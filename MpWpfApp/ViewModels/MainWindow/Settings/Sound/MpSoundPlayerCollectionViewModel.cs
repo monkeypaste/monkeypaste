@@ -38,10 +38,10 @@ namespace MpWpfApp {
 
         #region Private Methods
         private MpSoundPlayerCollectionViewModel() : base(null) {
-            SoundNotificationViewModels.Add(new MpSoundNotificationViewModel(MpSoundNotificationType.NotificationDoCopySound, MpPreferences.NotificationDoCopySound));
+            SoundNotificationViewModels.Add(new MpSoundNotificationViewModel(MpSoundNotificationType.NotificationDoCopySound, MpJsonPreferenceIO.Instance.NotificationDoCopySound));
             SoundNotificationViewModels[0].PerformNotificationCommand.Execute(null);
 
-            MpPreferences.NotificationDoCopySound = false;
+            MpJsonPreferenceIO.Instance.NotificationDoCopySound = false;
 
             SoundNotificationViewModels[0].PerformNotificationCommand.Execute(null);
         }

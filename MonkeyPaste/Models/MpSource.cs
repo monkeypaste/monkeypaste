@@ -153,7 +153,7 @@ namespace MonkeyPaste {
 
         //    var source = new MpSource() {
         //        SourceGuid = System.Guid.NewGuid(),
-        //        AppId = MpPreferences.ThisAppSource.AppId,
+        //        AppId = MpJsonPreferenceIO.Instance.ThisAppSource.AppId,
         //        CopyItemTransactionId = copyItemTransactionId
         //    };
 

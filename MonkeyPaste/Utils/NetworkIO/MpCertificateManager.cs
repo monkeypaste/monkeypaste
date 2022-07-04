@@ -24,10 +24,10 @@ namespace MonkeyPaste {
         private X509Certificate2 _cert = null;
 
         public MpCertificateManager() {
-            if (DateTime.UtcNow > MpPreferences.SslCertExpirationDateTime) {
+            if (DateTime.UtcNow > MpJsonPreferenceIO.Instance.SslCertExpirationDateTime) {
                 CreateCertificate();
             }
-            _cert = LoadCertificate(MpPreferences.SyncCertPath);
+            _cert = LoadCertificate(MpJsonPreferenceIO.Instance.SyncCertPath);
 
             if (_cert == null) {
                 MpConsole.WriteTraceLine(@"Error could not load sync certificate");
@@ -35,13 +35,13 @@ namespace MonkeyPaste {
         }
 
         private void CreateCertificate() {
-            AsymmetricKeyParameter caPrivKey = GenerateCACertificate(MpPreferences.SslCASubject);
+            AsymmetricKeyParameter caPrivKey = GenerateCACertificate(MpJsonPreferenceIO.Instance.SslCASubject);
 
-            var cert = GenerateSelfSignedCertificate(MpPreferences.SslCertSubject, MpPreferences.SslCASubject, caPrivKey);
+            var cert = GenerateSelfSignedCertificate(MpJsonPreferenceIO.Instance.SslCertSubject, MpJsonPreferenceIO.Instance.SslCASubject, caPrivKey);
 
-            MpPreferences.SslPublicKey = cert.GetPublicKeyString();
+            MpJsonPreferenceIO.Instance.SslPublicKey = cert.GetPublicKeyString();
 
-            SaveCertificate(MpPreferences.SyncCertPath, cert);
+            SaveCertificate(MpJsonPreferenceIO.Instance.SyncCertPath, cert);
         }
 
         private AsymmetricKeyParameter GenerateCACertificate(string subjectName, int keyStrength = 2048) {
@@ -102,14 +102,14 @@ namespace MonkeyPaste {
                 certificate = new X509Certificate2(ms.ToArray(), exportpw, X509KeyStorageFlags.Exportable);
             }
             //signature algorithm
-            //ISignatureFactory signatureFactory = new Asn1SignatureFactory(MpPreferences.SslAlgorithm, issuerKeyPair.Private, random);
+            //ISignatureFactory signatureFactory = new Asn1SignatureFactory(MpJsonPreferenceIO.Instance.SslAlgorithm, issuerKeyPair.Private, random);
 
             // Selfsign certificate
             //var certificate = certificateGenerator.Generate(issuerKeyPair.Private, random); //signatureFactory);
             //var x509 = new X509Certificate2(certificate.GetEncoded(),string.Empty);
 
             // Add CA certificate to Root store
-            SaveCertificate(MpPreferences.SyncCaPath, certificate);
+            SaveCertificate(MpJsonPreferenceIO.Instance.SyncCaPath, certificate);
 
             return issuerKeyPair.Private;
         }
@@ -134,7 +134,7 @@ namespace MonkeyPaste {
             //const string signatureAlgorithm = "SHA256WithRSA";            
             //certificateGenerator.SetSignatureAlgorithm(signatureAlgorithm);
 
-            //ISignatureFactory signatureFactory = new Asn1SignatureFactory(MpPreferences.SslAlgorithm, issuerPrivKey, random);
+            //ISignatureFactory signatureFactory = new Asn1SignatureFactory(MpJsonPreferenceIO.Instance.SslAlgorithm, issuerPrivKey, random);
 
 
             // Issuer and Subject Name
@@ -147,7 +147,7 @@ namespace MonkeyPaste {
             var notBefore = DateTime.UtcNow.Date;
             var notAfter = notBefore.AddYears(2);
 
-            MpPreferences.SslCertExpirationDateTime = notAfter;
+            MpJsonPreferenceIO.Instance.SslCertExpirationDateTime = notAfter;
 
             certificateGenerator.SetNotBefore(notBefore);
             certificateGenerator.SetNotAfter(notAfter);

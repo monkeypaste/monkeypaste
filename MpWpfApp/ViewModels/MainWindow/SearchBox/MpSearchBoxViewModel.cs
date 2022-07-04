@@ -37,74 +37,74 @@ namespace MpWpfApp {
                         new MpSearchFilterViewModel(
                             this,
                             "Content",
-                            nameof(MpPreferences.SearchByContent),
+                            nameof(MpJsonPreferenceIO.Instance.SearchByContent),
                             MpContentFilterType.Content),
                         new MpSearchFilterViewModel(
                             this,
                             "Title",
-                            nameof(MpPreferences.SearchByTitle),
+                            nameof(MpJsonPreferenceIO.Instance.SearchByTitle),
                             MpContentFilterType.Title),
                         new MpSearchFilterViewModel(
                             this,
                             "Url",
-                            nameof(MpPreferences.SearchBySourceUrl),
+                            nameof(MpJsonPreferenceIO.Instance.SearchBySourceUrl),
                             MpContentFilterType.Url),
                         new MpSearchFilterViewModel(
                             this,
                             "Url Title",
-                            nameof(MpPreferences.SearchByUrlTitle),
+                            nameof(MpJsonPreferenceIO.Instance.SearchByUrlTitle),
                             MpContentFilterType.UrlTitle),
                         new MpSearchFilterViewModel(
                             this,
                             "Application Path",
-                            nameof(MpPreferences.SearchByProcessName),
+                            nameof(MpJsonPreferenceIO.Instance.SearchByProcessName),
                             MpContentFilterType.AppPath),
                         new MpSearchFilterViewModel(
                             this,
                             "Application Name",
-                            nameof(MpPreferences.SearchByApplicationName),
+                            nameof(MpJsonPreferenceIO.Instance.SearchByApplicationName),
                             MpContentFilterType.AppName),
                         //new MpSearchFilterViewModel(
                         //    this,
                         //    "Collections",
-                        //    nameof(MpPreferences.SearchByTag),
+                        //    nameof(MpJsonPreferenceIO.Instance.SearchByTag),
                         //    MpContentFilterType.Tag),
                         new MpSearchFilterViewModel(
                             this,
                             "Description",
-                            nameof(MpPreferences.SearchByDescription),
+                            nameof(MpJsonPreferenceIO.Instance.SearchByDescription),
                             MpContentFilterType.Meta),
                         new MpSearchFilterViewModel(this,true),
                         new MpSearchFilterViewModel(
                             this,
                             "Text Type",
-                            nameof(MpPreferences.SearchByTextType),
+                            nameof(MpJsonPreferenceIO.Instance.SearchByTextType),
                             MpContentFilterType.TextType),
                         new MpSearchFilterViewModel(
                             this,
                             "File Type",
-                            nameof(MpPreferences.SearchByFileType),
+                            nameof(MpJsonPreferenceIO.Instance.SearchByFileType),
                             MpContentFilterType.FileType),
                         new MpSearchFilterViewModel(
                             this,
                             "Image Type",
-                            nameof(MpPreferences.SearchByImageType),
+                            nameof(MpJsonPreferenceIO.Instance.SearchByImageType),
                             MpContentFilterType.ImageType),
                         new MpSearchFilterViewModel(this,true),
                         new MpSearchFilterViewModel(
                             this,
                             "Case Sensitive",
-                            nameof(MpPreferences.SearchByIsCaseSensitive),
+                            nameof(MpJsonPreferenceIO.Instance.SearchByIsCaseSensitive),
                             MpContentFilterType.CaseSensitive),
                         new MpSearchFilterViewModel(
                             this,
                             "Whole Word",
-                            nameof(MpPreferences.SearchByWholeWord),
+                            nameof(MpJsonPreferenceIO.Instance.SearchByWholeWord),
                             MpContentFilterType.WholeWord),
                         new MpSearchFilterViewModel(
                             this,
                             "Regular Expression",
-                            nameof(MpPreferences.SearchByRegex),
+                            nameof(MpJsonPreferenceIO.Instance.SearchByRegex),
                             MpContentFilterType.Regex)
                     };
                 }
@@ -144,7 +144,7 @@ namespace MpWpfApp {
 
         public string PlaceholderText {
             get {
-                return MpPreferences.SearchPlaceHolderText;
+                return MpJsonPreferenceIO.Instance.SearchPlaceHolderText;
             }
         }
 
@@ -152,8 +152,8 @@ namespace MpWpfApp {
 
         #region State
         public ObservableCollection<string> RecentSearchTexts {
-            get => new ObservableCollection<string>(MpPreferences.RecentSearchTexts.Split(new string[] { MpPreferences.STRING_ARRAY_SPLIT_TOKEN }, StringSplitOptions.RemoveEmptyEntries));
-            set => MpPreferences.RecentSearchTexts = string.Join(MpPreferences.STRING_ARRAY_SPLIT_TOKEN, value);
+            get => new ObservableCollection<string>(MpJsonPreferenceIO.Instance.RecentSearchTexts.Split(new string[] { MpJsonPreferenceIO.STRING_ARRAY_SPLIT_TOKEN }, StringSplitOptions.RemoveEmptyEntries));
+            set => MpJsonPreferenceIO.Instance.RecentSearchTexts = string.Join(MpJsonPreferenceIO.STRING_ARRAY_SPLIT_TOKEN, value);
         }
 
         public bool CanDeleteSearch => UserSearch != null && UserSearch.Id > 0;
@@ -391,8 +391,8 @@ namespace MpWpfApp {
         }
 
         private void ValidateFilters() {
-            var resfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.SearchByRegex));
-            var cssfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.SearchByIsCaseSensitive));
+            var resfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpJsonPreferenceIO.Instance.SearchByRegex));
+            var cssfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpJsonPreferenceIO.Instance.SearchByIsCaseSensitive));
             if (resfvm.IsChecked) {
                 cssfvm.IsChecked = false;
                 cssfvm.IsEnabled = false;
@@ -400,9 +400,9 @@ namespace MpWpfApp {
                 cssfvm.IsEnabled = true;
             }
 
-            var sbtfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.SearchByTextType));
-            var sbifvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.SearchByImageType));
-            var sbffvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.SearchByFileType));
+            var sbtfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpJsonPreferenceIO.Instance.SearchByTextType));
+            var sbifvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpJsonPreferenceIO.Instance.SearchByImageType));
+            var sbffvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpJsonPreferenceIO.Instance.SearchByFileType));
 
             if(!sbtfvm.IsChecked && !sbifvm.IsChecked && !sbffvm.IsChecked) {
                 sbtfvm.IsChecked = sbifvm.IsChecked = sbffvm.IsChecked = true;
@@ -527,7 +527,7 @@ namespace MpWpfApp {
                 int recentFindIdx = rftl.IndexOf(_text);
                 if (recentFindIdx < 0) {
                     rftl.Insert(0, _text);
-                    rftl = new ObservableCollection<string>(rftl.Take(MpPreferences.MaxRecentTextsCount));
+                    rftl = new ObservableCollection<string>(rftl.Take(MpJsonPreferenceIO.Instance.MaxRecentTextsCount));
                 } else {
                     rftl.RemoveAt(recentFindIdx);
                     rftl.Insert(0, _text);

@@ -142,7 +142,7 @@ namespace MpWpfApp {
             p.Inlines.Add(pathLink);
 
             double fontSize = 16;
-            p.FontFamily = new FontFamily(MpPreferences.DefaultFontFamily);
+            p.FontFamily = new FontFamily(MpJsonPreferenceIO.Instance.DefaultFontFamily);
             p.FontSize = fontSize;
 
 
@@ -815,7 +815,7 @@ namespace MpWpfApp {
             if (str.IsStringPlainText()) {
                 using (System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox()) {
                     rtb.Text = str;
-                    rtb.Font = new System.Drawing.Font(MpPreferences.DefaultFontFamily, (float)MpPreferences.DefaultFontSize);
+                    rtb.Font = new System.Drawing.Font(MpJsonPreferenceIO.Instance.DefaultFontFamily, (float)MpJsonPreferenceIO.Instance.DefaultFontSize);
                     return rtb.Rtf;
                 }
             }

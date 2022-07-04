@@ -160,8 +160,8 @@ namespace MonkeyPaste.Common.Wpf {
         public static BitmapSource CopyScreen() {
             double left = 0;//System.Windows.Forms.Screen.AllScreens.Min(screen => screen.Bounds.X);
             double top = 0;// System.Windows.Forms.Screen.AllScreens.Min(screen => screen.Bounds.Y);
-            double right = SystemParameters.PrimaryScreenWidth;// MpMeasurements.Instance.ScreenWidth * MpPreferences.ThisAppDip;//System.Windows.Forms.Screen.AllScreens.Max(screen => screen.Bounds.X + screen.Bounds.Width);
-            double bottom = SystemParameters.PrimaryScreenHeight; // MpMeasurements.Instance.ScreenHeight * MpPreferences.ThisAppDip;//System.Windows.Forms.Screen.AllScreens.Max(screen => screen.Bounds.Y + screen.Bounds.Height);
+            double right = SystemParameters.PrimaryScreenWidth;// MpMeasurements.Instance.ScreenWidth * MpJsonPreferenceIO.Instance.ThisAppDip;//System.Windows.Forms.Screen.AllScreens.Max(screen => screen.Bounds.X + screen.Bounds.Width);
+            double bottom = SystemParameters.PrimaryScreenHeight; // MpMeasurements.Instance.ScreenHeight * MpJsonPreferenceIO.Instance.ThisAppDip;//System.Windows.Forms.Screen.AllScreens.Max(screen => screen.Bounds.Y + screen.Bounds.Height);
             int width = (int)(right - left);
             int height = (int)(bottom - top);
 

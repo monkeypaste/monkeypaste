@@ -7,5 +7,8 @@ namespace MpWpfApp {
         public string OsFileManagerPath => Path.Combine(@"%windir%".ExpandEnvVars(), "explorer.exe");
 
         public string OsFileManagerName => "Explorer";
+
+        public MpUserDeviceType OsType => MpUserDeviceType.Windows;
+        
     }
 }

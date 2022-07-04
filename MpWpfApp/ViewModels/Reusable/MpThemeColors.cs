@@ -162,7 +162,7 @@ namespace MpWpfApp {
                         new SolidColorBrush(Color.FromRgb(223, 223, 223)),
                         new SolidColorBrush(Color.FromRgb(187, 187, 187)),
                         new SolidColorBrush(Color.FromRgb(137, 137, 137)),
-                        new ImageBrush(new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/add2.png")))
+                        new ImageBrush(new BitmapImage(new Uri(MpJsonPreferenceIO.Instance.AbsoluteResourcesPath + @"/Images/add2.png")))
                     }
                 };
             }

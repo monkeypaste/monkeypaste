@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public interface MpISingleton<T> where T: class {
         void Init();
+
     }
     public interface MpIAsyncSingleton<T> where T : class {
         //static T Instance { get; }

@@ -70,7 +70,7 @@ namespace MonkeyPaste.Avalonia {
                 });
         }
 
-        public override async Task Init() {
+        public override async Task InitAsync() {
 
             for (int i = 0; i < _items.Count; i++) {
                 await LoadItemAsync(_items[i], i);

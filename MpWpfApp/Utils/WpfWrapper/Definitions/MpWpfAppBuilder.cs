@@ -25,7 +25,7 @@ namespace MpWpfApp {
                 Debugger.Break();
                 // since source is unknown set to this app
                 processPath = Assembly.GetExecutingAssembly().Location;
-                appName = string.IsNullOrEmpty(appName) ? MpPreferences.ThisAppName : appName;
+                appName = string.IsNullOrEmpty(appName) ? MpJsonPreferenceIO.Instance.ThisAppName : appName;
                 processIconImg64 = MpBase64Images.AppIcon;
             }
             var icon = await MpPlatformWrapper.Services.IconBuilder.Create(processIconImg64);

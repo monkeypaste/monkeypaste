@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="MonkeyPaste.Avalonia/MonkeyPaste.Avalonia/Views/MainView.axaml" value="MonkeyPaste.Avalonia/MonkeyPaste.Avalonia.Desktop.Mac/MonkeyPaste.Avalonia.Desktop.Mac.csproj" />
+        <entry key="MonkeyPaste.Avalonia/MonkeyPaste.Avalonia/Views/MainWindow.axaml" value="MonkeyPaste.Avalonia/MonkeyPaste.Avalonia.Desktop.Mac/MonkeyPaste.Avalonia.Desktop.Mac.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

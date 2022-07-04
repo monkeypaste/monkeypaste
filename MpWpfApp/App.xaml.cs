@@ -49,9 +49,9 @@ namespace MpWpfApp {
 
                 Xamarin.Forms.Forms.Init();
 
-                MpPlatformWrapper.Init(new MpWpfWrapper());
+                await MpPlatformWrapper.InitAsync(new MpWpfWrapper());
                 var bootstrapper = new MpWpfBootstrapperViewModel();
-                await bootstrapper.Init();
+                await bootstrapper.InitAsync();
 
                 MpDb.OnInitDefaultNativeData += MpDb_OnInitDefaultNativeData;
                 base.MainWindow = new MpMainWindow();
@@ -95,7 +95,7 @@ namespace MpWpfApp {
         private void MpDb_OnInitDefaultNativeData(object sender, EventArgs e) {
             //only occurs on initial load
             Task.Run(async () => {
-                //MpPreferences.MainWindowInitialHeight = MpMeasurements.Instance.MainWindowDefaultHeight;
+                //MpJsonPreferenceIO.Instance.MainWindowInitialHeight = MpMeasurements.Instance.MainWindowDefaultHeight;
                 // TEMPORARY ONLY WPF (NOTE !! Use env variables to find windows/system32 folder NOT C:)
                 // NOTEPAD
                 var notepadApp = await MpApp.Create(

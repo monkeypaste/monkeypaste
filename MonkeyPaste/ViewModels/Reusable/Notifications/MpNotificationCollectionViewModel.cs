@@ -231,7 +231,7 @@ namespace MonkeyPaste {
 
         public MpIAsyncCommand ResetAllNotificationsCommand => new MpAsyncCommand(
             async () => {
-                MpPreferences.DoNotShowAgainNotificationIdCsvStr = string.Empty;
+                MpJsonPreferenceIO.Instance.DoNotShowAgainNotificationIdCsvStr = string.Empty;
 
             }, () => MpBootstrapperViewModelBase.IsLoaded);
 
@@ -249,7 +249,7 @@ namespace MonkeyPaste {
 
                 DoNotShowNotificationIds.Add(notificationId);
 
-                MpPreferences.DoNotShowAgainNotificationIdCsvStr = string.Join(",", DoNotShowNotificationIds);
+                MpJsonPreferenceIO.Instance.DoNotShowAgainNotificationIdCsvStr = string.Join(",", DoNotShowNotificationIds);
             });
 
         //public ICommand ShiftToNextNotificationCommand => new MpCommand(

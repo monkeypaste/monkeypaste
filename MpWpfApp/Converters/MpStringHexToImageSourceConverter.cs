@@ -13,9 +13,9 @@ namespace MpWpfApp {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is string hexStr && hexStr.IsStringHexColor()) {
                 Brush brush = hexStr.ToWpfBrush();
-                var bgBmp = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/texture.png"));
+                var bgBmp = (BitmapSource)new BitmapImage(new Uri(MpJsonPreferenceIO.Instance.AbsoluteResourcesPath + @"/Images/texture.png"));
                 bgBmp = bgBmp.Tint(((SolidColorBrush)brush).Color, false);
-                var borderBmp = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/textureborder.png"));
+                var borderBmp = (BitmapSource)new BitmapImage(new Uri(MpJsonPreferenceIO.Instance.AbsoluteResourcesPath + @"/Images/textureborder.png"));
                 if (!MpWpfColorHelpers.IsBright((brush as SolidColorBrush).Color)) {
                     borderBmp = borderBmp.Tint(Colors.White, false);
                 }
@@ -29,7 +29,7 @@ namespace MpWpfApp {
                         checkPath = @"/Images/check_partial.png";
                     }
                     if (!string.IsNullOrEmpty(checkPath)) {
-                        var checkBmp = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + checkPath));
+                        var checkBmp = (BitmapSource)new BitmapImage(new Uri(MpJsonPreferenceIO.Instance.AbsoluteResourcesPath + checkPath));
                         if (!MpWpfColorHelpers.IsBright((brush as SolidColorBrush).Color)) {
                             //on dark backgrounds convert black check to white check for better visualization
                             checkBmp = checkBmp.Tint(Colors.White, false);

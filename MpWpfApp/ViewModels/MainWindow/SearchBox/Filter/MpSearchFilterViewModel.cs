@@ -50,7 +50,12 @@ namespace MpWpfApp {
             _filterType = filterType;
             Label = label;
             PreferenceName = prefName;
-            IsChecked = (bool)MpPreferences.Default.Get(PreferenceName, false);//[PreferenceName];
+            if (MpJsonPreferenceIO.Instance[PreferenceName] == null) {
+                IsChecked = false;
+            } else {
+                IsChecked = (bool)MpJsonPreferenceIO.Instance[PreferenceName];
+            }
+            
         }
 
         #endregion
@@ -60,7 +65,7 @@ namespace MpWpfApp {
         private void MpSearchFilterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsChecked):
-                    MpPreferences.Default.Set(PreferenceName,IsChecked);
+                    MpJsonPreferenceIO.Instance[PreferenceName] = IsChecked;
                     break;
             }
         }

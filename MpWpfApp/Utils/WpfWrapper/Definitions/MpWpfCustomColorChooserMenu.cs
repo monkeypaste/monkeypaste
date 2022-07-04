@@ -29,14 +29,14 @@ namespace MpWpfApp {
             cd.AllowFullOpen = true;
             cd.ShowHelp = true;
             cd.Color = selectedColorHexStr.ToWinFormsColor();
-            cd.CustomColors = MpPreferences.UserCustomColorIdxArray.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(x => Convert.ToInt32(x)).ToArray();
+            cd.CustomColors = MpJsonPreferenceIO.Instance.UserCustomColorIdxArray.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(x => Convert.ToInt32(x)).ToArray();
             cd.FullOpen = cd.CustomColors.Length > 0;
 
             string selectedCustomColor = string.Empty;
             var result = cd.ShowDialog();            
 
             if (result == System.Windows.Forms.DialogResult.OK) {
-                MpPreferences.UserCustomColorIdxArray = string.Join(",", cd.CustomColors);
+                MpJsonPreferenceIO.Instance.UserCustomColorIdxArray = string.Join(",", cd.CustomColors);
 
                 if(ucvm != null) {
                     ucvm.UserHexColor = cd.Color.ToHex();

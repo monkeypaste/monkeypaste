@@ -211,8 +211,8 @@ namespace MpWpfApp {
         //                var l = new Label();
         //                l.Content = MpProcessManager.GetProcessMainWindowTitle(ptamivm.Handle) + (ptamivm.IsAdmin ? " (Admin)" : string.Empty);
 
-        //                var eyeOpenImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/eye.png")) };
-        //                var eyeClosedImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/eye_closed.png")) };
+        //                var eyeOpenImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(MpJsonPreferenceIO.Instance.AbsoluteResourcesPath + @"/Images/eye.png")) };
+        //                var eyeClosedImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(MpJsonPreferenceIO.Instance.AbsoluteResourcesPath + @"/Images/eye_closed.png")) };
         //                var btn = new Button() { Cursor = Cursors.Hand, Content = eyeOpenImg, BorderThickness = new Thickness(0), Background = Brushes.Transparent, Width = 20, Height = 20, HorizontalAlignment = HorizontalAlignment.Right/*, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center*/ };
         //                bool isOverButton = false;
         //                MouseEventHandler mouseEnter = (object o, MouseEventArgs e) => {
@@ -289,7 +289,7 @@ namespace MpWpfApp {
         //    }
         //    var addNewMenuItem = new MenuItem();
         //    addNewMenuItem.Header = "Add Application...";
-        //    addNewMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Icons/Silk/icons/add.png")) };
+        //    addNewMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(MpJsonPreferenceIO.Instance.AbsoluteResourcesPath + @"/Icons/Silk/icons/add.png")) };
         //    RoutedEventHandler addNewMenuItemClick = (object o, RoutedEventArgs e) => {
         //        MpSystemTrayViewModel.Instance.ShowSettingsWindowCommand.Execute(1);
         //    };

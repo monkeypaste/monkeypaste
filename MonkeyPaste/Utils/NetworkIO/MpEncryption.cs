@@ -161,7 +161,9 @@ namespace MonkeyPaste {
                     binaryWriter.Write(nonce);
                     //Write Cipher Text
                     binaryWriter.Write(cipherText);
+                    binaryWriter.Close();
                 }
+                combinedStream.Close();
                 return combinedStream.ToArray();
             }
         }
@@ -233,6 +235,7 @@ namespace MonkeyPaste {
             var payload = new byte[salt.Length + nonSecretPayload.Length];
             Array.Copy(nonSecretPayload, payload, nonSecretPayload.Length);
             Array.Copy(salt, 0, payload, nonSecretPayload.Length, salt.Length);
+            
 
             return SimpleEncrypt(secretMessage, key.GetKey(), payload);
         }

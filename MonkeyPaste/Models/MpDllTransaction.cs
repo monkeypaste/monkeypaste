@@ -78,7 +78,7 @@ namespace MonkeyPaste {
                 throw new Exception("Must specifiy path");
             }
             if (deviceId <= 0) {
-                deviceId = MpPreferences.ThisUserDevice.Id;
+                deviceId = MpJsonPreferenceIO.Instance.ThisUserDevice.Id;
             }
             var mr = new MpDllTransaction() {
                 DllTransactionGuid = System.Guid.NewGuid(),

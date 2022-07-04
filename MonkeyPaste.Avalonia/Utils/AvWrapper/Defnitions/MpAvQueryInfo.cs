@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
             // NOTE not sure why this isn't set so maybe bad
             FilterFlags = MpContentFilterType.TextType | MpContentFilterType.FileType | MpContentFilterType.ImageType; //MpSearchBoxViewModel.Instance.FilterType;
 
-            MpPreferences.LastQueryInfoJson = Serialize();
+            MpJsonPreferenceIO.Instance.LastQueryInfoJson = Serialize();
 
             var qi = MpDataModelProvider.QueryInfo;
             MpDataModelProvider.QueryInfos.Clear();

@@ -50,8 +50,31 @@ namespace MonkeyPaste.Avalonia {
         public double MainWindowRight { get; set; }
         public double MainWindowTop { get; set; }
         public double MainWindowBottom { get; set; }
-        
 
+        public MpRect MainWindowRect => new MpRect(MainWindowLeft, MainWindowTop, MainWindowWidth, MainWindowHeight);
+        
+        public MpRect ExternalRect {
+            get {
+                var screen = MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx);
+
+                switch (MainWindowOrientationType) {
+                    case MpMainWindowOrientationType.Top:
+                        double y = MainWindowTop + MainWindowHeight;
+                        if(y < 0) {
+                            y = 0;
+                        }
+                        double h = y == 0 ? screen.Bounds.Height : screen.Bounds.Height - (MainWindowTop + MainWindowHeight);
+
+                        var extRect = new MpRect(0, y, MainWindowWidth, h);
+                        MpConsole.WriteLine("Ext Rect: " + extRect);
+                        return extRect;
+                }
+                return new MpRect();
+            }
+        }
+        public double ExternalTop => ExternalRect.Top;
+
+        public double ExternalHeight => ExternalRect.Height;
         public MpRect MainWindowOpenedRect {
             get {
                 var screen = MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx);
@@ -65,6 +88,12 @@ namespace MonkeyPaste.Avalonia {
                         return new MpRect(
                             screen.WorkArea.Left,
                             screen.WorkArea.Bottom - MainWindowHeight,
+                            MainWindowWidth,
+                            MainWindowHeight);
+                    case MpMainWindowOrientationType.Top:
+                        return new MpRect(
+                            screen.WorkArea.Left,
+                            screen.WorkArea.Top,
                             MainWindowWidth,
                             MainWindowHeight);
                 }
@@ -86,6 +115,12 @@ namespace MonkeyPaste.Avalonia {
                         return new MpRect(
                             screen.WorkArea.Left,
                             screen.WorkArea.Bottom,
+                            MainWindowWidth,
+                            MainWindowHeight);
+                    case MpMainWindowOrientationType.Top:
+                        return new MpRect(
+                            screen.WorkArea.Left,
+                            screen.WorkArea.Top - MainWindowHeight,
                             MainWindowWidth,
                             MainWindowHeight);
                 }
@@ -124,13 +159,13 @@ namespace MonkeyPaste.Avalonia {
         public bool IsFilterMenuVisible { get; set; } = true;
 
         public MpMainWindowOrientationType MainWindowOrientationType {
-            get => (MpMainWindowOrientationType)Enum.Parse(typeof(MpMainWindowOrientationType), MpPreferences.MainWindowOrientation, false);
-            set => MpPreferences.MainWindowOrientation = value.ToString();
+            get => (MpMainWindowOrientationType)Enum.Parse(typeof(MpMainWindowOrientationType), MpJsonPreferenceIO.Instance.MainWindowOrientation, false);
+            set => MpJsonPreferenceIO.Instance.MainWindowOrientation = value.ToString();
         }
 
         public MpMainWindowShowBehaviorType MainWindowShowBehaviorType {
-            get => (MpMainWindowShowBehaviorType)Enum.Parse(typeof(MpMainWindowShowBehaviorType), MpPreferences.MainWindowDisplayType, false);
-            set => MpPreferences.MainWindowDisplayType = value.ToString();
+            get => (MpMainWindowShowBehaviorType)Enum.Parse(typeof(MpMainWindowShowBehaviorType), MpJsonPreferenceIO.Instance.MainWindowDisplayType, false);
+            set => MpJsonPreferenceIO.Instance.MainWindowDisplayType = value.ToString();
         }
 
         public int MainWindowMonitorIdx {
@@ -183,16 +218,16 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             switch (MainWindowOrientationType) {
+                case MpMainWindowOrientationType.Top:
                 case MpMainWindowOrientationType.Bottom:
                     MainWindowWidth = screen.WorkArea.Width;
                     if(MainWindowHeight == 0) {
-                        // startup case
-                        MpPreferences.MainWindowInitialHeight = screen.WorkArea.Height * 0.35;
-                        if (MpPreferences.MainWindowInitialHeight == 0) {
+                        // startup case                        
+                        if (MpJsonPreferenceIO.Instance.MainWindowInitialHeight == 0) {
                             // initial setting
-                            MpPreferences.MainWindowInitialHeight = screen.WorkArea.Height * 0.35;
+                            MpJsonPreferenceIO.Instance.MainWindowInitialHeight = screen.WorkArea.Height * 0.35;
                         }
-                        MainWindowHeight = MpPreferences.MainWindowInitialHeight;                        
+                        MainWindowHeight = MpJsonPreferenceIO.Instance.MainWindowInitialHeight;                        
                     } else {
                         // height is user defined
                     }
@@ -210,10 +245,15 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ShowWindowCommand => new MpAsyncCommand(
             async () => {
+                if(!Dispatcher.UIThread.CheckAccess()) {
+                    Dispatcher.UIThread.Post(() => {
+                        ShowWindowCommand.Execute(null);
+                    });
+                    return;
+                }
                 IsMainWindowOpening = true;
 
                 //MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowOpening);
-
 
                 var mw = MainWindow.Instance;
                 while (mw == null) {
@@ -229,6 +269,7 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     mw.Topmost = false;
                 }
+                mw.Topmost = false;
 
                 if (IsMainWindowInitiallyOpening) {
                     //await MpMainWindowResizeBehavior.Instance.ResizeForInitialLoad();
@@ -245,7 +286,7 @@ namespace MonkeyPaste.Avalonia {
 
                 MpRect openEndRect = MainWindowOpenedRect;
 
-                double test = MpPreferences.ShowMainWindowAnimationMilliseconds;
+                double test = MpJsonPreferenceIO.Instance.ShowMainWindowAnimationMilliseconds;
                 double tt = 500;//
                 double fps = 30;
 
@@ -268,6 +309,9 @@ namespace MonkeyPaste.Avalonia {
                         case MpMainWindowOrientationType.Bottom:
                             isDone = MainWindowTop < openEndRect.Top;
                             break;
+                        case MpMainWindowOrientationType.Top:
+                            isDone = MainWindowTop > openEndRect.Top;
+                            break;
                     }
                     if(isDone) {
                         MpConsole.WriteLine("SHOW WINDOW DONE");
@@ -282,6 +326,7 @@ namespace MonkeyPaste.Avalonia {
                         IsMainWindowOpening = false;
                         IsMainWindowOpen = true;
 
+                        OnPropertyChanged(nameof(ExternalRect));
                         OnMainWindowOpened?.Invoke(this, new EventArgs());
 
                         //MpClipTrayViewModel.Instance.AddNewItemsCommand.Execute(null);
@@ -291,6 +336,8 @@ namespace MonkeyPaste.Avalonia {
                         MainWindowTop += d_t;
                         MainWindowRight += d_r;
                         MainWindowBottom += d_b;
+
+                        OnPropertyChanged(nameof(ExternalRect));
                     }
                 };
 
@@ -321,7 +368,7 @@ namespace MonkeyPaste.Avalonia {
 
                     MpRect closeEndRect = MainWindowClosedRect;
 
-                    double tt = MpPreferences.HideMainWindowAnimationMilliseconds;
+                    double tt = MpJsonPreferenceIO.Instance.HideMainWindowAnimationMilliseconds;
                     double fps = 30;
 
                     double step = tt / (fps);
@@ -339,6 +386,9 @@ namespace MonkeyPaste.Avalonia {
                         switch (MainWindowOrientationType) {
                             case MpMainWindowOrientationType.Bottom:
                                 isDone = MainWindowTop > closeEndRect.Top;
+                                break;
+                            case MpMainWindowOrientationType.Top:
+                                isDone = MainWindowTop < closeEndRect.Top;
                                 break;
                         }
                         if (isDone) {
@@ -361,12 +411,16 @@ namespace MonkeyPaste.Avalonia {
                             IsMainWindowOpen = false;
                             IsMainWindowClosing = false;
 
+                            OnPropertyChanged(nameof(ExternalRect));
+
                             OnMainWindowClosed?.Invoke(this, new EventArgs());
                         } else {
                             MainWindowLeft += d_l;
                             MainWindowTop += d_t;
                             MainWindowRight += d_r;
                             MainWindowBottom += d_b;
+
+                            OnPropertyChanged(nameof(ExternalRect));
                         }
                     };
                     timer.Start();

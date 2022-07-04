@@ -159,7 +159,7 @@ namespace MpWpfApp {
         }
 
         private async Task SetUserIconToCurrentHexColor(string hexColor, MpIUserIconViewModel uivm) {
-            var bmpSrc = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/texture.png"));
+            var bmpSrc = (BitmapSource)new BitmapImage(new Uri(MpJsonPreferenceIO.Instance.AbsoluteResourcesPath + @"/Images/texture.png"));
             bmpSrc = bmpSrc.Tint(hexColor.ToWinMediaColor());
 
             MpIcon icon ;
@@ -174,7 +174,7 @@ namespace MpWpfApp {
                 var img = await MpDb.GetItemAsync<MpDbImage>(icon.IconImageId);
                 img.ImageBase64 = bmpSrc.ToBase64String();
                 await img.WriteToDatabaseAsync();
-                await icon.CreateOrUpdateBorder(forceHexColor: hexColor);
+                await icon.CreateOrUpdateBorderAsync(forceHexColor: hexColor);
             }
             uivm.OnPropertyChanged(nameof(uivm.IconId));
         }
@@ -214,7 +214,7 @@ namespace MpWpfApp {
                         img.ImageBase64 = bmpSrc.ToBase64String();
                         await img.WriteToDatabaseAsync();
 
-                        await icon.CreateOrUpdateBorder();
+                        await icon.CreateOrUpdateBorderAsync();
                     }
                     uivm.OnPropertyChanged(nameof(uivm.IconId));
 

@@ -28,14 +28,29 @@ namespace MpProcessHelper {
         #region Private Variables
         private static System.Timers.Timer _timer;
 
-        public static IntPtr ThisAppHandle { get; set; }
+        private static IntPtr _thisAppHandle;
+        public static IntPtr ThisAppHandle {
+            get => _thisAppHandle;
+            set {
+                if(_thisAppHandle != value) {
+                    _thisAppHandle = value;
+                    if(_thisAppHandle != IntPtr.Zero) {
+                        IsThisAppAdmin = IsProcessAdmin(ThisAppHandle);
+                    }
+                }
+            }
+        }
 
         //private static string thisAppExe = Path.Combine(System.Windows.Forms.Application.StartupPath, "MpWpfApp.exe");
         //private static MpIconBuilder _ib;
 
         private static string _FallbackProcessPath = @"C:\WINDOWS\Explorer.EXE";
 
-        public static string[] _ignoredProcessNames;
+        public static string[] _ignoredProcessNames = new string[] {
+            "csrss",
+            "dwm",
+            "mmc"
+        };
 
         #endregion
 
@@ -53,7 +68,7 @@ namespace MpProcessHelper {
 
         public static string LastProcessPath => GetProcessPath(LastHandle);
 
-        
+        public static bool IsThisAppAdmin { get; private set; } = false;
         #endregion
 
         #region Events
@@ -64,9 +79,7 @@ namespace MpProcessHelper {
 
         #region Public Methods
 
-        public static void Init(string ignoredProcessNames) {
-            _ignoredProcessNames = ignoredProcessNames.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-
+        public static void Init() {
             LastHandle = IntPtr.Zero;
             var pkvp = GetOpenWindows();
             foreach(var kvp in pkvp) {
@@ -206,12 +219,12 @@ namespace MpProcessHelper {
                         return fallback;
                     }
 
-                    //bool isThisAppAdmin = UACHelper.UACHelper.IsAdministrator;
-                    //bool isProcElevated = UACHelper.UACHelper.IsProcessElevated(proc);
+                    bool isProcElevated = IsProcessAdmin(proc.MainWindowHandle);
 
-                    //if (!isThisAppAdmin && isProcElevated) {
-                    //    return fallback;
-                    //}
+                    if (!IsThisAppAdmin && isProcElevated) {
+                        return fallback;
+                    }
+
                     try {
                         return proc.MainModule.FileName.ToString().ToLower();
                     }catch(InvalidOperationException) {
@@ -221,7 +234,7 @@ namespace MpProcessHelper {
                 }
             }
             catch (Exception e) {
-                MpConsole.WriteLine("MpHelpers.GetProcessPath error (likely) cannot find process path (w/ Handle " + hwnd.ToString() + ") : " + e.ToString());
+                MpConsole.WriteTraceLine("Cannot find process path (w/ Handle " + hwnd.ToString() + ") : " + e.ToString(), e);
                 //return GetExecutablePathAboveVista(hwnd);
                 return fallback; //fallback;
             }
@@ -236,7 +249,7 @@ namespace MpProcessHelper {
                 return Process.GetProcessById((int)pid);
             }
             catch (Exception e) {
-                MpConsole.WriteLine("MpHelpers.GetProcessPath error (likely) cannot find process path (w/ Handle " + handle.ToString() + ") : " + e.ToString());
+                MpConsole.WriteTraceLine("Cannot find process path (w/ Handle " + handle.ToString() + ") : " + e.ToString(), e);
                 //return GetExecutablePathAboveVista(hwnd);
                 return null; //fallback;
             }

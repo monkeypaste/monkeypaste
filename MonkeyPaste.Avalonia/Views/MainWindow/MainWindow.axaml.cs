@@ -1,10 +1,15 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Platform;
 using Avalonia.Rendering;
 using Avalonia.Threading;
+using Avalonia.X11;
+using MonkeyPaste.Common;
 using PropertyChanged;
+using SharpHook;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -37,7 +42,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Canvas_PointerPressed(object? sender, global::Avalonia.Input.PointerPressedEventArgs e) {
-            if (MpAvMouseHook_Win32.GlobalMouseLocation.Y < MpAvMainWindowViewModel.Instance.MainWindowTop) {
+            bool isMainWindowClick = MpAvMainWindowViewModel.Instance.MainWindowRect.Contains(MpAvGlobalMouseHook.GlobalMouseLocation);
+            if (!isMainWindowClick) {
                 MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
             }
         }
@@ -48,20 +54,28 @@ namespace MonkeyPaste.Avalonia {
 
 
         private async Task InitAsync() {
-            MpPlatformWrapper.Init(new MpAvWrapper(this));
+            await MpPlatformWrapper.InitAsync(new MpAvWrapper(this));
             var bootstrapper = new MpAvBootstrapperViewModel();
-            await bootstrapper.Init();
+            await bootstrapper.InitAsync();
 
             while (!MpAvBootstrapperViewModel.IsLoaded) {
                 await Task.Delay(100);
             }
-            MpAvMouseHook_Win32.Init();
-            MpAvToolWindow_Win32.InitToolWindow(this.PlatformImpl.Handle.Handle);            
+            MpAvGlobalMouseHook.Init(((IRenderRoot)this).RenderScaling);
+
+            MpAvGlobalMouseHook.OnGlobalMouseWheelScroll += MpAvMouseHook_Win32_OnMouseWheelScroll;
+            MpAvGlobalMouseHook.OnGlobalMouseMove += MpAvMouseHook_Win32_OnGlobalMouseMove;
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                
+                MpAvToolWindow_Win32.InitToolWindow(this.PlatformImpl.Handle.Handle);
+
+                //MpAvMouseHook_Win32.Init();
+                //MpAvMouseHook_Win32.OnGlobalMouseWheelScroll += MpAvMouseHook_Win32_OnMouseWheelScroll;
+                //MpAvMouseHook_Win32.OnGlobalMouseMove += MpAvMouseHook_Win32_OnGlobalMouseMove;
+            }
 
 
-            MpAvMouseHook_Win32.OnGlobalMouseWheelScroll += MpAvMouseHook_Win32_OnMouseWheelScroll;
-            MpAvMouseHook_Win32.OnGlobalMouseMove += MpAvMouseHook_Win32_OnGlobalMouseMove;
-            
             DataContext = MpAvMainWindowViewModel.Instance;
             await MpAvMainWindowViewModel.Instance.InitializeAsync();
 
@@ -72,6 +86,8 @@ namespace MonkeyPaste.Avalonia {
             //var bounds = this.Bounds;
             //Debugger.Break();
         }
+
+        
 
         private void Instance_OnMainWindowClosed(object? sender, System.EventArgs e) {
             this.Topmost = false;
@@ -87,7 +103,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MpAvMouseHook_Win32_OnMouseWheelScroll(object? sender, double e) {
-            if(MpAvMouseHook_Win32.GlobalMouseLocation.Y < 10) {
+            if(MpAvGlobalMouseHook.GlobalMouseLocation.Y < 10) {
                 MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
             }
         }

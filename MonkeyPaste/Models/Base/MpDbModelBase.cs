@@ -53,7 +53,7 @@ namespace MonkeyPaste {
                 return;
             }
             if (string.IsNullOrEmpty(sourceClientGuid)) {
-                sourceClientGuid = MpPreferences.ThisDeviceGuid;
+                sourceClientGuid = MpJsonPreferenceIO.Instance.ThisDeviceGuid;
             }
             if (string.IsNullOrEmpty(Guid)) {
                 Guid = System.Guid.NewGuid().ToString();
@@ -77,7 +77,7 @@ namespace MonkeyPaste {
             if (IsSyncing) {
                 await WriteToDatabaseAsync(SyncingWithDeviceGuid, false, true);
             } else {
-                await WriteToDatabaseAsync(MpPreferences.ThisDeviceGuid);
+                await WriteToDatabaseAsync(MpJsonPreferenceIO.Instance.ThisDeviceGuid);
             }
         }
 
@@ -102,7 +102,7 @@ namespace MonkeyPaste {
             if (IsSyncing) {
                 await DeleteFromDatabaseAsync(SyncingWithDeviceGuid, false, true);
             } else {
-                await DeleteFromDatabaseAsync(MpPreferences.ThisDeviceGuid);
+                await DeleteFromDatabaseAsync(MpJsonPreferenceIO.Instance.ThisDeviceGuid);
             }
         }
 
@@ -230,7 +230,7 @@ namespace MonkeyPaste {
 
         //public virtual void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
         //    if (string.IsNullOrEmpty(sourceClientGuid)) {
-        //        sourceClientGuid = MpPreferences.ThisDeviceGuid;
+        //        sourceClientGuid = MpJsonPreferenceIO.Instance.ThisDeviceGuid;
         //    }
         //    if (string.IsNullOrEmpty(Guid)) {
         //        Guid = System.Guid.NewGuid().ToString();
@@ -246,12 +246,12 @@ namespace MonkeyPaste {
         //    if (IsSyncing) {
         //        WriteToDatabase(SyncingWithDeviceGuid, false, true);
         //    } else {
-        //        WriteToDatabase(MpPreferences.ThisDeviceGuid);
+        //        WriteToDatabase(MpJsonPreferenceIO.Instance.ThisDeviceGuid);
         //    }
         //}
 
         //public void WriteToDatabase(bool isFirstLoad) {
-        //    WriteToDatabase(MpPreferences.ThisDeviceGuid, isFirstLoad);
+        //    WriteToDatabase(MpJsonPreferenceIO.Instance.ThisDeviceGuid, isFirstLoad);
         //}
 
         //public virtual void DeleteFromDatabase(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
@@ -269,7 +269,7 @@ namespace MonkeyPaste {
         //    if (IsSyncing) {
         //        DeleteFromDatabase(SyncingWithDeviceGuid, false, true);
         //    } else {
-        //        DeleteFromDatabase(MpPreferences.ThisDeviceGuid);
+        //        DeleteFromDatabase(MpJsonPreferenceIO.Instance.ThisDeviceGuid);
         //    }
         //}
     }

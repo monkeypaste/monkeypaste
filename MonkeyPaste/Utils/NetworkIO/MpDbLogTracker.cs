@@ -14,7 +14,7 @@ namespace MonkeyPaste {
                 return;
             }
             Guid objectGuid = Guid.Parse(dbModel.Guid);
-            Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(MpPreferences.ThisDeviceGuid) : Guid.Parse(clientGuid);
+            Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(MpJsonPreferenceIO.Instance.ThisDeviceGuid) : Guid.Parse(clientGuid);
             string tableName = dbModel.GetType().ToString();
             tableName = tableName.Substring(tableName.IndexOf(".") + 1);
             var actionDateTime = DateTime.UtcNow;
@@ -39,7 +39,7 @@ namespace MonkeyPaste {
 
         //public static void TrackDbWrite(MpDbLogActionType actionType, MpDbModelBase dbModel, string clientGuid = "") {
         //    Guid objectGuid = Guid.Parse(dbModel.Guid);
-        //    Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(MpPreferences.ThisDeviceGuid) : Guid.Parse(clientGuid);
+        //    Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(MpJsonPreferenceIO.Instance.ThisDeviceGuid) : Guid.Parse(clientGuid);
         //    string tableName = dbModel.GetType().ToString();
         //    tableName = tableName.Substring(tableName.IndexOf(".") + 1);
         //    var actionDateTime = DateTime.UtcNow;
@@ -69,7 +69,7 @@ namespace MonkeyPaste {
         //    }
 
         //    Guid objectGuid = Guid.Parse(objGuid);
-        //    Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(MpPreferences.ThisDeviceGuid) : Guid.Parse(clientGuid);
+        //    Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(MpJsonPreferenceIO.Instance.ThisDeviceGuid) : Guid.Parse(clientGuid);
         //    string tableName = "UnknownTableName";
         //    var actionType = MonkeyPaste.MpDbLogActionType.None;
         //    var actionDateTime = DateTime.UtcNow;

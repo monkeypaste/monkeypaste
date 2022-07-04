@@ -34,7 +34,7 @@ namespace MpWpfApp {
 
         public MpRtbContentView() : base() {
             InitializeComponent();
-            Rtb.SpellCheck.IsEnabled = MonkeyPaste.MpPreferences.UseSpellCheck;
+            Rtb.SpellCheck.IsEnabled = MonkeyPaste.MpJsonPreferenceIO.Instance.UseSpellCheck;
         }
 
         public void UpdateAdorners() {

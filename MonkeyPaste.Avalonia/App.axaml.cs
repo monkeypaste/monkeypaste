@@ -15,7 +15,7 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaXamlLoader.Load(this);            
         }
 
-        public override async void OnFrameworkInitializationCompleted() {
+        public override void OnFrameworkInitializationCompleted() {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
                 desktop.MainWindow = new MainWindow();
             }

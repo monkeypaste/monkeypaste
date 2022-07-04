@@ -78,7 +78,7 @@ namespace MpWpfApp {
         //        if(Source.PrimarySource == null) {
         //            // BUG I think there's issues w/ SQLite extensions and foreign properties aren't being created. But 
         //            // primary source isn't being set for CopyItemTransactions
-        //            return MpPreferences.ThisAppSource.PrimarySource;
+        //            return MpJsonPreferenceIO.Instance.ThisAppSource.PrimarySource;
         //        }
         //        return Source.PrimarySource;
         //    }

@@ -8,7 +8,6 @@ namespace MonkeyPaste {
     public interface MpIPlatformWrapper {
         MpICursor Cursor { get; set; }
         MpIDbInfo DbInfo { get; set; }
-        MpIPreferenceIO PreferenceIO { get; set; }
         MpIQueryInfo QueryInfo { get; set; }
         MpIIconBuilder IconBuilder { get; set; }
         MpIUrlBuilder UrlBuilder { get; set; }
@@ -42,7 +41,10 @@ namespace MonkeyPaste {
     public static class MpPlatformWrapper {
         public static MpIPlatformWrapper Services { get; private set; }
 
-        public static void Init(MpIPlatformWrapper niw) {
+        public static async Task InitAsync(MpIPlatformWrapper niw) {
+            await MpJsonPreferenceIO.InitAsync();
+            MpJsonPreferenceIO.Instance.MainWindowOrientation = "Bottom";
+
             Services = niw;
         }
 

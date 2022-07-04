@@ -89,7 +89,7 @@ namespace MonkeyPaste {
                 throw new Exception("Must specifiy copyitemId");
             }
             if (deviceId <= 0) {
-                deviceId = MpPreferences.ThisUserDevice.Id;
+                deviceId = MpJsonPreferenceIO.Instance.ThisUserDevice.Id;
             }
             var mr = new MpUserTransaction() {
                 UserTransactionGuid = System.Guid.NewGuid(),

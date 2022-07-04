@@ -502,8 +502,8 @@ namespace MpWpfApp {
             if (!MpMainWindowViewModel.Instance.IsMainWindowOpen && 
                 !MpMainWindowViewModel.Instance.IsMainWindowOpening && 
                 MpBootstrapperViewModelBase.IsLoaded) {
-                if (MpPreferences.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
-                    if (e.Y <= MpPreferences.ShowMainWindowMouseHitZoneHeight) {
+                if (MpJsonPreferenceIO.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
+                    if (e.Y <= MpJsonPreferenceIO.Instance.ShowMainWindowMouseHitZoneHeight) {
                         MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
                     }
                 }
@@ -523,9 +523,9 @@ namespace MpWpfApp {
                 GlobalMouseMove?.Invoke(this, GlobalMouseLocation);
             } else {
                 bool isShowingMainWindow = false;
-                if (MpPreferences.DoShowMainWindowWithMouseEdge &&
-                    !MpPreferences.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
-                    if (e.Y <= MpPreferences.ShowMainWindowMouseHitZoneHeight) {
+                if (MpJsonPreferenceIO.Instance.DoShowMainWindowWithMouseEdge &&
+                    !MpJsonPreferenceIO.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
+                    if (e.Y <= MpJsonPreferenceIO.Instance.ShowMainWindowMouseHitZoneHeight) {
                         MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
                         isShowingMainWindow = true;
                     }
@@ -534,8 +534,8 @@ namespace MpWpfApp {
                 if(!isShowingMainWindow &&
                     _globalMouseDownPosition.HasValue && 
                     GlobalMouseLocation.Distance(_globalMouseDownPosition.Value) >= _MIN_GLOBAL_DRAG_DIST &&
-                    GlobalMouseLocation.Y <= MpPreferences.ShowMainWindowMouseHitZoneHeight &&
-                    MpPreferences.ShowMainWindowOnDragToScreenTop) {
+                    GlobalMouseLocation.Y <= MpJsonPreferenceIO.Instance.ShowMainWindowMouseHitZoneHeight &&
+                    MpJsonPreferenceIO.Instance.ShowMainWindowOnDragToScreenTop) {
                     MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
                 }
             }

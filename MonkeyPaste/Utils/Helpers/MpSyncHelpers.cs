@@ -31,7 +31,7 @@ namespace MonkeyPaste {
             return 44381;
         }
         public static string GetThisClientGuid() {
-            return MpPreferences.ThisDeviceGuid;
+            return MpJsonPreferenceIO.Instance.ThisDeviceGuid;
         }
         public static string GetPrimaryLocalIp4Address() {
             if (!IsConnectedToNetwork()) {

@@ -38,5 +38,6 @@
             return p.X >= Left && p.X <= Right &&
                    p.Y >= Top && p.Y <= Bottom;
         }
+
     }
 }

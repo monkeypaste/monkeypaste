@@ -76,6 +76,7 @@
     <Compile Remove="MpResolver.cs" />
     <Compile Remove="Utils\MpJsMessageListener.cs" />
     <Compile Remove="Utils\MpSingleton.cs" />
+    <Compile Remove="Utils\Preferences\MpPreferences.cs" />
     <Compile Remove="ViewModels\Bases\MpObservableObject.cs" />
     <Compile Remove="ViewModels\Bases\MpViewModelBase_old.cs" />
     <Compile Remove="ViewModels\Reusable\Geometry\MpBoxViewModel.cs" />
@@ -123,6 +124,8 @@
     <None Remove="Resources\Icons\monkey.png" />
     <None Remove="Behaviors\" />
     <None Remove="Resources\Images\test.png" />
+    <EmbeddedResource Remove="Resources\Styles\MpWpfConverters.xaml" />
+    <Compile Remove="Resources\Styles\MpWpfConverters.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -268,10 +271,6 @@
     <EmbeddedResource Update="Resources\Html\Editor\style\template-style.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Styles\MpWpfConverters.xaml">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>MpWpfConverters.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Update="Views\Shell\MainFlyOut\ContextMenu\MpColorChooserContextMenuItemView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -343,11 +342,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Resources\Styles\MpWpfConverters.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>MpWpfConverters.xaml</DependentUpon>
-    </Compile>
     <Compile Update="Views\Shell\MainFlyOut\ContextMenu\MpContextMenuView.xaml.cs">
       <DependentUpon>MpContextMenuView.xaml</DependentUpon>
     </Compile>
@@ -390,13 +384,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Resources\Styles" />
     <Folder Include="ViewModels\Reusable\Errors\" />
     <Folder Include="ViewModels\Reusable\NewFolder\" />
     <Folder Include="ViewModels\Reusable\Theme\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Include="Resources\Styles\MpPagingListBoxResourceDictionary.xaml" />
   </ItemGroup>
 
   <ItemGroup>

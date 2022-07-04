@@ -13,15 +13,13 @@ namespace MpWpfApp {
         public int TotalItemsInQuery { get; set; } = 0;
         public bool IsDescending { get; set; } = true;
         public MpContentSortType SortType { get; set; } = MpContentSortType.None;
-        public int TagId { get; set; } = 0;
+        public int TagId { get; set; } = MpTag.AllTagId;
         public string SearchText { get; set; } = string.Empty;
 
         public MpContentFilterType FilterFlags { get; set; } = MpContentFilterType.None;
         public MpTextFilterFlagType TextFlags { get; set; } = MpTextFilterFlagType.None;
         public MpTimeFilterFlagType TimeFlags { get; set; } = MpTimeFilterFlagType.None;
         public MpLogicalFilterFlagType LogicFlags { get; set; }
-
-        public int PageSize { get; set; } = 0;
 
         public int SortOrderIdx { get; set; } = 0;
 
@@ -39,7 +37,7 @@ namespace MpWpfApp {
             // NOTE not sure why this isn't set so maybe bad
             FilterFlags = MpSearchBoxViewModel.Instance.FilterType;
 
-            MpPreferences.LastQueryInfoJson = Serialize();
+            MpJsonPreferenceIO.Instance.LastQueryInfoJson = Serialize();
 
             var qi = MpDataModelProvider.QueryInfo;
             MpDataModelProvider.QueryInfos.Clear();

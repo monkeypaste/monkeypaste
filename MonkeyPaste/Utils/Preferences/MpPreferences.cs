@@ -6,27 +6,29 @@ using MonkeyPaste.Common;
 using System.Reflection;
 
 namespace MonkeyPaste {
-    public static class MpPreferences {
-        #region Constructors
-
-        public static void Init() {
-            Default = MpPlatformWrapper.Services.PreferenceIO;
-            if (string.IsNullOrEmpty(ThisDeviceGuid)) {
-                ThisDeviceGuid = System.Guid.NewGuid().ToString();
-            }
-            ResetClipboardAfterMonkeyPaste = false;
-        }
-
-        #endregion
-
+    public static class MpJsonPreferenceIO.Instance {
         #region Private Variables
 
         public static MpIPreferenceIO Default { get; private set; }
         #endregion
 
+        #region Constants
+
+        public const string PREFERENCES_FILE_NAME = "Pref.json";
+
+        public const string STRING_ARRAY_SPLIT_TOKEN = "<&>SPLIT</&>";
+
+        #endregion
+
         #region Properties
 
-        public static readonly string STRING_ARRAY_SPLIT_TOKEN = "<&>SPLIT</&>";
+        public static string PreferencesPath =>
+            Path.Combine(
+                Environment.CurrentDirectory,
+                PREFERENCES_FILE_NAME);
+
+
+        #region Preference Properties
 
         #region Property Reflection Referencer
 
@@ -35,7 +37,7 @@ namespace MonkeyPaste {
         //        // probably faster without reflection:
         //        // like:  return Properties.Settings.Default.PropertyValues[propertyName] 
         //        // instead of the following
-        //        Type myType = typeof(MpPreferences);
+        //        Type myType = typeof(MpJsonPreferenceIO.Instance);
         //        PropertyInfo myPropInfo = myType.GetProperty(propertyName);
         //        if (myPropInfo == null) {
         //            throw new Exception("Unable to find property: " + propertyName);
@@ -43,7 +45,7 @@ namespace MonkeyPaste {
         //        return myPropInfo.GetValue(this, null);
         //    }
         //    set {
-        //        Type myType = typeof(MpPreferences);
+        //        Type myType = typeof(MpJsonPreferenceIO.Instance);
         //        PropertyInfo myPropInfo = myType.GetProperty(propertyName);
         //        myPropInfo.SetValue(this, value, null);
         //    }
@@ -1189,16 +1191,23 @@ namespace MonkeyPaste {
         #endregion
 
         #endregion
-
-        #region MpIPreferences Implementation
-        public static object GetPreferenceValue(string preferenceName) {
-            return typeof(MpIPreferenceIO).GetProperty(preferenceName).GetValue(Default);
-        }
-
-        public static void SetPreferenceValue(string preferenceName, object preferenceValue) {
-            typeof(MpIPreferenceIO).GetProperty(preferenceName).SetValue(Default, preferenceValue);
-        }
         #endregion
+
+        #region Constructors
+
+        public static void Init() {
+            if(!File.Exists(PreferencesPath)) {
+
+            }
+            Default = MpPlatformWrapper.Services.PreferenceIO;
+            if (string.IsNullOrEmpty(ThisDeviceGuid)) {
+                ThisDeviceGuid = System.Guid.NewGuid().ToString();
+            }
+            ResetClipboardAfterMonkeyPaste = false;
+        }
+
+        #endregion
+
 
         #region Private Methods
 

@@ -16,6 +16,8 @@ using System.Windows.Forms;
 using Microsoft.Office.Interop.Outlook;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Wpf;
+using System.Diagnostics;
+
 namespace MpWpfApp {
 
     public class MpTagTrayViewModel : 
@@ -382,14 +384,22 @@ namespace MpWpfApp {
                     tagId = DefaultTagId;
                 } else if(args is MpTagTileViewModel ttvm) {
                     tagId = ttvm.TagId;
-                } else {
+                } else if(args is int){
                     tagId = (int)args;
+                } else {
+                    Debugger.Break();
+                    tagId = MpTag.AllTagId;
                 }
 
                 Items.ForEach(x => x.IsSelected = x.TagId == tagId);
 
                 OnPropertyChanged(nameof(SelectedTagTile));
                 
+                if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                    // last loaded tag is selected in ClipTray OnPostMainWindowLoaded 
+                    // which notifies query changed so don't notify
+                    return;
+                }
                 if(MpDataModelProvider.QueryInfo.SortType == MpContentSortType.Manual) {
                     MpClipTileSortViewModel.Instance.ResetToDefault();
                 } else if (MpDataModelProvider.QueryInfo.TagId != tagId) {

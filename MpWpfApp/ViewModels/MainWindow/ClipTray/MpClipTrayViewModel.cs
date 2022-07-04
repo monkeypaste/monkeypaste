@@ -997,7 +997,7 @@ namespace MpWpfApp {
             //    MpCopyItemType.RichText,
             //    "One place for your clipboard",
             //    MpHelpers.ConvertPlainTextToRichText(""));
-            //MpPreferences.IsInitialLoad = false;
+            //MpJsonPreferenceIO.Instance.IsInitialLoad = false;
             //
         }
 
@@ -1405,46 +1405,40 @@ namespace MpWpfApp {
         }
 
         public async void OnPostMainWindowLoaded() {
-            //while (IsBusy || MpTagTrayViewModel.Instance.IsBusy) { await Task.Delay(100); }
-
-
-            //if (!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
-            //    // this ensures this only gets called once
-            //    return;
-            //}
-
-            //int totalItems =  MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount;
-
-            //MpSystemTrayViewModel.Instance.TotalItemCountLabel = string.Format(@"{0} total entries", totalItems);
-            //MpMainWindowViewModel.Instance.IsMainWindowLoading = false;
-
-            //await Task.Delay(3000);
-
 
             int totalItems = MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount;
 
             MpSystemTrayViewModel.Instance.TotalItemCountLabel = string.Format(@"{0} total entries", totalItems);
-            MpMainWindowViewModel.Instance.IsMainWindowLoading = false;
+            
 
 
             MpPlatformWrapper.Services.ClipboardMonitor.OnClipboardChanged += ClipboardChanged;
             MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
             //await Task.Delay(3000);
 
-            //if (!string.IsNullOrEmpty(MpPreferences.LastQueryInfoJson)) {
-            //    var qi = JsonConvert.DeserializeObject<MpWpfQueryInfo>(MpPreferences.LastQueryInfoJson);
-            //    if (qi != null) {
-            //        MpDataModelProvider.Init();
-            //    }
-            //}
+            if (!string.IsNullOrEmpty(MpJsonPreferenceIO.Instance.LastQueryInfoJson)) {
+                var qi = JsonConvert.DeserializeObject<MpWpfQueryInfo>(MpJsonPreferenceIO.Instance.LastQueryInfoJson);
+                if (qi != null) {
+                    MpClipTileSortViewModel.Instance.SelectedSortType = 
+                        MpClipTileSortViewModel.Instance.SortTypes
+                            .FirstOrDefault(x=>x.SortType == qi.SortType);
+                    MpClipTileSortViewModel.Instance.IsSortDescending = qi.IsDescending;
 
-            while(IsAnyBusy) {
-                await Task.Delay(100);
+                    MpTagTrayViewModel.Instance.SelectTagCommand.Execute(qi.TagId);
+
+                    MpSearchBoxViewModel.Instance.SearchText = qi.SearchText;
+                    // NOTE Filter flags already set from Preferences
+
+                    MpPlatformWrapper.Services.QueryInfo = qi;
+                    
+
+                    MpDataModelProvider.Init();
+                }
             }
+            MpMainWindowViewModel.Instance.IsMainWindowLoading = false;
 
-            QueryCommand.Execute(null);
 
-            //MpNotificationCollectionView.Instance.CloseBalloon();
+            MpDataModelProvider.QueryInfo.NotifyQueryChanged(true);
         }
 
 
@@ -1575,7 +1569,7 @@ namespace MpWpfApp {
                             _newModels.Insert(newIdx, _appendModeCopyItem);
                         }
 
-                        if (MpPreferences.NotificationShowAppendBufferToast) {
+                        if (MpJsonPreferenceIO.Instance.NotificationShowAppendBufferToast) {
                             // TODO now composite item doesn't roll up children so the buffer needs to be created here
                             // if I use this at all
 
@@ -1586,22 +1580,22 @@ namespace MpWpfApp {
                                 .FireAndForgetSafeAsync(this);
                         }
 
-                        if (MpPreferences.NotificationDoCopySound) {
+                        if (MpJsonPreferenceIO.Instance.NotificationDoCopySound) {
                             MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
                         }
                     }
                 }
             } else {
                 _appendModeCopyItem = null;
-                if (MpPreferences.NotificationDoCopySound) {
+                if (MpJsonPreferenceIO.Instance.NotificationDoCopySound) {
                     MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
                 }
-                if (MpPreferences.IsTrialExpired) {
+                if (MpJsonPreferenceIO.Instance.IsTrialExpired) {
                     MpNotificationCollectionViewModel.Instance.ShowMessage(
                         title: "Trial Expired",
                         msg: "Please update your membership to use Monkey Paste",
                         msgType: MpNotificationDialogType.TrialExpired,
-                        iconResourceKey: MpPreferences.AbsoluteResourcesPath + @"/Images/monkey (2).png")
+                        iconResourceKey: MpJsonPreferenceIO.Instance.AbsoluteResourcesPath + @"/Images/monkey (2).png")
                         .FireAndForgetSafeAsync(this);
                 }
             }
@@ -2339,7 +2333,7 @@ namespace MpWpfApp {
                     !IsAnyEditingClipTile &&
                     !IsAnyEditingClipTitle &&
                     !IsAnyPastingTemplate &&
-                    !MpPreferences.IsTrialExpired;
+                    !MpJsonPreferenceIO.Instance.IsTrialExpired;
             });
 
         public ICommand PasteCurrentClipboardIntoSelectedTileCommand => new RelayCommand(
@@ -2506,7 +2500,7 @@ namespace MpWpfApp {
                     pt));
                 //MpClipTrayViewModel.Instance.ClearClipSelection();
                 //IsSelected = true;
-                //MpHelpers.CreateEmail(MpPreferences.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
+                //MpHelpers.CreateEmail(MpJsonPreferenceIO.Instance.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
             },
             () => {
                 return !IsAnyEditingClipTile && SelectedItem != null;
@@ -2546,7 +2540,7 @@ namespace MpWpfApp {
             () => {
                 string pt = string.Join(Environment.NewLine, PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
                 return (GetSelectedClipsType() == MpCopyItemType.Text) &&
-                    pt.Length <= MpPreferences.MaxQrCodeCharLength;
+                    pt.Length <= MpJsonPreferenceIO.Instance.MaxQrCodeCharLength;
             });
 
         public ICommand SpeakSelectedClipsCommand => new RelayCommand(
@@ -2554,10 +2548,10 @@ namespace MpWpfApp {
                 await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
                     var speechSynthesizer = new SpeechSynthesizer();
                     speechSynthesizer.SetOutputToDefaultAudioDevice();
-                    if (string.IsNullOrEmpty(MpPreferences.SpeechSynthVoiceName)) {
+                    if (string.IsNullOrEmpty(MpJsonPreferenceIO.Instance.SpeechSynthVoiceName)) {
                         speechSynthesizer.SelectVoice(speechSynthesizer.GetInstalledVoices()[0].VoiceInfo.Name);
                     } else {
-                        speechSynthesizer.SelectVoice(MpPreferences.SpeechSynthVoiceName);
+                        speechSynthesizer.SelectVoice(MpJsonPreferenceIO.Instance.SpeechSynthVoiceName);
                     }
                     speechSynthesizer.Rate = 0;
                     speechSynthesizer.SpeakCompleted += (s, e) => {

@@ -72,7 +72,7 @@ namespace MpWpfApp {
 
         public async Task InitAsync() {
 
-            await SetSoundGroupIdx(MpPreferences.NotificationSoundGroupIdx);
+            await SetSoundGroupIdx(MpJsonPreferenceIO.Instance.NotificationSoundGroupIdx);
         }
 
         public MpSoundPlayerGroupCollectionViewModel() : base(null) {
@@ -91,13 +91,13 @@ namespace MpWpfApp {
                         //do nothing so collections empty and play commands don't execute
                         break;
                     case MpSoundGroup.Minimal:
-                        SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.Copy, MpPreferences.NotificationCopySound1Path));
-                        SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.AppendOn, MpPreferences.NotificationAppendModeOnSoundPath));
-                        SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.AppendOff, MpPreferences.NotificationAppendModeOffSoundPath));
-                        SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.Loaded, MpPreferences.NotificationLoadedPath));
+                        SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.Copy, MpJsonPreferenceIO.Instance.NotificationCopySound1Path));
+                        SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.AppendOn, MpJsonPreferenceIO.Instance.NotificationAppendModeOnSoundPath));
+                        SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.AppendOff, MpJsonPreferenceIO.Instance.NotificationAppendModeOffSoundPath));
+                        SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.Loaded, MpJsonPreferenceIO.Instance.NotificationLoadedPath));
                         break;
                 }
-                MpPreferences.NotificationSoundGroupIdx = (int)SelectedSoundGroupNameIdx;
+                MpJsonPreferenceIO.Instance.NotificationSoundGroupIdx = (int)SelectedSoundGroupNameIdx;
             });
         }
         #endregion
@@ -124,7 +124,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanPlayCopySound() {
-            return MpPreferences.NotificationDoCopySound && SoundPlayerViewModels.Count > 0;
+            return MpJsonPreferenceIO.Instance.NotificationDoCopySound && SoundPlayerViewModels.Count > 0;
         }
         private void PlayCopySound() {
             SoundPlayerViewModels.Where(x => x.SoundType == MpSoundType.Copy).ToList()[0].Play();
@@ -140,7 +140,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanPlayLoadedSound() {
-            return MpPreferences.NotificationDoLoadedSound && SoundPlayerViewModels.Count > 0;
+            return MpJsonPreferenceIO.Instance.NotificationDoLoadedSound && SoundPlayerViewModels.Count > 0;
         }
         private void PlayLoadedSound() {
             SoundPlayerViewModels.Where(x => x.SoundType == MpSoundType.Loaded).ToList()[0].Play();
@@ -156,7 +156,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanPlayModeChange(bool isOn) {
-            return MpPreferences.NotificationDoModeChangeSound && SoundPlayerViewModels.Count > 0;
+            return MpJsonPreferenceIO.Instance.NotificationDoModeChangeSound && SoundPlayerViewModels.Count > 0;
         }
         private void PlayModeChange(bool isOn) {
             SoundPlayerViewModels.Where(x => isOn ? x.SoundType == MpSoundType.AppendOn: x.SoundType == MpSoundType.AppendOff).ToList()[0].Play();

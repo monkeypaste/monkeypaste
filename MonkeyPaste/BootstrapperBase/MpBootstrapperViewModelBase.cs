@@ -46,8 +46,9 @@ namespace MonkeyPaste {
             _items.AddRange(
                 new List<MpBootstrappedItemViewModel>() {
                     new MpBootstrappedItemViewModel(this,typeof(MpConsole)),
+                    //new MpBootstrappedItemViewModel(this,typeof(MpJsonPreferenceIO)),
                     new MpBootstrappedItemViewModel(this,typeof(MpCursor)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpPreferences)),
+
                     //new MpBootstrappedItemViewModel(this,typeof(MpTempFileManager)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpDb)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpDataModelProvider)),
@@ -57,7 +58,7 @@ namespace MonkeyPaste {
                 });
         }
 
-        public abstract Task Init();
+        public abstract Task InitAsync();
 
         protected async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {
             IsBusy = true;

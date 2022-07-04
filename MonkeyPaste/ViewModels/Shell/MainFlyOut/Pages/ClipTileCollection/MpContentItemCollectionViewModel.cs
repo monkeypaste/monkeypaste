@@ -941,7 +941,7 @@ namespace MonkeyPaste {
             //    MpCopyItemType.RichText,
             //    "One place for your clipboard",
             //    MpHelpers.ConvertPlainTextToRichText(""));
-            //MpPreferences.IsInitialLoad = false;
+            //MpJsonPreferenceIO.Instance.IsInitialLoad = false;
             //
         }
 
@@ -1412,30 +1412,30 @@ namespace MonkeyPaste {
                     newCopyItem.CompositeSortOrderIdx = compositeChildCount + 1;
                     await newCopyItem.WriteToDatabaseAsync();
 
-                    if (MpPreferences.NotificationShowAppendBufferToast) {
+                    if (MpJsonPreferenceIO.Instance.NotificationShowAppendBufferToast) {
                         // TODO now composite item doesn't roll up children so the buffer needs to be created here
                         // if I use this at all
                         MpStandardBalloonViewModel.ShowBalloon(
                             "Append Buffer",
                             SelectedItems[0].TailItem.CopyItem.ItemData.ToPlainText(),
-                            MpPreferences.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+                            MpJsonPreferenceIO.Instance.AbsoluteResourcesPath + @"/Images/monkey (2).png");
                     }
 
-                    if (MpPreferences.NotificationDoCopySound) {
+                    if (MpJsonPreferenceIO.Instance.NotificationDoCopySound) {
                         MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
                     }
                 }
 
             } else {
                 _appendModeCopyItem = null;
-                if (MpPreferences.NotificationDoCopySound) {
+                if (MpJsonPreferenceIO.Instance.NotificationDoCopySound) {
                     MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
                 }
-                if (MpPreferences.IsTrialExpired) {
+                if (MpJsonPreferenceIO.Instance.IsTrialExpired) {
                     MpStandardBalloonViewModel.ShowBalloon(
                         "Trial Expired",
                         "Please update your membership to use Monkey Paste",
-                        MpPreferences.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+                        MpJsonPreferenceIO.Instance.AbsoluteResourcesPath + @"/Images/monkey (2).png");
                 }
             }
             if (isDup) {
@@ -2187,7 +2187,7 @@ namespace MonkeyPaste {
                     !IsAnyEditingClipTile &&
                     !IsAnyEditingClipTitle &&
                     !IsAnyPastingTemplate &&
-                    !MpPreferences.IsTrialExpired;
+                    !MpJsonPreferenceIO.Instance.IsTrialExpired;
             });
 
         public ICommand PasteCurrentClipboardIntoSelectedTileCommand => new RelayCommand(
@@ -2384,7 +2384,7 @@ namespace MonkeyPaste {
                     pt));
                 //MpContentItemCollectionViewModel.Instance.ClearClipSelection();
                 //IsSelected = true;
-                //MpHelpers.CreateEmail(MpPreferences.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
+                //MpHelpers.CreateEmail(MpJsonPreferenceIO.Instance.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
             },
             () => {
                 return !IsAnyEditingClipTile && SelectedItems.Count > 0;
@@ -2433,7 +2433,7 @@ namespace MonkeyPaste {
             () => {
                 string pt = string.Join(Environment.NewLine, PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
                 return (GetSelectedClipsType() == MpCopyItemType.Text) &&
-                    pt.Length <= MpPreferences.MaxQrCodeCharLength;
+                    pt.Length <= MpJsonPreferenceIO.Instance.MaxQrCodeCharLength;
             });
 
         public ICommand SpeakSelectedClipsCommand => new RelayCommand(
@@ -2441,10 +2441,10 @@ namespace MonkeyPaste {
                 await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
                     var speechSynthesizer = new SpeechSynthesizer();
                     speechSynthesizer.SetOutputToDefaultAudioDevice();
-                    if (string.IsNullOrEmpty(MpPreferences.SpeechSynthVoiceName)) {
+                    if (string.IsNullOrEmpty(MpJsonPreferenceIO.Instance.SpeechSynthVoiceName)) {
                         speechSynthesizer.SelectVoice(speechSynthesizer.GetInstalledVoices()[0].VoiceInfo.Name);
                     } else {
-                        speechSynthesizer.SelectVoice(MpPreferences.SpeechSynthVoiceName);
+                        speechSynthesizer.SelectVoice(MpJsonPreferenceIO.Instance.SpeechSynthVoiceName);
                     }
                     speechSynthesizer.Rate = 0;
                     speechSynthesizer.SpeakCompleted += (s, e) => {

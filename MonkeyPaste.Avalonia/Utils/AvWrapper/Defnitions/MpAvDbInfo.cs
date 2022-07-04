@@ -6,14 +6,15 @@ using System.Reflection;
 namespace MonkeyPaste.Avalonia {
     public class MpAvDbInfo : MonkeyPaste.MpIDbInfo {
         public string GetDbFilePath() {
-            string appDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            if (string.IsNullOrEmpty(MpPreferences.DbPath) ||
-                !File.Exists(MpPreferences.DbPath)) {
-                MpConsole.WriteLine("Db does not exist in " + appDir);
-                MpPreferences.DbPath = Path.Combine(appDir,MpPreferences.DbName);
-                MpPreferences.DbPassword = string.Empty;
-            }
-            return MpPreferences.DbPath;
+            //string appDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            //if (string.IsNullOrEmpty(MpJsonPreferenceIO.Instance.DbPath) ||
+            //    !File.Exists(MpJsonPreferenceIO.Instance.DbPath)) {
+            //    MpConsole.WriteLine("Db does not exist in " + appDir);
+            //    MpJsonPreferenceIO.Instance.DbPath = Path.Combine(appDir,MpJsonPreferenceIO.Instance.DbName);
+            //    MpJsonPreferenceIO.Instance.DbPassword = string.Empty;
+            //}
+            //return MpJsonPreferenceIO.Instance.DbPath;
+            return MpJsonPreferenceIO.Instance.DbPath;
         }
 
         public string GetDbName() {

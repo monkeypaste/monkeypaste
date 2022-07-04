@@ -18,7 +18,7 @@ using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 namespace MonkeyPaste {
     public static class MpDb {
         #region Private Variables
-        private static MpIDbInfo _dbInfo;
+
         private static object _rdLock = new object();
         private static SQLiteAsyncConnection _connectionAsync;
         private static SQLiteConnection _connection;
@@ -50,12 +50,11 @@ namespace MonkeyPaste {
         #region Constructors
 
 
-        public static async Task Init() {
-            _dbInfo = MpPlatformWrapper.Services.DbInfo;
+        public static async Task InitAsync() {
             var sw = new Stopwatch();
             sw.Start();
-            //MpPreferences.StartupDateTime = DateTime.Now;
-            await InitDb();
+            //MpJsonPreferenceIO.Instance.StartupDateTime = DateTime.Now;
+            await InitDbAsync();
             IsLoaded = true;
             sw.Stop();
             MpConsole.WriteLine($"Db loading: {sw.ElapsedMilliseconds} ms");
@@ -67,7 +66,7 @@ namespace MonkeyPaste {
         #region Public Methods
 
         public static string GetDbFileAsBase64() {
-            var bytes = File.ReadAllBytes(_dbInfo.GetDbFilePath());
+            var bytes = File.ReadAllBytes(MpJsonPreferenceIO.Instance.DbPath);
             return Convert.ToBase64String(bytes);
         }
         #region Queries
@@ -306,7 +305,7 @@ namespace MonkeyPaste {
         #endregion
 
         public static byte[] GetDbFileBytes() {
-            var dbPath = _dbInfo.GetDbFilePath();
+            var dbPath = MpJsonPreferenceIO.Instance.DbPath;
             return File.ReadAllBytes(dbPath);
         }
 
@@ -318,7 +317,7 @@ namespace MonkeyPaste {
             if(!IsLoaded) {
                 return null;
             }
-            return string.IsNullOrEmpty(providedSourceClientGuid) ? MpPreferences.ThisDeviceGuid : providedSourceClientGuid;
+            return string.IsNullOrEmpty(providedSourceClientGuid) ? MpJsonPreferenceIO.Instance.ThisDeviceGuid : providedSourceClientGuid;
         }
 
         private static async Task LogWrite(MpDbLogActionType actionType, MpDbModelBase item, string sourceClientGuid, bool ignoreTracking) {
@@ -356,12 +355,12 @@ namespace MonkeyPaste {
             }
         }
 
-        private static async Task InitDb() {
+        private static async Task InitDbAsync() {
 
             //SQLitePCL.Batteries.Init();
 
-            var dbPath = _dbInfo.GetDbFilePath();
-            
+            var dbPath = MpJsonPreferenceIO.Instance.DbPath;
+
             //File.Delete(dbPath);
 
             bool isNewDb = !File.Exists(dbPath);
@@ -382,20 +381,20 @@ namespace MonkeyPaste {
             
             if (isNewDb) {
                 await CreateViews();
-                await InitDefaultData();
+                await InitDefaultDataAsync();
 
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
 
-            MpPreferences.ThisUserDevice = await MpDataModelProvider.GetUserDeviceByGuid(MpPreferences.ThisDeviceGuid);
+            MpJsonPreferenceIO.Instance.ThisAppSourceId = 5;
+            MpJsonPreferenceIO.Instance.ThisOsFileManagerSourceId = 4;
 
-            MpPreferences.ThisAppSourceId = 5;
-            MpPreferences.ThisAppSource = await GetItemAsync<MpSource>(MpPreferences.ThisAppSourceId);
-            var thisAppApp = await MpDb.GetItemAsync<MpApp>(MpPreferences.ThisAppSource.AppId);
-            MpPreferences.ThisAppIcon = await GetItemAsync<MpIcon>(thisAppApp.IconId);
-
-
-            MpPreferences.ThisOsFileManagerSource = await GetItemAsync<MpSource>(MpPreferences.ThisOsFileManagerSourceId);
+            MpJsonPreferenceIO.Instance.ThisUserDevice = await MpDataModelProvider.GetUserDeviceByGuid(MpJsonPreferenceIO.Instance.ThisDeviceGuid);
+            
+            MpJsonPreferenceIO.Instance.ThisAppSource = await GetItemAsync<MpSource>(MpJsonPreferenceIO.Instance.ThisAppSourceId);
+            var thisAppApp = await MpDb.GetItemAsync<MpApp>(MpJsonPreferenceIO.Instance.ThisAppSource.AppId);
+            MpJsonPreferenceIO.Instance.ThisAppIcon = await GetItemAsync<MpIcon>(thisAppApp.IconId);
+            MpJsonPreferenceIO.Instance.ThisOsFileManagerSource = await GetItemAsync<MpSource>(MpJsonPreferenceIO.Instance.ThisOsFileManagerSourceId);
 
 
             if(isNewDb) {
@@ -404,7 +403,7 @@ namespace MonkeyPaste {
 
 
             MpConsole.WriteLine(@"Db file located: " + dbPath);
-            MpConsole.WriteLine(@"This Client Guid: " + MpPreferences.ThisDeviceGuid);
+            MpConsole.WriteLine(@"This Client Guid: " + MpJsonPreferenceIO.Instance.ThisDeviceGuid);
             MpConsole.WriteLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
         }
 
@@ -566,16 +565,18 @@ namespace MonkeyPaste {
             //                                        LEFT JOIN MpUrl ON MpUrl.pk_MpUrlId = MpSource.fk_MpUrlId");
         }
         
-        private static async Task InitDefaultData() {
+        private static async Task InitDefaultDataAsync() {
             // NOTE! MpTag.AllTagId needs to be changed to 1 not 2 since recent was removed
 
             #region User Device
 
-            MpPreferences.ThisDeviceGuid = Guid.NewGuid().ToString();
+            MpJsonPreferenceIO.Instance.ThisDeviceType = MpPlatformWrapper.Services.OsInfo.OsType;
+
+            MpJsonPreferenceIO.Instance.ThisDeviceGuid = Guid.NewGuid().ToString();
 
             var thisDevice = new MpUserDevice() {
-                UserDeviceGuid = Guid.Parse(MpPreferences.ThisDeviceGuid),
-                PlatformType = MpPreferences.ThisDeviceType
+                UserDeviceGuid = Guid.Parse(MpJsonPreferenceIO.Instance.ThisDeviceGuid),
+                PlatformType = MpJsonPreferenceIO.Instance.ThisDeviceType
             };
             await AddItemAsync<MpUserDevice>(thisDevice);
 
@@ -984,7 +985,7 @@ namespace MonkeyPaste {
 
             //var ai1 = await MpAnalyticItem.Create(
             //            "https://api.cognitive.microsofttranslator.com/{0}",
-            //            MpPreferences.AzureCognitiveServicesKey,
+            //            MpJsonPreferenceIO.Instance.AzureCognitiveServicesKey,
             //            MpCopyItemType.Text,
             //            MpAnalyzerOutputFormatFlags.Text,
             //            "Language Translator",
@@ -995,7 +996,7 @@ namespace MonkeyPaste {
 
             //var ai2 = await MpAnalyticItem.Create(
             //            "https://api.openai.com/v1/",
-            //            MpPreferences.RestfulOpenAiApiKey,
+            //            MpJsonPreferenceIO.Instance.RestfulOpenAiApiKey,
             //            MpCopyItemType.Text,
             //            MpAnalyzerOutputFormatFlags.Text,
             //            "Open Ai",
@@ -1050,14 +1051,14 @@ namespace MonkeyPaste {
 
             var process = Process.GetCurrentProcess();
             string thisAppPath = process.MainModule.FileName;
-            string thisAppName = MpPreferences.ApplicationName;
+            string thisAppName = MpJsonPreferenceIO.Instance.ApplicationName;
             var thisApp = await MpApp.Create(thisAppPath, thisAppName, sourceIcon.Id);
             var thisAppSource = await MpSource.Create(appId: thisApp.Id, urlId: 0);
-            MpPreferences.ThisAppSourceId = thisAppSource.Id;
+            MpJsonPreferenceIO.Instance.ThisAppSourceId = thisAppSource.Id;
 
             var osApp = await MpApp.Create(MpPlatformWrapper.Services.OsInfo.OsFileManagerPath, MpPlatformWrapper.Services.OsInfo.OsFileManagerName);
             var osAppSource = await MpSource.Create(osApp.Id, 0);
-            MpPreferences.ThisOsFileManagerSourceId = osAppSource.Id;
+            MpJsonPreferenceIO.Instance.ThisOsFileManagerSourceId = osAppSource.Id;
 
             #endregion
 
@@ -1101,7 +1102,7 @@ namespace MonkeyPaste {
             return 44381;
         }
         public static string GetThisClientGuid() {
-            return MpPreferences.ThisDeviceGuid;
+            return MpJsonPreferenceIO.Instance.ThisDeviceGuid;
         }
         public static string GetPrimaryLocalIp4Address() {
             if (!IsConnectedToNetwork()) {

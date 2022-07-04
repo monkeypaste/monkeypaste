@@ -7,7 +7,6 @@ namespace MpWpfApp {
     public class MpWpfWrapper : MpIPlatformWrapper {
         public MpICursor Cursor { get; set; }
         public MpIDbInfo DbInfo { get; set; }
-        public MpIPreferenceIO PreferenceIO { get; set; }
         public MpIQueryInfo QueryInfo { get; set; }
         public MpIIconBuilder IconBuilder { get; set; }
         public MpIUrlBuilder UrlBuilder { get; set; }
@@ -39,8 +38,7 @@ namespace MpWpfApp {
             // NOTE DataObjectRegistrar is set after bootstrapping
 
             Cursor = new MpWpfCursor();
-            DbInfo = new MpWpfDbInfo();
-            PreferenceIO = new MpWpfPreferences();            
+            DbInfo = new MpWpfDbInfo();          
             QueryInfo = new MpWpfQueryInfo();
             IconBuilder = new MpWpfIconBuilder();
             UrlBuilder = new MpUrlBuilder();

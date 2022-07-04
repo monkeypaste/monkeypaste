@@ -35,9 +35,10 @@ namespace MonkeyPaste {
             if(_Rand == null) {
                 _Rand = new Random((int)DateTime.Now.Ticks);
             }
+            return "this_is_a_test_password";
 
-            int length = _Rand.Next(MinDbPasswordLength, MaxDbPasswordLength);
-            return new string(Enumerable.Repeat(PasswordChars, length).Select(s => s[_Rand.Next(s.Length)]).ToArray());
+            //int length = _Rand.Next(MinDbPasswordLength, MaxDbPasswordLength);
+            //return new string(Enumerable.Repeat(PasswordChars, length).Select(s => s[_Rand.Next(s.Length)]).ToArray());
         }
     }
 }

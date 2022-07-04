@@ -38,10 +38,10 @@ namespace MpWpfApp {
 
 
             //if(AddButton.IsEnabled) {
-            //    AddButtonImage.Source = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/MpRichTextBox/templateadd.png"));
+            //    AddButtonImage.Source = (BitmapSource)new BitmapImage(new Uri(MpJsonPreferenceIO.Instance.AbsoluteResourcesPath + @"/Images/MpRichTextBox/templateadd.png"));
             //    AddButton.ToolTip = "Add Template";
             //} else {
-            //    AddButtonImage.Source = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/MpRichTextBox/templatedisabled.png"));
+            //    AddButtonImage.Source = (BitmapSource)new BitmapImage(new Uri(MpJsonPreferenceIO.Instance.AbsoluteResourcesPath + @"/Images/MpRichTextBox/templatedisabled.png"));
             //    var tb = new TextBlock() {
             //        Foreground = Brushes.Red,
             //        Background = Brushes.White,

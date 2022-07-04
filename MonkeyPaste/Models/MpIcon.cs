@@ -139,7 +139,7 @@ namespace MonkeyPaste {
             };
 
             if(createBorder) {
-                await newIcon.CreateOrUpdateBorder(string.Empty,suppressWrite);
+                await newIcon.CreateOrUpdateBorderAsync(string.Empty,suppressWrite);
             } else if(!suppressWrite) {
                 await newIcon.WriteToDatabaseAsync();
             }
@@ -190,7 +190,7 @@ namespace MonkeyPaste {
 
         public MpIcon() { }
 
-        public async Task CreateOrUpdateBorder(string forceHexColor = "", bool suppressWrite = false) {
+        public async Task CreateOrUpdateBorderAsync(string forceHexColor = "", bool suppressWrite = false) {
             var iconBuilder = MpPlatformWrapper.Services.IconBuilder;
 
             var img = await MpDb.GetItemAsync<MpDbImage>(IconImageId);

@@ -25,7 +25,7 @@ namespace MpWpfApp {
             _items.AddRange(
                 new List<MpBootstrappedItemViewModel>() {
                     new MpBootstrappedItemViewModel(this,typeof(MpDocumentHtmlExtension)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpProcessManager), Properties.Settings.Default.IgnoredProcessNames),
+                    new MpBootstrappedItemViewModel(this,typeof(MpProcessManager)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpProcessAutomation)),
                     new MpBootstrappedItemViewModel(this,typeof(MpScreenInformation)),
                     new MpBootstrappedItemViewModel(this,typeof(MpThemeColors)),
@@ -73,7 +73,7 @@ namespace MpWpfApp {
                 });
         }
 
-        public override async Task Init() {
+        public override async Task InitAsync() {
             var sw = Stopwatch.StartNew();
 
             // NOTE Move this later (to first load init native data in app.cs) start

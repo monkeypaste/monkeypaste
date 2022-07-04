@@ -81,7 +81,7 @@ namespace MpWpfApp {
                     return null;
                 }
 
-                if (MpPreferences.IgnoreWhiteSpaceCopyItems &&
+                if (MpJsonPreferenceIO.Instance.IgnoreWhiteSpaceCopyItems &&
                     itemType == MpCopyItemType.Text &&
                     string.IsNullOrWhiteSpace((itemData).ToPlainText().Replace(Environment.NewLine, ""))) {
                     return null;
@@ -93,14 +93,14 @@ namespace MpWpfApp {
                 //    //htmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
                 //}
 
-                if (itemType == MpCopyItemType.Text && ((string)itemData).Length > MpPreferences.MaxRtfCharCount) {
+                if (itemType == MpCopyItemType.Text && ((string)itemData).Length > MpJsonPreferenceIO.Instance.MaxRtfCharCount) {
                     itemData = itemData.ToPlainText();
-                    if (((string)itemData).Length > MpPreferences.MaxRtfCharCount) {
+                    if (((string)itemData).Length > MpJsonPreferenceIO.Instance.MaxRtfCharCount) {
                         //item is TOO LARGE so ignore
-                        if (MpPreferences.NotificationShowCopyItemTooLargeToast) {
+                        if (MpJsonPreferenceIO.Instance.NotificationShowCopyItemTooLargeToast) {
                             MpNotificationCollectionViewModel.Instance.ShowMessage(
                                 title: "Item TOO LARGE",
-                                msg: $"Max Item Characters is {MpPreferences.MaxRtfCharCount} and copied item is {((string)itemData).Length} characters",
+                                msg: $"Max Item Characters is {MpJsonPreferenceIO.Instance.MaxRtfCharCount} and copied item is {((string)itemData).Length} characters",
                                 msgType: MpNotificationDialogType.DbError)
                                     .FireAndForgetSafeAsync(MpClipTrayViewModel.Instance);
                         }
@@ -125,7 +125,7 @@ namespace MpWpfApp {
                 //    // since source is unknown set to this app
 
                 //    processPath = Assembly.GetExecutingAssembly().Location;
-                //    appName = MpPreferences.ThisAppName;
+                //    appName = MpJsonPreferenceIO.Instance.ThisAppName;
                 //    processIconImg64 = MpBase64Images.AppIcon;
                 //} else {
                 //    processPath = MpProcessManager.GetProcessPath(processHandle);

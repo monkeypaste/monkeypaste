@@ -24,16 +24,27 @@
           Height="{Binding Height, ElementName=AvMainWindow}">
     <!--Canvas.Right="{Binding MainWindowRight}"
           Canvas.Bottom="{Binding MainWindowBottom}"-->
+    <!--<Canvas x:Name="ExternalCanvas"
+            IsHitTestVisible="False"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Canvas.Left="0"
+            Canvas.Top="{Binding ExternalTop}"
+            Width="{Binding MainWindowWidth}"
+            Height="{Binding ExternalHeight}">
+      <Canvas.Background>
+        <SolidColorBrush Color="Orange" Opacity="0.7"/>
+      </Canvas.Background>
+    </Canvas>-->
       <Grid x:Name="MainWindowGrid"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Canvas.Left="0"
             Canvas.Top="{Binding MainWindowTop}"
             Width="{Binding MainWindowWidth}"
-          Height="{Binding MainWindowHeight}"
-          >
+          Height="{Binding MainWindowHeight}">
       <Grid.Background>
-        <SolidColorBrush Color="Pink" />
+        <SolidColorBrush Color="Pink" Opacity="0.7"/>
       </Grid.Background>
     </Grid>
   </Canvas>

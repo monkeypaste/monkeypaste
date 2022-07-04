@@ -65,7 +65,7 @@ using stdole;
         //public object this[string propertyName] {
         //    get {
         //        // probably faster without reflection:
-        //        // like:  return MpPreferences.PropertyValues[propertyName] 
+        //        // like:  return MpJsonPreferenceIO.Instance.PropertyValues[propertyName] 
         //        // instead of the following
         //        Type myType = typeof(MpClipTileViewModel);
         //        PropertyInfo myPropInfo = myType.GetProperty(propertyName);
@@ -277,12 +277,12 @@ using stdole;
         public bool UseRegEx { get; set; }
 
         public ObservableCollection<string> RecentFindTexts {
-            get => new ObservableCollection<string>(MpPreferences.RecentFindTexts.Split(new string[] { MpPreferences.STRING_ARRAY_SPLIT_TOKEN },StringSplitOptions.RemoveEmptyEntries));
-            set => MpPreferences.RecentFindTexts = string.Join(MpPreferences.STRING_ARRAY_SPLIT_TOKEN, value);
+            get => new ObservableCollection<string>(MpJsonPreferenceIO.Instance.RecentFindTexts.Split(new string[] { MpJsonPreferenceIO.STRING_ARRAY_SPLIT_TOKEN },StringSplitOptions.RemoveEmptyEntries));
+            set => MpJsonPreferenceIO.Instance.RecentFindTexts = string.Join(MpJsonPreferenceIO.STRING_ARRAY_SPLIT_TOKEN, value);
         }
         public ObservableCollection<string> RecentReplaceTexts {
-            get => new ObservableCollection<string>(MpPreferences.RecentReplaceTexts.Split(new string[] { MpPreferences.STRING_ARRAY_SPLIT_TOKEN }, StringSplitOptions.RemoveEmptyEntries));
-            set => MpPreferences.RecentReplaceTexts = string.Join(MpPreferences.STRING_ARRAY_SPLIT_TOKEN, value);
+            get => new ObservableCollection<string>(MpJsonPreferenceIO.Instance.RecentReplaceTexts.Split(new string[] { MpJsonPreferenceIO.STRING_ARRAY_SPLIT_TOKEN }, StringSplitOptions.RemoveEmptyEntries));
+            set => MpJsonPreferenceIO.Instance.RecentReplaceTexts = string.Join(MpJsonPreferenceIO.STRING_ARRAY_SPLIT_TOKEN, value);
         }
         public ICommand ToggleFindAndReplaceVisibleCommand => new RelayCommand(
             () => {
@@ -331,7 +331,7 @@ using stdole;
                 int recentFindIdx = rftl.IndexOf(_findText);
                 if (recentFindIdx < 0) {
                     rftl.Insert(0, _findText);
-                    rftl = new ObservableCollection<string>(rftl.Take(MpPreferences.MaxRecentTextsCount));
+                    rftl = new ObservableCollection<string>(rftl.Take(MpJsonPreferenceIO.Instance.MaxRecentTextsCount));
                 } else {
                     rftl.RemoveAt(recentFindIdx);
                     rftl.Insert(0, _findText);
@@ -349,7 +349,7 @@ using stdole;
                     rrtl.RemoveAt(recentReplaceIdx);
                     rrtl.Insert(0, _replaceText);
                 }
-                RecentReplaceTexts = new ObservableCollection<string>(rrtl.Take(MpPreferences.MaxRecentTextsCount));
+                RecentReplaceTexts = new ObservableCollection<string>(rrtl.Take(MpJsonPreferenceIO.Instance.MaxRecentTextsCount));
             }
         });
         public ICommand FindNextCommand => new RelayCommand(
@@ -427,7 +427,7 @@ using stdole;
                 //}
                 var svm = MpSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == SourceId);
                 if (svm == null) {
-                    return MpSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == MpPreferences.ThisAppSourceId);
+                    return MpSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == MpJsonPreferenceIO.Instance.ThisAppSourceId);
                 }
                 return svm;
             }
@@ -762,7 +762,7 @@ using stdole;
 
         public Visibility ToolTipVisibility {
             get {
-                if (!MpPreferences.ShowItemPreview) {
+                if (!MpJsonPreferenceIO.Instance.ShowItemPreview) {
                     return Visibility.Collapsed;
                 }
                 return (Parent.HasScrollVelocity || IsSelected) ? Visibility.Collapsed : Visibility.Visible;
@@ -771,7 +771,7 @@ using stdole;
 
         public Visibility TrialOverlayVisibility {
             get {
-                return MpPreferences.IsTrialExpired ? Visibility.Visible : Visibility.Collapsed;
+                return MpJsonPreferenceIO.Instance.IsTrialExpired ? Visibility.Visible : Visibility.Collapsed;
             }
         }
         #endregion
@@ -1283,7 +1283,7 @@ using stdole;
                     // BUG currently when plugin creates new content it is not setting source info
                     // so return app icon
                     
-                    return MpPreferences.ThisAppIcon.Id;
+                    return MpJsonPreferenceIO.Instance.ThisAppIcon.Id;
                 }
                 return SourceViewModel.PrimarySourceViewModel.IconId;
             }
