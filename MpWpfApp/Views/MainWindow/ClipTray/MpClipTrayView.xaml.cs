@@ -25,7 +25,7 @@ namespace MpWpfApp {
             //MpClipboardHelper.MpClipboardMonitor.Start();
 
             
-            if (MpJsonPreferenceIO.Instance.IsInitialLoad) {
+            if (MpPrefViewModel.Instance.IsInitialLoad) {
                 BindingContext.InitIntroItems();
             }
 

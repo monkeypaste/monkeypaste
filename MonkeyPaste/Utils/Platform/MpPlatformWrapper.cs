@@ -42,8 +42,8 @@ namespace MonkeyPaste {
         public static MpIPlatformWrapper Services { get; private set; }
 
         public static async Task InitAsync(MpIPlatformWrapper niw) {
-            await MpJsonPreferenceIO.InitAsync();
-            MpJsonPreferenceIO.Instance.MainWindowOrientation = "Bottom";
+            //await MpPrefViewModel.InitAsync();
+            //MpPrefViewModel.Instance.MainWindowOrientation = "Bottom";
 
             Services = niw;
         }

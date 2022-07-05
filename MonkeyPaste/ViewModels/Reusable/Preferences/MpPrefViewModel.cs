@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace MonkeyPaste {
-    public class MpJsonPreferenceIO : MpJsonObject, INotifyPropertyChanged, MpIErrorHandler {
+    public class MpPrefViewModel : MpViewModelBase, MpIJsonObject {
         #region Private
         [JsonIgnore]
         private object _lock = new object();
@@ -30,7 +30,7 @@ namespace MonkeyPaste {
         //[JsonIgnore]
         //private static MpJsonPreferenceIO _instance;
         [JsonIgnore]
-        public static MpJsonPreferenceIO Instance { get; private set; } //=> _instance ?? (new MpJsonPreferenceIO());
+        public static MpPrefViewModel Instance { get; private set; } //=> _instance ?? (new MpJsonPreferenceIO());
 
         #endregion
 
@@ -45,7 +45,7 @@ namespace MonkeyPaste {
                 // probably faster without reflection:
                 // like:  return Properties.Settings.Default.PropertyValues[propertyName] 
                 // instead of the following
-                Type myType = typeof(MpJsonPreferenceIO);
+                Type myType = typeof(MpPrefViewModel);
                 PropertyInfo myPropInfo = myType.GetProperty(propertyName);
                 if (myPropInfo == null) {
                     throw new Exception("Unable to find property: " + propertyName);
@@ -53,7 +53,7 @@ namespace MonkeyPaste {
                 return myPropInfo.GetValue(this, null);
             }
             set {
-                Type myType = typeof(MpJsonPreferenceIO);
+                Type myType = typeof(MpPrefViewModel);
                 PropertyInfo myPropInfo = myType.GetProperty(propertyName);
                 myPropInfo.SetValue(this, value, null);
             }
@@ -301,7 +301,9 @@ namespace MonkeyPaste {
 
         public string MainWindowDisplayType { get; set; } = "Primary";
 
+        public double MainWindowInitialWidth { get; set; } = 0;
         public double MainWindowInitialHeight { get; set; } = 0;
+        
 
         public DateTime StartupDateTime { get; set; } = DateTime.MinValue;
 
@@ -363,7 +365,10 @@ namespace MonkeyPaste {
         public int RestfulOpenAiMaxCount { get; set; } = 5;
         #endregion
 
-        #region Experience
+        #region Appearance
+
+        public double MainWindowOpacity { get; set; } = 0.7;
+
         public string UserCustomColorIdxArray { get; set; } = "0";
 
         public string ThemeClipTileBackgroundColor { get; set; } = "#FFFFF";
@@ -502,16 +507,10 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region INotifyPropertyChanged Implementation
-        
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        #endregion
-
-        #region MpIHandleError Implementation
-
-        public void HandleError(Exception ex) {
-            MpConsole.WriteTraceLine(ex);
+        #region MpIJsonObject Implementation
+        public string Serialize() {
+            return MpJsonObject.SerializeObject(this);
         }
 
         #endregion
@@ -533,36 +532,22 @@ namespace MonkeyPaste {
         #endregion
 
         #region Constructors
+
+        public MpPrefViewModel() : base(){
+            PropertyChanged += MpJsonPreferenceIO_PropertyChanged;
+        }
+
+        #endregion
+
+        #region Public Methods
+
         public static async Task InitAsync() {
             if (!File.Exists(PreferencesPath)) {
-                Instance = new MpJsonPreferenceIO();
-                Instance.Save();
-
-                // NOTE this line should be removed and is only valid for current wpf db
-                //Instance.ThisDeviceGuid = "f64b221e-806a-4e28-966a-f9c5ff0d9370";
-                while(Instance.IsSaving) {
-                    await Task.Delay(100);
-                }
-                return;
-            }
-            IsLoading = true;
-
-            string prefsStr;
-            if(UseEncryption) {
-                string prefsStr_Encrypted = MpFileIo.ReadTextFromFile(PreferencesPath);
-                prefsStr = MpEncryption.SimpleDecryptWithPassword(prefsStr_Encrypted, "testtesttest");
+                await CreateDefaultPrefsAsync();
             } else {
-                prefsStr = MpFileIo.ReadTextFromFile(PreferencesPath);
+                await LoadPrefsAsync();
             }
-
-            Instance = MpJsonObject.DeserializeObject<MpJsonPreferenceIO>(prefsStr);
-            while (Instance.IsSaving) {
-                await Task.Delay(100);
-            }
-            IsLoading = false;
-        }
-        public MpJsonPreferenceIO() {
-            PropertyChanged += MpJsonPreferenceIO_PropertyChanged;
+            
         }
 
         public void Save() {
@@ -598,11 +583,49 @@ namespace MonkeyPaste {
             if(e.PropertyName == nameof(IsSaving) || IsLoading) {
                 return;
             }
-
             Save();
         }
 
+        private static async Task LoadPrefsAsync() {
+            IsLoading = true;
+
+            string prefsStr;
+            if (UseEncryption) {
+                string prefsStr_Encrypted = MpFileIo.ReadTextFromFile(PreferencesPath);
+                prefsStr = MpEncryption.SimpleDecryptWithPassword(prefsStr_Encrypted, "testtesttest");
+            } else {
+                prefsStr = MpFileIo.ReadTextFromFile(PreferencesPath);
+            }
+
+            if (string.IsNullOrWhiteSpace(prefsStr)) {
+                Debugger.Break();
+                await CreateDefaultPrefsAsync();
+            } else {
+                Instance = MpJsonObject.DeserializeObject<MpPrefViewModel>(prefsStr);
+                while (Instance.IsSaving) {
+                    await Task.Delay(100);
+                }
+            }
+
+            IsLoading = false;
+        }
+
+        private static async Task CreateDefaultPrefsAsync() {
+            MpConsole.WriteTraceLine("Pref file was either missing or empty, (re)creating");
+
+            Instance = new MpPrefViewModel();
+            Instance.Save();
+
+            // NOTE this line should be removed and is only valid for current wpf db
+            //Instance.ThisDeviceGuid = "f64b221e-806a-4e28-966a-f9c5ff0d9370";
+            while (Instance.IsSaving) {
+                await Task.Delay(100);
+            }
+            return;
+        }
         
+
+
 
         #endregion
     }

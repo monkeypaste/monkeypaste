@@ -10,13 +10,17 @@ using SharpHook;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MainWindow : Window {
-        public static Window Instance { get; private set; } = null;
+        public static Window? Instance { get; private set; } = null;
         public MainWindow() {
+            while (!Debugger.IsAttached) {
+                Thread.Sleep(100);
+            }
             if (Instance == null) {
                 Instance = this;
             }
@@ -27,7 +31,6 @@ namespace MonkeyPaste.Avalonia {
 #endif
             var canvas = this.FindControl<Canvas>("MainWindowContainerCanvas");
             canvas.PointerPressed += Canvas_PointerPressed;
-
             this.Activated += MainWindow_Activated;
             this.Deactivated += MainWindow_Deactivated;
         }
@@ -42,13 +45,23 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Canvas_PointerPressed(object? sender, global::Avalonia.Input.PointerPressedEventArgs e) {
-            bool isMainWindowClick = MpAvMainWindowViewModel.Instance.MainWindowRect.Contains(MpAvGlobalMouseHook.GlobalMouseLocation);
-            if (!isMainWindowClick) {
+            var mwg = this.FindControl<Grid>("MainWindowGrid");
+            if(mwg == null) {
+                return;
+            }
+            if(!mwg.Bounds.Contains(e.GetPosition(mwg.Parent))) {
+                if (e.Pointer.Captured is Border b && b.Name == "MainWindowResizeBorder") {
+                    MpConsole.WriteTraceLine("Mouse captured and rejecting out of mainwindow click. Capturer: " + e.Pointer.Captured.GetType().ToString());
+                    return;
+                }
                 MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
             }
         }
 
         private async void MainWindow_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e) {
+            if(Design.IsDesignMode) {
+                return;
+            }
             await InitAsync();
         }
 
@@ -67,14 +80,13 @@ namespace MonkeyPaste.Avalonia {
             MpAvGlobalMouseHook.OnGlobalMouseMove += MpAvMouseHook_Win32_OnGlobalMouseMove;
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
-                
+
                 MpAvToolWindow_Win32.InitToolWindow(this.PlatformImpl.Handle.Handle);
 
                 //MpAvMouseHook_Win32.Init();
                 //MpAvMouseHook_Win32.OnGlobalMouseWheelScroll += MpAvMouseHook_Win32_OnMouseWheelScroll;
                 //MpAvMouseHook_Win32.OnGlobalMouseMove += MpAvMouseHook_Win32_OnGlobalMouseMove;
             }
-
 
             DataContext = MpAvMainWindowViewModel.Instance;
             await MpAvMainWindowViewModel.Instance.InitializeAsync();

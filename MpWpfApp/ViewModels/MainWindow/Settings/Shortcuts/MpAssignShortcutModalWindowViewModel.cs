@@ -128,10 +128,10 @@ namespace MpWpfApp {
         public BitmapSource WarningBmp {
             get {
                 if (_isReplacingShortcut) {
-                    return (BitmapSource)new BitmapImage(new Uri(MpJsonPreferenceIO.Instance.AbsoluteResourcesPath+@"/Images/warning.png"));
+                    return (BitmapSource)new BitmapImage(new Uri(MpPrefViewModel.Instance.AbsoluteResourcesPath+@"/Images/warning.png"));
                 }
                 if (_wasPreviouslyASequence || KeyList.Count > 1) {
-                    return (BitmapSource)new BitmapImage(new Uri(MpJsonPreferenceIO.Instance.AbsoluteResourcesPath + @"/Images/info.png"));
+                    return (BitmapSource)new BitmapImage(new Uri(MpPrefViewModel.Instance.AbsoluteResourcesPath + @"/Images/info.png"));
                 }
                 return new BitmapImage();
             }

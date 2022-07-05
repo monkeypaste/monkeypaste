@@ -154,7 +154,7 @@ namespace MonkeyPaste {
             
             newUrl.IconId = icon.Id;
             if (newUrl.IconId == 0) {
-                newUrl.IconId = MpJsonPreferenceIO.Instance.ThisAppIcon.Id;
+                newUrl.IconId = MpPrefViewModel.Instance.ThisAppIcon.Id;
             }
 
             if(!suppressWrite) {

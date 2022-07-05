@@ -1416,8 +1416,8 @@ namespace MpWpfApp {
             MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
             //await Task.Delay(3000);
 
-            if (!string.IsNullOrEmpty(MpJsonPreferenceIO.Instance.LastQueryInfoJson)) {
-                var qi = JsonConvert.DeserializeObject<MpWpfQueryInfo>(MpJsonPreferenceIO.Instance.LastQueryInfoJson);
+            if (!string.IsNullOrEmpty(MpPrefViewModel.Instance.LastQueryInfoJson)) {
+                var qi = JsonConvert.DeserializeObject<MpWpfQueryInfo>(MpPrefViewModel.Instance.LastQueryInfoJson);
                 if (qi != null) {
                     MpClipTileSortViewModel.Instance.SelectedSortType = 
                         MpClipTileSortViewModel.Instance.SortTypes
@@ -1569,7 +1569,7 @@ namespace MpWpfApp {
                             _newModels.Insert(newIdx, _appendModeCopyItem);
                         }
 
-                        if (MpJsonPreferenceIO.Instance.NotificationShowAppendBufferToast) {
+                        if (MpPrefViewModel.Instance.NotificationShowAppendBufferToast) {
                             // TODO now composite item doesn't roll up children so the buffer needs to be created here
                             // if I use this at all
 
@@ -1580,22 +1580,22 @@ namespace MpWpfApp {
                                 .FireAndForgetSafeAsync(this);
                         }
 
-                        if (MpJsonPreferenceIO.Instance.NotificationDoCopySound) {
+                        if (MpPrefViewModel.Instance.NotificationDoCopySound) {
                             MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
                         }
                     }
                 }
             } else {
                 _appendModeCopyItem = null;
-                if (MpJsonPreferenceIO.Instance.NotificationDoCopySound) {
+                if (MpPrefViewModel.Instance.NotificationDoCopySound) {
                     MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
                 }
-                if (MpJsonPreferenceIO.Instance.IsTrialExpired) {
+                if (MpPrefViewModel.Instance.IsTrialExpired) {
                     MpNotificationCollectionViewModel.Instance.ShowMessage(
                         title: "Trial Expired",
                         msg: "Please update your membership to use Monkey Paste",
                         msgType: MpNotificationDialogType.TrialExpired,
-                        iconResourceKey: MpJsonPreferenceIO.Instance.AbsoluteResourcesPath + @"/Images/monkey (2).png")
+                        iconResourceKey: MpPrefViewModel.Instance.AbsoluteResourcesPath + @"/Images/monkey (2).png")
                         .FireAndForgetSafeAsync(this);
                 }
             }
@@ -2333,7 +2333,7 @@ namespace MpWpfApp {
                     !IsAnyEditingClipTile &&
                     !IsAnyEditingClipTitle &&
                     !IsAnyPastingTemplate &&
-                    !MpJsonPreferenceIO.Instance.IsTrialExpired;
+                    !MpPrefViewModel.Instance.IsTrialExpired;
             });
 
         public ICommand PasteCurrentClipboardIntoSelectedTileCommand => new RelayCommand(
@@ -2540,7 +2540,7 @@ namespace MpWpfApp {
             () => {
                 string pt = string.Join(Environment.NewLine, PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
                 return (GetSelectedClipsType() == MpCopyItemType.Text) &&
-                    pt.Length <= MpJsonPreferenceIO.Instance.MaxQrCodeCharLength;
+                    pt.Length <= MpPrefViewModel.Instance.MaxQrCodeCharLength;
             });
 
         public ICommand SpeakSelectedClipsCommand => new RelayCommand(
@@ -2548,10 +2548,10 @@ namespace MpWpfApp {
                 await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
                     var speechSynthesizer = new SpeechSynthesizer();
                     speechSynthesizer.SetOutputToDefaultAudioDevice();
-                    if (string.IsNullOrEmpty(MpJsonPreferenceIO.Instance.SpeechSynthVoiceName)) {
+                    if (string.IsNullOrEmpty(MpPrefViewModel.Instance.SpeechSynthVoiceName)) {
                         speechSynthesizer.SelectVoice(speechSynthesizer.GetInstalledVoices()[0].VoiceInfo.Name);
                     } else {
-                        speechSynthesizer.SelectVoice(MpJsonPreferenceIO.Instance.SpeechSynthVoiceName);
+                        speechSynthesizer.SelectVoice(MpPrefViewModel.Instance.SpeechSynthVoiceName);
                     }
                     speechSynthesizer.Rate = 0;
                     speechSynthesizer.SpeakCompleted += (s, e) => {

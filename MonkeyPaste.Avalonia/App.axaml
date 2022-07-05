@@ -1,7 +1,21 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="using:MonkeyPaste.Avalonia"
              x:Class="MonkeyPaste.Avalonia.App">
     <Application.Styles>
         <FluentTheme Mode="Light"/>
     </Application.Styles>
+  <Application.Resources>
+    <!-- Converters -->
+    <local:MpAvStringHexToBrushConverter x:Key="StringHexToBrushConverter"/>
+    <local:MpAvStringResourceToBitmapConverter x:Key="StringResourceToBitmapConverter"/>
+    <local:MpAvStringHexToColorConverter x:Key="StringHexToColorConverter"/>
+    <!-- End Converters -->
+
+    <s:String x:Key="FrameGripTile">
+      <!--pack://application:,,,/MonkeyPaste.Avalonia;component/Assets/Images/frame_grip.png-->
+      avares://MonkeyPaste.Avalonia/Assets/Images/frame_grip.png
+    </s:String>
+  </Application.Resources>
 </Application>

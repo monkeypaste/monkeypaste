@@ -193,7 +193,7 @@ namespace MonkeyPaste {
                         break;
                 }
                 if (string.IsNullOrEmpty(iconStr)) {
-                    iconId = MpJsonPreferenceIO.Instance.ThisAppIcon.Id;
+                    iconId = MpPrefViewModel.Instance.ThisAppIcon.Id;
                 } else { 
                     var icon = await MpIcon.Create(
                         iconImgBase64: iconStr, 

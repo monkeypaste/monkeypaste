@@ -76,7 +76,7 @@
     <Compile Remove="MpResolver.cs" />
     <Compile Remove="Utils\MpJsMessageListener.cs" />
     <Compile Remove="Utils\MpSingleton.cs" />
-    <Compile Remove="Utils\Preferences\MpPreferences.cs" />
+    <Compile Remove="ViewModels\Reusable\Preferences\MpPreferences.cs" />
     <Compile Remove="ViewModels\Bases\MpObservableObject.cs" />
     <Compile Remove="ViewModels\Bases\MpViewModelBase_old.cs" />
     <Compile Remove="ViewModels\Reusable\Geometry\MpBoxViewModel.cs" />

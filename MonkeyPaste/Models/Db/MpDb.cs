@@ -66,7 +66,7 @@ namespace MonkeyPaste {
         #region Public Methods
 
         public static string GetDbFileAsBase64() {
-            var bytes = File.ReadAllBytes(MpJsonPreferenceIO.Instance.DbPath);
+            var bytes = File.ReadAllBytes(MpPrefViewModel.Instance.DbPath);
             return Convert.ToBase64String(bytes);
         }
         #region Queries
@@ -305,7 +305,7 @@ namespace MonkeyPaste {
         #endregion
 
         public static byte[] GetDbFileBytes() {
-            var dbPath = MpJsonPreferenceIO.Instance.DbPath;
+            var dbPath = MpPrefViewModel.Instance.DbPath;
             return File.ReadAllBytes(dbPath);
         }
 
@@ -317,7 +317,7 @@ namespace MonkeyPaste {
             if(!IsLoaded) {
                 return null;
             }
-            return string.IsNullOrEmpty(providedSourceClientGuid) ? MpJsonPreferenceIO.Instance.ThisDeviceGuid : providedSourceClientGuid;
+            return string.IsNullOrEmpty(providedSourceClientGuid) ? MpPrefViewModel.Instance.ThisDeviceGuid : providedSourceClientGuid;
         }
 
         private static async Task LogWrite(MpDbLogActionType actionType, MpDbModelBase item, string sourceClientGuid, bool ignoreTracking) {
@@ -359,7 +359,7 @@ namespace MonkeyPaste {
 
             //SQLitePCL.Batteries.Init();
 
-            var dbPath = MpJsonPreferenceIO.Instance.DbPath;
+            var dbPath = MpPrefViewModel.Instance.DbPath;
 
             //File.Delete(dbPath);
 
@@ -386,15 +386,15 @@ namespace MonkeyPaste {
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
 
-            MpJsonPreferenceIO.Instance.ThisAppSourceId = 5;
-            MpJsonPreferenceIO.Instance.ThisOsFileManagerSourceId = 4;
+            MpPrefViewModel.Instance.ThisAppSourceId = 5;
+            MpPrefViewModel.Instance.ThisOsFileManagerSourceId = 4;
 
-            MpJsonPreferenceIO.Instance.ThisUserDevice = await MpDataModelProvider.GetUserDeviceByGuid(MpJsonPreferenceIO.Instance.ThisDeviceGuid);
+            MpPrefViewModel.Instance.ThisUserDevice = await MpDataModelProvider.GetUserDeviceByGuid(MpPrefViewModel.Instance.ThisDeviceGuid);
             
-            MpJsonPreferenceIO.Instance.ThisAppSource = await GetItemAsync<MpSource>(MpJsonPreferenceIO.Instance.ThisAppSourceId);
-            var thisAppApp = await MpDb.GetItemAsync<MpApp>(MpJsonPreferenceIO.Instance.ThisAppSource.AppId);
-            MpJsonPreferenceIO.Instance.ThisAppIcon = await GetItemAsync<MpIcon>(thisAppApp.IconId);
-            MpJsonPreferenceIO.Instance.ThisOsFileManagerSource = await GetItemAsync<MpSource>(MpJsonPreferenceIO.Instance.ThisOsFileManagerSourceId);
+            MpPrefViewModel.Instance.ThisAppSource = await GetItemAsync<MpSource>(MpPrefViewModel.Instance.ThisAppSourceId);
+            var thisAppApp = await MpDb.GetItemAsync<MpApp>(MpPrefViewModel.Instance.ThisAppSource.AppId);
+            MpPrefViewModel.Instance.ThisAppIcon = await GetItemAsync<MpIcon>(thisAppApp.IconId);
+            MpPrefViewModel.Instance.ThisOsFileManagerSource = await GetItemAsync<MpSource>(MpPrefViewModel.Instance.ThisOsFileManagerSourceId);
 
 
             if(isNewDb) {
@@ -403,7 +403,7 @@ namespace MonkeyPaste {
 
 
             MpConsole.WriteLine(@"Db file located: " + dbPath);
-            MpConsole.WriteLine(@"This Client Guid: " + MpJsonPreferenceIO.Instance.ThisDeviceGuid);
+            MpConsole.WriteLine(@"This Client Guid: " + MpPrefViewModel.Instance.ThisDeviceGuid);
             MpConsole.WriteLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
         }
 
@@ -570,13 +570,13 @@ namespace MonkeyPaste {
 
             #region User Device
 
-            MpJsonPreferenceIO.Instance.ThisDeviceType = MpPlatformWrapper.Services.OsInfo.OsType;
+            MpPrefViewModel.Instance.ThisDeviceType = MpPlatformWrapper.Services.OsInfo.OsType;
 
-            MpJsonPreferenceIO.Instance.ThisDeviceGuid = Guid.NewGuid().ToString();
+            MpPrefViewModel.Instance.ThisDeviceGuid = Guid.NewGuid().ToString();
 
             var thisDevice = new MpUserDevice() {
-                UserDeviceGuid = Guid.Parse(MpJsonPreferenceIO.Instance.ThisDeviceGuid),
-                PlatformType = MpJsonPreferenceIO.Instance.ThisDeviceType
+                UserDeviceGuid = Guid.Parse(MpPrefViewModel.Instance.ThisDeviceGuid),
+                PlatformType = MpPrefViewModel.Instance.ThisDeviceType
             };
             await AddItemAsync<MpUserDevice>(thisDevice);
 
@@ -1051,14 +1051,14 @@ namespace MonkeyPaste {
 
             var process = Process.GetCurrentProcess();
             string thisAppPath = process.MainModule.FileName;
-            string thisAppName = MpJsonPreferenceIO.Instance.ApplicationName;
+            string thisAppName = MpPrefViewModel.Instance.ApplicationName;
             var thisApp = await MpApp.Create(thisAppPath, thisAppName, sourceIcon.Id);
             var thisAppSource = await MpSource.Create(appId: thisApp.Id, urlId: 0);
-            MpJsonPreferenceIO.Instance.ThisAppSourceId = thisAppSource.Id;
+            MpPrefViewModel.Instance.ThisAppSourceId = thisAppSource.Id;
 
             var osApp = await MpApp.Create(MpPlatformWrapper.Services.OsInfo.OsFileManagerPath, MpPlatformWrapper.Services.OsInfo.OsFileManagerName);
             var osAppSource = await MpSource.Create(osApp.Id, 0);
-            MpJsonPreferenceIO.Instance.ThisOsFileManagerSourceId = osAppSource.Id;
+            MpPrefViewModel.Instance.ThisOsFileManagerSourceId = osAppSource.Id;
 
             #endregion
 
@@ -1102,7 +1102,7 @@ namespace MonkeyPaste {
             return 44381;
         }
         public static string GetThisClientGuid() {
-            return MpJsonPreferenceIO.Instance.ThisDeviceGuid;
+            return MpPrefViewModel.Instance.ThisDeviceGuid;
         }
         public static string GetPrimaryLocalIp4Address() {
             if (!IsConnectedToNetwork()) {

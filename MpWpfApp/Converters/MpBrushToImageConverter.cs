@@ -13,7 +13,7 @@ namespace MpWpfApp {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is Brush brush) {
                 var bmpSrc = (BitmapSource)new BitmapImage(
-                    new Uri(MpJsonPreferenceIO.Instance.AbsoluteResourcesPath + @"/Images/texture.png"));
+                    new Uri(MpPrefViewModel.Instance.AbsoluteResourcesPath + @"/Images/texture.png"));
                return bmpSrc.Tint(brush);
             }
             return new Image();

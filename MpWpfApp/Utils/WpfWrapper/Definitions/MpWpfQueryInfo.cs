@@ -37,7 +37,7 @@ namespace MpWpfApp {
             // NOTE not sure why this isn't set so maybe bad
             FilterFlags = MpSearchBoxViewModel.Instance.FilterType;
 
-            MpJsonPreferenceIO.Instance.LastQueryInfoJson = Serialize();
+            MpPrefViewModel.Instance.LastQueryInfoJson = Serialize();
 
             var qi = MpDataModelProvider.QueryInfo;
             MpDataModelProvider.QueryInfos.Clear();

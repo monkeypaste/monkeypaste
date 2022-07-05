@@ -130,13 +130,13 @@ namespace MonkeyPaste {
             }
             //if app doesn't exist create image,icon,app and source
 
-            var thisDevice = await MpDataModelProvider.GetUserDeviceByGuid(MpJsonPreferenceIO.Instance.ThisDeviceGuid);
+            var thisDevice = await MpDataModelProvider.GetUserDeviceByGuid(MpPrefViewModel.Instance.ThisDeviceGuid);
 
             if(thisDevice == null) {
                 //not sure why this happens but duplicating MpDb.InitDefaultData...
                 thisDevice = new MpUserDevice() {
-                    UserDeviceGuid = System.Guid.Parse(MpJsonPreferenceIO.Instance.ThisDeviceGuid),
-                    PlatformType = MpJsonPreferenceIO.Instance.ThisDeviceType
+                    UserDeviceGuid = System.Guid.Parse(MpPrefViewModel.Instance.ThisDeviceGuid),
+                    PlatformType = MpPrefViewModel.Instance.ThisDeviceType
                 };
                 await thisDevice.WriteToDatabaseAsync();
             }

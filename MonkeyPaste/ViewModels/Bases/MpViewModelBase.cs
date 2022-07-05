@@ -4,10 +4,15 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using Newtonsoft.Json;
 
 namespace MonkeyPaste {    
     public interface MpIViewModel {
+
+        [JsonIgnore]
         bool IsBusy { get; set; }
+
+        [JsonIgnore]
         bool HasModelChanged { get; set; }
 
         void OnPropertyChanged(
@@ -22,18 +27,22 @@ namespace MonkeyPaste {
         INotifyPropertyChanged, 
         MpIErrorHandler, 
         MpIViewModel {
-        
-        //public static event EventHandler<bool> OnBusyChanged;
 
-        private static Dictionary<string, int> _instanceCountLookup;
+        //[JsonIgnore]
+        //private static Dictionary<string, int> _instanceCountLookup;
 
         #region Properties
 
+        [JsonIgnore]
         public virtual object ParentObj { get; protected set; }
 
+        [JsonIgnore]
         public virtual MpViewModelBase SelfBindingRef => this;
 
+        [JsonIgnore]
         private bool _isBusy = false;
+
+        [JsonIgnore]
         public bool IsBusy {
             get => _isBusy;
             set {
@@ -47,9 +56,13 @@ namespace MonkeyPaste {
         }
 
 
+        [JsonIgnore]
         public bool SupressPropertyChangedNotification { get; set; } = false;
+
+        [JsonIgnore]
         public bool SuprressWriteModelChangedToDatabase { get; set; } = false;
 
+        [JsonIgnore]
         public virtual bool HasModelChanged { get; set; } = false;
 
         #endregion
@@ -66,17 +79,17 @@ namespace MonkeyPaste {
         protected MpViewModelBase() { }
 
         protected MpViewModelBase(object parent) {
-            if (parent == null) {
-                string typeStr = this.GetType().Name;
-                if (_instanceCountLookup == null) {
-                    _instanceCountLookup = new Dictionary<string, int>();
-                }
-                if (_instanceCountLookup.ContainsKey(typeStr)) {
-                    _instanceCountLookup[typeStr]++;
-                } else {
-                    _instanceCountLookup.Add(typeStr, 1);
-                }
-            }
+            //if (parent == null) {
+            //    string typeStr = this.GetType().Name;
+            //    if (_instanceCountLookup == null) {
+            //        _instanceCountLookup = new Dictionary<string, int>();
+            //    }
+            //    if (_instanceCountLookup.ContainsKey(typeStr)) {
+            //        _instanceCountLookup[typeStr]++;
+            //    } else {
+            //        _instanceCountLookup.Add(typeStr, 1);
+            //    }
+            //}
 
             ParentObj = parent;
 
@@ -90,11 +103,11 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public static void PrintInstanceCount() {
-            foreach (var kvp in _instanceCountLookup) {
-                MpConsole.WriteLine($"'{kvp.Key}': {kvp.Value}");
-            }
-        }
+        //public static void PrintInstanceCount() {
+        //    foreach (var kvp in _instanceCountLookup) {
+        //        MpConsole.WriteLine($"'{kvp.Key}': {kvp.Value}");
+        //    }
+        //}
 
         #region MpIErrorHandler Implementation
 
@@ -170,6 +183,7 @@ namespace MonkeyPaste {
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        [JsonIgnore]
         private bool ThrowOnInvalidPropertyName => false;
 
         protected void SetProperty<T>(ref T field, T value, [CallerMemberName] string name = "") {
@@ -219,6 +233,7 @@ namespace MonkeyPaste {
 
         #region Properties
 
+        [JsonIgnore]
         public P Parent {
             get {
                 if (ParentObj == null) {

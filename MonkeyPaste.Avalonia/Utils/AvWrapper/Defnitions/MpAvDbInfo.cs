@@ -14,7 +14,7 @@ namespace MonkeyPaste.Avalonia {
             //    MpJsonPreferenceIO.Instance.DbPassword = string.Empty;
             //}
             //return MpJsonPreferenceIO.Instance.DbPath;
-            return MpJsonPreferenceIO.Instance.DbPath;
+            return MpPrefViewModel.Instance.DbPath;
         }
 
         public string GetDbName() {

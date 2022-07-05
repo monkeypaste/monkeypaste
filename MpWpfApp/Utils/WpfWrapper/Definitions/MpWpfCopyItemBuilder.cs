@@ -81,7 +81,7 @@ namespace MpWpfApp {
                     return null;
                 }
 
-                if (MpJsonPreferenceIO.Instance.IgnoreWhiteSpaceCopyItems &&
+                if (MpPrefViewModel.Instance.IgnoreWhiteSpaceCopyItems &&
                     itemType == MpCopyItemType.Text &&
                     string.IsNullOrWhiteSpace((itemData).ToPlainText().Replace(Environment.NewLine, ""))) {
                     return null;
@@ -93,14 +93,14 @@ namespace MpWpfApp {
                 //    //htmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
                 //}
 
-                if (itemType == MpCopyItemType.Text && ((string)itemData).Length > MpJsonPreferenceIO.Instance.MaxRtfCharCount) {
+                if (itemType == MpCopyItemType.Text && ((string)itemData).Length > MpPrefViewModel.Instance.MaxRtfCharCount) {
                     itemData = itemData.ToPlainText();
-                    if (((string)itemData).Length > MpJsonPreferenceIO.Instance.MaxRtfCharCount) {
+                    if (((string)itemData).Length > MpPrefViewModel.Instance.MaxRtfCharCount) {
                         //item is TOO LARGE so ignore
-                        if (MpJsonPreferenceIO.Instance.NotificationShowCopyItemTooLargeToast) {
+                        if (MpPrefViewModel.Instance.NotificationShowCopyItemTooLargeToast) {
                             MpNotificationCollectionViewModel.Instance.ShowMessage(
                                 title: "Item TOO LARGE",
-                                msg: $"Max Item Characters is {MpJsonPreferenceIO.Instance.MaxRtfCharCount} and copied item is {((string)itemData).Length} characters",
+                                msg: $"Max Item Characters is {MpPrefViewModel.Instance.MaxRtfCharCount} and copied item is {((string)itemData).Length} characters",
                                 msgType: MpNotificationDialogType.DbError)
                                     .FireAndForgetSafeAsync(MpClipTrayViewModel.Instance);
                         }

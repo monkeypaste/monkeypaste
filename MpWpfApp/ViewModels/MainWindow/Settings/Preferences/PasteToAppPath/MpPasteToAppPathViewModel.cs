@@ -361,8 +361,8 @@ namespace MpWpfApp {
             if (string.IsNullOrEmpty(Args)) {
                 return string.Empty;
             }
-            if(Args.Length > MpJsonPreferenceIO.Instance.MaxCommandLineArgumentLength) {
-                return @"Max length of Commandline args is " + MpJsonPreferenceIO.Instance.MaxCommandLineArgumentLength + " this is " + Args.Length;
+            if(Args.Length > MpPrefViewModel.Instance.MaxCommandLineArgumentLength) {
+                return @"Max length of Commandline args is " + MpPrefViewModel.Instance.MaxCommandLineArgumentLength + " this is " + Args.Length;
             }
             return string.Empty;
         }

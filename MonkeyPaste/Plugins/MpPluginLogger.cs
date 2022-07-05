@@ -36,8 +36,8 @@ namespace MonkeyPaste {
             if (trans.Response == null) {
                 trans.Response = new MpPluginResponseFormatBase();
             }
-            int transAppId = MpJsonPreferenceIO.Instance.ThisAppSource.AppId;
-            int transUrlId = MpJsonPreferenceIO.Instance.ThisAppSource.UrlId;
+            int transAppId = MpPrefViewModel.Instance.ThisAppSource.AppId;
+            int transUrlId = MpPrefViewModel.Instance.ThisAppSource.UrlId;
 
             if (trans.Response is MpPluginResponseFormatBase prf) {                
                 MpCopyItemTransactionType transType = MpCopyItemTransactionType.None;

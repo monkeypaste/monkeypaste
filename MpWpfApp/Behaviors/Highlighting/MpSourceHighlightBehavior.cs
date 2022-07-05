@@ -38,16 +38,16 @@ namespace MpWpfApp {
 
             var civm = AssociatedObject.BindingContext;
             var qi = MpDataModelProvider.QueryInfo;
-            string st = MpJsonPreferenceIO.Instance.SearchByIsCaseSensitive ? qi.SearchText : qi.SearchText.ToLower();
+            string st = MpPrefViewModel.Instance.SearchByIsCaseSensitive ? qi.SearchText : qi.SearchText.ToLower();
             if(civm.UrlViewModel != null) {                
                 if (qi.FilterFlags.HasFlag(MpContentFilterType.Url)) {
-                    string urlPath = MpJsonPreferenceIO.Instance.SearchByIsCaseSensitive ? civm.UrlViewModel.UrlPath : civm.UrlViewModel.UrlPath.ToLower();
+                    string urlPath = MpPrefViewModel.Instance.SearchByIsCaseSensitive ? civm.UrlViewModel.UrlPath : civm.UrlViewModel.UrlPath.ToLower();
                     if (urlPath.Contains(st)) {
                         _matches.Add(null);
                     }                    
                 }
                 if (qi.FilterFlags.HasFlag(MpContentFilterType.UrlTitle)) {
-                    string urlTitle = MpJsonPreferenceIO.Instance.SearchByIsCaseSensitive ? civm.UrlViewModel.UrlTitle : civm.UrlViewModel.UrlTitle.ToLower();
+                    string urlTitle = MpPrefViewModel.Instance.SearchByIsCaseSensitive ? civm.UrlViewModel.UrlTitle : civm.UrlViewModel.UrlTitle.ToLower();
                     if (urlTitle.Contains(st)) {
                         _matches.Add(null);
                     }
@@ -56,13 +56,13 @@ namespace MpWpfApp {
 
             if (civm.AppViewModel != null) {
                 if (qi.FilterFlags.HasFlag(MpContentFilterType.AppName)) {
-                    string appName = MpJsonPreferenceIO.Instance.SearchByIsCaseSensitive ? civm.AppViewModel.AppName : civm.AppViewModel.AppName.ToLower();
+                    string appName = MpPrefViewModel.Instance.SearchByIsCaseSensitive ? civm.AppViewModel.AppName : civm.AppViewModel.AppName.ToLower();
                     if (appName.Contains(st)) {
                         _matches.Add(null);
                     }
                 }
                 if (qi.FilterFlags.HasFlag(MpContentFilterType.AppPath)) {
-                    string appPath = MpJsonPreferenceIO.Instance.SearchByIsCaseSensitive ? civm.AppViewModel.AppPath : civm.AppViewModel.AppPath.ToLower();
+                    string appPath = MpPrefViewModel.Instance.SearchByIsCaseSensitive ? civm.AppViewModel.AppPath : civm.AppViewModel.AppPath.ToLower();
                     if (appPath.Contains(st)) {
                         _matches.Add(null);
                     }

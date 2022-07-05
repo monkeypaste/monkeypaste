@@ -1,0 +1,96 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:MonkeyPaste.Avalonia"
+             xmlns:pcl="using:MonkeyPaste"
+             x:TypeArguments="local:MpAvMainWindowViewModel"
+             x:DataType="local:MpAvMainWindowViewModel"
+             x:CompileBindings="True"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="MonkeyPaste.Avalonia.MpAvMainWindowTitleMenuView">
+  <Grid x:Name="MainWindowTitleGrid"
+          Grid.Row="0"
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch">
+    <Grid.Background>
+      <SolidColorBrush Color="{Binding TitleBarBackgroundHexColor, Converter={StaticResource StringHexToColorConverter}}"
+                       Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}"/>
+    </Grid.Background>
+    <Border Width="100" 
+            Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}"
+            local:MpAvIsHoveringExtension.DefaultBrush="Transparent"
+            local:MpAvIsHoveringExtension.HoverBrush="Yellow"
+            local:MpAvIsHoveringExtension.IsSelected="{Binding IsResizing}"
+            local:MpAvIsHoveringExtension.SelectedBrush="Orange"
+            local:MpAvIsHoveringExtension.HoverCursor="ResizeNS"
+            local:MpAvIsHoveringExtension.IsEnabled="True">
+      <Border x:Name="MainWindowResizeBorder"
+              local:MpAvResizeExtension.MinHeight="{Binding MainWindowMinHeight}"
+              local:MpAvResizeExtension.MaxHeight="{Binding MainWindowMaxHeight}"
+              
+              local:MpAvResizeExtension.MinWidth="{Binding MainWindowMinWidth}"
+              local:MpAvResizeExtension.MaxWidth="{Binding MainWindowMaxWidth}"
+              
+              local:MpAvResizeExtension.BoundWidth="{Binding MainWindowWidth, Mode=TwoWay}"
+              local:MpAvResizeExtension.BoundHeight="{Binding MainWindowHeight, Mode=TwoWay}"
+              
+              local:MpAvResizeExtension.DefaultWidth="{Binding MainWindowDefaultWidth}"
+              local:MpAvResizeExtension.DefaultHeight="{Binding MainWindowDefaultHeight}"
+              
+              local:MpAvResizeExtension.CanResize="{Binding CanResize, Mode=TwoWay}"
+              local:MpAvResizeExtension.IsResizing="{Binding IsResizing, Mode=TwoWay}"
+              
+              local:MpAvResizeExtension.ResizerEdge="{Binding ResizerEdge}"
+              
+              local:MpAvResizeExtension.IsEnabled="True"            
+              
+              
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              BorderBrush="{Binding TitleBarBackgroundHexColor,
+                                    Converter={StaticResource StringHexToBrushConverter}}"
+              BorderThickness="1,0.5,1,0.5">
+        <Border.Background>
+          <ImageBrush Source="{Binding ., 
+                                      Source={StaticResource FrameGripTile}, 
+                                      Converter={StaticResource StringResourceToBitmapConverter}}"
+                      TileMode="Tile"
+                      SourceRect="0,0,5,5"
+                      DestinationRect="0,0,5,5" />
+        </Border.Background>
+    </Border>
+      <!--<i:Interaction.Behaviors>
+        <local:MpResizeBehavior x:Name="MainWindowResizeBehvior"
+                                MinHeight="{Binding MainWindowMinHeight,
+                                                                    Source={x:Static local:MpMeasurements.Instance}}"
+                                MaxHeight="{Binding MainWindowMaxHeight,
+                                                                    Source={x:Static local:MpMeasurements.Instance}}"
+                                AffectsContent="True"
+                                BoundElement="{Binding ElementName=MainWindowGrid}"
+                                BoundHeight="{Binding MainWindowHeight,
+                                                                      Mode=TwoWay,
+                                                                      UpdateSourceTrigger=PropertyChanged,
+                                                                      NotifyOnSourceUpdated=True,
+                                                                      NotifyOnTargetUpdated=True}"
+                                CanResize="{Binding CanResize,
+                                                                    Mode=TwoWay,
+                                                                    UpdateSourceTrigger=PropertyChanged,
+                                                                    NotifyOnSourceUpdated=True,
+                                                                    NotifyOnTargetUpdated=True}"
+                                DefaultWidth="{Binding MainWindowWidth}"
+                                DefaultHeight="{Binding MainWindowDefaultHeight,
+                                                                        Source={x:Static local:MpMeasurements.Instance}}"
+                                IsEnabled="True"
+                                IsResizing="{Binding IsResizing,
+                                                                     Mode=TwoWay,
+                                                                     UpdateSourceTrigger=PropertyChanged,
+                                                                     NotifyOnSourceUpdated=True,
+                                                                     NotifyOnTargetUpdated=True}"
+                                ResizableEdge1="Top"
+                                DoubleClickFrameworkElement="{Binding ElementName=MainWindowResizeBorder}" />
+
+      </i:Interaction.Behaviors>-->
+    </Border>
+  </Grid>
+</local:MpAvUserControl>

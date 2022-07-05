@@ -13,7 +13,7 @@ namespace MpWpfApp {
             //    MpJsonPreferenceIO.Instance.DbPath = MpHelpers.GetApplicationDirectory() + MpJsonPreferenceIO.Instance.DbName;
             //    MpJsonPreferenceIO.Instance.DbPassword = string.Empty;
             //}
-            return MpJsonPreferenceIO.Instance.DbPath;
+            return MpPrefViewModel.Instance.DbPath;
         }
 
         public string GetDbName() {

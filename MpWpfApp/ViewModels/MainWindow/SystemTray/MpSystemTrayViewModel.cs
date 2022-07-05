@@ -31,7 +31,7 @@ namespace MpWpfApp {
         }
         #endregion
 
-        private string _systemTrayIconToolTipText = MpJsonPreferenceIO.Instance.ApplicationName;
+        private string _systemTrayIconToolTipText = MpPrefViewModel.Instance.ApplicationName;
         public string SystemTrayIconToolTipText {
             get {
                 return _systemTrayIconToolTipText;
@@ -63,7 +63,7 @@ namespace MpWpfApp {
 
         public string DbSizeInMbs {
             get {
-                return Math.Round(MpFileIo.FileListSize(new string[] { MpJsonPreferenceIO.Instance.DbPath }),2).ToString() + " megabytes";
+                return Math.Round(MpFileIo.FileListSize(new string[] { MpPrefViewModel.Instance.DbPath }),2).ToString() + " megabytes";
             }
         }
 

@@ -296,7 +296,7 @@ namespace MpWpfApp {
                     break;
                 case MpMessageType.ResizeContentCompleted:
                     //IsResizing = false;
-                    MpJsonPreferenceIO.Instance.MainWindowInitialHeight = MainWindowHeight;
+                    MpPrefViewModel.Instance.MainWindowInitialHeight = MainWindowHeight;
                     break;
             }
         }
@@ -386,7 +386,7 @@ namespace MpWpfApp {
                 //SetupMainWindowRect();
                 MainWindowTop = MainWindowTopClosed;
 
-                double tt = MpJsonPreferenceIO.Instance.ShowMainWindowAnimationMilliseconds;
+                double tt = MpPrefViewModel.Instance.ShowMainWindowAnimationMilliseconds;
                 double fps = 30;
                 //double dt = (_endMainWindowTop - _startMainWindowTop) / tt / (fps / 1000);
                 double dt = (MainWindowTopOpened - MainWindowTopClosed) / tt / (fps / 1000);
@@ -431,7 +431,7 @@ namespace MpWpfApp {
                 if (IsMainWindowOpen) {
                     IsMainWindowClosing = true;
 
-                    double tt = MpJsonPreferenceIO.Instance.HideMainWindowAnimationMilliseconds;
+                    double tt = MpPrefViewModel.Instance.HideMainWindowAnimationMilliseconds;
                     double fps = 30;
                     //double dt = (_endMainWindowTop - _startMainWindowTop) / tt / (fps / 1000);
                     double dt = (MainWindowTopOpened - MainWindowTopClosed) / tt / (fps / 1000);

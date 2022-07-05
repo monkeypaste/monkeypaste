@@ -49,7 +49,7 @@ namespace MpWpfApp {
                                 FontSize,
                                 ForegroundBrush,
                                 new NumberSubstitution(),
-                                MpJsonPreferenceIO.Instance.ThisAppDip);
+                                MpPrefViewModel.Instance.ThisAppDip);
 
                     CanMarquee = ft.Width > ContainerWidth;
                     break;

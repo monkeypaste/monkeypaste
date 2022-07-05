@@ -502,8 +502,8 @@ namespace MpWpfApp {
             if (!MpMainWindowViewModel.Instance.IsMainWindowOpen && 
                 !MpMainWindowViewModel.Instance.IsMainWindowOpening && 
                 MpBootstrapperViewModelBase.IsLoaded) {
-                if (MpJsonPreferenceIO.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
-                    if (e.Y <= MpJsonPreferenceIO.Instance.ShowMainWindowMouseHitZoneHeight) {
+                if (MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
+                    if (e.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
                         MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
                     }
                 }
@@ -523,9 +523,9 @@ namespace MpWpfApp {
                 GlobalMouseMove?.Invoke(this, GlobalMouseLocation);
             } else {
                 bool isShowingMainWindow = false;
-                if (MpJsonPreferenceIO.Instance.DoShowMainWindowWithMouseEdge &&
-                    !MpJsonPreferenceIO.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
-                    if (e.Y <= MpJsonPreferenceIO.Instance.ShowMainWindowMouseHitZoneHeight) {
+                if (MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdge &&
+                    !MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
+                    if (e.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
                         MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
                         isShowingMainWindow = true;
                     }
@@ -534,8 +534,8 @@ namespace MpWpfApp {
                 if(!isShowingMainWindow &&
                     _globalMouseDownPosition.HasValue && 
                     GlobalMouseLocation.Distance(_globalMouseDownPosition.Value) >= _MIN_GLOBAL_DRAG_DIST &&
-                    GlobalMouseLocation.Y <= MpJsonPreferenceIO.Instance.ShowMainWindowMouseHitZoneHeight &&
-                    MpJsonPreferenceIO.Instance.ShowMainWindowOnDragToScreenTop) {
+                    GlobalMouseLocation.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight &&
+                    MpPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop) {
                     MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
                 }
             }

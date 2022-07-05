@@ -272,14 +272,14 @@ namespace MonkeyPaste {
             int dataObjectId = 0,
             bool suppressWrite = false) {
             var dupCheck = await MpDataModelProvider.GetCopyItemByData(data);
-            if (MpJsonPreferenceIO.Instance.IgnoreNewDuplicates && dupCheck != null && !suppressWrite) {
+            if (MpPrefViewModel.Instance.IgnoreNewDuplicates && dupCheck != null && !suppressWrite) {
                 //flipping pk sign notifies AddItemThread item already exists and flips it back
                 dupCheck.Id *= -1;
                 return dupCheck;
             }
 
-            if(MpJsonPreferenceIO.Instance.UniqueContentItemIdx == 0 && !suppressWrite) {
-                MpJsonPreferenceIO.Instance.UniqueContentItemIdx = await MpDataModelProvider.GetTotalCopyItemCountAsync();
+            if(MpPrefViewModel.Instance.UniqueContentItemIdx == 0 && !suppressWrite) {
+                MpPrefViewModel.Instance.UniqueContentItemIdx = await MpDataModelProvider.GetTotalCopyItemCountAsync();
             }
             
             if(itemType == MpCopyItemType.None) {
@@ -301,7 +301,7 @@ namespace MonkeyPaste {
             var newCopyItem = new MpCopyItem() {
                 CopyItemGuid = System.Guid.NewGuid(),
                 CopyDateTime = DateTime.Now,
-                Title = string.IsNullOrEmpty(title) ? "Untitled" + (++MpJsonPreferenceIO.Instance.UniqueContentItemIdx) : title,
+                Title = string.IsNullOrEmpty(title) ? "Untitled" + (++MpPrefViewModel.Instance.UniqueContentItemIdx) : title,
                 ItemDescription = description,
                 ItemData = data,
                 ItemType = itemType,
@@ -370,7 +370,7 @@ namespace MonkeyPaste {
                 ItemData = objParts[4],
                 ItemDescription = objParts[5],
                 ItemType = (MpCopyItemType)Convert.ToInt32(objParts[6]),
-                SourceId = source == null ? MpJsonPreferenceIO.Instance.ThisAppSourceId : source.Id
+                SourceId = source == null ? MpPrefViewModel.Instance.ThisAppSourceId : source.Id
             };
             //ci.Source = await MpDb.GetDbObjectByTableGuidAsync("MpSource", objParts[7]) as MpSource;
             //TODO deserialize this once img and files added

@@ -92,7 +92,7 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine("Http transaction must have source ip");
             }
             if (deviceId <= 0) {
-                deviceId = MpJsonPreferenceIO.Instance.ThisUserDevice.Id;
+                deviceId = MpPrefViewModel.Instance.ThisUserDevice.Id;
             }
 
 

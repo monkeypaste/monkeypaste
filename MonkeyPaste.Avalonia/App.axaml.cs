@@ -15,8 +15,11 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaXamlLoader.Load(this);            
         }
 
-        public override void OnFrameworkInitializationCompleted() {
+        public override async void OnFrameworkInitializationCompleted() {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+                await MpPrefViewModel.InitAsync();
+                MpPrefViewModel.Instance.MainWindowOrientation = "Bottom";
+
                 desktop.MainWindow = new MainWindow();
             }
 

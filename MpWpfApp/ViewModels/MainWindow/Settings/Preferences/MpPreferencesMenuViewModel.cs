@@ -58,7 +58,7 @@ namespace MpWpfApp {
             }
         }
 
-        private string _selectedVoiceName = MpJsonPreferenceIO.Instance.SpeechSynthVoiceName;
+        private string _selectedVoiceName = MpPrefViewModel.Instance.SpeechSynthVoiceName;
         public string SelectedVoiceName {
             get {
                 return _selectedVoiceName;
@@ -66,14 +66,14 @@ namespace MpWpfApp {
             set {
                 if(_selectedVoiceName != value) {
                     _selectedVoiceName = value;
-                    MpJsonPreferenceIO.Instance.SpeechSynthVoiceName = _selectedVoiceName;
+                    MpPrefViewModel.Instance.SpeechSynthVoiceName = _selectedVoiceName;
                     
                     OnPropertyChanged(nameof(SelectedVoiceName));
                 }
             }
         }
 
-        private int _maxRtfCharCount = MpJsonPreferenceIO.Instance.MaxRtfCharCount;
+        private int _maxRtfCharCount = MpPrefViewModel.Instance.MaxRtfCharCount;
         public int MaxRtfCharCount {
             get {
                 return _maxRtfCharCount;
@@ -81,7 +81,7 @@ namespace MpWpfApp {
             set {
                 if (_maxRtfCharCount != value && value > 0) {
                     _maxRtfCharCount = value;
-                    MpJsonPreferenceIO.Instance.MaxRtfCharCount = _maxRtfCharCount;
+                    MpPrefViewModel.Instance.MaxRtfCharCount = _maxRtfCharCount;
                     
                     OnPropertyChanged(nameof(MaxRtfCharCount));
                 }
@@ -101,7 +101,7 @@ namespace MpWpfApp {
         //    }
         //}
 
-        private string _selectedLanguage = MpJsonPreferenceIO.Instance.UserLanguage;
+        private string _selectedLanguage = MpPrefViewModel.Instance.UserLanguage;
         public string SelectedLanguage {
             get {
                 return _selectedLanguage;
@@ -109,13 +109,13 @@ namespace MpWpfApp {
             set {
                 if (_selectedLanguage != value) {
                     _selectedLanguage = value;
-                    MpJsonPreferenceIO.Instance.UserLanguage = _selectedLanguage;
+                    MpPrefViewModel.Instance.UserLanguage = _selectedLanguage;
                     
                     OnPropertyChanged(nameof(SelectedLanguage));
                 }
             }
         }
-        private bool _ignoreWhiteSpaceCopyItems = MpJsonPreferenceIO.Instance.IgnoreWhiteSpaceCopyItems;
+        private bool _ignoreWhiteSpaceCopyItems = MpPrefViewModel.Instance.IgnoreWhiteSpaceCopyItems;
         public bool IgnoreWhiteSpaceCopyItems {
             get {
                 return _ignoreWhiteSpaceCopyItems;
@@ -123,13 +123,13 @@ namespace MpWpfApp {
             set {
                 if (_ignoreWhiteSpaceCopyItems != value) {
                     _ignoreWhiteSpaceCopyItems = value;
-                    MpJsonPreferenceIO.Instance.IgnoreWhiteSpaceCopyItems = _ignoreWhiteSpaceCopyItems;
+                    MpPrefViewModel.Instance.IgnoreWhiteSpaceCopyItems = _ignoreWhiteSpaceCopyItems;
                     OnPropertyChanged(nameof(IgnoreWhiteSpaceCopyItems));
                 }
             }
         }
 
-        private bool _resetClipboard = MpJsonPreferenceIO.Instance.ResetClipboardAfterMonkeyPaste;
+        private bool _resetClipboard = MpPrefViewModel.Instance.ResetClipboardAfterMonkeyPaste;
         public bool ResetClipboard {
             get {
                 return _resetClipboard;
@@ -137,14 +137,14 @@ namespace MpWpfApp {
             set {
                 if (_resetClipboard != value) {
                     _resetClipboard = value;
-                    MpJsonPreferenceIO.Instance.ResetClipboardAfterMonkeyPaste = _resetClipboard;
+                    MpPrefViewModel.Instance.ResetClipboardAfterMonkeyPaste = _resetClipboard;
                     
                     OnPropertyChanged(nameof(ResetClipboard));
                 }
             }
         }
 
-        private bool _showItemPreview = MpJsonPreferenceIO.Instance.ShowItemPreview;
+        private bool _showItemPreview = MpPrefViewModel.Instance.ShowItemPreview;
         public bool ShowItemPreview {
             get {
                 return _showItemPreview;
@@ -152,7 +152,7 @@ namespace MpWpfApp {
             set {
                 if (_showItemPreview != value) {
                     _showItemPreview = value;
-                    MpJsonPreferenceIO.Instance.ShowItemPreview = _showItemPreview;
+                    MpPrefViewModel.Instance.ShowItemPreview = _showItemPreview;
                     
                     if(!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                         foreach(var ctvm in MpClipTrayViewModel.Instance.Items) {
@@ -164,7 +164,7 @@ namespace MpWpfApp {
             }
         }
 
-        private bool _useSpellCheck = MpJsonPreferenceIO.Instance.UseSpellCheck;
+        private bool _useSpellCheck = MpPrefViewModel.Instance.UseSpellCheck;
         public bool UseSpellCheck {
             get {
                 return _useSpellCheck;
@@ -172,14 +172,14 @@ namespace MpWpfApp {
             set {
                 if (_useSpellCheck != value) {
                     _useSpellCheck = value;
-                    MpJsonPreferenceIO.Instance.UseSpellCheck = _useSpellCheck;
+                    MpPrefViewModel.Instance.UseSpellCheck = _useSpellCheck;
                     
                     OnPropertyChanged(nameof(UseSpellCheck));
                 }
             }
         }
 
-        private bool _ignoreNewDuplicates = MpJsonPreferenceIO.Instance.IgnoreNewDuplicates;
+        private bool _ignoreNewDuplicates = MpPrefViewModel.Instance.IgnoreNewDuplicates;
         public bool IgnoreNewDuplicates {
             get {
                 return _ignoreNewDuplicates;
@@ -187,7 +187,7 @@ namespace MpWpfApp {
             set {
                 if (_ignoreNewDuplicates != value) {
                     _ignoreNewDuplicates = value;
-                    MpJsonPreferenceIO.Instance.IgnoreNewDuplicates = _ignoreNewDuplicates;
+                    MpPrefViewModel.Instance.IgnoreNewDuplicates = _ignoreNewDuplicates;
                     
                     OnPropertyChanged(nameof(IgnoreNewDuplicates));
                 }
@@ -225,9 +225,9 @@ namespace MpWpfApp {
                 }
             };
 
-            IsLoadOnLoginChecked = MpJsonPreferenceIO.Instance.LoadOnLogin;
-            UseSpellCheck = MpJsonPreferenceIO.Instance.UseSpellCheck;
-            if(string.IsNullOrEmpty(MpJsonPreferenceIO.Instance.SpeechSynthVoiceName) && VoiceNames != null && VoiceNames.Count > 0) {
+            IsLoadOnLoginChecked = MpPrefViewModel.Instance.LoadOnLogin;
+            UseSpellCheck = MpPrefViewModel.Instance.UseSpellCheck;
+            if(string.IsNullOrEmpty(MpPrefViewModel.Instance.SpeechSynthVoiceName) && VoiceNames != null && VoiceNames.Count > 0) {
                 SelectedVoiceName = VoiceNames[0];
             }
         }
@@ -259,7 +259,7 @@ namespace MpWpfApp {
             } else {
                 rk.DeleteValue(appName, false);
             }
-            MpJsonPreferenceIO.Instance.LoadOnLogin = loadOnLogin;
+            MpPrefViewModel.Instance.LoadOnLogin = loadOnLogin;
             
             MpConsole.WriteLine("App " + appName + " with path " + appPath + " has load on login set to: " + loadOnLogin);
         }

@@ -3,9 +3,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="using:MonkeyPaste.Avalonia"
+        xmlns:pcl="using:MonkeyPaste"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="MonkeyPaste.Avalonia.MainWindow"
         x:Name="AvMainWindow" 
+        x:DataType="local:MpAvMainWindowViewModel"
+        x:CompileBindings="True"
         WindowState="Maximized"
         SystemDecorations="None"
         Background="Transparent"
@@ -19,33 +22,54 @@
         AttachedToVisualTree="MainWindow_AttachedToVisualTree"
           HorizontalAlignment="Left"
           VerticalAlignment="Top" 
+            
           Background="Transparent" 
           Width="{Binding Width, ElementName=AvMainWindow}"
-          Height="{Binding Height, ElementName=AvMainWindow}">
-    <!--Canvas.Right="{Binding MainWindowRight}"
-          Canvas.Bottom="{Binding MainWindowBottom}"-->
-    <!--<Canvas x:Name="ExternalCanvas"
-            IsHitTestVisible="False"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Canvas.Left="0"
-            Canvas.Top="{Binding ExternalTop}"
-            Width="{Binding MainWindowWidth}"
-            Height="{Binding ExternalHeight}">
-      <Canvas.Background>
-        <SolidColorBrush Color="Orange" Opacity="0.7"/>
-      </Canvas.Background>
-    </Canvas>-->
+          Height="{Binding Height, ElementName=AvMainWindow}">    
       <Grid x:Name="MainWindowGrid"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
-            Canvas.Left="0"
+            Canvas.Left="{Binding MainWindowLeft}"
             Canvas.Top="{Binding MainWindowTop}"
             Width="{Binding MainWindowWidth}"
-          Height="{Binding MainWindowHeight}">
-      <Grid.Background>
-        <SolidColorBrush Color="Pink" Opacity="0.7"/>
-      </Grid.Background>
+            Height="{Binding MainWindowHeight}">
+        <Grid.Background>
+          <SolidColorBrush Color="Pink" 
+                           Opacity="{Binding MainWindowOpacity, 
+                                      Source={x:Static pcl:MpPrefViewModel.Instance}}"/>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="20"/>
+          <RowDefinition Height="40"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+      
+        <!-- Title Menu -->
+        <local:MpAvMainWindowTitleMenuView
+              x:Name="MainWindowTitleGrid"
+              Grid.Row="0"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              DataContext="{Binding}"/>
+
+        <!-- Filter Menu -->
+        <Grid x:Name="MainWindowFilterGrid"
+              Grid.Row="1">
+          <Grid.Background>
+            <SolidColorBrush Color="Purple" 
+                             Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}"/>
+          </Grid.Background>
+        </Grid>
+
+        <!-- Tray Row -->
+        <Grid x:Name="MainWindowTrayGrid"
+              Grid.Row="2">
+          <Grid.Background>
+            <SolidColorBrush Color="DarkViolet" 
+                             Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}"/>
+          </Grid.Background>
+        </Grid>
+              
     </Grid>
   </Canvas>
 </Window>

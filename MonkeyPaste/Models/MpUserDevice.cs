@@ -70,14 +70,14 @@ namespace MonkeyPaste {
                 if (UserDeviceGuid == null) {
                     return false;
                 }
-                return UserDeviceGuid.ToString() == MpJsonPreferenceIO.Instance.ThisDeviceGuid;
+                return UserDeviceGuid.ToString() == MpPrefViewModel.Instance.ThisDeviceGuid;
             }
         }
 
         [Ignore]
         public bool IsThisPlatform {
             get {
-                return PlatformType == MpJsonPreferenceIO.Instance.ThisDeviceType;
+                return PlatformType == MpPrefViewModel.Instance.ThisDeviceType;
             }
         }
 

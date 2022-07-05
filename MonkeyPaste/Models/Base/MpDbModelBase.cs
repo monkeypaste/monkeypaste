@@ -53,7 +53,7 @@ namespace MonkeyPaste {
                 return;
             }
             if (string.IsNullOrEmpty(sourceClientGuid)) {
-                sourceClientGuid = MpJsonPreferenceIO.Instance.ThisDeviceGuid;
+                sourceClientGuid = MpPrefViewModel.Instance.ThisDeviceGuid;
             }
             if (string.IsNullOrEmpty(Guid)) {
                 Guid = System.Guid.NewGuid().ToString();
@@ -77,7 +77,7 @@ namespace MonkeyPaste {
             if (IsSyncing) {
                 await WriteToDatabaseAsync(SyncingWithDeviceGuid, false, true);
             } else {
-                await WriteToDatabaseAsync(MpJsonPreferenceIO.Instance.ThisDeviceGuid);
+                await WriteToDatabaseAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
             }
         }
 
@@ -102,7 +102,7 @@ namespace MonkeyPaste {
             if (IsSyncing) {
                 await DeleteFromDatabaseAsync(SyncingWithDeviceGuid, false, true);
             } else {
-                await DeleteFromDatabaseAsync(MpJsonPreferenceIO.Instance.ThisDeviceGuid);
+                await DeleteFromDatabaseAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
             }
         }
 

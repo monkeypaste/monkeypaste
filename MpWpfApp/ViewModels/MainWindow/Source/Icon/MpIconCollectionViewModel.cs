@@ -159,7 +159,7 @@ namespace MpWpfApp {
         }
 
         private async Task SetUserIconToCurrentHexColor(string hexColor, MpIUserIconViewModel uivm) {
-            var bmpSrc = (BitmapSource)new BitmapImage(new Uri(MpJsonPreferenceIO.Instance.AbsoluteResourcesPath + @"/Images/texture.png"));
+            var bmpSrc = (BitmapSource)new BitmapImage(new Uri(MpPrefViewModel.Instance.AbsoluteResourcesPath + @"/Images/texture.png"));
             bmpSrc = bmpSrc.Tint(hexColor.ToWinMediaColor());
 
             MpIcon icon ;

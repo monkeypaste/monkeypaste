@@ -671,7 +671,7 @@ namespace MpWpfApp {
                 for (int y = 0; y < _ContentColors[0].Count; y++) {
                     Border b = new Border();
                     if(x == _ContentColors.Count -1 && y == _ContentColors[0].Count - 1) {
-                        var addBmpSrc = (BitmapSource)new BitmapImage(new Uri(MpJsonPreferenceIO.Instance.AbsoluteResourcesPath + @"/Images/add2.png"));
+                        var addBmpSrc = (BitmapSource)new BitmapImage(new Uri(MpPrefViewModel.Instance.AbsoluteResourcesPath + @"/Images/add2.png"));
                         b.Background = new ImageBrush(addBmpSrc);
                         MouseButtonEventHandler bMouseLeftButtonUp = (object o, MouseButtonEventArgs e3) => {
                             var result = new MpWpfCustomColorChooserMenu().ShowCustomColorMenu(MpWpfColorHelpers.GetRandomBrushColor().ToHex(),null);

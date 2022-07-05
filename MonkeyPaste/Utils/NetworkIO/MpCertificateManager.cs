@@ -24,10 +24,10 @@ namespace MonkeyPaste {
         private X509Certificate2 _cert = null;
 
         public MpCertificateManager() {
-            if (DateTime.UtcNow > MpJsonPreferenceIO.Instance.SslCertExpirationDateTime) {
+            if (DateTime.UtcNow > MpPrefViewModel.Instance.SslCertExpirationDateTime) {
                 CreateCertificate();
             }
-            _cert = LoadCertificate(MpJsonPreferenceIO.Instance.SyncCertPath);
+            _cert = LoadCertificate(MpPrefViewModel.Instance.SyncCertPath);
 
             if (_cert == null) {
                 MpConsole.WriteTraceLine(@"Error could not load sync certificate");
@@ -35,13 +35,13 @@ namespace MonkeyPaste {
         }
 
         private void CreateCertificate() {
-            AsymmetricKeyParameter caPrivKey = GenerateCACertificate(MpJsonPreferenceIO.Instance.SslCASubject);
+            AsymmetricKeyParameter caPrivKey = GenerateCACertificate(MpPrefViewModel.Instance.SslCASubject);
 
-            var cert = GenerateSelfSignedCertificate(MpJsonPreferenceIO.Instance.SslCertSubject, MpJsonPreferenceIO.Instance.SslCASubject, caPrivKey);
+            var cert = GenerateSelfSignedCertificate(MpPrefViewModel.Instance.SslCertSubject, MpPrefViewModel.Instance.SslCASubject, caPrivKey);
 
-            MpJsonPreferenceIO.Instance.SslPublicKey = cert.GetPublicKeyString();
+            MpPrefViewModel.Instance.SslPublicKey = cert.GetPublicKeyString();
 
-            SaveCertificate(MpJsonPreferenceIO.Instance.SyncCertPath, cert);
+            SaveCertificate(MpPrefViewModel.Instance.SyncCertPath, cert);
         }
 
         private AsymmetricKeyParameter GenerateCACertificate(string subjectName, int keyStrength = 2048) {
@@ -109,7 +109,7 @@ namespace MonkeyPaste {
             //var x509 = new X509Certificate2(certificate.GetEncoded(),string.Empty);
 
             // Add CA certificate to Root store
-            SaveCertificate(MpJsonPreferenceIO.Instance.SyncCaPath, certificate);
+            SaveCertificate(MpPrefViewModel.Instance.SyncCaPath, certificate);
 
             return issuerKeyPair.Private;
         }
@@ -147,7 +147,7 @@ namespace MonkeyPaste {
             var notBefore = DateTime.UtcNow.Date;
             var notAfter = notBefore.AddYears(2);
 
-            MpJsonPreferenceIO.Instance.SslCertExpirationDateTime = notAfter;
+            MpPrefViewModel.Instance.SslCertExpirationDateTime = notAfter;
 
             certificateGenerator.SetNotBefore(notBefore);
             certificateGenerator.SetNotAfter(notAfter);

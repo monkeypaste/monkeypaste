@@ -50,10 +50,10 @@ namespace MpWpfApp {
             _filterType = filterType;
             Label = label;
             PreferenceName = prefName;
-            if (MpJsonPreferenceIO.Instance[PreferenceName] == null) {
+            if (MpPrefViewModel.Instance[PreferenceName] == null) {
                 IsChecked = false;
             } else {
-                IsChecked = (bool)MpJsonPreferenceIO.Instance[PreferenceName];
+                IsChecked = (bool)MpPrefViewModel.Instance[PreferenceName];
             }
             
         }
@@ -65,7 +65,7 @@ namespace MpWpfApp {
         private void MpSearchFilterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsChecked):
-                    MpJsonPreferenceIO.Instance[PreferenceName] = IsChecked;
+                    MpPrefViewModel.Instance[PreferenceName] = IsChecked;
                     break;
             }
         }
