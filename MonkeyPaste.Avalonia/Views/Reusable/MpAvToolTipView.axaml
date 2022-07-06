@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="MonkeyPaste.Avalonia.MpAvTooltipView"
+             Background="Transparent"
+             AttachedToVisualTree="UserControl_AttachedToVisualTree">
+  <Grid>
+    <Border BorderBrush="DarkKhaki"
+            BorderThickness="1.5"
+            Padding="5"
+            CornerRadius="0"
+            Background="Khaki">
+      <!--<Border.Effect>
+        <DropShadowEffect RenderingBias="Quality"
+                          Color="Black"
+                          Direction="315"
+                          Opacity="0.3"
+                          BlurRadius="5" />
+      </Border.Effect>-->
+      <TextBlock x:Name="ToolTipTextBlock"
+                 MaxWidth="300"
+                 Foreground="Black"
+                 FontWeight="Light"
+                 TextWrapping="WrapWithOverflow" />
+
+    </Border>
+  </Grid>
+</UserControl>

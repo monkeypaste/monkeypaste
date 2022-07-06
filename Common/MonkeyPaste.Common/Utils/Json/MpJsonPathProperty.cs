@@ -203,8 +203,4 @@ namespace MonkeyPaste.Common {
             }
         }
     }
-    public class MpJsonPathPropertyException : Exception {
-        public MpJsonPathPropertyException(string msg) : base(msg) { }
-        public MpJsonPathPropertyException(string msg, Exception innerException) : base(msg, innerException) { }
-    }
 }

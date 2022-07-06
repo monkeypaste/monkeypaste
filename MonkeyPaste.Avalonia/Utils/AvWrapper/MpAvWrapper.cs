@@ -54,9 +54,9 @@ namespace MonkeyPaste.Avalonia {
             //DataObjectHelper = MpWpfDataObjectHelper.Instance;
             //ExternalPasteHandler = MpWpfDataObjectHelper.Instance;
             //CopyItemBuilder = new MpWpfCopyItemBuilder();
-            //ClipboardMonitor = new MpWpfClipboardWatcher();
+            ClipboardMonitor = new MpAvClipboardWatcher();
             //ClipboardData = MpClipboardHandlerCollectionViewModel.Instance;
-            //DataObjectRegistrar = ClipboardMonitor as MpIPlatformDataObjectRegistrar;
+            DataObjectRegistrar = ClipboardMonitor as MpIPlatformDataObjectRegistrar;
             ScreenInfoCollection = new MpAvScreenInfoCollection(w);
             
         }

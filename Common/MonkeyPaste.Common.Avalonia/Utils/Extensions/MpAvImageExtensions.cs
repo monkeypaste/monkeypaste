@@ -10,60 +10,83 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common.Avalonia {
+    [StructLayout(LayoutKind.Sequential)]
+    public struct PixelColor {
+        public byte Blue;
+        public byte Green;
+        public byte Red;
+        public byte Alpha;
+    }
+
     public static class MpAvImageExtensions {
+        public static unsafe PixelColor[,] GetPixels(Bitmap bitmap) {
+            using (var memoryStream = new MemoryStream()) {
+                bitmap.Save(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                var writeableBitmap = WriteableBitmap.Decode(memoryStream);
+                using var lockedBitmap = writeableBitmap.Lock();
 
-        public static IBitmap Tint(this IImage iimg, Brush tint, bool retainAlpha = true) {
-            if(iimg is Bitmap bmpSrc) {
-                //Bitmap formattedBmpSrc = null;
-                //if (bmpSrc.Dpi.X != 96 || bmpSrc.Dpi.Y != 96) {
-                //    //means bmp dpi isn't 96
-                //    double dpi = 96;
-                //    int width = bmpSrc.PixelSize.Width;
-                //    int height = bmpSrc.PixelSize.Height;
+                byte* bmpPtr = (byte*)lockedBitmap.Address;
+                int width = writeableBitmap.PixelSize.Width;
+                int height = writeableBitmap.PixelSize.Height;
 
-                //    int stride = width * 4; // 4 bytes per pixel
-                //    byte[] pixelData = new byte[stride * height]; 
+                PixelColor[,] pixels = new PixelColor[width, height];
 
-                //    bmpSrc.CopyPixels(pixelData, stride, 0);
+                for (int row = 0; row < height; row++) {
+                    for (int col = 0; col < width; col++) {
+                        byte red = *bmpPtr++;
+                        byte green = *bmpPtr++;
+                        byte blue = *bmpPtr++;
+                        byte alpha = *bmpPtr++;
 
-                //    formattedBmpSrc = BitmapSource.Create(width, height, dpi, dpi, PixelFormats.Bgra32, null, pixelData, stride);
-                //} else {
-                //    formattedBmpSrc = bmpSrc;
-                //}
+                        pixels[col, row] = new PixelColor() {
+                            Alpha = alpha,
+                            Red = red,
+                            Green = green,
+                            Blue = blue
+                        };
+                    }
+                }
 
-                var wbmp = new WriteableBitmap(bmpSrc.PixelSize, bmpSrc.Dpi, PixelFormat.Bgra8888, AlphaFormat.Unpremul);
-
-                //using(Stream stream = new MemoryStream()) {
-                //    bmpSrc.Save(stream);
-
-                //    using(var fb = wbmp.Lock()) {
-                //        var data = new int[fb.Size.Width * fb.Size.Height];
-
-                //        for (int y = 0; y < fb.Size.Height; y++) {
-                //            for (int x = 0; x < fb.Size.Width; x++) {
-                //                var color = new Color(fillAlpha, 0, 255, 0);
-
-                //                if (premul) {
-                //                    byte r = (byte)(color.R * color.A / 255);
-                //                    byte g = (byte)(color.G * color.A / 255);
-                //                    byte b = (byte)(color.B * color.A / 255);
-
-                //                    color = new Color(fillAlpha, r, g, b);
-                //                }
-
-                //                data[y * fb.Size.Width + x] = (int)color.ToUint32();
-                //            }
-                //        }
-
-                //        Marshal.Copy(data, 0, fb.Address, fb.Size.Width * fb.Size.Height);
-                //    }
-                //}
+                return pixels;
             }
-
-            return null;
-            
-
         }
+
+        public static unsafe Bitmap ToGrayScale(this Bitmap bitmap) {
+            using (var memoryStream = new MemoryStream()) {
+                bitmap.Save(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                var writeableBitmap = WriteableBitmap.Decode(memoryStream);
+                using var lockedBitmap = writeableBitmap.Lock();
+
+                byte* bmpPtr = (byte*)lockedBitmap.Address;
+                int width = writeableBitmap.PixelSize.Width;
+                int height = writeableBitmap.PixelSize.Height;
+                byte* tempPtr;
+
+                for (int row = 0; row < height; row++) {
+                    for (int col = 0; col < width; col++) {
+                        tempPtr = bmpPtr;
+                        byte red = *bmpPtr++;
+                        byte green = *bmpPtr++;
+                        byte blue = *bmpPtr++;
+                        byte alpha = *bmpPtr++;
+
+                        byte result = (byte)(0.2126 * red + 0.7152 * green + 0.0722 * blue);
+                        // byte result = (byte)((red + green + blue) / 3);
+
+                        bmpPtr = tempPtr;
+                        *bmpPtr++ = result; // red
+                        *bmpPtr++ = result; // green
+                        *bmpPtr++ = result; // blue
+                        *bmpPtr++ = alpha; // alpha
+                    }
+                }
+
+                return writeableBitmap;
+            }
+        }
+
         
     }
 }

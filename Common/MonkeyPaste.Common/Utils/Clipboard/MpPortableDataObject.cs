@@ -79,7 +79,7 @@ namespace MonkeyPaste.Common {
         public void SetData(string format, object data) {
             var pdf = MpPortableDataFormats.GetDataFormat(format);
             if (pdf == null) {
-                throw new Exception($"Format {format} is not registered");
+                throw new MpUnregisteredDataFormatException($"Format {format} is not registered");
             }
             DataFormatLookup.AddOrReplace(pdf, data);
         }

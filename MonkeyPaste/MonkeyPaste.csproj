@@ -123,7 +123,6 @@
     <None Remove="Resources\Html\Editor\webpack.config.js" />
     <None Remove="Resources\Icons\monkey.png" />
     <None Remove="Behaviors\" />
-    <None Remove="Resources\Images\test.png" />
     <EmbeddedResource Remove="Resources\Styles\MpWpfConverters.xaml" />
     <Compile Remove="Resources\Styles\MpWpfConverters.Designer.cs" />
   </ItemGroup>
@@ -198,7 +197,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Icons\monkey.png" />
-    <EmbeddedResource Include="Resources\Images\test.png" />
   </ItemGroup>
 
   <ItemGroup>

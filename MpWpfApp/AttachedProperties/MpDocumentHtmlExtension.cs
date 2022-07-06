@@ -30,6 +30,9 @@ using Xamarin.Essentials;
 using Microsoft.Office.Interop.Outlook;
 
 namespace MpWpfApp {
+    public interface MpIProcessWatcher {
+
+    }
     public class MpDocumentHtmlExtension : DependencyObject {
         #region Private Variables
 

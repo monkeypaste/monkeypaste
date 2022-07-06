@@ -71,7 +71,7 @@ namespace MonkeyPaste.Avalonia {
             var bootstrapper = new MpAvBootstrapperViewModel();
             await bootstrapper.InitAsync();
 
-            while (!MpAvBootstrapperViewModel.IsLoaded) {
+            while (!MpBootstrapperViewModelBase.IsLoaded) {
                 await Task.Delay(100);
             }
             MpAvGlobalMouseHook.Init(((IRenderRoot)this).RenderScaling);
@@ -94,9 +94,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvMainWindowViewModel.Instance.OnMainWindowOpened += Instance_OnMainWindowOpened;
             MpAvMainWindowViewModel.Instance.OnMainWindowClosed += Instance_OnMainWindowClosed;
 
-            //var screen = MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(0);
-            //var bounds = this.Bounds;
-            //Debugger.Break();
+            MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
         }
 
         

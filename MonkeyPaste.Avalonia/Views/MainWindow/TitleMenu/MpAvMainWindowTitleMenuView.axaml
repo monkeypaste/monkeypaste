@@ -17,6 +17,86 @@
       <SolidColorBrush Color="{Binding TitleBarBackgroundHexColor, Converter={StaticResource StringHexToColorConverter}}"
                        Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}"/>
     </Grid.Background>
+
+    <StackPanel Orientation="Horizontal">
+      <!-- 
+                  Command="{Binding ShowSettingsWindowCommand,
+                                    Source={x:Static local:MpSystemTrayViewModel.Instance}}"
+                                    
+                  PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"
+                  Template="{StaticResource SearchButtonControlTemplate}"
+                                    -->
+      <Button Margin="5,0,0,0"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Center"
+              local:MpAvIsHoveringExtension.HoverCursor="Default"
+              local:MpAvIsHoveringExtension.IsEnabled="True"
+              ToolTip.ShowDelay="500">
+        <ToolTip.Tip>
+          <local:MpAvTooltipView ToolTipText="Settings" />
+        </ToolTip.Tip>
+        <Image Width="12"
+                Height="12"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Source="{Binding .,
+                                      Source={StaticResource CogIcon},
+                                      Converter={StaticResource StringResourceToBitmapConverter}}"
+                Stretch="Fill">
+          <!--<Image.Effect>
+                      <local:MpInvertEffect />
+                  </Image.Effect>-->
+        </Image>
+      </Button>
+      <!-- 
+                        Template="{StaticResource LockToggleButtonControlTemplate}"
+                        -->
+      <ToggleButton VerticalAlignment="Center"
+                    IsChecked="{Binding IsMainWindowLocked,
+                                            Mode=TwoWay}"
+                    ToolTip.ShowDelay="500">
+        <ToolTip.Tip>
+          <local:MpAvTooltipView ToolTipText="Lock" />
+        </ToolTip.Tip>
+        <Image Width="12"
+                Height="12"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Source="{Binding Source={StaticResource LockIcon},
+                                      Converter={StaticResource StringResourceToBitmapConverter}}"
+                Stretch="Fill">
+          <!--<Image.Effect>
+                      <local:MpInvertEffect />
+                  </Image.Effect>-->
+        </Image>
+      </ToggleButton>
+      <ToggleButton VerticalAlignment="Center"
+                    local:MpAvIsHoveringExtension.IsEnabled="True"
+                    local:MpAvIsHoveringExtension.HoverCursor="Hand"
+                    Background="Pink"
+                    IsChecked="{Binding !IsFilterMenuVisible}"
+                    ToolTip.ShowDelay="0">
+        <ToolTip.Tip>
+          <local:MpAvTooltipView ToolTipText="Hide Filter Menu" />
+        </ToolTip.Tip>
+        <Grid>
+          <Polygon Points="6,0 12,12 0,12"
+                    StrokeThickness="1"
+                    IsVisible="{Binding !IsFilterMenuVisible}"
+                    Stroke="Black"
+                    Fill="Transparent" />
+          <Polygon Points="5,0 10,10 0,10"
+                    StrokeThickness="1"
+                    IsVisible="{Binding IsFilterMenuVisible}"
+                    Stroke="Black"
+                    Fill="Transparent">
+            <Polygon.RenderTransform>
+              <RotateTransform Angle="180" />
+            </Polygon.RenderTransform>
+          </Polygon>
+        </Grid>
+      </ToggleButton>
+    </StackPanel>
     <Border Width="100" 
             Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}"
             local:MpAvIsHoveringExtension.DefaultBrush="Transparent"
@@ -25,6 +105,7 @@
             local:MpAvIsHoveringExtension.SelectedBrush="Orange"
             local:MpAvIsHoveringExtension.HoverCursor="ResizeNS"
             local:MpAvIsHoveringExtension.IsEnabled="True">
+
       <Border x:Name="MainWindowResizeBorder"
               local:MpAvResizeExtension.MinHeight="{Binding MainWindowMinHeight}"
               local:MpAvResizeExtension.MaxHeight="{Binding MainWindowMaxHeight}"

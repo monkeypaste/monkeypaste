@@ -15,9 +15,6 @@
         ShowInTaskbar="False"
         TransparencyLevelHint="Transparent"
         Title="Monkey Paste">
-  <!--<Design.DataContext>
-    <local:MpAvMainWindowViewModel/>
-  </Design.DataContext>-->
   <Canvas x:Name="MainWindowContainerCanvas"
         AttachedToVisualTree="MainWindow_AttachedToVisualTree"
           HorizontalAlignment="Left"

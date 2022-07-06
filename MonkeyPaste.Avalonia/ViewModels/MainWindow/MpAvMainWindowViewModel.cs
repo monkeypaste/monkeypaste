@@ -271,6 +271,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        
         public bool IsHovering { get; set; }
 
         public bool IsMainWindowInitiallyOpening { get; set; } = true;
