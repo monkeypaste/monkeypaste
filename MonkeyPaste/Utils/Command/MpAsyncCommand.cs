@@ -19,7 +19,7 @@ namespace MonkeyPaste {
             Func<T, bool> canExecute = null,
             MpIErrorHandler errorHandler = null) : this(execute,canExecute,errorHandler, null) { }
 
-            public MpAsyncCommand(
+       public MpAsyncCommand(
             Func<T, Task> execute, 
             Func<T, bool> canExecute = null, 
             MpIErrorHandler errorHandler = null,

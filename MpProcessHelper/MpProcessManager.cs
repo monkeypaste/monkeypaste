@@ -1,4 +1,4 @@
-﻿using MonkeyPaste.Common.Plugin; 
+﻿using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Wpf;
 using System;
@@ -18,7 +18,7 @@ using System.Timers;
 using System.Windows.Forms;
 
 namespace MpProcessHelper {
-    public class MpProcessActivatedEventArgs : EventArgs {
+    public class MpWpfProcessActivatedEventArgs : EventArgs {
         public string ProcessPath { get; set; }
         public string ApplicationName { get; set; }
         public IntPtr Handle { get; set; }
@@ -73,7 +73,7 @@ namespace MpProcessHelper {
 
         #region Events
 
-        public static event EventHandler<MpProcessActivatedEventArgs> OnAppActivated;
+        public static event EventHandler<MpWpfProcessActivatedEventArgs> OnAppActivated;
 
         #endregion
 
@@ -407,7 +407,7 @@ namespace MpProcessHelper {
                 
                 OnAppActivated?.Invoke(
                     nameof(MpProcessManager), 
-                    new MpProcessActivatedEventArgs() {
+                    new MpWpfProcessActivatedEventArgs() {
                         ProcessPath = processPath,
                         ApplicationName = GetProcessApplicationName(LastTitle),
                         Handle = LastHandle

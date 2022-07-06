@@ -501,15 +501,13 @@ namespace MonkeyPaste.Avalonia {
                 MainWindowRight = openStartRect.Right;
                 MainWindowBottom = openStartRect.Bottom;
 
-                MpConsole.WriteLine($"SHOW WINDOW START: L: " + MainWindowLeft + " T: " + MainWindowTop + " R:" + MainWindowRight + " B:" + MainWindowBottom);
+                //MpConsole.WriteLine($"SHOW WINDOW START: L: " + MainWindowLeft + " T: " + MainWindowTop + " R:" + MainWindowRight + " B:" + MainWindowBottom);
 
                 MpRect openEndRect = MainWindowOpenedRect;
 
                 double test = MpPrefViewModel.Instance.ShowMainWindowAnimationMilliseconds;
-                double tt = 500;//
+                double tt = 500;
                 double fps = 30;
-
-                //double dt = (MainWindowTopOpened - MainWindowTopClosed) / tt / (fps / 1000);
                 double step = tt / (fps );
 
                 double d_l = (openEndRect.Left - openStartRect.Left) / step;
@@ -517,7 +515,7 @@ namespace MonkeyPaste.Avalonia {
                 double d_r = (openEndRect.Right - openStartRect.Right) / step;
                 double d_b = (openEndRect.Bottom - openStartRect.Bottom) / step;
                 
-                MpConsole.WriteLine($"SHOW WINDOW STEP: L: " + d_l + " T: " + d_t + " R:" + d_r + " B:" + d_b);
+                //MpConsole.WriteLine($"SHOW WINDOW STEP: L: " + d_l + " T: " + d_t + " R:" + d_r + " B:" + d_b);
 
                 var timer = new DispatcherTimer(DispatcherPriority.Normal);
                 timer.Interval = TimeSpan.FromMilliseconds(fps);
@@ -539,7 +537,7 @@ namespace MonkeyPaste.Avalonia {
                             break;
                     }
                     if(isDone) {
-                        MpConsole.WriteLine("SHOW WINDOW DONE");
+                        //MpConsole.WriteLine("SHOW WINDOW DONE");
                         MainWindowLeft = openEndRect.Left;
                         MainWindowTop = openEndRect.Top;
                         MainWindowRight = openEndRect.Right;
@@ -556,7 +554,7 @@ namespace MonkeyPaste.Avalonia {
 
                         //MpClipTrayViewModel.Instance.AddNewItemsCommand.Execute(null);
                     } else {
-                        MpConsole.WriteLine($"SHOW WINDOW ANIMATING: L: " + MainWindowLeft + " T: " + MainWindowTop + " R:" + MainWindowRight + " B:" + MainWindowBottom);
+                        //MpConsole.WriteLine($"SHOW WINDOW ANIMATING: L: " + MainWindowLeft + " T: " + MainWindowTop + " R:" + MainWindowRight + " B:" + MainWindowBottom);
                         MainWindowLeft += d_l;
                         MainWindowTop += d_t;
                         MainWindowRight += d_r;
@@ -595,7 +593,6 @@ namespace MonkeyPaste.Avalonia {
 
                     double tt = MpPrefViewModel.Instance.HideMainWindowAnimationMilliseconds;
                     double fps = 30;
-
                     double step = tt / (fps);
 
                     double d_l = (closeEndRect.Left - closeStartRect.Left) / step;
@@ -632,7 +629,7 @@ namespace MonkeyPaste.Avalonia {
                             mw!.IsVisible = false;
                             mw!.WindowState = WindowState.Minimized;
                             
-                            MpConsole.WriteLine("HIDE WINDOW DONE");
+                            //MpConsole.WriteLine("HIDE WINDOW DONE");
 
                             IsMainWindowLoading = false;
                             IsMainWindowOpening = false;

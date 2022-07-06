@@ -8,6 +8,7 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <UseWPF>False</UseWPF>
     <StartupObject>MonkeyPaste.Avalonia.Program</StartupObject>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaXaml Remove="Assets\Images\backup\**" />
@@ -20,6 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
+    <Compile Remove="Utils\Platform\X11\Gtk\gtk_stuff.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
@@ -809,6 +811,7 @@
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.15" />
     <PackageReference Include="Avalonia.Win32" Version="0.10.15" />
     <PackageReference Include="Avalonia.X11" Version="0.10.15" />
+    <PackageReference Include="CefGlue.Avalonia" Version="91.4472.30" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" />
     <PackageReference Include="SharpHook" Version="3.0.2" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
@@ -817,6 +820,9 @@
   <ItemGroup>
     <Folder Include="Styles\Converters\" />
     <Folder Include="Utils\Clipboard\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Utils\Platform\X11\Gtk\gtk_stuff.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />

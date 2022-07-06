@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public interface MpIPlatformWrapper {
+        MpIProcessWatcher ProcessWatcher { get; set; }
         MpICursor Cursor { get; set; }
         MpIDbInfo DbInfo { get; set; }
         MpIQueryInfo QueryInfo { get; set; }

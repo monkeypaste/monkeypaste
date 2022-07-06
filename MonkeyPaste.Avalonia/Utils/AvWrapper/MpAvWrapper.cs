@@ -7,6 +7,7 @@ using Avalonia.Media.Imaging;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvWrapper : MpIPlatformWrapper {
+        public MpIProcessWatcher ProcessWatcher { get; set; }
         public MpICursor? Cursor { get; set; }
         public MpIDbInfo? DbInfo { get; set; }
 
@@ -40,6 +41,7 @@ namespace MonkeyPaste.Avalonia {
             Cursor = new MpAvCursor();
             DbInfo = new MpAvDbInfo();
             QueryInfo = new MpAvQueryInfo();
+            ProcessWatcher = new MpAvProcessWatcher().Watcher;
 
             //IconBuilder = new MpWpfIconBuilder();
             //UrlBuilder = new MpUrlBuilder();

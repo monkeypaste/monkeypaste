@@ -3,6 +3,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -19,7 +20,23 @@ namespace MonkeyPaste.Common.Avalonia {
     }
 
     public static class MpAvImageExtensions {
-        public static unsafe PixelColor[,] GetPixels(Bitmap bitmap) {
+        public static Bitmap ToBitmap(this byte[] bytes) {
+            using (var stream = new MemoryStream(bytes)) {
+                return new Bitmap(stream);
+            }
+        }
+        public static byte[] ToByteArray(this Bitmap bmp) {
+            using(var stream = new MemoryStream()) {
+                bmp.Save(stream);
+                return stream.ToArray();
+            }
+        }
+
+        public static string ToBase64(this Bitmap bmp) {
+            return Convert.ToBase64String(bmp.ToByteArray());
+        }
+
+        public static unsafe PixelColor[,] GetPixels(this Bitmap bitmap) {
             using (var memoryStream = new MemoryStream()) {
                 bitmap.Save(memoryStream);
                 memoryStream.Seek(0, SeekOrigin.Begin);

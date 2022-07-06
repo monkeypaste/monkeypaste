@@ -155,7 +155,7 @@ namespace MpWpfApp {
             return al;
         }
 
-        private void MpProcessManager_OnAppActivated(object sender, MpProcessActivatedEventArgs e) {
+        private void MpProcessManager_OnAppActivated(object sender, MpWpfProcessActivatedEventArgs e) {
             // if app is unknown add it
             // TODO device logic
             bool isUnknown = Items.FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower()) == null;

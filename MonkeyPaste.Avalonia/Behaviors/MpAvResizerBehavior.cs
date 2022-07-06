@@ -474,7 +474,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            MpConsole.WriteLine("dx " + dx + " dy " + dy);
+            //MpConsole.WriteLine("dx " + dx + " dy " + dy);
 
             double bound_width = GetBoundWidth(control);
             double bound_height = GetBoundHeight(control);

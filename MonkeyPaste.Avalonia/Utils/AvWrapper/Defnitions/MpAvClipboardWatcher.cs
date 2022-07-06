@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Permissions;
 using System.Text;
@@ -7,10 +8,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Input;
+using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common.Avalonia;
+using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipboardWatcher : MpIClipboardMonitor, MpIPlatformDataObjectRegistrar {
@@ -23,6 +27,7 @@ namespace MonkeyPaste.Avalonia {
         private DispatcherTimer _timer;
 
         private bool _isCheckingClipboard = false;
+        
 
         #endregion
 
@@ -94,6 +99,20 @@ namespace MonkeyPaste.Avalonia {
                 if (HasChanged(cbo)) {
                     _lastCbo = cbo;
                     // TODO Add plugin handling here
+
+                    var pngFormat = _lastCbo.DataFormatLookup.FirstOrDefault(x => x.Key.Name.ToLower() == "png");
+                    if(pngFormat.Value != default) {
+                        var pngBytes = pngFormat.Value as byte[];
+                        if(pngBytes != null) {
+                            using (var stream = new MemoryStream(pngBytes)) {
+                                var bmp = new Bitmap(stream);
+                                var pixels = bmp.GetPixels();
+                                Debugger.Break();
+                            }
+                                
+                        }
+
+                    }
 
                     OnClipboardChanged?.Invoke(typeof(MpAvClipboardWatcher).ToString(), cbo);
                 }
