@@ -9,6 +9,7 @@ using MonkeyPaste.Common;
 using Avalonia.X11.NativeDialogs;
 using System.Diagnostics;
 using System.Timers;
+using System.Collections.ObjectModel;
 
 namespace MonkeyPaste.Avalonia {
     public class MpX11ProcessWatcher : MpIProcessWatcher {
@@ -17,9 +18,11 @@ namespace MonkeyPaste.Avalonia {
         public IntPtr ThisAppHandle { get; set; }
         public IntPtr LastHandle { get; }
         public string LastProcessPath { get; }
-        public ConcurrentDictionary<string, List<IntPtr>> RunningProcessLookup { get; }
+        public ConcurrentDictionary<string, ObservableCollection<IntPtr>> RunningProcessLookup { get; }
 
         public MpX11ProcessWatcher() {
+
+            
             _timer = new Timer() {
                 Interval = 300,
                 AutoReset = true,

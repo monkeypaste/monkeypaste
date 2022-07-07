@@ -2,15 +2,16 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace MonkeyPaste {
     public interface MpIProcessWatcher {
-        IntPtr ThisAppHandle { get; set; }
+        IntPtr ThisAppHandle { get; }
 
         IntPtr LastHandle { get; }
         string LastProcessPath { get; }
 
-        ConcurrentDictionary<string,List<IntPtr>> RunningProcessLookup { get; }
+        ConcurrentDictionary<string,ObservableCollection<IntPtr>> RunningProcessLookup { get; }
 
         IntPtr GetParentHandleAtPoint(MpPoint poIntPtr);
         IntPtr GetLastActiveInstance(string path);

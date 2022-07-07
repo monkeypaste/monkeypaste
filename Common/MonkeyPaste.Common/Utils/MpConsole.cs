@@ -25,30 +25,13 @@ namespace MonkeyPaste.Common {
                 WriteTraceLine(@"Error deleting previus log file w/ path: " + LogFilePath + " with exception: " + ex);
             }
         }
-        public static void Write(string str) {
-            str = str == null ? string.Empty : str;
-            Console.Write(str);
-        }
 
         public static void WriteLine(string line) {
             line = line == null ? string.Empty : line;
             string str = line.ToString();
             str = $"[{DateTime.Now.ToString()}] {str}";
             if (LogToConsole) {
-                if (RuntimeInformation.FrameworkDescription.Contains(".NET Framework")) {
-                    Console.WriteLine(str);
-                    return;
-                } else if (RuntimeInformation.FrameworkDescription.Contains(".NET 6")) {
-                    Debug.WriteLine(str);
-                    return;
-                }
-                Console.WriteLine("");
-                Console.WriteLine(@"-----------------------------------------------------------------------");
-                Console.WriteLine("");
-                Console.WriteLine(str);
-                Console.WriteLine("");
-                Console.Write(@"-----------------------------------------------------------------------");
-                Console.WriteLine("");
+                WriteLineWrapper(str);
             }
             if(LogToFile) {
                 WriteLogLine(str);
@@ -69,17 +52,7 @@ namespace MonkeyPaste.Common {
             string str = line.ToString();
             str = $"[{DateTime.Now.ToString()}] {str}";
             if (LogToConsole) {
-                if (RuntimeInformation.FrameworkDescription.Contains(".NET Framework")) {
-                    Console.WriteLine(str);
-                    return;
-                }
-                Console.WriteLine("");
-                Console.WriteLine(@"-----------------------------------------------------------------------");
-                Console.WriteLine("");
-                Console.WriteLine(str);
-                Console.WriteLine("");
-                Console.Write(@"-----------------------------------------------------------------------");
-                Console.WriteLine("");
+                WriteLineWrapper(str);
             }
             if (LogToFile) {
                 WriteLogLine(str);
@@ -94,17 +67,17 @@ namespace MonkeyPaste.Common {
 
             line = $"[{DateTime.Now.ToString()}] {line}";
             if (LogToConsole) {
-                Console.WriteLine("");
-                Console.WriteLine(@"-----------------------------------------------------------------------");
-                Console.WriteLine("File: " + callerFilePath);
-                Console.WriteLine("Member: " + callerName);
-                Console.WriteLine("Line: " + lineNum);
-                Console.WriteLine("Msg: " + line);
-                Console.WriteLine(@"-----------------------------------------------------------------------");
-                Console.WriteLine("");
+                WriteLineWrapper("",true);
+                WriteLineWrapper(@"-----------------------------------------------------------------------",true);
+                WriteLineWrapper("File: " + callerFilePath,true);
+                WriteLineWrapper("Member: " + callerName,true);
+                WriteLineWrapper("Line: " + lineNum,true);
+                WriteLineWrapper("Msg: " + line,true);
+                WriteLineWrapper(@"-----------------------------------------------------------------------",true);
+                WriteLineWrapper("",true);
                 if(ex != null) {
-                    Console.WriteLine("Exception: ");
-                    Console.WriteLine(ex);
+                    WriteLineWrapper("Exception: ",true);
+                    WriteLineWrapper(ex.ToString(),true);
                 }
             }
             if (LogToFile) {
@@ -134,6 +107,24 @@ namespace MonkeyPaste.Common {
             }
             line = $"[{DateTime.Now.ToString()}] {line}";
             File.AppendAllLines(LogFilePath, new List<string> { line.ToString() });
-        }                                                                                       
+        }
+
+        private static void WriteLineWrapper(string str, bool isTrace = false) {
+            if (RuntimeInformation.FrameworkDescription.Contains(".NET Framework") || isTrace) {
+                Console.WriteLine(str);
+                return;
+            } else if (RuntimeInformation.FrameworkDescription.ToLower().Contains(".net 6")) {
+                Console.WriteLine(str);
+                return;
+            } else {
+                Console.WriteLine("");
+                Console.WriteLine(@"-----------------------------------------------------------------------");
+                Console.WriteLine("");
+                Console.WriteLine(str);
+                Console.WriteLine("");
+                Console.WriteLine(@"-----------------------------------------------------------------------");
+                Console.WriteLine("");
+            }
+        }
     }
 }

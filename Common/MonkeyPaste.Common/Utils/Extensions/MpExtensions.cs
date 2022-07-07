@@ -16,6 +16,12 @@ namespace MonkeyPaste.Common {
     public static class MpExtensions {
 
         #region Collections
+        public static bool IsDefault<T>(this T value) where T : struct {
+            bool isDefault = value.Equals(default(T));
+
+            return isDefault;
+        }
+
         public static int IndexOf<T>(this IEnumerable<T> source, Func<T, bool> predicate) {
             int retval = -1;
             var enumerator = source.GetEnumerator();

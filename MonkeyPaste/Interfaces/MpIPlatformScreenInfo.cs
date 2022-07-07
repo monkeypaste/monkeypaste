@@ -16,6 +16,7 @@ namespace MonkeyPaste {
     }
 
     public interface MpIPlatformScreenInfoCollection {
-        IEnumerable<MpIPlatformScreenInfo> Screens { get; set; }
+        double PixelScaling { get; }
+        IEnumerable<MpIPlatformScreenInfo> Screens { get; }
     }
 }

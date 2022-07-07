@@ -218,6 +218,12 @@ dotnet_naming_style.begins_with_i.capitalization = pascal_case
 csharp_style_namespace_declarations = block_scoped:silent
 csharp_style_prefer_method_group_conversion = true:silent
 
+# CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+dotnet_diagnostic.CS8632.severity = none
+
+# CS8073: The result of the expression is always the same since a value of this type is never equal to 'null'
+dotnet_diagnostic.CS8073.severity = none
+
 [*.{cs,vb}]
 dotnet_style_coalesce_expression = true:suggestion
 dotnet_style_null_propagation = true:suggestion

@@ -100,20 +100,6 @@ namespace MonkeyPaste.Avalonia {
                     _lastCbo = cbo;
                     // TODO Add plugin handling here
 
-                    var pngFormat = _lastCbo.DataFormatLookup.FirstOrDefault(x => x.Key.Name.ToLower() == "png");
-                    if(pngFormat.Value != default) {
-                        var pngBytes = pngFormat.Value as byte[];
-                        if(pngBytes != null) {
-                            using (var stream = new MemoryStream(pngBytes)) {
-                                var bmp = new Bitmap(stream);
-                                var pixels = bmp.GetPixels();
-                                Debugger.Break();
-                            }
-                                
-                        }
-
-                    }
-
                     OnClipboardChanged?.Invoke(typeof(MpAvClipboardWatcher).ToString(), cbo);
                 }
             });

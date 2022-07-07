@@ -13,7 +13,7 @@ using PropertyChanged;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
+
 using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
     public static class MpAvResizeExtension {
         #region Private Variables
 
-        private static MpPoint? _lastMousePosition, _mouseDownPosition;
+        private static Point _lastMousePosition, _mouseDownPosition;
         #endregion
 
         #region Constants
@@ -337,24 +337,26 @@ namespace MonkeyPaste.Avalonia {
                         return;
                     }
                     if(e.ClickCount > 1) {
-                        e.Pointer.Capture(control);
+                        //e.Pointer.Capture(control);
                         ResetToDefault(control);
 
-                        Dispatcher.UIThread.Post(async () => {
-                            await Task.Delay(1000);
-                            e.Pointer.Capture(null);
-                        });
+                        // Dispatcher.UIThread.Post(async () => {
+                        //     await Task.Delay(1000);
+                        //     e.Pointer.Capture(null);
+                        // });
 
                         return;
                     }
                     if (control.DataContext is MpISelectableViewModel svm) {
                         svm.IsSelected = true;
                     }
-                    e.Pointer.Capture(control);
-                    if (e.Pointer.Captured == control) {
+                    //e.Pointer.Capture(control);
+                    //if (e.Pointer.Captured == control) 
+                    {
                         SetIsResizing(control, true);
 
-                        _lastMousePosition = _mouseDownPosition = e.GetPosition(MainWindow.Instance).ToPortablePoint();
+                        _lastMousePosition = _mouseDownPosition = MainWindow.Instance.PointToScreen(e.GetCurrentPoint(null).Position).ToPoint(1);
+                        //_lastMousePosition = _mouseDownPosition = MpAvGlobalMouseHook.GlobalMouseLocation;
                     }
                 }
             }
@@ -369,14 +371,15 @@ namespace MonkeyPaste.Avalonia {
                     
                     if (GetIsResizing(control)) {
                         Reset(control);
-                        e.Pointer.Capture(null);
+                        //e.Pointer.Capture(null);
                     }
                 }
             }
 
             void PointerMovedHandler(object? s, PointerEventArgs e) {
                 if (s is Control control) {
-                    if (e.Pointer.Captured != control ||
+                    if (//e.Pointer.Captured != control ||
+                        !GetIsResizing(control) ||
                        !GetIsEnabled(control) ||
                         _mouseDownPosition == null
                        //MpClipTrayViewModel.Instance.HasScrollVelocity
@@ -389,10 +392,11 @@ namespace MonkeyPaste.Avalonia {
                         return;
                     }
 
-                    MpPoint mw_mp = null;
+                    var mw_mp = MainWindow.Instance.PointToScreen(e.GetCurrentPoint(null).Position).ToPoint(1);
                     if (GetIsResizing(control)) {
-                        mw_mp = e.GetPosition(MainWindow.Instance).ToPortablePoint();
-                        var delta = mw_mp - _lastMousePosition;
+                        //mw_mp = e.GetPosition(MainWindow.Instance).ToPortablePoint();
+                        
+                        var delta = new Point(mw_mp.X - _lastMousePosition.X, mw_mp.Y - _lastMousePosition.Y);
                         Resize(control, delta.X, -delta.Y);
                     }
                     _lastMousePosition = mw_mp;
@@ -462,6 +466,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static void Resize(Control control, double dx, double dy) {
+            
+            MpConsole.WriteLine("dx " + dx + " dy " + dy);
+            
             if (GetResizerEdge(control) != MpResizeEdgeType.Left && 
                 GetResizerEdge(control) != MpResizeEdgeType.Right) {
                 dx = 0;
@@ -474,11 +481,11 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            //MpConsole.WriteLine("dx " + dx + " dy " + dy);
 
             double bound_width = GetBoundWidth(control);
             double bound_height = GetBoundHeight(control);
-
+            MpConsole.WriteLine("Bound Width " + bound_width + " Bound Height " + bound_height);
+            
             if (bound_width + dx < 0) {
                 ResetToDefault(control);
                 return;
@@ -506,7 +513,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             SetIsResizing(control, false);
-            _lastMousePosition = _mouseDownPosition = null;
+            _lastMousePosition = _mouseDownPosition = default;
         }
 
         #endregion

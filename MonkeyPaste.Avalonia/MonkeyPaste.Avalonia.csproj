@@ -15,6 +15,9 @@
     <Compile Remove="Assets\Images\backup\**" />
     <EmbeddedResource Remove="Assets\Images\backup\**" />
     <None Remove="Assets\Images\backup\**" />
+    <None Remove="CefNet" />
+    <None Remove="CefNet.Avalonia" />
+    <None Remove="WebViewControl-Avalonia" />
   </ItemGroup>
   <ItemGroup>
     <AvaloniaXaml Remove="Styles\Converters\MpConvertersResourceDictionary.axaml" />
@@ -811,11 +814,11 @@
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.15" />
     <PackageReference Include="Avalonia.Win32" Version="0.10.15" />
     <PackageReference Include="Avalonia.X11" Version="0.10.15" />
-    <PackageReference Include="CefGlue.Avalonia" Version="91.4472.30" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" />
     <PackageReference Include="SharpHook" Version="3.0.2" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
+    <PackageReference Include="WebViewControl-Avalonia" Version="2.91.27" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Styles\Converters\" />
@@ -825,23 +828,12 @@
     <None Include="Utils\Platform\X11\Gtk\gtk_stuff.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
     <ProjectReference Include="..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj" />
+    <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Settings.settings">
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-      <Generator>PublicSettingsSingleFileGenerator</Generator>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
     <Compile Update="Views\MainWindow\TitleMenu\MpAvMainWindowTitleMenuView.axaml.cs">
       <DependentUpon>MpAvMainWindowTitleMenuView.axaml</DependentUpon>
     </Compile>

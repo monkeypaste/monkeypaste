@@ -8,6 +8,8 @@ namespace MonkeyPaste.Avalonia {
     internal class MpAvProcessWatcher {
         public MpIProcessWatcher Watcher { get; private set; }
         public MpAvProcessWatcher() {
+            //GtkTest.Test();
+
             if(OperatingSystem.IsWindows()) {
                 Watcher = new MpWin32ProcessWatcher();
             } else if(OperatingSystem.IsLinux()) {
