@@ -13,9 +13,13 @@ namespace MonkeyPaste.Common.Avalonia {
             if(!hexColor.IsStringHexColor()) {
                 return Colors.Transparent;
             }
-            return Color.Parse(hexColor);
+            var c = new MpColor(hexColor);
+            return c.ToAvColor();
         }
 
+        public static Color ToAvColor(this MpColor mpcolor) {
+            return new Color(mpcolor.A,mpcolor.R, mpcolor.G, mpcolor.B);
+        }
         public static Brush ToAvBrush(this string hexColor) {            
             return new SolidColorBrush(hexColor.ToAvColor());
         }

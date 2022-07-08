@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -12,6 +13,7 @@ namespace MonkeyPaste {
         private static MpCommandErrorHandler _instance;
         public static MpCommandErrorHandler Instance => _instance ??= (_instance = new MpCommandErrorHandler());
         public void HandleError(Exception ex) {
+            Debugger.Break();
             MpConsole.WriteTraceLine("Command error: ", ex);
         }
     }

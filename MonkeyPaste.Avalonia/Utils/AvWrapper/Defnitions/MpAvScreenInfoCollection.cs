@@ -14,6 +14,8 @@ namespace MonkeyPaste.Avalonia {
 
         public double PixelScaling {
             get {
+                //return 1.0d;
+
                 if (_w == null ||
                     OperatingSystem.IsMacOS()) {
                     // NOTE windows seems to now account for scaling on bounds/workarea but mac does

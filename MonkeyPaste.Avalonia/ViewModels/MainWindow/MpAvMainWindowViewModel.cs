@@ -481,8 +481,13 @@ namespace MonkeyPaste.Avalonia {
                     if (MainWindow.Instance == null) {
                         return;
                     }
+                    var p = new MpPoint(MainWindowLeft, MainWindowTop);
+                    if(OperatingSystem.IsWindows()) {
+                        // Window position on windows uses actual density not scaled value mac uses scaled haven't checked linux
+                        p *= MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx).PixelDensity;
+                    }
 
-                    MainWindow.Instance.Position = new PixelPoint((int)MainWindowLeft, (int)MainWindowTop);
+                    MainWindow.Instance.Position = new PixelPoint((int)p.X,(int)p.Y);
                     break;
                 case nameof(IsResizing):
                     if(!IsResizing) {
@@ -502,6 +507,9 @@ namespace MonkeyPaste.Avalonia {
                         //MainWindowLeft = MainWindowOpenedRect.Left;
                         //MainWindowRight = MainWindowOpenedRect.Right;
                     }
+                    break;
+                case nameof(IsMainWindowLocked):
+                    MainWindow.Instance.Topmost = IsMainWindowLocked;
                     break;
             }
         }
@@ -529,9 +537,10 @@ namespace MonkeyPaste.Avalonia {
                 }
                 mw.Show();
                 mw.IsVisible = true;
-                // mw.WindowState = WindowState.Normal;
                 mw.Activate();
-                mw.Topmost = true;
+
+                // NOTE on windows setting Topmost= true here makes mw in animate in front of taskbar
+                mw.Topmost = false;
 
                 if (IsMainWindowInitiallyOpening) {
                     //await MpMainWindowResizeBehavior.Instance.ResizeForInitialLoad();
@@ -595,6 +604,8 @@ namespace MonkeyPaste.Avalonia {
                         MainWindowRight += d_r;
                         MainWindowBottom += d_b;
 
+
+
                         OnPropertyChanged(nameof(ExternalRect));
                     }
                 };
@@ -615,6 +626,8 @@ namespace MonkeyPaste.Avalonia {
                     !IsMainWindowOpen) {
                     return;
                 }
+                MainWindow.Instance.Activate();
+                MainWindow.Instance.Topmost = false;
 
                 IsMainWindowClosing = true;
 
@@ -664,6 +677,7 @@ namespace MonkeyPaste.Avalonia {
                         IsMainWindowLocked = false;
                         IsMainWindowOpen = false;
                         IsMainWindowClosing = false;
+
 
                         OnPropertyChanged(nameof(ExternalRect));
 

@@ -43,15 +43,16 @@ namespace MonkeyPaste.Avalonia {
             QueryInfo = new MpAvQueryInfo();
             ProcessWatcher = new MpAvProcessWatcher().Watcher;
 
-            //IconBuilder = new MpWpfIconBuilder();
+            IconBuilder = new MpAvIconBuilder().IconBuilder;
+
             //UrlBuilder = new MpUrlBuilder();
-            //AppBuilder = new MpWpfAppBuilder();
+            AppBuilder = new MpAvAppBuilder();
             //CustomColorChooserMenu = new MpWpfCustomColorChooserMenu();
             //PlatformResource = new MpWpfResourceFetcher();
             //ContextMenuCloser = new MpWpfContextMenuCloser();
             MainThreadMarshal = new MpAvMainThreadMarshal();
             //StringTools = new MpWpfStringTools();
-            //OsInfo = new MpWpfOsInfo();
+            OsInfo = new MpAvOsInfo();
             //NativeMessageBox = new MpWpfMessageBox();
             //DataObjectHelper = MpWpfDataObjectHelper.Instance;
             //ExternalPasteHandler = MpWpfDataObjectHelper.Instance;

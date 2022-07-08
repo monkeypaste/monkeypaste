@@ -10,6 +10,7 @@ namespace MonkeyPaste {
 
         IntPtr LastHandle { get; }
         string LastProcessPath { get; }
+        string LastMainWindowTitle { get; }
 
         ConcurrentDictionary<string,ObservableCollection<IntPtr>> RunningProcessLookup { get; }
 

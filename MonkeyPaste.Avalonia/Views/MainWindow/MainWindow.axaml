@@ -16,7 +16,8 @@
         ClipToBounds="True"
         Background="Transparent"
         ShowInTaskbar="False"
-        SizeToContent="WidthAndHeight"
+              Width="{Binding MainWindowWidth}"
+              Height="{Binding MainWindowHeight}"
         TransparencyLevelHint="Transparent"
         Title="Monkey Paste">
     <!-- <Canvas x:Name="MainWindowContainerCanvas" -->
@@ -67,7 +68,7 @@
                     <SolidColorBrush Color="DarkViolet"
                                      Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
                 </Grid.Background>
-                <webview:WebView x:Name="webview" Address="file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html" />
+                <!--<webview:WebView x:Name="webview" Address="file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html" />-->
             </Grid>
 
         </Grid>

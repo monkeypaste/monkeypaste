@@ -11,12 +11,9 @@
              x:Class="MonkeyPaste.Avalonia.MpAvMainWindowTitleMenuView">
   <Grid x:Name="MainWindowTitleGrid"
           Grid.Row="0"
+        Background="{Binding TitleBarBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
-    <Grid.Background>
-      <SolidColorBrush Color="{Binding TitleBarBackgroundHexColor, Converter={StaticResource StringHexToColorConverter}}"
-                       Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}"/>
-    </Grid.Background>
 
     <StackPanel Orientation="Horizontal">
       <!-- 

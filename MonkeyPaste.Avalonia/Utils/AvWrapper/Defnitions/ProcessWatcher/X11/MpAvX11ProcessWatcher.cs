@@ -12,15 +12,16 @@ using System.Timers;
 using System.Collections.ObjectModel;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpX11ProcessWatcher : MpIProcessWatcher {
+    public class MpAvX11ProcessWatcher : MpIProcessWatcher {
         private Timer _timer;
 
         public IntPtr ThisAppHandle { get; set; }
         public IntPtr LastHandle { get; }
+        public string LastMainWindowTitle { get; private set; }
         public string LastProcessPath { get; }
         public ConcurrentDictionary<string, ObservableCollection<IntPtr>> RunningProcessLookup { get; }
 
-        public MpX11ProcessWatcher() {
+        public MpAvX11ProcessWatcher() {
 
             
             _timer = new Timer() {

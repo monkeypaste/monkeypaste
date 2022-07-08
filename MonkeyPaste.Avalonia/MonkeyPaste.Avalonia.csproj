@@ -1,14 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>disable</Nullable>
     <!--Avalonia doesen't support TrimMode=link currently,but we are working on that https://github.com/AvaloniaUI/Avalonia/issues/6892 -->
     <TrimMode>copyused</TrimMode>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <UseWPF>False</UseWPF>
-    <StartupObject>MonkeyPaste.Avalonia.Program</StartupObject>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DefineConstants></DefineConstants>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaXaml Remove="Assets\Images\backup\**" />
@@ -18,6 +21,10 @@
     <None Remove="CefNet" />
     <None Remove="CefNet.Avalonia" />
     <None Remove="WebViewControl-Avalonia" />
+    <None Remove="Avalonia.MonoMac" />
+    <None Remove="Utils\Platform\MacOs\" />
+    <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
+    <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Base\" />
   </ItemGroup>
   <ItemGroup>
     <AvaloniaXaml Remove="Styles\Converters\MpConvertersResourceDictionary.axaml" />
@@ -808,30 +815,30 @@
     <TrimmableAssembly Include="Avalonia.Themes.Default" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.15" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.15" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.15" />
-    <PackageReference Include="Avalonia.Win32" Version="0.10.15" />
-    <PackageReference Include="Avalonia.X11" Version="0.10.15" />
+    <PackageReference Include="Avalonia" Version="0.10.16" />
+    <PackageReference Include="Avalonia.MonoMac" Version="0.6.1" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" />
     <PackageReference Include="SharpHook" Version="3.0.2" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
     <PackageReference Include="WebViewControl-Avalonia" Version="2.91.27" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Styles\Converters\" />
     <Folder Include="Utils\Clipboard\" />
+    <Folder Include="Utils\Platform\MacOs\" />
+    <Folder Include="Utils\Platform\MacOs\" />
+    <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
+    <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Base\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\Platform\X11\Gtk\gtk_stuff.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
     <ProjectReference Include="..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj" />
-    <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Views\MainWindow\TitleMenu\MpAvMainWindowTitleMenuView.axaml.cs">

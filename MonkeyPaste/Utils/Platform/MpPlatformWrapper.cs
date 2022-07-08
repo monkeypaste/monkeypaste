@@ -45,7 +45,7 @@ namespace MonkeyPaste {
         public static async Task InitAsync(MpIPlatformWrapper niw) {
             //await MpPrefViewModel.InitAsync();
             //MpPrefViewModel.Instance.MainWindowOrientation = "Bottom";
-
+            await Task.Delay(1);
             Services = niw;
         }
 

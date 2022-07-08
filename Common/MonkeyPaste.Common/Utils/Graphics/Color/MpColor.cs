@@ -33,7 +33,7 @@ namespace MonkeyPaste.Common {
             Channels = channels;
         }
         public MpColor(byte r, byte g, byte b) {
-            Channels = new byte[] { r, g, b };
+            Channels = new byte[] { 255, r, g, b };
         }
         public MpColor(byte a, byte r, byte g, byte b) {
             Channels = new byte[] { a, r, g, b };

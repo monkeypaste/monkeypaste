@@ -4,6 +4,7 @@ using Avalonia.Platform;
 using Avalonia.Rendering;
 using Avalonia.Threading;
 using Avalonia.X11;
+using MonkeyPaste;
 using MonkeyPaste.Common;
 using PropertyChanged;
 using SharpHook;
@@ -105,17 +106,18 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private async void MainWindow_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e) {
+        private void MainWindow_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e) {
             if(Design.IsDesignMode) {
                 return;
             }
-            await InitAsync();
+            InitAsync().FireAndForgetSafeAsync(MpCommandErrorHandler.Instance);
         }
         
 
         private void Instance_OnMainWindowClosed(object? sender, System.EventArgs e) {
             this.IsVisible = false;
             this.Topmost = false;
+            this.Hide();
             //this.WindowState = WindowState.Minimized;
         }
 

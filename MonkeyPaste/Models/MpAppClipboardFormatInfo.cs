@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using SQLiteNetExtensions.Attributes;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public class MpAppClipboardFormatInfo : MpDbModelBase {
