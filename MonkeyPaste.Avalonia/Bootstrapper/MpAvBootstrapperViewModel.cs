@@ -21,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
 
             _items.AddRange(
                 new List<MpBootstrappedItemViewModel>() {
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvGlobalMouseHook))
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvGlobalMouseHook)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpDocumentHtmlExtension)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpProcessManager), Properties.Settings.Default.IgnoredProcessNames),
                     ////new MpBootstrappedItemViewModel(this,typeof(MpProcessAutomation)),
@@ -49,13 +49,13 @@ namespace MonkeyPaste.Avalonia {
 
                     ////new MpBootstrappedItemViewModel(this,typeof(MpClipboardManager)),
 
-                    //new MpBootstrappedItemViewModel(this,typeof(MpClipTrayViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvClipTrayViewModel)),
 
                     //new MpBootstrappedItemViewModel(this,typeof(MpShortcutCollectionViewModel)),
 
 
                     //new MpBootstrappedItemViewModel(this,typeof(MpTagTrayViewModel)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpMainWindowViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindowViewModel)),
 
                     //new MpBootstrappedItemViewModel(this,typeof(MpActionCollectionViewModel)),
 

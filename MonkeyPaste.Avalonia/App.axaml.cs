@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class App : Application {
+        public App() {
+            DataContext = new MpAvAppViewModel();
+        }
         public override void Initialize() {
             AvaloniaXamlLoader.Load(this);            
         }
@@ -19,6 +22,10 @@ namespace MonkeyPaste.Avalonia {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
                 await MpPrefViewModel.InitAsync();
                 MpPrefViewModel.Instance.MainWindowOrientation = "Bottom";
+
+                await MpPlatformWrapper.InitAsync(new MpAvWrapper());
+                var bootstrapper = new MpAvBootstrapperViewModel();
+                await bootstrapper.InitAsync();
 
                 desktop.MainWindow = new MainWindow();
             }

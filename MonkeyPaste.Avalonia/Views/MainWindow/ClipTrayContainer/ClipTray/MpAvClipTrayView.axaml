@@ -1,0 +1,84 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:DataType="local:MpAvClipTrayViewModel"
+                       x:TypeArguments="local:MpAvClipTrayViewModel"
+                       x:CompileBindings="False"
+                       AttachedToVisualTree="MpAvClipTrayView_AttachedToVisualTree"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvClipTrayView">
+    <local:MpAvUserControl.Resources>
+        <RecyclePool x:Key="RecyclePool"
+                     x:DataType="local:MpAvClipTileViewModel" />
+        <DataTemplate x:Key="odd">
+            <TextBlock Classes="oddTemplate"
+                       Height="{Binding Height}"
+                       Text="{Binding Text}" />
+        </DataTemplate>
+        <DataTemplate x:Key="even">
+            <TextBlock Classes="evenTemplate"
+                       Height="{Binding Height}"
+                       Text="{Binding Text}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="ClipTileTemplate"
+                      DataType="local:MpAvClipTileViewModel">
+            <local:MpAvClipTileView Focusable="True"
+                                    Height="250"
+                                    Width="250" />
+            <!--<TextBlock Text="Yo" />-->
+        </DataTemplate>
+        <RecyclingElementFactory x:Key="elementFactory"
+                                 RecyclePool="{StaticResource RecyclePool}"
+                                 SelectTemplateKey="OnSelectTemplateKey">
+            <RecyclingElementFactory.Templates>
+                <StaticResource x:Key="odd"
+                                ResourceKey="odd" />
+                <StaticResource x:Key="even"
+                                ResourceKey="even" />
+
+                <StaticResource x:Key="ClipTileTemplate"
+                                ResourceKey="ClipTileTemplate" />
+            </RecyclingElementFactory.Templates>
+        </RecyclingElementFactory>
+    </local:MpAvUserControl.Resources>
+    <Grid HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch">
+        <Grid.Background>
+            <SolidColorBrush Color="Cyan"
+                             Opacity="0.7" />
+        </Grid.Background>
+        <Border>
+            <ScrollViewer Name="ClipTrayScrollViewer"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto">
+                <ItemsRepeater Name="ClipTrayItemsRepeater"
+                               local:MpAvKinematicScrollExtension.IsEnabled="True"
+                               local:MpAvKinematicScrollExtension.ScrollViewer="{Binding ElementName=ClipTrayScrollViewer}"
+                               local:MpAvKinematicScrollExtension.Friction="0.85"
+                               local:MpAvKinematicScrollExtension.WheelDampening="0.08"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Stretch"
+                               Margin="5"
+                               Background="Transparent"
+                               Items="{Binding Items}"
+                               ItemTemplate="{StaticResource elementFactory}">
+
+                    <!--<ItemsRepeater.RenderTransform>
+                        <TranslateTransform />
+                    </ItemsRepeater.RenderTransform>-->
+                    <ItemsRepeater.Layout>
+                        <StackLayout Spacing="5"
+                                     Orientation="Horizontal" />
+                    </ItemsRepeater.Layout>
+                </ItemsRepeater>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+
+</local:MpAvUserControl>

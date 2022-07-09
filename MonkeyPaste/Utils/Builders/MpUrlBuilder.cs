@@ -32,7 +32,7 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public async Task<MpUrl> Create(string uri, string title = "") {
+        public async Task<MpUrl> CreateAsync(string uri, string title = "") {
             var url = await MpUrlBuilder.CreateUrl(uri, title);
             return url;
         }

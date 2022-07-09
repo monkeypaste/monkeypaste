@@ -22,13 +22,23 @@ namespace MonkeyPaste {
         public object ItemArg { get; set; }
         public Type ItemType { get; set; }
 
+        private string _label;
         public string Label {
             get {
-                string label = ItemType.ToString();
-                foreach(var rss in _removedSubStrings) {
-                    label = label.Replace(rss, string.Empty);
+                if(_label.IsNullOrEmpty()) {
+                    _label = ItemType.ToString();
+                    foreach (var rss in _removedSubStrings) {
+                        _label = _label.Replace(rss, string.Empty);
+                    }
+                    _label = _label.ToLabel();
                 }
-                return label.ToLabel();
+                return _label;
+            }
+            set {
+                if(_label != value) {
+                    _label = value;
+                    OnPropertyChanged(nameof(Label));
+                }
             }
         }
 
@@ -52,27 +62,42 @@ namespace MonkeyPaste {
             PropertyInfo instancePropertyInfo = ItemType.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
 
             if (instancePropertyInfo == null) {
+                // singleton
                 initMethodInfo = ItemType.GetMethod("Init", BindingFlags.Static | BindingFlags.Public);
                 if (initMethodInfo == null) {
+                    //asyn singleton
                     initMethodInfo = ItemType.GetMethod("InitAsync", BindingFlags.Static | BindingFlags.Public);
                     if(initMethodInfo == null) {
-                        return;
+                        initMethodInfo = ItemType.GetMethod("InitializeAsync", BindingFlags.Static | BindingFlags.Public);
+                        if (initMethodInfo == null) {
+                            MpConsole.WriteTraceLine("Error,couldn't load " + ItemType);
+                            return;
+                        }
                     }
                 }
             } else {
+                //static class
                 itemObj = instancePropertyInfo.GetValue(null, null);
 
                 initMethodInfo = ItemType.GetMethod("Init");
                 if (itemObj == null || initMethodInfo == null) {
                     initMethodInfo = ItemType.GetMethod("InitAsync");
                     if(initMethodInfo == null) {
-                        return;
+                        initMethodInfo = ItemType.GetMethod("InitializeAsync");
+                        if (initMethodInfo == null) {
+                            MpConsole.WriteTraceLine("Error,couldn't load " + ItemType);
+                            return;
+                        }
                     }                    
                 }
             }
 
             if (initMethodInfo.ReturnType == typeof(Task)) {
                 MpViewModelBase vm = itemObj as MpViewModelBase;
+                if(vm is MpIBootstrappedItem bsi) {
+                    Label = bsi.Label;
+                }
+
                 var initTask = (Task)initMethodInfo.Invoke(itemObj, args);
                 await initTask;
 
@@ -83,7 +108,9 @@ namespace MonkeyPaste {
                 }
                     
             } else {
-
+                if (itemObj is MpIBootstrappedItem bsi) {
+                    Label = bsi.Label;
+                }
                 initMethodInfo.Invoke(itemObj, args);
             }
 

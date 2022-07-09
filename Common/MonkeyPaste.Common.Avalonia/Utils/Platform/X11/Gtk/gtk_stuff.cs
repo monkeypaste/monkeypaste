@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms.PlatformConfiguration;
 
-namespace MonkeyPaste.Avalonia.Utils.Platform.X11.Gtk {
+namespace MonkeyPaste.Common.Avalonia.Utils.Platform.X11.Gtk {
     public class WApplication {
         private IntPtr WnckApplication;
 

@@ -9,11 +9,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MonkeyPaste.Avalonia {
+namespace MonkeyPaste.Common.Avalonia {
     public static unsafe class GdiApi {
         private const string GlibName = "libglib-2.0.so.0";
         private const string GObjectName = "libgobject-2.0.so.0";
-
 
     }
 

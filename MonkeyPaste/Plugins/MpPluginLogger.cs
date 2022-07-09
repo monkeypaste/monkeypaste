@@ -54,7 +54,7 @@ namespace MonkeyPaste {
                         throw new MpUserNotifiedException("Http Plugin Component does not exist");
                     }
 
-                    var url = MpPlatformWrapper.Services.UrlBuilder.Create(urlPath, preset.Label);                    
+                    var url = MpPlatformWrapper.Services.UrlBuilder.CreateAsync(urlPath, preset.Label);                    
 
                     var httpTrans = await MpHttpTransaction.Create(
                         presetId: preset.Id,
@@ -81,7 +81,7 @@ namespace MonkeyPaste {
                         string processPath = Path.Combine(pluginDir, pluginName + ".exe");
                         
                         if (pluginFormat.ioType.isCli) {
-                            var app = await MpPlatformWrapper.Services.AppBuilder.Create(processPath, preset.Label);
+                            var app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(processPath, preset.Label);
 
                             var cliTrans = await MpCliTransaction.Create(
                                 presetId: preset.Id,

@@ -7,7 +7,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvIconBuilder() {
             if(OperatingSystem.IsWindows()) {
-
+                IconBuilder = new MpAvWinIconBuilder();
             } else if(OperatingSystem.IsLinux()) {
 
             } else if(OperatingSystem.IsMacOS()) {

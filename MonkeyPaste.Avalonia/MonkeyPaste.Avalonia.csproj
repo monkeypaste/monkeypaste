@@ -18,11 +18,12 @@
     <Compile Remove="Assets\Images\backup\**" />
     <EmbeddedResource Remove="Assets\Images\backup\**" />
     <None Remove="Assets\Images\backup\**" />
+    <None Remove="Assets\Icons\cog.ico" />
+    <None Remove="Assets\Icons\monkey.ico" />
     <None Remove="CefNet" />
     <None Remove="CefNet.Avalonia" />
     <None Remove="WebViewControl-Avalonia" />
     <None Remove="Avalonia.MonoMac" />
-    <None Remove="Utils\Platform\MacOs\" />
     <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
     <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Base\" />
   </ItemGroup>
@@ -31,7 +32,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
-    <Compile Remove="Utils\Platform\X11\Gtk\gtk_stuff.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
@@ -230,6 +230,12 @@
     <None Remove="Settings.settings" />
   </ItemGroup>
   <ItemGroup>
+    <AvaloniaResource Include="Assets\Icons\cog.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Icons\monkey.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\Add.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -824,15 +830,11 @@
     <PackageReference Include="WebViewControl-Avalonia" Version="2.91.27" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controls\" />
     <Folder Include="Styles\Converters\" />
     <Folder Include="Utils\Clipboard\" />
-    <Folder Include="Utils\Platform\MacOs\" />
-    <Folder Include="Utils\Platform\MacOs\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Base\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Utils\Platform\X11\Gtk\gtk_stuff.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />
@@ -841,6 +843,23 @@
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Assets\Icons\monkey.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <AvaloniaXaml Update="Views\MainWindow\ClipTrayContainer\ClipTray\MpAvClipTrayView.axaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaXaml>
+    <AvaloniaXaml Update="Views\MainWindow\MainWindow.axaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaXaml>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\MpAvClipTrayView.axaml.cs">
+      <DependentUpon>MpAvClipTrayView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\MainWindow.axaml.cs">
+      <DependentUpon>MainWindow.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MainWindow\TitleMenu\MpAvMainWindowTitleMenuView.axaml.cs">
       <DependentUpon>MpAvMainWindowTitleMenuView.axaml</DependentUpon>
     </Compile>

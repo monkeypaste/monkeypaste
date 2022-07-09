@@ -37,15 +37,13 @@ namespace MonkeyPaste.Avalonia {
         public MpIPlatformDataObjectRegistrar? DataObjectRegistrar { get; set; }
 
         public MpICopyItemBuilder? CopyItemBuilder { get; set; }
-        public MpAvWrapper(Window w) {
+        public MpAvWrapper() {
             Cursor = new MpAvCursor();
             DbInfo = new MpAvDbInfo();
             QueryInfo = new MpAvQueryInfo();
             ProcessWatcher = new MpAvProcessWatcher().Watcher;
-
             IconBuilder = new MpAvIconBuilder().IconBuilder;
-
-            //UrlBuilder = new MpUrlBuilder();
+            UrlBuilder = new MpUrlBuilder();
             AppBuilder = new MpAvAppBuilder();
             //CustomColorChooserMenu = new MpWpfCustomColorChooserMenu();
             //PlatformResource = new MpWpfResourceFetcher();
@@ -60,7 +58,7 @@ namespace MonkeyPaste.Avalonia {
             ClipboardMonitor = new MpAvClipboardWatcher();
             //ClipboardData = MpClipboardHandlerCollectionViewModel.Instance;
             DataObjectRegistrar = ClipboardMonitor as MpIPlatformDataObjectRegistrar;
-            ScreenInfoCollection = new MpAvScreenInfoCollection(w);
+            ScreenInfoCollection = new MpAvScreenInfoCollection();
             
         }
 

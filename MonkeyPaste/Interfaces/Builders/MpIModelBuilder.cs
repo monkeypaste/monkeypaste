@@ -11,7 +11,7 @@ namespace MonkeyPaste {
     }
 
     public interface MpIUrlBuilder {
-        Task<MpUrl> Create(string url, string title = "");
+        Task<MpUrl> CreateAsync(string url, string title = "");
     }
 
 
@@ -22,11 +22,11 @@ namespace MonkeyPaste {
     }
 
     public interface MpIAppBuilder {
-        Task<MpApp> Create(object handleOrAppPath, string appName = "");
+        Task<MpApp> CreateAsync(object handleOrAppPath, string appName = "");
     }
 
     public interface MpIIconBuilder {
-        Task<MpIcon> Create(string iconBase64, bool createBorder = true);
+        Task<MpIcon> CreateAsync(string iconBase64, bool createBorder = true);
 
         string CreateBorder(string iconBase64, double scale, string hexColor);
         List<string> CreatePrimaryColorList(string iconBase64, int palleteSize = 5);

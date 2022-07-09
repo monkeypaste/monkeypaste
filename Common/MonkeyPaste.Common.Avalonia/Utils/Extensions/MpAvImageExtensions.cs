@@ -1,9 +1,4 @@
-﻿using Avalonia.Media;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
-using Avalonia;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -11,6 +6,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 
 namespace MonkeyPaste.Common.Avalonia {
     [StructLayout(LayoutKind.Sequential)]
@@ -22,7 +20,7 @@ namespace MonkeyPaste.Common.Avalonia {
     }
 
     public static class MpAvImageExtensions {
-        #region Converters
+        #region Converters        
 
         public static Bitmap? ToBitmap(this string base64Str) {
             if(!base64Str.IsStringBase64()) {
@@ -43,7 +41,7 @@ namespace MonkeyPaste.Common.Avalonia {
             }
         }
 
-        public static string ToBase64(this Bitmap bmp) {
+        public static string ToBase64String(this Bitmap bmp) {
             return Convert.ToBase64String(bmp.ToByteArray());
         }
 

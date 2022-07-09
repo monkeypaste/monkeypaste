@@ -1,5 +1,6 @@
 ﻿using System;
 using MonkeyPaste;
+using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMacIconBuilder : MpAvIconBuildBase {
@@ -7,7 +8,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override string GetApplicationIconBase64(string appPath, MpIconSize iconSize = MpIconSize.MediumIcon32) {
-            return MacHelper.GetIconBase64FromPath(appPath);
+            return MpMacPathIconHelper.GetIconBase64FromMacPath(appPath);
         }
     }
 }

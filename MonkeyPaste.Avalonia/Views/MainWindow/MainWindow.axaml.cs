@@ -38,12 +38,18 @@ namespace MonkeyPaste.Avalonia {
 #endif
             this.Activated += MainWindow_Activated;
             this.Deactivated += MainWindow_Deactivated;
+
+
+            InitAsync().FireAndForgetSafeAsync(MpCommandErrorHandler.Instance);
         }
-        
+
+        private void MainWindow_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e) {
+            if (Design.IsDesignMode) {
+                return;
+            }
+        }
+
         private async Task InitAsync() {
-            await MpPlatformWrapper.InitAsync(new MpAvWrapper(this));
-            var bootstrapper = new MpAvBootstrapperViewModel();
-            await bootstrapper.InitAsync();
 
             while (!MpBootstrapperViewModelBase.IsLoaded) {
                 await Task.Delay(100);
@@ -61,8 +67,8 @@ namespace MonkeyPaste.Avalonia {
                 //MpAvMouseHook_Win32.OnGlobalMouseMove += MpAvMouseHook_Win32_OnGlobalMouseMove;
             }
 
-            DataContext = MpAvMainWindowViewModel.Instance;
-            await MpAvMainWindowViewModel.Instance.InitializeAsync();
+            //DataContext = MpAvMainWindowViewModel.Instance;
+            //await MpAvMainWindowViewModel.Instance.InitializeAsync();
 
             MpAvMainWindowViewModel.Instance.OnMainWindowOpened += Instance_OnMainWindowOpened;
             MpAvMainWindowViewModel.Instance.OnMainWindowClosed += Instance_OnMainWindowClosed;
@@ -77,10 +83,12 @@ namespace MonkeyPaste.Avalonia {
             //    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "locales"); //Path.Combine(cef_path,"Resources", "locales");// @"/Resources/en.lproj");
             ////settings.ResourcesDirPath = Path.Combine(
             ////    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "locales"); //Path.Combine(cef_path, "Resources");
-
+            
             //var app = new CefNetApplication();
             //app.Initialize(cef_path, settings);
             //Debugger.Break();
+
+            MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
         }
 
         private void MainWindow_Activated(object? sender, System.EventArgs e) {
@@ -106,19 +114,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private void MainWindow_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e) {
-            if(Design.IsDesignMode) {
-                return;
-            }
-            InitAsync().FireAndForgetSafeAsync(MpCommandErrorHandler.Instance);
-        }
         
 
         private void Instance_OnMainWindowClosed(object? sender, System.EventArgs e) {
-            this.IsVisible = false;
-            this.Topmost = false;
-            this.Hide();
-            //this.WindowState = WindowState.Minimized;
         }
 
         private void Instance_OnMainWindowOpened(object? sender, System.EventArgs e) {

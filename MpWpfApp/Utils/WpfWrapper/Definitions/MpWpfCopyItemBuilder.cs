@@ -116,7 +116,7 @@ namespace MpWpfApp {
                     return dupCheck;
                 }
 
-                var app = await MpPlatformWrapper.Services.AppBuilder.Create(MpProcessManager.LastHandle);
+                var app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(MpProcessManager.LastHandle);
 
                 //string processPath, appName, processIconImg64;
 

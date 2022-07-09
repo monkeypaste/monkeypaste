@@ -1826,7 +1826,7 @@ namespace MpWpfApp {
                 return false;
             });
 
-        public ICommand QueryCommand => new RelayCommand<object>(
+        public ICommand QueryCommand => new MpAsyncCommand<object>(
             async (offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg) => {
                 if (!MpHelpers.IsOnMainThread()) {
                     MpHelpers.RunOnMainThread(() => QueryCommand.Execute(offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg));
@@ -1847,13 +1847,17 @@ namespace MpWpfApp {
                 int loadCount = 0;
 
                 if (offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg != null) {
+                    // sub-query of visual, data-specific or incremental offset 
+
                     if (offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is int) {
+                        // sub-query to data-specific (Id) offset
                         loadOffsetIdx = (int)offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg;
                     } else if (offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is double) {
+                        // sub-query to visual (scroll position) offset 
                         newScrollOffset = (double)offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg;
-
                         loadOffsetIdx = FindJumpTileIdx(newScrollOffset);
                     } else if (offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is bool) {
+                        // sub-query either forward (true) or backward (false) based on current offset
                         newScrollOffset = ScrollOffset;
 
                         loadCount = _pageSize;
@@ -1876,9 +1880,12 @@ namespace MpWpfApp {
                     }
 
                     if (loadOffsetIdx + DefaultLoadCount > MaxClipTrayQueryIdx) {
+                        // clamp load offset to max query total count
                         loadOffsetIdx = MaxLoadQueryIdx;
                     }
                 } else {
+                    // new query all content and offsets are re-initialized
+
                     newScrollOffset = 0;
                     ClearClipSelection();
                     MpDataModelProvider.ResetQuery();

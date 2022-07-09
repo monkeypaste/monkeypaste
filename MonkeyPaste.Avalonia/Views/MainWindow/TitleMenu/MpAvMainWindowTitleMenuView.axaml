@@ -1,144 +1,131 @@
 <local:MpAvUserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="using:MonkeyPaste.Avalonia"
-             xmlns:pcl="using:MonkeyPaste"
-             x:TypeArguments="local:MpAvMainWindowViewModel"
-             x:DataType="local:MpAvMainWindowViewModel"
-             x:CompileBindings="True"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="MonkeyPaste.Avalonia.MpAvMainWindowTitleMenuView">
-  <Grid x:Name="MainWindowTitleGrid"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="local:MpAvMainWindowViewModel"
+                       x:DataType="local:MpAvMainWindowViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvMainWindowTitleMenuView">
+    <Grid x:Name="MainWindowTitleGrid"
           Grid.Row="0"
-        Background="{Binding TitleBarBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+          Background="{Binding TitleBarBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
 
-    <StackPanel Orientation="Horizontal">
-      <!-- 
-                  Command="{Binding ShowSettingsWindowCommand,
-                                    Source={x:Static local:MpSystemTrayViewModel.Instance}}"
-                                    
-                  PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"
-                  Template="{StaticResource SearchButtonControlTemplate}"
-                                    -->
-      <Button Margin="5,0,0,0"
-              HorizontalAlignment="Left"
-              VerticalAlignment="Center"
-              local:MpAvIsHoveringExtension.HoverCursor="Default"
-              local:MpAvIsHoveringExtension.IsEnabled="True"
-              ToolTip.ShowDelay="500">
-        <ToolTip.Tip>
-          <local:MpAvTooltipView ToolTipText="Settings" />
-        </ToolTip.Tip>
-        <Image Width="12"
-                Height="12"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Source="{Binding .,
-                                      Source={StaticResource CogIcon},
-                                      Converter={StaticResource StringResourceToBitmapConverter}}"
-                Stretch="Fill">
-          <!--<Image.Effect>
-                      <local:MpInvertEffect />
-                  </Image.Effect>-->
-        </Image>
-      </Button>
-      <!-- 
-                        Template="{StaticResource LockToggleButtonControlTemplate}"
-                        -->
-      <ToggleButton VerticalAlignment="Center"
-                    IsChecked="{Binding IsMainWindowLocked,
-                                            Mode=TwoWay}"
-                    ToolTip.ShowDelay="500">
-        <ToolTip.Tip>
-          <local:MpAvTooltipView ToolTipText="Lock" />
-        </ToolTip.Tip>
-        <Image Width="12"
-                Height="12"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Source="{Binding Source={StaticResource LockIcon},
-                                      Converter={StaticResource StringResourceToBitmapConverter}}"
-                Stretch="Fill">
-          <!--<Image.Effect>
-                      <local:MpInvertEffect />
-                  </Image.Effect>-->
-        </Image>
-      </ToggleButton>
-      <ToggleButton VerticalAlignment="Center"
+        <StackPanel Orientation="Horizontal">
+            <!--
+                Command="{Binding ShowSettingsWindowCommand,
+                Source={x:Static local:MpSystemTrayViewModel.Instance}}"
+                
+                PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"
+                Template="{StaticResource SearchButtonControlTemplate}"
+            -->
+            <Button Margin="5,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    local:MpAvIsHoveringExtension.HoverCursor="Default"
                     local:MpAvIsHoveringExtension.IsEnabled="True"
-                    local:MpAvIsHoveringExtension.HoverCursor="Hand"
-                    Background="Pink"
-                    IsChecked="{Binding !IsFilterMenuVisible}"
-                    ToolTip.ShowDelay="0">
-        <ToolTip.Tip>
-          <local:MpAvTooltipView ToolTipText="Hide Filter Menu" />
-        </ToolTip.Tip>
-        <Grid>
-          <Polygon Points="6,0 12,12 0,12"
-                    StrokeThickness="1"
-                    IsVisible="{Binding !IsFilterMenuVisible}"
-                    Stroke="Black"
-                    Fill="Transparent" />
-          <Polygon Points="5,0 10,10 0,10"
-                    StrokeThickness="1"
-                    IsVisible="{Binding IsFilterMenuVisible}"
-                    Stroke="Black"
-                    Fill="Transparent">
-            <Polygon.RenderTransform>
-              <RotateTransform Angle="180" />
-            </Polygon.RenderTransform>
-          </Polygon>
-        </Grid>
-      </ToggleButton>
-    </StackPanel>
-    <Border Width="100" 
-            Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}"
-            local:MpAvIsHoveringExtension.DefaultBrush="Transparent"
-            local:MpAvIsHoveringExtension.HoverBrush="Yellow"
-            local:MpAvIsHoveringExtension.IsSelected="{Binding IsResizing}"
-            local:MpAvIsHoveringExtension.SelectedBrush="Orange"
-            local:MpAvIsHoveringExtension.HoverCursor="ResizeNS"
-            local:MpAvIsHoveringExtension.IsEnabled="True">
+                    ToolTip.ShowDelay="500">
+                <ToolTip.Tip>
+                    <local:MpAvTooltipView ToolTipText="Settings" />
+                </ToolTip.Tip>
+                <Image Width="12"
+                       Height="12"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Source="{Binding ., Source={StaticResource CogIcon}, Converter={StaticResource StringResourceToBitmapConverter}}"
+                       Stretch="Fill">
+                    <!--<Image.Effect>
+                      <local:MpInvertEffect />
+                  </Image.Effect>-->
+                </Image>
+            </Button>
+            <!--
+                Template="{StaticResource LockToggleButtonControlTemplate}"
+            -->
+            <ToggleButton VerticalAlignment="Center"
+                          IsChecked="{Binding IsMainWindowLocked, Mode=TwoWay}"
+                          ToolTip.ShowDelay="500">
+                <ToolTip.Tip>
+                    <local:MpAvTooltipView ToolTipText="Lock" />
+                </ToolTip.Tip>
+                <Image Width="12"
+                       Height="12"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Source="{Binding Source={StaticResource LockIcon}, Converter={StaticResource StringResourceToBitmapConverter}}"
+                       Stretch="Fill">
+                    <!--<Image.Effect>
+                      <local:MpInvertEffect />
+                  </Image.Effect>-->
+                </Image>
+            </ToggleButton>
+            <ToggleButton VerticalAlignment="Center"
+                          local:MpAvIsHoveringExtension.IsEnabled="True"
+                          local:MpAvIsHoveringExtension.HoverCursor="Hand"
+                          Background="Pink"
+                          IsChecked="{Binding !IsFilterMenuVisible}"
+                          ToolTip.ShowDelay="0">
+                <ToolTip.Tip>
+                    <local:MpAvTooltipView ToolTipText="Hide Filter Menu" />
+                </ToolTip.Tip>
+                <Grid Margin="0,2,0,0">
+                    <Polygon Points="6,0 12,12 0,12"
+                             StrokeThickness="1"
+                             IsVisible="{Binding !IsFilterMenuVisible}"
+                             Stroke="Black"
+                             Fill="Transparent" />
+                    <Polygon Points="5,0 10,10 0,10"
+                             StrokeThickness="1"
+                             IsVisible="{Binding IsFilterMenuVisible}"
+                             Stroke="Black"
+                             Fill="Transparent">
+                        <Polygon.RenderTransform>
+                            <RotateTransform Angle="180" />
+                        </Polygon.RenderTransform>
+                    </Polygon>
+                </Grid>
+            </ToggleButton>
+        </StackPanel>
+        <Border Width="100"
+                Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}"
+                local:MpAvIsHoveringExtension.DefaultBrush="Transparent"
+                local:MpAvIsHoveringExtension.HoverBrush="Yellow"
+                local:MpAvIsHoveringExtension.IsSelected="{Binding IsResizing}"
+                local:MpAvIsHoveringExtension.SelectedBrush="Orange"
+                local:MpAvIsHoveringExtension.HoverCursor="ResizeNS"
+                local:MpAvIsHoveringExtension.IsEnabled="True">
 
-      <Border x:Name="MainWindowResizeBorder"
-              local:MpAvResizeExtension.MinHeight="{Binding MainWindowMinHeight}"
-              local:MpAvResizeExtension.MaxHeight="{Binding MainWindowMaxHeight}"
-              
-              local:MpAvResizeExtension.MinWidth="{Binding MainWindowMinWidth}"
-              local:MpAvResizeExtension.MaxWidth="{Binding MainWindowMaxWidth}"
-              
-              local:MpAvResizeExtension.BoundWidth="{Binding MainWindowWidth, Mode=TwoWay}"
-              local:MpAvResizeExtension.BoundHeight="{Binding MainWindowHeight, Mode=TwoWay}"
-              
-              local:MpAvResizeExtension.DefaultWidth="{Binding MainWindowDefaultWidth}"
-              local:MpAvResizeExtension.DefaultHeight="{Binding MainWindowDefaultHeight}"
-              
-              local:MpAvResizeExtension.CanResize="{Binding CanResize, Mode=TwoWay}"
-              local:MpAvResizeExtension.IsResizing="{Binding IsResizing, Mode=TwoWay}"
-              
-              local:MpAvResizeExtension.ResizerEdge="{Binding ResizerEdge}"
-              
-              local:MpAvResizeExtension.IsEnabled="True"            
-              
-              
-              HorizontalAlignment="Stretch"
-              VerticalAlignment="Stretch"
-              BorderBrush="{Binding TitleBarBackgroundHexColor,
-                                    Converter={StaticResource StringHexToBrushConverter}}"
-              BorderThickness="1,0.5,1,0.5">
-        <Border.Background>
-          <ImageBrush Source="{Binding ., 
-                                      Source={StaticResource FrameGripTile}, 
-                                      Converter={StaticResource StringResourceToBitmapConverter}}"
-                      TileMode="Tile"
-                      SourceRect="0,0,5,5"
-                      DestinationRect="0,0,5,5" />
-        </Border.Background>
-    </Border>
-      <!--<i:Interaction.Behaviors>
+            <Border x:Name="MainWindowResizeBorder"
+                    local:MpAvResizeExtension.MinHeight="{Binding MainWindowMinHeight}"
+                    local:MpAvResizeExtension.MaxHeight="{Binding MainWindowMaxHeight}"
+                    local:MpAvResizeExtension.MinWidth="{Binding MainWindowMinWidth}"
+                    local:MpAvResizeExtension.MaxWidth="{Binding MainWindowMaxWidth}"
+                    local:MpAvResizeExtension.BoundWidth="{Binding MainWindowWidth, Mode=TwoWay}"
+                    local:MpAvResizeExtension.BoundHeight="{Binding MainWindowHeight, Mode=TwoWay}"
+                    local:MpAvResizeExtension.DefaultWidth="{Binding MainWindowDefaultWidth}"
+                    local:MpAvResizeExtension.DefaultHeight="{Binding MainWindowDefaultHeight}"
+                    local:MpAvResizeExtension.CanResize="{Binding CanResize, Mode=TwoWay}"
+                    local:MpAvResizeExtension.IsResizing="{Binding IsResizing, Mode=TwoWay}"
+                    local:MpAvResizeExtension.ResizerEdge="{Binding ResizerEdge}"
+                    local:MpAvResizeExtension.IsEnabled="True"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    BorderBrush="{Binding TitleBarBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                    BorderThickness="1,0.5,1,0.5">
+                <Border.Background>
+                    <ImageBrush Source="{Binding ., Source={StaticResource FrameGripTile}, Converter={StaticResource StringResourceToBitmapConverter}}"
+                                TileMode="Tile"
+                                SourceRect="0,0,5,5"
+                                DestinationRect="0,0,5,5" />
+                </Border.Background>
+            </Border>
+            <!--<i:Interaction.Behaviors>
         <local:MpResizeBehavior x:Name="MainWindowResizeBehvior"
                                 MinHeight="{Binding MainWindowMinHeight,
                                                                     Source={x:Static local:MpMeasurements.Instance}}"
@@ -169,6 +156,6 @@
                                 DoubleClickFrameworkElement="{Binding ElementName=MainWindowResizeBorder}" />
 
       </i:Interaction.Behaviors>-->
-    </Border>
-  </Grid>
+        </Border>
+    </Grid>
 </local:MpAvUserControl>

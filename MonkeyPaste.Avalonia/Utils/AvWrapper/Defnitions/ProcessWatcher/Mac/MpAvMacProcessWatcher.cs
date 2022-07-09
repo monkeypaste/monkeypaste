@@ -1,5 +1,6 @@
 ﻿using System;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
@@ -20,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public override void InitPlatform() {
-            MacHelper.EnsureInitialized();
+            MpMacHelpers.EnsureInitialized();
         }
         public override IntPtr GetLastActiveInstance(string path) {
             if(RunningProcessLookup.TryGetValue(path.ToLower(), out var handles) && handles.Count > 0) {

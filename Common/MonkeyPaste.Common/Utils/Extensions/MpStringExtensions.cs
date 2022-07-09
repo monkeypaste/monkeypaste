@@ -23,6 +23,14 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
+        public static bool IsStringNullOrEmpty(this string str) {
+            return string.IsNullOrEmpty(str);
+        }
+
+        public static bool IsStringNullOrWhiteSpace(this string str) {
+            return string.IsNullOrWhiteSpace(str);
+        }
+
         public static string RemoveLastLineEnding(this string str) {
             if (str.EndsWith(Environment.NewLine)) {
                 return str.Substring(0, str.Length - Environment.NewLine.Length);

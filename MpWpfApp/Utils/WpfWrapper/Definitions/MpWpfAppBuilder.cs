@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public class MpWpfAppBuilder : MpIAppBuilder {
-        public async Task<MpApp> Create(object handleOrAppPath, string appName = "") {
+        public async Task<MpApp> CreateAsync(object handleOrAppPath, string appName = "") {
 
             string processPath, processIconImg64;
 
@@ -28,7 +28,7 @@ namespace MpWpfApp {
                 appName = string.IsNullOrEmpty(appName) ? MpPrefViewModel.Instance.ThisAppName : appName;
                 processIconImg64 = MpBase64Images.AppIcon;
             }
-            var icon = await MpPlatformWrapper.Services.IconBuilder.Create(processIconImg64);
+            var icon = await MpPlatformWrapper.Services.IconBuilder.CreateAsync(processIconImg64);
 
             var app = await MpApp.Create(
                 appPath: processPath, 

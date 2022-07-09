@@ -8,12 +8,22 @@ using System.Text;
 
 namespace MonkeyPaste.Common {
     public static class MpConsole {
+        #region Private Variables
+
+        #endregion
+
+        #region Properties
+
         public static double MaxLogFileSizeInMegaBytes = 3.25;
 
         public static bool LogToFile { get; set; } = false;
         public static bool LogToConsole { get; set; } = true;
 
         public static string LogFilePath => Path.Combine(Directory.GetCurrentDirectory(), "log.txt");
+
+        #endregion
+
+        #region Public Methods
 
         public static void Init() {
             try {
@@ -109,14 +119,23 @@ namespace MonkeyPaste.Common {
             File.AppendAllLines(LogFilePath, new List<string> { line.ToString() });
         }
 
+        #endregion
+
+        #region Private Methods
+
         private static void WriteLineWrapper(string str, bool isTrace = false) {
-            if (RuntimeInformation.FrameworkDescription.Contains(".NET Framework") || isTrace) {
+            if (RuntimeInformation.FrameworkDescription.ToLower().Contains(".net framework") || isTrace) {
+                // wpf
                 Console.WriteLine(str);
                 return;
             } else if (RuntimeInformation.FrameworkDescription.ToLower().Contains(".net 6")) {
-                Console.WriteLine(str);
+                // avalonia
+
+                Debug.WriteLine(str);
                 return;
             } else {
+                // give console space on xamarin
+
                 Console.WriteLine("");
                 Console.WriteLine(@"-----------------------------------------------------------------------");
                 Console.WriteLine("");
@@ -126,5 +145,7 @@ namespace MonkeyPaste.Common {
                 Console.WriteLine("");
             }
         }
+
+        #endregion
     }
 }

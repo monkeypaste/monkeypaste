@@ -6,7 +6,7 @@ using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public abstract class MpAvIconBuildBase : MpIIconBuilder {
-        public async Task<MpIcon> Create(string iconBase64, bool createBorder = true) {
+        public async Task<MpIcon> CreateAsync(string iconBase64, bool createBorder = true) {
             var icon = await MpIcon.Create(
                 iconImgBase64: iconBase64,
                 createBorder: createBorder);

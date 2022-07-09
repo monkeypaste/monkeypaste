@@ -9,7 +9,13 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Utils\Platform\X11\Gtk\gtk_stuff.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove=".gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Utils\Platform\X11\Gtk\gtk_stuff.cs" />
   </ItemGroup>
   <ItemGroup>
     <!--This helps with theme dll-s trimming.
@@ -23,6 +29,7 @@
     <PackageReference Include="Avalonia.Desktop" Version="0.10.16" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.16" />
+    <PackageReference Include="Avalonia.MonoMac" Version="0.6.1" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
   </ItemGroup>
   <ItemGroup>
