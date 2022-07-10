@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipTileViewModel : MpViewModelBase<MpAvClipTrayViewModel>,
         MpISelectableViewModel,
-        MpIHoverableViewModel {
+        MpISelectorItemViewModel<MpAvClipTileViewModel>,
+        MpIHoverableViewModel,
+        MpIResizableViewModel {
         #region Properties
 
         #region MpISelectableViewModel Implementation
@@ -17,13 +20,78 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region MpISelectorItemViewModel<MpAvClipTileViewModel> Implementation
+        MpISelectorViewModel<MpAvClipTileViewModel> MpISelectorItemViewModel<MpAvClipTileViewModel>.Selector => Parent;
+
+        #endregion
+
         #region MpIHoverableViewModel Implementation
         public bool IsHovering { get; set; }
 
         #endregion
 
+        #region MpIResizableViewModel Implementation
+
+        public bool IsResizing { get; set; }
+        public bool CanResize { get; set; }
+
+        #endregion
+
+        #region Appearance
+
+        public string TileBorderHexColor {
+            get {
+                if (IsResizing) {
+                    return MpSystemColors.pink;
+                }
+                if (CanResize) {
+                    return MpSystemColors.orange1;
+                }
+                if (IsSelected) {
+                    return MpSystemColors.Red;
+                }
+                if (Parent.HasScrollVelocity || Parent.HasScrollVelocity) {
+                    return MpSystemColors.Transparent;
+                }
+                if (IsHovering) {
+                    return MpSystemColors.Yellow;
+                }
+                return MpSystemColors.Transparent;
+            }
+        }
+
+        #endregion
+
         #region State
 
+        public bool IsTitleReadOnly { get; set; } = true;
+        public bool IsContentReadOnly { get; set; } = true;
+
+        public bool IsSubSelectionEnabled { get; set; } = false;
+
+        public bool IsVerticalScrollbarVisibile {
+            get {
+                if (IsContentReadOnly && !IsSubSelectionEnabled) {
+                    return false;
+                }
+                // true makes auto
+                return true;
+                //return EditableContentSize.Height > ContentHeight;
+            }
+        }
+
+        public bool IsVisible {
+            get {
+                //if (Parent == null) {
+                //    return false;
+                //}
+                //double screenX = TrayX - Parent.ScrollOffset;
+                //return screenX >= 0 &&
+                //       screenX < Parent.ClipTrayScreenWidth &&
+                //       screenX + TileBorderWidth <= Parent.ClipTrayScreenWidth;
+                return true;
+            }
+        }
         #endregion
 
         #region Model
@@ -78,6 +146,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvClipTileViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             
         }
+
 
 
         #endregion

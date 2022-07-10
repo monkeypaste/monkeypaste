@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Platform;
 using Avalonia.Rendering;
 using Avalonia.Threading;
+using Avalonia.Layout;
 using Avalonia.X11;
 using MonkeyPaste;
 using MonkeyPaste.Common;
@@ -16,18 +17,20 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using WebViewControl;
+using Avalonia.Media;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MainWindow : Window {
         public static Window? Instance { get; private set; } = null;
+
         public MainWindow() {
             WebView.Settings.OsrEnabled = false;
             WebView.Settings.LogFile = "ceflog.txt";
             
-            while (!Debugger.IsAttached) {
-                Thread.Sleep(100);
-            }
+            //while (!Debugger.IsAttached) {
+            //    Thread.Sleep(100);
+            //}
             if (Instance == null) {
                 Instance = this;
             }
@@ -38,15 +41,83 @@ namespace MonkeyPaste.Avalonia {
 #endif
             this.Activated += MainWindow_Activated;
             this.Deactivated += MainWindow_Deactivated;
+            this.AttachedToVisualTree += MainWindow_AttachedToVisualTree;
 
-
+            MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
             InitAsync().FireAndForgetSafeAsync(MpCommandErrorHandler.Instance);
         }
 
-        private void MainWindow_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e) {
-            if (Design.IsDesignMode) {
-                return;
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch(msg) {
+                case MpMessageType.MainWindowOrientationChanged:
+                    var mwvm = MpAvMainWindowViewModel.Instance;
+                    var titleView = this.FindControl<MpAvMainWindowTitleMenuView>("MainWindowTitleView");
+                    var contentGrid = this.FindControl<Grid>("FilterAndTrayGrid");
+                    var rt = titleView.RenderTransform as RotateTransform;
+
+                    switch (mwvm.MainWindowOrientationType) {
+                        case MpMainWindowOrientationType.Top:
+                        case MpMainWindowOrientationType.Bottom:
+                            titleView.Width = this.Width;
+                            titleView.Height = 20;
+
+
+                            bool isBottom = mwvm.MainWindowOrientationType == MpMainWindowOrientationType.Bottom;
+
+                            rt.Angle = isBottom ? 0 : 180;
+
+                            RelativePanel.SetAlignTopWithPanel(titleView, isBottom);
+                            RelativePanel.SetAlignRightWithPanel(titleView, true);
+                            RelativePanel.SetAlignLeftWithPanel(titleView, true);
+                            RelativePanel.SetAlignBottomWithPanel(titleView, !isBottom);
+
+                            RelativePanel.SetAlignTopWithPanel(contentGrid, false);
+                            RelativePanel.SetAlignRightWithPanel(contentGrid, true);
+                            RelativePanel.SetAlignLeftWithPanel(contentGrid, true);
+                            RelativePanel.SetAlignBottomWithPanel(contentGrid, false);
+
+                            if(isBottom) {
+                                RelativePanel.SetBelow(contentGrid, titleView);                                
+                            } else {
+                                RelativePanel.SetAbove(contentGrid, titleView);
+                            }
+
+                            break;
+                        case MpMainWindowOrientationType.Left:
+                        case MpMainWindowOrientationType.Right:                            
+                            titleView.Width = 20;
+                            titleView.Height = this.Height;
+
+                            bool isRight = mwvm.MainWindowOrientationType == MpMainWindowOrientationType.Right;
+
+                            rt.Angle = isRight ? 270 : 90;
+
+                            RelativePanel.SetAlignTopWithPanel(titleView, false);
+                            RelativePanel.SetAlignRightWithPanel(titleView, !isRight);
+                            RelativePanel.SetAlignLeftWithPanel(titleView, isRight);
+                            RelativePanel.SetAlignBottomWithPanel(titleView, false);
+
+                            RelativePanel.SetAlignTopWithPanel(contentGrid, true);
+                            RelativePanel.SetAlignRightWithPanel(contentGrid, false);
+                            RelativePanel.SetAlignLeftWithPanel(contentGrid, false);
+                            RelativePanel.SetAlignBottomWithPanel(contentGrid, true);
+
+                            if (isRight) {
+                                RelativePanel.SetRightOf(contentGrid, titleView);
+                            } else {
+                                RelativePanel.SetLeftOf(contentGrid, titleView);
+                            }
+
+                            break;
+                    }
+                    break;
             }
+        }
+        private void MainWindow_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e) {
+            //if (Design.IsDesignMode) {
+            //    return;
+            //}
+            
         }
 
         private async Task InitAsync() {
@@ -67,28 +138,15 @@ namespace MonkeyPaste.Avalonia {
                 //MpAvMouseHook_Win32.OnGlobalMouseMove += MpAvMouseHook_Win32_OnGlobalMouseMove;
             }
 
-            //DataContext = MpAvMainWindowViewModel.Instance;
-            //await MpAvMainWindowViewModel.Instance.InitializeAsync();
-
             MpAvMainWindowViewModel.Instance.OnMainWindowOpened += Instance_OnMainWindowOpened;
             MpAvMainWindowViewModel.Instance.OnMainWindowClosed += Instance_OnMainWindowClosed;
             
             MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
-            //string cef_path = "/Users/tkefauver/Downloads/CefNet-master/cef/Release/Chromium Embedded Framework.framework";
-            //var settings = new CefSettings();
-            //settings.NoSandbox = true;
-            //settings.MultiThreadedMessageLoop = false; // or true
-            //settings.WindowlessRenderingEnabled = true;
-            //settings.LocalesDirPath = Path.Combine(
-            //    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "locales"); //Path.Combine(cef_path,"Resources", "locales");// @"/Resources/en.lproj");
-            ////settings.ResourcesDirPath = Path.Combine(
-            ////    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "locales"); //Path.Combine(cef_path, "Resources");
-            
-            //var app = new CefNetApplication();
-            //app.Initialize(cef_path, settings);
-            //Debugger.Break();
 
+            MpAvMainWindowViewModel.Instance.IsMainWindowLoading = false;
             MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
+
+            ReceivedGlobalMessage(MpMessageType.MainWindowOrientationChanged);
         }
 
         private void MainWindow_Activated(object? sender, System.EventArgs e) {
@@ -100,19 +158,19 @@ namespace MonkeyPaste.Avalonia {
             MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
         }
 
-        private void MainWindowGrid_PointerPressed(object? sender, global::Avalonia.Input.PointerPressedEventArgs e) {
-            var mwg = this.FindControl<Grid>("MainWindowGrid");
-            if(mwg == null) {
-                return;
-            }
-            if(!mwg.Bounds.Contains(e.GetPosition(mwg.Parent))) {
-                if (e.Pointer.Captured is Border b && b.Name == "MainWindowResizeBorder") {
-                    MpConsole.WriteTraceLine("Mouse captured and rejecting out of mainwindow click. Capturer: " + e.Pointer.Captured.GetType().ToString());
-                    return;
-                }
-                MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
-            }
-        }
+        //private void MainWindowGrid_PointerPressed(object? sender, global::Avalonia.Input.PointerPressedEventArgs e) {
+        //    var mwg = this.FindControl<Grid>("MainWindowGrid");
+        //    if(mwg == null) {
+        //        return;
+        //    }
+        //    if(!mwg.Bounds.Contains(e.GetPosition(mwg.Parent))) {
+        //        if (e.Pointer.Captured is Border b && b.Name == "MainWindowResizeBorder") {
+        //            MpConsole.WriteTraceLine("Mouse captured and rejecting out of mainwindow click. Capturer: " + e.Pointer.Captured.GetType().ToString());
+        //            return;
+        //        }
+        //        MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
+        //    }
+        //}
 
         
 

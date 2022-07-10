@@ -15,7 +15,7 @@
     <local:MpAvUserControl.Resources>
         <RecyclePool x:Key="RecyclePool"
                      x:DataType="local:MpAvClipTileViewModel" />
-        <DataTemplate x:Key="odd">
+        <!--<DataTemplate x:Key="odd">
             <TextBlock Classes="oddTemplate"
                        Height="{Binding Height}"
                        Text="{Binding Text}" />
@@ -24,23 +24,23 @@
             <TextBlock Classes="evenTemplate"
                        Height="{Binding Height}"
                        Text="{Binding Text}" />
-        </DataTemplate>
+        </DataTemplate>-->
 
         <DataTemplate x:Key="ClipTileTemplate"
                       DataType="local:MpAvClipTileViewModel">
-            <local:MpAvClipTileView Focusable="True"
-                                    Height="250"
-                                    Width="250" />
+            <local:MpAvClipTileView MinWidth="265"
+                                    MinHeight="265"
+                                    Focusable="True" />
             <!--<TextBlock Text="Yo" />-->
         </DataTemplate>
         <RecyclingElementFactory x:Key="elementFactory"
                                  RecyclePool="{StaticResource RecyclePool}"
                                  SelectTemplateKey="OnSelectTemplateKey">
             <RecyclingElementFactory.Templates>
-                <StaticResource x:Key="odd"
+                <!--<StaticResource x:Key="odd"
                                 ResourceKey="odd" />
                 <StaticResource x:Key="even"
-                                ResourceKey="even" />
+                                ResourceKey="even" />-->
 
                 <StaticResource x:Key="ClipTileTemplate"
                                 ResourceKey="ClipTileTemplate" />
@@ -53,18 +53,28 @@
             <SolidColorBrush Color="Cyan"
                              Opacity="0.7" />
         </Grid.Background>
-        <Border>
+        <Border Margin="5">
             <ScrollViewer Name="ClipTrayScrollViewer"
                           HorizontalScrollBarVisibility="Auto"
                           VerticalScrollBarVisibility="Auto">
+                <!--
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    MaxWidth="{Binding MainWindowWidth, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+                -->
                 <ItemsRepeater Name="ClipTrayItemsRepeater"
-                               local:MpAvKinematicScrollExtension.IsEnabled="True"
-                               local:MpAvKinematicScrollExtension.ScrollViewer="{Binding ElementName=ClipTrayScrollViewer}"
-                               local:MpAvKinematicScrollExtension.Friction="0.85"
-                               local:MpAvKinematicScrollExtension.WheelDampening="0.08"
-                               HorizontalAlignment="Stretch"
-                               VerticalAlignment="Stretch"
-                               Margin="5"
+                               local:MpAvKineticScrollExtension.IsEnabled="True"
+                               local:MpAvKineticScrollExtension.ScrollViewer="{Binding ElementName=ClipTrayScrollViewer}"
+                               local:MpAvKineticScrollExtension.FrictionX="0.85"
+                               local:MpAvKineticScrollExtension.WheelDampeningX="0.08"
+                               local:MpAvKineticScrollExtension.FrictionY="0.75"
+                               local:MpAvKineticScrollExtension.WheelDampeningY="0.08"
+                               local:MpAvKineticScrollExtension.ScrollOffsetX="{Binding ScrollOffsetX, Mode=TwoWay}"
+                               local:MpAvKineticScrollExtension.ScrollOffsetY="{Binding ScrollOffsetY, Mode=TwoWay}"
+                               local:MpAvKineticScrollExtension.VelocityX="{Binding ScrollVelocityX, Mode=TwoWay}"
+                               local:MpAvKineticScrollExtension.VelocityY="{Binding ScrollVelocityY, Mode=TwoWay}"
+                               local:MpAvKineticScrollExtension.CanScrollX="{Binding CanScroll}"
+                               local:MpAvKineticScrollExtension.CanScrollY="{Binding CanScroll}"
                                Background="Transparent"
                                Items="{Binding Items}"
                                ItemTemplate="{StaticResource elementFactory}">
@@ -72,10 +82,17 @@
                     <!--<ItemsRepeater.RenderTransform>
                         <TranslateTransform />
                     </ItemsRepeater.RenderTransform>-->
-                    <ItemsRepeater.Layout>
-                        <StackLayout Spacing="5"
-                                     Orientation="Horizontal" />
-                    </ItemsRepeater.Layout>
+                    <!--<ItemsRepeater.Layout>
+                    -->
+                    <!--<StackLayout Spacing="5"
+                                     Orientation="Horizontal" />-->
+                    <!--
+                        <UniformGridLayout Orientation="Horizontal"
+                                           MinRowSpacing="5"
+                                           MinColumnSpacing="5"
+                                           MinItemWidth="250"
+                                           MinItemHeight="250" />
+                    </ItemsRepeater.Layout>-->
                 </ItemsRepeater>
             </ScrollViewer>
         </Border>

@@ -4,9 +4,15 @@ using System.Linq;
 using System.Text;
 using Avalonia.Win32;
 using Avalonia.Media.Imaging;
+using System.Threading.Tasks;
+using System;
+using System.IO;
+using System.Reflection;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvWrapper : MpIPlatformWrapper {
+        private static MpAvWrapper _instance;
+        public static MpAvWrapper Instance => _instance ?? (_instance = new MpAvWrapper());
         public MpIProcessWatcher ProcessWatcher { get; set; }
         public MpICursor? Cursor { get; set; }
         public MpIDbInfo? DbInfo { get; set; }
@@ -37,7 +43,27 @@ namespace MonkeyPaste.Avalonia {
         public MpIPlatformDataObjectRegistrar? DataObjectRegistrar { get; set; }
 
         public MpICopyItemBuilder? CopyItemBuilder { get; set; }
-        public MpAvWrapper() {
+        public async Task InitializeAsync(){
+            string prefFileName = null;
+            if (OperatingSystem.IsWindows()) {
+                prefFileName = "Pref.json";
+            }
+            if (OperatingSystem.IsLinux()) {
+                prefFileName = "pref_x11.json";
+            }
+            if (OperatingSystem.IsMacOS()) {
+                prefFileName = "pref_mac.json";
+            }
+            if(prefFileName == null) {
+                throw new Exception("Unknown os");
+            }
+            string prefPath = Path.Combine(
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                prefFileName);
+
+            await MpPrefViewModel.InitAsync(prefPath);
+            MpPrefViewModel.Instance.MainWindowOrientation = "Bottom";
+
             Cursor = new MpAvCursor();
             DbInfo = new MpAvDbInfo();
             QueryInfo = new MpAvQueryInfo();

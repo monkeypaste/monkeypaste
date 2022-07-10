@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
 
 namespace MonkeyPaste.Avalonia {
@@ -7,6 +8,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvMainWindowTitleMenuView() {
             InitializeComponent();
         }
+
 
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);

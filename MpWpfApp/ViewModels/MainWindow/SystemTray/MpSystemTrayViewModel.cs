@@ -63,7 +63,7 @@ namespace MpWpfApp {
 
         public string DbSizeInMbs {
             get {
-                return Math.Round(MpFileIo.FileListSize(new string[] { MpPrefViewModel.Instance.DbPath }),2).ToString() + " megabytes";
+                return Math.Round(MpFileIo.FileListSize(new string[] {MpPlatformWrapper.Services.DbInfo.DbPath }),2).ToString() + " megabytes";
             }
         }
 

@@ -16,6 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controls\**" />
     <Compile Remove="Models\Db\ContentQuery\**" />
     <Compile Remove="Models\Db\SQLite\**" />
     <Compile Remove="Models\PreferenceModels\**" />
@@ -27,14 +28,13 @@
     <Compile Remove="Resources\Html\Editor\src\modules\**" />
     <Compile Remove="Resources\Html\Editor\TestData\**" />
     <Compile Remove="Resources\Html\temp\**" />
+    <Compile Remove="Selectors\**" />
     <Compile Remove="Services\**" />
     <Compile Remove="Utils\NetworkIO\Json\**" />
-    <Compile Remove="ViewModels\Reusable\Clipboard\**" />
-    <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\CopyItemCollectionViewModelCopyItem\CopyItemViewModelCopyItem\Title\**" />
-    <Compile Remove="Views\MainWindow\**" />
-    <Compile Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Content\**" />
-    <Compile Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Title\**" />
-    <Compile Remove="Views\Shell\MainFlyOut\Popups\**" />
+    <Compile Remove="ViewModels\Reusable\**" />
+    <Compile Remove="ViewModels\Shell\**" />
+    <Compile Remove="Views\**" />
+    <EmbeddedResource Remove="Controls\**" />
     <EmbeddedResource Remove="Models\Db\ContentQuery\**" />
     <EmbeddedResource Remove="Models\Db\SQLite\**" />
     <EmbeddedResource Remove="Models\PreferenceModels\**" />
@@ -46,14 +46,13 @@
     <EmbeddedResource Remove="Resources\Html\Editor\src\modules\**" />
     <EmbeddedResource Remove="Resources\Html\Editor\TestData\**" />
     <EmbeddedResource Remove="Resources\Html\temp\**" />
+    <EmbeddedResource Remove="Selectors\**" />
     <EmbeddedResource Remove="Services\**" />
     <EmbeddedResource Remove="Utils\NetworkIO\Json\**" />
-    <EmbeddedResource Remove="ViewModels\Reusable\Clipboard\**" />
-    <EmbeddedResource Remove="ViewModels\Shell\MainFlyOut\Pages\CopyItemCollectionViewModelCopyItem\CopyItemViewModelCopyItem\Title\**" />
-    <EmbeddedResource Remove="Views\MainWindow\**" />
-    <EmbeddedResource Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Content\**" />
-    <EmbeddedResource Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Title\**" />
-    <EmbeddedResource Remove="Views\Shell\MainFlyOut\Popups\**" />
+    <EmbeddedResource Remove="ViewModels\Reusable\**" />
+    <EmbeddedResource Remove="ViewModels\Shell\**" />
+    <EmbeddedResource Remove="Views\**" />
+    <None Remove="Controls\**" />
     <None Remove="Models\Db\ContentQuery\**" />
     <None Remove="Models\Db\SQLite\**" />
     <None Remove="Models\PreferenceModels\**" />
@@ -65,35 +64,21 @@
     <None Remove="Resources\Html\Editor\src\modules\**" />
     <None Remove="Resources\Html\Editor\TestData\**" />
     <None Remove="Resources\Html\temp\**" />
+    <None Remove="Selectors\**" />
     <None Remove="Services\**" />
     <None Remove="Utils\NetworkIO\Json\**" />
-    <None Remove="ViewModels\Reusable\Clipboard\**" />
-    <None Remove="ViewModels\Shell\MainFlyOut\Pages\CopyItemCollectionViewModelCopyItem\CopyItemViewModelCopyItem\Title\**" />
-    <None Remove="Views\MainWindow\**" />
-    <None Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Content\**" />
-    <None Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Title\**" />
-    <None Remove="Views\Shell\MainFlyOut\Popups\**" />
+    <None Remove="ViewModels\Reusable\**" />
+    <None Remove="ViewModels\Shell\**" />
+    <None Remove="Views\**" />
+    <Compile Remove="App.xaml.cs" />
     <Compile Remove="Models\MpAnalyticItemParameter.cs" />
     <Compile Remove="Models\MpAnalyticItemParameterValue.cs" />
     <Compile Remove="Models\MpColor.cs" />
     <Compile Remove="MpResolver.cs" />
     <Compile Remove="Utils\MpJsMessageListener.cs" />
     <Compile Remove="Utils\MpSingleton.cs" />
-    <Compile Remove="ViewModels\Reusable\Preferences\MpPreferences.cs" />
     <Compile Remove="ViewModels\Bases\MpObservableObject.cs" />
     <Compile Remove="ViewModels\Bases\MpViewModelBase_old.cs" />
-    <Compile Remove="ViewModels\Reusable\Geometry\MpBoxViewModel.cs" />
-    <Compile Remove="ViewModels\Shell\MainFlyOut\MpMainViewModel.cs" />
-    <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\ClipTileCollection\Clip\MpContentItemViewModel.cs" />
-    <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\ClipTileCollection\Clip\MpCopyItemDetailPageViewModel.cs" />
-    <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\ClipTileCollection\MpContentItemCollectionViewModel.cs" />
-    <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\Settings\MpChatPageViewModel.cs" />
-    <Compile Remove="ViewModels\Shell\MpMainShellViewModel.cs" />
-    <Compile Remove="Views\Shell\MainFlyOut\ContextMenu\MpDefaultContextMenuItemView.xaml.cs" />
-    <Compile Remove="Views\Shell\MainFlyOut\MpMainView.xaml.cs" />
-    <Compile Remove="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\Pages\MpCopyItemDetailPageView.xaml.cs" />
-    <Compile Remove="Views\Shell\MainFlyOut\Settings\MpChatPageView.xaml.cs" />
-    <Compile Remove="Views\Shell\MpMainShell.xaml.cs" />
     <None Remove=".DS_Store" />
     <None Remove="Resources\Data\db.create" />
     <None Remove="Resources\Data\Google\client_secrets.json" />
@@ -126,6 +111,7 @@
     <None Remove="Resources\Html\Editor\webpack.config.js" />
     <None Remove="Resources\Icons\monkey.png" />
     <None Remove="Behaviors\" />
+    <EmbeddedResource Remove="App.xaml" />
     <EmbeddedResource Remove="Resources\Styles\MpWpfConverters.xaml" />
     <Compile Remove="Resources\Styles\MpWpfConverters.Designer.cs" />
   </ItemGroup>
@@ -137,11 +123,20 @@
   <ItemGroup>
     <EmbeddedResource Remove="MainPage.xaml" />
     <EmbeddedResource Remove="Resources\Styles\MpPagingListBoxResourceDictionary.xaml" />
-    <EmbeddedResource Remove="Views\Shell\MainFlyOut\ContextMenu\MpDefaultContextMenuItemView.xaml" />
-    <EmbeddedResource Remove="Views\Shell\MainFlyOut\MpMainView.xaml" />
-    <EmbeddedResource Remove="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\Pages\MpCopyItemDetailPageView.xaml" />
-    <EmbeddedResource Remove="Views\Shell\MainFlyOut\Settings\MpChatPageView.xaml" />
-    <EmbeddedResource Remove="Views\Shell\MpMainShell.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="ViewModels\Reusable\Contacts\MpContactCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\Contacts\MpContactViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\ContextMenu\MpColorPalletePopupMenuViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\ContextMenu\MpMenuItemViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\MpCursor.cs" />
+    <Compile Include="ViewModels\Reusable\Notifications\Items\Base\MpNotificationViewModelBase.cs" />
+    <Compile Include="ViewModels\Reusable\Notifications\Items\MpLoaderNotificationViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\Notifications\Items\MpMessageNotificationViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\Notifications\Items\MpUserActionNotificationViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\Notifications\MpNotificationCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\Preferences\MpPrefViewModel.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -203,7 +198,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Acr.UserDialogs" Version="7.2.0.564" />
+    <PackageReference Include="Acr.UserDialogs" Version="7.2.0.561" />
     <PackageReference Include="CsvHelper" Version="27.2.1" />
     <PackageReference Include="Google.Apis.Auth" Version="1.57.0" />
     <PackageReference Include="Google.Apis.PeopleService.v1" Version="1.57.0.2707" />
@@ -211,7 +206,6 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" PrivateAssets="All" />
-    <PackageReference Include="Rg.Plugins.Popup" Version="2.1.0" />
     <PackageReference Include="SkiaSharp" Version="2.88.0" />
     <PackageReference Include="SkiaSharp.QrCode" Version="0.6.0" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="2.88.0" />
@@ -219,7 +213,6 @@
     <PackageReference Include="SQLiteNetExtensions" Version="2.1.0" />
     <PackageReference Include="SQLiteNetExtensions.Async" Version="2.1.0" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
-    <PackageReference Include="Topten.RichTextKit" Version="0.4.151" />
     <PackageReference Include="Xam.Plugin.Media" Version="5.0.1" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2478" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
@@ -239,9 +232,6 @@
     <EmbeddedResource Include="Resources\Icons\search.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="Controls\MpPopupPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\src\components\content\content-style.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -272,58 +262,9 @@
     <EmbeddedResource Update="Resources\Html\Editor\style\template-style.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Shell\MainFlyOut\ContextMenu\MpColorChooserContextMenuItemView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Shell\MainFlyOut\ContextMenu\MpContextMenuItemView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Shell\MainFlyOut\ContextMenu\MpContextMenuView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Shell\MainFlyOut\MpMainFlyoutPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\Pages\MpRenamePopupPageView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\MpCopyItemDetailPageViewCopyItem.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\MpCopyItemViewCopyItem.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\MpCopyItemCollectionPageViewCopyItem.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Shell\MainFlyOut\Help\MpHelpPageView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Shell\MainFlyOut\Pages\CopyItemTileCollectionView\CopyItem\AssociatedTags\MpCopyItemTagAssociatedItemView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Shell\MainFlyOut\Pages\CopyItemTileCollectionView\CopyItem\AssociatedTags\MpCopyItemTagAssociationPageView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Shell\MainFlyOut\Pages\Popups\MpPopupMessagePage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Shell\MainFlyOut\TagTileCollectionView\MpTagTileCollectionView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Shell\MainFlyOut\Settings\MpSettingsPageView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Shell\MainFlyOut\TagTray\TagTag\MpTagViewTag.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Shell\MpMainPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="ViewModels\Shell\MainFlyOut\Pages\ClipTileCollection\MpContentItemCollectionViewModel.cs" />
     <None Include="Views\Shell\MpMainShell.xaml" />
     <None Include="Views\Shell\MainFlyOut\TagTileCollectionView\MpTagTileCollectionView.xaml" />
     <None Include="Views\Shell\MainFlyOut\TagTileCollectionView\Tag\MpTagTileView.xaml" />
@@ -343,56 +284,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\Shell\MainFlyOut\ContextMenu\MpContextMenuView.xaml.cs">
-      <DependentUpon>MpContextMenuView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\MpCopyItemDetailPageView.xaml.cs">
-      <DependentUpon>MpCopyItemDetailPageView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\MpCopyItemView.xaml.cs">
-      <DependentUpon>MpCopyItemView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\Pages\MpCopyItemTagAssociationPageView.xaml.cs">
-      <DependentUpon>MpCopyItemTagAssociationPageView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\Pages\MpCopyItemTagAssociatedItemView.xaml.cs">
-      <DependentUpon>MpCopyItemTagAssociatedItemView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\MpCopyItemCollectionPageView.xaml.cs">
-      <DependentUpon>MpCopyItemCollectionPageView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\MpCopyItemDetailPageViewCopyItem.xaml.cs">
-      <DependentUpon>MpCopyItemDetailPageViewCopyItem.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Shell\MainFlyOut\Pages\CopyItemTileCollectionView\CopyItem\MpCopyItemTileView.xaml.cs">
-      <DependentUpon>MpCopyItemTileView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\MpCopyItemCollectionPageViewCopyItem.xaml.cs">
-      <DependentUpon>MpCopyItemCollectionPageViewCopyItem.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Shell\MainFlyOut\Pages\CopyItemTileCollectionView\MpCopyItemTileCollectionPageView.xaml.cs">
-      <DependentUpon>MpCopyItemTileCollectionPageView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Shell\MainFlyOut\TagTileCollectionView\MpTagTileCollectionView.xaml.cs">
-      <DependentUpon>MpTagTileCollectionView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Shell\MainFlyOut\TagTileCollectionView\Tag\MpTagTileView.xaml.cs">
-      <DependentUpon>MpTagTileView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Shell\MpMainPage.xaml.cs">
-      <DependentUpon>MpMainPage.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Resources\Styles" />
-    <Folder Include="ViewModels\Reusable\Errors\" />
-    <Folder Include="ViewModels\Reusable\NewFolder\" />
-    <Folder Include="ViewModels\Reusable\Theme\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
+    <ProjectReference Include="..\Common\MonkeyPaste.Common.Xamarin\MonkeyPaste.Common.Xamarin.csproj" />
     <ProjectReference Include="..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
   </ItemGroup>
 

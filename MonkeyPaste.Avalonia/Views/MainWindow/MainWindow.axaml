@@ -22,59 +22,59 @@
         Height="{Binding MainWindowHeight}"
         TransparencyLevelHint="Transparent"
         Title="Monkey Paste">
-
-    <!--  <Canvas x:Name="MainWindowContainerCanvas"  -->
-    <!--  HorizontalAlignment="Left"  -->
-    <!--  VerticalAlignment="Top"  -->
-    <!--  Background="Transparent"  -->
-    <!--  Width="{Binding MainWindowWidth}"  -->
-    <!--  Height="{Binding MainWindowHeight}">  -->
-    <Grid x:Name="MainWindowGrid"
-          PointerPressed="MainWindowGrid_PointerPressed"
-          HorizontalAlignment="Left"
-          VerticalAlignment="Top"
-          Width="{Binding MainWindowWidth}"
-          Height="{Binding MainWindowHeight}">
-        <Grid.Background>
+    <RelativePanel x:Name="MainWindowGrid"
+                   Width="{Binding MainWindowWidth}"
+                   Height="{Binding MainWindowHeight}">
+        <RelativePanel.Background>
             <SolidColorBrush Color="Pink"
                              Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
-        </Grid.Background>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+        </RelativePanel.Background>
+
+        <Grid x:Name="FilterAndTrayGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <!--  Filter Menu  -->
+            <Grid x:Name="MainWindowFilterGrid"
+                  Grid.Row="0">
+                <Grid.Background>
+                    <SolidColorBrush Color="Purple"
+                                     Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
+                </Grid.Background>
+            </Grid>
+
+            <!--  Tray Row  -->
+            <Grid x:Name="MainWindowTrayGrid"
+                  Grid.Row="1">
+                <Grid.Background>
+                    <SolidColorBrush Color="DarkViolet"
+                                     Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
+                </Grid.Background>
+                <local:MpAvClipTrayView DataContext="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+
+
+
+                <!--<webview:WebView x:Name="webview" Address="file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html" />-->
+            </Grid>
+        </Grid>
 
         <!--  Title Menu  -->
-        <local:MpAvMainWindowTitleMenuView x:Name="MainWindowTitleGrid"
-                                           Grid.Row="0"
-                                           HorizontalAlignment="Stretch"
-                                           VerticalAlignment="Stretch"
-                                           DataContext="{Binding}" />
+        <local:MpAvMainWindowTitleMenuView x:Name="MainWindowTitleView"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Top"
+                                           DataContext="{Binding}">
+            <local:MpAvMainWindowTitleMenuView.RenderTransform>
+                <RotateTransform />
+            </local:MpAvMainWindowTitleMenuView.RenderTransform>
+        </local:MpAvMainWindowTitleMenuView>
 
-        <!--  Filter Menu  -->
-        <Grid x:Name="MainWindowFilterGrid"
-              Grid.Row="1">
-            <Grid.Background>
-                <SolidColorBrush Color="Purple"
-                                 Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
-            </Grid.Background>
-        </Grid>
-
-        <!--  Tray Row  -->
-        <Grid x:Name="MainWindowTrayGrid"
-              Grid.Row="2">
-            <Grid.Background>
-                <SolidColorBrush Color="DarkViolet"
-                                 Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
-            </Grid.Background>
-            <local:MpAvClipTrayView DataContext="{x:Static local:MpAvClipTrayViewModel.Instance}" />
-
-
-
-            <!--<webview:WebView x:Name="webview" Address="file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html" />-->
-        </Grid>
-
-    </Grid>
+      <!--<LayoutTransformControl Name="layoutTransform">
+        <LayoutTransformControl.LayoutTransform>
+          <RotateTransform />
+        </LayoutTransformControl.LayoutTransform>
+        <Button Background="White">Layout Transform</Button>
+      </LayoutTransformControl>-->
+    </RelativePanel>
     <!-- </Canvas> -->
 </Window>

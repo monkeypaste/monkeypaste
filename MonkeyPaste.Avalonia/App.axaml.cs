@@ -20,10 +20,8 @@ namespace MonkeyPaste.Avalonia {
 
         public override async void OnFrameworkInitializationCompleted() {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-                await MpPrefViewModel.InitAsync();
-                MpPrefViewModel.Instance.MainWindowOrientation = "Bottom";
-
-                await MpPlatformWrapper.InitAsync(new MpAvWrapper());
+                await MpAvWrapper.Instance.InitializeAsync();
+                await MpPlatformWrapper.InitAsync(MpAvWrapper.Instance);
                 var bootstrapper = new MpAvBootstrapperViewModel();
                 await bootstrapper.InitAsync();
 

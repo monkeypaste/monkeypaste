@@ -9,15 +9,16 @@
                        x:CompileBindings="True"
                        mc:Ignorable="d"
                        d:DesignWidth="800"
-                       d:DesignHeight="450"
+                       d:DesignHeight="30"
                        x:Class="MonkeyPaste.Avalonia.MpAvMainWindowTitleMenuView">
     <Grid x:Name="MainWindowTitleGrid"
-          Grid.Row="0"
           Background="{Binding TitleBarBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
 
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Left">
+
             <!--
                 Command="{Binding ShowSettingsWindowCommand,
                 Source={x:Static local:MpSystemTrayViewModel.Instance}}"
@@ -66,6 +67,7 @@
                 </Image>
             </ToggleButton>
             <ToggleButton VerticalAlignment="Center"
+                          IsVisible="False"
                           local:MpAvIsHoveringExtension.IsEnabled="True"
                           local:MpAvIsHoveringExtension.HoverCursor="Hand"
                           Background="Pink"
@@ -74,7 +76,7 @@
                 <ToolTip.Tip>
                     <local:MpAvTooltipView ToolTipText="Hide Filter Menu" />
                 </ToolTip.Tip>
-                <Grid Margin="0,2,0,0">
+                <Grid>
                     <Polygon Points="6,0 12,12 0,12"
                              StrokeThickness="1"
                              IsVisible="{Binding !IsFilterMenuVisible}"
@@ -125,37 +127,46 @@
                                 DestinationRect="0,0,5,5" />
                 </Border.Background>
             </Border>
-            <!--<i:Interaction.Behaviors>
-        <local:MpResizeBehavior x:Name="MainWindowResizeBehvior"
-                                MinHeight="{Binding MainWindowMinHeight,
-                                                                    Source={x:Static local:MpMeasurements.Instance}}"
-                                MaxHeight="{Binding MainWindowMaxHeight,
-                                                                    Source={x:Static local:MpMeasurements.Instance}}"
-                                AffectsContent="True"
-                                BoundElement="{Binding ElementName=MainWindowGrid}"
-                                BoundHeight="{Binding MainWindowHeight,
-                                                                      Mode=TwoWay,
-                                                                      UpdateSourceTrigger=PropertyChanged,
-                                                                      NotifyOnSourceUpdated=True,
-                                                                      NotifyOnTargetUpdated=True}"
-                                CanResize="{Binding CanResize,
-                                                                    Mode=TwoWay,
-                                                                    UpdateSourceTrigger=PropertyChanged,
-                                                                    NotifyOnSourceUpdated=True,
-                                                                    NotifyOnTargetUpdated=True}"
-                                DefaultWidth="{Binding MainWindowWidth}"
-                                DefaultHeight="{Binding MainWindowDefaultHeight,
-                                                                        Source={x:Static local:MpMeasurements.Instance}}"
-                                IsEnabled="True"
-                                IsResizing="{Binding IsResizing,
-                                                                     Mode=TwoWay,
-                                                                     UpdateSourceTrigger=PropertyChanged,
-                                                                     NotifyOnSourceUpdated=True,
-                                                                     NotifyOnTargetUpdated=True}"
-                                ResizableEdge1="Top"
-                                DoubleClickFrameworkElement="{Binding ElementName=MainWindowResizeBorder}" />
-
-      </i:Interaction.Behaviors>-->
         </Border>
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <ToggleButton x:Name="GridLayoutToggleButton"
+                          VerticalAlignment="Center"
+                          local:MpAvIsHoveringExtension.IsEnabled="True"
+                          local:MpAvIsHoveringExtension.HoverCursor="Hand"
+                          IsChecked="{Binding IsGridLayout, Mode=TwoWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                          ToolTip.ShowDelay="0">
+                <ToolTip.Tip>
+                    <local:MpAvTooltipView ToolTipText="Hide Filter Menu" />
+                </ToolTip.Tip>
+                <Grid Width="24"
+                      Height="24">
+                    <Grid.Resources>
+                        <StreamGeometry x:Key="GridLayoutSvg">M10,4V8H14V4H10M16,4V8H20V4H16M16,10V14H20V10H16M16,16V20H20V16H16M14,20V16H10V20H14M8,20V16H4V20H8M8,14V10H4V14H8M8,8V4H4V8H8M10,14H14V10H10V14M4,2H20A2,2 0 0,1 22,4V20A2,2 0 0,1 20,22H4C2.92,22 2,21.1 2,20V4A2,2 0 0,1 4,2Z</StreamGeometry>
+                    </Grid.Resources>
+                    <Path Fill="Black"
+                          Data="{StaticResource GridLayoutSvg}" />
+                </Grid>
+            </ToggleButton>
+            <Button x:Name="MainWindowOrientationButton"
+                    VerticalAlignment="Center"
+                    local:MpAvIsHoveringExtension.IsEnabled="True"
+                    local:MpAvIsHoveringExtension.HoverCursor="Hand"
+                    Command="{Binding CycleOrientationCcwCommand}"
+                    ToolTip.ShowDelay="0">
+                <ToolTip.Tip>
+                    <local:MpAvTooltipView ToolTipText="Hide Filter Menu" />
+                </ToolTip.Tip>
+                <Grid Width="24"
+                      Height="24">
+                    <Grid.Resources>
+                        <StreamGeometry x:Key="CycleOrSvg">M7.34,6.41L0.86,12.9L7.35,19.38L13.84,12.9L7.34,6.41M3.69,12.9L7.35,9.24L11,12.9L7.34,16.56L3.69,12.9M19.36,6.64C17.61,4.88 15.3,4 13,4V0.76L8.76,5L13,9.24V6C14.79,6 16.58,6.68 17.95,8.05C20.68,10.78 20.68,15.22 17.95,17.95C16.58,19.32 14.79,20 13,20C12.03,20 11.06,19.79 10.16,19.39L8.67,20.88C10,21.62 11.5,22 13,22C15.3,22 17.61,21.12 19.36,19.36C22.88,15.85 22.88,10.15 19.36,6.64Z</StreamGeometry>
+                    </Grid.Resources>
+                    <Path Fill="Black"
+                          Data="{StaticResource CycleOrSvg}" />
+                </Grid>
+            </Button>
+        </StackPanel>
+
     </Grid>
 </local:MpAvUserControl>

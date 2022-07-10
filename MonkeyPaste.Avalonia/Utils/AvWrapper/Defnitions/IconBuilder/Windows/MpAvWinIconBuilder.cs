@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Avalonia.Media.Imaging;
+//using Avalonia.Media.Imaging;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common;
 
@@ -20,8 +20,5 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
-
-        
-
     }
 }

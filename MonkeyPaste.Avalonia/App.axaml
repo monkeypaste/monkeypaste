@@ -454,6 +454,7 @@
   <TrayIcon.Icons>
     <TrayIcons>
       <TrayIcon Icon="/Assets/Icons/monkey.ico" 
+                Command="{Binding ShowWindowCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                 ToolTipText="Monkey Paste">
         <TrayIcon.Menu>
           <NativeMenu>

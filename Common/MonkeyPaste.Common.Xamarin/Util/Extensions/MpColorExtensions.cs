@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Text;
 using Xamarin.Forms;
 
-namespace MonkeyPaste.Common {
+namespace MonkeyPaste.Common.Xamarin {
     public static class MpColorExtensions {
         public static int ColorDistance(this SKColor a, SKColor b) {
             // from https://stackoverflow.com/a/3968341/105028
@@ -15,14 +15,9 @@ namespace MonkeyPaste.Common {
             return (int)(((a_intensity - b_intensity) * 100) / 255);
         }
 
-        public static string ToHex(this byte[] bytes) {
-            if (bytes == null) {
-                throw new Exception("Bytes are null");
-            }
-            return "#" + BitConverter.ToString(bytes).Replace("-", string.Empty);
-        }
         
-        public static string GetHexString(this Xamarin.Forms.Color color) {
+        
+        public static string GetHexString(this Color color) {
             var red = (int)(color.R * 255);
             var green = (int)(color.G * 255);
             var blue = (int)(color.B * 255);
@@ -59,14 +54,5 @@ namespace MonkeyPaste.Common {
             return Color.FromRgba(r, g, b, a);
         }
 
-        public static string AdjustAlpha(this string hexStr, double opacity) {
-            // opacity is 0-1
-            if(!hexStr.IsStringHexColor()) {
-                throw new Exception("Not a hex color");
-            }
-            var c = new MpColor(hexStr);
-            c.A = (byte)(255.0 * opacity);
-            return c.ToHex();
-        }
     }
 }

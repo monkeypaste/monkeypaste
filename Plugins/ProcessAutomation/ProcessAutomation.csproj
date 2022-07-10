@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
-    <ProjectReference Include="..\..\Common\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj" />
     <ProjectReference Include="..\..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
     <ProjectReference Include="..\..\MpProcessHelper\MpProcessHelper.csproj" />
   </ItemGroup>

@@ -17,6 +17,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
                     lifetime.Shutdown();
+                    
                 }
             });
 

@@ -4,9 +4,19 @@ using System.Text;
 
 namespace MonkeyPaste {
     public interface MpIDbInfo {
-        string GetDbFilePath();
-        string GetDbPassword();
-        string GetDbName();
+        //public string DbName => "mp.db";
+
+        //public string DbPath => Path.Combine(Environment.CurrentDirectory, DbName);
+
+        //public string DbMediaFolderPath => Path.Combine(LocalStoragePath, "media");
+
+        //public int MaxDbPasswordAttempts => 3;
+        string DbName { get; }
+        string DbPath { get; }
+
+        //string GetDbFilePath();
+        //string GetDbPassword();
+        //string GetDbName();
     }
 
 }

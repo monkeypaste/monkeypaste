@@ -1,14 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Nullable>disable</Nullable>
     <!--Avalonia doesen't support TrimMode=link currently,but we are working on that https://github.com/AvaloniaUI/Avalonia/issues/6892 -->
     <TrimMode>copyused</TrimMode>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <UseWPF>False</UseWPF>
+    <!--<UseWPF>True</UseWPF>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <UseWindowsForms>True</UseWindowsForms>-->
   </PropertyGroup>
+  <ItemGroup>
+    <KnownFrameworkReference Update="Microsoft.WindowsDesktop.App.WPF" IsWindowsOnly="false" />
+</ItemGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DefineConstants></DefineConstants>
     <WarningLevel>4</WarningLevel>
@@ -844,27 +849,5 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Icons\monkey.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <AvaloniaXaml Update="Views\MainWindow\ClipTrayContainer\ClipTray\MpAvClipTrayView.axaml">
-      <Generator>MSBuild:Compile</Generator>
-    </AvaloniaXaml>
-    <AvaloniaXaml Update="Views\MainWindow\MainWindow.axaml">
-      <Generator>MSBuild:Compile</Generator>
-    </AvaloniaXaml>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\MpAvClipTrayView.axaml.cs">
-      <DependentUpon>MpAvClipTrayView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\MainWindow.axaml.cs">
-      <DependentUpon>MainWindow.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\TitleMenu\MpAvMainWindowTitleMenuView.axaml.cs">
-      <DependentUpon>MpAvMainWindowTitleMenuView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Reusable\MpAvTooltipView.axaml.cs">
-      <DependentUpon>MpAvToolTipView.axaml</DependentUpon>
-    </Compile>
   </ItemGroup>
 </Project>

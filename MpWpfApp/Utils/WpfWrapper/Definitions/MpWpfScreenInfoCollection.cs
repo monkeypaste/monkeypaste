@@ -9,5 +9,7 @@ namespace MpWpfApp {
         public MpWpfScreenInfoCollection() {
             Screens = System.Windows.Forms.Screen.AllScreens.Select(x => new MpWpfScreenInfo(x));
         }
+
+        public double PixelScaling => 1.75;
     }
 }

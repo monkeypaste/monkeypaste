@@ -6,6 +6,9 @@ using MonkeyPaste.Common;
 namespace MpWpfApp {
     public class MpWpfWrapper : MpIPlatformWrapper {
         public MpICursor Cursor { get; set; }
+        MonkeyPaste.MpIProcessWatcher MpIPlatformWrapper.ProcessWatcher { get; set; }
+        //public MpIProcessWatcher ProcessWatcher { get; set; }
+
         public MpIDbInfo DbInfo { get; set; }
         public MpIQueryInfo QueryInfo { get; set; }
         public MpIIconBuilder IconBuilder { get; set; }
@@ -36,7 +39,6 @@ namespace MpWpfApp {
         public MpWpfWrapper() {
             // NOTE ClipboardMonitor is set after bootstrapping
             // NOTE DataObjectRegistrar is set after bootstrapping
-
             Cursor = new MpWpfCursor();
             DbInfo = new MpWpfDbInfo();          
             QueryInfo = new MpWpfQueryInfo();
@@ -59,5 +61,6 @@ namespace MpWpfApp {
             ScreenInfoCollection = new MpWpfScreenInfoCollection();            
         }
 
+        
     }
 }

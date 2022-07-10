@@ -13,11 +13,14 @@ namespace MonkeyPaste {
         [JsonIgnore]
         private object _lock = new object();
 
+        [JsonIgnore]
+        private static string _prefPath;
+
         #endregion
 
         #region Constants
-        [JsonIgnore]
-        public const string PREFERENCES_FILE_NAME = "Pref.json";
+        //[JsonIgnore]
+        //public const string PREFERENCES_FILE_NAME = "Pref.json";
         [JsonIgnore]
         public const string STRING_ARRAY_SPLIT_TOKEN = "<&>SPLIT</&>";
 
@@ -80,13 +83,7 @@ namespace MonkeyPaste {
 
         #region Db
 
-        public string DbName => "mp.db";
-
-        public string DbPath => Path.Combine(Environment.CurrentDirectory, DbName);
-
-        public string DbMediaFolderPath => Path.Combine(LocalStoragePath, "media");
-
-        public int MaxDbPasswordAttempts => 3;
+        
 
         #region Sync
         public string SyncCertFolderPath => Path.Combine(LocalStoragePath, "SyncCerts");
@@ -517,10 +514,10 @@ namespace MonkeyPaste {
 
         #region Preferences Properties
         [JsonIgnore]
-        public static string PreferencesPath =>
-            Path.Combine(
-                Environment.CurrentDirectory,
-                PREFERENCES_FILE_NAME);
+        public static string PreferencesPath => _prefPath;
+            //Path.Combine(
+            //    Environment.CurrentDirectory,
+            //    PREFERENCES_FILE_NAME);
 
         [JsonIgnore]
         public bool IsSaving { get; private set; }
@@ -541,8 +538,9 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-        public static async Task InitAsync() {
-            if (!File.Exists(PreferencesPath)) {
+        public static async Task InitAsync(string prefPath) {
+            _prefPath = prefPath;
+            if (!File.Exists(_prefPath)) {
                 await CreateDefaultPrefsAsync();
             } else {
                 await LoadPrefsAsync();

@@ -23,6 +23,7 @@ namespace MonkeyPaste {
         MainWindowOpened,
         MainWindowHiding,
         MainWindowHid,
+        MainWindowOrientationChanged,
         ItemInitialized,
         ItemDragBegin,
         ItemDragEnd,
@@ -30,6 +31,7 @@ namespace MonkeyPaste {
         ExternalDragEnd,
         TrayScrollChanged,
         TraySelectionChanged,
+        TrayLayoutChanged,
         ContentListScrollChanged, //has context (tile)
         ContentItemsChanged, //has context (tile)
         ContentSelectionChangeEnd, //has context (tile)

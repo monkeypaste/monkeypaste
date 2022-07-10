@@ -3,6 +3,25 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MonkeyPaste.Common {
+    public static class MpColorExtensions {
+        public static string ToHex(this byte[] bytes) {
+            if (bytes == null) {
+                throw new Exception("Bytes are null");
+            }
+            return "#" + BitConverter.ToString(bytes).Replace("-", string.Empty);
+        }
+
+
+        public static string AdjustAlpha(this string hexStr, double opacity) {
+            // opacity is 0-1
+            if (!hexStr.IsStringHexColor()) {
+                throw new Exception("Not a hex color");
+            }
+            var c = new MpColor(hexStr);
+            c.A = (byte)(255.0 * opacity);
+            return c.ToHex();
+        }
+    }
     public class MpColor {
         public byte[] Channels { get; set; }
 

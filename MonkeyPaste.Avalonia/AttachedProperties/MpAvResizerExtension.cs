@@ -467,7 +467,7 @@ namespace MonkeyPaste.Avalonia {
 
         public static void Resize(Control control, double dx, double dy) {
             
-            MpConsole.WriteLine("dx " + dx + " dy " + dy);
+            //MpConsole.WriteLine("dx " + dx + " dy " + dy);
             
             if (GetResizerEdge(control) != MpResizeEdgeType.Left && 
                 GetResizerEdge(control) != MpResizeEdgeType.Right) {
@@ -484,7 +484,7 @@ namespace MonkeyPaste.Avalonia {
 
             double bound_width = GetBoundWidth(control);
             double bound_height = GetBoundHeight(control);
-            MpConsole.WriteLine("Bound Width " + bound_width + " Bound Height " + bound_height);
+            //MpConsole.WriteLine("Bound Width " + bound_width + " Bound Height " + bound_height);
             
             if (bound_width + dx < 0) {
                 ResetToDefault(control);

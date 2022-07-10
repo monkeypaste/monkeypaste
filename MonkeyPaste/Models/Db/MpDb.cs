@@ -66,7 +66,7 @@ namespace MonkeyPaste {
         #region Public Methods
 
         public static string GetDbFileAsBase64() {
-            var bytes = File.ReadAllBytes(MpPrefViewModel.Instance.DbPath);
+            var bytes = File.ReadAllBytes(MpPlatformWrapper.Services.DbInfo.DbPath);
             return Convert.ToBase64String(bytes);
         }
         #region Queries
@@ -305,8 +305,7 @@ namespace MonkeyPaste {
         #endregion
 
         public static byte[] GetDbFileBytes() {
-            var dbPath = MpPrefViewModel.Instance.DbPath;
-            return File.ReadAllBytes(dbPath);
+            return File.ReadAllBytes(MpPlatformWrapper.Services.DbInfo.DbPath);
         }
 
         #endregion
@@ -359,7 +358,7 @@ namespace MonkeyPaste {
 
             //SQLitePCL.Batteries.Init();
 
-            var dbPath = MpPrefViewModel.Instance.DbPath;
+            var dbPath = MpPlatformWrapper.Services.DbInfo.DbPath;
 
             //File.Delete(dbPath);
 
@@ -413,7 +412,7 @@ namespace MonkeyPaste {
             }
             
             var _connStr = new SQLiteConnectionString(
-                            databasePath: MpPlatformWrapper.Services.DbInfo.GetDbFilePath(),
+                            databasePath: MpPlatformWrapper.Services.DbInfo.DbPath,
                             storeDateTimeAsTicks: true,
                             openFlags: SQLiteOpenFlags.ReadWrite |
                                        SQLiteOpenFlags.Create |
