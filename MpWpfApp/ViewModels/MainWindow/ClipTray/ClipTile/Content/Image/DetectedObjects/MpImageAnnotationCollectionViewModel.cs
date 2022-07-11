@@ -48,7 +48,7 @@ namespace MpWpfApp {
                 //not sure why this is getting called on non-images this shouldn't have to happen
                 return;
             }
-            var iiol = await MpDataModelProvider.GetImageAnnotationsByCopyItemId(ci.Id);
+            var iiol = await MpDataModelProvider.GetImageAnnotationsByCopyItemIdAsync(ci.Id);
             foreach (var dio in iiol) {
                 var diovm = await CreateDetectedImageObjectViewModel(dio);
                 Items.Add(diovm);

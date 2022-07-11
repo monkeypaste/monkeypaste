@@ -1890,7 +1890,7 @@ namespace MpWpfApp {
                     ClearClipSelection();
                     MpDataModelProvider.ResetQuery();
 
-                    await MpDataModelProvider.Requery(
+                    await MpDataModelProvider.RequeryAsync(
                         0,
                         MaxTileWidth,
                         MpMeasurements.Instance.ClipTileMargin * 2);
@@ -1965,7 +1965,7 @@ namespace MpWpfApp {
                         }
                     }
 
-                    var cil = await MpDataModelProvider.FetchCopyItemsByQueryIdxList(fetchQueryIdxList);
+                    var cil = await MpDataModelProvider.FetchCopyItemsByQueryIdxListAsync(fetchQueryIdxList);
 
                     for (int i = 0; i < cil.Count; i++) {
                         if (isLoadMore) {
@@ -2368,8 +2368,8 @@ namespace MpWpfApp {
 
                     MpClipTileViewModel ctvm = GetClipTileViewModelById(ciid);
                     if (ctvm == null) {
-                        var ci = await MpDataModelProvider.GetCopyItemById(ciid);
-                        var templates = await MpDataModelProvider.ParseTextTemplatesByCopyItemId(ci);
+                        var ci = await MpDataModelProvider.GetCopyItemByIdAsync(ciid);
+                        var templates = await MpDataModelProvider.ParseTextTemplatesByCopyItemIdAsync(ci);
                         if(templates != null && templates.Count > 0) {
                             // this item needs to be loaded into ui in order to paste it
                             // trigger query change before showing main window may need to tweak...

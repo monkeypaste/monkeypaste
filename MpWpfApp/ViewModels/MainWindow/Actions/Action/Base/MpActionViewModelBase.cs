@@ -690,7 +690,7 @@ namespace MpWpfApp {
             //}
 
             if (!IsPlaceholder) {
-                var cal = await MpDataModelProvider.GetChildActions(ActionId);
+                var cal = await MpDataModelProvider.GetChildActionsAsync(ActionId);
 
                 foreach (var ca in cal.OrderBy(x => x.SortOrderIdx)) {
                     var cavm = await CreateActionViewModel(ca);

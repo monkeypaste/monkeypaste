@@ -124,7 +124,7 @@ namespace MonkeyPaste {
             bool suppressWrite = false) {
 
             if(!string.IsNullOrEmpty(iconImgBase64)) {
-                var dupCheck = await MpDataModelProvider.GetIconByImageStr(iconImgBase64);
+                var dupCheck = await MpDataModelProvider.GetIconByImageStrAsync(iconImgBase64);
                 if (dupCheck != null) {
                     return dupCheck;
                 }

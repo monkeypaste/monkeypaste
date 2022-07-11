@@ -15,25 +15,25 @@ namespace MonkeyPaste.Avalonia {
             get {
                 //return 1.0d;
 
-                if (MainWindow.Instance == null ||
+                if (MpAvMainWindow.Instance == null ||
                     OperatingSystem.IsMacOS()) {
                     // NOTE windows seems to now account for scaling on bounds/workarea but mac does
                     // maybe this is a project setting thing?
                     return 1.0d;
                 }
 
-                return ((IRenderRoot)MainWindow.Instance).RenderScaling;
+                return ((IRenderRoot)MpAvMainWindow.Instance).RenderScaling;
             }
         }
 
         public IEnumerable<MpIPlatformScreenInfo> Screens {
             get {
-                if(MainWindow.Instance == null) {
+                if(MpAvMainWindow.Instance == null) {
                     return new List<MpIPlatformScreenInfo>();
                 }
 
                 return
-                    MainWindow.Instance.Screens.All
+                    MpAvMainWindow.Instance.Screens.All
                     .Select((x, i) =>
                         new MpAvScreenInfo() {
                             Bounds = new MpRect(

@@ -206,6 +206,23 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region IsThumbDragging AvaloniaProperty
+        public static bool GetIsThumbDragging(AvaloniaObject obj) {
+            return obj.GetValue(IsThumbDraggingProperty);
+        }
+
+        public static void SetIsThumbDragging(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsThumbDraggingProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsThumbDraggingProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "IsThumbDragging",
+                false,
+                false);
+
+        #endregion
+
         #region ScrollViewer AvaloniaProperty
         public static ScrollViewer GetScrollViewer(AvaloniaObject obj) {
             return obj.GetValue(ScrollViewerProperty);
@@ -263,7 +280,7 @@ namespace MonkeyPaste.Avalonia {
 
                     control.AddHandler(
                         Control.PointerPressedEvent,
-                        PreviewPointerPressedHandler,
+                        PreviewControlPointerPressedHandler,
                         RoutingStrategies.Tunnel);
 
                     if (e == null) {
@@ -275,14 +292,57 @@ namespace MonkeyPaste.Avalonia {
                     timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
                     timer.Tick += HandleWorldTimerTick;
 
-                    if(GetScrollViewer(control) == null) {
-                        var sv = control.GetVisualParent<ScrollViewer>();
+                    var sv = GetScrollViewer(control);
+                    if(sv == null) {
+                        sv = control.GetVisualParent<ScrollViewer>();
                         SetScrollViewer(control, sv);
-                        var thumbs = sv.GetVisualDescendants().Where(x => x is Thumb);
-                        if (thumbs.Count() == 0) {
-                            Debugger.Break();
-                        }
                     }
+                    sv.EffectiveViewportChanged += (s, e) => {
+                        if (sv.TryGetVisualDescendants<Track>(out var tracks)) {
+                            //Debugger.Break();
+                            foreach (var track in tracks) {
+                                track.Bind(
+                                        Track.ValueProperty,
+                                        new Binding() {
+                                            Source = control.DataContext,
+                                            Path = track.Orientation == Orientation.Horizontal ?
+                                                    nameof(MpAvClipTrayViewModel.Instance.ScrollOffsetX) :
+                                                    nameof(MpAvClipTrayViewModel.Instance.ScrollOffsetY),                                            
+                                            Mode = BindingMode.TwoWay, 
+                                            Priority = BindingPriority.StyleTrigger
+                                        });
+
+                                //track.Bind(
+                                //        Track.MaximumProperty,
+                                //        new Binding() {
+                                //            Source = control.DataContext,
+                                //            Path = track.Orientation == Orientation.Horizontal ?
+                                //                    nameof(MpAvClipTrayViewModel.Instance.MaxScrollOffsetX) :
+                                //                    nameof(MpAvClipTrayViewModel.Instance.MaxScrollOffsetY),
+                                //            Mode = BindingMode.TwoWay
+                                //        });
+
+                                track.Tag = control;
+
+
+                                track.AddHandler(
+                                    Control.PointerPressedEvent,
+                                    PreviewTrackPointerPressedHandler,
+                                    RoutingStrategies.Tunnel);
+
+                                track.AddHandler(
+                                    Control.PointerMovedEvent,
+                                    PreviewTrackPointerMovedHandler,
+                                    RoutingStrategies.Tunnel);
+
+                                track.AddHandler(
+                                    Control.PointerReleasedEvent,
+                                    PreviewTrackPointerReleasedHandler,
+                                    RoutingStrategies.Tunnel);
+                            }
+                        }
+                    };
+                    
 
                     timer.Start();
                 }
@@ -290,6 +350,23 @@ namespace MonkeyPaste.Avalonia {
 
             void DetachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
                 if (s is Control control) {
+                    if(GetScrollViewer(control) is ScrollViewer sv) {
+                        if (sv.TryGetVisualDescendants<Track>(out var tracks)) {
+                            foreach (var track in tracks) {
+                                track.RemoveHandler(
+                                    Control.PointerPressedEvent,
+                                    PreviewTrackPointerPressedHandler);
+
+                                track.RemoveHandler(
+                                    Control.PointerMovedEvent,
+                                    PreviewTrackPointerMovedHandler);
+
+                                track.RemoveHandler(
+                                    Control.PointerReleasedEvent,
+                                    PreviewTrackPointerReleasedHandler);
+                            }
+                        }
+                    }
                     control.AttachedToVisualTree -= AttachedToVisualHandler;
                     control.DetachedFromVisualTree -= DetachedToVisualHandler;
 
@@ -299,14 +376,80 @@ namespace MonkeyPaste.Avalonia {
 
                     control.RemoveHandler(
                         Control.PointerPressedEvent, 
-                        PreviewPointerPressedHandler);
+                        PreviewControlPointerPressedHandler);
+                }
+            }
+            #region Track Events
+
+            void PreviewTrackPointerPressedHandler(object? s, PointerPressedEventArgs e) {
+                // when user clicks always halt any animated scrolling
+                if (s is Track track && track.Tag is Control control) {
+                    if(e.Source is Control source_control && 
+                        source_control.TryGetVisualAncestor<Thumb>(out var thumb)) {
+                        SetIsThumbDragging(control, true);
+                        e.GetCurrentPoint(track).Pointer.Capture(control);
+                    } else {
+                        SetIsThumbDragging(control, false);
+                    }
+                }
+                e.Handled = true;
+            }
+
+            void PreviewTrackPointerMovedHandler(object? s, PointerEventArgs e) {
+                if (s is Track track && 
+                    track.Tag is Control control && 
+                    GetIsThumbDragging(control)) {
+
+                    //e.GetCurrentPoint(track).Pointer.Capture(track);
+                    var track_mp = e.GetCurrentPoint(track).Position;
+                    SetTrackValue(track, track_mp);
+                }
+                e.Handled = true;
+            }
+
+            void PreviewTrackPointerReleasedHandler(object? s, PointerReleasedEventArgs e) {
+                if (s is Track track &&
+                    track.Tag is Control control) {
+                    //
+                    
+                    if(GetIsThumbDragging(control)) {
+                        var track_mp = e.GetCurrentPoint(track).Position;
+                        SetTrackValue(track, track_mp);
+                        SetIsThumbDragging(control, false);
+                    }
+                    e.GetCurrentPoint(track).Pointer.Capture(null);
+                    
+
+                    
+                }
+                e.Handled = true;
+            }
+
+            void SetTrackValue(Track track, Point track_mp) {
+                if(track.Tag is Control control) {
+                    if (track.Orientation == Orientation.Horizontal) {
+                        SetVelocityX(control, 0);
+
+                        double new_x = (track_mp.X / track.Bounds.Width) * track.Maximum;
+                        new_x = Math.Min(Math.Max(track.Minimum, new_x), track.Maximum);
+                        SetScrollOffsetX(control, new_x);
+                    } else {
+                        SetVelocityY(control, 0);
+
+                        double new_y = (track_mp.Y / track.Bounds.Height) * track.Maximum;
+                        new_y = Math.Min(Math.Max(track.Minimum, new_y), track.Maximum);
+                        SetScrollOffsetY(control, new_y);
+                    }
                 }
             }
 
-            void PreviewPointerPressedHandler(object? s, PointerPressedEventArgs e) {
+            #endregion
+
+
+            void PreviewControlPointerPressedHandler(object? s, PointerPressedEventArgs e) {
                 // when user clicks always halt any animated scrolling
-                if(s is Control control) {
-                    if(e.GetCurrentPoint(control).Properties.IsLeftButtonPressed) {
+                if (s is Control control) {
+                    if (e.GetCurrentPoint(control).Properties.IsLeftButtonPressed) {
                         SetVelocityX(control, 0);
                         SetVelocityY(control, 0);
                     }
@@ -341,19 +484,20 @@ namespace MonkeyPaste.Avalonia {
                     double v0 = 0;
                     double damp = 0;
                     int lastWheelDelta = 0;
+                    double vFactor = 120;
                     
                     if(isScrollX) {                        
                         damp = GetWheelDampeningX(control);
-                        v0 = e.Delta.Y > 0 ? 120 : -120;
+                        v0 = e.Delta.Y * -vFactor;
                         if (v0 == 0 && e.Delta.X != 0) {
-                            v0 = e.Delta.X > 0 ? 120 : -120;
+                            v0 = e.Delta.X * -vFactor;
                         }
                         maxOffset = sv.Extent.Width - sv.Viewport.Width;
                         scrollOffset = GetScrollOffsetX(control);
                         lastWheelDelta = MpAttachedPropertyHelpers.GetInstanceProperty<int>(control, "lastWheelDeltaX");
                     } else {
                         damp = GetWheelDampeningY(control);
-                        v0 = e.Delta.Y > 0 ? -120 : 120;
+                        v0 = e.Delta.Y * -vFactor;
                         maxOffset = sv.Extent.Height - sv.Viewport.Height;
                         scrollOffset = GetScrollOffsetY(control);
                         lastWheelDelta = MpAttachedPropertyHelpers.GetInstanceProperty<int>(control, "lastWheelDeltaY");
@@ -363,7 +507,7 @@ namespace MonkeyPaste.Avalonia {
                                        ((lastWheelDelta < 0 && v0 > 0) ||
                                        (lastWheelDelta > 0 && v0 < 0));
                     if (isDirChange) {
-                        v0 = 0;
+                        //v0 = 0;
                     }
 
                     double v = v0 - (v0 * damp);
@@ -383,6 +527,7 @@ namespace MonkeyPaste.Avalonia {
             void HandleWorldTimerTick(object sender, EventArgs e) {
                 if(sender is DispatcherTimer timer && 
                    timer.Tag is Control control &&
+                   !GetIsThumbDragging(control) &&
                    GetScrollViewer(control) is ScrollViewer sv) {
                     if(control.IsUnsetValue()) {
                         Debugger.Break();
@@ -409,9 +554,6 @@ namespace MonkeyPaste.Avalonia {
                         vy = 0;
                     }
 
-                    //if (MpClipTrayViewModel.Instance.IsThumbDragging) {
-                    //    return;
-                    //}
                     sv.ScrollToHorizontalOffset(scrollOffsetX);
                     sv.ScrollToVerticalOffset(scrollOffsetY);
 

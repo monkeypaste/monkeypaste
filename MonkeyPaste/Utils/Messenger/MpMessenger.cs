@@ -24,6 +24,7 @@ namespace MonkeyPaste {
         MainWindowHiding,
         MainWindowHid,
         MainWindowOrientationChanged,
+        MainWindowSizeChanged,
         ItemInitialized,
         ItemDragBegin,
         ItemDragEnd,

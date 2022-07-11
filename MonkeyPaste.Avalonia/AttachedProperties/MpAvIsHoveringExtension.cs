@@ -11,6 +11,7 @@ using Avalonia.VisualTree;
 using MonkeyPaste.Common.Avalonia;
 using System.Runtime.Intrinsics.Arm;
 using Avalonia.Media.Immutable;
+using Avalonia.Controls.Shapes;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvIsHoveringExtension {
@@ -227,7 +228,7 @@ namespace MonkeyPaste.Avalonia {
                 AvaloniaObject ao;
                 object dc;
                 if (s is StyledElement se) {
-                    ao = se;
+                    ao = se; 
                     dc = se.DataContext; 
                 } else {
                     return;
@@ -259,13 +260,18 @@ namespace MonkeyPaste.Avalonia {
                         //img = elm.GetVisualDescendent<Image>();
                     }
                     if (img == null) {
-                        if (ao is Border b) {
-                            if (b.Background is ImageBrush imgBrush) {
-                               // imgBrush.Source = (imgBrush.Source as IImage).Tint(hoverBrush);
-                            } else {
-                                b.Background = hoverBrush;
+                        if(ao is Control control) {
+                            if(control.TryGetVisualDescendant<Path>(out Path path)) {
+                                path.Fill = hoverBrush;
+                            } else if (ao is Border b) {
+                                if (b.Background is ImageBrush imgBrush) {
+                                    // imgBrush.Source = (imgBrush.Source as IImage).Tint(hoverBrush);
+                                } else {
+                                    b.Background = hoverBrush;
+                                }
                             }
                         }
+                        
                         return;
                     }
                     //img.Source = (img.Source as IImage).Tint(hoverBrush);
@@ -299,16 +305,20 @@ namespace MonkeyPaste.Avalonia {
                         img = control.GetVisualDescendants().FirstOrDefault(x => x is Image) as Image;
                     }
                     if (img == null) {
-                        if (ao is Border b) {
-                            if (b.Background is ImageBrush imgBrush) {
-                                if (GetIsSelected(ao) && GetSelectedBrush(ao) != null) {
-                                    //imgBrush.ImageSource = (imgBrush.ImageSource as BitmapSource).Tint(GetSelectedBrush(ao));
-                                } else {
-                                    //imgBrush.ImageSource = (imgBrush.ImageSource as BitmapSource).Tint(defaultBrush);
+                        if(ao is Control control) {
+                            if (control.TryGetVisualDescendant<Path>(out Path path)) {
+                                path.Fill = defaultBrush;
+                            } else if (ao is Border b) {
+                                if (b.Background is ImageBrush imgBrush) {
+                                    if (GetIsSelected(ao) && GetSelectedBrush(ao) != null) {
+                                        //imgBrush.ImageSource = (imgBrush.ImageSource as BitmapSource).Tint(GetSelectedBrush(ao));
+                                    } else {
+                                        //imgBrush.ImageSource = (imgBrush.ImageSource as BitmapSource).Tint(defaultBrush);
 
+                                    }
+                                } else {
+                                    b.Background = defaultBrush;
                                 }
-                            } else {
-                                b.Background = defaultBrush;
                             }
                         }
                         return;

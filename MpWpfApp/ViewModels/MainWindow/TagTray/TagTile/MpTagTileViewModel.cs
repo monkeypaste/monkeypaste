@@ -749,7 +749,7 @@ namespace MpWpfApp {
                 TagClipCount++;
 
                 Task.Run(async () => {
-                    var ci = await MpDataModelProvider.GetCopyItemById(cit.CopyItemId);
+                    var ci = await MpDataModelProvider.GetCopyItemByIdAsync(cit.CopyItemId);
                     OnCopyItemLinked?.Invoke(this, ci);
                 });
             } else if(e is MpCopyItem ci && IsAllTag) {
@@ -773,7 +773,7 @@ namespace MpWpfApp {
             } else if (e is MpCopyItemTag cit && cit.TagId == TagId) {
                 TagClipCount--;
                 Task.Run(async () => {                    
-                    var ci = await MpDataModelProvider.GetCopyItemById(cit.CopyItemId);
+                    var ci = await MpDataModelProvider.GetCopyItemByIdAsync(cit.CopyItemId);
                     if(ci != null) {
                         OnCopyItemUnlinked?.Invoke(this, ci);
                     }

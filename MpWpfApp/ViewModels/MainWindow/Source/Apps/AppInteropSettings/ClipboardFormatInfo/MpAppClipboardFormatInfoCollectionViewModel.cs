@@ -65,7 +65,7 @@ namespace MpWpfApp {
         public async Task Init(int appId) {
             IsBusy = true;
 
-            var aisl = await MpDataModelProvider.GetAppClipboardFormatInfosByAppId(appId);
+            var aisl = await MpDataModelProvider.GetAppClipboardFormatInfosByAppIdAsync(appId);
 
             for (int i = 0; i < _DefaultFormats.Length; i++) {
                 MpClipboardFormatType defType = _DefaultFormats[i];

@@ -114,7 +114,7 @@ namespace MonkeyPaste {
             string urlIconPath = "",
             int urlIconId = 0,
             bool suppressWrite = false) {
-            var dupCheck = await MpDataModelProvider.GetUrlByPath(urlPath);
+            var dupCheck = await MpDataModelProvider.GetUrlByPathAsync(urlPath);
             if(dupCheck != null) {
                 dupCheck = await MpDb.GetItemAsync<MpUrl>(dupCheck.Id);
                 return dupCheck;

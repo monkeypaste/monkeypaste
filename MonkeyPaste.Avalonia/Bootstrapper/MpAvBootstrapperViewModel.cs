@@ -48,6 +48,7 @@ namespace MonkeyPaste.Avalonia {
                     //new MpBootstrappedItemViewModel(this,typeof(MpClipboardHandlerCollectionViewModel)),
 
                     ////new MpBootstrappedItemViewModel(this,typeof(MpClipboardManager)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvSettingsWindowViewModel)),
 
                     new MpBootstrappedItemViewModel(this,typeof(MpAvClipTrayViewModel)),
 

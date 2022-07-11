@@ -1,0 +1,322 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+    <s:String x:Key="AppImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/monkey.png
+    </s:String>
+    <s:String x:Key="NoEntryImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/noentry.png
+    </s:String>
+    <s:String x:Key="RobotClawImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/robotclaw.png
+    </s:String>
+    <s:String x:Key="BrainImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/brain.png
+    </s:String>
+    <s:String x:Key="BrainWhiteImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/brainwhite.png
+    </s:String>
+    <s:String x:Key="NoneClickImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/noneclick.png
+    </s:String>
+    <s:String x:Key="LeftClickImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/leftclick.png
+    </s:String>
+    <s:String x:Key="RightClickImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/rightclick.png
+    </s:String>
+    <s:String x:Key="BothClickImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/bothclick.png
+    </s:String>
+    <s:String x:Key="AppendImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/append.png
+    </s:String>
+    <s:String x:Key="AppendLineImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/appendline.png
+    </s:String>
+    <s:String x:Key="AppendRunImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/caret.png
+    </s:String>
+    <s:String x:Key="HelpImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/help.png
+    </s:String>
+    <s:String x:Key="PlayImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/play.png
+    </s:String>
+    <s:String x:Key="PauseImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/pause.png
+    </s:String>
+    <s:String x:Key="CogImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/cog.png
+    </s:String>
+    <s:String x:Key="LockImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/lock.png
+    </s:String>
+    <s:String x:Key="ExecuteImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/execute.png
+    </s:String>
+    <s:String x:Key="PasteImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/paste.png
+    </s:String>
+    <s:String x:Key="DeleteImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/Delete.png
+    </s:String>
+    <s:String x:Key="EditImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/edit.png
+    </s:String>
+    <s:String x:Key="CaretImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/caret.png
+    </s:String>
+    <s:String x:Key="EditContentImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/caret.png
+    </s:String>
+    <s:String x:Key="ToolsImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/tools.png
+    </s:String>
+    <s:String x:Key="RenameImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/rename.png
+    </s:String>
+    <s:String x:Key="DuplicateImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/duplicate.png
+    </s:String>
+    <s:String x:Key="MergeImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/merge.png
+    </s:String>
+    <s:String x:Key="EmailImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/email.png
+    </s:String>
+    <s:String x:Key="QrImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/qr.png
+    </s:String>
+    <s:String x:Key="SpeakImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/speak.png
+    </s:String>
+    <s:String x:Key="WebImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/web.png
+    </s:String>
+    <s:String x:Key="SearchImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/search.png
+    </s:String>
+    <s:String x:Key="GoogleImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/googleImage.png
+    </s:String>
+    <s:String x:Key="BingImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/bingImage.png
+    </s:String>
+    <s:String x:Key="DuckImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/duckduckgoImage.png
+    </s:String>
+    <s:String x:Key="YandexImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/yandexImage.png
+    </s:String>
+    <s:String x:Key="SelectionImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/selection.png
+    </s:String>
+    <s:String x:Key="BringToFrontImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/bringToFront.png
+    </s:String>
+    <s:String x:Key="SendToBackImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/sendToBack.png
+    </s:String>
+    <s:String x:Key="SelectAllImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/selectall.png
+    </s:String>
+    <s:String x:Key="InvertSelectionImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/invertSelection.png
+    </s:String>
+    <s:String x:Key="HotkeyImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/joystick2.png
+    </s:String>
+    <s:String x:Key="HotkeyActiveImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/joystickactive2.png
+    </s:String>
+    <s:String x:Key="PasteToAppImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/bullseye.png
+    </s:String>
+    <s:String x:Key="BullsEyeImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/bullseye.png
+    </s:String>
+    <s:String x:Key="PinToCollectionImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/tag.png
+    </s:String>
+    <s:String x:Key="OpenEyeImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/eye.png
+    </s:String>
+    <s:String x:Key="ClosedEyeImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/eye_closed.png
+    </s:String>
+    <s:String x:Key="TranslateImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/translate.png
+    </s:String>
+    <s:String x:Key="UserImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/user.png
+    </s:String>
+    <s:String x:Key="SlidersImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/sliders.png
+    </s:String>
+    <s:String x:Key="ShieldImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/shield.png
+    </s:String>
+    <s:String x:Key="SignOutImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/signout.png
+    </s:String>
+    <s:String x:Key="CopyImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/copy.png
+    </s:String>
+    <s:String x:Key="WarningImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/warning.png
+    </s:String>
+    <s:String x:Key="SaveImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/save.png
+    </s:String>
+    <s:String x:Key="ResetImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/reset.png
+    </s:String>
+    <s:String x:Key="AscendingImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/asc_black.png
+    </s:String>
+    <s:String x:Key="DecendingImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/desc_black.png
+    </s:String>
+    <s:String x:Key="AscendingImage_Disabled">
+        avares://MonkeyPaste.Avalonia/Assets/Images/asc_gray.png
+    </s:String>
+    <s:String x:Key="DecendingImage_Disabled">
+        avares://MonkeyPaste.Avalonia/Assets/Images/desc_gray.png
+    </s:String>
+    <s:String x:Key="FrameGripTile">
+        avares://MonkeyPaste.Avalonia/Assets/Images/frame_grip.png
+    </s:String>
+    <s:String x:Key="TrashCanImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/trashcan.png
+    </s:String>
+    <s:String x:Key="AddImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/add.png
+    </s:String>
+    <s:String x:Key="PinImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/pin.png
+    </s:String>
+    <s:String x:Key="PinOverImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/pinover.png
+    </s:String>
+    <s:String x:Key="PinDownImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/pindown.png
+    </s:String>
+    <s:String x:Key="PinDownOverImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/pindownover.png
+    </s:String>
+    <s:String x:Key="PlusImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/add2.png
+    </s:String>
+    <s:String x:Key="MinusImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/minus2.png
+    </s:String>
+    <s:String x:Key="BoltImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/bolt.png
+    </s:String>
+    <s:String x:Key="ScalesImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/scales.png
+    </s:String>
+    <s:String x:Key="HighlighterImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/highlighter.png
+    </s:String>
+    <s:String x:Key="FolderEventImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/fileSystemEvent.png
+    </s:String>
+    <s:String x:Key="ChainImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/chain.png
+    </s:String>
+    <s:String x:Key="CheckImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/check.png
+    </s:String>
+    <s:String x:Key="WhiteCircleImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/whitecircle.png
+    </s:String>
+    <s:String x:Key="DownArrowImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/down_black.png
+    </s:String>
+    <s:String x:Key="ImageImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/image_Image.png
+    </s:String>
+    <s:String x:Key="ClipboardImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/clipboard.png
+    </s:String>
+    <s:String x:Key="AlarmClockImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/alarmClock.png
+    </s:String>
+    <s:String x:Key="BeakerImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/beaker.png
+    </s:String>
+    <s:String x:Key="AsteriskImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/asterisk.png
+    </s:String>
+    <s:String x:Key="QuestionMarkImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/question.png
+    </s:String>
+    <s:String x:Key="EmptyImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/transparent.png
+    </s:String>
+    <s:String x:Key="WandImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/wand.png
+    </s:String>
+    <s:String x:Key="IndentImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/indent.png
+    </s:String>
+    <s:String x:Key="CloseImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/close2.png
+    </s:String>
+    <s:String x:Key="CloseOverImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/close1.png
+    </s:String>
+    <s:String x:Key="ErrorImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/delete2.png
+    </s:String>
+    <s:String x:Key="FilterImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/filter.png
+    </s:String>
+    <s:String x:Key="SheepImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/sheep.png
+    </s:String>
+    <s:String x:Key="GoogleSignInImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/google_signin.png
+    </s:String>
+    <s:String x:Key="ButterflyImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/butterfly.png
+    </s:String>
+    <s:String x:Key="JigsawImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/jigsaw.png
+    </s:String>
+    <s:String x:Key="KeyboardImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/keyboard.png
+    </s:String>
+    <s:String x:Key="IceCubeImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/icecube.png
+    </s:String>
+    <s:String x:Key="YinYangImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/yinyang.png
+    </s:String>
+    <s:String x:Key="ContactImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/contact.png
+    </s:String>
+    <s:String x:Key="FindReplaceImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/replace.png
+    </s:String>
+    <s:String x:Key="TextFormatImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/text.png
+    </s:String>
+    <s:String x:Key="HtmlFormatImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/html.png
+    </s:String>
+    <s:String x:Key="RtfFormatImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/rtf.png
+    </s:String>
+    <s:String x:Key="CsvFormatImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/csv.png
+    </s:String>
+    <s:String x:Key="BitmapFormatImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/bitmap.png
+    </s:String>
+    <s:String x:Key="FileDropFormatImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/folder.png
+    </s:String>
+</ResourceDictionary>

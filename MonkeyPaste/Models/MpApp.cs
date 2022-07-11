@@ -117,7 +117,7 @@ namespace MonkeyPaste {
                 appPath = appPath.ToLower();
             }
 
-            var dupApp = await MpDataModelProvider.GetAppByPath(appPath);
+            var dupApp = await MpDataModelProvider.GetAppByPathAsync(appPath);
             if (dupApp != null) {
                 //dupApp = await MpDb.GetItemAsync<MpApp>(dupApp.Id);
                 if(dupApp.IconId != iconId && iconId > 0) {
@@ -130,7 +130,7 @@ namespace MonkeyPaste {
             }
             //if app doesn't exist create image,icon,app and source
 
-            var thisDevice = await MpDataModelProvider.GetUserDeviceByGuid(MpPrefViewModel.Instance.ThisDeviceGuid);
+            var thisDevice = await MpDataModelProvider.GetUserDeviceByGuidAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
 
             if(thisDevice == null) {
                 //not sure why this happens but duplicating MpDb.InitDefaultData...

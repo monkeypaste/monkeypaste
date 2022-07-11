@@ -215,7 +215,7 @@ namespace MpWpfApp {
             MpConsole.WriteLine("Action Collectoin Init!");
 
             Items.Clear();
-            var tal = await MpDataModelProvider.GetAllTriggerActions();
+            var tal = await MpDataModelProvider.GetAllTriggerActionsAsync();
 
             foreach (var ta in tal) {
                 var tavm = await CreateTriggerViewModel(ta);

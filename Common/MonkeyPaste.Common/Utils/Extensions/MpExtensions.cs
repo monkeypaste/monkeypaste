@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.IO;
+using System.Collections;
 
 namespace MonkeyPaste.Common {
 
@@ -106,10 +107,16 @@ namespace MonkeyPaste.Common {
             }
             return queue.Dequeue();
         }
+        public static void ForEach<T>(this IEnumerable source, Action<T> action) {
+            foreach (T item in source) {
+                action(item);
+            }
+        }
 
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) {
-            foreach (T item in source)
+            foreach (T item in source) {
                 action(item);
+            }
         }
 
         public static List<T> GetRange<T>(this ObservableCollection<T> collection, int startIdx, int count) {

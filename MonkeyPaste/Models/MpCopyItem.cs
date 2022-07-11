@@ -82,11 +82,11 @@ namespace MonkeyPaste {
                 case MpCopyItemPropertyPathType.PasteCount:
                     return ci.GetPropertyValue(queryPathType.ToString());
                 case MpCopyItemPropertyPathType.SourceDeviceType:
-                    var deviceTypeInt = await MpDataModelProvider.GetSortableCopyItemViewProperty<int>(ci.Id, queryPathType.ToString());
+                    var deviceTypeInt = await MpDataModelProvider.GetSortableCopyItemViewPropertyAsync<int>(ci.Id, queryPathType.ToString());
                     return (MpUserDeviceType)deviceTypeInt;
                 default:
                     //UrlPath,UrlTitle,UrlDomainPath,AppPath,AppName,SourceDeviceName,SourceDeviceType
-                    var resultStr = await MpDataModelProvider.GetSortableCopyItemViewProperty<string>(ci.Id, queryPathType.ToString());
+                    var resultStr = await MpDataModelProvider.GetSortableCopyItemViewPropertyAsync<string>(ci.Id, queryPathType.ToString());
                     return resultStr;
 
             }
@@ -271,7 +271,7 @@ namespace MonkeyPaste {
             double h = 0,
             int dataObjectId = 0,
             bool suppressWrite = false) {
-            var dupCheck = await MpDataModelProvider.GetCopyItemByData(data);
+            var dupCheck = await MpDataModelProvider.GetCopyItemByDataAsync(data);
             if (MpPrefViewModel.Instance.IgnoreNewDuplicates && dupCheck != null && !suppressWrite) {
                 //flipping pk sign notifies AddItemThread item already exists and flips it back
                 dupCheck.Id *= -1;
@@ -487,7 +487,7 @@ namespace MonkeyPaste {
                         newCopyItem.ItemDescription = li.AffectedColumnValue;
                         break;
                     case "fk_MpSourceId":
-                        var source = await MpDataModelProvider.GetSourceByGuid(li.AffectedColumnValue);
+                        var source = await MpDataModelProvider.GetSourceByGuidAsync(li.AffectedColumnValue);
                         if(source != null) {
                             source = await MpDb.GetItemAsync<MpSource>(source.Id);
                         }

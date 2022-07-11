@@ -78,7 +78,7 @@ namespace MonkeyPaste {
 
         public async Task Update(List<MpTextTemplate> updatedTemplates, List<string> removedGuids) {            
             if(removedGuids != null) {
-                var rtl = await MpDataModelProvider.GetTextTemplatesByGuids(removedGuids);
+                var rtl = await MpDataModelProvider.GetTextTemplatesByGuidsAsync(removedGuids);
                 await Task.WhenAll(rtl.Select(x => x.DeleteFromDatabaseAsync()));
             }
 

@@ -46,6 +46,14 @@ namespace MonkeyPaste.Avalonia {
 
         public double ScrollOffsetY { get; set; }
 
+        public double MaxScrollOffsetX { get; set; }
+
+        public double MaxScrollOffsetY { get; set; }
+
+        public double ZoomFactor { get; set; } = 250;
+
+        //public double ZoomFactorY { get; set; } = 250;
+
         #endregion
 
         #region Appearance
@@ -165,6 +173,9 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsGridLayout):
                     ToggleLayoutTypeCommand.Execute(null);
+                    break;
+                case nameof(ZoomFactor):
+                    MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayLayoutChanged);
                     break;
             }
         }

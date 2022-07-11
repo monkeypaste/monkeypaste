@@ -1,0 +1,77 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="using:MonkeyPaste.Avalonia"
+        xmlns:pcl="using:MonkeyPaste"
+        xmlns:webview="clr-namespace:WebViewControl;assembly=WebViewControl.Avalonia"
+        mc:Ignorable="d"
+        d:DesignWidth="800"
+        d:DesignHeight="450"
+        x:Class="MonkeyPaste.Avalonia.MpAvMainWindow"
+        x:Name="AvMainWindow"
+        x:DataType="local:MpAvMainWindowViewModel"
+        x:CompileBindings="False"
+        DataContext="{x:Static local:MpAvMainWindowViewModel.Instance}"
+        WindowState="Normal"
+        SystemDecorations="None"
+        ClipToBounds="True"
+        Background="Transparent"
+        ShowInTaskbar="False"
+        Width="{Binding MainWindowWidth}"
+        Height="{Binding MainWindowHeight}"
+        TransparencyLevelHint="Transparent"
+        Title="Monkey Paste">
+    <Grid x:Name="MainWindowGrid"
+          RowDefinitions="20,40,*"
+          Width="{Binding MainWindowWidth}"
+          Height="{Binding MainWindowHeight}">
+        <Grid.Background>
+            <SolidColorBrush Color="Pink"
+                             Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
+        </Grid.Background>
+
+        <!--  Title Menu  -->
+        <local:MpAvMainWindowTitleMenuView x:Name="MainWindowTitleView"
+                                           Grid.Row="0"
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Stretch"
+                                           DataContext="{Binding}" />
+
+        <!--  Filter Menu  -->
+        <Grid x:Name="MainWindowFilterGrid"
+              Grid.Row="1"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
+            <Grid.Background>
+                <SolidColorBrush Color="Purple"
+                                 Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
+            </Grid.Background>
+        </Grid>
+
+        <!--  Tray Row  -->
+        <Grid x:Name="MainWindowTrayGrid"
+              Grid.Row="2"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
+            <Grid.Background>
+                <SolidColorBrush Color="DarkViolet"
+                                 Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
+            </Grid.Background>
+            <local:MpAvClipTrayView HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    DataContext="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+            <!--<webview:WebView x:Name="webview" Address="file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html" />-->
+        </Grid>
+
+        <!--  Resize Handle  -->
+        <local:MpAvMainWindowResizerView x:Name="MainWindowResizerView"
+                                         RenderTransformOrigin="0,0"
+                                         IsVisible="{Binding IsResizerVisible}"
+                                         DataContext="{Binding}">
+            <local:MpAvMainWindowResizerView.RenderTransform>
+                <TranslateTransform />
+            </local:MpAvMainWindowResizerView.RenderTransform>
+        </local:MpAvMainWindowResizerView>
+    </Grid>
+</Window>

@@ -42,13 +42,13 @@ namespace MonkeyPaste.Avalonia {
                 //Mouse.OverrideCursor = cursor;
                 //Mouse.PrimaryDevice.OverrideCursor = cursor;
 
-                if (MainWindow.Instance == null) {
+                if (MpAvMainWindow.Instance == null) {
                     // NOTE occurs on init
                     return;
                 }
                 //Application.Current.MainWindow.ForceCursor = true;
                 //Application.Current.MainWindow.Cursor = cursor;
-                MainWindow.Instance.Cursor = cursor;
+                MpAvMainWindow.Instance.Cursor = cursor;
             } else {
                 MpPlatformWrapper.Services.MainThreadMarshal.RunOnMainThread(() => SetCursor(newCursor));
                 //MpHelpers.RunOnMainThread(()=>SetCursor(newCursor));

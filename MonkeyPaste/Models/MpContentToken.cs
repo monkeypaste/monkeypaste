@@ -71,7 +71,7 @@ namespace MonkeyPaste {
             int w = 0,
             int h = 0) {
 
-            var dupCheck = await MpDataModelProvider.GetToken(copyItemId,actionId,matchData);
+            var dupCheck = await MpDataModelProvider.GetTokenAsync(copyItemId,actionId,matchData);
             if (dupCheck != null) {
                 MpConsole.WriteTraceLine("Token with same data already defined");
                 return dupCheck;

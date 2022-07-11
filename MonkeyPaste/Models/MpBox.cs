@@ -68,7 +68,7 @@ namespace MonkeyPaste {
             int boxObjId = 0,
             double x = 0, double y = 0, double w = 0, double h = 0,
             bool suppressWrite = false) {
-            var dupCheck = await MpDataModelProvider.GetBoxByTypeAndObjId(boxType, boxObjId);
+            var dupCheck = await MpDataModelProvider.GetBoxByTypeAndObjIdAsync(boxType, boxObjId);
             if(dupCheck != null) {
                 MpConsole.WriteTraceLine($"Duplicate box attempt detected for Type:'{boxType}' Id:'{boxObjId}', ignoring creating new");
                 return dupCheck;

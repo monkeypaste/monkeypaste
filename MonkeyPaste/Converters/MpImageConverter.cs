@@ -1,6 +1,6 @@
 ﻿using FFImageLoading.Forms;
 using SkiaSharp;
-using SkiaSharp.Views.Forms;
+//using SkiaSharp.Views.Forms;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

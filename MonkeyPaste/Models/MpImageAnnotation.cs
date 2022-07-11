@@ -65,7 +65,7 @@ namespace MonkeyPaste {
             string description = "",
             string hexColor = "",
             bool suppressWrite = false) {
-            var dupCheck = await MpDataModelProvider.GetImageAnnotationByData(cid, x, y, w, h, c, label, description,hexColor);
+            var dupCheck = await MpDataModelProvider.GetImageAnnotationByDataAsync(cid, x, y, w, h, c, label, description,hexColor);
             if(dupCheck != null) {
                 MpConsole.WriteTraceLine($"Duplicate detected image object detected ignoring create");
                 return dupCheck;

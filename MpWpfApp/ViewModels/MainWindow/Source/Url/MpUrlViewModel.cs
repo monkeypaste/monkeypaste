@@ -192,9 +192,9 @@ namespace MpWpfApp {
             if (confirmExclusionResult == MessageBoxResult.Yes) {
                 IsBusy = true;
                 if(isDomain) {
-                    clipsFromUrl = await MpDataModelProvider.GetCopyItemsByUrlDomain(UrlDomainPath);
+                    clipsFromUrl = await MpDataModelProvider.GetCopyItemsByUrlDomainAsync(UrlDomainPath);
                 } else {
-                    clipsFromUrl = await MpDataModelProvider.GetCopyItemsByUrlId(UrlId);
+                    clipsFromUrl = await MpDataModelProvider.GetCopyItemsByUrlIdAsync(UrlId);
                 }                
             } else if (confirmExclusionResult == MessageBoxResult.Cancel) {
                 wasCanceled = true;

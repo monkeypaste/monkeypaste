@@ -171,7 +171,7 @@ namespace MonkeyPaste {
             //    return null;
             //}
             if(sortOrderIdx == 0 && parentId > 0) {
-                sortOrderIdx = await MpDataModelProvider.GetChildActionCount(parentId);
+                sortOrderIdx = await MpDataModelProvider.GetChildActionCountAsync(parentId);
             }
             if(!suppressWrite && actionType == MpActionType.Trigger && iconId == 0) {
                 string iconStr = null;

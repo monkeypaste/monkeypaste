@@ -178,7 +178,7 @@ namespace MpWpfApp {
             ClipboardFormatInfos = new MpAppClipboardFormatInfoCollectionViewModel(this);
             await ClipboardFormatInfos.Init(AppId);
 
-            MpAppPasteShortcut aps = await MpDataModelProvider.GetAppPasteShortcut(AppId);
+            MpAppPasteShortcut aps = await MpDataModelProvider.GetAppPasteShortcutAsync(AppId);
             if(aps != null) {
                 PasteShortcutViewModel = new MpPasteShortcutViewModel(this);
                 await PasteShortcutViewModel.InitializeAsync(aps);
@@ -197,7 +197,7 @@ namespace MpWpfApp {
             IsBusy = true;
             bool wasCanceled = false;
 
-            var clipsFromApp = await MpDataModelProvider.GetCopyItemsByAppId(AppId);
+            var clipsFromApp = await MpDataModelProvider.GetCopyItemsByAppIdAsync(AppId);
 
             if (clipsFromApp != null && clipsFromApp.Count > 0) {
                 MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + AppName + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);

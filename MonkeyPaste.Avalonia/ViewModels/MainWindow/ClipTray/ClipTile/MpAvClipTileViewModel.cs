@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipTileViewModel : MpViewModelBase<MpAvClipTrayViewModel>,
@@ -57,6 +58,29 @@ namespace MonkeyPaste.Avalonia {
                     return MpSystemColors.Yellow;
                 }
                 return MpSystemColors.Transparent;
+            }
+        }
+
+        #endregion
+
+        #region Layout
+
+        public double MinSize {
+            get {
+                if (Parent.IsGridLayout) {
+                    return 1;// double.PositiveInfinity;
+                } else {
+                    return Parent.ZoomFactor;
+                }
+
+                //var ctrv = MpAvMainWindow.Instance.GetVisualDescendant<MpAvClipTrayView>();
+                //if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                //    double defaultHeight = ctrv.Bounds.Height - 10;
+                //    return defaultHeight * Parent.ZoomFactor;
+                //} else {
+                //    double defaultWidth = ctrv.Bounds.Width - 10;
+                //    return defaultWidth * Parent.ZoomFactor;
+                //}
             }
         }
 

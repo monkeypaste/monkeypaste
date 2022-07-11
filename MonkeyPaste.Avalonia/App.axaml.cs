@@ -2,20 +2,21 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Avalonia.Rendering;
-using MonkeyPaste.Common;
 using PropertyChanged;
+using System.Diagnostics;
+using System;
 using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class App : Application {
         public App() {
-            DataContext = new MpAvAppViewModel();
+            DataContext = MpAvAppViewModel.Instance;
         }
         public override void Initialize() {
-            AvaloniaXamlLoader.Load(this);            
+            AvaloniaXamlLoader.Load(this);
         }
 
         public override async void OnFrameworkInitializationCompleted() {
@@ -25,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
                 var bootstrapper = new MpAvBootstrapperViewModel();
                 await bootstrapper.InitAsync();
 
-                desktop.MainWindow = new MainWindow();
+                desktop.MainWindow = new MpAvMainWindow();
             }
 
             base.OnFrameworkInitializationCompleted();

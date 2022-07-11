@@ -71,7 +71,7 @@ namespace MpWpfApp {
             } else if (HasUserDefinedColor) {
                 HexColors = new ObservableCollection<string>(Enumerable.Repeat(Parent.CopyItemHexColor, 5));
             } else {
-                var tagColors = await MpDataModelProvider.GetTagColorsForCopyItem(Parent.CopyItemId);
+                var tagColors = await MpDataModelProvider.GetTagColorsForCopyItemAsync(Parent.CopyItemId);
                 tagColors.ForEach(x => HexColors.Insert(0, x));
             }
 

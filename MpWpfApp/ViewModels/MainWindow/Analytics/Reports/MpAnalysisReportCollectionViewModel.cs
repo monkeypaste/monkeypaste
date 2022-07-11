@@ -29,7 +29,7 @@ namespace MpWpfApp {
 
             IsBusy = true;
 
-            var ciTransactions = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemId(copyItemId);
+            var ciTransactions = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemIdAsync(copyItemId);
             foreach(var cit in ciTransactions) {
                 var rvm = await CreateReportViewModel(cit.ResponseJson);
                 Items.Add(rvm);

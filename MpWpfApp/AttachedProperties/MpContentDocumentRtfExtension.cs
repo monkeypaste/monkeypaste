@@ -624,7 +624,7 @@ namespace MpWpfApp {
             var loadedTemplateGuids = loadedTemplateElements.Select(x => (x.Tag as MpTextTemplate).Guid).Distinct();
 
             // verify template loaded in document exists, if does add to collection if not present on remove from document 
-            var loadedTemplateItems = await MpDataModelProvider.GetTextTemplatesByGuids(loadedTemplateGuids.ToList());
+            var loadedTemplateItems = await MpDataModelProvider.GetTextTemplatesByGuidsAsync(loadedTemplateGuids.ToList());
             var loadedTemplateGuids_toRemove = loadedTemplateGuids.Where(x => loadedTemplateItems.All(y => y.Guid != x));
             foreach (var templateGuid_toRemove in loadedTemplateGuids_toRemove) {
                 var templateElements_toRemove = loadedTemplateElements.Where(x => (x.Tag as MpTextTemplate).Guid == templateGuid_toRemove);
@@ -644,7 +644,7 @@ namespace MpWpfApp {
             //var templateEncodedRanges = GetEncodedTemplates(rtb.Document).ToArray();
 
             var templateEncodedGuids = templateEncodedRanges.Select(x => x.Text.Replace(MpTextTemplate.TextTemplateOpenToken, string.Empty).Replace(MpTextTemplate.TextTemplateCloseToken, string.Empty)).ToList();
-            var templateItems = await MpDataModelProvider.GetTextTemplatesByGuids(templateEncodedGuids);
+            var templateItems = await MpDataModelProvider.GetTextTemplatesByGuidsAsync(templateEncodedGuids);
 
             for (int i = 0; i < templateEncodedGuids.Count; i++) {
                 string templateGuid = templateEncodedGuids[i];
@@ -652,7 +652,7 @@ namespace MpWpfApp {
                 if (templateItems.All(x => x.Guid != templateGuid)) {
                     //Debugger.Break();
                     // when template is encoded in document but not referenced in MpTextTemplate
-                    var missingItem = await MpDataModelProvider.GetTextTemplateByGuid(templateGuid);
+                    var missingItem = await MpDataModelProvider.GetTextTemplateByGuidAsync(templateGuid);
                     if (missingItem == null) {
                         ctvm.CopyItemData = ctvm.CopyItemData.Replace(MpTextTemplate.TextTemplateOpenTokenRtf + templateGuid + MpTextTemplate.TextTemplateCloseTokenRtf, string.Empty);
                         templateEncodedRanges[i].Text = string.Empty;

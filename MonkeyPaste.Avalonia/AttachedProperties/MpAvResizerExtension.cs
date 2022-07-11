@@ -13,7 +13,7 @@ using PropertyChanged;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
-
+using MonkeyPaste.Common.Avalonia;
 using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
     public static class MpAvResizeExtension {
         #region Private Variables
 
-        private static Point _lastMousePosition, _mouseDownPosition;
+        private static MpPoint _lastMousePosition, _mouseDownPosition;
         #endregion
 
         #region Constants
@@ -191,6 +191,42 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        #region XFactor Property
+        public static double GetXFactor(AvaloniaObject obj) {
+            return obj.GetValue(XFactorProperty);
+        }
+
+        public static void SetXFactor(AvaloniaObject obj, double value) {
+            obj.SetValue(XFactorProperty, value);
+        }
+
+        public static readonly AttachedProperty<double>
+            XFactorProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, double>(
+            "XFactor",
+            1.0d,
+            false);
+
+        #endregion
+
+        #region YFactor Property
+        public static double GetYFactor(AvaloniaObject obj) {
+            return obj.GetValue(YFactorProperty);
+        }
+
+        public static void SetYFactor(AvaloniaObject obj, double value) {
+            obj.SetValue(YFactorProperty, value);
+        }
+
+        public static readonly AttachedProperty<double>
+            YFactorProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, double>(
+            "YFactor",
+            1.0d,
+            false);
+
+        #endregion
+
         #region CanResize Property
         public static bool GetCanResize(AvaloniaObject obj) {
             return obj.GetValue(CanResizeProperty);
@@ -232,23 +268,6 @@ namespace MonkeyPaste.Avalonia {
                 IsAnyResizing = isResizing;
             }
         }
-
-        #endregion
-
-        #region ResizerEdge Property
-        public static MpResizeEdgeType GetResizerEdge(AvaloniaObject obj) {
-            return obj.GetValue(ResizerEdgeProperty);
-        }
-
-        public static void SetResizerEdge(AvaloniaObject obj, MpResizeEdgeType value) {
-            obj.SetValue(ResizerEdgeProperty, value);
-        }
-
-        public static readonly AttachedProperty<MpResizeEdgeType>
-            ResizerEdgeProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, MpResizeEdgeType>(
-            "ResizerEdge",
-            MpResizeEdgeType.None);
 
         #endregion
 
@@ -350,14 +369,9 @@ namespace MonkeyPaste.Avalonia {
                     if (control.DataContext is MpISelectableViewModel svm) {
                         svm.IsSelected = true;
                     }
-                    //e.Pointer.Capture(control);
-                    //if (e.Pointer.Captured == control) 
-                    {
-                        SetIsResizing(control, true);
+                    SetIsResizing(control, true);
 
-                        _lastMousePosition = _mouseDownPosition = MainWindow.Instance.PointToScreen(e.GetCurrentPoint(null).Position).ToPoint(1);
-                        //_lastMousePosition = _mouseDownPosition = MpAvGlobalMouseHook.GlobalMouseLocation;
-                    }
+                    _lastMousePosition = _mouseDownPosition = MpAvMainWindow.Instance.PointToScreen(e.GetCurrentPoint(null).Position).ToPoint(1).ToPortablePoint();
                 }
             }
 
@@ -371,15 +385,13 @@ namespace MonkeyPaste.Avalonia {
                     
                     if (GetIsResizing(control)) {
                         Reset(control);
-                        //e.Pointer.Capture(null);
                     }
                 }
             }
 
             void PointerMovedHandler(object? s, PointerEventArgs e) {
                 if (s is Control control) {
-                    if (//e.Pointer.Captured != control ||
-                        !GetIsResizing(control) ||
+                    if (!GetIsResizing(control) ||
                        !GetIsEnabled(control) ||
                         _mouseDownPosition == null
                        //MpClipTrayViewModel.Instance.HasScrollVelocity
@@ -392,12 +404,10 @@ namespace MonkeyPaste.Avalonia {
                         return;
                     }
 
-                    var mw_mp = MainWindow.Instance.PointToScreen(e.GetCurrentPoint(null).Position).ToPoint(1);
+                    var mw_mp = MpAvMainWindow.Instance.PointToScreen(e.GetCurrentPoint(null).Position).ToPoint(1).ToPortablePoint();
                     if (GetIsResizing(control)) {
-                        //mw_mp = e.GetPosition(MainWindow.Instance).ToPortablePoint();
-                        
-                        var delta = new Point(mw_mp.X - _lastMousePosition.X, mw_mp.Y - _lastMousePosition.Y);
-                        Resize(control, delta.X, -delta.Y);
+                        var delta = _lastMousePosition - mw_mp; //new Point(mw_mp.X - _lastMousePosition.X, mw_mp.Y - _lastMousePosition.Y);
+                        Resize(control, delta.X, delta.Y);
                     }
                     _lastMousePosition = mw_mp;
                 }
@@ -429,59 +439,24 @@ namespace MonkeyPaste.Avalonia {
                 SetIsResizing(control, true);
             }
 
-            Resize(control, delta.X, delta.Y);
+            // Since x/y factor's are relative to window placement and this reset is not 
+            // apply factor here so it is flipped (called again in resize)
+            double dx = delta.X;
+            double dy = delta.Y;
+            dx *= GetXFactor(control);
+            dy *= GetYFactor(control);
+
+            Resize(control, dx, dy);
             Reset(control);
-
-            //if (AssociatedObject.DataContext is MpClipTileViewModel ctvm) {
-            //    if (defaultSize.X != MpClipTileViewModel.DefaultBorderWidth ||
-            //       defaultSize.Y != MpClipTileViewModel.DefaultBorderHeight) {
-            //        //Debugger.Break();
-
-            //        defaultSize = new Point(MpClipTileViewModel.DefaultBorderWidth, MpClipTileViewModel.DefaultBorderHeight);
-            //    }
-            //    bool resetToContentSize = false;
-            //    if (curSize.X == defaultSize.X) {
-            //        resetToContentSize = true;
-            //        if (AssociatedObject.DataContext is MpClipTileViewModel ctvm1) {
-            //            var ds = ctvm1.UnformattedContentSize;
-            //            defaultSize = new Point(ds.Width, ds.Height);
-            //        }
-
-            //    }
-
-            //    Vector delta = curSize - defaultSize;
-            //    Resize(-delta.X, -delta.Y);
-            //    Reset();
-
-            //    if (!resetToContentSize && !ctvm.IsPlaceholder) {
-            //        //MpClipTrayViewModel.Instance.PersistentUniqueWidthTileLookup.Remove(ctvm.CopyItemId);
-            //        MpClipTrayViewModel.Instance.RemovePersistentWidthById(ctvm.CopyItemId);
-            //    }
-
-            //} else if (AssociatedObject.DataContext is MpMainWindowViewModel mwvm) {
-            //    Vector delta = curSize - defaultSize;
-            //    Resize(-delta.X, -delta.Y);
-            //    Reset();
-            //}
         }
 
         public static void Resize(Control control, double dx, double dy) {
-            
-            //MpConsole.WriteLine("dx " + dx + " dy " + dy);
-            
-            if (GetResizerEdge(control) != MpResizeEdgeType.Left && 
-                GetResizerEdge(control) != MpResizeEdgeType.Right) {
-                dx = 0;
-            }
-            if (GetResizerEdge(control) != MpResizeEdgeType.Top &&
-                GetResizerEdge(control) != MpResizeEdgeType.Bottom) {
-                dy = 0;
-            }
+            dx *= GetXFactor(control);
+            dy *= GetYFactor(control);
+
             if (Math.Abs(dx + dy) < 0.1) {
                 return;
             }
-
-
             double bound_width = GetBoundWidth(control);
             double bound_height = GetBoundHeight(control);
             //MpConsole.WriteLine("Bound Width " + bound_width + " Bound Height " + bound_height);

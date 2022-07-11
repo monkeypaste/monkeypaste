@@ -70,7 +70,7 @@ namespace MonkeyPaste {
             double score = 1,
             string hexColor = "",
             bool suppressWrite = false) {
-            var dupCheck = await MpDataModelProvider.GetTextAnnotationByData(copyItemId, sourceId,label,matchValue,description); 
+            var dupCheck = await MpDataModelProvider.GetTextAnnotationByDataAsync(copyItemId, sourceId,label,matchValue,description); 
             if (dupCheck != null) {
                 MpConsole.WriteLine($"Duplicate Text Annotation detected during create, ignoring");
                 return dupCheck;

@@ -388,7 +388,7 @@ namespace MonkeyPaste {
             MpPrefViewModel.Instance.ThisAppSourceId = 5;
             MpPrefViewModel.Instance.ThisOsFileManagerSourceId = 4;
 
-            MpPrefViewModel.Instance.ThisUserDevice = await MpDataModelProvider.GetUserDeviceByGuid(MpPrefViewModel.Instance.ThisDeviceGuid);
+            MpPrefViewModel.Instance.ThisUserDevice = await MpDataModelProvider.GetUserDeviceByGuidAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
             
             MpPrefViewModel.Instance.ThisAppSource = await GetItemAsync<MpSource>(MpPrefViewModel.Instance.ThisAppSourceId);
             var thisAppApp = await MpDb.GetItemAsync<MpApp>(MpPrefViewModel.Instance.ThisAppSource.AppId);
@@ -1303,7 +1303,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task UpdateSyncHistory(string otherDeviceGuid, DateTime utcDtSentLocalChanges) {
-            MpSyncHistory sh = await MpDataModelProvider.GetSyncHistoryByDeviceGuid(otherDeviceGuid);
+            MpSyncHistory sh = await MpDataModelProvider.GetSyncHistoryByDeviceGuidAsync(otherDeviceGuid);
 
             if (sh == null) {
                 sh = new MpSyncHistory() {

@@ -15,35 +15,26 @@
     <local:MpAvUserControl.Resources>
         <RecyclePool x:Key="RecyclePool"
                      x:DataType="local:MpAvClipTileViewModel" />
-        <!--<DataTemplate x:Key="odd">
-            <TextBlock Classes="oddTemplate"
-                       Height="{Binding Height}"
-                       Text="{Binding Text}" />
-        </DataTemplate>
-        <DataTemplate x:Key="even">
-            <TextBlock Classes="evenTemplate"
-                       Height="{Binding Height}"
-                       Text="{Binding Text}" />
-        </DataTemplate>-->
-
-        <DataTemplate x:Key="ClipTileTemplate"
+        <DataTemplate x:Key="ClipTileHorizontalTemplate"
                       DataType="local:MpAvClipTileViewModel">
-            <local:MpAvClipTileView MinWidth="265"
-                                    MinHeight="265"
-                                    Focusable="True" />
-            <!--<TextBlock Text="Yo" />-->
+            <local:MpAvClipTileView Focusable="True"
+                                    MinHeight="{Binding MinSize}"
+                                    MinWidth="{Binding $self.Bounds.Height}" />
+        </DataTemplate>
+        <DataTemplate x:Key="ClipTileVerticalTemplate"
+                      DataType="local:MpAvClipTileViewModel">
+            <local:MpAvClipTileView Focusable="True"
+                                    MinWidth="{Binding MinSize}"
+                                    MinHeight="{Binding $self.Bounds.Width}" />
         </DataTemplate>
         <RecyclingElementFactory x:Key="elementFactory"
                                  RecyclePool="{StaticResource RecyclePool}"
                                  SelectTemplateKey="OnSelectTemplateKey">
             <RecyclingElementFactory.Templates>
-                <!--<StaticResource x:Key="odd"
-                                ResourceKey="odd" />
-                <StaticResource x:Key="even"
-                                ResourceKey="even" />-->
-
-                <StaticResource x:Key="ClipTileTemplate"
-                                ResourceKey="ClipTileTemplate" />
+                <StaticResource x:Key="ClipTileHorizontalTemplate"
+                                ResourceKey="ClipTileHorizontalTemplate" />
+                <StaticResource x:Key="ClipTileVerticalTemplate"
+                                ResourceKey="ClipTileVerticalTemplate" />
             </RecyclingElementFactory.Templates>
         </RecyclingElementFactory>
     </local:MpAvUserControl.Resources>
@@ -76,12 +67,10 @@
                                local:MpAvKineticScrollExtension.CanScrollX="{Binding CanScroll}"
                                local:MpAvKineticScrollExtension.CanScrollY="{Binding CanScroll}"
                                Background="Transparent"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Stretch"
                                Items="{Binding Items}"
                                ItemTemplate="{StaticResource elementFactory}">
-
-                    <!--<ItemsRepeater.RenderTransform>
-                        <TranslateTransform />
-                    </ItemsRepeater.RenderTransform>-->
                     <!--<ItemsRepeater.Layout>
                     -->
                     <!--<StackLayout Spacing="5"

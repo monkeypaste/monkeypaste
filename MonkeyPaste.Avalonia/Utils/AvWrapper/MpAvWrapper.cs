@@ -46,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitializeAsync(){
             string prefFileName = null;
             if (OperatingSystem.IsWindows()) {
-                prefFileName = "Pref.json";
+                prefFileName = "pref_win.json";
             }
             if (OperatingSystem.IsLinux()) {
                 prefFileName = "pref_x11.json";

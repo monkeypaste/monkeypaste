@@ -233,7 +233,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task UpdateSyncHistory(string otherDeviceGuid, DateTime utcDtSentLocalChanges) {
-            MpSyncHistory sh = await MpDataModelProvider.GetSyncHistoryByDeviceGuid(otherDeviceGuid);
+            MpSyncHistory sh = await MpDataModelProvider.GetSyncHistoryByDeviceGuidAsync(otherDeviceGuid);
 
             if (sh == null) {
                 sh = new MpSyncHistory() {

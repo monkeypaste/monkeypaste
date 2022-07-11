@@ -121,7 +121,7 @@ namespace MonkeyPaste {
             if(appId == 0 && copyItemTransactionId == 0) {
                 throw new Exception("Source must have an app or item associated");
             }
-            MpSource dupCheck = await MpDataModelProvider.GetSourceByMembers(appId, urlId, copyItemTransactionId);
+            MpSource dupCheck = await MpDataModelProvider.GetSourceByMembersAsync(appId, urlId, copyItemTransactionId);
             if(dupCheck != null) {
                 return dupCheck;
             }
