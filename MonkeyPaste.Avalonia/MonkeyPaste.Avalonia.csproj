@@ -32,11 +32,12 @@
     <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Base\" />
   </ItemGroup>
   <ItemGroup>
-    <AvaloniaXaml Remove="Styles\Converters\MpConvertersResourceDictionary.axaml" />
+    <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\MpAvClipTrayView_ItemsRepeater.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\ResizeHandle\MpAvMainWindowResizeHandle.axaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
+    <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\MpAvClipTrayView_ItemsRepeater.axaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
@@ -823,8 +824,6 @@
     <PackageReference Include="WebViewControl-Avalonia" Version="2.91.27" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\" />
-    <Folder Include="Styles\Converters\" />
     <Folder Include="Utils\Clipboard\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Base\" />

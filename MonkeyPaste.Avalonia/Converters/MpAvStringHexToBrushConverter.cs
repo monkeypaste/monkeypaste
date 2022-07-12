@@ -1,18 +1,15 @@
-﻿using System;
-using System.Globalization;
+﻿using Avalonia.Data.Converters;
 using MonkeyPaste.Common;
-using Avalonia.Data.Converters;
-using Avalonia.Data;
-using Avalonia.Media;
 using MonkeyPaste.Common.Avalonia;
-using System.Diagnostics;
+using System;
+using System.Globalization;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvStringHexToBrushConverter : IValueConverter {
         public static readonly MpAvStringHexToBrushConverter Instance = new();
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
-            if(value is string valStr && valStr.IsStringHexColor()) {
+            if (value is string valStr && valStr.IsStringHexColor()) {
                 var b = valStr.ToAvBrush();
                 if (parameter is string paramStr) {
                     double opacity = 1.0;

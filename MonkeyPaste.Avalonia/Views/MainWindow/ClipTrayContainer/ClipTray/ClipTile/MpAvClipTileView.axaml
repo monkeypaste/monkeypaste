@@ -6,19 +6,27 @@
                        xmlns:pcl="using:MonkeyPaste"
                        x:DataType="local:MpAvClipTileViewModel"
                        x:TypeArguments="local:MpAvClipTileViewModel"
-                       x:CompileBindings="False"
+                       x:CompileBindings="True"
                        mc:Ignorable="d"
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileView">
-    <Border Background="OldLace"
-            CornerRadius="5"
-            BorderThickness="5"
-            BorderBrush="{Binding TileBorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-            local:MpAvIsHoveringExtension.IsEnabled="True"
-            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-            local:MpAvIsHoveringExtension.IsSelected="{Binding IsSelected, Mode=TwoWay}"
-            Padding="4">
-        <TextBlock Text="{Binding CopyItemData}" />
-    </Border>
+  <Border HorizontalAlignment="Left"
+          VerticalAlignment="Top"
+          Width="{Binding MinSize}"
+          Height="{Binding MinSize}"
+          CornerRadius="10"
+          BorderThickness="5"
+          BorderBrush="{Binding TileBorderHexColor,
+                                  Converter={StaticResource StringHexToBrushConverter}}"
+          local:MpAvIsHoveringExtension.IsEnabled="True"
+          local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering,
+                                                               Mode=TwoWay}"
+          local:MpAvIsHoveringExtension.IsSelected="{Binding IsSelected,
+                                                               Mode=TwoWay}">
+    <Border.Background>
+      <SolidColorBrush Color="OldLace" Opacity="0.7" />
+    </Border.Background>
+    <TextBlock Text="{Binding CopyItemData}" />
+  </Border>
 </local:MpAvUserControl>

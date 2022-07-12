@@ -1,11 +1,7 @@
-﻿using Avalonia.Controls;
-using Avalonia.Rendering;
-using Google.Apis.PeopleService.v1.Data;
+﻿using Avalonia.Rendering;
 using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
@@ -28,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<MpIPlatformScreenInfo> Screens {
             get {
-                if(MpAvMainWindow.Instance == null) {
+                if (MpAvMainWindow.Instance == null) {
                     return new List<MpIPlatformScreenInfo>();
                 }
 
@@ -55,6 +51,10 @@ namespace MonkeyPaste.Avalonia {
                             PixelDensity = PixelScaling
                         });
             }
-        } 
+        }
+
+        public MpAvScreenInfoCollection() {
+
+        }
     }
 }

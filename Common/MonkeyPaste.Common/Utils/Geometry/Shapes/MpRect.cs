@@ -39,5 +39,9 @@
                    p.Y >= Top && p.Y <= Bottom;
         }
 
+        public override string ToString() {
+            return $"X:{Location.X} Y:{Location.Y} Width: {Width} Height: {Height}";
+        }
+
     }
 }

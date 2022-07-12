@@ -11,7 +11,7 @@
         x:Class="MonkeyPaste.Avalonia.MpAvMainWindow"
         x:Name="AvMainWindow"
         x:DataType="local:MpAvMainWindowViewModel"
-        x:CompileBindings="False"
+        x:CompileBindings="True"
         DataContext="{x:Static local:MpAvMainWindowViewModel.Instance}"
         WindowState="Normal"
         SystemDecorations="None"
@@ -59,8 +59,7 @@
                                  Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
             </Grid.Background>
             <local:MpAvClipTrayView HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    DataContext="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+                                    VerticalAlignment="Stretch" />
             <!--<webview:WebView x:Name="webview" Address="file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html" />-->
         </Grid>
 

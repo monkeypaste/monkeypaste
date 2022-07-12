@@ -1,20 +1,19 @@
-﻿using Avalonia.Controls.Primitives;
-using Avalonia.Layout;
+﻿using Avalonia;
+using Avalonia.Controls.Primitives;
 using MonkeyPaste.Common;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public enum MpAvClipTrayLayoutType { 
+    public enum MpAvClipTrayLayoutType {
         Stack,
         Grid
     }
 
-    public class MpAvClipTrayViewModel : MpSelectorViewModelBase<object,MpAvClipTileViewModel>,
+    public class MpAvClipTrayViewModel : MpSelectorViewModelBase<object, MpAvClipTileViewModel>,
         MpIBootstrappedItem {
         #region Private Variables
 
@@ -35,23 +34,43 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region View Models
-
+        public override ObservableCollection<MpAvClipTileViewModel> Items { get => base.Items; set => base.Items = value; }
         #endregion
 
         #region Layout
+        
 
-        public MpPoint ScrollOffset => new MpPoint(ScrollOffsetX, ScrollOffsetY);
+        public Vector ScrollOffset {
+            get => new Vector(ScrollOffsetX, ScrollOffsetY);
+            set {
+                ScrollOffsetX = value.X;
+                ScrollOffsetY = value.Y;
+            }
+        }
 
         public double ScrollOffsetX { get; set; }
 
         public double ScrollOffsetY { get; set; }
 
-        public double MaxScrollOffsetX { get; set; }
+        public double MaxScrollOffsetX => ClipTrayTotalTileWidth - ClipTrayScreenWidth;
 
         public double MaxScrollOffsetY { get; set; }
 
-        public double ZoomFactor { get; set; } = 250;
+        public double ZoomFactor { get; set; } = 1;
 
+        public double ClipTrayTotalTileWidth => Items.Sum(x => x.MinSize);
+
+        
+
+        public double ClipTrayTotalWidth => Math.Max(ClipTrayScreenWidth, ClipTrayTotalTileWidth);
+
+        public double ClipTrayScreenWidth { get; set; }
+
+        public double ClipTrayScreenHeight { get; set; }
+
+        public Size ClipTrayExtentSize => new Size(ClipTrayTotalWidth, ClipTrayScreenHeight);
+
+        public Size ClipTrayViewportSize => new Size(ClipTrayScreenWidth, ClipTrayScreenHeight);
         //public double ZoomFactorY { get; set; } = 250;
 
         #endregion
@@ -90,13 +109,13 @@ namespace MonkeyPaste.Avalonia {
             get {
                 return true;
 
-                if(MpAvMainWindowViewModel.Instance.IsMainWindowOpening ||
+                if (MpAvMainWindowViewModel.Instance.IsMainWindowOpening ||
                    !MpAvMainWindowViewModel.Instance.IsMainWindowOpen ||
                     IsRequery ||
                    IsScrollingIntoView) {
                     return false;
                 }
-                if(SelectedItem == null) {
+                if (SelectedItem == null) {
                     return true;
                 }
                 if (SelectedItem.IsVerticalScrollbarVisibile &&
@@ -131,14 +150,14 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitializeAsync() {
             IsBusy = true;
 
-            for(int i = 1;i <= 100;i++) {
+            for (int i = 1; i <= 100; i++) {
                 var test_ctvm = await CreateClipTileViewModel(
                     new MpCopyItem() {
                         Id = i,
                         ItemType = MpCopyItemType.Text,
-                        ItemData = "This is test "+i,
-                        Title = "Test"+i
-                    });
+                        ItemData = "This is test " + i,
+                        Title = "Test" + i
+                    }, i - 1);
                 Items.Add(test_ctvm);
             }
 
@@ -146,27 +165,29 @@ namespace MonkeyPaste.Avalonia {
 
             OnPropertyChanged(nameof(Items));
 
-            MpMessenger.Register<MpMessageType>(null, ReceivedGlobalkMessage);
-            
+
+            MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
+
 
             IsBusy = false;
         }
 
-        
+
 
         #endregion
 
         #region Private Methods
 
-        private async Task<MpAvClipTileViewModel> CreateClipTileViewModel(MpCopyItem ci) {
+        private async Task<MpAvClipTileViewModel> CreateClipTileViewModel(MpCopyItem ci, int queryOffsetIdx = -1) {
             MpAvClipTileViewModel ctvm = new MpAvClipTileViewModel(this);
-            await ctvm.InitializeAsync(ci);
+            await ctvm.InitializeAsync(ci, queryOffsetIdx);
             return ctvm;
         }
 
 
         private void MpAvClipTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            MpConsole.WriteLine($"Name: {e.PropertyName} Value: {this.GetPropertyValue(e.PropertyName)?.ToString()}");
+            switch (e.PropertyName) {
                 case nameof(Items):
                 case nameof(SelectedItem):
                     OnPropertyChanged(nameof(CanScroll));
@@ -175,15 +196,36 @@ namespace MonkeyPaste.Avalonia {
                     ToggleLayoutTypeCommand.Execute(null);
                     break;
                 case nameof(ZoomFactor):
+
                     MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayLayoutChanged);
+                    break;
+                case nameof(ClipTrayScreenWidth):
+                case nameof(ClipTrayScreenHeight):
+                    OnPropertyChanged(nameof(ClipTrayViewportSize));
+                    break;
+                case nameof(ClipTrayTotalTileWidth):
+                    OnPropertyChanged(nameof(ClipTrayExtentSize));
+                    break;
+                case nameof(ScrollOffsetX):
+                case nameof(ScrollOffsetY):
+                    OnPropertyChanged(nameof(ScrollOffset));
+                    MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayScrollChanged);
                     break;
             }
         }
 
-        private void ReceivedGlobalkMessage(MpMessageType msg) {
+        private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.MainWindowOrientationChanged:
-                    
+                case MpMessageType.MainWindowSizeChanged:
+                case MpMessageType.TrayLayoutChanged:
+                case MpMessageType.TrayScrollChanged:
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.MinSize)));
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayY)));
+
+                    OnPropertyChanged(nameof(ClipTrayViewportSize));
+                    OnPropertyChanged(nameof(ClipTrayExtentSize));
                     break;
             }
         }
@@ -194,7 +236,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ToggleLayoutTypeCommand => new MpCommand(
             () => {
-                if(IsGridLayout) {
+                if (IsGridLayout) {
                     LayoutType = MpAvClipTrayLayoutType.Grid;
                 } else {
                     LayoutType = MpAvClipTrayLayoutType.Stack;

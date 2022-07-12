@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste.Common;
 
+
 namespace MonkeyPaste.Avalonia {
     public class MpAvScreenInfo : MpIPlatformScreenInfo {
         public MpRect Bounds { get; set; } = new MpRect();

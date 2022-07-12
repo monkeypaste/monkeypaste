@@ -4,4 +4,6 @@
     <local:MpAvStringHexToBrushConverter x:Key="StringHexToBrushConverter" />
     <local:MpAvStringResourceToBitmapConverter x:Key="StringResourceToBitmapConverter" />
     <local:MpAvStringHexToColorConverter x:Key="StringHexToColorConverter" />
+    <local:MpAvDoubleToThicknessConverter x:Key="DoubleToThicknessConverter" />
+    <local:MpAvNegateDoubleConverter x:Key="NegateDoubleConverter" />
 </ResourceDictionary>

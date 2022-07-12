@@ -119,13 +119,12 @@
         <Slider Value="{Binding ZoomFactor,
                                 Mode=TwoWay,
                                 Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                Minimum="50"
-                Maximum="{Binding MainWindowScreen.Bounds.Width,
-                                  Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+                Minimum="0.5"
+                Maximum="10"
                 Orientation="Horizontal"
                 IsSnapToTickEnabled="False"
-                TickPlacement="Outside" 
-                TickFrequency="100" 
+                TickPlacement="Outside"
+                TickFrequency="0.5"
                 Height="{Binding Bounds.Height,
                                  ElementName=TitlePanel}"
                 Width="250"

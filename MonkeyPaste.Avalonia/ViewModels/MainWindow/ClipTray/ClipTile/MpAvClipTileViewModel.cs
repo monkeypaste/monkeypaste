@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Threading.Tasks;
-using MonkeyPaste;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipTileViewModel : MpViewModelBase<MpAvClipTrayViewModel>,
@@ -52,12 +47,12 @@ namespace MonkeyPaste.Avalonia {
                     return MpSystemColors.Red;
                 }
                 if (Parent.HasScrollVelocity || Parent.HasScrollVelocity) {
-                    return MpSystemColors.Transparent;
+                    return MpSystemColors.blue1;
                 }
                 if (IsHovering) {
                     return MpSystemColors.Yellow;
                 }
-                return MpSystemColors.Transparent;
+                return MpSystemColors.blue1;
             }
         }
 
@@ -65,25 +60,31 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
+        public double Spacing => 5;
         public double MinSize {
             get {
-                if (Parent.IsGridLayout) {
-                    return 1;// double.PositiveInfinity;
-                } else {
-                    return Parent.ZoomFactor;
-                }
 
-                //var ctrv = MpAvMainWindow.Instance.GetVisualDescendant<MpAvClipTrayView>();
-                //if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                //    double defaultHeight = ctrv.Bounds.Height - 10;
-                //    return defaultHeight * Parent.ZoomFactor;
-                //} else {
-                //    double defaultWidth = ctrv.Bounds.Width - 10;
-                //    return defaultWidth * Parent.ZoomFactor;
-                //}
+                if (Parent == null) {
+                    return 0;
+                }
+                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                    return Parent.ClipTrayScreenHeight * Parent.ZoomFactor;
+                } else {
+                    return Parent.ClipTrayScreenWidth * Parent.ZoomFactor;
+                }
             }
         }
 
+        public double TrayX {
+            get {
+                if (Parent == null) {
+                    return 0;
+                }
+                return (MinSize * QueryOffsetIdx + ((QueryOffsetIdx + 1) * (Spacing * 2)));
+            }
+        }
+
+        public double TrayY => 0;
         #endregion
 
         #region State
@@ -104,6 +105,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public int QueryOffsetIdx { get; set; }
+
         public bool IsVisible {
             get {
                 //if (Parent == null) {
@@ -122,7 +125,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string CopyItemData {
             get {
-                if(CopyItem == null) {
+                if (CopyItem == null) {
                     return string.Empty;
                 }
                 return CopyItem.ItemData;
@@ -157,8 +160,12 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
 
             await Task.Delay(1);
+            QueryOffsetIdx = queryOffsetIdx;
 
             CopyItem = ci;
+
+            OnPropertyChanged(nameof(TrayX));
+            OnPropertyChanged(nameof(TrayY));
 
             IsBusy = false;
         }
@@ -168,7 +175,14 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpAvClipTileViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            
+            switch (e.PropertyName) {
+                //case nameof(MinSize):
+                //    if(Parent == null) {
+                //        break;
+                //    }
+                //    Parent.OnPropertyChanged(nameof(Parent.ClipTrayTotalWidth));
+                //    break;
+            }
         }
 
 

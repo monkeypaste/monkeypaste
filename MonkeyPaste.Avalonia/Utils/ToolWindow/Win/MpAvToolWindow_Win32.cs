@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System;
 
-namespace MonkeyPaste.Avalonia {
+namespace MonkeyPaste.Avalonia.Utils.ToolWindow.Win {
     public static class MpAvToolWindow_Win32 {
         [Flags]
         public enum ExtendedWindowStyles {
@@ -11,7 +11,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public enum GetWindowLongFields {
             // ...
-            GWL_EXSTYLE = (-20),
+            GWL_EXSTYLE = -20,
             // ...
         }
         [DllImport("user32.dll", SetLastError = true)]
@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
         public static extern IntPtr IntSetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
 
         [DllImport("user32.dll", EntryPoint = "SetWindowLong", SetLastError = true)]
-        public static extern Int32 IntSetWindowLong(IntPtr hWnd, int nIndex, Int32 dwNewLong);
+        public static extern int IntSetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
         public static int IntPtrToInt32(IntPtr intPtr) {
             return unchecked((int)intPtr.ToInt64());
@@ -37,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (IntPtr.Size == 4) {
                 // use SetWindowLong
-                Int32 tempResult = IntSetWindowLong(hWnd, nIndex, IntPtrToInt32(dwNewLong));
+                int tempResult = IntSetWindowLong(hWnd, nIndex, IntPtrToInt32(dwNewLong));
                 error = Marshal.GetLastWin32Error();
                 result = new IntPtr(tempResult);
             } else {
@@ -46,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
                 error = Marshal.GetLastWin32Error();
             }
 
-            if ((result == IntPtr.Zero) && (error != 0)) {
+            if (result == IntPtr.Zero && error != 0) {
                 throw new System.ComponentModel.Win32Exception(error);
             }
 
@@ -54,7 +54,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static void InitToolWindow(IntPtr handle) {
-            int exStyle = (int)GetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE);
+            int exStyle = GetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE);
             exStyle |= (int)ExtendedWindowStyles.WS_EX_TOOLWINDOW;
             SetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
 

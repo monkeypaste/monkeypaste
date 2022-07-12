@@ -1,19 +1,16 @@
-﻿using SkiaSharp;
-using System;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.IO;
-using System.Collections;
 
 namespace MonkeyPaste.Common {
-
     public static class MpExtensions {
 
         #region Collections
@@ -54,16 +51,16 @@ namespace MonkeyPaste.Common {
             d.Add(key, value);
             return true;
         }
-        public static T[] ToArray<T>(this object obj) where T:class {
+        public static T[] ToArray<T>(this object obj) where T : class {
             return new T[] { obj as T };
         }
         public static IEnumerable<Match> ToCollection(this MatchCollection obj) {
-            foreach(Match m in obj) {
+            foreach (Match m in obj) {
                 yield return m;
             }
         }
 
-        public static List<T> ToList<T>(this object obj) where T:class {
+        public static List<T> ToList<T>(this object obj) where T : class {
             return new List<T> { obj as T };
         }
         public static int FastIndexOf<T>(this IList<T> list, T value) {
@@ -88,7 +85,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static T PeekOrDefault<T>(this Stack<T> stack) {
-            if(stack.Count == 0) {
+            if (stack.Count == 0) {
                 return default(T);
             }
             return stack.Peek();
@@ -123,7 +120,7 @@ namespace MonkeyPaste.Common {
             if (count == 0 && startIdx + count > 0) {
                 throw new Exception("Collection empty");
             }
-            if (startIdx < 0 || startIdx >= collection.Count()) { 
+            if (startIdx < 0 || startIdx >= collection.Count()) {
                 throw new Exception($"startIdx {startIdx} is greater than collection {collection.Count()}");
             }
             if (startIdx + count >= collection.Count()) {
@@ -149,25 +146,25 @@ namespace MonkeyPaste.Common {
 
         public static IOrderedEnumerable<TSource> OrderByDynamic<TSource, TKey>(this IEnumerable<TSource> source, bool isDescending, Func<TSource, TKey> keySelector, IComparer<TKey> comparer) {
             if (isDescending) {
-                return source.OrderByDescending<TSource, TKey>(keySelector,comparer);
+                return source.OrderByDescending<TSource, TKey>(keySelector, comparer);
             } else {
-                return source.OrderBy<TSource, TKey>(keySelector,comparer);
+                return source.OrderBy<TSource, TKey>(keySelector, comparer);
             }
         }
 
         public static IEnumerable<TSource> IntersectBy<TSource, TKey>(this IEnumerable<TSource> source, IEnumerable<TKey> keys, Func<TSource, TKey> keySelector) => source.Join(keys, keySelector, id => id, (o, id) => o);
-        
-        public static void RemoveRange<TSource>(this IList<TSource> collection, int startIdx, int count) where TSource: class {
-            if(count == 0) {
+
+        public static void RemoveRange<TSource>(this IList<TSource> collection, int startIdx, int count) where TSource : class {
+            if (count == 0) {
                 return;
             }
-            if(startIdx < 0 || startIdx >= collection.Count()) {
+            if (startIdx < 0 || startIdx >= collection.Count()) {
                 return;
             }
-            if(startIdx + count >= collection.Count()) {
+            if (startIdx + count >= collection.Count()) {
                 count = collection.Count() - startIdx;
             }
-            while(count > 0) {
+            while (count > 0) {
                 collection.RemoveAt(startIdx);
                 count--;
             }
@@ -209,13 +206,13 @@ namespace MonkeyPaste.Common {
 
         #region Enums
 
-        public static string[] EnumToLabels(this Type e,  string noneText = "", bool hideFirst = false) {
-            if(e == null || !e.IsEnum) {
+        public static string[] EnumToLabels(this Type e, string noneText = "", bool hideFirst = false) {
+            if (e == null || !e.IsEnum) {
                 return new string[] { };
             }
 
             var names = Enum.GetNames(e);
-            for (int i = hideFirst ? 1:0; i < names.Length; i++) {
+            for (int i = hideFirst ? 1 : 0; i < names.Length; i++) {
                 names[i] = names[i].ToLabel(noneText);
             }
             return names;
@@ -235,7 +232,7 @@ namespace MonkeyPaste.Common {
             return value.EnumToName(noneText).ToLabel(noneText);
         }
 
-        public static int EnumToInt<TValue>(this TValue value) 
+        public static int EnumToInt<TValue>(this TValue value)
             where TValue : Enum => Convert.ToInt32(value);
 
         #endregion
@@ -274,7 +271,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static int ByteCount(this object obj) {
-            if(obj == null) {
+            if (obj == null) {
                 return 0;
             }
             RuntimeTypeHandle th = obj.GetType().TypeHandle;
@@ -336,13 +333,14 @@ namespace MonkeyPaste.Common {
             }
             try {
                 return propInfo.GetValue(propObj, index);
-            }catch(Exception ex) {
+            }
+            catch (Exception ex) {
                 MpConsole.WriteTraceLine(ex);
                 return propertyPath;
-            }            
+            }
         }
 
-        public static T GetPropertyValue<T>(this object obj, string propertyPath, object[] index = null) 
+        public static T GetPropertyValue<T>(this object obj, string propertyPath, object[] index = null)
             where T : class {
             return obj.GetPropertyValue(propertyPath, index) as T;
         }

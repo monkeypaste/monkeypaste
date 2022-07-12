@@ -17,11 +17,23 @@ namespace MonkeyPaste.Common.Avalonia {
             return c.ToAvColor();
         }
 
-        public static Color ToAvColor(this MpColor mpcolor) {
-            return new Color(mpcolor.A,mpcolor.R, mpcolor.G, mpcolor.B);
-        }
         public static Brush ToAvBrush(this string hexColor) {            
             return new SolidColorBrush(hexColor.ToAvColor());
+        }
+        public static MpColor ToPortableColor(this Color color) {
+            return new MpColor(color.A, color.R, color.G, color.B);
+        }
+
+        public static Color ToAvColor(this MpColor color) {
+            return new Color(color.A, color.R, color.G, color.B);
+        }
+
+        public static MpColor ToPortableColor(this PixelColor color) {
+            return new MpColor(color.Red, color.Green, color.Blue);
+        }
+
+        public static Color ToAvPixelColor(this MpColor color) {
+            return new Color(255, color.R, color.G, color.B);
         }
 
         public static string ToHex(this Brush b) {

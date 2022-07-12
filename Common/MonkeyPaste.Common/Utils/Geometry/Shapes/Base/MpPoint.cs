@@ -60,5 +60,5 @@ namespace MonkeyPaste.Common {
         public object Clone() {
             return new MpPoint(X, Y);
         }
-    }
+    }    
 }
