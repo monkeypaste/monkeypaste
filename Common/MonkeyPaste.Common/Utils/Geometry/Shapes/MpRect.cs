@@ -1,4 +1,6 @@
-﻿namespace MonkeyPaste.Common {
+﻿using System.Linq;
+
+namespace MonkeyPaste.Common {
     public class MpRect : MpShape {
         public MpPoint Location {
             get => Points[0];
@@ -27,7 +29,9 @@
         }
 
 
-        public MpRect() : base() { }
+        public MpRect() : base() {
+            Points = Enumerable.Repeat(new MpPoint(), 4).ToArray();
+        }
         public MpRect(MpPoint location,MpSize size) {
             Points = new MpPoint[] { location, new MpPoint(size.Width, size.Height) };
         }

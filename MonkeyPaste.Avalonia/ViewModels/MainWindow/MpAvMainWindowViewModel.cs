@@ -32,12 +32,13 @@ namespace MonkeyPaste.Avalonia {
         Left
     }
 
-    
+
 
     public class MpAvMainWindowViewModel : MpViewModelBase, MpIResizableViewModel {
         #region Statics
 
         private static MpAvMainWindowViewModel _instance;
+
         public static MpAvMainWindowViewModel Instance => _instance ?? (_instance = new MpAvMainWindowViewModel());
         #endregion
 
@@ -52,10 +53,13 @@ namespace MonkeyPaste.Avalonia {
         public double MainWindowHeight { get; set; }
 
         public double MainWindowLeft { get; set; }
+
         public double MainWindowRight { get; set; }
+
         public double MainWindowTop { get; set; }
+
         public double MainWindowBottom { get; set; }
-                
+
 
         #region Resize Constraints
 
@@ -152,7 +156,7 @@ namespace MonkeyPaste.Avalonia {
 
         public double MainWindowDefaultWidth {
             get {
-                
+
                 switch (MainWindowOrientationType) {
                     case MpMainWindowOrientationType.Top:
                     case MpMainWindowOrientationType.Bottom:
@@ -181,7 +185,9 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        public MpRect MainWindowRect => new MpRect(MainWindowLeft, MainWindowTop, MainWindowRight, MainWindowBottom);
+        // Last and Cur Rect set in view bounds changed handler
+        public MpRect LastMainWindowRect { get; set; } = new MpRect();
+        public MpRect MainWindowRect { get; set; } = new MpRect(); // => new MpRect(MainWindowLeft, MainWindowTop, MainWindowRight, MainWindowBottom);
 
         public MpRect ExternalRect {
             get {
@@ -191,7 +197,7 @@ namespace MonkeyPaste.Avalonia {
                         if (y < 0) {
                             y = 0;
                         }
-                        double h = y == 0 ? MainWindowScreen.Bounds.Height : 
+                        double h = y == 0 ? MainWindowScreen.Bounds.Height :
                                     MainWindowScreen.Bounds.Height - (MainWindowTop + MainWindowHeight);
 
                         var extRect = new MpRect(0, y, MainWindowWidth, h);
@@ -286,7 +292,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpCursorType ResizerCursor {
             get {
-                if(IsHorizontalOrientation) {
+                if (IsHorizontalOrientation) {
                     return MpCursorType.ResizeNS;
                 } else {
                     return MpCursorType.ResizeWE;
@@ -327,7 +333,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsFilterMenuVisible { get; set; } = true;
 
-        public bool IsHorizontalOrientation => MainWindowOrientationType == MpMainWindowOrientationType.Bottom || 
+        public bool IsHorizontalOrientation => MainWindowOrientationType == MpMainWindowOrientationType.Bottom ||
                                                 MainWindowOrientationType == MpMainWindowOrientationType.Top;
 
         public bool IsVerticalOrientation => !IsHorizontalOrientation;
@@ -459,6 +465,10 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsHovering):
                     MpConsole.WriteLine("MainWindow Hover: " + (IsHovering ? "TRUE" : "FALSE"));
                     break;
+                case nameof(LastMainWindowRect):
+                    //MpConsole.WriteLine("Last mwr " + LastMainWindowRect);
+                   // MpConsole.WriteLine("Cur mwr" + MainWindowRect);
+                    break;
                 case nameof(MainWindowHeight):
                     if (!IsResizing) {
                         return;
@@ -564,7 +574,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 MpRect openStartRect = MainWindowClosedRect;
-                if(IsMainWindowClosing) {
+                if (IsMainWindowClosing) {
                     IsMainWindowClosing = false;
                     openStartRect = MainWindowRect;
                 }
@@ -642,7 +652,7 @@ namespace MonkeyPaste.Avalonia {
                 return (MpAvMainWindow.Instance != null ||
                    !IsMainWindowLoading ||
                    !IsShowingDialog) &&
-                   !IsMainWindowOpen && 
+                   !IsMainWindowOpen &&
                    !IsMainWindowOpening;
             });
 
@@ -754,7 +764,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand CycleOrientationCcwCommand => new MpCommand(
             () => {
                 int nextOr = (int)MainWindowOrientationType + 1;
-                if(nextOr >= Enum.GetNames(typeof(MpMainWindowOrientationType)).Length) {
+                if (nextOr >= Enum.GetNames(typeof(MpMainWindowOrientationType)).Length) {
                     nextOr = 0;
                 }
                 MainWindowOrientationType = (MpMainWindowOrientationType)nextOr;

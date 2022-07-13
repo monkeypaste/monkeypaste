@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace MonkeyPaste.Common {
-    public class MpPoint : ICloneable {
+    public class MpPoint : ICloneable, INotifyPropertyChanged {
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public static MpPoint Zero => new MpPoint(0, 0);
         public double X { get; set; } = 0;

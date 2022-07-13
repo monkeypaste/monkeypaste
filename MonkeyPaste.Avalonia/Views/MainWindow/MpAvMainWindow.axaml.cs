@@ -11,12 +11,15 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using WebViewControl;
+using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvMainWindow : Window {
         public static Window? Instance { get; private set; } = null;
-
+        static MpAvMainWindow() {
+            BoundsProperty.Changed.AddClassHandler<MpAvMainWindow>((x,y) => x.BoundsChangedHandler(y as AvaloniaPropertyChangedEventArgs<Rect>));
+        }
         public MpAvMainWindow() {
             WebView.Settings.OsrEnabled = false;
             WebView.Settings.LogFile = "ceflog.txt";
@@ -37,11 +40,19 @@ namespace MonkeyPaste.Avalonia {
             this.PointerMoved += MainWindow_PointerMoved;
             this.PointerLeave += MainWindow_PointerLeave;
 
+            //var bounds = this.GetObservable(Window.BoundsProperty);
+            //bounds.Subscribe((e) => {
+
+            //});
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
             InitAsync().FireAndForgetSafeAsync(MpCommandErrorHandler.Instance);
         }
 
-
+        void BoundsChangedHandler(AvaloniaPropertyChangedEventArgs<Rect> e) {
+            var oldAndNewVals = e.GetOldAndNewValue<Rect>();
+            MpAvMainWindowViewModel.Instance.LastMainWindowRect = oldAndNewVals.oldValue.ToPortableRect();
+            MpAvMainWindowViewModel.Instance.MainWindowRect = oldAndNewVals.newValue.ToPortableRect();
+        }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {

@@ -12,7 +12,7 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTrayView">
-    <Grid Margin="5"
+    <Grid Margin="0"
           AttachedToVisualTree="MpAvClipTrayView_AttachedToVisualTree">
         <Grid.Background>
             <SolidColorBrush Color="Cyan"
@@ -24,95 +24,98 @@
                                                                         Mode=OneWayToSource}"
                 local:MpAvSizeObserverExtension.ObservedHeight="{Binding ClipTrayScreenHeight,
                                                                          Mode=OneWayToSource}">
-            <!--<ScrollViewer x:Name="ClipTrayScrollViwer"
-                          HorizontalScrollBarVisibility="Visible"
-                          VerticalScrollBarVisibility="Visible"
+            <ScrollViewer x:Name="ClipTrayScrollViewer"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto"
                           AllowAutoHide="False"
-                          MaxWidth="{Binding ClipTrayScreenWidth}"
-                          Height="{Binding ClipTrayScreenHeight}">-->
-            <ListBox x:Name="ClipTrayListBox"
-                     local:MpAvKineticScrollExtension.IsEnabled="True"
-                     local:MpAvKineticScrollExtension.FrictionX="0.85"
-                     local:MpAvKineticScrollExtension.WheelDampeningX="0.08"
-                     local:MpAvKineticScrollExtension.FrictionY="0.75"
-                     local:MpAvKineticScrollExtension.WheelDampeningY="0.08"
-                     local:MpAvKineticScrollExtension.ScrollOffsetX="{Binding ScrollOffsetX,
+                          MaxWidth="{Binding ClipTrayViewportSize.Width}"
+                          Height="{Binding ClipTrayViewportSize.Height}">
+                <!--
+                -->
+                <ListBox x:Name="ClipTrayListBox"
+                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                         local:MpAvPagingListBoxExtension.IsEnabled="True"
+                         local:MpAvPagingListBoxExtension.FrictionX="0.85"
+                         local:MpAvPagingListBoxExtension.WheelDampeningX="0.08"
+                         local:MpAvPagingListBoxExtension.FrictionY="0.75"
+                         local:MpAvPagingListBoxExtension.WheelDampeningY="0.08"
+                         local:MpAvPagingListBoxExtension.ScrollOffsetX="{Binding ScrollOffsetX,
+                                                                                  Mode=TwoWay}"
+                         local:MpAvPagingListBoxExtension.ScrollOffsetY="{Binding ScrollOffsetY,
+                                                                                  Mode=TwoWay}"
+                         local:MpAvPagingListBoxExtension.MaxScrollOffsetX="{Binding MaxScrollOffsetX}"
+                         local:MpAvPagingListBoxExtension.MaxScrollOffsetY="{Binding MaxScrollOffsetY}"
+                         local:MpAvPagingListBoxExtension.VelocityX="{Binding ScrollVelocityX,
                                                                               Mode=TwoWay}"
-                     local:MpAvKineticScrollExtension.ScrollOffsetY="{Binding ScrollOffsetY,
+                         local:MpAvPagingListBoxExtension.VelocityY="{Binding ScrollVelocityY,
                                                                               Mode=TwoWay}"
-                     local:MpAvKineticScrollExtension.MaxScrollOffsetX="{Binding MaxScrollOffsetX}"
-                     local:MpAvKineticScrollExtension.MaxScrollOffsetY="{Binding MaxScrollOffsetY}"
-                     local:MpAvKineticScrollExtension.VelocityX="{Binding ScrollVelocityX,
-                                                                          Mode=TwoWay}"
-                     local:MpAvKineticScrollExtension.VelocityY="{Binding ScrollVelocityY,
-                                                                          Mode=TwoWay}"
-                     local:MpAvKineticScrollExtension.CanScrollX="{Binding CanScroll}"
-                     local:MpAvKineticScrollExtension.CanScrollY="{Binding CanScroll}"
-                     ScrollViewer.HorizontalScrollBarVisibility="Visible"
-                     ScrollViewer.VerticalScrollBarVisibility="Visible"
-                     Background="Transparent"
-                     HorizontalAlignment="Left"
-                     ClipToBounds="True"
-                     VerticalAlignment="Top"
-                     Width="{Binding ClipTrayScreenWidth}"
-                     Height="{Binding ClipTrayScreenHeight}"
-                     Items="{Binding Items}">
-                <!--<ListBox.RenderTransform>
-                        <TranslateTransform X="{Binding ScrollOffsetX,
-                                                        Converter={StaticResource NegateDoubleConverter}}" />
-                    </ListBox.RenderTransform>-->
-                <ListBox.Styles>
-                    <!--  Give the ListBoxItems a fixed with of 100 and right-align them  -->
-                    <Style Selector="ListBoxItem" x:DataType="local:MpAvClipTileViewModel">
-                        <!--<Setter Property="MinWidth"
-                                    Value="{Binding MinSize}" />
-                            <Setter Property="MinHeight"
-                                    Value="{Binding MinSize}" />-->
-                        <Setter Property="HorizontalAlignment"
-                                Value="Left" />
-                        <Setter Property="VerticalAlignment"
-                                Value="Top" />
-                        <Setter Property="Margin"
-                                Value="0" />
-                        <Setter Property="Padding"
-                                Value="0" />
-                        <Setter Property="FocusAdorner"
-                                Value="{x:Null}" />
-                        <Setter Property="Canvas.Left"
-                                Value="{Binding TrayX}" />
-                        <Setter Property="Canvas.Top"
-                                Value="{Binding TrayY}" />
-                        <!--<Setter Property="RenderTransformOrigin"
-                                    Value="0,0" />-->
-                        <!--<Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ListBoxItem">
-                                        <ContentPresenter />
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>-->
-
-                    </Style>
-                </ListBox.Styles>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <!--
-                            Canvas.Left="{Binding TrayX}"
-                            Canvas.Top="{Binding TrayY}"
-                        -->
-                        <local:MpAvClipTileView DataContext="{Binding}" />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch"
-                                Background="Brown" />
-                        <!--<VirtualizingStackPanel Orientation="Horizontal" />-->
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-            </ListBox>
-            <!--</ScrollViewer>-->
+                         local:MpAvPagingListBoxExtension.CanScrollX="{Binding CanScroll}"
+                         local:MpAvPagingListBoxExtension.CanScrollY="{Binding CanScroll}"
+                         local:MpAvPagingListBoxExtension.ListOrientation="{Binding ListOrientation}"
+                         local:MpAvPagingListBoxExtension.LayoutType="{Binding LayoutType}"
+                         Background="Transparent"
+                         HorizontalAlignment="Left"
+                         ClipToBounds="True"
+                         VerticalAlignment="Stretch"
+                         Width="{Binding ClipTrayExtentSize.Width}"
+                         Height="{Binding ClipTrayExtentSize.Height}"
+                         Items="{Binding Items}">
+                    <ListBox.Resources>
+                        <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">
+                            Transparent
+                        </SolidColorBrush>
+                        <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">
+                            Transparent
+                        </SolidColorBrush>
+                        <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">
+                            Transparent
+                        </SolidColorBrush>
+                        <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">
+                            Transparent
+                        </SolidColorBrush>
+                        <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">
+                            Transparent
+                        </SolidColorBrush>
+                        <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">
+                            Transparent
+                        </SolidColorBrush>
+                    </ListBox.Resources>
+                    <ListBox.Styles>
+                        <!--  Give the ListBoxItems a fixed with of 100 and right-align them  -->
+                        <Style Selector="ListBoxItem"
+                               x:DataType="local:MpAvClipTileViewModel">
+                            <Setter Property="HorizontalAlignment"
+                                    Value="Left" />
+                            <Setter Property="VerticalAlignment"
+                                    Value="Center" />
+                            <Setter Property="Margin"
+                                    Value="0" />
+                            <Setter Property="Padding"
+                                    Value="0" />
+                            <Setter Property="FocusAdorner"
+                                    Value="{x:Null}" />
+                            <Setter Property="Canvas.Left"
+                                    Value="{Binding TrayX}" />
+                            <Setter Property="Canvas.Top"
+                                    Value="{Binding TrayY}" />
+                        </Style>
+                    </ListBox.Styles>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <local:MpAvClipTileView DataContext="{Binding}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Background="Transparent" />
+                            <!--<VirtualizingStackPanel Orientation="Horizontal" />-->
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+            </ScrollViewer>
         </Border>
     </Grid>
 

@@ -1,6 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
+using MonkeyPaste.Common.Avalonia;
 using System;
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTrayView : MpAvUserControl<MpAvClipTrayViewModel> {
@@ -19,10 +21,20 @@ namespace MonkeyPaste.Avalonia {
             
 
             sv = this.FindControl<ScrollViewer>("ClipTrayScrollViewer");
+            sv.EffectiveViewportChanged += Sv_EffectiveViewportChanged;
+            sv.AttachedToVisualTree += Sv_AttachedToVisualTree;
             lb = this.FindControl<ListBox>("ClipTrayListBox");
             lb.ItemContainerGenerator.Materialized += ItemContainerGenerator_Materialized;
             //sv.ScrollChanged += Sv_ScrollChanged;
             this.DataContextChanged += MpAvClipTrayView_DataContextChanged;
+        }
+
+        private void Sv_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
+            //var tracks = sv.GetVisualDescendants<Track>()
+        }
+
+        private void Sv_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            
         }
 
         private void ItemContainerGenerator_Materialized(object sender, global::Avalonia.Controls.Generators.ItemContainerEventArgs e) {
