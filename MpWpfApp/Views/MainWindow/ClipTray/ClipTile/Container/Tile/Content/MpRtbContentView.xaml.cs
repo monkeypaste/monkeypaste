@@ -115,7 +115,7 @@ namespace MpWpfApp {
         }
         private void ReceivedMainWindowResizeBehviorMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.ResizingContent:
+                case MpMessageType.ContentResized:
                 case MpMessageType.ResizeContentCompleted:
                     //Rtb.FitDocToRtb();
                     break;

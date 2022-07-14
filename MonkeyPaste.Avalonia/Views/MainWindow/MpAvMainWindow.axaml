@@ -28,7 +28,8 @@
           Height="{Binding MainWindowHeight}">
         <Grid.Background>
             <SolidColorBrush Color="Pink"
-                             Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
+                             Opacity="{Binding MainWindowOpacity,
+                                               Source={x:Static pcl:MpPrefViewModel.Instance}}" />
         </Grid.Background>
 
         <!--  Title Menu  -->
@@ -45,7 +46,8 @@
               VerticalAlignment="Stretch">
             <Grid.Background>
                 <SolidColorBrush Color="Purple"
-                                 Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
+                                 Opacity="{Binding MainWindowOpacity,
+                                                   Source={x:Static pcl:MpPrefViewModel.Instance}}" />
             </Grid.Background>
         </Grid>
 
@@ -56,7 +58,8 @@
               VerticalAlignment="Stretch">
             <Grid.Background>
                 <SolidColorBrush Color="DarkViolet"
-                                 Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
+                                 Opacity="{Binding MainWindowOpacity,
+                                                   Source={x:Static pcl:MpPrefViewModel.Instance}}" />
             </Grid.Background>
             <local:MpAvClipTrayView HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch" />
@@ -65,8 +68,9 @@
 
         <!--  Resize Handle  -->
         <local:MpAvMainWindowResizerView x:Name="MainWindowResizerView"
+                                         ZIndex="1000"
+                                         IsVisible="True"
                                          RenderTransformOrigin="0,0"
-                                         IsVisible="{Binding IsResizerVisible}"
                                          DataContext="{Binding}">
             <local:MpAvMainWindowResizerView.RenderTransform>
                 <TranslateTransform />

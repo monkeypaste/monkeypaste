@@ -522,13 +522,7 @@ namespace MonkeyPaste.Avalonia {
                         } else {
                             MpPrefViewModel.Instance.MainWindowInitialHeight = MainWindowHeight;
                         }
-
-                        // update location (needed if reset to default)
-
-                        //MainWindowTop = MainWindowOpenedRect.Top;
-                        //MainWindowBottom = MainWindowOpenedRect.Bottom;
-                        //MainWindowLeft = MainWindowOpenedRect.Left;
-                        //MainWindowRight = MainWindowOpenedRect.Right;
+                    } else {
                     }
                     break;
                 case nameof(IsMainWindowLocked):
@@ -767,6 +761,7 @@ namespace MonkeyPaste.Avalonia {
                 if (nextOr >= Enum.GetNames(typeof(MpMainWindowOrientationType)).Length) {
                     nextOr = 0;
                 }
+
                 MainWindowOrientationType = (MpMainWindowOrientationType)nextOr;
                 SetupMainWindowSize(true);
 

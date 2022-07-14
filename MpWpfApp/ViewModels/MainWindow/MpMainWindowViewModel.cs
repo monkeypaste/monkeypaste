@@ -284,7 +284,7 @@ namespace MpWpfApp {
 
         public void ReceivedResizerBehaviorMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.ResizingContent:
+                case MpMessageType.ContentResized:
                     //IsResizing = true;
                     //if(IsMainWindowLocked) {
                     //    MainWindowTop = 0;

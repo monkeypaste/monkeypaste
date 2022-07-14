@@ -1335,7 +1335,7 @@ namespace MpWpfApp {
 
         public void ReceivedResizerBehaviorMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.ResizingContent:
+                case MpMessageType.ContentResized:
                     double oldHeadTrayX = HeadItem == null ? 0 : HeadItem.TrayX;
                     double oldScrollOffset = ScrollOffset;
 

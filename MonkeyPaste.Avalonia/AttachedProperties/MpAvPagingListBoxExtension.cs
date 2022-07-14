@@ -331,14 +331,14 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
             } else {
-                DetachedToVisualHandler(element, null);
+                //DetachedFromVisualHandler(element, VisualTreeAttachmentEventArgs.Empty);
             }
 
             #region ListBox Events (ItemsRepeater)
 
             void AttachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
                 if (s is ListBox lb) {
-                    lb.DetachedFromVisualTree += DetachedToVisualHandler;
+                    lb.DetachedFromVisualTree += DetachedFromVisualHandler;
 
                     lb.AddHandler(
                         InputElement.PointerWheelChangedEvent,
@@ -359,6 +359,9 @@ namespace MonkeyPaste.Avalonia {
                     timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
                     timer.Tick += HandleWorldTimerTick;
 
+                    timer.Start();
+
+
                     Dispatcher.UIThread.Post(async () => {
                         var sv = GetScrollViewer(lb);
                         while (sv == null) {
@@ -368,51 +371,43 @@ namespace MonkeyPaste.Avalonia {
 
                         SetScrollViewer(lb, sv);
                         sv.Tag = lb;
-                        sv.EffectiveViewportChanged += Sv_EffectiveViewportChanged;
 
                         while (!BindScrollViewerAndTracks(lb)) {
                             await Task.Delay(1000);
                         }
-                        timer.Start();
+                        sv.EffectiveViewportChanged += async(s, e) => {
+                            sv.Tag = lb;
+                            while (!BindScrollViewerAndTracks(lb)) {
+                                await Task.Delay(1000);
+                            }
+                        };
                     });
                 }
             }
 
-            void DetachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+            void DetachedFromVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
                 if (s is ListBox lb) {
                     if (GetScrollViewer(lb) is ScrollViewer sv) {
                         if (sv.TryGetVisualDescendants<Track>(out var tracks)) {
                             foreach (var track in tracks) {
                                 track.RemoveHandler(
-                                    ListBox.PointerPressedEvent,
-                                    PreviewTrackPointerPressedHandler);
-
-                                //track.RemoveHandler(
-                                //    ListBox.PointerMovedEvent,
-                                //    PreviewTrackPointerMovedHandler);
-
-                                track.RemoveHandler(
                                     ListBox.PointerReleasedEvent,
                                     PreviewTrackPointerReleasedHandler);
 
-                                //if (track.Thumb is Thumb thumb) {
-                                //    thumb.RemoveHandler(
-                                //            ListBox.PointerPressedEvent,
-                                //            PreviewThumbPointerPressedHandler);
+                                if (track.Thumb is Thumb thumb) {
+                                    thumb.RemoveHandler(
+                                            ListBox.PointerPressedEvent,
+                                            PreviewThumbPointerPressedHandler);
 
-                                //    thumb.RemoveHandler(
-                                //        ListBox.PointerMovedEvent,
-                                //        PreviewThumbPointerMovedHandler);
-
-                                //    thumb.RemoveHandler(
-                                //        ListBox.PointerReleasedEvent,
-                                //        PreviewThumbPointerReleasedHandler);
-                                //}
+                                    thumb.RemoveHandler(
+                                        ListBox.PointerMovedEvent,
+                                        PreviewThumbPointerMovedHandler);
+                                }
                             }
                         }
                     }
                     lb.AttachedToVisualTree -= AttachedToVisualHandler;
-                    lb.DetachedFromVisualTree -= DetachedToVisualHandler;
+                    lb.DetachedFromVisualTree -= DetachedFromVisualHandler;
 
                     lb.RemoveHandler(
                         ListBox.PointerWheelChangedEvent,
@@ -460,9 +455,6 @@ namespace MonkeyPaste.Avalonia {
             #endregion
 
             #region ScrollViewer Events
-            void Sv_EffectiveViewportChanged(object sender, EffectiveViewportChangedEventArgs e) {
-                return;
-            }
 
             bool BindScrollViewerAndTracks(ListBox lb) {
                 if (GetScrollViewer(lb) is ScrollViewer sv) {                    
@@ -470,6 +462,7 @@ namespace MonkeyPaste.Avalonia {
                         foreach (var track in tracks) {
                             track.Tag = lb;
                             track.IsThumbDragHandled = true;
+
                             track.Bind(
                                     Track.ValueProperty,
                                     new Binding() {
@@ -480,7 +473,7 @@ namespace MonkeyPaste.Avalonia {
                                         //Mode = BindingMode.TwoWay,
                                         //Priority = BindingPriority.Style
                                     });
-                            ScrollViewer.HorizontalScrollBarMaximumProperty
+
                             track.Bind(
                                     Track.MaximumProperty,
                                     new Binding() {
@@ -516,99 +509,13 @@ namespace MonkeyPaste.Avalonia {
 
                         }
 
-                        return tracks.Count() > 0;
-                    } else if (sv.TryGetVisualDescendants<Thumb>(out var thumbs) && thumbs.Count() > 0) {
-                        Debugger.Break();
+                        return true;
                     }
                 }
                 return false;
             }
 
             #region Track Events
-
-            void PreviewTrackPointerPressedHandler(object? s, PointerPressedEventArgs e) {
-                if (s is Track track &&
-                    track.Tag is ListBox lb) {
-                    MpConsole.WriteLine("Track Mouse Down");
-                }
-                e.Handled = true;
-                //if (s is Track track &&
-                //    track.Tag is ListBox lb) {
-
-                //    // NOTE if pointer pressed on thumb this event shouldn't fire
-
-                //    //if (GetIsThumbDragging(lb)) {
-                //    //    var track_mp = e.GetCurrentPoint(track).Position;
-                //    //    SetTrackValue(track, track_mp);
-                //    //    SetIsThumbDragging(lb, false);
-                //    //}
-                //    //e.GetCurrentPoint(track).Pointer.Capture(null);
-
-                //    var track_mp = e.GetPosition(track);
-
-                //    // BUG for horizontal decrease button bounds width == 0 so use track height
-                //    //var db_bounds = new Rect(
-                //    //    track.DecreaseButton.Bounds.Position,
-                //    //    new Size(
-                //    //        track.Orientation == Orientation.Horizontal ? track.Bounds.Height : track.DecreaseButton.Bounds.Height,
-                //    //        track.Orientation == Orientation.Horizontal ? track.DecreaseButton.Bounds.Width : track.Bounds.Width));
-
-                //    //// BUG for horizontal increase button bounds width ==  so use track height
-                //    //var ib_bounds = new Rect(
-                //    //    track.IncreaseButton.Bounds.Position,
-                //    //    new Size(
-                //    //        track.Orientation == Orientation.Horizontal ? track.Bounds.Height : track.DecreaseButton.Bounds.Height,
-                //    //        track.Orientation == Orientation.Horizontal ? track.DecreaseButton.Bounds.Width : track.Bounds.Width));
-
-                //    //if (track.DecreaseButton.Bounds.Contains(track_mp) ||
-                //    //    track.IncreaseButton.Bounds.Contains(track_mp)) {
-                //    //    MpConsole.WriteLine("Track button pressed, ignoring jump");
-                //    //    return;
-                //    //}
-                //    //if (track.Thumb.Bounds.Contains(e.GetPosition(track.Thumb.Parent))) {
-                //    //    Debugger.Break();
-                //    //    return;
-                //    //}
-
-                //    MpConsole.WriteLine($"Track Mouse Released ");
-
-                //    if (track.Orientation == Orientation.Horizontal) {
-                //        double adjusted_viewport_width = track.ViewportSize;// - track.DecreaseButton.Bounds.Width - track.IncreaseButton.Bounds.Width;
-
-                //        // track bounds includes arrow buttons so offset from low bound
-                //        // to find click spot
-                //        double adjusted_track_mp_x = track_mp.X;// + track.DecreaseButton.Bounds.Width;
-
-                //        // if click was near right arrow button clamp mp.x to visible viewport width
-                //        //adjusted_track_mp_x = Math.Min(adjusted_track_mp_x, adjusted_viewport_width);
-
-                //        // get normalized distance along adjusted track to project new track value
-                //        double adjusted_ratio = adjusted_track_mp_x / adjusted_viewport_width;
-
-                //        // minimum should be zero so check thesee are same
-                //        double new_track_value_test = track.Maximum * adjusted_ratio;
-                //        double new_track_value = track.ValueFromPoint(track_mp); //track.Minimum + ((track.Maximum - track.Minimum) * adjusted_ratio);
-
-                //        MpConsole.WriteLine("");
-                //        MpConsole.WriteLine($"Horizontal scroll jump");
-                //        MpConsole.WriteLine($"Track Min: {track.Minimum} Track Max: {track.Maximum}");
-                //        MpConsole.WriteLine($"Viewport size: {track.ViewportSize} Adjusted Viewport size: {adjusted_viewport_width}");
-                //        MpConsole.WriteLine($"Decrease Button Width: {track.DecreaseButton.Bounds.Width}");
-                //        MpConsole.WriteLine($"Viewport size: {track.ViewportSize} Adjusted Viewport size: {adjusted_viewport_width}");
-                //        MpConsole.WriteLine($"Track Value: {track.Value} New Value: {new_track_value} New Value Check: {new_track_value_test}");
-                //        MpConsole.WriteLine($"ScrollOffset (should match track value): {GetScrollOffsetX(lb)}");
-
-                //        SetScrollOffsetX(lb, new_track_value);
-
-                //        track.GetVisualAncestor<ScrollViewer>().ScrollToHorizontalOffset(new_track_value);
-                //    }
-
-                //    //e.Handled = true;
-                //    return;
-                //}
-                //e.Handled = false;
-            }
-
 
             void PreviewTrackPointerReleasedHandler(object? s, PointerReleasedEventArgs e) {
                 if (s is Track track &&
@@ -666,6 +573,15 @@ namespace MonkeyPaste.Avalonia {
 
                         MpConsole.WriteLine($"DeltaX: {deltaX} DeltaValue: {deltaValue} ScrollOffsetX: {scrollOffsetX} New ScrollOffsetX: {newScrollOffset}");
                         SetScrollOffsetX(lb, newScrollOffset);
+                    } else {
+                        double deltaY = mp.Y - lastMousePosition.Y;
+                        double deltaValue = track.ValueFromDistance(deltaY, 0);
+
+                        double scrollOffsetY = GetScrollOffsetY(lb);
+                        double newScrollOffset = scrollOffsetY + deltaValue;
+
+                        MpConsole.WriteLine($"DeltaY: {deltaY} DeltaValue: {deltaValue} ScrollOffsetY: {scrollOffsetY} New ScrollOffsetY: {newScrollOffset}");
+                        SetScrollOffsetY(lb, newScrollOffset);
                     }
                     lastMousePosition = e.GetPosition(MpAvMainWindow.Instance);
                 }
@@ -685,23 +601,6 @@ namespace MonkeyPaste.Avalonia {
                         SetVelocityY(lb, 0);
                         return;
                     }
-
-                    //var htrack = sv.GetVisualDescendants<Track>().FirstOrDefault(x => x.Orientation == Orientation.Horizontal);
-                    //var vtrack = sv.GetVisualDescendants<Track>().FirstOrDefault(x => x.Orientation == Orientation.Vertical);
-                    //if (htrack == null || vtrack == null) {
-                    //    return;
-                    //}
-                    //double extent_width = htrack.Maximum;
-                    //double extent_height = vtrack.Maximum;
-                    //double viewport_width = htrack.ViewportSize;
-                    //double viewport_height = vtrack.ViewportSize;
-                    //sv.Extent = MpAvClipTrayViewModel.Instance.ClipTrayExtentSize;
-                    //sv.Viewport = MpAvClipTrayViewModel.Instance.ClipTrayViewportSize;
-
-                    //double extent_width = sv.Extent.Width;
-                    //double extent_height = sv.Extent.Height;
-                    //double viewport_width = sv.Viewport.Width;
-                    //double viewport_height = sv.Viewport.Height;
 
                     double scrollOffsetX = GetScrollOffsetX(lb);
                     double maxOffsetX = GetMaxScrollOffsetX(lb);
@@ -743,25 +642,6 @@ namespace MonkeyPaste.Avalonia {
 
                     SetVelocityX(lb, vx);
                     SetVelocityY(lb, vy);
-                }
-            }
-
-
-            void SetTrackValue(Track track, Point track_mp) {
-                if (track.Tag is ListBox lb) {
-                    if (track.Orientation == Orientation.Horizontal) {
-                        SetVelocityX(lb, 0);
-
-                        double new_x = (track_mp.X / track.Bounds.Width) * track.Maximum;
-                        new_x = Math.Min(Math.Max(track.Minimum, new_x), track.Maximum);
-                        SetScrollOffsetX(lb, new_x);
-                    } else {
-                        SetVelocityY(lb, 0);
-
-                        double new_y = (track_mp.Y / track.Bounds.Height) * track.Maximum;
-                        new_y = Math.Min(Math.Max(track.Minimum, new_y), track.Maximum);
-                        SetScrollOffsetY(lb, new_y);
-                    }
                 }
             }
         }

@@ -1,9 +1,17 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTrayView : MpAvUserControl<MpAvClipTrayViewModel> {
         private static MpAvClipTrayView _instance;
@@ -11,9 +19,8 @@ namespace MonkeyPaste.Avalonia {
 
         private ScrollViewer sv;
         private ListBox lb;
-
+        private Canvas lb_canvas;
         //public ItemsRepeater TrayRepeater => Instance.ir;
-
 
         public MpAvClipTrayView() {
             //DataContext = MpAvClipTrayViewModel.Instance;
@@ -24,22 +31,53 @@ namespace MonkeyPaste.Avalonia {
             sv.EffectiveViewportChanged += Sv_EffectiveViewportChanged;
             sv.AttachedToVisualTree += Sv_AttachedToVisualTree;
             lb = this.FindControl<ListBox>("ClipTrayListBox");
-            lb.ItemContainerGenerator.Materialized += ItemContainerGenerator_Materialized;
+
             //sv.ScrollChanged += Sv_ScrollChanged;
             this.DataContextChanged += MpAvClipTrayView_DataContextChanged;
+
+            MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
+
+            Dispatcher.UIThread.Post(async () => {
+                IEnumerable<Track> tracks = sv.GetVisualDescendants<Track>();
+                while(true) {
+                    if(tracks != null && tracks.Count() > 0) {
+                        break;
+                    }
+                    tracks = sv.GetVisualDescendants<Track>();
+                    await Task.Delay(100);
+                }
+
+                foreach(var track in tracks) {
+                    Track.MaximumProperty.Changed.Subscribe((e) => TrackMaximumChangedHandler(track,e));
+                    Track.ValueProperty.Changed.Subscribe((e) => TrackValueChangedHandler(track, e));
+                }
+                
+            });
+        }
+
+        void TrackMaximumChangedHandler(Track track,AvaloniaPropertyChangedEventArgs<double> e) {
+            // occurs before scroll offset changes
+            var oldAndNewVals = e.GetOldAndNewValue<double>();
+            if(track.Orientation == Orientation.Horizontal) {
+               // BindingContext.LastMaxScrollOffsetX = oldAndNewVals.oldValue;
+            }
+        }
+
+        void TrackValueChangedHandler(Track track, AvaloniaPropertyChangedEventArgs<double> e) {
+            var oldAndNewVals = e.GetOldAndNewValue<double>();
+            if (track.Orientation == Orientation.Horizontal) {
+                //BindingContext.LastScrollOffsetX = oldAndNewVals.oldValue;
+            }
         }
 
         private void Sv_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
             //var tracks = sv.GetVisualDescendants<Track>()
+            //e.
         }
 
-        private void Sv_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            
+        private void Sv_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) { 
         }
 
-        private void ItemContainerGenerator_Materialized(object sender, global::Avalonia.Controls.Generators.ItemContainerEventArgs e) {
-            
-        }
 
         private void Sv_ScrollChanged(object sender, ScrollChangedEventArgs e) {
             var sv = (ScrollViewer)sender;
@@ -59,6 +97,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
         }
+
 
         private void MpAvClipTrayView_DataContextChanged(object sender, EventArgs e) {
             if (DataContext == null) {
@@ -96,7 +135,7 @@ namespace MonkeyPaste.Avalonia {
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.MainWindowSizeChanged:
-                case MpMessageType.MainWindowOrientationChanged:
+                case MpMessageType.MainWindowOrientationChanged:                
                 case MpMessageType.TrayLayoutChanged:
                     //var mwvm = MpAvMainWindowViewModel.Instance;
 
@@ -152,11 +191,20 @@ namespace MonkeyPaste.Avalonia {
                     //    }
                     //}
                     //ir.InvalidateMeasure();
-                    lb?.InvalidateMeasure();
+                    sv?.InvalidateArrange();
+                    lb?.InvalidateArrange();
+                    lb_canvas?.InvalidateArrange();
+
                     sv?.InvalidateMeasure();
-
                     lb?.InvalidateMeasure();
+                    lb_canvas?.InvalidateMeasure();
 
+                    sv?.InvalidateVisual();
+                    lb?.InvalidateVisual();
+                    lb_canvas?.InvalidateVisual();
+
+
+                    //lb_canvas?.InvalidateArrange();
                     break;
             }
         }

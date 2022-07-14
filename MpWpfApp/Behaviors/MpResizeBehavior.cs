@@ -357,7 +357,7 @@ namespace MpWpfApp {
 
 
             if(AffectsContent) {
-                MpMessenger.SendGlobal(MpMessageType.ResizingContent);
+                MpMessenger.SendGlobal(MpMessageType.ContentResized);
                 if(!IsResizing) {
                     MpMessenger.SendGlobal(MpMessageType.ResizeContentCompleted);
                 }
@@ -378,7 +378,7 @@ namespace MpWpfApp {
             BoundWidth = newWidth;
 
             if (AffectsContent) {
-                MpMessenger.SendGlobal(MpMessageType.ResizingContent);
+                MpMessenger.SendGlobal(MpMessageType.ContentResized);
                 if (!IsResizing) {
                     MpMessenger.SendGlobal(MpMessageType.ResizeContentCompleted);
                 }
@@ -399,7 +399,7 @@ namespace MpWpfApp {
             BoundHeight = newHeight;
 
             if (AffectsContent) {
-                MpMessenger.SendGlobal(MpMessageType.ResizingContent);
+                MpMessenger.SendGlobal(MpMessageType.ContentResized);
                 if (!IsResizing) {
                     MpMessenger.SendGlobal(MpMessageType.ResizeContentCompleted);
                 }

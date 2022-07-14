@@ -215,7 +215,7 @@ namespace MpWpfApp {
         private void ReceivedMainWindowResizeBehaviorMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.ResizingMainWindowComplete:
-                case MpMessageType.ResizingContent:
+                case MpMessageType.ContentResized:
                 case MpMessageType.ResizeContentCompleted:
                     MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.MaximumScrollOfset));
                     //

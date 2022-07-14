@@ -1,6 +1,9 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
+using MonkeyPaste.Common.Avalonia;
+using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileView : MpAvUserControl<MpAvClipTileViewModel> {
@@ -9,8 +12,22 @@ namespace MonkeyPaste.Avalonia {
             this.AttachedToVisualTree += MpAvClipTileView_AttachedToVisualTree;
             this.PointerPressed += MpAvClipTileView_PointerPressed;
             this.DataContextChanged += MpAvClipTileView_DataContextChanged;
-        }
 
+            MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
+        }
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.TrayLayoutChanged:
+                    var lbi = this.GetVisualAncestor<ListBoxItem>();
+                    if(lbi == null) {
+                        Debugger.Break();
+                         return;
+                    }
+                    this.InvalidateMeasure();
+                    this.InvalidateArrange();
+                    break;
+            }
+        }
         private void MpAvClipTileView_DataContextChanged(object sender, System.EventArgs e) {
             InvalidateVisual();
             //if (e.OldValue != null && e.OldValue is MpClipTileViewModel octvm) {
@@ -28,6 +45,11 @@ namespace MonkeyPaste.Avalonia {
 
         private void BindingContext_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
+                case nameof(BindingContext.TrayX):
+                case nameof(BindingContext.MinSize):
+                    this.InvalidateVisual();
+                    this.InvalidateVisual();
+                    break;
                 case nameof(BindingContext.IsBusy):
                     if(!BindingContext.IsBusy) {
                         this.InvalidateVisual();

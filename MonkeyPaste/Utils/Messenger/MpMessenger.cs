@@ -25,6 +25,7 @@ namespace MonkeyPaste {
         MainWindowHid,
         MainWindowOrientationChanged,
         MainWindowSizeChanged,
+        MainWindowSizeReset,
         ItemInitialized,
         ItemDragBegin,
         ItemDragEnd,
@@ -36,7 +37,7 @@ namespace MonkeyPaste {
         ContentListScrollChanged, //has context (tile)
         ContentItemsChanged, //has context (tile)
         ContentSelectionChangeEnd, //has context (tile)
-        ResizingContent,
+        ContentResized,
         ResizeContentCompleted,
         SelectNextMatch,
         SelectPreviousMatch,

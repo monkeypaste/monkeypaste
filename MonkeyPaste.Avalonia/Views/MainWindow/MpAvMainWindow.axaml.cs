@@ -102,11 +102,11 @@ namespace MonkeyPaste.Avalonia {
                                 resizerHandle.HorizontalAlignment = HorizontalAlignment.Center;
                                 resizerHandle.VerticalAlignment = VerticalAlignment.Stretch;
 
-                                resizerView.Width = mwvm.MainWindowWidth;
+                                resizerView.Width = resizer_long_side;
                                 resizerView.Height = resizer_short_side;
-                                resizerView.HorizontalAlignment = HorizontalAlignment.Center;
-                                resizerView.VerticalAlignment = VerticalAlignment.Bottom;
-
+                                resizerView.HorizontalAlignment = HorizontalAlignment.Stretch;
+                                resizerView.VerticalAlignment = VerticalAlignment.Top;
+                                                                
                                 resizerTransform.Y = mwvm.MainWindowHeight - resizerView.Height;
 
                                 resizerView.Background = new SolidColorBrush() {

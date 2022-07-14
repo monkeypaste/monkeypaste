@@ -2,8 +2,10 @@
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -15,7 +17,8 @@ namespace MonkeyPaste.Avalonia {
     }
 
     public class MpAvClipTrayViewModel : MpSelectorViewModelBase<object, MpAvClipTileViewModel>,
-        MpIBootstrappedItem {
+        MpIBootstrappedItem, 
+        MpIPagingScrollViewer {
         #region Private Variables
 
         #endregion
@@ -38,89 +41,56 @@ namespace MonkeyPaste.Avalonia {
         public override ObservableCollection<MpAvClipTileViewModel> Items { get => base.Items; set => base.Items = value; }
         #endregion
 
-        #region Layout
-
+        #region MpIPagingScrollViewer Implementation
         public Orientation ListOrientation => MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ? Orientation.Horizontal : Orientation.Vertical;
 
-        public double LastScrollOffsetX { get; set; }
-        public double LastScrollOffsetY { get; set; }
-        public Vector LastScrollOffset => new Vector(LastScrollOffsetX, LastScrollOffsetY);
-
-        public Vector ScrollOffset => new Vector(ScrollOffsetX, ScrollOffsetY);
-
-        private double _scrollOffsetX;
-        public double ScrollOffsetX {
-            get => _scrollOffsetX;
-            set {
-                LastScrollOffsetX = _scrollOffsetX;
-                _scrollOffsetX = value;
-            }
-        }
-        private double _scrollOffsetY;
-        public double ScrollOffsetY {
-            get => _scrollOffsetY;
-            set {
-                LastScrollOffsetY = _scrollOffsetY;
-                _scrollOffsetY = value;
+        public double ScrollOffsetX { get; set; }
+        public double ScrollOffsetY { get; set; }
+        public double MaxScrollOffsetX {
+            get {
+                if (ListOrientation == Orientation.Vertical) {
+                    return 0;
+                }
+                return ClipTrayTotalTileWidth - ClipTrayScreenWidth;
             }
         }
 
-        public double MaxScrollOffsetX => ClipTrayTotalTileWidth - ClipTrayScreenWidth;
+        public double MaxScrollOffsetY {
+            get {
+                if (ListOrientation == Orientation.Horizontal) {
+                    return 0;
+                }
+                return ClipTrayTotalTileHeight - ClipTrayScreenHeight;
+            }
+        }
 
-        public double MaxScrollOffsetY { get; set; }
-
-        public double ZoomFactor { get; set; } = 1;
-
-        public double ClipTrayTotalTileWidth => Items.Last().TrayX + Items.Last().MinSize + Items.Last().Spacing;
-                
+        public double ClipTrayTotalTileWidth {
+            get {
+                if (ListOrientation == Orientation.Vertical) {
+                    return ClipTrayScreenWidth;
+                }
+                return Items.Last().TrayX + Items.Last().MinSize;// + Items.Last().Spacing;
+            }
+        }
+        public double ClipTrayTotalTileHeight {
+            get {
+                if (ListOrientation == Orientation.Horizontal) {
+                    return ClipTrayScreenHeight;
+                }
+                return Items.Last().TrayY + Items.Last().MinSize;// + Items.Last().Spacing;
+            }
+        }
 
         public double ClipTrayTotalWidth => Math.Max(ClipTrayScreenWidth, ClipTrayTotalTileWidth);
+        public double ClipTrayTotalHeight => Math.Max(ClipTrayScreenHeight, ClipTrayTotalTileHeight);
 
         public double ClipTrayScreenWidth { get; set; }
 
         public double ClipTrayScreenHeight { get; set; }
 
-        public Size ClipTrayExtentSize => new(ClipTrayTotalWidth, ClipTrayScreenHeight);
-
-        public Size ClipTrayViewportSize => new Size(ClipTrayScreenWidth, ClipTrayScreenHeight);
-        //public double ZoomFactorY { get; set; } = 250;
-
-
-        #endregion
-
-        #region Appearance
-
-        public ScrollBarVisibility HorizontalScrollBarVisibility {
-            get {
-                //var mwvm = MpAvMainWindowViewModel.Instance;
-                //if(LayoutType == MpAvClipTrayLayoutType.Stack) {
-                //    if(mwvm.MainWindowOrientationType == MpMainWindowOrientationType.)
-                //}
-                return ScrollBarVisibility.Auto;
-            }
-        }
-
-        public MpAvClipTrayLayoutType LayoutType { get; set; } = MpAvClipTrayLayoutType.Stack;
-
-        #endregion
-
-        #region State
-
-        public MpPoint ScrollVelocity {
-            get {
-                return new MpPoint(ScrollVelocityX, ScrollVelocityY);
-            }
-        }
-
+        public double ZoomFactor { get; set; } = 1;
         public double ScrollVelocityX { get; set; }
-
         public double ScrollVelocityY { get; set; }
-
-        public bool HasScrollVelocity => ScrollVelocity.Length > 0;
-
-        public bool IsScrollingIntoView { get; set; }
-
-        public bool IsGridLayout { get; set; }
 
         public bool CanScroll {
             get {
@@ -143,10 +113,51 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
         }
+        public bool IsThumbDragging { get; set; } = false;
+
+        #endregion
+        #region Layout
+
+
+
+        #endregion
+
+        #region Appearance
+
+        public ScrollBarVisibility HorizontalScrollBarVisibility {
+            get {
+                return ListOrientation == Orientation.Horizontal ?
+                                        ScrollBarVisibility.Auto :
+                                        ScrollBarVisibility.Hidden;
+            }
+        }
+
+        public ScrollBarVisibility VerticalScrollBarVisibility {
+            get {
+                return ListOrientation == Orientation.Horizontal ?
+                                        ScrollBarVisibility.Hidden :
+                                        ScrollBarVisibility.Auto;
+            }
+        }
+
+        public MpAvClipTrayLayoutType LayoutType { get; set; } = MpAvClipTrayLayoutType.Stack;
+
+        #endregion
+
+        #region State
+
+
+
+        public bool HasScrollVelocity => Math.Abs(ScrollVelocityX) + Math.Abs(ScrollVelocityY) > 0.1d;
+
+        public bool IsScrollingIntoView { get; set; }
+
+        public bool IsGridLayout { get; set; }
+
+        
 
         public bool IsRequery { get; set; } = false;
 
-        public bool IsThumbDragging { get; set; } = false;
 
         #endregion
 
@@ -214,25 +225,29 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(ZoomFactor):
 
-                    MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayLayoutChanged);
+                    MpMessenger.SendGlobal<MpMessageType>(MpMessageType.ContentResized);
                     break;
                 case nameof(ClipTrayScreenWidth):
                 case nameof(ClipTrayScreenHeight):
-                    OnPropertyChanged(nameof(ClipTrayViewportSize));
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.MinSize)));
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayY)));
+
+                    OnPropertyChanged(nameof(ClipTrayTotalHeight));
+                    OnPropertyChanged(nameof(ClipTrayTotalWidth));
+
+                    OnPropertyChanged(nameof(MaxScrollOffsetX));
+                    OnPropertyChanged(nameof(MaxScrollOffsetY));
+
+                    OnPropertyChanged(nameof(ClipTrayTotalTileWidth));
+                    OnPropertyChanged(nameof(ClipTrayTotalTileHeight));
                     break;
                 case nameof(ClipTrayTotalTileWidth):
-                    OnPropertyChanged(nameof(ClipTrayExtentSize));
                     OnPropertyChanged(nameof(MaxScrollOffsetX));
                     OnPropertyChanged(nameof(MaxScrollOffsetY));
                     break;
-                case nameof(ScrollOffset):
-                    MpConsole.WriteLine("Last scroll: " + LastScrollOffset);
-                    MpConsole.WriteLine("Cur scroll: " + ScrollOffset);
-                    break;
                 case nameof(ScrollOffsetX):
                 case nameof(ScrollOffsetY):
-
-                    OnPropertyChanged(nameof(ScrollOffset));
                     MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayScrollChanged);
                     break;
             }
@@ -240,61 +255,41 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
+                case MpMessageType.TrayScrollChanged:
+
+                    break;
                 case MpMessageType.MainWindowOrientationChanged:
                 case MpMessageType.MainWindowSizeChanged:
                 case MpMessageType.TrayLayoutChanged:
-                //case MpMessageType.TrayScrollChanged:
-                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.MinSize)));                    
-                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
-                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayY)));
-
-                    OnPropertyChanged(nameof(LayoutType));
-                    OnPropertyChanged(nameof(ListOrientation));
-                    OnPropertyChanged(nameof(ClipTrayTotalTileWidth));
-                    OnPropertyChanged(nameof(ClipTrayTotalWidth));
-                    OnPropertyChanged(nameof(ClipTrayViewportSize));
-                    OnPropertyChanged(nameof(ClipTrayExtentSize));
-
-                    var mwvm = MpAvMainWindowViewModel.Instance;
-
-                    //double rw = mwvm.MainWindowRect.Width / mwvm.LastMainWindowRect.Width;
-                    //double rh = mwvm.MainWindowRect.Height / mwvm.LastMainWindowRect.Height;
-                    //rw = rw.IsNumber() ? rw : 1;
-                    //rh = rh.IsNumber() ? rh : 1;
-
-                    //double rx = ScrollOffsetX / LastScrollOffsetX;
-                    //double ry = ScrollOffsetY / LastScrollOffsetY;
-                    //rx = rx.IsNumber() ? rx : 1;
-                    //ry = ry.IsNumber() ? ry : 1;
-
-                    //double rw = LastScrollOffsetX / ScrollOffsetX;
-                    //double rh = LastScrollOffsetY / ScrollOffsetY;
-                    //rw = rw.IsNumber() ? rw : 1;
-                    //rh = rh.IsNumber() ? rh : 1;
-
-                    //double rx = ScrollOffsetX / LastScrollOffsetX;
-                    //double ry = ScrollOffsetY / LastScrollOffsetY;
-                    //rx = rx.IsNumber() ? rx : 1;
-                    //ry = ry.IsNumber() ? ry : 1;
-
-
-                    //ScrollOffsetX *= rw;
-                    //ScrollOffsetY *= rh;
-                    double oldHeadTrayX = Items.Last().TrayX;
-                    double oldScrollOffsetDiffWithHead = LastScrollOffsetX - oldHeadTrayX;
-
-                    //double newHeadTrayX = HeadItem == null ? 0 : HeadItem.TrayX;
-                    //double headOffsetRatio = newHeadTrayX / oldHeadTrayX;
-                    //headOffsetRatio = double.IsNaN(headOffsetRatio) ? 1 : headOffsetRatio;
-                    //double newScrollOfsetDiffWithHead = headOffsetRatio * oldScrollOffsetDiffWithHead;
-                    //double newScrollOfset = FindTileOffsetX(HeadQueryIdx) + newScrollOfsetDiffWithHead;
-
-                    //if(newScrollOfset < 100 || Math.Abs(newScrollOfset - oldScrollOfset) > 200) {
-                    //    Debugger.Break();
-                    //}
-                    //ScrollOffset = newScrollOfset;
+                case MpMessageType.ContentResized:
+                    UpdateScrollProperties();
+                    break;
+                case MpMessageType.MainWindowSizeReset:
+                    ZoomFactor = 1.0d;
                     break;
             }
+        }
+
+        private void UpdateScrollProperties() {
+            OnPropertyChanged(nameof(LayoutType));
+
+            OnPropertyChanged(nameof(ListOrientation));
+
+            OnPropertyChanged(nameof(ClipTrayScreenWidth));
+            OnPropertyChanged(nameof(ClipTrayScreenHeight));
+
+            OnPropertyChanged(nameof(ClipTrayTotalTileWidth));
+            OnPropertyChanged(nameof(ClipTrayTotalTileHeight));
+
+            OnPropertyChanged(nameof(ClipTrayTotalWidth));
+            OnPropertyChanged(nameof(ClipTrayTotalHeight));
+
+
+            OnPropertyChanged(nameof(MaxScrollOffsetX));
+            OnPropertyChanged(nameof(MaxScrollOffsetY));
+
+            OnPropertyChanged(nameof(HorizontalScrollBarVisibility));
+            OnPropertyChanged(nameof(VerticalScrollBarVisibility));
         }
 
         #endregion

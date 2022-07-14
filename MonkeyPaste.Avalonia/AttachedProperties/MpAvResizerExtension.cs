@@ -356,14 +356,7 @@ namespace MonkeyPaste.Avalonia {
                         return;
                     }
                     if(e.ClickCount > 1) {
-                        //e.Pointer.Capture(control);
                         ResetToDefault(control);
-
-                        // Dispatcher.UIThread.Post(async () => {
-                        //     await Task.Delay(1000);
-                        //     e.Pointer.Capture(null);
-                        // });
-
                         return;
                     }
                     if (control.DataContext is MpISelectableViewModel svm) {
@@ -446,8 +439,11 @@ namespace MonkeyPaste.Avalonia {
             dx *= GetXFactor(control);
             dy *= GetYFactor(control);
 
+
             Resize(control, dx, dy);
             Reset(control);
+
+            MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeReset);
         }
 
         public static void Resize(Control control, double dx, double dy) {
@@ -475,7 +471,7 @@ namespace MonkeyPaste.Avalonia {
             SetBoundWidth(control, bound_width);
             SetBoundHeight(control, bound_height);
 
-            MpMessenger.SendGlobal(MpMessageType.ResizingContent);
+            MpMessenger.SendGlobal(MpMessageType.ContentResized);
             if (!GetIsResizing(control)) {
                 MpMessenger.SendGlobal(MpMessageType.ResizeContentCompleted);
             }
