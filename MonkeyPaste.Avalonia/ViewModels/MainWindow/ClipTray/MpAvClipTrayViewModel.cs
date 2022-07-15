@@ -18,10 +18,11 @@ namespace MonkeyPaste.Avalonia {
 
     public class MpAvClipTrayViewModel : MpSelectorViewModelBase<object, MpAvClipTileViewModel>,
         MpIBootstrappedItem, 
-        MpIPagingScrollViewer {
+        MpIPagingScrollViewerViewModel {
         #region Private Variables
 
         #endregion
+
 
         #region Statics
 
@@ -38,46 +39,82 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region View Models
+        // NOTE have to override ObservableCollection from pcl because of .netcore issue w/ module
         public override ObservableCollection<MpAvClipTileViewModel> Items { get => base.Items; set => base.Items = value; }
         #endregion
 
+        public int RowCount {
+            get {
+                if(IsEmpty) {
+                    return 0;
+                }
+                if (LayoutType == MpAvClipTrayLayoutType.Stack) {
+                    if(ListOrientation == Orientation.Horizontal) {
+                        return 1;
+                    }
+                    return Items.Count;
+                }
+                //double totalFlatWidth = Items.Sum(x => x.MinSize);
+                //int rowCount = (int)Math.Floor(totalFlatWidth / ClipTrayScreenWidth);
+                //return rowCount;
+                int rowCount = (int)Math.Ceiling((double)Items.Count / (double)ColCount);
+                return rowCount;
+            }
+        }
+
+        public int ColCount {
+            get {
+                if(IsEmpty) {
+                    return 0;
+                }
+
+                if (LayoutType == MpAvClipTrayLayoutType.Stack) {
+                    if (ListOrientation == Orientation.Horizontal) {
+                        return Items.Count;
+                    }
+                    return 1;
+                }
+                int colCount = (int)Math.Max(1.0d,Math.Floor(ClipTrayScreenWidth / Items.First().MinSize));
+                return colCount;
+            }
+        }
+
         #region MpIPagingScrollViewer Implementation
+
         public Orientation ListOrientation => MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ? Orientation.Horizontal : Orientation.Vertical;
 
         public double ScrollOffsetX { get; set; }
         public double ScrollOffsetY { get; set; }
         public double MaxScrollOffsetX {
             get {
-                if (ListOrientation == Orientation.Vertical) {
-                    return 0;
-                }
-                return ClipTrayTotalTileWidth - ClipTrayScreenWidth;
+                double maxScrollOffsetX = Math.Max(0,ClipTrayTotalTileWidth - ClipTrayScreenWidth);
+                return maxScrollOffsetX;
             }
         }
 
         public double MaxScrollOffsetY {
             get {
-                if (ListOrientation == Orientation.Horizontal) {
-                    return 0;
-                }
-                return ClipTrayTotalTileHeight - ClipTrayScreenHeight;
+                double maxScrollOffsetY = Math.Max(0,ClipTrayTotalTileHeight - ClipTrayScreenHeight);
+                return maxScrollOffsetY;
             }
         }
 
         public double ClipTrayTotalTileWidth {
             get {
-                if (ListOrientation == Orientation.Vertical) {
-                    return ClipTrayScreenWidth;
+                if(IsEmpty) {
+                    return 0;
                 }
-                return Items.Last().TrayX + Items.Last().MinSize;// + Items.Last().Spacing;
+                double totalTileWidth = ColCount * Items.First().MinSize;
+                return totalTileWidth;
             }
         }
         public double ClipTrayTotalTileHeight {
             get {
-                if (ListOrientation == Orientation.Horizontal) {
-                    return ClipTrayScreenHeight;
+                if(IsEmpty) {
+                    return 0;
                 }
-                return Items.Last().TrayY + Items.Last().MinSize;// + Items.Last().Spacing;
+                double totalTileHeight = RowCount * Items.First().MinSize;
+                return totalTileHeight;
             }
         }
 
@@ -115,9 +152,14 @@ namespace MonkeyPaste.Avalonia {
         }
         public bool IsThumbDragging { get; set; } = false;
 
-        #endregion
-        #region Layout
 
+        public Size HorizontalScrollBarDesiredSize { get; set; }
+
+        public Size VerticalScrollBarDesiredSize { get; set; }
+
+        #endregion
+
+        #region Layout
 
 
         #endregion
@@ -126,17 +168,17 @@ namespace MonkeyPaste.Avalonia {
 
         public ScrollBarVisibility HorizontalScrollBarVisibility {
             get {
-                return ListOrientation == Orientation.Horizontal ?
-                                        ScrollBarVisibility.Auto :
-                                        ScrollBarVisibility.Hidden;
+                return ScrollBarVisibility.Visible;
+                //return ClipTrayTotalTileWidth > ClipTrayScreenWidth ?
+                //        ScrollBarVisibility.Auto : ScrollBarVisibility.Hidden;
             }
         }
 
         public ScrollBarVisibility VerticalScrollBarVisibility {
             get {
-                return ListOrientation == Orientation.Horizontal ?
-                                        ScrollBarVisibility.Hidden :
-                                        ScrollBarVisibility.Auto;
+                return ScrollBarVisibility.Visible;
+                //return ClipTrayTotalTileHeight > ClipTrayScreenHeight ?
+                //        ScrollBarVisibility.Auto : ScrollBarVisibility.Hidden;
             }
         }
 
@@ -146,7 +188,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-
+        public bool IsEmpty => Items.Count == 0;
 
         public bool HasScrollVelocity => Math.Abs(ScrollVelocityX) + Math.Abs(ScrollVelocityY) > 0.1d;
 
@@ -176,9 +218,13 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync() {
-            IsBusy = true;
+            LogPropertyChangedEvents = true;
 
-            for (int i = 1; i <= 100; i++) {
+            IsBusy = true;
+            
+            MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
+
+            for (int i = 1; i <= 10; i++) {
                 var test_ctvm = await CreateClipTileViewModel(
                     new MpCopyItem() {
                         Id = i,
@@ -194,14 +240,16 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(Items));
 
 
-            MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
+            
 
 
             IsBusy = false;
         }
 
 
-
+        public override string ToString() {
+            return $"ClipTray";
+        }
         #endregion
 
         #region Private Methods
@@ -224,14 +272,14 @@ namespace MonkeyPaste.Avalonia {
                     ToggleLayoutTypeCommand.Execute(null);
                     break;
                 case nameof(ZoomFactor):
-
-                    MpMessenger.SendGlobal<MpMessageType>(MpMessageType.ContentResized);
-                    break;
+                case nameof(LayoutType):
                 case nameof(ClipTrayScreenWidth):
                 case nameof(ClipTrayScreenHeight):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.MinSize)));
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayY)));
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.RowIdx)));
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.ColIdx)));
 
                     OnPropertyChanged(nameof(ClipTrayTotalHeight));
                     OnPropertyChanged(nameof(ClipTrayTotalWidth));
@@ -259,37 +307,13 @@ namespace MonkeyPaste.Avalonia {
 
                     break;
                 case MpMessageType.MainWindowOrientationChanged:
-                case MpMessageType.MainWindowSizeChanged:
-                case MpMessageType.TrayLayoutChanged:
-                case MpMessageType.ContentResized:
-                    UpdateScrollProperties();
+                    OnPropertyChanged(nameof(ListOrientation));
                     break;
+                case MpMessageType.TrayLayoutChanged:
                 case MpMessageType.MainWindowSizeReset:
-                    ZoomFactor = 1.0d;
+                    ResetZoomFactorCommand.Execute(null);
                     break;
             }
-        }
-
-        private void UpdateScrollProperties() {
-            OnPropertyChanged(nameof(LayoutType));
-
-            OnPropertyChanged(nameof(ListOrientation));
-
-            OnPropertyChanged(nameof(ClipTrayScreenWidth));
-            OnPropertyChanged(nameof(ClipTrayScreenHeight));
-
-            OnPropertyChanged(nameof(ClipTrayTotalTileWidth));
-            OnPropertyChanged(nameof(ClipTrayTotalTileHeight));
-
-            OnPropertyChanged(nameof(ClipTrayTotalWidth));
-            OnPropertyChanged(nameof(ClipTrayTotalHeight));
-
-
-            OnPropertyChanged(nameof(MaxScrollOffsetX));
-            OnPropertyChanged(nameof(MaxScrollOffsetY));
-
-            OnPropertyChanged(nameof(HorizontalScrollBarVisibility));
-            OnPropertyChanged(nameof(VerticalScrollBarVisibility));
         }
 
         #endregion
@@ -298,12 +322,31 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ToggleLayoutTypeCommand => new MpCommand(
             () => {
+                ScrollToHomeCommand.Execute(null);
+
                 if (IsGridLayout) {
                     LayoutType = MpAvClipTrayLayoutType.Grid;
                 } else {
                     LayoutType = MpAvClipTrayLayoutType.Stack;
                 }
                 MpMessenger.SendGlobal(MpMessageType.TrayLayoutChanged);
+            });
+
+        public ICommand ScrollToHomeCommand => new MpCommand(
+            () => {
+                ScrollOffsetX = 0;
+                ScrollOffsetY = 0;
+            });
+
+        public ICommand ScrollToEndCommand => new MpCommand(
+            () => {
+                ScrollOffsetX = MaxScrollOffsetX;
+                ScrollOffsetY = MaxScrollOffsetY;
+            });
+
+        public ICommand ResetZoomFactorCommand => new MpCommand(
+            () => {
+                ZoomFactor = 1.0d;
             });
         #endregion
     }

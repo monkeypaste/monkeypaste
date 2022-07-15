@@ -78,7 +78,8 @@
                       IsChecked="{Binding IsVisible,
                                           Source={x:Static local:MpAvSettingsWindowViewModel.Instance}}"
                       ToolTip.ShowDelay="500"
-                      Padding="0,0,2,0">
+                      Margin="3,0,0,0"
+                      Padding="2,2,2,0">
             <ToolTip.Tip>
                 <local:MpAvTooltipView ToolTipText="Settings" />
             </ToolTip.Tip>
@@ -106,60 +107,85 @@
                 <local:MpAvTooltipView ToolTipText="Lock" />
             </ToolTip.Tip>
             <Grid>
-                <Viewbox IsVisible="{Binding !IsMainWindowLocked}">
+                <Viewbox>
                     <Path Data="{StaticResource LockOutlineSvg}" />
-                </Viewbox>
-                <Viewbox IsVisible="{Binding IsMainWindowLocked}">
-                    <Path Data="{StaticResource LockSvg}" />
                 </Viewbox>
             </Grid>
         </ToggleButton>
 
-        <!--  Right Side  -->
-
-        <!--
-            Zoom Factor Slider
-            
-            
-            Height="{Binding Bounds.Height,
-            ElementName=TitlePanel}"
-        -->
-        <Viewbox Stretch="UniformToFill"
-                 Width="125"
-                 Height="{Binding Bounds.Height,
-                                  ElementName=TitlePanel}"
-                 RelativePanel.LeftOf="GridLayoutToggleButton">
-            <Slider Value="{Binding ZoomFactor,
-                                    Mode=TwoWay,
-                                    Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                    Minimum="0.25"
-                    Maximum="3"
-                    TickFrequency="0.5"
-                    Width="250"
-                    Height="40"
-                    HorizontalAlignment="Center"
+        <!--  Zoom Factor Slider  -->
+        <Grid Width="125"
+              Opacity="0.5"
+              Height="{Binding Bounds.Height,
+                               ElementName=TitlePanel}"
+              Margin="0,0,10,0"
+              RelativePanel.LeftOf="GridLayoutToggleButton">
+            <Border HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
-                    Orientation="Horizontal"
-                    IsSnapToTickEnabled="False"
-                    TickPlacement="TopLeft"
-                    Margin="0,0,5,0">
-                <Slider.Styles>
-                    <Style Selector="Slider /template/ Thumb">
-                        <Setter Property="ToolTip.Tip"
-                                Value="{Binding $parent[Slider].Value,
-                                                Mode=OneWay,
-                                                StringFormat='Value \{0:f\}'}" />
-                        <Setter Property="ToolTip.Placement"
-                                Value="Top" />
-                        <Setter Property="ToolTip.VerticalOffset"
-                                Value="-10" />
-                        <Setter Property="ToolTip.HorizontalOffset"
-                                Value="-30" />
-                    </Style>
-                </Slider.Styles>
-            </Slider>
-        </Viewbox>
-
+                    Margin="0,2,0,0"
+                    Height="1"
+                    Background="White" />
+            <Border HorizontalAlignment="Left"
+                    VerticalAlignment="Stretch"
+                    Margin="0,5"
+                    Width="1"
+                    Background="White" />
+            <Border HorizontalAlignment="Right"
+                    VerticalAlignment="Stretch"
+                    Margin="0,5"
+                    Width="1"
+                    Background="White" />
+            <Viewbox Stretch="Fill"
+                     VerticalAlignment="Center"
+                     Margin="0">
+                <Slider x:Name="ZoomFactorSlider"
+                        DoubleTapped="ZoomFactorSlider_DoubleTapped"
+                        Value="{Binding ZoomFactor,
+                                        Mode=TwoWay,
+                                        Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                        Minimum="0.25"
+                        Maximum="3"
+                        TickFrequency="0.1"
+                        Width="250"
+                        Height="40"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Orientation="Horizontal"
+                        IsSnapToTickEnabled="False"
+                        Margin="0,0,5,14">
+                    <Slider.Styles>
+                        <Style Selector="Slider /template/ Thumb">
+                            <Setter Property="ToolTip.Tip"
+                                    Value="{Binding $parent[Slider].Value,
+                                                    Mode=OneWay,
+                                                    StringFormat='Value \{0:f\}'}" />
+                            <Setter Property="ToolTip.Placement"
+                                    Value="Top" />
+                            <Setter Property="ToolTip.VerticalOffset"
+                                    Value="-10" />
+                            <Setter Property="ToolTip.HorizontalOffset"
+                                    Value="-30" />
+                        </Style>
+                        <Style Selector="Slider /template/ RepeatButton">
+                            <Setter Property="IsVisible"
+                                    Value="False" />
+                        </Style>
+                        <Style Selector="Slider /template/ Thumb.SliderThumbStyle">
+                            <Setter Property="Template">
+                                <ControlTemplate>
+                                    <Grid>
+                                        <Border Width="12"
+                                                Height="40"
+                                                CornerRadius="3"
+                                                Background="White" />
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter>
+                        </Style>
+                    </Slider.Styles>
+                </Slider>
+            </Viewbox>
+        </Grid>
         <!--  Layout Toggle Button  -->
         <ToggleButton x:Name="GridLayoutToggleButton"
                       RelativePanel.LeftOf="MainWindowOrientationButton"

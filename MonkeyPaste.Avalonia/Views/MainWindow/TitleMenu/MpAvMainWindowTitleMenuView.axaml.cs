@@ -9,6 +9,9 @@ namespace MonkeyPaste.Avalonia {
             InitializeComponent();
         }
 
+        private void ZoomFactorSlider_DoubleTapped(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
+            MpAvClipTrayViewModel.Instance.ResetZoomFactorCommand.Execute(null);
+        }
 
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);

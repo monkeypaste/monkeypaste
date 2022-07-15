@@ -65,6 +65,9 @@ namespace MonkeyPaste {
         [JsonIgnore]
         public virtual bool HasModelChanged { get; set; } = false;
 
+        [JsonIgnore]
+        public bool LogPropertyChangedEvents { get; set; } = false;
+
         #endregion
 
         #region Events
@@ -209,7 +212,13 @@ namespace MonkeyPaste {
             if(SupressPropertyChangedNotification) {
                 return;
             }
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            var e = new PropertyChangedEventArgs(propertyName);
+
+            if (LogPropertyChangedEvents) {
+                MpConsole.WriteLine($"{this} {e.PropertyName} => {this.GetPropertyValue(e.PropertyName)?.ToString()}");
+            }
+
+            PropertyChanged?.Invoke(this, e);
             //return;
 
             //MpHelpers.RunOnMainThreadAsync(() => {

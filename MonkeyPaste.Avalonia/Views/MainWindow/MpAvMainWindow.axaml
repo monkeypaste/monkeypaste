@@ -4,7 +4,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="using:MonkeyPaste.Avalonia"
         xmlns:pcl="using:MonkeyPaste"
-        xmlns:webview="clr-namespace:WebViewControl;assembly=WebViewControl.Avalonia"
         mc:Ignorable="d"
         d:DesignWidth="800"
         d:DesignHeight="450"
@@ -23,14 +22,10 @@
         TransparencyLevelHint="Transparent"
         Title="Monkey Paste">
     <Grid x:Name="MainWindowGrid"
+          Background="Transparent"
           RowDefinitions="20,40,*"
           Width="{Binding MainWindowWidth}"
           Height="{Binding MainWindowHeight}">
-        <Grid.Background>
-            <SolidColorBrush Color="Pink"
-                             Opacity="{Binding MainWindowOpacity,
-                                               Source={x:Static pcl:MpPrefViewModel.Instance}}" />
-        </Grid.Background>
 
         <!--  Title Menu  -->
         <local:MpAvMainWindowTitleMenuView x:Name="MainWindowTitleView"
@@ -63,7 +58,6 @@
             </Grid.Background>
             <local:MpAvClipTrayView HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch" />
-            <!--<webview:WebView x:Name="webview" Address="file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html" />-->
         </Grid>
 
         <!--  Resize Handle  -->

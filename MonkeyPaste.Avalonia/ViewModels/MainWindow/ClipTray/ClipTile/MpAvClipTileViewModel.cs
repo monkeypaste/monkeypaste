@@ -1,6 +1,8 @@
-﻿using Avalonia.Layout;
+﻿using Avalonia;
+using Avalonia.Layout;
 using MonkeyPaste.Common;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -9,6 +11,13 @@ namespace MonkeyPaste.Avalonia {
         MpISelectorItemViewModel<MpAvClipTileViewModel>,
         MpIHoverableViewModel,
         MpIResizableViewModel {
+
+        #region Constants
+
+        public const double MIN_SIZE_ZOOM_FACTOR_COEFF = (double)1 / (double)7;
+
+        #endregion
+
         #region Properties
 
         #region MpISelectableViewModel Implementation
@@ -45,15 +54,15 @@ namespace MonkeyPaste.Avalonia {
                     return MpSystemColors.orange1;
                 }
                 if (IsSelected) {
-                    return MpSystemColors.Red;
+                    return MpSystemColors.Red;//.AdjustAlpha(0.7);
                 }
                 if (Parent.HasScrollVelocity || Parent.HasScrollVelocity) {
-                    return MpSystemColors.blue1;
+                    return MpSystemColors.Transparent;
                 }
                 if (IsHovering) {
-                    return MpSystemColors.Yellow;
+                    return MpSystemColors.Yellow;//.AdjustAlpha(0.7);
                 }
-                return MpSystemColors.blue1;
+                return MpSystemColors.Transparent;
             }
         }
 
@@ -61,44 +70,53 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
-        public double OuterSpacing => 10;
-        public double InnerSpacing => 5;
+        public double OuterSpacing => 5;
+        public double InnerSpacing => 0;
         public double MinSize {
             get {
+                double minSize = 0;
                 if (Parent == null) {
-                    return 0;
+                    return minSize;
                 }
-                if (Parent.ListOrientation == Orientation.Horizontal) {
-                    return (Parent.ClipTrayScreenHeight * Parent.ZoomFactor);// - (Spacing * 2);
+                if (Parent.LayoutType == MpAvClipTrayLayoutType.Stack) {
+                    minSize = Parent.ListOrientation == Orientation.Horizontal ?
+                                    (Parent.ClipTrayScreenHeight * Parent.ZoomFactor) :
+                                    (Parent.ClipTrayScreenWidth * Parent.ZoomFactor);
                 } else {
-                    return (Parent.ClipTrayScreenWidth * Parent.ZoomFactor);// - (Spacing * 2);
+                    minSize = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds.Width * 
+                                Parent.ZoomFactor * MIN_SIZE_ZOOM_FACTOR_COEFF;
                 }
+                //minSize = ();
+
+                return minSize;
             }
         }
 
         public double TrayX {
             get {
+                double trayX = 0;
                 if (Parent == null) {
-                    return 0;
+                    return trayX;
                 }
-                if (Parent.ListOrientation == Orientation.Vertical) {
-                    return 0;
-                }
-                return (MinSize * QueryOffsetIdx + ((QueryOffsetIdx + 1)));// * (Spacing * 2))); ;
+                trayX = MinSize * ColIdx;
+
+                return trayX;
             }
         }
 
         public double TrayY {
             get {
+                double trayY = 0;
                 if (Parent == null) {
-                    return 0;
+                    return trayY;
                 }
-                if (Parent.ListOrientation == Orientation.Horizontal) {
-                    return 0;
-                }
-                return (MinSize * QueryOffsetIdx + ((QueryOffsetIdx + 1)));// * (Spacing * 2)));
+                trayY = MinSize * RowIdx;
+                return trayY;
             }
         }
+
+        public Rect TrayRect => new Rect(TrayX, TrayY, MinSize, MinSize);
+
         #endregion
 
         #region State
@@ -121,6 +139,39 @@ namespace MonkeyPaste.Avalonia {
 
         public int QueryOffsetIdx { get; set; }
 
+        public int RowIdx {
+            get {
+                int rowIdx = 0;
+                if(Parent == null) {
+                    return rowIdx;
+                }
+                if(Parent.LayoutType == MpAvClipTrayLayoutType.Stack) {
+                    rowIdx = Parent.ListOrientation == Orientation.Horizontal ?
+                                    0 : QueryOffsetIdx;                    
+                } else {
+                    rowIdx = (int)((double)QueryOffsetIdx / (double)Parent.ColCount);
+                }
+
+                return rowIdx;
+            }
+        }
+
+        public int ColIdx {
+            get {
+                int colIdx = 0;
+                if (Parent == null) {
+                    return colIdx;
+                }
+                if (Parent.LayoutType == MpAvClipTrayLayoutType.Stack) {
+                    colIdx = Parent.ListOrientation == Orientation.Horizontal ?
+                                    QueryOffsetIdx : 0;                    
+                } else {
+                    colIdx = QueryOffsetIdx - (RowIdx * Parent.ColCount);
+                }                
+                
+                return colIdx;
+            }
+        }
         public bool IsVisible {
             get {
                 //if (Parent == null) {
@@ -133,6 +184,14 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
         }
+
+        public string EditorPath {
+            get {
+                //file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html
+                return Path.Combine(Environment.CurrentDirectory, "Resources", "Html", "Editor", "index.html");
+            }
+        }
+        
         #endregion
 
         #region Model
@@ -171,6 +230,8 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync(MpCopyItem ci, int queryOffsetIdx = -1) {
+            LogPropertyChangedEvents = true;
+
             IsBusy = true;
 
             await Task.Delay(1);
@@ -186,6 +247,9 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
+        public override string ToString() {
+            return $"Tile[{QueryOffsetIdx}]";
+        }
         #endregion
 
         #region Private Methods
@@ -197,15 +261,6 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch(msg) {
-                case MpMessageType.MainWindowOrientationChanged:
-                case MpMessageType.MainWindowSizeChanged:
-                case MpMessageType.TrayLayoutChanged:
-                case MpMessageType.ContentResized:
-                    OnPropertyChanged(nameof(TrayX));
-                    OnPropertyChanged(nameof(TrayY));
-
-                    OnPropertyChanged(nameof(MinSize));
-                    break;
             }
         }
 

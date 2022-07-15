@@ -1,7 +1,9 @@
-﻿using Avalonia.Layout;
+﻿using Avalonia;
+using Avalonia.Layout;
+using MonkeyPaste;
 
 namespace MonkeyPaste.Avalonia {
-    public interface MpIPagingScrollViewer {
+    public interface MpIPagingScrollViewerViewModel : MpIViewModel {
         bool CanScroll { get; }
         bool IsScrollingIntoView { get; set; }
         bool IsThumbDragging { get; set; }
@@ -13,5 +15,9 @@ namespace MonkeyPaste.Avalonia {
         double ScrollOffsetY { get; set; }
         double ScrollVelocityX { get; set; }
         double ScrollVelocityY { get; set; }
+
+        Size HorizontalScrollBarDesiredSize { get; set; }
+
+        Size VerticalScrollBarDesiredSize { get; set; }
     }
 }

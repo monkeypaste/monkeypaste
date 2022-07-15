@@ -286,8 +286,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
-
         #region ScrollViewer AvaloniaProperty
         public static ScrollViewer GetScrollViewer(AvaloniaObject obj) {
             return obj.GetValue(ScrollViewerProperty);
@@ -439,10 +437,13 @@ namespace MonkeyPaste.Avalonia {
                     double dampX = GetWheelDampeningX(lb);
                     double dampY = GetWheelDampeningY(lb);
                     var lb_orientation = GetListOrientation(lb);
+                    var layout_type = GetLayoutType(lb);
                     double vFactor = -120;
 
-                    double v0x = lb_orientation == Orientation.Horizontal ? e.Delta.Y * vFactor : e.Delta.X * vFactor;
-                    double v0y = lb_orientation == Orientation.Horizontal ? e.Delta.X * vFactor : e.Delta.Y * vFactor;
+                    double v0x = lb_orientation == Orientation.Horizontal && layout_type == MpAvClipTrayLayoutType.Stack
+                                    ? e.Delta.Y * vFactor : e.Delta.X * vFactor;
+                    double v0y = lb_orientation == Orientation.Horizontal && layout_type == MpAvClipTrayLayoutType.Stack
+                                    ? e.Delta.X * vFactor : e.Delta.Y * vFactor;
 
                     double vx = v0x - (v0x * dampX);
                     double vy = v0y - (v0y * dampY);
@@ -457,8 +458,25 @@ namespace MonkeyPaste.Avalonia {
             #region ScrollViewer Events
 
             bool BindScrollViewerAndTracks(ListBox lb) {
-                if (GetScrollViewer(lb) is ScrollViewer sv) {                    
-                    if (sv.TryGetVisualDescendants<Track>(out var tracks) && tracks.Count() > 0) {
+                if (GetScrollViewer(lb) is ScrollViewer sv &&
+                    sv.DataContext is MpIPagingScrollViewerViewModel psvvm) {
+                    
+                    if (sv.TryGetVisualDescendants<Track>(out var tracks) && tracks.Count() == 2) {
+
+                        var lb_sv = lb.GetVisualDescendant<ScrollViewer>();
+                        lb_sv.Bind(
+                            ScrollViewer.HorizontalScrollBarValueProperty,
+                            new Binding() {
+                                Source = lb.DataContext,
+                                Path = nameof(psvvm.ScrollOffsetX)});
+
+                        lb_sv.Bind(
+                            ScrollViewer.VerticalScrollBarValueProperty,
+                            new Binding() {
+                                Source = lb.DataContext,
+                                Path = nameof(psvvm.ScrollOffsetY)});
+
+
                         foreach (var track in tracks) {
                             track.Tag = lb;
                             track.IsThumbDragHandled = true;
@@ -468,22 +486,17 @@ namespace MonkeyPaste.Avalonia {
                                     new Binding() {
                                         Source = lb.DataContext,
                                         Path = track.Orientation == Orientation.Horizontal ?
-                                                nameof(MpAvClipTrayViewModel.Instance.ScrollOffsetX) :
-                                                nameof(MpAvClipTrayViewModel.Instance.ScrollOffsetY),
-                                        //Mode = BindingMode.TwoWay,
-                                        //Priority = BindingPriority.Style
-                                    });
+                                                nameof(psvvm.ScrollOffsetX) :
+                                                nameof(psvvm.ScrollOffsetY),});
 
                             track.Bind(
                                     Track.MaximumProperty,
                                     new Binding() {
                                         Source = lb.DataContext,
                                         Path = track.Orientation == Orientation.Horizontal ?
-                                                nameof(MpAvClipTrayViewModel.Instance.MaxScrollOffsetX) :
-                                                nameof(MpAvClipTrayViewModel.Instance.MaxScrollOffsetY),
-                                        //Mode = BindingMode.OneWay
-                                        //Priority = BindingPriority.Style
-                                    });
+                                                nameof(psvvm.MaxScrollOffsetX) :
+                                                nameof(psvvm.MaxScrollOffsetY)});
+
                             track.Minimum = 0;
                             
                             track.AddHandler(
@@ -514,6 +527,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return false;
             }
+
 
             #region Track Events
 
@@ -634,11 +648,6 @@ namespace MonkeyPaste.Avalonia {
 
                     SetScrollOffsetX(lb, scrollOffsetX);
                     SetScrollOffsetY(lb, scrollOffsetY);
-
-                    //update listbox sv not the parent scroll vieweerr
-                    var control_sv = lb.GetVisualDescendant<ScrollViewer>();
-                    control_sv.ScrollToHorizontalOffset(scrollOffsetX);
-                    control_sv.ScrollToVerticalOffset(scrollOffsetY);
 
                     SetVelocityX(lb, vx);
                     SetVelocityY(lb, vy);

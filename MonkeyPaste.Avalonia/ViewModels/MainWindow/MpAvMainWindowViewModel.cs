@@ -393,11 +393,6 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task InitializeAsync() {
             await Task.Delay(1);
-
-
-
-
-            //ShowWindowCommand.Execute(null);
         }
 
         public void SetupMainWindowSize(bool isOrientationChange = false) {

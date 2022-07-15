@@ -13,12 +13,8 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTrayView">
     <Grid Margin="0"
-          AttachedToVisualTree="MpAvClipTrayView_AttachedToVisualTree">
-        <Grid.Background>
-            <SolidColorBrush Color="Cyan"
-                             Opacity="0.7" />
-        </Grid.Background>
-
+          AttachedToVisualTree="MpAvClipTrayView_AttachedToVisualTree"
+          Background="Transparent">
         <Border x:Name="ClipTrayContainerBorder"
                 local:MpAvSizeObserverExtension.IsEnabled="True"
                 local:MpAvSizeObserverExtension.ObservedWidth="{Binding ClipTrayScreenWidth,
@@ -32,8 +28,6 @@
                           VerticalAlignment="Top"
                           Width="{Binding ClipTrayScreenWidth}"
                           Height="{Binding ClipTrayScreenHeight}">
-                <!--
-                -->
                 <ListBox x:Name="ClipTrayListBox"
                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
@@ -81,9 +75,11 @@
                         <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">
                             Transparent
                         </SolidColorBrush>
+                        <Thickness x:Key="ListBoxItemPadding">
+                            5,5,5,5
+                        </Thickness>
                     </ListBox.Resources>
                     <ListBox.Styles>
-                        <!--  Give the ListBoxItems a fixed with of 100 and right-align them  -->
                         <Style Selector="ListBoxItem"
                                x:DataType="local:MpAvClipTileViewModel">
                             <Setter Property="HorizontalAlignment"
@@ -115,7 +111,7 @@
                         <ItemsPanelTemplate>
                             <Canvas x:Name="ClipTrayItemsPanelCanvas"
                                     Width="{Binding ClipTrayTotalWidth}"
-                                    Height="{Binding ClipTrayTotalHeight}"/>
+                                    Height="{Binding ClipTrayTotalHeight}" />
                             <!--<VirtualizingStackPanel Orientation="Horizontal" />-->
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
