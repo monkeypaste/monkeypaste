@@ -21,8 +21,6 @@ namespace MonkeyPaste.Avalonia {
             BoundsProperty.Changed.AddClassHandler<MpAvMainWindow>((x,y) => x.BoundsChangedHandler(y as AvaloniaPropertyChangedEventArgs<Rect>));
         }
         public MpAvMainWindow() {
-            WebView.Settings.OsrEnabled = false;
-            WebView.Settings.LogFile = "ceflog.txt";
 
             while (!Debugger.IsAttached) {
                 Thread.Sleep(100);

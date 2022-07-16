@@ -32,14 +32,30 @@
             <SolidColorBrush Color="OldLace"
                              Opacity="0.7" />
         </Border.Background>
-        <Grid RowDefinitions="20,*">
-            <TextBlock Grid.Row="0"
-                       Text="{Binding CopyItemData}" />
-            <webview:WebView x:Name="webview"
+        <!--<Grid>-->
+        <Grid RowDefinitions="30,*"
+              IsHitTestVisible="False"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Grid.Row="0"
+                           Text="{Binding CopyItemData}" />
+                <Button x:Name="DebugButton"
+                        Content="Debug" />
+            </StackPanel>
+            <webview:WebView x:Name="WebView"
+                             IsHitTestVisible="False"
                              Grid.Row="1"
-                             MinWidth="150"
-                             MinHeight="150"
-                             Address="https://www.google.com" />
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             Address="{Binding EditorPath}" />
         </Grid>
+
+
+        <!--<Border Background="Orange"
+                    IsHitTestVisible="False"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch" />
+        </Grid>-->
     </Border>
 </local:MpAvUserControl>

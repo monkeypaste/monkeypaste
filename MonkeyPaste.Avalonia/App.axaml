@@ -22,10 +22,13 @@
     <TrayIcon.Icons>
         <TrayIcons>
             <TrayIcon Icon="/Assets/Icons/monkey.ico"
-                      Command="{Binding ShowWindowCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+                      Clicked="AppTrayIcon_Clicked"
                       ToolTipText="Monkey Paste">
                 <TrayIcon.Menu>
+                        
                     <NativeMenu>
+                        <NativeMenuItem Header="Show"
+                                        Command="{Binding ShowWindowCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />
                         <NativeMenuItem Header="Settings"
                                         Command="{Binding ToggleCommand}">
                             <NativeMenu>

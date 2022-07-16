@@ -124,9 +124,6 @@ function loadQuill(reqMsg) {
 	Quill.register("modules/htmlEditButton", htmlEditButton);
 	Quill.register({ "modules/better-table": quillBetterTable }, true);
 
-
-	//registerContentBlots();
-	registerContentGuidAttribute();
 	registerTemplateSpan();
 
 	// Append the CSS stylesheet to the page
@@ -170,8 +167,9 @@ function loadQuill(reqMsg) {
 	//quill.root.removeEventListener('dragenter', quill.root.ondragenter);
 	//quill.root.removeEventListener('dragleave', quill.root.ondragleave);
 	//quill.root.removeEventListener('dragover', quill.root.ondragover);
-	quill.root.removeEventListener("dragstart", quill.root.ondragstart, true);
-	quill.root.removeEventListener("drop", quill.root.ondrop, true);
+
+	//quill.root.removeEventListener("dragstart", quill.root.ondragstart, true);
+	//quill.root.removeEventListener("drop", quill.root.ondrop, true);
 
 	initTableToolbarButton();
 
@@ -257,7 +255,6 @@ function loadQuill(reqMsg) {
 			return;
 		}
 
-		formatContentChange(delta, oldDelta, source);
 
 		updateTemplatesAfterTextChanged(delta, oldDelta, source);
 
@@ -267,9 +264,9 @@ function loadQuill(reqMsg) {
 
 	initTemplates(reqMsg.usedTextTemplates, reqMsg.isPasteRequest);
 
-	// initDragDrop();
+	initDragDrop();
 
-	//initClipboard();
+	initClipboard();
 
 	refreshFontSizePicker();
 	refreshFontFamilyPicker();
@@ -334,7 +331,7 @@ function updateAllSizeAndPositions() {
 	//$(".ql-toolbar").css("position", "fixed");
 	$(".ql-toolbar").css("top", 0);
 
-	if (IsReadOnly()) {
+	if (IsReadOnly() || IsDropping()) {
 		$("#editor").css("top", 0);
 	} else {
 		$("#editor").css("top", $(".ql-toolbar").outerHeight());
@@ -412,8 +409,8 @@ function getHtml() {
 	//var val = document.getElementsByClassName("ql-editor")[0].innerHTML;
 	clearTemplateFocus();
 	var val = quill.root.innerHTML;
-	log('getHtml response');
-	log(val);
+	//log('getHtml response');
+	//log(val);
 
 	return val;
 	// return val;
@@ -614,29 +611,35 @@ function enableReadOnly() {
 	return qrmJsonStr; //btoa(qrmJsonStr);
 }
 
-function disableReadOnly(disableReadOnlyReqStr) {
+function disableReadOnly(disableReadOnlyReqStrOrObj) {
 	bindJsComAdapter();
 
 	let disableReadOnlyMsg = null;
 
-	if (disableReadOnlyReqStr == null) {
+	if (disableReadOnlyReqStrOrObj == null) {
 		disableReadOnlyMsg = {
 			allAvailableTextTemplates: [],
-			editorHeight: window.visualViewport.height
+			editorHeight: window.visualViewport.height,
+			isSilent: false
 		};
-	} else {
+	} else if (disableReadOnlyReqStrOrObj instanceof String) {
 		//let disableReadOnlyReqStr_decoded = atob(disableReadOnlyReqStr);
 		//disableReadOnlyMsg = JSON.parse(disableReadOnlyReqStr_decoded);
-		disableReadOnlyMsg = JSON.parse(disableReadOnlyReqStr);
+		disableReadOnlyMsg = JSON.parse(disableReadOnlyReqStrOrObj);
+	} else {
+		disableReadOnlyMsg = disableReadOnlyReqStrOrObj;
 	}
 
 	availableTemplates = disableReadOnlyMsg.allAvailableTextTemplates;
 	//document.body.style.height = disableReadOnlyMsg.editorHeight;
 
-	showEditorToolbar();
-	showScrollbars();
+	if (!disableReadOnlyMsg.isSilent) {
+		showEditorToolbar();
+		showScrollbars();
 
-	updateAllSizeAndPositions();
+		updateAllSizeAndPositions();
+	}
+	
 
 	$(".ql-editor").attr("contenteditable", true);
 	$(".ql-editor").css("caret-color", "black");
@@ -646,13 +649,13 @@ function disableReadOnly(disableReadOnlyReqStr) {
 	//$('.ql-editor').css('width', DefaultEditorWidth);
 	//document.body.style.minHeight = disableReadOnlyMsg.editorHeight;
 
-	updateAllSizeAndPositions();
+	//updateAllSizeAndPositions();
 
 	let droMsgObj = { editorWidth: DefaultEditorWidth };
 	let droMsgJsonStr = JSON.stringify(droMsgObj);
 
-	log("disableReadOnly() response msg:");
-	log(droMsgJsonStr);
+	//log("disableReadOnly() response msg:");
+	//log(droMsgJsonStr);
 
 	return droMsgJsonStr; //btoa(droMsgJsonStr);
 }

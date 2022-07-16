@@ -218,7 +218,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync() {
-            LogPropertyChangedEvents = true;
+            LogPropertyChangedEvents = false;
 
             IsBusy = true;
             

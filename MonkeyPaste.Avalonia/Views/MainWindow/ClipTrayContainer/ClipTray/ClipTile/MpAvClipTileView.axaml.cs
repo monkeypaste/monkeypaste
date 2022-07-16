@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using MonkeyPaste.Common.Avalonia;
 using System.Diagnostics;
+using WebViewControl;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileView : MpAvUserControl<MpAvClipTileViewModel> {
@@ -14,7 +15,17 @@ namespace MonkeyPaste.Avalonia {
             this.DataContextChanged += MpAvClipTileView_DataContextChanged;
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
+
+            var dbgButton = this.FindControl<Button>("DebugButton");
+            dbgButton.Click += DbgButton_Click;
         }
+
+        private void DbgButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
+            var webView = this.FindControl<WebView>("WebView");
+            webView.ShowDeveloperTools();
+            
+        }
+
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.TrayLayoutChanged:

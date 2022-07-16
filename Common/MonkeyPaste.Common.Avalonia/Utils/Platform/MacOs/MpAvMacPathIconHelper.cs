@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common.Avalonia {
-    public static class MpMacPathIconHelper {
+    public static class MpAvMacPathIconHelper {
         #region Path Icon
         public static string GetIconBase64FromMacPath(string path) {
             /*
@@ -25,7 +25,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 return string.Empty;
             }
 
-            MpMacHelpers.EnsureInitialized();
+            MpAvMacHelpers.EnsureInitialized();
 
             var icon = NSWorkspace.SharedWorkspace.IconForFile(path);
             var data = icon.AsTiff();

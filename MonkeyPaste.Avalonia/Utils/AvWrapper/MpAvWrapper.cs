@@ -13,6 +13,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvWrapper : MpIPlatformWrapper {
         private static MpAvWrapper _instance;
         public static MpAvWrapper Instance => _instance ?? (_instance = new MpAvWrapper());
+        
         public MpIProcessWatcher ProcessWatcher { get; set; }
         public MpICursor? Cursor { get; set; }
         public MpIDbInfo? DbInfo { get; set; }

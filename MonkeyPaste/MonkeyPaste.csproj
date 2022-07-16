@@ -23,7 +23,6 @@
     <Compile Remove="Repositories\**" />
     <Compile Remove="Resources\Data\Analytics\**" />
     <Compile Remove="Resources\Html\Editor\dist\**" />
-    <Compile Remove="Resources\Html\Editor\lib\**" />
     <Compile Remove="Resources\Html\Editor\node_modules\**" />
     <Compile Remove="Resources\Html\Editor\src\modules\**" />
     <Compile Remove="Resources\Html\Editor\TestData\**" />
@@ -41,7 +40,6 @@
     <EmbeddedResource Remove="Repositories\**" />
     <EmbeddedResource Remove="Resources\Data\Analytics\**" />
     <EmbeddedResource Remove="Resources\Html\Editor\dist\**" />
-    <EmbeddedResource Remove="Resources\Html\Editor\lib\**" />
     <EmbeddedResource Remove="Resources\Html\Editor\node_modules\**" />
     <EmbeddedResource Remove="Resources\Html\Editor\src\modules\**" />
     <EmbeddedResource Remove="Resources\Html\Editor\TestData\**" />
@@ -59,7 +57,6 @@
     <None Remove="Repositories\**" />
     <None Remove="Resources\Data\Analytics\**" />
     <None Remove="Resources\Html\Editor\dist\**" />
-    <None Remove="Resources\Html\Editor\lib\**" />
     <None Remove="Resources\Html\Editor\node_modules\**" />
     <None Remove="Resources\Html\Editor\src\modules\**" />
     <None Remove="Resources\Html\Editor\TestData\**" />
@@ -231,24 +228,6 @@
     <EmbeddedResource Include="Resources\Icons\search.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="Resources\Html\Editor\src\components\content\content-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\src\components\editor\editor-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\src\components\editor\quill-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\src\components\template\template-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\src\components\template\toolbar\edit\edit-template-toolbar-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\src\components\template\toolbar\paste\paste-template-toolbar-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\style\content-style.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -299,4 +278,8 @@
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /y /f /S /I /E &quot;$(ProjectDir)Resources&quot; &quot;$(TargetDir)Resources&quot;" />
+  </Target>
 </Project>

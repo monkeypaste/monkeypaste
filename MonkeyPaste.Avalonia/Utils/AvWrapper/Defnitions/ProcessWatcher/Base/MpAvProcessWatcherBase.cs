@@ -18,7 +18,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-        public IntPtr ThisAppHandle => MpAvMainWindow.Instance == null ? IntPtr.Zero : MpAvMainWindow.Instance.PlatformImpl.Handle.Handle;
+        public IntPtr ThisAppHandle => MpAvMainWindow.Instance == null || MpAvMainWindow.Instance.PlatformImpl == null ?
+                                        IntPtr.Zero :
+                                        MpAvMainWindow.Instance.PlatformImpl.Handle.Handle;
 
         public IntPtr LastHandle => _lastProcessTuple == null ? IntPtr.Zero : _lastProcessTuple.Item3;
 
@@ -45,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 _timer.Stop();
             }
-            _timer.Start();
+            //_timer.Start();
         }
 
 

@@ -9,6 +9,7 @@ body {
     width: 100%;
     font-family: Arial;
     overflow: hidden;
+    background-color: transparent;
     /*white-space: pre-wrap;*/
 }
 
@@ -23,6 +24,10 @@ body {
     color: green;
 }
 
+span, a, em, strong, u, s, sub, sup, img, p, ol, ul, li, div, table, colgroup, col, tbody, tr, td, iframe, blockquote {
+    background-color: transparent !important;
+}
+
 #editor {
     width: 100%;    
     position: fixed;
@@ -31,13 +36,13 @@ body {
     z-index: -1;
 }
 
-div:focus {
+/*div:focus {
     background-color: aqua;
 }
 
 textarea:focus {
     background-color: maroon;
-}
+}*/
 
 .info-marker {
     color: cornflowerblue;

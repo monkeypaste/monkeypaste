@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public override string GetApplicationIconBase64(string appPath, MpIconSize iconSize = MpIconSize.MediumIcon32) {
-            string base64 = MpWinPathIconHelper.GetIconBase64FromWindowsPath(appPath, (int)iconSize);
+            string base64 = MpAvWinPathIconHelper.GetIconBase64FromWindowsPath(appPath, (int)iconSize);
             if(base64.IsNullOrEmpty()) {
                 return MpBase64Images.QuestionMark;
             }

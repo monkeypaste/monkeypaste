@@ -230,7 +230,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync(MpCopyItem ci, int queryOffsetIdx = -1) {
-            LogPropertyChangedEvents = true;
+            LogPropertyChangedEvents = false;
 
             IsBusy = true;
 

@@ -16,12 +16,13 @@ namespace MonkeyPaste.Avalonia {
         private object _lockObj = new object();
 
         #endregion
+
         #region Constructors
         #endregion
 
         #region Public Methods
         public override void InitPlatform() {
-            MpMacHelpers.EnsureInitialized();
+            MpAvMacHelpers.EnsureInitialized();
         }
         public override IntPtr GetLastActiveInstance(string path) {
             if(RunningProcessLookup.TryGetValue(path.ToLower(), out var handles) && handles.Count > 0) {

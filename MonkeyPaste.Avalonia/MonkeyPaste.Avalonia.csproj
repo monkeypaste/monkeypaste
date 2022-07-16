@@ -30,6 +30,11 @@
     <None Remove="Avalonia.MonoMac" />
     <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
     <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Base\" />
+    <None Remove="Utils\AvWrapper\Defnitions\TrayIcon\" />
+    <None Remove="Utils\AvWrapper\Defnitions\TrayIcon\Mac\" />
+    <None Remove="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
+    <None Remove="CefGlue.Avalonia" />
+    <None Remove="Controls\WebView\Mac\" />
   </ItemGroup>
   <ItemGroup>
     <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\MpAvClipTrayView_ItemsRepeater.axaml" />
@@ -822,6 +827,7 @@
     <PackageReference Include="SharpHook" Version="3.0.2" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
     <PackageReference Include="WebViewControl-Avalonia" Version="2.91.27" />
+    <PackageReference Include="CefGlue.Avalonia" Version="91.4472.30" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\WebView\WebViewControl\" />
@@ -829,6 +835,10 @@
     <Folder Include="Utils\Clipboard\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Base\" />
+    <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\" />
+    <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Mac\" />
+    <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
+    <Folder Include="Controls\WebView\Mac\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />
@@ -844,4 +854,7 @@
       <DependentUpon>MpAvMainWindow.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /s /D /Y  &quot;$(SolutionDir)MonkeyPaste\Resources\*&quot; &quot;$(TargetDir)\Resources&quot;" />
+  </Target>
 </Project>

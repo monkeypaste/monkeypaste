@@ -3,7 +3,7 @@ using System;
 using System.IO;
 
 namespace MonkeyPaste.Common.Avalonia {
-    public static class MpMacHelpers {
+    public static class MpAvMacHelpers {
         private static bool _isInitialized;
 
         public static void EnsureInitialized() {

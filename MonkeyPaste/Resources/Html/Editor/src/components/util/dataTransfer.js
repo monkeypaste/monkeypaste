@@ -14,7 +14,7 @@
     }
     if (dt.types.indexOf('text/plain') > -1) {
         let itemData = dt.getData('text/plain');
-        return retargetPlainTextClipboardData(itemData);
+        return itemData;
     }
 }
 
