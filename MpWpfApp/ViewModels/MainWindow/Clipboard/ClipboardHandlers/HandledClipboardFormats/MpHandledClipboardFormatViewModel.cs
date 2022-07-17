@@ -429,7 +429,7 @@ namespace MpWpfApp {
                     await Task.Delay(100);
                 }
                 var ivm = MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == HandledFormatIconId);
-                MpNotificationCollectionViewModel.Instance.ShowMessage(
+                MpNotificationCollectionViewModel.Instance.ShowMessageAsync(
                     msgType: MpNotificationDialogType.PluginUpdated,
                     title: $"Clipboard Handler '{Title}' Updated",
                     iconBase64Str: ivm == null ? null : ivm.IconBase64,                    

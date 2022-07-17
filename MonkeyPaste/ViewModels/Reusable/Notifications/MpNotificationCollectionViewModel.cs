@@ -57,31 +57,34 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-        public async Task Init() {
-            await Task.Delay(1);
-        }
 
-        public async Task Init(List<int> doNotShowNotifications) {
+        public async Task InitAsync(List<int> doNotShowNotifications) {
             await Task.Delay(1);
+            if(doNotShowNotifications == null) {
+                doNotShowNotifications = MpPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr
+                    .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => Convert.ToInt32(x)).ToList();
+            }
+
             if(doNotShowNotifications != null) {
                 DoNotShowNotificationIds = doNotShowNotifications;
             }
             //IsVisible = true;
         }
 
-        public async Task RegisterWithWindow(MpINotificationBalloonView nbv) {
+        public async Task RegisterWithWindowAsync(MpINotificationBalloonView nbv) {
             await Task.Delay(1);
             _nbv = nbv;
         }
 
-        public async Task ShowMessage(
+        public async Task ShowMessageAsync(
             string title = "", 
             string msg = "", 
             double maxShowTimeMs = 3000,
             MpNotificationDialogType msgType = MpNotificationDialogType.Message,            
             string iconResourceKey = null,
             string iconBase64Str = null) {
-            await ShowNotification(
+            await ShowNotificationAsync(
                 dialogType: msgType,
                 title: title,
                 msg: msg,
@@ -89,7 +92,7 @@ namespace MonkeyPaste {
                 iconResourceKey: iconResourceKey,
                 iconBase64Str: iconBase64Str);
         }
-        public async Task<MpDialogResultType> ShowNotification(
+        public async Task<MpDialogResultType> ShowNotificationAsync(
             MpNotificationDialogType dialogType = MpNotificationDialogType.None,
             string title = "",
             string msg = "",
@@ -180,13 +183,13 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public async Task BeginLoader(MpIProgressLoader loader) {
+        public async Task BeginLoaderAsync(MpIProgressLoader loader) {
             if (DoNotShowNotificationIds.Contains((int)loader.DialogType)) {
                 MpConsole.WriteTraceLine($"Notification: {loader.DialogType.ToString()} marked as hidden");
                 return;
             }
 
-            var lvm = await CreateLoaderViewModel(loader); 
+            var lvm = await CreateLoaderViewModelAsync(loader); 
             Notifications.Add(lvm);
 
             //OnPropertyChanged(nameof(CurrentNotificationViewModel));
@@ -215,7 +218,7 @@ namespace MonkeyPaste {
             Notifications.Remove(nvmb);
             //IsVisible = false;
         }
-        private async Task<MpLoaderNotificationViewModel> CreateLoaderViewModel(MpIProgressLoader loader) {
+        private async Task<MpLoaderNotificationViewModel> CreateLoaderViewModelAsync(MpIProgressLoader loader) {
             var lvm = new MpLoaderNotificationViewModel(this);
             await lvm.InitializeAsync(loader);
             return lvm;

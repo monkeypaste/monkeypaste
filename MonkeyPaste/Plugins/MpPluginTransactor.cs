@@ -111,7 +111,7 @@ namespace MonkeyPaste {
             await MpPluginLogger.LogTransactionAsync(pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite)
                                     .TimeoutAfter(TimeSpan.FromMilliseconds(_PROCESS_TIMEOUT_MS));
 
-            var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotification(
+            var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotificationAsync(
                 dialogType: MpNotificationDialogType.InvalidRequest,
                 msg: ex.Message,
                 maxShowTimeMs: 5000);

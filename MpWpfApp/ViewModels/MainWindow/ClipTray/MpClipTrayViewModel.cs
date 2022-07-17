@@ -1404,7 +1404,7 @@ namespace MpWpfApp {
             }
         }
 
-        public async void OnPostMainWindowLoaded() {
+        public void OnPostMainWindowLoaded() {
 
             int totalItems = MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount;
 
@@ -1573,7 +1573,7 @@ namespace MpWpfApp {
                             // TODO now composite item doesn't roll up children so the buffer needs to be created here
                             // if I use this at all
 
-                            MpNotificationCollectionViewModel.Instance.ShowMessage(
+                            MpNotificationCollectionViewModel.Instance.ShowMessageAsync(
                                 title: "Append Buffer",
                                 msg: _appendModeCopyItem.ItemData.ToPlainText(),
                                 msgType: MpNotificationDialogType.AppendBuffer)
@@ -1591,7 +1591,7 @@ namespace MpWpfApp {
                     MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
                 }
                 if (MpPrefViewModel.Instance.IsTrialExpired) {
-                    MpNotificationCollectionViewModel.Instance.ShowMessage(
+                    MpNotificationCollectionViewModel.Instance.ShowMessageAsync(
                         title: "Trial Expired",
                         msg: "Please update your membership to use Monkey Paste",
                         msgType: MpNotificationDialogType.TrialExpired,
@@ -2596,13 +2596,13 @@ namespace MpWpfApp {
         public ICommand ToggleRightClickPasteCommand => new RelayCommand(
             () => {
                 IsRightClickPasteMode = !IsRightClickPasteMode;
-                MpNotificationCollectionViewModel.Instance.ShowMessage("MODE CHANGED", string.Format("RIGHT CLICK PASTE MODE: {0}", IsRightClickPasteMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
+                MpNotificationCollectionViewModel.Instance.ShowMessageAsync("MODE CHANGED", string.Format("RIGHT CLICK PASTE MODE: {0}", IsRightClickPasteMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
             }, !IsAppPaused);
 
         public ICommand ToggleAutoCopyModeCommand => new RelayCommand(
             () => {
                 IsAutoCopyMode = !IsAutoCopyMode;
-                MpNotificationCollectionViewModel.Instance.ShowMessage("MODE CHANGED", string.Format("AUTO-COPY SELECTION MODE: {0}", IsAutoCopyMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
+                MpNotificationCollectionViewModel.Instance.ShowMessageAsync("MODE CHANGED", string.Format("AUTO-COPY SELECTION MODE: {0}", IsAutoCopyMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
             }, !IsAppPaused);
         
         public ICommand ToggleAppendModeCommand => new RelayCommand(
@@ -2611,7 +2611,7 @@ namespace MpWpfApp {
                 if (IsAppendMode && IsAppendLineMode) {
                     ToggleAppendLineModeCommand.Execute(null);
                 }
-                MpNotificationCollectionViewModel.Instance.ShowMessage("MODE CHANGED",string.Format("APPEND MODE: {0}", IsAppendMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
+                MpNotificationCollectionViewModel.Instance.ShowMessageAsync("MODE CHANGED",string.Format("APPEND MODE: {0}", IsAppendMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
             }, !IsAppPaused);
 
         public ICommand ToggleAppendLineModeCommand => new RelayCommand(
@@ -2620,7 +2620,7 @@ namespace MpWpfApp {
                 if (IsAppendLineMode && IsAppendMode) {
                     ToggleAppendModeCommand.Execute(null);
                 }
-                MpNotificationCollectionViewModel.Instance.ShowMessage("MODE CHANGED", string.Format("APPEND LINE MODE: {0}", IsAppendLineMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
+                MpNotificationCollectionViewModel.Instance.ShowMessageAsync("MODE CHANGED", string.Format("APPEND LINE MODE: {0}", IsAppendLineMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
             }, !IsAppPaused);
 
         public ICommand FindAndReplaceSelectedItem => new RelayCommand(

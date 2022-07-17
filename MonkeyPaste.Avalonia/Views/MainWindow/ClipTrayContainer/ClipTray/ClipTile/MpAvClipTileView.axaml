@@ -32,30 +32,27 @@
             <SolidColorBrush Color="OldLace"
                              Opacity="0.7" />
         </Border.Background>
-        <!--<Grid>-->
         <Grid RowDefinitions="30,*"
-              IsHitTestVisible="False"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Spacing="10"
+                        Orientation="Horizontal">
                 <TextBlock Grid.Row="0"
+                           VerticalAlignment="Center"
                            Text="{Binding CopyItemData}" />
                 <Button x:Name="DebugButton"
                         Content="Debug" />
             </StackPanel>
+<Border x:Name="ClipTileContainerBorder"
+                    Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
             <webview:WebView x:Name="WebView"
-                             IsHitTestVisible="False"
-                             Grid.Row="1"
+         
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch"
                              Address="{Binding EditorPath}" />
+</Border>
         </Grid>
-
-
-        <!--<Border Background="Orange"
-                    IsHitTestVisible="False"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch" />
-        </Grid>-->
     </Border>
 </local:MpAvUserControl>

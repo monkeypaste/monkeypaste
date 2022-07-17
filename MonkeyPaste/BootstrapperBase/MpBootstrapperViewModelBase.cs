@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace MonkeyPaste {
     public abstract class MpBootstrapperViewModelBase : 
@@ -48,7 +49,7 @@ namespace MonkeyPaste {
                     new MpBootstrappedItemViewModel(this,typeof(MpConsole)),
                     new MpBootstrappedItemViewModel(this,typeof(MpCursor)),
                     new MpBootstrappedItemViewModel(this,typeof(MpTempFileManager)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpDb)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpDb)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpDataModelProvider)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpPluginLoader)),
@@ -59,26 +60,31 @@ namespace MonkeyPaste {
         public abstract Task InitAsync();
 
         protected async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {
-            IsBusy = true;
+            await MpPlatformWrapper.Services.MainThreadMarshal.RunOnMainThreadAsync(async () => {
+                IsBusy = true;
+                var sw = Stopwatch.StartNew();
 
-            MpConsole.WriteLine("Loading " + item.Label + " at idx: " + index);
+                await item.LoadItemAsync();
+                sw.Stop();
 
-            await item.LoadItemAsync();
+                LoadedCount++;
+                MpConsole.WriteLine("Loaded " + item.Label + " at idx: " + index + " Load Count: " + LoadedCount + " Load Percent: " + PercentLoaded + " Time(ms): " + sw.ElapsedMilliseconds);
 
-            LoadedCount++;
-            OnPropertyChanged(nameof(PercentLoaded));
+                OnPropertyChanged(nameof(PercentLoaded));
 
-            OnPropertyChanged(nameof(Detail));
+                OnPropertyChanged(nameof(Detail));
 
-            Body = string.IsNullOrWhiteSpace(item.Label) ? Body : item.Label;
+                Body = string.IsNullOrWhiteSpace(item.Label) ? Body : item.Label;
 
-            int dotCount = index % 4;
-            Title = "LOADING";
-            for (int i = 0; i < dotCount; i++) {
-                Title += ".";
-            }
+                int dotCount = index % 4;
+                Title = "LOADING";
+                for (int i = 0; i < dotCount; i++) {
+                    Title += ".";
+                }
 
-            IsBusy = false;
+                IsBusy = false;
+            });
+            
         }
     }
 }

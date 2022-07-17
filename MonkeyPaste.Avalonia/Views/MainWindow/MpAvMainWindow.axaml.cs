@@ -38,10 +38,6 @@ namespace MonkeyPaste.Avalonia {
             this.PointerMoved += MainWindow_PointerMoved;
             this.PointerLeave += MainWindow_PointerLeave;
 
-            //var bounds = this.GetObservable(Window.BoundsProperty);
-            //bounds.Subscribe((e) => {
-
-            //});
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
             InitAsync().FireAndForgetSafeAsync(MpCommandErrorHandler.Instance);
         }
@@ -164,16 +160,10 @@ namespace MonkeyPaste.Avalonia {
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                 MpAvToolWindow_Win32.InitToolWindow(this.PlatformImpl.Handle.Handle);
-
-                //MpAvMouseHook_Win32.Init();
-                //MpAvMouseHook_Win32.OnGlobalMouseWheelScroll += MpAvMouseHook_Win32_OnMouseWheelScroll;
-                //MpAvMouseHook_Win32.OnGlobalMouseMove += MpAvMouseHook_Win32_OnGlobalMouseMove;
             }
 
             MpAvMainWindowViewModel.Instance.OnMainWindowOpened += Instance_OnMainWindowOpened;
             MpAvMainWindowViewModel.Instance.OnMainWindowClosed += Instance_OnMainWindowClosed;
-
-            MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
 
             MpAvMainWindowViewModel.Instance.IsMainWindowLoading = false;
             MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);

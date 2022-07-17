@@ -817,7 +817,7 @@ namespace MpWpfApp {
             //});
             await Task.Delay(1);
             MpHelpers.RunOnMainThread(() => {
-                MpNotificationCollectionViewModel.Instance.ShowNotification(
+                MpNotificationCollectionViewModel.Instance.ShowNotificationAsync(
                     dialogType: MpNotificationDialogType.InvalidAction,
                     msg: ValidationText,
                     retryAction: async (args) => { await Validate(); },

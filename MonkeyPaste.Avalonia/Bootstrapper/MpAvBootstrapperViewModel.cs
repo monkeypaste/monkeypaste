@@ -73,14 +73,33 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override async Task InitAsync() {
+            await MpNotificationCollectionViewModel.Instance.InitAsync(null);
 
-            for (int i = 0; i < _items.Count; i++) {
-                await LoadItemAsync(_items[i], i);
-            }
-            while(_items.Any(x=>x.IsBusy)) {
+            var nw = new MpAvNotificationWindow();
+            nw.Opened += Nw_Opened;
+
+            await MpNotificationCollectionViewModel.Instance.RegisterWithWindowAsync(nw);
+            await MpNotificationCollectionViewModel.Instance.BeginLoaderAsync(this);
+            while (IsLoaded == false) {
                 await Task.Delay(100);
             }
+        }
 
+        private async void Nw_Opened(object sender, EventArgs e) {
+            for (int i = 0; i < _items.Count; i++) {
+                await LoadItemAsync(_items[i], i);
+                while(IsBusy) {
+                    await Task.Delay(100);
+                }
+            }
+            while (_items.Any(x => x.IsBusy)) {
+                await Task.Delay(100);
+            }
+            await Task.Delay(1000);
+
+            MpNotificationCollectionViewModel.Instance.FinishLoading();
+
+            MpAvClipTrayViewModel.Instance.OnPostMainWindowLoaded();
             IsLoaded = true;
         }
     }

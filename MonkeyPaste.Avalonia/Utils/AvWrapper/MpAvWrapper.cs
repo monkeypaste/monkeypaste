@@ -73,7 +73,7 @@ namespace MonkeyPaste.Avalonia {
             UrlBuilder = new MpUrlBuilder();
             AppBuilder = new MpAvAppBuilder();
             //CustomColorChooserMenu = new MpWpfCustomColorChooserMenu();
-            //PlatformResource = new MpWpfResourceFetcher();
+            PlatformResource = new MpAvPlatformResource();
             //ContextMenuCloser = new MpWpfContextMenuCloser();
             MainThreadMarshal = new MpAvMainThreadMarshal();
             //StringTools = new MpWpfStringTools();

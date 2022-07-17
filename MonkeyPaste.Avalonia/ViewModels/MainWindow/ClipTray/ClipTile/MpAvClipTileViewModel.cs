@@ -1,8 +1,11 @@
 ﻿using Avalonia;
 using Avalonia.Layout;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -40,6 +43,67 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsResizing { get; set; }
         public bool CanResize { get; set; }
+
+        #endregion
+
+        #region ViewModels
+        //public ObservableCollection<MpFileItemViewModel> FileItems { get; set; } = new ObservableCollection<MpFileItemViewModel>();
+
+        //public MpImageAnnotationCollectionViewModel DetectedImageObjectCollectionViewModel { get; set; }
+
+        public MpAvClipTileTitleSwirlViewModel TitleSwirlViewModel { get; set; }
+
+        //public MpTemplateCollectionViewModel TemplateCollection { get; set; }
+
+        //public MpContentTableViewModel TableViewModel { get; set; }
+
+        public MpSourceViewModel SourceViewModel {
+            get {
+                //if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                //    return null;
+                //}
+                var svm = MpSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == SourceId);
+                if (svm == null) {
+                    return MpSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == MpPrefViewModel.Instance.ThisAppSourceId);
+                }
+                return svm;
+            }
+        }
+
+        public MpAppViewModel AppViewModel => SourceViewModel.AppViewModel;
+
+        public MpUrlViewModel UrlViewModel => SourceViewModel.UrlViewModel;
+
+        //public MpAvClipTileViewModel Next {
+        //    get {
+        //        if (IsPlaceholder || Parent == null) {
+        //            return null;
+        //        }
+        //        if (IsPinned) {
+        //            int pinIdx = Parent.PinnedItems.IndexOf(this);
+        //            return Parent.PinnedItems.FirstOrDefault(x => Parent.PinnedItems.IndexOf(x) == pinIdx + 1);
+        //        }
+        //        return Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == QueryOffsetIdx + 1);
+        //    }
+        //}
+
+        //public MpAvClipTileViewModel Prev {
+        //    get {
+        //        if (IsPlaceholder || Parent == null || QueryOffsetIdx == 0) {
+        //            return null;
+        //        }
+        //        if (IsPinned) {
+        //            int pinIdx = Parent.PinnedItems.IndexOf(this);
+        //            return Parent.PinnedItems.FirstOrDefault(x => Parent.PinnedItems.IndexOf(x) == pinIdx - 1);
+        //        }
+        //        return Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == QueryOffsetIdx - 1);
+        //    }
+        //}
+
+        public MpColorPalletePopupMenuViewModel SelectionFgColorPopupViewModel { get; private set; } = new MpColorPalletePopupMenuViewModel();
+
+        public MpColorPalletePopupMenuViewModel SelectionBgColorPopupViewModel { get; private set; } = new MpColorPalletePopupMenuViewModel();
+
 
         #endregion
 
@@ -188,13 +252,127 @@ namespace MonkeyPaste.Avalonia {
         public string EditorPath {
             get {
                 //file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html
-                return Path.Combine(Environment.CurrentDirectory, "Resources", "Html", "Editor", "index.html");
+                string editorPath = Path.Combine(Environment.CurrentDirectory, "Resources", "Html", "Editor", "index.html");
+                if(OperatingSystem.IsWindows()) {
+                    return editorPath;
+                }
+                var uri = new Uri(editorPath, UriKind.Absolute);
+                string uriStr = uri.AbsoluteUri;
+                return uriStr;
             }
         }
-        
+
         #endregion
 
+
         #region Model
+
+        public Size UnformattedContentSize {
+            get {
+                if (CopyItem == null) {
+                    return new Size();
+                }
+                return CopyItem.ItemSize.ToAvSize();
+            }
+            set {
+                if (UnformattedContentSize != value) {
+                    CopyItem.ItemSize = value.ToPortableSize();
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(UnformattedContentSize));
+                }
+            }
+        }
+
+        public DateTime CopyItemCreatedDateTime {
+            get {
+                if (CopyItem == null) {
+                    return DateTime.MinValue;
+                }
+                return CopyItem.CopyDateTime;
+            }
+        }
+
+
+        public string CopyItemTitle {
+            get {
+                if (CopyItem == null) {
+                    return string.Empty;
+                }
+                return CopyItem.Title;
+            }
+            set {
+                if (CopyItem != null && CopyItem.Title != value) {
+                    CopyItem.Title = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(CopyItemTitle));
+                }
+            }
+        }
+
+        public MpPortableDataFormat PreferredFormat {
+            get {
+                if (CopyItem == null) {
+                    return null;
+                }
+                return CopyItem.PreferredFormat;
+            }
+            set {
+                if (CopyItem != null && CopyItem.PreferredFormat != value) {
+                    CopyItem.PreferredFormat = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(PreferredFormat));
+                }
+            }
+        }
+
+        public MpCopyItemType ItemType {
+            get {
+                if (CopyItem == null) {
+                    return MpCopyItemType.None;
+                }
+                return CopyItem.ItemType;
+            }
+            set {
+                if (CopyItem != null && CopyItem.ItemType != value) {
+                    CopyItem.ItemType = value;
+                    OnPropertyChanged(nameof(ItemType));
+                }
+            }
+        }
+
+        public string CopyItemGuid {
+            get {
+                if (CopyItem == null) {
+                    return string.Empty;
+                }
+                return CopyItem.Guid;
+            }
+        }
+
+
+        public int CopyItemId {
+            get {
+                if (CopyItem == null) {
+                    return 0;
+                }
+                return CopyItem.Id;
+            }
+            set {
+                if (CopyItem != null && CopyItem.Id != value) {
+                    CopyItem.Id = value;
+                    OnPropertyChanged(nameof(CopyItemId));
+                }
+            }
+        }
+
+        public int SourceId {
+            get {
+                if (CopyItem == null) {
+                    return 0;
+                }
+                return CopyItem.SourceId;
+            }
+        }
 
         public string CopyItemData {
             get {
@@ -204,7 +382,7 @@ namespace MonkeyPaste.Avalonia {
                 return CopyItem.ItemData;
             }
             set {
-                if (CopyItem.ItemData != value) {
+                if (CopyItem != null && CopyItem.ItemData != value) {
                     CopyItem.ItemData = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(CopyItemData));
@@ -212,9 +390,58 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+
+        public int IconId {
+            get {
+                if (CopyItem == null) {
+                    return 0;
+                }
+                if (CopyItem.IconId > 0) {
+                    return CopyItem.IconId;
+                }
+                if (SourceViewModel == null) {
+                    // BUG currently when plugin creates new content it is not setting source info
+                    // so return app icon
+
+                    return MpPrefViewModel.Instance.ThisAppIcon.Id;
+                }
+                return SourceViewModel.PrimarySourceViewModel.IconId;
+            }
+            set {
+                if (IconId != value) {
+                    CopyItem.IconId = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(IconId));
+                }
+            }
+        }
+
+        private string _curItemRandomHexColor;
+        public string CopyItemHexColor {
+            get {
+                if (CopyItem == null || string.IsNullOrEmpty(CopyItem.ItemColor)) {
+                    if (string.IsNullOrEmpty(_curItemRandomHexColor)) {
+                        _curItemRandomHexColor = MpColorHelpers.GetRandomHexColor();
+                    }
+                    return _curItemRandomHexColor;
+                }
+                return CopyItem.ItemColor;
+            }
+            set {
+                if (CopyItemHexColor != value) {
+                    CopyItem.ItemColor = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(CopyItemHexColor));
+                }
+            }
+        }
+
+
         public MpCopyItem CopyItem { get; set; }
 
+
         #endregion
+
 
         #endregion
 

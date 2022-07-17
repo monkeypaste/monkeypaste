@@ -89,6 +89,76 @@ namespace MonkeyPaste {
             }
         }
 
+        private string _borderHexColor;
+        public string BorderHexColor {
+            get {
+                if (_borderHexColor == null) {
+                    if (IsErrorNotification) {
+                        return MpSystemColors.red1;
+                    }
+                    if (IsWarningNotification) {
+                        return MpSystemColors.yellow1;
+                    }
+                    return MpSystemColors.oldlace;
+                }
+                return _borderHexColor;
+            }
+            set {
+                if (_borderHexColor != value) {
+                    _borderHexColor = value;
+                    OnPropertyChanged(nameof(BorderHexColor));
+                }
+            }
+        }
+
+        public string BackgroundHexColor { get; set; } = MpSystemColors.mediumpurple;
+
+        #region Icon
+
+
+        public int IconId { get; set; } = 0;
+
+        public string IconResourceKey { get; set; } = string.Empty;
+
+        public string IconHexStr { get; set; } = string.Empty;
+
+        private string _iconImageBase64;
+        public string IconImageBase64 {
+            get {
+                if (string.IsNullOrEmpty(_iconImageBase64)) {
+                    if (IsErrorNotification) {
+                        return MpBase64Images.Error;
+                    }
+                    if (IsWarningNotification) {
+                        return MpBase64Images.Warning;
+                    }
+                    return MpBase64Images.AppIcon;
+                }
+                return _iconImageBase64;
+            }
+            set {
+                if (IconImageBase64 != value) {
+                    _iconImageBase64 = value;
+                    OnPropertyChanged(nameof(IconImageBase64));
+                }
+            }
+        }
+
+        public object IconSourceObj {
+            get {
+                if (IconId > 0) {
+                    return IconId;
+                }
+                if (IconHexStr.IsStringHexColor()) {
+                    return IconHexStr;
+                }
+                return IconResourceKey;
+            }
+        }
+
+        #endregion
+
+
         #endregion
 
         #region State
@@ -125,31 +195,12 @@ namespace MonkeyPaste {
 
         #region Model
 
+        
+
         public bool DoNotShowAgain { get; set; } = false;
 
-        private string _iconImageBase64;
-        public string IconImageBase64 { 
-            get {
-                if(string.IsNullOrEmpty(_iconImageBase64)) {
-                    if (IsErrorNotification) {
-                        return MpBase64Images.Error;
-                    }
-                    if (IsWarningNotification) {
-                        return MpBase64Images.Warning;
-                    }
-                    return MpBase64Images.AppIcon;
-                }
-                return _iconImageBase64;
-            }
-            set {
-                if(IconImageBase64 != value) {
-                    _iconImageBase64 = value;
-                    OnPropertyChanged(nameof(IconImageBase64));
-                }
-            }
-        }
+        
 
-        public string IconResourceKey { get; set; }
 
         public virtual string Title { get; set; }
 

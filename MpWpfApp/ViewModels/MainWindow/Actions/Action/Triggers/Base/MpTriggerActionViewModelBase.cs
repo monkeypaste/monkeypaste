@@ -227,7 +227,7 @@ namespace MpWpfApp {
             string notificationText = $"Action '{FullName}' is now  {enabledText}";
             MpMainWindowViewModel.Instance.IsShowingDialog = MpMainWindowViewModel.Instance.IsMainWindowOpen;
 
-            await MpNotificationCollectionViewModel.Instance.ShowMessage(
+            await MpNotificationCollectionViewModel.Instance.ShowMessageAsync(
                 iconResourceKey: IconResourceKeyStr,
                 title: "ACTION STATUS",
                 msg: notificationText);

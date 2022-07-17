@@ -53,9 +53,6 @@ namespace MonkeyPaste {
         }
 
         public async Task LoadItemAsync() {
-           // await Device.InvokeOnMainThreadAsync(async () => {
-                
-            var sw = Stopwatch.StartNew();
             object itemObj = null;
             object[] args = ItemArg == null ? null : new[] { ItemArg };
             MethodInfo initMethodInfo;
@@ -67,7 +64,7 @@ namespace MonkeyPaste {
                 if (initMethodInfo == null) {
                     //asyn singleton
                     initMethodInfo = ItemType.GetMethod("InitAsync", BindingFlags.Static | BindingFlags.Public);
-                    if(initMethodInfo == null) {
+                    if (initMethodInfo == null) {
                         initMethodInfo = ItemType.GetMethod("InitializeAsync", BindingFlags.Static | BindingFlags.Public);
                         if (initMethodInfo == null) {
                             MpConsole.WriteTraceLine("Error,couldn't load " + ItemType);
@@ -82,60 +79,36 @@ namespace MonkeyPaste {
                 initMethodInfo = ItemType.GetMethod("Init");
                 if (itemObj == null || initMethodInfo == null) {
                     initMethodInfo = ItemType.GetMethod("InitAsync");
-                    if(initMethodInfo == null) {
+                    if (initMethodInfo == null) {
                         initMethodInfo = ItemType.GetMethod("InitializeAsync");
                         if (initMethodInfo == null) {
                             MpConsole.WriteTraceLine("Error,couldn't load " + ItemType);
                             return;
                         }
-                    }                    
+                    }
                 }
             }
 
             if (initMethodInfo.ReturnType == typeof(Task)) {
                 MpViewModelBase vm = itemObj as MpViewModelBase;
-                if(vm is MpIBootstrappedItem bsi) {
+                if (vm is MpIBootstrappedItem bsi) {
                     Label = bsi.Label;
                 }
 
                 var initTask = (Task)initMethodInfo.Invoke(itemObj, args);
                 await initTask;
 
-                if(vm != null) {
+                if (vm != null) {
                     while (vm.IsBusy) {
                         await Task.Delay(100);
                     }
                 }
-                    
+
             } else {
                 if (itemObj is MpIBootstrappedItem bsi) {
                     Label = bsi.Label;
                 }
                 initMethodInfo.Invoke(itemObj, args);
-            }
-
-            sw.Stop();
-            MpConsole.WriteLine($"{ItemType} loaded in {sw.ElapsedMilliseconds} ms");
-           // ReportLoaded();
-            //await Task.Delay(300);
-            //});            
-        }
-        private void ReportLoaded() {
-            var lnvm = MpNotificationCollectionViewModel.Instance.Notifications.FirstOrDefault(x => x is MpLoaderNotificationViewModel);
-            if (lnvm == null) {
-                // NOTE this occurs when warnings exist and loader is finished
-                return;
-            }
-            Parent.LoadedCount++;
-            Parent.OnPropertyChanged(nameof(Parent.PercentLoaded));
-            Parent.OnPropertyChanged(nameof(Parent.Detail));
-
-            Parent.Body = string.IsNullOrWhiteSpace(Label) ? Parent.Body : Label;
-            
-            int dotCount = Parent.LoadedCount % 4;
-            Parent.Title = "LOADING";
-            for (int i = 0; i < dotCount; i++) {
-                Parent.Title += ".";
             }
         }
     }

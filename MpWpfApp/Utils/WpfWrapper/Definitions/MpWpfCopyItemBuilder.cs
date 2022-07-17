@@ -98,7 +98,7 @@ namespace MpWpfApp {
                     if (((string)itemData).Length > MpPrefViewModel.Instance.MaxRtfCharCount) {
                         //item is TOO LARGE so ignore
                         if (MpPrefViewModel.Instance.NotificationShowCopyItemTooLargeToast) {
-                            MpNotificationCollectionViewModel.Instance.ShowMessage(
+                            MpNotificationCollectionViewModel.Instance.ShowMessageAsync(
                                 title: "Item TOO LARGE",
                                 msg: $"Max Item Characters is {MpPrefViewModel.Instance.MaxRtfCharCount} and copied item is {((string)itemData).Length} characters",
                                 msgType: MpNotificationDialogType.DbError)

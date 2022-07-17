@@ -387,7 +387,7 @@ namespace MonkeyPaste.Avalonia {
                     if (!GetIsResizing(control) ||
                        !GetIsEnabled(control) ||
                         _mouseDownPosition == null
-                       //MpClipTrayViewModel.Instance.HasScrollVelocity
+                       //MpAvClipTrayViewModel.Instance.HasScrollVelocity
                        ) {
                         return;
                     }

@@ -1,0 +1,111 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="using:MonkeyPaste.Avalonia"
+        xmlns:pcl="using:MonkeyPaste"
+        mc:Ignorable="d"
+        d:DesignWidth="800"
+        d:DesignHeight="450"
+        x:Name="NotificationWindow"
+        x:DataType="pcl:MpNotificationViewModelBase"
+        x:CompileBindings="True"
+        x:Class="MonkeyPaste.Avalonia.MpAvNotificationWindow"
+        EffectiveViewportChanged="MpAvNotificationWindow_EffectiveViewportChanged"
+        Opened="MpAvNotificationWindow_Opened"
+        Closed="MpAvNotificationWindow_Closed"
+        MinHeight="125"
+        Width="350"
+        SizeToContent="Height"
+        ShowInTaskbar="False"
+        WindowState="Normal"
+        SystemDecorations="None"
+        Title="">
+    <Border HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            BorderThickness="7"
+            BorderBrush="{Binding BorderHexColor,
+                                  Converter={StaticResource StringHexToBrushConverter}}"
+            Background="{Binding BackgroundHexColor,
+                                 Converter={StaticResource StringHexToBrushConverter}}"
+            local:MpAvIsHoveringExtension.IsEnabled="True"
+            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering,
+                                                               Mode=TwoWay}">
+        <Grid x:Name="grid"
+              PointerReleased="MpAvNotificationWindow_PointerReleased">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.35*" />
+                <ColumnDefinition Width="0.75*" />
+            </Grid.ColumnDefinitions>
+            <Image Grid.Row="0"
+                   Grid.Column="0"
+                   Width="72"
+                   Height="72"
+                   IsVisible="{Binding IconSourceObj,
+                                       Converter={StaticResource IsNotNullToBoolConverter}}"
+                   Source="{Binding IconSourceObj,
+                                    Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                   Stretch="Fill"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Margin="10,5,0,0" />
+            <CheckBox Grid.Column="0"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Bottom"
+                      VerticalContentAlignment="Center"
+                      Margin="7,0,0,5"
+                      IsVisible="{Binding CanChooseNotShowAgain}"
+                      IsChecked="{Binding DoNotShowAgain,
+                                          Mode=TwoWay}">
+                <CheckBox.Content>
+                    <TextBlock MaxWidth="100"
+                               Foreground="White"
+                               FontSize="9"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Right"
+                               TextWrapping="Wrap"
+                               Text="Do Not Show Again" />
+                </CheckBox.Content>
+            </CheckBox>
+            <Button x:Name="CloseButton"
+                    Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Margin="5"
+                    Background="Transparent"
+                    Click="CloseButton_Click"
+                    BorderThickness="0">
+                <!--
+                    local:MpAvIsHoveringExtension.IsEnabled="True"
+                    local:MpAvIsHoveringExtension.HoverImageSource="{Binding .,
+                    Converter={StaticResource StringResourceToBitmapConverter},
+                    ConverterParameter={StaticResource CloseOverImage}}"
+                    local:MpAvIsHoveringExtension.DefaultImageSource="{Binding .,
+                    Converter={StaticResource StringResourceToBitmapConverter},
+                    ConverterParameter={StaticResource CloseImage}}"
+                -->
+                <Image Width="15"
+                       Height="15"
+                       Stretch="Fill"
+                       Source="{Binding .,
+                                        Converter={StaticResource StringResourceToBitmapConverter},
+                                        Source={StaticResource CloseImage}}" />
+            </Button>
+            <ContentControl Grid.Column="1"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            DataContext="{Binding}"
+                            DataContextChanged="ContentControl_DataContextChanged"
+                            Content="{Binding}">
+                <ContentControl.DataTemplates>
+                    <local:MpAvNotificationTemplateSelector>
+                        <DataTemplate x:Key="LoaderTemplate"
+                                      DataType="pcl:MpLoaderNotificationViewModel">
+                            <local:MpAvLoaderNotificationView DataContext="{Binding}" />
+                        </DataTemplate>
+                    </local:MpAvNotificationTemplateSelector>
+                </ContentControl.DataTemplates>
+            </ContentControl>
+        </Grid>
+    </Border>
+</Window>

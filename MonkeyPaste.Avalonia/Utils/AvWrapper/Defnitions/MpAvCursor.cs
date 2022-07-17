@@ -32,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
             };
 
         public void SetCursor(MpCursorType newCursor) {
-            //if (MpClipTrayViewModel.Instance.HasScrollVelocity) {
+            //if (MpAvClipTrayViewModel.Instance.HasScrollVelocity) {
             //    return;
             //}
 

@@ -6,4 +6,6 @@
     <local:MpAvStringHexToColorConverter x:Key="StringHexToColorConverter" />
     <local:MpAvDoubleToThicknessConverter x:Key="DoubleToThicknessConverter" />
     <local:MpAvNegateDoubleConverter x:Key="NegateDoubleConverter" />
+    <local:MpAvIconSourceObjToBitmapConverter x:Key="IconSourceObjToBitmapConverter" />
+    <local:MpAvIsNotNullToBoolConverter x:Key="IsNotNullToBoolConverter" />
 </ResourceDictionary>

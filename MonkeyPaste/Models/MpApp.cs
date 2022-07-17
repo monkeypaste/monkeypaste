@@ -113,6 +113,9 @@ namespace MonkeyPaste {
             int iconId = 0,
             string guid = "",
             bool suppressWrite = false) {
+            if(appPath.IsNullOrEmpty()) {
+                throw new Exception("App must have path");
+            }
             if(appPath != null) {
                 appPath = appPath.ToLower();
             }

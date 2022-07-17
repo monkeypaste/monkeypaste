@@ -11,6 +11,7 @@ using WebViewControl;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class App : Application {
+        public static IClassicDesktopStyleApplicationLifetime Desktop { get; private set; }
         public App() {
             DataContext = MpAvAppViewModel.Instance;
         }
@@ -24,6 +25,8 @@ namespace MonkeyPaste.Avalonia {
 
         public override async void OnFrameworkInitializationCompleted() {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+                Desktop = desktop;
+
                 string cefLogPath = Path.Combine(Environment.CurrentDirectory, "ceflog.txt");
                 if(File.Exists(cefLogPath)) {
                     File.Delete(cefLogPath);
@@ -44,6 +47,8 @@ namespace MonkeyPaste.Avalonia {
                 await MpPlatformWrapper.InitAsync(MpAvWrapper.Instance);
                 var bootstrapper = new MpAvBootstrapperViewModel();
                 await bootstrapper.InitAsync();
+
+                //desktop.MainWindow.Close();
 
                 desktop.MainWindow = new MpAvMainWindow();
             }

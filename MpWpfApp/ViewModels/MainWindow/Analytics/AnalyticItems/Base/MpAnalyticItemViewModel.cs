@@ -644,7 +644,7 @@ namespace MpWpfApp {
             if (needsReset) {
                 var ivm = MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == PluginIconId);
 
-                MpNotificationCollectionViewModel.Instance.ShowMessage(
+                MpNotificationCollectionViewModel.Instance.ShowMessageAsync(
                     msgType: MpNotificationDialogType.PluginUpdated,
                     title: $"Analyzer '{Title}' Updated",
 

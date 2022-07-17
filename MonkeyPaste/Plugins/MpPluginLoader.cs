@@ -99,7 +99,7 @@ namespace MonkeyPaste {
         private static async Task<MpPluginFormat> LoadPluginAsync(string manifestPath) {
             string manifestStr = MpFileIo.ReadTextFromFile(manifestPath);
             if (string.IsNullOrEmpty(manifestStr)) {
-                var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotification(
+                var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotificationAsync(
                     dialogType: MpNotificationDialogType.InvalidPlugin,
                     msg: $"Plugin manifest not found in '{manifestPath}'", 
                     retryAction: async (args) => { await LoadPluginAsync(manifestPath); },
@@ -118,7 +118,7 @@ namespace MonkeyPaste {
                 bool isValid = ValidatePluginManifest(plugin,manifestPath);
             }
             catch (Exception ex) {
-                var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotification(
+                var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotificationAsync(
                         dialogType: MpNotificationDialogType.InvalidPlugin,
                         msg: $"Error parsing plugin manifest '{manifestPath}': {ex.Message}",
                         retryAction: async (args) => { await LoadPluginAsync(manifestPath); },
@@ -136,7 +136,7 @@ namespace MonkeyPaste {
                     plugin.RootDirectory = Path.GetDirectoryName(manifestPath);
                 }
                 catch (Exception ex) {
-                    var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotification(
+                    var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotificationAsync(
                             dialogType: MpNotificationDialogType.InvalidPlugin,
                             msg: ex.Message,
                             retryAction: async (args) => { await LoadPluginAsync(manifestPath); },

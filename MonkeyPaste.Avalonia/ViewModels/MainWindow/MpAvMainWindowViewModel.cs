@@ -31,9 +31,6 @@ namespace MonkeyPaste.Avalonia {
         Top,
         Left
     }
-
-
-
     public class MpAvMainWindowViewModel : MpViewModelBase, MpIResizableViewModel {
         #region Statics
 
@@ -617,7 +614,7 @@ namespace MonkeyPaste.Avalonia {
                         OnPropertyChanged(nameof(ExternalRect));
                         OnMainWindowOpened?.Invoke(this, EventArgs.Empty);
 
-                        //MpClipTrayViewModel.Instance.AddNewItemsCommand.Execute(null);
+                        //MpAvClipTrayViewModel.Instance.AddNewItemsCommand.Execute(null);
                     } else {
                         if (IsMainWindowClosing) {
                             timer.Stop();
@@ -768,17 +765,17 @@ namespace MonkeyPaste.Avalonia {
                 MpMessenger.SendGlobal(MpMessageType.MainWindowOrientationChanged);
             });
 
-        //public ICommand ToggleMainWindowLockCommand => new RelayCommand(
+        //public ICommand ToggleMainWindowLockCommand => new MpCommand(
         //    () => {
         //        IsMainWindowLocked = !IsMainWindowLocked;
         //    });
 
-        //public ICommand ToggleFilterMenuVisibleCommand => new RelayCommand(
+        //public ICommand ToggleFilterMenuVisibleCommand => new MpCommand(
         //    () => {
         //        IsFilterMenuVisible = !IsFilterMenuVisible;
         //    });
 
-        //public ICommand IncreaseSizeCommand => new RelayCommand(
+        //public ICommand IncreaseSizeCommand => new MpCommand(
         //     () => {
         //         IsResizing = true;
         //         var mw = Application.Current.MainWindow as MpMainWindow;
@@ -786,7 +783,7 @@ namespace MonkeyPaste.Avalonia {
         //         IsResizing = false;
         //     });
 
-        //public ICommand DecreaseSizeCommand => new RelayCommand(
+        //public ICommand DecreaseSizeCommand => new MpCommand(
         //     () => {
         //         IsResizing = true;
         //         var mw = Application.Current.MainWindow as MpMainWindow;
@@ -794,11 +791,11 @@ namespace MonkeyPaste.Avalonia {
         //         IsResizing = false;
         //     });
 
-        //private RelayCommand _undoCommand;
+        //private MpCommand _undoCommand;
         //public ICommand UndoCommand {
         //    get {
         //        if (_undoCommand == null) {
-        //            _undoCommand = new RelayCommand(() => UndoManager.Undo(), () => UndoManager.CanUndo);
+        //            _undoCommand = new MpCommand(() => UndoManager.Undo(), () => UndoManager.CanUndo);
         //        }
         //        return _undoCommand;
         //    }
@@ -808,7 +805,7 @@ namespace MonkeyPaste.Avalonia {
         //public ICommand RedoCommand {
         //    get {
         //        if (_redoCommand == null)
-        //            _redoCommand = new RelayCommand(() => UndoManager.Redo(), () => UndoManager.CanRedo);
+        //            _redoCommand = new MpCommand(() => UndoManager.Redo(), () => UndoManager.CanRedo);
         //        return _redoCommand;
         //    }
         //}

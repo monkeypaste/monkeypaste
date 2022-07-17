@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public class MpLoaderNotificationViewModel : MpNotificationViewModelBase {
@@ -23,10 +25,20 @@ namespace MonkeyPaste {
             }
         }
 
+
+
         #endregion
 
         #region State
 
+        public double ValueLoaded {
+            get {
+                if (ProgressLoader == null) {
+                    return 0;
+                }
+                return ProgressLoader.PercentLoaded * 100;
+            }
+        }
         #endregion
 
         #region Model
@@ -58,6 +70,8 @@ namespace MonkeyPaste {
 
         public async Task InitializeAsync(MpIProgressLoader progressLoader) {
             IsBusy = true;
+            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("AppImage") as string;
+            OnPropertyChanged(nameof(IconSourceObj));
             await Task.Delay(1);
             ProgressLoader = progressLoader;
             IsBusy = false;

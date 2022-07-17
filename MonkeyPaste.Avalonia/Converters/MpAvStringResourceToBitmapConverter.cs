@@ -12,31 +12,40 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvStringResourceToBitmapConverter Instance = new MpAvStringResourceToBitmapConverter();
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
+            string rawUri;
             if (value == null) {
+                if(parameter == null) {
+                    throw new NotSupportedException();
+                } else if(parameter is string) {
+                    rawUri = parameter as string;
+                } else {
+                    throw new NotSupportedException();
+                }
+            } else if(value is string) {
+                rawUri = value as string;
+            } else {
                 return null;
             }
-            if (value is string rawUri && targetType.IsAssignableFrom(typeof(Bitmap))) {
-                Uri uri;
 
-                // Allow for assembly overrides
-                if (rawUri.StartsWith("avares://")) {
-                    uri = new Uri(rawUri);
-                } else {
-                    string assemblyName = Assembly.GetEntryAssembly().GetName().Name;
-                    uri = new Uri($"avares://{assemblyName}{rawUri}");
-                }
+            Uri uri;
 
-                var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
-                var asset = assets.Open(uri);
-
-                return new Bitmap(asset);
+            // Allow for assembly overrides
+            if (rawUri.StartsWith("avares://")) {
+                uri = new Uri(rawUri);
+            } else {
+                string assemblyName = Assembly.GetEntryAssembly().GetName().Name;
+                uri = new Uri($"avares://{assemblyName}{rawUri}");
             }
 
-            throw new NotSupportedException();
+            var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
+            var asset = assets.Open(uri);
+
+            return new Bitmap(asset);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
             throw new NotSupportedException();
         }
     }
+
 }

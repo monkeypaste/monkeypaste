@@ -22,14 +22,14 @@ namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvImageExtensions {
         #region Converters        
 
-        public static Bitmap? ToBitmap(this string base64Str) {
+        public static Bitmap? ToAvBitmap(this string base64Str) {
             if(!base64Str.IsStringBase64()) {
                 return null;
             }
-            return Convert.FromBase64String(base64Str).ToBitmap();
+            return Convert.FromBase64String(base64Str).ToAvBitmap();
         }
 
-        public static Bitmap ToBitmap(this byte[] bytes) {
+        public static Bitmap ToAvBitmap(this byte[] bytes) {
             using (var stream = new MemoryStream(bytes)) {
                 return new Bitmap(stream);
             }
@@ -65,55 +65,62 @@ namespace MonkeyPaste.Common.Avalonia {
             //} else {
             //    formattedBmpSrc = bmpSrc;
             //}
+            var tint = hexColor.ToAvColor();
+            var tintPixelColor = new PixelColor { Alpha = tint.A, Red = tint.R, Green = tint.G, Blue = tint.B };
 
             var pixels = GetPixels(bmp);
-            var pixelColor = new PixelColor[1, 1];
-            var tint = hexColor.ToAvColor();
-            pixelColor[0, 0] = new PixelColor { Alpha = tint.A, Red = tint.R, Green = tint.G, Blue = tint.B };
             using (var memoryStream = new MemoryStream()) {
                 bmp.Save(memoryStream);
                 memoryStream.Seek(0, SeekOrigin.Begin);
                 var writeableBitmap = WriteableBitmap.Decode(memoryStream);
-                using var lockedBitmap = writeableBitmap.Lock();
+                using (var lockedBitmap = writeableBitmap.Lock()) {
+                    byte* bmpPtr = (byte*)lockedBitmap.Address;
+                    int width = writeableBitmap.PixelSize.Width;
+                    int height = writeableBitmap.PixelSize.Height;
+                    //byte* tempPtr;
 
-                byte* bmpPtr = (byte*)lockedBitmap.Address;
-                int width = writeableBitmap.PixelSize.Width;
-                int height = writeableBitmap.PixelSize.Height;
-                //byte* tempPtr;
+                    for (int row = 0; row < height; row++) {
+                        for (int col = 0; col < width; col++) {
+                            //tempPtr = bmpPtr;
+                            //byte red = *bmpPtr++;
+                            //byte green = *bmpPtr++;
+                            //byte blue = *bmpPtr++;
+                            //byte alpha = *bmpPtr++;
 
-                for (int row = 0; row < height; row++) {
-                    for (int col = 0; col < width; col++) {
-                        //tempPtr = bmpPtr;
-                        //byte red = *bmpPtr++;
-                        //byte green = *bmpPtr++;
-                        //byte blue = *bmpPtr++;
-                        //byte alpha = *bmpPtr++;
+                            //byte result = (byte)(0.2126 * red + 0.7152 * green + 0.0722 * blue);
+                            //// byte result = (byte)((red + green + blue) / 3);
 
-                        //byte result = (byte)(0.2126 * red + 0.7152 * green + 0.0722 * blue);
-                        //// byte result = (byte)((red + green + blue) / 3);
+                            //bmpPtr = tempPtr;
 
-                        //bmpPtr = tempPtr;
+                            PixelColor c = pixels[col, row];
+                            if (c.Alpha > 0) {
+                                // only write non-transparent pixels so color analysis is accurate
 
-                        PixelColor c = pixels[col, row];
-                        if (c.Alpha > 0) {
-                            // only write non-transparent pixels so color analysis is accurate
-
-                            //if (retainAlpha) {
-                            //    pixelColor[0, 0].Alpha = c.Alpha;
-                            //}
-                            //bmpPtr = PutPixels(writeableBitmap, pixelColor, bmpPtr);
-
-                            if(!retainAlpha) {
-                                c.Alpha = 255;
+                                //if (retainAlpha) {
+                                //    pixelColor[0, 0].Alpha = c.Alpha;
+                                //}
+                                //bmpPtr = PutPixels(writeableBitmap, pixelColor, bmpPtr);
+                                c = tintPixelColor;
+                                if (!retainAlpha) {
+                                    c.Alpha = 255;
+                                }
+                            } else {
+                                c = new PixelColor();
                             }
-                        } else {
-                            c = new PixelColor();
+                            bmpPtr = PutPixel(writeableBitmap, c, bmpPtr);
                         }
-                        bmpPtr = PutPixel(writeableBitmap, c, bmpPtr);       
                     }
                 }
 
-                return writeableBitmap;
+                    
+
+                using(var outStream = new MemoryStream()) {
+                    writeableBitmap.Save(outStream);
+
+                    outStream.Seek(0, SeekOrigin.Begin);
+                    var outBmp = new Bitmap(outStream);
+                    return outBmp;
+                }
             }
         }
 
@@ -125,6 +132,36 @@ namespace MonkeyPaste.Common.Avalonia {
         public static Bitmap? Resize(this Bitmap bmpSrc, MpSize size) {
             var bmpTarget = bmpSrc.CreateScaledBitmap(new PixelSize((int)size.Width, (int)size.Height));
             return bmpTarget;
+        }
+
+        #endregion
+
+        #region Operations
+
+        public static List<KeyValuePair<PixelColor, int>> GetStatistics(this Bitmap bmpSource) {
+            var countDictionary = new Dictionary<PixelColor, int>();
+            var pixels = GetPixels(bmpSource);
+            for (int x = 0; x < bmpSource.PixelSize.Width; x++) {
+                for (int y = 0; y < bmpSource.PixelSize.Height; y++) {
+                    PixelColor currentColor = pixels[x, y];
+                    if (currentColor.Alpha == 0) {
+                        continue;
+                    }
+                    //If a record already exists for this color, set the count, otherwise just set it as 0
+                    int currentCount = countDictionary.ContainsKey(currentColor) ? countDictionary[currentColor] : 0;
+
+                    if (currentCount == 0) {
+                        //If this color doesnt already exists in the dictionary, add it
+                        countDictionary.Add(currentColor, 1);
+                    } else {
+                        //If it exists, increment the value and update it
+                        countDictionary[currentColor] = currentCount + 1;
+                    }
+                }
+            }
+
+            //order the list from most used to least used before returning
+            return countDictionary.OrderByDescending(o => o.Value).ToList();
         }
         #endregion
 

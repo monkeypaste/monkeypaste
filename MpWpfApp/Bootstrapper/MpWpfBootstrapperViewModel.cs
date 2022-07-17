@@ -95,13 +95,13 @@ namespace MpWpfApp {
                     .Select(x => Convert.ToInt32(x)).ToList();
             }
 
-            await MpNotificationCollectionViewModel.Instance.Init(doNotShowNotifications);
+            await MpNotificationCollectionViewModel.Instance.InitAsync(doNotShowNotifications);
 
             var nw = new MpNotificationWindow();
-            await MpNotificationCollectionViewModel.Instance.RegisterWithWindow(nw);
+            await MpNotificationCollectionViewModel.Instance.RegisterWithWindowAsync(nw);
             //nw.DataContext = MpNotificationCollectionViewModel.Instance;
 
-            await MpNotificationCollectionViewModel.Instance.BeginLoader(this);
+            await MpNotificationCollectionViewModel.Instance.BeginLoaderAsync(this);
 
             await Task.Delay(300);
             // Parallel

@@ -3,6 +3,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -22,7 +23,6 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         #endregion
-
 
         #region Statics
 
@@ -239,14 +239,42 @@ namespace MonkeyPaste.Avalonia {
 
             OnPropertyChanged(nameof(Items));
 
-
-            
-
-
             IsBusy = false;
         }
 
+        public void OnPostMainWindowLoaded() {
+            //int totalItems = MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount;
 
+            //MpSystemTrayViewModel.Instance.TotalItemCountLabel = string.Format(@"{0} total entries", totalItems);
+
+            //MpPlatformWrapper.Services.ClipboardMonitor.OnClipboardChanged += ClipboardChanged;
+            //MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
+            ////await Task.Delay(3000);
+
+            //if (!string.IsNullOrEmpty(MpPrefViewModel.Instance.LastQueryInfoJson)) {
+            //    var qi = JsonConvert.DeserializeObject<MpWpfQueryInfo>(MpPrefViewModel.Instance.LastQueryInfoJson);
+            //    if (qi != null) {
+            //        MpClipTileSortViewModel.Instance.SelectedSortType =
+            //            MpClipTileSortViewModel.Instance.SortTypes
+            //                .FirstOrDefault(x => x.SortType == qi.SortType);
+            //        MpClipTileSortViewModel.Instance.IsSortDescending = qi.IsDescending;
+
+            //        MpTagTrayViewModel.Instance.SelectTagCommand.Execute(qi.TagId);
+
+            //        MpSearchBoxViewModel.Instance.SearchText = qi.SearchText;
+            //        // NOTE Filter flags already set from Preferences
+
+            //        MpPlatformWrapper.Services.QueryInfo = qi;
+
+
+            //        MpDataModelProvider.Init();
+            //    }
+            //}
+            //MpAvMainWindowViewModel.Instance.IsMainWindowLoading = false;
+
+
+            //MpDataModelProvider.QueryInfo.NotifyQueryChanged(true);
+        }
         public override string ToString() {
             return $"ClipTray";
         }

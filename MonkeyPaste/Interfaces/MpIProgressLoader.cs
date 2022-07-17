@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste {
-    public interface MpINotification {
+    public interface MpINotification : MpIViewModel {
         string Title { get; set; }
         string Body { get; set; }
         string Detail { get; set; }

@@ -85,28 +85,36 @@ namespace MonkeyPaste.Avalonia {
             if(_isCheckingClipboard) {
                 return;
             }
-            Dispatcher.UIThread.Post(async () => {
-                //while (MpClipboardManager.ThisAppHandle == null || MpClipboardManager.ThisAppHandle == IntPtr.Zero) {
-                //    Thread.Sleep(100);
-                //}
-                //setting last here will ensure item on cb isn't added when starting
-                if (_lastCbo == null) {
-                    _lastCbo = await ConvertManagedFormats();
-                    return;
-                }
+            Dispatcher.UIThread.Post(async () => { await CheckClipboardHelper(); });
+        }
+        private async Task CheckClipboardHelper() {
+            //while (MpClipboardManager.ThisAppHandle == null || MpClipboardManager.ThisAppHandle == IntPtr.Zero) {
+            //    Thread.Sleep(100);
+            //}
+            //setting last here will ensure item on cb isn't added when starting
+            if (_lastCbo == null) {
+                _lastCbo = await ConvertManagedFormats();
+                return;
+            }
 
-                var cbo = await ConvertManagedFormats();
-                if (HasChanged(cbo)) {
-                    _lastCbo = cbo;
-                    // TODO Add plugin handling here
+            var cbo = await ConvertManagedFormats();
+            if (HasChanged(cbo)) {
+                _lastCbo = cbo;
+                // TODO Add plugin handling here
 
-                    OnClipboardChanged?.Invoke(typeof(MpAvClipboardWatcher).ToString(), cbo);
-                }
-            });
+                OnClipboardChanged?.Invoke(typeof(MpAvClipboardWatcher).ToString(), cbo);
+            }
         }
 
         private async Task<MpPortableDataObject> ConvertManagedFormats() {
             _isCheckingClipboard = true;
+
+            if(OperatingSystem.IsWindows()) {
+                while(WinApi.IsClipboardOpen(true) != IntPtr.Zero) {
+                    MpConsole.WriteLine("Waiting on windows clipboard...");
+                    await Task.Delay(100);
+                }
+            }
 
             var ndo = new MpPortableDataObject();
             string[] formats = await Application.Current.Clipboard.GetFormatsAsync();
@@ -136,19 +144,24 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
             foreach (var nce in nco.DataFormatLookup) {
-                if (!_lastCbo.DataFormatLookup.ContainsKey(nce.Key)) {
-                    return true;
-                }
-                if(nce.Value is byte[] newBytes && 
-                    _lastCbo.DataFormatLookup[nce.Key] is byte[] oldBytes) {
-                    if(!newBytes.SequenceEqual(oldBytes)) {
+                try {
+                    if (!_lastCbo.DataFormatLookup.ContainsKey(nce.Key)) {
                         return true;
                     }
-                } else {
-                    if (!_lastCbo.DataFormatLookup[nce.Key].Equals(nce.Value)) {
-                        return true;
+                    if (nce.Value is byte[] newBytes &&
+                        _lastCbo.DataFormatLookup[nce.Key] is byte[] oldBytes) {
+                        if (!newBytes.SequenceEqual(oldBytes)) {
+                            return true;
+                        }
+                    } else {
+                        if (!_lastCbo.DataFormatLookup[nce.Key].Equals(nce.Value)) {
+                            return true;
+                        }
                     }
+                } catch(Exception ex) {
+                    MpConsole.WriteTraceLine("Error comparing clipbaord data. ", ex);
                 }
+                
                 
             }
             return false;

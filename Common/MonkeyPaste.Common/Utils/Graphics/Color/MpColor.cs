@@ -21,6 +21,21 @@ namespace MonkeyPaste.Common {
             c.A = (byte)(255.0 * opacity);
             return c.ToHex();
         }
+
+        public static double ColorDistance(this MpColor e1, MpColor e2) {
+            //max between 0 and 764.83331517396653 (found by checking distance from white to black)
+            long rmean = ((long)(e1.R * 255) + (long)(e2.R * 255)) / 2;
+            long r = (long)(e1.R * 255) - (long)(e2.R * 255);
+            long g = (long)(e1.G * 255) - (long)(e2.G * 255);
+            long b = (long)(e1.B * 255) - (long)(e2.B * 255);
+            double max = 764.83331517396653;
+            double d = Math.Sqrt((((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8));
+            return d / max;
+        }
+
+        public static MpColor ToPortableColor(this string str) {
+            return new MpColor(str);
+        }
     }
     public class MpColor {
         public byte[] Channels { get; set; }

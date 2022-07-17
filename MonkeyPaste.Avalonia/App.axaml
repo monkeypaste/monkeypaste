@@ -7,6 +7,7 @@
              x:Class="MonkeyPaste.Avalonia.App">
     <Application.Styles>
         <FluentTheme Mode="Light" />
+        <!--<StyleInclude Source="/Styles/MpAvAllStyles.axaml" />-->
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>
@@ -18,6 +19,11 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
+    <NativeMenu.Menu>
+        <NativeMenu>
+            <NativeMenuItem Header="About Monkey Paste" />
+        </NativeMenu>
+    </NativeMenu.Menu>
 
     <TrayIcon.Icons>
         <TrayIcons>
@@ -25,10 +31,11 @@
                       Clicked="AppTrayIcon_Clicked"
                       ToolTipText="Monkey Paste">
                 <TrayIcon.Menu>
-                        
+
                     <NativeMenu>
                         <NativeMenuItem Header="Show"
-                                        Command="{Binding ShowWindowCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />
+                                        Command="{Binding ShowWindowCommand,
+                                                          Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />
                         <NativeMenuItem Header="Settings"
                                         Command="{Binding ToggleCommand}">
                             <NativeMenu>

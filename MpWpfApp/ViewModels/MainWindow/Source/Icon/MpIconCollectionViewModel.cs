@@ -149,7 +149,7 @@ namespace MpWpfApp {
                         return;
                     }
                     MpHelpers.RunOnMainThread(async () => {
-                        await SetUserIconToCurrentHexColor(UserHexColor, _currentIconViewModel);
+                        await SetUserIconToCurrentHexColorAsync(UserHexColor, _currentIconViewModel);
 
                         _currentIconViewModel = null;
                         UserHexColor = null;
@@ -158,7 +158,7 @@ namespace MpWpfApp {
             }
         }
 
-        private async Task SetUserIconToCurrentHexColor(string hexColor, MpIUserIconViewModel uivm) {
+        private async Task SetUserIconToCurrentHexColorAsync(string hexColor, MpIUserIconViewModel uivm) {
             var bmpSrc = (BitmapSource)new BitmapImage(new Uri(MpPrefViewModel.Instance.AbsoluteResourcesPath + @"/Images/texture.png"));
             bmpSrc = bmpSrc.Tint(hexColor.ToWinMediaColor());
 
@@ -182,7 +182,7 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public ICommand SelectImagePathCommand => new RelayCommand<object>(
+        public ICommand SelectImagePathCommand => new MpAsyncCommand<object>(
             async (args) => {
                 var uivm = args as MpIUserIconViewModel;
                 if(uivm == null) {
@@ -223,7 +223,7 @@ namespace MpWpfApp {
                 MpMainWindowViewModel.Instance.IsShowingDialog = false;
             });
 
-        public ICommand ChangeIconCommand => new RelayCommand<object>(
+        public ICommand ChangeIconCommand => new MpCommand<object>(
              (args) => {
                  //FrameworkElement fe = args as FrameworkElement;
                  dynamic fe = args;
@@ -266,7 +266,7 @@ namespace MpWpfApp {
                          if (string.IsNullOrEmpty(UserHexColor)) {
                              return;
                          }
-                         await SetUserIconToCurrentHexColor(UserHexColor, uivm);
+                         await SetUserIconToCurrentHexColorAsync(UserHexColor, uivm);
 
                          _currentIconViewModel = null;
                          UserHexColor = null;

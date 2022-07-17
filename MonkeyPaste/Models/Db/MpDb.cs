@@ -385,8 +385,7 @@ namespace MonkeyPaste {
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
 
-            MpPrefViewModel.Instance.ThisAppSourceId = 5;
-            MpPrefViewModel.Instance.ThisOsFileManagerSourceId = 4;
+            
 
             MpPrefViewModel.Instance.ThisUserDevice = await MpDataModelProvider.GetUserDeviceByGuidAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
             

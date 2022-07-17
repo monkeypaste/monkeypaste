@@ -1,11 +1,12 @@
 ﻿using System;
+using System.IO;
 using MonkeyPaste;
 namespace MonkeyPaste.Avalonia {
     public class MpAvOsInfo : MpIOsInfo {
         public string OsFileManagerPath {
             get {
                 if(OperatingSystem.IsWindows()) {
-
+                    return Path.Combine(Directory.GetParent(Environment.SystemDirectory).FullName, "explorer.exe");
                 }
                 if(OperatingSystem.IsLinux()) {
 
@@ -20,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
         public string OsFileManagerName {
             get {
                 if (OperatingSystem.IsWindows()) {
-
+                    return "Explorer";
                 }
                 if (OperatingSystem.IsLinux()) {
 

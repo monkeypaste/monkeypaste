@@ -26,6 +26,16 @@ namespace MonkeyPaste {
         public string OriginalColor { get; }
     }
 
+    public enum MpMenuItemType {
+        None = 0,
+        HeaderSeparator,
+        Separator,
+        PasteToPathRuntimeItem,
+        ColorPallete,
+        NewTableSelector,
+        lorIconMenuItem,
+
+    }
     public class MpMenuItemViewModel : MpViewModelBase {
         #region Statics
 
