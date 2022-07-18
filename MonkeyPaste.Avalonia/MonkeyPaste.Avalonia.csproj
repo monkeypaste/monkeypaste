@@ -842,8 +842,8 @@
     <PackageReference Include="Dotnet.Bundle" Version="0.9.13" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controls\Adorners\" />
     <Folder Include="Controls\WebView\WebViewControl\" />
-    <Folder Include="Utils\Clipboard\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Base\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\" />

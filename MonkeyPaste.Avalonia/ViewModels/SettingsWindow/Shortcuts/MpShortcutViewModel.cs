@@ -26,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
         MpISelectableViewModel {
         #region Properties        
 
-        #region MpIShortcutCommand Implementation
+        #region MpAvIShortcutCommand Implementation
 
         public ICommand AssignCommand => new MpCommand(() => {
             Parent.SelectedItem = this;
@@ -370,7 +370,7 @@ namespace MonkeyPaste.Avalonia {
                     if (RoutingType == MpRoutingType.None) {
                         throw new Exception("ShortcutViewModel error, routing type cannot be none");
                     }
-                    var hook = RoutingType == MpRoutingType.Internal ? Parent.ApplicationHook : Parent.GlobalHook;
+                    //var hook = RoutingType == MpRoutingType.Internal ? Parent.ApplicationHook : Parent.GlobalHook;
 
                     var cl = MpAvKeyboardInputHelpers.ConvertStringToKeySequence(KeyString);
                     //var wfcl = cl.Select(x => x.Select(y => MpAvKeyboardInputHelpers.WpfKeyToWinformsKey(y)).ToList()).ToList();
@@ -440,10 +440,10 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(KeyString):
                     //if (IsCustom()) {
                     //    if (Shortcut.CopyItemId > 0) {
-                    //        var ctvm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(Shortcut.CopyItemId);
+                    //        var ctvm = MpAvClipTrayViewModel.Instance.GetContentItemViewModelById(Shortcut.CopyItemId);
                     //        ctvm.ShortcutKeyString = Shortcut.KeyString;
                     //    } else {
-                    //        var ttvm = MpTagTrayViewModel.Instance.Items.Where(x => x.Tag.Id == Shortcut.TagId).Single();
+                    //        var ttvm = MpAvTagTrayViewModel.Instance.Items.Where(x => x.Tag.Id == Shortcut.TagId).Single();
                     //        ttvm.ShortcutKeyString = Shortcut.KeyString;
                     //    }
                     //}

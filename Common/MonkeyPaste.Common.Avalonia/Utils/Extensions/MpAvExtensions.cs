@@ -47,7 +47,6 @@ namespace MonkeyPaste.Common.Avalonia {
         }
         #endregion
 
-
         #region Scroll Viewer
         public static ScrollBar GetScrollBar(this ScrollViewer sv, Orientation orientation) {
             if (orientation == Orientation.Vertical) {

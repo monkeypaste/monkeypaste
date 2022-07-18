@@ -55,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
                     //new MpBootstrappedItemViewModel(this,typeof(MpShortcutCollectionViewModel)),
 
 
-                    //new MpBootstrappedItemViewModel(this,typeof(MpTagTrayViewModel)),
+                    //new MpBootstrappedItemViewModel(this,typeof(MpAvTagTrayViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindowViewModel)),
 
                     //new MpBootstrappedItemViewModel(this,typeof(MpActionCollectionViewModel)),

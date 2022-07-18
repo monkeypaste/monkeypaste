@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Avalonia.Threading;
 using MonkeyPaste;
 
 namespace MonkeyPaste.Avalonia {
@@ -77,7 +78,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if(e is MpSource s) {
-                MpHelpers.RunOnMainThread(async () => {
+                Dispatcher.UIThread.Post(async () => {
                     var svm = await CreateSourceViewModel(s);
                     Items.Add(svm);
                     OnPropertyChanged(nameof(Items));
@@ -86,7 +87,7 @@ namespace MonkeyPaste.Avalonia {
         }
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpSource s) {
-                MpHelpers.RunOnMainThread(async () => {
+                Dispatcher.UIThread.Post(async () => {
                     var svm = Items.FirstOrDefault(x => x.Source.Id == s.Id);
                     if(svm != null) {
                         await svm.InitializeAsync(s);

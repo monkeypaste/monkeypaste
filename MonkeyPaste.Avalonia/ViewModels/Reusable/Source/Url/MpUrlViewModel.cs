@@ -1,14 +1,10 @@
-﻿using System;
+﻿using Avalonia.Threading;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-
-using Microsoft.Office.Interop.Outlook;
-using MonkeyPaste;
-using SQLite;
 
 namespace MonkeyPaste.Avalonia {
     public class MpUrlViewModel : 
@@ -188,17 +184,17 @@ namespace MonkeyPaste.Avalonia {
             bool wasCanceled = false;
 
             List<MpCopyItem> clipsFromUrl = new List<MpCopyItem>();
-            MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + UrlPath + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
-            if (confirmExclusionResult == MessageBoxResult.Yes) {
-                IsBusy = true;
-                if(isDomain) {
-                    clipsFromUrl = await MpDataModelProvider.GetCopyItemsByUrlDomainAsync(UrlDomainPath);
-                } else {
-                    clipsFromUrl = await MpDataModelProvider.GetCopyItemsByUrlIdAsync(UrlId);
-                }                
-            } else if (confirmExclusionResult == MessageBoxResult.Cancel) {
-                wasCanceled = true;
-            }
+            //MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + UrlPath + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
+            //if (confirmExclusionResult == MessageBoxResult.Yes) {
+            //    IsBusy = true;
+            //    if(isDomain) {
+            //        clipsFromUrl = await MpDataModelProvider.GetCopyItemsByUrlDomainAsync(UrlDomainPath);
+            //    } else {
+            //        clipsFromUrl = await MpDataModelProvider.GetCopyItemsByUrlIdAsync(UrlId);
+            //    }                
+            //} else if (confirmExclusionResult == MessageBoxResult.Cancel) {
+            //    wasCanceled = true;
+            //}
 
 
             if (wasCanceled) {
@@ -217,12 +213,12 @@ namespace MonkeyPaste.Avalonia {
             switch(e.PropertyName) {
                 case nameof(IsRejected):
                     if(IsRejected) {
-                        MpHelpers.RunOnMainThread(async() => { await RejectUrlOrDomain(true); });
+                        Dispatcher.UIThread.Post(async() => { await RejectUrlOrDomain(true); });
                     }
                     break;
                 case nameof(IsSubRejected):
                     if (IsSubRejected) {
-                        MpHelpers.RunOnMainThread(async () => { await RejectUrlOrDomain(false); });
+                        Dispatcher.UIThread.Post(async () => { await RejectUrlOrDomain(false); });
                     }
                     break;
                 case nameof(HasModelChanged):

@@ -16,7 +16,10 @@ using MonkeyPaste.Common.Avalonia;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvMainWindow : Window {
-        public static Window? Instance { get; private set; } = null;
+        public static MpAvMainWindow? Instance { get; private set; } = null;
+
+        public Grid MainWindowGrid { get; private set; }
+
         static MpAvMainWindow() {
             BoundsProperty.Changed.AddClassHandler<MpAvMainWindow>((x,y) => x.BoundsChangedHandler(y as AvaloniaPropertyChangedEventArgs<Rect>));
         }
@@ -37,6 +40,8 @@ namespace MonkeyPaste.Avalonia {
             this.Deactivated += MainWindow_Deactivated;
             this.PointerMoved += MainWindow_PointerMoved;
             this.PointerLeave += MainWindow_PointerLeave;
+
+            MainWindowGrid = this.FindControl<Grid>("MainWindowGridRef");
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
             InitAsync().FireAndForgetSafeAsync(MpCommandErrorHandler.Instance);

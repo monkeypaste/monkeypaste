@@ -6,8 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-
-
+using Avalonia.Threading;
 using MonkeyPaste;
 
 namespace MonkeyPaste.Avalonia {
@@ -200,10 +199,10 @@ namespace MonkeyPaste.Avalonia {
             var clipsFromApp = await MpDataModelProvider.GetCopyItemsByAppIdAsync(AppId);
 
             if (clipsFromApp != null && clipsFromApp.Count > 0) {
-                MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + AppName + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
-                if (confirmExclusionResult == MessageBoxResult.Cancel) {
-                    wasCanceled = true;
-                }
+                //MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + AppName + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
+                //if (confirmExclusionResult == MessageBoxResult.Cancel) {
+                //    wasCanceled = true;
+                //}
             }
             if (wasCanceled) {
                 IsBusy = false;
@@ -224,12 +223,13 @@ namespace MonkeyPaste.Avalonia {
                         }
                         
                         Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
-                        CollectionViewSource.GetDefaultView(ClipboardFormatInfos.Items).Refresh();
+                        //CollectionViewSource.GetDefaultView(ClipboardFormatInfos.Items).Refresh();
+                        ClipboardFormatInfos.OnPropertyChanged(nameof(ClipboardFormatInfos.Items));
                     }
                     break;
                 case nameof(IsRejected):
                     if(IsRejected) {
-                        MpHelpers.RunOnMainThread(async()=> { await RejectApp(); });
+                        Dispatcher.UIThread.Post(async()=> { await RejectApp(); });
                     }
                     break;
 

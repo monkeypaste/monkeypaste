@@ -231,10 +231,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task InitHotkeysAndMouseEvents() {
-            await MpHelpers.RunOnMainThreadAsync(() => {
+            await Dispatcher.UIThread.InvokeAsync(() => {
                 try {
-                    GlobalHook = Hook.GlobalEvents();
-                    ApplicationHook = Hook.AppEvents();
+                    //GlobalHook = Hook.GlobalEvents();
+                    //ApplicationHook = Hook.AppEvents();
 
 
                     //MpAvMainWindowViewModel.Instance.OnMainWindowShow += Mwvm_OnMainWindowShow;
@@ -267,13 +267,14 @@ namespace MonkeyPaste.Avalonia {
                     //    }
                     //}
                     //});
-                    GlobalHook.MouseMove += GlobalHook_MouseMove;
-                    GlobalHook.MouseDown += GlobalHook_MouseDown; ;
-                    GlobalHook.MouseUp += GlobalHook_MouseUp;
-                    GlobalHook.MouseWheel += GlobalHook_MouseWheel;
 
-                    GlobalHook.KeyDown += GlobalHook_KeyDown;
-                    GlobalHook.KeyUp += GlobalHook_KeyUp;
+                    //GlobalHook.MouseMove += GlobalHook_MouseMove;
+                    //GlobalHook.MouseDown += GlobalHook_MouseDown; ;
+                    //GlobalHook.MouseUp += GlobalHook_MouseUp;
+                    //GlobalHook.MouseWheel += GlobalHook_MouseWheel;
+
+                    //GlobalHook.KeyDown += GlobalHook_KeyDown;
+                    //GlobalHook.KeyUp += GlobalHook_KeyUp;
                     
                     #endregion
 
@@ -493,156 +494,156 @@ namespace MonkeyPaste.Avalonia {
         private Point? _globalMouseDownPosition = null;
         private double _MIN_GLOBAL_DRAG_DIST = 20;
 
-        private void GlobalHook_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e) {
-            if (!MpAvMainWindowViewModel.Instance.IsMainWindowOpen && 
-                !MpAvMainWindowViewModel.Instance.IsMainWindowOpening && 
-                MpBootstrapperViewModelBase.IsLoaded) {
-                if (MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
-                    if (e.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
-                        MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-                    }
-                }
-            }
-        }
+        //private void GlobalHook_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e) {
+        //    if (!MpAvMainWindowViewModel.Instance.IsMainWindowOpen && 
+        //        !MpAvMainWindowViewModel.Instance.IsMainWindowOpening && 
+        //        MpBootstrapperViewModelBase.IsLoaded) {
+        //        if (MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
+        //            if (e.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
+        //                MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
+        //            }
+        //        }
+        //    }
+        //}
 
-        private void GlobalHook_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e) {
-            GlobalMouseLocation = MpScreenInformation.ConvertWinFormsScreenPointToWpf(e.Location);
+        //private void GlobalHook_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e) {
+        //    GlobalMouseLocation = MpScreenInformation.ConvertWinFormsScreenPointToWpf(e.Location);
 
-            //MpConsole.WriteLine("WinForms: " + e.Location.X + "," + e.Location.Y);
-            //MpConsole.WriteLine("Wpf: " + GlobalMouseLocation.X + "," + GlobalMouseLocation.Y);
-            //MpConsole.WriteLine("");
+        //    //MpConsole.WriteLine("WinForms: " + e.Location.X + "," + e.Location.Y);
+        //    //MpConsole.WriteLine("Wpf: " + GlobalMouseLocation.X + "," + GlobalMouseLocation.Y);
+        //    //MpConsole.WriteLine("");
 
-            if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                // NOTE!! this maybe bad only firing when window open 
-                // but its for drag/drop and not doing could interfere w/ performance too much
-                GlobalMouseMove?.Invoke(this, GlobalMouseLocation);
-            } else {
-                bool isShowingMainWindow = false;
-                if (MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdge &&
-                    !MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
-                    if (e.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
-                        MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-                        isShowingMainWindow = true;
-                    }
-                }
+        //    if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+        //        // NOTE!! this maybe bad only firing when window open 
+        //        // but its for drag/drop and not doing could interfere w/ performance too much
+        //        GlobalMouseMove?.Invoke(this, GlobalMouseLocation);
+        //    } else {
+        //        bool isShowingMainWindow = false;
+        //        if (MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdge &&
+        //            !MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
+        //            if (e.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
+        //                MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
+        //                isShowingMainWindow = true;
+        //            }
+        //        }
 
-                if(!isShowingMainWindow &&
-                    _globalMouseDownPosition.HasValue && 
-                    GlobalMouseLocation.Distance(_globalMouseDownPosition.Value) >= _MIN_GLOBAL_DRAG_DIST &&
-                    GlobalMouseLocation.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight &&
-                    MpPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop) {
-                    MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-                }
-            }
+        //        if(!isShowingMainWindow &&
+        //            _globalMouseDownPosition.HasValue && 
+        //            GlobalMouseLocation.Distance(_globalMouseDownPosition.Value) >= _MIN_GLOBAL_DRAG_DIST &&
+        //            GlobalMouseLocation.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight &&
+        //            MpPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop) {
+        //            MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
+        //        }
+        //    }
 
 
-        }
+        //}
 
-        private void GlobalHook_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
-            if(e.Button == System.Windows.Forms.MouseButtons.Left) {
-                GlobalIsMouseLeftButtonDown = true;
-                _globalMouseDownPosition = GlobalMouseLocation;
-            }
-        }
-        private void GlobalHook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {            
+        //private void GlobalHook_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
+        //    if(e.Button == System.Windows.Forms.MouseButtons.Left) {
+        //        GlobalIsMouseLeftButtonDown = true;
+        //        _globalMouseDownPosition = GlobalMouseLocation;
+        //    }
+        //}
+        //private void GlobalHook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {            
 
-            if (e.Button == System.Windows.Forms.MouseButtons.Left) {
-                _globalMouseDownPosition = null;
-                GlobalIsMouseLeftButtonDown = false;
+        //    if (e.Button == System.Windows.Forms.MouseButtons.Left) {
+        //        _globalMouseDownPosition = null;
+        //        GlobalIsMouseLeftButtonDown = false;
 
-                if(MpDragDropManager.IsDragAndDrop) {
-                    MpHelpers.RunOnMainThread(async () => {
-                        var handle = MpProcessHelper.MpProcessManager.ThisAppHandle;
-                        WinApi.SetForegroundWindow(handle);
-                        WinApi.SetActiveWindow(handle);
+        //        if(MpDragDropManager.IsDragAndDrop) {
+        //            Dispatcher.UIThread.Post(async () => {
+        //                var handle = MpProcessHelper.MpProcessManager.ThisAppHandle;
+        //                WinApi.SetForegroundWindow(handle);
+        //                WinApi.SetActiveWindow(handle);
 
-                        while(true) {
-                            await Task.Delay(100);
-                        }
-                        //MessageBox.Show("Mouse up");
-                    });
-                }
+        //                while(true) {
+        //                    await Task.Delay(100);
+        //                }
+        //                //MessageBox.Show("Mouse up");
+        //            });
+        //        }
                 
-                GlobalMouseLeftButtonUp?.Invoke(this, null);
-            }
+        //        GlobalMouseLeftButtonUp?.Invoke(this, null);
+        //    }
 
-            if (!MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                if (MpAvClipTrayViewModel.Instance.IsAutoCopyMode) {
-                    if (e.Button == System.Windows.Forms.MouseButtons.Left && !MpHelpers.ApplicationIsActivated()) {
-                        System.Windows.Forms.SendKeys.SendWait("^c");
-                    }
-                }
-                if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
-                    if (e.Button == System.Windows.Forms.MouseButtons.Right && !MpHelpers.ApplicationIsActivated()) {
-                        System.Windows.Forms.SendKeys.SendWait("^v");
-                    }
-                }
-            } else if (!MpAvMainWindowViewModel.Instance.IsMainWindowClosing &&
-                      !MpAvMainWindowViewModel.Instance.IsMainWindowLocked &&
-                      !MpExternalDropBehavior.Instance.IsPreExternalTemplateDrop &&
-                      GlobalMouseLocation.Y < MpAvMainWindowViewModel.Instance.MainWindowTop) {
-                MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
-            }
-        }
+        //    if (!MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+        //        if (MpAvClipTrayViewModel.Instance.IsAutoCopyMode) {
+        //            if (e.Button == System.Windows.Forms.MouseButtons.Left && !MpHelpers.ApplicationIsActivated()) {
+        //                System.Windows.Forms.SendKeys.SendWait("^c");
+        //            }
+        //        }
+        //        if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
+        //            if (e.Button == System.Windows.Forms.MouseButtons.Right && !MpHelpers.ApplicationIsActivated()) {
+        //                System.Windows.Forms.SendKeys.SendWait("^v");
+        //            }
+        //        }
+        //    } else if (!MpAvMainWindowViewModel.Instance.IsMainWindowClosing &&
+        //              !MpAvMainWindowViewModel.Instance.IsMainWindowLocked &&
+        //              !MpExternalDropBehavior.Instance.IsPreExternalTemplateDrop &&
+        //              GlobalMouseLocation.Y < MpAvMainWindowViewModel.Instance.MainWindowTop) {
+        //        MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
+        //    }
+        //}
 
         #endregion
 
         #region Global Key Handlers
 
-        private void GlobalHook_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e) {
-             if (MpAssignHotkeyModalWindow.IsOpen && IsCustomRoutingEnabled) {
-                return;
-            }
+        //private void GlobalHook_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e) {
+        //     if (MpAssignHotkeyModalWindow.IsOpen && IsCustomRoutingEnabled) {
+        //        return;
+        //    }
 
-            if (e.KeyCode == System.Windows.Forms.Keys.Alt || e.Alt ||
-               e.KeyCode == System.Windows.Forms.Keys.LMenu ||
-               e.KeyCode == System.Windows.Forms.Keys.RMenu) {
-                GlobalIsAltDown = true;
-            }
-            if (e.KeyCode == System.Windows.Forms.Keys.LShiftKey || e.KeyCode == System.Windows.Forms.Keys.RShiftKey) {
-                GlobalIsShiftDown = true;
-            }
-            if (e.KeyCode == System.Windows.Forms.Keys.LControlKey || e.KeyCode == System.Windows.Forms.Keys.RControlKey) {
-                GlobalIsCtrlDown = true;
-            }
+        //    if (e.KeyCode == System.Windows.Forms.Keys.Alt || e.Alt ||
+        //       e.KeyCode == System.Windows.Forms.Keys.LMenu ||
+        //       e.KeyCode == System.Windows.Forms.Keys.RMenu) {
+        //        GlobalIsAltDown = true;
+        //    }
+        //    if (e.KeyCode == System.Windows.Forms.Keys.LShiftKey || e.KeyCode == System.Windows.Forms.Keys.RShiftKey) {
+        //        GlobalIsShiftDown = true;
+        //    }
+        //    if (e.KeyCode == System.Windows.Forms.Keys.LControlKey || e.KeyCode == System.Windows.Forms.Keys.RControlKey) {
+        //        GlobalIsCtrlDown = true;
+        //    }
 
-            if (e.KeyCode == System.Windows.Forms.Keys.Escape) {
-                if (MpDragDropManager.IsDragAndDrop) {
-                    _keyboardGestureHelper.Reset();
-                    //e.SuppressKeyPress = true;
-                    GlobalEscKeyPressed?.Invoke(this, null);
-                    return;
-                }
-            }
+        //    if (e.KeyCode == System.Windows.Forms.Keys.Escape) {
+        //        if (MpDragDropManager.IsDragAndDrop) {
+        //            _keyboardGestureHelper.Reset();
+        //            //e.SuppressKeyPress = true;
+        //            GlobalEscKeyPressed?.Invoke(this, null);
+        //            return;
+        //        }
+        //    }
 
-            if (IsCustomRoutingEnabled) {
-                 HandleGestureRouting_Down(ref e);
-            }            
-        }
+        //    if (IsCustomRoutingEnabled) {
+        //         HandleGestureRouting_Down(ref e);
+        //    }            
+        //}
 
-        private void GlobalHook_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e) {
-            if (e.KeyCode == System.Windows.Forms.Keys.Alt || !e.Alt ||
-               e.KeyCode == System.Windows.Forms.Keys.LMenu ||
-               e.KeyCode == System.Windows.Forms.Keys.RMenu) {
-                GlobalIsAltDown = false;
-            }
-            if (e.KeyCode == System.Windows.Forms.Keys.LShiftKey || e.KeyCode == System.Windows.Forms.Keys.RShiftKey) {
-                GlobalIsShiftDown = false;
-            }
-            if (e.KeyCode == System.Windows.Forms.Keys.LControlKey || e.KeyCode == System.Windows.Forms.Keys.RControlKey) {
-                GlobalIsCtrlDown = false;
-            }
+        //private void GlobalHook_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e) {
+        //    if (e.KeyCode == System.Windows.Forms.Keys.Alt || !e.Alt ||
+        //       e.KeyCode == System.Windows.Forms.Keys.LMenu ||
+        //       e.KeyCode == System.Windows.Forms.Keys.RMenu) {
+        //        GlobalIsAltDown = false;
+        //    }
+        //    if (e.KeyCode == System.Windows.Forms.Keys.LShiftKey || e.KeyCode == System.Windows.Forms.Keys.RShiftKey) {
+        //        GlobalIsShiftDown = false;
+        //    }
+        //    if (e.KeyCode == System.Windows.Forms.Keys.LControlKey || e.KeyCode == System.Windows.Forms.Keys.RControlKey) {
+        //        GlobalIsCtrlDown = false;
+        //    }
 
-            if(IsCustomRoutingEnabled) {
-                HandleGestureRouting_Up(e);
-            }            
-        }
+        //    if(IsCustomRoutingEnabled) {
+        //        HandleGestureRouting_Up(e);
+        //    }            
+        //}
 
 
-        private void GlobalHook_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e) {
-            //AutoSearchOnKeyPress(e.KeyChar);
+        //private void GlobalHook_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e) {
+        //    //AutoSearchOnKeyPress(e.KeyChar);
             
-        }
+        //}
 
         #endregion
 
@@ -652,153 +653,153 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        private void HandleGestureRouting_Down(ref System.Windows.Forms.KeyEventArgs e) {
-            var wpfKey = MpWpfKeyboardInputHelpers.WinformsToWPFKey(e.KeyCode);
-            _keyboardGestureHelper.AddKeyDown(wpfKey);
+        //private void HandleGestureRouting_Down(ref System.Windows.Forms.KeyEventArgs e) {
+        //    var wpfKey = MpAvKeyboardInputHelpers.WinformsToWPFKey(e.KeyCode);
+        //    _keyboardGestureHelper.AddKeyDown(wpfKey);
 
-            if (!string.IsNullOrEmpty(_sendKeysToThisApp) && _sendKeysToThisApp.StartsWith(_keyboardGestureHelper.CurrentGesture)) {
-                if (_sendKeysToThisApp.Length > _keyboardGestureHelper.CurrentGesture.Length) {
-                    _sendKeysToThisApp = _sendKeysToThisApp.Substring(_keyboardGestureHelper.CurrentGesture.Length);
-                } else {
-                    _sendKeysToThisApp = String.Empty;
-                }
-                if (Keyboard.PrimaryDevice != null) {
-                    if (Keyboard.PrimaryDevice.ActiveSource != null) {
-                        var ie = new KeyEventArgs(
-                            Keyboard.PrimaryDevice,
-                            Keyboard.PrimaryDevice.ActiveSource, 0, wpfKey) {
-                            RoutedEvent = Keyboard.KeyDownEvent
-                        };
-                        InputManager.Current.ProcessInput(ie);
+        //    if (!string.IsNullOrEmpty(_sendKeysToThisApp) && _sendKeysToThisApp.StartsWith(_keyboardGestureHelper.CurrentGesture)) {
+        //        if (_sendKeysToThisApp.Length > _keyboardGestureHelper.CurrentGesture.Length) {
+        //            _sendKeysToThisApp = _sendKeysToThisApp.Substring(_keyboardGestureHelper.CurrentGesture.Length);
+        //        } else {
+        //            _sendKeysToThisApp = String.Empty;
+        //        }
+        //        if (Keyboard.PrimaryDevice != null) {
+        //            if (Keyboard.PrimaryDevice.ActiveSource != null) {
+        //                var ie = new KeyEventArgs(
+        //                    Keyboard.PrimaryDevice,
+        //                    Keyboard.PrimaryDevice.ActiveSource, 0, wpfKey) {
+        //                    RoutedEvent = Keyboard.KeyDownEvent
+        //                };
+        //                InputManager.Current.ProcessInput(ie);
 
-                        // Note: Based on your requirements you may also need to fire events for:
-                        // RoutedEvent = Keyboard.PreviewKeyDownEvent
-                        // RoutedEvent = Keyboard.KeyUpEvent
-                        // RoutedEvent = Keyboard.PreviewKeyUpEvent
-                    }
-                }
+        //                // Note: Based on your requirements you may also need to fire events for:
+        //                // RoutedEvent = Keyboard.PreviewKeyDownEvent
+        //                // RoutedEvent = Keyboard.KeyUpEvent
+        //                // RoutedEvent = Keyboard.PreviewKeyUpEvent
+        //            }
+        //        }
 
-                _keyboardGestureHelper.Reset();
-                e.Handled = false;
-                e.SuppressKeyPress = false;
-                return;
-            }
+        //        _keyboardGestureHelper.Reset();
+        //        e.Handled = false;
+        //        e.SuppressKeyPress = false;
+        //        return;
+        //    }
 
-            _waitToExecuteShortcutStartDateTime = null;
+        //    _waitToExecuteShortcutStartDateTime = null;
 
-            var possibleMatches = Items.Where(x => x.SendKeyStr.StartsWith(_keyboardGestureHelper.CurrentGesture));
-            if (possibleMatches.Count() == 0) {
-                _keyboardGestureHelper.Reset();
-                return;
-            }
+        //    var possibleMatches = Items.Where(x => x.SendKeyStr.StartsWith(_keyboardGestureHelper.CurrentGesture));
+        //    if (possibleMatches.Count() == 0) {
+        //        _keyboardGestureHelper.Reset();
+        //        return;
+        //    }
 
-            e.SuppressKeyPress = true;
+        //    e.SuppressKeyPress = true;
 
-            possibleMatches.ForEach(x => MpConsole.WriteLine("Possible match DOWN: " + x));
-        }
+        //    possibleMatches.ForEach(x => MpConsole.WriteLine("Possible match DOWN: " + x));
+        //}
 
-        private async void HandleGestureRouting_Up(System.Windows.Forms.KeyEventArgs e) {
-            string curGestureStr = _keyboardGestureHelper.CurrentGesture;
+        //private async void HandleGestureRouting_Up(System.Windows.Forms.KeyEventArgs e) {
+        //    string curGestureStr = _keyboardGestureHelper.CurrentGesture;
 
-            if (string.IsNullOrEmpty(curGestureStr)) {
-                // no possible or exact shorcuts were suppressed so ignore
-                return;
-            }
+        //    if (string.IsNullOrEmpty(curGestureStr)) {
+        //        // no possible or exact shorcuts were suppressed so ignore
+        //        return;
+        //    }
 
-            var wpfKey = MpWpfKeyboardInputHelpers.WinformsToWPFKey(e.KeyCode);
-            _keyboardGestureHelper.AddKeyUp(wpfKey);
+        //    var wpfKey = MpAvKeyboardInputHelpers.WinformsToWPFKey(e.KeyCode);
+        //    _keyboardGestureHelper.AddKeyUp(wpfKey);
 
 
-            var exactMatches = Items.Where(x => x.SendKeyStr == curGestureStr);
-            var possibleMatches = Items.Where(x => exactMatches.All(y => y != x) && x.SendKeyStr.StartsWith(curGestureStr));
+        //    var exactMatches = Items.Where(x => x.SendKeyStr == curGestureStr);
+        //    var possibleMatches = Items.Where(x => exactMatches.All(y => y != x) && x.SendKeyStr.StartsWith(curGestureStr));
 
-            possibleMatches.ForEach(x => MpConsole.WriteLine("Possible match UP: " + x));
-            exactMatches.ForEach(x => MpConsole.WriteLine("Exact match UP: " + x));
+        //    possibleMatches.ForEach(x => MpConsole.WriteLine("Possible match UP: " + x));
+        //    exactMatches.ForEach(x => MpConsole.WriteLine("Exact match UP: " + x));
 
-            bool passInput = false;
+        //    bool passInput = false;
 
-            if (exactMatches.Count() > 0) {
-                if (exactMatches.Count() > 1) {
-                    // should only be 1
-                    Debugger.Break();
-                }
-                // when current gesture is exact match check if it maybe part of a longer sequence
-                var matchedShortcut = exactMatches.ElementAt(0);
+        //    if (exactMatches.Count() > 0) {
+        //        if (exactMatches.Count() > 1) {
+        //            // should only be 1
+        //            Debugger.Break();
+        //        }
+        //        // when current gesture is exact match check if it maybe part of a longer sequence
+        //        var matchedShortcut = exactMatches.ElementAt(0);
 
-                if (possibleMatches.Count() == 0) {
-                    // this means user issued the exact match so no need to dump suppressed input                   
+        //        if (possibleMatches.Count() == 0) {
+        //            // this means user issued the exact match so no need to dump suppressed input                   
 
-                    passInput = !PerformMatchedShortcut(matchedShortcut);
-                } else {
-                    // when current gesture is a match but a longer is possible set wait delay
-                    _waitToExecuteShortcutStartDateTime = DateTime.Now;
+        //            passInput = !PerformMatchedShortcut(matchedShortcut);
+        //        } else {
+        //            // when current gesture is a match but a longer is possible set wait delay
+        //            _waitToExecuteShortcutStartDateTime = DateTime.Now;
 
-                    while (true) {
-                        if (!_waitToExecuteShortcutStartDateTime.HasValue) {
-                            // a new key down was issued so the exact is not the final gesture
-                            break;
-                        }
-                        if (DateTime.Now - _waitToExecuteShortcutStartDateTime.Value >
-                            TimeSpan.FromMilliseconds(_MAX_WAIT_TO_EXECUTE_SHORTCUT_MS)) {
-                            // since no new key down was issued in given delay execute shortcut and clear buffer
-                            passInput = !PerformMatchedShortcut(matchedShortcut);
-                            break;
-                        }
-                        await Task.Delay(10);
-                    }
-                }
-            } else if (possibleMatches.Count() == 0) {
-                passInput = true;
-            }
-            if (passInput && !string.IsNullOrEmpty(curGestureStr)) {
-                // (i don't think this can happen) when both exact and possible have no matches pass current buffer
-                System.Windows.Forms.SendKeys.SendWait(curGestureStr);
+        //            while (true) {
+        //                if (!_waitToExecuteShortcutStartDateTime.HasValue) {
+        //                    // a new key down was issued so the exact is not the final gesture
+        //                    break;
+        //                }
+        //                if (DateTime.Now - _waitToExecuteShortcutStartDateTime.Value >
+        //                    TimeSpan.FromMilliseconds(_MAX_WAIT_TO_EXECUTE_SHORTCUT_MS)) {
+        //                    // since no new key down was issued in given delay execute shortcut and clear buffer
+        //                    passInput = !PerformMatchedShortcut(matchedShortcut);
+        //                    break;
+        //                }
+        //                await Task.Delay(10);
+        //            }
+        //        }
+        //    } else if (possibleMatches.Count() == 0) {
+        //        passInput = true;
+        //    }
+        //    if (passInput && !string.IsNullOrEmpty(curGestureStr)) {
+        //        // (i don't think this can happen) when both exact and possible have no matches pass current buffer
+        //        System.Windows.Forms.SendKeys.SendWait(curGestureStr);
 
-                MpConsole.WriteLine("Emptied gesture buffer with sendkey string: " + curGestureStr);
-                _keyboardGestureHelper.Reset();
-            }
-        }
+        //        MpConsole.WriteLine("Emptied gesture buffer with sendkey string: " + curGestureStr);
+        //        _keyboardGestureHelper.Reset();
+        //    }
+        //}
 
-        private bool PerformMatchedShortcut(MpShortcutViewModel matchedShortcut) {
-            string sendKeyStr = _keyboardGestureHelper.CurrentGesture;
-            if (!matchedShortcut.PerformShortcutCommand.CanExecute(null)) {
-                //when shortcut can't execute pass gesture and clear buffer
-                if(matchedShortcut.RoutingType == MpRoutingType.Internal) {
-                    _sendKeysToThisApp = sendKeyStr;
-                }
-                return false;
-            } else {
-                MpHelpers.RunOnMainThread(async () => {
-                    switch (matchedShortcut.RoutingType) {
-                        case MpRoutingType.Internal:
-                        case MpRoutingType.Direct:
-                            // direct or internal means no further action, gesture is suppressed
-                            matchedShortcut.PerformShortcutCommand.Execute(null);
-                            break;
-                        case MpRoutingType.Bubble:
-                            // pass gesture before invoking command
+        //private bool PerformMatchedShortcut(MpShortcutViewModel matchedShortcut) {
+        //    string sendKeyStr = _keyboardGestureHelper.CurrentGesture;
+        //    if (!matchedShortcut.PerformShortcutCommand.CanExecute(null)) {
+        //        //when shortcut can't execute pass gesture and clear buffer
+        //        if(matchedShortcut.RoutingType == MpRoutingType.Internal) {
+        //            _sendKeysToThisApp = sendKeyStr;
+        //        }
+        //        return false;
+        //    } else {
+        //        Dispatcher.UIThread.Post(async () => {
+        //            switch (matchedShortcut.RoutingType) {
+        //                case MpRoutingType.Internal:
+        //                case MpRoutingType.Direct:
+        //                    // direct or internal means no further action, gesture is suppressed
+        //                    matchedShortcut.PerformShortcutCommand.Execute(null);
+        //                    break;
+        //                case MpRoutingType.Bubble:
+        //                    // pass gesture before invoking command
 
-                            System.Windows.Forms.SendKeys.SendWait(sendKeyStr);
+        //                    System.Windows.Forms.SendKeys.SendWait(sendKeyStr);
 
-                            await Task.Delay(matchedShortcut.RoutingDelayMs);
+        //                    await Task.Delay(matchedShortcut.RoutingDelayMs);
 
-                            matchedShortcut.PerformShortcutCommand.Execute(null);
-                            break;
-                        case MpRoutingType.Tunnel:
-                            // pass gesture after invoking command                                
+        //                    matchedShortcut.PerformShortcutCommand.Execute(null);
+        //                    break;
+        //                case MpRoutingType.Tunnel:
+        //                    // pass gesture after invoking command                                
 
-                            matchedShortcut.PerformShortcutCommand.Execute(null);
+        //                    matchedShortcut.PerformShortcutCommand.Execute(null);
 
-                            await Task.Delay(matchedShortcut.RoutingDelayMs);
-                            System.Windows.Forms.SendKeys.SendWait(sendKeyStr);
-                            break;
-                    }
-                });
-            }
-            _keyboardGestureHelper.Reset();
-            _waitToExecuteShortcutStartDateTime = null;
-            return true;
-        }
+        //                    await Task.Delay(matchedShortcut.RoutingDelayMs);
+        //                    System.Windows.Forms.SendKeys.SendWait(sendKeyStr);
+        //                    break;
+        //            }
+        //        });
+        //    }
+        //    _keyboardGestureHelper.Reset();
+        //    _waitToExecuteShortcutStartDateTime = null;
+        //    return true;
+        //}
 
         #endregion
 

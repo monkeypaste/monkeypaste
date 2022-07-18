@@ -21,7 +21,7 @@
         Height="{Binding MainWindowHeight}"
         TransparencyLevelHint="Transparent"
         Title="Monkey Paste">
-    <Grid x:Name="MainWindowGrid"
+    <Grid x:Name="MainWindowGridRef"
           Background="Transparent"
           RowDefinitions="20,40,*"
           Width="{Binding MainWindowWidth}"

@@ -45,7 +45,7 @@ namespace MonkeyPaste.Avalonia {
                 if(_showPlus != value) {
                     _showPlus = value;
                     OnPropertyChanged(nameof(ShowPlus));
-                    OnPropertyChanged(nameof(PlusVisibility));
+                    OnPropertyChanged(nameof(IsPlusVisible));
                 }
             }
         }
@@ -59,20 +59,20 @@ namespace MonkeyPaste.Avalonia {
                 if (_showComma != value) {
                     _showComma = value;
                     OnPropertyChanged(nameof(ShowComma));
-                    OnPropertyChanged(nameof(CommaVisibility));
+                    OnPropertyChanged(nameof(IsCommaVisible));
                 }
             }
         }
 
-        public Visibility PlusVisibility {
+        public bool IsPlusVisible {
             get {
-                return ShowPlus ? Visibility.Visible : Visibility.Collapsed;
+                return ShowPlus ? true : false;
             }
         }
 
-        public Visibility CommaVisibility {
+        public bool IsCommaVisible {
             get {
-                return ShowComma ? Visibility.Visible : Visibility.Collapsed;
+                return ShowComma ? true : false;
             }
         }
         #endregion

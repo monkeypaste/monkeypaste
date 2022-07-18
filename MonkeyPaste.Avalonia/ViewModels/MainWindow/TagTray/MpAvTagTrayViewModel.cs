@@ -7,9 +7,9 @@ using System.Windows.Input;
 using MonkeyPaste;
 using MonkeyPaste.Common;
 using System.Diagnostics;
+using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
-
     public class MpAvTagTrayViewModel : 
         MpSelectorViewModelBase<object,MpAvTagTileViewModel>, 
         MpIAsyncSingletonViewModel<MpAvTagTrayViewModel>,
@@ -49,9 +49,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpISidebarItemViewModel Implementation
-        public double SidebarWidth { get; set; } = MpMeasurements.Instance.DefaultTagTreePanelWidth;
+        public double SidebarWidth { get; set; } = 0;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
 
-        public double DefaultSidebarWidth => MpMeasurements.Instance.DefaultTagTreePanelWidth;
+        public double DefaultSidebarWidth => 300;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
         public bool IsSidebarVisible { get; set; }
 
         public MpISidebarItemViewModel NextSidebarItem { get; }
@@ -76,7 +76,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public bool IsNavButtonsVisible => Items.Where(x => x.IsPinned).Sum(x => x.TagTileTrayWidth) > MpMeasurements.Instance.TagTrayDefaultMaxWidth;
+        public bool IsNavButtonsVisible => true;// Items.Where(x => x.IsPinned).Sum(x => x.TagTileTrayWidth) > MpMeasurements.Instance.TagTrayDefaultMaxWidth;
         public bool IsEditingTagName {
             get {
                 if(SelectedTagTile == null) {
@@ -121,7 +121,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         public async Task InitAsync() {
-            await MpHelpers.RunOnMainThreadAsync(async () => {
+            await Dispatcher.UIThread.InvokeAsync(async () => {
                 IsBusy = true;
 
                 MpDb.SyncAdd += MpDbObject_SyncAdd;
@@ -284,7 +284,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model Sync Events
         private void MpDbObject_SyncDelete(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
-            MpHelpers.RunOnMainThread(() => {
+            Dispatcher.UIThread.Post(() => {
                 if (sender is MpTag t) {                    
                     var ttvmToRemove = Items.Where(x => x.Tag.Guid == t.Guid).FirstOrDefault();
                     if (ttvmToRemove != null) {
@@ -297,12 +297,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MpDbObject_SyncUpdate(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
-            //MpHelpers.RunOnMainThread(() => {
+            //Dispatcher.UIThread.Post(() => {
             //});
         }
 
         private void MpDbObject_SyncAdd(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
-           // MpHelpers.RunOnMainThread(async() => {
+           // Dispatcher.UIThread.Post(async() => {
                 //if (sender is MpTag t) {
                 //    t.StartSync(e.SourceGuid);
                 //    var dupCheck = Items.Where(x => x.Tag.Guid == t.Guid).FirstOrDefault();
@@ -385,7 +385,7 @@ namespace MonkeyPaste.Avalonia {
 
                 OnPropertyChanged(nameof(SelectedTagTile));
                 
-                if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                if(MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
                     // last loaded tag is selected in ClipTray OnPostMainWindowLoaded 
                     // which notifies query changed so don't notify
                     return;

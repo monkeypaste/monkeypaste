@@ -32,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
         public void NotifyQueryChanged(bool isFilterSortOrSearch = true) {
             IsDescending = true;// MpClipTileSortViewModel.Instance.IsSortDescending;
             SortType = MpContentSortType.CopyDateTime; // MpClipTileSortViewModel.Instance.SelectedSortType.SortType;
-            TagId = MpTag.AllTagId; //MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
+            TagId = MpTag.AllTagId; //MpAvTagTrayViewModel.Instance.SelectedTagTile.TagId;
             SearchText = string.Empty; // MpSearchBoxViewModel.Instance.SearchText;
             TotalItemsInQuery = MpDataModelProvider.TotalTilesInQuery;
 

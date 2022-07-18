@@ -18,7 +18,7 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel,
         MpISelectableViewModel,
         MpIHierarchialViewModel<MpAvTagTileViewModel>,
-        //MpIShortcutCommand, 
+        MpAvIShortcutCommand, 
         MpIHasNotification,
         MpIUserColorViewModel,
         MpIActionComponent,
@@ -69,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvTagTileViewModel ParentTreeItem { get; set; }
 
-        //public IList<MpTagTileViewModel> Children => Items;
+        //public IList<MpAvTagTileViewModel> Children => Items;
 
         #endregion
 
@@ -136,7 +136,7 @@ namespace MonkeyPaste.Avalonia {
                     SubItems = new List<MpMenuItemViewModel>() {
                         new MpMenuItemViewModel() {
                             Header = "_Rename",
-                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("RenameImage") as string, //Application.Current.Resources["RenameIcon"] as string,
+                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("RenameImage") as string, //MpPlatformWrapper.Services.PlatformResource.GetResource("RenameIcon") as string,
                             Command = RenameTagCommand,
                             CommandParameter = IsTreeContextMenuOpened
                         },
@@ -191,7 +191,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIShortcutCommand Implementation
+        #region MpAvIShortcutCommand Implementation
 
         public MpShortcutType ShortcutType => MpShortcutType.SelectTag;
 

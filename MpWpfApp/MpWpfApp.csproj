@@ -304,6 +304,7 @@
     <Compile Include="Utils\Extensions\MpWebView2Extensions.cs" />
     <Compile Include="Utils\MpJsComAdapter.cs" />
     <Compile Include="Utils\System\MpFolderPicker.cs" />
+    <Compile Include="Utils\System\MpIFileSystemEventHandler.cs" />
     <Compile Include="Utils\System\VirtualFileDataObject.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfClipboardWatcher.cs">
       <SubType>Form</SubType>

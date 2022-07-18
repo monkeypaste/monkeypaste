@@ -9,8 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 using MonkeyPaste;
 using System.IO;
-using Microsoft.Office.Interop.Outlook;
-using MonkeyPaste;
+using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
     public class MpUrlCollectionViewModel : 
@@ -92,7 +91,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpUrl url) {
-                MpHelpers.RunOnMainThread(async () => {
+                Dispatcher.UIThread.Post(async () => {
                     var uvm = await CreateUrlViewModel(url);
                     Items.Add(uvm);
                     OnPropertyChanged(nameof(Items));
@@ -116,7 +115,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand AddUrlCommand => new MpCommand(
             async () => {
-                string UrlPath = MpTextBoxMessageBox.ShowCustomMessageBox("");
+                string UrlPath = string.Empty;//MpTextBoxMessageBox.ShowCustomMessageBox("");
 
                 if(string.IsNullOrEmpty(UrlPath)) {
                     return;

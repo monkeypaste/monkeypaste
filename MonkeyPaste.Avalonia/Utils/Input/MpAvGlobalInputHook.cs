@@ -122,7 +122,7 @@ namespace MonkeyPaste.Avalonia {
         [STAThread]
         private void GlobalInputListenerThread() {
             if (_hook == null) {
-                _hook = new SimpleGlobalHook();
+                _hook = new SimpleGlobalHook(); 
 
                 _hook.MouseWheel += Hook_MouseWheel;
 

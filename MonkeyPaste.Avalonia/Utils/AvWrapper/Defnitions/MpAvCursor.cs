@@ -10,11 +10,11 @@ namespace MonkeyPaste.Avalonia {
             new Dictionary<MpCursorType, Cursor>() {
                 {MpCursorType.None, new Cursor(StandardCursorType.Arrow) },
                 {MpCursorType.Default, new Cursor(StandardCursorType.Arrow)},
-                //{MpCursorType.OverDragItem, new Cursor(Path.Combine(Environment.CurrentDirectory, Application.Current.Resources["HandOpenCursor"] as string))  )},
-                //{MpCursorType.ContentMove, new Cursor(Path.Combine(Environment.CurrentDirectory, Application.Current.Resources["HandClosedCursor"] as string))  )},
-                //{MpCursorType.TileMove, new Cursor(Path.Combine(Environment.CurrentDirectory, Application.Current.Resources["HandClosedCursor"] as string))  )},
-                //{MpCursorType.ContentCopy, new Cursor(Path.Combine(Environment.CurrentDirectory, Application.Current.Resources["CopyCursor"] as string)) )},
-                //{MpCursorType.TileCopy, new Cursor(Path.Combine(Environment.CurrentDirectory, Application.Current.Resources["CopyCursor"] as string))  )},
+                //{MpCursorType.OverDragItem, new Cursor(Path.Combine(Environment.CurrentDirectory, MpPlatformWrapper.Services.PlatformResource.GetResource("HandOpenCursor") as string))  )},
+                //{MpCursorType.ContentMove, new Cursor(Path.Combine(Environment.CurrentDirectory, MpPlatformWrapper.Services.PlatformResource.GetResource("HandClosedCursor") as string))  )},
+                //{MpCursorType.TileMove, new Cursor(Path.Combine(Environment.CurrentDirectory, MpPlatformWrapper.Services.PlatformResource.GetResource("HandClosedCursor") as string))  )},
+                //{MpCursorType.ContentCopy, new Cursor(Path.Combine(Environment.CurrentDirectory, MpPlatformWrapper.Services.PlatformResource.GetResource("CopyCursor") as string)) )},
+                //{MpCursorType.TileCopy, new Cursor(Path.Combine(Environment.CurrentDirectory, MpPlatformWrapper.Services.PlatformResource.GetResource("CopyCursor") as string))  )},
                 {MpCursorType.OverDragItem, new Cursor(StandardCursorType.Hand)},
                 {MpCursorType.ContentMove, new Cursor(StandardCursorType.Hand)},
                 {MpCursorType.TileMove, new Cursor(StandardCursorType.Hand)},
@@ -51,7 +51,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvMainWindow.Instance.Cursor = cursor;
             } else {
                 MpPlatformWrapper.Services.MainThreadMarshal.RunOnMainThread(() => SetCursor(newCursor));
-                //MpHelpers.RunOnMainThread(()=>SetCursor(newCursor));
+                //Dispatcher.UIThread.Post(()=>SetCursor(newCursor));
             }
         }
     }

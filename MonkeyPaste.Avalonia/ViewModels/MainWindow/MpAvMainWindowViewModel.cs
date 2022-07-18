@@ -765,53 +765,51 @@ namespace MonkeyPaste.Avalonia {
                 MpMessenger.SendGlobal(MpMessageType.MainWindowOrientationChanged);
             });
 
-        //public ICommand ToggleMainWindowLockCommand => new MpCommand(
-        //    () => {
-        //        IsMainWindowLocked = !IsMainWindowLocked;
-        //    });
+        public ICommand ToggleMainWindowLockCommand => new MpCommand(
+            () => {
+                IsMainWindowLocked = !IsMainWindowLocked;
+            });
 
-        //public ICommand ToggleFilterMenuVisibleCommand => new MpCommand(
-        //    () => {
-        //        IsFilterMenuVisible = !IsFilterMenuVisible;
-        //    });
+        public ICommand ToggleFilterMenuVisibleCommand => new MpCommand(
+            () => {
+                IsFilterMenuVisible = !IsFilterMenuVisible;
+            });
 
-        //public ICommand IncreaseSizeCommand => new MpCommand(
-        //     () => {
-        //         IsResizing = true;
-        //         var mw = Application.Current.MainWindow as MpMainWindow;
-        //         mw.MainWindowResizeBehvior.Resize(0, 50);
-        //         IsResizing = false;
-        //     });
+        public ICommand IncreaseSizeCommand => new MpCommand(
+             () => {
+                 IsResizing = true;
+                 //var mw = Application.Current.MainWindow as MpMainWindow;
+                 //mw.MainWindowResizeBehvior.Resize(0, 50);
+                 IsResizing = false;
+             });
 
-        //public ICommand DecreaseSizeCommand => new MpCommand(
-        //     () => {
-        //         IsResizing = true;
-        //         var mw = Application.Current.MainWindow as MpMainWindow;
-        //         mw.MainWindowResizeBehvior.Resize(0, -50);
-        //         IsResizing = false;
-        //     });
+        public ICommand DecreaseSizeCommand => new MpCommand(
+             () => {
+                 IsResizing = true;
+                 //var mw = Application.Current.MainWindow as MpMainWindow;
+                 //mw.MainWindowResizeBehvior.Resize(0, -50);
+                 IsResizing = false;
+             });
 
-        //private MpCommand _undoCommand;
-        //public ICommand UndoCommand {
-        //    get {
-        //        if (_undoCommand == null) {
-        //            _undoCommand = new MpCommand(() => UndoManager.Undo(), () => UndoManager.CanUndo);
-        //        }
-        //        return _undoCommand;
-        //    }
-        //}
+        private MpCommand _undoCommand;
+        public ICommand UndoCommand {
+            get {
+                if (_undoCommand == null) {
+                    _undoCommand = new MpCommand(() => UndoManager.Undo(), () => UndoManager.CanUndo);
+                }
+                return _undoCommand;
+            }
+        }
 
-        //private ICommand _redoCommand;
-        //public ICommand RedoCommand {
-        //    get {
-        //        if (_redoCommand == null)
-        //            _redoCommand = new MpCommand(() => UndoManager.Redo(), () => UndoManager.CanRedo);
-        //        return _redoCommand;
-        //    }
-        //}
+        private ICommand _redoCommand;
+        public ICommand RedoCommand {
+            get {
+                if (_redoCommand == null)
+                    _redoCommand = new MpCommand(() => UndoManager.Redo(), () => UndoManager.CanRedo);
+                return _redoCommand;
+            }
+        }
         #endregion
-
-
 
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    internal class MpAvProcessWatcher {
+    public class MpAvProcessWatcher {
         public MpIProcessWatcher Watcher { get; private set; }
         public MpAvProcessWatcher() {
             if(OperatingSystem.IsWindows()) {

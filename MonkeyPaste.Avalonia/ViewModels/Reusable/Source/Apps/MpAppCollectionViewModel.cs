@@ -12,8 +12,7 @@ using System.IO;
 
 
 using MonkeyPaste.Common;
-
-
+using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAppCollectionViewModel : 
@@ -45,7 +44,7 @@ namespace MonkeyPaste.Avalonia {
         public static MpAppCollectionViewModel Instance => _instance ?? (_instance = new MpAppCollectionViewModel());
 
         public MpAppCollectionViewModel() : base(null) {
-            //MpHelpers.RunOnMainThreadAsync(Init);
+            //Dispatcher.UIThread.InvokeAsync(Init);
             PropertyChanged += MpAppCollectionViewModel_PropertyChanged;
         }
 
@@ -82,7 +81,8 @@ namespace MonkeyPaste.Avalonia {
                 Items[0].IsSelected = true;
             }
 
-            MpProcessManager.OnAppActivated += MpProcessManager_OnAppActivated;
+            //MpProcessManager.OnAppActivated += MpProcessManager_OnAppActivated;
+            MpPlatformWrapper.Services.ProcessWatcher.OnAppActivated += MpProcessManager_OnAppActivated;
 
             IsBusy = false;
         }
@@ -128,7 +128,8 @@ namespace MonkeyPaste.Avalonia {
                     if (SelectedItem != null) {
                         SelectedItem.OnPropertyChanged(nameof(SelectedItem.IconId));
 
-                        CollectionViewSource.GetDefaultView(SelectedItem.ClipboardFormatInfos.Items).Refresh();
+                        //CollectionViewSource.GetDefaultView(SelectedItem.ClipboardFormatInfos.Items).Refresh();
+                        SelectedItem.ClipboardFormatInfos.OnPropertyChanged(nameof(SelectedItem.ClipboardFormatInfos.Items));
                     }
                     break;
             }
@@ -155,13 +156,13 @@ namespace MonkeyPaste.Avalonia {
             return al;
         }
 
-        private void MpProcessManager_OnAppActivated(object sender, MpWpfProcessActivatedEventArgs e) {
+        private void MpProcessManager_OnAppActivated(object sender, MpProcessActivatedEventArgs e) {
             // if app is unknown add it
             // TODO device logic
             bool isUnknown = Items.FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower()) == null;
 
             if(isUnknown) {
-                MpHelpers.RunOnMainThread(async () => {
+                Dispatcher.UIThread.Post(async () => {
                     var iconStr = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(e.ProcessPath);
                     var icon = await MpIcon.Create(iconStr);
                     var app = await MpApp.Create(e.ProcessPath, e.ApplicationName, icon.Id);
@@ -174,44 +175,44 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand AddAppCommand => new MpCommand(
+        public ICommand AddAppCommand => new MpAsyncCommand(
             async () => {
-                string appPath = string.Empty;
+                //string appPath = string.Empty;
 
-                var openFileDialog = new System.Windows.Forms.OpenFileDialog() {
-                    Filter = "Applications|*.lnk;*.exe",
-                    Title = "Select application path",
-                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-                };
-                MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
+                //var openFileDialog = new System.Windows.Forms.OpenFileDialog() {
+                //    Filter = "Applications|*.lnk;*.exe",
+                //    Title = "Select application path",
+                //    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+                //};
+                //MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
 
-                var openResult = openFileDialog.ShowDialog();
+                //var openResult = openFileDialog.ShowDialog();
 
-                MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
-                if (openResult == System.Windows.Forms.DialogResult.Cancel) {
-                    return;
-                }
-                if (openResult == System.Windows.Forms.DialogResult.OK) {
-                    appPath = openFileDialog.FileName;
-                    if (Path.GetExtension(openFileDialog.FileName).Contains("lnk")) {
-                        appPath = MpHelpers.GetShortcutTargetPath(openFileDialog.FileName);
-                    }
-                    MpApp app = null;
-                    var avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == appPath.ToLower());
-                    if (avm == null) {
-                        var iconBmpSrc = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(appPath).ToBitmapSource();
-                        var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
-                        app = await MpApp.Create(appPath, Path.GetFileName(appPath), icon.Id);
-                        if (Items.All(x => x.AppId != app.Id)) {
-                            avm = await CreateAppViewModel(app);
-                            Items.Add(avm);
-                        }
+                //MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
+                //if (openResult == System.Windows.Forms.DialogResult.Cancel) {
+                //    return;
+                //}
+                //if (openResult == System.Windows.Forms.DialogResult.OK) {
+                //    appPath = openFileDialog.FileName;
+                //    if (Path.GetExtension(openFileDialog.FileName).Contains("lnk")) {
+                //        appPath = MpHelpers.GetShortcutTargetPath(openFileDialog.FileName);
+                //    }
+                //    MpApp app = null;
+                //    var avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == appPath.ToLower());
+                //    if (avm == null) {
+                //        var iconBmpSrc = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(appPath).ToBitmapSource();
+                //        var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
+                //        app = await MpApp.Create(appPath, Path.GetFileName(appPath), icon.Id);
+                //        if (Items.All(x => x.AppId != app.Id)) {
+                //            avm = await CreateAppViewModel(app);
+                //            Items.Add(avm);
+                //        }
                         
-                    }
+                //    }
 
-                    SelectedItem = avm;
+                //    SelectedItem = avm;
                 }
-            });
+            );
 
         #endregion
     }
