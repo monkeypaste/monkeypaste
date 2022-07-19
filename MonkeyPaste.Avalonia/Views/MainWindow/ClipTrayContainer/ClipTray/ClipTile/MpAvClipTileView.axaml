@@ -43,16 +43,14 @@
                 <Button x:Name="DebugButton"
                         Content="Debug" />
             </StackPanel>
-<Border x:Name="ClipTileContainerBorder"
+            <Border x:Name="ClipTileContainerBorder"
                     Grid.Row="1"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch">
-            <webview:WebView x:Name="WebView"
-         
-                             HorizontalAlignment="Stretch"
-                             VerticalAlignment="Stretch"
-                             Address="{Binding EditorPath}" />
-</Border>
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                <webview:WebView x:Name="WebView"
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Stretch" />
+            </Border>
         </Grid>
     </Border>
 </local:MpAvUserControl>

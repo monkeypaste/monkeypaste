@@ -9,9 +9,10 @@ namespace MonkeyPaste.Avalonia {
                     return Path.Combine(Directory.GetParent(Environment.SystemDirectory).FullName, "explorer.exe");
                 }
                 if(OperatingSystem.IsLinux()) {
-
+                    // TODO will likely need to have user specify path and name of file manager on linux. 
+                    return @"/usr/bin/nautilus";
                 }
-                if(OperatingSystem.IsMacOS()) {
+                if (OperatingSystem.IsMacOS()) {
                     return @"/System/Library/CoreServices/finder.app";
                 }
                 return null;
@@ -24,7 +25,8 @@ namespace MonkeyPaste.Avalonia {
                     return "Explorer";
                 }
                 if (OperatingSystem.IsLinux()) {
-
+                    // TODO will need to handle more than ubuntu here
+                    return "Nautilus";
                 }
                 if (OperatingSystem.IsMacOS()) {
                     return @"Finder";

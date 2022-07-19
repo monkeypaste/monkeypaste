@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using MonkeyPaste;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+using System.IO;
+using System.Reflection;
 
 namespace MpWpfApp {
     /// <summary>
@@ -49,6 +51,11 @@ namespace MpWpfApp {
 
                 Xamarin.Forms.Forms.Init();
 
+                string prefPath = Path.Combine(
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                "pref_wpf.json");
+
+                await MpPrefViewModel.InitAsync(prefPath);
                 await MpPlatformWrapper.InitAsync(new MpWpfWrapper());
                 var bootstrapper = new MpWpfBootstrapperViewModel();
                 await bootstrapper.InitAsync();

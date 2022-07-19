@@ -12,9 +12,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.IO;
-using Avalonia.Controls;
-using Avalonia.Controls.Platform;
-
 namespace MonkeyPaste.Common.Avalonia {
     public static unsafe class GdiApi {
         private const string GlibName = "libglib-2.0.so.0";

@@ -156,10 +156,18 @@
     <script src="src/components/editor/editor.js"></script>
 
     <script>
-        init();
-        enableReadOnly();
+        //init();
+        //enableReadOnly();
         //disableReadOnly();
         //hideEditTemplateToolbar();
+
+
+        function checkIsLoaded() {
+            if (IsLoaded) {
+                return true;
+            }
+            return false;
+        }
     </script>
 
 </body>

@@ -163,7 +163,7 @@ namespace MpWpfApp {
                 OnPropertyChanged(nameof(Items));
                 OnPropertyChanged(nameof(PinnedItems));
 
-                //SelectTagCommand.Execute(DefaultTagId);
+                SelectTagCommand.Execute(DefaultTagId);
 
                 IsBusy = false;
             });

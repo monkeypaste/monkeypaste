@@ -1408,9 +1408,7 @@ namespace MpWpfApp {
 
             int totalItems = MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount;
 
-            MpSystemTrayViewModel.Instance.TotalItemCountLabel = string.Format(@"{0} total entries", totalItems);
-            
-
+            MpSystemTrayViewModel.Instance.TotalItemCountLabel = string.Format(@"{0} total entries", totalItems);            
 
             MpPlatformWrapper.Services.ClipboardMonitor.OnClipboardChanged += ClipboardChanged;
             MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
@@ -1743,7 +1741,7 @@ namespace MpWpfApp {
              },
             (args) => args != null && args is MpClipTileViewModel ctvm && ctvm.IsPinned);
 
-        public ICommand ToggleTileIsPinnedCommand => new RelayCommand<object>(
+        public ICommand ToggleTileIsPinnedCommand => new MpCommand<object>(
             (args) => {
                 var pctvm = args as MpClipTileViewModel;
                 if (pctvm.IsPinned) {
@@ -1755,7 +1753,7 @@ namespace MpWpfApp {
             (args) => args != null && args is MpClipTileViewModel);
 
 
-        public ICommand DuplicateSelectedClipsCommand => new RelayCommand(
+        public ICommand DuplicateSelectedClipsCommand => new MpAsyncCommand(
             async () => {
                 IsBusy = true;
                 var clonedCopyItem = (MpCopyItem)await SelectedItem.CopyItem.Clone(true);
@@ -1768,7 +1766,7 @@ namespace MpWpfApp {
                 IsBusy = false;
             });
 
-        public ICommand AppendNewItemsCommand => new RelayCommand(
+        public ICommand AppendNewItemsCommand => new MpAsyncCommand(
             async() => {
                 IsBusy = true;
 
@@ -1779,9 +1777,9 @@ namespace MpWpfApp {
 
                 IsBusy = false;
             },
-            _appendModeCopyItem != null);
+            ()=>_appendModeCopyItem != null);
 
-        public ICommand AddNewItemsCommand => new RelayCommand(
+        public ICommand AddNewItemsCommand => new MpAsyncCommand(
             async () => {
                 int selectedId = -1;
                 if(MpMainWindowViewModel.Instance.IsMainWindowLocked) {
@@ -2035,7 +2033,7 @@ namespace MpWpfApp {
             }, 
             (offsetIdx_Or_ScrollOffset_Arg) => !IsAnyBusy && !IsRequery);
 
-        public ICommand FlipTileCommand => new RelayCommand<object>(
+        public ICommand FlipTileCommand => new MpAsyncCommand<object>(
             async (tileToFlip) => {
                 var ctvm = tileToFlip as MpClipTileViewModel;
                 ctvm.IsBusy = true;
@@ -2067,7 +2065,7 @@ namespace MpWpfApp {
                 ctvm.IsBusy = false;
             });
 
-        public ICommand ExcludeSubSelectedItemApplicationCommand => new RelayCommand(
+        public ICommand ExcludeSubSelectedItemApplicationCommand => new MpAsyncCommand(
             async () => {
                 var avm = MpAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppId == SelectedItem.AppViewModel.AppId);
                 if(avm == null) {
@@ -2075,9 +2073,9 @@ namespace MpWpfApp {
                 }
                 await avm.RejectApp();
             },
-            SelectedItem != null);
+            ()=>SelectedItem != null);
 
-        public ICommand ExcludeSubSelectedItemUrlDomainCommand => new RelayCommand(
+        public ICommand ExcludeSubSelectedItemUrlDomainCommand => new MpAsyncCommand(
             async () => {
                 var uvm = MpUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == SelectedItem.UrlViewModel.UrlId);
                 if(uvm == null) {
@@ -2086,9 +2084,9 @@ namespace MpWpfApp {
                 }
                 await uvm.RejectUrlOrDomain(true);
             },
-            SelectedItem != null && SelectedItem.UrlViewModel != null);
+            ()=>SelectedItem != null && SelectedItem.UrlViewModel != null);
 
-        public ICommand SearchWebCommand => new RelayCommand<object>(
+        public ICommand SearchWebCommand => new MpCommand<object>(
             (args) => {
                 string pt = string.Join(
                             Environment.NewLine, 
@@ -2097,19 +2095,19 @@ namespace MpWpfApp {
                 MpHelpers.OpenUrl(args.ToString() + Uri.EscapeDataString(pt));
             }, (args) => args != null && args is string);
 
-        public ICommand ScrollToHomeCommand => new RelayCommand(
+        public ICommand ScrollToHomeCommand => new MpCommand(
              () => {           
                  QueryCommand.Execute(0d);
              },
             () => ScrollOffset > 0 && !IsAnyBusy);
 
-        public ICommand ScrollToEndCommand => new RelayCommand(
+        public ICommand ScrollToEndCommand => new MpCommand(
             () => {
                 QueryCommand.Execute(MaximumScrollOfset);
             },
             () => ScrollOffset < MaximumScrollOfset && !IsAnyBusy);
 
-        public ICommand ScrollToNextPageCommand => new RelayCommand(
+        public ICommand ScrollToNextPageCommand => new MpCommand(
              () => {
                  //int nextPageOffset = Math.Min(TotalTilesInQuery - 1, TailQueryIdx + 1);
                  //JumpToQueryIdxCommand.Execute(nextPageOffset);
@@ -2124,7 +2122,7 @@ namespace MpWpfApp {
              },
             () => ScrollOffset < MaximumScrollOfset && !IsAnyBusy);
 
-        public ICommand ScrollToPreviousPageCommand => new RelayCommand(
+        public ICommand ScrollToPreviousPageCommand => new MpAsyncCommand(
             async() => {
                 //int prevPageOffset = Math.Max(0, HeadQueryIdx - 1);
                 //JumpToQueryIdxCommand.Execute(prevPageOffset);
@@ -2141,7 +2139,7 @@ namespace MpWpfApp {
             () => ScrollOffset > 0 && !IsAnyBusy);
 
 
-        public ICommand SelectNextItemCommand => new RelayCommand(
+        public ICommand SelectNextItemCommand => new MpAsyncCommand(
             async () => {
                 IsArrowSelecting = true;
 
@@ -2203,7 +2201,7 @@ namespace MpWpfApp {
                   !IsScrollingIntoView && 
                   (SelectedItem == null || (SelectedItem != null && !SelectedItem.IsPinned)));
 
-        public ICommand SelectPreviousItemCommand => new RelayCommand(
+        public ICommand SelectPreviousItemCommand => new MpAsyncCommand(
             async () => {
                 IsArrowSelecting = true;
 
@@ -2258,7 +2256,7 @@ namespace MpWpfApp {
             () => !IsAnyBusy && !HasScrollVelocity && !IsScrollingIntoView && !IsArrowSelecting &&
             (SelectedItem == null || (SelectedItem != null && !SelectedItem.IsPinned)));
 
-        public ICommand SelectAllCommand => new RelayCommand(
+        public ICommand SelectAllCommand => new MpCommand(
             () => {
                 ClearClipSelection();
                 foreach (var ctvm in Items) {
@@ -2266,7 +2264,7 @@ namespace MpWpfApp {
                 }
             });
 
-        public ICommand ChangeSelectedClipsColorCommand => new RelayCommand<object>(
+        public ICommand ChangeSelectedClipsColorCommand => new MpCommand<object>(
              (hexStrOrBrush) => {
                  string hexStr = string.Empty;
                  if(hexStrOrBrush is Brush b) {
@@ -2277,13 +2275,13 @@ namespace MpWpfApp {
                 SelectedItem.ChangeColorCommand.Execute(hexStr.ToString());
             });
 
-        public ICommand CopySelectedClipsCommand => new RelayCommand(
+        public ICommand CopySelectedClipsCommand => new MpAsyncCommand(
             async () => { 
                 var mpdo = await SelectedItem.ConvertToPortableDataObject(false);
                 MpPlatformWrapper.Services.DataObjectHelper.SetPlatformClipboard(mpdo, true);
-            }, SelectedItem != null);
+            }, ()=>SelectedItem != null);
 
-        public ICommand PasteSelectedClipsCommand => new RelayCommand<object>(
+        public ICommand PasteSelectedClipsCommand => new MpAsyncCommand<object>(
             async(args) => {
                 IsPasting = true;
                 var pi = new MpProcessInfo() {
@@ -2343,7 +2341,7 @@ namespace MpWpfApp {
                     !MpPrefViewModel.Instance.IsTrialExpired;
             });
 
-        public ICommand PasteCurrentClipboardIntoSelectedTileCommand => new RelayCommand(
+        public ICommand PasteCurrentClipboardIntoSelectedTileCommand => new MpAsyncCommand(
             async() => {
                 while (IsAddingClipboardItem) {
                     // wait in case tray is still processing the data
@@ -2355,9 +2353,9 @@ namespace MpWpfApp {
                 var mpdo = MpPlatformWrapper.Services.DataObjectHelper.GetPlatformClipboardDataObject();
 
                 SelectedItem.RequestPastePortableDataObject(mpdo);
-            }, SelectedItem != null && !SelectedItem.IsPlaceholder);
+            }, ()=> SelectedItem != null && !SelectedItem.IsPlaceholder);
 
-        public ICommand PasteCopyItemByIdCommand => new RelayCommand<object>(
+        public ICommand PasteCopyItemByIdCommand => new MpAsyncCommand<object>(
             async (args) => {
                 if(args is int ciid) {
                     IsPasting = true;
@@ -2416,7 +2414,7 @@ namespace MpWpfApp {
              () => {
             });
 
-        public ICommand DeleteSelectedClipsCommand => new RelayCommand(
+        public ICommand DeleteSelectedClipsCommand => new MpAsyncCommand(
             async () => {
                 while(IsBusy) { await Task.Delay(100); }
 
@@ -2438,7 +2436,7 @@ namespace MpWpfApp {
                         !IsAnyPastingTemplate;
             });
 
-        public ICommand LinkTagToCopyItemCommand => new RelayCommand<MpTagTileViewModel>(
+        public ICommand LinkTagToCopyItemCommand => new MpAsyncCommand<MpTagTileViewModel>(
             async (tagToLink) => {
                 var civm = SelectedItem;
                 bool isUnlink = await tagToLink.IsLinkedAsync(civm);
@@ -2464,7 +2462,7 @@ namespace MpWpfApp {
             });
 
 
-        public ICommand AssignHotkeyCommand => new RelayCommand(
+        public ICommand AssignHotkeyCommand => new MpCommand(
             () => {
                 MpShortcutCollectionViewModel.Instance.ShowAssignShortcutDialogCommand.Execute(SelectedItem);
             },
@@ -2474,7 +2472,7 @@ namespace MpWpfApp {
             () => {
             });
 
-        public ICommand EditSelectedTitleCommand => new RelayCommand(
+        public ICommand EditSelectedTitleCommand => new MpCommand(
             () => {
                 SelectedItem.IsTitleReadOnly = false;
             },
@@ -2485,7 +2483,7 @@ namespace MpWpfApp {
                 return SelectedItem != null;
             });
 
-        public ICommand EditSelectedContentCommand => new RelayCommand(
+        public ICommand EditSelectedContentCommand => new MpAsyncCommand(
             async() => {
                 ClearAllEditing();
                 if(SelectedItem.IsSubSelectionEnabled) {
@@ -2497,7 +2495,7 @@ namespace MpWpfApp {
             },
             () => SelectedItem != null && SelectedItem.IsContentReadOnly);
 
-        public ICommand SendToEmailCommand => new RelayCommand(
+        public ICommand SendToEmailCommand => new MpCommand(
             () => {
                 // for gmail see https://stackoverflow.com/a/60741242/105028
                 string pt = string.Join(Environment.NewLine, PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
@@ -2513,7 +2511,7 @@ namespace MpWpfApp {
                 return !IsAnyEditingClipTile && SelectedItem != null;
             });
 
-        public ICommand MergeSelectedClipsCommand => new RelayCommand(
+        public ICommand MergeSelectedClipsCommand => new MpCommand(
             () => {
                 SelectedItem.RequestMerge();
             },
@@ -2527,9 +2525,9 @@ namespace MpWpfApp {
         //    },
         //    () => SelectedItem != null && SelectedItem.IsTextItem);
 
-        public ICommand CreateQrCodeFromSelectedClipsCommand => new RelayCommand(
+        public ICommand CreateQrCodeFromSelectedClipsCommand => new MpCommand(
              () => {
-                MpHelpers.RunOnMainThreadAsync(() => {
+                MpHelpers.RunOnMainThread(() => {
                     BitmapSource bmpSrc = null;
                     string pt = string.Join(Environment.NewLine, PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
                     bmpSrc = MpHelpers.ConvertUrlToQrCode(pt);
@@ -2550,7 +2548,7 @@ namespace MpWpfApp {
                     pt.Length <= MpPrefViewModel.Instance.MaxQrCodeCharLength;
             });
 
-        public ICommand SpeakSelectedClipsCommand => new RelayCommand(
+        public ICommand SpeakSelectedClipsCommand => new MpAsyncCommand(
             async () => {
                 await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
                     var speechSynthesizer = new SpeechSynthesizer();
@@ -2578,7 +2576,7 @@ namespace MpWpfApp {
                 return SelectedItem != null && SelectedItem.IsTextItem;
             });
 
-        public ICommand AnalyzeSelectedItemCommand => new RelayCommand<int>(
+        public ICommand AnalyzeSelectedItemCommand => new MpAsyncCommand<int>(
             async (presetId) => {
                 var preset = await MpDb.GetItemAsync<MpPluginPreset>((int)presetId);
                 var analyticItemVm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.PluginGuid == preset.PluginGuid);
@@ -2588,45 +2586,45 @@ namespace MpWpfApp {
                 analyticItemVm.ExecuteAnalysisCommand.Execute(null);
             });
 
-        public ICommand ToggleIsAppPausedCommand => new RelayCommand(
+        public ICommand ToggleIsAppPausedCommand => new MpCommand(
             () => {
                 IsAppPaused = !IsAppPaused;
             });
 
-        public ICommand ToggleRightClickPasteCommand => new RelayCommand(
+        public ICommand ToggleRightClickPasteCommand => new MpCommand(
             () => {
                 IsRightClickPasteMode = !IsRightClickPasteMode;
                 MpNotificationCollectionViewModel.Instance.ShowMessageAsync("MODE CHANGED", string.Format("RIGHT CLICK PASTE MODE: {0}", IsRightClickPasteMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
-            }, !IsAppPaused);
+            }, ()=>!IsAppPaused);
 
-        public ICommand ToggleAutoCopyModeCommand => new RelayCommand(
+        public ICommand ToggleAutoCopyModeCommand => new MpCommand(
             () => {
                 IsAutoCopyMode = !IsAutoCopyMode;
                 MpNotificationCollectionViewModel.Instance.ShowMessageAsync("MODE CHANGED", string.Format("AUTO-COPY SELECTION MODE: {0}", IsAutoCopyMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
-            }, !IsAppPaused);
+            }, ()=> !IsAppPaused);
         
-        public ICommand ToggleAppendModeCommand => new RelayCommand(
+        public ICommand ToggleAppendModeCommand => new MpCommand(
             () => {
                 IsAppendMode = !IsAppendMode;
                 if (IsAppendMode && IsAppendLineMode) {
                     ToggleAppendLineModeCommand.Execute(null);
                 }
                 MpNotificationCollectionViewModel.Instance.ShowMessageAsync("MODE CHANGED",string.Format("APPEND MODE: {0}", IsAppendMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
-            }, !IsAppPaused);
+            },()=> !IsAppPaused);
 
-        public ICommand ToggleAppendLineModeCommand => new RelayCommand(
+        public ICommand ToggleAppendLineModeCommand => new MpCommand(
             () => {
                 IsAppendLineMode = !IsAppendLineMode;
                 if (IsAppendLineMode && IsAppendMode) {
                     ToggleAppendModeCommand.Execute(null);
                 }
                 MpNotificationCollectionViewModel.Instance.ShowMessageAsync("MODE CHANGED", string.Format("APPEND LINE MODE: {0}", IsAppendLineMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
-            }, !IsAppPaused);
+            }, ()=>!IsAppPaused);
 
-        public ICommand FindAndReplaceSelectedItem => new RelayCommand(
+        public ICommand FindAndReplaceSelectedItem => new MpCommand(
             () => {
                 SelectedItem.ToggleFindAndReplaceVisibleCommand.Execute(null);
-            }, SelectedItem != null && !SelectedItem.IsFindAndReplaceVisible && SelectedItem.IsTextItem);
+            }, ()=> SelectedItem != null && !SelectedItem.IsFindAndReplaceVisible && SelectedItem.IsTextItem);
         #endregion
     }
     public enum MpExportType {

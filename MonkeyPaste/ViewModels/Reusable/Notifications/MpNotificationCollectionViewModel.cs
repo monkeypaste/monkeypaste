@@ -57,7 +57,6 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-
         public async Task InitAsync(List<int> doNotShowNotifications) {
             await Task.Delay(1);
             if(doNotShowNotifications == null) {

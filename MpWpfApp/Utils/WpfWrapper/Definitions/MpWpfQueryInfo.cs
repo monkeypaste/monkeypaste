@@ -30,6 +30,9 @@ namespace MpWpfApp {
         public void NotifyQueryChanged(bool isFilterSortOrSearch = true) {
             IsDescending = MpClipTileSortViewModel.Instance.IsSortDescending;
             SortType = MpClipTileSortViewModel.Instance.SelectedSortType.SortType;
+            if(MpTagTrayViewModel.Instance.SelectedTagTile == null) {
+                MpTagTrayViewModel.Instance.SelectTagCommand.Execute(MpTagTrayViewModel.Instance.DefaultTagId);
+            }
             TagId = MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
             SearchText = MpSearchBoxViewModel.Instance.SearchText;
             TotalItemsInQuery = MpDataModelProvider.TotalTilesInQuery;

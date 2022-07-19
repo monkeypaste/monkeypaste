@@ -121,11 +121,10 @@ namespace MpWpfApp {
             // Sequential (35649 06/12/2022)
             for (int i = 0; i < _items.Count; i++) {
                 await LoadItemAsync(_items[i], i);
+                while (_items[i].IsBusy) {
+                    await Task.Delay(100);
+                }
             }
-
-            //MpPlatformWrapper.Services.ClipboardMonitor = MpClipboardManager.MonitorService;
-            //MpPlatformWrapper.Services.DataObjectRegistrar = MpClipboardManager.RegistrarService;
-            //MpPortableDataFormats.Init(MpPlatformWrapper.Services.DataObjectRegistrar);
 
             await Task.Delay(500);
             MpNotificationCollectionViewModel.Instance.FinishLoading();
@@ -183,6 +182,31 @@ namespace MpWpfApp {
             
 
             IsLoaded = true;
+        }
+
+        protected override async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {
+            IsBusy = true;
+            var sw = Stopwatch.StartNew();
+
+            await item.LoadItemAsync();
+            sw.Stop();
+
+            LoadedCount++;
+            MpConsole.WriteLine("Loaded " + item.Label + " at idx: " + index + " Load Count: " + LoadedCount + " Load Percent: " + PercentLoaded + " Time(ms): " + sw.ElapsedMilliseconds);
+
+            OnPropertyChanged(nameof(PercentLoaded));
+
+            OnPropertyChanged(nameof(Detail));
+
+            Body = string.IsNullOrWhiteSpace(item.Label) ? Body : item.Label;
+
+            int dotCount = index % 4;
+            Title = "LOADING";
+            for (int i = 0; i < dotCount; i++) {
+                Title += ".";
+            }
+
+            IsBusy = false;
         }
     }
 }

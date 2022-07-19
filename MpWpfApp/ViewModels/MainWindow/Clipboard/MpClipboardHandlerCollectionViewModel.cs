@@ -288,6 +288,7 @@ namespace MpWpfApp {
                     //                    })).Cast<MpIParameterKeyValuePair>().ToList(),
                     forcedClipboardDataObject = forcedDataObject
                 };
+                
 
                 var response = handler.ReadClipboardData(req);
 

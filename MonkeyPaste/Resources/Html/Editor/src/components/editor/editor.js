@@ -54,6 +54,7 @@ function convertPlainHtml(plainHtml) {
 }
 
 function init(reqMsgStr) {
+	log("init request: " + reqMsgStr);
 	//drag/drop notes:
 	// quill.root.removeEventListener('dragstart',getEventListeners(quill.root).dragstart[0].listener)
 	// quill.root.removeEventListener('drop',getEventListeners(quill.root).drop[0].listener)
@@ -77,6 +78,14 @@ function init(reqMsgStr) {
 			usedTextTemplates: {},
 			isPasteRequest: false,
 			itemEncodedHtmlData: sample1
+		}
+	} else if (typeof reqMsgStr === 'string' || reqMsgStr instanceof String) {
+		reqMsg = {
+			envName: 'wpf',
+			isReadOnlyEnabled: true,
+			usedTextTemplates: {},
+			isPasteRequest: false,
+			itemEncodedHtmlData: reqMsgStr
 		}
 	} else {
 		//let reqMsgStr_decoded = atob(reqMsgStr);
@@ -360,6 +369,7 @@ function updateAllSizeAndPositions() {
 		//$("#editor").css("bottom", viewportBottom - tbh);
 	}
 }
+
 
 function onWindowScroll(e) {
 	if (IsReadOnly()) {

@@ -353,6 +353,9 @@ namespace CoreClipboardHandler {
                 }
             }
             if(request.writeToClipboard) {
+                while(WinApi.IsClipboardOpen() != IntPtr.Zero) {
+                    Thread.Sleep(10);
+                }
                 Clipboard.SetDataObject(dataObj, true);
             }
             

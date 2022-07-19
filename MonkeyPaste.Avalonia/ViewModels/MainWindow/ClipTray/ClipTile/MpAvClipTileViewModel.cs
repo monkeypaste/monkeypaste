@@ -212,8 +212,9 @@ namespace MonkeyPaste.Avalonia {
         public string EditorPath {
             get {
                 //file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html
-                string editorPath = Path.Combine(Environment.CurrentDirectory, "Resources", "Html", "Editor", "index.html");
-                if(OperatingSystem.IsWindows()) {
+                //string editorPath = Path.Combine(Environment.CurrentDirectory, "Resources", "Html", "Editor", "index.html");
+                string editorPath = @"file:///C:/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html";
+                if (OperatingSystem.IsWindows()) {
                     return editorPath;
                 }
                 var uri = new Uri(editorPath, UriKind.Absolute);
@@ -1618,6 +1619,8 @@ namespace MonkeyPaste.Avalonia {
             MpMessenger.Send<MpMessageType>(MpMessageType.ContentItemsChanged, this);
 
             OnPropertyChanged(nameof(CopyItemTitle));
+
+            OnPropertyChanged(nameof(CopyItemData));
 
             IsBusy = false;
         }

@@ -50,18 +50,18 @@ namespace MonkeyPaste {
                     new MpBootstrappedItemViewModel(this,typeof(MpCursor)),
                     new MpBootstrappedItemViewModel(this,typeof(MpTempFileManager)),
                     new MpBootstrappedItemViewModel(this,typeof(MpDb)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpDataModelProvider)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpPluginLoader)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpDataModelProvider)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpPluginLoader)),
                     new MpBootstrappedItemViewModel(this,typeof(MpPortableDataFormats),MpPlatformWrapper.Services.DataObjectRegistrar)
                 });
         }
 
         public abstract Task InitAsync();
 
-        protected async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {
+        protected virtual async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {
+            IsBusy = true;
             await MpPlatformWrapper.Services.MainThreadMarshal.RunOnMainThreadAsync(async () => {
-                IsBusy = true;
                 var sw = Stopwatch.StartNew();
 
                 await item.LoadItemAsync();
@@ -82,9 +82,9 @@ namespace MonkeyPaste {
                     Title += ".";
                 }
 
-                IsBusy = false;
             });
-            
+
+            IsBusy = false;
         }
     }
 }

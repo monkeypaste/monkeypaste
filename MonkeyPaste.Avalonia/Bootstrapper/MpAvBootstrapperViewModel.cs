@@ -10,6 +10,7 @@ using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common; 
 using System.IO;
 using System.Collections;
+using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvBootstrapperViewModel : MpBootstrapperViewModelBase {
@@ -97,10 +98,35 @@ namespace MonkeyPaste.Avalonia {
             }
             await Task.Delay(1000);
 
-            MpNotificationCollectionViewModel.Instance.FinishLoading();
 
+            MpNotificationCollectionViewModel.Instance.FinishLoading();
             MpAvClipTrayViewModel.Instance.OnPostMainWindowLoaded();
             IsLoaded = true;
+        }
+
+        protected override async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {
+            IsBusy = true;
+            var sw = Stopwatch.StartNew();
+
+            await item.LoadItemAsync();
+            sw.Stop();
+
+            LoadedCount++;
+            MpConsole.WriteLine("Loaded " + item.Label + " at idx: " + index + " Load Count: " + LoadedCount + " Load Percent: " + PercentLoaded + " Time(ms): " + sw.ElapsedMilliseconds);
+
+            OnPropertyChanged(nameof(PercentLoaded));
+
+            OnPropertyChanged(nameof(Detail));
+
+            Body = string.IsNullOrWhiteSpace(item.Label) ? Body : item.Label;
+
+            int dotCount = index % 4;
+            Title = "LOADING";
+            for (int i = 0; i < dotCount; i++) {
+                Title += ".";
+            }
+
+            IsBusy = false;
         }
     }
 }

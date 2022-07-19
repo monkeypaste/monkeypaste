@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System;
 using System.IO;
 using WebViewControl;
+using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -31,16 +32,25 @@ namespace MonkeyPaste.Avalonia {
                 if(File.Exists(cefLogPath)) {
                     File.Delete(cefLogPath);
                 }
+
                 WebView.Settings.OsrEnabled = true;
                 WebView.Settings.LogFile = "ceflog.txt";
-                WebView.Settings.EnableErrorLogOnly = true;
+                //WebView.Settings.EnableErrorLogOnly = true;
 
                 
                 string cefCacheDir = Path.Combine(Environment.CurrentDirectory, "cefcache");
-                if (!Directory.Exists(cefCacheDir)) {
-                    Directory.CreateDirectory(cefCacheDir);
+                if (Directory.Exists(cefCacheDir)) {
+                    //Directory.CreateDirectory(cefCacheDir);
+                    Directory.Delete(cefCacheDir);
                 }
-                WebView.Settings.CachePath = cefCacheDir;
+                //WebView.Settings.CachePath = cefCacheDir;
+
+
+                if (OperatingSystem.IsLinux()) {
+                    await GtkHelper.EnsureInitialized();
+                } else if (OperatingSystem.IsMacOS()) {
+                    MpAvMacHelpers.EnsureInitialized();
+                }
 
 
                 await MpAvWrapper.Instance.InitializeAsync();

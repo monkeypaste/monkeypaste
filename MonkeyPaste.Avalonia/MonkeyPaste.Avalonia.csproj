@@ -34,7 +34,7 @@
     <None Remove="Utils\AvWrapper\Defnitions\TrayIcon\Mac\" />
     <None Remove="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
     <None Remove="CefGlue.Avalonia" />
-    <None Remove="Controls\WebView\Mac\" />
+    <None Remove="Controls\ContentView\Mac\" />
     <None Remove="Dotnet.Bundle" />
   </ItemGroup>
   <ItemGroup>
@@ -843,13 +843,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\Adorners\" />
-    <Folder Include="Controls\WebView\WebViewControl\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Base\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Mac\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
-    <Folder Include="Controls\WebView\Mac\" />
     <Folder Include="Utils\Input\Mouse\" />
   </ItemGroup>
   <ItemGroup>
