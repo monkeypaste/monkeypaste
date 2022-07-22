@@ -47,43 +47,7 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
         // NOTE have to override ObservableCollection from pcl because of .netcore issue w/ module
         public override ObservableCollection<MpAvClipTileViewModel> Items { get => base.Items; set => base.Items = value; }
-        #endregion
-
-        public int RowCount {
-            get {
-                if(IsEmpty) {
-                    return 0;
-                }
-                if (LayoutType == MpAvClipTrayLayoutType.Stack) {
-                    if(ListOrientation == Orientation.Horizontal) {
-                        return 1;
-                    }
-                    return Items.Count;
-                }
-                //double totalFlatWidth = Items.Sum(x => x.MinSize);
-                //int rowCount = (int)Math.Floor(totalFlatWidth / ClipTrayScreenWidth);
-                //return rowCount;
-                int rowCount = (int)Math.Ceiling((double)Items.Count / (double)ColCount);
-                return rowCount;
-            }
-        }
-
-        public int ColCount {
-            get {
-                if(IsEmpty) {
-                    return 0;
-                }
-
-                if (LayoutType == MpAvClipTrayLayoutType.Stack) {
-                    if (ListOrientation == Orientation.Horizontal) {
-                        return Items.Count;
-                    }
-                    return 1;
-                }
-                int colCount = (int)Math.Max(1.0d,Math.Floor(ClipTrayScreenWidth / Items.First().MinSize));
-                return colCount;
-            }
-        }
+        #endregion        
 
         #region MpIPagingScrollViewer Implementation
 
@@ -167,6 +131,41 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
+        public int RowCount {
+            get {
+                if (IsEmpty) {
+                    return 0;
+                }
+                if (LayoutType == MpAvClipTrayLayoutType.Stack) {
+                    if (ListOrientation == Orientation.Horizontal) {
+                        return 1;
+                    }
+                    return Items.Count;
+                }
+                //double totalFlatWidth = Items.Sum(x => x.MinSize);
+                //int rowCount = (int)Math.Floor(totalFlatWidth / ClipTrayScreenWidth);
+                //return rowCount;
+                int rowCount = (int)Math.Ceiling((double)Items.Count / (double)ColCount);
+                return rowCount;
+            }
+        }
+
+        public int ColCount {
+            get {
+                if (IsEmpty) {
+                    return 0;
+                }
+
+                if (LayoutType == MpAvClipTrayLayoutType.Stack) {
+                    if (ListOrientation == Orientation.Horizontal) {
+                        return Items.Count;
+                    }
+                    return 1;
+                }
+                int colCount = (int)Math.Max(1.0d, Math.Floor(ClipTrayScreenWidth / Items.First().MinSize));
+                return colCount;
+            }
+        }
 
         #endregion
 
@@ -204,6 +203,41 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsRequery { get; set; } = false;
 
+        #region Child Property Wrappers
+
+        public bool IsAnyBusy => Items.Any(x => x.IsAnyBusy) || PinnedItems.Any(x => x.IsAnyBusy) || IsBusy;
+        public bool IsAnyTileContextMenuOpened => Items.Any(x => x.IsContextMenuOpen) || PinnedItems.Any(x => x.IsContextMenuOpen);
+
+        public bool IsAnyTileFlipped => Items.Any(x => x.IsFlipped || x.IsFlipping) || PinnedItems.Any(x => x.IsFlipped || x.IsFlipping);
+
+        public bool IsAnyResizing => Items.Any(x => x.IsResizing) || PinnedItems.Any(x => x.IsResizing);
+
+        public bool CanAnyResize => Items.Any(x => x.CanResize) || PinnedItems.Any(x => x.CanResize);
+
+        public bool IsAnyEditing => Items.Any(x => !x.IsContentAndTitleReadOnly) || PinnedItems.Any(x => !x.IsContentAndTitleReadOnly);
+
+
+        public bool IsAnyHovering => Items.Any(x => x.IsHovering) || PinnedItems.Any(x => x.IsHovering);
+
+
+        public bool IsAnyEditingClipTitle => Items.Any(x => !x.IsTitleReadOnly) || PinnedItems.Any(x => !x.IsTitleReadOnly);
+
+        public bool IsAnyEditingClipTile => Items.Any(x => !x.IsContentReadOnly) || PinnedItems.Any(x => !x.IsContentReadOnly);
+
+        public bool IsAnyPastingTemplate => Items.Any(x => x.IsPastingTemplate) || PinnedItems.Any(x => x.IsPastingTemplate);
+
+        public bool IsAnyItemDragging => Items.Any(x => x.IsItemDragging) ||
+                                         PinnedItems.Any(x => x.IsItemDragging) ||
+                                         MpAvDragDropManager.IsDraggingFromExternal;
+
+        public bool IsAnyTilePinned => PinnedItems.Count > 0;
+
+        public bool IsDragOverPinTray { get; set; }
+
+        public bool IsAllTileViewsLoaded => Items.All(x => x.IsViewLoaded);
+
+        #endregion
+
         #endregion
 
 
@@ -212,6 +246,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         private MpAvClipTrayViewModel() : base() {
+            MpConsole.WriteLine("ClipTray created");
             PropertyChanged += MpAvClipTrayViewModel_PropertyChanged;
         }
 
@@ -271,7 +306,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(ScrollOffsetY):
                     if (IsThumbDragging) {
                         break;
-                    }
+                    }                    
                     MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayScrollChanged);
                     break;
                 case nameof(HasScrollVelocity):
@@ -296,6 +331,8 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.TrayLayoutChanged:
                 case MpMessageType.MainWindowSizeReset:
                     ResetZoomFactorCommand.Execute(null);
+                    OnPropertyChanged(nameof(ClipTrayScreenHeight));
+                    OnPropertyChanged(nameof(ClipTrayScreenWidth));
                     break;
             }
         }
@@ -858,39 +895,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsFilteringByApp));
                 }
             }
-        }
-
-        #region Child Property Wrappers
-        public bool IsAnyBusy => Items.Any(x => x.IsAnyBusy) || PinnedItems.Any(x => x.IsAnyBusy) || IsBusy;
-        public bool IsAnyTileContextMenuOpened => Items.Any(x => x.IsContextMenuOpen) || PinnedItems.Any(x => x.IsContextMenuOpen);
-
-        public bool IsAnyTileFlipped => Items.Any(x => x.IsFlipped || x.IsFlipping) || PinnedItems.Any(x => x.IsFlipped || x.IsFlipping);
-
-        public bool IsAnyResizing => Items.Any(x => x.IsResizing) || PinnedItems.Any(x => x.IsResizing);
-
-        public bool CanAnyResize => Items.Any(x => x.CanResize) || PinnedItems.Any(x => x.CanResize);
-
-        public bool IsAnyEditing => Items.Any(x => !x.IsContentAndTitleReadOnly) || PinnedItems.Any(x => !x.IsContentAndTitleReadOnly);
-
-
-        public bool IsAnyHovering => Items.Any(x => x.IsHovering) || PinnedItems.Any(x => x.IsHovering);
-
-
-        public bool IsAnyEditingClipTitle => Items.Any(x => !x.IsTitleReadOnly) || PinnedItems.Any(x => !x.IsTitleReadOnly);
-
-        public bool IsAnyEditingClipTile => Items.Any(x => !x.IsContentReadOnly) || PinnedItems.Any(x => !x.IsContentReadOnly);
-
-        public bool IsAnyPastingTemplate => Items.Any(x => x.IsPastingTemplate) || PinnedItems.Any(x => x.IsPastingTemplate);
-
-        public bool IsAnyItemDragging => Items.Any(x => x.IsItemDragging) ||
-                                         PinnedItems.Any(x => x.IsItemDragging) ||
-                                         MpAvDragDropManager.IsDraggingFromExternal;
-
-        public bool IsAnyTilePinned => PinnedItems.Count > 0;
-
-        public bool IsDragOverPinTray { get; set; }
-
-        #endregion
+        }       
 
         #endregion
 
@@ -916,6 +921,8 @@ namespace MonkeyPaste.Avalonia {
 
 
         public async Task InitAsync() {
+            LogPropertyChangedEvents = true;
+
             IsBusy = true;
 
             while (MpSourceCollectionViewModel.Instance.IsAnyBusy) {
@@ -942,9 +949,6 @@ namespace MonkeyPaste.Avalonia {
             MpMessenger.Register<MpMessageType>(
                 nameof(MpAvDragDropManager), ReceivedDragDropManagerMessage);
 
-            LogPropertyChangedEvents = false;
-
-
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
 
             for (int i = 1; i <= 10; i++) {
@@ -953,7 +957,8 @@ namespace MonkeyPaste.Avalonia {
                         Id = i,
                         ItemType = MpCopyItemType.Text,
                         ItemData = "This is test " + i,
-                        Title = "Test" + i
+                        Title = "Test" + i,
+                        SourceId = 1
                     }, i - 1);
                 Items.Add(test_ctvm);
             }

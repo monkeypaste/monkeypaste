@@ -2,7 +2,6 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                       xmlns:webview="clr-namespace:WebViewControl;assembly=WebViewControl.Avalonia"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
                        x:DataType="local:MpAvClipTileViewModel"
@@ -16,41 +15,186 @@
                        HorizontalContentAlignment="Stretch"
                        VerticalContentAlignment="Stretch"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileView">
-
-    <Border HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            CornerRadius="10"
-            BorderThickness="5"
-            BorderBrush="{Binding TileBorderHexColor,
-                                  Converter={StaticResource StringHexToBrushConverter}}"
-            local:MpAvIsHoveringExtension.IsEnabled="True"
-            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering,
-                                                               Mode=TwoWay}"
-            local:MpAvIsHoveringExtension.IsSelected="{Binding IsSelected,
-                                                               Mode=TwoWay}">
-        <Border.Background>
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Path">
+            <Setter Property="Stroke"
+                    Value="Transparent" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+        </Style>
+        <Style Selector="Viewbox">
+            <Setter Property="Margin"
+                    Value="1" />
+            <Setter Property="Stretch"
+                    Value="Uniform" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="VerticalAlignment"
+                    Value="Stretch" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <local:MpAvClipBorder HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                          CornerRadius="10"
+                          BorderThickness="5"
+                          BorderBrush="{Binding TileBorderHexColor,
+                                                Converter={StaticResource StringHexToBrushConverter}}"
+                          local:MpAvIsHoveringExtension.IsEnabled="True"
+                          local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering,
+                                                                             Mode=TwoWay}"
+                          local:MpAvIsHoveringExtension.IsSelected="{Binding IsSelected,
+                                                                             Mode=TwoWay}">
+        <local:MpAvClipBorder.Background>
             <SolidColorBrush Color="OldLace"
                              Opacity="0.7" />
-        </Border.Background>
-        <Grid RowDefinitions="30,*"
+        </local:MpAvClipBorder.Background>
+        <Grid RowDefinitions="0.2*,*,20"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
-            <StackPanel Spacing="10"
-                        Orientation="Horizontal">
-                <TextBlock Grid.Row="0"
-                           VerticalAlignment="Center"
-                           Text="{Binding CopyItemData}" />
-                <Button x:Name="DebugButton"
-                        Content="Debug" />
-            </StackPanel>
-            <Border x:Name="ClipTileContainerBorder"
-                    Grid.Row="1"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
-                <webview:WebView x:Name="WebView"
-                                       HorizontalAlignment="Stretch"
-                                       VerticalAlignment="Stretch" />
+            <!--  Title  -->
+            <Grid Grid.Row="0"
+                  MaxHeight="50">
+                <local:MpAvClipTileTitleView DataContext="{Binding}"
+                                             IsVisible="{Binding IsTitleVisible}" />
+                <!--  Hide Title Button  -->
+
+                <ToggleButton x:Name="HideTitleButton"
+                              IsChecked="{Binding !IsTitleVisible,
+                                                  Mode=TwoWay}"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Top"
+                              BorderThickness="0"
+                              Background="Transparent"
+                              Margin="0,2,0,0"
+                              Width="15"
+                              Height="12"
+                              IsVisible="{Binding IsHovering}">
+                    <Grid Width="15"
+                          Height="12">
+                        <Viewbox IsVisible="{Binding IsTitleVisible}">
+                            <Path Fill="{Binding CopyItemHexColor,
+                                                 Converter={StaticResource IsBrightToBrushConverter}}"
+                                  Data="{StaticResource HideSvg}" />
+                        </Viewbox>
+                        <Viewbox IsVisible="{Binding !IsTitleVisible}">
+                            <Path Fill="{Binding CopyItemHexColor,
+                                                 Converter={StaticResource IsBrightToBrushConverter}}"
+                                  Data="{StaticResource ShowSvg}" />
+                        </Viewbox>
+                    </Grid>
+                </ToggleButton>
+
+                <!--  Pin Tile Button  -->
+
+                <ToggleButton x:Name="PinTileButton"
+                              IsChecked="{Binding IsPinned,
+                                                  Mode=TwoWay}"
+                              HorizontalAlignment="Right"
+                              VerticalAlignment="Top"
+                              HorizontalContentAlignment="Center"
+                              VerticalContentAlignment="Center"
+                              BorderThickness="0"
+                              Background="Transparent"
+                              Margin="0,0,5,0"
+                              Width="15"
+                              Height="12"
+                              IsVisible="{Binding IsHovering}">
+                    <Grid Width="15"
+                          Height="12">
+                        <Viewbox IsVisible="{Binding !IsPinned}">
+                            <Path Fill="{Binding CopyItemHexColor,
+                                                 Converter={StaticResource IsBrightToBrushConverter}}"
+                                  Data="{StaticResource PinOutlineSvg}" />
+                        </Viewbox>
+                        <Viewbox IsVisible="{Binding IsPinned}">
+                            <Path Fill="{Binding CopyItemHexColor,
+                                                 Converter={StaticResource IsBrightToBrushConverter}}"
+                                  Data="{StaticResource PinSvg}" />
+                        </Viewbox>
+                    </Grid>
+                </ToggleButton>
+            </Grid>
+
+            <!--  Content  -->
+            <Grid Grid.Row="1"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch">
+                <Border x:Name="ClipTileContainerBorder"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
+
+                    <ContentControl Content="{Binding}">
+                        <ContentControl.DataTemplates>
+                            <local:MpClipTileContentDataTemplateSelector>
+                                <DataTemplate x:Key="CefWebViewTemplate"
+                                              DataType="local:MpAvClipTileViewModel">
+                                    <local:MpAvContentWebView DataContext="{Binding}"
+                                                              HorizontalAlignment="Stretch"
+                                                              VerticalAlignment="Stretch" />
+                                </DataTemplate>
+                                <DataTemplate x:Key="LinuxTemplate"
+                                              DataType="local:MpAvClipTileViewModel">
+                                    <local:MpAvGtkWebView DataContext="{Binding}"
+                                                          HorizontalAlignment="Stretch"
+                                                          VerticalAlignment="Stretch" />
+                                </DataTemplate>
+                            </local:MpClipTileContentDataTemplateSelector>
+                        </ContentControl.DataTemplates>
+                    </ContentControl>
+                </Border>
+            </Grid>
+            <!--  Detail  -->
+
+            <local:MpAvClipTileDetailView Grid.Row="2"
+                                          HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Stretch"
+                                          IsVisible="{Binding IsHovering}"
+                                          DataContext="{Binding}" />
+
+            <!--  IsBusy Overlay  -->
+            <Border HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    IsVisible="{Binding IsAnyBusy}">
+                <Border.Background>
+                    <SolidColorBrush Color="Black"
+                                     Opacity="0.2" />
+                </Border.Background>
+                <local:ProgressRing Width="80"
+                                    Height="80"
+                                    IsActive="True"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Foreground="Green">
+                    <local:ProgressRing.Background>
+                        <SolidColorBrush Color="Black"
+                                         Opacity="0.2" />
+                    </local:ProgressRing.Background>
+                </local:ProgressRing>
+            </Border>
+
+            <!--  Trial Expired Overlay  -->
+            <Border HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    IsVisible="False">
+                <Border.Background>
+                    <SolidColorBrush Color="Black"
+                                     Opacity="0.2" />
+                </Border.Background>
+
+                <Viewbox Stretch="Uniform"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Width="50"
+                         Height="50"
+                         IsVisible="{Binding IsPinned}">
+                    <Path Fill="Wheat"
+                          Data="{StaticResource LockSvg}" />
+                </Viewbox>
             </Border>
         </Grid>
-    </Border>
+    </local:MpAvClipBorder>
 </local:MpAvUserControl>

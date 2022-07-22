@@ -67,7 +67,7 @@ namespace MonkeyPaste.Common.Avalonia {
             g_timeout_add_full(priority, interval, s_pinnedHandler, GCHandle.ToIntPtr(handle), IntPtr.Zero);
         }
 
-        public static Task<T> RunOnGlibThread<T>(Func<T> action) {
+        public static Task<T> RunOnGlibThreadAsync<T>(Func<T> action) {
             var tcs = new TaskCompletionSource<T>();
             AddTimeout(0, 0, () => {
 

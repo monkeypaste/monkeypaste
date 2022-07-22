@@ -235,7 +235,7 @@ namespace MonkeyPaste.Common.Avalonia {
             //    return null;
             EnsureInitialized().RunSynchronously();
 
-            return Glib.RunOnGlibThread(() => {
+            return Glib.RunOnGlibThreadAsync(() => {
                 using (var title = new Utf8Buffer("Embedded")) {
                     var widget = GtkApi.gtk_file_chooser_dialog_new(title, IntPtr.Zero, GtkFileChooserAction.SelectFolder,
                         IntPtr.Zero);
@@ -392,7 +392,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
             var platformImpl = parent?.PlatformImpl;
 
-            return await await Glib.RunOnGlibThread(() => ShowDialog(
+            return await await Glib.RunOnGlibThreadAsync(() => ShowDialog(
                 dialog.Title, platformImpl,
                 dialog is OpenFileDialog ? GtkFileChooserAction.Open : GtkFileChooserAction.Save,
                 (dialog as OpenFileDialog)?.AllowMultiple ?? false,
@@ -408,7 +408,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
             var platformImpl = parent?.PlatformImpl;
 
-            return await await Glib.RunOnGlibThread(async () => {
+            return await await Glib.RunOnGlibThreadAsync(async () => {
                 var res = await ShowDialog(
                     dialog.Title,
                     platformImpl, GtkFileChooserAction.SelectFolder,
@@ -445,7 +445,7 @@ namespace MonkeyPaste.Common.Avalonia {
         public string HandleDescriptor => "XID";
 
         public void Destroy() {
-            Glib.RunOnGlibThread(() =>
+            Glib.RunOnGlibThreadAsync(() =>
             {
                 GtkApi.gtk_widget_destroy(_widget);
                 return 0;

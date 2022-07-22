@@ -58,7 +58,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
 
             if(Parent.IconId > 0 && !HasUserDefinedColor) {                
-                var ivm = MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == Parent.IconId);
+                var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == Parent.IconId);
                 if(ivm == null) {
                     var icon = await MpDb.GetItemAsync<MpIcon>(Parent.IconId);
                     HexColors = new ObservableCollection<string>(icon.HexColors);

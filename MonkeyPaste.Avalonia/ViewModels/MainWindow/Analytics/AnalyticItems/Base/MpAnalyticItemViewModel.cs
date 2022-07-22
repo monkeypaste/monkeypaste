@@ -414,7 +414,7 @@ namespace MonkeyPaste.Avalonia {
 
             PluginIconId = await GetOrCreateIconIdAsync();
 
-            while(MpIconCollectionViewModel.Instance.IsAnyBusy) {
+            while(MpAvIconCollectionViewModel.Instance.IsAnyBusy) {
                 await Task.Delay(100);
             }
                        
@@ -632,7 +632,7 @@ namespace MonkeyPaste.Avalonia {
             bool isManifestModified = presets.Any(x => x.ManifestLastModifiedDateTime < PluginFormat.manifestLastModifiedDateTime);
             bool needsReset = isNew || isManifestModified;
             if (needsReset) {
-                var ivm = MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == PluginIconId);
+                var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == PluginIconId);
 
                 MpNotificationCollectionViewModel.Instance.ShowMessageAsync(
                     msgType: MpNotificationDialogType.PluginUpdated,

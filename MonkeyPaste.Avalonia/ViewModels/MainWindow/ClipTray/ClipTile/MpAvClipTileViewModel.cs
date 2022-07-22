@@ -80,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
                 if (IsSelected) {
                     return MpSystemColors.Red;//.AdjustAlpha(0.7);
                 }
-                if (Parent.HasScrollVelocity || Parent.HasScrollVelocity) {
+                if (Parent.HasScrollVelocity) {
                     return MpSystemColors.Transparent;
                 }
                 if (IsHovering) {
@@ -144,6 +144,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool IsViewLoaded { get; set; } = false;
 
         public bool IsTitleReadOnly { get; set; } = true;
         public bool IsContentReadOnly { get; set; } = true;
@@ -217,11 +219,200 @@ namespace MonkeyPaste.Avalonia {
                 if (OperatingSystem.IsWindows()) {
                     return editorPath;
                 }
+                if(OperatingSystem.IsMacOS()) {
+                    return @"file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html";
+                }
                 var uri = new Uri(editorPath, UriKind.Absolute);
                 string uriStr = uri.AbsoluteUri;
                 return uriStr;
             }
         }
+
+        public int LineCount { get; private set; } = -1;
+        public int CharCount { get; private set; } = -1;
+
+        public bool IsAnyBusy {
+            get {
+                if (IsBusy) {
+                    return true;
+                }
+                if (TitleSwirlViewModel != null && TitleSwirlViewModel.IsBusy) {
+                    return true;
+                }
+                if (DetectedImageObjectCollectionViewModel != null && DetectedImageObjectCollectionViewModel.IsAnyBusy) {
+                    return true;
+                }
+                if (TemplateCollection != null && TemplateCollection.IsAnyBusy) {
+                    return true;
+                }
+                if (SourceViewModel != null) {
+                    if (AppViewModel != null && AppViewModel.IsBusy) {
+                        return true;
+                    }
+                    if (UrlViewModel != null && UrlViewModel.IsBusy) {
+                        return true;
+                    }
+                    if (SourceViewModel != null && SourceViewModel.IsBusy) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+        public bool HasDetectedObjects => DetectedImageObjectCollectionViewModel != null && DetectedImageObjectCollectionViewModel.Items.Count > 0;
+
+        public bool IsOverHyperlink { get; set; } = false;
+
+        public MpCopyItemDetailType CurDetailType {
+            get {
+                return (MpCopyItemDetailType)_detailIdx;
+            }
+        }
+
+
+        private bool _isHoveringOnTitleTextGrid = false;
+        public bool IsHoveringOnTitleTextGrid {
+            get {
+                return _isHoveringOnTitleTextGrid;
+            }
+            set {
+                if (_isHoveringOnTitleTextGrid != value) {
+                    _isHoveringOnTitleTextGrid = value;
+                    OnPropertyChanged(nameof(IsHoveringOnTitleTextGrid));
+                    OnPropertyChanged(nameof(TileTitleTextGridBackgroundHexColor));
+                    OnPropertyChanged(nameof(TitleTextColor));
+                }
+            }
+        }
+
+        public bool HasBeenSeen { get; set; } = false;
+
+
+        #region Scroll
+
+        public double NormalizedVerticalScrollOffset { get; set; } = 0;
+
+        public bool IsScrolledToHome => Math.Abs(NormalizedVerticalScrollOffset) <= 0.1;
+
+        public bool IsScrolledToEnd => Math.Abs(NormalizedVerticalScrollOffset) >= 0.9;
+
+        public double KeyboardScrollAmount { get; set; } = 0.2;
+
+        #endregion
+
+        public bool CanEdit => IsSelected && IsTextItem;
+
+
+        public bool IsContextMenuOpen { get; set; } = false;
+
+
+        public bool IsTitleFocused { get; set; } = false;
+
+
+        public bool IsEditingTemplate {
+            get {
+                if (CopyItem == null || TemplateCollection == null) {
+                    return false;
+                }
+
+                return TemplateCollection.Items.Any(x => x.IsEditingTemplate);
+            }
+        }
+
+        public bool IsPasting { get; set; } = false;
+
+        public bool IsPastingTemplate => IsPasting && HasTemplates;
+
+        public bool IsPastingUserInputTemplate => IsPastingTemplate && SelectedTextTemplateViewModels.Any(x => x.IsInputRequiredForPaste);
+
+        public bool HasTemplates {
+            get {
+                return TemplateCollection.Items.Count > 0;
+            }
+        }
+
+        public int ItemIdx {
+            get {
+                if (Parent == null) {
+                    return -1;
+                }
+                return Parent.Items.IndexOf(this);
+            }
+        }
+
+
+
+        public bool IsPlaceholder => CopyItem == null || IsPinned;
+
+        #region Drag & Drop
+
+        public bool IsItemDragging { get; set; } = false;
+        public bool IsCurrentDropTarget { get; set; } = false;
+
+        #endregion
+
+        public bool IsContentFocused { get; set; } = false;
+
+        public bool IsOverPinButton { get; set; } = false;
+
+        public bool IsOverHideTitleButton { get; set; } = false;
+
+        public bool IsPinned => Parent != null &&
+                                Parent.PinnedItems.Any(x => x.CopyItemId == CopyItemId);
+
+
+        public bool CanVerticallyScroll => !IsContentReadOnly ?
+                                                EditableContentSize.Height > TileContentHeight :
+                                                UnformattedContentSize.Height > TileContentHeight;
+
+        public bool CanResize { get; set; } = false;
+
+        public bool IsResizing { get; set; } = false;
+
+
+        public bool IsFileListItem => ItemType == MpCopyItemType.FileList;
+
+        public bool IsTextItem => ItemType == MpCopyItemType.Text;
+
+        public bool IsFlipping { get; set; } = false;
+
+        public bool IsFlipped { get; set; } = false;
+
+        public bool IsTitleVisible { get; set; } = true;
+
+        public bool IsDetailGridVisibile {
+            get {
+                if (Parent.HasScrollVelocity) {
+                    return false;
+                }
+                if (IsFindAndReplaceVisible) {
+                    return false;
+                }
+
+
+                if (!IsContentReadOnly) {
+                    if (IsEditingTemplate ||
+                        IsPastingTemplate) {
+                        return false;
+                    }
+                } else {
+                    if (!IsSelected && !IsHovering) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+
+
+
+
+        public bool IsContentAndTitleReadOnly => IsContentReadOnly && IsTitleReadOnly;
+
+
+        public bool IsContextMenuOpened { get; set; }
+
+        public bool AllowMultiSelect { get; set; } = false;
 
         #endregion
 
@@ -1298,191 +1489,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsChromiumEditor => PreferredFormat != null && PreferredFormat.Name == MpPortableDataFormats.Html;
 
-        public int LineCount { get; private set; } = -1;
-        public int CharCount { get; private set; } = -1;
-
-        public bool IsAnyBusy {
-            get {
-                if (IsBusy) {
-                    return true;
-                }
-                if (TitleSwirlViewModel != null && TitleSwirlViewModel.IsBusy) {
-                    return true;
-                }
-                if (DetectedImageObjectCollectionViewModel != null && DetectedImageObjectCollectionViewModel.IsAnyBusy) {
-                    return true;
-                }
-                if (TemplateCollection != null && TemplateCollection.IsAnyBusy) {
-                    return true;
-                }
-                if (SourceViewModel != null) {
-                    if (AppViewModel != null && AppViewModel.IsBusy) {
-                        return true;
-                    }
-                    if (UrlViewModel != null && UrlViewModel.IsBusy) {
-                        return true;
-                    }
-                    if (SourceViewModel != null && SourceViewModel.IsBusy) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
-        public bool HasDetectedObjects => DetectedImageObjectCollectionViewModel != null && DetectedImageObjectCollectionViewModel.Items.Count > 0;
-
-        public bool IsOverHyperlink { get; set; } = false;
-
-        public MpCopyItemDetailType CurDetailType {
-            get {
-                return (MpCopyItemDetailType)_detailIdx;
-            }
-        }
-
-
-        private bool _isHoveringOnTitleTextGrid = false;
-        public bool IsHoveringOnTitleTextGrid {
-            get {
-                return _isHoveringOnTitleTextGrid;
-            }
-            set {
-                if (_isHoveringOnTitleTextGrid != value) {
-                    _isHoveringOnTitleTextGrid = value;
-                    OnPropertyChanged(nameof(IsHoveringOnTitleTextGrid));
-                    OnPropertyChanged(nameof(TileTitleTextGridBackgroundHexColor));
-                    OnPropertyChanged(nameof(TitleTextColor));
-                }
-            }
-        }
-
-        public bool HasBeenSeen { get; set; } = false;
-
-
-        #region Scroll
-
-        public double NormalizedVerticalScrollOffset { get; set; } = 0;
-
-        public bool IsScrolledToHome => Math.Abs(NormalizedVerticalScrollOffset) <= 0.1;
-
-        public bool IsScrolledToEnd => Math.Abs(NormalizedVerticalScrollOffset) >= 0.9;
-
-        public double KeyboardScrollAmount { get; set; } = 0.2;
-
-        #endregion
-
-        public bool CanEdit => IsSelected && IsTextItem;
-
-
-        public bool IsContextMenuOpen { get; set; } = false;
-
-
-        public bool IsTitleFocused { get; set; } = false;
-
-
-        public bool IsEditingTemplate {
-            get {
-                if (CopyItem == null || TemplateCollection == null) {
-                    return false;
-                }
-
-                return TemplateCollection.Items.Any(x => x.IsEditingTemplate);
-            }
-        }
-
-        public bool IsPasting { get; set; } = false;
-
-        public bool IsPastingTemplate => IsPasting && HasTemplates;
-
-        public bool IsPastingUserInputTemplate => IsPastingTemplate && SelectedTextTemplateViewModels.Any(x => x.IsInputRequiredForPaste);
-
-        public bool HasTemplates {
-            get {
-                return TemplateCollection.Items.Count > 0;
-            }
-        }
-
-        public int ItemIdx {
-            get {
-                if (Parent == null) {
-                    return -1;
-                }
-                return Parent.Items.IndexOf(this);
-            }
-        }
-
-
-
-        public bool IsPlaceholder => CopyItem == null || IsPinned;
-
-        #region Drag & Drop
-
-        public bool IsItemDragging { get; set; } = false;
-        public bool IsCurrentDropTarget { get; set; } = false;
-
-        #endregion
-
-        public bool IsContentFocused { get; set; } = false;
-
-        public bool IsOverPinButton { get; set; } = false;
-
-        public bool IsOverHideTitleButton { get; set; } = false;
-
-        public bool IsPinned => Parent != null &&
-                                Parent.PinnedItems.Any(x => x.CopyItemId == CopyItemId);
-
-
-        public bool CanVerticallyScroll => !IsContentReadOnly ?
-                                                EditableContentSize.Height > TileContentHeight :
-                                                UnformattedContentSize.Height > TileContentHeight;
-
-        public bool CanResize { get; set; } = false;
-
-        public bool IsResizing { get; set; } = false;
-
-
-        public bool IsFileListItem => ItemType == MpCopyItemType.FileList;
-
-        public bool IsTextItem => ItemType == MpCopyItemType.Text;
-
-        public bool IsFlipping { get; set; } = false;
-
-        public bool IsFlipped { get; set; } = false;
-
-        public bool IsTitleVisible { get; set; } = true;
-
-        public bool IsDetailGridVisibile {
-            get {
-                if (Parent.HasScrollVelocity) {
-                    return false;
-                }
-                if (IsFindAndReplaceVisible) {
-                    return false;
-                }
-
-
-                if (!IsContentReadOnly) {
-                    if (IsEditingTemplate ||
-                        IsPastingTemplate) {
-                        return false;
-                    }
-                } else {
-                    if (!IsSelected && !IsHovering) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        }
-
-
-
-
-        public bool IsContentAndTitleReadOnly => IsContentReadOnly && IsTitleReadOnly;
-
-
-        public bool IsContextMenuOpened { get; set; }
-
-        public bool AllowMultiSelect { get; set; } = false;
+        
 
         #endregion
 
@@ -2188,7 +2195,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(HasModelChanged):
                     if (HasModelChanged) {
                         Task.Run(async () => {
-                            await CopyItem.WriteToDatabaseAsync();
+                            //await CopyItem.WriteToDatabaseAsync();
                             HasModelChanged = false;
                         });
                     }

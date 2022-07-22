@@ -15,10 +15,4 @@
         WindowState="Normal"
         Icon="/Assets/Icons/cog.ico"
         Title="Settings">
-<webview:WebView x:Name="webview"
-                             Grid.Row="1"
-           
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-                             Address="https://www.google.com" />
 </Window>

@@ -36,7 +36,7 @@ namespace MonkeyPaste.Common {
 
 
         public static bool IsBright(string hexStr, int brightThreshold = 150) {
-            MpColor c = new MpColor(GetHexColorBytes(hexStr));
+            MpColor c = new MpColor(hexStr);
             int grayVal = (int)Math.Sqrt(
             c.R * c.R * .299 +
             c.G * c.G * .587 +

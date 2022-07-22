@@ -21,50 +21,41 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        public override void InitPlatform() {
-            MpAvMacHelpers.EnsureInitialized();
-        }
-        public override IntPtr GetLastActiveInstance(string path) {
-            if(RunningProcessLookup.TryGetValue(path.ToLower(), out var handles) && handles.Count > 0) {
-                return handles[0];
-            }
-            return IntPtr.Zero;
-        }
 
         public override IntPtr GetParentHandleAtPoint(MpPoint poIntPtr) {
             throw new NotImplementedException();
         }
 
-        public override string GetProcessApplicationName(IntPtr handle) {
-            var runningApps = NSWorkspace.SharedWorkspace.RunningApplications;
-            var matchApp = runningApps.FirstOrDefault(x => x.Handle == handle);
-            string name = matchApp == default ? String.Empty : matchApp.LocalizedName;
+        //public override string getprocessapplicationname(intptr handle) {
+        //    var runningapps = nsworkspace.sharedworkspace.runningapplications;
+        //    var matchapp = runningapps.firstordefault(x => x.handle == handle);
+        //    string name = matchapp == default ? string.empty : matchapp.localizedname;
             
-            runningApps.ForEach(x => x.Dispose());
-            return name;
-        }
+        //    runningapps.foreach(x => x.dispose());
+        //    return name;
+        //}
 
-        public override string GetProcessMainWindowTitle(IntPtr handle) {
-            return GetProcessApplicationName(handle);
-        }
+        //public override string GetProcessMainWindowTitle(IntPtr handle) {
+        //    return GetProcessApplicationName(handle);
+        //}
 
-        public override string GetProcessPath(IntPtr handle) {
-            var runningApps = NSWorkspace.SharedWorkspace.RunningApplications;
-            var matchApp = runningApps.FirstOrDefault(x => x.Handle == handle);
-            string path = matchApp == default ? String.Empty : matchApp.ExecutableUrl.AbsoluteString.ToLower();
+        //public override string GetProcessPath(IntPtr handle) {
+        //    var runningApps = NSWorkspace.SharedWorkspace.RunningApplications;
+        //    var matchApp = runningApps.FirstOrDefault(x => x.Handle == handle);
+        //    string path = matchApp == default ? String.Empty : matchApp.ExecutableUrl.AbsoluteString.ToLower();
 
-            runningApps.ForEach(x => x.Dispose());
-            return path;
-        }
+        //    runningApps.ForEach(x => x.Dispose());
+        //    return path;
+        //}
 
-        public override bool IsHandleRunningProcess(IntPtr handle) {
-            var runningApps = NSWorkspace.SharedWorkspace.RunningApplications;
-            var matchApp = runningApps.FirstOrDefault(x => x.Handle == handle);
-            bool isRunning = matchApp == default ? false : true;
+        //public override bool IsHandleRunningProcess(IntPtr handle) {
+        //    var runningApps = NSWorkspace.SharedWorkspace.RunningApplications;
+        //    var matchApp = runningApps.FirstOrDefault(x => x.Handle == handle);
+        //    bool isRunning = matchApp == default ? false : true;
 
-            runningApps.ForEach(x => x.Dispose());
-            return isRunning;
-        }
+        //    runningApps.ForEach(x => x.Dispose());
+        //    return isRunning;
+        //}
         #endregion
 
         #region Protected Methods

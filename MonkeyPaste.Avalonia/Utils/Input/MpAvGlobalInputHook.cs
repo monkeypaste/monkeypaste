@@ -90,12 +90,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         private MpAvGlobalInputHook() {
-            //Start();
+            
         }
 
         #endregion
 
         #region Public Methods
+
+        public void Init() {
+            Start();
+        }
 
         public void Start() {
             if (_thread == null) {
@@ -162,7 +166,6 @@ namespace MonkeyPaste.Avalonia {
 
             _hook.Dispose();
             _hook = null;
-
         }
 
 
@@ -170,6 +173,7 @@ namespace MonkeyPaste.Avalonia {
         #region Mouse Event Handlers
 
         private void Hook_MouseWheel(object? sender, MouseWheelHookEventArgs e) {
+            //MpConsole.WriteLine("Scroll wheel: " + e.Data.Rotation);
             OnGlobalMouseWheelScroll?.Invoke(typeof(MpAvGlobalInputHook).ToString(), e);
         }
 

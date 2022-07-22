@@ -1,0 +1,54 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:DataType="local:MpAvClipTileViewModel"
+                       x:TypeArguments="local:MpAvClipTileViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvClipTileTitleView">
+    <Grid ColumnDefinitions="*,0.3*"
+          Background="{Binding CopyItemHexColor,
+                               Converter={StaticResource StringHexToBrushConverter},
+                               ConverterParameter=0.7}">
+        <!--  Title Text Box  -->
+        <Grid Grid.Column="0"
+              Margin="15,0,0,0"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Center"
+              local:MpAvIsHoveringExtension.IsEnabled="True"
+              local:MpAvIsHoveringExtension.IsHovering="{Binding IsHoveringOnTitleTextGrid,
+                                                                 Mode=TwoWay}"
+              local:MpAvIsHoveringExtension.HoverCursor="IBeam"
+              IsHitTestVisible="{Binding !HasScrollVelocity,
+                                         Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
+            <TextBox x:Name="ClipTileTitleTextBox"
+                     FontSize="20"
+                     BorderThickness="0"
+                     IsReadOnly="{Binding IsTitleReadOnly,
+                                          Mode=OneWay}"
+                     Foreground="Black"
+                     Background="{Binding TileTitleTextGridBackgroundHexColor,
+                                          Converter={StaticResource StringHexToBrushConverter}}"
+                     Text="{Binding CopyItemTitle,
+                                    Mode=TwoWay}" />
+        </Grid>
+        <!--  Source Icon  -->
+        <Grid Grid.Column="1"
+              HorizontalAlignment="Right"
+              Margin="0,0,5,0"
+              ClipToBounds="False">
+            <Image Source="{Binding IconId,
+                                    Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                   Stretch="UniformToFill"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Width="30"
+                   Height="30" />
+        </Grid>
+    </Grid>
+</local:MpAvUserControl>

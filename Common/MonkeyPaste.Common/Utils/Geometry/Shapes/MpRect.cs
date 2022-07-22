@@ -14,7 +14,6 @@ namespace MonkeyPaste.Common {
 
         public double Left => Location.X;
         public double Right => Location.X + Size.Width;
-
         public double Top => Location.Y;
         public double Bottom => Location.Y + Size.Height;
 

@@ -11,7 +11,7 @@ namespace MonkeyPaste.Avalonia {
     public abstract class MpAvProcessWatcherBase : MpIProcessWatcher {
         #region Private Variables
         
-        private Tuple<string, string, IntPtr>? _lastProcessTuple = default;
+        protected Tuple<string, string, IntPtr>? _lastProcessTuple = default;
         private DispatcherTimer _timer;
 
         #endregion
@@ -35,10 +35,6 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvProcessWatcherBase() {
-            InitPlatform();
-
-            CreateRunningProcessLookup();
-
             if (_timer == null) {
                 _timer = new DispatcherTimer() {
                     Interval = TimeSpan.FromMilliseconds(300)
@@ -54,21 +50,48 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        public virtual void InitPlatform() { }
 
         public event EventHandler<MpProcessActivatedEventArgs> OnAppActivated;
 
-        public abstract IntPtr GetLastActiveInstance(string path);
+        public virtual IntPtr GetLastActiveInstance(string path) {
+            if (RunningProcessLookup.TryGetValue(path.ToLower(), out var handles) && handles.Count > 0) {
+                return handles[0];
+            }
+            return IntPtr.Zero;
+        }
 
         public abstract IntPtr GetParentHandleAtPoint(MpPoint poIntPtr);
 
-        public abstract string GetProcessApplicationName(IntPtr handle);
+        public virtual string GetProcessApplicationName(IntPtr handle) {
+            foreach(var kvp in RunningProcessLookup) {
+                if(kvp.Value.Contains(handle)) {
+                    return kvp.Key;
+                }
+            }
+            return String.Empty;
+        }
 
-        public abstract string GetProcessMainWindowTitle(IntPtr handle);
+        public virtual string GetProcessMainWindowTitle(IntPtr handle) {
+            return GetProcessApplicationName(handle);
+        }
 
-        public abstract string GetProcessPath(IntPtr handle);
+        public virtual string GetProcessPath(IntPtr handle) {
+            foreach (var kvp in RunningProcessLookup) {
+                if (kvp.Value.Contains(handle)) {
+                    return kvp.Key;
+                }
+            }
+            return string.Empty;
+        }
 
-        public abstract bool IsHandleRunningProcess(IntPtr handle);
+        public virtual bool IsHandleRunningProcess(IntPtr handle) {
+            foreach (var kvp in RunningProcessLookup) {
+                if (kvp.Value.Contains(handle)) {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         #endregion
 
@@ -82,9 +105,15 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void _timer_Tick(object sender, EventArgs e) {
+            if(RunningProcessLookup == null) {                
+                CreateRunningProcessLookup();
+            }
+            
             bool didActiveChange = false;
             var activeProcessTuple = RefreshRunningProcessLookup();
-            if(activeProcessTuple.Item3 == ThisAppHandle) {
+
+            if(activeProcessTuple == null ||
+               activeProcessTuple.Item3 == ThisAppHandle) {
                 return;
             }
 

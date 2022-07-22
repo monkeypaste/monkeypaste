@@ -8,6 +8,7 @@
     <Compile Remove="Formats\**" />
     <EmbeddedResource Remove="Formats\**" />
     <None Remove="Formats\**" />
+    <None Remove="Microsoft.CSharp" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,10 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="27.2.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" />
     <PackageReference Include="SkiaSharp" Version="2.88.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
   </ItemGroup>
 
 </Project>

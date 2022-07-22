@@ -7,7 +7,10 @@
              x:Class="MonkeyPaste.Avalonia.App">
     <Application.Styles>
         <FluentTheme Mode="Light" />
-        <!--<StyleInclude Source="/Styles/MpAvAllStyles.axaml" />-->
+        <!--<StyleInclude Source="/Styles/MpAvAllStyles.axaml" />
+        <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
+        <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml"/>-->
+        <StyleInclude Source="avares://MonkeyPaste.Avalonia/Styles/ProgressRing/ProgressRing.xaml"/>
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>

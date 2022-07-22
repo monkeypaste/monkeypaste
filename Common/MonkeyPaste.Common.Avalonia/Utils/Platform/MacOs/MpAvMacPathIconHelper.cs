@@ -36,7 +36,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 using (var memStream = new MemoryStream()) {
                     stream.CopyTo(memStream);
                     var bytes = memStream.ToArray();
-                    string base64 = @"data:image/png;base64," + Convert.ToBase64String(bytes);
+                    string base64 = Convert.ToBase64String(bytes);
                     return base64;
                 }
             }    

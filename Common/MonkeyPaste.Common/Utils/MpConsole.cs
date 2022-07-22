@@ -130,8 +130,11 @@ namespace MonkeyPaste.Common {
                 return;
             } else if (RuntimeInformation.FrameworkDescription.ToLower().Contains(".net 6")) {
                 // avalonia
-
-                Debug.WriteLine(str);
+                if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                    Debug.WriteLine(str);
+                } else {
+                    Console.WriteLine(str);
+                }
                 return;
             } else {
                 // give console space on xamarin

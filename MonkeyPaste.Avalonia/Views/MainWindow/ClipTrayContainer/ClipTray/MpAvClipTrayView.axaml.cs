@@ -61,6 +61,7 @@ namespace MonkeyPaste.Avalonia {
 
 
                     //lb_canvas?.InvalidateArrange();
+                    this.InvalidateMeasure();
                     break;
             }
         }

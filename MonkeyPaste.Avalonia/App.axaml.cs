@@ -8,6 +8,7 @@ using System;
 using System.IO;
 using WebViewControl;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -21,6 +22,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void AppTrayIcon_Clicked(object sender, EventArgs e) {
+            MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
             return;
         }
 
@@ -33,17 +35,20 @@ namespace MonkeyPaste.Avalonia {
                     File.Delete(cefLogPath);
                 }
 
-                WebView.Settings.OsrEnabled = true;
-                WebView.Settings.LogFile = "ceflog.txt";
-                //WebView.Settings.EnableErrorLogOnly = true;
+                if(!OperatingSystem.IsLinux()) {
+                    WebView.Settings.OsrEnabled = true;
+                    WebView.Settings.LogFile = "ceflog.txt";
+                    //WebView.Settings.EnableErrorLogOnly = true;
 
-                
-                string cefCacheDir = Path.Combine(Environment.CurrentDirectory, "cefcache");
-                if (Directory.Exists(cefCacheDir)) {
-                    //Directory.CreateDirectory(cefCacheDir);
-                    Directory.Delete(cefCacheDir);
+                    string cefCacheDir = Path.Combine(Environment.CurrentDirectory, "cefcache");
+                    if (Directory.Exists(cefCacheDir)) {
+                        //Directory.CreateDirectory(cefCacheDir);
+                        Directory.Delete(cefCacheDir);
+                    }
+                    //WebView.Settings.CachePath = cefCacheDir;
                 }
-                //WebView.Settings.CachePath = cefCacheDir;
+
+
 
 
                 if (OperatingSystem.IsLinux()) {
@@ -58,9 +63,12 @@ namespace MonkeyPaste.Avalonia {
                 var bootstrapper = new MpAvBootstrapperViewModel();
                 await bootstrapper.InitAsync();
 
+                MpConsole.WriteLine("Loaded");
+
                 //desktop.MainWindow.Close();
 
                 desktop.MainWindow = new MpAvMainWindow();
+                desktop.MainWindow.Show();
             }
 
             base.OnFrameworkInitializationCompleted();

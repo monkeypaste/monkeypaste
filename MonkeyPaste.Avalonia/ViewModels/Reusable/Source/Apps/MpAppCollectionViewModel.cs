@@ -54,7 +54,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitAsync() {
             IsBusy = true;
 
-            while (MpIconCollectionViewModel.Instance.IsAnyBusy) {
+            while (MpAvIconCollectionViewModel.Instance.IsAnyBusy) {
                 // wait for icons to load since app vm depends on icon vm
                 await Task.Delay(100);
             }

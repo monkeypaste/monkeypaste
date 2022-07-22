@@ -31,6 +31,13 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Public Methods
+
+        public async Task InitAsync() {
+            await Task.Delay(1);
+        }
+
+        #endregion
 
         #region Private Methods
 

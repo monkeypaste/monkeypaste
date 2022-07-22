@@ -373,6 +373,16 @@ namespace MonkeyPaste.Avalonia {
                         while (!BindScrollViewerAndTracks(lb)) {
                             await Task.Delay(1000);
                         }
+
+                        var lb_sv = lb.GetVisualDescendant<ScrollViewer>();
+
+                        lb_sv.EffectiveViewportChanged += async (s, e) => {
+                            sv.Tag = lb;
+                            while (!BindScrollViewerAndTracks(lb)) {
+                                await Task.Delay(1000);
+                            }
+                        };
+
                         sv.EffectiveViewportChanged += async(s, e) => {
                             sv.Tag = lb;
                             while (!BindScrollViewerAndTracks(lb)) {
@@ -461,20 +471,36 @@ namespace MonkeyPaste.Avalonia {
                 if (GetScrollViewer(lb) is ScrollViewer sv &&
                     sv.DataContext is MpIPagingScrollViewerViewModel psvvm) {
                     
-                    if (sv.TryGetVisualDescendants<Track>(out var tracks) && tracks.Count() == 2) {
+                    if (sv.TryGetVisualDescendants<Track>(out var tracks) && tracks.Count() > 0) {
 
                         var lb_sv = lb.GetVisualDescendant<ScrollViewer>();
                         lb_sv.Bind(
                             ScrollViewer.HorizontalScrollBarValueProperty,
                             new Binding() {
                                 Source = lb.DataContext,
-                                Path = nameof(psvvm.ScrollOffsetX)});
+                                Path = nameof(psvvm.ScrollOffsetX)
+                            });
 
                         lb_sv.Bind(
                             ScrollViewer.VerticalScrollBarValueProperty,
                             new Binding() {
                                 Source = lb.DataContext,
-                                Path = nameof(psvvm.ScrollOffsetY)});
+                                Path = nameof(psvvm.ScrollOffsetY)
+                            });
+
+                        //sv.Bind(
+                        //    ScrollViewer.HorizontalScrollBarValueProperty,
+                        //    new Binding() {
+                        //        Source = lb.DataContext,
+                        //        Path = nameof(psvvm.ScrollOffsetX)
+                        //    });
+
+                        //sv.Bind(
+                        //    ScrollViewer.VerticalScrollBarValueProperty,
+                        //    new Binding() {
+                        //        Source = lb.DataContext,
+                        //        Path = nameof(psvvm.ScrollOffsetY)
+                        //    });
 
 
                         foreach (var track in tracks) {
@@ -487,7 +513,8 @@ namespace MonkeyPaste.Avalonia {
                                         Source = lb.DataContext,
                                         Path = track.Orientation == Orientation.Horizontal ?
                                                 nameof(psvvm.ScrollOffsetX) :
-                                                nameof(psvvm.ScrollOffsetY),});
+                                                nameof(psvvm.ScrollOffsetY),
+                                    });
 
                             track.Bind(
                                     Track.MaximumProperty,
@@ -651,6 +678,13 @@ namespace MonkeyPaste.Avalonia {
 
                     SetVelocityX(lb, vx);
                     SetVelocityY(lb, vy);
+                    
+                    //sv.ScrollToHorizontalOffset(scrollOffsetX);
+                    //sv.ScrollToVerticalOffset(scrollOffsetY);
+
+                    //var lb_sv = lb.GetVisualDescendant<ScrollViewer>();
+                    //lb_sv.ScrollToHorizontalOffset(scrollOffsetX);
+                    //lb_sv.ScrollToVerticalOffset(scrollOffsetY);
                 }
             }
         }

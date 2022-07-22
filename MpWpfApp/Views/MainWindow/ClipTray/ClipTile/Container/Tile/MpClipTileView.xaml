@@ -105,7 +105,6 @@
                 </DockPanel.Resources>
 
                 <!--  Title  -->
-
                 <Grid DockPanel.Dock="Top">
                     <local:MpClipTileTitleView x:Name="TileTitleView"
                                                DockPanel.Dock="Top"

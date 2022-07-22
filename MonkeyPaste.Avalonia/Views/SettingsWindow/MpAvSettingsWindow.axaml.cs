@@ -15,6 +15,7 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvSettingsWindow : Window {
         //private static MpAvSettingsWindow _instance;
         //public static MpAvSettingsWindow Instance => _instance ?? (_instance = new MpAvSettingsWindow());
+
         public MpAvSettingsWindow() { 
             InitializeComponent();
             DataContext = MpAvSettingsWindowViewModel.Instance;

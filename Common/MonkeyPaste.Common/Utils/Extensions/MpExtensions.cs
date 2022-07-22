@@ -287,7 +287,6 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
-
         #region Data
 
         public static bool HasValue(this double value) {

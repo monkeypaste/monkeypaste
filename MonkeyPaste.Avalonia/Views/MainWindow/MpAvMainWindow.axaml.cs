@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WebViewControl;
 using MonkeyPaste.Common.Avalonia;
+using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -25,9 +26,9 @@ namespace MonkeyPaste.Avalonia {
         }
         public MpAvMainWindow() {
 
-            while (!Debugger.IsAttached) {
-                Thread.Sleep(100);
-            }
+            //while (!Debugger.IsAttached) {
+            //    Thread.Sleep(100);
+            //}
             if (Instance == null) {
                 Instance = this;
             }
@@ -40,11 +41,18 @@ namespace MonkeyPaste.Avalonia {
             this.Deactivated += MainWindow_Deactivated;
             this.PointerMoved += MainWindow_PointerMoved;
             this.PointerLeave += MainWindow_PointerLeave;
-
+            this.AttachedToVisualTree += MpAvMainWindow_AttachedToVisualTree;
             MainWindowGrid = this.FindControl<Grid>("MainWindowGridRef");
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
-            InitAsync().FireAndForgetSafeAsync(MpCommandErrorHandler.Instance);
+            
+            Dispatcher.UIThread.Post(async () => {
+                await InitAsync();
+            });
+        }
+
+        private void MpAvMainWindow_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            
         }
 
         void BoundsChangedHandler(AvaloniaPropertyChangedEventArgs<Rect> e) {
@@ -68,10 +76,7 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                 case MpMessageType.MainWindowOrientationChanged: {
-                        var mwvm = MpAvMainWindowViewModel.Instance;
-                        var titleView = this.FindControl<MpAvMainWindowTitleMenuView>("MainWindowTitleView");
-                        var contentGrid = this.FindControl<Grid>("FilterAndTrayGrid");
-                        var resizerView = this.FindControl<MpAvMainWindowResizerView>("MainWindowResizerView");
+                        var mwvm = MpAvMainWindowViewModel.Instance;var resizerView = this.FindControl<MpAvMainWindowResizerView>("MainWindowResizerView");
                         var resizerHandle = resizerView.FindControl<Border>("MainWindowResizeOuterBorder");
 
                         var resizerTransform = resizerView.RenderTransform as TranslateTransform;
@@ -156,8 +161,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task InitAsync() {
-
             while (!MpBootstrapperViewModelBase.IsLoaded) {
+                MpConsole.WriteLine("MainWindow waiting to open...");
+                await Task.Delay(100);
+            }
+
+            while (!this.IsInitialized) {
+                MpConsole.WriteLine("MainWindow waiting to initialize...");
                 await Task.Delay(100);
             }
 
@@ -169,13 +179,16 @@ namespace MonkeyPaste.Avalonia {
 
             MpAvMainWindowViewModel.Instance.OnMainWindowOpened += Instance_OnMainWindowOpened;
             MpAvMainWindowViewModel.Instance.OnMainWindowClosed += Instance_OnMainWindowClosed;
+            
+            MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeChanged);
+
 
             MpAvMainWindowViewModel.Instance.IsMainWindowLoading = false;
             MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
 
-            
+            // Need to delay or resizer thinks bounds are empty on initial show
+            await Task.Delay(300);
             ReceivedGlobalMessage(MpMessageType.MainWindowOrientationChanged);
-            MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeChanged);
         }
 
         private int? _origResizerIdx;

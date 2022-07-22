@@ -8,6 +8,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Media;
 using Avalonia.Controls.Shapes;
 using MonkeyPaste.Common.Avalonia;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvIconSourceObjToBitmapConverter : IValueConverter {
@@ -15,17 +16,17 @@ namespace MonkeyPaste.Avalonia {
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
             if (value is int iconId) {
-                //var ivm = MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == iconId);
+                var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == iconId);
 
-                //if (ivm == null) {
-                //    return null;
-                //}
-                //if (parameter is string paramStr) {
-                //    if (paramStr.ToLower() == "border") {
-                //        return new MpBase64StringToBitmapSourceConverter().Convert(ivm.IconBorderImage.ImageBase64, null, null, CultureInfo.CurrentCulture);
-                //    }
-                //}
-                //return new MpBase64StringToBitmapSourceConverter().Convert(ivm.IconImage.ImageBase64, null, null, CultureInfo.CurrentCulture);
+                if (ivm == null) {
+                    return null;
+                }
+                if (parameter is string paramStr) {
+                    if (paramStr.ToLower() == "border") {
+                        return new MpAvStringBase64ToBitmapConverter().Convert(ivm.IconBorderBase64, null, null, CultureInfo.CurrentCulture);
+                    }
+                }
+                return new MpAvStringBase64ToBitmapConverter().Convert(ivm.IconBase64, null, null, CultureInfo.CurrentCulture);
             } else if(value is string valStr) {
                 //types: resource key, hex color, base64
                 if(valStr.EndsWith("Image") || valStr.IsAvResourceString()) {

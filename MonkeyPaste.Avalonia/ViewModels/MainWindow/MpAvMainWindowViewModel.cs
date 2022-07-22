@@ -385,7 +385,6 @@ namespace MonkeyPaste.Avalonia {
             PropertyChanged += MpAvMainWindowViewModel_PropertyChanged;
         }
 
-
         #region Public Methods
 
         public async Task InitializeAsync() {
@@ -393,10 +392,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void SetupMainWindowSize(bool isOrientationChange = false) {
-            if (MainWindowScreen == null) {
-                Debugger.Break();
-                return;
-            }
             switch (MainWindowOrientationType) {
                 case MpMainWindowOrientationType.Top:
                 case MpMainWindowOrientationType.Bottom:
@@ -524,7 +519,6 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-
         #region Commands        
 
         public ICommand ShowWindowCommand => new MpAsyncCommand(
@@ -554,11 +548,6 @@ namespace MonkeyPaste.Avalonia {
                 // NOTE on windows setting Topmost= true here makes mw in animate in front of taskbar
                 mw.Topmost = false;
 
-                if (IsMainWindowInitiallyOpening) {
-                    //await MpMainWindowResizeBehavior.Instance.ResizeForInitialLoad();
-                    IsMainWindowInitiallyOpening = false;
-                }
-
                 MpRect openStartRect = MainWindowClosedRect;
                 if (IsMainWindowClosing) {
                     IsMainWindowClosing = false;
@@ -570,7 +559,14 @@ namespace MonkeyPaste.Avalonia {
                 MainWindowRight = openStartRect.Right;
                 MainWindowBottom = openStartRect.Bottom;
 
-                //MpConsole.WriteLine($"SHOW WINDOW START: L: " + MainWindowLeft + " T: " + MainWindowTop + " R:" + MainWindowRight + " B:" + MainWindowBottom);
+                if (IsMainWindowInitiallyOpening) {
+                    //while (!MpAvClipTrayViewModel.Instance.IsAllTileViewsLoaded) {
+                    //    await Task.Delay(100);
+                    //}
+                    IsMainWindowInitiallyOpening = false;
+                }
+
+                MpConsole.WriteLine($"SHOW WINDOW START: L: " + MainWindowLeft + " T: " + MainWindowTop + " R:" + MainWindowRight + " B:" + MainWindowBottom);
 
                 MpRect openEndRect = MainWindowOpenedRect;
 
@@ -625,8 +621,6 @@ namespace MonkeyPaste.Avalonia {
                         MainWindowTop += d_t;
                         MainWindowRight += d_r;
                         MainWindowBottom += d_b;
-
-
 
                         OnPropertyChanged(nameof(ExternalRect));
                     }
@@ -714,7 +708,7 @@ namespace MonkeyPaste.Avalonia {
 
                         MpAvMainWindow.Instance.IsVisible = false;
                         MpAvMainWindow.Instance.Topmost = false;
-                        MpAvMainWindow.Instance.Hide();
+                        //MpAvMainWindow.Instance.Hide();
 
                         // Hide END - end
 

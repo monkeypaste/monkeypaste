@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvSizeObserverExtension {
@@ -96,6 +97,10 @@ namespace MonkeyPaste.Avalonia {
                 if (sender is Control control) {
                     SetObservedWidth(control, control.Bounds.Width);
                     SetObservedHeight(control, control.Bounds.Height);
+                    //if(control.Name == "ClipTrayContainerBorder") {
+                    //    MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.ClipTrayScreenWidth));
+                    //    MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.ClipTrayScreenHeight));
+                    //}
                 }
             }
         }

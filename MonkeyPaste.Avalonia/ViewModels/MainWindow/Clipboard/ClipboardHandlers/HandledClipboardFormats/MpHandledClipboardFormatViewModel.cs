@@ -427,11 +427,11 @@ namespace MonkeyPaste.Avalonia {
             bool isManifestModified = presets.Any(x => x.ManifestLastModifiedDateTime < PluginFormat.manifestLastModifiedDateTime);
             bool needsReset = isNew || isManifestModified;
             if (needsReset) {
-                while (MpIconCollectionViewModel.Instance.IsAnyBusy) {
+                while (MpAvIconCollectionViewModel.Instance.IsAnyBusy) {
                     // if this is first load of the plugin the icon may not be added to icon collection yet so wait for it
                     await Task.Delay(100);
                 }
-                var ivm = MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == HandledFormatIconId);
+                var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == HandledFormatIconId);
                 MpNotificationCollectionViewModel.Instance.ShowMessageAsync(
                     msgType: MpNotificationDialogType.PluginUpdated,
                     title: $"Clipboard Handler '{Title}' Updated",
