@@ -617,11 +617,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private void MpAvClipTileViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
-            }
-        }
-
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch(msg) {
             }

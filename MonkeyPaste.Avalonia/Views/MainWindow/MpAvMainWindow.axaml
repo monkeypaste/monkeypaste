@@ -19,7 +19,7 @@
         ShowInTaskbar="False"
         Width="{Binding MainWindowWidth}"
         Height="{Binding MainWindowHeight}"
-        TransparencyLevelHint="Transparent"
+        TransparencyLevelHint="AcrylicBlur"
         Title="Monkey Paste">
     <Grid x:Name="MainWindowGridRef"
           Background="Transparent"
@@ -49,6 +49,7 @@
         <!--  Tray Row  -->
         <Grid x:Name="MainWindowTrayGrid"
               Grid.Row="2"
+              ColumnDefinitions="40,Auto,*"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
             <Grid.Background>
@@ -56,7 +57,15 @@
                                  Opacity="{Binding MainWindowOpacity,
                                                    Source={x:Static pcl:MpPrefViewModel.Instance}}" />
             </Grid.Background>
-            <local:MpAvClipTrayView HorizontalAlignment="Stretch"
+            <local:MpAvSidebarView Grid.Column="0"
+                                   Margin="0,3"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch"
+                                   HorizontalContentAlignment="Stretch"
+                                   VerticalContentAlignment="Stretch" />
+
+            <local:MpAvClipTrayView Grid.Column="2"
+                                    HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch" />
         </Grid>
 

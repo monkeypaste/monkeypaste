@@ -47,10 +47,7 @@ namespace MonkeyPaste.Avalonia {
                     Directory.CreateDirectory(cefCacheDir);
                     WebView.Settings.CachePath = cefCacheDir;
                 }
-
-
-
-
+                
                 if (OperatingSystem.IsLinux()) {
                     await GtkHelper.EnsureInitialized();
                 } else if (OperatingSystem.IsMacOS()) {

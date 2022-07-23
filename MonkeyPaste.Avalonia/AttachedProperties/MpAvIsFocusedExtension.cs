@@ -8,8 +8,7 @@ namespace MonkeyPaste.Avalonia {
     public static class MpAvIsFocusedExtension {
         static MpAvIsFocusedExtension() {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
-            Control.IsKeyboardFocusWithinProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsKeyboardFocusWithinChanged(x, y));
-            TextBox.IsReadOnlyProperty.Changed.AddClassHandler<TextBox>((x, y) => HandleIsReadOnlyChanged(x, y));
+            //IsReadOnlyProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsReadOnlyChanged(x, y));
         }
         #region Properties
 
@@ -119,6 +118,9 @@ namespace MonkeyPaste.Avalonia {
                     control.DetachedFromVisualTree += DetachedToVisualHandler;
                     control.GotFocus += Control_GotFocus;
                     control.LostFocus += Control_LostFocus;   
+                    if(control is TextBox tb) {
+                        tb.PropertyChanged += Tb_PropertyChanged;
+                    }
                 }
             }
             void DetachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
@@ -127,6 +129,19 @@ namespace MonkeyPaste.Avalonia {
                     control.DetachedFromVisualTree -= DetachedToVisualHandler;
                     control.GotFocus -= Control_GotFocus;
                     control.LostFocus -= Control_LostFocus;
+                    if(control is TextBox tb) {
+                        tb.PropertyChanged -= Tb_PropertyChanged;
+                    }
+                }
+            }
+        }
+
+        private static void Tb_PropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e) {
+            if(sender is TextBox tb) {
+                if(e.Property.Name == "IsReadOnly") {
+                    //HandleIsReadOnlyChanged(tb, e);
+                } else if(e.Property.Name == "IsKeyboardFocusWithin") {
+                    HandleIsKeyboardFocusWithinChanged(tb, e);
                 }
             }
         }
@@ -170,7 +185,7 @@ namespace MonkeyPaste.Avalonia {
                 bool isFocused = GetIsFocused(tb);
                 if(isFocused != tb.IsFocused) {
                     // shouldn't happen
-                    Debugger.Break();
+                    //Debugger.Break();
                 }
                 if(isFocused) {
                     if (tb.IsReadOnly) {
@@ -198,12 +213,15 @@ namespace MonkeyPaste.Avalonia {
                     MpAvMainWindowViewModel.Instance.IsAnyTextBoxFocused = false;
                 } else {
                     MpAvMainWindowViewModel.Instance.IsAnyTextBoxFocused = true;
-                    tb.CaretIndex = 0;
-
-                    if(GetSelectAllOnFocus(control)) {
-                        tb.SelectAll();
-                    }
+                    //
                 }
+                if (GetSelectAllOnFocus(control)) {
+                    tb.CaretIndex = 0;
+                    SetIsReadOnly(control, false);
+                    KeyboardDevice.Instance.SetFocusedElement(control, NavigationMethod.Unspecified, KeyModifiers.None);
+                    tb.SelectAll();
+                }
+
             }
         }
 

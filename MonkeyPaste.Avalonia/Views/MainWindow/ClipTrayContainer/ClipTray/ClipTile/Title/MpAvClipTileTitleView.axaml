@@ -30,8 +30,7 @@
                      FontSize="20"
                      BorderThickness="0"
                      local:MpAvIsFocusedExtension.IsEnabled="True"
-                     local:MpAvIsFocusedExtension.IsReadOnly="{Binding IsReadOnly,
-                                                                       ElementName=ClipTileTitleTextBox}"
+                     local:MpAvIsFocusedExtension.IsReadOnly="{Binding IsTitleReadOnly, Mode=TwoWay}"
                      local:MpAvIsFocusedExtension.IsFocused="{Binding IsTitleFocused,
                                                                       Mode=TwoWay}"
                      local:MpAvIsFocusedExtension.SelectAllOnFocus="True"

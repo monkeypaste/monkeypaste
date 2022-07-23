@@ -875,6 +875,7 @@
     <Folder Include="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Selector\" />
     <Folder Include="Styles\ProgressRing\" />
     <Folder Include="Controls\ProgressRing\" />
+    <Folder Include="Views\MainWindow\Sidebar\SidebarItems\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />

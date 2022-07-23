@@ -7,6 +7,8 @@ using System;
 using PropertyChanged;
 using Avalonia.Metadata;
 using WebKit;
+using System.Threading.Tasks;
+using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -15,6 +17,8 @@ namespace MonkeyPaste.Avalonia {
     }
     [DoNotNotify]
     public class MpAvGtkWebViewHost : NativeControlHost {
+        private IPlatformHandle _webViewHandle;
+
         private readonly Window _hostedWindow = CreateHostedWindow();
         private WebView _webview;
 
@@ -35,9 +39,35 @@ namespace MonkeyPaste.Avalonia {
             InitWindow(_hostedWindow);
         }
 
+        private IPlatformHandle CreateLinux() {
+            var webViewHandle = Glib.RunOnGlibThreadAsync(() => {
+                _webview = new WebView() {
+                    // Vexpand = true,                    
+                    // Hexpand = true,
+                    // HeightRequest = 300,
+                    // WidthRequest = 300                              
+                };  
+                    
+                GtkApi.gtk_widget_realize(_webview.Handle);
+
+                var xid = GtkApi.gdk_x11_window_get_xid(GtkApi.gtk_widget_get_window(_webview.Handle));
+                GtkApi.gtk_window_present(_webview.Handle);
+
+                _webview.LoadUri("https://www.google.com");
+                return new MpAvGtkWidgetHandle(_webview.Handle, xid);
+            }).Result;
+
+            return webViewHandle;            
+        }
+
+        void DestroyLinux(IPlatformHandle handle) {
+            ((MpAvGtkWidgetHandle)handle).Dispose();
+        }
+
         protected override IPlatformHandle CreateNativeControlCore(IPlatformHandle parent) {
             if (OperatingSystem.IsLinux()) {
-                return CreateLinux();
+                var handle = CreateLinux();
+                return handle;
             }
             return null;
         }
@@ -74,33 +104,6 @@ namespace MonkeyPaste.Avalonia {
             window.IsVisible = true;
             window.LayoutManager.ExecuteInitialLayoutPass();
             window.Renderer.Start();
-
-            window.AttachedToVisualTree += (s,e) =>{
-                //_webview
-                //        // Set the title of the application window
-                //        .SetTitle("The Hitchhicker")
-                //        // Set the start size of the window                
-                //        .SetSize(1024, 768, WebviewHint.None)
-                //        // Set the minimum size of the window
-                //        .SetSize(800, 600, WebviewHint.Min)
-                //        // This script gets executed after navigating to the url
-                //        //.InitScript("window.x = 42;")
-                //        // Bind a c# function to the webview - Accessible with the name "evalTest"
-                //        .Bind("evalTest", (id, req) => {
-                //        // Executes the javascript on the webview
-                //        _webview.Evaluate("console.log('The anwser is ' + window.x);");
-                //        // And returns a successful promise result to the javascript function, which executed the 'evalTest'
-                //        _webview.Return(id, RPCResult.Success, "{ result: 'We always knew it!' }");
-                //        })
-                //        // Navigate to this url on start
-                //        .Navigate(new UrlContent("https://en.wikipedia.org/wiki/The_Hitchhiker%27s_Guide_to_the_Galaxy_(novel)"))
-                //        // Run the webview loop
-                //        .Run();
-
-                if(_webview == null) {
-                    return;
-                }
-            };
         }
 
         private static Window CreateHostedWindow() {
@@ -115,42 +118,31 @@ namespace MonkeyPaste.Avalonia {
                 CanResize = false
             };
         }
-
-
-
-        private IPlatformHandle CreateLinux() {
-            var webViewHandle = Glib.RunOnGlibThreadAsync(() => {
-                _webview = new WebView {
-                    Vexpand = true,
-                    Hexpand = true,                     
-                };      
-                _webview.SetSizeRequest(300, 300);
-                _webview.LoadUri("https://www.google.com");
-                return new MpAvGtkWebViewHandle(_webview);
-            }).Result;
-            return webViewHandle;            
-        }
-
-        void DestroyLinux(IPlatformHandle handle) {
-            ((MpAvWebViewHandle)handle).Dispose();
-        }
-
     }
 
     [DoNotNotify]
-    class MpAvGtkWebViewHandle : IPlatformHandle, IDisposable {
-        private WebView _webview;
-
-        public MpAvGtkWebViewHandle(WebView view) {
-            _webview = view;
+    class MpAvGtkWidgetHandle : IPlatformHandle, IDisposable {
+        //private WebView _webview;
+        private IntPtr _widget;
+        
+        public IntPtr Handle { get; }
+        public string HandleDescriptor => "XID";
+        
+        public MpAvGtkWidgetHandle(IntPtr widget, IntPtr xid) {
+            _widget = widget;
+            Handle = xid;
         }
 
-        public IntPtr Handle => _webview?.Handle ?? IntPtr.Zero;
-        public string HandleDescriptor => "WebView";
+        public void Destroy() {
+            Glib.RunOnGlibThreadAsync(() =>
+            {
+                GtkApi.gtk_widget_destroy(_widget);
+                return 0;
+            }).Wait();
+        }
 
         public void Dispose() {
-            _webview.Dispose();
-            _webview = null;
+            Destroy();
         }
     }
 }

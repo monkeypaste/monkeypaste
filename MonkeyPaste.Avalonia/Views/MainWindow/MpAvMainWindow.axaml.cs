@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using WebViewControl;
 using MonkeyPaste.Common.Avalonia;
 using Avalonia.Threading;
+using Avalonia.Controls.Primitives;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -76,85 +78,9 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                 case MpMessageType.MainWindowOrientationChanged: {
-                        var mwvm = MpAvMainWindowViewModel.Instance;var resizerView = this.FindControl<MpAvMainWindowResizerView>("MainWindowResizerView");
-                        var resizerHandle = resizerView.FindControl<Border>("MainWindowResizeOuterBorder");
+                        UpdateResizerOrientation();
 
-                        var resizerTransform = resizerView.RenderTransform as TranslateTransform;
-
-                        double resizer_long_side = mwvm.IsHorizontalOrientation ? mwvm.MainWindowWidth : mwvm.MainWindowHeight;
-                        double resizer_short_side = mwvm.ResizerLength;
-
-                        switch (mwvm.MainWindowOrientationType) {
-                            case MpMainWindowOrientationType.Bottom:
-                                resizerHandle.Width = resizer_long_side;
-                                resizerHandle.Height = resizer_short_side;
-                                resizerHandle.HorizontalAlignment = HorizontalAlignment.Center;
-                                resizerHandle.VerticalAlignment = VerticalAlignment.Stretch;
-
-                                resizerView.Width = resizer_long_side;
-                                resizerView.Height = resizer_short_side;
-                                resizerView.HorizontalAlignment = HorizontalAlignment.Center;
-                                resizerView.VerticalAlignment = VerticalAlignment.Top;
-
-                                resizerTransform.Y = 0;
-
-                                resizerView.Background = Brushes.Transparent;
-                                break;
-                            case MpMainWindowOrientationType.Top:
-                                resizerHandle.Width = resizer_long_side;
-                                resizerHandle.Height = resizer_short_side;
-                                resizerHandle.HorizontalAlignment = HorizontalAlignment.Center;
-                                resizerHandle.VerticalAlignment = VerticalAlignment.Stretch;
-
-                                resizerView.Width = resizer_long_side;
-                                resizerView.Height = resizer_short_side;
-                                resizerView.HorizontalAlignment = HorizontalAlignment.Stretch;
-                                resizerView.VerticalAlignment = VerticalAlignment.Top;
-                                                                
-                                resizerTransform.Y = mwvm.MainWindowHeight - resizerView.Height;
-
-                                resizerView.Background = new SolidColorBrush() {
-                                    Color = Colors.White,
-                                    Opacity = 0.5
-                                };
-                                break;
-                            case MpMainWindowOrientationType.Left:
-                                resizerHandle.Width = resizer_short_side;
-                                resizerHandle.Height = resizer_long_side;
-                                resizerHandle.HorizontalAlignment = HorizontalAlignment.Stretch;
-                                resizerHandle.VerticalAlignment = VerticalAlignment.Center;
-
-                                resizerView.Width = resizer_short_side;
-                                resizerView.Height = mwvm.MainWindowHeight;
-                                resizerView.HorizontalAlignment = HorizontalAlignment.Right;
-                                resizerView.VerticalAlignment = VerticalAlignment.Top;
-
-                                resizerTransform.Y = 0;
-
-                                resizerView.Background = new SolidColorBrush() {
-                                    Color = Colors.White,
-                                    Opacity = 0.5
-                                };
-                                break;
-                            case MpMainWindowOrientationType.Right:
-                                resizerHandle.Width = resizer_short_side;
-                                resizerHandle.Height = resizer_long_side;
-                                resizerHandle.HorizontalAlignment = HorizontalAlignment.Stretch;
-                                resizerHandle.VerticalAlignment = VerticalAlignment.Center;
-
-                                resizerView.Width = resizer_short_side;
-                                resizerView.Height = mwvm.MainWindowHeight;
-                                resizerView.HorizontalAlignment = HorizontalAlignment.Left;
-                                resizerView.VerticalAlignment = VerticalAlignment.Top;
-
-                                resizerTransform.Y = 0;
-
-                                resizerView.Background = new SolidColorBrush() {
-                                    Color = Colors.White,
-                                    Opacity = 0.5
-                                };
-                                break;
-                        }
+                        UpdateContentOrientation();
                         break;
                     }
             }
@@ -244,6 +170,116 @@ namespace MonkeyPaste.Avalonia {
             if (MpAvGlobalInputHook.Instance.GlobalMouseLocation.Y < 10) {
                 MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
             }
+        }
+        private void UpdateResizerOrientation() {
+            var mwvm = MpAvMainWindowViewModel.Instance; 
+            
+            var resizerView = this.FindControl<MpAvMainWindowResizerView>("MainWindowResizerView");
+            var resizerHandle = resizerView.FindControl<Border>("MainWindowResizeOuterBorder");
+            var resizerTransform = resizerView.RenderTransform as TranslateTransform;
+
+            double resizer_long_side = mwvm.IsHorizontalOrientation ? mwvm.MainWindowWidth : mwvm.MainWindowHeight;
+            double resizer_short_side = mwvm.ResizerLength;
+
+            switch (mwvm.MainWindowOrientationType) {
+                case MpMainWindowOrientationType.Bottom:
+                    resizerHandle.Width = resizer_long_side;
+                    resizerHandle.Height = resizer_short_side;
+                    resizerHandle.HorizontalAlignment = HorizontalAlignment.Center;
+                    resizerHandle.VerticalAlignment = VerticalAlignment.Stretch;
+
+                    resizerView.Width = resizer_long_side;
+                    resizerView.Height = resizer_short_side;
+                    resizerView.HorizontalAlignment = HorizontalAlignment.Center;
+                    resizerView.VerticalAlignment = VerticalAlignment.Top;
+
+                    resizerTransform.Y = 0;
+
+                    resizerView.Background = Brushes.Transparent;
+                    break;
+                case MpMainWindowOrientationType.Top:
+                    resizerHandle.Width = resizer_long_side;
+                    resizerHandle.Height = resizer_short_side;
+                    resizerHandle.HorizontalAlignment = HorizontalAlignment.Center;
+                    resizerHandle.VerticalAlignment = VerticalAlignment.Stretch;
+
+                    resizerView.Width = resizer_long_side;
+                    resizerView.Height = resizer_short_side;
+                    resizerView.HorizontalAlignment = HorizontalAlignment.Stretch;
+                    resizerView.VerticalAlignment = VerticalAlignment.Top;
+
+                    resizerTransform.Y = mwvm.MainWindowHeight - resizerView.Height;
+
+                    resizerView.Background = new SolidColorBrush() {
+                        Color = Colors.White,
+                        Opacity = 0.5
+                    };
+                    break;
+                case MpMainWindowOrientationType.Left:
+                    resizerHandle.Width = resizer_short_side;
+                    resizerHandle.Height = resizer_long_side;
+                    resizerHandle.HorizontalAlignment = HorizontalAlignment.Stretch;
+                    resizerHandle.VerticalAlignment = VerticalAlignment.Center;
+
+                    resizerView.Width = resizer_short_side;
+                    resizerView.Height = mwvm.MainWindowHeight;
+                    resizerView.HorizontalAlignment = HorizontalAlignment.Right;
+                    resizerView.VerticalAlignment = VerticalAlignment.Top;
+
+                    resizerTransform.Y = 0;
+
+                    resizerView.Background = new SolidColorBrush() {
+                        Color = Colors.White,
+                        Opacity = 0.5
+                    };
+                    break;
+                case MpMainWindowOrientationType.Right:
+                    resizerHandle.Width = resizer_short_side;
+                    resizerHandle.Height = resizer_long_side;
+                    resizerHandle.HorizontalAlignment = HorizontalAlignment.Stretch;
+                    resizerHandle.VerticalAlignment = VerticalAlignment.Center;
+
+                    resizerView.Width = resizer_short_side;
+                    resizerView.Height = mwvm.MainWindowHeight;
+                    resizerView.HorizontalAlignment = HorizontalAlignment.Left;
+                    resizerView.VerticalAlignment = VerticalAlignment.Top;
+
+                    resizerTransform.Y = 0;
+
+                    resizerView.Background = new SolidColorBrush() {
+                        Color = Colors.White,
+                        Opacity = 0.5
+                    };
+                    break;
+            }
+        }
+        private void UpdateContentOrientation() {
+            var mwvm = MpAvMainWindowViewModel.Instance;
+
+            var mwtg = this.FindControl<Grid>("MainWindowTrayGrid");
+
+            var sbv = this.GetVisualDescendant<MpAvSidebarView>();
+            var ctrv = this.GetVisualDescendant<MpAvClipTrayView>();
+
+            if (mwvm.IsHorizontalOrientation) {
+                mwtg.RowDefinitions.Clear();
+                mwtg.ColumnDefinitions = new ColumnDefinitions("40,Auto,*");
+                Grid.SetRow(sbv, 0);
+                Grid.SetColumn(sbv, 0);
+                // Add Sidebar items here
+                Grid.SetRow(ctrv, 0);
+                Grid.SetColumn(ctrv, 2);
+            } else {
+                mwtg.RowDefinitions = new RowDefinitions("*,Auto,40");
+                mwtg.ColumnDefinitions.Clear();
+                Grid.SetRow(sbv, 2);
+                Grid.SetColumn(sbv, 0);
+                // Add Sidebar items here
+                Grid.SetRow(ctrv, 0);
+                Grid.SetColumn(ctrv, 0);
+            }
+
+            mwtg.InvalidateMeasure();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
             if(OperatingSystem.IsWindows() || OperatingSystem.IsMacOS()) {
                 key = "CefWebViewTemplate";
             } else {
-                key = "LinuxTemplate";
+                key = "CefWebViewTemplate";//"LinuxTemplate";
             }
             return AvailableTemplates[key].Build(param); 
         }

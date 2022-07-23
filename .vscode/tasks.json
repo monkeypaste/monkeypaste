@@ -3,31 +3,27 @@
     "tasks": [
         {
             "label": "build",
-            "command": "dotnet",
+            "command": "/home/parallels/dotnet/dotnet",
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/MonkeyPaste.Avalonia/MonkeyPaste.Avalonia.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
+                "${workspaceFolder}/MonkeyPaste.Avalonia/MonkeyPaste.Avalonia.csproj"
             ],
-            "problemMatcher": "$msCompile"
+            "problemMatcher": "$tsc"
         },
         {
             "label": "publish",
-            "command": "dotnet",
+            "command": "/home/parallels/dotnet/dotnet",
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/MonkeyPaste.Avalonia/MonkeyPaste.Avalonia.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
+                "${workspaceFolder}/MonkeyPaste.Avalonia/MonkeyPaste.Avalonia.csproj"
             ],
-            "problemMatcher": "$msCompile"
+            "problemMatcher": "$tsc"
         },
         {
             "label": "watch",
-            "command": "dotnet",
+            "command": "/home/parallels/dotnet/dotnet",
             "type": "process",
             "args": [
                 "watch",
@@ -35,7 +31,7 @@
                 "--project",
                 "${workspaceFolder}/MonkeyPaste.Avalonia/MonkeyPaste.Avalonia.csproj"
             ],
-            "problemMatcher": "$msCompile"
+            "problemMatcher": "$tsc-watch"
         }
     ]
 }

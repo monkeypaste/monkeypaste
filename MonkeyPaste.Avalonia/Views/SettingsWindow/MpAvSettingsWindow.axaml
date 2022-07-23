@@ -15,4 +15,6 @@
         WindowState="Normal"
         Icon="/Assets/Icons/cog.ico"
         Title="Settings">
+        <local:MpAvGtkWebViewHost HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch" />
 </Window>
