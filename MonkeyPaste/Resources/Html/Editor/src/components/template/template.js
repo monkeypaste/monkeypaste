@@ -288,7 +288,7 @@ function isTemplateNode(node) {
 
 //#region Encode/Decode
 
-function getEncodedTemplateGuids(itemData) {
+function getEncodedTemplateGuids() {
     // this returns all parsed templates to html extension on load BEFORE init
     let etgl = [];
 
@@ -305,6 +305,29 @@ function getEncodedTemplateGuids(itemData) {
         }
     }
     return etgl;
+}
+
+function getDecodedTemplateGuids() {
+    //this returns all load template blots distinct guid's
+    let dtgl = [];
+
+    getUsedTemplateInstances().forEach(function (cit) {
+        if (!dtgl.includes(cit.templateGuid)) {
+            dtgl.push(cit.templateGuid);
+        }        
+    });
+    return dtgl;
+}
+
+function removeTemplatesByGuid(tguid) {
+    getUsedTemplateInstances().forEach(function (cit) {
+        if (cit.templateGuid == tguid) {
+            let docIdx = getTemplateDocIdx(cit.templateInstanceGuid);
+            if (docIdx >= 0) {
+                quill.deleteText(docIdx, 1);
+			}
+		}
+    });
 }
 
 function decodeTemplates(templateDefs) {

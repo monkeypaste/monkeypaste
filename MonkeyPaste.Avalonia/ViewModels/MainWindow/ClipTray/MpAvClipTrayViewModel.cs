@@ -921,7 +921,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         public async Task InitAsync() {
-            LogPropertyChangedEvents = true;
+            // LogPropertyChangedEvents = true;
 
             IsBusy = true;
 
@@ -958,7 +958,8 @@ namespace MonkeyPaste.Avalonia {
                         ItemType = MpCopyItemType.Text,
                         ItemData = "This is test " + i,
                         Title = "Test" + i,
-                        SourceId = 1
+                        SourceId = 1,
+                        CopyDateTime = DateTime.Now
                     }, i - 1);
                 Items.Add(test_ctvm);
             }

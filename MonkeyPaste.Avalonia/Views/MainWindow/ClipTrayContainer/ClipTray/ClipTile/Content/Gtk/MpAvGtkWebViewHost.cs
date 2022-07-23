@@ -3,17 +3,20 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform;
 using MonkeyPaste.Common.Avalonia;
-using SharpWebview;
-using SharpWebview.Content;
 using System;
 using PropertyChanged;
 using Avalonia.Metadata;
+using WebKit;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
+    public class MpAvGtkWebViewHost2 : NativeControlHost {
+        
+    }
+    [DoNotNotify]
     public class MpAvGtkWebViewHost : NativeControlHost {
         private readonly Window _hostedWindow = CreateHostedWindow();
-        private Webview _webview;
+        private WebView _webview;
 
         public static readonly StyledProperty<IControl> ChildProperty =
             AvaloniaProperty.Register<MpAvGtkWebViewHost, IControl>(nameof(Child));
@@ -73,26 +76,30 @@ namespace MonkeyPaste.Avalonia {
             window.Renderer.Start();
 
             window.AttachedToVisualTree += (s,e) =>{
-                _webview
-                        // Set the title of the application window
-                        .SetTitle("The Hitchhicker")
-                        // Set the start size of the window                
-                        .SetSize(1024, 768, WebviewHint.None)
-                        // Set the minimum size of the window
-                        .SetSize(800, 600, WebviewHint.Min)
-                        // This script gets executed after navigating to the url
-                        //.InitScript("window.x = 42;")
-                        // Bind a c# function to the webview - Accessible with the name "evalTest"
-                        .Bind("evalTest", (id, req) => {
-                        // Executes the javascript on the webview
-                        _webview.Evaluate("console.log('The anwser is ' + window.x);");
-                        // And returns a successful promise result to the javascript function, which executed the 'evalTest'
-                        _webview.Return(id, RPCResult.Success, "{ result: 'We always knew it!' }");
-                        })
-                        // Navigate to this url on start
-                        .Navigate(new UrlContent("https://en.wikipedia.org/wiki/The_Hitchhiker%27s_Guide_to_the_Galaxy_(novel)"))
-                        // Run the webview loop
-                        .Run();
+                //_webview
+                //        // Set the title of the application window
+                //        .SetTitle("The Hitchhicker")
+                //        // Set the start size of the window                
+                //        .SetSize(1024, 768, WebviewHint.None)
+                //        // Set the minimum size of the window
+                //        .SetSize(800, 600, WebviewHint.Min)
+                //        // This script gets executed after navigating to the url
+                //        //.InitScript("window.x = 42;")
+                //        // Bind a c# function to the webview - Accessible with the name "evalTest"
+                //        .Bind("evalTest", (id, req) => {
+                //        // Executes the javascript on the webview
+                //        _webview.Evaluate("console.log('The anwser is ' + window.x);");
+                //        // And returns a successful promise result to the javascript function, which executed the 'evalTest'
+                //        _webview.Return(id, RPCResult.Success, "{ result: 'We always knew it!' }");
+                //        })
+                //        // Navigate to this url on start
+                //        .Navigate(new UrlContent("https://en.wikipedia.org/wiki/The_Hitchhiker%27s_Guide_to_the_Galaxy_(novel)"))
+                //        // Run the webview loop
+                //        .Run();
+
+                if(_webview == null) {
+                    return;
+                }
             };
         }
 
@@ -112,10 +119,14 @@ namespace MonkeyPaste.Avalonia {
 
 
         private IPlatformHandle CreateLinux() {
-            var webViewHandle = Glib.RunOnGlibThreadAsync(() =>
-            {
-                _webview = new SharpWebview.Webview(true, true);                
-                return new MpAvWebViewHandle(_webview);
+            var webViewHandle = Glib.RunOnGlibThreadAsync(() => {
+                _webview = new WebView {
+                    Vexpand = true,
+                    Hexpand = true,                     
+                };      
+                _webview.SetSizeRequest(300, 300);
+                _webview.LoadUri("https://www.google.com");
+                return new MpAvGtkWebViewHandle(_webview);
             }).Result;
             return webViewHandle;            
         }
@@ -124,5 +135,22 @@ namespace MonkeyPaste.Avalonia {
             ((MpAvWebViewHandle)handle).Dispose();
         }
 
+    }
+
+    [DoNotNotify]
+    class MpAvGtkWebViewHandle : IPlatformHandle, IDisposable {
+        private WebView _webview;
+
+        public MpAvGtkWebViewHandle(WebView view) {
+            _webview = view;
+        }
+
+        public IntPtr Handle => _webview?.Handle ?? IntPtr.Zero;
+        public string HandleDescriptor => "WebView";
+
+        public void Dispose() {
+            _webview.Dispose();
+            _webview = null;
+        }
     }
 }

@@ -16,10 +16,9 @@
                        VerticalContentAlignment="Stretch"
                        x:Class="MonkeyPaste.Avalonia.MpAvGtkWebView">
 
-    <!--<TextBox AttachedToVisualTree="LinuxContentView_AttachedToVisualTree"
-                                                 TextWrapping="WrapWithOverflow"
-                                                 AcceptsReturn="True"
-                                                 Text="{Binding CopyItemData}"/>-->
+    <!--<TextBox TextWrapping="WrapWithOverflow"
+             AcceptsReturn="True"
+             Text="{Binding CopyItemData}" />-->
     <local:MpAvGtkWebViewHost HorizontalAlignment="Stretch"
                               VerticalAlignment="Stretch" />
 </local:MpAvUserControl>

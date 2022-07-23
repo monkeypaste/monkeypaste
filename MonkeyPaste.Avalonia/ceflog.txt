@@ -1,0 +1,589 @@
+[0722/152848.683047:VERBOSE1:pref_proxy_config_tracker_impl.cc(186)] 0x7f8a49ba13c0: set chrome proxy config service to 0x7f8a49ba2660
+[0722/152849.013560:VERBOSE1:webrtc_internals.cc(118)] Could not get the download directory.
+[0722/152849.505176:VERBOSE1:pref_proxy_config_tracker_impl.cc(186)] 0x7f8a49bed9d0: set chrome proxy config service to 0x7f8a49beedd0
+[0722/152849.568523:VERBOSE1:simple_index_file.cc(583)] Simple Cache Index is being restored from disk.
+[0722/152849.568521:VERBOSE1:simple_index_file.cc(583)] Simple Cache Index is being restored from disk.
+[0722/152849.632659:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html
+[0722/152849.633396:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html
+[0722/152849.638196:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html
+[0722/152849.635893:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html
+[0722/152849.640596:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html
+[0722/152849.638067:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html
+[0722/152849.634520:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html
+[0722/152849.638778:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html
+[0722/152849.643397:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html
+[0722/152849.657591:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html
+[0722/152854.330025:INFO:cpu_info.cc(53)] Available number of cores: 8
+[0722/152854.392824:INFO:cpu_info.cc(53)] Available number of cores: 8
+[0722/152854.411463:INFO:cpu_info.cc(53)] Available number of cores: 8
+[0722/152854.413780:INFO:cpu_info.cc(53)] Available number of cores: 8
+[0722/152854.417039:INFO:cpu_info.cc(53)] Available number of cores: 8
+[0722/152854.418694:INFO:cpu_info.cc(53)] Available number of cores: 8
+[0722/152854.485825:VERBOSE1:document.cc(3974)] Document::DispatchUnloadEvents() URL = <null>
+[0722/152854.485973:VERBOSE1:document.cc(4054)] Actually dispatching an UnloadEvent: URL = <null>
+[0722/152854.486591:VERBOSE1:document.cc(3974)] Document::DispatchUnloadEvents() URL = <null>
+[0722/152854.486730:VERBOSE1:document.cc(4054)] Actually dispatching an UnloadEvent: URL = <null>
+[0722/152854.489486:VERBOSE1:document.cc(3974)] Document::DispatchUnloadEvents() URL = <null>
+[0722/152854.489902:VERBOSE1:document.cc(4054)] Actually dispatching an UnloadEvent: URL = <null>
+[0722/152854.501852:VERBOSE1:script_context.cc(273)] Created context:
+  extension id:           (none)
+  frame:                  0x3ad53a22e8
+  URL:                    
+  context_type:           WEB_PAGE
+  effective extension id: (none)
+  effective context type: WEB_PAGE
+[0722/152854.502498:VERBOSE1:script_context.cc(273)] Created context:
+  extension id:           (none)
+  frame:                  0x0
+  URL:                    
+  context_type:           UNSPECIFIED
+  effective extension id: (none)
+  effective context type: UNSPECIFIED
+[0722/152854.502763:VERBOSE1:dispatcher.cc(385)] Num tracked contexts: 1
+[0722/152854.505278:VERBOSE1:script_context.cc(273)] Created context:
+  extension id:           (none)
+  frame:                  0x310a3c22e8
+  URL:                    
+  context_type:           WEB_PAGE
+  effective extension id: (none)
+  effective context type: WEB_PAGE
+[0722/152854.509384:VERBOSE1:script_context.cc(273)] Created context:
+  extension id:           (none)
+  frame:                  0x0
+  URL:                    
+  context_type:           UNSPECIFIED
+  effective extension id: (none)
+  effective context type: UNSPECIFIED
+[0722/152854.512459:VERBOSE1:dispatcher.cc(385)] Num tracked contexts: 1
+[0722/152854.558658:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery-context-menus/dist/context-menu.min.css
+[0722/152854.559856:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery-context-menus/dist/context-menu.min.css
+[0722/152854.561309:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill/quill.snow.css
+[0722/152854.562390:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/github.min.css
+[0722/152854.562674:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill/quill.snow.css
+[0722/152854.563433:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/github.min.css
+[0722/152854.563631:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Better-Table/quill-better-table.css
+[0722/152854.564101:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Better-Table/quill-better-table.css
+[0722/152854.564319:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/katex/katex.min.css
+[0722/152854.564839:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/katex/katex.min.css
+[0722/152854.565555:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/font-awesome/fontawesome-free-6.1.1-web/css/all.css
+[0722/152854.565914:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/font-awesome/fontawesome-free-6.1.1-web/css/all.css
+[0722/152854.566787:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/quill-style.css
+[0722/152854.566799:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/quill-style.css
+[0722/152854.567658:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor-style.css
+[0722/152854.567695:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor-style.css
+[0722/152854.568544:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/template-style.css
+[0722/152854.568612:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/template-style.css
+[0722/152854.569435:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/edit/edit-template-toolbar-style.css
+[0722/152854.569465:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/edit/edit-template-toolbar-style.css
+[0722/152854.570641:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/paste/paste-template-toolbar-style.css
+[0722/152854.570689:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/paste/paste-template-toolbar-style.css
+[0722/152854.571671:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/content/content-style.css
+[0722/152854.571690:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/content/content-style.css
+[0722/152854.572368:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/highlight.min.js
+[0722/152854.572400:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/highlight.min.js
+[0722/152854.573312:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/xml.min.js
+[0722/152854.573330:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/xml.min.js
+[0722/152854.574316:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill/quill.min.js
+[0722/152854.574338:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill/quill.min.js
+[0722/152854.575215:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Better-Table/quill-better-table.min.js
+[0722/152854.575236:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Better-Table/quill-better-table.min.js
+[0722/152854.576134:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery/jquery.min.js
+[0722/152854.576138:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery/jquery.min.js
+[0722/152854.577041:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/DynamicQuillTools/DynamicQuillTools.js
+[0722/152854.577075:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/DynamicQuillTools/DynamicQuillTools.js
+[0722/152854.577944:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Html-Edit-Button/quill.htmlEditButton.min.js
+[0722/152854.577956:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Html-Edit-Button/quill.htmlEditButton.min.js
+[0722/152854.578823:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/DateFormatter/jquery.dateFormat.js
+[0722/152854.578835:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/DateFormatter/jquery.dateFormat.js
+[0722/152854.579710:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/katex/katex.min.js
+[0722/152854.579716:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/katex/katex.min.js
+[0722/152854.580640:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery-context-menus/src/context-menu.js
+[0722/152854.580656:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery-context-menus/src/context-menu.js
+[0722/152854.581642:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/font-awesome/fontawesome-free-6.1.1-web/all.min.js
+[0722/152854.581679:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/font-awesome/fontawesome-free-6.1.1-web/all.min.js
+[0722/152854.582585:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/jsComAdapter.js
+[0722/152854.582599:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/jsComAdapter.js
+[0722/152854.583587:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/dataTransfer.js
+[0722/152854.583670:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/dataTransfer.js
+[0722/152854.584470:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/debug.js
+[0722/152854.584481:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/debug.js
+[0722/152854.585214:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/util.js
+[0722/152854.585224:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/util.js
+[0722/152854.586139:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/resize.js
+[0722/152854.586145:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/resize.js
+[0722/152854.587110:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/template.js
+[0722/152854.587115:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/template.js
+[0722/152854.588059:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/create/createTemplateToolbarItem.js
+[0722/152854.588059:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/create/createTemplateToolbarItem.js
+[0722/152854.589060:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/edit/editTemplateToolbar.js
+[0722/152854.589066:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/edit/editTemplateToolbar.js
+[0722/152854.590045:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/paste/pasteTemplateToolbar.js
+[0722/152854.590186:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/paste/pasteTemplateToolbar.js
+[0722/152854.591103:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/content/content.js
+[0722/152854.591141:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/content/content.js
+[0722/152854.591888:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/font/font.js
+[0722/152854.591903:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/font/font.js
+[0722/152854.592675:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/clipboard/clipboard.js
+[0722/152854.592696:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/clipboard/clipboard.js
+[0722/152854.593617:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/dragdrop/dragdrop.js
+[0722/152854.593651:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/dragdrop/dragdrop.js
+[0722/152854.594518:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/table/table.js
+[0722/152854.594526:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/table/table.js
+[0722/152854.595485:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor.js
+[0722/152854.595521:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor.js
+[0722/152854.627199:VERBOSE1:document.cc(3974)] Document::DispatchUnloadEvents() URL = <null>
+[0722/152854.627366:VERBOSE1:document.cc(4054)] Actually dispatching an UnloadEvent: URL = <null>
+[0722/152854.708392:VERBOSE1:script_context.cc(273)] Created context:
+  extension id:           (none)
+  frame:                  0x35723a22e8
+  URL:                    
+  context_type:           WEB_PAGE
+  effective extension id: (none)
+  effective context type: WEB_PAGE
+[0722/152854.716571:VERBOSE1:script_context.cc(273)] Created context:
+  extension id:           (none)
+  frame:                  0x0
+  URL:                    
+  context_type:           UNSPECIFIED
+  effective extension id: (none)
+  effective context type: UNSPECIFIED
+[0722/152854.717279:VERBOSE1:dispatcher.cc(385)] Num tracked contexts: 1
+[0722/152854.731558:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery-context-menus/dist/context-menu.min.css
+[0722/152854.732712:VERBOSE1:document.cc(3974)] Document::DispatchUnloadEvents() URL = <null>
+[0722/152854.737700:VERBOSE1:document.cc(4054)] Actually dispatching an UnloadEvent: URL = <null>
+[0722/152854.745519:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill/quill.snow.css
+[0722/152854.746147:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/github.min.css
+[0722/152854.747055:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Better-Table/quill-better-table.css
+[0722/152854.747698:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/katex/katex.min.css
+[0722/152854.748338:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/font-awesome/fontawesome-free-6.1.1-web/css/all.css
+[0722/152854.749033:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/quill-style.css
+[0722/152854.749699:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor-style.css
+[0722/152854.750435:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/template-style.css
+[0722/152854.751164:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/edit/edit-template-toolbar-style.css
+[0722/152854.751941:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/paste/paste-template-toolbar-style.css
+[0722/152854.752695:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/content/content-style.css
+[0722/152854.753544:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/highlight.min.js
+[0722/152854.754344:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/xml.min.js
+[0722/152854.755006:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill/quill.min.js
+[0722/152854.755833:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Better-Table/quill-better-table.min.js
+[0722/152854.756560:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery/jquery.min.js
+[0722/152854.757193:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/DynamicQuillTools/DynamicQuillTools.js
+[0722/152854.757878:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Html-Edit-Button/quill.htmlEditButton.min.js
+[0722/152854.758588:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/DateFormatter/jquery.dateFormat.js
+[0722/152854.759254:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/katex/katex.min.js
+[0722/152854.759880:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery-context-menus/src/context-menu.js
+[0722/152854.760326:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/font-awesome/fontawesome-free-6.1.1-web/all.min.js
+[0722/152854.761203:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/jsComAdapter.js
+[0722/152854.761964:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/dataTransfer.js
+[0722/152854.762632:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/debug.js
+[0722/152854.763320:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/util.js
+[0722/152854.764024:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/resize.js
+[0722/152854.764663:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/template.js
+[0722/152854.765431:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/create/createTemplateToolbarItem.js
+[0722/152854.767605:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/edit/editTemplateToolbar.js
+[0722/152854.768671:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/paste/pasteTemplateToolbar.js
+[0722/152854.769564:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/content/content.js
+[0722/152854.770349:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/font/font.js
+[0722/152854.771119:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/clipboard/clipboard.js
+[0722/152854.771796:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/dragdrop/dragdrop.js
+[0722/152854.772436:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/table/table.js
+[0722/152854.773202:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor.js
+[0722/152854.780312:VERBOSE1:script_context.cc(273)] Created context:
+  extension id:           (none)
+  frame:                  0x1aa63e22e8
+  URL:                    
+  context_type:           WEB_PAGE
+  effective extension id: (none)
+  effective context type: WEB_PAGE
+[0722/152854.783196:VERBOSE1:script_context.cc(273)] Created context:
+  extension id:           (none)
+  frame:                  0x0
+  URL:                    
+  context_type:           UNSPECIFIED
+  effective extension id: (none)
+  effective context type: UNSPECIFIED
+[0722/152854.783576:VERBOSE1:dispatcher.cc(385)] Num tracked contexts: 1
+[0722/152854.743053:VERBOSE1:script_context.cc(273)] Created context:
+  extension id:           (none)
+  frame:                  0x27738e22e8
+  URL:                    
+  context_type:           WEB_PAGE
+  effective extension id: (none)
+  effective context type: WEB_PAGE
+[0722/152854.826114:VERBOSE1:script_context.cc(273)] Created context:
+  extension id:           (none)
+  frame:                  0x0
+  URL:                    
+  context_type:           UNSPECIFIED
+  effective extension id: (none)
+  effective context type: UNSPECIFIED
+[0722/152854.827046:VERBOSE1:dispatcher.cc(385)] Num tracked contexts: 1
+[0722/152854.842095:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery-context-menus/dist/context-menu.min.css
+[0722/152854.842935:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill/quill.snow.css
+[0722/152854.843547:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/github.min.css
+[0722/152854.844132:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Better-Table/quill-better-table.css
+[0722/152854.844714:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/katex/katex.min.css
+[0722/152854.845344:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/font-awesome/fontawesome-free-6.1.1-web/css/all.css
+[0722/152854.846005:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/quill-style.css
+[0722/152854.846696:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor-style.css
+[0722/152854.879023:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/template-style.css
+[0722/152854.879399:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery-context-menus/dist/context-menu.min.css
+[0722/152854.880141:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/edit/edit-template-toolbar-style.css
+[0722/152854.880158:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill/quill.snow.css
+[0722/152854.880831:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/github.min.css
+[0722/152854.880857:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/paste/paste-template-toolbar-style.css
+[0722/152854.881497:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/content/content-style.css
+[0722/152854.881517:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Better-Table/quill-better-table.css
+[0722/152854.882066:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/katex/katex.min.css
+[0722/152854.882749:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/font-awesome/fontawesome-free-6.1.1-web/css/all.css
+[0722/152854.883385:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/quill-style.css
+[0722/152854.883997:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor-style.css
+[0722/152854.884605:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/template-style.css
+[0722/152854.886747:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/edit/edit-template-toolbar-style.css
+[0722/152854.887418:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/paste/paste-template-toolbar-style.css
+[0722/152854.890768:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/content/content-style.css
+[0722/152854.891106:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/highlight.min.js
+[0722/152854.891738:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/highlight.min.js
+[0722/152854.892355:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/xml.min.js
+[0722/152854.892971:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill/quill.min.js
+[0722/152854.897978:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Better-Table/quill-better-table.min.js
+[0722/152854.898525:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/xml.min.js
+[0722/152854.898931:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery/jquery.min.js
+[0722/152854.899360:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill/quill.min.js
+[0722/152854.899917:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/DynamicQuillTools/DynamicQuillTools.js
+[0722/152854.900558:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Html-Edit-Button/quill.htmlEditButton.min.js
+[0722/152854.901222:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/DateFormatter/jquery.dateFormat.js
+[0722/152854.901814:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/katex/katex.min.js
+[0722/152854.906515:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery-context-menus/src/context-menu.js
+[0722/152854.906766:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Better-Table/quill-better-table.min.js
+[0722/152854.907727:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery/jquery.min.js
+[0722/152854.907759:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/font-awesome/fontawesome-free-6.1.1-web/all.min.js
+[0722/152854.908361:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/DynamicQuillTools/DynamicQuillTools.js
+[0722/152854.908992:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/jsComAdapter.js
+[0722/152854.909016:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Html-Edit-Button/quill.htmlEditButton.min.js
+[0722/152854.909666:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/DateFormatter/jquery.dateFormat.js
+[0722/152854.909670:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/dataTransfer.js
+[0722/152854.910311:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/katex/katex.min.js
+[0722/152854.911041:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/debug.js
+[0722/152854.926650:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/util.js
+[0722/152854.926925:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery-context-menus/src/context-menu.js
+[0722/152854.927549:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/resize.js
+[0722/152854.928519:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/font-awesome/fontawesome-free-6.1.1-web/all.min.js
+[0722/152854.929142:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/jsComAdapter.js
+[0722/152854.943637:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/dataTransfer.js
+[0722/152854.944036:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/template.js
+[0722/152854.944482:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/debug.js
+[0722/152854.953379:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/create/createTemplateToolbarItem.js
+[0722/152854.953793:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/util.js
+[0722/152854.954426:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/edit/editTemplateToolbar.js
+[0722/152854.954541:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/resize.js
+[0722/152854.955096:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/template.js
+[0722/152854.955125:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/paste/pasteTemplateToolbar.js
+[0722/152854.955879:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/create/createTemplateToolbarItem.js
+[0722/152854.956797:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/edit/editTemplateToolbar.js
+[0722/152854.956924:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/content/content.js
+[0722/152854.957476:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/paste/pasteTemplateToolbar.js
+[0722/152854.957499:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/font/font.js
+[0722/152854.958132:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/content/content.js
+[0722/152854.958743:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/font/font.js
+[0722/152854.959324:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/clipboard/clipboard.js
+[0722/152854.975684:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/clipboard/clipboard.js
+[0722/152854.975892:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/dragdrop/dragdrop.js
+[0722/152854.976454:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/dragdrop/dragdrop.js
+[0722/152854.976463:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/table/table.js
+[0722/152854.977171:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/table/table.js
+[0722/152854.977196:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor.js
+[0722/152854.977927:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor.js
+[0722/152855.039851:ERROR:gl_implementation.cc(394)] Failed to load /Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste.Avalonia/bin/Debug/net6.0/CefGlueBrowserProcess/libswiftshader_libGLESv2.dylib: dlopen(/Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste.Avalonia/bin/Debug/net6.0/CefGlueBrowserProcess/libswiftshader_libGLESv2.dylib, 0x0001): tried: '/Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste.Avalonia/bin/Debug/net6.0/CefGlueBrowserProcess/libswiftshader_libGLESv2.dylib' (no such file)
+[0722/152855.041112:VERBOSE1:gpu_init.cc(380)] gl::init::InitializeStaticGLBindingsOneOff failed
+[0722/152855.209309:INFO:cpu_info.cc(53)] Available number of cores: 8
+[0722/152855.239534:ERROR:viz_main_impl.cc(160)] Exiting GPU process due to errors during initialization
+[0722/152855.492089:VERBOSE1:document.cc(3974)] Document::DispatchUnloadEvents() URL = <null>
+[0722/152855.492242:VERBOSE1:document.cc(4054)] Actually dispatching an UnloadEvent: URL = <null>
+[0722/152855.533422:VERBOSE1:script_context.cc(273)] Created context:
+  extension id:           (none)
+  frame:                  0x3045e422e8
+  URL:                    
+  context_type:           WEB_PAGE
+  effective extension id: (none)
+  effective context type: WEB_PAGE
+[0722/152855.557515:VERBOSE1:script_context.cc(273)] Created context:
+  extension id:           (none)
+  frame:                  0x0
+  URL:                    
+  context_type:           UNSPECIFIED
+  effective extension id: (none)
+  effective context type: UNSPECIFIED
+[0722/152855.557745:VERBOSE1:dispatcher.cc(385)] Num tracked contexts: 1
+[0722/152855.586195:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery-context-menus/dist/context-menu.min.css
+[0722/152855.586963:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill/quill.snow.css
+[0722/152855.587604:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/github.min.css
+[0722/152855.588275:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Better-Table/quill-better-table.css
+[0722/152855.589656:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/katex/katex.min.css
+[0722/152855.590349:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/font-awesome/fontawesome-free-6.1.1-web/css/all.css
+[0722/152855.595447:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/quill-style.css
+[0722/152855.596198:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor-style.css
+[0722/152855.596878:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/template-style.css
+[0722/152855.602359:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/edit/edit-template-toolbar-style.css
+[0722/152855.612606:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/paste/paste-template-toolbar-style.css
+[0722/152855.613454:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/content/content-style.css
+[0722/152855.614254:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/highlight.min.js
+[0722/152855.614944:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/xml.min.js
+[0722/152855.615579:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill/quill.min.js
+[0722/152855.616349:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Better-Table/quill-better-table.min.js
+[0722/152855.621765:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery/jquery.min.js
+[0722/152855.622531:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/DynamicQuillTools/DynamicQuillTools.js
+[0722/152855.623337:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Html-Edit-Button/quill.htmlEditButton.min.js
+[0722/152855.624158:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/DateFormatter/jquery.dateFormat.js
+[0722/152855.624874:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/katex/katex.min.js
+[0722/152855.625440:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery-context-menus/src/context-menu.js
+[0722/152855.626102:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/font-awesome/fontawesome-free-6.1.1-web/all.min.js
+[0722/152855.627163:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/jsComAdapter.js
+[0722/152855.627880:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/dataTransfer.js
+[0722/152855.628595:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/debug.js
+[0722/152855.629278:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/util.js
+[0722/152855.629974:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/resize.js
+[0722/152855.630761:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/template.js
+[0722/152855.631451:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/create/createTemplateToolbarItem.js
+[0722/152855.632120:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/edit/editTemplateToolbar.js
+[0722/152855.632802:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/paste/pasteTemplateToolbar.js
+[0722/152855.634202:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/content/content.js
+[0722/152855.634956:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/font/font.js
+[0722/152855.635731:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/clipboard/clipboard.js
+[0722/152855.636375:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/dragdrop/dragdrop.js
+[0722/152855.637015:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/table/table.js
+[0722/152855.637716:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor.js
+[0722/152858.153357:INFO:cpu_info.cc(53)] Available number of cores: 8
+[0722/152858.213369:INFO:cpu_info.cc(53)] Available number of cores: 8
+[0722/152858.213506:INFO:cpu_info.cc(53)] Available number of cores: 8
+[0722/152858.285617:INFO:cpu_info.cc(53)] Available number of cores: 8
+[0722/152917.041249:VERBOSE1:document.cc(3974)] Document::DispatchUnloadEvents() URL = <null>
+[0722/152917.075807:VERBOSE1:document.cc(4054)] Actually dispatching an UnloadEvent: URL = <null>
+[0722/152917.042214:VERBOSE1:document.cc(3974)] Document::DispatchUnloadEvents() URL = <null>
+[0722/152917.079932:VERBOSE1:document.cc(4054)] Actually dispatching an UnloadEvent: URL = <null>
+[0722/152917.042492:VERBOSE1:document.cc(3974)] Document::DispatchUnloadEvents() URL = <null>
+[0722/152917.081761:VERBOSE1:document.cc(4054)] Actually dispatching an UnloadEvent: URL = <null>
+[0722/152917.091598:VERBOSE1:document.cc(3974)] Document::DispatchUnloadEvents() URL = <null>
+[0722/152917.091693:VERBOSE1:document.cc(4054)] Actually dispatching an UnloadEvent: URL = <null>
+[0722/152917.103250:VERBOSE1:script_context.cc(273)] Created context:
+  extension id:           (none)
+  frame:                  0x2b8f8022e8
+  URL:                    
+  context_type:           WEB_PAGE
+  effective extension id: (none)
+  effective context type: WEB_PAGE
+[0722/152917.103381:VERBOSE1:script_context.cc(273)] Created context:
+  extension id:           (none)
+  frame:                  0x37062822e8
+  URL:                    
+  context_type:           WEB_PAGE
+  effective extension id: (none)
+  effective context type: WEB_PAGE
+[0722/152917.103989:VERBOSE1:script_context.cc(273)] Created context:
+  extension id:           (none)
+  frame:                  0x0
+  URL:                    
+  context_type:           UNSPECIFIED
+  effective extension id: (none)
+  effective context type: UNSPECIFIED
+[0722/152917.104092:VERBOSE1:script_context.cc(273)] Created context:
+  extension id:           (none)
+  frame:                  0x0
+  URL:                    
+  context_type:           UNSPECIFIED
+  effective extension id: (none)
+  effective context type: UNSPECIFIED
+[0722/152917.104145:VERBOSE1:dispatcher.cc(385)] Num tracked contexts: 1
+[0722/152917.104237:VERBOSE1:dispatcher.cc(385)] Num tracked contexts: 1
+[0722/152917.116559:VERBOSE1:script_context.cc(273)] Created context:
+  extension id:           (none)
+  frame:                  0x201bb022e8
+  URL:                    
+  context_type:           WEB_PAGE
+  effective extension id: (none)
+  effective context type: WEB_PAGE
+[0722/152917.120281:VERBOSE1:script_context.cc(273)] Created context:
+  extension id:           (none)
+  frame:                  0x0
+  URL:                    
+  context_type:           UNSPECIFIED
+  effective extension id: (none)
+  effective context type: UNSPECIFIED
+[0722/152917.134659:VERBOSE1:dispatcher.cc(385)] Num tracked contexts: 1
+[0722/152917.164916:VERBOSE1:script_context.cc(273)] Created context:
+  extension id:           (none)
+  frame:                  0x11fcc422e8
+  URL:                    
+  context_type:           WEB_PAGE
+  effective extension id: (none)
+  effective context type: WEB_PAGE
+[0722/152917.167194:VERBOSE1:script_context.cc(273)] Created context:
+  extension id:           (none)
+  frame:                  0x0
+  URL:                    
+  context_type:           UNSPECIFIED
+  effective extension id: (none)
+  effective context type: UNSPECIFIED
+[0722/152917.168023:VERBOSE1:dispatcher.cc(385)] Num tracked contexts: 1
+[0722/152917.179790:INFO:CONSOLE(57)] "[1658518157129] [DEBUG] init request: [object Object]", source: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor.js (57)
+[0722/152917.179922:INFO:CONSOLE(57)] "[1658518157130] [DEBUG] init request: [object Object]", source: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor.js (57)
+[0722/152917.180048:INFO:CONSOLE(57)] "[1658518157130] [DEBUG] init request: [object Object]", source: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor.js (57)
+[0722/152917.180103:INFO:CONSOLE(57)] "[1658518157130] [DEBUG] init request: [object Object]", source: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor.js (57)
+[0722/152917.187514:INFO:CONSOLE(57)] "[1658518157142] [DEBUG] init request: [object Object]", source: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor.js (57)
+[0722/152917.187632:INFO:CONSOLE(57)] "[1658518157144] [DEBUG] init request: [object Object]", source: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor.js (57)
+[0722/152917.188737:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery-context-menus/dist/context-menu.min.css
+[0722/152917.194204:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery-context-menus/dist/context-menu.min.css
+[0722/152917.195478:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery-context-menus/dist/context-menu.min.css
+[0722/152917.196785:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill/quill.snow.css
+[0722/152917.197655:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/github.min.css
+[0722/152917.197970:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill/quill.snow.css
+[0722/152917.198465:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Better-Table/quill-better-table.css
+[0722/152917.199182:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/github.min.css
+[0722/152917.199230:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/katex/katex.min.css
+[0722/152917.199290:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill/quill.snow.css
+[0722/152917.200019:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/font-awesome/fontawesome-free-6.1.1-web/css/all.css
+[0722/152917.200079:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Better-Table/quill-better-table.css
+[0722/152917.200097:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/github.min.css
+[0722/152917.200876:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Better-Table/quill-better-table.css
+[0722/152917.200896:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/quill-style.css
+[0722/152917.200897:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/katex/katex.min.css
+[0722/152917.201346:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery-context-menus/dist/context-menu.min.css
+[0722/152917.202068:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/font-awesome/fontawesome-free-6.1.1-web/css/all.css
+[0722/152917.202078:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill/quill.snow.css
+[0722/152917.202130:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/katex/katex.min.css
+[0722/152917.202144:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor-style.css
+[0722/152917.203462:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/font-awesome/fontawesome-free-6.1.1-web/css/all.css
+[0722/152917.203503:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/template-style.css
+[0722/152917.203609:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/quill-style.css
+[0722/152917.204325:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/quill-style.css
+[0722/152917.204351:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/edit/edit-template-toolbar-style.css
+[0722/152917.204406:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor-style.css
+[0722/152917.205289:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/paste/paste-template-toolbar-style.css
+[0722/152917.205530:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/template-style.css
+[0722/152917.205326:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor-style.css
+[0722/152917.206646:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/edit/edit-template-toolbar-style.css
+[0722/152917.206977:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/content/content-style.css
+[0722/152917.207061:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/template-style.css
+[0722/152917.207578:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/paste/paste-template-toolbar-style.css
+[0722/152917.208165:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/highlight.min.js
+[0722/152917.208261:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/edit/edit-template-toolbar-style.css
+[0722/152917.208300:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/content/content-style.css
+[0722/152917.208958:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/xml.min.js
+[0722/152917.208996:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/paste/paste-template-toolbar-style.css
+[0722/152917.209073:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/highlight.min.js
+[0722/152917.209866:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/content/content-style.css
+[0722/152917.209893:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/xml.min.js
+[0722/152917.209918:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill/quill.min.js
+[0722/152917.211042:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill/quill.min.js
+[0722/152917.211067:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Better-Table/quill-better-table.min.js
+[0722/152917.211121:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/highlight.min.js
+[0722/152917.211835:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Better-Table/quill-better-table.min.js
+[0722/152917.211863:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery/jquery.min.js
+[0722/152917.211891:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/xml.min.js
+[0722/152917.212259:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/github.min.css
+[0722/152917.212937:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/DynamicQuillTools/DynamicQuillTools.js
+[0722/152917.212974:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery/jquery.min.js
+[0722/152917.213040:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill/quill.min.js
+[0722/152917.213063:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Better-Table/quill-better-table.css
+[0722/152917.213731:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Better-Table/quill-better-table.min.js
+[0722/152917.213752:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Html-Edit-Button/quill.htmlEditButton.min.js
+[0722/152917.213773:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/DynamicQuillTools/DynamicQuillTools.js
+[0722/152917.214564:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Html-Edit-Button/quill.htmlEditButton.min.js
+[0722/152917.214555:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery/jquery.min.js
+[0722/152917.214620:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/DateFormatter/jquery.dateFormat.js
+[0722/152917.215361:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/katex/katex.min.js
+[0722/152917.215399:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/DynamicQuillTools/DynamicQuillTools.js
+[0722/152917.215398:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/DateFormatter/jquery.dateFormat.js
+[0722/152917.216234:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/katex/katex.min.js
+[0722/152917.216295:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Html-Edit-Button/quill.htmlEditButton.min.js
+[0722/152917.216304:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery-context-menus/src/context-menu.js
+[0722/152917.217055:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/font-awesome/fontawesome-free-6.1.1-web/all.min.js
+[0722/152917.217065:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/DateFormatter/jquery.dateFormat.js
+[0722/152917.217077:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery-context-menus/src/context-menu.js
+[0722/152917.217794:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/katex/katex.min.js
+[0722/152917.217821:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/font-awesome/fontawesome-free-6.1.1-web/all.min.js
+[0722/152917.217942:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/jsComAdapter.js
+[0722/152917.218499:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/jsComAdapter.js
+[0722/152917.218520:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery-context-menus/src/context-menu.js
+[0722/152917.218662:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/dataTransfer.js
+[0722/152917.219807:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/dataTransfer.js
+[0722/152917.219940:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/font-awesome/fontawesome-free-6.1.1-web/all.min.js
+[0722/152917.219945:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/debug.js
+[0722/152917.220689:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/debug.js
+[0722/152917.220798:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/jsComAdapter.js
+[0722/152917.221687:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/dataTransfer.js
+[0722/152917.221777:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/util.js
+[0722/152917.222058:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/util.js
+[0722/152917.223152:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/debug.js
+[0722/152917.223277:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/resize.js
+[0722/152917.223346:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/resize.js
+[0722/152917.224278:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/util.js
+[0722/152917.224312:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/template.js
+[0722/152917.225216:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/create/createTemplateToolbarItem.js
+[0722/152917.225226:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/resize.js
+[0722/152917.226053:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/template.js
+[0722/152917.226069:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/edit/editTemplateToolbar.js
+[0722/152917.226817:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/create/createTemplateToolbarItem.js
+[0722/152917.226839:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/paste/pasteTemplateToolbar.js
+[0722/152917.227621:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/edit/editTemplateToolbar.js
+[0722/152917.227688:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/content/content.js
+[0722/152917.228882:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/font/font.js
+[0722/152917.228990:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/paste/pasteTemplateToolbar.js
+[0722/152917.230678:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/clipboard/clipboard.js
+[0722/152917.237777:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/content/content.js
+[0722/152917.238018:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/template.js
+[0722/152917.238766:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/create/createTemplateToolbarItem.js
+[0722/152917.249058:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/katex/katex.min.css
+[0722/152917.250524:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/edit/editTemplateToolbar.js
+[0722/152917.250673:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/font/font.js
+[0722/152917.250942:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/font-awesome/fontawesome-free-6.1.1-web/css/all.css
+[0722/152917.251813:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/paste/pasteTemplateToolbar.js
+[0722/152917.252696:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/content/content.js
+[0722/152917.253514:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/quill-style.css
+[0722/152917.253628:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/clipboard/clipboard.js
+[0722/152917.253812:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/font/font.js
+[0722/152917.254877:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/clipboard/clipboard.js
+[0722/152917.254967:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/dragdrop/dragdrop.js
+[0722/152917.255777:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor-style.css
+[0722/152917.257990:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/dragdrop/dragdrop.js
+[0722/152917.258125:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/template-style.css
+[0722/152917.259006:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/edit/edit-template-toolbar-style.css
+[0722/152917.259047:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/table/table.js
+[0722/152917.260016:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/paste/paste-template-toolbar-style.css
+[0722/152917.260752:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor.js
+[0722/152917.262486:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/table/table.js
+[0722/152917.262721:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/dragdrop/dragdrop.js
+[0722/152917.262540:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/content/content-style.css
+[0722/152917.263799:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/table/table.js
+[0722/152917.263869:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor.js
+[0722/152917.263928:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/highlight.min.js
+[0722/152917.265009:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor.js
+[0722/152917.265878:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/HighlightJs/xml.min.js
+[0722/152917.266705:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill/quill.min.js
+[0722/152917.267484:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Better-Table/quill-better-table.min.js
+[0722/152917.269053:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery/jquery.min.js
+[0722/152917.269915:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/DynamicQuillTools/DynamicQuillTools.js
+[0722/152917.270851:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/Quill-Html-Edit-Button/quill.htmlEditButton.min.js
+[0722/152917.271781:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/DateFormatter/jquery.dateFormat.js
+[0722/152917.272642:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/katex/katex.min.js
+[0722/152917.273649:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/jquery-context-menus/src/context-menu.js
+[0722/152917.274573:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/lib/font-awesome/fontawesome-free-6.1.1-web/all.min.js
+[0722/152917.275398:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/jsComAdapter.js
+[0722/152917.276433:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/dataTransfer.js
+[0722/152917.277458:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/debug.js
+[0722/152917.278464:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/util.js
+[0722/152917.279370:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/util/resize.js
+[0722/152917.280208:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/template.js
+[0722/152917.281025:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/create/createTemplateToolbarItem.js
+[0722/152917.281894:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/edit/editTemplateToolbar.js
+[0722/152917.282707:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/template/toolbar/paste/pasteTemplateToolbar.js
+[0722/152917.283639:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/content/content.js
+[0722/152917.284546:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/font/font.js
+[0722/152917.285323:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/clipboard/clipboard.js
+[0722/152917.286259:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/dragdrop/dragdrop.js
+[0722/152917.287103:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/table/table.js
+[0722/152917.288397:VERBOSE1:file_url_loader_factory.cc(457)] FileURLLoader::Start: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor.js
+[0722/152917.647993:INFO:CONSOLE(57)] "[1658518157645] [DEBUG] init request: [object Object]", source: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor.js (57)
+[0722/152917.653929:INFO:CONSOLE(57)] "[1658518157652] [DEBUG] init request: [object Object]", source: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor.js (57)
+[0722/152917.658906:INFO:CONSOLE(57)] "[1658518157658] [DEBUG] init request: [object Object]", source: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor.js (57)
+[0722/152917.675785:INFO:CONSOLE(57)] "[1658518157673] [DEBUG] init request: [object Object]", source: file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/src/components/editor/editor.js (57)

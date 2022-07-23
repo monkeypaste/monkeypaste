@@ -29,6 +29,13 @@
             <TextBox x:Name="ClipTileTitleTextBox"
                      FontSize="20"
                      BorderThickness="0"
+                     local:MpAvIsFocusedExtension.IsEnabled="True"
+                     local:MpAvIsFocusedExtension.IsReadOnly="{Binding IsReadOnly,
+                                                                       ElementName=ClipTileTitleTextBox}"
+                     local:MpAvIsFocusedExtension.IsFocused="{Binding IsTitleFocused,
+                                                                      Mode=TwoWay}"
+                     local:MpAvIsFocusedExtension.SelectAllOnFocus="True"
+                     local:MpAvIsFocusedExtension.SelectViewModelOnFocus="True"
                      IsReadOnly="{Binding IsTitleReadOnly,
                                           Mode=OneWay}"
                      Foreground="Black"
@@ -39,6 +46,7 @@
         </Grid>
         <!--  Source Icon  -->
         <Grid Grid.Column="1"
+              PointerPressed="SourceIconGrid_PointerPressed"
               HorizontalAlignment="Right"
               Margin="0,0,5,0"
               ClipToBounds="False">

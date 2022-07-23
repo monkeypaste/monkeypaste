@@ -141,7 +141,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public static async Task<MpTextTemplate> Create(
+        public static async Task<MpTextTemplate> CreateAsync(
             string guid = "",
             MpTextTemplateType templateType = MpTextTemplateType.Dynamic,
             string templateName = "", 
@@ -193,6 +193,23 @@ namespace MonkeyPaste {
                 await ccit.WriteToDatabaseAsync();
             }
             return ccit;
+        }
+
+        public MpQuillTextTemplateBlot ToTextTemplateBlot() {
+            return new MpQuillTextTemplateBlot() {
+                templateColor = HexColor,
+                templateData = TemplateData,
+                templateDeltaFormat = TemplateDeltaFormat,
+                templateGuid = Guid,
+                templateName = TemplateName,
+                templateText = TemplateText,
+                templateType = TemplateTypeStr
+            };
+        }
+
+        public static MpTextTemplate FromTextTemplateBlot(MpQuillTextTemplateBlot templateBlot) {
+            return null;
+
         }
 
         public override string ToString() {

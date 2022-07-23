@@ -13,8 +13,9 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvContentWebView">
     <webview:WebView x:Name="WebView"
-                     Navigated="WebView_Navigated"
                      Address="{Binding EditorPath}"
+                     local:MpAvCefWebViewExtension.ContentHtml="{Binding CopyItemData}"
+                     local:MpAvCefWebViewExtension.IsContentReadOnly="{Binding IsContentReadOnly}"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch" />
 </local:MpAvUserControl>

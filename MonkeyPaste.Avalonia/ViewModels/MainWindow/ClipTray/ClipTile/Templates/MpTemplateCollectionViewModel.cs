@@ -276,7 +276,7 @@ namespace MonkeyPaste.Avalonia {
                     if(selectionFormat != null && selectionFormat.inlineFormat != null) {
                         initialFormat = selectionFormat.Serialize();
                     }
-                    var cit = await MpTextTemplate.Create(
+                    var cit = await MpTextTemplate.CreateAsync(
                         templateName: templateName,
                         templateType: templateType,
                         rtfFormatJson: initialFormat);

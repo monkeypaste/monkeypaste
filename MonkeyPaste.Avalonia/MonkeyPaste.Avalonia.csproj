@@ -855,6 +855,7 @@
     <PackageReference Include="Avalonia.MonoMac" Version="0.6.1" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" />
     <PackageReference Include="SharpHook" Version="3.0.2" />
+    <PackageReference Include="WebkitGtkSharp" Version="3.24.24.38" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
     <PackageReference Include="WebViewControl-Avalonia" Version="2.91.27" />
     <PackageReference Include="CefGlue.Avalonia" Version="91.4472.30" />
@@ -862,7 +863,6 @@
     <PackageReference Include="GtkSharp" Version="3.24.24.38" />
     <PackageReference Include="GioSharp" Version="3.24.24.38" />
     <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
-    <PackageReference Include="SharpWebview" Version="0.7.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\Adorners\" />
@@ -881,7 +881,6 @@
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
     <ProjectReference Include="..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj" />
-    <ProjectReference Include="..\webview_csharp\src\SharpWebview\SharpWebview.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Icons\monkey.ico" />

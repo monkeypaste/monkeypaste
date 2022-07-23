@@ -54,6 +54,8 @@ function convertPlainHtml(plainHtml) {
 }
 
 function init(reqMsgStr) {
+	// reqMsgStr is serialized 'MpQuillLoadRequestMessage' object
+
 	log("init request: " + reqMsgStr);
 	//drag/drop notes:
 	// quill.root.removeEventListener('dragstart',getEventListeners(quill.root).dragstart[0].listener)
@@ -80,21 +82,23 @@ function init(reqMsgStr) {
 			itemEncodedHtmlData: sample1
 		}
 	} else if (typeof reqMsgStr === 'string' || reqMsgStr instanceof String) {
-		reqMsg = {
-			envName: 'wpf',
-			isReadOnlyEnabled: true,
-			usedTextTemplates: {},
-			isPasteRequest: false,
-			itemEncodedHtmlData: reqMsgStr
+		if (hasJsonStructure(reqMsgStr)) {
+			//let reqMsgStr_decoded = atob(reqMsgStr);
+			//reqMsg = JSON.parse(reqMsgStr_decoded);
+			reqMsg = JSON.parse(reqMsgStr);
+		} else {
+			reqMsg = {
+				envName: 'wpf',
+				isReadOnlyEnabled: true,
+				usedTextTemplates: {},
+				isPasteRequest: false,
+				itemEncodedHtmlData: reqMsgStr
+			}
 		}
 	} else {
-		//let reqMsgStr_decoded = atob(reqMsgStr);
-		//reqMsg = JSON.parse(reqMsgStr_decoded);
-		reqMsg = JSON.parse(reqMsgStr);
-
-		if (reqMsg.itemEncodedHtmlData) {
-			reqMsg.itemEncodedHtmlData = reqMsg.itemEncodedHtmlData;
-		}
+		log('error loading with reqMsgStr (reloading default): ' + reqMsgStr);
+		init();
+		return;
 	}
 	EnvName = reqMsg.envName;
 
@@ -126,7 +130,20 @@ function init(reqMsgStr) {
 	window.onscroll = onWindowScroll;
 
 	IsLoaded = true;
-	return "GREAT!";
+
+	log('Editor loaded');
+
+	// init response is serialized 'MpQuillLoadResponseMessage'
+	let initResponseMsg = {
+		contentWidth: getContentWidth(),
+		contentHeight: getContentHeight(),
+		decodedTemplateGuids: getDecodedTemplateGuids()
+	}
+	let initResponseMsgStr = JSON.stringify(initResponseMsg);
+	log('init Response: ');
+	log(initResponseMsgStr);
+
+	return initResponseMsgStr;
 }
 
 function loadQuill(reqMsg) {
@@ -182,92 +199,11 @@ function loadQuill(reqMsg) {
 
 	initTableToolbarButton();
 
-	window.addEventListener("click", (e) => {
-		if (
-			e.path.find(
-				(x) => x.classList && x.classList.contains("edit-template-toolbar")
-			) != null ||
-			e.path.find(
-				(x) => x.classList && x.classList.contains("paste-template-toolbar")
-			) != null ||
-			e.path.find(
-				(x) => x.classList && x.classList.contains("context-menu-option")
-			) != null ||
-			e.path.find((x) => x.classList && x.classList.contains("ql-toolbar")) !=
-			null
-		) {
-			//ignore clicks within template toolbars
-			return;
-		}
-		if (
-			e.path.find(
-				(x) => x.classList && x.classList.contains("ql-template-embed-blot")
-			) == null
-		) {
-			hideAllTemplateContextMenus();
-			hideEditTemplateToolbar();
-			hidePasteTemplateToolbar();
-			clearTemplateFocus();
-		}
-	});
+	window.addEventListener("click", onWindowClick);
 
-	quill.on("selection-change", function (range, oldRange, source) {
-		//LastSelectedHtml = SelectedHtml;
-		//SelectedHtml = getSelectedHtml();
-		if (IgnoreNextSelectionChange) {
-			IgnoreNextSelectionChange = false;
-			return;
-		}
+	quill.on("selection-change", onEditorSelectionChanged);
 
-		if (range) {
-			refreshFontSizePicker();
-			refreshFontFamilyPicker();
-
-			if (range.length == 0) {
-				var text = quill.getText(range.index, 1);
-				log("User cursor is at " + range.index + ' idx before "' + text + '"');
-			} else {
-				var text = quill.getText(range.index, range.length);
-				log(
-					"User cursor is at " +
-					range.index +
-					" with length " +
-					range.length +
-					' and selected text "' +
-					text +
-					'"'
-				);
-			}
-
-			refreshTemplatesAfterSelectionChange();
-			updateTemplatesAfterSelectionChanged(range, oldRange, source);
-		} else {
-			log("Cursor not in the editor");
-		}
-		if (!range && oldRange) {
-			//blur occured
-			//quill.setSelection(oldRange);
-		}
-	});
-
-	quill.on("text-change", function (delta, oldDelta, source) {
-		updateAllSizeAndPositions();
-		if (!IsLoaded) {
-			return;
-		}
-		if (IgnoreNextTextChange) {
-			IgnoreNextTextChange = false;
-			return;
-		}
-		let srange = quill.getSelection();
-		if (!srange) {
-			return;
-		}
-
-
-		updateTemplatesAfterTextChanged(delta, oldDelta, source);
-
-	});
+	quill.on("text-change", onEditorTextChanged);
 
 	initContent(reqMsg.itemEncodedHtmlData);
 
@@ -340,10 +276,10 @@ function updateAllSizeAndPositions() {
 	//$(".ql-toolbar").css("position", "fixed");
 	$(".ql-toolbar").css("top", 0);
 
-	if (IsReadOnly() || IsDropping()) {
-		$("#editor").css("top", 0);
+	if (isEditorToolbarVisible()) {
+		$("#editor").css("top", $(".ql-toolbar").outerHeight()); 
 	} else {
-		$("#editor").css("top", $(".ql-toolbar").outerHeight());
+		$("#editor").css("top", 0);
 	}
 
 	let wh = window.visualViewport.height;
@@ -370,6 +306,34 @@ function updateAllSizeAndPositions() {
 	}
 }
 
+function onWindowClick(e) {
+	if (
+		e.path.find(
+			(x) => x.classList && x.classList.contains("edit-template-toolbar")
+		) != null ||
+		e.path.find(
+			(x) => x.classList && x.classList.contains("paste-template-toolbar")
+		) != null ||
+		e.path.find(
+			(x) => x.classList && x.classList.contains("context-menu-option")
+		) != null ||
+		e.path.find((x) => x.classList && x.classList.contains("ql-toolbar")) !=
+		null
+	) {
+		//ignore clicks within template toolbars
+		return;
+	}
+	if (
+		e.path.find(
+			(x) => x.classList && x.classList.contains("ql-template-embed-blot")
+		) == null
+	) {
+		hideAllTemplateContextMenus();
+		hideEditTemplateToolbar();
+		hidePasteTemplateToolbar();
+		clearTemplateFocus();
+	}
+}
 
 function onWindowScroll(e) {
 	if (IsReadOnly()) {
@@ -377,6 +341,67 @@ function onWindowScroll(e) {
 	}
 
 	updateAllSizeAndPositions();
+}
+
+function onEditorSelectionChanged(range, oldRange, source) {
+	//LastSelectedHtml = SelectedHtml;
+	//SelectedHtml = getSelectedHtml();
+	if (IgnoreNextSelectionChange) {
+		IgnoreNextSelectionChange = false;
+		return;
+	}
+
+	if (range) {
+		refreshFontSizePicker();
+		refreshFontFamilyPicker();
+
+		if (range.length == 0) {
+			var text = quill.getText(range.index, 1);
+			log("User cursor is at " + range.index + ' idx before "' + text + '"');
+		} else {
+			var text = quill.getText(range.index, range.length);
+			log(
+				"User cursor is at " +
+				range.index +
+				" with length " +
+				range.length +
+				' and selected text "' +
+				text +
+				'"'
+			);
+		}
+
+		refreshTemplatesAfterSelectionChange();
+		updateTemplatesAfterSelectionChanged(range, oldRange, source);
+	} else {
+		log("Cursor not in the editor");
+	}
+	if (!range) {
+		if (oldRange) {
+			//blur occured
+			quill.setSelection(oldRange);
+		} else {
+			return;
+		}
+		
+	}
+}
+
+function onEditorTextChanged(delta, oldDelta, source) {
+	updateAllSizeAndPositions();
+	if (!IsLoaded) {
+		return;
+	}
+	if (IgnoreNextTextChange) {
+		IgnoreNextTextChange = false;
+		return;
+	}
+	let srange = quill.getSelection();
+	if (!srange) {
+		return;
+	}
+
+	updateTemplatesAfterTextChanged(delta, oldDelta, source);
 }
 
 function setText(text) {
@@ -404,10 +429,13 @@ function setContents(jsonStr) {
 }
 
 function getText() {
-	//var text = quill.getText(0, quill.getLength() - 1);
-	//return text;
-	var text = quill.root.innerText;
-	return text;
+	if (quill && quill.root) {
+		//var text = quill.getText(0, quill.getLength() - 1);
+		//return text;
+		var text = quill.root.innerText;
+		return text;
+	}
+	return '';
 }
 
 function getSelectedText() {
@@ -416,14 +444,16 @@ function getSelectedText() {
 }
 
 function getHtml() {
-	//var val = document.getElementsByClassName("ql-editor")[0].innerHTML;
-	clearTemplateFocus();
-	var val = quill.root.innerHTML;
-	//log('getHtml response');
-	//log(val);
+	if (quill && quill.root) {
+		//var val = document.getElementsByClassName("ql-editor")[0].innerHTML;
+		clearTemplateFocus();
+		var val = quill.root.innerHTML;
+		//log('getHtml response');
+		//log(val);
 
-	return val;
-	// return val;
+		return val;
+	}
+	return '';
 }
 
 function getEncodedHtml() {
@@ -605,8 +635,6 @@ function enableReadOnly() {
 	scrollToHome();
 	hideScrollbars();
 
-	updateAllSizeAndPositions();
-
 	//return 'MpQuillResponseMessage'  updated master collection of templates
 	let qrmObj = {
 		itemEncodedHtmlData: getEncodedHtml(),
@@ -646,8 +674,6 @@ function disableReadOnly(disableReadOnlyReqStrOrObj) {
 	if (!disableReadOnlyMsg.isSilent) {
 		showEditorToolbar();
 		showScrollbars();
-
-		updateAllSizeAndPositions();
 	}
 	
 
@@ -659,7 +685,7 @@ function disableReadOnly(disableReadOnlyReqStrOrObj) {
 	//$('.ql-editor').css('width', DefaultEditorWidth);
 	//document.body.style.minHeight = disableReadOnlyMsg.editorHeight;
 
-	//updateAllSizeAndPositions();
+	updateAllSizeAndPositions();
 
 	let droMsgObj = { editorWidth: DefaultEditorWidth };
 	let droMsgJsonStr = JSON.stringify(droMsgObj);
@@ -702,6 +728,10 @@ function showEditorToolbar() {
 			.classList.add("ql-toolbar-env-wpf");
 	}
 	updateAllSizeAndPositions();
+}
+
+function isEditorToolbarVisible() {
+	return !document.getElementsByClassName("ql-toolbar")[0].classList.contains('hidden');
 }
 
 function getEditorWidth() {

@@ -19,6 +19,13 @@ namespace MonkeyPaste {
         public List<MpTextTemplate> usedTextTemplates { get; set; }
     }
 
+    public class MpQuillLoadResponseMessage : MpJsonObject {
+        public double contentWidth { get; set; }
+        public double contentHeight { get; set; }
+
+        public List<string> decodedTemplateGuids { get; set; }
+    }
+
     public class MpQuillDisableReadOnlyRequestMessage : MpJsonObject {
         public List<MpTextTemplate> allAvailableTextTemplates { get; set; }
         public double editorHeight { get; set; }
@@ -34,5 +41,31 @@ namespace MonkeyPaste {
         public List<string> userDeletedTemplateGuids { get; set; }
         public List<MpTextTemplate> updatedAllAvailableTextTemplates { get; set; }
     }
-    
+
+    public class MpQuillTextTemplateBlot : MpJsonObject {
+        /*
+        isFocus: "false"
+templateColor: "#6F562C"
+templateData: ""
+templateDeltaFormat: "[object Object]"
+templateGuid: "1cd87443-ee3c-46bb-b4f1-925205fc0f55"
+templateHtmlFormat: "Template #1"
+templateInstanceGuid: "21d2ea4d-64b0-491e-8552-8cee6c8af75e"
+templateName: "Template #1"
+templateText: "undefined"
+templateType: "dynamic"
+        */
+        public bool isFocus { get; set; }
+        public string templateColor { get; set; }
+        public string templateData { get; set; }
+        public string templateDeltaFormat { get; set; }
+        public string templateGuid { get; set; }
+        public string templateInstanceGuid { get; set; }
+        public string templateName { get; set; }
+        public string templateText { get; set; }
+        public string templateType { get; set; }
+
+
+    }
+
 }

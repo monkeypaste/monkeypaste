@@ -42,10 +42,10 @@ namespace MonkeyPaste.Avalonia {
 
                     string cefCacheDir = Path.Combine(Environment.CurrentDirectory, "cefcache");
                     if (Directory.Exists(cefCacheDir)) {
-                        //Directory.CreateDirectory(cefCacheDir);
-                        Directory.Delete(cefCacheDir);
+                        Directory.Delete(cefCacheDir,true);
                     }
-                    //WebView.Settings.CachePath = cefCacheDir;
+                    Directory.CreateDirectory(cefCacheDir);
+                    WebView.Settings.CachePath = cefCacheDir;
                 }
 
 

@@ -639,7 +639,8 @@ namespace MpWpfApp {
                 }
             }
 
-            // get ranges of templates encoded from db (will be present on initial load, after saving content or when new template is added/created)
+            // get ranges of templates encoded from db
+            // (will be present on initial load, after saving content or when new template is added/created)
             var templateEncodedRanges = GetEncodedRanges(rtb.Document, MpTextTemplate.TextTemplateOpenToken, MpTextTemplate.TextTemplateCloseToken);
             //var templateEncodedRanges = GetEncodedTemplates(rtb.Document).ToArray();
 

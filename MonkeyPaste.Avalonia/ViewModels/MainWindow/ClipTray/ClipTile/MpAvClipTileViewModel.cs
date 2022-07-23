@@ -1005,9 +1005,6 @@ namespace MonkeyPaste.Avalonia {
 
         public MpSourceViewModel SourceViewModel {
             get {
-                //if(MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
-                //    return null;
-                //}
                 var svm = MpSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == SourceId);
                 if (svm == null) {
                     return MpSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == MpPrefViewModel.Instance.ThisAppSourceId);
@@ -1016,9 +1013,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpAppViewModel AppViewModel => SourceViewModel.AppViewModel;
+        public MpAppViewModel AppViewModel => SourceViewModel == null ? null : SourceViewModel.AppViewModel;
 
-        public MpUrlViewModel UrlViewModel => SourceViewModel.UrlViewModel;
+        public MpUrlViewModel UrlViewModel => SourceViewModel == null ? null : SourceViewModel.UrlViewModel;
 
         public MpAvClipTileViewModel Next {
             get {
@@ -1079,7 +1076,6 @@ namespace MonkeyPaste.Avalonia {
         #region MpIShortcutCommandViewModel Implementation
 
         public MpShortcutType ShortcutType => MpShortcutType.PasteCopyItem;
-
         public string ShortcutLabel => "Paste " + CopyItemTitle;
         public int ModelId => CopyItemId;
         public ICommand ShortcutCommand => Parent == null ? null : Parent.PasteCopyItemByIdCommand;
@@ -1579,9 +1575,8 @@ namespace MonkeyPaste.Avalonia {
 
             await TitleSwirlViewModel.InitializeAsync();
 
-            _detailIdx = 0;
-            DetailText = string.Empty;
-
+            _detailIdx = -1;
+            CycleDetailCommand.Execute(null);
 
             if (ItemType == MpCopyItemType.Image) {
                 DetectedImageObjectCollectionViewModel = new MpImageAnnotationCollectionViewModel(this);

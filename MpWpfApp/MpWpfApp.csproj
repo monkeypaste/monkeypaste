@@ -3055,7 +3055,7 @@
       <Name>MonkeyPaste</Name>
     </ProjectReference>
     <ProjectReference Include="..\MpProcessHelper\MpProcessHelper.csproj">
-      <Project>{56e5faad-0c31-400f-b95f-d83517c07ed3}</Project>
+      <Project>{56E5FAAD-0C31-400F-B95F-D83517C07ED3}</Project>
       <Name>MpProcessHelper</Name>
     </ProjectReference>
   </ItemGroup>

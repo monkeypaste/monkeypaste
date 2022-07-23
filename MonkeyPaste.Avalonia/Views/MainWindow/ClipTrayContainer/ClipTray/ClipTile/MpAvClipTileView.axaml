@@ -57,8 +57,11 @@
               VerticalAlignment="Stretch">
             <!--  Title  -->
             <Grid Grid.Row="0"
-                  MaxHeight="50">
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch">
                 <local:MpAvClipTileTitleView DataContext="{Binding}"
+                                             HorizontalAlignment="Stretch"
+                                             VerticalAlignment="Stretch"
                                              IsVisible="{Binding IsTitleVisible}" />
                 <!--  Hide Title Button  -->
 
