@@ -44,7 +44,7 @@ namespace MonkeyPaste.Common {
             if (string.IsNullOrEmpty(text)) {
                 return false;
             }
-            if (text.StartsWith("pack:")) {
+            if (text.StartsWith("pack:") || text.StartsWith("avares:")) {
                 return true;
             }
             if (_resourceNames == null) {

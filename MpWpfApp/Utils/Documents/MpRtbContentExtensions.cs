@@ -466,7 +466,7 @@ namespace MpWpfApp {
                         var origin = tr.Start.GetCharacterRect(LogicalDirection.Forward).Location;
                         origin = iuic.FindParentOfType<RichTextBox>().TranslatePoint(origin, Application.Current.MainWindow);
 
-                        MpContextMenuView.Instance.DataContext = tvm.MenuItemViewModel;
+                        MpContextMenuView.Instance.DataContext = tvm.ContextMenuItemViewModel;
                         //MpContextMenuView.Instance.PlacementRectangle = new Rect(origin,new Size(200,50));
 
                         iuic.ContextMenu = MpContextMenuView.Instance;

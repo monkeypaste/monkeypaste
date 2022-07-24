@@ -31,9 +31,11 @@
             <Setter.Value>
                 <LinearGradientBrush EndPoint="0,1">
                     <GradientStop Offset="0"
-                                  Color="{Binding Source={x:Static common:MpSystemColors.DefaultControlBackground1}, Mode=OneWay}" />
+                                  Color="{Binding Source={x:Static common:MpSystemColors.DefaultControlBackground1},
+                                                  Mode=OneWay}" />
                     <GradientStop Offset="1"
-                                  Color="{Binding Source={x:Static common:MpSystemColors.DefaultControlBackground2}, Mode=OneWay}" />
+                                  Color="{Binding Source={x:Static common:MpSystemColors.DefaultControlBackground2},
+                                                  Mode=OneWay}" />
                 </LinearGradientBrush>
             </Setter.Value>
         </Setter>

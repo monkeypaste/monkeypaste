@@ -12,7 +12,7 @@ using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
     public class MpShortcutCollectionViewModel : 
-        MpSelectorViewModelBase<object,MpShortcutViewModel>, 
+        MpAvSelectorViewModelBase<object,MpShortcutViewModel>, 
         MpIAsyncSingletonViewModel<MpShortcutCollectionViewModel>{
         #region Private Variables
 

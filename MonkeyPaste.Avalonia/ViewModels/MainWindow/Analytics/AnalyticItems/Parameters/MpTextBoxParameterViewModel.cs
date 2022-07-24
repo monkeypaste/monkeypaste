@@ -25,7 +25,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpMenuItemViewModel MenuItemViewModel {
+        public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 var tmivml = new List<MpMenuItemViewModel>();
                 var propertyPathLabels = typeof(MpCopyItemPropertyPathType).EnumToLabels();

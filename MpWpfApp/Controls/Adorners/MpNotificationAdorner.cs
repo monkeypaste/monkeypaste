@@ -16,7 +16,7 @@ namespace MpWpfApp {
     public class MpNotificationAdorner : Adorner {
         #region Private Variables
         
-        private MpIHasNotification _notifier;
+        private MpIBadgeNotificationViewModel _notifier;
 
         #endregion
 
@@ -27,7 +27,7 @@ namespace MpWpfApp {
                 if(_notifier == null) {
                     return false;
                 }
-                return _notifier.HasNotification;
+                return _notifier.HasBadgeNotification;
             }
         }
 
@@ -35,8 +35,8 @@ namespace MpWpfApp {
 
         #region Public Methods
         public MpNotificationAdorner(UIElement uie) : base(uie) { 
-            if(uie != null && uie is FrameworkElement fe && fe.DataContext is MpIHasNotification) {
-                _notifier = fe.DataContext as MpIHasNotification;
+            if(uie != null && uie is FrameworkElement fe && fe.DataContext is MpIBadgeNotificationViewModel) {
+                _notifier = fe.DataContext as MpIBadgeNotificationViewModel;
             }
         }
         #endregion

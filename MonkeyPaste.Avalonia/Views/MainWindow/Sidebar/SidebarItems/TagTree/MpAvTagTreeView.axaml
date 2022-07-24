@@ -1,0 +1,53 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:TypeArguments="local:MpAvTagTrayViewModel"
+                       x:DataType="local:MpAvTagTrayViewModel"
+                       x:CompileBindings="True"
+                       DataContext="{x:Static local:MpAvTagTrayViewModel.Instance}"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvTagTreeView">
+    <Grid>
+        <!--
+            local:MpAvSizeObserverExtension.IsEnabled="True"
+            local:MpAvSizeObserverExtension.ObservedWidth="{Binding SidebarWidth,
+            Mode=OneWayToSource}"
+            local:MpAvSizeObserverExtension.ObservedHeight="{Binding SidebarHeight,
+            Mode=OneWayToSource}"
+        -->
+        <TreeView Items="{Binding RootItems}"
+                  Background="Orange"
+                  SelectedItems="{Binding SelectedTagTile}"
+                  SelectionMode="Single"
+                  MinWidth="{Binding DefaultSidebarWidth}"
+                  MinHeight="{Binding DefaultSidebarHeight}"
+                  IsVisible="{Binding IsSidebarVisible}"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch">
+            <TreeView.Styles>
+                <Style Selector="TreeViewItem">
+                    <Setter Property="MinHeight"
+                            Value="40" />
+                </Style>
+            </TreeView.Styles>
+            <TreeView.ItemTemplate>
+                <TreeDataTemplate DataType="{x:Type local:MpAvTagTileViewModel}"
+                                  ItemsSource="{Binding Children}">
+                    <local:MpAvTagView local:MpAvMenuExtension.SelectOnRightClick="False"
+                                       local:MpAvMenuExtension.IsOpen="{Binding IsContextMenuOpened,
+                                                                                Mode=TwoWay}"
+                                       local:MpAvMenuExtension.IsEnabled="True"
+                                       local:MpAvIsHoveringExtension.IsEnabled="True"
+                                       local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering,
+                                                                                          Mode=TwoWay}"
+                                       local:MpAvIsHoveringExtension.HoverCursor="Hand"
+                                       DataContext="{Binding}" />
+                </TreeDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+    </Grid>
+</local:MpAvUserControl>

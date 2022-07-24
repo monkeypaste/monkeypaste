@@ -13,7 +13,7 @@ using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
     public class MpUrlCollectionViewModel : 
-        MpSelectorViewModelBase<object,MpUrlViewModel>, 
+        MpAvSelectorViewModelBase<object,MpUrlViewModel>, 
         MpIAsyncSingletonViewModel<MpUrlCollectionViewModel> {
         #region Properties
 

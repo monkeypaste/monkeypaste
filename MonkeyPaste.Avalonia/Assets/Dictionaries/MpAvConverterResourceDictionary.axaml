@@ -11,4 +11,5 @@
     <local:MpAvStringBase64ToBitmapConverter x:Key="MpAvStringBase64ToBitmapConverter" />
     <local:MpAvIsBrightToBrushConverter x:Key="IsBrightToBrushConverter" />
     <local:MpAvIsBrightToColorConverter x:Key="IsBrightToColorConverter" />
+    <local:MpAvItemToItemsSourceConverter x:Key="ItemToItemsSourceConverter" />
 </ResourceDictionary>

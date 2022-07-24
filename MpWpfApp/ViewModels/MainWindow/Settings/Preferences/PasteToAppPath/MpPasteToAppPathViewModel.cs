@@ -28,7 +28,7 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        public MpMenuItemViewModel MenuItemViewModel {
+        public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 return new MpMenuItemViewModel() {
                     Header = IsRuntime ? Label + (IsAdmin ? " (Admin)" : string.Empty) : Label,

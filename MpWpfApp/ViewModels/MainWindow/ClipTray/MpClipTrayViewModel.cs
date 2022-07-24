@@ -285,7 +285,7 @@ namespace MpWpfApp {
                                 },
                             }
                         },
-                        MpAnalyticItemCollectionViewModel.Instance.MenuItemViewModel,
+                        MpAnalyticItemCollectionViewModel.Instance.ContextMenuItemViewModel,
                         new MpMenuItemViewModel() {
                             Header = "_Select",
                             IconResourceKey = Application.Current.Resources["SelectionIcon"] as string,

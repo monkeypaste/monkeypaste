@@ -11,7 +11,7 @@ using MonkeyPaste;
 namespace MonkeyPaste.Avalonia {
 
     public class MpSourceCollectionViewModel : 
-        MpSelectorViewModelBase<object,MpSourceViewModel>, 
+        MpAvSelectorViewModelBase<object,MpSourceViewModel>, 
         MpIAsyncSingletonViewModel<MpSourceCollectionViewModel> {
         #region Properties
 

@@ -19,7 +19,7 @@ using Avalonia.Controls.Primitives.PopupPositioning;
 
 namespace MonkeyPaste.Avalonia {
     public class MpActionCollectionViewModel : 
-        MpSelectorViewModelBase<object,MpAvTriggerActionViewModelBase>, 
+        MpAvSelectorViewModelBase<object,MpAvTriggerActionViewModelBase>, 
         MpIMenuItemViewModel,
         MpIAsyncSingletonViewModel<MpActionCollectionViewModel>,
         MpIHoverableViewModel,
@@ -35,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpMenuItemViewModel MenuItemViewModel {
+        public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 var tmivml = new List<MpMenuItemViewModel>();
                 var triggerLabels = typeof(MpTriggerType).EnumToLabels("Select Trigger");
@@ -463,7 +463,7 @@ namespace MonkeyPaste.Avalonia {
              (args) => {
                  var fe = args as Control;
                  var cm = MpAvContextMenuView.Instance;
-                 cm.DataContext = MenuItemViewModel;
+                 cm.DataContext = ContextMenuItemViewModel;
                  fe.ContextMenu = cm;
                  fe.ContextMenu.PlacementTarget = fe;
                  fe.ContextMenu.PlacementAnchor = PopupAnchor.Right;//Placement = System.Windows.Controls.Primitives.PlacementMode.Right;

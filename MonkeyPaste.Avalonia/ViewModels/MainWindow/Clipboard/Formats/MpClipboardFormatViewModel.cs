@@ -11,7 +11,7 @@ using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpClipboardFormatViewModel : 
-        MpSelectorViewModelBase<MpClipboardHandlerCollectionViewModel,MpClipboardHandlerItemViewModel>,
+        MpAvSelectorViewModelBase<MpClipboardHandlerCollectionViewModel,MpClipboardHandlerItemViewModel>,
         MpITreeItemViewModel,
         MpISelectableViewModel {
 

@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public class MpClipboardFormatPresetViewModel : 
-        MpSelectorViewModelBase<MpHandledClipboardFormatViewModel,MpPluginParameterViewModelBase>,
+        MpAvSelectorViewModelBase<MpHandledClipboardFormatViewModel,MpPluginParameterViewModelBase>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpISidebarItemViewModel,

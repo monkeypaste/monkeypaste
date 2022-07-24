@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAnalyticItemPresetViewModel : 
-        MpSelectorViewModelBase<MpAnalyticItemViewModel, MpPluginParameterViewModelBase>,
+        MpAvSelectorViewModelBase<MpAnalyticItemViewModel, MpPluginParameterViewModelBase>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpIMenuItemViewModel,
@@ -36,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
                 return paraDict;
             }
         }
-        public MpMenuItemViewModel MenuItemViewModel {
+        public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 return new MpMenuItemViewModel() {
                     Header = Label,

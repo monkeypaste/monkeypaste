@@ -10,4 +10,9 @@ namespace MonkeyPaste {
         MpISidebarItemViewModel NextSidebarItem { get; }
         MpISidebarItemViewModel PreviousSidebarItem { get; }
     }
+
+    public interface MpIOrientedSidebarItemViewModel : MpISidebarItemViewModel{
+        double DefaultSidebarHeight { get; }
+        double SidebarHeight { get; set; }
+    }
 }

@@ -22,7 +22,7 @@ namespace MpWpfApp {
         MpIHierarchialViewModel<MpTagTileViewModel>,
         //MpITreeItemViewModel,
         MpIShortcutCommand, 
-        MpIHasNotification,
+        MpIBadgeNotificationViewModel,
         MpIUserColorViewModel,
         MpIActionComponent,
         MpIMenuItemViewModel{
@@ -133,7 +133,7 @@ namespace MpWpfApp {
             }
         }
 
-        public MpMenuItemViewModel MenuItemViewModel {
+        public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 return new MpMenuItemViewModel() {
                     SubItems = new List<MpMenuItemViewModel>() {
@@ -221,7 +221,7 @@ namespace MpWpfApp {
 
         #region MpIHasNotification Implementation
 
-        public bool HasNotification { get; set; } = false;
+        public bool HasBadgeNotification { get; set; } = false;
 
         #endregion
 

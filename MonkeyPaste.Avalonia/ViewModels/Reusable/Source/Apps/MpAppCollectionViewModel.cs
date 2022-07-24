@@ -16,7 +16,7 @@ using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAppCollectionViewModel : 
-        MpSelectorViewModelBase<object,MpAppViewModel>, 
+        MpAvSelectorViewModelBase<object,MpAppViewModel>, 
         MpIAsyncSingletonViewModel<MpAppCollectionViewModel> {
         #region Private Variables
 

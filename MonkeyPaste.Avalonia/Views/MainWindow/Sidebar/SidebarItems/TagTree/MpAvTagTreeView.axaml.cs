@@ -1,0 +1,20 @@
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Markup.Xaml;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
+using System.Linq;
+
+namespace MonkeyPaste.Avalonia {
+    public partial class MpAvTagTreeView : MpAvUserControl<MpAvTagTrayViewModel> {
+
+        public MpAvTagTreeView() {
+            InitializeComponent();
+        }
+
+        private void InitializeComponent() {
+            AvaloniaXamlLoader.Load(this);
+        }        
+    }
+}

@@ -44,7 +44,7 @@ namespace MpWpfApp {
                 return paraDict;
             }
         }
-        public MpMenuItemViewModel MenuItemViewModel {
+        public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 return new MpMenuItemViewModel() {
                     Header = Label,

@@ -15,7 +15,7 @@ using Avalonia.Input;
 namespace MonkeyPaste.Avalonia {
 
     public class MpClipboardHandlerCollectionViewModel : 
-        MpSelectorViewModelBase<object,MpClipboardHandlerItemViewModel>,
+        MpAvSelectorViewModelBase<object,MpClipboardHandlerItemViewModel>,
         MpIMenuItemViewModel,
         MpIAsyncSingletonViewModel<MpClipboardHandlerCollectionViewModel>, 
         MpITreeItemViewModel,
@@ -25,12 +25,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpMenuItemViewModel MenuItemViewModel {
+        public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 return new MpMenuItemViewModel() {
                     Header = @"_Transform",
                     IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("ButterflyImage") as string,
-                    SubItems = Items.Select(x => x.MenuItemViewModel).ToList()
+                    SubItems = Items.Select(x => x.ContextMenuItemViewModel).ToList()
                 };
             }
         }

@@ -29,12 +29,12 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public MpMenuItemViewModel MenuItemViewModel {
+        public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 return new MpMenuItemViewModel() {
                     Header = @"_Transform",
                     IconResourceKey = Application.Current.Resources["ButterflyIcon"] as string,
-                    SubItems = Items.Select(x => x.MenuItemViewModel).ToList()
+                    SubItems = Items.Select(x => x.ContextMenuItemViewModel).ToList()
                 };
             }
         }

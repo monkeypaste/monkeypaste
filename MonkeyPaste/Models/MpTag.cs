@@ -11,9 +11,9 @@ using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 namespace MonkeyPaste {
     public class MpTag : MpDbModelBase, MpISyncableDbObject {
         //public const int RecentTagId = 1;
-        public const int AllTagId = 2;
-        public const int FavoritesTagId = 3;
-        //public const int HelpTagId = 4;
+        public static int AllTagId = 1;
+        public static int FavoritesTagId = 2;
+        public static int HelpTagId = 3;
         //public const int RootTagId = 5;
 
         #region Columns

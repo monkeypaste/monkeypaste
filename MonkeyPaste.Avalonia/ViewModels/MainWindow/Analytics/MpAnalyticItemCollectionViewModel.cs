@@ -25,7 +25,7 @@ namespace MonkeyPaste.Avalonia {
     }
 
     public class MpAnalyticItemCollectionViewModel : 
-        MpSelectorViewModelBase<object,MpAnalyticItemViewModel>,
+        MpAvSelectorViewModelBase<object,MpAnalyticItemViewModel>,
         MpIMenuItemViewModel,
         MpIAsyncSingletonViewModel<MpAnalyticItemCollectionViewModel>, 
         MpITreeItemViewModel,
@@ -45,13 +45,13 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAnalyticItemViewModel HttpAutomationViewModel => Items.FirstOrDefault(x => x.PluginGuid == _httpAutomationGuid);
 
-        public MpMenuItemViewModel MenuItemViewModel {
+        public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 List<MpMenuItemViewModel> subItems = Items.SelectMany(x => x.QuickActionPresetMenuItems).ToList();
                 if(subItems.Count > 0) {
                     subItems.Add(new MpMenuItemViewModel() { IsSeparator = true });
                 }
-                subItems.AddRange(Items.Select(x => x.MenuItemViewModel));
+                subItems.AddRange(Items.Select(x => x.ContextMenuItemViewModel));
 
                 return new MpMenuItemViewModel() {
                     Header = @"_Analyze",

@@ -12,9 +12,9 @@ namespace MonkeyPaste {
         MpITreeItemViewModel<T>,
         MpIHoverableViewModel,
         MpIFocusableViewModel,
-        MpISelectableViewModel,
+        MpISelectableViewModel
         //MpIEditableViewModel,
-        MpIMenuItemViewModel 
+        //MpIMenuItemViewModel 
         where T:MpViewModelBase, MpITreeItemViewModel {
 
         string Label { get; set; }

@@ -147,7 +147,7 @@ namespace MpWpfApp {
 
         #region MpIMenuItemViewModel Implementation
 
-        public virtual MpMenuItemViewModel MenuItemViewModel {
+        public virtual MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 var amivml = new List<MpMenuItemViewModel>();
                 var triggerLabels = typeof(MpActionType).EnumToLabels();
@@ -1049,7 +1049,7 @@ namespace MpWpfApp {
                  //LastSelectedDateTime = DateTime.Now;
                  IsSelected = true;
 
-                 cm.DataContext = MenuItemViewModel;
+                 cm.DataContext = ContextMenuItemViewModel;
                  fe.ContextMenu = cm;
                  fe.ContextMenu.PlacementTarget = fe;
                  fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;

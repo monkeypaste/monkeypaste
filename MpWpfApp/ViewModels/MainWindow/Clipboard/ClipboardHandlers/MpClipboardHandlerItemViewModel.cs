@@ -64,7 +64,7 @@ namespace MpWpfApp {
 
         #region MpIMenuItemViewModel Implementation
 
-        public MpMenuItemViewModel MenuItemViewModel { get; }
+        public MpMenuItemViewModel ContextMenuItemViewModel { get; }
 
         #endregion
 

@@ -1,0 +1,106 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="local:MpAvTagTileViewModel"
+                       x:DataType="local:MpAvTagTileViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       x:Class="MonkeyPaste.Avalonia.MpAvTagView">
+    <!--<AdornerLayer>-->
+    <!--
+        local:MpAvMenuExtension.SelectOnRightClick="False"
+        local:MpAvMenuExtension.IsOpen="{Binding IsContextMenuOpened,
+        Mode=TwoWay}"
+        local:MpAvMenuExtension.IsEnabled="True"
+    -->
+
+    <!--<Grid ColumnDefinitions="20,*"
+          local:MpAvBadgeNotificationExtension.IsEnabled="True">
+    -->
+    <!--<Grid.ContextMenu>
+            <local:MpAvContextMenuView Items="{Binding ContextMenuViewModel.SubItems}" />
+        </Grid.ContextMenu>-->
+    <!--
+        <TextBlock Text="{Binding TagClipCount}"
+                   Grid.Column="0" />
+        <TextBlock Text="{Binding TagName}"
+                   Grid.Column="1" />
+    </Grid>-->
+    <Grid ColumnDefinitions="*,Auto">
+        <local:MpAvClipBorder local:MpAvSizeObserverExtension.IsEnabled="True"
+                              local:MpAvSizeObserverExtension.ObservedWidth="{Binding TagTileTrayWidth,
+                                                                                      Mode=OneWayToSource}"
+                              CornerRadius="7"
+                              Margin="5,0,0,0"
+                              Padding="1"
+                              Focusable="False"
+                              VerticalAlignment="Stretch"
+                              HorizontalAlignment="Left"
+                              MinHeight="20"
+                              Background="{Binding TagBorderBackgroundHexColor,
+                                                   Converter={StaticResource StringHexToBrushConverter}}"
+                              BorderBrush="{Binding TagTrayBorderHexColor,
+                                                    Converter={StaticResource StringHexToBrushConverter}}"
+                              BorderThickness="1.5">
+            <Grid ColumnDefinitions="*,*">
+                <!--  Tag Count Box  -->
+                <local:MpAvClipBorder CornerRadius="5"
+                                      Grid.Column="0"
+                                      MinWidth="20"
+                                      Margin="1"
+                                      Padding="4,1"
+                                      BorderThickness="0"
+                                      Background="{Binding TagHexColor,
+                                                           Converter={StaticResource StringHexToBrushConverter}}">
+                    <TextBlock Background="Transparent"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Text="{Binding TagClipCount}"
+                               Foreground="{Binding TagCountTextHexColor,
+                                                    Converter={StaticResource StringHexToBrushConverter}}" />
+
+                </local:MpAvClipBorder>
+                <Grid Grid.Column="1"
+                      ClipToBounds="True"
+                      Margin="5,0,0,0"
+                      MaxHeight="20"
+                      MaxWidth="200">
+                    <TextBox local:MpAvIsFocusedExtension.IsEnabled="True"
+                             local:MpAvIsFocusedExtension.SelectViewModelOnFocus="False"
+                             local:MpAvIsFocusedExtension.IsFocused="{Binding IsTagNameTrayTextBoxFocused,
+                                                                              Mode=TwoWay}"
+                             Background="Transparent"
+                             Foreground="Black"
+                             Margin="0"
+                             Padding="0"
+                             BorderThickness="0"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             IsReadOnly="{Binding IsTagNameTreeReadOnly,
+                                                  Mode=OneWay}"
+                             FontSize="16"
+                             Text="{Binding TagName,
+                                            Mode=TwoWay}" />
+                </Grid>
+            </Grid>
+        </local:MpAvClipBorder>
+        <Button x:Name="AddTagButton"
+                HorizontalAlignment="Left"
+                Grid.Column="1"
+                IsVisible="{Binding IsHovering}"
+                CornerRadius="7"
+                Command="{Binding AddChildTagCommand}">
+            <ToolTip.Tip>
+                <local:MpAvTooltipView ToolTipText="Add Sub Item" />
+            </ToolTip.Tip>
+            <Image Stretch="Fill"
+                   Height="20"
+                   Width="20"
+                   Source="/Assets/Images/add4.png" />
+        </Button>
+    </Grid>
+    <!--</AdornerLayer>-->
+</local:MpAvUserControl>

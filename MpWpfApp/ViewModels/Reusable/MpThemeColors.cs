@@ -64,7 +64,6 @@ namespace MpWpfApp {
 
         public List<List<Brush>> ContentColors {
             get {
-                
                 return new List<List<Brush>> {
                     new List<Brush> {
                         new SolidColorBrush(Color.FromRgb(248, 160, 174)),

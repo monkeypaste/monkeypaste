@@ -9,7 +9,7 @@ namespace MonkeyPaste {
     public interface MpIMenuItemViewModelBase { }
 
     public interface MpIMenuItemViewModel : MpIMenuItemViewModelBase {
-        MpMenuItemViewModel MenuItemViewModel { get; }
+        MpMenuItemViewModel ContextMenuItemViewModel { get; }
     }
 
     public interface MpIContextMenuViewModel : MpIMenuItemViewModelBase {
@@ -83,6 +83,9 @@ namespace MonkeyPaste {
 
         public bool IsHovering { get; set; }
 
+        public bool IsCustomColorButton { get; set; }
+
+        public int SortOrderIdx { get; set; }
         #endregion
 
         #region Appearance
@@ -181,6 +184,7 @@ namespace MonkeyPaste {
         #region Constructors
 
         public MpMenuItemViewModel() : base(null) { }
+
         #endregion
 
         #region Public Methods
@@ -211,29 +215,27 @@ namespace MonkeyPaste {
                     command = SetColorCommand;
                     commandArg = new object[] { ucvm, cc };
                 }
+
                 colors.Add(new MpMenuItemViewModel() {
                     IsSelected = isSelected,
                     Header = header,
                     Command = command,
                     CommandParameter = commandArg,
-                    IsVisible = isCustom
+                    IsVisible = isCustom,
+                    IsCustomColorButton = isCustom,
+                    SortOrderIdx = i
                 });
             }
             
             return new MpMenuItemViewModel() {
                 IsColorPallete = true,
-                SubItems = colors
+                SubItems = colors.OrderBy(x=>x.SortOrderIdx).ToList()
             };
         }
 
         #endregion
 
         #region Private Methods
-
-        private void MpContextMenuItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            //switch (e.PropertyName) {
-            //}
-        }
 
         #endregion
 
@@ -252,5 +254,5 @@ namespace MonkeyPaste {
             });
 
         #endregion
-    }
+    }    
 }

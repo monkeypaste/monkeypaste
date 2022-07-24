@@ -19,7 +19,7 @@ using System.IO;
 
 namespace MonkeyPaste.Avalonia {
     public class MpHandledClipboardFormatViewModel :
-        MpSelectorViewModelBase<MpClipboardHandlerItemViewModel,MpClipboardFormatPresetViewModel>,
+        MpAvSelectorViewModelBase<MpClipboardHandlerItemViewModel,MpClipboardFormatPresetViewModel>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpITreeItemViewModel {

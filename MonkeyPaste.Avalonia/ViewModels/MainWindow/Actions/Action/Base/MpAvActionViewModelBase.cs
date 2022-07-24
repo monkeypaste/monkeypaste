@@ -150,7 +150,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIMenuItemViewModel Implementation
 
-        public virtual MpMenuItemViewModel MenuItemViewModel {
+        public virtual MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 var amivml = new List<MpMenuItemViewModel>();
                 var triggerLabels = typeof(MpActionType).EnumToLabels();
@@ -1052,7 +1052,7 @@ namespace MonkeyPaste.Avalonia {
                  //LastSelectedDateTime = DateTime.Now;
                  IsSelected = true;
 
-                 cm.DataContext = MenuItemViewModel;
+                 cm.DataContext = ContextMenuItemViewModel;
                  fe.ContextMenu = cm;
                  fe.ContextMenu.PlacementTarget = fe;
                  fe.ContextMenu.PlacementAnchor = PopupAnchor.Right; //System.Windows.Controls.Primitives.PlacementMode.Right;

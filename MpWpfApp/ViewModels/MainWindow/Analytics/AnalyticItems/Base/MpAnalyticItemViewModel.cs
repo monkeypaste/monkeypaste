@@ -62,9 +62,9 @@ namespace MpWpfApp {
 
         public MpAnalyticItemPresetViewModel DefaultPresetViewModel => Items.FirstOrDefault(x => x.IsDefault);
 
-        public MpMenuItemViewModel MenuItemViewModel {
+        public MpMenuItemViewModel ContextMenuItemViewModel {
             get { 
-                var subItems = Items.Where(x=>!x.IsActionPreset).Select(x => x.MenuItemViewModel).ToList();
+                var subItems = Items.Where(x=>!x.IsActionPreset).Select(x => x.ContextMenuItemViewModel).ToList();
                 if(subItems.Count > 0) {
                     subItems.Add(new MpMenuItemViewModel() { IsSeparator = true });
                 }
@@ -83,7 +83,7 @@ namespace MpWpfApp {
             }
         }
 
-        public IEnumerable<MpMenuItemViewModel> QuickActionPresetMenuItems => Items.Where(x => x.IsQuickAction).Select(x => x.MenuItemViewModel);
+        public IEnumerable<MpMenuItemViewModel> QuickActionPresetMenuItems => Items.Where(x => x.IsQuickAction).Select(x => x.ContextMenuItemViewModel);
 
         public MpITreeItemViewModel ParentTreeItem => Parent;
 

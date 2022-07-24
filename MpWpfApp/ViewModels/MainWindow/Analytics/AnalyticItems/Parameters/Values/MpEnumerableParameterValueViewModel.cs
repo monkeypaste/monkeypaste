@@ -39,7 +39,7 @@ namespace MpWpfApp {
 
         #region MpIMenuItemViewModel Implementation
 
-        public MpMenuItemViewModel MenuItemViewModel {
+        public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 var tmivml = new List<MpMenuItemViewModel>();
                 var propertyPathLabels = typeof(MpCopyItemPropertyPathType).EnumToLabels();
@@ -79,7 +79,7 @@ namespace MpWpfApp {
                  IsActionParameter = fe.GetVisualAncestor<MpTriggerActionChooserView>() != null;
 
                  var cm = MpContextMenuView.Instance;
-                 cm.DataContext = MenuItemViewModel;
+                 cm.DataContext = ContextMenuItemViewModel;
                  fe.ContextMenu = cm;
                  fe.ContextMenu.PlacementTarget = fe;
                  fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;

@@ -18,7 +18,7 @@ using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
     public class MpTemplateCollectionViewModel : 
-        MpSelectorViewModelBase<MpAvClipTileViewModel,MpAvTextTemplateViewModelBase> {
+        MpAvSelectorViewModelBase<MpAvClipTileViewModel,MpAvTextTemplateViewModelBase> {
         #region Private Variables
 
         #endregion

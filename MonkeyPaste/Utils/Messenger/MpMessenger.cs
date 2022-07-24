@@ -57,6 +57,10 @@ namespace MonkeyPaste {
             Register(sender, receiverAction, null);
         }
 
+        public static void RegisterGlobal(Action<MpMessageType> receiverAction) {
+            Register<MpMessageType>(null, receiverAction, null);
+        }
+
         public static void Register<T>(object sender, Action<T> receiverAction, object context) {
             var key = new MessengerKey(sender, typeof(T), context);
             if(_recipientDictionary.ContainsKey(key)) {

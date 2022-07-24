@@ -386,6 +386,8 @@ namespace MonkeyPaste {
             }
 
             if(Environment.CurrentDirectory.Contains("MpWpfApp")) {
+                MpTag.AllTagId = 2;
+                MpTag.FavoritesTagId =
                 MpPrefViewModel.Instance.ThisAppSourceId = 5;
                 MpPrefViewModel.Instance.ThisOsFileManagerSourceId = 4;
             }
@@ -595,6 +597,7 @@ namespace MonkeyPaste {
 
             await AddItemAsync<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("54b61353-b031-4029-9bda-07f7ca55c123"),
+                ParentTagId = 1,
                 TagName = "Favorites",
                 HexColor = Color.Yellow.ToHex(),
                 TagSortIdx = 2

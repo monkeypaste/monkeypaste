@@ -107,7 +107,11 @@ namespace MonkeyPaste.Avalonia {
             var actionInput = GetInput(arg);
 
             var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
-            await ttvm.AddContentItem(actionInput.CopyItem.Id);
+            if(ttvm != null && actionInput != null && actionInput.CopyItem != null) {
+                ttvm.LinkCopyItemCommand.Execute(actionInput.CopyItem.Id);
+
+
+            }
 
             await base.PerformAction(new MpClassifyOutput() {
                 Previous = arg as MpAvActionOutput,

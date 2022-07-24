@@ -22,7 +22,7 @@ using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAppClipboardFormatInfoCollectionViewModel : 
-        MpSelectorViewModelBase<MpAppViewModel, MpAppClipboardFormatInfoViewModel> {
+        MpAvSelectorViewModelBase<MpAppViewModel, MpAppClipboardFormatInfoViewModel> {
         #region Private Variables
 
         private static readonly MpClipboardFormatType[] _DefaultFormats = new MpClipboardFormatType[] {

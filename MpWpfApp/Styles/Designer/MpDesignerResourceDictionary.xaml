@@ -77,7 +77,8 @@
             </Setter.Value>
         </Setter>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsMouseOver}"
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent},
+                                           Path=IsMouseOver}"
                          Value="True">
                 <Setter Property="Background"
                         Value="Transparent" />

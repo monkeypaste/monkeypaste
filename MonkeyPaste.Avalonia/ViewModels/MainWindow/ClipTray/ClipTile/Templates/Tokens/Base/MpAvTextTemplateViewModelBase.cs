@@ -46,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpMenuItemViewModel MenuItemViewModel {
+        public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 return new MpMenuItemViewModel() {
                     Header = "Delete All",

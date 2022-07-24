@@ -1066,25 +1066,22 @@ namespace MonkeyPaste {
 
             string query;
 
-            switch (tagId) {
-                case MpTag.AllTagId:
-                    if (searchStr == null) {
-                        query = string.Format(@"select {4} from MpCopyItem order by {0} {1} limit {2} offset {3}",
-                                          sortStr, descStr, count, startIndex, selectToken);
-                    } else {
-                        query = string.Format(@"select {4} from MpCopyItem where pk_MpCopyItemId in 
+            if(tagId == MpTag.AllTagId) {
+                if (searchStr == null) {
+                    query = string.Format(@"select {4} from MpCopyItem order by {0} {1} limit {2} offset {3}",
+                                      sortStr, descStr, count, startIndex, selectToken);
+                } else {
+                    query = string.Format(@"select {4} from MpCopyItem where pk_MpCopyItemId in 
                                             (select distinct pk_MpCopyItemId from MpCopyItem where ItemData like '%{5}%')
                                             order by {0} {1} limit {2} offset {3}",
-                                            sortStr, descStr, count, startIndex, selectToken, searchStr);
-                    }
-                    break;
-                default:
-                    query = string.Format(@"select {5} from MpCopyItem where pk_MpCopyItemId in 
+                                        sortStr, descStr, count, startIndex, selectToken, searchStr);
+                }
+            } else {
+                query = string.Format(@"select {5} from MpCopyItem where pk_MpCopyItemId in 
                                             (select distinct pk_MpCopyItemId from MpCopyItem where pk_MpCopyItemId in 
                                                 (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId={4}))
                                            order by {0} {1} limit {2} offset {3}",
-                                           sortStr, descStr, count, startIndex, tagId, selectToken);
-                    break;
+                                       sortStr, descStr, count, startIndex, tagId, selectToken);
             }
             return query;
         }
@@ -1098,31 +1095,27 @@ namespace MonkeyPaste {
             Dictionary<int, int> manualSortOrderLookup = null) {
             List<MpCopyItem> result = await MpDb.GetItemsAsync<MpCopyItem>();
 
-            switch (tagId) {
-                case MpTag.AllTagId:
-                    break;
-                default:
-                    var citl = await MpDb.GetItemsAsync<MpCopyItemTag>();
-                    if (isDescending) {
-                        result = (from value in
-                                    (from ci in result
-                                     from cit in citl
-                                     where ci.Id == cit.CopyItemId &&
-                                         tagId == cit.TagId
-                                     select new { ci, cit })
-                                  orderby value.cit.CopyItemSortIdx descending
-                                  select value.ci).ToList();
-                    } else {
-                        result = (from value in
-                                    (from ci in result
-                                     from cit in citl
-                                     where ci.Id == cit.CopyItemId &&
-                                         tagId == cit.TagId
-                                     select new { ci, cit })
-                                  orderby value.cit.CopyItemSortIdx ascending
-                                  select value.ci).ToList();
-                    }
-                    break;
+            if(tagId != MpTag.AllTagId) {
+                var citl = await MpDb.GetItemsAsync<MpCopyItemTag>();
+                if (isDescending) {
+                    result = (from value in
+                                (from ci in result
+                                 from cit in citl
+                                 where ci.Id == cit.CopyItemId &&
+                                     tagId == cit.TagId
+                                 select new { ci, cit })
+                              orderby value.cit.CopyItemSortIdx descending
+                              select value.ci).ToList();
+                } else {
+                    result = (from value in
+                                (from ci in result
+                                 from cit in citl
+                                 where ci.Id == cit.CopyItemId &&
+                                     tagId == cit.TagId
+                                 select new { ci, cit })
+                              orderby value.cit.CopyItemSortIdx ascending
+                              select value.ci).ToList();
+                }
             }
             switch (sortType) {
                 case MpContentSortType.CopyDateTime:

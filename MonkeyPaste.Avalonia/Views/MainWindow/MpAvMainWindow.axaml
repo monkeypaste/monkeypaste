@@ -64,6 +64,11 @@
                                    HorizontalContentAlignment="Stretch"
                                    VerticalContentAlignment="Stretch" />
 
+            <local:MpAvTagTreeView x:Name="TagTreeView"
+                                   Grid.Column="1"
+                                   IsVisible="{Binding IsSidebarVisible,
+                                                       Source={x:Static local:MpAvTagTrayViewModel.Instance}}" />
+
             <local:MpAvClipTrayView Grid.Column="2"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch" />

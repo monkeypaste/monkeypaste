@@ -34,7 +34,7 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public MpMenuItemViewModel MenuItemViewModel {
+        public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 var tmivml = new List<MpMenuItemViewModel>();
                 var triggerLabels = typeof(MpTriggerType).EnumToLabels("Select Trigger");
@@ -471,7 +471,7 @@ namespace MpWpfApp {
              (args) => {
                  var fe = args as FrameworkElement;
                  var cm = MpContextMenuView.Instance;
-                 cm.DataContext = MenuItemViewModel;
+                 cm.DataContext = ContextMenuItemViewModel;
                  fe.ContextMenu = cm;
                  fe.ContextMenu.PlacementTarget = fe;
                  fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;

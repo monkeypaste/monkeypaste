@@ -12,7 +12,7 @@ using System.Collections;
 
 namespace MonkeyPaste.Avalonia {
     public class MpClipboardHandlerItemViewModel :
-        MpSelectorViewModelBase<MpClipboardHandlerCollectionViewModel, MpHandledClipboardFormatViewModel>,
+        MpAvSelectorViewModelBase<MpClipboardHandlerCollectionViewModel, MpHandledClipboardFormatViewModel>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpIMenuItemViewModel, 
@@ -64,7 +64,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIMenuItemViewModel Implementation
 
-        public MpMenuItemViewModel MenuItemViewModel { get; }
+        public MpMenuItemViewModel ContextMenuItemViewModel { get; }
 
         #endregion
 

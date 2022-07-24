@@ -94,7 +94,7 @@ namespace MpWpfApp {
                 idsToRemoveCount--;
             }
 
-            AssociatedObject.BindingContext.HasNotification = _copyItemIdsNeedingView.Count > 0;
+            AssociatedObject.BindingContext.HasBadgeNotification = _copyItemIdsNeedingView.Count > 0;
             UpdateAdorner();
         }
 

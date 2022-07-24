@@ -11,11 +11,11 @@ using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvTagTrayViewModel : 
-        MpSelectorViewModelBase<object,MpAvTagTileViewModel>, 
+        MpAvSelectorViewModelBase<object,MpAvTagTileViewModel>, 
         MpIAsyncSingletonViewModel<MpAvTagTrayViewModel>,
         MpIHoverableViewModel,
         MpISelectableViewModel,
-        MpISidebarItemViewModel {
+        MpIOrientedSidebarItemViewModel {
         #region Private Variables
         #endregion
 
@@ -29,33 +29,58 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public override ObservableCollection<MpAvTagTileViewModel> Items {
-            get {
-                if(AllTagViewModel == null) {
-                    return new ObservableCollection<MpAvTagTileViewModel>();
-                }
-                var ttvml = AllTagViewModel.FindAllChildren().ToList();
-                ttvml.Insert(0, AllTagViewModel);
-                return new ObservableCollection<MpAvTagTileViewModel>(ttvml.Cast<MpAvTagTileViewModel>());
-            }
-        }
+        //public override ObservableCollection<MpAvTagTileViewModel> Items {
+        //    get {
+        //        if(AllTagViewModel == null || HelpTagViewModel == null) {
+        //            return new ObservableCollection<MpAvTagTileViewModel>();
+        //        }
+        //        var ttvml = AllTagViewModel.FindAllChildren().ToList();
+        //        ttvml.Insert(0, AllTagViewModel);
+        //        ttvml.Add(HelpTagViewModel);
+        //        var htvml = HelpTagViewModel.FindAllChildren().ToList();
+        //        if(htvml.Count > 0) {
+        //            ttvml.AddRange(htvml);
+        //        }
+        //        return new ObservableCollection<MpAvTagTileViewModel>(ttvml.Cast<MpAvTagTileViewModel>());
+        //    }
+        //}
 
-        //public ObservableCollection<MpITreeItemViewModel> TreeItems => new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
+        public IEnumerable<MpAvTagTileViewModel> RootItems => Items.Where(x => x.ParentTagId == 0);
 
         public MpAvTagTileViewModel SelectedTagTile => Items.FirstOrDefault(x => x.IsSelected);
 
         public MpAvTagTileViewModel AllTagViewModel { get; set; }
+        public MpAvTagTileViewModel HelpTagViewModel { get; set; }
 
         #endregion
 
         #region MpISidebarItemViewModel Implementation
         public double SidebarWidth { get; set; } = 0;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
-
-        public double DefaultSidebarWidth => 300;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
+        public double SidebarHeight { get; set; }
+        
+        public double DefaultSidebarWidth {
+            get {
+                if(MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                    return 300;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
+                } else {
+                    return MpAvMainWindowViewModel.Instance.MainWindowWidth;
+                }
+            }
+        }
+        public double DefaultSidebarHeight {
+            get {
+                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                    return MpAvClipTrayViewModel.Instance.ClipTrayScreenHeight;
+                } else {
+                    return 300;
+                }
+            }
+        }
         public bool IsSidebarVisible { get; set; }
 
         public MpISidebarItemViewModel NextSidebarItem { get; }
         public MpISidebarItemViewModel PreviousSidebarItem { get; }
+        
 
         #endregion
 
@@ -121,42 +146,46 @@ namespace MonkeyPaste.Avalonia {
 
 
         public async Task InitAsync() {
-            await Dispatcher.UIThread.InvokeAsync(async () => {
-                IsBusy = true;
+            IsBusy = true;
 
-                MpDb.SyncAdd += MpDbObject_SyncAdd;
-                MpDb.SyncUpdate += MpDbObject_SyncUpdate;
-                MpDb.SyncDelete += MpDbObject_SyncDelete;
+            MpDb.SyncAdd += MpDbObject_SyncAdd;
+            MpDb.SyncUpdate += MpDbObject_SyncUpdate;
+            MpDb.SyncDelete += MpDbObject_SyncDelete;
 
-                MpTag allTag = await MpDb.GetItemAsync<MpTag>(MpTag.AllTagId);
+            MpTag allTag = await MpDb.GetItemAsync<MpTag>(MpTag.AllTagId);
 
-                AllTagViewModel = new MpAvTagTileViewModel(this);
-                await AllTagViewModel.InitializeAsync(allTag);
+            AllTagViewModel = new MpAvTagTileViewModel(this);
+            await AllTagViewModel.InitializeAsync(allTag);
 
-                while(AllTagViewModel.IsBusy) {
-                    await Task.Delay(100);
-                }
+            MpTag helpTag = await MpDb.GetItemAsync<MpTag>(MpTag.HelpTagId);
 
-                //OnPropertyChanged(nameof(Items));
-                //OnPropertyChanged(nameof(TreeItems));
+            HelpTagViewModel = new MpAvTagTileViewModel(this);
+            await HelpTagViewModel.InitializeAsync(helpTag);
 
-                Items.CollectionChanged += TagTileViewModels_CollectionChanged;
+            while (AllTagViewModel.IsBusy || HelpTagViewModel.IsBusy) {
+                await Task.Delay(100);
+            }
 
-                //UpdateSortOrder(true);
+            //OnPropertyChanged(nameof(Items));
+            //OnPropertyChanged(nameof(TreeItems));
 
-                Items.FirstOrDefault(x => x.TagId == DefaultTagId).IsSelected = true;
+            Items.CollectionChanged += TagTileViewModels_CollectionChanged;
 
-                await RefreshAllCounts();
+            //UpdateSortOrder(true);
 
-                AllTagViewModel.IsExpanded = true;
+            Items.FirstOrDefault(x => x.TagId == DefaultTagId).IsSelected = true;
 
-                OnPropertyChanged(nameof(Items));
-                OnPropertyChanged(nameof(PinnedItems));
+            await RefreshAllCounts();
 
-                //SelectTagCommand.Execute(DefaultTagId);
+            AllTagViewModel.IsExpanded = true;
 
-                IsBusy = false;
-            });
+            SelectTagCommand.Execute(DefaultTagId);
+
+            OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(PinnedItems));
+            OnPropertyChanged(nameof(RootItems));
+
+            IsBusy = false;
         }
         #endregion
 
@@ -164,6 +193,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void TagTileViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             UpdateSortOrder();
+            OnPropertyChanged(nameof(RootItems));
         }
 
         
@@ -219,27 +249,6 @@ namespace MonkeyPaste.Avalonia {
             }            
         }
 
-        public async Task UpdateTagAssociation() {
-            // BUG after tray jump and scroll then resizing tile then resize to default (double click) 
-            // there's a collection is modified exception
-            // I think this is because of tray's load (since scroll changes from resizing) more and handling persistent selection so wait till tray's done
-
-            while(MpAvClipTrayViewModel.Instance.IsAnyBusy) {
-                //await Task.Delay(100);
-                return;
-            }
-            
-            foreach (var ttvm in Items) {
-                if (ttvm.IsSudoTag || ttvm.IsSelected) {
-                    continue;
-                }
-                var ciidl = await MpDataModelProvider.GetCopyItemIdsForTagAsync(ttvm.TagId);
-
-                ttvm.IsAssociated = MpAvClipTrayViewModel.Instance.SelectedItem != null &&
-                                                     ciidl.Contains(MpAvClipTrayViewModel.Instance.SelectedItem.CopyItemId);
-
-            }
-        }
 
         #endregion
 
@@ -252,12 +261,16 @@ namespace MonkeyPaste.Avalonia {
                         MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = false;
                         MpActionCollectionViewModel.Instance.IsSidebarVisible = false;
                         MpClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
+
                     }
                     break;
                 case nameof(IsSelected):
                     if(IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
                     }
+                    break;
+                case nameof(Items):
+                    OnPropertyChanged(nameof(RootItems));
                     break;
             }
         }
@@ -350,6 +363,8 @@ namespace MonkeyPaste.Avalonia {
                 if (!ttvm.Tag.IsSyncing) {
                     await ttvm.Tag.DeleteFromDatabaseAsync();
                 }
+                
+                Items.Remove(ttvm);
 
                 OnPropertyChanged(nameof(Items));
                 ResetTagSelection();
@@ -398,7 +413,7 @@ namespace MonkeyPaste.Avalonia {
             },
             (args)=>args != null);
 
-        
+
         #endregion
     }
 }

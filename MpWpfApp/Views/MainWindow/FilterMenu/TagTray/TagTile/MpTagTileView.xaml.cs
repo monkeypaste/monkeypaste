@@ -79,7 +79,7 @@ namespace MpWpfApp {
                 fe.ContextMenu.Closed -= onCloseHandler;
             };
 
-            MpContextMenuView.Instance.DataContext = BindingContext.MenuItemViewModel;
+            MpContextMenuView.Instance.DataContext = BindingContext.ContextMenuItemViewModel;
             fe.ContextMenu = MpContextMenuView.Instance;
             fe.ContextMenu.PlacementTarget = this;
             fe.ContextMenu.Closed += onCloseHandler;

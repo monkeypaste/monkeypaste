@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 
 namespace MonkeyPaste.Avalonia {
     public class MpImageAnnotationCollectionViewModel : 
-        MpSelectorViewModelBase<MpAvClipTileViewModel,MpImageAnnotationViewModel> {
+        MpAvSelectorViewModelBase<MpAvClipTileViewModel,MpImageAnnotationViewModel> {
         #region Private Variables
         private bool _isEnabled = false;
         #endregion

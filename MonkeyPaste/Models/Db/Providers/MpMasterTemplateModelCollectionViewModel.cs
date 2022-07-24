@@ -28,7 +28,7 @@ namespace MonkeyPaste {
 
         #region View Models
 
-        public MpMenuItemViewModel MenuItemViewModel {
+        public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 var mivm = new MpMenuItemViewModel() {
                     SubItems = new List<MpMenuItemViewModel>()

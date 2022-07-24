@@ -21,7 +21,8 @@ namespace MonkeyPaste.Avalonia {
         Grid
     }
 
-    public class MpAvClipTrayViewModel : MpSelectorViewModelBase<object, MpAvClipTileViewModel>,
+    public class MpAvClipTrayViewModel : 
+        MpAvSelectorViewModelBase<object, MpAvClipTileViewModel>,
         MpIBootstrappedItem, 
         MpIPagingScrollViewerViewModel,
         MpIActionComponent,
@@ -45,8 +46,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region View Models
-        // NOTE have to override ObservableCollection from pcl because of .netcore issue w/ module
-        public override ObservableCollection<MpAvClipTileViewModel> Items { get => base.Items; set => base.Items = value; }
+        
+        
         #endregion        
 
         #region MpIPagingScrollViewer Implementation
@@ -272,8 +273,11 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvClipTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             //MpConsole.WriteLine($"Name: {e.PropertyName} Value: {this.GetPropertyValue(e.PropertyName)?.ToString()}");
             switch (e.PropertyName) {
-                case nameof(Items):
                 case nameof(SelectedItem):
+                    OnPropertyChanged(nameof(CanScroll));
+                    MpMessenger.SendGlobal(MpMessageType.TraySelectionChanged);
+                    break;
+                case nameof(Items):
                     OnPropertyChanged(nameof(CanScroll));
                     break;
                 case nameof(IsGridLayout):
@@ -631,7 +635,7 @@ namespace MonkeyPaste.Avalonia {
                                 },
                             }
                         },
-                        MpAnalyticItemCollectionViewModel.Instance.MenuItemViewModel,
+                        MpAnalyticItemCollectionViewModel.Instance.ContextMenuItemViewModel,
                         new MpMenuItemViewModel() {
                             Header = "_Select",
                             IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("SelectionIcon") as string,
@@ -1504,7 +1508,7 @@ namespace MonkeyPaste.Avalonia {
                 if (ttvm == null || !ttvm.IsSelected) {
                     return;
                 }
-                bool isAssociated = await ttvm.IsLinkedAsync(ctvm);
+                bool isAssociated = await ttvm.IsCopyItemLinkedAsync(ctvm.CopyItemId);
                 if (isAssociated) {
                     return;
                 }
@@ -1806,7 +1810,7 @@ namespace MonkeyPaste.Avalonia {
 
             OnCopyItemAdd?.Invoke(this, newCopyItem);
 
-            MpAvTagTrayViewModel.Instance.AllTagViewModel.NotifyAllTagItemLinked(newCopyItem);
+            //MpAvTagTrayViewModel.Instance.AllTagViewModel.NotifyAllTagItemLinked(newCopyItem);
 
             totalAddSw.Stop();
             MpConsole.WriteLine("Time to create new copyitem: " + totalAddSw.ElapsedMilliseconds + " ms");
@@ -2616,21 +2620,24 @@ namespace MonkeyPaste.Avalonia {
                         !IsAnyPastingTemplate;
             });
 
-        public ICommand LinkTagToCopyItemCommand => new MpAsyncCommand<MpAvTagTileViewModel>(
-            async (tagToLink) => {
-                var civm = SelectedItem;
-                bool isUnlink = await tagToLink.IsLinkedAsync(civm);
+        public ICommand ToggleLinkTagToCopyItemCommand => new MpAsyncCommand<MpAvTagTileViewModel>(
+            async (ttvm) => {
+                var ctvm = SelectedItem;
+                bool isUnlink = await ttvm.IsCopyItemLinkedAsync(ctvm.CopyItemId);
 
                 if (isUnlink) {
                     // NOTE item is removed from ui from db ondelete event
-                    await tagToLink.RemoveContentItem(civm.CopyItemId);
+                    ttvm.UnlinkCopyItemCommand.Execute(ctvm.CopyItemId);
                 } else {
-                    await tagToLink.AddContentItem(civm.CopyItemId);
+                    ttvm.LinkCopyItemCommand.Execute(ctvm.CopyItemId);
                 }
 
 
-                await civm.TitleSwirlViewModel.InitializeAsync();
-                await MpAvTagTrayViewModel.Instance.UpdateTagAssociation();
+                await ctvm.TitleSwirlViewModel.InitializeAsync();
+
+                // trigger selection changed message to notify tag and parents of association change
+
+                MpMessenger.SendGlobal(MpMessageType.TraySelectionChanged);
             },
             (tagToLink) => {
                 //this checks the selected clips association with tagToLink

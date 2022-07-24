@@ -7,11 +7,174 @@
              mc:Ignorable="d"
              d:DesignWidth="800"
              d:DesignHeight="450"
+             x:DataType="pcl:MpMenuItemViewModel"
+             x:CompileBindings="False"
+             Items="{Binding SubItems}"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
              x:Class="MonkeyPaste.Avalonia.MpAvContextMenuView"
              ContextMenuOpening="MpAvContextMenuView_ContextMenuOpening"
              ContextMenuClosing="MpAvContextMenuView_ContextMenuClosing"
              DataContextChanged="MpAvContextMenuView_DataContextChanged">
+    <!--<ContextMenu.Styles>
+        <StyleInclude Source="/Styles/ContextMenu/MpAvContextMenuStyle.axaml" />
+    </ContextMenu.Styles>-->
+    <ContextMenu.Resources>
+        <Thickness x:Key="MenuFlyoutItemThemePadding">
+            0,0,0,0
+        </Thickness>
+        <Thickness x:Key="MenuFlyoutPresenterThemePadding">
+            0,0,0,0
+        </Thickness>
+        <Thickness x:Key="MenuInputGestureTextMargin">
+            0,0,0,0
+        </Thickness>
+        <Thickness x:Key="MenuIconPresenterMargin">
+            0,0,0,0
+        </Thickness>
+    </ContextMenu.Resources>
     <ContextMenu.DataTemplates>
+        <local:MpAvMenuItemDataTemplateSelector>
+            <DataTemplate x:Key="HeaderedSeperatorMenuItemTemplate"
+                          DataType="{x:Type pcl:MpMenuItemViewModel}">
+
+            </DataTemplate>
+            <DataTemplate x:Key="SeperatorMenuItemTemplate"
+                          DataType="{x:Type pcl:MpMenuItemViewModel}">
+                <Separator IsHitTestVisible="False" />
+            </DataTemplate>
+            <DataTemplate x:Key="PasteToPathRuntimeMenuItemTemplate"
+                          DataType="{x:Type pcl:MpMenuItemViewModel}">
+            </DataTemplate>
+            <DataTemplate x:Key="ColorPalleteMenuItemTemplate"
+                          DataType="{x:Type pcl:MpMenuItemViewModel}">
+                <MenuItem>
+                    <MenuItem.Header>
+                        <ListBox Margin="0"
+                                 HorizontalAlignment="Stretch"
+                                 VerticalAlignment="Stretch"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Items="{Binding SubItems}"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 SelectionMode="Single">
+                            <ListBox.Resources>
+                                <Thickness x:Key="ListBoxItemPadding">
+                                    0,0,0,0
+                                </Thickness>
+                            </ListBox.Resources>
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel MaxWidth="280"
+                                               Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.Styles>
+                                <Style Selector="ListBoxItem"
+                                       x:DataType="pcl:MpMenuItemViewModel">
+                                    <Setter Property="IsSelected"
+                                            Value="{Binding IsSelected}" />
+                                    <Setter Property="FocusAdorner"
+                                            Value="{x:Null}" />
+                                    <Setter Property="HorizontalContentAlignment"
+                                            Value="Left" />
+                                    <Setter Property="VerticalContentAlignment"
+                                            Value="Top" />
+                                    <Setter Property="Margin"
+                                            Value="0" />
+                                    <Setter Property="Padding"
+                                            Value="0" />
+                                  <Setter Property="Width"
+                                            Value="20" />
+                                  <Setter Property="Height"
+                                            Value="20" />
+
+                                </Style>
+                            </ListBox.Styles>
+                            <ListBox.ItemTemplate>
+                                <!--  Color Pallete Item  -->
+                                <DataTemplate>
+                                    <Button local:MpAvIsHoveringExtension.IsEnabled="True"
+                                            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering,
+                                                                                               Mode=TwoWay}"
+                                            Click="ColorButton_Click"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Command="{Binding Command}"
+                                            CommandParameter="{Binding CommandParameter}">
+                                        <Border Width="15"
+                                                Height="15"
+                                                Padding="0"
+                                                Background="{Binding Header,
+                                                                     Converter={StaticResource StringHexToBrushConverter}}"
+                                                BorderBrush="{Binding BorderHexColor,
+                                                                      Converter={StaticResource StringHexToBrushConverter}}"
+                                                BorderThickness="1"
+                                                CornerRadius="2">
+                                            <ToolTip.Tip>
+                                                <local:MpAvTooltipView ToolTipText="{Binding Header}" />
+                                            </ToolTip.Tip>
+                                            <Image HorizontalAlignment="Stretch"
+                                                   VerticalAlignment="Stretch"
+                                                   Source="{Binding .,
+                                                                    Converter={StaticResource StringResourceToBitmapConverter},
+                                                                    Source={StaticResource PlusImage}}"
+                                                   Stretch="Fill"
+                                                   IsVisible="{Binding IsVisible}">
+                                                <!--<ToolTip.Tip>
+                                                    <local:MpAvTooltipView ToolTipText="Custom Color..." />
+                                                </ToolTip.Tip>-->
+                                            </Image>
+                                        </Border>
+                                    </Button>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </MenuItem.Header>
+                </MenuItem>
+            </DataTemplate>
+            <TreeDataTemplate x:Key="CheckableMenuItemTemplate"
+                              ItemsSource="{Binding SubItems}"
+                              DataType="{x:Type pcl:MpMenuItemViewModel}">
+                <MenuItem Command="{Binding Command}"
+                          CommandParameter="{Binding CommandParameter}"
+                          Header="{Binding Header}"
+                          InputGesture="{Binding InputGestureText}"
+                          Items="{Binding SubItems}"
+                          IsVisible="{Binding IsVisible}">
+                    <MenuItem.Icon>
+                        <Grid>
+                            <Image Source="{Binding IconSourceObj,
+                                                    Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                                   Width="15"
+                                   Height="15" />
+                            <Image Source="{Binding .,
+                                                    Converter={StaticResource StringResourceToBitmapConverter},
+                                                    Source={StaticResource CheckImage}}"
+                                   IsVisible="{Binding IsSelected}" />
+                        </Grid>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </TreeDataTemplate>
+            <TreeDataTemplate x:Key="DefaultMenuItemTemplate"
+                              ItemsSource="{Binding SubItems}">
+                <MenuItem Command="{Binding Command}"
+                          CommandParameter="{Binding CommandParameter}"
+                          Header="{Binding Header}"
+                          InputGesture="{Binding InputGestureText}"
+                          Items="{Binding SubItems}"
+                          IsVisible="{Binding IsVisible}">
+                    <MenuItem.Icon>
+                        <Image Source="{Binding IconSourceObj,
+                                                Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                               Width="15"
+                               Height="15" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </TreeDataTemplate>
+        </local:MpAvMenuItemDataTemplateSelector>
+    </ContextMenu.DataTemplates>
+    <!--<ContextMenu.DataTemplates>
         <TreeDataTemplate DataType="pcl:MpMenuItemViewModel"
                           ItemsSource="{Binding SubItems}">
             <MenuItem Command="{Binding Command}"
@@ -23,5 +186,5 @@
                       Items="{Binding SubItems}"
                       IsVisible="{Binding IsVisible}" />
         </TreeDataTemplate>
-    </ContextMenu.DataTemplates>
+    </ContextMenu.DataTemplates>-->
 </ContextMenu>
