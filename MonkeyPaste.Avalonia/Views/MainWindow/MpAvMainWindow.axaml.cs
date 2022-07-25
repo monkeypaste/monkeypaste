@@ -15,6 +15,7 @@ using MonkeyPaste.Common.Avalonia;
 using Avalonia.Threading;
 using Avalonia.Controls.Primitives;
 using System.Linq;
+using System;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -46,11 +47,23 @@ namespace MonkeyPaste.Avalonia {
             this.AttachedToVisualTree += MpAvMainWindow_AttachedToVisualTree;
             MainWindowGrid = this.FindControl<Grid>("MainWindowGridRef");
 
+            var sidebarSplitter = this.FindControl<GridSplitter>("SidebarGridSplitter");
+            sidebarSplitter.GetObservable(GridSplitter.IsVisibleProperty).Subscribe(value => SidebarSplitter_isVisibleChange(sidebarSplitter, value));
+
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
             
             Dispatcher.UIThread.Post(async () => {
                 await InitAsync();
             });
+        }
+        private void SidebarSplitter_isVisibleChange(GridSplitter splitter, bool isVisible) {
+            var containerGrid = splitter.GetVisualAncestor<Grid>();
+
+            if (!isVisible) {
+                containerGrid.ColumnDefinitions[1].Width = new GridLength(0);
+            } else {
+                containerGrid.ColumnDefinitions[1].Width = GridLength.Auto;
+            }
         }
 
         private void MpAvMainWindow_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {

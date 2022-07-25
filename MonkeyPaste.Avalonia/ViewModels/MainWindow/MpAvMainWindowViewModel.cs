@@ -368,7 +368,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
+        
 
         #endregion
 

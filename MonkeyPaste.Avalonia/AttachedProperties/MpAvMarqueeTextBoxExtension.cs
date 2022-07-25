@@ -303,11 +303,6 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            void Canvas_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e) {
-                if (sender is Canvas canvas) {
-                    AnimateAsync(canvas).FireAndForgetSafeAsync(canvas.DataContext as MpViewModelBase);
-                }
-            }
 
             void Canvas_IsVisibleChanged(Canvas canvas, bool isVisible) {
                 if (isVisible) {
@@ -316,11 +311,28 @@ namespace MonkeyPaste.Avalonia {
                 canvas.InvalidateAll();
             }
 
+            void Canvas_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e) {
+                if (sender is Canvas canvas) {
+                    if(e == null) {
+                        // this means this handler is triggered from visibility change so set 
+                        // cursor to canvas origin
+                        canvasMp = canvas.Bounds.Position;
+                    } else {
+                        canvasMp = e.GetPosition(canvas.Parent);
+                    }                   
+                    
+                    AnimateAsync(canvas).FireAndForgetSafeAsync(canvas.DataContext as MpViewModelBase);
+                }
+            }
             void Canvas_PointerMoved(object sender, PointerEventArgs e) {
-                canvasMp = e.GetPosition(sender as Canvas);
+                if(sender is Canvas canvas) {
+                    canvasMp = e.GetPosition(canvas.Parent);
+                }
             }
             void Canvas_PointerLeave(object sender, PointerEventArgs e) {
-                canvasMp = null;
+                if (sender is Canvas canvas) {
+                    canvasMp = null;
+                }
             }
 
             void Canvas_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
@@ -408,11 +420,6 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     canvas.Width = (double)(textBmp.PixelSize.Width);
                 }
-                
-                //canvas.InvalidateAll();
-                //img1.InvalidateAll();
-                //img2.InvalidateAll();
-                //(canvas.Parent as Control).InvalidateAll();
             }
 
             async Task AnimateAsync(Canvas canvas) {
@@ -423,14 +430,12 @@ namespace MonkeyPaste.Avalonia {
                     var img1 = canvas.Children.ElementAt(0) as Image;
                     var img2 = canvas.Children.ElementAt(1) as Image;
 
-                    //var cmp = canvasMp.HasValue ? canvasMp.Value : new Point();
-                    //bool isReseting = !canvasMp.HasValue || !canvas.Bounds.Contains(cmp);
-                    var cmp = canvasMp.HasValue ? canvasMp.Value : canvas.Bounds.Position;
+                    var cmp = canvasMp.HasValue ? canvasMp.Value : new Point();
                     bool isReseting = !canvasMp.HasValue || !canvas.Bounds.Contains(cmp);
 
-                    double velMultiplier = cmp.X / canvas.Bounds.Width;
-                    velMultiplier = 1.0;// isReseting ? 1.0 : Math.Min(1.0, Math.Max(0.1, velMultiplier));
-                    MpConsole.WriteLine("vel multiplier: " + velMultiplier);
+                    double velMultiplier = cmp.X / (canvas.Parent as Panel).MaxWidth;
+                    velMultiplier = isReseting ? 1.0 : Math.Min(1.0, Math.Max(0.1, velMultiplier));                    
+
                     double deltaX = GetMaxVelocity(canvas) * velMultiplier;
 
                     double left1 = Canvas.GetLeft(img1).HasValue() ? Canvas.GetLeft(img1) : 0;
@@ -515,7 +520,7 @@ namespace MonkeyPaste.Avalonia {
                         (int)Math.Max(1.0, ft.Bounds.Height * pixelsPerDip) + (int)GetDropShadowOffset(canvas).Y));
 
                 using (var context = ftBmp.CreateDrawingContext(null)) {
-                    context.Clear(Colors.Cyan);
+                    context.Clear(Colors.Transparent);
                     context.DrawText(GetDropShadowHexColor(tb).ToAvBrush(), GetDropShadowOffset(canvas), ft.PlatformImpl);
                     context.DrawText(GetForegroundHexColor(tb).ToAvBrush(), new Point(0, 0), ft.PlatformImpl);
                 }

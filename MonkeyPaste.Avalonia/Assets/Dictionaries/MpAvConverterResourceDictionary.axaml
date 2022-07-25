@@ -12,4 +12,5 @@
     <local:MpAvIsBrightToBrushConverter x:Key="IsBrightToBrushConverter" />
     <local:MpAvIsBrightToColorConverter x:Key="IsBrightToColorConverter" />
     <local:MpAvItemToItemsSourceConverter x:Key="ItemToItemsSourceConverter" />
+    <local:MpAvMultiBoolConverter x:Key="MultiBoolConverter" />
 </ResourceDictionary>

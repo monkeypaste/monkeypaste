@@ -29,6 +29,7 @@
                           Width="{Binding ClipTrayScreenWidth}"
                           Height="{Binding ClipTrayScreenHeight}">
                 <ListBox x:Name="ClipTrayListBox"
+                         BorderThickness="0"
                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
                          local:MpAvPagingListBoxExtension.IsEnabled="True"

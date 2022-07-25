@@ -67,8 +67,31 @@
 
             <local:MpAvTagTreeView x:Name="TagTreeView"
                                    Grid.Column="1"
+                                   HorizontalAlignment="Stretch"
+                                   HorizontalContentAlignment="Left"
                                    IsVisible="{Binding IsSidebarVisible,
                                                        Source={x:Static local:MpAvTagTrayViewModel.Instance}}" />
+            <GridSplitter x:Name="SidebarGridSplitter"
+                          Grid.Column="1"
+                          Width="5"
+                          HorizontalAlignment="Right"
+                          VerticalAlignment="Stretch"
+                          local:MpAvIsHoveringExtension.HoverCursor="ResizeWE"
+                          local:MpAvIsHoveringExtension.IsEnabled="True">
+                <GridSplitter.IsVisible>
+                    <MultiBinding Converter="{StaticResource MultiBoolConverter}"
+                                  ConverterParameter="Or">
+                        <Binding Path="IsSidebarVisible"
+                                 Source="{x:Static local:MpAvTagTrayViewModel.Instance}" />
+                        <Binding Path="IsSidebarVisible"
+                                 Source="{x:Static local:MpAnalyticItemCollectionViewModel.Instance}" />
+                        <Binding Path="IsSidebarVisible"
+                                 Source="{x:Static local:MpClipboardHandlerCollectionViewModel.Instance}" />
+                        <Binding Path="IsSidebarVisible"
+                                 Source="{x:Static local:MpActionCollectionViewModel.Instance}" />
+                    </MultiBinding>
+                </GridSplitter.IsVisible>
+            </GridSplitter>
 
             <local:MpAvClipTrayView x:Name="ClipTrayView"
                                     Grid.Column="2"

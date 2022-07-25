@@ -21,12 +21,11 @@
         -->
         <TreeView x:Name="TagTreeView"
                   Items="{Binding RootItems}"
-                  Background="Orange"
+                  BorderThickness="0"
+                  Background="Transparent"
                   SelectedItem="{Binding SelectedItem,
                                          Mode=TwoWay}"
                   SelectionMode="Single"
-                  MinWidth="{Binding DefaultSidebarWidth}"
-                  MinHeight="{Binding DefaultSidebarHeight}"
                   IsVisible="{Binding IsSidebarVisible}"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch">
