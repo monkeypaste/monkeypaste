@@ -8,6 +8,7 @@ using Avalonia.Input;
 using Avalonia.Styling;
 using System;
 using MonkeyPaste.Common.Avalonia;
+using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -50,8 +51,6 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvContextMenuView_ContextMenuOpening(object sender, System.ComponentModel.CancelEventArgs e) {
             MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
-            var cw = this.GetVisualAncestor<Window>();
-            cw.AttachDevTools();
         }
 
         private void MpAvContextMenuView_ContextMenuClosing(object sender, System.ComponentModel.CancelEventArgs e) {

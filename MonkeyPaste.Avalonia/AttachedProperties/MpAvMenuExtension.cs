@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Linq;
 using Avalonia.Input;
 using System.ComponentModel;
+using MonkeyPaste.Common.Avalonia;
+using Avalonia.Controls.Primitives.PopupPositioning;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -50,7 +52,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region IsEnabled AvaloniaProperty
         public static bool GetIsEnabled(AvaloniaObject obj) {
             return obj.GetValue(IsEnabledProperty);
@@ -89,6 +90,11 @@ namespace MonkeyPaste.Avalonia {
 
                     if(control.DataContext is MpIMenuItemViewModelBase cmvm) {
                         control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
+
+                        //if (control is MpAvTagView tv) {
+                        //    var tvi = tv.GetVisualAncestor<TreeViewItem>();
+                        //    tvi.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
+                        //}
                     }
                 }
             }
@@ -103,12 +109,17 @@ namespace MonkeyPaste.Avalonia {
 
             void Control_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
                 if(sender is Control control) {
+                    //if(control is TreeViewItem tvi) {
+                    //    control = tvi.GetVisualDescendant<MpAvTagView>();
+                    //}
                     if (GetIsEnabled(control)) {
                         MpMenuItemViewModel mivm = null;
 
                         if (e.GetCurrentPoint(control)
                             .Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed) {
                             if (control.DataContext is MpIPopupMenuViewModel pumvm) {
+                                SetIsOpen(control, true);
+
                                 mivm = pumvm.PopupMenuViewModel;
 
                                 if (control.DataContext is MpISelectableViewModel svm) {
@@ -118,6 +129,8 @@ namespace MonkeyPaste.Avalonia {
                         } else if (e.GetCurrentPoint(control)
                             .Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed) {
                             if (control.DataContext is MpIContextMenuViewModel cmvm) {
+                                SetIsOpen(control, true);
+
                                 mivm = cmvm.ContextMenuViewModel;
 
                                 if (control.DataContext is MpISelectableViewModel svm &&
@@ -133,6 +146,8 @@ namespace MonkeyPaste.Avalonia {
                             return;
                         }
 
+                        e.Handled = true;
+
                         CancelEventHandler onOpenHandler = null;
                         CancelEventHandler onCloseHandler = null;
 
@@ -143,18 +158,19 @@ namespace MonkeyPaste.Avalonia {
                         };
                         
                         onOpenHandler = (s, e1) => {
-                            SetIsOpen(control, true);
                             e1.Cancel = false;
                         };
 
-                        MpAvContextMenuView.Instance.DataContext = mivm;
+
                         control.ContextMenu = MpAvContextMenuView.Instance;
-                        //control.ContextMenu.PlacementTarget = control;
+                        control.ContextMenu.DataContext = mivm;
+                        control.ContextMenu.PlacementTarget = control;
+                        control.ContextMenu.PlacementAnchor = PopupAnchor.TopRight;
+
                         control.ContextMenu.ContextMenuOpening += onOpenHandler;
                         control.ContextMenu.ContextMenuClosing += onCloseHandler;
 
-                        MpAvContextMenuView.Instance.PlacementTarget = control;
-                        MpAvContextMenuView.Instance.Open(control);
+                        control.ContextMenu.Open(control);
 
                     }
                 }
@@ -164,6 +180,32 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        public static void ShowContextMenu(Control control) {
+            if(control != null && control.DataContext is MpIContextMenuViewModel cmvm) {
+                CancelEventHandler onOpenHandler = null;
+                CancelEventHandler onCloseHandler = null;
+
+                onCloseHandler = (s, e1) => {
+                    SetIsOpen(control, false);
+                    control.ContextMenu.ContextMenuClosing -= onCloseHandler;
+                    control.ContextMenu.ContextMenuOpening -= onOpenHandler;
+                };
+
+                onOpenHandler = (s, e1) => {
+                    SetIsOpen(control, true);
+                    e1.Cancel = false;
+                };
+
+                MpAvContextMenuView.Instance.DataContext = cmvm;
+                control.ContextMenu = MpAvContextMenuView.Instance;
+                //control.ContextMenu.PlacementTarget = control;
+                control.ContextMenu.ContextMenuOpening += onOpenHandler;
+                control.ContextMenu.ContextMenuClosing += onCloseHandler;
+
+                MpAvContextMenuView.Instance.PlacementTarget = control;
+                MpAvContextMenuView.Instance.Open(control);
+            }
+        }
         #endregion
     }
 }

@@ -57,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
         public string IconTextOrResourceKey => TagClipCount.ToString();
         public string IconLabelHexColor => TagCountTextHexColor;
         public string BackgroundHexColor => TagHexColor;
-        public string BorderHexColor => TagTrayBorderHexColor;
+        public string BorderHexColor => TagBorderHexColor;
 
         public ICommand AddChildCommand => AddChildTagCommand;
 
@@ -140,7 +140,8 @@ namespace MonkeyPaste.Avalonia {
                             Header = "_Rename",
                             IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("RenameImage") as string, //MpPlatformWrapper.Services.PlatformResource.GetResource("RenameIcon") as string,
                             Command = RenameTagCommand,
-                            CommandParameter = IsContextMenuOpened
+                            CommandParameter = IsTreeContextMenuOpened,
+                            IsVisible = RenameTagCommand.CanExecute(IsTreeContextMenuOpened)
                         },
                         new MpMenuItemViewModel() {
                             Header = "_Assign Hotkey",
@@ -157,12 +158,16 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpMenuItemViewModel() {IsSeparator = true},
                         MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(this),
-                        new MpMenuItemViewModel() {IsSeparator = true},
+                        new MpMenuItemViewModel() {
+                            IsSeparator = true,
+                            IsVisible = Parent.DeleteTagCommand.CanExecute(TagId)
+                        },
                         new MpMenuItemViewModel() {
                             Header = "_Delete",
                             IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("DeleteImage") as string,
                             Command = Parent.DeleteTagCommand,
-                            CommandParameter = TagId
+                            CommandParameter = TagId,
+                            IsVisible = Parent.DeleteTagCommand.CanExecute(TagId)
                         }
                     }
                 };
@@ -232,7 +237,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsTagReadOnly {
             get {
-                return TagId != 0 && TagId <= 4;
+                return IsAllTag || IsHelpTag || IsFavoriteTag;
             }
         }
 
@@ -247,15 +252,9 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsUserTag => !IsSudoTag;
 
-
-        public bool IsAllTag {
-            get {
-                if (Tag == null) {
-                    return false;
-                }
-                return Tag.Id == MpTag.AllTagId;
-            }
-        }
+        public bool IsAllTag => TagId == MpTag.AllTagId;
+        public bool IsFavoriteTag => TagId == MpTag.FavoritesTagId;
+        public bool IsHelpTag => TagId == MpTag.HelpTagId;
 
         public bool IsEditing => !IsTagNameTrayReadOnly || !IsTagNameTreeReadOnly;
 
@@ -304,7 +303,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsAssociated { get; private set; }
 
-        public bool IsContextMenuOpened { get; set; } = false;
+        public bool IsTreeContextMenuOpened { get; set; } = false;
+        public bool IsTrayContextMenuOpened { get; set; } = false;
 
         #endregion
 
@@ -325,21 +325,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string TagTrayBorderHexColor {
+        public string TagBorderHexColor {
             get {
-                if(IsContextMenuOpened) {
-                    return MpSystemColors.red1;
-                }
-                if (IsAssociated) {
-                    return TagHexColor;
-                }
-                return MpSystemColors.Transparent;
-            }
-        }
-
-        public string TagTreeBorderHexColor {
-            get {
-                if (IsContextMenuOpened) {
+                if(IsTrayContextMenuOpened || IsTreeContextMenuOpened) {
                     return MpSystemColors.red1;
                 }
                 if (IsAssociated) {
@@ -698,6 +686,7 @@ namespace MonkeyPaste.Avalonia {
                         IsTagNameTrayReadOnly = true;
                         IsTagNameTreeReadOnly = true;
                     }
+                    //OnPropertyChanged(nameof(TagBorderBackgroundHexColor));
                     //MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.ClipTrayBackgroundBrush));
                     break;
                 case nameof(IsTagNameTreeReadOnly):
@@ -901,10 +890,10 @@ namespace MonkeyPaste.Avalonia {
 
                  if(arg == null) {
                      MpTag t = await MpTag.Create(
-                     parentTagId: Parent.SelectedTagTile.TagId,
-                     sortIdx: Parent.SelectedTagTile.Items.Count);
+                     parentTagId: Parent.SelectedItem.TagId,
+                     sortIdx: Parent.SelectedItem.Items.Count);
 
-                     ttvm = await Parent.SelectedTagTile.CreateChildTagTileViewModel(t);
+                     ttvm = await Parent.SelectedItem.CreateChildTagTileViewModel(t);
                  } else if(arg is MpAvTagTileViewModel) {
                      ttvm = arg as MpAvTagTileViewModel;
                      if(ttvm.ParentTreeItem != null) {
@@ -912,11 +901,11 @@ namespace MonkeyPaste.Avalonia {
                      }
                  }
 
-                 Parent.SelectedTagTile.Items.Add(ttvm);
+                 Parent.SelectedItem.Items.Add(ttvm);
 
-                 Parent.SelectedTagTile.SelectedItem = ttvm;
+                 Parent.SelectedItem.SelectedItem = ttvm;
 
-                 Parent.SelectedTagTile.OnPropertyChanged(nameof(Parent.SelectedTagTile.Items));
+                 Parent.SelectedItem.OnPropertyChanged(nameof(Parent.SelectedItem.Items));
                  Parent.OnPropertyChanged(nameof(Parent.Items));
              });
 

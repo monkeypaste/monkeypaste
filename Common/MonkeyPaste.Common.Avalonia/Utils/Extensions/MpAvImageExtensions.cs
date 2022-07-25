@@ -45,6 +45,19 @@ namespace MonkeyPaste.Common.Avalonia {
             return Convert.ToBase64String(bmp.ToByteArray());
         }
 
+        public static Bitmap ToAvBitmap(this WriteableBitmap wbmp) {
+            using (var outStream = new MemoryStream()) {
+                wbmp.Save(outStream);
+                outStream.Seek(0, SeekOrigin.Begin);
+                var outBmp = new Bitmap(outStream);
+                return outBmp;
+            }
+        }
+
+        public static Bitmap ToAvBitmap(this RenderTargetBitmap rtbmp) {
+            return new Bitmap(rtbmp.PlatformImpl);
+        }
+
         #endregion
 
         #region Effects
@@ -111,16 +124,7 @@ namespace MonkeyPaste.Common.Avalonia {
                         }
                     }
                 }
-
-                    
-
-                using(var outStream = new MemoryStream()) {
-                    writeableBitmap.Save(outStream);
-
-                    outStream.Seek(0, SeekOrigin.Begin);
-                    var outBmp = new Bitmap(outStream);
-                    return outBmp;
-                }
+                return writeableBitmap.ToAvBitmap();
             }
         }
 

@@ -57,7 +57,8 @@
                                  Opacity="{Binding MainWindowOpacity,
                                                    Source={x:Static pcl:MpPrefViewModel.Instance}}" />
             </Grid.Background>
-            <local:MpAvSidebarView Grid.Column="0"
+            <local:MpAvSidebarView x:Name="SidebarView"
+                                   Grid.Column="0"
                                    Margin="0,3"
                                    HorizontalAlignment="Stretch"
                                    VerticalAlignment="Stretch"
@@ -69,7 +70,8 @@
                                    IsVisible="{Binding IsSidebarVisible,
                                                        Source={x:Static local:MpAvTagTrayViewModel.Instance}}" />
 
-            <local:MpAvClipTrayView Grid.Column="2"
+            <local:MpAvClipTrayView x:Name="ClipTrayView"
+                                    Grid.Column="2"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch" />
         </Grid>

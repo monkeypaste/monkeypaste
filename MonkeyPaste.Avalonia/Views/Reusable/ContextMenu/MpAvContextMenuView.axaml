@@ -12,6 +12,8 @@
              Items="{Binding SubItems}"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch"
+             MinWidth="300"
+             MinHeight="300"
              x:Class="MonkeyPaste.Avalonia.MpAvContextMenuView"
              ContextMenuOpening="MpAvContextMenuView_ContextMenuOpening"
              ContextMenuClosing="MpAvContextMenuView_ContextMenuClosing"
@@ -41,7 +43,8 @@
             </DataTemplate>
             <DataTemplate x:Key="SeperatorMenuItemTemplate"
                           DataType="{x:Type pcl:MpMenuItemViewModel}">
-                <Separator IsHitTestVisible="False" />
+                <Separator IsVisible="{Binding IsVisible}"
+                           IsHitTestVisible="False" />
             </DataTemplate>
             <DataTemplate x:Key="PasteToPathRuntimeMenuItemTemplate"
                           DataType="{x:Type pcl:MpMenuItemViewModel}">
@@ -84,9 +87,9 @@
                                             Value="0" />
                                     <Setter Property="Padding"
                                             Value="0" />
-                                  <Setter Property="Width"
+                                    <Setter Property="Width"
                                             Value="20" />
-                                  <Setter Property="Height"
+                                    <Setter Property="Height"
                                             Value="20" />
 
                                 </Style>

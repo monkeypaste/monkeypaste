@@ -8,5 +8,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsPrimary { get; set; }
         public string Name { get; set; } = string.Empty;
         public double PixelDensity { get; set; }
+        public MpPoint PixelsPerInch => new MpPoint(PixelDensity * 96, PixelDensity * 96);
     }
 }

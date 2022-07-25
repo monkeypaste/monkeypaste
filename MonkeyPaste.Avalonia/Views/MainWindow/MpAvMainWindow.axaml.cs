@@ -79,7 +79,6 @@ namespace MonkeyPaste.Avalonia {
 
                 case MpMessageType.MainWindowOrientationChanged: {
                         UpdateResizerOrientation();
-
                         UpdateContentOrientation();
                         break;
                     }
@@ -257,9 +256,8 @@ namespace MonkeyPaste.Avalonia {
             var mwvm = MpAvMainWindowViewModel.Instance;
 
             var mwtg = this.FindControl<Grid>("MainWindowTrayGrid");
-
-            var sbv = this.GetVisualDescendant<MpAvSidebarView>();
-            var ctrv = this.GetVisualDescendant<MpAvClipTrayView>();
+            var sbv = this.FindControl<MpAvSidebarView>("SidebarView");
+            var ctrv = this.FindControl<MpAvClipTrayView>("ClipTrayView");
 
             if (mwvm.IsHorizontalOrientation) {
                 mwtg.RowDefinitions.Clear();

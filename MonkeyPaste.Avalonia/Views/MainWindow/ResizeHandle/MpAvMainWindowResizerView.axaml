@@ -12,34 +12,40 @@
                        x:DataType="local:MpAvMainWindowViewModel"
                        x:CompileBindings="True">
     <Border x:Name="MainWindowResizeOuterBorder"
-            Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}"
-            local:MpAvIsHoveringExtension.DefaultBrush="Transparent"
-            local:MpAvIsHoveringExtension.HoverBrush="Yellow"
-            local:MpAvIsHoveringExtension.IsSelected="{Binding IsResizing}"
-            local:MpAvIsHoveringExtension.SelectedBrush="Orange"
+            Opacity="{Binding MainWindowOpacity,
+                              Source={x:Static pcl:MpPrefViewModel.Instance}}"
+            Background="Transparent"
             local:MpAvIsHoveringExtension.HoverCursor="{Binding ResizerCursor}"
+            local:MpAvIsHoveringExtension.IsSelected="{Binding IsResizing}"
+            local:MpAvIsHoveringExtension.HoverBrush="Yellow"
             local:MpAvIsHoveringExtension.IsEnabled="True">
-
         <Border x:Name="MainWindowResizeBorder"
                 local:MpAvResizeExtension.MinHeight="{Binding MainWindowMinHeight}"
                 local:MpAvResizeExtension.MaxHeight="{Binding MainWindowMaxHeight}"
                 local:MpAvResizeExtension.MinWidth="{Binding MainWindowMinWidth}"
                 local:MpAvResizeExtension.MaxWidth="{Binding MainWindowMaxWidth}"
-                local:MpAvResizeExtension.BoundWidth="{Binding MainWindowWidth, Mode=TwoWay}"
-                local:MpAvResizeExtension.BoundHeight="{Binding MainWindowHeight, Mode=TwoWay}"
+                local:MpAvResizeExtension.BoundWidth="{Binding MainWindowWidth,
+                                                               Mode=TwoWay}"
+                local:MpAvResizeExtension.BoundHeight="{Binding MainWindowHeight,
+                                                                Mode=TwoWay}"
                 local:MpAvResizeExtension.DefaultWidth="{Binding MainWindowDefaultWidth}"
                 local:MpAvResizeExtension.DefaultHeight="{Binding MainWindowDefaultHeight}"
-                local:MpAvResizeExtension.CanResize="{Binding CanResize, Mode=TwoWay}"
-                local:MpAvResizeExtension.IsResizing="{Binding IsResizing, Mode=TwoWay}"
+                local:MpAvResizeExtension.CanResize="{Binding CanResize,
+                                                              Mode=TwoWay}"
+                local:MpAvResizeExtension.IsResizing="{Binding IsResizing,
+                                                               Mode=TwoWay}"
                 local:MpAvResizeExtension.XFactor="{Binding ResizeXFactor}"
                 local:MpAvResizeExtension.YFactor="{Binding ResizeYFactor}"
                 local:MpAvResizeExtension.IsEnabled="True"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                BorderBrush="{Binding TitleBarBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                BorderBrush="{Binding TitleBarBackgroundHexColor,
+                                      Converter={StaticResource StringHexToBrushConverter}}"
                 BorderThickness="0.5">
             <Border.Background>
-                <ImageBrush Source="{Binding ., Source={StaticResource FrameGripTile}, Converter={StaticResource StringResourceToBitmapConverter}}"
+                <ImageBrush Source="{Binding .,
+                                             Source={StaticResource FrameGripTile},
+                                             Converter={StaticResource StringResourceToBitmapConverter}}"
                             TileMode="Tile"
                             SourceRect="0,0,5,5"
                             DestinationRect="0,0,5,5" />

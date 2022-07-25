@@ -47,8 +47,6 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<MpAvTagTileViewModel> RootItems => Items.Where(x => x.ParentTagId == 0);
 
-        public MpAvTagTileViewModel SelectedTagTile => Items.FirstOrDefault(x => x.IsSelected);
-
         public MpAvTagTileViewModel AllTagViewModel { get; set; }
         public MpAvTagTileViewModel HelpTagViewModel { get; set; }
 
@@ -104,10 +102,10 @@ namespace MonkeyPaste.Avalonia {
         public bool IsNavButtonsVisible => true;// Items.Where(x => x.IsPinned).Sum(x => x.TagTileTrayWidth) > MpMeasurements.Instance.TagTrayDefaultMaxWidth;
         public bool IsEditingTagName {
             get {
-                if(SelectedTagTile == null) {
+                if(SelectedItem == null) {
                     return false;
                 }
-                return SelectedTagTile.IsEditing;
+                return SelectedItem.IsEditing;
             }
         }
 
@@ -193,7 +191,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void TagTileViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             UpdateSortOrder();
-            OnPropertyChanged(nameof(RootItems));
+            //OnPropertyChanged(nameof(RootItems));
         }
 
         
@@ -243,7 +241,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void ResetTagSelection() {
-            if(SelectedTagTile.TagId != DefaultTagId) {
+            if(SelectedItem.TagId != DefaultTagId) {
                 ClearTagSelection();
                 Items.Where(x => x.TagId == DefaultTagId).FirstOrDefault().IsSelected = true;
             }            
@@ -398,7 +396,7 @@ namespace MonkeyPaste.Avalonia {
 
                 Items.ForEach(x => x.IsSelected = x.TagId == tagId);
 
-                OnPropertyChanged(nameof(SelectedTagTile));
+                OnPropertyChanged(nameof(SelectedItem));
                 
                 if(MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
                     // last loaded tag is selected in ClipTray OnPostMainWindowLoaded 

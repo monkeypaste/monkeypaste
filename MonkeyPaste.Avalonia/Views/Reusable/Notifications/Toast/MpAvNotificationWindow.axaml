@@ -75,15 +75,6 @@
                     Background="Transparent"
                     Click="CloseButton_Click"
                     BorderThickness="0">
-                <!--
-                    local:MpAvIsHoveringExtension.IsEnabled="True"
-                    local:MpAvIsHoveringExtension.HoverImageSource="{Binding .,
-                    Converter={StaticResource StringResourceToBitmapConverter},
-                    ConverterParameter={StaticResource CloseOverImage}}"
-                    local:MpAvIsHoveringExtension.DefaultImageSource="{Binding .,
-                    Converter={StaticResource StringResourceToBitmapConverter},
-                    ConverterParameter={StaticResource CloseImage}}"
-                -->
                 <Image Width="15"
                        Height="15"
                        Stretch="Fill"

@@ -904,11 +904,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="SharpWebview">
-      <HintPath>..\webview_csharp\src\SharpWebview\bin\Debug\netstandard2.1\SharpWebview.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <AvaloniaXaml Update="Views\MainWindow\Sidebar\SidebarItems\TagTree\MpAvTagTreeView.axaml">
       <SubType>Designer</SubType>
     </AvaloniaXaml>

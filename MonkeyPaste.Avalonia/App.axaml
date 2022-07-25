@@ -6,24 +6,14 @@
              x:CompileBindings="True"
              x:Class="MonkeyPaste.Avalonia.App">
     <Application.Styles>
-        <FluentTheme Mode="Light" />
+        <!--<FluentTheme Mode="Light" />-->
 
-        <!--<StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml" />-->
+        <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml" />
+        <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml" />
         <!--<StyleInclude Source="/Styles/MpAvAllStyles.axaml" />
-        <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
-        <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml"/>-->
+        -->
         <StyleInclude Source="avares://MonkeyPaste.Avalonia/Styles/ProgressRing/ProgressRing.xaml" />
 
-        <!--<Style Selector="ContextMenu MenuItem">
-            <Setter Property="Header"
-                    Value="{Binding Header}" />
-            <Setter Property="Items"
-                    Value="{Binding Items}" />
-            <Setter Property="Command"
-                    Value="{Binding Command}" />
-            <Setter Property="CommandParameter"
-                    Value="{Binding CommandParameter}" />
-        </Style>-->
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>

@@ -44,7 +44,7 @@ namespace MonkeyPaste.Avalonia {
             if(AdornedControl == null) {
                 return;
             }
-
+            
             var rect = AdornedControl.Bounds;
 
             if(!HasNotification) {

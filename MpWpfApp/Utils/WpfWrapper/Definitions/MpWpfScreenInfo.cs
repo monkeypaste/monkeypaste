@@ -11,7 +11,7 @@ namespace MpWpfApp {
         public string Name { get; set; }
 
         public double PixelDensity { get; set; }
-
+        public MpPoint PixelsPerInch => new MpPoint(PixelDensity * 96, PixelDensity * 96);
         public MpWpfScreenInfo(System.Windows.Forms.Screen screen) { 
             Bounds = screen.Bounds.ToPortableRect();
             WorkArea = screen.WorkingArea.ToPortableRect();

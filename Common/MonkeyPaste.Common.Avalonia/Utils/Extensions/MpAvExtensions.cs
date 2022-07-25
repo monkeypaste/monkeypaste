@@ -47,6 +47,15 @@ namespace MonkeyPaste.Common.Avalonia {
         }
         #endregion
 
+        #region Control
+        public static void InvalidateAll(this Control control) {
+            control?.InvalidateArrange();
+            control?.InvalidateMeasure();
+            control?.InvalidateVisual();            
+        }
+
+        #endregion
+
         #region Scroll Viewer
         public static ScrollBar GetScrollBar(this ScrollViewer sv, Orientation orientation) {
             if (orientation == Orientation.Vertical) {
@@ -118,6 +127,13 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static PixelPoint ToAvPixelPoint(this Point p) {
             return new PixelPoint((int)p.X, (int)p.Y);
+        }
+
+        #endregion
+
+        #region Vector
+        public static Vector ToAvVector(this MpPoint p) {
+            return new Vector(p.X, p.Y);
         }
 
         #endregion
