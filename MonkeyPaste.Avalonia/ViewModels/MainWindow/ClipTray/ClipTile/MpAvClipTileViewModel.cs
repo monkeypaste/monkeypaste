@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -110,9 +111,9 @@ namespace MonkeyPaste.Avalonia {
                     minSize = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds.Width * 
                                 Parent.ZoomFactor * MIN_SIZE_ZOOM_FACTOR_COEFF;
                 }
-                //minSize = ();
 
-                return minSize;
+                double scrollBarSize = 30;
+                return minSize - scrollBarSize;
             }
         }
 

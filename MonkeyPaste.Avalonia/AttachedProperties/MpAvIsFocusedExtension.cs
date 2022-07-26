@@ -215,12 +215,12 @@ namespace MonkeyPaste.Avalonia {
                     MpAvMainWindowViewModel.Instance.IsAnyTextBoxFocused = true;
                     //
                 }
-                if (GetSelectAllOnFocus(control)) {
-                    tb.CaretIndex = 0;
-                    SetIsReadOnly(control, false);
-                    KeyboardDevice.Instance.SetFocusedElement(control, NavigationMethod.Unspecified, KeyModifiers.None);
-                    tb.SelectAll();
-                }
+                //if (GetSelectAllOnFocus(control)) {
+                //    tb.CaretIndex = 0;
+                //    SetIsReadOnly(control, false);
+                //    KeyboardDevice.Instance.SetFocusedElement(control, NavigationMethod.Unspecified, KeyModifiers.None);
+                //    tb.SelectAll();
+                //}
 
             }
         }

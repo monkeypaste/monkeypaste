@@ -365,6 +365,7 @@ namespace MonkeyPaste.Avalonia {
                         MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = false;
                     }
                     OnPropertyChanged(nameof(SelectedItem));
+                    MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel));
                     break;
                 case nameof(Items):
                     OnPropertyChanged(nameof(Children));

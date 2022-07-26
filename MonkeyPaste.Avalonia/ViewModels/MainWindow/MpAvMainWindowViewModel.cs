@@ -41,6 +41,24 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        #region View Models
+
+        public MpISidebarItemViewModel SelectedSidebarItemViewModel { 
+            get {
+                if(MpAvTagTrayViewModel.Instance.IsSidebarVisible) {
+                    return MpAvTagTrayViewModel.Instance;
+                }
+                if(MpActionCollectionViewModel.Instance.IsSidebarVisible) {
+                    return MpActionCollectionViewModel.Instance;
+                }
+                if(MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible) {
+                    return MpAnalyticItemCollectionViewModel.Instance;
+                }
+                return null;
+            }
+        }
+        #endregion
+
         #region Layout
 
         public double MainWindowDefaultHorizontalHeightRatio => 0.35;

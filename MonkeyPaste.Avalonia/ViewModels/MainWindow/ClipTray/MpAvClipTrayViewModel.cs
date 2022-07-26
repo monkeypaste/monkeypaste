@@ -123,11 +123,6 @@ namespace MonkeyPaste.Avalonia {
         }
         public bool IsThumbDragging { get; set; } = false;
 
-
-        public Size HorizontalScrollBarDesiredSize { get; set; }
-
-        public Size VerticalScrollBarDesiredSize { get; set; }
-
         #endregion
 
         #region Layout
@@ -174,17 +169,15 @@ namespace MonkeyPaste.Avalonia {
 
         public ScrollBarVisibility HorizontalScrollBarVisibility {
             get {
-                return ScrollBarVisibility.Visible;
-                //return ClipTrayTotalTileWidth > ClipTrayScreenWidth ?
-                //        ScrollBarVisibility.Auto : ScrollBarVisibility.Hidden;
+                return ClipTrayTotalTileWidth > ClipTrayScreenWidth ?
+                        ScrollBarVisibility.Visible : ScrollBarVisibility.Hidden;
             }
         }
 
         public ScrollBarVisibility VerticalScrollBarVisibility {
             get {
-                return ScrollBarVisibility.Visible;
-                //return ClipTrayTotalTileHeight > ClipTrayScreenHeight ?
-                //        ScrollBarVisibility.Auto : ScrollBarVisibility.Hidden;
+                return ClipTrayTotalTileHeight > ClipTrayScreenHeight ?
+                        ScrollBarVisibility.Visible : ScrollBarVisibility.Hidden;
             }
         }
 
@@ -235,8 +228,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsDragOverPinTray { get; set; }
 
-        public bool IsAllTileViewsLoaded => Items.All(x => x.IsViewLoaded);
-
         #endregion
 
         #endregion
@@ -247,8 +238,6 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         private MpAvClipTrayViewModel() : base() {
-            MpConsole.WriteLine("ClipTray created");
-            PropertyChanged += MpAvClipTrayViewModel_PropertyChanged;
         }
 
 
@@ -256,6 +245,58 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
+        public async Task InitAsync() {
+            LogPropertyChangedEvents = true;
+
+            IsBusy = true;
+
+            while (MpSourceCollectionViewModel.Instance.IsAnyBusy) {
+                await Task.Delay(100);
+            }
+
+
+            PropertyChanged += MpAvClipTrayViewModel_PropertyChanged;
+            Items.CollectionChanged += Items_CollectionChanged;
+
+            MpDataModelProvider.AllFetchedAndSortedCopyItemIds.CollectionChanged += AllFetchedAndSortedCopyItemIds_CollectionChanged;
+
+            MpDb.SyncAdd += MpDbObject_SyncAdd;
+            MpDb.SyncUpdate += MpDbObject_SyncUpdate;
+            MpDb.SyncDelete += MpDbObject_SyncDelete;
+
+            _pageSize = 1;
+            RemainingItemsCountThreshold = 1;
+            _oldMainWindowHeight = MpAvMainWindowViewModel.Instance.MainWindowHeight;
+            //DefaultLoadCount = MpMeasurements.Instance.DefaultTotalVisibleClipTiles * 1 + 2;
+
+            MpMessenger.Register<MpMessageType>(
+                MpDataModelProvider.QueryInfo, ReceivedQueryInfoMessage);
+
+            MpMessenger.Register<MpMessageType>(
+                nameof(MpAvDragDropManager), ReceivedDragDropManagerMessage);
+
+            MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
+
+            for (int i = 1; i <= 10; i++) {
+                var test_ctvm = await CreateClipTileViewModel(
+                    new MpCopyItem() {
+                        Id = i,
+                        ItemType = MpCopyItemType.Text,
+                        ItemData = "This is test " + i,
+                        Title = "Test" + i,
+                        SourceId = 1,
+                        CopyDateTime = DateTime.Now
+                    }, i - 1);
+                Items.Add(test_ctvm);
+            }
+
+            SelectedItem = Items[0];
+
+            OnPropertyChanged(nameof(Items));
+
+
+            IsBusy = false;
+        }
         public override string ToString() {
             return $"ClipTray";
         }
@@ -301,10 +342,17 @@ namespace MonkeyPaste.Avalonia {
 
                     OnPropertyChanged(nameof(ClipTrayTotalTileWidth));
                     OnPropertyChanged(nameof(ClipTrayTotalTileHeight));
+
+                    OnPropertyChanged(nameof(HorizontalScrollBarVisibility));
+                    OnPropertyChanged(nameof(VerticalScrollBarVisibility));
                     break;
                 case nameof(ClipTrayTotalTileWidth):
+                case nameof(ClipTrayTotalHeight):
                     OnPropertyChanged(nameof(MaxScrollOffsetX));
                     OnPropertyChanged(nameof(MaxScrollOffsetY));
+
+                    OnPropertyChanged(nameof(HorizontalScrollBarVisibility));
+                    OnPropertyChanged(nameof(VerticalScrollBarVisibility));
                     break;
                 case nameof(ScrollOffsetX):
                 case nameof(ScrollOffsetY):
@@ -924,61 +972,6 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
 
-        public async Task InitAsync() {
-            // LogPropertyChangedEvents = true;
-
-            IsBusy = true;
-
-            while (MpSourceCollectionViewModel.Instance.IsAnyBusy) {
-                await Task.Delay(100);
-            }
-
-            PropertyChanged += MpAvClipTrayViewModel_PropertyChanged;
-            Items.CollectionChanged += Items_CollectionChanged;
-
-            MpDataModelProvider.AllFetchedAndSortedCopyItemIds.CollectionChanged += AllFetchedAndSortedCopyItemIds_CollectionChanged;
-
-            MpDb.SyncAdd += MpDbObject_SyncAdd;
-            MpDb.SyncUpdate += MpDbObject_SyncUpdate;
-            MpDb.SyncDelete += MpDbObject_SyncDelete;
-
-            _pageSize = 1;
-            RemainingItemsCountThreshold = 1;
-            _oldMainWindowHeight = MpAvMainWindowViewModel.Instance.MainWindowHeight;
-            //DefaultLoadCount = MpMeasurements.Instance.DefaultTotalVisibleClipTiles * 1 + 2;
-
-            MpMessenger.Register<MpMessageType>(
-                MpDataModelProvider.QueryInfo, ReceivedQueryInfoMessage);
-
-            MpMessenger.Register<MpMessageType>(
-                nameof(MpAvDragDropManager), ReceivedDragDropManagerMessage);
-
-            MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
-
-            for (int i = 1; i <= 10; i++) {
-                var test_ctvm = await CreateClipTileViewModel(
-                    new MpCopyItem() {
-                        Id = i,
-                        ItemType = MpCopyItemType.Text,
-                        ItemData = "This is test " + i,
-                        Title = "Test" + i,
-                        SourceId = 1,
-                        CopyDateTime = DateTime.Now
-                    }, i - 1);
-                Items.Add(test_ctvm);
-            }
-
-            SelectedItem = Items[0];
-
-            OnPropertyChanged(nameof(Items));
-
-            
-            IsBusy = false;
-
-
-
-
-        }
 
         private void AllFetchedAndSortedCopyItemIds_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
             MpConsole.WriteLine("Query Ids Changed:");
@@ -1581,6 +1574,8 @@ namespace MonkeyPaste.Avalonia {
 
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(IsTrayEmpty));
+            OnPropertyChanged(nameof(HorizontalScrollBarVisibility));
+            OnPropertyChanged(nameof(VerticalScrollBarVisibility));
             if (e.OldItems != null) { //if (e.Action == NotifyCollectionChangedAction.Move && IsLoadingMore) {
                 foreach (MpAvClipTileViewModel octvm in e.OldItems) {
                     octvm.Dispose();
@@ -2307,8 +2302,8 @@ namespace MonkeyPaste.Avalonia {
              },
             () => ScrollOffsetX < MaxScrollOffsetX && !IsAnyBusy);
 
-        public ICommand ScrollToPreviousPageCommand => new MpAsyncCommand(
-            async () => {
+        public ICommand ScrollToPreviousPageCommand => new MpCommand(
+            () => {
                 //int prevPageOffset = Math.Max(0, HeadQueryIdx - 1);
                 //JumpToQueryIdxCommand.Execute(prevPageOffset);
                 //await Task.Delay(100);

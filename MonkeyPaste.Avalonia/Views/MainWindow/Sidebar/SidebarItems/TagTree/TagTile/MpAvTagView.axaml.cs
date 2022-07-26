@@ -8,6 +8,9 @@ using System.Linq;
 using PropertyChanged;
 using Avalonia.Interactivity;
 using Avalonia.Input;
+using Avalonia.Threading;
+using System;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -24,6 +27,17 @@ namespace MonkeyPaste.Avalonia {
 
             var tagNameTextBox = this.FindControl<TextBox>("TagNameTextBox");
             tagNameTextBox.AddHandler(TextBox.KeyDownEvent, TagNameTextBox_KeyDown, RoutingStrategies.Tunnel);
+            tagNameTextBox.GetObservable(TextBox.IsVisibleProperty).Subscribe(value => {
+                if(!value) {
+                    return;
+                }
+                Dispatcher.UIThread.Post(async () => {
+                    await Task.Delay(500);
+                    tagNameTextBox.SelectAll();
+                    //MpAvIsFocusedExtension.SetIsFocused(tagNameTextBox, true);
+                    tagNameTextBox.Focus();
+                });
+            });
         }
 
         private void TagNameTextBox_KeyDown(object sender, global::Avalonia.Input.KeyEventArgs e) {

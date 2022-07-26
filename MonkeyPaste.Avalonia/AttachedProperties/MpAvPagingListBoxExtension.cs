@@ -501,11 +501,22 @@ namespace MonkeyPaste.Avalonia {
                         //        Source = lb.DataContext,
                         //        Path = nameof(psvvm.ScrollOffsetY)
                         //    });
-
-
+                        //if(sv.TryGetVisualDescendants<ScrollBar>(out var scrollBars) && scrollBars.Count() > 0) {
+                        //    foreach(var sb in scrollBars) {
+                        //        sb.GetObservable(ScrollBar.BoundsProperty).Subscribe(value => {
+                        //            if (sb.Orientation == Orientation.Horizontal) {
+                        //                MpConsole.WriteLine("H Bounds change, size: " + value.Size);
+                        //                psvvm.HorizontalScrollBarDesiredSize = value.Size;
+                        //            } else {
+                        //                MpConsole.WriteLine("V Bounds change, size: " + value.Size);
+                        //                psvvm.VerticalScrollBarDesiredSize = value.Size;
+                        //            }
+                        //        });
+                        //    }
+                        //}
                         foreach (var track in tracks) {
                             track.Tag = lb;
-                            track.IsThumbDragHandled = true;
+                            track.IsThumbDragHandled = true;                            
 
                             track.Bind(
                                     Track.ValueProperty,

@@ -329,7 +329,8 @@ namespace MonkeyPaste.Avalonia {
                     canvasMp = e.GetPosition(canvas.Parent);
                 }
             }
-            void Canvas_PointerLeave(object sender, PointerEventArgs e) {
+            void Canvas_PointerLeave
+                (object sender, PointerEventArgs e) {
                 if (sender is Canvas canvas) {
                     canvasMp = null;
                 }
@@ -368,10 +369,13 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (isVisible) {
                     if (!tb.IsFocused) {
-                        tb.Focus();
+                        //tb.Focus();
+                        //tb.CaretIndex = 0;
+                        //tb.SelectAll();
+                        //MpAvIsFocusedExtension.SetIsFocused(tb, true);
                     }
                 }
-                tb.InvalidateAll();
+                //tb.InvalidateAll();
             }
 
             #endregion

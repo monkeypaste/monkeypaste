@@ -26,6 +26,7 @@
                           VerticalScrollBarVisibility="{Binding VerticalScrollBarVisibility}"
                           HorizontalAlignment="Left"
                           VerticalAlignment="Top"
+                          AllowAutoHide="True"
                           Width="{Binding ClipTrayScreenWidth}"
                           Height="{Binding ClipTrayScreenHeight}">
                 <ListBox x:Name="ClipTrayListBox"
@@ -101,6 +102,30 @@
                                     Value="{Binding MinSize}" />
                             <Setter Property="Height"
                                     Value="{Binding MinSize}" />
+                        </Style>
+                        <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+                            <Setter Property="Background"
+                                    Value="Transparent" />
+                        </Style>
+
+                        <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+                            <Setter Property="Background"
+                                    Value="Transparent" />
+                        </Style>
+
+                        <Style Selector="ListBoxItem:selected:focus /template/ ContentPresenter">
+                            <Setter Property="Background"
+                                    Value="Transparent" />
+                        </Style>
+
+                        <Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter">
+                            <Setter Property="Background"
+                                    Value="Transparent" />
+                        </Style>
+
+                        <Style Selector="ListBoxItem:selected:focus:pointerover /template/ ContentPresenter">
+                            <Setter Property="Background"
+                                    Value="Transparent" />
                         </Style>
                     </ListBox.Styles>
                     <ListBox.ItemTemplate>

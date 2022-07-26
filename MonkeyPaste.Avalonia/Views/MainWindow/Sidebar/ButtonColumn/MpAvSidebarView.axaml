@@ -38,22 +38,36 @@
                         Value="1" />
             </Style>
             <Style Selector="ToggleButton:pointerover">
+                <Setter Property="Cursor"
+                        Value="Hand" />
+            </Style>
+            <Style Selector="ToggleButton:pointerover PathIcon">
+                <Setter Property="Foreground"
+                        Value="Gold" />
+            </Style>
+            <Style Selector="ToggleButton:pointerover /template/ ContentPresenter">
                 <Setter Property="BorderBrush"
                         Value="Yellow" />
             </Style>
-            <Style Selector="ToggleButton[IsChecked=true]">
+            <Style Selector="ToggleButton:checked /template/ ContentPresenter">
                 <Setter Property="Background"
                         Value="Lime" />
             </Style>
-            <Style Selector="ToggleButton[IsChecked=false]">
+            <Style Selector="ToggleButton:unchecked /template/ ContentPresenter">
                 <Setter Property="Background"
                         Value="LightGray" />
             </Style>
-            <Style Selector="Image">
+            <Style Selector="PathIcon">
                 <Setter Property="HorizontalAlignment"
-                        Value="Stretch" />
+                        Value="Center" />
                 <Setter Property="VerticalAlignment"
-                        Value="Stretch" />
+                        Value="Center" />
+                <Setter Property="Width"
+                        Value="24" />
+                <Setter Property="Height"
+                        Value="24" />
+                <Setter Property="Foreground"
+                        Value="LightSlateGray" />
             </Style>
         </Grid.Styles>
         <ToggleButton x:Name="TagTreeToggleButton"
@@ -64,8 +78,7 @@
             <ToolTip.Tip>
                 <local:MpAvTooltipView ToolTipText="Collection Tree" />
             </ToolTip.Tip>
-            <Image Source="{Binding Source={StaticResource PinToCollectionImage},
-                                    Converter={StaticResource StringResourceToBitmapConverter}}" />
+            <PathIcon Data="{StaticResource BooksSvg}" />
         </ToggleButton>
         <ToggleButton x:Name="ClipboardHandlerToggleButton"
                       Grid.Row="1"
@@ -75,8 +88,7 @@
             <ToolTip.Tip>
                 <local:MpAvTooltipView ToolTipText="Clipboard Handlers" />
             </ToolTip.Tip>
-            <Image Source="{Binding Source={StaticResource ClipboardImage},
-                                    Converter={StaticResource StringResourceToBitmapConverter}}" />
+            <PathIcon Data="{StaticResource ClipboardSvg}" />
         </ToggleButton>
         <ToggleButton x:Name="AnalyzerToggleButton"
                       Grid.Row="2"
@@ -86,8 +98,7 @@
             <ToolTip.Tip>
                 <local:MpAvTooltipView ToolTipText="Analyze" />
             </ToolTip.Tip>
-            <Image Source="{Binding Source={StaticResource BrainImage},
-                                    Converter={StaticResource StringResourceToBitmapConverter}}" />
+            <PathIcon Data="{StaticResource BrainOutlineSvg}" />
         </ToggleButton>
         <ToggleButton x:Name="ActionsToggleButton"
                       Grid.Row="3"
@@ -98,8 +109,7 @@
             <ToolTip.Tip>
                 <local:MpAvTooltipView ToolTipText="Actions" />
             </ToolTip.Tip>
-            <Image Source="{Binding Source={StaticResource BoltImage},
-                                    Converter={StaticResource StringResourceToBitmapConverter}}" />
+            <PathIcon Data="{StaticResource BoltSvg}" />
         </ToggleButton>
         <ToggleButton x:Name="AppModeToggleButton"
                       Grid.Row="4"
@@ -267,8 +277,8 @@
                     </ContextMenu.Template>
                 </ContextMenu>
             </ToggleButton.ContextMenu>-->
-            <Image Source="{Binding Source={StaticResource BullsEyeImage},
-                                    Converter={StaticResource StringResourceToBitmapConverter}}" />
+
+          <PathIcon Data="{StaticResource MouseSvg}" />
         </ToggleButton>
     </Grid>
 </local:MpAvUserControl>

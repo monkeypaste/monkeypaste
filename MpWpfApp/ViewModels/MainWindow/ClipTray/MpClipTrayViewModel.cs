@@ -754,7 +754,7 @@ namespace MpWpfApp {
 
         #region MpIClipboardContentDataProvider Implementation
 
-        public async Task<string> GetClipboardContentData() {
+        public async Task<string> GetClipboardContentDataAsync() {
             while(IsAddingClipboardItem) {
                 try {
                     await Task.Delay(100).TimeoutAfter(TimeSpan.FromMilliseconds(3000));
@@ -792,7 +792,7 @@ namespace MpWpfApp {
             OnUiRefreshRequest?.Invoke(this, null);
         }
         #endregion      
-        public async Task UpdateSortOrder(bool fromModel = false) {
+        public async Task UpdateSortOrderAsync(bool fromModel = false) {
             if (fromModel) {
                 //ClipTileViewModels.Sort(x => x.CopyItem.CompositeSortOrderIdx);
             } else {
@@ -2122,8 +2122,8 @@ namespace MpWpfApp {
              },
             () => ScrollOffset < MaximumScrollOfset && !IsAnyBusy);
 
-        public ICommand ScrollToPreviousPageCommand => new MpAsyncCommand(
-            async() => {
+        public ICommand ScrollToPreviousPageCommand => new MpCommand(
+            () => {
                 //int prevPageOffset = Math.Max(0, HeadQueryIdx - 1);
                 //JumpToQueryIdxCommand.Execute(prevPageOffset);
                 //await Task.Delay(100);

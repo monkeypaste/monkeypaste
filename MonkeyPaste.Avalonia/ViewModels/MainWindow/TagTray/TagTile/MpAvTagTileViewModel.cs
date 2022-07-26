@@ -160,14 +160,13 @@ namespace MonkeyPaste.Avalonia {
                         MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(this),
                         new MpMenuItemViewModel() {
                             IsSeparator = true,
-                            IsVisible = Parent.DeleteTagCommand.CanExecute(TagId)
+                            IsVisible = !IsTagReadOnly
                         },
                         new MpMenuItemViewModel() {
                             Header = "_Delete",
                             IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("DeleteImage") as string,
-                            Command = Parent.DeleteTagCommand,
-                            CommandParameter = TagId,
-                            IsVisible = Parent.DeleteTagCommand.CanExecute(TagId)
+                            Command = DeleteThisTagCommand,
+                            IsVisible = !IsTagReadOnly
                         }
                     }
                 };
@@ -912,7 +911,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand DeleteChildTagCommand => new MpAsyncCommand<object>(
             async (args) => {
                 var ttvm = args as MpAvTagTileViewModel;
-                var deleteTasks = ttvm.FindAllChildren().Select(x => (x as MpAvTagTileViewModel).Tag.DeleteFromDatabaseAsync()).ToList();
+                var deleteTasks = ttvm.FindAllChildren().Select(x => x.Tag.DeleteFromDatabaseAsync()).ToList();
                 deleteTasks.Add(ttvm.Tag.DeleteFromDatabaseAsync());
                 await Task.WhenAll(deleteTasks);
 
@@ -920,7 +919,8 @@ namespace MonkeyPaste.Avalonia {
 
                 await UpdateSortOrder();
                 OnPropertyChanged(nameof(Items));
-                OnPropertyChanged(nameof(SelectedItem));
+
+                Parent.SelectTagCommand.Execute(this);                
             });
 
         public ICommand DeleteThisTagCommand => new MpCommand(

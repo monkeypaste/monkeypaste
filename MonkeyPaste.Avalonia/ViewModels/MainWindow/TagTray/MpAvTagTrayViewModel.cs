@@ -59,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultSidebarWidth {
             get {
                 if(MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return 150;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
+                    return 300;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
                 } else {
                     return MpAvMainWindowViewModel.Instance.MainWindowWidth;
                 }
@@ -241,6 +241,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void ResetTagSelection() {
+            if(SelectedItem == null) {
+                return;
+            }
             if(SelectedItem.TagId != DefaultTagId) {
                 ClearTagSelection();
                 Items.Where(x => x.TagId == DefaultTagId).FirstOrDefault().IsSelected = true;
@@ -259,8 +262,8 @@ namespace MonkeyPaste.Avalonia {
                         MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = false;
                         MpActionCollectionViewModel.Instance.IsSidebarVisible = false;
                         MpClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
-
                     }
+                    MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel));
                     break;
                 case nameof(IsSelected):
                     if(IsSelected) {
@@ -300,7 +303,7 @@ namespace MonkeyPaste.Avalonia {
                     var ttvmToRemove = Items.Where(x => x.Tag.Guid == t.Guid).FirstOrDefault();
                     if (ttvmToRemove != null) {
                         ttvmToRemove.Tag.StartSync(e.SourceGuid);
-                        DeleteTagCommand.Execute(t.Id);
+                        ttvmToRemove.DeleteThisTagCommand.Execute(null);
                         ttvmToRemove.Tag.EndSync();
                     }
                 }
@@ -347,38 +350,6 @@ namespace MonkeyPaste.Avalonia {
             (args) => args != null &&
                       (args is MpAvTagTileViewModel ||
                        args is List<MpAvTagTileViewModel>));
-
-        public ICommand DeleteTagCommand => new MpCommand<object>(
-            async (tagId) => {
-                //when removing a tag auto-select the history tag
-
-                var ttvm = Items.Where(x => x.TagId == (int)tagId).FirstOrDefault();
-                ttvm.ParentTreeItem.Children.Remove(ttvm);
-
-                var ctl = await MpDataModelProvider.GetChildTagsAsync((int)tagId);
-                ctl.ForEach(x => DeleteTagCommand.Execute(x.Id));
-
-                if (!ttvm.Tag.IsSyncing) {
-                    await ttvm.Tag.DeleteFromDatabaseAsync();
-                }
-                
-                Items.Remove(ttvm);
-
-                OnPropertyChanged(nameof(Items));
-                ResetTagSelection();
-            },
-            (tagId) => {
-                //allow delete if any tag besides history tag is selected, delete method will ignore history
-                if (tagId == null) {
-                    return false;
-                }
-                var ttvm = Items.Where(x => x.TagId == (int)tagId).FirstOrDefault();
-                if(ttvm == null) {
-                    return false;
-                }
-                return !ttvm.IsTagReadOnly;
-            });
-
 
         public ICommand SelectTagCommand => new MpCommand<object>(
             (args) => {

@@ -58,7 +58,7 @@
                         <TextBox x:Name="TagNameTextBox"
                                  local:MpAvIsFocusedExtension.IsEnabled="True"
                                  local:MpAvIsFocusedExtension.SelectViewModelOnFocus="False"
-                                 local:MpAvIsFocusedExtension.IsFocused="{Binding IsTagNameTreeTextBoxFocused,
+                                 local:MpAvIsFocusedExtension.IsFocused="{Binding IsEditing,
                                                                                   Mode=TwoWay}"
                                  local:MpAvMarqueeTextBoxExtension.IsEnabled="True"
                                  local:MpAvMarqueeTextBoxExtension.EditOnMouseClick="False"
@@ -71,7 +71,7 @@
                                  BorderThickness="0"
                                  HorizontalAlignment="Center"
                                  VerticalAlignment="Center"
-                                 IsReadOnly="{Binding IsTagNameTreeReadOnly,
+                                 IsReadOnly="{Binding !IsEditing,
                                                       Mode=OneWay}"
                                  FontSize="16"
                                  Text="{Binding TagName,
@@ -80,22 +80,7 @@
                 </Grid>
             </StackPanel>
         </local:MpAvClipBorder>
-        <Button x:Name="AddTagButton"
-                Grid.Column="1"
-                DockPanel.Dock="Right"
-                HorizontalAlignment="Right"
-                Background="Transparent"
-                IsVisible="{Binding IsHovering}"
-                CornerRadius="7"
-                Command="{Binding AddChildTagCommand}">
-            <ToolTip.Tip>
-                <local:MpAvTooltipView ToolTipText="Add Sub Item" />
-            </ToolTip.Tip>
-            <Image Stretch="Fill"
-                   Height="20"
-                   Width="20"
-                   Source="/Assets/Images/add4.png" />
-        </Button>
+
     </DockPanel>
     <!--</AdornerLayer>-->
 </local:MpAvUserControl>

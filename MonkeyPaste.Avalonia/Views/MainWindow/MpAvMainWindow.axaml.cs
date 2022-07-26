@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using WebViewControl;
 using MonkeyPaste.Common.Avalonia;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using Avalonia.Controls.Primitives;
 using System.Linq;
 using System;
@@ -44,7 +45,6 @@ namespace MonkeyPaste.Avalonia {
             this.Deactivated += MainWindow_Deactivated;
             this.PointerMoved += MainWindow_PointerMoved;
             this.PointerLeave += MainWindow_PointerLeave;
-            this.AttachedToVisualTree += MpAvMainWindow_AttachedToVisualTree;
             MainWindowGrid = this.FindControl<Grid>("MainWindowGridRef");
 
             var sidebarSplitter = this.FindControl<GridSplitter>("SidebarGridSplitter");
@@ -59,15 +59,12 @@ namespace MonkeyPaste.Avalonia {
         private void SidebarSplitter_isVisibleChange(GridSplitter splitter, bool isVisible) {
             var containerGrid = splitter.GetVisualAncestor<Grid>();
 
-            if (!isVisible) {
-                containerGrid.ColumnDefinitions[1].Width = new GridLength(0);
-            } else {
-                containerGrid.ColumnDefinitions[1].Width = GridLength.Auto;
-            }
-        }
+            if (isVisible) {
+                containerGrid.ColumnDefinitions[1].Width = new GridLength(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel.DefaultSidebarWidth);
 
-        private void MpAvMainWindow_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            
+            } else {
+                containerGrid.ColumnDefinitions[1].Width = new GridLength(0);
+            }
         }
 
         void BoundsChangedHandler(AvaloniaPropertyChangedEventArgs<Rect> e) {
@@ -110,7 +107,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             MpAvGlobalInputHook.Instance.OnGlobalMouseWheelScroll += MpAvGlobalInputHook_OnMouseWheelScroll;
-
+            MpAvGlobalInputHook.Instance.OnGlobalMouseClicked += Instance_OnGlobalMouseClicked;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                 MpAvToolWindow_Win32.InitToolWindow(this.PlatformImpl.Handle.Handle);
             }
@@ -128,6 +125,7 @@ namespace MonkeyPaste.Avalonia {
             await Task.Delay(300);
             ReceivedGlobalMessage(MpMessageType.MainWindowOrientationChanged);
         }
+
 
         private int? _origResizerIdx;
         private void MainWindow_PointerMoved(object sender, global::Avalonia.Input.PointerEventArgs e) {
@@ -183,6 +181,17 @@ namespace MonkeyPaste.Avalonia {
                 MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
             }
         }
+        private void Instance_OnGlobalMouseClicked(object sender, MouseHookEventArgs e) {
+            if(!this.IsActive && 
+               !this.Bounds.Contains(MpAvGlobalInputHook.Instance.GlobalMouseLocation.ToAvPoint()) &&
+               MpAvMainWindowViewModel.Instance.IsMainWindowOpen &&
+               !MpAvMainWindowViewModel.Instance.IsMainWindowClosing) {
+                Dispatcher.UIThread.Post(() => {
+                    MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
+                });
+            }
+        }
+
         private void UpdateResizerOrientation() {
             var mwvm = MpAvMainWindowViewModel.Instance; 
             

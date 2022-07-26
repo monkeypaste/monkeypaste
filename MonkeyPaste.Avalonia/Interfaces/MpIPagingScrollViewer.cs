@@ -15,9 +15,5 @@ namespace MonkeyPaste.Avalonia {
         double ScrollOffsetY { get; set; }
         double ScrollVelocityX { get; set; }
         double ScrollVelocityY { get; set; }
-
-        Size HorizontalScrollBarDesiredSize { get; set; }
-
-        Size VerticalScrollBarDesiredSize { get; set; }
     }
 }

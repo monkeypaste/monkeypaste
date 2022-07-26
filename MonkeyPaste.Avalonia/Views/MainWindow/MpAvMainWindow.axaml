@@ -68,7 +68,7 @@
             <local:MpAvTagTreeView x:Name="TagTreeView"
                                    Grid.Column="1"
                                    HorizontalAlignment="Stretch"
-                                   HorizontalContentAlignment="Left"
+                                   HorizontalContentAlignment="Stretch"
                                    IsVisible="{Binding IsSidebarVisible,
                                                        Source={x:Static local:MpAvTagTrayViewModel.Instance}}" />
             <GridSplitter x:Name="SidebarGridSplitter"
@@ -78,6 +78,12 @@
                           VerticalAlignment="Stretch"
                           local:MpAvIsHoveringExtension.HoverCursor="ResizeWE"
                           local:MpAvIsHoveringExtension.IsEnabled="True">
+                <GridSplitter.Styles>
+                    <Style Selector="GridSplitter:pointerover">
+                        <Setter Property="Background"
+                                Value="Yellow" />
+                    </Style>
+                </GridSplitter.Styles>
                 <GridSplitter.IsVisible>
                     <MultiBinding Converter="{StaticResource MultiBoolConverter}"
                                   ConverterParameter="Or">
