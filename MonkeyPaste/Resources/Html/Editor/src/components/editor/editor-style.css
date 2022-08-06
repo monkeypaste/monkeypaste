@@ -36,6 +36,11 @@ body {
     z-index: -1;
 }
 
+#overlayCanvas {
+    position: absolute;
+    background-color: transparent;
+    z-index: 1;
+}
 /*div:focus {
     background-color: aqua;
 }

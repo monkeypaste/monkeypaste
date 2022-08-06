@@ -43,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpISidebarItemViewModel SelectedSidebarItemViewModel { 
+        public MpIOrientedSidebarItemViewModel SelectedSidebarItemViewModel { 
             get {
                 if(MpAvTagTrayViewModel.Instance.IsSidebarVisible) {
                     return MpAvTagTrayViewModel.Instance;
@@ -495,6 +495,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     MainWindowLeft = MainWindowOpenedRect.Left;
                     MainWindowRight = MainWindowOpenedRect.Right;
+                    MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayWidth));
 
                     MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeChanged);
 
@@ -759,22 +760,27 @@ namespace MonkeyPaste.Avalonia {
                               !IsMainWindowClosing;
             });
 
-        public ICommand CycleOrientationCcwCommand => new MpCommand(
-            () => {
-                int nextOr = (int)MainWindowOrientationType + 1;
-                if (nextOr >= Enum.GetNames(typeof(MpMainWindowOrientationType)).Length) {
-                    nextOr = 0;
+        public ICommand CycleOrientationCommand => new MpCommand<object>(
+            (isCwArg) => {
+                if(isCwArg is bool isCw) {
+                    int nextOr = (int)MainWindowOrientationType + (isCw ? -1 : 1);
+                    
+                    if (nextOr >= Enum.GetNames(typeof(MpMainWindowOrientationType)).Length) {
+                        nextOr = 0;
+                    } else if(nextOr < 0) {
+                        nextOr = Enum.GetNames(typeof(MpMainWindowOrientationType)).Length - 1;
+                    }
+
+                    MainWindowOrientationType = (MpMainWindowOrientationType)nextOr;
+                    SetupMainWindowSize(true);
+
+                    MainWindowLeft = MainWindowOpenedRect.Left;
+                    MainWindowTop = MainWindowOpenedRect.Top;
+                    MainWindowRight = MainWindowOpenedRect.Right;
+                    MainWindowBottom = MainWindowOpenedRect.Bottom;
+
+                    MpMessenger.SendGlobal(MpMessageType.MainWindowOrientationChanged);
                 }
-
-                MainWindowOrientationType = (MpMainWindowOrientationType)nextOr;
-                SetupMainWindowSize(true);
-
-                MainWindowLeft = MainWindowOpenedRect.Left;
-                MainWindowTop = MainWindowOpenedRect.Top;
-                MainWindowRight = MainWindowOpenedRect.Right;
-                MainWindowBottom = MainWindowOpenedRect.Bottom;
-
-                MpMessenger.SendGlobal(MpMessageType.MainWindowOrientationChanged);
             });
 
         public ICommand ToggleMainWindowLockCommand => new MpCommand(

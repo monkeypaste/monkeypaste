@@ -6,8 +6,10 @@ using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using WebViewControl;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvCefWebViewExtension {
@@ -240,5 +242,25 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #endregion
+
+        public static void InitCef() {
+            string cefLogPath = Path.Combine(Environment.CurrentDirectory, "ceflog.txt");
+            if (File.Exists(cefLogPath)) {
+                File.Delete(cefLogPath);
+            }
+
+            if (!OperatingSystem.IsLinux()) {
+                WebView.Settings.OsrEnabled = true;
+                WebView.Settings.LogFile = "ceflog.txt";
+                //WebView.Settings.EnableErrorLogOnly = true;
+
+                string cefCacheDir = Path.Combine(Environment.CurrentDirectory, "cefcache");
+                if (Directory.Exists(cefCacheDir)) {
+                    Directory.Delete(cefCacheDir, true);
+                }
+                Directory.CreateDirectory(cefCacheDir);
+                WebView.Settings.CachePath = cefCacheDir;
+            }
+        }
     }
 }

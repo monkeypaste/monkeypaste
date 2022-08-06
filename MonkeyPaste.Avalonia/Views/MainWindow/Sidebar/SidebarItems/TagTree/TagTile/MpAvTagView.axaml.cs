@@ -19,25 +19,8 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvTagView() {
             InitializeComponent();
-            var tagViewContainerDockPanel = this.FindControl<DockPanel>("TagViewContainerDockPanel");
-            tagViewContainerDockPanel.AddHandler(DockPanel.PointerPressedEvent, TagViewContainerDockPanel_PointerPressed, RoutingStrategies.Tunnel);
-
             var tagNameBorder = this.FindControl<MpAvClipBorder>("TagNameBorder");
             tagNameBorder.PointerPressed += TagNameBorder_PointerPressed;
-
-            var tagNameTextBox = this.FindControl<TextBox>("TagNameTextBox");
-            tagNameTextBox.AddHandler(TextBox.KeyDownEvent, TagNameTextBox_KeyDown, RoutingStrategies.Tunnel);
-            tagNameTextBox.GetObservable(TextBox.IsVisibleProperty).Subscribe(value => {
-                if(!value) {
-                    return;
-                }
-                Dispatcher.UIThread.Post(async () => {
-                    await Task.Delay(500);
-                    tagNameTextBox.SelectAll();
-                    //MpAvIsFocusedExtension.SetIsFocused(tagNameTextBox, true);
-                    tagNameTextBox.Focus();
-                });
-            });
         }
 
         private void TagNameTextBox_KeyDown(object sender, global::Avalonia.Input.KeyEventArgs e) {
@@ -57,15 +40,11 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             if(e.ClickCount > 1) {
-                BindingContext.RenameTagCommand.Execute(IsTreeTag);
+                BindingContext.RenameTagCommand.Execute(null);
             } else if (BindingContext.IsSelected) {
                 MpDataModelProvider.QueryInfo.NotifyQueryChanged();
             }
             //MpDragDropManager.StartDragCheck(BindingContext);
-        }
-
-        private void TagViewContainerDockPanel_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
-            
         }
 
         private void InitializeComponent() {

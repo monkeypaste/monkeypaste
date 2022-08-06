@@ -869,6 +869,7 @@ namespace MonkeyPaste {
         public static string GetShortcutKeystring(MpShortcutType shortcutType, int commandId = 0) {
             string query = string.Format(@"select KeyString from MpShortcut where e_ShortcutTypeId=? and fk_MpCommandId=?");
             var result = MpDb.QueryScalar<string>(query, (int)shortcutType, commandId);
+            result = result == null ? string.Empty : result;
             return result;
         }
 

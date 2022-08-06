@@ -316,6 +316,8 @@ function getDecodedTemplateGuids() {
             dtgl.push(cit.templateGuid);
         }        
     });
+    setComOutput(JSON.stringify(dtgl));
+
     return dtgl;
 }
 

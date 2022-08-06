@@ -11,13 +11,14 @@ using MonkeyPaste.Common;
 
 using System.Diagnostics;
 using Avalonia.Threading;
+using Avalonia.Controls;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvTagTileViewModel : 
         MpAvSelectorViewModelBase<MpAvTagTrayViewModel, MpAvTagTileViewModel>, 
         MpIHoverableViewModel,
         MpISelectableViewModel,
-        MpIHierarchialViewModel<MpAvTagTileViewModel>,
+        MpITreeItemViewModel<MpAvTagTileViewModel>,
         MpAvIShortcutCommand, 
         MpIBadgeNotificationViewModel,
         MpIUserColorViewModel,
@@ -36,48 +37,15 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
         #endregion
 
-        #region MpIHierarchialViewModel Implementation
-
-        public string Label {
-            get => TagName;
-            set => TagName = value;
-        }
-
-        public bool IsFocused { get; set; }
-        public double LabelFontSize => TagHeight * 0.5;
-        public string LabelForegroundHexColor => TagTextHexColor;
-        public bool ShowAddButton => IsAllTag;
-        public double ScreenWidth {
-            get => TagTileTrayWidth;
-            set => TagTileTrayWidth = value;
-        }
-        public double ScreenHeight => TagHeight;
-
-        public string IconHexColor => TagHexColor;
-        public string IconTextOrResourceKey => TagClipCount.ToString();
-        public string IconLabelHexColor => TagCountTextHexColor;
-        public string BackgroundHexColor => TagHexColor;
-        public string BorderHexColor => TagBorderHexColor;
-
-        public ICommand AddChildCommand => AddChildTagCommand;
-
-        //MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem => ParentTreeItem;
-        //ObservableCollection<MpITreeItemViewModel> MpITreeItemViewModel.Children => new ObservableCollection<MpITreeItemViewModel>(Children);
-        public ObservableCollection<MpAvTagTileViewModel> Children => new ObservableCollection<MpAvTagTileViewModel>(Items.OrderBy(x=>x.TagSortIdx));
-
         #region MpITreeItemViewModel Implementation
 
+        public ObservableCollection<MpAvTagTileViewModel> Children => new ObservableCollection<MpAvTagTileViewModel>(Items.OrderBy(x => x.TagSortIdx));
         public bool IsExpanded { get; set; }
 
         public MpAvTagTileViewModel ParentTreeItem { get; set; }
 
-        //public IList<MpAvTagTileViewModel> Children => Items;
-
-        #endregion
-
-
-        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem { get; }
-        ObservableCollection<MpITreeItemViewModel> MpITreeItemViewModel.Children { get; }
+        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem => ParentTreeItem;
+        ObservableCollection<MpITreeItemViewModel> MpITreeItemViewModel.Children => new ObservableCollection<MpITreeItemViewModel>(Children.Cast<MpITreeItemViewModel>());
 
         #endregion
 
@@ -88,7 +56,7 @@ namespace MonkeyPaste.Avalonia {
             get => _isSelected;
             set {
                 if(IsSelected != value) {
-                    if(!IsSelected && IsEditing) {
+                    if(!IsSelected && !IsTagNameReadOnly) {
                         return;
                     }
                     _isSelected = value;
@@ -120,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
                 int linkCount = IsCopyItemLinked(MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem.Id) ? 1 : 0;//MpAvClipTrayViewModel.Instance.SelectedModels.Where(x => IsLinked(x)).Count();
                 return new MpMenuItemViewModel() {
                     Header = TagName,
-                    //Command = MpAvClipTrayViewModel.Instance.LinkTagToCopyItemCommand,
+                    Command = MpAvClipTrayViewModel.Instance.ToggleLinkTagToCopyItemCommand,
                     CommandParameter = this,
                     IsSelected = totalCount == linkCount && totalCount > 0,
                     IsPartiallySelected = linkCount != totalCount && totalCount > 0,
@@ -140,8 +108,7 @@ namespace MonkeyPaste.Avalonia {
                             Header = "_Rename",
                             IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("RenameImage") as string, //MpPlatformWrapper.Services.PlatformResource.GetResource("RenameIcon") as string,
                             Command = RenameTagCommand,
-                            CommandParameter = IsTreeContextMenuOpened,
-                            IsVisible = RenameTagCommand.CanExecute(IsTreeContextMenuOpened)
+                            IsVisible = RenameTagCommand.CanExecute(null)
                         },
                         new MpMenuItemViewModel() {
                             Header = "_Assign Hotkey",
@@ -151,7 +118,7 @@ namespace MonkeyPaste.Avalonia {
                             ShortcutType = MpShortcutType.SelectTag
                         },
                         new MpMenuItemViewModel() {
-                            Header = IsPinned ? "_Unpin" : "_Pin",
+                            Header = IsModelPinned ? "_Unpin" : "_Pin",
                             IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("PinImage") as string,
                             Command = Parent.ToggleTileIsPinnedCommand,
                             CommandParameter = this
@@ -199,15 +166,15 @@ namespace MonkeyPaste.Avalonia {
 
         public MpShortcutType ShortcutType => MpShortcutType.SelectTag;
 
-        public MpShortcutViewModel ShortcutViewModel {
+        public MpAvShortcutViewModel ShortcutViewModel {
             get {
                 if (Parent == null || Tag == null) {
                     return null;
                 }
-                var scvm = MpShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.CommandId == TagId && x.ShortcutType == ShortcutType);
+                var scvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.CommandId == TagId && x.ShortcutType == ShortcutType);
 
                 if (scvm == null) {
-                    scvm = new MpShortcutViewModel(MpShortcutCollectionViewModel.Instance);
+                    scvm = new MpAvShortcutViewModel(MpAvShortcutCollectionViewModel.Instance);
                 }
 
                 return scvm;
@@ -228,6 +195,22 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsPinnedViewModel {
+            get {
+                if(!IsModelPinned) {
+                    return false;
+                }
+                return Parent.PinnedItems.Contains(this);
+            }
+        }
+        public bool CanAddChild {
+            get {
+                if(IsHelpTag) {
+                    return false;
+                }
+                return true;
+            }
+        }
         public bool IsNew {
             get {
                 return Tag == null || Tag.Id <= 0;
@@ -255,59 +238,16 @@ namespace MonkeyPaste.Avalonia {
         public bool IsFavoriteTag => TagId == MpTag.FavoritesTagId;
         public bool IsHelpTag => TagId == MpTag.HelpTagId;
 
-        public bool IsEditing => !IsTagNameTrayReadOnly || !IsTagNameTreeReadOnly;
+        public bool IsTagNameReadOnly { get; set; } = true;
 
-        private bool _isTagNameTreeReadOnly = true;
-        public bool IsTagNameTreeReadOnly {
-            get {
-                if(IsTagReadOnly) {
-                    return true;
-                }
-                return _isTagNameTreeReadOnly;
-            }
-            set {
-                if(IsTagReadOnly) {
-                    return;
-                }
-                if (_isTagNameTreeReadOnly != value) {
-                    _isTagNameTreeReadOnly = value;
-                    OnPropertyChanged(nameof(IsTagNameTreeReadOnly));
-                    OnPropertyChanged(nameof(IsEditing));
-                }
-            }
-        }
-        private bool _isTagNameTrayReadOnly = true;
-        public bool IsTagNameTrayReadOnly {
-            get {
-                if (IsTagReadOnly) {
-                    return true;
-                }
-                return _isTagNameTrayReadOnly;
-            }
-            set {
-                if (IsTagReadOnly) {
-                    return;
-                }
-                if (_isTagNameTrayReadOnly != value) {
-                    _isTagNameTrayReadOnly = value;
-                    OnPropertyChanged(nameof(IsTagNameTrayReadOnly));
-                    OnPropertyChanged(nameof(IsEditing));
-                }
-            }
-        }
 
-        public bool IsTagNameTrayTextBoxFocused { get; set; } = false;
-        public bool IsTagNameTreeTextBoxFocused { get; set; } = false;
+        public bool IsTagNameTextBoxFocused { get; set; } = false;
 
 
         public bool IsAssociated { get; private set; }
 
-        public bool IsTreeContextMenuOpened { get; set; } = false;
-        public bool IsTrayContextMenuOpened { get; set; } = false;
+        public bool IsContextMenuOpened { get; set; } = false;
 
-        #endregion
-
-        #region Visibility
         #endregion
 
         #region Appearance
@@ -326,7 +266,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string TagBorderHexColor {
             get {
-                if(IsTrayContextMenuOpened || IsTreeContextMenuOpened) {
+                if(IsContextMenuOpened) {
                     return MpSystemColors.red1;
                 }
                 if (IsAssociated) {
@@ -375,18 +315,18 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
-        public bool IsPinned {
+        public bool IsModelPinned {
             get {
-                if(Tag == null) {
+                if(Parent == null) {
                     return false;
                 }
-                return Tag.IsPinned;
+                return Parent.PinnedItems.Any(x => x.TagId == TagId);
             }
             set {
-                if(IsPinned != value) {
+                if(IsModelPinned != value) {
                     Tag.IsPinned = value;
                     HasModelChanged = true;
-                    OnPropertyChanged(nameof(IsPinned));
+                    OnPropertyChanged(nameof(IsModelPinned));
                     Parent.OnPropertyChanged(nameof(Parent.PinnedItems));
                 }
             }
@@ -438,6 +378,22 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+
+        public int TagTraySortIdx {
+            get {
+                if (Tag == null) {
+                    return 0;
+                }
+                return Tag.TagTraySortIdx;
+            }
+            set {
+                if (Tag.TagTraySortIdx != value) {
+                    Tag.TagTraySortIdx = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(TagTraySortIdx));
+                }
+            }
+        }
         public string TagName {
             get {
                 if (Tag == null) {
@@ -450,13 +406,11 @@ namespace MonkeyPaste.Avalonia {
                     Tag.TagName = value;
                     if (Tag.TagName.Trim() == string.Empty) {
                         Tag.TagName = "Untitled";
-                        if(IsTagNameTreeTextBoxFocused) {
-                            IsTagNameTreeReadOnly = false;
-                        } else if(IsTagNameTrayTextBoxFocused) {
-                            IsTagNameTrayReadOnly = false;
-                        }
+                        if(IsTagNameTextBoxFocused) {
+                            IsTagNameReadOnly = false;
+                        } 
                     }
-                    HasModelChanged = true;
+                    //HasModelChanged = true;
                     OnPropertyChanged(nameof(TagName));
                 }
             }
@@ -529,7 +483,7 @@ namespace MonkeyPaste.Avalonia {
 
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(Children));
-            OnPropertyChanged(nameof(IsTagNameTrayReadOnly));
+            OnPropertyChanged(nameof(IsTagNameReadOnly));
 
             if(Parent.Items.All(x=>x.TagId != TagId)) {
                 Parent.Items.Add(this);
@@ -626,7 +580,11 @@ namespace MonkeyPaste.Avalonia {
                 if (sc.CommandId == TagId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
-            } 
+            } else if(e is MpTag t && t.Id == TagId) {
+                Dispatcher.UIThread.Post(async () => {
+                    await InitializeAsync(t);
+                });
+            }
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
@@ -658,8 +616,8 @@ namespace MonkeyPaste.Avalonia {
 
         protected virtual void MpTagTileViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(IsEditing):
-                    if (IsEditing) {
+                case nameof(IsTagNameReadOnly):
+                    if (!IsTagNameReadOnly) {
                         _wasEditingName = true;
                         _originalTagName = TagName;
                     } else {
@@ -682,29 +640,13 @@ namespace MonkeyPaste.Avalonia {
                         }
                         Parent.SelectTagCommand.Execute(this);
                     } else {
-                        IsTagNameTrayReadOnly = true;
-                        IsTagNameTreeReadOnly = true;
+                        IsTagNameReadOnly = true;
                     }
                     //OnPropertyChanged(nameof(TagBorderBackgroundHexColor));
                     //MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.ClipTrayBackgroundBrush));
                     break;
-                case nameof(IsTagNameTreeReadOnly):
-                    if (!IsTagNameTreeReadOnly) {
-                        IsTagNameTrayTextBoxFocused = false;
-                        IsTagNameTreeTextBoxFocused = true;
-                        //IsSelected = true;
-                    }
-                    break;
-                case nameof(IsTagNameTrayReadOnly):
-                    if (!IsTagNameTrayReadOnly) {
-                        IsTagNameTreeTextBoxFocused = false;
-                        IsTagNameTrayTextBoxFocused = true;
-                        //IsSelected = true;
-                    }
-                    break;
-                case nameof(IsTagNameTrayTextBoxFocused):
-                case nameof(IsTagNameTreeTextBoxFocused):
-                    if (!IsTagNameTreeTextBoxFocused && !IsTagNameTrayTextBoxFocused) {
+                case nameof(IsTagNameTextBoxFocused):
+                    if (!IsTagNameTextBoxFocused) {
                         FinishRenameTagCommand.Execute(null);
                     }
                     break;
@@ -733,6 +675,7 @@ namespace MonkeyPaste.Avalonia {
                         return;
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsNavButtonsVisible));
+                    Parent.OnPropertyChanged(nameof(Parent.TotalTrayTileWidth));
                     break;
             }
         }
@@ -750,7 +693,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private async Task UpdateSortOrder() {
+        private async Task UpdateTreeSortOrder() {
             Items.ForEach(x => x.TagSortIdx = Items.IndexOf(x));
             await Task.WhenAll(Items.Select(x => x.Tag.WriteToDatabaseAsync()));
         }
@@ -838,7 +781,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand AssignHotkeyCommand => new MpCommand<object>(
             async (args) => {
-                await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
+                await MpAvShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
                             $"Select '{TagName}' Collection",
                             Parent.SelectTagCommand, 
                             ShortcutType,
@@ -848,7 +791,7 @@ namespace MonkeyPaste.Avalonia {
             });
 
         public ICommand ChangeColorCommand => new MpCommand<object>(
-            async (args) => {
+            (args) => {
                 TagHexColor = args.ToString();
                
             });
@@ -856,29 +799,21 @@ namespace MonkeyPaste.Avalonia {
         public ICommand CancelRenameTagCommand => new MpCommand(
             () => {
                 TagName = _originalTagName;
-                IsTagNameTrayReadOnly = true;
-                IsTagNameTreeReadOnly = true;
+                IsTagNameReadOnly = true;
             });
 
         public ICommand FinishRenameTagCommand => new MpAsyncCommand(
             async() => {
-                IsTagNameTrayReadOnly = true;
-                IsTagNameTreeReadOnly = true;
+                IsTagNameReadOnly = true;
                 await Tag.WriteToDatabaseAsync();
             });
 
-        public ICommand RenameTagCommand => new MpCommand<object>(
-             (isFromTreeArg) => {
+        public ICommand RenameTagCommand => new MpCommand(
+             () => {
                 _originalTagName = TagName;
-                if(isFromTreeArg is bool isFromTree && isFromTree) {
-                     IsTagNameTreeReadOnly = false;
-                     IsTagNameTrayReadOnly = true;
-                 } else {
-                     IsTagNameTrayReadOnly = false;
-                     IsTagNameTreeReadOnly = true;
-                 }
-            },
-            (isFromTreeArg) => {
+                 IsTagNameReadOnly = false;
+             },
+            () => {
                 return !IsTagReadOnly;
             });
 
@@ -906,18 +841,26 @@ namespace MonkeyPaste.Avalonia {
 
                  Parent.SelectedItem.OnPropertyChanged(nameof(Parent.SelectedItem.Items));
                  Parent.OnPropertyChanged(nameof(Parent.Items));
-             });
+             },(arg) => CanAddChild);
 
         public ICommand DeleteChildTagCommand => new MpAsyncCommand<object>(
             async (args) => {
                 var ttvm = args as MpAvTagTileViewModel;
+                if (ttvm.IsModelPinned) {
+                    var pttvm_toRemove = Parent.PinnedItems.FirstOrDefault(x => x.TagId == ttvm.TagId);
+                    Parent.PinnedItems.Remove(pttvm_toRemove);
+                }
+                
                 var deleteTasks = ttvm.FindAllChildren().Select(x => x.Tag.DeleteFromDatabaseAsync()).ToList();
                 deleteTasks.Add(ttvm.Tag.DeleteFromDatabaseAsync());
                 await Task.WhenAll(deleteTasks);
 
-                Items.Remove(ttvm);
+                var ttvm_toRemove = Parent.PinnedItems.FirstOrDefault(x => x.TagId == ttvm.TagId);
+                Parent.PinnedItems.Remove(ttvm_toRemove);
+                Items.Remove(ttvm_toRemove);
+                
 
-                await UpdateSortOrder();
+                await UpdateTreeSortOrder();
                 OnPropertyChanged(nameof(Items));
 
                 Parent.SelectTagCommand.Execute(this);                

@@ -9,18 +9,13 @@
              d:DesignHeight="450"
              x:DataType="pcl:MpMenuItemViewModel"
              x:CompileBindings="False"
-             Items="{Binding SubItems}"
+             Items="{Binding SubItems,
+                             Converter={StaticResource VisibleMenuItemsConverter}}"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch"
-             MinWidth="300"
-             MinHeight="300"
              x:Class="MonkeyPaste.Avalonia.MpAvContextMenuView"
              ContextMenuOpening="MpAvContextMenuView_ContextMenuOpening"
-             ContextMenuClosing="MpAvContextMenuView_ContextMenuClosing"
-             DataContextChanged="MpAvContextMenuView_DataContextChanged">
-    <!--<ContextMenu.Styles>
-        <StyleInclude Source="/Styles/ContextMenu/MpAvContextMenuStyle.axaml" />
-    </ContextMenu.Styles>-->
+             ContextMenuClosing="MpAvContextMenuView_ContextMenuClosing">
     <ContextMenu.Resources>
         <Thickness x:Key="MenuFlyoutItemThemePadding">
             0,0,0,0
@@ -51,7 +46,7 @@
             </DataTemplate>
             <DataTemplate x:Key="ColorPalleteMenuItemTemplate"
                           DataType="{x:Type pcl:MpMenuItemViewModel}">
-                <MenuItem>
+                <MenuItem Tag="yup">
                     <MenuItem.Header>
                         <ListBox Margin="0"
                                  HorizontalAlignment="Stretch"
@@ -95,7 +90,6 @@
                                 </Style>
                             </ListBox.Styles>
                             <ListBox.ItemTemplate>
-                                <!--  Color Pallete Item  -->
                                 <DataTemplate>
                                     <Button local:MpAvIsHoveringExtension.IsEnabled="True"
                                             local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering,
@@ -124,9 +118,6 @@
                                                                     Source={StaticResource PlusImage}}"
                                                    Stretch="Fill"
                                                    IsVisible="{Binding IsVisible}">
-                                                <!--<ToolTip.Tip>
-                                                    <local:MpAvTooltipView ToolTipText="Custom Color..." />
-                                                </ToolTip.Tip>-->
                                             </Image>
                                         </Border>
                                     </Button>
@@ -140,6 +131,7 @@
                               ItemsSource="{Binding SubItems}"
                               DataType="{x:Type pcl:MpMenuItemViewModel}">
                 <MenuItem Command="{Binding Command}"
+                          Tag="yup"
                           CommandParameter="{Binding CommandParameter}"
                           Header="{Binding Header}"
                           InputGesture="{Binding InputGestureText}"
@@ -162,6 +154,7 @@
             <TreeDataTemplate x:Key="DefaultMenuItemTemplate"
                               ItemsSource="{Binding SubItems}">
                 <MenuItem Command="{Binding Command}"
+                          Tag="yup"
                           CommandParameter="{Binding CommandParameter}"
                           Header="{Binding Header}"
                           InputGesture="{Binding InputGestureText}"

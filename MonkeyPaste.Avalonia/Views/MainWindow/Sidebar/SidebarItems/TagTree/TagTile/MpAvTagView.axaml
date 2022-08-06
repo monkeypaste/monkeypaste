@@ -18,7 +18,6 @@
                               CornerRadius="7"
                               Margin="5,0,0,0"
                               Padding="1"
-                              Focusable="False"
                               VerticalAlignment="Stretch"
                               HorizontalAlignment="Left"
                               MinHeight="20"
@@ -58,11 +57,13 @@
                         <TextBox x:Name="TagNameTextBox"
                                  local:MpAvIsFocusedExtension.IsEnabled="True"
                                  local:MpAvIsFocusedExtension.SelectViewModelOnFocus="False"
-                                 local:MpAvIsFocusedExtension.IsFocused="{Binding IsEditing,
+                                 local:MpAvIsFocusedExtension.IsFocused="{Binding IsTagNameTextBoxFocused,
                                                                                   Mode=TwoWay}"
                                  local:MpAvMarqueeTextBoxExtension.IsEnabled="True"
                                  local:MpAvMarqueeTextBoxExtension.EditOnMouseClick="False"
-                                 local:MpAvMarqueeTextBoxExtension.IsReadOnly="{Binding IsTagNameTreeReadOnly,
+                                 local:MpAvMarqueeTextBoxExtension.CancelEditCommand="{Binding CancelRenameTagCommand}"
+                                 local:MpAvMarqueeTextBoxExtension.FinishEditCommand="{Binding FinishRenameTagCommand}"
+                                 local:MpAvMarqueeTextBoxExtension.IsReadOnly="{Binding IsTagNameReadOnly,
                                                                                         Mode=TwoWay}"
                                  Background="White"
                                  Foreground="Black"
@@ -71,7 +72,7 @@
                                  BorderThickness="0"
                                  HorizontalAlignment="Center"
                                  VerticalAlignment="Center"
-                                 IsReadOnly="{Binding !IsEditing,
+                                 IsReadOnly="{Binding IsTagNameReadOnly,
                                                       Mode=OneWay}"
                                  FontSize="16"
                                  Text="{Binding TagName,

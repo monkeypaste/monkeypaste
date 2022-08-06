@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
         MpIMenuItemViewModel,
         MpIAsyncSingletonViewModel<MpAnalyticItemCollectionViewModel>, 
         MpITreeItemViewModel,
-        MpISidebarItemViewModel {
+        MpIOrientedSidebarItemViewModel {
         #region Private Variables
 
         private string _processAutomationGuid = "e7e25c85-1c8f-4e79-be8f-2ebfcb5bb94e";
@@ -78,9 +78,13 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpISidebarItemViewModel Implementation
+        #region MpIOrientedSidebarItemViewModel Implementation
         public double SidebarWidth { get; set; } = 0;// MpMeasurements.Instance.DefaultAnalyzerPresetPanelWidth;
         public double DefaultSidebarWidth => 350;// MpMeasurements.Instance.DefaultAnalyzerPresetPanelWidth;
+
+        public double DefaultSidebarHeight => 350;
+        public double SidebarHeight { get; set; } = 0;
+
         public bool IsSidebarVisible { get; set; } = false;
 
         public MpISidebarItemViewModel NextSidebarItem => SelectedPresetViewModel;

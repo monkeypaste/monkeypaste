@@ -60,10 +60,9 @@
                 <TreeDataTemplate DataType="{x:Type local:MpAvTagTileViewModel}"
                                   ItemsSource="{Binding Items}">
                     <local:MpAvTagView DataContext="{Binding}"
-                                       IsTreeTag="True"
-                                       local:MpAvMenuExtension.IsEnabled="True"
+                                       local:MpAvMenuExtension.IsEnabled="False"
                                        local:MpAvMenuExtension.SelectOnRightClick="False"
-                                       local:MpAvMenuExtension.IsOpen="{Binding IsTreeContextMenuOpened,
+                                       local:MpAvMenuExtension.IsOpen="{Binding IsContextMenuOpened,
                                                                                 Mode=TwoWay}"
                                        local:MpAvIsHoveringExtension.IsEnabled="True"
                                        local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering,

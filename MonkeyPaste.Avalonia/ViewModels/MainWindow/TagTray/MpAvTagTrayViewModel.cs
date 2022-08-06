@@ -17,33 +17,17 @@ namespace MonkeyPaste.Avalonia {
         MpISelectableViewModel,
         MpIOrientedSidebarItemViewModel {
         #region Private Variables
+        
+        private bool _isSelecting = false;
+
         #endregion
 
         #region Properties
 
         #region View Models
 
-        public ObservableCollection<MpAvTagTileViewModel> PinnedItems {
-            get {
-                return new ObservableCollection<MpAvTagTileViewModel>(Items.Where(x => x.IsPinned));
-            }
-        }
-
-        //public override ObservableCollection<MpAvTagTileViewModel> Items {
-        //    get {
-        //        if(AllTagViewModel == null || HelpTagViewModel == null) {
-        //            return new ObservableCollection<MpAvTagTileViewModel>();
-        //        }
-        //        var ttvml = AllTagViewModel.FindAllChildren().ToList();
-        //        ttvml.Insert(0, AllTagViewModel);
-        //        ttvml.Add(HelpTagViewModel);
-        //        var htvml = HelpTagViewModel.FindAllChildren().ToList();
-        //        if(htvml.Count > 0) {
-        //            ttvml.AddRange(htvml);
-        //        }
-        //        return new ObservableCollection<MpAvTagTileViewModel>(ttvml.Cast<MpAvTagTileViewModel>());
-        //    }
-        //}
+        public ObservableCollection<MpAvTagTileViewModel> PinnedItems { get; set; } = new ObservableCollection<MpAvTagTileViewModel>();
+        
 
         public IEnumerable<MpAvTagTileViewModel> RootItems => Items.Where(x => x.ParentTagId == 0);
 
@@ -99,18 +83,23 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public bool IsNavButtonsVisible => true;// Items.Where(x => x.IsPinned).Sum(x => x.TagTileTrayWidth) > MpMeasurements.Instance.TagTrayDefaultMaxWidth;
-        public bool IsEditingTagName {
+        public bool IsNavButtonsVisible => TotalTrayTileWidth > TagTrayWidth;
+
+        public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy) || PinnedItems.Any(x=>x.IsBusy);
+
+        #endregion
+
+        #region Layout
+        
+        public double TagTrayWidth {
             get {
-                if(SelectedItem == null) {
-                    return false;
-                }
-                return SelectedItem.IsEditing;
+                double mww = MpAvMainWindowViewModel.Instance.MainWindowWidth;
+                double ppbw = MpAvClipTrayViewModel.Instance.PlayPauseButtonWidth;
+                double sbvw = MpAvSearchBoxViewModel.Instance.SearchBoxViewWidth;
+                return mww - ppbw - sbvw;
             }
         }
-
-        public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy);
-
+        public double TotalTrayTileWidth => PinnedItems.Sum(x => x.TagTileTrayWidth);
         #endregion
 
         #region Appearance
@@ -146,6 +135,8 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitAsync() {
             IsBusy = true;
 
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+
             MpDb.SyncAdd += MpDbObject_SyncAdd;
             MpDb.SyncUpdate += MpDbObject_SyncUpdate;
             MpDb.SyncDelete += MpDbObject_SyncDelete;
@@ -164,11 +155,15 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            //OnPropertyChanged(nameof(Items));
-            //OnPropertyChanged(nameof(TreeItems));
+            foreach(var ttvm in Items.Where(x=>x.Tag.IsPinned).OrderBy(x=>x.TagTraySortIdx)) {
+                var pttvm = new MpAvTagTileViewModel(this);
+                await pttvm.InitializeAsync(ttvm.Tag);
+                pttvm.ParentTreeItem = ttvm.ParentTreeItem;
+                PinnedItems.Add(pttvm);
+            }
 
             Items.CollectionChanged += TagTileViewModels_CollectionChanged;
-
+            PinnedItems.CollectionChanged += PinnedItems_CollectionChanged;
             //UpdateSortOrder(true);
 
             Items.FirstOrDefault(x => x.TagId == DefaultTagId).IsSelected = true;
@@ -179,29 +174,43 @@ namespace MonkeyPaste.Avalonia {
 
             SelectTagCommand.Execute(DefaultTagId);
 
+
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(PinnedItems));
             OnPropertyChanged(nameof(RootItems));
 
             IsBusy = false;
         }
+
+        
         #endregion
 
         #region Public Methods
 
         private void TagTileViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            UpdateSortOrder();
+            UpdateTreeSortOrder();
             //OnPropertyChanged(nameof(RootItems));
         }
 
-        
+        private void PinnedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            UpdateTraySortOrder();
+        }
 
-        public void UpdateSortOrder(bool fromModel = false) {
+        public void UpdateTreeSortOrder(bool fromModel = false) {
             if (fromModel) {
                 //Items.Sort(x => x.TagSortIdx);
             } else {
                 foreach (var ttvm in Items) {
                     ttvm.TagSortIdx = Items.IndexOf(ttvm);
+                }
+            }
+        }
+        public void UpdateTraySortOrder(bool fromModel = false) {
+            if (fromModel) {
+                //Items.Sort(x => x.TagSortIdx);
+            } else {
+                foreach (var ttvm in PinnedItems) {
+                    ttvm.TagTraySortIdx = PinnedItems.IndexOf(ttvm);
                 }
             }
         }
@@ -228,16 +237,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void ClearTagEditing() {
-
-            foreach(var ttvm in Items) {
-                ttvm.IsTagNameTrayReadOnly = ttvm.IsTagNameTreeReadOnly = true;
-            }
+            Items.ForEach(x => x.IsTagNameReadOnly = true);
+            PinnedItems.ForEach(x => x.IsTagNameReadOnly = true);
         }
         public void ClearTagSelection() {
             ClearTagEditing();
-            foreach (var tagTile in Items) {
-                tagTile.IsSelected = false;
-            }
+            Items.ForEach(x => x.IsSelected = false);
+            PinnedItems.ForEach(x => x.IsSelected = false);
         }
 
         public void ResetTagSelection() {
@@ -272,6 +278,16 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(Items):
                     OnPropertyChanged(nameof(RootItems));
+                    break;
+            }
+        }
+
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch(msg) {
+                case MpMessageType.MainWindowOpening:
+                    
+                    OnPropertyChanged(nameof(PinnedItems));
+                    OnPropertyChanged(nameof(TagTrayWidth));
                     break;
             }
         }
@@ -338,14 +354,26 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand ToggleTileIsPinnedCommand => new MpCommand<object>(
-            (args) => {
-                var pctvm = args as MpAvTagTileViewModel;
-                pctvm.IsPinned = !pctvm.IsPinned;
+        public ICommand ToggleTileIsPinnedCommand => new MpAsyncCommand<object>(
+            async(args) => {
+                var ttvm = args as MpAvTagTileViewModel;
+                bool wasPinned = ttvm.IsModelPinned;
+
+                if(wasPinned) {
+                    var ttvm_toRemove = PinnedItems.FirstOrDefault(x => x.TagId == ttvm.TagId);
+                    PinnedItems.Remove(ttvm_toRemove);
+                } else {
+                    var pttvm = new MpAvTagTileViewModel(this);
+                    await pttvm.InitializeAsync(ttvm.Tag);
+                    pttvm.ParentTreeItem = ttvm.ParentTreeItem;
+                    PinnedItems.Add(pttvm);
+                    pttvm.OnPropertyChanged(nameof(pttvm.IsModelPinned));
+                }
 
                 OnPropertyChanged(nameof(PinnedItems));
-                pctvm.OnPropertyChanged(nameof(pctvm.IsPinned));
+                ttvm.OnPropertyChanged(nameof(ttvm.IsModelPinned));
                 OnPropertyChanged(nameof(IsNavButtonsVisible));
+                OnPropertyChanged(nameof(TagTrayWidth));
             },
             (args) => args != null &&
                       (args is MpAvTagTileViewModel ||
@@ -353,6 +381,8 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand SelectTagCommand => new MpCommand<object>(
             (args) => {
+                _isSelecting = true;
+
                 int tagId;
                 if(args == null) {
                     tagId = DefaultTagId;
@@ -364,8 +394,10 @@ namespace MonkeyPaste.Avalonia {
                     Debugger.Break();
                     tagId = MpTag.AllTagId;
                 }
+                ClearTagSelection();
 
                 Items.ForEach(x => x.IsSelected = x.TagId == tagId);
+                PinnedItems.ForEach(x => x.IsSelected = x.TagId == tagId);
 
                 OnPropertyChanged(nameof(SelectedItem));
                 
@@ -375,12 +407,13 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 if(MpDataModelProvider.QueryInfo.SortType == MpContentSortType.Manual) {
-                    MpClipTileSortViewModel.Instance.ResetToDefault();
+                    MpAvClipTileSortViewModel.Instance.ResetToDefault();
                 } else if (MpDataModelProvider.QueryInfo.TagId != tagId) {
                     MpDataModelProvider.QueryInfo.NotifyQueryChanged();
-                }                
+                }
+                _isSelecting = false;
             },
-            (args)=>args != null);
+            (args)=>args != null && !_isSelecting);
 
 
         #endregion

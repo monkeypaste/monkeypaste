@@ -33,3 +33,11 @@ function deleteJsComAdapter() {
 		log('successfully delete host binding');
     }
 }
+
+function setComOutput(output) {
+	document.getElementById('comOutputTextArea').innerHtml = output;
+}
+
+function clearComOutput() {
+	document.getElementById('comOutputTextArea').innerText = '';
+}

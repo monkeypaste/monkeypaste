@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Avalonia.Input;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SharpHook.Native;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvKeyboardInputHelpers {
 
-        public static List<List<KeyCode>> ConvertStringToKeySequence(string keyStr) {
-            var keyList = new List<List<KeyCode>>();
+        public static List<List<Key>> ConvertStringToKeySequence(string keyStr) {
+            var keyList = new List<List<Key>>();
             if (string.IsNullOrEmpty(keyStr)) {
                 return keyList;
             }
@@ -17,7 +17,7 @@ namespace MonkeyPaste.Common.Avalonia {
             var combos = keyStr.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var c in combos) {
                 var keys = c.Split(new string[] { "+" }, StringSplitOptions.RemoveEmptyEntries);
-                keyList.Add(new List<KeyCode>());
+                keyList.Add(new List<Key>());
                 foreach (var k in keys) {
                     keyList[keyList.Count - 1].Add(ConvertStringToKey(k));
                 }
@@ -25,7 +25,7 @@ namespace MonkeyPaste.Common.Avalonia {
             return keyList;
         }
 
-        public static string ConvertKeySequenceToString(List<List<KeyCode>> keyList) {
+        public static string ConvertKeySequenceToString(List<List<Key>> keyList) {
             var outStr = string.Empty;
             foreach (var kl in keyList) {
                 if (!string.IsNullOrEmpty(outStr)) {
@@ -44,114 +44,124 @@ namespace MonkeyPaste.Common.Avalonia {
             return outStr;
         }
 
-        public static KeyCode ConvertStringToKey(string keyStr) {
+        public static Key ConvertStringToKey(string keyStr) {
+            if(keyStr.IsNullOrEmpty()) {
+                return Key.None;
+            }
+
             string lks = keyStr.ToLower();
-            if (lks == "control") {
-                return KeyCode.VcLeftControl;//.LeftCtrl;
+            if (lks == "ctrl") {
+                return Key.LeftCtrl;//.LeftCtrl;
             }
             if (lks == "alt") {
-                return KeyCode.VcLeftAlt;//.LeftAlt;
+                return Key.LeftAlt;//.LeftAlt;
             }
             if (lks == "shift") {
-                return KeyCode.VcLeftShift;
+                return Key.LeftShift;
             }
             if (lks == ";") {
-                return KeyCode.VcSemicolon;
+                return Key.OemSemicolon;
             }
             if (lks == "`") {
-                return KeyCode.VcBackquote;
+                return Key.OemTilde;
             }
             if (lks == "'") {
-                return KeyCode.VcQuote;
+                return Key.OemQuotes;
             }
             if (lks == "-") {
-                return KeyCode.VcMinus;
+                return Key.OemMinus;
             }
             if (lks == "=") {
-                return KeyCode.VcEquals;
+                return Key.OemPlus;
             }
             if (lks == ",") {
-                return KeyCode.VcComma;
+                return Key.OemComma;
             }
             if (lks == @"/") {
-                return KeyCode.VcBackSlash;
+                return Key.OemQuestion;
             }
             if (lks == ".") {
-                return KeyCode.VcPeriod;
+                return Key.OemPeriod;
             }
             if (lks == "[") {
-                return KeyCode.VcOpenBracket;
+                return Key.OemOpenBrackets;
             }
             if (lks == "]") {
-                return KeyCode.VcCloseBracket;
+                return Key.OemCloseBrackets;
             }
             if (lks == "|") {
-                return KeyCode.VcSlash;
+                return Key.OemPipe;
             }
-            if (lks == "PageDown") {
-                return KeyCode.VcPageDown;
+            if (lks == "pagedown") {
+                return Key.PageDown;
             }
-            return (KeyCode)Enum.Parse(typeof(KeyCode), keyStr, true);
+            if(lks == "control") {
+                return Key.LeftCtrl;
+            }
+
+            var kg = KeyGesture.Parse(lks);
+
+            return (Key)Enum.Parse(typeof(Key), keyStr, true);
         }
 
-        public static string ConvertKeyToString(KeyCode key) {
-            if (key == KeyCode.VcLeftControl || key == KeyCode.VcRightControl) {
-                return "Control";
+        public static string ConvertKeyToString(Key key) {
+            if (key == Key.LeftCtrl || key == Key.RightCtrl) {
+                return "Ctrl";
             }
-            if (key == KeyCode.VcLeftAlt || key == KeyCode.VcRightAlt) { //} || key == KeyCode.System) {
+            if (key == Key.LeftAlt || key == Key.RightAlt) { //} || key == Key.System) {
                 return "Alt";
             }
-            if (key == KeyCode.VcLeftShift || key == KeyCode.VcRightShift) {
+            if (key == Key.LeftShift || key == Key.RightShift) {
                 return "Shift";
             }
 
             return key.ToString();
         }
 
-        public static string GetKeyLiteral(KeyCode key) {
-            if (key == KeyCode.VcLeftShift) {
+        public static string GetKeyLiteral(Key key) {
+            if (key == Key.LeftShift) {
                 return "Shift";
             }
-            if (key == KeyCode.VcLeftAlt) {
+            if (key == Key.LeftAlt) {
                 return "Alt";
             }
-            if (key == KeyCode.VcLeftControl) {
-                return "Control";
+            if (key == Key.LeftCtrl) {
+                return "Ctrl";
             }
-            if (key == KeyCode.VcSemicolon) {
+            if (key == Key.OemSemicolon) {
                 return ";";
             }
-            if (key == KeyCode.VcBackquote) {
+            if (key == Key.OemTilde) {
                 return "`";
             }
-            if (key == KeyCode.VcQuote) {
+            if (key == Key.OemQuotes) {
                 return "'";
             }
-            if (key == KeyCode.VcMinus) {
+            if (key == Key.OemMinus) {
                 return "-";
             }
-            if (key == KeyCode.VcEquals) {
+            if (key == Key.OemPlus) {
                 return "=";
             }
-            if (key == KeyCode.VcComma) {
+            if (key == Key.OemComma) {
                 return ",";
             }
-            if (key == KeyCode.VcBackSlash) {
+            if (key == Key.OemQuestion) {
                 return @"/";
             }
-            if (key == KeyCode.VcPeriod) {
+            if (key == Key.OemPeriod) {
                 return ".";
             }
-            if (key == KeyCode.VcOpenBracket) {
+            if (key == Key.OemOpenBrackets) {
                 return "[";
             }
-            if (key == KeyCode.VcCloseBracket) {
+            if (key == Key.OemCloseBrackets) {
                 return "]";
             }
-            if (key == KeyCode.VcSlash) {
+            if (key == Key.OemPipe) {
                 return "|";
             }
-            if (key == KeyCode.VcPageDown) {
+            if (key == Key.PageDown) {
                 return "PageDown";
             }
             return key.ToString();
@@ -171,7 +181,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 var keys = seq.Split(new string[] { "+" }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var key in keys) {
                     switch (key) {
-                        case "Control":
+                        case "Ctrl":
                             //outStr += "^";
                             sb.Append("^");
                             break;
@@ -244,7 +254,7 @@ namespace MonkeyPaste.Common.Avalonia {
             return sb.ToString();
         }
 
-        //public static System.Windows.Input.KeyCode WinformsToWPFKey(System.Windows.Forms.Keys formsKey) {
+        //public static System.Windows.Input.Key WinformsToWPFKey(System.Windows.Forms.Keys formsKey) {
 
         //    // Put special case logic here if there's a key you need but doesn't map...  
         //    try {
@@ -252,11 +262,11 @@ namespace MonkeyPaste.Common.Avalonia {
         //    }
         //    catch {
         //        // There wasn't a direct mapping...    
-        //        return System.Windows.Input.KeyCode.None;
+        //        return System.Windows.Input.Key.None;
         //    }
         //}
 
-        //public static System.Windows.Forms.Keys WpfKeyToWinformsKey(KeyCode wpfKey) {
+        //public static System.Windows.Forms.Keys WpfKeyToWinformsKey(Key wpfKey) {
 
         //    // Put special case logic here if there's a key you need but doesn't map...  
         //    try {

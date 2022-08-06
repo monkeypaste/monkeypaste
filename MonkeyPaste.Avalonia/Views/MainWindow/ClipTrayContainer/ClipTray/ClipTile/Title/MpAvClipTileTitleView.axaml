@@ -19,7 +19,11 @@
         <Grid Grid.Column="0"
               Margin="15,0,0,0"
               HorizontalAlignment="Left"
-              VerticalAlignment="Center"
+              VerticalAlignment="Stretch"
+              MaxWidth="100"
+              ClipToBounds="True"
+              Background="{Binding TileTitleTextGridBackgroundHexColor,
+                                   Converter={StaticResource StringHexToBrushConverter}}"
               local:MpAvIsHoveringExtension.IsEnabled="True"
               local:MpAvIsHoveringExtension.IsHovering="{Binding IsHoveringOnTitleTextGrid,
                                                                  Mode=TwoWay}"
@@ -30,16 +34,23 @@
                      FontSize="20"
                      BorderThickness="0"
                      local:MpAvIsFocusedExtension.IsEnabled="True"
-                     local:MpAvIsFocusedExtension.IsReadOnly="{Binding IsTitleReadOnly, Mode=TwoWay}"
+                     local:MpAvIsFocusedExtension.IsReadOnly="{Binding IsTitleReadOnly,
+                                                                       Mode=TwoWay}"
                      local:MpAvIsFocusedExtension.IsFocused="{Binding IsTitleFocused,
                                                                       Mode=TwoWay}"
                      local:MpAvIsFocusedExtension.SelectAllOnFocus="True"
                      local:MpAvIsFocusedExtension.SelectViewModelOnFocus="True"
+                     local:MpAvMarqueeTextBoxExtension.IsEnabled="True"
+                     local:MpAvMarqueeTextBoxExtension.CancelEditCommand="{Binding CancelEditTitleCommand}"
+                     local:MpAvMarqueeTextBoxExtension.FinishEditCommand="{Binding FinishEditTitleCommand}"
+                     local:MpAvMarqueeTextBoxExtension.IsReadOnly="{Binding IsTitleReadOnly,
+                                                                            Mode=TwoWay}"
                      IsReadOnly="{Binding IsTitleReadOnly,
                                           Mode=OneWay}"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Center"
+                     Background="White"
                      Foreground="Black"
-                     Background="{Binding TileTitleTextGridBackgroundHexColor,
-                                          Converter={StaticResource StringHexToBrushConverter}}"
                      Text="{Binding CopyItemTitle,
                                     Mode=TwoWay}" />
         </Grid>

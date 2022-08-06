@@ -24,7 +24,7 @@
 
     <script src="lib/HighlightJs/highlight.min.js"></script>
     <script src="lib/HighlightJs/xml.min.js"></script>
-    
+
     <!--<script src="https://cdn.quilljs.com/2.0.0-dev.4/quill.js"></script>-->
     <script src="lib/Quill/quill.min.js"></script>
     <script src="lib/Quill-Better-Table/quill-better-table.min.js"></script>
@@ -37,7 +37,7 @@
 
     <script src="lib/font-awesome/fontawesome-free-6.1.1-web/all.min.js"></script>
 
-    
+
     <script>
         // globals
         var quill;
@@ -47,12 +47,12 @@
         const domSerializer = new XMLSerializer();
         var isDebug = true;
 
-                        //let browserAgentInfo = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36';
-                        //if (navigator.userAgent.toLowerCase() == browserAgentInfo.toLowerCase()) {
-                        //    $(function () {
-                        //        init();
-                        //    });
-                        //}
+        //let browserAgentInfo = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36';
+        //if (navigator.userAgent.toLowerCase() == browserAgentInfo.toLowerCase()) {
+        //    $(function () {
+        //        init();
+        //    });
+        //}
     </script>
 
     <script src="src/components/util/jsComAdapter.js"></script>
@@ -69,6 +69,7 @@
     <script src="src/components/clipboard/clipboard.js"></script>
     <script src="src/components/dragdrop/dragdrop.js"></script>
     <script src="src/components/table/table.js"></script>
+    <script src="src/components/overlay/overlay.js"></script>
 </head>
 <body>
     <!--<div class="dropzone">
@@ -151,7 +152,9 @@
 
     <div id="templateColorPaletteMenu" class="ql-toolbar-template-context-menu"></div>
 
+    <textarea id="comOutputTextArea" style="display: none"></textarea>
 
+    <canvas id="overlayCanvas"></canvas>
 
     <script src="src/components/editor/editor.js"></script>
 
@@ -164,8 +167,10 @@
 
         function checkIsLoaded() {
             if (IsLoaded) {
+                setComOutput('true');
                 return true;
             }
+            setComOutput('false');
             return false;
         }
     </script>

@@ -213,13 +213,6 @@ namespace MonkeyPaste.Avalonia {
                     if (e == null) {
                         control.AttachedToVisualTree += AttachedToVisualHandler;
                     }
-
-                    if (control is MpAvTagView tv) {
-                        var tvi = tv.GetVisualAncestor<TreeViewItem>();
-                        tvi.PointerEnter += PointerEnterHandler;
-                        tvi.PointerLeave += PointerLeaveHandler;
-                    }
-
                 }
             }
 
@@ -234,9 +227,6 @@ namespace MonkeyPaste.Avalonia {
 
             void PointerEnterHandler(object? s, PointerEventArgs e) {
                 if(s is Control control) {
-                    //if(control is TreeViewItem tvi) {
-                    //    control = tvi.GetVisualDescendant<MpAvTagView>();
-                    //}
                     if(!GetCanHover(control)) {
                         return;
                     }
@@ -307,9 +297,6 @@ namespace MonkeyPaste.Avalonia {
             }
             void PointerLeaveHandler(object? s, PointerEventArgs e) {
                 if (s is Control control) {
-                    //if (control is TreeViewItem tvi) {
-                    //    control = tvi.GetVisualDescendant<MpAvTagView>();
-                    //}
                     SetIsHovering(control, false);
                     if (GetHoverCursor(control) is MpCursorType ct) {
                         MpCursor.UnsetCursor(control.DataContext);

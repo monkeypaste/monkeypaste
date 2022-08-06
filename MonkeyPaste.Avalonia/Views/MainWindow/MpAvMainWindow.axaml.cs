@@ -30,9 +30,9 @@ namespace MonkeyPaste.Avalonia {
         }
         public MpAvMainWindow() {
 
-            //while (!Debugger.IsAttached) {
-            //    Thread.Sleep(100);
-            //}
+            while (!Debugger.IsAttached) {
+                Thread.Sleep(100);
+            }
             if (Instance == null) {
                 Instance = this;
             }
@@ -57,15 +57,10 @@ namespace MonkeyPaste.Avalonia {
             });
         }
         private void SidebarSplitter_isVisibleChange(GridSplitter splitter, bool isVisible) {
-            var containerGrid = splitter.GetVisualAncestor<Grid>();
-
-            if (isVisible) {
-                containerGrid.ColumnDefinitions[1].Width = new GridLength(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel.DefaultSidebarWidth);
-
-            } else {
-                containerGrid.ColumnDefinitions[1].Width = new GridLength(0);
-            }
+            UpdateSidebarGridsplitter();
         }
+
+        
 
         void BoundsChangedHandler(AvaloniaPropertyChangedEventArgs<Rect> e) {
             var oldAndNewVals = e.GetOldAndNewValue<Rect>();
@@ -106,14 +101,10 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            MpAvGlobalInputHook.Instance.OnGlobalMouseWheelScroll += MpAvGlobalInputHook_OnMouseWheelScroll;
-            MpAvGlobalInputHook.Instance.OnGlobalMouseClicked += Instance_OnGlobalMouseClicked;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                 MpAvToolWindow_Win32.InitToolWindow(this.PlatformImpl.Handle.Handle);
             }
 
-            MpAvMainWindowViewModel.Instance.OnMainWindowOpened += Instance_OnMainWindowOpened;
-            MpAvMainWindowViewModel.Instance.OnMainWindowClosed += Instance_OnMainWindowClosed;
             
             MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeChanged);
 
@@ -169,28 +160,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
         }
 
-        private void Instance_OnMainWindowClosed(object? sender, System.EventArgs e) {
-        }
 
-        private void Instance_OnMainWindowOpened(object? sender, System.EventArgs e) {
-
-        }
-
-        private void MpAvGlobalInputHook_OnMouseWheelScroll(object? sender, MouseWheelHookEventArgs e) {
-            if (MpAvGlobalInputHook.Instance.GlobalMouseLocation.Y < 10) {
-                MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-            }
-        }
-        private void Instance_OnGlobalMouseClicked(object sender, MouseHookEventArgs e) {
-            if(!this.IsActive && 
-               !this.Bounds.Contains(MpAvGlobalInputHook.Instance.GlobalMouseLocation.ToAvPoint()) &&
-               MpAvMainWindowViewModel.Instance.IsMainWindowOpen &&
-               !MpAvMainWindowViewModel.Instance.IsMainWindowClosing) {
-                Dispatcher.UIThread.Post(() => {
-                    MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
-                });
-            }
-        }
 
         private void UpdateResizerOrientation() {
             var mwvm = MpAvMainWindowViewModel.Instance; 
@@ -280,26 +250,84 @@ namespace MonkeyPaste.Avalonia {
             var mwtg = this.FindControl<Grid>("MainWindowTrayGrid");
             var sbv = this.FindControl<MpAvSidebarView>("SidebarView");
             var ctrv = this.FindControl<MpAvClipTrayView>("ClipTrayView");
+            var ttv = this.FindControl<MpAvTagTreeView>("TagTreeView");
+            var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");
 
             if (mwvm.IsHorizontalOrientation) {
                 mwtg.RowDefinitions.Clear();
                 mwtg.ColumnDefinitions = new ColumnDefinitions("40,Auto,*");
+                // sidebar columns
                 Grid.SetRow(sbv, 0);
                 Grid.SetColumn(sbv, 0);
+
+                // sidebar splitter
+                Grid.SetRow(sbgs, 0);
+                Grid.SetColumn(sbgs, 1);
+                sbgs.Height = double.NaN;
+                sbgs.VerticalAlignment = VerticalAlignment.Stretch;
+                sbgs.Width = 5.0d;
+                sbgs.HorizontalAlignment = HorizontalAlignment.Right;
+
+                sbgs.ResizeDirection = GridResizeDirection.Columns;
+                MpAvIsHoveringExtension.SetHoverCursor(sbgs, MpCursorType.ResizeWE);
+
                 // Add Sidebar items here
+                Grid.SetRow(ttv, 0);
+                Grid.SetColumn(ttv, 1);
+
+                // cliptray container view
                 Grid.SetRow(ctrv, 0);
                 Grid.SetColumn(ctrv, 2);
             } else {
                 mwtg.RowDefinitions = new RowDefinitions("*,Auto,40");
                 mwtg.ColumnDefinitions.Clear();
+                // sidebar columns
                 Grid.SetRow(sbv, 2);
                 Grid.SetColumn(sbv, 0);
+
+                // sidebar splitter
+                Grid.SetRow(sbgs, 1);
+                Grid.SetColumn(sbgs, 0);
+                sbgs.Height = 5.0d;
+                sbgs.VerticalAlignment = VerticalAlignment.Top;
+                sbgs.Width = double.NaN;
+                sbgs.HorizontalAlignment = HorizontalAlignment.Stretch;
+                sbgs.ResizeDirection = GridResizeDirection.Rows;
+                MpAvIsHoveringExtension.SetHoverCursor(sbgs, MpCursorType.ResizeNS);
+
                 // Add Sidebar items here
+                Grid.SetRow(ttv, 1);
+                Grid.SetColumn(ttv, 0);
+
+                // cliptray container view
                 Grid.SetRow(ctrv, 0);
                 Grid.SetColumn(ctrv, 0);
             }
 
+            UpdateSidebarGridsplitter();
+
             mwtg.InvalidateMeasure();
+        }
+
+        private void UpdateSidebarGridsplitter() {
+            //only reset when isVisibilityChanged = true, isVisibilityChanged = false is orientation change
+            var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");
+            var containerGrid = sbgs.GetVisualAncestor<Grid>();
+
+            if(MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                if (sbgs.IsVisible) {
+                    containerGrid.ColumnDefinitions[1].Width = new GridLength(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel.DefaultSidebarWidth);
+                } else {
+                    containerGrid.ColumnDefinitions[1].Width = new GridLength(0);
+                }
+            } else {
+                if (sbgs.IsVisible) {
+                    containerGrid.RowDefinitions[1].Height = new GridLength(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel.DefaultSidebarHeight);
+                } else {
+                    containerGrid.RowDefinitions[1].Height = new GridLength(0);
+                }
+            }
+
         }
     }
 }

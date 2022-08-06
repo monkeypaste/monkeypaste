@@ -9,10 +9,25 @@ using Avalonia.Input;
 using System.ComponentModel;
 using MonkeyPaste.Common.Avalonia;
 using Avalonia.Controls.Primitives.PopupPositioning;
+using Avalonia.Media.Imaging;
+using Avalonia.Layout;
+using Avalonia.Themes.Fluent;
+using Avalonia.Media;
 
 namespace MonkeyPaste.Avalonia {
-
     public static class MpAvMenuExtension {
+        private static ContextMenu _openContextMenu;
+
+        public static bool IsChildDialogOpen { get; set; } = false;
+
+        public static void CloseMenu() {
+            if(_openContextMenu == null) {
+                return;
+            }
+            _openContextMenu.Close();
+            _openContextMenu = null;
+        }
+
         static MpAvMenuExtension() {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
         }
@@ -88,7 +103,17 @@ namespace MonkeyPaste.Avalonia {
                     }
                     control.DetachedFromVisualTree += DetachedToVisualHandler;
 
-                    if(control.DataContext is MpIMenuItemViewModelBase cmvm) {
+                    if(control.DataContext == null) {
+                        control.DataContextChanged += Control_DataContextChanged;
+                    } else {
+                        Control_DataContextChanged(control, null);
+                    }                    
+                }
+            }
+
+            void Control_DataContextChanged(object sender, System.EventArgs e) {
+                if(sender is Control control) {
+                    if (control.DataContext is MpIMenuItemViewModelBase cmvm) {
                         control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
 
                         //if (control is MpAvTagView tv) {
@@ -155,6 +180,7 @@ namespace MonkeyPaste.Avalonia {
                             SetIsOpen(control, false);
                             control.ContextMenu.ContextMenuClosing -= onCloseHandler;
                             control.ContextMenu.ContextMenuOpening -= onOpenHandler;
+                            _openContextMenu = null;
                         };
                         
                         onOpenHandler = (s, e1) => {
@@ -162,7 +188,9 @@ namespace MonkeyPaste.Avalonia {
                         };
 
 
-                        control.ContextMenu = MpAvContextMenuView.Instance;
+                        control.ContextMenu = new ContextMenu() {
+                            Items = mivm.SubItems.Where(x=>x.IsVisible).Select(x => CreateMenuItem(x))
+                        };
                         control.ContextMenu.DataContext = mivm;
                         control.ContextMenu.PlacementTarget = control;
                         control.ContextMenu.PlacementAnchor = PopupAnchor.TopRight;
@@ -170,42 +198,100 @@ namespace MonkeyPaste.Avalonia {
                         control.ContextMenu.ContextMenuOpening += onOpenHandler;
                         control.ContextMenu.ContextMenuClosing += onCloseHandler;
 
-                        control.ContextMenu.Open(control);
+                        _openContextMenu = control.ContextMenu;
+
+
+                        control.ContextMenu.Open();
 
                     }
+                }
+
+                Control CreateMenuItem(MpMenuItemViewModel mivm) {
+                    Control control = null;
+                    string itemType = new MpAvMenuItemDataTemplateSelector().GetTemplateName(mivm);
+                    
+                    switch(itemType) {
+                        case "DefaultMenuItemTemplate":
+                            control = new MenuItem() {
+                                Icon = mivm.IconSourceObj == null ? 
+                                    null :
+                                    new Image() {
+                                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                                        VerticalAlignment = VerticalAlignment.Stretch,
+                                        Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(mivm.IconSourceObj, null, null, null) as Bitmap,
+                                    },
+                                Header = mivm.Header,
+                                Items = mivm.SubItems == null ? 
+                                    null : 
+                                    mivm.SubItems.Where(x=>x.IsVisible).Select(x=>CreateMenuItem(x)),
+                                Command = mivm.Command,
+                                CommandParameter = mivm.CommandParameter,
+                                InputGesture = string.IsNullOrWhiteSpace(mivm.InputGestureText) ? 
+                                    null :
+                                    KeyGesture.Parse(mivm.InputGestureText)
+                            };
+                            control.PointerEnter += Control_PointerEnter;
+                            control.PointerLeave += Control_PointerLeave;
+                            control.DetachedFromVisualTree += Control_DetachedFromVisualTree;
+                            
+                            if(mivm.SubItems == null || mivm.SubItems.Count == 0) {
+                                control.AddHandler(Control.PointerReleasedEvent, Control_PointerReleased, RoutingStrategies.Tunnel);
+                            }
+                            break;
+                        case "SeperatorMenuItemTemplate":
+                            control = new Separator();
+                            break;
+                        case "ColorPalleteMenuItemTemplate":
+                            control = new MpAvColorPaletteListBoxView() {
+                                DataContext = mivm
+                            };
+                            break;
+                        case "ColorPalleteItemMenuItemTemplate":
+
+                            break;
+                    }
+
+                    return control;
                 }
             }
         }
 
+        private static void Control_PointerReleased(object sender, PointerReleasedEventArgs e) {
+            MpPlatformWrapper.Services.ContextMenuCloser.CloseMenu();
+            e.Handled = false;
+        }
 
-        #endregion
 
-        public static void ShowContextMenu(Control control) {
-            if(control != null && control.DataContext is MpIContextMenuViewModel cmvm) {
-                CancelEventHandler onOpenHandler = null;
-                CancelEventHandler onCloseHandler = null;
-
-                onCloseHandler = (s, e1) => {
-                    SetIsOpen(control, false);
-                    control.ContextMenu.ContextMenuClosing -= onCloseHandler;
-                    control.ContextMenu.ContextMenuOpening -= onOpenHandler;
-                };
-
-                onOpenHandler = (s, e1) => {
-                    SetIsOpen(control, true);
-                    e1.Cancel = false;
-                };
-
-                MpAvContextMenuView.Instance.DataContext = cmvm;
-                control.ContextMenu = MpAvContextMenuView.Instance;
-                //control.ContextMenu.PlacementTarget = control;
-                control.ContextMenu.ContextMenuOpening += onOpenHandler;
-                control.ContextMenu.ContextMenuClosing += onCloseHandler;
-
-                MpAvContextMenuView.Instance.PlacementTarget = control;
-                MpAvContextMenuView.Instance.Open(control);
+        private static void Control_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            if(sender is Control control) {
+                control.PointerEnter -= Control_PointerEnter;
+                control.PointerLeave -= Control_PointerLeave;                
+                control.DetachedFromVisualTree -= Control_DetachedFromVisualTree;
+                control.PointerReleased -= Control_PointerReleased;
             }
         }
+
+        private static void Control_PointerLeave(object sender, PointerEventArgs e) {
+            if (sender is MenuItem mi) {
+                mi.Background = Brushes.Transparent;
+            }
+        }
+
+        private static void Control_PointerEnter(object sender, PointerEventArgs e) {
+            if(sender is MenuItem mi) {
+                mi.Background = Brushes.LightBlue;
+            }
+        }
+
+
         #endregion
+
+        #endregion
+    }
+
+    public class MpAvContextMenuCloser : MpIContextMenuCloser {
+        public void CloseMenu() {
+            MpAvMenuExtension.CloseMenu();
+        }
     }
 }

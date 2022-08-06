@@ -17,35 +17,15 @@
                    HorizontalAlignment="Stretch"
                    VerticalAlignment="Stretch">
         <RelativePanel.Styles>
-            <Style Selector=":is(Button)">
-                <Setter Property="HorizontalAlignment"
-                        Value="Center" />
-                <Setter Property="VerticalAlignment"
-                        Value="Center" />
-                <Setter Property="HorizontalContentAlignment"
-                        Value="Center" />
-                <Setter Property="VerticalContentAlignment"
-                        Value="Center" />
-                <Setter Property="CornerRadius"
-                        Value="3" />
-                <Setter Property="BorderThickness"
-                        Value="0" />
-                <Setter Property="Background"
-                        Value="Transparent" />
-            </Style>
-            <Style Selector=":is(Button):pointerover">
-                <Setter Property="Cursor"
-                        Value="Hand" />
-            </Style>
-            <Style Selector=":is(Button):pointerover PathIcon">
+            <Style Selector="PathIcon">
                 <Setter Property="Foreground"
-                        Value="Wheat" />
+                        Value="Black" />
+            </Style>
+            <Style Selector="PathIcon /template/ Path">
+                <Setter Property="Margin"
+                        Value="3" />
             </Style>
             <Style Selector="ToggleButton:checked /template/ ContentPresenter">
-                <Setter Property="Background"
-                        Value="Transparent" />
-            </Style>
-            <Style Selector=":is(Button):pressed  /template/ ContentPresenter">
                 <Setter Property="Background"
                         Value="Transparent" />
             </Style>
@@ -53,17 +33,9 @@
                 <Setter Property="Foreground"
                         Value="Maroon" />
             </Style>
-            <Style Selector="PathIcon">
-                <Setter Property="HorizontalAlignment"
-                        Value="Stretch" />
-                <Setter Property="VerticalAlignment"
-                        Value="Stretch" />
+            <Style Selector=":is(Button):pointerover PathIcon">
                 <Setter Property="Foreground"
-                        Value="Black" />
-            </Style>
-            <Style Selector="PathIcon /template/ Path">
-                <Setter Property="Margin"
-                        Value="3" />
+                        Value="Maroon" />
             </Style>
         </RelativePanel.Styles>
         <!--  Left Side  -->
@@ -184,7 +156,6 @@
 
         <Button x:Name="MainWindowOrientationButton"
                 RelativePanel.AlignRightWithPanel="True"
-                Command="{Binding CycleOrientationCcwCommand}"
                 ToolTip.ShowDelay="0">
             <ToolTip.Tip>
                 <local:MpAvTooltipView ToolTipText="Hide Filter Menu" />

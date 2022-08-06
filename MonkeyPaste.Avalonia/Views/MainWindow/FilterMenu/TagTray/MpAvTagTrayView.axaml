@@ -1,0 +1,106 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:DataType="local:MpAvTagTrayViewModel"
+                       x:TypeArguments="local:MpAvTagTrayViewModel"
+                       x:CompileBindings="True"
+                       DataContext="{x:Static local:MpAvTagTrayViewModel.Instance}"
+                       x:Class="MonkeyPaste.Avalonia.MpAvTagTrayView">
+    <Grid x:Name="TagTrayContainerGrid"
+          HorizontalAlignment="Center"
+          VerticalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.1*" />
+            <ColumnDefinition Width="auto"
+                              MinWidth="200"
+                              MaxWidth="1000" />
+            <ColumnDefinition Width="0.1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.Styles>
+            <Style Selector="PathIcon">
+                <Setter Property="Width"
+                        Value="25" />
+                <Setter Property="Height"
+                        Value="25" />
+                <Setter Property="Foreground"
+                        Value="Black" />
+            </Style>
+        </Grid.Styles>
+
+        <RepeatButton x:Name="TagTrayNavLeftButton"
+                      HorizontalAlignment="Left"
+                      Grid.Column="0"
+                      Click="NavLeftRepeatButton_Click"
+                      Margin="5"
+                      Padding="5"
+                      IsVisible="{Binding IsNavButtonsVisible}">
+            <PathIcon Data="{StaticResource ArrowLeftSvg}" />
+        </RepeatButton>
+        <ListBox x:Name="TagTray"
+                 Grid.Column="1"
+                 Background="Transparent"
+                 AutoScrollToSelectedItem="False"
+                 BorderBrush="Transparent"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
+                 Width="{Binding TagTrayWidth}"
+                 SelectionMode="Single"
+                 ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                 Items="{Binding PinnedItems}">
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem"
+                       x:DataType="local:MpAvTagTileViewModel">
+                    <Setter Property="IsSelected"
+                            Value="{Binding IsSelected,
+                                            Mode=TwoWay}" />
+                    <!--<Setter Property="HorizontalAlignment"
+                            Value="Center" />
+                    <Setter Property="HorizontalContentAlignment"
+                            Value="Center" />
+                    <Setter Property="VerticalAlignment"
+                            Value="Stretch" />-->
+                </Style>
+            </ListBox.Styles>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Stretch" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <local:MpAvTagView local:MpAvMenuExtension.IsEnabled="True"
+                                       local:MpAvMenuExtension.SelectOnRightClick="False"
+                                       local:MpAvMenuExtension.IsOpen="{Binding IsContextMenuOpened,
+                                                                                Mode=TwoWay}"
+                                       local:MpAvIsHoveringExtension.IsEnabled="True"
+                                       local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering,
+                                                                                          Mode=TwoWay}"
+                                       local:MpAvIsHoveringExtension.HoverCursor="Hand"
+                                       local:MpAvSizeObserverExtension.IsEnabled="True"
+                                       local:MpAvSizeObserverExtension.ObservedWidth="{Binding TagTileTrayWidth,
+                                                                                               Mode=TwoWay}"
+                                       DataContext="{Binding}" />
+
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <RepeatButton x:Name="TagTrayNavRightButton"
+                      Grid.Column="2"
+                      Click="NavRightRepeatButton_Click"
+                      HorizontalAlignment="Right"
+                      Margin="5"
+                      Padding="5"
+                      IsVisible="{Binding IsNavButtonsVisible}">
+            <PathIcon Data="{StaticResource ArrowRightSvg}" />
+        </RepeatButton>
+    </Grid>
+</local:MpAvUserControl>

@@ -291,15 +291,15 @@ namespace MonkeyPaste.Avalonia {
 
         public MpShortcutType ShortcutType => MpShortcutType.AnalyzeCopyItemWithPreset;
 
-        public MpShortcutViewModel ShortcutViewModel {
+        public MpAvShortcutViewModel ShortcutViewModel {
             get {
                 if(Parent == null || Preset == null) {
                     return null;
                 }
-                var scvm = MpShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.CommandId == Preset.Id && x.ShortcutType == ShortcutType);
+                var scvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.CommandId == Preset.Id && x.ShortcutType == ShortcutType);
 
                 if(scvm == null) {
-                    scvm = new MpShortcutViewModel(MpShortcutCollectionViewModel.Instance);
+                    scvm = new MpAvShortcutViewModel(MpAvShortcutCollectionViewModel.Instance);
                 }
 
                 return scvm;
@@ -530,7 +530,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand AssignHotkeyCommand => new MpAsyncCommand(
             async () => {
-                await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
+                await MpAvShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
                     $"Use {Label} Analyzer",
                     MpAvClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
                     MpShortcutType.AnalyzeCopyItemWithPreset,

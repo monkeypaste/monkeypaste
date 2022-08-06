@@ -22,7 +22,6 @@ namespace MonkeyPaste.Avalonia {
 
             _items.AddRange(
                 new List<MpBootstrappedItemViewModel>() {
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvGlobalInputHook)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpDocumentHtmlExtension)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpProcessManager), Properties.Settings.Default.IgnoredProcessNames),
                     ////new MpBootstrappedItemViewModel(this,typeof(MpProcessAutomation)),
@@ -32,18 +31,18 @@ namespace MonkeyPaste.Avalonia {
                     //new MpBootstrappedItemViewModel(this,typeof(MpMeasurements)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpFileSystemWatcher)),
 
-                    //new MpBootstrappedItemViewModel(this,typeof(MpIconCollectionViewModel)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpAppCollectionViewModel)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpUrlCollectionViewModel)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpSourceCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvIconCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvAppCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvUrlCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvSourceCollectionViewModel)),
 
 
-                    //new MpBootstrappedItemViewModel(this,typeof(MpSystemTrayViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvSystemTrayViewModel)),
 
                     //new MpBootstrappedItemViewModel(this,typeof(MpSoundPlayerGroupCollectionViewModel)),
 
-                    //new MpBootstrappedItemViewModel(this,typeof(MpClipTileSortViewModel)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpSearchBoxViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvClipTileSortViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvSearchBoxViewModel)),
 
                     //new MpBootstrappedItemViewModel(this,typeof(MpAnalyticItemCollectionViewModel)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpClipboardHandlerCollectionViewModel)),
@@ -53,7 +52,7 @@ namespace MonkeyPaste.Avalonia {
 
                     new MpBootstrappedItemViewModel(this,typeof(MpAvClipTrayViewModel)),
 
-                    //new MpBootstrappedItemViewModel(this,typeof(MpShortcutCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvShortcutCollectionViewModel)),
 
 
                     new MpBootstrappedItemViewModel(this,typeof(MpAvTagTrayViewModel)),

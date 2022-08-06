@@ -1,0 +1,57 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       mc:Ignorable="d"
+                       d:DesignWidth="250"
+                       d:DesignHeight="40"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:DataType="local:MpAvClipTileSortViewModel"
+                       x:TypeArguments="local:MpAvClipTileSortViewModel"
+                       x:CompileBindings="True"
+                       DataContext="{x:Static local:MpAvClipTileSortViewModel.Instance}"
+                       x:Class="MonkeyPaste.Avalonia.MpAvClipTileSortView">
+    <StackPanel Orientation="Horizontal">
+        <Label FontSize="19"
+               Foreground="White"
+               HorizontalAlignment="Left"
+               Content="Sort By"
+               FontWeight="DemiBold"
+               VerticalContentAlignment="Center"
+               Padding="0,0,0,0" />
+        <local:MpAvClipBorder CornerRadius="10"
+                              BorderThickness="1"
+                              BorderBrush="Black"
+                              Margin="2">
+            <ComboBox FontSize="16"
+                      BorderThickness="0"
+                      Background="White"
+                      HorizontalContentAlignment="Left" 
+                      VerticalContentAlignment="Center"
+                      IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                               Source={x:Static local:MpAvMainWindowViewModel.Instance},
+                                               Mode=TwoWay}"
+                      SelectedIndex="{Binding SelectedSortTypeIdx,
+                                              Mode=TwoWay}"
+                      Items="{Binding .,
+                                      Converter={StaticResource EnumToLabelCollectionConverter},
+                                      ConverterParameter=MonkeyPaste.MpContentSortType|omit}">
+            </ComboBox>
+        </local:MpAvClipBorder>
+        <ToggleButton Margin="0,0,0,0"
+                      Background="Transparent"
+                      BorderThickness="0"
+                      Height="30"
+                      Width="30"
+                      IsChecked="{Binding !IsSortDescending,
+                                          Mode=TwoWay}">
+            <Grid>
+                <PathIcon IsVisible="{Binding IsSortDescending}"
+                          Data="{StaticResource DescendingSvg}" />
+                <PathIcon IsVisible="{Binding !IsSortDescending}"
+                          Data="{StaticResource AscendingSvg}" />
+            </Grid>
+        </ToggleButton>
+    </StackPanel>
+</local:MpAvUserControl>

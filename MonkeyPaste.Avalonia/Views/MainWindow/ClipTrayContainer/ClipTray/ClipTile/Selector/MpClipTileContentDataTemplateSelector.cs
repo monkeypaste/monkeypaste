@@ -14,8 +14,8 @@ namespace MonkeyPaste.Avalonia {
 
         public IControl Build(object param) {
             string key = string.Empty;
-            if(OperatingSystem.IsWindows() || OperatingSystem.IsMacOS()) {
-                key = "CefWebViewTemplate";
+            if (OperatingSystem.IsWindows() || OperatingSystem.IsMacOS()) {
+                key = "CefWebViewTemplate"; //"CefNetWebViewTemplate"; //
             } else {
                 key = "CefWebViewTemplate";//"LinuxTemplate";
             }

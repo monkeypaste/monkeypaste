@@ -9,6 +9,9 @@ using Avalonia.Styling;
 using System;
 using MonkeyPaste.Common.Avalonia;
 using Avalonia.Threading;
+using Avalonia.Controls.Generators;
+using System.Linq;
+using Xamarin.Forms.Internals;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -21,40 +24,22 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvContextMenuView() {
             InitializeComponent();
+            this.Initialized += MpAvContextMenuView_Initialized;
         }
 
-
-        private void MpAvContextMenuView_DataContextChanged(object sender, System.EventArgs e) {
-            //if(DataContext is MpMenuItemViewModel mivm) {
-            //    var mil = new List<TemplatedControl>();
-            //    foreach(var cmivm in mivm.SubItems) {
-            //        if (cmivm.IsSeparator) {
-            //            mil.Add(new Separator());
-            //        } else if(cmivm.IsColorPallete) {
-
-            //        } else {
-            //            var mi = new MenuItem() {
-            //                MinWidth = 100,
-            //                MinHeight = 30,
-            //                Header = cmivm.Header,
-            //                Icon = new MpAvIconSourceObjToBitmapConverter().Convert(cmivm.IconSourceObj, null, null, null),
-            //                Command = cmivm.Command,
-            //                CommandParameter = cmivm.CommandParameter
-            //                //InputGesture = new KeyGesture()
-            //            };
-            //            mil.Add(mi);
-            //        }                    
-            //    }
-            //    this.Items = mil;
-            //}
+        private void MpAvContextMenuView_Initialized(object sender, EventArgs e) {
+            (this.VisualRoot as PopupRoot).AttachDevTools();
         }
+
 
         private void MpAvContextMenuView_ContextMenuOpening(object sender, System.ComponentModel.CancelEventArgs e) {
             MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
+            return;
         }
 
         private void MpAvContextMenuView_ContextMenuClosing(object sender, System.ComponentModel.CancelEventArgs e) {
-            if(IsShowingChildDialog) {
+            //e.Cancel = true;            
+            if (IsShowingChildDialog) {
                 e.Cancel = true;
                 return;
             }

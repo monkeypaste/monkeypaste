@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
         
         public int TotalItemsInQuery { get; set; } = 0;
         public bool IsDescending { get; set; } = true;
-        public MpContentSortType SortType { get; set; } = MpContentSortType.None;
+        public MpContentSortType SortType { get; set; } = MpContentSortType.CopyDateTime;
         public int TagId { get; set; } = 0;
         public string SearchText { get; set; } = string.Empty;
 

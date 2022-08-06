@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              xmlns:local="using:MonkeyPaste.Avalonia"
-             x:DataType="local:MpAvAppViewModel"
+             x:DataType="local:MpAvSystemTrayViewModel"
              x:CompileBindings="True"
              x:Class="MonkeyPaste.Avalonia.App">
     <Application.Styles>
@@ -10,10 +10,89 @@
 
         <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml" />
         <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml" />
-        <!--<StyleInclude Source="/Styles/MpAvAllStyles.axaml" />
-        -->
         <StyleInclude Source="avares://MonkeyPaste.Avalonia/Styles/ProgressRing/ProgressRing.xaml" />
 
+        <Style Selector=":is(Button)">
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
+            <Setter Property="CornerRadius"
+                    Value="3" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
+            <Setter Property="Background"
+                    Value="Transparent" />
+        </Style>
+        <Style Selector=":is(Button):pointerover">
+            <Setter Property="Cursor"
+                    Value="Hand" />
+        </Style>
+        <Style Selector=":is(Button):pointerover PathIcon">
+            <Setter Property="Foreground"
+                    Value="Yellow" />
+        </Style>
+        <Style Selector="ToggleButton:checked /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Lime" />
+        </Style>
+        <Style Selector=":is(Button):pressed  /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Transparent" />
+        </Style>
+        <!--<Style Selector="ToggleButton:checked PathIcon">
+            <Setter Property="Foreground"
+                    Value="Lime" />
+        </Style>-->
+        <Style Selector="PathIcon">
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="VerticalAlignment"
+                    Value="Stretch" />
+            <Setter Property="Foreground"
+                    Value="Wheat" />
+        </Style>
+        <Style Selector="PathIcon /template/ Path">
+            <Setter Property="Margin"
+                    Value="0" />
+        </Style>
+
+        <Style Selector="ListBoxItem">
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+            <Setter Property="VerticalAlignment"
+                    Value="Top" />
+            <Setter Property="FocusAdorner"
+                    Value="{x:Null}" />
+        </Style>
+        <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Transparent" />
+        </Style>
+
+        <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Transparent" />
+        </Style>
+
+        <Style Selector="ListBoxItem:selected:focus /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Transparent" />
+        </Style>
+
+        <Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Transparent" />
+        </Style>
+
+        <Style Selector="ListBoxItem:selected:focus:pointerover /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Transparent" />
+        </Style>
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>
@@ -25,11 +104,11 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
-    <NativeMenu.Menu>
+    <!--<NativeMenu.Menu>
         <NativeMenu>
             <NativeMenuItem Header="About Monkey Paste" />
         </NativeMenu>
-    </NativeMenu.Menu>
+    </NativeMenu.Menu>-->
 
     <TrayIcon.Icons>
         <TrayIcons>
@@ -37,12 +116,11 @@
                       Clicked="AppTrayIcon_Clicked"
                       ToolTipText="Monkey Paste">
                 <TrayIcon.Menu>
-
                     <NativeMenu>
                         <NativeMenuItem Header="Show"
                                         Command="{Binding ShowWindowCommand,
                                                           Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />
-                        <NativeMenuItem Header="Settings"
+                        <!--<NativeMenuItem Header="Settings"
                                         Command="{Binding ToggleCommand}">
                             <NativeMenu>
                                 <NativeMenuItem Header="Option 1"
@@ -62,9 +140,10 @@
                                                 Header="Restore Defaults"
                                                 Command="{Binding ToggleCommand}" />
                             </NativeMenu>
-                        </NativeMenuItem>
+                        </NativeMenuItem>-->
                         <NativeMenuItem Header="Exit"
-                                        Command="{Binding ExitCommand}" />
+                                        Command="{Binding ExitApplicationCommand,
+                                                          Source={x:Static local:MpAvSystemTrayViewModel.Instance}}" />
                     </NativeMenu>
                 </TrayIcon.Menu>
             </TrayIcon>

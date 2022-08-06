@@ -180,7 +180,7 @@ namespace MonkeyPaste.Avalonia {
 
     #endregion
 
-    public class MpSearchCriteriaItemViewModel : MpViewModelBase<MpSearchBoxViewModel> {
+    public class MpSearchCriteriaItemViewModel : MpViewModelBase<MpAvSearchBoxViewModel> {
         #region Private Variables
         private List<string> _deviceNames;
 
@@ -778,7 +778,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpSearchCriteriaItemViewModel() : base(null) { }
 
-        public MpSearchCriteriaItemViewModel(MpSearchBoxViewModel parent) : base(parent) {
+        public MpSearchCriteriaItemViewModel(MpAvSearchBoxViewModel parent) : base(parent) {
             PropertyChanged += MpSearchCriteriaItemViewModel_PropertyChanged;
         }
 

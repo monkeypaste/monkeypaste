@@ -87,6 +87,12 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #endregion
 
+        #region Events
+        
+        
+
+        #endregion
+
         #region PropertyChanged
 
         public static (T oldValue, T newValue) GetOldAndNewValue<T>(this AvaloniaPropertyChangedEventArgs e) {

@@ -7,6 +7,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using SkiaSharp;
@@ -15,6 +16,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvMarqueeTextBoxExtension {
@@ -87,35 +89,35 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region ForegroundHexColor AvaloniaProperty
-        public static string GetForegroundHexColor(AvaloniaObject obj) {
-            return obj.GetValue(ForegroundHexColorProperty);
+        #region ForegroundBrush AvaloniaProperty
+        public static IBrush GetForegroundBrush(AvaloniaObject obj) {
+            return obj.GetValue(ForegroundBrushProperty);
         }
 
-        public static void SetForegroundHexColor(AvaloniaObject obj, string value) {
-            obj.SetValue(ForegroundHexColorProperty, value);
+        public static void SetForegroundBrush(AvaloniaObject obj, IBrush value) {
+            obj.SetValue(ForegroundBrushProperty, value);
         }
 
-        public static readonly AttachedProperty<string> ForegroundHexColorProperty =
-            AvaloniaProperty.RegisterAttached<object, TextBox, string>(
-                "ForegroundHexColor",
-                MpSystemColors.White);
+        public static readonly AttachedProperty<IBrush> ForegroundBrushProperty =
+            AvaloniaProperty.RegisterAttached<object, TextBox, IBrush>(
+                "ForegroundBrush",
+                Brushes.White);
 
         #endregion
 
-        #region DropShadowHexColor AvaloniaProperty
-        public static string GetDropShadowHexColor(AvaloniaObject obj) {
-            return obj.GetValue(DropShadowHexColorProperty);
+        #region DropShadowBrush AvaloniaProperty
+        public static IBrush GetDropShadowBrush(AvaloniaObject obj) {
+            return obj.GetValue(DropShadowBrushProperty);
         }
 
-        public static void SetDropShadowHexColor(AvaloniaObject obj, string value) {
-            obj.SetValue(DropShadowHexColorProperty, value);
+        public static void SetDropShadowBrush(AvaloniaObject obj, IBrush value) {
+            obj.SetValue(DropShadowBrushProperty, value);
         }
 
-        public static readonly AttachedProperty<string> DropShadowHexColorProperty =
-            AvaloniaProperty.RegisterAttached<object, TextBox, string>(
-                "DropShadowHexColor",
-                MpSystemColors.Black);
+        public static readonly AttachedProperty<IBrush> DropShadowBrushProperty =
+            AvaloniaProperty.RegisterAttached<object, TextBox, IBrush>(
+                "DropShadowBrush",
+                Brushes.Black);
 
         #endregion
 
@@ -148,6 +150,38 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaProperty.RegisterAttached<object, TextBox, double>(
                 "MaxVelocity",
                 -5.0d);
+
+        #endregion
+
+        #region CancelEditCommand AvaloniaProperty
+        public static ICommand GetCancelEditCommand(AvaloniaObject obj) {
+            return obj.GetValue(CancelEditCommandProperty);
+        }
+
+        public static void SetCancelEditCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(CancelEditCommandProperty, value);
+        }
+
+        public static readonly AttachedProperty<ICommand> CancelEditCommandProperty =
+            AvaloniaProperty.RegisterAttached<object, TextBox, ICommand>(
+                "CancelEditCommand",
+                null);
+
+        #endregion
+
+        #region FinishEditCommand AvaloniaProperty
+        public static ICommand GetFinishEditCommand(AvaloniaObject obj) {
+            return obj.GetValue(FinishEditCommandProperty);
+        }
+
+        public static void SetFinishEditCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(FinishEditCommandProperty, value);
+        }
+
+        public static readonly AttachedProperty<ICommand> FinishEditCommandProperty =
+            AvaloniaProperty.RegisterAttached<object, TextBox, ICommand>(
+                "FinishEditCommand",
+                null);
 
         #endregion
 
@@ -259,6 +293,7 @@ namespace MonkeyPaste.Avalonia {
                     tb.LostFocus += Tb_LostFocus;
                     tb.GetObservable(TextBox.IsVisibleProperty).Subscribe(value => Tb_IsVisibleChanged(tb, value));
                     tb.DetachedFromVisualTree += DetachedToVisualHandler;
+                    tb.AddHandler(TextBox.KeyDownEvent, Tb_KeyDown, RoutingStrategies.Tunnel);
                     if (e == null) {
                         tb.AttachedToVisualTree += AttachedToVisualHandler;
                     }
@@ -274,6 +309,7 @@ namespace MonkeyPaste.Avalonia {
                     tb.DataContextChanged -= Tb_DataContextChanged;
                     tb.GotFocus -= Tb_GotFocus;
                     tb.LostFocus -= Tb_LostFocus;
+                    tb.RemoveHandler(TextBox.KeyDownEvent, Tb_KeyDown);
                 }
             }
 
@@ -368,14 +404,27 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 if (isVisible) {
-                    if (!tb.IsFocused) {
-                        //tb.Focus();
-                        //tb.CaretIndex = 0;
-                        //tb.SelectAll();
+                    Dispatcher.UIThread.Post(async () => {
+                        await Task.Delay(500);
+                        tb.SelectAll();
                         //MpAvIsFocusedExtension.SetIsFocused(tb, true);
-                    }
+                        tb.Focus();
+                    });
                 }
                 //tb.InvalidateAll();
+            }
+
+            void Tb_KeyDown(object sender, KeyEventArgs e) {
+                if(sender is Control control) {
+                    if (e.Key == Key.Enter && GetFinishEditCommand(control) is ICommand finishCmd) {
+                        e.Handled = true;
+                        finishCmd.Execute(null);
+
+                    } else if (e.Key == Key.Escape && GetCancelEditCommand(control) is ICommand cancelCmd) {
+                        e.Handled = true;
+                        cancelCmd.Execute(null);
+                    }
+                }
             }
 
             #endregion
@@ -525,8 +574,8 @@ namespace MonkeyPaste.Avalonia {
 
                 using (var context = ftBmp.CreateDrawingContext(null)) {
                     context.Clear(Colors.Transparent);
-                    context.DrawText(GetDropShadowHexColor(tb).ToAvBrush(), GetDropShadowOffset(canvas), ft.PlatformImpl);
-                    context.DrawText(GetForegroundHexColor(tb).ToAvBrush(), new Point(0, 0), ft.PlatformImpl);
+                    context.DrawText(GetDropShadowBrush(tb), GetDropShadowOffset(canvas), ft.PlatformImpl);
+                    context.DrawText(GetForegroundBrush(tb), new Point(0, 0), ft.PlatformImpl);
                 }
 
                 var bmp = ftBmp.ToAvBitmap();

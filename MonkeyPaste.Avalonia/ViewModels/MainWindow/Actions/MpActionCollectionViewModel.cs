@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncSingletonViewModel<MpActionCollectionViewModel>,
         MpIHoverableViewModel,
         MpIResizableViewModel,
-        MpISidebarItemViewModel,
+        MpIOrientedSidebarItemViewModel,
         MpIDesignerSettingsViewModel {
         #region Private Variables
 
@@ -143,10 +143,14 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpISidebarItemViewModel Implementation
+        #region MpIOrientedSidebarItemViewModel Implementation
 
         public double DefaultSidebarWidth => 500;//MpMeasurements.Instance.DefaultActionPanelWidth;
+        
         public double SidebarWidth { get; set; } = 0;// MpMeasurements.Instance.DefaultActionPanelWidth;
+        
+        public double DefaultSidebarHeight => 500;
+        public double SidebarHeight { get; set; } = 0;
         public bool IsSidebarVisible { get; set; } = false;
 
         public MpISidebarItemViewModel NextSidebarItem => SelectedItem == null ? null : SelectedItem;
@@ -461,13 +465,13 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ShowTriggerSelectorMenuCommand => new MpCommand<object>(
              (args) => {
-                 var fe = args as Control;
-                 var cm = MpAvContextMenuView.Instance;
-                 cm.DataContext = ContextMenuItemViewModel;
-                 fe.ContextMenu = cm;
-                 fe.ContextMenu.PlacementTarget = fe;
-                 fe.ContextMenu.PlacementAnchor = PopupAnchor.Right;//Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
-                 fe.ContextMenu.Open();//IsOpen = true;
+                 //var fe = args as Control;
+                 //var cm = MpAvContextMenuView.Instance;
+                 //cm.DataContext = ContextMenuItemViewModel;
+                 //fe.ContextMenu = cm;
+                 //fe.ContextMenu.PlacementTarget = fe;
+                 //fe.ContextMenu.PlacementAnchor = PopupAnchor.Right;//Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
+                 //fe.ContextMenu.Open();//IsOpen = true;
              });
 
         public ICommand AddTriggerCommand => new MpCommand<object>(

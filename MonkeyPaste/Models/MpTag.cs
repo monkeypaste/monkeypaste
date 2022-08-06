@@ -33,6 +33,10 @@ namespace MonkeyPaste {
         [Column("SortIdx")]
         public int TagSortIdx { get; set; } = 0;
 
+        [Column("TraySortIdx")]
+        public int TagTraySortIdx { get; set; } = 0;
+
+
         [Column("HexColor")]
         public string HexColor { get; set; }
 

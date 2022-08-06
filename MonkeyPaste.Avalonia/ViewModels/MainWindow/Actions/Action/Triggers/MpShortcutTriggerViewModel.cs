@@ -13,16 +13,16 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand AssignCommand => AssignHotkeyCommand;
         public MpShortcutType ShortcutType => MpShortcutType.TriggerAction;
-        public MpShortcutViewModel ShortcutViewModel {
+        public MpAvShortcutViewModel ShortcutViewModel {
             get {
                 if (Action == null) {
                     return null;
                 }
-                var scvm = MpShortcutCollectionViewModel.Instance.Items.FirstOrDefault(
+                var scvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(
                     x => x.CommandId == ActionId && x.ShortcutType == ShortcutType);
 
                 if (scvm == null) {
-                    scvm = new MpShortcutViewModel(MpShortcutCollectionViewModel.Instance);
+                    scvm = new MpAvShortcutViewModel(MpAvShortcutCollectionViewModel.Instance);
                 }
 
                 return scvm;
@@ -71,7 +71,7 @@ namespace MonkeyPaste.Avalonia {
                 return IsValid;
             }
 
-            var scvm = MpShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
+            var scvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
             if (scvm == null) {
                 ValidationText = $"Shortcut for Trigger Action '{FullName}' not found";
                 await ShowValidationNotification();
@@ -89,7 +89,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override async Task Enable() {
             await base.Enable();
-            var scvm = MpShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
+            var scvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
             if (scvm != null) {
                 scvm.RegisterActionComponent(this);
             }
@@ -97,7 +97,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override async Task Disable() {
             await base.Disable();
-            var scvm = MpShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
+            var scvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
             if (scvm != null) {
                 scvm.UnregisterActionComponent(this);
             }
@@ -109,7 +109,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand AssignHotkeyCommand => new MpAsyncCommand(
             async () => {
-                await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
+                await MpAvShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
                     $"Trigger {Label} Action",
                     PerformActionOnSelectedContentCommand,
                     MpShortcutType.TriggerAction,

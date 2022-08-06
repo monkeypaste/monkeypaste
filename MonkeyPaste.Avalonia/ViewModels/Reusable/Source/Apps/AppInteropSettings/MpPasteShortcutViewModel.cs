@@ -8,7 +8,7 @@ using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpPasteShortcutViewModel : 
-        MpViewModelBase<MpAppViewModel> {
+        MpViewModelBase<MpAvAppViewModel> {
 
         #region Properties
 
@@ -41,7 +41,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpPasteShortcutViewModel() : base(null) { }
 
-        public MpPasteShortcutViewModel(MpAppViewModel parent) : base(parent) {
+        public MpPasteShortcutViewModel(MpAvAppViewModel parent) : base(parent) {
             PropertyChanged += MpPasteShortcutViewModel_PropertyChanged;
         }
 

@@ -10,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
     public interface MpAvIShortcutCommand {
         ICommand AssignCommand { get; }
         MpShortcutType ShortcutType { get; }
-        MpShortcutViewModel ShortcutViewModel { get; }
+        MpAvShortcutViewModel ShortcutViewModel { get; }
         string ShortcutKeyString { get; }
     }
 

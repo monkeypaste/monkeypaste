@@ -13,4 +13,8 @@
     <local:MpAvIsBrightToColorConverter x:Key="IsBrightToColorConverter" />
     <local:MpAvItemToItemsSourceConverter x:Key="ItemToItemsSourceConverter" />
     <local:MpAvMultiBoolConverter x:Key="MultiBoolConverter" />
+    <local:MpAvEnumToKeyLiteralConverter x:Key="EnumToKeyLiteralConverter" />
+    <local:MpAvVisibleMenuItemsConverter x:Key="VisibleMenuItemsConverter" />
+    <local:MpAvEnumToLabelCollectionConverter x:Key="EnumToLabelCollectionConverter" />
+    <local:MpAvBoolToBrushConverter x:Key="BoolToBrushConverter" />
 </ResourceDictionary>

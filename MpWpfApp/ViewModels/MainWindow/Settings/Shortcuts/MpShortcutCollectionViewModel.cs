@@ -23,7 +23,7 @@ namespace MpWpfApp {
 
         private string _sendKeysToThisApp = string.Empty;
 
-        private MpKeyGestureHelper _keyboardGestureHelper;
+        private MpWpfKeyGestureHelper _keyboardGestureHelper;
 
         private DateTime? _waitToExecuteShortcutStartDateTime;
 
@@ -231,7 +231,7 @@ namespace MpWpfApp {
 
         #region Private Methods
         private void InitGestureListener() {
-            _keyboardGestureHelper = new MpKeyGestureHelper();
+            _keyboardGestureHelper = new MpWpfKeyGestureHelper();
 
         }
 

@@ -127,6 +127,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
+        public double PlayPauseButtonWidth { get; set; }
         public int RowCount {
             get {
                 if (IsEmpty) {
@@ -246,11 +247,11 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitAsync() {
-            LogPropertyChangedEvents = true;
+            LogPropertyChangedEvents = false;
 
             IsBusy = true;
 
-            while (MpSourceCollectionViewModel.Instance.IsAnyBusy) {
+            while (MpAvSourceCollectionViewModel.Instance.IsAnyBusy) {
                 await Task.Delay(100);
             }
 
@@ -314,6 +315,9 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvClipTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             //MpConsole.WriteLine($"Name: {e.PropertyName} Value: {this.GetPropertyValue(e.PropertyName)?.ToString()}");
             switch (e.PropertyName) {
+                case nameof(PlayPauseButtonWidth):
+                    MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayWidth));
+                    break;
                 case nameof(SelectedItem):
                     OnPropertyChanged(nameof(CanScroll));
                     MpMessenger.SendGlobal(MpMessageType.TraySelectionChanged);
@@ -670,7 +674,7 @@ namespace MonkeyPaste.Avalonia {
                                 new MpMenuItemViewModel() {
                                     Header = "Into _Macro",
                                     IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("RobotClawIcon") as string,
-                                    Command = MpSystemTrayViewModel.Instance.ShowSettingsWindowCommand,
+                                    Command = MpAvSystemTrayViewModel.Instance.ShowSettingsWindowCommand,
                                     CommandParameter = this
                                 },
                                 new MpMenuItemViewModel() {
@@ -678,7 +682,7 @@ namespace MonkeyPaste.Avalonia {
                                     ShortcutType = MpShortcutType.PasteCopyItem,
                                     ShortcutObjId = SelectedItem.CopyItemId,
                                     IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("HotkeyIcon") as string,
-                                    Command = MpSystemTrayViewModel.Instance.ShowSettingsWindowCommand,
+                                    Command = MpAvSystemTrayViewModel.Instance.ShowSettingsWindowCommand,
                                     CommandParameter = this
                                 },
                             }
@@ -1537,7 +1541,7 @@ namespace MonkeyPaste.Avalonia {
                 if (sender is MpCopyItem ci) {
                     ci.StartSync(e.SourceGuid);
 
-                    var svm = MpSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == ci.SourceId);
+                    var svm = MpAvSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == ci.SourceId);
 
                     var app = svm.AppViewModel.App;
                     app.StartSync(e.SourceGuid);
@@ -2247,7 +2251,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ExcludeSubSelectedItemApplicationCommand => new MpAsyncCommand(
             async () => {
-                var avm = MpAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppId == SelectedItem.AppViewModel.AppId);
+                var avm = MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppId == SelectedItem.AppViewModel.AppId);
                 if (avm == null) {
                     return;
                 }
@@ -2257,7 +2261,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ExcludeSubSelectedItemUrlDomainCommand => new MpAsyncCommand(
             async () => {
-                var uvm = MpUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == SelectedItem.UrlViewModel.UrlId);
+                var uvm = MpAvUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == SelectedItem.UrlViewModel.UrlId);
                 if (uvm == null) {
                     MpConsole.WriteTraceLine("Error cannot find url id: " + SelectedItem.UrlViewModel.UrlId);
                     return;
@@ -2646,7 +2650,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand AssignHotkeyCommand => new MpCommand(
             () => {
-                MpShortcutCollectionViewModel.Instance.ShowAssignShortcutDialogCommand.Execute(SelectedItem);
+                MpAvShortcutCollectionViewModel.Instance.ShowAssignShortcutDialogCommand.Execute(SelectedItem);
             },
             () => SelectedItem != null);
 

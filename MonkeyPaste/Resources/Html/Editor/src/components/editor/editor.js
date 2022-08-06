@@ -143,8 +143,12 @@ function init(reqMsgStr) {
 	log('init Response: ');
 	log(initResponseMsgStr);
 
+	setComOutput(initResponseMsgStr);
+
 	return initResponseMsgStr;
 }
+
+
 
 function loadQuill(reqMsg) {
 	Quill.register("modules/htmlEditButton", htmlEditButton);
@@ -287,6 +291,8 @@ function updateAllSizeAndPositions() {
 	let tth = getTemplateToolbarHeight();
 
 	$("#editor").css("height", wh - eth - tth);
+
+	updateOverlayBounds();
 
 	updateEditTemplateToolbarPosition();
 	updatePasteTemplateToolbarPosition();
@@ -450,9 +456,11 @@ function getHtml() {
 		var val = quill.root.innerHTML;
 		//log('getHtml response');
 		//log(val);
+		setComOutput(JSON.stringify(val));
 
 		return val;
 	}
+	setComOutput('');
 	return '';
 }
 
@@ -766,3 +774,4 @@ function getEditorToolbarHeight() {
 function scrollToHome() {
 	document.getElementById("editor").scrollTop = 0;
 }
+

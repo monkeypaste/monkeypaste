@@ -59,6 +59,7 @@ namespace MonkeyPaste {
         public bool IsHeaderedSeparator { get; set; }
 
         public bool IsColorPallete { get; set; }
+        public bool IsColorPalleteItem { get; set; }
 
         public bool IsNewTableSelector { get; set; }
         #endregion
@@ -223,6 +224,7 @@ namespace MonkeyPaste {
                     CommandParameter = commandArg,
                     IsVisible = isCustom,
                     IsCustomColorButton = isCustom,
+                    IsColorPalleteItem = true,
                     SortOrderIdx = i
                 });
             }

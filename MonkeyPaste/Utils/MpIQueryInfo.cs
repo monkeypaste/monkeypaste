@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public enum MpContentSortType {
-        None = 0,
         CopyDateTime,
         Source,
         Title,

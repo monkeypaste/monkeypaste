@@ -110,10 +110,10 @@ namespace MonkeyPaste.Avalonia {
 
         public static bool IsDragCopy {
             get {
-                if (MpShortcutCollectionViewModel.Instance == null) {
+                if (MpAvShortcutCollectionViewModel.Instance == null) {
                     return false;
                 }
-                return MpShortcutCollectionViewModel.Instance.GlobalIsCtrlDown;
+                return MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown;
             }
         }
 
@@ -169,11 +169,12 @@ namespace MonkeyPaste.Avalonia {
             DragData = dragData;
             IsCheckingForDrag = true;
 
-            _mouseDragCheckStartPosition = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+            _mouseDragCheckStartPosition = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
 
-            MpShortcutCollectionViewModel.Instance.GlobalMouseMove += GlobalHook_MouseMove;
-            MpShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonUp += GlobalHook_MouseUp;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove += Instance_OnGlobalMouseMove;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += Instance_OnGlobalMouseReleased;
         }
+
 
         public static void SetDragData(object data) {
             DragData = data;
@@ -201,7 +202,7 @@ namespace MonkeyPaste.Avalonia {
         private static MpIContentDropTarget SelectDropTarget(object dragData) {
             MpIContentDropTarget selectedTarget = null;
             foreach (var dt in DropTargets.Where(x => x.IsDropEnabled).OrderByDescending(x=>(int)x.DropType)) {
-                if (!dt.IsDragDataValid(MpShortcutCollectionViewModel.Instance.GlobalIsCtrlDown, dragData)) {
+                if (!dt.IsDragDataValid(MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown, dragData)) {
                     continue;
                 }
 
@@ -216,27 +217,29 @@ namespace MonkeyPaste.Avalonia {
             return selectedTarget;
         }
 
-        private static void GlobalEscKey_Pressed(object sender, EventArgs e) {
+        private static void Instance_OnGlobalEscapePressed(object sender, EventArgs e) {
             if(!IsDragAndDrop) {
                 return;
             }
             Reset();
         }
 
-        private static  async void GlobalHook_MouseUp(object sender, EventArgs e) {
-            if (IsDragAndDrop) {
-                await PerformDrop(DragData);
-            } else if (IsCheckingForDrag) {
-                Reset();
+        private static void Instance_OnGlobalMouseReleased(object sender, SharpHook.MouseHookEventArgs e) {
+            if(e.Data.Button == SharpHook.Native.MouseButton.Button1) {
+                if (IsDragAndDrop) {
+                    PerformDrop(DragData).FireAndForgetSafeAsync(MpAvMainWindowViewModel.Instance);
+                } else if (IsCheckingForDrag) {
+                    Reset();
+                }
             }
         }
 
-        private static void GlobalHook_MouseMove(object sender, Point mp) {
+        private static void Instance_OnGlobalMouseMove(object sender, SharpHook.MouseHookEventArgs e) {
             if(IsPerformingDrop) {
                 // NOTE added this state to try to fix DropIdx from clearing during drop                
                 return;
             }
-            if(IsDraggingFromExternal && !MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
+            if(IsDraggingFromExternal && !MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
                 IsDraggingFromExternal = false;
             }
             // NOTE is not on main thread from external drag
@@ -244,7 +247,7 @@ namespace MonkeyPaste.Avalonia {
                 Reset();
                 return;
             }
-            bool isLeftMouseButtonDown = MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown;
+            bool isLeftMouseButtonDown = MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown;
             if (!isLeftMouseButtonDown || _mouseDragCheckStartPosition == null) {
                 // this is a sanity check since global event handlers are needed and 
                 // probably something isn't releasing mouse capture
@@ -252,14 +255,14 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             //MpConsole.WriteLine("In DragDrop mouse move " + MpShortcutCollectionViewModel.Instance.GlobalMouseLocation);
-
-            MpPoint diff = mp.ToPortablePoint() - _mouseDragCheckStartPosition;
+            MpPoint mp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+            MpPoint diff = mp - _mouseDragCheckStartPosition;
 
             if (diff.Length >= MINIMUM_DRAG_DISTANCE || IsDragAndDrop) {
                 if (!IsDragAndDrop) {
                     IsDragAndDrop = true;
                     _timer.Start();
-                    MpShortcutCollectionViewModel.Instance.GlobalEscKeyPressed += GlobalEscKey_Pressed;
+                    MpAvShortcutCollectionViewModel.Instance.OnGlobalEscKeyPressed += Instance_OnGlobalEscapePressed;
                     MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
                 }
 
@@ -285,7 +288,7 @@ namespace MonkeyPaste.Avalonia {
                 IsPerformingDrop = true;
 
                 await CurDropTarget?.Drop(
-                        MpShortcutCollectionViewModel.Instance.GlobalIsCtrlDown,
+                        MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown,
                         dragData);
 
                 IsPerformingDrop = false;
@@ -304,9 +307,10 @@ namespace MonkeyPaste.Avalonia {
             _timer.Stop();
             DropTargets.ForEach(x => x.Reset());
 
-            MpShortcutCollectionViewModel.Instance.GlobalMouseMove -= GlobalHook_MouseMove;
-            MpShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonUp -= GlobalHook_MouseUp;
-            MpShortcutCollectionViewModel.Instance.GlobalEscKeyPressed -= GlobalEscKey_Pressed;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalEscKeyPressed -= Instance_OnGlobalEscapePressed;
+
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove -= Instance_OnGlobalMouseMove;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased -= Instance_OnGlobalMouseReleased;
 
             UpdateCursor();
             //

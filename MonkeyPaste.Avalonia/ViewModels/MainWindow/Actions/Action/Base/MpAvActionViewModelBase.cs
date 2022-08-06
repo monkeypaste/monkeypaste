@@ -1047,16 +1047,16 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ShowActionSelectorMenuCommand => new MpCommand<object>(
              (args) => {
-                 var fe = args as Control;
-                 var cm = MpAvContextMenuView.Instance;
-                 //LastSelectedDateTime = DateTime.Now;
-                 IsSelected = true;
+                 //var fe = args as Control;
+                 //var cm = MpAvContextMenuView.Instance;
+                 ////LastSelectedDateTime = DateTime.Now;
+                 //IsSelected = true;
 
-                 cm.DataContext = ContextMenuItemViewModel;
-                 fe.ContextMenu = cm;
-                 fe.ContextMenu.PlacementTarget = fe;
-                 fe.ContextMenu.PlacementAnchor = PopupAnchor.Right; //System.Windows.Controls.Primitives.PlacementMode.Right;
-                 fe.ContextMenu.Open();//IsOpen = true;
+                 //cm.DataContext = ContextMenuItemViewModel;
+                 //fe.ContextMenu = cm;
+                 //fe.ContextMenu.PlacementTarget = fe;
+                 //fe.ContextMenu.PlacementAnchor = PopupAnchor.Right; //System.Windows.Controls.Primitives.PlacementMode.Right;
+                 //fe.ContextMenu.Open();//IsOpen = true;
              });
 
         public ICommand AddChildActionCommand => new MpCommand<object>(

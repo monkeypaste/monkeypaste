@@ -130,6 +130,7 @@
     <None Remove="Resources\Html\Editor\src\components\dragdrop\dragdrop.js" />
     <None Remove="Resources\Html\Editor\src\components\editor\editor.js" />
     <None Remove="Resources\Html\Editor\src\components\font\font.js" />
+    <None Remove="Resources\Html\Editor\src\components\overlay\overlay.js" />
     <None Remove="Resources\Html\Editor\src\components\table\table.js" />
     <None Remove="Resources\Html\Editor\src\components\template\template.js" />
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\create\createTemplateToolbarItem.js" />
@@ -257,6 +258,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\font\font.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\overlay\overlay.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\table\table.js">

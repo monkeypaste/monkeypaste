@@ -40,6 +40,8 @@ namespace MonkeyPaste.Avalonia {
 
         private int _detailIdx = 0;
 
+        private string _originalTitle;
+
         #endregion
 
         #region Constants
@@ -66,7 +68,6 @@ namespace MonkeyPaste.Avalonia {
         MpISelectorViewModel<MpAvClipTileViewModel> MpISelectorItemViewModel<MpAvClipTileViewModel>.Selector => Parent;
 
         #endregion
-
 
         #region Appearance
 
@@ -145,6 +146,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool IsDevToolsVisible { get; set; } = false;
 
         public bool IsViewLoaded { get; set; } = false;
 
@@ -453,9 +456,9 @@ namespace MonkeyPaste.Avalonia {
                 return CopyItem.Title;
             }
             set {
-                if (CopyItem != null && CopyItem.Title != value) {
+                if (CopyItem.Title != value) {
                     CopyItem.Title = value;
-                    HasModelChanged = true;
+                    // NOTE title is not automatically synced w/ model
                     OnPropertyChanged(nameof(CopyItemTitle));
                 }
             }
@@ -999,19 +1002,19 @@ namespace MonkeyPaste.Avalonia {
 
         public MpContentTableViewModel TableViewModel { get; set; }
 
-        public MpSourceViewModel SourceViewModel {
+        public MpAvSourceViewModel SourceViewModel {
             get {
-                var svm = MpSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == SourceId);
+                var svm = MpAvSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == SourceId);
                 if (svm == null) {
-                    return MpSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == MpPrefViewModel.Instance.ThisAppSourceId);
+                    return MpAvSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == MpPrefViewModel.Instance.ThisAppSourceId);
                 }
                 return svm;
             }
         }
 
-        public MpAppViewModel AppViewModel => SourceViewModel == null ? null : SourceViewModel.AppViewModel;
+        public MpAvAppViewModel AppViewModel => SourceViewModel == null ? null : SourceViewModel.AppViewModel;
 
-        public MpUrlViewModel UrlViewModel => SourceViewModel == null ? null : SourceViewModel.UrlViewModel;
+        public MpAvUrlViewModel UrlViewModel => SourceViewModel == null ? null : SourceViewModel.UrlViewModel;
 
         public MpAvClipTileViewModel Next {
             get {
@@ -2123,6 +2126,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsTitleReadOnly):
                     if (!IsTitleReadOnly) {
+                        _originalTitle = CopyItemTitle;
                         IsTitleFocused = true;
                         IsSelected = true;
                     }
@@ -2381,7 +2385,17 @@ namespace MonkeyPaste.Avalonia {
                 IsTitleVisible = !IsTitleVisible;
             }, ()=> !IsPlaceholder);
 
+        public ICommand CancelEditTitleCommand => new MpCommand(
+            () => {
+                CopyItemTitle = _originalTitle;
+                IsTitleReadOnly = true;
+            });
 
+        public ICommand FinishEditTitleCommand => new MpCommand(
+            () => {
+                IsTitleReadOnly = true;
+                CopyItem.WriteToDatabaseAsync().FireAndForgetSafeAsync(this);
+            });
 
 
         #endregion

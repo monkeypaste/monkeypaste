@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using MonkeyPaste.Common.Avalonia;
+using Avalonia.Interactivity;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileTitleView : MpAvUserControl<MpAvClipTileViewModel> {
@@ -13,6 +14,7 @@ namespace MonkeyPaste.Avalonia {
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }
+
 
         private void SourceIconGrid_PointerPressed(object sender, PointerPressedEventArgs e) {
             var ctv = this.GetVisualAncestor<MpAvClipTileView>();

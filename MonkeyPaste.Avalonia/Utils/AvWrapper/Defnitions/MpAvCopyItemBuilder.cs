@@ -147,11 +147,11 @@ namespace MonkeyPaste.Avalonia {
                     null : await MpUrlBuilder.CreateUrl(htmlClipboardData.SourceUrl);
 
                 if (url != null) {
-                    if (MpUrlCollectionViewModel.Instance.IsRejected(url.UrlDomainPath)) {
+                    if (MpAvUrlCollectionViewModel.Instance.IsRejected(url.UrlDomainPath)) {
                         MpConsole.WriteLine("Clipboard Monitor: Ignoring url domain '" + url.UrlDomainPath);
                         return null;
                     }
-                    if (MpUrlCollectionViewModel.Instance.IsUrlRejected(url.UrlPath)) {
+                    if (MpAvUrlCollectionViewModel.Instance.IsUrlRejected(url.UrlPath)) {
                         MpConsole.WriteLine("Clipboard Monitor: Ignoring url domain '" + url.UrlPath);
                         return null;
                     }

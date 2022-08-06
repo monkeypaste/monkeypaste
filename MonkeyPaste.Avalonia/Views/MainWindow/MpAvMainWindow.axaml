@@ -35,16 +35,68 @@
                                            DataContext="{Binding}" />
 
         <!--  Filter Menu  -->
-        <Grid x:Name="MainWindowFilterGrid"
-              Grid.Row="1"
-              HorizontalAlignment="Stretch"
-              VerticalAlignment="Stretch">
-            <Grid.Background>
+        <ItemsControl x:Name="MainWindowFilterGrid"
+                      Grid.Row="1"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch">
+            <ItemsControl.Background>
                 <SolidColorBrush Color="Purple"
                                  Opacity="{Binding MainWindowOpacity,
                                                    Source={x:Static pcl:MpPrefViewModel.Instance}}" />
-            </Grid.Background>
-        </Grid>
+            </ItemsControl.Background>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal"
+                               HorizontalAlignment="Stretch" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.Items>
+                <ToggleButton local:MpAvSizeObserverExtension.IsEnabled="True"
+                              local:MpAvSizeObserverExtension.ObservedWidth="{Binding PlayPauseButtonWidth,
+                                                                                      Source={x:Static local:MpAvClipTrayViewModel.Instance},
+                                                                                      Mode=OneWayToSource}"
+                              Padding="10"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Top"
+                              IsChecked="{Binding IsAppPaused,
+                                                  Source={x:Static local:MpAvClipTrayViewModel.Instance},
+                                                  Mode=TwoWay}">
+                    <Grid>
+                        <Image HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Source="{Binding Source={StaticResource PauseImage},
+                                                Converter={StaticResource StringResourceToBitmapConverter}}"
+                               IsVisible="{Binding !IsAppPaused,
+                                                   Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
+                            <ToolTip.Tip>
+                                <local:MpAvTooltipView ToolTipText="Pause Clipboard Listener" />
+                            </ToolTip.Tip>
+                        </Image>
+                        <Image HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Source="{Binding Source={StaticResource PlayImage},
+                                                Converter={StaticResource StringResourceToBitmapConverter}}"
+                               IsVisible="{Binding IsAppPaused,
+                                                   Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
+                            <ToolTip.Tip>
+                                <local:MpAvTooltipView ToolTipText="Resume Clipboard Listener" />
+                            </ToolTip.Tip>
+                        </Image>
+                    </Grid>
+                </ToggleButton>
+                <local:MpAvClipTileSortView local:MpAvSizeObserverExtension.IsEnabled="True"
+                                            local:MpAvSizeObserverExtension.ObservedWidth="{Binding ClipTileSortViewWidth,
+                                                                                                    Source={x:Static local:MpAvClipTileSortViewModel.Instance},
+                                                                                                    Mode=OneWayToSource}"
+                                            HorizontalAlignment="Left" />
+                <local:MpAvTagTrayView />
+                <local:MpAvSearchBoxView HorizontalAlignment="Right"
+                                         local:MpAvSizeObserverExtension.IsEnabled="True"
+                                         local:MpAvSizeObserverExtension.ObservedWidth="{Binding SearchBoxViewWidth,
+                                                                                                 Source={x:Static local:MpAvSearchBoxViewModel.Instance},
+                                                                                                 Mode=OneWayToSource}" />
+            </ItemsControl.Items>
+        </ItemsControl>
 
         <!--  Tray Row  -->
         <Grid x:Name="MainWindowTrayGrid"
@@ -74,6 +126,7 @@
             <GridSplitter x:Name="SidebarGridSplitter"
                           Grid.Column="1"
                           Width="5"
+                          ResizeDirection="Columns"
                           HorizontalAlignment="Right"
                           VerticalAlignment="Stretch"
                           local:MpAvIsHoveringExtension.HoverCursor="ResizeWE"

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using MonkeyPaste;
 namespace MonkeyPaste.Avalonia {
-    public class MpShortcutKeyViewModel : MpViewModelBase<MpShortcutViewModel> {
+    public class MpShortcutKeyViewModel : MpViewModelBase<MpAvShortcutViewModel> {
         #region Properties
 
         private int _seqIdx = 0;
@@ -87,7 +87,7 @@ namespace MonkeyPaste.Avalonia {
             SeqIdx = seqIdx;
         }
 
-        public MpShortcutKeyViewModel(MpShortcutViewModel parent, string keyStr, bool showPlus, bool showComma, int seqIdx) : base(parent) {
+        public MpShortcutKeyViewModel(MpAvShortcutViewModel parent, string keyStr, bool showPlus, bool showComma, int seqIdx) : base(parent) {
             KeyStr = keyStr;
             ShowPlus = showPlus;
             ShowComma = showComma;

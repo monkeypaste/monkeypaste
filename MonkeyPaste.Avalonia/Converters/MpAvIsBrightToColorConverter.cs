@@ -12,11 +12,13 @@ namespace MonkeyPaste.Avalonia {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
             if(value is string valStr) {
                 if(valStr.IsStringHexColor()) {
+                    bool flip = parameter is string str && str == "flip";
+
                     var c = new MpColor(valStr);
                     if(MpColorHelpers.IsBright(valStr)) {
-                        return Colors.Black;
+                        return flip ? Colors.White : Colors.Black;
                     }
-                    return Colors.White;
+                    return flip ? Colors.Black : Colors.White;
                 }
             }
             return null;

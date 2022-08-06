@@ -168,7 +168,7 @@
     <Compile Include="Behaviors\Highlighting\Interfaces\MpIHighlightRegion.cs" />
     <Compile Include="Behaviors\Highlighting\MpRtbHighlightBehavior.cs" />
     <Compile Include="Behaviors\Input\MpKeyGestureBehavior.cs" />
-    <Compile Include="Behaviors\Input\MpKeyGestureHelper.cs" />
+    <Compile Include="Behaviors\Input\MpWpfKeyGestureHelper.cs" />
     <Compile Include="Behaviors\MpGlassBehavior.cs" />
     <Compile Include="Behaviors\Highlighting\Base\MpHighlightBehaviorBase.cs" />
     <Compile Include="Behaviors\MpImageObjectRecognitionBehavior.cs" />

@@ -84,16 +84,10 @@
                     <ListBox.Styles>
                         <Style Selector="ListBoxItem"
                                x:DataType="local:MpAvClipTileViewModel">
-                            <Setter Property="HorizontalAlignment"
-                                    Value="Left" />
-                            <Setter Property="VerticalAlignment"
-                                    Value="Top" />
                             <Setter Property="Margin"
                                     Value="{Binding OuterSpacing}" />
                             <Setter Property="Padding"
                                     Value="{Binding InnerSpacing}" />
-                            <Setter Property="FocusAdorner"
-                                    Value="{x:Null}" />
                             <Setter Property="Canvas.Left"
                                     Value="{Binding TrayX}" />
                             <Setter Property="Canvas.Top"

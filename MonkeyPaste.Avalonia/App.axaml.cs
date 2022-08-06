@@ -15,7 +15,7 @@ namespace MonkeyPaste.Avalonia {
     public partial class App : Application {
         public static IClassicDesktopStyleApplicationLifetime Desktop { get; private set; }
         public App() {
-            DataContext = MpAvAppViewModel.Instance;
+            DataContext = MpAvSystemTrayViewModel.Instance;
         }
         public override void Initialize() {
             AvaloniaXamlLoader.Load(this);
@@ -29,31 +29,15 @@ namespace MonkeyPaste.Avalonia {
         public override async void OnFrameworkInitializationCompleted() {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
                 Desktop = desktop;
-
-                string cefLogPath = Path.Combine(Environment.CurrentDirectory, "ceflog.txt");
-                if(File.Exists(cefLogPath)) {
-                    File.Delete(cefLogPath);
-                }
-
-                if(!OperatingSystem.IsLinux()) {
-                    WebView.Settings.OsrEnabled = true;
-                    WebView.Settings.LogFile = "ceflog.txt";
-                    //WebView.Settings.EnableErrorLogOnly = true;
-
-                    string cefCacheDir = Path.Combine(Environment.CurrentDirectory, "cefcache");
-                    if (Directory.Exists(cefCacheDir)) {
-                        Directory.Delete(cefCacheDir,true);
-                    }
-                    Directory.CreateDirectory(cefCacheDir);
-                    WebView.Settings.CachePath = cefCacheDir;
-                }
                 
+                //MpAvCefNetWebViewExtension.InitCefNet(desktop);
+                MpAvCefWebViewExtension.InitCef();
+
                 if (OperatingSystem.IsLinux()) {
                     await GtkHelper.EnsureInitialized();
                 } else if (OperatingSystem.IsMacOS()) {
                     MpAvMacHelpers.EnsureInitialized();
                 }
-
 
                 await MpAvWrapper.Instance.InitializeAsync();
                 await MpPlatformWrapper.InitAsync(MpAvWrapper.Instance);
@@ -63,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine("Loaded");
 
                 //desktop.MainWindow.Close();
-
+                desktop.Exit += Desktop_Exit;
                 desktop.MainWindow = new MpAvMainWindow();
                 desktop.MainWindow.Show();
             }
@@ -71,5 +55,8 @@ namespace MonkeyPaste.Avalonia {
             base.OnFrameworkInitializationCompleted();
         }
 
+        private void Desktop_Exit(object sender, ControlledApplicationLifetimeExitEventArgs e) {
+            MpAvCefNetWebViewExtension.ShutdownCefNet();            
+        }
     }
 }
