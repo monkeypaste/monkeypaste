@@ -64,6 +64,10 @@ namespace MonkeyPaste {
         public static void Register<T>(object sender, Action<T> receiverAction, object context) {
             var key = new MessengerKey(sender, typeof(T), context);
             if(_recipientDictionary.ContainsKey(key)) {
+                if (_recipientDictionary[key].Contains(receiverAction)) {
+                    // this probably shouldn't happen, needs to be unregistered or remove old entry
+                    Debugger.Break();
+                }
                 _recipientDictionary[key].Add(receiverAction);
             } else {
                 _recipientDictionary.TryAdd(key, new List<object> { receiverAction });
@@ -81,7 +85,9 @@ namespace MonkeyPaste {
                 _recipientDictionary[key].Remove(receiverAction);
             }
         }
-
+        public static void UnregisterGlobal(Action<MpMessageType> receiverAction) {
+            Unregister<MpMessageType>(null, receiverAction, null);
+        }
 
         public static void UnregisterAll() {
             _recipientDictionary.Clear();

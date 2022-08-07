@@ -59,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
 
                     var tt = (MpTriggerType)i;
                     tmivml.Add(new MpMenuItemViewModel() {
-                        IsSelected = tt == TriggerType,
+                        IsChecked = tt == TriggerType,
                         IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource(resourceKey) as string,
                         Header = triggerLabels[i],
                         Command = SelectTriggerTypeCommand,

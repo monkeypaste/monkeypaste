@@ -4,16 +4,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchFilterViewModel : MpViewModelBase<MpAvSearchBoxViewModel> {
         #region Private Variables
 
         private MpContentFilterType _filterType = MpContentFilterType.None;
-        
+
         #endregion
 
         #region Properties
+
+        public MpMenuItemViewModel MenuItemViewModel {
+            get {
+                if(IsSeperator) {
+                    return new MpMenuItemViewModel() {
+                        IsSeparator = true
+                    };
+                }
+                return new MpMenuItemViewModel() {
+                    IsChecked = IsChecked,
+                    IsEnabled = IsEnabled,
+                    Header = Label,
+                    IconHexStr = MpSystemColors.White,
+                };
+            }
+        }
 
         #region Appearance
 

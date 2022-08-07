@@ -1,0 +1,51 @@
+<MenuItem xmlns="https://github.com/avaloniaui"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:local="using:MonkeyPaste.Avalonia"
+          xmlns:pcl="using:MonkeyPaste"
+          x:DataType="pcl:MpMenuItemViewModel"
+          x:CompileBindings="True"
+          mc:Ignorable="d"
+          d:DesignWidth="800"
+          d:DesignHeight="450"
+          x:Class="MonkeyPaste.Avalonia.MpAvCheckableMenuItemView">
+    <MenuItem.Styles>
+        <Style Selector="MenuItem"
+               x:DataType="pcl:MpMenuItemViewModel">
+            <Setter Property="Icon">
+                <Template>
+                    <CheckBox x:Name="MenuItemCheckBox"
+                              Checked="MpAvCheckableMenuItemView_Checked"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch"
+                              IsChecked="{Binding IsChecked, Mode=TwoWay}">
+                        <CheckBox.Styles>
+                            <Style Selector="CheckBox /template/ ContentPresenter"
+                                   x:DataType="pcl:MpMenuItemViewModel">
+                                <Setter Property="Background"
+                                        Value="{Binding IconHexStr, Converter={StaticResource StringHexToBrushConverter}}" />
+                            </Style>
+                        </CheckBox.Styles>
+                    </CheckBox>
+                </Template>
+            </Setter>
+            <Setter Property="Header"
+                    Value="{Binding Header}" />
+            <Setter Property="Items"
+                    Value="{Binding SubItems}" />
+            <Setter Property="Command"
+                    Value="{Binding Command}" />
+            <Setter Property="CommandParameter"
+                    Value="{Binding CommandParameter}" />
+            <Setter Property="InputGesture"
+                    Value="{Binding InputGestureText}" />
+            <Setter Property="IsVisible"
+                    Value="{Binding IsVisible}" />
+        </Style>
+        <Style Selector="MenuItem:pointerover">
+            <Setter Property="Background"
+                    Value="LightBlue" />
+        </Style>
+    </MenuItem.Styles>
+</MenuItem>

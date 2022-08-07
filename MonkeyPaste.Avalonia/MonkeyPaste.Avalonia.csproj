@@ -18,9 +18,13 @@
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaXaml Remove="Assets\Images\backup\**" />
+    <AvaloniaXaml Remove="cef\**" />
     <Compile Remove="Assets\Images\backup\**" />
+    <Compile Remove="cef\**" />
     <EmbeddedResource Remove="Assets\Images\backup\**" />
+    <EmbeddedResource Remove="cef\**" />
     <None Remove="Assets\Images\backup\**" />
+    <None Remove="cef\**" />
     <None Remove="Assets\Icons\cog.ico" />
     <None Remove="Assets\Icons\monkey.ico" />
     <None Remove="Assets\Images\monkey.png" />
@@ -56,12 +60,10 @@
     <AvaloniaXaml Remove="Styles\MpAvAllStyles.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\MpAvClipTrayView_ItemsRepeater.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\ResizeHandle\MpAvMainWindowResizeHandle.axaml" />
-    <AvaloniaXaml Remove="Views\Reusable\ContextMenu\MpAvContextMenuView.axaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
     <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\MpAvClipTrayView_ItemsRepeater.axaml.cs" />
-    <Compile Remove="Views\Reusable\ContextMenu\MpAvContextMenuView.axaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
@@ -913,6 +915,12 @@
     </Compile>
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\TagTree\TagTile\MpAvTagView.axaml.cs">
       <DependentUpon>MpAvTagView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\ContextMenu\CheckableMenuItem\MpAvCheckableMenuItemView.axaml.cs">
+      <DependentUpon>MpAvCheckableMenuItemView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\ContextMenu\DefaultMenuItem\MpAvDefaultMenuItemView.axaml.cs">
+      <DependentUpon>MpAvDefaultMenuItemView.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

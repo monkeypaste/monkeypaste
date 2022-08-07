@@ -68,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
 
         public int SelectedShortcutIndex { get; set; }
 
-        public MpPoint GlobalMouseLocation { get; private set; }
+        public MpPoint? GlobalMouseLocation { get; private set; } = null;
 
         public MpPoint? GlobalMouseLeftButtonDownLocation { get; private set; } = null;
         public bool GlobalIsMouseLeftButtonDown { get; private set; } = false;
@@ -586,7 +586,9 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             if (!MpAvMainWindow.Instance.IsActive &&
-               !MpAvMainWindow.Instance.Bounds.Contains(MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.ToAvPoint()) &&
+                GlobalMouseLocation != null &&
+                MpAvMainWindow.Instance != null &&
+               !MpAvMainWindow.Instance.Bounds.Contains(GlobalMouseLocation.ToAvPoint()) &&
                MpAvMainWindowViewModel.Instance.IsMainWindowOpen &&
                !MpAvMainWindowViewModel.Instance.IsMainWindowClosing) {
                 Dispatcher.UIThread.Post(() => {

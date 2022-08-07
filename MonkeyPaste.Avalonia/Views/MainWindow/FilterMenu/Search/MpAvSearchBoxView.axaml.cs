@@ -15,7 +15,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void SearchViewContainer_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            InitContextMenu();
+            //InitContextMenu();
         }
 
         private void InitializeComponent() {

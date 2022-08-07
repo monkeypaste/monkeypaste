@@ -21,6 +21,8 @@ namespace MonkeyPaste {
     }
 
 
+
+
     public class MpSetColorArguments {
         public event EventHandler<string> SetColorEventCallback;
         public string OriginalColor { get; }
@@ -62,6 +64,7 @@ namespace MonkeyPaste {
         public bool IsColorPalleteItem { get; set; }
 
         public bool IsNewTableSelector { get; set; }
+
         #endregion
 
         #region Header
@@ -78,7 +81,9 @@ namespace MonkeyPaste {
 
         #region State
 
-        public bool IsSelected { get; set; } = false;
+        public bool IsEnabled { get; set; }
+
+        public bool IsChecked { get; set; } = false;
 
         public bool IsPartiallySelected { get; set; } = false; // for multi-select tag ischecked overlay
 
@@ -133,7 +138,7 @@ namespace MonkeyPaste {
 
         public string BorderHexColor {
             get {
-                if (IsSelected) {
+                if (IsChecked) {
                     return MpSystemColors.IsSelectedBorderColor;
                 } else if (IsHovering) {
                     return MpSystemColors.IsHoveringBorderColor;
@@ -189,11 +194,10 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-
         public static MpMenuItemViewModel GetColorPalleteMenuItemViewModel(MpIUserColorViewModel ucvm) {
             bool isAnySelected = false;
             var colors = new List<MpMenuItemViewModel>();
-            string selectedHexStr = ucvm.UserHexColor == null ? string.Empty:ucvm.UserHexColor;
+            string selectedHexStr = ucvm.UserHexColor == null ? string.Empty : ucvm.UserHexColor;
             for (int i = 0; i < MpSystemColors.ContentColors.Count; i++) {
                 string cc = MpSystemColors.ContentColors[i].ToUpper();
                 bool isCustom = i == MpSystemColors.ContentColors.Count - 1;
@@ -218,7 +222,7 @@ namespace MonkeyPaste {
                 }
 
                 colors.Add(new MpMenuItemViewModel() {
-                    IsSelected = isSelected,
+                    IsChecked = isSelected,
                     Header = header,
                     Command = command,
                     CommandParameter = commandArg,
@@ -228,10 +232,10 @@ namespace MonkeyPaste {
                     SortOrderIdx = i
                 });
             }
-            
+
             return new MpMenuItemViewModel() {
                 IsColorPallete = true,
-                SubItems = colors.OrderBy(x=>x.SortOrderIdx).ToList()
+                SubItems = colors.OrderBy(x => x.SortOrderIdx).ToList()
             };
         }
 
@@ -245,7 +249,7 @@ namespace MonkeyPaste {
 
         public static ICommand SetColorCommand => new MpCommand<object>(
             (args) => {
-                if(args == null) {
+                if (args == null) {
                     throw new Exception("Args must be color and color interface");
                 }
                 var argParts = args as object[];
@@ -256,5 +260,5 @@ namespace MonkeyPaste {
             });
 
         #endregion
-    }    
+    }
 }

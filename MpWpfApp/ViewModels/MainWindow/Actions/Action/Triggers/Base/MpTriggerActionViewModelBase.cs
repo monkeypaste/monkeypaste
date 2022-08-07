@@ -61,7 +61,7 @@ namespace MpWpfApp {
 
                     var tt = (MpTriggerType)i;
                     tmivml.Add(new MpMenuItemViewModel() {
-                        IsSelected = tt == TriggerType,
+                        IsChecked = tt == TriggerType,
                         IconResourceKey = Application.Current.Resources[resourceKey] as string,
                         Header = triggerLabels[i],
                         Command = SelectTriggerTypeCommand,

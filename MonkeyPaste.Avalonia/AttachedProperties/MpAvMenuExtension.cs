@@ -13,6 +13,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Layout;
 using Avalonia.Themes.Fluent;
 using Avalonia.Media;
+using System;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvMenuExtension {
@@ -31,6 +32,7 @@ namespace MonkeyPaste.Avalonia {
         static MpAvMenuExtension() {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
         }
+
         #region Properties
 
         #region SelectOnRightClick AvaloniaProperty
@@ -102,28 +104,9 @@ namespace MonkeyPaste.Avalonia {
                         control.AttachedToVisualTree += AttachedToVisualHandler;
                     }
                     control.DetachedFromVisualTree += DetachedToVisualHandler;
-
-                    if(control.DataContext == null) {
-                        control.DataContextChanged += Control_DataContextChanged;
-                    } else {
-                        Control_DataContextChanged(control, null);
-                    }                    
+                    control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);         
                 }
             }
-
-            void Control_DataContextChanged(object sender, System.EventArgs e) {
-                if(sender is Control control) {
-                    if (control.DataContext is MpIMenuItemViewModelBase cmvm) {
-                        control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
-
-                        //if (control is MpAvTagView tv) {
-                        //    var tvi = tv.GetVisualAncestor<TreeViewItem>();
-                        //    tvi.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
-                        //}
-                    }
-                }
-            }
-
             void DetachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
                 if (s is Control control) {
                     control.AttachedToVisualTree -= AttachedToVisualHandler;
@@ -134,41 +117,31 @@ namespace MonkeyPaste.Avalonia {
 
             void Control_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
                 if(sender is Control control) {
-                    //if(control is TreeViewItem tvi) {
-                    //    control = tvi.GetVisualDescendant<MpAvTagView>();
-                    //}
                     if (GetIsEnabled(control)) {
                         MpMenuItemViewModel mivm = null;
 
-                        if (e.GetCurrentPoint(control)
-                            .Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed) {
-                            if (control.DataContext is MpIPopupMenuViewModel pumvm) {
-                                SetIsOpen(control, true);
-
-                                mivm = pumvm.PopupMenuViewModel;
-
-                                if (control.DataContext is MpISelectableViewModel svm) {
-                                    svm.IsSelected = true;
-                                }
-                            }
-                        } else if (e.GetCurrentPoint(control)
-                            .Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed) {
+                        if (e.IsLeftPress(control) &&
+                            control.DataContext is MpIPopupMenuViewModel pumvm) {
+                            mivm = pumvm.PopupMenuViewModel;
+                        } else if (e.IsRightPress(control)) {
                             if (control.DataContext is MpIContextMenuViewModel cmvm) {
-                                SetIsOpen(control, true);
-
                                 mivm = cmvm.ContextMenuViewModel;
-
-                                if (control.DataContext is MpISelectableViewModel svm &&
-                                    GetSelectOnRightClick(control)) {
-                                    svm.IsSelected = true;
-                                }
                             }
                         }
+
 
                         if (mivm == null) {
                             e.Handled = false;
                             SetIsOpen(control, false);
                             return;
+                        } else {
+                            SetIsOpen(control, true);
+
+                            if (control.DataContext is MpISelectableViewModel svm) {
+                                if(e.IsLeftPress(control) || GetSelectOnRightClick(control)) {
+                                    svm.IsSelected = true;
+                                }
+                            }
                         }
 
                         e.Handled = true;
@@ -189,11 +162,11 @@ namespace MonkeyPaste.Avalonia {
 
 
                         control.ContextMenu = new ContextMenu() {
-                            Items = mivm.SubItems.Where(x=>x.IsVisible).Select(x => CreateMenuItem(x))
+                            Items = mivm.SubItems.Where(x=>x.IsVisible).Select(x => CreateMenuItem(x)),
+                            PlacementTarget = control,
+                            PlacementAnchor = PopupAnchor.TopRight,
+                            DataContext = mivm
                         };
-                        control.ContextMenu.DataContext = mivm;
-                        control.ContextMenu.PlacementTarget = control;
-                        control.ContextMenu.PlacementAnchor = PopupAnchor.TopRight;
 
                         control.ContextMenu.ContextMenuOpening += onOpenHandler;
                         control.ContextMenu.ContextMenuClosing += onCloseHandler;
@@ -206,14 +179,111 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
 
+                //Control CreateMenuItem(MpMenuItemViewModel mivm) {
+                //    //if (mivm is MpMenuItemViewModel) {
+                //    //    //return new Separator() {
+                //    //    //    HorizontalAlignment = HorizontalAlignment.Stretch,
+                //    //    //    VerticalAlignment = VerticalAlignment.Center,
+                //    //    //    MinWidth = 20,
+                //    //    //    MinHeight = 20,
+                //    //    //    Foreground = Brushes.Black
+                //    //    //};
+                //    //    return new MenuItem() {
+                //    //        Header = "-"
+                //    //    };
+                //    //}
+                //    //if (mivm is MpMenuItemViewModel) {
+                //    //    return new MpAvDefaultMenuItemView() {
+                //    //        DataContext = mivm
+                //    //    };
+                //    //}
+                //    //if (mivm is MpMenuItemViewModel) {
+                //    //    return new MpAvCheckableMenuItemView() {
+                //    //        DataContext = mivm
+                //    //    };
+                //    //}
+                //    //if (mivm is MpMenuItemViewModel cpmivm) {
+                //    //    return new MpAvColorPaletteListBoxView() {
+                //    //        DataContext = cpmivm
+                //    //    };
+                //    //}
+                //    //Debugger.Break();
+                //    //return null;
+
+                //    Control control = null;
+                //    string itemType = new MpAvMenuItemDataTemplateSelector().GetTemplateName(mivm);
+
+                //    switch (itemType) {
+                //        case "DefaultMenuItemTemplate":
+                //            control = new MpAvDefaultMenuItemView() {
+                //                DataContext = mivm
+                //            };
+                //            break;
+                //        case "CheckableMenuItemTemplate":
+                //            control = new MpAvCheckableMenuItemView() {
+                //                DataContext = mivm
+                //            };
+                //            break;
+                //        case "SeperatorMenuItemTemplate":
+                //            control = new MenuItem() {
+                //                Header = "-"
+                //            };
+                //            break;
+                //        case "ColorPalleteMenuItemTemplate":
+                //            return new MpAvColorPaletteListBoxView() {
+                //                DataContext = mivm
+                //            };
+                //        case "ColorPalleteItemMenuItemTemplate":
+
+                //            break;
+                //    }
+                //    if(control is MenuItem mi &&
+                //        mivm.SubItems != null && mivm.SubItems.Count > 0) {
+                //        mi.Items = mivm.SubItems.Where(x => x.IsVisible).Select(x => CreateMenuItem(x));
+                //    }
+                //    return control;
+                //}
+
                 Control CreateMenuItem(MpMenuItemViewModel mivm) {
                     Control control = null;
                     string itemType = new MpAvMenuItemDataTemplateSelector().GetTemplateName(mivm);
-                    
-                    switch(itemType) {
+
+                    switch (itemType) {
+                        case "CheckableMenuItemTemplate":
+                            control = new MenuItem() {
+                                Icon = new Border() {
+                                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                                    VerticalAlignment = VerticalAlignment.Stretch,
+                                    MinWidth = 20,
+                                    MinHeight = 20,
+                                    Background = mivm.IconHexStr.ToAvBrush(),
+                                    Child = new PathIcon() {
+                                        Data = MpPlatformWrapper.Services.PlatformResource.GetResource("CheckSvg") as StreamGeometry,
+                                        Foreground = Brushes.Black,
+                                        IsVisible = mivm.IsChecked
+                                    }
+                                },
+                                Header = mivm.Header,
+                                Items = mivm.SubItems == null ?
+                                    null :
+                                    mivm.SubItems.Where(x => x.IsVisible).Select(x => CreateMenuItem(x)),
+                                Command = mivm.Command,
+                                CommandParameter = mivm.CommandParameter,
+                                InputGesture = string.IsNullOrWhiteSpace(mivm.InputGestureText) ?
+                                    null :
+                                    KeyGesture.Parse(mivm.InputGestureText)
+                            };
+                            control.PointerEnter += Control_PointerEnter;
+                            control.PointerLeave += Control_PointerLeave;
+                            control.DetachedFromVisualTree += Control_DetachedFromVisualTree;
+
+                            if (mivm.SubItems == null || mivm.SubItems.Count == 0) {
+                                control.AddHandler(Control.PointerReleasedEvent, CheckableControl_PointerReleased, RoutingStrategies.Tunnel);
+                            }
+                            break;
                         case "DefaultMenuItemTemplate":
                             control = new MenuItem() {
-                                Icon = mivm.IconSourceObj == null ? 
+                                Icon = mivm.IconSourceObj == null ?
                                     null :
                                     new Image() {
                                         HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -221,25 +291,27 @@ namespace MonkeyPaste.Avalonia {
                                         Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(mivm.IconSourceObj, null, null, null) as Bitmap,
                                     },
                                 Header = mivm.Header,
-                                Items = mivm.SubItems == null ? 
-                                    null : 
-                                    mivm.SubItems.Where(x=>x.IsVisible).Select(x=>CreateMenuItem(x)),
+                                Items = mivm.SubItems == null ?
+                                    null :
+                                    mivm.SubItems.Where(x => x.IsVisible).Select(x => CreateMenuItem(x)),
                                 Command = mivm.Command,
                                 CommandParameter = mivm.CommandParameter,
-                                InputGesture = string.IsNullOrWhiteSpace(mivm.InputGestureText) ? 
+                                InputGesture = string.IsNullOrWhiteSpace(mivm.InputGestureText) ?
                                     null :
                                     KeyGesture.Parse(mivm.InputGestureText)
                             };
                             control.PointerEnter += Control_PointerEnter;
                             control.PointerLeave += Control_PointerLeave;
                             control.DetachedFromVisualTree += Control_DetachedFromVisualTree;
-                            
-                            if(mivm.SubItems == null || mivm.SubItems.Count == 0) {
+
+                            if (mivm.SubItems == null || mivm.SubItems.Count == 0) {
                                 control.AddHandler(Control.PointerReleasedEvent, Control_PointerReleased, RoutingStrategies.Tunnel);
                             }
                             break;
                         case "SeperatorMenuItemTemplate":
-                            control = new Separator();
+                            control = new MenuItem() {
+                                Header = "-"
+                            };
                             break;
                         case "ColorPalleteMenuItemTemplate":
                             control = new MpAvColorPaletteListBoxView() {
@@ -254,18 +326,29 @@ namespace MonkeyPaste.Avalonia {
                     return control;
                 }
             }
-        }
 
+        }
         private static void Control_PointerReleased(object sender, PointerReleasedEventArgs e) {
             MpPlatformWrapper.Services.ContextMenuCloser.CloseMenu();
+            e.Handled = false;
+        }
+        private static void CheckableControl_PointerReleased(object sender, PointerReleasedEventArgs e) {
+            if(sender is MenuItem mi && mi.DataContext is MpMenuItemViewModel mivm) {
+                mivm.IsChecked = !mivm.IsChecked;
+
+                var pi = mi.GetVisualDescendant<PathIcon>();
+                if(pi != null) {
+                    pi.IsVisible = mivm.IsChecked;
+                }
+            }
             e.Handled = false;
         }
 
 
         private static void Control_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            if(sender is Control control) {
+            if (sender is Control control) {
                 control.PointerEnter -= Control_PointerEnter;
-                control.PointerLeave -= Control_PointerLeave;                
+                control.PointerLeave -= Control_PointerLeave;
                 control.DetachedFromVisualTree -= Control_DetachedFromVisualTree;
                 control.PointerReleased -= Control_PointerReleased;
             }
@@ -278,11 +361,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void Control_PointerEnter(object sender, PointerEventArgs e) {
-            if(sender is MenuItem mi) {
+            if (sender is MenuItem mi) {
                 mi.Background = Brushes.LightBlue;
             }
         }
-
+    
+        
 
         #endregion
 

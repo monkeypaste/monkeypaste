@@ -14,22 +14,18 @@
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
           local:MpAvSizeObserverExtension.IsEnabled="True"
-          local:MpAvSizeObserverExtension.ObservedWidth="{Binding SidebarWidth,
-                                                                  Mode=OneWayToSource}"
-          local:MpAvSizeObserverExtension.ObservedHeight="{Binding SidebarHeight,
-                                                                   Mode=OneWayToSource}">
+          local:MpAvSizeObserverExtension.ObservedWidth="{Binding SidebarWidth, Mode=OneWayToSource}"
+          local:MpAvSizeObserverExtension.ObservedHeight="{Binding SidebarHeight, Mode=OneWayToSource}">
         <TreeView x:Name="TagTreeView"
                   Items="{Binding RootItems}"
                   BorderThickness="0"
                   Background="Transparent"
-                  SelectedItem="{Binding SelectedItem,
-                                         Mode=TwoWay}"
+                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                   SelectionMode="Single"
                   IsVisible="{Binding IsSidebarVisible}"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch">
-            <TreeView.Resources>
-            </TreeView.Resources>
+            <TreeView.Resources />
             <TreeView.Styles>
                 <Style Selector="TreeViewItem"
                        x:DataType="local:MpAvTagTileViewModel">
@@ -40,8 +36,7 @@
                     <Setter Property="Background"
                             Value="Transparent" />
                     <Setter Property="IsExpanded"
-                            Value="{Binding IsExpanded,
-                                            Mode=TwoWay}" />
+                            Value="{Binding IsExpanded, Mode=TwoWay}" />
                 </Style>
                 <Style Selector="TreeViewItem /template/ Border#SelectionBorder:pointerover">
                     <Setter Property="Background"
@@ -60,13 +55,8 @@
                 <TreeDataTemplate DataType="{x:Type local:MpAvTagTileViewModel}"
                                   ItemsSource="{Binding Items}">
                     <local:MpAvTagView DataContext="{Binding}"
-                                       local:MpAvMenuExtension.IsEnabled="False"
-                                       local:MpAvMenuExtension.SelectOnRightClick="False"
-                                       local:MpAvMenuExtension.IsOpen="{Binding IsContextMenuOpened,
-                                                                                Mode=TwoWay}"
                                        local:MpAvIsHoveringExtension.IsEnabled="True"
-                                       local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering,
-                                                                                          Mode=TwoWay}"
+                                       local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
                                        local:MpAvIsHoveringExtension.HoverCursor="Hand" />
                 </TreeDataTemplate>
             </TreeView.ItemTemplate>

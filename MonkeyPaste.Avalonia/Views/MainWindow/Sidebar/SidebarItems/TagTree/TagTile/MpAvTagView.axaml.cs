@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvTagView : MpAvUserControl<MpAvTagTileViewModel> {
-        public bool IsTreeTag { get; set; } = false;
 
         public MpAvTagView() {
             InitializeComponent();

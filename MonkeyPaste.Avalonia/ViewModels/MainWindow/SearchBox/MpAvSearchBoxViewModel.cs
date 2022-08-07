@@ -18,7 +18,9 @@ using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
 
-    public class MpAvSearchBoxViewModel : MpViewModelBase, MpIAsyncSingletonViewModel<MpAvSearchBoxViewModel> {
+    public class MpAvSearchBoxViewModel : MpViewModelBase, 
+        MpIAsyncSingletonViewModel<MpAvSearchBoxViewModel>,
+        MpIPopupMenuViewModel {
         #region Private Variables
         #endregion
 
@@ -111,6 +113,25 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        #endregion
+
+        #region MpIPopupMenuViewModel Implementation
+
+        public MpMenuItemViewModel PopupMenuViewModel {
+            get {
+                return new MpMenuItemViewModel() {
+                    //SubItems = Filters.Select(
+                    //    x => new MpMenuItemViewModel() {
+                    //        IsSeparator = x.IsSeperator,
+                    //        IsChecked = x.IsChecked,
+                    //        IsEnabled = x.IsEnabled,
+                    //        Header = x.Label,
+                    //        IconHexStr = MpSystemColors.Transparent,
+                    //    }).Cast<MpMenuItemViewModel>().ToList()
+                    SubItems = Filters.Select(x=>x.MenuItemViewModel).ToList()
+                };
+            }
+        }
         #endregion
 
         #region Layout

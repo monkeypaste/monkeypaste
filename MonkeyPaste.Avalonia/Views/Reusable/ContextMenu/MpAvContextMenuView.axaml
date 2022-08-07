@@ -9,13 +9,9 @@
              d:DesignHeight="450"
              x:DataType="pcl:MpMenuItemViewModel"
              x:CompileBindings="False"
-             Items="{Binding SubItems,
-                             Converter={StaticResource VisibleMenuItemsConverter}}"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch"
-             x:Class="MonkeyPaste.Avalonia.MpAvContextMenuView"
-             ContextMenuOpening="MpAvContextMenuView_ContextMenuOpening"
-             ContextMenuClosing="MpAvContextMenuView_ContextMenuClosing">
+             x:Class="MonkeyPaste.Avalonia.MpAvContextMenuView">
     <ContextMenu.Resources>
         <Thickness x:Key="MenuFlyoutItemThemePadding">
             0,0,0,0
@@ -30,7 +26,7 @@
             0,0,0,0
         </Thickness>
     </ContextMenu.Resources>
-    <ContextMenu.DataTemplates>
+    <!--<ContextMenu.DataTemplates>
         <local:MpAvMenuItemDataTemplateSelector>
             <DataTemplate x:Key="HeaderedSeperatorMenuItemTemplate"
                           DataType="{x:Type pcl:MpMenuItemViewModel}">
@@ -169,7 +165,7 @@
                 </MenuItem>
             </TreeDataTemplate>
         </local:MpAvMenuItemDataTemplateSelector>
-    </ContextMenu.DataTemplates>
+    </ContextMenu.DataTemplates>-->
     <!--<ContextMenu.DataTemplates>
         <TreeDataTemplate DataType="pcl:MpMenuItemViewModel"
                           ItemsSource="{Binding SubItems}">

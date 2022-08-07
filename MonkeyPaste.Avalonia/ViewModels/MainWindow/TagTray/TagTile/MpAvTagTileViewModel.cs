@@ -90,7 +90,7 @@ namespace MonkeyPaste.Avalonia {
                     Header = TagName,
                     Command = MpAvClipTrayViewModel.Instance.ToggleLinkTagToCopyItemCommand,
                     CommandParameter = this,
-                    IsSelected = totalCount == linkCount && totalCount > 0,
+                    IsChecked = totalCount == linkCount && totalCount > 0,
                     IsPartiallySelected = linkCount != totalCount && totalCount > 0,
                     IconHexStr = TagHexColor,
                     ShortcutObjId = TagId,
@@ -123,7 +123,7 @@ namespace MonkeyPaste.Avalonia {
                             Command = Parent.ToggleTileIsPinnedCommand,
                             CommandParameter = this
                         },
-                        new MpMenuItemViewModel() {IsSeparator = true},
+                        new MpMenuItemViewModel() { IsSeparator = true},
                         MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(this),
                         new MpMenuItemViewModel() {
                             IsSeparator = true,
@@ -317,10 +317,10 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsModelPinned {
             get {
-                if(Parent == null) {
+                if(Tag == null) {
                     return false;
                 }
-                return Parent.PinnedItems.Any(x => x.TagId == TagId);
+                return Tag.IsPinned;
             }
             set {
                 if(IsModelPinned != value) {
@@ -458,7 +458,7 @@ namespace MonkeyPaste.Avalonia {
             PropertyChanged += MpTagTileViewModel_PropertyChanged;
         }
 
-        public virtual async Task InitializeAsync(MpTag tag) {
+        public virtual async Task InitializeAsync(MpTag tag, bool isPinnedItem = false) {
             PropertyChanged -= MpTagTileViewModel_PropertyChanged;
             PropertyChanged += MpTagTileViewModel_PropertyChanged;
 
@@ -466,19 +466,23 @@ namespace MonkeyPaste.Avalonia {
 
             Tag = tag;
 
-            var ctl = await MpDataModelProvider.GetChildTagsAsync(TagId);
+            if(!isPinnedItem) {
+                var ctl = await MpDataModelProvider.GetChildTagsAsync(TagId);
 
-            foreach(var ct in ctl.OrderBy(x=>x.TagSortIdx)) {
-                var ttvm = await CreateChildTagTileViewModel(ct);
-                Items.Add(ttvm);
+                foreach (var ct in ctl.OrderBy(x => x.TagSortIdx)) {
+                    var ttvm = await CreateChildTagTileViewModel(ct);
+                    Items.Add(ttvm);
+                }
+
+                while (Items.Any(x => x.IsBusy)) {
+                    await Task.Delay(100);
+                }
             }
 
-            while(Items.Any(x=>x.IsBusy)) {
-                await Task.Delay(100);
-            }
-
+            MpMessenger.UnregisterGlobal(ReceivedGlobalMessage);
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
+            _copyItemIdsNeedingView.CollectionChanged -= _copyItemIdsNeedingView_CollectionChanged;
             _copyItemIdsNeedingView.CollectionChanged += _copyItemIdsNeedingView_CollectionChanged;
 
             OnPropertyChanged(nameof(Items));
@@ -572,7 +576,7 @@ namespace MonkeyPaste.Avalonia {
                 }                
             } else if(e is MpCopyItem ci && IsAllTag) {
                 LinkCopyItemCommand.Execute(ci.Id);
-            }
+            } 
         }
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
@@ -581,11 +585,13 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             } else if(e is MpTag t && t.Id == TagId) {
-                Dispatcher.UIThread.Post(async () => {
-                    await InitializeAsync(t);
+                Dispatcher.UIThread.Post(() => {
+                    //await InitializeAsync(t);
+                    OnPropertyChanged(nameof(TagName));
+                    OnPropertyChanged(nameof(TagHexColor));
                 });
             }
-        }
+    }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
@@ -642,10 +648,13 @@ namespace MonkeyPaste.Avalonia {
                     } else {
                         IsTagNameReadOnly = true;
                     }
+                    //Parent.OnPropertyChanged(nameof(Parent.SelectedPinnedItem));
+
                     //OnPropertyChanged(nameof(TagBorderBackgroundHexColor));
                     //MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.ClipTrayBackgroundBrush));
                     break;
                 case nameof(IsTagNameTextBoxFocused):
+
                     if (!IsTagNameTextBoxFocused) {
                         FinishRenameTagCommand.Execute(null);
                     }
@@ -653,11 +662,17 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(HasModelChanged):
                     if (IsBusy) {
                         return;
-                    }
+                    } 
                     if (HasModelChanged) {
+                        //if(SuprressNextHasModelChangedHandling) {
+                        //    HasModelChanged = false;
+                        //    SuprressNextHasModelChangedHandling = false;
+                        //}
                         Task.Run(async () => {
+                            IsBusy = true;
                             await Tag.WriteToDatabaseAsync();
                             HasModelChanged = false;
+                            IsBusy = false;
                         });
                     }
 
@@ -779,8 +794,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand AssignHotkeyCommand => new MpCommand<object>(
-            async (args) => {
+        public ICommand AssignHotkeyCommand => new MpCommand(
+            async () => {
                 await MpAvShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
                             $"Select '{TagName}' Collection",
                             Parent.SelectTagCommand, 

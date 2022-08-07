@@ -123,7 +123,7 @@ namespace MpWpfApp {
                     Header = TagName,
                     Command = MpClipTrayViewModel.Instance.LinkTagToCopyItemCommand,
                     CommandParameter = this,
-                    IsSelected = totalCount == linkCount && totalCount > 0,
+                    IsChecked = totalCount == linkCount && totalCount > 0,
                     IsPartiallySelected = linkCount != totalCount && totalCount > 0,
                     IconHexStr = TagHexColor,
                     ShortcutObjId = TagId,

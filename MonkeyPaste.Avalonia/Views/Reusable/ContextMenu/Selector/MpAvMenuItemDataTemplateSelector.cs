@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
                 } else if (!string.IsNullOrEmpty(cmivm.IconResourceKey)) {
                     keyStr = "DefaultMenuItemTemplate";
                 } else if (!string.IsNullOrEmpty(cmivm.IconHexStr)) {
-                    keyStr = cmivm.IsSelected ? "CheckableMenuItemTemplate" : "CheckableMenuItemTemplate";
+                    keyStr = "CheckableMenuItemTemplate";
                 } else if (cmivm.IconId > 0) {
                     keyStr = "DefaultMenuItemTemplate";
                 } else {

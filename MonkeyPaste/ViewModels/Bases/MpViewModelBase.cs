@@ -60,7 +60,7 @@ namespace MonkeyPaste {
         public bool SupressPropertyChangedNotification { get; set; } = false;
 
         [JsonIgnore]
-        public bool SuprressWriteModelChangedToDatabase { get; set; } = false;
+        public bool SuprressNextHasModelChangedHandling { get; set; } = false;
 
         [JsonIgnore]
         public virtual bool HasModelChanged { get; set; } = false;

@@ -10,6 +10,9 @@
                        mc:Ignorable="d"
                        x:Class="MonkeyPaste.Avalonia.MpAvTagView">
     <DockPanel x:Name="TagViewContainerDockPanel"
+               local:MpAvMenuExtension.IsEnabled="True"
+               local:MpAvMenuExtension.SelectOnRightClick="False"
+               local:MpAvMenuExtension.IsOpen="{Binding IsContextMenuOpened, Mode=TwoWay}"
                HorizontalAlignment="Stretch"
                VerticalAlignment="Stretch"
                Height="30">
@@ -21,10 +24,8 @@
                               VerticalAlignment="Stretch"
                               HorizontalAlignment="Left"
                               MinHeight="20"
-                              Background="{Binding TagBorderBackgroundHexColor,
-                                                   Converter={StaticResource StringHexToBrushConverter}}"
-                              BorderBrush="{Binding TagBorderHexColor,
-                                                    Converter={StaticResource StringHexToBrushConverter}}"
+                              Background="{Binding TagBorderBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                              BorderBrush="{Binding TagBorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                               BorderThickness="1.5">
             <StackPanel Orientation="Horizontal">
                 <Grid>
@@ -39,14 +40,12 @@
                                           Margin="1"
                                           Padding="4,1"
                                           BorderThickness="0"
-                                          Background="{Binding TagHexColor,
-                                                               Converter={StaticResource StringHexToBrushConverter}}">
+                                          Background="{Binding TagHexColor, Converter={StaticResource StringHexToBrushConverter}}">
                         <TextBlock Background="Transparent"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center"
                                    Text="{Binding TagClipCount}"
-                                   Foreground="{Binding TagCountTextHexColor,
-                                                        Converter={StaticResource StringHexToBrushConverter}}" />
+                                   Foreground="{Binding TagCountTextHexColor, Converter={StaticResource StringHexToBrushConverter}}" />
 
                     </local:MpAvClipBorder>
                     <Grid Grid.Column="1"
@@ -57,14 +56,12 @@
                         <TextBox x:Name="TagNameTextBox"
                                  local:MpAvIsFocusedExtension.IsEnabled="True"
                                  local:MpAvIsFocusedExtension.SelectViewModelOnFocus="False"
-                                 local:MpAvIsFocusedExtension.IsFocused="{Binding IsTagNameTextBoxFocused,
-                                                                                  Mode=TwoWay}"
+                                 local:MpAvIsFocusedExtension.IsFocused="{Binding IsTagNameTextBoxFocused, Mode=TwoWay}"
                                  local:MpAvMarqueeTextBoxExtension.IsEnabled="True"
                                  local:MpAvMarqueeTextBoxExtension.EditOnMouseClick="False"
                                  local:MpAvMarqueeTextBoxExtension.CancelEditCommand="{Binding CancelRenameTagCommand}"
                                  local:MpAvMarqueeTextBoxExtension.FinishEditCommand="{Binding FinishRenameTagCommand}"
-                                 local:MpAvMarqueeTextBoxExtension.IsReadOnly="{Binding IsTagNameReadOnly,
-                                                                                        Mode=TwoWay}"
+                                 local:MpAvMarqueeTextBoxExtension.IsReadOnly="{Binding IsTagNameReadOnly, Mode=TwoWay}"
                                  Background="White"
                                  Foreground="Black"
                                  Margin="0"
@@ -72,11 +69,9 @@
                                  BorderThickness="0"
                                  HorizontalAlignment="Center"
                                  VerticalAlignment="Center"
-                                 IsReadOnly="{Binding IsTagNameReadOnly,
-                                                      Mode=OneWay}"
+                                 IsReadOnly="{Binding IsTagNameReadOnly, Mode=OneWay}"
                                  FontSize="16"
-                                 Text="{Binding TagName,
-                                                Mode=TwoWay}" />
+                                 Text="{Binding TagName, Mode=TwoWay}" />
                     </Grid>
                 </Grid>
             </StackPanel>

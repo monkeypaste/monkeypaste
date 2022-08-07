@@ -1598,7 +1598,7 @@ namespace MonkeyPaste.Avalonia {
 
             //MpMessenger.Register<MpMessageType>(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
 
-            MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
             OnPropertyChanged(nameof(EditorHeight));
             OnPropertyChanged(nameof(IsPlaceholder));

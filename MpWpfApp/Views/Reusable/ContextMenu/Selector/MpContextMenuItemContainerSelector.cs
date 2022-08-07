@@ -29,7 +29,7 @@ namespace MpWpfApp {
             } else if (!string.IsNullOrEmpty(cmivm.IconResourceKey)) {
                 keyStr = "MenuItem";
             } else if (!string.IsNullOrEmpty(cmivm.IconHexStr)) {
-                keyStr = cmivm.IsSelected ? "CheckedTagMenuItem" : "UncheckedTagMenuItem";
+                keyStr = cmivm.IsChecked ? "CheckedTagMenuItem" : "UncheckedTagMenuItem";
             } else if (cmivm.IconId > 0) {
                 keyStr = "UserMenuItem";
             } else {
