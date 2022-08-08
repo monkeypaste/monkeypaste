@@ -17,6 +17,17 @@ namespace MonkeyPaste.Common.Avalonia {
         public const int EM_SETRECT = 0xB3;
         public const int HWND_BROADCAST = 0xffff;
 
+        public const int WM_SYSCOMMAND = 0x0112;
+        public const int SC_CLOSE = 0xF060;
+
+        [DllImport("user32.dll")]
+        public static extern int FindWindow(string ClassName, string WindowName);
+
+        [DllImport("user32.dll")]
+        public static extern int SendMessage(int hWnd, uint Msg, int wParam, int lParam);
+
+        
+
         [DllImport("User32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr SetClipboardViewer(IntPtr hWndNewViewer);
 

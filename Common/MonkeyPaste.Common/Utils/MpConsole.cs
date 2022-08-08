@@ -60,7 +60,7 @@ namespace MonkeyPaste.Common {
         public static void WriteLine(object line, params object[] args) {
             line = line == null ? string.Empty : line;
             string str = line.ToString();
-            str = $"[{DateTime.Now.ToString()}] {str}";
+            str = $"<{DateTime.Now}> {str}";
             if (LogToConsole) {
                 WriteLineWrapper(str);
             }
@@ -111,11 +111,11 @@ namespace MonkeyPaste.Common {
         public static void WriteLogLine(object line, params object[] args) {
             line = line == null ? string.Empty : line;
             string str = line.ToString();
-            str = $"[{DateTime.Now.ToString()}] {str}";
+            str = $"<{DateTime.Now}> {str}";
             if (args != null && args.Length > 0) {
                 str = string.Format(str, args);
             }
-            line = $"[{DateTime.Now.ToString()}] {line}";
+            line = $"<{DateTime.Now}> {line}";
             File.AppendAllLines(LogFilePath, new List<string> { line.ToString() });
         }
 

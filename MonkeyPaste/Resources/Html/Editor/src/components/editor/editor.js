@@ -54,6 +54,10 @@ function convertPlainHtml(plainHtml) {
 }
 
 function init(reqMsgStr) {
+	if (IsLoaded) {
+		log('editor already loaded, ignoring...');
+		return;
+	}
 	// reqMsgStr is serialized 'MpQuillLoadRequestMessage' object
 
 	log("init request: " + reqMsgStr);
@@ -212,13 +216,13 @@ function loadQuill(reqMsg) {
 	initContent(reqMsg.itemEncodedHtmlData);
 
 	initTemplates(reqMsg.usedTextTemplates, reqMsg.isPasteRequest);
-
+	
+	refreshFontSizePicker();
+	refreshFontFamilyPicker();
 	initDragDrop();
 
 	initClipboard();
 
-	refreshFontSizePicker();
-	refreshFontFamilyPicker();
 }
 
 function registerToolbar(envName) {
@@ -658,6 +662,8 @@ function enableReadOnly() {
 }
 
 function disableReadOnly(disableReadOnlyReqStrOrObj) {
+	log('read-only: DISABLED');
+
 	bindJsComAdapter();
 
 	let disableReadOnlyMsg = null;

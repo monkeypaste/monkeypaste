@@ -1,13 +1,14 @@
 {
   "profiles": {
     "MonkeyPaste.Avalonia": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "nativeDebugging": true
     },
     "WSL": {
       "commandName": "WSL2",
       "environmentVariables": {
-        "DISPLAY": "192.168.43.209:0.0",
-        "LIBGL_ALWAYS_INDIRECT": "1"
+        "LIBGL_ALWAYS_INDIRECT": "1",
+        "DISPLAY": "192.168.43.209:0.0"
       },
       "distributionName": ""
     }

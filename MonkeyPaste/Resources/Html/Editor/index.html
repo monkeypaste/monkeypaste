@@ -47,12 +47,25 @@
         const domSerializer = new XMLSerializer();
         var isDebug = true;
 
+        var IsIndexLoaded = false;
         //let browserAgentInfo = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36';
         //if (navigator.userAgent.toLowerCase() == browserAgentInfo.toLowerCase()) {
         //    $(function () {
         //        init();
         //    });
         //}
+        document.addEventListener('DOMContentLoaded', () => {
+            IsIndexLoaded = true;
+        });
+
+        function checkIsIndexLoaded() {
+            if (IsIndexLoaded) {
+                setComOutput('true');
+                return 'true';
+            }
+            setComOutput('false');
+            return 'false';
+        }
     </script>
 
     <script src="src/components/util/jsComAdapter.js"></script>
@@ -165,7 +178,7 @@
         //hideEditTemplateToolbar();
 
 
-        function checkIsLoaded() {
+        function checkIsEditorLoaded() {
             if (IsLoaded) {
                 setComOutput('true');
                 return true;
@@ -177,4 +190,3 @@
 
 </body>
 </html>
-

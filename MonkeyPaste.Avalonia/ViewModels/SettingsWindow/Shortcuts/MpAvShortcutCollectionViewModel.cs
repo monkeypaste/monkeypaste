@@ -18,7 +18,9 @@ using MonkeyPaste.Common.Avalonia;
 namespace MonkeyPaste.Avalonia {
     public class MpAvShortcutCollectionViewModel : 
         MpAvSelectorViewModelBase<object,MpAvShortcutViewModel>, 
-        MpIAsyncSingletonViewModel<MpAvShortcutCollectionViewModel>{
+        MpIAsyncSingletonViewModel<MpAvShortcutCollectionViewModel> {
+
+        private const bool IS_GLOBAL_INPUT_ENABLED = false;
 
         #region Private Variables
 
@@ -131,7 +133,10 @@ namespace MonkeyPaste.Avalonia {
             _keyboardGestureHelper = new MpAvKeyGestureHelper<KeyCode>(GetPriority);
             await InitShortcuts();
 
-            StartGlobalListener();
+            if(IS_GLOBAL_INPUT_ENABLED) {
+                StartGlobalListener();
+            }
+            
             //GlobalHook.OnCombination(new Dictionary<Combination, Action> {
             //{
             //    Combination.FromString("Control+V"), () => {

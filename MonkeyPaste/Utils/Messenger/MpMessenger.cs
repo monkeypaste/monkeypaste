@@ -66,7 +66,10 @@ namespace MonkeyPaste {
             if(_recipientDictionary.ContainsKey(key)) {
                 if (_recipientDictionary[key].Contains(receiverAction)) {
                     // this probably shouldn't happen, needs to be unregistered or remove old entry
-                    Debugger.Break();
+
+                    //Debugger.Break();
+
+                    MpConsole.WriteLine("Warning, re-registering message receipient " + receiverAction.Target + " there are " + _recipientDictionary[key].Count + " instances for this receiver type");
                 }
                 _recipientDictionary[key].Add(receiverAction);
             } else {

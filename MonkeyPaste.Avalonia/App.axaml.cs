@@ -15,9 +15,11 @@ namespace MonkeyPaste.Avalonia {
     public partial class App : Application {
         public static IClassicDesktopStyleApplicationLifetime Desktop { get; private set; }
         public App() {
+            MpCefNetApplication.ResetEnv();
+
             DataContext = MpAvSystemTrayViewModel.Instance;
         }
-        public override void Initialize() {
+        public override void Initialize() { 
             AvaloniaXamlLoader.Load(this);
         }
 
@@ -30,8 +32,9 @@ namespace MonkeyPaste.Avalonia {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
                 Desktop = desktop;
                 
-                //MpAvCefNetWebViewExtension.InitCefNet(desktop);
-                MpAvCefWebViewExtension.InitCef();
+                MpCefNetApplication.InitCefNet(desktop);
+
+                //MpAvCefWebViewExtension.InitCef();
 
                 if (OperatingSystem.IsLinux()) {
                     await GtkHelper.EnsureInitialized();
@@ -47,16 +50,11 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine("Loaded");
 
                 //desktop.MainWindow.Close();
-                desktop.Exit += Desktop_Exit;
                 desktop.MainWindow = new MpAvMainWindow();
                 desktop.MainWindow.Show();
             }
 
             base.OnFrameworkInitializationCompleted();
-        }
-
-        private void Desktop_Exit(object sender, ControlledApplicationLifetimeExitEventArgs e) {
-            MpAvCefNetWebViewExtension.ShutdownCefNet();            
         }
     }
 }

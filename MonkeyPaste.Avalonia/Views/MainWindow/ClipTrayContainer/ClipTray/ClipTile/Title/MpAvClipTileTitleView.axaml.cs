@@ -19,7 +19,14 @@ namespace MonkeyPaste.Avalonia {
         private void SourceIconGrid_PointerPressed(object sender, PointerPressedEventArgs e) {
             var ctv = this.GetVisualAncestor<MpAvClipTileView>();
             var wv = ctv.GetVisualDescendant<WebViewControl.WebView>();
-            wv.ShowDeveloperTools();
+            if(wv != null) {
+                wv.ShowDeveloperTools();
+                return;
+            }
+            var cwv = ctv.GetVisualDescendant<MpAvCefNetWebView>();
+            if(cwv != null) {
+                cwv.ShowDevTools();
+            }
         }
     }
 }

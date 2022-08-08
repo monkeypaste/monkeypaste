@@ -5,7 +5,7 @@ using Avalonia.Data;
 using Avalonia.Threading;
 using CefNet;
 using CefNet.Avalonia;
-using CefNet.JSInterop;
+using CefNet.CApi;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -45,21 +45,16 @@ namespace MonkeyPaste.Avalonia {
 
         private static async void HandleIsContentReadOnlyChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isReadOnly &&
-                element is WebView wv) {
-                if(wv.IsInitialized) {
-                    var isLoadedResp = await wv.EvaluateJavascriptAsync("checkIsLoaded()");
-                    bool isInitialized = isLoadedResp == "true";
-                    if(isInitialized) {
-                        // only signal read only change after webview is loaded
-                        if (isReadOnly) {
-                            var enableReadOnlyResp = await wv.EvaluateJavascriptAsync("enableReadOnly()");
-                            ProcessEnableReadOnlyResponse(wv, enableReadOnlyResp);
-                        } else {
-                            MpQuillDisableReadOnlyRequestMessage drorMsg = CreateDisableReadOnlyMessage(wv);
-                            var disableReadOnlyResp = await wv.EvaluateJavascriptAsync($"disableReadOnly('{drorMsg.Serialize()}')");
-                            ProcessDisableReadOnlyResponse(wv, disableReadOnlyResp);
-                        }
-                    }
+                element is MpAvCefNetWebView wv && 
+                wv.IsEditorInitialized) {
+                // only signal read only change after webview is loaded
+                if (isReadOnly) {
+                    var enableReadOnlyResp = await wv.EvaluateJavascriptAsync("enableReadOnly()");
+                    ProcessEnableReadOnlyResponse(wv, enableReadOnlyResp);
+                } else {
+                    MpQuillDisableReadOnlyRequestMessage drorMsg = CreateDisableReadOnlyMessage(wv);
+                    var disableReadOnlyResp = await wv.EvaluateJavascriptAsync($"disableReadOnly('{drorMsg.Serialize()}')");
+                    ProcessDisableReadOnlyResponse(wv, disableReadOnlyResp);
                 }
             } 
 
@@ -134,7 +129,7 @@ namespace MonkeyPaste.Avalonia {
                 BindingMode.TwoWay);
 
         private static void HandleIsDevToolsVisibleChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
-            if(element is WebView wv) {
+            if(element is MpAvCefNetWebView wv) {
                 if(e.NewValue is bool isVisible) {                    
                     if (isVisible) {                        
                         wv.ShowDevTools();
@@ -166,7 +161,7 @@ namespace MonkeyPaste.Avalonia {
 
         private static void HandleIsEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isEnabled &&
-                element is WebView wv) {
+                element is MpAvCefNetWebView wv) {
                 if(isEnabled) {
                     wv.BrowserCreated += Wv_BrowserCreated;
                     wv.DevToolsProtocolEventAvailable += Wv_DevToolsProtocolEventAvailable;
@@ -175,16 +170,28 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void Wv_BrowserCreated(object sender, EventArgs e) {
-            if(sender is WebView wv && 
+            if(sender is MpAvCefNetWebView wv && 
                 wv.DataContext is MpAvClipTileViewModel ctvm) {
-                wv.CefFrameAttached += Wv_CefFrameAttached;
-                wv.Navigate(ctvm.EditorPath);
+                wv.IsEditorInitialized = false;
+                //wv.CefFrameAttached += Wv_CefFrameAttached;
+                wv.Navigated += Wv_Navigated;
+                wv.Navigate(ctvm.EditorPath);                
             }
 
         }
 
+        private static void Wv_Navigated(object sender, NavigatedEventArgs e) {
+            if (sender is MpAvCefNetWebView wv) {
+                Dispatcher.UIThread.Post(() => {
+                    //await Task.Delay(3000);
+                    LoadContentAsync(wv).FireAndForgetSafeAsync(MpAvClipTrayViewModel.Instance);
+                    return;
+                });
+            }
+        }
+
         private static void Wv_CefFrameAttached(object sender, FrameEventArgs e) {
-            if(sender is WebView wv) {
+            if(sender is MpAvCefNetWebView wv) {
                 Dispatcher.UIThread.Post(() => {
                     //await Task.Delay(3000);
                     LoadContentAsync(wv).FireAndForgetSafeAsync(MpAvClipTrayViewModel.Instance);
@@ -195,7 +202,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         private static async Task LoadContentAsync(Control control) {
-            if (control is WebView wv && 
+            if (control is MpAvCefNetWebView wv && 
                 control.DataContext is MpAvClipTileViewModel ctvm) {
                 while (ctvm.IsAnyBusy) {
                     await Task.Delay(100);
@@ -206,10 +213,23 @@ namespace MonkeyPaste.Avalonia {
 
                 var lrm = await CreateLoadRequestMessageAsync(wv);
                 var loadReqJsonStr = lrm.Serialize();
-
-                string loadResponseMsgStr = await wv.EvaluateJavascriptAsync($"init('{loadReqJsonStr}')");
+                string loadResponseMsgStr = null;
+                while(loadResponseMsgStr == null) {
+                    string resp = await wv.EvaluateJavascriptAsync($"init('{loadReqJsonStr}')");
+                    if(resp == MpCefNetApplication.JS_REF_ERROR || resp == null) {
+                        await Task.Delay(100);
+                        continue;
+                    }
+                    loadResponseMsgStr = resp;
+                }
+                
                 MpQuillLoadResponseMessage loadResponseMsg = MpJsonObject.DeserializeObject<MpQuillLoadResponseMessage>(loadResponseMsgStr);
+                if(loadResponseMsg == null) {
+                    // error loading content
+                    return;
+                }
                 ctvm.UnformattedContentSize = new Size(loadResponseMsg.contentWidth, loadResponseMsg.contentHeight);
+                wv.IsEditorInitialized = true;
 
                 MpConsole.WriteLine($"Tile Content Item '{ctvm.CopyItemTitle}' is loaded");
             }
@@ -217,7 +237,7 @@ namespace MonkeyPaste.Avalonia {
 
         private static async Task<MpQuillLoadRequestMessage> CreateLoadRequestMessageAsync(Control control) {
             if (control.DataContext is MpAvClipTileViewModel ctvm &&
-                control is WebView wv) {
+                control is MpAvCefNetWebView wv) {
                 var tcvm = ctvm.TemplateCollection;
                 tcvm.IsBusy = true;
 
@@ -247,7 +267,7 @@ namespace MonkeyPaste.Avalonia {
 
         private static async Task LoadTemplatesAsync(Control control) {
             if (control.DataContext is MpAvClipTileViewModel ctvm &&
-                control is WebView wv) {
+                control is MpAvCefNetWebView wv) {
                 var tcvm = ctvm.TemplateCollection;
                 tcvm.IsBusy = true;
 
@@ -270,7 +290,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 string htmlToDecode = string.Empty;
-                bool isLoaded = await wv.EvaluateJavascriptAsync("checkIsLoaded()") == "true";
+                bool isLoaded = await wv.EvaluateJavascriptAsync("checkIsEditorLoaded()") == "true";
                 if (isLoaded) {
                     htmlToDecode = await wv.EvaluateJavascriptAsync("getHtml()");
                 } else {
@@ -304,98 +324,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        private static CefNetApplication cefApp;
-
-        public static void InitCefNet(IClassicDesktopStyleApplicationLifetime desktop) {
-            desktop.Exit += Desktop_Exit;
-            string cefRootDir = @"C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia\cef";
-
-            var settings = new CefSettings();
-            settings.NoSandbox = true;
-            settings.MultiThreadedMessageLoop = true;
-            settings.WindowlessRenderingEnabled = true;
-            settings.LocalesDirPath = Path.Combine(cefRootDir, "Resources", "locales");
-            settings.ResourcesDirPath = Path.Combine(cefRootDir, "Resources");
-            settings.LogSeverity = CefLogSeverity.Default;
-
-            cefApp = new CefNetApplication();
-            cefApp.CefContextInitialized += CefApp_CefContextInitialized;
-            cefApp.Initialize(Path.Combine(cefRootDir, "Release"), settings);
-        }
-
-        private static void CefApp_CefContextInitialized(object sender, EventArgs e) {
-            return;
-        }
-
-        public static void ShutdownCefNet() {
-            if(cefApp == null) {
-                return;
-            }
-            cefApp.Shutdown();
-        }
-        private static void Desktop_Exit(object sender, ControlledApplicationLifetimeExitEventArgs e) {
-            if(cefApp == null) {
-                return;
-            }
-            cefApp.Shutdown();
-        }
-    }
-
-    public static class CefNetExtensions {
-        public static void ExecuteJavascript(this WebView wv, string script) {
-            var frame = wv.GetMainFrame();
-            if (frame == null) {
-                throw new Exception("frame must be initialized");
-            }
-            if (!Dispatcher.UIThread.CheckAccess()) {
-                 Dispatcher.UIThread.Post( () => {
-                    wv.ExecuteJavascript(script);
-                });
-                return;
-            }
-            frame.ExecuteJavaScript(script, frame.Url, 0);
-        }
-
-        public static async Task<string> EvaluateJavascriptAsync(this WebView wv, string script) {
-            var frame = wv.GetMainFrame();
-            if(frame == null) {
-                return null;
-            }
-            if(!Dispatcher.UIThread.CheckAccess()) {
-                string result = string.Empty;
-                await Dispatcher.UIThread.InvokeAsync(async () => {
-                    result = await wv.EvaluateJavascriptAsync(script);
-                });
-                return result;
-            }
-            
-            frame.ExecuteJavaScript(script, frame.Url, 0);
-            string response = await GetComOutputAsync(frame);
-
-            return response;
-        }
-
-        private static async Task<string> GetComOutputAsync(CefFrame frame) {
-            CancellationToken cancellationToken = CancellationToken.None;
-            dynamic scriptableObject = await frame.GetScriptableObjectAsync(cancellationToken).ConfigureAwait(false);
-            // This code must be executed on any background thread. Execution on UI or any CEF thread will result in a deadlock.
-            string html = scriptableObject.window.document.documentElement.outerHTML;
-            string patternStart = "<textarea id=\"comOutputTextArea\" style=\"display: none\">";
-            string patternEnd = "</textarea>";
-            var match = Regex.Match(html, patternStart + ".*" + patternEnd, RegexOptions.Multiline);
-            if (match.Success) {
-                string result = match.Value.Replace(patternStart, string.Empty).Replace(patternEnd, string.Empty);
-                if (string.IsNullOrEmpty(result)) {
-                    MpConsole.WriteLine("no com output, waiting...");
-                    await Task.Delay(100);
-                    return await GetComOutputAsync(frame);
-                }
-                Dispatcher.UIThread.Post(() => {
-                    frame.ExecuteJavaScript("clearComOutput()", frame.Url, 0);
-                });
-                return result;
-            }
-            return string.Empty;
-        }
+        
     }
 }

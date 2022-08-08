@@ -871,6 +871,7 @@
     <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controls\ContentView\CefNetWebView\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Base\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\" />
