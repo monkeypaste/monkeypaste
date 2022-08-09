@@ -12,16 +12,19 @@ namespace MonkeyPaste {
         DateTime LastSelectedDateTime { get; set; }
     }
 
-    public interface MpISelectorItemViewModel<TItemType> where TItemType : MpViewModelBase {
-        MpISelectorViewModel<TItemType> Selector { get; }
+    public interface MpISelectorItemViewModel : MpIViewModel {
+        MpISelectorViewModel Selector { get; }
+    }
+    public interface MpISelectorItemViewModel<TItemType> : MpISelectorItemViewModel where TItemType : MpViewModelBase {
+        new MpISelectorViewModel<TItemType> Selector { get; }
     }
 
-    //public interface MpISelectorViewModel : MpIViewModel  {
-    //    object SelectedItem { get; set; }
-    //}
+    public interface MpISelectorViewModel : MpIViewModel {
+        object SelectedItem { get; set; }
+    }
 
-    public interface MpISelectorViewModel<T> : MpIViewModel where T : MpViewModelBase {
-        T SelectedItem { get; set; }
+    public interface MpISelectorViewModel<T> : MpISelectorViewModel where T : MpViewModelBase {
+        new T SelectedItem { get; set; }
         ObservableCollection<T> Items { get; set; }
     }
 

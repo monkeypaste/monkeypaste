@@ -21,6 +21,7 @@ namespace MonkeyPaste.Avalonia {
     public static class MpAvCefNetWebViewExtension {
         static MpAvCefNetWebViewExtension() {
             IsContentReadOnlyProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsContentReadOnlyChanged(x, y));
+            IsSubSelectionEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsSubSelectionEnabledChanged(x, y));
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
             IsDevToolsVisibleProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsDevToolsVisibleChanged(x, y));
         }
@@ -112,6 +113,36 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region IsSubSelectionEnabled AvaloniaProperty
+
+        public static bool GetIsSubSelectionEnabled(AvaloniaObject obj) {
+            return obj.GetValue(IsSubSelectionEnabledProperty);
+        }
+
+        public static void SetIsSubSelectionEnabled(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsSubSelectionEnabledProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsSubSelectionEnabledProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "IsSubSelectionEnabled",
+                false,
+                false);
+
+        private static void HandleIsSubSelectionEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+            if (e.NewValue is bool isSubSelectionEnabled &&
+                element is MpAvCefNetWebView wv &&
+                wv.IsEditorInitialized) {
+                  if (isSubSelectionEnabled) {
+                    wv.ExecuteJavascript("enableSubSelection()");
+                } else {
+                    wv.ExecuteJavascript("disableSubSelection()");
+                }
+            }
+        }
+
+        #endregion
+
         #region IsDevToolsVisible AvaloniaProperty
         public static bool GetIsDevToolsVisible(AvaloniaObject obj) {
             return obj.GetValue(IsDevToolsVisibleProperty);
@@ -173,7 +204,7 @@ namespace MonkeyPaste.Avalonia {
             if(sender is MpAvCefNetWebView wv && 
                 wv.DataContext is MpAvClipTileViewModel ctvm) {
                 wv.IsEditorInitialized = false;
-                //wv.CefFrameAttached += Wv_CefFrameAttached;
+
                 wv.Navigated += Wv_Navigated;
                 wv.Navigate(ctvm.EditorPath);                
             }
@@ -189,18 +220,6 @@ namespace MonkeyPaste.Avalonia {
                 });
             }
         }
-
-        private static void Wv_CefFrameAttached(object sender, FrameEventArgs e) {
-            if(sender is MpAvCefNetWebView wv) {
-                Dispatcher.UIThread.Post(() => {
-                    //await Task.Delay(3000);
-                    LoadContentAsync(wv).FireAndForgetSafeAsync(MpAvClipTrayViewModel.Instance);
-                    return;
-                });
-            }
-        }
-
-
         private static async Task LoadContentAsync(Control control) {
             if (control is MpAvCefNetWebView wv && 
                 control.DataContext is MpAvClipTileViewModel ctvm) {
@@ -210,6 +229,8 @@ namespace MonkeyPaste.Avalonia {
                 if (ctvm.IsPlaceholder && !ctvm.IsPinned) {
                     return;
                 }
+
+                ctvm.IsBusy = true;
 
                 var lrm = await CreateLoadRequestMessageAsync(wv);
                 var loadReqJsonStr = lrm.Serialize();
@@ -224,12 +245,11 @@ namespace MonkeyPaste.Avalonia {
                 }
                 
                 MpQuillLoadResponseMessage loadResponseMsg = MpJsonObject.DeserializeObject<MpQuillLoadResponseMessage>(loadResponseMsgStr);
-                if(loadResponseMsg == null) {
-                    // error loading content
-                    return;
-                }
+                
                 ctvm.UnformattedContentSize = new Size(loadResponseMsg.contentWidth, loadResponseMsg.contentHeight);
+
                 wv.IsEditorInitialized = true;
+                ctvm.IsBusy = false;
 
                 MpConsole.WriteLine($"Tile Content Item '{ctvm.CopyItemTitle}' is loaded");
             }

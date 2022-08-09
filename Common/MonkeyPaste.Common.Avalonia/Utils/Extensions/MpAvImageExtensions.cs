@@ -186,9 +186,9 @@ namespace MonkeyPaste.Common.Avalonia {
 
                 for (int row = 0; row < height; row++) {
                     for (int col = 0; col < width; col++) {
+                        byte blue = *bmpPtr++; 
+                        byte green = *bmpPtr++; 
                         byte red = *bmpPtr++;
-                        byte green = *bmpPtr++;
-                        byte blue = *bmpPtr++;
                         byte alpha = *bmpPtr++;
 
                         pixels[col, row] = new PixelColor() {
@@ -203,19 +203,11 @@ namespace MonkeyPaste.Common.Avalonia {
                 return pixels;
             }
         }
-
-        public static unsafe byte* PutPixels(WriteableBitmap bitmap, PixelColor[,] pixels, byte* bmpPtr) {
-            int width = pixels.GetLength(0);
-            int height = pixels.GetLength(1);
-
-            //bitmap.WritePixels(new Int32Rect(0, 0, width, height), pixels, width * 4, x, y);
-            return bmpPtr;
-        }
         public static unsafe byte* PutPixel(WriteableBitmap bitmap, PixelColor pixel, byte* bmpPtr) {
-            *bmpPtr++ = pixel.Red; // red
-            *bmpPtr++ = pixel.Green; // green
-            *bmpPtr++ = pixel.Blue; // blue
-            *bmpPtr++ = pixel.Alpha; // alpha
+            *bmpPtr++ = pixel.Blue; 
+            *bmpPtr++ = pixel.Green;
+            *bmpPtr++ = pixel.Red;
+            *bmpPtr++ = pixel.Alpha;
 
             return bmpPtr;
         }

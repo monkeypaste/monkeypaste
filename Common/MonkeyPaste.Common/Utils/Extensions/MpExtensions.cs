@@ -134,12 +134,24 @@ namespace MonkeyPaste.Common {
             }
         }
 
+        public static void ForEach<T>(this IEnumerable source, Action<T,int> action) {
+            int idx = 0;
+            foreach (T item in source) {
+                action(item,idx++);
+            }
+        }
+
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) {
             foreach (T item in source) {
                 action(item);
             }
         }
-
+        public static void ForEach<T>(this IEnumerable<T> source, Action<T, int> action) {
+            int idx = 0;
+            foreach (T item in source) {
+                action(item, idx++);
+            }
+        }
         public static List<T> GetRange<T>(this ObservableCollection<T> collection, int startIdx, int count) {
             if (count == 0 && startIdx + count > 0) {
                 throw new Exception("Collection empty");

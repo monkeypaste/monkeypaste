@@ -8,10 +8,30 @@ using System;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvColorPaletteListBoxView : MenuItem , IStyleable {
-        Type IStyleable.StyleKey => typeof(MenuItem);
+    public partial class MpAvColorPaletteListBoxView : MpAvUserControl<MpMenuItemViewModel> {
+        //Type IStyleable.StyleKey => typeof(MenuItem);
         public MpAvColorPaletteListBoxView() {
             InitializeComponent();
+            var cplb = this.FindControl<ListBox>("ColorPaletteListBox");
+            this.DataContextChanged += MpAvColorPaletteListBoxView_DataContextChanged;
+            cplb.DataContextChanged += Cplb_DataContextChanged;
+            cplb.ItemContainerGenerator.Materialized += ItemContainerGenerator_Materialized;
+        }
+
+        private void ItemContainerGenerator_Materialized(object sender, global::Avalonia.Controls.Generators.ItemContainerEventArgs e) {
+            return;
+        }
+
+        private void MpAvColorPaletteListBoxView_DataContextChanged(object sender, EventArgs e) {
+            if(BindingContext != null) {
+
+            }
+        }
+
+        private void Cplb_DataContextChanged(object sender, EventArgs e) {
+            if (BindingContext != null) {
+
+            }
         }
 
         private void InitializeComponent() {

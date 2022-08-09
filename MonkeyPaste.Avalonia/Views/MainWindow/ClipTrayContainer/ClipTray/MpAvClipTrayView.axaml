@@ -17,10 +17,8 @@
           Background="Transparent">
         <Border x:Name="ClipTrayContainerBorder"
                 local:MpAvSizeObserverExtension.IsEnabled="True"
-                local:MpAvSizeObserverExtension.ObservedWidth="{Binding ClipTrayScreenWidth,
-                                                                        Mode=OneWayToSource}"
-                local:MpAvSizeObserverExtension.ObservedHeight="{Binding ClipTrayScreenHeight,
-                                                                         Mode=OneWayToSource}">
+                local:MpAvSizeObserverExtension.ObservedWidth="{Binding ClipTrayScreenWidth, Mode=OneWayToSource}"
+                local:MpAvSizeObserverExtension.ObservedHeight="{Binding ClipTrayScreenHeight, Mode=OneWayToSource}">
             <ScrollViewer x:Name="ClipTrayScrollViewer"
                           HorizontalScrollBarVisibility="{Binding HorizontalScrollBarVisibility}"
                           VerticalScrollBarVisibility="{Binding VerticalScrollBarVisibility}"
@@ -38,16 +36,12 @@
                          local:MpAvPagingListBoxExtension.WheelDampeningX="0.08"
                          local:MpAvPagingListBoxExtension.FrictionY="0.75"
                          local:MpAvPagingListBoxExtension.WheelDampeningY="0.08"
-                         local:MpAvPagingListBoxExtension.ScrollOffsetX="{Binding ScrollOffsetX,
-                                                                                  Mode=TwoWay}"
-                         local:MpAvPagingListBoxExtension.ScrollOffsetY="{Binding ScrollOffsetY,
-                                                                                  Mode=TwoWay}"
+                         local:MpAvPagingListBoxExtension.ScrollOffsetX="{Binding ScrollOffsetX, Mode=TwoWay}"
+                         local:MpAvPagingListBoxExtension.ScrollOffsetY="{Binding ScrollOffsetY, Mode=TwoWay}"
                          local:MpAvPagingListBoxExtension.MaxScrollOffsetX="{Binding MaxScrollOffsetX}"
                          local:MpAvPagingListBoxExtension.MaxScrollOffsetY="{Binding MaxScrollOffsetY}"
-                         local:MpAvPagingListBoxExtension.VelocityX="{Binding ScrollVelocityX,
-                                                                              Mode=TwoWay}"
-                         local:MpAvPagingListBoxExtension.VelocityY="{Binding ScrollVelocityY,
-                                                                              Mode=TwoWay}"
+                         local:MpAvPagingListBoxExtension.VelocityX="{Binding ScrollVelocityX, Mode=TwoWay}"
+                         local:MpAvPagingListBoxExtension.VelocityY="{Binding ScrollVelocityY, Mode=TwoWay}"
                          local:MpAvPagingListBoxExtension.CanScrollX="{Binding CanScroll}"
                          local:MpAvPagingListBoxExtension.CanScrollY="{Binding CanScroll}"
                          local:MpAvPagingListBoxExtension.ListOrientation="{Binding ListOrientation}"
@@ -96,6 +90,10 @@
                                     Value="{Binding MinSize}" />
                             <Setter Property="Height"
                                     Value="{Binding MinSize}" />
+                            <!--<Setter Property="MinWidth"
+                                    Value="{Binding MinSize}" />
+                            <Setter Property="MinHeight"
+                                    Value="{Binding MinSize}" />-->
                         </Style>
                         <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
                             <Setter Property="Background"

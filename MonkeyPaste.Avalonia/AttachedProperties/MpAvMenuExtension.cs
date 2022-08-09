@@ -14,19 +14,22 @@ using Avalonia.Layout;
 using Avalonia.Themes.Fluent;
 using Avalonia.Media;
 using System;
+using System.Threading.Tasks;
+using Avalonia.Threading;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvMenuExtension {
-        private static ContextMenu _openContextMenu;
+        private static ContextMenu _cmInstance;
 
         public static bool IsChildDialogOpen { get; set; } = false;
 
         public static void CloseMenu() {
-            if(_openContextMenu == null) {
+            if(_cmInstance == null) {
                 return;
             }
-            _openContextMenu.Close();
-            _openContextMenu = null;
+            _cmInstance.Close();
+            //_cmInstance = null;
         }
 
         static MpAvMenuExtension() {
@@ -48,6 +51,38 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaProperty.RegisterAttached<object, Control, bool>(
                 "SelectOnRightClick",
                 true);
+
+        #endregion
+
+        #region SuppressDefaultRightClick AvaloniaProperty
+        public static bool GetSuppressDefaultRightClick(AvaloniaObject obj) {
+            return obj.GetValue(SuppressDefaultRightClickProperty);
+        }
+
+        public static void SetSuppressDefaultRightClick(AvaloniaObject obj, bool value) {
+            obj.SetValue(SuppressDefaultRightClickProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> SuppressDefaultRightClickProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "SuppressDefaultRightClick",
+                true);
+
+        #endregion
+
+        #region DoubleClickCommand AvaloniaProperty
+        public static ICommand GetDoubleClickCommand(AvaloniaObject obj) {
+            return obj.GetValue(DoubleClickCommandProperty);
+        }
+
+        public static void SetDoubleClickCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(DoubleClickCommandProperty, value);
+        }
+
+        public static readonly AttachedProperty<ICommand> DoubleClickCommandProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
+                "DoubleClickCommand",
+                null);
 
         #endregion
 
@@ -86,6 +121,9 @@ namespace MonkeyPaste.Avalonia {
 
         private static void HandleIsEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isEnabledVal && isEnabledVal) {
+                if(_cmInstance == null) {
+                    _cmInstance = new ContextMenu();
+                }
                 if (element is Control control) {
                     if (control.IsInitialized) {
                         AttachedToVisualHandler(control, null);
@@ -118,32 +156,36 @@ namespace MonkeyPaste.Avalonia {
             void Control_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
                 if(sender is Control control) {
                     if (GetIsEnabled(control)) {
+                        if (control.DataContext is MpISelectorItemViewModel sivm) {
+                            if (e.IsLeftPress(control) || GetSelectOnRightClick(control)) {
+                                sivm.Selector.SelectedItem = control.DataContext;
+                            }
+                        } else if (control.DataContext is MpISelectableViewModel svm) {
+                            if (e.IsLeftPress(control) || GetSelectOnRightClick(control)) {
+                                svm.IsSelected = true;
+                            }
+                        }
+
                         MpMenuItemViewModel mivm = null;
 
-                        if (e.IsLeftPress(control) &&
-                            control.DataContext is MpIPopupMenuViewModel pumvm) {
-                            mivm = pumvm.PopupMenuViewModel;
+                        if (e.IsLeftPress(control)) {
+                            if(e.ClickCount == 2 && GetDoubleClickCommand(control) != null) {
+                                GetDoubleClickCommand(control).Execute(null);
+                            } else if(control.DataContext is MpIPopupMenuViewModel pumvm) {
+                                mivm = pumvm.PopupMenuViewModel;
+                            }                            
                         } else if (e.IsRightPress(control)) {
                             if (control.DataContext is MpIContextMenuViewModel cmvm) {
                                 mivm = cmvm.ContextMenuViewModel;
                             }
                         }
 
-
                         if (mivm == null) {
-                            e.Handled = false;
+                            e.Handled = GetSuppressDefaultRightClick(control);                            
                             SetIsOpen(control, false);
                             return;
-                        } else {
-                            SetIsOpen(control, true);
-
-                            if (control.DataContext is MpISelectableViewModel svm) {
-                                if(e.IsLeftPress(control) || GetSelectOnRightClick(control)) {
-                                    svm.IsSelected = true;
-                                }
-                            }
                         }
-
+                        SetIsOpen(control, true);
                         e.Handled = true;
 
                         CancelEventHandler onOpenHandler = null;
@@ -151,98 +193,27 @@ namespace MonkeyPaste.Avalonia {
 
                         onCloseHandler = (s, e1) => {
                             SetIsOpen(control, false);
-                            control.ContextMenu.ContextMenuClosing -= onCloseHandler;
-                            control.ContextMenu.ContextMenuOpening -= onOpenHandler;
-                            _openContextMenu = null;
+                            _cmInstance.ContextMenuClosing -= onCloseHandler;
+                            _cmInstance.ContextMenuOpening -= onOpenHandler;
+                            //_cmInstance = null;
+                            control.ContextMenu = null;
                         };
                         
                         onOpenHandler = (s, e1) => {
                             e1.Cancel = false;
                         };
 
+                        _cmInstance.Items = mivm.SubItems.Where(x => x.IsVisible).Select(x => CreateMenuItem(x));
+                        _cmInstance.PlacementTarget = control;
+                        _cmInstance.PlacementAnchor = PopupAnchor.TopRight;
+                        _cmInstance.DataContext = mivm;
 
-                        control.ContextMenu = new ContextMenu() {
-                            Items = mivm.SubItems.Where(x=>x.IsVisible).Select(x => CreateMenuItem(x)),
-                            PlacementTarget = control,
-                            PlacementAnchor = PopupAnchor.TopRight,
-                            DataContext = mivm
-                        };
+                        _cmInstance.ContextMenuOpening += onOpenHandler;
+                        _cmInstance.ContextMenuClosing += onCloseHandler;
 
-                        control.ContextMenu.ContextMenuOpening += onOpenHandler;
-                        control.ContextMenu.ContextMenuClosing += onCloseHandler;
-
-                        _openContextMenu = control.ContextMenu;
-
-
-                        control.ContextMenu.Open();
-
+                        _cmInstance.Open(MpAvMainWindow.Instance);
                     }
                 }
-
-                //Control CreateMenuItem(MpMenuItemViewModel mivm) {
-                //    //if (mivm is MpMenuItemViewModel) {
-                //    //    //return new Separator() {
-                //    //    //    HorizontalAlignment = HorizontalAlignment.Stretch,
-                //    //    //    VerticalAlignment = VerticalAlignment.Center,
-                //    //    //    MinWidth = 20,
-                //    //    //    MinHeight = 20,
-                //    //    //    Foreground = Brushes.Black
-                //    //    //};
-                //    //    return new MenuItem() {
-                //    //        Header = "-"
-                //    //    };
-                //    //}
-                //    //if (mivm is MpMenuItemViewModel) {
-                //    //    return new MpAvDefaultMenuItemView() {
-                //    //        DataContext = mivm
-                //    //    };
-                //    //}
-                //    //if (mivm is MpMenuItemViewModel) {
-                //    //    return new MpAvCheckableMenuItemView() {
-                //    //        DataContext = mivm
-                //    //    };
-                //    //}
-                //    //if (mivm is MpMenuItemViewModel cpmivm) {
-                //    //    return new MpAvColorPaletteListBoxView() {
-                //    //        DataContext = cpmivm
-                //    //    };
-                //    //}
-                //    //Debugger.Break();
-                //    //return null;
-
-                //    Control control = null;
-                //    string itemType = new MpAvMenuItemDataTemplateSelector().GetTemplateName(mivm);
-
-                //    switch (itemType) {
-                //        case "DefaultMenuItemTemplate":
-                //            control = new MpAvDefaultMenuItemView() {
-                //                DataContext = mivm
-                //            };
-                //            break;
-                //        case "CheckableMenuItemTemplate":
-                //            control = new MpAvCheckableMenuItemView() {
-                //                DataContext = mivm
-                //            };
-                //            break;
-                //        case "SeperatorMenuItemTemplate":
-                //            control = new MenuItem() {
-                //                Header = "-"
-                //            };
-                //            break;
-                //        case "ColorPalleteMenuItemTemplate":
-                //            return new MpAvColorPaletteListBoxView() {
-                //                DataContext = mivm
-                //            };
-                //        case "ColorPalleteItemMenuItemTemplate":
-
-                //            break;
-                //    }
-                //    if(control is MenuItem mi &&
-                //        mivm.SubItems != null && mivm.SubItems.Count > 0) {
-                //        mi.Items = mivm.SubItems.Where(x => x.IsVisible).Select(x => CreateMenuItem(x));
-                //    }
-                //    return control;
-                //}
 
                 Control CreateMenuItem(MpMenuItemViewModel mivm) {
                     Control control = null;
@@ -314,8 +285,11 @@ namespace MonkeyPaste.Avalonia {
                             };
                             break;
                         case "ColorPalleteMenuItemTemplate":
-                            control = new MpAvColorPaletteListBoxView() {
-                                DataContext = mivm
+                            control = new MenuItem() {
+                                //DataContext = mivm,
+                                Header = new MpAvColorPaletteListBoxView() {
+                                    DataContext = mivm
+                                }
                             };
                             break;
                         case "ColorPalleteItemMenuItemTemplate":

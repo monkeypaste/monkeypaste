@@ -14,7 +14,9 @@
     <local:MpAvCefNetWebView x:Name="CefNetWebView"
                              local:MpAvCefNetWebViewExtension.IsEnabled="True"
                              local:MpAvCefNetWebViewExtension.IsDevToolsVisible="{Binding IsDevToolsVisible, Mode=TwoWay}"
+                             local:MpAvCefNetWebViewExtension.IsSubSelectionEnabled="{Binding IsSubSelectionEnabled}"
                              local:MpAvCefNetWebViewExtension.IsContentReadOnly="{Binding IsContentReadOnly}"
+                             IsHitTestVisible="{Binding IsSubSelectionEnabled}"
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch" />
 </local:MpAvUserControl>

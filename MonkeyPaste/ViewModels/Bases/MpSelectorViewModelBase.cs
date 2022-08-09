@@ -9,7 +9,7 @@ namespace MonkeyPaste {
 
     public abstract class MpSelectorViewModelBase<P,C> : 
         MpViewModelBase<P>, 
-        MpISelectorViewModel<C> 
+        MpISelectorViewModel
         where P:class 
         where C: MpViewModelBase,MpISelectableViewModel {
 
@@ -36,6 +36,11 @@ namespace MonkeyPaste {
         public bool HasItems => Items.Count > 0;
 
         public bool IsAnySelected => SelectedItem != null;
+
+        object MpISelectorViewModel.SelectedItem {
+            get => SelectedItem;
+            set => SelectedItem = value as C;
+        }
         //public List<C> SelectedItems => Items.Where(x => x.IsSelected).ToList();
     }
 

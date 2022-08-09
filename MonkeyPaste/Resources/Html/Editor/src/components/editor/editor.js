@@ -54,10 +54,10 @@ function convertPlainHtml(plainHtml) {
 }
 
 function init(reqMsgStr) {
-	if (IsLoaded) {
-		log('editor already loaded, ignoring...');
-		return;
-	}
+	//if (IsLoaded) {
+	//	log('editor already loaded, setting html and  ignoring...');
+	//	return;
+	//}
 	// reqMsgStr is serialized 'MpQuillLoadRequestMessage' object
 
 	log("init request: " + reqMsgStr);
@@ -106,9 +106,19 @@ function init(reqMsgStr) {
 	}
 	EnvName = reqMsg.envName;
 
-	loadQuill(reqMsg);
+	if (!IsLoaded) {
+		loadQuill(reqMsg);
+	}
 
-	if (reqMsg.envName == "web") {
+	initContent(reqMsg.itemEncodedHtmlData);
+
+	initTemplates(reqMsg.usedTextTemplates, reqMsg.isPasteRequest);
+
+	initDragDrop();
+
+	initClipboard();
+
+	if (EnvName == "web") {
 		//for testing in browser
 		document.getElementsByClassName("ql-toolbar")[0].classList.add("env-web");
 	} else {
@@ -125,7 +135,7 @@ function init(reqMsgStr) {
 	window.addEventListener(
 		"resize",
 		function (event) {
-			updateAllSizeAndPositions();
+			onWindowResize(event);
 		},
 		true
 	);
@@ -147,7 +157,7 @@ function init(reqMsgStr) {
 	log('init Response: ');
 	log(initResponseMsgStr);
 
-	setComOutput(initResponseMsgStr);
+	//setComOutput(initResponseMsgStr);
 
 	return initResponseMsgStr;
 }
@@ -212,17 +222,6 @@ function loadQuill(reqMsg) {
 	quill.on("selection-change", onEditorSelectionChanged);
 
 	quill.on("text-change", onEditorTextChanged);
-
-	initContent(reqMsg.itemEncodedHtmlData);
-
-	initTemplates(reqMsg.usedTextTemplates, reqMsg.isPasteRequest);
-	
-	refreshFontSizePicker();
-	refreshFontFamilyPicker();
-	initDragDrop();
-
-	initClipboard();
-
 }
 
 function registerToolbar(envName) {
@@ -296,7 +295,7 @@ function updateAllSizeAndPositions() {
 
 	$("#editor").css("height", wh - eth - tth);
 
-	updateOverlayBounds();
+	//updateOverlayBounds();
 
 	updateEditTemplateToolbarPosition();
 	updatePasteTemplateToolbarPosition();
@@ -351,6 +350,11 @@ function onWindowScroll(e) {
 	}
 
 	updateAllSizeAndPositions();
+}
+
+function onWindowResize(e) {
+	updateAllSizeAndPositions();
+	drawOverlay();
 }
 
 function onEditorSelectionChanged(range, oldRange, source) {
@@ -460,7 +464,7 @@ function getHtml() {
 		var val = quill.root.innerHTML;
 		//log('getHtml response');
 		//log(val);
-		setComOutput(JSON.stringify(val));
+		//setComOutput(JSON.stringify(val));
 
 		return val;
 	}
@@ -693,6 +697,9 @@ function disableReadOnly(disableReadOnlyReqStrOrObj) {
 
 	$(".ql-editor").attr("contenteditable", true);
 	$(".ql-editor").css("caret-color", "black");
+
+
+
 	//$('.ql-editor').css('min-width', getEditorToolbarWidth());
 	//$('.ql-editor').css('min-height', disableReadOnlyMsg.editorHeight);
 	//document.getElementById('editor').style.minHeight = disableReadOnlyMsg.editorHeight - getEditorToolbarHeight() + 'px';
@@ -701,6 +708,9 @@ function disableReadOnly(disableReadOnlyReqStrOrObj) {
 
 	updateAllSizeAndPositions();
 
+	refreshFontSizePicker();
+	refreshFontFamilyPicker();
+
 	let droMsgObj = { editorWidth: DefaultEditorWidth };
 	let droMsgJsonStr = JSON.stringify(droMsgObj);
 
@@ -708,6 +718,16 @@ function disableReadOnly(disableReadOnlyReqStrOrObj) {
 	//log(droMsgJsonStr);
 
 	return droMsgJsonStr; //btoa(droMsgJsonStr);
+}
+
+function enableSubSelection() {
+	IsUnderlinesVisible = true;
+	drawOverlay();
+}
+
+function disableSubSelection() {
+	IsUnderlinesVisible = false;
+	drawOverlay();
 }
 
 function isShowingEditorToolbar() {

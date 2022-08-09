@@ -1,99 +1,87 @@
-<MenuItem xmlns="https://github.com/avaloniaui"
-          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-          mc:Ignorable="d"
-          d:DesignWidth="800"
-          d:DesignHeight="450"
-          xmlns:local="using:MonkeyPaste.Avalonia"
-          xmlns:pcl="using:MonkeyPaste"
-          x:DataType="pcl:MpMenuItemViewModel"
-          x:CompileBindings="True"
-          x:Class="MonkeyPaste.Avalonia.MpAvColorPaletteListBoxView">
-    <MenuItem.Styles>
-        <Style Selector="MenuItem"
-               x:DataType="pcl:MpMenuItemViewModel">
-            <Setter Property="Header">
-                <Template>
-                    <ListBox Margin="0"
-                             HorizontalAlignment="Stretch"
-                             VerticalAlignment="Stretch"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             Items="{Binding SubItems}"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                             SelectionMode="Single">
-                        <ListBox.Resources>
-                            <Thickness x:Key="ListBoxItemPadding">
-                                0,0,0,0
-                            </Thickness>
-                        </ListBox.Resources>
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel MaxWidth="280"
-                                           Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                        <ListBox.Styles>
-                            <Style Selector="ListBoxItem"
-                                   x:DataType="pcl:MpMenuItemViewModel">
-                                <Setter Property="IsSelected"
-                                        Value="{Binding IsChecked, Mode=TwoWay}" />
-                                <Setter Property="FocusAdorner"
-                                        Value="{x:Null}" />
-                                <Setter Property="HorizontalContentAlignment"
-                                        Value="Left" />
-                                <Setter Property="VerticalContentAlignment"
-                                        Value="Top" />
-                                <Setter Property="Margin"
-                                        Value="0" />
-                                <Setter Property="Padding"
-                                        Value="0" />
-                                <Setter Property="Width"
-                                        Value="20" />
-                                <Setter Property="Height"
-                                        Value="20" />
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="pcl:MpMenuItemViewModel"
+                       x:DataType="pcl:MpMenuItemViewModel"
+                       x:CompileBindings="True"
+                       x:Class="MonkeyPaste.Avalonia.MpAvColorPaletteListBoxView">
+    <ListBox x:Name="ColorPaletteListBox"
+             Margin="0"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
+             Background="Transparent"
+             BorderThickness="0"
+             Items="{Binding SubItems}"
+             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+             SelectionMode="Single">
+        <ListBox.Resources>
+            <Thickness x:Key="ListBoxItemPadding">
+                0,0,0,0
+            </Thickness>
+        </ListBox.Resources>
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <WrapPanel MaxWidth="280"
+                           Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ListBox.Styles>
+            <Style Selector="ListBoxItem"
+                   x:DataType="pcl:MpMenuItemViewModel">
+                <Setter Property="IsSelected"
+                        Value="{Binding IsChecked, Mode=TwoWay}" />
+                <Setter Property="FocusAdorner"
+                        Value="{x:Null}" />
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalContentAlignment"
+                        Value="Top" />
+                <Setter Property="Margin"
+                        Value="0" />
+                <Setter Property="Padding"
+                        Value="0" />
+                <Setter Property="Width"
+                        Value="20" />
+                <Setter Property="Height"
+                        Value="20" />
 
-                            </Style>
-                        </ListBox.Styles>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate DataType="pcl:MpMenuItemViewModel">
-                                <Button local:MpAvIsHoveringExtension.IsEnabled="True"
-                                        local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                                        Click="ColorButton_Click"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        Command="{Binding Command}"
-                                        CommandParameter="{Binding CommandParameter}"
-                                        x:DataType="pcl:MpMenuItemViewModel"
-                                        DataContext="{Binding}">
-                                    <Border Width="15"
-                                            Height="15"
-                                            Padding="0"
-                                            Background="{Binding Header, Converter={StaticResource StringHexToBrushConverter}}"
-                                            BorderBrush="{Binding BorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                                            BorderThickness="1"
-                                            CornerRadius="2">
-                                        <ToolTip.Tip>
-                                            <local:MpAvTooltipView ToolTipText="{Binding Header}" />
-                                        </ToolTip.Tip>
-                                        <Image HorizontalAlignment="Stretch"
-                                               VerticalAlignment="Stretch"
-                                               Source="{Binding ., Converter={StaticResource StringResourceToBitmapConverter}, Source={StaticResource PlusImage}}"
-                                               Stretch="Fill"
-                                               IsVisible="{Binding IsVisible}" />
-                                    </Border>
-                                </Button>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </Template>
-            </Setter>
-        </Style>
-        <!--<Style Selector="MenuItem:pointerover">
-            <Setter Property="Background"
-                    Value="LightBlue" />
-        </Style>-->
-    </MenuItem.Styles>
-
-</MenuItem>
+            </Style>
+        </ListBox.Styles>
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <Button local:MpAvIsHoveringExtension.IsEnabled="True"
+                        local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                        Click="ColorButton_Click"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding Command}"
+                        CommandParameter="{Binding CommandParameter}"
+                        x:DataType="pcl:MpMenuItemViewModel"
+                        DataContext="{Binding}">
+                    <Border Width="15"
+                            Height="15"
+                            Padding="0"
+                            Background="{Binding Header, Converter={StaticResource StringHexToBrushConverter}}"
+                            BorderBrush="{Binding BorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                            BorderThickness="1"
+                            CornerRadius="2">
+                        <ToolTip.Tip>
+                            <local:MpAvTooltipView ToolTipText="{Binding Header}" />
+                        </ToolTip.Tip>
+                        <Image HorizontalAlignment="Stretch"
+                               VerticalAlignment="Stretch"
+                               Source="{Binding ., Converter={StaticResource StringResourceToBitmapConverter}, Source={StaticResource PlusImage}}"
+                               Stretch="Fill"
+                               IsVisible="{Binding IsVisible}" />
+                    </Border>
+                </Button>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
+</local:MpAvUserControl>

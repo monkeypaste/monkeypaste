@@ -138,6 +138,7 @@
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\paste\pasteTemplateToolbar.js" />
     <None Remove="Resources\Html\Editor\src\components\util\dataTransfer.js" />
     <None Remove="Resources\Html\Editor\src\components\util\debug.js" />
+    <None Remove="Resources\Html\Editor\src\components\util\graphics.js" />
     <None Remove="Resources\Html\Editor\src\components\util\jsComAdapter.js" />
     <None Remove="Resources\Html\Editor\src\components\util\resize.js" />
     <None Remove="Resources\Html\Editor\src\components\util\util.js" />
@@ -282,6 +283,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\debug.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\graphics.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\jsComAdapter.js">

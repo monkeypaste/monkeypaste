@@ -38,8 +38,9 @@ body {
 
 #overlayCanvas {
     position: absolute;
-    background-color: transparent;
+    background-color: transparent;    
     z-index: 1;
+    pointer-events: none;
 }
 /*div:focus {
     background-color: aqua;

@@ -16,48 +16,16 @@
             Background="Transparent"
             BorderBrush="LightGray"
             BorderThickness="0,0,0,0">
-        <Grid ColumnDefinitions="16,*,16">
-            <Button x:Name="ClipTileHotkeyButton"
-                    Grid.Column="0"
-                    Width="16"
-                    Height="16"
-                    Margin="2,2,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Bottom"
-                    Command="{Binding ShowAssignShortcutDialogCommand,
-                                      Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
-                    CommandParameter="{Binding}">
-                <!--<Button.ToolTip>
-                    <TextBlock>
-                        <TextBlock.Text>
-                            <Run Text="Assign Shorcut " />
-                            <Run Text="{Binding Short}"
-                        </TextBlock.Text>
-                    </TextBlock>
-                </Button.ToolTip>-->
-                <PathIcon Data="{StaticResource ControllerOutlineSvg}" />
-            </Button>
-            <TextBlock x:Name="ClipTileDetailTextBlock"
-                       Grid.Column="1"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Bottom"
-                       Background="Transparent"
-                       MinWidth="50"
-                       FontSize="10"
-                       Foreground="{Binding DetailTextHexColor}"
-                       PointerEnter="MpAvClipTileDetailView_PointerEnter"
-                       PointerLeave="MpAvClipTileDetailView_PointerLeave"
-                       Text="{Binding DetailText}" />
-            <ToggleButton x:Name="ClipTileToggleEditButton"
-                          Grid.Column="2"
-                          Width="16"
-                          Height="16"
-                          HorizontalAlignment="Right"
-                          VerticalAlignment="Bottom"
-                          IsChecked="{Binding !IsContentReadOnly,
-                                              Mode=TwoWay}">
-                <PathIcon Data="{StaticResource PencilOutlineSvg}" />
-            </ToggleButton>
-        </Grid>
+        <TextBlock x:Name="ClipTileDetailTextBlock"
+                   Grid.Column="1"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Bottom"
+                   Background="Transparent"
+                   MinWidth="50"
+                   FontSize="10"
+                   Foreground="{Binding DetailTextHexColor}"
+                   PointerEnter="MpAvClipTileDetailView_PointerEnter"
+                   PointerLeave="MpAvClipTileDetailView_PointerLeave"
+                   Text="{Binding DetailText}" />
     </Border>
 </local:MpAvUserControl>

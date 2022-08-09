@@ -115,6 +115,8 @@ namespace MonkeyPaste.Avalonia {
             // Need to delay or resizer thinks bounds are empty on initial show
             await Task.Delay(300);
             ReceivedGlobalMessage(MpMessageType.MainWindowOrientationChanged);
+
+            MpMessenger.SendGlobal(MpMessageType.MainWindowLoadComplete);
         }
 
 

@@ -46,19 +46,19 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static void ResetEnv() {
-            if(OperatingSystem.IsWindows()) {
-                //int HWND = WinApi.FindWindow(null, "WebViewHost");//window title
-                var wvhp = Process.GetProcesses().FirstOrDefault(x => x.ProcessName.ToLower() == "webviewhost");
-                if(wvhp != null) {
-                    WinApi.SendMessage(wvhp.Handle.ToInt32(), WinApi.WM_SYSCOMMAND, WinApi.SC_CLOSE, 0);
-                }
+            //if(OperatingSystem.IsWindows()) {
+            //    //int HWND = WinApi.FindWindow(null, "WebViewHost");//window title
+            //    var wvhp = Process.GetProcesses().FirstOrDefault(x => x.ProcessName.ToLower() == "webviewhost");
+            //    if(wvhp != null) {
+            //        WinApi.SendMessage(wvhp.Handle.ToInt32(), WinApi.WM_SYSCOMMAND, WinApi.SC_CLOSE, 0);
+            //    }
                 
-            }
+            //}
 
-            string cefNetLogPath = Path.Combine(Environment.CurrentDirectory, "debug.log");
-            if (File.Exists(cefNetLogPath)) {
-                File.Delete(cefNetLogPath);
-            }
+            //string cefNetLogPath = Path.Combine(Environment.CurrentDirectory, "debug.log");
+            //if (File.Exists(cefNetLogPath)) {
+            //    File.Delete(cefNetLogPath);
+            //}
         }
 
         public static void InitCefNet(IClassicDesktopStyleApplicationLifetime desktop) {

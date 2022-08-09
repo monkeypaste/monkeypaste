@@ -133,10 +133,8 @@ namespace MonkeyPaste.Avalonia {
             _keyboardGestureHelper = new MpAvKeyGestureHelper<KeyCode>(GetPriority);
             await InitShortcuts();
 
-            if(IS_GLOBAL_INPUT_ENABLED) {
-                StartGlobalListener();
-            }
-            
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+
             //GlobalHook.OnCombination(new Dictionary<Combination, Action> {
             //{
             //    Combination.FromString("Control+V"), () => {
@@ -439,6 +437,17 @@ namespace MonkeyPaste.Avalonia {
             });
         }
 
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.MainWindowLoadComplete: {
+                        if (IS_GLOBAL_INPUT_ENABLED) {
+                            StartGlobalListener();
+                        }
+                        break;
+                    }
+            }
+        }
+
         private void AutoSearchOnKeyPress(char keyChar) {
             var sbvm = MpAvSearchBoxViewModel.Instance;
 
@@ -532,9 +541,6 @@ namespace MonkeyPaste.Avalonia {
         #region Mouse Event Handlers
 
         private void Hook_MouseWheel(object? sender, MouseWheelHookEventArgs e) {
-            if (!MpAvBootstrapperViewModel.IsLoaded) {
-                return;
-            }
             if (GlobalMouseLocation != null && GlobalMouseLocation.Y < 10) {
                 MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
             }
@@ -544,9 +550,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Hook_MouseMoved(object? sender, MouseHookEventArgs e) {
-            if (!MpAvBootstrapperViewModel.IsLoaded) {
-                return;
-            }
             MpPoint unscaled_mp = new MpPoint(e.Data.X, e.Data.Y);
             double scale = MpPlatformWrapper.Services.ScreenInfoCollection.PixelScaling;
             GlobalMouseLocation = new MpPoint(Math.Max(0, (double)e.Data.X / scale), Math.Max(0, (double)e.Data.Y / scale));
@@ -556,9 +559,6 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void Hook_MousePressed(object sender, MouseHookEventArgs e) {
-            if (!MpAvBootstrapperViewModel.IsLoaded) {
-                return;
-            }
             if (e.Data.Button == SharpHook.Native.MouseButton.Button1) {
                 GlobalIsMouseLeftButtonDown = true;
                 GlobalMouseLeftButtonDownLocation = GlobalMouseLocation;
@@ -571,9 +571,6 @@ namespace MonkeyPaste.Avalonia {
             OnGlobalMousePressed?.Invoke(sender, e);
         }
         private void Hook_MouseReleased(object sender, MouseHookEventArgs e) {
-            if (!MpAvBootstrapperViewModel.IsLoaded) {
-                return;
-            }
             if (e.Data.Button == SharpHook.Native.MouseButton.Button1) {
                 GlobalIsMouseLeftButtonDown = false;
                 GlobalMouseLeftButtonDownLocation = null;
@@ -587,12 +584,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Hook_MouseClicked(object sender, MouseHookEventArgs e) {
-            if(!MpAvBootstrapperViewModel.IsLoaded) {
-                return;
-            }
             if (!MpAvMainWindow.Instance.IsActive &&
-                GlobalMouseLocation != null &&
-                MpAvMainWindow.Instance != null &&
                !MpAvMainWindow.Instance.Bounds.Contains(GlobalMouseLocation.ToAvPoint()) &&
                MpAvMainWindowViewModel.Instance.IsMainWindowOpen &&
                !MpAvMainWindowViewModel.Instance.IsMainWindowClosing) {

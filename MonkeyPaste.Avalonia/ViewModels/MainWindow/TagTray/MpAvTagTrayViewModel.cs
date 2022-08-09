@@ -115,9 +115,12 @@ namespace MonkeyPaste.Avalonia {
         public double TagTrayWidth {
             get {
                 double mww = MpAvMainWindowViewModel.Instance.MainWindowWidth;
+
                 double ppbw = MpAvClipTrayViewModel.Instance.PlayPauseButtonWidth;
+                double ctsvw = MpAvClipTileSortViewModel.Instance.ClipTileSortViewWidth;
                 double sbvw = MpAvSearchBoxViewModel.Instance.SearchBoxViewWidth;
-                return mww - ppbw - sbvw;
+                
+                return mww - ppbw - ctsvw - sbvw;
             }
         }
         public double TotalTrayTileWidth => PinnedItems.Sum(x => x.TagTileTrayWidth);

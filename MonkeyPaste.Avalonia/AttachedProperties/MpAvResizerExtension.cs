@@ -455,18 +455,24 @@ namespace MonkeyPaste.Avalonia {
             }
             double bound_width = GetBoundWidth(control);
             double bound_height = GetBoundHeight(control);
+
+            double min_w = GetMinWidth(control);
+            double min_h = GetMinHeight(control);
+
+            double max_w = GetMaxWidth(control);
+            double max_h = GetMaxHeight(control);
             //MpConsole.WriteLine("Bound Width " + bound_width + " Bound Height " + bound_height);
-            
+
             if (bound_width + dx < 0) {
                 ResetToDefault(control);
                 return;
             }
 
             double nw = bound_width + dx;
-            bound_width = Math.Min(Math.Max(nw, GetMinWidth(control)), GetMaxWidth(control));
+            bound_width = Math.Min(Math.Max(nw, min_w), max_w);
 
             double nh = bound_height + dy;
-            bound_height = Math.Min(Math.Max(nh, GetMinHeight(control)), GetMaxHeight(control));
+            bound_height = Math.Min(Math.Max(nh, min_h), max_h);
 
             SetBoundWidth(control, bound_width);
             SetBoundHeight(control, bound_height);

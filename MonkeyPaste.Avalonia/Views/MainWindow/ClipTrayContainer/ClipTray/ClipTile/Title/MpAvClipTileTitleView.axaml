@@ -11,10 +11,18 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileTitleView">
-    <Grid ColumnDefinitions="*,0.3*"
-          Background="{Binding CopyItemHexColor,
-                               Converter={StaticResource StringHexToBrushConverter},
-                               ConverterParameter=0.7}">
+    <Grid x:Name="TitleContainerGrid"
+          ColumnDefinitions="*,0.3*">
+        <!--  Swirl  -->
+        <Viewbox HorizontalAlignment="Left"
+                 VerticalAlignment="Top"
+                 Width="{Binding Bounds.Width, ElementName=TitleContainerGrid}"
+                 Height="{Binding Bounds.Height, ElementName=TitleContainerGrid}"
+                 Stretch="Fill">
+            <Canvas x:Name="SwirlCanvas"
+                    Width="260"
+                    Height="52" />
+        </Viewbox>
         <!--  Title Text Box  -->
         <Grid Grid.Column="0"
               Margin="15,0,0,0"
@@ -22,37 +30,29 @@
               VerticalAlignment="Stretch"
               MaxWidth="100"
               ClipToBounds="True"
-              Background="{Binding TileTitleTextGridBackgroundHexColor,
-                                   Converter={StaticResource StringHexToBrushConverter}}"
+              Background="{Binding TileTitleTextGridBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
               local:MpAvIsHoveringExtension.IsEnabled="True"
-              local:MpAvIsHoveringExtension.IsHovering="{Binding IsHoveringOnTitleTextGrid,
-                                                                 Mode=TwoWay}"
+              local:MpAvIsHoveringExtension.IsHovering="{Binding IsHoveringOnTitleTextGrid, Mode=TwoWay}"
               local:MpAvIsHoveringExtension.HoverCursor="IBeam"
-              IsHitTestVisible="{Binding !HasScrollVelocity,
-                                         Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
+              IsHitTestVisible="{Binding !HasScrollVelocity, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
             <TextBox x:Name="ClipTileTitleTextBox"
                      FontSize="20"
                      BorderThickness="0"
                      local:MpAvIsFocusedExtension.IsEnabled="True"
-                     local:MpAvIsFocusedExtension.IsReadOnly="{Binding IsTitleReadOnly,
-                                                                       Mode=TwoWay}"
-                     local:MpAvIsFocusedExtension.IsFocused="{Binding IsTitleFocused,
-                                                                      Mode=TwoWay}"
+                     local:MpAvIsFocusedExtension.IsReadOnly="{Binding IsTitleReadOnly, Mode=TwoWay}"
+                     local:MpAvIsFocusedExtension.IsFocused="{Binding IsTitleFocused, Mode=TwoWay}"
                      local:MpAvIsFocusedExtension.SelectAllOnFocus="True"
                      local:MpAvIsFocusedExtension.SelectViewModelOnFocus="True"
                      local:MpAvMarqueeTextBoxExtension.IsEnabled="True"
                      local:MpAvMarqueeTextBoxExtension.CancelEditCommand="{Binding CancelEditTitleCommand}"
                      local:MpAvMarqueeTextBoxExtension.FinishEditCommand="{Binding FinishEditTitleCommand}"
-                     local:MpAvMarqueeTextBoxExtension.IsReadOnly="{Binding IsTitleReadOnly,
-                                                                            Mode=TwoWay}"
-                     IsReadOnly="{Binding IsTitleReadOnly,
-                                          Mode=OneWay}"
+                     local:MpAvMarqueeTextBoxExtension.IsReadOnly="{Binding IsTitleReadOnly, Mode=TwoWay}"
+                     IsReadOnly="{Binding IsTitleReadOnly, Mode=OneWay}"
                      HorizontalAlignment="Left"
                      VerticalAlignment="Center"
                      Background="White"
                      Foreground="Black"
-                     Text="{Binding CopyItemTitle,
-                                    Mode=TwoWay}" />
+                     Text="{Binding CopyItemTitle, Mode=TwoWay}" />
         </Grid>
         <!--  Source Icon  -->
         <Grid Grid.Column="1"
@@ -60,8 +60,7 @@
               HorizontalAlignment="Right"
               Margin="0,0,5,0"
               ClipToBounds="False">
-            <Image Source="{Binding IconId,
-                                    Converter={StaticResource IconSourceObjToBitmapConverter}}"
+            <Image Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}"
                    Stretch="UniformToFill"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"

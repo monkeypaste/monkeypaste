@@ -17,17 +17,17 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileView">
     <local:MpAvClipBorder HorizontalAlignment="Stretch"
                           VerticalAlignment="Stretch"
+                          local:MpAvMenuExtension.IsEnabled="True"
+                          local:MpAvMenuExtension.IsOpen="{Binding IsContextMenuOpened, Mode=TwoWay}"
+                          local:MpAvMenuExtension.DoubleClickCommand="{Binding EnableSubSelectionEnabled}"
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
                           CornerRadius="10"
                           BorderThickness="5"
-                          BorderBrush="{Binding TileBorderHexColor,
-                                                Converter={StaticResource StringHexToBrushConverter}}"
+                          BorderBrush="{Binding TileBorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                           local:MpAvIsHoveringExtension.IsEnabled="True"
-                          local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering,
-                                                                             Mode=TwoWay}"
-                          local:MpAvIsHoveringExtension.IsSelected="{Binding IsSelected,
-                                                                             Mode=TwoWay}">
+                          local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                          local:MpAvIsHoveringExtension.IsSelected="{Binding IsSelected, Mode=TwoWay}">
         <local:MpAvClipBorder.Background>
             <SolidColorBrush Color="OldLace"
                              Opacity="0.7" />
@@ -46,113 +46,71 @@
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
             <!--  Title  -->
-            <Grid Grid.Row="0"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch">
-                <local:MpAvClipTileTitleView DataContext="{Binding}"
-                                             HorizontalAlignment="Stretch"
-                                             VerticalAlignment="Stretch"
-                                             IsVisible="{Binding IsTitleVisible}" />
-                <!--  Hide Title Button  -->
-
-                <ToggleButton x:Name="HideTitleButton"
-                              IsChecked="{Binding !IsTitleVisible,
-                                                  Mode=TwoWay}"
-                              HorizontalAlignment="Left"
-                              VerticalAlignment="Top"
-                              BorderThickness="0"
-                              Margin="0,0,0,1"
-                              Background="Transparent"
-                              IsVisible="{Binding IsHovering}">
-                    <Grid>
-                        <PathIcon IsVisible="{Binding IsTitleVisible}"
-                                  Data="{StaticResource HideSvg}" />
-
-                        <PathIcon IsVisible="{Binding !IsTitleVisible}"
-                                  Data="{StaticResource ShowSvg}" />
-                    </Grid>
-                </ToggleButton>
-
-                <!--  Pin Tile Button  -->
-
-                <ToggleButton x:Name="PinTileButton"
-                              IsChecked="{Binding IsPinned,
-                                                  Mode=TwoWay}"
-                              HorizontalAlignment="Right"
-                              VerticalAlignment="Top"
-                              HorizontalContentAlignment="Center"
-                              VerticalContentAlignment="Center"
-                              BorderThickness="0"
-                              Margin="2,0,0,1"
-                              Background="Transparent"
-                              IsVisible="{Binding IsHovering}">
-                    <Grid>
-                        <PathIcon Data="{StaticResource PinSvg}" />
-                    </Grid>
-                </ToggleButton>
-            </Grid>
+            <local:MpAvClipTileTitleView Grid.Row="0"
+                                         DataContext="{Binding}"
+                                         HorizontalAlignment="Stretch"
+                                         VerticalAlignment="Stretch"
+                                         IsVisible="{Binding IsTitleVisible}" />
 
             <!--  Content  -->
-            <Grid Grid.Row="1"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch">
-                <Border x:Name="ClipTileContainerBorder"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch">
+            <local:MpAvClipTileContentView Grid.Row="1"
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Stretch"
+                                           DataContext="{Binding}" />
 
-                    <ContentControl Content="{Binding}">
-                        <ContentControl.DataTemplates>
-                            <local:MpClipTileContentDataTemplateSelector>
-                                <DataTemplate x:Key="CefWebViewTemplate"
-                                              DataType="local:MpAvClipTileViewModel">
-                                    <local:MpAvContentWebView DataContext="{Binding}"
-                                                              HorizontalAlignment="Stretch"
-                                                              VerticalAlignment="Stretch" />
-                                </DataTemplate>
-                                <DataTemplate x:Key="LinuxTemplate"
-                                              DataType="local:MpAvClipTileViewModel">
-                                    <local:MpAvGtkWebView DataContext="{Binding}"
-                                                          HorizontalAlignment="Stretch"
-                                                          VerticalAlignment="Stretch" />
-                                </DataTemplate>
-                                <DataTemplate x:Key="CefNetWebViewTemplate"
-                                              DataType="local:MpAvClipTileViewModel">
-                                    <local:MpAvCefNetContentWebView DataContext="{Binding}"
-                                                                    HorizontalAlignment="Stretch"
-                                                                    VerticalAlignment="Stretch" />
-                                </DataTemplate>
-                            </local:MpClipTileContentDataTemplateSelector>
-                        </ContentControl.DataTemplates>
-                    </ContentControl>
-                </Border>
-            </Grid>
             <!--  Detail  -->
-
             <local:MpAvClipTileDetailView Grid.Row="2"
                                           HorizontalAlignment="Stretch"
                                           VerticalAlignment="Stretch"
                                           IsVisible="{Binding IsHovering}"
                                           DataContext="{Binding}" />
 
+            <!--  Corner Button Overlay  -->
+            <local:MpAvClipTileCornerButtonsView Grid.Row="0"
+                                                 Grid.RowSpan="3"
+                                                 IsVisible="{Binding IsHovering}"
+                                                 HorizontalAlignment="Stretch"
+                                                 VerticalAlignment="Stretch"
+                                                 DataContext="{Binding}" />
+
+            <!--<Border x:Name="ClipTileResizeBorder"
+                    Grid.Row="0"
+                    Grid.RowSpan="3"
+                    local:MpAvResizeExtension.MinHeight="{Binding MinSize}"
+                    local:MpAvResizeExtension.MaxHeight="{Binding MaxHeight}"
+                    local:MpAvResizeExtension.MinWidth="{Binding MinSize}"
+                    local:MpAvResizeExtension.MaxWidth="{Binding MaxWidth}"
+                    local:MpAvResizeExtension.BoundWidth="{Binding BoundWidth, Mode=TwoWay}"
+                    local:MpAvResizeExtension.BoundHeight="{Binding BoundHeight, Mode=TwoWay}"
+                    local:MpAvResizeExtension.DefaultWidth="{Binding MinSize}"
+                    local:MpAvResizeExtension.DefaultHeight="{Binding MinSize}"
+                    local:MpAvResizeExtension.CanResize="{Binding CanResize, Mode=TwoWay}"
+                    local:MpAvResizeExtension.IsResizing="{Binding IsResizing, Mode=TwoWay}"
+                    local:MpAvResizeExtension.XFactor="-1"
+                    local:MpAvResizeExtension.YFactor="1"
+                    local:MpAvResizeExtension.IsEnabled="True"
+                    Cursor="SizeWestEast"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Stretch"
+                    Width="5"
+                    Background="Magenta"/>-->
+          
             <!--  IsBusy Overlay  -->
-            <Border HorizontalAlignment="Stretch"
+            <Border Grid.Row="1"
+                    Grid.RowSpan="2"
+                    HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     IsVisible="{Binding IsAnyBusy}">
                 <Border.Background>
                     <SolidColorBrush Color="Black"
                                      Opacity="0.2" />
                 </Border.Background>
-                <local:ProgressRing Width="80"
-                                    Height="80"
+                <local:ProgressRing Width="50"
+                                    Height="50"
                                     IsActive="True"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Foreground="Green">
-                    <local:ProgressRing.Background>
-                        <SolidColorBrush Color="Black"
-                                         Opacity="0.2" />
-                    </local:ProgressRing.Background>
-                </local:ProgressRing>
+                                    Foreground="Green" />
             </Border>
 
             <!--  Trial Expired Overlay  -->

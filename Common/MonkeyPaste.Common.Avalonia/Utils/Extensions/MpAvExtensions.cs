@@ -90,12 +90,12 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region Events
         
-        public static bool IsLeftPress(this PointerPressedEventArgs ppea, IVisual? control) {
+        public static bool IsLeftPress(this PointerPressedEventArgs ppea, IVisual? control = null) {
             return ppea.GetCurrentPoint(control)
                             .Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed;
         }
 
-        public static bool IsRightPress(this PointerPressedEventArgs ppea, IVisual? control) {
+        public static bool IsRightPress(this PointerPressedEventArgs ppea, IVisual? control = null) {
             return ppea.GetCurrentPoint(control)
                             .Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed;
         }
