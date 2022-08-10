@@ -9,14 +9,18 @@ using System.IO;
 using WebViewControl;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common;
+using Avalonia.Media.Imaging;
+using System.Linq;
+using Avalonia.Controls.Converters;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class App : Application {
         public static IClassicDesktopStyleApplicationLifetime Desktop { get; private set; }
         public App() {
-            MpCefNetApplication.ResetEnv();
-
+            if(MpClipTileContentDataTemplateSelector.UseCefNet) {
+                MpCefNetApplication.ResetEnv();
+            }
             DataContext = MpAvSystemTrayViewModel.Instance;
         }
         public override void Initialize() { 
@@ -31,10 +35,12 @@ namespace MonkeyPaste.Avalonia {
         public override async void OnFrameworkInitializationCompleted() {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
                 Desktop = desktop;
-                
-                MpCefNetApplication.InitCefNet(desktop);
 
-                //MpAvCefWebViewExtension.InitCef();
+                if (MpClipTileContentDataTemplateSelector.UseCefNet) {
+                    MpCefNetApplication.InitCefNet(desktop);
+                } else {
+                    MpAvCefWebViewExtension.InitCef();
+                }
 
                 if (OperatingSystem.IsLinux()) {
                     await GtkHelper.EnsureInitialized();
@@ -51,10 +57,42 @@ namespace MonkeyPaste.Avalonia {
 
                 //desktop.MainWindow.Close();
                 desktop.MainWindow = new MpAvMainWindow();
+
+                CreateTrayIcon();
+
                 desktop.MainWindow.Show();
             }
 
             base.OnFrameworkInitializationCompleted();
+        }
+        private void CreateTrayIcon() {
+            var trayIcons = new TrayIcons();
+            trayIcons.Add(new TrayIcon() {
+                Icon = new WindowIcon(
+                    MpAvStringResourceToBitmapConverter.Instance.Convert(
+                        MpPlatformWrapper.Services.PlatformResource.GetResource("AppImage"), null, null, null) as Bitmap),
+                Command = MpAvMainWindowViewModel.Instance.ShowWindowCommand,
+                ToolTipText = MpPrefViewModel.Instance.ApplicationName,
+                Menu = new NativeMenu()
+            });
+            var mil = new[] {
+                new NativeMenuItem() {
+                            Header = "_Open",
+                            Command = MpAvMainWindowViewModel.Instance.ShowWindowCommand
+                        },
+                        new NativeMenuItem() {
+                            Header = "_Settings",
+                            Command = MpAvSettingsWindowViewModel.Instance.ShowSettingsWindowCommand
+                        },
+                        new NativeMenuItem() {
+                            Header = "-"
+                        },
+                        new NativeMenuItem() {
+                            Header = "_Exit",
+                            Command = MpAvSystemTrayViewModel.Instance.ExitApplicationCommand
+                        }
+            };
+            mil.ForEach(x => trayIcons.First().Menu.Items.Add(x));            
         }
     }
 }

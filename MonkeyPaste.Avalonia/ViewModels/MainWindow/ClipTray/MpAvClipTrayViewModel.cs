@@ -31,6 +31,12 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Constants
+
+        public const double MIN_SIZE_ZOOM_FACTOR_COEFF = (double)1 / (double)7;
+
+        #endregion
+
         #region Statics
 
         private static MpAvClipTrayViewModel _instance;
@@ -261,15 +267,36 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-
+        
         #endregion
 
         #region MpIPagingScrollViewer Implementation
 
         public Orientation ListOrientation => MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ? Orientation.Horizontal : Orientation.Vertical;
 
-        public double ScrollOffsetX { get; set; }
-        public double ScrollOffsetY { get; set; }
+        private double _scrollOffsetX;
+        public double ScrollOffsetX {
+            get => _scrollOffsetX;
+            set {
+                if(ScrollOffsetX != value) {
+                    LastScrollOffsetX = _scrollOffsetX;
+                    _scrollOffsetX = value;
+                    OnPropertyChanged(nameof(ScrollOffsetX));
+                }
+            }
+        }
+
+        private double _scrollOffsetY;
+        public double ScrollOffsetY {
+            get => _scrollOffsetY;
+            set {
+                if (ScrollOffsetY != value) {
+                    LastScrollOffsetY = _scrollOffsetY;
+                    _scrollOffsetY = value;
+                    OnPropertyChanged(nameof(ScrollOffsetY));
+                }
+            }
+        }
         public double MaxScrollOffsetX {
             get {
                 double maxScrollOffsetX = Math.Max(0,ClipTrayTotalTileWidth - ClipTrayScreenWidth);
@@ -284,24 +311,95 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public double ClipTrayTotalTileWidth {
+        public double DesiredMaxTileRight {
             get {
-                if(IsEmpty) {
-                    return 0;
+                if(ListOrientation == Orientation.Horizontal) {
+                    if(LayoutType == MpAvClipTrayLayoutType.Stack) {
+                        return double.PositiveInfinity;
+                    }
+                    return ClipTrayScreenWidth;
+                } else {
+                    return ClipTrayScreenWidth;
                 }
-                double totalTileWidth = ColCount * Items.First().MinSize;
-                return totalTileWidth;
             }
         }
-        public double ClipTrayTotalTileHeight {
+
+        public double DesiredMaxTileBottom {
             get {
-                if(IsEmpty) {
-                    return 0;
+                if (ListOrientation == Orientation.Horizontal) {
+                    if (LayoutType == MpAvClipTrayLayoutType.Stack) {
+                        return ClipTrayScreenHeight;
+                    }
+                    return double.PositiveInfinity;
+                } else {
+                    if (LayoutType == MpAvClipTrayLayoutType.Stack) {
+                        return double.PositiveInfinity; 
+                    }
+                    return ClipTrayScreenHeight;
                 }
-                double totalTileHeight = RowCount * Items.First().MinSize;
-                return totalTileHeight;
             }
         }
+        public double ClipTrayTotalTileWidth { get; private set; }
+        public double ClipTrayTotalTileHeight { get; private set; }
+
+        //public double ClipTrayTotalTileWidth {
+        //    get {
+        //        if(IsEmpty) {
+        //            return 0;
+        //        }
+        //        double totalTileWidth = ColCount * Items.First().MinSize;
+        //        return totalTileWidth;
+        //    }
+        //}
+        //public double ClipTrayTotalTileHeight {
+        //    get {
+        //        if(IsEmpty) {
+        //            return 0;
+        //        }
+        //        double totalTileHeight = RowCount * Items.First().MinSize;
+        //        return totalTileHeight;
+        //    }
+        //}
+
+        //public int RowCount {
+        //    get {
+        //        if (IsEmpty) {
+        //            return 0;
+        //        }
+        //        if (LayoutType == MpAvClipTrayLayoutType.Stack) {
+        //            if (ListOrientation == Orientation.Horizontal) {
+        //                return 1;
+        //            }
+        //            return Items.Count;
+        //        }
+        //        //double totalFlatWidth = Items.Sum(x => x.MinSize);
+        //        //int rowCount = (int)Math.Floor(totalFlatWidth / ClipTrayScreenWidth);
+        //        //return rowCount;
+        //        int rowCount = (int)Math.Ceiling((double)Items.Count / (double)ColCount);
+        //        return rowCount;
+        //    }
+        //}
+
+        //public int ColCount {
+        //    get {
+        //        if (IsEmpty) {
+        //            return 0;
+        //        }
+
+        //        if (LayoutType == MpAvClipTrayLayoutType.Stack) {
+        //            if (ListOrientation == Orientation.Horizontal) {
+        //                return Items.Count;
+        //            }
+        //            return 1;
+        //        }
+        //        int colCount = (int)Math.Max(1.0d, Math.Floor(ClipTrayScreenWidth / Items.First().MinSize));
+        //        return colCount;
+        //    }
+        //}
+
+        //public int RowCount { get; set; }
+
+        //public int ColCount { get; set; }
 
         public double ClipTrayTotalWidth => Math.Max(ClipTrayScreenWidth, ClipTrayTotalTileWidth);
         public double ClipTrayTotalHeight => Math.Max(ClipTrayScreenHeight, ClipTrayTotalTileHeight);
@@ -337,46 +435,323 @@ namespace MonkeyPaste.Avalonia {
         }
         public bool IsThumbDragging { get; set; } = false;
 
+        public double DefaultItemSizeLength {
+            get {
+                double minSize;
+                if (LayoutType == MpAvClipTrayLayoutType.Stack) {
+                    minSize = ListOrientation == Orientation.Horizontal ?
+                                    (ClipTrayScreenHeight * ZoomFactor) :
+                                    (ClipTrayScreenWidth * ZoomFactor);
+                } else {
+                    minSize = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds.Width *
+                                ZoomFactor * MIN_SIZE_ZOOM_FACTOR_COEFF;
+                }
+                double scrollBarSize = 30;
+                return minSize - scrollBarSize;
+            }
+        }
+
+        public void FindTotalTileSize() {
+            // NOTE this is to avoid making TotalTile Width/Height auto
+            // and should only be called on a requery or on content resize (or event better only on resize complete)
+            Size totalTileSize = Size.Empty;
+            if(TotalTilesInQuery > 0) {
+                FindTileRectInternal(TotalTilesInQuery - 1, out totalTileSize);
+            }
+            
+            ClipTrayTotalTileWidth = totalTileSize.Width;
+            ClipTrayTotalTileHeight = totalTileSize.Height;
+        }
+
+        private Rect FindTileRectInternal(int queryOffsetIdx, out Size totalTileSize) {
+            int totalTileCount = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.Count;
+            if (totalTileCount <= 0 || queryOffsetIdx < 0 || queryOffsetIdx >= totalTileCount) {
+                throw new Exception($"FindTileRect Exception: Idx '{queryOffsetIdx}' out of bounds '{totalTileCount}'");
+            }
+
+            var totalSize = MpSize.Empty;
+
+            var cur_grid_row_or_col_rects = new List<MpRect>();
+            MpRect last_rect = null;
+
+            for (int i = 0; i <= queryOffsetIdx; i++) {
+                int tileId = MpDataModelProvider.AllFetchedAndSortedCopyItemIds[i];
+                if (PinnedItems.Any(x => x.CopyItemId == tileId)) {
+                    continue;
+                }
+
+                MpSize tile_size = new MpSize(DefaultItemSizeLength, DefaultItemSizeLength);
+                if (TryGetByPersistentSize_ById(tileId, out Size uniqueSize)) {
+                    tile_size = uniqueSize.ToPortableSize();
+                }
+
+                MpPoint tile_offset = null;
+                if (last_rect == null) {
+                    // initial case
+                    tile_offset = new MpPoint();
+                } else {
+                    tile_offset = last_rect.Location;
+                    if (ListOrientation == Orientation.Horizontal) {
+                        tile_offset.X = last_rect.Right;
+                    } else {
+                        tile_offset.Y = last_rect.Bottom;
+                    }
+                }
+
+                MpRect tile_rect = new MpRect(tile_offset, tile_size);
+                bool is_tile_wrapped = false;
+                if (tile_rect.Right > DesiredMaxTileRight) {
+                    // when tile projected rect is beyond desired max width
+
+                    if (cur_grid_row_or_col_rects.Count == 0) {
+                        // this means based on tray orientation/layout it can't contain this tile
+                        // so it will need to overflow 
+                        // always occurs in stack
+                    } else {
+                        // wrap to next line
+                        tile_rect.X = 0;
+                        tile_rect.Y = cur_grid_row_or_col_rects[0].Bottom;
+                        is_tile_wrapped = true;
+                    }
+                }
+
+                if (tile_rect.Bottom > DesiredMaxTileBottom) {
+                    // when tile projected rect is beyond desired max height
+
+                    if (cur_grid_row_or_col_rects.Count == 0) {
+                        // this means based on tray orientation/layout it can't contain this tile
+                        // so it will need to overflow 
+                        // always occurs in stack
+                    } else {
+                        // wrap to next line
+                        tile_rect.X = cur_grid_row_or_col_rects[0].Right;
+                        tile_rect.Y = 0;
+                        is_tile_wrapped = true;
+                    }
+                }
+
+                if (is_tile_wrapped) {
+                    cur_grid_row_or_col_rects.Clear();
+                } else if (LayoutType == MpAvClipTrayLayoutType.Grid) {
+                    cur_grid_row_or_col_rects.Add(tile_rect);
+                }
+
+                totalSize.Width = Math.Max(tile_rect.Right, totalSize.Width);
+                totalSize.Height = Math.Max(tile_rect.Bottom, totalSize.Height);
+
+                last_rect = tile_rect;
+            }
+            if (last_rect == null) {
+                totalTileSize = new Size();
+                return Rect.Empty;
+            }
+            totalTileSize = totalSize.ToAvSize();
+            return last_rect.ToAvRect();
+        }
+        
+        public Rect FindTileRect(int queryOffsetIdx) {
+            return FindTileRectInternal(queryOffsetIdx, out Size totalSizeAtOffset);
+        }
+
+        //public double FindTileOffsetX2(int queryOffsetIdx) {
+        //    int totalTileCount = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.Count;
+        //    if (totalTileCount <= 0) {
+        //        return 0;
+        //    }
+        //    queryOffsetIdx = Math.Max(0, Math.Min(queryOffsetIdx, totalTileCount - 1));
+
+        //    var headItemIds = MpDataModelProvider.AllFetchedAndSortedCopyItemIds;
+
+        //    double offsetX = 0;
+        //    for (int i = 1; i <= queryOffsetIdx; i++) {
+        //        int tileHeadId = headItemIds[i - 1];
+        //        if (PinnedItems.Any(x => x.CopyItemId == tileHeadId)) {
+        //            continue;
+        //        }
+        //        offsetX += MpMeasurements.Instance.ClipTileMargin * 2;
+
+        //        if (TryGetByPersistentWidthById(tileHeadId, out double uniqueWidth)) {
+        //            offsetX += uniqueWidth;
+        //        } else {
+        //            offsetX += MpAvClipTileViewModel.DefaultBorderWidth;
+
+        //        }
+        //    }
+        //    return offsetX;
+        //}
+        public double FindTileOffsetX(int queryOffsetIdx) {
+            // get count of all items in current query that can affect offset
+            //int totalTileCount = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.Count;
+            //if (totalTileCount <= 0 || queryOffsetIdx <= 0) {
+            //    // offset 0 will always be at x = 0
+            //    return 0;
+            //}
+
+            //var item = Items.FirstOrDefault(x => x.QueryOffsetIdx == queryOffsetIdx && x.CopyItemTitle == "Untitled2636");
+
+            //// ensure the check is clamped to within the count
+            //queryOffsetIdx = Math.Max(0, Math.Min(queryOffsetIdx, totalTileCount - 1));
+
+            //var relevantUniqueWidthLookup = _persistentUniqueWidthQueryOffsetLookup
+            //                                    .Where(x =>
+            //                                        PinnedItems.All(y => y.QueryOffsetIdx != x.Key) &&
+            //                                        x.Key < queryOffsetIdx)
+            //                                    .ToDictionary(k => k.Key, v => v.Value);
+
+            //int uniqueWidthCount = relevantUniqueWidthLookup.Count;
+
+            //int relevantPinnedDefaultWidthCount = PinnedItems.Where(x => x.QueryOffsetIdx >= 0 && x.QueryOffsetIdx < queryOffsetIdx).Count();
+            //double uniqueWidthSum = (uniqueWidthCount * (MpMeasurements.Instance.ClipTileMargin * 2)) + relevantUniqueWidthLookup.Sum(x => x.Value);
+
+            //int defaultWidthCount = Math.Max(0, queryOffsetIdx - uniqueWidthCount - relevantPinnedDefaultWidthCount);
+
+            //double defaultItemWidthWithMargin = (MpMeasurements.Instance.ClipTileMargin * 2) + MpAvClipTileViewModel.DefaultBorderWidth;
+            //double defaultWidthSum = defaultWidthCount * defaultItemWidthWithMargin;
+
+            //double offsetX = uniqueWidthSum + defaultWidthSum;
+            //return offsetX;
+            return 0;
+        }
+
+
+        public int FindJumpTileIdx(double trackValue) {
+
+            //int totalTileCount = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.Count;
+            //var headItemIds = MpDataModelProvider.AllFetchedAndSortedCopyItemIds;
+
+            //double offsetX = 0;
+            //for (int i = 0; i < totalTileCount; i++) {
+            //    if (PinnedItems.Any(x => x.QueryOffsetIdx == i)) {
+            //        continue;
+            //    }
+            //    offsetX += MpMeasurements.Instance.ClipTileMargin;
+
+
+            //    if (_persistentUniqueWidthQueryOffsetLookup.TryGetValue(i, out double uniqueWidth)) {
+            //        offsetX += uniqueWidth;
+            //    } else {
+            //        offsetX += MpAvClipTileViewModel.DefaultBorderWidth;
+            //    }
+
+            //    if (offsetX >= trackValue) {
+            //        return i;
+            //    }
+            //    offsetX += MpMeasurements.Instance.ClipTileMargin;
+            //}
+
+            //return totalTileCount - 1;
+            return 0;
+        }
+
+        public void AdjustScrollOffsetToResize(double oldHeadTrayX, double oldScrollOfset) {
+            double oldScrollOffsetDiffWithHead = oldScrollOfset - oldHeadTrayX;
+
+            double newHeadTrayX = HeadItem == null ? 0 : HeadItem.TrayX;
+            double headOffsetRatio = newHeadTrayX / oldHeadTrayX;
+            headOffsetRatio = double.IsNaN(headOffsetRatio) ? 1 : headOffsetRatio;
+            double newScrollOfsetDiffWithHead = headOffsetRatio * oldScrollOffsetDiffWithHead;
+
+            var head_rect = FindTileRect(HeadQueryIdx);
+            double newScrollOfsetX = head_rect.Left + newScrollOfsetDiffWithHead;
+            
+            //if(newScrollOfset < 100 || Math.Abs(newScrollOfset - oldScrollOfset) > 200) {
+            //    Debugger.Break();
+            //}
+            ScrollOffsetX = newScrollOfsetX;
+        }
+
+
+
+        #region Virtual
+
+        //set in civm IsSelected property change, DragDrop.Drop (copy mode)
+        public List<MpCopyItem> PersistentSelectedModels { get; set; } = new List<MpCopyItem>();
+
+        private Dictionary<int, Size> _persistentUniqueTileSizeLookup_ById { get; set; } = new Dictionary<int, Size>();
+        private Dictionary<int, Size> _persistentUniqueTileSizeLookup_ByIdx { get; set; } = new Dictionary<int, Size>();
+        //<CopyItemId, Unique ItemWidth> unique is != to MpMeausrements.Instance.ClipTileMinSize
+        //public Dictionary<int, double> PersistentUniqueWidthTileLookup => _persistentUniqueWidthTileLookup;
+
+        // THIS Lookup is passive and only changed when PersistentUniqueWidthTileLookup is changed
+        //<QueryOffsetIdx, Unique ItemWidth> unique is != to MpMeausrements.Instance.ClipTileMinSize
+        //public Dictionary<int, double> PersistentUniqueWidthQueryOffsetLookup => _persistentUniqueWidthQueryOffsetLookup;
+
+        public void AddOrReplacePersistentSize_ById(int ciid, Size uniqueSize) {
+            _persistentUniqueTileSizeLookup_ById.AddOrReplace(ciid, uniqueSize);
+            
+            int queryOffset = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.FastIndexOf(ciid);
+            if (queryOffset < 0) {
+                return;
+            }
+            _persistentUniqueTileSizeLookup_ByIdx.AddOrReplace(queryOffset, uniqueSize);
+        }
+
+        public void RemovePersistentSize_ById(int ciid) {
+            if (_persistentUniqueTileSizeLookup_ById.ContainsKey(ciid)) {
+                _persistentUniqueTileSizeLookup_ById.Remove(ciid);
+            }
+            int queryOffset = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.FastIndexOf(ciid);
+            if (queryOffset < 0) {
+                return;
+            }
+            _persistentUniqueTileSizeLookup_ByIdx.Remove(queryOffset);
+        }
+
+        public bool TryGetByPersistentSize_ById(int ciid, out Size uniqueSize) {
+            return _persistentUniqueTileSizeLookup_ById.TryGetValue(ciid, out uniqueSize);
+        }
+
+        public void ClearPersistentWidths() {
+            _persistentUniqueTileSizeLookup_ByIdx.Clear();
+            _persistentUniqueTileSizeLookup_ById.Clear();
+        }
+
+
+        public int HeadQueryIdx => Items.Count == 0 ? -1 : Items.Where(x => x.QueryOffsetIdx >= 0).Min(x => x.QueryOffsetIdx);// Math.Max(0, Items.Min(x => x.QueryOffsetIdx));
+
+        public int TailQueryIdx => Items.Count == 0 ? -1 : Items.Max(x => x.QueryOffsetIdx);// Math.Min(TotalTilesInQuery - 1, Items.Max(x => x.QueryOffsetIdx));
+
+        public int MaxLoadQueryIdx => Math.Max(0, MaxClipTrayQueryIdx - DefaultLoadCount + 1);
+
+        public int MaxClipTrayQueryIdx {
+            get {
+                int maxClipTrayQueryIdx = TotalTilesInQuery - 1;
+                if (maxClipTrayQueryIdx < 0) {
+                    return maxClipTrayQueryIdx;
+                }
+                while (PinnedItems.Any(x => x.QueryOffsetIdx == maxClipTrayQueryIdx)) {
+                    if (maxClipTrayQueryIdx < 0) {
+                        return maxClipTrayQueryIdx;
+                    }
+                    maxClipTrayQueryIdx--;
+                }
+                return maxClipTrayQueryIdx;
+            }
+        }
+
+        public int MinClipTrayQueryIdx {
+            get {
+                if (TotalTilesInQuery == 0) {
+                    return -1;
+                }
+                int minClipTrayQueryIdx = 0;
+
+                while (PinnedItems.Any(x => x.QueryOffsetIdx == minClipTrayQueryIdx)) {
+                    if (minClipTrayQueryIdx >= TotalTilesInQuery) {
+                        return -1;
+                    }
+                    minClipTrayQueryIdx++;
+                }
+                return minClipTrayQueryIdx;
+            }
+        }
+        #endregion
+
         #endregion
 
         #region Layout
 
         public double PlayPauseButtonWidth { get; set; }
-        public int RowCount {
-            get {
-                if (IsEmpty) {
-                    return 0;
-                }
-                if (LayoutType == MpAvClipTrayLayoutType.Stack) {
-                    if (ListOrientation == Orientation.Horizontal) {
-                        return 1;
-                    }
-                    return Items.Count;
-                }
-                //double totalFlatWidth = Items.Sum(x => x.MinSize);
-                //int rowCount = (int)Math.Floor(totalFlatWidth / ClipTrayScreenWidth);
-                //return rowCount;
-                int rowCount = (int)Math.Ceiling((double)Items.Count / (double)ColCount);
-                return rowCount;
-            }
-        }
-
-        public int ColCount {
-            get {
-                if (IsEmpty) {
-                    return 0;
-                }
-
-                if (LayoutType == MpAvClipTrayLayoutType.Stack) {
-                    if (ListOrientation == Orientation.Horizontal) {
-                        return Items.Count;
-                    }
-                    return 1;
-                }
-                int colCount = (int)Math.Max(1.0d, Math.Floor(ClipTrayScreenWidth / Items.First().MinSize));
-                return colCount;
-            }
-        }
 
         #endregion
 
@@ -480,7 +855,7 @@ namespace MonkeyPaste.Avalonia {
             MpDb.SyncDelete += MpDbObject_SyncDelete;
 
             _pageSize = 1;
-            RemainingItemsCountThreshold = 1;
+            RemainingItemsCountThreshold = 5;
             _oldMainWindowHeight = MpAvMainWindowViewModel.Instance.MainWindowHeight;
             //DefaultLoadCount = MpMeasurements.Instance.DefaultTotalVisibleClipTiles * 1 + 2;
 
@@ -492,20 +867,18 @@ namespace MonkeyPaste.Avalonia {
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
 
-            for (int i = 1; i <= 10; i++) {
-                var test_ctvm = await CreateClipTileViewModel(
-                    new MpCopyItem() {
-                        Id = i,
-                        ItemType = MpCopyItemType.Text,
-                        ItemData = "This is test " + i,
-                        Title = "Test" + i,
-                        SourceId = 1,
-                        CopyDateTime = DateTime.Now
-                    }, i - 1);
-                Items.Add(test_ctvm);
-            }
+            //for (int i = 1; i <= 1000; i++) {
+            //    var ci = new MpCopyItem() {
+            //        ItemType = MpCopyItemType.Text,
+            //        ItemData = "This is test " + i,
+            //        Title = "Test" + i,
+            //        SourceId = 1,
+            //        CopyDateTime = DateTime.Now
+            //    };
+            //    await ci.WriteToDatabaseAsync();
+            //}
 
-            SelectedItem = Items[0];
+            //SelectedItem = Items[0];
 
             OnPropertyChanged(nameof(Items));
 
@@ -517,11 +890,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void RefreshLayout() {
-            Items.ForEach(x => x.OnPropertyChanged(nameof(x.MinSize)));
-            Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
-            Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayY)));
-            Items.ForEach(x => x.OnPropertyChanged(nameof(x.RowIdx)));
-            Items.ForEach(x => x.OnPropertyChanged(nameof(x.ColIdx)));
+            //Items.ForEach(x => x.OnPropertyChanged(nameof(x.MinSize)));
+            //Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
+            //Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayY)));
+            //Items.ForEach(x => x.OnPropertyChanged(nameof(x.RowIdx)));
+            //Items.ForEach(x => x.OnPropertyChanged(nameof(x.ColIdx)));
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.MaxWidth)));
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.MaxHeight)));
 
@@ -580,12 +953,11 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(ScrollOffsetX):
                 case nameof(ScrollOffsetY):
-                    if (IsThumbDragging) {
-                        break;
-                    }                    
-                    MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayScrollChanged);
+                    CheckLoadMore();
                     break;
                 case nameof(HasScrollVelocity):
+                    MpCursor.IsCursorFrozen = HasScrollVelocity;
+
                     if (!HasScrollVelocity) {
                         var hctvm = Items.FirstOrDefault(x => x.IsHovering);
                         if (hctvm != null) {
@@ -613,9 +985,59 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private void CheckLoadMore() {
+            if (IsThumbDragging || 
+                IsAnyBusy || 
+                IsAnyResizing || 
+                MpAvMainWindowViewModel.Instance.IsResizing ||
+                Items.Count <= RemainingItemsCountThreshold) {
+                return;
+            }
+
+            //MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayScrollChanged);
+
+            double dx = ScrollOffsetX - LastScrollOffsetX;
+            double dy = ScrollOffsetY - LastScrollOffsetY;
+
+            if (dx > 0) {
+                //var rightest_ctvm = Items.Take(Items.Count - RemainingItemsCountThreshold)
+                //                         .Aggregate((a, b) => a.TrayRect.X > b.TrayRect.X ? a : b);
+                var rightest_ctvm = Items.OrderByDescending(x => x.TrayRect.X).ElementAt(RemainingItemsCountThreshold);
+                double rightest_right_edge_diff = rightest_ctvm.TrayRect.Right - ScrollOffsetX;
+                //MpConsole.WriteLine($"Rightest Item: '{rightest_ctvm}' diff: {rightest_right_edge_diff}");
+                if (rightest_right_edge_diff < ClipTrayScreenWidth) {
+                    QueryCommand.Execute(true);
+                }
+            } else if (dx < 0) {
+                //var leftest_ctvm = Items.TakeLast(Items.Count - RemainingItemsCountThreshold)
+                //                        .Aggregate((a, b) => a.TrayRect.X < b.TrayRect.X ? a : b);
+                var leftest_ctvm = Items.OrderBy(x=>x.TrayRect.X).ElementAt(RemainingItemsCountThreshold);
+
+                double leftest_left_edge_diff = leftest_ctvm.TrayRect.Left - ScrollOffsetX;
+                //MpConsole.WriteLine($"Rightest Item: '{leftest_ctvm}' diff: {leftest_left_edge_diff}");
+                if (leftest_left_edge_diff < 0) {
+                    QueryCommand.Execute(false);
+                }
+            }
+        }
         #endregion
 
         #region Commands
+
+        public ICommand UpdateTileRectCommand => new MpCommand<object>(
+            (args) => {
+                if(args is MpAvClipTileViewModel ctvm) {
+                    var trayRect = FindTileRect(ctvm.QueryOffsetIdx);
+                    ctvm.TrayLocation = trayRect.Position.ToPortablePoint(); 
+
+                    //Task.Run(() => {
+                    //    var trayRect = FindTileRect(ctvm.QueryOffsetIdx);
+                    //    Dispatcher.UIThread.Post(() => {
+                    //        ctvm.TrayLocation = trayRect.Position.ToPortablePoint();
+                    //    });
+                    //});
+                }
+            });
 
         public ICommand ToggleLayoutTypeCommand => new MpCommand(
             () => {
@@ -765,7 +1187,7 @@ namespace MonkeyPaste.Avalonia {
         public string PinTrayDropForegroundHexColor => IsDragOverPinTray ? MpSystemColors.Yellow : MpSystemColors.oldlace;
         public int MaxTotalVisibleClipTiles {
             get {
-                return 6;// (int)Math.Ceiling(ClipTrayScreenWidth / MpMeasurements.Instance.ClipTileBorderMinWidth);
+                return 10;// (int)Math.Ceiling(ClipTrayScreenWidth / MpMeasurements.Instance.ClipTileBorderMinWidth);
             }
         }
 
@@ -778,7 +1200,7 @@ namespace MonkeyPaste.Avalonia {
 
         public int TotalTilesInQuery => MpDataModelProvider.TotalTilesInQuery;
 
-        public int DefaultLoadCount => MaxTotalVisibleClipTiles + 3;
+        public int DefaultLoadCount => 20;// MaxTotalVisibleClipTiles + 3;
 
 
         #endregion
@@ -809,92 +1231,6 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-
-        #region Virtual
-
-        //set in civm IsSelected property change, DragDrop.Drop (copy mode)
-        public List<MpCopyItem> PersistentSelectedModels { get; set; } = new List<MpCopyItem>();
-
-
-        private Dictionary<int, double> _persistentUniqueWidthTileLookup { get; set; } = new Dictionary<int, double>();
-        private Dictionary<int, double> _persistentUniqueWidthQueryOffsetLookup { get; set; } = new Dictionary<int, double>();
-        //<CopyItemId, Unique ItemWidth> unique is != to MpMeausrements.Instance.ClipTileMinSize
-        //public Dictionary<int, double> PersistentUniqueWidthTileLookup => _persistentUniqueWidthTileLookup;
-
-        // THIS Lookup is passive and only changed when PersistentUniqueWidthTileLookup is changed
-        //<QueryOffsetIdx, Unique ItemWidth> unique is != to MpMeausrements.Instance.ClipTileMinSize
-        //public Dictionary<int, double> PersistentUniqueWidthQueryOffsetLookup => _persistentUniqueWidthQueryOffsetLookup;
-
-        public void AddOrReplacePersistentWidthById(int ciid, double uniqueWidth) {
-            _persistentUniqueWidthTileLookup.AddOrReplace(ciid, uniqueWidth);
-
-            int queryOffset = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.FastIndexOf(ciid);
-            if (queryOffset < 0) {
-                return;
-            }
-            _persistentUniqueWidthQueryOffsetLookup.AddOrReplace(queryOffset, uniqueWidth);
-        }
-
-        public void RemovePersistentWidthById(int ciid) {
-            if (_persistentUniqueWidthTileLookup.ContainsKey(ciid)) {
-                _persistentUniqueWidthTileLookup.Remove(ciid);
-            }
-            int queryOffset = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.FastIndexOf(ciid);
-            if (queryOffset < 0) {
-                return;
-            }
-            _persistentUniqueWidthQueryOffsetLookup.Remove(queryOffset);
-        }
-
-        public bool TryGetByPersistentWidthById(int ciid, out double uniqueWidth) {
-            return _persistentUniqueWidthTileLookup.TryGetValue(ciid, out uniqueWidth);
-        }
-
-        public void ClearPersistentWidths() {
-            _persistentUniqueWidthQueryOffsetLookup.Clear();
-            _persistentUniqueWidthTileLookup.Clear();
-        }
-
-
-        public int HeadQueryIdx => Items.Count == 0 ? -1 : Items.Where(x => x.QueryOffsetIdx >= 0).Min(x => x.QueryOffsetIdx);// Math.Max(0, Items.Min(x => x.QueryOffsetIdx));
-
-        public int TailQueryIdx => Items.Count == 0 ? -1 : Items.Max(x => x.QueryOffsetIdx);// Math.Min(TotalTilesInQuery - 1, Items.Max(x => x.QueryOffsetIdx));
-
-        public int MaxLoadQueryIdx => Math.Max(0, MaxClipTrayQueryIdx - DefaultLoadCount + 1);
-
-        public int MaxClipTrayQueryIdx {
-            get {
-                int maxClipTrayQueryIdx = TotalTilesInQuery - 1;
-                if (maxClipTrayQueryIdx < 0) {
-                    return maxClipTrayQueryIdx;
-                }
-                while (PinnedItems.Any(x => x.QueryOffsetIdx == maxClipTrayQueryIdx)) {
-                    if (maxClipTrayQueryIdx < 0) {
-                        return maxClipTrayQueryIdx;
-                    }
-                    maxClipTrayQueryIdx--;
-                }
-                return maxClipTrayQueryIdx;
-            }
-        }
-
-        public int MinClipTrayQueryIdx {
-            get {
-                if (TotalTilesInQuery == 0) {
-                    return -1;
-                }
-                int minClipTrayQueryIdx = 0;
-
-                while (PinnedItems.Any(x => x.QueryOffsetIdx == minClipTrayQueryIdx)) {
-                    if (minClipTrayQueryIdx >= TotalTilesInQuery) {
-                        return -1;
-                    }
-                    minClipTrayQueryIdx++;
-                }
-                return minClipTrayQueryIdx;
-            }
-        }
-        #endregion
 
         #region Mouse Modes
 
@@ -932,6 +1268,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsRestoringSelection { get; private set; } = false;
 
         public double LastScrollOffsetX { get; set; } = 0;
+        public double LastScrollOffsetY { get; set; } = 0;
 
         public bool IsHorizontalScrollBarVisible => ClipTrayTotalTileWidth > ClipTrayScreenWidth; //TotalTilesInQuery > MpMeasurements.Instance.DefaultTotalVisibleClipTiles;
 
@@ -1287,110 +1624,7 @@ namespace MonkeyPaste.Avalonia {
 
             IsRestoringSelection = false;
         }
-        //public double FindTileOffsetX2(int queryOffsetIdx) {
-        //    int totalTileCount = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.Count;
-        //    if (totalTileCount <= 0) {
-        //        return 0;
-        //    }
-        //    queryOffsetIdx = Math.Max(0, Math.Min(queryOffsetIdx, totalTileCount - 1));
-
-        //    var headItemIds = MpDataModelProvider.AllFetchedAndSortedCopyItemIds;
-
-        //    double offsetX = 0;
-        //    for (int i = 1; i <= queryOffsetIdx; i++) {
-        //        int tileHeadId = headItemIds[i - 1];
-        //        if (PinnedItems.Any(x => x.CopyItemId == tileHeadId)) {
-        //            continue;
-        //        }
-        //        offsetX += MpMeasurements.Instance.ClipTileMargin * 2;
-
-        //        if (TryGetByPersistentWidthById(tileHeadId, out double uniqueWidth)) {
-        //            offsetX += uniqueWidth;
-        //        } else {
-        //            offsetX += MpAvClipTileViewModel.DefaultBorderWidth;
-
-        //        }
-        //    }
-        //    return offsetX;
-        //}
-        public double FindTileOffsetX(int queryOffsetIdx) {
-            // get count of all items in current query that can affect offset
-            //int totalTileCount = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.Count;
-            //if (totalTileCount <= 0 || queryOffsetIdx <= 0) {
-            //    // offset 0 will always be at x = 0
-            //    return 0;
-            //}
-
-            //var item = Items.FirstOrDefault(x => x.QueryOffsetIdx == queryOffsetIdx && x.CopyItemTitle == "Untitled2636");
-
-            //// ensure the check is clamped to within the count
-            //queryOffsetIdx = Math.Max(0, Math.Min(queryOffsetIdx, totalTileCount - 1));
-
-            //var relevantUniqueWidthLookup = _persistentUniqueWidthQueryOffsetLookup
-            //                                    .Where(x =>
-            //                                        PinnedItems.All(y => y.QueryOffsetIdx != x.Key) &&
-            //                                        x.Key < queryOffsetIdx)
-            //                                    .ToDictionary(k => k.Key, v => v.Value);
-
-            //int uniqueWidthCount = relevantUniqueWidthLookup.Count;
-
-            //int relevantPinnedDefaultWidthCount = PinnedItems.Where(x => x.QueryOffsetIdx >= 0 && x.QueryOffsetIdx < queryOffsetIdx).Count();
-            //double uniqueWidthSum = (uniqueWidthCount * (MpMeasurements.Instance.ClipTileMargin * 2)) + relevantUniqueWidthLookup.Sum(x => x.Value);
-
-            //int defaultWidthCount = Math.Max(0, queryOffsetIdx - uniqueWidthCount - relevantPinnedDefaultWidthCount);
-
-            //double defaultItemWidthWithMargin = (MpMeasurements.Instance.ClipTileMargin * 2) + MpAvClipTileViewModel.DefaultBorderWidth;
-            //double defaultWidthSum = defaultWidthCount * defaultItemWidthWithMargin;
-
-            //double offsetX = uniqueWidthSum + defaultWidthSum;
-            //return offsetX;
-            return 0;
-        }
-
-
-        public int FindJumpTileIdx(double trackValue) {
-
-            //int totalTileCount = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.Count;
-            //var headItemIds = MpDataModelProvider.AllFetchedAndSortedCopyItemIds;
-
-            //double offsetX = 0;
-            //for (int i = 0; i < totalTileCount; i++) {
-            //    if (PinnedItems.Any(x => x.QueryOffsetIdx == i)) {
-            //        continue;
-            //    }
-            //    offsetX += MpMeasurements.Instance.ClipTileMargin;
-
-
-            //    if (_persistentUniqueWidthQueryOffsetLookup.TryGetValue(i, out double uniqueWidth)) {
-            //        offsetX += uniqueWidth;
-            //    } else {
-            //        offsetX += MpAvClipTileViewModel.DefaultBorderWidth;
-            //    }
-
-            //    if (offsetX >= trackValue) {
-            //        return i;
-            //    }
-            //    offsetX += MpMeasurements.Instance.ClipTileMargin;
-            //}
-
-            //return totalTileCount - 1;
-            return 0;
-        }
-
-        public void AdjustScrollOffsetToResize(double oldHeadTrayX, double oldScrollOfset) {
-            double oldScrollOffsetDiffWithHead = oldScrollOfset - oldHeadTrayX;
-
-            double newHeadTrayX = HeadItem == null ? 0 : HeadItem.TrayX;
-            double headOffsetRatio = newHeadTrayX / oldHeadTrayX;
-            headOffsetRatio = double.IsNaN(headOffsetRatio) ? 1 : headOffsetRatio;
-            double newScrollOfsetDiffWithHead = headOffsetRatio * oldScrollOffsetDiffWithHead;
-            double newScrollOfset = FindTileOffsetX(HeadQueryIdx) + newScrollOfsetDiffWithHead;
-
-            //if(newScrollOfset < 100 || Math.Abs(newScrollOfset - oldScrollOfset) > 200) {
-            //    Debugger.Break();
-            //}
-            ScrollOffsetX = newScrollOfset;
-        }
+        
 
         public void ForceScrollOffset(double newOffset) {
             //_scrollOffset = LastScrollOffsetX = newOffset;
@@ -1433,7 +1667,7 @@ namespace MonkeyPaste.Avalonia {
         protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
                 PersistentSelectedModels.Remove(ci);
-                RemovePersistentWidthById(ci.Id);
+                RemovePersistentSize_ById(ci.Id);
                 MpDataModelProvider.RemoveQueryItem(ci.Id);
 
                 var removed_ctvm = GetClipTileViewModelById(ci.Id);
@@ -1475,9 +1709,9 @@ namespace MonkeyPaste.Avalonia {
                                 continue;
                             }
                             ctvm.QueryOffsetIdx--;
-                            if (TryGetByPersistentWidthById(ctvm.CopyItemId, out double uniqueWidth)) {
-                                _persistentUniqueWidthQueryOffsetLookup.Remove(ctvm.QueryOffsetIdx + 1);
-                                _persistentUniqueWidthQueryOffsetLookup.Add(ctvm.QueryOffsetIdx, uniqueWidth);
+                            if (TryGetByPersistentSize_ById(ctvm.CopyItemId, out Size uniqueSize)) {
+                                _persistentUniqueTileSizeLookup_ByIdx.Remove(ctvm.QueryOffsetIdx + 1);
+                                _persistentUniqueTileSizeLookup_ByIdx.Add(ctvm.QueryOffsetIdx, uniqueSize);
                             }
                             ctvm.OnPropertyChanged(nameof(ctvm.TrayX));
                         }
@@ -1612,40 +1846,37 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void OnPostMainWindowLoaded() {
-            return;
-            //int totalItems = MpAvTagTrayViewModel.Instance.AllTagViewModel.TagClipCount;
+            int totalItems = MpAvTagTrayViewModel.Instance.AllTagViewModel.TagClipCount;
 
-            //MpAvSystemTrayViewModel.Instance.TotalItemCountLabel = string.Format(@"{0} total entries", totalItems);
-
+            MpAvSystemTrayViewModel.Instance.TotalItemCountLabel = string.Format(@"{0} total entries", totalItems);
 
 
-            //MpPlatformWrapper.Services.ClipboardMonitor.OnClipboardChanged += ClipboardChanged;
-            //MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
-            ////await Task.Delay(3000);
 
-            //if (!string.IsNullOrEmpty(MpPrefViewModel.Instance.LastQueryInfoJson)) {
-            //    var qi = JsonConvert.DeserializeObject<MpWpfQueryInfo>(MpPrefViewModel.Instance.LastQueryInfoJson);
-            //    if (qi != null) {
-            //        MpClipTileSortViewModel.Instance.SelectedSortType =
-            //            MpClipTileSortViewModel.Instance.SortTypes
-            //                .FirstOrDefault(x => x.SortType == qi.SortType);
-            //        MpClipTileSortViewModel.Instance.IsSortDescending = qi.IsDescending;
+            MpPlatformWrapper.Services.ClipboardMonitor.OnClipboardChanged += ClipboardChanged;
+            MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
+            //await Task.Delay(3000);
 
-            //        MpAvTagTrayViewModel.Instance.SelectTagCommand.Execute(qi.TagId);
+            if (!string.IsNullOrEmpty(MpPrefViewModel.Instance.LastQueryInfoJson)) {
+                var qi = JsonConvert.DeserializeObject<MpAvQueryInfo>(MpPrefViewModel.Instance.LastQueryInfoJson);
+                if (qi != null) {
+                    MpAvClipTileSortViewModel.Instance.SelectedSortTypeIdx = (int)qi.SortType;
+                    MpAvClipTileSortViewModel.Instance.IsSortDescending = qi.IsDescending;
 
-            //        MpSearchBoxViewModel.Instance.SearchText = qi.SearchText;
-            //        // NOTE Filter flags already set from Preferences
+                    MpAvTagTrayViewModel.Instance.SelectTagCommand.Execute(qi.TagId);
 
-            //        MpPlatformWrapper.Services.QueryInfo = qi;
+                    MpAvSearchBoxViewModel.Instance.SearchText = qi.SearchText;
+                    // NOTE Filter flags already set from Preferences
 
-
-            //        MpDataModelProvider.Init();
-            //    }
-            //}
-            //MpAvMainWindowViewModel.Instance.IsMainWindowLoading = false;
+                    MpPlatformWrapper.Services.QueryInfo = qi;
 
 
-            //MpDataModelProvider.QueryInfo.NotifyQueryChanged(true);
+                    MpDataModelProvider.Init();
+                }
+            }
+            MpAvMainWindowViewModel.Instance.IsMainWindowLoading = false;
+
+
+            MpDataModelProvider.QueryInfo.NotifyQueryChanged(true);
         }
 
 
@@ -2087,6 +2318,8 @@ namespace MonkeyPaste.Avalonia {
                     Items.Clear();
                     ClearPersistentWidths();
 
+                    FindTotalTileSize();
+
                     OnPropertyChanged(nameof(TotalTilesInQuery));
                     OnPropertyChanged(nameof(ClipTrayTotalWidth));
                     OnPropertyChanged(nameof(MaxScrollOffsetX));
@@ -2223,7 +2456,9 @@ namespace MonkeyPaste.Avalonia {
                 sw.Stop();
                 MpConsole.WriteLine($"Update tray of {Items.Count} items took: " + sw.ElapsedMilliseconds);
             },
-            (offsetIdx_Or_ScrollOffset_Arg) => !IsAnyBusy && !IsRequery);
+            (offsetIdx_Or_ScrollOffset_Arg) => {
+                return !IsAnyBusy && !IsRequery;
+            });
 
         public ICommand FlipTileCommand => new MpCommand<object>(
             async (tileToFlip) => {
@@ -2638,9 +2873,12 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     ttvm.LinkCopyItemCommand.Execute(ctvm.CopyItemId);
                 }
+                while(ttvm.IsBusy) {
+                    await Task.Delay(100);
+                }
 
 
-                await ctvm.TitleSwirlViewModel.InitializeAsync();
+                await ctvm.InitTitleLayers();
 
                 // trigger selection changed message to notify tag and parents of association change
 

@@ -38,7 +38,6 @@
     <None Remove="Utils\AvWrapper\Defnitions\TrayIcon\Mac\" />
     <None Remove="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
     <None Remove="CefGlue.Avalonia" />
-    <None Remove="Controls\ContentView\Mac\" />
     <None Remove="Dotnet.Bundle" />
     <None Remove="WebkitGtkSharp" />
     <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\" />
@@ -871,7 +870,6 @@
     <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\ContentView\CefNetWebView\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Base\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\" />

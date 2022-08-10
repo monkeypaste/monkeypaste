@@ -21,8 +21,9 @@ namespace MonkeyPaste {
 
         #region State
 
-        public static MpCursorType CurrentCursor { get; set; } = MpCursorType.Default;        
+        public static MpCursorType CurrentCursor { get; set; } = MpCursorType.Default;
 
+        public static bool IsCursorFrozen { get; set; } = false;
         #endregion
 
         #endregion
@@ -38,7 +39,7 @@ namespace MonkeyPaste {
         #region public static Methods
 
         public static void SetCursor(object sender, MpCursorType cursor) {
-            if(!MpBootstrapperViewModelBase.IsLoaded) {
+            if(!MpBootstrapperViewModelBase.IsLoaded || IsCursorFrozen) {
                 return;
             }
 

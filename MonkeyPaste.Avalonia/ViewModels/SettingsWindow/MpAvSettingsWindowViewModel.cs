@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSettingsWindowViewModel : MpViewModelBase {
@@ -60,7 +61,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-
+        public ICommand ShowSettingsWindowCommand => new MpCommand(
+            () => {
+                IsVisible = true;
+            });
         #endregion
     }
 }

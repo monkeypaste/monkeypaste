@@ -1,5 +1,6 @@
 <local:MpAvUserControl xmlns="https://github.com/avaloniaui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:core="clr-namespace:System;assembly=mscorlib"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:local="using:MonkeyPaste.Avalonia"
@@ -8,8 +9,8 @@
                        x:TypeArguments="local:MpAvClipTileViewModel"
                        x:CompileBindings="True"
                        mc:Ignorable="d"
-                       d:DesignWidth="800"
-                       d:DesignHeight="450"
+                       d:DesignWidth="260"
+                       d:DesignHeight="52"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileTitleView">
     <Grid x:Name="TitleContainerGrid"
           ColumnDefinitions="*,0.3*">
@@ -21,14 +22,84 @@
                  Stretch="Fill">
             <Canvas x:Name="SwirlCanvas"
                     Width="260"
-                    Height="52" />
+                    Height="52">
+                <Path x:Name="layer0"
+                      StrokeThickness="0"
+                      Fill="{Binding TitleLayerHexColors[0], Converter={StaticResource StringHexToBrushConverter}}">
+                    <Path.Data>
+                        <PathGeometry>
+                            <PathGeometry.Figures>
+                                <PathFigure IsClosed="True"
+                                            StartPoint="0,22">
+                                    <PathSegments>
+                                        <BezierSegment Point1="150,-10"
+                                                       Point2="160,85"
+                                                       Point3="270,40" />
+                                        <LineSegment Point="270,0" />
+                                        <LineSegment Point="0,0" />
+                                    </PathSegments>
+                                </PathFigure>
+                            </PathGeometry.Figures>
+                        </PathGeometry>
+                    </Path.Data>
+                </Path>
+                <Path x:Name="layer1"
+                      StrokeThickness="0"
+                      Fill="{Binding TitleLayerHexColors[1], Converter={StaticResource StringHexToBrushConverter}}">
+                    <Path.Data>
+                        <PathGeometry>
+                            <PathGeometry.Figures>
+                                <PathFigure IsClosed="True"
+                                            StartPoint="0,35">
+                                    <PathSegments>
+                                        <BezierSegment Point1="40,45"
+                                                       Point2="75,20"
+                                                       Point3="100,20" />
+                                        <BezierSegment Point1="185,20"
+                                                       Point2="139,20"
+                                                       Point3="270,40" />
+                                        <LineSegment Point="270,0" />
+                                        <LineSegment Point="0,0" />
+                                    </PathSegments>
+                                </PathFigure>
+                            </PathGeometry.Figures>
+                        </PathGeometry>
+                    </Path.Data>
+                </Path>
+                <Ellipse x:Name="layer2"
+                         StrokeThickness="0"
+                         Fill="{Binding TitleLayerHexColors[2], Converter={StaticResource StringHexToBrushConverter}}"
+                         Width="87"
+                         Height="28"
+                         Canvas.Left="165"
+                         Canvas.Top="24" />
+                <Path x:Name="layer3"
+                      StrokeThickness="0"
+                      Fill="{Binding TitleLayerHexColors[3], Converter={StaticResource StringHexToBrushConverter}}">
+                    <Path.Data>
+                        <PathGeometry>
+                            <PathGeometry.Figures>
+                                <PathFigure IsClosed="True"
+                                            StartPoint="0,55">
+                                    <PathSegments>
+                                        <QuadraticBezierSegment Point1="30,10"
+                                                                Point2="270,0" />
+                                        <LineSegment Point="0,0" />
+                                    </PathSegments>
+                                </PathFigure>
+                            </PathGeometry.Figures>
+                        </PathGeometry>
+                    </Path.Data>
+                </Path>
+            </Canvas>
+
         </Viewbox>
         <!--  Title Text Box  -->
         <Grid Grid.Column="0"
-              Margin="15,0,0,0"
               HorizontalAlignment="Left"
               VerticalAlignment="Stretch"
-              MaxWidth="100"
+              Margin="15,0,0,0"
+              MaxWidth="{Binding MaxTitleTextBoxWidth}"
               ClipToBounds="True"
               Background="{Binding TileTitleTextGridBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
               local:MpAvIsHoveringExtension.IsEnabled="True"
@@ -48,6 +119,8 @@
                      local:MpAvMarqueeTextBoxExtension.FinishEditCommand="{Binding FinishEditTitleCommand}"
                      local:MpAvMarqueeTextBoxExtension.IsReadOnly="{Binding IsTitleReadOnly, Mode=TwoWay}"
                      IsReadOnly="{Binding IsTitleReadOnly, Mode=OneWay}"
+                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                      HorizontalAlignment="Left"
                      VerticalAlignment="Center"
                      Background="White"
@@ -55,7 +128,10 @@
                      Text="{Binding CopyItemTitle, Mode=TwoWay}" />
         </Grid>
         <!--  Source Icon  -->
-        <Grid Grid.Column="1"
+        <Grid x:Name="SourceIconContainerGrid"
+              Grid.Column="1"
+              local:MpAvSizeObserverExtension.IsEnabled="False"
+              local:MpAvSizeObserverExtension.ObservedWidth="{Binding TitleIconWidth, Mode=OneWayToSource}"
               PointerPressed="SourceIconGrid_PointerPressed"
               HorizontalAlignment="Right"
               Margin="0,0,5,0"

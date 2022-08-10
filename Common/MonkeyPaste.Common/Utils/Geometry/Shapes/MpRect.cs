@@ -2,9 +2,19 @@
 
 namespace MonkeyPaste.Common {
     public class MpRect : MpShape {
+        public static MpRect Empty => new MpRect();
         public MpPoint Location {
             get => Points[0];
             set => Points[0] = value;
+        }
+
+        public double X {
+            get => Points[0].X;
+            set => Points[0].X = value;
+        }
+        public double Y {
+            get => Points[0].Y;
+            set => Points[0].Y = value;
         }
 
         public MpSize Size {
@@ -12,10 +22,43 @@ namespace MonkeyPaste.Common {
             set => Points[1] = new MpPoint(value.Width, value.Height);
         }
 
-        public double Left => Location.X;
-        public double Right => Location.X + Size.Width;
-        public double Top => Location.Y;
-        public double Bottom => Location.Y + Size.Height;
+        public double Left {
+            get => X;
+            set => X = value;
+        }
+
+        public double Top {
+            get => Y;
+            set => Y = value;
+        }
+
+        public double Right {
+            get => X + Width;
+            set {
+                if(value - X < 0) {
+                    //swap left & right
+                    double temp = X;
+                    X = value;
+                    Right = temp;
+                } else {
+                    Width = value - X;
+                }                
+            }
+        }
+        
+        public double Bottom {
+            get => Y + Height;
+            set {
+                if (value - Top < 0) {
+                    //swap left & right
+                    double temp = Y;
+                    Y = value;
+                    Bottom = temp;
+                } else {
+                    Height = value - Y;
+                }
+            }
+        }
 
         public double Width {
             get => Size.Width;

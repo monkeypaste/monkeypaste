@@ -185,6 +185,54 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region TotalLoopWaitMs AvaloniaProperty
+        public static int GetTotalLoopWaitMs(AvaloniaObject obj) {
+            return obj.GetValue(TotalLoopWaitMsProperty);
+        }
+
+        public static void SetTotalLoopWaitMs(AvaloniaObject obj, int value) {
+            obj.SetValue(TotalLoopWaitMsProperty, value);
+        }
+
+        public static readonly AttachedProperty<int> TotalLoopWaitMsProperty =
+            AvaloniaProperty.RegisterAttached<object, TextBox, int>(
+                "TotalLoopWaitMs",
+                1000);
+
+        #endregion
+
+        #region CurLoopWaitMs AvaloniaProperty
+        public static int GetCurLoopWaitMs(AvaloniaObject obj) {
+            return obj.GetValue(CurLoopWaitMsProperty);
+        }
+
+        public static void SetCurLoopWaitMs(AvaloniaObject obj, int value) {
+            obj.SetValue(CurLoopWaitMsProperty, value);
+        }
+
+        public static readonly AttachedProperty<int> CurLoopWaitMsProperty =
+            AvaloniaProperty.RegisterAttached<object, TextBox, int>(
+                "CurLoopWaitMs",
+                0);
+
+        #endregion
+
+        #region DistTraveled AvaloniaProperty
+        public static double GetDistTraveled(AvaloniaObject obj) {
+            return obj.GetValue(DistTraveledProperty);
+        }
+
+        public static void SetDistTraveled(AvaloniaObject obj, double value) {
+            obj.SetValue(DistTraveledProperty, value);
+        }
+
+        public static readonly AttachedProperty<double> DistTraveledProperty =
+            AvaloniaProperty.RegisterAttached<object, TextBox, double>(
+                "DistTraveled",
+                .0d);
+
+        #endregion
+
         #region IsEnabled AvaloniaProperty
         public static bool GetIsEnabled(AvaloniaObject obj) {
             return obj.GetValue(IsEnabledProperty);
@@ -477,6 +525,8 @@ namespace MonkeyPaste.Avalonia {
 
             async Task AnimateAsync(Canvas canvas) {
                 while (true) {
+                    int delayMs = 20;
+
                     if (!canvas.IsVisible || canvas.Children.Count < 2) {
                         return;
                     }
@@ -521,22 +571,50 @@ namespace MonkeyPaste.Avalonia {
                             nLeft2 = nRight1;
                         }
                     }
-
-                    Canvas.SetLeft(img1, nLeft1);
-                    Canvas.SetLeft(img2, nLeft2);
-
+                      
                     if (isReseting) {
                         if (Math.Abs(nLeft1) < deltaX || Math.Abs(nLeft2) < deltaX) {
                             Canvas.SetLeft(img1, 0);
                             Canvas.SetLeft(img2, img1.Width);
                             canvas.InvalidateVisual();
+
+                            int test = GetTotalLoopWaitMs(canvas);
+                            SetCurLoopWaitMs(canvas, 0);
+                            SetDistTraveled(canvas, 0);
                             return;
                         }
                     }
 
+                    double maxLoopDeltaX = 5;
+                    int curLoopDelayMs = GetCurLoopWaitMs(canvas);
+                    double distTraveled = GetDistTraveled(canvas);
+                    bool isInitialLoop = Math.Abs(distTraveled) < img1.Width;
+                    bool isLoopDelaying = !isInitialLoop &&
+                                            (Math.Abs(nLeft1) < maxLoopDeltaX || Math.Abs(nLeft2) < maxLoopDeltaX);
+
+                    if (isLoopDelaying) {
+                        //pause this cycle
+                        curLoopDelayMs += delayMs;
+                        // initial loop delay (snap to 0)
+                        nLeft1 = 0;
+                        nLeft2 = img1.Width;
+                    }
+                    if (curLoopDelayMs > 1000) {
+                        //loop delay is over reset elapsed and bump so not caught next pass
+                        curLoopDelayMs = 0;
+                        double vel_dir = GetMaxVelocity(canvas) > 0 ? 1 : -1;
+                        nLeft1 = (maxLoopDeltaX + 0.5) * vel_dir;
+                        nLeft2 = nLeft1 + img1.Width;
+                    }
+
+                    Canvas.SetLeft(img1, nLeft1);
+                    Canvas.SetLeft(img2, nLeft2);
+                    SetCurLoopWaitMs(canvas, curLoopDelayMs);
+                    SetDistTraveled(canvas, distTraveled + deltaX);
+
                     canvas.InvalidateVisual();
 
-                    await Task.Delay(20);
+                    await Task.Delay(delayMs);
                 }
             }
 

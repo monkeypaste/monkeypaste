@@ -26,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void MpAvClipTileView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayLayoutChanged);
+            //MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayLayoutChanged);
         }
 
 

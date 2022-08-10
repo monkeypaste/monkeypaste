@@ -17,6 +17,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvClipTileContentView_PointerPressed(object sender, PointerPressedEventArgs e) {
             if(!e.IsLeftPress()) {
+                e.Handled = false;
                 return;
             }
 

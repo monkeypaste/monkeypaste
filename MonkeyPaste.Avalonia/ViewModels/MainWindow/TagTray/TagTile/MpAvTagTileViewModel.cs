@@ -682,7 +682,7 @@ namespace MonkeyPaste.Avalonia {
                         while (HasModelChanged) {
                             await Task.Delay(100);
                         }
-                        await Task.WhenAll(MpAvClipTrayViewModel.Instance.Items.Select(x => x.TitleSwirlViewModel.InitializeAsync()));
+                        await Task.WhenAll(MpAvClipTrayViewModel.Instance.Items.Select(x => x.InitTitleLayers()));
                     });
                     break;
                 case nameof(TagTileTrayWidth):

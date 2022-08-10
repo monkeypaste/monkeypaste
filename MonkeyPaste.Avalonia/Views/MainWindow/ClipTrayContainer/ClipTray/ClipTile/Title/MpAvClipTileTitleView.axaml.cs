@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
             InitializeComponent();
             var sc = this.FindControl<Canvas>("SwirlCanvas");
             sc.AttachedToVisualTree += Sc_AttachedToVisualTree;
-            this.DataContextChanged += MpAvClipTileTitleView_DataContextChanged;
+            //this.DataContextChanged += MpAvClipTileTitleView_DataContextChanged;
         }
 
         private void MpAvClipTileTitleView_DataContextChanged(object sender, System.EventArgs e) {
@@ -122,7 +122,7 @@ namespace MonkeyPaste.Avalonia {
         }
         private void Sc_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             if (sender is Canvas swirlCanvas) {
-                CreateSwirl();     
+                //CreateSwirl();     
             }
         }
 

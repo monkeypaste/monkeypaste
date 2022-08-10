@@ -18,7 +18,7 @@ namespace MonkeyPaste.Avalonia
         // Avalonia configuration, don't remove; also used by visual designer.
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
-                            //.With(new Win32PlatformOptions { UseWgl = true })
+                            .With(new Win32PlatformOptions { UseWgl = true })
                             //.With(new AvaloniaNativePlatformOptions { UseGpu = !OperatingSystem.IsMacOS() })
                             //.With(new Win32PlatformOptions {
                             //    UseWgl = true,

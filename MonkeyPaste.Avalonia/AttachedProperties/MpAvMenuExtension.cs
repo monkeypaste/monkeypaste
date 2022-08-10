@@ -142,6 +142,8 @@ namespace MonkeyPaste.Avalonia {
                         control.AttachedToVisualTree += AttachedToVisualHandler;
                     }
                     control.DetachedFromVisualTree += DetachedToVisualHandler;
+                    //control.ContextMenu.ContextMenuOpening += ContextMenu_ContextMenuOpening;
+                    
                     control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);         
                 }
             }
@@ -156,6 +158,8 @@ namespace MonkeyPaste.Avalonia {
             void Control_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
                 if(sender is Control control) {
                     if (GetIsEnabled(control)) {
+                        e.Handled = false;
+
                         if (control.DataContext is MpISelectorItemViewModel sivm) {
                             if (e.IsLeftPress(control) || GetSelectOnRightClick(control)) {
                                 sivm.Selector.SelectedItem = control.DataContext;
@@ -181,7 +185,7 @@ namespace MonkeyPaste.Avalonia {
                         }
 
                         if (mivm == null) {
-                            e.Handled = GetSuppressDefaultRightClick(control);                            
+                            e.Handled = GetSuppressDefaultRightClick(control) && e.IsRightPress(control);                            
                             SetIsOpen(control, false);
                             return;
                         }
@@ -302,6 +306,11 @@ namespace MonkeyPaste.Avalonia {
             }
 
         }
+
+        private static void ContextMenu_ContextMenuOpening(object sender, CancelEventArgs e) {
+            throw new NotImplementedException();
+        }
+
         private static void Control_PointerReleased(object sender, PointerReleasedEventArgs e) {
             MpPlatformWrapper.Services.ContextMenuCloser.CloseMenu();
             e.Handled = false;

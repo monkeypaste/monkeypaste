@@ -95,8 +95,13 @@ namespace MonkeyPaste.Avalonia {
 
             void Control_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs? e) {
                 if (sender is Control control) {
-                    SetObservedWidth(control, control.Bounds.Width);
-                    SetObservedHeight(control, control.Bounds.Height);
+                    if(control.Bounds.Width != GetObservedWidth(control)) {
+                        SetObservedWidth(control, control.Bounds.Width);
+                    }
+                    if(control.Bounds.Height != GetObservedHeight(control)) {
+                        SetObservedHeight(control, control.Bounds.Height);
+                    }
+                    
                     //if(control.Name == "ClipTrayContainerBorder") {
                     //    MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.ClipTrayScreenWidth));
                     //    MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.ClipTrayScreenHeight));

@@ -10,6 +10,8 @@ using PropertyChanged;
 using System.Diagnostics;
 using System.Collections.Concurrent;
 using System.Threading;
+using Avalonia.Input;
+using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -22,6 +24,13 @@ namespace MonkeyPaste.Avalonia {
         public string _lastResult;
         public bool IsEditorInitialized { get; set; } = false;
 
+        public bool SuppressRightClick { get; set; } = true;
+        protected override void OnPointerPressed(PointerPressedEventArgs e) {
+            if(e.IsRightPress(this) && SuppressRightClick) {
+                return;
+            }
+            base.OnPointerPressed(e);
+        }
         public void SetJavascriptResult(string evalGuid, string result) {
             //lock(_lockObj) {
                 //if(_lastResult != null) {

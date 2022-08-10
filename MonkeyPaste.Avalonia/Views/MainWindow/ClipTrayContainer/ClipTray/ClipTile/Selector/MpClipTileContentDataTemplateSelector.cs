@@ -8,17 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    internal class MpClipTileContentDataTemplateSelector : IDataTemplate {
+    public class MpClipTileContentDataTemplateSelector : IDataTemplate {
+        public static bool UseCefNet = true;
         [Content]
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
         public IControl Build(object param) {
-            string key = string.Empty;
-            if (OperatingSystem.IsWindows() || OperatingSystem.IsMacOS()) {
-                key = "CefNetWebViewTemplate"; //
-            } else {
-                key = "CefWebViewTemplate";//"LinuxTemplate";
-            }
+            string key = UseCefNet ? "CefNetWebViewTemplate": "CefWebViewTemplate"; 
             return AvailableTemplates[key].Build(param); 
         }
 

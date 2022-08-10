@@ -648,6 +648,11 @@ namespace MonkeyPaste.Avalonia {
                 if (sender is DispatcherTimer timer &&
                    timer.Tag is ListBox lb &&
                    GetScrollViewer(lb) is ScrollViewer sv) {
+                    if(sv.DataContext is MpViewModelBase vm &&
+                        vm.IsBusy) {
+                        return;
+                    }
+
                     if (GetIsThumbDragging(lb)) {
                         SetVelocityX(lb, 0);
                         SetVelocityY(lb, 0);
