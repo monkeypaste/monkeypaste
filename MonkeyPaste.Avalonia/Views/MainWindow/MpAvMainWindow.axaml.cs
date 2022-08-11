@@ -83,8 +83,10 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                 case MpMessageType.MainWindowOrientationChanged: {
-                        UpdateResizerOrientation();
                         UpdateContentOrientation();
+                        UpdateResizerOrientation();
+
+
                         break;
                     }
             }
@@ -308,7 +310,7 @@ namespace MonkeyPaste.Avalonia {
 
             UpdateSidebarGridsplitter();
 
-            mwtg.InvalidateMeasure();
+            //mwtg.InvalidateMeasure();
         }
 
         private void UpdateSidebarGridsplitter() {

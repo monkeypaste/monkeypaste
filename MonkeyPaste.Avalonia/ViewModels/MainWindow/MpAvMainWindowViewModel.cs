@@ -761,8 +761,9 @@ namespace MonkeyPaste.Avalonia {
             });
 
         public ICommand CycleOrientationCommand => new MpCommand<object>(
-            (isCwArg) => {
-                if(isCwArg is bool isCw) {
+            (dirStrArg) => {
+                if(dirStrArg is string dirStr) {
+                    bool isCw = dirStr.ToLower() == "cw";
                     int nextOr = (int)MainWindowOrientationType + (isCw ? -1 : 1);
                     
                     if (nextOr >= Enum.GetNames(typeof(MpMainWindowOrientationType)).Length) {

@@ -26,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
 
             sv = this.FindControl<ScrollViewer>("ClipTrayScrollViewer");
             lb = this.FindControl<ListBox>("ClipTrayListBox");
-
+            
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
         }
 

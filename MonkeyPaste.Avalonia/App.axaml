@@ -112,7 +112,7 @@
 
     <!--<TrayIcon.Icons>
         <TrayIcons>
-            <TrayIcon Icon="/Assets/Icons/monkey.ico" 
+            <TrayIcon Icon="/Assets/Icons/monkey.ico"
                       Clicked="AppTrayIcon_Clicked"
                       ToolTipText="Monkey Paste">
                 <TrayIcon.Menu>
@@ -120,7 +120,8 @@
                         <NativeMenuItem Header="Show"
                                         Command="{Binding ShowWindowCommand,
                                                           Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />
-                        --><!--<NativeMenuItem Header="Settings"
+    -->
+    <!--<NativeMenuItem Header="Settings"
                                         Command="{Binding ToggleCommand}">
                             <NativeMenu>
                                 <NativeMenuItem Header="Option 1"
@@ -140,7 +141,8 @@
                                                 Header="Restore Defaults"
                                                 Command="{Binding ToggleCommand}" />
                             </NativeMenu>
-                        </NativeMenuItem>--><!--
+                        </NativeMenuItem>-->
+    <!--
                         <NativeMenuItem Header="Exit"
                                         Command="{Binding ExitApplicationCommand,
                                                           Source={x:Static local:MpAvSystemTrayViewModel.Instance}}" />

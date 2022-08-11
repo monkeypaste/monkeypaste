@@ -9,8 +9,8 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvMainWindowTitleMenuView : MpAvUserControl<MpAvMainWindowViewModel> {
         public MpAvMainWindowTitleMenuView() {
             InitializeComponent();
-            var ltb = this.FindControl<Button>("MainWindowOrientationButton");
-            ltb.AddHandler(Button.PointerPressedEvent, Ltb_PointerPressed, RoutingStrategies.Tunnel);
+            //var ltb = this.FindControl<Button>("MainWindowOrientationButton");
+            //ltb.AddHandler(Button.PointerPressedEvent, Ltb_PointerPressed, RoutingStrategies.Tunnel);
         }
 
         private void Ltb_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {

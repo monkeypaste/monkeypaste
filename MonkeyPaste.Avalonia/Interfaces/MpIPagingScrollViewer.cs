@@ -6,7 +6,9 @@ namespace MonkeyPaste.Avalonia {
     public interface MpIPagingScrollViewerViewModel : MpIViewModel {
         bool CanScroll { get; }
         bool IsScrollingIntoView { get; set; }
-        bool IsThumbDragging { get; set; }
+        bool IsThumbDraggingX { get; set; }
+        bool IsThumbDraggingY { get; set; }
+        bool IsThumbDragging { get; }
         MpAvClipTrayLayoutType LayoutType { get; set; }
         Orientation ListOrientation { get; }
         double MaxScrollOffsetX { get; }

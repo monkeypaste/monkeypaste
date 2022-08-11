@@ -5,7 +5,9 @@ using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Threading;
+using Avalonia.Utilities;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -239,16 +241,68 @@ namespace MonkeyPaste.Avalonia {
         public static bool GetIsThumbDragging(AvaloniaObject obj) {
             return obj.GetValue(IsThumbDraggingProperty);
         }
-
         public static void SetIsThumbDragging(AvaloniaObject obj, bool value) {
             obj.SetValue(IsThumbDraggingProperty, value);
         }
-
         public static readonly AttachedProperty<bool> IsThumbDraggingProperty =
             AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
                 "IsThumbDragging",
                 false,
                 false);
+
+        #endregion
+
+        #region IsThumbDraggingX AvaloniaProperty
+        public static bool GetIsThumbDraggingX(AvaloniaObject obj) {
+            return obj.GetValue(IsThumbDraggingXProperty);
+        }
+
+        public static void SetIsThumbDraggingX(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsThumbDraggingXProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsThumbDraggingXProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
+                "IsThumbDraggingX",
+                false,
+                false,
+                BindingMode.TwoWay);
+
+        #endregion
+
+        #region IsThumbDraggingY AvaloniaProperty
+        public static bool GetIsThumbDraggingY(AvaloniaObject obj) {
+            return obj.GetValue(IsThumbDraggingYProperty);
+        }
+
+        public static void SetIsThumbDraggingY(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsThumbDraggingYProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsThumbDraggingYProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
+                "IsThumbDraggingY",
+                false,
+                false,
+                BindingMode.TwoWay);
+
+        #endregion
+
+        #region IsScrollJumping AvaloniaProperty
+        public static bool GetIsScrollJumping(AvaloniaObject obj) {
+            return obj.GetValue(IsScrollJumpingProperty);
+        }
+
+        public static void SetIsScrollJumping(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsScrollJumpingProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsScrollJumpingProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
+                "IsScrollJumping",
+                false,
+                false,
+                BindingMode.TwoWay);
 
         #endregion
 
@@ -319,6 +373,8 @@ namespace MonkeyPaste.Avalonia {
                 false);
 
         private static void HandleIsEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+            //MpPoint lastMousePosition = null;
+
             if (e.NewValue is bool isEnabledVal && isEnabledVal) {
                 if (element is ListBox lb) {
                     if (lb.IsInitialized) {
@@ -374,14 +430,14 @@ namespace MonkeyPaste.Avalonia {
                             await Task.Delay(1000);
                         }
 
-                        var lb_sv = lb.GetVisualDescendant<ScrollViewer>();
+                        //var lb_sv = lb.GetVisualDescendant<ScrollViewer>();
 
-                        lb_sv.EffectiveViewportChanged += async (s, e) => {
-                            sv.Tag = lb;
-                            while (!BindScrollViewerAndTracks(lb)) {
-                                await Task.Delay(1000);
-                            }
-                        };
+                        //lb_sv.EffectiveViewportChanged += async (s, e) => {
+                        //    sv.Tag = lb;
+                        //    while (!BindScrollViewerAndTracks(lb)) {
+                        //        await Task.Delay(1000);
+                        //    }
+                        //};
 
                         sv.EffectiveViewportChanged += async(s, e) => {
                             sv.Tag = lb;
@@ -396,23 +452,35 @@ namespace MonkeyPaste.Avalonia {
             void DetachedFromVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
                 if (s is ListBox lb) {
                     if (GetScrollViewer(lb) is ScrollViewer sv) {
-                        if (sv.TryGetVisualDescendants<Track>(out var tracks)) {
-                            foreach (var track in tracks) {
-                                track.RemoveHandler(
-                                    ListBox.PointerReleasedEvent,
-                                    PreviewTrackPointerReleasedHandler);
+                        sv.RemoveHandler(
+                                    ScrollViewer.PointerPressedEvent,
+                                    ScrollViewerPointerPressedHandler);
 
-                                if (track.Thumb is Thumb thumb) {
-                                    thumb.RemoveHandler(
-                                            ListBox.PointerPressedEvent,
-                                            PreviewThumbPointerPressedHandler);
+                        sv.RemoveHandler(
+                            ScrollViewer.PointerMovedEvent,
+                            ScrollViewerPointerMovedHandler);
+                        sv.RemoveHandler(
+                            ScrollViewer.PointerReleasedEvent,
+                            ScrollViewerPointerReleasedHandler);
 
-                                    thumb.RemoveHandler(
-                                        ListBox.PointerMovedEvent,
-                                        PreviewThumbPointerMovedHandler);
-                                }
-                            }
-                        }
+                        //if (sv.TryGetVisualDescendants<Track>(out var tracks)) {
+                        //    foreach (var track in tracks) {
+                        //        track.RemoveHandler(
+                        //            ListBox.PointerReleasedEvent,
+                        //            PreviewTrackPointerReleasedHandler);
+
+
+                        //        if (track.Thumb is Thumb thumb) {
+                        //            thumb.RemoveHandler(
+                        //                    ListBox.PointerPressedEvent,
+                        //                    PreviewThumbPointerPressedHandler);
+
+                        //            thumb.RemoveHandler(
+                        //                ListBox.PointerMovedEvent,
+                        //                PreviewThumbPointerMovedHandler);
+                        //        }
+                        //    }
+                        //}
                     }
                     lb.AttachedToVisualTree -= AttachedToVisualHandler;
                     lb.DetachedFromVisualTree -= DetachedFromVisualHandler;
@@ -470,174 +538,254 @@ namespace MonkeyPaste.Avalonia {
             bool BindScrollViewerAndTracks(ListBox lb) {
                 if (GetScrollViewer(lb) is ScrollViewer sv &&
                     sv.DataContext is MpIPagingScrollViewerViewModel psvvm) {
-                    
-                    if (sv.TryGetVisualDescendants<Track>(out var tracks) && tracks.Count() > 0) {
+                    if (sv.TryGetVisualDescendants<ScrollBar>(out var bars) && bars.Count() > 0) {
+                        foreach(var sb in bars) {
 
-                        var lb_sv = lb.GetVisualDescendant<ScrollViewer>();
-                        lb_sv.Bind(
-                            ScrollViewer.HorizontalScrollBarValueProperty,
-                            new Binding() {
-                                Source = lb.DataContext,
-                                Path = nameof(psvvm.ScrollOffsetX)
-                            });
-
-                        lb_sv.Bind(
-                            ScrollViewer.VerticalScrollBarValueProperty,
-                            new Binding() {
-                                Source = lb.DataContext,
-                                Path = nameof(psvvm.ScrollOffsetY)
-                            });
-
-                        //sv.Bind(
-                        //    ScrollViewer.HorizontalScrollBarValueProperty,
-                        //    new Binding() {
-                        //        Source = lb.DataContext,
-                        //        Path = nameof(psvvm.ScrollOffsetX)
-                        //    });
-
-                        //sv.Bind(
-                        //    ScrollViewer.VerticalScrollBarValueProperty,
-                        //    new Binding() {
-                        //        Source = lb.DataContext,
-                        //        Path = nameof(psvvm.ScrollOffsetY)
-                        //    });
-                        //if(sv.TryGetVisualDescendants<ScrollBar>(out var scrollBars) && scrollBars.Count() > 0) {
-                        //    foreach(var sb in scrollBars) {
-                        //        sb.GetObservable(ScrollBar.BoundsProperty).Subscribe(value => {
-                        //            if (sb.Orientation == Orientation.Horizontal) {
-                        //                MpConsole.WriteLine("H Bounds change, size: " + value.Size);
-                        //                psvvm.HorizontalScrollBarDesiredSize = value.Size;
-                        //            } else {
-                        //                MpConsole.WriteLine("V Bounds change, size: " + value.Size);
-                        //                psvvm.VerticalScrollBarDesiredSize = value.Size;
-                        //            }
-                        //        });
-                        //    }
-                        //}
-                        foreach (var track in tracks) {
-                            track.Tag = lb;
-                            track.IsThumbDragHandled = true;                            
-
-                            track.Bind(
-                                    Track.ValueProperty,
-                                    new Binding() {
-                                        Source = lb.DataContext,
-                                        Path = track.Orientation == Orientation.Horizontal ?
-                                                nameof(psvvm.ScrollOffsetX) :
-                                                nameof(psvvm.ScrollOffsetY),
-                                    });
-
-                            track.Bind(
-                                    Track.MaximumProperty,
-                                    new Binding() {
-                                        Source = lb.DataContext,
-                                        Path = track.Orientation == Orientation.Horizontal ?
-                                                nameof(psvvm.MaxScrollOffsetX) :
-                                                nameof(psvvm.MaxScrollOffsetY)});
-
-                            track.Minimum = 0;
                             
-                            track.AddHandler(
-                                Track.PointerReleasedEvent,
-                                PreviewTrackPointerReleasedHandler,
-                                RoutingStrategies.Tunnel);
+                            //sb.PointerReleased += PreviewTrackPointerReleasedHandler;
 
+                            if (sv.TryGetVisualDescendants<Track>(out var tracks) && tracks.Count() > 0) {
 
-                            if (track.Thumb is Thumb thumb) {
-                                thumb.Tag = lb;
-
-                                thumb.AddHandler(
-                                    Thumb.PointerPressedEvent,
-                                    PreviewThumbPointerPressedHandler,
+                                sv.AddHandler(
+                                    ScrollViewer.PointerPressedEvent,
+                                    ScrollViewerPointerPressedHandler,
                                     RoutingStrategies.Tunnel);
 
-                                thumb.AddHandler(
-                                    Thumb.PointerMovedEvent,
-                                    PreviewThumbPointerMovedHandler,
+                                sv.AddHandler(
+                                    ScrollViewer.PointerMovedEvent,
+                                    ScrollViewerPointerMovedHandler,
                                     RoutingStrategies.Tunnel);
+                                sv.AddHandler(
+                                    ScrollViewer.PointerReleasedEvent,
+                                    ScrollViewerPointerReleasedHandler,
+                                    RoutingStrategies.Tunnel);
+                                //var lb_sv = lb.GetVisualDescendant<ScrollViewer>();
+
+                                //lb_sv.Bind(
+                                //    ScrollViewer.HorizontalScrollBarValueProperty,
+                                //    new Binding() {
+                                //        Source = lb.DataContext,
+                                //        Path = nameof(psvvm.ScrollOffsetX)
+                                //    });
+
+                                //lb_sv.Bind(
+                                //    ScrollViewer.VerticalScrollBarValueProperty,
+                                //    new Binding() {
+                                //        Source = lb.DataContext,
+                                //        Path = nameof(psvvm.ScrollOffsetY)
+                                //    });
+
+                                //sv.Bind(
+                                //    ScrollViewer.HorizontalScrollBarValueProperty,
+                                //    new Binding() {
+                                //        Source = lb.DataContext,
+                                //        Path = nameof(psvvm.ScrollOffsetX)
+                                //    });
+
+                                //sv.Bind(
+                                //    ScrollViewer.VerticalScrollBarValueProperty,
+                                //    new Binding() {
+                                //        Source = lb.DataContext,
+                                //        Path = nameof(psvvm.ScrollOffsetY)
+                                //    });
+                                //if(sv.TryGetVisualDescendants<ScrollBar>(out var scrollBars) && scrollBars.Count() > 0) {
+                                //    foreach(var sb in scrollBars) {
+                                //        sb.GetObservable(ScrollBar.BoundsProperty).Subscribe(value => {
+                                //            if (sb.Orientation == Orientation.Horizontal) {
+                                //                MpConsole.WriteLine("H Bounds change, size: " + value.Size);
+                                //                psvvm.HorizontalScrollBarDesiredSize = value.Size;
+                                //            } else {
+                                //                MpConsole.WriteLine("V Bounds change, size: " + value.Size);
+                                //                psvvm.VerticalScrollBarDesiredSize = value.Size;
+                                //            }
+                                //        });
+                                //    }
+                                //}
+                                foreach (var track in tracks) {
+                                    track.Tag = lb;
+                                    track.IsThumbDragHandled = true;
+
+                                    //track.Bind(
+                                    //        Track.ValueProperty,
+                                    //        new Binding() {
+                                    //            Source = lb.DataContext,
+                                    //            Path = track.Orientation == Orientation.Horizontal ?
+                                    //                    nameof(psvvm.ScrollOffsetX) :
+                                    //                    nameof(psvvm.ScrollOffsetY),
+                                    //        });
+
+                                    track.Bind(
+                                            Track.MaximumProperty,
+                                            new Binding() {
+                                                Source = lb.DataContext,
+                                                Path = track.Orientation == Orientation.Horizontal ?
+                                                        nameof(psvvm.MaxScrollOffsetX) :
+                                                        nameof(psvvm.MaxScrollOffsetY)
+                                            });
+
+                                    track.Minimum = 0;
+
+                                    //track.PointerReleased += PreviewTrackPointerReleasedHandler;
+                                    //track.PointerMoved += TrackPointerMovedHandler;
+                                    
+
+                                    //track.AddHandler(
+                                    //    Track.PointerReleasedEvent,
+                                    //    PreviewTrackPointerReleasedHandler,
+                                    //    RoutingStrategies.Tunnel);
+
+
+                                    if (track.Thumb is Thumb thumb) {
+                                        thumb.Tag = lb;
+                                        thumb.RenderTransform = new TranslateTransform();
+
+                                        //thumb.PointerPressed += PreviewThumbPointerPressedHandler;
+                                        //thumb.PointerMoved += PreviewThumbPointerMovedHandler;
+
+                                        //thumb.AddHandler(
+                                        //    Thumb.PointerPressedEvent,
+                                        //    PreviewThumbPointerPressedHandler,
+                                        //    RoutingStrategies.Tunnel);
+
+                                        //thumb.AddHandler(
+                                        //    Thumb.PointerMovedEvent,
+                                        //    PreviewThumbPointerMovedHandler,
+                                        //    RoutingStrategies.Tunnel);
+                                    }
+
+
+                                }
+
+                                return true;
                             }
-
-
                         }
-
-                        return true;
                     }
                 }
                 return false;
             }
 
 
-            #region Track Events
+            #region Scroll Viewer Events
 
-            void PreviewTrackPointerReleasedHandler(object? s, PointerReleasedEventArgs e) {
-                if (s is Track track &&
-                    track.Tag is ListBox lb) {
-                    //MpDebuggerHelper.Break();
-                    MpConsole.WriteLine("Track Mouse Up");
-                    if(GetIsThumbDragging(lb)) {
-                        SetIsThumbDragging(lb, false);                        
-                    } else {
-                        var track_mp = e.GetPosition(track);
-                        double new_track_value = track.ValueFromPoint(track_mp); 
-                        if(track.Orientation == Orientation.Horizontal) {
-                            SetScrollOffsetX(lb, new_track_value);
-                        } else {
-                            SetScrollOffsetY(lb, new_track_value);
+            void ScrollViewerPointerPressedHandler(object? s, PointerPressedEventArgs e) {
+                if (s is ScrollViewer sv &&
+                    sv.Tag is ListBox lb &&
+                    sv.TryGetVisualDescendants<ScrollBar>(out var bars) &&
+                    bars.Count() > 0) {
+                    foreach (var sb in bars) {
+                        if (sb.Bounds.Contains(e.GetPosition(sb.Parent))) {
+                            if(sb.GetVisualDescendant<Track>() is Track track) {
+                                if(track.Bounds.Contains(e.GetPosition(track.Parent))) {
+                                    if(track.GetVisualDescendant<Thumb>() is Thumb thumb) {
+                                        var track_mp = e.GetPosition(track);
+                                        double new_track_value = track.ValueFromPoint(track_mp);
+                                        bool pressOnThumb = (e.Source as Control).GetVisualAncestor<Thumb>() != null;
+                                        if (track.Orientation == Orientation.Horizontal) {
+                                            SetIsThumbDraggingX(lb, true);
+                                            if (thumb.RenderTransform is TranslateTransform tt) {
+                                                if(pressOnThumb) {
+                                                    tt.X = 0;
+                                                } else {
+                                                    double hw = thumb.Bounds.Width / 2;
+                                                    double tx_min = -thumb.Bounds.X;
+                                                    double tx_max = track.Bounds.Width - hw - thumb.Bounds.X;
+                                                    double tx = track_mp.X - hw - thumb.Bounds.X;
+                                                    tt.X = Math.Max(tx_min, Math.Min(tx, tx_max));
+                                                }
+                                            }
+                                            //sv.ScrollToHorizontalOffset(new_track_value);
+                                        } else {
+                                            SetIsThumbDraggingY(lb, true);
+                                            if (thumb.RenderTransform is TranslateTransform tt) {
+                                                tt.Y = track_mp.Y;
+                                            }
+                                            //sv.ScrollToVerticalOffset(new_track_value);
+                                        }
+                                        
+                                        //track.Value = new_track_value;
+                                        e.Pointer.Capture(thumb);
+                                        e.Handled = true;
+                                    }
+
+                                } 
+                            }
                         }
                     }
-                    
                 }
-                e.Handled = true;
             }
 
-            #endregion
-
-            #region Thumb Events
-
-            Point lastMousePosition;
-
-            void PreviewThumbPointerPressedHandler(object? s, PointerPressedEventArgs e) {
-                if (s is Thumb thumb &&
-                    thumb.Tag is ListBox lb) {
-
-                    MpConsole.WriteLine("Thumb Mouse Down");
-
-                    SetIsThumbDragging(lb, true);
-                    e.Pointer.Capture(thumb);
-                    lastMousePosition = e.GetPosition(MpAvMainWindow.Instance);
-                }
-                e.Handled = true;
-            }
-
-            void PreviewThumbPointerMovedHandler(object? s, PointerEventArgs e) {
-                if (s is Thumb thumb &&
-                    thumb.Tag is ListBox lb &&
-                    GetIsThumbDragging(lb)) {
-                    var mp = e.GetPosition(MpAvMainWindow.Instance);
-
-                    var track = thumb.GetVisualAncestor<Track>();
-                    if (track.Orientation == Orientation.Horizontal) {
-                        double deltaX = mp.X - lastMousePosition.X;
-                        double deltaValue = track.ValueFromDistance(deltaX, 0);
-
-                        double scrollOffsetX = GetScrollOffsetX(lb);
-                        double newScrollOffset = scrollOffsetX + deltaValue;
-
-                        MpConsole.WriteLine($"DeltaX: {deltaX} DeltaValue: {deltaValue} ScrollOffsetX: {scrollOffsetX} New ScrollOffsetX: {newScrollOffset}");
-                        SetScrollOffsetX(lb, newScrollOffset);
+            void ScrollViewerPointerMovedHandler(object? s, PointerEventArgs e) {
+                if (//s is Track track &&
+                    //s is ScrollBar sb &&
+                    s is ScrollViewer sv &&
+                    sv.Tag is ListBox lb &&
+                    GetIsThumbDragging(lb) &&
+                    sv.TryGetVisualDescendants<Track>(out var tracks)) {
+                    Track track = null;
+                    if(GetIsThumbDraggingX(lb)) {
+                        track = tracks.FirstOrDefault(x => x.Orientation == Orientation.Horizontal);
                     } else {
-                        double deltaY = mp.Y - lastMousePosition.Y;
-                        double deltaValue = track.ValueFromDistance(deltaY, 0);
-
-                        double scrollOffsetY = GetScrollOffsetY(lb);
-                        double newScrollOffset = scrollOffsetY + deltaValue;
-
-                        MpConsole.WriteLine($"DeltaY: {deltaY} DeltaValue: {deltaValue} ScrollOffsetY: {scrollOffsetY} New ScrollOffsetY: {newScrollOffset}");
-                        SetScrollOffsetY(lb, newScrollOffset);
+                        track = tracks.FirstOrDefault(x => x.Orientation == Orientation.Vertical);
                     }
-                    lastMousePosition = e.GetPosition(MpAvMainWindow.Instance);
+                    var thumb = track.GetVisualDescendant<Thumb>();
+                    
+                    var track_mp = e.GetPosition(track);
+                    double newScrollOffset;
+
+                    if (track.Orientation == Orientation.Horizontal) {
+                        newScrollOffset = track.ValueFromPoint(track_mp);
+                        if (thumb.RenderTransform is TranslateTransform tt) {
+                            double hw = thumb.Bounds.Width / 2;
+                            double tx_min = -thumb.Bounds.X;
+                            double tx_max = track.Bounds.Width - hw - thumb.Bounds.X;
+                            double tx = track_mp.X - hw - thumb.Bounds.X;
+                            tt.X = Math.Max(tx_min, Math.Min(tx, tx_max));
+                        }
+                        //sv.ScrollToHorizontalOffset(newScrollOffset);
+                    } else {
+                        newScrollOffset = track.ValueFromPoint(track_mp);
+                        if (thumb.RenderTransform is TranslateTransform tt) {
+                            tt.Y = MathUtilities.Clamp(track_mp.Y, 0, track.Bounds.Height);
+                        }
+                        //sv.ScrollToVerticalOffset(newScrollOffset);
+                    }
+                    //track.Value = newScrollOffset;
+                    e.Handled = true;
                 }
-                e.Handled = true;
+            }
+
+            void ScrollViewerPointerReleasedHandler(object? s, PointerReleasedEventArgs e) {
+                if (s is ScrollViewer sv &&
+                    sv.Tag is ListBox lb) {
+                    if (GetIsThumbDragging(lb) && 
+                        e.Source is Thumb thumb &&
+                        thumb.GetVisualAncestor<Track>() is Track track) {
+                        //finish thumb drag
+                        if (GetIsThumbDraggingX(lb)) {
+                            if (thumb.RenderTransform is TranslateTransform tt) {
+                                double hw = thumb.Bounds.Width / 2;
+                                double x = tt.X + thumb.Bounds.X + hw;
+                                track.Value = track.ValueFromPoint(new Point(x, 0));
+                                tt.X = 0;
+                                SetScrollOffsetX(lb, track.Value);
+                                SetIsThumbDraggingX(lb, false);
+                            }
+
+                        } else if (GetIsThumbDraggingY(lb)) {
+                            if (thumb.RenderTransform is TranslateTransform tt) {
+                                tt.Y = 0;
+                            }
+                            SetScrollOffsetY(lb, sv.Offset.Y);
+                            SetIsThumbDraggingY(lb, false);
+                        } else {
+                            // shouldn't happen
+                            Debugger.Break();
+                        }
+                        e.Pointer.Capture(null);
+                        e.Handled = true;
+                        return;
+                    }
+                }
             }
 
             #endregion
@@ -689,18 +837,30 @@ namespace MonkeyPaste.Avalonia {
                     vx *= GetFrictionX(lb);
                     vy *= GetFrictionY(lb);
 
+                    // set scroll offset for container scroll viewer (bound to tracks)
                     SetScrollOffsetX(lb, scrollOffsetX);
                     SetScrollOffsetY(lb, scrollOffsetY);
 
+                    //if(!GetIsThumbDragging(lb)) 
+                        {
+                        // manually set actual listbox scroll
+                        // so thumb drag smoothly scrolls (updates visual container sv)
+                        // and load more check doesn't occur to mouse up
+                        var lb_sv = lb.GetVisualDescendant<ScrollViewer>();
+                        lb_sv.ScrollToHorizontalOffset(scrollOffsetX);
+                        lb_sv.ScrollToVerticalOffset(scrollOffsetY);
+
+                        sv.ScrollToHorizontalOffset(scrollOffsetX);
+                        sv.ScrollToVerticalOffset(scrollOffsetY);
+                    }
+
                     SetVelocityX(lb, vx);
                     SetVelocityY(lb, vy);
-                    
+
                     //sv.ScrollToHorizontalOffset(scrollOffsetX);
                     //sv.ScrollToVerticalOffset(scrollOffsetY);
 
-                    //var lb_sv = lb.GetVisualDescendant<ScrollViewer>();
-                    //lb_sv.ScrollToHorizontalOffset(scrollOffsetX);
-                    //lb_sv.ScrollToVerticalOffset(scrollOffsetY);
+
                 }
             }
         }

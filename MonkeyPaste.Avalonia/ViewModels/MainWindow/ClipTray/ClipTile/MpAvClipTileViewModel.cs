@@ -74,7 +74,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-        public string[] TitleLayerHexColors { get; private set; }
+        public string[] TitleLayerHexColors { get; private set; } = Enumerable.Repeat(MpSystemColors.Transparent, 4).ToArray();
 
         public string TileBorderHexColor {
             get {
@@ -103,7 +103,10 @@ namespace MonkeyPaste.Avalonia {
 
         public double OuterSpacing => 5;
         public double InnerSpacing => 0;
-        public double MinSize => Parent == null ? 0 : Parent.DefaultItemSizeLength;
+        public MpSize MinSize => Parent == null ? MpSize.Empty : Parent.DefaultItemSize;
+
+        public double MinWidth => MinSize.Width;
+        public double MinHeight => MinSize.Height;
 
         public double TitleIconWidth { get; set; }
         public double MaxTitleTextBoxWidth => BoundWidth - TitleIconWidth;
@@ -389,7 +392,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-
+        public bool IsCustomSize => Parent == null ? false : Parent.TryGetByPersistentSize_ById(CopyItemId, out Size size);
         public bool IsPlaceholder => CopyItem == null || IsPinned;
 
         #region Drag & Drop
@@ -656,6 +659,11 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch(msg) {
+                case MpMessageType.MainWindowOrientationChanged:
+                case MpMessageType.TrayLayoutChanged:
+                case MpMessageType.MainWindowSizeChanged:
+                    //OnPropertyChanged(nameof())
+                    break;
             }
         }
 
@@ -1288,7 +1296,7 @@ namespace MonkeyPaste.Avalonia {
                 var ds = UnformattedContentSize;//CopyItemData.ToFlowDocument().GetDocumentSize();
 
                 //if item's content is larger than expanded width make sure it gets that width (will show scroll bars)
-                double w = Math.Max(ds.Width, MinSize);// MpMeasurements.Instance.ClipTileContentMinMaxWidth);
+                double w = Math.Max(ds.Width, MinWidth);// MpMeasurements.Instance.ClipTileContentMinMaxWidth);
 
                 //let height in expanded mode match content's height
                 double h = ds.Height;
@@ -1563,7 +1571,7 @@ namespace MonkeyPaste.Avalonia {
             if (ci != null && Parent.TryGetByPersistentSize_ById(ci.Id, out Size uniqueSize)) {
                 BoundSize = uniqueSize.ToPortableSize();
             } else {
-                BoundSize = new MpSize(MinSize, MinSize);
+                BoundSize = MinSize;
             }
 
             CopyItem = ci;
@@ -2174,6 +2182,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     MpMessenger.Send<MpMessageType>(IsContentReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
                     Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
+                    Parent.OnPropertyChanged(nameof(Parent.IsVerticalScrollBarVisible));
 
                     OnPropertyChanged(nameof(IsHorizontalScrollbarVisibile));
                     OnPropertyChanged(nameof(IsVerticalScrollbarVisibile));
@@ -2238,14 +2247,10 @@ namespace MonkeyPaste.Avalonia {
                     ResetExpensiveDetails();
                     break;
                 case nameof(MinSize):
-                    if (MinSize > 0) {
-                        if (BoundWidth <= 0) {
-                            BoundWidth = MinSize;
-                        }
-                        if (BoundHeight <= 0) {
-                            BoundHeight = MinSize;
-                        }
+                    if(IsCustomSize) {
+                        break;
                     }
+                    BoundSize = MinSize;
                     break;
                 case nameof(BoundSize):
                     if (Parent.TryGetByPersistentSize_ById(CopyItemId, out Size uniqueSize)) {
@@ -2256,6 +2261,8 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     Parent.UpdateTileRectCommand.Execute(this);
+                    OnPropertyChanged(nameof(BoundWidth));
+                    OnPropertyChanged(nameof(BoundHeight));
                     break;
                 case nameof(TrayLocation):
                     if (Next == null) {
@@ -2267,6 +2274,8 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     Parent.UpdateTileRectCommand.Execute(Next);
+                    OnPropertyChanged(nameof(TrayX));
+                    OnPropertyChanged(nameof(TrayY));
                     //Next.OnPropertyChanged(nameof(Next.TrayX));
                     break;
                 case nameof(QueryOffsetIdx):

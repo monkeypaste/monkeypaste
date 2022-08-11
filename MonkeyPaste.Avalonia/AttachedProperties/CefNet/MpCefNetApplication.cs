@@ -12,38 +12,17 @@ using MonkeyPaste.Common.Avalonia;
 namespace MonkeyPaste.Avalonia {
     public class MpCefNetApplication : CefNetApplication {
         #region Private Variables
-
-        private Timer messagePump;
-        private const int messagePumpDelay = 10;
-
         #endregion
 
         #region Constants
 
         public const string JS_REF_ERROR = "JS_REF_ERROR";
+
         #endregion
 
         #region Statics
-
-
         #endregion
 
-        #region Events
-
-        public static event EventHandler<object> ProcessMessageReceived;
-
-        #endregion
-
-        protected override void OnContextCreated(CefBrowser browser, CefFrame frame, CefV8Context context) {
-            base.OnContextCreated(browser, frame, context);
-        }
-
-
-        public Action<long> ScheduleMessagePumpWorkCallback { get; set; }
-
-        protected override void OnScheduleMessagePumpWork(long delayMs) {
-            ScheduleMessagePumpWorkCallback(delayMs);
-        }
 
         public static void ResetEnv() {
             //if(OperatingSystem.IsWindows()) {
@@ -67,42 +46,37 @@ namespace MonkeyPaste.Avalonia {
         
         private MpCefNetApplication(IClassicDesktopStyleApplicationLifetime desktop) {
             string cefRootDir = @"C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia\cef";
+            string localDirPath = string.Empty;
+            string resourceDirPath = string.Empty;
+
+            if(OperatingSystem.IsWindows()) {
+                cefRootDir = Path.Combine(cefRootDir, "win");
+                localDirPath = Path.Combine(cefRootDir, "Resources", "locales");
+                resourceDirPath = Path.Combine(cefRootDir, "Resources");
+            } else if(OperatingSystem.IsMacOS()) {
+                cefRootDir = Path.Combine(cefRootDir, "mac");
+            } else if(OperatingSystem.IsLinux()) {
+                cefRootDir = Path.Combine(cefRootDir, "linux");
+            } else {
+                throw new Exception("No cef implementation found for this architecture");
+            }
+            
 
             var settings = new CefSettings();
             settings.NoSandbox = true;
-
-            //settings.ExternalMessagePump = true;
             settings.MultiThreadedMessageLoop = true;
             settings.WindowlessRenderingEnabled = false;
-            settings.LocalesDirPath = Path.Combine(cefRootDir, "Resources", "locales");
-            settings.ResourcesDirPath = Path.Combine(cefRootDir, "Resources");
+            settings.LocalesDirPath = localDirPath;
+            settings.ResourcesDirPath = resourceDirPath;
             settings.LogSeverity = CefLogSeverity.Error;
 
-            desktop.Startup += Desktop_Startup;
             desktop.Exit += (s,e) => Shutdown();            
             
             CefProcessMessageReceived += CefApp_CefProcessMessageReceived;
 
-            ScheduleMessagePumpWorkCallback = ScheduleMessagePumpCallback;
-
             Initialize(Path.Combine(cefRootDir, "Release"), settings);
         }
 
-        private void Desktop_Startup(object sender, ControlledApplicationLifetimeStartupEventArgs e) {
-            if (UsesExternalMessageLoop) {
-                messagePump = new Timer(_ => Dispatcher.UIThread.Post(CefApi.DoMessageLoopWork), null, messagePumpDelay, messagePumpDelay);
-            }
-        }
-
-
-        public void OnFrameworkShutdown() {
-            messagePump?.Dispose();
-        }
-
-        private async void ScheduleMessagePumpCallback(long delayMs) {
-            await Task.Delay((int)delayMs);
-            Dispatcher.UIThread.Post(CefApi.DoMessageLoopWork);
-        }
 
         private void CefApp_CefProcessMessageReceived(object sender, CefProcessMessageReceivedEventArgs e) {            
             if (e.Name == "EvaluateScript") {

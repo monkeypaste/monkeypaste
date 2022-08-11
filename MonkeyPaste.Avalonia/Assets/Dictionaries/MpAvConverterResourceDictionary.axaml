@@ -17,5 +17,6 @@
     <local:MpAvVisibleMenuItemsConverter x:Key="VisibleMenuItemsConverter" />
     <local:MpAvEnumToLabelCollectionConverter x:Key="EnumToLabelCollectionConverter" />
     <local:MpAvBoolToBrushConverter x:Key="BoolToBrushConverter" />
-    <local:MpAvMultiSumConverter x:Key="MultiSumConverter" />
+    <local:MpAvMultiStringAppendConverter x:Key="MultiStringAppendConverter" />
+    <local:MpAvBoolToScrollBarVisibilityConverter x:Key="BoolToScrollBarVisibilityConverter" />
 </ResourceDictionary>

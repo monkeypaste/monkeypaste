@@ -20,8 +20,8 @@
                 local:MpAvSizeObserverExtension.ObservedWidth="{Binding ClipTrayScreenWidth, Mode=OneWayToSource}"
                 local:MpAvSizeObserverExtension.ObservedHeight="{Binding ClipTrayScreenHeight, Mode=OneWayToSource}">
             <ScrollViewer x:Name="ClipTrayScrollViewer"
-                          HorizontalScrollBarVisibility="{Binding HorizontalScrollBarVisibility}"
-                          VerticalScrollBarVisibility="{Binding VerticalScrollBarVisibility}"
+                          HorizontalScrollBarVisibility="{Binding IsHorizontalScrollBarVisible, Converter={StaticResource BoolToScrollBarVisibilityConverter}}"
+                          VerticalScrollBarVisibility="{Binding IsVerticalScrollBarVisible, Converter={StaticResource BoolToScrollBarVisibilityConverter}}"
                           HorizontalAlignment="Left"
                           VerticalAlignment="Top"
                           AllowAutoHide="True"
@@ -38,6 +38,10 @@
                          local:MpAvPagingListBoxExtension.WheelDampeningY="0.08"
                          local:MpAvPagingListBoxExtension.ScrollOffsetX="{Binding ScrollOffsetX, Mode=TwoWay}"
                          local:MpAvPagingListBoxExtension.ScrollOffsetY="{Binding ScrollOffsetY, Mode=TwoWay}"
+                         local:MpAvPagingListBoxExtension.IsThumbDraggingX="{Binding IsThumbDraggingX, Mode=TwoWay}"
+                         local:MpAvPagingListBoxExtension.IsThumbDraggingY="{Binding IsThumbDraggingY, Mode=TwoWay}"
+                         local:MpAvPagingListBoxExtension.IsThumbDragging="{Binding IsThumbDragging}"
+                         local:MpAvPagingListBoxExtension.IsScrollJumping="{Binding IsScrollJumping, Mode=TwoWay}"
                          local:MpAvPagingListBoxExtension.MaxScrollOffsetX="{Binding MaxScrollOffsetX}"
                          local:MpAvPagingListBoxExtension.MaxScrollOffsetY="{Binding MaxScrollOffsetY}"
                          local:MpAvPagingListBoxExtension.VelocityX="{Binding ScrollVelocityX, Mode=TwoWay}"
@@ -87,9 +91,9 @@
                             <Setter Property="Canvas.Top"
                                     Value="{Binding TrayY}" />
                             <Setter Property="Width"
-                                    Value="{Binding MinSize}" />
+                                    Value="{Binding BoundWidth}" />
                             <Setter Property="Height"
-                                    Value="{Binding MinSize}" />
+                                    Value="{Binding BoundHeight}" />
                             <!--<Setter Property="MinWidth"
                                     Value="{Binding MinSize}" />
                             <Setter Property="MinHeight"

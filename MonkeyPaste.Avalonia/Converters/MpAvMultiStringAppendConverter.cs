@@ -7,17 +7,14 @@ using System.Globalization;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvMultiSumConverter : IMultiValueConverter {
-        public static readonly MpAvMultiSumConverter Instance = new();
+    public class MpAvMultiStringAppendConverter : IMultiValueConverter {
+        public static readonly MpAvMultiStringAppendConverter Instance = new();
 
         public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture) {
-            if(values is List<double> doubleVals) {
-                if(doubleVals.Any(x=>x > 0)) {
-                    Debugger.Break();
-                }
-                return doubleVals.Sum();
+            if(values is List<string> strList) {
+                return string.Join(string.Empty, strList);
             }
-            return 0;
+            return string.Empty;
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {
