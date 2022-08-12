@@ -24,16 +24,15 @@ namespace MonkeyPaste.Avalonia {
             IsSubSelectionEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsSubSelectionEnabledChanged(x, y));
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
             IsDevToolsVisibleProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsDevToolsVisibleChanged(x, y));
+            HtmlDataProperty.Changed.AddClassHandler<Control>((x, y) => HandleHtmlDataChanged(x, y));
         }
 
         #region Properties
 
         #region IsContentReadOnly AvaloniaProperty
-
         public static bool GetIsContentReadOnly(AvaloniaObject obj) {
             return obj.GetValue(IsContentReadOnlyProperty);
         }
-
         public static void SetIsContentReadOnly(AvaloniaObject obj, bool value) {
             obj.SetValue(IsContentReadOnlyProperty, value);
         }
@@ -174,6 +173,32 @@ namespace MonkeyPaste.Avalonia {
         private static void Wv_DevToolsProtocolEventAvailable(object sender, DevToolsProtocolEventAvailableEventArgs e) {
             MpConsole.WriteLine($"Dev tools Event: '{e.EventName}' Data: '{e.Data}' ");
         }
+        #endregion
+
+        #region HtmlData AvaloniaProperty
+
+        public static string GetHtmlData(AvaloniaObject obj) {
+            return obj.GetValue(HtmlDataProperty);
+        }
+
+        public static void SetHtmlData(AvaloniaObject obj, string value) {
+            obj.SetValue(HtmlDataProperty, value);
+        }
+
+        public static readonly AttachedProperty<string> HtmlDataProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, string>(
+                "HtmlData",
+                string.Empty,
+                false);
+
+        private static void HandleHtmlDataChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+            if (e.NewValue is string htmlDataStr &&
+                element is MpAvCefNetWebView wv &&
+                wv.IsEditorInitialized) {
+                wv.ExecuteJavascript($"setHtml('{htmlDataStr}')");
+            }
+        }
+
         #endregion
 
         #region IsEnabled AvaloniaProperty

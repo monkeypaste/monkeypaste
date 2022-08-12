@@ -153,6 +153,38 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region MaxPanelWidth AvaloniaProperty
+        public static double GetMaxPanelWidth(AvaloniaObject obj) {
+            return obj.GetValue(MaxPanelWidthProperty);
+        }
+
+        public static void SetMaxPanelWidth(AvaloniaObject obj, double value) {
+            obj.SetValue(MaxPanelWidthProperty, value);
+        }
+
+        public static readonly AttachedProperty<double> MaxPanelWidthProperty =
+            AvaloniaProperty.RegisterAttached<object, TextBox, double>(
+                "MaxPanelWidth",
+                default);
+
+        #endregion
+
+        #region Margin AvaloniaProperty
+        public static Thickness GetMargin(AvaloniaObject obj) {
+            return obj.GetValue(MarginProperty);
+        }
+
+        public static void SetMargin(AvaloniaObject obj, Thickness value) {
+            obj.SetValue(MarginProperty, value);
+        }
+
+        public static readonly AttachedProperty<Thickness> MarginProperty =
+            AvaloniaProperty.RegisterAttached<object, TextBox, Thickness>(
+                "Margin",
+                new Thickness());
+
+        #endregion
+
         #region CancelEditCommand AvaloniaProperty
         public static ICommand GetCancelEditCommand(AvaloniaObject obj) {
             return obj.GetValue(CancelEditCommandProperty);
@@ -275,7 +307,7 @@ namespace MonkeyPaste.Avalonia {
                     var canvas = new Canvas() {
                         //RenderTransformOrigin = RelativePoint.TopLeft,
                         HorizontalAlignment = HorizontalAlignment.Left,
-                        //VerticalAlignment = VerticalAlignment.Center
+                        Margin = GetMargin(tb)
                     };
 
                     if (tb.Parent is Panel) {
@@ -396,11 +428,12 @@ namespace MonkeyPaste.Avalonia {
             }
 
             void Canvas_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e) {
-                if (sender is Canvas canvas) {
+                if (sender is Canvas canvas && 
+                    canvas.Parent is Panel) {
                     if(e == null) {
                         // this means this handler is triggered from visibility change so set 
                         // cursor to canvas origin
-                        canvasMp = canvas.Bounds.Position;
+                        canvasMp = new Point(canvas.Width / 2, 0);
                     } else {
                         canvasMp = e.GetPosition(canvas.Parent);
                     }                   
@@ -511,10 +544,14 @@ namespace MonkeyPaste.Avalonia {
                 canvas.Children.Clear();
                 canvas.Children.Add(img1);
 
-                double maxRenderWidth = tb.Bounds.Width;
-                if (tb.Parent is Panel p) {
-                    maxRenderWidth = p.MaxWidth;
+                if(GetMaxPanelWidth(tb) == default &&
+                    tb.Parent is Panel p) {
+                    double maxWidth = p.MaxWidth.IsNumber() ? p.MaxWidth : p.Bounds.Width;
+                    SetMaxPanelWidth(tb, maxWidth);
                 }
+                
+                double maxRenderWidth = GetMaxPanelWidth(tb);
+
                 if (ftSize.Width > (int)maxRenderWidth) {
                     canvas.Children.Add(img2);
                     canvas.Width = (double)(textBmp.PixelSize.Width * 2);
@@ -529,14 +566,17 @@ namespace MonkeyPaste.Avalonia {
 
                     if (!canvas.IsVisible || canvas.Children.Count < 2) {
                         return;
-                    }
+                    }                 
+                    
                     var img1 = canvas.Children.ElementAt(0) as Image;
                     var img2 = canvas.Children.ElementAt(1) as Image;
 
                     var cmp = canvasMp.HasValue ? canvasMp.Value : new Point();
                     bool isReseting = !canvasMp.HasValue || !canvas.Bounds.Contains(cmp);
 
-                    double velMultiplier = cmp.X / (canvas.Parent as Panel).MaxWidth;
+                    var tb = GetTextBoxFromParent(canvas.Parent as Panel);
+                    double max_width = GetMaxPanelWidth(tb);
+                    double velMultiplier = cmp.X / max_width;
                     velMultiplier = isReseting ? 1.0 : Math.Min(1.0, Math.Max(0.1, velMultiplier));                    
 
                     double deltaX = GetMaxVelocity(canvas) * velMultiplier;

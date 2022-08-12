@@ -51,6 +51,8 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.Items>
+              <!-- Pause / Resume Clipboard Listener Toggle Button -->
+              
                 <ToggleButton local:MpAvSizeObserverExtension.IsEnabled="True"
                               local:MpAvSizeObserverExtension.ObservedWidth="{Binding PlayPauseButtonWidth,
                                                                                       Source={x:Static local:MpAvClipTrayViewModel.Instance},
@@ -84,12 +86,21 @@
                         </Image>
                     </Grid>
                 </ToggleButton>
+
+              <!-- Content Sort View -->
+              
                 <local:MpAvClipTileSortView local:MpAvSizeObserverExtension.IsEnabled="True"
                                             local:MpAvSizeObserverExtension.ObservedWidth="{Binding ClipTileSortViewWidth,
                                                                                                     Source={x:Static local:MpAvClipTileSortViewModel.Instance},
                                                                                                     Mode=OneWayToSource}"
                                             HorizontalAlignment="Left" />
+
+              <!-- Pinned Tag Tray -->
+              
                 <local:MpAvTagTrayView />
+
+              <!-- SearchBox View -->
+              
                 <local:MpAvSearchBoxView HorizontalAlignment="Right"
                                          local:MpAvSizeObserverExtension.IsEnabled="True"
                                          local:MpAvSizeObserverExtension.ObservedWidth="{Binding SearchBoxViewWidth,

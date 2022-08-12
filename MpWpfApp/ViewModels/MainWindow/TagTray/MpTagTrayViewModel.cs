@@ -13,7 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using MonkeyPaste;
 using System.Windows.Forms;
-using Microsoft.Office.Interop.Outlook;
+
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Wpf;
 using System.Diagnostics;

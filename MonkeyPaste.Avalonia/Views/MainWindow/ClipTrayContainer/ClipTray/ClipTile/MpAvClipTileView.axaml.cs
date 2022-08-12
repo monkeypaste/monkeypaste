@@ -16,9 +16,9 @@ namespace MonkeyPaste.Avalonia {
         public MpAvClipTileView() {
             InitializeComponent();
             this.AttachedToVisualTree += MpAvClipTileView_AttachedToVisualTree;
-
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
         }
+
 
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);

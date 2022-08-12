@@ -27,7 +27,7 @@ using System.Windows.Documents;
 using System.Windows.Markup;
 using System.Windows.Media;
 using Xamarin.Essentials;
-using Microsoft.Office.Interop.Outlook;
+
 
 namespace MpWpfApp {
     public interface MpIProcessWatcher {

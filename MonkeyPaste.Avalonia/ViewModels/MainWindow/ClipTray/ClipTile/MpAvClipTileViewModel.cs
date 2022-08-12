@@ -1603,6 +1603,8 @@ namespace MonkeyPaste.Avalonia {
                 SelectionBgColorPopupViewModel.OnColorChanged += SelectionBgColorPopupViewModel_OnColorChanged;
             }
 
+
+
             //RequestUiUpdate();
             //OnPropertyChanged(nameof(EditorHeight));
             OnPropertyChanged(nameof(TileBorderBrush));
@@ -1631,6 +1633,10 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(CopyItemTitle));
 
             OnPropertyChanged(nameof(CopyItemData));
+
+            if(Parent.IsPersistentTileEditable_ById(CopyItemId)) {
+                IsContentReadOnly = false;
+            }
 
             IsBusy = false;
         }
@@ -2179,6 +2185,11 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsContentReadOnly):
                     if (!IsContentReadOnly && !IsSelected) {
                         IsSelected = true;
+                    }
+                    if(IsContentReadOnly) {
+                        Parent.RemovePersistentEditableTile_ById(CopyItemId);
+                    } else {
+                        Parent.AddPersistentEditableTile_ById(CopyItemId);
                     }
                     MpMessenger.Send<MpMessageType>(IsContentReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
                     Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));

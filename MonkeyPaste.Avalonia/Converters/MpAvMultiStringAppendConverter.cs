@@ -11,8 +11,8 @@ namespace MonkeyPaste.Avalonia {
         public static readonly MpAvMultiStringAppendConverter Instance = new();
 
         public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture) {
-            if(values is List<string> strList) {
-                return string.Join(string.Empty, strList);
+            if(values != null) {
+                return string.Join(string.Empty, values);
             }
             return string.Empty;
         }

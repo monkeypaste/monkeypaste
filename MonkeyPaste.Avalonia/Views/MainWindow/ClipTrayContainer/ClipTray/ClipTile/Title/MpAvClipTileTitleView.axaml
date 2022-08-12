@@ -22,7 +22,15 @@
                  Stretch="Fill">
             <Canvas x:Name="SwirlCanvas"
                     Width="260"
-                    Height="52">
+                    Height="55">
+                <Ellipse x:Name="layer2"
+                         StrokeThickness="0"
+                         Fill="{Binding TitleLayerHexColors[2], Converter={StaticResource StringHexToBrushConverter}}"
+                         Width="100"
+                         Height="28"
+                         Opacity="0.3"
+                         Canvas.Left="165"
+                         Canvas.Top="24" />
                 <Path x:Name="layer0"
                       StrokeThickness="0"
                       Fill="{Binding TitleLayerHexColors[0], Converter={StaticResource StringHexToBrushConverter}}">
@@ -66,13 +74,6 @@
                         </PathGeometry>
                     </Path.Data>
                 </Path>
-                <Ellipse x:Name="layer2"
-                         StrokeThickness="0"
-                         Fill="{Binding TitleLayerHexColors[2], Converter={StaticResource StringHexToBrushConverter}}"
-                         Width="87"
-                         Height="28"
-                         Canvas.Left="165"
-                         Canvas.Top="24" />
                 <Path x:Name="layer3"
                       StrokeThickness="0"
                       Fill="{Binding TitleLayerHexColors[3], Converter={StaticResource StringHexToBrushConverter}}">
@@ -95,19 +96,34 @@
 
         </Viewbox>
         <!--  Title Text Box  -->
-        <Grid Grid.Column="0"
+        <Grid x:Name="TitleTextBoxContainerGrid"
+              Grid.Column="0"
               HorizontalAlignment="Left"
               VerticalAlignment="Stretch"
               Margin="15,0,0,0"
-              MaxWidth="{Binding MaxTitleTextBoxWidth}"
               ClipToBounds="True"
               Background="{Binding TileTitleTextGridBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
               local:MpAvIsHoveringExtension.IsEnabled="True"
               local:MpAvIsHoveringExtension.IsHovering="{Binding IsHoveringOnTitleTextGrid, Mode=TwoWay}"
               local:MpAvIsHoveringExtension.HoverCursor="IBeam"
               IsHitTestVisible="{Binding !HasScrollVelocity, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
+            <Grid.MaxWidth>
+                <MultiBinding Converter="{StaticResource MultiDoubleSumConverter}">
+                    <Binding Path="Bounds.Width"
+                             ElementName="TitleContainerGrid" />
+                    <Binding Path="Bounds.Width"
+                             ElementName="SourceIconContainerGrid"
+                             Converter="{StaticResource NegateDoubleConverter}" />
+                    <Binding>
+                        <Binding.Source>
+                            <core:Double>-5</core:Double>
+                        </Binding.Source>
+                    </Binding>
+                </MultiBinding>
+            </Grid.MaxWidth>
             <TextBox x:Name="ClipTileTitleTextBox"
-                     FontSize="20"
+                     FontFamily="Segoe UI"
+                     FontSize="18"
                      BorderThickness="0"
                      local:MpAvIsFocusedExtension.IsEnabled="True"
                      local:MpAvIsFocusedExtension.IsReadOnly="{Binding IsTitleReadOnly, Mode=TwoWay}"
@@ -118,6 +134,7 @@
                      local:MpAvMarqueeTextBoxExtension.CancelEditCommand="{Binding CancelEditTitleCommand}"
                      local:MpAvMarqueeTextBoxExtension.FinishEditCommand="{Binding FinishEditTitleCommand}"
                      local:MpAvMarqueeTextBoxExtension.IsReadOnly="{Binding IsTitleReadOnly, Mode=TwoWay}"
+                     local:MpAvMarqueeTextBoxExtension.MaxPanelWidth="{Binding MaxWidth, ElementName=TitleTextBoxContainerGrid}"
                      IsReadOnly="{Binding IsTitleReadOnly, Mode=OneWay}"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
@@ -127,21 +144,27 @@
                      Foreground="Black"
                      Text="{Binding CopyItemTitle, Mode=TwoWay}" />
         </Grid>
+
         <!--  Source Icon  -->
         <Grid x:Name="SourceIconContainerGrid"
               Grid.Column="1"
-              local:MpAvSizeObserverExtension.IsEnabled="False"
-              local:MpAvSizeObserverExtension.ObservedWidth="{Binding TitleIconWidth, Mode=OneWayToSource}"
+              Width="{Binding Bounds.Height, ElementName=TitleContainerGrid}"
               PointerPressed="SourceIconGrid_PointerPressed"
               HorizontalAlignment="Right"
               Margin="0,0,5,0"
               ClipToBounds="False">
-            <Image Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}"
+            <Image Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}, ConverterParameter=7}"
                    Stretch="UniformToFill"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   Width="30"
-                   Height="30" />
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Stretch">
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <TranslateTransform X="0"
+                                            Y="0" />
+                        <RotateTransform Angle="0" />
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
         </Grid>
     </Grid>
 </local:MpAvUserControl>

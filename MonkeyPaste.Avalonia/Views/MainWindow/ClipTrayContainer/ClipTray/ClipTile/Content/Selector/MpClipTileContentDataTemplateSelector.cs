@@ -14,7 +14,8 @@ namespace MonkeyPaste.Avalonia {
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
         public IControl Build(object param) {
-            string key = UseCefNet ? "CefNetWebViewTemplate": "CefWebViewTemplate"; 
+            string key = UseCefNet ? "CefNetWebViewTemplate": "CefWebViewTemplate";
+            key = "PlainTextTemplate";
             return AvailableTemplates[key].Build(param); 
         }
 

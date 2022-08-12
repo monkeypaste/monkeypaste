@@ -8,8 +8,7 @@ using MonkeyPaste.Common;
 using Newtonsoft.Json;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvQueryInfo : MpIQueryInfo {
-        
+    public class MpAvQueryInfo : MpIQueryInfo {        
         public int TotalItemsInQuery { get; set; } = 0;
         public bool IsDescending { get; set; } = true;
         public MpContentSortType SortType { get; set; } = MpContentSortType.CopyDateTime;
@@ -30,22 +29,23 @@ namespace MonkeyPaste.Avalonia {
         }
         
         public void NotifyQueryChanged(bool isFilterSortOrSearch = true) {
-            IsDescending = true;// MpClipTileSortViewModel.Instance.IsSortDescending;
-            SortType = MpContentSortType.CopyDateTime; // MpClipTileSortViewModel.Instance.SelectedSortType.SortType;
-            TagId = MpTag.AllTagId; //MpAvTagTrayViewModel.Instance.SelectedTagTile.TagId;
-            SearchText = string.Empty; // MpSearchBoxViewModel.Instance.SearchText;
+            IsDescending = MpAvClipTileSortViewModel.Instance.IsSortDescending;
+            SortType = MpAvClipTileSortViewModel.Instance.SelectedSortType;
+            TagId = MpAvTagTrayViewModel.Instance.SelectedItem.TagId;
+            SearchText = MpAvSearchBoxViewModel.Instance.SearchText;
             TotalItemsInQuery = MpDataModelProvider.TotalTilesInQuery;
 
             // NOTE not sure why this isn't set so maybe bad
-            FilterFlags = MpContentFilterType.TextType | MpContentFilterType.FileType | MpContentFilterType.ImageType; //MpSearchBoxViewModel.Instance.FilterType;
+            //FilterFlags = MpContentFilterType.TextType | MpContentFilterType.FileType | MpContentFilterType.ImageType; //MpSearchBoxViewModel.Instance.FilterType;
+            FilterFlags = MpAvSearchBoxViewModel.Instance.FilterType;
 
             MpPrefViewModel.Instance.LastQueryInfoJson = Serialize();
 
-            var qi = MpDataModelProvider.QueryInfo;
+            //var qi = MpDataModelProvider.QueryInfo;
             MpDataModelProvider.QueryInfos.Clear();
 
-            qi.FilterFlags = FilterFlags;//MpSearchBoxViewModel.Instance.FilterType;
-            MpDataModelProvider.QueryInfos.Add(qi);
+            //qi.FilterFlags = FilterFlags;//MpSearchBoxViewModel.Instance.FilterType;
+            MpDataModelProvider.QueryInfos.Add(this);
             // MpSearchBoxViewModel.Instance.CriteriaItems.OrderBy(x => x.SortOrderIdx).ForEach(x => MpDataModelProvider.QueryInfos.Add(x.ToQueryInfo()));
 
             MpPlatformWrapper.Services.MainThreadMarshal.RunOnMainThread(() => {

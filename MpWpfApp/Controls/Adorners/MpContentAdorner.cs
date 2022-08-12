@@ -12,7 +12,7 @@ using MonkeyPaste;
 using MonkeyPaste.Common.Plugin; 
 using MonkeyPaste.Common; 
 using MonkeyPaste.Common.Wpf;
-using Microsoft.Office.Interop.Outlook;
+
 using System.Diagnostics;
 
 namespace MpWpfApp {

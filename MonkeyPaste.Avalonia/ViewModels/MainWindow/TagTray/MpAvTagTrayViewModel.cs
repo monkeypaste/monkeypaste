@@ -104,15 +104,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public bool IsNavButtonsVisible => TotalTrayTileWidth > TagTrayWidth;
+        public bool IsNavButtonsVisible => TagTrayTotalWidth > TagTrayScreenWidth;
 
         public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy) || PinnedItems.Any(x=>x.IsBusy);
 
         #endregion
 
-        #region Layout
-        
-        public double TagTrayWidth {
+        #region Layout        
+        public double TagTrayScreenWidth {
             get {
                 double mww = MpAvMainWindowViewModel.Instance.MainWindowWidth;
 
@@ -123,7 +122,7 @@ namespace MonkeyPaste.Avalonia {
                 return mww - ppbw - ctsvw - sbvw;
             }
         }
-        public double TotalTrayTileWidth => PinnedItems.Sum(x => x.TagTileTrayWidth);
+        public double TagTrayTotalWidth => PinnedItems.Sum(x => x.TagTileTrayWidth);
         #endregion
 
         #region Appearance
@@ -249,6 +248,9 @@ namespace MonkeyPaste.Avalonia {
                 var ttvm = Items.FirstOrDefault(x => x.TagId == ct.Key);
                 if (ttvm != null) {
                     ttvm.TagClipCount = count;
+                    if(ttvm.IsModelPinned) {
+                        PinnedItems.FirstOrDefault(x => x.TagId == ttvm.TagId).TagClipCount = count;
+                    }
                 }
             }           
         }
@@ -304,7 +306,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.MainWindowOpening:
                     
                     OnPropertyChanged(nameof(PinnedItems));
-                    OnPropertyChanged(nameof(TagTrayWidth));
+                    OnPropertyChanged(nameof(TagTrayScreenWidth));
                     break;
             }
         }
@@ -406,7 +408,7 @@ namespace MonkeyPaste.Avalonia {
 
                 OnPropertyChanged(nameof(PinnedItems));
                 OnPropertyChanged(nameof(IsNavButtonsVisible));
-                OnPropertyChanged(nameof(TagTrayWidth));
+                OnPropertyChanged(nameof(TagTrayScreenWidth));
             });
 
         public ICommand SelectTagCommand => new MpCommand<object>(

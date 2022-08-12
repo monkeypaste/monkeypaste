@@ -560,9 +560,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private object FindTileRectOrQueryIdxOrTotalTileSizeInternal(int queryOffsetIdx, double scrollOffsetX, double scrollOffsetY) {
-            // For TotalTileSize<Size>: all params -1
-            // For TileRect<Rect>:  0 <= queryOffsetIdx < TotalTilesInQuery and scrollOffsets == -1
-            // For TileQueryIdx<int>: queryoffsetIdx < 0 and both scrollOffset > 0
+            // For TotalTileSize<MpSize>: all params -1
+            // For TileRect<MpRect>:  0 <= queryOffsetIdx < TotalTilesInQuery and scrollOffsets == -1
+            // For TileQueryIdx<[]{int,MpRect}>: queryoffsetIdx < 0 and both scrollOffset > 0
 
             bool isFindTileIdx = scrollOffsetX >= 0 && scrollOffsetY >= 0;
             bool isFindTileRect = !isFindTileIdx && queryOffsetIdx >= 0;
@@ -649,7 +649,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if(isFindTileIdx) {
                     if(tile_rect.X >= scrollOffsetX && tile_rect.Y >= scrollOffsetY) {
-                        return i;
+                        return new object[] { i, tile_rect };
                     }
                 }
                 last_rect = tile_rect;
@@ -679,14 +679,16 @@ namespace MonkeyPaste.Avalonia {
             return MpRect.Empty;
         }
 
-        public int FindJumpTileIdx(double scrollOffsetX, double scrollOffsetY) {
+        public int FindJumpTileIdx(double scrollOffsetX, double scrollOffsetY, out MpRect tileRect) {
             object result = FindTileRectOrQueryIdxOrTotalTileSizeInternal(
                                 queryOffsetIdx: -1,
                                 scrollOffsetX: scrollOffsetX,
                                 scrollOffsetY: scrollOffsetY);
-            if (result is int tileIdx) {
-                return tileIdx;
+            if (result is object[] resultParts) {
+                tileRect = resultParts[1] as MpRect;
+                return (int)resultParts[0];
             }
+            tileRect = MpRect.Empty;
             return -1;
         }
 
@@ -804,6 +806,7 @@ namespace MonkeyPaste.Avalonia {
         //set in civm IsSelected property change, DragDrop.Drop (copy mode)
         public List<MpCopyItem> PersistentSelectedModels { get; set; } = new List<MpCopyItem>();
 
+        private List<int> _persistentEditableTiles_ById { get; set; } = new List<int>();
         private Dictionary<int, Size> _persistentUniqueTileSizeLookup_ById { get; set; } = new Dictionary<int, Size>();
         private Dictionary<int, Size> _persistentUniqueTileSizeLookup_ByIdx { get; set; } = new Dictionary<int, Size>();
         //<CopyItemId, Unique ItemWidth> unique is != to MpMeausrements.Instance.ClipTileMinSize
@@ -812,6 +815,22 @@ namespace MonkeyPaste.Avalonia {
         // THIS Lookup is passive and only changed when PersistentUniqueWidthTileLookup is changed
         //<QueryOffsetIdx, Unique ItemWidth> unique is != to MpMeausrements.Instance.ClipTileMinSize
         //public Dictionary<int, double> PersistentUniqueWidthQueryOffsetLookup => _persistentUniqueWidthQueryOffsetLookup;
+
+        public void AddPersistentEditableTile_ById(int ciid) { 
+            if(_persistentEditableTiles_ById.Contains(ciid)) {
+                return;
+            }
+            _persistentEditableTiles_ById.Add(ciid);
+        }
+        public void RemovePersistentEditableTile_ById(int ciid) {
+            if (_persistentEditableTiles_ById.Contains(ciid)) {
+                _persistentEditableTiles_ById.Remove(ciid);
+            }            
+        }
+
+        public bool IsPersistentTileEditable_ById(int ciid) {
+            return _persistentEditableTiles_ById.Contains(ciid);
+        }
 
         public void AddOrReplacePersistentSize_ById(int ciid, Size uniqueSize) {
             _persistentUniqueTileSizeLookup_ById.AddOrReplace(ciid, uniqueSize);
@@ -1052,6 +1071,28 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(ScrollOffsetY));
         }
 
+        int anchor_query_idx;
+        public void ListOrientationChangeBegin() {
+            if(IsEmpty) {
+                anchor_query_idx = -1;
+                return;
+            }
+            if(ListOrientation == Orientation.Horizontal) {
+                // list was vertical
+                anchor_query_idx = Items.Aggregate((a, b) => a.TrayY < b.TrayY && ScrollOffsetY - a.TrayY >= 0 ? a : b).QueryOffsetIdx;
+            } else {
+                // list was horizontal
+                anchor_query_idx = Items.Aggregate((a, b) => a.TrayX < b.TrayX && ScrollOffsetX - a.TrayX >= 0 ? a : b).QueryOffsetIdx;
+            }
+        }
+
+        public void ListOrientationChangeEnd() {
+            if(anchor_query_idx < 0) {
+                return;
+            }
+            QueryCommand.Execute(anchor_query_idx);
+        }
+
         #endregion
 
         #region Private Methods
@@ -1067,7 +1108,7 @@ namespace MonkeyPaste.Avalonia {
             //MpConsole.WriteLine($"Name: {e.PropertyName} Value: {this.GetPropertyValue(e.PropertyName)?.ToString()}");
             switch (e.PropertyName) {
                 case nameof(PlayPauseButtonWidth):
-                    MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayWidth));
+                    MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayScreenWidth));
                     break;
                 case nameof(SelectedItem):
                     OnPropertyChanged(nameof(CanScroll));
@@ -1078,6 +1119,8 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsGridLayout):
                     ToggleLayoutTypeCommand.Execute(null);
+                    break;
+                case nameof(ListOrientation):
                     break;
                 case nameof(ZoomFactor):
                 case nameof(LayoutType):
@@ -2362,35 +2405,35 @@ namespace MonkeyPaste.Avalonia {
                 bool isLoadMore = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is bool;
 
                 int loadOffsetIdx = 0;
-                //double newScrollOffset = default;
-                //double newScrollOffsetX = default;
-                //double newScrollOffsetY = default;
                 int loadCount = 0;
+
+                double newScrollOffsetX = default;
+                double newScrollOffsetY = default;
 
                 if (isSubQuery) {
                     // sub-query of visual, data-specific or incremental offset 
 
                     if (isOffsetJump) {
                         // sub-query to data-specific (Id) offset
+
                         loadOffsetIdx = (int)offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg;
+                        var loadTileRect = FindTileRect(loadOffsetIdx);
+                        newScrollOffsetX = loadTileRect.X;
+                        newScrollOffsetY = loadTileRect.Y;
                     } else if (isScrollJump) {
                         // sub-query to visual (scroll position) offset 
-                        //var newScrollOffsetParts = (double[])offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg;
-                        //if (newScrollOffsetParts[0] == default) {
-                        //    newScrollOffsetY = newScrollOffsetParts[1];
-                        //} else {
-                        //    newScrollOffsetX = newScrollOffsetParts[0];
-                        //    loadOffsetIdx = FindJumpTileIdx(newScrollOffset);
-                        //}
-                        loadOffsetIdx = FindJumpTileIdx(ScrollOffsetX,ScrollOffsetY);
+
+                        loadOffsetIdx = FindJumpTileIdx(ScrollOffsetX,ScrollOffsetY, out MpRect offsetTileRect);
+                        newScrollOffsetX = offsetTileRect.X;
+                        newScrollOffsetY = offsetTileRect.Y;
                     } else if (isLoadMore) {
                         // sub-query either forward (true) or backward (false) based on current offset
-                        //newScrollOffset = ScrollOffsetX;
 
                         loadCount = LoadMorePageSize;
 
                         if ((bool)offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg) {
                             //load More to tail
+
                             loadOffsetIdx = TailQueryIdx + 1;
                             if (loadOffsetIdx > MaxClipTrayQueryIdx) {
                                 IsRequery = IsBusy = false;
@@ -2398,6 +2441,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         } else {
                             //load more to head
+
                             loadOffsetIdx = HeadQueryIdx - 1;
                             if (loadOffsetIdx < MinClipTrayQueryIdx) {
                                 IsRequery = IsBusy = false;
@@ -2408,6 +2452,7 @@ namespace MonkeyPaste.Avalonia {
 
                     if (loadOffsetIdx + DefaultLoadCount > MaxClipTrayQueryIdx) {
                         // clamp load offset to max query total count
+
                         loadOffsetIdx = MaxLoadQueryIdx;
                     }
                 } else {
@@ -2539,11 +2584,12 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(TotalTilesInQuery));
                 OnPropertyChanged(nameof(ClipTrayTotalTileWidth));
                 OnPropertyChanged(nameof(ClipTrayTotalWidth));
-
                 OnPropertyChanged(nameof(MaxScrollOffsetX));
                 OnPropertyChanged(nameof(MaxScrollOffsetY));
                 OnPropertyChanged(nameof(IsHorizontalScrollBarVisible));
                 OnPropertyChanged(nameof(IsVerticalScrollBarVisible));
+                OnPropertyChanged(nameof(IsEmpty));
+
                 if (Items.Count == 0) {
                     ScrollOffsetX = LastScrollOffsetX = ScrollOffsetY = LastScrollOffsetY = 0;
                 }
@@ -2555,7 +2601,8 @@ namespace MonkeyPaste.Avalonia {
                     //_scrollOffset = LastScrollOffsetX = FindTileOffsetX(HeadQueryIdx);
                     MpMessenger.SendGlobal<MpMessageType>(MpMessageType.JumpToIdxCompleted);
                 } else if (isScrollJump) {
-                    //_scrollOffset = LastScrollOffsetX = Math.Min(MaxScrollOffsetX, newScrollOffset);
+                    _scrollOffsetX = LastScrollOffsetX = Math.Min(MaxScrollOffsetX, newScrollOffsetX);
+                    _scrollOffsetY = LastScrollOffsetY = Math.Min(MaxScrollOffsetY, newScrollOffsetY);
                     MpMessenger.SendGlobal<MpMessageType>(MpMessageType.JumpToIdxCompleted);
                 }
                 OnPropertyChanged(nameof(ScrollOffsetX));

@@ -26,15 +26,15 @@
                                                       HorizontalAlignment="Stretch"
                                                       VerticalAlignment="Stretch" />
                         </DataTemplate>
-                        <DataTemplate x:Key="LinuxTemplate"
-                                      DataType="local:MpAvClipTileViewModel">
-                            <local:MpAvGtkWebView DataContext="{Binding}"
-                                                  HorizontalAlignment="Stretch"
-                                                  VerticalAlignment="Stretch" />
-                        </DataTemplate>
                         <DataTemplate x:Key="CefNetWebViewTemplate"
                                       DataType="local:MpAvClipTileViewModel">
                             <local:MpAvCefNetContentWebView DataContext="{Binding}"
+                                                            HorizontalAlignment="Stretch"
+                                                            VerticalAlignment="Stretch" />
+                        </DataTemplate>
+                        <DataTemplate x:Key="PlainTextTemplate"
+                                      DataType="local:MpAvClipTileViewModel">
+                            <local:MpAvPlainTextContentView DataContext="{Binding}"
                                                             HorizontalAlignment="Stretch"
                                                             VerticalAlignment="Stretch" />
                         </DataTemplate>

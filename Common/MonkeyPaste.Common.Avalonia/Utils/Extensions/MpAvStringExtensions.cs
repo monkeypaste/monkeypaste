@@ -1,16 +1,23 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvStringExtensions {
         public static string ToCsv(this string str) {
             return str;
         }
-        public static string ToPlainText(this string str) {
-            return str;
+        public static string ToPlainText(this string text) {
+            if (text.IsStringHtmlText()) {
+                var htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(text);
+                return htmlDoc.Text;
+            }
+            return text;
         }
 
         public static string ToRichText(this string str) {

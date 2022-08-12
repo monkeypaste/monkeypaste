@@ -9,7 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 using MonkeyPaste;
 using System.IO;
-using Microsoft.Office.Interop.Outlook;
+
 using MonkeyPaste;
 
 namespace MpWpfApp {

@@ -17,9 +17,10 @@
           VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.1*" />
+          <!-- NOTE MinWidth set for drag drop target -->
             <ColumnDefinition Width="auto"
                               MinWidth="200"
-                              MaxWidth="1000" />
+                              MaxWidth="{Binding TagTrayScreenWidth}" />
             <ColumnDefinition Width="0.1*" />
         </Grid.ColumnDefinitions>
         <Grid.Styles>
@@ -49,7 +50,7 @@
                  BorderBrush="Transparent"
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center"
-                 Width="{Binding TagTrayWidth}"
+                 Width="{Binding TagTrayScreenWidth}"
                  SelectionMode="Single" 
                  SelectedItem="{Binding SelectedPinnedItem, Mode=TwoWay}"
                  ScrollViewer.VerticalScrollBarVisibility="Hidden"

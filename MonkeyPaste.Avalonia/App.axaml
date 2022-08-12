@@ -6,11 +6,15 @@
              x:CompileBindings="True"
              x:Class="MonkeyPaste.Avalonia.App">
     <Application.Styles>
-        <!--<FluentTheme Mode="Light" />-->
+        <FluentTheme Mode="Light" />
+        <!--<StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml" />
+        <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml" />-->
 
-        <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml" />
-        <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml" />
         <StyleInclude Source="avares://MonkeyPaste.Avalonia/Styles/ProgressRing/ProgressRing.xaml" />
+        <Style Selector="TextBlock">
+            <Setter Property="FontFamily"
+                    Value="Helvetica" />
+        </Style>
 
         <Style Selector=":is(Button)">
             <Setter Property="HorizontalAlignment"

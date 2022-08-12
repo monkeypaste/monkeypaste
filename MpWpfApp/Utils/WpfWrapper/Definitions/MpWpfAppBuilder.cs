@@ -5,11 +5,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace MpWpfApp {
     public class MpWpfAppBuilder : MpIAppBuilder {
         public async Task<MpApp> CreateAsync(object handleOrAppPath, string appName = "") {
-
             string processPath, processIconImg64;
 
             if (handleOrAppPath is string) {

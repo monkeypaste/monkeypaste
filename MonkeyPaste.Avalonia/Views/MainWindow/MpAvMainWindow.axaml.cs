@@ -83,6 +83,7 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                 case MpMessageType.MainWindowOrientationChanged: {
+
                         UpdateContentOrientation();
                         UpdateResizerOrientation();
 
@@ -104,7 +105,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
-                MpAvToolWindow_Win32.InitToolWindow(this.PlatformImpl.Handle.Handle);
+                //MpAvToolWindow_Win32.InitToolWindow(this.PlatformImpl.Handle.Handle);
             }
 
             
@@ -257,6 +258,16 @@ namespace MonkeyPaste.Avalonia {
             var ttv = this.FindControl<MpAvTagTreeView>("TagTreeView");
             var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");
 
+            EventHandler<EffectiveViewportChangedEventArgs> trayViewportChangedHandler = null;
+            trayViewportChangedHandler = (s, e) => {
+                ctrv.EffectiveViewportChanged -= trayViewportChangedHandler;
+                //MpAvClipTrayViewModel.Instance.ListOrientationChangeEnd();
+            };
+
+            ctrv.EffectiveViewportChanged += trayViewportChangedHandler;
+
+           // MpAvClipTrayViewModel.Instance.ListOrientationChangeBegin();
+
             if (mwvm.IsHorizontalOrientation) {
                 mwtg.RowDefinitions.Clear();
                 mwtg.ColumnDefinitions = new ColumnDefinitions("40,Auto,*");
@@ -310,6 +321,7 @@ namespace MonkeyPaste.Avalonia {
 
             UpdateSidebarGridsplitter();
 
+            
             //mwtg.InvalidateMeasure();
         }
 

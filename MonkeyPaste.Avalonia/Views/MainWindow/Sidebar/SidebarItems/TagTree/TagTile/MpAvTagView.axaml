@@ -62,6 +62,7 @@
                                  local:MpAvMarqueeTextBoxExtension.CancelEditCommand="{Binding CancelRenameTagCommand}"
                                  local:MpAvMarqueeTextBoxExtension.FinishEditCommand="{Binding FinishRenameTagCommand}"
                                  local:MpAvMarqueeTextBoxExtension.IsReadOnly="{Binding IsTagNameReadOnly, Mode=TwoWay}"
+                                 local:MpAvMarqueeTextBoxExtension.Margin="0,2.5,0,0"
                                  Background="White"
                                  Foreground="Black"
                                  Margin="0"

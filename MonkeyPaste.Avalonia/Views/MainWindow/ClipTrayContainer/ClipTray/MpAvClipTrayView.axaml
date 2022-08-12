@@ -1,5 +1,6 @@
 <local:MpAvUserControl xmlns="https://github.com/avaloniaui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:core="clr-namespace:System;assembly=mscorlib"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:local="using:MonkeyPaste.Avalonia"
@@ -139,6 +140,54 @@
                     </ListBox.ItemsPanel>
                 </ListBox>
             </ScrollViewer>
+        </Border>
+
+        <!--  IsBusy Overlay  -->
+        <Border HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                IsVisible="{Binding IsBusy}">
+            <Border.Background>
+                <SolidColorBrush Color="Black"
+                                 Opacity="0.2" />
+            </Border.Background>
+            <local:ProgressRing Width="50"
+                                Height="50"
+                                IsActive="True"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Foreground="Green" />
+        </Border>
+
+        <!--  IsEmpty Overlay  -->
+
+        <Border HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Background="Transparent"
+                IsVisible="{Binding IsEmpty}">
+            <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="42"
+                       FontStyle="Italic"
+                       FontWeight="SemiBold"
+                       Foreground="LightGray">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource MultiStringAppendConverter}">
+                        <Binding>
+                            <Binding.Source>
+                                <core:String>Collection '</core:String>
+                            </Binding.Source>
+                        </Binding>
+                        <Binding Path="SelectedItem.TagName"
+                                 Source="{x:Static local:MpAvTagTrayViewModel.Instance}" />
+                        <Binding>
+                            <Binding.Source>
+                                <core:String>' Is Empty</core:String>
+                            </Binding.Source>
+                        </Binding>
+
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
         </Border>
     </Grid>
 

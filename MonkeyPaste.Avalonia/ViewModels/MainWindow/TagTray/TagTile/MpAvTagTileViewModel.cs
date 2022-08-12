@@ -35,6 +35,7 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
+
         #endregion
 
         #region MpITreeItemViewModel Implementation
@@ -195,14 +196,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public bool IsPinnedViewModel {
-            get {
-                if(!IsModelPinned) {
-                    return false;
-                }
-                return Parent.PinnedItems.Contains(this);
-            }
-        }
         public bool CanAddChild {
             get {
                 if(IsHelpTag) {
@@ -466,7 +459,7 @@ namespace MonkeyPaste.Avalonia {
 
             Tag = tag;
 
-            if(!isPinnedItem) {
+            if (!isPinnedItem) {
                 var ctl = await MpDataModelProvider.GetChildTagsAsync(TagId);
 
                 foreach (var ct in ctl.OrderBy(x => x.TagSortIdx)) {
@@ -690,7 +683,7 @@ namespace MonkeyPaste.Avalonia {
                         return;
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsNavButtonsVisible));
-                    Parent.OnPropertyChanged(nameof(Parent.TotalTrayTileWidth));
+                    Parent.OnPropertyChanged(nameof(Parent.TagTrayTotalWidth));
                     break;
             }
         }

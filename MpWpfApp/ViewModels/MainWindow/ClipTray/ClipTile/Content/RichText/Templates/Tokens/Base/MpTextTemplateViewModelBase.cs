@@ -20,7 +20,7 @@ using System.Diagnostics;
 using static QRCoder.PayloadGenerator;
 using System.Windows.Forms;
 using Xamarin.Forms;
-using Microsoft.Office.Interop.Outlook;
+
 
 namespace MpWpfApp {
     public enum MpCurrencyType {

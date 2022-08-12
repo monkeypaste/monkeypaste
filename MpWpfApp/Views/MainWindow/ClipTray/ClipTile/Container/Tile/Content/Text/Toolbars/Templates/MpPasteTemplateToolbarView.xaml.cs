@@ -16,7 +16,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste;
 using MonkeyPaste.Common.Wpf;
 using CefSharp.DevTools.CSS;
-using Microsoft.Office.Interop.Outlook;
+
 using System.Runtime.Serialization;
 using Exception = System.Exception;
 

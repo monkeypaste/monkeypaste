@@ -876,7 +876,7 @@
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Mac\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
     <Folder Include="Utils\Input\Mouse\" />
-    <Folder Include="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Selector\" />
+    <Folder Include="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Selector\" />
     <Folder Include="Styles\ProgressRing\" />
     <Folder Include="Controls\ProgressRing\" />
   </ItemGroup>
@@ -895,6 +895,9 @@
     </Compile>
     <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\MpAvContentWebView.axaml.cs">
       <DependentUpon>MpAvContentWebView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\PlainText\MpAvPlainTextContentView.axaml.cs">
+      <DependentUpon>MpAvPlainTextContentView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Detail\MpAvClipTileDetailView.axaml.cs">
       <DependentUpon>MpAvClipTileDetailView.axaml</DependentUpon>

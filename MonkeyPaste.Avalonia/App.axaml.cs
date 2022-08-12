@@ -12,10 +12,12 @@ using MonkeyPaste.Common;
 using Avalonia.Media.Imaging;
 using System.Linq;
 using Avalonia.Controls.Converters;
+using Avalonia.Themes.Fluent;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class App : Application {
+
         public static IClassicDesktopStyleApplicationLifetime Desktop { get; private set; }
         public App() {
             if(MpClipTileContentDataTemplateSelector.UseCefNet) {

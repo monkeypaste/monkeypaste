@@ -1,4 +1,4 @@
-﻿using Microsoft.Office.Interop.Outlook;
+﻿//
 using MonkeyPaste;
 using System.Collections.Generic;
 using System.ComponentModel;

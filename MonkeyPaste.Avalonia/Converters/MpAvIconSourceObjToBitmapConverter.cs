@@ -15,18 +15,28 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvIconSourceObjToBitmapConverter Instance = new MpAvIconSourceObjToBitmapConverter();
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
+            double scale = 1.0d;
+            if(parameter is string paramStr &&
+                paramStr.ToLower().StartsWith("scale_")) {
+                try {
+                    scale = double.Parse(paramStr.ToLower().Replace("scale_", String.Empty));
+                }catch {
+                    scale = 1.0d;
+                }
+            }
+
             if (value is int iconId) {
                 var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == iconId);
 
                 if (ivm == null) {
                     return null;
                 }
-                if (parameter is string paramStr) {
-                    if (paramStr.ToLower() == "border") {
-                        return new MpAvStringBase64ToBitmapConverter().Convert(ivm.IconBorderBase64, null, null, CultureInfo.CurrentCulture);
+                if (parameter is string paramStr2) {
+                    if (paramStr2.ToLower() == "border") {
+                        return new MpAvStringBase64ToBitmapConverter().Convert(ivm.IconBorderBase64, null, scale.ToString(), CultureInfo.CurrentCulture);
                     }
                 }
-                return new MpAvStringBase64ToBitmapConverter().Convert(ivm.IconBase64, null, null, CultureInfo.CurrentCulture);
+                return new MpAvStringBase64ToBitmapConverter().Convert(ivm.IconBase64, null, scale.ToString(), CultureInfo.CurrentCulture);
             } else if(value is string valStr) {
                 //types: resource key, hex color, base64
                 if(valStr.EndsWith("Image") || valStr.IsAvResourceString()) {
