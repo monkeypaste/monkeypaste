@@ -5,8 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
 using Avalonia.Threading;
 using Avalonia;
 using Avalonia.Layout;
@@ -49,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
         MpShape[] GetDropTargetAdornerShape();
         void ContinueDragOverTarget();
 
-       //MpContentAdorner DropLineAdorner { get; set; }
+        //MpContentAdorner DropLineAdorner { get; set; }
         Orientation AdornerOrientation { get; }
         void InitAdorner();
         void UpdateAdorner();
@@ -119,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
 
         public static MpDropType DropType {
             get {
-                if(CurDropTarget == null) {
+                if (CurDropTarget == null) {
                     return MpDropType.None;
                 }
                 return CurDropTarget.DropType;
@@ -128,7 +128,7 @@ namespace MonkeyPaste.Avalonia {
 
         public static MpIContentDropTarget CurDropTarget { get; private set; }
 
-        public static bool IsDragAndDrop { get; private set; }        
+        public static bool IsDragAndDrop { get; private set; }
 
         public static bool IsPerformingDrop { get; private set; }
 
@@ -150,7 +150,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvMainWindowViewModel.Instance.OnMainWindowClosed += Instance_OnMainWindowHide;
 
             MpMessenger.Register<MpMessageType>(
-                MpAvClipTrayViewModel.Instance, 
+                MpAvClipTrayViewModel.Instance,
                 ReceivedClipTrayViewModelMessage);
         }
 
@@ -165,7 +165,7 @@ namespace MonkeyPaste.Avalonia {
             //   IsCheckingForDrag) {
             //    return;
             //}
-            
+
             DragData = dragData;
             IsCheckingForDrag = true;
 
@@ -201,14 +201,14 @@ namespace MonkeyPaste.Avalonia {
 
         private static MpIContentDropTarget SelectDropTarget(object dragData) {
             MpIContentDropTarget selectedTarget = null;
-            foreach (var dt in DropTargets.Where(x => x.IsDropEnabled).OrderByDescending(x=>(int)x.DropType)) {
+            foreach (var dt in DropTargets.Where(x => x.IsDropEnabled).OrderByDescending(x => (int)x.DropType)) {
                 if (!dt.IsDragDataValid(MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown, dragData)) {
                     continue;
                 }
 
                 dt.DropIdx = dt.GetDropTargetRectIdx();
                 if (dt.DropIdx >= 0) {
-                    if(selectedTarget != null) {
+                    if (selectedTarget != null) {
                         selectedTarget.DropIdx = -1;
                     }
                     selectedTarget = dt;
@@ -218,14 +218,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void Instance_OnGlobalEscapePressed(object sender, EventArgs e) {
-            if(!IsDragAndDrop) {
+            if (!IsDragAndDrop) {
                 return;
             }
             Reset();
         }
 
         private static void Instance_OnGlobalMouseReleased(object sender, SharpHook.MouseHookEventArgs e) {
-            if(e.Data.Button == SharpHook.Native.MouseButton.Button1) {
+            if (e.Data.Button == SharpHook.Native.MouseButton.Button1) {
                 if (IsDragAndDrop) {
                     PerformDrop(DragData).FireAndForgetSafeAsync(MpAvMainWindowViewModel.Instance);
                 } else if (IsCheckingForDrag) {
@@ -235,11 +235,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void Instance_OnGlobalMouseMove(object sender, SharpHook.MouseHookEventArgs e) {
-            if(IsPerformingDrop) {
+            if (IsPerformingDrop) {
                 // NOTE added this state to try to fix DropIdx from clearing during drop                
                 return;
             }
-            if(IsDraggingFromExternal && !MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
+            if (IsDraggingFromExternal && !MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
                 IsDraggingFromExternal = false;
             }
             // NOTE is not on main thread from external drag
@@ -280,7 +280,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static async Task PerformDrop(object dragData) {
-            if(IsPerformingDrop) {
+            if (IsPerformingDrop) {
                 return;
             }
 
@@ -292,9 +292,9 @@ namespace MonkeyPaste.Avalonia {
                         dragData);
 
                 IsPerformingDrop = false;
-            }                        
+            }
 
-            Reset(); 
+            Reset();
         }
         private static void Reset() {
             IsCheckingForDrag = IsDragAndDrop = IsDraggingFromExternal = false;
@@ -302,7 +302,7 @@ namespace MonkeyPaste.Avalonia {
 
             _mouseDragCheckStartPosition = null;
             CurDropTarget = null;
-            
+
             DragData = null;
             _timer.Stop();
             DropTargets.ForEach(x => x.Reset());
@@ -335,7 +335,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            if(MpCursor.CurrentCursor != dropCursor) {
+            if (MpCursor.CurrentCursor != dropCursor) {
                 MpCursor.SetCursor(nameof(MpAvDragDropManager), dropCursor);
             }
         }
@@ -343,10 +343,10 @@ namespace MonkeyPaste.Avalonia {
         private static void Instance_OnMainWindowHide(object sender, EventArgs e) {
             if (!IsDragAndDrop) {
                 Reset();
-            }            
+            }
         }
 
-        private static void _timer_Tick(object sender, EventArgs e) {            
+        private static void _timer_Tick(object sender, EventArgs e) {
             DropTargets.ForEach(x => x.UpdateAdorner());
             DropTargets.ForEach(x => x.AutoScrollByMouse());
 
@@ -358,10 +358,10 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.JumpToIdxCompleted:
                 case MpMessageType.RequeryCompleted:
                 case MpMessageType.TrayScrollChanged:
-                    if(IsCheckingForDrag || IsDragAndDrop) {
+                    if (IsCheckingForDrag || IsDragAndDrop) {
                         DropTargets.ForEach(x => x.UpdateAdorner());
                     }
-                    
+
                     break;
             }
         }

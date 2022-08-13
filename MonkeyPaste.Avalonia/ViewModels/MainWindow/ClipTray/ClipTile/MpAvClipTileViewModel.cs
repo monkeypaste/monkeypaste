@@ -74,6 +74,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
+        public int[] TitleLayerZIndexes { get; private set; } = Enumerable.Range(1, 3).ToArray();
         public string[] TitleLayerHexColors { get; private set; } = Enumerable.Repeat(MpSystemColors.Transparent, 4).ToArray();
 
         public string TileBorderHexColor {
@@ -1650,7 +1651,6 @@ namespace MonkeyPaste.Avalonia {
             bool HasUserDefinedColor = !string.IsNullOrEmpty(CopyItem.ItemColor);
 
             List<string> hexColors = new List<string>();
-            List<double> opacities = new List<double>();
 
             if (IconId > 0 && !HasUserDefinedColor) {
                 var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId);
@@ -1673,6 +1673,8 @@ namespace MonkeyPaste.Avalonia {
             hexColors = hexColors.Take(layerCount).ToList();
 
             TitleLayerHexColors = hexColors.Select((x, i) => x.AdjustAlpha((double)MpRandom.Rand.Next(40, 120) / 255)).ToArray();
+            TitleLayerZIndexes = new List<int> { 1, 2, 3 }.Randomize().ToArray();
+
             IsBusy = wasBusy;
         }
         public void ResetSubSelection(bool clearEditing = true, bool reqFocus = false) {
@@ -2021,7 +2023,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.CommandId == CopyItemId && sc.ShortcutType == ShortcutType) {
+                if (sc.CommandParameter == CopyItemId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(SelfBindingRef));
                 }
             } else if (e is MpImageAnnotation dio) {
@@ -2039,7 +2041,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override async void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.CommandId == CopyItemId && sc.ShortcutType == ShortcutType) {
+                if (sc.CommandParameter == CopyItemId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(SelfBindingRef));
                 }
             } else if (e is MpCopyItem ci && ci.Id == CopyItemId) {
@@ -2051,10 +2053,10 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            //if(MpDragDropManager.IsDragAndDrop) {
-            //    return;
-            //}
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if (MpAvDragDropManager.IsDragAndDrop) {
+                return;
+            }
             if (e is MpCopyItem ci && CopyItemId == ci.Id) {
 
             }

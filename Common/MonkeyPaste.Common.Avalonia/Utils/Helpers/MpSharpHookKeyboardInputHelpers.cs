@@ -44,6 +44,10 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static KeyCode ConvertStringToKey(string keyStr) {
+            if(Enum.TryParse(typeof(KeyCode), keyStr.StartsWith("Vc") ? keyStr : "Vc" + keyStr, out object? keyCodeObj) &&
+                keyCodeObj is KeyCode keyCode) {
+                return keyCode;
+            }
             string lks = keyStr.ToLower();
             if (lks == "control") {
                 return KeyCode.VcLeftControl;//.LeftCtrl;
@@ -90,7 +94,7 @@ namespace MonkeyPaste.Common.Avalonia {
             if (lks == "PageDown") {
                 return KeyCode.VcPageDown;
             }
-            return (KeyCode)Enum.Parse(typeof(KeyCode), keyStr, true);
+            throw new Exception("unkown key: " + lks);
         }
 
         public static string ConvertKeyToString(KeyCode key) {
@@ -108,13 +112,13 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static string GetKeyLiteral(KeyCode key) {
-            if (key == KeyCode.VcLeftShift) {
+            if (key == KeyCode.VcLeftShift || key == KeyCode.VcRightShift) {
                 return "Shift";
             }
-            if (key == KeyCode.VcLeftAlt) {
+            if (key == KeyCode.VcLeftAlt || key == KeyCode.VcRightAlt) {
                 return "Alt";
             }
-            if (key == KeyCode.VcLeftControl) {
+            if (key == KeyCode.VcLeftControl || key == KeyCode.VcRightControl) {
                 return "Control";
             }
             if (key == KeyCode.VcSemicolon) {
@@ -148,12 +152,41 @@ namespace MonkeyPaste.Common.Avalonia {
                 return "]";
             }
             if (key == KeyCode.VcSlash) {
-                return "|";
+                return @"\";
             }
-            if (key == KeyCode.VcPageDown) {
-                return "PageDown";
+            //if (key == KeyCode.VcPageDown) {
+            //    return "PageDown";
+            //}
+            //if(key == KeyCode.VcNumPadLeft) {
+            //    return "Left";
+            //}
+            //if (key == KeyCode.VcNumPadRight) {
+            //    return "Right";
+            //}
+            //if (key == KeyCode.VcNumPadUp) {
+            //    return "Up";
+            //}
+            //if (key == KeyCode.VcNumPadDown) {
+            //    return "Down";
+            //}
+            //if(key == KeyCode.VcEscape) {
+            //    return "Escape";
+            //}
+            //if (key == KeyCode.VcEnter) {
+            //    return "Enter";
+            //}
+
+            //if(key >= KeyCode.VcF1 && key <= KeyCode.VcF12) {
+            //    int fVal = int.Parse(key.ToString().Replace("VcF", String.Empty));
+            //    return "F" + fVal;
+            //}
+            //if (key >= KeyCode.Vc1 && key <= KeyCode.Vc0) {
+            //    return key.ToString().Replace("Vc", String.Empty);
+            //}
+            if (key >= KeyCode.VcNumPad1 && key <= KeyCode.VcNumPad0) {
+                return key.ToString().Replace("VcNumPad", String.Empty);
             }
-            return key.ToString();
+            return key.ToString().Replace("Vc", String.Empty);
         }
 
         public static string ConvertKeyStringToSendKeysString(string keyString) {

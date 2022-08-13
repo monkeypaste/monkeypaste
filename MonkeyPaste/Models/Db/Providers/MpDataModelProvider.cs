@@ -842,34 +842,24 @@ namespace MonkeyPaste {
 
         #region MpShortcut
 
-        public static async Task<MpShortcut> GetShortcutAsync(int ciid, int tagId, int aiid) {
-            string query = string.Format(@"select * from MpShortcut where fk_MpCopyItemId=? and fk_MpTagId=? and fk_MpAnalyticItemPresetId=?");
-            var result = await MpDb.QueryAsync<MpShortcut>(query,ciid,tagId,aiid);
+        public static async Task<MpShortcut> GetShortcutAsync(string shortcutTypeName, string commandParameter = "") {
+            string query = string.Format(@"select * from MpShortcut where ShortcutTypeName=? and CommandParameter=?");
+            var result = await MpDb.QueryAsync<MpShortcut>(query, shortcutTypeName, commandParameter);
             if (result == null || result.Count == 0) {
                 return null;
             }
             return result[0];
         }
 
-        public static async Task<MpShortcut> GetShortcutAsync(MpShortcutType shortcutType, int commandId) {
-            string query = string.Format(@"select * from MpShortcut where e_ShortcutTypeId=? and fk_MpCommandId=?");
-            var result = await MpDb.QueryAsync<MpShortcut>(query, (int)shortcutType, commandId);
-            if (result == null || result.Count == 0) {
-                return null;
-            }
-            return result[0];
-        }
-
-        public static async Task<string> GetShortcutKeystringAsync(MpShortcutType shortcutType, int commandId = 0) {
-            string query = string.Format(@"select KeyString from MpShortcut where e_ShortcutTypeId=? and fk_MpCommandId=?");
-            var result = await MpDb.QueryScalarAsync<string>(query, (int)shortcutType, commandId);
+        public static async Task<string> GetShortcutKeystringAsync(string shortcutTypeName, string commandParameter = "") {
+            string query = string.Format(@"select KeyString from MpShortcut where ShortcutTypeName=? and CommandParameter=?");
+            var result = await MpDb.QueryScalarAsync<string>(query, shortcutTypeName, commandParameter);
             return result;
         }
 
-        public static string GetShortcutKeystring(MpShortcutType shortcutType, int commandId = 0) {
-            string query = string.Format(@"select KeyString from MpShortcut where e_ShortcutTypeId=? and fk_MpCommandId=?");
-            var result = MpDb.QueryScalar<string>(query, (int)shortcutType, commandId);
-            result = result == null ? string.Empty : result;
+        public static string GetShortcutKeystring(string shortcutTypeName, string commandParameter = "") {
+            string query = string.Format(@"select KeyString from MpShortcut where ShortcutTypeName=? and CommandParameter=?");
+            var result = MpDb.QueryScalar<string>(query, shortcutTypeName, commandParameter);
             return result;
         }
 
@@ -878,19 +868,6 @@ namespace MonkeyPaste {
             var result = await MpDb.QueryAsync<MpShortcut>(query);
             return result;
         }
-
-        public static async Task<List<MpShortcut>> GetCopyItemShortcutsAsync(int ciid) {
-            string query = string.Format(@"select * from MpShortcut where fk_MpCopyItemId={0}", ciid);
-            var result = await MpDb.QueryAsync<MpShortcut>(query);
-            return result;
-        }
-
-        public static async Task<List<MpShortcut>> GetTagShortcutsAsync(int tid) {
-            string query = string.Format(@"select * from MpShortcut where fk_MpTagId={0}", tid);
-            var result = await MpDb.QueryAsync<MpShortcut>(query);
-            return result;
-        }
-
         #endregion
 
         #region MpPasteToAppPath

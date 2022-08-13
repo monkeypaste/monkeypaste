@@ -81,7 +81,6 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public ICommand Command { get; set; }
-        public object CommandParameter { get; set; }
 
         public IDisposable KeysObservable { get; set; }
 
@@ -185,25 +184,25 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public int CommandId {
+        public string CommandParameter {
             get {
                 if(Shortcut == null) {
-                    return 0;
+                    return string.Empty;
                 }
                 //if(IsCustom()) {
                 //    return Shortcut.CommandId;
                 //}
                 //return ShortcutId;
-                return Shortcut.CommandId;
+                return Shortcut.CommandParameter;
             }
             set {
-                if(CommandId != value) {
+                if(CommandParameter != value) {
                     if(!IsCustom()) {
                         throw new Exception("Application shortcuts use pk not command id");
                     }
-                    Shortcut.CommandId = value;
+                    Shortcut.CommandParameter = value;
                     HasModelChanged = true;
-                    OnPropertyChanged(nameof(CommandId));
+                    OnPropertyChanged(nameof(CommandParameter));
                 }
             }
         }
@@ -259,6 +258,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+
         private string _sendKeyStr;
         public string SendKeyStr => _sendKeyStr;
 
@@ -267,11 +267,11 @@ namespace MonkeyPaste.Avalonia {
                 if(Shortcut == null) {
                     return string.Empty;
                 }
-                return Shortcut.ShortcutName;
+                return Shortcut.ShortcutLabel;
             }
             set {
-                if (Shortcut != null && Shortcut.ShortcutName != value) {
-                    Shortcut.ShortcutName = value;
+                if (Shortcut != null && Shortcut.ShortcutLabel != value) {
+                    Shortcut.ShortcutLabel = value;
                     HasModelChanged = true; 
                     OnPropertyChanged(nameof(ShortcutDisplayName));
                 }
@@ -326,7 +326,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(KeyList));
                     OnPropertyChanged(nameof(ShortcutDisplayName));
                     OnPropertyChanged(nameof(ShortcutId));
-                    OnPropertyChanged(nameof(CommandId));
+                    OnPropertyChanged(nameof(CommandParameter));
                     OnPropertyChanged(nameof(ShortcutType));
                     OnPropertyChanged(nameof(DefaultKeyString));
                     OnPropertyChanged(nameof(SelectedRoutingTypeIdx));
@@ -349,12 +349,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public async Task InitializeAsync(MpShortcut s, ICommand command, object commandParameter = null) {
+        public async Task InitializeAsync(MpShortcut s, ICommand command) {
             //only register if non-empty keysstring
             
             Shortcut = s;
             Command = command;
-            CommandParameter = commandParameter;
             _sendKeyStr = MpAvKeyboardInputHelpers.ConvertKeyStringToSendKeysString(KeyString);
 
             OnPropertyChanged(nameof(KeyItems));
@@ -496,7 +495,7 @@ namespace MonkeyPaste.Avalonia {
             if(Shortcut == null) {
                 return false;
             }
-            return Shortcut.CommandId > 0;
+            return (int)ShortcutType >= MpShortcut.MIN_USER_SHORTCUT_TYPE;
         }
 
         public void ClearShortcutKeyString() {
@@ -516,25 +515,28 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             bool wasChanged = false;
-            if(e is MpCopyItem ci) {
-                if(ShortcutType == MpShortcutType.PasteCopyItem && 
-                    CommandId == ci.Id) {
-                    ShortcutDisplayName = $"Paste {ci.Title}";
-                    wasChanged = true;
-                }
-            } else if (e is MpTag t) {
-                if (ShortcutType == MpShortcutType.SelectTag &&
-                    CommandId == t.Id) {
-                    ShortcutDisplayName = $"Select {t.TagName}";
-                    wasChanged = true;
-                }
-            } else if (e is MpPluginPreset aip) {
-                if (ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset &&
-                    CommandId == aip.Id) {
-                    ShortcutDisplayName = $"User {aip.Label} analyzer";
-                    wasChanged = true;
+            if (int.TryParse(CommandParameter, out int cmd_param_int)) {
+                if (e is MpCopyItem ci) {
+                    if (ShortcutType == MpShortcutType.PasteCopyItem &&
+                        cmd_param_int == ci.Id) {
+                        ShortcutDisplayName = $"Paste {ci.Title}";
+                        wasChanged = true;
+                    }
+                } else if (e is MpTag t) {
+                    if (ShortcutType == MpShortcutType.SelectTag &&
+                        cmd_param_int == t.Id) {
+                        ShortcutDisplayName = $"Select {t.TagName}";
+                        wasChanged = true;
+                    }
+                } else if (e is MpPluginPreset aip) {
+                    if (ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset &&
+                        cmd_param_int == aip.Id) {
+                        ShortcutDisplayName = $"User {aip.Label} analyzer";
+                        wasChanged = true;
+                    }
                 }
             }
+            
             if(wasChanged) {
                 Task.Run(async () => {
                     await Shortcut.WriteToDatabaseAsync();
@@ -551,7 +553,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand PerformShortcutCommand => new MpCommand(
             () => {
                 if (IsCustom()) {
-                    Command?.Execute(CommandId);
+                    Command?.Execute(CommandParameter);
                 } else {
                     Command?.Execute(null);
                 }

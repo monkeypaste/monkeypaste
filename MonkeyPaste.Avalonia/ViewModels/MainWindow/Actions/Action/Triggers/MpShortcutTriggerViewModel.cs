@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
                 var scvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(
-                    x => x.CommandId == ActionId && x.ShortcutType == ShortcutType);
+                    x => x.CommandParameter == ActionId.ToString() && x.ShortcutType == ShortcutType);
 
                 if (scvm == null) {
                     scvm = new MpAvShortcutViewModel(MpAvShortcutCollectionViewModel.Instance);
@@ -113,7 +113,7 @@ namespace MonkeyPaste.Avalonia {
                     $"Trigger {Label} Action",
                     PerformActionOnSelectedContentCommand,
                     MpShortcutType.TriggerAction,
-                    ActionId,
+                    ActionId.ToString(),
                     ShortcutKeyString);
 
                 OnPropertyChanged(nameof(ShortcutViewModel));

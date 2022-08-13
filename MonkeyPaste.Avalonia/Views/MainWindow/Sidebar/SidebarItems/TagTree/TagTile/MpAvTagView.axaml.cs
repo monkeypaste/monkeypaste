@@ -43,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
             } else if (BindingContext.IsSelected) {
                 MpDataModelProvider.QueryInfo.NotifyQueryChanged();
             }
-            //MpDragDropManager.StartDragCheck(BindingContext);
+            //MpAvDragDropManager.StartDragCheck(BindingContext);
         }
 
         private void InitializeComponent() {

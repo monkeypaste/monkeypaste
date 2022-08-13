@@ -296,7 +296,7 @@ namespace MonkeyPaste.Avalonia {
                 if(Parent == null || Preset == null) {
                     return null;
                 }
-                var scvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.CommandId == Preset.Id && x.ShortcutType == ShortcutType);
+                var scvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.CommandParameter == Preset.Id.ToString() && x.ShortcutType == ShortcutType);
 
                 if(scvm == null) {
                     scvm = new MpAvShortcutViewModel(MpAvShortcutCollectionViewModel.Instance);
@@ -424,7 +424,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.CommandId == AnalyticItemPresetId && sc.ShortcutType == ShortcutType) {
+                if (sc.CommandParameter == AnalyticItemPresetId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             }
@@ -432,7 +432,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.CommandId == AnalyticItemPresetId && sc.ShortcutType == ShortcutType) {
+                if (sc.CommandParameter == AnalyticItemPresetId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             }
@@ -440,7 +440,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.CommandId == AnalyticItemPresetId && sc.ShortcutType == ShortcutType) {
+                if (sc.CommandParameter == AnalyticItemPresetId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             }
@@ -534,7 +534,7 @@ namespace MonkeyPaste.Avalonia {
                     $"Use {Label} Analyzer",
                     MpAvClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
                     MpShortcutType.AnalyzeCopyItemWithPreset,
-                    Preset.Id,
+                    Preset.Id.ToString(),
                     ShortcutKeyString);
 
                 OnPropertyChanged(nameof(ShortcutViewModel));

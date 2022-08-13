@@ -40,8 +40,10 @@ namespace MonkeyPaste {
         CopySelection,
         ScrollToHome,
         ScrollToEnd,
-        IncreaseSize,
-        DecreaseSize, 
+        WindowSizeUp,
+        WindowSizeDown,
+        WindowSizeLeft,
+        WindowSizeRight,
         PasteHere,
         PreviousPage,
         NextPage,
@@ -873,6 +875,8 @@ namespace MonkeyPaste {
         DeadCharProcessed = 172
     }
     public class MpShortcut : MpDbModelBase {
+        public const int MIN_USER_SHORTCUT_TYPE = 101;
+
         #region Columns
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpShortcutId")]
@@ -881,18 +885,18 @@ namespace MonkeyPaste {
         [Column("MpShortcutGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        [Column("fk_MpCommandId")]
-        public int CommandId { get; set; } = 0;
+        //[Column("fk_MpCommandId")]
+        public string CommandParameter { get; set; }
 
-        public string ShortcutName { get; set; } = string.Empty;
+        public string ShortcutLabel { get; set; } = string.Empty;
         public string KeyString { get; set; } = string.Empty;
         public string DefaultKeyString { get; set; } = string.Empty;
 
-        [Column("RoutingType")]
-        public int RouteType { get; set; } = 0;
+        //[Column("RoutingType")]
+        public string RouteTypeName { get; set; }
 
-        [Column("e_ShortcutTypeId")]
-        public int ShortcutTypeId { get; set; } = 0;
+        //[Column("e_ShortcutTypeId")]
+        public string ShortcutTypeName { get; set; } 
 
         public int RoutingDelayMs { get; set; } = 100;
 
@@ -930,20 +934,20 @@ namespace MonkeyPaste {
         [Ignore]
         public MpShortcutType ShortcutType {
             get {
-                return (MpShortcutType)ShortcutTypeId;
+                return ShortcutTypeName.ToEnum<MpShortcutType>();
             }
             set {
-                ShortcutTypeId = (int)value;
+                ShortcutTypeName = value.ToString();
             }
         }
 
         [Ignore]
         public MpRoutingType RoutingType {
             get {
-                return (MpRoutingType)RouteType;
+                return RouteTypeName.ToEnum<MpRoutingType>();
             }
             set {
-                RouteType = (int)value;
+                RouteTypeName = value.ToString();
             }
         }
 
@@ -952,30 +956,48 @@ namespace MonkeyPaste {
 
         #region Static Methods
 
-        public static async Task<MpShortcut> Create(
-            string name,
-            string keyString,
-            string defKeyString,
-            MpRoutingType routeType,
-            MpShortcutType shortcutType,
-            int commandId) {
+        public static async Task<MpShortcut> CreateAsync(
+            string shortcutLabel = "",
+            string keyString = "",
+            string defKeyString = "",
+            MpRoutingType routeType = MpRoutingType.Direct,
+            MpShortcutType shortcutType = MpShortcutType.None,
+            string commandParameter = "",
+            string guid = "") {
             if(shortcutType == MpShortcutType.None) {
                 throw new Exception("Needs type");
             }
+            if(string.IsNullOrEmpty(keyString)) {
+                throw new Exception("Needs keystring");
+            }
 
-            var dupShortcut = await MpDataModelProvider.GetShortcutAsync(shortcutType,commandId);
+            shortcutLabel = string.IsNullOrEmpty(shortcutLabel) ? shortcutType.EnumToLabel() : shortcutLabel;
+            guid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid().ToString() : guid;
+            defKeyString = string.IsNullOrEmpty(defKeyString) ? keyString : defKeyString;
+
+            var dupShortcut = await MpDataModelProvider.GetShortcutAsync(shortcutType.ToString(),commandParameter);
             if (dupShortcut != null) {
+                MpConsole.WriteLine($"Shortcut '{dupShortcut.ShortcutLabel}' already exists.");
+                MpConsole.WriteLine($"Updating name from '{dupShortcut.ShortcutLabel}' to '{shortcutLabel}'");
+                MpConsole.WriteLine($"Updating keyString from '{dupShortcut.KeyString}' to '{keyString}'");
+                MpConsole.WriteLine($"Updating routing type from '{dupShortcut.RoutingType}' to '{routeType}'");
+
                 dupShortcut = await MpDb.GetItemAsync<MpShortcut>(dupShortcut.Id);
+                dupShortcut.ShortcutLabel = shortcutLabel;
+                dupShortcut.KeyString = keyString;
+                dupShortcut.RoutingType = routeType;
+
+                await dupShortcut.WriteToDatabaseAsync();
                 return dupShortcut;
             }
             var newShortcut = new MpShortcut() {
-                ShortcutGuid = System.Guid.NewGuid(),
-                ShortcutName = String.IsNullOrEmpty(name) ? shortcutType.EnumToLabel() : name,
+                ShortcutGuid = System.Guid.Parse(guid),
+                ShortcutLabel = shortcutLabel,
                 KeyString = keyString,
                 DefaultKeyString = defKeyString,
                 RoutingType = routeType,
                 ShortcutType = shortcutType,
-                CommandId = commandId
+                CommandParameter = commandParameter
             };
 
             await newShortcut.WriteToDatabaseAsync();
@@ -989,7 +1011,7 @@ namespace MonkeyPaste {
 
 
         public override string ToString() {
-            string outStr = "Shortcut Name: " + ShortcutName + " Id: " + ShortcutId;
+            string outStr = "Shortcut Name: " + ShortcutLabel + " Id: " + ShortcutId;
             outStr += " " + KeyString;
             return outStr;
         }

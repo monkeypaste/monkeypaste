@@ -15,6 +15,20 @@ namespace MonkeyPaste.Common {
 
         #region Collections
 
+        public static IEnumerable<T> Randomize<T>(this IEnumerable<T> enumerable) {
+            List<T> enumerable_copy = enumerable.ToList();
+            List<T> rand_list = new List<T>();
+
+            while (enumerable_copy.Count() > 0) {
+                int idx = MpRandom.Rand.Next(enumerable_copy.Count);
+                T item = enumerable_copy.ElementAt(idx);
+                enumerable_copy.RemoveAt(idx);
+                rand_list.Add(item);
+            }
+
+            return rand_list;
+        }
+
         public static ObservableCollection<TSource> Sort<TSource, TKey>(
             this ObservableCollection<TSource> source,
             Func<TSource, TKey> keySelector,

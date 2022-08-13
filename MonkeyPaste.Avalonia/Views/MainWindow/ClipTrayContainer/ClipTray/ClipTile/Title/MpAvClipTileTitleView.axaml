@@ -29,9 +29,11 @@
                          Width="100"
                          Height="28"
                          Opacity="0.3"
+                         ZIndex="0"
                          Canvas.Left="165"
                          Canvas.Top="24" />
                 <Path x:Name="layer0"
+                      ZIndex="{Binding TitleLayerZIndexes[0]}"
                       StrokeThickness="0"
                       Fill="{Binding TitleLayerHexColors[0], Converter={StaticResource StringHexToBrushConverter}}">
                     <Path.Data>
@@ -53,6 +55,7 @@
                 </Path>
                 <Path x:Name="layer1"
                       StrokeThickness="0"
+                      ZIndex="{Binding TitleLayerZIndexes[1]}"
                       Fill="{Binding TitleLayerHexColors[1], Converter={StaticResource StringHexToBrushConverter}}">
                     <Path.Data>
                         <PathGeometry>
@@ -76,6 +79,7 @@
                 </Path>
                 <Path x:Name="layer3"
                       StrokeThickness="0"
+                      ZIndex="{Binding TitleLayerZIndexes[2]}"
                       Fill="{Binding TitleLayerHexColors[3], Converter={StaticResource StringHexToBrushConverter}}">
                     <Path.Data>
                         <PathGeometry>

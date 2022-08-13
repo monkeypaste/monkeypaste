@@ -97,7 +97,6 @@ namespace MonkeyPaste.Avalonia {
             }
             await Task.Delay(1000);
 
-
             MpNotificationCollectionViewModel.Instance.FinishLoading();
             MpAvClipTrayViewModel.Instance.OnPostMainWindowLoaded();
             IsLoaded = true;

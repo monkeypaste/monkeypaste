@@ -54,7 +54,7 @@ namespace MonkeyPaste.Avalonia {
                 //}
             }
 
-            //MpDragDropManager.StartDragCheck(BindingContext);
+            //MpAvDragDropManager.StartDragCheck(BindingContext);
 
             e.Handled = true;
         }

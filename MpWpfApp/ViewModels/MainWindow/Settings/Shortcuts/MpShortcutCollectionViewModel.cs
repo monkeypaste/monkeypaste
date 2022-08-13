@@ -150,7 +150,7 @@ namespace MpWpfApp {
                 //if new shortcut
                 MpRoutingType routingType = shortcutType == MpShortcutType.PasteCopyItem ? MpRoutingType.Direct : MpRoutingType.Internal;
                 //copyitem direct, tag internal, analyzer internal
-                var sc = await MpShortcut.Create(title, shortcutKeyString, shortcutKeyString, routingType, shortcutType, commandId);
+                var sc = await MpShortcut.CreateAsync(title, shortcutKeyString, shortcutKeyString, routingType, shortcutType, commandId.ToString());
                 scvm = await CreateShortcutViewModel(sc, command);
                 Items.Add(scvm);
             } else {
@@ -409,10 +409,10 @@ namespace MpWpfApp {
                         case MpShortcutType.ScrollToEnd:
                             shortcutCommand = MpClipTrayViewModel.Instance.ScrollToEndCommand;
                             break;
-                        case MpShortcutType.IncreaseSize:
+                        case MpShortcutType.WindowSizeUp:
                             shortcutCommand = MpMainWindowViewModel.Instance.IncreaseSizeCommand;
                             break;
-                        case MpShortcutType.DecreaseSize:
+                        case MpShortcutType.WindowSizeDown:
                             shortcutCommand = MpMainWindowViewModel.Instance.DecreaseSizeCommand;
                             break;
                         case MpShortcutType.PreviousPage:
@@ -808,7 +808,7 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public ICommand ReassignSelectedShortcutCommand => new RelayCommand(
+        public ICommand ReassignSelectedShortcutCommand => new MpAsyncCommand(
             async () => {
                 var scvm = Items[SelectedShortcutIndex];
                 await RegisterViewModelShortcutAsync(
@@ -820,9 +820,9 @@ namespace MpWpfApp {
                 );
             });
 
-        public ICommand ShowAssignShortcutDialogCommand => new RelayCommand<MpIShortcutCommandViewModel>(
+        public ICommand ShowAssignShortcutDialogCommand => new MpAsyncCommand<MpIShortcutCommandViewModel>(
             async (sccvm) => {
-                string shortcutKeyString = await MpDataModelProvider.GetShortcutKeystringAsync(sccvm.ShortcutType, sccvm.ModelId);
+                string shortcutKeyString = await MpDataModelProvider.GetShortcutKeystringAsync(sccvm.ShortcutType.ToString(), sccvm.ModelId.ToString());
 
                 await RegisterViewModelShortcutAsync(
                     sccvm.ShortcutLabel,

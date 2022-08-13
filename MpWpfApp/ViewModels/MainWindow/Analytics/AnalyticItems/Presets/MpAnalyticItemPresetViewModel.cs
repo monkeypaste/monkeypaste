@@ -432,7 +432,7 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.CommandId == AnalyticItemPresetId && sc.ShortcutType == ShortcutType) {
+                if (sc.CommandParameter == AnalyticItemPresetId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             }
@@ -440,7 +440,7 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.CommandId == AnalyticItemPresetId && sc.ShortcutType == ShortcutType) {
+                if (sc.CommandParameter == AnalyticItemPresetId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             }
@@ -448,7 +448,7 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.CommandId == AnalyticItemPresetId && sc.ShortcutType == ShortcutType) {
+                if (sc.CommandParameter == AnalyticItemPresetId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             }

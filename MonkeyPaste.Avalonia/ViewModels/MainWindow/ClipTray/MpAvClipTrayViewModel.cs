@@ -1071,26 +1071,36 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(ScrollOffsetY));
         }
 
-        int anchor_query_idx;
+        int anchor_query_idx = -1;
+        MpPoint pre_orientation_max_scroll_offset = null;
+
         public void ListOrientationChangeBegin() {
             if(IsEmpty) {
                 anchor_query_idx = -1;
                 return;
             }
             if(ListOrientation == Orientation.Horizontal) {
-                // list was vertical
-                anchor_query_idx = Items.Aggregate((a, b) => a.TrayY < b.TrayY && ScrollOffsetY - a.TrayY >= 0 ? a : b).QueryOffsetIdx;
-            } else {
-                // list was horizontal
                 anchor_query_idx = Items.Aggregate((a, b) => a.TrayX < b.TrayX && ScrollOffsetX - a.TrayX >= 0 ? a : b).QueryOffsetIdx;
+                
+            } else {
+                anchor_query_idx = Items.Aggregate((a, b) => a.TrayY < b.TrayY && ScrollOffsetY - a.TrayY >= 0 ? a : b).QueryOffsetIdx;
             }
+            pre_orientation_max_scroll_offset = new MpPoint(MaxScrollOffsetX, MaxScrollOffsetY);
         }
 
         public void ListOrientationChangeEnd() {
             if(anchor_query_idx < 0) {
                 return;
             }
-            QueryCommand.Execute(anchor_query_idx);
+            //QueryCommand.Execute(anchor_query_idx);
+            var anchor_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == anchor_query_idx);
+            if(anchor_ctvm == null) {
+                Debugger.Break();
+            }
+            ScrollOffsetX = anchor_ctvm.TrayX;
+            ScrollOffsetY = anchor_ctvm.TrayY;
+            anchor_query_idx = -1;
+            pre_orientation_max_scroll_offset = null;
         }
 
         #endregion
@@ -1138,10 +1148,16 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(ScrollOffsetX):
                 case nameof(ScrollOffsetY):
-                    if(IsThumbDragging) {
-
-                    }
+                    
                     CheckLoadMore();
+                    break;
+                case nameof(MaxScrollOffsetX):
+                case nameof(MaxScrollOffsetY):
+                    if(pre_orientation_max_scroll_offset != null && 
+                        pre_orientation_max_scroll_offset.X != MaxScrollOffsetX &&
+                        pre_orientation_max_scroll_offset.Y != MaxScrollOffsetY) {
+                        
+                    }
                     break;
                 case nameof(IsThumbDraggingX):
                 case nameof(IsThumbDraggingY):
@@ -2619,6 +2635,8 @@ namespace MonkeyPaste.Avalonia {
                         await Task.Delay(100);
                     }
                     CheckLoadMore();
+                } else if(anchor_query_idx >= 0) {
+                    
                 }
             },
             (offsetIdx_Or_ScrollOffset_Arg) => {

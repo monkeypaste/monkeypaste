@@ -9,7 +9,7 @@ using SharpHook;
 using SharpHook.Native;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvKeyGestureHelper<T> where T:Enum {
+    public class MpAvKeyGestureHelper<T> where T:class {
         #region Private Variables
 
         private List<KeyValuePair<T, DateTime>> _downs = new List<KeyValuePair<T, DateTime>>();
@@ -41,8 +41,9 @@ namespace MonkeyPaste.Avalonia {
                 if (i > 0) {
                     //remove last up from downs
                     var downsToRemove = downs.Where(d =>
-                                                d.Value < ups[i - 1].Value && 
-                                                d.Key.CompareTo(ups[i - 1].Key) == 0).ToList();
+                                                d.Value < ups[i - 1].Value &&
+                                                //d.Key.Co(ups[i - 1].Key) == 0).ToList();
+                                                d.Key == ups[i - 1].Key).ToList();
                     for (int j = 0; j < downsToRemove.Count; j++) {
                         downs.Remove(downsToRemove[j]);
                     }

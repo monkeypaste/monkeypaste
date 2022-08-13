@@ -417,7 +417,7 @@ namespace MonkeyPaste {
         public bool NotificationShowAppendBufferToast { get; set; } = false;
         public bool NotificationShowCopyItemTooLargeToast { get; set; }
 
-        public bool DoShowMainWindowWithMouseEdgeAndScrollDelta { get; set; }
+        public bool DoShowMainWindowWithMouseEdgeAndScrollDelta { get; set; } = true;
 
         public bool DoShowMainWindowWithMouseEdge { get; set; } = true;
         #endregion

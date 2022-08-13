@@ -32,6 +32,12 @@ namespace MonkeyPaste.Avalonia {
         Left
     }
     public class MpAvMainWindowViewModel : MpViewModelBase, MpIResizableViewModel {
+        #region Private Variables
+
+        private double _resize_shortcut_nudge_amount = 50;
+
+        #endregion
+
         #region Statics
 
         private static MpAvMainWindowViewModel _instance;
@@ -43,15 +49,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpIOrientedSidebarItemViewModel SelectedSidebarItemViewModel { 
+        public MpIOrientedSidebarItemViewModel SelectedSidebarItemViewModel {
             get {
-                if(MpAvTagTrayViewModel.Instance.IsSidebarVisible) {
+                if (MpAvTagTrayViewModel.Instance.IsSidebarVisible) {
                     return MpAvTagTrayViewModel.Instance;
                 }
-                if(MpActionCollectionViewModel.Instance.IsSidebarVisible) {
+                if (MpActionCollectionViewModel.Instance.IsSidebarVisible) {
                     return MpActionCollectionViewModel.Instance;
                 }
-                if(MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible) {
+                if (MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible) {
                     return MpAnalyticItemCollectionViewModel.Instance;
                 }
                 return null;
@@ -386,7 +392,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        
+
 
         #endregion
 
@@ -472,7 +478,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(LastMainWindowRect):
                     //MpConsole.WriteLine("Last mwr " + LastMainWindowRect);
-                   // MpConsole.WriteLine("Cur mwr" + MainWindowRect);
+                    // MpConsole.WriteLine("Cur mwr" + MainWindowRect);
                     break;
                 case nameof(MainWindowHeight):
                     if (!IsResizing) {
@@ -754,7 +760,7 @@ namespace MonkeyPaste.Avalonia {
                               MpAvMainWindow.Instance.IsVisible &&
                               !IsAnyDropDownOpen &&
                               !IsShowingDialog &&
-                              //!MpDragDropManager.IsDragAndDrop &&
+                              !MpAvDragDropManager.IsDragAndDrop &&
                               //!MpContextMenuView.Instance.IsOpen &&
                               !IsResizing &&
                               !IsMainWindowClosing;
@@ -762,15 +768,18 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand CycleOrientationCommand => new MpCommand<object>(
             (dirStrArg) => {
-                if(dirStrArg is string dirStr) {
+                if (dirStrArg is string dirStr) {
                     bool isCw = dirStr.ToLower() == "cw";
                     int nextOr = (int)MainWindowOrientationType + (isCw ? -1 : 1);
-                    
+
                     if (nextOr >= Enum.GetNames(typeof(MpMainWindowOrientationType)).Length) {
                         nextOr = 0;
-                    } else if(nextOr < 0) {
+                    } else if (nextOr < 0) {
                         nextOr = Enum.GetNames(typeof(MpMainWindowOrientationType)).Length - 1;
                     }
+
+
+                    MpAvClipTrayViewModel.Instance.ListOrientationChangeBegin();
 
                     MainWindowOrientationType = (MpMainWindowOrientationType)nextOr;
                     SetupMainWindowSize(true);
@@ -794,20 +803,58 @@ namespace MonkeyPaste.Avalonia {
                 IsFilterMenuVisible = !IsFilterMenuVisible;
             });
 
-        public ICommand IncreaseSizeCommand => new MpCommand(
+        
+        public ICommand WindowSizeUpCommand => new MpCommand(
              () => {
                  IsResizing = true;
-                 //var mw = Application.Current.MainWindow as MpMainWindow;
-                 //mw.MainWindowResizeBehvior.Resize(0, 50);
+                 var resize_control = MpAvMainWindow.Instance.MainWindowResizerView.MainWindowResizeBorder;
+
+                 double dir = MainWindowOrientationType == MpMainWindowOrientationType.Bottom ? 1 : -1;
+                 MpAvResizeExtension.Resize(resize_control, 0, _resize_shortcut_nudge_amount * dir);
+
                  IsResizing = false;
+             },
+             () => {
+                 return IsHorizontalOrientation;
+                });
+
+        public ICommand WindowSizeDownCommand => new MpCommand(
+             () => {
+                 IsResizing = true;
+
+                 var resize_control = MpAvMainWindow.Instance.MainWindowResizerView.MainWindowResizeBorder;
+
+                 double dir = MainWindowOrientationType == MpMainWindowOrientationType.Bottom ? -1 : 1;
+                 MpAvResizeExtension.Resize(resize_control, 0, _resize_shortcut_nudge_amount * dir);
+
+                 IsResizing = false;
+             }, 
+             () => {
+                 return IsHorizontalOrientation;
              });
 
-        public ICommand DecreaseSizeCommand => new MpCommand(
+        public ICommand WindowSizeRightCommand => new MpCommand(
              () => {
                  IsResizing = true;
-                 //var mw = Application.Current.MainWindow as MpMainWindow;
-                 //mw.MainWindowResizeBehvior.Resize(0, -50);
+                 var resize_control = MpAvMainWindow.Instance.MainWindowResizerView.MainWindowResizeBorder;
+
+                 double dir = MainWindowOrientationType == MpMainWindowOrientationType.Right ? -1 : 1;
+                 MpAvResizeExtension.Resize(resize_control, _resize_shortcut_nudge_amount * dir, 0);
                  IsResizing = false;
+             }, () => {
+                 return IsVerticalOrientation;
+             });
+
+        public ICommand WindowSizeLeftCommand => new MpCommand(
+             () => {
+                 IsResizing = true;
+                 var resize_control = MpAvMainWindow.Instance.MainWindowResizerView.MainWindowResizeBorder;
+
+                 double dir = MainWindowOrientationType == MpMainWindowOrientationType.Right ? 1 : -1;
+                 MpAvResizeExtension.Resize(resize_control, _resize_shortcut_nudge_amount * dir, 0);
+                 IsResizing = false;
+             }, () => {
+                 return IsVerticalOrientation;
              });
 
         private MpCommand _undoCommand;

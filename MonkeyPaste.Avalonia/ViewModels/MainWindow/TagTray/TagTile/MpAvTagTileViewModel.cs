@@ -172,7 +172,7 @@ namespace MonkeyPaste.Avalonia {
                 if (Parent == null || Tag == null) {
                     return null;
                 }
-                var scvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.CommandId == TagId && x.ShortcutType == ShortcutType);
+                var scvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.CommandParameter == TagId.ToString() && x.ShortcutType == ShortcutType);
 
                 if (scvm == null) {
                     scvm = new MpAvShortcutViewModel(MpAvShortcutCollectionViewModel.Instance);
@@ -552,7 +552,7 @@ namespace MonkeyPaste.Avalonia {
         #region Db Events
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.CommandId == TagId && sc.ShortcutType == ShortcutType) {
+                if (sc.CommandParameter == TagId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             } else if (e is MpCopyItemTag cit) {
@@ -574,7 +574,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.CommandId == TagId && sc.ShortcutType == ShortcutType) {
+                if (sc.CommandParameter == TagId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             } else if(e is MpTag t && t.Id == TagId) {
@@ -588,7 +588,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.CommandId == TagId && sc.ShortcutType == ShortcutType) {
+                if (sc.CommandParameter == TagId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             } else if (e is MpCopyItemTag cit) {
@@ -793,7 +793,7 @@ namespace MonkeyPaste.Avalonia {
                             $"Select '{TagName}' Collection",
                             Parent.SelectTagCommand, 
                             ShortcutType,
-                            TagId,
+                            TagId.ToString(),
                             ShortcutKeyString);
                 OnPropertyChanged(nameof(ShortcutKeyString));
             });

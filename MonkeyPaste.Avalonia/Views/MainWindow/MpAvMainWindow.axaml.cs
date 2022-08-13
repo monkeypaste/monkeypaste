@@ -256,17 +256,7 @@ namespace MonkeyPaste.Avalonia {
             var sbv = this.FindControl<MpAvSidebarView>("SidebarView");
             var ctrv = this.FindControl<MpAvClipTrayView>("ClipTrayView");
             var ttv = this.FindControl<MpAvTagTreeView>("TagTreeView");
-            var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");
-
-            EventHandler<EffectiveViewportChangedEventArgs> trayViewportChangedHandler = null;
-            trayViewportChangedHandler = (s, e) => {
-                ctrv.EffectiveViewportChanged -= trayViewportChangedHandler;
-                //MpAvClipTrayViewModel.Instance.ListOrientationChangeEnd();
-            };
-
-            ctrv.EffectiveViewportChanged += trayViewportChangedHandler;
-
-           // MpAvClipTrayViewModel.Instance.ListOrientationChangeBegin();
+            var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");            
 
             if (mwvm.IsHorizontalOrientation) {
                 mwtg.RowDefinitions.Clear();
@@ -321,7 +311,6 @@ namespace MonkeyPaste.Avalonia {
 
             UpdateSidebarGridsplitter();
 
-            
             //mwtg.InvalidateMeasure();
         }
 

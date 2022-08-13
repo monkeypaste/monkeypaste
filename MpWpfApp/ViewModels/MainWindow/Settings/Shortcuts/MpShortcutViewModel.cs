@@ -195,14 +195,14 @@ namespace MpWpfApp {
                 //    return Shortcut.CommandId;
                 //}
                 //return ShortcutId;
-                return Shortcut.CommandId;
+                return Shortcut.CommandParameter;
             }
             set {
                 if(CommandId != value) {
                     if(!IsCustom()) {
                         throw new Exception("Application shortcuts use pk not command id");
                     }
-                    Shortcut.CommandId = value;
+                    Shortcut.CommandParameter = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(CommandId));
                 }
@@ -268,11 +268,11 @@ namespace MpWpfApp {
                 if(Shortcut == null) {
                     return string.Empty;
                 }
-                return Shortcut.ShortcutName;
+                return Shortcut.ShortcutLabel;
             }
             set {
-                if (Shortcut != null && Shortcut.ShortcutName != value) {
-                    Shortcut.ShortcutName = value;
+                if (Shortcut != null && Shortcut.ShortcutLabel != value) {
+                    Shortcut.ShortcutLabel = value;
                     HasModelChanged = true; 
                     OnPropertyChanged(nameof(ShortcutDisplayName));
                 }
@@ -497,7 +497,7 @@ namespace MpWpfApp {
             if(Shortcut == null) {
                 return false;
             }
-            return Shortcut.CommandId > 0;
+            return Shortcut.CommandParameter > 0;
         }
 
         public void ClearShortcutKeyString() {

@@ -10,7 +10,7 @@ using PropertyChanged;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvAssignShortcutWindow : Window {
-        private MpAvKeyGestureHelper<Key> _gestureHelper;
+        private MpAvKeyGestureHelper<string> _gestureHelper;
 
         public bool DialogResult { get; set; } = false;
         public MpAvAssignShortcutWindow() {
@@ -23,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
             this.DataContextChanged += MpAvAssignShortcutWindow_DataContextChanged;
             this.KeyDown += MpAvAssignShortcutWindow_KeyDown;
             this.KeyUp += MpAvAssignShortcutWindow_KeyUp;
-            _gestureHelper = new MpAvKeyGestureHelper<Key>(GetPriority);
+            _gestureHelper = new MpAvKeyGestureHelper<string>(GetPriority_str);
         }
 
 
@@ -47,15 +47,19 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private int GetPriority_str(string keyStr) {
+            return 0;
+        }
+
         private void MpAvAssignShortcutWindow_KeyUp(object sender, global::Avalonia.Input.KeyEventArgs e) {
-            _gestureHelper.AddKeyUp(e.Key);
+            _gestureHelper.AddKeyUp(e.Key.ToString());
             if (DataContext is MpAvAssignShortcutModalWindowViewModel asmwvm) {
                 asmwvm.SetKeyList(MpAvKeyboardInputHelpers.ConvertStringToKeySequence(_gestureHelper.CurrentGesture));
             }
         }
 
         private void MpAvAssignShortcutWindow_KeyDown(object sender, global::Avalonia.Input.KeyEventArgs e) {
-            _gestureHelper.AddKeyDown(e.Key);
+            _gestureHelper.AddKeyDown(e.Key.ToString());
             if (DataContext is MpAvAssignShortcutModalWindowViewModel asmwvm) {
                 asmwvm.SetKeyList(MpAvKeyboardInputHelpers.ConvertStringToKeySequence(_gestureHelper.CurrentGesture));
             }

@@ -742,7 +742,7 @@ namespace MpWpfApp {
         #region Db Events
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.CommandId == TagId && sc.ShortcutType == ShortcutType) {
+                if (sc.CommandParameter == TagId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             } else if (e is MpCopyItemTag cit && cit.TagId == TagId) {
@@ -759,7 +759,7 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.CommandId == TagId && sc.ShortcutType == ShortcutType) {
+                if (sc.CommandParameter == TagId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             } 
@@ -767,7 +767,7 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.CommandId == TagId && sc.ShortcutType == ShortcutType) {
+                if (sc.CommandParameter == TagId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             } else if (e is MpCopyItemTag cit && cit.TagId == TagId) {

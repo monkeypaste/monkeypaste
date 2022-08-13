@@ -21,13 +21,34 @@ namespace MonkeyPaste.Avalonia {
         private ListBox lb;
 
         public MpAvClipTrayView() {
-            //DataContext = MpAvClipTrayViewModel.Instance;
-            InitializeComponent();            
+            InitializeComponent();
 
-            sv = this.FindControl<ScrollViewer>("ClipTrayScrollViewer");
-            lb = this.FindControl<ListBox>("ClipTrayListBox");
-            
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
+
+            sv = this.FindControl<ScrollViewer>("ClipTrayScrollViewer");            
+            lb = this.FindControl<ListBox>("ClipTrayListBox");
+            lb.EffectiveViewportChanged += Lb_EffectiveViewportChanged;
+        }
+
+        private void Lb_EffectiveViewportChanged(object sender, EffectiveViewportChangedEventArgs e) {
+            if(sender is ListBox lb && lb.GetVisualDescendant<Canvas>() is Canvas items_panel_canvas) {
+                double max_diff = 0.1;
+                double w_diff = Math.Abs(items_panel_canvas.Bounds.Width - BindingContext.ClipTrayTotalWidth);
+                double h_diff = Math.Abs(items_panel_canvas.Bounds.Height - BindingContext.ClipTrayTotalHeight);
+                if (w_diff <= max_diff && h_diff <= max_diff) {
+                    // NOTE the lb w/h is bound to total dimensions but only reports screen dimensions
+                    // the items panel is CLOSE to actual total dimensions but off by some kind of pixel snapping small value
+
+                    // this is intended to retain scroll position when orientation changes
+                    // and this event is triggered twice,
+                    // first when the container changes (which the if is trying is set to ignore)
+                    // second when the list is transformed                    
+                    // the *Begin() is called right before mw rect is changed in mwvm.CycleOrientation
+                    BindingContext.ListOrientationChangeEnd();
+                }
+            }
+            
+            return;
         }
 
         private void InitializeComponent() {

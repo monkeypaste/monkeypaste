@@ -23,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         private ICommand _assigningCommand = null;
-        private int _commandId;
+        private string _commandParameter;
         #endregion
 
         #region Properties
@@ -119,10 +119,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Static Methods
-        public static async Task<string> ShowAssignShortcutWindow(string shortcutName,string keys,ICommand command, int commandId) {
+        public static async Task<string> ShowAssignShortcutWindow(string shortcutName,string keys,ICommand command, string commandParameter) {
             MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
             var ascw = new MpAvAssignShortcutWindow();
-            var ascwvm = new MpAvAssignShortcutModalWindowViewModel(shortcutName, keys, command, commandId);
+            var ascwvm = new MpAvAssignShortcutModalWindowViewModel(shortcutName, keys, command, commandParameter);
             ascw.DataContext = ascwvm;
 
             await ascw.ShowDialog(MpAvMainWindow.Instance);
@@ -137,9 +137,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpAvAssignShortcutModalWindowViewModel() : this(string.Empty,string.Empty,null,0) { }
+        public MpAvAssignShortcutModalWindowViewModel() : this(string.Empty,string.Empty,null,string.Empty) { }
 
-        private MpAvAssignShortcutModalWindowViewModel(string shortcutName, string keyString, ICommand command,int commandId) : base(null) {
+        private MpAvAssignShortcutModalWindowViewModel(string shortcutName, string keyString, ICommand command,string commandParameter) : base(null) {
             PropertyChanged += MpAssignShortcutModalWindowViewModel_PropertyChanged;
 
             if (!string.IsNullOrEmpty(keyString) && keyString.Contains(@",")) {
@@ -149,7 +149,7 @@ namespace MonkeyPaste.Avalonia {
             KeyList = MpAvKeyboardInputHelpers.ConvertStringToKeySequence(keyString);
 
             _assigningCommand = command;
-            _commandId = commandId;
+            _commandParameter = commandParameter;
             ShortcutDisplayName = shortcutName;
 
             OnPropertyChanged(nameof(KeyString));
@@ -214,7 +214,7 @@ namespace MonkeyPaste.Avalonia {
                 //    }
                 //    klIdx++;
                 //}
-                if (_isReplacingShortcut && KeyString != string.Empty && scvm.Command != _assigningCommand && scvm.CommandId != _commandId) {
+                if (_isReplacingShortcut && KeyString != string.Empty && scvm.Command != _assigningCommand && scvm.CommandParameter != _commandParameter) {
                     DuplicatedShortcutViewModel = scvm;
                     WarningString = "This combination conflicts with '" + scvm.ShortcutDisplayName + "' which will be cleared if saved";
                     return false;
