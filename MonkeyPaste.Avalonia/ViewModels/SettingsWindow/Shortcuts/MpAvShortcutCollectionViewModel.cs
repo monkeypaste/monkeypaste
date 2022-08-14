@@ -164,18 +164,23 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void StartGlobalListener() {
-            if (_thread == null) {
-                _thread = new Thread(
-                    new ParameterizedThreadStart(x => GlobalInputListenerThread()));
-                _thread.Priority = ThreadPriority.BelowNormal;
-            } else {
-                if(_isRunning) {
-                    return;
-                }
+            //if (_thread == null) {
+            //    _thread = new Thread(
+            //        new ParameterizedThreadStart(x => GlobalInputListenerThread()));
+            //    _thread.Priority = ThreadPriority.BelowNormal;
+            //} else {
+            //    if(_isRunning) {
+            //        return;
+            //    }
+            //}
+            if(_isRunning) {
+                return;
             }
 
+
             _isRunning = true;
-            _thread.Start();
+            GlobalInputListenerThread();
+            //_thread.Start();
         }
 
         public void StopGlobalListener() {
@@ -496,7 +501,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Global Handlers
 
-        [STAThread]
+        //[STAThread]
         private void GlobalInputListenerThread() {
             if (_hook == null) {
                 _hook = new SimpleGlobalHook();
@@ -523,28 +528,28 @@ namespace MonkeyPaste.Avalonia {
 
             _hook.RunAsync();
 
-            while (_isRunning) {
-                Thread.Sleep(100);
-            }
+            //while (_isRunning) {
+            //    Thread.Sleep(100);
+            //}
 
-            _hook.MouseWheel -= Hook_MouseWheel;
+            //_hook.MouseWheel -= Hook_MouseWheel;
 
-            _hook.MouseMoved -= Hook_MouseMoved;
+            //_hook.MouseMoved -= Hook_MouseMoved;
 
-            _hook.MousePressed -= Hook_MousePressed;
-            _hook.MouseReleased -= Hook_MouseReleased;
+            //_hook.MousePressed -= Hook_MousePressed;
+            //_hook.MouseReleased -= Hook_MouseReleased;
 
-            _hook.MouseClicked -= Hook_MouseClicked;
+            //_hook.MouseClicked -= Hook_MouseClicked;
 
-            _hook.MouseDragged -= Hook_MouseDragged;
+            //_hook.MouseDragged -= Hook_MouseDragged;
 
-            _hook.KeyPressed -= Hook_KeyPressed;
-            _hook.KeyReleased -= Hook_KeyReleased;
+            //_hook.KeyPressed -= Hook_KeyPressed;
+            //_hook.KeyReleased -= Hook_KeyReleased;
 
-            _hook.Dispose();
-            _hook = null;
+            //_hook.Dispose();
+            //_hook = null;
 
-            _eventSimulator = null;
+            //_eventSimulator = null;
         }
 
         private MpPoint GetScaledMousePoint(MouseEventData med) {
@@ -641,29 +646,29 @@ namespace MonkeyPaste.Avalonia {
                 GlobalIsMouseRightButtonDown = false;
 
                 OnGlobalMouseReleased?.Invoke(sender, e);
-            }
+            }            
 
-            if (MpAvMainWindow.Instance != null) {
-                if (!MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                    if (MpAvClipTrayViewModel.Instance.IsAutoCopyMode) {
-                        if (e.Data.Button == SharpHook.Native.MouseButton.Button1 && !MpAvMainWindow.Instance.IsActive) {
-                            SimulateKeyPress("control+c");
+            Dispatcher.UIThread.Post(() => {
+                if (MpAvMainWindow.Instance != null) {
+                    if (!MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+                        if (MpAvClipTrayViewModel.Instance.IsAutoCopyMode) {
+                            if (e.Data.Button == SharpHook.Native.MouseButton.Button1 && !MpAvMainWindow.Instance.IsActive) {
+                                SimulateKeyPress("control+c");
+                            }
                         }
-                    }
-                    if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
-                        if (e.Data.Button == SharpHook.Native.MouseButton.Button2 && !MpAvMainWindow.Instance.IsActive) {
-                            SimulateKeyPress("control+v");
+                        if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
+                            if (e.Data.Button == SharpHook.Native.MouseButton.Button2 && !MpAvMainWindow.Instance.IsActive) {
+                                SimulateKeyPress("control+v");
+                            }
                         }
+                    } else if (!MpAvMainWindowViewModel.Instance.IsMainWindowClosing &&
+                              !MpAvMainWindowViewModel.Instance.IsMainWindowLocked &&
+                              //!MpExternalDropBehavior.Instance.IsPreExternalTemplateDrop &&
+                              GlobalMouseLocation.Y < MpAvMainWindowViewModel.Instance.MainWindowTop) {
+                        MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
                     }
-                } else if (!MpAvMainWindowViewModel.Instance.IsMainWindowClosing &&
-                          !MpAvMainWindowViewModel.Instance.IsMainWindowLocked &&
-                          //!MpExternalDropBehavior.Instance.IsPreExternalTemplateDrop &&
-                          GlobalMouseLocation.Y < MpAvMainWindowViewModel.Instance.MainWindowTop) {
-                    MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
                 }
-            }
-
-            
+            });
         }
 
         private void Hook_MouseClicked(object sender, MouseHookEventArgs e) {
@@ -717,7 +722,7 @@ namespace MonkeyPaste.Avalonia {
             OnGlobalKeyPressed?.Invoke(sender, e);
 
             if (IsCustomRoutingEnabled) {
-                HandleGestureRouting_Down(ref e);
+                //HandleGestureRouting_Down(ref e);
             }
         }
 
@@ -739,7 +744,7 @@ namespace MonkeyPaste.Avalonia {
             OnGlobalKeyReleased?.Invoke(sender, e);
 
             if (IsCustomRoutingEnabled) {
-                HandleGestureRouting_Up(e);
+                //HandleGestureRouting_Up(e);
             }
         }
 

@@ -14,7 +14,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 return keyList;
             }
 
-            var combos = keyStr.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+            var combos = keyStr.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var c in combos) {
                 var keys = c.Split(new string[] { "+" }, StringSplitOptions.RemoveEmptyEntries);
                 keyList.Add(new List<Key>());
@@ -37,7 +37,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 outStr = outStr.Remove(outStr.Length - 1, 1);
             }
             if (!string.IsNullOrEmpty(outStr)) {
-                if (outStr.EndsWith(", ")) {
+                if (outStr.EndsWith("|")) {
                     outStr = outStr.Remove(outStr.Length - 2, 2);
                 }
             }

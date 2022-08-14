@@ -278,27 +278,6 @@ namespace MonkeyPaste {
             return primaryIconColorList;
         }
 
-        public static double ColorDistance(SKColor e1, SKColor e2) {
-            //max between 0 and 764.83331517396653 (found by checking distance from white to black)
-            long rmean = (long)((e1.Red + e2.Red) / 2);
-            long r = (long)(e1.Red - e2.Red);
-            long g = (long)(e1.Green - e2.Green);
-            long b = (long)(e1.Blue - e2.Blue);
-            double max = 764.83331517396653;
-            double d = Math.Sqrt((((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8));
-            return d / max;
-        }
-
-        public static double ColorDistance(Color e1, Color e2) {
-            //max between 0 and 764.83331517396653 (found by checking distance from white to black)
-            long rmean = ((long)(e1.R*255) + (long)(e2.R*255)) / 2;
-            long r = (long)(e1.R * 255) - (long)(e2.R * 255);
-            long g = (long)(e1.G * 255) - (long)(e2.G * 255);
-            long b = (long)(e1.B * 255) - (long)(e2.B * 255);
-            double max = 764.83331517396653;
-            double d = Math.Sqrt((((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8));
-            return d / max;
-        }
 
         public static bool IsBright(Color c, int brightThreshold = 150) {
             double s = c.R < 1 || c.G < 1 || c.B < 1 ? 255 : 1;

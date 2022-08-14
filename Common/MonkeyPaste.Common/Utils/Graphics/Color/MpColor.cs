@@ -23,12 +23,12 @@ namespace MonkeyPaste.Common {
         }
 
         public static double ColorDistance(this MpColor e1, MpColor e2) {
-            //max between 0 and 764.83331517396653 (found by checking distance from white to black)
-            long rmean = ((long)(e1.R * 255) + (long)(e2.R * 255)) / 2;
-            long r = (long)(e1.R * 255) - (long)(e2.R * 255);
-            long g = (long)(e1.G * 255) - (long)(e2.G * 255);
-            long b = (long)(e1.B * 255) - (long)(e2.B * 255);
-            double max = 764.83331517396653;
+            //distance between 0 and 1 (tested by checking between black and white where distance is 1)
+            long rmean = ((long)(e1.R) + (long)(e2.R)) / 2;
+            long r = (long)(e1.R) - (long)(e2.R);
+            long g = (long)(e1.G) - (long)(e2.G);
+            long b = (long)(e1.B) - (long)(e2.B);
+            double max = 764.83331517396655; // changed last digit from 3 to 5 :)
             double d = Math.Sqrt((((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8));
             return d / max;
         }

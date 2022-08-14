@@ -48,28 +48,25 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public ObservableCollection<MpShortcutKeyViewModel> KeyItems {
+        public IEnumerable<MpAvShortcutKeyGroupViewModel> KeyItems {
             get {
-                var keyItems = new ObservableCollection<MpShortcutKeyViewModel>();
-                foreach (var kl in KeyList) {
-                    int seqIdx = KeyList.IndexOf(kl);
-                    foreach (var k in kl) {
-                        string k_literal = MpAvKeyboardInputHelpers.GetKeyLiteral(k);
-                        if (kl.Count > 1 && kl.IndexOf(k) < kl.Count - 1) {
-                            keyItems.Add(new MpShortcutKeyViewModel(this,
-                                            k_literal,
-                                            true, false, seqIdx));
-                        } else if (kl.IndexOf(k) == kl.Count - 1 && KeyList.IndexOf(kl) < KeyList.Count - 1) {
-                            keyItems.Add(new MpShortcutKeyViewModel(this,
-                                            k_literal,
-                                            false, true, seqIdx));
-                        } else {
-                            keyItems.Add(new MpShortcutKeyViewModel(this,
-                                            k_literal,
-                                            false, false, seqIdx));
-                        }
+                var keyItems = new List<MpAvShortcutKeyGroupViewModel>();
+                var combos = KeyString.Split(new String[] { MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+                int maxComboIdx = combos.Length - 1;
+                for (int comboIdx = 0; comboIdx < combos.Length; comboIdx++) {
+                    string combo = combos[comboIdx];
+                    var comboGroup = new MpAvShortcutKeyGroupViewModel();
+                    var keys = combo.Split(new String[] { MpAvKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int keyIdx = 0; keyIdx < keys.Length; keyIdx++) {
+                        string key = keys[keyIdx];
 
+                        var skvm = new MpAvShortcutKeyViewModel() {
+                            KeyStr = key,
+                        };
+                        comboGroup.Items.Add(skvm);
                     }
+                    comboGroup.IsPlusVisible = maxComboIdx > 0 && comboIdx < maxComboIdx;
+                    keyItems.Add(comboGroup);
                 }
                 return keyItems;
             }
@@ -162,7 +159,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public bool IsEmpty => KeyItems.Count == 0;
+        public bool IsEmpty => KeyItems.Count() == 0;
 
         #endregion
 

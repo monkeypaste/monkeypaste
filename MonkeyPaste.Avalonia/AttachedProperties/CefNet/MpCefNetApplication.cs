@@ -45,20 +45,40 @@ namespace MonkeyPaste.Avalonia {
         }
         
         private MpCefNetApplication(IClassicDesktopStyleApplicationLifetime desktop) {
+            string datFileName = "icudtl.dat";
             string cefRootDir = @"C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia\cef";
+
             string localDirPath = string.Empty;
             string resourceDirPath = string.Empty;
+            string releaseDir = string.Empty;
+            string datFileSourcePath = string.Empty;
+            string datFileTargetPath = string.Empty;
 
-            if(OperatingSystem.IsWindows()) {
+            if (OperatingSystem.IsWindows()) {
                 cefRootDir = Path.Combine(cefRootDir, "win");
                 localDirPath = Path.Combine(cefRootDir, "Resources", "locales");
                 resourceDirPath = Path.Combine(cefRootDir, "Resources");
+                releaseDir = Path.Combine(cefRootDir, "Release");
+                datFileSourcePath = Path.Combine(resourceDirPath, datFileName);
+                datFileTargetPath = Path.Combine(releaseDir, datFileName);
             } else if(OperatingSystem.IsMacOS()) {
                 cefRootDir = Path.Combine(cefRootDir, "mac");
             } else if(OperatingSystem.IsLinux()) {
                 cefRootDir = Path.Combine(cefRootDir, "linux");
             } else {
                 throw new Exception("No cef implementation found for this architecture");
+            }
+
+            if(!File.Exists(datFileTargetPath)) {
+                // NOTE this would/will occur when a new cef version is installed
+                if(!File.Exists(datFileSourcePath)) {
+                    throw new Exception($"'CefNet cannot initialize, '{datFileSourcePath}' cannot be found");
+                }
+                try {
+                    File.Copy(datFileSourcePath, datFileTargetPath);
+                }catch(Exception ex) {
+                    throw new Exception($"'CefNet cannot initialize, '{datFileSourcePath}' cannot be written to '{datFileTargetPath}'"+Environment.NewLine,ex);
+                }
             }
             
 

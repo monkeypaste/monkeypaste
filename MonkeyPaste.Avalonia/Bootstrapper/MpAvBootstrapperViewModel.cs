@@ -97,6 +97,14 @@ namespace MonkeyPaste.Avalonia {
             }
             await Task.Delay(1000);
 
+            for (int i = 1; i <= 1000; i++) {
+                await MpCopyItem.Create(
+                    sourceId: MpPrefViewModel.Instance.ThisAppSourceId,
+                    data: $"This is test {i}",
+                    title: $"This is test {i}",
+                    itemType: MpCopyItemType.Text);
+            }
+
             MpNotificationCollectionViewModel.Instance.FinishLoading();
             MpAvClipTrayViewModel.Instance.OnPostMainWindowLoaded();
             IsLoaded = true;

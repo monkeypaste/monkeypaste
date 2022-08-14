@@ -100,7 +100,7 @@ namespace MonkeyPaste {
 
         #region Statics
 
-        public static async Task<MpIcon> Create2(
+        public static async Task<MpIcon> Create2Async(
             string iconUrl = "",
             List<string> hexColors = null,
             bool createBorder = true,

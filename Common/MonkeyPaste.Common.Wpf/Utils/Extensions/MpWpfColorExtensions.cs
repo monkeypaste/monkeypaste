@@ -15,7 +15,7 @@ namespace MonkeyPaste.Common.Wpf {
             long r = (long)e1.R - (long)e2.R;
             long g = (long)e1.G - (long)e2.G;
             long b = (long)e1.B - (long)e2.B;
-            double max = 764.83331517396653;
+            double max = 764.83331517396655;
             double d = Math.Sqrt((((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8));
             return d / max;
         }

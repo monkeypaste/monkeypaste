@@ -655,10 +655,10 @@ namespace MonkeyPaste.Avalonia {
             },
             () => {
                 return (MpAvMainWindow.Instance != null ||
-                   !IsMainWindowLoading ||
-                   !IsShowingDialog) &&
-                   !IsMainWindowOpen &&
-                   !IsMainWindowOpening;
+                               !IsMainWindowLoading ||
+                               !IsShowingDialog) &&
+                               !IsMainWindowOpen &&
+                               !IsMainWindowOpening;
             });
 
         public ICommand HideWindowCommand => new MpCommand(

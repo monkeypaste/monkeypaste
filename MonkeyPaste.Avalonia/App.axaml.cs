@@ -60,7 +60,7 @@ namespace MonkeyPaste.Avalonia {
                 //desktop.MainWindow.Close();
                 desktop.MainWindow = new MpAvMainWindow();
 
-                CreateTrayIcon();
+                //CreateTrayIcon();
 
                 desktop.MainWindow.Show();
             }

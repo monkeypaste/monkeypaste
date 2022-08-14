@@ -114,45 +114,38 @@
         </NativeMenu>
     </NativeMenu.Menu>-->
 
-    <!--<TrayIcon.Icons>
-        <TrayIcons>
-            <TrayIcon Icon="/Assets/Icons/monkey.ico"
-                      Clicked="AppTrayIcon_Clicked"
+    <TrayIcon.Icons>
+        <TrayIcons Capacity="1">
+            <TrayIcon Icon="/Assets/Icons/monkey.ico" 
+                      Command="{Binding ShowWindowCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                       ToolTipText="Monkey Paste">
                 <TrayIcon.Menu>
                     <NativeMenu>
                         <NativeMenuItem Header="Show"
-                                        Command="{Binding ShowWindowCommand,
-                                                          Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />
-    -->
-    <!--<NativeMenuItem Header="Settings"
-                                        Command="{Binding ToggleCommand}">
+                                        Command="{Binding ShowWindowCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />
+
+                        <NativeMenuItem Header="Settings">
                             <NativeMenu>
                                 <NativeMenuItem Header="Option 1"
                                                 ToggleType="Radio"
-                                                IsChecked="True"
-                                                Command="{Binding ToggleCommand}" />
+                                                IsChecked="True" />
                                 <NativeMenuItem Header="Option 2"
                                                 ToggleType="Radio"
-                                                IsChecked="True"
-                                                Command="{Binding ToggleCommand}" />
+                                                IsChecked="True"/>
                                 <NativeMenuItemSeparator />
                                 <NativeMenuItem Header="Option 3"
                                                 ToggleType="CheckBox"
-                                                IsChecked="True"
-                                                Command="{Binding ToggleCommand}" />
+                                                IsChecked="True" />
                                 <NativeMenuItem Icon="/Assets/Icons/cog.ico"
-                                                Header="Restore Defaults"
-                                                Command="{Binding ToggleCommand}" />
+                                                Header="Restore Defaults" />
                             </NativeMenu>
-                        </NativeMenuItem>-->
-    <!--
+                        </NativeMenuItem>
+
                         <NativeMenuItem Header="Exit"
-                                        Command="{Binding ExitApplicationCommand,
-                                                          Source={x:Static local:MpAvSystemTrayViewModel.Instance}}" />
+                                        Command="{Binding ExitApplicationCommand, Source={x:Static local:MpAvSystemTrayViewModel.Instance}}" />
                     </NativeMenu>
                 </TrayIcon.Menu>
             </TrayIcon>
         </TrayIcons>
-    </TrayIcon.Icons>-->
+    </TrayIcon.Icons>
 </Application>

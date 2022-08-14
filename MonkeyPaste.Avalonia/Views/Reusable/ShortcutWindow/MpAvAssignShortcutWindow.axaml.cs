@@ -6,11 +6,11 @@ using Avalonia.Markup.Xaml;
 using MonkeyPaste.Common.Avalonia;
 using SharpHook.Native;
 using PropertyChanged;
+using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvAssignShortcutWindow : Window {
-        private MpAvKeyGestureHelper<string> _gestureHelper;
 
         public bool DialogResult { get; set; } = false;
         public MpAvAssignShortcutWindow() {
@@ -21,48 +21,9 @@ namespace MonkeyPaste.Avalonia {
             this.Closed += MpAvAssignShortcutWindow_Closed;
             this.Opened += MpAvAssignShortcutWindow_Opened;
             this.DataContextChanged += MpAvAssignShortcutWindow_DataContextChanged;
-            this.KeyDown += MpAvAssignShortcutWindow_KeyDown;
-            this.KeyUp += MpAvAssignShortcutWindow_KeyUp;
-            _gestureHelper = new MpAvKeyGestureHelper<string>(GetPriority_str);
-        }
-
-
-        private int GetPriority(Key key) {
-            switch (key) {
-                case Key.LeftCtrl:
-                    return 0;
-                case Key.RightCtrl:
-                    return 1;
-                //case Key.System:
-                case Key.LeftAlt:
-                    return 2;
-                case Key.RightAlt:
-                    return 3;
-                case Key.LeftShift:
-                    return 4;
-                case Key.RightShift:
-                    return 5;
-                default:
-                    return 6;
-            }
-        }
-
-        private int GetPriority_str(string keyStr) {
-            return 0;
-        }
-
-        private void MpAvAssignShortcutWindow_KeyUp(object sender, global::Avalonia.Input.KeyEventArgs e) {
-            _gestureHelper.AddKeyUp(e.Key.ToString());
-            if (DataContext is MpAvAssignShortcutModalWindowViewModel asmwvm) {
-                asmwvm.SetKeyList(MpAvKeyboardInputHelpers.ConvertStringToKeySequence(_gestureHelper.CurrentGesture));
-            }
-        }
-
-        private void MpAvAssignShortcutWindow_KeyDown(object sender, global::Avalonia.Input.KeyEventArgs e) {
-            _gestureHelper.AddKeyDown(e.Key.ToString());
-            if (DataContext is MpAvAssignShortcutModalWindowViewModel asmwvm) {
-                asmwvm.SetKeyList(MpAvKeyboardInputHelpers.ConvertStringToKeySequence(_gestureHelper.CurrentGesture));
-            }
+            var lb = this.FindControl<ListBox>("ShortcutListBox");
+            //this.KeyDown += MpAvAssignShortcutWindow_KeyDown;
+            //this.KeyUp += MpAvAssignShortcutWindow_KeyUp;
         }
 
         private void MpAvAssignShortcutWindow_DataContextChanged(object sender, System.EventArgs e) {
@@ -79,14 +40,43 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvAssignShortcutWindow_Opened(object sender, System.EventArgs e) {
             MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
-            _gestureHelper.Reset();            
+           
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed += Instance_OnGlobalKeyPressed;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased += Instance_OnGlobalKeyReleased;
         }
 
         private void MpAvAssignShortcutWindow_Closed(object sender, System.EventArgs e) {
             MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= Instance_OnGlobalKeyPressed;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= Instance_OnGlobalKeyReleased;
         }
+        
 
+        private void Instance_OnGlobalKeyPressed(object sender, SharpHook.KeyboardHookEventArgs e) {
+            Dispatcher.UIThread.Post(() => {
+                if (!this.IsActive) {
+                    return;
+                }
 
+                if (DataContext is MpAvAssignShortcutModalWindowViewModel asmwvm) {
+                    string key_literal = MpSharpHookKeyboardInputHelpers.GetKeyLiteral(e.Data.KeyCode);
+                    asmwvm.AddKeyDownCommand.Execute(key_literal);
+                }
+            });
+        }
+        private void Instance_OnGlobalKeyReleased(object sender, SharpHook.KeyboardHookEventArgs e) {
+            Dispatcher.UIThread.Post(() => {
+                if (!this.IsActive) {
+                    return;
+                }
+
+                if (DataContext is MpAvAssignShortcutModalWindowViewModel asmwvm) {
+                    string key_literal = MpSharpHookKeyboardInputHelpers.GetKeyLiteral(e.Data.KeyCode);
+                    asmwvm.RemoveKeyDownCommand.Execute(key_literal);
+                }
+            });
+            
+        }
         private void Ok_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
             (DataContext as MpAvAssignShortcutModalWindowViewModel).OkCommand.Execute(null);
             DialogResult = true;

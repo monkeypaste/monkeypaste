@@ -1,0 +1,28 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="local:MpAvShortcutKeyViewModel"
+                       x:DataType="local:MpAvShortcutKeyViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       x:Class="MonkeyPaste.Avalonia.MpAvShortcutKeyView">
+    <Border Grid.Column="0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Width="{Binding $self.Bounds.Height}"
+            Background="LightGray"
+            BorderBrush="DarkGray"
+            Margin="7"
+            BorderThickness="2"
+            CornerRadius="5">
+        <TextBlock HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontSize="14"
+                   Foreground="Black"
+                   Text="{Binding KeyStr, Converter={StaticResource EnumToKeyLiteralConverter}}"
+                   FontWeight="Bold" />
+    </Border>
+</local:MpAvUserControl>

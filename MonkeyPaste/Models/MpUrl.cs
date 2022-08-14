@@ -137,7 +137,7 @@ namespace MonkeyPaste {
             if(urlIconId > 0) {
                 icon = await MpDb.GetItemAsync<MpIcon>(urlIconId);
             } else if(!string.IsNullOrEmpty(urlIconPath)) {
-                icon = await MpIcon.Create2(
+                icon = await MpIcon.Create2Async(
                     iconUrl: urlIconPath, 
                     suppressWrite: suppressWrite);
             }

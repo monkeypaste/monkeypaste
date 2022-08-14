@@ -45,8 +45,20 @@ namespace MonkeyPaste.Avalonia {
 
                 //0-255 0 is black
                 var grayScaleValue = 0.2126 * (int)c.R + 0.7152 * (int)c.G + 0.0722 * (int)c.B;
-                var relativeDist = primaryIconColorList.Count == 0 ? 1 : primaryIconColorList[primaryIconColorList.Count - 1].ToPortableColor().ColorDistance(c);
-                if (totalDiff > 50 && grayScaleValue < 200 && relativeDist > 0.15) {
+
+                
+                double curMinRelativeDist = 1;
+                for (int i = 0; i < primaryIconColorList.Count; i++) {
+                    // 
+                    double curDist = primaryIconColorList[i].ToPortableColor().ColorDistance(c);
+                    curMinRelativeDist = Math.Min(curMinRelativeDist, curDist);
+                }
+
+                bool isSignificantlyDifferent_ByValue = curMinRelativeDist >= 0.15;
+                bool isColorful = grayScaleValue < 200;
+                bool isSignificantlyDifferent_ByChannels = totalDiff > 50;
+                //primaryIconColorList.Count == 0 ? 1 : primaryIconColorList[primaryIconColorList.Count - 1].ToPortableColor().ColorDistance(c);
+                if (isSignificantlyDifferent_ByChannels && isSignificantlyDifferent_ByValue && isColorful) {
                     primaryIconColorList.Add(c.ToHex());
                 }
             }

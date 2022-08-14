@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Input;
@@ -10,6 +11,7 @@ using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using SharpHook.Native;
+using Xamarin.Forms.Internals;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAssignShortcutModalWindowViewModel : MpViewModelBase {
@@ -17,6 +19,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Variables
+
+        private MpAvKeyGestureHelper2 _gestureHelper;
 
         private bool _isReplacingShortcut = false;
         private bool _wasPreviouslyASequence = false;
@@ -28,9 +32,31 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-        public List<List<Key>> KeyList { get; set; } = new List<List<Key>>();
+        //public List<List<Key>> KeyList { get; set; } = new List<List<Key>>();
 
-        public ObservableCollection<MpShortcutKeyViewModel> KeyItems { get; set; } = new ObservableCollection<MpShortcutKeyViewModel>();
+        public IEnumerable<MpAvShortcutKeyGroupViewModel> KeyItems {
+            get {
+                var keyItems = new List<MpAvShortcutKeyGroupViewModel>();
+                var combos = KeyString.Split(new String[] { MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+                int maxComboIdx = combos.Length - 1;
+                for (int comboIdx = 0; comboIdx < combos.Length; comboIdx++) {
+                    string combo = combos[comboIdx];
+                    var comboGroup = new MpAvShortcutKeyGroupViewModel();
+                    var keys = combo.Split(new String[] { MpAvKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+                    
+                    for (int keyIdx = 0; keyIdx < keys.Length; keyIdx++) {
+                        string key = keys[keyIdx];
+                        var skvm = new MpAvShortcutKeyViewModel() {
+                            KeyStr = key
+                        };
+                        comboGroup.Items.Add(skvm);
+                    }
+                    comboGroup.IsPlusVisible = maxComboIdx > 0 && comboIdx < maxComboIdx;
+                    keyItems.Add(comboGroup);
+                }
+                return keyItems;
+            }
+        }
 
         public MpAvShortcutViewModel DuplicatedShortcutViewModel { get; set; }
 
@@ -38,39 +64,23 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsEmpty => string.IsNullOrEmpty(KeyString);
 
+        private string _keyString = string.Empty;
         public string KeyString {
             get {
-                KeyItems.Clear();
-                foreach(var kl in KeyList) {
-                    int seqIdx = KeyList.IndexOf(kl);
-                    foreach(var k in kl) {
-                        string kLiteral = MpAvKeyboardInputHelpers.GetKeyLiteral(k);
-                        if (kl.Count > 1 && kl.IndexOf(k) < kl.Count - 1) {
-                            KeyItems.Add(new MpShortcutKeyViewModel(
-                                            kLiteral,
-                                            true,false,seqIdx));
-                        } else if (kl.IndexOf(k) == kl.Count - 1 && KeyList.IndexOf(kl) < KeyList.Count -1) {
-                            KeyItems.Add(new MpShortcutKeyViewModel(
-                                            kLiteral,
-                                            false, true, seqIdx));
-                        } else {
-                            KeyItems.Add(new MpShortcutKeyViewModel(
-                                            kLiteral,
-                                            false, false, seqIdx));
-                        }
-
-                    }
-                }
-                //if(KeyItems.Count > 0) {
-                //    var ki = KeyItems[0];
-                //    var view = (CollectionView)CollectionViewSource.GetDefaultView(_shortCutListBox);
-                //    var groupDescription = new PropertyGroupDescription(nameof(ki.SeqIdx));
-                //    view.GroupDescriptions.Add(groupDescription);
-                //}
-                return MpAvKeyboardInputHelpers.ConvertKeySequenceToString(KeyList);
+                return _keyString;
             }
-        }        
+            set {
+                if(KeyString != value) {
+                    _keyString = value;
+                    OnPropertyChanged(nameof(KeyString));
+                    OnPropertyChanged(nameof(KeyItems));
+                }
+            }
+        }
 
+        public bool IsSequence => KeyString.Contains(MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR);
+
+        public bool ShowWarning => IsSequence || _wasPreviouslyASequence || _isReplacingShortcut;
         public string WarningString { get; set; }
 
         public Bitmap WarningBmp {
@@ -78,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
                 if (_isReplacingShortcut) {
                     return MpBase64Images.Warning.ToAvBitmap();//(Bitmap)new BitmapImage(new Uri(MpPrefViewModel.Instance.AbsoluteResourcesPath+@"/Images/warning.png"));
                 }
-                if (_wasPreviouslyASequence || KeyList.Count > 1) {
+                if (_wasPreviouslyASequence || IsSequence) {
                     return MpBase64Images.QuestionMark.ToAvBitmap(); //(Bitmap)new BitmapImage(new Uri(MpPrefViewModel.Instance.AbsoluteResourcesPath + @"/Images/info.png"));
                 }
                 return null;// new BitmapImage();
@@ -92,7 +102,7 @@ namespace MonkeyPaste.Avalonia {
                 if (_isReplacingShortcut) {
                     return MpSystemColors.indianred;
                 }
-                if(_wasPreviouslyASequence || KeyList.Count > 1) {
+                if(_wasPreviouslyASequence || IsSequence) {
                     return MpSystemColors.lightblue;
                 }
                 return MpSystemColors.Transparent;
@@ -104,7 +114,7 @@ namespace MonkeyPaste.Avalonia {
                 if (_isReplacingShortcut) {
                     return MpSystemColors.antiquewhite;
                 }
-                if (_wasPreviouslyASequence || KeyList.Count > 1) {
+                if (_wasPreviouslyASequence || IsSequence) {
                     return MpSystemColors.dimgray;
                 }
                 return MpSystemColors.Transparent;
@@ -146,13 +156,16 @@ namespace MonkeyPaste.Avalonia {
                 _wasPreviouslyASequence = true;
                 WarningString = @"Sequence hot key's require a restart to be enabled";
             }
-            KeyList = MpAvKeyboardInputHelpers.ConvertStringToKeySequence(keyString);
 
             _assigningCommand = command;
             _commandParameter = commandParameter;
             ShortcutDisplayName = shortcutName;
 
             OnPropertyChanged(nameof(KeyString));
+            OnPropertyChanged(nameof(KeyItems));
+
+
+            _gestureHelper = new MpAvKeyGestureHelper2();
             //KeysString = keysList;
         }
 
@@ -171,12 +184,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        public void SetKeyList(List<List<Key>> keylist) {
-            KeyList = keylist;
-            OnPropertyChanged(nameof(KeyString));
-            Validate();
-            OnPropertyChanged(nameof(KeyItems));
-        }
 
         private void _windowRef_Closed(object sender, EventArgs e) {
             MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
@@ -194,7 +201,7 @@ namespace MonkeyPaste.Avalonia {
             //iterate over ALL shortcuts
             foreach (var scvm in MpAvShortcutCollectionViewModel.Instance.Items) {                
                 if (scvm.Command == _assigningCommand ||
-                    scvm.KeyList.Count != KeyList.Count || 
+                    scvm.KeyList.Count != KeyItems.Count() || 
                     scvm.KeyList.Count == 0) {
                     //ignore same, empty or shortcut w/ different key counts
                     continue;
@@ -220,7 +227,7 @@ namespace MonkeyPaste.Avalonia {
                     return false;
                 }
             }
-            if (_wasPreviouslyASequence || KeyList.Count > 1) {
+            if (_wasPreviouslyASequence || IsSequence) {
                 WarningString = @"Sequence hot key's require a restart to be enabled";
                 return true;
             }
@@ -231,22 +238,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        private MpCommand _clearCommand;
-        public ICommand ClearCommand {
-            get {
-                if (_clearCommand == null) {
-                    _clearCommand = new MpCommand(Clear);
-                }
-                return _clearCommand;
-            }
-        }
-        private void Clear() {
-            KeyList.Clear();
-            KeyItems.Clear();
-            Validate();
-            OnPropertyChanged(nameof(KeyString));
-            OnClear?.Invoke(this, null);
-        }
+        public ICommand ClearCommand => new MpCommand(
+            () => {
+                KeyString = String.Empty;
+                OnPropertyChanged(nameof(KeyItems));
+                _gestureHelper.Reset();
+                Validate();
+                OnPropertyChanged(nameof(KeyString));
+                OnClear?.Invoke(this, null);
+            });
 
         public ICommand OkCommand => new MpCommand(
             async () => {
@@ -263,6 +263,20 @@ namespace MonkeyPaste.Avalonia {
                     await DuplicatedShortcutViewModel.Shortcut.WriteToDatabaseAsync();
                     DuplicatedShortcutViewModel.Unregister();
                 }
+            });
+
+        public ICommand AddKeyDownCommand => new MpCommand<string>(
+            (args) => {
+                _gestureHelper.AddKeyDown(args as string);
+                KeyString = _gestureHelper.GetCurrentGesture();
+                OnPropertyChanged(nameof(KeyItems));
+            });
+
+        public ICommand RemoveKeyDownCommand => new MpCommand<string>(
+            (args) => {
+                _gestureHelper.RemoveKeyDown(args as string);
+                KeyString = _gestureHelper.GetCurrentGesture();
+                OnPropertyChanged(nameof(KeyItems));
             });
         #endregion
     }
