@@ -63,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
                 prefFileName);
 
             await MpPrefViewModel.InitAsync(prefPath);
-            MpPrefViewModel.Instance.MainWindowOrientation = "Bottom";
+            //MpPrefViewModel.Instance.MainWindowOrientation = "Bottom";
 
             Cursor = new MpAvCursor();
             DbInfo = new MpAvDbInfo();

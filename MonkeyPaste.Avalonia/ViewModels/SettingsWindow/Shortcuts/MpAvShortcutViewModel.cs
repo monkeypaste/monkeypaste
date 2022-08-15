@@ -13,6 +13,7 @@ using MonkeyPaste.Common;
 using SharpHook.Native;
 using MonkeyPaste.Common.Avalonia;
 using Avalonia.Input;
+using Avalonia.Controls;
 
 namespace MonkeyPaste.Avalonia {
     public interface MpIShortcutCommandViewModel<T> where T:struct,Enum {
@@ -348,68 +349,14 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task InitializeAsync(MpShortcut s, ICommand command) {
             //only register if non-empty keysstring
-            
+            await Task.Delay(1);
+
             Shortcut = s;
             Command = command;
             _sendKeyStr = MpAvKeyboardInputHelpers.ConvertKeyStringToSendKeysString(KeyString);
 
             OnPropertyChanged(nameof(KeyItems));
             OnPropertyChanged(nameof(IsEmpty));
-
-            if (string.IsNullOrEmpty(KeyString)) {
-                if (!IsSequence()) {
-                    Unregister();
-                }
-                await Shortcut.WriteToDatabaseAsync();
-                return;
-            } else {
-                try {
-                    if (RoutingType == MpRoutingType.None) {
-                        throw new Exception("ShortcutViewModel error, routing type cannot be none");
-                    }
-                    //var hook = RoutingType == MpRoutingType.Internal ? Parent.ApplicationHook : Parent.GlobalHook;
-
-                    var cl = MpAvKeyboardInputHelpers.ConvertStringToKeySequence(KeyString);
-                    //var wfcl = cl.Select(x => x.Select(y => MpAvKeyboardInputHelpers.WpfKeyToWinformsKey(y)).ToList()).ToList();
-                    //string keyValStr = string.Join(",", wfcl.Select(x =>
-                    //                             string.Join("+", x.Select(y =>
-                    //                                Enum.GetName(typeof(System.Windows.Forms.Keys), y)))));
-                    if (Parent.IsCustomRoutingEnabled) {
-                        //only register/unregister shortcuts when NOT using custom routing
-                        // at this point if a shortcut changes its routing type, restart
-                        // will be required to change...
-                    } else {
-                        if (IsSequence()) {
-                            if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
-                                //only register sequences at startup
-
-                                //hook.OnSequence(new Dictionary<Sequence, Action> {
-                                //    {
-                                //        Sequence.FromString(keyValStr),
-                                //        () => PerformShortcutCommand.Execute(null)
-                                //    }
-                                //});
-                            }
-                        } else {
-                            //unregister if already exists
-
-                            Unregister();
-                            //var t = new MouseKeyHook.Rx.Trigger[] { MouseKeyHook.Rx.Trigger.FromString(keyValStr) };
-
-                            //KeysObservable = hook.KeyUpObservable().Matching(t).Subscribe(
-                            //    (trigger) => PerformShortcutCommand.Execute(null)
-                            //);
-                        }
-                    }
-                    
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteLine("Error creating shortcut: " + ex.ToString());
-                    return;
-                }
-                //MpConsole.WriteLine("Shortcut Successfully registered for '" + ShortcutDisplayName + "' with hotkeys: " + KeyString);
-                return;
-            }
         }
 
         public void RegisterActionComponent(MpIActionTrigger mvm) {

@@ -60,7 +60,7 @@ namespace MonkeyPaste.Avalonia {
                 //desktop.MainWindow.Close();
                 desktop.MainWindow = new MpAvMainWindow();
 
-                //CreateTrayIcon();
+                CreateTrayIcon();
 
                 desktop.MainWindow.Show();
             }
@@ -69,32 +69,50 @@ namespace MonkeyPaste.Avalonia {
         }
         private void CreateTrayIcon() {
             var trayIcons = new TrayIcons();
-            trayIcons.Add(new TrayIcon() {
+            var rootIcon = new TrayIcon() {
                 Icon = new WindowIcon(
                     MpAvStringResourceToBitmapConverter.Instance.Convert(
                         MpPlatformWrapper.Services.PlatformResource.GetResource("AppImage"), null, null, null) as Bitmap),
                 Command = MpAvMainWindowViewModel.Instance.ShowWindowCommand,
                 ToolTipText = MpPrefViewModel.Instance.ApplicationName,
                 Menu = new NativeMenu()
-            });
+            };
+            rootIcon.Menu.Opening += Menu_Opening;
+            rootIcon.Menu.Closed += Menu_Closed;
+            //rootIcon.Clicked += RootIcon_Clicked;
+            trayIcons.Add(rootIcon);
             var mil = new[] {
                 new NativeMenuItem() {
-                            Header = "_Open",
-                            Command = MpAvMainWindowViewModel.Instance.ShowWindowCommand
-                        },
-                        new NativeMenuItem() {
-                            Header = "_Settings",
-                            Command = MpAvSettingsWindowViewModel.Instance.ShowSettingsWindowCommand
-                        },
-                        new NativeMenuItem() {
-                            Header = "-"
-                        },
-                        new NativeMenuItem() {
-                            Header = "_Exit",
-                            Command = MpAvSystemTrayViewModel.Instance.ExitApplicationCommand
-                        }
+                    Header = "_Open",
+                    Command = MpAvMainWindowViewModel.Instance.ShowWindowCommand
+                },
+                new NativeMenuItem() {
+                    Header = "_Settings",
+                    Command = MpAvSettingsWindowViewModel.Instance.ShowSettingsWindowCommand
+                },
+                new NativeMenuItem() {
+                    Header = "-"
+                },
+                new NativeMenuItem() {
+                    Header = "_Exit",
+                    Command = MpAvSystemTrayViewModel.Instance.ExitApplicationCommand
+                }
             };
             mil.ForEach(x => trayIcons.First().Menu.Items.Add(x));            
+        }
+
+
+        private void Menu_Closed(object sender, EventArgs e) {
+            MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
+        }
+
+        private void Menu_Opening(object sender, EventArgs e) {
+            MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
+        }
+
+        private void RootIcon_Clicked(object sender, EventArgs e) {
+            MpAvMainWindowViewModel.Instance.IsShowingDialog = DateTime.Now - MpAvShortcutCollectionViewModel.Instance.LastRightClickDateTime < TimeSpan.FromMilliseconds(1000);
+
         }
     }
 }

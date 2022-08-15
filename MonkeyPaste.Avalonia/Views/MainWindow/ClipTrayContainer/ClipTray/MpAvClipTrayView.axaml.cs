@@ -27,12 +27,24 @@ namespace MonkeyPaste.Avalonia {
 
             sv = this.FindControl<ScrollViewer>("ClipTrayScrollViewer");            
             lb = this.FindControl<ListBox>("ClipTrayListBox");
-            lb.EffectiveViewportChanged += Lb_EffectiveViewportChanged;
+            var lb_sv = lb.GetVisualDescendant<ScrollViewer>();
+            Dispatcher.UIThread.Post(async () => {
+                while(lb_sv == null) {
+                    lb_sv = lb.GetVisualDescendant<ScrollViewer>();
+
+                    if(lb_sv == null) {
+                        await Task.Delay(100);
+                    } else {
+                        lb_sv.EffectiveViewportChanged += Lb_EffectiveViewportChanged;
+                        return;
+                    }
+                }
+            });
         }
 
         private void Lb_EffectiveViewportChanged(object sender, EffectiveViewportChangedEventArgs e) {
-            if(sender is ListBox lb && lb.GetVisualDescendant<Canvas>() is Canvas items_panel_canvas) {
-                double max_diff = 0.1;
+            if(sender is Control control && control.GetVisualDescendant<Canvas>() is Canvas items_panel_canvas) {
+                double max_diff = 1.0;
                 double w_diff = Math.Abs(items_panel_canvas.Bounds.Width - BindingContext.ClipTrayTotalWidth);
                 double h_diff = Math.Abs(items_panel_canvas.Bounds.Height - BindingContext.ClipTrayTotalHeight);
                 if (w_diff <= max_diff && h_diff <= max_diff) {
@@ -44,7 +56,8 @@ namespace MonkeyPaste.Avalonia {
                     // first when the container changes (which the if is trying is set to ignore)
                     // second when the list is transformed                    
                     // the *Begin() is called right before mw rect is changed in mwvm.CycleOrientation
-                    BindingContext.ListOrientationChangeEnd();
+
+                    //BindingContext.DropScrollAnchor();
                 }
             }
             
@@ -65,7 +78,7 @@ namespace MonkeyPaste.Avalonia {
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.MainWindowSizeChanged:
-                case MpMessageType.MainWindowOrientationChanged:                
+                case MpMessageType.MainWindowOrientationChangeBegin:                
                 case MpMessageType.TrayLayoutChanged:
 
                     //sv?.InvalidateArrange();

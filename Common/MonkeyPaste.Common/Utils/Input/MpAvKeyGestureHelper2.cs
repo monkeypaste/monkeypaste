@@ -1,18 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Avalonia.Input;
-using MonkeyPaste;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
-using SharpHook;
-using SharpHook.Native;
 
-namespace MonkeyPaste.Avalonia {
+namespace MonkeyPaste.Common {
     public class MpAvKeyGestureHelper2 {
         #region Private Variables
         public const string COMBO_SEPARATOR = "+";
@@ -26,8 +16,10 @@ namespace MonkeyPaste.Avalonia {
         private string _currentGesture = String.Empty;
 
         private string _finalGesture = string.Empty;
+
         #endregion
 
+        #region Public Methods
 
         public void AddKeyDown(string key, bool isRepeat = false) {
             if (isRepeat) {
@@ -39,13 +31,13 @@ namespace MonkeyPaste.Avalonia {
                 // 1. only 1 key is changed between each combo ie. <Some Modifier Keys> + J, <Same modifier keys> + L
 
                 // so if nothing is already down treat as a new gesture
-               // Reset();
+                Reset();
             }
             _downCount++;
 
             if(_curKeysDown.Contains(SEQUENCE_SEPARATOR)) {
                 //shouldn't happen
-                MpDebuggerHelper.Break();
+                //MpDebuggerHelper.Break();
             }
 
             AddPressedKey(key);
@@ -63,9 +55,6 @@ namespace MonkeyPaste.Avalonia {
             } else if(_currentGesture.IndexListOfAll(SEQUENCE_SEPARATOR).Count + 1 < _MAX_COMBOS) {
                 _currentGesture += SEQUENCE_SEPARATOR + _curKeysDown;
             }
-
-            
-
             RemovePressedKey(key);
         }
 
@@ -83,12 +72,9 @@ namespace MonkeyPaste.Avalonia {
             return _curKeysDown;
         }
 
-        public void Reset() {
-            _currentGesture = string.Empty;
-            _curKeysDown = String.Empty;
-            _finalGesture = string.Empty;
-            _downCount = 0;
-        }
+        #endregion
+
+        #region Private Methods
 
         private void AddPressedKey(string key) {
             var curDownParts = _curKeysDown.Split(new string[] { COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries).ToList();
@@ -137,5 +123,14 @@ namespace MonkeyPaste.Avalonia {
                     return false;
             }
         }
+
+        private void Reset() {
+            _currentGesture = string.Empty;
+            _curKeysDown = String.Empty;
+            _finalGesture = string.Empty;
+            _downCount = 0;
+        }
+
+        #endregion
     }
 }

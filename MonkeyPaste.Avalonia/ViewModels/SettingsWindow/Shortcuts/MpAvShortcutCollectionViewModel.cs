@@ -15,29 +15,26 @@ using SharpHook;
 using System.Threading;
 using MonkeyPaste.Common.Avalonia;
 using Gtk;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvShortcutCollectionViewModel : 
         MpAvSelectorViewModelBase<object,MpAvShortcutViewModel>, 
         MpIAsyncSingletonViewModel<MpAvShortcutCollectionViewModel> {
 
-        private const bool IS_GLOBAL_INPUT_ENABLED = true;
+        private const bool IS_GLOBAL_INPUT_ENABLED = false;
         private const double _MIN_GLOBAL_DRAG_DIST = 20;
 
         #region Private Variables
 
         private string _sim_keystr_to_this_app = string.Empty;
-        private MpAvKeyGestureHelper<string> _keyboardGestureHelper;
+        private MpAvKeyGestureHelper2 _keyboardGestureHelper;
 
         private DateTime? _waitToExecuteShortcutStartDateTime;
 
         private const int _MAX_WAIT_TO_EXECUTE_SHORTCUT_MS = 500;
 
         private SimpleGlobalHook _hook;
-        private Thread _thread;
-
-        private bool _isRunning = false;
-
         private EventSimulator _eventSimulator;
 
         #endregion
@@ -51,8 +48,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-
         #region View Models
+
+        public IEnumerable<MpAvShortcutViewModel> ApplicationShortcuts => Items.Where(x => x.RoutingType == MpRoutingType.Internal);
+
+        public IEnumerable<MpAvShortcutViewModel> GlobalShortcuts => Items.Where(x => !ApplicationShortcuts.Contains(x));
+
         #endregion
 
         #region Input Hooks
@@ -80,24 +81,20 @@ namespace MonkeyPaste.Avalonia {
         public bool GlobalIsMouseLeftButtonDown { get; private set; } = false;
         public bool GlobalIsMouseRightButtonDown { get; private set; } = false;
 
-        public bool ForceDisableCustomRouting { get; set; } = false;
+        public bool IsApplicationShortcutsEnabled { get; set; } = true;
+        public bool IsGlobalShortcutsEnabled { get; set; } = true;
 
-        private bool _isCustomRoutingEnabled = true;
-        public bool IsCustomRoutingEnabled {
-            get {
-                if(ForceDisableCustomRouting) {
-                    return false;
-                }
-                return _isCustomRoutingEnabled;
-            }
+        public bool IsShortcutsEnabled {
+            get => IsApplicationShortcutsEnabled || IsGlobalShortcutsEnabled;
             set {
-                if(_isCustomRoutingEnabled != value) {
-                    _isCustomRoutingEnabled = value;
-                    OnPropertyChanged(nameof(IsCustomRoutingEnabled));
-                }
+                IsApplicationShortcutsEnabled = value;
+                IsGlobalShortcutsEnabled = value;
+                OnPropertyChanged(nameof(IsShortcutsEnabled));
             }
         }
 
+        public DateTime LastRightClickDateTime { get; set; }
+        public DateTime LastLeftClickDateTime { get; set; }
         #endregion
 
         #endregion
@@ -134,7 +131,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvShortcutCollectionViewModel() : base(null) { }
 
         public async Task InitAsync() {
-            _keyboardGestureHelper = new MpAvKeyGestureHelper<string>(GetPriority_str);
+            _keyboardGestureHelper = new MpAvKeyGestureHelper2();
             await InitShortcuts();
 
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
@@ -164,28 +161,53 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void StartGlobalListener() {
-            //if (_thread == null) {
-            //    _thread = new Thread(
-            //        new ParameterizedThreadStart(x => GlobalInputListenerThread()));
-            //    _thread.Priority = ThreadPriority.BelowNormal;
-            //} else {
-            //    if(_isRunning) {
-            //        return;
-            //    }
-            //}
-            if(_isRunning) {
-                return;
+            if (_hook == null) {
+                _hook = new SimpleGlobalHook();
+
+                _hook.MouseWheel += Hook_MouseWheel;
+
+                _hook.MouseMoved += Hook_MouseMoved;
+
+                _hook.MousePressed += Hook_MousePressed;
+                _hook.MouseReleased += Hook_MouseReleased;
+
+                _hook.MouseClicked += Hook_MouseClicked;
+
+                _hook.MouseDragged += Hook_MouseDragged;
+
+                _hook.KeyPressed += Hook_KeyPressed;
+                _hook.KeyReleased += Hook_KeyReleased;
+            }
+
+            if (_eventSimulator == null) {
+                _eventSimulator = new EventSimulator();
             }
 
 
-            _isRunning = true;
-            GlobalInputListenerThread();
-            //_thread.Start();
+            _hook.RunAsync();
         }
 
         public void StopGlobalListener() {
-            _isRunning = false;
-            _thread = null;
+            if(_hook != null) {
+                _hook.MouseWheel -= Hook_MouseWheel;
+
+                _hook.MouseMoved -= Hook_MouseMoved;
+
+                _hook.MousePressed -= Hook_MousePressed;
+                _hook.MouseReleased -= Hook_MouseReleased;
+
+                _hook.MouseClicked -= Hook_MouseClicked;
+
+                _hook.MouseDragged -= Hook_MouseDragged;
+
+                _hook.KeyPressed -= Hook_KeyPressed;
+                _hook.KeyReleased -= Hook_KeyReleased;
+
+                _hook.Dispose();
+                _hook = null;
+            }
+
+            _eventSimulator = null;
         }
 
         public async Task<string> RegisterViewModelShortcutAsync(
@@ -250,49 +272,27 @@ namespace MonkeyPaste.Avalonia {
             return shortcutKeyString;
         }
 
-        public int GetPriority_KeyCode(KeyCode key) {
-            switch (key) {
-                case KeyCode.VcLeftControl:
-                    return 0;
-                case KeyCode.VcRightControl:
-                    return 1;
-                //case KeyCode.System:
-                case KeyCode.VcLeftAlt:
-                    return 2;
-                case KeyCode.VcRightAlt:
-                    return 3;
-                case KeyCode.VcLeftShift:
-                    return 4;
-                case KeyCode.VcRightShift:
-                    return 5;
-                default:
-                    return 6;
-            }
-        }
-
-        public int GetPriority_str(string key) {
-            return 0;
-        }
         #endregion
 
         #region Protected Methods
 
         #region Db Overrides
 
-        protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            await Task.Run(async () => {
-                MpAvShortcutViewModel scvmToRemove = null;
-                if (e is MpCopyItem ci) {
-                    scvmToRemove = Items.FirstOrDefault(x => x.CommandParameter == ci.Id.ToString() && x.ShortcutType == MpShortcutType.PasteCopyItem);
-                } else if (e is MpTag t) {
-                    scvmToRemove = Items.FirstOrDefault(x => x.CommandParameter == t.Id.ToString() && x.ShortcutType == MpShortcutType.SelectTag);
-                } else if (e is MpPluginPreset aip) {
-                    scvmToRemove = Items.FirstOrDefault(x => x.CommandParameter == aip.Id.ToString() && x.ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset);
-                }
-                if(scvmToRemove != null) {
-                    await RemoveAsync(scvmToRemove);
-                }
-            });
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            MpAvShortcutViewModel scvmToRemove = null;
+            if (e is MpCopyItem ci) {
+                scvmToRemove = Items.FirstOrDefault(x => x.CommandParameter == ci.Id.ToString() && x.ShortcutType == MpShortcutType.PasteCopyItem);
+            } else if (e is MpTag t) {
+                scvmToRemove = Items.FirstOrDefault(x => x.CommandParameter == t.Id.ToString() && x.ShortcutType == MpShortcutType.SelectTag);
+            } else if (e is MpPluginPreset aip) {
+                scvmToRemove = Items.FirstOrDefault(x => x.CommandParameter == aip.Id.ToString() && x.ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset);
+            }
+            if (scvmToRemove != null) {
+                Items.Remove(scvmToRemove);
+                OnPropertyChanged(nameof(Items));
+                OnPropertyChanged(nameof(ApplicationShortcuts));
+                OnPropertyChanged(nameof(GlobalShortcuts));
+            }
         }
 
         #endregion
@@ -306,7 +306,7 @@ namespace MonkeyPaste.Avalonia {
                 //using mainwindow, map all saved shortcuts to their commands
                 var scl = await MpDb.GetItemsAsync<MpShortcut>();
 
-                IsCustomRoutingEnabled = scl.All(x => x.RoutingType == MpRoutingType.Internal || x.RoutingType == MpRoutingType.Direct);
+                //IsCustomRoutingEnabled = scl.All(x => x.RoutingType == MpRoutingType.Internal || x.RoutingType == MpRoutingType.Direct);
 
                 foreach (var sc in scl) {
                     ICommand shortcutCommand = null;
@@ -453,37 +453,21 @@ namespace MonkeyPaste.Avalonia {
                         }
                         break;
                     }
+                case MpMessageType.MainWindowHid:
+                    IsApplicationShortcutsEnabled = false;
+                    break;
+                case MpMessageType.MainWindowOpened:
+                    IsApplicationShortcutsEnabled = true;
+                    break;
+                case MpMessageType.ShortcutAssignmentStarted:
+                    IsShortcutsEnabled = false;
+                    break;
+                case MpMessageType.ShortcutAssignmentEnded:
+                    IsShortcutsEnabled = true;
+                    break;
             }
         }
 
-        private void AutoSearchOnKeyPress(char keyChar) {
-            var sbvm = MpAvSearchBoxViewModel.Instance;
-
-            if (MpAvMainWindowViewModel.Instance.IsAnyTextBoxFocused) {
-                return;
-            }
-            if (sbvm != null && sbvm.IsTextBoxFocused) {
-                return;
-            }
-            if (MpAvClipTrayViewModel.Instance != null && MpAvClipTrayViewModel.Instance.IsAnyEditingClipTitle) {
-                return;
-            }
-            if (MpAvMainWindowViewModel.Instance.IsShowingDialog) {
-                return;
-            }
-            if (!char.IsControl(keyChar)) {
-                foreach (var scvm in Items) {
-                }
-                if (!sbvm.IsTextBoxFocused) {
-                    if (sbvm.HasText) {
-                        sbvm.SearchText += keyChar.ToString();
-                    } else {
-                        sbvm.SearchText = keyChar.ToString();
-                    }
-                    sbvm.RequestSearchBoxFocus();
-                }
-            }
-        }
 
         private async Task<MpAvShortcutViewModel> CreateShortcutViewModel(MpShortcut sc, ICommand comamnd) {
             MpAvShortcutViewModel nscvm = new MpAvShortcutViewModel(this);
@@ -491,66 +475,8 @@ namespace MonkeyPaste.Avalonia {
             return nscvm;
         }
 
-        private async Task RemoveAsync(MpAvShortcutViewModel scvm) {
-            Items.Remove(scvm);
-            scvm.Unregister();
-            if (scvm.IsCustom()) {
-                await scvm.Shortcut.DeleteFromDatabaseAsync();
-            }
-        }
 
         #region Global Handlers
-
-        //[STAThread]
-        private void GlobalInputListenerThread() {
-            if (_hook == null) {
-                _hook = new SimpleGlobalHook();
-
-                _hook.MouseWheel += Hook_MouseWheel;
-
-                _hook.MouseMoved += Hook_MouseMoved;
-
-                _hook.MousePressed += Hook_MousePressed;
-                _hook.MouseReleased += Hook_MouseReleased;
-
-                _hook.MouseClicked += Hook_MouseClicked;
-
-                _hook.MouseDragged += Hook_MouseDragged;
-
-                _hook.KeyPressed += Hook_KeyPressed;
-                _hook.KeyReleased += Hook_KeyReleased;
-            }
-
-            if(_eventSimulator == null) {
-                _eventSimulator = new EventSimulator();
-            }
-
-
-            _hook.RunAsync();
-
-            //while (_isRunning) {
-            //    Thread.Sleep(100);
-            //}
-
-            //_hook.MouseWheel -= Hook_MouseWheel;
-
-            //_hook.MouseMoved -= Hook_MouseMoved;
-
-            //_hook.MousePressed -= Hook_MousePressed;
-            //_hook.MouseReleased -= Hook_MouseReleased;
-
-            //_hook.MouseClicked -= Hook_MouseClicked;
-
-            //_hook.MouseDragged -= Hook_MouseDragged;
-
-            //_hook.KeyPressed -= Hook_KeyPressed;
-            //_hook.KeyReleased -= Hook_KeyReleased;
-
-            //_hook.Dispose();
-            //_hook = null;
-
-            //_eventSimulator = null;
-        }
 
         private MpPoint GetScaledMousePoint(MouseEventData med) {
             MpPoint unscaled_mp = new MpPoint(med.X, med.Y);
@@ -604,9 +530,6 @@ namespace MonkeyPaste.Avalonia {
                     MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
                 }
             }
-
-
-
         }
 
 
@@ -614,8 +537,10 @@ namespace MonkeyPaste.Avalonia {
             if (e.Data.Button == SharpHook.Native.MouseButton.Button1) {
                 GlobalIsMouseLeftButtonDown = true;
                 GlobalMouseLeftButtonDownLocation = GlobalMouseLocation;
+                LastLeftClickDateTime = DateTime.Now;
             } else if (e.Data.Button == SharpHook.Native.MouseButton.Button2) {
                 GlobalIsMouseRightButtonDown = true;
+                LastRightClickDateTime = DateTime.Now;
             } else {
                 MpConsole.WriteTraceLine("Unknown mouse button pressed: " + e.Data.Button);
             }
@@ -675,6 +600,8 @@ namespace MonkeyPaste.Avalonia {
             if(GlobalMouseLocation == null) {
                 GlobalMouseLocation = GetScaledMousePoint(e.Data);
             }
+            
+
             Dispatcher.UIThread.Post(() => {
                 if (!MpAvMainWindow.Instance.IsActive &&
                !MpAvMainWindow.Instance.Bounds.Contains(GlobalMouseLocation.ToAvPoint()) &&
@@ -712,7 +639,7 @@ namespace MonkeyPaste.Avalonia {
             }
             if (e.Data.KeyCode == KeyCode.VcEscape) {
                 if (MpAvDragDropManager.IsDragAndDrop) {
-                    _keyboardGestureHelper.Reset();
+                    //_keyboardGestureHelper.Reset();
                     //e.SuppressKeyPress = true;
                     OnGlobalEscKeyPressed?.Invoke(sender, KeyboardHookEventArgs.Empty);
                     return;
@@ -721,8 +648,8 @@ namespace MonkeyPaste.Avalonia {
 
             OnGlobalKeyPressed?.Invoke(sender, e);
 
-            if (IsCustomRoutingEnabled) {
-                //HandleGestureRouting_Down(ref e);
+            if (IsShortcutsEnabled) {
+                HandleGestureRouting_Down(ref e);
             }
         }
 
@@ -743,8 +670,8 @@ namespace MonkeyPaste.Avalonia {
 
             OnGlobalKeyReleased?.Invoke(sender, e);
 
-            if (IsCustomRoutingEnabled) {
-                //HandleGestureRouting_Up(e);
+            if (IsShortcutsEnabled) {
+                HandleGestureRouting_Up(e);
             }
         }
 
@@ -755,122 +682,110 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void HandleGestureRouting_Down(ref KeyboardHookEventArgs e) {
-            //var wpfKey = MpAvKeyboardInputHelpers.(e.KeyCode);            
            string keyLiteral = MpSharpHookKeyboardInputHelpers.GetKeyLiteral(e.Data.KeyCode);
             _keyboardGestureHelper.AddKeyDown(keyLiteral);
 
-            if (!string.IsNullOrEmpty(_sim_keystr_to_this_app) && _sim_keystr_to_this_app.StartsWith(_keyboardGestureHelper.CurrentGesture)) {
-                // user MAY be pressing a defined shortcut
+            //string curGesture = _keyboardGestureHelper.GetCurrentGesture();
+            
+            //if (!string.IsNullOrEmpty(_sim_keystr_to_this_app) && _sim_keystr_to_this_app.StartsWith(curGesture)) {
+            //    // user MAY be pressing a defined shortcut
 
-                if (_sim_keystr_to_this_app.Length > _keyboardGestureHelper.CurrentGesture.Length) {
-                    _sim_keystr_to_this_app = _sim_keystr_to_this_app.Substring(_keyboardGestureHelper.CurrentGesture.Length);
-                } else {
-                    _sim_keystr_to_this_app = String.Empty;
-                }
-                //if (Keyboard.PrimaryDevice != null) {
-                //    if (Keyboard.PrimaryDevice.ActiveSource != null) {
-                //        var ie = new KeyEventArgs(
-                //            Keyboard.PrimaryDevice,
-                //            Keyboard.PrimaryDevice.ActiveSource, 0, wpfKey) {
-                //            RoutedEvent = Keyboard.KeyDownEvent
-                //        };
-                //        InputManager.Current.ProcessInput(ie);
+            //    if (_sim_keystr_to_this_app.Length > curGesture.Length) {
+            //        _sim_keystr_to_this_app = _sim_keystr_to_this_app.Substring(curGesture.Length);
+            //    } else {
+            //        _sim_keystr_to_this_app = String.Empty;
+            //    }
 
-                //        // Note: Based on your requirements you may also need to fire events for:
-                //        // RoutedEvent = Keyboard.PreviewKeyDownEvent
-                //        // RoutedEvent = Keyboard.KeyUpEvent
-                //        // RoutedEvent = Keyboard.PreviewKeyUpEvent
-                //    }
-                //}
+            //    //_keyboardGestureHelper.Reset();
+            //    e.Reserved = EventReservedValueMask.SuppressEvent;
+            //    return;
+            //}
 
-                _keyboardGestureHelper.Reset();
-                //e.Handled = false;
-                //e.SuppressKeyPress = false;
-                return;
-            }
+            //_waitToExecuteShortcutStartDateTime = null;
 
-            _waitToExecuteShortcutStartDateTime = null;
-
-            var possibleMatches = Items.Where(x => x.KeyString.StartsWith(_keyboardGestureHelper.CurrentGesture));
-            if (possibleMatches.Count() == 0) {
-                _keyboardGestureHelper.Reset();
-                return;
-            }
+            //var possibleMatches = Items.Where(x => x.KeyString.StartsWith(curGesture));
+            //if (possibleMatches.Count() == 0) {
+            //    //_keyboardGestureHelper.Reset();
+            //    return;
+            //}
 
             //e.SuppressKeyPress = true;
 
-            possibleMatches.ForEach(x => MpConsole.WriteLine("Possible match DOWN: " + x));
+            //possibleMatches.ForEach(x => MpConsole.WriteLine("Possible match DOWN: " + x));
         }
 
         private async void HandleGestureRouting_Up(KeyboardHookEventArgs e) {
-            string curGestureStr = _keyboardGestureHelper.CurrentGesture;
-
-            if (string.IsNullOrEmpty(curGestureStr)) {
-                // no possible or exact shorcuts were suppressed so ignore
-                return;
-            }
-
             string keyLiteral = MpSharpHookKeyboardInputHelpers.GetKeyLiteral(e.Data.KeyCode);
-            _keyboardGestureHelper.AddKeyUp(keyLiteral);
-            curGestureStr = _keyboardGestureHelper.CurrentGesture;
+            _keyboardGestureHelper.RemoveKeyDown(keyLiteral);
+
+            string curGestureStr = _keyboardGestureHelper.GetCurrentGesture();
 
             MpConsole.WriteLine("Current Gesture: " + curGestureStr);
 
-            var exactMatches = Items.Where(x => x.KeyString == curGestureStr);
-            var possibleMatches = Items.Where(x => exactMatches.All(y => y != x) && x.KeyString.StartsWith(curGestureStr));
-
-            //possibleMatches.ForEach(x => MpConsole.WriteLine("Possible match UP: " + x));
-            //exactMatches.ForEach(x => MpConsole.WriteLine("Exact match UP: " + x));
-
-            bool passInput = false;
-
-            if (exactMatches.Count() > 0) {
-                if (exactMatches.Count() > 1) {
-                    // should only be 1
-                    Debugger.Break();
-                }
-                // when current gesture is exact match check if it maybe part of a longer sequence
-                var matchedShortcut = exactMatches.ElementAt(0);
-
-                if (possibleMatches.Count() == 0) {
-                    // this means user issued the exact match so no need to dump suppressed input                   
-
-                    passInput = !PerformMatchedShortcut(matchedShortcut);
-                } else {
-                    // when current gesture is a match but a longer is possible set wait delay
-                    _waitToExecuteShortcutStartDateTime = DateTime.Now;
-
-                    while (true) {
-                        if (!_waitToExecuteShortcutStartDateTime.HasValue) {
-                            // a new key down was issued so the exact is not the final gesture
-                            break;
-                        }
-                        if (DateTime.Now - _waitToExecuteShortcutStartDateTime.Value >
-                            TimeSpan.FromMilliseconds(_MAX_WAIT_TO_EXECUTE_SHORTCUT_MS)) {
-                            // since no new key down was issued in given delay execute shortcut and clear buffer
-                            passInput = !PerformMatchedShortcut(matchedShortcut);
-                            break;
-                        }
-                        await Task.Delay(10);
-                    }
-                }
-            } else if (possibleMatches.Count() == 0) {
-                passInput = true;
+            var exactMatch = Items.FirstOrDefault(x => x.KeyString.ToLower() == curGestureStr.ToLower());
+            if(exactMatch != default) {
+                exactMatch.PerformShortcutCommand.Execute(null);
             }
-            if (passInput && !string.IsNullOrEmpty(curGestureStr)) {
-                // (i don't think this can happen) when both exact and possible have no matches pass current buffer
-                //System.Windows.Forms.SendKeys.SendWait(curGestureStr);
-                SimulateKeyPress(curGestureStr);
 
-                MpConsole.WriteLine("Emptied gesture buffer with sendkey string: " + curGestureStr);
-                _keyboardGestureHelper.Reset();
-            }
+            //IEnumerable<MpAvShortcutViewModel> exactMatches = null;
+            //IEnumerable<MpAvShortcutViewModel> possibleMatches = null;
+
+            //if(IsApplicationShortcutsEnabled) {
+            //    exactMatches = Items.Where(x => x.KeyString == curGestureStr);
+            //    possibleMatches = Items.Where(x => exactMatches.All(y => y != x) && x.KeyString.StartsWith(curGestureStr));
+            //} else if(IsGlobalShortcutsEnabled) {
+            //    exactMatches = GlobalShortcuts.Where(x => x.KeyString.ToLower() == curGestureStr.ToLower());
+            //    possibleMatches = GlobalShortcuts.Where(x => exactMatches.All(y => y != x) && x.KeyString.ToLower().StartsWith(curGestureStr.ToLower()));
+            //}
+
+            //bool passInput = false;
+
+            //if (exactMatches.Count() > 0) {
+            //    if (exactMatches.Count() > 1) {
+            //        // should only be 1
+            //        Debugger.Break();
+            //    }
+            //    // when current gesture is exact match check if it maybe part of a longer sequence
+            //    var matchedShortcut = exactMatches.ElementAt(0);
+
+            //    if (possibleMatches.Count() == 0) {
+            //        // this means user issued the exact match so no need to dump suppressed input                   
+
+            //        passInput = !PerformMatchedShortcut(matchedShortcut, curGestureStr);
+            //    } else {
+            //        // when current gesture is a match but a longer is possible set wait delay
+            //        _waitToExecuteShortcutStartDateTime = DateTime.Now;
+
+            //        while (true) {
+            //            if (!_waitToExecuteShortcutStartDateTime.HasValue) {
+            //                // a new key down was issued so the exact is not the final gesture
+            //                break;
+            //            }
+            //            if (DateTime.Now - _waitToExecuteShortcutStartDateTime.Value >
+            //                TimeSpan.FromMilliseconds(_MAX_WAIT_TO_EXECUTE_SHORTCUT_MS)) {
+            //                // since no new key down was issued in given delay execute shortcut and clear buffer
+            //                passInput = !PerformMatchedShortcut(matchedShortcut,curGestureStr);
+            //                break;
+            //            }
+            //            await Task.Delay(10);
+            //        }
+            //    }
+            //} else if (possibleMatches.Count() == 0) {
+            //    passInput = true;
+            //}
+            //if (passInput && !string.IsNullOrEmpty(curGestureStr)) {
+            //    // (i don't think this can happen) when both exact and possible have no matches pass current buffer
+            //    //System.Windows.Forms.SendKeys.SendWait(curGestureStr);
+            //    SimulateKeyPress(curGestureStr);
+
+            //    MpConsole.WriteLine("Emptied gesture buffer with sendkey string: " + curGestureStr);
+            //    //_keyboardGestureHelper.Reset();
+            //}
         }
 
         
 
-        private bool PerformMatchedShortcut(MpAvShortcutViewModel matchedShortcut) {
-            string cur_keystr = _keyboardGestureHelper.CurrentGesture;
+        private bool PerformMatchedShortcut(MpAvShortcutViewModel matchedShortcut, string cur_keystr) {
             if (!matchedShortcut.PerformShortcutCommand.CanExecute(null)) {
                 //when shortcut can't execute pass gesture and clear buffer
                 if (matchedShortcut.RoutingType == MpRoutingType.Internal) {
@@ -907,7 +822,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                 });
             }
-            _keyboardGestureHelper.Reset();
+            //_keyboardGestureHelper.Reset();
             _waitToExecuteShortcutStartDateTime = null;
             return true;
         }

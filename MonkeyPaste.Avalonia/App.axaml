@@ -114,9 +114,9 @@
         </NativeMenu>
     </NativeMenu.Menu>-->
 
-    <TrayIcon.Icons>
+    <!--<TrayIcon.Icons>
         <TrayIcons Capacity="1">
-            <TrayIcon Icon="/Assets/Icons/monkey.ico" 
+            <TrayIcon Icon="/Assets/Icons/monkey.ico"
                       Command="{Binding ShowWindowCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                       ToolTipText="Monkey Paste">
                 <TrayIcon.Menu>
@@ -147,5 +147,5 @@
                 </TrayIcon.Menu>
             </TrayIcon>
         </TrayIcons>
-    </TrayIcon.Icons>
+    </TrayIcon.Icons>-->
 </Application>

@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch(msg) {
-                case MpMessageType.MainWindowOrientationChanged:
+                case MpMessageType.MainWindowOrientationChangeEnd:
                     var ctg = this.FindControl<Grid>("SidebarContainerGrid");
                     var tbl = ctg.GetVisualDescendants<ToggleButton>().ToList();
 

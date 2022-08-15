@@ -400,7 +400,7 @@ namespace MonkeyPaste.Avalonia {
                     var mw_mp = MpAvMainWindow.Instance.PointToScreen(e.GetCurrentPoint(null).Position).ToPoint(1).ToPortablePoint();
                     if (GetIsResizing(control)) {
                         var delta = _lastMousePosition - mw_mp; //new Point(mw_mp.X - _lastMousePosition.X, mw_mp.Y - _lastMousePosition.Y);
-                        Resize(control, delta.X, delta.Y);
+                        ResizeByDelta(control, delta.X, delta.Y);
                     }
                     _lastMousePosition = mw_mp;
                 }
@@ -440,13 +440,13 @@ namespace MonkeyPaste.Avalonia {
             dy *= GetYFactor(control);
 
 
-            Resize(control, dx, dy);
+            ResizeByDelta(control, dx, dy);
             Reset(control);
 
             MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeReset);
         }
 
-        public static void Resize(Control control, double dx, double dy) {
+        public static void ResizeByDelta(Control control, double dx, double dy) {
             dx *= GetXFactor(control);
             dy *= GetYFactor(control);
 

@@ -90,7 +90,6 @@
                          VerticalAlignment="Center"
                          Margin="0">
                     <Slider x:Name="ZoomFactorSlider"
-                            DoubleTapped="ZoomFactorSlider_DoubleTapped"
                             Value="{Binding ZoomFactor, Mode=TwoWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                             Minimum="0.25"
                             Maximum="3"
@@ -155,7 +154,7 @@
             </ToggleButton>
             <!--  Orientation Cycle CW Button  -->
 
-            <Button x:Name="MainWindowCycleOrientationCwButton"
+            <!--<Button x:Name="MainWindowCycleOrientationCwButton"
                     Command="{Binding CycleOrientationCommand}"
                     CommandParameter="CW"
                     ToolTip.ShowDelay="0">
@@ -168,13 +167,16 @@
                         <ScaleTransform ScaleX="-1" />
                     </PathIcon.RenderTransform>
                 </PathIcon>
-            </Button>
+            </Button>-->
 
             <!--  Orientation Cycle CCW Button  -->
 
             <Button x:Name="MainWindowCycleOrientationCcwButton"
                     Command="{Binding CycleOrientationCommand}"
                     CommandParameter="CCW"
+                    local:MpAvMousePressCommand.IsEnabled="True"
+                    local:MpAvMousePressCommand.RightPressCommand="{Binding CycleOrientationCommand}"
+                    local:MpAvMousePressCommand.RightPressCommandParameter="CW"
                     ToolTip.ShowDelay="0">
                 <ToolTip.Tip>
                     <local:MpAvTooltipView ToolTipText="Cycle Orientation CCW" />

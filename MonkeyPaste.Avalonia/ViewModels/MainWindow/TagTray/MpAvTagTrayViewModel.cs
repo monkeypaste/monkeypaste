@@ -303,6 +303,10 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch(msg) {
+                case MpMessageType.MainWindowOrientationChangeEnd:
+                    OnPropertyChanged(nameof(TagTrayScreenWidth));
+                    OnPropertyChanged(nameof(TagTrayTotalWidth));
+                    break;
                 case MpMessageType.MainWindowOpening:
                     
                     OnPropertyChanged(nameof(PinnedItems));

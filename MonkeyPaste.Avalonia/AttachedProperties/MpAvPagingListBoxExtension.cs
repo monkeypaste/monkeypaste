@@ -6,6 +6,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Media.Transformation;
 using Avalonia.Threading;
 using Avalonia.Utilities;
 using MonkeyPaste.Common;
@@ -58,6 +59,40 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<bool> CanScrollYProperty =
             AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
                 "CanScrollY",
+                true,
+                false);
+
+        #endregion
+
+        #region IsHorizontalScrollBarVisibile AvaloniaProperty
+        public static bool? GetIsHorizontalScrollBarVisibile(AvaloniaObject obj) {
+            return obj.GetValue(IsHorizontalScrollBarVisibileProperty);
+        }
+
+        public static void SetIsHorizontalScrollBarVisibile(AvaloniaObject obj, bool? value) {
+            obj.SetValue(IsHorizontalScrollBarVisibileProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool?> IsHorizontalScrollBarVisibileProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool?>(
+                "IsHorizontalScrollBarVisibile",
+                true,
+                false);
+
+        #endregion
+
+        #region IsVerticalScrollBarVisibile AvaloniaProperty
+        public static bool? GetIsVerticalScrollBarVisibile(AvaloniaObject obj) {
+            return obj.GetValue(IsVerticalScrollBarVisibileProperty);
+        }
+
+        public static void SetIsVerticalScrollBarVisibile(AvaloniaObject obj, bool? value) {
+            obj.SetValue(IsVerticalScrollBarVisibileProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool?> IsVerticalScrollBarVisibileProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool?>(
+                "IsVerticalScrollBarVisibile",
                 true,
                 false);
 
@@ -388,484 +423,369 @@ namespace MonkeyPaste.Avalonia {
                 //DetachedFromVisualHandler(element, VisualTreeAttachmentEventArgs.Empty);
             }
 
-            #region ListBox Events (ItemsRepeater)
+            
+        }
 
-            void AttachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
-                if (s is ListBox lb) {
-                    lb.DetachedFromVisualTree += DetachedFromVisualHandler;
 
-                    lb.AddHandler(
-                        InputElement.PointerWheelChangedEvent,
-                        PointerMouseWheelHandler,
-                        RoutingStrategies.Tunnel);
+        #endregion
 
-                    lb.AddHandler(
-                        InputElement.PointerPressedEvent,
-                        PreviewControlPointerPressedHandler,
-                        RoutingStrategies.Tunnel);
+        #region Internal Event Handlers
 
-                    if (e == null) {
-                        lb.AttachedToVisualTree += AttachedToVisualHandler;
+        private static void AttachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+            if (s is ListBox lb) {
+                lb.DetachedFromVisualTree += DetachedFromVisualHandler;
+
+                lb.AddHandler(
+                    InputElement.PointerWheelChangedEvent,
+                    PointerMouseWheelHandler,
+                    RoutingStrategies.Tunnel);
+
+                lb.AddHandler(
+                    InputElement.PointerPressedEvent,
+                    PreviewControlPointerPressedHandler,
+                    RoutingStrategies.Tunnel);
+
+                if (e == null) {
+                    lb.AttachedToVisualTree += AttachedToVisualHandler;
+                }
+
+                var timer = new DispatcherTimer(DispatcherPriority.Normal);
+                timer.Tag = lb;
+                timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
+                timer.Tick += HandleWorldTimerTick;
+
+                timer.Start();
+
+
+                Dispatcher.UIThread.Post(async () => {
+                    var sv = GetScrollViewer(lb);
+                    while (sv == null) {
+                        sv = lb.GetVisualAncestor<ScrollViewer>();
+                        await Task.Delay(100);
                     }
 
-                    var timer = new DispatcherTimer(DispatcherPriority.Normal);
-                    timer.Tag = lb;
-                    timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
-                    timer.Tick += HandleWorldTimerTick;
+                    SetScrollViewer(lb, sv);
 
-                    timer.Start();
-
-
-                    Dispatcher.UIThread.Post(async () => {
-                        var sv = GetScrollViewer(lb);
-                        while (sv == null) {
-                            sv = lb.GetVisualAncestor<ScrollViewer>();
-                            await Task.Delay(100);
-                        }
-
-                        SetScrollViewer(lb, sv);
-                        sv.Tag = lb;
-
-                        while (!BindScrollViewerAndTracks(lb)) {
-                            await Task.Delay(1000);
-                        }
-
-                        //var lb_sv = lb.GetVisualDescendant<ScrollViewer>();
-
-                        //lb_sv.EffectiveViewportChanged += async (s, e) => {
-                        //    sv.Tag = lb;
-                        //    while (!BindScrollViewerAndTracks(lb)) {
-                        //        await Task.Delay(1000);
-                        //    }
-                        //};
-
-                        sv.EffectiveViewportChanged += async(s, e) => {
-                            sv.Tag = lb;
-                            while (!BindScrollViewerAndTracks(lb)) {
-                                await Task.Delay(1000);
-                            }
-                        };
-                    });
-                }
-            }
-
-            void DetachedFromVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
-                if (s is ListBox lb) {
-                    if (GetScrollViewer(lb) is ScrollViewer sv) {
-                        sv.RemoveHandler(
-                                    ScrollViewer.PointerPressedEvent,
-                                    ScrollViewerPointerPressedHandler);
-
-                        sv.RemoveHandler(
-                            ScrollViewer.PointerMovedEvent,
-                            ScrollViewerPointerMovedHandler);
-                        sv.RemoveHandler(
-                            ScrollViewer.PointerReleasedEvent,
-                            ScrollViewerPointerReleasedHandler);
-
-                        //if (sv.TryGetVisualDescendants<Track>(out var tracks)) {
-                        //    foreach (var track in tracks) {
-                        //        track.RemoveHandler(
-                        //            ListBox.PointerReleasedEvent,
-                        //            PreviewTrackPointerReleasedHandler);
-
-
-                        //        if (track.Thumb is Thumb thumb) {
-                        //            thumb.RemoveHandler(
-                        //                    ListBox.PointerPressedEvent,
-                        //                    PreviewThumbPointerPressedHandler);
-
-                        //            thumb.RemoveHandler(
-                        //                ListBox.PointerMovedEvent,
-                        //                PreviewThumbPointerMovedHandler);
-                        //        }
-                        //    }
-                        //}
+                    while (!BindScrollViewerAndTracks(lb)) {
+                        await Task.Delay(1000);
                     }
-                    lb.AttachedToVisualTree -= AttachedToVisualHandler;
-                    lb.DetachedFromVisualTree -= DetachedFromVisualHandler;
 
-                    lb.RemoveHandler(
-                        ListBox.PointerWheelChangedEvent,
-                        PointerMouseWheelHandler);
 
-                    lb.RemoveHandler(
-                        ListBox.PointerPressedEvent,
-                        PreviewControlPointerPressedHandler);
-                }
+                    //sv.EffectiveViewportChanged += async (s, e) => {
+                    //    while (!BindScrollViewerAndTracks(lb)) {
+                    //        await Task.Delay(1000);
+                    //    }
+                    //};
+                });
             }
+        }
 
-            void PreviewControlPointerPressedHandler(object? s, PointerPressedEventArgs e) {
-                // when user clicks always halt any animated scrolling
-                if (s is ListBox lb) {
-                    SetVelocityX(lb, 0);
-                    SetVelocityY(lb, 0);
+        private static void DetachedFromVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+            if (s is ListBox lb) {
+                if (GetScrollViewer(lb) is ScrollViewer sv) {
+                    sv.RemoveHandler(
+                                ScrollViewer.PointerPressedEvent,
+                                ScrollViewerPointerPressedHandler);
+
+                    sv.RemoveHandler(
+                        ScrollViewer.PointerMovedEvent,
+                        ScrollViewerPointerMovedHandler);
+                    sv.RemoveHandler(
+                        ScrollViewer.PointerReleasedEvent,
+                        ScrollViewerPointerReleasedHandler);
                 }
-                e.Handled = false;
+                lb.AttachedToVisualTree -= AttachedToVisualHandler;
+                lb.DetachedFromVisualTree -= DetachedFromVisualHandler;
+
+                lb.RemoveHandler(
+                    ListBox.PointerWheelChangedEvent,
+                    PointerMouseWheelHandler);
+
+                lb.RemoveHandler(
+                    ListBox.PointerPressedEvent,
+                    PreviewControlPointerPressedHandler);
             }
+        }
 
-            void PointerMouseWheelHandler(object? s, global::Avalonia.Input.PointerWheelEventArgs e) {
-                if (s is ListBox lb) {
-                    e.Handled = true;
+        private static void PreviewControlPointerPressedHandler(object? s, PointerPressedEventArgs e) {
+            // when user clicks always halt any animated scrolling
+            if (s is ListBox lb) {
+                SetVelocityX(lb, 0);
+                SetVelocityY(lb, 0);
+            }
+            e.Handled = false;
+        }
 
-                    double scrollOffsetX = GetScrollOffsetX(lb);
-                    double scrollOffsetY = GetScrollOffsetY(lb);
-                    double maxScrollOffsetX = GetMaxScrollOffsetX(lb);
-                    double maxScrollOffsetY = GetMaxScrollOffsetY(lb);
-                    double dampX = GetWheelDampeningX(lb);
-                    double dampY = GetWheelDampeningY(lb);
-                    var lb_orientation = GetListOrientation(lb);
-                    var layout_type = GetLayoutType(lb);
-                    double vFactor = -120;
+        private static void PointerMouseWheelHandler(object? s, global::Avalonia.Input.PointerWheelEventArgs e) {
+            if (s is ListBox lb) {
+                e.Handled = true;
 
-                    double v0x = lb_orientation == Orientation.Horizontal && layout_type == MpAvClipTrayLayoutType.Stack
-                                    ? e.Delta.Y * vFactor : e.Delta.X * vFactor;
-                    double v0y = lb_orientation == Orientation.Horizontal && layout_type == MpAvClipTrayLayoutType.Stack
-                                    ? e.Delta.X * vFactor : e.Delta.Y * vFactor;
+                double scrollOffsetX = GetScrollOffsetX(lb);
+                double scrollOffsetY = GetScrollOffsetY(lb);
+                double maxScrollOffsetX = GetMaxScrollOffsetX(lb);
+                double maxScrollOffsetY = GetMaxScrollOffsetY(lb);
+                double dampX = GetWheelDampeningX(lb);
+                double dampY = GetWheelDampeningY(lb);
+                var lb_orientation = GetListOrientation(lb);
+                var layout_type = GetLayoutType(lb);
+                double vFactor = -120;
 
-                    double vx = v0x - (v0x * dampX);
-                    double vy = v0y - (v0y * dampY);
+                double v0x = lb_orientation == Orientation.Horizontal && layout_type == MpAvClipTrayLayoutType.Stack
+                                ? e.Delta.Y * vFactor : e.Delta.X * vFactor;
+                double v0y = lb_orientation == Orientation.Horizontal && layout_type == MpAvClipTrayLayoutType.Stack
+                                ? e.Delta.X * vFactor : e.Delta.Y * vFactor;
 
-                    SetVelocityX(lb, vx);
-                    SetVelocityY(lb, vy);
+                double vx = v0x - (v0x * dampX);
+                double vy = v0y - (v0y * dampY);
+
+                SetVelocityX(lb, vx);
+                SetVelocityY(lb, vy);
+            }
+        }
+
+        
+        private static void ScrollViewerPointerPressedHandler(object? s, PointerPressedEventArgs e) {
+            //BUG not sure why but track and thumb don't have tag set here after orientation changes
+            var sv = s as ScrollViewer;
+            Track track = (e.Source as Control).GetVisualAncestor<Track>();
+            if (track == null) {
+                return;
+            }
+            track.Tag = sv.Tag;
+            var track_mp = e.GetPosition(track);
+
+            Thumb thumb = (e.Source as Control).GetVisualAncestor<Thumb>();
+            bool isThumbPress = thumb != null;
+            if (thumb == null) {
+                thumb = track.GetVisualDescendant<Thumb>();
+            }
+            thumb.Tag = sv.Tag;
+            //if(thumb.RenderTransform is TransformOperations tos) {
+            //    tos.
+            //}
+            //thumb.RenderTransform = new TranslateTransform();
+
+            AdjustThumbTransform(track, track_mp, isThumbPress);
+
+            e.Pointer.Capture(thumb);
+            e.Handled = true;
+        }
+
+        private static void ScrollViewerPointerMovedHandler(object? s, PointerEventArgs e) {
+            if (//s is Track track &&
+                //s is ScrollBar sb &&
+                s is ScrollViewer sv &&
+                sv.Tag is ListBox lb &&
+                GetIsThumbDragging(lb) &&
+                sv.TryGetVisualDescendants<Track>(out var tracks)) {
+                Track track = null;
+                if (GetIsThumbDraggingX(lb)) {
+                    track = tracks.FirstOrDefault(x => x.Orientation == Orientation.Horizontal);
+                } else {
+                    track = tracks.FirstOrDefault(x => x.Orientation == Orientation.Vertical);
                 }
+                var thumb = track.GetVisualDescendant<Thumb>();
+
+                var track_mp = e.GetPosition(track);
+                AdjustThumbTransform(track, track_mp, false);
+
+                e.Handled = true;
             }
-
-            #endregion
-
-            #region ScrollViewer Events
-
-            bool BindScrollViewerAndTracks(ListBox lb) {
-                if (GetScrollViewer(lb) is ScrollViewer sv &&
-                    sv.DataContext is MpIPagingScrollViewerViewModel psvvm) {
-                    if (sv.TryGetVisualDescendants<ScrollBar>(out var bars) && bars.Count() > 0) {
-                        foreach(var sb in bars) {
-
-                            
-                            //sb.PointerReleased += PreviewTrackPointerReleasedHandler;
-
-                            if (sv.TryGetVisualDescendants<Track>(out var tracks) && tracks.Count() > 0) {
-
-                                sv.AddHandler(
-                                    ScrollViewer.PointerPressedEvent,
-                                    ScrollViewerPointerPressedHandler,
-                                    RoutingStrategies.Tunnel);
-
-                                sv.AddHandler(
-                                    ScrollViewer.PointerMovedEvent,
-                                    ScrollViewerPointerMovedHandler,
-                                    RoutingStrategies.Tunnel);
-                                sv.AddHandler(
-                                    ScrollViewer.PointerReleasedEvent,
-                                    ScrollViewerPointerReleasedHandler,
-                                    RoutingStrategies.Tunnel);
-                                //var lb_sv = lb.GetVisualDescendant<ScrollViewer>();
-
-                                //lb_sv.Bind(
-                                //    ScrollViewer.HorizontalScrollBarValueProperty,
-                                //    new Binding() {
-                                //        Source = lb.DataContext,
-                                //        Path = nameof(psvvm.ScrollOffsetX)
-                                //    });
-
-                                //lb_sv.Bind(
-                                //    ScrollViewer.VerticalScrollBarValueProperty,
-                                //    new Binding() {
-                                //        Source = lb.DataContext,
-                                //        Path = nameof(psvvm.ScrollOffsetY)
-                                //    });
-
-                                //sv.Bind(
-                                //    ScrollViewer.HorizontalScrollBarValueProperty,
-                                //    new Binding() {
-                                //        Source = lb.DataContext,
-                                //        Path = nameof(psvvm.ScrollOffsetX)
-                                //    });
-
-                                //sv.Bind(
-                                //    ScrollViewer.VerticalScrollBarValueProperty,
-                                //    new Binding() {
-                                //        Source = lb.DataContext,
-                                //        Path = nameof(psvvm.ScrollOffsetY)
-                                //    });
-                                //if(sv.TryGetVisualDescendants<ScrollBar>(out var scrollBars) && scrollBars.Count() > 0) {
-                                //    foreach(var sb in scrollBars) {
-                                //        sb.GetObservable(ScrollBar.BoundsProperty).Subscribe(value => {
-                                //            if (sb.Orientation == Orientation.Horizontal) {
-                                //                MpConsole.WriteLine("H Bounds change, size: " + value.Size);
-                                //                psvvm.HorizontalScrollBarDesiredSize = value.Size;
-                                //            } else {
-                                //                MpConsole.WriteLine("V Bounds change, size: " + value.Size);
-                                //                psvvm.VerticalScrollBarDesiredSize = value.Size;
-                                //            }
-                                //        });
-                                //    }
-                                //}
-                                foreach (var track in tracks) {
-                                    track.Tag = lb;
-                                    track.IsThumbDragHandled = true;
-
-                                    //track.Bind(
-                                    //        Track.ValueProperty,
-                                    //        new Binding() {
-                                    //            Source = lb.DataContext,
-                                    //            Path = track.Orientation == Orientation.Horizontal ?
-                                    //                    nameof(psvvm.ScrollOffsetX) :
-                                    //                    nameof(psvvm.ScrollOffsetY),
-                                    //        });
-
-                                    track.Bind(
-                                            Track.MaximumProperty,
-                                            new Binding() {
-                                                Source = lb.DataContext,
-                                                Path = track.Orientation == Orientation.Horizontal ?
-                                                        nameof(psvvm.MaxScrollOffsetX) :
-                                                        nameof(psvvm.MaxScrollOffsetY)
-                                            });
-
-                                    track.Minimum = 0;
-
-                                    //track.PointerReleased += PreviewTrackPointerReleasedHandler;
-                                    //track.PointerMoved += TrackPointerMovedHandler;
-                                    
-
-                                    //track.AddHandler(
-                                    //    Track.PointerReleasedEvent,
-                                    //    PreviewTrackPointerReleasedHandler,
-                                    //    RoutingStrategies.Tunnel);
-
-
-                                    if (track.Thumb is Thumb thumb) {
-                                        thumb.Tag = lb;
-                                        thumb.RenderTransform = new TranslateTransform();
-
-                                        //thumb.PointerPressed += PreviewThumbPointerPressedHandler;
-                                        //thumb.PointerMoved += PreviewThumbPointerMovedHandler;
-
-                                        //thumb.AddHandler(
-                                        //    Thumb.PointerPressedEvent,
-                                        //    PreviewThumbPointerPressedHandler,
-                                        //    RoutingStrategies.Tunnel);
-
-                                        //thumb.AddHandler(
-                                        //    Thumb.PointerMovedEvent,
-                                        //    PreviewThumbPointerMovedHandler,
-                                        //    RoutingStrategies.Tunnel);
-                                    }
-
-
-                                }
-
-                                return true;
-                            }
-                        }
-                    }
-                }
-                return false;
-            }
-
-
-            #region Scroll Viewer Events
-
-            void ScrollViewerPointerPressedHandler(object? s, PointerPressedEventArgs e) {
-                if (s is ScrollViewer sv &&
-                    sv.Tag is ListBox lb &&
-                    sv.TryGetVisualDescendants<ScrollBar>(out var bars) &&
-                    bars.Count() > 0) {
-                    foreach (var sb in bars) {
-                        if (sb.Bounds.Contains(e.GetPosition(sb.Parent))) {
-                            if(sb.GetVisualDescendant<Track>() is Track track) {
-                                if(track.Bounds.Contains(e.GetPosition(track.Parent))) {
-                                    if(track.GetVisualDescendant<Thumb>() is Thumb thumb) {
-                                        var track_mp = e.GetPosition(track);
-                                        double new_track_value = track.ValueFromPoint(track_mp);
-                                        bool pressOnThumb = (e.Source as Control).GetVisualAncestor<Thumb>() != null;
-                                        if (track.Orientation == Orientation.Horizontal) {
-                                            SetIsThumbDraggingX(lb, true);
-                                            if (thumb.RenderTransform is TranslateTransform tt) {
-                                                if(pressOnThumb) {
-                                                    tt.X = 0;
-                                                } else {
-                                                    double hw = thumb.Bounds.Width / 2;
-                                                    double tx_min = -thumb.Bounds.X;
-                                                    double tx_max = track.Bounds.Width - hw - thumb.Bounds.X;
-                                                    double tx = track_mp.X - hw - thumb.Bounds.X;
-                                                    tt.X = Math.Max(tx_min, Math.Min(tx, tx_max));
-                                                }
-                                            }
-                                            //sv.ScrollToHorizontalOffset(new_track_value);
-                                        } else {
-                                            SetIsThumbDraggingY(lb, true);
-                                            if (thumb.RenderTransform is TranslateTransform tt) {
-                                                tt.Y = track_mp.Y;
-                                            }
-                                            //sv.ScrollToVerticalOffset(new_track_value);
-                                        }
-                                        
-                                        //track.Value = new_track_value;
-                                        e.Pointer.Capture(thumb);
-                                        e.Handled = true;
-                                    }
-
-                                } 
-                            }
-                        }
-                    }
-                }
-            }
-
-            void ScrollViewerPointerMovedHandler(object? s, PointerEventArgs e) {
-                if (//s is Track track &&
-                    //s is ScrollBar sb &&
-                    s is ScrollViewer sv &&
-                    sv.Tag is ListBox lb &&
-                    GetIsThumbDragging(lb) &&
-                    sv.TryGetVisualDescendants<Track>(out var tracks)) {
-                    Track track = null;
-                    if(GetIsThumbDraggingX(lb)) {
-                        track = tracks.FirstOrDefault(x => x.Orientation == Orientation.Horizontal);
-                    } else {
-                        track = tracks.FirstOrDefault(x => x.Orientation == Orientation.Vertical);
-                    }
-                    var thumb = track.GetVisualDescendant<Thumb>();
-                    
-                    var track_mp = e.GetPosition(track);
-                    double newScrollOffset;
-
-                    if (track.Orientation == Orientation.Horizontal) {
-                        newScrollOffset = track.ValueFromPoint(track_mp);
+        }
+        private static void ScrollViewerPointerReleasedHandler(object? s, PointerReleasedEventArgs e) {
+            //MpConsole.WriteLine("ScrollViewer Release");
+            if (s is ScrollViewer sv &&
+                sv.Tag is ListBox lb) {
+                if (GetIsThumbDragging(lb) &&
+                    e.Source is Thumb thumb &&
+                    thumb.GetVisualAncestor<Track>() is Track track) {
+                    //finish thumb drag
+                    if (GetIsThumbDraggingX(lb)) {
                         if (thumb.RenderTransform is TranslateTransform tt) {
                             double hw = thumb.Bounds.Width / 2;
-                            double tx_min = -thumb.Bounds.X;
-                            double tx_max = track.Bounds.Width - hw - thumb.Bounds.X;
-                            double tx = track_mp.X - hw - thumb.Bounds.X;
-                            tt.X = Math.Max(tx_min, Math.Min(tx, tx_max));
+                            double x = tt.X + thumb.Bounds.X + hw;
+                            track.Value = track.ValueFromPoint(new Point(x, 0));
+                            tt.X = 0;
+                            SetScrollOffsetX(lb, track.Value);
+                            SetIsThumbDraggingX(lb, false);
                         }
-                        //sv.ScrollToHorizontalOffset(newScrollOffset);
-                    } else {
-                        newScrollOffset = track.ValueFromPoint(track_mp);
+
+                    } else if (GetIsThumbDraggingY(lb)) {
                         if (thumb.RenderTransform is TranslateTransform tt) {
-                            tt.Y = MathUtilities.Clamp(track_mp.Y, 0, track.Bounds.Height);
-                        }
-                        //sv.ScrollToVerticalOffset(newScrollOffset);
-                    }
-                    //track.Value = newScrollOffset;
-                    e.Handled = true;
-                }
-            }
-
-            void ScrollViewerPointerReleasedHandler(object? s, PointerReleasedEventArgs e) {
-                if (s is ScrollViewer sv &&
-                    sv.Tag is ListBox lb) {
-                    if (GetIsThumbDragging(lb) && 
-                        e.Source is Thumb thumb &&
-                        thumb.GetVisualAncestor<Track>() is Track track) {
-                        //finish thumb drag
-                        if (GetIsThumbDraggingX(lb)) {
-                            if (thumb.RenderTransform is TranslateTransform tt) {
-                                double hw = thumb.Bounds.Width / 2;
-                                double x = tt.X + thumb.Bounds.X + hw;
-                                track.Value = track.ValueFromPoint(new Point(x, 0));
-                                tt.X = 0;
-                                SetScrollOffsetX(lb, track.Value);
-                                SetIsThumbDraggingX(lb, false);
-                            }
-
-                        } else if (GetIsThumbDraggingY(lb)) {
-                            if (thumb.RenderTransform is TranslateTransform tt) {
-                                tt.Y = 0;
-                            }
-                            SetScrollOffsetY(lb, sv.Offset.Y);
+                            double hh = thumb.Bounds.Height / 2;
+                            double y = tt.Y + thumb.Bounds.Y + hh;
+                            track.Value = track.ValueFromPoint(new Point(0,y));
+                            tt.Y = 0;
+                            SetScrollOffsetY(lb, track.Value);
                             SetIsThumbDraggingY(lb, false);
-                        } else {
-                            // shouldn't happen
-                            Debugger.Break();
                         }
-                        e.Pointer.Capture(null);
-                        e.Handled = true;
-                        return;
+                    } else {
+                        // shouldn't happen
+                        Debugger.Break();
                     }
-                }
-            }
-
-            #endregion
-
-            #endregion
-
-            void HandleWorldTimerTick(object sender, EventArgs e) {
-                if (sender is DispatcherTimer timer &&
-                   timer.Tag is ListBox lb &&
-                   GetScrollViewer(lb) is ScrollViewer sv) {
-                    if(sv.DataContext is MpViewModelBase vm &&
-                        vm.IsBusy) {
-                        return;
-                    }
-
-                    if (GetIsThumbDragging(lb)) {
-                        SetVelocityX(lb, 0);
-                        SetVelocityY(lb, 0);
-                        return;
-                    }
-
-                    double scrollOffsetX = GetScrollOffsetX(lb);
-                    double maxOffsetX = GetMaxScrollOffsetX(lb);
-
-                    double scrollOffsetY = GetScrollOffsetY(lb);
-                    double maxOffsetY = GetMaxScrollOffsetY(lb);
-
-                    double vx = GetVelocityX(lb);
-                    double vy = GetVelocityY(lb);
-
-                    //MpConsole.WriteLine("vx: " + vx);
-                    //MpConsole.WriteLine("vy: " + vy);
-
-                    if (scrollOffsetX < 0 || scrollOffsetX > maxOffsetX) {
-                        scrollOffsetX = Math.Min(maxOffsetX, Math.Max(0, scrollOffsetX));
-                        vx = 0;
-                    }
-                    if (scrollOffsetY < 0 || scrollOffsetY > maxOffsetY) {
-                        scrollOffsetY = Math.Min(maxOffsetY, Math.Max(0, scrollOffsetY));
-                        vy = 0;
-                    }                    
-
-                    vx = Math.Abs(vx) < 0.1d ? 0 : vx;
-                    vy = Math.Abs(vy) < 0.1d ? 0 : vy;
-
-                    scrollOffsetX += vx;
-                    scrollOffsetY += vy;
-
-                    vx *= GetFrictionX(lb);
-                    vy *= GetFrictionY(lb);
-
-                    // set scroll offset for container scroll viewer (bound to tracks)
-                    SetScrollOffsetX(lb, scrollOffsetX);
-                    SetScrollOffsetY(lb, scrollOffsetY);
-
-                    //if(!GetIsThumbDragging(lb)) 
-                        {
-                        // manually set actual listbox scroll
-                        // so thumb drag smoothly scrolls (updates visual container sv)
-                        // and load more check doesn't occur to mouse up
-                        var lb_sv = lb.GetVisualDescendant<ScrollViewer>();
-                        lb_sv.ScrollToHorizontalOffset(scrollOffsetX);
-                        lb_sv.ScrollToVerticalOffset(scrollOffsetY);
-
-                        sv.ScrollToHorizontalOffset(scrollOffsetX);
-                        sv.ScrollToVerticalOffset(scrollOffsetY);
-                    }
-
-                    SetVelocityX(lb, vx);
-                    SetVelocityY(lb, vy);
-
-                    //sv.ScrollToHorizontalOffset(scrollOffsetX);
-                    //sv.ScrollToVerticalOffset(scrollOffsetY);
-
-
+                    e.Pointer.Capture(null);
+                    e.Handled = true;
+                    return;
                 }
             }
         }
-               
 
+        private static void HandleWorldTimerTick(object sender, EventArgs e) {
+            if (sender is DispatcherTimer timer &&
+               timer.Tag is ListBox lb &&
+               GetScrollViewer(lb) is ScrollViewer sv) {
+                if (sv.DataContext is MpViewModelBase vm &&
+                    vm.IsBusy) {
+                    return;
+                }
+
+                if (GetIsThumbDragging(lb)) {
+                    SetVelocityX(lb, 0);
+                    SetVelocityY(lb, 0);
+                    return;
+                }
+
+                double scrollOffsetX = GetScrollOffsetX(lb);
+                double maxOffsetX = GetMaxScrollOffsetX(lb);
+
+                double scrollOffsetY = GetScrollOffsetY(lb);
+                double maxOffsetY = GetMaxScrollOffsetY(lb);
+
+                double vx = GetVelocityX(lb);
+                double vy = GetVelocityY(lb);
+
+                //MpConsole.WriteLine("vx: " + vx);
+                //MpConsole.WriteLine("vy: " + vy);
+
+                if (scrollOffsetX < 0 || scrollOffsetX > maxOffsetX) {
+                    scrollOffsetX = Math.Min(maxOffsetX, Math.Max(0, scrollOffsetX));
+                    vx = 0;
+                }
+                if (scrollOffsetY < 0 || scrollOffsetY > maxOffsetY) {
+                    scrollOffsetY = Math.Min(maxOffsetY, Math.Max(0, scrollOffsetY));
+                    vy = 0;
+                }
+
+                vx = Math.Abs(vx) < 0.1d ? 0 : vx;
+                vy = Math.Abs(vy) < 0.1d ? 0 : vy;
+
+                scrollOffsetX += vx;
+                scrollOffsetY += vy;
+
+                vx *= GetFrictionX(lb);
+                vy *= GetFrictionY(lb);
+
+                // set scroll offset for container scroll viewer (bound to tracks)
+                SetScrollOffsetX(lb, scrollOffsetX);
+                SetScrollOffsetY(lb, scrollOffsetY);
+
+                //if(!GetIsThumbDragging(lb)) 
+                {
+                    // manually set actual listbox scroll
+                    // so thumb drag smoothly scrolls (updates visual container sv)
+                    // and load more check doesn't occur to mouse up
+                    var lb_sv = lb.GetVisualDescendant<ScrollViewer>();
+                    lb_sv.ScrollToHorizontalOffset(scrollOffsetX);
+                    lb_sv.ScrollToVerticalOffset(scrollOffsetY);
+
+                    sv.ScrollToHorizontalOffset(scrollOffsetX);
+                    sv.ScrollToVerticalOffset(scrollOffsetY);
+                }
+
+                SetVelocityX(lb, vx);
+                SetVelocityY(lb, vy);
+
+                //sv.ScrollToHorizontalOffset(scrollOffsetX);
+                //sv.ScrollToVerticalOffset(scrollOffsetY);
+
+
+            }
+        }
+
+        #endregion
+
+        #region Private Helper Methods
+
+        private static bool BindScrollViewerAndTracks(ListBox lb) {
+            if (GetScrollViewer(lb) is ScrollViewer sv &&
+                sv.DataContext is MpIPagingScrollViewerViewModel psvvm) {
+                sv.Tag = lb;
+                if (sv.TryGetVisualDescendants<Track>(out var tracks) && tracks.Count() == 2) {
+                    sv.AddHandler(
+                       ScrollViewer.PointerPressedEvent,
+                       ScrollViewerPointerPressedHandler,
+                       RoutingStrategies.Tunnel);
+                    sv.AddHandler(
+                        ScrollViewer.PointerMovedEvent,
+                        ScrollViewerPointerMovedHandler,
+                        RoutingStrategies.Tunnel);
+                    sv.AddHandler(
+                        ScrollViewer.PointerReleasedEvent,
+                        ScrollViewerPointerReleasedHandler,
+                        RoutingStrategies.Tunnel);
+
+                    foreach (var track in tracks) {
+                        track.Tag = lb;
+                        track.IsThumbDragHandled = true;
+
+                        track.Bind(
+                                Track.MaximumProperty,
+                                new Binding() {
+                                    Source = lb.DataContext,
+                                    Path = track.Orientation == Orientation.Horizontal ?
+                                            nameof(psvvm.MaxScrollOffsetX) :
+                                            nameof(psvvm.MaxScrollOffsetY)
+                                });
+
+                        track.Minimum = 0;
+
+                        if (track.Thumb is Thumb thumb) {
+                            thumb.Tag = lb;
+                            thumb.RenderTransform = new TranslateTransform();
+
+                        }
+                    }
+                    return true;
+
+                }
+            }
+            return false;
+        }
+
+
+        private static void AdjustThumbTransform(Track track, Point track_mp, bool isThumbPress) {
+            var attached_control = track.Tag as AvaloniaObject;
+
+            var thumb = track.GetVisualDescendant<Thumb>();
+            if (track.Orientation == Orientation.Horizontal) {
+                SetIsThumbDraggingX(attached_control, true);
+
+                if (thumb.RenderTransform is TranslateTransform tt) {
+                    if (isThumbPress) {
+                        tt.X = 0;
+                    } else {
+                        double hw = thumb.Bounds.Width / 2;
+                        double tx_min = -thumb.Bounds.X;
+                        double tx_max = track.Bounds.Width - hw - thumb.Bounds.X;
+                        double tx = track_mp.X - hw - thumb.Bounds.X;
+                        tt.X = Math.Max(tx_min, Math.Min(tx, tx_max));
+                    }
+                }
+            } else {
+                SetIsThumbDraggingY(attached_control, true);
+                if (thumb.RenderTransform  is TranslateTransform tt) {
+                    if (isThumbPress) {
+                        tt.Y = 0;
+                    } else {
+                        double hh = thumb.Bounds.Height / 2;
+                        double ty_min = -thumb.Bounds.Y;
+                        double ty_max = track.Bounds.Height - hh - thumb.Bounds.Y;
+                        double ty = track_mp.Y - hh - thumb.Bounds.Y;
+                        tt.Y = Math.Max(ty_min, Math.Min(ty, ty_max));
+                    }
+                } 
+            }
+        }
         #endregion
     }
 

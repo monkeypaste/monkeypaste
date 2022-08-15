@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvKeyboardInputHelpers {
@@ -14,9 +15,9 @@ namespace MonkeyPaste.Common.Avalonia {
                 return keyList;
             }
 
-            var combos = keyStr.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+            var combos = keyStr.Split(new string[] { MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var c in combos) {
-                var keys = c.Split(new string[] { "+" }, StringSplitOptions.RemoveEmptyEntries);
+                var keys = c.Split(new string[] { MpAvKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
                 keyList.Add(new List<Key>());
                 foreach (var k in keys) {
                     keyList[keyList.Count - 1].Add(ConvertStringToKey(k));
@@ -29,10 +30,10 @@ namespace MonkeyPaste.Common.Avalonia {
             var outStr = string.Empty;
             foreach (var kl in keyList) {
                 if (!string.IsNullOrEmpty(outStr)) {
-                    outStr += ", ";
+                    outStr += MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR;
                 }
                 foreach (var k in kl) {
-                    outStr += GetKeyLiteral(k) + "+";
+                    outStr += GetKeyLiteral(k) + MpAvKeyGestureHelper2.COMBO_SEPARATOR;
                 }
                 outStr = outStr.Remove(outStr.Length - 1, 1);
             }
@@ -174,11 +175,11 @@ namespace MonkeyPaste.Common.Avalonia {
             //}
 
             var sb = new StringBuilder();
-            string[] keySequences = keyString.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+            string[] keySequences = keyString.Split(new string[] { MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < keySequences.Length; i++) {
                 string seq = keySequences[i].Trim();
                 //string outStr = string.Empty;
-                var keys = seq.Split(new string[] { "+" }, StringSplitOptions.RemoveEmptyEntries);
+                var keys = seq.Split(new string[] { MpAvKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var key in keys) {
                     switch (key) {
                         case "Ctrl":

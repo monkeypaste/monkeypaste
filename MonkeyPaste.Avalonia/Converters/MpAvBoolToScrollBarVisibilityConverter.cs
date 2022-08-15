@@ -9,10 +9,11 @@ namespace MonkeyPaste.Avalonia {
         public static readonly MpAvBoolToScrollBarVisibilityConverter Instance = new();
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
-            if(value is bool boolVal) {
-                return boolVal ? ScrollBarVisibility.Visible : ScrollBarVisibility.Hidden;
+            var boolVal = (bool?)value;
+            if(boolVal.HasValue) {
+                return boolVal.Value ? ScrollBarVisibility.Visible : ScrollBarVisibility.Hidden;
             }
-            return ScrollBarVisibility.Hidden;
+            return ScrollBarVisibility.Auto;
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {

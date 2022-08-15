@@ -18,15 +18,19 @@ namespace MonkeyPaste {
         IsReadOnly, //has context (tile)
         IsEditable,   //has context (tile)
         ResizingMainWindowComplete,
+
         //UnexpandComplete,
         MainWindowOpening,
         MainWindowOpened,
         MainWindowHiding,
         MainWindowHid,
-        MainWindowOrientationChanged,
+        MainWindowOrientationChangeBegin,
+        MainWindowOrientationChangeEnd,
         MainWindowSizeChanged,
         MainWindowSizeReset,
         MainWindowLoadComplete,
+        ShortcutAssignmentStarted,
+        ShortcutAssignmentEnded,
         ItemInitialized,
         ItemDragBegin,
         ItemDragEnd,
@@ -35,6 +39,8 @@ namespace MonkeyPaste {
         TrayScrollChanged,
         TraySelectionChanged,
         TrayLayoutChanged,
+        TrayZoomFactorChangeBegin,
+        TrayZoomFactorChangeEnd,
         ContentListScrollChanged, //has context (tile)
         ContentItemsChanged, //has context (tile)
         ContentSelectionChangeEnd, //has context (tile)

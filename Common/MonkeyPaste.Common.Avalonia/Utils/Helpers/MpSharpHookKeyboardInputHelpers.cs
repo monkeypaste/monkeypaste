@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SharpHook.Native;
+using MonkeyPaste.Common;
+using System.Diagnostics;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpSharpHookKeyboardInputHelpers {
@@ -13,9 +15,9 @@ namespace MonkeyPaste.Common.Avalonia {
                 return keyList;
             }
 
-            var combos = keyStr.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+            var combos = keyStr.Split(new string[] { MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var c in combos) {
-                var keys = c.Split(new string[] { "+" }, StringSplitOptions.RemoveEmptyEntries);
+                var keys = c.Split(new string[] { MpAvKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
                 keyList.Add(new List<KeyCode>());
                 foreach (var k in keys) {
                     keyList[keyList.Count - 1].Add(ConvertStringToKey(k));
@@ -28,16 +30,16 @@ namespace MonkeyPaste.Common.Avalonia {
             var outStr = string.Empty;
             foreach (var kl in keyList) {
                 if (!string.IsNullOrEmpty(outStr)) {
-                    outStr += ", ";
+                    outStr += MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR;
                 }
                 foreach (var k in kl) {
-                    outStr += GetKeyLiteral(k) + "+";
+                    outStr += GetKeyLiteral(k) + MpAvKeyGestureHelper2.COMBO_SEPARATOR;
                 }
-                outStr = outStr.Remove(outStr.Length - 1, 1);
+                outStr = outStr.Remove(outStr.Length - MpAvKeyGestureHelper2.COMBO_SEPARATOR.Length, MpAvKeyGestureHelper2.COMBO_SEPARATOR.Length);
             }
             if (!string.IsNullOrEmpty(outStr)) {
-                if (outStr.EndsWith(", ")) {
-                    outStr = outStr.Remove(outStr.Length - 2, 2);
+                if (outStr.EndsWith(MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR)) {
+                    outStr = outStr.Remove(outStr.Length - MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR.Length, MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR.Length);
                 }
             }
             return outStr;
@@ -121,6 +123,28 @@ namespace MonkeyPaste.Common.Avalonia {
             if (key == KeyCode.VcLeftControl || key == KeyCode.VcRightControl) {
                 return "Control";
             }
+            if(key == KeyCode.VcNumPadDivide) {
+                return @"/";
+            }
+            if (key == KeyCode.VcNumPadMultiply) {
+                return @"*";
+            }
+            if (key == KeyCode.VcNumPadSubtract) {
+                return @"-";
+            }
+            if (key == KeyCode.VcNumPadEquals) {
+                return @"=";
+            }
+            if (key == KeyCode.VcNumPadAdd) {
+                return @"+";
+            }
+            if (key == KeyCode.VcNumPadEnter) {
+                return @"Enter";
+            }
+            if (key == KeyCode.VcNumPadSeparator) { 
+                // what key is this?
+                Debugger.Break();
+            }
             if (key == KeyCode.VcSemicolon) {
                 return ";";
             }
@@ -154,36 +178,8 @@ namespace MonkeyPaste.Common.Avalonia {
             if (key == KeyCode.VcSlash) {
                 return @"\";
             }
-            //if (key == KeyCode.VcPageDown) {
-            //    return "PageDown";
-            //}
-            //if(key == KeyCode.VcNumPadLeft) {
-            //    return "Left";
-            //}
-            //if (key == KeyCode.VcNumPadRight) {
-            //    return "Right";
-            //}
-            //if (key == KeyCode.VcNumPadUp) {
-            //    return "Up";
-            //}
-            //if (key == KeyCode.VcNumPadDown) {
-            //    return "Down";
-            //}
-            //if(key == KeyCode.VcEscape) {
-            //    return "Escape";
-            //}
-            //if (key == KeyCode.VcEnter) {
-            //    return "Enter";
-            //}
-
-            //if(key >= KeyCode.VcF1 && key <= KeyCode.VcF12) {
-            //    int fVal = int.Parse(key.ToString().Replace("VcF", String.Empty));
-            //    return "F" + fVal;
-            //}
-            //if (key >= KeyCode.Vc1 && key <= KeyCode.Vc0) {
-            //    return key.ToString().Replace("Vc", String.Empty);
-            //}
-            if (key >= KeyCode.VcNumPad1 && key <= KeyCode.VcNumPad0) {
+            string keyStr = key.ToString();
+            if(keyStr.StartsWith("VcNumPad")) {
                 return key.ToString().Replace("VcNumPad", String.Empty);
             }
             return key.ToString().Replace("Vc", String.Empty);
@@ -196,11 +192,11 @@ namespace MonkeyPaste.Common.Avalonia {
             //}
 
             var sb = new StringBuilder();
-            string[] keySequences = keyString.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+            string[] keySequences = keyString.Split(new string[] { MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < keySequences.Length; i++) {
                 string seq = keySequences[i].Trim();
                 //string outStr = string.Empty;
-                var keys = seq.Split(new string[] { "+" }, StringSplitOptions.RemoveEmptyEntries);
+                var keys = seq.Split(new string[] { MpAvKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var key in keys) {
                     switch (key) {
                         case "Control":

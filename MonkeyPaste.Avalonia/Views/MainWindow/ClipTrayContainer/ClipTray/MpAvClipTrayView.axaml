@@ -20,9 +20,13 @@
                 local:MpAvSizeObserverExtension.IsEnabled="True"
                 local:MpAvSizeObserverExtension.ObservedWidth="{Binding ClipTrayScreenWidth, Mode=OneWayToSource}"
                 local:MpAvSizeObserverExtension.ObservedHeight="{Binding ClipTrayScreenHeight, Mode=OneWayToSource}">
+            <!--
+                HorizontalScrollBarVisibility="{Binding IsHorizontalScrollBarVisible, Converter={StaticResource BoolToScrollBarVisibilityConverter}}"
+                VerticalScrollBarVisibility="{Binding IsVerticalScrollBarVisible, Converter={StaticResource BoolToScrollBarVisibilityConverter}}"
+            -->
             <ScrollViewer x:Name="ClipTrayScrollViewer"
-                          HorizontalScrollBarVisibility="{Binding IsHorizontalScrollBarVisible, Converter={StaticResource BoolToScrollBarVisibilityConverter}}"
-                          VerticalScrollBarVisibility="{Binding IsVerticalScrollBarVisible, Converter={StaticResource BoolToScrollBarVisibilityConverter}}"
+                          HorizontalScrollBarVisibility="Visible"
+                          VerticalScrollBarVisibility="Visible"
                           HorizontalAlignment="Left"
                           VerticalAlignment="Top"
                           AllowAutoHide="True"
@@ -34,7 +38,7 @@
                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
                          local:MpAvPagingListBoxExtension.IsEnabled="True"
                          local:MpAvPagingListBoxExtension.FrictionX="0.85"
-                         local:MpAvPagingListBoxExtension.WheelDampeningX="0.08"
+                         local:MpAvPagingListBoxExtension.WheelDampeningX="0.03"
                          local:MpAvPagingListBoxExtension.FrictionY="0.75"
                          local:MpAvPagingListBoxExtension.WheelDampeningY="0.08"
                          local:MpAvPagingListBoxExtension.ScrollOffsetX="{Binding ScrollOffsetX, Mode=TwoWay}"

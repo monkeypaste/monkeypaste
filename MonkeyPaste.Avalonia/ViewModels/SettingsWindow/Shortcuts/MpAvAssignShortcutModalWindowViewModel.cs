@@ -135,8 +135,12 @@ namespace MonkeyPaste.Avalonia {
             var ascwvm = new MpAvAssignShortcutModalWindowViewModel(shortcutName, keys, command, commandParameter);
             ascw.DataContext = ascwvm;
 
+            MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentStarted);
+
             await ascw.ShowDialog(MpAvMainWindow.Instance);
-            
+
+            MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentEnded);
+
             var assignResult = ascw.DialogResult;
             MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
             if (assignResult == true) {
@@ -242,7 +246,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 KeyString = String.Empty;
                 OnPropertyChanged(nameof(KeyItems));
-                _gestureHelper.Reset();
+                //_gestureHelper.Reset();
                 Validate();
                 OnPropertyChanged(nameof(KeyString));
                 OnClear?.Invoke(this, null);

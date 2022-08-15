@@ -186,11 +186,19 @@ namespace MonkeyPaste.Avalonia {
         }
         public MpSize BoundSize { get; set; } = MpSize.Empty;
 
-        public Rect TrayRect => new Rect(TrayLocation.ToAvPoint(),BoundSize.ToAvSize());
+        public MpRect TrayRect => new MpRect(TrayLocation,BoundSize);
+
+        public MpRect ScreenRect => Parent == null ? MpRect.Empty : new MpRect(TrayLocation - Parent.ScrollOffset, BoundSize);
 
         #endregion
 
         #region State
+
+        public bool IsScreenVisible => Parent == null ? false : 
+            Parent.ScreenRect.Contains(ScreenRect.TopLeft) || 
+            Parent.ScreenRect.Contains(ScreenRect.TopRight) || 
+            Parent.ScreenRect.Contains(ScreenRect.BottomLeft) || 
+            Parent.ScreenRect.Contains(ScreenRect.BottomRight);
 
         public bool IsDevToolsVisible { get; set; } = false;
 
@@ -660,11 +668,6 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch(msg) {
-                case MpMessageType.MainWindowOrientationChanged:
-                case MpMessageType.TrayLayoutChanged:
-                case MpMessageType.MainWindowSizeChanged:
-                    //OnPropertyChanged(nameof())
-                    break;
             }
         }
 

@@ -8,6 +8,12 @@ namespace MonkeyPaste.Common {
             set => Points[0] = value;
         }
 
+        public MpPoint TopLeft => new MpPoint(Left, Top);
+        public MpPoint TopRight => new MpPoint(Right, Top);
+
+        public MpPoint BottomLeft => new MpPoint(Left, Bottom);
+        public MpPoint BottomRight => new MpPoint(Right, Bottom);
+
         public double X {
             get => Points[0].X;
             set => Points[0].X = value;

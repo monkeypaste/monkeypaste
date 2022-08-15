@@ -82,14 +82,14 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
 
-                case MpMessageType.MainWindowOrientationChanged: {
+                //case MpMessageType.MainWindowOrientationChanged: {
 
-                        UpdateContentOrientation();
-                        UpdateResizerOrientation();
+                //        UpdateContentOrientation();
+                //        UpdateResizerOrientation();
 
 
-                        break;
-                    }
+                //        break;
+                //    }
             }
         }
 
@@ -117,7 +117,8 @@ namespace MonkeyPaste.Avalonia {
 
             // Need to delay or resizer thinks bounds are empty on initial show
             await Task.Delay(300);
-            ReceivedGlobalMessage(MpMessageType.MainWindowOrientationChanged);
+            //ReceivedGlobalMessage(MpMessageType.MainWindowOrientationChanged);
+            MpAvMainWindowViewModel.Instance.CycleOrientationCommand.Execute(null);
 
             MpMessenger.SendGlobal(MpMessageType.MainWindowLoadComplete);
         }
@@ -167,7 +168,7 @@ namespace MonkeyPaste.Avalonia {
 
 
 
-        private void UpdateResizerOrientation() {
+        public void UpdateResizerOrientation() {
             var mwvm = MpAvMainWindowViewModel.Instance; 
             
             var resizerView = this.FindControl<MpAvMainWindowResizerView>("MainWindowResizerView");
@@ -249,7 +250,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
-        private void UpdateContentOrientation() {
+        public void UpdateContentOrientation() {
             var mwvm = MpAvMainWindowViewModel.Instance;
 
             var mwtg = this.FindControl<Grid>("MainWindowTrayGrid");
@@ -309,9 +310,10 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetColumn(ctrv, 0);
             }
 
-            UpdateSidebarGridsplitter();
+            UpdateResizerOrientation();
+            //UpdateSidebarGridsplitter();
 
-            //mwtg.InvalidateMeasure();
+            mwtg.InvalidateMeasure();
         }
 
         private void UpdateSidebarGridsplitter() {
@@ -320,12 +322,18 @@ namespace MonkeyPaste.Avalonia {
             var containerGrid = sbgs.GetVisualAncestor<Grid>();
 
             if(MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                if (containerGrid.ColumnDefinitions.Count == 0) {
+                    UpdateContentOrientation();
+                }
                 if (sbgs.IsVisible) {
                     containerGrid.ColumnDefinitions[1].Width = new GridLength(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel.DefaultSidebarWidth);
                 } else {
                     containerGrid.ColumnDefinitions[1].Width = new GridLength(0);
                 }
             } else {
+                if(containerGrid.RowDefinitions.Count == 0) {
+                    UpdateContentOrientation();
+                }
                 if (sbgs.IsVisible) {
                     containerGrid.RowDefinitions[1].Height = new GridLength(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel.DefaultSidebarHeight);
                 } else {

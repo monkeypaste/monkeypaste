@@ -40,8 +40,6 @@
     <None Remove="CefGlue.Avalonia" />
     <None Remove="Dotnet.Bundle" />
     <None Remove="WebkitGtkSharp" />
-    <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\" />
-    <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\DataTemplate\" />
     <None Remove="Styles\Spinner\" />
     <EmbeddedResource Remove="Styles\Spinner\Spinner.xaml" />
     <None Remove="Controls\ProgressRing\" />
@@ -57,12 +55,9 @@
   <ItemGroup>
     <AvaloniaXaml Remove="Styles\Buttons\MpAvButtonStyles.axaml" />
     <AvaloniaXaml Remove="Styles\MpAvAllStyles.axaml" />
-    <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\MpAvClipTrayView_ItemsRepeater.axaml" />
-    <AvaloniaXaml Remove="Views\MainWindow\ResizeHandle\MpAvMainWindowResizeHandle.axaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
-    <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\MpAvClipTrayView_ItemsRepeater.axaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
@@ -256,9 +251,6 @@
     <None Remove="Assets\Images\yandexIcon.png" />
     <None Remove="Assets\Images\yinyang.png" />
     <None Remove="Settings.settings" />
-  </ItemGroup>
-  <ItemGroup>
-    <Watch Remove="Views\MainWindow\ResizeHandle\MpAvMainWindowResizeHandle.axaml" />
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\Icons\cog.ico">
@@ -876,7 +868,6 @@
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Mac\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
     <Folder Include="Utils\Input\Mouse\" />
-    <Folder Include="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Selector\" />
     <Folder Include="Styles\ProgressRing\" />
     <Folder Include="Controls\ProgressRing\" />
   </ItemGroup>
@@ -890,34 +881,6 @@
     <Resource Include="Assets\Icons\monkey.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\MpAvCefNetContentWebView.axaml.cs">
-      <DependentUpon>MpAvCefNetContentWebView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\MpAvContentWebView.axaml.cs">
-      <DependentUpon>MpAvContentWebView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\PlainText\MpAvPlainTextContentView.axaml.cs">
-      <DependentUpon>MpAvPlainTextContentView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Detail\MpAvClipTileDetailView.axaml.cs">
-      <DependentUpon>MpAvClipTileDetailView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\FilterMenu\Search\MpAvSearchBoxView.axaml.cs">
-      <DependentUpon>MpAvSearchBoxView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\FilterMenu\Sort\MpAvClipTileSortView.axaml.cs">
-      <DependentUpon>MpAvClipTileSortView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\MpAvMainWindow.axaml.cs">
-      <DependentUpon>MpAvMainWindow.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\TagTree\MpAvTagTreeView.axaml.cs">
-      <SubType>Code</SubType>
-      <DependentUpon>MpAvTagTreeView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\TagTree\TagTile\MpAvTagView.axaml.cs">
-      <DependentUpon>MpAvTagView.axaml</DependentUpon>
-    </Compile>
     <Compile Update="Views\Reusable\ContextMenu\CheckableMenuItem\MpAvCheckableMenuItemView.axaml.cs">
       <DependentUpon>MpAvCheckableMenuItemView.axaml</DependentUpon>
     </Compile>
@@ -930,11 +893,6 @@
     <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\KeyGroup\MpAvShortcutKeyGroupView.axaml.cs">
       <DependentUpon>MpAvShortcutKeyGroupView.axaml</DependentUpon>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <AvaloniaXaml Update="Views\MainWindow\Sidebar\SidebarItems\TagTree\MpAvTagTreeView.axaml">
-      <SubType>Designer</SubType>
-    </AvaloniaXaml>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <!--<Exec Command="xcopy /s /D /Y  &quot;$(SolutionDir)MonkeyPaste\Resources\*&quot; &quot;$(TargetDir)\Resources&quot;" />

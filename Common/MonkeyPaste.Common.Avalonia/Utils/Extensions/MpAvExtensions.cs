@@ -100,6 +100,16 @@ namespace MonkeyPaste.Common.Avalonia {
                             .Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed;
         }
 
+        public static bool IsLeftRelease(this PointerReleasedEventArgs ppea, IVisual? control = null) {
+            return ppea.GetCurrentPoint(control)
+                            .Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed;
+        }
+
+        public static bool IsRightRelease(this PointerReleasedEventArgs ppea, IVisual? control = null) {
+            return ppea.GetCurrentPoint(control)
+                            .Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed;
+        }
+
         #endregion
 
         #region PropertyChanged
