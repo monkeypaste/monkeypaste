@@ -3,6 +3,8 @@ using System.IO;
 using MonkeyPaste;
 namespace MonkeyPaste.Avalonia {
     public class MpAvOsInfo : MpIOsInfo {
+        public string OsMachineName => Environment.MachineName;
+
         public string OsFileManagerPath {
             get {
                 if(OperatingSystem.IsWindows()) {

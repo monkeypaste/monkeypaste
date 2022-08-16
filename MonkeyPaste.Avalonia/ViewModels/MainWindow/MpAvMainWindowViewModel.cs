@@ -489,13 +489,7 @@ namespace MonkeyPaste.Avalonia {
                     MainWindowTop = MainWindowOpenedRect.Top;
                     MainWindowBottom = MainWindowOpenedRect.Bottom;
 
-                    MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeChanged);
-
-                    if (MpAvMainWindow.Instance == null) {
-                        return;
-                    }
-
-                    //MainWindow.Instance.Height = MainWindowHeight;
+                    //MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeChanged);
                     break;
                 case nameof(MainWindowWidth):
                     if (!IsResizing) {
@@ -503,15 +497,8 @@ namespace MonkeyPaste.Avalonia {
                     }
                     MainWindowLeft = MainWindowOpenedRect.Left;
                     MainWindowRight = MainWindowOpenedRect.Right;
-                    MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayScreenWidth));
 
-                    MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeChanged);
-
-                    if (MpAvMainWindow.Instance == null) {
-                        return;
-                    }
-
-                    //MainWindow.Instance.Width = MainWindowWidth;
+                    //MpMessenger.SendGlobal(MpMessageType.MainWindowSizeChanged);
                     break;
                 case nameof(MainWindowLeft):
                 case nameof(MainWindowTop):
@@ -527,7 +514,9 @@ namespace MonkeyPaste.Avalonia {
                     MpAvMainWindow.Instance.Position = new PixelPoint((int)p.X, (int)p.Y);
                     break;
                 case nameof(IsResizing):
-                    if (!IsResizing) {
+                    if (IsResizing) {
+                        MpMessenger.SendGlobal(MpMessageType.MainWindowSizeChangeBegin);
+                    } else {
                         // after resizing store new resized dimension for next load                        
 
                         if (MainWindowOrientationType == MpMainWindowOrientationType.Left ||
@@ -536,7 +525,7 @@ namespace MonkeyPaste.Avalonia {
                         } else {
                             MpPrefViewModel.Instance.MainWindowInitialHeight = MainWindowHeight;
                         }
-                    } else {
+                        MpMessenger.SendGlobal(MpMessageType.MainWindowSizeChangeEnd);
                     }
                     break;
                 case nameof(IsMainWindowLocked):
@@ -815,10 +804,13 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand WindowResizeCommand => new MpCommand<MpSize>(
             (sizeArg) => {
+                var rc = MpAvMainWindow.Instance.GetResizerControl();
+                if(rc == null) {
+                    return;
+                }
                 IsResizing = true;
-                var mwrv = MpAvMainWindow.Instance.GetVisualDescendant<MpAvMainWindowResizerView>();
-                var resize_control = mwrv.FindControl<Control>("MainWindowResizeBorder");
-                MpAvResizeExtension.ResizeByDelta(resize_control, sizeArg.Width, sizeArg.Height);
+                
+                MpAvResizeExtension.ResizeByDelta(rc, sizeArg.Width, sizeArg.Height);
 
                 IsResizing = false;
             },
@@ -859,6 +851,19 @@ namespace MonkeyPaste.Avalonia {
              }, () => {
                  return IsVerticalOrientation;
              });
+
+        public ICommand WindowSizeToDefaultCommand => new MpCommand(
+            () => {
+                var rc = MpAvMainWindow.Instance.GetResizerControl();
+                if (rc == null) {
+                    return;
+                }
+                IsResizing = true;
+
+                MpAvResizeExtension.ResetToDefault(rc);
+
+                IsResizing = false;
+            });
 
         private MpCommand _undoCommand;
         public ICommand UndoCommand {

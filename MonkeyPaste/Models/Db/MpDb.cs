@@ -50,6 +50,11 @@ namespace MonkeyPaste {
         #region Constructors
 
 
+
+        #endregion
+
+        #region Public Methods
+
         public static async Task InitAsync() {
             var sw = new Stopwatch();
             sw.Start();
@@ -61,9 +66,6 @@ namespace MonkeyPaste {
         }
 
 
-        #endregion
-
-        #region Public Methods
 
         public static string GetDbFileAsBase64() {
             var bytes = File.ReadAllBytes(MpPlatformWrapper.Services.DbInfo.DbPath);
@@ -354,27 +356,32 @@ namespace MonkeyPaste {
             }
         }
 
-        private static async Task InitDbAsync() {
-
+        private static async Task<bool> InitDbConnectionAsync(MpIDbInfo dbInfo, bool allowCreate) {
             //SQLitePCL.Batteries.Init();
 
-            var dbPath = MpPlatformWrapper.Services.DbInfo.DbPath;
+            var dbPath = dbInfo.DbPath;
 
             //File.Delete(dbPath);
 
             bool isNewDb = !File.Exists(dbPath);
 
-            if(isNewDb) {
-                using (File.Create(dbPath));
+            if (isNewDb && allowCreate) {
+                using (File.Create(dbPath)) ;
             }
 
-            CreateConnection();
+            CreateConnection(dbPath);
 
             if (UseWAL) {
                 if (_connectionAsync != null) {
                     await _connectionAsync.EnableWriteAheadLoggingAsync().ConfigureAwait(false);
                 }
             }
+            return isNewDb;
+        }
+
+        private static async Task InitDbAsync() {
+            bool isNewDb = await InitDbConnectionAsync(MpPlatformWrapper.Services.DbInfo,true);
+            
 
             await InitTablesAsync();
             
@@ -406,18 +413,21 @@ namespace MonkeyPaste {
             }
 
 
-            MpConsole.WriteLine(@"Db file located: " + dbPath);
+            MpConsole.WriteLine(@"Db file located: " + MpPlatformWrapper.Services.DbInfo.DbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPrefViewModel.Instance.ThisDeviceGuid);
             MpConsole.WriteLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
         }
 
-        private static void CreateConnection() {
+        private static void CreateConnection(string dbPath = "") {
+            if (string.IsNullOrEmpty(dbPath)) {
+                dbPath = MpPlatformWrapper.Services.DbInfo.DbPath;
+            }
             if(_connection != null && _connectionAsync != null) {
                 return;
             }
             
             var _connStr = new SQLiteConnectionString(
-                            databasePath: MpPlatformWrapper.Services.DbInfo.DbPath,
+                            databasePath: dbPath,
                             storeDateTimeAsTicks: true,
                             openFlags: SQLiteOpenFlags.ReadWrite |
                                        SQLiteOpenFlags.Create |
@@ -568,7 +578,37 @@ namespace MonkeyPaste {
             //                                        INNER JOIN MpApp ON MpApp.pk_MpAppId = MpSource.fk_MpAppId
             //                                        LEFT JOIN MpUrl ON MpUrl.pk_MpUrlId = MpSource.fk_MpUrlId");
         }
-        
+
+        public static async Task<bool> ResetPreferenceDefaultsAsync(MpIDbInfo dbInfo, MpIOsInfo osInfo) {
+            bool wouldBeNewDb = await InitDbConnectionAsync(dbInfo, false);
+            if (wouldBeNewDb) {
+                //this should be caught in pref init so somethings wrong
+                Debugger.Break();
+                return false;
+            }
+            await _connectionAsync.CreateTableAsync<MpUserDevice>();
+            MpPrefViewModel.Instance.ThisDeviceGuid = await MpDataModelProvider.GetUserDeviceGuidByMachineNameAsync(osInfo.OsMachineName);
+            MpPrefViewModel.Instance.ThisDeviceType = osInfo.OsType;
+
+            await _connectionAsync.CreateTableAsync<MpApp>();
+            var process = Process.GetCurrentProcess();
+            string thisAppPath = process.MainModule.FileName;
+            var thisApp = await MpDataModelProvider.GetAppByPathAsync(thisAppPath);
+
+            await _connectionAsync.CreateTableAsync<MpSource>();
+            var thisAppSource = await MpSource.Create(appId: thisApp.Id, urlId: 0);
+            MpPrefViewModel.Instance.ThisAppSourceId = thisAppSource.Id;
+
+
+            var osApp = await MpDataModelProvider.GetAppByPathAsync(osInfo.OsFileManagerPath);
+            var osAppSource = await MpDataModelProvider.GetSourceByMembersAsync(osApp.Id,0);
+            MpPrefViewModel.Instance.ThisOsFileManagerSourceId = osAppSource.Id;
+
+            await _connectionAsync.CloseAsync();
+            _connectionAsync = null;
+            return true;
+        }
+
         private static async Task InitDefaultDataAsync() {
             // NOTE! MpTag.AllTagId needs to be changed to 1 not 2 since recent was removed
 
@@ -580,8 +620,10 @@ namespace MonkeyPaste {
 
             var thisDevice = new MpUserDevice() {
                 UserDeviceGuid = Guid.Parse(MpPrefViewModel.Instance.ThisDeviceGuid),
-                PlatformType = MpPrefViewModel.Instance.ThisDeviceType
+                PlatformType = MpPrefViewModel.Instance.ThisDeviceType,
+                MachineName = Environment.MachineName
             };
+
             await AddItemAsync<MpUserDevice>(thisDevice);
 
             #endregion
@@ -669,70 +711,11 @@ namespace MonkeyPaste {
 
             #endregion
 
-            #region Anayltic Items
-
-            //var ai1 = await MpAnalyticItem.Create(
-            //            "https://api.cognitive.microsofttranslator.com/{0}",
-            //            MpJsonPreferenceIO.Instance.AzureCognitiveServicesKey,
-            //            MpCopyItemType.Text,
-            //            MpAnalyzerOutputFormatFlags.Text,
-            //            "Language Translator",
-            //            "Azure Cognitive-Services Language Translator",
-            //            MpFileIo.ReadTextFromResource(
-            //                "MonkeyPaste.Resources.Data.Analytics.Formats.Azure.azuretranslator.json", 
-            //                typeof(MpDb).Assembly));
-
-            //var ai2 = await MpAnalyticItem.Create(
-            //            "https://api.openai.com/v1/",
-            //            MpJsonPreferenceIO.Instance.RestfulOpenAiApiKey,
-            //            MpCopyItemType.Text,
-            //            MpAnalyzerOutputFormatFlags.Text,
-            //            "Open Ai",
-            //            "OpenAI is an artificial intelligence research laboratory consisting of the for-profit corporation OpenAI LP and its parent company, the non-profit OpenAI Inc.",
-            //            MpFileIo.ReadTextFromResource(
-            //                "MonkeyPaste.Resources.Data.Analytics.Formats.OpenAi.openai.json",
-            //                typeof(MpDb).Assembly));
-
-            // TODO add other analyzers here or better load w/ json
-
-            #endregion
-
-            #region Matcher
-
-            /*
-            -on end of startup MpMatchManager loads matchers,events and commands and registers for events
-            -on copy item create invoke event w/ item from tray
-            -in manager run all event commands with copy item
-            -compare content w/ all clipboard matchers
-
-            */
-
-            //var mr1 = await MpMatcher.Create(
-            //    MpMatcherType.Contains,
-            //    "cat",
-
-            //    MpMatchTriggerType.ContentItemAdded,
-            //    MpMatchActionType.Analyze,
-            //    24,
-
-            //    MpMatchActionType.Classify,
-            //    32
-            //    );
-
-            #endregion
 
             #region Icon
 
-
             var sourceIcon = await MpIcon.Create(MpBase64Images.AppIcon);
-            /*
-            
-129a1643-3bf5-4292-aedb-a6c8f1112088
-470752e3-1a6d-4785-b215-a881c9a96385
-091894d7-6c88-4815-936d-682b0906c409
-3b3e27e8-8f6d-4b10-a83a-1668eb798891
-            */
-            //var i1 = await MpIcon.Create(MpBase64Images.ClipboardIcon,false, "954fc715-35f3-4171-b23f-b8379a40db96")
+
             #endregion
 
             #region Source

@@ -115,15 +115,44 @@
                             <Style Selector="Slider /template/ RepeatButton">
                                 <Setter Property="IsVisible"
                                         Value="False" />
+                                <!--<Setter Property="Padding"
+                                        Value="0" />-->
                             </Style>
-                            <Style Selector="Slider /template/ Thumb.SliderThumbStyle">
+                          <Style Selector="Slider /template/ Thumb.SliderThumbStyle">
+                            <Setter Property="Template">
+                              <ControlTemplate>
+                                <Grid>
+                                  <Border Width="12"
+                                          Cursor="Hand"
+                                          Height="40"
+                                          CornerRadius="3"
+                                          Background="White" />
+                                </Grid>
+                              </ControlTemplate>
+                            </Setter>
+                          </Style>
+                            <Style Selector="Slider /template/ Thumb.SliderThumbStyle:pointerover">
                                 <Setter Property="Template">
                                     <ControlTemplate>
                                         <Grid>
                                             <Border Width="12"
                                                     Height="40"
+                                                    Cursor="Hand"
                                                     CornerRadius="3"
-                                                    Background="White" />
+                                                    Background="Yellow" />
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter>
+                            </Style>
+                            <Style Selector="Slider /template/ Thumb.SliderThumbStyle:pressed">
+                                <Setter Property="Template">
+                                    <ControlTemplate>
+                                        <Grid>
+                                            <Border Width="12"
+                                                    Height="40"
+                                                    Cursor="Hand"
+                                                    CornerRadius="3"
+                                                    Background="Red" />
                                         </Grid>
                                     </ControlTemplate>
                                 </Setter>

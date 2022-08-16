@@ -25,6 +25,7 @@ namespace MonkeyPaste.Avalonia {
 
         public Grid MainWindowGrid { get; private set; }
 
+
         static MpAvMainWindow() {
             BoundsProperty.Changed.AddClassHandler<MpAvMainWindow>((x,y) => x.BoundsChangedHandler(y as AvaloniaPropertyChangedEventArgs<Rect>));
         }
@@ -56,6 +57,13 @@ namespace MonkeyPaste.Avalonia {
                 await InitAsync();
             });
         }
+
+        public Control GetResizerControl() {
+            var mwrv = this.GetVisualDescendant<MpAvMainWindowResizerView>();
+            var resize_control = mwrv.FindControl<Control>("MainWindowResizeBorder");
+            return resize_control;
+        }
+
         private void SidebarSplitter_isVisibleChange(GridSplitter splitter, bool isVisible) {
             UpdateSidebarGridsplitter();
         }

@@ -17,7 +17,9 @@
             local:MpAvIsHoveringExtension.HoverCursor="{Binding ResizerCursor}"
             local:MpAvIsHoveringExtension.IsSelected="{Binding IsResizing}"
             local:MpAvIsHoveringExtension.HoverBrush="Yellow"
-            local:MpAvIsHoveringExtension.IsEnabled="True">
+            local:MpAvIsHoveringExtension.IsEnabled="True"
+            local:MpAvMousePressCommand.IsEnabled="True"
+            local:MpAvMousePressCommand.DoubleLeftPressCommand="{Binding WindowSizeToDefaultCommand}">
         <Border x:Name="MainWindowResizeBorder"
                 local:MpAvResizeExtension.MinHeight="{Binding MainWindowMinHeight}"
                 local:MpAvResizeExtension.MaxHeight="{Binding MainWindowMaxHeight}"
@@ -31,6 +33,7 @@
                 local:MpAvResizeExtension.IsResizing="{Binding IsResizing, Mode=TwoWay}"
                 local:MpAvResizeExtension.XFactor="{Binding ResizeXFactor}"
                 local:MpAvResizeExtension.YFactor="{Binding ResizeYFactor}"
+                local:MpAvResizeExtension.GlobalResizeMessage="MainWindowSizeChanged"
                 local:MpAvResizeExtension.IsEnabled="True"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"

@@ -271,6 +271,24 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region GlobalResizeMessage Property
+        public static MpMessageType GetGlobalResizeMessage(AvaloniaObject obj) {
+            return obj.GetValue(GlobalResizeMessageProperty);
+        }
+
+        public static void SetGlobalResizeMessage(AvaloniaObject obj, MpMessageType value) {
+            obj.SetValue(GlobalResizeMessageProperty, value);
+        }
+
+        public static readonly AttachedProperty<MpMessageType>
+            GlobalResizeMessageProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, MpMessageType>(
+            "GlobalResizeMessage",
+            MpMessageType.None,
+            false);
+
+        #endregion
+
         #region IsEnabled AvaloniaProperty
         public static bool GetIsEnabled(AvaloniaObject obj) {
             return obj.GetValue(IsEnabledProperty);
@@ -301,110 +319,7 @@ namespace MonkeyPaste.Avalonia {
                 DetachedToVisualHandler(element, null);
             }
 
-            void AttachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
-                if (s is Control control) {
-                    control.DetachedFromVisualTree += DetachedToVisualHandler;
-                    control.PointerEnter += PointerEnterHandler;
-                    control.PointerLeave += PointerLeaveHandler;
-                    control.PointerPressed += PointerPressedHandler;
-                    control.PointerReleased += PointerReleasedHandler;
-                    control.PointerMoved += PointerMovedHandler;
-                    if (e == null) {
-                        control.AttachedToVisualTree += AttachedToVisualHandler;
-                    }
-                }
-            }
-
-            void DetachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
-                if (s is Control control) {
-                    control.AttachedToVisualTree -= AttachedToVisualHandler;
-                    control.DetachedFromVisualTree -= DetachedToVisualHandler;
-                    control.PointerEnter -= PointerEnterHandler;
-                    control.PointerLeave -= PointerLeaveHandler;
-                    control.PointerPressed -= PointerPressedHandler;
-                    control.PointerReleased -= PointerReleasedHandler;
-                    control.PointerMoved -= PointerMovedHandler;
-                }
-            }
-
-            void PointerEnterHandler(object? s, PointerEventArgs e) {
-                if (s is AvaloniaObject ao) {
-                    if (!GetIsEnabled(ao) ||
-                        IsAnyResizing) {
-                        return;
-                    }
-                    SetCanResize(ao, true);
-                }
-            }
-
-            void PointerLeaveHandler(object? s, PointerEventArgs e) {
-                if (s is Control control) {
-                    if (!GetIsEnabled(control) || GetIsResizing(control)) {
-                        return;
-                    }
-                    if (!GetIsResizing(control)) {
-                        SetCanResize(control, false);
-                    }
-                }
-            }
-
-            void PointerPressedHandler(object? s, PointerPressedEventArgs e) {
-                if (s is Control control &&
-                    e.GetCurrentPoint(control)
-                    .Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed) {
-                    if (!GetIsEnabled(control)) {
-                        return;
-                    }
-                    if(e.ClickCount > 1) {
-                        ResetToDefault(control);
-                        return;
-                    }
-                    if (control.DataContext is MpISelectableViewModel svm) {
-                        svm.IsSelected = true;
-                    }
-                    SetIsResizing(control, true);
-
-                    _lastMousePosition = _mouseDownPosition = MpAvMainWindow.Instance.PointToScreen(e.GetCurrentPoint(null).Position).ToPoint(1).ToPortablePoint();
-                }
-            }
-
-            void PointerReleasedHandler(object? s, PointerReleasedEventArgs e) {
-                if (s is Control control &&
-                    e.GetCurrentPoint(control)
-                    .Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonReleased) {
-                    if (!GetIsEnabled(control)) {
-                        return;
-                    }
-                    
-                    if (GetIsResizing(control)) {
-                        Reset(control);
-                    }
-                }
-            }
-
-            void PointerMovedHandler(object? s, PointerEventArgs e) {
-                if (s is Control control) {
-                    if (!GetIsResizing(control) ||
-                       !GetIsEnabled(control) ||
-                        _mouseDownPosition == null
-                       //MpAvClipTrayViewModel.Instance.HasScrollVelocity
-                       ) {
-                        return;
-                    }
-                    if (!e.GetCurrentPoint(control)
-                        .Properties.IsLeftButtonPressed) {
-                        Reset(control);
-                        return;
-                    }
-
-                    var mw_mp = MpAvMainWindow.Instance.PointToScreen(e.GetCurrentPoint(null).Position).ToPoint(1).ToPortablePoint();
-                    if (GetIsResizing(control)) {
-                        var delta = _lastMousePosition - mw_mp; //new Point(mw_mp.X - _lastMousePosition.X, mw_mp.Y - _lastMousePosition.Y);
-                        ResizeByDelta(control, delta.X, delta.Y);
-                    }
-                    _lastMousePosition = mw_mp;
-                }
-            }
+            
         }
 
         #endregion
@@ -443,7 +358,7 @@ namespace MonkeyPaste.Avalonia {
             ResizeByDelta(control, dx, dy);
             Reset(control);
 
-            MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeReset);
+            //MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeReset);
         }
 
         public static void ResizeByDelta(Control control, double dx, double dy) {
@@ -477,11 +392,124 @@ namespace MonkeyPaste.Avalonia {
             SetBoundWidth(control, bound_width);
             SetBoundHeight(control, bound_height);
 
-            MpMessenger.SendGlobal(MpMessageType.ContentResized);
-            if (!GetIsResizing(control)) {
-                MpMessenger.SendGlobal(MpMessageType.ResizeContentCompleted);
+            //MpMessenger.SendGlobal(MpMessageType.ContentResized);
+            //if (!GetIsResizing(control)) {
+            //    MpMessenger.SendGlobal(MpMessageType.ResizeContentCompleted);
+            //}
+            var resizeMsg = GetGlobalResizeMessage(control);
+            if(resizeMsg != MpMessageType.None) {
+                MpMessenger.SendGlobal(resizeMsg);
             }
         }
+        #endregion
+
+        #region Private Event Handlers
+
+        private static void AttachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+            if (s is Control control) {
+                control.DetachedFromVisualTree += DetachedToVisualHandler;
+                control.PointerEnter += PointerEnterHandler;
+                control.PointerLeave += PointerLeaveHandler;
+                control.PointerPressed += PointerPressedHandler;
+                control.PointerReleased += PointerReleasedHandler;
+                control.PointerMoved += PointerMovedHandler;
+                if (e == null) {
+                    control.AttachedToVisualTree += AttachedToVisualHandler;
+                }
+            }
+        }
+
+        private static void DetachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+            if (s is Control control) {
+                control.AttachedToVisualTree -= AttachedToVisualHandler;
+                control.DetachedFromVisualTree -= DetachedToVisualHandler;
+                control.PointerEnter -= PointerEnterHandler;
+                control.PointerLeave -= PointerLeaveHandler;
+                control.PointerPressed -= PointerPressedHandler;
+                control.PointerReleased -= PointerReleasedHandler;
+                control.PointerMoved -= PointerMovedHandler;
+            }
+        }
+
+        private static void PointerEnterHandler(object? s, PointerEventArgs e) {
+            if (s is AvaloniaObject ao) {
+                if (!GetIsEnabled(ao) ||
+                    IsAnyResizing) {
+                    return;
+                }
+                SetCanResize(ao, true);
+            }
+        }
+
+        private static void PointerLeaveHandler(object? s, PointerEventArgs e) {
+            if (s is Control control) {
+                if (!GetIsEnabled(control) || GetIsResizing(control)) {
+                    return;
+                }
+                if (!GetIsResizing(control)) {
+                    SetCanResize(control, false);
+                }
+            }
+        }
+
+        private static void PointerPressedHandler(object? s, PointerPressedEventArgs e) {
+            if (s is Control control &&
+                e.GetCurrentPoint(control)
+                .Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed) {
+                if (!GetIsEnabled(control)) {
+                    return;
+                }
+                //if (e.ClickCount > 1) {
+                //    ResetToDefault(control);
+                //    return;
+                //}
+                if (control.DataContext is MpISelectableViewModel svm) {
+                    svm.IsSelected = true;
+                }
+                SetIsResizing(control, true);
+
+                _lastMousePosition = _mouseDownPosition = MpAvMainWindow.Instance.PointToScreen(e.GetCurrentPoint(null).Position).ToPoint(1).ToPortablePoint();
+            }
+        }
+
+        private static void PointerReleasedHandler(object? s, PointerReleasedEventArgs e) {
+            if (s is Control control &&
+                e.GetCurrentPoint(control)
+                .Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonReleased) {
+                if (!GetIsEnabled(control)) {
+                    return;
+                }
+
+                if (GetIsResizing(control)) {
+                    Reset(control);
+                }
+            }
+        }
+
+        private static void PointerMovedHandler(object? s, PointerEventArgs e) {
+            if (s is Control control) {
+                if (!GetIsResizing(control) ||
+                   !GetIsEnabled(control) ||
+                    _mouseDownPosition == null
+                   //MpAvClipTrayViewModel.Instance.HasScrollVelocity
+                   ) {
+                    return;
+                }
+                if (!e.GetCurrentPoint(control)
+                    .Properties.IsLeftButtonPressed) {
+                    Reset(control);
+                    return;
+                }
+
+                var mw_mp = MpAvMainWindow.Instance.PointToScreen(e.GetCurrentPoint(null).Position).ToPoint(1).ToPortablePoint();
+                if (GetIsResizing(control)) {
+                    var delta = _lastMousePosition - mw_mp; //new Point(mw_mp.X - _lastMousePosition.X, mw_mp.Y - _lastMousePosition.Y);
+                    ResizeByDelta(control, delta.X, delta.Y);
+                }
+                _lastMousePosition = mw_mp;
+            }
+        }
+
         #endregion
 
         #region Private Methods

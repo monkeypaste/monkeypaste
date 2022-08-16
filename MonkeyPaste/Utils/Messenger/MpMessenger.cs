@@ -24,33 +24,52 @@ namespace MonkeyPaste {
         MainWindowOpened,
         MainWindowHiding,
         MainWindowHid,
+
         MainWindowOrientationChangeBegin,
         MainWindowOrientationChangeEnd,
+
+        MainWindowSizeChangeBegin,
         MainWindowSizeChanged,
-        MainWindowSizeReset,
+        MainWindowSizeChangeEnd,
+
         MainWindowLoadComplete,
+
         ShortcutAssignmentStarted,
         ShortcutAssignmentEnded,
+
         ItemInitialized,
+
         ItemDragBegin,
         ItemDragEnd,
+
         ExternalDragBegin,
         ExternalDragEnd,
+
         TrayScrollChanged,
+
         TraySelectionChanged,
+
         TrayLayoutChanged,
+
         TrayZoomFactorChangeBegin,
+        TrayZoomFactorChanged,
         TrayZoomFactorChangeEnd,
+
         ContentListScrollChanged, //has context (tile)
         ContentItemsChanged, //has context (tile)
         ContentSelectionChangeEnd, //has context (tile)
+
         ContentResized,
         ResizeContentCompleted,
+
         SelectNextMatch,
         SelectPreviousMatch,
+
         SearchCriteriaItemsChanged,
+
         TagTileNotificationAdded,
         TagTileNotificationRemoved,
+
         Loaded, //has context (object)
         Busy,
         NotBusy

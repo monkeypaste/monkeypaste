@@ -19,39 +19,6 @@ namespace MonkeyPaste.Avalonia {
         static MpAvMousePressCommand() {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
         }
-        #region IsRightPress AvaloniaProperty
-        public static bool GetIsRightPress(AvaloniaObject obj) {
-            return obj.GetValue(IsRightPressProperty);
-        }
-
-        public static void SetIsRightPress(AvaloniaObject obj, bool value) {
-            obj.SetValue(IsRightPressProperty, value);
-        }
-
-        public static readonly AttachedProperty<bool> IsRightPressProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, bool>(
-                "IsRightPress",
-                false,
-                false);
-
-        #endregion
-
-        #region IsDoublePress AvaloniaProperty
-        public static bool GetIsDoublePress(AvaloniaObject obj) {
-            return obj.GetValue(IsDoublePressProperty);
-        }
-
-        public static void SetIsDoublePress(AvaloniaObject obj, bool value) {
-            obj.SetValue(IsDoublePressProperty, value);
-        }
-
-        public static readonly AttachedProperty<bool> IsDoublePressProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, bool>(
-                "IsDoublePress",
-                false,
-                false);
-
-        #endregion
 
         #region LeftPressCommand AvaloniaProperty
         public static ICommand GetLeftPressCommand(AvaloniaObject obj) {

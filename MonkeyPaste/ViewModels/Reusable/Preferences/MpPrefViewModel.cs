@@ -16,6 +16,11 @@ namespace MonkeyPaste {
         [JsonIgnore]
         private static string _prefPath;
 
+        [JsonIgnore]
+        private static MpIDbInfo _dbInfo;
+
+        [JsonIgnore]
+        private static MpIOsInfo _osInfo;
         #endregion
 
         #region Constants
@@ -282,7 +287,6 @@ namespace MonkeyPaste {
 
         public string RecentFindTexts { get; set; } = string.Empty;
 
-
         public string RecentReplaceTexts { get; set; } = string.Empty;
 
         public string RecentSearchTexts { get; set; } = string.Empty;
@@ -294,7 +298,7 @@ namespace MonkeyPaste {
 
         public string AppStorageFilePath { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-        public string MainWindowOrientation { get; set; }
+        public string MainWindowOrientation { get; set; } = "Bottom";
 
         public string MainWindowDisplayType { get; set; } = "Primary";
 
@@ -538,8 +542,10 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-        public static async Task InitAsync(string prefPath) {
+        public static async Task InitAsync(string prefPath, MpIDbInfo dbInfo, MpIOsInfo osInfo) {
             _prefPath = prefPath;
+            _dbInfo = dbInfo;
+            _osInfo = osInfo;
             if (!File.Exists(_prefPath)) {
                 await CreateDefaultPrefsAsync();
             } else {
@@ -595,23 +601,48 @@ namespace MonkeyPaste {
                 prefsStr = MpFileIo.ReadTextFromFile(PreferencesPath);
             }
 
-            if (string.IsNullOrWhiteSpace(prefsStr)) {
-                Debugger.Break();
-                await CreateDefaultPrefsAsync();
-            } else {
-                Instance = MpJsonObject.DeserializeObject<MpPrefViewModel>(prefsStr);
-                while (Instance.IsSaving) {
-                    await Task.Delay(100);
+            MpPrefViewModel prefVm = null;
+            if (ValidatePrefData(prefsStr)) {
+                try {
+                    prefVm = MpJsonObject.DeserializeObject<MpPrefViewModel>(prefsStr);
                 }
+                catch(Exception ex) {
+                    MpConsole.WriteTraceLine($"Error loading pref file from '{PreferencesPath}' ", ex);
+                }
+            }
+            
+            if(prefVm == null) {
+                await CreateDefaultPrefsAsync(true);
+                if(Instance == null) {
+                    // shouldn't happen
+                    Debugger.Break();
+                }
+            }else {
+                Instance = prefVm;
             }
 
             IsLoading = false;
         }
 
-        private static async Task CreateDefaultPrefsAsync() {
+        private static bool ValidatePrefData(string prefStr) {
+            
+            if(string.IsNullOrWhiteSpace(prefStr)) {
+                return false;
+            }
+            if(prefStr.StartsWith("{"+Environment.NewLine) && 
+                prefStr.EndsWith(Environment.NewLine+"}")) {
+                return true;
+            }
+            return false;
+        }
+
+        private static async Task CreateDefaultPrefsAsync(bool isReset = false) {
             MpConsole.WriteTraceLine("Pref file was either missing or empty, (re)creating");
 
             Instance = new MpPrefViewModel();
+            if(isReset) {
+                bool success = await MpDb.ResetPreferenceDefaultsAsync(_dbInfo, _osInfo);
+            }
             Instance.Save();
 
             // NOTE this line should be removed and is only valid for current wpf db
@@ -621,9 +652,6 @@ namespace MonkeyPaste {
             }
             return;
         }
-        
-
-
 
         #endregion
     }

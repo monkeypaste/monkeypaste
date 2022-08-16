@@ -44,7 +44,7 @@ namespace MonkeyPaste.Avalonia {
         public MpIPlatformDataObjectRegistrar? DataObjectRegistrar { get; set; }
 
         public MpICopyItemBuilder? CopyItemBuilder { get; set; }
-        public async Task InitializeAsync(){
+        public async Task InitializeAsync() {
             string prefFileName = null;
             if (OperatingSystem.IsWindows()) {
                 prefFileName = "pref_win.json";
@@ -62,11 +62,12 @@ namespace MonkeyPaste.Avalonia {
                 Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
                 prefFileName);
 
-            await MpPrefViewModel.InitAsync(prefPath);
+            DbInfo = new MpAvDbInfo();
+            OsInfo = new MpAvOsInfo();
+            await MpPrefViewModel.InitAsync(prefPath, DbInfo, OsInfo);
             //MpPrefViewModel.Instance.MainWindowOrientation = "Bottom";
 
             Cursor = new MpAvCursor();
-            DbInfo = new MpAvDbInfo();
             QueryInfo = new MpAvQueryInfo();
             ProcessWatcher = new MpAvProcessWatcher().Watcher;
             IconBuilder = new MpAvIconBuilder().IconBuilder;
@@ -77,7 +78,6 @@ namespace MonkeyPaste.Avalonia {
             ContextMenuCloser = new MpAvContextMenuCloser();
             MainThreadMarshal = new MpAvMainThreadMarshal();
             StringTools = new MpAvStringTools();
-            OsInfo = new MpAvOsInfo();
             //NativeMessageBox = new MpWpfMessageBox();
             //DataObjectHelper = MpWpfDataObjectHelper.Instance;
             //ExternalPasteHandler = MpWpfDataObjectHelper.Instance;

@@ -1552,11 +1552,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvClipTileViewModel() : base(null) {
+        public MpAvClipTileViewModel() : this(null) {
             IsBusy = true;
         }
 
         public MpAvClipTileViewModel(MpAvClipTrayViewModel parent) : base(parent) {
+            PropertyChanged += MpClipTileViewModel_PropertyChanged;
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             IsBusy = true;
         }
 
@@ -1565,8 +1567,6 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync(MpCopyItem ci, int queryOffset = -1) {
-            PropertyChanged -= MpClipTileViewModel_PropertyChanged;
-            PropertyChanged += MpClipTileViewModel_PropertyChanged;
 
             _curItemRandomHexColor = string.Empty;
 
@@ -1613,10 +1613,6 @@ namespace MonkeyPaste.Avalonia {
             //OnPropertyChanged(nameof(EditorHeight));
             OnPropertyChanged(nameof(TileBorderBrush));
             OnPropertyChanged(nameof(TileBorderBrushRect));
-
-            //MpMessenger.Register<MpMessageType>(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
-
-            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
             OnPropertyChanged(nameof(EditorHeight));
             OnPropertyChanged(nameof(IsPlaceholder));
@@ -2008,12 +2004,12 @@ namespace MonkeyPaste.Avalonia {
         #region IDisposable
 
         public override void Dispose() {
-            base.Dispose();
-            PropertyChanged -= MpClipTileViewModel_PropertyChanged;
-            SelectionBgColorPopupViewModel.OnColorChanged -= SelectionBgColorPopupViewModel_OnColorChanged;
-            SelectionFgColorPopupViewModel.OnColorChanged -= SelectionFgColorPopupViewModel_OnColorChanged;
+            //base.Dispose();
+            //PropertyChanged -= MpClipTileViewModel_PropertyChanged;
+            //SelectionBgColorPopupViewModel.OnColorChanged -= SelectionBgColorPopupViewModel_OnColorChanged;
+            //SelectionFgColorPopupViewModel.OnColorChanged -= SelectionFgColorPopupViewModel_OnColorChanged;
             ClearSelection();
-            TemplateCollection.Dispose();
+            //TemplateCollection.Dispose();
         }
 
         #endregion
@@ -2279,6 +2275,8 @@ namespace MonkeyPaste.Avalonia {
                     Parent.UpdateTileRectCommand.Execute(this);
                     OnPropertyChanged(nameof(BoundWidth));
                     OnPropertyChanged(nameof(BoundHeight));
+                    OnPropertyChanged(nameof(MaxWidth));
+                    OnPropertyChanged(nameof(MaxHeight));
                     break;
                 case nameof(TrayLocation):
                     if (Next == null) {

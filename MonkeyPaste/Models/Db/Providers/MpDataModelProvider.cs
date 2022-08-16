@@ -405,6 +405,12 @@ namespace MonkeyPaste {
             return result[0];
         }
 
+        public static async Task<string> GetUserDeviceGuidByMachineNameAsync(string machineName) {
+            string query = $"select MpUserDeviceGuid from MpUserDevice where MachineName=?";
+            var result = await MpDb.QueryScalarAsync<string>(query, machineName);
+            return result;
+        }
+
         #endregion MpUserDevice
 
         #region DbImage

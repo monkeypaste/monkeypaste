@@ -129,6 +129,7 @@
                      FontFamily="Segoe UI"
                      FontSize="18"
                      BorderThickness="0"
+                     Padding="0"
                      local:MpAvIsFocusedExtension.IsEnabled="True"
                      local:MpAvIsFocusedExtension.IsReadOnly="{Binding IsTitleReadOnly, Mode=TwoWay}"
                      local:MpAvIsFocusedExtension.IsFocused="{Binding IsTitleFocused, Mode=TwoWay}"
@@ -143,10 +144,18 @@
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                      HorizontalAlignment="Left"
-                     VerticalAlignment="Center"
+                     VerticalAlignment="Top"
+                     HorizontalContentAlignment="Left"
+                     VerticalContentAlignment="Top"
                      Background="White"
                      Foreground="Black"
-                     Text="{Binding CopyItemTitle, Mode=TwoWay}" />
+                     Text="{Binding CopyItemTitle, Mode=TwoWay}">
+                <TextBox.Resources>
+                    <Thickness x:Key="TextControlThemePadding">
+                        0,0,0,0
+                    </Thickness>
+                </TextBox.Resources>
+            </TextBox>
         </Grid>
 
         <!--  Source Icon  -->
