@@ -37,7 +37,7 @@
                 local:MpAvResizeExtension.IsEnabled="True"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                BorderBrush="{Binding TitleBarBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                BorderBrush="{Binding TitleBarBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}, Source={x:Static local:MpAvMainWindowTitleMenuViewModel.Instance}}"
                 BorderThickness="0.5">
             <Border.Background>
                 <ImageBrush Source="{Binding ., Source={StaticResource FrameGripTile}, Converter={StaticResource StringResourceToBitmapConverter}}"

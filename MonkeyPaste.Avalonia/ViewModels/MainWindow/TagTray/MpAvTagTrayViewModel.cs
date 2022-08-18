@@ -104,25 +104,47 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public bool IsNavButtonsVisible => TagTrayTotalWidth > TagTrayScreenWidth;
+        //public bool IsNavButtonsVisible => MpAvMainWindowViewModel.Instance.IsHorizontalOrientation && 
+        //                                    TagTrayTotalWidth > TagTrayScreenWidth;
+        public bool IsNavButtonsVisible { get; private set; } = false;
 
         public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy) || PinnedItems.Any(x=>x.IsBusy);
 
         #endregion
 
         #region Layout        
+        public double NavButtonSize => 25;
         public double TagTrayScreenWidth {
             get {
                 double mww = MpAvMainWindowViewModel.Instance.MainWindowWidth;
 
+                //MpRect ppbw = MpAvClipTrayViewModel.Instance.PlayPauseButtonBounds;
+                //MpRect ctsvw = MpAvClipTileSortViewModel.Instance.ClipTileSortViewBounds;
+                //MpRect sbvw = MpAvSearchBoxViewModel.Instance.SearchBoxViewBounds;
+
+                //double other_items_width = ppbw.Width + ctsvw.Width + sbvw.Width;
+                //double total_filter_width = other_items_width + TagTrayTotalWidth;
+                //if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ||
+                //    total_filter_width <= mww) {
+                //    return mww - other_items_width;
+                //}
+                //return double.NaN;
                 double ppbw = MpAvClipTrayViewModel.Instance.PlayPauseButtonWidth;
                 double ctsvw = MpAvClipTileSortViewModel.Instance.ClipTileSortViewWidth;
                 double sbvw = MpAvSearchBoxViewModel.Instance.SearchBoxViewWidth;
-                
-                return mww - ppbw - ctsvw - sbvw;
+
+                double ttsw = mww - ppbw - ctsvw - sbvw;
+
+                IsNavButtonsVisible = TagTrayTotalWidth > ttsw;
+                if(IsNavButtonsVisible) {
+                    ttsw -= (NavButtonSize * 2);
+                }
+                return ttsw;
             }
         }
         public double TagTrayTotalWidth => PinnedItems.Sum(x => x.TagTileTrayWidth);
+
+        public MpRect TagTrayBounds { get; set; }
         #endregion
 
         #region Appearance
@@ -210,6 +232,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void PinnedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             UpdateTraySortOrder();
+            OnPropertyChanged(nameof(TagTrayScreenWidth));
         }
 
         public void UpdateTreeSortOrder(bool fromModel = false) {

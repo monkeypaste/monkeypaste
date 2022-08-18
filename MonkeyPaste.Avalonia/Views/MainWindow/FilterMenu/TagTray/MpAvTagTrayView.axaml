@@ -16,19 +16,19 @@
           HorizontalAlignment="Center"
           VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.1*" />
-          <!-- NOTE MinWidth set for drag drop target -->
+            <ColumnDefinition Width="Auto" />
+            <!--  NOTE MinWidth set for drag drop target  -->
             <ColumnDefinition Width="auto"
                               MinWidth="200"
                               MaxWidth="{Binding TagTrayScreenWidth}" />
-            <ColumnDefinition Width="0.1*" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.Styles>
             <Style Selector="PathIcon">
                 <Setter Property="Width"
-                        Value="25" />
+                        Value="{Binding NavButtonSize}" />
                 <Setter Property="Height"
-                        Value="25" />
+                        Value="{Binding NavButtonSize}" />
                 <Setter Property="Foreground"
                         Value="Black" />
             </Style>
@@ -51,7 +51,7 @@
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center"
                  Width="{Binding TagTrayScreenWidth}"
-                 SelectionMode="Single" 
+                 SelectionMode="Single"
                  SelectedItem="{Binding SelectedPinnedItem, Mode=TwoWay}"
                  ScrollViewer.VerticalScrollBarVisibility="Hidden"
                  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
@@ -76,7 +76,7 @@
                                        local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
                                        local:MpAvIsHoveringExtension.HoverCursor="Hand"
                                        local:MpAvSizeObserverExtension.IsEnabled="True"
-                                       local:MpAvSizeObserverExtension.ObservedWidth="{Binding TagTileTrayWidth, Mode=TwoWay}"
+                                       local:MpAvSizeObserverExtension.ObservedWidth="{Binding TagTileTrayWidth, Mode=OneWayToSource}"
                                        DataContext="{Binding}" />
 
                 </DataTemplate>

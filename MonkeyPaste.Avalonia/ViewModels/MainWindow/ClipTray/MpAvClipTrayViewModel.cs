@@ -395,36 +395,10 @@ namespace MonkeyPaste.Avalonia {
         public MpRect ScreenRect => new MpRect(0, 0, ClipTrayScreenWidth, ClipTrayScreenHeight);
 
         public MpRect TotalTileRect => new MpRect(0, 0, ClipTrayTotalTileWidth, ClipTrayTotalTileHeight);
-        public double DesiredMaxTileRight {
-            get {
-                if(ListOrientation == Orientation.Horizontal) {
-                    if(LayoutType == MpAvClipTrayLayoutType.Stack) {
-                        return double.PositiveInfinity;
-                    }
-                    return ClipTrayScreenWidth;
-                } else {
-                    return ClipTrayScreenWidth;
-                }
-            }
-        }
-
-        public double DesiredMaxTileBottom {
-            get {
-                if (ListOrientation == Orientation.Horizontal) {
-                    if (LayoutType == MpAvClipTrayLayoutType.Stack) {
-                        return ClipTrayScreenHeight;
-                    }
-                    return double.PositiveInfinity;
-                } else {
-                    if (LayoutType == MpAvClipTrayLayoutType.Stack) {
-                        return double.PositiveInfinity; 
-                    }
-                    return ClipTrayScreenHeight;
-                }
-            }
-        }
+        
         public double ClipTrayTotalTileWidth { get; private set; }
         public double ClipTrayTotalTileHeight { get; private set; }
+        
 
         //public double ClipTrayTotalTileWidth {
         //    get {
@@ -532,42 +506,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsThumbDraggingY { get; set; } = false;
         public bool IsThumbDragging => IsThumbDraggingX || IsThumbDraggingY;
 
-        public  bool IsZoomDragging { get; set; }
 
         public bool IsScrollJumping { get; set; }
-        public double DefaultItemWidth {
-            get {
-                double minSize;
-                if (LayoutType == MpAvClipTrayLayoutType.Stack) {
-                    minSize = ListOrientation == Orientation.Horizontal ?
-                                    (ClipTrayScreenHeight * ZoomFactor) :
-                                    (ClipTrayScreenWidth * ZoomFactor);
-                } else {
-                    minSize = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds.Width *
-                                ZoomFactor * MIN_SIZE_ZOOM_FACTOR_COEFF;
-                }
-                double scrollBarSize = 30;// IsHorizontalScrollBarVisible ? 30:0;
-                return minSize - scrollBarSize;
-            }
-        }
-
-        public double DefaultItemHeight {
-            get {
-                double minSize;
-                if (LayoutType == MpAvClipTrayLayoutType.Stack) {
-                    minSize = ListOrientation == Orientation.Horizontal ?
-                                    (ClipTrayScreenHeight * ZoomFactor) :
-                                    (ClipTrayScreenWidth * ZoomFactor);
-                } else {
-                    minSize = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds.Width *
-                                ZoomFactor * MIN_SIZE_ZOOM_FACTOR_COEFF;
-                }
-                double scrollBarSize = 30;// IsVerticalScrollBarVisible ? 30 : 0;
-                return minSize - scrollBarSize;
-            }
-        }
-
-        public MpSize DefaultItemSize => new MpSize(DefaultItemWidth, DefaultItemHeight);
 
         public void FindTotalTileSize() {
             // NOTE this is to avoid making TotalTile Width/Height auto
@@ -827,7 +767,73 @@ namespace MonkeyPaste.Avalonia {
             ScrollOffsetX = newScrollOfsetX;
         }
 
+        #region Default Tile Layout 
 
+
+        public double DesiredMaxTileRight {
+            get {
+                if (ListOrientation == Orientation.Horizontal) {
+                    if (LayoutType == MpAvClipTrayLayoutType.Stack) {
+                        return double.PositiveInfinity;
+                    }
+                    return ClipTrayScreenWidth;
+                } else {
+                    return ClipTrayScreenWidth;
+                }
+            }
+        }
+
+        public double DesiredMaxTileBottom {
+            get {
+                if (ListOrientation == Orientation.Horizontal) {
+                    if (LayoutType == MpAvClipTrayLayoutType.Stack) {
+                        return ClipTrayScreenHeight;
+                    }
+                    return double.PositiveInfinity;
+                } else {
+                    if (LayoutType == MpAvClipTrayLayoutType.Stack) {
+                        return double.PositiveInfinity;
+                    }
+                    return ClipTrayScreenHeight;
+                }
+            }
+        }
+        
+        public double DefaultItemWidth {
+            get {
+                double minSize;
+                if (LayoutType == MpAvClipTrayLayoutType.Stack) {
+                    minSize = ListOrientation == Orientation.Horizontal ?
+                                    (ClipTrayScreenHeight * ZoomFactor) :
+                                    (ClipTrayScreenWidth * ZoomFactor);
+                } else {
+                    minSize = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds.Width *
+                                ZoomFactor * MIN_SIZE_ZOOM_FACTOR_COEFF;
+                }
+                double scrollBarSize = 30;// IsHorizontalScrollBarVisible ? 30:0;
+                return minSize - scrollBarSize;
+            }
+        }
+
+        public double DefaultItemHeight {
+            get {
+                double minSize;
+                if (LayoutType == MpAvClipTrayLayoutType.Stack) {
+                    minSize = ListOrientation == Orientation.Horizontal ?
+                                    (ClipTrayScreenHeight * ZoomFactor) :
+                                    (ClipTrayScreenWidth * ZoomFactor);
+                } else {
+                    minSize = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds.Width *
+                                ZoomFactor * MIN_SIZE_ZOOM_FACTOR_COEFF;
+                }
+                double scrollBarSize = 30;// IsVerticalScrollBarVisible ? 30 : 0;
+                return minSize - scrollBarSize;
+            }
+        }
+
+        public MpSize DefaultItemSize => new MpSize(DefaultItemWidth, DefaultItemHeight);
+
+        #endregion
 
         #region Virtual
 
@@ -938,7 +944,7 @@ namespace MonkeyPaste.Avalonia {
         #region Layout
 
         public double PlayPauseButtonWidth { get; set; }
-
+        public MpRect PlayPauseButtonBounds { get; set; } = new MpRect();
         #endregion
 
         #region Appearance
@@ -1020,7 +1026,7 @@ namespace MonkeyPaste.Avalonia {
             PropertyChanged += MpAvClipTrayViewModel_PropertyChanged;
             Items.CollectionChanged += Items_CollectionChanged;
 
-            MpDataModelProvider.AllFetchedAndSortedCopyItemIds.CollectionChanged += AllFetchedAndSortedCopyItemIds_CollectionChanged;
+            //MpDataModelProvider.AllFetchedAndSortedCopyItemIds.CollectionChanged += AllFetchedAndSortedCopyItemIds_CollectionChanged;
 
             MpDb.SyncAdd += MpDbObject_SyncAdd;
             MpDb.SyncUpdate += MpDbObject_SyncUpdate;
@@ -1079,7 +1085,7 @@ namespace MonkeyPaste.Avalonia {
         public void ForceScrollOffsetX(double newOffsetX, bool isSilent = false) {
             _scrollOffsetX = LastScrollOffsetX = newOffsetX;
             if(newOffsetX < 0 || newOffsetX > MaxScrollOffsetX) {
-                Debugger.Break();
+                //Debugger.Break();
             }
             if(isSilent) {
                 return;
@@ -1090,7 +1096,7 @@ namespace MonkeyPaste.Avalonia {
         public void ForceScrollOffsetY(double newOffsetY, bool isSilent = false) {
             _scrollOffsetY = LastScrollOffsetY = newOffsetY;
             if (newOffsetY < 0 || newOffsetY > MaxScrollOffsetY) {
-                Debugger.Break();
+                //Debugger.Break();
             }
             if (isSilent) {
                 return;
@@ -1151,6 +1157,9 @@ namespace MonkeyPaste.Avalonia {
             //MpConsole.WriteLine($"Name: {e.PropertyName} Value: {this.GetPropertyValue(e.PropertyName)?.ToString()}");
             switch (e.PropertyName) {
                 case nameof(PlayPauseButtonWidth):
+                    MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayScreenWidth));
+                    break;
+                case nameof(PlayPauseButtonBounds):
                     MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayScreenWidth));
                     break;
                 case nameof(SelectedItem):
@@ -1239,6 +1248,11 @@ namespace MonkeyPaste.Avalonia {
                     CheckLoadMore();
                     break;
                 case MpMessageType.MainWindowSizeChangeEnd:
+                    // NOTE Size reset doesn't call changed so treat end as changed too
+                    RefreshLayout();
+                    LockScrollToAnchor();
+                    CheckLoadMore();
+
                     SetScrollAnchor();
                     break;
 
@@ -1256,15 +1270,22 @@ namespace MonkeyPaste.Avalonia {
 
                 // TRAY ZOOM
                 case MpMessageType.TrayZoomFactorChangeBegin:
+                    MpConsole.WriteLine("Zoom change begin: " + ZoomFactor);
                     SetScrollAnchor();
                     break;
                 case MpMessageType.TrayZoomFactorChanged:
+                    MpConsole.WriteLine("Zoom changed: " + ZoomFactor);
                     RefreshLayout();
                     LockScrollToAnchor();
                     CheckLoadMore(true);
                     break;
                 case MpMessageType.TrayZoomFactorChangeEnd:
+                    MpConsole.WriteLine("Zoom change end: " + ZoomFactor);
+                    RefreshLayout();
+                    LockScrollToAnchor();
+                    CheckLoadMore(true);
 
+                    SetScrollAnchor();
                     break;
 
                 // SCROLL JUMP

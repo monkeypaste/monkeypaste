@@ -159,7 +159,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public double SearchBoxViewWidth { get; set; }
-
+        public MpRect SearchBoxViewBounds { get; set; } = new MpRect();
         #endregion
 
         #region Business Logic Properties
@@ -439,6 +439,9 @@ namespace MonkeyPaste.Avalonia {
         private void MpSearchBoxViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(SearchBoxViewWidth):
+                    MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayScreenWidth));
+                    break;
+                case nameof(SearchBoxViewBounds):
                     MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayScreenWidth));
                     break;
                 case nameof(SearchText):

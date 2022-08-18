@@ -25,6 +25,9 @@ namespace MonkeyPaste {
         MainWindowHiding,
         MainWindowHid,
 
+        MainWindowActivated,
+        MainWindowDeactivated,
+
         MainWindowOrientationChangeBegin,
         MainWindowOrientationChangeEnd,
 
@@ -95,7 +98,7 @@ namespace MonkeyPaste {
 
                     //Debugger.Break();
 
-                    MpConsole.WriteLine("Warning, re-registering message receipient " + receiverAction.Target + " there are " + _recipientDictionary[key].Count + " instances for this receiver type");
+                    //MpConsole.WriteLine("Warning, re-registering message receipient " + receiverAction.Target + " there are " + _recipientDictionary[key].Count + " instances for this receiver type");
                 }
                 _recipientDictionary[key].Add(receiverAction);
             } else {

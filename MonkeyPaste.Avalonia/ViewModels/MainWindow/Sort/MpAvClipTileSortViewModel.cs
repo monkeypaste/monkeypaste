@@ -7,6 +7,8 @@ using System.Windows.Input;
 using System.Linq;
 using MonkeyPaste;
 using System.Threading.Tasks;
+using Avalonia;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipTileSortViewModel : MpViewModelBase, MpIAsyncSingletonViewModel<MpAvClipTileSortViewModel> {
@@ -19,8 +21,8 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region Layout
-
         public double ClipTileSortViewWidth { get; set; }
+        public MpRect ClipTileSortViewBounds { get; set; } = new MpRect();
         #endregion
 
         #region State
@@ -71,6 +73,9 @@ namespace MonkeyPaste.Avalonia {
         private void MpClipTileSortViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(ClipTileSortViewWidth):
+                    MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayScreenWidth));
+                    break;
+                case nameof(ClipTileSortViewBounds):
                     MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayScreenWidth));
                     break;
                 case nameof(SelectedSortType):

@@ -97,6 +97,15 @@
             <Setter Property="Background"
                     Value="Transparent" />
         </Style>
+        <!--  TreeViewItemBackgroundSelected  -->
+        <Style Selector="TreeViewItem:selected /template/ Border#PART_LayoutRoot">
+            <Setter Property="Background"
+                    Value="Transparent" />
+        </Style>
+        <Style Selector="TreeViewItem /template/ Border#PART_LayoutRoot:pointerover">
+            <Setter Property="Background"
+                    Value="Transparent" />
+        </Style>
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>

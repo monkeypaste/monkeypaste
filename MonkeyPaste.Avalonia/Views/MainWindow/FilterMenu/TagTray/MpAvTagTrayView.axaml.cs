@@ -8,6 +8,7 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvTagTrayView : MpAvUserControl<MpAvTagTrayViewModel> {
         public MpAvTagTrayView() {
             InitializeComponent();
+            var lb = this.FindControl<ListBox>("TagTray");
         }
         
         private void NavRightRepeatButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {

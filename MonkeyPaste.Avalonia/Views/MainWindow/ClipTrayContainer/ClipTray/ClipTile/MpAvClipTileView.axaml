@@ -42,14 +42,23 @@
                         Value="Black" />
             </Style>
         </local:MpAvClipBorder.Styles>
-        <Grid RowDefinitions="0.25*,*,20"
-              HorizontalAlignment="Stretch"
+        <!--  RowDefinitions="0.25*,*,20"
+        
+                                         MaxHeight="{Binding MaxTitleHeight, FallbackValue=40, TargetNullValue=40}"-->
+        <Grid HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.25*" MaxHeight="40" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="20" />
+            </Grid.RowDefinitions>
             <!--  Title  -->
             <local:MpAvClipTileTitleView Grid.Row="0"
                                          DataContext="{Binding}"
                                          HorizontalAlignment="Stretch"
                                          VerticalAlignment="Stretch"
+                                         local:MpAvSizeObserverExtension.IsEnabled="True"
+                                         local:MpAvSizeObserverExtension.ObservedHeight="{Binding TitleHeight, Mode=OneWayToSource}"
                                          IsVisible="{Binding IsTitleVisible}" />
 
             <!--  Content  -->

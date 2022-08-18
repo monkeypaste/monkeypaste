@@ -88,8 +88,8 @@ namespace MonkeyPaste.Avalonia {
 
         public double ResizerLength => 3;
 
-        public double MainWindowMinimumHorizontalHeight => 100;
-        public double MainWindowMinimumVerticalWidth => 100;
+        public double MainWindowMinimumHorizontalHeight => 200;
+        public double MainWindowMinimumVerticalWidth => 290;
         public double MainWindowExtentPad => 20;
 
         public double ResizeXFactor {
@@ -304,15 +304,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-        public string TitleBarBackgroundHexColor {
-            get {
-                if (IsMainWindowActive) {
-                    return MpSystemColors.goldenrod.AdjustAlpha(0.7);
-                }
-                return MpSystemColors.gainsboro.AdjustAlpha(0.7);
-            }
-        }
-
         public MpCursorType ResizerCursor {
             get {
                 if (IsHorizontalOrientation) {
@@ -497,7 +488,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     MainWindowLeft = MainWindowOpenedRect.Left;
                     MainWindowRight = MainWindowOpenedRect.Right;
-
+                    //MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayScreenWidth));
                     //MpMessenger.SendGlobal(MpMessageType.MainWindowSizeChanged);
                     break;
                 case nameof(MainWindowLeft):
@@ -525,11 +516,21 @@ namespace MonkeyPaste.Avalonia {
                         } else {
                             MpPrefViewModel.Instance.MainWindowInitialHeight = MainWindowHeight;
                         }
-                        MpMessenger.SendGlobal(MpMessageType.MainWindowSizeChangeEnd);
+                        Dispatcher.UIThread.Post(async () => {
+                            await Task.Delay(300);
+                            MpMessenger.SendGlobal(MpMessageType.MainWindowSizeChangeEnd);
+                        });
                     }
                     break;
                 case nameof(IsMainWindowLocked):
                     MpAvMainWindow.Instance.Topmost = IsMainWindowLocked;
+                    break;
+                case nameof(IsMainWindowActive):
+                    if(IsMainWindowActive) {
+                        MpMessenger.SendGlobal(MpMessageType.MainWindowActivated);
+                    } else {
+                        MpMessenger.SendGlobal(MpMessageType.MainWindowDeactivated);
+                    }
                     break;
             }
         }
@@ -787,7 +788,7 @@ namespace MonkeyPaste.Avalonia {
                 var mw = MpAvMainWindow.Instance;
                 mw.UpdateContentOrientation();
 
-                await Task.Delay(1000);
+                await Task.Delay(300);
                 
                 MpMessenger.SendGlobal(MpMessageType.MainWindowOrientationChangeEnd);
             });

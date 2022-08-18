@@ -21,4 +21,5 @@
     <local:MpAvBoolToScrollBarVisibilityConverter x:Key="BoolToScrollBarVisibilityConverter" />
     <local:MpAvContentDataConverter x:Key="ContentDataConverter" />
     <local:MpAvMultiDoubleSumConverter x:Key="MultiDoubleSumConverter" />
+    <local:MpAvDoubleToGridLengthConverter x:Key="DoubleToGridLengthConverter" />
 </ResourceDictionary>

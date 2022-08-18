@@ -1,0 +1,81 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="local:MpAvFilterMenuViewModel"
+                       x:DataType="local:MpAvFilterMenuViewModel"
+                       x:CompileBindings="True"
+                       DataContext="{x:Static local:MpAvFilterMenuViewModel.Instance}"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvFilterMenuView">
+    <ItemsControl x:Name="MainWindowFilterGrid"
+                  Grid.Row="1"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Center">
+        <ItemsControl.Background>
+            <SolidColorBrush Color="Purple"
+                             Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
+        </ItemsControl.Background>
+        <ItemsControl.Styles>
+            <Style Selector="ItemsControl > :is(Control)">
+                <Setter Property="MaxHeight"
+                        Value="40" />
+            </Style>
+        </ItemsControl.Styles>
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <WrapPanel Orientation="Horizontal"
+                           HorizontalAlignment="Stretch" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.Items>
+            <!--  Pause / Resume Clipboard Listener Toggle Button  -->
+
+            <ToggleButton local:MpAvSizeObserverExtension.IsEnabled="True"
+                          local:MpAvSizeObserverExtension.ObservedWidth="{Binding PlayPauseButtonWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWayToSource}"
+                          Padding="10"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Top"
+                          IsChecked="{Binding IsAppPaused, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=TwoWay}">
+                <Grid>
+                    <Image HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Source="{Binding Source={StaticResource PauseImage}, Converter={StaticResource StringResourceToBitmapConverter}}"
+                           IsVisible="{Binding !IsAppPaused, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
+                        <ToolTip.Tip>
+                            <local:MpAvTooltipView ToolTipText="Pause Clipboard Listener" />
+                        </ToolTip.Tip>
+                    </Image>
+                    <Image HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Source="{Binding Source={StaticResource PlayImage}, Converter={StaticResource StringResourceToBitmapConverter}}"
+                           IsVisible="{Binding IsAppPaused, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
+                        <ToolTip.Tip>
+                            <local:MpAvTooltipView ToolTipText="Resume Clipboard Listener" />
+                        </ToolTip.Tip>
+                    </Image>
+                </Grid>
+            </ToggleButton>
+
+            <!--  Content Sort View  -->
+
+            <local:MpAvClipTileSortView local:MpAvSizeObserverExtension.IsEnabled="True"
+                                        local:MpAvSizeObserverExtension.ObservedWidth="{Binding ClipTileSortViewWidth, Source={x:Static local:MpAvClipTileSortViewModel.Instance}, Mode=OneWayToSource}"
+                                        HorizontalAlignment="Left" />
+
+            <!--  Pinned Tag Tray  -->
+
+            <local:MpAvTagTrayView />
+
+            <!--  SearchBox View  -->
+
+            <local:MpAvSearchBoxView HorizontalAlignment="Right"
+                                     local:MpAvSizeObserverExtension.IsEnabled="True"
+                                     local:MpAvSizeObserverExtension.ObservedWidth="{Binding SearchBoxViewWidth, Source={x:Static local:MpAvSearchBoxViewModel.Instance}, Mode=OneWayToSource}" />
+        </ItemsControl.Items>
+    </ItemsControl>
+</local:MpAvUserControl>

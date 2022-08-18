@@ -683,7 +683,7 @@ namespace MonkeyPaste.Avalonia {
                         return;
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsNavButtonsVisible));
-                    Parent.OnPropertyChanged(nameof(Parent.TagTrayTotalWidth));
+                    Parent.OnPropertyChanged(nameof(Parent.TagTrayScreenWidth));
                     break;
             }
         }
