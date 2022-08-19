@@ -57,7 +57,7 @@
                                          DataContext="{Binding}"
                                          HorizontalAlignment="Stretch"
                                          VerticalAlignment="Stretch"
-                                         local:MpAvSizeObserverExtension.IsEnabled="True"
+                                         local:MpAvSizeObserverExtension.IsEnabled="False"
                                          local:MpAvSizeObserverExtension.ObservedHeight="{Binding TitleHeight, Mode=OneWayToSource}"
                                          IsVisible="{Binding IsTitleVisible}" />
 

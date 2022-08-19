@@ -41,6 +41,15 @@
     <None Remove="Dotnet.Bundle" />
     <None Remove="WebkitGtkSharp" />
     <None Remove="Styles\Spinner\" />
+    <EmbeddedResource Remove="Styles\Mechanism\Controls\Fluent\Controls\CommandBar.xaml" />
+    <EmbeddedResource Remove="Styles\Mechanism\Controls\Fluent\Controls\OverflowFlyoutItemsPresenter.xaml" />
+    <EmbeddedResource Remove="Styles\Mechanism\Controls\Fluent\Controls\SwipeSheet.xaml" />
+    <EmbeddedResource Remove="Styles\Mechanism\Controls\Fluent\Controls\ToolBarTray.xaml" />
+    <EmbeddedResource Remove="Styles\Mechanism\Controls\Fluent\Controls\ToolStrip.xaml" />
+    <EmbeddedResource Remove="Styles\Mechanism\Controls\Fluent\FluentTheme.xaml" />
+    <EmbeddedResource Remove="Styles\Mechanism\Extra\Fluent\Controls\BlenderBar.xaml" />
+    <EmbeddedResource Remove="Styles\Mechanism\Extra\Fluent\Controls\ExpandToFillView.xaml" />
+    <EmbeddedResource Remove="Styles\Mechanism\Extra\Fluent\FluentTheme.xaml" />
     <EmbeddedResource Remove="Styles\Spinner\Spinner.xaml" />
     <None Remove="Controls\ProgressRing\" />
     <None Remove="GtkSharp" />
@@ -823,6 +832,33 @@
     <AvaloniaResource Include="Assets\Images\yinyang.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Styles\Mechanism\Controls\Fluent\Controls\CommandBar.xaml">
+      <Generator></Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Styles\Mechanism\Controls\Fluent\Controls\OverflowFlyoutItemsPresenter.xaml">
+      <Generator></Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Styles\Mechanism\Controls\Fluent\Controls\SwipeSheet.xaml">
+      <Generator></Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Styles\Mechanism\Controls\Fluent\Controls\ToolBarTray.xaml">
+      <Generator></Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Styles\Mechanism\Controls\Fluent\Controls\ToolStrip.xaml">
+      <Generator></Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Styles\Mechanism\Controls\Fluent\FluentTheme.xaml">
+      <Generator></Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Styles\Mechanism\Extra\Fluent\Controls\BlenderBar.xaml">
+      <Generator></Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Styles\Mechanism\Extra\Fluent\Controls\ExpandToFillView.xaml">
+      <Generator></Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Styles\Mechanism\Extra\Fluent\FluentTheme.xaml">
+      <Generator></Generator>
+    </AvaloniaResource>
     <AvaloniaResource Include="Styles\ProgressRing\ProgressRing.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -846,8 +882,9 @@
   </ItemGroup>
   <ItemGroup>
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Include="Avalonia" Version="0.10.17" />
+    <PackageReference Include="Avalonia" Version="0.10.18" />
     <PackageReference Include="Avalonia.MonoMac" Version="0.6.1" />
+    <PackageReference Include="Avalonia.Xaml.Interactivity" Version="0.10.18" />
     <PackageReference Include="AvaloniaColorPicker" Version="1.3.4" />
     <PackageReference Include="CefNet.Avalonia" Version="104.4.22220.128" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" />
@@ -906,5 +943,16 @@
   </Target>
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Reusable\ShortcutWindow\MpAvAssignShortcutWindow.axaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Mechanism.AvaloniaUI.Controls">
+      <HintPath>lib\Mechanism.AvaloniaUI.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Mechanism.AvaloniaUI.Core">
+      <HintPath>lib\Mechanism.AvaloniaUI.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Mechanism.AvaloniaUI.Extras">
+      <HintPath>lib\Mechanism.AvaloniaUI.Extras.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

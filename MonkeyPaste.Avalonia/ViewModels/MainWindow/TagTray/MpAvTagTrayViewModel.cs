@@ -135,14 +135,18 @@ namespace MonkeyPaste.Avalonia {
 
                 double ttsw = mww - ppbw - ctsvw - sbvw;
 
-                IsNavButtonsVisible = TagTrayTotalWidth > ttsw;
-                if(IsNavButtonsVisible) {
-                    ttsw -= (NavButtonSize * 2);
-                }
+                //IsNavButtonsVisible = TagTrayTotalWidth > ttsw;
+                //if(IsNavButtonsVisible) {
+                //    MpConsole.WriteLine("nav button visible");
+                //    ttsw -= (NavButtonSize * 2);
+                //} else {
+                //    MpConsole.WriteLine("nav button hidden");
+                //}
                 return ttsw;
             }
         }
-        public double TagTrayTotalWidth => PinnedItems.Sum(x => x.TagTileTrayWidth);
+        //public double TagTrayTotalWidth => PinnedItems.Sum(x => x.TagTileTrayWidth);
+        public double TagTrayTotalWidth { get; set; }
 
         public MpRect TagTrayBounds { get; set; }
         #endregion

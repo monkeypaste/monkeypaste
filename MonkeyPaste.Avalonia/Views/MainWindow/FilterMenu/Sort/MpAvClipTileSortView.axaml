@@ -14,11 +14,13 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileSortView">
     <StackPanel Orientation="Horizontal">
         <Label FontSize="19"
+               FontFamily="Segoe UI"
                Foreground="White"
                HorizontalAlignment="Left"
                Content="Sort By"
                FontWeight="DemiBold"
                VerticalContentAlignment="Center"
+               Margin="5,0,0,0"
                Padding="0,0,0,0" />
         <local:MpAvClipBorder CornerRadius="10"
                               BorderThickness="1"

@@ -115,7 +115,16 @@ namespace MonkeyPaste.Avalonia {
         public double MaxWidth => Parent.ClipTrayScreenWidth - 50;
         public double MaxHeight => Parent.ClipTrayScreenHeight - 50;
 
-        public double TitleHeight { get; set; }
+        private double _titleHeight = 0;
+        public double TitleHeight {
+            get => _titleHeight;
+            set {
+                if(TitleHeight != value) {
+                    _titleHeight = value;
+                    OnPropertyChanged(nameof(TitleHeight));
+                }
+            }
+        }
         public double MaxTitleHeight => 40;
 
         public double TitleFontSize => Math.Max(8,(TitleHeight / 2) - 2);

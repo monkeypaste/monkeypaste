@@ -48,7 +48,8 @@
                                    Foreground="{Binding TagCountTextHexColor, Converter={StaticResource StringHexToBrushConverter}}" />
 
                     </local:MpAvClipBorder>
-                    <Grid Grid.Column="1"
+                  <!-- Tag Name TextBox/ Marquee -->  
+                  <Grid Grid.Column="1"
                           ClipToBounds="True"
                           HorizontalAlignment="Left"
                           Margin="5,0,0,0"

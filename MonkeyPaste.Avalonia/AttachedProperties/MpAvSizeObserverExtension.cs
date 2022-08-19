@@ -95,10 +95,10 @@ namespace MonkeyPaste.Avalonia {
 
             void Control_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs? e) {
                 if (sender is Control control) {
-                    if(control.Bounds.Width != GetObservedWidth(control)) {
+                    if((int)control.Bounds.Width != (int)GetObservedWidth(control)) {
                         SetObservedWidth(control, control.Bounds.Width);
                     }
-                    if(control.Bounds.Height != GetObservedHeight(control)) {
+                    if((int)control.Bounds.Height != (int)GetObservedHeight(control)) {
                         SetObservedHeight(control, control.Bounds.Height);
                     }
                     

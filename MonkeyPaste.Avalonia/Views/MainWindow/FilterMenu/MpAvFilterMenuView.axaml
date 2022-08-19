@@ -6,36 +6,52 @@
                        xmlns:pcl="using:MonkeyPaste"
                        x:TypeArguments="local:MpAvFilterMenuViewModel"
                        x:DataType="local:MpAvFilterMenuViewModel"
-                       x:CompileBindings="True"
+                       x:CompileBindings="False"
                        DataContext="{x:Static local:MpAvFilterMenuViewModel.Instance}"
                        mc:Ignorable="d"
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvFilterMenuView">
-    <ItemsControl x:Name="MainWindowFilterGrid"
-                  Grid.Row="1"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Center">
-        <ItemsControl.Background>
-            <SolidColorBrush Color="Purple"
-                             Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
-        </ItemsControl.Background>
-        <ItemsControl.Styles>
-            <Style Selector="ItemsControl > :is(Control)">
+    <DockPanel x:Name="FilterDockPanel"
+               HorizontalAlignment="Stretch"
+               VerticalAlignment="Stretch">
+        <DockPanel.Styles>
+            <!--
+                       xmlns:mech="https://github.com/Splitwirez/Mechanism-for-Avalonia"
+                       <StyleInclude Source="avares://MonkeyPaste.Avalonia/Styles/Mechanism/Extra/Fluent/FluentTheme.xaml"/>
+            <StyleInclude Source="avares://MonkeyPaste.Avalonia/Styles/Mechanism/Controls/Fluent/FluentTheme.xaml" />
+            <Style Selector="mech|ToolBarTray > :is(Control)">
                 <Setter Property="MaxHeight"
                         Value="40" />
             </Style>
-        </ItemsControl.Styles>
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <WrapPanel Orientation="Horizontal"
-                           HorizontalAlignment="Stretch" />
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-        <ItemsControl.Items>
-            <!--  Pause / Resume Clipboard Listener Toggle Button  -->
+            <Style Selector="mech|ToolBar">
+                <Setter Property="Background"
+                        Value="Transparent" />
+                <Setter Property="Padding"
+                        Value="0" />
+            </Style>-->
+            <Style Selector="ToggleButton">
+                <Setter Property="Padding"
+                        Value="0" />
+            </Style>
+        </DockPanel.Styles>
 
-            <ToggleButton local:MpAvSizeObserverExtension.IsEnabled="True"
+        <DockPanel.Background>
+            <SolidColorBrush Color="Purple"
+                             Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
+        </DockPanel.Background>
+
+        <!--<mech:ToolBarTray x:Name="ToolBarTray"
+                          Background="Transparent"
+                          IsLocked="False">
+            <mech:ToolBarTray.Resources>
+                <SolidColorBrush x:Key="ComboBoxDropDownBackground">
+                    DimGray
+                </SolidColorBrush>
+            </mech:ToolBarTray.Resources>-->
+            <!--  Pause / Resume Clipboard Listener Toggle Button  -->
+            <ToggleButton Tag="PlayPause"
+                          local:MpAvSizeObserverExtension.IsEnabled="False"
                           local:MpAvSizeObserverExtension.ObservedWidth="{Binding PlayPauseButtonWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWayToSource}"
                           Padding="10"
                           HorizontalAlignment="Center"
@@ -61,21 +77,56 @@
                 </Grid>
             </ToggleButton>
 
-            <!--  Content Sort View  -->
 
-            <local:MpAvClipTileSortView local:MpAvSizeObserverExtension.IsEnabled="True"
+            <!--  Content Sort View  -->
+            <local:MpAvClipTileSortView Tag="Sort"
+                                        local:MpAvSizeObserverExtension.IsEnabled="False"
                                         local:MpAvSizeObserverExtension.ObservedWidth="{Binding ClipTileSortViewWidth, Source={x:Static local:MpAvClipTileSortViewModel.Instance}, Mode=OneWayToSource}"
                                         HorizontalAlignment="Left" />
+            <!--
+                SelectionMode="Single"
+                SelectedItem="{Binding SelectedPinnedItem, Source={x:Static local:MpAvTagTrayViewModel.Instance}, Mode=TwoWay}"
+            -->
 
-            <!--  Pinned Tag Tray  -->
+            <ItemsControl x:Name="TagTray"
+                          Tag="TagTray"
+                          IsVisible="False"
+                          Background="Transparent"
+                          BorderBrush="Transparent"
+                          MinWidth="1000"
+                          MaxWidth="1000"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Center"
+                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                          Items="{Binding PinnedItems, Source={x:Static local:MpAvTagTrayViewModel.Instance}}">
+                <ItemsControl.Resources>
+                    <!--<Thickness x:Key="ListBoxItemPadding">
+                        0,0,0,0
+                    </Thickness>-->
+                </ItemsControl.Resources>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:MpAvTagView local:MpAvIsHoveringExtension.IsEnabled="True"
+                                           local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                                           local:MpAvIsHoveringExtension.HoverCursor="Hand"
+                                           local:MpAvSizeObserverExtension.IsEnabled="False"
+                                           Width="122"
+                                           local:MpAvSizeObserverExtension.ObservedWidth="{Binding TagTileTrayWidth, Mode=OneWayToSource}"
+                                           DataContext="{Binding}" />
 
-            <local:MpAvTagTrayView />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
             <!--  SearchBox View  -->
 
             <local:MpAvSearchBoxView HorizontalAlignment="Right"
-                                     local:MpAvSizeObserverExtension.IsEnabled="True"
+                                     Tag="Search"
+                                     MaxWidth="300"
+                                     local:MpAvSizeObserverExtension.IsEnabled="False"
                                      local:MpAvSizeObserverExtension.ObservedWidth="{Binding SearchBoxViewWidth, Source={x:Static local:MpAvSearchBoxViewModel.Instance}, Mode=OneWayToSource}" />
-        </ItemsControl.Items>
-    </ItemsControl>
+
+        <!--</mech:ToolBarTray>-->
+    </DockPanel>
 </local:MpAvUserControl>

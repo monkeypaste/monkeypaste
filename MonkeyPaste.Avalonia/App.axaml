@@ -116,6 +116,28 @@
                 <ResourceInclude Source="/Assets/Dictionaries/MpAvConverterResourceDictionary.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
+
+        <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">
+            Transparent
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">
+            Transparent
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">
+            Transparent
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">
+            Transparent
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">
+            Transparent
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">
+            Transparent
+        </SolidColorBrush>
+        <Thickness x:Key="ListBoxItemPadding">
+            5,5,5,5
+        </Thickness>
     </Application.Resources>
     <!--<NativeMenu.Menu>
         <NativeMenu>

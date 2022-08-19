@@ -530,9 +530,11 @@ namespace MonkeyPaste.Avalonia {
                 var layout_type = GetLayoutType(lb);
                 double vFactor = -120;
 
-                double v0x = lb_orientation == Orientation.Horizontal && layout_type == MpAvClipTrayLayoutType.Stack
+                bool isScrollHorizontal = (lb_orientation == Orientation.Horizontal && layout_type == MpAvClipTrayLayoutType.Stack) ||
+                                            (lb_orientation == Orientation.Vertical && layout_type == MpAvClipTrayLayoutType.Grid);
+                double v0x = isScrollHorizontal
                                 ? e.Delta.Y * vFactor : e.Delta.X * vFactor;
-                double v0y = lb_orientation == Orientation.Horizontal && layout_type == MpAvClipTrayLayoutType.Stack
+                double v0y = isScrollHorizontal
                                 ? e.Delta.X * vFactor : e.Delta.Y * vFactor;
 
                 double vx = v0x - (v0x * dampX);

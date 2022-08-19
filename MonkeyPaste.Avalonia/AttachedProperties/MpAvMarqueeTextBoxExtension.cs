@@ -666,13 +666,13 @@ namespace MonkeyPaste.Avalonia {
             Bitmap GetMarqueeBitmap(TextBox tb, out Size ftSize) {
                 var canvas = GetCanvas(tb);
                 int pad = (int)GetTailPadding(canvas);
+                double fs = Math.Max(1.0d, tb.FontSize);
                 
-                
-                Size textSize = new Size(tb.Text.Length * tb.FontSize, tb.FontSize);
+                Size textSize = new Size(tb.Text.Length * fs, fs);
                 var ft = new FormattedText(
                         tb.Text,
                         new Typeface(tb.FontFamily, tb.FontStyle, tb.FontWeight),
-                        tb.FontSize,
+                        fs,
                         tb.TextAlignment,
                         tb.TextWrapping,
                         new Size());

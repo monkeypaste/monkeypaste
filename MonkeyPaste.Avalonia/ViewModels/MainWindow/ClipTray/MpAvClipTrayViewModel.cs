@@ -532,6 +532,8 @@ namespace MonkeyPaste.Avalonia {
             // For TileRect<MpRect>:  0 <= queryOffsetIdx < TotalTilesInQuery and scrollOffsets == -1
             // For TileQueryIdx<[]{int,MpRect}>: queryoffsetIdx < 0 and both scrollOffset > 0
 
+            bool isGrid = LayoutType == MpAvClipTrayLayoutType.Grid;
+
             bool isFindTileIdx = scrollOffsetX >= 0 && scrollOffsetY >= 0;
             bool isFindTileRect = !isFindTileIdx && queryOffsetIdx >= 0;
             bool isFindTotalSize = !isFindTileRect;
@@ -577,7 +579,7 @@ namespace MonkeyPaste.Avalonia {
                 MpRect tile_rect = new MpRect(tile_offset, tile_size);
                 bool is_tile_wrapped = false;
                 if (tile_rect.Right > DesiredMaxTileRight) {
-                    // when tile projected rect is beyond desired max width
+                    // when tile projected rect is beyond desired max width (horizontal)
 
                     if (cur_grid_row_or_col_rects.Count == 0) {
                         // this means based on tray orientation/layout it can't contain this tile
@@ -592,7 +594,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (tile_rect.Bottom > DesiredMaxTileBottom) {
-                    // when tile projected rect is beyond desired max height
+                    // when tile projected rect is beyond desired max height (vertical)
 
                     if (cur_grid_row_or_col_rects.Count == 0) {
                         // this means based on tray orientation/layout it can't contain this tile
@@ -607,6 +609,9 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (is_tile_wrapped) {
+                    if(isFindTotalSize && isGrid) {
+                        CurGridFixedCount = Math.Max(CurGridFixedCount, cur_grid_row_or_col_rects.Count);
+                    }
                     cur_grid_row_or_col_rects.Clear();
                 } else if (LayoutType == MpAvClipTrayLayoutType.Grid) {
                     cur_grid_row_or_col_rects.Add(tile_rect);
@@ -631,6 +636,9 @@ namespace MonkeyPaste.Avalonia {
                 return last_rect;
             }
             if(isFindTotalSize) {
+                if(!IsGridLayout) {
+                    CurGridFixedCount = 0;
+                }
                 return total_size;
             }
             return null;
@@ -778,7 +786,10 @@ namespace MonkeyPaste.Avalonia {
                     }
                     return ClipTrayScreenWidth;
                 } else {
-                    return ClipTrayScreenWidth;
+                    if(LayoutType == MpAvClipTrayLayoutType.Stack) {
+                        return ClipTrayScreenWidth;
+                    }
+                    return double.PositiveInfinity;
                 }
             }
         }
@@ -1137,6 +1148,7 @@ namespace MonkeyPaste.Avalonia {
             var anchor_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == _anchor_query_idx);
             if(anchor_ctvm == null) {
                 Debugger.Break();
+                return;
             }
 
             ForceScrollOffset(anchor_ctvm.TrayLocation);
@@ -1154,7 +1166,6 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void MpAvClipTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            //MpConsole.WriteLine($"Name: {e.PropertyName} Value: {this.GetPropertyValue(e.PropertyName)?.ToString()}");
             switch (e.PropertyName) {
                 case nameof(PlayPauseButtonWidth):
                     MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayScreenWidth));
@@ -1236,6 +1247,11 @@ namespace MonkeyPaste.Avalonia {
                     
                     RefreshLayout();
                     LockScrollToAnchor();
+                    if(LayoutType == MpAvClipTrayLayoutType.Grid) {
+                        QueryCommand.Execute(ScrollOffset);
+                    } else {
+                        CheckLoadMore();
+                    }
                     break;
 
                 // MAIN WINDOW SIZE
@@ -1319,7 +1335,7 @@ namespace MonkeyPaste.Avalonia {
             return true;
         }
 
-        private void CheckLoadMore(bool isZoomCheck = false, bool isSizeCheck = false) {
+        private void CheckLoadMore(bool isZoomCheck = false) {
             if(!CanCheckLoadMore()) {
                 return;
             }
@@ -1335,39 +1351,45 @@ namespace MonkeyPaste.Avalonia {
             // NOTE when zooming the anchor item SHOULD be locked to lo edge so won't need to check lo
             bool checkLo = (dx < 0 || dy < 0) && HeadQueryIdx > 0;
             bool checkHi = (dx > 0 || dy > 0 || isLessZoom) && TailQueryIdx < MaxClipTrayQueryIdx;
-            
-            if(LayoutType == MpAvClipTrayLayoutType.Stack) {
-                if (checkHi) {
-                    int hi_thresholdQueryIdx = Math.Max(0, TailQueryIdx - RemainingItemsCountThreshold);
-                    var hi_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == hi_thresholdQueryIdx);
-                    double hi_diff = ListOrientation == Orientation.Horizontal ?
-                                        hi_ctvm.TrayRect.Right - ScrollOffsetX - ClipTrayScreenWidth:
-                                        hi_ctvm.TrayRect.Bottom - ScrollOffsetY - ClipTrayScreenHeight;
 
-                    if (hi_diff < 0) {
-                        QueryCommand.Execute(true);
-                        if (!isLessZoom) {
-                            return;
-                        }
+            bool isScrollHorizontal = (LayoutType == MpAvClipTrayLayoutType.Stack && ListOrientation == Orientation.Horizontal) ||
+                                      (LayoutType == MpAvClipTrayLayoutType.Grid && ListOrientation == Orientation.Vertical);
 
-                    }
+            if (checkHi) {
+                int hi_thresholdQueryIdx = Math.Max(0, TailQueryIdx - RemainingItemsCountThreshold);
+                var hi_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == hi_thresholdQueryIdx);
+                if (hi_ctvm == null) {
+                    Debugger.Break();
                 }
-                if (checkLo) {
-                    int lo_thresholdQueryIdx = Math.Max(0, HeadQueryIdx + RemainingItemsCountThreshold);
-                    var lo_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == lo_thresholdQueryIdx);
-                    double lo_diff = ListOrientation == Orientation.Horizontal ?
-                                        lo_ctvm.TrayRect.Right - ScrollOffsetX :
-                                        lo_ctvm.TrayRect.Bottom - ScrollOffsetY;
-                    if (lo_diff > 0) {
-                        QueryCommand.Execute(false);
-                        if (!isLessZoom) {
-                            return;
-                        }
+                double hi_diff = isScrollHorizontal ?
+                                    hi_ctvm.TrayRect.Right - ScrollOffsetX - ClipTrayScreenWidth :
+                                    hi_ctvm.TrayRect.Bottom - ScrollOffsetY - ClipTrayScreenHeight;
+
+                if (hi_diff < 0) {
+                    QueryCommand.Execute(true);
+                    if (!isLessZoom) {
+                        return;
+                    }
+
+                }
+            }
+            if (checkLo) {
+                int lo_thresholdQueryIdx = Math.Max(0, HeadQueryIdx + RemainingItemsCountThreshold);
+                var lo_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == lo_thresholdQueryIdx);
+                if(lo_ctvm == null) {
+                    Debugger.Break();
+                }
+                double lo_diff = isScrollHorizontal ?
+                                    lo_ctvm.TrayRect.Right - ScrollOffsetX :
+                                    lo_ctvm.TrayRect.Top - ScrollOffsetY;
+
+                if (lo_diff > 0) {
+                    QueryCommand.Execute(false);
+                    if (!isLessZoom) {
+                        return;
                     }
                 }
             }
-
-           
         }
         #endregion
 
@@ -1390,7 +1412,8 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ToggleLayoutTypeCommand => new MpCommand(
             () => {
-                ScrollToHomeCommand.Execute(null);
+                //ScrollToHomeCommand.Execute(null);
+                SetScrollAnchor();
 
                 if (IsGridLayout) {
                     LayoutType = MpAvClipTrayLayoutType.Grid;
@@ -1461,6 +1484,8 @@ namespace MonkeyPaste.Avalonia {
 
         public double MaxTileWidth => ClipTrayScreenWidth - 50;// (MpMeasurements.Instance.ClipTileMaxWidthPadding * 2);
 
+        public int CurGridFixedCount { get; set; }
+
         #endregion
 
         #region Appearance
@@ -1477,12 +1502,47 @@ namespace MonkeyPaste.Avalonia {
         #region Business Logic
 
 
-        public int RemainingItemsCountThreshold => 5;
-        public int LoadMorePageSize => 1;
+        public int RemainingItemsCountThreshold {
+            get {
+                if (LayoutType == MpAvClipTrayLayoutType.Stack) {
+                    return 5;
+                }
+                return CurGridFixedCount * 2;
+            }
+        }
+        public int LoadMorePageSize {
+            get {
+                if(LayoutType == MpAvClipTrayLayoutType.Stack) {
+                    return 1;
+                }
+                return CurGridFixedCount;
+            }
+        }
 
         public int TotalTilesInQuery => MpDataModelProvider.TotalTilesInQuery;
 
-        public int DefaultLoadCount => 20;// MaxTotalVisibleClipTiles + 3;
+        public int DefaultLoadCount {
+            get {
+                if(LayoutType == MpAvClipTrayLayoutType.Stack) {
+                    return 20;
+                } else {
+                    // for grid try to make default load count so it lands at the end of the fixed side
+                    double length = ListOrientation == Orientation.Horizontal ? ClipTrayScreenHeight : ClipTrayScreenWidth;
+                    double item_length = ListOrientation == Orientation.Horizontal ? DefaultItemSize.Height : DefaultItemSize.Width;
+                    double items_per_length = length / item_length;
+
+                    double count_val = (double)CurGridFixedCount * items_per_length;
+                    int count = (int)count_val;
+                    while(count % CurGridFixedCount != 0) {
+                        count--;
+                        if(count <= 0) {
+                            Debugger.Break();
+                        }
+                    }
+                    return count * 3;
+                }
+            }
+        }
 
 
         #endregion
@@ -2533,6 +2593,8 @@ namespace MonkeyPaste.Avalonia {
                 int loadOffsetIdx = 0;
                 int loadCount = 0;
 
+                bool isLoadMoreTail = false;
+
                 MpPoint newScrollOffset = default;
 
                 if (isSubQuery) {
@@ -2556,7 +2618,7 @@ namespace MonkeyPaste.Avalonia {
 
                         if ((bool)offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg) {
                             //load More to tail
-
+                            isLoadMoreTail = true;
                             loadOffsetIdx = TailQueryIdx + 1;
                             if (loadOffsetIdx > MaxClipTrayQueryIdx) {
                                 IsRequery = IsBusy = false;
@@ -2564,8 +2626,8 @@ namespace MonkeyPaste.Avalonia {
                             }
                         } else {
                             //load more to head
-
-                            loadOffsetIdx = HeadQueryIdx - 1;
+                            isLoadMoreTail = false;
+                            loadOffsetIdx = HeadQueryIdx - loadCount;
                             if (loadOffsetIdx < MinClipTrayQueryIdx) {
                                 IsRequery = IsBusy = false;
                                 return;
@@ -2573,7 +2635,7 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
 
-                    if (loadOffsetIdx + DefaultLoadCount > MaxClipTrayQueryIdx) {
+                    if (loadOffsetIdx + loadCount > MaxClipTrayQueryIdx) {
                         // clamp load offset to max query total count
 
                         loadOffsetIdx = MaxLoadQueryIdx;
@@ -2664,27 +2726,32 @@ namespace MonkeyPaste.Avalonia {
 
                     var cil = await MpDataModelProvider.FetchCopyItemsByQueryIdxListAsync(fetchQueryIdxList);
 
+                    int recycle_base_query_idx = isLoadMoreTail ? HeadQueryIdx : TailQueryIdx;
+                    int dir = isLoadMoreTail ? 1 : -1;
+                    List<Task> initTasks = new List<Task>();
+                    MpAvClipTileViewModel ctvm_needs_restore = null;
+
                     for (int i = 0; i < cil.Count; i++) {
+                        MpAvClipTileViewModel cur_ctvm = null;
                         if (isLoadMore) {
-                            int loadMoreSwapIdx_from = fetchQueryIdxList[i] > TailQueryIdx ? HeadItemIdx : TailItemIdx;
-                            int loadMoreSwapIdx_to = fetchQueryIdxList[i] > TailQueryIdx ? TailItemIdx : HeadItemIdx;
-
-                            if (Items[loadMoreSwapIdx_from].IsSelected) {
-                                StoreSelectionState(Items[loadMoreSwapIdx_from]);
-                                Items[loadMoreSwapIdx_from].ClearSelection();
-                            }
-                            Items.Move(loadMoreSwapIdx_from, loadMoreSwapIdx_to);
-                            await Items[loadMoreSwapIdx_to].InitializeAsync(cil[i], fetchQueryIdxList[i]);
-
-                            RestoreSelectionState(Items[loadMoreSwapIdx_to]);
+                            int cur_query_idx = recycle_base_query_idx + (dir * i);
+                            cur_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == cur_query_idx);
                         } else {
-                            await Items[i].InitializeAsync(cil[i], fetchQueryIdxList[i]);
-
-                            if (isSubQuery) {
-                                RestoreSelectionState(Items[i]);
-                            }
-
+                            cur_ctvm = Items[i];
                         }
+                        if (cur_ctvm.IsSelected) {
+                            StoreSelectionState(cur_ctvm);
+                            cur_ctvm.ClearSelection();
+                        }
+                        initTasks.Add(cur_ctvm.InitializeAsync(cil[i], fetchQueryIdxList[i]));
+
+                        if (isSubQuery && PersistentSelectedModels.Any(x => x.Id == cil[i].Id)) {
+                                ctvm_needs_restore = cur_ctvm;
+                        }
+                    }
+                    await Task.WhenAll(initTasks.ToArray());
+                    if (ctvm_needs_restore != null) {
+                        RestoreSelectionState(ctvm_needs_restore);
                     }
                 }
 
@@ -2736,9 +2803,7 @@ namespace MonkeyPaste.Avalonia {
                         await Task.Delay(100);
                     }
                     CheckLoadMore();
-                } else if(_anchor_query_idx >= 0) {
-                    
-                }
+                } 
             },
             (offsetIdx_Or_ScrollOffset_Arg) => {
                 return !IsAnyBusy && !IsRequery;

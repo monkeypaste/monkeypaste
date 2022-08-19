@@ -127,7 +127,7 @@
             </Grid.MaxWidth>
             <TextBox x:Name="ClipTileTitleTextBox"
                      FontFamily="Segoe UI"
-                     FontSize="{Binding TitleFontSize}"
+                     FontSize="18"
                      BorderThickness="0"
                      Padding="0"
                      local:MpAvIsFocusedExtension.IsEnabled="True"

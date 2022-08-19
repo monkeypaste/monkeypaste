@@ -15,6 +15,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common.Avalonia;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipboardWatcher : MpIClipboardMonitor, MpIPlatformDataObjectRegistrar {
@@ -27,8 +28,10 @@ namespace MonkeyPaste.Avalonia {
         private DispatcherTimer _timer;
 
         private bool _isCheckingClipboard = false;
-        
 
+        private List<string> _rejectedFormats = new List<string>() {
+            "FileContents"
+        };
         #endregion
 
         #region Properties
@@ -119,8 +122,21 @@ namespace MonkeyPaste.Avalonia {
             var ndo = new MpPortableDataObject();
             string[] formats = await Application.Current.Clipboard.GetFormatsAsync();
 
-            foreach (var format in formats.Where(x=>!x.StartsWith("Unknown_Format"))) {
-                object formatData = await Application.Current.Clipboard.GetDataAsync(format);
+            foreach (var format in formats.Where(x=>!x.StartsWith("Unknown_Format") && !_rejectedFormats.Contains(x))) {
+                object formatData = null;
+                try {
+                    formatData = await Application.Current.Clipboard.GetDataAsync(format);
+                } catch(COMException com_ex) {
+                    MpConsole.WriteTraceLine($"Error reading clipboard format '{format}'", com_ex);
+                    continue;
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error reading clipboard format '{format}'", ex);
+                    continue;
+                }
+                if(formatData == null) {
+                    continue;
+                }
                 try {
                     ndo.SetData(format, formatData);
                 }catch(MpUnregisteredDataFormatException){                    
