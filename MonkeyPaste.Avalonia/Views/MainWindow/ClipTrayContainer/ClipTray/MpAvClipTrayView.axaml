@@ -40,7 +40,7 @@
                          local:MpAvPagingListBoxExtension.FrictionX="0.85"
                          local:MpAvPagingListBoxExtension.WheelDampeningX="0.03"
                          local:MpAvPagingListBoxExtension.FrictionY="0.75"
-                         local:MpAvPagingListBoxExtension.WheelDampeningY="0.08"
+                         local:MpAvPagingListBoxExtension.WheelDampeningY="0.03"
                          local:MpAvPagingListBoxExtension.ScrollOffsetX="{Binding ScrollOffsetX, Mode=TwoWay}"
                          local:MpAvPagingListBoxExtension.ScrollOffsetY="{Binding ScrollOffsetY, Mode=TwoWay}"
                          local:MpAvPagingListBoxExtension.IsThumbDraggingX="{Binding IsThumbDraggingX, Mode=TwoWay}"
@@ -125,7 +125,7 @@
         </Border>
 
         <!--  IsBusy Overlay  -->
-        <Border HorizontalAlignment="Stretch"
+        <!--<Border HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 IsVisible="{Binding IsBusy}">
             <Border.Background>
@@ -138,7 +138,7 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Foreground="Green" />
-        </Border>
+        </Border>-->
 
         <!--  IsEmpty Overlay  -->
 

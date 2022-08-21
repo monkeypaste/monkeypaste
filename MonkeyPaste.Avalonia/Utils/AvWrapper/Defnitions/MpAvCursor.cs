@@ -35,24 +35,16 @@ namespace MonkeyPaste.Avalonia {
             //if (MpAvClipTrayViewModel.Instance.HasScrollVelocity) {
             //    return;
             //}
-
-            if (Dispatcher.UIThread.CheckAccess()) {
-                Cursor cursor = _cursorLookup[newCursor];
-
-                //Mouse.OverrideCursor = cursor;
-                //Mouse.PrimaryDevice.OverrideCursor = cursor;
-
-                if (MpAvMainWindow.Instance == null) {
+            Dispatcher.UIThread.Post(() => {
+                if (MpAvMainWindow.Instance == null || MpAvClipTrayViewModel.Instance.HasScrollVelocity) {
                     // NOTE occurs on init
                     return;
                 }
-                //Application.Current.MainWindow.ForceCursor = true;
-                //Application.Current.MainWindow.Cursor = cursor;
+                Cursor cursor = _cursorLookup[newCursor];
+
+                
                 MpAvMainWindow.Instance.Cursor = cursor;
-            } else {
-                MpPlatformWrapper.Services.MainThreadMarshal.RunOnMainThread(() => SetCursor(newCursor));
-                //Dispatcher.UIThread.Post(()=>SetCursor(newCursor));
-            }
+            });
         }
     }
 }

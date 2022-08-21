@@ -112,7 +112,7 @@
               local:MpAvIsHoveringExtension.HoverCursor="IBeam"
               IsHitTestVisible="{Binding !HasScrollVelocity, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
             <Grid.MaxWidth>
-                <MultiBinding Converter="{StaticResource MultiDoubleSumConverter}">
+                <MultiBinding Converter="{StaticResource MultiDoubleMathConverter}">
                     <Binding Path="Bounds.Width"
                              ElementName="TitleContainerGrid" />
                     <Binding Path="Bounds.Width"
@@ -127,7 +127,6 @@
             </Grid.MaxWidth>
             <TextBox x:Name="ClipTileTitleTextBox"
                      FontFamily="Segoe UI"
-                     FontSize="18"
                      BorderThickness="0"
                      Padding="0"
                      local:MpAvIsFocusedExtension.IsEnabled="True"
@@ -150,6 +149,23 @@
                      Background="White"
                      Foreground="Black"
                      Text="{Binding CopyItemTitle, Mode=TwoWay}">
+                <TextBox.FontSize>
+                    <MultiBinding Converter="{StaticResource MultiDoubleMathConverter}"
+                                  ConverterParameter="/,-">
+                        <Binding Path="Bounds.Height"
+                                 ElementName="TitleContainerGrid" />
+                        <Binding>
+                            <Binding.Source>
+                                <core:Double>2</core:Double>
+                            </Binding.Source>
+                        </Binding>
+                        <Binding>
+                            <Binding.Source>
+                                <core:Double>2</core:Double>
+                            </Binding.Source>
+                        </Binding>
+                    </MultiBinding>
+                </TextBox.FontSize>
                 <TextBox.Resources>
                     <Thickness x:Key="TextControlThemePadding">
                         0,0,0,0

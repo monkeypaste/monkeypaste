@@ -91,6 +91,13 @@ namespace MonkeyPaste.Common {
                    p.Y >= Top && p.Y <= Bottom;
         }
 
+        public bool Contains(MpRect other) {
+            return Contains(other.TopLeft) && Contains(other.BottomRight);
+        }
+        public bool Intersects(MpRect other) {
+            return other.Points.Any(x => Contains(x));
+        }
+
         public override string ToString() {
             return $"X:{Location.X} Y:{Location.Y} Width: {Width} Height: {Height}";
         }

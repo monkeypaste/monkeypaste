@@ -2,7 +2,7 @@
   "profiles": {
     "MonkeyPaste.Avalonia": {
       "commandName": "Project",
-      "nativeDebugging": true
+      "nativeDebugging": false
     },
     "WSL": {
       "commandName": "WSL2",

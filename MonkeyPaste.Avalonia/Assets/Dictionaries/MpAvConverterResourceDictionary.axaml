@@ -20,6 +20,6 @@
     <local:MpAvMultiStringAppendConverter x:Key="MultiStringAppendConverter" />
     <local:MpAvBoolToScrollBarVisibilityConverter x:Key="BoolToScrollBarVisibilityConverter" />
     <local:MpAvContentDataConverter x:Key="ContentDataConverter" />
-    <local:MpAvMultiDoubleSumConverter x:Key="MultiDoubleSumConverter" />
+    <local:MpAvMultiDoubleMathConverter x:Key="MultiDoubleMathConverter" />
     <local:MpAvDoubleToGridLengthConverter x:Key="DoubleToGridLengthConverter" />
 </ResourceDictionary>

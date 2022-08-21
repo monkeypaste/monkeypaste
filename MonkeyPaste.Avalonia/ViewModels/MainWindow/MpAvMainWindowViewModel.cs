@@ -805,15 +805,17 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand WindowResizeCommand => new MpCommand<MpSize>(
             (sizeArg) => {
-                var rc = MpAvMainWindow.Instance.GetResizerControl();
-                if(rc == null) {
-                    return;
-                }
-                IsResizing = true;
-                
-                MpAvResizeExtension.ResizeByDelta(rc, sizeArg.Width, sizeArg.Height);
+                Dispatcher.UIThread.Post(() => {
+                    var rc = MpAvMainWindow.Instance.GetResizerControl();
+                    if (rc == null) {
+                        return;
+                    }
+                    IsResizing = true;
 
-                IsResizing = false;
+                    MpAvResizeExtension.ResizeByDelta(rc, sizeArg.Width, sizeArg.Height);
+
+                    IsResizing = false;
+                });
             },
             (sizeArg) => {
                 return IsMainWindowOpen && sizeArg != null;

@@ -19,7 +19,8 @@
                           VerticalAlignment="Stretch"
                           local:MpAvMenuExtension.IsEnabled="True"
                           local:MpAvMenuExtension.IsOpen="{Binding IsContextMenuOpened, Mode=TwoWay}"
-                          local:MpAvMenuExtension.DoubleClickCommand="{Binding EnableSubSelectionEnabled}"
+                          local:MpAvMousePressCommand.IsEnabled="True"
+                          local:MpAvMousePressCommand.DoubleLeftPressCommand="{Binding EnableSubSelectionCommand}"
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
                           CornerRadius="10"
@@ -42,13 +43,16 @@
                         Value="Black" />
             </Style>
         </local:MpAvClipBorder.Styles>
-        <!--  RowDefinitions="0.25*,*,20"
-        
-                                         MaxHeight="{Binding MaxTitleHeight, FallbackValue=40, TargetNullValue=40}"-->
+        <!--
+            RowDefinitions="0.25*,*,20"
+            
+            MaxHeight="{Binding MaxTitleHeight, FallbackValue=40, TargetNullValue=40}"
+        -->
         <Grid HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.25*" MaxHeight="40" />
+                <RowDefinition Height="0.25*"
+                               MaxHeight="40" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="20" />
             </Grid.RowDefinitions>
@@ -82,27 +86,29 @@
                                                  VerticalAlignment="Stretch"
                                                  DataContext="{Binding}" />
 
-            <!--<Border x:Name="ClipTileResizeBorder"
+            <Border x:Name="ClipTileResizeBorder"
                     Grid.Row="0"
                     Grid.RowSpan="3"
-                    local:MpAvResizeExtension.MinHeight="{Binding MinSize}"
+                    local:MpAvResizeExtension.MinHeight="{Binding MinHeight}"
                     local:MpAvResizeExtension.MaxHeight="{Binding MaxHeight}"
-                    local:MpAvResizeExtension.MinWidth="{Binding MinSize}"
+                    local:MpAvResizeExtension.MinWidth="{Binding MinWidth}"
                     local:MpAvResizeExtension.MaxWidth="{Binding MaxWidth}"
                     local:MpAvResizeExtension.BoundWidth="{Binding BoundWidth, Mode=TwoWay}"
                     local:MpAvResizeExtension.BoundHeight="{Binding BoundHeight, Mode=TwoWay}"
-                    local:MpAvResizeExtension.DefaultWidth="{Binding MinSize}"
-                    local:MpAvResizeExtension.DefaultHeight="{Binding MinSize}"
+                    local:MpAvResizeExtension.DefaultWidth="{Binding MinWidth}"
+                    local:MpAvResizeExtension.DefaultHeight="{Binding MinHeight}"
                     local:MpAvResizeExtension.CanResize="{Binding CanResize, Mode=TwoWay}"
                     local:MpAvResizeExtension.IsResizing="{Binding IsResizing, Mode=TwoWay}"
                     local:MpAvResizeExtension.XFactor="-1"
-                    local:MpAvResizeExtension.YFactor="1"
+                    local:MpAvResizeExtension.YFactor="0"
                     local:MpAvResizeExtension.IsEnabled="True"
+                    local:MpAvMousePressCommand.IsEnabled="True"
+                    local:MpAvMousePressCommand.DoubleLeftPressCommand="{Binding ResetTileSizeToDefaultCommand}"
                     Cursor="SizeWestEast"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Stretch"
                     Width="5"
-                    Background="Magenta"/>-->
+                    Background="Transparent" />
 
             <!--  IsBusy Overlay  -->
             <Border Grid.Row="0"

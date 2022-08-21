@@ -22,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvSelectorViewModelBase<object,MpAvShortcutViewModel>, 
         MpIAsyncSingletonViewModel<MpAvShortcutCollectionViewModel> {
 
-        private const bool IS_GLOBAL_INPUT_ENABLED = false;
+        private const bool IS_GLOBAL_INPUT_ENABLED = true;
         private const double _MIN_GLOBAL_DRAG_DIST = 20;
 
         #region Private Variables
@@ -618,6 +618,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Hook_MouseDragged(object sender, MouseHookEventArgs e) {
+            GlobalMouseLocation = GetScaledMousePoint(e.Data);
             OnGlobalMouseDragged?.Invoke(sender, e);
         }
 

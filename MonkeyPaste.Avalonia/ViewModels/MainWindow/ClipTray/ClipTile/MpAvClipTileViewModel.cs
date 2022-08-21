@@ -8,6 +8,7 @@ using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -109,11 +110,9 @@ namespace MonkeyPaste.Avalonia {
         public double MinWidth => MinSize.Width;
         public double MinHeight => MinSize.Height;
 
-        public double TitleIconWidth { get; set; }
-        public double MaxTitleTextBoxWidth => BoundWidth - TitleIconWidth;
 
-        public double MaxWidth => Parent.ClipTrayScreenWidth - 50;
-        public double MaxHeight => Parent.ClipTrayScreenHeight - 50;
+        public double MaxWidth => double.PositiveInfinity;// Parent.ClipTrayScreenWidth - 50;
+        public double MaxHeight => double.PositiveInfinity;// Parent.ClipTrayScreenHeight - 50;
 
         private double _titleHeight = 0;
         public double TitleHeight {
@@ -205,7 +204,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public bool IsScreenVisible => Parent == null ? false : 
+        public bool IsAnyCornerVisible => Parent == null ? false : 
             Parent.ScreenRect.Contains(ScreenRect.TopLeft) || 
             Parent.ScreenRect.Contains(ScreenRect.TopRight) || 
             Parent.ScreenRect.Contains(ScreenRect.BottomLeft) || 
@@ -412,7 +411,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public bool IsCustomSize => Parent == null ? false : Parent.TryGetByPersistentSize_ById(CopyItemId, out Size size);
+        public bool IsCustomSize => Parent == null ? false : Parent.TryGetByPersistentSize_ById(CopyItemId, out MpSize size);
         public bool IsPlaceholder => CopyItem == null || IsPinned;
 
         #region Drag & Drop
@@ -1583,8 +1582,8 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = true;
 
-            if (ci != null && Parent.TryGetByPersistentSize_ById(ci.Id, out Size uniqueSize)) {
-                BoundSize = uniqueSize.ToPortableSize();
+            if (ci != null && Parent.TryGetByPersistentSize_ById(ci.Id, out MpSize uniqueSize)) {
+                BoundSize = uniqueSize;
             } else {
                 BoundSize = MinSize;
             }
@@ -1688,13 +1687,15 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = wasBusy;
         }
         public void ResetSubSelection(bool clearEditing = true, bool reqFocus = false) {
-            ClearSelection(clearEditing);
-            Parent.IsSelectionReset = true;
-            IsSelected = true;
-            Parent.IsSelectionReset = false;
-            if (reqFocus) {
-                IsContentFocused = true;
-            }
+            Dispatcher.UIThread.Post(() => {
+                ClearSelection(clearEditing);
+                Parent.IsSelectionReset = true;
+                IsSelected = true;
+                Parent.IsSelectionReset = false;
+                if (reqFocus) {
+                    IsContentFocused = true;
+                }
+            });
         }
 
 
@@ -2154,13 +2155,6 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsEditingTemplate):
                     //OnPropertyChanged(nameof(De))
                     break;
-                case nameof(CanResize):
-                    OnPropertyChanged(nameof(TileBorderBrush));
-                    Parent.OnPropertyChanged(nameof(Parent.CanAnyResize));
-                    break;
-                case nameof(IsResizing):
-                    Parent.OnPropertyChanged(nameof(Parent.IsAnyResizing));
-                    break;
                 case nameof(IsOverPinButton):
                 case nameof(IsPinned):
                     OnPropertyChanged(nameof(PinIconSourcePath));
@@ -2269,36 +2263,52 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(CopyItemData):
                     ResetExpensiveDetails();
                     break;
+
+                case nameof(CanResize):
+                    OnPropertyChanged(nameof(TileBorderBrush));
+                    Parent.OnPropertyChanged(nameof(Parent.CanAnyResize));
+                    break;
+                case nameof(IsResizing):
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyResizing));
+                    if (!IsResizing) {
+                        Parent.RefreshLayout();
+                    }
+                    break;
                 case nameof(MinSize):
-                    if(IsCustomSize) {
+                    OnPropertyChanged(nameof(MinWidth));
+                    OnPropertyChanged(nameof(MinHeight));
+                    if (IsCustomSize) {
                         break;
                     }
                     BoundSize = MinSize;
                     break;
                 case nameof(BoundSize):
-                    if (Parent.TryGetByPersistentSize_ById(CopyItemId, out Size uniqueSize)) {
+                    if (IsResizing) {
                         //this occurs when mainwindow is resized and user gives tile unique width
-                        Parent.AddOrReplacePersistentSize_ById(CopyItemId, BoundSize.ToAvSize());
+                        Parent.AddOrReplacePersistentSize_ById(CopyItemId, BoundSize);
                     }
                     if (Next == null) {
                         break;
                     }
-                    Parent.UpdateTileRectCommand.Execute(this);
+                    Parent.UpdateTileRectCommand.Execute(new object[] {Next,TrayRect});
                     OnPropertyChanged(nameof(BoundWidth));
                     OnPropertyChanged(nameof(BoundHeight));
                     OnPropertyChanged(nameof(MaxWidth));
                     OnPropertyChanged(nameof(MaxHeight));
                     break;
                 case nameof(TrayLocation):
+                    if(QueryOffsetIdx == 0 && TrayLocation.X > 0) {
+                        Debugger.Break();
+                    }
                     if (Next == null) {
-                        if (Parent.IsAnyResizing) {
-                            // TrayX is only changed on layout change OR resize
-                            // only update list when next is null (tail)
-                            Parent.RefreshLayout();
-                        }
+                        //if (Parent.IsAnyResizing) {
+                        //    // TrayX is only changed on layout change OR resize
+                        //    // only update list when next is null (tail)
+                        //    Parent.RefreshLayout();
+                        //}
                         break;
                     }
-                    Parent.UpdateTileRectCommand.Execute(Next);
+                    Parent.UpdateTileRectCommand.Execute(new object[] { Next, TrayRect });
                     OnPropertyChanged(nameof(TrayX));
                     OnPropertyChanged(nameof(TrayY));
                     //Next.OnPropertyChanged(nameof(Next.TrayX));
@@ -2307,6 +2317,8 @@ namespace MonkeyPaste.Avalonia {
                     if (IsPlaceholder) {
                         break;
                     }
+                    //MpRect prevRect = Prev == null ? null : Prev.TrayRect;
+                    //Parent.UpdateTileRectCommand.Execute(new object[] { this, prevRect });
                     Parent.UpdateTileRectCommand.Execute(this);
                     //OnPropertyChanged(nameof(TrayX));
                     break;
@@ -2392,10 +2404,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand EnableSubSelectionEnabled => new MpCommand(
+        public ICommand EnableSubSelectionCommand => new MpCommand(
             () => {
                 IsSubSelectionEnabled = !IsSubSelectionEnabled;
-            });
+            },()=>IsContentReadOnly);
 
         public ICommand ChangeColorCommand => new MpCommand<string>(
             (b) => {
@@ -2406,6 +2418,17 @@ namespace MonkeyPaste.Avalonia {
                 //MpHelpers.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, CopyItemTitle, CopyItemData.ToPlainText()));
             });
 
+        public ICommand ResetTileSizeToDefaultCommand => new MpCommand(
+            () => {
+                IsResizing = true;
+
+                Parent.RemovePersistentSize_ById(CopyItemId);
+                BoundSize = Parent.DefaultItemSize;
+
+                IsResizing = false;
+            }, () => {
+                return Parent != null && Parent.IsTileHaveUniqueSize(CopyItemId);
+            });
 
 
 

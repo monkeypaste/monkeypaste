@@ -944,15 +944,4 @@
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Reusable\ShortcutWindow\MpAvAssignShortcutWindow.axaml" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Mechanism.AvaloniaUI.Controls">
-      <HintPath>lib\Mechanism.AvaloniaUI.Controls.dll</HintPath>
-    </Reference>
-    <Reference Include="Mechanism.AvaloniaUI.Core">
-      <HintPath>lib\Mechanism.AvaloniaUI.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Mechanism.AvaloniaUI.Extras">
-      <HintPath>lib\Mechanism.AvaloniaUI.Extras.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 </Project>

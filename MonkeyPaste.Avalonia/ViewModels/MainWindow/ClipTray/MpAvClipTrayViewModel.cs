@@ -32,6 +32,7 @@ namespace MonkeyPaste.Avalonia {
 
         private bool _isMainWindowOrientationChanging = false;
 
+
         #endregion
 
         #region Constants
@@ -333,11 +334,47 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public IEnumerable<MpAvClipTileViewModel> VisibleItems => Items.Where(x => x.IsScreenVisible);
+        public IEnumerable<MpAvClipTileViewModel> VisibleItems => Items.Where(x => x.IsAnyCornerVisible);
 
         #endregion
 
         #region MpIPagingScrollViewer Implementation
+
+        public double ScrollFrictionX { 
+            get {
+                if(LayoutType == MpAvClipTrayLayoutType.Stack) {
+                    return 0.85d;
+                }
+                return 0.85d;
+            }
+        }
+
+        public double ScrollWheelDampeningX {
+            get {
+                if (LayoutType == MpAvClipTrayLayoutType.Stack) {
+                    return 0.03d;
+                }
+                return 0.01d;
+            }
+        }
+
+        public double ScrollFrictionY {
+            get {
+                if (LayoutType == MpAvClipTrayLayoutType.Stack) {
+                    return 0.85d;
+                }
+                return 0.85d;
+            }
+        }
+
+        public double ScrollWheelDampeningY {
+            get {
+                if (LayoutType == MpAvClipTrayLayoutType.Stack) {
+                    return 0.03d;
+                }
+                return 0.01d;
+            }
+        }
 
         public Orientation ListOrientation => MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ? Orientation.Horizontal : Orientation.Vertical;
 
@@ -527,12 +564,13 @@ namespace MonkeyPaste.Avalonia {
             ClipTrayTotalTileHeight = totalTileSize.Height;
         }
 
-        private object FindTileRectOrQueryIdxOrTotalTileSizeInternal(int queryOffsetIdx, double scrollOffsetX, double scrollOffsetY) {
+        private object FindTileRectOrQueryIdxOrTotalTileSizeInternal(int queryOffsetIdx, double scrollOffsetX, double scrollOffsetY, MpRect prevOffsetRect = null) {
             // For TotalTileSize<MpSize>: all params -1
             // For TileRect<MpRect>:  0 <= queryOffsetIdx < TotalTilesInQuery and scrollOffsets == -1
             // For TileQueryIdx<[]{int,MpRect}>: queryoffsetIdx < 0 and both scrollOffset > 0
 
             bool isGrid = LayoutType == MpAvClipTrayLayoutType.Grid;
+            bool isStack = !isGrid;
 
             bool isFindTileIdx = scrollOffsetX >= 0 && scrollOffsetY >= 0;
             bool isFindTileRect = !isFindTileIdx && queryOffsetIdx >= 0;
@@ -540,27 +578,22 @@ namespace MonkeyPaste.Avalonia {
             
             int totalTileCount = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.Count;
             queryOffsetIdx = isFindTotalSize ? TotalTilesInQuery - 1 : queryOffsetIdx;
-
-            //if (totalTileCount <= 0 || queryOffsetIdx < 0 || queryOffsetIdx >= totalTileCount) {
-            //    throw new Exception($"FindTileRect Exception: Idx '{queryOffsetIdx}' out of bounds '{totalTileCount}'");
-            //}
-
+            int startIdx = 0;// prevOffsetRect == null ? 0 : queryOffsetIdx;
 
             var total_size = MpSize.Empty;
+            int gridFixedCount = -1;
 
-            var cur_grid_row_or_col_rects = new List<MpRect>();
-            MpRect last_rect = null;
+            MpRect last_rect = null;// prevOffsetRect;
 
-            for (int i = 0; i <= queryOffsetIdx; i++) {
+            for (int i = startIdx; i <= queryOffsetIdx; i++) {
                 int tileId = MpDataModelProvider.AllFetchedAndSortedCopyItemIds[i];
                 if (PinnedItems.Any(x => x.CopyItemId == tileId)) {
                     continue;
                 }
 
-
-                MpSize tile_size = new MpSize(DefaultItemWidth, DefaultItemWidth);
-                if (TryGetByPersistentSize_ById(tileId, out Size uniqueSize)) {
-                    tile_size = uniqueSize.ToPortableSize();
+                MpSize tile_size = DefaultItemSize;
+                if (TryGetByPersistentSize_ById(tileId, out MpSize uniqueSize)) {
+                    tile_size = uniqueSize;
                 }
 
                 MpPoint tile_offset = null;
@@ -581,14 +614,14 @@ namespace MonkeyPaste.Avalonia {
                 if (tile_rect.Right > DesiredMaxTileRight) {
                     // when tile projected rect is beyond desired max width (horizontal)
 
-                    if (cur_grid_row_or_col_rects.Count == 0) {
+                    if (isStack) {
                         // this means based on tray orientation/layout it can't contain this tile
                         // so it will need to overflow 
                         // always occurs in stack
                     } else {
                         // wrap to next line
                         tile_rect.X = 0;
-                        tile_rect.Y = cur_grid_row_or_col_rects[0].Bottom;
+                        tile_rect.Y = last_rect.Bottom;
                         is_tile_wrapped = true;
                     }
                 }
@@ -596,26 +629,21 @@ namespace MonkeyPaste.Avalonia {
                 if (tile_rect.Bottom > DesiredMaxTileBottom) {
                     // when tile projected rect is beyond desired max height (vertical)
 
-                    if (cur_grid_row_or_col_rects.Count == 0) {
+                    if (isStack) {
                         // this means based on tray orientation/layout it can't contain this tile
                         // so it will need to overflow 
                         // always occurs in stack
                     } else {
                         // wrap to next line
-                        tile_rect.X = cur_grid_row_or_col_rects[0].Right;
+                        tile_rect.X = last_rect.Right;
                         tile_rect.Y = 0;
                         is_tile_wrapped = true;
                     }
                 }
 
-                if (is_tile_wrapped) {
-                    if(isFindTotalSize && isGrid) {
-                        CurGridFixedCount = Math.Max(CurGridFixedCount, cur_grid_row_or_col_rects.Count);
-                    }
-                    cur_grid_row_or_col_rects.Clear();
-                } else if (LayoutType == MpAvClipTrayLayoutType.Grid) {
-                    cur_grid_row_or_col_rects.Add(tile_rect);
-                }
+                if (is_tile_wrapped && gridFixedCount < 0) {
+                    gridFixedCount = i;
+                } 
 
                 total_size.Width = Math.Max(tile_rect.Right, total_size.Width);
                 total_size.Height = Math.Max(tile_rect.Bottom, total_size.Height);
@@ -636,7 +664,9 @@ namespace MonkeyPaste.Avalonia {
                 return last_rect;
             }
             if(isFindTotalSize) {
-                if(!IsGridLayout) {
+                if(IsGridLayout) {
+                    CurGridFixedCount = gridFixedCount;
+                } else {
                     CurGridFixedCount = 0;
                 }
                 return total_size;
@@ -644,11 +674,13 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
         
-        public MpRect FindTileRect(int queryOffsetIdx) {
+        public MpRect FindTileRect(int queryOffsetIdx, MpRect prevOffsetRect) {
+
             object result = FindTileRectOrQueryIdxOrTotalTileSizeInternal(
                                 queryOffsetIdx: queryOffsetIdx,
                                 scrollOffsetX: -1,
-                                scrollOffsetY: -1);
+                                scrollOffsetY: -1,
+                                prevOffsetRect: prevOffsetRect);
             if(result is MpRect tileRect) {
                 return tileRect;
             }
@@ -758,23 +790,6 @@ namespace MonkeyPaste.Avalonia {
             return 0;
         }
 
-        public void AdjustScrollOffsetToResize(double oldHeadTrayX, double oldScrollOfset) {
-            double oldScrollOffsetDiffWithHead = oldScrollOfset - oldHeadTrayX;
-
-            double newHeadTrayX = HeadItem == null ? 0 : HeadItem.TrayX;
-            double headOffsetRatio = newHeadTrayX / oldHeadTrayX;
-            headOffsetRatio = double.IsNaN(headOffsetRatio) ? 1 : headOffsetRatio;
-            double newScrollOfsetDiffWithHead = headOffsetRatio * oldScrollOffsetDiffWithHead;
-
-            var head_rect = FindTileRect(HeadQueryIdx);
-            double newScrollOfsetX = head_rect.Left + newScrollOfsetDiffWithHead;
-            
-            //if(newScrollOfset < 100 || Math.Abs(newScrollOfset - oldScrollOfset) > 200) {
-            //    Debugger.Break();
-            //}
-            ScrollOffsetX = newScrollOfsetX;
-        }
-
         #region Default Tile Layout 
 
 
@@ -812,37 +827,40 @@ namespace MonkeyPaste.Avalonia {
         
         public double DefaultItemWidth {
             get {
-                double minSize;
+                double defaultWidth;
                 if (LayoutType == MpAvClipTrayLayoutType.Stack) {
-                    minSize = ListOrientation == Orientation.Horizontal ?
+                    defaultWidth = ListOrientation == Orientation.Horizontal ?
                                     (ClipTrayScreenHeight * ZoomFactor) :
                                     (ClipTrayScreenWidth * ZoomFactor);
                 } else {
-                    minSize = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds.Width *
+                    defaultWidth = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds.Width *
                                 ZoomFactor * MIN_SIZE_ZOOM_FACTOR_COEFF;
                 }
-                double scrollBarSize = 30;// IsHorizontalScrollBarVisible ? 30:0;
-                return minSize - scrollBarSize;
+                double scrollBarSize = ScrollBarFixedAxisSize;// IsHorizontalScrollBarVisible ? 30:0;
+                return defaultWidth - scrollBarSize;
             }
         }
 
         public double DefaultItemHeight {
             get {
-                double minSize;
+                double defaultHeight;
                 if (LayoutType == MpAvClipTrayLayoutType.Stack) {
-                    minSize = ListOrientation == Orientation.Horizontal ?
-                                    (ClipTrayScreenHeight * ZoomFactor) :
-                                    (ClipTrayScreenWidth * ZoomFactor);
+                    //defaultHeight = ListOrientation == Orientation.Horizontal ?
+                    //                (ClipTrayScreenHeight * ZoomFactor) :
+                    //                (ClipTrayScreenWidth * ZoomFactor);
+                    defaultHeight = 260.0d * ZoomFactor;
                 } else {
-                    minSize = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds.Width *
+                    defaultHeight = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds.Width *
                                 ZoomFactor * MIN_SIZE_ZOOM_FACTOR_COEFF;
                 }
-                double scrollBarSize = 30;// IsVerticalScrollBarVisible ? 30 : 0;
-                return minSize - scrollBarSize;
+                double scrollBarSize = ScrollBarFixedAxisSize;// IsVerticalScrollBarVisible ? 30 : 0;
+                return defaultHeight - scrollBarSize;
             }
         }
 
         public MpSize DefaultItemSize => new MpSize(DefaultItemWidth, DefaultItemHeight);
+
+        public double ScrollBarFixedAxisSize => 30;
 
         #endregion
 
@@ -852,8 +870,8 @@ namespace MonkeyPaste.Avalonia {
         public List<MpCopyItem> PersistentSelectedModels { get; set; } = new List<MpCopyItem>();
 
         private List<int> _persistentEditableTiles_ById { get; set; } = new List<int>();
-        private Dictionary<int, Size> _persistentUniqueTileSizeLookup_ById { get; set; } = new Dictionary<int, Size>();
-        private Dictionary<int, Size> _persistentUniqueTileSizeLookup_ByIdx { get; set; } = new Dictionary<int, Size>();
+        private Dictionary<int, MpSize> _persistentUniqueTileSizeLookup_ById { get; set; } = new Dictionary<int, MpSize>();
+        private Dictionary<int, MpSize> _persistentUniqueTileSizeLookup_ByIdx { get; set; } = new Dictionary<int, MpSize>();
         //<CopyItemId, Unique ItemWidth> unique is != to MpMeausrements.Instance.ClipTileMinSize
         //public Dictionary<int, double> PersistentUniqueWidthTileLookup => _persistentUniqueWidthTileLookup;
 
@@ -877,7 +895,7 @@ namespace MonkeyPaste.Avalonia {
             return _persistentEditableTiles_ById.Contains(ciid);
         }
 
-        public void AddOrReplacePersistentSize_ById(int ciid, Size uniqueSize) {
+        public void AddOrReplacePersistentSize_ById(int ciid, MpSize uniqueSize) {
             _persistentUniqueTileSizeLookup_ById.AddOrReplace(ciid, uniqueSize);
             
             int queryOffset = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.FastIndexOf(ciid);
@@ -898,10 +916,13 @@ namespace MonkeyPaste.Avalonia {
             _persistentUniqueTileSizeLookup_ByIdx.Remove(queryOffset);
         }
 
-        public bool TryGetByPersistentSize_ById(int ciid, out Size uniqueSize) {
+        public bool TryGetByPersistentSize_ById(int ciid, out MpSize uniqueSize) {
             return _persistentUniqueTileSizeLookup_ById.TryGetValue(ciid, out uniqueSize);
         }
 
+        public bool IsTileHaveUniqueSize(int ciid) {
+            return _persistentUniqueTileSizeLookup_ById.TryGetValue(ciid, out MpSize uniqueSize);
+        }
         public void ClearPersistentWidths() {
             _persistentUniqueTileSizeLookup_ByIdx.Clear();
             _persistentUniqueTileSizeLookup_ById.Clear();
@@ -1073,9 +1094,11 @@ namespace MonkeyPaste.Avalonia {
             return $"ClipTray";
         }
 
-        public void RefreshLayout() {
+        public void RefreshLayout(MpAvClipTileViewModel fromItem = null) {
             FindTotalTileSize();
-            UpdateTileRectCommand.Execute(HeadItem);
+
+            fromItem = fromItem == null ? HeadItem : fromItem;
+            UpdateTileRectCommand.Execute(fromItem);
 
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.MinSize)));
             //OnPropertyChanged(nameof(ClipTrayScreenHeight));
@@ -1094,10 +1117,11 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsVerticalScrollBarVisible));
         }
         public void ForceScrollOffsetX(double newOffsetX, bool isSilent = false) {
-            _scrollOffsetX = LastScrollOffsetX = newOffsetX;
-            if(newOffsetX < 0 || newOffsetX > MaxScrollOffsetX) {
-                //Debugger.Break();
+            if (newOffsetX < 0 || newOffsetX > MaxScrollOffsetX) {
+                Debugger.Break();
             }
+            //newOffsetX = Math.Min(MaxScrollOffsetX, Math.Max(0, newOffsetX));
+            _scrollOffsetX = LastScrollOffsetX = newOffsetX;
             if(isSilent) {
                 return;
             }
@@ -1105,10 +1129,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void ForceScrollOffsetY(double newOffsetY, bool isSilent = false) {
-            _scrollOffsetY = LastScrollOffsetY = newOffsetY;
             if (newOffsetY < 0 || newOffsetY > MaxScrollOffsetY) {
-                //Debugger.Break();
+                Debugger.Break();
             }
+            //newOffsetY = Math.Min(MaxScrollOffsetY, Math.Max(0, newOffsetY));
+            _scrollOffsetY = LastScrollOffsetY = newOffsetY;
             if (isSilent) {
                 return;
             }
@@ -1119,7 +1144,7 @@ namespace MonkeyPaste.Avalonia {
             ForceScrollOffsetY(newOffset.Y, isSilent);
         }
 
-        public void SetScrollAnchor() {
+        public void SetScrollAnchor(bool isLayoutChangeToGrid = false) {
             // this keeps track of the first screen visible tile 
             // so when orientation or zoom is changed relative offset is retained
             // in conjunction w/ drop scroll anchor
@@ -1127,15 +1152,25 @@ namespace MonkeyPaste.Avalonia {
                 _anchor_query_idx = -1;
                 return;
             }
-            if(VisibleItems.Count() == 0) {
-                Debugger.Break();
+            if (isLayoutChangeToGrid) {
+                // when change is to grid change anchor to first element on fixed dimension of what the anchor was
+                var anchor_loc = Items.FirstOrDefault(x => x.QueryOffsetIdx == _anchor_query_idx).TrayLocation;
+                if (ListOrientation == Orientation.Horizontal) {
+                    _anchor_query_idx = Items.Where(x=>Math.Abs(x.TrayY - anchor_loc.Y) < 3).Aggregate((a, b) => a.TrayX < b.TrayX ? a : b).QueryOffsetIdx;
+                } else {
+                    _anchor_query_idx = Items.Where(x => Math.Abs(x.TrayX - anchor_loc.X) < 3).Aggregate((a, b) => a.TrayY < b.TrayY ? a : b).QueryOffsetIdx;
+                }
+                return;
+            }
+            if (VisibleItems.Count() == 0) {
+                //Debugger.Break();
                 LockScrollToAnchor();
+                if (VisibleItems.Count() == 0) {
+                    return;
+                }
             }
-            if (ListOrientation == Orientation.Horizontal) {
-                _anchor_query_idx = VisibleItems.Aggregate((a, b) => a.TrayX < b.TrayX ? a : b).QueryOffsetIdx;
-            } else {
-                _anchor_query_idx = VisibleItems.Aggregate((a, b) => a.TrayY < b.TrayY ? a : b).QueryOffsetIdx;
-            }
+            // finds visible tile closest to origin of tray
+            _anchor_query_idx = VisibleItems.Aggregate((a, b) => a.TrayLocation.Distance(MpPoint.Zero) < b.TrayLocation.Distance(MpPoint.Zero) ? a : b).QueryOffsetIdx;
             MpConsole.WriteLine("AnchorIdx: " + _anchor_query_idx);
         }
 
@@ -1194,10 +1229,10 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(ClipTrayTotalTileWidth):
                 case nameof(ClipTrayTotalHeight):
-                    //OnPropertyChanged(nameof(MaxScrollOffsetX));
-                    //OnPropertyChanged(nameof(MaxScrollOffsetY));
+                    OnPropertyChanged(nameof(MaxScrollOffsetX));
+                    OnPropertyChanged(nameof(MaxScrollOffsetY));
 
-                    //OnPropertyChanged(nameof(IsHorizontalScrollBarVisible));
+                    OnPropertyChanged(nameof(IsHorizontalScrollBarVisible));
                     OnPropertyChanged(nameof(IsVerticalScrollBarVisible));
                     break;
                 case nameof(ScrollOffsetX):
@@ -1223,7 +1258,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(DefaultItemSize):
-                    //AllItems.ForEach(x => x.OnPropertyChanged(nameof(x.MinSize)));
+                    AllItems.ForEach(x => x.OnPropertyChanged(nameof(x.MinSize)));
                     break;
                 case nameof(HasScrollVelocity):
                     MpCursor.IsCursorFrozen = HasScrollVelocity;
@@ -1241,15 +1276,14 @@ namespace MonkeyPaste.Avalonia {
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 // LAYOUT CHANGE
-                case MpMessageType.TrayLayoutChanged:
-                    //SetScrollAnchor();
-                    //ResetZoomFactorCommand.Execute(null);
-                    
+                case MpMessageType.TrayLayoutChanged:                    
                     RefreshLayout();
-                    LockScrollToAnchor();
-                    if(LayoutType == MpAvClipTrayLayoutType.Grid) {
-                        QueryCommand.Execute(ScrollOffset);
+                    if (LayoutType == MpAvClipTrayLayoutType.Grid) {
+
+                        SetScrollAnchor(true);
+                        QueryCommand.Execute(_anchor_query_idx);
                     } else {
+                        LockScrollToAnchor();
                         CheckLoadMore();
                     }
                     break;
@@ -1361,11 +1395,15 @@ namespace MonkeyPaste.Avalonia {
                 if (hi_ctvm == null) {
                     Debugger.Break();
                 }
-                double hi_diff = isScrollHorizontal ?
-                                    hi_ctvm.TrayRect.Right - ScrollOffsetX - ClipTrayScreenWidth :
-                                    hi_ctvm.TrayRect.Bottom - ScrollOffsetY - ClipTrayScreenHeight;
+                //double hi_diff = isScrollHorizontal ?
+                //                    hi_ctvm.TrayRect.Right - ScrollOffsetX - ClipTrayScreenWidth :
+                //                    hi_ctvm.TrayRect.Bottom - ScrollOffsetY - ClipTrayScreenHeight;
+                //bool addMoreToTail = hi_diff < 0;
+                bool addMoreToTail = ScreenRect.Contains(hi_ctvm.ScreenRect.BottomRight);// && !HeadItem.IsAnyCornerVisible;
 
-                if (hi_diff < 0) {
+                if (addMoreToTail) {
+                    MpConsole.WriteLine("Load more to tail");
+                    // when right (horizontal scroll) or bottom (vertical scroll) of high threshold tile is within viewport
                     QueryCommand.Execute(true);
                     if (!isLessZoom) {
                         return;
@@ -1379,11 +1417,15 @@ namespace MonkeyPaste.Avalonia {
                 if(lo_ctvm == null) {
                     Debugger.Break();
                 }
-                double lo_diff = isScrollHorizontal ?
-                                    lo_ctvm.TrayRect.Right - ScrollOffsetX :
-                                    lo_ctvm.TrayRect.Top - ScrollOffsetY;
+                //double lo_diff = isScrollHorizontal ?
+                //                    lo_ctvm.TrayRect.Right - ScrollOffsetX :
+                //                    lo_ctvm.TrayRect.Top - ScrollOffsetY;
+                //bool addMoreToHead = lo_diff > 0;
+                bool addMoreToHead = ScreenRect.Contains(lo_ctvm.ScreenRect.TopLeft);// && !TailItem.IsAnyCornerVisible;
 
-                if (lo_diff > 0) {
+                if (addMoreToHead) {
+                    MpConsole.WriteLine("Load more to head");
+                    // when right (horizontal scroll) or bottom (vertical scroll) of high threshold tile is within viewport
                     QueryCommand.Execute(false);
                     if (!isLessZoom) {
                         return;
@@ -1397,17 +1439,19 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand UpdateTileRectCommand => new MpCommand<object>(
             (args) => {
-                if(args is MpAvClipTileViewModel ctvm) {
-                    var trayRect = FindTileRect(ctvm.QueryOffsetIdx);
-                    ctvm.TrayLocation = trayRect.Location; 
-
-                    //Task.Run(() => {
-                    //    var trayRect = FindTileRect(ctvm.QueryOffsetIdx);
-                    //    Dispatcher.UIThread.Post(() => {
-                    //        ctvm.TrayLocation = trayRect.Position.ToPortablePoint();
-                    //    });
-                    //});
+                MpAvClipTileViewModel ctvm = null;
+                MpRect prevOffsetRect = null;
+                if(args is MpAvClipTileViewModel) {
+                    ctvm = args as MpAvClipTileViewModel;
+                } else if (args is object[] argParts) {
+                    ctvm = argParts[0] as MpAvClipTileViewModel;
+                    prevOffsetRect = argParts[1] as MpRect;
                 }
+                if(ctvm == null) {
+                    return;
+                }
+                var trayRect = FindTileRect(ctvm.QueryOffsetIdx, prevOffsetRect);
+                ctvm.TrayLocation = trayRect.Location;
             });
 
         public ICommand ToggleLayoutTypeCommand => new MpCommand(
@@ -2040,7 +2084,7 @@ namespace MonkeyPaste.Avalonia {
                                 continue;
                             }
                             ctvm.QueryOffsetIdx--;
-                            if (TryGetByPersistentSize_ById(ctvm.CopyItemId, out Size uniqueSize)) {
+                            if (TryGetByPersistentSize_ById(ctvm.CopyItemId, out MpSize uniqueSize)) {
                                 _persistentUniqueTileSizeLookup_ByIdx.Remove(ctvm.QueryOffsetIdx + 1);
                                 _persistentUniqueTileSizeLookup_ByIdx.Add(ctvm.QueryOffsetIdx, uniqueSize);
                             }
@@ -2604,7 +2648,7 @@ namespace MonkeyPaste.Avalonia {
                         // sub-query to data-specific (Id) offset
 
                         loadOffsetIdx = (int)offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg;
-                        var loadTileRect = FindTileRect(loadOffsetIdx);
+                        var loadTileRect = FindTileRect(loadOffsetIdx, null);
                         newScrollOffset = loadTileRect.Location;
                     } else if (isScrollJump) {
                         // sub-query to visual (scroll position) offset 
@@ -2655,6 +2699,7 @@ namespace MonkeyPaste.Avalonia {
                     Items.Clear();
                     ClearPersistentWidths();
 
+                    //RefreshLayout();
                     FindTotalTileSize();
 
                     OnPropertyChanged(nameof(TotalTilesInQuery));
@@ -2739,6 +2784,12 @@ namespace MonkeyPaste.Avalonia {
                         } else {
                             cur_ctvm = Items[i];
                         }
+                        if(isLoadMore && cur_ctvm.IsAnyCornerVisible) {
+                            //Debugger.Break();
+                            cur_ctvm = new MpAvClipTileViewModel(this);
+                            Items.Add(cur_ctvm);
+                        }
+
                         if (cur_ctvm.IsSelected) {
                             StoreSelectionState(cur_ctvm);
                             cur_ctvm.ClearSelection();
@@ -2755,12 +2806,12 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
 
-                while (Items.Any(x => x.IsAnyBusy)) {
-                    await Task.Delay(100);
-                }
+                //while (Items.Any(x => x.IsAnyBusy)) {
+                //    await Task.Delay(100);
+                //}
 
                 if (isSubQuery) {
-                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
+                    //Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
                 } else {
                     HasUserAlteredPinTrayWidth = false;
 
@@ -2785,6 +2836,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (!isSubQuery) {
                     //_scrollOffset = LastScrollOffsetX = 0;
+                    //ForceScrollOffset(MpPoint.Zero);
                     MpMessenger.SendGlobal<MpMessageType>(MpMessageType.RequeryCompleted);
 
                 } else if (isScrollJump || isOffsetJump) {
