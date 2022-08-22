@@ -10,8 +10,8 @@ namespace MonkeyPaste.Avalonia {
 
         public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture) {
             string op = "AND";
-            if (parameter != null && parameter.ToString() == "Or") {
-                op = "Or";
+            if (parameter != null && parameter.ToString().ToLower() == "or") {
+                op = "OR";
             }
 
             bool isTrue = op == "AND";
@@ -21,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
                         case "AND":
                             isTrue = isTrue && (bool)value;
                             break;
-                        case "Or":
+                        case "OR":
                             isTrue = isTrue || (bool)value;
                             break;
                     }

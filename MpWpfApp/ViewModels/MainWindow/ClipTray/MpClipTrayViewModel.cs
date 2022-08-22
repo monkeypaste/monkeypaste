@@ -1888,10 +1888,7 @@ namespace MpWpfApp {
                     ClearClipSelection();
                     MpDataModelProvider.ResetQuery();
 
-                    await MpDataModelProvider.RequeryAsync(
-                        0,
-                        MaxTileWidth,
-                        MpMeasurements.Instance.ClipTileMargin * 2);
+                    await MpDataModelProvider.QueryForTotalCountAsync();
 
                     
 

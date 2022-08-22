@@ -17,6 +17,10 @@ using System;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using System.Windows.Input;
+using Xamarin.Forms.Internals;
+using Avalonia.VisualTree;
+using System.Collections.Generic;
+using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvMenuExtension {
@@ -135,180 +139,183 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 DetachedToVisualHandler(element, null);
             }
-
-            void AttachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
-                if (s is Control control) {
-                    if (e == null) {
-                        control.AttachedToVisualTree += AttachedToVisualHandler;
-                    }
-                    control.DetachedFromVisualTree += DetachedToVisualHandler;
-                    //control.ContextMenu.ContextMenuOpening += ContextMenu_ContextMenuOpening;
-                    
-                    control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);         
-                }
-            }
-            void DetachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
-                if (s is Control control) {
-                    control.AttachedToVisualTree -= AttachedToVisualHandler;
-                    control.DetachedFromVisualTree -= DetachedToVisualHandler;
-                    control.RemoveHandler(Control.PointerPressedEvent, Control_PointerPressed);
-                }
-            }
-
-            void Control_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
-                if(sender is Control control) {
-                    if (GetIsEnabled(control)) {
-                        e.Handled = false;
-
-                        if (control.DataContext is MpISelectorItemViewModel sivm) {
-                            if (e.IsLeftPress(control) || GetSelectOnRightClick(control)) {
-                                sivm.Selector.SelectedItem = control.DataContext;
-                            }
-                        } else if (control.DataContext is MpISelectableViewModel svm) {
-                            if (e.IsLeftPress(control) || GetSelectOnRightClick(control)) {
-                                svm.IsSelected = true;
-                            }
-                        }
-
-                        MpMenuItemViewModel mivm = null;
-
-                        if (e.IsLeftPress(control)) {
-                            if(e.ClickCount == 2 && GetDoubleClickCommand(control) != null) {
-                                GetDoubleClickCommand(control).Execute(null);
-                            } else if(control.DataContext is MpIPopupMenuViewModel pumvm) {
-                                mivm = pumvm.PopupMenuViewModel;
-                            }                            
-                        } else if (e.IsRightPress(control)) {
-                            if (control.DataContext is MpIContextMenuViewModel cmvm) {
-                                mivm = cmvm.ContextMenuViewModel;
-                            }
-                        }
-
-                        if (mivm == null) {
-                            e.Handled = GetSuppressDefaultRightClick(control) && e.IsRightPress(control);                            
-                            SetIsOpen(control, false);
-                            return;
-                        }
-                        SetIsOpen(control, true);
-                        e.Handled = true;
-
-                        CancelEventHandler onOpenHandler = null;
-                        CancelEventHandler onCloseHandler = null;
-
-                        onCloseHandler = (s, e1) => {
-                            SetIsOpen(control, false);
-                            _cmInstance.ContextMenuClosing -= onCloseHandler;
-                            _cmInstance.ContextMenuOpening -= onOpenHandler;
-                            //_cmInstance = null;
-                            control.ContextMenu = null;
-                        };
-                        
-                        onOpenHandler = (s, e1) => {
-                            e1.Cancel = false;
-                        };
-
-                        _cmInstance.Items = mivm.SubItems.Where(x => x.IsVisible).Select(x => CreateMenuItem(x));
-                        _cmInstance.PlacementTarget = control;
-                        _cmInstance.PlacementAnchor = PopupAnchor.TopRight;
-                        _cmInstance.DataContext = mivm;
-
-                        _cmInstance.ContextMenuOpening += onOpenHandler;
-                        _cmInstance.ContextMenuClosing += onCloseHandler;
-
-                        _cmInstance.Open(MpAvMainWindow.Instance);
-                    }
-                }
-
-                Control CreateMenuItem(MpMenuItemViewModel mivm) {
-                    Control control = null;
-                    string itemType = new MpAvMenuItemDataTemplateSelector().GetTemplateName(mivm);
-
-                    switch (itemType) {
-                        case "CheckableMenuItemTemplate":
-                            control = new MenuItem() {
-                                Icon = new Border() {
-                                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                                    VerticalAlignment = VerticalAlignment.Stretch,
-                                    MinWidth = 20,
-                                    MinHeight = 20,
-                                    Background = mivm.IconHexStr.ToAvBrush(),
-                                    Child = new PathIcon() {
-                                        Data = MpPlatformWrapper.Services.PlatformResource.GetResource("CheckSvg") as StreamGeometry,
-                                        Foreground = Brushes.Black,
-                                        IsVisible = mivm.IsChecked
-                                    }
-                                },
-                                Header = mivm.Header,
-                                Items = mivm.SubItems == null ?
-                                    null :
-                                    mivm.SubItems.Where(x => x.IsVisible).Select(x => CreateMenuItem(x)),
-                                Command = mivm.Command,
-                                CommandParameter = mivm.CommandParameter,
-                                InputGesture = string.IsNullOrWhiteSpace(mivm.InputGestureText) ?
-                                    null :
-                                    KeyGesture.Parse(mivm.InputGestureText)
-                            };
-                            control.PointerEnter += Control_PointerEnter;
-                            control.PointerLeave += Control_PointerLeave;
-                            control.DetachedFromVisualTree += Control_DetachedFromVisualTree;
-
-                            if (mivm.SubItems == null || mivm.SubItems.Count == 0) {
-                                control.AddHandler(Control.PointerReleasedEvent, CheckableControl_PointerReleased, RoutingStrategies.Tunnel);
-                            }
-                            break;
-                        case "DefaultMenuItemTemplate":
-                            control = new MenuItem() {
-                                Icon = mivm.IconSourceObj == null ?
-                                    null :
-                                    new Image() {
-                                        HorizontalAlignment = HorizontalAlignment.Stretch,
-                                        VerticalAlignment = VerticalAlignment.Stretch,
-                                        Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(mivm.IconSourceObj, null, null, null) as Bitmap,
-                                    },
-                                Header = mivm.Header,
-                                Items = mivm.SubItems == null ?
-                                    null :
-                                    mivm.SubItems.Where(x => x.IsVisible).Select(x => CreateMenuItem(x)),
-                                Command = mivm.Command,
-                                CommandParameter = mivm.CommandParameter,
-                                InputGesture = string.IsNullOrWhiteSpace(mivm.InputGestureText) ?
-                                    null :
-                                    KeyGesture.Parse(mivm.InputGestureText)
-                            };
-                            control.PointerEnter += Control_PointerEnter;
-                            control.PointerLeave += Control_PointerLeave;
-                            control.DetachedFromVisualTree += Control_DetachedFromVisualTree;
-
-                            if (mivm.SubItems == null || mivm.SubItems.Count == 0) {
-                                control.AddHandler(Control.PointerReleasedEvent, Control_PointerReleased, RoutingStrategies.Tunnel);
-                            }
-                            break;
-                        case "SeperatorMenuItemTemplate":
-                            control = new MenuItem() {
-                                Header = "-"
-                            };
-                            break;
-                        case "ColorPalleteMenuItemTemplate":
-                            control = new MenuItem() {
-                                //DataContext = mivm,
-                                Header = new MpAvColorPaletteListBoxView() {
-                                    DataContext = mivm
-                                }
-                            };
-                            break;
-                        case "ColorPalleteItemMenuItemTemplate":
-
-                            break;
-                    }
-
-                    return control;
-                }
-            }
+            
 
         }
 
-        private static void ContextMenu_ContextMenuOpening(object sender, CancelEventArgs e) {
-            throw new NotImplementedException();
+        private static void AttachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+            if (s is Control control) {
+                if (e == null) {
+                    control.AttachedToVisualTree += AttachedToVisualHandler;
+                }
+                control.DetachedFromVisualTree += DetachedToVisualHandler;
+                //control.ContextMenu.ContextMenuOpening += ContextMenu_ContextMenuOpening;
+
+                control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
+            }
+        }
+        private static void DetachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+            if (s is Control control) {
+                control.AttachedToVisualTree -= AttachedToVisualHandler;
+                control.DetachedFromVisualTree -= DetachedToVisualHandler;
+                control.RemoveHandler(Control.PointerPressedEvent, Control_PointerPressed);
+            }
+        }
+
+        private static void Control_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
+            if (sender is Control control) {
+                if (GetIsEnabled(control)) {
+                    e.Handled = false;
+
+                    if (control.DataContext is MpISelectorItemViewModel sivm) {
+                        if (e.IsLeftPress(control) || GetSelectOnRightClick(control)) {
+                            sivm.Selector.SelectedItem = control.DataContext;
+                        }
+                    } else if (control.DataContext is MpISelectableViewModel svm) {
+                        if (e.IsLeftPress(control) || GetSelectOnRightClick(control)) {
+                            svm.IsSelected = true;
+                        }
+                    }
+
+                    MpMenuItemViewModel mivm = null;
+
+                    if (e.IsLeftPress(control)) {
+                        if (e.ClickCount == 2 && GetDoubleClickCommand(control) != null) {
+                            GetDoubleClickCommand(control).Execute(null);
+                        } else if (control.DataContext is MpIPopupMenuViewModel pumvm) {
+                            mivm = pumvm.PopupMenuViewModel;
+                        }
+                    } else if (e.IsRightPress(control)) {
+                        if (control.DataContext is MpIContextMenuViewModel cmvm) {
+                            mivm = cmvm.ContextMenuViewModel;
+                        }
+                    }
+
+                    if (mivm == null) {
+                        e.Handled = GetSuppressDefaultRightClick(control) && e.IsRightPress(control);
+                        SetIsOpen(control, false);
+                        return;
+                    }
+                    SetIsOpen(control, true);
+                    e.Handled = true;
+
+                    CancelEventHandler onOpenHandler = null;
+                    CancelEventHandler onCloseHandler = null;
+
+                    onCloseHandler = (s, e1) => {
+                        SetIsOpen(control, false);
+                        _cmInstance.ContextMenuClosing -= onCloseHandler;
+                        _cmInstance.ContextMenuOpening -= onOpenHandler;
+                        //_cmInstance = null;
+                        control.ContextMenu = null;
+                    };
+
+                    onOpenHandler = (s, e1) => {
+                        e1.Cancel = false;
+                    };
+
+                    _cmInstance.Items = mivm.SubItems.Where(x => x.IsVisible).Select(x => CreateMenuItem(x));
+                    _cmInstance.PlacementTarget = control;
+                    _cmInstance.PlacementAnchor = PopupAnchor.TopRight;
+                    _cmInstance.DataContext = mivm;
+
+                    _cmInstance.ContextMenuOpening += onOpenHandler;
+                    _cmInstance.ContextMenuClosing += onCloseHandler;
+                    
+                    _cmInstance.Open(MpAvMainWindow.Instance);
+                }
+            }
+
+            
+        }
+        private static Control CreateMenuItem(MpMenuItemViewModel mivm) {
+            Control control = null;
+            string itemType = new MpAvMenuItemDataTemplateSelector().GetTemplateName(mivm);
+
+            switch (itemType) {
+                case "CheckableMenuItemTemplate":
+                    control = new MenuItem() {
+                        Icon = new Border() {
+                            HorizontalAlignment = HorizontalAlignment.Stretch,
+                            VerticalAlignment = VerticalAlignment.Stretch,
+                            MinWidth = 20,
+                            MinHeight = 20,
+                            Background = mivm.IconHexStr.ToAvBrush(),
+                            Child = new PathIcon() {
+                                Data = MpPlatformWrapper.Services.PlatformResource.GetResource("CheckSvg") as StreamGeometry,
+                                Foreground = Brushes.Black,
+                                IsVisible = mivm.IsChecked
+                            }
+                        },
+                        Header = mivm.Header,
+                        Items = mivm.SubItems == null ?
+                            null :
+                            mivm.SubItems.Where(x => x.IsVisible).Select(x => CreateMenuItem(x)),
+                        Command = mivm.Command,
+                        CommandParameter = mivm.CommandParameter,
+                        InputGesture = string.IsNullOrWhiteSpace(mivm.InputGestureText) ?
+                            null :
+                            KeyGesture.Parse(mivm.InputGestureText),
+                        DataContext = mivm
+                    };
+                    
+                    control.PointerEnter += Control_PointerEnter;
+                    control.PointerLeave += Control_PointerLeave;
+                    control.DetachedFromVisualTree += Control_DetachedFromVisualTree;
+
+                    if (mivm.SubItems == null || mivm.SubItems.Count == 0) {
+                        control.AddHandler(Control.PointerReleasedEvent, CheckableControl_PointerReleased, RoutingStrategies.Tunnel);
+                    }
+                    break;
+                case "DefaultMenuItemTemplate":
+                    control = new MenuItem() { 
+                        Icon = mivm.IconSourceObj == null ?
+                            null :
+                            new Image() {
+                                HorizontalAlignment = HorizontalAlignment.Stretch,
+                                VerticalAlignment = VerticalAlignment.Stretch,
+                                Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(mivm.IconSourceObj, null, null, null) as Bitmap,
+                            },
+                        Header = mivm.Header,
+                        Items = mivm.SubItems == null ?
+                            null :
+                            mivm.SubItems.Where(x => x.IsVisible).Select(x => CreateMenuItem(x)),
+                        Command = mivm.Command,
+                        CommandParameter = mivm.CommandParameter,
+                        InputGesture = string.IsNullOrWhiteSpace(mivm.InputGestureText) ?
+                            null :
+                            KeyGesture.Parse(mivm.InputGestureText),
+                        DataContext = mivm
+                    };
+                    
+                    control.PointerEnter += Control_PointerEnter;
+                    control.PointerLeave += Control_PointerLeave;
+                    control.DetachedFromVisualTree += Control_DetachedFromVisualTree;
+
+                    if (mivm.SubItems == null || mivm.SubItems.Count == 0) {
+                        control.AddHandler(Control.PointerReleasedEvent, Control_PointerReleased, RoutingStrategies.Tunnel);
+                    }
+                    break;
+                case "SeperatorMenuItemTemplate":
+                    control = new MenuItem() {
+                        Header = "-",
+                        DataContext = mivm
+                    };
+                    break;
+                case "ColorPalleteMenuItemTemplate":
+                    control = new MenuItem() {
+                        //DataContext = mivm,
+                        Header = new MpAvColorPaletteListBoxView() {
+                            DataContext = mivm
+                        },
+                        DataContext = mivm
+                    };
+                    break;
+                case "ColorPalleteItemMenuItemTemplate":
+
+                    break;
+            }
+            return control;
         }
 
         private static void Control_PointerReleased(object sender, PointerReleasedEventArgs e) {
@@ -340,16 +347,46 @@ namespace MonkeyPaste.Avalonia {
         private static void Control_PointerLeave(object sender, PointerEventArgs e) {
             if (sender is MenuItem mi) {
                 mi.Background = Brushes.Transparent;
+                mi.GetVisualAncestor<Panel>().Background = "#FFF2F2F2".ToAvBrush();
+                //mi.Close();
+                //mi.IsSubMenuOpen = false;
             }
         }
-
         private static void Control_PointerEnter(object sender, PointerEventArgs e) {
             if (sender is MenuItem mi) {
+                mi.IsSubMenuOpen = true;
+                //mi.GetVisualAncestor<Panel>().Background = Brushes.LightBlue;
+                if (mi.DataContext is MpMenuItemViewModel mivm) {
+                    var parents = new List<MenuItem>();
+                    object parent = mi.Parent;
+                    while (parent != null) {
+                        if (parent is MenuItem) {
+                            parents.Add(parent as MenuItem);
+                        }
+                        parent = (parent as Control).Parent;
+                    }
+                    //return;
+                    foreach (var rmi in _cmInstance.Items) {
+                        if (rmi is MenuItem) {
+                            if (parents.Contains((rmi as MenuItem))) {
+                                continue;
+                            }
+                            (rmi as MenuItem).IsSubMenuOpen = false;
+                            (rmi as MenuItem).Close();
+                        }
+                    }
+
+                    if (mivm.SubItems != null && mivm.SubItems.Count > 0) {
+                        //var cm = mi.GetVisualAncestor<ContextMenu>();
+                        
+
+                       // mi.Open();
+                    }
+                }
                 mi.Background = Brushes.LightBlue;
             }
         }
     
-        
 
         #endregion
 
@@ -359,6 +396,14 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvContextMenuCloser : MpIContextMenuCloser {
         public void CloseMenu() {
             MpAvMenuExtension.CloseMenu();
+        }
+    }
+
+    [DoNotNotify]
+    class TestContextMenu : ContextMenu {
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
+            base.OnAttachedToVisualTree(e);
+            (this.VisualRoot as PopupRoot).AttachDevTools();
         }
     }
 }

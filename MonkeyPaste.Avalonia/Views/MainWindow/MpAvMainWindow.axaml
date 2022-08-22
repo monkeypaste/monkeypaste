@@ -97,10 +97,10 @@
                 </GridSplitter.IsVisible>
             </GridSplitter>
 
-            <local:MpAvClipTrayView x:Name="ClipTrayView"
-                                    Grid.Column="2"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch" />
+            <local:MpAvClipTrayContainerView x:Name="ClipTrayContainerView"
+                                             Grid.Column="2"
+                                             HorizontalAlignment="Stretch"
+                                             VerticalAlignment="Stretch" />
         </Grid>
 
         <!--  Resize Handle  -->

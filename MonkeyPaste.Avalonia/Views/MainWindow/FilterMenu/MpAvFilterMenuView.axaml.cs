@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
-using Mechanism.AvaloniaUI.Controls;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvFilterMenuView : MpAvUserControl<MpAvFilterMenuViewModel> {
-        List<ToolBar> toolbars = new List<ToolBar>();
+        //List<ToolBar> toolbars = new List<ToolBar>();
         public MpAvFilterMenuView() {
             InitializeComponent();
             MpAvTagTrayViewModel.Instance.PinnedItems.CollectionChanged += PinnedItems_CollectionChanged;
@@ -29,29 +28,29 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void PinnedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            toolbars.ForEach(x => x.InvalidateAll());
+            //toolbars.ForEach(x => x.InvalidateAll());
         }
 
         private void Tb_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
-            var tb = sender as ToolBar;
-            if(tb.Content is Control control) {
-                switch(control.Tag as string) {
-                    case "Search":
-                        MpAvSearchBoxViewModel.Instance.SearchBoxViewWidth = tb.Bounds.Width;
-                        break;
-                    case "Sort":
-                        MpAvClipTileSortViewModel.Instance.ClipTileSortViewWidth = tb.Bounds.Width;
-                        break;
-                    case "PlayPause":
-                        MpAvClipTrayViewModel.Instance.PlayPauseButtonWidth = tb.Bounds.Width;
-                        break;
-                }
-            }
+            //var tb = sender as ToolBar;
+            //if(tb.Content is Control control) {
+            //    switch(control.Tag as string) {
+            //        case "Search":
+            //            MpAvSearchBoxViewModel.Instance.SearchBoxViewWidth = tb.Bounds.Width;
+            //            break;
+            //        case "Sort":
+            //            MpAvClipTileSortViewModel.Instance.ClipTileSortViewWidth = tb.Bounds.Width;
+            //            break;
+            //        case "PlayPause":
+            //            MpAvClipTrayViewModel.Instance.PlayPauseButtonWidth = tb.Bounds.Width;
+            //            break;
+            //    }
+            //}
 
-            var tttb = toolbars.FirstOrDefault(x => x.Content is Control control && control.Tag.ToString() == "TagTray");
-            if(tttb != null) {
-                tttb.Width = MpAvTagTrayViewModel.Instance.TagTrayScreenWidth;
-            }
+            //var tttb = toolbars.FirstOrDefault(x => x.Content is Control control && control.Tag.ToString() == "TagTray");
+            //if(tttb != null) {
+            //    tttb.Width = MpAvTagTrayViewModel.Instance.TagTrayScreenWidth;
+            //}
         }
 
         private void InitializeComponent() {

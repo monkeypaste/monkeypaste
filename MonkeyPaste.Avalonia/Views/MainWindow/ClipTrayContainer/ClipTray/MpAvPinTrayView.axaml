@@ -1,0 +1,60 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="local:MpAvClipTrayViewModel"
+                       x:DataType="local:MpAvClipTrayViewModel"
+                       x:CompileBindings="True"
+                       DataContext="{x:Static local:MpAvClipTrayViewModel.Instance}"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvPinTrayView">
+    <Grid HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch">
+        <Grid.Background>
+            <SolidColorBrush Color="Salmon"
+                             Opacity="0.7" />
+        </Grid.Background>
+        <ListBox x:Name="PinTrayListBox"
+                 BorderThickness="0"
+                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 Background="Transparent"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Stretch"
+                 Items="{Binding PinnedItems}">
+
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem"
+                       x:DataType="local:MpAvClipTileViewModel">
+                    <Setter Property="Margin"
+                            Value="{Binding OuterSpacing}" />
+                    <Setter Property="Padding"
+                            Value="{Binding InnerSpacing}" />
+                    <Setter Property="Width"
+                            Value="{Binding BoundWidth}" />
+                    <Setter Property="Height"
+                            Value="{Binding BoundHeight}" />
+                    <Setter Property="IsSelected"
+                            Value="{Binding IsSelected, Mode=TwoWay}" />
+                </Style>
+            </ListBox.Styles>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <local:MpAvClipTileView DataContext="{Binding}"
+                                            IsVisible="{Binding IsPinned}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel HorizontalAlignment="Stretch"
+                               VerticalAlignment="Stretch"
+                               Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
+    </Grid>
+</local:MpAvUserControl>

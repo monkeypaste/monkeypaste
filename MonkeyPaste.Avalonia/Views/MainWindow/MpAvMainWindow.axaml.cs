@@ -263,7 +263,7 @@ namespace MonkeyPaste.Avalonia {
 
             var mwtg = this.FindControl<Grid>("MainWindowTrayGrid");
             var sbv = this.FindControl<MpAvSidebarView>("SidebarView");
-            var ctrv = this.FindControl<MpAvClipTrayView>("ClipTrayView");
+            var ctrv = this.FindControl<MpAvClipTrayContainerView>("ClipTrayContainerView");
             var ttv = this.FindControl<MpAvTagTreeView>("TagTreeView");
             var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");            
 

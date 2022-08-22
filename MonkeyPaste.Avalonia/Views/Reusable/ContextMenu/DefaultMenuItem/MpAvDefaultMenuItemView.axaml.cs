@@ -8,7 +8,7 @@ using System;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvDefaultMenuItemView : MenuItem, IStyleable {
+    public partial class MpAvDefaultMenuItemView : MpAvUserControl<MpMenuItemViewModel>, IStyleable {
         Type IStyleable.StyleKey => typeof(MenuItem);
         public MpAvDefaultMenuItemView() {
             InitializeComponent();

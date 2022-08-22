@@ -33,12 +33,10 @@ namespace MonkeyPaste {
         }
 
         public static ObservableCollection<int> AllFetchedAndSortedCopyItemIds { get; private set; } = new ObservableCollection<int>();
+        public static ObservableCollection<int> AvailableQueryCopyItemIds { get; private set; } = new ObservableCollection<int>();
 
-        public static ObservableCollection<double> AllFetchedAndSortedTileOffsets { get; private set; } = new ObservableCollection<double>();
 
-        public static int TotalTilesInQuery => AllFetchedAndSortedCopyItemIds.Count;
-
-        public static double TotalTileWidth_WithoutMargins { get; set; }
+        public static int TotalTilesInQuery => AvailableQueryCopyItemIds.Count;
 
         #endregion
 
@@ -58,7 +56,7 @@ namespace MonkeyPaste {
 
         public static void ResetQuery() {
             AllFetchedAndSortedCopyItemIds.Clear();
-            AllFetchedAndSortedTileOffsets.Clear();
+            AvailableQueryCopyItemIds.Clear();
 
             _lastResult = new List<MpCopyItem>();
         }
@@ -76,47 +74,9 @@ namespace MonkeyPaste {
 
         #region MpQueryInfo Fetch Methods      
         
-        public static async Task<double> RequeryAsync(double minWidth, double maxWidth, double marginWidth) {
-            string viewQueryStr = await QueryForTotalCountAsync();
-            //double totalWidth = await QueryForOffsetPositions(viewQueryStr, minWidth, maxWidth, marginWidth);
-            //return totalWidth;
-            return 0;
-        }
+        public static async Task<string> QueryForTotalCountAsync(IEnumerable<int> idsToOmit = null) {
+            idsToOmit = idsToOmit == null ? new List<int>() : idsToOmit;
 
-        public static async Task<double> QueryForOffsetPositionsAsync(string viewQueryStr, double minWidth, double maxWidth, double marginWidth) {
-            AllFetchedAndSortedTileOffsets.Clear();
-
-            string minWhenStr = $"when ItemWidth < {minWidth} then {minWidth} + {marginWidth}";
-            string maxWhenStr = $"when ItemWidth > {maxWidth} then {maxWidth} + {marginWidth}";
-            string elseStr = $"else ItemWidth + {marginWidth}";
-
-            string caseStr = $"case {minWhenStr} {maxWhenStr} {elseStr} END";
-
-            int rootIdStartIdx = viewQueryStr.IndexOf("RootId");
-            string pre = viewQueryStr.Substring(0, rootIdStartIdx);
-            string post = viewQueryStr.Substring(rootIdStartIdx + "RootId".Length);
-            string itemWidthQueryStr = pre + caseStr + post;
-
-            var widths = await MpDb.QueryScalarsAsync<double>(itemWidthQueryStr);
-
-            double curOffset = 0.0d;
-            for (int i = 0; i < widths.Count; i++) {
-                if(i == 0) {
-                    AllFetchedAndSortedTileOffsets.Add(0);
-                    continue;
-                }
-                curOffset += widths[i - 1];
-                AllFetchedAndSortedTileOffsets.Add(curOffset);
-            }
-
-            //string totalWidthQueryStr = pre + $"SUM({caseStr})" + post;
-
-            //double totalWidth = await MpDb.QueryScalarAsync<double>(totalWidthQueryStr);
-            //return totalWidth;
-            return AllFetchedAndSortedTileOffsets[AllFetchedAndSortedTileOffsets.Count - 1] + widths[widths.Count - 1];
-        }
-
-        public static async Task<string> QueryForTotalCountAsync() {
             string viewQueryStr = string.Empty;
             AllFetchedAndSortedCopyItemIds.Clear();
 
@@ -176,25 +136,16 @@ namespace MonkeyPaste {
                     AllFetchedAndSortedCopyItemIds = new ObservableCollection<int>(idl.Distinct());
                 }
             }
-            
-            QueryInfo.TotalItemsInQuery = AllFetchedAndSortedCopyItemIds.Count;
+            AvailableQueryCopyItemIds =  new ObservableCollection<int>(AllFetchedAndSortedCopyItemIds.Where(x => !idsToOmit.Contains(x)));
+            QueryInfo.TotalItemsInQuery = AvailableQueryCopyItemIds.Count;
+
             return viewQueryStr;
         }
 
-        public static async Task<List<MpCopyItem>> FetchCopyItemRangeAsync(
-            int startIndex, 
-            int count) {
-            var fetchRange = AllFetchedAndSortedCopyItemIds.GetRange(startIndex, count);
-            var items = await GetCopyItemsByIdListAsync(fetchRange);
-            if (items.Count == 0 && startIndex + count < AllFetchedAndSortedCopyItemIds.Count) {
-                MpConsole.WriteTraceLine("Bad data detected for ids: " + string.Join(",", fetchRange));
-            }
-            return items;
-        }
 
         public static async Task<List<MpCopyItem>> FetchCopyItemsByQueryIdxListAsync(
             List<int> copyItemQueryIdxList) {
-            var fetchRootIds = AllFetchedAndSortedCopyItemIds
+            var fetchRootIds = AvailableQueryCopyItemIds
                                 .Select((val, idx) => (val, idx))
                                 .Where(x => copyItemQueryIdxList.Contains(x.idx))
                                 .Select(x => x.val).ToList();
@@ -1150,54 +1101,11 @@ namespace MonkeyPaste {
             }
             int itemIdx = AllFetchedAndSortedCopyItemIds.IndexOf(copyItemId);
             AllFetchedAndSortedCopyItemIds.Remove(copyItemId);
+            AvailableQueryCopyItemIds.Remove(copyItemId);
 
             MpConsole.WriteLine($"QueryItem {copyItemId} was removed from [{itemIdx}]");
 
             return null;
-        }
-
-        public static void MoveQueryItem(int copyItemId, int newIdx) {
-            if (!AllFetchedAndSortedCopyItemIds.Contains(copyItemId)) {
-                throw new Exception("Query does not contain item " + copyItemId);
-            }
-            int oldIdx = AllFetchedAndSortedCopyItemIds.IndexOf(copyItemId);
-            AllFetchedAndSortedCopyItemIds.Move(oldIdx, newIdx);
-            MpConsole.WriteLine($"QueryItem {copyItemId} moved from [{oldIdx}] to [{newIdx}]");
-        }
-
-        public static void InsertQueryItem(int copyItemId, int newIdx) {
-            if (AllFetchedAndSortedCopyItemIds.Contains(copyItemId)) {
-                int oldIdx = AllFetchedAndSortedCopyItemIds.IndexOf(copyItemId);
-                if (newIdx > oldIdx) {
-                    newIdx--;
-                }
-                AllFetchedAndSortedCopyItemIds.RemoveAt(oldIdx);                
-            }
-            if(newIdx < 0) {
-                throw new Exception($"Idx must be >= 0, was [{newIdx}]");
-            }
-            if (newIdx > AllFetchedAndSortedCopyItemIds.Count) {
-                throw new Exception($"Idx must be < item count ({AllFetchedAndSortedCopyItemIds.Count}), idx was [{newIdx}]");
-            }
-            if (newIdx == AllFetchedAndSortedCopyItemIds.Count) {
-                AllFetchedAndSortedCopyItemIds.Add(copyItemId);
-            } else {
-                AllFetchedAndSortedCopyItemIds.Insert(newIdx,copyItemId);
-            }
-            MpConsole.WriteLine($"QueryItem {copyItemId} was inserted at idx [{newIdx}]");            
-        }
-
-        public static void SwapQueryItem(int queryOffsetIdx, int copyItemId) {
-            if (queryOffsetIdx < 0) {
-                throw new Exception($"Idx must be >= 0, was [{queryOffsetIdx}]");
-            }
-            if (queryOffsetIdx >= AllFetchedAndSortedCopyItemIds.Count) {
-                throw new Exception($"Idx must be < item count ({AllFetchedAndSortedCopyItemIds.Count}), idx was [{queryOffsetIdx}]");
-            }
-            int oldItemId = AllFetchedAndSortedCopyItemIds[queryOffsetIdx];
-            AllFetchedAndSortedCopyItemIds[queryOffsetIdx] = copyItemId;
-
-            MpConsole.WriteLine($"QueryItem {oldItemId} was swapped for {copyItemId} at idx [{queryOffsetIdx}]");
         }
 
     }

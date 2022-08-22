@@ -576,7 +576,7 @@ namespace MonkeyPaste.Avalonia {
             bool isFindTileRect = !isFindTileIdx && queryOffsetIdx >= 0;
             bool isFindTotalSize = !isFindTileRect;
             
-            int totalTileCount = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.Count;
+            int totalTileCount = MpDataModelProvider.AvailableQueryCopyItemIds.Count;
             queryOffsetIdx = isFindTotalSize ? TotalTilesInQuery - 1 : queryOffsetIdx;
             int startIdx = 0;// prevOffsetRect == null ? 0 : queryOffsetIdx;
 
@@ -586,14 +586,14 @@ namespace MonkeyPaste.Avalonia {
             MpRect last_rect = null;// prevOffsetRect;
 
             for (int i = startIdx; i <= queryOffsetIdx; i++) {
-                int tileId = MpDataModelProvider.AllFetchedAndSortedCopyItemIds[i];
+                int tileId = MpDataModelProvider.AvailableQueryCopyItemIds[i];
                 if (PinnedItems.Any(x => x.CopyItemId == tileId)) {
                     continue;
                 }
 
                 MpSize tile_size = DefaultItemSize;
-                if (TryGetByPersistentSize_ById(tileId, out MpSize uniqueSize)) {
-                    tile_size = uniqueSize;
+                if (TryGetByPersistentSize_ById(tileId, out double uniqueSize)) {
+                    tile_size.Width = uniqueSize;
                 }
 
                 MpPoint tile_offset = null;
@@ -700,96 +700,6 @@ namespace MonkeyPaste.Avalonia {
             return -1;
         }
 
-        //public double FindTileOffsetX2(int queryOffsetIdx) {
-        //    int totalTileCount = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.Count;
-        //    if (totalTileCount <= 0) {
-        //        return 0;
-        //    }
-        //    queryOffsetIdx = Math.Max(0, Math.Min(queryOffsetIdx, totalTileCount - 1));
-
-        //    var headItemIds = MpDataModelProvider.AllFetchedAndSortedCopyItemIds;
-
-        //    double offsetX = 0;
-        //    for (int i = 1; i <= queryOffsetIdx; i++) {
-        //        int tileHeadId = headItemIds[i - 1];
-        //        if (PinnedItems.Any(x => x.CopyItemId == tileHeadId)) {
-        //            continue;
-        //        }
-        //        offsetX += MpMeasurements.Instance.ClipTileMargin * 2;
-
-        //        if (TryGetByPersistentWidthById(tileHeadId, out double uniqueWidth)) {
-        //            offsetX += uniqueWidth;
-        //        } else {
-        //            offsetX += MpAvClipTileViewModel.DefaultBorderWidth;
-
-        //        }
-        //    }
-        //    return offsetX;
-        //}
-        public double FindTileOffsetX(int queryOffsetIdx) {
-            // get count of all items in current query that can affect offset
-            //int totalTileCount = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.Count;
-            //if (totalTileCount <= 0 || queryOffsetIdx <= 0) {
-            //    // offset 0 will always be at x = 0
-            //    return 0;
-            //}
-
-            //var item = Items.FirstOrDefault(x => x.QueryOffsetIdx == queryOffsetIdx && x.CopyItemTitle == "Untitled2636");
-
-            //// ensure the check is clamped to within the count
-            //queryOffsetIdx = Math.Max(0, Math.Min(queryOffsetIdx, totalTileCount - 1));
-
-            //var relevantUniqueWidthLookup = _persistentUniqueWidthQueryOffsetLookup
-            //                                    .Where(x =>
-            //                                        PinnedItems.All(y => y.QueryOffsetIdx != x.Key) &&
-            //                                        x.Key < queryOffsetIdx)
-            //                                    .ToDictionary(k => k.Key, v => v.Value);
-
-            //int uniqueWidthCount = relevantUniqueWidthLookup.Count;
-
-            //int relevantPinnedDefaultWidthCount = PinnedItems.Where(x => x.QueryOffsetIdx >= 0 && x.QueryOffsetIdx < queryOffsetIdx).Count();
-            //double uniqueWidthSum = (uniqueWidthCount * (MpMeasurements.Instance.ClipTileMargin * 2)) + relevantUniqueWidthLookup.Sum(x => x.Value);
-
-            //int defaultWidthCount = Math.Max(0, queryOffsetIdx - uniqueWidthCount - relevantPinnedDefaultWidthCount);
-
-            //double defaultItemWidthWithMargin = (MpMeasurements.Instance.ClipTileMargin * 2) + MpAvClipTileViewModel.DefaultBorderWidth;
-            //double defaultWidthSum = defaultWidthCount * defaultItemWidthWithMargin;
-
-            //double offsetX = uniqueWidthSum + defaultWidthSum;
-            //return offsetX;
-            return 0;
-        }
-
-
-        public int FindJumpTileIdx(double trackValue) {
-
-            //int totalTileCount = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.Count;
-            //var headItemIds = MpDataModelProvider.AllFetchedAndSortedCopyItemIds;
-
-            //double offsetX = 0;
-            //for (int i = 0; i < totalTileCount; i++) {
-            //    if (PinnedItems.Any(x => x.QueryOffsetIdx == i)) {
-            //        continue;
-            //    }
-            //    offsetX += MpMeasurements.Instance.ClipTileMargin;
-
-
-            //    if (_persistentUniqueWidthQueryOffsetLookup.TryGetValue(i, out double uniqueWidth)) {
-            //        offsetX += uniqueWidth;
-            //    } else {
-            //        offsetX += MpAvClipTileViewModel.DefaultBorderWidth;
-            //    }
-
-            //    if (offsetX >= trackValue) {
-            //        return i;
-            //    }
-            //    offsetX += MpMeasurements.Instance.ClipTileMargin;
-            //}
-
-            //return totalTileCount - 1;
-            return 0;
-        }
-
         #region Default Tile Layout 
 
 
@@ -870,14 +780,8 @@ namespace MonkeyPaste.Avalonia {
         public List<MpCopyItem> PersistentSelectedModels { get; set; } = new List<MpCopyItem>();
 
         private List<int> _persistentEditableTiles_ById { get; set; } = new List<int>();
-        private Dictionary<int, MpSize> _persistentUniqueTileSizeLookup_ById { get; set; } = new Dictionary<int, MpSize>();
-        private Dictionary<int, MpSize> _persistentUniqueTileSizeLookup_ByIdx { get; set; } = new Dictionary<int, MpSize>();
-        //<CopyItemId, Unique ItemWidth> unique is != to MpMeausrements.Instance.ClipTileMinSize
-        //public Dictionary<int, double> PersistentUniqueWidthTileLookup => _persistentUniqueWidthTileLookup;
-
-        // THIS Lookup is passive and only changed when PersistentUniqueWidthTileLookup is changed
-        //<QueryOffsetIdx, Unique ItemWidth> unique is != to MpMeausrements.Instance.ClipTileMinSize
-        //public Dictionary<int, double> PersistentUniqueWidthQueryOffsetLookup => _persistentUniqueWidthQueryOffsetLookup;
+        private Dictionary<int, double> _persistentUniqueTileSizeLookup_ById { get; set; } = new Dictionary<int, double>();
+        private Dictionary<int, double> _persistentUniqueTileSizeLookup_ByIdx { get; set; } = new Dictionary<int, double>();
 
         public void AddPersistentEditableTile_ById(int ciid) { 
             if(_persistentEditableTiles_ById.Contains(ciid)) {
@@ -895,10 +799,10 @@ namespace MonkeyPaste.Avalonia {
             return _persistentEditableTiles_ById.Contains(ciid);
         }
 
-        public void AddOrReplacePersistentSize_ById(int ciid, MpSize uniqueSize) {
+        public void AddOrReplacePersistentSize_ById(int ciid, double uniqueSize) {
             _persistentUniqueTileSizeLookup_ById.AddOrReplace(ciid, uniqueSize);
             
-            int queryOffset = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.FastIndexOf(ciid);
+            int queryOffset = MpDataModelProvider.AvailableQueryCopyItemIds.FastIndexOf(ciid);
             if (queryOffset < 0) {
                 return;
             }
@@ -909,19 +813,19 @@ namespace MonkeyPaste.Avalonia {
             if (_persistentUniqueTileSizeLookup_ById.ContainsKey(ciid)) {
                 _persistentUniqueTileSizeLookup_ById.Remove(ciid);
             }
-            int queryOffset = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.FastIndexOf(ciid);
+            int queryOffset = MpDataModelProvider.AvailableQueryCopyItemIds.FastIndexOf(ciid);
             if (queryOffset < 0) {
                 return;
             }
             _persistentUniqueTileSizeLookup_ByIdx.Remove(queryOffset);
         }
 
-        public bool TryGetByPersistentSize_ById(int ciid, out MpSize uniqueSize) {
+        public bool TryGetByPersistentSize_ById(int ciid, out double uniqueSize) {
             return _persistentUniqueTileSizeLookup_ById.TryGetValue(ciid, out uniqueSize);
         }
 
         public bool IsTileHaveUniqueSize(int ciid) {
-            return _persistentUniqueTileSizeLookup_ById.TryGetValue(ciid, out MpSize uniqueSize);
+            return _persistentUniqueTileSizeLookup_ById.TryGetValue(ciid, out double uniqueSize);
         }
         public void ClearPersistentWidths() {
             _persistentUniqueTileSizeLookup_ByIdx.Clear();
@@ -937,38 +841,38 @@ namespace MonkeyPaste.Avalonia {
         public int TailItemIdx => TailItem == null ? -1 : Items.IndexOf(TailItem);
         public int MaxLoadQueryIdx => Math.Max(0, MaxClipTrayQueryIdx - DefaultLoadCount + 1);
 
-        public int MaxClipTrayQueryIdx {
-            get {
-                int maxClipTrayQueryIdx = TotalTilesInQuery - 1;
-                if (maxClipTrayQueryIdx < 0) {
-                    return maxClipTrayQueryIdx;
-                }
-                while (PinnedItems.Any(x => x.QueryOffsetIdx == maxClipTrayQueryIdx)) {
-                    if (maxClipTrayQueryIdx < 0) {
-                        return maxClipTrayQueryIdx;
-                    }
-                    maxClipTrayQueryIdx--;
-                }
-                return maxClipTrayQueryIdx;
-            }
-        }
+        public int MaxClipTrayQueryIdx => TotalTilesInQuery - 1; //{
+        //    get {
+        //        int maxClipTrayQueryIdx = TotalTilesInQuery - 1;
+        //        if (maxClipTrayQueryIdx < 0) {
+        //            return maxClipTrayQueryIdx;
+        //        }
+        //        while (PinnedItems.Any(x => x.QueryOffsetIdx == maxClipTrayQueryIdx)) {
+        //            if (maxClipTrayQueryIdx < 0) {
+        //                return maxClipTrayQueryIdx;
+        //            }
+        //            maxClipTrayQueryIdx--;
+        //        }
+        //        return maxClipTrayQueryIdx;
+        //    }
+        //}
 
-        public int MinClipTrayQueryIdx {
-            get {
-                if (TotalTilesInQuery == 0) {
-                    return -1;
-                }
-                int minClipTrayQueryIdx = 0;
+        public int MinClipTrayQueryIdx => 0;//{
+        //    get {
+        //        if (TotalTilesInQuery == 0) {
+        //            return -1;
+        //        }
+        //        int minClipTrayQueryIdx = 0;
 
-                while (PinnedItems.Any(x => x.QueryOffsetIdx == minClipTrayQueryIdx)) {
-                    if (minClipTrayQueryIdx >= TotalTilesInQuery) {
-                        return -1;
-                    }
-                    minClipTrayQueryIdx++;
-                }
-                return minClipTrayQueryIdx;
-            }
-        }
+        //        while (PinnedItems.Any(x => x.QueryOffsetIdx == minClipTrayQueryIdx)) {
+        //            if (minClipTrayQueryIdx >= TotalTilesInQuery) {
+        //                return -1;
+        //            }
+        //            minClipTrayQueryIdx++;
+        //        }
+        //        return minClipTrayQueryIdx;
+        //    }
+        //}
         #endregion
 
         #endregion
@@ -1028,6 +932,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsDragOverPinTray { get; set; }
 
+        public bool IsUnpinning { get; set; }
         #endregion
 
         #endregion
@@ -2043,6 +1948,7 @@ namespace MonkeyPaste.Avalonia {
             if (e is MpCopyItem ci) {
                 PersistentSelectedModels.Remove(ci);
                 RemovePersistentSize_ById(ci.Id);
+
                 MpDataModelProvider.RemoveQueryItem(ci.Id);
 
                 var removed_ctvm = GetClipTileViewModelById(ci.Id);
@@ -2055,7 +1961,7 @@ namespace MonkeyPaste.Avalonia {
 
                         if (pctvm != null) {
                             int pinIdx = PinnedItems.IndexOf(pctvm);
-                            // Flag QueryOffsetIdx = -1 so it tray doesn't attempt to return it to tray
+                            // Flag QueryOffsetIdx = -1 so doesn't attempt to return it to tray
                             pctvm.QueryOffsetIdx = -1;
                             await Dispatcher.UIThread.InvokeAsync(async () => {
                                 ToggleTileIsPinnedCommand.Execute(pctvm);
@@ -2084,7 +1990,7 @@ namespace MonkeyPaste.Avalonia {
                                 continue;
                             }
                             ctvm.QueryOffsetIdx--;
-                            if (TryGetByPersistentSize_ById(ctvm.CopyItemId, out MpSize uniqueSize)) {
+                            if (TryGetByPersistentSize_ById(ctvm.CopyItemId, out double uniqueSize)) {
                                 _persistentUniqueTileSizeLookup_ByIdx.Remove(ctvm.QueryOffsetIdx + 1);
                                 _persistentUniqueTileSizeLookup_ByIdx.Add(ctvm.QueryOffsetIdx, uniqueSize);
                             }
@@ -2261,7 +2167,7 @@ namespace MonkeyPaste.Avalonia {
                     QueryCommand.Execute(null);
                     break;
                 case MpMessageType.SubQueryChanged:
-                    QueryCommand.Execute(HeadQueryIdx);
+                    QueryCommand.Execute(ScrollOffset);
                     break;
             }
 
@@ -2443,37 +2349,46 @@ namespace MonkeyPaste.Avalonia {
              async (args) => {
                  var pctvm = args as MpAvClipTileViewModel;
 
-                 var trayItemToRemove = Items.FirstOrDefault(x => x.CopyItemId == pctvm.CopyItemId);
-                 if (trayItemToRemove != null) {
-                     //swap to-be-pinned item w/ a new placeholder
-                     Items.Remove(trayItemToRemove);
-                     var sub_tray_ctvm = await CreateClipTileViewModel(null);
-                     Items.Add(sub_tray_ctvm);
+                 MpDataModelProvider.AvailableQueryCopyItemIds.Remove(pctvm.CopyItemId);
 
-                 }
+                 
+                 //var trayItemToRemove = Items.FirstOrDefault(x => x.CopyItemId == pctvm.CopyItemId);
+                 //if (trayItemToRemove != null) {
+                 //    //swap to-be-pinned item w/ a new placeholder
+                 //    Items.Remove(trayItemToRemove);
+                 //    var sub_tray_ctvm = await CreateClipTileViewModel(null);
+                 //    Items.Add(sub_tray_ctvm);
 
-                 if (pctvm.QueryOffsetIdx >= 0) {
-                     // only recreate tiles that are already in the tray (they won't be if new)
-                     pctvm = await CreateClipTileViewModel(pctvm.CopyItem, pctvm.QueryOffsetIdx);
-                 }
+                 //}
+
+                 //if (pctvm.QueryOffsetIdx >= 0) {
+                 //    // only recreate tiles that are already in the tray (they won't be if new)
+                 //    pctvm = await CreateClipTileViewModel(pctvm.CopyItem, pctvm.QueryOffsetIdx);
+                 //}
+                 Items.Remove(pctvm);
+                 Items.Where(x => x.QueryOffsetIdx > pctvm.QueryOffsetIdx).ForEach(x => x.QueryOffsetIdx = x.QueryOffsetIdx - 1);
+                 pctvm.QueryOffsetIdx = -1;
                  PinnedItems.Add(pctvm);
                  pctvm.OnPropertyChanged(nameof(pctvm.IsPinned));
                  pctvm.OnPropertyChanged(nameof(pctvm.IsPlaceholder));
 
-                 Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
+                 pctvm.IsSelected = true;
+
+                 MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                 await Task.Delay(100);
+                 while(IsAnyBusy) {
+                     await Task.Delay(100);
+                 }
+
+                 RefreshLayout();
 
                  OnPropertyChanged(nameof(Items));
                  OnPropertyChanged(nameof(PinnedItems));
                  OnPropertyChanged(nameof(IsAnyTilePinned));
-                 OnPropertyChanged(nameof(ClipTrayScreenWidth));
-                 OnPropertyChanged(nameof(ClipTrayTotalTileWidth));
-                 OnPropertyChanged(nameof(ClipTrayScreenWidth));
-                 OnPropertyChanged(nameof(ClipTrayTotalWidth));
-                 OnPropertyChanged(nameof(MaxScrollOffsetX));
-                 OnPropertyChanged(nameof(MaxScrollOffsetY));
-
-                 //SelectedItem = pctvm;
-                 pctvm.IsSelected = true;
+                 OnPropertyChanged(nameof(MinPinTrayScreenWidth));
+                 OnPropertyChanged(nameof(MaxPinTrayWidth));
+                 OnPropertyChanged(nameof(ClipTrayScreenWidth)); 
+                 OnPropertyChanged(nameof(ClipTrayScreenHeight));
              },
             (args) =>
             args != null &&
@@ -2483,6 +2398,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand UnpinTileCommand => new MpAsyncCommand<object>(
              async (args) => {
+
                  var upctvm = args as MpAvClipTileViewModel;
                  int unpinnedId = upctvm.CopyItemId;
 
@@ -2492,9 +2408,67 @@ namespace MonkeyPaste.Avalonia {
                  if (!IsAnyTilePinned) {
                      PinTrayTotalWidth = PinTrayScreenWidth = 0;
                  }
+                 int queryIdx = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.FastIndexOf(upctvm.CopyItemId);
+                 if(queryIdx > 0) {
+                     // if unpinned tile is part of current query find nearest previous unpinned idx
+                     int prevAvailIdx = queryIdx - 1;
+                     while(prevAvailIdx >= 0) {
+                         int prevId = MpDataModelProvider.AllFetchedAndSortedCopyItemIds[prevAvailIdx];
+                         if(PinnedItems.All(x=>x.CopyItemId != prevId)) {
+                             // prevId is nearest previous unpinned item
+                             // get it's query offset
+                             prevAvailIdx = MpDataModelProvider.AvailableQueryCopyItemIds.FastIndexOf(prevId);
+                             break;
+                         }
+                         prevAvailIdx--;
+                     }
+                     queryIdx = prevAvailIdx + 1;
+                 }
+                 if(queryIdx >= 0) {
+                     SetScrollAnchor();
 
-                 upctvm.OnPropertyChanged(nameof(upctvm.IsPinned));
-                 upctvm.OnPropertyChanged(nameof(upctvm.IsPlaceholder));
+                     // when unpinned tile is part of current query add to available at right idx
+                     MpDataModelProvider.AvailableQueryCopyItemIds.Insert(queryIdx, upctvm.CopyItemId);
+                     // offset items after unpinned item 
+
+                     IsUnpinning = true;
+                     Items.Where(x => x.QueryOffsetIdx >= queryIdx)
+                          .ForEach(x => x.QueryOffsetIdx = x.QueryOffsetIdx + 1);
+
+
+                     if (queryIdx >= HeadQueryIdx - 1 && queryIdx <= TailQueryIdx + 1) {
+                         // when unpinned tile is part of current visible part of query
+                         Items.Add(upctvm);
+                         upctvm.QueryOffsetIdx = queryIdx;
+                     } else if(queryIdx < HeadQueryIdx) {
+                         // when unpinned item comes before current visible update positions
+                     }
+
+                     IsUnpinning = false;
+
+                     MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                     await Task.Delay(100);
+                     while (IsAnyBusy) {
+                         await Task.Delay(100);
+                     }
+                     upctvm = Items.FirstOrDefault(x => x.CopyItemId == upctvm.CopyItemId);
+                     if (upctvm != default) {
+                         upctvm.IsSelected = true;
+                     }
+                 }
+
+                 RefreshLayout();
+                 OnPropertyChanged(nameof(Items));
+                 OnPropertyChanged(nameof(PinnedItems));
+                 OnPropertyChanged(nameof(IsAnyTilePinned));
+                 OnPropertyChanged(nameof(MinPinTrayScreenWidth));
+                 OnPropertyChanged(nameof(MaxPinTrayWidth));
+                 OnPropertyChanged(nameof(ClipTrayScreenWidth));
+                 OnPropertyChanged(nameof(ClipTrayScreenHeight));
+
+                 LockScrollToAnchor();
+                 //upctvm.OnPropertyChanged(nameof(upctvm.IsPinned));
+                 //upctvm.OnPropertyChanged(nameof(upctvm.IsPlaceholder));
 
                  // if (upctvm.QueryOffsetIdx >= 0) {
                  //    //resultTile = await CreateClipTileViewModel(pctvm.Items.Select(x => x.CopyItem).ToList(), pctvm.QueryOffsetIdx);
@@ -2515,24 +2489,24 @@ namespace MonkeyPaste.Avalonia {
                  //         await Task.Delay(100);
                  //     }
                  // }
-                 QueryCommand.Execute(ScrollOffsetX);
-                 while (IsAnyBusy) {
-                     await Task.Delay(100);
-                 }
+                 //QueryCommand.Execute(ScrollOffsetX);
+                 //while (IsAnyBusy) {
+                 //    await Task.Delay(100);
+                 //}
 
-                 Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
+                 //Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
 
-                 OnPropertyChanged(nameof(ClipTrayScreenWidth));
-                 OnPropertyChanged(nameof(ClipTrayTotalTileWidth));
-                 OnPropertyChanged(nameof(ClipTrayScreenWidth));
-                 OnPropertyChanged(nameof(ClipTrayTotalWidth));
-                 OnPropertyChanged(nameof(MaxScrollOffsetX));
-                 OnPropertyChanged(nameof(MaxScrollOffsetY));
+                 //OnPropertyChanged(nameof(ClipTrayScreenWidth));
+                 //OnPropertyChanged(nameof(ClipTrayTotalTileWidth));
+                 //OnPropertyChanged(nameof(ClipTrayScreenWidth));
+                 //OnPropertyChanged(nameof(ClipTrayTotalWidth));
+                 //OnPropertyChanged(nameof(MaxScrollOffsetX));
+                 //OnPropertyChanged(nameof(MaxScrollOffsetY));
 
-                 upctvm = GetClipTileViewModelById(unpinnedId);
-                 if (upctvm != null) {
-                     upctvm.IsSelected = true;
-                 }
+                 //upctvm = GetClipTileViewModelById(unpinnedId);
+                 //if (upctvm != null) {
+                 //    upctvm.IsSelected = true;
+                 //}
              },
             (args) => args != null && args is MpAvClipTileViewModel ctvm && ctvm.IsPinned);
 
@@ -2691,10 +2665,7 @@ namespace MonkeyPaste.Avalonia {
                     ClearClipSelection();
                     MpDataModelProvider.ResetQuery();
 
-                    await MpDataModelProvider.RequeryAsync(
-                        0,
-                        MaxTileWidth,
-                        0);// MpMeasurements.Instance.ClipTileMargin * 2);
+                    await MpDataModelProvider.QueryForTotalCountAsync(PinnedItems.Select(x=>x.CopyItemId));
 
                     Items.Clear();
                     ClearPersistentWidths();
@@ -2721,37 +2692,38 @@ namespace MonkeyPaste.Avalonia {
                 List<int> fetchQueryIdxList = Enumerable.Range(loadOffsetIdx, loadCount).ToList();
                 if (fetchQueryIdxList.Count > 0) {
                     //clean up pinned items if requerying and not present in this query
-                    PinnedItems.ForEach(x => x.QueryOffsetIdx = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.FastIndexOf(x.CopyItemId));
+                    //PinnedItems.ForEach(x => x.QueryOffsetIdx = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.FastIndexOf(x.CopyItemId));
 
-                    foreach (var pctvm in PinnedItems.Where(x => x.QueryOffsetIdx >= 0)) {
-                        //when pinned item is part of this fetch remove and next to
-                        //tail if available or prev to head so load count is constant
-                        int pinLoadOffsetIdx = fetchQueryIdxList.FastIndexOf(pctvm.QueryOffsetIdx);
-                        if (pinLoadOffsetIdx < 0) {
-                            continue;
-                        }
-                        fetchQueryIdxList.RemoveAt(pinLoadOffsetIdx);
+                    //foreach (var pctvm in PinnedItems.Where(x => x.QueryOffsetIdx >= 0)) {
+                    //    //when pinned item is part of this fetch remove and next to
+                    //    //tail if available or prev to head so load count is constant
+                    //    int pinLoadOffsetIdx = fetchQueryIdxList.FastIndexOf(pctvm.QueryOffsetIdx);
+                    //    if (pinLoadOffsetIdx < 0) {
+                    //        continue;
+                    //    }
+                    //    fetchQueryIdxList.RemoveAt(pinLoadOffsetIdx);
 
-                        if (fetchQueryIdxList.Count == 0) {
-                            IsBusy = IsRequery = false;
-                            return;
-                        }
-                        int newTailFetchIdx = fetchQueryIdxList.Last() + 1;
-                        while (newTailFetchIdx <= MaxClipTrayQueryIdx && PinnedItems.Any(x => x.QueryOffsetIdx == newTailFetchIdx)) {
-                            newTailFetchIdx++;
-                        }
-                        if (newTailFetchIdx > MaxClipTrayQueryIdx) {
-                            int newHeadFetchIdx = fetchQueryIdxList.First() - 1;
-                            while (newHeadFetchIdx >= MinClipTrayQueryIdx && PinnedItems.Any(x => x.QueryOffsetIdx == newHeadFetchIdx)) {
-                                newHeadFetchIdx--;
-                            }
-                            if (newHeadFetchIdx >= MinClipTrayQueryIdx) {
-                                fetchQueryIdxList.Insert(0, newHeadFetchIdx);
-                            }
-                        } else {
-                            fetchQueryIdxList.Add(newTailFetchIdx);
-                        }
-                    }
+                    //    if (fetchQueryIdxList.Count == 0) {
+                    //        IsBusy = IsRequery = false;
+                    //        return;
+                    //    }
+                    //    int newTailFetchIdx = fetchQueryIdxList.Last() + 1;
+                    //    while (newTailFetchIdx <= MaxClipTrayQueryIdx && PinnedItems.Any(x => x.QueryOffsetIdx == newTailFetchIdx)) {
+                    //        newTailFetchIdx++;
+                    //    }
+                    //    if (newTailFetchIdx > MaxClipTrayQueryIdx) {
+                    //        int newHeadFetchIdx = fetchQueryIdxList.First() - 1;
+                    //        while (newHeadFetchIdx >= MinClipTrayQueryIdx && PinnedItems.Any(x => x.QueryOffsetIdx == newHeadFetchIdx)) {
+                    //            newHeadFetchIdx--;
+                    //        }
+                    //        if (newHeadFetchIdx >= MinClipTrayQueryIdx) {
+                    //            fetchQueryIdxList.Insert(0, newHeadFetchIdx);
+                    //        }
+                    //    } else {
+                    //        fetchQueryIdxList.Add(newTailFetchIdx);
+                    //    }
+                    //}
+
                     if (!isLoadMore) {
                         // Cleanup Tray item count depending on last query
                         int itemCountDiff = Items.Count - fetchQueryIdxList.Count;

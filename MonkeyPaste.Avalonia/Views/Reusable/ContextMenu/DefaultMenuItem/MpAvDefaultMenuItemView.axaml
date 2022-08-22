@@ -1,17 +1,17 @@
-<MenuItem xmlns="https://github.com/avaloniaui"
-          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-          xmlns:local="using:MonkeyPaste.Avalonia"
-          xmlns:pcl="using:MonkeyPaste"
-          x:DataType="pcl:MpMenuItemViewModel"
-          x:CompileBindings="True"
-          mc:Ignorable="d"
-          d:DesignWidth="800"
-          d:DesignHeight="450"
-          x:Class="MonkeyPaste.Avalonia.MpAvDefaultMenuItemView">
-    <MenuItem.Styles>
-        <Style Selector="MenuItem">
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:DataType="pcl:MpMenuItemViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvDefaultMenuItemView">
+    <!--<local:MpAvUserControl.Styles>
+        <Style Selector="local|MpAvUserControl">
             <Setter Property="Icon">
                 <Template>
                     <Image HorizontalAlignment="Stretch"
@@ -27,14 +27,22 @@
                     Value="{Binding Command}" />
             <Setter Property="CommandParameter"
                     Value="{Binding CommandParameter}" />
-            <!--<Setter Property="InputGesture"
+    -->
+    <!--<Setter Property="InputGesture"
                     Value="{Binding InputGestureText}" />-->
+    <!--
             <Setter Property="IsVisible"
                     Value="{Binding IsVisible}" />
         </Style>
-        <Style Selector="MenuItem:pointerover">
+        <Style Selector="local:MpAvUserControl:pointerover">
             <Setter Property="Background"
                     Value="LightBlue" />
         </Style>
-    </MenuItem.Styles>
-</MenuItem>
+    </local:MpAvUserControl.Styles>-->
+    <StackPanel Orientation="Horizontal">
+        <Image Width="20"
+               Height="20"
+               Source="{Binding IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+        <Label Content="{Binding Header}" />
+    </StackPanel>
+</local:MpAvUserControl>

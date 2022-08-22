@@ -1,0 +1,64 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="local:MpAvClipTrayViewModel"
+                       x:DataType="local:MpAvClipTrayViewModel"
+                       x:CompileBindings="True"
+                       DataContext="{x:Static local:MpAvClipTrayViewModel.Instance}"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvClipTrayContainerView">
+    <Grid x:Name="ClipTrayContainerGrid"
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"
+                              MinWidth="{Binding MinPinTrayScreenWidth}"
+                              MaxWidth="{Binding MaxPinTrayWidth}" />
+            <ColumnDefinition Width="*"
+                              MinWidth="{Binding MinClipTrayScreenWidth}" />
+        </Grid.ColumnDefinitions>
+        <local:MpAvPinTrayView x:Name="PinTrayView"
+                               Grid.Column="0"
+                               DataContext="{Binding}"
+                               MinWidth="{Binding MinClipTrayScreenWidth}"
+                               Margin="0,0,5,0"
+                               local:MpAvSizeObserverExtension.IsEnabled="True"
+                               local:MpAvSizeObserverExtension.ObservedWidth="{Binding PinTrayScreenWidth, Mode=OneWayToSource}">
+            <local:MpAvPinTrayView.IsVisible>
+                <MultiBinding Converter="{StaticResource MultiBoolConverter}"
+                              ConverterParameter="OR">
+                    <Binding Source="{x:Static local:MpAvClipTrayViewModel.Instance}"
+                             Path="IsAnyTilePinned" />
+                    <Binding Source="{x:Static local:MpAvClipTrayViewModel.Instance}"
+                             Path="IsAnyItemDragging" />
+                </MultiBinding>
+            </local:MpAvPinTrayView.IsVisible>
+        </local:MpAvPinTrayView>
+        <GridSplitter x:Name="ClipTraySplitter"
+                      Grid.Column="0"
+                      IsEnabled="{Binding IsAnyTilePinned}"
+                      IsVisible="{Binding IsAnyTilePinned}"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Stretch"
+                      Margin="0,0,0,0"
+                      Width="5"
+                      Background="Magenta"
+                      local:MpAvIsHoveringExtension.HoverCursor="ResizeWE"
+                      local:MpAvIsHoveringExtension.IsEnabled="True">
+            <GridSplitter.Styles>
+                <Style Selector="GridSplitter:pointerover">
+                    <Setter Property="Background"
+                            Value="Yellow" />
+                </Style>
+            </GridSplitter.Styles>
+        </GridSplitter>
+        <local:MpAvClipTrayView x:Name="ClipTrayView"
+                                Grid.Column="1"
+                                DataContext="{Binding}" />
+    </Grid>
+</local:MpAvUserControl>

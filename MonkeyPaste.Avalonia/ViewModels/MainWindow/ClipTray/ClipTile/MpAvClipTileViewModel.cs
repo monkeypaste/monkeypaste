@@ -237,6 +237,8 @@ namespace MonkeyPaste.Avalonia {
 
         public int QueryOffsetIdx { get; set; } = -1;
 
+        //public int PinnedPlaceholderQueryOffsetIdx { get; set; } = -1;
+
         //public int RowIdx {
         //    get {
         //        int rowIdx = 0;
@@ -411,8 +413,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public bool IsCustomSize => Parent == null ? false : Parent.TryGetByPersistentSize_ById(CopyItemId, out MpSize size);
-        public bool IsPlaceholder => CopyItem == null || IsPinned;
+        public bool IsCustomSize => Parent == null ? false : Parent.TryGetByPersistentSize_ById(CopyItemId, out double size);
+        public bool IsPlaceholder => CopyItem == null;
 
         #region Drag & Drop
 
@@ -1581,9 +1583,8 @@ namespace MonkeyPaste.Avalonia {
             _curItemRandomHexColor = string.Empty;
 
             IsBusy = true;
-
-            if (ci != null && Parent.TryGetByPersistentSize_ById(ci.Id, out MpSize uniqueSize)) {
-                BoundSize = uniqueSize;
+            if (ci != null && Parent.TryGetByPersistentSize_ById(ci.Id, out double uniqueSize)) {
+                BoundSize = new MpSize(uniqueSize, MinHeight);
             } else {
                 BoundSize = MinSize;
             }
@@ -2285,7 +2286,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(BoundSize):
                     if (IsResizing) {
                         //this occurs when mainwindow is resized and user gives tile unique width
-                        Parent.AddOrReplacePersistentSize_ById(CopyItemId, BoundSize);
+                        Parent.AddOrReplacePersistentSize_ById(CopyItemId, BoundWidth);
                     }
                     if (Next == null) {
                         break;
@@ -2314,7 +2315,7 @@ namespace MonkeyPaste.Avalonia {
                     //Next.OnPropertyChanged(nameof(Next.TrayX));
                     break;
                 case nameof(QueryOffsetIdx):
-                    if (IsPlaceholder) {
+                    if (IsPlaceholder || Parent.IsUnpinning) {
                         break;
                     }
                     //MpRect prevRect = Prev == null ? null : Prev.TrayRect;

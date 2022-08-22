@@ -35,7 +35,9 @@
         <!--  Pin Tile Button  -->
 
         <ToggleButton x:Name="PinTileButton"
-                      IsChecked="{Binding IsPinned, Mode=TwoWay}"
+                      Command="{Binding ToggleTileIsPinnedCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                      CommandParameter="{Binding}"
+                      IsChecked="{Binding IsPinned}"
                       HorizontalAlignment="Right"
                       VerticalAlignment="Top"
                       HorizontalContentAlignment="Center"
