@@ -78,7 +78,7 @@ namespace MonkeyPaste.Avalonia {
             ContextMenuCloser = new MpAvContextMenuCloser();
             MainThreadMarshal = new MpAvMainThreadMarshal();
             StringTools = new MpAvStringTools();
-            //NativeMessageBox = new MpWpfMessageBox();
+            NativeMessageBox = new MpAvMessageBox();
             //DataObjectHelper = MpWpfDataObjectHelper.Instance;
             //ExternalPasteHandler = MpWpfDataObjectHelper.Instance;
             //CopyItemBuilder = new MpWpfCopyItemBuilder();

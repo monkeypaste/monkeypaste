@@ -70,6 +70,7 @@
             <!--  Zoom Factor Slider  -->
             <Grid Width="125"
                   Opacity="0.5"
+                  Cursor="Hand"
                   local:MpAvIsHoveringExtension.IsEnabled="True"
                   local:MpAvIsHoveringExtension.IsHovering="{Binding IsZoomSliderHovering, Mode=TwoWay}"
                   Height="{Binding Bounds.Height, ElementName=TitlePanel}"

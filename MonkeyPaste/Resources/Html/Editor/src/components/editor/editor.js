@@ -112,7 +112,9 @@ function init(reqMsgStr) {
 
 	initContent(reqMsg.itemEncodedHtmlData);
 
-	initTemplates(reqMsg.usedTextTemplates, reqMsg.isPasteRequest);
+	if (!IsLoaded) {
+		initTemplates(reqMsg.usedTextTemplates, reqMsg.isPasteRequest);
+	}
 
 	initDragDrop();
 
@@ -295,10 +297,10 @@ function updateAllSizeAndPositions() {
 
 	$("#editor").css("height", wh - eth - tth);
 
-	//updateOverlayBounds();
-
 	updateEditTemplateToolbarPosition();
 	updatePasteTemplateToolbarPosition();
+
+	drawOverlay();
 
 	if (EnvName == "android") {
 		//var viewportBottom = window.scrollY + window.innerHeight;
@@ -687,6 +689,8 @@ function disableReadOnly(disableReadOnlyReqStrOrObj) {
 	}
 
 	availableTemplates = disableReadOnlyMsg.allAvailableTextTemplates;
+	IsUnderlinesVisible = false;
+
 	//document.body.style.height = disableReadOnlyMsg.editorHeight;
 
 	if (!disableReadOnlyMsg.isSilent) {
@@ -721,7 +725,12 @@ function disableReadOnly(disableReadOnlyReqStrOrObj) {
 }
 
 function enableSubSelection() {
-	IsUnderlinesVisible = true;
+	if (IsReadOnly()) {
+		IsUnderlinesVisible = true;
+	} else {
+		IsUnderlinesVisible = false;
+	}
+	
 	drawOverlay();
 }
 

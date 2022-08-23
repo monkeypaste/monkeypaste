@@ -2060,7 +2060,9 @@ namespace MonkeyPaste.Avalonia {
                 if (HasModelChanged) {
                     // this means the model has been updated from the view model so ignore
                 } else {
-                    await InitializeAsync(ci);
+                    Dispatcher.UIThread.Post(async () => {
+                        await InitializeAsync(ci);
+                    });
                 }
             }
         }

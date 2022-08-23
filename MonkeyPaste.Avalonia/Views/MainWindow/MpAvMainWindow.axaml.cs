@@ -17,6 +17,8 @@ using Avalonia.VisualTree;
 using Avalonia.Controls.Primitives;
 using System.Linq;
 using System;
+using Avalonia.Data;
+using Avalonia.Input;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -263,7 +265,11 @@ namespace MonkeyPaste.Avalonia {
 
             var mwtg = this.FindControl<Grid>("MainWindowTrayGrid");
             var sbv = this.FindControl<MpAvSidebarView>("SidebarView");
-            var ctrv = this.FindControl<MpAvClipTrayContainerView>("ClipTrayContainerView");
+            var ctrcv = this.FindControl<MpAvClipTrayContainerView>("ClipTrayContainerView");
+            var ctrcv_cg = ctrcv.FindControl<Grid>("ClipTrayContainerGrid");
+            var ctrcv_ptrv = ctrcv.FindControl<MpAvPinTrayView>("PinTrayView");
+            var ctrcv_gs = ctrcv.FindControl<GridSplitter>("ClipTraySplitter");
+            var ctrcv_ctrv = ctrcv.FindControl<MpAvClipTrayView>("ClipTrayView");
             var ttv = this.FindControl<MpAvTagTreeView>("TagTreeView");
             var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");            
 
@@ -290,8 +296,57 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetColumn(ttv, 1);
 
                 // cliptray container view
-                Grid.SetRow(ctrv, 0);
-                Grid.SetColumn(ctrv, 2);
+                Grid.SetRow(ctrcv, 0);
+                Grid.SetColumn(ctrcv, 2);
+
+                // cliptray container column definitions
+                ctrcv_cg.RowDefinitions.Clear();
+                var ptrv_cd = new ColumnDefinition(new GridLength(0, GridUnitType.Auto));
+                ptrv_cd.Bind(
+                    ColumnDefinition.MinWidthProperty,
+                    new Binding() {
+                        Source = MpAvClipTrayViewModel.Instance,
+                        Path = nameof(MpAvClipTrayViewModel.Instance.MinPinTrayScreenWidth)
+                    });
+                ptrv_cd.Bind(
+                    ColumnDefinition.MaxWidthProperty,
+                    new Binding() {
+                        Source = MpAvClipTrayViewModel.Instance,
+                        Path = nameof(MpAvClipTrayViewModel.Instance.MaxPinTrayScreenWidth)
+                    });
+
+                var ctrv_cd = new ColumnDefinition(new GridLength(1, GridUnitType.Star));
+                ctrv_cd.Bind(
+                    ColumnDefinition.MinWidthProperty,
+                    new Binding() {
+                        Source = MpAvClipTrayViewModel.Instance,
+                        Path = nameof(MpAvClipTrayViewModel.Instance.MinClipTrayScreenWidth)
+                    });
+
+                ctrcv_cg.ColumnDefinitions = new ColumnDefinitions() {
+                     ptrv_cd,
+                     ctrv_cd
+                };
+
+                //pin tray
+                ctrcv_ptrv.Margin = new Thickness(0, 0, 5, 0);
+
+                // clip/pin tray grid splitter
+                ctrcv_gs.HorizontalAlignment = HorizontalAlignment.Right;
+                ctrcv_gs.VerticalAlignment = VerticalAlignment.Stretch;
+                ctrcv_gs.Width = 5;
+                ctrcv_gs.Height = double.NaN;
+                ctrcv_gs.ResizeDirection = GridResizeDirection.Columns;
+                ctrcv_gs.Cursor = new Cursor(StandardCursorType.SizeWestEast);
+
+                Grid.SetRow(ctrcv_ptrv, 0);
+                Grid.SetColumn(ctrcv_ptrv, 0);
+
+                Grid.SetRow(ctrcv_gs, 0);
+                Grid.SetColumn(ctrcv_gs, 0);
+
+                Grid.SetRow(ctrcv_ctrv, 0);
+                Grid.SetColumn(ctrcv_ctrv, 1);
             } else {
                 mwtg.RowDefinitions = new RowDefinitions("*,Auto,40");
                 mwtg.ColumnDefinitions.Clear();
@@ -314,8 +369,57 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetColumn(ttv, 0);
 
                 // cliptray container view
-                Grid.SetRow(ctrv, 0);
-                Grid.SetColumn(ctrv, 0);
+                Grid.SetRow(ctrcv, 0);
+                Grid.SetColumn(ctrcv, 0);
+
+                // cliptray container column definitions
+                ctrcv_cg.ColumnDefinitions.Clear();
+                var ptrv_rd = new RowDefinition(new GridLength(0, GridUnitType.Auto));
+                ptrv_rd.Bind(
+                    RowDefinition.MinHeightProperty,
+                    new Binding() {
+                        Source = MpAvClipTrayViewModel.Instance,
+                        Path = nameof(MpAvClipTrayViewModel.Instance.MinPinTrayScreenHeight)
+                    });
+                ptrv_rd.Bind(
+                    RowDefinition.MaxHeightProperty,
+                    new Binding() {
+                        Source = MpAvClipTrayViewModel.Instance,
+                        Path = nameof(MpAvClipTrayViewModel.Instance.MaxPinTrayScreenHeight)
+                    });
+
+                var ctrv_rd = new RowDefinition(new GridLength(1, GridUnitType.Star));
+                ctrv_rd.Bind(
+                    RowDefinition.MinHeightProperty,
+                    new Binding() {
+                        Source = MpAvClipTrayViewModel.Instance,
+                        Path = nameof(MpAvClipTrayViewModel.Instance.MinClipTrayScreenHeight)
+                    });
+
+                ctrcv_cg.RowDefinitions = new RowDefinitions() {
+                     ptrv_rd,
+                     ctrv_rd
+                };
+
+                //pin tray
+                ctrcv_ptrv.Margin = new Thickness(0, 0, 0, 5);
+
+                // clip/pin tray grid splitter
+                ctrcv_gs.HorizontalAlignment = HorizontalAlignment.Stretch;
+                ctrcv_gs.VerticalAlignment = VerticalAlignment.Bottom;
+                ctrcv_gs.Width = double.NaN;
+                ctrcv_gs.Height = 5;
+                ctrcv_gs.ResizeDirection = GridResizeDirection.Rows;
+                ctrcv_gs.Cursor = new Cursor(StandardCursorType.SizeNorthSouth);
+
+                Grid.SetRow(ctrcv_ptrv, 0);
+                Grid.SetColumn(ctrcv_ptrv, 0);
+
+                Grid.SetRow(ctrcv_gs, 0);
+                Grid.SetColumn(ctrcv_gs, 0);
+
+                Grid.SetRow(ctrcv_ctrv, 1);
+                Grid.SetColumn(ctrcv_ctrv, 0);
             }
 
             UpdateResizerOrientation();

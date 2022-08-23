@@ -31,14 +31,14 @@ namespace MonkeyPaste {
                     string msg = "Warning! Do you want to delete these? " + Environment.NewLine + string.Join(Environment.NewLine, lastTempFileList);
 
                     MpConsole.WriteLine(msg);
-                    var result = MpPlatformWrapper.Services.NativeMessageBox.ShowOkCancelMessageBox("Temp File Manager", msg);
-                    if (result) {
-                        foreach (var lastTempFileToDelete in lastTempFileList) {
-                            if (File.Exists(lastTempFileToDelete)) {
-                                File.Delete(lastTempFileToDelete);
-                            }
-                        }
-                    }
+                    //var result = MpPlatformWrapper.Services.NativeMessageBox.ShowOkCancelMessageBox("Temp File Manager", msg);
+                    //if (result) {
+                    //    foreach (var lastTempFileToDelete in lastTempFileList) {
+                    //        if (File.Exists(lastTempFileToDelete)) {
+                    //            File.Delete(lastTempFileToDelete);
+                    //        }
+                    //    }
+                    //}
                     File.Delete(TempFilePath);
                 }
 

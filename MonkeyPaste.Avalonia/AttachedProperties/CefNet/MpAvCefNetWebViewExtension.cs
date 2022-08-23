@@ -131,6 +131,7 @@ namespace MonkeyPaste.Avalonia {
         private static void HandleIsSubSelectionEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isSubSelectionEnabled &&
                 element is MpAvCefNetWebView wv &&
+                GetIsContentReadOnly(wv) &&
                 wv.IsEditorInitialized) {
                   if (isSubSelectionEnabled) {
                     wv.ExecuteJavascript("enableSubSelection()");

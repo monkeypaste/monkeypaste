@@ -125,6 +125,7 @@
                                  FontStyle="{Binding TextBoxFontStyle}"
                                  BorderThickness="0"
                                  Padding="0"
+                                 Margin="0,7,0,0"
                                  HorizontalAlignment="Stretch"
                                  VerticalAlignment="Center"
                                  KeyUp="SearchBox_KeyUp"

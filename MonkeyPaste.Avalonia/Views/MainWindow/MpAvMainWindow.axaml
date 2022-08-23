@@ -99,6 +99,9 @@
 
             <local:MpAvClipTrayContainerView x:Name="ClipTrayContainerView"
                                              Grid.Column="2"
+                                             local:MpAvSizeObserverExtension.IsEnabled="True"
+                                             local:MpAvSizeObserverExtension.ObservedWidth="{Binding ClipTrayContainerScreenWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWayToSource}"
+                                             local:MpAvSizeObserverExtension.ObservedHeight="{Binding ClipTrayContainerScreenHeight, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWayToSource}"
                                              HorizontalAlignment="Stretch"
                                              VerticalAlignment="Stretch" />
         </Grid>

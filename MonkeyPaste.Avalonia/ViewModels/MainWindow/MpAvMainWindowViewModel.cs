@@ -646,15 +646,21 @@ namespace MonkeyPaste.Avalonia {
                 timer.Start();
             },
             () => {
-                return (MpAvMainWindow.Instance != null ||
-                               !IsMainWindowLoading ||
-                               !IsShowingDialog) &&
-                               !IsMainWindowOpen &&
-                               !IsMainWindowOpening;
+                return !IsMainWindowLoading &&
+                        !IsShowingDialog &&
+                        !IsMainWindowOpen &&
+                        !IsMainWindowOpening;
             });
 
         public ICommand HideWindowCommand => new MpCommand(
             () => {
+                if (!Dispatcher.UIThread.CheckAccess()) {
+                    Dispatcher.UIThread.Post(() => {
+                        ShowWindowCommand.Execute(null);
+                    });
+                    return;
+                }
+
                 if (IsMainWindowLocked ||
                     IsResizing ||
                     IsMainWindowClosing ||
@@ -748,14 +754,15 @@ namespace MonkeyPaste.Avalonia {
                 timer.Start();
             },
             () => {
-                return MpAvMainWindow.Instance != null &&
-                              MpAvMainWindow.Instance.IsVisible &&
-                              !IsAnyDropDownOpen &&
-                              !IsShowingDialog &&
-                              !MpAvDragDropManager.IsDragAndDrop &&
-                              //!MpContextMenuView.Instance.IsOpen &&
-                              !IsResizing &&
-                              !IsMainWindowClosing;
+                return //MpAvMainWindow.Instance != null &&
+                         // MpAvMainWindow.Instance.IsVisible &&
+                         (IsMainWindowOpen || IsMainWindowOpening) &&
+                          !IsAnyDropDownOpen &&
+                          !IsShowingDialog &&
+                          !MpAvDragDropManager.IsDragAndDrop &&
+                          //!MpContextMenuView.Instance.IsOpen &&
+                          !IsResizing &&
+                          !IsMainWindowClosing;
             });
 
         public ICommand CycleOrientationCommand => new MpCommand<object>(

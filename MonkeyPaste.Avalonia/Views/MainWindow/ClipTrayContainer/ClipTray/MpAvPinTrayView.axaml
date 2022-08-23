@@ -20,7 +20,7 @@
         </Grid.Background>
         <ListBox x:Name="PinTrayListBox"
                  BorderThickness="0"
-                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
                  ScrollViewer.VerticalScrollBarVisibility="Auto"
                  Background="Transparent"
                  HorizontalAlignment="Stretch"
@@ -51,8 +51,7 @@
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel HorizontalAlignment="Stretch"
-                               VerticalAlignment="Stretch"
-                               Orientation="Horizontal" />
+                               VerticalAlignment="Stretch" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>

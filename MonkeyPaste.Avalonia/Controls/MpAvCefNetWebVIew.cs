@@ -71,39 +71,16 @@ namespace MonkeyPaste.Avalonia {
 
             CefProcessMessage cefMsg = new CefProcessMessage("EvaluateScript");
 
-            //if (guid == string.Empty) {
-            //    guid = System.Guid.NewGuid().ToString();
-
-            //    if (!_msgLookup.TryAdd(guid, null)) {
-            //        Debugger.Break();
-            //    }
-            //}
-
             cefMsg.ArgumentList.SetString(0, guid);
             cefMsg.ArgumentList.SetString(1, script);
             frame.SendProcessMessage(CefProcessId.Renderer, cefMsg);
 
             while (_lastResult == null) {
-                //if(_cts.IsCancellationRequested) {
-                //    return;
-                //}
                 await Task.Delay(100);
             }
-            string resp = _lastResult;// _msgLookup[guid];
-            //if (resp == MpCefNetApplication.JS_REF_ERROR) {
-            //    await Task.Delay(500);
-            //    // (assuming) js not available yet so call again until no excecption
-            //    resp = await EvaluateJavascriptAsync(script,guid);
-            //    return resp;
-            //}
+            string resp = _lastResult;
             _lastResult = null;
             return resp;
-
-            //string response = await GetComOutputAsync(frame);
-            //return response;
-
-            //string response = await GetComOutputFromSource(frame);
-            //return response;
         }
         public void ExecuteJavascript(string script) {
             var frame = GetMainFrame();
