@@ -75,7 +75,7 @@ namespace MpWpfApp {
             MpHelpers.RunOnMainThread(async () => {
                 tvm.IsBusy = true;
 
-                contact_cmb.ItemsSource = await MpMasterTemplateModelCollectionViewModel.Instance.GetContacts();
+                contact_cmb.ItemsSource = await MpMasterTemplateModelCollectionViewModel.Instance.GetContactsAsync();
                 
                 if(contact_cmb.Items.Count == 0) {
                     contact_cmb.Items.Add(MpContact.EmptyContact);

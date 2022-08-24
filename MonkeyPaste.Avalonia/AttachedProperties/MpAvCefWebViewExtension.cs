@@ -202,7 +202,7 @@ namespace MonkeyPaste.Avalonia {
                     //    ctcv.TileResizeBehavior.ResizeWidth(GetReadOnlyWidth(fe));
                     //}
 
-                    MpMasterTemplateModelCollectionViewModel.Instance.Update(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids).FireAndForgetSafeAsync(ctvm);
+                    MpMasterTemplateModelCollectionViewModel.Instance.UpdateAsync(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids).FireAndForgetSafeAsync(ctvm);
 
                     return qrm.itemEncodedHtmlData;
                 }

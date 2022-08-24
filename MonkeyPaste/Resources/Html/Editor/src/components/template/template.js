@@ -17,7 +17,7 @@ var templateTypesMenuOptions = [
         label: 'Static',
         icon: 'fa-solid fa-icicles'
     },
-    {
+   /* {
         label: 'Content',
         icon: 'fa-solid fa-clipboard'
     },
@@ -28,17 +28,14 @@ var templateTypesMenuOptions = [
     {
         label: 'Action',
         icon: 'fa-solid fa-bolt-lightning'
-    },
+    },*/
     {
         label: 'Contact',
         icon: 'fa-solid fa-id-card'
     },
     {
         label: 'DateTime',
-        icon: 'fa-solid fa-chess-clock'
-    },
-    {
-        label: 'New...'
+        icon: 'fa-solid fa-clock'
     }
 ];
 
@@ -107,6 +104,10 @@ function initTemplates(usedTemplates, isPasting) {
 
     initTemplateToolbarButton();
 
+    document.getElementById('templateNameTextInput').onfocus = onTemplateNameTextAreaGotFocus;
+    document.getElementById('templateNameTextInput').onblur = onTemplateNameTextAreaLostFocus;
+    document.getElementById('templateDetailTextInput').onfocus = onTemplateDetailTextAreaGotFocus;
+    document.getElementById('templateDetailTextInput').onblur = onTemplateDetailTextAreaLostFocus;
 
     if (isPasting) {
         // this SHOULD only happen when there are templates 
@@ -128,12 +129,14 @@ function initTemplateToolbarButton() {
 
     templateToolbarButton.onClick = function (e) {
         var templateButton = document.getElementById('templateToolbarButton');
-        var tl = getAvailableTemplateDefinitions();
-        if (tl.length > 0) {
-            showTemplateToolbarContextMenu(templateButton);
-        } else {
-            createTemplate();
-        }
+        showTemplateToolbarContextMenu(templateButton);
+
+        //var tl = getAvailableTemplateDefinitions();
+        //if (tl.length > 0) {
+        //    showTemplateToolbarContextMenu(templateButton);
+        //} else {
+        //    createTemplate();
+        //}
 
         event.stopPropagation(e);
     }
@@ -259,6 +262,11 @@ function applyTemplateToDomNode(node, value) {
 
     //initDragDrop();
 
+    let observer = new MutationObserver(function (mutationsList, observer) {
+        console.log(mutationsList);
+    });
+
+    observer.observe(node, { characterData: false, childList: true, attributes: false });
     return node;
 }
 
@@ -482,7 +490,16 @@ function getUsedTemplateDefinitions() {
 
 function getAvailableTemplateDefinitions() {
     if (availableTemplates == null) {
-        return getUsedTemplateDefinitions().map(x => getTemplateFromDomNode(x.domNode));
+        if (typeof getAllTemplatesFromDb === 'function') {
+            let allTemplatesJsonStr = getAllTemplatesFromDb();
+            log('templates from db:');
+            log(allTemplatesJsonStr);
+            availableTemplates = JSON.parse(allTemplatesJsonStr);
+		}
+
+        if (availableTemplates == null) {
+            return getUsedTemplateDefinitions().map(x => getTemplateFromDomNode(x.domNode));
+		}
     }
 
     let utdl = getUsedTemplateDefinitions();
@@ -557,7 +574,7 @@ function getUsedTemplateInstances() {
         getTemplateDocIdx(b.domNode.getAttribute('templateInstanceGuid')) ? -1 : 1));
 }
 
-function createTemplate(templateObjOrId) {
+function createTemplate(templateObjOrId,newTemplateType) {
     var templateObj;
     if (templateObjOrId != null && typeof templateObjOrId === 'string') {
         templateObj = getTemplateDefByGuid(templateObjOrId);
@@ -599,9 +616,9 @@ function createTemplate(templateObjOrId) {
             templateGuid: generateGuid(),
             templateColor: getRandomColor(),
             templateName: newTemplateName,
-            templateType: 'dynamic',
+            templateType: newTemplateType,
             templateData: '',
-            templateDeltaFormat: formatInfo,
+            templateDeltaFormat: JSON.stringify(formatInfo),
             templateHtmlFormat: selectionInnerHtml
         };
     }
@@ -797,7 +814,7 @@ function resetTemplates() {
 
         ti.domNode.setAttribute('templateText', '');
         ti.domNode.setAttribute('isFocus', 'false');
-        ti.domNode.innerHTML = ti.templateName;
+        ti.domNode.innerHTML = ti.domNode.getAttribute('templateName');
     }
 }
 

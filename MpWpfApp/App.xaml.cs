@@ -55,7 +55,7 @@ namespace MpWpfApp {
                 Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
                 "pref_wpf.json");
 
-                await MpPrefViewModel.InitAsync(prefPath);
+                await MpPrefViewModel.InitAsync(prefPath,new MpWpfDbInfo(),new MpWpfOsInfo());
                 await MpPlatformWrapper.InitAsync(new MpWpfWrapper());
                 var bootstrapper = new MpWpfBootstrapperViewModel();
                 await bootstrapper.InitAsync();

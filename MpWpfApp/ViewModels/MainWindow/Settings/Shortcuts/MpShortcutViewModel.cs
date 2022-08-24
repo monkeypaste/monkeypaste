@@ -195,14 +195,17 @@ namespace MpWpfApp {
                 //    return Shortcut.CommandId;
                 //}
                 //return ShortcutId;
-                return Shortcut.CommandParameter;
+                if(int.TryParse(Shortcut.CommandParameter, out int cmdId)) {
+                    return cmdId;
+                }
+                return 0;
             }
             set {
                 if(CommandId != value) {
                     if(!IsCustom()) {
                         throw new Exception("Application shortcuts use pk not command id");
                     }
-                    Shortcut.CommandParameter = value;
+                    Shortcut.CommandParameter = value.ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(CommandId));
                 }
@@ -370,7 +373,8 @@ namespace MpWpfApp {
             } else {
                 try {
                     if (RoutingType == MpRoutingType.None) {
-                        throw new Exception("ShortcutViewModel error, routing type cannot be none");
+                        return;
+                        //throw new Exception("ShortcutViewModel error, routing type cannot be none");
                     }
                     var hook = RoutingType == MpRoutingType.Internal ? Parent.ApplicationHook : Parent.GlobalHook;
 
@@ -497,7 +501,7 @@ namespace MpWpfApp {
             if(Shortcut == null) {
                 return false;
             }
-            return Shortcut.CommandParameter > 0;
+            return CommandId > 0;
         }
 
         public void ClearShortcutKeyString() {

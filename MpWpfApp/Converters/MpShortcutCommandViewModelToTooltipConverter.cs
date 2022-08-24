@@ -10,7 +10,7 @@ namespace MpWpfApp {
         //returns primary source by default but secondary w/ parameter of 'SecondarySource' 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is MpIShortcutCommandViewModel sccvm) {
-                string shortcutKeyString = MpDataModelProvider.GetShortcutKeystring(sccvm.ShortcutType, sccvm.ModelId);
+                string shortcutKeyString = MpDataModelProvider.GetShortcutKeystring(sccvm.ShortcutType.ToString(), sccvm.ModelId.ToString());
                 if(string.IsNullOrEmpty(shortcutKeyString)) {
                     return "Assign " + sccvm.ShortcutLabel + " Shortcut";
                 }

@@ -413,7 +413,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public bool IsCustomSize => Parent == null ? false : Parent.TryGetByPersistentSize_ById(CopyItemId, out double size);
+        public bool IsCustomWidth => Parent == null ? false : MpAvPersistentClipTilePropertiesHelper.IsTileHaveUniqueSize(CopyItemId);
         public bool IsPlaceholder => CopyItem == null;
 
         #region Drag & Drop
@@ -1583,8 +1583,8 @@ namespace MonkeyPaste.Avalonia {
             _curItemRandomHexColor = string.Empty;
 
             IsBusy = true;
-            if (ci != null && Parent.TryGetByPersistentSize_ById(ci.Id, out double uniqueSize)) {
-                BoundSize = new MpSize(uniqueSize, MinHeight);
+            if (ci != null && MpAvPersistentClipTilePropertiesHelper.TryGetByPersistentSize_ById(ci.Id, out double uniqueWidth)) {
+                BoundSize = new MpSize(uniqueWidth, MinHeight);
             } else {
                 BoundSize = MinSize;
             }
@@ -1645,7 +1645,7 @@ namespace MonkeyPaste.Avalonia {
 
             OnPropertyChanged(nameof(CopyItemData));
 
-            if(Parent.IsPersistentTileEditable_ById(CopyItemId)) {
+            if(MpAvPersistentClipTilePropertiesHelper.IsPersistentTileEditable_ById(CopyItemId)) {
                 IsContentReadOnly = false;
             }
 
@@ -2196,9 +2196,9 @@ namespace MonkeyPaste.Avalonia {
                         IsSelected = true;
                     }
                     if(IsContentReadOnly) {
-                        Parent.RemovePersistentEditableTile_ById(CopyItemId);
+                        MpAvPersistentClipTilePropertiesHelper.RemovePersistentEditableTile_ById(CopyItemId);
                     } else {
-                        Parent.AddPersistentEditableTile_ById(CopyItemId);
+                        MpAvPersistentClipTilePropertiesHelper.AddPersistentEditableTile_ById(CopyItemId);
                     }
                     MpMessenger.Send<MpMessageType>(IsContentReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
                     Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
@@ -2280,15 +2280,12 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(MinSize):
                     OnPropertyChanged(nameof(MinWidth));
                     OnPropertyChanged(nameof(MinHeight));
-                    if (IsCustomSize) {
-                        break;
-                    }
-                    BoundSize = MinSize;
+                    BoundSize = new MpSize(IsCustomWidth ? BoundWidth : MinSize.Width, MinSize.Height);
                     break;
                 case nameof(BoundSize):
                     if (IsResizing) {
                         //this occurs when mainwindow is resized and user gives tile unique width
-                        Parent.AddOrReplacePersistentSize_ById(CopyItemId, BoundWidth);
+                        MpAvPersistentClipTilePropertiesHelper.AddOrReplacePersistentSize_ById(CopyItemId, BoundWidth);
                     }
                     if (Next == null) {
                         break;
@@ -2425,12 +2422,12 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 IsResizing = true;
 
-                Parent.RemovePersistentSize_ById(CopyItemId);
+                MpAvPersistentClipTilePropertiesHelper.RemovePersistentSize_ById(CopyItemId);
                 BoundSize = Parent.DefaultItemSize;
 
                 IsResizing = false;
             }, () => {
-                return Parent != null && Parent.IsTileHaveUniqueSize(CopyItemId);
+                return Parent != null && MpAvPersistentClipTilePropertiesHelper.IsTileHaveUniqueSize(CopyItemId);
             });
 
 

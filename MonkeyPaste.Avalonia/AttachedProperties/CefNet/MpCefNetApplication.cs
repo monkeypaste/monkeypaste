@@ -8,6 +8,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common;
+using Newtonsoft.Json;
 
 namespace MonkeyPaste.Avalonia {
     public class MpCefNetApplication : CefNetApplication {
@@ -96,6 +98,12 @@ namespace MonkeyPaste.Avalonia {
 
             Initialize(Path.Combine(cefRootDir, "Release"), settings);
         }
+        //protected override void OnContextCreated(CefBrowser browser, CefFrame frame, CefV8Context context) {
+        //    base.OnContextCreated(browser, frame, context);
+        //    CefV8Value window = context.GetGlobal();
+        //    var fnhandler = new V8Func();
+        //    window.SetValue("getAllTemplatesFromDb", CefV8Value.CreateFunction("getAllTemplatesFromDb", fnhandler), CefV8PropertyAttribute.ReadOnly);
+        //}
 
 
         private void CefApp_CefProcessMessageReceived(object sender, CefProcessMessageReceivedEventArgs e) {            
@@ -142,45 +150,18 @@ namespace MonkeyPaste.Avalonia {
                 e.Handled = true;
                 return;
             }
-
-            //if (e.Name == "MessageBox.Show") {
-            //    string message = e.Message.ArgumentList.GetString(0);
-            //    Dispatcher.UIThread.Post(() => {
-            //        var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-            //            .GetMessageBoxStandardWindow("title", message);
-            //        messageBoxStandardWindow.Show();
-            //    });
-            //    e.Handled = true;
-            //    return;
-            //}
         }
+    }
+    class V8Func : CefV8Handler {
+        protected override bool Execute(string name, CefV8Value @object, CefV8Value[] arguments, ref CefV8Value retval, ref string exception) {
+            if(name == "getAllTemplatesFromDb") {
+                var citl = MpDb.GetItems<MpTextTemplate>();
 
-        private void EvaluateScript(CefFrame frame, string script) {
-            //var sb = new StringBuilder();
-            CefV8Context context = frame.V8Context;
-            if (!context.Enter()) {
-                return;
+                exception = null;
+                retval = CefV8Value.CreateString(JsonConvert.SerializeObject(citl));
+                return true;
             }
-
-            try {
-                //    sb.Append("typeof 1 = ").Append(context.Eval("1", null).Type).AppendLine();
-                //    sb.Append("typeof true = ").Append(context.Eval("true", null).Type).AppendLine();
-                //    sb.Append("typeof 'string' = ").Append(context.Eval("'string'", null).Type).AppendLine();
-                //    sb.Append("typeof 2.2 = ").Append(context.Eval("2.2", null).Type).AppendLine();
-                //    sb.Append("typeof null = ").Append(context.Eval("null", null).Type).AppendLine();
-                //    sb.Append("typeof new Object() = ").Append(context.Eval("new Object()", null).Type).AppendLine();
-                //    sb.Append("typeof undefined = ").Append(context.Eval("undefined", null).Type).AppendLine();
-                //    sb.Append("typeof new Date() = ").Append(context.Eval("new Date()", null).Type).AppendLine();
-                //    sb.Append("(window == window) = ").Append(context.Eval("window", null) == context.Eval("window", null)).AppendLine();
-                context.Eval(script, null);
-            }
-            finally {
-                context.Exit();
-            }
-            var message = new CefProcessMessage("ScriptEvaluation");
-            //message.ArgumentList.SetString(0, sb.ToString());
-            frame.SendProcessMessage(CefProcessId.Browser, message);
+            return false;
         }
-
     }
 }

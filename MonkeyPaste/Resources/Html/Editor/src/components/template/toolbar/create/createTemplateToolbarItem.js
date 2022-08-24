@@ -10,21 +10,7 @@ function showTemplateToolbarContextMenu(tb) {
     for (var i = 0; i < templateTypesMenuOptions.length; i++) {
         let tmi = templateTypesMenuOptions[i];
 
-        if (i == templateTypesMenuOptions.length - 1) {
-            cm.push({ separator: true });
-            // add new is always visible
-            tmi.action = function (option, contextMenuIndex, optionIndex) {
-                createTemplate();
-            },
-                cm.push(tmi);
-            continue;
-        }
-
         let allTemplateDefsForType = allTemplateDefs.filter(x => x.templateType.toLowerCase() == tmi.label.toLowerCase());
-
-        if (allTemplateDefsForType == null || allTemplateDefsForType.length == 0) {
-            continue;
-        }
 
         tmi.submenu = allTemplateDefsForType.map(function (ttd) {
             return {
@@ -36,6 +22,20 @@ function showTemplateToolbarContextMenu(tb) {
                 },
             }
         });
+
+        if (allTemplateDefsForType.length > 0) {
+            tmi.submenu.push({ separator: true });            
+        }
+        tmi.submenu.push(
+            {
+                icon: 'fa-solid fa-plus',
+                iconFgColor: 'lime',
+                label: 'New...',
+                action: function (option, contextMenuIndex, optionIndex) {
+                    createTemplate(null, tmi.label.toLowerCase());
+                },
+            }
+        )
         cm.push(tmi);
     }
 

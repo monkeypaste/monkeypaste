@@ -40,7 +40,7 @@ function drawUnderlines(ctx, color = 'red', thickness = '1') {
         }
 
         if (p1 && p2) {
-            log('line from: ' + p1.x + ',' + p1.y + ' to: ' + p2.x + ',' + p2.y);
+            //log('line from: ' + p1.x + ',' + p1.y + ' to: ' + p2.x + ',' + p2.y);
 
             drawLine(ctx, p1.x, p1.y, p2.x, p2.y, color, thickness);
             p1 = p2 = null;

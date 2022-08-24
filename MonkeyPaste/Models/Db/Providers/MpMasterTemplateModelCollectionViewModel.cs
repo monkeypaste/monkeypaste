@@ -76,7 +76,7 @@ namespace MonkeyPaste {
 
         }
 
-        public async Task Update(List<MpTextTemplate> updatedTemplates, List<string> removedGuids) {            
+        public async Task UpdateAsync(List<MpTextTemplate> updatedTemplates, List<string> removedGuids) {            
             if(removedGuids != null) {
                 var rtl = await MpDataModelProvider.GetTextTemplatesByGuidsAsync(removedGuids);
                 await Task.WhenAll(rtl.Select(x => x.DeleteFromDatabaseAsync()));
@@ -91,7 +91,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public async Task<IEnumerable<MpContact>> GetContacts() {
+        public async Task<IEnumerable<MpContact>> GetContactsAsync() {
             var contacts = new List<MpIContact>(); 
 
             var fetchers = MpPluginLoader.Plugins.Where(x => x.Value.Component is MpIContactFetcherComponentBase).Select(x=>x.Value.Component).Distinct();

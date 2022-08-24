@@ -1802,7 +1802,7 @@ using stdole;
 
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.CommandParameter == CopyItemId && sc.ShortcutType == ShortcutType) {
+                if (sc.CommandParameter == CopyItemId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(SelfBindingRef));
                 }
             } else if (e is MpImageAnnotation dio) {
@@ -1820,7 +1820,7 @@ using stdole;
 
         protected override async void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
-                if (sc.CommandParameter == CopyItemId && sc.ShortcutType == ShortcutType) {
+                if (sc.CommandParameter == CopyItemId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(SelfBindingRef));
                 }
             } else if (e is MpCopyItem ci && ci.Id == CopyItemId) {

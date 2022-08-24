@@ -14,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using SQLiteNetExtensions.Extensions;
 
 namespace MonkeyPaste {
     public static class MpDb {
@@ -31,7 +32,7 @@ namespace MonkeyPaste {
         public static string AccessToken { get; set; }
         public static bool IsLoaded { get; set; } = false;
 
-        public static bool IgnoreLogging { get; set; } = false;
+        public static bool IgnoreLogging { get; set; } = true;
 
         #endregion
 
@@ -270,6 +271,13 @@ namespace MonkeyPaste {
         #endregion
 
         #region Sync
+        public static List<T> GetItems<T>() where T : new() {
+            if (_connection == null) {
+                CreateConnection();
+            }
+            var dbol = _connection.GetAllWithChildren<T>(recursive: true);
+            return dbol;
+        }
 
         public static T GetItem<T>(int id) where T : new() {
             if (_connection == null) {
@@ -394,9 +402,10 @@ namespace MonkeyPaste {
 
             if(Environment.CurrentDirectory.Contains("MpWpfApp")) {
                 MpTag.AllTagId = 2;
-                MpTag.FavoritesTagId =
+                MpTag.FavoritesTagId = 3;
                 MpPrefViewModel.Instance.ThisAppSourceId = 5;
                 MpPrefViewModel.Instance.ThisOsFileManagerSourceId = 4;
+                MpPrefViewModel.Instance.ThisDeviceGuid = "f64b221e-806a-4e28-966a-f9c5ff0d9370";
             }
 
 

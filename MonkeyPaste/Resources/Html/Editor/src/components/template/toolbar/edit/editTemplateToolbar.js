@@ -1,4 +1,7 @@
 ﻿
+var IsTemplateNameTextAreaFocused = false;
+var IsTemplateDetailTextAreaFocused = false;
+
 function showEditTemplateToolbar() {
     var ett = document.getElementById('editTemplateToolbar');
     ett.style.display = 'flex';
@@ -12,14 +15,14 @@ function showEditTemplateToolbar() {
         setTemplateType(t.domNode.getAttribute('templateGuid'), t.domNode.getAttribute('templateType'));
     }
 
-    document.getElementById('editTemplateTypeMenuSelector').addEventListener('change', onTemplateTypeChanged);
+    //document.getElementById('editTemplateTypeMenuSelector').addEventListener('change', onTemplateTypeChanged);
 }
 
 function hideEditTemplateToolbar() {
     var ett = document.getElementById('editTemplateToolbar');
     ett.style.display = 'none';
 
-    document.getElementById('editTemplateTypeMenuSelector').removeEventListener('change', onTemplateTypeChanged);
+    //document.getElementById('editTemplateTypeMenuSelector').removeEventListener('change', onTemplateTypeChanged);
 }
 
 function updateEditTemplateToolbarPosition() {
@@ -120,7 +123,7 @@ function setTemplateType(tguid, ttype) {
 
     var t = getTemplateDefByGuid(tguid);
     //t.domNode.setAttribute('templateType', templateTypeValue);
-    document.getElementById("editTemplateTypeMenuSelector").value = ttype;
+    //document.getElementById("editTemplateTypeMenuSelector").value = ttype;
 
     if (ttype == 'datetime' && t.domNode.getAttribute('templateData') == '') {
         setTemplateProperty(tguid, 'templateData', 'MM/dd/yyy HH:mm:ss');
@@ -170,6 +173,10 @@ function setTemplateDetailData(tguid, detailData) {
     }
 }
 
+function isEditTemplateTextAreaFocused() {
+    return IsTemplateNameTextAreaFocused || IsTemplateDetailTextAreaFocused;
+}
+
 //#endregion
 
 //#region Event Callbacks
@@ -191,6 +198,22 @@ function onTemplateNameChanged(e) {
 function onTemplateDetailChanged(e) {
     let newDetailData = document.getElementById('templateDetailTextInput').value;
     setTemplateDetailData(getFocusTemplateGuid(), newDetailData);
+}
+
+function onTemplateNameTextAreaGotFocus() {
+    IsTemplateNameTextAreaFocused = true;
+}
+
+function onTemplateDetailTextAreaGotFocus() {
+    IsTemplateDetailTextAreaFocused = true;
+}
+
+function onTemplateNameTextAreaLostFocus() {
+    IsTemplateNameTextAreaFocused = false;
+}
+
+function onTemplateDetailTextAreaLostFocus() {
+    IsTemplateDetailTextAreaFocused = false;
 }
 
 //#endregion

@@ -19,6 +19,12 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvCefNetWebViewExtension {
+        #region Private Variables
+
+        private static readonly double _EDITOR_DEFAULT_WIDTH = 1200;
+
+        #endregion
+
         static MpAvCefNetWebViewExtension() {
             IsContentReadOnlyProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsContentReadOnlyChanged(x, y));
             IsSubSelectionEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsSubSelectionEnabledChanged(x, y));
@@ -28,6 +34,22 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #region Properties
+
+        #region ReadOnlyWidth AvaloniaProperty
+        public static double GetReadOnlyWidth(AvaloniaObject obj) {
+            return obj.GetValue(ReadOnlyWidthProperty);
+        }
+        public static void SetReadOnlyWidth(AvaloniaObject obj, double value) {
+            obj.SetValue(ReadOnlyWidthProperty, value);
+        }
+
+        public static readonly AttachedProperty<double> ReadOnlyWidthProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, double>(
+                "ReadOnlyWidth",
+                260.0d,
+                false);
+
+        #endregion
 
         #region IsContentReadOnly AvaloniaProperty
         public static bool GetIsContentReadOnly(AvaloniaObject obj) {
@@ -53,61 +75,15 @@ namespace MonkeyPaste.Avalonia {
                     ProcessEnableReadOnlyResponse(wv, enableReadOnlyResp);
                 } else {
                     MpQuillDisableReadOnlyRequestMessage drorMsg = CreateDisableReadOnlyMessage(wv);
-                    var disableReadOnlyResp = await wv.EvaluateJavascriptAsync($"disableReadOnly('{drorMsg.Serialize()}')");
+                    string drorMsgStr = drorMsg.Serialize();
+                    MpConsole.WriteLine("Disable ReadOnly request:");
+                    MpConsole.WriteLine(drorMsgStr);
+                    string disableReadOnlyResp = await wv.EvaluateJavascriptAsync($"disableReadOnly('{drorMsgStr}')");
                     ProcessDisableReadOnlyResponse(wv, disableReadOnlyResp);
                 }
             } 
 
-            string ProcessEnableReadOnlyResponse(Control control, string enableReadOnlyResponse) {
-                if (control.DataContext is MpAvClipTileViewModel ctvm) {
-                    MpConsole.WriteLine($"Tile content item '{ctvm.CopyItemTitle}' is readonly");
-                    
-                    var qrm = MpJsonObject.DeserializeObject<MpQuillEnableReadOnlyResponseMessage>(enableReadOnlyResponse);
-
-                    ctvm.CopyItemData = qrm.itemEncodedHtmlData;
-                    MpConsole.WriteLine("Skipping writing updated item data: ");
-                    MpConsole.WriteLine(qrm.itemEncodedHtmlData);
-
-                    //var ctcv = fe.GetVisualAncestor<MpAvClipTileView>();
-                    //if (ctcv != null) {
-                    //    ctcv.TileResizeBehavior.ResizeWidth(GetReadOnlyWidth(fe));
-                    //}
-
-                    MpMasterTemplateModelCollectionViewModel.Instance.Update(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids).FireAndForgetSafeAsync(ctvm);
-
-                    return qrm.itemEncodedHtmlData;
-                }
-                return null;
-            }
-            void ProcessDisableReadOnlyResponse(Control fe, string disableReadOnlyResponse) {
-                if (fe.DataContext is MpAvClipTileViewModel civm) {
-                    MpConsole.WriteLine($"Tile content item '{civm.CopyItemTitle}' is editable");
-
-                    var qrm = MpJsonObject.DeserializeObject<MpQuillDisableReadOnlyResponseMessage>(disableReadOnlyResponse);
-
-                    //var ctcv = fe.GetVisualAncestor<MpAvClipTileView>();
-                    //if (ctcv != null) {
-                    //    SetReadOnlyWidth(fe, ctcv.ActualWidth);
-
-                    //    if (ctcv.ActualWidth < 900) {
-                    //        ctcv.TileResizeBehavior.ResizeWidth(900);// qrm.editorWidth - ctcv.ActualWidth, 0);
-                    //    }
-                    //} else {
-                    //    SetReadOnlyWidth(fe, MpClipTileViewModel.DefaultBorderWidth);
-                    //}
-                }
-            }
-
-            MpQuillDisableReadOnlyRequestMessage CreateDisableReadOnlyMessage(Control fe) {
-                var ctvm = fe.DataContext as MpAvClipTileViewModel;
-                MpConsole.WriteLine($"Tile content item '{ctvm.CopyItemTitle}' is editable");
-
-                MpQuillDisableReadOnlyRequestMessage drorMsg = new MpQuillDisableReadOnlyRequestMessage() {
-                    allAvailableTextTemplates = MpMasterTemplateModelCollectionViewModel.Instance.AllTemplates.ToList(),
-                    editorHeight = ctvm.EditorHeight//fe.GetVisualAncestor<MpRtbContentView>().ActualHeight
-                };
-                return drorMsg;
-            }            
+                 
         }
 
         #endregion
@@ -225,14 +201,18 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+        #endregion
+
+        #endregion
+
 
         private static void Wv_BrowserCreated(object sender, EventArgs e) {
-            if(sender is MpAvCefNetWebView wv && 
+            if (sender is MpAvCefNetWebView wv &&
                 wv.DataContext is MpAvClipTileViewModel ctvm) {
                 wv.IsEditorInitialized = false;
 
                 wv.Navigated += Wv_Navigated;
-                wv.Navigate(ctvm.EditorPath);                
+                wv.Navigate(ctvm.EditorPath);
             }
 
         }
@@ -247,7 +227,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private static async Task LoadContentAsync(Control control) {
-            if (control is MpAvCefNetWebView wv && 
+            if (control is MpAvCefNetWebView wv &&
                 control.DataContext is MpAvClipTileViewModel ctvm) {
                 while (ctvm.IsAnyBusy) {
                     await Task.Delay(100);
@@ -261,17 +241,17 @@ namespace MonkeyPaste.Avalonia {
                 var lrm = await CreateLoadRequestMessageAsync(wv);
                 var loadReqJsonStr = lrm.Serialize();
                 string loadResponseMsgStr = null;
-                while(loadResponseMsgStr == null) {
+                while (loadResponseMsgStr == null) {
                     string resp = await wv.EvaluateJavascriptAsync($"init('{loadReqJsonStr}')");
-                    if(resp == MpCefNetApplication.JS_REF_ERROR || resp == null) {
+                    if (resp == MpCefNetApplication.JS_REF_ERROR || resp == null) {
                         await Task.Delay(100);
                         continue;
                     }
                     loadResponseMsgStr = resp;
                 }
-                
+
                 MpQuillLoadResponseMessage loadResponseMsg = MpJsonObject.DeserializeObject<MpQuillLoadResponseMessage>(loadResponseMsgStr);
-                
+
                 ctvm.UnformattedContentSize = new Size(loadResponseMsg.contentWidth, loadResponseMsg.contentHeight);
 
                 wv.IsEditorInitialized = true;
@@ -349,27 +329,83 @@ namespace MonkeyPaste.Avalonia {
             List<string> templateGuids = new List<string>();
             int curIdx = 0;
             while (curIdx < text.Length) {
-                var encodedRangeOpenTagIdx = text.Substring(curIdx).IndexOf(MpTextTemplate.TextTemplateOpenToken);
+                string curText = text.Substring(curIdx);
+                var encodedRangeOpenTagIdx = curText.IndexOf(MpTextTemplate.TextTemplateOpenToken);
                 if (encodedRangeOpenTagIdx < 0) {
                     break;
                 }
-                var encodedRangeCloseTagIdx = text.Substring(encodedRangeOpenTagIdx).IndexOf(MpTextTemplate.TextTemplateCloseToken);
+                var encodedRangeCloseTagIdx = curText.IndexOf(MpTextTemplate.TextTemplateCloseToken);
                 if (encodedRangeCloseTagIdx < 0) {
                     MpConsole.WriteLine(@"Corrupt text content, missing ending range tag. Item html: ");
                     MpConsole.WriteLine(text);
                     throw new Exception("Corrupt text content see console");
                 }
-                string templateGuid = text.Substring(encodedRangeOpenTagIdx + MpTextTemplate.TextTemplateOpenToken.Length, encodedRangeCloseTagIdx);
+                string templateGuid = curText.Substring(encodedRangeOpenTagIdx + MpTextTemplate.TextTemplateOpenToken.Length, encodedRangeCloseTagIdx - (encodedRangeOpenTagIdx + MpTextTemplate.TextTemplateOpenToken.Length));
 
                 templateGuids.Add(templateGuid);
-                curIdx = encodedRangeCloseTagIdx + 1;
+                curIdx = curIdx + encodedRangeCloseTagIdx + 1;
             }
             return templateGuids.Distinct().ToList();
         }
-        #endregion
+        private static string ProcessEnableReadOnlyResponse(Control control, string enableReadOnlyResponse) {
+            if (control.DataContext is MpAvClipTileViewModel ctvm) {
+                MpConsole.WriteLine($"Tile content item '{ctvm.CopyItemTitle}' is readonly");
 
-        #endregion
+                var qrm = MpJsonObject.DeserializeObject<MpQuillEnableReadOnlyResponseMessage>(enableReadOnlyResponse);
 
-        
+                if (ctvm.CopyItemData != qrm.itemEncodedHtmlData) {
+
+                    ctvm.CopyItemData = qrm.itemEncodedHtmlData;
+                }
+
+                var ctv = control.GetVisualAncestor<MpAvClipTileView>();
+                if (ctv != null) {
+                    if (GetReadOnlyWidth(control) < MpAvClipTrayViewModel.Instance.DefaultItemWidth) {
+                        SetReadOnlyWidth(control, MpAvClipTrayViewModel.Instance.DefaultItemWidth);
+                    }
+                    double deltaWidth = GetReadOnlyWidth(control) - ctv.Bounds.Width;
+
+                    var resizeBorder = ctv.FindControl<Border>("ClipTileResizeBorder");
+                    MpAvResizeExtension.ResizeByDelta(resizeBorder, deltaWidth, 0, false);
+                }
+
+                MpMasterTemplateModelCollectionViewModel.Instance
+                    .UpdateAsync(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids)
+                    .FireAndForgetSafeAsync(ctvm);
+
+                return qrm.itemEncodedHtmlData;
+            }
+            return null;
+        }
+        private static void ProcessDisableReadOnlyResponse(Control control, string disableReadOnlyResponse) {
+            if (control.DataContext is MpAvClipTileViewModel civm) {
+                MpConsole.WriteLine($"Tile content item '{civm.CopyItemTitle}' is editable");
+
+                //var qrm = MpJsonObject.DeserializeObject<MpQuillDisableReadOnlyResponseMessage>(disableReadOnlyResponse);
+
+                var ctv = control.GetVisualAncestor<MpAvClipTileView>();
+                if (ctv != null) {
+                    SetReadOnlyWidth(control, ctv.Bounds.Width);
+
+                    double deltaWidth = _EDITOR_DEFAULT_WIDTH - ctv.Bounds.Width;
+                    if (deltaWidth > 0) {
+                        var resizeBorder = ctv.FindControl<Border>("ClipTileResizeBorder");
+                        MpAvResizeExtension.ResizeByDelta(resizeBorder, deltaWidth, 0, false);
+                    }
+                }
+            }
+        }
+
+        private static MpQuillDisableReadOnlyRequestMessage CreateDisableReadOnlyMessage(Control fe) {
+            var ctvm = fe.DataContext as MpAvClipTileViewModel;
+            MpConsole.WriteLine($"Tile content item '{ctvm.CopyItemTitle}' is editable");
+
+            MpQuillDisableReadOnlyRequestMessage drorMsg = new MpQuillDisableReadOnlyRequestMessage() {
+                allAvailableTextTemplates = new List<MpTextTemplate>(),// MpMasterTemplateModelCollectionViewModel.Instance.AllTemplates.ToList(),
+                editorHeight = ctvm.EditorHeight
+            };
+            return drorMsg;
+        }
+
     }
 }

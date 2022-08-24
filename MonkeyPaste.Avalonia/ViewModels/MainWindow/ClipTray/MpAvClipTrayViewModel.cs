@@ -32,7 +32,6 @@ namespace MonkeyPaste.Avalonia {
 
         private bool _isMainWindowOrientationChanging = false;
 
-
         #endregion
 
         #region Constants
@@ -592,7 +591,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 MpSize tile_size = DefaultItemSize;
-                if (TryGetByPersistentSize_ById(tileId, out double uniqueSize)) {
+                if (MpAvPersistentClipTilePropertiesHelper.TryGetByPersistentSize_ById(tileId, out double uniqueSize)) {
                     tile_size.Width = uniqueSize;
                 }
 
@@ -702,7 +701,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Default Tile Layout 
 
-
         public double DesiredMaxTileRight {
             get {
                 if (ListOrientation == Orientation.Horizontal) {
@@ -777,60 +775,8 @@ namespace MonkeyPaste.Avalonia {
         #region Virtual
 
         //set in civm IsSelected property change, DragDrop.Drop (copy mode)
-        public List<MpCopyItem> PersistentSelectedModels { get; set; } = new List<MpCopyItem>();
-
-        private List<int> _persistentEditableTiles_ById { get; set; } = new List<int>();
-        private Dictionary<int, double> _persistentUniqueTileSizeLookup_ById { get; set; } = new Dictionary<int, double>();
-        private Dictionary<int, double> _persistentUniqueTileSizeLookup_ByIdx { get; set; } = new Dictionary<int, double>();
-
-        public void AddPersistentEditableTile_ById(int ciid) { 
-            if(_persistentEditableTiles_ById.Contains(ciid)) {
-                return;
-            }
-            _persistentEditableTiles_ById.Add(ciid);
-        }
-        public void RemovePersistentEditableTile_ById(int ciid) {
-            if (_persistentEditableTiles_ById.Contains(ciid)) {
-                _persistentEditableTiles_ById.Remove(ciid);
-            }            
-        }
-
-        public bool IsPersistentTileEditable_ById(int ciid) {
-            return _persistentEditableTiles_ById.Contains(ciid);
-        }
-
-        public void AddOrReplacePersistentSize_ById(int ciid, double uniqueSize) {
-            _persistentUniqueTileSizeLookup_ById.AddOrReplace(ciid, uniqueSize);
-            
-            int queryOffset = MpDataModelProvider.AvailableQueryCopyItemIds.FastIndexOf(ciid);
-            if (queryOffset < 0) {
-                return;
-            }
-            _persistentUniqueTileSizeLookup_ByIdx.AddOrReplace(queryOffset, uniqueSize);
-        }
-
-        public void RemovePersistentSize_ById(int ciid) {
-            if (_persistentUniqueTileSizeLookup_ById.ContainsKey(ciid)) {
-                _persistentUniqueTileSizeLookup_ById.Remove(ciid);
-            }
-            int queryOffset = MpDataModelProvider.AvailableQueryCopyItemIds.FastIndexOf(ciid);
-            if (queryOffset < 0) {
-                return;
-            }
-            _persistentUniqueTileSizeLookup_ByIdx.Remove(queryOffset);
-        }
-
-        public bool TryGetByPersistentSize_ById(int ciid, out double uniqueSize) {
-            return _persistentUniqueTileSizeLookup_ById.TryGetValue(ciid, out uniqueSize);
-        }
-
-        public bool IsTileHaveUniqueSize(int ciid) {
-            return _persistentUniqueTileSizeLookup_ById.TryGetValue(ciid, out double uniqueSize);
-        }
-        public void ClearPersistentWidths() {
-            _persistentUniqueTileSizeLookup_ByIdx.Clear();
-            _persistentUniqueTileSizeLookup_ById.Clear();
-        }
+        
+        
 
 
         public int HeadQueryIdx => Items.Count == 0 ? -1 : Items.Where(x => x.QueryOffsetIdx >= 0).Min(x => x.QueryOffsetIdx);// Math.Max(0, Items.Min(x => x.QueryOffsetIdx));
@@ -1006,8 +952,6 @@ namespace MonkeyPaste.Avalonia {
             UpdateTileRectCommand.Execute(fromItem);
 
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.MinSize)));
-            //OnPropertyChanged(nameof(ClipTrayScreenHeight));
-            //OnPropertyChanged(nameof(ClipTrayScreenWidth));
 
             OnPropertyChanged(nameof(ClipTrayTotalHeight));
             OnPropertyChanged(nameof(ClipTrayTotalWidth));
@@ -1615,21 +1559,6 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
 
-
-        private void AllFetchedAndSortedCopyItemIds_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-            MpConsole.WriteLine("Query Ids Changed:");
-            MpConsole.WriteLine("ACTION: " + e.Action);
-            MpConsole.WriteLine("NEW ITEMS: " + string.Join(",", e.NewItems));
-            MpConsole.WriteLine("OLD ITEMS: " + string.Join(",", e.OldItems));
-            MpConsole.WriteLine("NEW START IDX: " + e.NewStartingIndex);
-            MpConsole.WriteLine("OLD START IDX: " + e.OldStartingIndex);
-            switch (e.Action) {
-                case NotifyCollectionChangedAction.Add:
-
-                    break;
-            }
-        }
-
         #endregion
 
         #region Public Methods
@@ -1796,7 +1725,7 @@ namespace MonkeyPaste.Avalonia {
                     ctvm.ClearSelection();
                 }
 
-                PersistentSelectedModels.Clear();
+                MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Clear();
             }));
         }
 
@@ -1900,11 +1829,11 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            PersistentSelectedModels = new List<MpCopyItem>() { tile.CopyItem };
+            MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels = new List<MpCopyItem>() { tile.CopyItem };
         }
 
         public void RestoreSelectionState(MpAvClipTileViewModel tile) {
-            var prevSelectedItems = PersistentSelectedModels
+            var prevSelectedItems = MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels
                                         .Where(y => y.Id == tile.CopyItemId).ToList();
             if (prevSelectedItems.Count == 0) {
                 tile.ClearSelection();
@@ -1955,8 +1884,8 @@ namespace MonkeyPaste.Avalonia {
 
         protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
-                PersistentSelectedModels.Remove(ci);
-                RemovePersistentSize_ById(ci.Id);
+                MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Remove(ci);
+                MpAvPersistentClipTilePropertiesHelper.RemovePersistentSize_ById(ci.Id);
 
                 MpDataModelProvider.RemoveQueryItem(ci.Id);
 
@@ -1999,10 +1928,10 @@ namespace MonkeyPaste.Avalonia {
                                 continue;
                             }
                             ctvm.QueryOffsetIdx--;
-                            if (TryGetByPersistentSize_ById(ctvm.CopyItemId, out double uniqueSize)) {
-                                _persistentUniqueTileSizeLookup_ByIdx.Remove(ctvm.QueryOffsetIdx + 1);
-                                _persistentUniqueTileSizeLookup_ByIdx.Add(ctvm.QueryOffsetIdx, uniqueSize);
+                            if(MpAvPersistentClipTilePropertiesHelper.IsTileHaveUniqueSize(ctvm.CopyItemId)) {
+                                MpAvPersistentClipTilePropertiesHelper.ShiftPersistentSize(ctvm.CopyItemId, ctvm.QueryOffsetIdx + 1, ctvm.QueryOffsetIdx);
                             }
+                            
                             ctvm.OnPropertyChanged(nameof(ctvm.TrayX));
                         }
 
@@ -2672,7 +2601,7 @@ namespace MonkeyPaste.Avalonia {
                     await MpDataModelProvider.QueryForTotalCountAsync(PinnedItems.Select(x=>x.CopyItemId));
 
                     Items.Clear();
-                    ClearPersistentWidths();
+                    MpAvPersistentClipTilePropertiesHelper.ClearPersistentWidths();
 
                     //RefreshLayout();
                     FindTotalTileSize();
@@ -2777,7 +2706,7 @@ namespace MonkeyPaste.Avalonia {
                         }
                         initTasks.Add(cur_ctvm.InitializeAsync(cil[i], fetchQueryIdxList[i]));
 
-                        if (isSubQuery && PersistentSelectedModels.Any(x => x.Id == cil[i].Id)) {
+                        if (isSubQuery && MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Any(x => x.Id == cil[i].Id)) {
                             ctvm_needs_restore = cur_ctvm;
                         }
                     }
@@ -2797,7 +2726,7 @@ namespace MonkeyPaste.Avalonia {
                     HasUserAlteredPinTrayWidth = false;
 
                     if (SelectedItem == null &&
-                        PersistentSelectedModels.Count == 0 &&
+                        MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Count == 0 &&
                         TotalTilesInQuery > 0) {
                         ResetClipSelection();
                     }
@@ -2899,7 +2828,7 @@ namespace MonkeyPaste.Avalonia {
             (args) => {
                 string pt = string.Join(
                             Environment.NewLine,
-                            PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
+                            MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
 
                 //MpHelpers.OpenUrl(args.ToString() + Uri.EscapeDataString(pt));
             }, (args) => args != null && args is string);
@@ -2960,9 +2889,9 @@ namespace MonkeyPaste.Avalonia {
                     curRightMostSelectQueryIdx = SelectedItem.QueryOffsetIdx;
                     nextSelectQueryIdx = curRightMostSelectQueryIdx + 1;
 
-                } else if (PersistentSelectedModels.Count > 0) {
+                } else if (MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Count > 0) {
                     needJump = true;
-                    curRightMostSelectQueryIdx = PersistentSelectedModels.
+                    curRightMostSelectQueryIdx = MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.
                         Select(x =>
                             MpDataModelProvider.AllFetchedAndSortedCopyItemIds.IndexOf(x.Id))
                                 .Max();
@@ -3020,9 +2949,9 @@ namespace MonkeyPaste.Avalonia {
                 if (SelectedItem != null) {
                     curLeftMostSelectQueryIdx = SelectedItem.QueryOffsetIdx;
                     prevSelectQueryIdx = curLeftMostSelectQueryIdx - 1;
-                } else if (PersistentSelectedModels.Count > 0) {
+                } else if (MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Count > 0) {
                     needJump = true;
-                    curLeftMostSelectQueryIdx = PersistentSelectedModels.
+                    curLeftMostSelectQueryIdx = MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.
                         Select(x =>
                             MpDataModelProvider.AllFetchedAndSortedCopyItemIds.IndexOf(x.Id))
                                 .Min();
@@ -3312,7 +3241,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand SendToEmailCommand => new MpCommand(
             () => {
                 // for gmail see https://stackoverflow.com/a/60741242/105028
-                string pt = string.Join(Environment.NewLine, PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
+                string pt = string.Join(Environment.NewLine, MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
                 //MpHelpers.OpenUrl(
                 //    string.Format("mailto:{0}?subject={1}&body={2}",
                 //    string.Empty, SelectedItem.CopyItem.Title,
@@ -3343,7 +3272,7 @@ namespace MonkeyPaste.Avalonia {
              () => {
                  Dispatcher.UIThread.InvokeAsync(() => {
                      //BitmapSource bmpSrc = null;
-                     string pt = string.Join(Environment.NewLine, PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
+                     string pt = string.Join(Environment.NewLine, MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
                      //bmpSrc = MpHelpers.ConvertUrlToQrCode(pt);
                      //MpClipboardHelper.MpClipboardManager.SetDataObjectWrapper(
                      //    new MpDataObject() {
@@ -3357,7 +3286,7 @@ namespace MonkeyPaste.Avalonia {
                  });
              },
             () => {
-                string pt = string.Join(Environment.NewLine, PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
+                string pt = string.Join(Environment.NewLine, MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
                 return (GetSelectedClipsType() == MpCopyItemType.Text) &&
                     pt.Length <= MpPrefViewModel.Instance.MaxQrCodeCharLength;
             });

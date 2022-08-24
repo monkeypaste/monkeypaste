@@ -41,31 +41,11 @@
     <script>
         // globals
         var quill;
-        var availableTemplates = [];
+        var availableTemplates = null;
 
         const domParser = new DOMParser();
         const domSerializer = new XMLSerializer();
         var isDebug = true;
-
-        var IsIndexLoaded = false;
-        //let browserAgentInfo = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36';
-        //if (navigator.userAgent.toLowerCase() == browserAgentInfo.toLowerCase()) {
-        //    $(function () {
-        //        init();
-        //    });
-        //}
-        document.addEventListener('DOMContentLoaded', () => {
-            IsIndexLoaded = true;
-        });
-
-        function checkIsIndexLoaded() {
-            if (IsIndexLoaded) {
-                setComOutput('true');
-                return 'true';
-            }
-            setComOutput('false');
-            return 'false';
-        }
     </script>
 
     <script src="src/components/util/jsComAdapter.js"></script>
@@ -96,17 +76,15 @@
         <div class="resizer resizer-t"></div>
         <div id="templateColorBox" class="edit-template-color-box"></div>
         <textarea id="templateNameTextInput" rows="1" cols="20" class="resizable-textarea" placeholder="Template Name"></textarea>
-        <div class="edit-template-type-select-container">
+        <!--<div class="edit-template-type-select-container">
             <select id="editTemplateTypeMenuSelector">
-                <option class="edit-template-type-option" value="datetime">DateTime</option>
                 <option class="edit-template-type-option" value="dynamic">Dynamic Text</option>
                 <option class="edit-template-type-option" value="static">Static Text</option>
-                <option class="edit-template-type-option" value="content">Content Property</option>
-                <option class="edit-template-type-option" value="analyzer">Analyzer Output</option>
-                <option class="edit-template-type-option" value="action">Action Output</option>
                 <option class="edit-template-type-option" value="contact">Contact Property</option>
+                <option class="edit-template-type-option" value="datetime">DateTime</option>
             </select>
-        </div>
+        </div>-->
+
         <div id="templateDetailTextInputContainer" class="edit-template-detail-text-input-container">
             <textarea id="templateDetailTextInput" rows="1" cols="20" class="resizable-textarea" placeholder="Enter Details"></textarea>
             <i class="fa-solid fa-circle-info info-marker">

@@ -178,6 +178,12 @@ window.superCm = (function (msie) {
           iconElm.css("border", "1px solid black");
         }
 
+        var iconFgColor = opt.iconFgColor !== undefined && opt.iconFgColor;
+
+        if (iconFgColor) {
+            iconElm.css("color", iconFgColor);
+        }
+
         cmOptElement.append(iconElm.addClass(opt.icon));
         // TAK - END
 

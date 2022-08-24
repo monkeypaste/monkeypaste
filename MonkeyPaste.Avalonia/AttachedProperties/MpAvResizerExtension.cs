@@ -361,13 +361,17 @@ namespace MonkeyPaste.Avalonia {
             //MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeReset);
         }
 
-        public static void ResizeByDelta(Control control, double dx, double dy) {
-            dx *= GetXFactor(control);
-            dy *= GetYFactor(control);
-
-            if (Math.Abs(dx + dy) < 0.1) {
+        public static void ResizeByDelta(Control control, double dx, double dy, bool isFromUser = true) {
+            if (Math.Abs(dx) + Math.Abs(dy) < 0.1) {
                 return;
             }
+            if (isFromUser) {
+                dx *= GetXFactor(control);
+                dy *= GetYFactor(control);
+            } else {
+                SetIsResizing(control, true);
+            }
+
             double bound_width = GetBoundWidth(control);
             double bound_height = GetBoundHeight(control);
 
@@ -395,13 +399,12 @@ namespace MonkeyPaste.Avalonia {
             SetBoundWidth(control, bound_width);
             SetBoundHeight(control, bound_height);
 
-            //MpMessenger.SendGlobal(MpMessageType.ContentResized);
-            //if (!GetIsResizing(control)) {
-            //    MpMessenger.SendGlobal(MpMessageType.ResizeContentCompleted);
-            //}
             var resizeMsg = GetGlobalResizeMessage(control);
             if(resizeMsg != MpMessageType.None) {
                 MpMessenger.SendGlobal(resizeMsg);
+            }
+            if(!isFromUser) {
+                SetIsResizing(control, false);
             }
         }
         #endregion

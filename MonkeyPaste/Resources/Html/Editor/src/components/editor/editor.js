@@ -165,7 +165,6 @@ function init(reqMsgStr) {
 }
 
 
-
 function loadQuill(reqMsg) {
 	Quill.register("modules/htmlEditButton", htmlEditButton);
 	Quill.register({ "modules/better-table": quillBetterTable }, true);
@@ -392,7 +391,7 @@ function onEditorSelectionChanged(range, oldRange, source) {
 	} else {
 		log("Cursor not in the editor");
 	}
-	if (!range) {
+	if (!range && !isEditTemplateTextAreaFocused()) {
 		if (oldRange) {
 			//blur occured
 			quill.setSelection(oldRange);
@@ -641,7 +640,7 @@ function IsReadOnly() {
 }
 
 function enableReadOnly() {
-	deleteJsComAdapter();
+	//deleteJsComAdapter();
 
 	$(".ql-editor").attr("contenteditable", false);
 	$(".ql-editor").css("caret-color", "transparent");
@@ -669,8 +668,9 @@ function enableReadOnly() {
 
 function disableReadOnly(disableReadOnlyReqStrOrObj) {
 	log('read-only: DISABLED');
-
-	bindJsComAdapter();
+	log('disableReadOnly msg:');
+	log(disableReadOnlyReqStrOrObj);
+	//bindJsComAdapter();
 
 	let disableReadOnlyMsg = null;
 
@@ -680,7 +680,7 @@ function disableReadOnly(disableReadOnlyReqStrOrObj) {
 			editorHeight: window.visualViewport.height,
 			isSilent: false
 		};
-	} else if (disableReadOnlyReqStrOrObj instanceof String) {
+	} else if (typeof disableReadOnlyReqStrOrObj === 'string' || disableReadOnlyReqStrOrObj instanceof String) {
 		//let disableReadOnlyReqStr_decoded = atob(disableReadOnlyReqStr);
 		//disableReadOnlyMsg = JSON.parse(disableReadOnlyReqStr_decoded);
 		disableReadOnlyMsg = JSON.parse(disableReadOnlyReqStrOrObj);
@@ -721,7 +721,7 @@ function disableReadOnly(disableReadOnlyReqStrOrObj) {
 	//log("disableReadOnly() response msg:");
 	//log(droMsgJsonStr);
 
-	return droMsgJsonStr; //btoa(droMsgJsonStr);
+	//return droMsgJsonStr; //btoa(droMsgJsonStr);
 }
 
 function enableSubSelection() {

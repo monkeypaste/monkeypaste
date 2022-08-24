@@ -13,7 +13,7 @@ namespace MpWpfApp {
             //    return $"{sct.EnumToLabel()} {shortcutKeyString}";
             //}
             if (parameter is MpShortcutType sct) {
-                string shortcutKeyString = MpDataModelProvider.GetShortcutKeystring(sct);
+                string shortcutKeyString = MpDataModelProvider.GetShortcutKeystring(sct.ToString());
                 return $"{sct.EnumToLabel()} {shortcutKeyString}";
             }
             return null;
