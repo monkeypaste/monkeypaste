@@ -17,6 +17,14 @@ namespace MonkeyPaste.Common.Avalonia {
             }
             return control.GetVisualAncestors().FirstOrDefault(x => x is T) as T;
         }
+        public static IEnumerable<T> GetVisualAncestors<T>(this Control control) where T : Control {
+            IEnumerable<T> result;
+            result = control.GetVisualAncestors().Where(x => x is T).Cast<T>();
+            if (control is T ct) {
+                result.Append(ct);
+            }
+            return result;
+        }
         public static T GetVisualDescendant<T>(this Control control) where T : Control {
             if (control is T) {
                 return control as T;

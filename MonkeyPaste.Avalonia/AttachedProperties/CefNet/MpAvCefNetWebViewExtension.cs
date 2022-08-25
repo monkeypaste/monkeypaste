@@ -21,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
     public static class MpAvCefNetWebViewExtension {
         #region Private Variables
 
-        private static readonly double _EDITOR_DEFAULT_WIDTH = 1200;
+        private static readonly double _EDITOR_DEFAULT_WIDTH = 1130;
 
         #endregion
 
@@ -75,15 +75,10 @@ namespace MonkeyPaste.Avalonia {
                     ProcessEnableReadOnlyResponse(wv, enableReadOnlyResp);
                 } else {
                     MpQuillDisableReadOnlyRequestMessage drorMsg = CreateDisableReadOnlyMessage(wv);
-                    string drorMsgStr = drorMsg.Serialize();
-                    MpConsole.WriteLine("Disable ReadOnly request:");
-                    MpConsole.WriteLine(drorMsgStr);
-                    string disableReadOnlyResp = await wv.EvaluateJavascriptAsync($"disableReadOnly('{drorMsgStr}')");
+                    string disableReadOnlyResp = await wv.EvaluateJavascriptAsync($"disableReadOnly('{drorMsg.Serialize()}')");
                     ProcessDisableReadOnlyResponse(wv, disableReadOnlyResp);
                 }
-            } 
-
-                 
+            }                  
         }
 
         #endregion

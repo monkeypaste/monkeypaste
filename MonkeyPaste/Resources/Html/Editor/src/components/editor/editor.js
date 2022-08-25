@@ -721,7 +721,7 @@ function disableReadOnly(disableReadOnlyReqStrOrObj) {
 	//log("disableReadOnly() response msg:");
 	//log(droMsgJsonStr);
 
-	//return droMsgJsonStr; //btoa(droMsgJsonStr);
+	return droMsgJsonStr; //btoa(droMsgJsonStr);
 }
 
 function enableSubSelection() {

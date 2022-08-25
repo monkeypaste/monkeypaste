@@ -13,7 +13,7 @@
              VerticalAlignment="Stretch"
              x:Class="MonkeyPaste.Avalonia.MpAvContextMenuView">
     <ContextMenu.Resources>
-        <Thickness x:Key="MenuFlyoutItemThemePadding">
+        <!--<Thickness x:Key="MenuFlyoutItemThemePadding">
             0,0,0,0
         </Thickness>
         <Thickness x:Key="MenuFlyoutPresenterThemePadding">
@@ -24,8 +24,31 @@
         </Thickness>
         <Thickness x:Key="MenuIconPresenterMargin">
             0,0,0,0
-        </Thickness>
+        </Thickness>-->
+        <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver">
+            LightBlue
+        </SolidColorBrush>
+        <!--<SolidColorBrush x:Key="MenuFlyoutItemBackground">
+            Transparent
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="MenuFlyoutPresenterBackground">
+            Transparent
+        </SolidColorBrush>-->
     </ContextMenu.Resources>
+    <ContextMenu.Styles>
+        <Style Selector="MenuItem">
+            <Setter Property="Background"
+                    Value="Transparent" />
+        </Style>
+        <Style Selector="MenuItem:pointerover">
+            <Setter Property="Background"
+                    Value="LightBlue" />
+        </Style>
+        <Style Selector="MenuItem:pointerover /template/ Border">
+            <Setter Property="Background"
+                    Value="LightBlue" />
+        </Style>
+    </ContextMenu.Styles>
     <!--<ContextMenu.DataTemplates>
         <local:MpAvMenuItemDataTemplateSelector>
             <DataTemplate x:Key="HeaderedSeperatorMenuItemTemplate"

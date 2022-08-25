@@ -2190,7 +2190,9 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTitle));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
                     break;
+                case nameof(IsContentEditable):
 
+                    break;
                 case nameof(IsContentReadOnly):
                     if (!IsContentReadOnly && !IsSelected) {
                         IsSelected = true;
@@ -2210,6 +2212,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(CanVerticallyScroll));
                     IsSubSelectionEnabled = !IsContentReadOnly;
                     OnPropertyChanged(nameof(IsSubSelectionEnabled));
+                    //OnPropertyChanged(nameof(IsContentEditable));
 
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));

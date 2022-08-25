@@ -847,6 +847,7 @@
   <ItemGroup>
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Include="Avalonia" Version="0.10.18" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.18" />
     <PackageReference Include="Avalonia.MonoMac" Version="0.6.1" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="0.10.18" />
     <PackageReference Include="AvaloniaColorPicker" Version="1.3.4" />

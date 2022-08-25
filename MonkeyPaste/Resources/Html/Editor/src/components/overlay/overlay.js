@@ -15,7 +15,7 @@ function updateOverlayBounds() {
 	overlayCanvas.height = editorRect.height;
 }
 
-function drawUnderlines(ctx, color = 'red', thickness = '1') {
+function drawUnderlines(ctx, color = 'red', thickness = '0.5') {
     updateOverlayBounds();
 
     let p1 = null;
@@ -24,7 +24,6 @@ function drawUnderlines(ctx, color = 'red', thickness = '1') {
 
     for (var i = 0; i < count; i++) {
         let idx_rect = quill.getBounds(i);
-        //drawRect(ctx, idx_rect);
         let isTail = i == quill.getLength() - 1;
 
         if (p1 == null) {
@@ -40,8 +39,6 @@ function drawUnderlines(ctx, color = 'red', thickness = '1') {
         }
 
         if (p1 && p2) {
-            //log('line from: ' + p1.x + ',' + p1.y + ' to: ' + p2.x + ',' + p2.y);
-
             drawLine(ctx, p1.x, p1.y, p2.x, p2.y, color, thickness);
             p1 = p2 = null;
 

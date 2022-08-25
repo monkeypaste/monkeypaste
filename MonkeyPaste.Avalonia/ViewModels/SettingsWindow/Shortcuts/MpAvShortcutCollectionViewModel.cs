@@ -22,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvSelectorViewModelBase<object,MpAvShortcutViewModel>, 
         MpIAsyncSingletonViewModel<MpAvShortcutCollectionViewModel> {
 
-        private const bool IS_GLOBAL_INPUT_ENABLED = false;
+        private const bool IS_GLOBAL_INPUT_ENABLED = true;
         private const double _MIN_GLOBAL_DRAG_DIST = 20;
 
         #region Private Variables
@@ -589,6 +589,7 @@ namespace MonkeyPaste.Avalonia {
                     } else if (!MpAvMainWindowViewModel.Instance.IsMainWindowClosing &&
                               !MpAvMainWindowViewModel.Instance.IsMainWindowLocked &&
                               //!MpExternalDropBehavior.Instance.IsPreExternalTemplateDrop &&
+                              GlobalMouseLocation != null &&
                               GlobalMouseLocation.Y < MpAvMainWindowViewModel.Instance.MainWindowTop) {
                         MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
                     }

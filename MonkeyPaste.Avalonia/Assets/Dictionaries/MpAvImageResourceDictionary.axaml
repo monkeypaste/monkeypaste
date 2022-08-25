@@ -98,16 +98,16 @@
         avares://MonkeyPaste.Avalonia/Assets/Images/search.png
     </s:String>
     <s:String x:Key="GoogleImage">
-        avares://MonkeyPaste.Avalonia/Assets/Images/googleImage.png
+        avares://MonkeyPaste.Avalonia/Assets/Images/googleIcon.png
     </s:String>
     <s:String x:Key="BingImage">
-        avares://MonkeyPaste.Avalonia/Assets/Images/bingImage.png
+        avares://MonkeyPaste.Avalonia/Assets/Images/bingIcon.png
     </s:String>
     <s:String x:Key="DuckImage">
-        avares://MonkeyPaste.Avalonia/Assets/Images/duckduckgoImage.png
+        avares://MonkeyPaste.Avalonia/Assets/Images/duckduckgoIcon.png
     </s:String>
     <s:String x:Key="YandexImage">
-        avares://MonkeyPaste.Avalonia/Assets/Images/yandexImage.png
+        avares://MonkeyPaste.Avalonia/Assets/Images/yandexIcon.png
     </s:String>
     <s:String x:Key="SelectionImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/selection.png

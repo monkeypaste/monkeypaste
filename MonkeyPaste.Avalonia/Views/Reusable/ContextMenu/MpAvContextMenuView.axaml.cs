@@ -74,4 +74,8 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaXamlLoader.Load(this);
         }
     }
+    [DoNotNotify]
+    public class MpAvMenuItem : MenuItem, IStyleable {
+        //Type IStyleable.StyleKey => typeof(MenuItem);
+    }
 }
