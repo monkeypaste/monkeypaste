@@ -489,7 +489,7 @@ function getUsedTemplateDefinitions() {
 }
 
 function getAvailableTemplateDefinitions() {
-    if (availableTemplates == null) {
+    if (availableTemplates == null || availableTemplates.length == 0) {
         if (typeof getAllTemplatesFromDb === 'function') {
             let allTemplatesJsonStr = getAllTemplatesFromDb();
             log('templates from db:');
@@ -497,7 +497,7 @@ function getAvailableTemplateDefinitions() {
             availableTemplates = JSON.parse(allTemplatesJsonStr);
 		}
 
-        if (availableTemplates == null) {
+        if (availableTemplates == null || availableTemplates.length == 0) {
             return getUsedTemplateDefinitions().map(x => getTemplateFromDomNode(x.domNode));
 		}
     }

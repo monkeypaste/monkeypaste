@@ -43,11 +43,6 @@
                         Value="Black" />
             </Style>
         </local:MpAvClipBorder.Styles>
-        <!--
-            RowDefinitions="0.25*,*,20"
-            
-            MaxHeight="{Binding MaxTitleHeight, FallbackValue=40, TargetNullValue=40}"
-        -->
         <Grid HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
             <Grid.RowDefinitions>

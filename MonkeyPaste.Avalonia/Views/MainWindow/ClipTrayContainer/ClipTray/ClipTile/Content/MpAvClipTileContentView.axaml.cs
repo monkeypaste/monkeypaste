@@ -10,8 +10,6 @@ namespace MonkeyPaste.Avalonia {
         public MpAvClipTileContentView() {
             InitializeComponent();
             var b = this.FindControl<Border>("ClipTileContainerBorder");
-            //b.PointerPressed += MpAvClipTileContentView_PointerPressed;
-            
             b.AddHandler(Control.PointerPressedEvent, MpAvClipTileContentView_PointerPressed, RoutingStrategies.Tunnel);
         }
 
@@ -32,8 +30,7 @@ namespace MonkeyPaste.Avalonia {
             if (!BindingContext.IsTitleReadOnly ||
                 !BindingContext.IsContentReadOnly ||
                  BindingContext.Parent.IsAnyResizing ||
-                 BindingContext.Parent.CanAnyResize) { // ||
-                 //MpResizeBehavior.IsAnyResizing) {
+                 BindingContext.Parent.CanAnyResize) { 
                 e.Handled = false;
                 return;
             }
@@ -52,6 +49,8 @@ namespace MonkeyPaste.Avalonia {
                 //    e.Handled = false;
                 //    return;
                 //}
+                e.Handled = false;
+                return;
             }
 
             //MpAvDragDropManager.StartDragCheck(BindingContext);

@@ -656,7 +656,7 @@ function enableReadOnly() {
 	let qrmObj = {
 		itemEncodedHtmlData: getEncodedHtml(),
 		userDeletedTemplateGuids: userDeletedTemplateGuids,
-		updatedAllAvailableTextTemplates: getAvailableTemplateDefinitions()
+		updatedAllAvailableTextTemplates: IsLoaded ? getAvailableTemplateDefinitions() : []
 	};
 	let qrmJsonStr = JSON.stringify(qrmObj);
 
@@ -732,11 +732,14 @@ function enableSubSelection() {
 	}
 	
 	drawOverlay();
+	//$(".ql-editor").css("caret-color", "black");
+	//$(".ql-editor").attr("contenteditable", true);
 }
 
 function disableSubSelection() {
 	IsUnderlinesVisible = false;
 	drawOverlay();
+	$(".ql-editor").css("caret-color", "transparent");
 }
 
 function isShowingEditorToolbar() {

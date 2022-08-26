@@ -173,7 +173,7 @@ namespace MonkeyPaste.Avalonia {
                                         },
                                         new MpMenuItemViewModel() {
                                             Header = "_DuckDuckGo",
-                                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("DuckGo") as string,
+                                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("DuckImage") as string,
                                             Command = SearchWebCommand,
                                             CommandParameter=@"https://duckduckgo.com/?q="
                                         },

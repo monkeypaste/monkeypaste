@@ -23,6 +23,7 @@ namespace MonkeyPaste {
         private static object _rdLock = new object();
         private static SQLiteAsyncConnection _connectionAsync;
         private static SQLiteConnection _connection;
+
         #endregion
 
         #region Properties
@@ -65,7 +66,6 @@ namespace MonkeyPaste {
             sw.Stop();
             MpConsole.WriteLine($"Db loading: {sw.ElapsedMilliseconds} ms");
         }
-
 
 
         public static string GetDbFileAsBase64() {
@@ -271,9 +271,9 @@ namespace MonkeyPaste {
         #endregion
 
         #region Sync
-        public static List<T> GetItems<T>() where T : new() {
+        public static List<T> GetItems<T>(string dbPath = "") where T : new() {
             if (_connection == null) {
-                CreateConnection();
+                CreateConnection(dbPath);
             }
             var dbol = _connection.GetAllWithChildren<T>(recursive: true);
             return dbol;
@@ -388,7 +388,7 @@ namespace MonkeyPaste {
         }
 
         private static async Task InitDbAsync() {
-            bool isNewDb = await InitDbConnectionAsync(MpPlatformWrapper.Services.DbInfo,true);
+            bool isNewDb = await InitDbConnectionAsync(MpPlatformWrapper.Services.DbInfo, true);
             
 
             await InitTablesAsync();

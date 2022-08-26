@@ -57,6 +57,8 @@
     <AvaloniaXaml Remove="Styles\MpAvAllStyles.axaml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="AttachedProperties\DragDrop\DropHandlers\Base\MpDropBehaviorBase.cs" />
+    <Compile Remove="AttachedProperties\DragDrop\DropHandlers\MpContentViewDropBehavior.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -866,6 +868,7 @@
     <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="AttachedProperties\DragDrop\DropHandlers\Base\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Base\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\" />

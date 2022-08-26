@@ -10,10 +10,12 @@ using System.Threading.Tasks;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace MonkeyPaste.Avalonia {
     public class MpCefNetApplication : CefNetApplication {
         #region Private Variables
+        private string _dbPath;
         #endregion
 
         #region Constants
@@ -47,6 +49,8 @@ namespace MonkeyPaste.Avalonia {
         }
         
         private MpCefNetApplication(IClassicDesktopStyleApplicationLifetime desktop) {
+            _dbPath = new MpAvDbInfo().DbPath;
+
             string datFileName = "icudtl.dat";
             string cefRootDir = @"C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia\cef";
 
@@ -98,12 +102,24 @@ namespace MonkeyPaste.Avalonia {
 
             Initialize(Path.Combine(cefRootDir, "Release"), settings);
         }
-        //protected override void OnContextCreated(CefBrowser browser, CefFrame frame, CefV8Context context) {
-        //    base.OnContextCreated(browser, frame, context);
-        //    CefV8Value window = context.GetGlobal();
-        //    var fnhandler = new V8Func();
-        //    window.SetValue("getAllTemplatesFromDb", CefV8Value.CreateFunction("getAllTemplatesFromDb", fnhandler), CefV8PropertyAttribute.ReadOnly);
-        //}
+
+        protected override void OnContextCreated(CefBrowser browser, CefFrame frame, CefV8Context context) {
+            //base.OnContextCreated(browser, frame, context);
+            if(!context.Enter()) {
+                return;
+            }
+            try {
+                CefV8Value window = context.GetGlobal();
+                var fnhandler = new V8Func(_dbPath);
+                window.SetValue("getAllTemplatesFromDb", CefV8Value.CreateFunction("getAllTemplatesFromDb", fnhandler), CefV8PropertyAttribute.ReadOnly);
+            }
+            catch (CefNet.CefNetJSExcepton ex) {
+                MpConsole.WriteTraceLine("CefNet Context created exception: ", ex);
+            }
+            finally {
+                context.Exit();
+            }            
+        }
 
 
         private void CefApp_CefProcessMessageReceived(object sender, CefProcessMessageReceivedEventArgs e) {            
@@ -153,9 +169,14 @@ namespace MonkeyPaste.Avalonia {
         }
     }
     class V8Func : CefV8Handler {
+        private string _dbPath;
+        public V8Func(string dbPath) : base() {
+            _dbPath = dbPath;
+        }
+
         protected override bool Execute(string name, CefV8Value @object, CefV8Value[] arguments, ref CefV8Value retval, ref string exception) {
             if(name == "getAllTemplatesFromDb") {
-                var citl = MpDb.GetItems<MpTextTemplate>();
+                List<MpTextTemplate> citl = MpDb.GetItems<MpTextTemplate>(_dbPath);
 
                 exception = null;
                 retval = CefV8Value.CreateString(JsonConvert.SerializeObject(citl));
