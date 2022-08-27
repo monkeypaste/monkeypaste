@@ -62,6 +62,8 @@ namespace MonkeyPaste.Avalonia {
 
         public abstract IntPtr GetParentHandleAtPoint(MpPoint poIntPtr);
 
+        public abstract void SetActiveProcess(IntPtr handle);
+
         public virtual string GetProcessApplicationName(IntPtr handle) {
             foreach(var kvp in RunningProcessLookup) {
                 if(kvp.Value.Contains(handle)) {
@@ -134,7 +136,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        
+
+
         #endregion
     }
 }

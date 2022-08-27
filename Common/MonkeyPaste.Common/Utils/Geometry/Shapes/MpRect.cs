@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Drawing;
+using System;
+using System.Linq;
 
 namespace MonkeyPaste.Common {
     public class MpRect : MpShape {
@@ -96,6 +98,22 @@ namespace MonkeyPaste.Common {
         }
         public bool Intersects(MpRect other) {
             return other.Points.Any(x => Contains(x));
+        }
+
+        public static MpRect Union(MpRect a, MpRect b) {
+            double x1 = Math.Min(a.X, b.X);
+            double x2 = Math.Max(a.X + a.Width, b.X + b.Width);
+            double y1 = Math.Min(a.Y, b.Y);
+            double y2 = Math.Max(a.Y + a.Height, b.Y + b.Height);
+
+            return new MpRect(x1, y1, x2 - x1, y2 - y1);
+        }
+
+        public void Union(MpRect b) {
+            X = Math.Min(X, b.X);
+            Width = Math.Max(X + Width, b.X + b.Width);
+            Y = Math.Min(Y, b.Y);
+            Height = Math.Max(Y + Height, b.Y + b.Height);
         }
 
         public override string ToString() {

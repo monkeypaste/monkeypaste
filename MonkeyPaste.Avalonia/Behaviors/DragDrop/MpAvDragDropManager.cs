@@ -16,46 +16,6 @@ using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
 
-    public enum MpDropType {
-        None,
-        Content,
-        PinTray,
-        External,
-        Action
-    }
-
-    public interface MpIContentDropTarget {
-        object DataContext { get; }
-        bool IsDropEnabled { get; set; }
-        bool IsDebugEnabled { get; set; }
-        int DropIdx { get; set; }
-        MpDropType DropType { get; }
-
-        MpCursorType MoveCursor { get; }
-        MpCursorType CopyCursor { get; }
-
-        void AutoScrollByMouse();
-
-        bool IsDragDataValid(bool isCopy, object dragData);
-
-        Task StartDrop();
-        Task Drop(bool isCopy, object dragData);
-        void CancelDrop();
-
-        Control RelativeToElement { get; }
-        List<Rect> DropRects { get; }
-        List<Rect> GetDropTargetRects();
-        int GetDropTargetRectIdx();
-        MpShape[] GetDropTargetAdornerShape();
-        void ContinueDragOverTarget();
-
-        //MpContentAdorner DropLineAdorner { get; set; }
-        Orientation AdornerOrientation { get; }
-        void InitAdorner();
-        void UpdateAdorner();
-        void Reset();
-    }
-
     public static class MpAvDragDropManager {
         #region private static  Variables
 
@@ -171,7 +131,9 @@ namespace MonkeyPaste.Avalonia {
 
             _mouseDragCheckStartPosition = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
 
-            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove += Instance_OnGlobalMouseMove;
+            MpAvMainWindow.Instance.PointerMoved += Instance_PointerMoved;
+            //MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove += Instance_OnGlobalMouseMove;
+
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += Instance_OnGlobalMouseReleased;
         }
 
@@ -234,7 +196,14 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private static void Instance_PointerMoved(object sender, PointerEventArgs e) {
+            MouseMoveHandler(sender, e);
+        }
         private static void Instance_OnGlobalMouseMove(object sender, SharpHook.MouseHookEventArgs e) {
+            MouseMoveHandler(sender, e);
+        }
+
+        private static void MouseMoveHandler(object sender, object e) {
             if (IsPerformingDrop) {
                 // NOTE added this state to try to fix DropIdx from clearing during drop                
                 return;
@@ -271,7 +240,7 @@ namespace MonkeyPaste.Avalonia {
                 if (dropTarget != CurDropTarget) {
                     CurDropTarget?.CancelDrop();
                     CurDropTarget = dropTarget;
-                    CurDropTarget?.StartDrop();
+                    CurDropTarget?.StartDrop(e as PointerEventArgs);
                 }
 
                 CurDropTarget?.ContinueDragOverTarget();
@@ -309,7 +278,9 @@ namespace MonkeyPaste.Avalonia {
 
             MpAvShortcutCollectionViewModel.Instance.OnGlobalEscKeyPressed -= Instance_OnGlobalEscapePressed;
 
-            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove -= Instance_OnGlobalMouseMove;
+            MpAvMainWindow.Instance.PointerMoved -= Instance_PointerMoved;
+            //MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove -= Instance_OnGlobalMouseMove;
+
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased -= Instance_OnGlobalMouseReleased;
 
             UpdateCursor();

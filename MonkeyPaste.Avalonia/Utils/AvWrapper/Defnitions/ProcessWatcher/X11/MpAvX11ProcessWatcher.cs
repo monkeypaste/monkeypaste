@@ -19,8 +19,10 @@ namespace MonkeyPaste.Avalonia {
     
     public class MpAvX11ProcessWatcher : MpAvProcessWatcherBase {
         private object _lockObj = new object();
-               
 
+        public override void SetActiveProcess(IntPtr handle) {
+            throw new NotImplementedException();
+        }
         public override IntPtr GetParentHandleAtPoint(MpPoint poIntPtr) {
             throw new NotImplementedException();
         }

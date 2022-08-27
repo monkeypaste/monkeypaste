@@ -1,12 +1,21 @@
 ﻿using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; 
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common; 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-namespace MpWpfApp {
-    public class MpContentViewDropBehavior : MpDropBehaviorBase<MpRtbContentView> {
+using Avalonia.Controls;
+using Avalonia.Layout;
+using Avalonia;
+using MonkeyPaste.Common.Avalonia;
+using Avalonia.Input;
+using AvaloniaEdit.Document;
+using Avalonia.Controls.Primitives;
+
+namespace MonkeyPaste.Avalonia {
+    public class MpAvContentViewDropBehavior : MpAvDropBehaviorBase<Control> {
         #region Privates              
         private double _autoScrollMinScrollDist = 15;
 
@@ -18,16 +27,16 @@ namespace MpWpfApp {
         private bool _isPostBlockDrop = false;
 
         private bool _isBlockDrop => _isPreBlockDrop || _isPostBlockDrop || _isSplitBlockDrop;
-        private bool _isSplitBlockDrop => MpShortcutCollectionViewModel.Instance.GlobalIsAltDown;
+        private bool _isSplitBlockDrop => MpAvShortcutCollectionViewModel.Instance.GlobalIsAltDown;
         #endregion
 
         public override bool IsDropEnabled { get; set; } = true;
 
         public override MpDropType DropType => MpDropType.Content;
 
-        public override UIElement RelativeToElement => AssociatedObject.Rtb;
+        public override Control RelativeToElement => AssociatedObject;
 
-        public override FrameworkElement AdornedElement => AssociatedObject.Rtb;
+        public override Control AdornedElement => AssociatedObject;
 
         public override Orientation AdornerOrientation => Orientation.Vertical;
 
@@ -36,7 +45,7 @@ namespace MpWpfApp {
 
         public override void OnLoaded() {
             base.OnLoaded();
-            if (AssociatedObject == null || AssociatedObject.Rtb == null) {
+            if (AssociatedObject == null) {
                 return;
             }
 
@@ -68,7 +77,9 @@ namespace MpWpfApp {
             }
         }
 
-        protected override void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
+        protected override void ReceivedGlobalMessage(MpMessageType msg) {
+            base.ReceivedGlobalMessage(msg);
+
             switch (msg) {
                 case MpMessageType.ResizingMainWindowComplete:
                     if (IsDropEnabled) {
@@ -80,58 +91,64 @@ namespace MpWpfApp {
             }
         }
 
-        public override List<Rect> GetDropTargetRects() {
-            if (AssociatedObject == null || AssociatedObject.Rtb == null) {
-                return new List<Rect>();
+        public override List<MpRect> GetDropTargetRects() {
+            if (AssociatedObject == null) {
+                return new List<MpRect>();
             }
-            var rtbRect = new List<Rect>() {
-                new Rect(0, 0, AssociatedObject.Rtb.ActualWidth, AssociatedObject.Rtb.ActualHeight)
+            var rtbRect = new List<MpRect>() {
+                new MpRect(0, 0, AssociatedObject.Bounds.Width, AssociatedObject.Bounds.Height)
             };
             return rtbRect;
         }
 
         public override int GetDropTargetRectIdx() {            
-            if (AssociatedObject == null || AssociatedObject.Rtb == null) {
+            if (AssociatedObject == null) {
                 return -1;
             }
-            if (!MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
+            if (!MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
                 // NOTE only continue if drop isn't executing or debugging drop idx will be off
                 return DropIdx;
             }
 
-            var rtb = AssociatedObject.Rtb;
-            var gmp = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+            var control = AssociatedObject;
+            MpAvCefNetWebView wv = null;
+            if (control is MpAvCefNetContentWebView cwv) { 
+                wv = cwv.GetVisualDescendant<MpAvCefNetWebView>();
+            }
 
-            var mp = Application.Current.MainWindow.TranslatePoint(gmp, rtb);
-            Rect rtb_rect = new Rect(0, 0, rtb.ActualWidth, rtb.ActualHeight);
+            var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+
+            var mp = VisualExtensions.PointToClient(control, gmp.ToAvPixelPoint()).ToPortablePoint();
+            MpRect rtb_rect = new MpRect(0, 0, control.Bounds.Width, control.Bounds.Height);
             if (!rtb_rect.Contains(mp)) {
                 Reset();
                 //MpConsole.WriteLine("rtb mp (no hit): " + mp);
                 return -1;
             }
             
-            var this_ctvm = rtb.DataContext as MpClipTileViewModel;
+            var this_ctvm = control.DataContext as MpAvClipTileViewModel;
             if (this_ctvm.IsItemDragging) {
                 //if dropping onto self
-                if (rtb.Selection.IsEmpty ||
-                   (rtb.Selection.Start == rtb.Document.ContentStart &&
-                    rtb.Selection.End == rtb.Document.ContentEnd)) {
-                    //only allow self drop for partial selection
-                    return -1;
+                if (wv != null) {
+                    if(wv.Selection.IsEmpty ||
+                        (wv.Selection.Start == wv.Document.ContentStart &&
+                            wv.Selection.End == wv.Document.ContentEnd)) {
+                        //only allow self drop for partial selection
+                        return -1;
+                    }
+                    var rtb_mp = VisualExtensions.PointToClient(control, MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.ToAvPixelPoint()).ToPortablePoint();
+                    if(wv.Selection.IsPointInRange(rtb_mp)) {
+                        // do not allow drop onto selection
+                        return -1;
+                    }
                 }
                 if(!this_ctvm.IsSubSelectionEnabled) {
                     //implies all is selected
                     return -1;
                 }
-                var rtb_mp = Application.Current.MainWindow.TranslatePoint(MpShortcutCollectionViewModel.Instance.GlobalMouseLocation, rtb);
-                
-                if(rtb.Selection.IsPointInRange(rtb_mp)) {
-                    // do not allow drop onto selection
-                    return -1;
-                }
             }
 
-            var mptp = rtb.GetPositionFromPoint(mp, true); 
+            var mptp = wv.Document.GetPosisitionFromPoint(mp, true); 
             if(mptp == null) {
                 // TODO? maybe to differentiate block drops turn off snap in GetPositionFromPoint and only 
                 // snap to find block drop
@@ -142,10 +159,11 @@ namespace MpWpfApp {
 
 
                 return -1;
-            }
+            } 
+
 
             var mptp_rect = mptp.GetCharacterRect(LogicalDirection.Forward);
-            var doc_start_rect = rtb.Document.ContentStart.GetCharacterRect(LogicalDirection.Forward);
+            var doc_start_rect = wv.Document.ContentStart.GetCharacterRect(LogicalDirection.Forward);
 
             double blockThreshold = Math.Max(2, mptp_rect.Height / 4);
             // NOTE to avoid conflicts between each line as pre/post drop only use pre for first
@@ -158,7 +176,7 @@ namespace MpWpfApp {
                 _isPreBlockDrop = _isPostBlockDrop = false;
             }
             if(_isPreBlockDrop) {
-                mptp = rtb.Document.ContentStart;
+                mptp = wv.Document.ContentStart;
             } else if(this_ctvm.ItemType == MpCopyItemType.FileList) {
                 _isPostBlockDrop = true;
             }
@@ -166,18 +184,22 @@ namespace MpWpfApp {
             //MpConsole.WriteLine("Pre: " + (_isPreBlockDrop ? "YES" : "NO"));
             //MpConsole.WriteLine("Inline: " + (_isSplitBlockDrop ? "YES" : "NO"));
             //MpConsole.WriteLine("Post: " + (_isPostBlockDrop ? "YES" : "NO"));
-            return rtb.Document.ContentStart.GetOffsetToPosition(mptp);
+            return wv.Document.ContentStart.GetOffsetToPosition(mptp);
         }
 
         public override MpShape[] GetDropTargetAdornerShape() {
+            MpAvCefNetWebView wv = null;
+            if (AssociatedObject is MpAvCefNetContentWebView cwv) {
+                wv = cwv.GetVisualDescendant<MpAvCefNetWebView>();
+            }
             var dt_ll = new List<MpShape>();
-            if (AssociatedObject == null || AssociatedObject.Rtb == null) {
+            if (wv == null) {
                 return dt_ll.ToArray();
             }
             if (DropIdx < 0) {
                 return dt_ll.ToArray();
             }
-            var dt_tp = AssociatedObject.Rtb.Document.ContentStart.GetPositionAtOffset(DropIdx);
+            var dt_tp = wv.Document.ContentStart.GetPositionAtOffset(DropIdx);
             if(dt_tp == null) {
                 return dt_ll.ToArray();
             }
@@ -189,12 +211,12 @@ namespace MpWpfApp {
             var line_start_tp = dt_tp.GetLineStartPosition(0);
             var line_start_rect = line_start_tp.GetCharacterRect(LogicalDirection.Forward);
             double pre_y = line_start_rect.Top - blockLineOffset;
-            var pre_line = new MpLine(0, pre_y, AssociatedObject.Rtb.ActualWidth, pre_y);
+            var pre_line = new MpLine(0, pre_y, AssociatedObject.Bounds.Width, pre_y);
 
             var line_end_tp = dt_tp.GetLineEndPosition(0);
             var line_end_rect = line_end_tp.GetCharacterRect(LogicalDirection.Backward);
             double post_y = line_end_rect.Bottom + blockLineOffset;
-            var post_line = new MpLine(0, post_y, AssociatedObject.Rtb.ActualWidth, post_y);
+            var post_line = new MpLine(0, post_y, AssociatedObject.Bounds.Width, post_y);
 
             var dltp_rect = dt_tp.GetCharacterRect(LogicalDirection.Forward);
             var caret_line = new MpLine(dltp_rect.Left, dltp_rect.Top, dltp_rect.Left, dltp_rect.Bottom);
@@ -225,21 +247,22 @@ namespace MpWpfApp {
             return dt_ll.ToArray();
         }
         public override bool IsDragDataValid(bool isCopy,object dragData) {
-            if (AssociatedObject == null || AssociatedObject.Rtb == null) {
+            if (AssociatedObject == null || AssociatedObject == null) {
                 return false;
             }
             if (!base.IsDragDataValid(isCopy,dragData)) {
                 return false;
             }
-            var rtb = AssociatedObject.Rtb;
-            var drop_ctvm = rtb.DataContext as MpClipTileViewModel;
+            var rtb = AssociatedObject;
+            var drop_ctvm = rtb.DataContext as MpAvClipTileViewModel;
             if (AssociatedObject != null) {
-                if(dragData is MpClipTileViewModel drag_ctvm) {
+                if(dragData is MpAvClipTileViewModel drag_ctvm) {
                     return drop_ctvm.ItemType == drag_ctvm.ItemType;
                 }
                 if(dragData is List<MpCopyItem> ddl) {
                     if (!isCopy &&
-                       ddl.Any(x => x.Id == AssociatedObject.BindingContext.CopyItemId)) {
+                        AssociatedObject.DataContext is MpAvClipTileViewModel ctvm &&
+                       ddl.Any(x => x.Id == ctvm.CopyItemId)) {
                         return false;
                     }
 
@@ -256,14 +279,18 @@ namespace MpWpfApp {
             if(AssociatedObject == null) {
                 return;
             }
-            var rtb = AssociatedObject.Rtb;
-            if(rtb == null) {
+            var rtb = AssociatedObject;
+            MpAvCefNetWebView wv = null;
+            if (AssociatedObject is MpAvCefNetContentWebView cwv) {
+                wv = cwv.GetVisualDescendant<MpAvCefNetWebView>();
+            }
+            if (rtb == null || wv == null) {
                 return;
             }
             // paste into selection range 
             if(pasteData is MpPortableDataObject pdo) {
                 if (tsr.SelectionLength > 0) {
-                    rtb.Selection.Text = string.Empty;
+                    wv.Selection.Text = string.Empty;
                 }
                 DropIdx = tsr.SelectionStart;
                 await Drop(false, pdo);
@@ -271,12 +298,17 @@ namespace MpWpfApp {
         }
 
         public override async Task Drop(bool isCopy, object dragData) {
-            if (AssociatedObject == null || DropIdx < 0) {
+            MpAvCefNetWebView wv = null;
+            if (AssociatedObject is MpAvCefNetContentWebView cwv) {
+                wv = cwv.GetVisualDescendant<MpAvCefNetWebView>();
+            }
+
+            if (AssociatedObject == null || wv == null || DropIdx < 0) {
                 return;
             }
-            var rtb = AssociatedObject.Rtb;
-            var drag_ctvm = dragData as MpClipTileViewModel;
-            var drop_ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
+            var rtb = AssociatedObject;
+            var drag_ctvm = dragData as MpAvClipTileViewModel;
+            var drop_ctvm = AssociatedObject.DataContext as MpAvClipTileViewModel;
             int dropItemId = drop_ctvm.CopyItemId;
 
             bool isSelfDrop = drag_ctvm == drop_ctvm;
@@ -303,13 +335,13 @@ namespace MpWpfApp {
             string dropData = string.Empty;
             if (drag_ctvm == null) {
                 if (dragData is MpPortableDataObject mpdo) {
-                    if(MpRichTextBox.DraggingRtb != null) {
+                    if(MpAvCefNetWebView.DraggingRtb != null) {
                         //var internalObj = mpdo.GetData(MpPortableDataFormats.InternalContent);
-                        await Drop(isCopy, MpRichTextBox.DraggingRtb.DataContext);
+                        await Drop(isCopy, MpAvCefNetWebView.DraggingRtb.DataContext);
                         return;
                     }
                     // from external source
-                    var tempCopyItem = await MpWpfCopyItemBuilder.CreateFromDataObject(mpdo, true);
+                    var tempCopyItem = await MpAvCopyItemBuilder.CreateFromDataObject(mpdo, true);
                     if(tempCopyItem == null) {
                         //empty item ignore (or was a bug and unnecessary check here
                         return;
@@ -325,13 +357,13 @@ namespace MpWpfApp {
 
 
             if(dropData.IsStringBase64()) {
-                dropRange.LoadImage(dropData, out Size dummySize);
+                dropRange.LoadImage(dropData, out MpSize dummySize);
             } else if(dropData.IsStringWindowsFileOrPathFormat()) {
                 dropRange = dropRange.End.ToTextRange();
-                dropRange.LoadItemData(dropData, MpCopyItemType.FileList, out Size dummySize);
+                dropRange.LoadItemData(dropData, MpCopyItemType.FileList, out MpSize dummySize);
             } else if (dropData.IsStringRichTextTable()) {
-                string csv = MpCsvToRtfTableConverter.GetCsv(dropData);
-                dropRange.LoadTable(csv);
+                //string csv = MpCsvToRtfTableConverter.GetCsv(dropData);
+                dropRange.LoadTable(dropData);
             } else {
                 MpConsole.WriteLine("Drop Plain Text: " + dropData);
                 dropData = dropData.TrimTrailingLineEndings();
@@ -350,14 +382,14 @@ namespace MpWpfApp {
                 dropRange.Text = dropData;
             }
 
-            await MpContentDocumentRtfExtension.SaveTextContent(rtb);
+            await MpAvCefNetWebViewExtension.SaveTextContentAsync(wv);
 
             if(!isCopy && drag_ctvm != null) {
-                MpContentDocumentRtfExtension.FinishContentCut(drag_ctvm)
+                MpAvCefNetWebViewExtension.FinishContentCutAsync(drag_ctvm)
                     .FireAndForgetSafeAsync(drag_ctvm);
             }
 
-            while(MpClipTrayViewModel.Instance.IsAnyBusy) {
+            while(MpAvClipTrayViewModel.Instance.IsAnyBusy) {
                 await Task.Delay(100);
             }
 
@@ -365,58 +397,60 @@ namespace MpWpfApp {
             // not be attached to the same content anymore so use id ref to find/select
             // drop tile
 
-            var ctvm_toSelect = MpClipTrayViewModel.Instance.GetClipTileViewModelById(dropItemId);
+            var ctvm_toSelect = MpAvClipTrayViewModel.Instance.GetClipTileViewModelById(dropItemId);
             if(ctvm_toSelect != null) {
                 ctvm_toSelect.IsSelected = true;
             }
         }
 
 
-        private TextRange GetDropRange(int rtfDropIdx, bool pre, bool post, bool split) {
+        private MpAvITextRange GetDropRange(int rtfDropIdx, bool pre, bool post, bool split) {
             MpConsole.WriteLine("DropIdx: " + rtfDropIdx);
             MpConsole.WriteLine("Pre: " + (pre ? "TRUE" : "FALSE"));
             MpConsole.WriteLine("Post: " + (post ? "TRUE" : "FALSE"));
             MpConsole.WriteLine("Split: " + (split ? "TRUE" : "FALSE"));
 
-            var rtb = AssociatedObject.Rtb;
-
+            MpAvCefNetWebView wv = null;
+            if (AssociatedObject is MpAvCefNetContentWebView cwv) {
+                wv = cwv.GetVisualDescendant<MpAvCefNetWebView>();
+            }
             // isolate insertion point and account for block drop
-            TextPointer dtp_end;
+            MpAvITextPointer dtp_end;
             if (pre) {
-                dtp_end = rtb.Document.ContentStart.GetInsertionPosition(LogicalDirection.Forward);
+                dtp_end = wv.Document.ContentStart.GetInsertionPosition(LogicalDirection.Forward);
 
             } else if (post) {
-                dtp_end = rtb.Document.ContentStart.GetPositionAtOffset(rtfDropIdx).GetLineStartPosition(1);
+                dtp_end = wv.Document.ContentStart.GetPositionAtOffset(rtfDropIdx).GetLineStartPosition(1);
                 if(dtp_end == null) {
-                    dtp_end = rtb.Document.ContentEnd.GetInsertionPosition(LogicalDirection.Backward);
+                    dtp_end = wv.Document.ContentEnd.GetInsertionPosition(LogicalDirection.Backward);
                 } else {
                     dtp_end = dtp_end.GetInsertionPosition(LogicalDirection.Forward);
                 }
 
             } else {
-                dtp_end = rtb.Document.ContentStart
+                dtp_end = wv.Document.ContentStart
                             .GetPositionAtOffset(rtfDropIdx)
                             .GetInsertionPosition(LogicalDirection.Forward);
             }
-            return new TextRange(dtp_end, dtp_end);
+            return new MpAvTextRange(dtp_end, dtp_end);
         }
 
         public override void AutoScrollByMouse() {
-            if (AssociatedObject == null || AssociatedObject.Rtb == null) {
+            if (AssociatedObject == null || AssociatedObject == null) {
                 return;
             }
             
-            var rtb = AssociatedObject.Rtb;
-            var gmp = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;
-            var mp = Application.Current.MainWindow.TranslatePoint(gmp, rtb);
+            var sv = AssociatedObject.GetVisualDescendant<ScrollViewer>();
+            var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+            var mp = VisualExtensions.PointToClient(AssociatedObject, gmp.ToAvPixelPoint()).ToPortablePoint();
 
-            Rect rtb_rect = new Rect(0, 0, rtb.ActualWidth,rtb.ActualHeight);
+            MpRect rtb_rect = new MpRect(0, 0, AssociatedObject.Bounds.Width, AssociatedObject.Bounds.Height);
 
-            if(rtb.HorizontalScrollBarVisibility == ScrollBarVisibility.Visible) {
-                rtb_rect.Height -= rtb.GetVisualDescendent<ScrollViewer>().GetScrollBar(Orientation.Horizontal).Height;
+            if(sv.HorizontalScrollBarVisibility == ScrollBarVisibility.Visible) {
+                rtb_rect.Height -= sv.GetScrollBar(Orientation.Horizontal).Height;
             }
-            if (rtb.VerticalScrollBarVisibility == ScrollBarVisibility.Visible) {
-                rtb_rect.Width -= rtb.GetVisualDescendent<ScrollViewer>().GetScrollBar(Orientation.Vertical).Width;
+            if (sv.VerticalScrollBarVisibility == ScrollBarVisibility.Visible) {
+                rtb_rect.Width -= sv.GetScrollBar(Orientation.Vertical).Width;
             }
 
             if (!rtb_rect.Contains(mp)) {
@@ -428,7 +462,7 @@ namespace MpWpfApp {
             double tdist = Math.Abs(mp.Y - rtb_rect.Top);
             double bdist = Math.Abs(mp.Y - rtb_rect.Bottom);
 
-            Point rtbScrollOffsetDelta = new Point(); 
+            MpPoint rtbScrollOffsetDelta = new MpPoint(); 
             if(ldist <= _autoScrollMinScrollDist) {
                 rtbScrollOffsetDelta.X = -_autoScrollVelocity;
             } else if (rdist <= _autoScrollMinScrollDist) {
@@ -445,21 +479,20 @@ namespace MpWpfApp {
 
             if(rtbScrollOffsetDelta.X != 0 || rtbScrollOffsetDelta.Y != 0) {
                 _autoScrollVelocity += _autoScrollAccumulator;
-                var cv = rtb.GetVisualAncestor<MpRtbContentView>();
-                cv.ScrollByPointDelta(rtbScrollOffsetDelta);
+                sv.ScrollByPointDelta(rtbScrollOffsetDelta);
             }
 
         }
 
-        public override async Task StartDrop() {
+        public override async Task StartDrop(PointerEventArgs e) {
             await Task.Delay(1);
-            if (AssociatedObject == null || AssociatedObject.Rtb == null) {
+            if (AssociatedObject == null || AssociatedObject == null) {
                 return;
             }
-            var rtb = AssociatedObject.Rtb;
-            rtb.FitDocToRtb(true);
+            //var rtb = AssociatedObject;
+            //rtb.FitDocToRtb(true);
             _autoScrollVelocity = _baseAutoScrollVelocity;
-            if(rtb.DataContext is MpClipTileViewModel ctvm) {
+            if(AssociatedObject.DataContext is MpAvClipTileViewModel ctvm) {
                 ctvm.IsCurrentDropTarget = true;
             }
         }
@@ -467,7 +500,7 @@ namespace MpWpfApp {
         public override void CancelDrop() {
             base.CancelDrop();
             if (AssociatedObject != null && 
-                AssociatedObject.DataContext is MpClipTileViewModel ctvm) {
+                AssociatedObject.DataContext is MpAvClipTileViewModel ctvm) {
                 ctvm.IsCurrentDropTarget = false;
             }
         }
@@ -478,29 +511,29 @@ namespace MpWpfApp {
             _autoScrollVelocity = _baseAutoScrollVelocity;
             _isPostBlockDrop = _isPreBlockDrop = false;
 
-            if(AssociatedObject == null || AssociatedObject.Rtb == null || AssociatedObject.DataContext == null) {
+            if(AssociatedObject == null || AssociatedObject.DataContext == null) {
                 return;
             }
 
             
-            if (!MpDragDropManager.IsDragAndDrop || 
-               !(AssociatedObject.DataContext as MpClipTileViewModel).IsItemDragging) {
+            if (!MpAvDragDropManager.IsDragAndDrop || 
+               !(AssociatedObject.DataContext as MpAvClipTileViewModel).IsItemDragging) {
                 // these checks make sure selection isn't cleared during self drop
                 
-                var rtb = AssociatedObject.Rtb;
-                if(rtb.IsReadOnly) {
-                    rtb.ScrollToHome();
+                var rtb = AssociatedObject;
+                if((AssociatedObject.DataContext as MpAvClipTileViewModel).IsContentReadOnly) {
+                    AssociatedObject.GetVisualDescendant<ScrollViewer>().ScrollToHome();
                 }
                 
-                if(rtb.Document == null) {
-                    return;
-                }
+                //if(rtb.Document == null) {
+                //    return;
+                //}
 
                 //rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
-                rtb.FitDocToRtb();
+                //rtb.FitDocToRtb();
             }
             if (AssociatedObject != null &&
-                AssociatedObject.DataContext is MpClipTileViewModel ctvm) {
+                AssociatedObject.DataContext is MpAvClipTileViewModel ctvm) {
                 ctvm.IsCurrentDropTarget = false;
             }
         }

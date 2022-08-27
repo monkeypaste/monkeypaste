@@ -13,10 +13,22 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileContentView">
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
+        <!--<Grid.Styles>
+            <Style Selector=":is(Control).ContentDragAndDrop">
+                <Setter Property="(i:Interaction.Behaviors)">
+                    <i:BehaviorCollectionTemplate>
+                        <i:BehaviorCollection>
+                            <local:MpAvContentViewDropBehavior x:Key="ContentViewDropBehavior" />
+                        </i:BehaviorCollection>
+                    </i:BehaviorCollectionTemplate>
+                </Setter>
+            </Style>
+        </Grid.Styles>-->
         <Border x:Name="ClipTileContainerBorder"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
-            <ContentControl Content="{Binding}">
+            <ContentControl x:Name="ClipTileContentControl"
+                            Content="{Binding}">
                 <ContentControl.DataTemplates>
                     <local:MpClipTileContentDataTemplateSelector>
                         <!--<DataTemplate x:Key="CefWebViewTemplate"
@@ -28,12 +40,14 @@
                         <DataTemplate x:Key="CefNetWebViewTemplate"
                                       DataType="local:MpAvClipTileViewModel">
                             <local:MpAvCefNetContentWebView DataContext="{Binding}"
+                                                            Classes="ContentDragAndDrop"
                                                             HorizontalAlignment="Stretch"
                                                             VerticalAlignment="Stretch" />
                         </DataTemplate>
                         <DataTemplate x:Key="PlainTextTemplate"
                                       DataType="local:MpAvClipTileViewModel">
                             <local:MpAvPlainTextContentView DataContext="{Binding}"
+                                                            Classes="ContentDragAndDrop"
                                                             HorizontalAlignment="Stretch"
                                                             VerticalAlignment="Stretch" />
                         </DataTemplate>

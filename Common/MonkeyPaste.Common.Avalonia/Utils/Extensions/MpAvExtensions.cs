@@ -11,13 +11,13 @@ using System.Linq;
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvExtensions {
         #region Collections
-        public static T GetVisualAncestor<T>(this Control control) where T : Control {
+        public static T GetVisualAncestor<T>(this IVisual control) where T : IVisual? {
             if (control is T) {
-                return control as T;
+                return (T)control;
             }
-            return control.GetVisualAncestors().FirstOrDefault(x => x is T) as T;
+            return (T)control.GetVisualAncestors().FirstOrDefault(x => x is T);
         }
-        public static IEnumerable<T> GetVisualAncestors<T>(this Control control) where T : Control {
+        public static IEnumerable<T> GetVisualAncestors<T>(this IVisual control) where T : IVisual {
             IEnumerable<T> result;
             result = control.GetVisualAncestors().Where(x => x is T).Cast<T>();
             if (control is T ct) {
@@ -25,13 +25,13 @@ namespace MonkeyPaste.Common.Avalonia {
             }
             return result;
         }
-        public static T GetVisualDescendant<T>(this Control control) where T : Control {
+        public static T GetVisualDescendant<T>(this IVisual control) where T : IVisual {
             if (control is T) {
-                return control as T;
+                return (T)control;
             }
-            return control.GetVisualDescendants().FirstOrDefault(x => x is T) as T;
+            return (T)control.GetVisualDescendants().FirstOrDefault(x => x is T);
         }
-        public static IEnumerable<T> GetVisualDescendants<T>(this Control control) where T : Control {
+        public static IEnumerable<T> GetVisualDescendants<T>(this IVisual control) where T : IVisual {
             IEnumerable<T> result;
             result = control.GetVisualDescendants().Where(x => x is T).Cast<T>();
             if (control is T ct) {
@@ -40,17 +40,17 @@ namespace MonkeyPaste.Common.Avalonia {
             return result;
         }
 
-        public static bool TryGetVisualAncestor<T>(this Control control, out T ancestor) where T : Control {
+        public static bool TryGetVisualAncestor<T>(this IVisual control, out T ancestor) where T : IVisual {
             ancestor = control.GetVisualAncestor<T>();
-            return ancestor != default(T);
+            return ancestor != null;
         }
 
-        public static bool TryGetVisualDescendant<T>(this Control control, out T descendant) where T : Control {
+        public static bool TryGetVisualDescendant<T>(this IVisual control, out T descendant) where T : IVisual {
             descendant = control.GetVisualDescendant<T>();
-            return descendant != default(T);
+            return descendant != null;
         }
 
-        public static bool TryGetVisualDescendants<T>(this Control control, out IEnumerable<T> descendant) where T : Control {
+        public static bool TryGetVisualDescendants<T>(this IVisual control, out IEnumerable<T> descendant) where T : IVisual {
             descendant = control.GetVisualDescendants<T>();
             return descendant.Count() > 0;
         }
@@ -94,10 +94,27 @@ namespace MonkeyPaste.Common.Avalonia {
             sv.Offset = newOffset;
         }
 
+        public static void ScrollByPointDelta(this ScrollViewer sv, MpPoint delta) {
+            var hsb = sv.GetScrollBar(Orientation.Horizontal);
+            var vsb = sv.GetScrollBar(Orientation.Vertical);
+
+            double new_x_offset = Math.Max(0, Math.Min(sv.Offset.X + delta.X, hsb.Maximum));
+            double new_y_offset = Math.Max(0, Math.Min(sv.Offset.Y + delta.Y, vsb.Maximum));
+
+            sv.ScrollToPoint(new MpPoint(new_x_offset, new_y_offset));
+        }
+
+        public static void ScrollToPoint(this ScrollViewer sv, MpPoint p) {
+            sv.ScrollToHorizontalOffset(p.X);
+            sv.ScrollToVerticalOffset(p.Y);
+
+            sv.InvalidateMeasure();
+            sv.InvalidateArrange();
+        }
         #endregion
 
         #region Events
-        
+
         public static bool IsLeftPress(this PointerPressedEventArgs ppea, IVisual? control = null) {
             return ppea.GetCurrentPoint(control)
                             .Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed;

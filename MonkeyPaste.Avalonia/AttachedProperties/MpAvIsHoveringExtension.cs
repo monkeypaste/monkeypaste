@@ -204,162 +204,167 @@ namespace MonkeyPaste.Avalonia {
                 DetachedToVisualHandler(element, null);
             }
 
-            void AttachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
-                if (s is Control control) {
-                    control.DetachedFromVisualTree += DetachedToVisualHandler;
-                    control.PointerEnter += PointerEnterHandler;
-                    control.PointerLeave += PointerLeaveHandler;
+            
+        }
 
-                    if (e == null) {
-                        control.AttachedToVisualTree += AttachedToVisualHandler;
-                    }
+        #endregion
+
+        #region Private Methods
+
+        private static void AttachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+            if (s is Control control) {
+                control.DetachedFromVisualTree += DetachedToVisualHandler;
+                control.PointerEnter += PointerEnterHandler;
+                control.PointerLeave += PointerLeaveHandler;
+
+                if (e == null) {
+                    control.AttachedToVisualTree += AttachedToVisualHandler;
                 }
-            }
-
-            void DetachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
-                if (s is Control control) {
-                    control.AttachedToVisualTree -= AttachedToVisualHandler;
-                    control.DetachedFromVisualTree -= DetachedToVisualHandler;
-                    control.PointerEnter -= PointerEnterHandler;
-                    control.PointerLeave -= PointerLeaveHandler;
-                }
-            }
-
-            void PointerEnterHandler(object? s, PointerEventArgs e) {
-                if(s is Control control) {
-                    if(!GetCanHover(control)) {
-                        return;
-                    }
-                    SetIsHovering(control, true);
-                    if(GetHoverCursor(control) is MpCursorType ct) {
-                        MpPlatformWrapper.Services.Cursor.SetCursor(ct);
-                    }
-                    var test = GetHoverBrush(control);
-                    if(GetHoverBrush(control) is IBrush hoverBrush && control is Border border) {
-                        if(GetDefaultBrush(control) == null) {
-                            SetDefaultBrush(control, border.Background);
-                        }
-                        border.Background = hoverBrush;
-                    }
-                }
-
-                //AvaloniaObject ao;
-                //object dc;
-                //if (s is StyledElement se) {
-                //    ao = se; 
-                //    dc = se.DataContext; 
-                //} else {
-                //    return;
-                //}
-                //if(!GetCanHover(ao)) {
-                //    return;
-                //}
-                //SetIsHovering(ao, true);
-
-                //MpCursorType? hoverCursor = GetHoverCursor(ao);
-                //if (hoverCursor.HasValue) {
-                //    MpCursor.SetCursor(dc, hoverCursor.Value);
-                //}
-
-                //IImage hoverImageSource = GetHoverImageSource(ao);
-                //if (hoverImageSource != null && ao is Image i) {
-                //    if (GetDefaultImageSource(ao) == null) {
-                //        SetDefaultImageSource(ao, i.Source);
-                //    }
-
-                //    i.Source = hoverImageSource;
-                //} else if (GetHoverBrush(ao) != null) {
-                //    var hoverBrush = GetHoverBrush(ao);
-                //    Image img = null;
-                //    if (ao is Image) {
-                //        img = ao as Image;
-                //    } else if (ao is Control control) {
-                //        img = control.GetVisualDescendants().FirstOrDefault(x => x is Image) as Image;
-                //        //img = elm.GetVisualDescendent<Image>();
-                //    }
-                //    if (img == null) {
-                //        if(ao is Control control) {
-                //            if(control.TryGetVisualDescendant<Path>(out Path path)) {
-                //                path.Fill = hoverBrush;
-                //            } else if (ao is Border b) {
-                //                if (b.Background is ImageBrush imgBrush) {
-                //                    // imgBrush.Source = (imgBrush.Source as IImage).Tint(hoverBrush);
-                //                } else {
-                //                    b.Background = hoverBrush;
-                //                }
-                //            }
-                //        }
-                        
-                //        return;
-                //    }
-                //    //img.Source = (img.Source as IImage).Tint(hoverBrush);
-                //}
-            }
-            void PointerLeaveHandler(object? s, PointerEventArgs e) {
-                if (s is Control control) {
-                    SetIsHovering(control, false);
-                    if (GetHoverCursor(control) is MpCursorType ct) {
-                        MpCursor.UnsetCursor(control.DataContext);
-                    }
-                    if(GetDefaultBrush(control) is IBrush defaultBrush && control is Border border) {
-                        border.Background = defaultBrush;
-                    }
-                }
-                //AvaloniaObject ao;
-                //object dc;
-                //if (s is StyledElement se) {
-                //    ao = se;
-                //    dc = se.DataContext;
-                //} else {
-                //    return;
-                //}
-                //SetIsHovering(ao, false);
-
-                //MpCursorType? hoverCursor = GetHoverCursor(ao);
-                //if (hoverCursor.HasValue) {
-                //    MpCursor.UnsetCursor(dc);
-                //}
-
-                //IImage defaultImageSource = GetDefaultImageSource(ao);
-                //if (GetHoverImageSource(ao) != null && defaultImageSource != null && ao is Image i) {
-                //    i.Source = defaultImageSource;
-                //} else if (GetDefaultBrush(ao) != null) {
-                //    var defaultBrush = GetDefaultBrush(ao);
-                //    Image img = null;
-                //    if (ao is Image) {
-                //        img = ao as Image;
-                //    } else if (ao is Control control) {
-                //        img = control.GetVisualDescendants().FirstOrDefault(x => x is Image) as Image;
-                //    }
-                //    if (img == null) {
-                //        if(ao is Control control) {
-                //            if (control.TryGetVisualDescendant<Path>(out Path path)) {
-                //                path.Fill = defaultBrush;
-                //            } else if (ao is Border b) {
-                //                if (b.Background is ImageBrush imgBrush) {
-                //                    if (GetIsSelected(ao) && GetSelectedBrush(ao) != null) {
-                //                        //imgBrush.ImageSource = (imgBrush.ImageSource as BitmapSource).Tint(GetSelectedBrush(ao));
-                //                    } else {
-                //                        //imgBrush.ImageSource = (imgBrush.ImageSource as BitmapSource).Tint(defaultBrush);
-
-                //                    }
-                //                } else {
-                //                    b.Background = defaultBrush;
-                //                }
-                //            }
-                //        }
-                //        return;
-                //    }
-                //    if (GetIsSelected(ao) && GetSelectedBrush(ao) != null) {
-                //        //img.Source = (img.Source as BitmapSource).Tint(GetSelectedBrush(ao));
-                //    } else {
-                //        //img.Source = (img.Source as BitmapSource).Tint(defaultBrush);
-                //    }
-
-                //}
             }
         }
 
+        private static void DetachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+            if (s is Control control) {
+                control.AttachedToVisualTree -= AttachedToVisualHandler;
+                control.DetachedFromVisualTree -= DetachedToVisualHandler;
+                control.PointerEnter -= PointerEnterHandler;
+                control.PointerLeave -= PointerLeaveHandler;
+            }
+        }
+
+        private static void PointerEnterHandler(object? s, PointerEventArgs e) {
+            if (s is Control control) {
+                if (!GetCanHover(control)) {
+                    return;
+                }
+                SetIsHovering(control, true);
+                if (GetHoverCursor(control) is MpCursorType ct) {
+                    MpPlatformWrapper.Services.Cursor.SetCursor(ct);
+                }
+                var test = GetHoverBrush(control);
+                if (GetHoverBrush(control) is IBrush hoverBrush && control is Border border) {
+                    if (GetDefaultBrush(control) == null) {
+                        SetDefaultBrush(control, border.Background);
+                    }
+                    border.Background = hoverBrush;
+                }
+            }
+
+            //AvaloniaObject ao;
+            //object dc;
+            //if (s is StyledElement se) {
+            //    ao = se; 
+            //    dc = se.DataContext; 
+            //} else {
+            //    return;
+            //}
+            //if(!GetCanHover(ao)) {
+            //    return;
+            //}
+            //SetIsHovering(ao, true);
+
+            //MpCursorType? hoverCursor = GetHoverCursor(ao);
+            //if (hoverCursor.HasValue) {
+            //    MpCursor.SetCursor(dc, hoverCursor.Value);
+            //}
+
+            //IImage hoverImageSource = GetHoverImageSource(ao);
+            //if (hoverImageSource != null && ao is Image i) {
+            //    if (GetDefaultImageSource(ao) == null) {
+            //        SetDefaultImageSource(ao, i.Source);
+            //    }
+
+            //    i.Source = hoverImageSource;
+            //} else if (GetHoverBrush(ao) != null) {
+            //    var hoverBrush = GetHoverBrush(ao);
+            //    Image img = null;
+            //    if (ao is Image) {
+            //        img = ao as Image;
+            //    } else if (ao is Control control) {
+            //        img = control.GetVisualDescendants().FirstOrDefault(x => x is Image) as Image;
+            //        //img = elm.GetVisualDescendent<Image>();
+            //    }
+            //    if (img == null) {
+            //        if(ao is Control control) {
+            //            if(control.TryGetVisualDescendant<Path>(out Path path)) {
+            //                path.Fill = hoverBrush;
+            //            } else if (ao is Border b) {
+            //                if (b.Background is ImageBrush imgBrush) {
+            //                    // imgBrush.Source = (imgBrush.Source as IImage).Tint(hoverBrush);
+            //                } else {
+            //                    b.Background = hoverBrush;
+            //                }
+            //            }
+            //        }
+
+            //        return;
+            //    }
+            //    //img.Source = (img.Source as IImage).Tint(hoverBrush);
+            //}
+        }
+        private static void PointerLeaveHandler(object? s, PointerEventArgs e) {
+            if (s is Control control) {
+                SetIsHovering(control, false);
+                if (GetHoverCursor(control) is MpCursorType ct) {
+                    MpCursor.UnsetCursor(control.DataContext);
+                }
+                if (GetDefaultBrush(control) is IBrush defaultBrush && control is Border border) {
+                    border.Background = defaultBrush;
+                }
+            }
+            //AvaloniaObject ao;
+            //object dc;
+            //if (s is StyledElement se) {
+            //    ao = se;
+            //    dc = se.DataContext;
+            //} else {
+            //    return;
+            //}
+            //SetIsHovering(ao, false);
+
+            //MpCursorType? hoverCursor = GetHoverCursor(ao);
+            //if (hoverCursor.HasValue) {
+            //    MpCursor.UnsetCursor(dc);
+            //}
+
+            //IImage defaultImageSource = GetDefaultImageSource(ao);
+            //if (GetHoverImageSource(ao) != null && defaultImageSource != null && ao is Image i) {
+            //    i.Source = defaultImageSource;
+            //} else if (GetDefaultBrush(ao) != null) {
+            //    var defaultBrush = GetDefaultBrush(ao);
+            //    Image img = null;
+            //    if (ao is Image) {
+            //        img = ao as Image;
+            //    } else if (ao is Control control) {
+            //        img = control.GetVisualDescendants().FirstOrDefault(x => x is Image) as Image;
+            //    }
+            //    if (img == null) {
+            //        if(ao is Control control) {
+            //            if (control.TryGetVisualDescendant<Path>(out Path path)) {
+            //                path.Fill = defaultBrush;
+            //            } else if (ao is Border b) {
+            //                if (b.Background is ImageBrush imgBrush) {
+            //                    if (GetIsSelected(ao) && GetSelectedBrush(ao) != null) {
+            //                        //imgBrush.ImageSource = (imgBrush.ImageSource as BitmapSource).Tint(GetSelectedBrush(ao));
+            //                    } else {
+            //                        //imgBrush.ImageSource = (imgBrush.ImageSource as BitmapSource).Tint(defaultBrush);
+
+            //                    }
+            //                } else {
+            //                    b.Background = defaultBrush;
+            //                }
+            //            }
+            //        }
+            //        return;
+            //    }
+            //    if (GetIsSelected(ao) && GetSelectedBrush(ao) != null) {
+            //        //img.Source = (img.Source as BitmapSource).Tint(GetSelectedBrush(ao));
+            //    } else {
+            //        //img.Source = (img.Source as BitmapSource).Tint(defaultBrush);
+            //    }
+
+            //}
+        }
         #endregion
     }
 

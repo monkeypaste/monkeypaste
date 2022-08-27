@@ -194,6 +194,14 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
+
+            <Ellipse x:Name="SourceMatchEllipse"
+                     IsVisible="False"
+                     StrokeThickness="1"
+                     RenderTransformOrigin="0.5,0.5"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch"
+                     Margin="0,3,13,0" />
         </Grid>
     </Grid>
 </local:MpAvUserControl>

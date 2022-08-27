@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using CefNet;
 using CefNet.Avalonia;
 using CefNet.CApi;
@@ -221,6 +222,101 @@ namespace MonkeyPaste.Avalonia {
                 });
             }
         }
+
+        public static async Task SaveTextContentAsync(MpAvCefNetWebView wv) {
+            if (MpAvClipTrayViewModel.Instance.IsRequery ||
+                MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
+                return;
+            }
+
+            if (wv.DataContext is MpAvClipTileViewModel ctvm) {
+                // flags detail info to reload in ctvm propertychanged
+                ctvm.CopyItemData = GetEncodedContent(wv);
+
+                await LoadContentAsync(wv);
+            }
+        }
+
+        public static string GetEncodedContent(
+            MpAvCefNetWebView wv,
+            bool ignoreSubSelection = true,
+            bool asPlainText = false) {
+            var ctvm = wv.DataContext as MpAvClipTileViewModel;
+            if (ctvm == null) {
+                Debugger.Break();
+            }
+
+            switch (ctvm.ItemType) {
+                case MpCopyItemType.FileList:
+                    if (!ignoreSubSelection) {
+                        return string.Join(Environment.NewLine, ctvm.FileItems.Where(x => x.IsSelected).Select(x => x.Path));
+                    }
+                    return string.Join(Environment.NewLine, ctvm.FileItems.Select(x => x.Path));
+                case MpCopyItemType.Image:
+                    return ctvm.CopyItemData;
+                case MpCopyItemType.Text:
+                    MpAvITextRange tr = null;
+                    if (ignoreSubSelection) {
+                        tr = wv.Document.ContentRange();
+                    } else {
+                        tr = wv.Selection;
+                    }
+                    //ignoreSubSelection ? rtb.Document.ContentRange() : rtb.Selection;
+                    return asPlainText ? tr.ToEncodedPlainText() : tr.ToEncodedRichText();
+            }
+            MpConsole.WriteTraceLine("Unknown item type " + ctvm);
+            return null;
+        }
+
+        public static async Task FinishContentCutAsync(MpAvClipTileViewModel drag_ctvm) {
+            var wv = FindWebViewByViewModel(drag_ctvm);
+            if (wv == null) {
+                return;
+            }
+            bool delete_item = false;
+            if (drag_ctvm.ItemType == MpCopyItemType.Text) {
+                wv.Selection.Text = string.Empty;
+
+                string dpt = wv.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
+                if (string.IsNullOrWhiteSpace(dpt)) {
+                    delete_item = true;
+                }
+            } else if (drag_ctvm.ItemType == MpCopyItemType.FileList) {
+                if (drag_ctvm.FileItems.Count == 0) {
+                    delete_item = true;
+                } else {
+                    var fileItemsToRemove = drag_ctvm.FileItems.Where(x => x.IsSelected).ToList();
+                    for (int i = 0; i < fileItemsToRemove.Count; i++) {
+                        drag_ctvm.FileItems.Remove(fileItemsToRemove[i]);
+                    }
+                    //var paragraphsToRemove = wv.Document.GetAllTextElements()
+                    //   .Where(x => x is MpFileItemParagraph).Cast<MpFileItemParagraph>()
+                    //       .Where(x => fileItemsToRemove.Any(y => y == x.DataContext));
+
+                    //paragraphsToRemove.ForEach(x => wv.Document.Blocks.Remove(x));
+                }
+            } else {
+                return;
+            }
+
+            if (delete_item) {
+                await drag_ctvm.CopyItem.DeleteFromDatabaseAsync();
+            } else {
+                await SaveTextContentAsync(wv);
+            }
+        }
+
+        public static MpAvCefNetWebView FindWebViewByViewModel(MpAvClipTileViewModel ctvm) {
+            var cv = MpAvMainWindow.Instance
+                                 .GetVisualDescendants<MpAvCefNetWebView>()
+                                 .FirstOrDefault(x => x.DataContext == ctvm);
+            if (cv == null) {
+                Debugger.Break();
+                return null;
+            }
+            return cv;
+        }
+
         private static async Task LoadContentAsync(Control control) {
             if (control is MpAvCefNetWebView wv &&
                 control.DataContext is MpAvClipTileViewModel ctvm) {

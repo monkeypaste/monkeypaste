@@ -12,3 +12,7 @@
     transition: .4s;
     background-color: cyan;
 }
+
+a {
+    user-select: auto;
+}

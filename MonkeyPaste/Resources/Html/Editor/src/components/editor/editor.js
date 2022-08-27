@@ -419,6 +419,14 @@ function onEditorTextChanged(delta, oldDelta, source) {
 	updateTemplatesAfterTextChanged(delta, oldDelta, source);
 }
 
+function selectAll() {
+	quill.setSelection({ index: 0, length: qull.getLength()});
+}
+
+function isAllSelected() {
+	return quill.getSelection().length == quill.getLength();
+}
+
 function setText(text) {
 	quill.setText(text + "\n");
 }

@@ -124,8 +124,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void CefApp_CefProcessMessageReceived(object sender, CefProcessMessageReceivedEventArgs e) {            
             if (e.Name == "EvaluateScript") {
-                string evalKey = e.Message.ArgumentList.GetString(0);
-                string script = e.Message.ArgumentList.GetString(1);
+                string script = e.Message.ArgumentList.GetString(0);
 
                 CefV8Context context = e.Frame.V8Context;
 
@@ -147,8 +146,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 var message = new CefProcessMessage("ScriptEvaluation");
-                message.ArgumentList.SetString(0, evalKey);
-                message.ArgumentList.SetString(1, jsRespStr_renderer);
+                message.ArgumentList.SetString(0, jsRespStr_renderer);
                 e.Frame.SendProcessMessage(CefProcessId.Browser, message);
 
                 e.Handled = true;
@@ -156,11 +154,10 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (e.Name == "ScriptEvaluation") {
-                string evalKey = e.Message.ArgumentList.GetString(0);
-                string jsRespStr_browser = e.Message.ArgumentList.GetString(1);
+                string jsRespStr_browser = e.Message.ArgumentList.GetString(0);
                 Dispatcher.UIThread.Post(() => {
                     if (e.Frame.Browser.Host.Client.GetWebView() is MpAvCefNetWebView wv) {
-                        wv.SetJavascriptResult(evalKey,jsRespStr_browser);
+                        wv.SetJavascriptResult(jsRespStr_browser);
                     }
                 });
                 e.Handled = true;

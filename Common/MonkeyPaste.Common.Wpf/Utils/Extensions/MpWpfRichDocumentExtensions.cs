@@ -356,7 +356,7 @@ namespace MonkeyPaste.Common.Wpf {
             string pt = new TextRange(fd.ContentStart, fd.ContentEnd).Text;
             if(removeLastLineEnding) {
                 return pt.RemoveLastLineEnding();
-            }
+            } 
             return pt;
 
         }

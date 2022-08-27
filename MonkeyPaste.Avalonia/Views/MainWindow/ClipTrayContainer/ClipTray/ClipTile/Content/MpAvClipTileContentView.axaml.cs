@@ -4,13 +4,40 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using MonkeyPaste.Common.Avalonia;
 using Avalonia.Input;
+using System.Diagnostics;
+using System.Security.Cryptography;
+using Avalonia.Controls.Primitives;
+using Xamarin.Forms.Internals;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileContentView : MpAvUserControl<MpAvClipTileViewModel> {
+        public MpAvContentViewDropBehavior ContentViewDropBehavior { get; private set; }
+        public MpAvCefNetWebViewHighlightBehavior HighlightBehavior { get; private set; }
         public MpAvClipTileContentView() {
             InitializeComponent();
             var b = this.FindControl<Border>("ClipTileContainerBorder");
             b.AddHandler(Control.PointerPressedEvent, MpAvClipTileContentView_PointerPressed, RoutingStrategies.Tunnel);
+
+            var cc = this.FindControl<ContentControl>("ClipTileContentControl");
+            cc.AttachedToVisualTree += Cc_AttachedToVisualTree;
+        }
+
+        public void UpdateAdorners() {
+            var al = AdornerLayer.GetAdornerLayer(this);
+            if(al == null) {
+                return;
+            }
+            al.Children.ForEach(x => x.InvalidateVisual());
+        }
+
+
+        private void Cc_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            var cc = sender as ContentControl;
+            ContentViewDropBehavior = new MpAvContentViewDropBehavior();
+            ContentViewDropBehavior.Attach(cc.Content as IAvaloniaObject);
+
+            HighlightBehavior = new MpAvCefNetWebViewHighlightBehavior();
+            HighlightBehavior.Attach(cc.Content as IAvaloniaObject);
         }
 
         private void MpAvClipTileContentView_PointerPressed(object sender, PointerPressedEventArgs e) {

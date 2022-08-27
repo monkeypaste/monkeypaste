@@ -17,8 +17,8 @@ namespace MonkeyPaste.Common.Avalonia {
             return c.ToAvColor();
         }
 
-        public static Brush ToAvBrush(this string hexColor) {            
-            return new SolidColorBrush(hexColor.ToAvColor());
+        public static Brush ToAvBrush(this string hexColor, double opacity = 1.0d) {            
+            return new SolidColorBrush(hexColor.AdjustAlpha(opacity).ToAvColor());
         }
         public static MpColor ToPortableColor(this Color color) {
             return new MpColor(color.A, color.R, color.G, color.B);

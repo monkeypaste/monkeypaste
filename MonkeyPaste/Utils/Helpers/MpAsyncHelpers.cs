@@ -6,6 +6,8 @@ using System.Threading;
 
 namespace MonkeyPaste {
     public static class MpAsyncHelpers {
+        // from https://stackoverflow.com/a/5097066/105028
+
         /// <summary>
         /// Execute's an async Task<T> method which has a void return value synchronously
         /// </summary>
@@ -30,6 +32,7 @@ namespace MonkeyPaste {
 
             SynchronizationContext.SetSynchronizationContext(oldContext);
         }
+        
 
         /// <summary>
         /// Execute's an async Task<T> method which has a T return type synchronously

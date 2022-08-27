@@ -20,6 +20,7 @@ namespace MonkeyPaste {
         string GetProcessPath(IntPtr handle);
         string GetProcessApplicationName(IntPtr handle);
         string GetProcessMainWindowTitle(IntPtr handle);
+        void SetActiveProcess(IntPtr handle);
 
         event EventHandler<MpProcessActivatedEventArgs> OnAppActivated;
     }

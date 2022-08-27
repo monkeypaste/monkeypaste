@@ -1,5 +1,4 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,10 +6,16 @@ using System.Threading.Tasks;
 using System.Windows;
 using MonkeyPaste;
 using System.Diagnostics;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
 using Avalonia.Controls;
+using Avalonia.Threading;
+using Avalonia.Layout;
+using Avalonia;
+using Avalonia.Input;
+using Avalonia.Controls.Primitives;
 
-namespace MpWpfApp {
+namespace MonkeyPaste.Avalonia {
     public enum MpDropType {
         None,
         Content,
@@ -19,7 +24,7 @@ namespace MpWpfApp {
         Action
     }
 
-    public abstract class MpDropBehaviorBase<T> where T : Control {
+    public abstract class MpAvDropBehaviorBase<T> : MpAvBehavior<T>, MpIContentDropTarget where T : Control {
         #region Private Variables
         
         private AdornerLayer adornerLayer;
@@ -28,13 +33,13 @@ namespace MpWpfApp {
 
         #region Properties
 
-        public MpContentAdorner DropLineAdorner { get; set; }
+        public MpAvContentAdorner DropLineAdorner { get; set; }
 
         public int DropIdx { get; set; } = -1;
 
         public object DataContext => AssociatedObject?.DataContext;
 
-        public List<Rect> DropRects => GetDropTargetRects();
+        public List<MpRect> DropRects => GetDropTargetRects();
 
         private bool _isDebugEnabled = false;
         public bool IsDebugEnabled {
@@ -45,7 +50,9 @@ namespace MpWpfApp {
                     Task.Run(async () => {
                         while (!_isLoaded) { await Task.Delay(100); }
 
-                        MpHelpers.RunOnMainThread(UpdateAdorner);
+                        Dispatcher.UIThread.Post(()=> {
+                            UpdateAdorner();
+                        });
                     });                    
                 }
             }
@@ -57,51 +64,50 @@ namespace MpWpfApp {
         public abstract bool IsDropEnabled { get; set; }
         public abstract MpDropType DropType { get; }
 
-        public abstract UIElement RelativeToElement { get; }
+        public abstract Control RelativeToElement { get; }
 
-        public abstract FrameworkElement AdornedElement { get; }
+        public abstract Control AdornedElement { get; }
         public abstract Orientation AdornerOrientation { get; }
 
         public abstract MpCursorType MoveCursor { get; }
         public abstract MpCursorType CopyCursor { get; }
-        public abstract List<Rect> GetDropTargetRects();
+        public abstract List<MpRect> GetDropTargetRects();
         public abstract void AutoScrollByMouse();
 
         #endregion
 
-        public MpDropBehaviorBase() { }
+        public MpAvDropBehaviorBase() { }
 
         protected override void OnAttached() {
             base.OnAttached();
 
             //MpMainWindowViewModel.Instance.OnMainWindowHidden += MainWindowViewModel_OnMainWindowHide;
 
-            AssociatedObject.Loaded += AssociatedObject_Loaded;
-            AssociatedObject.Unloaded += AssociatedObject_Unloaded;
+            AssociatedObject.AttachedToVisualTree += AssociatedObject_Loaded;
+            AssociatedObject.DetachedFromVisualTree += AssociatedObject_Unloaded;
 
             AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
         }
-
-        private void AssociatedObject_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+        private void AssociatedObject_DataContextChanged(object sender, EventArgs e) {
             if(AssociatedObject?.DataContext != null) {
                 Attach(AssociatedObject);
             }
         }
 
-        private void AssociatedObject_Unloaded(object sender, RoutedEventArgs e) {
+        private void AssociatedObject_Unloaded(object sender, VisualTreeAttachmentEventArgs e) {
             Detach();
         }
 
         protected override void OnDetaching() {
             base.OnDetaching();
             if(AssociatedObject != null) {
-                AssociatedObject.Loaded -= AssociatedObject_Loaded;
-                AssociatedObject.Unloaded -= AssociatedObject_Unloaded;
+                AssociatedObject.AttachedToVisualTree -= AssociatedObject_Loaded;
+                AssociatedObject.DetachedFromVisualTree -= AssociatedObject_Unloaded;
             }
             OnUnloaded();
         }
 
-        private void AssociatedObject_Loaded(object sender, RoutedEventArgs e) {            
+        private void AssociatedObject_Loaded(object sender, VisualTreeAttachmentEventArgs e) {            
             OnLoaded();
         }
 
@@ -112,50 +118,30 @@ namespace MpWpfApp {
             Reset();
         }
 
-        protected virtual void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
+        protected virtual void ReceivedGlobalMessage(MpMessageType msg) {
             switch(msg) {
                 case MpMessageType.TrayScrollChanged:
                 case MpMessageType.JumpToIdxCompleted:
                     DropIdx = -1;
                     RefreshDropRects();
                     break;
-            }
-        }
-        
-        protected virtual void ReceivedMainWindowResizeBehviorMessage(MpMessageType msg) {
-            switch(msg) {
                 case MpMessageType.ResizeContentCompleted:
                     //comes from BOTH mainwindow resize and tile resize
                     RefreshDropRects();
                     break;
             }
         }
-
-        protected virtual void ReceivedMainWindowViewModelMessage(MpMessageType msg) { }
-
+        
         public virtual void OnLoaded() {
             _dataContext = AssociatedObject.DataContext;
 
-            MpMessenger.Register<MpMessageType>(
-                MpClipTrayViewModel.Instance, 
-                ReceivedClipTrayViewModelMessage);
-
-
-            MpMessenger.Register<MpMessageType>(
-                MpMainWindowViewModel.Instance, 
-                ReceivedMainWindowViewModelMessage);
-                        
-
-            MpMessenger.Register<MpMessageType>(
-                (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior,
-                ReceivedMainWindowResizeBehviorMessage);
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
             InitAdorner();
         }
 
         public virtual void OnUnloaded() {
-            MpMessenger.Unregister<MpMessageType>(MpClipTrayViewModel.Instance, ReceivedClipTrayViewModelMessage);
-            MpMessenger.Unregister<MpMessageType>(MpMainWindowViewModel.Instance, ReceivedMainWindowViewModelMessage);
+            MpMessenger.UnregisterGlobal(ReceivedGlobalMessage);
 
         }
 
@@ -169,32 +155,30 @@ namespace MpWpfApp {
 
         public void OnDragOver(object sender, DragEventArgs e) {
             //this is unset in drag drop manager global mouse move when mouse up
-            MpDragDropManager.IsDraggingFromExternal = true;
+            MpAvDragDropManager.IsDraggingFromExternal = true;
 
-            e.Effects = DragDropEffects.None;
+            e.DragEffects = DragDropEffects.None;
 
             bool isValid = true;
-            if (MpDragDropManager.DragData == null) {
-                if (MpRichTextBox.DraggingRtb != null) {
-                    MpDragDropManager.IsDraggingFromExternal = false;
-                    MpDragDropManager.SetDragData(MpRichTextBox.DraggingRtb.DataContext);
+            if (MpAvDragDropManager.DragData == null) {
+                if (MpAvCefNetWebView.DraggingRtb != null) {
+                    MpAvDragDropManager.IsDraggingFromExternal = false;
+                    MpAvDragDropManager.SetDragData(MpAvCefNetWebView.DraggingRtb.DataContext);
                 } else {
-                    isValid = MpDragDropManager.PrepareDropDataFromExternalSource(e.Data);
+                    isValid = MpAvDragDropManager.PrepareDropDataFromExternalSource(e.Data);
                 }                
             }
 
             if (isValid) {
-                if (e.KeyStates == DragDropKeyStates.ControlKey ||
-                   e.KeyStates == DragDropKeyStates.AltKey ||
-                   e.KeyStates == DragDropKeyStates.ShiftKey) {
-                    e.Effects = DragDropEffects.Copy;
+                if (e.KeyModifiers.HasAnyFlag(KeyModifiers.Control | KeyModifiers.Alt | KeyModifiers.Shift)) {
+                    e.DragEffects = DragDropEffects.Copy;
                 } else {
-                    e.Effects = DragDropEffects.Move;
+                    e.DragEffects = DragDropEffects.Move;
                 }
 
-                if (!MpDragDropManager.IsCheckingForDrag) {
-                    MpDragDropManager.StartDragCheck(MpDragDropManager.DragData);
-                    MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.IsAnyItemDragging));
+                if (!MpAvDragDropManager.IsCheckingForDrag) {
+                    MpAvDragDropManager.StartDragCheck(MpAvDragDropManager.DragData);
+                    MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.IsAnyItemDragging));
                 }
             }
             e.Handled = true;
@@ -225,10 +209,10 @@ namespace MpWpfApp {
         public virtual void Reset() {
             DropIdx = -1;
             UpdateAdorner();
-            MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.IsAnyItemDragging));
+            MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.IsAnyItemDragging));
         }
 
-        public abstract Task StartDrop(); 
+        public abstract Task StartDrop(PointerEventArgs e); 
 
         public void ContinueDragOverTarget() {
             int newDropIdx = GetDropTargetRectIdx();
@@ -246,7 +230,7 @@ namespace MpWpfApp {
             if(dragData is MpPortableDataObject) {
                 return true;
             }
-            if(dragData is MpClipTileViewModel ctvm) {
+            if(dragData is MpAvClipTileViewModel ctvm) {
                 return ctvm.ItemType != MpCopyItemType.Image;
             }            
             return false;
@@ -260,19 +244,19 @@ namespace MpWpfApp {
             if(AdornedElement != null) {
                 adornerLayer = AdornerLayer.GetAdornerLayer(AdornedElement);
                 if(adornerLayer != null) {
-                    DropLineAdorner = new MpContentAdorner(AdornedElement, this);
-                    adornerLayer.Add(DropLineAdorner);
+                    DropLineAdorner = new MpAvContentAdorner(AdornedElement, this);
+                    adornerLayer.Children.Add(DropLineAdorner);
                     RefreshDropRects();
                 }
             }
         }
 
         public void UpdateAdorner() {
-            MpHelpers.RunOnMainThread(() => {
+            Dispatcher.UIThread.Post(() => {
                 if (adornerLayer == null) {
                     InitAdorner();
                 }
-                adornerLayer?.Update();
+                adornerLayer?.InvalidateVisual();
             });
         }
 

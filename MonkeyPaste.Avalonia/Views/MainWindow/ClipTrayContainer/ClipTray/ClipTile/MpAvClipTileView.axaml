@@ -52,7 +52,8 @@
                 <RowDefinition Height="20" />
             </Grid.RowDefinitions>
             <!--  Title  -->
-            <local:MpAvClipTileTitleView Grid.Row="0"
+            <local:MpAvClipTileTitleView x:Name="TileTitleView"
+                                         Grid.Row="0"
                                          DataContext="{Binding}"
                                          HorizontalAlignment="Stretch"
                                          VerticalAlignment="Stretch"

@@ -941,6 +941,11 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = false;
         }
+        public async Task<MpAvClipTileViewModel> CreateClipTileViewModel(MpCopyItem ci, int queryOffsetIdx = -1) {
+            MpAvClipTileViewModel ctvm = new MpAvClipTileViewModel(this);
+            await ctvm.InitializeAsync(ci, queryOffsetIdx);
+            return ctvm;
+        }
         public override string ToString() {
             return $"ClipTray";
         }
@@ -1042,11 +1047,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task<MpAvClipTileViewModel> CreateClipTileViewModel(MpCopyItem ci, int queryOffsetIdx = -1) {
-            MpAvClipTileViewModel ctvm = new MpAvClipTileViewModel(this);
-            await ctvm.InitializeAsync(ci, queryOffsetIdx);
-            return ctvm;
-        }
+        
 
 
         private void MpAvClipTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
