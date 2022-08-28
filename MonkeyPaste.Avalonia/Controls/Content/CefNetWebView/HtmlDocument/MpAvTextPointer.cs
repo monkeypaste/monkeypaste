@@ -1,4 +1,8 @@
-﻿using AvaloniaEdit.Document;
+﻿using Avalonia.Controls;
+using Avalonia.Media;
+using AvaloniaEdit.Document;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,19 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public interface MpAvITextPointer : IComparable {
-        object Document { get; }
-        int Offset { get; }
 
-        MpAvITextPointer DocumentStart { get; }
-        MpAvITextPointer DocumentEnd { get; }
-
-        MpAvITextPointer GetNextInsertionPosition(LogicalDirection dir);
-        bool IsInSameDocument(MpAvITextPointer otp);
-        int GetOffsetToPosition(MpAvITextPointer tp);
-        MpAvITextPointer GetPositionAtOffset(int offset);
-        MpAvITextPointer GetInsertionPosition(LogicalDirection dir);
-    }
     public class MpAvTextPointer : MpAvITextPointer {
         #region Private Variables
 
@@ -44,13 +36,13 @@ namespace MonkeyPaste.Avalonia {
         }
         public int Offset { get; set; }
 
-        public object Document { get; private set; }
+        public MpAvIContentDocument Document { get; private set; }
 
         #endregion
 
         #region Constructors
 
-        public MpAvTextPointer(object document, int offset) {
+        public MpAvTextPointer(MpAvIContentDocument document, int offset) {
             Document = document;
             Offset = offset;
         }
@@ -62,11 +54,15 @@ namespace MonkeyPaste.Avalonia {
         public int CompareTo(object obj) {
             if(obj is MpAvITextPointer otp) {
                 if(!IsInSameDocument(otp)) {
-                    return -1;
+                    throw new Exception("Cannot compare MpAvITextPointer from another document");
                 }
                 return Offset.CompareTo(otp.Offset);
             }
-            return -1;
+            throw new Exception("Can only be compared to another MpAvITextPointer");
+        }
+
+        public bool Equals(MpAvITextPointer other) {
+            return CompareTo(other) == 0;
         }
 
         public bool IsInSameDocument(MpAvITextPointer otp) {
@@ -74,20 +70,16 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public MpAvITextPointer GetNextInsertionPosition(LogicalDirection dir) {
-            if (Document is MpAvHtmlDocument doc) {
-                if (dir == LogicalDirection.Forward) {
-                    if (doc.ContentEnd.Offset == Offset) {
-                        return null;
-                    }
-                    return new MpAvTextPointer(Document, Offset + 1);
-                } else {
-                    if(Offset == 0) {
-                        return null;
-                    }
-                    return new MpAvTextPointer(Document, Offset - 1);
+            if (dir == LogicalDirection.Forward) {
+                if (Document.ContentEnd.Offset == Offset) {
+                    return null;
                 }
+                return new MpAvTextPointer(Document, Offset + 1);
             }
-            return null;
+            if (Offset == 0) {
+                return null;
+            }
+            return new MpAvTextPointer(Document, Offset - 1);
         }
 
         public int GetOffsetToPosition(MpAvITextPointer tp) {
@@ -98,14 +90,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public MpAvITextPointer GetPositionAtOffset(int offset) {
-            if (Document is MpAvHtmlDocument doc) {
-                int newOffset = Offset + offset;
-                if (newOffset < 0 || newOffset > doc.ContentEnd.Offset) {
-                    throw new Exception($"Offset '{newOffset}' is out-of-bounds 0-'{doc.ContentEnd.Offset}')");
-                }
-                return new MpAvTextPointer(Document, newOffset);
+            int newOffset = Offset + offset;
+            if (newOffset < 0 || newOffset > Document.ContentEnd.Offset) {
+                throw new Exception($"Offset '{newOffset}' is out-of-bounds 0-'{Document.ContentEnd.Offset}')");
             }
-            return null;
+            return new MpAvTextPointer(Document, newOffset);
         }
 
         public MpAvITextPointer GetInsertionPosition(LogicalDirection dir) {
@@ -114,6 +103,23 @@ namespace MonkeyPaste.Avalonia {
             //}
             return new MpAvTextPointer(Document, Offset + (dir == LogicalDirection.Forward ? 1 : -1));
         }
+
+        public MpRect GetCharacterRect(LogicalDirection dir) {
+            int offset = dir == LogicalDirection.Forward ? Offset : Math.Max(0, Offset - 1);
+
+            if (Document.Owner is TextBox tb) {
+                var ft = tb.ToFormattedText();
+                var rect = ft.HitTestTextPosition(offset);
+                return rect.ToPortableRect();
+            } else if(Document.Owner is MpAvCefNetWebView wv) {
+                string rectJsonStr = wv.EvaluateJavascript($"getCharacterRect({offset})");
+                return MpRect.ParseJson(rectJsonStr);
+            }
+            return MpRect.Empty;
+        }
+
+       
+
 
         #endregion
 

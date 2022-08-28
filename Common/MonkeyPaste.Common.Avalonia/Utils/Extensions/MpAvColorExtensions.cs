@@ -17,8 +17,8 @@ namespace MonkeyPaste.Common.Avalonia {
             return c.ToAvColor();
         }
 
-        public static Brush ToAvBrush(this string hexColor, double opacity = 1.0d) {            
-            return new SolidColorBrush(hexColor.AdjustAlpha(opacity).ToAvColor());
+        public static Brush ToAvBrush(this string hexColor) {            
+            return new SolidColorBrush(hexColor.ToAvColor());
         }
         public static MpColor ToPortableColor(this Color color) {
             return new MpColor(color.A, color.R, color.G, color.B);
@@ -45,6 +45,28 @@ namespace MonkeyPaste.Common.Avalonia {
             }
             Debugger.Break();
             return MpSystemColors.Transparent;
+        }
+
+        public static Color AdjustOpacity(this Color color, double opacity) {
+            if(color.A != 255 && opacity != 1.0d) {
+                // warning, color already has adjusted opacity
+                Debugger.Break();
+            }
+            var adjustedColor = new Color(
+                Math.Max((byte)255, (byte)((double)255 * opacity)),
+                color.R,
+                color.G,
+                color.B);
+            return adjustedColor;
+        }
+        public static IBrush AdjustOpacity(this IBrush brush, double opacity) {
+            if(brush is SolidColorBrush scb) {
+                scb.Color = scb.Color.AdjustOpacity(opacity);
+                return scb;
+            }
+            // warning, not solid color brush
+            Debugger.Break();
+            return brush;
         }
     }
 }

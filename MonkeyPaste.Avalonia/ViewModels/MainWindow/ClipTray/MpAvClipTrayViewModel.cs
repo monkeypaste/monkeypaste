@@ -833,6 +833,10 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipTrayLayoutType LayoutType { get; set; } = MpAvClipTrayLayoutType.Stack;
 
+        public string PinTrayBackgroundHexColor => MpSystemColors.salmon.AdjustAlpha(MpPrefViewModel.Instance.MainWindowOpacity);
+
+        public string ClipTrayBackgroundHexColor => MpSystemColors.darkviolet.AdjustAlpha(MpPrefViewModel.Instance.MainWindowOpacity);
+
         #endregion
 
         #region State
@@ -1116,7 +1120,7 @@ namespace MonkeyPaste.Avalonia {
                     if (!HasScrollVelocity) {
                         var hctvm = Items.FirstOrDefault(x => x.IsHovering);
                         if (hctvm != null) {
-                            hctvm.OnPropertyChanged(nameof(hctvm.TileBorderBrush));
+                            hctvm.OnPropertyChanged(nameof(hctvm.TileBorderHexColor));
                         }
                     }
                     break;

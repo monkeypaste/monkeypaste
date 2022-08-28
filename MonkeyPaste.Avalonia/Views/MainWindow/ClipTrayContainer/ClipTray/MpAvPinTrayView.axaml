@@ -14,10 +14,6 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvPinTrayView">
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
-        <Grid.Background>
-            <SolidColorBrush Color="Salmon"
-                             Opacity="0.7" />
-        </Grid.Background>
         <ListBox x:Name="PinTrayListBox"
                  BorderThickness="0"
                  ScrollViewer.HorizontalScrollBarVisibility="Auto"

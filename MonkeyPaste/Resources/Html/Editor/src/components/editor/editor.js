@@ -540,11 +540,24 @@ function createLink() {
 	}
 }
 
-function getEditorIndexFromPoint(p) {
+function getEditorIndexFromPoint(p, snapToLine, fallbackIdx) {
+	// NOTE fallbackIdx is handy when user is dragging a template instance
+	// so location freeze's when drag is out of bounds
+
+	if (snapToLine) {
+		return getEditorIndexFromPoint_ByLine(p, fallbackIdx);
+	}
+	return getEditorIndexFromPoint_Absolute(p, fallbackIdx);
+}
+
+function getEditorIndexFromPoint_Absolute(p, fallbackIdx) {
+	// this version checks for closest absolute position
+
+	fallbackIdx = !fallbackIdx ? -1 : fallbackIdx;
 	let closestIdx = -1;
 	let closestDist = Number.MAX_SAFE_INTEGER;
 	if (!p) {
-		return closestIdx;
+		return fallbackIdx;
 	}
 
 	let editorRect = document.getElementById("editor").getBoundingClientRect();
@@ -555,7 +568,7 @@ function getEditorIndexFromPoint(p) {
 	let ep = { x: ex, y: ey };
 	//log('editor pos: ' + ep.x + ' '+ep.y);
 	if (!isPointInRect(erect, ep)) {
-		return closestIdx;
+		return fallbackIdx;
 	}
 
 	for (var i = 0; i < quill.getLength(); i++) {
@@ -570,12 +583,19 @@ function getEditorIndexFromPoint(p) {
 		}
 	}
 
+	if (closestIdx < 0) {
+		return fallbackIdx;
+	}
+
 	return closestIdx;
 }
 
-function getEditorIndexFromPoint2(p) {
+function getEditorIndexFromPoint_ByLine(p, fallbackIdx) {
+	// this version first checks for closest line to p.y
+	fallbackIdx = !fallbackIdx ? -1 : fallbackIdx;
+
 	if (!p) {
-		return -1;
+		return fallbackIdx;
 	}
 
 	let editorRect = document.getElementById("editor").getBoundingClientRect();
@@ -586,7 +606,7 @@ function getEditorIndexFromPoint2(p) {
 	let ep = { x: ex, y: ey };
 	//log('editor pos: ' + ep.x + ' '+ep.y);
 	if (!isPointInRect(erect, ep)) {
-		return -1;
+		return fallbackIdx;
 	}
 
 	let closestLineIdx = -1;
@@ -604,7 +624,7 @@ function getEditorIndexFromPoint2(p) {
 		}
 	}
 	if (closestLineIdx < 0) {
-		return -1;
+		return fallbackIdx;
 	}
 
 	log("closest line idx: " + closestLineIdx);
@@ -625,6 +645,10 @@ function getEditorIndexFromPoint2(p) {
 			closestDist = idist;
 			closestIdx = i;
 		}
+	}
+
+	if (closestIdx < 0) {
+		return fallbackIdx;
 	}
 
 	return closestIdx;

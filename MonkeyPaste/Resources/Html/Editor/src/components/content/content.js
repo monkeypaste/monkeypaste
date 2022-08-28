@@ -5,6 +5,10 @@ function initContent(itemHtml) {
     setHtml(itemHtml);
 }
 
+function getCharacterRect(idx) {
+    let rect = quill.getBounds(idx)
+}
+
 function getContentWidth() {
     var bounds = quill.getBounds(0, quill.getLength());
     return bounds.width;

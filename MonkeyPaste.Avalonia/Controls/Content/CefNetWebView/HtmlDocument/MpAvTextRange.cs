@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using AvaloniaEdit.Document;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
@@ -7,21 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public interface MpAvITextRange {
-        MpAvITextPointer Start { get; }
-        MpAvITextPointer End { get; }
 
-        bool IsEmpty { get; }
-        string Text { get; set; }
-
-        bool IsPointInRange(MpPoint point);
-    }
     public class MpAvTextRange : MpAvITextRange {
         #region Properties
 
-        public MpAvITextPointer Start { get; }
-        public MpAvITextPointer End { get; }
-        public bool IsEmpty { get; }
+        public MpAvITextPointer Start { get; set; }
+        public MpAvITextPointer End { get; set; }
+        public bool IsEmpty => Start == End;
+
         public string Text { 
             get {
                 if(!Start.IsInSameDocument(End)) {
@@ -60,13 +54,28 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public bool IsPointInRange(MpPoint point) {
-            return false;
+            var srect = Start.GetCharacterRect(LogicalDirection.Forward);
+            var erect = End.GetCharacterRect(LogicalDirection.Forward);
+            srect.Union(erect);
+            return srect.Contains(point);
+        }
+
+        public int CompareTo(object obj) {
+            if (obj is MpAvITextRange otr) {
+                if (!Start.IsInSameDocument(otr.Start)) {
+                    throw new Exception("Cannot compare MpAvITextRange from another document");
+                }
+                int result = Start.CompareTo(otr.Start) + End.CompareTo(otr.End);
+                return Math.Clamp(result, -1, 1);
+            }
+
+            throw new Exception("Can only be compared to another MpAvITextRange");
+        }
+
+        public bool Equals(MpAvITextRange other) {
+            return CompareTo(other) == 0;
         }
 
         #endregion
-    }
-
-    public class MpAvTextSelection : MpAvTextRange {
-        public MpAvTextSelection(MpAvITextPointer start, MpAvITextPointer end) : base(start,end) { }
     }
 }

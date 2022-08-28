@@ -99,6 +99,124 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public string TileBackgroundHexColor {
+            get {
+                if (IsTitleVisible) {
+                    return MpSystemColors.oldlace.AdjustAlpha(MpPrefViewModel.Instance.MainWindowOpacity);
+                }
+                return CopyItemHexColor.AdjustAlpha(MpPrefViewModel.Instance.MainWindowOpacity);
+            }
+        }
+
+        public string DetailTextHexColor {
+            get {
+                if (IsSelected || IsHovering) {
+                    return MpSystemColors.Black;//MpSystemColors.DimGray;
+                }
+
+                return MpSystemColors.Transparent;
+            }
+        }
+
+        public string TileTitleTextGridBackgroundHexColor {
+            get {
+                if (IsHoveringOnTitleTextGrid && !IsTitleReadOnly) {
+                    return MpSystemColors.White.AdjustAlpha(0.25);
+                }
+                return MpSystemColors.Transparent;
+            }
+        }
+
+        public string TitleTextColor {
+            get {
+                if (IsHoveringOnTitleTextGrid) {
+                    return MpSystemColors.DarkGray;
+                }
+                return MpSystemColors.White;
+            }
+        }
+
+        public string SelectedTextHexColor {
+            get {
+                if (ItemType == MpCopyItemType.Text) {
+                    return MpSystemColors.lightblue;
+                }
+                return MpSystemColors.Transparent;
+            }
+        }
+
+        public string InactiveSelectedTextHexColor {
+            get {
+                if (ItemType == MpCopyItemType.Text) {
+                    return MpSystemColors.purple;
+                }
+                return MpSystemColors.Transparent;
+            }
+        }
+
+        public string CaretBrushHexColor {
+            get {
+                if (IsContentReadOnly) {
+                    if (IsSubSelectionEnabled || IsFindAndReplaceVisible) {
+                        return MpSystemColors.Red;
+                    }
+                    return MpSystemColors.Transparent;
+                }
+                return MpSystemColors.Black;
+            }
+        }
+
+
+        public string PinIconSourcePath {
+            get {
+                string path = "PinImage";
+                if (IsPinned) {
+                    if (IsOverPinButton) {
+                        path = "PinDownOverImage";
+                    } else {
+                        path = "PinDownImage";
+                    }
+                } else {
+                    if (IsOverPinButton) {
+                        path = "PinOverImage";
+                    }
+                }
+                return MpPlatformWrapper.Services.PlatformResource.GetResource(path) as string;
+            }
+        }
+
+        public string HideTitleIconSourcePath {
+            get {
+                string path = "OpenEyeImage";
+                if (IsTitleVisible) {
+                    if (IsOverHideTitleButton) {
+                        path = "OpenEyeImage";
+                    } else {
+                        path = "OpenEyeImage";
+                    }
+                } else {
+                    if (IsOverPinButton) {
+                        path = "ClosedEyeImage";
+                    } else {
+                        path = "ClosedEyeImage";
+                    }
+                }
+                return MpPlatformWrapper.Services.PlatformResource.GetResource(path) as string;
+            }
+        }
+
+        public double TileBorderBrushTranslateOffsetX { get; set; }
+
+        public Rect TileBorderBrushRect {
+            get {
+                if (IsItemDragging || IsContextMenuOpen) {
+                    return new Rect(); //MpMeasurements.Instance.DottedBorderRect;
+                }
+                return new Rect(); //MpMeasurements.Instance.SolidBorderRect;
+            }
+        }
+
+
         #endregion
 
         #region Layout
@@ -1373,145 +1491,6 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-        #region Appearance      
-        public string TileBackgroundHexColor {
-            get {
-                if (IsTitleVisible) {
-                    return MpSystemColors.White;
-                }
-                return CopyItemHexColor;
-            }
-        }
-        public string DetailTextHexColor {
-            get {
-                if (IsSelected || IsHovering) {
-                    return MpSystemColors.Black;//MpSystemColors.DimGray;
-                }
-
-                return MpSystemColors.Transparent;
-            }
-        }
-
-        public string TileTitleTextGridBackgroundHexColor {
-            get {
-                if (IsHoveringOnTitleTextGrid && !IsTitleReadOnly) {
-                    return MpSystemColors.White.AdjustAlpha(0.25);
-                }
-                return MpSystemColors.Transparent;
-            }
-        }
-
-        public string TitleTextColor {
-            get {
-                if (IsHoveringOnTitleTextGrid) {
-                    return MpSystemColors.DarkGray;
-                }
-                return MpSystemColors.White;
-            }
-        }
-
-        public string SelectedTextHexColor {
-            get {
-                if (ItemType == MpCopyItemType.Text) {
-                    return MpSystemColors.lightblue;
-                }
-                return MpSystemColors.Transparent;
-            }
-        }
-
-        public string InactiveSelectedTextHexColor {
-            get {
-                if (ItemType == MpCopyItemType.Text) {
-                    return MpSystemColors.purple;
-                }
-                return MpSystemColors.Transparent;
-            }
-        }
-
-        public string CaretBrushHexColor {
-            get {
-                if (IsContentReadOnly) {
-                    if (IsSubSelectionEnabled || IsFindAndReplaceVisible) {
-                        return MpSystemColors.Red;
-                    }
-                    return MpSystemColors.Transparent;
-                }
-                return MpSystemColors.Black;
-            }
-        }
-
-
-        public string PinIconSourcePath {
-            get {
-                string path = "PinImage";
-                if (IsPinned) {
-                    if (IsOverPinButton) {
-                        path = "PinDownOverImage";
-                    } else {
-                        path = "PinDownImage";
-                    }
-                } else {
-                    if (IsOverPinButton) {
-                        path = "PinOverImage";
-                    }
-                }
-                return MpPlatformWrapper.Services.PlatformResource.GetResource(path) as string;
-            }
-        }
-
-        public string HideTitleIconSourcePath {
-            get {
-                string path = "OpenEyeImage";
-                if (IsTitleVisible) {
-                    if (IsOverHideTitleButton) {
-                        path = "OpenEyeImage";
-                    } else {
-                        path = "OpenEyeImage";
-                    }
-                } else {
-                    if (IsOverPinButton) {
-                        path = "ClosedEyeImage";
-                    } else {
-                        path = "ClosedEyeImage";
-                    }
-                }
-                return MpPlatformWrapper.Services.PlatformResource.GetResource(path) as string;
-            }
-        }
-
-        public double TileBorderBrushTranslateOffsetX { get; set; }
-
-        public Rect TileBorderBrushRect {
-            get {
-                if (IsItemDragging || IsContextMenuOpen) {
-                    return new Rect(); //MpMeasurements.Instance.DottedBorderRect;
-                }
-                return new Rect(); //MpMeasurements.Instance.SolidBorderRect;
-            }
-        }
-
-        public string TileBorderBrush {
-            get {
-                if (IsResizing) {
-                    return MpSystemColors.pink;
-                }
-                if (CanResize) {
-                    return MpSystemColors.orange1;
-                }
-                if (IsSelected) {
-                    return MpSystemColors.Red;
-                }
-                if (Parent.HasScrollVelocity || Parent.HasScrollVelocity) {
-                    return MpSystemColors.Transparent;
-                }
-                if (IsHovering) {
-                    return MpSystemColors.Yellow;
-                }
-                return MpSystemColors.Transparent;
-            }
-        }
-
-        #endregion
 
         #region State 
 
@@ -1622,13 +1601,12 @@ namespace MonkeyPaste.Avalonia {
 
             //RequestUiUpdate();
             //OnPropertyChanged(nameof(EditorHeight));
-            OnPropertyChanged(nameof(TileBorderBrush));
             OnPropertyChanged(nameof(TileBorderBrushRect));
 
             OnPropertyChanged(nameof(EditorHeight));
             OnPropertyChanged(nameof(IsPlaceholder));
             OnPropertyChanged(nameof(TrayX));
-            OnPropertyChanged(nameof(TileBorderBrush));
+            OnPropertyChanged(nameof(TileBorderHexColor));
             OnPropertyChanged(nameof(CanVerticallyScroll));
             OnPropertyChanged(nameof(IsTextItem));
             OnPropertyChanged(nameof(IsFileListItem));
@@ -2144,7 +2122,7 @@ namespace MonkeyPaste.Avalonia {
 
 
                     Parent.NotifySelectionChanged();
-                    OnPropertyChanged(nameof(TileBorderBrush));
+                    OnPropertyChanged(nameof(TileBorderHexColor));
                     break;
                 case nameof(CopyItem):
                     if (CopyItem == null) {
@@ -2223,7 +2201,7 @@ namespace MonkeyPaste.Avalonia {
                     //}
                     break;
                 case nameof(IsContextMenuOpen):
-                    OnPropertyChanged(nameof(TileBorderBrush));
+                    OnPropertyChanged(nameof(TileBorderHexColor));
                     //Parent.OnPropertyChanged(nameof(Parent.TileBorderBrush));
                     OnPropertyChanged(nameof(TileBorderBrushRect));
                     OnPropertyChanged(nameof(IsContextMenuOpen));
@@ -2246,7 +2224,7 @@ namespace MonkeyPaste.Avalonia {
                     } else {
                         StopAnimation();
                     }
-                    OnPropertyChanged(nameof(TileBorderBrush));
+                    OnPropertyChanged(nameof(TileBorderHexColor));
                     OnPropertyChanged(nameof(TileBorderBrushRect));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyItemDragging));
                     break;
@@ -2271,7 +2249,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
 
                 case nameof(CanResize):
-                    OnPropertyChanged(nameof(TileBorderBrush));
+                    OnPropertyChanged(nameof(TileBorderHexColor));
                     Parent.OnPropertyChanged(nameof(Parent.CanAnyResize));
                     break;
                 case nameof(IsResizing):

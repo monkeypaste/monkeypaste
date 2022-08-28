@@ -12,7 +12,20 @@ using Xamarin.Forms.Internals;
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileContentView : MpAvUserControl<MpAvClipTileViewModel> {
         public MpAvContentViewDropBehavior ContentViewDropBehavior { get; private set; }
-        public MpAvCefNetWebViewHighlightBehavior HighlightBehavior { get; private set; }
+        public MpAvContentHighlightBehavior HighlightBehavior { get; private set; }
+
+
+        public MpAvIContentView ContentView {
+            get {
+                var wv = this.GetVisualDescendant<MpAvCefNetWebView>();
+                if(wv == null) {
+                    var tb = this.GetVisualDescendant<MpAvTextBox>();
+                    return tb;
+                }
+                return wv;
+            }
+        }
+
         public MpAvClipTileContentView() {
             InitializeComponent();
             var b = this.FindControl<Border>("ClipTileContainerBorder");
@@ -36,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
             ContentViewDropBehavior = new MpAvContentViewDropBehavior();
             ContentViewDropBehavior.Attach(cc.Content as IAvaloniaObject);
 
-            HighlightBehavior = new MpAvCefNetWebViewHighlightBehavior();
+            HighlightBehavior = new MpAvContentHighlightBehavior();
             HighlightBehavior.Attach(cc.Content as IAvaloniaObject);
         }
 
@@ -51,7 +64,7 @@ namespace MonkeyPaste.Avalonia {
                 !BindingContext.IsSubSelectionEnabled) {
                 BindingContext.IsSubSelectionEnabled = true;
                 MpCursor.SetCursor(BindingContext, MpCursorType.IBeam);
-                //UpdateAdorners();
+                UpdateAdorners();
                 return;
             }
             if (!BindingContext.IsTitleReadOnly ||
@@ -80,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            //MpAvDragDropManager.StartDragCheck(BindingContext);
+            MpAvDragDropManager.StartDragCheck(BindingContext);
 
             e.Handled = true;
         }

@@ -21,7 +21,7 @@
         MinHeight="{Binding MainWindowMinHeight}"
         Width="{Binding MainWindowWidth}"
         Height="{Binding MainWindowHeight}"
-        TransparencyLevelHint="AcrylicBlur"
+        TransparencyLevelHint="Transparent"
         Title="Monkey Paste">
     <Grid x:Name="MainWindowGridRef"
           Background="Transparent"
@@ -51,10 +51,6 @@
               ColumnDefinitions="40,Auto,*"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
-            <Grid.Background>
-                <SolidColorBrush Color="DarkViolet"
-                                 Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
-            </Grid.Background>
             <local:MpAvSidebarView x:Name="SidebarView"
                                    Grid.Column="0"
                                    Margin="0,3"

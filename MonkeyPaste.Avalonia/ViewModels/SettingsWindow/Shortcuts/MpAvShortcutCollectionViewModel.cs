@@ -14,15 +14,13 @@ using Avalonia.Input;
 using SharpHook;
 using System.Threading;
 using MonkeyPaste.Common.Avalonia;
-using Gtk;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvShortcutCollectionViewModel : 
         MpAvSelectorViewModelBase<object,MpAvShortcutViewModel>, 
         MpIAsyncSingletonViewModel<MpAvShortcutCollectionViewModel> {
 
-        private const bool IS_GLOBAL_INPUT_ENABLED = false;
+        private const bool IS_GLOBAL_INPUT_ENABLED = true;
         private const double _MIN_GLOBAL_DRAG_DIST = 20;
 
         #region Private Variables

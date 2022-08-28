@@ -19,7 +19,7 @@ using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvCefNetWebView : WebView {
+    public class MpAvCefNetWebView : WebView, MpAvIContentView {
         #region Private Variables
 
         private string _lastResult;
@@ -39,9 +39,11 @@ namespace MonkeyPaste.Avalonia {
 
         public bool SuppressRightClick { get; set; } = true;
 
-        public MpAvTextSelection Selection { get; private set; }
+        public MpAvITextSelection Selection { get; private set; }
 
         public MpAvHtmlDocument Document { get; set; }
+
+        MpAvIContentDocument MpAvIContentView.Document => Document;
 
         public IList<RoutedCommandBinding> CommandBindings { get; } = new List<RoutedCommandBinding>();
         #endregion
@@ -179,5 +181,7 @@ namespace MonkeyPaste.Avalonia {
                     .FireAndForgetSafeAsync(ctvm);
             }
         }
+
+       
     }
 }

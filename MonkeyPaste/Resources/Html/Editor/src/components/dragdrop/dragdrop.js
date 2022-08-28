@@ -93,7 +93,7 @@ function onDrop(e) {
         //e.preventDefault();
         //itemHtml = retargetPlainTextClipboardData(CefDragData);
         //CefDragData = null;
-        let dropIdx = 0;//getEditorIndexFromPoint2({ x: e.clientX, y: e.clientY });
+        let dropIdx = 0;//getEditorIndexFromPoint_ByLine({ x: e.clientX, y: e.clientY });
         quill.setSelection(dropIdx, 0);
         quill.insertText(0, CefDragData);
         //quill.clipboard.dangerouslyPasteHTML(dropIdx, CefDragData);
@@ -108,7 +108,7 @@ function onDrop(e) {
         }
 
         if (itemHtml != '') {
-            let dropIdx = getEditorIndexFromPoint2(mp);
+            let dropIdx = getEditorIndexFromPoint(mp,true);
             quill.setSelection(dropIdx, 0);
             quill.clipboard.dangerouslyPasteHTML(dropIdx, itemHtml);
             //if (isHtml) {

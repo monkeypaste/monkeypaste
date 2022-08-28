@@ -19,12 +19,12 @@ namespace MonkeyPaste.Common {
             if (hexString.IndexOf('#') != -1) {
                 hexString = hexString.Replace("#", string.Empty);
             }
-            //
+
             int x = hexString.Length == 8 ? 2 : 0;
+            byte a = x > 0 ? byte.Parse(hexString.Substring(0, 2), NumberStyles.AllowHexSpecifier) : (byte)255;
             byte r = byte.Parse(hexString.Substring(x, 2), NumberStyles.AllowHexSpecifier);
             byte g = byte.Parse(hexString.Substring(x + 2, 2), NumberStyles.AllowHexSpecifier);
             byte b = byte.Parse(hexString.Substring(x + 4, 2), NumberStyles.AllowHexSpecifier);
-            byte a = x > 0 ? byte.Parse(hexString.Substring(0, 2), NumberStyles.AllowHexSpecifier) : (byte)255;
 
             return new byte[] { a, r, g, b };
         }

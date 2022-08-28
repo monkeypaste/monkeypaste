@@ -140,7 +140,7 @@ namespace MonkeyPaste.Avalonia {
             bool isCaseSensitive = MpDataModelProvider.QueryInfo.FilterFlags.HasFlag(MpContentFilterType.CaseSensitive);
             bool isWholeWord = MpDataModelProvider.QueryInfo.FilterFlags.HasFlag(MpContentFilterType.WholeWord);
             bool isRegEx = MpDataModelProvider.QueryInfo.FilterFlags.HasFlag(MpContentFilterType.Regex);
-            _matches = ContentRange.Start.FindAllText(ContentRange.End, st,isCaseSensitive,isWholeWord,isRegEx).ToList();
+            _matches = ContentRange.Start.Document.FindAllText(st,isCaseSensitive,isWholeWord,isRegEx).ToList();
 
             SelectedIdx = -1;
 

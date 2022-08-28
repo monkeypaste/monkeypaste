@@ -120,9 +120,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
-
-
         #endregion
 
         #region Public Methods

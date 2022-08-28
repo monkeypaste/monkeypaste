@@ -21,9 +21,9 @@ namespace MonkeyPaste.Avalonia {
         public string TitleBarBackgroundHexColor {
             get {
                 if (MpAvMainWindowViewModel.Instance.IsMainWindowActive) {
-                    return MpSystemColors.goldenrod.AdjustAlpha(0.7);
+                    return MpSystemColors.goldenrod.AdjustAlpha(MpPrefViewModel.Instance.MainWindowOpacity);
                 }
-                return MpSystemColors.gainsboro.AdjustAlpha(0.7);
+                return MpSystemColors.gainsboro.AdjustAlpha(MpPrefViewModel.Instance.MainWindowOpacity);
             }
         }
 
@@ -80,6 +80,7 @@ namespace MonkeyPaste.Avalonia {
             switch (msg) {
                 case MpMessageType.MainWindowActivated:
                 case MpMessageType.MainWindowDeactivated:
+                case MpMessageType.MainWindowOpened:
                     OnPropertyChanged(nameof(TitleBarBackgroundHexColor));
                     break;
             }

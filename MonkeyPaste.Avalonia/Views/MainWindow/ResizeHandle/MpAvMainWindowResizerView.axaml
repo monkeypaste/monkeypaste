@@ -34,17 +34,17 @@
                 local:MpAvResizeExtension.XFactor="{Binding ResizeXFactor}"
                 local:MpAvResizeExtension.YFactor="{Binding ResizeYFactor}"
                 local:MpAvResizeExtension.GlobalResizeMessage="MainWindowSizeChanged"
+                Background="{Binding TitleBarBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}, Source={x:Static local:MpAvMainWindowTitleMenuViewModel.Instance}}"
                 local:MpAvResizeExtension.IsEnabled="True"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                BorderBrush="{Binding TitleBarBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}, Source={x:Static local:MpAvMainWindowTitleMenuViewModel.Instance}}"
-                BorderThickness="0.5">
-            <Border.Background>
+                BorderThickness="0">
+            <!--<Border.Background>
                 <ImageBrush Source="{Binding ., Source={StaticResource FrameGripTile}, Converter={StaticResource StringResourceToBitmapConverter}}"
                             TileMode="Tile"
                             SourceRect="0,0,5,5"
                             DestinationRect="0,0,5,5" />
-            </Border.Background>
+            </Border.Background>-->
         </Border>
     </Border>
 </local:MpAvUserControl>

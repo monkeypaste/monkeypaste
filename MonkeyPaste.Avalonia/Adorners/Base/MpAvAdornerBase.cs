@@ -11,7 +11,7 @@ namespace MonkeyPaste.Avalonia {
     public abstract class MpAvAdornerBase : Control {
         protected Control AdornedControl { get; private set; }
 
-        public MpAvAdornerBase(Control adornedControl) : base() {
+        public MpAvAdornerBase(Control adornedControl) : base() {            
             AdornedControl = adornedControl;
         }
     }

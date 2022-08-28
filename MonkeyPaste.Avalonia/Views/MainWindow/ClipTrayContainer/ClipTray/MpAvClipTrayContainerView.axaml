@@ -28,6 +28,7 @@
                                MinWidth="{Binding MinClipTrayScreenWidth}"
                                MinHeight="{Binding MinClipTrayScreenHeight}"
                                Margin="0,0,5,0"
+                               Background="{Binding PinTrayBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                                local:MpAvSizeObserverExtension.IsEnabled="True"
                                local:MpAvSizeObserverExtension.ObservedWidth="{Binding PinTrayScreenWidth, Mode=OneWayToSource}"
                                local:MpAvSizeObserverExtension.ObservedHeight="{Binding PinTrayScreenHeight, Mode=OneWayToSource}">
@@ -65,6 +66,7 @@
         </GridSplitter>
         <local:MpAvClipTrayView x:Name="ClipTrayView"
                                 Grid.Column="1"
+                                Background="{Binding ClipTrayBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                                 DataContext="{Binding}" />
     </Grid>
 </local:MpAvUserControl>

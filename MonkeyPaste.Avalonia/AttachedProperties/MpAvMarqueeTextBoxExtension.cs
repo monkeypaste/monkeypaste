@@ -699,14 +699,9 @@ namespace MonkeyPaste.Avalonia {
             double fs = Math.Max(1.0d, tb.FontSize);
 
             Size textSize = new Size(tb.Text.Length * fs, fs);
-            var ft = new FormattedText(
-                    tb.Text,
-                    new Typeface(tb.FontFamily, tb.FontStyle, tb.FontWeight),
-                    fs,
-                    tb.TextAlignment,
-                    tb.TextWrapping,
-                    new Size());
-
+            var ft = tb.ToFormattedText();
+            ft.FontSize = Math.Max(1.0d, tb.FontSize);
+            
             ftSize = ft.Bounds.Size;
             ft.Constraint = ftSize;
             // pixelsPerDip = 1.75

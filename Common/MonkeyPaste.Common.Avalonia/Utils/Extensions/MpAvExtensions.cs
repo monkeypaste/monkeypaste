@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.VisualTree;
 using System;
 using System.Collections.Generic;
@@ -62,6 +63,22 @@ namespace MonkeyPaste.Common.Avalonia {
             control?.InvalidateMeasure();
             control?.InvalidateVisual();            
         }
+
+        #endregion
+
+        #region TextBox
+
+        public static FormattedText ToFormattedText(this TextBox tb) {
+            var ft = new FormattedText(
+                    tb.Text,
+                    new Typeface(tb.FontFamily, tb.FontStyle, tb.FontWeight),
+                    tb.FontSize,
+                    tb.TextAlignment,
+                    tb.TextWrapping,
+                    new Size());
+            return ft;
+        }
+
 
         #endregion
 

@@ -74,23 +74,19 @@ namespace MonkeyPaste.Avalonia {
 
         private void ShowSourceHighlight(bool isSelected) {
             double fillOpacity = 0.3;
-            string pink = Brushes.Pink.ToString();
-            string yellow = Brushes.Yellow.ToString();
-            string red = Brushes.Red.ToString(); 
-            Brush fill = isSelected ? pink.ToAvBrush(fillOpacity) : yellow.ToAvBrush(fillOpacity);
-            Brush stroke = isSelected ? red.ToAvBrush() : yellow.ToAvBrush(); 
+            var fill = isSelected ? Brushes.Pink : Brushes.Yellow;
+            var stroke = isSelected ? Brushes.Red : Brushes.Yellow; 
 
-            AssociatedObject.SourceMatchEllipse.Fill = fill;
-            AssociatedObject.SourceMatchEllipse.Stroke = stroke;
-
-            AssociatedObject.SourceMatchEllipse.IsVisible = true;
+            //AssociatedObject.SourceMatchEllipse.Fill = fill;
+            //AssociatedObject.SourceMatchEllipse.Stroke = stroke;
+            //AssociatedObject.SourceMatchEllipse.IsVisible = true;
         }
 
         private void HideSourceHighlight() {
             if(AssociatedObject == null) {
                 return;
             }
-            AssociatedObject.SourceMatchEllipse.IsVisible = false;
+            //AssociatedObject.SourceMatchEllipse.IsVisible = false;
         }
     }
 }

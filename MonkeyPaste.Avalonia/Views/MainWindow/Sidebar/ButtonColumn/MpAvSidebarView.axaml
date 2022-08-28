@@ -18,7 +18,7 @@
           RowDefinitions="*,*,*,*,*">
         <Grid.Background>
             <SolidColorBrush Color="DimGray"
-                             Opacity="0.7" />
+                             Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
         </Grid.Background>
         <Grid.Styles>
             <Style Selector="ToggleButton">
@@ -72,8 +72,7 @@
         </Grid.Styles>
         <ToggleButton x:Name="TagTreeToggleButton"
                       Grid.Row="0"
-                      IsChecked="{Binding IsSidebarVisible,
-                                          Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
+                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
                       Padding="10">
             <ToolTip.Tip>
                 <local:MpAvTooltipView ToolTipText="Collection Tree" />
@@ -82,8 +81,7 @@
         </ToggleButton>
         <ToggleButton x:Name="ClipboardHandlerToggleButton"
                       Grid.Row="1"
-                      IsChecked="{Binding IsSidebarVisible,
-                                          Source={x:Static local:MpClipboardHandlerCollectionViewModel.Instance}}"
+                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpClipboardHandlerCollectionViewModel.Instance}}"
                       Padding="10">
             <ToolTip.Tip>
                 <local:MpAvTooltipView ToolTipText="Clipboard Handlers" />
@@ -92,8 +90,7 @@
         </ToggleButton>
         <ToggleButton x:Name="AnalyzerToggleButton"
                       Grid.Row="2"
-                      IsChecked="{Binding IsSidebarVisible,
-                                          Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance}}"
+                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance}}"
                       Padding="10">
             <ToolTip.Tip>
                 <local:MpAvTooltipView ToolTipText="Analyze" />
@@ -103,8 +100,7 @@
         <ToggleButton x:Name="ActionsToggleButton"
                       Grid.Row="3"
                       IsEnabled="True"
-                      IsChecked="{Binding IsSidebarVisible,
-                                          Source={x:Static local:MpActionCollectionViewModel.Instance}}"
+                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpActionCollectionViewModel.Instance}}"
                       Padding="10">
             <ToolTip.Tip>
                 <local:MpAvTooltipView ToolTipText="Actions" />
@@ -278,7 +274,7 @@
                 </ContextMenu>
             </ToggleButton.ContextMenu>-->
 
-          <PathIcon Data="{StaticResource MouseSvg}" />
+            <PathIcon Data="{StaticResource MouseSvg}" />
         </ToggleButton>
     </Grid>
 </local:MpAvUserControl>

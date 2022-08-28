@@ -25,14 +25,11 @@
                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
                           CornerRadius="10"
                           BorderThickness="5"
+                          Background="{Binding TileBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                           BorderBrush="{Binding TileBorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                           local:MpAvIsHoveringExtension.IsEnabled="True"
                           local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
                           local:MpAvIsHoveringExtension.IsSelected="{Binding IsSelected, Mode=TwoWay}">
-        <local:MpAvClipBorder.Background>
-            <SolidColorBrush Color="OldLace"
-                             Opacity="0.7" />
-        </local:MpAvClipBorder.Background>
         <local:MpAvClipBorder.Styles>
             <Style Selector="PathIcon">
                 <Setter Property="Width"

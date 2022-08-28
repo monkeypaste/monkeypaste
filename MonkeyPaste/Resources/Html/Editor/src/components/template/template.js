@@ -218,7 +218,7 @@ function applyTemplateToDomNode(node, value) {
             return;
         }
 
-        let targetDocIdx = getEditorIndexFromPoint({ x: e.clientX, y: e.clientY });
+        let targetDocIdx = getEditorIndexFromPoint({ x: e.clientX, y: e.clientY }, false);
 
         if (targetDocIdx < 0) {
             return;
@@ -237,7 +237,7 @@ function applyTemplateToDomNode(node, value) {
             templateDocIdxCache = getTemplateElementsWithDocIdx();
         }
 
-        let docIdx = getEditorIndexFromPoint({ x: e.clientX, y: e.clientY }, templateDocIdxCache);
+        let docIdx = getEditorIndexFromPoint({ x: e.clientX, y: e.clientY },false, templateDocIdxCache);
         log('docIdx: ' + docIdx);
 
         if (docIdx < 0) {

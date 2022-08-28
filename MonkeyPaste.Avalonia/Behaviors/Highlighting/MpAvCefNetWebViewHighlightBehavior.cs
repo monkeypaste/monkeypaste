@@ -11,7 +11,7 @@ using System.Windows;
 using PropertyChanged;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvCefNetWebViewHighlightBehavior : MpAvHighlightBehaviorBase<MpAvClipTileContentView> {
+    public class MpAvContentHighlightBehavior : MpAvHighlightBehaviorBase<MpAvClipTileContentView> {
         private Dictionary<int, List<MpShape>> _highlightShapes = new Dictionary<int, List<MpShape>>();
 
         protected override MpAvITextRange ContentRange {
