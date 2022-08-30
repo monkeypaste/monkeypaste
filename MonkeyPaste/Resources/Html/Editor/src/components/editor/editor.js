@@ -4,11 +4,13 @@ var IgnoreNextTextChange = false;
 var IgnoreNextSelectionChange = false;
 
 var IsLoaded = false;
+
 var EnvName = "";
 
 var IsClipboardDataReady = false;
 
-var isPastingTemplate = false;
+var IsPastingTemplate = false;
+var IsSubSelectionEnabled = false;
 
 function initConverter() {
 	reqMsg = {
@@ -80,6 +82,7 @@ function init(reqMsgStr) {
 		// };
 		reqMsg = {
 			envName: 'wpf',
+			copyItemId: 0,
 			isReadOnlyEnabled: true,
 			usedTextTemplates: {},
 			isPasteRequest: false,
@@ -105,6 +108,7 @@ function init(reqMsgStr) {
 		return;
 	}
 	EnvName = reqMsg.envName;
+	CopyItemId = reqMsg.copyItemId;
 
 	if (!IsLoaded) {
 		loadQuill(reqMsg);
@@ -346,7 +350,7 @@ function onWindowClick(e) {
 }
 
 function onWindowScroll(e) {
-	if (IsReadOnly()) {
+	if (isReadOnly()) {
 		return;
 	}
 
@@ -371,10 +375,12 @@ function onEditorSelectionChanged(range, oldRange, source) {
 		refreshFontFamilyPicker();
 
 		if (range.length == 0) {
-			var text = quill.getText(range.index, 1);
-			log("User cursor is at " + range.index + ' idx before "' + text + '"');
+			var text = getText({ index: range.index, length: 1 });
+			let ls = getLineStartDocIdx(range.index);
+			let le = getLineEndDocIdx(range.index);
+			log("User cursor is at " + range.index + ' idx before "' + text + '" line start: '+ls+' line end: '+le);
 		} else {
-			var text = quill.getText(range.index, range.length);
+			var text = getText(range);
 			log(
 				"User cursor is at " +
 				range.index +
@@ -388,6 +394,14 @@ function onEditorSelectionChanged(range, oldRange, source) {
 
 		refreshTemplatesAfterSelectionChange();
 		updateTemplatesAfterSelectionChanged(range, oldRange, source);
+
+		let selChangedObj = { copyItemId: CopyItemId, index: range.index, length: range.length };
+
+		if (typeof notifyEditorSelectionChanged === 'function') {
+			notifyEditorSelectionChanged(JSON.stringify(selChangedObj));
+		}
+		
+
 	} else {
 		log("Cursor not in the editor");
 	}
@@ -417,6 +431,12 @@ function onEditorTextChanged(delta, oldDelta, source) {
 	}
 
 	updateTemplatesAfterTextChanged(delta, oldDelta, source);
+
+	if (typeof notifyContentLengthChanged === 'function') {
+		// send MpQuillContentLengthChangedMessage msg to host to update ContetEnd offset
+		let contentLengthChangedMsg = { copyItemId: CopyItemId, length: quill.getLength() };
+		notifyContentLengthChanged(JSon.stringify(contentLengthChangedMsg));
+	}
 }
 
 function selectAll() {
@@ -424,12 +444,10 @@ function selectAll() {
 }
 
 function isAllSelected() {
-	return quill.getSelection().length == quill.getLength();
+	let result = quill.getSelection().length == quill.getLength();
+	return result;
 }
 
-function setText(text) {
-	quill.setText(text + "\n");
-}
 
 function setHtml(html) {
 	//quill.root.innerHTML = html;
@@ -451,14 +469,56 @@ function setContents(jsonStr) {
 	quill.setContents(JSON.parse(jsonStr));
 }
 
-function getText() {
-	if (quill && quill.root) {
-		//var text = quill.getText(0, quill.getLength() - 1);
-		//return text;
-		var text = quill.root.innerText;
-		return text;
+function getText(rangeObjParam) {
+	if (!quill || !quill.root) {
+		return '';
 	}
-	return '';
+
+	let wasReadOnly = isReadOnly();
+	if (wasReadOnly) {
+		document.getElementById('editor').firstChild.setAttribute('contenteditable', true);
+		quill.update();
+	}
+
+	let rangeObj = null;
+	if (typeof rangeObjParam === 'string' || rangeObjParam instanceof String) {
+		rangeObj = JSON.parse(rangeObjParam);
+	} else if (rangeObjParam) {
+		rangeObj = rangeObjParam;
+	} else {
+		rangeObj = { index: 0, length: quill.getLength() };
+	}
+
+	
+	let text = quill.getText(rangeObj.index, rangeObj.length);
+	if (wasReadOnly) {
+		document.getElementById('editor').firstChild.setAttribute('contenteditable', false);
+		quill.update();
+	}
+	return text;
+}
+
+function setText(textOrRangeAndTextObjParam) {
+	if (!quill || !quill.root) {
+		return '';
+	}
+	let textOrRangeAndTextObj = null;
+
+	if (typeof rangeObjParam === 'string' || rangeObjParam instanceof String) {
+		if (textOrRangeAndTextObjParam.includes('isHostJsonMsg: true')) {
+			//ensure param is a MpQuillContentSetTextMessage
+
+		}
+		rangeObj = JSON.parse(rangeObjParam);
+	} else if (rangeObjParam) {
+		rangeObj = rangeObjParam;
+	} else {
+		rangeObj = { index: 0, length: quill.getLength() };
+	}
+	let text = quill.getText(rangeObj.index, rangeObj.length);
+	return text;
+
+	quill.setText(text + "\n");
 }
 
 function getSelectedText() {
@@ -529,7 +589,7 @@ function getSelectedHtml2() {
 function createLink() {
 	var range = quill.getSelection(true);
 	if (range) {
-		var text = quill.getText(range.index, range.length);
+		var text = getText(range);
 		quill.deleteText(range.index, range.length);
 		var ts =
 			'<a class="square_btn" href="https://www.google.com">' + text + "</a>";
@@ -540,14 +600,26 @@ function createLink() {
 	}
 }
 
-function getEditorIndexFromPoint(p, snapToLine, fallbackIdx) {
+function getEditorIndexFromPoint(editorPointMsgStr) {
 	// NOTE fallbackIdx is handy when user is dragging a template instance
 	// so location freeze's when drag is out of bounds
 
-	if (snapToLine) {
-		return getEditorIndexFromPoint_ByLine(p, fallbackIdx);
+	let editorPointMsgObj = null;
+	if (typeof editorPointMsgStr === 'string' || editorPointMsgStr instanceof String) {
+		editorPointMsgObj = JSON.parse(editorPointMsgStr);
 	}
-	return getEditorIndexFromPoint_Absolute(p, fallbackIdx);
+
+	if (editorPointMsgObj) {
+		let p = { x: editorPointMsgObj.x, y: editorPointMsgObj.y };
+		let fallbackIdx = editorPointMsgObj.fallbackIdx;
+		let snapToLine = editorPointMsgObj.snapToLine;
+
+		if (snapToLine) {
+			return getEditorIndexFromPoint_ByLine(p, fallbackIdx);
+		}
+		return getEditorIndexFromPoint_Absolute(p, fallbackIdx);
+	}
+	return -1;
 }
 
 function getEditorIndexFromPoint_Absolute(p, fallbackIdx) {
@@ -627,7 +699,7 @@ function getEditorIndexFromPoint_ByLine(p, fallbackIdx) {
 		return fallbackIdx;
 	}
 
-	log("closest line idx: " + closestLineIdx);
+	//log("closest line idx: " + closestLineIdx);
 
 	let lineMinDocIdx = quill.getIndex(docLines[closestLineIdx]);
 	let nextLineMinDocIdx = quill.getLength();
@@ -666,7 +738,7 @@ function getIsClipboardReady() {
 	return isReady ? "yes" : "no";
 }
 
-function IsReadOnly() {
+function isReadOnly() {
 	var isEditable = parseBool($(".ql-editor").attr("contenteditable"));
 	return !isEditable;
 }
@@ -683,6 +755,9 @@ function enableReadOnly() {
 
 	scrollToHome();
 	hideScrollbars();
+
+	IsSubSelectionEnabled = false;
+	drawOverlay();
 
 	//return 'MpQuillResponseMessage'  updated master collection of templates
 	let qrmObj = {
@@ -702,7 +777,6 @@ function disableReadOnly(disableReadOnlyReqStrOrObj) {
 	log('read-only: DISABLED');
 	log('disableReadOnly msg:');
 	log(disableReadOnlyReqStrOrObj);
-	//bindJsComAdapter();
 
 	let disableReadOnlyMsg = null;
 
@@ -721,9 +795,8 @@ function disableReadOnly(disableReadOnlyReqStrOrObj) {
 	}
 
 	availableTemplates = disableReadOnlyMsg.allAvailableTextTemplates;
-	IsUnderlinesVisible = false;
+	IsSubSelectionEnabled = true;
 
-	//document.body.style.height = disableReadOnlyMsg.editorHeight;
 
 	if (!disableReadOnlyMsg.isSilent) {
 		showEditorToolbar();
@@ -735,7 +808,7 @@ function disableReadOnly(disableReadOnlyReqStrOrObj) {
 	$(".ql-editor").css("caret-color", "black");
 
 
-
+	//document.body.style.height = disableReadOnlyMsg.editorHeight;
 	//$('.ql-editor').css('min-width', getEditorToolbarWidth());
 	//$('.ql-editor').css('min-height', disableReadOnlyMsg.editorHeight);
 	//document.getElementById('editor').style.minHeight = disableReadOnlyMsg.editorHeight - getEditorToolbarHeight() + 'px';
@@ -747,6 +820,8 @@ function disableReadOnly(disableReadOnlyReqStrOrObj) {
 	refreshFontSizePicker();
 	refreshFontFamilyPicker();
 
+	drawOverlay();
+
 	let droMsgObj = { editorWidth: DefaultEditorWidth };
 	let droMsgJsonStr = JSON.stringify(droMsgObj);
 
@@ -757,21 +832,54 @@ function disableReadOnly(disableReadOnlyReqStrOrObj) {
 }
 
 function enableSubSelection() {
-	if (IsReadOnly()) {
-		IsUnderlinesVisible = true;
+	//if (isReadOnly()) {
+	//	IsUnderlinesVisible = true;
+	//} else {
+	//	IsUnderlinesVisible = false;
+	//}
+	IsSubSelectionEnabled = true;
+	if (isReadOnly()) {
+		$(".ql-editor").css("caret-color", "red");
 	} else {
-		IsUnderlinesVisible = false;
+		// this SHOULD be set already in disableReadOnly but setting here to ensure state
+		$(".ql-editor").css("caret-color", "black");
 	}
-	
 	drawOverlay();
-	//$(".ql-editor").css("caret-color", "black");
-	//$(".ql-editor").attr("contenteditable", true);
 }
 
 function disableSubSelection() {
-	IsUnderlinesVisible = false;
+	//IsUnderlinesVisible = false;
+	IsSubSelectionEnabled = false;
+
+	if (isReadOnly()) {
+		$(".ql-editor").css("caret-color", "transparent");
+
+		let selection = quill.getSelection();
+		if (selection) {
+			quill.setSelection(selection.index, 0);
+		}
+	}
+	
+
 	drawOverlay();
-	$(".ql-editor").css("caret-color", "transparent");
+}
+
+function getSelection() {
+	let selection = quill.getSelection();
+	return selection;
+}
+
+function setSelection(selObj) {
+	let index = 0;
+	let length = 0;
+	if (typeof selObj === 'string' || selObj instanceof String) {
+		selObj = JSON.parse(selObj);
+	}
+
+	index = selObj.index;
+	length = selObj.length;
+
+	quill.setSelection(index, length);
 }
 
 function isShowingEditorToolbar() {
@@ -825,7 +933,7 @@ function getEditorHeight() {
 }
 
 function getEditorToolbarWidth() {
-	if (IsReadOnly()) {
+	if (isReadOnly()) {
 		return 0;
 	}
 	return document
@@ -834,7 +942,7 @@ function getEditorToolbarWidth() {
 }
 
 function getEditorToolbarHeight() {
-	if (IsReadOnly()) {
+	if (isReadOnly()) {
 		return 0;
 	}
 	var toolbarHeight = parseInt($(".ql-toolbar").outerHeight());

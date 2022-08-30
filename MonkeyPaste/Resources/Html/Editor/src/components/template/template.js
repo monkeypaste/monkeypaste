@@ -218,7 +218,7 @@ function applyTemplateToDomNode(node, value) {
             return;
         }
 
-        let targetDocIdx = getEditorIndexFromPoint({ x: e.clientX, y: e.clientY }, false);
+        let targetDocIdx = getEditorIndexFromPoint_Absolute({ x: e.clientX, y: e.clientY });
 
         if (targetDocIdx < 0) {
             return;
@@ -237,7 +237,7 @@ function applyTemplateToDomNode(node, value) {
             templateDocIdxCache = getTemplateElementsWithDocIdx();
         }
 
-        let docIdx = getEditorIndexFromPoint({ x: e.clientX, y: e.clientY },false, templateDocIdxCache);
+        let docIdx = getEditorIndexFromPoint_Absolute({ x: e.clientX, y: e.clientY },templateDocIdxCache);
         log('docIdx: ' + docIdx);
 
         if (docIdx < 0) {
@@ -346,7 +346,7 @@ function decodeTemplates(templateDefs) {
     //and deletes all current instances in active document so when not provided replace 
     //encoded template w/ empty character
 
-    let qtext = quill.getText();
+    let qtext = getText();
     let tcount = 0; 
     while (result = ENCODED_TEMPLATE_REGEXP.exec(qtext)) {
         let encodedTemplateStr = result[0];
@@ -372,7 +372,7 @@ function decodeTemplates(templateDefs) {
         } else {
             log('template def \'' + tguid + '\' not found so omitting from editor');
         }
-        qtext = quill.getText();
+        qtext = getText();
     }
 }
 
@@ -605,7 +605,7 @@ function createTemplate(templateObjOrId,newTemplateType) {
         if (range.length == 0) {
             newTemplateName = getLowestAnonTemplateName();
         } else {
-            newTemplateName = quill.getText(range.index, range.length).trim();
+            newTemplateName = getText(range).trim();
         }
         if (selectionInnerHtml == '<br>') {
             //this occurs when selection.length == 0
@@ -701,7 +701,7 @@ function focusTemplate(tguid, fromDropDown, tiguid) {
     for (var i = 0; i < tel.length; i++) {
         var te = tel[i];
         if (te.getAttribute('templateGuid') == tguid) {
-            if (isPastingTemplate) {
+            if (IsPastingTemplate) {
                 $('#templateTextArea').placeholder = "Enter text for " + te.innerText;
                 if (te.innerText != getTemplateDefByGuid(tguid)['templateName']) {
                     $('#templateTextArea').val(te.innerText);
@@ -727,7 +727,7 @@ function focusTemplate(tguid, fromDropDown, tiguid) {
     }
 
     if (fromDropDown == null || !fromDropDown) {
-        if (isPastingTemplate) {
+        if (IsPastingTemplate) {
             //when user clicks a template this will adjust to drop dwon to the clicked element
             var items = document.getElementById('paste-template-custom-select').getElementsByTagName("div");
             for (var i = 0; i < items.length; i++) {
@@ -829,13 +829,13 @@ function padTemplate(tiguid,delta) {
     if (isDocIdxLineStart(teDocIdx)) {
         needsPre = true;
     } else {
-        let preText = quill.getText(teDocIdx - 1, 1);
+        let preText = getText({ index: teDocIdx - 1, length: 1 });
         needsPre = preText != ' ';
     }
     if (isDocIdxLineEnd(teDocIdx)) {
         needsPost = true;
     } else {
-        let postText = quill.getText(teDocIdx + 1, 1);
+        let postText = getText({ index: teDocIdx + 1, length: 1 });
         needsPost = postText != ' ';
     }
 
@@ -902,7 +902,7 @@ function updateTemplatesAfterSelectionChanged(range, oldRange, source) {
 
 
     // results
-    // 1. do nothing
+    // 1. do nothing (disable add template button)
     // 2. selection moved +1 to template idx
     // 3. selection is moved -1 to template idx
     // 4. #2
@@ -910,6 +910,8 @@ function updateTemplatesAfterSelectionChanged(range, oldRange, source) {
     // 6. do nothing
     // 7.
     */
+
+    let isAddTemplateValid = true;
     let tel = getTemplateElements();
 
     for (var i = 0; i < tel.length; i++) {
@@ -942,6 +944,7 @@ function updateTemplatesAfterSelectionChanged(range, oldRange, source) {
             //return;
         } else if (range.index == tDocIdx) {
             nrange = range;
+            isAddTemplateValid = false;
         }
         if (nrange) {
             //IgnoreNextSelectionChange = true;
@@ -951,7 +954,11 @@ function updateTemplatesAfterSelectionChanged(range, oldRange, source) {
             break;
         }
     }
-
+    if (isAddTemplateValid) {
+        enableCanCreateTemplateToolbarItem();
+    } else {
+        disableCanCreateTemplateToolbarItem();
+	}
 }
 
 function getTemplateToolbarHeight() {

@@ -39,7 +39,22 @@ namespace MonkeyPaste.Avalonia {
 
         public bool SuppressRightClick { get; set; } = true;
 
-        public MpAvITextSelection Selection { get; private set; }
+        //public MpAvTextSelection Selection { 
+        //    get {
+        //        string selJsonStr = this.EvaluateJavascript("getSelection()");
+        //        var selParts = MpJsonObject.DeserializeObject<List<int>>(selJsonStr);
+        //        return new MpAvTextRange(
+        //            new MpAvTextPointer(Document, selParts[0]),
+        //            new MpAvTextPointer(Document, selParts[0] + selParts[1])) as MpAvTextSelection;
+        //    }
+        //    private set {
+        //        int[] selVal = value == null ? new int[] { 0, 0 } : new int[] { value.Start.Offset, value.End.Offset };
+        //        string selJsonStr = string.Format(@"{index:{0}, length:{1}}", selVal[0], selVal[1] - selVal[0]);
+        //        this.ExecuteJavascript($"setSelection('{selJsonStr}')");
+        //    }
+        //}
+
+        public MpAvTextSelection Selection { get; private set; }
 
         public MpAvHtmlDocument Document { get; set; }
 
@@ -48,13 +63,41 @@ namespace MonkeyPaste.Avalonia {
         public IList<RoutedCommandBinding> CommandBindings { get; } = new List<RoutedCommandBinding>();
         #endregion
 
-        #region Overrides
-
+        #region Constructors
         public MpAvCefNetWebView() : base() {
-            CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Copy, OnCopy,OnCanExecuteClipboardCommand));
+            Document = new MpAvHtmlDocument(this);
+            Selection = new MpAvTextSelection(Document);
+
+            CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Copy, OnCopy, OnCanExecuteClipboardCommand));
             CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Cut, OnCut, OnCanExecuteClipboardCommand));
             CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Paste, OnPaste, OnCanExecuteClipboardCommand));
         }
+
+        #endregion
+
+        #region Public Methods
+
+        public void UpdateSelection(int index, int length, bool isFromEditor) {
+            var newStart = new MpAvTextPointer(Document, index);
+            var newEnd = new MpAvTextPointer(Document, index + length);
+            if (isFromEditor) {
+                Selection.Start = newStart;
+                Selection.End = newEnd;
+            } else {
+                Selection.Select(newStart, newEnd);
+            }
+            MpConsole.WriteLine($"Tile: '{(DataContext as MpAvClipTileViewModel).CopyItemTitle}' Selection Changed: '{Selection}'");
+        }
+
+        void MpAvIContentView.SelectAll() {
+            this.ExecuteJavascript("selectAll()");
+        }
+
+        #endregion
+
+
+        #region Overrides
+
 
         protected override void OnDragEnter(DragEventArgs e) {
             base.OnDragEnter(e);
@@ -68,6 +111,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
+
 
         #region Javascript Evaluation
 
@@ -88,7 +132,7 @@ namespace MonkeyPaste.Avalonia {
                 });
                 return result;
             }
-
+            
             CefProcessMessage cefMsg = new CefProcessMessage("EvaluateScript");
             cefMsg.ArgumentList.SetString(0, script);
             frame.SendProcessMessage(CefProcessId.Renderer, cefMsg);
@@ -108,10 +152,6 @@ namespace MonkeyPaste.Avalonia {
             return resp;
         }
 
-        public string EvaluateJavascript(string script) {
-            string result = MpAsyncHelpers.RunSync<string>(()=>EvaluateJavascriptAsync(script));
-            return result;
-        }
 
        public void ExecuteJavascript(string script) {
             var frame = GetMainFrame();
@@ -138,14 +178,14 @@ namespace MonkeyPaste.Avalonia {
 
         private static void OnCopy(object sender, ExecutedRoutedEventArgs e) {
             MpAvCefNetWebView wv = (MpAvCefNetWebView)sender;
-            wv.SetClipboardData(true);
             e.Handled = true;
+            wv.SetClipboardDataAsync(true).FireAndForgetSafeAsync(wv.DataContext as MpViewModelBase);
         }
 
         private static void OnCut(object sender, ExecutedRoutedEventArgs e) {
             MpAvCefNetWebView wv = (MpAvCefNetWebView)sender;
-            wv.SetClipboardData(false);
             e.Handled = true;
+            wv.SetClipboardDataAsync(false).FireAndForgetSafeAsync(wv.DataContext as MpViewModelBase);
         }
 
         private static void OnPaste(object sender, ExecutedRoutedEventArgs e) {
@@ -153,8 +193,8 @@ namespace MonkeyPaste.Avalonia {
 
             e.Handled = true;
             Dispatcher.UIThread.Post(async () => {
-                wv.Selection.Text = await Application.Current.Clipboard.GetTextAsync();
-
+                string cb_text = await Application.Current.Clipboard.GetTextAsync();
+                await wv.Selection.SetTextAsync(cb_text);
 
                 if (wv.DataContext is MpAvClipTileViewModel ctvm) {
                     MpAvCefNetWebViewExtension.SaveTextContentAsync(wv)
@@ -165,12 +205,12 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        protected void SetClipboardData(bool isCopy) {
+        protected async Task SetClipboardDataAsync(bool isCopy) {
             var ctvm = DataContext as MpAvClipTileViewModel;
             if (Selection.IsEmpty) {
                 MpAvTextBoxSelectionExtension.SelectAll(ctvm);
             }
-            string selectedText = MpAvCefNetWebViewExtension.GetEncodedContent(this, false, true);
+            string selectedText = await MpAvCefNetWebViewExtension.GetEncodedContentAsync(this, false, true);
 
             MpPlatformWrapper.Services.ClipboardMonitor.IgnoreNextClipboardChangeEvent = true;
             Application.Current.Clipboard.SetTextAsync(selectedText)

@@ -8,9 +8,15 @@ using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvPinTrayView : MpAvUserControl<MpAvClipTrayViewModel> {
-
+        public MpAvPinTrayDropBehavior PinTrayDropBehavior { get; private set; }
         public MpAvPinTrayView() {
             InitializeComponent();
+            this.AttachedToVisualTree += MpAvClipTileTitleView_AttachedToVisualTree;
+        }
+
+        private void MpAvClipTileTitleView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            PinTrayDropBehavior = new MpAvPinTrayDropBehavior();
+            PinTrayDropBehavior.Attach(this);
         }
 
         private void InitializeComponent() {

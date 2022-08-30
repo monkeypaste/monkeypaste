@@ -20,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvSelectorViewModelBase<object,MpAvShortcutViewModel>, 
         MpIAsyncSingletonViewModel<MpAvShortcutCollectionViewModel> {
 
-        private const bool IS_GLOBAL_INPUT_ENABLED = true;
+        private const bool IS_GLOBAL_INPUT_ENABLED = false;
         private const double _MIN_GLOBAL_DRAG_DIST = 20;
 
         #region Private Variables
@@ -714,7 +714,7 @@ namespace MonkeyPaste.Avalonia {
             //possibleMatches.ForEach(x => MpConsole.WriteLine("Possible match DOWN: " + x));
         }
 
-        private async void HandleGestureRouting_Up(KeyboardHookEventArgs e) {
+        private void HandleGestureRouting_Up(KeyboardHookEventArgs e) {
             string keyLiteral = MpSharpHookKeyboardInputHelpers.GetKeyLiteral(e.Data.KeyCode);
             _keyboardGestureHelper.RemoveKeyDown(keyLiteral);
 

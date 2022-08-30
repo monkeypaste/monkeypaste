@@ -8,42 +8,71 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using PropertyChanged;
+using Avalonia;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvTextBox : TextBox, MpAvIContentView, MpAvIContentDocument, MpAvITextSelection {
-        #region Properties
+    [DoNotNotify]
+    public class MpAvTextBox : TextBox, MpAvIContentView, MpAvIContentDocument {
+        #region Statics
 
-        #region MpAvITextSelection Implementation
-
-        MpAvITextPointer MpAvITextRange.Start {
-            get => new MpAvTextPointer(this, SelectionStart);
-            set => SelectionStart = value == null ? 0 : value.Offset;
-        }
-        MpAvITextPointer MpAvITextRange.End {
-            get => new MpAvTextPointer(this, SelectionEnd);
-            set => SelectionEnd = value == null ? SelectionStart : value.Offset;
+        static MpAvTextBox() {
+            SelectionStartProperty.Changed.AddClassHandler<MpAvTextBox>((x, y) => HandleSelectionStartChanged(x, y));
+            SelectionEndProperty.Changed.AddClassHandler<MpAvTextBox>((x, y) => HandleSelectionEndChanged(x, y));
         }
 
-        bool MpAvITextRange.IsEmpty => SelectionStart == SelectionEnd;
-
-        public void Select(MpAvITextPointer start, MpAvITextPointer end) {
-            SelectionStart = start.Offset;
-            SelectionEnd = end.Offset;
+        private static void HandleSelectionStartChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+            if(element is MpAvTextBox tb && e.NewValue is int startIdx) {
+                tb.UpdateSelection(startIdx, tb.SelectionEnd, true);
+            }
+        }
+        private static void HandleSelectionEndChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+            if (element is MpAvTextBox tb && e.NewValue is int endIdx) {
+                tb.UpdateSelection(tb.SelectionStart, endIdx, true);
+            }
         }
 
-        bool MpAvITextRange.IsPointInRange(MpPoint point) => (this as MpAvITextRange).IsPointInRange(point);
-
-        int IComparable.CompareTo(object obj) => (this as MpAvITextRange).CompareTo(obj);
-
-        bool IEquatable<MpAvITextRange>.Equals(MpAvITextRange other) => (this as MpAvITextRange).Equals(other);
 
         #endregion
+
+        #region Properties
+
+        //#region MpAvTextSelection Implementation
+
+        //MpAvITextPointer MpAvITextRange.Start {
+        //    get => new MpAvTextPointer(this, SelectionStart);
+        //    set => SelectionStart = value == null ? 0 : value.Offset;
+        //}
+        //MpAvITextPointer MpAvITextRange.End {
+        //    get => new MpAvTextPointer(this, SelectionEnd);
+        //    set => SelectionEnd = value == null ? SelectionStart : value.Offset;
+        //}
+
+        //bool MpAvITextRange.IsEmpty => SelectionStart == SelectionEnd;
+
+        //public void Select(MpAvITextPointer start, MpAvITextPointer end) {
+        //    SelectionStart = start.Offset;
+        //    SelectionEnd = end.Offset;
+        //}
+
+        //bool MpAvITextRange.IsPointInRange(MpPoint point) => (this as MpAvITextRange).IsPointInRange(point);
+
+        //int IComparable.CompareTo(object obj) => (this as MpAvITextRange).CompareTo(obj);
+
+        //bool IEquatable<MpAvITextRange>.Equals(MpAvITextRange other) => (this as MpAvITextRange).Equals(other);
+
+        //#endregion
+
+        public MpAvTextSelection Selection { get; private set; }
 
 
         #region MpAvIContentView Implementation
         IControl MpAvIContentDocument.Owner => this;
         public MpAvIContentDocument Document => this;
-        MpAvITextSelection MpAvIContentView.Selection => this;
+
+        void MpAvIContentView.SelectAll() {
+            this.SelectAll();
+        }
 
         #endregion
 
@@ -52,27 +81,23 @@ namespace MonkeyPaste.Avalonia {
         public MpAvITextPointer ContentStart => new MpAvTextPointer(this, 0);
         public MpAvITextPointer ContentEnd => new MpAvTextPointer(this, Text == null ? 0 : Text.Length - 1);
 
-        string MpAvIContentDocument.ContentData {
-            get => Text;
-            set => Text = value;
-        }
 
-        MpAvITextPointer MpAvIContentDocument.GetPosisitionFromPoint(MpPoint point, bool snapToText) {
-            if (Document.Owner is TextBox tb) {
-                var ft = tb.ToFormattedText();
-                if (snapToText) {
-                    point.Clamp(ft.Bounds.ToPortableRect());
-                }
-                var hitTestResult = ft.HitTestPoint(point.ToAvPoint());
-                if (hitTestResult == null || hitTestResult.TextPosition < 0) {
-                    return null;
-                }
-                return new MpAvTextPointer(this, hitTestResult.TextPosition);
+        async Task<MpAvITextPointer> MpAvIContentDocument.GetPosisitionFromPointAsync(MpPoint point, bool snapToText) {
+            await Task.Delay(1);
+            var ft = this.ToFormattedText();
+            if (snapToText) {
+                point.Clamp(ft.Bounds.ToPortableRect());
             }
-            return null;
+            var hitTestResult = ft.HitTestPoint(point.ToAvPoint());
+            if (hitTestResult == null || hitTestResult.TextPosition < 0) {
+                return null;
+            }
+            return new MpAvTextPointer(this, hitTestResult.TextPosition);
         }
 
-        IEnumerable<MpAvITextRange> MpAvIContentDocument.FindAllText(string matchText, bool isCaseSensitive, bool matchWholeWord, bool useRegex) {
+        async Task<IEnumerable<MpAvITextRange>> MpAvIContentDocument.FindAllTextAsync(string matchText, bool isCaseSensitive, bool matchWholeWord, bool useRegex) {
+            await Task.Delay(1);
+
             string pattern = useRegex ? matchText : matchText.Replace(Environment.NewLine, string.Empty);
             pattern = useRegex ? pattern : Regex.Escape(pattern);
             pattern = !useRegex && matchWholeWord ? $"\b{pattern}\b" : pattern;
@@ -102,12 +127,24 @@ namespace MonkeyPaste.Avalonia {
             return matches;
         }
 
-       #endregion
+
+
+        #endregion
 
         #endregion
 
         #region Public Methods
 
+        public void UpdateSelection(int index, int length, bool isFromEditor) {
+            var newStart = new MpAvTextPointer(Document, index);
+            var newEnd = new MpAvTextPointer(Document, index + length);
+            if (isFromEditor) {
+                Selection.Start = newStart;
+                Selection.End = newEnd;
+            } else {
+                Selection.Select(newStart, newEnd);
+            }
+        }
 
 
 

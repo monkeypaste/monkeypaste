@@ -2,6 +2,18 @@
 var DropElm;
 var WasReadOnly;
 
+var IsSplitDrop = false;
+var IsPreBlockDrop = false;
+var IsPostBlockDrop = false;
+
+var DropIdx = -1;
+
+var IsCtrlDown = false;
+var IsAltDown = false;
+var isShiftDown = false;
+
+var MousePos = { x: -1, y: -1 };
+
 function initDragDrop() {
     initDragDropOverrides();
 
@@ -13,6 +25,26 @@ function initDragDrop() {
     Array.from(editorElms).forEach(elm => {
         enableDragDrop(elm);
     });    
+
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
+    //window.addEventListener('mousemove', onMouseMove);
+}
+
+function onKeyDown(e) {
+    IsCtrlDown = e.ctrKey;
+    IsAltDown = e.altKey;
+    isShiftDown = e.shiftKey;
+}
+
+function onKeyUp(e) {
+    IsCtrlDown = e.ctrKey;
+    IsAltDown = e.altKey;
+    isShiftDown = e.shiftKey;
+}
+
+function onMouseMove(e) {
+    MousePos = { x: e.clientX, y: e.clientY };
 }
 
 function enableDragDrop(elm) {
@@ -61,25 +93,38 @@ function initDragDropOverrides() {
     }, true);
 }
 
-function IsDropping() {
+function getDropIdx() {
+
+}
+
+function isDropping() {
     return DropElm != null;
 }
 
 function onDragEnter(e) {
-    log('onDragEnter: ' + e);
-    if (!IsDropping()) {
-        WasReadOnly = IsReadOnly();
+    MousePos = { x: e.clientX, y: e.clientY };
+
+    //log('onDragEnter: ' + e);
+    drawOverlay();
+
+    if (!isDropping()) {
+        WasReadOnly = isReadOnly();
         if (WasReadOnly) {
             disableReadOnly({ isSilent: true });
         }
 	}
 }
 function onDragOver(e) {
-    log('onDragOver: ' + e);
+    MousePos = { x: e.clientX, y: e.clientY };
+    //log('onDragOver: ' + e);
     DropElm = e.currentTarget;
+
+    drawOverlay();
 }
 function onDragLeave(e) {
-    log('onDragLeave: ' + e);    
+    MousePos = { x: e.clientX, y: e.clientY };
+    //log('onDragLeave: ' + e);    
+    drawOverlay();
 }
 
 
@@ -108,7 +153,7 @@ function onDrop(e) {
         }
 
         if (itemHtml != '') {
-            let dropIdx = getEditorIndexFromPoint(mp,true);
+            let dropIdx = getEditorIndexFromPoint_ByLine(mp);
             quill.setSelection(dropIdx, 0);
             quill.clipboard.dangerouslyPasteHTML(dropIdx, itemHtml);
             //if (isHtml) {

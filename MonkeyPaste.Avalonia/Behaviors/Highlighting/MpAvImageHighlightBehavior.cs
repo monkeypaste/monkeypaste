@@ -10,7 +10,8 @@ namespace MonkeyPaste.Avalonia {
 
         public override MpHighlightType HighlightType => MpHighlightType.Content;
 
-        public override void ScrollToSelectedItem() {
+        public override async Task ScrollToSelectedItemAsync() {
+            await Task.Delay(1);
         }
     }
 }

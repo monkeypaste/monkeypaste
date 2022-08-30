@@ -1,12 +1,44 @@
 var InlineTags = ['span', 'a', 'em', 'strong', 'u', 's', 'sub', 'sup', 'img'];
 var BlockTags = ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe','blockquote']
+var CopyItemId = -1;
+var CopyItemType = 'text';
 
 function initContent(itemHtml) {
     setHtml(itemHtml);
 }
 
+function getLineStartDocIdx(docIdx) {
+    let lineStartDocIdx = 0;
+    let pt = getText();
+    for (var i = 0; i < docIdx; i++) {
+        if (pt[i] == '\n') {
+            lineStartDocIdx = Math.min(i + 1, pt.length);
+		}
+    }
+    return lineStartDocIdx;
+}
+
+function getLineEndDocIdx(docIdx) {
+    let pt = getText();
+    let lineEndDocIdx = pt.length - 1;
+    for (var i = pt.length - 1; i >= docIdx; i--) {
+        if (pt[i] == '\n') {
+            lineEndDocIdx = i;
+        }
+    }
+    return lineEndDocIdx;
+}
+
 function getCharacterRect(idx) {
-    let rect = quill.getBounds(idx)
+    let idxVal = null;
+    if (typeof idx === 'string' || idx instanceof String) {
+        idxVal = parseInt(idx);
+    } else {
+        idxVal = idx;
+	}
+    let rect = quill.getBounds(idxVal);
+    let rectJsonStr = JSON.stringify(rect);
+    return rectJsonStr;
 }
 
 function getContentWidth() {

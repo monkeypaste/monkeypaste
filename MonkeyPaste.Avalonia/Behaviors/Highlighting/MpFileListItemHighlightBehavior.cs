@@ -2,6 +2,8 @@
 using MonkeyPaste.Common;
 
 using PropertyChanged;
+using System.Threading.Tasks;
+
 namespace MonkeyPaste.Avalonia {
 
     [DoNotNotify]
@@ -21,11 +23,11 @@ namespace MonkeyPaste.Avalonia {
 
         public override MpHighlightType HighlightType => MpHighlightType.Content;
 
-        public override void ScrollToSelectedItem() {
+        public override async Task ScrollToSelectedItemAsync() {
             if (SelectedIdx < 0) {
                 return;
             }
-            MpRect characterRect = _matches[SelectedIdx].End.GetCharacterRect(LogicalDirection.Forward);
+            MpRect characterRect =  await _matches[SelectedIdx].End.GetCharacterRectAsync(LogicalDirection.Forward);
             
             //AssociatedObject.BringIntoView();
             //AssociatedObject.FileListItemTextBlock.BringIntoView(characterRect);

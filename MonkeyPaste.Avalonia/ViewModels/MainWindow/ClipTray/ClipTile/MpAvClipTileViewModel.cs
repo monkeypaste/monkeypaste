@@ -564,10 +564,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsTextItem => ItemType == MpCopyItemType.Text;
 
-        public bool IsFlipping { get; set; } = false;
-
-        public bool IsFlipped { get; set; } = false;
-
         public bool IsTitleVisible { get; set; } = true;
 
         public bool IsDetailGridVisibile {
@@ -1983,7 +1979,6 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            //(Parent.FlipTileCommand as MpCommand<object>).NotifyCanExecuteChanged();
             //(Parent.BringSelectedClipTilesToFrontCommand as MpCommand).NotifyCanExecuteChanged();
             //(Parent.SendSelectedClipTilesToBackCommand as MpCommand).NotifyCanExecuteChanged();
             //(Parent.SpeakSelectedClipsCommand as MpCommand).NotifyCanExecuteChanged();
@@ -2106,9 +2101,6 @@ namespace MonkeyPaste.Avalonia {
                             Parent.StoreSelectionState(this);
                         }
                     } else {
-                        if (IsFlipped) {
-                            Parent.FlipTileCommand.Execute(this);
-                        }
                         if (IsContentReadOnly) {
                             if (IsSubSelectionEnabled) {
                                 IsSubSelectionEnabled = false;

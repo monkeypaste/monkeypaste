@@ -13,6 +13,9 @@ using System.Runtime.Intrinsics.Arm;
 using Avalonia.Media.Immutable;
 using Avalonia.Controls.Shapes;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using MonkeyPaste.Common;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvTextBoxSelectionExtension {
@@ -73,42 +76,36 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public static string GetSelectedPlainText(MpITextSelectionRange tsr) {
+        public static async Task<string> GetSelectedPlainTextAsync(MpITextSelectionRange tsr) {
             var control = FindControl(tsr);
-            if (control is TextBox tb) {
-                return tb.SelectedText;
-            } else if(control is MpAvCefNetWebView wv) {
-                return wv.Selection.Text;
+            if (control is MpAvIContentView cv) {
+                string text = await cv.Selection.GetTextAsync();
+                return text;
             }
+
             return null;
         }
 
         public static int GetSelectionStart(MpITextSelectionRange tsr) {
             var control = FindControl(tsr);
-            if (control is TextBox tb) {
-                return tb.SelectionStart;
-            } else if (control is MpAvCefNetWebView wv) {
-                return wv.Selection.Start.Offset;
+            if (control is MpAvIContentView cv) {
+                return cv.Selection.Start.Offset;
             }
             return 0;
         }
 
         public static int GetSelectionLength(MpITextSelectionRange tsr) {
             var control = FindControl(tsr);
-            if (control is TextBox tb) {
-                return tb.SelectedText.Length;
-            } else if (control is MpAvCefNetWebView wv) {
-                return wv.Selection.Text.Length;
+            if (control is MpAvIContentView cv) {
+                return cv.Selection.End.Offset - cv.Selection.Start.Offset;
             }
             return 0;
         }
 
         public static void SetSelectionText(MpITextSelectionRange tsr, string text) {
             var control = FindControl(tsr);
-            if (control is TextBox tb) {
-                tb.SelectedText = text;
-            } else if (control is MpAvCefNetWebView wv) {
-                wv.Selection.Text = text;
+            if(control is MpAvIContentView cv) {
+                cv.Selection.SetTextAsync(text).FireAndForgetSafeAsync((cv as Control).DataContext as MpAvClipTileViewModel);
             }
         }
 
@@ -123,19 +120,17 @@ namespace MonkeyPaste.Avalonia {
             if (!control.IsFocused) {
                 Debugger.Break();
             }
-            if(control is TextBox tb) {
-                tb.SelectAll();
-            } else if(control is MpAvCefNetWebView wv) {
-                wv.ExecuteJavascript("selectAll()");
+            if(control is MpAvIContentView cv) {
+                cv.SelectAll();
             }
         }
 
-        public static bool IsAllSelected(MpITextSelectionRange tsr) {
+        public static async Task<bool> IsAllSelectedAsync(MpITextSelectionRange tsr) {
             var control = FindControl(tsr);
             if (control is TextBox tb) {
                 return tb.Text.Length == tb.SelectedText.Length;
             } else if(control is MpAvCefNetWebView wv) {
-                string resultStr = wv.EvaluateJavascript("isAllSelected()");
+                string resultStr = await wv.EvaluateJavascriptAsync("isAllSelected()");
                 return resultStr.ToLower() == "true";
 
             }   

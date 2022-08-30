@@ -7,6 +7,7 @@ using System.Text;
 
 namespace MonkeyPaste {
     public class MpQuillLoadRequestMessage : MpJsonObject {
+        public int copyItemId { get; set; }
         public string envName { get; set; } // will be wpf,android, etc.
 
         public bool isPasteRequest { get; set; } = false; //request should ONLY happen if encoded w/ templates
@@ -18,6 +19,7 @@ namespace MonkeyPaste {
 
         public List<MpTextTemplate> usedTextTemplates { get; set; }
     }
+
 
     public class MpQuillLoadResponseMessage : MpJsonObject {
         public double contentWidth { get; set; }
@@ -68,4 +70,36 @@ templateType: "dynamic"
 
     }
 
+    public class MpQuillContentRangeMessage : MpJsonObject {
+        public int index { get; set; }
+        public int length { get; set; }
+    }
+
+    public class MpQuillContentSelectionChangedMessage : MpJsonObject {
+        public int copyItemId { get; set; }
+        public int index { get; set; }
+        public int length { get; set; }
+    }
+
+    public class MpQuillContentLengthChangedMessage : MpJsonObject {
+        public int copyItemId { get; set; }
+        public int length { get; set; }
+    }
+
+    public class MpQuillContentSetTextRangeMessage : MpJsonObject {
+        public int index { get; set; }
+        public int length { get; set; }
+
+        public string text { get; set; }
+
+        public bool isHostJsonMsg => true;
+    }
+
+    public class MpQuillEditorIndexFromPointMessage : MpJsonObject {
+        public double x { get; set; }
+        public double y { get; set; }
+        public bool snapToLine { get; set; } = true;
+
+        public int fallBackIdx { get; set; } = -1;
+    }
 }

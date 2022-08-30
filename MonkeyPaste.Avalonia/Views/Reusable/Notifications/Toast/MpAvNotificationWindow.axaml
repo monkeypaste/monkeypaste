@@ -16,6 +16,7 @@
         Closed="MpAvNotificationWindow_Closed"
         MinHeight="125"
         Width="350"
+        Topmost="True"
         SizeToContent="Height"
         ShowInTaskbar="False"
         WindowState="Normal"
@@ -24,13 +25,10 @@
     <Border HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             BorderThickness="7"
-            BorderBrush="{Binding BorderHexColor,
-                                  Converter={StaticResource StringHexToBrushConverter}}"
-            Background="{Binding BackgroundHexColor,
-                                 Converter={StaticResource StringHexToBrushConverter}}"
+            BorderBrush="{Binding BorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+            Background="{Binding BackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
             local:MpAvIsHoveringExtension.IsEnabled="True"
-            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering,
-                                                               Mode=TwoWay}">
+            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
         <Grid x:Name="grid"
               PointerReleased="MpAvNotificationWindow_PointerReleased">
             <Grid.ColumnDefinitions>
@@ -41,10 +39,8 @@
                    Grid.Column="0"
                    Width="72"
                    Height="72"
-                   IsVisible="{Binding IconSourceObj,
-                                       Converter={StaticResource IsNotNullToBoolConverter}}"
-                   Source="{Binding IconSourceObj,
-                                    Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                   IsVisible="{Binding IconSourceObj, Converter={StaticResource IsNotNullToBoolConverter}}"
+                   Source="{Binding IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}"
                    Stretch="Fill"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Top"
@@ -55,8 +51,7 @@
                       VerticalContentAlignment="Center"
                       Margin="7,0,0,5"
                       IsVisible="{Binding CanChooseNotShowAgain}"
-                      IsChecked="{Binding DoNotShowAgain,
-                                          Mode=TwoWay}">
+                      IsChecked="{Binding DoNotShowAgain, Mode=TwoWay}">
                 <CheckBox.Content>
                     <TextBlock MaxWidth="100"
                                Foreground="White"
@@ -78,9 +73,7 @@
                 <Image Width="15"
                        Height="15"
                        Stretch="Fill"
-                       Source="{Binding .,
-                                        Converter={StaticResource StringResourceToBitmapConverter},
-                                        Source={StaticResource CloseImage}}" />
+                       Source="{Binding ., Converter={StaticResource StringResourceToBitmapConverter}, Source={StaticResource CloseImage}}" />
             </Button>
             <ContentControl Grid.Column="1"
                             HorizontalAlignment="Stretch"

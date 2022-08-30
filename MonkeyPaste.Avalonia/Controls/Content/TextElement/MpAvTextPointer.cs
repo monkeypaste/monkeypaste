@@ -28,13 +28,14 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvITextPointer DocumentEnd {
             get {
-                if(Document is MpAvHtmlDocument doc) {
+                if (Document is MpAvHtmlDocument doc) {
                     return doc.ContentEnd;
                 }
                 return null;
             }
         }
         public int Offset { get; set; }
+
 
         public MpAvIContentDocument Document { get; private set; }
 
@@ -52,17 +53,13 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public int CompareTo(object obj) {
-            if(obj is MpAvITextPointer otp) {
-                if(!IsInSameDocument(otp)) {
+            if (obj is MpAvITextPointer otp) {
+                if (!IsInSameDocument(otp)) {
                     throw new Exception("Cannot compare MpAvITextPointer from another document");
                 }
                 return Offset.CompareTo(otp.Offset);
             }
             throw new Exception("Can only be compared to another MpAvITextPointer");
-        }
-
-        public bool Equals(MpAvITextPointer other) {
-            return CompareTo(other) == 0;
         }
 
         public bool IsInSameDocument(MpAvITextPointer otp) {
@@ -82,8 +79,16 @@ namespace MonkeyPaste.Avalonia {
             return new MpAvTextPointer(Document, Offset - 1);
         }
 
+
+        public MpAvITextPointer GetLineStartPosition(int lineOffset) {
+            return null;
+        }
+        public MpAvITextPointer GetLineEndPosition(int lineOffset) {
+            return null;
+        }
+
         public int GetOffsetToPosition(MpAvITextPointer tp) {
-            if(!IsInSameDocument(tp)) {
+            if (!IsInSameDocument(tp)) {
                 throw new Exception("Must be in same document");
             }
             return tp.Offset - Offset;
@@ -104,22 +109,19 @@ namespace MonkeyPaste.Avalonia {
             return new MpAvTextPointer(Document, Offset + (dir == LogicalDirection.Forward ? 1 : -1));
         }
 
-        public MpRect GetCharacterRect(LogicalDirection dir) {
+        public async Task<MpRect> GetCharacterRectAsync(LogicalDirection dir) {
             int offset = dir == LogicalDirection.Forward ? Offset : Math.Max(0, Offset - 1);
 
             if (Document.Owner is TextBox tb) {
                 var ft = tb.ToFormattedText();
                 var rect = ft.HitTestTextPosition(offset);
                 return rect.ToPortableRect();
-            } else if(Document.Owner is MpAvCefNetWebView wv) {
-                string rectJsonStr = wv.EvaluateJavascript($"getCharacterRect({offset})");
+            } else if (Document.Owner is MpAvCefNetWebView wv) {
+                string rectJsonStr = await wv.EvaluateJavascriptAsync($"getCharacterRect({offset})");
                 return MpRect.ParseJson(rectJsonStr);
             }
             return MpRect.Empty;
         }
-
-       
-
 
         #endregion
 

@@ -29,24 +29,24 @@ namespace MonkeyPaste.Avalonia {
         public override MpHighlightType HighlightType => MpHighlightType.Content;
 
         public Dictionary<int, List<MpShape>> GetHighlightShapes() {
-            FindHighlightShapes();
+            FindHighlightShapesAsync();
             return _highlightShapes;
         }
 
-        public override async Task FindHighlighting() {
-            await base.FindHighlighting();
+        public override async Task FindHighlightingAsync() {
+            await base.FindHighlightingAsync();
 
-            FindHighlightShapes();
+            await FindHighlightShapesAsync();
         }
 
-        public void FindHighlightShapes() {
+        public async Task FindHighlightShapesAsync() {
             _highlightShapes.Clear();
 
             for (int i = 0; i < _matches.Count; i++) {
                 var match = _matches[i];
                 var rects = new List<MpShape>();
-                var startRect = match.Start.GetCharacterRect(LogicalDirection.Forward);
-                var endRect = match.End.GetCharacterRect(LogicalDirection.Backward);
+                var startRect = await match.Start.GetCharacterRectAsync(LogicalDirection.Forward);
+                var endRect = await match.End.GetCharacterRectAsync(LogicalDirection.Backward);
                 MpRect rectShape;
                 if (startRect.Location.Y == endRect.Location.Y) {
                     //when range is not wrapped make 1 box
@@ -55,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
                     rects.Add(rectShape);
                 } else {
                     var eol_tp = match.Start.GetLineEndPosition(0);
-                    var eolRect = eol_tp.GetCharacterRect(LogicalDirection.Backward);
+                    var eolRect = await eol_tp.GetCharacterRectAsync(LogicalDirection.Backward);
                     startRect.Union(eolRect);
                     rectShape = new MpRect(startRect.Location, startRect.Size);
                     rects.Add(rectShape);
@@ -65,7 +65,7 @@ namespace MonkeyPaste.Avalonia {
                         if (ctp == null || ctp == ctp.DocumentEnd) {
                             break;
                         }
-                        var sol_rect = ctp.GetCharacterRect(LogicalDirection.Forward);
+                        var sol_rect = await ctp.GetCharacterRectAsync(LogicalDirection.Forward);
 
 
                         if (sol_rect.Location.Y == endRect.Location.Y) {
@@ -74,7 +74,8 @@ namespace MonkeyPaste.Avalonia {
                             rects.Add(new MpRect(sol_rect.Location, sol_rect.Size));
                             break;
                         }
-                        eolRect = ctp.GetLineEndPosition(0).GetCharacterRect(LogicalDirection.Backward);
+                        var cur_eol_tp = ctp.GetLineEndPosition(0);
+                        eolRect = await cur_eol_tp.GetCharacterRectAsync(LogicalDirection.Backward);
                         sol_rect.Union(eolRect);
                         rects.Add(new MpRect(sol_rect.Location, sol_rect.Size));
 
@@ -85,11 +86,11 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public override void ApplyHighlighting() {
+        public override async Task ApplyHighlightingAsync() {
             if (AssociatedObject == null) {
                 return;
             }
-            ScrollToSelectedItem();
+            await ScrollToSelectedItemAsync();
 
             AssociatedObject.UpdateAdorners();
             AssociatedObject.InvalidateAll();
@@ -99,7 +100,7 @@ namespace MonkeyPaste.Avalonia {
             _highlightShapes?.Clear();
         }
 
-        public override void ScrollToSelectedItem() {
+        public override async Task ScrollToSelectedItemAsync() {
             var sv = AssociatedObject.GetVisualDescendant<ScrollViewer>();
 
             if (AssociatedObject == null ||
@@ -121,8 +122,8 @@ namespace MonkeyPaste.Avalonia {
 
             AssociatedObject.BringIntoView();
 
-            var start = tr.Start.GetCharacterRect(LogicalDirection.Forward);
-            var end = tr.End.GetCharacterRect(LogicalDirection.Forward);
+            var start = await tr.Start.GetCharacterRectAsync(LogicalDirection.Forward);
+            var end = await tr.End.GetCharacterRectAsync(LogicalDirection.Forward);
             double offset = (start.Top + end.Bottom - sv.Viewport.Height) / 2 + sv.Offset.Y;
             if(double.IsNaN(offset) || double.IsInfinity(offset)) {
                 offset = 0;

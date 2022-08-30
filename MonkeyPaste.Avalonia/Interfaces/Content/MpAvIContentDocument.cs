@@ -2,6 +2,7 @@
 using MonkeyPaste.Common;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public interface MpAvIContentDocument {
@@ -10,10 +11,8 @@ namespace MonkeyPaste.Avalonia {
         MpAvITextPointer ContentStart { get; }
         MpAvITextPointer ContentEnd { get; }
 
-        string ContentData { get; set; }
+        Task<MpAvITextPointer> GetPosisitionFromPointAsync(MpPoint point, bool snapToText);
 
-        MpAvITextPointer GetPosisitionFromPoint(MpPoint point, bool snapToText);
-
-        IEnumerable<MpAvITextRange> FindAllText(string matchText, bool isCaseSensitive, bool matchWholeWord, bool useRegex);
+        Task<IEnumerable<MpAvITextRange>> FindAllTextAsync(string matchText, bool isCaseSensitive, bool matchWholeWord, bool useRegex);
     }
 }

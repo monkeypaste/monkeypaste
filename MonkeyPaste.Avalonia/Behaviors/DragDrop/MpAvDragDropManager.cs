@@ -29,36 +29,30 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-        public static List<MpIContentDropTarget> DropTargets {
+        public static List<MpAvIContentDropTarget> DropTargets {
             get {
-                //List<MpIContentDropTarget> dtl = new List<MpIContentDropTarget>();
+                List<MpAvIContentDropTarget> dtl = new List<MpAvIContentDropTarget>();
 
-                //var rtbvl = Application.Current.MainWindow.GetVisualDescendents<MpRtbContentView>();
-                //dtl.AddRange(rtbvl.Select(x => x.ContentViewDropBehavior).Where(x => x.IsDropEnabled).ToList());
+                if (MpAvMainWindow.Instance == null) {
+                    return dtl;
+                }
 
-                //var ctrv = Application.Current.MainWindow.GetVisualDescendent<MpClipTrayView>();
-                //if (ctrv != null) {
-                //    dtl.Add(ctrv.ClipTrayDropBehavior);
-                //}
+                var rtbvl = MpAvMainWindow.Instance.GetVisualDescendants<MpAvClipTileContentView>();
+                dtl.AddRange(rtbvl.Select(x => x.ContentViewDropBehavior).Where(x => x.IsDropEnabled).ToList());
 
-                //var ptrv = Application.Current.MainWindow.GetVisualDescendent<MpPinTrayView>();
-                //if (ptrv != null) {
-                //    dtl.Add(ptrv.PinTrayDropBehavior);
-                //}
+                var ptrv = MpAvMainWindow.Instance.GetVisualDescendant<MpAvPinTrayView>();
+                if (ptrv != null && ptrv.PinTrayDropBehavior.IsDropEnabled) {
+                    dtl.Add(ptrv.PinTrayDropBehavior);
+                }
 
-
-                //var adivl = Application.Current.MainWindow.GetVisualDescendents<MpActionDesignerItemView>();
+                //var adivl = MpAvMainWindow.Instance.GetVisualDescendants<MpActionDesignerItemView>();
                 //dtl.AddRange(adivl.Select(x => x.ActionDesignerItemDropBehavior).Where(x => x.IsDropEnabled).ToList());
 
-                //var mwv = Application.Current.MainWindow as MpMainWindow;
-                //if (mwv != null) {
-                //    dtl.Add(mwv.ExternalDropBehavior);
-                //}
-
-
-                //return dtl;
-                return null;
-
+                if(MpAvMainWindow.Instance.ExternalDropBehavior.IsDropEnabled) {
+                    dtl.Add(MpAvMainWindow.Instance.ExternalDropBehavior);
+                }
+                
+                return dtl;
             }
         }
 
@@ -86,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public static MpIContentDropTarget CurDropTarget { get; private set; }
+        public static MpAvIContentDropTarget CurDropTarget { get; private set; }
 
         public static bool IsDragAndDrop { get; private set; }
 
@@ -101,7 +95,8 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Init
+        #region Public Methods
+
         public static void Init() {
             _timer = new DispatcherTimer(DispatcherPriority.Render);
             _timer.Interval = new TimeSpan(0, 0, 0, 0, 100);
@@ -113,11 +108,6 @@ namespace MonkeyPaste.Avalonia {
                 MpAvClipTrayViewModel.Instance,
                 ReceivedClipTrayViewModelMessage);
         }
-
-        #endregion
-
-        #region public static Methods
-
 
         public static void StartDragCheck(object dragData) {
             //if(MpMoveBehavior.IsAnyMoving || 
@@ -161,14 +151,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region private static  Methods
 
-        private static MpIContentDropTarget SelectDropTarget(object dragData) {
-            MpIContentDropTarget selectedTarget = null;
+        private static async Task<MpAvIContentDropTarget> SelectDropTargetAsync(object dragData) {
+            MpAvIContentDropTarget selectedTarget = null;
+
             foreach (var dt in DropTargets.Where(x => x.IsDropEnabled).OrderByDescending(x => (int)x.DropType)) {
-                if (!dt.IsDragDataValid(MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown, dragData)) {
+                bool isDropValid = await dt.IsDragDataValidAsync(MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown, dragData);
+                if (!isDropValid) {
                     continue;
                 }
 
-                dt.DropIdx = dt.GetDropTargetRectIdx();
+                dt.DropIdx = await dt.GetDropTargetRectIdxAsync();
                 if (dt.DropIdx >= 0) {
                     if (selectedTarget != null) {
                         selectedTarget.DropIdx = -1;
@@ -235,16 +227,17 @@ namespace MonkeyPaste.Avalonia {
                     MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
                 }
 
-                var dropTarget = SelectDropTarget(DragData);
+                Dispatcher.UIThread.Post(async () => {
+                    var dropTarget = await SelectDropTargetAsync(DragData);
 
-                if (dropTarget != CurDropTarget) {
-                    CurDropTarget?.CancelDrop();
-                    CurDropTarget = dropTarget;
-                    CurDropTarget?.StartDrop(e as PointerEventArgs);
-                }
+                    if (dropTarget != CurDropTarget) {
+                        CurDropTarget?.CancelDrop();
+                        CurDropTarget = dropTarget;
+                        CurDropTarget?.StartDrop(e as PointerEventArgs);
+                    }
 
-                CurDropTarget?.ContinueDragOverTarget();
-
+                    CurDropTarget?.ContinueDragOverTargetAsync();
+                });
             }
         }
 
@@ -256,7 +249,7 @@ namespace MonkeyPaste.Avalonia {
             if (CurDropTarget != null) {
                 IsPerformingDrop = true;
 
-                await CurDropTarget?.Drop(
+                await CurDropTarget?.DropAsync(
                         MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown,
                         dragData);
 

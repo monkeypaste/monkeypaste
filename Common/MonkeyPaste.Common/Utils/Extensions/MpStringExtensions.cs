@@ -21,6 +21,24 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
+        public static string ReplaceRange(this string str, int index, int length, string text) {
+            int preStrLength = index + 1;
+            if(str.Length < preStrLength) {
+                throw new Exception("invalid range replace");
+            }
+            string preStr = str.Substring(0, preStrLength);
+            int postStrIdx = index + length;
+            if(postStrIdx >= str.Length) {
+                throw new Exception("invalid range replace");
+            }
+            int postStrLength = str.Length - (index + length);
+            if(postStrIdx + postStrLength > str.Length) {
+                throw new Exception("invalid range replace");
+            }
+            string postStr = str.Substring(postStrIdx, postStrLength);
+            return preStr + text + postStr;
+        }
+
         public static bool IsStringNullOrEmpty(this string str) {
             return string.IsNullOrEmpty(str);
         }

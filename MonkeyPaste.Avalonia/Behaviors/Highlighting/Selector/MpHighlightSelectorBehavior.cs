@@ -119,13 +119,13 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            await Task.WhenAll(hll.Select(x => x.FindHighlighting()));
+            await Task.WhenAll(hll.Select(x => x.FindHighlightingAsync()));
             _selectedHighlighterIdx = 0;
             if (hll.All(x => x.MatchCount == 0)) {
                 return;
             }
             SelectNextMatch(hll);
-            hll.ForEach(x => x.ApplyHighlighting());
+            hll.ForEach(x => x.ApplyHighlightingAsync());
         }
         public void SelectNextMatch(List<MpIHighlightRegion> hll) {
             if (hll.All(x => x.MatchCount == 0)) {
@@ -148,7 +148,7 @@ namespace MonkeyPaste.Avalonia {
                 SelectNextMatch(hll);
                 return;
             }
-            hll.ForEach(x => x.ApplyHighlighting());
+            hll.ForEach(x => x.ApplyHighlightingAsync());
         }
 
         public void SelectPreviousMatch(List<MpIHighlightRegion> hll) {
@@ -189,7 +189,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            hll.ForEach(x => x.ApplyHighlighting());
+            hll.ForEach(x => x.ApplyHighlightingAsync());
         }
 
         private void Reset(List<MpIHighlightRegion> hll) {

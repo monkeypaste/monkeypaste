@@ -23,16 +23,28 @@ using Avalonia.Input;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvMainWindow : Window {
+        #region Private Variables
+
+        private int? _origResizerIdx;
+
+        #endregion
+
+        #region Statics
         public static MpAvMainWindow? Instance { get; private set; } = null;
-
-        public Grid MainWindowGrid { get; private set; }
-
-
         static MpAvMainWindow() {
-            BoundsProperty.Changed.AddClassHandler<MpAvMainWindow>((x,y) => x.BoundsChangedHandler(y as AvaloniaPropertyChangedEventArgs<Rect>));
+            BoundsProperty.Changed.AddClassHandler<MpAvMainWindow>((x, y) => x.BoundsChangedHandler(y as AvaloniaPropertyChangedEventArgs<Rect>));
         }
-        public MpAvMainWindow() {
 
+        #endregion
+
+        #region Properties
+        public MpAvExternalDropBehavior ExternalDropBehavior { get; private set; }
+
+        #endregion
+
+        #region Constructors
+
+        public MpAvMainWindow() {
             while (!Debugger.IsAttached) {
                 Thread.Sleep(100);
             }
@@ -48,139 +60,24 @@ namespace MonkeyPaste.Avalonia {
             this.Deactivated += MainWindow_Deactivated;
             this.PointerMoved += MainWindow_PointerMoved;
             this.PointerLeave += MainWindow_PointerLeave;
-            MainWindowGrid = this.FindControl<Grid>("MainWindowGridRef");
+            this.AttachedToVisualTree += MpAvMainWindow_AttachedToVisualTree;
 
             var sidebarSplitter = this.FindControl<GridSplitter>("SidebarGridSplitter");
             sidebarSplitter.GetObservable(GridSplitter.IsVisibleProperty).Subscribe(value => SidebarSplitter_isVisibleChange(sidebarSplitter, value));
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
-            
+
             Dispatcher.UIThread.Post(async () => {
                 await InitAsync();
             });
         }
 
-        public Control GetResizerControl() {
-            var mwrv = this.GetVisualDescendant<MpAvMainWindowResizerView>();
-            var resize_control = mwrv.FindControl<Control>("MainWindowResizeBorder");
-            return resize_control;
-        }
+        #endregion
 
-        private void SidebarSplitter_isVisibleChange(GridSplitter splitter, bool isVisible) {
-            UpdateSidebarGridsplitter();
-        }
-
-        
-
-        void BoundsChangedHandler(AvaloniaPropertyChangedEventArgs<Rect> e) {
-            var oldAndNewVals = e.GetOldAndNewValue<Rect>();
-            MpAvMainWindowViewModel.Instance.LastMainWindowRect = oldAndNewVals.oldValue.ToPortableRect();
-            MpAvMainWindowViewModel.Instance.MainWindowRect = oldAndNewVals.newValue.ToPortableRect();
-        }
-
-        private void ReceivedGlobalMessage(MpMessageType msg) {
-            switch (msg) {
-                case MpMessageType.MainWindowSizeChanged: {
-                        var mwvm = MpAvMainWindowViewModel.Instance;
-                        if (mwvm.MainWindowOrientationType == MpMainWindowOrientationType.Top) {
-                            // can't figure out how to make resizer align to bottom so have to manually translate to bottom
-
-                            var resizerView = this.FindControl<MpAvMainWindowResizerView>("MainWindowResizerView");
-                            var resizerTransform = resizerView.RenderTransform as TranslateTransform;
-                            resizerTransform.Y = mwvm.MainWindowHeight - resizerView.Height;
-                        }
-                        break;
-                    }
-
-                //case MpMessageType.MainWindowOrientationChanged: {
-
-                //        UpdateContentOrientation();
-                //        UpdateResizerOrientation();
-
-
-                //        break;
-                //    }
-            }
-        }
-
-        private async Task InitAsync() {
-            while (!MpBootstrapperViewModelBase.IsLoaded) {
-                MpConsole.WriteLine("MainWindow waiting to open...");
-                await Task.Delay(100);
-            }
-
-            while (!this.IsInitialized) {
-                MpConsole.WriteLine("MainWindow waiting to initialize...");
-                await Task.Delay(100);
-            }
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
-                //MpAvToolWindow_Win32.InitToolWindow(this.PlatformImpl.Handle.Handle);
-            }
-
-            
-            MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeChanged);
-
-
-            MpAvMainWindowViewModel.Instance.IsMainWindowLoading = false;
-            MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-
-            // Need to delay or resizer thinks bounds are empty on initial show
-            await Task.Delay(300);
-            //ReceivedGlobalMessage(MpMessageType.MainWindowOrientationChanged);
-            MpAvMainWindowViewModel.Instance.CycleOrientationCommand.Execute(null);
-
-            MpMessenger.SendGlobal(MpMessageType.MainWindowLoadComplete);
-        }
-
-
-        private int? _origResizerIdx;
-        private void MainWindow_PointerMoved(object sender, global::Avalonia.Input.PointerEventArgs e) {
-            var mwvm = MpAvMainWindowViewModel.Instance;
-            if (mwvm.IsResizing) {
-                mwvm.IsResizerVisible = true;
-            } else {
-                var mw_mp = e.GetCurrentPoint(Parent).Position;
-                var titleView = this.FindControl<MpAvMainWindowTitleMenuView>("MainWindowTitleView");
-                if (titleView.Bounds.Contains(e.GetCurrentPoint(titleView.Parent).Position) &&
-                    mwvm.MainWindowOrientationType != MpMainWindowOrientationType.Bottom) {
-                    mwvm.IsResizerVisible = false;
-                } else {
-                    mwvm.IsResizerVisible = !this.Bounds.Deflate(mwvm.ResizerLength).Contains(mw_mp);
-                }
-
-                var resizerView = this.FindControl<MpAvMainWindowResizerView>("MainWindowResizerView");
-                if (_origResizerIdx == null) {
-                    _origResizerIdx = resizerView.ZIndex;
-                }
-
-                if (mwvm.IsResizerVisible) {
-                    resizerView.ZIndex = 1000;
-                } else {
-                    resizerView.ZIndex = _origResizerIdx.Value;
-                }
-
-            }
-
-        }
-        private void MainWindow_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e) {
-            MpAvMainWindowViewModel.Instance.IsResizerVisible = false;
-        }
-
-        private void MainWindow_Activated(object? sender, System.EventArgs e) {
-            MpAvMainWindowViewModel.Instance.IsMainWindowActive = true;
-        }
-
-        private void MainWindow_Deactivated(object? sender, System.EventArgs e) {
-            MpAvMainWindowViewModel.Instance.IsMainWindowActive = false;
-            MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
-        }
-
-
-
+        #region Public Methods
         public void UpdateResizerOrientation() {
-            var mwvm = MpAvMainWindowViewModel.Instance; 
-            
+            var mwvm = MpAvMainWindowViewModel.Instance;
+
             var resizerView = this.FindControl<MpAvMainWindowResizerView>("MainWindowResizerView");
             var resizerHandle = resizerView.FindControl<Border>("MainWindowResizeOuterBorder");
             var resizerTransform = resizerView.RenderTransform as TranslateTransform;
@@ -271,7 +168,7 @@ namespace MonkeyPaste.Avalonia {
             var ctrcv_gs = ctrcv.FindControl<GridSplitter>("ClipTraySplitter");
             var ctrcv_ctrv = ctrcv.FindControl<MpAvClipTrayView>("ClipTrayView");
             var ttv = this.FindControl<MpAvTagTreeView>("TagTreeView");
-            var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");            
+            var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");
 
             if (mwvm.IsHorizontalOrientation) {
                 mwtg.RowDefinitions.Clear();
@@ -427,13 +324,76 @@ namespace MonkeyPaste.Avalonia {
 
             mwtg.InvalidateMeasure();
         }
+        public Control GetResizerControl() {
+            var mwrv = this.GetVisualDescendant<MpAvMainWindowResizerView>();
+            var resize_control = mwrv.FindControl<Control>("MainWindowResizeBorder");
+            return resize_control;
+        }
+
+        #endregion
+
+        #region Private Methods
+        private async Task InitAsync() {
+            while (!MpBootstrapperViewModelBase.IsLoaded) {
+                MpConsole.WriteLine("MainWindow waiting to open...");
+                await Task.Delay(100);
+            }
+
+            while (!this.IsInitialized) {
+                MpConsole.WriteLine("MainWindow waiting to initialize...");
+                await Task.Delay(100);
+            }
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                //MpAvToolWindow_Win32.InitToolWindow(this.PlatformImpl.Handle.Handle);
+            }
+
+
+            MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeChanged);
+
+
+            MpAvMainWindowViewModel.Instance.IsMainWindowLoading = false;
+            MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
+
+            // Need to delay or resizer thinks bounds are empty on initial show
+            await Task.Delay(300);
+            //ReceivedGlobalMessage(MpMessageType.MainWindowOrientationChanged);
+            MpAvMainWindowViewModel.Instance.CycleOrientationCommand.Execute(null);
+
+            MpMessenger.SendGlobal(MpMessageType.MainWindowLoadComplete);
+        }
+
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.MainWindowSizeChanged: {
+                        var mwvm = MpAvMainWindowViewModel.Instance;
+                        if (mwvm.MainWindowOrientationType == MpMainWindowOrientationType.Top) {
+                            // can't figure out how to make resizer align to bottom so have to manually translate to bottom
+
+                            var resizerView = this.FindControl<MpAvMainWindowResizerView>("MainWindowResizerView");
+                            var resizerTransform = resizerView.RenderTransform as TranslateTransform;
+                            resizerTransform.Y = mwvm.MainWindowHeight - resizerView.Height;
+                        }
+                        break;
+                    }
+
+                    //case MpMessageType.MainWindowOrientationChanged: {
+
+                    //        UpdateContentOrientation();
+                    //        UpdateResizerOrientation();
+
+
+                    //        break;
+                    //    }
+            }
+        }
 
         private void UpdateSidebarGridsplitter() {
             //only reset when isVisibilityChanged = true, isVisibilityChanged = false is orientation change
             var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");
             var containerGrid = sbgs.GetVisualAncestor<Grid>();
 
-            if(MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+            if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
                 if (containerGrid.ColumnDefinitions.Count == 0) {
                     UpdateContentOrientation();
                 }
@@ -443,7 +403,7 @@ namespace MonkeyPaste.Avalonia {
                     containerGrid.ColumnDefinitions[1].Width = new GridLength(0);
                 }
             } else {
-                if(containerGrid.RowDefinitions.Count == 0) {
+                if (containerGrid.RowDefinitions.Count == 0) {
                     UpdateContentOrientation();
                 }
                 if (sbgs.IsVisible) {
@@ -452,7 +412,65 @@ namespace MonkeyPaste.Avalonia {
                     containerGrid.RowDefinitions[1].Height = new GridLength(0);
                 }
             }
+        }
+
+        #region Event Handlers
+        private void SidebarSplitter_isVisibleChange(GridSplitter splitter, bool isVisible) {
+            UpdateSidebarGridsplitter();
+        }
+
+        private void BoundsChangedHandler(AvaloniaPropertyChangedEventArgs<Rect> e) {
+            var oldAndNewVals = e.GetOldAndNewValue<Rect>();
+            MpAvMainWindowViewModel.Instance.LastMainWindowRect = oldAndNewVals.oldValue.ToPortableRect();
+            MpAvMainWindowViewModel.Instance.MainWindowRect = oldAndNewVals.newValue.ToPortableRect();
+        }
+        private void MainWindow_PointerMoved(object sender, global::Avalonia.Input.PointerEventArgs e) {
+            var mwvm = MpAvMainWindowViewModel.Instance;
+            if (mwvm.IsResizing) {
+                mwvm.IsResizerVisible = true;
+            } else {
+                var mw_mp = e.GetCurrentPoint(Parent).Position;
+                var titleView = this.FindControl<MpAvMainWindowTitleMenuView>("MainWindowTitleView");
+                if (titleView.Bounds.Contains(e.GetCurrentPoint(titleView.Parent).Position) &&
+                    mwvm.MainWindowOrientationType != MpMainWindowOrientationType.Bottom) {
+                    mwvm.IsResizerVisible = false;
+                } else {
+                    mwvm.IsResizerVisible = !this.Bounds.Deflate(mwvm.ResizerLength).Contains(mw_mp);
+                }
+
+                var resizerView = this.FindControl<MpAvMainWindowResizerView>("MainWindowResizerView");
+                if (_origResizerIdx == null) {
+                    _origResizerIdx = resizerView.ZIndex;
+                }
+
+                if (mwvm.IsResizerVisible) {
+                    resizerView.ZIndex = 1000;
+                } else {
+                    resizerView.ZIndex = _origResizerIdx.Value;
+                }
+
+            }
 
         }
+        private void MainWindow_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e) {
+            MpAvMainWindowViewModel.Instance.IsResizerVisible = false;
+        }
+
+        private void MainWindow_Activated(object? sender, System.EventArgs e) {
+            MpAvMainWindowViewModel.Instance.IsMainWindowActive = true;
+        }
+
+        private void MainWindow_Deactivated(object? sender, System.EventArgs e) {
+            MpAvMainWindowViewModel.Instance.IsMainWindowActive = false;
+            MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
+        }
+        private void MpAvMainWindow_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            ExternalDropBehavior = new MpAvExternalDropBehavior();
+            ExternalDropBehavior.Attach(this);
+        }
+
+        #endregion
+
+        #endregion
     }
 }

@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
         Action
     }
 
-    public abstract class MpAvDropBehaviorBase<T> : MpAvBehavior<T>, MpIContentDropTarget where T : Control {
+    public abstract class MpAvDropBehaviorBase<T> : MpAvBehavior<T>, MpAvIContentDropTarget where T : Control {
         #region Private Variables
         
         private AdornerLayer adornerLayer;
@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
 
         public object DataContext => AssociatedObject?.DataContext;
 
-        public List<MpRect> DropRects => GetDropTargetRects();
+        //public List<MpRect> DropRects => GetDropTargetRectsAsync();
 
         private bool _isDebugEnabled = false;
         public bool IsDebugEnabled {
@@ -71,7 +71,7 @@ namespace MonkeyPaste.Avalonia {
 
         public abstract MpCursorType MoveCursor { get; }
         public abstract MpCursorType CopyCursor { get; }
-        public abstract List<MpRect> GetDropTargetRects();
+        public abstract Task<List<MpRect>> GetDropTargetRectsAsync();
         public abstract void AutoScrollByMouse();
 
         #endregion
@@ -192,7 +192,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIDropTarget Implementation        
 
-        public virtual async Task Drop(bool isCopy, object dragData) {
+        public virtual async Task DropAsync(bool isCopy, object dragData) {
             if (DropIdx < 0) {
                 throw new Exception($"DropIdx {DropIdx} must be >= 0");
             }
@@ -214,8 +214,8 @@ namespace MonkeyPaste.Avalonia {
 
         public abstract Task StartDrop(PointerEventArgs e); 
 
-        public void ContinueDragOverTarget() {
-            int newDropIdx = GetDropTargetRectIdx();
+        public async Task ContinueDragOverTargetAsync() {
+            int newDropIdx = await GetDropTargetRectIdxAsync();
             if(newDropIdx != DropIdx) {
                 MpConsole.WriteLine("New dropIdx: " + newDropIdx);
             }
@@ -223,7 +223,9 @@ namespace MonkeyPaste.Avalonia {
             UpdateAdorner();
         }
 
-        public virtual bool IsDragDataValid(bool isCopy, object dragData) {
+        public virtual async Task<bool> IsDragDataValidAsync(bool isCopy, object dragData) {
+            await Task.Delay(1);
+
             if (dragData == null) {
                 return false;
             }
@@ -236,9 +238,9 @@ namespace MonkeyPaste.Avalonia {
             return false;
         }
 
-        public abstract int GetDropTargetRectIdx();
+        public abstract Task<int> GetDropTargetRectIdxAsync();
 
-        public abstract MpShape[] GetDropTargetAdornerShape();
+        public abstract Task<MpShape[]> GetDropTargetAdornerShapeAsync();
 
         public void InitAdorner() {
             if(AdornedElement != null) {

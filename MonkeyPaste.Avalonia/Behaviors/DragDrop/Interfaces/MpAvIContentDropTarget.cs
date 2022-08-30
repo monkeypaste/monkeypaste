@@ -9,7 +9,7 @@ using MonkeyPaste;
 using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
-    public interface MpIContentDropTarget {
+    public interface MpAvIContentDropTarget {
         object DataContext { get; }
         bool IsDropEnabled { get; set; }
         bool IsDebugEnabled { get; set; }
@@ -21,18 +21,18 @@ namespace MonkeyPaste.Avalonia {
 
         void AutoScrollByMouse();
         
-        bool IsDragDataValid(bool isCopy, object dragData);
+        Task<bool> IsDragDataValidAsync(bool isCopy, object dragData);
         
         Task StartDrop(PointerEventArgs e);
-        Task Drop(bool isCopy, object dragData);
+        Task DropAsync(bool isCopy, object dragData);
         void CancelDrop();
 
         Control RelativeToElement { get; }
-        List<MpRect> DropRects { get; }
-        List<MpRect> GetDropTargetRects();
-        int GetDropTargetRectIdx();
-        MpShape[] GetDropTargetAdornerShape();
-        void ContinueDragOverTarget();
+        //List<MpRect> DropRects { get; }
+        Task<List<MpRect>> GetDropTargetRectsAsync();
+        Task<int> GetDropTargetRectIdxAsync();
+        Task<MpShape[]> GetDropTargetAdornerShapeAsync();
+        Task ContinueDragOverTargetAsync();
 
         MpAvContentAdorner DropLineAdorner { get; set; }
         Orientation AdornerOrientation { get; }

@@ -11,11 +11,12 @@ namespace MonkeyPaste.Avalonia {
 
         public override MpHighlightType HighlightType => MpHighlightType.Source;
 
-        public override void ScrollToSelectedItem() {
-            return;
+        public override async Task ScrollToSelectedItemAsync() {
+            await Task.Delay(1);
         }
 
-        public override void ApplyHighlighting() {
+        public override async Task ApplyHighlightingAsync() {
+            await Task.Delay(1);
             if (!IsVisible) {
                 HideSourceHighlight();
             } else {
@@ -27,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
             HideSourceHighlight();
         }
 
-        public override async Task FindHighlighting() {            
+        public override async Task FindHighlightingAsync() {            
             await Task.Delay(1);
 
             _matches.Clear();

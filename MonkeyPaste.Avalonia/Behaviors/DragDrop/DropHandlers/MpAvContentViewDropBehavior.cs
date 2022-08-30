@@ -91,7 +91,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public override List<MpRect> GetDropTargetRects() {
+        public override async Task<List<MpRect>> GetDropTargetRectsAsync() {
+            await Task.Delay(1);
+
             if (AssociatedObject == null) {
                 return new List<MpRect>();
             }
@@ -101,7 +103,7 @@ namespace MonkeyPaste.Avalonia {
             return rtbRect;
         }
 
-        public override int GetDropTargetRectIdx() {            
+        public override async Task<int> GetDropTargetRectIdxAsync() {            
             if (AssociatedObject == null) {
                 return -1;
             }
@@ -137,7 +139,8 @@ namespace MonkeyPaste.Avalonia {
                         return -1;
                     }
                     var rtb_mp = VisualExtensions.PointToClient(control, MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.ToAvPixelPoint()).ToPortablePoint();
-                    if(wv.Selection.IsPointInRange(rtb_mp)) {
+                    bool isPressOnSelection = await wv.Selection.IsPointInRangeAsync(rtb_mp);
+                    if (isPressOnSelection) {
                         // do not allow drop onto selection
                         return -1;
                     }
@@ -148,7 +151,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            var mptp = wv.Document.GetPosisitionFromPoint(mp, true); 
+            var mptp = await wv.Document.GetPosisitionFromPointAsync(mp, true); 
             if(mptp == null) {
                 // TODO? maybe to differentiate block drops turn off snap in GetPositionFromPoint and only 
                 // snap to find block drop
@@ -162,8 +165,8 @@ namespace MonkeyPaste.Avalonia {
             } 
 
 
-            var mptp_rect = mptp.GetCharacterRect(LogicalDirection.Forward);
-            var doc_start_rect = wv.Document.ContentStart.GetCharacterRect(LogicalDirection.Forward);
+            var mptp_rect = await mptp.GetCharacterRectAsync(LogicalDirection.Forward);
+            var doc_start_rect = await wv.Document.ContentStart.GetCharacterRectAsync(LogicalDirection.Forward);
 
             double blockThreshold = Math.Max(2, mptp_rect.Height / 4);
             // NOTE to avoid conflicts between each line as pre/post drop only use pre for first
@@ -187,7 +190,7 @@ namespace MonkeyPaste.Avalonia {
             return wv.Document.ContentStart.GetOffsetToPosition(mptp);
         }
 
-        public override MpShape[] GetDropTargetAdornerShape() {
+        public override async Task<MpShape[]> GetDropTargetAdornerShapeAsync() {
             MpAvCefNetWebView wv = null;
             if (AssociatedObject is MpAvCefNetContentWebView cwv) {
                 wv = cwv.GetVisualDescendant<MpAvCefNetWebView>();
@@ -209,16 +212,16 @@ namespace MonkeyPaste.Avalonia {
             double blockLineOffset = 3;
 
             var line_start_tp = dt_tp.GetLineStartPosition(0);
-            var line_start_rect = line_start_tp.GetCharacterRect(LogicalDirection.Forward);
+            var line_start_rect = await line_start_tp.GetCharacterRectAsync(LogicalDirection.Forward);
             double pre_y = line_start_rect.Top - blockLineOffset;
             var pre_line = new MpLine(0, pre_y, AssociatedObject.Bounds.Width, pre_y);
 
             var line_end_tp = dt_tp.GetLineEndPosition(0);
-            var line_end_rect = line_end_tp.GetCharacterRect(LogicalDirection.Backward);
+            var line_end_rect = await line_end_tp.GetCharacterRectAsync(LogicalDirection.Backward);
             double post_y = line_end_rect.Bottom + blockLineOffset;
             var post_line = new MpLine(0, post_y, AssociatedObject.Bounds.Width, post_y);
 
-            var dltp_rect = dt_tp.GetCharacterRect(LogicalDirection.Forward);
+            var dltp_rect = await dt_tp.GetCharacterRectAsync(LogicalDirection.Forward);
             var caret_line = new MpLine(dltp_rect.Left, dltp_rect.Top, dltp_rect.Left, dltp_rect.Bottom);
 
             if (_isSplitBlockDrop) {
@@ -246,11 +249,12 @@ namespace MonkeyPaste.Avalonia {
 
             return dt_ll.ToArray();
         }
-        public override bool IsDragDataValid(bool isCopy,object dragData) {
+        public override async Task<bool> IsDragDataValidAsync(bool isCopy,object dragData) {
             if (AssociatedObject == null || AssociatedObject == null) {
                 return false;
             }
-            if (!base.IsDragDataValid(isCopy,dragData)) {
+            bool isValidBaseResult = await base.IsDragDataValidAsync(isCopy, dragData);
+            if (!isValidBaseResult) {
                 return false;
             }
             var rtb = AssociatedObject;
@@ -290,14 +294,14 @@ namespace MonkeyPaste.Avalonia {
             // paste into selection range 
             if(pasteData is MpPortableDataObject pdo) {
                 if (tsr.SelectionLength > 0) {
-                    wv.Selection.Text = string.Empty;
+                    wv.Selection.SetTextAsync(string.Empty).FireAndForgetSafeAsync(AssociatedObject.DataContext as MpAvClipTileViewModel);
                 }
                 DropIdx = tsr.SelectionStart;
-                await Drop(false, pdo);
+                await DropAsync(false, pdo);
             }
         }
 
-        public override async Task Drop(bool isCopy, object dragData) {
+        public override async Task DropAsync(bool isCopy, object dragData) {
             MpAvCefNetWebView wv = null;
             if (AssociatedObject is MpAvCefNetContentWebView cwv) {
                 wv = cwv.GetVisualDescendant<MpAvCefNetWebView>();
@@ -325,7 +329,7 @@ namespace MonkeyPaste.Avalonia {
             bool post = _isPostBlockDrop;
             bool split = _isSplitBlockDrop;
 
-            await base.Drop(isCopy, dragData);
+            await base.DropAsync(isCopy, dragData);
 
             // get drop range before altering content (if self drop offset may change if selection is before drop so use pointer which is passive ref
             var dropRange = GetDropRange(rtfDropIdx, pre, post, split);
@@ -337,7 +341,7 @@ namespace MonkeyPaste.Avalonia {
                 if (dragData is MpPortableDataObject mpdo) {
                     if(MpAvCefNetWebView.DraggingRtb != null) {
                         //var internalObj = mpdo.GetData(MpPortableDataFormats.InternalContent);
-                        await Drop(isCopy, MpAvCefNetWebView.DraggingRtb.DataContext);
+                        await DropAsync(isCopy, MpAvCefNetWebView.DraggingRtb.DataContext);
                         return;
                     }
                     // from external source
@@ -379,7 +383,7 @@ namespace MonkeyPaste.Avalonia {
                 } else if (split) {
                     dropData = Environment.NewLine + dropData + Environment.NewLine;
                 }
-                dropRange.Text = dropData;
+                await dropRange.SetTextAsync(dropData);
             }
 
             await MpAvCefNetWebViewExtension.SaveTextContentAsync(wv);
@@ -447,10 +451,12 @@ namespace MonkeyPaste.Avalonia {
             MpRect rtb_rect = new MpRect(0, 0, AssociatedObject.Bounds.Width, AssociatedObject.Bounds.Height);
 
             if(sv.HorizontalScrollBarVisibility == ScrollBarVisibility.Visible) {
-                rtb_rect.Height -= sv.GetScrollBar(Orientation.Horizontal).Height;
+                //rtb_rect.Height -= sv.GetScrollBar(Orientation.Horizontal).Height;
+                rtb_rect.Bottom -= sv.GetScrollBar(Orientation.Horizontal).Height;
             }
             if (sv.VerticalScrollBarVisibility == ScrollBarVisibility.Visible) {
-                rtb_rect.Width -= sv.GetScrollBar(Orientation.Vertical).Width;
+                //rtb_rect.Width -= sv.GetScrollBar(Orientation.Vertical).Width;
+                rtb_rect.Right -= sv.GetScrollBar(Orientation.Vertical).Width;
             }
 
             if (!rtb_rect.Contains(mp)) {

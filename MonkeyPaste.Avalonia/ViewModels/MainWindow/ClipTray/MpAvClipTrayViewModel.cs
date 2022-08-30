@@ -856,8 +856,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsAnyBusy => Items.Any(x => x.IsAnyBusy) || PinnedItems.Any(x => x.IsAnyBusy) || IsBusy;
         public bool IsAnyTileContextMenuOpened => Items.Any(x => x.IsContextMenuOpen) || PinnedItems.Any(x => x.IsContextMenuOpen);
 
-        public bool IsAnyTileFlipped => Items.Any(x => x.IsFlipped || x.IsFlipping) || PinnedItems.Any(x => x.IsFlipped || x.IsFlipping);
-
         public bool IsAnyResizing => Items.Any(x => x.IsResizing) || PinnedItems.Any(x => x.IsResizing);
 
         public bool CanAnyResize => Items.Any(x => x.CanResize) || PinnedItems.Any(x => x.CanResize);
@@ -1765,15 +1763,6 @@ namespace MonkeyPaste.Avalonia {
 
             //});
             IsSelectionReset = false;
-        }
-
-        public void UnFlipAllTiles() {
-            // TODO make async and do Unflip here
-            foreach (var ctvm in Items) {
-                if (ctvm.IsFlipped) {
-                    FlipTileCommand.Execute(ctvm);
-                }
-            }
         }
 
         public void RefreshAllCommands() {
@@ -2774,38 +2763,6 @@ namespace MonkeyPaste.Avalonia {
             },
             (offsetIdx_Or_ScrollOffset_Arg) => {
                 return !IsAnyBusy && !IsRequery;
-            });
-
-        public ICommand FlipTileCommand => new MpCommand<object>(
-            async (tileToFlip) => {
-                var ctvm = tileToFlip as MpAvClipTileViewModel;
-                ctvm.IsBusy = true;
-                if (ctvm.IsFlipped) {
-                    //ClearClipSelection();
-                    //ctvm.IsSelected = true;
-                    ctvm.IsFlipping = true;
-                    while (ctvm.IsFlipping) {
-                        await Task.Delay(100);
-                    }
-                } else {
-                    var flippedCtvm = Items.FirstOrDefault(x => x.IsFlipped);
-                    if (flippedCtvm != null) {
-                        flippedCtvm.IsFlipping = true;
-                        while (flippedCtvm.IsFlipping) {
-                            await Task.Delay(100);
-                        }
-                    }
-                    ClearClipSelection();
-                    ctvm.IsFlipping = true;
-                    while (ctvm.IsFlipping) {
-                        await Task.Delay(100);
-                    }
-                    ctvm.IsSelected = true;
-                    //await ctvm.PrimaryItem.AnalyticItemCollectionViewModel.Init();
-                    //ctvm.IsFlipping = true;
-                }
-
-                ctvm.IsBusy = false;
             });
 
         public ICommand ExcludeSubSelectedItemApplicationCommand => new MpAsyncCommand(

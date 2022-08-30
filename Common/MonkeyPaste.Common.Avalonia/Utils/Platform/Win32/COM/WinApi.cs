@@ -43,6 +43,10 @@ namespace MonkeyPaste.Common.Avalonia {
         [DllImport("user32.dll")]
         public static extern bool SetActiveWindow(IntPtr hWnd);
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool TerminateProcess(IntPtr hProcess, uint uExitCode);
+
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern IntPtr GetOpenClipboardWindow();
 

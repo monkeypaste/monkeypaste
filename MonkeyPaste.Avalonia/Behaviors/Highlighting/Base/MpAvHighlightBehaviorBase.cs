@@ -118,7 +118,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public abstract void ScrollToSelectedItem();
+        public abstract Task ScrollToSelectedItemAsync();
 
         public virtual void Reset() {
             ClearHighlighting();
@@ -126,7 +126,7 @@ namespace MonkeyPaste.Avalonia {
             //ReplaceDocumentsBgColors();
         }
 
-        public virtual async Task FindHighlighting() {
+        public virtual async Task FindHighlightingAsync() {
             await Task.Delay(5);
             if (AssociatedObject == null || ContentRange == null) {
                 // NOTE currently occurs during active search and tag changes
@@ -140,7 +140,9 @@ namespace MonkeyPaste.Avalonia {
             bool isCaseSensitive = MpDataModelProvider.QueryInfo.FilterFlags.HasFlag(MpContentFilterType.CaseSensitive);
             bool isWholeWord = MpDataModelProvider.QueryInfo.FilterFlags.HasFlag(MpContentFilterType.WholeWord);
             bool isRegEx = MpDataModelProvider.QueryInfo.FilterFlags.HasFlag(MpContentFilterType.Regex);
-            _matches = ContentRange.Start.Document.FindAllText(st,isCaseSensitive,isWholeWord,isRegEx).ToList();
+
+            var matchResult = await ContentRange.Start.Document.FindAllTextAsync(st, isCaseSensitive, isWholeWord, isRegEx);
+            _matches = matchResult.ToList();
 
             SelectedIdx = -1;
 
@@ -158,7 +160,7 @@ namespace MonkeyPaste.Avalonia {
             //ReplaceDocumentsBgColors();
         }
 
-        public virtual void ApplyHighlighting() {
+        public virtual async Task ApplyHighlightingAsync() {
             if (_matches.Count == 0) {
                 return;
             }
@@ -168,7 +170,7 @@ namespace MonkeyPaste.Avalonia {
                 //match.ApplyPropertyValue(TextElement.BackgroundProperty, b);
             }
             AssociatedObject.InvalidateAll();
-            ScrollToSelectedItem();
+            await ScrollToSelectedItemAsync();
         }
 
         //public void UpdateUniqueBackgrounds() {

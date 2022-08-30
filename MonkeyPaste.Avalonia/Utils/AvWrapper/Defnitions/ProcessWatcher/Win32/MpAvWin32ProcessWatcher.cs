@@ -11,6 +11,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Timers;
+using Avalonia.Threading;
 using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -18,7 +19,7 @@ using MonkeyPaste.Common.Avalonia;
 namespace MonkeyPaste.Avalonia {
     public class MpAvWin32ProcessWatcher : MpIProcessWatcher {
         #region Private Variables
-        private System.Timers.Timer _timer;
+        private DispatcherTimer _timer;
 
         private IntPtr _thisAppHandle;
         public IntPtr ThisAppHandle {
@@ -85,12 +86,18 @@ namespace MonkeyPaste.Avalonia {
             RefreshHandleStack();
 
             if (_timer == null) {
-                _timer = new System.Timers.Timer(500);
-                _timer.Elapsed += Timer_Elapsed;
+                _timer = new DispatcherTimer() {
+                    Interval = TimeSpan.FromMilliseconds(500)
+                };
+                _timer.Tick += Timer_Elapsed;
             } else {
                 _timer.Stop();
             }
             _timer.Start();
+        }
+
+        private void _timer_Tick(object sender, EventArgs e) {
+            throw new NotImplementedException();
         }
 
         public void SetActiveProcess(IntPtr handle) {
@@ -368,7 +375,7 @@ namespace MonkeyPaste.Avalonia {
             return string.Empty;
         }
 
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e) {
+        private void Timer_Elapsed(object sender, EventArgs e) {
             IntPtr currentHandle = WinApi.GetForegroundWindow();
             if (currentHandle == ThisAppHandle) {
                 return;

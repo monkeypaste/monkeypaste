@@ -1,5 +1,7 @@
 ﻿
 
+using System.Threading.Tasks;
+
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipTileTitleHighlightBehavior : MpAvHighlightBehaviorBase<MpAvClipTileTitleView> {        
         protected override MpAvITextRange ContentRange {
@@ -17,8 +19,8 @@ namespace MonkeyPaste.Avalonia {
 
         public override MpHighlightType HighlightType => MpHighlightType.Title;
 
-        public override void ScrollToSelectedItem() {
-            return;
+        public override async Task ScrollToSelectedItemAsync() {
+            await Task.Delay(1);
         }
     }
 }

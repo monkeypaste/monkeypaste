@@ -59,24 +59,27 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public override List<MpRect> GetDropTargetRects() {
+        public override async Task<List<MpRect>> GetDropTargetRectsAsync() {
+            await Task.Delay(1);
             var designerItemRect = new List<MpRect>() {
                 new MpRect(0,0,AssociatedObject.Bounds.Width,AssociatedObject.Bounds.Height)
             };
             return designerItemRect;
         }
 
-        public override int GetDropTargetRectIdx() {
+        public override async Task<int> GetDropTargetRectIdxAsync() {
             var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
             var mp = VisualExtensions.PointToClient(AssociatedObject, gmp.ToAvPixelPoint()).ToPortablePoint();
             //var mp = Application.Current.MainWindow.TranslatePoint(gmp, AssociatedObject);
-            if (GetDropTargetRects()[0].Contains(mp)) {
+            var dtrl = await GetDropTargetRectsAsync();
+            if (dtrl[0].Contains(mp)) {
                 return 0;
             }
             return -1;
         }
-        public override MpShape[] GetDropTargetAdornerShape() {
+        public override async Task<MpShape[]> GetDropTargetAdornerShapeAsync() {
             // NOTE since actions only have 1 drop rect the cursor change is sufficient
+            await Task.Delay(1);
 
             return new MpShape[] { };
 
@@ -88,12 +91,13 @@ namespace MonkeyPaste.Avalonia {
             //return  new MpEllipse(new MpPoint(s.Width / 2, s.Height / 2), s).ToArray<MpShape>();
         }
 
-        public override bool IsDragDataValid(bool isCopy,object dragData) {
+        public override async Task<bool> IsDragDataValidAsync(bool isCopy,object dragData) {
             if(AssociatedObject.DataContext is MpAvActionViewModelBase avm && !avm.IsValid) {
                 return false;
             }
 
-            if(base.IsDragDataValid(isCopy, dragData)) {
+            bool isValidBaseResult = await base.IsDragDataValidAsync(isCopy, dragData);
+            if (isValidBaseResult) {
                 return true;
             }
             if(dragData is MpAvTagTileViewModel) {
@@ -102,13 +106,13 @@ namespace MonkeyPaste.Avalonia {
             return false;
         }
 
-        public override async Task Drop(bool isCopy, object dragData) {
-            await base.Drop(isCopy, dragData);
+        public override async Task DropAsync(bool isCopy, object dragData) {
+            await base.DropAsync(isCopy, dragData);
 
             List<MpCopyItem> dragModels = new List<MpCopyItem>();
             if(dragData is MpPortableDataObject mpdo) {
                 if (MpAvCefNetWebView.DraggingRtb != null) {
-                    await Drop(isCopy, MpAvCefNetWebView.DraggingRtb.DataContext);
+                    await DropAsync(isCopy, MpAvCefNetWebView.DraggingRtb.DataContext);
                     return;
                 }
                 // from external source

@@ -19,7 +19,7 @@ using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
 
-    public class MpExternalDropBehavior : MpAvDropBehaviorBase<Control> {
+    public class MpAvExternalDropBehavior : MpAvDropBehaviorBase<Control> {
         #region Private Variables
         
         private bool _wasReset = false;
@@ -27,8 +27,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Singleton Definition
-        private static MpExternalDropBehavior _instance;
-        public static MpExternalDropBehavior Instance => _instance ?? (_instance = new MpExternalDropBehavior());
+        private static MpAvExternalDropBehavior _instance;
+        public static MpAvExternalDropBehavior Instance => _instance ?? (_instance = new MpAvExternalDropBehavior());
         #endregion
 
         #region Properties
@@ -71,7 +71,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public override bool IsDragDataValid(bool isCopy, object dragData) {
+        public override async Task<bool> IsDragDataValidAsync(bool isCopy, object dragData) {
+            await Task.Delay(1);
+
             if(MpAvDragDropManager.IsDraggingFromExternal) {
                 return false;
             }
@@ -79,7 +81,9 @@ namespace MonkeyPaste.Avalonia {
             return dragData != null;
         }
 
-        public override List<MpRect> GetDropTargetRects() {
+        public override async Task<List<MpRect>> GetDropTargetRectsAsync() {
+            await Task.Delay(1);
+
             int pad = 1;
             // NOTE subtracting pad from bottom of rect (main window top) because converting mp to winforms
             // isn't exactly accurate or the title bar highlight border isn't accounted for w/ main window top or
@@ -91,11 +95,12 @@ namespace MonkeyPaste.Avalonia {
             return new List<MpRect> { extRect };
         }
 
-        public override int GetDropTargetRectIdx() {
+        public override async Task<int> GetDropTargetRectIdxAsync() {
             //Point mp = Mouse.GetPosition(Application.Current.MainWindow);
             MpPoint mp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+            var dtrl = await GetDropTargetRectsAsync();
             //MpConsole.WriteLine("Mouse Relative to Main Window: " + mp.ToString());
-            if (GetDropTargetRects()[0].Contains(mp)) {
+            if (dtrl[0].Contains(mp)) {
                 //Application.Current.MainWindow.Top = 20000;
                 //var winforms_mp = MpScreenInformation.ConvertWpfScreenPointToWinForms(mp);
                 IntPtr dropHandle = MpPlatformWrapper.Services.ProcessWatcher.GetParentHandleAtPoint(mp);
@@ -108,8 +113,8 @@ namespace MonkeyPaste.Avalonia {
             }
             return -1;
         }
-        public override MpShape[] GetDropTargetAdornerShape() {
-            var drl = GetDropTargetRects();
+        public override async Task<MpShape[]> GetDropTargetAdornerShapeAsync() {
+            var drl = await GetDropTargetRectsAsync();
             if (DropIdx < 0 || DropIdx >= drl.Count) {
                 return null;
             }
@@ -198,7 +203,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public override async Task Drop(bool isCopy, object dragData) {
+        public override async Task DropAsync(bool isCopy, object dragData) {
             //Application.Current.MainWindow.Activate();
             //Application.Current.MainWindow.Focus();
             //Application.Current.MainWindow.Topmost = true;

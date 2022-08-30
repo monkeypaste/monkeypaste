@@ -23,5 +23,6 @@ namespace MonkeyPaste {
         void SetActiveProcess(IntPtr handle);
 
         event EventHandler<MpProcessActivatedEventArgs> OnAppActivated;
+
     }
 }

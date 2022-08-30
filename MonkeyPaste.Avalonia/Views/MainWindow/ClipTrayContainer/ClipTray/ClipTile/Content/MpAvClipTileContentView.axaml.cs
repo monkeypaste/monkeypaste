@@ -28,8 +28,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipTileContentView() {
             InitializeComponent();
-            var b = this.FindControl<Border>("ClipTileContainerBorder");
-            b.AddHandler(Control.PointerPressedEvent, MpAvClipTileContentView_PointerPressed, RoutingStrategies.Tunnel);
+            this.AddHandler(Control.PointerPressedEvent, MpAvClipTileContentView_PointerPressed, RoutingStrategies.Tunnel);
 
             var cc = this.FindControl<ContentControl>("ClipTileContentControl");
             cc.AttachedToVisualTree += Cc_AttachedToVisualTree;
@@ -53,7 +52,7 @@ namespace MonkeyPaste.Avalonia {
             HighlightBehavior.Attach(cc.Content as IAvaloniaObject);
         }
 
-        private void MpAvClipTileContentView_PointerPressed(object sender, PointerPressedEventArgs e) {
+        private async void MpAvClipTileContentView_PointerPressed(object sender, PointerPressedEventArgs e) {
             if(!e.IsLeftPress()) {
                 e.Handled = false;
                 return;
@@ -79,18 +78,17 @@ namespace MonkeyPaste.Avalonia {
                 // drag is from somewhere in the selection range.
                 // If mouse down isn't in selection range reset selection to down position
 
-                //if (Rtb.Selection.IsEmpty) {
-                //    e.Handled = false;
-                //    return;
-                //}
-                //if (!Rtb.Selection.IsPointInRange(e.GetPosition(Rtb))) {
-                //    //var mptp = Rtb.GetPositionFromPoint(e.GetPosition(Rtb),true);
-                //    //Rtb.Selection.Select(mptp, mptp);
-                //    e.Handled = false;
-                //    return;
-                //}
-                e.Handled = false;
-                return;
+                if (ContentView.Selection.IsEmpty) {
+                    e.Handled = false;
+                    return;
+                }
+                bool isPressOnSelection = await ContentView.Selection.IsPointInRangeAsync(e.GetPosition(ContentView.Document.Owner).ToPortablePoint());
+                if (!isPressOnSelection) {
+                    //var mptp = Rtb.GetPositionFromPoint(e.GetPosition(Rtb),true);
+                    //Rtb.Selection.Select(mptp, mptp);
+                    e.Handled = false;
+                    return;
+                }
             }
 
             MpAvDragDropManager.StartDragCheck(BindingContext);

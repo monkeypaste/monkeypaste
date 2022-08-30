@@ -23,17 +23,8 @@ namespace MonkeyPaste.Avalonia {
             return new MpAvTextRange(tp,tp);
         }
 
-        public static string ToPlainText(this MpAvHtmlDocument doc) {
-            return doc.Html.ToPlainText();
-        }
         
 
-        public static MpAvITextPointer GetLineStartPosition(this MpAvITextPointer tp, int lineOffset) {
-            return null;
-        }
-        public static MpAvITextPointer GetLineEndPosition(this MpAvITextPointer tp, int lineOffset) {
-            return null;
-        }
 
         public static void LoadImage(this MpAvITextRange tr,string base64Str, out MpSize size) {
             size = new MpSize();
@@ -41,13 +32,14 @@ namespace MonkeyPaste.Avalonia {
 
         public static void LoadItemData(this MpAvITextRange tr, string data, MpCopyItemType itemType, out MpSize size) {
             size = new MpSize();
-            tr.Text = data;
+            tr.SetTextAsync(data).FireAndForgetSafeAsync((tr.Start.Document.Owner as Control).DataContext as MpViewModelBase);
         }
         public static void LoadTable(this MpAvITextRange tr, string csvStr) {
-            tr.Text = csvStr;
+
+            tr.SetTextAsync(csvStr).FireAndForgetSafeAsync((tr.Start.Document.Owner as Control).DataContext as MpViewModelBase);
         }
 
-        public static string ToEncodedPlainText(this MpAvITextRange tr) {
+        public static async Task<string> ToEncodedPlainTextAsync(this MpAvITextRange tr) {
             //if (tr.IsEmpty) {
             //    return string.Empty;
             //}
@@ -71,10 +63,11 @@ namespace MonkeyPaste.Avalonia {
             //    }
             //}
             //return sb.ToString();
-            return tr.Text;
+            string text = await tr.GetTextAsync();
+            return text;
         }
 
-        public static string ToEncodedRichText(this MpAvITextRange tr) {
+        public static async Task<string> ToEncodedRichTextAsync(this MpAvITextRange tr) {
             //if (tr.IsEmpty) {
             //    return string.Empty;
             //}
@@ -87,7 +80,8 @@ namespace MonkeyPaste.Avalonia {
             //var clonedDoc = doc.Clone(tr, out TextRange encodedRange);
 
             //return encodedRange.ToRichText();
-            return tr.Text;
+            string text = await tr.GetTextAsync();
+            return text;
         }
     }
 }

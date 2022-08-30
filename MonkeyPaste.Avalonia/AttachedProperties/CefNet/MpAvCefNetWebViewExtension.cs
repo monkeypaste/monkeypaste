@@ -231,13 +231,13 @@ namespace MonkeyPaste.Avalonia {
 
             if (wv.DataContext is MpAvClipTileViewModel ctvm) {
                 // flags detail info to reload in ctvm propertychanged
-                ctvm.CopyItemData = GetEncodedContent(wv);
+                ctvm.CopyItemData = await GetEncodedContentAsync(wv);
 
                 await LoadContentAsync(wv);
             }
         }
 
-        public static string GetEncodedContent(
+        public static async Task<string> GetEncodedContentAsync(
             MpAvCefNetWebView wv,
             bool ignoreSubSelection = true,
             bool asPlainText = false) {
@@ -262,7 +262,8 @@ namespace MonkeyPaste.Avalonia {
                         tr = wv.Selection;
                     }
                     //ignoreSubSelection ? rtb.Document.ContentRange() : rtb.Selection;
-                    return asPlainText ? tr.ToEncodedPlainText() : tr.ToEncodedRichText();
+                    string contentStr = asPlainText ? await tr.ToEncodedPlainTextAsync() : await tr.ToEncodedRichTextAsync();
+                    return contentStr;
             }
             MpConsole.WriteTraceLine("Unknown item type " + ctvm);
             return null;
@@ -275,9 +276,11 @@ namespace MonkeyPaste.Avalonia {
             }
             bool delete_item = false;
             if (drag_ctvm.ItemType == MpCopyItemType.Text) {
-                wv.Selection.Text = string.Empty;
+                await wv.Selection.SetTextAsync(string.Empty);
 
-                string dpt = wv.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
+                //string dpt = wv.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
+                string dpt = await new MpAvTextRange(wv.Document.ContentStart, wv.Document.ContentEnd).GetTextAsync();
+                dpt = dpt.Trim().Replace(Environment.NewLine, string.Empty);
                 if (string.IsNullOrWhiteSpace(dpt)) {
                     delete_item = true;
                 }
@@ -372,6 +375,7 @@ namespace MonkeyPaste.Avalonia {
                 tcvm.IsBusy = false;
 
                 return new MpQuillLoadRequestMessage() {
+                    copyItemId = ctvm.CopyItemId,
                     envName = "wpf",
                     itemEncodedHtmlData = ctvm.CopyItemData,
                     usedTextTemplates = usedTemplates,

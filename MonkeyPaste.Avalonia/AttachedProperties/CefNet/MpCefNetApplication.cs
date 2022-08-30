@@ -15,7 +15,10 @@ using System.Collections.Generic;
 namespace MonkeyPaste.Avalonia {
     public class MpCefNetApplication : CefNetApplication {
         #region Private Variables
+
         private string _dbPath;
+
+
         #endregion
 
         #region Constants
@@ -112,6 +115,8 @@ namespace MonkeyPaste.Avalonia {
                 CefV8Value window = context.GetGlobal();
                 var fnhandler = new V8Func(_dbPath);
                 window.SetValue("getAllTemplatesFromDb", CefV8Value.CreateFunction("getAllTemplatesFromDb", fnhandler), CefV8PropertyAttribute.ReadOnly);
+                window.SetValue("notifyEditorSelectionChanged", CefV8Value.CreateFunction("notifyEditorSelectionChanged", fnhandler), CefV8PropertyAttribute.ReadOnly);
+                window.SetValue("notifyContentLengthChanged", CefV8Value.CreateFunction("notifyContentLengthChanged", fnhandler), CefV8PropertyAttribute.ReadOnly);
             }
             catch (CefNet.CefNetJSExcepton ex) {
                 MpConsole.WriteTraceLine("CefNet Context created exception: ", ex);
@@ -163,22 +168,93 @@ namespace MonkeyPaste.Avalonia {
                 e.Handled = true;
                 return;
             }
+
+            if(e.Name == "WindowBindingResponse") {
+                string msgType = e.Message.ArgumentList.GetString(0);
+                string msgJsonStr = e.Message.ArgumentList.GetString(1);
+                Dispatcher.UIThread.Post(() => {
+                    switch (msgType) {
+                        case "notifyEditorSelectionChanged":
+                            var selChangedJsonMsgObj = MpJsonObject.DeserializeObject<MpQuillContentSelectionChangedMessage>(msgJsonStr);
+                            var wv = MpAvMainWindow.Instance.GetVisualDescendants<MpAvCefNetWebView>()
+                                                          .FirstOrDefault(x => x.DataContext is MpAvClipTileViewModel ctvm &&
+                                                                                ctvm.CopyItemId == selChangedJsonMsgObj.copyItemId);
+                            if (wv == null) {
+                                Debugger.Break();
+                            } else {
+                                wv.UpdateSelection(selChangedJsonMsgObj.index, selChangedJsonMsgObj.length, true);
+                            }
+
+                            break;
+                        case "notifyContentLengthChanged":
+                            var contentLengthMsgObj = MpJsonObject.DeserializeObject<MpQuillContentLengthChangedMessage>(msgJsonStr);
+                            if (contentLengthMsgObj != null) {
+                                Dispatcher.UIThread.Post(() => {
+                                    var wv = MpAvMainWindow.Instance.GetVisualDescendants<MpAvCefNetWebView>()
+                                                                  .FirstOrDefault(x => x.DataContext is MpAvClipTileViewModel ctvm &&
+                                                                                        ctvm.CopyItemId == contentLengthMsgObj.copyItemId);
+                                    if (wv == null) {
+                                        Debugger.Break();
+                                    } else {
+                                        wv.Document.ContentEnd.Offset = contentLengthMsgObj.length;
+                                    }
+                                });
+                            }
+                            break;
+                    }
+                });
+                
+
+                e.Handled = true;
+                return;
+            }
         }
     }
     class V8Func : CefV8Handler {
         private string _dbPath;
+
+
+        //private IClassicDesktopStyleApplicationLifetime _desktopRef;
+        //public V8Func(string dbPath) : base() {
+        //    _dbPath = dbPath;
+        //}
         public V8Func(string dbPath) : base() {
             _dbPath = dbPath;
         }
 
         protected override bool Execute(string name, CefV8Value @object, CefV8Value[] arguments, ref CefV8Value retval, ref string exception) {
-            if(name == "getAllTemplatesFromDb") {
-                List<MpTextTemplate> citl = MpDb.GetItems<MpTextTemplate>(_dbPath);
+            MpConsole.WriteLine("Received window binding msg name: " + name);
+            if(arguments != null) {
+                arguments.ForEach((x, i) => MpConsole.WriteLine("Arg " + i + ": " + x.ToString()));
+            }
+            if(name.StartsWith("get")) {
+                // js is accessing data from cs...
+
+                if (name == "getAllTemplatesFromDb") {
+                    List<MpTextTemplate> citl = MpDb.GetItems<MpTextTemplate>(_dbPath);
+
+                    exception = null;
+                    retval = CefV8Value.CreateString(JsonConvert.SerializeObject(citl));
+                    return true;
+                }
+            } else if(name.StartsWith("notify")) {
+                // js is setting cs data..
+
+                CefProcessMessage browserProcMsg = new CefProcessMessage("WindowBindingResponse");
+                browserProcMsg.ArgumentList.SetString(0, name);
+                browserProcMsg.ArgumentList.SetString(1, arguments[0].GetStringValue());
+                CefV8Context.GetCurrentContext().Frame.SendProcessMessage(CefProcessId.Browser, browserProcMsg);
 
                 exception = null;
-                retval = CefV8Value.CreateString(JsonConvert.SerializeObject(citl));
+                retval = null;
                 return true;
             }
+
+            // unknown msg name
+            MpConsole.WriteTraceLine("Uknown msg name: " + name);
+
+            Debugger.Break();
+
             return false;
         }
     }

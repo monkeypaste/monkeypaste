@@ -11,6 +11,7 @@ using System.Diagnostics;
 using Avalonia.Media;
 using Avalonia.Controls;
 using MonkeyPaste.Common.Avalonia;
+using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvContentAdorner : MpAvAdornerBase {
@@ -19,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
 
         private Color _debugColor;
 
-        private MpIContentDropTarget _dropBehavior;
+        private MpAvIContentDropTarget _dropBehavior;
         //private MpRtbHighlightBehavior _highlightBehavior;
 
         #endregion
@@ -47,18 +48,18 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsShowingHighlightShapes => false;// _highlightBehavior != null && _highlightBehavior.GetHighlightShapes().Count > 0;
 
-        public bool IsShowingCaret {
-            get {
-                //if(AdornedControl != null && 
-                //   AdornedControl is RichTextBox rtb &&
-                //   rtb.Selection.IsEmpty) {// &&
-                //   //rtb.DataContext is MpClipTileViewModel ctvm &&
-                //   //ctvm.IsSubSelectionEnabled) {
-                //    return true;
-                //}
-                return false;
-            }
-        }
+        //public bool IsShowingCaret {
+        //    get {
+        //        //if (AdornedControl != null &&
+        //        //   AdornedControl is MpAvIContentView rtb &&
+        //        //   rtb.Selection.IsEmptyAsync) {// &&
+        //        //                           //rtb.DataContext is MpClipTileViewModel ctvm &&
+        //        //                           //ctvm.IsSubSelectionEnabled) {
+        //        //    return true;
+        //        //}
+        //        return false;
+        //    }
+        //}
 
         public bool IsShowingContentLines {
             get {
@@ -84,14 +85,23 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        //public bool IsShowing => //MpMainWindowViewModel.Instance.IsMainWindowOpen &&
+        //                        (_dropBehavior.GetType() != typeof(MpAvPinTrayDropBehavior) ||
+        //                         IsShowingHighlightShapes) &&
+        //                         (IsShowingDropShape ||
+        //                          IsShowingHighlightShapes ||
+        //                         IsShowingCaret ||
+        //                         IsDebugMode ||
+        //                         IsShowingContentLines);
+
         public bool IsShowing => //MpMainWindowViewModel.Instance.IsMainWindowOpen &&
                                 (_dropBehavior.GetType() != typeof(MpAvPinTrayDropBehavior) ||
                                  IsShowingHighlightShapes) &&
                                  (IsShowingDropShape ||
                                   IsShowingHighlightShapes ||
-                                 IsShowingCaret ||
-                                 IsDebugMode ||
-                                 IsShowingContentLines);
+                                     //IsShowingCaret ||
+                                     IsDebugMode ||
+                                     IsShowingContentLines);
 
         public bool IsDebugMode {
             get {
@@ -102,14 +112,14 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public List<MpRect> DropRects {
-            get {
-                if (_dropBehavior == null) {
-                    return new List<MpRect>();
-                }
-                return _dropBehavior.DropRects;
-            }
-        }
+        //public List<MpRect> DropRects {
+        //    get {
+        //        if (_dropBehavior == null) {
+        //            return new List<MpRect>();
+        //        }
+        //        return _dropBehavior.DropRects;
+        //    }
+        //}
 
         public int DropIdx {
             get {
@@ -123,7 +133,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        public MpAvContentAdorner(Control uie, MpIContentDropTarget dropBehavior) : base(uie) {
+        public MpAvContentAdorner(Control uie, MpAvIContentDropTarget dropBehavior) : base(uie) {
             _dropBehavior = dropBehavior;
 
             var rtbcv = uie.GetVisualAncestor<MpAvClipTileContentView>();
@@ -157,9 +167,9 @@ namespace MonkeyPaste.Avalonia {
                 if (IsShowingHighlightShapes) {
                     DrawHighlightShapes(dc);
                 }
-                if (IsShowingCaret) {
-                    DrawCaret(dc, new Pen(Brushes.Red, 1));
-                }
+                //if (IsShowingCaret) {
+                //    DrawCaret(dc, new Pen(Brushes.Red, 1));
+                //}
 
 
                 if (IsShowingContentLines) {
@@ -233,8 +243,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void DrawDropShapes(DrawingContext dc, Pen pen) {
-            var dropShapes = _dropBehavior.GetDropTargetAdornerShape();
-            dropShapes.ForEach(x => DrawShape(dc, x, pen));
+            Dispatcher.UIThread.Post(async () => {
+                var dropShapes = await _dropBehavior.GetDropTargetAdornerShapeAsync();
+                dropShapes.ForEach(x => DrawShape(dc, x, pen));
+            });
         }
 
         private void DrawUnderlines(DrawingContext dc, Pen pen) {
@@ -292,19 +304,22 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void DrawDebugRects(DrawingContext dc) {
-            foreach (var debugRect in DropRects) {
-                if (DropRects.IndexOf(debugRect) == DropIdx) {
-                    dc.DrawRectangle(
-                        Brushes.Blue,
-                        new Pen(Brushes.Orange, 1),
-                        debugRect.ToAvRect());
-                } else {
-                    dc.DrawRectangle(
-                        new SolidColorBrush(_debugColor),
-                        new Pen(Brushes.Orange, 1),
-                        debugRect.ToAvRect());
+            Dispatcher.UIThread.Post(async () => {
+                var dtrl = await _dropBehavior.GetDropTargetRectsAsync();
+                foreach (var debugRect in dtrl) {
+                    if (dtrl.IndexOf(debugRect) == DropIdx) {
+                        dc.DrawRectangle(
+                            Brushes.Blue,
+                            new Pen(Brushes.Orange, 1),
+                            debugRect.ToAvRect());
+                    } else {
+                        dc.DrawRectangle(
+                            new SolidColorBrush(_debugColor),
+                            new Pen(Brushes.Orange, 1),
+                            debugRect.ToAvRect());
+                    }
                 }
-            }
+            });
         }
         #endregion
     }

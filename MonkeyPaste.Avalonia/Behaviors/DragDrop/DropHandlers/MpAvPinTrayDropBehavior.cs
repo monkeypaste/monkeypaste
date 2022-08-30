@@ -68,10 +68,12 @@ namespace MonkeyPaste.Avalonia {
             MpRect pin_tray_lb_rect = new MpRect(0, 0, pt_lb.Bounds.Width, pt_lb.Bounds.Height);
 
             if (sv.HorizontalScrollBarVisibility == ScrollBarVisibility.Visible) {
-                pin_tray_lb_rect.Height -= sv.GetScrollBar(Orientation.Horizontal).Height;
+                //pin_tray_lb_rect.Height -= sv.GetScrollBar(Orientation.Horizontal).Height;
+                pin_tray_lb_rect.Bottom -= sv.GetScrollBar(Orientation.Horizontal).Height;
             }
             if (sv.VerticalScrollBarVisibility == ScrollBarVisibility.Visible) {
-                pin_tray_lb_rect.Width -= sv.GetScrollBar(Orientation.Vertical).Width;
+                //pin_tray_lb_rect.Width -= sv.GetScrollBar(Orientation.Vertical).Width;
+                pin_tray_lb_rect.Right -= sv.GetScrollBar(Orientation.Vertical).Width;
             }
 
             if (!pin_tray_lb_rect.Contains(pin_tray_lb_mp)) {
@@ -102,27 +104,32 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public override bool IsDragDataValid(bool isCopy, object dragData) {
-            if(!base.IsDragDataValid(isCopy, dragData)) {
+        public override async Task<bool> IsDragDataValidAsync(bool isCopy, object dragData) {
+            bool isValidBaseResult = await base.IsDragDataValidAsync(isCopy, dragData);
+            if (!isValidBaseResult) {
                 return false;
             }
             if(dragData is MpAvClipTileViewModel ctvm) {
-                if(ctvm.IsPinned && MpAvTextBoxSelectionExtension.IsAllSelected(ctvm)) {
+                bool isAllSelected = await MpAvTextBoxSelectionExtension.IsAllSelectedAsync(ctvm);
+                if (ctvm.IsPinned && isAllSelected) {
                     return false;
                 }
             }
             return true;
         }
 
-        public override int GetDropTargetRectIdx() {
+        public override async Task<int> GetDropTargetRectIdxAsync() {
             var ctrvm = MpAvClipTrayViewModel.Instance;
             var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
             var mp = VisualExtensions.PointToClient(AssociatedObject.PinTrayListBox, gmp.ToAvPixelPoint()).ToPortablePoint();
             bool isOverPinnedItem = ctrvm.PinnedItems.Any(x => x.IsHovering);
-            ctrvm.IsDragOverPinTray = DropRects[0].Contains(mp) && !isOverPinnedItem;
+            var drl = await GetDropTargetRectsAsync();
+            ctrvm.IsDragOverPinTray = drl[0].Contains(mp) && !isOverPinnedItem;
             return ctrvm.IsDragOverPinTray ? 0 : -1;
         }
-        public override List<MpRect> GetDropTargetRects() {
+        public override async Task<List<MpRect>> GetDropTargetRectsAsync() {
+            await Task.Delay(1);
+
             var rl = new List<MpRect>();
             if(AssociatedObject == null) {
                 return rl;
@@ -133,7 +140,8 @@ namespace MonkeyPaste.Avalonia {
             };
             return rl;
         }
-        public override MpShape[] GetDropTargetAdornerShape() {
+        public override async Task<MpShape[]> GetDropTargetAdornerShapeAsync() {
+            await Task.Delay(1);
             return null;
         }
 
@@ -151,13 +159,13 @@ namespace MonkeyPaste.Avalonia {
             AssociatedObject.PinTrayListBox.Width -= _dragOverPadding;            
         }
 
-        public override async Task Drop(bool isCopy, object dragData) {
+        public override async Task DropAsync(bool isCopy, object dragData) {
             var ctrvm = MpAvClipTrayViewModel.Instance;
             // BUG storing dropIdx because somehow it gets lost after calling base
 
             int dropIdx = ctrvm.PinnedItems.Count;
 
-            await base.Drop(isCopy, dragData);
+            await base.DropAsync(isCopy, dragData);
 
             MpAvClipTileViewModel drag_ctvm = null;
             MpAvClipTileViewModel drop_ctvm = null;
@@ -171,8 +179,11 @@ namespace MonkeyPaste.Avalonia {
                 // either a partial pinned or tray selection or tray item
 
                 drag_ctvm = dragData as MpAvClipTileViewModel;
-                bool isPartialDrop = !MpAvTextBoxSelectionExtension.IsAllSelected(drag_ctvm);
-                if(isPartialDrop) {
+                bool isTotalContentDrop = await MpAvTextBoxSelectionExtension.IsAllSelectedAsync(drag_ctvm);
+                if (isTotalContentDrop) {
+                    drop_ctvm = drag_ctvm;
+                    drag_ctvm = null;
+                } else {
                     string drop_data = drag_ctvm.SelectedRichText; 
 
                     var dragModel = await drag_ctvm.CopyItem.Clone(false) as MpCopyItem;
@@ -180,10 +191,7 @@ namespace MonkeyPaste.Avalonia {
                     await dragModel.WriteToDatabaseAsync();
 
                     drop_ctvm = await ctrvm.CreateClipTileViewModel(dragModel);
-                } else {
-                    drop_ctvm = drag_ctvm;
-                    drag_ctvm = null;
-                }        
+                }       
             }
 
             ctrvm.PinTileCommand.Execute(drop_ctvm);

@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using System;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public interface MpAvITextRange : IComparable, IEquatable<MpAvITextRange> {
@@ -7,8 +8,10 @@ namespace MonkeyPaste.Avalonia {
         MpAvITextPointer End { get; set; }
 
         bool IsEmpty { get; }
-        string Text { get; set; }
+        //string Text { get; set; }
+        Task<string> GetTextAsync();
+        Task SetTextAsync(string text);
 
-        bool IsPointInRange(MpPoint point);
+        Task<bool> IsPointInRangeAsync(MpPoint point);
     }
 }

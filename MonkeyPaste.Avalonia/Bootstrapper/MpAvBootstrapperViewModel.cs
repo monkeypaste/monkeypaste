@@ -63,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
 
                     //new MpBootstrappedItemViewModel(this,typeof(MpContextMenuView)),
 
-                    //new MpBootstrappedItemViewModel(this,typeof(MpDragDropManager)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvDragDropManager)),
 
 
                     //new MpBootstrappedItemViewModel(this,typeof(MpWpfDataObjectHelper)),
