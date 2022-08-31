@@ -117,7 +117,7 @@ namespace MonkeyPaste.Avalonia {
                 var rect = ft.HitTestTextPosition(offset);
                 return rect.ToPortableRect();
             } else if (Document.Owner is MpAvCefNetWebView wv) {
-                string rectJsonStr = await wv.EvaluateJavascriptAsync($"getCharacterRect({offset})");
+                string rectJsonStr = await wv.EvaluateJavascriptAsync($"getCharacterRect_ext({offset})");
                 return MpRect.ParseJson(rectJsonStr);
             }
             return MpRect.Empty;

@@ -25,20 +25,17 @@ function drawRect(ctx, r, stroke = 'black', width = 1) {
     ctx.stroke();
 }
 
-function rectContainsPoint(rect, p) {
-    if (!rect || !p) {
-        return false;
+
+function getEditorRect(clean = true) {
+    //return { left: 0, top: 0, right: window.outerWidth, bottom: window.outerHeight, width: window.outerWidth, height: window.outerHeight };
+    let temp = document.getElementById("editor").getBoundingClientRect();
+    temp = cleanRect(temp);
+    if (clean) {
+        temp.right = temp.width;
+        temp.bottom = temp.height;
+        temp.left = 0;
+        temp.top = 0;
+        temp = cleanRect(temp);
 	}
-    return p.x >= rect.left && p.x <= rect.right && p.y >= rect.top && p.y <= rect.bottom;
-}
-
-function rectContainsRect(rect, r) {
-    if (!rect || !p) {
-        return false;
-    }
-    return rectContainsPoint(rect, { x: r.left, y: r.top }) && rectContainsPoint(rect, { x: r.right, y: r.bottom });
-}
-
-function getWindowRect() {
-    return { left: 0, top: 0, right: window.outerWidth, bottom: window.outerHeight, width: window.outerWidth, height: window.outerHeight };
+    return temp;
 }

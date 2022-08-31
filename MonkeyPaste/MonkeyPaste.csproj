@@ -139,9 +139,11 @@
     <None Remove="Resources\Html\Editor\src\components\util\dataTransfer.js" />
     <None Remove="Resources\Html\Editor\src\components\util\debug.js" />
     <None Remove="Resources\Html\Editor\src\components\util\graphics.js" />
+    <None Remove="Resources\Html\Editor\src\components\util\helpers.js" />
     <None Remove="Resources\Html\Editor\src\components\util\jsComAdapter.js" />
+    <None Remove="Resources\Html\Editor\src\components\util\math.js" />
+    <None Remove="Resources\Html\Editor\src\components\util\messages.js" />
     <None Remove="Resources\Html\Editor\src\components\util\resize.js" />
-    <None Remove="Resources\Html\Editor\src\components\util\util.js" />
     <None Remove="Resources\Html\Editor\src\editor.js" />
     <None Remove="Resources\Html\Editor\webpack.config.js" />
     <None Remove="Resources\Icons\monkey.png" />
@@ -285,16 +287,22 @@
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\debug.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\math.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\graphics.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\jsComAdapter.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\messages.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\resize.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\util.js">
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\helpers.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Icons\monkey.png" />

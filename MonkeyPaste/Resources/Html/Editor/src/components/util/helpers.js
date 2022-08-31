@@ -168,17 +168,7 @@ function getAllElementsBetweenHelper(elm, elms) {
     getAllElementsBetweenHelper(elm.nextSibling, elms);
 }
 
-function isPointInRect(rect, p) {
-    return rect.x <= p.x && p.x <= rect.x + rect.w && rect.y <= p.y && p.y <= rect.y + rect.h;
-}
 
-function dist(a, b) {
-    return Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2));
-}
-
-function distSqr(a, b) {
-    return Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2);
-}
 
 
 function isEmptyOrSpaces(str) {
@@ -215,5 +205,13 @@ function hasJsonStructure(str) {
     } catch (err) {
         return false;
     }
+}
+
+function setTextSelectionBgColor(bgColor) {
+    document.body.style.setProperty('--selbgcolor', bgColor);
+}
+
+function setTextSelectionFgColor(fgColor) {
+    document.body.style.setProperty('--selfgcolor', fgColor);
 }
 

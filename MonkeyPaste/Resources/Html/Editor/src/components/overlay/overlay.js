@@ -21,7 +21,7 @@ function drawUnderlines(ctx, color = 'red', thickness = '0.5') {
     let p1 = null;
     let p2 = null;
     let count = quill.getLength();
-    let windowRect = getWindowRect();
+    let windowRect = getEditorRect();
 
     for (var i = 0; i < count; i++) {
         //log('drawing idx ' + i + ' of ' + count);
@@ -43,7 +43,7 @@ function drawUnderlines(ctx, color = 'red', thickness = '0.5') {
             p2 = { x: idx_rect.right, y: idx_rect.bottom };
         }
 
-        if (rectContainsPoint(windowRect, p1) && rectContainsPoint(windowRect,p2)) {
+        if (isPointInRect(windowRect, p1) && isPointInRect(windowRect, p2)) {
             drawLine(ctx, p1.x, p1.y, p2.x, p2.y, color, thickness);
             p1 = p2 = null;
 
@@ -67,46 +67,46 @@ function drawHighlighting(ctx, forceColor) {
 
 
 function drawDropPreview(ctx, color = 'red', thickness = '0.5') {
-    let drop_idx = getEditorIndexFromPoint_ByLine(MousePos);
+    let drop_idx = DropIdx;
+
     //log('dropIdx: ' + drop_idx + ' mp x:' + MousePos.x + ' y:' + MousePos.y);
     if (drop_idx < 0) {
         return;
     }
 
     let block_line_offset = 3.0;
-    let window_rect = getWindowRect();
+    let editor_rect = getEditorRect();
 
     let line_start_idx = getLineStartDocIdx(drop_idx);
     let line_start_rect = getCharacterRect(line_start_idx);
     let pre_y = line_start_rect.top - block_line_offset;
-    let pre_line = { x1: 0, y1: pre_y, x2: window_rect.width, y2: pre_y };
+    let pre_line = { x1: 0, y1: pre_y, x2: editor_rect.width, y2: pre_y };
 
     let line_end_idx = getLineEndDocIdx(drop_idx);
     let line_end_rect = getCharacterRect(line_end_idx);
     let post_y = line_end_rect.bottom + block_line_offset;
-    let post_line = { x1: 0, y1: post_y, x2: window_rect.width, y2: post_y };
+    let post_line = { x1: 0, y1: post_y, x2: editor_rect.width, y2: post_y };
 
     let caret_rect = getCharacterRect(drop_idx);
     let caret_line = { x1: caret_rect.left, y1: caret_rect.top, x2: caret_rect.left, y2: caret_rect.bottom };
 
-
-    let is_split_block_drop = IsCtrlDown;
+    IsSplitDrop = IsShiftDown; //IsCtrlDown || IsAltDown;
 
     let block_threshold = Math.max(2, caret_rect.height / 4);
     let doc_start_rect = getCharacterRect(0);
 
     // NOTE to avoid conflicts between each line as pre/post drop only use pre for first
     // line of content then only check post for others
-    let is_pre_block_drop = Math.abs(MousePos.y - doc_start_rect.top) < block_threshold || MousePos.y < doc_start_rect.top;
-    let is_post_block_drop = Math.abs(MousePos.y - caret_rect.bottom) < block_threshold || MousePos.y > caret_rect.bottom;
+    IsPreBlockDrop = Math.abs(MousePos.y - doc_start_rect.top) < block_threshold || MousePos.y < doc_start_rect.top;
+    IsPostBlockDrop = Math.abs(MousePos.y - caret_rect.bottom) < block_threshold || MousePos.y > caret_rect.bottom;
 
-    if (is_split_block_drop && CopyItemType != 'FileList') {
-        is_pre_block_drop = is_post_block_drop = false;
+    if (IsSplitDrop && CopyItemType != 'FileList') {
+        IsPreBlockDrop = false;
+        IsPostBlockDrop = false;
     }
 
-
     let render_lines = [];
-    if (is_split_block_drop) {
+    if (IsSplitDrop) {
         let pre_split_line = pre_line;
         pre_split_line.x1 = caret_line.x1;
 
@@ -115,15 +115,29 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5') {
 
         render_lines.push(pre_split_line);
         render_lines.push(post_split_line);
-    } else if (is_pre_block_drop) {
+    } else if (IsPreBlockDrop) {
         render_lines.push(pre_line);
-    } else if (is_post_block_drop) {
+    } else if (IsPostBlockDrop) {
         render_lines.push(post_line);
     } else {
         render_lines.push(caret_line);
     }
 
-    render_lines.forEach(line => drawLine(ctx, line.x1, line.y1, line.x2, line.y2, color, thickness, [15, 5]));
+    for (var i = 0; i < render_lines.length; i++) {
+        let line = render_lines[i];
+        drawLine(ctx, line.x1, line.y1, line.x2, line.y2, color, thickness, [15, 5])
+    }
+
+    if (IsCtrlDown) {
+        setTextSelectionBgColor('lime');
+    } else {
+        setTextSelectionBgColor('lightblue');
+    }
+    if (IsAltDown) {
+        setTextSelectionFgColor('orange');
+    } else {
+        setTextSelectionFgColor('black');
+	}
 }
 
 
@@ -132,10 +146,11 @@ function drawOverlay() {
     let ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    let isUnderlinesVisible = isReadOnly() && IsSubSelectionEnabled;
+    let isUnderlinesVisible = !isEditorToolbarVisible() && IsSubSelectionEnabled && !isDropping();
     if (isUnderlinesVisible) {
         drawUnderlines(ctx);
     } else {
+        isUnderlinesVisible = isUnderlinesVisible;
         //clearUnderlines(ctx);
     }
 

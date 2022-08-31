@@ -65,7 +65,7 @@ namespace MonkeyPaste.Avalonia {
                     index = Start.Offset,
                     length = End.Offset - Start.Offset
                 };
-                string text = await wv.EvaluateJavascriptAsync($"getText('{getRangeMsg.Serialize()}')");
+                string text = await wv.EvaluateJavascriptAsync($"getText_ext('{getRangeMsg.Serialize()}')");
                 return text;
             } else if(Start.Document is MpAvTextBox tb) {
                 return tb.Text;
@@ -85,7 +85,7 @@ namespace MonkeyPaste.Avalonia {
                     length = End.Offset - Start.Offset,
                     text = text
                 };
-                await wv.EvaluateJavascriptAsync($"setText('{setRangeMsg.Serialize()}')");
+                await wv.EvaluateJavascriptAsync($"setTextInRange_ext('{setRangeMsg.Serialize()}')");
             } else if(Start.Document is MpAvTextBox tb) {
                 tb.Text = tb.Text.ReplaceRange(Start.Offset, End.Offset - Start.Offset, text);                
             }

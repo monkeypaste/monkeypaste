@@ -130,7 +130,7 @@ namespace MonkeyPaste.Avalonia {
             if (control is TextBox tb) {
                 return tb.Text.Length == tb.SelectedText.Length;
             } else if(control is MpAvCefNetWebView wv) {
-                string resultStr = await wv.EvaluateJavascriptAsync("isAllSelected()");
+                string resultStr = await wv.EvaluateJavascriptAsync("isAllSelected_ext()");
                 return resultStr.ToLower() == "true";
 
             }   

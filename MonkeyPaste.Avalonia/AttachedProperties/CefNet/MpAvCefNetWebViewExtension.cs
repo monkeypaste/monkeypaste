@@ -72,11 +72,11 @@ namespace MonkeyPaste.Avalonia {
                 wv.IsEditorInitialized) {
                 // only signal read only change after webview is loaded
                 if (isReadOnly) {
-                    var enableReadOnlyResp = await wv.EvaluateJavascriptAsync("enableReadOnly()");
+                    var enableReadOnlyResp = await wv.EvaluateJavascriptAsync("enableReadOnly_ext()");
                     ProcessEnableReadOnlyResponse(wv, enableReadOnlyResp);
                 } else {
                     MpQuillDisableReadOnlyRequestMessage drorMsg = CreateDisableReadOnlyMessage(wv);
-                    string disableReadOnlyResp = await wv.EvaluateJavascriptAsync($"disableReadOnly('{drorMsg.Serialize()}')");
+                    string disableReadOnlyResp = await wv.EvaluateJavascriptAsync($"disableReadOnly_ext('{drorMsg.Serialize()}')");
                     ProcessDisableReadOnlyResponse(wv, disableReadOnlyResp);
                 }
             }                  
@@ -336,7 +336,7 @@ namespace MonkeyPaste.Avalonia {
                 var loadReqJsonStr = lrm.Serialize();
                 string loadResponseMsgStr = null;
                 while (loadResponseMsgStr == null) {
-                    string resp = await wv.EvaluateJavascriptAsync($"init('{loadReqJsonStr}')");
+                    string resp = await wv.EvaluateJavascriptAsync($"init_ext('{loadReqJsonStr}')");
                     if (resp == MpCefNetApplication.JS_REF_ERROR || resp == null) {
                         await Task.Delay(100);
                         continue;
@@ -393,7 +393,7 @@ namespace MonkeyPaste.Avalonia {
                 tcvm.IsBusy = true;
 
                 // get templates present in realtime document
-                var decodedTemplateGuidsObj = await wv.EvaluateJavascriptAsync("getDecodedTemplateGuids()");
+                var decodedTemplateGuidsObj = await wv.EvaluateJavascriptAsync("getDecodedTemplateGuids_ext()");
                 Debugger.Break();
                 List<string> loadedTemplateGuids = MpJsonObject.DeserializeObject<List<string>>(decodedTemplateGuidsObj);
 
@@ -411,9 +411,9 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 string htmlToDecode = string.Empty;
-                bool isLoaded = await wv.EvaluateJavascriptAsync("checkIsEditorLoaded()") == "true";
+                bool isLoaded = await wv.EvaluateJavascriptAsync("checkIsEditorLoaded_ext()") == "true";
                 if (isLoaded) {
-                    htmlToDecode = await wv.EvaluateJavascriptAsync("getHtml()");
+                    htmlToDecode = await wv.EvaluateJavascriptAsync("getHtml_ext()");
                 } else {
                     htmlToDecode = ctvm.CopyItemData;
                 }

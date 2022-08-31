@@ -1,4 +1,23 @@
-﻿function convertDataTransferToHtml(dt) {
+﻿
+function convertDataTransferToPlainText(dt) {
+    if (dt == null) {
+        return '';
+    }
+    if (dt.types.indexOf('text/plain') > -1) {
+        let itemData = dt.getData('text/plain');
+        return itemData;
+    }
+    if (dt.types.indexOf('text/html') > -1) {
+        let itemData = dt.getData('text/html');
+        itemData = parseForHtmlContentStr(itemData);
+        let item_html_doc = domParser.parseFromString(itemData);
+        //isHtml = true;
+        return item_html_doc.body.innerText;
+    }
+    return '';
+}
+
+function convertDataTransferToHtml(dt) {
     if (dt == null) {
         return null;
     }
@@ -14,6 +33,7 @@
     }
     if (dt.types.indexOf('text/plain') > -1) {
         let itemData = dt.getData('text/plain');
+        itemData = '<html><body>' + itemData + '</body></html>';
         return itemData;
     }
 }

@@ -53,7 +53,7 @@ namespace MonkeyPaste.Avalonia {
                 y = point.Y,
                 snapToLine = true
             };
-            string idxRespStr = await _owner.EvaluateJavascriptAsync($"getEditorIndexFromPoint('{pointMsg.Serialize()}')");
+            string idxRespStr = await _owner.EvaluateJavascriptAsync($"getEditorIndexFromPoint_ext('{pointMsg.Serialize()}')");
             if (int.TryParse(idxRespStr, out int offset)) {
                 return new MpAvTextPointer(this, offset);
             }
@@ -95,7 +95,7 @@ namespace MonkeyPaste.Avalonia {
             if (_owner == null) {
                 return string.Empty;
             }
-            string html = await _owner.EvaluateJavascriptAsync("getHtml()");
+            string html = await _owner.EvaluateJavascriptAsync("getHtml_ext()");
             return html;
         }
 
@@ -104,14 +104,14 @@ namespace MonkeyPaste.Avalonia {
             if (_owner == null) {
                 return;
             }
-            _owner.ExecuteJavascript($"setHtml('{html}')");
+            _owner.ExecuteJavascript($"setHtml_ext('{html}')");
         }
 
         private async Task<string> GetTextAsync() {
             if (_owner == null) {
                 return string.Empty;
             }
-            string text = await _owner.EvaluateJavascriptAsync("getText()");
+            string text = await _owner.EvaluateJavascriptAsync("getText_ext()");
             return text;
         }
 
@@ -119,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
             if (_owner == null) {
                 return;
             }
-            _owner.ExecuteJavascript($"setText('{text}')");
+            _owner.ExecuteJavascript($"setText_ext('{text}')");
         }
 
         private IEnumerable<MpAvITextRange> FindText(HtmlNode docNode, string matchText) {            

@@ -10,9 +10,14 @@ body {
     font-family: Arial;
     overflow: hidden;
     background-color: transparent;
+    --selbgcolor: lightblue;
+    --selfgcolor: black;
     /*white-space: pre-wrap;*/
 }
-
+::selection {
+    background-color: var(--selbgcolor);
+    color: var(--selfgcolor);
+}
 .btn {
 }
     /* On mouse-over */
@@ -28,11 +33,24 @@ body {
     background-color: transparent;
 }*/
 
+.duplicate {
+    color: lime;
+}
+
+/*::selection {
+    background: lime;
+}
+
+::-moz-selection {
+    background: lime;
+}*/
+
+
 #editor {
     width: 100%;    
     position: fixed;
     overflow: auto;
-    padding: 5px;
+    padding: 0px;
     z-index: -1;
 }
 

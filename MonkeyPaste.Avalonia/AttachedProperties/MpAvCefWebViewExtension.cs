@@ -55,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
                     var lrm = await CreateLoadRequestMessageAsync(wv);
                     var loadReqJsonStr = lrm.Serialize();
 
-                    string loadResponseMsgStr = await wv.EvaluateScript<string>($"init('{loadReqJsonStr}')");
+                    string loadResponseMsgStr = await wv.EvaluateScript<string>($"init_ext('{loadReqJsonStr}')");
                     MpQuillLoadResponseMessage loadResponseMsg = MpJsonObject.DeserializeObject<MpQuillLoadResponseMessage>(loadResponseMsgStr);
                     ctvm.UnformattedContentSize = new Size(loadResponseMsg.contentWidth, loadResponseMsg.contentHeight);
 
@@ -100,7 +100,7 @@ namespace MonkeyPaste.Avalonia {
                     tcvm.IsBusy = true;
 
                     // get templates present in realtime document
-                    var decodedTemplateGuidsObj = await wv.EvaluateScript<object>("getDecodedTemplateGuids()");
+                    var decodedTemplateGuidsObj = await wv.EvaluateScript<object>("getDecodedTemplateGuids_ext()");
                     Debugger.Break();
                     List<string> loadedTemplateGuids = MpJsonObject.DeserializeObject<List<string>>(decodedTemplateGuidsObj);
 
@@ -118,9 +118,9 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                     string htmlToDecode = string.Empty;
-                    bool isLoaded = await wv.EvaluateScript<bool>("checkIsLoaded()");
+                    bool isLoaded = await wv.EvaluateScript<bool>("checkIsLoaded_ext()");
                     if(isLoaded) {
-                        htmlToDecode = await wv.EvaluateScript<string>("getHtml()");
+                        htmlToDecode = await wv.EvaluateScript<string>("getHtml_ext()");
                     } else {
                         htmlToDecode = ctvm.CopyItemData;
                     }

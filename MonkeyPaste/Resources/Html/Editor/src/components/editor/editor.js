@@ -55,22 +55,21 @@ function convertPlainHtml(plainHtml) {
 	//
 }
 
-function init(reqMsgStr) {
+function init(initMsg) {
 	//if (IsLoaded) {
 	//	log('editor already loaded, setting html and  ignoring...');
 	//	return;
 	//}
 	// reqMsgStr is serialized 'MpQuillLoadRequestMessage' object
 
-	log("init request: " + reqMsgStr);
+	//log("init request: " + reqMsgStr);
 	//drag/drop notes:
 	// quill.root.removeEventListener('dragstart',getEventListeners(quill.root).dragstart[0].listener)
 	// quill.root.removeEventListener('drop',getEventListeners(quill.root).drop[0].listener)
 
-	if (reqMsgStr == null) {
+	if (initMsg == null) {
 		//let sample1 = '<p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">//rtbvm.HasViewChanged = true;</span></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">rtbvm.OnPropertyChanged(</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,255);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">nameof</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">(rtbvm.CurrentSize)); </span></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,255);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">var</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"> cilv =  </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,255);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">this</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">.GetVisualAncestor<</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(43,145,175);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">MpContentListView</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">>(); </span></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">cilv.UpdateAdorner();</span></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><br copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,255);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">var</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"> rtbl = cilv.GetVisualDescendents<</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(43,145,175);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">RichTextBox</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">>(); </span></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,255);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">double</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"> totalHeight = rtbl.Sum(x => x.ActualHeight) +</span></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(43,145,175);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">MpMeasurements</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">.Instance.ClipTileEditToolbarHeight + </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(43,145,175);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">MpMeasurements</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">.Instance.ClipTileDetailHeight; </span></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,255);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">var</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"> ctcv =  </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,255);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">this</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">.GetVisualAncestor<</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(43,145,175);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">MpClipTileContainerView</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">>(); </span></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">ctcv.ExpandBehavior.Resize(totalHeight); </span></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,255);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">var</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"> sv = cilv.ContentListBox.GetScrollViewer(); </span></p><p class="ql-align-left"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">sv.InvalidateScrollInfo();</span></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><br copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"></p>';
-		//let sample2 = '<p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><br copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938"></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//public async Task FillAllTemplates() {</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//    bool hasExpanded = false;</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//    foreach (var rtbvm in SubSelectedContentItems) {</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//        if (rtbvm.HasTokens) {</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//            rtbvm.IsSelected = true;</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//            rtbvm.IsPastingTemplate = true;</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//            if (!hasExpanded) {</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//                //tile will be shrunk in on completed of hide window</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//                MainWindowViewModel.ExpandClipTile(HostClipTileViewModel);</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//                if (!MpClipTrayViewModel.Instance.IsPastingHotKey) {</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//                    PasteTemplateToolbarViewModel.IsBusy = true;</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//                }</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//                hasExpanded = true;</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//            }</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//            PasteTemplateToolbarViewModel.SetSubItem(rtbvm);</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//            await Application.Current.Dispatcher.BeginInvoke((Action)(() => {</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//                while (!PasteTemplateToolbarViewModel.HaveAllSubItemTemplatesBeenVisited) {</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//                    System.Threading.Thread.Sleep(100);</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//                }</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//            }), DispatcherPriority.Background);</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><br copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938"></p><p class="ql-align-left"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//            //await Task.Run(() => {</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//            //    while (!HostClipTileViewModel.PasteTemplateToolbarViewModel.HaveAllSubItemTemplatesBeenVisited) {</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//            //        System.Threading.Thread.Sleep(100);</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//            //    }</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//            //    //TemplateRichText is set in PasteTemplateCommand</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//            //});</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//            rtbvm.TemplateHyperlinkCollectionViewModel.ClearSelection();</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//        }</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><br copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938"></p><p class="ql-align-left"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//    }</span></p><p class="ql-align-left"	copyitemblockguid="707c5722-f7a7-4459-b8c3-6a1179a59938"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">        </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="707c5722-f7a7-4459-b8c3-6a1179a59938">//}</span></p>';    
-
+		
 		let sample1 = "<html><body><!--StartFragment--><p style='font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'>This article can be considered as the fourth instalment in the following sequence of articles:</p><ol style='margin: 10px 0px; padding: 0px 0px 0px 40px; border: 0px; color: rgb(17, 17, 17); font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'><li style='margin: 0px; padding: 0px; border: 0px; font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17);'><a href='https://www.codeproject.com/Articles/5308645/Multiplatform-UI-Coding-with-AvaloniaUI-in-Easy-Sa'	style='margin: 0px; padding: 0px; border: 0px; text-decoration: none; color: rgb(0, 87, 130);'>Multiplatform UI Coding with AvaloniaUI in Easy Samples. Part 1 - AvaloniaUI Building Blocks</a></li><li style='margin: 0px; padding: 0px; border: 0px; font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17);'><a href='https://www.codeproject.com/Articles/5314369/Basics-of-XAML-in-Easy-Samples-for-Multiplatform-A'	style='margin: 0px; padding: 0px; border: 0px; text-decoration: none; color: rgb(0, 87, 130);'>Basics of XAML in Easy Samples for Multiplatform Avalonia .NET Framework</a></li><li style='margin: 0px; padding: 0px; border: 0px; font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17);'><a href='https://www.codeproject.com/Articles/5311995/Multiplatform-Avalonia-NET-Framework-Programming-B'	style='margin: 0px; padding: 0px; border: 0px; text-decoration: none; color: rgb(0, 87, 130);'>Multiplatform Avalonia .NET Framework Programming Basic Concepts in Easy Samples</a></li></ol><p style='font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'>If you know WPF, you can read this article without reading the previous ones, otherwise, you should read the previous articles first.</p><!--EndFragment--></body></html>";
 
 		// reqMsg = {
@@ -80,7 +79,7 @@ function init(reqMsgStr) {
 		//   itemEncodedHtmlData: sample1 + sample2,
 		//   usedTextTemplates: []
 		// };
-		reqMsg = {
+		initMsg = {
 			envName: 'wpf',
 			copyItemId: 0,
 			isReadOnlyEnabled: true,
@@ -88,36 +87,18 @@ function init(reqMsgStr) {
 			isPasteRequest: false,
 			itemEncodedHtmlData: sample1
 		}
-	} else if (typeof reqMsgStr === 'string' || reqMsgStr instanceof String) {
-		if (hasJsonStructure(reqMsgStr)) {
-			//let reqMsgStr_decoded = atob(reqMsgStr);
-			//reqMsg = JSON.parse(reqMsgStr_decoded);
-			reqMsg = JSON.parse(reqMsgStr);
-		} else {
-			reqMsg = {
-				envName: 'wpf',
-				isReadOnlyEnabled: true,
-				usedTextTemplates: {},
-				isPasteRequest: false,
-				itemEncodedHtmlData: reqMsgStr
-			}
-		}
-	} else {
-		log('error loading with reqMsgStr (reloading default): ' + reqMsgStr);
-		init();
-		return;
-	}
-	EnvName = reqMsg.envName;
-	CopyItemId = reqMsg.copyItemId;
+	}  
+	EnvName = initMsg.envName;
+	CopyItemId = initMsg.copyItemId;
 
 	if (!IsLoaded) {
-		loadQuill(reqMsg);
+		loadQuill(initMsg);
 	}
 
-	initContent(reqMsg.itemEncodedHtmlData);
+	initContent(initMsg.itemEncodedHtmlData);
 
 	if (!IsLoaded) {
-		initTemplates(reqMsg.usedTextTemplates, reqMsg.isPasteRequest);
+		initTemplates(initMsg.usedTextTemplates, initMsg.isPasteRequest);
 	}
 
 	initDragDrop();
@@ -130,7 +111,7 @@ function init(reqMsgStr) {
 	} else {
 		document.getElementsByClassName("ql-toolbar")[0].classList.add("env-wpf");
 
-		if (reqMsg.isReadOnlyEnabled) {
+		if (initMsg.isReadOnlyEnabled) {
 			enableReadOnly();
 		} else {
 			showEditorToolbar();
@@ -469,7 +450,7 @@ function setContents(jsonStr) {
 	quill.setContents(JSON.parse(jsonStr));
 }
 
-function getText(rangeObjParam) {
+function getText(rangeObj) {
 	if (!quill || !quill.root) {
 		return '';
 	}
@@ -480,16 +461,8 @@ function getText(rangeObjParam) {
 		quill.update();
 	}
 
-	let rangeObj = null;
-	if (typeof rangeObjParam === 'string' || rangeObjParam instanceof String) {
-		rangeObj = JSON.parse(rangeObjParam);
-	} else if (rangeObjParam) {
-		rangeObj = rangeObjParam;
-	} else {
-		rangeObj = { index: 0, length: quill.getLength() };
-	}
+	rangeObj = rangeObj == null ? { index: 0, length: quill.getLength() } : rangeObj;
 
-	
 	let text = quill.getText(rangeObj.index, rangeObj.length);
 	if (wasReadOnly) {
 		document.getElementById('editor').firstChild.setAttribute('contenteditable', false);
@@ -498,27 +471,11 @@ function getText(rangeObjParam) {
 	return text;
 }
 
-function setText(textOrRangeAndTextObjParam) {
-	if (!quill || !quill.root) {
-		return '';
-	}
-	let textOrRangeAndTextObj = null;
+function setTextInRange(range, text) {
+	quill.deleteText(range.index, range.length);
+	quill.insertText(range.index, text);
 
-	if (typeof rangeObjParam === 'string' || rangeObjParam instanceof String) {
-		if (textOrRangeAndTextObjParam.includes('isHostJsonMsg: true')) {
-			//ensure param is a MpQuillContentSetTextMessage
-
-		}
-		rangeObj = JSON.parse(rangeObjParam);
-	} else if (rangeObjParam) {
-		rangeObj = rangeObjParam;
-	} else {
-		rangeObj = { index: 0, length: quill.getLength() };
-	}
-	let text = quill.getText(rangeObj.index, rangeObj.length);
-	return text;
-
-	quill.setText(text + "\n");
+	//quill.setText(text + "\n");
 }
 
 function getSelectedText() {
@@ -600,154 +557,21 @@ function createLink() {
 	}
 }
 
-function getEditorIndexFromPoint(editorPointMsgStr) {
-	// NOTE fallbackIdx is handy when user is dragging a template instance
-	// so location freeze's when drag is out of bounds
-
-	let editorPointMsgObj = null;
-	if (typeof editorPointMsgStr === 'string' || editorPointMsgStr instanceof String) {
-		editorPointMsgObj = JSON.parse(editorPointMsgStr);
-	}
-
-	if (editorPointMsgObj) {
-		let p = { x: editorPointMsgObj.x, y: editorPointMsgObj.y };
-		let fallbackIdx = editorPointMsgObj.fallbackIdx;
-		let snapToLine = editorPointMsgObj.snapToLine;
-
-		if (snapToLine) {
-			return getEditorIndexFromPoint_ByLine(p, fallbackIdx);
-		}
-		return getEditorIndexFromPoint_Absolute(p, fallbackIdx);
-	}
-	return -1;
-}
-
-function getEditorIndexFromPoint_Absolute(p, fallbackIdx) {
-	// this version checks for closest absolute position
-
-	fallbackIdx = !fallbackIdx ? -1 : fallbackIdx;
-	let closestIdx = -1;
-	let closestDist = Number.MAX_SAFE_INTEGER;
-	if (!p) {
-		return fallbackIdx;
-	}
-
-	let editorRect = document.getElementById("editor").getBoundingClientRect();
-	let erect = { x: 0, y: 0, w: editorRect.width, h: editorRect.height };
-
-	let ex = p.x - editorRect.left; //x position within the element.
-	let ey = p.y - editorRect.top; //y position within the element.
-	let ep = { x: ex, y: ey };
-	//log('editor pos: ' + ep.x + ' '+ep.y);
-	if (!isPointInRect(erect, ep)) {
-		return fallbackIdx;
-	}
-
-	for (var i = 0; i < quill.getLength(); i++) {
-		let irect = quill.getBounds(i, 1);
-		let ix = irect.left;
-		let iy = irect.top + irect.height / 2;
-		let ip = { x: ix, y: iy };
-		let idist = distSqr(ip, ep);
-		if (idist < closestDist) {
-			closestDist = idist;
-			closestIdx = i;
-		}
-	}
-
-	if (closestIdx < 0) {
-		return fallbackIdx;
-	}
-
-	return closestIdx;
-}
-
-function getEditorIndexFromPoint_ByLine(p, fallbackIdx) {
-	// this version first checks for closest line to p.y
-	fallbackIdx = !fallbackIdx ? -1 : fallbackIdx;
-
-	if (!p) {
-		return fallbackIdx;
-	}
-
-	let editorRect = document.getElementById("editor").getBoundingClientRect();
-	let erect = { x: 0, y: 0, w: editorRect.width, h: editorRect.height };
-
-	let ex = p.x - editorRect.left; //x position within the element.
-	let ey = p.y - editorRect.top; //y position within the element.
-	let ep = { x: ex, y: ey };
-	//log('editor pos: ' + ep.x + ' '+ep.y);
-	if (!isPointInRect(erect, ep)) {
-		return fallbackIdx;
-	}
-
-	let closestLineIdx = -1;
-	let closestLineDist = Number.MAX_SAFE_INTEGER;
-	let docLines = quill.getLines(0, quill.getLength());
-
-	for (var i = 0; i < docLines.length; i++) {
-		let l = docLines[i];
-		let lrect = quill.getBounds(quill.getIndex(l));
-		let lineY = lrect.top + lrect.height / 2;
-		let curYDist = Math.abs(lineY - ey);
-		if (curYDist < closestLineDist) {
-			closestLineIdx = i;
-			closestLineDist = curYDist;
-		}
-	}
-	if (closestLineIdx < 0) {
-		return fallbackIdx;
-	}
-
-	//log("closest line idx: " + closestLineIdx);
-
-	let lineMinDocIdx = quill.getIndex(docLines[closestLineIdx]);
-	let nextLineMinDocIdx = quill.getLength();
-	if (closestLineIdx < docLines.length - 1) {
-		nextLineMinDocIdx = quill.getIndex(docLines[closestLineIdx + 1]);
-	}
-
-	let closestIdx = -1;
-	let closestDist = Number.MAX_SAFE_INTEGER;
-	for (var i = lineMinDocIdx; i < nextLineMinDocIdx; i++) {
-		let irect = quill.getBounds(i, 1);
-		let ix = irect.left;
-		let idist = Math.abs(ix - ex);
-		if (idist < closestDist) {
-			closestDist = idist;
-			closestIdx = i;
-		}
-	}
-
-	if (closestIdx < 0) {
-		return fallbackIdx;
-	}
-
-	return closestIdx;
-}
-
-function getElementAtIdx(docIdx) {
-	let leafNode = quill.getLeaf(docIdx)[0].domNode;
-	let leafElementNode =
-		leafNode.nodeType == 3 ? leafNode.parentElement : leafNode;
-	return leafElementNode;
-}
-
 function getIsClipboardReady() {
 	var isReady = IsClipboardDataReady;
 	return isReady ? "yes" : "no";
 }
 
 function isReadOnly() {
-	var isEditable = parseBool($(".ql-editor").attr("contenteditable"));
+	var isEditable = document.getElementById('editor').firstChild.getAttribute('contenteditable');
 	return !isEditable;
 }
 
 function enableReadOnly() {
 	//deleteJsComAdapter();
 
-	$(".ql-editor").attr("contenteditable", false);
-	$(".ql-editor").css("caret-color", "transparent");
+	document.getElementById('editor').firstChild.setAttribute('contenteditable', false);
+	document.getElementById('editor').firstChild.style.caretColor = 'transparent';
 
 	quill.update();
 
@@ -758,54 +582,20 @@ function enableReadOnly() {
 
 	IsSubSelectionEnabled = false;
 	drawOverlay();
-
-	//return 'MpQuillResponseMessage'  updated master collection of templates
-	let qrmObj = {
-		itemEncodedHtmlData: getEncodedHtml(),
-		userDeletedTemplateGuids: userDeletedTemplateGuids,
-		updatedAllAvailableTextTemplates: IsLoaded ? getAvailableTemplateDefinitions() : []
-	};
-	let qrmJsonStr = JSON.stringify(qrmObj);
-
-	//log("enableReadOnly() response msg:");
-	//log(qrmJsonStr);
-
-	return qrmJsonStr; //btoa(qrmJsonStr);
 }
 
-function disableReadOnly(disableReadOnlyReqStrOrObj) {
-	log('read-only: DISABLED');
-	log('disableReadOnly msg:');
-	log(disableReadOnlyReqStrOrObj);
-
-	let disableReadOnlyMsg = null;
-
-	if (disableReadOnlyReqStrOrObj == null) {
-		disableReadOnlyMsg = {
-			allAvailableTextTemplates: [],
-			editorHeight: window.visualViewport.height,
-			isSilent: false
-		};
-	} else if (typeof disableReadOnlyReqStrOrObj === 'string' || disableReadOnlyReqStrOrObj instanceof String) {
-		//let disableReadOnlyReqStr_decoded = atob(disableReadOnlyReqStr);
-		//disableReadOnlyMsg = JSON.parse(disableReadOnlyReqStr_decoded);
-		disableReadOnlyMsg = JSON.parse(disableReadOnlyReqStrOrObj);
-	} else {
-		disableReadOnlyMsg = disableReadOnlyReqStrOrObj;
-	}
-
-	availableTemplates = disableReadOnlyMsg.allAvailableTextTemplates;
+function disableReadOnly(isSilent) {		
 	IsSubSelectionEnabled = true;
 
-
-	if (!disableReadOnlyMsg.isSilent) {
+	if (!isSilent) {
 		showEditorToolbar();
 		showScrollbars();
 	}
-	
 
-	$(".ql-editor").attr("contenteditable", true);
-	$(".ql-editor").css("caret-color", "black");
+	document.getElementById('editor').firstChild.setAttribute('contenteditable', true);
+	document.getElementById('editor').firstChild.style.caretColor = 'black';
+	//$(".ql-editor").attr("contenteditable", true);
+	//$(".ql-editor").css("caret-color", "black");
 
 
 	//document.body.style.height = disableReadOnlyMsg.editorHeight;
@@ -821,45 +611,30 @@ function disableReadOnly(disableReadOnlyReqStrOrObj) {
 	refreshFontFamilyPicker();
 
 	drawOverlay();
-
-	let droMsgObj = { editorWidth: DefaultEditorWidth };
-	let droMsgJsonStr = JSON.stringify(droMsgObj);
-
-	//log("disableReadOnly() response msg:");
-	//log(droMsgJsonStr);
-
-	return droMsgJsonStr; //btoa(droMsgJsonStr);
 }
 
 function enableSubSelection() {
-	//if (isReadOnly()) {
-	//	IsUnderlinesVisible = true;
-	//} else {
-	//	IsUnderlinesVisible = false;
-	//}
 	IsSubSelectionEnabled = true;
 	if (isReadOnly()) {
-		$(".ql-editor").css("caret-color", "red");
+		document.getElementById('editor').firstChild.style.caretColor = 'red';
 	} else {
 		// this SHOULD be set already in disableReadOnly but setting here to ensure state
-		$(".ql-editor").css("caret-color", "black");
+		document.getElementById('editor').firstChild.style.caretColor = 'black';
 	}
 	drawOverlay();
 }
 
 function disableSubSelection() {
-	//IsUnderlinesVisible = false;
 	IsSubSelectionEnabled = false;
 
 	if (isReadOnly()) {
-		$(".ql-editor").css("caret-color", "transparent");
+		document.getElementById('editor').firstChild.style.caretColor = 'transparent';
 
 		let selection = quill.getSelection();
 		if (selection) {
-			quill.setSelection(selection.index, 0);
+			setSelection({ index: selection.index, length: 0 });
 		}
 	}
-	
 
 	drawOverlay();
 }
