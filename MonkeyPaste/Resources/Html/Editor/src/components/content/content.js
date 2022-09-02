@@ -1,7 +1,7 @@
 var InlineTags = ['span', 'a', 'em', 'strong', 'u', 's', 'sub', 'sup', 'img'];
 var BlockTags = ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe','blockquote']
 var CopyItemId = -1;
-var CopyItemType = 'text';
+var CopyItemType = 'Text';
 
 function initContent(itemHtml) {
     setHtml(itemHtml);
@@ -10,13 +10,13 @@ function initContent(itemHtml) {
 function getContentWidth() {
 	var bounds = quill.getBounds(0, quill.getLength());
 	bounds = cleanRect(bounds);
-    return bounds.width;
+    return parseFloat(bounds.width);
 }
 
 function getContentHeight() {
 	var bounds = quill.getBounds(0, quill.getLength());
 	bounds = cleanRect(bounds);
-    return bounds.height;
+    return parseFloat(bounds.height);
 }
 
 function isBlockElement(elm) {
@@ -93,9 +93,10 @@ function getLineEndDocIdx(docIdx) {
 }
 
 function getLineIdx(docIdx) {
-	let lineIdx = quill.getLine(docIdx);
-	return lineIdx;
+	let line_blot = quill.getLine(docIdx);
+	return line_blot ? line_blot[1] : -1;
 }
+
 
 function getLineDocRange(lineIdx) {
 	lineIdx = lineIdx < 0 ? 0 : lineIdx >= getLineCount() ? getLineCount() - 1 : lineIdx;
@@ -118,9 +119,64 @@ function getLineCount() {
 	return quill.getLines().length;
 }
 
-function getCharacterRect(docIdx) {
-	let docIdx_rect = quill.getBounds(docIdx, 1);
+function getDocLength() {
+	return quill.getLength();
+}
 
+function getCharacterRect(docIdx, inflateX = false, inflateY = false) {
+	let docIdx_rect = quill.getBounds(docIdx, 1);
+	docIdx_rect = editorToScreenRect(docIdx_rect);
+
+	if (inflateX || inflateY) {
+		inflateCharacterRect(docIdx, docIdx_rect, inflateX, inflateY);
+	} else {
+		docIdx_rect = cleanRect(docIdx_rect);
+	}
+	return docIdx_rect;
+}
+
+function isDocIdxInRange(docIdx, range) {
+	return docIdx >= range.index && docIdx <= range.index + range.length;
+}
+
+function inflateCharacterRect(docIdx, docIdx_rect, inflateX, inflateY) {
+	docIdx_rect = cleanRect(docIdx_rect);
+
+	if (inflateX || inflateY) {
+		let editor_rect = getEditorRect();
+		if (inflateX) {
+			if (isDocIdxLineStart(docIdx)) {
+				//inflate first line char to editor left
+				docIdx_rect.left = editor_rect.left;
+			} else if (docIdx > 0) {
+				// inflate  char to previous uninflated rect left
+				let prev_uninflated_docIdx_rect = getCharacterRect(docIdx - 1);
+				docIdx_rect.left = prev_uninflated_docIdx_rect.right;
+			}
+
+			if (isDocIdxLineEnd(docIdx)) {
+				docIdx_rect.right = editor_rect.right;
+			} else if (docIdx < getDocLength() - 1) {
+				let next_uninflated_docIdx_rect = getCharacterRect(docIdx + 1);
+				docIdx_rect.right = next_uninflated_docIdx_rect.right;
+			}
+		}
+		if (inflateY) {
+			let line_idx = getLineIdx(docIdx);
+			let line_count = getLineCount();
+			
+			if (line_idx == 0) {
+				docIdx_rect.top = editor_rect.top;
+			} else {
+				let prev_line_rect = getLineRect(line_idx - 1);
+				docIdx_rect.top = prev_line_rect.bottom;
+			}
+
+			if (line_idx == line_count - 1) {
+				docIdx_rect.bottom = editor_rect.bottom;
+			}
+		}
+	}
 	docIdx_rect = cleanRect(docIdx_rect);
 	return docIdx_rect;
 }
@@ -158,17 +214,42 @@ function getLineRect(lineIdx) {
 	return line_rect;
 }
 
-
-var GetPointIdxInvokeCount = 0;
+function getRangeRects(range,inflateX = null, inflateY = null) {
+	let range_rects = [];
+	if (!range || range.length == 0) {
+		return range_rects;
+	}
+	let cur_line_rect = null;
+	for (var i = range.index; i < range.index + range.length; i++) {
+		let cur_idx_rect = getCharacterRect(i,inflateX,inflateY);
+		if (cur_line_rect == null) {
+			//new line
+			cur_line_rect = cur_idx_rect
+		} else {
+			cur_line_rect = rectUnion(cur_line_rect, cur_idx_rect);
+		}
+		if (isDocIdxLineEnd(i)) {
+			range_rects.push(cur_line_rect);
+			cur_line_rect = null;
+		}
+	}
+	if (cur_line_rect) {
+		// end of range is before end of line
+		range_rects.push(cur_line_rect);
+	}
+	return range_rects;
+}
 
 function isPointOnLine(p, lineIdx) {
 	let line_rect = getLineRect(lineIdx);
 	return isPointInRect(p);
 }
 
-function getPointDocLine(p) {
+function getLineIdxAndRectFromPoint(p) {
 	let lineCount = getLineCount();
-	for (var i = 0; i < lineCount; i++) {
+	let blockIdx = getBlockIdxFromPoint(p);
+	let start_line_idx = getLineIdx(blockIdx); //0;
+	for (var i = start_line_idx; i < lineCount; i++) {
 		let line_rect = getLineRect(i);
 		if (isPointInRect(line_rect, p)) {
 			return [i,line_rect];
@@ -178,7 +259,21 @@ function getPointDocLine(p) {
 	return null;
 }
 
-function getEditorIndexFromPoint(p, snapToLine = true) {
+function getBlockIdxFromPoint(p) {
+	let p_elm = document.elementFromPoint(p.x, p.y);
+	let blot = Quill.find(p_elm);
+	let block_idx = blot.offset(quill.scroll);
+	return block_idx;
+}
+
+function isPointInRange(p,range) {
+	let p_doc_idx = getDocIdxFromPoint(p, false);
+	let is_in_range = isDocIdxInRange(p_doc_idx,range);
+	return is_in_range;
+}
+
+
+function getDocIdxFromPoint(p, snapToLine, invokeId = 0) {
 	if (!p) {
 		return -1;
 	}
@@ -189,7 +284,8 @@ function getEditorIndexFromPoint(p, snapToLine = true) {
 		return -1;
 	}
 
-	let point_line = getPointDocLine(p);
+	let point_line = getLineIdxAndRectFromPoint(p);
+
 	if (!point_line || point_line[0] < 0 || !point_line[1]) {
 		return -1;
 	}
@@ -216,70 +312,6 @@ function getEditorIndexFromPoint(p, snapToLine = true) {
 		}
 	}
 	return -1;
-}
-
-function getEditorIndexFromPoint_ByLine(p, fallbackIdx) {
-	// this version first checks for closest line to p.y
-	fallbackIdx = !fallbackIdx ? -1 : fallbackIdx;
-
-	if (!p) {
-		return fallbackIdx;
-	}
-
-	let editorRect = document.getElementById("editor").getBoundingClientRect();
-	let erect = { x: 0, y: 0, w: editorRect.width, h: editorRect.height };
-
-	let ex = p.x - editorRect.left; //x position within the element.
-	let ey = p.y - editorRect.top; //y position within the element.
-	let ep = { x: ex, y: ey };
-	//log('editor pos: ' + ep.x + ' '+ep.y);
-	if (!isPointInRect(erect, ep)) {
-		return fallbackIdx;
-	}
-
-	let closestLineIdx = -1;
-	let closestLineDist = Number.MAX_SAFE_INTEGER;
-	let docLines = quill.getLines(0, quill.getLength());
-
-	for (var i = 0; i < docLines.length; i++) {
-		let l = docLines[i];
-		let lrect = quill.getBounds(quill.getIndex(l));
-		let lineY = lrect.top + lrect.height / 2;
-		let curYDist = Math.abs(lineY - ey);
-		if (curYDist < closestLineDist) {
-			closestLineIdx = i;
-			closestLineDist = curYDist;
-		}
-	}
-	if (closestLineIdx < 0) {
-		return fallbackIdx;
-	}
-
-	//log("closest line idx: " + closestLineIdx);
-
-	let lineMinDocIdx = quill.getIndex(docLines[closestLineIdx]);
-	let nextLineMinDocIdx = quill.getLength();
-	if (closestLineIdx < docLines.length - 1) {
-		nextLineMinDocIdx = quill.getIndex(docLines[closestLineIdx + 1]);
-	}
-
-	let closestIdx = -1;
-	let closestDist = Number.MAX_SAFE_INTEGER;
-	for (var i = lineMinDocIdx; i < nextLineMinDocIdx; i++) {
-		let irect = quill.getBounds(i, 1);
-		let ix = irect.left;
-		let idist = Math.abs(ix - ex);
-		if (idist < closestDist) {
-			closestDist = idist;
-			closestIdx = i;
-		}
-	}
-
-	if (closestIdx < 0) {
-		return fallbackIdx;
-	}
-
-	return closestIdx;
 }
 
 function getElementAtIdx(docIdx) {

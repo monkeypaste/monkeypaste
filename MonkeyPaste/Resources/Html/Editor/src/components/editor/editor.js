@@ -7,10 +7,11 @@ var IsLoaded = false;
 
 var EnvName = "";
 
-var IsClipboardDataReady = false;
-
 var IsPastingTemplate = false;
 var IsSubSelectionEnabled = false;
+
+var EditorContainerElement = null;
+var QuillEditorElement = null;
 
 function initConverter() {
 	reqMsg = {
@@ -55,6 +56,32 @@ function convertPlainHtml(plainHtml) {
 	//
 }
 
+function init_test() {
+	let sample1 = "<html><body><!--StartFragment--><p style='font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'>This article can be considered as the fourth instalment in the following sequence of articles:</p><p style='font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'>This article can be considered as the fourth instalment in the following sequence of articles:</p><p style='font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'>This article can be considered as the fourth instalment in the following sequence of articles:</p><ol style='margin: 10px 0px; padding: 0px 0px 0px 40px; border: 0px; color: rgb(17, 17, 17); font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'><li style='margin: 0px; padding: 0px; border: 0px; font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17);'><a href='https://www.codeproject.com/Articles/5308645/Multiplatform-UI-Coding-with-AvaloniaUI-in-Easy-Sa'	style='margin: 0px; padding: 0px; border: 0px; text-decoration: none; color: rgb(0, 87, 130);'>Multiplatform UI Coding with AvaloniaUI in Easy Samples. Part 1 - AvaloniaUI Building Blocks</a></li><li style='margin: 0px; padding: 0px; border: 0px; font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17);'><a href='https://www.codeproject.com/Articles/5314369/Basics-of-XAML-in-Easy-Samples-for-Multiplatform-A'	style='margin: 0px; padding: 0px; border: 0px; text-decoration: none; color: rgb(0, 87, 130);'>Basics of XAML in Easy Samples for Multiplatform Avalonia .NET Framework</a></li><li style='margin: 0px; padding: 0px; border: 0px; font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17);'><a href='https://www.codeproject.com/Articles/5311995/Multiplatform-Avalonia-NET-Framework-Programming-B'	style='margin: 0px; padding: 0px; border: 0px; text-decoration: none; color: rgb(0, 87, 130);'>Multiplatform Avalonia .NET Framework Programming Basic Concepts in Easy Samples</a></li></ol><p style='font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'>If you know WPF, you can read this article without reading the previous ones, otherwise, you should read the previous articles first.</p><!--EndFragment--></body></html>";
+	let sample_big = sample1 + sample1 + sample1 + sample1 + sample1 + sample1;
+
+	// reqMsg = {
+	//   envName: "web",
+	//   isPasteRequest: false,
+	//   isReadOnlyEnabled: false,
+	//   itemEncodedHtmlData: sample1 + sample2,
+	//   usedTextTemplates: []
+	// };
+	initMsg = {
+		envName: 'wpf',
+		copyItemId: 0,
+		isReadOnlyEnabled: true,
+		usedTextTemplates: {},
+		isPasteRequest: false,
+		itemEncodedHtmlData: sample1
+	}
+
+	init(initMsg);
+	disableReadOnly();
+	//enableFancyTextSelection();
+	//enableSubSelection();
+}
+
 function init(initMsg) {
 	//if (IsLoaded) {
 	//	log('editor already loaded, setting html and  ignoring...');
@@ -68,24 +95,16 @@ function init(initMsg) {
 	// quill.root.removeEventListener('drop',getEventListeners(quill.root).drop[0].listener)
 
 	if (initMsg == null) {
-		//let sample1 = '<p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,128,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">//rtbvm.HasViewChanged = true;</span></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">rtbvm.OnPropertyChanged(</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,255);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">nameof</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">(rtbvm.CurrentSize)); </span></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,255);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">var</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"> cilv =  </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,255);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">this</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">.GetVisualAncestor<</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(43,145,175);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">MpContentListView</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">>(); </span></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">cilv.UpdateAdorner();</span></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><br copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,255);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">var</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"> rtbl = cilv.GetVisualDescendents<</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(43,145,175);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">RichTextBox</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">>(); </span></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,255);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">double</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"> totalHeight = rtbl.Sum(x => x.ActualHeight) +</span></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(43,145,175);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">MpMeasurements</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">.Instance.ClipTileEditToolbarHeight + </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(43,145,175);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">MpMeasurements</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">.Instance.ClipTileDetailHeight; </span></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,255);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">var</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"> ctcv =  </span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,255);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">this</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">.GetVisualAncestor<</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(43,145,175);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">MpClipTileContainerView</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">>(); </span></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">ctcv.ExpandBehavior.Resize(totalHeight); </span></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,255);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">var</span><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"> sv = cilv.ContentListBox.GetScrollViewer(); </span></p><p class="ql-align-left"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0,0,0);"	copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">sv.InvalidateScrollInfo();</span></p><p class="ql-align-left"	copyitemblockguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><br copyiteminlineguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"></p>';
-		
-		let sample1 = "<html><body><!--StartFragment--><p style='font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'>This article can be considered as the fourth instalment in the following sequence of articles:</p><ol style='margin: 10px 0px; padding: 0px 0px 0px 40px; border: 0px; color: rgb(17, 17, 17); font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'><li style='margin: 0px; padding: 0px; border: 0px; font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17);'><a href='https://www.codeproject.com/Articles/5308645/Multiplatform-UI-Coding-with-AvaloniaUI-in-Easy-Sa'	style='margin: 0px; padding: 0px; border: 0px; text-decoration: none; color: rgb(0, 87, 130);'>Multiplatform UI Coding with AvaloniaUI in Easy Samples. Part 1 - AvaloniaUI Building Blocks</a></li><li style='margin: 0px; padding: 0px; border: 0px; font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17);'><a href='https://www.codeproject.com/Articles/5314369/Basics-of-XAML-in-Easy-Samples-for-Multiplatform-A'	style='margin: 0px; padding: 0px; border: 0px; text-decoration: none; color: rgb(0, 87, 130);'>Basics of XAML in Easy Samples for Multiplatform Avalonia .NET Framework</a></li><li style='margin: 0px; padding: 0px; border: 0px; font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17);'><a href='https://www.codeproject.com/Articles/5311995/Multiplatform-Avalonia-NET-Framework-Programming-B'	style='margin: 0px; padding: 0px; border: 0px; text-decoration: none; color: rgb(0, 87, 130);'>Multiplatform Avalonia .NET Framework Programming Basic Concepts in Easy Samples</a></li></ol><p style='font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'>If you know WPF, you can read this article without reading the previous ones, otherwise, you should read the previous articles first.</p><!--EndFragment--></body></html>";
+		//init_test();
 
-		// reqMsg = {
-		//   envName: "web",
-		//   isPasteRequest: false,
-		//   isReadOnlyEnabled: false,
-		//   itemEncodedHtmlData: sample1 + sample2,
-		//   usedTextTemplates: []
-		// };
+		//return;
 		initMsg = {
 			envName: 'wpf',
 			copyItemId: 0,
 			isReadOnlyEnabled: true,
 			usedTextTemplates: {},
 			isPasteRequest: false,
-			itemEncodedHtmlData: sample1
+			itemEncodedHtmlData: ''
 		}
 	}  
 	EnvName = initMsg.envName;
@@ -119,8 +138,7 @@ function init(initMsg) {
 		}
 	}
 
-	window.addEventListener(
-		"resize",
+	window.addEventListener("resize",
 		function (event) {
 			onWindowResize(event);
 		},
@@ -192,15 +210,6 @@ function loadQuill(reqMsg) {
 
 	quill.root.setAttribute("spellcheck", "false");
 
-	//quill.root.removeEventListener('drag', quill.root.ondrag);
-	//quill.root.removeEventListener('dragend', quill.root.ondragend);
-	//quill.root.removeEventListener('dragenter', quill.root.ondragenter);
-	//quill.root.removeEventListener('dragleave', quill.root.ondragleave);
-	//quill.root.removeEventListener('dragover', quill.root.ondragover);
-
-	//quill.root.removeEventListener("dragstart", quill.root.ondragstart, true);
-	//quill.root.removeEventListener("drop", quill.root.ondrop, true);
-
 	initTableToolbarButton();
 
 	window.addEventListener("click", onWindowClick);
@@ -208,6 +217,10 @@ function loadQuill(reqMsg) {
 	quill.on("selection-change", onEditorSelectionChanged);
 
 	quill.on("text-change", onEditorTextChanged);
+
+	document.onselectionchange = onDocumentSelectionChange;
+
+	getEditorContainerElement().firstChild.id = 'quill-editor';
 }
 
 function registerToolbar(envName) {
@@ -259,6 +272,15 @@ function showScrollbars() {
 	document.getElementById("editor").style.overflow = "auto";
 }
 
+function disbleTextWrapping() {
+	document.getElementById('editor').style.overflow = 'scroll';
+}
+
+function enableTextWrapping() {
+	document.getElementById('editor').style.overflow = 'auto';
+}
+
+
 function getTotalHeight() {
 	var totalHeight =
 		getEditorToolbarHeight() + getEditorHeight() + getTemplateToolbarHeight();
@@ -266,11 +288,11 @@ function getTotalHeight() {
 }
 
 function updateAllSizeAndPositions() {
-	//$(".ql-toolbar").css("position", "fixed");
+
 	$(".ql-toolbar").css("top", 0);
 
 	if (isEditorToolbarVisible()) {
-		$("#editor").css("top", $(".ql-toolbar").outerHeight()); 
+		$("#editor").css("top", $(".ql-toolbar").outerHeight());
 	} else {
 		$("#editor").css("top", 0);
 	}
@@ -299,6 +321,51 @@ function updateAllSizeAndPositions() {
 		//}
 		//$("#editor").css("bottom", viewportBottom - tbh);
 	}
+
+
+	////$(".ql-toolbar").css("position", "fixed");
+	//let toolbarElm = getEditorToolbarElement();
+	//let editorContainerElm = getEditorContainerElement();
+	//let editorElm = getEditorElement();
+
+	//toolbarElm.style.top = 0;
+
+	//if (isEditorToolbarVisible()) {
+	//	toolbarElm.style.top = parseFloat(toolbarElm.style.height);
+	//	//$("#editor").css("top", $(".ql-toolbar").outerHeight()); 
+	//} else {
+	//	editorContainerElm.style.top = 0;
+	//	//$("#editor").css("top", 0);
+	//}
+
+	//let wh = parseFloat(window.visualViewport.height);
+	//let eth = getEditorToolbarHeight();
+	//let tth = getTemplateToolbarHeight();
+
+	////$("#editor").css("height", wh - eth - tth);
+	//editorContainerElm.style.height = (wh - eth - tth) + 'px';
+
+	//editorContainerElm.style.width = getContentWidth() + 'px';
+	//editorElm.style.height = getContentHeight() + 'px';
+
+	//updateEditTemplateToolbarPosition();
+	//updatePasteTemplateToolbarPosition();
+
+	//drawOverlay();
+
+	//if (EnvName == "android") {
+	//	//var viewportBottom = window.scrollY + window.innerHeight;
+	//	//let tbh = $(".ql-toolbar").outerHeight();
+	//	//if (y <= 0) {
+	//	//    //keyboard is not visible
+	//	//    $(".ql-toolbar").css("top", y);
+	//	//    $("#editor").css("top", y + tbh);
+	//	//} else {
+	//	//    $(".ql-toolbar").css("top", y - tbh);
+	//	//    $("#editor").css("top", 0);
+	//	//}
+	//	//$("#editor").css("bottom", viewportBottom - tbh);
+	//}
 }
 
 function onWindowClick(e) {
@@ -343,11 +410,24 @@ function onWindowResize(e) {
 	drawOverlay();
 }
 
+function onDocumentSelectionChange(e) {
+	let range = getSelection();
+	//log("idx " + range.index + ' length "' + range.length);
+	drawOverlay();
+}
 function onEditorSelectionChanged(range, oldRange, source) {
 	//LastSelectedHtml = SelectedHtml;
 	//SelectedHtml = getSelectedHtml();
+	drawOverlay();
+
 	if (IgnoreNextSelectionChange) {
 		IgnoreNextSelectionChange = false;
+		return;
+	}
+
+	if (IsDragCancel) {
+		IsDragCancel = false;
+		quill.setSelection(oldRange);
 		return;
 	}
 
@@ -359,18 +439,10 @@ function onEditorSelectionChanged(range, oldRange, source) {
 			var text = getText({ index: range.index, length: 1 });
 			let ls = getLineStartDocIdx(range.index);
 			let le = getLineEndDocIdx(range.index);
-			log("User cursor is at " + range.index + ' idx before "' + text + '" line start: '+ls+' line end: '+le);
+			//log("User cursor is at " + range.index + ' idx before "' + text + '" line start: '+ls+' line end: '+le);
 		} else {
 			var text = getText(range);
-			log(
-				"User cursor is at " +
-				range.index +
-				" with length " +
-				range.length +
-				' and selected text "' +
-				text +
-				'"'
-			);
+			//log("User cursor is at " + range.index + " with length " + range.length + ' and selected text "' + text + '"');
 		}
 
 		refreshTemplatesAfterSelectionChange();
@@ -457,7 +529,7 @@ function getText(rangeObj) {
 
 	let wasReadOnly = isReadOnly();
 	if (wasReadOnly) {
-		document.getElementById('editor').firstChild.setAttribute('contenteditable', true);
+		getEditorElement().setAttribute('contenteditable', true);
 		quill.update();
 	}
 
@@ -465,7 +537,7 @@ function getText(rangeObj) {
 
 	let text = quill.getText(rangeObj.index, rangeObj.length);
 	if (wasReadOnly) {
-		document.getElementById('editor').firstChild.setAttribute('contenteditable', false);
+		getEditorElement().setAttribute('contenteditable', false);
 		quill.update();
 	}
 	return text;
@@ -476,6 +548,10 @@ function setTextInRange(range, text) {
 	quill.insertText(range.index, text);
 
 	//quill.setText(text + "\n");
+}
+
+function insertText(docIdx, text) {
+	quill.insertText(docIdx, text);
 }
 
 function getSelectedText() {
@@ -496,6 +572,17 @@ function getHtml() {
 	}
 	setComOutput('');
 	return '';
+}
+
+function insertHtml(docIdx, data) {
+	quill.clipboard.dangerouslyPasteHTML(docIdx, data);
+}
+
+function insertContent(docIdx, data, forcePlainText = false) {
+	// TODO need to determine data type here
+	if (forcePlainText) {
+		insertText(docIdx, data);
+	}
 }
 
 function getEncodedHtml() {
@@ -557,21 +644,16 @@ function createLink() {
 	}
 }
 
-function getIsClipboardReady() {
-	var isReady = IsClipboardDataReady;
-	return isReady ? "yes" : "no";
-}
-
 function isReadOnly() {
-	var isEditable = document.getElementById('editor').firstChild.getAttribute('contenteditable');
+	var isEditable = getEditorElement().getAttribute('contenteditable');
 	return !isEditable;
 }
 
 function enableReadOnly() {
 	//deleteJsComAdapter();
 
-	document.getElementById('editor').firstChild.setAttribute('contenteditable', false);
-	document.getElementById('editor').firstChild.style.caretColor = 'transparent';
+	getEditorElement().setAttribute('contenteditable', false);
+	
 
 	quill.update();
 
@@ -592,8 +674,8 @@ function disableReadOnly(isSilent) {
 		showScrollbars();
 	}
 
-	document.getElementById('editor').firstChild.setAttribute('contenteditable', true);
-	document.getElementById('editor').firstChild.style.caretColor = 'black';
+	getEditorElement().setAttribute('contenteditable', true);
+	//getEditorElement().style.caretColor = 'black';
 	//$(".ql-editor").attr("contenteditable", true);
 	//$(".ql-editor").css("caret-color", "black");
 
@@ -615,25 +697,28 @@ function disableReadOnly(isSilent) {
 
 function enableSubSelection() {
 	IsSubSelectionEnabled = true;
-	if (isReadOnly()) {
-		document.getElementById('editor').firstChild.style.caretColor = 'red';
+
+	if (!isEditorToolbarVisible()) {
+		//getEditorElement().style.caretColor = 'red';
 	} else {
 		// this SHOULD be set already in disableReadOnly but setting here to ensure state
-		document.getElementById('editor').firstChild.style.caretColor = 'black';
+		//getEditorElement().style.caretColor = 'black';
 	}
+	showScrollbars();
 	drawOverlay();
 }
 
 function disableSubSelection() {
 	IsSubSelectionEnabled = false;
 
-	if (isReadOnly()) {
-		document.getElementById('editor').firstChild.style.caretColor = 'transparent';
+	if (!isEditorToolbarVisible()) {
+		//getEditorElement().style.caretColor = 'transparent';
 
 		let selection = quill.getSelection();
 		if (selection) {
 			setSelection({ index: selection.index, length: 0 });
 		}
+		hideScrollbars();
 	}
 
 	drawOverlay();
@@ -707,6 +792,9 @@ function getEditorHeight() {
 	return editorRect.height;
 }
 
+
+
+
 function getEditorToolbarWidth() {
 	if (isReadOnly()) {
 		return 0;
@@ -726,5 +814,37 @@ function getEditorToolbarHeight() {
 
 function scrollToHome() {
 	document.getElementById("editor").scrollTop = 0;
+}
+
+function getEditorContainerElement() {
+	if (EditorContainerElement == null) {
+		EditorContainerElement = document.getElementById("editor");
+	}
+	return EditorContainerElement;
+}
+
+function getEditorElement() {
+	if (QuillEditorElement == null) {
+		QuillEditorElement = getEditorContainerElement().firstChild;
+	}
+	return QuillEditorElement;
+}
+
+function getEditorToolbarElement() {
+	return document.getElementsByClassName('ql-toolbar')[0]
+}
+
+function getEditorRect(clean = true) {
+	//return { left: 0, top: 0, right: window.outerWidth, bottom: window.outerHeight, width: window.outerWidth, height: window.outerHeight };
+	let temp = getEditorContainerElement().getBoundingClientRect();
+	temp = cleanRect(temp);
+	//   if (clean) {
+	//       temp.right = temp.width;
+	//       temp.bottom = temp.height;
+	//       temp.left = 0;
+	//       temp.top = 0;
+	//       temp = cleanRect(temp);
+	//}
+	return temp;
 }
 

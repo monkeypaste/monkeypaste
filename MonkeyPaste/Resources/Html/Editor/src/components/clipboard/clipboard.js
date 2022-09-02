@@ -40,7 +40,7 @@ function onPaste(e) {
     if (e.clipboardData && e.clipboardData.getData) {
         pastedText = e.clipboardData.getData('text/plain');
     }
-    alert(pastedText); // Process and handle text...
+    //alert(pastedText); 
     return false; // Prevent the default handler from running.
 }
 

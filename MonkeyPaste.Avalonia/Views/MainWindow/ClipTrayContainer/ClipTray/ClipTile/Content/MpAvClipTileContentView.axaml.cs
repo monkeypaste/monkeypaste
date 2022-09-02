@@ -46,10 +46,10 @@ namespace MonkeyPaste.Avalonia {
         private void Cc_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             var cc = sender as ContentControl;
             ContentViewDropBehavior = new MpAvContentViewDropBehavior();
-            ContentViewDropBehavior.Attach(cc.Content as IAvaloniaObject);
+            //ContentViewDropBehavior.Attach(cc.Content as IAvaloniaObject);
 
             HighlightBehavior = new MpAvContentHighlightBehavior();
-            HighlightBehavior.Attach(cc.Content as IAvaloniaObject);
+            //HighlightBehavior.Attach(cc.Content as IAvaloniaObject);
         }
 
         private async void MpAvClipTileContentView_PointerPressed(object sender, PointerPressedEventArgs e) {

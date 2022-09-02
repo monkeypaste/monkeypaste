@@ -466,7 +466,7 @@ namespace MonkeyPaste.Avalonia {
         }
         private void MpAvMainWindow_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             ExternalDropBehavior = new MpAvExternalDropBehavior();
-            ExternalDropBehavior.Attach(this);
+            //ExternalDropBehavior.Attach(this);
         }
 
         #endregion

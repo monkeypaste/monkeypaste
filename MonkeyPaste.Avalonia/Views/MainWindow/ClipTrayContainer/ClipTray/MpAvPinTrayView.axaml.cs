@@ -16,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvClipTileTitleView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             PinTrayDropBehavior = new MpAvPinTrayDropBehavior();
-            PinTrayDropBehavior.Attach(this);
+            //PinTrayDropBehavior.Attach(this);
         }
 
         private void InitializeComponent() {

@@ -12,12 +12,14 @@ function init_ext(initMsgStr) {
 	log("init request: " + initMsgStr);
 	let initMsg = null;
 
+
 	if (typeof initMsgStr === 'string' || initMsgStr instanceof String) {
 		if (hasJsonStructure(initMsgStr)) {
 			//let reqMsgStr_decoded = atob(reqMsgStr);
 			//reqMsg = JSON.parse(reqMsgStr_decoded);
-			initMsg = JSON.parse(initMsgStr);
-		} 
+			//initMsg = JSON.parse(initMsgStr);
+		}
+		initMsg = JSON.parse(initMsgStr);
 	} else {
 		log('init_ext error initMsgStr: ' + initMsgStr);
 	}

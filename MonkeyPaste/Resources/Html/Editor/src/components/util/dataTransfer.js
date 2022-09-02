@@ -1,13 +1,34 @@
 ﻿
+
+function getDataTransferObject(e) {
+    let dtObj = e.detail ? e.detail.original.dataTransfer : e.dataTransfer;
+    return dtObj;
+}
+
+function isDataTransferValid(dt) {
+    if (CopyItemType == 'Text') {
+        return hasPlainText(dt) || hasHtml(dt);
+    }
+    return false;
+}
+
+function hasPlainText(dt) {
+    return dt && dt.types && dt.types.indexOf('text/plain') > -1;
+}
+
+function hasHtml(dt) {
+    return dt && dt.types && dt.types.indexOf('text/html') > -1;
+}
+
 function convertDataTransferToPlainText(dt) {
     if (dt == null) {
         return '';
     }
-    if (dt.types.indexOf('text/plain') > -1) {
+    if (hasPlainText(dt)) {
         let itemData = dt.getData('text/plain');
         return itemData;
     }
-    if (dt.types.indexOf('text/html') > -1) {
+    if (hasHtml(dt)) {
         let itemData = dt.getData('text/html');
         itemData = parseForHtmlContentStr(itemData);
         let item_html_doc = domParser.parseFromString(itemData);

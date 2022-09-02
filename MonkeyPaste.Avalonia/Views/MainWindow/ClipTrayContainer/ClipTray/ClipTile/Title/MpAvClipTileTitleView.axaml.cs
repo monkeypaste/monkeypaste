@@ -25,10 +25,10 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvClipTileTitleView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             ClipTileTitleHighlightBehavior = new MpAvClipTileTitleHighlightBehavior();
-            ClipTileTitleHighlightBehavior.Attach(this);
+            //ClipTileTitleHighlightBehavior.Attach(this);
 
             SourceHighlightBehavior = new MpAvSourceHighlightBehavior();
-            SourceHighlightBehavior.Attach(this);
+            //SourceHighlightBehavior.Attach(this);
         }
 
         private void InitializeComponent() {

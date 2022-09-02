@@ -5,10 +5,10 @@ var IsHighlightingVisible = false;
 var HighlightRects = [];
 var SelectedHighlightRectIdx = -1;
 
-function updateOverlayBounds() {
-	let editorRect = document.getElementById('editor').getBoundingClientRect();
+var OverlayGlobalAlpha = 0.7;
 
-	let overlayCanvas = document.getElementById('overlayCanvas');
+function updateOverlayBounds(overlayCanvas) {
+    let editorRect = getEditorRect();
 	overlayCanvas.style.left = editorRect.left;
 	overlayCanvas.style.top = editorRect.top;
 	overlayCanvas.width = editorRect.width;
@@ -16,8 +16,6 @@ function updateOverlayBounds() {
 }
 
 function drawUnderlines(ctx, color = 'red', thickness = '0.5') {
-    updateOverlayBounds();
-
     let p1 = null;
     let p2 = null;
     let count = quill.getLength();
@@ -26,7 +24,7 @@ function drawUnderlines(ctx, color = 'red', thickness = '0.5') {
     for (var i = 0; i < count; i++) {
         //log('drawing idx ' + i + ' of ' + count);
 
-        let idx_rect = quill.getBounds(i);
+        let idx_rect = getCharacterRect(i); //quill.getBounds(i);
         //log('idx rect: ' + idx_rect);
 
         let isTail = i == count - 1;
@@ -36,7 +34,7 @@ function drawUnderlines(ctx, color = 'red', thickness = '0.5') {
             p1 = { x: idx_rect.left, y: idx_rect.bottom };
         } else if (idx_rect.bottom > p1.y) {
             // start of new line
-            let last_idx_rect = quill.getBounds(i - 1);
+            let last_idx_rect = getCharacterRect(i - 1);// quill.getBounds(i - 1);
             p2 = { x: last_idx_rect.right, y: last_idx_rect.bottom };
         } else if (isTail) {
             // last line
@@ -44,7 +42,7 @@ function drawUnderlines(ctx, color = 'red', thickness = '0.5') {
         }
 
         if (isPointInRect(windowRect, p1) && isPointInRect(windowRect, p2)) {
-            drawLine(ctx, p1.x, p1.y, p2.x, p2.y, color, thickness);
+            drawLine(ctx, { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y }, color, thickness);
             p1 = p2 = null;
 
             if (isTail) {
@@ -65,11 +63,10 @@ function drawHighlighting(ctx, forceColor) {
 	}
 }
 
-
-function drawDropPreview(ctx, color = 'red', thickness = '0.5') {
+function drawDropPreview(ctx, color = 'red', thickness = '0.5', line_style = [5,5], alpha = 255) {
     let drop_idx = DropIdx;
 
-    //log('dropIdx: ' + drop_idx + ' mp x:' + MousePos.x + ' y:' + MousePos.y);
+    //log('dropIdx: ' + drop_idx + ' mp x:' + LastMousePos.x + ' y:' + LastMousePos.y);
     if (drop_idx < 0) {
         return;
     }
@@ -88,6 +85,16 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5') {
     let post_line = { x1: 0, y1: post_y, x2: editor_rect.width, y2: post_y };
 
     let caret_rect = getCharacterRect(drop_idx);
+    //let caret_render_rect = caret_rect;
+    //let caret_width = 1;
+    //if (drop_idx == getDocLength() - 1) {
+    //    caret_render_rect.left -= caret_render_rect.right - caret_width;
+    //} else {
+    //    caret_render_rect.right = caret_render_rect.left - caret_width;
+    //}
+    //caret_render_rect = cleanRect(caret_render_rect);
+
+
     let caret_line = { x1: caret_rect.left, y1: caret_rect.top, x2: caret_rect.left, y2: caret_rect.bottom };
 
     IsSplitDrop = IsShiftDown; //IsCtrlDown || IsAltDown;
@@ -97,8 +104,8 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5') {
 
     // NOTE to avoid conflicts between each line as pre/post drop only use pre for first
     // line of content then only check post for others
-    IsPreBlockDrop = Math.abs(MousePos.y - doc_start_rect.top) < block_threshold || MousePos.y < doc_start_rect.top;
-    IsPostBlockDrop = Math.abs(MousePos.y - caret_rect.bottom) < block_threshold || MousePos.y > caret_rect.bottom;
+    IsPreBlockDrop = Math.abs(LastMousePos.y - doc_start_rect.top) < block_threshold || LastMousePos.y < doc_start_rect.top;
+    IsPostBlockDrop = Math.abs(LastMousePos.y - caret_rect.bottom) < block_threshold || LastMousePos.y > caret_rect.bottom;
 
     if (IsSplitDrop && CopyItemType != 'FileList') {
         IsPreBlockDrop = false;
@@ -106,6 +113,9 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5') {
     }
 
     let render_lines = [];
+    let render_caret_line = null;
+    //let render_rects = [];
+
     if (IsSplitDrop) {
         let pre_split_line = pre_line;
         pre_split_line.x1 = caret_line.x1;
@@ -115,36 +125,103 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5') {
 
         render_lines.push(pre_split_line);
         render_lines.push(post_split_line);
+
+        render_caret_line = caret_line;
+        //render_lines.push(caret_line);
+        //render_rects.push(caret_render_rect)
     } else if (IsPreBlockDrop) {
         render_lines.push(pre_line);
     } else if (IsPostBlockDrop) {
         render_lines.push(post_line);
     } else {
-        render_lines.push(caret_line);
+        render_caret_line = caret_line;
+        //render_lines.push(caret_line);
+        //render_rects.push(caret_render_rect);
     }
 
     for (var i = 0; i < render_lines.length; i++) {
         let line = render_lines[i];
-        drawLine(ctx, line.x1, line.y1, line.x2, line.y2, color, thickness, [15, 5])
+        drawLine(ctx, line, color, thickness, line_style)
+    }
+    if (render_caret_line) {
+        drawLine(ctx, render_caret_line, color, 1.5, [1, 0]);
+	}
+	//for (var i = 0; i < render_rects.length; i++) {
+ //       let rect = render_rects[i];
+ //       drawRect(ctx, rect, color, 'transparent', 0, alpha);
+	//}
+
+}
+
+function drawFancyTextSelection(ctx) {
+    let sel_rects = getRangeRects(getSelection(), false, false);
+
+    let r = FancyTextSelectionRoundedCornerRadius;
+    let def_corner_radius = { tl: r, tr: r, br: r, bl: r };
+    let max_snap_dist = 5;
+    let round_rect_groups = convertRectsToRoundRectGroups(sel_rects, max_snap_dist, def_corner_radius);
+    for (var i = 0; i < round_rect_groups.length; i++) {
+        for (var j = 0; j < round_rect_groups[i].length; j++) {
+            let rrect = round_rect_groups[i][j];
+            drawRoundedRect(ctx, rrect[1], rrect[0], 'purple', 'goldenrod', 0, 100)
+        }
     }
 
-    if (IsCtrlDown) {
-        setTextSelectionBgColor('lime');
-    } else {
-        setTextSelectionBgColor('lightblue');
+    //sel_rects.forEach((srect) => drawRoundedRect(ctx, srect, r, 'purple', 'goldenrod', 1.5, 100));
+}
+
+function drawTextSelection(ctx) {
+    if (IsTextSelectionFancy) {
+        drawFancyTextSelection(ctx);
+        return;
     }
-    if (IsAltDown) {
-        setTextSelectionFgColor('orange');
-    } else {
-        setTextSelectionFgColor('black');
-	}
+
+    let sel_bg_color = 'lightblue';
+    let sel_fg_color = 'black';
+    let caret_color = 'black';
+
+    if (isDropping()) {
+        if (isDragSource()) {
+            if (isDropValid()) {
+                if (isDragCopy()) {
+                    sel_bg_color = 'lime';
+                }
+
+                if (isDropHtml()) {
+                    sel_fg_color = 'orange';
+                }
+            } else {
+                sel_bg_color = 'salmon';
+            }
+            // NOTE always override caret during drop to make it nice and thicky
+            caret_color = 'transparent';
+		}
+    } else if (IsSubSelectionEnabled && !isEditorToolbarVisible()) {
+        caret_color = 'salmon';
+    }
+
+    setTextSelectionBgColor(sel_bg_color);
+    setTextSelectionFgColor(sel_fg_color);
+
+    setCaretColor(caret_color); 
 }
 
 
 function drawOverlay() {
     let canvas = document.getElementById('overlayCanvas');
+
+    updateOverlayBounds(canvas);
+
+    if (!canvas.getContext) {
+        return;
+    }
+
     let ctx = canvas.getContext('2d');
+    //ctx.globalAlpha = OverlayGlobalAlpha;
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    drawTextSelection(ctx);
 
     let isUnderlinesVisible = !isEditorToolbarVisible() && IsSubSelectionEnabled && !isDropping();
     if (isUnderlinesVisible) {
@@ -162,9 +239,8 @@ function drawOverlay() {
 
     let isDropPreviewVisible = isDropping();
     if (isDropPreviewVisible) {
-        drawDropPreview(ctx);
+       drawDropPreview(ctx);
     } else {
         //clearDropPreview(ctx);
     }
-
 }

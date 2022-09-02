@@ -207,11 +207,4 @@ function hasJsonStructure(str) {
     }
 }
 
-function setTextSelectionBgColor(bgColor) {
-    document.body.style.setProperty('--selbgcolor', bgColor);
-}
-
-function setTextSelectionFgColor(fgColor) {
-    document.body.style.setProperty('--selfgcolor', fgColor);
-}
 

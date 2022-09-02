@@ -170,6 +170,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if(e.Name == "WindowBindingResponse") {
+                return;
                 string msgType = e.Message.ArgumentList.GetString(0);
                 string msgJsonStr = e.Message.ArgumentList.GetString(1);
                 Dispatcher.UIThread.Post(() => {
@@ -208,6 +209,7 @@ namespace MonkeyPaste.Avalonia {
                 e.Handled = true;
                 return;
             }
+
         }
     }
     class V8Func : CefV8Handler {

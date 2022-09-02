@@ -47,8 +47,8 @@ namespace MonkeyPaste.Avalonia {
 
                 //var adivl = MpAvMainWindow.Instance.GetVisualDescendants<MpActionDesignerItemView>();
                 //dtl.AddRange(adivl.Select(x => x.ActionDesignerItemDropBehavior).Where(x => x.IsDropEnabled).ToList());
-
-                if(MpAvMainWindow.Instance.ExternalDropBehavior.IsDropEnabled) {
+                var edb = MpAvMainWindow.Instance.ExternalDropBehavior;
+                if (edb != null && edb.IsDropEnabled) {
                     dtl.Add(MpAvMainWindow.Instance.ExternalDropBehavior);
                 }
                 

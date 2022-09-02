@@ -32,13 +32,22 @@ function rectUnion(rect_a, rect_b) {
     return rect_u;
 }
 
+function inflateRect(rect, dl, dt, dr, db) {
+    rect.left += dl;
+    rect.top += dt;
+    rect.right += dr;
+    rect.bottom += db;
+    rect = cleanRect(rect);
+    return rect;
+}
+
 function cleanRect(rect) {
     return {
-        left: rect.left,
-        top: rect.top,
-        right: rect.right,
-        bottom: rect.bottom,
-        width: rect.right - rect.left,
-        height: rect.bottom - rect.top
+        left: rect ? rect.left : 0,
+        top: rect ? rect.top : 0,
+        right: rect ? rect.right : 0,
+        bottom: rect ? rect.bottom : 0,
+        width: rect ? rect.right - rect.left : 0,
+        height: rect ? rect.bottom - rect.top : 0
     };
 }

@@ -11,7 +11,13 @@ var IsCtrlDown = false; //duplicate
 var IsShiftDown = false; //split 
 var IsAltDown = false; // w/ formatting (as html)? ONLY formating? dunno
 
-var MousePos = { x: -1, y: -1 };
+var IsDragCancel = false; // flagged from drag_end  evt resetDragDrop then unset in editorSelectionChange which restores selection
+
+
+var LastMousePos = null;
+var LastMouseUpdateDateTime = null;
+
+var DropProcessInvokeCount = 0;
 
 function initDragDrop() {
     initDragDropOverrides();
@@ -20,12 +26,15 @@ function initDragDrop() {
     let allDocTagsQueryStr = allDocTags.join(',');
     let editorElms = document.getElementById('editor').querySelectorAll(allDocTagsQueryStr);
 
+    enableDragDropOnElement(document.body);
+    enableDragDropOnElement(window);
     enableDragDropOnElement(document.getElementById('editor'));
-    Array.from(editorElms).forEach(elm => {
-       // enableDragDropOnElement(elm);
-    });    
+    //Array.from(editorElms).forEach(elm => {
+    //    enableDragDropOnElement(elm);
+    //});    
 
-    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mousemove', onMouseMove_dragOverFallback);
+    //window.addEventListener('keydown', onKeyDown);
 }
 
 
@@ -36,40 +45,88 @@ function initDragDropOverrides() {
 
         var event2 = new CustomEvent('mp_dragstart', { detail: { original: event } });
         event.target.dispatchEvent(event2);
+
         event.stopPropagation();
+
+        //onDragEnter(event);
     }, true);
 
     window.addEventListener('dragend', function (event) {
-        //var event2 = new CustomEvent('mp_dragstart', { detail: { original: event } });
+        //var event2 = new CustomEvent('mp_dragend', { detail: { original: event } });
         //event.target.dispatchEvent(event2);
+
         event.stopPropagation();
 
-        resetDragDrop();
+        resetDragDrop(true);
     }, true);
 
     window.addEventListener('drop', function (event) {
         //var event2 = new CustomEvent('mp_drop', { detail: { original: event } });
         //event.target.dispatchEvent(event2);
+
         event.stopPropagation();
 
         onDrop(event);
     }, true);
+
+    //window.addEventListener('dragenter', function (event) {
+    //    var event2 = new CustomEvent('mp_dragenter', { detail: { original: event } });
+    //    event.target.dispatchEvent(event2);
+
+    //    event.stopPropagation();
+    //}, true);
+
+    //window.addEventListener('dragover', function (event) {
+    //    var event2 = new CustomEvent('mp_dragover', { detail: { original: event } });
+    //    event.target.dispatchEvent(event2);
+
+    //    event.stopPropagation();
+    //}, true);
+
+
+    //window.addEventListener('dragover', function (event) {
+    //    var event2 = new CustomEvent('mp_dragover', { detail: { original: event } });
+    //    event.target.dispatchEvent(event2);
+
+    //    event.stopPropagation();
+    //}, true);
+
+
 }
 
-function enableDragDropOnElement(elm) {
-    if (InlineTags.includes(elm.tagName.toLowerCase())) {
-        elm.setAttribute('draggable', true);
 
-        elm.addEventListener('mp_dragstart', onDragStart);
-    } else if (BlockTags.includes(elm.tagName.toLowerCase())) {
+function enableDragDropOnElement(elm) {
+    if (elm.tagName) {
+        if (InlineTags.includes(elm.tagName.toLowerCase())) {
+            elm.setAttribute('draggable', true);
+
+            elm.addEventListener('mp_dragstart', onDragStart);
+        } else if (BlockTags.includes(elm.tagName.toLowerCase())) {
+
+            elm.addEventListener('dragenter', onDragEnter)
+            elm.addEventListener('dragover', onDragOver);
+            elm.addEventListener('dragleave', onDragLeave);
+            elm.addEventListener('drop', onDrop);
+
+            //elm.addEventListener('mp_drop', onDrop);
+        } else if (elm.nodeName == 'BODY') {
+            // only used to capture mouse when outside editor
+            //elm.addEventListener('dragenter', onDragEnter);
+            //elm.addEventListener('dragleave', onDragLeave);
+            elm.addEventListener('dragover', onDragOver);
+            elm.addEventListener('drop', onDrop);
+        } else {
+
+            log('dragdrop warning! attempting to enable unknown element: ' + elm.id);
+		}
+	}
+     else {
 
         elm.addEventListener('dragenter', onDragEnter)
         elm.addEventListener('dragover', onDragOver);
         elm.addEventListener('dragleave', onDragLeave);
         elm.addEventListener('drop', onDrop);
-
-        elm.addEventListener('mp_drop', onDrop);
-    }
+	}
     //elm.addEventListener('drop', onDrop);
 }
 
@@ -77,12 +134,24 @@ function isDropping() {
     return DropElm != null;
 }
 
-function isDuplicate() {
+function isDragCopy() {
+    return IsAltDown;
+}
+
+function isDragCut() {
+    return !IsAltDown;
+}
+
+function isDropHtml() {
     return IsCtrlDown;
 }
 
-function isFormatted() {
-    return IsAltDown;
+function isDropPlainText() {
+    return !IsCtrlDown;
+}
+
+function isBlockDrop() {
+    return IsPreBlockDrop || IsPostBlockDrop || IsSplitDrop;
 }
 
 function isDragSource() {
@@ -90,21 +159,67 @@ function isDragSource() {
     return selection.length > 0;
 }
 
+function isDragDataValid(dt) {
+    if (isDataTransferValid(dt)) {
+        return true;
+    }
+    return false;
+}
 
-function resetDragDrop() {
+function isDragValid(dt,emp) {
+    if (isDragDataValid(dt)) {
+        let sel_range = getSelection();
+        if (isPointInRange(emp, sel_range)) {
+            return false;
+        }
+        return true;
+    }
+    return false;
+}
+
+function isDropValid() {
+    return DropIdx >= 0;
+}
+
+function resetDragDrop(isEscCancel = false) {
+    IsDragCancel = isEscCancel;
+
     DropElm = null;
-    setTextSelectionBgColor('lightblue');
-    setTextSelectionFgColor('black');
+    //setTextSelectionBgColor('lightblue');
+    //setTextSelectionFgColor('black');
 
     IsPreBlockDrop = false;
     IsPostBlockDrop = false;
     IsSplitDrop = false;
 
-    MousePos = { x: -1, y: -1 };
+    LastMousePos = null;
+    LastMouseUpdateDateTime = null;
 
     DropIdx = -1;
 
+    DropProcessInvokeCount = 0;
+
+    quill.update();
+
+    enableTextWrapping();
+    //setCaretColor('black');
+
     drawOverlay();
+}
+
+function startDrop(e) {
+    if (e.currentTarget.id == 'editor') {
+        let dt = getDataTransferObject(e);
+        if (isDragDataValid(dt)) {
+            DropElm = e.currentTarget;
+		}
+    }
+
+    if (isDropping()) {
+        //setCaretColor('transparent');
+        disbleTextWrapping();
+        showScrollbars();
+	}
 }
 
 function getEditorMousePos(e) {
@@ -114,54 +229,248 @@ function getEditorMousePos(e) {
 
     let mp = { x: parseFloat(e.clientX), y: parseFloat(e.clientY) };
 
-    let editor_rect = getEditorRect(false);
+    //let editor_rect = getEditorRect(false);
 
-    mp.x = mp.x - editor_rect.left;
-    mp.y = mp.y - editor_rect.top;
+    //mp.x = mp.x - editor_rect.left;
+    //mp.y = mp.y - editor_rect.top;
 
     return mp;
 }
 
 function updateModKeys(e) {
+    let isModChanged =
+        IsCtrlDown != e.ctrlKey ||
+        IsAltDown != e.altKey ||
+        IsShiftDown != e.shiftKey;
+
     IsCtrlDown = e.ctrlKey;
     IsAltDown = e.altKey;
     IsShiftDown = e.shiftKey;
-    if (IsCtrlDown || IsAltDown || IsShiftDown) {
-        return;
+
+    if (isModChanged) {
+        drawOverlay();
 	}
 }
 
-function onMouseMove(e) {
-    if (isDropping() && parseInt(e.buttons) == 0) {
-        resetDragDrop();
+function getDragData(dt) {
+    // NOTE CefDragData should be pre-processed by host and ready from drop
+
+    // TODO should deal w/ CefDragData here or it shouldn't matter
+
+    //let item_data = isFormatted() ?
+    //    convertDataTransferToHtml(dt) :
+    //    convertDataTransferToPlainText(dt);
+    //let drag_data = convertDataTransferToHtml(dt);
+    if (isDragSource()) {
+        let sel = getSelection();
+        return getText(sel);
 	}
+    let drag_data = convertDataTransferToPlainText(dt);
+    return drag_data;
+}
+
+function dropData(docIdx, data) {
+    //quill.clipboard.dangerouslyPasteHTML(DropIdx + 1, drop_content_data);
+    insertContent(docIdx, data, true);
+}
+
+function onMouseMove_dragOverFallback(e) {
+    if (!isDropping()) {
+        return;
+    }
+    resetDragDrop();
+    return;
+
+    if (parseInt(e.buttons) == 0) {
+        resetDragDrop();
+        return;
+    }
+
+    // dragging must be outside editor (otherwise this event is suppressed), likely in a toolbar but still within window
+    if (DropIdx < 0) {
+        return;
+	}
+    LastMousePos = getEditorMousePos(e);
+    LastMouseUpdateDateTime = Date.now();
+
+    DropIdx = -1;
+    drawOverlay();
+}
+
+function onKeyDown(e) {
+    // unused only for debugging
+    if (!isDropping()) {
+        return;
+    }
+    return;
 }
 
 function onDragEnter(e) {
-    //log('onDragEnter: ' + e);
-    DropElm = e.currentTarget;
+    startDrop(e);
+
     updateModKeys(e);
 
     drawOverlay();
 }
+
 function onDragOver(e) {
-    //log('onDragOver: ' + e);
     let mp = getEditorMousePos(e);
     updateModKeys(e);
         
     if (isDropping()) {
-        e.preventDefault();
+        let min_drag_mouse_delta_dist = 1;
+        let cur_date_time = Date.now();
 
-        if (dist(MousePos, mp) > 1) {
-            MousePos = mp;
-            DropIdx = getEditorIndexFromPoint(MousePos);
-            log('Mouse DocIdx: ' + DropIdx + 'Mouse Pos: x: ' + MousePos.x + ' y: ' + MousePos.y); 
+        LastMouseUpdateDateTime = LastMouseUpdateDateTime == null ? cur_date_time : LastMouseUpdateDateTime;
+        let m_dt = LastMouseUpdateDateTime - cur_date_time;
+
+        LastMousePos = LastMousePos == null ? mp : LastMousePos;
+        let m_delta_dist = dist(mp, LastMousePos);
+
+        let m_v = m_delta_dist / m_dt;
+
+        let do_update = m_delta_dist == 0 && m_v == 0;//dist(LastMousePos, mp) > min_drag_mouse_delta_dist
+        //log('m_v: ' + m_v + ' m_delta_dist: ' + m_delta_dist);
+        // NOTE to optimize only up
+        //let do_drop_update = m_delta_dist > min_drag_mouse_delta_dist &&
+        LastMousePos = mp;
+        LastMouseUpdateDateTime = cur_date_time;
+        if (do_update) {
+            
+            let dt = getDataTransferObject(e);
+            let is_valid = isDragValid(dt, LastMousePos);
+            if (is_valid) {
+                e.preventDefault();
+
+                DropProcessInvokeCount++;
+                DropIdx = getDocIdxFromPoint(LastMousePos, true, DropProcessInvokeCount);
+
+
+                //let mp_elm = document.elementFromPoint(LastMousePos.x, LastMousePos.y);
+                //let blot = Quill.find(mp_elm);
+                //let test_index = blot.offset(quill.scroll);
+
+                //let caret_obj = Document.caretPositionFromPoint(LastMousePos.x, LastMousePos.y);
+                //let caret_elm = caret_obj.offsetNode;
+                //let caret_blot = Quill.find(caret_elm);
+                //let test_index2 = blot.offset(quill.scroll);
+
+                log('DropIdx: ' + DropIdx);// + ' TestIdx1: ' + test_index + ' TestIdx2: ' + test_index2);
+
+            } else {
+                DropIdx = -1;
+			}
+
+            
+
+            // NOTE to optimize only updating overlay when mouse move is significant enough
+            drawOverlay();
+            //log('Mouse DocIdx: ' + DropIdx + ' Mouse Pos: x: ' + LastMousePos.x + ' y: ' + LastMousePos.y + ' call count: ' + DropProcessInvokeCount); 
         }
     } 
-    drawOverlay();
 }
 function onDragLeave(e) {
     drawOverlay();
+}
+
+function onDrop(e) {
+    log('onDrop called  ');
+    if (!isDropValid()) {
+        log('drop error! drop attempted w/ DropIdx -1 it should be canceled before getting here')
+        resetDragDrop();
+        return;
+    }
+
+    let cur_drop_idx = DropIdx;
+
+    let is_internal_drop = isDragSource();
+    let is_host_drop = !is_internal_drop && CefDragData == null;
+
+    if (!is_internal_drop && !is_host_drop) {
+        log('drop error! drag is not internal and CefDragData == null host should be canceling drag events');
+        resetDragDrop();
+        return;
+	}        
+
+    let dt = getDataTransferObject(e);
+    let drop_content_data = getDragData(dt);
+
+    if (!drop_content_data || drop_content_data == '') {
+        log('drop warning! drop data null or empty, resetting...');
+        resetDragDrop();
+        return;
+	}
+
+
+    if (isDragCut()) {
+
+        if (is_internal_drop) {
+            let cur_sel = quill.getSelection();
+            if (cur_drop_idx > cur_sel.index) {
+                // when dropidx is after cut remove cut length from drop idx
+                log('drop cut adjusted from: ' + cur_drop_idx);
+                cur_drop_idx -= cur_sel.length;
+                log('drop cut adjusted to: ' + cur_drop_idx);
+			}
+            setTextInRange(cur_sel, '');
+        } else {
+            // NOTE host should be notified of cut here or just handles if drop is success
+
+        }
+    }
+    // to retain selection store doc length before paste to know drop data length (diff'd w/ length after)
+    let pre_doc_length = quill.getLength();
+
+    let length_delta = 0;
+    let post_sel_start_idx = cur_drop_idx;
+
+    if (IsPreBlockDrop) {
+        let isFirstLine = getLineIdx(cur_drop_idx) == 0;
+        if (!isFirstLine) {
+            log('WARNING! drop is flagged as pre block but not 1st line line is ' + getLineIdx(cur_drop_idx));
+        } else {
+            cur_drop_idx = 0;
+        }
+        quill.insertText(0, '\n');
+        dropData(0, drop_content_data);
+
+        length_delta = quill.getLength() - pre_doc_length - 1;
+        post_sel_start_idx = 0;
+    } else if (IsPostBlockDrop) {
+        cur_drop_idx = getLineEndDocIdx(cur_drop_idx);
+        quill.insertText(cur_drop_idx, '\n');
+        dropData(cur_drop_idx + 1, drop_content_data);
+
+        length_delta = quill.getLength() - pre_doc_length - 1;
+        post_sel_start_idx = cur_drop_idx + 1;
+    } else if (IsSplitDrop) {
+        quill.insertText(cur_drop_idx, '\n');
+        quill.insertText(cur_drop_idx, '\n');
+        dropData(cur_drop_idx + 1, drop_content_data);
+
+        length_delta = quill.getLength() - pre_doc_length - 2;
+        post_sel_start_idx = cur_drop_idx + 1;
+    } else {
+        dropData(cur_drop_idx, drop_content_data);
+
+        length_delta = quill.getLength() - pre_doc_length;
+    }
+
+    quill.setSelection(post_sel_start_idx, length_delta);
+
+    resetDragDrop();
+}
+
+function onDragStart(e) {
+    log('drag started yo');
+}
+
+function onCefDragEnter(text) {
+    let decodedText = atob(text);
+    CefDragData = decodedText;
+    log('onCefDragEnter called with text:');
+    log(decodedText);
+
 }
 
 
@@ -214,114 +523,5 @@ function onDragLeave(e) {
 //    resetDragDrop();
 //}
 
-function onDrop(e) {
-    log('onDrop: ' + e);
-
-    
-    let drop_data = '';
-    if (isFormatted()) {
-        drop_data = convertDataTransferToHtml(e.detail.original.dataTransfer);
-	}
-    if (isDragSource()) {
-
-        
-	}
-
-    if (CefDragData) {
-        //e.preventDefault();
-        //itemHtml = retargetPlainTextClipboardData(CefDragData);
-        //CefDragData = null;
-        //let dropIdx = 0;//getEditorIndexFromPoint_ByLine({ x: e.clientX, y: e.clientY });
-        quill.setSelection(DropIdx, 0);
-        quill.insertText(0, CefDragData);
-        //quill.clipboard.dangerouslyPasteHTML(dropIdx, CefDragData);
-    } else {
-        let dt = e.detail ? e.detail.original.dataTransfer : e.dataTransfer;
-
-        //let item_data = isFormatted() ?
-        //    convertDataTransferToHtml(dt) :
-        //    convertDataTransferToPlainText(dt);
-        let item_data = convertDataTransferToHtml(dt);
-
-        if (item_data != '') {
-            if (!isDuplicate()) {
-                setTextInRange(quill.getSelection(), '');
-            }
-
-            //store doc length before paste to know drop data length (diff'd w/ length after)
-            let pre_doc_length = quill.getLength();
-            let length_delta = 0;
-            let post_sel_start_idx = DropIdx;
-
-            if (IsPreBlockDrop) {
-                let isFirstLine = getLineIdx(DropIdx) == 0;
-                if (!isFirstLine) {
-                    log('WARNING! drop is flagged as pre block but not 1st line line is ' + getLineIdx(DropIdx));
-                } else {
-                    DropIdx = 0;
-                }
-                quill.insertText(0, '\n');
-                quill.clipboard.dangerouslyPasteHTML(0, item_data);
-
-                length_delta = quill.getLength() - pre_doc_length - 1;
-                post_sel_start_idx = 0;
-            } else if (IsPostBlockDrop) {
-                DropIdx = getLineEndDocIdx(DropIdx);
-                quill.insertText(DropIdx, '\n');
-                quill.clipboard.dangerouslyPasteHTML(DropIdx + 1, item_data);
-
-                length_delta = quill.getLength() - pre_doc_length - 1;
-                post_sel_start_idx = DropIdx + 1;
-            } else if (IsSplitDrop) {
-                quill.insertText(DropIdx, '\n');
-                quill.insertText(DropIdx, '\n');
-                quill.clipboard.dangerouslyPasteHTML(DropIdx + 1, item_data);
-
-                length_delta = quill.getLength() - pre_doc_length - 2;
-                post_sel_start_idx = DropIdx + 1;
-            } else {
-                quill.clipboard.dangerouslyPasteHTML(DropIdx, item_data);
-
-                length_delta = quill.getLength() - pre_doc_length;
-            }
-            quill.setSelection(post_sel_start_idx, length_delta);
-
-
-            //if (IsSplitDrop || IsPostBlockDrop) {
-            //    setTextInRange({ index: DropIdx, length: 1 }, '\n');
-            //    DropIdx++;
-            //}
-            //// SECURITY paste data should be sanitized here when html
-            ////quill.clipboard.dangerouslyPasteHTML(DropIdx, item_data);
-
-            //if (IsPreBlockDrop || IsPostBlockDrop) {
-            //    let length_delta = quill.getLength() - pre_doc_length;
-            //    DropIdx += length_delta + 1;
-            //}
-            //if (IsPreBlockDrop || IsPostBlockDrop || IsSplitDrop) {
-            //    setTextInRange({ index: DropIdx, length: 1 }, '\n');
-            //}
-            
-            //if (isHtml) {
-            //    quill.clipboard.dangerouslyPasteHTML(dropIdx, itemData);
-            //} else {
-            //    quill.insertText(dropIdx, itemData);
-            //}
-        }
-    }
-    resetDragDrop();
-}
-
-function onDragStart(e) {
-    log('drag started yo');
-}
-
-function onCefDragEnter(text) {
-    let decodedText = atob(text);
-    CefDragData = decodedText;
-    log('onCefDragEnter called with text:');
-    log(decodedText);
-
-}
 
 

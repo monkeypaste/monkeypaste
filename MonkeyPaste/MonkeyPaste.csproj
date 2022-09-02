@@ -129,6 +129,7 @@
     <None Remove="Resources\Html\Editor\src\components\content\content_with_source_attributes.js" />
     <None Remove="Resources\Html\Editor\src\components\dragdrop\dragdrop.js" />
     <None Remove="Resources\Html\Editor\src\components\editor\editor.js" />
+    <None Remove="Resources\Html\Editor\src\components\editor\selection.js" />
     <None Remove="Resources\Html\Editor\src\components\font\font.js" />
     <None Remove="Resources\Html\Editor\src\components\overlay\overlay.js" />
     <None Remove="Resources\Html\Editor\src\components\table\table.js" />
@@ -136,7 +137,7 @@
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\create\createTemplateToolbarItem.js" />
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\edit\editTemplateToolbar.js" />
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\paste\pasteTemplateToolbar.js" />
-    <None Remove="Resources\Html\Editor\src\components\util\dataTransfer.js" />
+    <None Remove="Resources\Html\Editor\src\components\util\color.js" />
     <None Remove="Resources\Html\Editor\src\components\util\debug.js" />
     <None Remove="Resources\Html\Editor\src\components\util\graphics.js" />
     <None Remove="Resources\Html\Editor\src\components\util\helpers.js" />
@@ -260,6 +261,9 @@
     <EmbeddedResource Include="Resources\Html\Editor\src\components\editor\editor.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\overlay\selection.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\font\font.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -281,10 +285,10 @@
     <EmbeddedResource Include="Resources\Html\Editor\src\components\template\toolbar\paste\pasteTemplateToolbar.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\dataTransfer.js">
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\debug.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\debug.js">
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\color.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\math.js">
@@ -367,6 +371,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\src\components\editor\quill-style.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Html\Editor\src\components\overlay\overlay-style.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\src\components\template\template-style.css">
