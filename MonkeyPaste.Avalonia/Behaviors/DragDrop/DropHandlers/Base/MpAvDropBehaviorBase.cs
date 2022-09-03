@@ -31,6 +31,8 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        
+
         #region Properties
 
         public MpAvContentAdorner DropLineAdorner { get; set; }

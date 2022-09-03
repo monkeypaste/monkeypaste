@@ -666,6 +666,36 @@ namespace MonkeyPaste {
 
             #region Shortcuts
 
+            await InitDefaultShortcutsAsync();
+
+            #endregion
+
+
+            #region Icon
+
+            var sourceIcon = await MpIcon.Create(MpBase64Images.AppIcon);
+
+            #endregion
+
+            #region Source
+
+            var process = Process.GetCurrentProcess();
+            string thisAppPath = process.MainModule.FileName;
+            string thisAppName = MpPrefViewModel.Instance.ApplicationName;
+            var thisApp = await MpApp.Create(thisAppPath, thisAppName, sourceIcon.Id);
+            var thisAppSource = await MpSource.Create(appId: thisApp.Id, urlId: 0);
+            MpPrefViewModel.Instance.ThisAppSourceId = thisAppSource.Id;
+
+            var osApp = await MpApp.Create(MpPlatformWrapper.Services.OsInfo.OsFileManagerPath, MpPlatformWrapper.Services.OsInfo.OsFileManagerName);
+            var osAppSource = await MpSource.Create(osApp.Id, 0);
+            MpPrefViewModel.Instance.ThisOsFileManagerSourceId = osAppSource.Id;
+
+            #endregion
+
+            MpConsole.WriteTraceLine(@"Created all default tables");
+        }
+
+        private static async Task InitDefaultShortcutsAsync() {
             List<string[]> defaultShortcutDefinitions = new List<string[]>() {
                 // ORDER:
                 // guid,keyString,shortcutType,routeType
@@ -707,42 +737,17 @@ namespace MonkeyPaste {
                  new string[] {"09df97ea-f786-48d9-9112-a60266df6586","PageDown", "NextPage", "Internal"},
                  new string[] {"a39ac0cb-41e4-47b5-b963-70e388dc156a","Control+H", "FindAndReplaceSelectedItem", "Internal"},
                  new string[] {"cb1ac03b-a20f-4911-bf4f-bc1a858590e3", "Control+L", "ToggleMainWindowLocked", "Internal"},
-                 new string[] {"d73204f5-fbed-4d87-9dca-6dfa8d8cba82", "Control+K", "ToggleFilterMenuVisible", "Internal"}
+                 new string[] {"d73204f5-fbed-4d87-9dca-6dfa8d8cba82", "Control+K", "ToggleFilterMenuVisible", "Internal"},
+                 new string[] { "49f44a89-e381-4d6a-bf8c-1090eb443f17", "Control+Q", "ExitApplication", "Internal"}
             };
 
-            foreach(var defaultShortcut in defaultShortcutDefinitions) {
+            foreach (var defaultShortcut in defaultShortcutDefinitions) {
                 await MpShortcut.CreateAsync(
                     guid: defaultShortcut[0],
                     keyString: defaultShortcut[1],
                     shortcutType: defaultShortcut[2].ToEnum<MpShortcutType>(),
                     routeType: defaultShortcut[3].ToEnum<MpRoutingType>());
             }
-
-            #endregion
-
-
-            #region Icon
-
-            var sourceIcon = await MpIcon.Create(MpBase64Images.AppIcon);
-
-            #endregion
-
-            #region Source
-
-            var process = Process.GetCurrentProcess();
-            string thisAppPath = process.MainModule.FileName;
-            string thisAppName = MpPrefViewModel.Instance.ApplicationName;
-            var thisApp = await MpApp.Create(thisAppPath, thisAppName, sourceIcon.Id);
-            var thisAppSource = await MpSource.Create(appId: thisApp.Id, urlId: 0);
-            MpPrefViewModel.Instance.ThisAppSourceId = thisAppSource.Id;
-
-            var osApp = await MpApp.Create(MpPlatformWrapper.Services.OsInfo.OsFileManagerPath, MpPlatformWrapper.Services.OsInfo.OsFileManagerName);
-            var osAppSource = await MpSource.Create(osApp.Id, 0);
-            MpPrefViewModel.Instance.ThisOsFileManagerSourceId = osAppSource.Id;
-
-            #endregion
-
-            MpConsole.WriteTraceLine(@"Created all default tables");
         }
 
         private static void NotifyRemoteUpdate(MpDbLogActionType actionType, object dbo, string sourceClientGuid) {

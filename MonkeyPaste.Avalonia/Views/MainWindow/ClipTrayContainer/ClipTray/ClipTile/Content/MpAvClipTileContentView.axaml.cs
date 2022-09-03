@@ -11,20 +11,11 @@ using Xamarin.Forms.Internals;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileContentView : MpAvUserControl<MpAvClipTileViewModel> {
-        public MpAvContentViewDropBehavior ContentViewDropBehavior { get; private set; }
-        public MpAvContentHighlightBehavior HighlightBehavior { get; private set; }
+        public MpAvContentViewDropBehavior ContentViewDropBehavior { get;  set; }
+        public MpAvContentHighlightBehavior HighlightBehavior { get;  set; }
 
 
-        public MpAvIContentView ContentView {
-            get {
-                var wv = this.GetVisualDescendant<MpAvCefNetWebView>();
-                if(wv == null) {
-                    var tb = this.GetVisualDescendant<MpAvTextBox>();
-                    return tb;
-                }
-                return wv;
-            }
-        }
+        public MpAvIContentView ContentView { get; private set; }
 
         public MpAvClipTileContentView() {
             InitializeComponent();
@@ -45,11 +36,9 @@ namespace MonkeyPaste.Avalonia {
 
         private void Cc_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             var cc = sender as ContentControl;
-            ContentViewDropBehavior = new MpAvContentViewDropBehavior();
-            //ContentViewDropBehavior.Attach(cc.Content as IAvaloniaObject);
-
-            HighlightBehavior = new MpAvContentHighlightBehavior();
-            //HighlightBehavior.Attach(cc.Content as IAvaloniaObject);
+            var actual_content_control = cc.Content as Control;
+            ContentView = actual_content_control as MpAvIContentView;
+            MpAvViewBehaviorFactory.BuildAllViewBehaviors(this, actual_content_control);
         }
 
         private async void MpAvClipTileContentView_PointerPressed(object sender, PointerPressedEventArgs e) {

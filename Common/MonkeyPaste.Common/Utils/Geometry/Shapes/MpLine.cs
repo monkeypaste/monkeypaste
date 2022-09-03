@@ -7,25 +7,29 @@ using System.Windows;
 
 namespace MonkeyPaste.Common {
     public class MpLine : MpShape {
-        public MpPoint P1 {
-            get => Points[0];
-            set => Points[0] = value;
-        }
-        public MpPoint P2 {
-            get => Points[1];
-            set => Points[1] = value;
-        }
+        #region Properties
 
-        
+        public override MpPoint[] Points => new MpPoint[] { P1, P2 };
+        public MpPoint P1 { get; set; }
+        public MpPoint P2 { get; set; }
 
-        public MpLine(MpPoint p1, MpPoint p2) {
-            Points = new MpPoint[] { p1, p2 };
-        }
+        #endregion
+
+
+        #region Constructors
+
 
         public MpLine() : this(new MpPoint(), new MpPoint()) { }
 
         public MpLine(double x1, double y1, double x2, double y2) 
             : this(new MpPoint(x1,y1),new MpPoint(x2,y2)) { }
+
+        public MpLine(MpPoint p1, MpPoint p2) {
+            P1 = p1;
+            P2 = p2;
+        }
+
+        #endregion
 
         public override string ToString() {
             return $"P1: ({P1.X},{P1.Y}),({P2.X},{P2.Y})";

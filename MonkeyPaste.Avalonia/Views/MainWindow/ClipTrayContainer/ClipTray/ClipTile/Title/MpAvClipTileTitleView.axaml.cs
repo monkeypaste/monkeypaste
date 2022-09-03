@@ -15,8 +15,8 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileTitleView : MpAvUserControl<MpAvClipTileViewModel> {
-        public MpAvClipTileTitleHighlightBehavior ClipTileTitleHighlightBehavior { get; private set; }
-        public MpAvSourceHighlightBehavior SourceHighlightBehavior { get; private set; }
+        public MpAvClipTileTitleHighlightBehavior ClipTileTitleHighlightBehavior { get; set; }
+        public MpAvSourceHighlightBehavior SourceHighlightBehavior { get; set; }
 
         public MpAvClipTileTitleView() {
             InitializeComponent();
@@ -24,11 +24,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MpAvClipTileTitleView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            ClipTileTitleHighlightBehavior = new MpAvClipTileTitleHighlightBehavior();
-            //ClipTileTitleHighlightBehavior.Attach(this);
-
-            SourceHighlightBehavior = new MpAvSourceHighlightBehavior();
-            //SourceHighlightBehavior.Attach(this);
+            MpAvViewBehaviorFactory.BuildAllViewBehaviors(this, this);
         }
 
         private void InitializeComponent() {

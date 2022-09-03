@@ -138,7 +138,7 @@ namespace MonkeyPaste.Avalonia {
             frame.SendProcessMessage(CefProcessId.Renderer, cefMsg);
 
             while (_lastResult == null) {
-                if(_lastResult == MpCefNetApplication.JS_REF_ERROR) {
+                if(_lastResult == MpAvCefNetApplication.JS_REF_ERROR) {
                     _lastResult = null;
                     EvaluateJavascriptAsync(script, retryAttempt + 1).FireAndForgetSafeAsync(DataContext as MpViewModelBase);
                 }

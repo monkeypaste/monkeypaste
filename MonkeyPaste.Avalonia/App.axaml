@@ -106,6 +106,9 @@
             <Setter Property="Background"
                     Value="Transparent" />
         </Style>
+
+
+
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>
@@ -138,6 +141,24 @@
         <Thickness x:Key="ListBoxItemPadding">
             5,5,5,5
         </Thickness>
+        <SolidColorBrush x:Key="DefaultBorderBrush_unselected">
+            Transparent
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="DefaultBorderBrush_selected">
+            Red
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="IsHoveringBorderBrush_unselected">
+            Yellow
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="IsHoveringBorderBrush_selected">
+            SpringGreen
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="CanResizeBorderBrush">
+            DeepPink
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="IsResizingBorderBrush">
+            LightPink
+        </SolidColorBrush>
     </Application.Resources>
     <!--<NativeMenu.Menu>
         <NativeMenu>

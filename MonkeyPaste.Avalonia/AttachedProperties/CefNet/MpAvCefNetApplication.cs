@@ -11,9 +11,10 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using CefNet.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpCefNetApplication : CefNetApplication {
+    public class MpAvCefNetApplication : CefNetApplication {
         #region Private Variables
 
         private string _dbPath;
@@ -28,6 +29,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
+
+        private static MpAvCefNetApplication _instance;
+        public static MpAvCefNetApplication Instance => _instance;
         #endregion
 
 
@@ -48,10 +52,19 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static void InitCefNet(IClassicDesktopStyleApplicationLifetime desktop) {
-            _ = new MpCefNetApplication(desktop);
+            _instance = new MpAvCefNetApplication(desktop);
         }
+
+        public static void ShutdownCefNet() {
+            if(_instance == null) {
+                return;
+            }
+            _instance.Shutdown();
+            MpConsole.WriteLine("CefNet Successfully shutdown");
+        }
+
         
-        private MpCefNetApplication(IClassicDesktopStyleApplicationLifetime desktop) {
+        private MpAvCefNetApplication(IClassicDesktopStyleApplicationLifetime desktop) {
             _dbPath = new MpAvDbInfo().DbPath;
 
             string datFileName = "icudtl.dat";
@@ -99,11 +112,16 @@ namespace MonkeyPaste.Avalonia {
             settings.ResourcesDirPath = resourceDirPath;
             settings.LogSeverity = CefLogSeverity.Error;
 
-            desktop.Exit += (s,e) => Shutdown();            
+            desktop.Exit += Desktop_Exit;           
             
             CefProcessMessageReceived += CefApp_CefProcessMessageReceived;
 
             Initialize(Path.Combine(cefRootDir, "Release"), settings);
+        }
+
+        private void Desktop_Exit(object sender, ControlledApplicationLifetimeExitEventArgs e) {
+            // BUG this is NOT trigger from systray exitapp command
+            ShutdownCefNet();
         }
 
         protected override void OnContextCreated(CefBrowser browser, CefFrame frame, CefV8Context context) {

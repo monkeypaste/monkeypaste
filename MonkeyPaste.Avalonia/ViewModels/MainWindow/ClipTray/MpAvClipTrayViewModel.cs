@@ -435,68 +435,8 @@ namespace MonkeyPaste.Avalonia {
         public double ClipTrayTotalTileWidth { get; private set; }
         public double ClipTrayTotalTileHeight { get; private set; }
         
-
-        //public double ClipTrayTotalTileWidth {
-        //    get {
-        //        if(IsEmpty) {
-        //            return 0;
-        //        }
-        //        double totalTileWidth = ColCount * Items.First().MinSize;
-        //        return totalTileWidth;
-        //    }
-        //}
-        //public double ClipTrayTotalTileHeight {
-        //    get {
-        //        if(IsEmpty) {
-        //            return 0;
-        //        }
-        //        double totalTileHeight = RowCount * Items.First().MinSize;
-        //        return totalTileHeight;
-        //    }
-        //}
-
-        //public int RowCount {
-        //    get {
-        //        if (IsEmpty) {
-        //            return 0;
-        //        }
-        //        if (LayoutType == MpAvClipTrayLayoutType.Stack) {
-        //            if (ListOrientation == Orientation.Horizontal) {
-        //                return 1;
-        //            }
-        //            return Items.Count;
-        //        }
-        //        //double totalFlatWidth = Items.Sum(x => x.MinSize);
-        //        //int rowCount = (int)Math.Floor(totalFlatWidth / ClipTrayScreenWidth);
-        //        //return rowCount;
-        //        int rowCount = (int)Math.Ceiling((double)Items.Count / (double)ColCount);
-        //        return rowCount;
-        //    }
-        //}
-
-        //public int ColCount {
-        //    get {
-        //        if (IsEmpty) {
-        //            return 0;
-        //        }
-
-        //        if (LayoutType == MpAvClipTrayLayoutType.Stack) {
-        //            if (ListOrientation == Orientation.Horizontal) {
-        //                return Items.Count;
-        //            }
-        //            return 1;
-        //        }
-        //        int colCount = (int)Math.Max(1.0d, Math.Floor(ClipTrayScreenWidth / Items.First().MinSize));
-        //        return colCount;
-        //    }
-        //}
-
-        //public int RowCount { get; set; }
-
-        //public int ColCount { get; set; }
-
-        public double ClipTrayTotalWidth => Math.Max(ClipTrayScreenWidth, ClipTrayTotalTileWidth);
-        public double ClipTrayTotalHeight => Math.Max(ClipTrayScreenHeight, ClipTrayTotalTileHeight);
+        public double ClipTrayTotalWidth => Math.Max(0,Math.Max(ClipTrayScreenWidth, ClipTrayTotalTileWidth));
+        public double ClipTrayTotalHeight => Math.Max(0,Math.Max(ClipTrayScreenHeight, ClipTrayTotalTileHeight));
 
         public double ClipTrayScreenWidth { get; set; }
 
@@ -550,7 +490,7 @@ namespace MonkeyPaste.Avalonia {
             // and should only be called on a requery or on content resize (or event better only on resize complete)
             MpSize totalTileSize = MpSize.Empty;
             if(TotalTilesInQuery > 0) {
-                var result = FindTileRectOrQueryIdxOrTotalTileSizeInternal(
+                var result = FindTileRectOrQueryIdxOrTotalTileSize_internal(
                     queryOffsetIdx: -1,
                     scrollOffsetX: -1,
                     scrollOffsetY: -1);
@@ -563,7 +503,7 @@ namespace MonkeyPaste.Avalonia {
             ClipTrayTotalTileHeight = totalTileSize.Height;
         }
 
-        private object FindTileRectOrQueryIdxOrTotalTileSizeInternal(int queryOffsetIdx, double scrollOffsetX, double scrollOffsetY, MpRect prevOffsetRect = null) {
+        private object FindTileRectOrQueryIdxOrTotalTileSize_internal(int queryOffsetIdx, double scrollOffsetX, double scrollOffsetY, MpRect prevOffsetRect = null) {
             // For TotalTileSize<MpSize>: all params -1
             // For TileRect<MpRect>:  0 <= queryOffsetIdx < TotalTilesInQuery and scrollOffsets == -1
             // For TileQueryIdx<[]{int,MpRect}>: queryoffsetIdx < 0 and both scrollOffset > 0
@@ -598,7 +538,7 @@ namespace MonkeyPaste.Avalonia {
                 MpPoint tile_offset = null;
                 if (last_rect == null) {
                     // initial case
-                    tile_offset = new MpPoint();
+                    tile_offset = MpPoint.Zero;
                 } else {
                     tile_offset = last_rect.Location;
                     if (ListOrientation == Orientation.Horizontal) {
@@ -611,22 +551,24 @@ namespace MonkeyPaste.Avalonia {
                 MpRect tile_rect = new MpRect(tile_offset, tile_size);
                 bool is_tile_wrapped = false;
                 if (tile_rect.Right > DesiredMaxTileRight) {
-                    // when tile projected rect is beyond desired max width (horizontal)
+                    // when tile projected rect is beyond desired max width (grid horizontal/stack vertical)
 
                     if (isStack) {
                         // this means based on tray orientation/layout it can't contain this tile
                         // so it will need to overflow 
-                        // always occurs in stack
+                        // always occurs in stack so ignored
                     } else {
-                        // wrap to next line
+                        // wrap to next linez
                         tile_rect.X = 0;
                         tile_rect.Y = last_rect.Bottom;
+
+                        //tile_rect = new MpRect(0,last_rect.Bottom, tile_size.Width, tile_size.Height);
                         is_tile_wrapped = true;
                     }
                 }
 
                 if (tile_rect.Bottom > DesiredMaxTileBottom) {
-                    // when tile projected rect is beyond desired max height (vertical)
+                    // when tile projected rect is beyond desired max height (grid vertical/stack horizontal)
 
                     if (isStack) {
                         // this means based on tray orientation/layout it can't contain this tile
@@ -636,6 +578,8 @@ namespace MonkeyPaste.Avalonia {
                         // wrap to next line
                         tile_rect.X = last_rect.Right;
                         tile_rect.Y = 0;
+
+                        //tile_rect = new MpRect(last_rect.Right, 0, tile_size.Width, tile_size.Height);
                         is_tile_wrapped = true;
                     }
                 }
@@ -675,7 +619,7 @@ namespace MonkeyPaste.Avalonia {
         
         public MpRect FindTileRect(int queryOffsetIdx, MpRect prevOffsetRect) {
 
-            object result = FindTileRectOrQueryIdxOrTotalTileSizeInternal(
+            object result = FindTileRectOrQueryIdxOrTotalTileSize_internal(
                                 queryOffsetIdx: queryOffsetIdx,
                                 scrollOffsetX: -1,
                                 scrollOffsetY: -1,
@@ -687,7 +631,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public int FindJumpTileIdx(double scrollOffsetX, double scrollOffsetY, out MpRect tileRect) {
-            object result = FindTileRectOrQueryIdxOrTotalTileSizeInternal(
+            object result = FindTileRectOrQueryIdxOrTotalTileSize_internal(
                                 queryOffsetIdx: -1,
                                 scrollOffsetX: scrollOffsetX,
                                 scrollOffsetY: scrollOffsetY);
@@ -745,7 +689,7 @@ namespace MonkeyPaste.Avalonia {
                                 ZoomFactor * MIN_SIZE_ZOOM_FACTOR_COEFF;
                 }
                 double scrollBarSize = ScrollBarFixedAxisSize;// IsHorizontalScrollBarVisible ? 30:0;
-                return defaultWidth - scrollBarSize;
+                return Math.Clamp(defaultWidth - scrollBarSize, 0, MaxTileWidth);
             }
         }
 
@@ -762,7 +706,7 @@ namespace MonkeyPaste.Avalonia {
                                 ZoomFactor * MIN_SIZE_ZOOM_FACTOR_COEFF;
                 }
                 double scrollBarSize = ScrollBarFixedAxisSize;// IsVerticalScrollBarVisible ? 30 : 0;
-                return defaultHeight - scrollBarSize;
+                return Math.Clamp(defaultHeight - scrollBarSize,0,MaxTileHeight);
             }
         }
 
@@ -1075,12 +1019,26 @@ namespace MonkeyPaste.Avalonia {
                     MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayZoomFactorChanged);
                     break;
                 case nameof(LayoutType):
-                case nameof(ClipTrayScreenWidth):
+
                 case nameof(ClipTrayScreenHeight):
+                    if (ClipTrayScreenHeight < 0) {
+                        Debugger.Break();
+                        ClipTrayScreenHeight = 0;
+                    }
+                    break;
+                case nameof(ClipTrayScreenWidth):
+                    if(ClipTrayScreenWidth < 0) {
+                        Debugger.Break();
+                        ClipTrayScreenWidth = 0;
+                    }
                     //RefreshLayout();
                     break;
                 case nameof(ClipTrayTotalTileWidth):
-                case nameof(ClipTrayTotalHeight):
+                case nameof(ClipTrayTotalTileHeight):
+                    if (ClipTrayTotalTileWidth < 0 || ClipTrayTotalTileHeight < 0) {
+                        Debugger.Break();
+                        ClipTrayScreenWidth = 0;
+                    }
                     OnPropertyChanged(nameof(MaxScrollOffsetX));
                     OnPropertyChanged(nameof(MaxScrollOffsetY));
 
@@ -1366,6 +1324,7 @@ namespace MonkeyPaste.Avalonia {
 
         public const int DISABLE_READ_ONLY_DELAY_MS = 500;
 
+        public const double MAX_TILE_SIZE_CONTAINER_PAD = 50;
         #endregion
 
         #region Properties
@@ -1387,7 +1346,8 @@ namespace MonkeyPaste.Avalonia {
 
         public double ClipTrayContainerScreenWidth { get; set; }
         public double ClipTrayContainerScreenHeight { get; set; }
-        public double MaxTileWidth => ClipTrayScreenWidth - 50;
+        public double MaxTileWidth => Math.Max(0, ClipTrayScreenWidth - MAX_TILE_SIZE_CONTAINER_PAD);
+        public double MaxTileHeight => double.PositiveInfinity;// Math.Max(0, ClipTrayScreenHeight - MAX_TILE_SIZE_CONTAINER_PAD);
 
         public int CurGridFixedCount { get; set; }
 

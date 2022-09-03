@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
@@ -77,6 +78,7 @@ namespace MonkeyPaste.Avalonia {
 
         public int[] TitleLayerZIndexes { get; private set; } = Enumerable.Range(1, 3).ToArray();
         public string[] TitleLayerHexColors { get; private set; } = Enumerable.Repeat(MpSystemColors.Transparent, 4).ToArray();
+
 
         public string TileBorderHexColor {
             get {
@@ -2255,6 +2257,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(MinHeight));
                     BoundSize = new MpSize(IsCustomWidth ? BoundWidth : MinSize.Width, MinSize.Height);
                     break;
+                
                 case nameof(BoundSize):
                     if (IsResizing) {
                         //this occurs when mainwindow is resized and user gives tile unique width
@@ -2263,11 +2266,11 @@ namespace MonkeyPaste.Avalonia {
                     if (Next == null) {
                         break;
                     }
-                    Parent.UpdateTileRectCommand.Execute(new object[] {Next,TrayRect});
                     OnPropertyChanged(nameof(BoundWidth));
                     OnPropertyChanged(nameof(BoundHeight));
                     OnPropertyChanged(nameof(MaxWidth));
                     OnPropertyChanged(nameof(MaxHeight));
+                    Parent.UpdateTileRectCommand.Execute(new object[] { Next, TrayRect });
                     break;
                 case nameof(TrayLocation):
                     if(QueryOffsetIdx == 0 && TrayLocation.X > 0) {
@@ -2281,9 +2284,14 @@ namespace MonkeyPaste.Avalonia {
                         //}
                         break;
                     }
-                    Parent.UpdateTileRectCommand.Execute(new object[] { Next, TrayRect });
                     OnPropertyChanged(nameof(TrayX));
                     OnPropertyChanged(nameof(TrayY));
+
+                    OnPropertyChanged(nameof(BoundWidth));
+                    OnPropertyChanged(nameof(BoundHeight));
+                    OnPropertyChanged(nameof(MaxWidth));
+                    OnPropertyChanged(nameof(MaxHeight));
+                    Parent.UpdateTileRectCommand.Execute(new object[] { Next, TrayRect });
                     //Next.OnPropertyChanged(nameof(Next.TrayX));
                     break;
                 case nameof(QueryOffsetIdx):

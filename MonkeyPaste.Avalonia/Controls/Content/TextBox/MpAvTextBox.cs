@@ -10,19 +10,27 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using PropertyChanged;
 using Avalonia;
+using Avalonia.Data;
+using Avalonia.Styling;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvTextBox : TextBox, MpAvIContentView, MpAvIContentDocument {
+    public class MpAvTextBox : TextBox, MpAvIContentView, MpAvIContentDocument, IStyleable {
+        #region Private Variables
+
+        private bool _ignoreSelectionChanges = false;
+        #endregion
+
         #region Statics
 
         static MpAvTextBox() {
             SelectionStartProperty.Changed.AddClassHandler<MpAvTextBox>((x, y) => HandleSelectionStartChanged(x, y));
             SelectionEndProperty.Changed.AddClassHandler<MpAvTextBox>((x, y) => HandleSelectionEndChanged(x, y));
+            TextProperty.Changed.AddClassHandler<MpAvTextBox>((x, y) => HandleTextChanged(x, y));
         }
 
         private static void HandleSelectionStartChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
-            if(element is MpAvTextBox tb && e.NewValue is int startIdx) {
+            if (element is MpAvTextBox tb && e.NewValue is int startIdx) {
                 tb.UpdateSelection(startIdx, tb.SelectionEnd, true);
             }
         }
@@ -32,47 +40,41 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private static void HandleTextChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+            if (element is MpAvTextBox tb) {
+                //RaisePropertyChanged(TextProperty, oldValue, value);
+            }
+        }
+
+
+        #endregion
+
+        #region Overrides
+        Type IStyleable.StyleKey => typeof(TextBox);
 
         #endregion
 
         #region Properties
 
-        //#region MpAvTextSelection Implementation
+        private MpAvTextSelection _selection;
+        public MpAvTextSelection Selection {
+            get { return _selection; }
+            set {
+                value = CoerceSelection(value);
+                SetAndRaise(SelectionProperty, ref _selection, value);
+            }
+        }
 
-        //MpAvITextPointer MpAvITextRange.Start {
-        //    get => new MpAvTextPointer(this, SelectionStart);
-        //    set => SelectionStart = value == null ? 0 : value.Offset;
-        //}
-        //MpAvITextPointer MpAvITextRange.End {
-        //    get => new MpAvTextPointer(this, SelectionEnd);
-        //    set => SelectionEnd = value == null ? SelectionStart : value.Offset;
-        //}
-
-        //bool MpAvITextRange.IsEmpty => SelectionStart == SelectionEnd;
-
-        //public void Select(MpAvITextPointer start, MpAvITextPointer end) {
-        //    SelectionStart = start.Offset;
-        //    SelectionEnd = end.Offset;
-        //}
-
-        //bool MpAvITextRange.IsPointInRange(MpPoint point) => (this as MpAvITextRange).IsPointInRange(point);
-
-        //int IComparable.CompareTo(object obj) => (this as MpAvITextRange).CompareTo(obj);
-
-        //bool IEquatable<MpAvITextRange>.Equals(MpAvITextRange other) => (this as MpAvITextRange).Equals(other);
-
-        //#endregion
-
-        public MpAvTextSelection Selection { get; private set; }
-
+        public static readonly DirectProperty<MpAvTextBox, MpAvTextSelection> SelectionProperty =
+            AvaloniaProperty.RegisterDirect<MpAvTextBox,MpAvTextSelection>(
+                nameof(Selection),
+                x => x.Selection,
+                defaultBindingMode: BindingMode.TwoWay,
+                enableDataValidation: true);
 
         #region MpAvIContentView Implementation
-        IControl MpAvIContentDocument.Owner => this;
+        public IControl Owner => this;
         public MpAvIContentDocument Document => this;
-
-        void MpAvIContentView.SelectAll() {
-            this.SelectAll();
-        }
 
         #endregion
 
@@ -82,7 +84,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvITextPointer ContentEnd => new MpAvTextPointer(this, Text == null ? 0 : Text.Length - 1);
 
 
-        async Task<MpAvITextPointer> MpAvIContentDocument.GetPosisitionFromPointAsync(MpPoint point, bool snapToText) {
+        public async Task<MpAvITextPointer> GetPosisitionFromPointAsync(MpPoint point, bool snapToText) {
             await Task.Delay(1);
             var ft = this.ToFormattedText();
             if (snapToText) {
@@ -95,7 +97,7 @@ namespace MonkeyPaste.Avalonia {
             return new MpAvTextPointer(this, hitTestResult.TextPosition);
         }
 
-        async Task<IEnumerable<MpAvITextRange>> MpAvIContentDocument.FindAllTextAsync(string matchText, bool isCaseSensitive, bool matchWholeWord, bool useRegex) {
+        public async Task<IEnumerable<MpAvITextRange>> FindAllTextAsync(string matchText, bool isCaseSensitive, bool matchWholeWord, bool useRegex) {
             await Task.Delay(1);
 
             string pattern = useRegex ? matchText : matchText.Replace(Environment.NewLine, string.Empty);
@@ -115,10 +117,10 @@ namespace MonkeyPaste.Avalonia {
 
                         matches.AddRange(
                             input.IndexListOfAll(c.Value)
-                                    .Select(x=>
+                                    .Select(x =>
                                         new MpAvTextRange(
-                                            new MpAvTextPointer(this,x),
-                                            new MpAvTextPointer(this,x+c.Value.Length))));
+                                            new MpAvTextPointer(this, x),
+                                            new MpAvTextPointer(this, x + c.Value.Length))));
                     }
                 }
             }
@@ -131,6 +133,13 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #endregion
+
+        #region Constructors
+
+        public MpAvTextBox() : base() {
+            Selection = new MpAvTextSelection(this);
+        }
         #endregion
 
         #region Public Methods
@@ -146,6 +155,31 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+
+        protected override void OnDataContextChanged(EventArgs e) {
+            base.OnDataContextChanged(e);
+        }
+        #endregion
+
+        #region Private Methods
+
+        private MpAvTextSelection CoerceSelection(MpAvTextSelection value) {
+            if(value == null) {
+                return ContentStart.ToTextRange() as MpAvTextSelection;
+            }
+            if(value.Start == null) {
+                if(Text == null) {
+                    Text = String.Empty;
+                }
+                value.Start = new MpAvTextPointer(this, 0);
+            }
+            if(value.End == null) {
+                value.End = value.Start;
+            }
+
+            return value;
+
+        }
 
 
         #endregion

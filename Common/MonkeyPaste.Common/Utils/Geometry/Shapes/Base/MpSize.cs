@@ -1,12 +1,46 @@
-﻿namespace MonkeyPaste.Common {
+﻿using System.Diagnostics;
+
+namespace MonkeyPaste.Common {
     public class MpSize {
         //public static MpSize Parse(string text) {
         //    text = text.Trim();
         //    if(text.Contains())
         //}
+        #region Statics
+
         public static MpSize Empty => new MpSize();
-        public double Width { get; set; } = 0;
-        public double Height { get; set; } = 0;
+
+        #endregion
+
+        #region Properties
+
+        private double _width;
+        public double Width {
+            get => _width; 
+            set {
+                if(value < 0) {
+                    Debugger.Break();
+                    value = 0;
+                }
+                _width = value;
+            }
+        }
+
+        private double _height;
+        public double Height {
+            get => _height;
+            set {
+                if (value < 0) {
+                    Debugger.Break();
+                    value = 0;
+                }
+                _height = value;
+            }
+        }
+
+        #endregion
+
+        #region Constructors
 
         public MpSize() { }
         public MpSize(double w, double h) {
@@ -14,6 +48,7 @@
             Height = h;
         }
 
+        #endregion
         public override string ToString() {
             return $"Width: {Width} Height: {Height}";
         }

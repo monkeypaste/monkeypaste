@@ -1,12 +1,11 @@
 ﻿using System.Drawing;
-using System;
-using System.Linq;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System;
+using System.Linq;
 
 namespace MonkeyPaste.Common {
-    
     public class MpRect : MpShape {
         #region Statics
         public static MpRect Empty => new MpRect();
@@ -23,25 +22,14 @@ namespace MonkeyPaste.Common {
         public static MpRect ParseJson(string jsonStr) {
             ///quill json '{ left: Number, top: Number, height: Number, width: Number }'
             var qr = MpJsonObject.DeserializeObject<MpQuillRect>(jsonStr);
-            var r = new MpRect(qr.left,qr.top,qr.width,qr.height);
+            var r = new MpRect(qr.left, qr.top, qr.width, qr.height);
             return r;
         }
         #endregion
 
         #region Properties
 
-        [JsonIgnore]
-        public MpPoint Location {
-            get => Points[0];
-            //set => Points[0] = value;
-        }
-
-        [JsonIgnore]
-        public MpSize Size {
-            get => new MpSize(Right-Left,Bottom-Top);
-            //get => new MpSize(Points[1].X, Points[1].Y);
-            //set => Points[1] = new MpPoint(value.Width, value.Height);
-        }
+        #region Read-Only Properties
 
         [JsonIgnore]
         public MpPoint TopLeft => new MpPoint(Left, Top);
@@ -52,101 +40,97 @@ namespace MonkeyPaste.Common {
         [JsonIgnore]
         public MpPoint BottomRight => new MpPoint(Right, Bottom);
 
+        [JsonIgnore]
+        public override MpPoint[] Points => new MpPoint[] { TopLeft, TopRight, BottomRight, BottomLeft };
+
+        [JsonProperty("width", Order = int.MaxValue - 2)]
+        public double Width => _right - _left;
+
+        [JsonProperty("height", Order = int.MaxValue - 1)]
+        public double Height => _bottom - _top;
+
+        [JsonIgnore]
+        public MpSize Size => new MpSize(Width, Height);
+
+        [JsonIgnore]
+        public MpPoint Location => new MpPoint(X, Y);
+
+        #endregion
+
+
         [JsonProperty("x")]
         public double X {
-            get => Points[0].X;
-            set => Points[0].X = value;
+            get => Left;
+            set => Left = value;
         }
         [JsonProperty("y")]
         public double Y {
-            get => Points[0].Y;
-            set => Points[0].Y = value;
+            get => Top;
+            set => Top = value;
         }
-        [JsonProperty("left")]
+
+        private double _left;
+        [JsonProperty("left")]        
         public double Left {
-            get => X;
-            set => X = value;
+            get => _left;
+            set {
+                if(_left != value) {
+                    _right = value + Width;
+                    _left = value;
+                }
+            }
         }
+
+        private double _top;
         [JsonProperty("top")]
         public double Top {
-            get => Y;
-            set => Y = value;
+            get => _top;
+            set {
+                if (_top != value) {
+                    _bottom = value + Height;
+                    _top = value;
+                }
+            }
         }
 
+        private double _right;
         [JsonProperty("right")]
         public double Right {
-            //get => X + Width;
-            //set {
-            //    if (value - X < 0) {
-            //        //swap left & right
-            //        double temp = X;
-            //        X = value;
-            //        Right = temp;
-            //    } else {
-            //        Width = value - X;
-            //    }
-            //}
-            get => Points[1].X;
-            set => Points[1].X = value;
+            get => _right;
+            set {
+                if (_right != value) {
+                    _left = value - Width;
+                    _right = value;
+                }
+            }
         }
+
+        private double _bottom;
         [JsonProperty("bottom")]
         public double Bottom {
-            //get => Y + Height;
-            //set {
-            //    if (value - Top < 0) {
-            //        //swap left & right
-            //        double temp = Y;
-            //        Y = value;
-            //        Bottom = temp;
-            //    } else {
-            //        Height = value - Y;
-            //    }
-            //}
-            get => Points[1].Y;
-            set => Points[1].Y = value;
-        }
-
-        [JsonProperty("width",Order = int.MaxValue - 2)]
-        //[JsonIgnore]
-        public double Width {
-            get => Right - Left; //Size.Width;
-            //set => Size.Width = value;
-            //get => Right - Left;
-            //set {
-            //    if(Left + value < 0) {
-            //        Debugger.Break();
-            //    }
-            //    Right = Math.Max(Left, Left + value);
-            //}
-        }
-
-        [JsonProperty("height", Order = int.MaxValue - 1)]
-        //[JsonIgnore]
-        public double Height {
-            get => Bottom - Top; //Size.Height;
-            //set => Size.Height = value;
-            //get => Bottom - Top;
-            //set {
-            //    if(Top +value < 0) {
-            //        Debugger.Break();
-            //    }
-            //    Bottom = Math.Max(Top, Top + value);
-            //}
+            get => _bottom;
+            set {
+                if (_bottom != value) {
+                    _top = value - Height;
+                    _bottom = value;
+                }
+            }
         }
 
         #endregion
 
         #region Constructors
 
+        public MpRect() : base() { }
 
-        public MpRect() : base() {
-            Points = Enumerable.Repeat(new MpPoint(), 4).ToArray();
-        }
-        public MpRect(MpPoint location,MpSize size) {
-            Points = new MpPoint[] { location, new MpPoint(location.X + size.Width, location.Y + size.Height) };
-        }
+        public MpRect(double x, double y, double w, double h) : this(new MpPoint(x, y), new MpSize(w, h)) { }
 
-        public MpRect(double x, double y, double w, double h) : this(new MpPoint(x,y),new MpSize(w,h)) { }
+        public MpRect(MpPoint location, MpSize size) : this() {
+            _left = location.X;
+            _top = location.Y;
+            _right = _left + size.Width;
+            _bottom = _top + size.Height;
+        }
 
         #endregion
 
@@ -163,7 +147,6 @@ namespace MonkeyPaste.Common {
             return other.Points.Any(x => Contains(x));
         }
 
-
         public void Union(MpRect b) {
             Left = Math.Min(Left, b.Left);
             Top = Math.Min(Top, b.Top);
@@ -172,11 +155,22 @@ namespace MonkeyPaste.Common {
         }
 
         public override string ToString() {
-            return $"X:{Location.X} Y:{Location.Y} Width: {Width} Height: {Height}";
+            return $"X:{X} Y:{Y} Width: {Width} Height: {Height}";
         }
         #endregion
 
+        #region Private Methods
+
+
+        private void MpRect_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            if (Width < 0 || Height < 0) {
+                Debugger.Break();
+            }
+        }
+
+        #endregion
     }
+
 
 
     public class MpQuillRect {

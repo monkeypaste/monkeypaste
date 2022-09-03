@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls;
+using MonkeyPaste.Common;
+using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSystemTrayViewModel : MpViewModelBase, MpIAsyncSingletonViewModel<MpAvSystemTrayViewModel> {
@@ -125,13 +127,21 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
         public ICommand ExitApplicationCommand => new MpCommand(
             () => {
-                MpAvMainWindow.Instance.Close();
-                MpAvMainWindowViewModel.Instance.Dispose();
+                Dispatcher.UIThread.Post(async () => {
+                    MpConsole.WriteLine("ExitApplicationCommand begin");
 
-                if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
-                    lifetime.Shutdown();
-                }
-            },()=> MpAvBootstrapperViewModel.IsLoaded);
+                    //MpAvMainWindow.Instance.Close();
+                    //MpAvMainWindowViewModel.Instance.Dispose();
+                    MpAvCefNetApplication.ShutdownCefNet();
+                    await Task.Delay(3000);
+
+                    MpConsole.WriteLine("CefNet Shutdown Complete");
+
+                    if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
+                        lifetime.Shutdown();
+                    }
+                });
+            },()=> MpBootstrapperViewModelBase.IsLoaded);
 
         public ICommand ShowLogDialogCommand => new MpCommand(
             () => {

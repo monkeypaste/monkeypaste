@@ -16,6 +16,9 @@
                        VerticalContentAlignment="Stretch"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileView">
     <local:MpAvClipBorder HorizontalAlignment="Stretch"
+                          Classes.TileBorder="True"
+                          Classes.CanResize="{Binding CanResize}"
+                          Classes.IsResizing="{Binding IsResizing}"
                           VerticalAlignment="Stretch"
                           local:MpAvMenuExtension.IsEnabled="True"
                           local:MpAvMenuExtension.IsOpen="{Binding IsContextMenuOpened, Mode=TwoWay}"
@@ -26,7 +29,6 @@
                           CornerRadius="10"
                           BorderThickness="5"
                           Background="{Binding TileBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                          BorderBrush="{Binding TileBorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                           local:MpAvIsHoveringExtension.IsEnabled="True"
                           local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
                           local:MpAvIsHoveringExtension.IsSelected="{Binding IsSelected, Mode=TwoWay}">

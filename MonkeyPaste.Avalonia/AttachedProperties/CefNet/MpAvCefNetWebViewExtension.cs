@@ -337,7 +337,7 @@ namespace MonkeyPaste.Avalonia {
                 string loadResponseMsgStr = null;
                 while (loadResponseMsgStr == null) {
                     string resp = await wv.EvaluateJavascriptAsync($"init_ext('{loadReqJsonStr}')");
-                    if (resp == MpCefNetApplication.JS_REF_ERROR || resp == null) {
+                    if (resp == MpAvCefNetApplication.JS_REF_ERROR || resp == null) {
                         await Task.Delay(100);
                         continue;
                     }

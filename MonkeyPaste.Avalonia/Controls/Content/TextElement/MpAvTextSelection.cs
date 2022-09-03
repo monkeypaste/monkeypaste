@@ -10,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvTextSelection : MpAvTextRange, MpAvITextSelection {
         private MpAvIContentDocument _document;
 
-        
+        //public MpAvTextPointer Start;
 
         #region Constructors
 

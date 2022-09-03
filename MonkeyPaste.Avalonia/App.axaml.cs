@@ -21,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
         public static IClassicDesktopStyleApplicationLifetime Desktop { get; private set; }
         public App() {
             if(MpClipTileContentDataTemplateSelector.UseCefNet) {
-                MpCefNetApplication.ResetEnv();
+                MpAvCefNetApplication.ResetEnv();
             }
             DataContext = MpAvSystemTrayViewModel.Instance;
         }
@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
                 Desktop = desktop;
 
                 if (MpClipTileContentDataTemplateSelector.UseCefNet) {
-                    MpCefNetApplication.InitCefNet(desktop);
+                    MpAvCefNetApplication.InitCefNet(desktop);
                 } else {
                     MpAvCefWebViewExtension.InitCef();
                 }

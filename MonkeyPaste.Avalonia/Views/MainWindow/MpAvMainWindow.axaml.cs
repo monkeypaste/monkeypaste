@@ -38,7 +38,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
-        public MpAvExternalDropBehavior ExternalDropBehavior { get; private set; }
+        //public MpAvExternalDropBehavior ExternalDropBehavior { get; private set; }
 
         #endregion
 
@@ -465,7 +465,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
         }
         private void MpAvMainWindow_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            ExternalDropBehavior = new MpAvExternalDropBehavior();
+            //pAvExternalDropBehavior.Instance = new MpAvExternalDropBehavior();
             //ExternalDropBehavior.Attach(this);
         }
 

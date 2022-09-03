@@ -13,6 +13,7 @@ namespace MonkeyPaste {
         None = 0,
         ShowMainWindow,
         HideMainWindow,
+        ExitApplication,
         ToggleAppendMode,
         ToggleAutoCopyMode,
         ToggleRightClickPasteMode,

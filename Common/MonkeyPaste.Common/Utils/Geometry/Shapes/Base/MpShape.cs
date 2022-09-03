@@ -6,9 +6,9 @@ using System.Text;
 namespace MonkeyPaste.Common {
     public abstract class MpShape : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
-        public virtual MpPoint[] Points { get; set; }
+        public abstract MpPoint[] Points { get; }
         public MpShape() {
-            Points = new MpPoint[] { };
+            //Points = new MpPoint[] { };
         }
     }
 }

@@ -15,7 +15,7 @@ namespace MonkeyPaste.Common.Avalonia {
             if (text.IsStringHtmlText()) {
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(text);
-                return htmlDoc.Text;
+                return htmlDoc.Text;// == null ? String.Empty : htmlDoc.Text;
             }
             return text;
         }

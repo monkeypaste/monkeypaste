@@ -130,7 +130,7 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task InitAsync() {
             _keyboardGestureHelper = new MpAvKeyGestureHelper2();
-            await InitShortcuts();
+            await InitShortcutsAsync();
 
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
@@ -299,7 +299,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task InitShortcuts() {
+        private async Task InitShortcutsAsync() {
             await Dispatcher.UIThread.InvokeAsync(async () => {
                 //using mainwindow, map all saved shortcuts to their commands
                 var scl = await MpDb.GetItemsAsync<MpShortcut>();
@@ -314,6 +314,9 @@ namespace MonkeyPaste.Avalonia {
                             break;
                         case MpShortcutType.HideMainWindow:
                             shortcutCommand = MpAvMainWindowViewModel.Instance.HideWindowCommand;
+                            break;
+                        case MpShortcutType.ExitApplication:
+                            shortcutCommand = MpAvSystemTrayViewModel.Instance.ExitApplicationCommand;
                             break;
                         case MpShortcutType.ToggleAppendMode:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAppendModeCommand;

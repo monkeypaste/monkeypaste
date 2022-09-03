@@ -583,7 +583,7 @@ namespace MonkeyPaste.Avalonia {
                     IsMainWindowInitiallyOpening = false;
                 }
 
-                MpConsole.WriteLine($"SHOW WINDOW START: L: " + MainWindowLeft + " T: " + MainWindowTop + " R:" + MainWindowRight + " B:" + MainWindowBottom);
+                //MpConsole.WriteLine($"SHOW WINDOW START: L: " + MainWindowLeft + " T: " + MainWindowTop + " R:" + MainWindowRight + " B:" + MainWindowBottom);
 
                 MpRect openEndRect = MainWindowOpenedRect;
 

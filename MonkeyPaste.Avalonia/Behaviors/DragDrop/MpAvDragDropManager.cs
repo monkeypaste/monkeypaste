@@ -33,24 +33,25 @@ namespace MonkeyPaste.Avalonia {
             get {
                 List<MpAvIContentDropTarget> dtl = new List<MpAvIContentDropTarget>();
 
-                if (MpAvMainWindow.Instance == null) {
-                    return dtl;
-                }
+                //if (MpAvMainWindow.Instance == null) {
+                //    return dtl;
+                //}
 
-                var rtbvl = MpAvMainWindow.Instance.GetVisualDescendants<MpAvClipTileContentView>();
-                dtl.AddRange(rtbvl.Select(x => x.ContentViewDropBehavior).Where(x => x.IsDropEnabled).ToList());
+                //var rtbvl = MpAvMainWindow.Instance.GetVisualDescendants<MpAvClipTileContentView>();
+                //dtl.AddRange(rtbvl.Select(x => x.ContentViewDropBehavior).Where(x => x.IsDropEnabled).ToList());
 
-                var ptrv = MpAvMainWindow.Instance.GetVisualDescendant<MpAvPinTrayView>();
-                if (ptrv != null && ptrv.PinTrayDropBehavior.IsDropEnabled) {
-                    dtl.Add(ptrv.PinTrayDropBehavior);
-                }
+                //var ptrv = MpAvMainWindow.Instance.GetVisualDescendant<MpAvPinTrayView>();
+                //if (ptrv != null && ptrv.PinTrayDropBehavior.IsDropEnabled) {
+                //    dtl.Add(ptrv.PinTrayDropBehavior);
+                //}
 
                 //var adivl = MpAvMainWindow.Instance.GetVisualDescendants<MpActionDesignerItemView>();
                 //dtl.AddRange(adivl.Select(x => x.ActionDesignerItemDropBehavior).Where(x => x.IsDropEnabled).ToList());
-                var edb = MpAvMainWindow.Instance.ExternalDropBehavior;
-                if (edb != null && edb.IsDropEnabled) {
-                    dtl.Add(MpAvMainWindow.Instance.ExternalDropBehavior);
-                }
+
+                //var edb = MpAvMainWindow.Instance.ExternalDropBehavior;
+                //if (edb != null && edb.IsDropEnabled) {
+                //    dtl.Add(MpAvMainWindow.Instance.ExternalDropBehavior);
+                //}
                 
                 return dtl;
             }

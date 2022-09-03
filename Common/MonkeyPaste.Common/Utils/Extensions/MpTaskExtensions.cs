@@ -18,6 +18,7 @@ namespace MonkeyPaste.Common {
             }
         }
 
+
         public static async Task TimeoutAfter(this Task task, TimeSpan timeout) {
             using (var timeoutCancellationTokenSource = new CancellationTokenSource()) {
                 var completedTask = await Task.WhenAny(task, Task.Delay(timeout, timeoutCancellationTokenSource.Token));

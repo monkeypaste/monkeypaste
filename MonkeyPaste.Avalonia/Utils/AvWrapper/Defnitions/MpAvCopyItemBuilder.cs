@@ -78,6 +78,12 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
 
+                if(itemData == null) {
+                    MpConsole.WriteTraceLine("Warning! CopyItemBuilder could not create itemData");
+                    return null;
+                }
+
+
                 if (MpPrefViewModel.Instance.IgnoreWhiteSpaceCopyItems &&
                     itemType == MpCopyItemType.Text &&
                     string.IsNullOrWhiteSpace((itemData).ToPlainText().Replace(Environment.NewLine, ""))) {

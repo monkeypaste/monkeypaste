@@ -691,7 +691,8 @@ namespace MonkeyPaste.Avalonia {
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch(msg) {
                 case MpMessageType.TraySelectionChanged:
-                    Dispatcher.UIThread.InvokeAsync(UpdateAssociationAsync).FireAndForgetSafeAsync(this);
+                    //Dispatcher.UIThread.InvokeAsync(UpdateAssociationAsync).FireAndForgetSafeAsync(this);
+                    UpdateAssociationAsync_void();
                     break;
                 case MpMessageType.TrayScrollChanged:
                 case MpMessageType.RequeryCompleted:
@@ -706,12 +707,15 @@ namespace MonkeyPaste.Avalonia {
             await Task.WhenAll(Items.Select(x => x.Tag.WriteToDatabaseAsync()));
         }
 
-        private async Task UpdateAssociationAsync() {
-            if(MpAvClipTrayViewModel.Instance.SelectedItem == null) {
-                IsAssociated = false;
-            } else {
-                IsAssociated = await IsCopyItemLinkedAsync(MpAvClipTrayViewModel.Instance.SelectedItem.CopyItemId);
-            }
+        private async void UpdateAssociationAsync_void() {
+            //Dispatcher.UIThread.Post(async() => {
+                if (MpAvClipTrayViewModel.Instance.SelectedItem == null) {
+                    IsAssociated = false;
+                } else {
+                    IsAssociated = await IsCopyItemLinkedAsync(MpAvClipTrayViewModel.Instance.SelectedItem.CopyItemId);
+                }
+           // });
+            
         }
 
         private void UpdateNotifier() {
