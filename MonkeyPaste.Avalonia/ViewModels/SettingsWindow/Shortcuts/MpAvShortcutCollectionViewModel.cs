@@ -20,8 +20,13 @@ namespace MonkeyPaste.Avalonia {
         MpAvSelectorViewModelBase<object,MpAvShortcutViewModel>, 
         MpIAsyncSingletonViewModel<MpAvShortcutCollectionViewModel> {
 
-        private const bool IS_GLOBAL_INPUT_ENABLED = false;
-        private const double _MIN_GLOBAL_DRAG_DIST = 20;
+        #region Constants
+
+        public const bool IS_GLOBAL_INPUT_ENABLED = false;
+        public const double MIN_GLOBAL_DRAG_DIST = 20;
+
+        #endregion
+
 
         #region Private Variables
 
@@ -73,7 +78,7 @@ namespace MonkeyPaste.Avalonia {
 
         public int SelectedShortcutIndex { get; set; }
 
-        public MpPoint? GlobalMouseLocation { get; private set; } = null;
+        public MpPoint GlobalMouseLocation { get; set; } = MpPoint.Zero;
 
         public MpPoint? GlobalMouseLeftButtonDownLocation { get; private set; } = null;
         public bool GlobalIsMouseLeftButtonDown { get; private set; } = false;
@@ -490,7 +495,7 @@ namespace MonkeyPaste.Avalonia {
         private void Hook_MouseWheel(object? sender, MouseWheelHookEventArgs e) {
             if (!MpAvMainWindowViewModel.Instance.IsMainWindowOpen &&
                 !MpAvMainWindowViewModel.Instance.IsMainWindowOpening &&
-                MpBootstrapperViewModelBase.IsLoaded) {
+                MpBootstrapperViewModelBase.IsCoreLoaded) {
                 if (MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
                     if (GlobalMouseLocation != null && 
                         GlobalMouseLocation.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
@@ -525,7 +530,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (!isShowingMainWindow &&
                     GlobalMouseLeftButtonDownLocation != null &&
-                    GlobalMouseLocation.Distance(GlobalMouseLeftButtonDownLocation) >= _MIN_GLOBAL_DRAG_DIST &&
+                    GlobalMouseLocation.Distance(GlobalMouseLeftButtonDownLocation) >= MIN_GLOBAL_DRAG_DIST &&
                     GlobalMouseLocation.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight &&
                     MpPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop) {
                     MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);

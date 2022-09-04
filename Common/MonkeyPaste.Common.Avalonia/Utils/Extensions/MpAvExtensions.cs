@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using static Avalonia.VisualExtensions;
+
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvExtensions {
         #region Collections
@@ -132,24 +134,32 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region Events
 
-        public static bool IsLeftPress(this PointerPressedEventArgs ppea, IVisual? control = null) {
+        public static bool IsLeftPress(this PointerPressedEventArgs ppea, IVisual? control) {
             return ppea.GetCurrentPoint(control)
                             .Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed;
         }
 
-        public static bool IsRightPress(this PointerPressedEventArgs ppea, IVisual? control = null) {
+        public static bool IsRightPress(this PointerPressedEventArgs ppea, IVisual? control) {
             return ppea.GetCurrentPoint(control)
                             .Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed;
         }
 
-        public static bool IsLeftRelease(this PointerReleasedEventArgs ppea, IVisual? control = null) {
+        public static bool IsLeftRelease(this PointerReleasedEventArgs ppea, IVisual? control) {
             return ppea.GetCurrentPoint(control)
                             .Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed;
         }
 
-        public static bool IsRightRelease(this PointerReleasedEventArgs ppea, IVisual? control = null) {
+        public static bool IsRightRelease(this PointerReleasedEventArgs ppea, IVisual? control) {
             return ppea.GetCurrentPoint(control)
                             .Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed;
+        }
+
+        public static bool IsLeftDown(this PointerEventArgs e, IVisual? control) {
+            return e.GetCurrentPoint(control).Properties.IsLeftButtonPressed;
+        }
+
+        public static MpPoint GetClientMousePoint(this PointerEventArgs e, IVisual? control) {
+            return e.GetPosition(control).ToPortablePoint();
         }
 
         #endregion

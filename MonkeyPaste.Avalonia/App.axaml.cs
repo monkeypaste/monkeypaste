@@ -55,7 +55,8 @@ namespace MonkeyPaste.Avalonia {
                 var bootstrapper = new MpAvBootstrapperViewModel();
                 await bootstrapper.InitAsync();
 
-                MpConsole.WriteLine("Loaded");
+                MpConsole.WriteLine("Core and ViewModel Bootstrap complete");
+
 
                 //desktop.MainWindow.Close();
                 desktop.MainWindow = new MpAvMainWindow();

@@ -460,7 +460,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected virtual void MpAnalyticItemParameterValueViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            if(!MpBootstrapperViewModelBase.IsLoaded) {
+            if(!MpBootstrapperViewModelBase.IsCoreLoaded) {
                 return;
             }
             OnValidate?.Invoke(this, new EventArgs());

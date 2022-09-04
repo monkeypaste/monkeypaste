@@ -1,5 +1,13 @@
-﻿using MonkeyPaste.Common;
-
+﻿
+using MonkeyPaste.Common;
+using Avalonia.Controls;
+using Avalonia.Layout;
+using MonkeyPaste.Common.Avalonia;
+using Avalonia;
+using Avalonia.Controls.Primitives;
+using Avalonia.Input;
+using Avalonia.VisualTree;
+using Gdk;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvScreenInfo : MpIPlatformScreenInfo {
@@ -9,5 +17,6 @@ namespace MonkeyPaste.Avalonia {
         public string Name { get; set; } = string.Empty;
         public double PixelDensity { get; set; }
         public MpPoint PixelsPerInch => new MpPoint(PixelDensity * 96, PixelDensity * 96);
+
     }
 }

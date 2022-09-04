@@ -39,7 +39,7 @@ namespace MonkeyPaste {
         #region public static Methods
 
         public static void SetCursor(object sender, MpCursorType cursor) {
-            if(!MpBootstrapperViewModelBase.IsLoaded || IsCursorFrozen) {
+            if(!MpBootstrapperViewModelBase.IsCoreLoaded || IsCursorFrozen) {
                 return;
             }
 

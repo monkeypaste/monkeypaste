@@ -7,6 +7,13 @@ using System.Linq;
 
 namespace MonkeyPaste.Common {
     public class MpRect : MpShape {
+
+        #region Private Variables
+
+        private double _left, _top, _right, _bottom;
+
+        #endregion
+
         #region Statics
         public static MpRect Empty => new MpRect();
 
@@ -31,46 +38,33 @@ namespace MonkeyPaste.Common {
 
         #region Read-Only Properties
 
-        [JsonIgnore]
         public MpPoint TopLeft => new MpPoint(Left, Top);
-        [JsonIgnore]
         public MpPoint TopRight => new MpPoint(Right, Top);
-        [JsonIgnore]
         public MpPoint BottomLeft => new MpPoint(Left, Bottom);
-        [JsonIgnore]
         public MpPoint BottomRight => new MpPoint(Right, Bottom);
 
-        [JsonIgnore]
         public override MpPoint[] Points => new MpPoint[] { TopLeft, TopRight, BottomRight, BottomLeft };
 
-        [JsonProperty("width", Order = int.MaxValue - 2)]
         public double Width => _right - _left;
 
-        [JsonProperty("height", Order = int.MaxValue - 1)]
         public double Height => _bottom - _top;
 
-        [JsonIgnore]
         public MpSize Size => new MpSize(Width, Height);
 
-        [JsonIgnore]
         public MpPoint Location => new MpPoint(X, Y);
 
         #endregion
 
 
-        [JsonProperty("x")]
         public double X {
             get => Left;
             set => Left = value;
         }
-        [JsonProperty("y")]
         public double Y {
             get => Top;
             set => Top = value;
         }
 
-        private double _left;
-        [JsonProperty("left")]        
         public double Left {
             get => _left;
             set {
@@ -81,8 +75,6 @@ namespace MonkeyPaste.Common {
             }
         }
 
-        private double _top;
-        [JsonProperty("top")]
         public double Top {
             get => _top;
             set {
@@ -93,8 +85,6 @@ namespace MonkeyPaste.Common {
             }
         }
 
-        private double _right;
-        [JsonProperty("right")]
         public double Right {
             get => _right;
             set {
@@ -105,8 +95,6 @@ namespace MonkeyPaste.Common {
             }
         }
 
-        private double _bottom;
-        [JsonProperty("bottom")]
         public double Bottom {
             get => _bottom;
             set {
@@ -162,18 +150,12 @@ namespace MonkeyPaste.Common {
         #region Private Methods
 
 
-        private void MpRect_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            if (Width < 0 || Height < 0) {
-                Debugger.Break();
-            }
-        }
-
         #endregion
     }
 
-
-
-    public class MpQuillRect {
+    public class MpQuillRect : MpJsonObject {
+        //public double x { get; set; }
+        //public double y { get; set; }
         public double left { get; set; }
         public double right { get; set; }
         public double bottom { get; set; }

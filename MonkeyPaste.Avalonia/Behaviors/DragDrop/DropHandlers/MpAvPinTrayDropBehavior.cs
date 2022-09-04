@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; 
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common; 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,19 +27,37 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Statics
+
+        private static MpAvPinTrayDropBehavior _instance;
+        public static MpAvPinTrayDropBehavior Instance => _instance ?? (_instance = new MpAvPinTrayDropBehavior());
+        #endregion
+
+        #region Properties
+
+        #region MpAvIContentDropTarget Override Implementation
+
         public override Orientation AdornerOrientation => Orientation.Vertical;
-        public override Control AdornedElement => AssociatedObject.PinTrayListBox;
+        public override Control AdornedElement => AssociatedObject == null ? null : AssociatedObject.PinTrayListBox;
 
         public override bool IsDropEnabled { get; set; } = true;
 
         public override MpDropType DropType => MpDropType.PinTray;
 
-        public override Control RelativeToElement => AssociatedObject.PinTrayListBox.GetVisualDescendant<ScrollViewer>();
+        public override Control RelativeToElement => AssociatedObject == null ? null : AssociatedObject.PinTrayListBox.GetVisualDescendant<ScrollViewer>();
 
         public override MpCursorType MoveCursor => MpCursorType.TileMove;
         public override MpCursorType CopyCursor => MpCursorType.TileCopy;
 
+        #endregion
 
+        #endregion
+
+        #region Constructors
+
+        #endregion
+
+        #region Public Methods
 
         public override void OnLoaded() {
             //IsDebugEnabled = true;
@@ -221,10 +240,13 @@ namespace MonkeyPaste.Avalonia {
 
             _autoScrollVelocity = _baseAutoScrollVelocity;
 
-            if (AssociatedObject.DataContext is MpAvClipTrayViewModel ctrvm) {
+            if (AssociatedObject != null &&
+                AssociatedObject.DataContext is MpAvClipTrayViewModel ctrvm) {
                 ctrvm.IsDragOverPinTray = false;
             }
         }
+
+        #endregion
     }
 
 }

@@ -11,9 +11,9 @@ namespace MonkeyPaste {
         MpIProgressLoader {
         #region Statics
 
-        public static bool IsLoaded { get; protected set; } = false;
+        public static bool IsCoreLoaded { get; protected set; } = false;
 
-        protected static List<MpBootstrappedItemViewModel> _items = new List<MpBootstrappedItemViewModel>();
+        protected static List<MpBootstrappedItemViewModel> _coreItems = new List<MpBootstrappedItemViewModel>();
 
         #endregion
 
@@ -32,7 +32,7 @@ namespace MonkeyPaste {
             set => throw new NotImplementedException();
         }
 
-        public double PercentLoaded => (double)LoadedCount / (double)_items.Count;
+        public double PercentLoaded => (double)LoadedCount / (double)_coreItems.Count;
 
         public MpNotificationDialogType DialogType => MpNotificationDialogType.StartupLoader;
 
@@ -44,7 +44,7 @@ namespace MonkeyPaste {
         #endregion
 
         public MpBootstrapperViewModelBase() {
-            _items.AddRange(
+            _coreItems.AddRange(
                 new List<MpBootstrappedItemViewModel>() {
                     new MpBootstrappedItemViewModel(this,typeof(MpConsole)),
                     new MpBootstrappedItemViewModel(this,typeof(MpCursor)),

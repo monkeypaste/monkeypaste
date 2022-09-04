@@ -61,100 +61,10 @@
                     <ListBox.Styles>
                         <Style Selector="ListBoxItem"
                                x:DataType="local:MpAvClipTileViewModel">
-                            <Setter Property="Margin"
-                                    Value="{Binding OuterSpacing}" />
-                            <Setter Property="Padding"
-                                    Value="{Binding InnerSpacing}" />
                             <Setter Property="Canvas.Left"
                                     Value="{Binding TrayX}" />
                             <Setter Property="Canvas.Top"
                                     Value="{Binding TrayY}" />
-                            <Setter Property="Width"
-                                    Value="{Binding BoundWidth}" />
-                            <Setter Property="Height"
-                                    Value="{Binding BoundHeight}" />
-                            <!--<Setter Property="MinWidth"
-                                    Value="{Binding MinSize}" />
-                            <Setter Property="MinHeight"
-                                    Value="{Binding MinSize}" />-->
-                        </Style>
-                        <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
-                            <Setter Property="Background"
-                                    Value="Transparent" />
-                        </Style>
-
-                        <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
-                            <Setter Property="Background"
-                                    Value="Transparent" />
-                        </Style>
-
-                        <Style Selector="ListBoxItem:selected:focus /template/ ContentPresenter">
-                            <Setter Property="Background"
-                                    Value="Transparent" />
-                        </Style>
-
-                        <Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter">
-                            <Setter Property="Background"
-                                    Value="Transparent" />
-                        </Style>
-
-                        <Style Selector="ListBoxItem:selected:focus:pointerover /template/ ContentPresenter">
-                            <Setter Property="Background"
-                                    Value="Transparent" />
-                        </Style>
-                        <Style Selector=":is(local|MpAvClipBorder).TileBorder"
-                               x:DataType="local:MpAvClipTileViewModel">
-                            <Setter Property="Transitions">
-                                <Transitions>
-                                    <BrushTransition Property="BorderBrush"
-                                                     Duration="0:0:0.2" />
-                                </Transitions>
-                            </Setter>
-                            <Setter Property="BorderBrush"
-                                    Value="{StaticResource DefaultBorderBrush_unselected}" />
-                        </Style>
-
-                        <!--  Hover Unselected  -->
-
-                        <Style Selector="ListBoxItem:pointerover:not(:selected) :is(Border).TileBorder"
-                               x:DataType="local:MpAvClipTileViewModel">
-                            <Setter Property="BorderBrush"
-                                    Value="{StaticResource IsHoveringBorderBrush_unselected}" />
-                        </Style>
-
-
-                        <!--  Default Selected  -->
-
-                        <Style Selector="ListBoxItem:selected :is(Border).TileBorder"
-                               x:DataType="local:MpAvClipTileViewModel">
-                            <Setter Property="BorderBrush"
-                                    Value="{StaticResource DefaultBorderBrush_selected}" />
-                        </Style>
-
-
-                        <!--  Hover Selected  -->
-
-                        <Style Selector="ListBoxItem:selected:pointerover :is(Border).TileBorder:not(.CanResize):not(.IsResizing)"
-                               x:DataType="local:MpAvClipTileViewModel">
-                            <Setter Property="BorderBrush"
-                                    Value="{StaticResource IsHoveringBorderBrush_selected}" />
-                        </Style>
-
-                        <!--  Default Resize  -->
-
-                        <Style Selector="ListBoxItem :is(Border).TileBorder.IsResizing"
-                               x:DataType="local:MpAvClipTileViewModel">
-                            <Setter Property="BorderBrush"
-                                    Value="{StaticResource IsResizingBorderBrush}" />
-                        </Style>
-
-
-                        <!--  Hover Resizing  -->
-
-                        <Style Selector="ListBoxItem:selected:pointerover :is(Border).TileBorder.CanResize:not(.IsResizing)"
-                               x:DataType="local:MpAvClipTileViewModel">
-                            <Setter Property="BorderBrush"
-                                    Value="{StaticResource CanResizeBorderBrush}" />
                         </Style>
                     </ListBox.Styles>
                     <ListBox.ItemTemplate>
@@ -168,7 +78,6 @@
                             <Canvas x:Name="ClipTrayItemsPanelCanvas"
                                     Width="{Binding ClipTrayTotalWidth}"
                                     Height="{Binding ClipTrayTotalHeight}" />
-                            <!--<VirtualizingStackPanel Orientation="Horizontal" />-->
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                 </ListBox>

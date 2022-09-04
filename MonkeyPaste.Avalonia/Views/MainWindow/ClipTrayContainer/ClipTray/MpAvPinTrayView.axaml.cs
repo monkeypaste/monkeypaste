@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
+using MonkeyPaste.Avalonia.Behaviors._Factory;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System.Linq;

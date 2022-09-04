@@ -22,18 +22,9 @@
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
                  Items="{Binding PinnedItems}">
-
             <ListBox.Styles>
                 <Style Selector="ListBoxItem"
                        x:DataType="local:MpAvClipTileViewModel">
-                    <Setter Property="Margin"
-                            Value="{Binding OuterSpacing}" />
-                    <Setter Property="Padding"
-                            Value="{Binding InnerSpacing}" />
-                    <Setter Property="Width"
-                            Value="{Binding BoundWidth}" />
-                    <Setter Property="Height"
-                            Value="{Binding BoundHeight}" />
                     <Setter Property="IsSelected"
                             Value="{Binding IsSelected, Mode=TwoWay}" />
                 </Style>

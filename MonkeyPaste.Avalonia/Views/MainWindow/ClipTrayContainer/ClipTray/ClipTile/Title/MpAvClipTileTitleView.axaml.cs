@@ -12,6 +12,7 @@ using System.Linq;
 using Avalonia.Threading;
 using System;
 using System.Threading.Tasks;
+using MonkeyPaste.Avalonia.Behaviors._Factory;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileTitleView : MpAvUserControl<MpAvClipTileViewModel> {

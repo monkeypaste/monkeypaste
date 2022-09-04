@@ -13,9 +13,22 @@ using System.Runtime.Intrinsics.Arm;
 using Avalonia.Media.Immutable;
 using Avalonia.Controls.Shapes;
 using System.Diagnostics;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvMousePressCommand {
+        #region Private Variables
+
+        private static MpPoint _mouseLeftDownPosition;
+        private static object _mouseDownObject;
+
+        #endregion
+
+        #region Constants
+
+        public const double MIN_DRAG_DIST = 5;
+        #endregion
+
         static MpAvMousePressCommand() {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
         }
@@ -122,6 +135,40 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region LeftDragCommand AvaloniaProperty
+        public static ICommand GetLeftDragBeginCommand(AvaloniaObject obj) {
+            return obj.GetValue(LeftDragBeginCommandProperty);
+        }
+
+        public static void SetLeftDragBeginCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(LeftDragBeginCommandProperty, value);
+        }
+
+        public static readonly AttachedProperty<ICommand> LeftDragBeginCommandProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
+                "LeftDragBeginCommand",
+                null,
+                false);
+
+        #endregion
+
+        #region LeftDragCommandParameter AvaloniaProperty
+        public static object GetLeftDragCommandParameter(AvaloniaObject obj) {
+            return obj.GetValue(LeftDragCommandParameterProperty);
+        }
+
+        public static void SetLeftDragCommandParameter(AvaloniaObject obj, object value) {
+            obj.SetValue(LeftDragCommandParameterProperty, value);
+        }
+
+        public static readonly AttachedProperty<object> LeftDragCommandParameterProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, object>(
+                "LeftDragCommandParameter",
+                null,
+                false);
+
+        #endregion
+
 
         #region IsEnabled AvaloniaProperty
         public static bool GetIsEnabled(AvaloniaObject obj) {
@@ -159,7 +206,11 @@ namespace MonkeyPaste.Avalonia {
             if (s is Control control) {
                 control.DetachedFromVisualTree += DetachedToVisualHandler;
                 control.PointerPressed += Control_PointerPressed;
-
+                
+                if(GetLeftDragBeginCommand(control) != null) {
+                    control.PointerMoved += Control_PointerMoved;
+                    control.PointerReleased += Control_PointerReleased;
+                }
                 if (e == null) {
                     control.AttachedToVisualTree += AttachedToVisualHandler;
                 }
@@ -170,6 +221,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+
         private static void DetachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
             if (s is Control control) {
                 control.AttachedToVisualTree -= AttachedToVisualHandler;
@@ -179,20 +231,27 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void Control_PointerPressed(object sender, PointerPressedEventArgs e) {
-            if(sender is AvaloniaObject ao) {
+            if(sender is Control control) {
                 ICommand cmd = null;
                 object param = null;
-                if(e.IsLeftPress()) {
-                    if(e.ClickCount == 2) {
-                        cmd = GetDoubleLeftPressCommand(ao);
-                        param = GetDoubleLeftPressCommandParameter(ao);
+                if(e.IsLeftPress(control)) {
+                    if(GetLeftDragBeginCommand(control) != null) {
+                        _mouseLeftDownPosition = e.GetClientMousePoint(control);
                     } else {
-                        cmd = GetLeftPressCommand(ao);
-                        param = GetLeftPressCommandParameter(ao);
+                        // null'd in rele
+                        _mouseLeftDownPosition = null;
                     }
-                } else if(e.IsRightPress()) {
-                    cmd = GetRightPressCommand(ao);
-                    param = GetRightPressCommandParameter(ao);
+
+                    if(e.ClickCount == 2) {
+                        cmd = GetDoubleLeftPressCommand(control);
+                        param = GetDoubleLeftPressCommandParameter(control);
+                    } else {
+                        cmd = GetLeftPressCommand(control);
+                        param = GetLeftPressCommandParameter(control);
+                    }
+                } else if(e.IsRightPress(control)) {
+                    cmd = GetRightPressCommand(control);
+                    param = GetRightPressCommandParameter(control);
                 }
                 if (cmd != null) {
                    cmd.Execute(param);
@@ -200,6 +259,26 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+
+        private static void Control_PointerMoved(object sender, PointerEventArgs e) {
+           // NOTE only added when DragBeginCommand exists
+           if(sender is Control control && 
+                GetLeftDragBeginCommand(control) is ICommand dragBeginCommand &&
+                e.IsLeftDown(control) &&
+                _mouseLeftDownPosition != null) {
+
+                var drag_dist = _mouseLeftDownPosition.Distance(e.GetClientMousePoint(control));
+                if(drag_dist >= MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST) {
+                    dragBeginCommand.Execute(GetLeftDragCommandParameter(control));
+                }
+
+            }
+        }
+
+
+        private static void Control_PointerReleased(object sender, PointerReleasedEventArgs e) {
+            _mouseLeftDownPosition = null;
+        }
         #endregion
     }
 

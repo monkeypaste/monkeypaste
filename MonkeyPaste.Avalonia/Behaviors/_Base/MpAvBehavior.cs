@@ -12,38 +12,6 @@ using Avalonia.Threading;
 using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
-    public static class MpAvViewBehaviorFactory {
-        public static void BuildAllViewBehaviors(Control view, Control controlToAttach) {
-            return;
-            // NOTE this should be called after/in view's attachedToVisualTree
-
-            // DROP BEHAVIORS
-            if (view is MpAvClipTileContentView ctcv) {
-                ctcv.ContentViewDropBehavior = new MpAvContentViewDropBehavior();
-                ctcv.ContentViewDropBehavior.Attach(controlToAttach);
-            } else if (view is MpAvPinTrayView ptv) {
-                ptv.PinTrayDropBehavior = new MpAvPinTrayDropBehavior();
-                ptv.PinTrayDropBehavior.Attach(controlToAttach);
-            }
-
-
-            // HIGHLIGHTING
-
-            if (view is MpAvClipTileTitleView cttv) {
-                cttv.ClipTileTitleHighlightBehavior = new MpAvClipTileTitleHighlightBehavior();
-                cttv.ClipTileTitleHighlightBehavior.Attach(controlToAttach);
-
-                cttv.SourceHighlightBehavior = new MpAvSourceHighlightBehavior();
-                cttv.SourceHighlightBehavior.Attach(controlToAttach);
-            } else if(view is MpAvClipTileContentView ctcv_hl) {
-                ctcv_hl.HighlightBehavior = new MpAvContentHighlightBehavior();
-                ctcv_hl.HighlightBehavior.Attach(controlToAttach);
-            }
-
-        }
-    }
-
-
 
     [DoNotNotify]
     public abstract class MpAvBehavior<T> : Behavior<T> where T : Control {

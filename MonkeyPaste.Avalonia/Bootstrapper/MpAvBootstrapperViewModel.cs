@@ -16,11 +16,11 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvBootstrapperViewModel : MpBootstrapperViewModelBase {
 
         public MpAvBootstrapperViewModel() : base() {
-            if(_items == null) {
-                _items = new List<MpBootstrappedItemViewModel>();
+            if(_coreItems == null) {
+                _coreItems = new List<MpBootstrappedItemViewModel>();
             }
 
-            _items.AddRange(
+            _coreItems.AddRange(
                 new List<MpBootstrappedItemViewModel>() {
                     new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpDocumentHtmlExtension)),
@@ -81,34 +81,34 @@ namespace MonkeyPaste.Avalonia {
 
             await MpNotificationCollectionViewModel.Instance.RegisterWithWindowAsync(nw);
             await MpNotificationCollectionViewModel.Instance.BeginLoaderAsync(this);
-            while (IsLoaded == false) {
+            while (IsCoreLoaded == false) {
                 await Task.Delay(100);
             }
         }
 
         private async void Nw_Opened(object sender, EventArgs e) {
-            for (int i = 0; i < _items.Count; i++) {
-                await LoadItemAsync(_items[i], i);
+            for (int i = 0; i < _coreItems.Count; i++) {
+                await LoadItemAsync(_coreItems[i], i);
                 while(IsBusy) {
                     await Task.Delay(100);
                 }
             }
-            while (_items.Any(x => x.IsBusy)) {
+            while (_coreItems.Any(x => x.IsBusy)) {
                 await Task.Delay(100);
             }
             await Task.Delay(1000);
 
-            for (int i = 1; i <= 1000; i++) {
-                await MpCopyItem.Create(
-                    sourceId: MpPrefViewModel.Instance.ThisAppSourceId,
-                    data: $"This is test {i}",
-                    title: $"This is test {i}",
-                    itemType: MpCopyItemType.Text);
-            }
+            //for (int i = 1; i <= 1000; i++) {
+            //    await MpCopyItem.Create(
+            //        sourceId: MpPrefViewModel.Instance.ThisAppSourceId,
+            //        data: $"This is test {i}",
+            //        title: $"This is test {i}",
+            //        itemType: MpCopyItemType.Text);
+            //}
 
             MpNotificationCollectionViewModel.Instance.FinishLoading();
             MpAvClipTrayViewModel.Instance.OnPostMainWindowLoaded();
-            IsLoaded = true;
+            IsCoreLoaded = true;
         }
 
         protected override async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {

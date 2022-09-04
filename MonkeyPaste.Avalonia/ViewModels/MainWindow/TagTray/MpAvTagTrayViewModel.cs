@@ -340,8 +340,25 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(PinnedItems));
                     OnPropertyChanged(nameof(TagTrayScreenWidth));
                     break;
+
+                case MpMessageType.TraySelectionChanged:
+                    HandleClipTraySelectionChangeAsync().FireAndForgetSafeAsync(this);
+                    break;
             }
         }
+
+        private async Task HandleClipTraySelectionChangeAsync() {
+            var ctrvm = MpAvClipTrayViewModel.Instance;
+
+            if(ctrvm.SelectedItem == null) {
+                Items.ForEach(x => x.IsLinkedToSelectedClipTile = false);
+                return;
+            }
+
+            var tag_ids_for_selected_copy_item = await MpDataModelProvider.GetTagIdsForCopyItemAsync(ctrvm.SelectedItem.CopyItemId);
+            Items.ForEach(x => x.IsLinkedToSelectedClipTile = tag_ids_for_selected_copy_item.Contains(x.TagId));
+        }
+
 
         #region Db Events
 

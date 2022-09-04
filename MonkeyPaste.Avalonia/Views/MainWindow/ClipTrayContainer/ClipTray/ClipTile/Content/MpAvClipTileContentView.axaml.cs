@@ -8,6 +8,8 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using Avalonia.Controls.Primitives;
 using Xamarin.Forms.Internals;
+using MonkeyPaste.Avalonia.Behaviors._Factory;
+using Avalonia.VisualTree;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileContentView : MpAvUserControl<MpAvClipTileViewModel> {
@@ -42,7 +44,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async void MpAvClipTileContentView_PointerPressed(object sender, PointerPressedEventArgs e) {
-            if(!e.IsLeftPress()) {
+            if(!e.IsLeftPress(sender as IVisual)) {
                 e.Handled = false;
                 return;
             }

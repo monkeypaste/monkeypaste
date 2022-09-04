@@ -235,7 +235,7 @@ namespace MonkeyPaste {
             async () => {
                 MpPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr = string.Empty;
 
-            }, () => MpBootstrapperViewModelBase.IsLoaded);
+            }, () => MpBootstrapperViewModelBase.IsCoreLoaded);
 
         public MpIAsyncCommand<int> DoNotShowAgainCommand => new MpAsyncCommand<int>(
             async (notificationId) => {
@@ -244,7 +244,7 @@ namespace MonkeyPaste {
                 }
                 RemoveNotificationCommand.Execute(Notifications.FirstOrDefault(x=>x.NotificationId == notificationId));
 
-                while(!MpBootstrapperViewModelBase.IsLoaded) {
+                while(!MpBootstrapperViewModelBase.IsCoreLoaded) {
                     //wait for dependencies to load
                     await Task.Delay(100);
                 }

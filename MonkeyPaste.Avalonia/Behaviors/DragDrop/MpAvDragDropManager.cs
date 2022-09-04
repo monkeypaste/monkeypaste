@@ -33,17 +33,17 @@ namespace MonkeyPaste.Avalonia {
             get {
                 List<MpAvIContentDropTarget> dtl = new List<MpAvIContentDropTarget>();
 
-                //if (MpAvMainWindow.Instance == null) {
-                //    return dtl;
-                //}
+                if (MpAvMainWindow.Instance == null) {
+                    return dtl;
+                }
 
                 //var rtbvl = MpAvMainWindow.Instance.GetVisualDescendants<MpAvClipTileContentView>();
                 //dtl.AddRange(rtbvl.Select(x => x.ContentViewDropBehavior).Where(x => x.IsDropEnabled).ToList());
 
                 //var ptrv = MpAvMainWindow.Instance.GetVisualDescendant<MpAvPinTrayView>();
-                //if (ptrv != null && ptrv.PinTrayDropBehavior.IsDropEnabled) {
-                //    dtl.Add(ptrv.PinTrayDropBehavior);
-                //}
+                if (MpAvPinTrayDropBehavior.Instance.IsDropEnabled) {
+                    dtl.Add(MpAvPinTrayDropBehavior.Instance);
+                }
 
                 //var adivl = MpAvMainWindow.Instance.GetVisualDescendants<MpActionDesignerItemView>();
                 //dtl.AddRange(adivl.Select(x => x.ActionDesignerItemDropBehavior).Where(x => x.IsDropEnabled).ToList());
@@ -52,7 +52,7 @@ namespace MonkeyPaste.Avalonia {
                 //if (edb != null && edb.IsDropEnabled) {
                 //    dtl.Add(MpAvMainWindow.Instance.ExternalDropBehavior);
                 //}
-                
+
                 return dtl;
             }
         }

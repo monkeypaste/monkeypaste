@@ -106,7 +106,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpIFileSystemWatcher Implementation
 
         public void OnFileSystemItemChanged(object sender, FileSystemEventArgs e) {
-            if(!MpBootstrapperViewModelBase.IsLoaded) {
+            if(!MpBootstrapperViewModelBase.IsCoreLoaded) {
                 // NOTE this check maybe unnecessary. Rtf test was being generated onto desktop during startup and interfering w/ this trigger's lifecycle
                 return;
             }

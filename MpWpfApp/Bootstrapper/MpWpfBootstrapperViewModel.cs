@@ -18,11 +18,11 @@ namespace MpWpfApp {
     public class MpWpfBootstrapperViewModel : MpBootstrapperViewModelBase {
 
         public MpWpfBootstrapperViewModel() : base() {
-            if(_items == null) {
-                _items = new List<MpBootstrappedItemViewModel>();
+            if(_coreItems == null) {
+                _coreItems = new List<MpBootstrappedItemViewModel>();
             }
 
-            _items.AddRange(
+            _coreItems.AddRange(
                 new List<MpBootstrappedItemViewModel>() {
                     new MpBootstrappedItemViewModel(this,typeof(MpDocumentHtmlExtension)),
                     new MpBootstrappedItemViewModel(this,typeof(MpProcessManager)),
@@ -119,9 +119,9 @@ namespace MpWpfApp {
 
             // Sequential (58831 ms 05/30/2022)
             // Sequential (35649 06/12/2022)
-            for (int i = 0; i < _items.Count; i++) {
-                await LoadItemAsync(_items[i], i);
-                while (_items[i].IsBusy) {
+            for (int i = 0; i < _coreItems.Count; i++) {
+                await LoadItemAsync(_coreItems[i], i);
+                while (_coreItems[i].IsBusy) {
                     await Task.Delay(100);
                 }
             }
@@ -181,7 +181,7 @@ namespace MpWpfApp {
             //}
             
 
-            IsLoaded = true;
+            IsCoreLoaded = true;
         }
 
         protected override async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {

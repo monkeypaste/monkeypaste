@@ -13,9 +13,17 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTrayContainerView">
     <local:MpAvUserControl.Styles>
-
-        
-
+        <Style Selector="ListBoxItem"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="Margin"
+                    Value="{Binding OuterSpacing}" />
+            <Setter Property="Padding"
+                    Value="{Binding InnerSpacing}" />
+            <Setter Property="Width"
+                    Value="{Binding BoundWidth}" />
+            <Setter Property="Height"
+                    Value="{Binding BoundHeight}" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="ClipTrayContainerGrid"
           HorizontalAlignment="Stretch"

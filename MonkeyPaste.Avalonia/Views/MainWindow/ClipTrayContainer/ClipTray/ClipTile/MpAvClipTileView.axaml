@@ -24,6 +24,7 @@
                           local:MpAvMenuExtension.IsOpen="{Binding IsContextMenuOpened, Mode=TwoWay}"
                           local:MpAvMousePressCommand.IsEnabled="True"
                           local:MpAvMousePressCommand.DoubleLeftPressCommand="{Binding EnableSubSelectionCommand}"
+                          local:MpAvMousePressCommand.LeftDragBeginCommand="{Binding TileDragBeginCommand}"
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
                           CornerRadius="10"

@@ -733,6 +733,12 @@ namespace MonkeyPaste {
             return result;
         }
 
+        public static async Task<List<int>> GetTagIdsForCopyItemAsync(int ciid) {
+            string query = string.Format(@"select fk_MpTagId from MpCopyItemTag where fk_MpCopyItemId={0}", ciid);
+            var result = await MpDb.QueryScalarsAsync<int>(query);
+            return result;
+        }
+
         public static async Task<int> GetCopyItemCountForTagAsync(int tagId) {
             string query = @"select count(pk_MpCopyItemTagId) from MpCopyItemTag where fk_MpTagId=?";
             var result = await MpDb.QueryScalarAsync<int>(query,tagId);

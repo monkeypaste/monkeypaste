@@ -34,7 +34,7 @@ namespace MonkeyPaste.Avalonia {
         public string SystemTrayIconToolTipText {
             get {
                 if(_systemTrayIconToolTipText == null) {
-                    if(MpAvBootstrapperViewModel.IsLoaded) {
+                    if(MpAvBootstrapperViewModel.IsCoreLoaded) {
                         _systemTrayIconToolTipText = MpPrefViewModel.Instance.ApplicationName;
                     }
                 }
@@ -50,7 +50,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string AppStatus {
             get {
-                if(!MpAvBootstrapperViewModel.IsLoaded) {
+                if(!MpAvBootstrapperViewModel.IsCoreLoaded) {
                     return string.Empty;
                 }
                 if(MpAvMainWindowViewModel.Instance == null) {
@@ -70,7 +70,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string DbSizeInMbs {
             get {
-                if(!MpAvBootstrapperViewModel.IsLoaded) {
+                if(!MpAvBootstrapperViewModel.IsCoreLoaded) {
                     return string.Empty;
                 }
                 return Math.Round(MpFileIo.FileListSize(new string[] {MpPlatformWrapper.Services.DbInfo.DbPath }),2).ToString() + " megabytes";
@@ -79,7 +79,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string PauseOrPlayIconSource {
             get {
-                if (!MpAvBootstrapperViewModel.IsLoaded) {
+                if (!MpAvBootstrapperViewModel.IsCoreLoaded) {
                     return string.Empty;
                 }
                 if (MpAvMainWindowViewModel.Instance == null || MpAvClipTrayViewModel.Instance == null) {
@@ -94,7 +94,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string PauseOrPlayHeader {
             get {
-                if (!MpAvBootstrapperViewModel.IsLoaded) {
+                if (!MpAvBootstrapperViewModel.IsCoreLoaded) {
                     return string.Empty;
                 }
                 if (MpAvMainWindowViewModel.Instance == null || MpAvClipTrayViewModel.Instance == null) {
@@ -141,7 +141,7 @@ namespace MonkeyPaste.Avalonia {
                         lifetime.Shutdown();
                     }
                 });
-            },()=> MpBootstrapperViewModelBase.IsLoaded);
+            },()=> MpBootstrapperViewModelBase.IsCoreLoaded);
 
         public ICommand ShowLogDialogCommand => new MpCommand(
             () => {
@@ -161,7 +161,7 @@ namespace MonkeyPaste.Avalonia {
                 } 
 
                 //await MpAvSettingsWindow.ShowDialog(tabIdx, args);
-            },(args)=>MpAvBootstrapperViewModel.IsLoaded);
+            },(args)=>MpAvBootstrapperViewModel.IsCoreLoaded);
         #endregion
     }
 }

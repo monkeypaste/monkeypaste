@@ -627,6 +627,10 @@ namespace MonkeyPaste.Avalonia {
                         OnPropertyChanged(nameof(ExternalRect));
                         OnMainWindowOpened?.Invoke(this, EventArgs.Empty);
 
+                        if(MpAvClipTrayViewModel.Instance.SelectedItem == null) {
+                            MpAvClipTrayViewModel.Instance.ResetClipSelection(false);
+                        }
+
                         //MpAvClipTrayViewModel.Instance.AddNewItemsCommand.Execute(null);
                     } else {
                         if (IsMainWindowClosing) {

@@ -2385,6 +2385,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
+        public ICommand TileDragBeginCommand => new MpCommand(
+            () => {
+                MpAvDragDropManager.StartDragCheck(this);
+            });
+
         public ICommand EnableSubSelectionCommand => new MpCommand(
             () => {
                 IsSubSelectionEnabled = !IsSubSelectionEnabled;

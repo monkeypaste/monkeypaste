@@ -297,10 +297,10 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (SelectedItem != value && value != null) {
-                    if (value != null && PinnedItems.Any(x => x.CopyItemId == value.CopyItemId)) {
+                    if (PinnedItems.Any(x => x.CopyItemId == value.CopyItemId)) {
                         PinnedItems.ForEach(x => x.IsSelected = x.CopyItemId == value.CopyItemId);
                         Items.ForEach(x => x.IsSelected = false);
-                    } else if (value != null && Items.Any(x => x.CopyItemId == value.CopyItemId)) {
+                    } else if (Items.Any(x => x.CopyItemId == value.CopyItemId)) {
                         Items.ForEach(x => x.IsSelected = x.CopyItemId == value.CopyItemId);
                         PinnedItems.ForEach(x => x.IsSelected = false);
                     } else {
@@ -1153,6 +1153,11 @@ namespace MonkeyPaste.Avalonia {
                     SetScrollAnchor();
                     break;
 
+                // REQUERY
+                case MpMessageType.RequeryCompleted:
+
+                    break;
+
                 // Selection
                 case MpMessageType.TraySelectionChanged:
                     OnPropertyChanged(nameof(CanScroll));
@@ -1164,6 +1169,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     CheckLoadMore();
                     break;
+
             }
         }
 
@@ -1676,7 +1682,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void ClearClipSelection(bool clearEditing = true) {
-            Dispatcher.UIThread.Post((Action)(() => {
+            //Dispatcher.UIThread.Post((Action)(() => {
                 if (clearEditing) {
                     ClearClipEditing();
                 }
@@ -1689,7 +1695,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Clear();
-            }));
+            //}));
         }
 
         public void ClearPinnedSelection(bool clearEditing = true) {
@@ -2499,6 +2505,7 @@ namespace MonkeyPaste.Avalonia {
                 bool isScrollJump = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is MpPoint;
                 bool isOffsetJump = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is int;
                 bool isLoadMore = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is bool;
+                bool isRequery = !isSubQuery;
 
                 int loadOffsetIdx = 0;
                 int loadCount = 0;
@@ -2674,9 +2681,7 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
 
-                if (isSubQuery) {
-                    //Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
-                } else {
+                if (isRequery) {
                     HasUserAlteredPinTrayWidth = false;
 
                     if (SelectedItem == null &&
@@ -2698,7 +2703,10 @@ namespace MonkeyPaste.Avalonia {
                 if (Items.Count == 0) {
                     ScrollOffsetX = LastScrollOffsetX = ScrollOffsetY = LastScrollOffsetY = 0;
                 }
-                if (!isSubQuery) {
+
+                IsBusy = IsRequery = false;
+
+                if (isRequery) {
                     //_scrollOffset = LastScrollOffsetX = 0;
                     //ForceScrollOffset(MpPoint.Zero);
                     MpMessenger.SendGlobal<MpMessageType>(MpMessageType.RequeryCompleted);
@@ -2708,7 +2716,6 @@ namespace MonkeyPaste.Avalonia {
                     MpMessenger.SendGlobal<MpMessageType>(MpMessageType.JumpToIdxCompleted);
                 }
 
-                IsBusy = IsRequery = false;
 
                 sw.Stop();
                 MpConsole.WriteLine($"Update tray of {Items.Count} items took: " + sw.ElapsedMilliseconds);

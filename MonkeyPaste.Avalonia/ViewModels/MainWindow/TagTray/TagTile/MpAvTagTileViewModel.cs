@@ -237,7 +237,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsTagNameTextBoxFocused { get; set; } = false;
 
 
-        public bool IsAssociated { get; private set; }
+        public bool IsLinkedToSelectedClipTile { get; set; }
 
         public bool IsContextMenuOpened { get; set; } = false;
 
@@ -262,7 +262,7 @@ namespace MonkeyPaste.Avalonia {
                 if(IsContextMenuOpened) {
                     return MpSystemColors.red1;
                 }
-                if (IsAssociated) {
+                if (IsSelected && IsLinkedToSelectedClipTile) {
                     return TagHexColor;
                 }
                 return MpSystemColors.Transparent;
@@ -690,10 +690,6 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch(msg) {
-                case MpMessageType.TraySelectionChanged:
-                    //Dispatcher.UIThread.InvokeAsync(UpdateAssociationAsync).FireAndForgetSafeAsync(this);
-                    UpdateAssociationAsync_void();
-                    break;
                 case MpMessageType.TrayScrollChanged:
                 case MpMessageType.RequeryCompleted:
                 case MpMessageType.JumpToIdxCompleted:
@@ -707,16 +703,6 @@ namespace MonkeyPaste.Avalonia {
             await Task.WhenAll(Items.Select(x => x.Tag.WriteToDatabaseAsync()));
         }
 
-        private async void UpdateAssociationAsync_void() {
-            //Dispatcher.UIThread.Post(async() => {
-                if (MpAvClipTrayViewModel.Instance.SelectedItem == null) {
-                    IsAssociated = false;
-                } else {
-                    IsAssociated = await IsCopyItemLinkedAsync(MpAvClipTrayViewModel.Instance.SelectedItem.CopyItemId);
-                }
-           // });
-            
-        }
 
         private void UpdateNotifier() {
             var idsSeen = new List<int>();

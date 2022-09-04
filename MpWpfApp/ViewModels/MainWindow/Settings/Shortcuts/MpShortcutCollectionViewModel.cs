@@ -501,7 +501,7 @@ namespace MpWpfApp {
         private void GlobalHook_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e) {
             if (!MpMainWindowViewModel.Instance.IsMainWindowOpen && 
                 !MpMainWindowViewModel.Instance.IsMainWindowOpening && 
-                MpBootstrapperViewModelBase.IsLoaded) {
+                MpBootstrapperViewModelBase.IsCoreLoaded) {
                 if (MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
                     if (e.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
                         MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);

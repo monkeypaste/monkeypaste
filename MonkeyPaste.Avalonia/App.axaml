@@ -5,6 +5,56 @@
              x:DataType="local:MpAvSystemTrayViewModel"
              x:CompileBindings="True"
              x:Class="MonkeyPaste.Avalonia.App">
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/Dictionaries/MpAvImageResourceDictionary.axaml" />
+        <ResourceInclude Source="/Assets/Dictionaries/MpAvIconResourceDictionary.axaml" />
+        <ResourceInclude Source="/Assets/Dictionaries/MpAvSvgResourceDictionary.axaml" />
+        <ResourceInclude Source="/Assets/Dictionaries/MpAvConverterResourceDictionary.axaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+
+    <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">
+      Transparent
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">
+      Transparent
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">
+      Transparent
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">
+      Transparent
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">
+      Transparent
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">
+      Transparent
+    </SolidColorBrush>
+    <Thickness x:Key="ListBoxItemPadding">
+      5,5,5,5
+    </Thickness>
+    <SolidColorBrush x:Key="DefaultBorderBrush_unselected">
+      Transparent
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="DefaultBorderBrush_selected">
+      Red
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="IsHoveringBorderBrush_unselected">
+      Yellow
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="IsHoveringBorderBrush_selected">
+      SpringGreen
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="CanResizeBorderBrush">
+      DeepPink
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="IsResizingBorderBrush">
+      LightPink
+    </SolidColorBrush>
+  </Application.Resources>
     <Application.Styles>
         <FluentTheme Mode="Light" />
         <!--<StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml" />
@@ -65,6 +115,8 @@
                     Value="0" />
         </Style>
 
+      <!--  ListBoxItem  -->
+
         <Style Selector="ListBoxItem">
             <Setter Property="HorizontalAlignment"
                     Value="Left" />
@@ -97,7 +149,66 @@
             <Setter Property="Background"
                     Value="Transparent" />
         </Style>
-        <!--  TreeViewItemBackgroundSelected  -->
+      
+      <!-- ListBoxItem Border .TileBorder -->
+      <Style Selector=":is(local|MpAvClipBorder).TileBorder"
+                               x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="BorderBrush"
+                             Duration="0:0:0.2" />
+          </Transitions>
+        </Setter>
+        <Setter Property="BorderBrush"
+                Value="{StaticResource DefaultBorderBrush_unselected}" />
+      </Style>
+
+      <!--  Hover Unselected  -->
+
+      <Style Selector="ListBoxItem:pointerover:not(:selected) :is(Border).TileBorder"
+             x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="BorderBrush"
+                Value="{StaticResource IsHoveringBorderBrush_unselected}" />
+      </Style>
+
+
+      <!--  Default Selected  -->
+
+      <Style Selector="ListBoxItem:selected :is(Border).TileBorder"
+             x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="BorderBrush"
+                Value="{StaticResource DefaultBorderBrush_selected}" />
+      </Style>
+
+
+      <!--  Hover Selected  -->
+
+      <Style Selector="ListBoxItem:selected:pointerover :is(Border).TileBorder:not(.CanResize):not(.IsResizing)"
+             x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="BorderBrush"
+                Value="{StaticResource IsHoveringBorderBrush_selected}" />
+      </Style>
+
+      <!--  Default Resize  -->
+
+      <Style Selector="ListBoxItem :is(Border).TileBorder.IsResizing"
+             x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="BorderBrush"
+                Value="{StaticResource IsResizingBorderBrush}" />
+      </Style>
+
+
+      <!--  Hover Resizing  -->
+
+      <Style Selector="ListBoxItem:selected:pointerover :is(Border).TileBorder.CanResize:not(.IsResizing)"
+             x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="BorderBrush"
+                Value="{StaticResource CanResizeBorderBrush}" />
+      </Style>
+      
+      <!-- END ListBoxItem -->
+      
+        <!--  TreeViewItem  -->
         <Style Selector="TreeViewItem:selected /template/ Border#PART_LayoutRoot">
             <Setter Property="Background"
                     Value="Transparent" />
@@ -107,59 +218,12 @@
                     Value="Transparent" />
         </Style>
 
-
+        <!-- END TreeViewItem -->
 
     </Application.Styles>
-    <Application.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="/Assets/Dictionaries/MpAvImageResourceDictionary.axaml" />
-                <ResourceInclude Source="/Assets/Dictionaries/MpAvIconResourceDictionary.axaml" />
-                <ResourceInclude Source="/Assets/Dictionaries/MpAvSvgResourceDictionary.axaml" />
-                <ResourceInclude Source="/Assets/Dictionaries/MpAvConverterResourceDictionary.axaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-
-        <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">
-            Transparent
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">
-            Transparent
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">
-            Transparent
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">
-            Transparent
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">
-            Transparent
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">
-            Transparent
-        </SolidColorBrush>
-        <Thickness x:Key="ListBoxItemPadding">
-            5,5,5,5
-        </Thickness>
-        <SolidColorBrush x:Key="DefaultBorderBrush_unselected">
-            Transparent
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="DefaultBorderBrush_selected">
-            Red
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="IsHoveringBorderBrush_unselected">
-            Yellow
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="IsHoveringBorderBrush_selected">
-            SpringGreen
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="CanResizeBorderBrush">
-            DeepPink
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="IsResizingBorderBrush">
-            LightPink
-        </SolidColorBrush>
-    </Application.Resources>
+  
+  <!-- NOTE Below is systray icon menu which has avalonia bug (may get fixed) that makes extra icons for cef process -->
+    
     <!--<NativeMenu.Menu>
         <NativeMenu>
             <NativeMenuItem Header="About Monkey Paste" />

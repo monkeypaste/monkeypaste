@@ -43,6 +43,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Lb_EffectiveViewportChanged(object sender, EffectiveViewportChangedEventArgs e) {
+            // NOTE don't delete below its related to orientation/layout change logic where grid loadMore locks up in vertical mode 
             if(sender is Control control && control.GetVisualDescendant<Canvas>() is Canvas items_panel_canvas) {
                 double max_diff = 1.0;
                 double w_diff = Math.Abs(items_panel_canvas.Bounds.Width - BindingContext.ClipTrayTotalWidth);
