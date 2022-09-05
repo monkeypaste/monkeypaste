@@ -24,17 +24,26 @@ function initDragDrop() {
 
     let allDocTags = [...InlineTags, ...BlockTags];
     let allDocTagsQueryStr = allDocTags.join(',');
-    let editorElms = document.getElementById('editor').querySelectorAll(allDocTagsQueryStr);
+    //let editorElms = document.getElementById('editor').querySelectorAll(allDocTagsQueryStr);
 
     enableDragDropOnElement(document.body);
     enableDragDropOnElement(window);
     enableDragDropOnElement(document.getElementById('editor'));
+
     //Array.from(editorElms).forEach(elm => {
     //    enableDragDropOnElement(elm);
     //});    
 
     window.addEventListener('mousemove', onMouseMove_dragOverFallback);
-    //window.addEventListener('keydown', onKeyDown);
+
+    //setInterval(onTick, 1000)
+    //window.addEventListener('keydown', onKeyDown_debug);
+}
+
+function onTick() {
+    //let range = getSelection();
+    //log("dragover idx " + range.index + ' length "' + range.length);
+
 }
 
 
@@ -76,9 +85,10 @@ function initDragDropOverrides() {
     //    event.stopPropagation();
     //}, true);
 
-    //window.addEventListener('dragover', function (event) {
-    //    var event2 = new CustomEvent('mp_dragover', { detail: { original: event } });
-    //    event.target.dispatchEvent(event2);
+    //window.addEventListener('dragover', function (/*event*/) {
+    //    //var event2 = new CustomEvent('mp_dragover', { detail: { original: event } });
+    //    //event.target.dispatchEvent(event2);
+        
 
     //    event.stopPropagation();
     //}, true);
@@ -217,7 +227,7 @@ function startDrop(e) {
 
     if (isDropping()) {
         //setCaretColor('transparent');
-        disbleTextWrapping();
+        disableTextWrapping();
         showScrollbars();
 	}
 }
@@ -275,9 +285,17 @@ function dropData(docIdx, data) {
 }
 
 function onMouseMove_dragOverFallback(e) {
+    //let offset = getDocIdxFromPoint({ x: parseFloat(e.clientX), y: parseFloat(e.clientY) });
+    //log('offset: ' + offset);
+
     if (!isDropping()) {
+        if (parseInt(e.buttons) != 0) {
+            //showTemplateUserSelection();
+		}
+        
         return;
     }
+    log('window.mousemove dragover fallback resetting drag drop');
     resetDragDrop();
     return;
 
@@ -297,7 +315,7 @@ function onMouseMove_dragOverFallback(e) {
     drawOverlay();
 }
 
-function onKeyDown(e) {
+function onKeyDown_debug(e) {
     // unused only for debugging
     if (!isDropping()) {
         return;
@@ -456,7 +474,7 @@ function onDrop(e) {
         length_delta = quill.getLength() - pre_doc_length;
     }
 
-    quill.setSelection(post_sel_start_idx, length_delta);
+    setEditorSelection(post_sel_start_idx, length_delta);
 
     resetDragDrop();
 }
@@ -485,7 +503,7 @@ function onCefDragEnter(text) {
 //        //itemHtml = retargetPlainTextClipboardData(CefDragData);
 //        //CefDragData = null;
 //        let dropIdx = 0;//getEditorIndexFromPoint_ByLine({ x: e.clientX, y: e.clientY });
-//        quill.setSelection(dropIdx, 0);
+//        quill.setEditorSelection(dropIdx, 0);
 //        quill.insertText(0, CefDragData);
 //        //quill.clipboard.dangerouslyPasteHTML(dropIdx, CefDragData);
 //    } else {
@@ -500,7 +518,7 @@ function onCefDragEnter(text) {
 
 //        if (itemHtml != '') {
 //            let dropIdx = getEditorIndexFromPoint_ByLine(mp);
-//            quill.setSelection(dropIdx, 0);
+//            quill.setEditorSelection(dropIdx, 0);
 //            quill.clipboard.dangerouslyPasteHTML(dropIdx, itemHtml);
 //            //if (isHtml) {
 //            //    quill.clipboard.dangerouslyPasteHTML(dropIdx, itemData);

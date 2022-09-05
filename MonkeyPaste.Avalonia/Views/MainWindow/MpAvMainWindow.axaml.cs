@@ -425,10 +425,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvMainWindowViewModel.Instance.MainWindowRect = oldAndNewVals.newValue.ToPortableRect();
         }
         private void MainWindow_PointerMoved(object sender, global::Avalonia.Input.PointerEventArgs e) {
-            if(!MpAvShortcutCollectionViewModel.IS_GLOBAL_INPUT_ENABLED) {
-                // NOTE only for debugging since step tracing gets so slow
-                MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation = e.GetClientMousePoint(this);
-            }
+            
             var mwvm = MpAvMainWindowViewModel.Instance;
             if (mwvm.IsResizing) {
                 mwvm.IsResizerVisible = true;

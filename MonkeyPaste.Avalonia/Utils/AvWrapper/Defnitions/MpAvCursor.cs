@@ -17,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
                 //{MpCursorType.TileCopy, new Cursor(Path.Combine(Environment.CurrentDirectory, MpPlatformWrapper.Services.PlatformResource.GetResource("CopyCursor") as string))  )},
                 {MpCursorType.OverDragItem, new Cursor(StandardCursorType.Hand)},
                 {MpCursorType.ContentMove, new Cursor(StandardCursorType.Hand)},
-                {MpCursorType.TileMove, new Cursor(StandardCursorType.Hand)},
+                {MpCursorType.TileMove, new Cursor(StandardCursorType.Cross)},
                 {MpCursorType.ContentCopy, new Cursor(StandardCursorType.Hand)},
                 {MpCursorType.TileCopy, new Cursor(StandardCursorType.Hand)},
                 {MpCursorType.Invalid, new Cursor(StandardCursorType.No )},

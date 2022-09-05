@@ -8,6 +8,9 @@ var ENCODED_TEMPLATE_REGEXP;
 var MouseDownOnTemplatePos;
 var IsMovingTemplate = false;
 
+var IsAnyTemplateBgTemporary = false;
+var DragAnchorDocIdxWhenTemplateWithinSelection = -1;
+
 var templateTypesMenuOptions = [
     {
         label: 'Dynamic',
@@ -106,6 +109,9 @@ function initTemplates(usedTemplates, isPasting) {
 
     document.getElementById('templateNameTextInput').onfocus = onTemplateNameTextAreaGotFocus;
     document.getElementById('templateNameTextInput').onblur = onTemplateNameTextAreaLostFocus;
+    document.getElementById('templateNameTextInput').onkeydown = onTemplateNameTextArea_keydown;
+    document.getElementById('templateNameTextInput').onkeyup = onTemplateNameTextArea_keyup;
+
     document.getElementById('templateDetailTextInput').onfocus = onTemplateDetailTextAreaGotFocus;
     document.getElementById('templateDetailTextInput').onblur = onTemplateDetailTextAreaLostFocus;
 
@@ -218,13 +224,13 @@ function applyTemplateToDomNode(node, value) {
             return;
         }
 
-        let targetDocIdx = getEditorIndexFromPoint_Absolute({ x: e.clientX, y: e.clientY });
+        let targetDocIdx = getDocIdxFromPoint({ x: e.clientX, y: e.clientY });
 
         if (targetDocIdx < 0) {
             return;
         }
         
-        moveTemplate(node.getAttribute('templateGuid'), node.getAttribute('templateInstanceGuid'), targetDocIdx, e.ctrlKey);
+        moveTemplate(node.getAttribute('templateInstanceGuid'), targetDocIdx, e.ctrlKey);
     }
 
     function pointerMove(e) {
@@ -237,7 +243,7 @@ function applyTemplateToDomNode(node, value) {
             templateDocIdxCache = getTemplateElementsWithDocIdx();
         }
 
-        let docIdx = getEditorIndexFromPoint_Absolute({ x: e.clientX, y: e.clientY },templateDocIdxCache);
+        let docIdx = getDocIdxFromPoint({ x: e.clientX, y: e.clientY }, templateDocIdxCache);
         log('docIdx: ' + docIdx);
 
         if (docIdx < 0) {
@@ -246,7 +252,7 @@ function applyTemplateToDomNode(node, value) {
         if (!quill.hasFocus()) {
             quill.focus();
         }
-        quill.setSelection(docIdx, 0);
+        setEditorSelection(docIdx, 0);
     }
 
     node.onpointerdown = pointerDown;
@@ -289,6 +295,7 @@ function getTemplateProperty(tguid, propertyName) {
 }
 
 function isTemplateNode(node) {
+
     return node.getAttribute('templateGuid') != null;
 }
 
@@ -436,23 +443,33 @@ function getFocusTemplateGuid() {
     return ft.domNode.getAttribute('templateGuid');
 }
 
-function getTemplatesFromRange(range) {
+function getTemplateElementsInRange(range) {
     if (range == null || range.index == null) {
         log('invalid range: ' + range);
     }
     let tl = [];
     let tel = getTemplateElements();
     tel.forEach(function (te) {
-        let t = getTemplateFromDomNode(te);
-        let docIdx = getTemplateDocIdx(t.templateInstanceGuid);
-        if (docIdx == range.index) {
+        let te_blot = Quill.find(te);
+        if (!te_blot) {
+            return;
+		}
+        let te_doc_idx = te_blot.offset(quill.scroll);
+        if (te_doc_idx >= range.index && te_doc_idx <= range.index + range.length) {
+            // template is range
             tl.push(te);
-        } else if (docIdx > range.index && docIdx < range.index + range.length) {
-            tl.push(te);
-        }
+		}
+        //let t = getTemplateFromDomNode(te);
+        //let docIdx = getTemplateDocIdx(t.templateInstanceGuid);
+        //if (docIdx == range.index) {
+        //    tl.push(te);
+        //} else if (docIdx > range.index && docIdx < range.index + range.length) {
+        //    tl.push(te);
+        //}
     });
     return tl;
 }
+
 
 
 //#region Paste 
@@ -641,12 +658,12 @@ function insertTemplate(range, t) {
     focusTemplate(t.templateGuid, true);
 }
 
-function moveTemplate(tguid, tiguid, nidx, isCopy) {
+function moveTemplate(tiguid, nidx, isCopy) {
     IsMovingTemplate = true;
 
     let tidx = getTemplateDocIdx(tiguid);
 
-    let t = getTemplateInstance(tguid, tiguid);
+    let t = getTemplateInstanceElement(tiguid);
 
     if (isCopy) {
         t.templateInstanceGuid = generateGuid();
@@ -666,16 +683,90 @@ function moveTemplate(tguid, tiguid, nidx, isCopy) {
     focusTemplate(t, true);
 }
 
-function refreshTemplatesAfterSelectionChange() {
-    let range = quill.getSelection();
+
+function coereceSelectionWithTemplatePadding(range, oldRange, source) {
+    if (!range) {
+        return;
+    }
+    /*
+    // cases
+    // 1. user clicks on template idx
+    // 2. user clicks on pre pad idx
+    // 3. user clicks on post pad idx
+    // 4. user arrows right onto pre pad idx
+    // 5. user arrows left onto pre pad idx
+    // 6. user arrows right onto post pad idx
+    // 7. user arrows left onto post pad idx
+    // 8. user dragging selection from right onto post pad idx
+    // 9. user dragging selection from left onto pre pad idx
+
+
+    // results
+    // 1. do nothing (disable add template button)
+    // 2. selection moved +1 to template idx
+    // 3. selection is moved -1 to template idx
+    // 4. #2
+    // 5. do nothing
+    // 6. do nothing
+    // 7.
+    */
+
+    let isAddTemplateValid = true;
+    let tel = getTemplateElements();
+
+    for (var i = 0; i < tel.length; i++) {
+        let new_range = range;
+        let te = tel[i];
+        let tDocIdx = getTemplateDocIdx(te.getAttribute('templateInstanceGuid'));
+        if (range.index == tDocIdx + 1) {
+            //if start/caret idx is at post pad space
+            if (oldRange.index == range.index + 1) {
+                //caret moving left
+                new_range.index = tDocIdx;
+            } else if (oldRange.index == tDocIdx) {
+                //caret moving right
+                new_range.index++;
+            } else {
+                new_range = null;
+            }
+            //return;
+        } else if (range.index == tDocIdx - 1) {
+            //if start/caret idx is at pre pad space
+            if (oldRange.index == tDocIdx) {
+                //caret moving left
+                new_range.index--;
+            } else if (oldRange.index + 1 == range.index) {
+                //caret moving right
+                new_range.index++;
+            } else {
+                new_range = null;
+            }
+            //return;
+        } else if (range.index == tDocIdx) {
+            new_range = range;
+            isAddTemplateValid = false;
+        }
+        if (new_range && (new_range.index != range.index || new_range.length != range.length)) {
+            //IgnoreNextSelectionChange = true;
+
+
+            setEditorSelection(new_range.index, new_range.length);
+
+            //range = nrange;
+            refreshTemplatesAfterSelectionChange();
+            break;
+        }
+    }
+
 
     getTemplateElements().forEach(telm => { telm.classList.remove('ql-template-embed-blot-at-insert') });
 
-    let tl = getTemplatesFromRange(range);
-    if (tl.length > 0) {
-
-        tl.forEach(telm => { telm.classList.add('ql-template-embed-blot-at-insert') });
-    }
+    if (range) {
+        let tl = getTemplateElementsInRange(range);
+        if (tl.length > 0) {
+            tl.forEach(telm => { telm.classList.add('ql-template-embed-blot-at-insert') });
+        }
+	}
 }
 
 function getLowestAnonTemplateName(anonPrefix = 'Template #') {
@@ -715,7 +806,7 @@ function focusTemplate(tguid, fromDropDown, tiguid) {
                 te.classList.add('ql-template-embed-blot-focus');
                 let teBlot = Quill.find(te);
                 let teIdx = quill.getIndex(teBlot);
-                quill.setSelection(teIdx,1);
+                setEditorSelection(teIdx,1);
             } else {
                 te.classList.add('ql-template-embed-blot-focus-not-instance');
             }
@@ -767,15 +858,9 @@ function getTemplateElements(tguid, iguid) {
 }
 
 function onColorPaletteItemClick(chex) {
-    let tel = getTemplateElements(getFocusTemplateGuid());
+    let tguid = getFocusTemplateGuid();
+    setTemplateBgColor(tguid, null,chex, false);
 
-    for (var i = 0; i < tel.length; i++) {
-        var te = tel[i];
-        te.style.backgroundColor = chex;
-        te.setAttribute('templateColor', chex);
-
-        te.style.color = isBright(chex) ? 'black' : 'white';
-    }
     document.getElementById('templateColorBox').style.backgroundColor = chex;
     hideAllTemplateContextMenus();
 }
@@ -790,17 +875,60 @@ function eventFire(el, etype) {
     }
 }
 
+function setTemplateBgColor(tguid, tiguid, color_name_or_hex, isTemporary) {
+    let tel = [];
+    if (tguid && !tiguid) {
+        tel = getTemplateElements(tguid);
+    } else {
+        let te = getTemplateInstanceElement(tiguid);
+        if (te) {
+            tel.push(te);
+		}
+	}
+
+    for (var i = 0; i < tel.length; i++) {
+        var te = tel[i];
+        te.style.backgroundColor = color_name_or_hex;
+        te.style.color = isBright(color_name_or_hex) ? 'black' : 'white';
+        if (isTemporary) {
+            te.classList.add('temporary-bg-color');
+            continue;
+        }
+
+        te.setAttribute('templateColor', color_name_or_hex);
+    }
+}
+
+function resetAllTemporaryTemplateBgColors() {
+    let temp_template_bg_elms = document.querySelectorAll('.temporary-bg-color');
+    Array.from(temp_template_bg_elms)
+        .forEach((te) => {
+            te.classList.remove('temporary-bg-color');
+            let template_color = te.getAttribute('templateColor');
+            te.style.backgroundColor = template_color;
+            te.style.color = isBright(template_color) ? 'black' : 'white';
+        });
+    IsAnyTemplateBgTemporary = false;
+}
+
+
 function getTemplateDefByGuid(tguid) {
     return getUsedTemplateDefinitions().find(x=>x.domNode.getAttribute('templateGuid') == tguid);
 }
 
-function getTemplateInstance(tguid, tiguid) {
-    let telm = document.querySelector('[templateGuid="' + tguid + '"],[templateInstanceGuid="' + tiguid + '"]');
-    if (telm == null) {
-        return null;
-    }
-    return getTemplateFromDomNode(telm);
+function getTemplateInstanceElement(tiguid) {
+    let telm = document.querySelector('[templateInstanceGuid="' + tiguid + '"]');
+    return telm;
+ //   if (telm == null) {
+ //       return null;
+ //   }
+ //   let telm_l = Array.from(telm);
+ //   if (telm_l.length == 0) {
+ //       return null;
+	//}
+ //   return telm_l[0];
 }
+
 
 function hideAllTemplateContextMenus() {
     hideTemplateColorPaletteMenu();
@@ -884,81 +1012,106 @@ function updateTemplatesAfterTextChanged(delta, oldDelta, source) {
     }
 }
 
-function updateTemplatesAfterSelectionChanged(range, oldRange, source) {
-    if (!range) {
-        return;
-    }
-    /*
-    // cases
-    // 1. user clicks on template idx
-    // 2. user clicks on pre pad idx
-    // 3. user clicks on post pad idx
-    // 4. user arrows right onto pre pad idx
-    // 5. user arrows left onto pre pad idx
-    // 6. user arrows right onto post pad idx
-    // 7. user arrows left onto post pad idx
-    // 8. user dragging selection from right onto post pad idx
-    // 9. user dragging selection from left onto pre pad idx
+function updateTemplatesAfterSelectionChange(range, oldRange, source, isSubCall = false) {
+    let new_drag_anchor_range_end_doc_idx = -1;
+    let template_elms_in_sel_range = range ? getTemplateElementsInRange(range) : [];
+    if (template_elms_in_sel_range.length > 0) {
+        // template(s) in sel range
+
+        // NOTE template blot doesn't show text selection overlay so style is adjusted
 
 
-    // results
-    // 1. do nothing (disable add template button)
-    // 2. selection moved +1 to template idx
-    // 3. selection is moved -1 to template idx
-    // 4. #2
-    // 5. do nothing
-    // 6. do nothing
-    // 7.
-    */
+        // 1. when template is selected or part of sel range cannot add template
+        // since templates can't contain other templates and by default new template use sel data as template data
 
-    let isAddTemplateValid = true;
-    let tel = getTemplateElements();
-
-    for (var i = 0; i < tel.length; i++) {
-        let nrange = range;
-        let te = tel[i];
-        let tDocIdx = getTemplateDocIdx(te.getAttribute('templateInstanceGuid'));
-        if (range.index == tDocIdx + 1) {
-            //if start/caret idx is at post pad space
-            if (oldRange.index == range.index + 1) {
-                //caret moving left
-                nrange.index = tDocIdx;
-            } else if (oldRange.index == tDocIdx) {
-                //caret moving right
-                nrange.index++;
-            } else {
-                nrange = null;
-            }
-            //return;
-        } else if (range.index == tDocIdx - 1) {
-            //if start/caret idx is at pre pad space
-            if (oldRange.index == tDocIdx) {
-                //caret moving left
-                nrange.index--;
-            } else if (oldRange.index + 1 == range.index) {
-                //caret moving right
-                nrange.index++;
-            } else {
-                nrange = null;
-            }
-            //return;
-        } else if (range.index == tDocIdx) {
-            nrange = range;
-            isAddTemplateValid = false;
-        }
-        if (nrange) {
-            //IgnoreNextSelectionChange = true;
-            quill.setSelection(nrange);
-            //range = nrange;
-            refreshTemplatesAfterSelectionChange();
-            break;
-        }
-    }
-    if (isAddTemplateValid) {
-        enableCanCreateTemplateToolbarItem();
-    } else {
         disableCanCreateTemplateToolbarItem();
+
+        if (IsAnyTemplateBgTemporary) {
+            // in case template bg has already been overriden and sel no longer contains that template
+            // clear any needing it before reapplying
+
+            resetAllTemporaryTemplateBgColors();
+		}
+        IsAnyTemplateBgTemporary = true;
+
+        let sel_bg_color = getTextSelectionBgColor();
+
+        template_elms_in_sel_range.forEach((telm) => {
+            setTemplateBgColor(null, telm.getAttribute('templateInstanceGuid'), sel_bg_color, true);
+        });
+
+        // BUG don't know why but dragging towards start and adding tempalte to selection clears selection
+        // so store original range end
+
+
+        if (DragAnchorDocIdxWhenTemplateWithinSelection >= 0) {
+            // anchor was set on previous call
+            IgnoreNextSelectionChange = true;
+            setEditorSelection(range.index, DragAnchorDocIdxWhenTemplateWithinSelection - range.index,'api');
+            //DragAnchorDocIdxWhenTemplateWithinSelection = range.index + oldRange.length;
+   //         if (range.index <= DragAnchorDocIdxWhenTemplateWithinSelection) {
+   //             setEditorSelection(range.index, DragAnchorDocIdxWhenTemplateWithinSelection - range.index);
+   //         } else {
+   //             let temp_start_idx = DragAnchorDocIdxWhenTemplateWithinSelection;
+   //             let temp_length = DragAnchorDocIdxWhenTemplateWithinSelection - range.index;
+   //             setEditorSelection(temp_start_idx, temp_length);
+   //             DragAnchorDocIdxWhenTemplateWithinSelection = range.index;
+			//}
+        } else  {
+            // no anchor set yet
+
+            let is_drag_towards_doc_start = range.index < oldRange.index;
+            let cur_range_end_idx = range.index + oldRange.length;
+            if (is_drag_towards_doc_start) {
+                if (cur_range_end_idx != DragAnchorDocIdxWhenTemplateWithinSelection) {
+                    // when selection dragging towards start, only flag new_anchor if its changed
+                    new_drag_anchor_range_end_doc_idx = cur_range_end_idx;
+				}
+            } else {
+                if (cur_range_end_idx > DragAnchorDocIdxWhenTemplateWithinSelection) {
+                    // flag drag end anchor idx
+                    new_drag_anchor_range_end_doc_idx = cur_range_end_idx;
+                }
+            }
+		}
+
+    } else {
+        // no templates in sel range
+        if (isSubCall) {
+            // this means sel was forced and new doesn't have template
+            DragAnchorDocIdxWhenTemplateWithinSelection = -1;
+		} else if (DragAnchorDocIdxWhenTemplateWithinSelection >= 0) {
+            IgnoreNextSelectionChange = true;
+            setEditorSelection(range.index, DragAnchorDocIdxWhenTemplateWithinSelection - range.index, 'api');
+            updateTemplatesAfterSelectionChange(range, oldRange, source, true);
+            return;
+		}
+        enableCanCreateTemplateToolbarItem();
+
+        if (IsAnyTemplateBgTemporary) {
+           resetAllTemporaryTemplateBgColors();
+        }
+    }
+
+    if (new_drag_anchor_range_end_doc_idx >= 0) {
+        DragAnchorDocIdxWhenTemplateWithinSelection = new_drag_anchor_range_end_doc_idx;
 	}
+}
+
+function showTemplateUserSelection() {
+    resetAllTemporaryTemplateBgColors();
+
+    let sel_range = getSelection();
+    if (!sel_range) {
+        return;
+	}
+    let template_elms_in_sel_range = sel_range ? getTemplateElementsInRange(sel_range) : [];
+    if (template_elms_in_sel_range.length > 0) {
+        let sel_bg_color = getTextSelectionBgColor();
+        template_elms_in_sel_range.forEach((telm) => {
+            setTemplateBgColor(null, telm.getAttribute('templateInstanceGuid'), sel_bg_color, true);
+        });
+    }
 }
 
 function getTemplateToolbarHeight() {

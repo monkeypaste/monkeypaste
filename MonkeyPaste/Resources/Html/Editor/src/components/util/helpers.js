@@ -1,33 +1,4 @@
-﻿//#region Color
-
-function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
-
-function isBright(hex, brightThreshold = 150) {
-    var c = hexToRgb(hex.toLowerCase());
-    var grayVal = Math.sqrt(
-        c.R * c.R * .299 +
-        c.G * c.G * .587 +
-        c.B * c.B * .114);
-    return grayVal > brightThreshold;
-}
-
-function hexToRgb(hex) {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        R: parseInt(result[1], 16),
-        G: parseInt(result[2], 16),
-        B: parseInt(result[3], 16)
-    } : null;
-}
-
-//#endregion
+﻿//#endregion
 
 //#region DOM Traversal
 
@@ -49,6 +20,14 @@ function changeInnerText(elm, text, newText) {
     }
 
     changeInnerTextHelper(elm.firstChild, text, newText);
+}
+
+function substringByLength(str, sIdx, length) {
+    // js subsring is by sidx,eidx
+    // cs substring is by sidx,length 
+    // this mimics cs for ported code, etc.
+    let eIdx = sIdx + length;
+    return str.substring(sIdx, eIdx);
 }
 
 function getAllElements(elm) {
@@ -207,4 +186,9 @@ function hasJsonStructure(str) {
     }
 }
 
+function isTextElement(elm) {
+    return elm.nodeType === 3;
+}
+
+const delay = time => new Promise(res => setTimeout(res, time));
 

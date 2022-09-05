@@ -1,3 +1,21 @@
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+function isBright(hex_or_color_name_or_rgb_or_rgba, brightThreshold = 150) {
+    var rgb = hexToRgb(hex_or_color_name_or_rgb_or_rgba.toLowerCase());
+    var grayVal = Math.sqrt(
+        rgb.R * rgb.R * .299 +
+        rgb.G * rgb.G * .587 +
+        rgb.B * rgb.B * .114);
+    return grayVal > brightThreshold;
+}
+
 function parseRgba(rgb_Or_rgba_Or_colorName_Str) {
     if (typeof rgb_Or_rgba_Or_colorName_Str === 'string' || rgb_Or_rgba_Or_colorName_Str instanceof String) {
         if (!rgb_Or_rgba_Or_colorName_Str.startsWith('#')) {
@@ -40,17 +58,27 @@ function hexToRgba(hexStr) {
     let x = hexStr.length == 8 ? 2 : 0;
 
     let a = x > 0 ? parseInt(hexStr.substring(0, 2), 16) : 255;
-    let r = parseInt(getSubRange(hexStr,x, 2), 16);
-    let g = parseInt(getSubRange(hexStr,x + 2, 2), 16);
-    let b = parseInt(getSubRange(hexStr,x + 4, 2), 16);
+    let r = parseInt(substringByLength(hexStr,x, 2), 16);
+    let g = parseInt(substringByLength(hexStr,x + 2, 2), 16);
+    let b = parseInt(substringByLength(hexStr,x + 4, 2), 16);
 
     return { r: r, g: g, b: b, a: a };
 }
 
-function getSubRange(str, sIdx, length) {
-    let eIdx = sIdx + length;
-    return str.substring(sIdx, eIdx);
+
+function hexToRgb(hex) {
+    let rgba = hexToRgba(hex);
+    delete rgba.a;
+    return rgba;
+
+    //var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    //return result ? {
+    //    R: parseInt(result[1], 16),
+    //    G: parseInt(result[2], 16),
+    //    B: parseInt(result[3], 16)
+    //} : null;
 }
+
 
 function cleanColor(rgb_Or_rgba_Or_colorName_Str, forceAlpha) {
     let color = parseRgba(rgb_Or_rgba_Or_colorName_Str);

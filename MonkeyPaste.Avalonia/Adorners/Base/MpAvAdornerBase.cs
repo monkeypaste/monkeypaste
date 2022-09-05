@@ -9,7 +9,7 @@ using PropertyChanged;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public abstract class MpAvAdornerBase : Control {
-        protected Control AdornedControl { get; private set; }
+        public Control AdornedControl { get; private set; }
 
         public MpAvAdornerBase(Control adornedControl) : base() {            
             AdornedControl = adornedControl;

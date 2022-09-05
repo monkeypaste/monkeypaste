@@ -122,7 +122,7 @@ namespace MonkeyPaste.Avalonia {
             return new MpRect(new MpPoint(), new MpSize(drl[0].Width, drl[0].Height)).ToArray<MpShape>();
         }
 
-        public override async Task StartDrop(PointerEventArgs e) {
+        public override async Task StartDropAsync() {
             var ctvm = MpAvDragDropManager.DragData as MpAvClipTileViewModel;
             if(ctvm == null) {
                 Debugger.Break();
@@ -144,7 +144,7 @@ namespace MonkeyPaste.Avalonia {
                 //DragDrop.AddQueryContinueDragHandler(AssociatedObject, OnQueryContinueDrag);
             }
 
-            DragDrop.DoDragDrop(e, wpfdo, DragDropEffects.Copy).FireAndForgetSafeAsync(MpAvMainWindowViewModel.Instance);
+            DragDrop.DoDragDrop(null, wpfdo, DragDropEffects.Copy).FireAndForgetSafeAsync(MpAvMainWindowViewModel.Instance);
         }
 
         private void OnQueryContinueDrag(object sender, DragEventArgs e) {

@@ -314,7 +314,7 @@ namespace MonkeyPaste.Avalonia {
                                  .GetVisualDescendants<MpAvCefNetWebView>()
                                  .FirstOrDefault(x => x.DataContext == ctvm);
             if (cv == null) {
-                Debugger.Break();
+               // Debugger.Break();
                 return null;
             }
             return cv;

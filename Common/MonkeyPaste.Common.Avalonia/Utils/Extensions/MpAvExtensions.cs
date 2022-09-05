@@ -114,13 +114,21 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static void ScrollByPointDelta(this ScrollViewer sv, MpPoint delta) {
+            if(sv == null) {
+                return;
+            }
             var hsb = sv.GetScrollBar(Orientation.Horizontal);
             var vsb = sv.GetScrollBar(Orientation.Vertical);
 
-            double new_x_offset = Math.Max(0, Math.Min(sv.Offset.X + delta.X, hsb.Maximum));
-            double new_y_offset = Math.Max(0, Math.Min(sv.Offset.Y + delta.Y, vsb.Maximum));
+            var new_offset = sv.Offset.ToPortablePoint();
+            if(hsb != null) {
+                new_offset.X = Math.Max(0, Math.Min(sv.Offset.X + delta.X, hsb.Maximum));
+            }
+            if(vsb != null) {
+                new_offset.Y = Math.Max(0, Math.Min(sv.Offset.Y + delta.Y, vsb.Maximum));
+            }
 
-            sv.ScrollToPoint(new MpPoint(new_x_offset, new_y_offset));
+            sv.ScrollToPoint(new_offset);
         }
 
         public static void ScrollToPoint(this ScrollViewer sv, MpPoint p) {
@@ -181,7 +189,11 @@ namespace MonkeyPaste.Common.Avalonia {
         public static MpPoint ToPortablePoint(this Point p) {
             return new MpPoint(p.X, p.Y);
         }
+        public static MpPoint ToPortablePoint(this Vector v) {
+            return new MpPoint(v.X, v.Y);
+        }
 
+       
         public static MpPoint ToPortablePoint(this PixelPoint p) {
             return new MpPoint(p.X, p.Y);
         }

@@ -53,7 +53,7 @@ namespace MonkeyPaste.Avalonia {
                 y = point.Y,
                 snapToLine = true
             };
-            string idxRespStr = await _owner.EvaluateJavascriptAsync($"getEditorIndexFromPoint_ext('{pointMsg.Serialize()}')");
+            string idxRespStr = await _owner.EvaluateJavascriptAsync($"getDocIdxFromPoint_ext('{pointMsg.Serialize()}')");
             if (int.TryParse(idxRespStr, out int offset)) {
                 return new MpAvTextPointer(this, offset);
             }

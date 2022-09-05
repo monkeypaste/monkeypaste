@@ -273,7 +273,7 @@ function isPointInRange(p,range) {
 }
 
 
-function getDocIdxFromPoint(p, snapToLine, invokeId = 0) {
+function getDocIdxFromPoint_slow(p, snapToLine, invokeId = 0) {
 	if (!p) {
 		return -1;
 	}
@@ -314,9 +314,70 @@ function getDocIdxFromPoint(p, snapToLine, invokeId = 0) {
 	return -1;
 }
 
+function getDocIdxFromPoint(p, fallbackIdx) {
+	fallbackIdx = fallbackIdx ? parseInt(fallbackIdx) : -1;
+
+	let textNode = null;
+	let text_node_idx = -1;
+
+	if (document.caretRangeFromPoint) {
+		// see https://developer.mozilla.org/en-US/docs/Web/API/Document/caretRangeFromPoint
+		let range = document.caretRangeFromPoint(p.x, p.y);
+		if (range) {
+			textNode = range.startContainer;
+			text_node_idx = range.startOffset;
+		}
+	} else if (document.caretPositionFromPoint) {
+		let range = document.caretPositionFromPoint(p.x, p.y);
+		textNode = range.offsetNode;
+		text_node_idx = range.offset;
+	}
+
+	if (text_node_idx >= 0) {
+		let doc_idx = text_node_idx;
+
+		if (textNode && textNode.parentElement) {
+			let parent_blot = Quill.find(textNode.parentElement);
+			if (parent_blot) {
+				let parent_idx = parent_blot.offset(quill.scroll);
+				doc_idx = text_node_idx + parent_idx;
+
+				if (doc_idx == 0) {
+					// NOTE parentElement is editor if p is outside of actual editable space (after line break)
+					// but parentElement will still be the enclosed block blot so find the blot offset
+					let p_elm = document.elementFromPoint(p.x, p.y);
+					if (p_elm) {
+						let blot = Quill.find(p_elm);
+						let block_idx = blot.offset(quill.scroll);
+						doc_idx = block_idx;
+
+					}
+					//let is_text_elm = isTextElement(p_elm);
+					//if (p_elm && !is_text_elm) {
+					//	let is_editor_elm = isEditorElement(p_elm);
+					//	let is_template_elm = isTemplateNode(p_elm);
+					//	if (!is_editor_elm) {
+					//		let blot = Quill.find(p_elm);
+					//		let block_idx = blot.offset(quill.scroll);
+					//		doc_idx = block_idx;
+					//	}
+					//}
+					
+				}
+				//log('doc_idx: ' + doc_idx + ' offset: ' + text_node_idx + ' parent_idx: ' + parent_idx);
+			}
+		}
+
+		return doc_idx;
+	}
+
+	return fallbackIdx;
+}
+
 function getElementAtIdx(docIdx) {
 	let leafNode = quill.getLeaf(docIdx)[0].domNode;
 	let leafElementNode =
 		leafNode.nodeType == 3 ? leafNode.parentElement : leafNode;
 	return leafElementNode;
 }
+

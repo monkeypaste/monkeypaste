@@ -1,5 +1,7 @@
 <local:MpAvUserControl xmlns="https://github.com/avaloniaui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:i="using:Avalonia.Xaml.Interactivity"
+                       xmlns:idd="using:Avalonia.Xaml.Interactions.DragAndDrop"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:local="using:MonkeyPaste.Avalonia"
@@ -12,6 +14,28 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPinTrayView">
+    <i:Interaction.Behaviors>
+        <local:MpAvPinTrayDropBehavior  />
+    </i:Interaction.Behaviors>
+    <!--<local:MpAvUserControl.Resources>
+    -->
+    <!--<local:MpAvPinTrayDropBehavior x:Key="PinTrayDropBehavior" />-->
+    <!--
+    </local:MpAvUserControl.Resources>
+    <local:MpAvUserControl.Styles>
+        <Style Selector=":is(local|MpAvPinTrayView)">
+            <Setter Property="(i:Interaction.Behaviors)">
+                <i:BehaviorCollectionTemplate>
+                    <i:BehaviorCollection>
+    -->
+    <!--<idd:ContextDropBehavior Handler="{StaticResource ItemsListBoxDropHandler}" />-->
+    <!--
+                        <local:MpAvPinTrayDropBehavior x:Key="PinTrayDropBehavior" />
+                    </i:BehaviorCollection>
+                </i:BehaviorCollectionTemplate>
+            </Setter>
+        </Style>
+    </local:MpAvUserControl.Styles>-->
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
         <ListBox x:Name="PinTrayListBox"

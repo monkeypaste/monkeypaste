@@ -12,6 +12,7 @@ using Avalonia.Media;
 using Avalonia.Controls;
 using MonkeyPaste.Common.Avalonia;
 using Avalonia.Threading;
+using Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvContentAdorner : MpAvAdornerBase {
@@ -20,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
 
         private Color _debugColor;
 
-        private MpAvIContentDropTarget _dropBehavior;
+        private MpAvIContentDropTargetAsync _dropBehavior;
         //private MpRtbHighlightBehavior _highlightBehavior;
 
         #endregion
@@ -94,14 +95,20 @@ namespace MonkeyPaste.Avalonia {
         //                         IsDebugMode ||
         //                         IsShowingContentLines);
 
-        public bool IsShowing => //MpMainWindowViewModel.Instance.IsMainWindowOpen &&
-                                (_dropBehavior.GetType() != typeof(MpAvPinTrayDropBehavior) ||
-                                 IsShowingHighlightShapes) &&
-                                 (IsShowingDropShape ||
-                                  IsShowingHighlightShapes ||
-                                     //IsShowingCaret ||
-                                     IsDebugMode ||
-                                     IsShowingContentLines);
+        public bool IsShowing {
+            get {
+                if(IsDebugMode) {
+                    return true;
+                }
+                if(IsShowingDropShape) {
+                    return true;
+                }
+                if(IsShowingHighlightShapes) {
+                    return true;
+                }
+                return false;
+            }
+        }
 
         public bool IsDebugMode {
             get {
@@ -121,6 +128,8 @@ namespace MonkeyPaste.Avalonia {
         //    }
         //}
 
+        public List<MpRect> DropRects { get; set; } = new List<MpRect>();
+
         public int DropIdx {
             get {
                 if (_dropBehavior == null) {
@@ -133,7 +142,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        public MpAvContentAdorner(Control uie, MpAvIContentDropTarget dropBehavior) : base(uie) {
+        public MpAvContentAdorner(Control uie, MpAvIContentDropTargetAsync dropBehavior) : base(uie) {
             _dropBehavior = dropBehavior;
 
             var rtbcv = uie.GetVisualAncestor<MpAvClipTileContentView>();
@@ -141,7 +150,7 @@ namespace MonkeyPaste.Avalonia {
                 //_highlightBehavior = rtbcv.RtbHighlightBehavior;
             }
 
-
+            IsVisible = true;
             _isDash = _dropBehavior.GetType() != typeof(MpAvActionDesignerItemDropBehavior);
 
             _debugColor = MpColorHelpers.GetRandomHexColor().AdjustAlpha(0.25).ToAvColor();
@@ -151,11 +160,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Overrides
         public override void Render(DrawingContext dc) {
+           // 
+
             if (IsShowing) {
                 IsVisible = true;
 
                 if (IsDebugMode) {
                     DrawDebugRects(dc);
+                    //dc.DrawLine(new Pen(Brushes.White, 5), new Point(50, 0), new Point(50, 500));
                 }
 
                 if (IsShowingDropShape) {
@@ -182,9 +194,10 @@ namespace MonkeyPaste.Avalonia {
 
 
             } else {
-                IsVisible = false;
-                Opacity = 1;
+                //IsVisible = false;
+                //Opacity = 1;
             }
+            base.Render(dc);
         }
 
         private void DrawShape(DrawingContext dc, MpShape dropShape, Pen pen, IBrush brush = null) {
@@ -243,10 +256,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void DrawDropShapes(DrawingContext dc, Pen pen) {
-            Dispatcher.UIThread.Post(async () => {
-                var dropShapes = await _dropBehavior.GetDropTargetAdornerShapeAsync();
-                dropShapes.ForEach(x => DrawShape(dc, x, pen));
-            });
+            //Dispatcher.UIThread.Post(async () => {
+            //    var dropShapes = await _dropBehavior.GetDropTargetAdornerShapeAsync();
+            //    DropRects.ForEach(x => DrawShape(dc, x, pen));
+            //});
+            DropRects.ForEach(x => DrawShape(dc, x, pen));
         }
 
         private void DrawUnderlines(DrawingContext dc, Pen pen) {
@@ -304,22 +318,20 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void DrawDebugRects(DrawingContext dc) {
-            Dispatcher.UIThread.Post(async () => {
-                var dtrl = await _dropBehavior.GetDropTargetRectsAsync();
-                foreach (var debugRect in dtrl) {
-                    if (dtrl.IndexOf(debugRect) == DropIdx) {
-                        dc.DrawRectangle(
-                            Brushes.Blue,
-                            new Pen(Brushes.Orange, 1),
-                            debugRect.ToAvRect());
-                    } else {
-                        dc.DrawRectangle(
-                            new SolidColorBrush(_debugColor),
-                            new Pen(Brushes.Orange, 1),
-                            debugRect.ToAvRect());
-                    }
-                }
-            });
+            var dtrl = DropRects; //await _dropBehavior.GetDropTargetRectsAsync();
+            foreach (var debugRect in dtrl) {
+                bool isDropIdx = dtrl.IndexOf(debugRect) == DropIdx;
+
+                var av_rect = debugRect.ToAvRect();
+                IBrush brush = isDropIdx ? Brushes.Blue : new SolidColorBrush(_debugColor);
+                IPen pen = new Pen(Brushes.White, 1);
+
+                //dc.DrawLine(pen, av_rect.TopLeft, av_rect.BottomLeft);
+                dc.DrawRectangle(
+                        brush,
+                        pen,
+                        av_rect);
+            }
         }
         #endregion
     }

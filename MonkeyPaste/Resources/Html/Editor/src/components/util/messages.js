@@ -27,7 +27,7 @@ function init_ext(initMsgStr) {
 	init(initMsg);
 }
 
-function getEditorIndexFromPoint_ext(editorPointMsgStr) {
+function getDocIdxFromPoint_ext(editorPointMsgStr) {
 	// NOTE fallbackIdx is handy when user is dragging a template instance
 	// so location freeze's when drag is out of bounds
 
@@ -42,11 +42,27 @@ function getEditorIndexFromPoint_ext(editorPointMsgStr) {
 		let snapToLine = editorPointMsgObj.snapToLine;
 
 		if (snapToLine) {
-			return getEditorIndexFromPoint_ByLine(p, fallbackIdx);
+			return getDocIdxFromPoint(p, fallbackIdx);
 		}
-		return getEditorIndexFromPoint_Absolute(p, fallbackIdx);
+		return getDocIdxFromPoint(p, fallbackIdx);
 	}
 	return -1;
+}
+
+function setSelection_ext(selMsg) {
+	let index = 0;
+	let length = 0;
+	if (typeof selMsg === 'string' || selMsg instanceof String) {
+		selMsg = JSON.parse(selMsg);
+	} else {
+		log('setSelection_ext error parsing selMsg: ' + selMsg);
+		return;
+	}
+
+	index = selMsg.index;
+	length = selMsg.length;
+
+	setEditorSelection(index, length);
 }
 
 function getCharacterRect_ext(docIdxStr) {

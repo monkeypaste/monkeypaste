@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
         Action
     }
 
-    public abstract class MpAvDropBehaviorBase<T> : MpAvBehavior<T>, MpAvIContentDropTarget where T : Control {
+    public abstract class MpAvDropBehaviorBase<T> : MpAvBehavior<T>, MpAvIContentDropTargetAsync where T : Control {
         #region Private Variables
         
         private AdornerLayer adornerLayer;
@@ -78,7 +78,10 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        public MpAvDropBehaviorBase() { }
+        public MpAvDropBehaviorBase() {
+            IsDebugEnabled = false;
+            MpConsole.WriteLine(GetType() + " behavior created");
+        }
 
         protected override void OnAttached() {
             base.OnAttached();
@@ -214,7 +217,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.IsAnyItemDragging));
         }
 
-        public abstract Task StartDrop(PointerEventArgs e); 
+        public abstract Task StartDropAsync(); 
 
         public async Task ContinueDragOverTargetAsync() {
             int newDropIdx = await GetDropTargetRectIdxAsync();
@@ -248,28 +251,84 @@ namespace MonkeyPaste.Avalonia {
             if(AdornedElement != null) {
                 adornerLayer = AdornerLayer.GetAdornerLayer(AdornedElement);
                 if(adornerLayer != null) {
-                    DropLineAdorner = new MpAvContentAdorner(AdornedElement, this);
-                    adornerLayer.Children.Add(DropLineAdorner);
-                    RefreshDropRects();
+                    var content_adorner = adornerLayer.Children.FirstOrDefault(x => x is MpAvContentAdorner ca && ca.AdornedControl == AdornedElement);
+                    if(content_adorner == null) {
+                        DropLineAdorner = new MpAvContentAdorner(AdornedElement, this);
+                        adornerLayer.Children.Add(DropLineAdorner);
+                        AdornerLayer.SetAdornedElement((Visual)DropLineAdorner, AdornedElement);
+                        RefreshDropRects();
+                    } else {
+                        
+                    }
                 }
             }
         }
 
+        public async Task UpdateRectsAsync() {
+            if(adornerLayer == null) {
+                return;
+            }
+            var content_adorner = adornerLayer.Children.FirstOrDefault(x => x is MpAvContentAdorner ca && ca.AdornedControl == AdornedElement);
+            if(content_adorner is MpAvContentAdorner ca) {
+                ca.DropRects = await GetDropTargetRectsAsync();
+            }
+        }
         public void UpdateAdorner() {
             Dispatcher.UIThread.Post(() => {
                 if (adornerLayer == null) {
                     InitAdorner();
                 }
-                adornerLayer?.InvalidateVisual();
+                if(adornerLayer != null) {
+                    var content_adorner = adornerLayer.Children.FirstOrDefault(x => x is MpAvContentAdorner ca && ca.AdornedControl == AdornedElement);
+                    content_adorner?.InvalidateVisual();
+                }
             });
         }
 
         #endregion
 
+
         protected void RefreshDropRects() {
             UpdateAdorner();
         }
+        // sync
 
+
+        //public bool IsDragDataValid(bool isCopy, object dragData) {
+        //    if (dragData == null) {
+        //        return false;
+        //    }
+        //    if (dragData is MpPortableDataObject) {
+        //        return true;
+        //    }
+        //    if (dragData is MpAvClipTileViewModel ctvm) {
+        //        return ctvm.ItemType != MpCopyItemType.Image;
+        //    }
+        //    return false;
+        //}
+
+        //public virtual void StartDrop() {
+        //}
+
+        //public void Drop(bool isCopy, object dragData) {
+        //    throw new NotImplementedException();
+        //}
+
+        //public List<MpRect> GetDropTargetRects() {
+        //    throw new NotImplementedException();
+        //}
+
+        //public int GetDropTargetRectIdx() {
+        //    throw new NotImplementedException();
+        //}
+
+        //public MpShape[] GetDropTargetAdornerShape() {
+        //    throw new NotImplementedException();
+        //}
+
+        //public void ContinueDragOverTarget() {
+        //    throw new NotImplementedException();
+        //}
     }
 
 }

@@ -9,10 +9,20 @@ using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvPinTrayView : MpAvUserControl<MpAvClipTrayViewModel> {
-        public MpAvPinTrayDropBehavior PinTrayDropBehavior { get; set; }
+        public MpAvPinTrayDropBehavior PinTrayDropBehavior { 
+            get {
+                if (this.Resources.TryGetResource("PinTrayDropBehavior", out object value)) {
+                    return value as MpAvPinTrayDropBehavior;
+                }
+                return null;
+            }
+        }
         public MpAvPinTrayView() {
             InitializeComponent();
-            this.AttachedToVisualTree += MpAvClipTileTitleView_AttachedToVisualTree;
+            PinTrayListBox = this.FindControl<ListBox>("PinTrayListBox");
+            //MpAvViewBehaviorFactory.BuildAllViewBehaviors(this, this);
+
+            //this.AttachedToVisualTree += MpAvClipTileTitleView_AttachedToVisualTree;
         }
 
         private void MpAvClipTileTitleView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {

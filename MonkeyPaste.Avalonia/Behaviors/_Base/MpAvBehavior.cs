@@ -31,6 +31,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
         public T AssociatedObjectRef => AssociatedObject;
 
+        public object test { get; set; }
 
         #region IsEnabled AvaloniaProperty
         public static bool GetIsEnabled(AvaloniaObject obj) {
@@ -75,12 +76,16 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void OnAttached() {
             base.OnAttached();
-            AssociatedObject.AttachedToVisualTree += AssociatedObject_Loaded;
-            AssociatedObject.DetachedFromVisualTree += AssociatedObject_Unloaded;
+            OnLoad();
+            test = AssociatedObject;
+
+            AssociatedObject.AttachedToLogicalTree += AssociatedObject_AttachedToLogicalTree;
+            AssociatedObject.DetachedFromLogicalTree += AssociatedObject_DetachedFromLogicalTree;
             if (AssociatedObject.IsInitialized) {
-                AssociatedObject_Loaded(AssociatedObject, null);
+                AssociatedObject_AttachedToLogicalTree(AssociatedObject, null);
             }
         }
+
 
         protected override void OnDetaching() {
             base.OnDetaching();
@@ -108,11 +113,12 @@ namespace MonkeyPaste.Avalonia {
 
         protected virtual void OnMainWindowShow(object sender, EventArgs e) { }
 
-        private void AssociatedObject_Unloaded(object sender, VisualTreeAttachmentEventArgs e) {
+
+        private void AssociatedObject_DetachedFromLogicalTree(object sender, global::Avalonia.LogicalTree.LogicalTreeAttachmentEventArgs e) {
             OnUnload();
         }
 
-        private void AssociatedObject_Loaded(object sender, VisualTreeAttachmentEventArgs e) {
+        private void AssociatedObject_AttachedToLogicalTree(object sender, global::Avalonia.LogicalTree.LogicalTreeAttachmentEventArgs e) {
             _dataContext = AssociatedObject.DataContext;
             OnLoad();
         }

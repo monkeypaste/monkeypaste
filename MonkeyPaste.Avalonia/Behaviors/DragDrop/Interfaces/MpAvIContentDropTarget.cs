@@ -9,7 +9,7 @@ using MonkeyPaste;
 using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
-    public interface MpAvIContentDropTarget {
+    public interface MpAvIContentDropTargetAsync {
         object DataContext { get; }
         bool IsDropEnabled { get; set; }
         bool IsDebugEnabled { get; set; }
@@ -20,25 +20,40 @@ namespace MonkeyPaste.Avalonia {
         MpCursorType CopyCursor { get; }
 
         void AutoScrollByMouse();
-        
-        Task<bool> IsDragDataValidAsync(bool isCopy, object dragData);
-        
-        Task StartDrop(PointerEventArgs e);
-        Task DropAsync(bool isCopy, object dragData);
-        void CancelDrop();
 
-        Control RelativeToElement { get; }
-        //List<MpRect> DropRects { get; }
-        Task<List<MpRect>> GetDropTargetRectsAsync();
-        Task<int> GetDropTargetRectIdxAsync();
-        Task<MpShape[]> GetDropTargetAdornerShapeAsync();
-        Task ContinueDragOverTargetAsync();
+        void CancelDrop();
 
         MpAvContentAdorner DropLineAdorner { get; set; }
         Orientation AdornerOrientation { get; }
         void InitAdorner();
         void UpdateAdorner();
         void Reset();
+
+        Control RelativeToElement { get; }
+        //List<MpRect> DropRects { get; }
+        Task UpdateRectsAsync();
+        Task<bool> IsDragDataValidAsync(bool isCopy, object dragData);
+        
+        Task StartDropAsync();
+        Task DropAsync(bool isCopy, object dragData);
+
+        Task<List<MpRect>> GetDropTargetRectsAsync();
+        Task<int> GetDropTargetRectIdxAsync();
+        Task<MpShape[]> GetDropTargetAdornerShapeAsync();
+        Task ContinueDragOverTargetAsync();
+
+    }
+
+    public interface MpAvIContentDropTarget: MpAvIContentDropTargetAsync {
+        bool IsDragDataValid(bool isCopy, object dragData);
+
+        void StartDrop();
+        void Drop(bool isCopy, object dragData);
+
+        List<MpRect> GetDropTargetRects();
+        int GetDropTargetRectIdx();
+        MpShape[] GetDropTargetAdornerShape();
+        void ContinueDragOverTarget();
     }
 
 }

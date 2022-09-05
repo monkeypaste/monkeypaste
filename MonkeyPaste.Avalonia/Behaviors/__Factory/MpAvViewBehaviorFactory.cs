@@ -12,9 +12,9 @@ namespace MonkeyPaste.Avalonia.Behaviors._Factory {
                 ctcv.ContentViewDropBehavior = new MpAvContentViewDropBehavior();
                 ctcv.ContentViewDropBehavior.Attach(controlToAttach);
             } else if (view is MpAvPinTrayView ptv) {
-                //return;
-                ptv.PinTrayDropBehavior = new MpAvPinTrayDropBehavior();
-                ptv.PinTrayDropBehavior.Attach(controlToAttach);
+                return;
+                //ptv.PinTrayDropBehavior = new MpAvPinTrayDropBehavior();
+                //ptv.PinTrayDropBehavior.Attach(controlToAttach);
             }
 
 

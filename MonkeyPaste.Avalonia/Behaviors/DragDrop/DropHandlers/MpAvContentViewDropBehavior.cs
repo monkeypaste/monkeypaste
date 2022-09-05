@@ -490,7 +490,7 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
-        public override async Task StartDrop(PointerEventArgs e) {
+        public override async Task StartDropAsync() {
             await Task.Delay(1);
             if (AssociatedObject == null || AssociatedObject == null) {
                 return;

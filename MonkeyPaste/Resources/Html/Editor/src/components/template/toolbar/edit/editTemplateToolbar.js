@@ -177,6 +177,59 @@ function isEditTemplateTextAreaFocused() {
     return IsTemplateNameTextAreaFocused || IsTemplateDetailTextAreaFocused;
 }
 
+
+async function scaleFocusTemplates(scaleType, tguid) {
+    if (!tguid) {
+        let f_cit = getFocusTemplate();
+        if (!f_cit) {
+            return;
+        }
+
+        tguid = f_cit.domNode.getAttribute('templateGuid');
+        if (!tguid) {
+            return;
+		}
+	}
+
+    let f_cit_elm_l = getTemplateElements(tguid);
+
+    Array
+        .from(f_cit_elm_l)
+            .forEach((f_cit_elm) => {
+                if (scaleType == 'bigger') {
+                    f_cit_elm.classList.remove('ql-template-embed-blot-display-key-up');
+                    f_cit_elm.classList.add('ql-template-embed-blot-display-key-down');
+                } else if (scaleType == 'default') {
+
+                    f_cit_elm.classList.remove('ql-template-embed-blot-display-key-down');
+                    f_cit_elm.classList.add('ql-template-embed-blot-display-key-up');
+                } else {
+
+                    f_cit_elm.classList.remove('ql-template-embed-blot-display-key-down');
+                    f_cit_elm.classList.remove('ql-template-embed-blot-display-key-up');
+				}
+        });
+}
+
+async function jiggleFocusTemplates(resetOnComplete = false) {
+    return;
+    let f_cit = getFocusTemplate();
+    let tguid = f_cit.domNode.getAttribute('templateGuid');
+    if (!tguid) {
+        return;
+	}
+    let scale_ms = 100;
+    for (var i = 0; i < 2; i++) {
+        await scaleFocusTemplates('bigger', tguid);
+        await delay(scale_ms);
+        await scaleFocusTemplates('default', tguid);
+        await delay(scale_ms);
+    }
+    if (resetOnComplete) {
+        scaleFocusTemplates('reset', tguid);
+	}
+}
+
 //#endregion
 
 //#region Event Callbacks
@@ -202,18 +255,31 @@ function onTemplateDetailChanged(e) {
 
 function onTemplateNameTextAreaGotFocus() {
     IsTemplateNameTextAreaFocused = true;
+
+    jiggleFocusTemplates();
+}
+
+function onTemplateNameTextAreaLostFocus() {
+    IsTemplateNameTextAreaFocused = false;
+
+    jiggleFocusTemplates(true);
 }
 
 function onTemplateDetailTextAreaGotFocus() {
     IsTemplateDetailTextAreaFocused = true;
 }
 
-function onTemplateNameTextAreaLostFocus() {
-    IsTemplateNameTextAreaFocused = false;
-}
 
 function onTemplateDetailTextAreaLostFocus() {
     IsTemplateDetailTextAreaFocused = false;
+}
+
+async function onTemplateNameTextArea_keydown() {
+    await scaleFocusTemplates('bigger');
+}
+
+async function onTemplateNameTextArea_keyup() {
+    await scaleFocusTemplates('default');
 }
 
 //#endregion

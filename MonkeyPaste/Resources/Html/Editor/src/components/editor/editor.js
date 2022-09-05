@@ -73,7 +73,7 @@ function init_test() {
 		isReadOnlyEnabled: true,
 		usedTextTemplates: {},
 		isPasteRequest: false,
-		itemEncodedHtmlData: sample1
+		itemEncodedHtmlData: sample_big
 	}
 
 	init(initMsg);
@@ -272,12 +272,14 @@ function showScrollbars() {
 	document.getElementById("editor").style.overflow = "auto";
 }
 
-function disbleTextWrapping() {
-	document.getElementById('editor').style.overflow = 'scroll';
+function disableTextWrapping() {
+	getEditorElement().style.whiteSpace = 'nowrap';
+	getEditorElement().style.width = Number.MAX_SAFE_INTEGER + 'px';
 }
 
 function enableTextWrapping() {
-	document.getElementById('editor').style.overflow = 'auto';
+	getEditorElement().style.whiteSpace = '';
+	getEditorElement().style.width = '';
 }
 
 
@@ -412,12 +414,18 @@ function onWindowResize(e) {
 
 function onDocumentSelectionChange(e) {
 	let range = getSelection();
-	//log("idx " + range.index + ' length "' + range.length);
-	drawOverlay();
+	if (range) {
+		//log("idx " + range.index + ' length "' + range.length);
+		drawOverlay();
+	} else {
+		log('selection outside editor');
+	}
 }
 function onEditorSelectionChanged(range, oldRange, source) {
 	//LastSelectedHtml = SelectedHtml;
 	//SelectedHtml = getSelectedHtml();
+	//log("User cursor is at " + (range == null ? -1 : range.index) + ' before "' + (oldRange == null ? - 1 : oldRange.index));
+	
 	drawOverlay();
 
 	if (IgnoreNextSelectionChange) {
@@ -427,7 +435,9 @@ function onEditorSelectionChanged(range, oldRange, source) {
 
 	if (IsDragCancel) {
 		IsDragCancel = false;
-		quill.setSelection(oldRange);
+		if (oldRange) {
+			setEditorSelection(oldRange.index, oldRange.length);
+		}
 		return;
 	}
 
@@ -435,18 +445,18 @@ function onEditorSelectionChanged(range, oldRange, source) {
 		refreshFontSizePicker();
 		refreshFontFamilyPicker();
 
-		if (range.length == 0) {
-			var text = getText({ index: range.index, length: 1 });
-			let ls = getLineStartDocIdx(range.index);
-			let le = getLineEndDocIdx(range.index);
-			//log("User cursor is at " + range.index + ' idx before "' + text + '" line start: '+ls+' line end: '+le);
-		} else {
-			var text = getText(range);
-			//log("User cursor is at " + range.index + " with length " + range.length + ' and selected text "' + text + '"');
-		}
+		//if (range.length == 0) {
+		//	var text = getText({ index: range.index, length: 1 });
+		//	let ls = getLineStartDocIdx(range.index);
+		//	let le = getLineEndDocIdx(range.index);
+		//	log("User cursor is at " + range.index + ' idx before "' + text + '" line start: '+ls+' line end: '+le);
+		//} else {
+		//	var text = getText(range);
+		//	log("User cursor is at " + range.index + " with length " + range.length + ' and selected text "' + text + '"');
+		//}
 
-		refreshTemplatesAfterSelectionChange();
-		updateTemplatesAfterSelectionChanged(range, oldRange, source);
+		//updateTemplatesAfterSelectionChange(range, oldRange, source);
+		//coereceSelectionWithTemplatePadding(range, oldRange, source);
 
 		let selChangedObj = { copyItemId: CopyItemId, index: range.index, length: range.length };
 
@@ -461,7 +471,7 @@ function onEditorSelectionChanged(range, oldRange, source) {
 	if (!range && !isEditTemplateTextAreaFocused()) {
 		if (oldRange) {
 			//blur occured
-			quill.setSelection(oldRange);
+			setEditorSelection(oldRange.index, oldRange.length);
 		} else {
 			return;
 		}
@@ -493,11 +503,11 @@ function onEditorTextChanged(delta, oldDelta, source) {
 }
 
 function selectAll() {
-	quill.setSelection({ index: 0, length: qull.getLength()});
+	setEditorSelection(0, getDocLength());
 }
 
 function isAllSelected() {
-	let result = quill.getSelection().length == quill.getLength();
+	let result = getSelection().length == getDocLength();
 	return result;
 }
 
@@ -716,7 +726,7 @@ function disableSubSelection() {
 
 		let selection = quill.getSelection();
 		if (selection) {
-			setSelection({ index: selection.index, length: 0 });
+			setEditorSelection(selection.index, 0);
 		}
 		hideScrollbars();
 	}
@@ -729,18 +739,10 @@ function getSelection() {
 	return selection;
 }
 
-function setSelection(selObj) {
-	let index = 0;
-	let length = 0;
-	if (typeof selObj === 'string' || selObj instanceof String) {
-		selObj = JSON.parse(selObj);
-	}
-
-	index = selObj.index;
-	length = selObj.length;
-
-	quill.setSelection(index, length);
+function setEditorSelection(doc_idx,length, source = 'user') {
+	quill.setSelection(doc_idx, length, source);
 }
+
 
 function isShowingEditorToolbar() {
 	$(".ql-toolbar").css("display") != "none";
@@ -846,5 +848,12 @@ function getEditorRect(clean = true) {
 	//       temp = cleanRect(temp);
 	//}
 	return temp;
+}
+
+function isEditorElement(elm) {
+	if (elm instanceof HTMLElement) {
+		return elm.classList.contains('ql-editor');
+	}
+	return false;
 }
 

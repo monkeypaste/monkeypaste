@@ -21,6 +21,20 @@
         border: 2px solid yellow;
     }
 
+.ql-template-embed-blot-sub-selected {
+
+}
+
+.ql-template-embed-blot-display-key-down {
+    transition: .0s;
+    transform: scale(1.1);
+}
+
+.ql-template-embed-blot-display-key-up {
+    transition: .0s;
+    transform: scale(1);
+}
+
 .ql-template-embed-blot-focus {
     border: 2px solid red;
 }

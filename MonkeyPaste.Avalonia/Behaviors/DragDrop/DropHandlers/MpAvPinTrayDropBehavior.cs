@@ -28,9 +28,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-
         private static MpAvPinTrayDropBehavior _instance;
-        public static MpAvPinTrayDropBehavior Instance => _instance ?? (_instance = new MpAvPinTrayDropBehavior());
+        public static MpAvPinTrayDropBehavior Instance => _instance;
         #endregion
 
         #region Properties
@@ -55,6 +54,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
+        public MpAvPinTrayDropBehavior() : base() {
+            if(_instance == null) {
+                _instance = this;
+            } else {
+                Debugger.Break();
+            }
+        }
         #endregion
 
         #region Public Methods
@@ -164,7 +170,7 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
 
-        public override async Task StartDrop(PointerEventArgs e) { 
+        public override async Task StartDropAsync() { 
             await Task.Delay(1);
             AssociatedObject.PinTrayListBox.Width += _dragOverPadding;
 
@@ -247,6 +253,30 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
+
+        //sync
+
+        //public override void StartDrop() {
+        //    AssociatedObject.PinTrayListBox.Width += _dragOverPadding;
+
+        //    if (AssociatedObject.DataContext is MpAvClipTrayViewModel ctrvm) {
+        //        ctrvm.IsDragOverPinTray = true;
+        //    }
+        //}
+
+        //public override bool IsDragDataValid(bool isCopy, object dragData) {
+        //    bool isValidBaseResult = base.IsDragDataValid(isCopy, dragData);
+        //    if (!isValidBaseResult) {
+        //        return false;
+        //    }
+        //    if (dragData is MpAvClipTileViewModel ctvm) {
+        //        bool isAllSelected = await MpAvTextBoxSelectionExtension.IsAllSelectedAsync(ctvm);
+        //        if (ctvm.IsPinned && isAllSelected) {
+        //            return false;
+        //        }
+        //    }
+        //    return true;
+        //}
     }
 
 }

@@ -14,6 +14,8 @@ using Avalonia.Input;
 using SharpHook;
 using System.Threading;
 using MonkeyPaste.Common.Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvShortcutCollectionViewModel : 
@@ -22,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
 
-        public const bool IS_GLOBAL_INPUT_ENABLED = false;
+        public static bool IS_GLOBAL_INPUT_ENABLED = false;
         public const double MIN_GLOBAL_DRAG_DIST = 20;
 
         #endregion
@@ -109,14 +111,14 @@ namespace MonkeyPaste.Avalonia {
 
         public event EventHandler<MouseWheelHookEventArgs> OnGlobalMouseWheelScroll;
 
-        public event EventHandler<MouseHookEventArgs> OnGlobalMouseMove;
+        public event EventHandler<MpPoint> OnGlobalMouseMove;
 
-        public event EventHandler<MouseHookEventArgs> OnGlobalMousePressed;
-        public event EventHandler<MouseHookEventArgs> OnGlobalMouseReleased;
+        public event EventHandler<bool> OnGlobalMousePressed;
+        public event EventHandler<bool> OnGlobalMouseReleased;
 
-        public event EventHandler<MouseHookEventArgs> OnGlobalMouseClicked;
+        public event EventHandler<bool> OnGlobalMouseClicked;
 
-        public event EventHandler<MouseHookEventArgs> OnGlobalMouseDragged;
+        public event EventHandler<object> OnGlobalMouseDragged;
 
         #endregion
 
@@ -164,6 +166,15 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void StartGlobalListener() {
+            if (!IS_GLOBAL_INPUT_ENABLED) {
+                Dispatcher.UIThread.Post(() => {
+                    MpAvMainWindow.Instance.PointerMoved += MainWindow_Instance_PointerMoved;
+                    MpAvMainWindow.Instance.AddHandler(Window.PointerPressedEvent, MainWindow_Instance_PointerPressed, RoutingStrategies.Tunnel);
+                    MpAvMainWindow.Instance.AddHandler(Window.PointerReleasedEvent, MainWindow_Instance_PointerReleased, RoutingStrategies.Tunnel);
+                });
+                return;
+            } 
+
             if (_hook == null) {
                 _hook = new SimpleGlobalHook();
 
@@ -176,7 +187,7 @@ namespace MonkeyPaste.Avalonia {
 
                 _hook.MouseClicked += Hook_MouseClicked;
 
-                _hook.MouseDragged += Hook_MouseDragged;
+                //_hook.MouseDragged += Hook_MouseDragged;
 
                 _hook.KeyPressed += Hook_KeyPressed;
                 _hook.KeyReleased += Hook_KeyReleased;
@@ -189,6 +200,7 @@ namespace MonkeyPaste.Avalonia {
 
             _hook.RunAsync();
         }
+
 
         public void StopGlobalListener() {
             if(_hook != null) {
@@ -454,9 +466,7 @@ namespace MonkeyPaste.Avalonia {
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.MainWindowLoadComplete: {
-                        if (IS_GLOBAL_INPUT_ENABLED) {
-                            StartGlobalListener();
-                        }
+                        StartGlobalListener();
                         break;
                     }
                 case MpMessageType.MainWindowHid:
@@ -509,122 +519,50 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Hook_MouseMoved(object? sender, MouseHookEventArgs e) {
-            GlobalMouseLocation = GetScaledMousePoint(e.Data);
-            //MpConsole.WriteLine("WinForms: " + e.Location.X + "," + e.Location.Y);
-            //MpConsole.WriteLine("Wpf: " + GlobalMouseLocation.X + "," + GlobalMouseLocation.Y);
-            //MpConsole.WriteLine("");
-
-            if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                // NOTE!! this maybe bad only firing when window open 
-                // but its for drag/drop and not doing could interfere w/ performance too much
-                OnGlobalMouseMove?.Invoke(typeof(MpAvShortcutCollectionViewModel).ToString(), e);
-            } else {
-                bool isShowingMainWindow = false;
-                if (MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdge &&
-                    !MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
-                    if (GlobalMouseLocation.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
-                        MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-                        isShowingMainWindow = true;
-                    }
-                }
-
-                if (!isShowingMainWindow &&
-                    GlobalMouseLeftButtonDownLocation != null &&
-                    GlobalMouseLocation.Distance(GlobalMouseLeftButtonDownLocation) >= MIN_GLOBAL_DRAG_DIST &&
-                    GlobalMouseLocation.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight &&
-                    MpPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop) {
-                    MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-                }
-            }
+            var gmp = GetScaledMousePoint(e.Data);
+            HandlePointerMove(gmp);
         }
 
 
         private void Hook_MousePressed(object sender, MouseHookEventArgs e) {
-            if (e.Data.Button == SharpHook.Native.MouseButton.Button1) {
-                GlobalIsMouseLeftButtonDown = true;
-                GlobalMouseLeftButtonDownLocation = GlobalMouseLocation;
-                LastLeftClickDateTime = DateTime.Now;
-            } else if (e.Data.Button == SharpHook.Native.MouseButton.Button2) {
-                GlobalIsMouseRightButtonDown = true;
-                LastRightClickDateTime = DateTime.Now;
+            if(e.Data.Button == SharpHook.Native.MouseButton.Button1) {
+                HandlePointerPress(true);
+            } else if(e.Data.Button == SharpHook.Native.MouseButton.Button2) {
+                HandlePointerPress(false);
             } else {
                 MpConsole.WriteTraceLine("Unknown mouse button pressed: " + e.Data.Button);
             }
 
-            OnGlobalMousePressed?.Invoke(sender, e);
         }
         private void Hook_MouseReleased(object sender, MouseHookEventArgs e) {
-
             if (e.Data.Button == SharpHook.Native.MouseButton.Button1) {
-                GlobalMouseLeftButtonDownLocation = null;
-                GlobalIsMouseLeftButtonDown = false;
-
-                if (MpAvDragDropManager.IsDragAndDrop) {
-                    Dispatcher.UIThread.Post(async () => {
-                        var handle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle;
-                        WinApi.SetForegroundWindow(handle);
-                        WinApi.SetActiveWindow(handle);
-
-                        while (true) {
-                            await Task.Delay(100);
-                        }
-                        //MessageBox.Show("Mouse up");
-                    });
-                }
-
-                OnGlobalMouseReleased?.Invoke(sender, e);
+                HandlePointerReleased(true);
             } else if (e.Data.Button == SharpHook.Native.MouseButton.Button2) {
-                GlobalIsMouseRightButtonDown = false;
-
-                OnGlobalMouseReleased?.Invoke(sender, e);
-            }            
-
-            Dispatcher.UIThread.Post(() => {
-                if (MpAvMainWindow.Instance != null) {
-                    if (!MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                        if (MpAvClipTrayViewModel.Instance.IsAutoCopyMode) {
-                            if (e.Data.Button == SharpHook.Native.MouseButton.Button1 && !MpAvMainWindow.Instance.IsActive) {
-                                SimulateKeyPress("control+c");
-                            }
-                        }
-                        if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
-                            if (e.Data.Button == SharpHook.Native.MouseButton.Button2 && !MpAvMainWindow.Instance.IsActive) {
-                                SimulateKeyPress("control+v");
-                            }
-                        }
-                    } else if (!MpAvMainWindowViewModel.Instance.IsMainWindowClosing &&
-                              !MpAvMainWindowViewModel.Instance.IsMainWindowLocked &&
-                              //!MpExternalDropBehavior.Instance.IsPreExternalTemplateDrop &&
-                              GlobalMouseLocation != null &&
-                              GlobalMouseLocation.Y < MpAvMainWindowViewModel.Instance.MainWindowTop) {
-                        MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
-                    }
-                }
-            });
+                HandlePointerReleased(false);
+            } else {
+                MpConsole.WriteTraceLine("Unknown mouse button released: " + e.Data.Button);
+            }
         }
 
         private void Hook_MouseClicked(object sender, MouseHookEventArgs e) {
-            if(GlobalMouseLocation == null) {
-                GlobalMouseLocation = GetScaledMousePoint(e.Data);
+            if (e.Data.Button == SharpHook.Native.MouseButton.Button1) {
+                HandlePointClick(true);
+            } else if (e.Data.Button == SharpHook.Native.MouseButton.Button2) {
+                HandlePointClick(false);
+            } else {
+                MpConsole.WriteTraceLine("Unknown mouse button clicked: " + e.Data.Button);
             }
-            
-
-            Dispatcher.UIThread.Post(() => {
-                if (!MpAvMainWindow.Instance.IsActive &&
-               !MpAvMainWindow.Instance.Bounds.Contains(GlobalMouseLocation.ToAvPoint()) &&
-               MpAvMainWindowViewModel.Instance.IsMainWindowOpen &&
-               !MpAvMainWindowViewModel.Instance.IsMainWindowClosing) {
-
-                    MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
-                }
-
-                OnGlobalMouseClicked?.Invoke(sender, e);
-            });
-            
-            
         }
 
         private void Hook_MouseDragged(object sender, MouseHookEventArgs e) {
+            if (e.Data.Button == SharpHook.Native.MouseButton.Button1) {
+
+                HandlePointClick(true);
+            } else if (e.Data.Button == SharpHook.Native.MouseButton.Button2) {
+                HandlePointClick(false);
+            } else {
+                MpConsole.WriteTraceLine("Unknown mouse button clicked: " + e.Data.Button);
+            }
             GlobalMouseLocation = GetScaledMousePoint(e.Data);
             OnGlobalMouseDragged?.Invoke(sender, e);
         }
@@ -688,6 +626,158 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+
+        #region Fake-Global Handlers
+
+        private void MainWindow_Instance_PointerPressed(object sender, PointerPressedEventArgs e) {
+            e.Handled = false;
+            HandlePointerPress(e.IsLeftDown(MpAvMainWindow.Instance));
+        }
+        private void MainWindow_Instance_PointerMoved(object sender, PointerEventArgs e) {
+            // NOTE only called when global input is disabled
+            var mw_mp = e.GetClientMousePoint(MpAvMainWindow.Instance);
+            var gmp = VisualExtensions.PointToScreen(MpAvMainWindow.Instance, mw_mp.ToAvPoint()).ToPortablePoint();
+            HandlePointerMove(gmp);
+        }
+
+        private void MainWindow_Instance_PointerReleased(object sender, PointerReleasedEventArgs e) {
+            e.Handled = false;
+            HandlePointerReleased(GlobalIsMouseLeftButtonDown != e.IsLeftDown(MpAvMainWindow.Instance));
+        }
+
+        #endregion
+
+        #region Input Wrappers
+
+        private void HandlePointerPress(bool isLeftButton) {
+            if(isLeftButton) {
+                GlobalIsMouseLeftButtonDown = true;
+                GlobalMouseLeftButtonDownLocation = GlobalMouseLocation;
+                LastLeftClickDateTime = DateTime.Now;
+            } else {
+                GlobalIsMouseRightButtonDown = true;
+                LastRightClickDateTime = DateTime.Now;
+            }
+
+            OnGlobalMousePressed?.Invoke(this, isLeftButton);
+        }
+
+        private void HandlePointerMove(MpPoint gmp) {
+            GlobalMouseLocation = gmp;
+            //MpConsole.WriteLine("WinForms: " + e.Location.X + "," + e.Location.Y);
+            //MpConsole.WriteLine("Wpf: " + GlobalMouseLocation.X + "," + GlobalMouseLocation.Y);
+            //MpConsole.WriteLine("");
+
+            if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+                // NOTE!! this maybe bad only firing when window open 
+                // but its for drag/drop and not doing could interfere w/ performance too much
+                OnGlobalMouseMove?.Invoke(typeof(MpAvShortcutCollectionViewModel).ToString(), GlobalMouseLocation);
+            } else {
+                bool isShowingMainWindow = false;
+                if (MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdge &&
+                    !MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
+                    if (GlobalMouseLocation.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
+                        MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
+                        isShowingMainWindow = true;
+                    }
+                }
+
+                if (!isShowingMainWindow &&
+                    GlobalMouseLeftButtonDownLocation != null &&
+                    GlobalMouseLocation.Distance(GlobalMouseLeftButtonDownLocation) >= MIN_GLOBAL_DRAG_DIST &&
+                    GlobalMouseLocation.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight &&
+                    MpPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop) {
+                    MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
+                }
+            }
+        }
+
+        private void HandlePointerReleased(bool isLeftButton) {
+            if (isLeftButton) {
+                GlobalMouseLeftButtonDownLocation = null;
+                GlobalIsMouseLeftButtonDown = false;
+
+                if (MpAvDragDropManager.IsDragAndDrop) {
+                    Dispatcher.UIThread.Post(async () => {
+                        var handle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle;
+                        WinApi.SetForegroundWindow(handle);
+                        WinApi.SetActiveWindow(handle);
+
+                        while (true) {
+                            await Task.Delay(100);
+                        }
+                        //MessageBox.Show("Mouse up");
+                    });
+                }
+
+            } else {
+                GlobalIsMouseRightButtonDown = false;
+            }
+
+            OnGlobalMouseReleased?.Invoke(this, isLeftButton);
+
+            Dispatcher.UIThread.Post(() => {
+                if (MpAvMainWindow.Instance != null) {
+                    if (!MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+                        if (MpAvClipTrayViewModel.Instance.IsAutoCopyMode) {
+                            if (isLeftButton && !MpAvMainWindow.Instance.IsActive) {
+                                SimulateKeyPress("control+c");
+                            }
+                        }
+                        if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
+                            if (!isLeftButton && !MpAvMainWindow.Instance.IsActive) {
+                                SimulateKeyPress("control+v");
+                            }
+                        }
+                    } else if (!MpAvMainWindowViewModel.Instance.IsMainWindowClosing &&
+                              !MpAvMainWindowViewModel.Instance.IsMainWindowLocked &&
+                              //!MpExternalDropBehavior.Instance.IsPreExternalTemplateDrop &&
+                              GlobalMouseLocation != null &&
+                              GlobalMouseLocation.Y < MpAvMainWindowViewModel.Instance.MainWindowTop) {
+                        MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
+                    }
+                }
+            });
+        }
+
+        private void HandlePointClick(bool isLeftButton) {
+            //if (GlobalMouseLocation == null) {
+            //    GlobalMouseLocation = GetScaledMousePoint(e.Data);
+            //}
+
+
+            Dispatcher.UIThread.Post(() => {
+                if (!MpAvMainWindow.Instance.IsActive &&
+               !MpAvMainWindow.Instance.Bounds.Contains(GlobalMouseLocation.ToAvPoint()) &&
+               MpAvMainWindowViewModel.Instance.IsMainWindowOpen &&
+               !MpAvMainWindowViewModel.Instance.IsMainWindowClosing) {
+
+                    MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
+                }
+
+                OnGlobalMouseClicked?.Invoke(this, isLeftButton);
+            });
+        }
+
+        private void HandlePointerDrag(bool isLeftButton, bool isBegin) {
+            //if (GlobalMouseLocation == null) {
+            //    GlobalMouseLocation = GetScaledMousePoint(e.Data);
+            //}
+
+
+            //Dispatcher.UIThread.Post(() => {
+            //    if (!MpAvMainWindow.Instance.IsActive &&
+            //   !MpAvMainWindow.Instance.Bounds.Contains(GlobalMouseLocation.ToAvPoint()) &&
+            //   MpAvMainWindowViewModel.Instance.IsMainWindowOpen &&
+            //   !MpAvMainWindowViewModel.Instance.IsMainWindowClosing) {
+
+            //        MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
+            //    }
+
+            //    OnGlobalMouseClicked?.Invoke(this, new Tuple<bool, Tuple<MpPoint, MpPoint>>(isLeftButton, new Tuple<MpPoint, MpPoint>();
+            //});
+        }
+        #endregion
 
         private void HandleGestureRouting_Down(ref KeyboardHookEventArgs e) {
            string keyLiteral = MpSharpHookKeyboardInputHelpers.GetKeyLiteral(e.Data.KeyCode);
