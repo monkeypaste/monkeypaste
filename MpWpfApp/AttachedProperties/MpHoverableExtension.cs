@@ -273,7 +273,7 @@ namespace MpWpfApp {
 
             MpCursorType? hoverCursor = GetHoverCursor(dpo);
             if (hoverCursor.HasValue) {
-                MpCursor.SetCursor(dc, hoverCursor.Value);
+                MpPlatformWrapper.Services.Cursor.SetCursor(dc, hoverCursor.Value);
             }
 
             ImageSource hoverImageSource = GetHoverImageSource(dpo);
@@ -320,7 +320,7 @@ namespace MpWpfApp {
 
             MpCursorType? hoverCursor = GetHoverCursor(dpo);
             if (hoverCursor.HasValue) {
-                MpCursor.UnsetCursor(dc);
+                MpPlatformWrapper.Services.Cursor.UnsetCursor(dc);
             }
 
             ImageSource defaultImageSource = GetDefaultImageSource(dpo);

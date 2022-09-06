@@ -13,6 +13,7 @@ using MonkeyPaste.Common.Avalonia;
 using Avalonia;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using MonoMac.CoreText;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvPinTrayDropBehavior : MpAvDropBehaviorBase<MpAvPinTrayView> {
@@ -144,15 +145,21 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override async Task<int> GetDropTargetRectIdxAsync() {
+            await Task.Delay(1);
             var ctrvm = MpAvClipTrayViewModel.Instance;
             var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
             var mp = VisualExtensions.PointToClient(AssociatedObject.PinTrayListBox, gmp.ToAvPixelPoint()).ToPortablePoint();
-            bool isOverPinnedItem = ctrvm.PinnedItems.Any(x => x.IsHovering);
-            var drl = await GetDropTargetRectsAsync();
-            ctrvm.IsDragOverPinTray = drl[0].Contains(mp) && !isOverPinnedItem;
-            return ctrvm.IsDragOverPinTray ? 0 : -1;
+            var hover_ctvm = ctrvm.PinnedItems.FirstOrDefault(x => x.IsHovering);
+            return ctrvm.PinnedItems.IndexOf(hover_ctvm);
+
+            //var drl = await GetDropTargetRectsAsync();
+            //ctrvm.IsDragOverPinTray = drl[0].Contains(mp) && !isOverPinnedItem;
+            //return ctrvm.IsDragOverPinTray ? 0 : -1;
         }
         public override async Task<List<MpRect>> GetDropTargetRectsAsync() {
+            // NOTE only parent rect is used for selecting target actual drop idx
+            // is based off of hover item idx and drop behavior priority (so content view drop takes priority)
+
             await Task.Delay(1);
 
             var rl = new List<MpRect>();
@@ -161,13 +168,24 @@ namespace MonkeyPaste.Avalonia {
             }
 
             rl = new List<MpRect>() {
-                new MpRect(0, 0, AssociatedObject.PinTrayListBox.Bounds.Width, AssociatedObject.PinTrayListBox.Bounds.Height)
+                new MpRect(0, 0, AssociatedObject.PinTrayListBox.Bounds.Width, AssociatedObject.PinTrayListBox.Bounds.Height) {
+                    StrokeOctColor = MpSystemColors.blue1,
+                    FillOctColor = MpSystemColors.Red
+                }
             };
             return rl;
         }
         public override async Task<MpShape[]> GetDropTargetAdornerShapeAsync() {
             await Task.Delay(1);
-            return null;
+            var hover_Ctvm = MpAvClipTrayViewModel.Instance.PinnedItems.FirstOrDefault(x => x.IsHovering);
+            if(hover_Ctvm != null) {
+                return new MpShape[] {
+                    new MpRect(10,10,20,500) {
+                        FillOctColor = MpSystemColors.White
+                    }
+                };
+            }
+            return new MpShape[] {};
         }
 
         public override async Task StartDropAsync() { 

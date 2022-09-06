@@ -23,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
 
         void CancelDrop();
 
-        MpAvContentAdorner DropLineAdorner { get; set; }
+        MpAvContentDragDropAdorner DropAdorner { get; set; }
         Orientation AdornerOrientation { get; }
         void InitAdorner();
         void UpdateAdorner();
@@ -31,7 +31,6 @@ namespace MonkeyPaste.Avalonia {
 
         Control RelativeToElement { get; }
         //List<MpRect> DropRects { get; }
-        Task UpdateRectsAsync();
         Task<bool> IsDragDataValidAsync(bool isCopy, object dragData);
         
         Task StartDropAsync();
@@ -42,6 +41,8 @@ namespace MonkeyPaste.Avalonia {
         Task<MpShape[]> GetDropTargetAdornerShapeAsync();
         Task ContinueDragOverTargetAsync();
 
+        int GetDropTargetRectIdx();
+        bool IsDragDataValid(bool isCopy, object dragData);
     }
 
     public interface MpAvIContentDropTarget: MpAvIContentDropTargetAsync {

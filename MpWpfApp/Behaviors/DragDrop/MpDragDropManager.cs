@@ -266,12 +266,12 @@ namespace MpWpfApp {
         }
 
         private static void UpdateCursor() {
-            //MpCursor.UnsetCursor(nameof(MpDragDropManager));
+            //MpPlatformWrapper.Services.Cursor.UnsetCursor(nameof(MpDragDropManager));
 
             MpCursorType dropCursor = MpCursorType.Default;
 
             if (!IsDragAndDrop) {
-                MpCursor.UnsetCursor(nameof(MpDragDropManager));
+                MpPlatformWrapper.Services.Cursor.UnsetCursor(nameof(MpDragDropManager));
                 return;
             } else if (!IsDropValid) {
                 dropCursor = MpCursorType.Invalid;
@@ -280,12 +280,12 @@ namespace MpWpfApp {
             } else if (IsDragAndDrop) {
                 dropCursor = CurDropTarget.MoveCursor;
             } else {
-                MpCursor.UnsetCursor(nameof(MpDragDropManager));
+                MpPlatformWrapper.Services.Cursor.UnsetCursor(nameof(MpDragDropManager));
                 return;
             }
 
-            if(MpCursor.CurrentCursor != dropCursor) {
-                MpCursor.SetCursor(nameof(MpDragDropManager), dropCursor);
+            if(MpPlatformWrapper.Services.Cursor.CurrentCursor != dropCursor) {
+                MpPlatformWrapper.Services.Cursor.SetCursor(nameof(MpDragDropManager), dropCursor);
             }
         }
 

@@ -18,10 +18,13 @@ namespace MonkeyPaste {
         ResizeNWSE,
         ResizeNESW,
         ResizeAll,
-        Hand
+        Hand,
+        Arrow
     }
     public interface MpICursor {
-        void SetCursor(MpCursorType newCursor);
+        MpCursorType CurrentCursor { get; }
+        void SetCursor(object targetObj, MpCursorType newCursor);
+        void UnsetCursor(object targetObj);
     }
 
     

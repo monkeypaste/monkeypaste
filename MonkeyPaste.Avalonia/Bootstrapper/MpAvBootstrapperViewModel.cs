@@ -23,6 +23,7 @@ namespace MonkeyPaste.Avalonia {
             _coreItems.AddRange(
                 new List<MpBootstrappedItemViewModel>() {
                     new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpDocumentHtmlExtension)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpProcessManager), Properties.Settings.Default.IgnoredProcessNames),
                     ////new MpBootstrappedItemViewModel(this,typeof(MpProcessAutomation)),

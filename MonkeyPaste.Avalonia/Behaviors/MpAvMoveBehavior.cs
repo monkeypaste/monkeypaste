@@ -171,7 +171,7 @@ namespace MonkeyPaste.Avalonia {
             if(!IsMoving) {
                 CanMove = false;
             }
-            MpCursor.UnsetCursor(AssociatedObject.DataContext);
+            MpPlatformWrapper.Services.Cursor.UnsetCursor(AssociatedObject.DataContext);
         }
 
         private void AssociatedObject_MouseMove(object sender, PointerEventArgs e) {
@@ -179,7 +179,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            MpCursor.SetCursor(AssociatedObject.DataContext, MpCursorType.ResizeAll);
+            MpPlatformWrapper.Services.Cursor.SetCursor(AssociatedObject, MpCursorType.ResizeAll);
             var mwmp = e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();
 
             var delta = mwmp - _lastMousePosition;

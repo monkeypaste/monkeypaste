@@ -67,7 +67,7 @@ namespace MonkeyPaste.Avalonia {
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, OsInfo);
             //MpPrefViewModel.Instance.MainWindowOrientation = "Bottom";
 
-            Cursor = new MpAvCursor();
+            
             QueryInfo = new MpAvQueryInfo();
             ProcessWatcher = new MpAvProcessWatcher().Watcher;
             IconBuilder = new MpAvIconBuilder().IconBuilder;
@@ -75,6 +75,7 @@ namespace MonkeyPaste.Avalonia {
             AppBuilder = new MpAvAppBuilder();
             CustomColorChooserMenu = new MpAvCustomColorChooser();
             PlatformResource = new MpAvPlatformResource();
+            Cursor = new MpAvCursor((MpAvPlatformResource)PlatformResource);
             ContextMenuCloser = new MpAvContextMenuCloser();
             MainThreadMarshal = new MpAvMainThreadMarshal();
             StringTools = new MpAvStringTools();

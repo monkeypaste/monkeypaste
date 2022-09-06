@@ -429,14 +429,14 @@ namespace MpWpfApp {
             MouseEventHandler thl_mouseEnter_handler = (s, e) => {
                 tvm.IsHovering = true;
                 if (!ctvm.IsContentReadOnly) {
-                    MpCursor.SetCursor(tvm, MpCursorType.Hand);
+                    MpPlatformWrapper.Services.Cursor.SetCursor(tvm, MpCursorType.Hand);
                 }
             };
 
             MouseEventHandler thl_mouseLeave_handler = (s, e) => {
                 tvm.IsHovering = false;
                 if (!ctvm.IsContentReadOnly) {
-                    MpCursor.UnsetCursor(tvm);
+                    MpPlatformWrapper.Services.Cursor.UnsetCursor(tvm);
                 }
             };
 

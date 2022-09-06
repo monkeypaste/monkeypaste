@@ -53,7 +53,7 @@ namespace MonkeyPaste.Avalonia {
                 BindingContext.IsContentReadOnly &&
                 !BindingContext.IsSubSelectionEnabled) {
                 BindingContext.IsSubSelectionEnabled = true;
-                MpCursor.SetCursor(BindingContext, MpCursorType.IBeam);
+                MpPlatformWrapper.Services.Cursor.SetCursor(sender as InputElement, MpCursorType.IBeam);
                 UpdateAdorners();
                 return;
             }

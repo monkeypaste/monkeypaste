@@ -70,9 +70,9 @@
             <!--  Zoom Factor Slider  -->
             <Grid Width="125"
                   Opacity="0.5"
-                  Cursor="Hand"
                   local:MpAvIsHoveringExtension.IsEnabled="True"
                   local:MpAvIsHoveringExtension.IsHovering="{Binding IsZoomSliderHovering, Mode=TwoWay}"
+                  local:MpAvIsHoveringExtension.HoverCursor="Hand"
                   Height="{Binding Bounds.Height, ElementName=TitlePanel}"
                   Margin="0,0,10,0">
                 <Border HorizontalAlignment="Stretch"
@@ -127,7 +127,8 @@
                                     <ControlTemplate>
                                         <Grid>
                                             <Border Width="12"
-                                                    Cursor="Hand"
+                                                    local:MpAvIsHoveringExtension.IsEnabled="True"
+                                                    local:MpAvIsHoveringExtension.HoverCursor="Hand"
                                                     Height="40"
                                                     CornerRadius="3"
                                                     Background="White" />
@@ -141,7 +142,8 @@
                                         <Grid>
                                             <Border Width="12"
                                                     Height="40"
-                                                    Cursor="Hand"
+                                                    local:MpAvIsHoveringExtension.IsEnabled="True"
+                                                    local:MpAvIsHoveringExtension.HoverCursor="Hand"
                                                     CornerRadius="3"
                                                     Background="Yellow" />
                                         </Grid>
@@ -154,7 +156,8 @@
                                         <Grid>
                                             <Border Width="12"
                                                     Height="40"
-                                                    Cursor="Hand"
+                                                    local:MpAvIsHoveringExtension.IsEnabled="True"
+                                                    local:MpAvIsHoveringExtension.HoverCursor="Hand"
                                                     CornerRadius="3"
                                                     Background="Red" />
                                         </Grid>

@@ -25,6 +25,9 @@
     <EmbeddedResource Remove="cef\**" />
     <None Remove="Assets\Images\backup\**" />
     <None Remove="cef\**" />
+    <None Remove="Assets\Cursors\copy.png" />
+    <None Remove="Assets\Cursors\hand_closed.png" />
+    <None Remove="Assets\Cursors\hand_open.png" />
     <None Remove="Assets\Icons\cog.ico" />
     <None Remove="Assets\Icons\monkey.ico" />
     <None Remove="Assets\Images\monkey.png" />
@@ -917,5 +920,16 @@
   </Target>
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Reusable\ShortcutWindow\MpAvAssignShortcutWindow.axaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\Cursors\copy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Cursors\hand_closed.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Cursors\hand_open.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
   </ItemGroup>
 </Project>

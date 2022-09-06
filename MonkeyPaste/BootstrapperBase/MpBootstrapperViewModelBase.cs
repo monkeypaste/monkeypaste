@@ -47,7 +47,6 @@ namespace MonkeyPaste {
             _coreItems.AddRange(
                 new List<MpBootstrappedItemViewModel>() {
                     new MpBootstrappedItemViewModel(this,typeof(MpConsole)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpCursor)),
                     new MpBootstrappedItemViewModel(this,typeof(MpTempFileManager)),
                     new MpBootstrappedItemViewModel(this,typeof(MpDb)),
                     new MpBootstrappedItemViewModel(this,typeof(MpDataModelProvider)),

@@ -48,9 +48,10 @@ namespace MonkeyPaste {
             set {
                 SetProperty(ref _isBusy, value);
                 if(_isBusy) {
-                    MpCursor.SetCursor(this, MpCursorType.Waiting);
+                    // NOTE since in PCL null fallsback to mw
+                    MpPlatformWrapper.Services.Cursor.SetCursor(null, MpCursorType.Waiting);
                 } else {
-                    MpCursor.UnsetCursor(this);
+                    MpPlatformWrapper.Services.Cursor.UnsetCursor(null);
                 }
             }
         }

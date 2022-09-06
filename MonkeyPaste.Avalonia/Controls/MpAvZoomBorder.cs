@@ -239,7 +239,7 @@ namespace MonkeyPaste.Avalonia {
                 var tt = GetTranslateTransform(Child);
                 mp_start = e.GetPosition(this).ToPortablePoint();
                 tt_origin = new MpPoint(tt.X, tt.Y);
-                MpCursor.SetCursor(DataContext, MpCursorType.Hand);
+                MpPlatformWrapper.Services.Cursor.SetCursor(Child, MpCursorType.Hand);
 
                 e.Pointer.Capture(this);
                 if(e.Pointer.Captured != this) {
@@ -256,7 +256,7 @@ namespace MonkeyPaste.Avalonia {
             if (Child != null) {
                 IsTranslating = false;
                 e.Pointer.Capture(null);
-                MpCursor.UnsetCursor(DataContext);
+                MpPlatformWrapper.Services.Cursor.UnsetCursor(DataContext);
                 if(DataContext is MpActionCollectionViewModel acvm) {
                     acvm.HasModelChanged = true;
                 }

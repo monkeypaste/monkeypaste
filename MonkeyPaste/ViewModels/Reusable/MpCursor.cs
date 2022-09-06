@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -23,7 +24,7 @@ namespace MonkeyPaste {
 
         public static MpCursorType CurrentCursor { get; set; } = MpCursorType.Default;
 
-        public static bool IsCursorFrozen { get; set; } = false;
+        //public static bool IsCursorFrozen { get; set; } = false;
         #endregion
 
         #endregion
@@ -38,19 +39,16 @@ namespace MonkeyPaste {
 
         #region public static Methods
 
-        public static void SetCursor(object sender, MpCursorType cursor) {
-            if(!MpBootstrapperViewModelBase.IsCoreLoaded || IsCursorFrozen) {
+        public static void SetCursor(object targetObj, MpCursorType cursor) {
+            if(!MpBootstrapperViewModelBase.IsCoreLoaded) { // || IsCursorFrozen) {
                 return;
             }
 
             CurrentCursor = cursor;
-            _cursor.SetCursor(CurrentCursor);
+            _cursor.SetCursor(targetObj,CurrentCursor);
 
-            //string logStr = $"Type: '{sender.GetType()}' set Cursor to: '{cursor.ToString()}'";
-            //if(sender is MpDbModelBase dbo) {
-            //    logStr = $"Guid: '{dbo.Guid}' " + logStr;
-            //}
-            //MpConsole.WriteLogLine(logStr);
+            string logStr = $"Type: '{targetObj}' set Cursor to: '{cursor}'";
+            MpConsole.WriteLogLine(logStr);
         }
 
         public static void UnsetCursor(object sender) {

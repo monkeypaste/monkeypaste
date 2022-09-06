@@ -363,12 +363,12 @@ namespace MpWpfApp {
 
         private void Rtb_MouseEnter(object sender, MouseEventArgs e) {
             if (!BindingContext.IsContentReadOnly || BindingContext.IsSubSelectionEnabled) {
-                MpCursor.SetCursor(BindingContext, MpCursorType.IBeam);
+                MpPlatformWrapper.Services.Cursor.SetCursor(BindingContext, MpCursorType.IBeam);
             }
         }
 
         private void Rtb_MouseLeave(object sender, MouseEventArgs e) {
-            MpCursor.UnsetCursor(BindingContext);
+            MpPlatformWrapper.Services.Cursor.UnsetCursor(BindingContext);
         }
 
         private void Rtb_MouseMove(object sender, MouseEventArgs e) {
@@ -376,16 +376,16 @@ namespace MpWpfApp {
                 // BUG when sub selection becomes empty the cursor goes back to default
                 // so this ensures it stays ibeam
                 if(!Rtb.IsReadOnly && BindingContext.TemplateCollection.Items.Any(x=>x.IsHovering)) {
-                    //MpCursor.SetCursor(BindingContext, MpCursorType.Hand);
+                    //MpPlatformWrapper.Services.Cursor.SetCursor(BindingContext, MpCursorType.Hand);
                     //handled in mouseEnter of LoadTemplate
                 } else if(BindingContext.IsSubSelectionEnabled) {
-                    MpCursor.SetCursor(BindingContext, MpCursorType.IBeam);
+                    MpPlatformWrapper.Services.Cursor.SetCursor(BindingContext, MpCursorType.IBeam);
                 } else {
-                    MpCursor.UnsetCursor(BindingContext);
+                    MpPlatformWrapper.Services.Cursor.UnsetCursor(BindingContext);
                 }
                 
             } else {
-                MpCursor.UnsetCursor(BindingContext);
+                MpPlatformWrapper.Services.Cursor.UnsetCursor(BindingContext);
             }
         }
 
@@ -416,7 +416,7 @@ namespace MpWpfApp {
                 !BindingContext.IsSubSelectionEnabled && !Rtb.Selection.IsEmpty) {
                 //Rtb.Selection.Select(Rtb.Selection.Start, Rtb.Selection.Start);
                 //ScrollToHome();
-                MpCursor.UnsetCursor(BindingContext);
+                MpPlatformWrapper.Services.Cursor.UnsetCursor(BindingContext);
             }
         }
         private void Rtb_PreviewKeyDown(object sender, KeyEventArgs e) {
@@ -448,7 +448,7 @@ namespace MpWpfApp {
                 BindingContext.IsContentReadOnly &&
                 !BindingContext.IsSubSelectionEnabled) {
                 BindingContext.IsSubSelectionEnabled = true;
-                MpCursor.SetCursor(BindingContext, MpCursorType.IBeam);
+                MpPlatformWrapper.Services.Cursor.SetCursor(BindingContext, MpCursorType.IBeam);
                 UpdateAdorners();
                 return;
             }
@@ -656,16 +656,16 @@ namespace MpWpfApp {
         //                                    // and they aren't holding ctrl until they see the message it will change cursor while
         //                                    // over link
         //                                    if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
-        //                                        MpCursor.SetCursor(hl, MpCursorType.Hand);                                        
+        //                                        MpPlatformWrapper.Services.Cursor.SetCursor(hl, MpCursorType.Hand);                                        
         //                                    } else {
-        //                                        MpCursor.UnsetCursor(hl);
+        //                                        MpPlatformWrapper.Services.Cursor.UnsetCursor(hl);
         //                                    }
         //                                };
         //                                MouseEventHandler hlMouseEnter = (object o, MouseEventArgs e) => {
         //                                    if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
-        //                                        MpCursor.SetCursor(hl, MpCursorType.Hand);
+        //                                        MpPlatformWrapper.Services.Cursor.SetCursor(hl, MpCursorType.Hand);
         //                                    } else {
-        //                                        MpCursor.UnsetCursor(hl);
+        //                                        MpPlatformWrapper.Services.Cursor.UnsetCursor(hl);
         //                                    }
         //                                    hl.IsEnabled = true;
         //                                    //Keyboard.AddKeyDownHandler(Application.Current.MainWindow, hlKeyDown);
@@ -677,7 +677,7 @@ namespace MpWpfApp {
         //                                    //} else {
 
         //                                    //}
-        //                                    MpCursor.UnsetCursor(hl);
+        //                                    MpPlatformWrapper.Services.Cursor.UnsetCursor(hl);
         //                                    hl.IsEnabled = false;
         //                                    //Keyboard.RemoveKeyDownHandler(Application.Current.MainWindow, hlKeyDown);
         //                                    rtbvm.IsOverHyperlink = false;

@@ -164,7 +164,7 @@ namespace MpWpfApp {
             if(!IsMoving) {
                 CanMove = false;
             }
-            MpCursor.UnsetCursor(AssociatedObject.DataContext);
+            MpPlatformWrapper.Services.Cursor.UnsetCursor(AssociatedObject.DataContext);
         }
 
         private void AssociatedObject_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
@@ -172,7 +172,7 @@ namespace MpWpfApp {
                 return;
             }
 
-            MpCursor.SetCursor(AssociatedObject.DataContext, MpCursorType.ResizeAll);
+            MpPlatformWrapper.Services.Cursor.SetCursor(AssociatedObject.DataContext, MpCursorType.ResizeAll);
             var mwmp = e.GetPosition(Application.Current.MainWindow);
 
             Vector delta = mwmp - _lastMousePosition;

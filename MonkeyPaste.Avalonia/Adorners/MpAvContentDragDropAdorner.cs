@@ -13,15 +13,24 @@ using Avalonia.Controls;
 using MonkeyPaste.Common.Avalonia;
 using Avalonia.Threading;
 using Avalonia;
+using System.Threading;
+using Avalonia.Rendering;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvContentAdorner : MpAvAdornerBase {
+    public class MpAvContentDragDropAdorner : MpAvAdornerBase {
         #region Private Variables
         private bool _isDash = true;
 
         private Color _debugColor;
 
         private MpAvIContentDropTargetAsync _dropBehavior;
+
+        private MpShape[] _adornerShapes = new MpShape[] { };
+
+        private List<MpRect> _debug_dropRects = new List<MpRect>();
+
+        public int _dropIdx { get; private set; } = -1;
+
         //private MpRtbHighlightBehavior _highlightBehavior;
 
         #endregion
@@ -45,7 +54,9 @@ namespace MonkeyPaste.Avalonia {
                 return Brushes.Red;
             }
         }
-        public bool IsShowingDropShape => DropIdx >= 0;
+
+        
+        public bool IsShowingDropShape => _dropIdx >= 0;
 
         public bool IsShowingHighlightShapes => false;// _highlightBehavior != null && _highlightBehavior.GetHighlightShapes().Count > 0;
 
@@ -128,21 +139,13 @@ namespace MonkeyPaste.Avalonia {
         //    }
         //}
 
-        public List<MpRect> DropRects { get; set; } = new List<MpRect>();
+        //public List<MpRect> DropRects { get; set; } = new List<MpRect>();
 
-        public int DropIdx {
-            get {
-                if (_dropBehavior == null) {
-                    return -1;
-                }
-                return _dropBehavior.DropIdx;
-            }
-        }
 
         #endregion
-
+        DispatcherTimer _timer;
         #region Public Methods
-        public MpAvContentAdorner(Control uie, MpAvIContentDropTargetAsync dropBehavior) : base(uie) {
+        public MpAvContentDragDropAdorner(Control uie, MpAvIContentDropTargetAsync dropBehavior) : base(uie) {
             _dropBehavior = dropBehavior;
 
             var rtbcv = uie.GetVisualAncestor<MpAvClipTileContentView>();
@@ -154,26 +157,55 @@ namespace MonkeyPaste.Avalonia {
             _isDash = _dropBehavior.GetType() != typeof(MpAvActionDesignerItemDropBehavior);
 
             _debugColor = MpColorHelpers.GetRandomHexColor().AdjustAlpha(0.25).ToAvColor();
+            
+        }
+
+        public void StartRenderTimer() {
+            if(_timer == null) {
+                _timer = new DispatcherTimer();
+                _timer.Interval = TimeSpan.FromMilliseconds(100);
+                _timer.Tick += _timer_Tick;
+            }
+            _timer.Start();
+        }
+        public void StopRenderTimer() {
+            if(_timer == null) {
+                return;
+            }
+            _timer.Stop();
+        }
+
+        private async void _timer_Tick(object sender, EventArgs e) {
+            _debug_dropRects = await _dropBehavior.GetDropTargetRectsAsync();
+            _adornerShapes = await _dropBehavior.GetDropTargetAdornerShapeAsync();
+
+            if(MpAvDragDropManager.CurDropTarget == _dropBehavior) {
+                _dropIdx = MpAvDragDropManager.CurDropTarget.DropIdx;
+            } else {
+                _dropIdx = -1;
+            }
+
+            this.InvalidateVisual();
 
         }
         #endregion
-
         #region Overrides
         public override void Render(DrawingContext dc) {
            // 
-
             if (IsShowing) {
                 IsVisible = true;
 
                 if (IsDebugMode) {
-                    DrawDebugRects(dc);
+                    //DrawDebugRects(dc);
                     //dc.DrawLine(new Pen(Brushes.White, 5), new Point(50, 0), new Point(50, 500));
+                    _debug_dropRects.ForEach(x => DrawShape(dc, x));
                 }
 
                 if (IsShowingDropShape) {
-                    DrawDropShapes(
-                        dc,
-                        new Pen(DropShapeBrush, 1.5) { DashStyle = _isDash ? DashStyle.Dash : new DashStyle() });
+                    //DrawAdornerShapes(
+                    //    dc,
+                    //    new Pen(DropShapeBrush, 1.5) { DashStyle = _isDash ? DashStyle.Dash : new DashStyle() });
+                    _adornerShapes.ForEach(x => DrawShape(dc, x));
                 }
 
                 if (IsShowingHighlightShapes) {
@@ -194,32 +226,36 @@ namespace MonkeyPaste.Avalonia {
 
 
             } else {
-                //IsVisible = false;
+                IsVisible = false;
                 //Opacity = 1;
             }
             base.Render(dc);
         }
 
-        private void DrawShape(DrawingContext dc, MpShape dropShape, Pen pen, IBrush brush = null) {
+        private void DrawShape(DrawingContext dc, MpShape shape) {
             var fe = AdornedControl as Control;
             if (fe == null) {
                 return;
             }
+            IBrush brush = shape.FillOctColor.ToAvBrush();
+
+
+            IPen pen = null;// shape.StrokeThickness.ToA;
             brush = brush == null ? Brushes.Transparent : brush;
 
-            if (dropShape is MpLine dl) {
+            if (shape is MpLine dl) {
                 dc.DrawLine(
                     pen,
                     dl.P1.ToAvPoint(),
                     dl.P2.ToAvPoint());
-            } else if (dropShape is MpEllipse de) {
+            } else if (shape is MpEllipse de) {
                 dc.DrawEllipse(
                     brush,
                     pen,
                     de.Center.ToAvPoint(),
                     de.Size.Width / 2,
                     de.Size.Height / 2);
-            } else if (dropShape is MpRect dr) {
+            } else if (shape is MpRect dr) {
                 dc.DrawRectangle(
                     brush,
                     pen,
@@ -255,13 +291,13 @@ namespace MonkeyPaste.Avalonia {
             //}
         }
 
-        private void DrawDropShapes(DrawingContext dc, Pen pen) {
-            //Dispatcher.UIThread.Post(async () => {
-            //    var dropShapes = await _dropBehavior.GetDropTargetAdornerShapeAsync();
-            //    DropRects.ForEach(x => DrawShape(dc, x, pen));
-            //});
-            DropRects.ForEach(x => DrawShape(dc, x, pen));
-        }
+        //private void DrawAdornerShapes(DrawingContext dc, Pen pen) {
+        //    //Dispatcher.UIThread.Post(async () => {
+        //    //    var dropShapes = await _dropBehavior.GetDropTargetAdornerShapeAsync();
+        //    //    DropRects.ForEach(x => DrawShape(dc, x, pen));
+        //    //});
+        //    _adornerShapes.ForEach(x => DrawShape(dc, x, pen));
+        //}
 
         private void DrawUnderlines(DrawingContext dc, Pen pen) {
             //var rtb = AdornedControl as RichTextBox;
@@ -318,9 +354,29 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void DrawDebugRects(DrawingContext dc) {
-            var dtrl = DropRects; //await _dropBehavior.GetDropTargetRectsAsync();
+            //if(sc == null) {
+            //    return;
+            //}dc.PlatformImpl
+            //sc.Post(async _ => {
+            //    var dtrl = await _dropBehavior.GetDropTargetRectsAsync();
+            //    foreach (var debugRect in dtrl) {
+            //        bool isDropIdx = dtrl.IndexOf(debugRect) == _dropIdx;
+
+            //        var av_rect = debugRect.ToAvRect();
+            //        IBrush brush = isDropIdx ? Brushes.Blue : new SolidColorBrush(_debugColor);
+            //        IPen pen = new Pen(Brushes.White, 1);
+
+            //        //dc.DrawLine(pen, av_rect.TopLeft, av_rect.BottomLeft);
+            //        dc.DrawRectangle(
+            //                brush,
+            //                pen,
+            //                av_rect);
+            //    }
+            //},null);
+
+            var dtrl = _debug_dropRects; //await _dropBehavior.GetDropTargetRectsAsync();
             foreach (var debugRect in dtrl) {
-                bool isDropIdx = dtrl.IndexOf(debugRect) == DropIdx;
+                bool isDropIdx = dtrl.IndexOf(debugRect) == _dropIdx;
 
                 var av_rect = debugRect.ToAvRect();
                 IBrush brush = isDropIdx ? Brushes.Blue : new SolidColorBrush(_debugColor);

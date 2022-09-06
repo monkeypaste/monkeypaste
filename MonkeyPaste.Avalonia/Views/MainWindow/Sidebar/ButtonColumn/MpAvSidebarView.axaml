@@ -37,10 +37,6 @@
                 <Setter Property="BorderThickness"
                         Value="1" />
             </Style>
-            <Style Selector="ToggleButton:pointerover">
-                <Setter Property="Cursor"
-                        Value="Hand" />
-            </Style>
             <Style Selector="ToggleButton:pointerover PathIcon">
                 <Setter Property="Foreground"
                         Value="Gold" />
@@ -72,6 +68,8 @@
         </Grid.Styles>
         <ToggleButton x:Name="TagTreeToggleButton"
                       Grid.Row="0"
+                      local:MpAvIsHoveringExtension.IsEnabled="True"
+                      local:MpAvIsHoveringExtension.HoverCursor="Hand"
                       IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
                       Padding="10">
             <ToolTip.Tip>
@@ -81,6 +79,8 @@
         </ToggleButton>
         <ToggleButton x:Name="ClipboardHandlerToggleButton"
                       Grid.Row="1"
+                      local:MpAvIsHoveringExtension.IsEnabled="True"
+                      local:MpAvIsHoveringExtension.HoverCursor="Hand"
                       IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpClipboardHandlerCollectionViewModel.Instance}}"
                       Padding="10">
             <ToolTip.Tip>
@@ -90,6 +90,8 @@
         </ToggleButton>
         <ToggleButton x:Name="AnalyzerToggleButton"
                       Grid.Row="2"
+                      local:MpAvIsHoveringExtension.IsEnabled="True"
+                      local:MpAvIsHoveringExtension.HoverCursor="Hand"
                       IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance}}"
                       Padding="10">
             <ToolTip.Tip>
@@ -99,6 +101,8 @@
         </ToggleButton>
         <ToggleButton x:Name="ActionsToggleButton"
                       Grid.Row="3"
+                      local:MpAvIsHoveringExtension.IsEnabled="True"
+                      local:MpAvIsHoveringExtension.HoverCursor="Hand"
                       IsEnabled="True"
                       IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpActionCollectionViewModel.Instance}}"
                       Padding="10">
@@ -109,6 +113,8 @@
         </ToggleButton>
         <ToggleButton x:Name="AppModeToggleButton"
                       Grid.Row="4"
+                      local:MpAvIsHoveringExtension.IsEnabled="True"
+                      local:MpAvIsHoveringExtension.HoverCursor="Hand"
                       Padding="10"
                       IsEnabled="{Binding !IsAppPaused}">
             <ToolTip.Tip>
@@ -121,6 +127,7 @@
                                   Loaded="AppendModeToggleButton_Loaded"
                                   Grid.Row="4"
                                   Padding="10"
+                                  
                                   VerticalAlignment="Bottom"
                                   HorizontalAlignment="Center"
                                   Template="{StaticResource AppModeToggleButtonControlTemplate_NOCHECKED_STYLE}"

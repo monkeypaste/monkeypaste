@@ -20,6 +20,10 @@ namespace MonkeyPaste.Common.Avalonia {
         public static Brush ToAvBrush(this string hexColor) {            
             return new SolidColorBrush(hexColor.ToAvColor());
         }
+
+        public static Pen ToAvPen(this string hexColor, double thickness = 1.0d, IDashStyle dashStyle = null) {
+            return new Pen(hexColor.ToAvBrush(), thickness, dashStyle);
+        }
         public static MpColor ToPortableColor(this Color color) {
             return new MpColor(color.A, color.R, color.G, color.B);
         }

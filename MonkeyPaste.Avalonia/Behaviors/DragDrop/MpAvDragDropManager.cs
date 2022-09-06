@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
 
         private static MpPoint _mouseDragCheckStartPosition;
 
-        private static DispatcherTimer _timer;
+        private static DispatcherTimer _update_timer;
 
         #endregion
 
@@ -104,9 +104,9 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public static void Init() {
-            _timer = new DispatcherTimer(DispatcherPriority.Render);
-            _timer.Interval = new TimeSpan(0, 0, 0, 0, 100);
-            _timer.Tick += _timer_Tick;
+            _update_timer = new DispatcherTimer(DispatcherPriority.Render);
+            _update_timer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            _update_timer.Tick += update_timer_Tick;
 
             MpAvMainWindowViewModel.Instance.OnMainWindowClosed += Instance_OnMainWindowHide;
 
@@ -126,11 +126,11 @@ namespace MonkeyPaste.Avalonia {
             IsCheckingForDrag = true;
 
             _mouseDragCheckStartPosition = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
-            _timer.Start();
+            _update_timer.Start();
 
-            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove += DragCheck_OnGlobalMouseMove;
+            //MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove += DragCheck_OnGlobalMouseMove;
 
-            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += DragCheck_OnGlobalMouseReleased;
+            //MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += DragCheck_OnGlobalMouseReleased;
         }
 
 
@@ -157,16 +157,35 @@ namespace MonkeyPaste.Avalonia {
 
         #region private static  Methods
 
-        private static async Task<MpAvIContentDropTargetAsync> SelectDropTargetAsync(object dragData) {
+        //private static async Task<MpAvIContentDropTargetAsync> SelectDropTargetAsync(object dragData) {
+        //    MpAvIContentDropTargetAsync selectedTarget = null;
+
+        //    foreach (var dt in DropTargets.Where(x => x.IsDropEnabled).OrderByDescending(x => (int)x.DropType)) {
+        //        bool isDropValid = await dt.IsDragDataValidAsync(MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown, dragData);
+        //        if (!isDropValid) {
+        //            continue;
+        //        }
+
+        //        dt.DropIdx = await dt.GetDropTargetRectIdxAsync();
+        //        if (dt.DropIdx >= 0) {
+        //            if (selectedTarget != null) {
+        //                selectedTarget.DropIdx = -1;
+        //            }
+        //            selectedTarget = dt;
+        //        }
+        //    }
+        //    return selectedTarget;
+        //}
+        private static MpAvIContentDropTargetAsync SelectDropTarget(object dragData) {
             MpAvIContentDropTargetAsync selectedTarget = null;
 
             foreach (var dt in DropTargets.Where(x => x.IsDropEnabled).OrderByDescending(x => (int)x.DropType)) {
-                bool isDropValid = await dt.IsDragDataValidAsync(MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown, dragData);
+                bool isDropValid =  dt.IsDragDataValid(MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown, dragData);
                 if (!isDropValid) {
                     continue;
                 }
 
-                dt.DropIdx = await dt.GetDropTargetRectIdxAsync();
+                dt.DropIdx = dt.GetDropTargetRectIdx();
                 if (dt.DropIdx >= 0) {
                     if (selectedTarget != null) {
                         selectedTarget.DropIdx = -1;
@@ -178,10 +197,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void Instance_OnGlobalEscapePressed(object sender, EventArgs e) {
-            if (!IsDragAndDrop) {
-                return;
-            }
-            Reset();
+            Reset(true);
         }
 
         private static void DragCheck_OnGlobalMouseReleased(object sender, bool isLeftButton) {
@@ -195,50 +211,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void DragCheck_OnGlobalMouseMove(object sender, MpPoint gmp) {
-            //MpConsole.WriteLine("mouse move: " + gmp);
-            if (IsPerformingDrop) {
-                // NOTE added this state to try to fix DropIdx from clearing during drop                
-                return;
-            }
-            if (IsDraggingFromExternal && !MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
-                IsDraggingFromExternal = false;
-            }
-            // NOTE is not on main thread from external drag
-            if (!IsCheckingForDrag && !IsDragAndDrop) {
-                Reset();
-                return;
-            }
-            bool isLeftMouseButtonDown = MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown;
-            if (!isLeftMouseButtonDown || _mouseDragCheckStartPosition == null) {
-                // this is a sanity check since global event handlers are needed and 
-                // probably something isn't releasing mouse capture
-                Reset();
-                return;
-            }
-            //MpConsole.WriteLine("In DragDrop mouse move " + MpShortcutCollectionViewModel.Instance.GlobalMouseLocation);
-            MpPoint mp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
-            MpPoint diff = mp - _mouseDragCheckStartPosition;
-
-            if (diff.Length >= MINIMUM_DRAG_DISTANCE || IsDragAndDrop) {
-                if (!IsDragAndDrop) {
-                    IsDragAndDrop = true;
-                   // _timer.Start();
-                    MpAvShortcutCollectionViewModel.Instance.OnGlobalEscKeyPressed += Instance_OnGlobalEscapePressed;
-                    MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
-                }
-
-                Dispatcher.UIThread.Post(async () => {
-                    var dropTarget = await SelectDropTargetAsync(DragData);
-
-                    if (dropTarget != CurDropTarget) {
-                        CurDropTarget?.CancelDrop();
-                        CurDropTarget = dropTarget;
-                        CurDropTarget?.StartDropAsync();
-                    }
-
-                    CurDropTarget?.ContinueDragOverTargetAsync();
-                });
-            }
+            
         }
 
         private static async Task PerformDrop(object dragData) {
@@ -258,15 +231,28 @@ namespace MonkeyPaste.Avalonia {
 
             Reset();
         }
-        private static void Reset() {
-            IsCheckingForDrag = IsDragAndDrop = IsDraggingFromExternal = false;
+        private static void Reset(bool isUserCancel = false) {
+
+            //if(!isUserCancel && !IsDragAndDrop) {
+            //    // not sure if this is right but need to be careful about order of events/state changes
+            //    // so when reset comes from escape key this shouldn't be reachable even if IsDragDrop==false
+            //    return;
+            //}
+
+            IsCheckingForDrag = false;
+            IsDragAndDrop = false;
+            IsDraggingFromExternal = false;
             MpMessenger.SendGlobal(MpMessageType.ItemDragEnd);
+
+            DropTargets.Where(x=>x.DropAdorner != null)
+                        .Select(x => x.DropAdorner)
+                         .Cast<MpAvContentDragDropAdorner>()
+                         .ForEach(x => x.StopRenderTimer());
 
             _mouseDragCheckStartPosition = null;
             CurDropTarget = null;
 
             DragData = null;
-            _timer.Stop();
             DropTargets.ForEach(x => x.Reset());
 
             MpAvShortcutCollectionViewModel.Instance.OnGlobalEscKeyPressed -= Instance_OnGlobalEscapePressed;
@@ -281,12 +267,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void UpdateCursor() {
-            //MpCursor.UnsetCursor(nameof(MpDragDropManager));
+            //MpPlatformWrapper.Services.Cursor.UnsetCursor(nameof(MpDragDropManager));
 
             MpCursorType dropCursor = MpCursorType.Default;
 
             if (!IsDragAndDrop) {
-                MpCursor.UnsetCursor(nameof(MpAvDragDropManager));
+                MpPlatformWrapper.Services.Cursor.UnsetCursor(App.Desktop.MainWindow);
                 return;
             } else if (!IsDropValid) {
                 dropCursor = MpCursorType.Invalid;
@@ -295,12 +281,17 @@ namespace MonkeyPaste.Avalonia {
             } else if (IsDragAndDrop) {
                 dropCursor = CurDropTarget.MoveCursor;
             } else {
-                MpCursor.UnsetCursor(nameof(MpAvDragDropManager));
+                MpPlatformWrapper.Services.Cursor.UnsetCursor(App.Desktop.MainWindow);
                 return;
             }
 
-            if (MpCursor.CurrentCursor != dropCursor) {
-                MpCursor.SetCursor(nameof(MpAvDragDropManager), dropCursor);
+            if (MpPlatformWrapper.Services.Cursor.CurrentCursor != dropCursor) {
+                if(CurDropTarget != null && CurDropTarget.RelativeToElement != null) {
+                    MpPlatformWrapper.Services.Cursor.SetCursor(CurDropTarget.RelativeToElement, dropCursor);
+                }else {
+                    MpPlatformWrapper.Services.Cursor.SetCursor(App.Desktop.MainWindow, dropCursor);
+                }
+               
             }
         }
 
@@ -310,12 +301,74 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void _timer_Tick(object sender, EventArgs e) {
-            MpConsole.WriteLine("tick " + DateTime.Now);
-            DropTargets.ForEach(x => x.UpdateAdorner());
-            DropTargets.ForEach(x => x.AutoScrollByMouse());
-            Task.WhenAll(DropTargets.Select(x => x.UpdateRectsAsync()))
-                .FireAndForgetSafeAsync(MpAvMainWindowViewModel.Instance);
+        private static void update_timer_Tick(object sender, EventArgs e) {
+            //MpConsole.WriteLine("tick " + DateTime.Now);
+            //DropTargets.ForEach(x => x.UpdateAdorner());
+            //DropTargets.ForEach(x => x.AutoScrollByMouse());
+            //Task.WhenAll(DropTargets.Select(x => x.UpdateRectsAsync()))
+            //    .FireAndForgetSafeAsync(MpAvMainWindowViewModel.Instance);
+
+            //MpConsole.WriteLine("mouse move: " + gmp);
+            UpdateCursor();
+
+            if (IsPerformingDrop) {
+                // mouse is released below note is old from mouse move event
+
+                // NOTE added this state to try to fix DropIdx from clearing during drop                
+                return;
+            }
+
+
+            if (IsDraggingFromExternal && !MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
+                IsDraggingFromExternal = false;
+            }
+            // NOTE is not on main thread from external drag
+            if (!IsCheckingForDrag && !IsDragAndDrop) {
+                Reset();
+                return;
+            }
+            bool isLeftMouseButtonDown = MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown;
+            if (!isLeftMouseButtonDown || _mouseDragCheckStartPosition == null) {
+                if (IsDragAndDrop) {
+                    PerformDrop(DragData).FireAndForgetSafeAsync(null);
+                    return;
+                } //else if (IsCheckingForDrag) {
+                 //   Reset();
+               // }
+
+                // this is a sanity check since global event handlers are needed and 
+                // probably something isn't releasing mouse capture
+                Reset();
+                return;
+            }
+            //MpConsole.WriteLine("In DragDrop mouse move " + MpShortcutCollectionViewModel.Instance.GlobalMouseLocation);
+            MpPoint mp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+            MpPoint diff = mp - _mouseDragCheckStartPosition;
+
+            if (diff.Length >= MINIMUM_DRAG_DISTANCE || IsDragAndDrop) {
+                if (!IsDragAndDrop) {
+                    IsDragAndDrop = true;
+
+                    DropTargets
+                        .Where(x=>x.DropAdorner != null)
+                         .Select(x => x.DropAdorner)
+                         .Cast<MpAvContentDragDropAdorner>()
+                         .ForEach(x => x.StartRenderTimer());
+
+                    MpAvShortcutCollectionViewModel.Instance.OnGlobalEscKeyPressed += Instance_OnGlobalEscapePressed;
+                    MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
+                }
+
+                var dropTarget = SelectDropTarget(DragData);
+
+                if (dropTarget != CurDropTarget) {
+                    CurDropTarget?.CancelDrop();
+                    CurDropTarget = dropTarget;
+                    CurDropTarget?.StartDropAsync();
+                }
+
+                CurDropTarget?.ContinueDragOverTargetAsync();
+            }
             UpdateCursor();
         }
 

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -255,6 +256,15 @@ namespace MonkeyPaste.Common {
         #endregion
 
         #region Enums
+
+        public static int Length(this Type e) {
+            if (e == null || !e.IsEnum) {
+                // should only pass enum
+                Debugger.Break();
+                return 0;
+            }
+            return Enum.GetNames(e).Length;
+        }
 
         public static string[] EnumToLabels(this Type e, string noneText = "", bool hideFirst = false) {
             if (e == null || !e.IsEnum) {

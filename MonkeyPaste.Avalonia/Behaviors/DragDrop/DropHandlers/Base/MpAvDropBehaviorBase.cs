@@ -28,14 +28,21 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
         
         private AdornerLayer adornerLayer;
-
+        private MpAvContentDragDropAdorner _contentDropAdorner;// {
+        //    get {
+        //        if (adornerLayer != null) {
+        //            var content_adorner = adornerLayer.Children.FirstOrDefault(x => x is MpAvContentDragDropAdorner ca && ca.AdornedControl == AdornedElement);
+        //            content_adorner?.InvalidateVisual();
+        //        }
+        //    }
+        //}
         #endregion
 
         
 
         #region Properties
 
-        public MpAvContentAdorner DropLineAdorner { get; set; }
+        public MpAvContentDragDropAdorner DropAdorner { get; set; }
 
         public int DropIdx { get; set; } = -1;
 
@@ -79,12 +86,13 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         public MpAvDropBehaviorBase() {
-            IsDebugEnabled = false;
+            //IsDebugEnabled = true;
             MpConsole.WriteLine(GetType() + " behavior created");
         }
 
         protected override void OnAttached() {
             base.OnAttached();
+            InitAdorner();
 
             //MpMainWindowViewModel.Instance.OnMainWindowHidden += MainWindowViewModel_OnMainWindowHide;
 
@@ -213,8 +221,22 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual void Reset() {
             DropIdx = -1;
-            UpdateAdorner();
+            //UpdateAdorner();
+            if(DropAdorner != null && !MpAvDragDropManager.IsDragAndDrop) {
+                DropAdorner.StopRenderTimer();
+            }
             MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.IsAnyItemDragging));
+        }
+
+        public int GetDropTargetRectIdx() {
+            if(DropAdorner == null) {
+                return -1;
+            }
+            return DropAdorner._dropIdx;
+        }
+
+        public bool IsDragDataValid(bool isCopy, object dragData) {
+            return true;
         }
 
         public abstract Task StartDropAsync(); 
@@ -251,11 +273,11 @@ namespace MonkeyPaste.Avalonia {
             if(AdornedElement != null) {
                 adornerLayer = AdornerLayer.GetAdornerLayer(AdornedElement);
                 if(adornerLayer != null) {
-                    var content_adorner = adornerLayer.Children.FirstOrDefault(x => x is MpAvContentAdorner ca && ca.AdornedControl == AdornedElement);
+                    var content_adorner = adornerLayer.Children.FirstOrDefault(x => x is MpAvContentDragDropAdorner ca && ca.AdornedControl == AdornedElement);
                     if(content_adorner == null) {
-                        DropLineAdorner = new MpAvContentAdorner(AdornedElement, this);
-                        adornerLayer.Children.Add(DropLineAdorner);
-                        AdornerLayer.SetAdornedElement((Visual)DropLineAdorner, AdornedElement);
+                        DropAdorner = new MpAvContentDragDropAdorner(AdornedElement, this);
+                        adornerLayer.Children.Add(DropAdorner);
+                        AdornerLayer.SetAdornedElement((Visual)DropAdorner, AdornedElement);
                         RefreshDropRects();
                     } else {
                         
@@ -264,33 +286,28 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public async Task UpdateRectsAsync() {
-            if(adornerLayer == null) {
-                return;
-            }
-            var content_adorner = adornerLayer.Children.FirstOrDefault(x => x is MpAvContentAdorner ca && ca.AdornedControl == AdornedElement);
-            if(content_adorner is MpAvContentAdorner ca) {
-                ca.DropRects = await GetDropTargetRectsAsync();
-            }
-        }
         public void UpdateAdorner() {
-            Dispatcher.UIThread.Post(() => {
-                if (adornerLayer == null) {
-                    InitAdorner();
-                }
-                if(adornerLayer != null) {
-                    var content_adorner = adornerLayer.Children.FirstOrDefault(x => x is MpAvContentAdorner ca && ca.AdornedControl == AdornedElement);
-                    content_adorner?.InvalidateVisual();
-                }
-            });
+            //Dispatcher.UIThread.Post(() => {
+            //    if (adornerLayer == null) {
+            //        // Find 1st parent call this update shouldn't need to happen anymore
+            //        InitAdorner();
+            //    }
+            //    //if(adornerLayer != null) {
+            //    //    var content_adorner = adornerLayer.Children.FirstOrDefault(x => x is MpAvContentDragDropAdorner ca && ca.AdornedControl == AdornedElement);
+            //    //    content_adorner?.InvalidateVisual();
+            //    //}
+            //});
         }
 
         #endregion
 
 
         protected void RefreshDropRects() {
-            UpdateAdorner();
+            InitAdorner();
+           // UpdateAdorner();
         }
+
+        
         // sync
 
 

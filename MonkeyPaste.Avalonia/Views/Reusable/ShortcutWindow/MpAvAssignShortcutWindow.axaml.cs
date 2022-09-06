@@ -52,27 +52,25 @@ namespace MonkeyPaste.Avalonia {
         }
         
 
-        private void Instance_OnGlobalKeyPressed(object sender, SharpHook.KeyboardHookEventArgs e) {
+        private void Instance_OnGlobalKeyPressed(object sender, string keyStr) {
             Dispatcher.UIThread.Post(() => {
                 if (!this.IsActive) {
                     return;
                 }
 
                 if (DataContext is MpAvAssignShortcutModalWindowViewModel asmwvm) {
-                    string key_literal = MpSharpHookKeyboardInputHelpers.GetKeyLiteral(e.Data.KeyCode);
-                    asmwvm.AddKeyDownCommand.Execute(key_literal);
+                    asmwvm.AddKeyDownCommand.Execute(keyStr);
                 }
             });
         }
-        private void Instance_OnGlobalKeyReleased(object sender, SharpHook.KeyboardHookEventArgs e) {
+        private void Instance_OnGlobalKeyReleased(object sender, string keyStr) {
             Dispatcher.UIThread.Post(() => {
                 if (!this.IsActive) {
                     return;
                 }
 
                 if (DataContext is MpAvAssignShortcutModalWindowViewModel asmwvm) {
-                    string key_literal = MpSharpHookKeyboardInputHelpers.GetKeyLiteral(e.Data.KeyCode);
-                    asmwvm.RemoveKeyDownCommand.Execute(key_literal);
+                    asmwvm.RemoveKeyDownCommand.Execute(keyStr);
                 }
             });
             

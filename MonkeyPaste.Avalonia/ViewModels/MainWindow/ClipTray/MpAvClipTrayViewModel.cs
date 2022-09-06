@@ -1071,12 +1071,17 @@ namespace MonkeyPaste.Avalonia {
                     //AllItems.ForEach(x => x.OnPropertyChanged(nameof(x.MinSize)));
                     break;
                 case nameof(HasScrollVelocity):
-                    MpCursor.IsCursorFrozen = HasScrollVelocity;
+                    //MpPlatformWrapper.Services.Cursor.IsCursorFrozen = HasScrollVelocity;
 
-                    if (!HasScrollVelocity) {
+                    if(HasScrollVelocity) {
+                        MpPlatformWrapper.Services.Cursor.UnsetCursor(null);
+                    } else { 
                         var hctvm = Items.FirstOrDefault(x => x.IsHovering);
                         if (hctvm != null) {
                             hctvm.OnPropertyChanged(nameof(hctvm.TileBorderHexColor));
+                        }
+                        if (IsAnyBusy) {
+                            OnPropertyChanged(nameof(IsBusy));
                         }
                     }
                     break;

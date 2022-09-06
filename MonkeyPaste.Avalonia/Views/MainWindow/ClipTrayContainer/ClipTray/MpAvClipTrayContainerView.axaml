@@ -65,7 +65,8 @@
                       Width="5"
                       Background="Magenta"
                       ResizeDirection="Columns"
-                      Cursor="SizeWestEast">
+                      local:MpAvIsHoveringExtension.IsEnabled="True"
+                      local:MpAvIsHoveringExtension.HoverCursor="ResizeWE">
             <GridSplitter.Styles>
                 <Style Selector="GridSplitter /template/ Border">
                     <Setter Property="Background"

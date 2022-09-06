@@ -30,8 +30,12 @@ namespace MpWpfApp {
                 {MpCursorType.ResizeAll, Cursors.SizeAll },
                 {MpCursorType.Hand, Cursors.Hand },
             };
+        #region Properties
+        private MpCursorType _currentCursor = MpCursorType.Default;
+        MpCursorType MpICursor.CurrentCursor => _currentCursor;
+        #endregion
 
-        public void SetCursor(MpCursorType newCursor) {
+        public void SetCursor(object targetObj, MpCursorType newCursor) {
             if (MpClipTrayViewModel.Instance.HasScrollVelocity) {
                 return;
             }
@@ -49,8 +53,13 @@ namespace MpWpfApp {
                 Application.Current.MainWindow.ForceCursor = true;
                 Application.Current.MainWindow.Cursor = cursor;
             } else {
-                MpHelpers.RunOnMainThread(()=>SetCursor(newCursor));
+                MpHelpers.RunOnMainThread(()=>SetCursor(targetObj, newCursor));
             }
+        }
+
+        void MpICursor.UnsetCursor(object targetObj) {
+            // TODO? if necessary setup cursor stack and remove entry here or ignore
+            (this as MpICursor).SetCursor(targetObj, MpCursorType.Default);
         }
     }
 }

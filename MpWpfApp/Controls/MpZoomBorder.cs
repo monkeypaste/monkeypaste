@@ -237,7 +237,7 @@ namespace MpWpfApp {
                 var tt = GetTranslateTransform(Child);
                 mp_start = e.GetPosition(this);
                 tt_origin = new Point(tt.X, tt.Y);
-                MpCursor.SetCursor(DataContext, MpCursorType.Hand);
+                MpPlatformWrapper.Services.Cursor.SetCursor(DataContext, MpCursorType.Hand);
                 bool result = CaptureMouse();
                 if(!result) {
                     var capturer = Mouse.Captured;
@@ -253,7 +253,7 @@ namespace MpWpfApp {
             if (Child != null) {
                 IsTranslating = false;
                 ReleaseMouseCapture();
-                MpCursor.UnsetCursor(DataContext);
+                MpPlatformWrapper.Services.Cursor.UnsetCursor(DataContext);
                 if(DataContext is MpActionCollectionViewModel acvm) {
                     acvm.HasModelChanged = true;
                 }

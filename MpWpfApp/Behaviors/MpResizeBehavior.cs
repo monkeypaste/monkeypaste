@@ -443,7 +443,7 @@ namespace MpWpfApp {
             }
             if (!IsResizing && !AssociatedObject.IsMouseCaptured) {
                 //MpCursorStack.CurrentCursor = MpCursorType.Default;
-                //MpCursor.UnsetCursor(this);
+                //MpPlatformWrapper.Services.Cursor.UnsetCursor(this);
                 CanResize = false;
             }
         }
@@ -497,7 +497,7 @@ namespace MpWpfApp {
 
             //if (_curCursor != MpCursorType.Default) {
                 IsResizing = AssociatedObject.CaptureMouse();
-              //  MpCursor.SetCursor(this, _curCursor);
+              //  MpPlatformWrapper.Services.Cursor.SetCursor(this, _curCursor);
                 e.Handled = true;
             //}
         }
