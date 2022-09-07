@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<MpRect> ObservedBoundsProperty =
             AvaloniaProperty.RegisterAttached<object, Control, MpRect>(
                 "ObservedBounds",
-                MpRect.Empty,
+               null,
                 false,
                 BindingMode.OneWayToSource);
 

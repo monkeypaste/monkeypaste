@@ -47,12 +47,12 @@ namespace MonkeyPaste {
             get => _isBusy;
             set {
                 SetProperty(ref _isBusy, value);
-                if(_isBusy) {
-                    // NOTE since in PCL null fallsback to mw
-                    MpPlatformWrapper.Services.Cursor.SetCursor(null, MpCursorType.Waiting);
-                } else {
-                    MpPlatformWrapper.Services.Cursor.UnsetCursor(null);
-                }
+                //if(_isBusy) {
+                //    // NOTE normally null should be passed for target but for wait cursor pass viewmodel
+                //    MpPlatformWrapper.Services.Cursor.SetCursor(this, MpCursorType.Waiting);
+                //} else {
+                //    MpPlatformWrapper.Services.Cursor.UnsetCursor(this);
+                //}
             }
         }
 

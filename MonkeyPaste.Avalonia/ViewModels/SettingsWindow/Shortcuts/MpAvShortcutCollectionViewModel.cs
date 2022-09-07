@@ -24,8 +24,10 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncSingletonViewModel<MpAvShortcutCollectionViewModel> {
 
         #region Constants
-
-        public static bool IS_GLOBAL_INPUT_ENABLED = true;
+        public static bool IS_GLOBAL_MOUSE_INPUT_ENABLED = false;
+        public static bool IS_GLOBAL_KEYBOARD_INPUT_ENABLED = false;
+        public static bool IS_GLOBAL_INPUT_ENABLED => IS_GLOBAL_KEYBOARD_INPUT_ENABLED || IS_GLOBAL_MOUSE_INPUT_ENABLED;
+        public static bool IS_PSEUDO_GLOBAL_INPUT_ENABLED = false;
         public const double MIN_GLOBAL_DRAG_DIST = 20;
 
         #endregion
@@ -229,22 +231,24 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void StartInputListener() {
-            if (!IS_GLOBAL_INPUT_ENABLED) {
+            if (IS_PSEUDO_GLOBAL_INPUT_ENABLED) {
                 Dispatcher.UIThread.Post(() => {
                     CreatePseudoGlobalInputHooks(MpAvMainWindow.Instance);
                 });
-                return;
             }
-            CreateGlobalInputHooks();
+            if(IS_GLOBAL_INPUT_ENABLED) {
+                CreateGlobalInputHooks();
+            }
         }
         public void StopInputListener() {
-            if (!IS_GLOBAL_INPUT_ENABLED) {
+            if (IS_PSEUDO_GLOBAL_INPUT_ENABLED) {
                 Dispatcher.UIThread.Post(() => {
                     DisposePseudoGlobalInputHooks(MpAvMainWindow.Instance);
                 });
-                return;
             }
-            DisposeGlobalInputHooks();
+            if (IS_GLOBAL_INPUT_ENABLED) {
+                DisposeGlobalInputHooks();
+            }
         }
 
         #endregion
@@ -523,19 +527,25 @@ namespace MonkeyPaste.Avalonia {
             if (_hook == null) {
                 _hook = new SimpleGlobalHook();
 
-                _hook.MouseWheel += Hook_MouseWheel;
+                if(IS_GLOBAL_MOUSE_INPUT_ENABLED) {
+                    _hook.MouseWheel += Hook_MouseWheel;
 
-                _hook.MouseMoved += Hook_MouseMoved;
+                    _hook.MouseMoved += Hook_MouseMoved;
 
-                _hook.MousePressed += Hook_MousePressed;
-                _hook.MouseReleased += Hook_MouseReleased;
+                    _hook.MousePressed += Hook_MousePressed;
+                    _hook.MouseReleased += Hook_MouseReleased;
 
-                _hook.MouseClicked += Hook_MouseClicked;
+                    _hook.MouseClicked += Hook_MouseClicked;
+                }
 
-                _hook.MouseDragged += Hook_MouseDragged;
+                if(IS_GLOBAL_KEYBOARD_INPUT_ENABLED) {
 
-                _hook.KeyPressed += Hook_KeyPressed;
-                _hook.KeyReleased += Hook_KeyReleased;
+                    _hook.MouseDragged += Hook_MouseDragged;
+
+                    _hook.KeyPressed += Hook_KeyPressed;
+                    _hook.KeyReleased += Hook_KeyReleased;
+                }
+
             }
 
             if (_eventSimulator == null) {

@@ -25,6 +25,7 @@
                           local:MpAvMousePressCommand.IsEnabled="True"
                           local:MpAvMousePressCommand.DoubleLeftPressCommand="{Binding EnableSubSelectionCommand}"
                           local:MpAvMousePressCommand.LeftDragBeginCommand="{Binding TileDragBeginCommand}"
+                          local:MpAvMousePressCommand.DragDataHost="{Binding ., ElementName=ClipTileContentView}"
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
                           CornerRadius="10"
@@ -62,7 +63,8 @@
                                          IsVisible="{Binding IsTitleVisible}" />
 
             <!--  Content  -->
-            <local:MpAvClipTileContentView Grid.Row="1"
+            <local:MpAvClipTileContentView x:Name="ClipTileContentView"
+                                           Grid.Row="1"
                                            HorizontalAlignment="Stretch"
                                            VerticalAlignment="Stretch"
                                            DataContext="{Binding}" />
@@ -101,7 +103,7 @@
                     local:MpAvMousePressCommand.IsEnabled="True"
                     local:MpAvMousePressCommand.DoubleLeftPressCommand="{Binding ResetTileSizeToDefaultCommand}"
                     local:MpAvIsHoveringExtension.IsEnabled="True"
-                    local:MpAvIsHoveringExtension.HoverCursor="ResizeWE"
+                    Cursor="SizeWestEast"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Stretch"
                     Width="5"

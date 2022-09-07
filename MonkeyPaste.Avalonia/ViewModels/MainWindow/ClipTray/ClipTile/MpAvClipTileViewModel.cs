@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -68,6 +69,8 @@ namespace MonkeyPaste.Avalonia {
         public MpMenuItemViewModel ContextMenuViewModel => IsSelected ? Parent.ContextMenuViewModel : null;
 
         #endregion
+
+       
 
         //#region MpISelectorItemViewModel<MpAvClipTileViewModel> Implementation
         //MpISelectorViewModel<MpAvClipTileViewModel> MpISelectorItemViewModel<MpAvClipTileViewModel>.Selector => Parent;
@@ -1255,6 +1258,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
+        public MpRect ObservedBounds { get; set; }
         public Thickness ContentMarginThickness {
             get {
                 if (IsTitleVisible) {
@@ -2220,7 +2224,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     OnPropertyChanged(nameof(TileBorderHexColor));
                     OnPropertyChanged(nameof(TileBorderBrushRect));
-                    Parent.OnPropertyChanged(nameof(Parent.IsAnyItemDragging));
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyTileDragging));
                     break;
                 case nameof(IsHovering):
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyHovering));
@@ -2387,7 +2391,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand TileDragBeginCommand => new MpCommand(
             () => {
-                MpAvDragDropManager.StartDragCheck(this);
+                //MpAvDragDropManager.StartDragCheck(this);
             });
 
         public ICommand EnableSubSelectionCommand => new MpCommand(

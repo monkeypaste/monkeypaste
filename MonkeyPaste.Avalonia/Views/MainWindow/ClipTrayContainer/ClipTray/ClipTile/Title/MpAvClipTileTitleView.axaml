@@ -109,7 +109,7 @@
               Background="Transparent"
               local:MpAvIsHoveringExtension.IsEnabled="True"
               local:MpAvIsHoveringExtension.IsHovering="{Binding IsHoveringOnTitleTextGrid, Mode=TwoWay}"
-              local:MpAvIsHoveringExtension.HoverCursor="IBeam"
+              Cursor="IBeam"
               IsHitTestVisible="{Binding !HasScrollVelocity, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
             <Grid.MaxWidth>
                 <MultiBinding Converter="{StaticResource MultiDoubleMathConverter}">

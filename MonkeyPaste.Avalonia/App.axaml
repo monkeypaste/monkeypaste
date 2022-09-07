@@ -83,10 +83,10 @@
             <Setter Property="Background"
                     Value="Transparent" />
         </Style>
-        <!--<Style Selector=":is(Button):pointerover">
+        <Style Selector=":is(Button):pointerover">
             <Setter Property="Cursor"
-                    Value="{Binding ., Converter={StaticResource SetCursorConverter}, ConverterParameter=Hand}" />
-        </Style>-->
+                    Value="Hand" />
+        </Style>
         <Style Selector=":is(Button):pointerover PathIcon">
             <Setter Property="Foreground"
                     Value="Yellow" />

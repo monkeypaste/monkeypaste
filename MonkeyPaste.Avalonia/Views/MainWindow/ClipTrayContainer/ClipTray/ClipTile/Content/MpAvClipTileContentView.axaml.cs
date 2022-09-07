@@ -7,17 +7,51 @@ using Avalonia.Input;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using Avalonia.Controls.Primitives;
-using Xamarin.Forms.Internals;
 using MonkeyPaste.Avalonia.Behaviors._Factory;
 using Avalonia.VisualTree;
+using System.Threading.Tasks;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
-    public partial class MpAvClipTileContentView : MpAvUserControl<MpAvClipTileViewModel> {
+    public partial class MpAvClipTileContentView : MpAvUserControl<MpAvClipTileViewModel>, MpAvIDragDataHost {
         public MpAvContentViewDropBehavior ContentViewDropBehavior { get;  set; }
         public MpAvContentHighlightBehavior HighlightBehavior { get;  set; }
 
 
         public MpAvIContentView ContentView { get; private set; }
+
+        #region MpAvIDragDataHost Implementation
+
+        bool MpAvIDragDataHost.IsDragValid(MpPoint host_mp) {
+            // check pointer selection/range intersection here
+
+            return true;
+        }
+
+        async Task<IDataObject> MpAvIDragDataHost.GetDragDataObjectAsync() {
+            await Task.Delay(1);
+
+            DataObject avdo = new DataObject();
+            // setup internal data format
+            avdo.Set(MpAvDataObjectHelper.CLIP_TILE_DATA_FORMAT, BindingContext);
+
+            return avdo;
+        }
+
+        void MpAvIDragDataHost.DragBegin() {
+            if(BindingContext == null) {
+                Debugger.Break();
+            }
+            BindingContext.IsItemDragging = true;
+        }
+
+        void MpAvIDragDataHost.DragEnd() {
+            if (BindingContext == null) {
+                Debugger.Break();
+            }
+            BindingContext.IsItemDragging = false;
+        }
+        #endregion
 
         public MpAvClipTileContentView() {
             InitializeComponent();

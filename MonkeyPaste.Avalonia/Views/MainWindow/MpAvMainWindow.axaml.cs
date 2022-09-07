@@ -196,8 +196,10 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetRow(ctrcv, 0);
                 Grid.SetColumn(ctrcv, 2);
 
-                // cliptray container column definitions
+                // cliptraycontainer column definitions (horizontal)
                 ctrcv_cg.RowDefinitions.Clear();
+
+                // pintray column definition
                 var ptrv_cd = new ColumnDefinition(new GridLength(0, GridUnitType.Auto));
                 ptrv_cd.Bind(
                     ColumnDefinition.MinWidthProperty,
@@ -212,6 +214,7 @@ namespace MonkeyPaste.Avalonia {
                         Path = nameof(MpAvClipTrayViewModel.Instance.MaxPinTrayScreenWidth)
                     });
 
+                // cliptray column definition
                 var ctrv_cd = new ColumnDefinition(new GridLength(1, GridUnitType.Star));
                 ctrv_cd.Bind(
                     ColumnDefinition.MinWidthProperty,
@@ -225,8 +228,24 @@ namespace MonkeyPaste.Avalonia {
                      ctrv_cd
                 };
 
-                //pin tray
+                //pin tray margin (horizontal)
                 ctrcv_ptrv.Margin = new Thickness(0, 0, 5, 0);
+
+                // pin tray min/max size (horizontal)
+                // pintray min width/height
+                ctrcv_ptrv.Bind(
+                    MpAvPinTrayView.MinWidthProperty,
+                    new Binding() {
+                        Source = MpAvClipTrayViewModel.Instance,
+                        Path = nameof(MpAvClipTrayViewModel.Instance.MinPinTrayScreenWidth)
+                    });
+                ctrcv_ptrv.Bind(
+                    MpAvPinTrayView.MinHeightProperty,
+                    new Binding() {
+                        Source = MpAvClipTrayViewModel.Instance,
+                        Path = nameof(MpAvClipTrayViewModel.Instance.MinPinTrayScreenHeight)
+                    });
+
 
                 // clip/pin tray grid splitter
                 ctrcv_gs.HorizontalAlignment = HorizontalAlignment.Right;
@@ -269,8 +288,10 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetRow(ctrcv, 0);
                 Grid.SetColumn(ctrcv, 0);
 
-                // cliptray container column definitions
+                // cliptraycontainer column definitions (vertical)
                 ctrcv_cg.ColumnDefinitions.Clear();
+
+                // pintray row definitions
                 var ptrv_rd = new RowDefinition(new GridLength(0, GridUnitType.Auto));
                 ptrv_rd.Bind(
                     RowDefinition.MinHeightProperty,
@@ -285,6 +306,7 @@ namespace MonkeyPaste.Avalonia {
                         Path = nameof(MpAvClipTrayViewModel.Instance.MaxPinTrayScreenHeight)
                     });
 
+                //cliptray row definitions
                 var ctrv_rd = new RowDefinition(new GridLength(1, GridUnitType.Star));
                 ctrv_rd.Bind(
                     RowDefinition.MinHeightProperty,

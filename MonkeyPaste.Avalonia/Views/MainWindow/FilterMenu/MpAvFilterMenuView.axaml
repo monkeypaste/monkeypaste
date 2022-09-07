@@ -109,8 +109,8 @@
                     <DataTemplate>
                         <local:MpAvTagView local:MpAvIsHoveringExtension.IsEnabled="True"
                                            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                                           local:MpAvIsHoveringExtension.HoverCursor="Hand"
                                            local:MpAvSizeObserverExtension.IsEnabled="False"
+                                           Cursor="Hand"
                                            Width="122"
                                            local:MpAvSizeObserverExtension.ObservedWidth="{Binding TagTileTrayWidth, Mode=OneWayToSource}"
                                            DataContext="{Binding}" />

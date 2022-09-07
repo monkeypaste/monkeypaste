@@ -43,6 +43,8 @@ namespace MonkeyPaste.Avalonia {
 
         private static Dictionary<MpCursorType, Cursor> _cursorLookup;
 
+        private object _waitObj = null;
+
         #endregion
 
         #region Statics
@@ -86,8 +88,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-
-
         void MpICursor.SetCursor(object targetObj, MpCursorType newCursor) {
             //if (MpAvClipTrayViewModel.Instance.HasScrollVelocity) {
             //    return;
@@ -96,6 +96,7 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
                 return;
             }
+
 
             Dispatcher.UIThread.Post(() => {
                 Cursor cursor = _cursorLookup[newCursor];
@@ -110,6 +111,32 @@ namespace MonkeyPaste.Avalonia {
                 if (targetElm == null) {
                     return;
                 }
+
+
+                if (_waitObj != null) {
+                    if(targetObj != _waitObj) {
+                        
+
+                        MpConsole.WriteLine("Set cursor rejected for " +targetObj+". " + _waitObj + " is overriding because its busy");
+                        return;
+                    } else if(newCursor == MpCursorType.Waiting) {
+                        MpConsole.WriteLine("Set cursor rejected for " + targetObj + " it is already waiting");
+                        return;
+                    } else {
+                        _waitObj = null;
+                    }
+                } else {
+                    if(newCursor == MpCursorType.Waiting) {
+                        // TODO? instead of rejecting here maybe cursor should be pushed on a set stack?
+                        if(targetObj is MpViewModelBase) {
+                            // NOTE only forece cursor when view model is busy
+                            _waitObj = targetObj;
+                        }
+                        
+                    }
+                }
+
+
                 targetElm.Cursor = cursor;
                 _currentCursor = newCursor;
 
@@ -119,7 +146,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         void MpICursor.UnsetCursor(object targetObj) {
-            // TODO? if necessary setup cursor stack and remove entry here or ignore
+            // TODO? if necessary setup cursor unset stack and remove entry here?
             (this as MpICursor).SetCursor(targetObj, MpCursorType.Default);
         }
 

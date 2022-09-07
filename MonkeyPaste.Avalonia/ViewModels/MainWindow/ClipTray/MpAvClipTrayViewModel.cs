@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -267,6 +268,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
+
+        
 
         #region View Models
 
@@ -816,7 +819,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsAnyPastingTemplate => Items.Any(x => x.IsPastingTemplate) || PinnedItems.Any(x => x.IsPastingTemplate);
 
-        public bool IsAnyItemDragging => Items.Any(x => x.IsItemDragging) ||
+        public bool IsAnyTileDragging => Items.Any(x => x.IsItemDragging) ||
                                          PinnedItems.Any(x => x.IsItemDragging) ||
                                          MpAvDragDropManager.IsDraggingFromExternal;
 
@@ -1085,6 +1088,14 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
                     break;
+                case nameof(IsAnyTileDragging):
+                    //notify pin tray to pop out if no item pinned
+                    OnPropertyChanged(nameof(MinPinTrayScreenWidth));
+                    OnPropertyChanged(nameof(MinPinTrayScreenHeight));
+                    OnPropertyChanged(nameof(MaxPinTrayScreenWidth));
+                    OnPropertyChanged(nameof(MaxPinTrayScreenHeight));
+                    
+                    break;
             }
         }
 
@@ -1347,13 +1358,43 @@ namespace MonkeyPaste.Avalonia {
 
         public double PinTrayTotalWidth { get; set; } = 0;
 
-        public double MinPinTrayScreenWidth => IsAnyTilePinned ? MinClipTrayScreenWidth : 0;
-        public double MinPinTrayScreenHeight=> IsAnyTilePinned ? MinClipTrayScreenHeight : 0;
-        public double MinClipTrayScreenWidth => 30;
-        public double MinClipTrayScreenHeight => 30;
+        public double MinPinTrayScreenWidth {
+            get {
+                return IsAnyTilePinned || IsAnyTileDragging ? MinClipOrPinTrayScreenWidth : 0;
+            }
+        }
+        public double MinPinTrayScreenHeight {
+            get {
+                return IsAnyTilePinned || IsAnyTileDragging ? MinClipOrPinTrayScreenHeight : 0;
+            }
+        }
 
-        public double MaxPinTrayScreenWidth => ClipTrayContainerScreenWidth - MinClipTrayScreenWidth;
-        public double MaxPinTrayScreenHeight => ClipTrayContainerScreenHeight - MinClipTrayScreenHeight;
+        public double MaxPinTrayScreenWidth {
+            get {
+                if(IsAnyTilePinned) {
+                    return ClipTrayContainerScreenWidth - MinClipTrayScreenWidth;
+                }
+                // When pin tray pops out max has to be reset to 0 which will be min after dragend
+                return MinPinTrayScreenWidth;
+            }
+        }
+        public double MaxPinTrayScreenHeight {
+            get {
+                if (IsAnyTilePinned) {
+                    return ClipTrayContainerScreenHeight - MinClipTrayScreenHeight; ;
+                }
+                // When pin tray pops out max has to be reset to 0 which will be min after dragend
+                return MinPinTrayScreenHeight;
+            }
+        }
+
+
+        public double MinClipTrayScreenWidth => MinClipOrPinTrayScreenWidth;
+        public double MinClipTrayScreenHeight => MinClipOrPinTrayScreenHeight;
+
+        public double MinClipOrPinTrayScreenWidth => 30;
+        public double MinClipOrPinTrayScreenHeight => 30;
+
 
         public double ClipTrayContainerScreenWidth { get; set; }
         public double ClipTrayContainerScreenHeight { get; set; }
@@ -2015,8 +2056,6 @@ namespace MonkeyPaste.Avalonia {
 
         private double _oldMainWindowHeight = 0;
 
-        
-
         public void ValidateItemsTrayX() {
             var orderedItems = Items.OrderBy(x => x.QueryOffsetIdx).ToList();
             for (int i = 0; i < Items.Count; i++) {
@@ -2084,7 +2123,7 @@ namespace MonkeyPaste.Avalonia {
             switch (msg) {
                 case MpMessageType.ItemDragBegin:
                 case MpMessageType.ItemDragEnd:
-                    OnPropertyChanged(nameof(IsAnyItemDragging));
+                    OnPropertyChanged(nameof(IsAnyTileDragging));
                     break;
             }
         }
@@ -2436,7 +2475,7 @@ namespace MonkeyPaste.Avalonia {
                 AddNewItemsCommand.Execute(true);
 
                 IsBusy = false;
-            });
+            },()=> SelectedItem != null);
 
         public ICommand AppendNewItemsCommand => new MpCommand(
             async () => {

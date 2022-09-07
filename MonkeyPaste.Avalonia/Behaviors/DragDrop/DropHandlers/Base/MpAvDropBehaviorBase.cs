@@ -191,7 +191,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (!MpAvDragDropManager.IsCheckingForDrag) {
                     MpAvDragDropManager.StartDragCheck(MpAvDragDropManager.DragData);
-                    MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.IsAnyItemDragging));
+                    MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.IsAnyTileDragging));
                 }
             }
             e.Handled = true;
@@ -225,7 +225,7 @@ namespace MonkeyPaste.Avalonia {
             if(DropAdorner != null && !MpAvDragDropManager.IsDragAndDrop) {
                 DropAdorner.StopRenderTimer();
             }
-            MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.IsAnyItemDragging));
+            MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.IsAnyTileDragging));
         }
 
         public int GetDropTargetRectIdx() {
