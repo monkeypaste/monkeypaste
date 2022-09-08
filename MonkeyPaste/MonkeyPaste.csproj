@@ -105,10 +105,10 @@
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\edit\editTemplateToolbar.js" />
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\paste\pasteTemplateToolbar.js" />
     <None Remove="Resources\Html\Editor\src\components\util\color.js" />
+    <None Remove="Resources\Html\Editor\src\components\util\dataTransfer.js" />
     <None Remove="Resources\Html\Editor\src\components\util\debug.js" />
     <None Remove="Resources\Html\Editor\src\components\util\graphics.js" />
     <None Remove="Resources\Html\Editor\src\components\util\helpers.js" />
-    <None Remove="Resources\Html\Editor\src\components\util\jsComAdapter.js" />
     <None Remove="Resources\Html\Editor\src\components\util\math.js" />
     <None Remove="Resources\Html\Editor\src\components\util\messages.js" />
     <None Remove="Resources\Html\Editor\src\components\util\resize.js" />
@@ -155,64 +155,64 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\clipboard\clipboard.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\content\content.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\dragdrop\dragdrop.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\editor\editor.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\overlay\selection.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\font\font.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\overlay\overlay.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\table\table.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\template\template.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\template\toolbar\create\createTemplateToolbarItem.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\template\toolbar\edit\editTemplateToolbar.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\template\toolbar\paste\pasteTemplateToolbar.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\dataTransfer.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\debug.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\color.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\math.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\graphics.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\jsComAdapter.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\messages.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\resize.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\helpers.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Icons\monkey.png" />
   </ItemGroup>
@@ -252,25 +252,25 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resources\Html\Editor\src\components\content\content-style.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\src\components\editor\editor-style.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\src\components\editor\quill-style.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\src\components\overlay\overlay-style.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\src\components\template\template-style.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\src\components\template\toolbar\edit\edit-template-toolbar-style.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\src\components\template\toolbar\paste\paste-template-toolbar-style.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\style\content-style.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

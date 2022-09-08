@@ -55,6 +55,12 @@
         <SolidColorBrush x:Key="IsResizingBorderBrush">
             LightPink
         </SolidColorBrush>
+        <Thickness x:Key="TileBorderThickness">
+            5,5,5,5
+        </Thickness>
+        <CornerRadius x:Key="TileCornerRadius">
+            10,10,10,10
+        </CornerRadius>
     </Application.Resources>
     <Application.Styles>
         <FluentTheme Mode="Light" />
@@ -115,7 +121,13 @@
             <Setter Property="Margin"
                     Value="0" />
         </Style>
-
+        <!--  ListBox  -->
+        <Style Selector="ListBox">
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
+        </Style>
         <!--  ListBoxItem  -->
 
         <Style Selector="ListBoxItem">

@@ -55,6 +55,14 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
+        #region Drawing Properties
+
+        public double RadiusX { get; set; } = 0;
+        public double RadiusY { get; set; } = 0;
+        public string BoxShadows { get; set; } = string.Empty;
+
+        #endregion
+
 
         public double X {
             get => Left;
@@ -123,118 +131,17 @@ namespace MonkeyPaste.Common {
         #endregion
 
         #region Public Methods
-        public bool Contains(MpPoint p) {
-            return p.X >= Left && p.X <= Right &&
-                   p.Y >= Top && p.Y <= Bottom;
-        }
-
-        public bool Contains(MpRect other) {
-            return Contains(other.TopLeft) && Contains(other.BottomRight);
-        }
-        public bool Intersects(MpRect other) {
-            return other.Points.Any(x => Contains(x));
-        }
-
-        public void Union(MpRect b) {
-            Left = Math.Min(Left, b.Left);
-            Top = Math.Min(Top, b.Top);
-            Right = Math.Max(Right, b.Right);
-            Bottom = Math.Max(Bottom, b.Bottom);
-        }
 
         public override string ToString() {
             return $"X:{X} Y:{Y} Width: {Width} Height: {Height}";
         }
 
-        public Tuple<double,string> GetClosestSideToPoint(MpPoint p) {
-            double l_dist = Math.Abs(Left - p.X);
-            double t_dist = Math.Abs(Top - p.Y);
-            double r_dist = Math.Abs(Right - p.X);
-            double b_dist = Math.Abs(Bottom - p.Y);
-            double[] side_dist_a = new double[] { l_dist, t_dist, r_dist, b_dist };
-
-            int min_idx = -1;
-            double min_dist = double.MaxValue;
-            for (int i = 0; i < side_dist_a.Length; i++) {
-                double cur_dist = side_dist_a[i];
-                if(cur_dist < min_dist) {
-                    min_dist = cur_dist;
-                    min_idx = i;
-                }
-            }
-            return new Tuple<double, string>(min_dist, GetSideLabel(min_idx));
-        }
-
-        public string GetSideLabel(int sideIdx) {
-            if(sideIdx == 0) {
-                return "l";
-            }
-            if (sideIdx == 1) {
-                return "t";
-            }
-            if (sideIdx == 2) {
-                return "r";
-            }
-            if (sideIdx == 3) {
-                return "b";
-            }
-            return null;
-        }
-        public int GetSideIdx(string sideLabel) {
-            if(string.IsNullOrEmpty(sideLabel)) {
-                return -1;
-            }
-            sideLabel = sideLabel.ToLower();
-            if (sideLabel == "l") {
-                return 0;
-            }
-            if (sideLabel == "t") {
-                return 1;
-            }
-            if (sideLabel == "r") {
-                return 2;
-            }
-            if (sideLabel == "b") {
-                return 3;
-            }
-            return -1;
-        }
-
-        public MpLine GetSideByLabel(string sideLabel) {
-            if (string.IsNullOrEmpty(sideLabel)) {
-                return null;
-            }
-            switch (sideLabel.ToLower()) {
-                case "l":
-                    return new MpLine(BottomLeft, TopLeft);
-                case "t":
-                    return new MpLine(TopLeft,TopRight);
-                case "r":
-                    return new MpLine(TopRight, BottomRight);
-                case "b":
-                    return new MpLine(BottomRight, BottomLeft);
-                default:
-                    MpConsole.WriteTraceLine("Error! Unknown MpRect sidelabel (returning null): " + sideLabel);
-                    return null;
-            }
-
-        }
+        
         #endregion
 
         #region Private Methods
 
 
         #endregion
-    }
-
-    public class MpQuillRect : MpJsonObject {
-        //public double x { get; set; }
-        //public double y { get; set; }
-        public double left { get; set; }
-        public double right { get; set; }
-        public double bottom { get; set; }
-        public double top { get; set; }
-        public double width { get; set; }
-        public double height { get; set; }
     }
 }

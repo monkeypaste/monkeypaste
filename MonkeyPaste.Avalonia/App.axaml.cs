@@ -40,9 +40,9 @@ namespace MonkeyPaste.Avalonia {
 
                 if (MpClipTileContentDataTemplateSelector.UseCefNet) {
                     MpAvCefNetApplication.InitCefNet(desktop);
-                } else {
-                    MpAvCefWebViewExtension.InitCef();
-                }
+                } //else {
+                   // MpAvCefWebViewExtension.InitCef();
+              //  }
 
                 if (OperatingSystem.IsLinux()) {
                     await GtkHelper.EnsureInitialized();

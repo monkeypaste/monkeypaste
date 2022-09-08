@@ -12,10 +12,16 @@ using PropertyChanged;
 using Avalonia;
 using Avalonia.Data;
 using Avalonia.Styling;
+using Avalonia.Input;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvTextBox : TextBox, MpAvIContentView, MpAvIContentDocument, IStyleable {
+    public class MpAvTextBox : 
+        TextBox, 
+        MpAvIContentView, 
+        MpAvIContentDocument, 
+        MpAvIDropHost,
+        IStyleable {
         #region Private Variables
 
         private bool _ignoreSelectionChanges = false;
@@ -71,6 +77,32 @@ namespace MonkeyPaste.Avalonia {
                 x => x.Selection,
                 defaultBindingMode: BindingMode.TwoWay,
                 enableDataValidation: true);
+
+
+
+        #region MpAvIDropHost Implementation
+
+        bool MpAvIDropHost.IsDropValid(IDataObject avdo) {
+            throw new System.NotImplementedException();
+        }
+
+        void MpAvIDropHost.DragEnter() {
+            throw new System.NotImplementedException();
+        }
+
+        void MpAvIDropHost.DragOver(MpPoint host_mp, IDataObject avdo, DragDropEffects dragEffects) {
+            throw new System.NotImplementedException();
+        }
+
+        void MpAvIDropHost.DragLeave() {
+            throw new System.NotImplementedException();
+        }
+
+        Task<DragDropEffects> MpAvIDropHost.DropDataObjectAsync(IDataObject avdo, DragDropEffects dragEffects) {
+            throw new System.NotImplementedException();
+        }
+
+        #endregion
 
         #region MpAvIContentView Implementation
         public IControl Owner => this;

@@ -105,7 +105,7 @@ namespace MpWpfApp {
                 //MpJsonPreferenceIO.Instance.MainWindowInitialHeight = MpMeasurements.Instance.MainWindowDefaultHeight;
                 // TEMPORARY ONLY WPF (NOTE !! Use env variables to find windows/system32 folder NOT C:)
                 // NOTEPAD
-                var notepadApp = await MpApp.Create(
+                var notepadApp = await MpApp.CreateAsync(
                     guid: "9a0085ac-ea3c-4213-9276-08017d0e4ef2",
                     appPath: @"c:\windows\system32\notepad.exe",
                     appName: "Notepad");
@@ -136,7 +136,7 @@ namespace MpWpfApp {
                     formatInfo: "txt");
 
                 //EXPLORER
-                var explorerApp = await MpApp.Create(
+                var explorerApp = await MpApp.CreateAsync(
                     guid: "81c2f520-0568-4b7f-b704-9ca9f9e22c1a",
                     appPath: @"c:\windows\explorer.exe",
                     appName: "Explorer");
@@ -166,7 +166,7 @@ namespace MpWpfApp {
                     format: MpClipboardFormatType.FileDrop);
 
                 //MSPAINT
-                var paintApp = await MpApp.Create(
+                var paintApp = await MpApp.CreateAsync(
                     guid: "ad30c88e-372c-44e7-89df-124e8b874624",
                     appPath: @"c:\windows\system32\mspaint.exe",
                     appName: "Paint");

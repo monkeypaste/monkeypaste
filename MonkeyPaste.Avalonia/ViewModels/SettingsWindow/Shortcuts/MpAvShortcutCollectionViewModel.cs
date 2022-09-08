@@ -27,7 +27,7 @@ namespace MonkeyPaste.Avalonia {
         public static bool IS_GLOBAL_MOUSE_INPUT_ENABLED = false;
         public static bool IS_GLOBAL_KEYBOARD_INPUT_ENABLED = false;
         public static bool IS_GLOBAL_INPUT_ENABLED => IS_GLOBAL_KEYBOARD_INPUT_ENABLED || IS_GLOBAL_MOUSE_INPUT_ENABLED;
-        public static bool IS_PSEUDO_GLOBAL_INPUT_ENABLED = false;
+        public static bool IS_PSEUDO_GLOBAL_INPUT_ENABLED = true;
         public const double MIN_GLOBAL_DRAG_DIST = 20;
 
         #endregion

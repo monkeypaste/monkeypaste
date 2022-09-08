@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System.Diagnostics;
@@ -11,6 +12,23 @@ namespace MonkeyPaste.Avalonia {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
         }
         #region Properties
+
+        #region RelativeTo AvaloniaProperty
+        public static IVisual GetRelativeTo(AvaloniaObject obj) {
+            return obj.GetValue(RelativeToProperty);
+        }
+
+        public static void SetRelativeTo(AvaloniaObject obj, IVisual value) {
+            obj.SetValue(RelativeToProperty, value);
+        }
+
+        public static readonly AttachedProperty<IVisual> RelativeToProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, IVisual>(
+                "RelativeTo",
+               null,
+                false);
+
+        #endregion
 
         #region ObservedBounds AvaloniaProperty
         public static MpRect GetObservedBounds(AvaloniaObject obj) {
@@ -79,6 +97,11 @@ namespace MonkeyPaste.Avalonia {
 
             void Control_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs? e) {
                 if (sender is Control control) {
+                    MpRect bounds = control.Bounds.ToPortableRect();
+                    if (GetRelativeTo(control) is IVisual relativeTo) {
+                        var relativeTo_origin = control.TranslatePoint(new Point(0,0), relativeTo).Value;
+                        bounds = new MpRect(relativeTo_origin.ToPortablePoint(), bounds.Size);
+                    }
                     SetObservedBounds(control, control.Bounds.ToPortableRect());
                 }
             }

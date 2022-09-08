@@ -150,7 +150,7 @@ namespace MonkeyPaste.Avalonia {
 
                 var iconStr = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(uap);
                 var icon = await MpIcon.Create(iconStr);
-                var app = await MpApp.Create(uap, appName, icon.Id);
+                var app = await MpApp.CreateAsync(uap, appName, icon.Id);
                 al.Add(app);
             }
             
@@ -168,7 +168,7 @@ namespace MonkeyPaste.Avalonia {
                 Dispatcher.UIThread.Post(async () => {
                     var iconStr = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(e.ProcessPath);
                     var icon = await MpIcon.Create(iconStr);
-                    var app = await MpApp.Create(e.ProcessPath, e.ApplicationName, icon.Id);
+                    var app = await MpApp.CreateAsync(e.ProcessPath, e.ApplicationName, icon.Id);
                     // vm is added in db add handler
                 });
             }

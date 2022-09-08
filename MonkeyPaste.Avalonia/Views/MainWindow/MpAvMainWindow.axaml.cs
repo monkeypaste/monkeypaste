@@ -165,6 +165,7 @@ namespace MonkeyPaste.Avalonia {
             var ctrcv = this.FindControl<MpAvClipTrayContainerView>("ClipTrayContainerView");
             var ctrcv_cg = ctrcv.FindControl<Grid>("ClipTrayContainerGrid");
             var ctrcv_ptrv = ctrcv.FindControl<MpAvPinTrayView>("PinTrayView");
+            var ctrcv_ptr_lb = ctrcv_ptrv.FindControl<ListBox>("PinTrayListBox");
             var ctrcv_gs = ctrcv.FindControl<GridSplitter>("ClipTraySplitter");
             var ctrcv_ctrv = ctrcv.FindControl<MpAvClipTrayView>("ClipTrayView");
             var ttv = this.FindControl<MpAvTagTreeView>("TagTreeView");
@@ -228,8 +229,11 @@ namespace MonkeyPaste.Avalonia {
                      ctrv_cd
                 };
 
-                //pin tray margin (horizontal)
+                //pin tray view margin (horizontal)
                 ctrcv_ptrv.Margin = new Thickness(0, 0, 5, 0);
+
+                // pin tray listbox padding (horizontal) for head/tail drop adorners
+                ctrcv_ptr_lb.Padding = new Thickness(10, 0, 10, 0);
 
                 // pin tray min/max size (horizontal)
                 // pintray min width/height
@@ -320,8 +324,10 @@ namespace MonkeyPaste.Avalonia {
                      ctrv_rd
                 };
 
-                //pin tray
-                ctrcv_ptrv.Margin = new Thickness(0, 0, 0, 5);
+                //pin tray (vertical)
+                ctrcv_ptrv.Margin = new Thickness(0, 5, 0, 5);
+                // pin tray listbox padding (vertical) for head/tail drop adorners
+                ctrcv_ptr_lb.Padding = new Thickness(0, 10, 0, 10);
 
                 // clip/pin tray grid splitter
                 ctrcv_gs.HorizontalAlignment = HorizontalAlignment.Stretch;

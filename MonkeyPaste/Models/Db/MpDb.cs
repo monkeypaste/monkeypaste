@@ -682,11 +682,11 @@ namespace MonkeyPaste {
             var process = Process.GetCurrentProcess();
             string thisAppPath = process.MainModule.FileName;
             string thisAppName = MpPrefViewModel.Instance.ApplicationName;
-            var thisApp = await MpApp.Create(thisAppPath, thisAppName, sourceIcon.Id);
+            var thisApp = await MpApp.CreateAsync(thisAppPath, thisAppName, sourceIcon.Id);
             var thisAppSource = await MpSource.Create(appId: thisApp.Id, urlId: 0);
             MpPrefViewModel.Instance.ThisAppSourceId = thisAppSource.Id;
 
-            var osApp = await MpApp.Create(MpPlatformWrapper.Services.OsInfo.OsFileManagerPath, MpPlatformWrapper.Services.OsInfo.OsFileManagerName);
+            var osApp = await MpApp.CreateAsync(MpPlatformWrapper.Services.OsInfo.OsFileManagerPath, MpPlatformWrapper.Services.OsInfo.OsFileManagerName);
             var osAppSource = await MpSource.Create(osApp.Id, 0);
             MpPrefViewModel.Instance.ThisOsFileManagerSourceId = osAppSource.Id;
 

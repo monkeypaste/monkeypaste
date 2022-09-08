@@ -41,51 +41,20 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public void DrawDropAdorner(MpShape[] dropShapes) {
-            _dropShapes = dropShapes;
-            IsVisible = _isAdornerVisible;
+            _dropShapes = dropShapes; 
+            //IsVisible = _isAdornerVisible;
             this.InvalidateVisual();
         }
         #endregion
 
         #region Private Methods
-        private void DrawShape(DrawingContext dc, MpShape shape) {
-            var fe = AdornedControl as Control;
-            if (fe == null) {
-                return;
-            }
-            IBrush brush = shape.FillOctColor.ToAvBrush();
-            IPen pen = shape.StrokeOctColor.ToAvPen(shape.StrokeThickness);
-
-            if (shape is MpLine dl) {
-                dc.DrawLine(
-                    pen,
-                    dl.P1.ToAvPoint(),
-                    dl.P2.ToAvPoint());
-            } else if (shape is MpEllipse de) {
-                dc.DrawEllipse(
-                    brush,
-                    pen,
-                    de.Center.ToAvPoint(),
-                    de.Size.Width / 2,
-                    de.Size.Height / 2);
-            } else if (shape is MpRect dr) {
-                dc.DrawRectangle(
-                    brush,
-                    pen,
-                    dr.ToAvRect());
-            }
-        }
-
         #endregion
 
         #region Overrides
         public override void Render(DrawingContext dc) {
-            //if(_dropShapes == null || _dropShapes.Length == 0) {
-            //    IsVisible = false;
-            //    return;
-            //}
-            //IsVisible = true;
-            _dropShapes.ForEach(x => DrawShape(dc, x));
+            if (_dropShapes != null) {
+                _dropShapes.ForEach(x => x.DrawShape(dc));
+            }
             base.Render(dc);
         }
 

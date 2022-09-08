@@ -167,12 +167,7 @@ namespace MonkeyPaste.Common {
             }
             return Convert.ToBase64String(bytes);
         }
-        public static string SerializeToJsonByteString(this object obj) {
-            if (obj == null) {
-                return string.Empty;
-            }
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(obj)));
-        }
+
 
         public static string ToCsv(this List<string> strList) {
             if(strList == null || strList.Count == 0) {

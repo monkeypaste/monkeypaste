@@ -18,8 +18,8 @@
             local:MpAvIsHoveringExtension.IsSelected="{Binding IsResizing}"
             local:MpAvIsHoveringExtension.HoverBrush="Yellow"
             local:MpAvIsHoveringExtension.IsEnabled="True"
-            local:MpAvMousePressCommand.IsEnabled="True"
-            local:MpAvMousePressCommand.DoubleLeftPressCommand="{Binding WindowSizeToDefaultCommand}">
+            local:MpAvMousePressCommandExtension.IsEnabled="True"
+            local:MpAvMousePressCommandExtension.DoubleLeftPressCommand="{Binding WindowSizeToDefaultCommand}">
         <Border x:Name="MainWindowResizeBorder"
                 local:MpAvResizeExtension.MinHeight="{Binding MainWindowMinHeight}"
                 local:MpAvResizeExtension.MaxHeight="{Binding MainWindowMaxHeight}"

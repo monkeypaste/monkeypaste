@@ -21,8 +21,22 @@ namespace MonkeyPaste.Common.Avalonia {
             return new SolidColorBrush(hexColor.ToAvColor());
         }
 
-        public static Pen ToAvPen(this string hexColor, double thickness = 1.0d, IDashStyle dashStyle = null) {
-            return new Pen(hexColor.ToAvBrush(), thickness, dashStyle);
+        public static Pen ToAvPen(
+            this string octColor, 
+            double thickness = 1.0d, 
+            double[] dashStyle = null, 
+            double dashOffset = 0,
+            string lineCap = "Flat",
+            string lineJoin = "Miter",
+            double miterLimit = 10.0) {
+            dashStyle = dashStyle == null ? new double[] { 1, 1, 0 } : dashStyle;
+            return new Pen(
+                octColor.ToAvBrush(), 
+                thickness, 
+                new DashStyle(dashStyle,dashOffset),
+                lineCap.ToEnum<PenLineCap>(),
+                lineJoin.ToEnum<PenLineJoin>(),
+                miterLimit);
         }
         public static MpColor ToPortableColor(this Color color) {
             return new MpColor(color.A, color.R, color.G, color.B);

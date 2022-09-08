@@ -329,11 +329,10 @@ namespace MonkeyPaste.Avalonia {
                 if (ctvm.IsPlaceholder && !ctvm.IsPinned) {
                     return;
                 }
-
                 ctvm.IsBusy = true;
 
                 var lrm = await CreateLoadRequestMessageAsync(wv);
-                var loadReqJsonStr = lrm.Serialize();
+                var loadReqJsonStr = lrm.SerializeToByteString();
                 string loadResponseMsgStr = null;
                 while (loadResponseMsgStr == null) {
                     string resp = await wv.EvaluateJavascriptAsync($"init_ext('{loadReqJsonStr}')");
@@ -358,27 +357,28 @@ namespace MonkeyPaste.Avalonia {
         private static async Task<MpQuillLoadRequestMessage> CreateLoadRequestMessageAsync(Control control) {
             if (control.DataContext is MpAvClipTileViewModel ctvm &&
                 control is MpAvCefNetWebView wv) {
-                var tcvm = ctvm.TemplateCollection;
-                tcvm.IsBusy = true;
+                await Task.Delay(1);
+                //var tcvm = ctvm.TemplateCollection;
+                //tcvm.IsBusy = true;
 
-                var templateGuids = ParseTemplateGuids(ctvm.CopyItemData);
-                var usedTemplates = await MpDataModelProvider.GetTextTemplatesByGuidsAsync(templateGuids);
+                //var templateGuids = ParseTemplateGuids(ctvm.CopyItemData);
+                //var usedTemplates = await MpDataModelProvider.GetTextTemplatesByGuidsAsync(templateGuids);
 
-                foreach (var cit in usedTemplates) {
-                    if (tcvm.Items.Any(x => x.TextTemplateGuid == cit.Guid)) {
-                        continue;
-                    }
-                    var ttvm = await tcvm.CreateTemplateViewModel(cit);
-                    tcvm.Items.Add(ttvm);
-                }
+                //foreach (var cit in usedTemplates) {
+                //    if (tcvm.Items.Any(x => x.TextTemplateGuid == cit.Guid)) {
+                //        continue;
+                //    }
+                //    var ttvm = await tcvm.CreateTemplateViewModel(cit);
+                //    tcvm.Items.Add(ttvm);
+                //}
 
-                tcvm.IsBusy = false;
+                //tcvm.IsBusy = false;
 
                 return new MpQuillLoadRequestMessage() {
                     copyItemId = ctvm.CopyItemId,
                     envName = "wpf",
                     itemEncodedHtmlData = ctvm.CopyItemData,
-                    usedTextTemplates = usedTemplates,
+                    usedTextTemplates = new List<MpTextTemplate>(), //usedTemplates,
                     isPasteRequest = ctvm.IsPasting,
                     isReadOnlyEnabled = ctvm.IsContentReadOnly
                 };

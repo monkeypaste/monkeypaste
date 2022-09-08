@@ -19,7 +19,9 @@ using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvCefNetWebView : WebView, MpAvIContentView {
+    public class MpAvCefNetWebView : 
+        WebView, 
+        MpAvIContentView {
         #region Private Variables
 
         private string _lastResult;

@@ -210,9 +210,9 @@
             <Button x:Name="MainWindowCycleOrientationCcwButton"
                     Command="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     CommandParameter="CCW"
-                    local:MpAvMousePressCommand.IsEnabled="True"
-                    local:MpAvMousePressCommand.RightPressCommand="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
-                    local:MpAvMousePressCommand.RightPressCommandParameter="CW"
+                    local:MpAvMousePressCommandExtension.IsEnabled="True"
+                    local:MpAvMousePressCommandExtension.RightPressCommand="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+                    local:MpAvMousePressCommandExtension.RightPressCommandParameter="CW"
                     ToolTip.ShowDelay="0">
                 <ToolTip.Tip>
                     <local:MpAvTooltipView ToolTipText="Cycle Orientation CCW" />

@@ -78,6 +78,7 @@ function init_test() {
 
 	init(initMsg);
 	disableReadOnly();
+
 	//enableFancyTextSelection();
 	//enableSubSelection();
 }
@@ -151,20 +152,6 @@ function init(initMsg) {
 	IsLoaded = true;
 
 	log('Editor loaded');
-
-	// init response is serialized 'MpQuillLoadResponseMessage'
-	let initResponseMsg = {
-		contentWidth: getContentWidth(),
-		contentHeight: getContentHeight(),
-		decodedTemplateGuids: getDecodedTemplateGuids()
-	}
-	let initResponseMsgStr = JSON.stringify(initResponseMsg);
-	log('init Response: ');
-	log(initResponseMsgStr);
-
-	//setComOutput(initResponseMsgStr);
-
-	return initResponseMsgStr;
 }
 
 
@@ -655,7 +642,7 @@ function createLink() {
 }
 
 function isReadOnly() {
-	var isEditable = getEditorElement().getAttribute('contenteditable');
+	var isEditable = parseBool(getEditorElement().getAttribute('contenteditable'));
 	return !isEditable;
 }
 

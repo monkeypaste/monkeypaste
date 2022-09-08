@@ -293,25 +293,64 @@ namespace MonkeyPaste.Avalonia {
 
         public override MpAvClipTileViewModel SelectedItem {
             get {
-                if (PinnedItems.Any(x => x.IsSelected)) {
-                    return PinnedItems.FirstOrDefault(x => x.IsSelected);
-                }
-                return Items.FirstOrDefault(x => x.IsSelected);
+                //if (PinnedItems.Any(x => x.IsSelected)) {
+                //    return PinnedItems.FirstOrDefault(x => x.IsSelected);
+                //}
+                return AllItems.FirstOrDefault(x => x.IsSelected);
             }
             set {
-                if (SelectedItem != value && value != null) {
-                    if (PinnedItems.Any(x => x.CopyItemId == value.CopyItemId)) {
-                        PinnedItems.ForEach(x => x.IsSelected = x.CopyItemId == value.CopyItemId);
-                        Items.ForEach(x => x.IsSelected = false);
-                    } else if (Items.Any(x => x.CopyItemId == value.CopyItemId)) {
-                        Items.ForEach(x => x.IsSelected = x.CopyItemId == value.CopyItemId);
-                        PinnedItems.ForEach(x => x.IsSelected = false);
-                    } else {
-                        SelectedItem = null;
-                    }
+                //if (SelectedItem != value && value != null) {
+                //    if (PinnedItems.Any(x => x.CopyItemId == value.CopyItemId)) {
+                //        PinnedItems.ForEach(x => x.IsSelected = x.CopyItemId == value.CopyItemId);
+                //        Items.ForEach(x => x.IsSelected = false);
+                //    } else if (Items.Any(x => x.CopyItemId == value.CopyItemId)) {
+                //        Items.ForEach(x => x.IsSelected = x.CopyItemId == value.CopyItemId);
+                //        PinnedItems.ForEach(x => x.IsSelected = false);
+                //    } else {
+                //        SelectedItem = null;
+                //    }
 
+                //}
+                if(value == null) {
+                    AllItems.ForEach(x => x.IsSelected = false);
+                } else {
+                    AllItems.ForEach(x => x.IsSelected = x.CopyItemId == value.CopyItemId);
                 }
                 OnPropertyChanged(nameof(SelectedItem));
+                OnPropertyChanged(nameof(SelectedPinTrayItem));
+                OnPropertyChanged(nameof(SelectedClipTrayItem));
+            }
+        }
+        public MpAvClipTileViewModel SelectedPinTrayItem {
+            get {
+                if (SelectedItem == null || !SelectedItem.IsPinned) {
+                    return null;
+                }
+                return SelectedItem;
+            }
+            set {
+                if (value == null) {
+                    PinnedItems.ForEach(x => x.IsSelected = false);
+                } else {
+                    SelectedItem = value;
+                }
+                OnPropertyChanged(nameof(SelectedPinTrayItem));
+            }
+        }
+        public MpAvClipTileViewModel SelectedClipTrayItem {
+            get {
+                if(SelectedItem == null || SelectedItem.IsPinned) {
+                    return null;
+                }
+                return SelectedItem;
+            }
+            set {
+                if(value == null) {
+                    Items.ForEach(x => x.IsSelected = false);
+                } else {
+                    SelectedItem = value;
+                }
+                OnPropertyChanged(nameof(SelectedClipTrayItem));
             }
         }
 
@@ -905,7 +944,7 @@ namespace MonkeyPaste.Avalonia {
             fromItem = fromItem == null ? HeadItem : fromItem;
             UpdateTileRectCommand.Execute(fromItem);
 
-            Items.ForEach(x => x.OnPropertyChanged(nameof(x.MinSize)));
+            AllItems.ForEach(x => x.OnPropertyChanged(nameof(x.MinSize)));
 
             OnPropertyChanged(nameof(ClipTrayTotalHeight));
             OnPropertyChanged(nameof(ClipTrayTotalWidth));
@@ -1743,6 +1782,16 @@ namespace MonkeyPaste.Avalonia {
                 MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Clear();
             //}));
         }
+        public void ClearAllSelection(bool clearEditing = true) {
+            //Dispatcher.UIThread.Post((Action)(() => {
+            if (clearEditing) {
+                ClearClipEditing();
+                ClearPinnedEditing();
+            }
+            ClearClipSelection();
+            ClearPinnedSelection();
+            //}));
+        }
 
         public void ClearPinnedSelection(bool clearEditing = true) {
             // Dispatcher.UIThread.Post((Action)(() => {
@@ -2314,14 +2363,14 @@ namespace MonkeyPaste.Avalonia {
                  pctvm.OnPropertyChanged(nameof(pctvm.IsPinned));
                  pctvm.OnPropertyChanged(nameof(pctvm.IsPlaceholder));
 
-                 pctvm.IsSelected = true;
+                 
 
                  MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
                  await Task.Delay(100);
                  while(IsAnyBusy) {
                      await Task.Delay(100);
                  }
-
+                 SelectedItem = pctvm;
                  RefreshLayout();
 
                  OnPropertyChanged(nameof(Items));
@@ -2394,9 +2443,7 @@ namespace MonkeyPaste.Avalonia {
                          await Task.Delay(100);
                      }
                      upctvm = Items.FirstOrDefault(x => x.CopyItemId == upctvm.CopyItemId);
-                     if (upctvm != default) {
-                         upctvm.IsSelected = true;
-                     }
+                     
                  }
 
                  RefreshLayout();
@@ -2409,6 +2456,14 @@ namespace MonkeyPaste.Avalonia {
                  OnPropertyChanged(nameof(ClipTrayScreenHeight));
 
                  LockScrollToAnchor();
+                 var ctvm_to_select = AllItems.FirstOrDefault(x => x.CopyItemId == unpinnedId);
+                 if (ctvm_to_select != default) {
+                     SelectedItem = ctvm_to_select;
+
+                     //OnPropertyChanged(nameof(SelectedPinTrayItem));
+                     //OnPropertyChanged(nameof(SelectedClipTrayItem));
+                 }
+
                  //upctvm.OnPropertyChanged(nameof(upctvm.IsPinned));
                  //upctvm.OnPropertyChanged(nameof(upctvm.IsPlaceholder));
 

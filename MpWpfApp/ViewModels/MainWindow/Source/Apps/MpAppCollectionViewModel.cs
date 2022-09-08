@@ -146,7 +146,7 @@ namespace MpWpfApp {
 
                 var iconStr = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(uap);
                 var icon = await MpIcon.Create(iconStr);
-                var app = await MpApp.Create(uap, appName, icon.Id);
+                var app = await MpApp.CreateAsync(uap, appName, icon.Id);
                 al.Add(app);
             }
             
@@ -164,7 +164,7 @@ namespace MpWpfApp {
                 MpHelpers.RunOnMainThread(async () => {
                     var iconStr = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(e.ProcessPath);
                     var icon = await MpIcon.Create(iconStr);
-                    var app = await MpApp.Create(e.ProcessPath, e.ApplicationName, icon.Id);
+                    var app = await MpApp.CreateAsync(e.ProcessPath, e.ApplicationName, icon.Id);
                     // vm is added in db add handler
                 });
             }
@@ -201,7 +201,7 @@ namespace MpWpfApp {
                     if (avm == null) {
                         var iconBmpSrc = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(appPath).ToBitmapSource();
                         var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
-                        app = await MpApp.Create(appPath, Path.GetFileName(appPath), icon.Id);
+                        app = await MpApp.CreateAsync(appPath, Path.GetFileName(appPath), icon.Id);
                         if (Items.All(x => x.AppId != app.Id)) {
                             avm = await CreateAppViewModel(app);
                             Items.Add(avm);

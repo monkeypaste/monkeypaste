@@ -107,7 +107,7 @@ namespace MonkeyPaste {
         public int RootId => Id;
         #endregion
 
-        public static async Task<MpApp> Create(
+        public static async Task<MpApp> CreateAsync(
             string appPath = "", 
             string appName = "", 
             int iconId = 0,

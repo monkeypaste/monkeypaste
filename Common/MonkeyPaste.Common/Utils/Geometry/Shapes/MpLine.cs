@@ -7,6 +7,11 @@ using System.Windows;
 
 namespace MonkeyPaste.Common {
     public class MpLine : MpShape {
+        #region Statics
+
+        public static MpLine Empty => new MpLine(0, 0, 0, 0);
+
+        #endregion
         #region Properties
 
         public override MpPoint[] Points => new MpPoint[] { P1, P2 };
@@ -31,8 +36,12 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
+        #region Public Methods
+
         public override string ToString() {
-            return $"P1: ({P1.X},{P1.Y}),({P2.X},{P2.Y})";
+            return $"P1: ({P1.X},{P1.Y}), P2:({P2.X},{P2.Y})";
         }
+
+        #endregion
     }
 }

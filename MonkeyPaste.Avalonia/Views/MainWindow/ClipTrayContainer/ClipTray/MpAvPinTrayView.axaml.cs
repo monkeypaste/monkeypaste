@@ -2,10 +2,14 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
+using Avalonia.Threading;
 using MonkeyPaste.Avalonia.Behaviors._Factory;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Utils.Extensions;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -13,107 +17,131 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvPinTrayView : MpAvUserControl<MpAvClipTrayViewModel>, MpAvIDropHost {
-        public MpAvPinTrayDropBehavior PinTrayDropBehavior { 
-            get {
-                if (this.Resources.TryGetResource("PinTrayDropBehavior", out object value)) {
-                    return value as MpAvPinTrayDropBehavior;
-                }
-                return null;
-            }
-        }
 
         #region MpAvIDropHost Implementation
-        private int _dropIdx = -1;
+        private int _dropIdx { get; set; } = -1;
 
         bool MpAvIDropHost.IsDropValid(IDataObject avdo) {
             return true;
         }
         void MpAvIDropHost.DragOver(MpPoint ptr_lb_mp, IDataObject avdo, DragDropEffects dragEffects) {
+            _dropIdx = -1;
+
             if(BindingContext.PinnedItems.Count == 0) {
                 // TODO Add logic for pin popout overlay or add binding somewhere when empty
                 _dropIdx = 0;
                 return;
             }
+            var ptr_lb = this.FindControl<ListBox>("PinTrayListBox");
 
-            MpAvClipTileViewModel closest_ctvm = null;
-            Tuple<double, string> closet_tup = null;
+            MpRectSideHitTest closet_side_ht = null;
+            int closest_side_lbi_idx = -1;
             for (int i = 0; i < BindingContext.PinnedItems.Count; i++) {
-                var cur_ctvm = BindingContext.PinnedItems[i];
-                if (cur_ctvm.ObservedBounds == null) {
-                    continue;
-                }
-                var cur_tup = cur_ctvm.ObservedBounds.GetClosestSideToPoint(ptr_lb_mp);
-                if (closet_tup == null || cur_tup.Item1 < closet_tup.Item1) {
-                    closest_ctvm = cur_ctvm;
-                    closet_tup = cur_tup;
+                var lbi_rect = ptr_lb.ItemContainerGenerator.ContainerFromIndex(i).Bounds.ToPortableRect();
+                var cur_tup = lbi_rect.GetClosestSideToPoint(ptr_lb_mp,"t,b");
+                if (closet_side_ht == null || cur_tup.ClosestSideDistance < closet_side_ht.ClosestSideDistance) {
+                    closet_side_ht = cur_tup;
+                    closest_side_lbi_idx = i;
                 }
             }
-            if(closest_ctvm == null) {
-                Debugger.Break();
-            }
-            _dropIdx = BindingContext.PinnedItems.IndexOf(closest_ctvm);
-            MpConsole.WriteLine("DropIdx: " + _dropIdx);
 
-            var dropAdorner = MpAvMousePressCommand.GetDropAdorner(this);
+            if (closet_side_ht.ClosestSideLabel == "r") {
+                _dropIdx = closest_side_lbi_idx + 1;
+            } else {
+                _dropIdx = closest_side_lbi_idx;
+            }
+
+            // BUG Have adjust pad for vert/horiz I think its from pin tray padding maybe...
+            double pad = BindingContext.PinnedItems.First().OuterSpacing;
+            if(BindingContext.ListOrientation == Orientation.Vertical) {
+                pad *= 0.75;
+            } else {
+                pad *= 2;
+            }
+            MpLine drop_line;
+            if(_dropIdx < BindingContext.PinnedItems.Count) {
+                drop_line = ptr_lb.ItemContainerGenerator.ContainerFromIndex(_dropIdx).Bounds.ToPortableRect().GetSideByLabel("l");
+            } else {
+                drop_line = ptr_lb.ItemContainerGenerator.ContainerFromIndex(BindingContext.PinnedItems.Count - 1).Bounds.ToPortableRect().GetSideByLabel("r");
+            }
+            drop_line.P1.X += pad;
+            drop_line.P2.X += pad;
+
+            double vert_pad = pad * 2;
+            drop_line.P1.Y += vert_pad;
+            drop_line.P2.Y -= vert_pad;
+
+            MpConsole.WriteLine("DropIdx: " + _dropIdx );
+
+            var dropAdorner = MpAvDropExtension.GetDropAdorner(this);
             if(dropAdorner == null) {
                 Debugger.Break();
                 MpConsole.WriteLine("Error Drop adorner missing! Ignoring rendering drop adorners");
                 return;
             }
 
-            MpLine line = closest_ctvm.ObservedBounds.GetSideByLabel(closet_tup.Item2);
-            if(line == null) {
-                return;
-            }
-            line.FillOctColor = MpSystemColors.White;
-            dropAdorner.DrawDropAdorner(new MpShape[] { line });
-            //return dragEffects;
+            
+            drop_line.StrokeOctColor = MpSystemColors.White;
+            drop_line.StrokeThickness = 2;
+            drop_line.StrokeDashStyle = new double[] { 5, 5 };
+
+            MpAvDropExtension.GetDropAdorner(this).DrawDropAdorner(new MpShape[] { drop_line });
+        }
+
+        void MpAvIDropHost.DragEnter() {
+            MpAvDropExtension.GetDropAdorner(this).IsVisible = true;
         }
 
         void MpAvIDropHost.DragLeave() {
             _dropIdx = -1;
-
-            var dropAdorner = MpAvMousePressCommand.GetDropAdorner(this);
-            if (dropAdorner == null) {
-                Debugger.Break();
-                MpConsole.WriteLine("Error Drop adorner missing! Ignoring rendering drop adorners");
-                return;
-            }
-            dropAdorner.DrawDropAdorner(null);
+            MpAvDropExtension.GetDropAdorner(this).IsVisible = false;
+            MpAvDropExtension.GetDropAdorner(this).DrawDropAdorner(null);
         }
 
         async Task<DragDropEffects> MpAvIDropHost.DropDataObjectAsync(IDataObject avdo, DragDropEffects effects) {
             // NOTE only pin tray allows drop
 
+            MpAvDropExtension.GetDropAdorner(this).DrawDropAdorner(null);
+
+            DragDropEffects dropEffects = DragDropEffects.None;
+            MpAvClipTileViewModel drop_ctvm;
+
             if (avdo.GetDataFormats().Contains(MpAvDataObjectHelper.CLIP_TILE_DATA_FORMAT)) {
-                var drop_ctvm = avdo.Get(MpAvDataObjectHelper.CLIP_TILE_DATA_FORMAT) as MpAvClipTileViewModel;
+                // Internal DragDrop
+                drop_ctvm = avdo.Get(MpAvDataObjectHelper.CLIP_TILE_DATA_FORMAT) as MpAvClipTileViewModel;
                 if (drop_ctvm == null) {
                     Debugger.Break();
                 }
                 bool isCopy = effects.HasFlag(DragDropEffects.Copy);
 
                 if (isCopy) {
-                    // perform duplicate
+                    //  duplicate
                     var dup_ci = (MpCopyItem)await BindingContext.SelectedItem.CopyItem.Clone(true);
 
                     await dup_ci.WriteToDatabaseAsync();
 
+
                     drop_ctvm = await BindingContext.CreateClipTileViewModel(dup_ci, -1);
                     BindingContext.PinTileCommand.Execute(drop_ctvm);
-
-                    BindingContext.PinnedItems.Move(BindingContext.PinnedItems.Count - 1, _dropIdx);
+                    dropEffects |= DragDropEffects.Copy;
                 } else {
-                    if (drop_ctvm.IsPinned) {
-                        // perform move
+                    // move
 
+                    if (drop_ctvm.IsPinned) {
+                        int drop_ctvm_idx = BindingContext.PinnedItems.IndexOf(drop_ctvm);
+                        if(_dropIdx > drop_ctvm_idx) {
+                            _dropIdx -= 1;
+                        }
+
+                        BindingContext.PinnedItems.Move(drop_ctvm_idx, _dropIdx);
                     } else {
                         BindingContext.ToggleTileIsPinnedCommand.Execute(drop_ctvm);
-                        return DragDropEffects.Move;
                     }
-                }
-
+                    dropEffects |= DragDropEffects.Move;
+                }                
             }
-            return DragDropEffects.None;
+
+            return dropEffects;
         }
 
         #endregion
@@ -121,9 +149,6 @@ namespace MonkeyPaste.Avalonia {
         public MpAvPinTrayView() {
             InitializeComponent();
             PinTrayListBox = this.FindControl<ListBox>("PinTrayListBox");
-            //MpAvViewBehaviorFactory.BuildAllViewBehaviors(this, this);
-
-            //this.AttachedToVisualTree += MpAvClipTileTitleView_AttachedToVisualTree;
         }
 
         private void MpAvClipTileTitleView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {

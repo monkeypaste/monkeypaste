@@ -124,25 +124,25 @@ namespace MonkeyPaste.Avalonia {
             ShutdownCefNet();
         }
 
-        protected override void OnContextCreated(CefBrowser browser, CefFrame frame, CefV8Context context) {
-            //base.OnContextCreated(browser, frame, context);
-            if(!context.Enter()) {
-                return;
-            }
-            try {
-                CefV8Value window = context.GetGlobal();
-                var fnhandler = new V8Func(_dbPath);
-                window.SetValue("getAllTemplatesFromDb", CefV8Value.CreateFunction("getAllTemplatesFromDb", fnhandler), CefV8PropertyAttribute.ReadOnly);
-                window.SetValue("notifyEditorSelectionChanged", CefV8Value.CreateFunction("notifyEditorSelectionChanged", fnhandler), CefV8PropertyAttribute.ReadOnly);
-                window.SetValue("notifyContentLengthChanged", CefV8Value.CreateFunction("notifyContentLengthChanged", fnhandler), CefV8PropertyAttribute.ReadOnly);
-            }
-            catch (CefNet.CefNetJSExcepton ex) {
-                MpConsole.WriteTraceLine("CefNet Context created exception: ", ex);
-            }
-            finally {
-                context.Exit();
-            }            
-        }
+        //protected override void OnContextCreated(CefBrowser browser, CefFrame frame, CefV8Context context) {
+        //    //base.OnContextCreated(browser, frame, context);
+        //    if(!context.Enter()) {
+        //        return;
+        //    }
+        //    try {
+        //        CefV8Value window = context.GetGlobal();
+        //        var fnhandler = new V8Func(_dbPath);
+        //        window.SetValue("getAllTemplatesFromDb", CefV8Value.CreateFunction("getAllTemplatesFromDb", fnhandler), CefV8PropertyAttribute.ReadOnly);
+        //        window.SetValue("notifyEditorSelectionChanged", CefV8Value.CreateFunction("notifyEditorSelectionChanged", fnhandler), CefV8PropertyAttribute.ReadOnly);
+        //        window.SetValue("notifyContentLengthChanged", CefV8Value.CreateFunction("notifyContentLengthChanged", fnhandler), CefV8PropertyAttribute.ReadOnly);
+        //    }
+        //    catch (CefNet.CefNetJSExcepton ex) {
+        //        MpConsole.WriteTraceLine("CefNet Context created exception: ", ex);
+        //    }
+        //    finally {
+        //        context.Exit();
+        //    }            
+        //}
 
 
         private void CefApp_CefProcessMessageReceived(object sender, CefProcessMessageReceivedEventArgs e) {            
@@ -162,6 +162,7 @@ namespace MonkeyPaste.Avalonia {
                         jsRespStr_renderer = result.GetStringValue();
                     }
                 }catch(CefNet.CefNetJSExcepton ex) {
+                    MpConsole.WriteLine("EvalJs Exception: "+ ex.ToString());
                     jsRespStr_renderer = JS_REF_ERROR;
                 }
                 finally {

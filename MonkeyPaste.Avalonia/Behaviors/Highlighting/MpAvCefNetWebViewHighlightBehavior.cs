@@ -9,6 +9,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using PropertyChanged;
+using MonkeyPaste.Common.Utils.Extensions;
+
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvContentHighlightBehavior : MpAvHighlightBehaviorBase<MpAvClipTileContentView> {

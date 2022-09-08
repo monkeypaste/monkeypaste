@@ -7,6 +7,7 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Utils.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -1258,7 +1259,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
-        public MpRect ObservedBounds { get; set; }
+        //public MpRect ObservedBounds { get; set; }
         public Thickness ContentMarginThickness {
             get {
                 if (IsTitleVisible) {
@@ -2089,11 +2090,12 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsSelected):
                     if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
-                        if (IsPinned) {
-                            Parent.ClearClipSelection(false);
-                        } else {
-                            Parent.ClearPinnedSelection(false);
-                        }
+                        // BUGGY this clears the alternate selection if tile is pinned/unpinned probably bad
+                        //if (IsPinned) {
+                        //    Parent.ClearClipSelection(false);
+                        //} else {
+                        //    Parent.ClearPinnedSelection(false);
+                        //}
                         if (Parent.SelectedItem != this) {
                             Parent.SelectedItem = this;
                         }

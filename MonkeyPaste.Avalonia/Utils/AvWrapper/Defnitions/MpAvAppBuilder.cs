@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
             }
             var icon = await MpPlatformWrapper.Services.IconBuilder.CreateAsync(processIconImg64);
 
-            var app = await MpApp.Create(
+            var app = await MpApp.CreateAsync(
                 appPath: processPath,
                 appName: appName,
                 iconId: icon.Id);

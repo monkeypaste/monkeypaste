@@ -5,7 +5,8 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
 using System.Diagnostics;
 using System.Net;
 using System.Text;
@@ -16,6 +17,7 @@ using Avalonia.Layout;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using MonkeyPaste.Common.Utils.Extensions;
 
 namespace MonkeyPaste.Avalonia {
 

@@ -1,30 +1,43 @@
 
 function checkIsEditorLoaded_ext() {
 	if (IsLoaded) {
-		setComOutput('true');
 		return true;
 	}
-	setComOutput('false');
 	return false;
 }
 
-function init_ext(initMsgStr) {
-	log("init request: " + initMsgStr);
+function init_ext(initMsgStr_base64) {
+	log("init request: " + initMsgStr_base64);
 	let initMsg = null;
 
 
-	if (typeof initMsgStr === 'string' || initMsgStr instanceof String) {
-		if (hasJsonStructure(initMsgStr)) {
-			//let reqMsgStr_decoded = atob(reqMsgStr);
-			//reqMsg = JSON.parse(reqMsgStr_decoded);
-			//initMsg = JSON.parse(initMsgStr);
-		}
+	if (typeof initMsgStr_base64 === 'string' || initMsgStr_base64 instanceof String) {
+		//if (hasJsonStructure(initMsgStr)) {
+
+		//}
+		let initMsgStr = atob(initMsgStr_base64);
 		initMsg = JSON.parse(initMsgStr);
 	} else {
-		log('init_ext error initMsgStr: ' + initMsgStr);
+		log('init_ext error initMsgStr: ' + initMsgStr_base64);
 	}
 
 	init(initMsg);
+
+	if (initMsg.isReadOnlyEnabled) {
+		enableReadOnly();
+	}
+
+	// init response is serialized 'MpQuillLoadResponseMessage'
+	let initResponseMsg = {
+		contentWidth: getContentWidth(),
+		contentHeight: getContentHeight(),
+		decodedTemplateGuids: getDecodedTemplateGuids()
+	}
+	let initResponseMsgStr = JSON.stringify(initResponseMsg);
+	log('init Response: ');
+	log(initResponseMsgStr);
+
+	return initResponseMsgStr;
 }
 
 function getDocIdxFromPoint_ext(editorPointMsgStr) {

@@ -15,54 +15,28 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPinTrayView">
-    <!--<i:Interaction.Behaviors>
-        <local:MpAvPinTrayDropBehavior />
-    </i:Interaction.Behaviors>-->
-    <!--<local:MpAvUserControl.Resources>
-    -->
-    <!--<local:MpAvPinTrayDropBehavior x:Key="PinTrayDropBehavior" />-->
-    <!--
-    </local:MpAvUserControl.Resources>
-    <local:MpAvUserControl.Styles>
-        <Style Selector=":is(local|MpAvPinTrayView)">
-            <Setter Property="(i:Interaction.Behaviors)">
-                <i:BehaviorCollectionTemplate>
-                    <i:BehaviorCollection>
-    -->
-    <!--<idd:ContextDropBehavior Handler="{StaticResource ItemsListBoxDropHandler}" />-->
-    <!--
-                        <local:MpAvPinTrayDropBehavior x:Key="PinTrayDropBehavior" />
-                    </i:BehaviorCollection>
-                </i:BehaviorCollectionTemplate>
-            </Setter>
-        </Style>
-    </local:MpAvUserControl.Styles>-->
-  
+
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
         <ListBox x:Name="PinTrayListBox"
-                 BorderThickness="0"
                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                 Background="Transparent"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
-                 local:MpAvMousePressCommand.IsEnabled="True"
-                 local:MpAvMousePressCommand.IsDropControl="True"
-                 local:MpAvMousePressCommand.DropAdornedControl="{Binding ., ElementName=PinTrayUserControl}"
+                 local:MpAvDropExtension.IsEnabled="True"
+                 local:MpAvDropExtension.DropAdornedControl="{Binding ., ElementName=PinTrayUserControl}"
+                 SelectedItem="{Binding SelectedPinTrayItem, Mode=TwoWay}"
                  Items="{Binding PinnedItems}">
             <ListBox.Styles>
                 <Style Selector="ListBoxItem"
                        x:DataType="local:MpAvClipTileViewModel">
-                    <Setter Property="IsSelected"
-                            Value="{Binding IsSelected, Mode=TwoWay}" />
+                    <!--<Setter Property="IsSelected"
+                            Value="{Binding IsSelected, Mode=TwoWay}" />-->
                 </Style>
             </ListBox.Styles>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <local:MpAvClipTileView DataContext="{Binding}"
-                                            local:MpAvBoundsObserverExtension.IsEnabled="True"
-                                            local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedBounds, Mode=OneWayToSource}"
                                             IsVisible="{Binding IsPinned}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
