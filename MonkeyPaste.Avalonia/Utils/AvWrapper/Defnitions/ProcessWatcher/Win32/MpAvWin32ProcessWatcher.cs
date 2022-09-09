@@ -392,12 +392,13 @@ namespace MonkeyPaste.Avalonia {
 
             if (hasChanged) {
                 MpConsole.WriteLine(string.Format(@"Last Window: {0} '{1}' ({2})", LastTitle, LastProcessPath, LastHandle));
+                string appName = GetProcessApplicationName(LastTitle);
 
                 OnAppActivated?.Invoke(
                     nameof(MpAvWin32ProcessWatcher),
                     new MpProcessActivatedEventArgs() {
                         ProcessPath = processPath,
-                        ApplicationName = GetProcessApplicationName(LastTitle),
+                        ApplicationName = appName,
                         Handle = LastHandle
                     });
             }

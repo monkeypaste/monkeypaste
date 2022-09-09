@@ -16,6 +16,16 @@ namespace MonkeyPaste.Common {
             return null;
         }
 
+        public static T DeserializeBase64Object<T>(object obj) where T : class {
+            if (obj is string objBase64Str) {
+                byte[] bytes = Convert.FromBase64String(objBase64Str);
+                string objStr = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+                var outObj = JsonConvert.DeserializeObject<T>(objStr);
+                return outObj;
+            }
+            return null;
+        }
+
         public static string SerializeObject(object obj) {
             if(obj == null) {
                 return string.Empty;

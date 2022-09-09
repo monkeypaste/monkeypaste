@@ -66,25 +66,15 @@ templateType: "dynamic"
         public string templateName { get; set; }
         public string templateText { get; set; }
         public string templateType { get; set; }
-
-
     }
+
 
     public class MpQuillContentRangeMessage : MpJsonObject {
         public int index { get; set; }
         public int length { get; set; }
     }
 
-    public class MpQuillContentSelectionChangedMessage : MpJsonObject {
-        public int copyItemId { get; set; }
-        public int index { get; set; }
-        public int length { get; set; }
-    }
-
-    public class MpQuillContentLengthChangedMessage : MpJsonObject {
-        public int copyItemId { get; set; }
-        public int length { get; set; }
-    }
+    
 
     public class MpQuillContentSetTextRangeMessage : MpJsonObject {
         public int index { get; set; }
@@ -94,6 +84,7 @@ templateType: "dynamic"
 
         public bool isHostJsonMsg => true;
     }
+    
 
     public class MpQuillEditorIndexFromPointMessage : MpJsonObject {
         public double x { get; set; }
@@ -101,5 +92,26 @@ templateType: "dynamic"
         public bool snapToLine { get; set; } = true;
 
         public int fallBackIdx { get; set; } = -1;
+    }
+
+    public abstract class MpQuillContentMessageBase : MpJsonObject {
+        public int copyItemId { get; set; }
+    }
+    public class MpQuillContentSelectionChangedMessage : MpQuillContentMessageBase {
+        //public int copyItemId { get; set; }
+        public int index { get; set; }
+        public int length { get; set; }
+
+        public List<MpJsonRect> selRects { get; set; }
+        public string selJsonRectListBase64Str { get; set; }
+    }
+
+    public class MpQuillContentLengthChangedMessage : MpQuillContentMessageBase {
+        // public int copyItemId { get; set; }
+        public int length { get; set; }
+    }
+    public class MpQuillContentDraggableChangedMessage : MpQuillContentMessageBase {
+        //public int copyItemId { get; set; }
+        public bool isDraggable { get; set; }
     }
 }

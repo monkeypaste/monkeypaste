@@ -1,4 +1,4 @@
-
+// this are only called from external sources and wrap in/out messaging
 function checkIsEditorLoaded_ext() {
 	if (IsLoaded) {
 		return true;

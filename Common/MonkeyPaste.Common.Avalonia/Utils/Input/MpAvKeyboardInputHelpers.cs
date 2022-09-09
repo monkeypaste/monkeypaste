@@ -120,15 +120,19 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static string GetKeyLiteral(Key key) {
-            if (key == Key.LeftShift) {
-                return "Shift";
+            if (key == Key.LeftShift || key == Key.RightShift) {
+                return MpKeyLiteralStringHelpers.SHIFT_KEY_LITERAL;
             }
-            if (key == Key.LeftAlt) {
-                return "Alt";
+            if (key == Key.LeftAlt || key == Key.RightAlt) {
+                return MpKeyLiteralStringHelpers.ALT_KEY_LITERAL;
             }
-            if (key == Key.LeftCtrl) {
-                return "Ctrl";
+            if (key == Key.LeftCtrl || key == Key.RightCtrl) {
+                return MpKeyLiteralStringHelpers.CONTROL_KEY_LITERAL;
             }
+            if(key == Key.Escape) {
+                return MpKeyLiteralStringHelpers.ESCAPE_KEY_LITERAL;
+            }
+
             if (key == Key.OemSemicolon) {
                 return ";";
             }

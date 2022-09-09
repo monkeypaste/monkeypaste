@@ -268,8 +268,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
-
-        
+                
 
         #region View Models
 
@@ -829,6 +828,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsEmpty => Items.Count == 0;
 
+        public bool IsPinTrayEmpty => PinnedItems.Count == 0;
         public bool HasScrollVelocity => Math.Abs(ScrollVelocityX) + Math.Abs(ScrollVelocityY) > 0.1d;
 
         public bool IsScrollingIntoView { get; set; }
@@ -836,6 +836,15 @@ namespace MonkeyPaste.Avalonia {
         public bool IsGridLayout { get; set; }        
 
         public bool IsRequery { get; set; } = false;
+
+        public bool IsPinTrayDropPopOutVisible {
+            get {
+                // show popout when no items are visible
+                // TODO This needs to account for external dragover
+                // TODO? at some point using global drag event  when mw is hidden (and pref enabled) have pop out panel automatically pop out for drop
+                return IsAnyTileDragging && IsPinTrayEmpty;
+            }
+        }
 
         #region Child Property Wrappers
 
@@ -858,9 +867,13 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsAnyPastingTemplate => Items.Any(x => x.IsPastingTemplate) || PinnedItems.Any(x => x.IsPastingTemplate);
 
-        public bool IsAnyTileDragging => Items.Any(x => x.IsItemDragging) ||
+        public bool IsAnyTileDragging {
+            get {
+                return Items.Any(x => x.IsItemDragging) ||
                                          PinnedItems.Any(x => x.IsItemDragging) ||
                                          MpAvDragDropManager.IsDraggingFromExternal;
+            }
+        }
 
         public bool IsAnyTilePinned => PinnedItems.Count > 0;
 
@@ -1129,11 +1142,16 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsAnyTileDragging):
                     //notify pin tray to pop out if no item pinned
+                    OnPropertyChanged(nameof(IsPinTrayDropPopOutVisible));
+
+                    
+                    break;
+                case nameof(IsPinTrayDropPopOutVisible):
+
                     OnPropertyChanged(nameof(MinPinTrayScreenWidth));
                     OnPropertyChanged(nameof(MinPinTrayScreenHeight));
                     OnPropertyChanged(nameof(MaxPinTrayScreenWidth));
                     OnPropertyChanged(nameof(MaxPinTrayScreenHeight));
-                    
                     break;
             }
         }
@@ -1413,6 +1431,9 @@ namespace MonkeyPaste.Avalonia {
                 if(IsAnyTilePinned) {
                     return ClipTrayContainerScreenWidth - MinClipTrayScreenWidth;
                 }
+                if(IsPinTrayDropPopOutVisible) {
+                    return double.PositiveInfinity;
+                }
                 // When pin tray pops out max has to be reset to 0 which will be min after dragend
                 return MinPinTrayScreenWidth;
             }
@@ -1421,6 +1442,9 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if (IsAnyTilePinned) {
                     return ClipTrayContainerScreenHeight - MinClipTrayScreenHeight; ;
+                }
+                if (IsPinTrayDropPopOutVisible) {
+                    return double.PositiveInfinity;
                 }
                 // When pin tray pops out max has to be reset to 0 which will be min after dragend
                 return MinPinTrayScreenHeight;
@@ -2338,8 +2362,18 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand PinTileCommand => new MpAsyncCommand<object>(
              async (args) => {
-                 var pctvm = args as MpAvClipTileViewModel;
-
+                 int pin_idx = PinnedItems.Count;
+                 MpAvClipTileViewModel pctvm = null;
+                 if (args is MpAvClipTileViewModel) {
+                     pctvm = args as MpAvClipTileViewModel;
+                     if(pctvm.IsPinned || pctvm.IsPlaceholder) {
+                         MpConsole.WriteTraceLine("PinTile error, tile is either already pinned or placeholder");
+                         return;
+                     }
+                 } else if (args is object[] argParts) {
+                     pctvm = argParts[0] as MpAvClipTileViewModel;
+                     pin_idx = (int)argParts[1];
+                 }
                  MpDataModelProvider.AvailableQueryCopyItemIds.Remove(pctvm.CopyItemId);
 
                  
@@ -2359,7 +2393,13 @@ namespace MonkeyPaste.Avalonia {
                  Items.Remove(pctvm);
                  Items.Where(x => x.QueryOffsetIdx > pctvm.QueryOffsetIdx).ForEach(x => x.QueryOffsetIdx = x.QueryOffsetIdx - 1);
                  pctvm.QueryOffsetIdx = -1;
-                 PinnedItems.Add(pctvm);
+                 if(pin_idx == PinnedItems.Count) {
+                     PinnedItems.Add(pctvm);
+                 } else {
+                     PinnedItems.Insert(pin_idx, pctvm);
+                 }
+
+                 OnPropertyChanged(nameof(IsAnyTilePinned));
                  pctvm.OnPropertyChanged(nameof(pctvm.IsPinned));
                  pctvm.OnPropertyChanged(nameof(pctvm.IsPlaceholder));
 
@@ -2370,8 +2410,10 @@ namespace MonkeyPaste.Avalonia {
                  while(IsAnyBusy) {
                      await Task.Delay(100);
                  }
-                 SelectedItem = pctvm;
                  RefreshLayout();
+                 await Task.Delay(200);
+                 SelectedItem = pctvm;
+
 
                  OnPropertyChanged(nameof(Items));
                  OnPropertyChanged(nameof(PinnedItems));
@@ -2382,10 +2424,7 @@ namespace MonkeyPaste.Avalonia {
                  OnPropertyChanged(nameof(ClipTrayScreenHeight));
              },
             (args) =>
-            args != null &&
-            args is MpAvClipTileViewModel ctvm &&
-            !ctvm.IsPinned &&
-            !ctvm.IsPlaceholder);
+            args != null);
 
         public ICommand UnpinTileCommand => new MpAsyncCommand<object>(
              async (args) => {
@@ -2395,6 +2434,7 @@ namespace MonkeyPaste.Avalonia {
 
                  PinnedItems.Remove(upctvm);
                  OnPropertyChanged(nameof(IsAnyTilePinned));
+                 OnPropertyChanged(nameof(IsPinTrayDropPopOutVisible));
 
                  if (!IsAnyTilePinned) {
                      PinTrayTotalWidth = PinTrayScreenWidth = 0;
@@ -2509,14 +2549,20 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ToggleTileIsPinnedCommand => new MpCommand<object>(
             (args) => {
-                var pctvm = args as MpAvClipTileViewModel;
+                MpAvClipTileViewModel pctvm = null;
+                if(args is MpAvClipTileViewModel) {
+                    pctvm = args as MpAvClipTileViewModel;
+                } else if(args is object[] argParts) {
+                    pctvm = argParts[0] as MpAvClipTileViewModel;
+                }
+
                 if (pctvm.IsPinned) {
                     UnpinTileCommand.Execute(args);
                 } else {
                     PinTileCommand.Execute(args);
                 }
             },
-            (args) => args != null && args is MpAvClipTileViewModel);
+            (args) => args != null);
 
 
         public ICommand DuplicateSelectedClipsCommand => new MpCommand(

@@ -445,13 +445,7 @@ function onEditorSelectionChanged(range, oldRange, source) {
 		//updateTemplatesAfterSelectionChange(range, oldRange, source);
 		//coereceSelectionWithTemplatePadding(range, oldRange, source);
 
-		let selChangedObj = { copyItemId: CopyItemId, index: range.index, length: range.length };
-
-		if (typeof notifyEditorSelectionChanged === 'function') {
-			notifyEditorSelectionChanged(JSON.stringify(selChangedObj));
-		}
-		
-
+		onEditorSelectionChanged_ntf(range);
 	} else {
 		log("Cursor not in the editor");
 	}

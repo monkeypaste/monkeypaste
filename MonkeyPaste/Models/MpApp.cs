@@ -119,13 +119,11 @@ namespace MonkeyPaste {
             if(appPath != null) {
                 appPath = appPath.ToLower();
             }
-
-            var dupApp = await MpDataModelProvider.GetAppByPathAsync(appPath);
+            // NOTE checking app by path and device here
+            var dupApp = await MpDataModelProvider.GetAppByPathAsync(appPath, MpPrefViewModel.Instance.ThisUserDevice.Id);
             if (dupApp != null) {
-                //dupApp = await MpDb.GetItemAsync<MpApp>(dupApp.Id);
                 if(dupApp.IconId != iconId && iconId > 0) {
-                    // this means app icon has changed or different device or something but update icon here
-                    Debugger.Break();
+                    // this means app icon has changed (probably from an update)
                     dupApp.IconId = iconId;
                     await dupApp.WriteToDatabaseAsync();                    
                 }

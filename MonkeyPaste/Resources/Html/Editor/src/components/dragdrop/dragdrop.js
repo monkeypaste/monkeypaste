@@ -35,7 +35,7 @@ function initDragDrop() {
     //});    
 
     window.addEventListener('mousemove', onMouseMove_dragOverFallback);
-
+    window.addEventListener('mousedown', onMouseDown);
     //setInterval(onTick, 1000)
     //window.addEventListener('keydown', onKeyDown_debug);
 }
@@ -284,12 +284,36 @@ function dropData(docIdx, data) {
     insertContent(docIdx, data, true);
 }
 
+function onMouseDown(e) {
+    if (!IsSubSelectionEnabled) {
+        onContentDraggableChanged_ntf(true);
+        return;
+    }
+
+    let sel = getSelection();
+    let is_none_selected = sel.length == 0;
+    if (is_none_selected) {
+        onContentDraggableChanged_ntf(false);
+        return;
+    }
+
+    let emp = getEditorMousePos(e);
+    let is_down_on_range = isPointInRange(emp, sel);
+    let is_all_selected = isAllSelected();
+
+    is_draggable = is_down_on_range || is_all_selected;
+    onContentDraggableChanged_ntf(is_draggable);
+}
+
 function onMouseMove_dragOverFallback(e) {
     //let offset = getDocIdxFromPoint({ x: parseFloat(e.clientX), y: parseFloat(e.clientY) });
     //log('offset: ' + offset);
 
     if (!isDropping()) {
         if (parseInt(e.buttons) != 0) {
+            // mouse button is down but not dragging
+
+            
             //showTemplateUserSelection();
 		}
         

@@ -4,6 +4,7 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Utils.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,6 +41,8 @@ namespace MonkeyPaste.Avalonia {
         //        }
         //    }
         //}
+
+        public ObservableCollection<MpRect> RangeRects { get; set; } = new ObservableCollection<MpRect>();
 
         #endregion
 

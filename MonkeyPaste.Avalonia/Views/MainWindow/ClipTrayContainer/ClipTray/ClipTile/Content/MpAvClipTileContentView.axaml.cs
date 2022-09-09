@@ -11,6 +11,8 @@ using MonkeyPaste.Avalonia.Behaviors._Factory;
 using Avalonia.VisualTree;
 using System.Threading.Tasks;
 using MonkeyPaste.Common;
+using System.Linq;
+using MonkeyPaste.Common.Utils.Extensions;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileContentView : MpAvUserControl<MpAvClipTileViewModel>, MpAvIDragDataHost {
@@ -24,7 +26,20 @@ namespace MonkeyPaste.Avalonia {
 
         bool MpAvIDragDataHost.IsDragValid(MpPoint host_mp) {
             // check pointer selection/range intersection here
-
+            if (BindingContext.IsSubSelectionEnabled) {
+                if (ContentView.Selection.IsEmpty || !ContentView.CanDrag) {
+                    return false;
+                }
+                //if(ContentView.Selection.RangeRects.Count > 1) {
+                //    Debugger.Break();
+                //}
+                //bool isPointerOnSelection = ContentView.Selection.RangeRects.Any(x => x.Contains(host_mp));
+                //MpConsole.WriteLine($"ContentView mp: '{host_mp}' is {(isPointerOnSelection ? "ON" : "NOT ON")} selection");
+                //if (isPointerOnSelection) {
+                //    return true;
+                //}
+                //return ;
+            }
             return true;
         }
 
@@ -55,10 +70,12 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipTileContentView() {
             InitializeComponent();
-            this.AddHandler(Control.PointerPressedEvent, MpAvClipTileContentView_PointerPressed, RoutingStrategies.Tunnel);
+        }
 
-            var cc = this.FindControl<ContentControl>("ClipTileContentControl");
-            cc.AttachedToVisualTree += Cc_AttachedToVisualTree;
+        private void ContentTemplate_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            if (sender is UserControl contentContainer) {
+                ContentView = contentContainer.Content as MpAvIContentView;
+            }
         }
 
         public void UpdateAdorners() {
@@ -74,7 +91,6 @@ namespace MonkeyPaste.Avalonia {
             var cc = sender as ContentControl;
             var actual_content_control = cc.Content as Control;
             ContentView = actual_content_control as MpAvIContentView;
-            MpAvViewBehaviorFactory.BuildAllViewBehaviors(this, actual_content_control);
         }
 
         private async void MpAvClipTileContentView_PointerPressed(object sender, PointerPressedEventArgs e) {

@@ -2,6 +2,23 @@
 
 //#region DOM Traversal
 
+function toBase64(obj) {
+    let objStr = null
+    if (typeof obj === 'string' || obj instanceof String) {
+        objStr = obj;
+    } else {
+        objStr = JSON.stringify(obj);
+	}
+    let base64 = btoa(objStr);
+    return base64;
+}
+
+function toJsonObj(base64Str) {
+    let jsonStr = atob(base64Str);
+    let jsonObj = JSON.parse(jsonStr);
+    return jsonObj;
+}
+
 function changeInnerText(elm, text, newText) {
     if (elm == null) {
         return;

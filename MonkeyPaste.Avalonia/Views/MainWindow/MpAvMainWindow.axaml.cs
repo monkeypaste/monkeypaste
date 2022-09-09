@@ -166,6 +166,7 @@ namespace MonkeyPaste.Avalonia {
             var ctrcv_cg = ctrcv.FindControl<Grid>("ClipTrayContainerGrid");
             var ctrcv_ptrv = ctrcv.FindControl<MpAvPinTrayView>("PinTrayView");
             var ctrcv_ptr_lb = ctrcv_ptrv.FindControl<ListBox>("PinTrayListBox");
+            var ctrcv_ptr_lb_wp = ctrcv_ptr_lb.GetVisualDescendant<WrapPanel>();
             var ctrcv_gs = ctrcv.FindControl<GridSplitter>("ClipTraySplitter");
             var ctrcv_ctrv = ctrcv.FindControl<MpAvClipTrayView>("ClipTrayView");
             var ttv = this.FindControl<MpAvTagTreeView>("TagTreeView");

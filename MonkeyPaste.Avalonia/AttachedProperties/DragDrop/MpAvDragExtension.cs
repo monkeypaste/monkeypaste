@@ -115,11 +115,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void DragCheckAndStart(Control dragControl, PointerPressedEventArgs e) {
+            MpPoint dc_down_pos = e.GetClientMousePoint(dragControl);
             var dragHost = GetDragDataHost(dragControl);
-            if (dragHost == null) {
+            if (dragHost == null || !dragHost.IsDragValid(dc_down_pos)) {
                 return;
             }
-            MpPoint dc_down_pos = e.GetClientMousePoint(dragControl);
             bool was_drag_started = false;
             // 
             EventHandler<PointerReleasedEventArgs> dragControl_PointerReleased_Handler = null;

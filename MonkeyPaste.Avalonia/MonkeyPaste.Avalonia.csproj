@@ -870,6 +870,7 @@
     <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controls\Content\CefNetWebView\Cef\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Base\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\" />
@@ -894,6 +895,9 @@
     </Compile>
     <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\MpAvPinTrayView.axaml.cs">
       <DependentUpon>MpAvPinTrayView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\Overlays\MpAvPinTrayDropPopoutOverlayView.axaml.cs">
+      <DependentUpon>MpAvPinTrayDropPopoutOverlayView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\MainWindow\FilterMenu\MpAvFilterMenuView.axaml.cs">
       <DependentUpon>MpAvFilterMenuView.axaml</DependentUpon>

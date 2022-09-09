@@ -1,0 +1,44 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="local:MpAvClipTrayViewModel"
+                       x:DataType="local:MpAvClipTrayViewModel"
+                       x:CompileBindings="True"
+                       DataContext="{x:Static local:MpAvClipTrayViewModel.Instance}"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvPinTrayDropPopoutOverlayView">
+    <Grid HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          IsHitTestVisible="False">
+        <Ellipse Fill="Transparent"
+                 StrokeThickness="3"
+                 Width="50"
+                 Height="50" />
+        <Border HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                CornerRadius="2"
+                Height="30"
+                Width="3" />
+        <Border HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                CornerRadius="2"
+                Height="3"
+                Width="30" />
+        <!--
+            Margin="30,76,30,0"
+        -->
+        <TextBlock FontSize="20"
+                   FontWeight="SemiBold"
+                   TextAlignment="Center"
+                   Margin="0,-60,0,0"
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Center">
+            Drop Here
+        </TextBlock>
+    </Grid>
+</local:MpAvUserControl>

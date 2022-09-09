@@ -39,14 +39,16 @@
                         </DataTemplate>-->
                         <DataTemplate x:Key="CefNetWebViewTemplate"
                                       DataType="local:MpAvClipTileViewModel">
-                            <local:MpAvCefNetContentWebView DataContext="{Binding}"
+                            <local:MpAvCefNetContentWebView AttachedToVisualTree="ContentTemplate_AttachedToVisualTree"
+                                                            DataContext="{Binding}"
                                                             Classes="ContentDragAndDrop"
                                                             HorizontalAlignment="Stretch"
                                                             VerticalAlignment="Stretch" />
                         </DataTemplate>
                         <DataTemplate x:Key="PlainTextTemplate"
                                       DataType="local:MpAvClipTileViewModel">
-                            <local:MpAvPlainTextContentView DataContext="{Binding}"
+                            <local:MpAvPlainTextContentView AttachedToVisualTree="ContentTemplate_AttachedToVisualTree"
+                                                            DataContext="{Binding}"
                                                             Classes="ContentDragAndDrop"
                                                             HorizontalAlignment="Stretch"
                                                             VerticalAlignment="Stretch" />

@@ -333,15 +333,16 @@ namespace MonkeyPaste.Avalonia {
 
                 var lrm = await CreateLoadRequestMessageAsync(wv);
                 var loadReqJsonStr = lrm.SerializeToByteString();
-                string loadResponseMsgStr = null;
-                while (loadResponseMsgStr == null) {
-                    string resp = await wv.EvaluateJavascriptAsync($"init_ext('{loadReqJsonStr}')");
-                    if (resp == MpAvCefNetApplication.JS_REF_ERROR || resp == null) {
-                        await Task.Delay(100);
-                        continue;
-                    }
-                    loadResponseMsgStr = resp;
-                }
+                //string loadResponseMsgStr = null;
+                //while (loadResponseMsgStr == null) {
+                //    string resp = await wv.EvaluateJavascriptAsync($"init_ext('{loadReqJsonStr}')");
+                //    if (resp == MpAvCefNetApplication.JS_REF_ERROR || resp == null) {
+                //        await Task.Delay(100);
+                //        continue;
+                //    }
+                //    loadResponseMsgStr = resp;
+                //}
+                string loadResponseMsgStr = await wv.EvaluateJavascriptAsync($"init_ext('{loadReqJsonStr}')");
 
                 MpQuillLoadResponseMessage loadResponseMsg = MpJsonObject.DeserializeObject<MpQuillLoadResponseMessage>(loadResponseMsgStr);
 

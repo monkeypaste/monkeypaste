@@ -14,11 +14,11 @@ namespace MonkeyPaste.Avalonia {
         void DragEnd();
     }
 
-    public interface MpAvIDropHost {
-        bool IsDropValid(IDataObject avdo);
-        void DragEnter();
+    public interface MpAvIDropHost  {
+        bool IsDropValid(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects);
+        //void DragEnter();
         void DragOver(MpPoint host_mp, IDataObject avdo, DragDropEffects dragEffects);
         void DragLeave();
-        Task<DragDropEffects> DropDataObjectAsync(IDataObject avdo, DragDropEffects dragEffects);
+        Task<DragDropEffects> DropDataObjectAsync(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects);
     }
 }

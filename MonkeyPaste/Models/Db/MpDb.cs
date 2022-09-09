@@ -596,20 +596,21 @@ namespace MonkeyPaste {
                 return false;
             }
             await _connectionAsync.CreateTableAsync<MpUserDevice>();
-            MpPrefViewModel.Instance.ThisDeviceGuid = await MpDataModelProvider.GetUserDeviceGuidByMachineNameAsync(osInfo.OsMachineName);
+            MpUserDevice this_device = await MpDataModelProvider.GetUserDeviceByMachineNameAsync(osInfo.OsMachineName);
+            MpPrefViewModel.Instance.ThisDeviceGuid = this_device.Guid;
             MpPrefViewModel.Instance.ThisDeviceType = osInfo.OsType;
 
             await _connectionAsync.CreateTableAsync<MpApp>();
             var process = Process.GetCurrentProcess();
             string thisAppPath = process.MainModule.FileName;
-            var thisApp = await MpDataModelProvider.GetAppByPathAsync(thisAppPath);
+            var thisApp = await MpDataModelProvider.GetAppByPathAsync(thisAppPath, this_device.Id);
 
             await _connectionAsync.CreateTableAsync<MpSource>();
             var thisAppSource = await MpSource.Create(appId: thisApp.Id, urlId: 0);
             MpPrefViewModel.Instance.ThisAppSourceId = thisAppSource.Id;
 
 
-            var osApp = await MpDataModelProvider.GetAppByPathAsync(osInfo.OsFileManagerPath);
+            var osApp = await MpDataModelProvider.GetAppByPathAsync(osInfo.OsFileManagerPath, this_device.Id);
             var osAppSource = await MpDataModelProvider.GetSourceByMembersAsync(osApp.Id,0);
             MpPrefViewModel.Instance.ThisOsFileManagerSourceId = osAppSource.Id;
 

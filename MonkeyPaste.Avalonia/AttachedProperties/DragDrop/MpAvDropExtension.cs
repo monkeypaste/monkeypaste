@@ -212,21 +212,21 @@ namespace MonkeyPaste.Avalonia {
 
 
         private static void DragOver(object sender, DragEventArgs e) {
-            //MpConsole.WriteLine("Drag Over: " + sender);
+            //MpConsole.WriteLine("Drag Over: " + sender);            
 
-            MpAvIDropHost dropHost = GetDropHost(sender);
-            e.DragEffects = GetDropEffects(dropHost, e);
-
-            if (dropHost == null) {
-                return;
+            MpAvIDropHost dropHost = GetDropHost(sender); 
+            e.DragEffects = GetDropEffects(e);
+            MpPoint drop_host_mp = e.GetPosition(dropHost as IVisual).ToPortablePoint();
+            if (!dropHost.IsDropValid(e.Data, drop_host_mp, e.DragEffects)) {
+                // currently pin tray drop is only invlaid on move to same idx
+                e.DragEffects = DragDropEffects.None;
             }
-
-            MpPoint drag_mp = e.GetPosition((IVisual)sender).ToPortablePoint();
-            dropHost.DragOver(drag_mp, e.Data, e.DragEffects);
+            dropHost.DragOver(drop_host_mp, e.Data, e.DragEffects);
         }
         private static void DragEnter(object sender, DragEventArgs e) {
-            MpAvIDropHost dropHost = GetDropHost(sender);
-            dropHost?.DragEnter();
+            //MpAvIDropHost dropHost = GetDropHost(sender);
+            //dropHost?.DragEnter();
+            DragOver(sender, e);
         }
         private static void DragLeave(object sender, RoutedEventArgs e) {
             //MpConsole.WriteLine("Drag Leave: " + sender);
@@ -238,11 +238,12 @@ namespace MonkeyPaste.Avalonia {
         private static async void Drop(object sender, DragEventArgs e) {
             MpConsole.WriteLine("Drop: " + sender);
             MpAvIDropHost dropHost = GetDropHost(sender);
-            e.DragEffects = GetDropEffects(dropHost, e);
+            e.DragEffects = GetDropEffects( e);
             if (dropHost == null) {
                 return;
             }
-            e.DragEffects = await dropHost.DropDataObjectAsync(e.Data, e.DragEffects);
+            MpPoint drop_host_mp = e.GetPosition(dropHost as IVisual).ToPortablePoint();
+            e.DragEffects = await dropHost.DropDataObjectAsync(e.Data, drop_host_mp, e.DragEffects);
         }
 
         #endregion
@@ -251,22 +252,17 @@ namespace MonkeyPaste.Avalonia {
 
         private static MpAvIDropHost GetDropHost(object sender) {
             if (sender is Control control) {
-                if (control.Name == "PinTrayListBox" &&
-                    control.GetVisualAncestor<MpAvPinTrayView>() is MpAvPinTrayView ptrv) {
-                    return ptrv;
-                }
+                //if (control.Name == "PinTrayListBox" &&
+                //    control.GetVisualAncestor<MpAvPinTrayView>() is MpAvPinTrayView ptrv) {
+                //    return ptrv;
+                //}
+                var dropHost = control.GetVisualAncestors<IVisual>().FirstOrDefault(x => x is MpAvIDropHost);
+                return (MpAvIDropHost)dropHost;
             }
             return null;
         }
 
-        private static DragDropEffects GetDropEffects(MpAvIDropHost dropHost, DragEventArgs e) {
-            if (dropHost == null) {
-                return DragDropEffects.None;
-            }
-            if (!dropHost.IsDropValid(e.Data)) {
-                return DragDropEffects.None;
-            }
-
+        private static DragDropEffects GetDropEffects(DragEventArgs e) {
             if (e.KeyModifiers.HasFlag(KeyModifiers.Control)) {
                 return DragDropEffects.Copy;
             }

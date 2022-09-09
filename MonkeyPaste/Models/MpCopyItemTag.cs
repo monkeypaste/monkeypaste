@@ -32,10 +32,12 @@ namespace MonkeyPaste {
 
         //[ForeignKey(typeof(MpTag))]
         [Column("fk_MpTagId")]
+        [Indexed]
         public int TagId { get; set; }
 
         //[ForeignKey(typeof(MpCopyItem))]
         [Column("fk_MpCopyItemId")]
+        [Indexed]
         public int CopyItemId { get; set; }
 
         public int CopyItemSortIdx { get; set; } = 0;

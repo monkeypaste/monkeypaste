@@ -20,7 +20,7 @@ namespace MonkeyPaste.Common {
 
         public static MpRect2 ParseJson(string jsonStr) {
             ///quill json '{ left: Number, top: Number, height: Number, width: Number }'
-            var qr = MpJsonObject.DeserializeObject<MpQuillRect>(jsonStr);
+            var qr = MpJsonObject.DeserializeObject<MpJsonRect>(jsonStr);
             var r = new MpRect2(qr.left, qr.top, qr.width, qr.height);
             return r;
         }

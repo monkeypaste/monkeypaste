@@ -19,7 +19,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public static class MpAvMousePressCommandExtension {
+    public static class MpAvPointerPressCommandExtension {
         #region Private Variables
 
         #endregion
@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
          #endregion
 
-        static MpAvMousePressCommandExtension() {
+        static MpAvPointerPressCommandExtension() {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
         }
 

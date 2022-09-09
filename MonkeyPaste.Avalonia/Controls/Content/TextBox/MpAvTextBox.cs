@@ -20,7 +20,6 @@ namespace MonkeyPaste.Avalonia {
         TextBox, 
         MpAvIContentView, 
         MpAvIContentDocument, 
-        MpAvIDropHost,
         IStyleable {
         #region Private Variables
 
@@ -82,32 +81,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIDropHost Implementation
 
-        bool MpAvIDropHost.IsDropValid(IDataObject avdo) {
-            throw new System.NotImplementedException();
-        }
-
-        void MpAvIDropHost.DragEnter() {
-            throw new System.NotImplementedException();
-        }
-
-        void MpAvIDropHost.DragOver(MpPoint host_mp, IDataObject avdo, DragDropEffects dragEffects) {
-            throw new System.NotImplementedException();
-        }
-
-        void MpAvIDropHost.DragLeave() {
-            throw new System.NotImplementedException();
-        }
-
-        Task<DragDropEffects> MpAvIDropHost.DropDataObjectAsync(IDataObject avdo, DragDropEffects dragEffects) {
-            throw new System.NotImplementedException();
-        }
+       
 
         #endregion
 
         #region MpAvIContentView Implementation
         public IControl Owner => this;
         public MpAvIContentDocument Document => this;
-
+        bool MpAvIContentView.CanDrag => true;
         #endregion
 
         #region MpAvIContentDocument Implementation
@@ -188,9 +169,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        protected override void OnDataContextChanged(EventArgs e) {
-            base.OnDataContextChanged(e);
-        }
         #endregion
 
         #region Private Methods
