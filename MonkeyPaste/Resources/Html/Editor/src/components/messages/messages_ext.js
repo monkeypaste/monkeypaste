@@ -7,27 +7,23 @@ function checkIsEditorLoaded_ext() {
 }
 
 function init_ext(initMsgStr_base64) {
+	// input 'MpQuillLoadResponseMessage'
+
 	log("init request: " + initMsgStr_base64);
-	let initMsg = null;
+	let initMsgObj = toJsonObjFromBase64Str(initMsgStr_base64);
 
+	if (initMsgObj && initMsgObj.isEditorPlainHtmlConverter) {
+		initPlainHtmlConverter();
+		log('plainHtml converter initialized.');
+		return;
+	} 
 
-	if (typeof initMsgStr_base64 === 'string' || initMsgStr_base64 instanceof String) {
-		//if (hasJsonStructure(initMsgStr)) {
+	init(initMsgObj);
 
-		//}
-		let initMsgStr = atob(initMsgStr_base64);
-		initMsg = JSON.parse(initMsgStr);
-	} else {
-		log('init_ext error initMsgStr: ' + initMsgStr_base64);
-	}
-
-	init(initMsg);
-
-	if (initMsg.isReadOnlyEnabled) {
+	if (initMsgObj.isReadOnlyEnabled) {
 		enableReadOnly();
 	}
-
-	// init response is serialized 'MpQuillLoadResponseMessage'
+	
 	let initResponseMsg = {
 		contentWidth: getContentWidth(),
 		contentHeight: getContentHeight(),
@@ -38,6 +34,23 @@ function init_ext(initMsgStr_base64) {
 	log(initResponseMsgStr);
 
 	return initResponseMsgStr;
+}
+
+function convertPlainHtml_ext(convertPlainHtmlReqMsgBase64Str) {
+	// input is MpQuillConvertPlainHtmlToQuillHtmlRequestMessage
+
+	let convertPlainHtmlReqMsgObj = toJsonObjFromBase64Str(convertPlainHtmlReqMsgBase64Str);
+	if (!convertPlainHtmlReqMsgObj || !convertPlainHtmlReqMsgObj.plainHtml) {
+		return;
+	}
+	let qhtml = convertPlainHtml(convertPlainHtmlReqMsgObj.plainHtml);
+
+	// output MpQuillConvertPlainHtmlToQuillHtmlResponseMessage
+	let convertPlainHtmlRespMsg = {
+		quillHtml: qhtml
+	};
+	let convertPlainHtmlRespMsgBase64Str = toBase64FromJsonObj(convertPlainHtmlRespMsg);
+	return convertPlainHtmlRespMsgBase64Str;
 }
 
 function getDocIdxFromPoint_ext(editorPointMsgStr) {

@@ -17,6 +17,8 @@ using MonkeyPaste.Common.Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using MonkeyPaste.Common.Avalonia.Utils.Extensions;
+using KeyEventArgs = Avalonia.Input.KeyEventArgs;
+using Key = Avalonia.Input.Key;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvShortcutCollectionViewModel : 
@@ -782,17 +784,19 @@ namespace MonkeyPaste.Avalonia {
                 GlobalIsMouseLeftButtonDown = false;
 
                 if(OperatingSystem.IsWindows()) {
-                    if (MpAvDragDropManager.IsDragAndDrop) {
-                        Dispatcher.UIThread.Post(async () => {
-                            var handle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle;
-                            WinApi.SetForegroundWindow(handle);
-                            WinApi.SetActiveWindow(handle);
+                    if (MpAvDragExtension.CurrentDragHost != null) {
+                        // (I think...) This is supposed to capture pointer release before a drop w/ templates? Not sure though...
 
-                            while (true) {
-                                await Task.Delay(100);
-                            }
-                            //MessageBox.Show("Mouse up");
-                        });
+                        //Dispatcher.UIThread.Post(async () => {
+                        //    var handle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle;
+                        //    WinApi.SetForegroundWindow(handle);
+                        //    WinApi.SetActiveWindow(handle);
+
+                        //    while (true) {
+                        //        await Task.Delay(100);
+                        //    }
+                        //    //MessageBox.Show("Mouse up");
+                        //});
                     }
                 }
 
@@ -905,7 +909,7 @@ namespace MonkeyPaste.Avalonia {
                 GlobalIsCtrlDown = true;
             }
             if (keyStr.IsEscape()) {
-                if (MpAvDragDropManager.IsDragAndDrop) {
+                if (MpAvDragExtension.CurrentDragHost != null) {
                     //_keyboardGestureHelper.Reset();
                     //e.SuppressKeyPress = true;
                     OnGlobalEscKeyPressed?.Invoke(this, EventArgs.Empty);

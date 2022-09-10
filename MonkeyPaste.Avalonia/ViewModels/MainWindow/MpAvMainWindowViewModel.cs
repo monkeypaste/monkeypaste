@@ -393,7 +393,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Events
 
-        public event EventHandler? OnMainWindowOpened;
+        //public event EventHandler? OnMainWindowOpened;
 
         public event EventHandler? OnMainWindowClosed;
         #endregion
@@ -625,13 +625,8 @@ namespace MonkeyPaste.Avalonia {
                         IsMainWindowOpen = true;
 
                         OnPropertyChanged(nameof(ExternalRect));
-                        OnMainWindowOpened?.Invoke(this, EventArgs.Empty);
-
-                        if(MpAvClipTrayViewModel.Instance.SelectedItem == null) {
-                            MpAvClipTrayViewModel.Instance.ResetClipSelection(false);
-                        }
-
-                        //MpAvClipTrayViewModel.Instance.AddNewItemsCommand.Execute(null);
+                        //OnMainWindowOpened?.Invoke(this, EventArgs.Empty);
+                        MpMessenger.SendGlobal(MpMessageType.MainWindowOpened);
                     } else {
                         if (IsMainWindowClosing) {
                             timer.Stop();
@@ -742,6 +737,7 @@ namespace MonkeyPaste.Avalonia {
                         OnPropertyChanged(nameof(ExternalRect));
 
                         OnMainWindowClosed?.Invoke(this, EventArgs.Empty);
+                        MpMessenger.SendGlobal(MpMessageType.MainWindowHid);
                     } else {
                         if (IsMainWindowOpening) {
                             timer.Stop();
@@ -763,7 +759,7 @@ namespace MonkeyPaste.Avalonia {
                          (IsMainWindowOpen || IsMainWindowOpening) &&
                           !IsAnyDropDownOpen &&
                           !IsShowingDialog &&
-                          !MpAvDragDropManager.IsDragAndDrop &&
+                          MpAvDragExtension.CurrentDragHost == null &&
                           //!MpContextMenuView.Instance.IsOpen &&
                           !IsResizing &&
                           !IsMainWindowClosing;

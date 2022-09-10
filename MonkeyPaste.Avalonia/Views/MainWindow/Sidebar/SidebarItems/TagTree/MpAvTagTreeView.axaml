@@ -13,6 +13,7 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvTagTreeView">
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
+          Background="{Binding TagTreeBgOctColor, Converter={StaticResource StringHexToBrushConverter}}"
           local:MpAvSizeObserverExtension.IsEnabled="True"
           local:MpAvSizeObserverExtension.ObservedWidth="{Binding SidebarWidth, Mode=OneWayToSource}"
           local:MpAvSizeObserverExtension.ObservedHeight="{Binding SidebarHeight, Mode=OneWayToSource}">

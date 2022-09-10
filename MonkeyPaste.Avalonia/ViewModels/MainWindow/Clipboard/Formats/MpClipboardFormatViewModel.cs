@@ -7,11 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using MonkeyPaste;
+
 using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpClipboardFormatViewModel : 
-        MpAvSelectorViewModelBase<MpClipboardHandlerCollectionViewModel,MpClipboardHandlerItemViewModel>,
+        MpAvSelectorViewModelBase<MpAvClipboardHandlerCollectionViewModel,MpClipboardHandlerItemViewModel>,
         MpITreeItemViewModel,
         MpISelectableViewModel {
 
@@ -135,7 +136,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpClipboardFormatViewModel() : base(null) { }
 
-        public MpClipboardFormatViewModel(MpClipboardHandlerCollectionViewModel parent, string format) : base(parent) {
+        public MpClipboardFormatViewModel(MpAvClipboardHandlerCollectionViewModel parent, string format) : base(parent) {
             PropertyChanged += MpClipboardFormatViewModel_PropertyChanged;
             Format = MpPortableDataFormats.GetDataFormat(format);
         }

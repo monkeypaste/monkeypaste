@@ -9,6 +9,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls;
 using MonkeyPaste.Common;
 using Avalonia.Threading;
+using Application = Avalonia.Application;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSystemTrayViewModel : MpViewModelBase, MpIAsyncSingletonViewModel<MpAvSystemTrayViewModel> {

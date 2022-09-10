@@ -10,12 +10,14 @@ using System.Windows.Input;
 
 
 using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; 
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
 using System.Diagnostics;
 using FFImageLoading.Forms.Handlers;
 
 
 using System.IO;
+
 
 namespace MonkeyPaste.Avalonia {
     public class MpHandledClipboardFormatViewModel :
@@ -600,7 +602,7 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(SelectedItem));
 
                 if(wasEnabled) {
-                    MpClipboardHandlerCollectionViewModel.Instance.ToggleFormatPresetIsEnabled.Execute(defvm);
+                    MpAvClipboardHandlerCollectionViewModel.Instance.ToggleFormatPresetIsEnabled.Execute(defvm);
                 }
 
                 IsBusy = false;

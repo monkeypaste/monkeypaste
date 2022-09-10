@@ -16,6 +16,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
+using KeyGesture = Avalonia.Input.KeyGesture;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvMenuExtension {

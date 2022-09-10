@@ -31,7 +31,7 @@ namespace MpWpfApp {
 
         #region MpIJsonObject Implementation
 
-        string MpIJsonObject.Serialize() {
+        string MpIJsonObject.SerializeJsonObject() {
             return MpJsonObject.SerializeObject(this);
         }
         #endregion

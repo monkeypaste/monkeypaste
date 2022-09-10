@@ -12,14 +12,13 @@ namespace MonkeyPaste {
 
         public bool isPasteRequest { get; set; } = false; //request should ONLY happen if encoded w/ templates
 
-        public bool isConvertPlainHtmlRequest { get; set; }
+        public bool isEditorPlainHtmlConverter { get; set; }
         public bool isReadOnlyEnabled { get; set; } = true;
 
         public string itemEncodedHtmlData { get; set; }
 
         public List<MpTextTemplate> usedTextTemplates { get; set; }
     }
-
 
     public class MpQuillLoadResponseMessage : MpJsonObject {
         public double contentWidth { get; set; }
@@ -68,13 +67,18 @@ templateType: "dynamic"
         public string templateType { get; set; }
     }
 
-
     public class MpQuillContentRangeMessage : MpJsonObject {
         public int index { get; set; }
         public int length { get; set; }
     }
 
-    
+    public class MpQuillConvertPlainHtmlToQuillHtmlRequestMessage : MpJsonObject {
+        public string plainHtml { get; set; }
+    }
+
+    public class MpQuillConvertPlainHtmlToQuillHtmlResponseMessage : MpJsonObject {
+        public string quillHtml { get; set; }
+    }
 
     public class MpQuillContentSetTextRangeMessage : MpJsonObject {
         public int index { get; set; }

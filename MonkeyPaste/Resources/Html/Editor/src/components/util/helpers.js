@@ -2,7 +2,7 @@
 
 //#region DOM Traversal
 
-function toBase64(obj) {
+function toBase64FromJsonObj(obj) {
     let objStr = null
     if (typeof obj === 'string' || obj instanceof String) {
         objStr = obj;
@@ -13,10 +13,13 @@ function toBase64(obj) {
     return base64;
 }
 
-function toJsonObj(base64Str) {
-    let jsonStr = atob(base64Str);
-    let jsonObj = JSON.parse(jsonStr);
-    return jsonObj;
+function toJsonObjFromBase64Str(base64Str) {
+    if (typeof base64Str === 'string' || base64Str instanceof String) {
+        let jsonStr = atob(base64Str);
+        let jsonObj = JSON.parse(jsonStr);
+        return jsonObj;
+    }
+    return null;
 }
 
 function changeInnerText(elm, text, newText) {

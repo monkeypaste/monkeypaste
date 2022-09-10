@@ -45,21 +45,21 @@ namespace MonkeyPaste.Avalonia {
                         itemData = mpdo.GetData(MpPortableDataFormats.Rtf).ToString().EscapeExtraOfficeRtfFormatting();
                     } else {
                         string csvStr = mpdo.GetData(MpPortableDataFormats.Csv).ToString();
-                        itemData = csvStr.ToRichText();
-                        //itemData = itemData.ToQuillText();
+                        //itemData = csvStr.ToRichText();
+                        itemData = itemData.ToQuillText();
                     }
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Rtf)) {
                     itemType = MpCopyItemType.Text;
                     itemData = mpdo.GetData(MpPortableDataFormats.Rtf).ToString().EscapeExtraOfficeRtfFormatting();
-                    //itemData = itemData.ToQuillText();
+                    itemData = itemData.ToQuillText();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Bitmap)) {
                     itemType = MpCopyItemType.Image;
                     itemData = mpdo.GetData(MpPortableDataFormats.Bitmap).ToString();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Html)) {
                     itemType = MpCopyItemType.Text;
                     string rawHtmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
-                    htmlClipboardData = await MpHtmlClipboardDataConverter.Parse(rawHtmlData);
-                    itemData = htmlClipboardData.Rtf;
+                    htmlClipboardData = await MpHtmlClipboardDataConverter.ParseAsync(rawHtmlData);
+                    itemData = htmlClipboardData.Html;
                     //itemData = itemData.ToQuillText();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Text)) {
                     itemType = MpCopyItemType.Text;

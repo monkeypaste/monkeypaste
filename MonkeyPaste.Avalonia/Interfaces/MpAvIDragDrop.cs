@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public interface MpAvIDragDataHost {
+    public interface MpAvIDragHost {
         bool IsDragValid(MpPoint host_mp);
         Task<IDataObject> GetDragDataObjectAsync();
         void DragBegin();

@@ -8,16 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
 using Avalonia.Input;
 
 namespace MonkeyPaste.Avalonia {
 
-    public class MpClipboardHandlerCollectionViewModel : 
-        MpAvSelectorViewModelBase<object,MpClipboardHandlerItemViewModel>,
+    public class MpAvClipboardHandlerCollectionViewModel :
+        MpAvSelectorViewModelBase<object, MpClipboardHandlerItemViewModel>,
         MpIMenuItemViewModel,
-        MpIAsyncSingletonViewModel<MpClipboardHandlerCollectionViewModel>, 
+        MpIAsyncSingletonViewModel<MpAvClipboardHandlerCollectionViewModel>,
         MpITreeItemViewModel,
         MpISidebarItemViewModel,
         MpIClipboardFormatDataHandlers { //
@@ -41,17 +41,17 @@ namespace MonkeyPaste.Avalonia {
 
         public List<MpClipboardFormatPresetViewModel> AllPresets {
             get {
-                return Items.SelectMany(x => x.Items.SelectMany(y=>y.Items)).ToList();
+                return Items.SelectMany(x => x.Items.SelectMany(y => y.Items)).ToList();
             }
         }
 
         public MpClipboardFormatPresetViewModel SelectedPresetViewModel {
             get {
-                if(SelectedItem == null) {
+                if (SelectedItem == null) {
                     return null;
                 }
-                if(SelectedItem.SelectedItem == null) {
-                    if(SelectedItem.Items.Count > 0) {
+                if (SelectedItem.SelectedItem == null) {
+                    if (SelectedItem.Items.Count > 0) {
                         SelectedItem.Items[0].IsSelected = true;
                     } else {
                         return null;
@@ -91,10 +91,10 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<MpClipboardFormatPresetViewModel> EnabledFormats {
             get {
-                foreach(var i in Items) {
-                    foreach(var j in i.Items) {
-                        foreach(var k in j.Items) {
-                            if(k.IsEnabled) {
+                foreach (var i in Items) {
+                    foreach (var j in i.Items) {
+                        foreach (var k in j.Items) {
+                            if (k.IsEnabled) {
                                 yield return k;
                             }
                         }
@@ -102,7 +102,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-            
+
 
         //public Dictionary<string, MpClipboardFormatPresetViewModel> EnabledReaderLookup =>
         //    Enab
@@ -165,11 +165,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        private static MpClipboardHandlerCollectionViewModel _instance;
-        public static MpClipboardHandlerCollectionViewModel Instance => _instance ?? (_instance = new MpClipboardHandlerCollectionViewModel());
+        private static MpAvClipboardHandlerCollectionViewModel _instance;
+        public static MpAvClipboardHandlerCollectionViewModel Instance => _instance ?? (_instance = new MpAvClipboardHandlerCollectionViewModel());
 
 
-        public MpClipboardHandlerCollectionViewModel() : base(null) {
+        public MpAvClipboardHandlerCollectionViewModel() : base(null) {
             PropertyChanged += MpClipboardHandlerCollectionViewModel_PropertyChanged;
         }
 
@@ -186,26 +186,26 @@ namespace MonkeyPaste.Avalonia {
             Items.Clear();
 
             var pail = MpPluginLoader.Plugins.Where(x => x.Value.Component is MpIClipboardPluginComponent);
-            foreach(var pai in pail) {
+            foreach (var pai in pail) {
                 var paivm = await CreateClipboardHandlerItemViewModelAsync(pai.Value);
                 Items.Add(paivm);
             }
 
-            while(Items.Any(x=>x.IsBusy)) {
+            while (Items.Any(x => x.IsBusy)) {
                 await Task.Delay(100);
             }
 
             OnPropertyChanged(nameof(Items));
-            
+
             if (Items.Count > 0) {
                 // select most recent preset and init default handlers
                 MpClipboardFormatPresetViewModel presetToSelect = null;
-                foreach(var chivm in Items) {
-                    foreach(var hivm in chivm.Items) {                        
-                        foreach(var hipvm in hivm.Items) {
-                            if(presetToSelect == null) {
+                foreach (var chivm in Items) {
+                    foreach (var hivm in chivm.Items) {
+                        foreach (var hipvm in hivm.Items) {
+                            if (presetToSelect == null) {
                                 presetToSelect = hipvm;
-                            } else if(hipvm.LastSelectedDateTime > presetToSelect.LastSelectedDateTime) {
+                            } else if (hipvm.LastSelectedDateTime > presetToSelect.LastSelectedDateTime) {
                                 presetToSelect = hipvm;
                             }
 
@@ -219,31 +219,31 @@ namespace MonkeyPaste.Avalonia {
                             //    if(hipvm.CanWrite) {
                             //        ToggleFormatPresetIsWriteEnabledCommand.Execute(hipvm);
                             //    }
-                                //bool replace = true;
-                                //if (EnabledFormatHandlerLookup.TryGetValue(hipvm.Parent.HandledFormat, out var curPreset)) {
-                                    
-                                //    string errorMsg = $"Warning clipboard format handler conflict for {curPreset.FullName} and {hipvm.FullName}";
-                                //    // two handled formats are marked as default so check which was last selected and use that one if none override previous
-                                //    if(curPreset.LastSelectedDateTime > hipvm.LastSelectedDateTime) {
-                                //        replace = false;
-                                //        errorMsg += $" {curPreset} is more recent so ignoring {hipvm}";
-                                //    } else if(curPreset.LastSelectedDateTime == hipvm.LastSelectedDateTime) {
-                                //        errorMsg += $" have same date time {hipvm.LastSelectedDateTime} so using {hipvm}";
-                                //    } else {
-                                //        errorMsg += $" {hipvm} is more recent so ignoring {curPreset}";
-                                //    }
-                                //    MpConsole.WriteTraceLine(errorMsg);
-                                //    if(!replace) {
-                                //        continue;
-                                //    }
-                                //}
-                                //EnabledFormatHandlerLookup.AddOrReplace(hipvm.Parent.HandledFormat, hipvm);
-                           //
+                            //bool replace = true;
+                            //if (EnabledFormatHandlerLookup.TryGetValue(hipvm.Parent.HandledFormat, out var curPreset)) {
+
+                            //    string errorMsg = $"Warning clipboard format handler conflict for {curPreset.FullName} and {hipvm.FullName}";
+                            //    // two handled formats are marked as default so check which was last selected and use that one if none override previous
+                            //    if(curPreset.LastSelectedDateTime > hipvm.LastSelectedDateTime) {
+                            //        replace = false;
+                            //        errorMsg += $" {curPreset} is more recent so ignoring {hipvm}";
+                            //    } else if(curPreset.LastSelectedDateTime == hipvm.LastSelectedDateTime) {
+                            //        errorMsg += $" have same date time {hipvm.LastSelectedDateTime} so using {hipvm}";
+                            //    } else {
+                            //        errorMsg += $" {hipvm} is more recent so ignoring {curPreset}";
+                            //    }
+                            //    MpConsole.WriteTraceLine(errorMsg);
+                            //    if(!replace) {
+                            //        continue;
+                            //    }
+                            //}
+                            //EnabledFormatHandlerLookup.AddOrReplace(hipvm.Parent.HandledFormat, hipvm);
+                            //
                         }
                     }
-                }                
+                }
 
-                if(presetToSelect != null) {
+                if (presetToSelect != null) {
                     presetToSelect.Parent.SelectedItem = presetToSelect;
                     presetToSelect.Parent.Parent.SelectedItem = presetToSelect.Parent;
                     SelectedItem = presetToSelect.Parent.Parent;
@@ -262,15 +262,15 @@ namespace MonkeyPaste.Avalonia {
             var ndo = new MpPortableDataObject();
 
             //only iterate through actual handlers 
-            var handlers = EnabledFormats.Where(x=>x.CanRead)
+            var handlers = EnabledFormats.Where(x => x.CanRead)
                                          .Select(x => x.Parent.ClipboardPluginComponent)
                                          .Distinct().Cast<MpIClipboardReaderComponent>();
-            
+
             foreach (var handler in handlers) {
 
                 var req = new MpClipboardReaderRequest() {
                     readFormats = EnabledFormats.Where(x => x.Parent.ClipboardPluginComponent == handler).Select(x => x.Parent.HandledFormat).Distinct().ToList(),
-                    items = EnabledFormats.Where(x => x.Parent.ClipboardPluginComponent == handler).SelectMany(x=>x.Items.Cast<MpIParameterKeyValuePair>()).ToList(),
+                    items = EnabledFormats.Where(x => x.Parent.ClipboardPluginComponent == handler).SelectMany(x => x.Items.Cast<MpIParameterKeyValuePair>()).ToList(),
                     //readFormats = EnabledReaderLookup
                     //                .Where(x => x.Value.Parent.ClipboardPluginComponent == handler)
                     //                .Select(x => x.Key).Distinct().ToList(),
@@ -301,7 +301,7 @@ namespace MonkeyPaste.Avalonia {
                                          .Select(x => x.Parent.ClipboardPluginComponent).Distinct().Cast<MpIClipboardReaderComponent>();
             foreach (var format in MpPortableDataFormats.RegisteredFormats) {
                 var handler = EnabledFormats.FirstOrDefault(x => x.CanWrite && x.Parent.HandledFormat == format);
-                if(handler == null) {
+                if (handler == null) {
                     continue;
                 }
                 var writeRequest = new MpClipboardWriterRequest() {
@@ -328,7 +328,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-        
+
         private async Task<MpClipboardHandlerItemViewModel> CreateClipboardHandlerItemViewModelAsync(MpPluginFormat plugin) {
             MpClipboardHandlerItemViewModel aivm = new MpClipboardHandlerItemViewModel(this);
             await aivm.InitializeAsync(plugin);
@@ -338,7 +338,7 @@ namespace MonkeyPaste.Avalonia {
         private void ReceivedDragDropManagerMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.ExternalDragBegin:
-                    if(SelectedItem == null) {
+                    if (SelectedItem == null) {
                         Debugger.Break();
                     }
                     SelectedItem.IsDraggingToExternal = true;
@@ -357,7 +357,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsHovering):
                 case nameof(IsAnySelected):
                     break;
-                case nameof(IsSidebarVisible):                    
+                case nameof(IsSidebarVisible):
                     MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.ClipTrayScreenHeight));
                     if (IsSidebarVisible) {
                         MpAvTagTrayViewModel.Instance.IsSidebarVisible = false;
@@ -371,7 +371,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(Children));
                     break;
                 case nameof(SelectedPresetViewModel):
-                    if(SelectedPresetViewModel == null) {
+                    if (SelectedPresetViewModel == null) {
                         return;
                     }
                     //CollectionViewSource.GetDefaultView(SelectedPresetViewModel.Items).Refresh();
@@ -389,10 +389,10 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ToggleFormatPresetIsEnabled => new MpCommand<object>(
             (presetVmArg) => {
-                if(presetVmArg is MpClipboardFormatPresetViewModel cfpvm) {
-                    if(cfpvm.CanRead) {
+                if (presetVmArg is MpClipboardFormatPresetViewModel cfpvm) {
+                    if (cfpvm.CanRead) {
                         ToggleFormatPresetIsReadEnabledCommand.Execute(cfpvm);
-                    }else if (cfpvm.CanWrite) {
+                    } else if (cfpvm.CanWrite) {
                         ToggleFormatPresetIsWriteEnabledCommand.Execute(cfpvm);
                     } else {
                         Debugger.Break();
@@ -407,10 +407,10 @@ namespace MonkeyPaste.Avalonia {
                 }
                 var handlerVm = presetVm.Parent;
 
-                if(presetVm.IsEnabled) {
+                if (presetVm.IsEnabled) {
                     //when toggled on, untoggle any other preset handling same format
-                    var otherEnabled = EnabledFormats.Where(x=>x.CanRead).FirstOrDefault(x => x.Parent.HandledFormat == presetVm.Parent.HandledFormat && x.PresetId != presetVm.PresetId);
-                    if(otherEnabled == null) {
+                    var otherEnabled = EnabledFormats.Where(x => x.CanRead).FirstOrDefault(x => x.Parent.HandledFormat == presetVm.Parent.HandledFormat && x.PresetId != presetVm.PresetId);
+                    if (otherEnabled == null) {
                         //no other preset was enabled so nothing to replace
                         return;
                     }
@@ -466,18 +466,18 @@ namespace MonkeyPaste.Avalonia {
         public ICommand UnregisterClipboardFormatCommand => new MpCommand<object>(
             (args) => {
                 return;
-                if (args is Object[] argParts &&
+                if (args is object[] argParts &&
                    argParts.Length == 3 &&
                    argParts[0] is string format &&
                    argParts[2] is bool isReadUnregister &&
                    argParts[1] is bool isWriteUnregister) {
 
                     bool canUnregister = false;
-                    if(isReadUnregister && isWriteUnregister) {
+                    if (isReadUnregister && isWriteUnregister) {
                         // when both read and write are unregistered (i don't know when this would happen)
                         // it doesn't matter if format is known anymore so just unregister
                         canUnregister = true;
-                    } else if(isReadUnregister && EnabledFormats.Any(x=>x.CanWrite && x.Parent.HandledFormat == format)) {
+                    } else if (isReadUnregister && EnabledFormats.Any(x => x.CanWrite && x.Parent.HandledFormat == format)) {
                         MpConsole.WriteTraceLine($"Note! Attempting to unregister '{format}' because read unregistered but a writer uses it so ignoring");
                     } else if (isWriteUnregister && EnabledFormats.Any(x => x.CanRead && x.Parent.HandledFormat == format)) {
                         MpConsole.WriteTraceLine($"Note! Attempting to unregister '{format}' because writer unregistered but a reader uses it so ignoring");

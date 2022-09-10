@@ -76,7 +76,7 @@ namespace MonkeyPaste.Avalonia {
                     ProcessEnableReadOnlyResponse(wv, enableReadOnlyResp);
                 } else {
                     MpQuillDisableReadOnlyRequestMessage drorMsg = CreateDisableReadOnlyMessage(wv);
-                    string disableReadOnlyResp = await wv.EvaluateJavascriptAsync($"disableReadOnly_ext('{drorMsg.Serialize()}')");
+                    string disableReadOnlyResp = await wv.EvaluateJavascriptAsync($"disableReadOnly_ext('{drorMsg.SerializeJsonObject()}')");
                     ProcessDisableReadOnlyResponse(wv, disableReadOnlyResp);
                 }
             }                  
@@ -165,10 +165,11 @@ namespace MonkeyPaste.Avalonia {
                 false);
 
         private static void HandleHtmlDataChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
-            if (e.NewValue is string htmlDataStr &&
+            if (e.NewValue is string &&//htmlDataStr &&
                 element is MpAvCefNetWebView wv &&
                 wv.IsEditorInitialized) {
-                wv.ExecuteJavascript($"setHtml('{htmlDataStr}')");
+                // editor will know its loaded by IsLoaded and just set new html
+                LoadContentAsync(wv).FireAndForgetSafeAsync(null);
             }
         }
 
@@ -332,23 +333,13 @@ namespace MonkeyPaste.Avalonia {
                 ctvm.IsBusy = true;
 
                 var lrm = await CreateLoadRequestMessageAsync(wv);
-                var loadReqJsonStr = lrm.SerializeToByteString();
-                //string loadResponseMsgStr = null;
-                //while (loadResponseMsgStr == null) {
-                //    string resp = await wv.EvaluateJavascriptAsync($"init_ext('{loadReqJsonStr}')");
-                //    if (resp == MpAvCefNetApplication.JS_REF_ERROR || resp == null) {
-                //        await Task.Delay(100);
-                //        continue;
-                //    }
-                //    loadResponseMsgStr = resp;
-                //}
+                var loadReqJsonStr = lrm.SerializeJsonObjectToBase64();
                 string loadResponseMsgStr = await wv.EvaluateJavascriptAsync($"init_ext('{loadReqJsonStr}')");
-
                 MpQuillLoadResponseMessage loadResponseMsg = MpJsonObject.DeserializeObject<MpQuillLoadResponseMessage>(loadResponseMsgStr);
 
                 ctvm.UnformattedContentSize = new Size(loadResponseMsg.contentWidth, loadResponseMsg.contentHeight);
-
                 wv.IsEditorInitialized = true;
+
                 ctvm.IsBusy = false;
 
                 MpConsole.WriteLine($"Tile Content Item '{ctvm.CopyItemTitle}' is loaded");

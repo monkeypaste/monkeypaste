@@ -25,21 +25,59 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+
+        #region Constructors
+
         static MpAvDragExtension() {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
         }
 
+        #endregion
+
+        #region Properties
+
+        private static MpAvIDragHost _currentDragHost;
+        public static MpAvIDragHost CurrentDragHost {
+            get => _currentDragHost;
+            set {
+                if(_currentDragHost != value) {
+                    var oldVal = _currentDragHost;
+                    _currentDragHost = value;
+
+                    bool is_drag_end = value == null;
+
+                    if(is_drag_end) {
+                        bool was_drag_source_internal = oldVal is Control dragHost && dragHost.DataContext is MpViewModelBase;
+                        if (was_drag_source_internal) {
+                            // when drag is complete and drag host was from external source
+                            MpMessenger.SendGlobal(MpMessageType.ItemDragEnd);
+                        } else {
+                            // TODO if necessary send ExternalDragEnd here
+                        }
+                    } else {
+                        // drag begin
+                        bool is_drag_source_internal = _currentDragHost is Control dragHost && dragHost.DataContext is MpViewModelBase;
+                        if(is_drag_source_internal) {
+                            MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
+                        } else {
+                            // TODO if necessary send External DragBegin here
+                        }
+                    }
+                }
+            }
+        }
+
         #region DragDataHost AvaloniaProperty
-        public static MpAvIDragDataHost GetDragDataHost(AvaloniaObject obj) {
+        public static MpAvIDragHost GetDragDataHost(AvaloniaObject obj) {
             return obj.GetValue(DragDataHostProperty);
         }
 
-        public static void SetDragDataHost(AvaloniaObject obj, MpAvIDragDataHost value) {
+        public static void SetDragDataHost(AvaloniaObject obj, MpAvIDragHost value) {
             obj.SetValue(DragDataHostProperty, value);
         }
 
-        public static readonly AttachedProperty<MpAvIDragDataHost> DragDataHostProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, MpAvIDragDataHost>(
+        public static readonly AttachedProperty<MpAvIDragHost> DragDataHostProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, MpAvIDragHost>(
                 "DragDataHost",
                 null,
                 false);
@@ -77,6 +115,8 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #endregion
+
         #region Control Event Handlers
 
         private static void EnabledControl_AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs e) {
@@ -105,6 +145,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Drag 
         private static void DragControl_PointerPressed(object sender, PointerPressedEventArgs e) {
+            if(CurrentDragHost != null) {
+                // this shouldn't happen
+                Debugger.Break();
+                _currentDragHost = null;
+                return;
+            }
+
             if (sender is Control dragControl) {
                 if(dragControl.DataContext is MpIResizableViewModel rvm &&
                     rvm.CanResize) {
@@ -121,7 +168,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             bool was_drag_started = false;
-            // 
+
             EventHandler<PointerReleasedEventArgs> dragControl_PointerReleased_Handler = null;
             EventHandler<PointerEventArgs> dragControl_PointerMoved_Handler = null;
 
@@ -132,14 +179,16 @@ namespace MonkeyPaste.Avalonia {
                 var drag_dist = dc_down_pos.Distance(dc_move_pos);
                 was_drag_started = drag_dist >= MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST;
                 if (was_drag_started) {
-                    // drag start
-                    //dc_down_pos = null;
+
+                    // DRAG START
+
                     dragControl.PointerMoved -= dragControl_PointerMoved_Handler;
 
                     Dispatcher.UIThread.Post(async () => {
                         DragDropEffects dragEffects = GetDragEffects(dragHost, dc_move_pos, e.KeyModifiers);
                         if (dragEffects != DragDropEffects.None) {
 
+                            _currentDragHost = dragHost;
                             dragHost.DragBegin();
 
                             var avdo = await dragHost.GetDragDataObjectAsync();
@@ -154,7 +203,6 @@ namespace MonkeyPaste.Avalonia {
                 }
             };
 
-
             // Drag Control PointerReleased Handler
             dragControl_PointerReleased_Handler = (s, e) => {
                 if (was_drag_started) {
@@ -162,11 +210,14 @@ namespace MonkeyPaste.Avalonia {
                     // release should be removed after drop
                     Debugger.Break();
                 }
+                
+                // DRAG END
+
                 dragControl.PointerMoved -= dragControl_PointerMoved_Handler;
                 dragControl.PointerReleased -= dragControl_PointerReleased_Handler;
                 MpConsole.WriteLine("DragCheck pointer released (was not drag)");
 
-                //dc_down_pos = null;
+                _currentDragHost = null;
                 dragHost.DragEnd();
 
             };
@@ -175,7 +226,7 @@ namespace MonkeyPaste.Avalonia {
             dragControl.PointerMoved += dragControl_PointerMoved_Handler;
         }
 
-        private static DragDropEffects GetDragEffects(MpAvIDragDataHost dragDataHost, MpPoint drag_host_mp, KeyModifiers keyModifiers) {
+        private static DragDropEffects GetDragEffects(MpAvIDragHost dragDataHost, MpPoint drag_host_mp, KeyModifiers keyModifiers) {
             if (dragDataHost == null) {
                 return DragDropEffects.None;
             }

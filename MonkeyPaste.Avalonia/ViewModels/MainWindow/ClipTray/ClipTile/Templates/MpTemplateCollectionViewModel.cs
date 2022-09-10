@@ -274,7 +274,7 @@ namespace MonkeyPaste.Avalonia {
                     string initialFormat = string.Empty;
                     var selectionFormat = Parent.SelectedRichTextFormat;
                     if(selectionFormat != null && selectionFormat.inlineFormat != null) {
-                        initialFormat = selectionFormat.Serialize();
+                        initialFormat = selectionFormat.SerializeJsonObject();
                     }
                     var cit = await MpTextTemplate.CreateAsync(
                         templateName: templateName,

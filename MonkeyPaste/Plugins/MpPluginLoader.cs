@@ -26,7 +26,6 @@ namespace MonkeyPaste {
 
         #endregion
 
-
         #region Properties
 
         //#region INotifyDataErrorInfo Implementation

@@ -8,7 +8,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
-using System.Windows;
 using System.Windows.Input;
 using Avalonia.Controls;
 using Avalonia.Media;

@@ -510,7 +510,7 @@ namespace MonkeyPaste {
 
 
         #region MpIJsonObject Implementation
-        public string Serialize() {
+        public string SerializeJsonObject() {
             return MpJsonObject.SerializeObject(this);
         }
 
@@ -565,7 +565,7 @@ namespace MonkeyPaste {
 
                     var sw = Stopwatch.StartNew();
 
-                    string prefStr = Serialize();
+                    string prefStr = SerializeJsonObject();
 
                     if (UseEncryption) {
                         prefStr = MpEncryption.SimpleEncryptWithPassword(prefStr, "testtesttest");

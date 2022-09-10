@@ -62,7 +62,6 @@ namespace MonkeyPaste.Common {
         
         #endregion
 
-
         public bool ContainsData(string format) {
             return GetData(format) != null;
         }

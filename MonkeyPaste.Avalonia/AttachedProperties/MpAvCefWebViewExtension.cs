@@ -53,7 +53,7 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                     var lrm = await CreateLoadRequestMessageAsync(wv);
-                    var loadReqJsonStr = lrm.Serialize();
+                    var loadReqJsonStr = lrm.SerializeJsonObject();
 
                     string loadResponseMsgStr = await wv.EvaluateScript<string>($"init_ext('{loadReqJsonStr}')");
                     MpQuillLoadResponseMessage loadResponseMsg = MpJsonObject.DeserializeObject<MpQuillLoadResponseMessage>(loadResponseMsgStr);
@@ -180,7 +180,7 @@ namespace MonkeyPaste.Avalonia {
                             ProcessEnableReadOnlyResponse(wv, enableReadOnlyResp);
                         } else {
                             MpQuillDisableReadOnlyRequestMessage drorMsg = CreateDisableReadOnlyMessage(wv);
-                            var disableReadOnlyResp = await wv.EvaluateScript<string>($"disableReadOnly('{drorMsg.Serialize()}')");
+                            var disableReadOnlyResp = await wv.EvaluateScript<string>($"disableReadOnly('{drorMsg.SerializeJsonObject()}')");
                             ProcessDisableReadOnlyResponse(wv, disableReadOnlyResp);
                         }
                     }

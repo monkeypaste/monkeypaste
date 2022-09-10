@@ -16,7 +16,7 @@ namespace MonkeyPaste {
         public MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat request) {
             Process process = new Process();
             process.StartInfo.FileName = Endpoint;
-            process.StartInfo.Arguments = request.SerializeToByteString();//Base64EncodeArgs(args.ToString());
+            process.StartInfo.Arguments = request.SerializeJsonObjectToBase64();//Base64EncodeArgs(args.ToString());
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;

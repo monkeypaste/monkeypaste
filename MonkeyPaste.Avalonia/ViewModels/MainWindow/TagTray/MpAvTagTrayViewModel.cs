@@ -153,6 +153,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
+        public string TagTreeBgOctColor => MpSystemColors.cyan1.AdjustAlpha(MpPrefViewModel.Instance.MainWindowOpacity);
         #endregion
 
         #region Business Logic
@@ -313,7 +314,7 @@ namespace MonkeyPaste.Avalonia {
                     if(IsSidebarVisible) {
                         MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = false;
                         MpActionCollectionViewModel.Instance.IsSidebarVisible = false;
-                        MpClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
+                        MpAvClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
                     }
                     MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel));
                     break;
@@ -335,11 +336,11 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(TagTrayScreenWidth));
                     OnPropertyChanged(nameof(TagTrayTotalWidth));
                     break;
-                case MpMessageType.MainWindowOpening:
+                //case MpMessageType.MainWindowOpened:
                     
-                    OnPropertyChanged(nameof(PinnedItems));
-                    OnPropertyChanged(nameof(TagTrayScreenWidth));
-                    break;
+                //    OnPropertyChanged(nameof(PinnedItems));
+                //    OnPropertyChanged(nameof(TagTrayScreenWidth));
+                //    break;
 
                 case MpMessageType.TraySelectionChanged:
                     HandleClipTraySelectionChangeAsync().FireAndForgetSafeAsync(this);

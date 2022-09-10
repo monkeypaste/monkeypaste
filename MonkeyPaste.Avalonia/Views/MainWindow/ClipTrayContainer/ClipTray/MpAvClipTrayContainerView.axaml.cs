@@ -41,6 +41,8 @@ namespace MonkeyPaste.Avalonia {
             var gs = sender as GridSplitter;
             if (gs.IsEnabled) {
                 //pin tray has items
+
+                //MpSize pinTraySize = this.FindControl<MpAvPinTrayView>("PinTrayView").Bounds.Size.ToPortableSize();
                 var ctrcg = this.FindControl<Grid>("ClipTrayContainerGrid");
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
                     GridLength pinColWidth = ctrcg.ColumnDefinitions[0].Width;
@@ -48,7 +50,8 @@ namespace MonkeyPaste.Avalonia {
                         //is default, collapsed so pop it out to show one item
                         pinColWidth = new GridLength(BindingContext.DefaultItemWidth, GridUnitType.Pixel);
                     } else {
-                        pinColWidth = new GridLength(gs.Bounds.Width, GridUnitType.Pixel);
+                        //pinColWidth = new GridLength(pinTraySize.Width, GridUnitType.Pixel);
+                        pinColWidth = new GridLength(gs.Width, GridUnitType.Pixel);
                     }
                     ctrcg.ColumnDefinitions[0].Width = pinColWidth;
                 } else {
@@ -57,7 +60,8 @@ namespace MonkeyPaste.Avalonia {
                         //is default, collapsed so pop it out to show one item
                         pinRowHeight = new GridLength(BindingContext.DefaultItemHeight, GridUnitType.Pixel);
                     } else {
-                        pinRowHeight = new GridLength(gs.Bounds.Height, GridUnitType.Pixel);
+                        //pinRowHeight = new GridLength(pinTraySize.Height, GridUnitType.Pixel);
+                        pinRowHeight = new GridLength(gs.Height, GridUnitType.Pixel);
                     }
                     ctrcg.RowDefinitions[0].Height = pinRowHeight;
                 }                

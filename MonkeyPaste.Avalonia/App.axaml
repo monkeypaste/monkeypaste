@@ -67,7 +67,7 @@
         <!--<StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml" />
         <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml" />-->
 
-        <StyleInclude Source="avares://MonkeyPaste.Avalonia/Styles/ProgressRing/ProgressRing.xaml" />
+        <!--<StyleInclude Source="avares://MonkeyPaste.Avalonia/Styles/ProgressRing/ProgressRing.xaml" />-->
         <Style Selector="TextBlock">
             <Setter Property="FontFamily"
                     Value="Helvetica" />

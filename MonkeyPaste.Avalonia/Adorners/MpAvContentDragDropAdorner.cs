@@ -23,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
 
         private Color _debugColor;
 
-        private MpAvIContentDropTargetAsync _dropBehavior;
+        //private MpAvIContentDropTargetAsync _dropBehavior;
 
         private MpShape[] _adornerShapes = new MpShape[] { };
 

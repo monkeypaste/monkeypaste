@@ -518,6 +518,14 @@ namespace MonkeyPaste.Avalonia {
 
         private static void PointerMouseWheelHandler(object? s, global::Avalonia.Input.PointerWheelEventArgs e) {
             if (s is ListBox lb) {
+                bool canScroll = GetCanScrollX(lb) || GetCanScrollY(lb);
+                if (!canScroll) {
+                    SetVelocityX(lb, 0);
+                    SetVelocityY(lb, 0);
+                    e.Handled = false;
+                    return;
+                }
+
                 e.Handled = true;
 
                 double scrollOffsetX = GetScrollOffsetX(lb);
@@ -640,8 +648,10 @@ namespace MonkeyPaste.Avalonia {
                     vm.IsBusy) {
                     return;
                 }
-
-                if (GetIsThumbDragging(lb)) {
+                bool isThumbDragging = GetIsThumbDragging(lb);
+                bool canScroll = GetCanScrollX(lb) || GetCanScrollY(lb);
+                bool is_scroll_frozen = isThumbDragging || !canScroll;
+                if (is_scroll_frozen) {
                     SetVelocityX(lb, 0);
                     SetVelocityY(lb, 0);
                     return;

@@ -121,12 +121,17 @@
                     <SolidColorBrush Color="Black"
                                      Opacity="0.2" />
                 </Border.Background>
-                <local:ProgressRing Width="50"
+                <!--<local:ProgressRing Width="50"
                                     Height="50"
                                     IsActive="True"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Foreground="Green" />
+                                    Foreground="Green" />-->
+                <Ellipse Fill="Transparent"
+                         Stroke="DimGray"
+                         StrokeThickness="10"
+                         Width="50"
+                         Height="50" />
             </Border>
 
             <!--  Trial Expired Overlay  -->

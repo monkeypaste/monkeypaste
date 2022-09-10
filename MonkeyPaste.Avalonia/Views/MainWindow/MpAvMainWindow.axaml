@@ -86,7 +86,7 @@
                         <Binding Path="IsSidebarVisible"
                                  Source="{x:Static local:MpAnalyticItemCollectionViewModel.Instance}" />
                         <Binding Path="IsSidebarVisible"
-                                 Source="{x:Static local:MpClipboardHandlerCollectionViewModel.Instance}" />
+                                 Source="{x:Static local:MpAvClipboardHandlerCollectionViewModel.Instance}" />
                         <Binding Path="IsSidebarVisible"
                                  Source="{x:Static local:MpActionCollectionViewModel.Instance}" />
                     </MultiBinding>

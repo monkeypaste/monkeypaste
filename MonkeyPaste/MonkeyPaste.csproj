@@ -91,9 +91,9 @@
     <None Remove="Resources\Html\Editor\package-lock.json" />
     <None Remove="Resources\Html\Editor\package.json" />
     <None Remove="Resources\Html\Editor\Quill_Formated_Text.html" />
-    <None Remove="Resources\Html\Editor\src\components\clipboard\clipboard.js" />
     <None Remove="Resources\Html\Editor\src\components\content\content.js" />
     <None Remove="Resources\Html\Editor\src\components\content\content_with_source_attributes.js" />
+    <None Remove="Resources\Html\Editor\src\components\converter\converter.js" />
     <None Remove="Resources\Html\Editor\src\components\dragdrop\dragdrop.js" />
     <None Remove="Resources\Html\Editor\src\components\editor\editor.js" />
     <None Remove="Resources\Html\Editor\src\components\editor\selection.js" />
@@ -158,6 +158,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\content\content.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\converter\converter.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\dragdrop\dragdrop.js">

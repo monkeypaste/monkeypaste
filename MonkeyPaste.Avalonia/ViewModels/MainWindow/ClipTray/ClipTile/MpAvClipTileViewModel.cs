@@ -2048,9 +2048,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if (MpAvDragDropManager.IsDragAndDrop) {
-                return;
-            }
+            //if (MpAvDragDropManager.IsDragAndDrop) {
+            //    return;
+            //}
             if (e is MpCopyItem ci && CopyItemId == ci.Id) {
 
             }
@@ -2063,26 +2063,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private void ReceivedDragDropManagerMessage(MpMessageType msg) {
-            switch (msg) {
-                case MpMessageType.ItemDragBegin:
-                    if (IsSelected) {
-                        IsItemDragging = true;
-                    }
-                    break;
-                case MpMessageType.ItemDragEnd:
-                    IsItemDragging = false;
-                    break;
-            }
-        }
-
-
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
             switch (e1.PropertyName) {
                 case nameof(IsAnyBusy):
                     if (Parent != null) {
                         Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
                     }
+                    break;
+                case nameof(IsHovering):
+                    Parent.OnPropertyChanged(nameof(Parent.CanScroll));
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyHovering));
                     break;
                 case nameof(IsBusy):
                     OnPropertyChanged(nameof(IsAnyBusy));
@@ -2149,6 +2139,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(TileContentHeight));
                     break;
                 case nameof(IsSubSelectionEnabled):
+                    Parent.OnPropertyChanged(nameof(Parent.CanScroll));
                     OnPropertyChanged(nameof(IsHorizontalScrollbarVisibile));
                     OnPropertyChanged(nameof(IsVerticalScrollbarVisibile));
                     break;
@@ -2227,9 +2218,6 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(TileBorderHexColor));
                     OnPropertyChanged(nameof(TileBorderBrushRect));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyTileDragging));
-                    break;
-                case nameof(IsHovering):
-                    Parent.OnPropertyChanged(nameof(Parent.IsAnyHovering));
                     break;
                 case nameof(HasModelChanged):
                     if (HasModelChanged) {

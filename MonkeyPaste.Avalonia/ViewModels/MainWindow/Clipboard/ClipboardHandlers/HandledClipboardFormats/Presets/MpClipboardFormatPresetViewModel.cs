@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; 
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
 using System.Diagnostics;
+
 
 namespace MonkeyPaste.Avalonia {
     public class MpClipboardFormatPresetViewModel : 
@@ -42,7 +44,7 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultSidebarWidth => 350;// MpMeasurements.Instance.DefaultAnalyzerPresetPanelWidth;
         public bool IsSidebarVisible { get; set; } = false;
         public MpISidebarItemViewModel NextSidebarItem => null;
-        public MpISidebarItemViewModel PreviousSidebarItem => MpClipboardHandlerCollectionViewModel.Instance;
+        public MpISidebarItemViewModel PreviousSidebarItem => MpAvClipboardHandlerCollectionViewModel.Instance;
 
         #endregion
 

@@ -11,7 +11,7 @@ function onEditorSelectionChanged_ntf(range) {
 		//selRects: selRangeRects
 	};
 
-	let base64Str = toBase64(selChangedObj);
+	let base64Str = toBase64FromJsonObj(selChangedObj);
 	if (typeof notifyEditorSelectionChanged === 'function') {
 		// is MpQuillContentSelectionChangedMessage
 		notifyEditorSelectionChanged(base64Str);

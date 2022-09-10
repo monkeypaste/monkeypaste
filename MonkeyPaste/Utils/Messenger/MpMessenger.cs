@@ -20,9 +20,9 @@ namespace MonkeyPaste {
         ResizingMainWindowComplete,
 
         //UnexpandComplete,
-        MainWindowOpening,
+        //MainWindowOpening,
         MainWindowOpened,
-        MainWindowHiding,
+        //MainWindowHiding,
         MainWindowHid,
 
         MainWindowActivated,

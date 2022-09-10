@@ -26,6 +26,19 @@ namespace MonkeyPaste.Common.Avalonia {
             return keyList;
         }
 
+        public static List<List<string>> ConvertStringToKeyLiteralSequence(string keyStr) {
+            var kseq = ConvertStringToKeySequence(keyStr);
+            var lseq = new List<List<string>>();
+            foreach(var kcombo in kseq) {
+                var lcombo = new List<string>();
+                foreach(var k in kcombo) {
+                    lcombo.Add(GetKeyLiteral(k));
+                }
+                lseq.Add(lcombo);
+            }
+            return lseq;
+        }
+
         public static string ConvertKeySequenceToString(List<List<Key>> keyList) {
             var outStr = string.Empty;
             foreach (var kl in keyList) {

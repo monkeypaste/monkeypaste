@@ -17,6 +17,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using KeyEventArgs = Avalonia.Input.KeyEventArgs;
+using Key = Avalonia.Input.Key;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvMarqueeTextBoxExtension {

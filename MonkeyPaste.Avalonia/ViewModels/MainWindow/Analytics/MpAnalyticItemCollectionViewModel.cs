@@ -13,7 +13,9 @@ using System.Windows.Input;
 using FFImageLoading.Helpers.Exif;
 
 using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; 
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
+
 
 namespace MonkeyPaste.Avalonia {
     public enum MpAnalyzerType {
@@ -216,7 +218,7 @@ namespace MonkeyPaste.Avalonia {
                     if (IsSidebarVisible) {
                         MpAvTagTrayViewModel.Instance.IsSidebarVisible = false;
                         MpActionCollectionViewModel.Instance.IsSidebarVisible = false;
-                        MpClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
+                        MpAvClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
                     }
                     OnPropertyChanged(nameof(SelectedItem));
                     MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel));

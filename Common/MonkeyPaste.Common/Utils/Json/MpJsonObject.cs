@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,12 +34,15 @@ namespace MonkeyPaste.Common {
             return JsonConvert.SerializeObject(obj);
         }
 
-        public string Serialize() {
+        public string SerializeJsonObject() {
             return JsonConvert.SerializeObject(this);
         }
 
-        public string SerializeToByteString() {
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(Serialize()));
+        public string SerializeJsonObjectToBase64() {
+            string jsonStr = SerializeJsonObject();
+            byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonStr);
+            string jsonBase64 = Convert.ToBase64String(jsonBytes);
+            return jsonBase64;
         }
 
         public object Deserialize(string jsonMsgStr) {
@@ -55,7 +59,7 @@ namespace MonkeyPaste.Common {
 
         public override string ToString() {
             
-            return Serialize();
+            return SerializeJsonObject();
         }
     }
 

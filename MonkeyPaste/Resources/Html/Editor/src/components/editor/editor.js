@@ -13,48 +13,7 @@ var IsSubSelectionEnabled = false;
 var EditorContainerElement = null;
 var QuillEditorElement = null;
 
-function initConverter() {
-	reqMsg = {
-		envName: 'wpf',
-		isReadOnlyEnabled: true,
-		usedTextTemplates: {},
-		isPasteRequest: false,
-		itemEncodedHtmlData: ''
-	}
 
-	EnvName = reqMsg.envName;
-
-	loadQuill(reqMsg);
-
-	document.getElementsByClassName("ql-toolbar")[0].classList.add("env-wpf");
-	disableReadOnly();
-	//hideEditorToolbar();
-	window.addEventListener(
-		"resize",
-		function (event) {
-			updateAllSizeAndPositions();
-		},
-		true
-	);
-
-	updateAllSizeAndPositions();
-
-	IsLoaded = true;
-	return "CONVERTER LOADED";
-}
-
-function convertPlainHtml(plainHtml) {
-	//log("Converting This Plain Html:");
-	//log(plainHtml);
-	//setHtml(plainHtml);
-	quill.deleteText(0, quill.getLength());
-	quill.clipboard.dangerouslyPasteHTML(plainHtml);
-	quill.update();
-	return getHtml();
-	//
-
-	//
-}
 
 function init_test() {
 	let sample1 = "<html><body><!--StartFragment--><p style='font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'>This article can be considered as the fourth instalment in the following sequence of articles:</p><p style='font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'>This article can be considered as the fourth instalment in the following sequence of articles:</p><p style='font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'>This article can be considered as the fourth instalment in the following sequence of articles:</p><ol style='margin: 10px 0px; padding: 0px 0px 0px 40px; border: 0px; color: rgb(17, 17, 17); font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'><li style='margin: 0px; padding: 0px; border: 0px; font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17);'><a href='https://www.codeproject.com/Articles/5308645/Multiplatform-UI-Coding-with-AvaloniaUI-in-Easy-Sa'	style='margin: 0px; padding: 0px; border: 0px; text-decoration: none; color: rgb(0, 87, 130);'>Multiplatform UI Coding with AvaloniaUI in Easy Samples. Part 1 - AvaloniaUI Building Blocks</a></li><li style='margin: 0px; padding: 0px; border: 0px; font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17);'><a href='https://www.codeproject.com/Articles/5314369/Basics-of-XAML-in-Easy-Samples-for-Multiplatform-A'	style='margin: 0px; padding: 0px; border: 0px; text-decoration: none; color: rgb(0, 87, 130);'>Basics of XAML in Easy Samples for Multiplatform Avalonia .NET Framework</a></li><li style='margin: 0px; padding: 0px; border: 0px; font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17);'><a href='https://www.codeproject.com/Articles/5311995/Multiplatform-Avalonia-NET-Framework-Programming-B'	style='margin: 0px; padding: 0px; border: 0px; text-decoration: none; color: rgb(0, 87, 130);'>Multiplatform Avalonia .NET Framework Programming Basic Concepts in Easy Samples</a></li></ol><p style='font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'>If you know WPF, you can read this article without reading the previous ones, otherwise, you should read the previous articles first.</p><!--EndFragment--></body></html>";
@@ -84,21 +43,7 @@ function init_test() {
 }
 
 function init(initMsg) {
-	//if (IsLoaded) {
-	//	log('editor already loaded, setting html and  ignoring...');
-	//	return;
-	//}
-	// reqMsgStr is serialized 'MpQuillLoadRequestMessage' object
-
-	//log("init request: " + reqMsgStr);
-	//drag/drop notes:
-	// quill.root.removeEventListener('dragstart',getEventListeners(quill.root).dragstart[0].listener)
-	// quill.root.removeEventListener('drop',getEventListeners(quill.root).drop[0].listener)
-
 	if (initMsg == null) {
-		//init_test();
-
-		//return;
 		initMsg = {
 			envName: 'wpf',
 			copyItemId: 0,
@@ -112,7 +57,7 @@ function init(initMsg) {
 	CopyItemId = initMsg.copyItemId;
 
 	if (!IsLoaded) {
-		loadQuill(initMsg);
+		loadQuill(EnvName);
 	}
 
 	initContent(initMsg.itemEncodedHtmlData);
@@ -155,7 +100,7 @@ function init(initMsg) {
 }
 
 
-function loadQuill(reqMsg) {
+function loadQuill(envName) {
 	Quill.register("modules/htmlEditButton", htmlEditButton);
 	Quill.register({ "modules/better-table": quillBetterTable }, true);
 
@@ -163,7 +108,7 @@ function loadQuill(reqMsg) {
 
 	// Append the CSS stylesheet to the page
 	var node = document.createElement("style");
-	node.innerHTML = registerFontStyles(reqMsg.envName);
+	node.innerHTML = registerFontStyles(envName);
 	document.body.appendChild(node);
 
 	quill = new Quill("#editor", {
@@ -172,7 +117,7 @@ function loadQuill(reqMsg) {
 		theme: "snow",
 		modules: {
 			table: false,
-			toolbar: registerToolbar(reqMsg.envName),
+			toolbar: registerToolbar(envName),
 			htmlEditButton: {
 				syntax: true
 			},
@@ -628,7 +573,7 @@ function createLink() {
 		quill.deleteText(range.index, range.length);
 		var ts =
 			'<a class="square_btn" href="https://www.google.com">' + text + "</a>";
-		quill.clipboard.dangerouslyPasteHTML(range.index, ts);
+		insertHtml(range.index, ts);
 
 		log("text:\n" + getText());
 		console.table("\nhtml:\n" + getHtml());

@@ -5,14 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; 
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
 using System.IO;
 using System.ComponentModel;
 using System.Collections;
 
+
 namespace MonkeyPaste.Avalonia {
     public class MpClipboardHandlerItemViewModel :
-        MpAvSelectorViewModelBase<MpClipboardHandlerCollectionViewModel, MpHandledClipboardFormatViewModel>,
+        MpAvSelectorViewModelBase<MpAvClipboardHandlerCollectionViewModel, MpHandledClipboardFormatViewModel>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpIMenuItemViewModel, 
@@ -117,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpClipboardHandlerItemViewModel(MpClipboardHandlerCollectionViewModel parent) : base(parent) {
+        public MpClipboardHandlerItemViewModel(MpAvClipboardHandlerCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpClipboardHandlerItemViewModel_PropertyChanged;
         }
 

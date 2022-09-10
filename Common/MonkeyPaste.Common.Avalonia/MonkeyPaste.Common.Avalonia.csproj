@@ -36,9 +36,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
+    <ProjectReference Include="..\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj" />
     <ProjectReference Include="..\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utils\Helpers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="PresentationFramework">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\PresentationFramework.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

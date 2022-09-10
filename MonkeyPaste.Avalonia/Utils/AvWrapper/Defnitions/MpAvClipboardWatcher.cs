@@ -16,6 +16,8 @@ using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common.Avalonia;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using MonkeyPaste.Common.Wpf;
+using WinApi = MonkeyPaste.Common.Avalonia.WinApi;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipboardWatcher : MpIClipboardMonitor, MpIPlatformDataObjectRegistrar {
@@ -30,7 +32,8 @@ namespace MonkeyPaste.Avalonia {
         private bool _isCheckingClipboard = false;
 
         private List<string> _rejectedFormats = new List<string>() {
-            "FileContents"
+            "FileContents",
+            "EnterpriseDataProtectionId"
         };
         #endregion
 
@@ -121,11 +124,27 @@ namespace MonkeyPaste.Avalonia {
 
             var ndo = new MpPortableDataObject();
             string[] formats = await Application.Current.Clipboard.GetFormatsAsync();
-
-            foreach (var format in formats.Where(x=>!x.StartsWith("Unknown_Format") && !_rejectedFormats.Contains(x))) {
+            var validFormats = formats.Where(x => MpPortableDataFormats.RegisteredFormats.Contains(x)); //formats.Where(x => !x.StartsWith("Unknown_Format") && !_rejectedFormats.Contains(x));
+            foreach (string format in validFormats) {
                 object formatData = null;
                 try {
-                    formatData = await Application.Current.Clipboard.GetDataAsync(format);
+                    if(OperatingSystem.IsWindows() && format == MpPortableDataFormats.Html) {
+                        // windows bug uses Win-1252 encoding not UTF8 this pinkvokes actual html
+                        formatData = MpAvWin32HtmlClipboardHelper.GetHTMLWin32Native();
+                    } else {
+                        formatData = await Application.Current.Clipboard.GetDataAsync(format);
+                    }
+                    
+                    if (formatData is byte[] formatDataBytes) {
+                        try {
+                            formatData = Encoding.UTF8.GetString(formatDataBytes, 0, formatDataBytes.Length);
+                            
+                        }
+                        catch (Exception ex) {
+                            MpConsole.WriteTraceLine($"Exception parsing bytes (ignoring format '{format}'): ", ex);
+                            continue;
+                        }
+                    }
                 } catch(COMException com_ex) {
                     MpConsole.WriteTraceLine($"Error reading clipboard format '{format}'", com_ex);
                     continue;

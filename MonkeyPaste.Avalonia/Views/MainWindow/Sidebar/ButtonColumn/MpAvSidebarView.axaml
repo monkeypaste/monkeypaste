@@ -81,7 +81,7 @@
                       Grid.Row="1"
                       local:MpAvIsHoveringExtension.IsEnabled="True"
                       local:MpAvIsHoveringExtension.HoverCursor="Hand"
-                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpClipboardHandlerCollectionViewModel.Instance}}"
+                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpAvClipboardHandlerCollectionViewModel.Instance}}"
                       Padding="10">
             <ToolTip.Tip>
                 <local:MpAvTooltipView ToolTipText="Clipboard Handlers" />
@@ -127,7 +127,7 @@
                                   Loaded="AppendModeToggleButton_Loaded"
                                   Grid.Row="4"
                                   Padding="10"
-                                  
+
                                   VerticalAlignment="Bottom"
                                   HorizontalAlignment="Center"
                                   Template="{StaticResource AppModeToggleButtonControlTemplate_NOCHECKED_STYLE}"

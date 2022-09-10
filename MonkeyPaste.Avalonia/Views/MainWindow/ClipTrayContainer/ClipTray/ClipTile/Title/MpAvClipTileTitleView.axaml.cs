@@ -12,20 +12,19 @@ using System.Linq;
 using Avalonia.Threading;
 using System;
 using System.Threading.Tasks;
-using MonkeyPaste.Avalonia.Behaviors._Factory;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileTitleView : MpAvUserControl<MpAvClipTileViewModel> {
-        public MpAvClipTileTitleHighlightBehavior ClipTileTitleHighlightBehavior { get; set; }
-        public MpAvSourceHighlightBehavior SourceHighlightBehavior { get; set; }
+        //public MpAvClipTileTitleHighlightBehavior ClipTileTitleHighlightBehavior { get; set; }
+        //public MpAvSourceHighlightBehavior SourceHighlightBehavior { get; set; }
 
         public MpAvClipTileTitleView() {
             InitializeComponent();
-            this.AttachedToVisualTree += MpAvClipTileTitleView_AttachedToVisualTree;
+            //this.AttachedToVisualTree += MpAvClipTileTitleView_AttachedToVisualTree;
         }
 
         private void MpAvClipTileTitleView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            MpAvViewBehaviorFactory.BuildAllViewBehaviors(this, this);
+            //MpAvViewBehaviorFactory.BuildAllViewBehaviors(this, this);
         }
 
         private void InitializeComponent() {

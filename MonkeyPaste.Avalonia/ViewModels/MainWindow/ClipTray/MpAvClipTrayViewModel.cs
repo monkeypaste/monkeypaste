@@ -500,7 +500,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool CanScroll {
             get {
-                return true;
+                //return true;
 
                 if (MpAvMainWindowViewModel.Instance.IsMainWindowOpening ||
                    !MpAvMainWindowViewModel.Instance.IsMainWindowOpen ||
@@ -508,6 +508,18 @@ namespace MonkeyPaste.Avalonia {
                    IsScrollingIntoView) {
                     return false;
                 }
+
+                if(HasScrollVelocity) {
+                    // this implies mouse is/was not over a sub-selectable tile and is scrolling so ignore item scroll if already moving
+                    return true;
+                }
+                // TODO? giving item scroll priority maybe better by checking if content exceeds visible boundaries here
+                bool isItemScrollPriority = Items.Any(x => x.IsSubSelectionEnabled && x.IsHovering);
+                if(isItemScrollPriority) {
+                    // when tray is not scrolling (is still) and mouse is over sub-selectable item keep tray scroll frozen
+                    return false;
+                }
+
                 if (SelectedItem == null) {
                     return true;
                 }
@@ -869,11 +881,10 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsAnyTileDragging {
             get {
-                return Items.Any(x => x.IsItemDragging) ||
-                                         PinnedItems.Any(x => x.IsItemDragging) ||
-                                         MpAvDragDropManager.IsDraggingFromExternal;
+                return Items.Any(x => x.IsItemDragging) || PinnedItems.Any(x => x.IsItemDragging);
             }
         }
+                
 
         public bool IsAnyTilePinned => PinnedItems.Count > 0;
 
@@ -919,11 +930,7 @@ namespace MonkeyPaste.Avalonia {
             _oldMainWindowHeight = MpAvMainWindowViewModel.Instance.MainWindowHeight;
             //DefaultLoadCount = MpMeasurements.Instance.DefaultTotalVisibleClipTiles * 1 + 2;
 
-            MpMessenger.Register<MpMessageType>(
-                MpDataModelProvider.QueryInfo, ReceivedQueryInfoMessage);
-
-            MpMessenger.Register<MpMessageType>(
-                nameof(MpAvDragDropManager), ReceivedDragDropManagerMessage);
+            MpMessenger.Register<MpMessageType>(MpDataModelProvider.QueryInfo, ReceivedQueryInfoMessage);
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
 
@@ -1242,7 +1249,14 @@ namespace MonkeyPaste.Avalonia {
                     }
                     CheckLoadMore();
                     break;
-
+                case MpMessageType.MainWindowOpened:
+                   // Dispatcher.UIThread.Post(() => {
+                        if (SelectedItem == null) {
+                            ResetClipSelection(false);
+                        }
+                        AddNewItemsCommand.Execute(null);
+                    //});
+                    break;
             }
         }
 
@@ -1900,6 +1914,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void NotifySelectionChanged() {
+            OnPropertyChanged(nameof(SelectedPinTrayItem));
+            OnPropertyChanged(nameof(SelectedClipTrayItem));
             MpMessenger.SendGlobal(MpMessageType.TraySelectionChanged);
         }
 

@@ -47,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
                     new MpBootstrappedItemViewModel(this,typeof(MpAvSearchBoxViewModel)),
 
                     //new MpBootstrappedItemViewModel(this,typeof(MpAnalyticItemCollectionViewModel)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpClipboardHandlerCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvClipboardHandlerCollectionViewModel)),
 
                     ////new MpBootstrappedItemViewModel(this,typeof(MpClipboardManager)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvSettingsWindowViewModel)),
@@ -64,7 +64,7 @@ namespace MonkeyPaste.Avalonia {
 
                     //new MpBootstrappedItemViewModel(this,typeof(MpContextMenuView)),
 
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvDragDropManager)),
+                    //new MpBootstrappedItemViewModel(this,typeof(MpAvDragDropManager)),
 
 
                     //new MpBootstrappedItemViewModel(this,typeof(MpWpfDataObjectHelper)),
@@ -102,14 +102,19 @@ namespace MonkeyPaste.Avalonia {
             //for (int i = 1; i <= 1000; i++) {
             //    await MpCopyItem.Create(
             //        sourceId: MpPrefViewModel.Instance.ThisAppSourceId,
-            //        data: $"This is test {i}",
-            //        title: $"This is test {i}",
+            //        title: $"{i} This is a test title BOO!",
+            //        data: $"This is the content for test {i}",
             //        itemType: MpCopyItemType.Text);
             //}
 
             MpNotificationCollectionViewModel.Instance.FinishLoading();
             MpAvClipTrayViewModel.Instance.OnPostMainWindowLoaded();
             IsCoreLoaded = true;
+
+            //if (OperatingSystem.IsWindows()) {
+            //    string result = MonkeyPaste.Common.Wpf.MpWpfRtfToHtmlConverter.Test();
+
+            //}
         }
 
         protected override async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {

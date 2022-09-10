@@ -25,6 +25,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
+        #region Properties
+
+        //private static MpAvIDropHost _currentDropHost;
+        //public static MpAvIDropHost CurrentDropHost => _currentDropHost;
 
         #region DropAdornedControl AvaloniaProperty
         public static Control GetDropAdornedControl(AvaloniaObject obj) {
@@ -42,7 +46,6 @@ namespace MonkeyPaste.Avalonia {
                 false);
 
         #endregion
-
 
         #region IsEnabled AvaloniaProperty
         public static bool GetIsEnabled(AvaloniaObject obj) {
@@ -77,6 +80,8 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #endregion
+
         #region Control Event Handlers
 
         private static void DropControl_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
@@ -100,11 +105,68 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
         #endregion
 
-        #region DragDrop 
+        #region DragDrop
 
+        #region Drop
+
+        private static void AddOrRemoveDropHandlers(Control dropControl, bool isAdd) {
+            if (isAdd) {
+                DragDrop.SetAllowDrop(dropControl, true);
+                dropControl.AddHandler(DragDrop.DragEnterEvent, DragEnter);
+                dropControl.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
+                dropControl.AddHandler(DragDrop.DragOverEvent, DragOver);
+                dropControl.AddHandler(DragDrop.DropEvent, Drop);
+            } else {
+                dropControl.RemoveHandler(DragDrop.DropEvent, Drop);
+                dropControl.RemoveHandler(DragDrop.DragEnterEvent, DragEnter);
+                dropControl.RemoveHandler(DragDrop.DragOverEvent, DragOver);
+                dropControl.RemoveHandler(DragDrop.DragLeaveEvent, DragLeave);
+                DragDrop.SetAllowDrop(dropControl, false);
+            }
+
+            MpConsole.WriteLine("DropHandler " + (isAdd ? "ADDED" : "REMOVED") + " for Control Type: " + dropControl.GetType() + " DataContext: " + dropControl.DataContext);
+        }
+
+
+        private static void DragOver(object sender, DragEventArgs e) {
+            //MpConsole.WriteLine("Drag Over: " + sender);            
+
+            MpAvIDropHost dropHost = GetDropHost(sender); 
+            e.DragEffects = GetDropEffects(e);
+            MpPoint drop_host_mp = e.GetPosition(dropHost as IVisual).ToPortablePoint();
+            if (!dropHost.IsDropValid(e.Data, drop_host_mp, e.DragEffects)) {
+                // currently pin tray drop is only invlaid on move to same idx
+                e.DragEffects = DragDropEffects.None;
+            }
+            dropHost.DragOver(drop_host_mp, e.Data, e.DragEffects);
+        }
+        private static void DragEnter(object sender, DragEventArgs e) {
+            //MpAvIDropHost dropHost = GetDropHost(sender);
+            //dropHost?.DragEnter();
+
+            DragOver(sender, e);
+        }
+        private static void DragLeave(object sender, RoutedEventArgs e) {
+            //MpConsole.WriteLine("Drag Leave: " + sender);
+
+            MpAvIDropHost dropHost = GetDropHost(sender);
+            dropHost?.DragLeave();
+        }
+
+        private static async void Drop(object sender, DragEventArgs e) {
+            MpConsole.WriteLine("Drop: " + sender);
+            MpAvIDropHost dropHost = GetDropHost(sender);
+            e.DragEffects = GetDropEffects( e);
+            if (dropHost == null) {
+                return;
+            }
+            MpPoint drop_host_mp = e.GetPosition(dropHost as IVisual).ToPortablePoint();
+            e.DragEffects = await dropHost.DropDataObjectAsync(e.Data, drop_host_mp, e.DragEffects);
+        }
+
+        #endregion
 
         #region Drop Adorner
 
@@ -177,73 +239,6 @@ namespace MonkeyPaste.Avalonia {
             }
             adornerLayer.Children.Remove(dropAdorner);
             MpConsole.WriteLine("Adorner removed for control: " + dropAdornedControl);
-        }
-
-        #endregion
-
-        #region Drop
-
-        private static void AddOrRemoveDropHandlers(Control dropControl, bool isAdd) {
-            if (isAdd) {
-                //if (!dropControl.IsInitialized) {
-                //    Dispatcher.UIThread.Post(async () => {
-                //        while (!dropControl.IsInitialized) {
-                //            await Task.Delay(100);
-                //        }
-                //        AddOrRemoveDropHandlers(dropControl, isAdd);
-                //    });
-                //    return;
-                //}
-                DragDrop.SetAllowDrop(dropControl, true);
-                dropControl.AddHandler(DragDrop.DragEnterEvent, DragEnter);
-                dropControl.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
-                dropControl.AddHandler(DragDrop.DragOverEvent, DragOver);
-                dropControl.AddHandler(DragDrop.DropEvent, Drop);
-            } else {
-                dropControl.RemoveHandler(DragDrop.DropEvent, Drop);
-                dropControl.RemoveHandler(DragDrop.DragEnterEvent, DragEnter);
-                dropControl.RemoveHandler(DragDrop.DragOverEvent, DragOver);
-                dropControl.RemoveHandler(DragDrop.DragLeaveEvent, DragLeave);
-                DragDrop.SetAllowDrop(dropControl, false);
-            }
-
-            MpConsole.WriteLine("DropHandler " + (isAdd ? "ADDED" : "REMOVED") + " for Control Type: " + dropControl.GetType() + " DataContext: " + dropControl.DataContext);
-        }
-
-
-        private static void DragOver(object sender, DragEventArgs e) {
-            //MpConsole.WriteLine("Drag Over: " + sender);            
-
-            MpAvIDropHost dropHost = GetDropHost(sender); 
-            e.DragEffects = GetDropEffects(e);
-            MpPoint drop_host_mp = e.GetPosition(dropHost as IVisual).ToPortablePoint();
-            if (!dropHost.IsDropValid(e.Data, drop_host_mp, e.DragEffects)) {
-                // currently pin tray drop is only invlaid on move to same idx
-                e.DragEffects = DragDropEffects.None;
-            }
-            dropHost.DragOver(drop_host_mp, e.Data, e.DragEffects);
-        }
-        private static void DragEnter(object sender, DragEventArgs e) {
-            //MpAvIDropHost dropHost = GetDropHost(sender);
-            //dropHost?.DragEnter();
-            DragOver(sender, e);
-        }
-        private static void DragLeave(object sender, RoutedEventArgs e) {
-            //MpConsole.WriteLine("Drag Leave: " + sender);
-
-            MpAvIDropHost dropHost = GetDropHost(sender);
-            dropHost?.DragLeave();
-        }
-
-        private static async void Drop(object sender, DragEventArgs e) {
-            MpConsole.WriteLine("Drop: " + sender);
-            MpAvIDropHost dropHost = GetDropHost(sender);
-            e.DragEffects = GetDropEffects( e);
-            if (dropHost == null) {
-                return;
-            }
-            MpPoint drop_host_mp = e.GetPosition(dropHost as IVisual).ToPortablePoint();
-            e.DragEffects = await dropHost.DropDataObjectAsync(e.Data, drop_host_mp, e.DragEffects);
         }
 
         #endregion

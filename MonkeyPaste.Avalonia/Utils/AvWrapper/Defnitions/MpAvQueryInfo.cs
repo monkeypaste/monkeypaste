@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
 
         public int SortOrderIdx { get; set; } = 0;
 
-        public string Serialize() {
+        public string SerializeJsonObject() {
             return MpJsonObject.SerializeObject(this);
         }
         
@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
             //FilterFlags = MpContentFilterType.TextType | MpContentFilterType.FileType | MpContentFilterType.ImageType; //MpSearchBoxViewModel.Instance.FilterType;
             FilterFlags = MpAvSearchBoxViewModel.Instance.FilterType;
 
-            MpPrefViewModel.Instance.LastQueryInfoJson = Serialize();
+            MpPrefViewModel.Instance.LastQueryInfoJson = SerializeJsonObject();
 
             //var qi = MpDataModelProvider.QueryInfo;
             MpDataModelProvider.QueryInfos.Clear();

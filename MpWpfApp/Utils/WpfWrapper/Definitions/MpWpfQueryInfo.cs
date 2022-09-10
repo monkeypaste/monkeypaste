@@ -23,7 +23,7 @@ namespace MpWpfApp {
 
         public int SortOrderIdx { get; set; } = 0;
 
-        public string Serialize() {
+        public string SerializeJsonObject() {
             return MpJsonObject.SerializeObject(this);
         }
         
@@ -40,7 +40,7 @@ namespace MpWpfApp {
             // NOTE not sure why this isn't set so maybe bad
             FilterFlags = MpSearchBoxViewModel.Instance.FilterType;
 
-            MpPrefViewModel.Instance.LastQueryInfoJson = Serialize();
+            MpPrefViewModel.Instance.LastQueryInfoJson = SerializeJsonObject();
 
             var qi = MpDataModelProvider.QueryInfo;
             MpDataModelProvider.QueryInfos.Clear();

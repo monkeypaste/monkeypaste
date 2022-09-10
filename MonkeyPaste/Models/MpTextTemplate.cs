@@ -165,7 +165,7 @@ namespace MonkeyPaste {
                 TemplateType = templateType,
                 TemplateData = templateTypeData,
                 RichTextFormatJson = string.IsNullOrWhiteSpace(rtfFormatJson) ? 
-                                        DefaultRichTextFormat.Serialize() : rtfFormatJson,
+                                        DefaultRichTextFormat.SerializeJsonObject() : rtfFormatJson,
                 TemplateDeltaFormat = deltaFormatJson
             };
 

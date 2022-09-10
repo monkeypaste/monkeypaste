@@ -133,13 +133,19 @@
                 <StackPanel Grid.Column="2"
                             Orientation="Horizontal">
                     <!--  IsSearching Spinner  -->
-                    <local:ProgressRing x:Name="IsSearchingSpinner"
+                    <!--<local:ProgressRing x:Name="IsSearchingSpinner"
                                         Margin="0,0,10,0"
                                         IsActive="{Binding IsSearching}"
                                         IsVisible="{Binding IsSearching}"
                                         VerticalAlignment="Center"
                                         Foreground="DimGray"
-                                        Background="Transparent" />
+                                        Background="Transparent" />-->
+                    <Ellipse Fill="Transparent"
+                             Stroke="DimGray"
+                             IsVisible="{Binding IsSearching}"
+                             StrokeThickness="10"
+                             Width="10"
+                             Height="10" />
                     <!--  Clear SearchText Button  -->
                     <Button x:Name="ClearTextBoxButton"
                             Width="15"

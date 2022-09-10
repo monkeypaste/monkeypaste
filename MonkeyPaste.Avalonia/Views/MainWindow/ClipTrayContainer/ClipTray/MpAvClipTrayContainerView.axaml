@@ -26,59 +26,59 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <!--<AdornerLayer>-->
-        <!--  NOTE! Layout is in mw code behind orientation change  -->
-        <Grid x:Name="ClipTrayContainerGrid"
-              HorizontalAlignment="Stretch"
-              VerticalAlignment="Stretch">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <local:MpAvPinTrayView x:Name="PinTrayView"
-                                   Grid.Column="0"
-                                   DataContext="{Binding}"
-                                   MinWidth="{Binding MinPinTrayScreenWidth}"
-                                   MinHeight="{Binding MinPinTrayScreenHeight}"
-                                   Background="{Binding PinTrayBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                                   local:MpAvSizeObserverExtension.IsEnabled="True"
-                                   local:MpAvSizeObserverExtension.ObservedWidth="{Binding PinTrayScreenWidth, Mode=OneWayToSource}"
-                                   local:MpAvSizeObserverExtension.ObservedHeight="{Binding PinTrayScreenHeight, Mode=OneWayToSource}">
-                <local:MpAvPinTrayView.IsVisible>
-                    <MultiBinding Converter="{StaticResource MultiBoolConverter}"
-                                  ConverterParameter="OR">
-                        <Binding Source="{x:Static local:MpAvClipTrayViewModel.Instance}"
-                                 Path="IsAnyTilePinned" />
-                        <Binding Source="{x:Static local:MpAvClipTrayViewModel.Instance}"
-                                 Path="IsAnyTileDragging" />
-                    </MultiBinding>
-                </local:MpAvPinTrayView.IsVisible>
-            </local:MpAvPinTrayView>
-            <GridSplitter x:Name="ClipTraySplitter"
-                          Grid.Column="0"
-                          IsEnabled="{Binding IsAnyTilePinned}"
-                          IsVisible="{Binding IsAnyTilePinned}"
-                          HorizontalAlignment="Right"
-                          VerticalAlignment="Stretch"
-                          Margin="0,0,0,0"
-                          Width="5"
-                          Background="Magenta"
-                          ResizeDirection="Columns"
-                          Cursor="SizeWestEast">
-                <GridSplitter.Styles>
-                    <Style Selector="GridSplitter /template/ Border">
-                        <Setter Property="Background"
-                                Value="Magenta" />
-                    </Style>
-                    <Style Selector="GridSplitter:pointerover /template/ Border">
-                        <Setter Property="Background"
-                                Value="Yellow" />
-                    </Style>
-                </GridSplitter.Styles>
-            </GridSplitter>
-            <local:MpAvClipTrayView x:Name="ClipTrayView"
-                                    Grid.Column="1"
-                                    Background="{Binding ClipTrayBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                                    DataContext="{Binding}" />
-        </Grid>
+    <!--  NOTE! Layout is in mw code behind orientation change  -->
+    <Grid x:Name="ClipTrayContainerGrid"
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <local:MpAvPinTrayView x:Name="PinTrayView"
+                               Grid.Column="0"
+                               DataContext="{Binding}"
+                               MinWidth="{Binding MinPinTrayScreenWidth}"
+                               MinHeight="{Binding MinPinTrayScreenHeight}"
+                               Background="{Binding PinTrayBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                               local:MpAvSizeObserverExtension.IsEnabled="True"
+                               local:MpAvSizeObserverExtension.ObservedWidth="{Binding PinTrayScreenWidth, Mode=OneWayToSource}"
+                               local:MpAvSizeObserverExtension.ObservedHeight="{Binding PinTrayScreenHeight, Mode=OneWayToSource}">
+            <local:MpAvPinTrayView.IsVisible>
+                <MultiBinding Converter="{StaticResource MultiBoolConverter}"
+                              ConverterParameter="OR">
+                    <Binding Source="{x:Static local:MpAvClipTrayViewModel.Instance}"
+                             Path="IsAnyTilePinned" />
+                    <Binding Source="{x:Static local:MpAvClipTrayViewModel.Instance}"
+                             Path="IsAnyTileDragging" />
+                </MultiBinding>
+            </local:MpAvPinTrayView.IsVisible>
+        </local:MpAvPinTrayView>
+        <GridSplitter x:Name="ClipTraySplitter"
+                      Grid.Column="0"
+                      IsEnabled="{Binding IsAnyTilePinned}"
+                      IsVisible="{Binding IsAnyTilePinned}"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Stretch"
+                      Margin="0,0,0,0"
+                      Width="5"
+                      Background="Magenta"
+                      ResizeDirection="Columns"
+                      Cursor="SizeWestEast">
+            <GridSplitter.Styles>
+                <Style Selector="GridSplitter /template/ Border">
+                    <Setter Property="Background"
+                            Value="Magenta" />
+                </Style>
+                <Style Selector="GridSplitter:pointerover /template/ Border">
+                    <Setter Property="Background"
+                            Value="Yellow" />
+                </Style>
+            </GridSplitter.Styles>
+        </GridSplitter>
+        <local:MpAvClipTrayView x:Name="ClipTrayView"
+                                Grid.Column="1"
+                                Background="{Binding ClipTrayBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                                DataContext="{Binding}" />
+    </Grid>
     <!--</AdornerLayer>-->
 </local:MpAvUserControl>

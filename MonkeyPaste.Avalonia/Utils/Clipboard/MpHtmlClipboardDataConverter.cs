@@ -11,9 +11,10 @@ namespace MonkeyPaste.Avalonia {
         public string SourceUrl { get; private set; }
         public string Html { get; private set; }
 
-        public string Rtf { get; private set; }
+        //public string Rtf { get; private set; }
 
-        public static async Task<MpHtmlClipboardDataConverter> Parse(string htmlClipboardData) {
+        public static async Task<MpHtmlClipboardDataConverter> ParseAsync(string htmlClipboardData) {
+            await Task.Delay(1);
             if(string.IsNullOrWhiteSpace(htmlClipboardData)) {
                 return null;
             }
@@ -35,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if(html_length > 0) {
                     hcd.Html = htmlClipboardData.Substring(html_start_idx, html_length);
-                    hcd.Rtf = string.Empty;// await MpQuillHtmlToRtfConverter.ConvertStandardHtmlToRtf(hcd.Html);
+                    //hcd.Rtf = string.Empty;// await MpQuillHtmlToRtfConverter.ConvertStandardHtmlToRtf(hcd.Html);
                 }
             }
             string sourceUrlToken = "SourceURL:";

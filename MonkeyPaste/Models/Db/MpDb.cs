@@ -635,6 +635,7 @@ namespace MonkeyPaste {
             };
 
             await AddItemAsync<MpUserDevice>(thisDevice);
+            MpPrefViewModel.Instance.ThisUserDevice = thisDevice;
 
             #endregion
 

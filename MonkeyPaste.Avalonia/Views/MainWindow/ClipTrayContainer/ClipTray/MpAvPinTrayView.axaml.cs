@@ -7,7 +7,6 @@ using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Threading;
-using MonkeyPaste.Avalonia.Behaviors._Factory;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Utils.Extensions;
@@ -205,11 +204,11 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvPinTrayView() {
             InitializeComponent();
-            PinTrayListBox = this.FindControl<ListBox>("PinTrayListBox");
+            //PinTrayListBox = this.FindControl<ListBox>("PinTrayListBox");
         }
 
         private void MpAvClipTileTitleView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            MpAvViewBehaviorFactory.BuildAllViewBehaviors(this, this);
+            //MpAvViewBehaviorFactory.BuildAllViewBehaviors(this, this);
         }
 
         private void InitializeComponent() {

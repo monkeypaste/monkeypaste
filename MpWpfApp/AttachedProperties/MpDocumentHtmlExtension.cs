@@ -149,7 +149,7 @@ namespace MpWpfApp {
                             cwb.JavascriptObjectRepository.ObjectBoundInJavascript += JavascriptObjectRepository_ObjectBoundInJavascript;
 
                             MpQuillDisableReadOnlyRequestMessage drorMsg = CreateDisableReadOnlyMessage(fe);
-                            var disableReadOnlyResponse = await cwb.EvaluateScriptAsync(null,$"disableReadOnly", drorMsg.Serialize());
+                            var disableReadOnlyResponse = await cwb.EvaluateScriptAsync(null,$"disableReadOnly", drorMsg.SerializeJsonObject());
                             ProcessDisableReadOnlyResponse(fe, disableReadOnlyResponse);
 
                             SetIsContentFocused(fe, true);

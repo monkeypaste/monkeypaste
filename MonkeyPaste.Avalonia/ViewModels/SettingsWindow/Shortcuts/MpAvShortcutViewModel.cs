@@ -5,15 +5,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
-using System.Windows;
-using System.Windows.Input;
 using MonkeyPaste;
 using System.Threading.Tasks;
 using MonkeyPaste.Common;
 using SharpHook.Native;
 using MonkeyPaste.Common.Avalonia;
-using Avalonia.Input;
 using Avalonia.Controls;
+using System.Windows.Input;
+using Key = Avalonia.Input.Key;
 
 namespace MonkeyPaste.Avalonia {
     public interface MpIShortcutCommandViewModel<T> where T:struct,Enum {
@@ -406,27 +405,27 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool StartsWith(List<List<Key>> otherKeyList) {
-            if(otherKeyList == null || 
-               otherKeyList.Count == 0 || 
-               otherKeyList[0].Count == 0) {
-                return false;
-            }
-            for (int i = 0; i < otherKeyList.Count; i++) {
-                if(KeyList.Count <=i) {
-                    return false;
-                }
-                for (int j = 0; j < otherKeyList[i].Count; j++) {
-                    if(KeyList[i].Count <= j) {
-                        return false;
-                    }
-                    if(KeyList[i][j] != otherKeyList[i][j]) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
+        //public bool StartsWith(List<List<Key>> otherKeyList) {
+        //    if(otherKeyList == null || 
+        //       otherKeyList.Count == 0 || 
+        //       otherKeyList[0].Count == 0) {
+        //        return false;
+        //    }
+        //    for (int i = 0; i < otherKeyList.Count; i++) {
+        //        if(KeyList.Count <=i) {
+        //            return false;
+        //        }
+        //        for (int j = 0; j < otherKeyList[i].Count; j++) {
+        //            if(KeyList[i].Count <= j) {
+        //                return false;
+        //            }
+        //            if(KeyList[i][j] != otherKeyList[i][j]) {
+        //                return false;
+        //            }
+        //        }
+        //    }
+        //    return true;
+        //}
 
         public void PassKeysToForegroundWindow() {
             //MpHelpers.PassKeysListToWindow(MpProcessHelper.MpProcessManager.LastHandle,KeyList);

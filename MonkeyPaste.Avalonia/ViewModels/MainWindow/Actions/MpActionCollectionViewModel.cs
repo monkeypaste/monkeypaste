@@ -11,11 +11,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives.PopupPositioning;
+
 
 namespace MonkeyPaste.Avalonia {
     public class MpActionCollectionViewModel : 
@@ -422,7 +424,7 @@ namespace MonkeyPaste.Avalonia {
                     if (IsSidebarVisible) {
                         MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = false;
                         MpAvTagTrayViewModel.Instance.IsSidebarVisible = false;
-                        MpClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
+                        MpAvClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
                     }
                     MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel));
                     break;

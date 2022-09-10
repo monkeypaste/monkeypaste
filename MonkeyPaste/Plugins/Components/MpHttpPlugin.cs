@@ -518,7 +518,7 @@ namespace MonkeyPaste {
             _reqParams = request.items.Cast<MpIParameterKeyValuePair>().ToList();
             if(_reqParams == null) {
                 Console.WriteLine($"Warning! Empty or malformed request arguments for plugin: '{_httpTransactionFormat.name}'");
-                Console.WriteLine($"With args: {request.Serialize()}");
+                Console.WriteLine($"With args: {request.SerializeJsonObject()}");
                 _reqParams = new List<MpIParameterKeyValuePair>();
             }
 

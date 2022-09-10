@@ -235,7 +235,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         private void child_PreviewMouseLeftButtonDown(object sender, PointerPressedEventArgs e) {
-            if (Child != null && !MpAvMoveBehavior.IsAnyMoving) {
+            if (Child != null && !MpAvMoveExtension.IsAnyMoving) {
                 var tt = GetTranslateTransform(Child);
                 mp_start = e.GetPosition(this).ToPortablePoint();
                 tt_origin = new MpPoint(tt.X, tt.Y);
