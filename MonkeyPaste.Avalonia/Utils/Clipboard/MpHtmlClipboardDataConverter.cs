@@ -44,7 +44,13 @@ namespace MonkeyPaste.Avalonia {
             if(source_url_start_idx >= 0) {
                 int source_url_length = htmlClipboardData.Substring(source_url_start_idx).IndexOf(Environment.NewLine);
                 if(source_url_length >= 0) {
-                    hcd.SourceUrl = htmlClipboardData.Substring(source_url_start_idx, source_url_length);
+                    string parsed_url = htmlClipboardData.Substring(source_url_start_idx, source_url_length);
+                    if(Uri.IsWellFormedUriString(parsed_url,UriKind.Absolute)) {
+                        hcd.SourceUrl = parsed_url;
+                    } else {
+                        MpConsole.WriteTraceLine("Malformed uri: " + parsed_url);
+                        hcd.SourceUrl = null;
+                    }
                 }
             }
             return hcd;

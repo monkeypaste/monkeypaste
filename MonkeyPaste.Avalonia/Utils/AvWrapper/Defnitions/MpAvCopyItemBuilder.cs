@@ -43,15 +43,16 @@ namespace MonkeyPaste.Avalonia {
                         // depending on the source so may need to be careful handling these. 
                         itemType = MpCopyItemType.Text;
                         itemData = mpdo.GetData(MpPortableDataFormats.Rtf).ToString().EscapeExtraOfficeRtfFormatting();
+                        itemData = itemData.ToQuillText(MpPortableDataFormats.Rtf);
                     } else {
                         string csvStr = mpdo.GetData(MpPortableDataFormats.Csv).ToString();
                         //itemData = csvStr.ToRichText();
-                        itemData = itemData.ToQuillText();
+                        itemData = itemData.ToQuillText(MpPortableDataFormats.Csv);
                     }
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Rtf)) {
                     itemType = MpCopyItemType.Text;
                     itemData = mpdo.GetData(MpPortableDataFormats.Rtf).ToString().EscapeExtraOfficeRtfFormatting();
-                    itemData = itemData.ToQuillText();
+                    itemData = itemData.ToQuillText(MpPortableDataFormats.Rtf);
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Bitmap)) {
                     itemType = MpCopyItemType.Image;
                     itemData = mpdo.GetData(MpPortableDataFormats.Bitmap).ToString();
@@ -183,8 +184,6 @@ namespace MonkeyPaste.Avalonia {
                     itemType: itemType,
                     suppressWrite: suppressWrite);
 
-
-
                 return ci;
             } catch(Exception ex) {
                 MpConsole.WriteTraceLine(ex);
@@ -192,7 +191,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public async Task<MpCopyItem> Create(MpPortableDataObject pdo, bool suppressWrite = false) {
+        public async Task<MpCopyItem> CreateAsync(MpPortableDataObject pdo, bool suppressWrite = false) {
             var ci = await CreateFromDataObject(pdo,suppressWrite);
             return ci;
         }

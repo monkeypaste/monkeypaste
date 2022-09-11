@@ -65,8 +65,6 @@ namespace MonkeyPaste.Avalonia {
             DbInfo = new MpAvDbInfo();
             OsInfo = new MpAvOsInfo();
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, OsInfo);
-            //MpPrefViewModel.Instance.MainWindowOrientation = "Bottom";
-
             
             QueryInfo = new MpAvQueryInfo();
             ProcessWatcher = new MpAvProcessWatcher().Watcher;
@@ -80,9 +78,10 @@ namespace MonkeyPaste.Avalonia {
             MainThreadMarshal = new MpAvMainThreadMarshal();
             StringTools = new MpAvStringTools();
             NativeMessageBox = new MpAvMessageBox();
-            //DataObjectHelper = MpWpfDataObjectHelper.Instance;
+            //DataObjectHelper = MpAvDataObjectHelper.Instance;
+            DataObjectHelper = MpAvClipboardHandlerCollectionViewModel.Instance;
             //ExternalPasteHandler = MpWpfDataObjectHelper.Instance;
-            //CopyItemBuilder = new MpWpfCopyItemBuilder();
+            CopyItemBuilder = new MpAvCopyItemBuilder();
             ClipboardMonitor = new MpAvClipboardWatcher();
             //ClipboardData = MpClipboardHandlerCollectionViewModel.Instance;
             DataObjectRegistrar = ClipboardMonitor as MpIPlatformDataObjectRegistrar;

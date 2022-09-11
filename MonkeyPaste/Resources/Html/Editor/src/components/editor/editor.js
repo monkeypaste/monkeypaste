@@ -13,12 +13,14 @@ var IsSubSelectionEnabled = false;
 var EditorContainerElement = null;
 var QuillEditorElement = null;
 
+var UseBetterTable = true;
+
 
 
 function init_test() {
 	let sample1 = "<html><body><!--StartFragment--><p style='font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'>This article can be considered as the fourth instalment in the following sequence of articles:</p><p style='font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'>This article can be considered as the fourth instalment in the following sequence of articles:</p><p style='font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'>This article can be considered as the fourth instalment in the following sequence of articles:</p><ol style='margin: 10px 0px; padding: 0px 0px 0px 40px; border: 0px; color: rgb(17, 17, 17); font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'><li style='margin: 0px; padding: 0px; border: 0px; font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17);'><a href='https://www.codeproject.com/Articles/5308645/Multiplatform-UI-Coding-with-AvaloniaUI-in-Easy-Sa'	style='margin: 0px; padding: 0px; border: 0px; text-decoration: none; color: rgb(0, 87, 130);'>Multiplatform UI Coding with AvaloniaUI in Easy Samples. Part 1 - AvaloniaUI Building Blocks</a></li><li style='margin: 0px; padding: 0px; border: 0px; font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17);'><a href='https://www.codeproject.com/Articles/5314369/Basics-of-XAML-in-Easy-Samples-for-Multiplatform-A'	style='margin: 0px; padding: 0px; border: 0px; text-decoration: none; color: rgb(0, 87, 130);'>Basics of XAML in Easy Samples for Multiplatform Avalonia .NET Framework</a></li><li style='margin: 0px; padding: 0px; border: 0px; font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17);'><a href='https://www.codeproject.com/Articles/5311995/Multiplatform-Avalonia-NET-Framework-Programming-B'	style='margin: 0px; padding: 0px; border: 0px; text-decoration: none; color: rgb(0, 87, 130);'>Multiplatform Avalonia .NET Framework Programming Basic Concepts in Easy Samples</a></li></ol><p style='font-family: &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: rgb(17, 17, 17); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'>If you know WPF, you can read this article without reading the previous ones, otherwise, you should read the previous articles first.</p><!--EndFragment--></body></html>";
 	let sample_big = sample1 + sample1 + sample1 + sample1 + sample1 + sample1;
-
+	let sample_buggy_table = '<h2 style="box-sizing: border-box; color: rgb(10, 10, 8); font-weight: 600; line-height: 1.3; margin: 0px; font-size: 26px; font-family: Lato, Roboto, Arial, Tahoma, sans-serif; padding: 0px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><span id="All_Attributes_of_the_anchor_Element" style="box-sizing: border-box;">All Attributes of the<span> </span><a href="https://html.com/tags/a/" style="box-sizing: border-box; background: 0px 0px; color: rgb(18, 18, 18); text-decoration: none; transition: all 0.2s ease-in-out 0s;"><code style="box-sizing: border-box; font-family: monospace, monospace; font-size: 26px; padding: 2px 4px; color: rgb(199, 37, 78); background-color: rgb(249, 242, 244); border-radius: 4px;">anchor</code></a><span> </span>Element</span></h2><table style="box-sizing: border-box; border-collapse: collapse; border-spacing: 0px; border-top: 0px; margin: 0px 0px 1.5em; max-width: 100%; position: relative; table-layout: fixed; width: 2691.22px; z-index: 1; color: rgb(0, 0, 0); font-family: Lato, Roboto, Arial, Tahoma, sans-serif; font-size: 10px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><tbody style="box-sizing: border-box;"><tr style="box-sizing: border-box; border-bottom: 1px solid rgb(240, 240, 240);"><th style="box-sizing: border-box; padding: 12px; background: rgba(0, 0, 0, 0.05); font-weight: 700; border-bottom: 1px solid rgba(0, 0, 0, 0.05); text-align: left; font-family: inherit; font-size: inherit; vertical-align: middle;">Attribute name</th><th style="box-sizing: border-box; padding: 12px; background: rgba(0, 0, 0, 0.05); font-weight: 700; border-bottom: 1px solid rgba(0, 0, 0, 0.05); text-align: left; font-family: inherit; font-size: inherit; vertical-align: middle;">Values</th><th style="box-sizing: border-box; padding: 12px; background: rgba(0, 0, 0, 0.05); font-weight: 700; border-bottom: 1px solid rgba(0, 0, 0, 0.05); text-align: left; font-family: inherit; font-size: inherit; vertical-align: middle;">Notes</th></tr><tr style="box-sizing: border-box; border-bottom: 1px solid rgb(240, 240, 240);"><td style="box-sizing: border-box; padding: 12px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); font-family: inherit; font-size: inherit; vertical-align: middle;"><a href="https://html.com/attributes/a-hreflang/" style="box-sizing: border-box; background: 0px 0px; color: rgb(63, 136, 197); text-decoration: none; transition: all 0.2s ease-in-out 0s;">hreflang</a></td><td style="box-sizing: border-box; padding: 12px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); font-family: inherit; font-size: inherit; vertical-align: middle;"></td><td style="box-sizing: border-box; padding: 12px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); font-family: inherit; font-size: inherit; vertical-align: middle;">Specifies the language of the linked resource.</td></tr><tr style="box-sizing: border-box; border-bottom: 1px solid rgb(240, 240, 240);"><td style="box-sizing: border-box; padding: 12px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); font-family: inherit; font-size: inherit; vertical-align: middle;"><a href="https://html.com/attributes/a-download/" style="box-sizing: border-box; background: 0px 0px; color: rgb(63, 136, 197); text-decoration: none; transition: all 0.2s ease-in-out 0s;">download</a></td><td style="box-sizing: border-box; padding: 12px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); font-family: inherit; font-size: inherit; vertical-align: middle;"></td><td style="box-sizing: border-box; padding: 12px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); font-family: inherit; font-size: inherit; vertical-align: middle;">Directs the browser to download the linked resource rather than opening it.</td></tr><tr style="box-sizing: border-box; border-bottom: 1px solid rgb(240, 240, 240);"><td style="box-sizing: border-box; padding: 12px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); font-family: inherit; font-size: inherit; vertical-align: middle;"><a href="https://html.com/attributes/a-target/" style="box-sizing: border-box; background: 0px 0px; color: rgb(63, 136, 197); text-decoration: none; transition: all 0.2s ease-in-out 0s;">target</a></td><td style="box-sizing: border-box; padding: 12px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); font-family: inherit; font-size: inherit; vertical-align: middle;">_blank<br style="box-sizing: border-box;">_parent<br style="box-sizing: border-box;">_self<br style="box-sizing: border-box;">_top<br style="box-sizing: border-box;">frame name</td><td style="box-sizing: border-box; padding: 12px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); font-family: inherit; font-size: inherit; vertical-align: middle;">Specifies the context in</td></tr></tbody></table><span style="box-sizing: border-box; color: rgb(0, 0, 0); font-family: Lato, Roboto, Arial, Tahoma, sans-serif; font-size: 10px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><br style="box-sizing: border-box;"><br style="box-sizing: border-box;">Read more:<span> </span><a href="https://html.com/attributes/a-target/#ixzz7eVW0Csar" style="box-sizing: border-box; background: 0px 0px; color: rgb(0, 51, 153); text-decoration: none; transition: all 0.2s ease-in-out 0s;">https://html.com/attributes/a-target/#ixzz7eVW0Csar</a></span>';
 	// reqMsg = {
 	//   envName: "web",
 	//   isPasteRequest: false,
@@ -32,7 +34,8 @@ function init_test() {
 		isReadOnlyEnabled: true,
 		usedTextTemplates: {},
 		isPasteRequest: false,
-		itemEncodedHtmlData: sample_big
+		itemEncodedHtmlData: sample_big,
+		useBetterTable: true
 	}
 
 	init(initMsg);
@@ -50,14 +53,19 @@ function init(initMsg) {
 			isReadOnlyEnabled: true,
 			usedTextTemplates: {},
 			isPasteRequest: false,
-			itemEncodedHtmlData: ''
+			itemEncodedHtmlData: '',
+			useBetterTable: false
 		}
 	}  
 	EnvName = initMsg.envName;
 	CopyItemId = initMsg.copyItemId;
+	UseBetterTable = initMsg.useBetterTable;
+	if (UseBetterTable == null) {
+		UseBetterTable = true;
+	}
 
 	if (!IsLoaded) {
-		loadQuill(EnvName);
+		loadQuill(EnvName, UseBetterTable);
 	}
 
 	initContent(initMsg.itemEncodedHtmlData);
@@ -100,9 +108,12 @@ function init(initMsg) {
 }
 
 
-function loadQuill(envName) {
+function loadQuill(envName, useBetterTable = true) {
 	Quill.register("modules/htmlEditButton", htmlEditButton);
-	Quill.register({ "modules/better-table": quillBetterTable }, true);
+	if (useBetterTable) {
+		Quill.register({ "modules/better-table": quillBetterTable }, true);
+	}
+	
 
 	registerTemplateSpan();
 
@@ -111,7 +122,8 @@ function loadQuill(envName) {
 	node.innerHTML = registerFontStyles(envName);
 	document.body.appendChild(node);
 
-	quill = new Quill("#editor", {
+	// create quill options
+	let quillOptions = {
 		//debug: true,
 		placeholder: "",
 		theme: "snow",
@@ -120,25 +132,29 @@ function loadQuill(envName) {
 			toolbar: registerToolbar(envName),
 			htmlEditButton: {
 				syntax: true
-			},
-			"better-table": {
-				operationMenu: {
-					items: {
-						unmergeCells: {
-							text: "Unmerge cells"
-						}
-					},
-					color: {
-						colors: ["green", "red", "yellow", "blue", "white"],
-						text: "Background Colors:"
-					}
-				}
-			},
-			keyboard: {
-				bindings: quillBetterTable.keyboardBindings
 			}
 		}
-	});
+	}
+	if (useBetterTable) {
+		quillOptions.modules['better-table'] = {
+			operationMenu: {
+				items: {
+					unmergeCells: {
+						text: "Unmerge cells"
+					}
+				},
+				color: {
+					colors: ["green", "red", "yellow", "blue", "white"],
+					text: "Background Colors:"
+				}
+			}
+		};
+		quillOptions.modules.keyboard = {
+			bindings: quillBetterTable.keyboardBindings
+		};
+	}
+
+	quill = new Quill("#editor", quillOptions);
 
 	quill.root.setAttribute("spellcheck", "false");
 

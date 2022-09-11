@@ -253,6 +253,29 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public bool SimulateKeyStrokeSequence(string keystr) {
+            ;
+            List<List<KeyCode>> seq = MpSharpHookKeyboardInputHelpers.ConvertStringToKeySequence(keystr);
+            foreach (var combo in seq) {
+                foreach (var key in combo) {
+                    UioHookResult result = _eventSimulator.SimulateKeyPress(key);
+                    if (result != UioHookResult.Success) {
+                        throw new Exception($"Error pressing key: '{key}' in seq: '{keystr}' error: '{result}'");
+                        //return false;
+                    }
+                }
+
+                foreach (var key in combo) {
+                    UioHookResult result = _eventSimulator.SimulateKeyRelease(key);
+                    if (result != UioHookResult.Success) {
+                        throw new Exception($"Error releasing key: '{key}' in seq: '{keystr}' error: '{result}'");
+                        //return false;
+                    }
+                }
+            }
+            return true;
+        }
+
         #endregion
 
         #region Protected Methods
@@ -476,7 +499,7 @@ namespace MonkeyPaste.Avalonia {
                             // pass gesture before invoking command
 
                             //System.Windows.Forms.SendKeys.SendWait(cur_keystr);
-                            SimulateKeyPress(cur_keystr);
+                            SimulateKeyStrokeSequence(cur_keystr);
 
                             await Task.Delay(matchedShortcut.RoutingDelayMs);
 
@@ -489,7 +512,7 @@ namespace MonkeyPaste.Avalonia {
 
                             await Task.Delay(matchedShortcut.RoutingDelayMs);
                             //System.Windows.Forms.SendKeys.SendWait(cur_keystr);
-                            SimulateKeyPress(cur_keystr);
+                            SimulateKeyStrokeSequence(cur_keystr);
                             break;
                     }
                 });
@@ -500,28 +523,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        private bool SimulateKeyPress(string keystr) {
-            ;
-            List<List<KeyCode>> seq = MpSharpHookKeyboardInputHelpers.ConvertStringToKeySequence(keystr);
-            foreach (var combo in seq) {
-                foreach (var key in combo) {
-                    UioHookResult result = _eventSimulator.SimulateKeyPress(key);
-                    if (result != UioHookResult.Success) {
-                        throw new Exception($"Error pressing key: '{key}' in seq: '{keystr}' error: '{result}'");
-                        //return false;
-                    }
-                }
-
-                foreach (var key in combo) {
-                    UioHookResult result = _eventSimulator.SimulateKeyRelease(key);
-                    if (result != UioHookResult.Success) {
-                        throw new Exception($"Error releasing key: '{key}' in seq: '{keystr}' error: '{result}'");
-                        //return false;
-                    }
-                }
-            }
-            return true;
-        }
+        
 
         #region Global Input
 
@@ -811,12 +813,12 @@ namespace MonkeyPaste.Avalonia {
                     if (!MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
                         if (MpAvClipTrayViewModel.Instance.IsAutoCopyMode) {
                             if (isLeftButton && !MpAvMainWindow.Instance.IsActive) {
-                                SimulateKeyPress("control+c");
+                                SimulateKeyStrokeSequence("control+c");
                             }
                         }
                         if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
                             if (!isLeftButton && !MpAvMainWindow.Instance.IsActive) {
-                                SimulateKeyPress("control+v");
+                                SimulateKeyStrokeSequence("control+v");
                             }
                         }
                     } else if (!MpAvMainWindowViewModel.Instance.IsMainWindowClosing &&

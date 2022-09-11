@@ -188,7 +188,7 @@ namespace MonkeyPaste.Avalonia {
                         DragDropEffects dragEffects = GetDragEffects(dragHost, dc_move_pos, e.KeyModifiers);
                         if (dragEffects != DragDropEffects.None) {
 
-                            _currentDragHost = dragHost;
+                            CurrentDragHost = dragHost;
                             dragHost.DragBegin();
 
                             var avdo = await dragHost.GetDragDataObjectAsync();
@@ -217,7 +217,7 @@ namespace MonkeyPaste.Avalonia {
                 dragControl.PointerReleased -= dragControl_PointerReleased_Handler;
                 MpConsole.WriteLine("DragCheck pointer released (was not drag)");
 
-                _currentDragHost = null;
+                CurrentDragHost = null;
                 dragHost.DragEnd();
 
             };

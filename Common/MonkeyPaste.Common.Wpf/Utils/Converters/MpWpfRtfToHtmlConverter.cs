@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 
 namespace MonkeyPaste.Common.Wpf {
     public static class MpWpfRtfToHtmlConverter {
-        #region private static Variables
+        #region Private Variables
         private static double _indentCharCount { get; set; } = 5;
 
         private static string[] _inlineTags { get; set; } = new string[] { "span", "a", "em", "strong", "u", "s", "sub", "sup", "img" };
@@ -22,15 +22,23 @@ namespace MonkeyPaste.Common.Wpf {
 
         #endregion
 
-        public static string ConvertRtfToHtml(string rtf, Dictionary<string, string> globalBlockAttributes = null, Dictionary<string, string> globalInlineAttributes = null) {
-            if (rtf == null) {
-                return string.Empty;
-            }
-            var fd = rtf.ToFlowDocument();
+        #region Public Methods
+
+        public static string ConvertFormatToHtml(
+            string formatName,
+            string formatData,
+            Dictionary<string, string> globalBlockAttributes = null, Dictionary<string, string> globalInlineAttributes = null) {
+            // allow empty document creation
+            formatData = formatData == null ? string.Empty : formatData;
+            var fd = formatData.ToFlowDocument();
             return ConvertFlowDocumentToHtml(fd, globalBlockAttributes, globalInlineAttributes);
         }
 
-        public static string ConvertFlowDocumentToHtml(FlowDocument fd, Dictionary<string, string> globalBlockAttributes = null, Dictionary<string, string> globalInlineAttributes = null) {
+        #endregion
+
+        #region Private Methods
+
+        private static string ConvertFlowDocumentToHtml(FlowDocument fd, Dictionary<string, string> globalBlockAttributes = null, Dictionary<string, string> globalInlineAttributes = null) {
             var sb = new StringBuilder();
             foreach (Block b in fd.Blocks) {
                 if (b is Table t) {
@@ -390,8 +398,8 @@ namespace MonkeyPaste.Common.Wpf {
             //}
 
             //string itemGuid = System.Guid.NewGuid().ToString();
-            string rtf = ReadTextFromFile(@"C:\Users\tkefauver\Desktop\rtf_sample.rtf");
-            string plain_html = ConvertRtfToHtml(rtf);
+            string rtf = ReadTextFromFile(@"C:\Users\tkefauver\Desktop\rtf_sample_short.rtf");
+            string plain_html = ConvertFormatToHtml(MpPortableDataFormats.Rtf, rtf);
 
             WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtf_sample_to_plain_html_test.html", plain_html);
             return plain_html;
@@ -424,5 +432,7 @@ namespace MonkeyPaste.Common.Wpf {
                 return null;
             }
         }
+
+        #endregion
     }
 }

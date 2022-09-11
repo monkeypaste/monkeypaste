@@ -35,6 +35,7 @@ namespace MonkeyPaste.Avalonia {
             "FileContents",
             "EnterpriseDataProtectionId"
         };
+
         #endregion
 
         #region Properties
@@ -114,6 +115,28 @@ namespace MonkeyPaste.Avalonia {
 
         private async Task<MpPortableDataObject> ConvertManagedFormats() {
             _isCheckingClipboard = true;
+            MpPortableDataObject ndo;
+
+            //  CoreClipboard only works w/ windows so pass handling to old way on other os
+            // TODO add other platform support to CoreClipboardHandler
+
+            if (OperatingSystem.IsWindows()) {
+                while (WinApi.IsClipboardOpen(true) != IntPtr.Zero) {
+                    MpConsole.WriteLine("Waiting on windows clipboard...");
+                    await Task.Delay(100);
+                }
+
+                ndo = MpAvClipboardHandlerCollectionViewModel.Instance.ReadClipboardOrDropObject();
+            } else {
+                ndo = await ConvertManagedFormats2();
+            }
+            
+
+            _isCheckingClipboard = false;
+            return ndo;
+        }
+        private async Task<MpPortableDataObject> ConvertManagedFormats2() {
+            _isCheckingClipboard = true;
 
             if(OperatingSystem.IsWindows()) {
                 while(WinApi.IsClipboardOpen(true) != IntPtr.Zero) {
@@ -125,6 +148,7 @@ namespace MonkeyPaste.Avalonia {
             var ndo = new MpPortableDataObject();
             string[] formats = await Application.Current.Clipboard.GetFormatsAsync();
             var validFormats = formats.Where(x => MpPortableDataFormats.RegisteredFormats.Contains(x)); //formats.Where(x => !x.StartsWith("Unknown_Format") && !_rejectedFormats.Contains(x));
+
             foreach (string format in validFormats) {
                 object formatData = null;
                 try {

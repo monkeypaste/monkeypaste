@@ -7,7 +7,7 @@ using MonkeyPaste.Common;
 namespace MonkeyPaste {
 
     public interface MpICopyItemBuilder {
-        Task<MpCopyItem> Create(MpPortableDataObject pdo, bool suppressWrite = false);
+        Task<MpCopyItem> CreateAsync(MpPortableDataObject pdo, bool suppressWrite = false);
     }
 
     public interface MpIUrlBuilder {

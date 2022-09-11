@@ -273,6 +273,7 @@ namespace MpWpfApp {
             foreach (var handler in handlers) {
 
                 var req = new MpClipboardReaderRequest() {
+                    platform = MpUserDeviceType.Windows.ToString(),
                     readFormats = EnabledFormats.Where(x => x.Parent.ClipboardPluginComponent == handler).Select(x => x.Parent.HandledFormat).Distinct().ToList(),
                     items = EnabledFormats.Where(x => x.Parent.ClipboardPluginComponent == handler).SelectMany(x=>x.Items.Cast<MpIParameterKeyValuePair>()).ToList(),
                     //readFormats = EnabledReaderLookup

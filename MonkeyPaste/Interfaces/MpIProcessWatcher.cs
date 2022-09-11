@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace MonkeyPaste {
     public interface MpIProcessWatcher {
-        IntPtr ThisAppHandle { get; }
+        IntPtr ThisAppHandle { get; set; }
 
         IntPtr LastHandle { get; }
         string LastProcessPath { get; }
@@ -23,6 +23,9 @@ namespace MonkeyPaste {
         void SetActiveProcess(IntPtr handle);
 
         event EventHandler<MpProcessActivatedEventArgs> OnAppActivated;
+
+        void StartWatcher();
+        void StopWatcher();
 
     }
 }

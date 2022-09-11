@@ -34,7 +34,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
 
-        public const double MAX_RESIZE_EDGE_DISTANCE = 5.0d;
+        public const double MAX_RESIZE_DISTANCE_TO_EDGE = 5.0d;
 
         #endregion
 

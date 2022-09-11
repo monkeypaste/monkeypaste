@@ -33,8 +33,13 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-
+        private static MpAvCefNetWebView _openerWebView { get; set; }
         public static MpAvCefNetWebView DraggingRtb { get; private set; } = null;
+
+        public static void InitOpener() {
+            var opener = new MpAvCefNetWebView();
+            _openerWebView = opener;
+        }
 
         #endregion
 
@@ -70,7 +75,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
+
         public MpAvCefNetWebView() : base() {
+            
+            //new WebViewTab(new CefBrowserSettings(), new CefRequestContext(new CefRequestContextSettings()));
             Document = new MpAvHtmlDocument(this);
             Selection = new MpAvTextSelection(Document);
 
@@ -199,35 +207,6 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
             return _evalResultLookup[evalKey];
-            ////while (_lastResult == null) {
-            ////    if(_lastResult == MpAvCefNetApplication.JS_REF_ERROR) {
-            ////        _lastResult = null;
-            ////        EvaluateJavascriptAsync(script, retryAttempt + 1).FireAndForgetSafeAsync(DataContext as MpViewModelBase);
-            ////    }
-            ////    await Task.Delay(100);
-            ////}
-            ////string resp = _lastResult;
-            ////if(retryAttempt == 0) {
-            ////    // only let the initial call clear the result
-            ////    _lastResult = null;
-            ////}
-            //string resp = null;
-            //while (resp == null) {
-            //    _evalResultLookup.TryGetValue(evalKey, out string resp);
-            //    bool is_valid = resp != null && resp != MpAvCefNetApplication.JS_REF_ERROR;
-
-            //    if (!is_valid) {
-            //        resp = null;
-            //        EvaluateJavascriptAsync(script,evalKey, retryAttempt + 1).FireAndForgetSafeAsync(DataContext as MpViewModelBase);
-            //    }
-            //    await Task.Delay(100);
-            //}
-            //string resp = resp;
-            //if (retryAttempt == 0) {
-            //    // only let the initial call clear the result
-            //    resp = null;
-            //}
-            //return resp;
         }
 
 

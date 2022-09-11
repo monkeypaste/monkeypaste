@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Windows;
 using Xamarin.Essentials;
 using Xamarin.Forms;

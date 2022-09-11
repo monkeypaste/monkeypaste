@@ -11,6 +11,7 @@ using MonkeyPaste;
 using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
 using Avalonia.Input;
+using System.Runtime.InteropServices;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -20,7 +21,8 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncSingletonViewModel<MpAvClipboardHandlerCollectionViewModel>,
         MpITreeItemViewModel,
         MpISidebarItemViewModel,
-        MpIClipboardFormatDataHandlers { //
+        MpIClipboardFormatDataHandlers,
+        MpIPlatformDataObjectHelper{ //
         #region Properties
 
         #region View Models
@@ -259,7 +261,7 @@ namespace MonkeyPaste.Avalonia {
         public MpPortableDataObject ReadClipboardOrDropObject(object forcedDataObject = null) {
             // NOTE forcedDataObject is used to read drag/drop, when null clipboard is read
 
-            var ndo = new MpPortableDataObject();
+            var mpdo = new MpPortableDataObject();
 
             //only iterate through actual handlers 
             var handlers = EnabledFormats.Where(x => x.CanRead)
@@ -267,8 +269,15 @@ namespace MonkeyPaste.Avalonia {
                                          .Distinct().Cast<MpIClipboardReaderComponent>();
 
             foreach (var handler in handlers) {
+                IntPtr mw_handle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle;                
+                //string str_test = Marshal.PtrToStringAuto(mw_handle);
+                int int_test = mw_handle.ToInt32();
+                long long_test = mw_handle.ToInt64();
 
                 var req = new MpClipboardReaderRequest() {
+                    isAvalonia = true,
+                    mainWindowImplicitHandle = int_test,//MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle.ToInt32(),
+                    platform = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
                     readFormats = EnabledFormats.Where(x => x.Parent.ClipboardPluginComponent == handler).Select(x => x.Parent.HandledFormat).Distinct().ToList(),
                     items = EnabledFormats.Where(x => x.Parent.ClipboardPluginComponent == handler).SelectMany(x => x.Items.Cast<MpIParameterKeyValuePair>()).ToList(),
                     //readFormats = EnabledReaderLookup
@@ -289,10 +298,10 @@ namespace MonkeyPaste.Avalonia {
 
                 bool isValid = MpPluginTransactor.ValidatePluginResponse(response);
                 if (isValid) {
-                    response.dataObject.DataFormatLookup.ForEach(x => ndo.DataFormatLookup.AddOrReplace(x.Key, x.Value));
+                    response.dataObject.DataFormatLookup.ForEach(x => mpdo.DataFormatLookup.AddOrReplace(x.Key, x.Value));
                 }
             }
-            return ndo;
+            return mpdo;
         }
 
         public object WriteClipboardOrDropObject(MpPortableDataObject mpdo, bool writeToClipboard) {
@@ -491,6 +500,26 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(FormatViewModels));
                 }
             });
+
+        MpPortableDataObject MpIPlatformDataObjectHelper.ConvertToSupportedPortableFormats(object nativeDataObj, int retryCount) {
+            var mpdo = ReadClipboardOrDropObject(nativeDataObj);
+            return mpdo;
+        }
+
+        object MpIPlatformDataObjectHelper.ConvertToPlatformClipboardDataObject(MpPortableDataObject mpdo) {
+            object pdo = WriteClipboardOrDropObject(mpdo, false);
+            return pdo;
+        }
+
+        void MpIPlatformDataObjectHelper.SetPlatformClipboard(MpPortableDataObject portableObj, bool ignoreClipboardChange) {
+            MpPlatformWrapper.Services.ClipboardMonitor.IgnoreNextClipboardChangeEvent = ignoreClipboardChange;
+            WriteClipboardOrDropObject(portableObj, true);
+        }
+
+        MpPortableDataObject MpIPlatformDataObjectHelper.GetPlatformClipboardDataObject() {
+            var pdo = ReadClipboardOrDropObject(null);
+            return pdo;
+        }
         #endregion
     }
 }

@@ -11,6 +11,11 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Wpf;
 using System.Collections.Specialized;
 using System.Windows.Documents;
+using System.Text;
+using Avalonia.Input;
+using IDataObject = Avalonia.Input.IDataObject;
+using DataFormats = System.Windows.DataFormats;
+using DataObject = System.Windows.DataObject;
 
 namespace CoreClipboardHandler {
     public class CoreClipboardHandler : 
@@ -64,8 +69,13 @@ namespace CoreClipboardHandler {
 
         #region MpIClipboardReaderComponent Implementation
         
-        public MpClipboardReaderResponse ReadClipboardData(MpClipboardReaderRequest request) {
-            var hasError = CanHandleDataObject();
+        MpClipboardReaderResponse MpIClipboardReaderComponent.ReadClipboardData(MpClipboardReaderRequest request) {
+            MpClipboardReaderResponse hasError = null;
+            if(request.isAvalonia) {
+                hasError = CanHandleDataObject_av(request);
+            } else {
+                hasError = CanHandleDataObject_wpf();
+            }
             if (hasError != null) {
                 return hasError;
             }
@@ -73,7 +83,7 @@ namespace CoreClipboardHandler {
             var currentOutput = new MpPortableDataObject();
             
             foreach (var nativeTypeName in request.readFormats) {
-                var data = GetClipboardData(nativeTypeName,request);
+                string data = ReadDataObjectFormat(nativeTypeName, request);
 
                 if (!string.IsNullOrEmpty(data)) {
                     currentOutput.SetData(nativeTypeName, data);
@@ -84,14 +94,33 @@ namespace CoreClipboardHandler {
             };
         }
 
-        private string GetClipboardData(string format, MpClipboardReaderRequest request) {
+        private string ReadDataObjectFormat(string format, MpClipboardReaderRequest request) {
+            MpUserDeviceType deviceType = request.platform.ToEnum<MpUserDeviceType>();
+            switch(deviceType) {
+                case MpUserDeviceType.Windows:
+                    return ReadDataObjectFormat_windows(format, request);
+                default:
+                    MpConsole.WriteTraceLine("Unsupported platform: " + request.platform);
+                    return null;
+            }
+        }
+
+        #region Windows Read
+
+
+        private string ReadDataObjectFormat_windows(string format, MpClipboardReaderRequest request) {
+            if(request.isAvalonia && request.forcedClipboardDataObject != null) {
+                // handle av dragdrop data object
+                return ReadDataObjectFormat_windows_av(format, request);
+            }
+
             IntPtr handle_with_cb = WinApi.IsClipboardOpen(true);
             bool triedToClose = false;
             while (handle_with_cb != IntPtr.Zero) {
-                if(triedToClose) {
+                if (triedToClose) {
                     Debugger.Break();
                 }
-                if(handle_with_cb == _mainWindowHandle) {
+                if (handle_with_cb == _mainWindowHandle) {
                     bool isClosed = WinApi.CloseClipboard();
                     MpConsole.WriteTraceLine("Clipboard is hung by this app while trying to read it, invoking close cliboard: " + (isClosed ? "SUCCESS" : "FAIL"));
                     triedToClose = true;
@@ -100,19 +129,19 @@ namespace CoreClipboardHandler {
                 handle_with_cb = WinApi.IsClipboardOpen(true);
             }
             string data = null;
-            switch(format) {
+            switch (format) {
                 case FILE_DROP_FORMAT:
-                    if(Clipboard.ContainsFileDropList()) {
+                    if (Clipboard.ContainsFileDropList()) {
                         string[] sa = Clipboard.GetData(format) as string[];
                         if (sa != null && sa.Length > 0) {
                             // NOTE ToLowering paths here ensures all item paths are lower case (which is app-wide convention)
-                            data = string.Join(Environment.NewLine, sa.Select(x=>x.ToLower()));
+                            data = string.Join(Environment.NewLine, sa.Select(x => x.ToLower()));
 
                         }
                     }
                     break;
                 case BMP_FORMAT:
-                    if(Clipboard.ContainsImage()) {
+                    if (Clipboard.ContainsImage()) {
                         var bmpSrc = Clipboard.GetImage();
                         if (bmpSrc != null) {
                             data = bmpSrc.ToBase64String();
@@ -147,10 +176,27 @@ namespace CoreClipboardHandler {
                     }
                     break;
             }
-            return ProcessReaderFormatParamsOnData(request, format, data); ;
+            return ProcessReaderFormatParamsOnData_windows(request, format, data); ;
         }
 
-        private string ProcessReaderFormatParamsOnData(MpClipboardReaderRequest req, string format, string data) {
+        private string ReadDataObjectFormat_windows_av(string format, MpClipboardReaderRequest request) {
+            string dataStr = null;
+            if (request.forcedClipboardDataObject is IDataObject avdo) {
+                var dataObj = avdo.Get(format);
+
+                if (dataObj is string) {
+                    dataStr = dataObj as string;
+                } else if (dataObj is byte[] bytes) {
+                    dataStr = Encoding.Default.GetString(bytes);
+                }
+            }
+            
+            return dataStr;
+        }
+        private string GetClipboardDataByFormat_windows(string format, MpClipboardReaderRequest request) {
+            return null;
+        }
+        private string ProcessReaderFormatParamsOnData_windows(MpClipboardReaderRequest req, string format, string data) {
             if(string.IsNullOrEmpty(data)) {
                 return null;
             }
@@ -266,8 +312,7 @@ namespace CoreClipboardHandler {
                     MpConsole.WriteTraceLine($"Warning, format '{format}' has no clipboard read parameter handler specified, returning raw clipboard data");
                     return data;
             }
-        }
-        
+        }       
 
 
         private uint GetWin32FormatId(string nativeFormatStr) {
@@ -292,7 +337,7 @@ namespace CoreClipboardHandler {
             return 0;
         }
 
-        private MpClipboardReaderResponse CanHandleDataObject() {
+        private MpClipboardReaderResponse CanHandleDataObject_wpf() {
             if (_mainWindowHandle == null || _mainWindowHandle == IntPtr.Zero) {
                 Application.Current.Dispatcher.Invoke(() => {
                     _mainWindowHandle = new WindowInteropHelper(Application.Current.MainWindow).Handle;
@@ -316,6 +361,38 @@ namespace CoreClipboardHandler {
             }
             return null;
         }
+
+        private MpClipboardReaderResponse CanHandleDataObject_av(MpClipboardReaderRequest request) {
+            if(request == null) {
+                return null;
+            }
+            IntPtr mwHandle = new IntPtr(request.mainWindowImplicitHandle);
+            //MpConsole.WriteLine("mw handle - int: " + request.mainWindowImplicitHandle + " intPtr: " + mwHandle);
+
+            if (mwHandle != IntPtr.Zero && 
+                _mainWindowHandle == IntPtr.Zero) {
+                // isolate first posssible request (need handle for WinApi.IsClipboardOpen)
+
+                CF_UNICODE_TEXT = WinApi.RegisterClipboardFormatA("UnicodeText");
+                CF_BITMAP = WinApi.RegisterClipboardFormatA("Bitmap");
+                CF_OEM_TEXT = WinApi.RegisterClipboardFormatA("OemText");
+                CF_HTML = WinApi.RegisterClipboardFormatA("HTML Format");
+                CF_RTF = WinApi.RegisterClipboardFormatA("Rich Text Format");
+                CF_CSV = WinApi.RegisterClipboardFormatA(DataFormats.CommaSeparatedValue);
+                CF_DIB = WinApi.RegisterClipboardFormatA("DeviceIndependentBitmap");
+                CF_HDROP = WinApi.RegisterClipboardFormatA(DataFormats.FileDrop);
+
+                _mainWindowHandle = mwHandle;
+            }
+            if (_mainWindowHandle == null || _mainWindowHandle == IntPtr.Zero) {
+                return new MpClipboardReaderResponse() {
+                    errorMessage = "No Window Handle"
+                };
+            }
+            return null;
+        }
+
+        #endregion
 
         #endregion
 

@@ -58,9 +58,9 @@ namespace MonkeyPaste.Common.Avalonia {
             return text;
         }
 
-        public static string ToQuillText(this string str) {
+        public static string ToQuillText(this string str, string strFormat) {
             if(str.IsStringRichText()) {
-                string qhtml = MpWpfRtfToHtmlConverter.ConvertRtfToHtml(str);
+                string qhtml = MpWpfRtfToHtmlConverter.ConvertFormatToHtml(str, strFormat);
                 return qhtml;
             } else if(str.IsStringCsv()) {
                 // TODO create quill tables here

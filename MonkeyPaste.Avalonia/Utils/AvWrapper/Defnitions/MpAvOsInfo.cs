@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using MonkeyPaste;
+using MonkeyPaste.Common;
+
 namespace MonkeyPaste.Avalonia {
     public class MpAvOsInfo : MpIOsInfo {
         public string OsMachineName => Environment.MachineName;

@@ -131,7 +131,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         private static void DragOver(object sender, DragEventArgs e) {
-            //MpConsole.WriteLine("Drag Over: " + sender);            
+            MpConsole.WriteLine($"[Drag Over] Source: '{e.Source}' Datat: '{e.Data}'");            
 
             MpAvIDropHost dropHost = GetDropHost(sender); 
             e.DragEffects = GetDropEffects(e);
@@ -142,10 +142,7 @@ namespace MonkeyPaste.Avalonia {
             }
             dropHost.DragOver(drop_host_mp, e.Data, e.DragEffects);
         }
-        private static void DragEnter(object sender, DragEventArgs e) {
-            //MpAvIDropHost dropHost = GetDropHost(sender);
-            //dropHost?.DragEnter();
-
+        private static void DragEnter(object sender, DragEventArgs e) {            
             DragOver(sender, e);
         }
         private static void DragLeave(object sender, RoutedEventArgs e) {
@@ -258,6 +255,16 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static DragDropEffects GetDropEffects(DragEventArgs e) {
+            if (MpAvDragExtension.CurrentDragHost == null) {
+                // this should only happen from external drag
+
+                //test data object conversion to validate
+                var mpdo = MpPlatformWrapper.Services.DataObjectHelper.ConvertToSupportedPortableFormats(e.Data);
+                if (mpdo.DataFormatLookup.Count == 0) {
+                    // external drop data has no supported formats so invalidate
+                    return DragDropEffects.None;
+                }
+            }
             if (e.KeyModifiers.HasFlag(KeyModifiers.Control)) {
                 return DragDropEffects.Copy;
             }

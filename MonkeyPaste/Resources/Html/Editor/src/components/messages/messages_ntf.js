@@ -31,3 +31,27 @@ function onContentDraggableChanged_ntf(isDraggable) {
 		notifyContentDraggableChanged(msgStr);
 	}
 }
+
+function onException_ntf(exType, exData) {
+	let exDataStr = null;
+	if (typeof exData === 'string' || exData instanceof String) {
+		exDataStr = exData;
+	} else {
+		exDataStr = JSON.stringify(exData);
+	}
+	log('');
+	log('exception! ');
+	log('exType: ' + exType);
+	log('exDataStr: ' + exDataStr);
+	log('');
+	// out MpQuillExceptionMessage
+	if (typeof notifyException === 'function') {
+		// is MpQuillContentDraggableChangedMessage
+		let msg = {
+			copyItemId: CopyItemId,
+			exType: exType,
+			exData: exDataStr
+		};
+		notifyHost(notifyException, msg);
+	}
+} 

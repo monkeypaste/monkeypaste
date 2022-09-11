@@ -22,6 +22,9 @@ namespace MonkeyPaste.Common.Plugin {
     }
 
     public class MpClipboardReaderRequest : MpPluginRequestFormatBase {
+        public bool isAvalonia { get; set; } = false;
+        public string platform { get; set; }
+        public int mainWindowImplicitHandle { get; set; }
         public List<string> readFormats { get; set; }
         
         public object forcedClipboardDataObject { get; set; } // (optional) this is used to convert drag/drop data 

@@ -15,6 +15,8 @@ namespace MonkeyPaste {
         public bool isEditorPlainHtmlConverter { get; set; }
         public bool isReadOnlyEnabled { get; set; } = true;
 
+        public bool useBetterTable { get; set; } = true;
+
         public string itemEncodedHtmlData { get; set; }
 
         public List<MpTextTemplate> usedTextTemplates { get; set; }
@@ -117,5 +119,10 @@ templateType: "dynamic"
     public class MpQuillContentDraggableChangedMessage : MpQuillContentMessageBase {
         //public int copyItemId { get; set; }
         public bool isDraggable { get; set; }
+    }
+
+    public class MpQuillExceptionMessage : MpQuillContentMessageBase {
+        public string exType { get; set; }
+        public string exData { get; set; }
     }
 }

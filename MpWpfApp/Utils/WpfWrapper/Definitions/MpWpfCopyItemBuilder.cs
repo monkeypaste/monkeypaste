@@ -189,7 +189,7 @@ namespace MpWpfApp {
             }
         }
 
-        public async Task<MpCopyItem> Create(MpPortableDataObject pdo, bool suppressWrite = false) {
+        public async Task<MpCopyItem> CreateAsync(MpPortableDataObject pdo, bool suppressWrite = false) {
             var ci = await CreateFromDataObject(pdo,suppressWrite);
             return ci;
         }

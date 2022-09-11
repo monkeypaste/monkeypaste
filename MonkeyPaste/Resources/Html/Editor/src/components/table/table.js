@@ -17,6 +17,10 @@ function initTable() {
 
 
 function initTableToolbarButton() {
+    if (!UseBetterTable) {
+        return;
+    }
+
     let editorDiv = $("#editor");
 
     var curTableIconSpan = editorDiv.parent().find('span.ql-Table-Input.ql-picker')[0].childNodes[0];

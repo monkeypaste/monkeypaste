@@ -8,16 +8,7 @@ using SQLite;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
-    public enum MpUserDeviceType {
-        None = 0,
-        Ios,
-        Android,
-        Windows,
-        Mac,
-        Linux,
-        Web,
-        Unknown
-    }
+    
 
     public class MpUserDevice : MpDbModelBase, MpISyncableDbObject {
         #region Columns
@@ -85,7 +76,7 @@ namespace MonkeyPaste {
 
         public MpUserDevice() { }
 
-        public MpUserDevice(string deviceGuid, MonkeyPaste.MpUserDeviceType platformTypeId) : this() {
+        public MpUserDevice(string deviceGuid, MpUserDeviceType platformTypeId) : this() {
             UserDeviceGuid = System.Guid.Parse(deviceGuid);
             PlatformType = platformTypeId;
         }

@@ -60,7 +60,6 @@ namespace MonkeyPaste.Avalonia {
             this.Deactivated += MainWindow_Deactivated;
             this.PointerMoved += MainWindow_PointerMoved;
             this.PointerLeave += MainWindow_PointerLeave;
-            this.AttachedToVisualTree += MpAvMainWindow_AttachedToVisualTree;
 
             var sidebarSplitter = this.FindControl<GridSplitter>("SidebarGridSplitter");
             sidebarSplitter.GetObservable(GridSplitter.IsVisibleProperty).Subscribe(value => SidebarSplitter_isVisibleChange(sidebarSplitter, value));
@@ -389,6 +388,7 @@ namespace MonkeyPaste.Avalonia {
             //ReceivedGlobalMessage(MpMessageType.MainWindowOrientationChanged);
             MpAvMainWindowViewModel.Instance.CycleOrientationCommand.Execute(null);
 
+            //MpPlatformWrapper.Services.ProcessWatcher.StartWatcher();
             MpMessenger.SendGlobal(MpMessageType.MainWindowLoadComplete);
         }
 
@@ -493,10 +493,6 @@ namespace MonkeyPaste.Avalonia {
         private void MainWindow_Deactivated(object? sender, System.EventArgs e) {
             MpAvMainWindowViewModel.Instance.IsMainWindowActive = false;
             MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
-        }
-        private void MpAvMainWindow_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            //pAvExternalDropBehavior.Instance = new MpAvExternalDropBehavior();
-            //ExternalDropBehavior.Attach(this);
         }
 
         #endregion

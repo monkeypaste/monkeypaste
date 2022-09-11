@@ -327,7 +327,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <!--<Exec Command="xcopy /y /f /S /I /E &qu<ot;$(ProjectDir)Resources&quot; &quot;$(TargetDir)Resources&quot;" />-->
+    <!--<Exec Command="xcopy /y /f /S /I /E &quot;$(ProjectDir)Resources&quot; &quot;$(TargetDir)Resources&quot;" />-->
 
     <!--<ItemGroup>
         <MySourceFiles Include="$(ProjectDir)Resources\Html\**\*.*"/>

@@ -17,6 +17,8 @@ namespace MonkeyPaste.Common {
         InternalContent,
         UnicodeText,
         OemText,
+        Xaml,
+        XamlPackage,
         Custom //when format name doesn't resolve to any previous
     }
 
@@ -99,12 +101,14 @@ namespace MonkeyPaste.Common {
         private static string[] _defaultFormatNames = new string[] {
             Text,
             Rtf,
-            Bitmap,
+            Xaml,
+            XamlPackage,
             Html,
-            FileDrop,
             Csv,
             Unicode,
             OemText,
+            FileDrop,
+            Bitmap
         };
 
         private static Dictionary<int, MpPortableDataFormat> _formatLookup;
@@ -115,6 +119,8 @@ namespace MonkeyPaste.Common {
 
         public const string Text = "Text";
         public const string Rtf = "Rich Text Format";
+        public const string Xaml = "Xaml";
+        public const string XamlPackage = "XamlPackage";
         public const string Bitmap = "Bitmap";
         public const string Html = "HTML Format";
         public const string FileDrop = "FileDrop";
@@ -122,7 +128,7 @@ namespace MonkeyPaste.Common {
         public const string Unicode = "Unicode";
         public const string OemText = "OEMText";
 
-        public const string InternalContent = "Mp Internal Content";
+        public const string INTERNAL_CLIP_TILE_DATA_FORMAT = "Mp Internal Content";
 
         #endregion
 
@@ -131,7 +137,6 @@ namespace MonkeyPaste.Common {
         public static IEnumerable<string> RegisteredFormats => _formatLookup.Select(x => x.Value.Name);
 
         #endregion
-
 
         #region Public Methods
 

@@ -1,4 +1,6 @@
-﻿namespace MonkeyPaste {
+﻿using MonkeyPaste.Common;
+
+namespace MonkeyPaste {
     public interface MpIOsInfo {
         string OsMachineName { get; }
         string OsFileManagerPath { get; }

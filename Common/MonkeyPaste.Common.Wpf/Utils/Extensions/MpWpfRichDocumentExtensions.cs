@@ -611,12 +611,18 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
 
-        public static FlowDocument ToFlowDocument(this string str) {
+        public static FlowDocument ToFlowDocument(this string str, string strFormat = "") {
+            strFormat = strFormat == string.Empty ? DataFormats.Rtf : strFormat;
+            if(strFormat != DataFormats.Text && strFormat != DataFormats.Rtf && strFormat != DataFormats.Xaml && strFormat != DataFormats.XamlPackage) {
+                // invalid format for tr.Load
+                Debugger.Break();
+                return new FlowDocument();
+            }
             using (var stream = new MemoryStream(Encoding.Default.GetBytes(str))) {
                 try {
                     var fd = new FlowDocument();
                     var range = new TextRange(fd.ContentStart, fd.ContentEnd);
-                    range.Load(stream, System.Windows.DataFormats.Rtf);
+                    range.Load(stream, strFormat);
 
                     var tr = new TextRange(fd.ContentStart, fd.ContentEnd);
                     var rtbAlignment = tr.GetPropertyValue(FlowDocument.TextAlignmentProperty);

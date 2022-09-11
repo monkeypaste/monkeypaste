@@ -98,6 +98,8 @@ namespace MonkeyPaste {
         private static async Task<MpPluginFormat> LoadPluginAsync(string manifestPath) {
             string manifestStr = MpFileIo.ReadTextFromFile(manifestPath);
             if (string.IsNullOrEmpty(manifestStr)) {
+                // Empty or io error on manifest file read
+
                 var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotificationAsync(
                     dialogType: MpNotificationDialogType.InvalidPlugin,
                     msg: $"Plugin manifest not found in '{manifestPath}'", 

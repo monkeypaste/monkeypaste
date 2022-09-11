@@ -3,8 +3,23 @@ var BlockTags = ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbod
 var CopyItemId = -1;
 var CopyItemType = 'Text';
 
-function initContent(itemHtml) {
-    setHtml(itemHtml);
+function initContent(itemHtmlStr) {
+	try {
+		setHtml('');
+		insertHtml(0, itemHtmlStr);
+		//setHtml(itemHtmlStr);
+	} catch (ex) {		
+		//malformed or unsupported content was 
+		onException_ntf('setHtml', ex);
+		let item_doc_node = domParser.parseFromString(itemHtmlStr, 'text/html');
+		log('malformed content: ')
+		log(itemHtmlStr);
+		log('using plain text: ');
+		let item_pt = item_doc_node.body.innerText;
+		log(item_pt);
+		initContent(item_pt);
+	}
+    
 }
 
 function getContentWidth() {

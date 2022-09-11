@@ -47,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
 
             DataObject avdo = new DataObject();
             // setup internal data format
-            avdo.Set(MpAvDataObjectHelper.CLIP_TILE_DATA_FORMAT, BindingContext);
+            avdo.Set(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT, BindingContext);
 
             return avdo;
         }
