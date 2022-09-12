@@ -841,6 +841,15 @@ namespace MonkeyPaste.Avalonia {
         public bool IsEmpty => Items.Count == 0;
 
         public bool IsPinTrayEmpty => PinnedItems.Count == 0;
+
+        public bool IsPinTrayVisible {
+            get {
+                if(IsExternalDragOverClipTrayContainer || !IsPinTrayEmpty) {
+                    return true;
+                }
+                return false;
+            }
+        }
         public bool HasScrollVelocity => Math.Abs(ScrollVelocityX) + Math.Abs(ScrollVelocityY) > 0.1d;
 
         public bool IsScrollingIntoView { get; set; }
@@ -849,14 +858,26 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsRequery { get; set; } = false;
 
+        #region Drag Drop
+
+        public bool IsAnyTileDragging {
+            get {
+                return Items.Any(x => x.IsItemDragging) || PinnedItems.Any(x => x.IsItemDragging);
+            }
+        }
+
+        public bool IsExternalDragOverClipTrayContainer { get; set; }
+        public bool IsDragOverPinTray { get; set; }
         public bool IsPinTrayDropPopOutVisible {
             get {
                 // show popout when no items are visible
                 // TODO This needs to account for external dragover
                 // TODO? at some point using global drag event  when mw is hidden (and pref enabled) have pop out panel automatically pop out for drop
-                return IsAnyTileDragging && IsPinTrayEmpty;
+                return (IsAnyTileDragging || IsExternalDragOverClipTrayContainer) && IsPinTrayEmpty;
             }
         }
+
+        #endregion
 
         #region Child Property Wrappers
 
@@ -879,16 +900,10 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsAnyPastingTemplate => Items.Any(x => x.IsPastingTemplate) || PinnedItems.Any(x => x.IsPastingTemplate);
 
-        public bool IsAnyTileDragging {
-            get {
-                return Items.Any(x => x.IsItemDragging) || PinnedItems.Any(x => x.IsItemDragging);
-            }
-        }
-                
+        
 
         public bool IsAnyTilePinned => PinnedItems.Count > 0;
 
-        public bool IsDragOverPinTray { get; set; }
 
         public bool IsUnpinning { get; set; }
         #endregion
@@ -1424,6 +1439,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
+        public double DefaultPinTrayWidth => DefaultItemWidth*1.4;
         public double PinTrayScreenWidth { get; set; }
         public double PinTrayScreenHeight { get; set; }
 
@@ -1431,12 +1447,12 @@ namespace MonkeyPaste.Avalonia {
 
         public double MinPinTrayScreenWidth {
             get {
-                return IsAnyTilePinned || IsAnyTileDragging ? MinClipOrPinTrayScreenWidth : 0;
+                return IsPinTrayVisible ? MinClipOrPinTrayScreenWidth : 0;
             }
         }
         public double MinPinTrayScreenHeight {
             get {
-                return IsAnyTilePinned || IsAnyTileDragging ? MinClipOrPinTrayScreenHeight : 0;
+                return IsPinTrayVisible ? MinClipOrPinTrayScreenHeight : 0;
             }
         }
 

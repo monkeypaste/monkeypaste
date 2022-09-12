@@ -19,6 +19,7 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvPinTrayView : MpAvUserControl<MpAvClipTrayViewModel>, MpAvIDropHost {
 
         #region MpAvIDropHost Implementation
+        bool MpAvIDropHost.IsDropEnabled => true;
         bool MpAvIDropHost.IsDropValid(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects) {
             if(dragEffects == DragDropEffects.None) {
                 return false;
@@ -51,6 +52,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         void MpAvIDropHost.DragOver(MpPoint host_mp, IDataObject avdo, DragDropEffects dragEffects) {
+            BindingContext.IsDragOverPinTray = true;
+
             int drop_idx = GetDropIdx(host_mp);
             MpConsole.WriteLine("DragOver DropIdx: " + drop_idx);
 
@@ -69,6 +72,8 @@ namespace MonkeyPaste.Avalonia {
         //}
 
         void MpAvIDropHost.DragLeave() {
+            BindingContext.IsDragOverPinTray = false;
+            BindingContext.OnPropertyChanged(nameof(BindingContext.IsPinTrayDropPopOutVisible));
             ClearAdorner();
         }
 
@@ -76,6 +81,9 @@ namespace MonkeyPaste.Avalonia {
             // NOTE only pin tray allows drop not clip tray
 
             ClearAdorner();
+            BindingContext.IsDragOverPinTray = false;
+            BindingContext.IsExternalDragOverClipTrayContainer = false;
+            BindingContext.OnPropertyChanged(nameof(BindingContext.IsPinTrayDropPopOutVisible));
 
             int drop_idx = GetDropIdx(host_mp);
             MpConsole.WriteLine("DropDataObjectAsync DropIdx: " + drop_idx);
@@ -154,7 +162,7 @@ namespace MonkeyPaste.Avalonia {
         private MpLine CreateDropLine(int drop_idx, DragDropEffects dragEffects) {
             var ptr_lb = this.FindControl<ListBox>("PinTrayListBox");
             int total_count = BindingContext.PinnedItems.Count;
-            if (drop_idx > total_count) {
+            if (drop_idx > total_count || total_count == 0) {
                 return null;
             }
             MpLine drop_line;

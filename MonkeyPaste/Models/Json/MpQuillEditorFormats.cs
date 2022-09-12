@@ -8,6 +8,10 @@ using System.Text;
 namespace MonkeyPaste {
     public class MpQuillLoadRequestMessage : MpJsonObject {
         public int copyItemId { get; set; }
+        public string copyItemType { get; set; }
+
+        public string itemData { get; set; }
+
         public string envName { get; set; } // will be wpf,android, etc.
 
         public bool isPasteRequest { get; set; } = false; //request should ONLY happen if encoded w/ templates
@@ -16,8 +20,6 @@ namespace MonkeyPaste {
         public bool isReadOnlyEnabled { get; set; } = true;
 
         public bool useBetterTable { get; set; } = true;
-
-        public string itemEncodedHtmlData { get; set; }
 
         public List<MpTextTemplate> usedTextTemplates { get; set; }
     }
@@ -39,7 +41,7 @@ namespace MonkeyPaste {
     }
 
     public class MpQuillEnableReadOnlyResponseMessage : MpJsonObject {
-        public string itemEncodedHtmlData { get; set; }
+        public string itemData { get; set; }
 
         public List<string> userDeletedTemplateGuids { get; set; }
         public List<MpTextTemplate> updatedAllAvailableTextTemplates { get; set; }
@@ -124,5 +126,15 @@ templateType: "dynamic"
     public class MpQuillExceptionMessage : MpQuillContentMessageBase {
         public string exType { get; set; }
         public string exData { get; set; }
+        public override string ToString() {
+            return $"Quill Exception for copyItemId:{copyItemId} ofType:'{exType}' withData: '{exData}'";
+        }
+    }
+    public class MpQuillFileListDataFragment : MpJsonObject {
+        public List<MpQuillFileListItemDataFragmentMessage> fileItems { get; set; }
+    }
+    public class MpQuillFileListItemDataFragmentMessage : MpJsonObject {
+        public string filePath { get; set; }
+        public string fileIconBase64 { get; set; }
     }
 }

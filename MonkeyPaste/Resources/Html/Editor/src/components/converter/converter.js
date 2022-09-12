@@ -6,7 +6,7 @@ function initPlainHtmlConverter() {
 		isReadOnlyEnabled: true,
 		usedTextTemplates: {},
 		isPasteRequest: false,
-		itemEncodedHtmlData: ''
+		itemData: ''
 	}
 
 	EnvName = reqMsg.envName;

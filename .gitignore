@@ -353,3 +353,4 @@ MigrationBackup/
 .ionide/
 /MpWpfApp/Resources/Icons/Silk/icons
 /MonkeyPaste.Avalonia/cef
+/MonkeyPaste.Avalonia/cef_old/win

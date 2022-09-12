@@ -507,12 +507,7 @@ function getUsedTemplateDefinitions() {
 
 function getAvailableTemplateDefinitions() {
     if (availableTemplates == null || availableTemplates.length == 0) {
-        if (typeof getAllTemplatesFromDb === 'function') {
-            let allTemplatesJsonStr = getAllTemplatesFromDb();
-            log('templates from db:');
-            log(allTemplatesJsonStr);
-            availableTemplates = JSON.parse(allTemplatesJsonStr);
-		}
+        availableTemplates = getAllTemplatesFromDb_get();
 
         if (availableTemplates == null || availableTemplates.length == 0) {
             return getUsedTemplateDefinitions().map(x => getTemplateFromDomNode(x.domNode));

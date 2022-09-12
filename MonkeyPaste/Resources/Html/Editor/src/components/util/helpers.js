@@ -210,5 +210,6 @@ function isTextElement(elm) {
     return elm.nodeType === 3;
 }
 
+
 const delay = time => new Promise(res => setTimeout(res, time));
 

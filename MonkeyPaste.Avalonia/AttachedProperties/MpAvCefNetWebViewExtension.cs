@@ -366,10 +366,22 @@ namespace MonkeyPaste.Avalonia {
 
                 //tcvm.IsBusy = false;
 
+                string itemData = ctvm.CopyItemData;
+                if(ctvm.ItemType == MpCopyItemType.FileList) {
+                    var fl_frag = new MpQuillFileListDataFragment() {
+                        fileItems = ctvm.FileItems.Select(x => new MpQuillFileListItemDataFragmentMessage() {
+                            filePath = x.Path,
+                            fileIconBase64 = x.IconBase64
+                        }).ToList()
+                    };
+                    itemData = fl_frag.SerializeJsonObjectToBase64();
+                }
+
                 return new MpQuillLoadRequestMessage() {
                     copyItemId = ctvm.CopyItemId,
+                    copyItemType = ctvm.ItemType.ToString(),
                     envName = "wpf",
-                    itemEncodedHtmlData = ctvm.CopyItemData,
+                    itemData = itemData,//ctvm.CopyItemData,
                     usedTextTemplates = new List<MpTextTemplate>(), //usedTemplates,
                     isPasteRequest = ctvm.IsPasting,
                     isReadOnlyEnabled = ctvm.IsContentReadOnly
@@ -440,9 +452,9 @@ namespace MonkeyPaste.Avalonia {
 
                 var qrm = MpJsonObject.DeserializeObject<MpQuillEnableReadOnlyResponseMessage>(enableReadOnlyResponse);
 
-                if (ctvm.CopyItemData != qrm.itemEncodedHtmlData) {
+                if (ctvm.CopyItemData != qrm.itemData) {
 
-                    ctvm.CopyItemData = qrm.itemEncodedHtmlData;
+                    ctvm.CopyItemData = qrm.itemData;
                 }
 
                 var ctv = control.GetVisualAncestor<MpAvClipTileView>();
@@ -460,7 +472,7 @@ namespace MonkeyPaste.Avalonia {
                     .UpdateAsync(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids)
                     .FireAndForgetSafeAsync(ctvm);
 
-                return qrm.itemEncodedHtmlData;
+                return qrm.itemData;
             }
             return null;
         }

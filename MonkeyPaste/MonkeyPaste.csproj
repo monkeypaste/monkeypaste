@@ -91,11 +91,15 @@
     <None Remove="Resources\Html\Editor\package-lock.json" />
     <None Remove="Resources\Html\Editor\package.json" />
     <None Remove="Resources\Html\Editor\Quill_Formated_Text.html" />
+    <None Remove="Resources\Html\Editor\src\components\content\content-file-list\content-file-list.js" />
+    <None Remove="Resources\Html\Editor\src\components\content\content-image\content-image.js" />
+    <None Remove="Resources\Html\Editor\src\components\content\content-text\content-text.js" />
     <None Remove="Resources\Html\Editor\src\components\content\content.js" />
     <None Remove="Resources\Html\Editor\src\components\content\content_with_source_attributes.js" />
     <None Remove="Resources\Html\Editor\src\components\converter\converter.js" />
     <None Remove="Resources\Html\Editor\src\components\dragdrop\dragdrop.js" />
     <None Remove="Resources\Html\Editor\src\components\editor\editor.js" />
+    <None Remove="Resources\Html\Editor\src\components\editor\search.png" />
     <None Remove="Resources\Html\Editor\src\components\editor\selection.js" />
     <None Remove="Resources\Html\Editor\src\components\font\font.js" />
     <None Remove="Resources\Html\Editor\src\components\overlay\overlay.js" />
@@ -160,6 +164,15 @@
     <EmbeddedResource Include="Resources\Html\Editor\src\components\content\content.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\content\content-file-list\content-file-list.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\content\content-image\content-image.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\content\content-text\content-text.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\converter\converter.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -169,6 +182,7 @@
     <EmbeddedResource Include="Resources\Html\Editor\src\components\editor\editor.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\editor\search.png" />
     <EmbeddedResource Include="Resources\Html\Editor\src\components\overlay\selection.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -252,6 +266,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resources\Html\Editor\src\components\content\content-style.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Html\Editor\src\components\content\content-file-list\content-file-list-style.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\src\components\editor\editor-style.css">

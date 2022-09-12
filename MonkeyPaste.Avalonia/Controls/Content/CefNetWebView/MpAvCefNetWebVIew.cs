@@ -145,14 +145,14 @@ namespace MonkeyPaste.Avalonia {
             //    // ignore 
             //}
             if(_evalResultLookup.ContainsKey(evalKey)) {
-                MpConsole.WriteLine("js eval key " + evalKey + " already has a result pending (replacing).");
-                MpConsole.WriteLine("existing: " + _evalResultLookup[evalKey]);
-                MpConsole.WriteLine("new: " + result);
+                //MpConsole.WriteLine("js eval key " + evalKey + " already has a result pending (replacing).");
+                //MpConsole.WriteLine("existing: " + _evalResultLookup[evalKey]);
+                //MpConsole.WriteLine("new: " + result);
                 _evalResultLookup[evalKey] = result;
                 return;
             }
             if(!_evalResultLookup.TryAdd(evalKey,result)) {
-                MpConsole.WriteTraceLine("Js Eval error, couldn't write to lookup, if happens should probably loop here..");
+               // MpConsole.WriteTraceLine("Js Eval error, couldn't write to lookup, if happens should probably loop here..");
                 Debugger.Break();
             }
         }
@@ -176,7 +176,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 _evalResultLookup[evalKey] = null;
                 attempt++;
-                MpConsole.WriteLine($"retrying '{script}' w/ key:'{evalKey}' attempt#:{attempt}");
+                //MpConsole.WriteLine($"retrying '{script}' w/ key:'{evalKey}' attempt#:{attempt}");
                 await Task.Delay(100);
             }
             MpConsole.WriteLine($"retry count exceeded for '{script}' w/ key:'{evalKey}' attempts#:{attempt}");

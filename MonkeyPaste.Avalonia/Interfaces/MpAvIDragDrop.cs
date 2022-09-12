@@ -15,6 +15,7 @@ namespace MonkeyPaste.Avalonia {
     }
 
     public interface MpAvIDropHost  {
+        bool IsDropEnabled { get; }
         bool IsDropValid(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects);
         //void DragEnter();
         void DragOver(MpPoint host_mp, IDataObject avdo, DragDropEffects dragEffects);

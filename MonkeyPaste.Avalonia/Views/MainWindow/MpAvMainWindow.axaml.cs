@@ -22,7 +22,7 @@ using Avalonia.Input;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvMainWindow : Window {
+    public partial class MpAvMainWindow : Window, MpAvIDropHost {
         #region Private Variables
 
         private int? _origResizerIdx;
@@ -33,6 +33,41 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvMainWindow? Instance { get; private set; } = null;
         static MpAvMainWindow() {
             BoundsProperty.Changed.AddClassHandler<MpAvMainWindow>((x, y) => x.BoundsChangedHandler(y as AvaloniaPropertyChangedEventArgs<Rect>));
+        }
+
+        #endregion
+
+        #region MpAvIDropHost Implementation
+
+        bool MpAvIDropHost.IsDropEnabled => false;
+        bool MpAvIDropHost.IsDropValid(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects) {
+            // since this is on mw grid, its a container for any internal drop
+            // it will only be valid when another drophost is set
+            if(MpAvDropExtension.CurrentDropHost == this) {
+                Debugger.Break();
+            }
+            return MpAvDropExtension.CurrentDropHost != null;
+        }
+
+        void MpAvIDropHost.DragOver(MpPoint host_mp, IDataObject avdo, DragDropEffects dragEffects) {
+            // only care about showing pin tray when empty from external drag
+            if (MpAvDragExtension.CurrentDragHost != null) {
+                // internal drag ignore
+                return;
+            }
+            MpAvClipTrayViewModel.Instance.IsExternalDragOverClipTrayContainer = true;
+        }
+
+        void MpAvIDropHost.DragLeave() {
+            if (MpAvDragExtension.CurrentDragHost != null) {
+                // internal drag ignore
+                return;
+            }
+            MpAvClipTrayViewModel.Instance.IsExternalDragOverClipTrayContainer = false;
+        }
+
+        Task<DragDropEffects> MpAvIDropHost.DropDataObjectAsync(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects) {
+            throw new NotImplementedException();
         }
 
         #endregion
@@ -327,7 +362,7 @@ namespace MonkeyPaste.Avalonia {
                 //pin tray (vertical)
                 ctrcv_ptrv.Margin = new Thickness(0, 5, 0, 5);
                 // pin tray listbox padding (vertical) for head/tail drop adorners
-                ctrcv_ptr_lb.Padding = new Thickness(0, 10, 0, 10);
+                ctrcv_ptr_lb.Padding = new Thickness(10, 10, 10, 10);
 
                 // clip/pin tray grid splitter
                 ctrcv_gs.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -494,6 +529,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvMainWindowViewModel.Instance.IsMainWindowActive = false;
             MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
         }
+
 
         #endregion
 

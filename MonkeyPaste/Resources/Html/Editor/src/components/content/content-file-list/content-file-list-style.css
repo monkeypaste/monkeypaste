@@ -1,0 +1,73 @@
+﻿.content-file-list-container {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 5px;
+}
+
+.content-file-list {
+    margin: 0px;
+    padding: 0px;
+    list-style-type: none;
+}
+
+.content-file-list-item {
+    display: flex;
+    list-style-position: inside;
+    border: 2px solid black;
+    border-radius: 3px;
+    padding: 2px 7px;
+    align-items: center;
+    margin-bottom: 3px
+}
+    .content-file-list-item:hover {
+        border: 2px solid yellow;
+        background-color: lightblue;
+        transition: .3s;
+    }
+        .content-file-list-item:hover .content-file-list-item-button {
+            display: flex;
+        }
+
+.content-file-list-item-icon {
+    width: 30px;
+    border-color: black;
+    padding: 3px;
+    object-fit: contain;
+}
+
+.content-file-list-item-path-link {
+    margin: 7px;
+    width: 85%;
+}
+.content-file-list-item-path-text {
+    font-size: 16px;
+    font-family: 'Segoe UI';
+    
+}
+
+.content-file-list-item-button {
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    border-radius: 3px;
+    background-color: white;
+    align-items: center;
+    margin-right: 5px;
+    cursor: pointer;
+    display: none;
+}
+
+.content-file-list-item-button:hover .delete-file-item {
+    color: red;
+}
+    .content-file-list-item-button:hover .goto-file-item {
+        color: blue;
+    }
+
+.content-file-list-item-button-icon {
+    width: 80%;
+    height: 80%;
+    margin-left: 3px;
+    margin-top: 3px;
+}

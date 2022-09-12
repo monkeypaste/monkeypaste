@@ -37,14 +37,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
 
-        private static MpAvCefNetApplication _instance;
-        public static MpAvCefNetApplication Instance => _instance;
-
 
         #endregion
         #region Properties
 
-        private string[] BindingFunctionNames = new string[] {
+        private static string[] BindingFunctionNames = new string[] {
             "getAllTemplatesFromDb",
             "notifyEditorSelectionChanged",
             "notifyContentLengthChanged",
@@ -52,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
             "notifyException"
         };
 
-        public Dictionary<string, MpAvEditorBindingFunctionType> BindingFunctionLookup {
+        public static Dictionary<string, MpAvEditorBindingFunctionType> BindingFunctionLookup {
             get {
                 if(typeof(MpAvEditorBindingFunctionType).Length() != BindingFunctionNames.Length) {
                     // mismatch in count
@@ -85,14 +82,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static void InitCefNet(IClassicDesktopStyleApplicationLifetime desktop) {
-            _instance = new MpAvCefNetApplication(desktop);
+            _ = new MpAvCefNetApplication(desktop);
         }
 
         public static void ShutdownCefNet() {
-            if(_instance == null) {
+            if(Instance == null) {
                 return;
             }
-            _instance.Shutdown();
+            Instance.Shutdown();
             MpConsole.WriteLine("CefNet Successfully shutdown");
         }
 
@@ -185,6 +182,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void CefApp_CefProcessMessageReceived(object sender, CefProcessMessageReceivedEventArgs e) {            
             if (e.Name == "EvaluateScript") {
+                // renderer thread
                 string evalKey = e.Message.ArgumentList.GetString(0);
                 string script = e.Message.ArgumentList.GetString(1);
 
@@ -238,73 +236,37 @@ namespace MonkeyPaste.Avalonia {
                         Debugger.Break();
                         return;
                     }
+
+                    var wv = e.Frame.Browser.Host.Client.GetWebView() as MpAvCefNetWebView;
+                    var ctvm = wv.DataContext as MpAvClipTileViewModel;
                     switch (funcType) {
-                        case MpAvEditorBindingFunctionType.NotifyContentDraggableChanged: {
-                                var draggableChanged = MpJsonObject.DeserializeObject<MpQuillContentDraggableChangedMessage>(msgJsonStr);
-                                var wv = MpAvMainWindow.Instance.GetVisualDescendants<MpAvCefNetWebView>()
-                                                              .FirstOrDefault(x => x.DataContext is MpAvClipTileViewModel ctvm &&
-                                                                                    ctvm.CopyItemId == draggableChanged.copyItemId);
-                                wv.UpdateDraggable(draggableChanged.isDraggable);
+                        case MpAvEditorBindingFunctionType.NotifyContentDraggableChanged: 
+                            var draggableChanged = MpJsonObject.DeserializeObject<MpQuillContentDraggableChangedMessage>(msgJsonStr);
+                            wv.UpdateDraggable(draggableChanged.isDraggable);
+                            break;
+                        case MpAvEditorBindingFunctionType.NotifyEditorSelectionChanged: 
+                            var selChangedJsonMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillContentSelectionChangedMessage>(msgJsonStr);
+                            if (selChangedJsonMsgObj.selRects != null) {
+                                int change_id = MpRandom.Rand.Next(0, 10);
+                                MpConsole.WriteLine("");
+                                selChangedJsonMsgObj.selRects.ForEach(x => MpConsole.WriteLine("ChangeId: " + change_id + x.ToRect()));
+                                MpConsole.WriteLine("");
+                                wv.UpdateSelectionRects(selChangedJsonMsgObj.selRects.Select(x => x.ToRect()));
+                            } 
 
+                            wv.UpdateSelection(selChangedJsonMsgObj.index, selChangedJsonMsgObj.length, true);
+                            break;
+                        case MpAvEditorBindingFunctionType.NotifyContentLengthChanged:
+                            var contentLengthMsgObj = MpJsonObject.DeserializeObject<MpQuillContentLengthChangedMessage>(msgJsonStr);
+                            if (contentLengthMsgObj != null) {
+                                wv.Document.ContentEnd.Offset = contentLengthMsgObj.length;
                             }
                             break;
-                        case MpAvEditorBindingFunctionType.NotifyEditorSelectionChanged: {
-                                var selChangedJsonMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillContentSelectionChangedMessage>(msgJsonStr);
-                                var wv = MpAvMainWindow.Instance.GetVisualDescendants<MpAvCefNetWebView>()
-                                                              .FirstOrDefault(x => x.DataContext is MpAvClipTileViewModel ctvm &&
-                                                                                    ctvm.CopyItemId == selChangedJsonMsgObj.copyItemId);
-                                if (wv == null) {
-                                    Debugger.Break();
-                                } else {
-                                    //if (!string.IsNullOrEmpty(selChangedJsonMsgObj.selJsonRectListBase64Str)) {
-                                    //    // NOTE rects are relative to top of window not document so toolbar height is included if visible
-                                    //    var selRects = MpJsonObject.DeserializeBase64Object<List<MpJsonRect>>(selChangedJsonMsgObj.selJsonRectListBase64Str);
-                                    //    if(selRects.Count > 1) {
-                                    //        Debugger.Break();
-                                    //    }
-                                    //    wv.UpdateSelectionRects(selRects.Select(x => x.ToRect()));
-                                    //}
-                                    if (selChangedJsonMsgObj.selRects != null) {
-                                        int change_id = MpRandom.Rand.Next(0, 10);
-                                        MpConsole.WriteLine("");
-                                        selChangedJsonMsgObj.selRects.ForEach(x => MpConsole.WriteLine("ChangeId: " + change_id + x.ToRect()));
-                                        MpConsole.WriteLine("");
-                                        wv.UpdateSelectionRects(selChangedJsonMsgObj.selRects.Select(x => x.ToRect()));
-                                    } else {
-
-                                    }
-
-                                    wv.UpdateSelection(selChangedJsonMsgObj.index, selChangedJsonMsgObj.length, true);
-                                }
-                            }
-
-                            break;
-                        case MpAvEditorBindingFunctionType.NotifyContentLengthChanged: {
-                                var contentLengthMsgObj = MpJsonObject.DeserializeObject<MpQuillContentLengthChangedMessage>(msgJsonStr);
-                                if (contentLengthMsgObj != null) {
-                                    var wv = MpAvMainWindow.Instance.GetVisualDescendants<MpAvCefNetWebView>()
-                                                                      .FirstOrDefault(x => x.DataContext is MpAvClipTileViewModel ctvm &&
-                                                                                            ctvm.CopyItemId == contentLengthMsgObj.copyItemId);
-                                    if (wv == null) {
-                                        Debugger.Break();
-                                    } else {
-                                        wv.Document.ContentEnd.Offset = contentLengthMsgObj.length;
-                                    }
-                                }
-                            }
-                            break;
-                        case MpAvEditorBindingFunctionType.NotifyException: {
+                        case MpAvEditorBindingFunctionType.NotifyException:
                                 var exceptionMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonStr);
                                 if(exceptionMsgObj != null) {
-                                    if (e.Frame.Browser.Host.Client.GetWebView() is MpAvCefNetWebView wv &&
-                                        wv.DataContext is MpAvClipTileViewModel ctvm) {
-                                        Debugger.Break();
-                                        //wv.SetJavascriptResult(evalKey, jsRespStr_browser);
-                                    } else {
-                                        Debugger.Break();
-                                    }
+                                    MpConsole.WriteLine(exceptionMsgObj);
                                 }
-                            }
                             break;
                     }
                 });
@@ -331,6 +293,9 @@ namespace MonkeyPaste.Avalonia {
             }
             if(name.StartsWith("get")) {
                 // js is accessing data from cs...
+                var test = MpAvCefNetApplication.BindingFunctionLookup;
+                // is it accessible?
+                Debugger.Break();
 
                 if (name == "getAllTemplatesFromDb") {
                     List<MpTextTemplate> citl = MpDb.GetItems<MpTextTemplate>(_dbPath);

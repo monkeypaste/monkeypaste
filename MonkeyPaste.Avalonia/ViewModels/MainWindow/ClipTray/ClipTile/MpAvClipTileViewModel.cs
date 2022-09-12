@@ -1170,7 +1170,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public ObservableCollection<MpFileItemViewModel> FileItems { get; set; } = new ObservableCollection<MpFileItemViewModel>();
+        public ObservableCollection<MpAvFileItemViewModel> FileItems { get; set; } = new ObservableCollection<MpAvFileItemViewModel>();
         public MpImageAnnotationCollectionViewModel DetectedImageObjectCollectionViewModel { get; set; }
 
         public MpTemplateCollectionViewModel TemplateCollection { get; set; }
@@ -1577,8 +1577,17 @@ namespace MonkeyPaste.Avalonia {
 
             //MpMessenger.Unregister<MpMessageType>(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
 
-
-            FileItems.Clear();
+            if (ItemType == MpCopyItemType.FileList) {
+                // BUG will need to check source here... pretty much most places using env.newLine to parse right i think
+                //  or substitute for 'portableNewLine' where necessary
+                var fil = await Task.WhenAll(
+                    CopyItemData.Split(new String[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
+                                .Select(x=>CreateFileItemViewModel(x)));
+                FileItems = new ObservableCollection<MpAvFileItemViewModel>(fil);
+            }else {
+                FileItems.Clear();
+            }
+            
             TemplateCollection = new MpTemplateCollectionViewModel(this);
 
             if(ci != null) {
@@ -1667,6 +1676,12 @@ namespace MonkeyPaste.Avalonia {
             TitleLayerZIndexes = new List<int> { 1, 2, 3 }.Randomize().ToArray();
 
             IsBusy = wasBusy;
+        }
+
+        private async Task<MpAvFileItemViewModel> CreateFileItemViewModel(string path) {
+            var fivm = new MpAvFileItemViewModel(this);
+            await fivm.InitializeAsync(path);
+            return fivm;
         }
         public void ResetSubSelection(bool clearEditing = true, bool reqFocus = false) {
             Dispatcher.UIThread.Post(() => {

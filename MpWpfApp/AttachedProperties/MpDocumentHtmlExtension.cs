@@ -206,7 +206,7 @@ namespace MpWpfApp {
         public static MpQuillLoadRequestMessage CreateConvertStandardHtmlMessage(string standardHtml) {
             return new MpQuillLoadRequestMessage() {
                 envName = "wpf",
-                itemEncodedHtmlData = standardHtml
+                itemData = standardHtml
             };
         }
 
@@ -219,7 +219,7 @@ namespace MpWpfApp {
 
                 return new MpQuillLoadRequestMessage() {
                     envName = "wpf",
-                    itemEncodedHtmlData = GetEncodedHtml(itemData,ctvm.CopyItemGuid),
+                    itemData = GetEncodedHtml(itemData,ctvm.CopyItemGuid),
                     usedTextTemplates = GetTextTemplates(itemData),
                     isPasteRequest = ctvm.IsPasting,
                     isReadOnlyEnabled = ctvm.IsContentReadOnly
@@ -237,7 +237,7 @@ namespace MpWpfApp {
 
                     //civm.CopyItemData = qrm.itemEncodedHtmlData;
                     MpConsole.WriteLine("Skipping writing updated item data: ");
-                    MpConsole.WriteLine(qrm.itemEncodedHtmlData);
+                    MpConsole.WriteLine(qrm.itemData);
 
                     var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
                     if (ctcv != null) {
@@ -246,7 +246,7 @@ namespace MpWpfApp {
 
                     MpMasterTemplateModelCollectionViewModel.Instance.UpdateAsync(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids).FireAndForgetSafeAsync(ctvm);
                     
-                    return qrm.itemEncodedHtmlData;
+                    return qrm.itemData;
                 }
             }
             return null;

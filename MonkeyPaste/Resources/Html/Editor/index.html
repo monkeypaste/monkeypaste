@@ -19,10 +19,14 @@
 
     <link href="src/components/editor/quill-style.css" rel="stylesheet" />
     <link href="src/components/editor/editor-style.css" rel="stylesheet" />
+
     <link href="src/components/template/template-style.css" rel="stylesheet" />
     <link href="src/components/template/toolbar/edit/edit-template-toolbar-style.css" rel="stylesheet" />
     <link href="src/components/template/toolbar/paste/paste-template-toolbar-style.css" rel="stylesheet" />
+
     <link href="src/components/content/content-style.css" rel="stylesheet" />
+    <link href="src/components/content/content-file-list/content-file-list-style.css" rel="stylesheet" />
+
     <link href="src/components/overlay/overlay-style.css" rel="stylesheet" />
 
     <script src="lib/HighlightJs/highlight.min.js"></script>
@@ -59,7 +63,9 @@
     <script src="src/components/util/math.js"></script>
     <script src="src/components/util/graphics.js"></script>
     <script src="src/components/util/color.js"></script>
+
     <script src="src/components/converter/converter.js"></script>
+
     <script src="src/components/messages/messages_core.js"></script>
     <script src="src/components/messages/messages_ext.js"></script>
     <script src="src/components/messages/messages_ntf.js"></script>
@@ -68,11 +74,18 @@
     <script src="src/components/template/toolbar/create/createTemplateToolbarItem.js"></script>
     <script src="src/components/template/toolbar/edit/editTemplateToolbar.js"></script>
     <script src="src/components/template/toolbar/paste/pasteTemplateToolbar.js"></script>
+
     <script src="src/components/content/content.js"></script>
+    <script src="src/components/content/content-text/content-text.js"></script>
+    <script src="src/components/content/content-file-list/content-file-list.js"></script>
+    <script src="src/components/content/content-image/content-image.js"></script>
+
     <script src="src/components/font/font.js"></script>
+
     <script src="src/components/clipboard/clipboard.js"></script>
     <script src="src/components/dragdrop/dragdrop.js"></script>
     <script src="src/components/table/table.js"></script>
+
     <script src="src/components/overlay/overlay.js"></script>
     <script src="src/components/overlay/selection.js"></script>
 
@@ -85,6 +98,7 @@
 
     <div id='editor' tabindex="0">
     </div>
+
 
     <div id="editTemplateToolbar" class="edit-template-toolbar">
         <div class="resizer resizer-t"></div>
@@ -158,17 +172,32 @@
 
     <div id="templateColorPaletteMenu" class="ql-toolbar-template-context-menu"></div>
 
-    <!--<textarea id="comOutputTextArea" style="display: none"></textarea>-->
+    <div id="fileListContainer" class="hidden content-file-list-container">
+        <ul class="content-file-list">
+            <li id="fileListRootItem" class="content-file-list-item">
+                <img class="content-file-list-item-icon" src="../../Icons/search.png">
+                <!--<a class="content-file-list-item-path-link" href="https://www.youtube.com">-->
+                    <span class="content-file-list-item-path-link content-file-list-item-path-text">This is a path 1</span>
+                <!--</a>-->
+                <div class="content-file-list-item-button">
+                    <i class="delete-file-item content-file-list-item-button-icon fa-solid fa-circle-minus"></i>
+                </div>
+                <div class="content-file-list-item-button">
+                    <i class="goto-file-item content-file-list-item-button-icon fa-solid fa-square-up-right"></i>
+                </div>
+            </li>
+        </ul>
+    </div>
 
     <canvas id="overlayCanvas"></canvas>
 
     <script src="src/components/editor/editor.js"></script>
 
     <script>
-                    //init();
-                    //enableReadOnly();
-                    //disableReadOnly();
-                    //hideEditTemplateToolbar();
+                                //init();
+                                //enableReadOnly();
+                                //disableReadOnly();
+                                //hideEditTemplateToolbar();
 
 
 

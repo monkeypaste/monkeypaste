@@ -17,8 +17,8 @@ using IDataObject = Avalonia.Input.IDataObject;
 using DataFormats = System.Windows.DataFormats;
 using DataObject = System.Windows.DataObject;
 
-namespace CoreClipboardHandler {
-    public class CoreClipboardHandler : 
+namespace CoreClipboardHandler_wpf {
+    public class CoreClipboardHandler_wpf : 
         MpIClipboardReaderComponent,
         MpIClipboardWriterComponent {
         #region Private Variables
@@ -65,58 +65,40 @@ namespace CoreClipboardHandler {
         private const string FILE_DROP_FORMAT = "FileDrop";
         private const string CSV_FORMAT = "CSV";
 
-        // (for now at least) use this to map av cb formats to manfiest types
-        private Dictionary<string, List<string>> _winToAvDataFormatMap => new Dictionary<string, List<string>>() {
-            {
-                FILE_DROP_FORMAT,
-                new List<string>() {
-                    //"FileItem",
-                    //"FileItems",
-                    //"FileNameW"
-                    "FileNames"
-                } 
-            }
-        };
-
         #endregion
 
         #region MpIClipboardReaderComponent Implementation
         
         MpClipboardReaderResponse MpIClipboardReaderComponent.ReadClipboardData(MpClipboardReaderRequest request) {
-            MpClipboardReaderResponse hasError = CanHandleDataObject(request);
+            MpClipboardReaderResponse hasError = null;
+            if(request.isAvalonia) {
+                hasError = CanHandleDataObject_av(request);
+            } else {
+                hasError = CanHandleDataObject_wpf();
+            }
             if (hasError != null) {
                 return hasError;
             }
 
             var currentOutput = new MpPortableDataObject();
             
-            foreach (var supportedTypeName in request.readFormats) {
-                var typeNameVariants = GetAvFormatFromPortable(supportedTypeName);
-                foreach (string typeNameVariant in typeNameVariants) {
-                    string data = ReadClipboardOrDataObjectFormat(typeNameVariant, request);
+            foreach (var nativeTypeName in request.readFormats) {
+                string data = ReadDataObjectFormat(nativeTypeName, request);
 
-                    if (!string.IsNullOrEmpty(data)) {
-                        currentOutput.SetData(supportedTypeName, data);
-                    }
+                if (!string.IsNullOrEmpty(data)) {
+                    currentOutput.SetData(nativeTypeName, data);
                 }
-                
             }
             return new MpClipboardReaderResponse() {
                 dataObject = currentOutput
             };
         }
 
-        private string ReadClipboardOrDataObjectFormat(string format, MpClipboardReaderRequest request) {
-            if (request.forcedClipboardDataObject is IDataObject avdo) {
-                // handle av dragdrop data object
-                //avdo.GetDataFormats().ForEach(x => MpConsole.WriteLine($"DragDrop format: {x}"));
-                return ReadDataObjectFormat(format, avdo);
-            }
-
+        private string ReadDataObjectFormat(string format, MpClipboardReaderRequest request) {
             MpUserDeviceType deviceType = request.platform.ToEnum<MpUserDeviceType>();
             switch(deviceType) {
                 case MpUserDeviceType.Windows:
-                    return ReadClipboardFormatData_windows(format, request);
+                    return ReadDataObjectFormat_windows(format, request);
                 default:
                     MpConsole.WriteTraceLine("Unsupported platform: " + request.platform);
                     return null;
@@ -126,8 +108,11 @@ namespace CoreClipboardHandler {
         #region Windows Read
 
 
-        private string ReadClipboardFormatData_windows(string format, MpClipboardReaderRequest request) {
-           
+        private string ReadDataObjectFormat_windows(string format, MpClipboardReaderRequest request) {
+            if(request.isAvalonia && request.forcedClipboardDataObject != null) {
+                // handle av dragdrop data object
+                return ReadDataObjectFormat_windows_av(format, request);
+            }
 
             IntPtr handle_with_cb = WinApi.IsClipboardOpen(true);
             bool triedToClose = false;
@@ -194,20 +179,18 @@ namespace CoreClipboardHandler {
             return ProcessReaderFormatParamsOnData_windows(request, format, data); ;
         }
 
-        private string ReadDataObjectFormat(string format, IDataObject avdo) {
-            if(format == "FileNames") {
-                return string.Join(Environment.NewLine, avdo.GetFileNames());
-            }
+        private string ReadDataObjectFormat_windows_av(string format, MpClipboardReaderRequest request) {
             string dataStr = null;
-            var dataObj = avdo.Get(format);
+            if (request.forcedClipboardDataObject is IDataObject avdo) {
+                var dataObj = avdo.Get(format);
 
-            if (dataObj is string) {
-                dataStr = dataObj as string;
-            } else if (dataObj is string[] strArr) {
-                dataStr = string.Join(Environment.NewLine, strArr);
-            } else if (dataObj is byte[] bytes) {
-                dataStr = Encoding.Default.GetString(bytes);
+                if (dataObj is string) {
+                    dataStr = dataObj as string;
+                } else if (dataObj is byte[] bytes) {
+                    dataStr = Encoding.Default.GetString(bytes);
+                }
             }
+            
             return dataStr;
         }
         private string GetClipboardDataByFormat_windows(string format, MpClipboardReaderRequest request) {
@@ -354,7 +337,32 @@ namespace CoreClipboardHandler {
             return 0;
         }
 
-        private MpClipboardReaderResponse CanHandleDataObject(MpClipboardReaderRequest request) {
+        private MpClipboardReaderResponse CanHandleDataObject_wpf() {
+            if (_mainWindowHandle == null || _mainWindowHandle == IntPtr.Zero) {
+                Application.Current.Dispatcher.Invoke(() => {
+                    _mainWindowHandle = new WindowInteropHelper(Application.Current.MainWindow).Handle;
+                });
+
+                if (_mainWindowHandle != null && _mainWindowHandle != IntPtr.Zero) {
+                    CF_UNICODE_TEXT = WinApi.RegisterClipboardFormatA("UnicodeText");
+                    CF_BITMAP = WinApi.RegisterClipboardFormatA("Bitmap");
+                    CF_OEM_TEXT = WinApi.RegisterClipboardFormatA("OemText");
+                    CF_HTML = WinApi.RegisterClipboardFormatA("HTML Format");
+                    CF_RTF = WinApi.RegisterClipboardFormatA("Rich Text Format");
+                    CF_CSV = WinApi.RegisterClipboardFormatA(DataFormats.CommaSeparatedValue);
+                    CF_DIB = WinApi.RegisterClipboardFormatA("DeviceIndependentBitmap");
+                    CF_HDROP = WinApi.RegisterClipboardFormatA(DataFormats.FileDrop);
+                }
+            }
+            if (_mainWindowHandle == null || _mainWindowHandle == IntPtr.Zero) {
+                return new MpClipboardReaderResponse() {
+                    errorMessage = "No Window Handle"
+                };
+            }
+            return null;
+        }
+
+        private MpClipboardReaderResponse CanHandleDataObject_av(MpClipboardReaderRequest request) {
             if(request == null) {
                 return null;
             }
@@ -385,13 +393,6 @@ namespace CoreClipboardHandler {
         }
 
         #endregion
-
-        private IEnumerable<string> GetAvFormatFromPortable(string portableFormat) {
-            if(_winToAvDataFormatMap.ContainsKey(portableFormat)) {
-                return _winToAvDataFormatMap[portableFormat];
-            }
-            return new List<string>() { portableFormat };
-        }
 
         #endregion
 

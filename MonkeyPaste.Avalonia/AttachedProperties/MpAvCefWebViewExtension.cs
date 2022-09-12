@@ -84,7 +84,7 @@ namespace MonkeyPaste.Avalonia {
 
                     return new MpQuillLoadRequestMessage() {
                         envName = "wpf",
-                        itemEncodedHtmlData = ctvm.CopyItemData,
+                        itemData = ctvm.CopyItemData,
                         usedTextTemplates = usedTemplates,
                         isPasteRequest = ctvm.IsPasting,
                         isReadOnlyEnabled = ctvm.IsContentReadOnly
@@ -193,9 +193,9 @@ namespace MonkeyPaste.Avalonia {
                     
                     var qrm = MpJsonObject.DeserializeObject<MpQuillEnableReadOnlyResponseMessage>(enableReadOnlyResponse);
 
-                    ctvm.CopyItemData = qrm.itemEncodedHtmlData;
+                    ctvm.CopyItemData = qrm.itemData;
                     MpConsole.WriteLine("Skipping writing updated item data: ");
-                    MpConsole.WriteLine(qrm.itemEncodedHtmlData);
+                    MpConsole.WriteLine(qrm.itemData);
 
                     //var ctcv = fe.GetVisualAncestor<MpAvClipTileView>();
                     //if (ctcv != null) {
@@ -204,7 +204,7 @@ namespace MonkeyPaste.Avalonia {
 
                     MpMasterTemplateModelCollectionViewModel.Instance.UpdateAsync(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids).FireAndForgetSafeAsync(ctvm);
 
-                    return qrm.itemEncodedHtmlData;
+                    return qrm.itemData;
                 }
                 return null;
             }

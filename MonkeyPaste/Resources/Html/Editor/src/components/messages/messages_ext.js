@@ -141,7 +141,7 @@ function enableReadOnly_ext() {
 
 	//return 'MpQuillResponseMessage'  updated master collection of templates
 	let qrmObj = {
-		itemEncodedHtmlData: getEncodedHtml(),
+		itemData: getEncodedHtml(),
 		userDeletedTemplateGuids: userDeletedTemplateGuids,
 		updatedAllAvailableTextTemplates: IsLoaded ? getAvailableTemplateDefinitions() : []
 	};
