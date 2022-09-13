@@ -197,7 +197,7 @@ function resetDragDrop(isEscCancel = false) {
     DropElm = null;
     //setTextSelectionBgColor('lightblue');
     //setTextSelectionFgColor('black');
-
+    CefDragData = null;
     IsPreBlockDrop = false;
     IsPostBlockDrop = false;
     IsSplitDrop = false;
@@ -505,14 +505,6 @@ function onDrop(e) {
 
 function onDragStart(e) {
     log('drag started yo');
-}
-
-function onCefDragEnter(text) {
-    let decodedText = atob(text);
-    CefDragData = decodedText;
-    log('onCefDragEnter called with text:');
-    log(decodedText);
-
 }
 
 

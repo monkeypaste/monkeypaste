@@ -348,6 +348,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsSubSelectionEnabled { get; set; } = false;
 
+        
+
         public bool IsVerticalScrollbarVisibile {
             get {
                 if (IsContentReadOnly && !IsSubSelectionEnabled) {
@@ -692,6 +694,14 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public int DataObjectId {
+            get {
+                if (CopyItem == null) {
+                    return 0;
+                }
+                return CopyItem.DataObjectId;
+            }
+        }
 
         public int CopyItemId {
             get {
@@ -1173,7 +1183,7 @@ namespace MonkeyPaste.Avalonia {
         public ObservableCollection<MpAvFileItemViewModel> FileItems { get; set; } = new ObservableCollection<MpAvFileItemViewModel>();
         public MpImageAnnotationCollectionViewModel DetectedImageObjectCollectionViewModel { get; set; }
 
-        public MpTemplateCollectionViewModel TemplateCollection { get; set; }
+        public MpAvTemplateCollectionViewModel TemplateCollection { get; set; }
 
         public MpContentTableViewModel TableViewModel { get; set; }
 
@@ -1509,7 +1519,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string QuillEditorPath => Path.Combine(Environment.CurrentDirectory, "Resources/Html/Editor/index.html");
 
-        public string TemplateRichText { get; set; }
+        public string TemplateRichHtml { get; set; }
 
         public string DetailText { get; set; }
 
@@ -1588,7 +1598,7 @@ namespace MonkeyPaste.Avalonia {
                 FileItems.Clear();
             }
             
-            TemplateCollection = new MpTemplateCollectionViewModel(this);
+            TemplateCollection = new MpAvTemplateCollectionViewModel(this);
 
             if(ci != null) {
                 await InitTitleLayers();
@@ -1676,6 +1686,14 @@ namespace MonkeyPaste.Avalonia {
             TitleLayerZIndexes = new List<int> { 1, 2, 3 }.Randomize().ToArray();
 
             IsBusy = wasBusy;
+        }
+
+        public MpAvIContentView GetContentView() {
+            var ctcv = MpAvClipTrayContainerView.Instance.GetVisualDescendants<MpAvClipTileContentView>().FirstOrDefault(x => x.DataContext == this);
+            if (ctcv == null) {
+                Debugger.Break();
+            }
+            return ctcv.ContentView;
         }
 
         private async Task<MpAvFileItemViewModel> CreateFileItemViewModel(string path) {
@@ -1823,7 +1841,9 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task<MpPortableDataObject> ConvertToPortableDataObject(bool fillTempalates) {
             MpPortableDataObject d = new MpPortableDataObject();
-            string rtf = string.Empty;
+
+            var wv = GetContentView() as MpAvCefNetWebView;
+            string qhtml = string.Empty;
             string pt = string.Empty;
             string bmpBase64 = string.Empty;
             var sctfl = new List<string>();
@@ -1856,12 +1876,12 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(MpAvClipTrayViewModel.DISABLE_READ_ONLY_DELAY_MS);
                 IsContentReadOnly = false;
 
-                TemplateRichText = null;
+                TemplateRichHtml = null;
 
                 TemplateCollection.BeginPasteTemplateCommand.Execute(null);
                 bool wasCanceled = false;
                 await Task.Run(async () => {
-                    while (string.IsNullOrEmpty(TemplateRichText)) {
+                    while (string.IsNullOrEmpty(TemplateRichHtml)) {
                         if (IsContentReadOnly) {
                             wasCanceled = true;
                             break;
@@ -1874,7 +1894,7 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
 
-                rtf = TemplateRichText;
+                qhtml = TemplateRichHtml;
 
                 if (!IsContentReadOnly) {
                     ClearEditing();
@@ -1883,30 +1903,36 @@ namespace MonkeyPaste.Avalonia {
             } else if (ItemType == MpCopyItemType.Text) {
                 if (isInUi) {
                     if (isSelectionEmpty) {
-                        //rtf = MpContentDocumentRtfExtension.GetEncodedContent(
-                        //        MpContentDocumentRtfExtension.FindRtbByViewModel(this),
-                        //        ignoreSubSelection: true);
+                        qhtml = await MpAvCefNetWebViewExtension.GetEncodedContentAsync(
+                                wv,
+                                ignoreSubSelection: true);
                     } else {
-                        rtf = SelectedRichText;
+                        qhtml = SelectedRichText;
                     }
                 } else {
                     // handle special case when pasting item by id (like from a hotkey)
                     // and it has no templates (if it did tray would set manual query and show it)
                     // so since its not in ui need to use model data which is ok because it won't have any modifications
                     //rtf = CopyItemData.ToContentRichText();
+                    qhtml = CopyItemData;
                 }
             }
             switch (ItemType) {
                 case MpCopyItemType.Text:
                     // NOTE must use rtf here which already is based on selection and any templated input
-                    //pt = rtf.ToPlainText();
-                    // bmpBase64 = rtf.ToFlowDocument().ToBitmapSource().ToBase64String();
+                    pt = qhtml.ToPlainText();
+                    //if (wv != null) {
+                    //    var respStr = await wv.EvaluateJavascriptAsync("getContentImageBase64Async_ext()");
+                    //    var respObj = MpJsonObject.DeserializeBase64Object<MpQuillGetEditorScreenshotResponseMessage>(respStr);
+                    //    bmpBase64 = respObj.base64ImgStr;
+                    //}
+
                     break;
                 case MpCopyItemType.Image:
                     await Task.Run(() => {
                         var bmpSrc = CopyItemData.ToAvBitmap();
-                        //pt = bmpSrc.ToAsciiImage();
-                        //rtf = bmpSrc.ToRtfImage();
+                        pt = bmpSrc.ToAsciiImage();
+                        qhtml = bmpSrc.ToRichHtmlImage();
                     });
 
                     bmpBase64 = CopyItemData;
@@ -1916,8 +1942,6 @@ namespace MonkeyPaste.Avalonia {
                         FileItems.ForEach(x => x.IsSelected = true);
                     }
                     pt = string.Join(Environment.NewLine, FileItems.Select(x => x.Path));
-                    //rtf = pt.ToRichText();
-                    //bmpBase64 = rtf.ToFlowDocument().ToBitmapSource().ToBase64String();
                     break;
             }
 
@@ -1926,7 +1950,7 @@ namespace MonkeyPaste.Avalonia {
                     case MpPortableDataFormats.FileDrop:
                         switch (ItemType) {
                             case MpCopyItemType.Text:
-                                sctfl.Add(rtf.ToFile(null, CopyItemTitle));
+                                sctfl.Add(qhtml.ToFile(null, CopyItemTitle));
                                 break;
                             case MpCopyItemType.Image:
                                 sctfl.Add(bmpBase64.ToFile(null, CopyItemTitle));
@@ -1941,12 +1965,13 @@ namespace MonkeyPaste.Avalonia {
                         }
                         d.SetData(MpPortableDataFormats.FileDrop, string.Join(Environment.NewLine, sctfl));
                         break;
-                    case MpPortableDataFormats.Rtf:
-                        if (string.IsNullOrEmpty(rtf)) {
+                    case MpPortableDataFormats.Html:
+                        if (string.IsNullOrEmpty(qhtml)) {
                             break;
                         }
-                        d.SetData(MpPortableDataFormats.Rtf, rtf);
+                        d.SetData(MpPortableDataFormats.Html, qhtml);
                         break;
+                    // TODO add rtf conversion here...
                     case MpPortableDataFormats.Text:
                         if (string.IsNullOrEmpty(pt)) {
                             break;
@@ -1962,7 +1987,12 @@ namespace MonkeyPaste.Avalonia {
                     case MpPortableDataFormats.Csv:
                         switch (ItemType) {
                             case MpCopyItemType.Text:
-                                //d.SetData(MpPortableDataFormats.Csv, CopyItemData.ToCsv());
+
+                                bool hasCsv = await MpDataModelProvider.IsDataObjectContainFormatAsync(DataObjectId, MpPortableDataFormats.Csv);
+                                if(hasCsv) {
+                                    d.SetData(MpPortableDataFormats.Csv, CopyItemData.ToCsv());
+                                }
+                                
                                 break;
                             case MpCopyItemType.Image:
 

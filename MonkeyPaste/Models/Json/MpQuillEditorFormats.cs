@@ -92,7 +92,29 @@ templateType: "dynamic"
 
         public bool isHostJsonMsg => true;
     }
-    
+
+    public class MpQuillGetEncodedRangeDataRequestMessage : MpJsonObject {
+        public int index { get; set; }
+        public int length { get; set; }
+        public bool isPlainText { get; set; }
+    }
+
+    public class MpQuillGetEncodedRangeDataResponseMessage : MpJsonObject {
+        public string encodedRangeData { get; set; }
+    }
+
+    public class MpQuillGetEditorScreenshotResponseMessage : MpJsonObject {
+        public string base64ImgStr { get; set; }
+    }
+
+    public class MpQuillDragDropDataObjectMessage : MpJsonObject {
+        public List<MpQuillDragDropDataObjectItemFragment> items { get; set; }
+    }
+
+    public class MpQuillDragDropDataObjectItemFragment : MpJsonObject {
+        public string format { get; set; }
+        public string data { get; set; }
+    }
 
     public class MpQuillEditorIndexFromPointMessage : MpJsonObject {
         public double x { get; set; }
@@ -110,8 +132,10 @@ templateType: "dynamic"
         public int index { get; set; }
         public int length { get; set; }
 
-        public List<MpJsonRect> selRects { get; set; }
-        public string selJsonRectListBase64Str { get; set; }
+        public bool isChangeBegin { get; set; }
+
+        //public List<MpJsonRect> selRects { get; set; }
+        //public string selJsonRectListBase64Str { get; set; }
     }
 
     public class MpQuillContentLengthChangedMessage : MpQuillContentMessageBase {
@@ -122,6 +146,7 @@ templateType: "dynamic"
         //public int copyItemId { get; set; }
         public bool isDraggable { get; set; }
     }
+
 
     public class MpQuillExceptionMessage : MpQuillContentMessageBase {
         public string exType { get; set; }
@@ -137,4 +162,5 @@ templateType: "dynamic"
         public string filePath { get; set; }
         public string fileIconBase64 { get; set; }
     }
+
 }

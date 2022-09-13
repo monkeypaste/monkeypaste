@@ -46,6 +46,23 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region DropHost AvaloniaProperty
+        public static MpAvIDropHost GetDropHost(AvaloniaObject obj) {
+            return obj.GetValue(DropHostProperty);
+        }
+
+        public static void SetDropHost(AvaloniaObject obj, MpAvIDropHost value) {
+            obj.SetValue(DropHostProperty, value);
+        }
+
+        public static readonly AttachedProperty<MpAvIDropHost> DropHostProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, MpAvIDropHost>(
+                "DropHost",
+                null,
+                false);
+
+        #endregion
+
         #region IsEnabled AvaloniaProperty
         public static bool GetIsEnabled(AvaloniaObject obj) {
             return obj.GetValue(IsEnabledProperty);
@@ -112,6 +129,15 @@ namespace MonkeyPaste.Avalonia {
 
         private static void AddOrRemoveDropHandlers(Control dropControl, bool isAdd) {
             if (isAdd) {
+                if (!dropControl.IsInitialized) {
+                    Dispatcher.UIThread.Post(async () => {
+                        while (!dropControl.IsInitialized) {
+                            await Task.Delay(100);
+                        }
+                        AddOrRemoveDropHandlers(dropControl, isAdd);
+                    });
+                    return;
+                }
                 DragDrop.SetAllowDrop(dropControl, true);
                 dropControl.AddHandler(DragDrop.DragEnterEvent, DragEnter);
                 dropControl.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
@@ -132,20 +158,21 @@ namespace MonkeyPaste.Avalonia {
         private static void DragOver(object sender, DragEventArgs e) {
             MpConsole.WriteLine($"[Drag Over] Source: '{e.Source}' Datat: '{e.Data}'");            
 
-            MpAvIDropHost dropHost = GetDropHost(sender); 
-            e.DragEffects = GetDropEffects(e);
+            MpAvIDropHost dropHost = GetDropHost(sender as Control); 
+            var dropEffects = GetDropEffects(e);
             MpPoint drop_host_mp = e.GetPosition(dropHost as IVisual).ToPortablePoint();
-            bool isDropValid = dropHost.IsDropValid(e.Data, drop_host_mp, e.DragEffects);
+            bool isDropValid = dropHost.IsDropValid(e.Data, drop_host_mp, dropEffects);
             if(isDropValid) {
-
+                e.DragEffects = dropEffects;
             } else { 
                 // currently pin tray drop is only invlaid on move to same idx
                 e.DragEffects = DragDropEffects.None;
             }
             dropHost.DragOver(drop_host_mp, e.Data, e.DragEffects);
         }
-        private static void DragEnter(object sender, DragEventArgs e) {            
-            MpAvIDropHost dropHost = GetDropHost(sender);            
+        private static void DragEnter(object sender, DragEventArgs e) {
+            MpConsole.WriteLine("[DragEnter] " + sender);
+            MpAvIDropHost dropHost = GetDropHost(sender as Control);            
             e.DragEffects = GetDropEffects(e);
             MpPoint drop_host_mp = e.GetPosition(dropHost as IVisual).ToPortablePoint();
             bool isDropValid = dropHost.IsDropValid(e.Data, drop_host_mp, e.DragEffects);
@@ -156,38 +183,20 @@ namespace MonkeyPaste.Avalonia {
             DragOver(sender, e);
         }
         private static void DragLeave(object sender, RoutedEventArgs e) {
-            //MpConsole.WriteLine("Drag Leave: " + sender);
+            MpConsole.WriteLine("[DragLeave] " + sender);
 
-            MpAvIDropHost dropHost = GetDropHost(sender);
-            CurrentDropHost = null;
-            //if (dropHost == CurrentDropHost &&
-            //    dropHost is Control dropHostControl) {
-            //    //since drag leave is not called on enter of a child drop host
-            //    // pass current to parent or when mw grid drag will be out of app
-            //    var parent_drop_host = dropHostControl.GetVisualAncestors().FirstOrDefault(x => x is MpAvIDropHost) as MpAvIDropHost;
-            //    while (parent_drop_host != null) {
-            //        //set closest enabled parent to drop host or null if none
-            //        if (parent_drop_host.IsDropEnabled) {
-            //            CurrentDropHost = parent_drop_host;
-            //            break;
-            //        }
-            //        if (parent_drop_host is Window w && App.Desktop.MainWindow == w) {
-            //            parent_drop_host = null;
-            //            break;
-            //        }
-            //        parent_drop_host = dropHostControl.GetVisualAncestors().FirstOrDefault(x => x is MpAvIDropHost) as MpAvIDropHost;
-            //    }
-            //} 
-            //else if (sender is Control control && control.Parent is Window) {
-            //    // catch drag leave app to remove drop host
-            //    CurrentDropHost = null;
-            //}
+            MpAvIDropHost dropHost = GetDropHost(sender as Control);
+            //var parentDropHost = FindParentDropHost(dropHost);
             dropHost?.DragLeave();
+
+            //if(parentDropHost != null) {
+            //    DragEnter(parentDropHost, new DragEventArgs());
+            //}
         }
 
         private static async void Drop(object sender, DragEventArgs e) {
-            MpConsole.WriteLine("Drop: " + sender);
-            MpAvIDropHost dropHost = GetDropHost(sender);
+            MpConsole.WriteLine("[Drop]" + sender);
+            MpAvIDropHost dropHost = GetDropHost(sender as Control);
             e.DragEffects = GetDropEffects( e);
             if (dropHost == null || dropHost != CurrentDropHost) {
                 return;
@@ -277,20 +286,46 @@ namespace MonkeyPaste.Avalonia {
 
         #region Drop Helper Methods
 
-        private static MpAvIDropHost GetDropHost(object sender) {
-            if (sender is Control control) {
-                //if (control.Name == "PinTrayListBox" &&
-                //    control.GetVisualAncestor<MpAvPinTrayView>() is MpAvPinTrayView ptrv) {
-                //    return ptrv;
-                //}
-                if(control is MpAvIDropHost) {
-                    return (MpAvIDropHost)control;
-                }
-                var dropHost = control.GetVisualAncestors<IVisual>().FirstOrDefault(x => x is MpAvIDropHost);
-                return (MpAvIDropHost)dropHost;
-            }
+        private static MpAvIDropHost FindParentDropHost(MpAvIDropHost dropHost) {
             return null;
+            //if (dropHost == CurrentDropHost &&
+            //    dropHost is Control dropHostControl) {
+            //    //since drag leave is not called on enter of a child drop host
+            //    // pass current to parent or when mw grid drag will be out of app
+            //    var parent_drop_host = dropHostControl.GetVisualAncestors().FirstOrDefault(x => x is MpAvIDropHost) as MpAvIDropHost;
+            //    while (parent_drop_host != null) {
+            //        //set closest enabled parent to drop host or null if none
+            //        if (parent_drop_host.IsDropEnabled) {
+            //            CurrentDropHost = parent_drop_host;
+            //            break;
+            //        }
+            //        if (parent_drop_host is Window w && App.Desktop.MainWindow == w) {
+            //            parent_drop_host = null;
+            //            break;
+            //        }
+            //        parent_drop_host = dropHostControl.GetVisualAncestors().FirstOrDefault(x => x is MpAvIDropHost) as MpAvIDropHost;
+            //    }
+            //} 
+            //else if (sender is Control control && control.Parent is Window) {
+            //    // catch drag leave app to remove drop host
+            //    CurrentDropHost = null;
+            //}
         }
+
+        //private static MpAvIDropHost GetDropHost(object sender) {
+        //    if (sender is Control control) {
+        //        //if (control.Name == "PinTrayListBox" &&
+        //        //    control.GetVisualAncestor<MpAvPinTrayView>() is MpAvPinTrayView ptrv) {
+        //        //    return ptrv;
+        //        //}
+        //        if(control is MpAvIDropHost) {
+        //            return (MpAvIDropHost)control;
+        //        }
+        //        var dropHost = control.GetVisualAncestors<IVisual>().FirstOrDefault(x => x is MpAvIDropHost);
+        //        return (MpAvIDropHost)dropHost;
+        //    }
+        //    return null;
+        //}
 
         private static DragDropEffects GetDropEffects(DragEventArgs e) {
             if (MpAvDragExtension.CurrentDragHost == null) {

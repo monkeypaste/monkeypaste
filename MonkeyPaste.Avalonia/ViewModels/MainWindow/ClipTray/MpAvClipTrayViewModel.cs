@@ -1969,7 +1969,7 @@ namespace MonkeyPaste.Avalonia {
             if (sctvm.HasTemplates) {
                 sctvm.ClearEditing();
                 sctvm.TemplateCollection.Reset();
-                sctvm.TemplateRichText = string.Empty;
+                sctvm.TemplateRichHtml = string.Empty;
                 //sctvm.RequestUiUpdate();
                 //sctvm.RequestScrollToHome();
             }

@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="icon-clipboard-1024.webp" />
     <None Include="manifest.json" />
     <None Include="packages.config" />
   </ItemGroup>

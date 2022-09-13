@@ -43,16 +43,17 @@ namespace MonkeyPaste.Avalonia {
                         // depending on the source so may need to be careful handling these. 
                         itemType = MpCopyItemType.Text;
                         itemData = mpdo.GetData(MpPortableDataFormats.Rtf).ToString().EscapeExtraOfficeRtfFormatting();
-                        itemData = itemData.ToQuillText(MpPortableDataFormats.Rtf);
+                        itemData = itemData.ToRichHtmlText(MpPortableDataFormats.Rtf);
                     } else {
                         string csvStr = mpdo.GetData(MpPortableDataFormats.Csv).ToString();
                         //itemData = csvStr.ToRichText();
-                        itemData = itemData.ToQuillText(MpPortableDataFormats.Csv);
+                        itemData = itemData.ToRichHtmlText(MpPortableDataFormats.Csv);
                     }
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Rtf)) {
+                    // for now and simplicity there are no platform checks for rtf because it should only (by the DataFormat name at least) be on windows
                     itemType = MpCopyItemType.Text;
                     itemData = mpdo.GetData(MpPortableDataFormats.Rtf).ToString().EscapeExtraOfficeRtfFormatting();
-                    itemData = itemData.ToQuillText(MpPortableDataFormats.Rtf);
+                    itemData = itemData.ToRichHtmlText(MpPortableDataFormats.Rtf);
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Bitmap)) {
                     itemType = MpCopyItemType.Image;
                     itemData = mpdo.GetData(MpPortableDataFormats.Bitmap).ToString();

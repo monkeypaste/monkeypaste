@@ -3,7 +3,7 @@
         #region Constructors
         public MpStaticTextTemplateViewModel() : base(null) { }
 
-        public MpStaticTextTemplateViewModel(MpTemplateCollectionViewModel parent) : base(parent) { }
+        public MpStaticTextTemplateViewModel(MpAvTemplateCollectionViewModel parent) : base(parent) { }
 
         #endregion
 

@@ -36,12 +36,12 @@ namespace MonkeyPaste.Avalonia {
 
         private static void HandleSelectionStartChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
             if (element is MpAvTextBox tb && e.NewValue is int startIdx) {
-                tb.UpdateSelection(startIdx, tb.SelectionEnd, true);
+                tb.UpdateSelection(startIdx, tb.SelectionEnd, true, true);
             }
         }
         private static void HandleSelectionEndChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
             if (element is MpAvTextBox tb && e.NewValue is int endIdx) {
-                tb.UpdateSelection(tb.SelectionStart, endIdx, true);
+                tb.UpdateSelection(tb.SelectionStart, endIdx, true, false);
             }
         }
 
@@ -157,7 +157,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public void UpdateSelection(int index, int length, bool isFromEditor) {
+        public void UpdateSelection(int index, int length, bool isFromEditor, bool isChngeBegin) {
             var newStart = new MpAvTextPointer(Document, index);
             var newEnd = new MpAvTextPointer(Document, index + length);
             if (isFromEditor) {

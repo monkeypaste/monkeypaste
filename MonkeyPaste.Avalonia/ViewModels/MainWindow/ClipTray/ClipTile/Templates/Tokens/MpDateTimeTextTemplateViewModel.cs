@@ -81,7 +81,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpDateTimeTextTemplateViewModel() : base(null) { }
 
-        public MpDateTimeTextTemplateViewModel(MpTemplateCollectionViewModel parent) : base(parent) {
+        public MpDateTimeTextTemplateViewModel(MpAvTemplateCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpDateTimeTextTemplateViewModel_PropertyChanged;
         }
 

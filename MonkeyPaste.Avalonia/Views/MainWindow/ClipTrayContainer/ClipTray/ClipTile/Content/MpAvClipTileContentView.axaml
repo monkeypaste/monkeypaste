@@ -4,6 +4,7 @@
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
+                       x:Name="ClipTileContentViewRoot"
                        x:DataType="local:MpAvClipTileViewModel"
                        x:TypeArguments="local:MpAvClipTileViewModel"
                        x:CompileBindings="True"

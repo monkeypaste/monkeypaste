@@ -148,7 +148,6 @@ namespace MonkeyPaste.Avalonia {
                 }
                 control.DetachedFromVisualTree += DetachedToVisualHandler;
                 //control.ContextMenu.ContextMenuOpening += ContextMenu_ContextMenuOpening;
-
                 control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
             }
         }

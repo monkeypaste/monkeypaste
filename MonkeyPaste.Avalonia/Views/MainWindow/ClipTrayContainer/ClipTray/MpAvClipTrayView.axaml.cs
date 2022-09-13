@@ -14,13 +14,12 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTrayView : MpAvUserControl<MpAvClipTrayViewModel> {
-        private static MpAvClipTrayView _instance;
-        public static MpAvClipTrayView Instance => _instance ?? (_instance = new MpAvClipTrayView());
 
         private ScrollViewer sv;
         private ListBox lb;
 
         public MpAvClipTrayView() {
+
             InitializeComponent();
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);

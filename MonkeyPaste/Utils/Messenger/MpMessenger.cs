@@ -60,6 +60,8 @@ namespace MonkeyPaste {
 
         ContentListScrollChanged, //has context (tile)
         ContentItemsChanged, //has context (tile)
+
+        ContentSelectionChangeBegin, //has context (tile)
         ContentSelectionChangeEnd, //has context (tile)
 
         ContentResized,

@@ -10,6 +10,7 @@ using Avalonia;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Visuals.Media.Imaging;
+using MonkeyPaste.Common.Wpf;
 
 namespace MonkeyPaste.Common.Avalonia {
     [StructLayout(LayoutKind.Sequential)]
@@ -61,6 +62,11 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static Bitmap ToAvBitmap(this RenderTargetBitmap rtbmp) {
             return new Bitmap(rtbmp.PlatformImpl);
+        }
+
+        public static string ToRichHtmlImage(this Bitmap bmp) {
+            string qhtml = string.Format(@"<p><img src='data:image/png;base64,{0}'></p>", bmp.ToBase64String());
+            return qhtml;
         }
 
         #endregion
@@ -141,6 +147,49 @@ namespace MonkeyPaste.Common.Avalonia {
         public static Bitmap? Resize(this Bitmap bmpSrc, MpSize size) {
             var bmpTarget = bmpSrc.CreateScaledBitmap(new PixelSize((int)size.Width, (int)size.Height));
             return bmpTarget;
+        }
+
+        public static unsafe string ToAsciiImage(this Bitmap bmpSrc, MpSize docSize = null) {
+            //Size size = docSize.HasValue ? docSize.Value : new Size(50, 50);
+            MpSize size = new MpSize(100, 100);
+            if (docSize != null) {
+                size = docSize;
+            } else {
+                MpSize pixelSize = bmpSrc.PixelSize.ToPortableSize();
+                if (pixelSize.Width >= pixelSize.Height) {
+                    double ar = pixelSize.Height / pixelSize.Width;
+                    size.Height *= ar;
+                } else {
+                    double ar = pixelSize.Width / pixelSize.Height;
+                    size.Width *= ar;
+                }
+            }
+            string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
+            bmpSrc = bmpSrc.Resize(size);
+            var pixels = GetPixels(bmpSrc);
+            using (var memoryStream = new MemoryStream()) {
+                bmpSrc.Save(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                var writeableBitmap = WriteableBitmap.Decode(memoryStream);
+                using (var lockedBitmap = writeableBitmap.Lock()) {
+                    byte* bmpPtr = (byte*)lockedBitmap.Address;
+                    int width = writeableBitmap.PixelSize.Width;
+                    int height = writeableBitmap.PixelSize.Height;
+
+                    string outStr = string.Empty;
+                    for (int row = 0; row < height; row++) {
+                        for (int col = 0; col < width; col++) {
+                            PixelColor c = pixels[col, row];
+                            byte avg = (byte)((double)(c.Red + c.Green + c.Blue) / 3.0d);
+                            PixelColor grayColor = new PixelColor() { Alpha = 255, Red = avg, Green = avg, Blue = avg }; //System.Drawing.Color.FromArgb(avg, avg, avg);
+                            int index = (int)((double)(grayColor.Red * 10) / 255.0d);
+                            outStr += asciiChars[index];
+                            bmpPtr = PutPixel(writeableBitmap, c, bmpPtr);
+                        }
+                    }
+                    return outStr;
+                }
+            }
         }
 
         #endregion

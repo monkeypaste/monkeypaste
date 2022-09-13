@@ -324,6 +324,7 @@ function getDocIdxFromPoint_slow(p, snapToLine, invokeId = 0) {
 	return -1;
 }
 
+
 function getDocIdxFromPoint(p, fallbackIdx) {
 	fallbackIdx = fallbackIdx ? parseInt(fallbackIdx) : -1;
 
@@ -358,8 +359,10 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 					let p_elm = document.elementFromPoint(p.x, p.y);
 					if (p_elm) {
 						let blot = Quill.find(p_elm);
-						let block_idx = blot.offset(quill.scroll);
-						doc_idx = block_idx;
+						if (blot && blot.offset) {
+							let block_idx = blot.offset(quill.scroll);
+							doc_idx = block_idx;
+						}
 
 					}
 					//let is_text_elm = isTextElement(p_elm);
@@ -389,5 +392,23 @@ function getElementAtIdx(docIdx) {
 	let leafElementNode =
 		leafNode.nodeType == 3 ? leafNode.parentElement : leafNode;
 	return leafElementNode;
+}
+
+function getHtmlFromDocRange(docRange) {
+	let old_sel = getSelection();
+
+	IgnoreNextSelectionChange = true;
+
+	setEditorSelection(docRange.index, docRange.length, 'silent');
+	let rangeHtml = getSelectedHtml();
+
+	IgnoreNextSelectionChange = true;
+	setEditorSelection(old_sel.index, old_sel.length, 'silent');
+
+	if (IgnoreNextSelectionChange) {
+		log('Hey! setSelection by silent doesnt trigger sel change event');
+		IgnoreNextSelectionChange = false;
+	}
+	return rangeHtml;
 }
 

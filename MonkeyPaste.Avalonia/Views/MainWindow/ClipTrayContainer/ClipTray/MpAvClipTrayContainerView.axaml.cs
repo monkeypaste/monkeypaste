@@ -10,12 +10,21 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using System.Threading.Tasks;
 using Avalonia.Input;
+using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTrayContainerView : MpAvUserControl<MpAvClipTrayViewModel> {
 
-        
+
+        public static MpAvClipTrayContainerView Instance { get; private set; }
         public MpAvClipTrayContainerView() {
+            if (Instance != null) {
+                // ensure singleton
+                Debugger.Break();
+                return;
+            }
+            Instance = this;
+
             InitializeComponent();
 
             //this.DataContextChanged += MpAvClipTrayContainerView_DataContextChanged;

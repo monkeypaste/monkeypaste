@@ -36,6 +36,17 @@ function init_ext(initMsgStr_base64) {
 	return initResponseMsgStr;
 }
 
+function setHostDataObject_ext(hostDataObjMsgStr) {
+	// input MpQuillDragDropDataObjectMessage
+	let hostDataObj = toJsonObjFromBase64Str(hostDataObjMsgStr);
+	if (hostDataObj && hostDataObj.items) {
+		hostDataObj.items.forEach((item) => {
+			log('data-item format: ' + item.format + ' data: ' + item.data);
+		});
+		CefDragData = hostDataObj;
+	}
+
+}
 function convertPlainHtml_ext(convertPlainHtmlReqMsgBase64Str) {
 	// input is MpQuillConvertPlainHtmlToQuillHtmlRequestMessage
 
@@ -203,3 +214,47 @@ function isAllSelected_ext() {
 function getDropIdx_ext() {
 	return DropIdx;
 }
+
+function getEncodedDataFromRange_ext(encRangeMsgBase64Str) {
+	// input MpQuillGetEncodedRangeDataRequestMessage
+	let encRangeReqMsg = toJsonObjFromBase64Str(encRangeMsgBase64Str);
+	if (encRangeReqMsg == null) {
+		log('error opening host msg in "getEncodedDataFromRange_ext" data was (ignoring): ' + encRangeMsgBase64Str);
+		return null;
+	}
+	let rangeData = getHtmlFromDocRange({ index: encRangeReqMsg.index, length: encRangeReqMsg.length });
+
+	if (encRangeReqMsg.isPlainText) {
+		let range_doc = domParser.parseFromString(rangeData);
+		rangeData = range_doc.body.innerText;
+	}
+
+	// output MpQuillGetEncodedRangeDataResponseMessage
+	let encRangeRespMsg = {
+		encodedRangeData: rangeData
+	};
+	let resp = toBase64FromJsonObj(encRangeRespMsg);
+	return resp;
+}
+
+async function getContentImageBase64Async_ext() {
+	// output MpQuillGetEditorScreenshotResponseMessage
+	let base64Str = await getContentImageBase64Async();
+	let ssRespMsg = {
+		base64ImgStr: base64Str
+	};
+	let resp = toBase64FromJsonObj(ssRespMsg);
+	return resp;
+}
+
+function getEditorScreenShot_ext() {
+	// output MpQuillGetEditorScreenshotResponseMessage
+	let base64Str = getEditorScreenShot();
+	let ssRespMsg = {
+		base64ImgStr: base64Str
+	};
+	let resp = toBase64FromJsonObj(ssRespMsg);
+	return resp;
+}
+
+

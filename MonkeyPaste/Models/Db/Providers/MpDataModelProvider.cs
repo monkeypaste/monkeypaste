@@ -978,6 +978,16 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region MpDataObject
+
+        public static async Task<bool> IsDataObjectContainFormatAsync(int doid, string formatName) {
+            string query = string.Format(@"select count(pk_MpDataObjectItemId) from MpDataObjectItem where fk_MpDataObjectId=? and ItemFormat=?");
+            int result = await MpDb.QueryScalarAsync<int>(query, doid,formatName);
+            return result > 0;
+        }
+
+        #endregion
+
         #endregion
 
         #endregion

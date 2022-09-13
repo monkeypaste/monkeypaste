@@ -213,3 +213,33 @@ function isTextElement(elm) {
 
 const delay = time => new Promise(res => setTimeout(res, time));
 
+async function getBase64ScreenshotOfElementAsync(element) {
+    // from https://stackoverflow.com/a/41585230/105028
+    let base64Str = '';
+    html2canvas(element).then(function (canvas9) {
+        var theimage9 = canvas9.toDataURL("image/png");
+        base64Str = theimage9.replace("data:image/png;base64,", "");
+        //document.querySelector("#theimage9").src = theimage9;
+    });
+
+    while (base64Str == '') {
+        await delay(100);
+    }
+    return base64Str;
+}
+
+function getBase64ScreenshotOfElement(element) {
+    // from https://stackoverflow.com/a/41585230/105028
+    let base64Str = '';
+    html2canvas(element).then(function (canvas9) {
+        var theimage9 = canvas9.toDataURL("image/png");
+        base64Str = theimage9.replace("data:image/png;base64,", "");
+        //document.querySelector("#theimage9").src = theimage9;
+    });
+
+    while (base64Str == '') {
+        
+    }
+    return base64Str;
+}
+

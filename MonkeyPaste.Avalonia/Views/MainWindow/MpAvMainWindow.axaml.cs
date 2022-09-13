@@ -22,7 +22,7 @@ using Avalonia.Input;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvMainWindow : Window, MpAvIDropHost {
+    public partial class MpAvMainWindow : Window { //}, MpAvIDropHost {
         #region Private Variables
 
         private int? _origResizerIdx;
@@ -39,36 +39,39 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIDropHost Implementation
 
-        bool MpAvIDropHost.IsDropEnabled => false;
-        bool MpAvIDropHost.IsDropValid(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects) {
-            // since this is on mw grid, its a container for any internal drop
-            // it will only be valid when another drophost is set
-            if(MpAvDropExtension.CurrentDropHost == this) {
-                Debugger.Break();
-            }
-            return MpAvDropExtension.CurrentDropHost != null;
-        }
+        //bool MpAvIDropHost.IsDropEnabled => false;
+        //bool MpAvIDropHost.IsDropValid(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects) {
+        //    // since this is on mw grid, its a container for any internal drop
+        //    // it will only be valid when another drophost is set
+        //    if(MpAvDropExtension.CurrentDropHost == this) {
+        //        Debugger.Break();
+        //    }
+        //    return MpAvDropExtension.CurrentDropHost != null;
+        //}
 
-        void MpAvIDropHost.DragOver(MpPoint host_mp, IDataObject avdo, DragDropEffects dragEffects) {
-            // only care about showing pin tray when empty from external drag
-            if (MpAvDragExtension.CurrentDragHost != null) {
-                // internal drag ignore
-                return;
-            }
-            MpAvClipTrayViewModel.Instance.IsExternalDragOverClipTrayContainer = true;
-        }
+        //void MpAvIDropHost.DragOver(MpPoint host_mp, IDataObject avdo, DragDropEffects dragEffects) {
+        //    MpConsole.WriteLine("[MainWindow DragOver]");
+        //    // only care about showing pin tray when empty from external drag
+        //    if (MpAvDragExtension.CurrentDragHost != null) {
+        //        // internal drag ignore
+        //        return;
+        //    }
+        //    MpAvClipTrayViewModel.Instance.IsExternalDragOverClipTrayContainer = true;
+        //}
 
-        void MpAvIDropHost.DragLeave() {
-            if (MpAvDragExtension.CurrentDragHost != null) {
-                // internal drag ignore
-                return;
-            }
-            MpAvClipTrayViewModel.Instance.IsExternalDragOverClipTrayContainer = false;
-        }
+        //void MpAvIDropHost.DragLeave() {
+        //    MpConsole.WriteLine("[MainWindow DragLeave]");
+        //    if (MpAvDragExtension.CurrentDragHost != null) {
+        //        // internal drag ignore
+        //        return;
+        //    }
+        //    MpAvClipTrayViewModel.Instance.IsExternalDragOverClipTrayContainer = false;
+        //}
 
-        Task<DragDropEffects> MpAvIDropHost.DropDataObjectAsync(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects) {
-            throw new NotImplementedException();
-        }
+        //Task<DragDropEffects> MpAvIDropHost.DropDataObjectAsync(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects) {
+        //    MpConsole.WriteLine("[MainWindow Drop]");
+        //    throw new NotImplementedException();
+        //}
 
         #endregion
 

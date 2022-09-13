@@ -12,6 +12,7 @@ using System.Collections.Specialized;
 using Avalonia.Threading;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Avalonia.Interactivity;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvDragExtension {
@@ -24,7 +25,6 @@ namespace MonkeyPaste.Avalonia {
         public const double MIN_DRAG_DIST = 5;
 
         #endregion
-
 
         #region Constructors
 
@@ -67,18 +67,18 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        #region DragDataHost AvaloniaProperty
-        public static MpAvIDragHost GetDragDataHost(AvaloniaObject obj) {
-            return obj.GetValue(DragDataHostProperty);
+        #region DragHost AvaloniaProperty
+        public static MpAvIDragHost GetDragHost(AvaloniaObject obj) {
+            return obj.GetValue(DragHostProperty);
         }
 
-        public static void SetDragDataHost(AvaloniaObject obj, MpAvIDragHost value) {
-            obj.SetValue(DragDataHostProperty, value);
+        public static void SetDragHost(AvaloniaObject obj, MpAvIDragHost value) {
+            obj.SetValue(DragHostProperty, value);
         }
 
-        public static readonly AttachedProperty<MpAvIDragHost> DragDataHostProperty =
+        public static readonly AttachedProperty<MpAvIDragHost> DragHostProperty =
             AvaloniaProperty.RegisterAttached<object, Control, MpAvIDragHost>(
-                "DragDataHost",
+                "DragHost",
                 null,
                 false);
 
@@ -123,6 +123,7 @@ namespace MonkeyPaste.Avalonia {
             if (s is Control dragControl) {
                 dragControl.DetachedFromVisualTree += DisabledControl_DetachedToVisualHandler;
                 dragControl.PointerPressed += DragControl_PointerPressed;
+                //dragControl.AddHandler(Control.PointerPressedEvent, DragControl_PointerPressed, RoutingStrategies.Tunnel);
                 if (e == null) {
                     dragControl.AttachedToVisualTree += EnabledControl_AttachedToVisualHandler;
                 }
@@ -147,9 +148,9 @@ namespace MonkeyPaste.Avalonia {
         private static void DragControl_PointerPressed(object sender, PointerPressedEventArgs e) {
             if(CurrentDragHost != null) {
                 // this shouldn't happen
-                Debugger.Break();
+                //Debugger.Break();
                 _currentDragHost = null;
-                return;
+                //return;
             }
 
             if (sender is Control dragControl) {
@@ -161,12 +162,13 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void DragCheckAndStart(Control dragControl, PointerPressedEventArgs e) {
+        public static void DragCheckAndStart(Control dragControl, PointerPressedEventArgs e) {
             MpPoint dc_down_pos = e.GetClientMousePoint(dragControl);
-            var dragHost = GetDragDataHost(dragControl);
+            var dragHost = GetDragHost(dragControl);
             if (dragHost == null || !dragHost.IsDragValid(dc_down_pos)) {
                 return;
             }
+            bool is_pointer_dragging = false;
             bool was_drag_started = false;
 
             EventHandler<PointerReleasedEventArgs> dragControl_PointerReleased_Handler = null;
@@ -177,8 +179,8 @@ namespace MonkeyPaste.Avalonia {
                 MpPoint dc_move_pos = e.GetClientMousePoint(dragControl);
 
                 var drag_dist = dc_down_pos.Distance(dc_move_pos);
-                was_drag_started = drag_dist >= MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST;
-                if (was_drag_started) {
+                is_pointer_dragging = drag_dist >= MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST;
+                if (is_pointer_dragging) {
 
                     // DRAG START
 
@@ -187,11 +189,11 @@ namespace MonkeyPaste.Avalonia {
                     Dispatcher.UIThread.Post(async () => {
                         DragDropEffects dragEffects = GetDragEffects(dragHost, dc_move_pos, e.KeyModifiers);
                         if (dragEffects != DragDropEffects.None) {
-
+                            was_drag_started = true;
                             CurrentDragHost = dragHost;
                             dragHost.DragBegin();
 
-                            var avdo = await dragHost.GetDragDataObjectAsync();
+                            var avdo = await dragHost.GetDragDataObjectAsync(false);
                             MpConsole.WriteLine("Drag Start. DragEffects: " + dragEffects);
                             var result = await DragDrop.DoDragDrop(e, avdo, dragEffects);
 
@@ -208,7 +210,7 @@ namespace MonkeyPaste.Avalonia {
                 if (was_drag_started) {
                     // this should not happen, or release is called before drop (if its called at all during drop
                     // release should be removed after drop
-                    Debugger.Break();
+                    //Debugger.Break();
                 }
                 
                 // DRAG END

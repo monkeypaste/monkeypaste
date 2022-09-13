@@ -5,7 +5,7 @@
   "credits": "Somebody",
   "guid": "a7df5078-8c85-4819-9518-dbf389612298",
   "url": "https://www.monkeypaste.com",
-  "iconUri": "https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-clipboard-1024.png",
+  "iconUri": "text.png",
   "ioType": {
     "isDll": true
   },
@@ -323,7 +323,7 @@
             "description": "When pasting or dropping a bitmap this will be the default file type",
             "controlType": "ComboBox",
             "unitType": "PlainText",
-            "paramId": 18, 
+            "paramId": 18,
             "isRequired": true,
             "values": [
               {

@@ -24,7 +24,6 @@
         TransparencyLevelHint="Transparent"
         Title="Monkey Paste">
     <Grid x:Name="MainWindowGridRef"
-          local:MpAvDropExtension.IsEnabled="True"
           Background="Transparent"
           Width="{Binding MainWindowWidth}"
           Height="{Binding MainWindowHeight}">

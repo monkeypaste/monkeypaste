@@ -703,7 +703,7 @@ namespace MpWpfApp {
             if (string.IsNullOrEmpty(str)) {
                 return string.Empty.ToContentRichText().ToXamlPackage();
             }
-            if (str.IsStringHtmlText()) {
+            if (str.IsStringRichHtmlText()) {
                 return str.ToContentRichText().ToXamlPackage();
             }
             if (str.IsStringPlainText()) {
@@ -740,7 +740,7 @@ namespace MpWpfApp {
             if (str.IsStringRichText() || str.IsStringRichTextTable()) {
                 return str;
             }
-            if (str.IsStringHtmlText()) {
+            if (str.IsStringRichHtmlText()) {
                 //return MpQuillHtmlToRtfConverter.ConvertQuillHtmlToRtf(str);
                 string xaml = HtmlToXamlDemo.HtmlToXamlConverter.ConvertHtmlToXaml(str, true);
                 return xaml.ToContentRichText(iconId);                
@@ -954,7 +954,7 @@ namespace MpWpfApp {
         }
 
         public static string ToQuillText(this string text) {
-            if (text.IsStringHtmlText()) {
+            if (text.IsStringRichHtmlText()) {
                 return text;
             }
             return MpRtfToHtmlConverter.ConvertRtfToHtml(text.ToContentRichText());

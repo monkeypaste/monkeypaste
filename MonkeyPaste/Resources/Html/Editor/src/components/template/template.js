@@ -399,6 +399,13 @@ function getTemplateEmbedStr(t, sToken = ENCODED_TEMPLATE_OPEN_TOKEN, eToken = E
     return result;
 }
 
+
+function getEncodedHtml() {
+    resetTemplates();
+    var result = encodeTemplates();
+    return result;
+}
+
 function encodeTemplates() {
     // NOTE template text should be cleared from html before calling this
     var html = getHtml();

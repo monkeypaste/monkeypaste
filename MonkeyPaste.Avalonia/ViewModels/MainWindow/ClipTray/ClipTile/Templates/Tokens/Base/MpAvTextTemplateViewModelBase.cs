@@ -21,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
         Yen
     }    
 
-    public abstract class MpAvTextTemplateViewModelBase : MpViewModelBase<MpTemplateCollectionViewModel>, 
+    public abstract class MpAvTextTemplateViewModelBase : MpViewModelBase<MpAvTemplateCollectionViewModel>, 
         MpISelectableViewModel,
         MpIValidatableViewModel,
         MpIHoverableViewModel,
@@ -312,7 +312,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvTextTemplateViewModelBase() : base(null) { }
 
-        public MpAvTextTemplateViewModelBase(MpTemplateCollectionViewModel thlcvm) : base(thlcvm) {
+        public MpAvTextTemplateViewModelBase(MpAvTemplateCollectionViewModel thlcvm) : base(thlcvm) {
             PropertyChanged += MpTemplateViewModel_PropertyChanged;            
         }
 

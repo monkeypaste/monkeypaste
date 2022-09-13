@@ -1,6 +1,47 @@
-﻿
+﻿var HostDataObj = null;
+
+function convertHostDataToDataTransferObject(hdo) {
+    let dtObj = {
+        types: {}
+    };
+    for (var i = 0; i < hdo.items.length; i++) {
+        let hdo_item = hdo.items[i];
+        let dtf = convertHostDataFormatToDataTransferFormat(hdo_item.format);
+        if (dtf) {
+            dtObj.types[dtf] = dtf == 'text/html' ? atob(hdo_item.data) : hdo_item.data;
+		}
+    }
+    return dtObj;
+}
+
+function convertHostDataFormatToDataTransferFormat(hdof) {
+    if (hdof == 'HTML Format') {
+        return 'text/html';
+    }
+    if (hdof == 'Text') {
+        return 'text/plain';
+    }
+    log('unknown host format (passing through): ' + hdof);
+    return null;
+}
+
+function convertDataTransferFormatToHostDataFormat(dtf) {
+    if (dtf == 'text/html') {
+        return 'HTML Format';
+    }
+    if (dtf == 'text/plain') {
+        return 'Text';
+    }
+    log('unknown data transfer format (passing through): ' + dtf);
+    return dtf;
+}
 
 function getDataTransferObject(e) {
+    if (CefDragData) {
+        let hdto = convertHostDataToDataTransferObject(CefDragData);
+        return hdto;
+    }
+
     let dtObj = e.detail ? e.detail.original.dataTransfer : e.dataTransfer;
     return dtObj;
 }
@@ -13,10 +54,16 @@ function isDataTransferValid(dt) {
 }
 
 function hasPlainText(dt) {
+    if (CefDragData) {
+        return dt && dt.types && dt.types['text/plain'] != null;
+	}
     return dt && dt.types && dt.types.indexOf('text/plain') > -1;
 }
 
 function hasHtml(dt) {
+    if (CefDragData) {
+        return dt && dt.types && dt.types['text/html'] != null;
+    }
     return dt && dt.types && dt.types.indexOf('text/html') > -1;
 }
 

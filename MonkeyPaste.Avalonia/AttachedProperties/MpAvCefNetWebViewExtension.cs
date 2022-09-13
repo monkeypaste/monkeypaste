@@ -263,7 +263,15 @@ namespace MonkeyPaste.Avalonia {
                         tr = wv.Selection;
                     }
                     //ignoreSubSelection ? rtb.Document.ContentRange() : rtb.Selection;
-                    string contentStr = asPlainText ? await tr.ToEncodedPlainTextAsync() : await tr.ToEncodedRichTextAsync();
+                    var encRangeReq = new MpQuillGetEncodedRangeDataRequestMessage() {
+                        index = tr.Start.Offset,
+                        length = tr.End.Offset - tr.Start.Offset,
+                        isPlainText = asPlainText
+                    };
+                    string encRangeRespStr = await wv.EvaluateJavascriptAsync($"getEncodedDataFromRange_ext('{encRangeReq.SerializeJsonObjectToBase64()}')");
+                    var encRangeResp = MpJsonObject.DeserializeBase64Object<MpQuillGetEncodedRangeDataResponseMessage>(encRangeRespStr);
+                    string contentStr = encRangeResp.encodedRangeData;
+                    //string contentStr = asPlainText ? await tr.ToEncodedPlainTextAsync() : await tr.ToEncodedRichTextAsync();
                     return contentStr;
             }
             MpConsole.WriteTraceLine("Unknown item type " + ctvm);

@@ -9,7 +9,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpDynamicTextTemplateViewModel() : base(null) { }
 
-        public MpDynamicTextTemplateViewModel(MpTemplateCollectionViewModel parent) : base(parent) { }
+        public MpDynamicTextTemplateViewModel(MpAvTemplateCollectionViewModel parent) : base(parent) { }
 
         #endregion
     }

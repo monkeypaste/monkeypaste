@@ -17,7 +17,7 @@ using MonkeyPaste.Common.Avalonia;
 using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpTemplateCollectionViewModel : 
+    public class MpAvTemplateCollectionViewModel : 
         MpAvSelectorViewModelBase<MpAvClipTileViewModel,MpAvTextTemplateViewModelBase> {
         #region Private Variables
 
@@ -92,9 +92,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpTemplateCollectionViewModel() : base(null) { }
+        public MpAvTemplateCollectionViewModel() : base(null) { }
 
-        public MpTemplateCollectionViewModel(MpAvClipTileViewModel ctvm) : base(ctvm) {
+        public MpAvTemplateCollectionViewModel(MpAvClipTileViewModel ctvm) : base(ctvm) {
         }
 
         #endregion
@@ -225,7 +225,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-        private void ReceivedRtbContentViewMessage(MpMessageType msg) {
+        private void ReceivedContentViewMessage(MpMessageType msg) {
             switch(msg) {
                 case MpMessageType.ContentSelectionChangeEnd:
                     if(Parent.IsPasting) {
@@ -354,11 +354,12 @@ namespace MonkeyPaste.Avalonia {
                 if(!isFromSelectionChanged) {
                     // only happens on initial template paste
 
-                    //var rtbcv = Application.Current.MainWindow.GetVisualDescendents<MpRtbContentView>().FirstOrDefault(x => x.DataContext == Parent);
-                    //if (rtbcv == null) {
-                    //    Debugger.Break();
-                    //}
-                    //MpMessenger.Register<MpMessageType>(rtbcv, ReceivedRtbContentViewMessage, Parent);
+                    // register notifications for selection changed to update PastableItems
+                    if(Parent.GetContentView() == null) {
+                        // virtualization issue?
+                        Debugger.Break();
+                    }
+                    MpMessenger.Register<MpMessageType>(Parent.GetContentView(), ReceivedContentViewMessage, Parent);
                 }
 
                 OnPropertyChanged(nameof(PastableItems));
@@ -398,42 +399,44 @@ namespace MonkeyPaste.Avalonia {
                 }
             });
 
-        public ICommand FinishPasteTemplateCommand => new MpCommand(
-            () => {
-                //var cv = Application.Current.MainWindow.GetVisualDescendents<MpRtbContentView>()
-                //            .FirstOrDefault(x => x.DataContext == Parent);
-                //if(cv == null) {
-                //    Debugger.Break();
+        public ICommand FinishPasteTemplateCommand => new MpAsyncCommand(
+            async() => {
+                MpAvIContentView cv = Parent.GetContentView();
+                if (cv == null) {
+                    // virtualization issue?
+                    Debugger.Break();
+                }
+                MpMessenger.Unregister<MpMessageType>(cv, ReceivedContentViewMessage);
+
+                Parent.IsBusy = true;
+                EventHandler hideEvent = null;
+                hideEvent = (s, e) => {
+                    Parent.IsBusy = false;
+                    MpAvMainWindowViewModel.Instance.OnMainWindowClosed -= hideEvent;
+                };
+
+                MpAvMainWindowViewModel.Instance.OnMainWindowClosed += hideEvent;
+
+                // NOTE templates are only available w/ webview not there in plain mode
+                var wv = cv as MpAvCefNetWebView;
+
+                string qhtml = await MpAvCefNetWebViewExtension.GetEncodedContentAsync(wv, wv.Selection.IsEmpty);
+
+                MpConsole.WriteLine("Unmodified item rtf: ");
+                MpConsole.WriteLine(qhtml);
+                //Debugger.Break();
+                foreach (var thlvm in Items) {
+                    //qhtml = qhtml.Replace(thlvm.TextTemplate.EncodedTemplateRtf, thlvm.TemplateText);
+                    qhtml = qhtml.Replace(thlvm.TextTemplate.EncodedTemplate, thlvm.TemplateText);
+                }
+                //if(wasAllSelected) {
+                //    rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
                 //}
-                //MpMessenger.Unregister<MpMessageType>(cv, ReceivedRtbContentViewMessage);
 
-                //Parent.IsBusy = true;
-                //EventHandler hideEvent = null;
-                //hideEvent = (s, e) => {
-                //    Parent.IsBusy = false;
-                //    MpAvMainWindowViewModel.Instance.OnMainWindowClosed -= hideEvent;
-                //};
+                Parent.TemplateRichHtml = qhtml;
 
-                //MpAvMainWindowViewModel.Instance.OnMainWindowClosed += hideEvent;
-
-                //var rtb = cv.Rtb;
-
-                //string rtf = MpContentDocumentRtfExtension.GetEncodedContent(rtb, rtb.Selection.IsEmpty);
-
-                //MpConsole.WriteLine("Unmodified item rtf: ");
-                //MpConsole.WriteLine(rtf);
-                ////Debugger.Break();
-                //foreach (var thlvm in Items) {
-                //    rtf = rtf.Replace(thlvm.TextTemplate.EncodedTemplateRtf, thlvm.TemplateText);
-                //}
-                ////if(wasAllSelected) {
-                ////    rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
-                ////}
-
-                //Parent.TemplateRichText = rtf;
-                
-                //MpConsole.WriteLine("Pastable rtf: ");
-                //MpConsole.WriteLine(rtf);
+                MpConsole.WriteLine("Pastable html: ");
+                MpConsole.WriteLine(qhtml);
             },
             () => IsAllTemplatesFilled);
 

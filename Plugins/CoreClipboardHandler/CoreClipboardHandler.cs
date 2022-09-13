@@ -402,7 +402,7 @@ namespace CoreClipboardHandler {
                 return null;
             }
 
-            DataObject dataObj = new DataObject();
+            Avalonia.Input.DataObject dataObj = new Avalonia.Input.DataObject();
             foreach (var kvp in request.data.DataFormatLookup) {
                 string format = kvp.Key.Name;
                 object data = kvp.Value;
@@ -413,23 +413,27 @@ namespace CoreClipboardHandler {
                         var winforms_dataobject = MpClipoardImageHelpers.GetClipboardImage_WinForms(bmpSrc.ToBitmap(), null, null);
                         var pngData = winforms_dataobject.GetData("PNG");
                         var dibData = winforms_dataobject.GetData(DataFormats.Dib);
-                        dataObj.SetImage(bmpSrc);
-                        dataObj.SetData("PNG", pngData);
-                        dataObj.SetData(DataFormats.Dib, dibData);
+                        dataObj.Set(MpPortableDataFormats.Bitmap,bmpSrc);
+                        dataObj.Set("PNG", pngData);
+                        dataObj.Set(DataFormats.Dib, dibData);
                         break;
                     case MpPortableDataFormats.FileDrop:
                         var fl = data.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-                        var sc = new StringCollection();
-                        sc.AddRange(fl);
-                        dataObj.SetFileDropList(sc);
+                        //var sc = new StringCollection();
+                        //sc.AddRange(fl);
+                        dataObj.Set("FileNames",fl.ToList());
+                        break;
+                    case MpPortableDataFormats.Html:
+                        var bytes = Encoding.Default.GetBytes(data.ToString());
+                        dataObj.Set(MpPortableDataFormats.Html,bytes);
                         break;
                     default:
-                        dataObj.SetData(format, data);
+                        dataObj.Set(format, data);
                         break;
                 }
             }
             if(request.writeToClipboard) {
-                while(WinApi.IsClipboardOpen() != IntPtr.Zero) {
+                while (WinApi.IsClipboardOpen() != IntPtr.Zero) {
                     Thread.Sleep(10);
                 }
                 Clipboard.SetDataObject(dataObj, true);

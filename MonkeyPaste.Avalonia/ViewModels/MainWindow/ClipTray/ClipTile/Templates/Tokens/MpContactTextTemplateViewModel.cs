@@ -79,7 +79,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpContactTextTemplateViewModel() : base(null) { }
 
-        public MpContactTextTemplateViewModel(MpTemplateCollectionViewModel parent) : base(parent) {
+        public MpContactTextTemplateViewModel(MpAvTemplateCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpContactTextTemplateViewModel_PropertyChanged;
         }
 

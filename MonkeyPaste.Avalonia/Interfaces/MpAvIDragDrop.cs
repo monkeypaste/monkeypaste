@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public interface MpAvIDragHost {
+        bool CanDrag { get; }
         bool IsDragValid(MpPoint host_mp);
-        Task<IDataObject> GetDragDataObjectAsync();
+        Task<IDataObject> GetDragDataObjectAsync(bool fillTemplates);
         void DragBegin();
         void DragEnd();
     }

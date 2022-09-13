@@ -22,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvCefNetWebView : 
         WebView, 
-        MpAvIContentView {
+        MpAvIContentView, MpAvIDropHost {
         #region Private Variables
 
         //private string _lastResult;
@@ -41,6 +41,20 @@ namespace MonkeyPaste.Avalonia {
             _openerWebView = opener;
         }
 
+        static MpAvCefNetWebView() {
+            IsHitTestVisibleProperty.Changed.AddClassHandler<MpAvCefNetWebView>((x, y) => HandleIsHitTestVisibleChanged(x, y));
+        }
+
+        private static void HandleIsHitTestVisibleChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+            if (e.NewValue is bool isHitTestVisible &&
+                element is MpAvCefNetWebView wv) {
+                if(isHitTestVisible) {
+                    // when wv has hit test CanDrag is updated through window binding
+                    return;
+                }
+                wv.UpdateDraggable(true);
+            }
+        }
         #endregion
 
         #region Properties
@@ -81,7 +95,8 @@ namespace MonkeyPaste.Avalonia {
             //new WebViewTab(new CefBrowserSettings(), new CefRequestContext(new CefRequestContextSettings()));
             Document = new MpAvHtmlDocument(this);
             Selection = new MpAvTextSelection(Document);
-
+            //MpAvDropExtension.SetIsEnabled(this, true);
+            //MpAvDropExtension.SetDropHost(this, this);
             CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Copy, OnCopy, OnCanExecuteClipboardCommand));
             CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Cut, OnCut, OnCanExecuteClipboardCommand));
             CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Paste, OnPaste, OnCanExecuteClipboardCommand));
@@ -90,7 +105,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        public void UpdateSelection(int index, int length, bool isFromEditor) {
+
+        public void UpdateSelection(int index, int length, bool isFromEditor, bool isChangeBegin) {
             var newStart = new MpAvTextPointer(Document, index);
             var newEnd = new MpAvTextPointer(Document, index + length);
             if (isFromEditor) {
@@ -99,6 +115,9 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 Selection.Select(newStart, newEnd);
             }
+            MpMessageType selChangeMsg = isChangeBegin ? MpMessageType.ContentSelectionChangeBegin : MpMessageType.ContentSelectionChangeEnd;
+            MpMessenger.Send(selChangeMsg, DataContext);
+
             MpConsole.WriteLine($"Tile: '{(DataContext as MpAvClipTileViewModel).CopyItemTitle}' Selection Changed: '{Selection}'");
         }
 
@@ -124,9 +143,9 @@ namespace MonkeyPaste.Avalonia {
         #region Overrides
 
 
-        protected override void OnDragEnter(DragEventArgs e) {
-            base.OnDragEnter(e);
-        }
+        //protected override void OnDragEnter(DragEventArgs e) {
+        //    base.OnDragEnter(e);
+        //}
 
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
             if(e.IsRightPress(this) && SuppressRightClick) {
@@ -183,7 +202,7 @@ namespace MonkeyPaste.Avalonia {
             Debugger.Break();
             return MpAvCefNetApplication.JS_REF_ERROR;
         }
-        public async Task<string> EvaluateJavascriptAsync_helper(string script,string evalKey, int retryAttempt = 0) {
+        private async Task<string> EvaluateJavascriptAsync_helper(string script,string evalKey, int retryAttempt = 0) {
             var frame = GetMainFrame();
             if (frame == null) {
                 return null;
@@ -279,6 +298,24 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-       
+        bool MpAvIDropHost.IsDropEnabled => true;
+
+        bool MpAvIDropHost.IsDropValid(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects) {
+            return true;
+        }
+
+        void MpAvIDropHost.DragOver(MpPoint host_mp, IDataObject avdo, DragDropEffects dragEffects) {
+            //throw new NotImplementedException();
+        }
+
+        void MpAvIDropHost.DragLeave() {
+            //throw new NotImplementedException();
+        }
+
+        async Task<DragDropEffects> MpAvIDropHost.DropDataObjectAsync(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects) {
+            //throw new NotImplementedException();
+            await Task.Delay(1);
+            return dragEffects;
+        }
     }
 }

@@ -12,43 +12,49 @@ using System.Threading.Tasks;
 using MonkeyPaste.Common;
 using System.Linq;
 using MonkeyPaste.Common.Utils.Extensions;
+using Avalonia.Threading;
+using System.Text;
 
 namespace MonkeyPaste.Avalonia {
-    public partial class MpAvClipTileContentView : MpAvUserControl<MpAvClipTileViewModel>, MpAvIDragHost {
-        //public MpAvContentViewDropBehavior ContentViewDropBehavior { get;  set; }
-        //public MpAvContentHighlightBehavior HighlightBehavior { get;  set; }
-
+    public partial class MpAvClipTileContentView : 
+        MpAvUserControl<MpAvClipTileViewModel>, 
+        MpAvIDragHost,
+        MpAvIDropHost {
+        private bool _wasSubSelectionEnabledBeforeDragOver { get; set; } = false;
 
         public MpAvIContentView ContentView { get; private set; }
 
         #region MpAvIDragHost Implementation
 
+        bool MpAvIDragHost.CanDrag => ContentView != null && ContentView.CanDrag;
+
         bool MpAvIDragHost.IsDragValid(MpPoint host_mp) {
             // check pointer selection/range intersection here
-            if (BindingContext.IsSubSelectionEnabled) {
-                if (ContentView.Selection.IsEmpty || !ContentView.CanDrag) {
-                    return false;
-                }
-                //if(ContentView.Selection.RangeRects.Count > 1) {
-                //    Debugger.Break();
-                //}
-                //bool isPointerOnSelection = ContentView.Selection.RangeRects.Any(x => x.Contains(host_mp));
-                //MpConsole.WriteLine($"ContentView mp: '{host_mp}' is {(isPointerOnSelection ? "ON" : "NOT ON")} selection");
-                //if (isPointerOnSelection) {
-                //    return true;
-                //}
-                //return ;
+            if(ContentView == null || !ContentView.CanDrag) {
+                return false;
             }
             return true;
         }
 
-        async Task<IDataObject> MpAvIDragHost.GetDragDataObjectAsync() {
-            await Task.Delay(1);
+        async Task<IDataObject> MpAvIDragHost.GetDragDataObjectAsync(bool fillTemplates) {
+            if(BindingContext == null) {
+                return null;
+            }
+            var mpdo = await BindingContext.ConvertToPortableDataObject(fillTemplates);
 
-            DataObject avdo = new DataObject();
-            // setup internal data format
-            avdo.Set(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT, BindingContext);
+            var avdo = MpPlatformWrapper.Services.DataObjectHelper.ConvertToPlatformClipboardDataObject(mpdo) as DataObject;
 
+            bool is_all_selected = false;
+            if (BindingContext.IsSubSelectionEnabled) {
+                is_all_selected = ContentView.Selection.Start.Offset == ContentView.Document.ContentStart.Offset &&
+                                    ContentView.Selection.End.Offset == ContentView.Document.ContentEnd.Offset;
+            } else {
+                is_all_selected = true;
+            }
+            if (is_all_selected) {
+                // only attach internal data format for entire tile
+                avdo.Set(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT, BindingContext);
+            }
             return avdo;
         }
 
@@ -67,6 +73,90 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
+        #region MpAvIDropHost Implementation
+
+
+        bool MpAvIDropHost.IsDropEnabled => true;
+
+        bool MpAvIDropHost.IsDropValid(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects) {
+            //if(IsDragDataSelf(avdo)) {
+            //    return false;
+            //}
+            if (!BindingContext.IsSubSelectionEnabled) {
+                return true;
+            }
+                bool isValid = MpPortableDataFormats.RegisteredFormats.Any(x => avdo.GetDataFormats().Contains(x));
+            return isValid;
+        }
+
+        void MpAvIDropHost.DragOver(MpPoint host_mp, IDataObject avdo, DragDropEffects dragEffects) {
+            MpConsole.WriteLine($"[Tile '{BindingContext.CopyItemTitle}' DragOver data count: {avdo.GetDataFormats().Count()}]");
+            if (dragEffects == DragDropEffects.None) {
+                return;
+            }
+            if(!BindingContext.IsSubSelectionEnabled) {
+                // should only be on first drag over
+                if(ContentView is MpAvCefNetWebView wv) {
+                    wv.PointerLeave += Cv_PointerLeave;
+                    
+                    Dispatcher.UIThread.Post( () => {
+                        var hdobjMsg = new MpQuillDragDropDataObjectMessage() {
+                            items = avdo.GetDataFormats()
+                                        .Where(x => MpPortableDataFormats.RegisteredFormats.Contains(x))
+                                        .Select(x =>
+                                            new MpQuillDragDropDataObjectItemFragment() {
+                                                format = x,
+                                                data = x != MpPortableDataFormats.Html ? avdo.Get(x) as string : (avdo.Get(x) as byte[]).ToBase64String()
+                                            }).ToList()
+                        };
+                        string msgStr = hdobjMsg.SerializeJsonObjectToBase64();
+                        wv.ExecuteJavascript($"setHostDataObject_ext('{msgStr}')");
+                    });
+                }
+                BindingContext.IsSubSelectionEnabled = true;
+            }
+        }
+
+        private void Cv_PointerLeave(object sender, PointerEventArgs e) {
+            
+            if (ContentView is Control cv) {
+                cv.PointerLeave -= Cv_PointerLeave;
+                BindingContext.IsSubSelectionEnabled = false;
+            }
+        }
+
+        void MpAvIDropHost.DragLeave() {
+            MpConsole.WriteLine($"[Tile '{BindingContext.CopyItemTitle}]' DragLeave]");
+            
+            if(BindingContext.IsItemDragging || this.IsPointerOver) {
+                return;
+            }
+
+
+        }
+
+        async Task<DragDropEffects> MpAvIDropHost.DropDataObjectAsync(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects) { 
+            MpConsole.WriteLine($"[Tile '{BindingContext.CopyItemTitle}]' Drop]");
+            await Task.Delay(1);
+            // editor should handle drop internally
+            return dragEffects;
+        }
+
+        #region Drag Helpers
+
+        private bool IsDragDataSelf(IDataObject avdo) {
+            if (avdo.Get(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT) is MpAvClipTileViewModel ctvm) {
+                if (ctvm.CopyItemId == BindingContext.CopyItemId) {
+                    return true;
+                }
+                return ctvm.ItemType == BindingContext.ItemType;
+            }
+            return false;
+        }
+        #endregion
+
+        #endregion
+
         public MpAvClipTileContentView() {
             InitializeComponent();
         }
@@ -79,6 +169,7 @@ namespace MonkeyPaste.Avalonia {
                 ContentView = contentContainer.Content as MpAvIContentView;
             }
         }
+
 
         //public void UpdateAdorners() {
         //    var al = AdornerLayer.GetAdornerLayer(this);

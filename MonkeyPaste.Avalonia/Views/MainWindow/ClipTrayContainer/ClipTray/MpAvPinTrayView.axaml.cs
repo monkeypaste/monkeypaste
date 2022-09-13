@@ -52,10 +52,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         void MpAvIDropHost.DragOver(MpPoint host_mp, IDataObject avdo, DragDropEffects dragEffects) {
+            MpConsole.WriteLine("[PinTray DragOver]");
             BindingContext.IsDragOverPinTray = true;
 
             int drop_idx = GetDropIdx(host_mp);
-            MpConsole.WriteLine("DragOver DropIdx: " + drop_idx);
 
             if (dragEffects == DragDropEffects.None || drop_idx < 0) {
                 MpConsole.WriteLine("DragOver invalidated: Effects is none");
@@ -72,6 +72,7 @@ namespace MonkeyPaste.Avalonia {
         //}
 
         void MpAvIDropHost.DragLeave() {
+            MpConsole.WriteLine("[PinTray DragLeave]");
             BindingContext.IsDragOverPinTray = false;
             BindingContext.OnPropertyChanged(nameof(BindingContext.IsPinTrayDropPopOutVisible));
             ClearAdorner();
@@ -79,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
 
         async Task<DragDropEffects> MpAvIDropHost.DropDataObjectAsync(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects) {
             // NOTE only pin tray allows drop not clip tray
-
+            MpConsole.WriteLine("[PinTray Drop]");
             ClearAdorner();
             BindingContext.IsDragOverPinTray = false;
             BindingContext.IsExternalDragOverClipTrayContainer = false;

@@ -168,7 +168,6 @@ namespace MonkeyPaste.Common {
             return Convert.ToBase64String(bytes);
         }
 
-
         public static string ToCsv(this List<string> strList) {
             if(strList == null || strList.Count == 0) {
                 return string.Empty;
@@ -439,8 +438,8 @@ namespace MonkeyPaste.Common {
             return true;
         }
 
-        public static bool IsStringHtmlText(this string str) {
-            if (string.IsNullOrEmpty(str)) {
+        public static bool IsStringRichHtmlText(this string str) {
+            if (string.IsNullOrEmpty(str) || !str.StartsWith("<")) {
                 return false;
             }
             str = str.ToLower();

@@ -9,7 +9,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvStringExtensions {
-        public static bool IsQuillHtmlMixedMedia(string qhtml) {
+        public static bool IsRichHtmlMixedMedia(this string qhtml) {
             string imgTagStartStr = @"<img src='";
             int img_tag_start_idx = qhtml.IndexOf(imgTagStartStr);
             if (img_tag_start_idx >= 0) {
@@ -47,18 +47,20 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static string ToCsv(this string str) {
-            return str;
+            // (currently) this assumes str is html table and down converting 
+            string csvStr = MpCsvToRichHtmlTableConverter.RichHtmlTableToCsv(str);
+            return csvStr;
         }
         public static string ToPlainText(this string text) {
-            if (text.IsStringHtmlText()) {
+            if (text.IsStringRichHtmlText()) {
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(text);
-                return htmlDoc.Text;// == null ? String.Empty : htmlDoc.Text;
+                return htmlDoc.DocumentNode.InnerText;// == null ? String.Empty : htmlDoc.Text;
             }
             return text;
         }
 
-        public static string ToQuillText(this string str, string strFormat) {
+        public static string ToRichHtmlText(this string str, string strFormat) {
             if(str.IsStringRichText()) {
                 string qhtml = MpWpfRtfToHtmlConverter.ConvertFormatToHtml(str, strFormat);
                 return qhtml;
@@ -66,6 +68,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 // TODO create quill tables here
 
             }
+            // TODO add image and file stuff here
             return str;
         }
 

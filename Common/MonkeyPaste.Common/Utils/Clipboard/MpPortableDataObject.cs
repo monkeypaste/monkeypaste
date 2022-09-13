@@ -108,7 +108,8 @@ namespace MonkeyPaste.Common {
             Unicode,
             OemText,
             FileDrop,
-            Bitmap
+            Bitmap,
+            INTERNAL_CLIP_TILE_DATA_FORMAT
         };
 
         private static Dictionary<int, MpPortableDataFormat> _formatLookup;
@@ -211,6 +212,10 @@ namespace MonkeyPaste.Common {
         public MpPortableDataFormat(string name, int id) {
             Name = name;
             Id = id;
+        }
+
+        public override string ToString() {
+            return $"{Id}-{Name}";
         }
     }
 }

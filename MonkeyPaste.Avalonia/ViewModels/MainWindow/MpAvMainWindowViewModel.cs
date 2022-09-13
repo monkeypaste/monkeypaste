@@ -633,10 +633,15 @@ namespace MonkeyPaste.Avalonia {
                             return;
                         }
                         //MpConsole.WriteLine($"SHOW WINDOW ANIMATING: L: " + MainWindowLeft + " T: " + MainWindowTop + " R:" + MainWindowRight + " B:" + MainWindowBottom);
-                        MainWindowLeft += d_l;
-                        MainWindowTop += d_t;
-                        MainWindowRight += d_r;
-                        MainWindowBottom += d_b;
+                        MainWindowLeft = Math.Min(openEndRect.Left,MainWindowLeft + d_l);
+                        MainWindowTop = Math.Min(openEndRect.Top,MainWindowTop + d_t);
+                        MainWindowRight = Math.Min(openEndRect.Right,MainWindowRight + d_r);
+                        MainWindowBottom = Math.Min(openEndRect.Bottom,MainWindowBottom + d_b);
+
+                        //MainWindowLeft += d_l;
+                        //MainWindowTop += d_t;
+                        //MainWindowRight += d_r;
+                        //MainWindowBottom += d_b;
 
                         OnPropertyChanged(nameof(ExternalRect));
                     }

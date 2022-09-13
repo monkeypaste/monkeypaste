@@ -8,6 +8,7 @@ namespace MonkeyPaste.Avalonia {
     public interface MpAvIContentDocument {
         IControl Owner { get; }
 
+        
         MpAvITextPointer ContentStart { get; }
         MpAvITextPointer ContentEnd { get; }
 

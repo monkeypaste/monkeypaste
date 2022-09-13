@@ -187,7 +187,7 @@ namespace MonkeyPaste.Avalonia {
                 string script = e.Message.ArgumentList.GetString(1);
 
                 CefV8Context context = e.Frame.V8Context;
-
+                
                 if (!context.Enter()) {
                     return;
                 }
@@ -241,23 +241,15 @@ namespace MonkeyPaste.Avalonia {
                     var ctvm = wv.DataContext as MpAvClipTileViewModel;
                     switch (funcType) {
                         case MpAvEditorBindingFunctionType.NotifyContentDraggableChanged: 
-                            var draggableChanged = MpJsonObject.DeserializeObject<MpQuillContentDraggableChangedMessage>(msgJsonStr);
+                            var draggableChanged = MpJsonObject.DeserializeBase64Object<MpQuillContentDraggableChangedMessage>(msgJsonStr);
                             wv.UpdateDraggable(draggableChanged.isDraggable);
                             break;
                         case MpAvEditorBindingFunctionType.NotifyEditorSelectionChanged: 
                             var selChangedJsonMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillContentSelectionChangedMessage>(msgJsonStr);
-                            if (selChangedJsonMsgObj.selRects != null) {
-                                int change_id = MpRandom.Rand.Next(0, 10);
-                                MpConsole.WriteLine("");
-                                selChangedJsonMsgObj.selRects.ForEach(x => MpConsole.WriteLine("ChangeId: " + change_id + x.ToRect()));
-                                MpConsole.WriteLine("");
-                                wv.UpdateSelectionRects(selChangedJsonMsgObj.selRects.Select(x => x.ToRect()));
-                            } 
-
-                            wv.UpdateSelection(selChangedJsonMsgObj.index, selChangedJsonMsgObj.length, true);
+                            wv.UpdateSelection(selChangedJsonMsgObj.index, selChangedJsonMsgObj.length, true, selChangedJsonMsgObj.isChangeBegin);
                             break;
                         case MpAvEditorBindingFunctionType.NotifyContentLengthChanged:
-                            var contentLengthMsgObj = MpJsonObject.DeserializeObject<MpQuillContentLengthChangedMessage>(msgJsonStr);
+                            var contentLengthMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillContentLengthChangedMessage>(msgJsonStr);
                             if (contentLengthMsgObj != null) {
                                 wv.Document.ContentEnd.Offset = contentLengthMsgObj.length;
                             }
