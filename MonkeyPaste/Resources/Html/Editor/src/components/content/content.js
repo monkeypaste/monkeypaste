@@ -46,6 +46,9 @@ function isInlineElement(elm) {
 }
 
 function isDocIdxLineStart(docIdx) {
+	if (isNaN(parseFloat(docIdx))) {
+		return false;
+	}
     if (docIdx == 0) {
         return true;
     }
@@ -58,6 +61,9 @@ function isDocIdxLineStart(docIdx) {
 }
 
 function isDocIdxLineEnd(docIdx) {
+	if (isNaN(parseFloat(docIdx))) {
+		return false;
+	}
     if (docIdx == quill.getLength()) {
         return true;
     }
@@ -134,6 +140,10 @@ function getDocLength() {
 }
 
 function getCharacterRect(docIdx, inflateX = false, inflateY = false) {
+	if (isNaN(parseFloat(docIdx))) {
+		return cleanRect();
+	}
+
 	let docIdx_rect = quill.getBounds(docIdx, 1);
 	docIdx_rect = editorToScreenRect(docIdx_rect);
 
@@ -344,12 +354,12 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 		text_node_idx = range.offset;
 	}
 
-	if (text_node_idx >= 0) {
+	if (!isNaN(parseInt(text_node_idx)) && text_node_idx >= 0) {
 		let doc_idx = text_node_idx;
 
 		if (textNode && textNode.parentElement) {
 			let parent_blot = Quill.find(textNode.parentElement);
-			if (parent_blot) {
+			if (parent_blot && typeof parent_blot.offset === 'function') {
 				let parent_idx = parent_blot.offset(quill.scroll);
 				doc_idx = text_node_idx + parent_idx;
 
@@ -359,9 +369,11 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 					let p_elm = document.elementFromPoint(p.x, p.y);
 					if (p_elm) {
 						let blot = Quill.find(p_elm);
-						if (blot && blot.offset) {
+						if (blot && typeof blot.offset === 'function') {
 							let block_idx = blot.offset(quill.scroll);
-							doc_idx = block_idx;
+							if (!isNaN(parseInt(block_idx))) {
+								doc_idx = block_idx;
+							}
 						}
 
 					}
@@ -387,11 +399,34 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 	return fallbackIdx;
 }
 
-function getElementAtIdx(docIdx) {
+function getBlotAtDocIdx(docIdx) {
+	let leaf = quill.getLeaf(docIdx);
+	if (leaf && leaf.length > 0) {
+		return leaf[0];
+	}
+	return null;
+}
+
+function getElementAtDocIdx(docIdx) {
 	let leafNode = quill.getLeaf(docIdx)[0].domNode;
 	let leafElementNode =
 		leafNode.nodeType == 3 ? leafNode.parentElement : leafNode;
 	return leafElementNode;
+}
+
+function getBlockElementAtDocIdx(docIdx) {
+	let cur_blot = getBlotAtDocIdx(docIdx);
+	while (cur_blot != null) {
+		if (cur_blot.domNode && cur_blot.domNode.tagName) {
+			// is false for text nodes
+			let cur_tag_name = cur_blot.domNode.tagName.toLowerCase();
+			if (BlockTags.includes(cur_tag_name)) {
+				return cur_blot.domNode;
+			}
+		}
+		cur_blot = cur_blot.parent;
+	}
+	return null;
 }
 
 function getHtmlFromDocRange(docRange) {

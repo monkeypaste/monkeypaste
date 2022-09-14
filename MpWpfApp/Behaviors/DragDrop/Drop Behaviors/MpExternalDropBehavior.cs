@@ -121,7 +121,7 @@ namespace MpWpfApp {
 
             MpMessenger.SendGlobal<MpMessageType>(MpMessageType.ExternalDragBegin);
 
-            MpPortableDataObject mpdo = await ctvm.ConvertToPortableDataObject(false);
+            MpPortableDataObject mpdo = await ctvm.ConvertToDataObject(false);
             DataObject wpfdo = MpPlatformWrapper.Services.DataObjectHelper.ConvertToPlatformClipboardDataObject(mpdo) as DataObject;
 
             if (ctvm.HasTemplates) {
@@ -163,7 +163,7 @@ namespace MpWpfApp {
                         }
                         //MpDragDropManager.DragData as MpClipTileViewModel;
 
-                        MpPortableDataObject mpdo = await ctvm.ConvertToPortableDataObject(true);
+                        MpPortableDataObject mpdo = await ctvm.ConvertToDataObject(true);
 
                         if(mpdo == null) {
                             // template paste was canceled

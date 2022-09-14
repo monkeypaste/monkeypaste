@@ -131,7 +131,8 @@ namespace MonkeyPaste.Avalonia {
                 return tb.Text.Length == tb.SelectedText.Length;
             } else if(control is MpAvCefNetWebView wv) {
                 string resultStr = await wv.EvaluateJavascriptAsync("isAllSelected_ext()");
-                return resultStr.ToLower() == "true";
+                var isAllSelectedResp = MpJsonObject.DeserializeBase64Object<MpQuillIsAllSelectedResponseMessage>(resultStr);
+                return isAllSelectedResp.isAllSelected;
 
             }   
             return false;

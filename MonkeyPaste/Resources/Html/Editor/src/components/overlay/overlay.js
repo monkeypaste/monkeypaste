@@ -27,25 +27,45 @@ function drawUnderlines(ctx, color = 'red', thickness = '0.5') {
         let idx_rect = getCharacterRect(i); //quill.getBounds(i);
         //log('idx rect: ' + idx_rect);
 
-        let isTail = i == count - 1;
-
-        if (p1 == null) {
+        let is_initial_line = p1 == null;        
+        let is_tail = i == count - 1;
+        let is_new_line = false;
+        if (i == 532) {
+            i = 532;
+		}
+        if (is_initial_line) {
             // initial line
             p1 = { x: idx_rect.left, y: idx_rect.bottom };
-        } else if (idx_rect.bottom > p1.y) {
-            // start of new line
-            let last_idx_rect = getCharacterRect(i - 1);// quill.getBounds(i - 1);
-            p2 = { x: last_idx_rect.right, y: last_idx_rect.bottom };
-        } else if (isTail) {
+        } else if (is_tail) {
             // last line
             p2 = { x: idx_rect.right, y: idx_rect.bottom };
-        }
+        } else {
+            let idx_block_elm = getBlockElementAtDocIdx(i);
+            let last_block_elm = getBlockElementAtDocIdx(i - 1);
+            if (idx_block_elm != last_block_elm ||
+                idx_rect.bottom > p1.y) {
+                // start of new line
+                let last_idx_rect = getCharacterRect(i - 1);// quill.getBounds(i - 1);
+                p2 = { x: last_idx_rect.right, y: last_idx_rect.bottom };
+            } 
+		}
+        //if (is_initial_line) {
+        //    // initial line
+        //    p1 = { x: idx_rect.left, y: idx_rect.bottom };
+        //} else if (is_new_line) {
+        //    // start of new line
+        //    let last_idx_rect = getCharacterRect(i - 1);// quill.getBounds(i - 1);
+        //    p2 = { x: last_idx_rect.right, y: last_idx_rect.bottom };
+        //} else if (is_tail) {
+        //    // last line
+        //    p2 = { x: idx_rect.right, y: idx_rect.bottom };
+        //}
 
         if (isPointInRect(windowRect, p1) && isPointInRect(windowRect, p2)) {
             drawLine(ctx, { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y }, color, thickness);
             p1 = p2 = null;
 
-            if (isTail) {
+            if (is_tail) {
                 return;
             }
 
@@ -180,7 +200,7 @@ function drawTextSelection(ctx) {
     let sel_fg_color = 'black';
     let caret_color = 'black';
 
-    if (isDropping()) {
+    if (isDropping() || IsDragging) {
         if (isDragSource()) {
             if (isDropValid()) {
                 if (isDragCopy()) {
@@ -226,21 +246,14 @@ function drawOverlay() {
     let isUnderlinesVisible = !isEditorToolbarVisible() && IsSubSelectionEnabled && !isDropping();
     if (isUnderlinesVisible) {
         drawUnderlines(ctx);
-    } else {
-        isUnderlinesVisible = isUnderlinesVisible;
-        //clearUnderlines(ctx);
-    }
+    } 
 
     if (IsHighlightingVisible) {
         drawHighlighting(ctx);
-    } else {
-        //clearHighlighting(ctx);
-    }
+    } 
 
     let isDropPreviewVisible = isDropping();
     if (isDropPreviewVisible) {
        drawDropPreview(ctx);
-    } else {
-        //clearDropPreview(ctx);
-    }
+    } 
 }

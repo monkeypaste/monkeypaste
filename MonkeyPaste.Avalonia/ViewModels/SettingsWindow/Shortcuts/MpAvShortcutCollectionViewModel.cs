@@ -26,10 +26,10 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncSingletonViewModel<MpAvShortcutCollectionViewModel> {
 
         #region Constants
-        public static bool IS_GLOBAL_MOUSE_INPUT_ENABLED = false;
-        public static bool IS_GLOBAL_KEYBOARD_INPUT_ENABLED = false;
+        public static bool IS_GLOBAL_MOUSE_INPUT_ENABLED = true;
+        public static bool IS_GLOBAL_KEYBOARD_INPUT_ENABLED = true;
         public static bool IS_GLOBAL_INPUT_ENABLED => IS_GLOBAL_KEYBOARD_INPUT_ENABLED || IS_GLOBAL_MOUSE_INPUT_ENABLED;
-        public static bool IS_PSEUDO_GLOBAL_INPUT_ENABLED = true;
+        public static bool IS_PSEUDO_GLOBAL_INPUT_ENABLED = false;
         public const double MIN_GLOBAL_DRAG_DIST = 20;
 
         #endregion
@@ -79,6 +79,7 @@ namespace MonkeyPaste.Avalonia {
         public bool GlobalIsAltDown { get; private set; } = false;
 
         public bool GlobalIsShiftDown { get; private set; } = false;
+        public bool GlobalIsEscapeDown { get; private set; } = false;
 
         public bool IsMultiSelectKeyDown => GlobalIsCtrlDown || GlobalIsAltDown || GlobalIsShiftDown;
 
@@ -911,6 +912,7 @@ namespace MonkeyPaste.Avalonia {
                 GlobalIsCtrlDown = true;
             }
             if (keyStr.IsEscape()) {
+                GlobalIsEscapeDown = true;
                 if (MpAvDragExtension.CurrentDragHost != null) {
                     //_keyboardGestureHelper.Reset();
                     //e.SuppressKeyPress = true;
@@ -941,6 +943,9 @@ namespace MonkeyPaste.Avalonia {
             }
             if (keyStr.IsCtrl()) {
                 GlobalIsCtrlDown = false;
+            }
+            if(keyStr.IsEscape()) {
+                GlobalIsEscapeDown = false;
             }
 
             OnGlobalKeyReleased?.Invoke(this, keyStr);

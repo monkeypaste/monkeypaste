@@ -17,6 +17,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvITextPointer Start { get; set; }
         public MpAvITextPointer End { get; set; }
 
+        public int Length => End.Offset - Start.Offset;
         //public string Text {
         //    get {
         //        if (!Start.IsInSameDocument(End)) {
@@ -65,9 +66,9 @@ namespace MonkeyPaste.Avalonia {
             }
             if (Start.Document is MpAvHtmlDocument doc &&
                 doc.Owner is MpAvCefNetWebView wv) {
-                var getRangeMsg = new MpQuillContentRangeMessage() {
+                var getRangeMsg = new MpQuillGetRangeTextRequestMessage() {
                     index = Start.Offset,
-                    length = End.Offset - Start.Offset
+                    length = Length
                 };
                 string text = await wv.EvaluateJavascriptAsync($"getText_ext('{getRangeMsg.SerializeJsonObject()}')");
                 return text;
@@ -86,12 +87,12 @@ namespace MonkeyPaste.Avalonia {
                 // NOTE passing extra 'isHostJsonMsg' to ensure any clipboard text isn't confused as this json message
                 var setRangeMsg = new MpQuillContentSetTextRangeMessage() {
                     index = Start.Offset,
-                    length = End.Offset - Start.Offset,
+                    length = Length,
                     text = text
                 };
                 await wv.EvaluateJavascriptAsync($"setTextInRange_ext('{setRangeMsg.SerializeJsonObject()}')");
             } else if(Start.Document is MpAvTextBox tb) {
-                tb.Text = tb.Text.ReplaceRange(Start.Offset, End.Offset - Start.Offset, text);                
+                tb.Text = tb.Text.ReplaceRange(Start.Offset, Length, text);                
             }
             End.Offset = Start.Offset + text.Length;
         }
@@ -126,7 +127,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override string ToString() {
-            return $"Start: {Start.Offset} End: {End.Offset} Length: {(End.Offset - Start.Offset)}";
+            return $"Start: {Start.Offset} End: {End.Offset} Length: {Length}";
         }
 
         #endregion

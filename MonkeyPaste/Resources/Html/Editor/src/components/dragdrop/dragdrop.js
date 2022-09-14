@@ -13,6 +13,11 @@ var IsAltDown = false; // w/ formatting (as html)? ONLY formating? dunno
 
 var IsDragCancel = false; // flagged from drag_end  evt resetDragDrop then unset in editorSelectionChange which restores selection
 
+var IsDragging = false;
+var WasNoneSelectedBeforeDrag = false;
+var SelIdxBeforeDrag = -1;
+
+var PreDropState = null;
 
 var LastMousePos = null;
 var LastMouseUpdateDateTime = null;
@@ -33,11 +38,11 @@ function initDragDrop() {
     //Array.from(editorElms).forEach(elm => {
     //    enableDragDropOnElement(elm);
     //});    
-
     window.addEventListener('mousemove', onMouseMove_dragOverFallback);
     window.addEventListener('mousedown', onMouseDown);
+
     //setInterval(onTick, 1000)
-    //window.addEventListener('keydown', onKeyDown_debug);
+    window.addEventListener('keydown', onKeyDown_debug);
 }
 
 function onTick() {
@@ -45,7 +50,6 @@ function onTick() {
     //log("dragover idx " + range.index + ' length "' + range.length);
 
 }
-
 
 function initDragDropOverrides() {
     // from https://stackoverflow.com/a/46986927/105028
@@ -145,19 +149,19 @@ function isDropping() {
 }
 
 function isDragCopy() {
-    return IsAltDown;
-}
-
-function isDragCut() {
-    return !IsAltDown;
-}
-
-function isDropHtml() {
     return IsCtrlDown;
 }
 
-function isDropPlainText() {
+function isDragCut() {
     return !IsCtrlDown;
+}
+
+function isDropHtml() {
+    return IsAltDown;
+}
+
+function isDropPlainText() {
+    return !IsAltDown;
 }
 
 function isBlockDrop() {
@@ -209,27 +213,79 @@ function resetDragDrop(isEscCancel = false) {
 
     DropProcessInvokeCount = 0;
 
-    quill.update();
 
     enableTextWrapping();
-    //setCaretColor('black');
+    hideScrollbars();
 
+    quill.update();
+ //   if (PreDropState) {
+ //       log('dragDrop reset to initial state: ' + PreDropState);
+ //       if (PreDropState == 'readonly') {
+ //           // do nothing
+ //       }
+ //   } else {
+ //       log('error reseting dragDrop, no pre drop state set');
+	//}
+    log('dragDrop reset. ignoring initial state: ' + PreDropState + ' and reseting to readonly w/ text wrapping');
+    PreDropState = null;
+    onDropEffectChanged_ntf('none');
+
+    drawOverlay();
+    IsDragCancel = false;
+}
+
+function startDrag() {
+    IsDragging = true;
+    let sel = getSelection();
+    if (sel.length == 0) {
+        WasNoneSelectedBeforeDrag = true;
+        SelIdxBeforeDrag = sel.index;
+    }
     drawOverlay();
 }
 
+function endDrag(isUserCancel = false) {
+    IsDragging = false;
+    if (WasNoneSelectedBeforeDrag) {
+        setEditorSelection(SelIdxBeforeDrag, 0);
+        WasNoneSelectedBeforeDrag = false;
+        SelIdxBeforeDrag = -1;
+    }
+    resetDragDrop(isUserCancel);
+}
+
 function startDrop(e) {
-    if (e.currentTarget.id == 'editor') {
+    if (!e.currentTarget || e.currentTarget.id == 'editor') {
+        // currentTarget null when passed from host so force target to editor
+        e.currentTarget = getEditorContainerElement();
         let dt = getDataTransferObject(e);
         if (isDragDataValid(dt)) {
             DropElm = e.currentTarget;
-		}
+        }
     }
-
+    
+    updateModKeys(e);
     if (isDropping()) {
-        //setCaretColor('transparent');
+        if (isEditorToolbarVisible()) {
+            PreDropState = 'editable';
+        } else if (IsSubSelectionEnabled) {
+            PreDropState = 'subselectable';
+        } else {
+            PreDropState = 'readonly';
+        }
+
+        log('drop started from state: ' + PreDropState);
+
+        if (typeof e.preventDefault === 'function') {
+            e.preventDefault();
+		}
+        //
+        e = setDropEffect(e);
+
         disableTextWrapping();
         showScrollbars();
-	}
+    }
+    return e;
 }
 
 function getEditorMousePos(e) {
@@ -248,6 +304,11 @@ function getEditorMousePos(e) {
 }
 
 function updateModKeys(e) {
+    //if (e.fromHost === undefined && isRunningInHost()) {
+    //    // ignore internal mod key updates when running from host
+    //    return;
+    //}
+
     let isModChanged =
         IsCtrlDown != e.ctrlKey ||
         IsAltDown != e.altKey ||
@@ -258,7 +319,12 @@ function updateModKeys(e) {
     IsShiftDown = e.shiftKey;
 
     if (isModChanged) {
+        log('mod changed: Ctrl: ' + (IsCtrlDown ? "YES" : "NO"));
         drawOverlay();
+    }
+
+    if (e.escKey) {
+        resetDragDrop();
 	}
 }
 
@@ -282,6 +348,25 @@ function getDragData(dt) {
 function dropData(docIdx, data) {
     //quill.clipboard.dangerouslyPasteHTML(DropIdx + 1, drop_content_data);
     insertContent(docIdx, data, true);
+}
+
+function getDropEffect() {
+    if (isDropping()) {
+        if (isDragCut()) {
+            return 'move';
+        }
+        if (isDragCopy()) {
+            return 'copy';
+        }
+	}
+    return 'none';
+}
+
+function setDropEffect(e) {
+    let dropEffects = getDropEffect();
+    onDropEffectChanged_ntf(dropEffects);
+    e.dataTransfer.effectAllowed = dropEffects;
+    return e;
 }
 
 function onMouseDown(e) {
@@ -340,23 +425,22 @@ function onMouseMove_dragOverFallback(e) {
 }
 
 function onKeyDown_debug(e) {
-    // unused only for debugging
-    if (!isDropping()) {
-        return;
-    }
-    return;
+    if (IsDragging && e.code == 'Escape') {
+        endDrag(true);
+	}
 }
 
 function onDragEnter(e) {
-    startDrop(e);
-
-    updateModKeys(e);
-
+    e = startDrop(e);
     drawOverlay();
 }
 
 function onDragOver(e) {
     let mp = getEditorMousePos(e);
+    if (mp.x < 0 || mp.y < 0) {
+        // drag leave should pick this up i think
+        return;
+	}
     updateModKeys(e);
         
     if (isDropping()) {
@@ -382,11 +466,12 @@ function onDragOver(e) {
             let dt = getDataTransferObject(e);
             let is_valid = isDragValid(dt, LastMousePos);
             if (is_valid) {
-                e.preventDefault();
+                if (typeof e.preventDefault === 'function') {
+                    e.preventDefault();
+                }
 
                 DropProcessInvokeCount++;
                 DropIdx = getDocIdxFromPoint(LastMousePos, true, DropProcessInvokeCount);
-
 
                 //let mp_elm = document.elementFromPoint(LastMousePos.x, LastMousePos.y);
                 //let blot = Quill.find(mp_elm);
@@ -397,20 +482,20 @@ function onDragOver(e) {
                 //let caret_blot = Quill.find(caret_elm);
                 //let test_index2 = blot.offset(quill.scroll);
 
-                log('DropIdx: ' + DropIdx);// + ' TestIdx1: ' + test_index + ' TestIdx2: ' + test_index2);
+                //log('DropIdx: ' + DropIdx);
 
             } else {
                 DropIdx = -1;
-			}
-
-            
+			}            
 
             // NOTE to optimize only updating overlay when mouse move is significant enough
             drawOverlay();
             //log('Mouse DocIdx: ' + DropIdx + ' Mouse Pos: x: ' + LastMousePos.x + ' y: ' + LastMousePos.y + ' call count: ' + DropProcessInvokeCount); 
         }
     } 
+    e = setDropEffect(e);
 }
+
 function onDragLeave(e) {
     drawOverlay();
 }
@@ -506,56 +591,3 @@ function onDrop(e) {
 function onDragStart(e) {
     log('drag started yo');
 }
-
-
-//function onDrop(e) {
-//    //e.detail.original.preventDefault();
-//    log('onDrop: '+e);
-
-//    let itemHtml = '';
-
-//    if (CefDragData) {
-//        //e.preventDefault();
-//        //itemHtml = retargetPlainTextClipboardData(CefDragData);
-//        //CefDragData = null;
-//        let dropIdx = 0;//getEditorIndexFromPoint_ByLine({ x: e.clientX, y: e.clientY });
-//        quill.setEditorSelection(dropIdx, 0);
-//        quill.insertText(0, CefDragData);
-//        //quill.clipboard.dangerouslyPasteHTML(dropIdx, CefDragData);
-//    } else {
-//        let mp = null;
-//        if (e.detail) {
-//            itemHtml = convertDataTransferToHtml(e.detail.original.dataTransfer);
-//            mp = { x: e.detail.original.clientX, y: e.detail.original.clientY };
-//        } else {
-//            itemHtml = convertDataTransferToHtml(e.dataTransfer);
-//            mp = { x: e.clientX, y: e.clientY }
-//        }
-
-//        if (itemHtml != '') {
-//            let dropIdx = getEditorIndexFromPoint_ByLine(mp);
-//            quill.setEditorSelection(dropIdx, 0);
-//            quill.clipboard.dangerouslyPasteHTML(dropIdx, itemHtml);
-//            //if (isHtml) {
-//            //    quill.clipboard.dangerouslyPasteHTML(dropIdx, itemData);
-//            //} else {
-//            //    quill.insertText(dropIdx, itemData);
-//            //}
-//        }
-
-//    //let isHtml = false;
-//    //let dt = e.detail.original.dataTransfer;
-//    //if (dt.types.indexOf('text/html') > -1) {
-//    //    itemData = dt.getData('text/html');
-//    //    itemData = parseForHtmlContentStr(itemData);
-//    //    isHtml = true;
-//    //}
-//    }
-//    log('drop dat shhhiiiit:');
-//    log(CefDragData);
-
-//    resetDragDrop();
-//}
-
-
-

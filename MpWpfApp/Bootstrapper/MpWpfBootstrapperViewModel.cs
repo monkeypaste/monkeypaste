@@ -24,6 +24,7 @@ namespace MpWpfApp {
 
             _coreItems.AddRange(
                 new List<MpBootstrappedItemViewModel>() {
+                    new MpBootstrappedItemViewModel(this,typeof(MpPortableDataFormats),MpPlatformWrapper.Services.DataObjectRegistrar),
                     new MpBootstrappedItemViewModel(this,typeof(MpDocumentHtmlExtension)),
                     new MpBootstrappedItemViewModel(this,typeof(MpProcessManager)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpProcessAutomation)),

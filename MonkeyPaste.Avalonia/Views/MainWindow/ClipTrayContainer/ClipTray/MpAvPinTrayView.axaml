@@ -22,9 +22,6 @@
                  ScrollViewer.VerticalScrollBarVisibility="Auto"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
-                 local:MpAvDropExtension.IsEnabled="True"
-                 local:MpAvDropExtension.DropHost="{Binding ., ElementName=PinTrayUserControl}"
-                 local:MpAvDropExtension.DropAdornedControl="{Binding ., ElementName=PinTrayUserControl}"
                  SelectedItem="{Binding SelectedPinTrayItem, Mode=TwoWay}"
                  Items="{Binding PinnedItems}">
             <ListBox.Styles>

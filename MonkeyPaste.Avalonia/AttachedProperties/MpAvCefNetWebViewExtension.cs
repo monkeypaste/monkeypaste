@@ -72,11 +72,11 @@ namespace MonkeyPaste.Avalonia {
                 wv.IsEditorInitialized) {
                 // only signal read only change after webview is loaded
                 if (isReadOnly) {
-                    var enableReadOnlyResp = await wv.EvaluateJavascriptAsync("enableReadOnly_ext()");
-                    ProcessEnableReadOnlyResponse(wv, enableReadOnlyResp);
+                    string enableReadOnlyRespStr = await wv.EvaluateJavascriptAsync("enableReadOnly_ext()");
+                    ProcessEnableReadOnlyResponse(wv, enableReadOnlyRespStr);
                 } else {
                     MpQuillDisableReadOnlyRequestMessage drorMsg = CreateDisableReadOnlyMessage(wv);
-                    string disableReadOnlyResp = await wv.EvaluateJavascriptAsync($"disableReadOnly_ext('{drorMsg.SerializeJsonObject()}')");
+                    string disableReadOnlyResp = await wv.EvaluateJavascriptAsync($"disableReadOnly_ext('{drorMsg.SerializeJsonObjectToBase64()}')");
                     ProcessDisableReadOnlyResponse(wv, disableReadOnlyResp);
                 }
             }                  
@@ -106,9 +106,9 @@ namespace MonkeyPaste.Avalonia {
                 GetIsContentReadOnly(wv) &&
                 wv.IsEditorInitialized) {
                   if (isSubSelectionEnabled) {
-                    wv.ExecuteJavascript("enableSubSelection()");
+                    wv.ExecuteJavascript("enableSubSelection_ext()");
                 } else {
-                    wv.ExecuteJavascript("disableSubSelection()");
+                    wv.ExecuteJavascript("disableSubSelection_ext()");
                 }
             }
         }
@@ -343,11 +343,11 @@ namespace MonkeyPaste.Avalonia {
                 var lrm = await CreateLoadRequestMessageAsync(wv);
                 var loadReqJsonStr = lrm.SerializeJsonObjectToBase64();
                 string loadResponseMsgStr = await wv.EvaluateJavascriptAsync($"init_ext('{loadReqJsonStr}')");
-                MpQuillLoadResponseMessage loadResponseMsg = MpJsonObject.DeserializeObject<MpQuillLoadResponseMessage>(loadResponseMsgStr);
+                MpQuillLoadResponseMessage loadResponseMsg = MpJsonObject.DeserializeBase64Object<MpQuillLoadResponseMessage>(loadResponseMsgStr);
 
                 ctvm.UnformattedContentSize = new Size(loadResponseMsg.contentWidth, loadResponseMsg.contentHeight);
                 wv.IsEditorInitialized = true;
-
+                wv.Document.ContentEnd.Offset = loadResponseMsg.contentLength - 1;
                 ctvm.IsBusy = false;
 
                 MpConsole.WriteLine($"Tile Content Item '{ctvm.CopyItemTitle}' is loaded");
@@ -405,13 +405,13 @@ namespace MonkeyPaste.Avalonia {
                 tcvm.IsBusy = true;
 
                 // get templates present in realtime document
-                var decodedTemplateGuidsObj = await wv.EvaluateJavascriptAsync("getDecodedTemplateGuids_ext()");
+                string decodedTemplateGuidsRespStr = await wv.EvaluateJavascriptAsync("getDecodedTemplateGuids_ext()");
                 Debugger.Break();
-                List<string> loadedTemplateGuids = MpJsonObject.DeserializeObject<List<string>>(decodedTemplateGuidsObj);
+                var decodedTemplatesResp = MpJsonObject.DeserializeBase64Object<MpQuillActiveTemplateGuidsRequestMessage>(decodedTemplateGuidsRespStr);
 
                 // verify template loaded in document exists, if does add to collection if not present on remove from document 
-                List<MpTextTemplate> loadedTemplateItems = await MpDataModelProvider.GetTextTemplatesByGuidsAsync(loadedTemplateGuids);
-                var loadedTemplateGuids_toRemove = loadedTemplateGuids.Where(x => loadedTemplateItems.All(y => y.Guid != x));
+                List<MpTextTemplate> loadedTemplateItems = await MpDataModelProvider.GetTextTemplatesByGuidsAsync(decodedTemplatesResp.templateGuids);
+                var loadedTemplateGuids_toRemove = decodedTemplatesResp.templateGuids.Where(x => loadedTemplateItems.All(y => y.Guid != x));
 
                 foreach (var templateGuid_toRemove in loadedTemplateGuids_toRemove) {
                     wv.ExecuteJavascript($"removeTemplatesByGuid('{templateGuid_toRemove}')");
@@ -458,7 +458,7 @@ namespace MonkeyPaste.Avalonia {
             if (control.DataContext is MpAvClipTileViewModel ctvm) {
                 MpConsole.WriteLine($"Tile content item '{ctvm.CopyItemTitle}' is readonly");
 
-                var qrm = MpJsonObject.DeserializeObject<MpQuillEnableReadOnlyResponseMessage>(enableReadOnlyResponse);
+                var qrm = MpJsonObject.DeserializeBase64Object<MpQuillEnableReadOnlyResponseMessage>(enableReadOnlyResponse);
 
                 if (ctvm.CopyItemData != qrm.itemData) {
 
@@ -488,7 +488,7 @@ namespace MonkeyPaste.Avalonia {
             if (control.DataContext is MpAvClipTileViewModel civm) {
                 MpConsole.WriteLine($"Tile content item '{civm.CopyItemTitle}' is editable");
 
-                //var qrm = MpJsonObject.DeserializeObject<MpQuillDisableReadOnlyResponseMessage>(disableReadOnlyResponse);
+                var qrm = MpJsonObject.DeserializeObject<MpQuillDisableReadOnlyResponseMessage>(disableReadOnlyResponse);
 
                 var ctv = control.GetVisualAncestor<MpAvClipTileView>();
                 if (ctv != null) {

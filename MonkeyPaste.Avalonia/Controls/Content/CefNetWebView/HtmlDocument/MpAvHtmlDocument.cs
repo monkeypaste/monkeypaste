@@ -48,12 +48,12 @@ namespace MonkeyPaste.Avalonia {
             if (snapToText) {
                 point.Clamp(_owner.Bounds.ToPortableRect());
             }
-            var pointMsg = new MpQuillEditorIndexFromPointMessage() {
+            var pointMsg = new MpQuillEditorIndexFromPointRequestMessage() {
                 x = point.X,
                 y = point.Y,
                 snapToLine = true
             };
-            string idxRespStr = await _owner.EvaluateJavascriptAsync($"getDocIdxFromPoint_ext('{pointMsg.SerializeJsonObject()}')");
+            string idxRespStr = await _owner.EvaluateJavascriptAsync($"getDocIdxFromPoint_ext('{pointMsg.SerializeJsonObjectToBase64()}')");
             if (int.TryParse(idxRespStr, out int offset)) {
                 return new MpAvTextPointer(this, offset);
             }
@@ -95,24 +95,20 @@ namespace MonkeyPaste.Avalonia {
             if (_owner == null) {
                 return string.Empty;
             }
-            string html = await _owner.EvaluateJavascriptAsync("getHtml_ext()");
-            return html;
+            string htmlRespStr = await _owner.EvaluateJavascriptAsync("getHtml_ext()");
+            var htmlRespObj = MpJsonObject.DeserializeBase64Object<MpQuillGetRangeHtmlResponseMessage>(htmlRespStr);
+            return htmlRespObj.html;
         }
 
-        private async Task SetHtmlAsync(string html) {
-            await Task.Delay(1);
-            if (_owner == null) {
-                return;
-            }
-            _owner.ExecuteJavascript($"setHtml_ext('{html}')");
-        }
 
         private async Task<string> GetTextAsync() {
             if (_owner == null) {
                 return string.Empty;
             }
-            string text = await _owner.EvaluateJavascriptAsync("getText_ext()");
-            return text;
+            string getRangeResp = await _owner.EvaluateJavascriptAsync("getText_ext()");
+            var rangeRespMsg = MpJsonObject.DeserializeBase64Object<MpQuillGetRangeTextResponseMessage>(getRangeResp);
+
+            return rangeRespMsg.text;
         }
 
         private void SetText(string text) {

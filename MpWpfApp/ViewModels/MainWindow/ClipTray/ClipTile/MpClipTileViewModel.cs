@@ -14,14 +14,15 @@
     using System.Windows.Threading;
     using GalaSoft.MvvmLight.CommandWpf;
     using MonkeyPaste;
-    using MonkeyPaste.Common.Plugin; 
-    using MonkeyPaste.Common; 
+    using MonkeyPaste.Common.Plugin;
+    using MonkeyPaste.Common;
     using MonkeyPaste.Common.Wpf;
     using System.Speech.Synthesis;
     using System.Windows.Documents;
-using System.Text.RegularExpressions;
-using MpProcessHelper;
-using stdole;
+    using System.Text.RegularExpressions;
+    using MpProcessHelper;
+    using stdole;
+    using MonkeyPaste.Common;
 
     public class MpClipTileViewModel : 
         MpViewModelBase<MpClipTrayViewModel>, 
@@ -1587,7 +1588,7 @@ using stdole;
         }
 
 
-        public async Task<MpPortableDataObject> ConvertToPortableDataObject(bool fillTempalates) {          
+        public async Task<MpPortableDataObject> ConvertToDataObject(bool fillTempalates) {          
             MpPortableDataObject d = new MpPortableDataObject();
             string rtf = string.Empty;
             string pt = string.Empty;

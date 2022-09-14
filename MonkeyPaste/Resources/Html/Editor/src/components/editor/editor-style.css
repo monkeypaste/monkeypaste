@@ -9,6 +9,7 @@ body {
     width: 100%;
     font-family: Arial;
     overflow: hidden;
+    cursor: default;
     background-color: transparent;
     --selbgcolor: lightblue;
     --selfgcolor: black;
@@ -46,6 +47,10 @@ body {
     background: lime;
 }*/
 
+.noselect {
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
 
 #editor {
     width: 100%;    

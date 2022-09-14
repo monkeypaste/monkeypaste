@@ -2274,7 +2274,7 @@ namespace MpWpfApp {
 
         public ICommand CopySelectedClipsCommand => new MpAsyncCommand(
             async () => { 
-                var mpdo = await SelectedItem.ConvertToPortableDataObject(false);
+                var mpdo = await SelectedItem.ConvertToDataObject(false);
                 MpPlatformWrapper.Services.DataObjectHelper.SetPlatformClipboard(mpdo, true);
             }, ()=>SelectedItem != null);
 
@@ -2316,7 +2316,7 @@ namespace MpWpfApp {
 
                 if(mpdo == null) {
                     //is non-null for external template drop
-                    mpdo = await SelectedItem.ConvertToPortableDataObject(true);
+                    mpdo = await SelectedItem.ConvertToDataObject(true);
                     if(mpdo == null) {
                         // paste was canceled
                         return;
@@ -2389,7 +2389,7 @@ namespace MpWpfApp {
                     if(ctvm == null) {
                         Debugger.Break();
                     }
-                    var mpdo = await ctvm.ConvertToPortableDataObject(true);
+                    var mpdo = await ctvm.ConvertToDataObject(true);
                     if(mpdo == null) {
                         // paste was canceled
                         return;

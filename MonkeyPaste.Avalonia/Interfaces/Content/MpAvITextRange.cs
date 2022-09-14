@@ -7,6 +7,8 @@ namespace MonkeyPaste.Avalonia {
         MpAvITextPointer Start { get; set; }
         MpAvITextPointer End { get; set; }
 
+        int Length { get; }
+
         bool IsEmpty { get; }
         //string Text { get; set; }
         Task<string> GetTextAsync();

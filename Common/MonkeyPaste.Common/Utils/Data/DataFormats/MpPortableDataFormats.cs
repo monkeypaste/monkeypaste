@@ -1,98 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
-    public enum MpClipboardFormatType {
-        None = 0,
-        Text,
-        Html,
-        Rtf,
-        Bitmap,
-        FileDrop,
-        Csv,
-        InternalContent,
-        UnicodeText,
-        OemText,
-        Xaml,
-        XamlPackage,
-        Custom //when format name doesn't resolve to any previous
-    }
-
-    public interface MpIPlatformDataObjectRegistrar {
-        int RegisterFormat(string format);
-    }
-    
-    public interface MpIClipboardMonitor {
-        event EventHandler<MpPortableDataObject> OnClipboardChanged;
-        
-        bool IgnoreNextClipboardChangeEvent { get; set; }
-
-        void StartMonitor();
-        void StopMonitor();
-    }
-
-    public interface MpIPlatformDataObjectHelper {
-        MpPortableDataObject ConvertToSupportedPortableFormats(object nativeDataObj, int retryCount = 5);
-        object ConvertToPlatformClipboardDataObject(MpPortableDataObject portableObj);
-        void SetPlatformClipboard(MpPortableDataObject portableObj, bool ignoreClipboardChange);
-        MpPortableDataObject GetPlatformClipboardDataObject();
-    }    
-
-    public interface MpIPortableContentDataObject {
-        Task<MpPortableDataObject> ConvertToPortableDataObject(bool fillTemplates);
-    }
-    public interface MpIExternalPasteHandler {
-        Task PasteDataObject(MpPortableDataObject mpdo, object handleOrProcessInfo, bool finishWithEnterKey = false);
-    }
-
-    public interface MpIPortableDataObject {
-        Dictionary<MpPortableDataFormat, object> DataFormatLookup { get; }
-
-        bool ContainsData(string format);
-        object GetData(string format);
-        void SetData(string format, object data);
-    }
-
-    public class MpPortableDataObject : MpIPortableDataObject {
-        #region Properties
-
-        public Dictionary<MpPortableDataFormat, object> DataFormatLookup { get; private set; } = new Dictionary<MpPortableDataFormat, object>();
-        
-        #endregion
-
-        public bool ContainsData(string format) {
-            return GetData(format) != null;
-        }
-
-        public object GetData(string format) {
-            var pdf = MpPortableDataFormats.GetDataFormat(format);
-            if (pdf == null) {
-                return null;
-            }
-            DataFormatLookup.TryGetValue(pdf, out object data);
-            return data;
-        }
-
-        public void SetData(string format, object data) {
-            var pdf = MpPortableDataFormats.GetDataFormat(format);
-            if (pdf == null) {
-                throw new MpUnregisteredDataFormatException($"Format {format} is not registered");
-            }
-            DataFormatLookup.AddOrReplace(pdf, data);
-        }
-
-        public MpPortableDataObject() {
-            DataFormatLookup = new Dictionary<MpPortableDataFormat, object>();
-        }
-        public MpPortableDataObject(string format, object data) : this() {
-            SetData(format, data);
-        }
-
-    }
     public static class MpPortableDataFormats {
         #region Private Variables
 
@@ -108,6 +18,7 @@ namespace MonkeyPaste.Common {
             Unicode,
             OemText,
             FileDrop,
+            //FileNames,
             Bitmap,
             INTERNAL_CLIP_TILE_DATA_FORMAT
         };
@@ -125,6 +36,7 @@ namespace MonkeyPaste.Common {
         public const string Bitmap = "Bitmap";
         public const string Html = "HTML Format";
         public const string FileDrop = "FileDrop";
+       //public const string FileNames = "FileNames";
         public const string Csv = "CSV";
         public const string Unicode = "Unicode";
         public const string OemText = "OEMText";
@@ -201,21 +113,5 @@ namespace MonkeyPaste.Common {
         }
 
         #endregion
-    }
-
-
-    public class MpPortableDataFormat {
-        public string Name { get; private set; }
-
-        public int Id { get; private set; }
-
-        public MpPortableDataFormat(string name, int id) {
-            Name = name;
-            Id = id;
-        }
-
-        public override string ToString() {
-            return $"{Id}-{Name}";
-        }
     }
 }

@@ -3121,7 +3121,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand CopySelectedClipsCommand => new MpAsyncCommand(
             async () => {
-                var mpdo = await SelectedItem.ConvertToPortableDataObject(false);
+                var mpdo = await SelectedItem.ConvertToDataObject(false);
                 MpPlatformWrapper.Services.DataObjectHelper.SetPlatformClipboard(mpdo, true);
             }, ()=>SelectedItem != null);
 

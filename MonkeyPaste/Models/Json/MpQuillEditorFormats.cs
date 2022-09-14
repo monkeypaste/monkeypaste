@@ -27,6 +27,7 @@ namespace MonkeyPaste {
     public class MpQuillLoadResponseMessage : MpJsonObject {
         public double contentWidth { get; set; }
         public double contentHeight { get; set; }
+        public int contentLength { get; set; }
 
         public List<string> decodedTemplateGuids { get; set; }
     }
@@ -34,6 +35,10 @@ namespace MonkeyPaste {
     public class MpQuillDisableReadOnlyRequestMessage : MpJsonObject {
         public List<MpTextTemplate> allAvailableTextTemplates { get; set; }
         public double editorHeight { get; set; }
+    }
+
+    public class MpQuillIsAllSelectedResponseMessage : MpJsonObject {
+       public bool isAllSelected { get; set; }
     }
 
     public class MpQuillDisableReadOnlyResponseMessage : MpJsonObject {
@@ -71,7 +76,29 @@ templateType: "dynamic"
         public string templateType { get; set; }
     }
 
-    public class MpQuillContentRangeMessage : MpJsonObject {
+    public class MpQuillActiveTemplateGuidsRequestMessage : MpJsonObject {
+        public List<string> templateGuids { get; set; }
+    }
+
+    public class MpQuillGetRangeTextRequestMessage : MpJsonObject {
+        public int index { get; set; }
+        public int length { get; set; }
+    }
+
+    public class MpQuillGetRangeTextResponseMessage : MpJsonObject {
+        public string text { get; set; }
+    }
+
+    public class MpQuillGetRangeHtmlRequestMessage : MpJsonObject {
+        public int index { get; set; }
+        public int length { get; set; }
+    }
+
+    public class MpQuillGetRangeHtmlResponseMessage : MpJsonObject {
+        public string html { get; set; }
+    }
+
+    public class MpQuillSetSelectionRangeRequestMessage : MpJsonObject {
         public int index { get; set; }
         public int length { get; set; }
     }
@@ -107,21 +134,33 @@ templateType: "dynamic"
         public string base64ImgStr { get; set; }
     }
 
+    public class MpQuillSubSelectionChangedNotification : MpJsonObject {
+        public bool isSubSelectionEnabled { get; set; }
+    }
+
     public class MpQuillDragDropDataObjectMessage : MpJsonObject {
+        public string eventType { get; set; }
         public List<MpQuillDragDropDataObjectItemFragment> items { get; set; }
     }
+
 
     public class MpQuillDragDropDataObjectItemFragment : MpJsonObject {
         public string format { get; set; }
         public string data { get; set; }
     }
-
-    public class MpQuillEditorIndexFromPointMessage : MpJsonObject {
+    public class MpQuillDropEffectChangedNotification : MpJsonObject {
+        public string dropEffect { get; set; }
+    }
+    public class MpQuillEditorIndexFromPointRequestMessage : MpJsonObject {
         public double x { get; set; }
         public double y { get; set; }
         public bool snapToLine { get; set; } = true;
 
         public int fallBackIdx { get; set; } = -1;
+    }
+
+    public class MpQuillEditorIndexFromPointResponseMessage : MpJsonObject {
+        public int docIdx { get; set; }
     }
 
     public abstract class MpQuillContentMessageBase : MpJsonObject {
@@ -133,17 +172,12 @@ templateType: "dynamic"
         public int length { get; set; }
 
         public bool isChangeBegin { get; set; }
-
-        //public List<MpJsonRect> selRects { get; set; }
-        //public string selJsonRectListBase64Str { get; set; }
     }
 
     public class MpQuillContentLengthChangedMessage : MpQuillContentMessageBase {
-        // public int copyItemId { get; set; }
         public int length { get; set; }
     }
     public class MpQuillContentDraggableChangedMessage : MpQuillContentMessageBase {
-        //public int copyItemId { get; set; }
         public bool isDraggable { get; set; }
     }
 
@@ -163,4 +197,15 @@ templateType: "dynamic"
         public string fileIconBase64 { get; set; }
     }
 
+
+    public class MpQuillModifierKeysNotification : MpJsonObject {
+        public bool ctrlKey { get; set; }
+        public bool altKey { get; set; }
+        public bool shiftKey { get; set; }
+        public bool escKey { get; set; }
+    }
+
+    public class MpQuillIsDraggingNotification : MpJsonObject {
+        public bool isDragging { get; set; }
+    }
 }

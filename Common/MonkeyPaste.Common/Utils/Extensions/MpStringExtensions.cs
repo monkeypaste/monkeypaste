@@ -207,6 +207,7 @@ namespace MonkeyPaste.Common {
             //return result;
         }
 
+
         public static TEnum ToEnum<TEnum>(this object obj) where TEnum: struct {
             if(obj != null) {
                 try {

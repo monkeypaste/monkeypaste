@@ -2,6 +2,7 @@
 
 function onEditorSelectionChanged_ntf(range,isSelChangeBegin) {
 	// output MpQuillContentSelectionChangedMessage
+
 	let selChangedObj = {
 		copyItemId: CopyItemId,
 		index: range.index,
@@ -18,10 +19,11 @@ function onEditorSelectionChanged_ntf(range,isSelChangeBegin) {
 function onContentLengthChanged_ntf() {
 	// output MpQuillContentLengthChangedMessage
 
+	let docLength = getDocLength();
 	if (typeof notifyContentLengthChanged === 'function') {
 		let clMsg = {
 			copyItemId: CopyItemId,
-			length: getDocLength()
+			length: docLength
 		};
 		let msgStr = toBase64FromJsonObj(clMsg);
 		return notifyContentLengthChanged(msgStr);
@@ -29,9 +31,10 @@ function onContentLengthChanged_ntf() {
 }
 
 function onContentDraggableChanged_ntf(isDraggable) {
-		// output MpQuillContentDraggableChangedMessage
+	// output MpQuillContentDraggableChangedMessage
+
 	// should only be called on mouse down...
-	log('is_draggable: ' + isDraggable);
+	//log('is_draggable: ' + isDraggable);
 	if (typeof notifyContentDraggableChanged === 'function') {
 		let msg = {
 			copyItemId: CopyItemId,
@@ -42,9 +45,38 @@ function onContentDraggableChanged_ntf(isDraggable) {
 	}
 }
 
+function onSubSelectionEnabledChanged_ntf(isEnabled) {
+	// output MpQuillSubSelectionChangedNotification
+
+	if (typeof notifySubSelectionEnabledChanged === 'function') {
+		let msg = {
+			isSubSelectionEnabled: isEnabled
+		};
+		let msgStr = toBase64FromJsonObj(msg);
+		notifySubSelectionEnabledChanged(msgStr);
+	}
+}
+
+function onDropEffectChanged_ntf(dropEffectStr) {
+	// output MpQuillDropEffectChangedNotification
+
+	if (!dropEffectStr) {
+		dropEffectStr = 'none';
+	}
+	//log('drop effect: ' + dropEffectStr);
+	if (typeof notifyDropEffectChanged === 'function') {
+		let msg = {
+			dropEffect: dropEffectStr
+		};
+		let msgStr = toBase64FromJsonObj(msg);
+		notifyDropEffectChanged(msgStr);
+	}
+}
+
 
 function onException_ntf(exType, exData) {
-		// output MpQuillExceptionMessage
+	// output MpQuillExceptionMessage
+
 	if (typeof notifyException === 'function') {
 		let exDataStr = null;
 		if (typeof exData === 'string' || exData instanceof String) {

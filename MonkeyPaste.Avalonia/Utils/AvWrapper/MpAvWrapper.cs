@@ -1,5 +1,4 @@
 ﻿using Avalonia.Controls;
-using MonkeyPaste.Common;
 using System.Linq;
 using System.Text;
 using Avalonia.Win32;
@@ -8,6 +7,7 @@ using System.Threading.Tasks;
 using System;
 using System.IO;
 using System.Reflection;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvWrapper : MpIPlatformWrapper {

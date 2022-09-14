@@ -27,26 +27,16 @@ function init_ext(initMsgStr_base64) {
 	let initResponseMsg = {
 		contentWidth: getContentWidth(),
 		contentHeight: getContentHeight(),
-		decodedTemplateGuids: getDecodedTemplateGuids()
+		decodedTemplateGuids: getDecodedTemplateGuids(),
+		contentLength: getDocLength()
 	}
-	let initResponseMsgStr = JSON.stringify(initResponseMsg);
-	log('init Response: ');
-	log(initResponseMsgStr);
+	let resp = toBase64FromJsonObj(initResponseMsg);
+	//log('init Response: ');
+	//log(initResponseMsgStr);
 
-	return initResponseMsgStr;
+	return resp;
 }
 
-function setHostDataObject_ext(hostDataObjMsgStr) {
-	// input MpQuillDragDropDataObjectMessage
-	let hostDataObj = toJsonObjFromBase64Str(hostDataObjMsgStr);
-	if (hostDataObj && hostDataObj.items) {
-		hostDataObj.items.forEach((item) => {
-			log('data-item format: ' + item.format + ' data: ' + item.data);
-		});
-		CefDragData = hostDataObj;
-	}
-
-}
 function convertPlainHtml_ext(convertPlainHtmlReqMsgBase64Str) {
 	// input is MpQuillConvertPlainHtmlToQuillHtmlRequestMessage
 
@@ -60,18 +50,18 @@ function convertPlainHtml_ext(convertPlainHtmlReqMsgBase64Str) {
 	let convertPlainHtmlRespMsg = {
 		quillHtml: qhtml
 	};
-	let convertPlainHtmlRespMsgBase64Str = toBase64FromJsonObj(convertPlainHtmlRespMsg);
-	return convertPlainHtmlRespMsgBase64Str;
+	let resp = toBase64FromJsonObj(convertPlainHtmlRespMsg);
+	return resp;
 }
 
 function getDocIdxFromPoint_ext(editorPointMsgStr) {
+	// input MpQuillEditorIndexFromPointRequestMessage
+
 	// NOTE fallbackIdx is handy when user is dragging a template instance
 	// so location freeze's when drag is out of bounds
 
-	let editorPointMsgObj = null;
-	if (typeof editorPointMsgStr === 'string' || editorPointMsgStr instanceof String) {
-		editorPointMsgObj = JSON.parse(editorPointMsgStr);
-	}
+	let editorPointMsgObj = toJsonObjFromBase64Str(editorPointMsgStr);
+	let doc_idx = -1;
 
 	if (editorPointMsgObj) {
 		let p = { x: editorPointMsgObj.x, y: editorPointMsgObj.y };
@@ -79,123 +69,112 @@ function getDocIdxFromPoint_ext(editorPointMsgStr) {
 		let snapToLine = editorPointMsgObj.snapToLine;
 
 		if (snapToLine) {
-			return getDocIdxFromPoint(p, fallbackIdx);
+			doc_idx = getDocIdxFromPoint(p, fallbackIdx);
+		} else {
+			doc_idx = getDocIdxFromPoint(p, fallbackIdx);
 		}
-		return getDocIdxFromPoint(p, fallbackIdx);
-	}
-	return -1;
-}
-
-function setSelection_ext(selMsg) {
-	let index = 0;
-	let length = 0;
-	if (typeof selMsg === 'string' || selMsg instanceof String) {
-		selMsg = JSON.parse(selMsg);
-	} else {
-		log('setSelection_ext error parsing selMsg: ' + selMsg);
-		return;
 	}
 
-	index = selMsg.index;
-	length = selMsg.length;
-
-	setEditorSelection(index, length);
+	// output MpQuillEditorIndexFromPointResponseMessage
+	let respObj = {
+		docIdx: doc_idx
+	};
+	let resp = toBase64FromJsonObj(respObj);
+	return resp;
 }
 
-function getCharacterRect_ext(docIdxStr) {
-	let idxVal = parseInt(docIdxStr);
+function setSelection_ext(selMsgReq) {
+	// input MpQuillSetSelectionRangeRequestMessage
 
-	let rect = getCharacterRect(idxVal);
-	let rectJsonStr = JSON.stringify(rect);
-	return rectJsonStr;
+	let selMsg = toJsonObjFromBase64Str(selMsgReq);
+	if (!selMsg || selMsg.index === undefined) {
+		log('cannot parse setSelection_ext msg: ' + selMsgReq);
+		return '';
+	}
+
+	setEditorSelection(selMsg.index, selMsg.length);
 }
+
 
 function getHtml_ext() {
-	return getHtml();
+	// output MpQuillGetRangeHtmlResponseMessage
+	let respObj = {
+		html: getHtml()
+	};
+	let resp = toBase64FromJsonObj(respObj);
+	return resp;
 }
 
-function setHtml_ext(html) {
-	setHtml(html);
-}
 
 function getText_ext(rangeObjParamStrOrNull) {
-	let rangeObj = null;
-	if (typeof rangeObjParamStrOrNull === 'string' || rangeObjParamStrOrNull instanceof String) {
-		rangeObj = JSON.parse(rangeObjParamStrOrNull);
-	} else if (rangeObjParamStrOrNull) {
-		rangeObj = rangeObjParamStrOrNull;
-	} else {
-		rangeObj = { index: 0, length: quill.getLength() };
+	// input MpQuillGetRangeTextRequestMessage
+	let rangeReq = toJsonObjFromBase64Str(rangeObjParamStrOrNull)
+	if (!rangeReq || rangeReq.index === undefined) {
+		rangeReq = { index: 0, length: quill.getLength() };
 	}
-	let text = getText(rangeObj);
-	return text;
+	let textStr = getText(rangeReq);
+
+	// output MpQuillGetRangeTextResponseMessage
+
+	let respObj = {
+		text: textStr
+	};
+	let resp = toBase64FromJsonObj(respObj);
+	return resp;
 }
 
-function setTextInRange_ext(textAndRangeMsgStr) {
-	let rangeObj = { index: 0, length: quill.getLength() };
-	let rangeText = '';
-	if (typeof textAndRangeMsgStr === 'string' || textAndRangeMsgStr instanceof String) {
-		let textAndRangeMsg = JSON.parse(textAndRangeMsgStr);
-		rangeObj = { index: textAndRangeMsg.index, length: textAndRangeMsg.length };
-		rangeText = textAndRangeMsg.text;
-	} 
+function setTextInRange_ext(setTextInRangeMsgStr) {
+	// input MpQuillContentSetTextRangeMessage
+
+	let setTextInRangeMsg = toJsonObjFromBase64Str(setTextInRangeMsgStr);
+
+	let rangeObj = { index: setTextInRangeMsg.index, length: setTextInRangeMsg.length };
+	let rangeText = setTextInRangeMsg.text;
 
 	setTextInRange(rangeObj, rangeText);
 }
 
 function getDecodedTemplateGuids_ext() {
-	return getDecodedTemplateGuids();
+	// output MpQuillActiveTemplateGuidsRequestMessage
+
+	let tgl = getDecodedTemplateGuids();
+	let tgMsg = {
+		templateGuids: tgl
+	};
+	let resp = toBase64FromJsonObj(tgMsg);
+	return resp;
 }
 
 function enableReadOnly_ext() {
 	enableReadOnly();
 
-	//return 'MpQuillResponseMessage'  updated master collection of templates
+	// output 'MpQuillResponseMessage'  updated master collection of templates
 	let qrmObj = {
 		itemData: getEncodedHtml(),
 		userDeletedTemplateGuids: userDeletedTemplateGuids,
 		updatedAllAvailableTextTemplates: IsLoaded ? getAvailableTemplateDefinitions() : []
 	};
-	let qrmJsonStr = JSON.stringify(qrmObj);
+	let resp = toBase64FromJsonObj(qrmObj);
 
-	//log("enableReadOnly() response msg:");
-	//log(qrmJsonStr);
-
-	return qrmJsonStr; //btoa(qrmJsonStr);
+	return resp;
 }
 
 function disableReadOnly_ext(disableReadOnlyReqStrOrObj) {
-	log('read-only: DISABLED');
-	log('disableReadOnly msg:');
-	log(disableReadOnlyReqStrOrObj);
+	// input MpQuillDisableReadOnlyRequestMessage
 
-	let disableReadOnlyMsg = null;
+	let disableReadOnlyMsg = toJsonObjFromBase64Str(disableReadOnlyReqStrOrObj);
 
-	if (disableReadOnlyReqStrOrObj == null) {
-		disableReadOnlyMsg = {
-			allAvailableTextTemplates: [],
-			editorHeight: window.visualViewport.height,
-			isSilent: false
-		};
-	} else if (typeof disableReadOnlyReqStrOrObj === 'string' || disableReadOnlyReqStrOrObj instanceof String) {
-		//let disableReadOnlyReqStr_decoded = atob(disableReadOnlyReqStr);
-		//disableReadOnlyMsg = JSON.parse(disableReadOnlyReqStr_decoded);
-		disableReadOnlyMsg = JSON.parse(disableReadOnlyReqStrOrObj);
-	} else {
-		disableReadOnlyMsg = disableReadOnlyReqStrOrObj;
-	}
 
 	availableTemplates = disableReadOnlyMsg.allAvailableTextTemplates;
 
 	disableReadOnly(disableReadOnlyMsg.isSilent);
 
+	// output MpQuillDisableReadOnlyResponseMessage
+
 	let droMsgObj = { editorWidth: DefaultEditorWidth };
-	let droMsgJsonStr = JSON.stringify(droMsgObj);
+	let resp = toBase64FromJsonObj(droMsgObj);
 
-	//log("disableReadOnly() response msg:");
-	//log(droMsgJsonStr);
-
-	return droMsgJsonStr; //btoa(droMsgJsonStr);
+	return resp; 
 }
 
 function enableSubSelection_ext() {
@@ -206,15 +185,42 @@ function disableSubSelection_ext() {
 	disableSubSelection();
 }
 
+function selectAll_ext() {
+	selectAll();
+}
+
+function updateModifierKeysFromHost_ext(modKeyMsgStr) {
+	// input MpQuillModifierKeysNotification
+
+	let modKeyMsg = toJsonObjFromBase64Str(modKeyMsgStr);
+	modKeyMsg.fromHost = true;
+	updateModKeys(modKeyMsg);
+}
+
+function updateIsDraggingFromHost_ext(isDraggingMsgStr) {
+	// input MpQuillModifierKeysNotification
+
+	let isDraggingMsg = toJsonObjFromBase64Str(isDraggingMsgStr);
+	if (isDraggingMsg.isDragging) {
+		startDrag();
+	} else {
+		endDrag();
+	}
+	
+}
 function isAllSelected_ext() {
-	let result = isAllSelected();
-	return result;
+	// output MpQuillIsAllSelectedResponseMessage
+	let is_all_selected = isAllSelected();
+	let respObj = {
+		isAllSelected: is_all_selected
+	}
+	let resp = toBase64FromJsonObj(respObj);
+	return resp;
 }
 
-function getDropIdx_ext() {
-	return DropIdx;
+function resetDragDrop_ext() {
+	resetDragDrop();
 }
-
 function getEncodedDataFromRange_ext(encRangeMsgBase64Str) {
 	// input MpQuillGetEncodedRangeDataRequestMessage
 	let encRangeReqMsg = toJsonObjFromBase64Str(encRangeMsgBase64Str);
@@ -257,4 +263,56 @@ function getEditorScreenShot_ext() {
 	return resp;
 }
 
+function onDragEvent_ext(ddoMsgStr) {
+	// input MpQuillDragDropDataObjectMessage
 
+	let ddoMsg = toJsonObjFromBase64Str(ddoMsgStr);
+
+	let sim_event = {
+		dataTransfer: convertHostDataToDataTransferObject(ddoMsg)
+	};
+	sim_event.dataTransfer.fromHost = true;
+	if (ddoMsg.eventType == 'dragenter') {
+		onDragEnter(sim_event);
+		return;
+	}
+	if (ddoMsg.eventType == 'dragover') {
+		onDragOver(sim_event);
+		return;
+	}
+	if (ddoMsg.eventType == 'dragleave') {
+		//onDragLeave(sim_event);
+		resetDragDrop();
+		return;
+	}
+	if (ddoMsg.eventType == 'drop') {
+		onDrop(sim_event);
+		return;
+	}
+}
+// unused
+
+
+function getDropIdx_ext() {
+	return DropIdx;
+}
+
+function getCharacterRect_ext(docIdxStr) {
+	let idxVal = parseInt(docIdxStr);
+
+	let rect = getCharacterRect(idxVal);
+	let rectJsonStr = JSON.stringify(rect);
+	return rectJsonStr;
+}
+
+function setHostDataObject_ext(hostDataObjMsgStr) {
+	// input MpQuillDragDropDataObjectMessage
+	let hostDataObj = toJsonObjFromBase64Str(hostDataObjMsgStr);
+	if (hostDataObj && hostDataObj.items) {
+		hostDataObj.items.forEach((item) => {
+			log('data-item format: ' + item.format + ' data: ' + item.data);
+		});
+		CefDragData = hostDataObj;
+	}
+
+}

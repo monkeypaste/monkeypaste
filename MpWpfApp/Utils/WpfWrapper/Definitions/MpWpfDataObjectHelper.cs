@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; 
-using MonkeyPaste.Common; 
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Wpf;
 using MonkeyPaste;
 using System.Windows;
@@ -15,6 +15,7 @@ using System.Threading;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Windows.Controls;
+using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public class MpWpfDataObjectHelper :

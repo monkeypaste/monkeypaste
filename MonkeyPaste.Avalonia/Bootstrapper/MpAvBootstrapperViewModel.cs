@@ -22,6 +22,7 @@ namespace MonkeyPaste.Avalonia {
 
             _coreItems.AddRange(
                 new List<MpBootstrappedItemViewModel>() {
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvDataFormats),MpPlatformWrapper.Services.DataObjectRegistrar),
                     new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpDocumentHtmlExtension)),

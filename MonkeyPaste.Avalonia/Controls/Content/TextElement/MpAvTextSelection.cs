@@ -25,8 +25,12 @@ namespace MonkeyPaste.Avalonia {
         public void Select(MpAvITextPointer start, MpAvITextPointer end) {
             if(_document is MpAvHtmlDocument htmlDoc &&
                 htmlDoc.Owner is MpAvCefNetWebView wv) {
-                string selJsonStr = string.Format(@"{index:{0}, length:{1}}", start.Offset, end.Offset - start.Offset);
-                wv.ExecuteJavascript($"setSelection('{selJsonStr}')");
+                var selSelReq = new MpQuillSetSelectionRangeRequestMessage() {
+                    index = start.Offset,
+                    length = end.Offset - start.Offset
+                };
+
+                wv.ExecuteJavascript($"setSelection_ext('{selSelReq.SerializeJsonObjectToBase64()}')");
             } else if(_document is MpAvTextBox tb) {
                 tb.SelectionStart = start.Offset;
                 tb.SelectionEnd = end.Offset;                

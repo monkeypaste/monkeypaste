@@ -235,13 +235,14 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvPinTrayView() {
             InitializeComponent();
-            //PinTrayListBox = this.FindControl<ListBox>("PinTrayListBox");
+            PinTrayListBox = this.FindControl<ListBox>("PinTrayListBox");
+            PinTrayListBox.AttachedToVisualTree += PinTrayListBox_AttachedToVisualTree;
         }
 
-        private void MpAvClipTileTitleView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            //MpAvViewBehaviorFactory.BuildAllViewBehaviors(this, this);
+        private void PinTrayListBox_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            var ptrlb = sender as ListBox;
+            //DragDrop.SetAllowDrop(ptrlb, true);
         }
-
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }

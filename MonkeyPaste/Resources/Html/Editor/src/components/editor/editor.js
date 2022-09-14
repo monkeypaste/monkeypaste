@@ -52,7 +52,7 @@ function init_test(doText = true) {
 		isReadOnlyEnabled: true,
 		usedTextTemplates: {},
 		isPasteRequest: false,
-		itemData: doText ? sample_buggy_table : sample_file_list,
+		itemData: doText ? sample1 : sample_file_list,
 
 		useBetterTable: true
 	}
@@ -134,6 +134,9 @@ function init(initMsg) {
 
 	IsLoaded = true;
 
+	// initial load content length ntf
+	//onContentLengthChanged_ntf();
+
 	log('Editor loaded');
 }
 
@@ -197,6 +200,7 @@ function loadQuill(envName, useBetterTable = true) {
 	quill.on("text-change", onEditorTextChanged);
 
 	document.onselectionchange = onDocumentSelectionChange;
+	window.ondblclick = onDocumentDoubleClick;
 
 	getEditorContainerElement().firstChild.id = 'quill-editor';
 }
@@ -399,6 +403,11 @@ function onDocumentSelectionChange(e) {
 		log('selection outside editor');
 	}
 }
+
+function onDocumentDoubleClick(e) {
+	enableSubSelection();
+}
+
 function onEditorSelectionChanged(range, oldRange, source) {
 	//LastSelectedHtml = SelectedHtml;
 	//SelectedHtml = getSelectedHtml();
@@ -455,8 +464,6 @@ function onEditorTextChanged(delta, oldDelta, source) {
 	updateAllSizeAndPositions();
 
 	if (!IsLoaded) {
-		// initial load content length ntf
-		onContentLengthChanged_ntf();
 		return;
 	}
 	if (IgnoreNextTextChange) {
@@ -577,7 +584,9 @@ function insertContent(docIdx, data, forcePlainText = false) {
 	// TODO need to determine data type here
 	if (forcePlainText) {
 		insertText(docIdx, data);
+		return;
 	}
+	insertHtml(docIdx, data);
 }
 
 
@@ -652,12 +661,12 @@ function enableReadOnly() {
 	scrollToHome();
 	hideScrollbars();
 
-	IsSubSelectionEnabled = false;
+	disableSubSelection();
 	drawOverlay();
 }
 
-function disableReadOnly(isSilent) {		
-	IsSubSelectionEnabled = true;
+function disableReadOnly(isSilent) {
+	enableSubSelection();
 
 	if (!isSilent) {
 		showEditorToolbar();
@@ -686,8 +695,16 @@ function disableReadOnly(isSilent) {
 }
 
 function enableSubSelection() {
+	if (IsSubSelectionEnabled) {
+		return;
+	}
+
+	getEditorContainerElement().classList.remove('noselect');
+	getEditorContainerElement().style.cursor = 'text';
+
 	IsSubSelectionEnabled = true;
 
+	onSubSelectionEnabledChanged_ntf(IsSubSelectionEnabled);
 	if (!isEditorToolbarVisible()) {
 		//getEditorElement().style.caretColor = 'red';
 	} else {
@@ -699,7 +716,14 @@ function enableSubSelection() {
 }
 
 function disableSubSelection() {
+	if (!IsSubSelectionEnabled) {
+		return;
+	}
+	getEditorContainerElement().classList.add('noselect');
+	getEditorContainerElement().style.cursor = 'default';
+
 	IsSubSelectionEnabled = false;
+	onSubSelectionEnabledChanged_ntf(IsSubSelectionEnabled);
 
 	if (!isEditorToolbarVisible()) {
 		//getEditorElement().style.caretColor = 'transparent';
@@ -867,5 +891,9 @@ function getContentImageBase64() {
 	let base64Str = getBase64ScreenshotOfElement(getEditorElement());
 
 	return base64Str;
+}
+
+function isRunningInHost() {
+	return typeof notifyException === 'function';
 }
 

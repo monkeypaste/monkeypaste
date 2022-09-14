@@ -4,11 +4,15 @@ function convertHostDataToDataTransferObject(hdo) {
     let dtObj = {
         types: {}
     };
+    if (!hdo.items) {
+        // occurs or dragleave
+        return dtObj;
+	}
     for (var i = 0; i < hdo.items.length; i++) {
         let hdo_item = hdo.items[i];
-        let dtf = convertHostDataFormatToDataTransferFormat(hdo_item.format);
+        let dtf = hdo_item.format;// convertHostDataFormatToDataTransferFormat(hdo_item.format);
         if (dtf) {
-            dtObj.types[dtf] = dtf == 'text/html' ? atob(hdo_item.data) : hdo_item.data;
+            dtObj.types[dtf] = hdo_item.data;// dtf == 'text/html' ? atob(hdo_item.data) : hdo_item.data;
 		}
     }
     return dtObj;
@@ -53,18 +57,25 @@ function isDataTransferValid(dt) {
     return false;
 }
 
-function hasPlainText(dt) {
-    if (CefDragData) {
-        return dt && dt.types && dt.types['text/plain'] != null;
+function getDataByType(dt, typeStr) {
+    if (!dt) {
+        return null;
+    }
+    if (typeof dt.getData === 'function') {
+        return dt.getData(typeStr);
+    }
+    if (!dt.types) {
+        return null;
 	}
-    return dt && dt.types && dt.types.indexOf('text/plain') > -1;
+    return dt.types['text/plain'];
+}
+
+function hasPlainText(dt) {
+    return getDataByType(dt, 'text/plain') != null;
 }
 
 function hasHtml(dt) {
-    if (CefDragData) {
-        return dt && dt.types && dt.types['text/html'] != null;
-    }
-    return dt && dt.types && dt.types.indexOf('text/html') > -1;
+    return getDataByType(dt, 'text/html') != null;
 }
 
 function convertDataTransferToPlainText(dt) {
@@ -72,11 +83,11 @@ function convertDataTransferToPlainText(dt) {
         return '';
     }
     if (hasPlainText(dt)) {
-        let itemData = dt.getData('text/plain');
+        let itemData = getDataByType(dt,'text/plain');
         return itemData;
     }
     if (hasHtml(dt)) {
-        let itemData = dt.getData('text/html');
+        let itemData = getDataByType(dt, 'text/html');
         itemData = parseForHtmlContentStr(itemData);
         let item_html_doc = domParser.parseFromString(itemData);
         //isHtml = true;
@@ -93,14 +104,14 @@ function convertDataTransferToHtml(dt) {
         log('available type: ' + dt.types[i]);
     }
 
-    if (dt.types.indexOf('text/html') > -1) {
-        let itemData = dt.getData('text/html');
+    if (hasHtml(dt)) {
+        let itemData = getDataByType(dt, 'text/html');
         itemData = parseForHtmlContentStr(itemData);
         //isHtml = true;
         return itemData;
     }
-    if (dt.types.indexOf('text/plain') > -1) {
-        let itemData = dt.getData('text/plain');
+    if (hasPlainText()) {
+        let itemData = getDataByType(dt, 'text/plain');
         itemData = '<html><body>' + itemData + '</body></html>';
         return itemData;
     }

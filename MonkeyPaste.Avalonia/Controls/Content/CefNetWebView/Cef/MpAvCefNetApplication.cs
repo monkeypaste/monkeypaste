@@ -18,7 +18,9 @@ namespace MonkeyPaste.Avalonia {
         GetAllTemplatesFromDb,
         NotifyEditorSelectionChanged,
         NotifyContentLengthChanged,
+        NotifySubSelectionEnabledChanged,
         NotifyContentDraggableChanged,
+        NotifyDropEffectChanged,
         NotifyException
     }
     public class MpAvCefNetApplication : CefNetApplication {
@@ -43,9 +45,11 @@ namespace MonkeyPaste.Avalonia {
 
         private static string[] BindingFunctionNames = new string[] {
             "getAllTemplatesFromDb",
+            "notifyDropEffectChanged",
             "notifyEditorSelectionChanged",
             "notifyContentLengthChanged",
             "notifyContentDraggableChanged",
+            "notifySubSelectionEnabledChanged",
             "notifyException"
         };
 
@@ -156,7 +160,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override void OnContextCreated(CefBrowser browser, CefFrame frame, CefV8Context context) {
-            //base.OnContextCreated(browser, frame, context);
             if (!context.Enter()) {
                 return;
             }
@@ -166,10 +169,6 @@ namespace MonkeyPaste.Avalonia {
                 foreach(var bf_kvp in BindingFunctionLookup) {
                     window.SetValue(bf_kvp.Key, CefV8Value.CreateFunction(bf_kvp.Key, fnhandler), CefV8PropertyAttribute.ReadOnly);
                 }
-                //window.SetValue("getAllTemplatesFromDb", CefV8Value.CreateFunction("getAllTemplatesFromDb", fnhandler), CefV8PropertyAttribute.ReadOnly);
-                //window.SetValue("notifyContentDraggableChanged", CefV8Value.CreateFunction("notifyContentDraggableChanged", fnhandler), CefV8PropertyAttribute.ReadOnly);
-                //window.SetValue("notifyEditorSelectionChanged", CefV8Value.CreateFunction("notifyEditorSelectionChanged", fnhandler), CefV8PropertyAttribute.ReadOnly);
-                //window.SetValue("notifyContentLengthChanged", CefV8Value.CreateFunction("notifyContentLengthChanged", fnhandler), CefV8PropertyAttribute.ReadOnly);
             }
             catch (CefNet.CefNetJSExcepton ex) {
                 MpConsole.WriteTraceLine("CefNet Context created exception: ", ex);
@@ -250,15 +249,20 @@ namespace MonkeyPaste.Avalonia {
                             break;
                         case MpAvEditorBindingFunctionType.NotifyContentLengthChanged:
                             var contentLengthMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillContentLengthChangedMessage>(msgJsonStr);
-                            if (contentLengthMsgObj != null) {
-                                wv.Document.ContentEnd.Offset = contentLengthMsgObj.length;
-                            }
+                            wv.Document.ContentEnd.Offset = contentLengthMsgObj.length;
+                            break;
+                        case MpAvEditorBindingFunctionType.NotifyDropEffectChanged:
+                            var dropEffectChangedNtf = MpJsonObject.DeserializeBase64Object<MpQuillDropEffectChangedNotification>(msgJsonStr);
+                            wv.UpdateDropEffect(dropEffectChangedNtf.dropEffect);
+                            MpConsole.WriteLine($"{ctvm.CopyItemTitle} dropEffects: {dropEffectChangedNtf.dropEffect}");
+                            break;
+                        case MpAvEditorBindingFunctionType.NotifySubSelectionEnabledChanged:
+                            var subSelChangedNtf = MpJsonObject.DeserializeBase64Object<MpQuillSubSelectionChangedNotification>(msgJsonStr);
+                            ctvm.IsSubSelectionEnabled = subSelChangedNtf.isSubSelectionEnabled;
                             break;
                         case MpAvEditorBindingFunctionType.NotifyException:
-                                var exceptionMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonStr);
-                                if(exceptionMsgObj != null) {
-                                    MpConsole.WriteLine(exceptionMsgObj);
-                                }
+                            var exceptionMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonStr);
+                            MpConsole.WriteLine(exceptionMsgObj);
                             break;
                     }
                 });

@@ -20,7 +20,8 @@ function parseRgba(rgb_Or_rgba_Or_colorName_Str) {
     if (typeof rgb_Or_rgba_Or_colorName_Str === 'string' || rgb_Or_rgba_Or_colorName_Str instanceof String) {
         if (!rgb_Or_rgba_Or_colorName_Str.startsWith('#')) {
             let hex = colorNameToHex(rgb_Or_rgba_Or_colorName_Str);
-            return hexToRgba(hex);
+            let rgba = hexToRgba(hex);
+            return rgba;
 		}
         let rgba = { r: 0, g: 0, b: 0, a: 255 };
         if (!rgb_Or_rgba_Or_colorName_Str) {
@@ -44,7 +45,7 @@ function parseRgba(rgb_Or_rgba_Or_colorName_Str) {
 }
 
 function rgbaToRgbaStyle(rgba) {
-    if (!rgba.a) {
+    if (rgba.a === undefined) {
         rgba.a = 255;
 	}
     return 'rgba(' + rgba.r + ',' + rgba.g + ',' + rgba.b + ',' + (rgba.a / 255) + ')';

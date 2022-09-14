@@ -7,6 +7,7 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Utils.Extensions;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,6 @@ namespace MonkeyPaste.Avalonia {
         MpIContextMenuViewModel,
         //MpIFindAndReplaceViewModel,
         MpITooltipInfoViewModel,
-        MpIPortableContentDataObject,
         MpISizeViewModel {
 
         #region Private Variables
@@ -1839,8 +1839,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public async Task<MpPortableDataObject> ConvertToPortableDataObject(bool fillTempalates) {
-            MpPortableDataObject d = new MpPortableDataObject();
+        public async Task<MpAvDataObject> ConvertToDataObject(bool fillTempalates) {
+            MpAvDataObject d = new MpAvDataObject();
 
             var wv = GetContentView() as MpAvCefNetWebView;
             string qhtml = string.Empty;
@@ -1963,7 +1963,7 @@ namespace MonkeyPaste.Avalonia {
                                 }
                                 break;
                         }
-                        d.SetData(MpPortableDataFormats.FileDrop, string.Join(Environment.NewLine, sctfl));
+                        //d.SetData(MpPortableDataFormats.FileDrop, string.Join(Environment.NewLine, sctfl));
                         break;
                     case MpPortableDataFormats.Html:
                         if (string.IsNullOrEmpty(qhtml)) {
