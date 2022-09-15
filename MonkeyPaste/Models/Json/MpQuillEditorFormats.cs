@@ -171,6 +171,7 @@ templateType: "dynamic"
         public int index { get; set; }
         public int length { get; set; }
 
+        public string selText { get; set; }
         public bool isChangeBegin { get; set; }
     }
 

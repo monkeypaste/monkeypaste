@@ -52,10 +52,12 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+        <!--
+            Classes.showpintray="{Binding IsPinTrayVisible}"
+        -->
         <local:MpAvPinTrayView x:Name="PinTrayView"
                                Grid.Column="0"
                                DataContext="{Binding}"
-                               Classes.showpintray="{Binding IsPinTrayVisible}"
                                Classes.dragoverpintray="{Binding IsDragOverPinTray}"
                                MinWidth="{Binding MinPinTrayScreenWidth}"
                                MinHeight="{Binding MinPinTrayScreenHeight}"
@@ -70,15 +72,15 @@
                              Path="IsAnyTilePinned" />
                     <Binding Source="{x:Static local:MpAvClipTrayViewModel.Instance}"
                              Path="IsAnyTileDragging" />
-                    <Binding Source="{x:Static local:MpAvClipTrayViewModel.Instance}"
-                             Path="IsExternalDragOverClipTrayContainer" />
+                    <Binding Source="{x:Static local:MpAvMainWindowViewModel.Instance}"
+                             Path="IsDropOverMainWindow" />
                 </MultiBinding>
             </local:MpAvPinTrayView.IsVisible>
         </local:MpAvPinTrayView>
         <GridSplitter x:Name="ClipTraySplitter"
                       Grid.Column="0"
                       IsEnabled="{Binding IsAnyTilePinned}"
-                      IsVisible="{Binding IsAnyTilePinned}"
+                      IsVisible="{Binding IsPinTrayVisible}"
                       HorizontalAlignment="Right"
                       VerticalAlignment="Stretch"
                       Margin="0,0,0,0"

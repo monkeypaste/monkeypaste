@@ -75,6 +75,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void GridSplitter_IsEnabledChanged(GridSplitter gs, bool isEnabled) {
             if (!gs.IsEnabled) {
+                // this ensures when gs is disabled the pin tray column is hidden inlcuding splitter
                 var ctrcg = this.FindControl<Grid>("ClipTrayContainerGrid");
                 if(MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
                     ctrcg.ColumnDefinitions[0].Width = new GridLength(0, GridUnitType.Auto);

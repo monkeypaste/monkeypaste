@@ -340,6 +340,8 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 
 	let textNode = null;
 	let text_node_idx = -1;
+	let parent_idx = 0;
+	let doc_idx = fallbackIdx;
 
 	if (document.caretRangeFromPoint) {
 		// see https://developer.mozilla.org/en-US/docs/Web/API/Document/caretRangeFromPoint
@@ -355,12 +357,12 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 	}
 
 	if (!isNaN(parseInt(text_node_idx)) && text_node_idx >= 0) {
-		let doc_idx = text_node_idx;
+		doc_idx = text_node_idx;
 
 		if (textNode && textNode.parentElement) {
 			let parent_blot = Quill.find(textNode.parentElement);
 			if (parent_blot && typeof parent_blot.offset === 'function') {
-				let parent_idx = parent_blot.offset(quill.scroll);
+				parent_idx = parent_blot.offset(quill.scroll);
 				doc_idx = text_node_idx + parent_idx;
 
 				if (doc_idx == 0) {
@@ -377,26 +379,14 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 						}
 
 					}
-					//let is_text_elm = isTextElement(p_elm);
-					//if (p_elm && !is_text_elm) {
-					//	let is_editor_elm = isEditorElement(p_elm);
-					//	let is_template_elm = isTemplateNode(p_elm);
-					//	if (!is_editor_elm) {
-					//		let blot = Quill.find(p_elm);
-					//		let block_idx = blot.offset(quill.scroll);
-					//		doc_idx = block_idx;
-					//	}
-					//}
 					
 				}
-				//log('doc_idx: ' + doc_idx + ' offset: ' + text_node_idx + ' parent_idx: ' + parent_idx);
+				
 			}
 		}
-
-		return doc_idx;
 	}
-
-	return fallbackIdx;
+	//log('doc_idx: ' + doc_idx + ' offset: ' + text_node_idx + ' parent_idx: ' + parent_idx);
+	return doc_idx;
 }
 
 function getBlotAtDocIdx(docIdx) {

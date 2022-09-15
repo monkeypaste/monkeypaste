@@ -163,16 +163,13 @@ function disableReadOnly_ext(disableReadOnlyReqStrOrObj) {
 	// input MpQuillDisableReadOnlyRequestMessage
 
 	let disableReadOnlyMsg = toJsonObjFromBase64Str(disableReadOnlyReqStrOrObj);
-
-
 	availableTemplates = disableReadOnlyMsg.allAvailableTextTemplates;
-
 	disableReadOnly(disableReadOnlyMsg.isSilent);
 
 	// output MpQuillDisableReadOnlyResponseMessage
 
-	let droMsgObj = { editorWidth: DefaultEditorWidth };
-	let resp = toBase64FromJsonObj(droMsgObj);
+	let respObj = { editorWidth: DefaultEditorWidth };
+	let resp = toBase64FromJsonObj(respObj);
 
 	return resp; 
 }

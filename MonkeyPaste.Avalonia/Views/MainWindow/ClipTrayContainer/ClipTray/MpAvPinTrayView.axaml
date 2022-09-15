@@ -66,10 +66,6 @@
                     <Setter Property="Stroke"
                             Value="Yellow" />
                 </Style>
-                <Style Selector=".dragoverpintray local|MpAvPinTrayDropPopoutOverlayView  Ellipse">
-                    <Setter Property="Stroke"
-                            Value="Yellow" />
-                </Style>
                 <Style Selector="Grid:pointerover Border">
                     <Setter Property="Background"
                             Value="Yellow" />
@@ -78,6 +74,11 @@
                     <Setter Property="Foreground"
                             Value="Yellow" />
                 </Style>
+
+              <Style Selector=".dragoverpintray local|MpAvPinTrayDropPopoutOverlayView  Ellipse">
+                <Setter Property="Stroke"
+                        Value="Yellow" />
+              </Style>
                 <Style Selector=".dragoverpintray local|MpAvPinTrayDropPopoutOverlayView Border">
                     <Setter Property="Background"
                             Value="Yellow" />

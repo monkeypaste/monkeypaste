@@ -210,7 +210,22 @@ function isTextElement(elm) {
     return elm.nodeType === 3;
 }
 
-
+function unescapeHtml(htmlStr) {
+    return htmlStr.replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        .replace(/&amp;/g, "&");
+}
+function escapeHtml(htmlStr) {
+    const htmlEntities = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&apos;"
+    };
+    return htmlStr.replace(/([&<>\"'])/g, match => htmlEntities[match]);
+}
 const delay = time => new Promise(res => setTimeout(res, time));
 
 async function getBase64ScreenshotOfElementAsync(element) {
@@ -227,6 +242,7 @@ async function getBase64ScreenshotOfElementAsync(element) {
     }
     return base64Str;
 }
+
 
 function getBase64ScreenshotOfElement(element) {
     // from https://stackoverflow.com/a/41585230/105028

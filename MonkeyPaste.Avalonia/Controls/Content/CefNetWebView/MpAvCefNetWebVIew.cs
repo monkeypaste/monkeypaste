@@ -115,14 +115,15 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Public Methods
+        #region WebView Binding Methods
 
-        public void UpdateSelection(int index, int length, bool isFromEditor, bool isChangeBegin) {
+        public void UpdateSelection(int index, int length,string text, bool isFromEditor, bool isChangeBegin) {
             var newStart = new MpAvTextPointer(Document, index);
             var newEnd = new MpAvTextPointer(Document, index + length);
             if (isFromEditor) {
                 Selection.Start = newStart;
                 Selection.End = newEnd;
+                Selection.UpdateSelectedTextFromEditor(text);
             } else {
                 Selection.Select(newStart, newEnd);
             }
@@ -157,90 +158,100 @@ namespace MonkeyPaste.Avalonia {
         public void SelectAll() {
             this.ExecuteJavascript("selectAll_ext()");
         }
-
+        public void DeselectAll() {
+            var selMsg = new MpQuillSetSelectionRangeRequestMessage() { index = 0, length = 0 };
+            this.ExecuteJavascript($"setSelection_ext('{selMsg.SerializeJsonObjectToBase64()}')");
+        }
         #endregion
 
-        //protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
-        //    base.OnAttachedToVisualTree(e);
-        //    DragDrop.SetAllowDrop(this, true);
-        //}
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
+            base.OnAttachedToVisualTree(e);
+            //DragDrop.SetAllowDrop(this, true);
+            //this.AddHandler(DragDrop.DragEnterEvent, DragEnter);
+            //this.AddHandler(DragDrop.DragOverEvent, DragOver);
+            //this.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
+            //this.AddHandler(DragDrop.DragLeaveEvent, Drop);
+        }
 
         //#region Drag
-        private void DragCheckAndStart(PointerPressedEventArgs e) {
-            MpPoint dc_down_pos = e.GetClientMousePoint(this);
-            bool is_pointer_dragging = false;
-            bool was_drag_started = false;
+        //private void DragCheckAndStart_old(PointerPressedEventArgs e) {
+        //    MpPoint dc_down_pos = e.GetClientMousePoint(this);
+        //    bool is_pointer_dragging = false;
+        //    bool was_drag_started = false;
 
-            EventHandler<PointerReleasedEventArgs> dragControl_PointerReleased_Handler = null;
-            EventHandler<PointerEventArgs> dragControl_PointerMoved_Handler = null;
+        //    EventHandler<PointerReleasedEventArgs> dragControl_PointerReleased_Handler = null;
+        //    EventHandler<PointerEventArgs> dragControl_PointerMoved_Handler = null;
 
-            // Drag Control PointerMoved Handler
-            dragControl_PointerMoved_Handler = (s, e) => {
-                MpPoint dc_move_pos = e.GetClientMousePoint(this);
+        //    // Drag Control PointerMoved Handler
+        //    dragControl_PointerMoved_Handler = (s, e) => {
+        //        MpPoint dc_move_pos = e.GetClientMousePoint(this);
 
-                var drag_dist = dc_down_pos.Distance(dc_move_pos);
-                is_pointer_dragging = drag_dist >= MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST;
-                if (is_pointer_dragging) {
+        //        var drag_dist = dc_down_pos.Distance(dc_move_pos);
+        //        is_pointer_dragging = drag_dist >= MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST;
+        //        if (is_pointer_dragging) {
 
-                    // DRAG START
+        //            // DRAG START
 
-                    this.PointerMoved -= dragControl_PointerMoved_Handler;
+        //            this.PointerMoved -= dragControl_PointerMoved_Handler;
 
-                    Dispatcher.UIThread.Post(async () => {
-                        if (CanDrag) {
-                            was_drag_started = true;
-                            StartDrag();
+        //            Dispatcher.UIThread.Post(async () => {
+        //                if (CanDrag) {
+        //                    was_drag_started = true;
+        //                    StartDrag();
 
-                            IDataObject avmpdo = await GetWebViewDragDataAsync(false);
-                            var result = await DragDrop.DoDragDrop(e, avmpdo, DragDropEffects.Copy | DragDropEffects.Move);
+        //                    IDataObject avmpdo = await GetWebViewDragDataAsync(false);
+        //                    var result = await DragDrop.DoDragDrop(e, avmpdo, DragDropEffects.Copy | DragDropEffects.Move);
 
-                            EndDrag();
-                            this.PointerReleased -= dragControl_PointerReleased_Handler;
-                            MpConsole.WriteLine("Drag End. Result effect: " + result);
-                        }
-                    });
-                }
-            };
+        //                    EndDrag();
+        //                    this.PointerReleased -= dragControl_PointerReleased_Handler;
+        //                    MpConsole.WriteLine("Drag End. Result effect: " + result);
+        //                }
+        //            });
+        //        }
+        //    };
 
-            // Drag Control PointerReleased Handler
-            dragControl_PointerReleased_Handler = (s, e) => {
-                if (was_drag_started) {
-                    // this should not happen, or release is called before drop (if its called at all during drop
-                    // release should be removed after drop
-                    //Debugger.Break();
-                }
+        //    // Drag Control PointerReleased Handler
+        //    dragControl_PointerReleased_Handler = (s, e) => {
+        //        if (was_drag_started) {
+        //            // this should not happen, or release is called before drop (if its called at all during drop
+        //            // release should be removed after drop
+        //            //Debugger.Break();
+        //        }
 
-                // DRAG END
+        //        // DRAG END
 
-                this.PointerMoved -= dragControl_PointerMoved_Handler;
-                this.PointerReleased -= dragControl_PointerReleased_Handler;
-                MpConsole.WriteLine("DragCheck pointer released (was not drag)");
+        //        this.PointerMoved -= dragControl_PointerMoved_Handler;
+        //        this.PointerReleased -= dragControl_PointerReleased_Handler;
+        //        MpConsole.WriteLine("DragCheck pointer released (was not drag)");
 
-                EndDrag();
+        //        EndDrag();
 
-            };
+        //    };
 
-            this.PointerReleased += dragControl_PointerReleased_Handler;
-            this.PointerMoved += dragControl_PointerMoved_Handler;
+        //    this.PointerReleased += dragControl_PointerReleased_Handler;
+        //    this.PointerMoved += dragControl_PointerMoved_Handler;
+        //}
+
+        private void StartDragAsync(PointerPressedEventArgs e) {
+            //var dragStartMsg = new MpQuillIsDraggingNotification() { isDragging = true };
+            //this.ExecuteJavascript($"updateIsDraggingFromHost_ext('{dragStartMsg.SerializeJsonObjectToBase64()}')");
+
+            Dispatcher.UIThread.Post(async () => {
+                BindingContext.IsTileDragging = true;
+
+                IDataObject avmpdo = await GetWebViewDragDataAsync(false);
+                var result = await DragDrop.DoDragDrop(e, avmpdo, DragDropEffects.Copy | DragDropEffects.Move);
+            });
         }
-
-        private void StartDrag() {
-            var dragStartMsg = new MpQuillIsDraggingNotification() { isDragging = true };
-            this.ExecuteJavascript($"updateIsDraggingFromHost_ext('{dragStartMsg.SerializeJsonObjectToBase64()}')");
-        }
-        private void EndDrag() {
-            var dragEndMsg = new MpQuillIsDraggingNotification() { isDragging = false };
-            this.ExecuteJavascript($"updateIsDraggingFromHost_ext('{dragEndMsg.SerializeJsonObjectToBase64()}')");
-        }
-        protected override void OnKeyUp(KeyEventArgs e) {
-            base.OnKeyUp(e);
-            if(e.Key == Key.Escape &&
-                BindingContext.IsContentReadOnly && BindingContext.IsSubSelectionEnabled) {
-                BindingContext.IsSubSelectionEnabled = false;
-            }
+        private void EndDragAsync() {
+            //var dragEndMsg = new MpQuillIsDraggingNotification() { isDragging = false };
+            //this.ExecuteJavascript($"updateIsDraggingFromHost_ext('{dragEndMsg.SerializeJsonObjectToBase64()}')");
+            BindingContext.IsTileDragging = false;
+            MpAvMainWindowViewModel.Instance.IsDropOverMainWindow = false;
         }
 
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
+            // NOTE This only occurs when sub-selection is enabled (bound in container view)
             if (e.IsRightPress(this) && SuppressRightClick) {
                 return;
             }
@@ -249,7 +260,9 @@ namespace MonkeyPaste.Avalonia {
             if (!CanDrag || BindingContext is MpIResizableViewModel rvm && rvm.CanResize) {
                 return;
             }
-            DragCheckAndStart(e);
+            this.DragCheckAndStart(e, StartDragAsync, EndDragAsync, true);
+
+            //DragCheckAndStart_old(e);
 
             //if (!CanDrag) {
             //    return;
@@ -340,53 +353,53 @@ namespace MonkeyPaste.Avalonia {
         //#endregion
 
 
-        //#region Drop
-        //protected override void OnDragEnter(DragEventArgs e) {
-        //    MpConsole.WriteLine("[DragEnter] CurDropEffects: " + _curDropEffects);
-        //    SendDropMsg(e.Data, "dragenter");
-        //    e.DragEffects = DragDropEffects.Copy | DragDropEffects.Move;
-        //    base.OnDragEnter(e);
-        //}
+        #region Drop
+        private void DragEnter(object sender, DragEventArgs e) {
+            MpConsole.WriteLine("[DragEnter] CurDropEffects: " + _curDropEffects);
+            SendDropMsg(e.Data, "dragenter");
+            e.DragEffects = DragDropEffects.Copy | DragDropEffects.Move;
+            //base.OnDragEnter(e);
+        }
 
-        //protected override void OnDragOver(DragEventArgs e) {
-        //    MpConsole.WriteLine("[DragOver] CurDropEffects: " + _curDropEffects);
-        //    SendDropMsg(e.Data, "dragover");
-        //    e.DragEffects = DragDropEffects.Copy | DragDropEffects.Move;
-        //    base.OnDragOver(e);
-        //}
-        //protected override void OnDragLeave(RoutedEventArgs e) {
-        //    SendDropMsg(null, "dragleave");
-        //    MpConsole.WriteLine("[DragLeave] CurDropEffects: " + _curDropEffects);
-        //    base.OnDragLeave(e);
-        //}
+        private void DragOver(object sender, DragEventArgs e) {
+            MpConsole.WriteLine("[DragOver] CurDropEffects: " + _curDropEffects);
+            SendDropMsg(e.Data, "dragover");
+            e.DragEffects = DragDropEffects.Copy | DragDropEffects.Move;
+           // base.OnDragOver(e);
+        }
+        private void DragLeave(object sender, RoutedEventArgs e) {
+            SendDropMsg(null, "dragleave");
+            MpConsole.WriteLine("[DragLeave] CurDropEffects: " + _curDropEffects);
+           // base.OnDragLeave(e);
+        }
 
-        //protected override void OnDrop(DragEventArgs e) {
-        //    MpConsole.WriteLine("[Drop] CurDropEffects: " + _curDropEffects);
-        //    SendDropMsg(e.Data, "dragleave");
-        //    e.DragEffects = DragDropEffects.Copy | DragDropEffects.Move;
-        //    base.OnDrop(e);
-        //}
+        private void Drop(object sender, DragEventArgs e) {
+            MpConsole.WriteLine("[Drop] CurDropEffects: " + _curDropEffects);
+            SendDropMsg(e.Data, "dragleave");
+            e.DragEffects = DragDropEffects.Copy | DragDropEffects.Move;
+          //  base.OnDrop(e);
+        }
 
-        //private void SendDropMsg(IDataObject avdo, string evtType) {
-        //    var jsonMsg = GetDragDropMessage(avdo, evtType);
-        //    this.ExecuteJavascript($"onDragEvent_ext('{jsonMsg.SerializeJsonObjectToBase64()}')");
-        //}
+        private void SendDropMsg(IDataObject avdo, string evtType) {
+            var jsonMsg = GetDragDropMessage(avdo, evtType);
+            this.ExecuteJavascript($"onDragEvent_ext('{jsonMsg.SerializeJsonObjectToBase64()}')");
+        }
 
-        //private MpQuillDragDropDataObjectMessage GetDragDropMessage(IDataObject avdo, string evtType) {
-        //    var hdobjMsg = new MpQuillDragDropDataObjectMessage() {
-        //        eventType = evtType,
-        //        items = avdo == null ? null : avdo.GetDataFormats()
-        //                                .Where(x => MpPortableDataFormats.RegisteredFormats.Contains(x))
-        //                                .Select(x =>
-        //                                    new MpQuillDragDropDataObjectItemFragment() {
-        //                                        format = x,
-        //                                        data = x != MpPortableDataFormats.Html ? avdo.Get(x) as string : (avdo.Get(x) as byte[]).ToBase64String()
-        //                                    }).ToList()
-        //    };
-        //    return hdobjMsg;
-        //}
+        private MpQuillDragDropDataObjectMessage GetDragDropMessage(IDataObject avdo, string evtType) {
+            var hdobjMsg = new MpQuillDragDropDataObjectMessage() {
+                eventType = evtType,
+                items = avdo == null ? null : avdo.GetDataFormats()
+                                        .Where(x => MpPortableDataFormats.RegisteredFormats.Contains(x))
+                                        .Select(x =>
+                                            new MpQuillDragDropDataObjectItemFragment() {
+                                                format = x,
+                                                data = x != MpPortableDataFormats.Html ? avdo.Get(x) as string : (avdo.Get(x) as byte[]).ToBase64String()
+                                            }).ToList()
+            };
+            return hdobjMsg;
+        }
 
-        //#endregion
+        #endregion
 
 
         #region Javascript Evaluation

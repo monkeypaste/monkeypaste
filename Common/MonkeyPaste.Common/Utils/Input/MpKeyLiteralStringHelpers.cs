@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
+
     public static class MpKeyLiteralStringHelpers {
         public const string CONTROL_KEY_LITERAL = "Ctrl";
         public const string ALT_KEY_LITERAL = "Alt";

@@ -210,7 +210,17 @@ namespace MonkeyPaste.Avalonia {
 
         // Last and Cur Rect set in view bounds changed handler
         public MpRect LastMainWindowRect { get; set; } = new MpRect();
-        public MpRect MainWindowRect { get; set; } = new MpRect(); // => new MpRect(MainWindowLeft, MainWindowTop, MainWindowRight, MainWindowBottom);
+        public MpRect MainWindowRect { get; set; } = new MpRect(); 
+
+        public MpRect MainWindowScreenRect {
+            get {
+                if(MpAvMainWindow.Instance == null) {
+                    return MpRect.Empty;
+                }
+                var mw_screen_origin = VisualExtensions.PointToScreen(MpAvMainWindow.Instance, MpPoint.Zero.ToAvPoint()).ToPortablePoint();
+                return new MpRect(mw_screen_origin, MainWindowRect.Size);
+            }
+        }
 
         public MpRect ExternalRect {
             get {
@@ -318,6 +328,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public MpPoint DragMouseMainWindowLocation { get; set; }
+        public bool IsDropOverMainWindow { get; set; } = false;
         public bool IsResizerVisible { get; set; } = false;
         public bool IsHovering { get; set; }
 
@@ -466,6 +478,12 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvMainWindowViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(IsDropOverMainWindow):
+                    MpConsole.WriteLine("IsDropOverMainWindow: " + (IsDropOverMainWindow ? "YES" : "NO"));
+                    MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.IsPinTrayDropPopOutVisible));
+                    MpAvClipTrayViewModel.Instance.AllItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsHitTestEnabled)));
+
+                    break;
                 case nameof(IsHovering):
                     MpConsole.WriteLine("MainWindow Hover: " + (IsHovering ? "TRUE" : "FALSE"));
                     break;
@@ -763,6 +781,7 @@ namespace MonkeyPaste.Avalonia {
                          // MpAvMainWindow.Instance.IsVisible &&
                          (IsMainWindowOpen || IsMainWindowOpening) &&
                           !IsAnyDropDownOpen &&
+                          !IsDropOverMainWindow &&
                           !IsShowingDialog &&
                           MpAvDragExtension.CurrentDragHost == null &&
                           //!MpContextMenuView.Instance.IsOpen &&

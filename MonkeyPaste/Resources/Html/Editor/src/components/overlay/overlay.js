@@ -85,8 +85,10 @@ function drawHighlighting(ctx, forceColor) {
 
 function drawDropPreview(ctx, color = 'red', thickness = '0.5', line_style = [5,5], alpha = 255) {
     let drop_idx = DropIdx;
-
-    //log('dropIdx: ' + drop_idx + ' mp x:' + LastMousePos.x + ' y:' + LastMousePos.y);
+    if (isDragCopy()) {
+        color = 'lime';
+	}
+    log('dropIdx: ' + drop_idx);
     if (drop_idx < 0) {
         return;
     }
@@ -105,17 +107,19 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5', line_style = [5,
     let post_line = { x1: 0, y1: post_y, x2: editor_rect.width, y2: post_y };
 
     let caret_rect = getCharacterRect(drop_idx);
-    //let caret_render_rect = caret_rect;
-    //let caret_width = 1;
-    //if (drop_idx == getDocLength() - 1) {
-    //    caret_render_rect.left -= caret_render_rect.right - caret_width;
-    //} else {
-    //    caret_render_rect.right = caret_render_rect.left - caret_width;
-    //}
-    //caret_render_rect = cleanRect(caret_render_rect);
-
 
     let caret_line = { x1: caret_rect.left, y1: caret_rect.top, x2: caret_rect.left, y2: caret_rect.bottom };
+    let left_clamp = 0;
+    let right_clamp = editor_rect.width;
+    if (caret_line.x1 < 0) {
+        caret_line.x1 = left_clamp;
+        caret_line.x2 = left_clamp;
+        log('caret_line was < editor_rect.left: ' + left_clamp);
+    } else if (caret_line.x1 > right_clamp) {
+        caret_rect.x1 = right_clamp;
+        caret_rect.x2 = right_clamp;
+        log('caret_line was > editor_rect.right: ' + right_clamp);
+    }
 
     IsSplitDrop = IsShiftDown; //IsCtrlDown || IsAltDown;
 
@@ -164,7 +168,11 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5', line_style = [5,
         drawLine(ctx, line, color, thickness, line_style)
     }
     if (render_caret_line) {
-        drawLine(ctx, render_caret_line, color, 1.5, [1, 0]);
+        if (render_caret_line.x1 < 0 || render_caret_line.x2 < 0) {
+            render_caret_line.x1 = 0;
+            render_caret_line.x2 = 0;
+		}
+        drawLine(ctx, render_caret_line, color, thickness, [1, 0]);
 	}
 	//for (var i = 0; i < render_rects.length; i++) {
  //       let rect = render_rects[i];
@@ -237,8 +245,6 @@ function drawOverlay() {
     }
 
     let ctx = canvas.getContext('2d');
-    //ctx.globalAlpha = OverlayGlobalAlpha;
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     drawTextSelection(ctx);

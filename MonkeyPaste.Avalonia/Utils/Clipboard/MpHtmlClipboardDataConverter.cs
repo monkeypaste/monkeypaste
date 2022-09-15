@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Markup;
 
 namespace MonkeyPaste.Avalonia {
@@ -36,6 +37,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if(html_length > 0) {
                     hcd.Html = htmlClipboardData.Substring(html_start_idx, html_length);
+                    hcd.Html = HttpUtility.HtmlDecode(hcd.Html);
                     //hcd.Rtf = string.Empty;// await MpQuillHtmlToRtfConverter.ConvertStandardHtmlToRtf(hcd.Html);
                 }
             }

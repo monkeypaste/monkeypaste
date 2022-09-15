@@ -19,6 +19,8 @@ using System.Linq;
 using System;
 using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Interactivity;
+using MonkeyPaste.Common.Utils.Extensions;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -76,7 +78,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
-        //public MpAvExternalDropBehavior ExternalDropBehavior { get; private set; }
+
+        public MpAvMainWindowViewModel BindingContext => MpAvMainWindowViewModel.Instance;
 
         #endregion
 
@@ -99,6 +102,11 @@ namespace MonkeyPaste.Avalonia {
             this.PointerMoved += MainWindow_PointerMoved;
             this.PointerLeave += MainWindow_PointerLeave;
 
+           // MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove += ShortcutCollectionViewModel_OnGlobalMouseMove;
+
+            var mwcg = this.FindControl<Grid>("MainWindowContainerGrid");
+            mwcg.AttachedToVisualTree += MainWindowContainerGrid_AttachedToVisualTree;
+
             var sidebarSplitter = this.FindControl<GridSplitter>("SidebarGridSplitter");
             sidebarSplitter.GetObservable(GridSplitter.IsVisibleProperty).Subscribe(value => SidebarSplitter_isVisibleChange(sidebarSplitter, value));
 
@@ -109,6 +117,48 @@ namespace MonkeyPaste.Avalonia {
             });
         }
 
+
+
+
+        #endregion
+
+        #region Drop
+
+        private void MainWindowContainerGrid_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            var mwcg = sender as Control;
+            DragDrop.SetAllowDrop(mwcg, true);
+            mwcg.AddHandler(DragDrop.DragEnterEvent, DragEnter);
+            //mwcg.AddHandler(DragDrop.DragOverEvent, DragOver);
+            mwcg.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
+        }
+
+        private void DragEnter(object sender, DragEventArgs e) {
+            MpConsole.WriteLine("[DragEnter] MainWindowContainerGrid: ");
+            BindingContext.DragMouseMainWindowLocation = e.GetPosition(this).ToPortablePoint();
+            e.DragEffects = DragDropEffects.None;
+            BindingContext.IsDropOverMainWindow = true;
+        }
+
+        //private void DragOver(object sender, DragEventArgs e) {
+        //    MpConsole.WriteLine("[DragOver] MainWindowContainerGrid: ");
+        //    e.DragEffects = DragDropEffects.None;
+        //}
+        private void DragLeave(object sender, RoutedEventArgs e) {
+            if(BindingContext.DragMouseMainWindowLocation == null) {
+                Debugger.Break();
+            }
+            bool isPointerWithinWindow = BindingContext.MainWindowRect.Contains(BindingContext.DragMouseMainWindowLocation);
+
+            MpConsole.WriteLine("[DragLeave] MainWindowContainerGrid: Inside Bounds: "+isPointerWithinWindow);
+            BindingContext.IsDropOverMainWindow = isPointerWithinWindow;
+            if(!BindingContext.IsDropOverMainWindow) {
+                Debugger.Break();
+            }
+        }
+
+        private void Drop(object sender, DragEventArgs e) {
+            MpConsole.WriteLine("[Drop] MainWindowContainerGrid: ");
+        }
         #endregion
 
         #region Public Methods
@@ -417,7 +467,6 @@ namespace MonkeyPaste.Avalonia {
 
             MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeChanged);
 
-
             MpAvMainWindowViewModel.Instance.IsMainWindowLoading = false;
             MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
 
@@ -491,6 +540,8 @@ namespace MonkeyPaste.Avalonia {
             MpAvMainWindowViewModel.Instance.LastMainWindowRect = oldAndNewVals.oldValue.ToPortableRect();
             MpAvMainWindowViewModel.Instance.MainWindowRect = oldAndNewVals.newValue.ToPortableRect();
         }
+
+
         private void MainWindow_PointerMoved(object sender, global::Avalonia.Input.PointerEventArgs e) {
             
             var mwvm = MpAvMainWindowViewModel.Instance;
@@ -532,7 +583,6 @@ namespace MonkeyPaste.Avalonia {
             MpAvMainWindowViewModel.Instance.IsMainWindowActive = false;
             MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
         }
-
 
         #endregion
 

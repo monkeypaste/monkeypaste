@@ -23,9 +23,8 @@
                           VerticalAlignment="Stretch"
                           local:MpAvMenuExtension.IsEnabled="True"
                           local:MpAvMenuExtension.IsOpen="{Binding IsContextMenuOpened, Mode=TwoWay}"
-                          local:MpAvPointerPressCommandExtension.IsEnabled="False"
-                          local:MpAvPointerPressCommandExtension.DoubleLeftPressCommand="{Binding EnableSubSelectionCommand}"
-                          
+                          local:MpAvPointerPressCommandExtension.IsEnabled="True"
+                          local:MpAvPointerPressCommandExtension.DoubleLeftPressCommand="{Binding EnableSubSelectionCommand}"                          
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
                           CornerRadius="{StaticResource TileCornerRadius}"

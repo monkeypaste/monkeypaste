@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using GLib;
 using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,34 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public class MpAvTextSelection : MpAvTextRange, MpAvITextSelection {
         private MpAvIContentDocument _document;
+
+        private string _text;
+        public string Text {
+            get {
+                if (_document is MpAvTextBox tb) {
+                    _text = tb.SelectedText;
+                }
+                return _text;
+            }
+            set {
+                if(_text != value) {
+                    _text = value;
+                    if (_document is MpAvHtmlDocument htmlDoc &&
+                        htmlDoc.Owner is MpAvCefNetWebView wv) {
+                        var setTextMsg = new MpQuillContentSetTextRangeMessage() {
+                            index = Start.Offset,
+                            length = Length,
+                            text = _text
+                        };
+                        wv.ExecuteJavascript($"setTextInRange_ext('{setTextMsg.SerializeJsonObjectToBase64()}')");
+                        
+                    } else if(_document is MpAvTextBox tb) {
+                        tb.SelectedText = _text;
+                    }
+                    
+                }
+            }
+        }
 
         //public MpAvTextPointer Start;
 
@@ -37,6 +66,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public void UpdateSelectedTextFromEditor(string selText) {
+            _text = selText;
+        }
         #endregion
     }
 }

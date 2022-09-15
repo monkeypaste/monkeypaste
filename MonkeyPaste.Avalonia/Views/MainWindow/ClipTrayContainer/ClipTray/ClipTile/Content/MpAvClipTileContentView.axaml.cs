@@ -62,14 +62,14 @@ namespace MonkeyPaste.Avalonia {
             if(BindingContext == null) {
                 Debugger.Break();
             }
-            BindingContext.IsItemDragging = true;
+            BindingContext.IsTileDragging = true;
         }
 
         void MpAvIDragHost.DragEnd() {
             if (BindingContext == null) {
                 Debugger.Break();
             }
-            BindingContext.IsItemDragging = false;
+            BindingContext.IsTileDragging = false;
         }
         #endregion
 
@@ -128,7 +128,7 @@ namespace MonkeyPaste.Avalonia {
         void MpAvIDropHost.DragLeave() {
             MpConsole.WriteLine($"[Tile '{BindingContext.CopyItemTitle}]' DragLeave]");
             
-            if(BindingContext.IsItemDragging || this.IsPointerOver) {
+            if(BindingContext.IsTileDragging || this.IsPointerOver) {
                 return;
             }
 

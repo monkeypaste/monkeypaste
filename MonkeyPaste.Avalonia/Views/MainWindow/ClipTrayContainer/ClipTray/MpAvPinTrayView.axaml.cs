@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Generators;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
@@ -16,30 +17,118 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public partial class MpAvPinTrayView : MpAvUserControl<MpAvClipTrayViewModel>, MpAvIDropHost {
+    public partial class MpAvPinTrayView : MpAvUserControl<MpAvClipTrayViewModel> { //, MpAvIDropHost {
+        #region Private Variables
 
-        #region MpAvIDropHost Implementation
-        bool MpAvIDropHost.IsDropEnabled => true;
-        bool MpAvIDropHost.IsDropValid(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects) {
-            if(dragEffects == DragDropEffects.None) {
-                return false;
+        private MpAvDropHostAdorner _dropAdorner;
+
+        #endregion
+
+        #region Drop
+
+        #region Drop Events
+
+        private void DragEnter(object sender, DragEventArgs e) {
+            MpConsole.WriteLine("[DragEnter] PinTrayListBox: ");
+            BindingContext.IsDragOverPinTray = true;
+        }
+
+        private void DragOver(object sender, DragEventArgs e) {
+            MpConsole.WriteLine("[DragOver] PinTrayListBox: ");
+            e.DragEffects = DragDropEffects.None;
+
+            var ptr_mp = e.GetPosition(sender as Control).ToPortablePoint();
+            int drop_idx = GetDropIdx(ptr_mp);
+            bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
+            bool is_drop_valid = IsDropValid(e.Data, drop_idx, is_copy);
+            MpConsole.WriteLine("[DragOver] PinTrayListBox DropIdx: " + drop_idx + " IsCopy: "+is_copy+" IsValid: "+is_drop_valid);
+
+            if (is_drop_valid) {
+                e.DragEffects = is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
+                MpLine dropLine = CreateDropLine(drop_idx, is_copy);
+                DrawAdorner(dropLine);
+            } else {
+                ClearAdorner();
             }
-            // called in DropExtension DragOver 
+        }
+        private void DragLeave(object sender, RoutedEventArgs e) {
+            MpConsole.WriteLine("[DragLeave] PinTrayListBox: ");
+            ResetDrop();
+        }
+
+        private async void Drop(object sender, DragEventArgs e) {
+            // NOTE only pin tray allows drop not clip tray
+
+            var host_mp = e.GetPosition(sender as Control).ToPortablePoint();
             int drop_idx = GetDropIdx(host_mp);
+            bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
+            bool is_drop_valid = IsDropValid(e.Data, drop_idx, is_copy);
+            MpConsole.WriteLine("[Drop] PinTrayListBox DropIdx: " + drop_idx + " IsCopy: " + is_copy + " IsValid: " + is_drop_valid);
+
+            if (is_drop_valid) {
+                e.DragEffects = is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
+                if (e.Data.GetDataFormats().Contains(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT)) {
+                    // Internal Drop
+                    await PerformInternalDropAsync(drop_idx, e.Data, is_copy);
+                } else {
+                    // External Drop
+                    await PerformExternalDropAsync(drop_idx, e.Data);
+                }
+            }
+
+            ResetDrop();
+        }
+
+        #endregion
+
+        #region Drop Helpers
+
+        private int GetDropIdx(MpPoint host_mp) {
+            var ptr_lb = this.FindControl<ListBox>("PinTrayListBox");
+            var ptr_lb_mp = this.TranslatePoint(host_mp.ToAvPoint(), ptr_lb).Value.ToPortablePoint();
+
+            if (!ptr_lb.Bounds.Contains(ptr_lb_mp.ToAvPoint())) {
+                return -1;
+            }
+
+            if (BindingContext.PinnedItems.Count == 0) {
+                // TODO Add logic for pin popout overlay or add binding somewhere when empty
+                return 0;
+            }
+
+            MpRectSideHitTest closet_side_ht = null;
+            int closest_side_lbi_idx = -1;
+            for (int i = 0; i < BindingContext.PinnedItems.Count; i++) {
+                var lbi_rect = ptr_lb.ItemContainerGenerator.ContainerFromIndex(i).Bounds.ToPortableRect();
+                var cur_tup = lbi_rect.GetClosestSideToPoint(ptr_lb_mp, "t,b");
+                if (closet_side_ht == null || cur_tup.ClosestSideDistance < closet_side_ht.ClosestSideDistance) {
+                    closet_side_ht = cur_tup;
+                    closest_side_lbi_idx = i;
+                }
+            }
+
+            if (closet_side_ht.ClosestSideLabel == "r") {
+                return closest_side_lbi_idx + 1;
+            }
+            return closest_side_lbi_idx;
+        }
+
+        private bool IsDropValid(IDataObject avdo, int drop_idx, bool is_copy) {
+            // called in DropExtension DragOver 
 
             MpConsole.WriteLine("IsDropValid DropIdx: " + drop_idx);
             if (drop_idx < 0) {
                 return false;
             }
-            var drag_pctvm = BindingContext.PinnedItems.FirstOrDefault(x => x.IsItemDragging);
-            if(drag_pctvm == null) {
+            var drag_pctvm = BindingContext.PinnedItems.FirstOrDefault(x => x.IsTileDragging);
+            if (drag_pctvm == null) {
                 // Tile drop is always valid
                 return true;
             }
             int drag_pctvm_idx = BindingContext.PinnedItems.IndexOf(drag_pctvm);
-            bool is_copy = dragEffects.HasFlag(DragDropEffects.Copy);
+            
             bool is_drop_onto_same_idx = drop_idx == drag_pctvm_idx || drop_idx == drag_pctvm_idx + 1;
-            if(!is_copy && is_drop_onto_same_idx) {
+            if (!is_copy && is_drop_onto_same_idx) {
                 // don't allow moving item if it'll be at same position
                 return false;
             }
@@ -51,66 +140,17 @@ namespace MonkeyPaste.Avalonia {
             return true;
         }
 
-        void MpAvIDropHost.DragOver(MpPoint host_mp, IDataObject avdo, DragDropEffects dragEffects) {
-            MpConsole.WriteLine("[PinTray DragOver]");
-            BindingContext.IsDragOverPinTray = true;
-
-            int drop_idx = GetDropIdx(host_mp);
-
-            if (dragEffects == DragDropEffects.None || drop_idx < 0) {
-                MpConsole.WriteLine("DragOver invalidated: Effects is none");
-                ClearAdorner();
-                return;
-            }
-
-            MpLine dropLine = CreateDropLine(drop_idx,dragEffects);
-            DrawAdorner(dropLine);
-        }
-
-        //void MpAvIDropHost.DragEnter() {
-        //    DrawAdorner(null);
-        //}
-
-        void MpAvIDropHost.DragLeave() {
-            MpConsole.WriteLine("[PinTray DragLeave]");
+        private void ResetDrop() {
             BindingContext.IsDragOverPinTray = false;
             BindingContext.OnPropertyChanged(nameof(BindingContext.IsPinTrayDropPopOutVisible));
             ClearAdorner();
         }
 
-        async Task<DragDropEffects> MpAvIDropHost.DropDataObjectAsync(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects) {
-            // NOTE only pin tray allows drop not clip tray
-            MpConsole.WriteLine("[PinTray Drop]");
-            ClearAdorner();
-            BindingContext.IsDragOverPinTray = false;
-            BindingContext.IsExternalDragOverClipTrayContainer = false;
-            BindingContext.OnPropertyChanged(nameof(BindingContext.IsPinTrayDropPopOutVisible));
-
-            int drop_idx = GetDropIdx(host_mp);
-            MpConsole.WriteLine("DropDataObjectAsync DropIdx: " + drop_idx);
-
-            if (dragEffects == DragDropEffects.None || drop_idx < 0) {
-                return DragDropEffects.None;
-            }
-
-            DragDropEffects dropEffects = DragDropEffects.None;
-
-            if (avdo.GetDataFormats().Contains(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT)) {
-                // Internal DragDrop
-                dropEffects = await PerformInternalDropAsync(drop_idx, avdo, dragEffects);
-            } else {
-                dropEffects = await PerformExternalDropAsync(drop_idx, avdo, dragEffects);
-            }
-
-            return dropEffects;
-        }
-
-        private async Task<DragDropEffects> PerformInternalDropAsync(int drop_idx, IDataObject avdo, DragDropEffects effects) {
+        private async Task PerformInternalDropAsync(int drop_idx, IDataObject avdo, bool isCopy) {
             var drop_ctvm = avdo.Get(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT) as MpAvClipTileViewModel;
             if (drop_ctvm == null) {
                 Debugger.Break();
             }
-            bool isCopy = effects.HasFlag(DragDropEffects.Copy);
 
             if (isCopy) {
                 //  duplicate
@@ -135,32 +175,35 @@ namespace MonkeyPaste.Avalonia {
                     BindingContext.PinTileCommand.Execute(new object[] { drop_ctvm, drop_idx });
                 }
             }
-            return effects;
         }
 
-        private async Task<DragDropEffects> PerformExternalDropAsync(int drop_idx, IDataObject avdo, DragDropEffects effects) {
+        private async Task PerformExternalDropAsync(int drop_idx, IDataObject avdo) {
             MpPortableDataObject mpdo = MpPlatformWrapper.Services.DataObjectHelper.ConvertToSupportedPortableFormats(avdo);
 
             var avdo_ci = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(mpdo);
 
             var drop_ctvm = await BindingContext.CreateClipTileViewModel(avdo_ci, -1);
             BindingContext.PinTileCommand.Execute(new object[] { drop_ctvm, drop_idx });
-
-            return effects;
         }
+
+        #endregion
+
+        #region Adorner
 
         private void ClearAdorner() {
-            MpAvDropExtension.GetDropAdorner(this).IsVisible = false;
-            MpAvDropExtension.GetDropAdorner(this).DrawDropAdorner(null);
+            _dropAdorner.IsVisible = false;
+            _dropAdorner.DrawDropAdorner(null);
         }
+
         private void DrawAdorner(MpLine dropLine) {
-            MpAvDropExtension.GetDropAdorner(this).IsVisible = true;
-            if(dropLine == null) {
+            _dropAdorner.IsVisible = true;
+            if (dropLine == null) {
                 return;
             }
-            MpAvDropExtension.GetDropAdorner(this).DrawDropAdorner(new MpShape[] {dropLine});
+            _dropAdorner.DrawDropAdorner(new MpShape[] { dropLine });
         }
-        private MpLine CreateDropLine(int drop_idx, DragDropEffects dragEffects) {
+
+        private MpLine CreateDropLine(int drop_idx, bool isCopy) {
             var ptr_lb = this.FindControl<ListBox>("PinTrayListBox");
             int total_count = BindingContext.PinnedItems.Count;
             if (drop_idx > total_count || total_count == 0) {
@@ -194,42 +237,41 @@ namespace MonkeyPaste.Avalonia {
             var lbi_child_bl = lbi_child.TranslatePoint(new Point(0, lbi_child.Bounds.Height), ptr_lb_wp);
             drop_line.P2.Y = lbi_child_bl.Value.Y;
 
-            drop_line.StrokeOctColor = dragEffects.HasFlag(DragDropEffects.Copy) ? MpSystemColors.limegreen : MpSystemColors.White;
+            drop_line.StrokeOctColor = isCopy ? MpSystemColors.limegreen : MpSystemColors.White;
             drop_line.StrokeThickness = 2;
             drop_line.StrokeDashStyle = new double[] { 5, 2 };
 
             return drop_line;
         }
 
-        private int GetDropIdx(MpPoint host_mp) {
-            var ptr_lb = this.FindControl<ListBox>("PinTrayListBox");
-            var ptr_lb_mp = this.TranslatePoint(host_mp.ToAvPoint(), ptr_lb).Value.ToPortablePoint();
+        private void InitAdorner(Control adornedControl) {
+            if(_dropAdorner != null) {
+                // should only happen once
+                Debugger.Break();
+                return;
+            }
+            var adornerLayer = AdornerLayer.GetAdornerLayer(adornedControl);
 
-            if (!ptr_lb.Bounds.Contains(ptr_lb_mp.ToAvPoint())) {
-                return -1;
+            if (adornerLayer == null) {
+                Dispatcher.UIThread.Post(async () => {
+                    adornerLayer = AdornerLayer.GetAdornerLayer(adornedControl);
+                    while (adornerLayer == null) {
+                        await Task.Delay(100);
+                    }
+                    InitAdorner(adornedControl);
+                    return;
+                });
+                return;
             }
 
-            if (BindingContext.PinnedItems.Count == 0) {
-                // TODO Add logic for pin popout overlay or add binding somewhere when empty
-                return 0;
-            }
-
-            MpRectSideHitTest closet_side_ht = null;
-            int closest_side_lbi_idx = -1;
-            for (int i = 0; i < BindingContext.PinnedItems.Count; i++) {
-                var lbi_rect = ptr_lb.ItemContainerGenerator.ContainerFromIndex(i).Bounds.ToPortableRect();
-                var cur_tup = lbi_rect.GetClosestSideToPoint(ptr_lb_mp, "t,b");
-                if (closet_side_ht == null || cur_tup.ClosestSideDistance < closet_side_ht.ClosestSideDistance) {
-                    closet_side_ht = cur_tup;
-                    closest_side_lbi_idx = i;
-                }
-            }
-
-            if (closet_side_ht.ClosestSideLabel == "r") {
-                return closest_side_lbi_idx + 1;
-            }
-            return closest_side_lbi_idx;
+            _dropAdorner = new MpAvDropHostAdorner(adornedControl);
+            adornerLayer.Children.Add(_dropAdorner);
+            AdornerLayer.SetAdornedElement(_dropAdorner, adornedControl);
+            MpConsole.WriteLine("Adorner added to control: " + adornedControl);
+            return;
         }
+
+        #endregion
 
         #endregion
 
@@ -238,11 +280,16 @@ namespace MonkeyPaste.Avalonia {
             PinTrayListBox = this.FindControl<ListBox>("PinTrayListBox");
             PinTrayListBox.AttachedToVisualTree += PinTrayListBox_AttachedToVisualTree;
         }
-
         private void PinTrayListBox_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             var ptrlb = sender as ListBox;
-            //DragDrop.SetAllowDrop(ptrlb, true);
+            DragDrop.SetAllowDrop(ptrlb, true);
+            ptrlb.AddHandler(DragDrop.DragEnterEvent, DragEnter);
+            ptrlb.AddHandler(DragDrop.DragOverEvent, DragOver);
+            ptrlb.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
+
+            InitAdorner(ptrlb);
         }
+
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }

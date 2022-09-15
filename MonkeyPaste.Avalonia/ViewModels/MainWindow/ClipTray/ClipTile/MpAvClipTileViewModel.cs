@@ -215,7 +215,7 @@ namespace MonkeyPaste.Avalonia {
 
         public Rect TileBorderBrushRect {
             get {
-                if (IsItemDragging || IsContextMenuOpen) {
+                if (IsTileDragging || IsContextMenuOpen) {
                     return new Rect(); //MpMeasurements.Instance.DottedBorderRect;
                 }
                 return new Rect(); //MpMeasurements.Instance.SolidBorderRect;
@@ -348,6 +348,14 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsSubSelectionEnabled { get; set; } = false;
 
+        public bool IsHitTestEnabled {
+            get {
+                if(IsSubSelectionEnabled) {
+                    return true;
+                }
+                return MpAvMainWindowViewModel.Instance.IsDropOverMainWindow;
+            }
+        }
         
 
         public bool IsVerticalScrollbarVisibile {
@@ -544,7 +552,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Drag & Drop
 
-        public bool IsItemDragging { get; set; } = false;
+        public bool IsTileDragging { get; set; } = false;
         public bool IsCurrentDropTarget { get; set; } = false;
 
         #endregion
@@ -886,12 +894,42 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIRtfSelectionRangeViewModel Implementation 
 
-        public int SelectionStart => 0;// MpContentDocumentRtfExtension.GetSelectionStart(this);
-        public int SelectionLength => 0;// MpContentDocumentRtfExtension.GetSelectionLength(this);
+        public int SelectionStart {
+            get {
+                var cv = GetContentView();
+                if (cv == null) {
+                    return 0;
+                }
+                return cv.Selection.Start.Offset;
+            }
+        }
+        public int SelectionLength {
+            get {
+                var cv = GetContentView();
+                if (cv == null) {
+                    return 0;
+                }
+                return cv.Selection.Length;
+            }
+        }
 
         public string SelectedPlainText {
-            get;// => MpContentDocumentRtfExtension.GetSelectedPlainText(this);
-            set;// => MpContentDocumentRtfExtension.SetSelectionText(this, value);
+            get {
+                var cv = GetContentView();
+                if (cv == null) {
+                    return string.Empty;
+                }
+                return cv.Selection.Text;
+            }
+            set {
+                var cv = GetContentView();
+                if (cv == null) {
+                    Debugger.Break();
+                }
+                if(cv.Selection.Text != value) {
+                    cv.Selection.Text = value;
+                }
+            }
         }
 
         public string SelectedRichText => null;// MpContentDocumentRtfExtension.GetSelectedRichText(this);
@@ -1902,13 +1940,9 @@ namespace MonkeyPaste.Avalonia {
 
             } else if (ItemType == MpCopyItemType.Text) {
                 if (isInUi) {
-                    if (isSelectionEmpty) {
-                        qhtml = await MpAvCefNetWebViewExtension.GetEncodedContentAsync(
-                                wv,
-                                ignoreSubSelection: true);
-                    } else {
-                        qhtml = SelectedRichText;
-                    }
+                    qhtml = await MpAvCefNetWebViewExtension.GetEncodedContentAsync(
+                               wv,
+                               ignoreSubSelection: isSelectionEmpty);
                 } else {
                     // handle special case when pasting item by id (like from a hotkey)
                     // and it has no templates (if it did tray would set manual query and show it)
@@ -2155,7 +2189,6 @@ namespace MonkeyPaste.Avalonia {
                         //ClearSelection();
                     }
 
-
                     Parent.NotifySelectionChanged();
                     OnPropertyChanged(nameof(TileBorderHexColor));
                     break;
@@ -2187,6 +2220,7 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.CanScroll));
                     OnPropertyChanged(nameof(IsHorizontalScrollbarVisibile));
                     OnPropertyChanged(nameof(IsVerticalScrollbarVisibile));
+                    OnPropertyChanged(nameof(IsHitTestEnabled));
                     break;
                 case nameof(IsContentFocused):
                     if (IsContentFocused) {
@@ -2243,9 +2277,9 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsContextMenuOpen));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyTileContextMenuOpened));
                     break;
-                case nameof(IsItemDragging):
+                case nameof(IsTileDragging):
                     //Parent.OnPropertyChanged(nameof(Parent.TileBorderBrush));
-                    if (IsItemDragging) {
+                    if (IsTileDragging) {
                         StartAnimation();
                         if (!IsSubSelectionEnabled) {
                             // BUG checking selection length here (when IsSubSelectionEnabled=false)
@@ -2405,7 +2439,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void _timer_Tick(object sender, EventArgs e) {
-            if (!IsItemDragging) {
+            if (!IsTileDragging) {
                 StopAnimation();
                 return;
             }

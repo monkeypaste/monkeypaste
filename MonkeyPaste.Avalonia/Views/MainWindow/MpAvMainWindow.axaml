@@ -23,7 +23,7 @@
         Height="{Binding MainWindowHeight}"
         TransparencyLevelHint="Transparent"
         Title="Monkey Paste">
-    <Grid x:Name="MainWindowGridRef"
+    <Grid x:Name="MainWindowContainerGrid"
           Background="Transparent"
           Width="{Binding MainWindowWidth}"
           Height="{Binding MainWindowHeight}">
@@ -95,7 +95,6 @@
 
             <local:MpAvClipTrayContainerView x:Name="ClipTrayContainerView"
                                              Grid.Column="2"
-                                             Classes.dragover="{Binding IsExternalDragOverClipTrayContainer, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                                              local:MpAvSizeObserverExtension.IsEnabled="True"
                                              local:MpAvSizeObserverExtension.ObservedWidth="{Binding ClipTrayContainerScreenWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWayToSource}"
                                              local:MpAvSizeObserverExtension.ObservedHeight="{Binding ClipTrayContainerScreenHeight, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWayToSource}"

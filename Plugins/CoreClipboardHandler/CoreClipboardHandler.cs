@@ -196,6 +196,9 @@ namespace CoreClipboardHandler {
 
         private string ReadDataObjectFormat(string format, IDataObject avdo) {
             if(format == "FileNames") {
+                if(avdo.GetFileNames() == null) {
+                    return String.Empty;
+                }
                 return string.Join(Environment.NewLine, avdo.GetFileNames());
             }
             string dataStr = null;

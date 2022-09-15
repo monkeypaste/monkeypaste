@@ -15,10 +15,11 @@ using CefNet.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public enum MpAvEditorBindingFunctionType {
+        GetDragData,
         GetAllTemplatesFromDb,
         NotifyEditorSelectionChanged,
         NotifyContentLengthChanged,
-        NotifySubSelectionEnabledChanged,
+        //NotifySubSelectionEnabledChanged,
         NotifyContentDraggableChanged,
         NotifyDropEffectChanged,
         NotifyException
@@ -44,12 +45,13 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         private static string[] BindingFunctionNames = new string[] {
+            "getDragData",
             "getAllTemplatesFromDb",
-            "notifyDropEffectChanged",
             "notifyEditorSelectionChanged",
             "notifyContentLengthChanged",
+            //"notifySubSelectionEnabledChanged",
             "notifyContentDraggableChanged",
-            "notifySubSelectionEnabledChanged",
+            "notifyDropEffectChanged",
             "notifyException"
         };
 
@@ -245,7 +247,7 @@ namespace MonkeyPaste.Avalonia {
                             break;
                         case MpAvEditorBindingFunctionType.NotifyEditorSelectionChanged: 
                             var selChangedJsonMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillContentSelectionChangedMessage>(msgJsonStr);
-                            wv.UpdateSelection(selChangedJsonMsgObj.index, selChangedJsonMsgObj.length, true, selChangedJsonMsgObj.isChangeBegin);
+                            wv.UpdateSelection(selChangedJsonMsgObj.index, selChangedJsonMsgObj.length, selChangedJsonMsgObj.selText, true, selChangedJsonMsgObj.isChangeBegin);
                             break;
                         case MpAvEditorBindingFunctionType.NotifyContentLengthChanged:
                             var contentLengthMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillContentLengthChangedMessage>(msgJsonStr);
@@ -256,10 +258,10 @@ namespace MonkeyPaste.Avalonia {
                             wv.UpdateDropEffect(dropEffectChangedNtf.dropEffect);
                             MpConsole.WriteLine($"{ctvm.CopyItemTitle} dropEffects: {dropEffectChangedNtf.dropEffect}");
                             break;
-                        case MpAvEditorBindingFunctionType.NotifySubSelectionEnabledChanged:
-                            var subSelChangedNtf = MpJsonObject.DeserializeBase64Object<MpQuillSubSelectionChangedNotification>(msgJsonStr);
-                            ctvm.IsSubSelectionEnabled = subSelChangedNtf.isSubSelectionEnabled;
-                            break;
+                        //case MpAvEditorBindingFunctionType.NotifySubSelectionEnabledChanged:
+                        //    var subSelChangedNtf = MpJsonObject.DeserializeBase64Object<MpQuillSubSelectionChangedNotification>(msgJsonStr);
+                        //    ctvm.IsSubSelectionEnabled = subSelChangedNtf.isSubSelectionEnabled;
+                        //    break;
                         case MpAvEditorBindingFunctionType.NotifyException:
                             var exceptionMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonStr);
                             MpConsole.WriteLine(exceptionMsgObj);
@@ -299,6 +301,9 @@ namespace MonkeyPaste.Avalonia {
                     exception = null;
                     retval = CefV8Value.CreateString(JsonConvert.SerializeObject(citl));
                     return true;
+                }
+                if(name == "getDragData") {
+
                 }
             } else if(name.StartsWith("notify")) {
                 // js is setting cs data..

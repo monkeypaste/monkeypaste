@@ -10,3 +10,7 @@ function getAllTemplatesFromDb_get() {
     }
     return all_templates;
 }
+
+function getDragData_get() {
+
+}

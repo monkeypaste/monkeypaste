@@ -31,8 +31,8 @@ function initDragDrop() {
     let allDocTagsQueryStr = allDocTags.join(',');
     //let editorElms = document.getElementById('editor').querySelectorAll(allDocTagsQueryStr);
 
-    enableDragDropOnElement(document.body);
-    enableDragDropOnElement(window);
+    //enableDragDropOnElement(document.body);
+    //enableDragDropOnElement(window);
     enableDragDropOnElement(document.getElementById('editor'));
 
     //Array.from(editorElms).forEach(elm => {
@@ -61,7 +61,7 @@ function initDragDropOverrides() {
 
         event.stopPropagation();
 
-        //onDragEnter(event);
+        onDragStart(event);
     }, true);
 
     window.addEventListener('dragend', function (event) {
@@ -116,6 +116,7 @@ function enableDragDropOnElement(elm) {
 
             elm.addEventListener('mp_dragstart', onDragStart);
         } else if (BlockTags.includes(elm.tagName.toLowerCase())) {
+            //elm.addEventListener('mp_dragstart', onDragStart);
 
             elm.addEventListener('dragenter', onDragEnter)
             elm.addEventListener('dragover', onDragOver);
@@ -136,7 +137,7 @@ function enableDragDropOnElement(elm) {
 	}
      else {
 
-        elm.addEventListener('dragenter', onDragEnter)
+        elm.addEventListener('dragenter', onDragEnter);
         elm.addEventListener('dragover', onDragOver);
         elm.addEventListener('dragleave', onDragLeave);
         elm.addEventListener('drop', onDrop);
@@ -183,7 +184,7 @@ function isDragDataValid(dt) {
 function isDragValid(dt,emp) {
     if (isDragDataValid(dt)) {
         let sel_range = getSelection();
-        if (isPointInRange(emp, sel_range)) {
+        if (sel_range.length > 0 && isPointInRange(emp, sel_range)) {
             return false;
         }
         return true;
@@ -432,7 +433,8 @@ function onKeyDown_debug(e) {
 
 function onDragEnter(e) {
     e = startDrop(e);
-    drawOverlay();
+    //onDragOver(e);
+    //drawOverlay();
 }
 
 function onDragOver(e) {
@@ -497,6 +499,13 @@ function onDragOver(e) {
 }
 
 function onDragLeave(e) {
+    let mp = getEditorMousePos(e);
+    let editor_rect = getEditorRect();
+    if (!isPointInRect(editor_rect,mp)) {
+        e.stopPropagation();
+        e.preventDefault();
+        resetDragDrop();
+	}
     drawOverlay();
 }
 
@@ -590,4 +599,5 @@ function onDrop(e) {
 
 function onDragStart(e) {
     log('drag started yo');
+    
 }

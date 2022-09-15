@@ -3,11 +3,13 @@
 function onEditorSelectionChanged_ntf(range,isSelChangeBegin) {
 	// output MpQuillContentSelectionChangedMessage
 
+	let text = getSelectedText();
 	let selChangedObj = {
 		copyItemId: CopyItemId,
 		index: range.index,
 		length: range.length,
-		isChangeBegin: isSelChangeBegin
+		isChangeBegin: isSelChangeBegin,
+		selText: text
 	};
 
 	let base64Str = toBase64FromJsonObj(selChangedObj);

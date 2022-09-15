@@ -888,7 +888,6 @@
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Mac\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
     <Folder Include="Utils\Clipboard\Win32\" />
-    <Folder Include="Utils\Input\Mouse\" />
     <Folder Include="Controls\ProgressRing\" />
   </ItemGroup>
   <ItemGroup>

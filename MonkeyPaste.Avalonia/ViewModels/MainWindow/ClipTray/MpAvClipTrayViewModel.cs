@@ -366,9 +366,9 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipTileViewModel DragItem {
             get {
-                var dragItem = Items.FirstOrDefault(x => x.IsItemDragging);
+                var dragItem = Items.FirstOrDefault(x => x.IsTileDragging);
                 if (dragItem == null) {
-                    return PinnedItems.FirstOrDefault(x => x.IsItemDragging);
+                    return PinnedItems.FirstOrDefault(x => x.IsTileDragging);
                 }
                 return dragItem;
             }
@@ -844,9 +844,12 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsPinTrayVisible {
             get {
-                if(IsExternalDragOverClipTrayContainer || !IsPinTrayEmpty) {
+                if (!IsPinTrayEmpty) {
                     return true;
                 }
+                if (IsPinTrayDropPopOutVisible) {
+                    return true;
+                } 
                 return false;
             }
         }
@@ -862,18 +865,19 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsAnyTileDragging {
             get {
-                return Items.Any(x => x.IsItemDragging) || PinnedItems.Any(x => x.IsItemDragging);
+                return Items.Any(x => x.IsTileDragging) || PinnedItems.Any(x => x.IsTileDragging);
             }
         }
 
-        public bool IsExternalDragOverClipTrayContainer { get; set; }
+        //public bool IsExternalDragOverClipTrayContainer { get; set; }
         public bool IsDragOverPinTray { get; set; }
         public bool IsPinTrayDropPopOutVisible {
             get {
+
                 // show popout when no items are visible
                 // TODO This needs to account for external dragover
                 // TODO? at some point using global drag event  when mw is hidden (and pref enabled) have pop out panel automatically pop out for drop
-                return (IsAnyTileDragging || IsExternalDragOverClipTrayContainer) && IsPinTrayEmpty;
+                return (IsAnyTileDragging || MpAvMainWindowViewModel.Instance.IsDropOverMainWindow) && IsPinTrayEmpty;
             }
         }
 
@@ -1500,7 +1504,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-        public string PinTrayDropForegroundHexColor => IsDragOverPinTray ? MpSystemColors.Yellow : MpSystemColors.oldlace;
         public int MaxTotalVisibleClipTiles {
             get {
                 return 10;// (int)Math.Ceiling(ClipTrayScreenWidth / MpMeasurements.Instance.ClipTileBorderMinWidth);
