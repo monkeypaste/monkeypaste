@@ -8,7 +8,7 @@ function getRandomColor() {
 }
 
 function isBright(hex_or_color_name_or_rgb_or_rgba, brightThreshold = 150) {
-    var rgb = hexToRgb(hex_or_color_name_or_rgb_or_rgba.toLowerCase());
+    var rgb = hexToRgb(hex_or_color_name_or_rgb_or_rgba);
     var grayVal = Math.sqrt(
         rgb.R * rgb.R * .299 +
         rgb.G * rgb.G * .587 +
@@ -53,6 +53,10 @@ function rgbaToRgbaStyle(rgba) {
 
 
 function hexToRgba(hexStr) {
+    if (typeof hexStr !== 'string' && !(hexStr instanceof String)) {
+        debugger;
+    }
+    hexStr = hexStr.toLowerCase()
     if (hexStr.indexOf('#') != -1) {
         hexStr = hexStr.replace('#', '');
     }

@@ -65,12 +65,6 @@ body {
     background-color: cornsilk;
     }*/
 
-#overlayCanvas {
-    position: absolute;
-    background-color: transparent;    
-    z-index: 1;
-    pointer-events: none;
-}
 /*div:focus {
     background-color: aqua;
 }

@@ -1,5 +1,6 @@
 ﻿var CefDragData;
 var DropElm;
+var DragElm;
 
 var IsSplitDrop = false;
 var IsPreBlockDrop = false;
@@ -22,10 +23,12 @@ var PreDropState = null;
 var LastMousePos = null;
 var LastMouseUpdateDateTime = null;
 
+const MIN_DRAG_DIST = 10;
+
 var DropProcessInvokeCount = 0;
 
 function initDragDrop() {
-    initDragDropOverrides();
+    initWindowDragDrop();
 
     let allDocTags = [...InlineTags, ...BlockTags];
     let allDocTagsQueryStr = allDocTags.join(',');
@@ -33,16 +36,14 @@ function initDragDrop() {
 
     //enableDragDropOnElement(document.body);
     //enableDragDropOnElement(window);
-    enableDragDropOnElement(document.getElementById('editor'));
+    enableDragDropOnElement(getEditorContainerElement());
 
     //Array.from(editorElms).forEach(elm => {
     //    enableDragDropOnElement(elm);
     //});    
-    window.addEventListener('mousemove', onMouseMove_dragOverFallback);
-    window.addEventListener('mousedown', onMouseDown);
+
 
     //setInterval(onTick, 1000)
-    window.addEventListener('keydown', onKeyDown_debug);
 }
 
 function onTick() {
@@ -51,98 +52,12 @@ function onTick() {
 
 }
 
-function initDragDropOverrides() {
-    // from https://stackoverflow.com/a/46986927/105028
-    window.addEventListener('dragstart', function (event) {
-        event.dataTransfer.effectAllowed = 'all';
-
-        var event2 = new CustomEvent('mp_dragstart', { detail: { original: event } });
-        event.target.dispatchEvent(event2);
-
-        event.stopPropagation();
-
-        onDragStart(event);
-    }, true);
-
-    window.addEventListener('dragend', function (event) {
-        //var event2 = new CustomEvent('mp_dragend', { detail: { original: event } });
-        //event.target.dispatchEvent(event2);
-
-        event.stopPropagation();
-
-        resetDragDrop(true);
-    }, true);
-
-    window.addEventListener('drop', function (event) {
-        //var event2 = new CustomEvent('mp_drop', { detail: { original: event } });
-        //event.target.dispatchEvent(event2);
-
-        event.stopPropagation();
-
-        onDrop(event);
-    }, true);
-
-    //window.addEventListener('dragenter', function (event) {
-    //    var event2 = new CustomEvent('mp_dragenter', { detail: { original: event } });
-    //    event.target.dispatchEvent(event2);
-
-    //    event.stopPropagation();
-    //}, true);
-
-    //window.addEventListener('dragover', function (/*event*/) {
-    //    //var event2 = new CustomEvent('mp_dragover', { detail: { original: event } });
-    //    //event.target.dispatchEvent(event2);
-        
-
-    //    event.stopPropagation();
-    //}, true);
-
-
-    //window.addEventListener('dragover', function (event) {
-    //    var event2 = new CustomEvent('mp_dragover', { detail: { original: event } });
-    //    event.target.dispatchEvent(event2);
-
-    //    event.stopPropagation();
-    //}, true);
-
-
-}
-
 
 function enableDragDropOnElement(elm) {
-    if (elm.tagName) {
-        if (InlineTags.includes(elm.tagName.toLowerCase())) {
-            elm.setAttribute('draggable', true);
-
-            elm.addEventListener('mp_dragstart', onDragStart);
-        } else if (BlockTags.includes(elm.tagName.toLowerCase())) {
-            //elm.addEventListener('mp_dragstart', onDragStart);
-
-            elm.addEventListener('dragenter', onDragEnter)
-            elm.addEventListener('dragover', onDragOver);
-            elm.addEventListener('dragleave', onDragLeave);
-            elm.addEventListener('drop', onDrop);
-
-            //elm.addEventListener('mp_drop', onDrop);
-        } else if (elm.nodeName == 'BODY') {
-            // only used to capture mouse when outside editor
-            //elm.addEventListener('dragenter', onDragEnter);
-            //elm.addEventListener('dragleave', onDragLeave);
-            elm.addEventListener('dragover', onDragOver);
-            elm.addEventListener('drop', onDrop);
-        } else {
-
-            log('dragdrop warning! attempting to enable unknown element: ' + elm.id);
-		}
-	}
-     else {
-
-        elm.addEventListener('dragenter', onDragEnter);
-        elm.addEventListener('dragover', onDragOver);
-        elm.addEventListener('dragleave', onDragLeave);
-        elm.addEventListener('drop', onDrop);
-	}
-    //elm.addEventListener('drop', onDrop);
+    elm.addEventListener('dragenter', onDragEnter)
+    elm.addEventListener('dragover', onDragOver);
+    elm.addEventListener('dragleave', onDragLeave);
+    elm.addEventListener('drop', onDrop);
 }
 
 function isDropping() {
@@ -171,7 +86,13 @@ function isBlockDrop() {
 
 function isDragSource() {
     let selection = quill.getSelection();
-    return selection.length > 0;
+    if (!selection) {
+        if (DragElm == null) {
+            return false;
+        }
+        return true;
+	}
+    return  selection.length > 0;
 }
 
 function isDragDataValid(dt) {
@@ -184,7 +105,8 @@ function isDragDataValid(dt) {
 function isDragValid(dt,emp) {
     if (isDragDataValid(dt)) {
         let sel_range = getSelection();
-        if (sel_range.length > 0 && isPointInRange(emp, sel_range)) {
+
+        if (sel_range && sel_range.length > 0 && isPointInRange(emp, sel_range)) {
             return false;
         }
         return true;
@@ -200,6 +122,8 @@ function resetDragDrop(isEscCancel = false) {
     IsDragCancel = isEscCancel;
 
     DropElm = null;
+    DragElm = null;
+
     //setTextSelectionBgColor('lightblue');
     //setTextSelectionFgColor('black');
     CefDragData = null;
@@ -255,39 +179,6 @@ function endDrag(isUserCancel = false) {
     resetDragDrop(isUserCancel);
 }
 
-function startDrop(e) {
-    if (!e.currentTarget || e.currentTarget.id == 'editor') {
-        // currentTarget null when passed from host so force target to editor
-        e.currentTarget = getEditorContainerElement();
-        let dt = getDataTransferObject(e);
-        if (isDragDataValid(dt)) {
-            DropElm = e.currentTarget;
-        }
-    }
-    
-    updateModKeys(e);
-    if (isDropping()) {
-        if (isEditorToolbarVisible()) {
-            PreDropState = 'editable';
-        } else if (IsSubSelectionEnabled) {
-            PreDropState = 'subselectable';
-        } else {
-            PreDropState = 'readonly';
-        }
-
-        log('drop started from state: ' + PreDropState);
-
-        if (typeof e.preventDefault === 'function') {
-            e.preventDefault();
-		}
-        //
-        e = setDropEffect(e);
-
-        disableTextWrapping();
-        showScrollbars();
-    }
-    return e;
-}
 
 function getEditorMousePos(e) {
     if (!e || !e.clientX || !e.clientY) {
@@ -338,15 +229,25 @@ function getDragData(dt) {
     //    convertDataTransferToHtml(dt) :
     //    convertDataTransferToPlainText(dt);
     //let drag_data = convertDataTransferToHtml(dt);
-    if (isDragSource()) {
-        let sel = getSelection();
-        return getText(sel);
-	}
+ //   if (isDragSource()) {
+ //       let sel = getSelection();
+ //       if (sel) {
+ //           return getText(sel);
+	//	}
+        
+	//}
     let drag_data = convertDataTransferToPlainText(dt);
     return drag_data;
 }
 
 function dropData(docIdx, data) {
+    if (data.includes('{t{') && data.includes('}t}')) {
+        // single template drop
+        let tguid = data.split(',')[0].replace('{t{', '');
+        let t = getTemplateDefByGuid(tguid);
+        insertTemplate({ index: docIdx, length: 1 }, t);
+        return;
+	}
     //quill.clipboard.dangerouslyPasteHTML(DropIdx + 1, drop_content_data);
     insertContent(docIdx, data, true);
 }
@@ -370,69 +271,39 @@ function setDropEffect(e) {
     return e;
 }
 
-function onMouseDown(e) {
-    if (!IsSubSelectionEnabled) {
-        onContentDraggableChanged_ntf(true);
-        return;
-    }
-
-    let sel = getSelection();
-    let is_none_selected = sel.length == 0;
-    if (is_none_selected) {
-        onContentDraggableChanged_ntf(false);
-        return;
-    }
-
-    let emp = getEditorMousePos(e);
-    let is_down_on_range = isPointInRange(emp, sel);
-    let is_all_selected = isAllSelected();
-
-    is_draggable = is_down_on_range || is_all_selected;
-    onContentDraggableChanged_ntf(is_draggable);
-}
-
-function onMouseMove_dragOverFallback(e) {
-    //let offset = getDocIdxFromPoint({ x: parseFloat(e.clientX), y: parseFloat(e.clientY) });
-    //log('offset: ' + offset);
-
-    if (!isDropping()) {
-        if (parseInt(e.buttons) != 0) {
-            // mouse button is down but not dragging
-
-            
-            //showTemplateUserSelection();
-		}
-        
-        return;
-    }
-    log('window.mousemove dragover fallback resetting drag drop');
-    resetDragDrop();
-    return;
-
-    if (parseInt(e.buttons) == 0) {
-        resetDragDrop();
-        return;
-    }
-
-    // dragging must be outside editor (otherwise this event is suppressed), likely in a toolbar but still within window
-    if (DropIdx < 0) {
-        return;
-	}
-    LastMousePos = getEditorMousePos(e);
-    LastMouseUpdateDateTime = Date.now();
-
-    DropIdx = -1;
-    drawOverlay();
-}
-
-function onKeyDown_debug(e) {
-    if (IsDragging && e.code == 'Escape') {
-        endDrag(true);
-	}
-}
 
 function onDragEnter(e) {
-    e = startDrop(e);
+    if (!e.currentTarget || e.currentTarget.id == 'editor') {
+        // currentTarget null when passed from host so force target to editor
+        e.currentTarget = getEditorContainerElement();
+        let dt = getDataTransferObject(e);
+        if (isDragDataValid(dt)) {
+            DropElm = e.currentTarget;
+        }
+    }
+
+    updateModKeys(e);
+    if (isDropping()) {
+        if (isEditorToolbarVisible()) {
+            PreDropState = 'editable';
+        } else if (IsSubSelectionEnabled) {
+            PreDropState = 'subselectable';
+        } else {
+            PreDropState = 'readonly';
+        }
+
+        log('drop started from state: ' + PreDropState);
+
+        if (typeof e.preventDefault === 'function') {
+            e.preventDefault();
+        }
+        //
+        e = setDropEffect(e);
+
+        disableTextWrapping();
+        showScrollbars();
+    }
+
     //onDragOver(e);
     //drawOverlay();
 }
@@ -475,6 +346,7 @@ function onDragOver(e) {
                 DropProcessInvokeCount++;
                 DropIdx = getDocIdxFromPoint(LastMousePos, true, DropProcessInvokeCount);
 
+
                 //let mp_elm = document.elementFromPoint(LastMousePos.x, LastMousePos.y);
                 //let blot = Quill.find(mp_elm);
                 //let test_index = blot.offset(quill.scroll);
@@ -500,7 +372,7 @@ function onDragOver(e) {
 
 function onDragLeave(e) {
     let mp = getEditorMousePos(e);
-    let editor_rect = getEditorRect();
+    let editor_rect = getEditorContainerRect();
     if (!isPointInRect(editor_rect,mp)) {
         e.stopPropagation();
         e.preventDefault();
@@ -539,15 +411,35 @@ function onDrop(e) {
 
 
     if (isDragCut()) {
-
         if (is_internal_drop) {
-            let cur_sel = quill.getSelection();
-            if (cur_drop_idx > cur_sel.index) {
-                // when dropidx is after cut remove cut length from drop idx
-                log('drop cut adjusted from: ' + cur_drop_idx);
-                cur_drop_idx -= cur_sel.length;
-                log('drop cut adjusted to: ' + cur_drop_idx);
+            let cur_sel = getSelection();
+            if (!cur_sel) {
+                // should only happen for single template drag
+                cur_sel = {};
+                let tdata = convertDataTransferToPlainText(dt);
+                let tguid = tdata.split(',')[0].replace('{t{', '');
+                let tiguid = tdata.split(',')[1].replace('}t}','');
+                cur_sel.index = getTemplateDocIdx(tiguid);
+                cur_sel.length = 0;
+                let t = getTemplateDefByGuid(tguid);
+                if (cur_sel.index < cur_drop_idx) {
+                    cur_drop_idx -= 3;
+				}
+                quill.deleteText(cur_sel.index - 1, 3);
+                insertTemplate({ index: cur_drop_idx, length: 0 }, t);
+                //moveTemplate(tiguid, cur_drop_idx, false);
+                //focusTemplate(tguid, false, tiguid);
+                resetDragDrop();
+                return;
 			}
+            if (cur_sel) {
+                if (cur_drop_idx > cur_sel.index) {
+                    // when dropidx is after cut remove cut length from drop idx
+                    log('drop cut adjusted from: ' + cur_drop_idx);
+                    cur_drop_idx -= cur_sel.length;
+                    log('drop cut adjusted to: ' + cur_drop_idx);
+                }
+            } 
             setTextInRange(cur_sel, '');
         } else {
             // NOTE host should be notified of cut here or just handles if drop is success
@@ -555,7 +447,7 @@ function onDrop(e) {
         }
     }
     // to retain selection store doc length before paste to know drop data length (diff'd w/ length after)
-    let pre_doc_length = quill.getLength();
+    let pre_doc_length = getDocLength();
 
     let length_delta = 0;
     let post_sel_start_idx = cur_drop_idx;
@@ -599,5 +491,15 @@ function onDrop(e) {
 
 function onDragStart(e) {
     log('drag started yo');
-    
+    DragElm = e.target;
+
+    if (e.target.classList !== undefined &&
+        e.target.classList.contains('ql-template-embed-blot')) {
+        let t = getTemplateFromDomNode(e.target);
+        e.dataTransfer.setData('text/html', e.target.outerHTML);
+        e.dataTransfer.setData('text/plain', '{t{'+t.templateGuid + ',' + t.templateInstanceGuid+'}t}');
+    } else {
+        e.dataTransfer.setData('text/html', getSelectedHtml());
+        e.dataTransfer.setData('text/plain', getSelectedText());       
+	}
 }

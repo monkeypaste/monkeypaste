@@ -1,8 +1,9 @@
 function initTextContent(itemDataStr) {
 	try {
-		setHtml('');
-		insertHtml(0, itemDataStr);
-		//setHtml(itemHtmlStr);
+		//setHtml('');
+		//insertHtml(0, itemDataStr);
+		setHtml(itemDataStr);
+		
 	} catch (ex) {
 		//malformed or unsupported content was 
 		onException_ntf('setHtml', ex);

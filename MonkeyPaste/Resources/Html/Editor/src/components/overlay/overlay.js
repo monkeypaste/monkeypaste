@@ -8,7 +8,7 @@ var SelectedHighlightRectIdx = -1;
 var OverlayGlobalAlpha = 0.7;
 
 function updateOverlayBounds(overlayCanvas) {
-    let editorRect = getEditorRect();
+    let editorRect = getEditorContainerRect();
 	overlayCanvas.style.left = editorRect.left;
 	overlayCanvas.style.top = editorRect.top;
 	overlayCanvas.width = editorRect.width;
@@ -19,7 +19,7 @@ function drawUnderlines(ctx, color = 'red', thickness = '0.5') {
     let p1 = null;
     let p2 = null;
     let count = quill.getLength();
-    let windowRect = getEditorRect();
+    let windowRect = getEditorContainerRect();
 
     for (var i = 0; i < count; i++) {
         //log('drawing idx ' + i + ' of ' + count);
@@ -94,7 +94,7 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5', line_style = [5,
     }
 
     let block_line_offset = 3.0;
-    let editor_rect = getEditorRect();
+    let editor_rect = getEditorContainerRect();
 
     let line_start_idx = getLineStartDocIdx(drop_idx);
     let line_start_rect = getCharacterRect(line_start_idx);
@@ -231,7 +231,13 @@ function drawTextSelection(ctx) {
     setTextSelectionBgColor(sel_bg_color);
     setTextSelectionFgColor(sel_fg_color);
 
-    setCaretColor(caret_color); 
+    setCaretColor(caret_color);
+
+    if (BlurredSelectionRects != null) {
+        BlurredSelectionRects.forEach((sel_rect) => {
+            drawRect(ctx, sel_rect, sel_bg_color,'transparent', 0, 75);
+        });
+	}
 }
 
 

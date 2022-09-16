@@ -13,7 +13,7 @@ function initPlainHtmlConverter() {
 
 	loadQuill('wpf');
 
-	document.getElementsByClassName("ql-toolbar")[0].classList.add("env-wpf");
+	//document.getElementsByClassName("ql-toolbar")[0].classList.add("env-wpf");
 	disableReadOnly();
 	//hideEditorToolbar();
 	window.addEventListener(

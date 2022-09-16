@@ -1,11 +1,12 @@
 const TEMPLATE_VALID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890#-_ ";
 const MIN_TEMPLATE_DRAG_DIST = 5;
 
+var availableTemplates = null;
+
 var ENCODED_TEMPLATE_OPEN_TOKEN = "{t{";
 var ENCODED_TEMPLATE_CLOSE_TOKEN = "}t}";
 var ENCODED_TEMPLATE_REGEXP;
 
-var MouseDownOnTemplatePos;
 var IsMovingTemplate = false;
 
 var IsAnyTemplateBgTemporary = false;
@@ -90,11 +91,16 @@ function registerTemplateSpan() {
 
 function initTemplates(usedTemplates, isPasting) {
     ENCODED_TEMPLATE_REGEXP = new RegExp(ENCODED_TEMPLATE_OPEN_TOKEN + ".*?" + ENCODED_TEMPLATE_CLOSE_TOKEN, "");
+    // scan doc for templates even if none provided
+   
 
     if (usedTemplates != null) {
         decodeTemplates(usedTemplates);
     }
-
+    let telml = getTemplateElements();
+    telml.forEach((t_elm) => {
+        applyTemplateToDomNode(t_elm, getTemplateFromDomNode(t_elm));
+    });
     Array
         .from(document.getElementsByClassName('resizable-textarea'))
         .forEach((rta) => {
@@ -107,13 +113,14 @@ function initTemplates(usedTemplates, isPasting) {
 
     initTemplateToolbarButton();
 
-    document.getElementById('templateNameTextInput').onfocus = onTemplateNameTextAreaGotFocus;
-    document.getElementById('templateNameTextInput').onblur = onTemplateNameTextAreaLostFocus;
-    document.getElementById('templateNameTextInput').onkeydown = onTemplateNameTextArea_keydown;
-    document.getElementById('templateNameTextInput').onkeyup = onTemplateNameTextArea_keyup;
+    document.getElementById('templateNameTextInput').addEventListener('focus',onTemplateNameTextAreaGotFocus);
+    document.getElementById('templateNameTextInput').addEventListener('blur',onTemplateNameTextAreaLostFocus);
+    document.getElementById('templateNameTextInput').addEventListener('keydown',onTemplateNameTextArea_keydown);
+    document.getElementById('templateNameTextInput').addEventListener('keyup',onTemplateNameTextArea_keyup);
 
-    document.getElementById('templateDetailTextInput').onfocus = onTemplateDetailTextAreaGotFocus;
-    document.getElementById('templateDetailTextInput').onblur = onTemplateDetailTextAreaLostFocus;
+    document.getElementById('templateDetailTextInput').addEventListener('focus',onTemplateDetailTextAreaGotFocus);
+    document.getElementById('templateDetailTextInput').addEventListener('blur',onTemplateDetailTextAreaLostFocus);
+
 
     if (isPasting) {
         // this SHOULD only happen when there are templates 
@@ -126,28 +133,6 @@ function initTemplates(usedTemplates, isPasting) {
     }
 }
 
-function initTemplateToolbarButton() {
-    // Toolbar Template Button
-    const templateToolbarButton = new QuillToolbarButton({
-        //icon: '<img id="templateToolbarButton" style="height:20px" src="data:image/png;base64,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"></img>'//`<svg viewBox="0 0 18 18"> <path class="ql-stroke" d="M5,3V9a4.012,4.012,0,0,0,4,4H9a4.012,4.012,0,0,0,4-4V3"></path></svg>`
-        icon: '<i id="templateToolbarButton" class="fa-solid fa-masks-theater"></i>'
-    })
-
-    templateToolbarButton.onClick = function (e) {
-        var templateButton = document.getElementById('templateToolbarButton');
-        showTemplateToolbarContextMenu(templateButton);
-
-        //var tl = getAvailableTemplateDefinitions();
-        //if (tl.length > 0) {
-        //    showTemplateToolbarContextMenu(templateButton);
-        //} else {
-        //    createTemplate();
-        //}
-
-        event.stopPropagation(e);
-    }
-    templateToolbarButton.attach(quill);
-}
 //#endregion
 
 //#region Convert To/From Blot/DomNode
@@ -172,6 +157,7 @@ function getTemplateFromDomNode(domNode) {
 
 function applyTemplateToDomNode(node, value) {
     if (node == null || value == null) {
+        
         return node;
     }
 
@@ -198,65 +184,59 @@ function applyTemplateToDomNode(node, value) {
     //node.setAttribute('onselectstart', 'return false;');
     //node.setAttribute('onmousedown', 'return false;');
 
-    node.contentEditable = 'false';
+    //node.contentEditable = 'false';
     node.setAttribute('isFocus', false);
     node.setAttribute("spellcheck", "false");
     node.setAttribute('class', 'ql-template-embed-blot');
-
-    
+    node.setAttribute('draggable', true);
     node.setAttribute('contenteditable', false);
 
     var templateDocIdxCache;
-
-    function pointerDown(e) {
-        node.onpointermove = pointerMove;
+    function onTemplatePointerDown(e) {
+        node.addEventListener('pointermove', onTemplatePointerMove);
         node.setPointerCapture(e.pointerId);
-        MouseDownOnTemplatePos = { x: e.clientX, y: e.clientY };
+        templateDocIdxCache
     }
 
-    function pointerUp(e) {
+    function onTemplatePointerUp(e) {
         templateDocIdxCache = null;
 
-        node.onpointermove = null;
+        node.removeEventListener('pointermove', onTemplatePointerMove);
         node.releasePointerCapture(e.pointerId);
-        let curMousePos = { x: e.clientX, y: e.clientY };
-        if (dist(MouseDownOnTemplatePos, curMousePos) < MIN_TEMPLATE_DRAG_DIST) {
-            return;
-        }
-
-        let targetDocIdx = getDocIdxFromPoint({ x: e.clientX, y: e.clientY });
-
-        if (targetDocIdx < 0) {
-            return;
-        }
-        
-        moveTemplate(node.getAttribute('templateInstanceGuid'), targetDocIdx, e.ctrlKey);
     }
 
-    function pointerMove(e) {
-        let curMousePos = { x: e.clientX, y: e.clientY };
-        if (dist(MouseDownOnTemplatePos, curMousePos) < MIN_TEMPLATE_DRAG_DIST) {
+    function onTemplatePointerMove(e) {
+        let curMousePos = getEditorPosFromTemplateMouse(e);
+        if (!IsMovingTemplate && dist(MouseDownOnTemplatePos, curMousePos) < MIN_TEMPLATE_DRAG_DIST) {
             return;
         }
-
         if (templateDocIdxCache == null) {
             templateDocIdxCache = getTemplateElementsWithDocIdx();
         }
 
-        let docIdx = getDocIdxFromPoint({ x: e.clientX, y: e.clientY }, templateDocIdxCache);
+        let docIdx = getDocIdxFromPoint(curMousePos, templateDocIdxCache);
         log('docIdx: ' + docIdx);
-
-        if (docIdx < 0) {
+         if (docIdx < 0) {
             return;
         }
-        if (!quill.hasFocus()) {
-            quill.focus();
-        }
-        setEditorSelection(docIdx, 0);
+        moveTemplate(value.templateInstanceGuid, docIdx, false);
+       
+        //if (!quill.hasFocus()) {
+        //    quill.focus();
+        //}
+        //setEditorSelection(docIdx, 0);
     }
 
-    node.onpointerdown = pointerDown;
-    node.onpointerup = pointerUp;
+    function getEditorPosFromTemplateMouse(e) {
+        return getEditorMousePos(e);
+        let curMousePos = { x: e.pageX, y: e.pageY };
+        curMousePos.x -= e.currentTarget.offsetLeft;
+        curMousePos.y -= e.currentTarget.offsetTop;
+        return curMousePos;
+	}
+
+    //node.addEventListener('pointerdown', onTemplatePointerDown);
+    //node.addEventListener('pointerup', onTemplatePointerUp);
 
     node.addEventListener('click', function (e) {
         focusTemplate(node.getAttribute('templateGuid'),false, node.getAttribute('templateInstanceGuid'));
@@ -264,9 +244,8 @@ function applyTemplateToDomNode(node, value) {
 
     //node.addEventListener('dragstart', function (e) {
     //    log('dragstart template');
+    //    e.dataTransfer.setData('text/html', node.outerHTML);
     //});
-
-    //initDragDrop();
 
     let observer = new MutationObserver(function (mutationsList, observer) {
         console.log(mutationsList);
@@ -665,7 +644,7 @@ function moveTemplate(tiguid, nidx, isCopy) {
 
     let tidx = getTemplateDocIdx(tiguid);
 
-    let t = getTemplateInstanceElement(tiguid);
+    let t = getTemplateDefByInstanceGuid(tiguid);
 
     if (isCopy) {
         t.templateInstanceGuid = generateGuid();
@@ -918,6 +897,14 @@ function getTemplateDefByGuid(tguid) {
     return getUsedTemplateDefinitions().find(x=>x.domNode.getAttribute('templateGuid') == tguid);
 }
 
+function getTemplateDefByInstanceGuid(tiguid) {
+    let telm = getTemplateElements(null, tiguid);
+    if (!telm) {
+        debugger;
+    }
+    return getTemplateFromDomNode(telm);
+}
+
 function getTemplateInstanceElement(tiguid) {
     let telm = document.querySelector('[templateInstanceGuid="' + tiguid + '"]');
     return telm;
@@ -1013,107 +1000,24 @@ function updateTemplatesAfterTextChanged(delta, oldDelta, source) {
         padTemplate(ti.getAttribute('templateInstanceGuid'));
     }
 }
-
-function updateTemplatesAfterSelectionChange(range, oldRange, source, isSubCall = false) {
-    let new_drag_anchor_range_end_doc_idx = -1;
-    let template_elms_in_sel_range = range ? getTemplateElementsInRange(range) : [];
-    if (template_elms_in_sel_range.length > 0) {
-        // template(s) in sel range
-
-        // NOTE template blot doesn't show text selection overlay so style is adjusted
-
-
-        // 1. when template is selected or part of sel range cannot add template
-        // since templates can't contain other templates and by default new template use sel data as template data
-
-        disableCanCreateTemplateToolbarItem();
-
-        if (IsAnyTemplateBgTemporary) {
-            // in case template bg has already been overriden and sel no longer contains that template
-            // clear any needing it before reapplying
-
-            resetAllTemporaryTemplateBgColors();
-		}
-        IsAnyTemplateBgTemporary = true;
-
-        let sel_bg_color = getTextSelectionBgColor();
-
-        template_elms_in_sel_range.forEach((telm) => {
-            setTemplateBgColor(null, telm.getAttribute('templateInstanceGuid'), sel_bg_color, true);
-        });
-
-        // BUG don't know why but dragging towards start and adding tempalte to selection clears selection
-        // so store original range end
-
-
-        if (DragAnchorDocIdxWhenTemplateWithinSelection >= 0) {
-            // anchor was set on previous call
-            IgnoreNextSelectionChange = true;
-            setEditorSelection(range.index, DragAnchorDocIdxWhenTemplateWithinSelection - range.index,'api');
-            //DragAnchorDocIdxWhenTemplateWithinSelection = range.index + oldRange.length;
-   //         if (range.index <= DragAnchorDocIdxWhenTemplateWithinSelection) {
-   //             setEditorSelection(range.index, DragAnchorDocIdxWhenTemplateWithinSelection - range.index);
-   //         } else {
-   //             let temp_start_idx = DragAnchorDocIdxWhenTemplateWithinSelection;
-   //             let temp_length = DragAnchorDocIdxWhenTemplateWithinSelection - range.index;
-   //             setEditorSelection(temp_start_idx, temp_length);
-   //             DragAnchorDocIdxWhenTemplateWithinSelection = range.index;
-			//}
-        } else  {
-            // no anchor set yet
-
-            let is_drag_towards_doc_start = range.index < oldRange.index;
-            let cur_range_end_idx = range.index + oldRange.length;
-            if (is_drag_towards_doc_start) {
-                if (cur_range_end_idx != DragAnchorDocIdxWhenTemplateWithinSelection) {
-                    // when selection dragging towards start, only flag new_anchor if its changed
-                    new_drag_anchor_range_end_doc_idx = cur_range_end_idx;
-				}
-            } else {
-                if (cur_range_end_idx > DragAnchorDocIdxWhenTemplateWithinSelection) {
-                    // flag drag end anchor idx
-                    new_drag_anchor_range_end_doc_idx = cur_range_end_idx;
-                }
-            }
-		}
-
-    } else {
-        // no templates in sel range
-        if (isSubCall) {
-            // this means sel was forced and new doesn't have template
-            DragAnchorDocIdxWhenTemplateWithinSelection = -1;
-		} else if (DragAnchorDocIdxWhenTemplateWithinSelection >= 0) {
-            IgnoreNextSelectionChange = true;
-            setEditorSelection(range.index, DragAnchorDocIdxWhenTemplateWithinSelection - range.index, 'api');
-            updateTemplatesAfterSelectionChange(range, oldRange, source, true);
-            return;
-		}
-        enableCanCreateTemplateToolbarItem();
-
-        if (IsAnyTemplateBgTemporary) {
-           resetAllTemporaryTemplateBgColors();
-        }
-    }
-
-    if (new_drag_anchor_range_end_doc_idx >= 0) {
-        DragAnchorDocIdxWhenTemplateWithinSelection = new_drag_anchor_range_end_doc_idx;
-	}
-}
-
-function showTemplateUserSelection() {
-    resetAllTemporaryTemplateBgColors();
+function updateTemplatesAfterSelectionChange() {
+    // BUG if template is at the end of a line (or maybe just block?) and drag selecting up sel clears, its the reason and its that quill bug
 
     let sel_range = getSelection();
-    if (!sel_range) {
-        return;
-	}
+    let sel_bg_color = 'lightblue';// getTextSelectionBgColor();
     let template_elms_in_sel_range = sel_range ? getTemplateElementsInRange(sel_range) : [];
-    if (template_elms_in_sel_range.length > 0) {
-        let sel_bg_color = getTextSelectionBgColor();
-        template_elms_in_sel_range.forEach((telm) => {
-            setTemplateBgColor(null, telm.getAttribute('templateInstanceGuid'), sel_bg_color, true);
-        });
-    }
+    let all_template_elms = getTemplateElements();
+    all_template_elms.forEach((te) => {
+        let updated_bg_color = null;
+        if (template_elms_in_sel_range.includes(te)) {
+            log('sel template: ' + te.getAttribute('templateInstanceGuid'));
+            updated_bg_color = sel_bg_color;
+        } else {
+            updated_bg_color = te.getAttribute('templateColor');
+        }
+        te.style.backgroundColor = updated_bg_color;
+        te.style.color = isBright(updated_bg_color) ? 'black' : 'white';
+    });
 }
 
 function getTemplateToolbarHeight() {

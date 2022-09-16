@@ -163,7 +163,7 @@ function inflateCharacterRect(docIdx, docIdx_rect, inflateX, inflateY) {
 	docIdx_rect = cleanRect(docIdx_rect);
 
 	if (inflateX || inflateY) {
-		let editor_rect = getEditorRect();
+		let editor_rect = getEditorContainerRect();
 		if (inflateX) {
 			if (isDocIdxLineStart(docIdx)) {
 				//inflate first line char to editor left
@@ -207,7 +207,7 @@ function getLineRect(lineIdx) {
 	let line_end_rect = getCharacterRect(line_doc_range[1]);
 	let line_rect = rectUnion(line_start_rect, line_end_rect);
 
-	let editor_rect = getEditorRect();
+	let editor_rect = getEditorContainerRect();
 	//union line with editor left/right edges
 	line_rect.left = editor_rect.left;
 	line_rect.right = editor_rect.right;
@@ -286,10 +286,19 @@ function getBlockIdxFromPoint(p) {
 	return block_idx;
 }
 
-function isPointInRange(p,range) {
-	let p_doc_idx = getDocIdxFromPoint(p, false);
-	let is_in_range = isDocIdxInRange(p_doc_idx,range);
+function isPointInRange(p, range, snapToBlock) {
+	let is_in_range = false;
+	let range_rects = getRangeRects(range);
+	range_rects.forEach((range_rect) => {
+		if (isPointInRect(range_rect, p)) {
+			is_in_range = true;
+		}
+	});
 	return is_in_range;
+
+	//let p_doc_idx = getDocIdxFromPoint(p, false);
+	//let is_in_range = isDocIdxInRange(p_doc_idx,range);
+	//return is_in_range;
 }
 
 
@@ -298,7 +307,7 @@ function getDocIdxFromPoint_slow(p, snapToLine, invokeId = 0) {
 		return -1;
 	}
 	
-	let editor_rect = getEditorRect();
+	let editor_rect = getEditorContainerRect();
 
 	if (!isPointInRect(editor_rect,p)) {
 		return -1;

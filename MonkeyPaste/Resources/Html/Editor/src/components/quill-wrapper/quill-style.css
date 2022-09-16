@@ -12,6 +12,7 @@
     width: 100%;
     position: fixed;
     top: 0em;
+    display: block;
 }
 .ql-toolbar-env-web {
     display: block;

@@ -208,12 +208,12 @@ function drawPolygon(ctx, points, stroke = 'black', fill = 'black', width = 0) {
 }
 
 function editorToScreenPoint(ep) {
-    let editor_rect = getEditorRect();
+    let editor_rect = getEditorContainerRect();
     return { x: ep.x + editor_rect.left, y: ep.y + editor_rect.top };
 }
 
 function screenToEditorPoint(sp) {
-    let editor_rect = getEditorRect();
+    let editor_rect = getEditorContainerRect();
     return { x: sp.x - editor_rect.left, y: sp.y - editor_rect.top };
 }
 
@@ -229,6 +229,6 @@ function editorToScreenRect(er) {
 }
 
 function screenToEditorRect(sp) {
-    let editor_rect = getEditorRect();
+    let editor_rect = getEditorContainerRect();
     return { x: sp.x - editor_rect.left, y: sp.y - editor_rect.top };
 }

@@ -98,11 +98,16 @@
     <None Remove="Resources\Html\Editor\src\components\content\content_with_source_attributes.js" />
     <None Remove="Resources\Html\Editor\src\components\converter\converter.js" />
     <None Remove="Resources\Html\Editor\src\components\dragdrop\dragdrop.js" />
+    <None Remove="Resources\Html\Editor\src\components\editor\document.js" />
     <None Remove="Resources\Html\Editor\src\components\editor\editor.js" />
-    <None Remove="Resources\Html\Editor\src\components\editor\search.png" />
     <None Remove="Resources\Html\Editor\src\components\editor\selection.js" />
+    <None Remove="Resources\Html\Editor\src\components\editor\window.js" />
     <None Remove="Resources\Html\Editor\src\components\font\font.js" />
+    <None Remove="Resources\Html\Editor\src\components\font\fontFamily.js" />
+    <None Remove="Resources\Html\Editor\src\components\font\fontSize.js" />
     <None Remove="Resources\Html\Editor\src\components\overlay\overlay.js" />
+    <None Remove="Resources\Html\Editor\src\components\quill-wrapper\quill-wrapper.js" />
+    <None Remove="Resources\Html\Editor\src\components\quill-wrapper\toolbar\quill-toolbar.js" />
     <None Remove="Resources\Html\Editor\src\components\table\table.js" />
     <None Remove="Resources\Html\Editor\src\components\template\template.js" />
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\create\createTemplateToolbarItem.js" />
@@ -179,17 +184,31 @@
     <EmbeddedResource Include="Resources\Html\Editor\src\components\dragdrop\dragdrop.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\containers\document.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\containers\window.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\editor\editor.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\editor\search.png" />
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\overlay\selection.js">
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\font\fontFamily.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\font\fontSize.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\font\font.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\overlay\overlay.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\quill-wrapper\quill-wrapper.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\quill-wrapper\toolbar\quill-toolbar.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\table\table.js">

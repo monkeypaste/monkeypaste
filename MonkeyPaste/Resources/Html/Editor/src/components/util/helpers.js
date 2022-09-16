@@ -209,7 +209,13 @@ function hasJsonStructure(str) {
 function isTextElement(elm) {
     return elm.nodeType === 3;
 }
+//function htmlCollectionMove(td, fromIndex, toIndex) {
+//    var before = td.children[curr_index + direction];
+//    var child = td.children[curr_index];
 
+//    td.removeChild(child);
+//    td.insertBefore(child, before); //attempt to insert it   
+//}
 function unescapeHtml(htmlStr) {
     return htmlStr.replace(/&lt;/g, "<")
         .replace(/&gt;/g, ">")

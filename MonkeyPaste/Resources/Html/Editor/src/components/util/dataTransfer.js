@@ -78,6 +78,7 @@ function hasHtml(dt) {
     return getDataByType(dt, 'text/html') != null;
 }
 
+
 function convertDataTransferToPlainText(dt) {
     if (dt == null) {
         return '';
