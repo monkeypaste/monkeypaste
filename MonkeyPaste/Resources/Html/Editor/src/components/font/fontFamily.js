@@ -139,15 +139,25 @@ function refreshFontFamilyPicker(forceFamily = null) {
 
     font_family_picker_label_elm.setAttribute('data-value', curFontFamily_dataValue);
 
+    let opts = Array.from(font_family_picker_options_elm.children);
+
     //iterate through font picker items and clear selection and if there's match set as selected
-    Array.from(font_family_picker_options_elm.children)
-        .forEach((fontFamilySpan) => {
-            fontFamilySpan.classList.remove('ql-selected');
-            if (fontFamilySpan.getAttribute('data-value') == curFontFamily_dataValue) {
-                fontFamilySpan.classList.add('ql-selected');
-                fontFamilyFound = true;
-            }
-        });
+    for (var i = 0; i < opts.length; i++) {
+        let fontFamilySpan = opts[i];
+        fontFamilySpan.classList.remove('ql-selected');
+        if (fontFamilySpan.getAttribute('data-value') == curFontFamily_dataValue) {
+            fontFamilySpan.classList.add('ql-selected');
+            fontFamilyFound = true;
+        }
+	}
+    //Array.from(font_family_picker_options_elm.children)
+    //    .forEach((fontFamilySpan) => {
+    //        fontFamilySpan.classList.remove('ql-selected');
+    //        if (fontFamilySpan.getAttribute('data-value') == curFontFamily_dataValue) {
+    //            fontFamilySpan.classList.add('ql-selected');
+    //            fontFamilyFound = true;
+    //        }
+    //    });
 
     if (!fontFamilyFound) {
         let familyElm = font_family_picker_options_elm.firstChild.cloneNode();

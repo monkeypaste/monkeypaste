@@ -1,14 +1,10 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace MonkeyPaste.Common {    
+namespace MonkeyPaste.Common {
     public abstract class MpJsonObject : MpIJsonObject {
         public static T DeserializeObject<T>(object obj) where T: class{
             if(obj is string objStr) {

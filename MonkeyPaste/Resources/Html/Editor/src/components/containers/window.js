@@ -66,7 +66,7 @@ function onWindowClick(e) {
 	}
 	if (
 		e.path.find(
-			(x) => x.classList && x.classList.contains("ql-template-embed-blot")
+			(x) => x.classList && x.classList.contains(TemplateEmbedClass)
 		) == null
 	) {
 		// unfocus templates 

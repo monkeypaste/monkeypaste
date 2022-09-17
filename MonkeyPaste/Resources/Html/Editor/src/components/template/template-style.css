@@ -1,4 +1,5 @@
 
+
 .ql-template-embed-blot {
     display: inline-flex;
     text-decoration: none;
@@ -10,9 +11,10 @@
     /*-moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;*/
-    
+
     user-select: none;
     margin-left: -3px;
+    margin-right: -5px;
 }
 
     .ql-template-embed-blot:hover:not(.ql-template-embed-blot-focus) {

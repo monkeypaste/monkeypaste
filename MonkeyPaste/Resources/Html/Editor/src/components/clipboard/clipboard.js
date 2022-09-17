@@ -19,7 +19,8 @@ const CB_DATA_TYPES = [
     'text/xml',
     'application/javascript',
     'application/json',
-    'application/octet-stream'
+    'application/octet-stream',
+    'application/json/quill-delta' //custom for quill delta
 ];
 
 function initClipboard() {
@@ -28,20 +29,60 @@ function initClipboard() {
     let editorElms = document.getElementById('editor').querySelectorAll(allDocTagsQueryStr);
 
     Array.from(editorElms).forEach(elm => {
-        enablePasteHandler(elm);
+        // WAIT!! don't enable unless necessary quill handles this better than manually (internally at least)
+
+        //enableClipboardHandlers(elm);
     });
 }
-function enablePasteHandler(elm) {
-    elm.onpaste = onPaste;
+
+function enableClipboardHandlers(elm) {
+    elm.addEventListener('paste', onPaste);
+    elm.addEventListener('cut', onCut);
+    elm.addEventListener('copy', onCopy);
+}
+
+function onCut(e) {
+    e = setDataTransferObject(e, 'cut');
+    let dt = getDataTransferObject(e);
+    log('cut plaintext: ' + getDataTransferPlainText(dt));
+    log('cut html: ' + getDataTransferHtml(dt));
+}
+function onCopy(e) {
+    e = setDataTransferObject(e, 'copy');
+    let dt = getDataTransferObject(e);
+    log('copy plaintext: ' + getDataTransferPlainText(dt));
+    log('copy html: ' + getDataTransferHtml(dt));
 }
 
 function onPaste(e) {
-    var pastedText = undefined;
-    if (e.clipboardData && e.clipboardData.getData) {
-        pastedText = e.clipboardData.getData('text/plain');
+    let dt = getDataTransferObject(e);
+    if (!isDataTransferValid(dt)) {
+        log('cannot paste, dt is invalid');
+        return;
     }
-    //alert(pastedText); 
-    return false; // Prevent the default handler from running.
+    let sel = getSelection();
+    if (!sel) {
+        log('no selection, cannot paste');
+        return;
+    }
+    if (hasQuillDeltaJson(dt)) {
+        setTextInRange(sel, '');
+        let deltaObj = JSON.parse(getDataTransferDeltaJson(dt));
+        deltaObj = [{ retain: sel.index }, ...deltaObj.ops];
+        quill.updateContents(deltaObj);
+        return;
+	}
+    if (hasHtml(dt)) {
+        setTextInRange(sel, '');
+        insertHtml(sel.index, getDataTransferHtml(dt));
+        return;
+    }
+    if (hasPlainText(dt)) {
+        setTextInRange(sel, '');
+        insertText(sel.index, getDataTransferPlainText(dt));
+        return;
+	}
+    log('unknown paste format');
 }
 
 
@@ -54,9 +95,9 @@ function retargetHtmlClipboardData(htmlDataStr) {
     let cb_html = domParser.parseFromString(htmlDataStr, 'text/html');
     let cb_elms = cb_html.querySelectorAll('*');
 
-    Array.from(cb_elms).forEach(elm => {
-        retargetContentItemDomNode(elm, newContentGuid);
-    });
+    for (var i = 0; i < cb_elms.length; i++) {
+        retargetContentItemDomNode(cb_elms[i], newContentGuid);
+	}
     let cb_elms_str = cb_elms.toString();
 
     log('Paste Output:');

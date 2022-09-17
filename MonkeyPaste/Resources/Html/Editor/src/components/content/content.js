@@ -45,6 +45,25 @@ function isInlineElement(elm) {
     return InlineTags.includes(tn);
 }
 
+function isDocIdxInListItem(docIdx) {
+	let doc_idx_elm = getElementAtDocIdx(docIdx);
+	while (doc_idx_elm != null) {
+		if (doc_idx_elm && doc_idx_elm.tagName == 'LI') {
+			return true;
+		}
+		doc_idx_elm = doc_idx_elm.parentNode;
+	}
+	return false;
+}
+function isDocIdxAtEmptyListItem(docIdx) {
+	let block_elm = getBlockElementAtDocIdx(docIdx);
+	if (block_elm.tagName == 'LI') {
+		let doc_idx_elm = getElementAtDocIdx(docIdx);
+		return doc_idx_elm && doc_idx_elm.tagName == 'BR';
+	}
+	return false;
+}
+
 function isDocIdxLineStart(docIdx) {
 	if (isNaN(parseFloat(docIdx))) {
 		return false;
@@ -289,11 +308,12 @@ function getBlockIdxFromPoint(p) {
 function isPointInRange(p, range, snapToBlock) {
 	let is_in_range = false;
 	let range_rects = getRangeRects(range);
-	range_rects.forEach((range_rect) => {
+	for (var i = 0; i < range_rects.length; i++) {
+		let range_rect = range_rects[i];
 		if (isPointInRect(range_rect, p)) {
 			is_in_range = true;
 		}
-	});
+	}
 	return is_in_range;
 
 	//let p_doc_idx = getDocIdxFromPoint(p, false);
@@ -407,10 +427,14 @@ function getBlotAtDocIdx(docIdx) {
 }
 
 function getElementAtDocIdx(docIdx) {
-	let leafNode = quill.getLeaf(docIdx)[0].domNode;
+	let leafNode = getNodeAtDocIdx(docIdx);
 	let leafElementNode =
 		leafNode.nodeType == 3 ? leafNode.parentElement : leafNode;
 	return leafElementNode;
+}
+function getNodeAtDocIdx(docIdx) {
+	let leafNode = quill.getLeaf(docIdx)[0].domNode;
+	return leafNode;
 }
 
 function getBlockElementAtDocIdx(docIdx) {

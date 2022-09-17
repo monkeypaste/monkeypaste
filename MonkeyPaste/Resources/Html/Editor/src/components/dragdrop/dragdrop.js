@@ -226,9 +226,9 @@ function getDragData(dt) {
     // TODO should deal w/ CefDragData here or it shouldn't matter
 
     //let item_data = isFormatted() ?
-    //    convertDataTransferToHtml(dt) :
-    //    convertDataTransferToPlainText(dt);
-    //let drag_data = convertDataTransferToHtml(dt);
+    //    getDataTransferHtml(dt) :
+    //    getDataTransferPlainText(dt);
+    //let drag_data = getDataTransferHtml(dt);
  //   if (isDragSource()) {
  //       let sel = getSelection();
  //       if (sel) {
@@ -236,7 +236,7 @@ function getDragData(dt) {
 	//	}
         
 	//}
-    let drag_data = convertDataTransferToPlainText(dt);
+    let drag_data = getDataTransferPlainText(dt);
     return drag_data;
 }
 
@@ -245,7 +245,7 @@ function dropData(docIdx, data) {
         // single template drop
         let tguid = data.split(',')[0].replace('{t{', '');
         let t = getTemplateDefByGuid(tguid);
-        insertTemplate({ index: docIdx, length: 1 }, t);
+        insertTemplate({ index: docIdx, length: 1 }, t,true);
         return;
 	}
     //quill.clipboard.dangerouslyPasteHTML(DropIdx + 1, drop_content_data);
@@ -416,7 +416,7 @@ function onDrop(e) {
             if (!cur_sel) {
                 // should only happen for single template drag
                 cur_sel = {};
-                let tdata = convertDataTransferToPlainText(dt);
+                let tdata = getDataTransferPlainText(dt);
                 let tguid = tdata.split(',')[0].replace('{t{', '');
                 let tiguid = tdata.split(',')[1].replace('}t}','');
                 cur_sel.index = getTemplateDocIdx(tiguid);
@@ -426,7 +426,7 @@ function onDrop(e) {
                     cur_drop_idx -= 3;
 				}
                 quill.deleteText(cur_sel.index - 1, 3);
-                insertTemplate({ index: cur_drop_idx, length: 0 }, t);
+                insertTemplate({ index: cur_drop_idx, length: 0 }, t,true);
                 //moveTemplate(tiguid, cur_drop_idx, false);
                 //focusTemplate(tguid, false, tiguid);
                 resetDragDrop();
@@ -493,13 +493,5 @@ function onDragStart(e) {
     log('drag started yo');
     DragElm = e.target;
 
-    if (e.target.classList !== undefined &&
-        e.target.classList.contains('ql-template-embed-blot')) {
-        let t = getTemplateFromDomNode(e.target);
-        e.dataTransfer.setData('text/html', e.target.outerHTML);
-        e.dataTransfer.setData('text/plain', '{t{'+t.templateGuid + ',' + t.templateInstanceGuid+'}t}');
-    } else {
-        e.dataTransfer.setData('text/html', getSelectedHtml());
-        e.dataTransfer.setData('text/plain', getSelectedText());       
-	}
+    e = setDataTransferObject(e, 'drag');
 }

@@ -109,7 +109,9 @@
     <None Remove="Resources\Html\Editor\src\components\quill-wrapper\quill-wrapper.js" />
     <None Remove="Resources\Html\Editor\src\components\quill-wrapper\toolbar\quill-toolbar.js" />
     <None Remove="Resources\Html\Editor\src\components\table\table.js" />
+    <None Remove="Resources\Html\Editor\src\components\template\blots\templateEmbedBlot.js" />
     <None Remove="Resources\Html\Editor\src\components\template\template.js" />
+    <None Remove="Resources\Html\Editor\src\components\template\templatePadAttribute.js" />
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\create\createTemplateToolbarItem.js" />
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\edit\editTemplateToolbar.js" />
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\paste\pasteTemplateToolbar.js" />
@@ -212,6 +214,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\table\table.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\template\blots\templateEmbedBlot.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\template\blots\templatePadAttribute.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\template\template.js">

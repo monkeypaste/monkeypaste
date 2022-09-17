@@ -45,70 +45,34 @@ var templateTypesMenuOptions = [
 
 var userDeletedTemplateGuids = [];
 
-function registerTemplateSpan() {
-    const Parchment = Quill.imports.parchment;
 
-    class TemplateEmbedBlot extends Parchment.EmbedBlot {
-        static blotName = 'template';
-        static tagName = 'DIV';
-        static className = 'ql-template-embed-blot';
-
-        static create(value) {
-            const node = super.create(value);
-
-            if (value.domNode != null) {
-                // creating existing instance
-                value = getTemplateFromDomNode(value.domNode);
-            }
-
-            if (!IsMovingTemplate) {
-                //ensure new template has unique instance guid
-                value.templateInstanceGuid = generateGuid();
-            }
-
-            applyTemplateToDomNode(node, value);
-
-            return node;
-        }
-
-        static formats(node) {
-            return getTemplateFromDomNode(node); 
-        }
-
-        format(name, value) {
-            super.format(name, value);
-        }
-
-        static value(domNode) {
-            return getTemplateFromDomNode(domNode);
-        }
-    }
-
-    Quill.register(TemplateEmbedBlot, true);
-}
 
 //#region Init
 
 function initTemplates(usedTemplates, isPasting) {
     ENCODED_TEMPLATE_REGEXP = new RegExp(ENCODED_TEMPLATE_OPEN_TOKEN + ".*?" + ENCODED_TEMPLATE_CLOSE_TOKEN, "");
     // scan doc for templates even if none provided
-   
 
     if (usedTemplates != null) {
         decodeTemplates(usedTemplates);
     }
-    let telml = getTemplateElements();
-    telml.forEach((t_elm) => {
-        applyTemplateToDomNode(t_elm, getTemplateFromDomNode(t_elm));
-    });
-    Array
-        .from(document.getElementsByClassName('resizable-textarea'))
-        .forEach((rta) => {
-            function updateToolbarSize() {
-                updateEditTemplateToolbarPosition();
-            }
-            new ResizeObserver(updateToolbarSize).observe(rta);
-        });
+    //let telml = getTemplateElements();
+    //for (var i = 0; i < telml.length; i++) {
+    //    let t_elm = telml[i];
+    //    let t_blot = getTemplateFromDomNode(t_elm);
+    //    applyTemplateToDomNode(t_elm, t_blot);
+    //    //t_blot.domNode = t_elm;
+    //    //TemplateEmbedBlot.create(t_blot);
+    //}
+
+    let resizers = Array.from(document.getElementsByClassName('resizable-textarea'));
+    for (var i = 0; i < resizers.length; i++) {
+        let rta = resizers[i];
+
+        new ResizeObserver(() => {
+            updateEditTemplateToolbarPosition();
+		}).observe(rta);
+	}
     
 
     initTemplateToolbarButton();
@@ -137,132 +101,18 @@ function initTemplates(usedTemplates, isPasting) {
 
 //#region Convert To/From Blot/DomNode
 
-function getTemplateFromDomNode(domNode) {
-    if (domNode == null) {
-        return null;
-    }
-    return {
-        templateGuid: domNode.getAttribute('templateGuid'),
-        templateInstanceGuid: domNode.getAttribute('templateInstanceGuid'),
-        isFocus: domNode.getAttribute('isFocus'),
-        templateName: domNode.getAttribute('templateName'),
-        templateColor: domNode.getAttribute('templateColor'),
-        templateText: domNode.getAttribute('templateText'),
-        templateType: domNode.getAttribute('templateType'),
-        templateData: domNode.getAttribute('templateData'),
-        templateDeltaFormat: domNode.getAttribute('templateDeltaFormat'),
-        templateHtmlFormat: domNode.getAttribute('templateHtmlFormat')
-    }
-}
 
-function applyTemplateToDomNode(node, value) {
-    if (node == null || value == null) {
-        
-        return node;
-    }
-
-    node.setAttribute('templateGuid', value.templateGuid);
-    node.setAttribute('templateInstanceGuid', value.templateInstanceGuid);
-    node.setAttribute('templateName', value.templateName);
-    node.setAttribute('templateType', value.templateType);
-    node.setAttribute('templateColor', value.templateColor);
-    node.setAttribute('templateData', value.templateData);
-    node.setAttribute('templateText', value.templateText);
-    node.setAttribute('templateDeltaFormat', value.templateDeltaFormat);
-    node.setAttribute('templateHtmlFormat', value.templateHtmlFormat);
-
-    var textColor = isBright(value.templateColor) ? 'black' : 'white';
-    node.setAttribute('style', 'background-color: ' + value.templateColor + ';color:' + textColor + ';');
-
-    node.innerHTML = value.templateHtmlFormat;
-    changeInnerText(node, node.innerText, value.templateName);
-
-    // TODO instead of rejecting mouse down, template should be draggable
-
-    //disable text selection
-    //node.setAttribute('unselectable', 'on');
-    //node.setAttribute('onselectstart', 'return false;');
-    //node.setAttribute('onmousedown', 'return false;');
-
-    //node.contentEditable = 'false';
-    node.setAttribute('isFocus', false);
-    node.setAttribute("spellcheck", "false");
-    node.setAttribute('class', 'ql-template-embed-blot');
-    node.setAttribute('draggable', true);
-    node.setAttribute('contenteditable', false);
-
-    var templateDocIdxCache;
-    function onTemplatePointerDown(e) {
-        node.addEventListener('pointermove', onTemplatePointerMove);
-        node.setPointerCapture(e.pointerId);
-        templateDocIdxCache
-    }
-
-    function onTemplatePointerUp(e) {
-        templateDocIdxCache = null;
-
-        node.removeEventListener('pointermove', onTemplatePointerMove);
-        node.releasePointerCapture(e.pointerId);
-    }
-
-    function onTemplatePointerMove(e) {
-        let curMousePos = getEditorPosFromTemplateMouse(e);
-        if (!IsMovingTemplate && dist(MouseDownOnTemplatePos, curMousePos) < MIN_TEMPLATE_DRAG_DIST) {
-            return;
-        }
-        if (templateDocIdxCache == null) {
-            templateDocIdxCache = getTemplateElementsWithDocIdx();
-        }
-
-        let docIdx = getDocIdxFromPoint(curMousePos, templateDocIdxCache);
-        log('docIdx: ' + docIdx);
-         if (docIdx < 0) {
-            return;
-        }
-        moveTemplate(value.templateInstanceGuid, docIdx, false);
-       
-        //if (!quill.hasFocus()) {
-        //    quill.focus();
-        //}
-        //setEditorSelection(docIdx, 0);
-    }
-
-    function getEditorPosFromTemplateMouse(e) {
-        return getEditorMousePos(e);
-        let curMousePos = { x: e.pageX, y: e.pageY };
-        curMousePos.x -= e.currentTarget.offsetLeft;
-        curMousePos.y -= e.currentTarget.offsetTop;
-        return curMousePos;
-	}
-
-    //node.addEventListener('pointerdown', onTemplatePointerDown);
-    //node.addEventListener('pointerup', onTemplatePointerUp);
-
-    node.addEventListener('click', function (e) {
-        focusTemplate(node.getAttribute('templateGuid'),false, node.getAttribute('templateInstanceGuid'));
-    });
-
-    //node.addEventListener('dragstart', function (e) {
-    //    log('dragstart template');
-    //    e.dataTransfer.setData('text/html', node.outerHTML);
-    //});
-
-    let observer = new MutationObserver(function (mutationsList, observer) {
-        console.log(mutationsList);
-    });
-
-    observer.observe(node, { characterData: false, childList: true, attributes: false });
-    return node;
-}
 
 
 //#endregion
 function setTemplateProperty(tguid, propertyName, propertyValue) {
-    getUsedTemplateInstances().forEach(function (ti) {
+    let til = getUsedTemplateInstances();
+	for (var i = 0; i < til.length; i++) {
+        let ti = til[i];
         if (ti.domNode.getAttribute('templateGuid') == tguid) {
             ti.domNode.setAttribute(propertyName, propertyValue);
         }
-    });
+	}
 }
 
 function getTemplateProperty(tguid, propertyName) {
@@ -305,12 +155,13 @@ function getDecodedTemplateGuids() {
     //this returns all load template blots distinct guid's
     let dtgl = [];
 
-    getUsedTemplateInstances().forEach(function (cit) {
+    let util = getUsedTemplateInstances();
+    for (var i = 0; i < util.length; i++) {
+        let cit = util[i];
         if (!dtgl.includes(cit.templateGuid)) {
             dtgl.push(cit.templateGuid);
         }        
-    });
-    //setComOutput(JSON.stringify(dtgl));
+    }
 
     return dtgl;
 }
@@ -403,30 +254,44 @@ function encodeTemplates() {
 
 function clearTemplateFocus() {
     let tel = getTemplateElements();
-    tel.forEach(te => {
+	for (var i = 0; i < tel.length; i++) {
+        let te = tel[i];
         te.setAttribute('isFocus', false);
 
-        te.classList.remove('ql-template-embed-blot-focus');
-        te.classList.remove('ql-template-embed-blot-focus-not-instance');
-    });
+        te.classList.remove(TemplateFocusInstanceClass);
+        te.classList.remove(TemplateFocusNotInstanceClass);
+    }
 }
 
 function isTemplateFocused() {
-    return getFocusTemplate() != null;
+    return getFocusTemplateElement() != null;
 }
 
-function getFocusTemplate() {
-    let til = getUsedTemplateInstances();
-    let result = til.find(x => x.domNode.getAttribute('isFocus') == "true");
-    return result;
+function getFocusTemplateElement() {
+    let fallback_telm = null;
+    let telml = getTemplateElements();
+    for (var i = 0; i < telml.length; i++) {
+        let telm = telml[i];
+        if (telm.classList.contains(TemplateFocusInstanceClass)) {
+            return telm;
+        }
+        if (parseBool(telm.getAttribute('isFocus')) == true) {
+            fallback_telm = telm;
+		}
+    }
+    return fallback_telm;
+
+    //let til = getUsedTemplateInstances();
+    //let result = til.find(x => x.domNode.getAttribute('isFocus') == true);
+    //return result;
 }
 
 function getFocusTemplateGuid() {
-    let ft = getFocusTemplate();
+    let ft = getFocusTemplateElement();
     if (ft == null) {
         return null;
     }
-    return ft.domNode.getAttribute('templateGuid');
+    return ft.getAttribute('templateGuid');
 }
 
 function getTemplateElementsInRange(range) {
@@ -548,6 +413,22 @@ function getTemplateDocIdx(tiguid) {
     return -1;
 }
 
+function getTemplateAtDocIdx(docIdx) {
+    let result = quill.getLeaf(docIdx);
+    if (!result || result.length < 2) {
+        return null;
+    }
+    let blot = result[0];
+    if (blot && blot.domNode && blot.domNode.hasAttribute === 'function' && blot.domNode.hasAttribute('templateGuid')) {
+        return getTemplateFromDomNode(blot.domNode);
+    }
+    return null;
+}
+
+function isTemplateAtDocIdx(docIdx) {
+    return getTemplateAtDocIdx(docIdx) != null;
+}
+
 function getTemplateElementsWithDocIdx() {
     let tewdil = [];
     getTemplateElements().forEach(te => {
@@ -558,7 +439,8 @@ function getTemplateElementsWithDocIdx() {
 }
 
 function getUsedTemplateInstances() {
-    var domTemplates = document.querySelectorAll('.ql-template-embed-blot');
+    //var domTemplates = document.querySelectorAll('.ql-template-embed-blot');
+    var domTemplates = document.querySelectorAll('.' + TemplateEmbedClass);
     var templates = [];
     for (var i = 0; i < domTemplates.length; i++) {
         var domTemplate = domTemplates[i];
@@ -621,7 +503,7 @@ function createTemplate(templateObjOrId,newTemplateType) {
         };
     }
 
-    insertTemplate(range, newTemplateObj);
+    insertTemplate(range, newTemplateObj,isNew);
 
     if (isNew) {
         showEditTemplateToolbar();
@@ -633,9 +515,11 @@ function createTemplate(templateObjOrId,newTemplateType) {
     return newTemplateObj;
 }
 
-function insertTemplate(range, t) {
+function insertTemplate(range, t, isNew) {
+    IgnoreNextTextChange = true;
     quill.deleteText(range.index, range.length);
     quill.insertEmbed(range.index, "template", t, Quill.sources.USER);
+
     focusTemplate(t.templateGuid, true);
 }
 
@@ -762,8 +646,8 @@ function getLowestAnonTemplateName(anonPrefix = 'Template #') {
     return anonPrefix + (parseInt(maxNum) + 1);
 }
 
-function focusTemplate(tguid, fromDropDown, tiguid) {
-    if (tguid == null) {
+function focusTemplate(ftguid, fromDropDown, ftiguid) {
+    if (ftguid == null) {
         return;
     }
     clearTemplateFocus();
@@ -772,10 +656,10 @@ function focusTemplate(tguid, fromDropDown, tiguid) {
     var tel = getTemplateElements();
     for (var i = 0; i < tel.length; i++) {
         var te = tel[i];
-        if (te.getAttribute('templateGuid') == tguid) {
+        if (te.getAttribute('templateGuid') == ftguid) {
             if (IsPastingTemplate) {
                 $('#templateTextArea').placeholder = "Enter text for " + te.innerText;
-                if (te.innerText != getTemplateDefByGuid(tguid)['templateName']) {
+                if (te.innerText != getTemplateDefByGuid(ftguid)['templateName']) {
                     $('#templateTextArea').val(te.innerText);
                 } else {
                     $('#templateTextArea').val('');
@@ -783,18 +667,18 @@ function focusTemplate(tguid, fromDropDown, tiguid) {
             }
             te.setAttribute('isFocus', true);
 
-            if (tiguid != null && te.getAttribute('templateInstanceGuid') == tiguid) {
-                te.classList.add('ql-template-embed-blot-focus');
+            if (ftiguid != null && te.getAttribute('templateInstanceGuid') == ftiguid) {
+                te.classList.add(TemplateFocusInstanceClass);
                 let teBlot = Quill.find(te);
                 let teIdx = quill.getIndex(teBlot);
-                setEditorSelection(teIdx,1);
+                setEditorSelection(teIdx,1,'silent');
             } else {
-                te.classList.add('ql-template-embed-blot-focus-not-instance');
+                te.classList.add(TemplateFocusNotInstanceClass);
             }
         } else {
             te.setAttribute('isFocus', false);
-            te.classList.remove('ql-template-embed-blot-focus');
-            te.classList.remove('ql-template-embed-blot-focus-not-instance');
+            te.classList.remove(TemplateFocusInstanceClass);
+            te.classList.remove(TemplateFocusNotInstanceClass);
         }
     }
 
@@ -819,7 +703,8 @@ function focusTemplate(tguid, fromDropDown, tiguid) {
 
 function getTemplateElements(tguid, iguid) {
     var tel = [];
-    var stl = document.getElementsByClassName("ql-template-embed-blot");
+    //var stl = document.getElementsByClassName("ql-template-embed-blot");
+    var stl = document.getElementsByClassName(TemplateEmbedClass);
     if (!tguid && !iguid) {
         return Array.from(stl);
     }
@@ -868,15 +753,14 @@ function setTemplateBgColor(tguid, tiguid, color_name_or_hex, isTemporary) {
 	}
 
     for (var i = 0; i < tel.length; i++) {
-        var te = tel[i];
-        te.style.backgroundColor = color_name_or_hex;
-        te.style.color = isBright(color_name_or_hex) ? 'black' : 'white';
+        tel[i].style.backgroundColor = color_name_or_hex;
+        tel[i].style.color = isBright(color_name_or_hex) ? 'black' : 'white';
         if (isTemporary) {
-            te.classList.add('temporary-bg-color');
+            tel[i].classList.add('temporary-bg-color');
             continue;
         }
 
-        te.setAttribute('templateColor', color_name_or_hex);
+        tel[i].setAttribute('templateColor', color_name_or_hex);
     }
 }
 
@@ -935,7 +819,7 @@ function resetTemplates() {
     }
 }
 
-function padTemplate(tiguid,delta) {
+function padTemplate(tiguid) {
     let teDocIdx = getTemplateDocIdx(tiguid);
     if (teDocIdx < 0) {
         throw 'tiguid: ' + tiguid + ' cannot have docIdx: ' + teDocIdx;
@@ -970,7 +854,8 @@ function padTemplate(tiguid,delta) {
 }
 
 function updateTemplatesAfterTextChanged(delta, oldDelta, source) {
-    let til = getTemplateElements();
+    let cur_template_elms = getTemplateElements();
+    let tguids_to_content_fit = [];
     let idx = 0;
     for (var i = 0; i < delta.ops.length; i++) {
         let op = delta.ops[i];
@@ -981,10 +866,14 @@ function updateTemplatesAfterTextChanged(delta, oldDelta, source) {
         if (op.insert) {
             idx += op.insert.length;
         }
+        if (op.attributes) {
+            if (op.attributes.templateInstanceGuid) {
+                tguids_to_content_fit.push(op.attributes.templateInstanceGuid);
+			}
+		}
         if (op.delete) {
-
-            for (var j = 0; j < til.length; j++) {
-                let ti = til[j];
+            for (var j = 0; j < cur_template_elms.length; j++) {
+                let ti = cur_template_elms[j];
                 let tiDocIdx = getTemplateDocIdx(ti.getAttribute('templateInstanceGuid'));
                 if (idx - op.delete == tiDocIdx) {
                     // deleting post pad so delete template and pre pad
@@ -994,11 +883,20 @@ function updateTemplatesAfterTextChanged(delta, oldDelta, source) {
             }
         }
     }
-    til = getTemplateElements();
-    for (var i = 0; i < til.length; i++) {
-        let ti = til[i];
+    cur_template_elms = getTemplateElements();
+    for (var i = 0; i < cur_template_elms.length; i++) {
+        let ti = cur_template_elms[i];
         padTemplate(ti.getAttribute('templateInstanceGuid'));
     }
+    for (var i = 0; i < tguids_to_content_fit.length; i++) {        
+        let t = getTemplateDefByInstanceGuid(tguids_to_content_fit[i]);
+        let telm = getTemplateInstanceElement(t.templateInstanceGuid);
+        applyTemplateToDomNode(telm, t);
+
+        telm.style.width = 'fit-content';
+        telm.style.height = 'fit-content';
+        telm.innerText = t.templateName;
+	}
 }
 function updateTemplatesAfterSelectionChange() {
     // BUG if template is at the end of a line (or maybe just block?) and drag selecting up sel clears, its the reason and its that quill bug
@@ -1007,11 +905,15 @@ function updateTemplatesAfterSelectionChange() {
     let sel_bg_color = 'lightblue';// getTextSelectionBgColor();
     let template_elms_in_sel_range = sel_range ? getTemplateElementsInRange(sel_range) : [];
     let all_template_elms = getTemplateElements();
+    let show_sel_bg_color = !isShowingEditTemplateToolbar();
     all_template_elms.forEach((te) => {
         let updated_bg_color = null;
-        if (template_elms_in_sel_range.includes(te)) {
+        let isTemporary = false;
+        let tiguid = te.getAttribute('templateInstanceGuid');
+        if (show_sel_bg_color && template_elms_in_sel_range.includes(te)) {
             log('sel template: ' + te.getAttribute('templateInstanceGuid'));
             updated_bg_color = sel_bg_color;
+            isTemporary = true;
         } else {
             updated_bg_color = te.getAttribute('templateColor');
         }

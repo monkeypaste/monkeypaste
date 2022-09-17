@@ -1,11 +1,12 @@
 var quill;
 
 function initQuill() {
-	registerTemplateSpan();
-
 	let quillOptions = createQuillOptions();
 	quill = new Quill("#editor", quillOptions);
 
+	registerTemplateBlots();
+
+	initTable();
 	initFontFamilyPicker();
 	quill.root.setAttribute("spellcheck", "false");
 

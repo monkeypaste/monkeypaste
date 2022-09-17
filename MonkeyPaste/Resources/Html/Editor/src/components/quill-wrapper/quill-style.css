@@ -38,6 +38,7 @@
     overflow: hidden;
 }
 
+
 /* checkbox */
 .ql-editor ul[data-checked=true] > li {
     text-decoration: line-through !important;

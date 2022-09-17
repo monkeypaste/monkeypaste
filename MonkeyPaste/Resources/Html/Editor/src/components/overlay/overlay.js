@@ -224,8 +224,18 @@ function drawTextSelection(ctx) {
             // NOTE always override caret during drop to make it nice and thicky
             caret_color = 'transparent';
 		}
-    } else if (IsSubSelectionEnabled && !isEditorToolbarVisible()) {
-        caret_color = 'salmon';
+    } else if (IsSubSelectionEnabled) {
+        if (isEditorToolbarVisible()) {
+            let sel = getSelection();
+            if (sel && sel.length == 0) {
+                if (isTemplateAtDocIdx(sel.index)) {
+                    caret_color = 'transparent';
+				}
+			}
+        }else {
+            caret_color = 'salmon';
+		}
+        
     }
 
     setTextSelectionBgColor(sel_bg_color);

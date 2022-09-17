@@ -108,7 +108,8 @@ function clearAllTemplateText() {
 }
 
 function setTemplateText(tguid, text) {
-    var stl = document.getElementsByClassName("ql-template-embed-blot");
+    //var stl = document.getElementsByClassName("ql-template-embed-blot");
+    var stl = document.getElementsByClassName(TemplateEmbedClass);
     for (var i = 0; i < stl.length; i++) {
         var t = stl[i];
         if (t.getAttribute('templateGuid') == tguid) {

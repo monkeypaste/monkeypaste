@@ -1,44 +1,5 @@
 ﻿var HostDataObj = null;
 
-function convertHostDataToDataTransferObject(hdo) {
-    let dtObj = {
-        types: {}
-    };
-    if (!hdo.items) {
-        // occurs or dragleave
-        return dtObj;
-	}
-    for (var i = 0; i < hdo.items.length; i++) {
-        let hdo_item = hdo.items[i];
-        let dtf = hdo_item.format;// convertHostDataFormatToDataTransferFormat(hdo_item.format);
-        if (dtf) {
-            dtObj.types[dtf] = hdo_item.data;// dtf == 'text/html' ? atob(hdo_item.data) : hdo_item.data;
-		}
-    }
-    return dtObj;
-}
-
-function convertHostDataFormatToDataTransferFormat(hdof) {
-    if (hdof == 'HTML Format') {
-        return 'text/html';
-    }
-    if (hdof == 'Text') {
-        return 'text/plain';
-    }
-    log('unknown host format (passing through): ' + hdof);
-    return null;
-}
-
-function convertDataTransferFormatToHostDataFormat(dtf) {
-    if (dtf == 'text/html') {
-        return 'HTML Format';
-    }
-    if (dtf == 'text/plain') {
-        return 'Text';
-    }
-    log('unknown data transfer format (passing through): ' + dtf);
-    return dtf;
-}
 
 function getDataTransferObject(e) {
     if (CefDragData) {
@@ -47,14 +8,57 @@ function getDataTransferObject(e) {
     }
 
     let dtObj = e.detail ? e.detail.original.dataTransfer : e.dataTransfer;
+    if (dtObj === undefined) {
+        // check clipboard
+        dtObj = e.clipboardData === undefined ? window.clipboardData : e.clipboardData;
+	}
     return dtObj;
+}
+
+
+function setDataTransferObject(e, actionType) {
+    let dt = getDataTransferObject(e);
+    if (actionType == 'drag') {
+        if (e.target.classList !== undefined &&
+            e.target.classList.contains(TemplateEmbedClass)) {
+            // BUGGY this should probably dealt w/ differently, when single template is selected
+            let t = getTemplateFromDomNode(e.target);
+            dt.setData('text/html', e.target.outerHTML);
+            dt.setData('text/plain', '{t{' + t.templateGuid + ',' + t.templateInstanceGuid + '}t}');
+        } else {
+            dt.setData('text/html', getSelectedHtml());
+            dt.setData('text/plain', getSelectedText());
+            dt.setData('application/json/quill-delta', getSelectedDeltaJson());
+        }
+        e.dataTransfer = dt;
+
+    } else if (actionType == 'cut' || actionType == 'copy') {
+        dt.setData('text/html', getSelectedHtml());
+        dt.setData('text/plain', getSelectedText());
+        dt.setData('application/json/quill-delta', getSelectedDeltaJson());
+        e.clipboardData = dt;
+    } else {
+        log('cannot set dataTransfer object, unknown actionType: ' + actionType);
+    }
+    return e;
 }
 
 function isDataTransferValid(dt) {
     if (CopyItemType == 'Text') {
-        return hasPlainText(dt) || hasHtml(dt);
+        return hasPlainText(dt) || hasHtml(dt) || hasQuillDeltaJson(dt);
     }
     return false;
+}
+
+function hasQuillDeltaJson(dt) {
+    return getDataByType(dt, 'application/json/quill-delta');
+}
+function hasPlainText(dt) {
+    return getDataByType(dt, 'text/plain') != null;
+}
+
+function hasHtml(dt) {
+    return getDataByType(dt, 'text/html') != null;
 }
 
 function getDataByType(dt, typeStr) {
@@ -70,16 +74,9 @@ function getDataByType(dt, typeStr) {
     return dt.types['text/plain'];
 }
 
-function hasPlainText(dt) {
-    return getDataByType(dt, 'text/plain') != null;
-}
-
-function hasHtml(dt) {
-    return getDataByType(dt, 'text/html') != null;
-}
 
 
-function convertDataTransferToPlainText(dt) {
+function getDataTransferPlainText(dt) {
     if (dt == null) {
         return '';
     }
@@ -97,7 +94,7 @@ function convertDataTransferToPlainText(dt) {
     return '';
 }
 
-function convertDataTransferToHtml(dt) {
+function getDataTransferHtml(dt) {
     if (dt == null) {
         return null;
     }
@@ -116,6 +113,13 @@ function convertDataTransferToHtml(dt) {
         itemData = '<html><body>' + itemData + '</body></html>';
         return itemData;
     }
+}
+
+function getDataTransferDeltaJson(dt) {
+    if (hasQuillDeltaJson(dt)) {
+        return getDataByType(dt, 'application/json/quill-delta');
+    }
+    return null;
 }
 
 function parseForHtmlContentStr(htmlStr) {
@@ -144,4 +148,46 @@ function parseForHtmlContentStr(htmlStr) {
     }
     let result = htmlStr.substring(preIdx, postIdx);
     return result;
+}
+
+// host (system format) converters
+
+function convertHostDataToDataTransferObject(hdo) {
+    let dtObj = {
+        types: {}
+    };
+    if (!hdo.items) {
+        // occurs or dragleave
+        return dtObj;
+    }
+    for (var i = 0; i < hdo.items.length; i++) {
+        let hdo_item = hdo.items[i];
+        let dtf = hdo_item.format;// convertHostDataFormatToDataTransferFormat(hdo_item.format);
+        if (dtf) {
+            dtObj.types[dtf] = hdo_item.data;// dtf == 'text/html' ? atob(hdo_item.data) : hdo_item.data;
+        }
+    }
+    return dtObj;
+}
+
+function convertHostDataFormatToDataTransferFormat(hdof) {
+    if (hdof == 'HTML Format') {
+        return 'text/html';
+    }
+    if (hdof == 'Text') {
+        return 'text/plain';
+    }
+    log('unknown host format (passing through): ' + hdof);
+    return null;
+}
+
+function convertDataTransferFormatToHostDataFormat(dtf) {
+    if (dtf == 'text/html') {
+        return 'HTML Format';
+    }
+    if (dtf == 'text/plain') {
+        return 'Text';
+    }
+    log('unknown data transfer format (passing through): ' + dtf);
+    return dtf;
 }

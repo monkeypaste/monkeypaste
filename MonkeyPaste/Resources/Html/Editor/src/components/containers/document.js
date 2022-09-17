@@ -5,6 +5,7 @@ function initDocument() {
 
 function onDocumentSelectionChange(e) {
 	// Enabled/Disabled with sub-selection
+	log('doc sel changed');
 	updateTemplatesAfterSelectionChange();
 	return;
 	// NOTE quill only registers selection change on mouse up

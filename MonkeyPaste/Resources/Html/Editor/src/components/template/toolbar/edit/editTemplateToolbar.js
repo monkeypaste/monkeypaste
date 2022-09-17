@@ -11,7 +11,7 @@ function showEditTemplateToolbar() {
     updateAllSizeAndPositions();
 
     var t = getTemplateDefByGuid(getFocusTemplateGuid());
-    if (t.domNode) {
+    if (t && t.domNode) {
         setTemplateType(t.domNode.getAttribute('templateGuid'), t.domNode.getAttribute('templateType'));
     }
 
@@ -19,6 +19,8 @@ function showEditTemplateToolbar() {
 }
 
 function hideEditTemplateToolbar() {
+    clearAllTemplateEditClasses();
+
     var ett = document.getElementById('editTemplateToolbar');
     ett.style.display = 'none';
 
@@ -177,44 +179,42 @@ function isEditTemplateTextAreaFocused() {
     return IsTemplateNameTextAreaFocused || IsTemplateDetailTextAreaFocused;
 }
 
+function clearAllTemplateEditClasses() {
+    getTemplateElements().forEach((telm) => {
+        telm.classList.remove('ql-template-embed-blot-display-key-up');
+        telm.classList.remove('ql-template-embed-blot-display-key-down');
+    });
+}
 
 async function scaleFocusTemplates(scaleType, tguid) {
     if (!tguid) {
-        let f_cit = getFocusTemplate();
-        if (!f_cit) {
-            return;
-        }
-
-        tguid = f_cit.domNode.getAttribute('templateGuid');
+        tguid = getFocusTemplateGuid();
         if (!tguid) {
             return;
 		}
 	}
 
     let f_cit_elm_l = getTemplateElements(tguid);
+    for (var i = 0; i < f_cit_elm_l.length; i++) {
+        let f_cit_elm = f_cit_elm_l[i];
+        if (scaleType == 'bigger') {
+            f_cit_elm.classList.remove('ql-template-embed-blot-display-key-up');
+            f_cit_elm.classList.add('ql-template-embed-blot-display-key-down');
+        } else if (scaleType == 'default') {
+            f_cit_elm.classList.remove('ql-template-embed-blot-display-key-down');
+            f_cit_elm.classList.add('ql-template-embed-blot-display-key-up');
+        } else {
 
-    Array
-        .from(f_cit_elm_l)
-            .forEach((f_cit_elm) => {
-                if (scaleType == 'bigger') {
-                    f_cit_elm.classList.remove('ql-template-embed-blot-display-key-up');
-                    f_cit_elm.classList.add('ql-template-embed-blot-display-key-down');
-                } else if (scaleType == 'default') {
-
-                    f_cit_elm.classList.remove('ql-template-embed-blot-display-key-down');
-                    f_cit_elm.classList.add('ql-template-embed-blot-display-key-up');
-                } else {
-
-                    f_cit_elm.classList.remove('ql-template-embed-blot-display-key-down');
-                    f_cit_elm.classList.remove('ql-template-embed-blot-display-key-up');
-				}
-        });
+            f_cit_elm.classList.remove('ql-template-embed-blot-display-key-down');
+            f_cit_elm.classList.remove('ql-template-embed-blot-display-key-up');
+        }
+	}
 }
 
 async function jiggleFocusTemplates(resetOnComplete = false) {
     return;
-    let f_cit = getFocusTemplate();
-    let tguid = f_cit.domNode.getAttribute('templateGuid');
+    //let f_cit = getFocusTemplateElement();
+    let tguid = getFocusTemplateGuid();
     if (!tguid) {
         return;
 	}
