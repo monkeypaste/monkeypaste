@@ -46,6 +46,9 @@
         </ListBox>
         <local:MpAvPinTrayDropPopoutOverlayView HorizontalAlignment="Stretch"
                                                 VerticalAlignment="Stretch"
+                                                local:MpAvSizeObserverExtension.IsEnabled="True"
+                                                local:MpAvSizeObserverExtension.ObservedWidth="{Binding PinTrayPopOutObservedWidth, Mode=OneWayToSource}"
+                                                local:MpAvSizeObserverExtension.ObservedHeight="{Binding PinTrayPopOutObservedHeight, Mode=OneWayToSource}"
                                                 Padding="15,0,15,0"
                                                 IsVisible="{Binding IsPinTrayDropPopOutVisible}">
 
@@ -75,10 +78,10 @@
                             Value="Yellow" />
                 </Style>
 
-              <Style Selector=".dragoverpintray local|MpAvPinTrayDropPopoutOverlayView  Ellipse">
-                <Setter Property="Stroke"
-                        Value="Yellow" />
-              </Style>
+                <Style Selector=".dragoverpintray local|MpAvPinTrayDropPopoutOverlayView  Ellipse">
+                    <Setter Property="Stroke"
+                            Value="Yellow" />
+                </Style>
                 <Style Selector=".dragoverpintray local|MpAvPinTrayDropPopoutOverlayView Border">
                     <Setter Property="Background"
                             Value="Yellow" />

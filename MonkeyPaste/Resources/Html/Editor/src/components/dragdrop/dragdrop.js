@@ -1,18 +1,17 @@
 ﻿var CefDragData;
-var DropElm;
-var DragElm;
-
-var IsSplitDrop = false;
-var IsPreBlockDrop = false;
-var IsPostBlockDrop = false;
-
-var DropIdx = -1;
 
 var IsCtrlDown = false; //duplicate
 var IsShiftDown = false; //split 
 var IsAltDown = false; // w/ formatting (as html)? ONLY formating? dunno
 
-var IsDragCancel = false; // flagged from drag_end  evt resetDragDrop then unset in editorSelectionChange which restores selection
+
+var DropElm;
+var DropIdx = -1;
+var IsDropCancel = false; // flagged from drag_end  evt resetDragDrop then unset in editorSelectionChange which restores selection
+
+var IsSplitDrop = false;
+var IsPreBlockDrop = false;
+var IsPostBlockDrop = false;
 
 var IsDragging = false;
 var WasNoneSelectedBeforeDrag = false;
@@ -24,8 +23,6 @@ var LastMousePos = null;
 var LastMouseUpdateDateTime = null;
 
 const MIN_DRAG_DIST = 10;
-
-var DropProcessInvokeCount = 0;
 
 function initDragDrop() {
     initWindowDragDrop();
@@ -85,14 +82,12 @@ function isBlockDrop() {
 }
 
 function isDragSource() {
-    let selection = quill.getSelection();
+    let selection = getSelection();
     if (!selection) {
-        if (DragElm == null) {
-            return false;
-        }
-        return true;
+        // occurs when drag started from host w/o sub-selection
+        return IsDragging;
 	}
-    return  selection.length > 0;
+    return IsDragging || selection.length > 0;
 }
 
 function isDragDataValid(dt) {
@@ -119,10 +114,9 @@ function isDropValid() {
 }
 
 function resetDragDrop(isEscCancel = false) {
-    IsDragCancel = isEscCancel;
+    IsDropCancel = isEscCancel;
 
     DropElm = null;
-    DragElm = null;
 
     //setTextSelectionBgColor('lightblue');
     //setTextSelectionFgColor('black');
@@ -135,9 +129,6 @@ function resetDragDrop(isEscCancel = false) {
     LastMouseUpdateDateTime = null;
 
     DropIdx = -1;
-
-    DropProcessInvokeCount = 0;
-
 
     enableTextWrapping();
     hideScrollbars();
@@ -156,10 +147,10 @@ function resetDragDrop(isEscCancel = false) {
     onDropEffectChanged_ntf('none');
 
     drawOverlay();
-    IsDragCancel = false;
+    IsDropCancel = false;
 }
 
-function startDrag() {
+function startDrag(isFromHost) {
     IsDragging = true;
     let sel = getSelection();
     if (sel.length == 0) {
@@ -216,7 +207,7 @@ function updateModKeys(e) {
     }
 
     if (e.escKey) {
-        resetDragDrop();
+        resetDragDrop(true);
 	}
 }
 
@@ -343,8 +334,7 @@ function onDragOver(e) {
                     e.preventDefault();
                 }
 
-                DropProcessInvokeCount++;
-                DropIdx = getDocIdxFromPoint(LastMousePos, true, DropProcessInvokeCount);
+                DropIdx = getDocIdxFromPoint(LastMousePos);
 
 
                 //let mp_elm = document.elementFromPoint(LastMousePos.x, LastMousePos.y);
@@ -364,7 +354,7 @@ function onDragOver(e) {
 
             // NOTE to optimize only updating overlay when mouse move is significant enough
             drawOverlay();
-            //log('Mouse DocIdx: ' + DropIdx + ' Mouse Pos: x: ' + LastMousePos.x + ' y: ' + LastMousePos.y + ' call count: ' + DropProcessInvokeCount); 
+            //log('Mouse DocIdx: ' + DropIdx + ' Mouse Pos: x: ' + LastMousePos.x + ' y: ' + LastMousePos.y + ' call count: '); 
         }
     } 
     e = setDropEffect(e);
@@ -491,7 +481,7 @@ function onDrop(e) {
 
 function onDragStart(e) {
     log('drag started yo');
-    DragElm = e.target;
+    startDrag(false);
 
-    e = setDataTransferObject(e, 'drag');
+    e = setDataTransferObjectForSelection(e, 'drag');
 }

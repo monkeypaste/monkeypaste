@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 namespace MonkeyPaste {
     public interface MpIProcessWatcher {
         IntPtr ThisAppHandle { get; set; }
-
+        string ThisAppProcessPath { get; }
         IntPtr LastHandle { get; }
         string LastProcessPath { get; }
         string LastMainWindowTitle { get; }

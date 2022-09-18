@@ -6,17 +6,25 @@ function getDataTransferObject(e) {
         let hdto = convertHostDataToDataTransferObject(CefDragData);
         return hdto;
     }
-
-    let dtObj = e.detail ? e.detail.original.dataTransfer : e.dataTransfer;
-    if (dtObj === undefined) {
-        // check clipboard
-        dtObj = e.clipboardData === undefined ? window.clipboardData : e.clipboardData;
+    if (e.detail !== undefined) {
+        // drag drop override (unused)
+        if (e.detail.original !== undefined) {
+            return e.detail.original.dataTransfer;
+		}
+    }
+    if (e.dataTransfer !== undefined) {
+        // drag drop
+        return e.dataTransfer;
+    }
+    if (e.clipboardData !== undefined) {
+        return e.clipboardData;
 	}
-    return dtObj;
+    log('unknown data transfer object');
+    return null;
 }
 
 
-function setDataTransferObject(e, actionType) {
+function setDataTransferObjectForSelection(e, actionType) {
     let dt = getDataTransferObject(e);
     if (actionType == 'drag') {
         if (e.target.classList !== undefined &&
@@ -41,6 +49,13 @@ function setDataTransferObject(e, actionType) {
         log('cannot set dataTransfer object, unknown actionType: ' + actionType);
     }
     return e;
+}
+
+function getDataTransferObjectForRange(range) {
+    let dt = new DataTransfer();
+    dt.setData('text/html', getHtml(range));
+    dt.setData('text/plain', getText(range));
+    dt.setData('application/json/quill-delta', getDeltaJson(range));
 }
 
 function isDataTransferValid(dt) {

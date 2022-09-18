@@ -18,6 +18,7 @@ function createQuillOptions() {
 	let quillOptions = {
 		//debug: true,
 		placeholder: "",
+		allowReadOnlyEdits: true,
 		theme: "snow",
 		modules: {
 			table: false,

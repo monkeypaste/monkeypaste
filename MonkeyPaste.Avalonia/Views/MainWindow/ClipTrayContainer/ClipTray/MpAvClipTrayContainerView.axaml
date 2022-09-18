@@ -80,14 +80,9 @@
         <GridSplitter x:Name="ClipTraySplitter"
                       Grid.Column="0"
                       IsEnabled="{Binding IsAnyTilePinned}"
-                      IsVisible="{Binding IsPinTrayVisible}"
-                      HorizontalAlignment="Right"
-                      VerticalAlignment="Stretch"
+                      IsVisible="{Binding IsAnyTilePinned}"
                       Margin="0,0,0,0"
-                      Width="5"
-                      Background="Magenta"
-                      ResizeDirection="Columns"
-                      Cursor="SizeWestEast">
+                      Background="Magenta">
             <GridSplitter.Styles>
                 <Style Selector="GridSplitter /template/ Border">
                     <Setter Property="Background"

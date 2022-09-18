@@ -914,12 +914,14 @@ namespace MonkeyPaste.Avalonia {
 
                 if (keyStr.IsShift()) {
                     GlobalIsShiftDown = true;
+                    
                 }
                 if (keyStr.IsAlt()) {
                     GlobalIsAltDown = true;
                 }
                 if (keyStr.IsCtrl()) {
                     GlobalIsCtrlDown = true;
+                    MpConsole.WriteLine("Global ctrl key: DOWN");
                 }
                 if (keyStr.IsEscape()) {
                     GlobalIsEscapeDown = true;
@@ -956,7 +958,8 @@ namespace MonkeyPaste.Avalonia {
                     GlobalIsAltDown = false;
                 }
                 if (keyStr.IsCtrl()) {
-                    GlobalIsCtrlDown = false;
+                    GlobalIsCtrlDown = false; 
+                    MpConsole.WriteLine("Global ctrl key: UP");
                 }
                 if (keyStr.IsEscape()) {
                     GlobalIsEscapeDown = false;

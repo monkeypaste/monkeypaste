@@ -186,20 +186,38 @@ function selectAll_ext() {
 	selectAll();
 }
 
+function deselectAll_ext() {
+	let sel = getSelection();
+	if (!sel) {
+		return;
+	}
+
+	setEditorSelection(0, 0);
+	if (IsSubSelectionEnabled) {
+		return;
+	}
+	getEditorContainerElement().style.userSelect = 'none';
+}
+
 function updateModifierKeysFromHost_ext(modKeyMsgStr) {
 	// input MpQuillModifierKeysNotification
+	log('mod key msg from host recvd: ' + modKeyMsgStr);
 
 	let modKeyMsg = toJsonObjFromBase64Str(modKeyMsgStr);
 	modKeyMsg.fromHost = true;
 	updateModKeys(modKeyMsg);
+	drawOverlay();
 }
 
 function updateIsDraggingFromHost_ext(isDraggingMsgStr) {
-	// input MpQuillModifierKeysNotification
+	// input MpQuillIsDraggingNotification
+
+	// NOTE this msg is needed so its known to only reset drop and not drag after dragLeave
+	// for drag feedback
 
 	let isDraggingMsg = toJsonObjFromBase64Str(isDraggingMsgStr);
 	if (isDraggingMsg.isDragging) {
-		startDrag();
+		startDrag(true);
 	} else {
 		endDrag();
 	}

@@ -1168,9 +1168,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsAnyTileDragging):
                     //notify pin tray to pop out if no item pinned
-                    OnPropertyChanged(nameof(IsPinTrayDropPopOutVisible));
-
-                    
+                    OnPropertyChanged(nameof(IsPinTrayDropPopOutVisible));                    
                     break;
                 case nameof(IsPinTrayDropPopOutVisible):
 
@@ -1178,6 +1176,34 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(MinPinTrayScreenHeight));
                     OnPropertyChanged(nameof(MaxPinTrayScreenWidth));
                     OnPropertyChanged(nameof(MaxPinTrayScreenHeight));
+
+                    if(!IsPinTrayDropPopOutVisible) {
+                        // normalize scroll offset for pin tray popout 
+
+                        // popout gone check if scroll needs adjusting
+                        if (IsPinTrayEmpty) {
+                            if (ListOrientation == Orientation.Horizontal) {
+                                ForceScrollOffsetX(ScrollOffsetX - PinTrayPopOutObservedWidth - 5);
+                            } else {
+                                ForceScrollOffsetY(ScrollOffsetY - PinTrayPopOutObservedHeight - 5);
+                            }
+                        } else {
+                            // item was dropped so don't need to adjust                            
+                        }
+
+                    }
+                    break;
+                case nameof(PinTrayPopOutObservedHeight):
+                    if (IsPinTrayDropPopOutVisible && ListOrientation == Orientation.Vertical) {
+                        // only matters when vertical
+                        ForceScrollOffsetY(ScrollOffsetY + PinTrayPopOutObservedHeight + 5);
+                    }
+                    break;
+                case nameof(PinTrayPopOutObservedWidth):
+                    // these change when pop out becomes visible but won't be updated when isVisible becomes true
+                    if (IsPinTrayDropPopOutVisible && ListOrientation == Orientation.Horizontal) {
+                        ForceScrollOffsetX(ScrollOffsetX + PinTrayPopOutObservedWidth + 5);
+                    } 
                     break;
             }
         }
@@ -1447,6 +1473,8 @@ namespace MonkeyPaste.Avalonia {
         public double PinTrayScreenWidth { get; set; }
         public double PinTrayScreenHeight { get; set; }
 
+        public double PinTrayPopOutObservedWidth { get; set; }
+        public double PinTrayPopOutObservedHeight { get; set; }
         public double PinTrayTotalWidth { get; set; } = 0;
 
         public double MinPinTrayScreenWidth {
@@ -1891,7 +1919,14 @@ namespace MonkeyPaste.Avalonia {
 
 
         public void ClipboardChanged(object sender, MpPortableDataObject mpdo) {
-            if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading || IsAppPaused) {
+            if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading || 
+                IsAppPaused) {
+                return;
+            }
+            if (MpPlatformWrapper.Services.ProcessWatcher.LastProcessPath == 
+                MpPlatformWrapper.Services.ProcessWatcher.ThisAppProcessPath) {
+                // TODO? have some pref about this or better to handle clipboard from this app
+                MpConsole.WriteLine("Clipboard changed from this app, ignoring...");
                 return;
             }
             Dispatcher.UIThread.Post(async () => {

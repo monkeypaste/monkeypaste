@@ -13,7 +13,6 @@ body {
     background-color: transparent;
     --selbgcolor: lightblue;
     --selfgcolor: black;
-
     /*white-space: pre-wrap;*/
 }
 ::selection {
@@ -59,6 +58,7 @@ body {
     padding: 0px;
     z-index: -1;
 }
+
 
 /*#editor :first-child {
         height: 100%;

@@ -419,7 +419,7 @@ function getTemplateAtDocIdx(docIdx) {
         return null;
     }
     let blot = result[0];
-    if (blot && blot.domNode && blot.domNode.hasAttribute === 'function' && blot.domNode.hasAttribute('templateGuid')) {
+    if (blot && blot.domNode && blot.domNode.hasAttribute != null && blot.domNode.hasAttribute('templateGuid')) {
         return getTemplateFromDomNode(blot.domNode);
     }
     return null;
@@ -899,19 +899,23 @@ function updateTemplatesAfterTextChanged(delta, oldDelta, source) {
 	}
 }
 function updateTemplatesAfterSelectionChange() {
-    // BUG if template is at the end of a line (or maybe just block?) and drag selecting up sel clears, its the reason and its that quill bug
+    // BUG if template is at the end of a line (or maybe just block?) 
+    //and drag selecting up sel clears, its the reason and its that quill bug
 
     let sel_range = getSelection();
-    let sel_bg_color = 'lightblue';// getTextSelectionBgColor();
+    let sel_bg_color = getTextSelectionBgColor();
     let template_elms_in_sel_range = sel_range ? getTemplateElementsInRange(sel_range) : [];
     let all_template_elms = getTemplateElements();
-    let show_sel_bg_color = !isShowingEditTemplateToolbar();
-    all_template_elms.forEach((te) => {
+    let show_sel_bg_color = !isShowingEditTemplateToolbar() && IsSubSelectionEnabled;
+
+    for (var i = 0; i < all_template_elms.length; i++) {
+        let te = all_template_elms[i];
         let updated_bg_color = null;
         let isTemporary = false;
         let tiguid = te.getAttribute('templateInstanceGuid');
         if (show_sel_bg_color && template_elms_in_sel_range.includes(te)) {
             log('sel template: ' + te.getAttribute('templateInstanceGuid'));
+
             updated_bg_color = sel_bg_color;
             isTemporary = true;
         } else {
@@ -919,7 +923,7 @@ function updateTemplatesAfterSelectionChange() {
         }
         te.style.backgroundColor = updated_bg_color;
         te.style.color = isBright(updated_bg_color) ? 'black' : 'white';
-    });
+	}
 }
 
 function getTemplateToolbarHeight() {

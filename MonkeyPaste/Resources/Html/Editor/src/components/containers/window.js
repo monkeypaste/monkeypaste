@@ -6,7 +6,7 @@ function initWindow() {
 	window.addEventListener('scroll', onWindowScroll);
 
 	window.addEventListener("mousedown", onWindowMouseDown);
-	window.addEventListener("mouseup", onWindowMouseUp);
+	//window.addEventListener("mouseup", onWindowMouseUp);
 	window.addEventListener("click", onWindowClick);
 
 

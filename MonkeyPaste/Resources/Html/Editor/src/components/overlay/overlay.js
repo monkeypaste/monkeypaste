@@ -5,7 +5,6 @@ var IsHighlightingVisible = false;
 var HighlightRects = [];
 var SelectedHighlightRectIdx = -1;
 
-var OverlayGlobalAlpha = 0.7;
 
 function updateOverlayBounds(overlayCanvas) {
     let editorRect = getEditorContainerRect();
@@ -22,6 +21,7 @@ function drawUnderlines(ctx, color = 'red', thickness = '0.5') {
     let windowRect = getEditorContainerRect();
 
     for (var i = 0; i < count; i++) {
+        
         //log('drawing idx ' + i + ' of ' + count);
 
         let idx_rect = getCharacterRect(i); //quill.getBounds(i);
@@ -30,12 +30,12 @@ function drawUnderlines(ctx, color = 'red', thickness = '0.5') {
         let is_initial_line = p1 == null;        
         let is_tail = i == count - 1;
         let is_new_line = false;
-        if (i == 532) {
-            i = 532;
-		}
+
+
         if (is_initial_line) {
             // initial line
             p1 = { x: idx_rect.left, y: idx_rect.bottom };
+            
         } else if (is_tail) {
             // last line
             p2 = { x: idx_rect.right, y: idx_rect.bottom };
@@ -62,15 +62,22 @@ function drawUnderlines(ctx, color = 'red', thickness = '0.5') {
         //}
 
         if (isPointInRect(windowRect, p1) && isPointInRect(windowRect, p2)) {
-            drawLine(ctx, { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y }, color, thickness);
-            p1 = p2 = null;
+            // force straight lines
 
+            let max_line_bottom = Math.max(p1.y, p2.y);
+            drawLine(ctx, { x1: p1.x, y1: max_line_bottom, x2: p2.x, y2: max_line_bottom }, color, thickness);
+            p1 = p2 = null;
             if (is_tail) {
                 return;
             }
 
-            p1 = { x: idx_rect.left, y: idx_rect.bottom };
-		}
+            p1 = { x: idx_rect.left, y: max_line_bottom };
+            
+        }
+        //if (isTemplateAtDocIdx(i + 1)) {
+        //    // skip template idx
+        //    i += 3;
+        //}
 	}
 }
 
@@ -204,15 +211,16 @@ function drawTextSelection(ctx) {
         return;
     }
 
-    let sel_bg_color = 'lightblue';
-    let sel_fg_color = 'black';
-    let caret_color = 'black';
+    let sel_bg_color = DefaultSelectionBgColor;
+    let sel_fg_color = DefaultSelectionFgColor;
+    let caret_color = DefaultCaretColor;
 
     if (isDropping() || IsDragging) {
         if (isDragSource()) {
-            if (isDropValid()) {
+            if (isDropValid() || IsDragging) {
                 if (isDragCopy()) {
                     sel_bg_color = 'lime';
+                    log('copy recognized in sel draw');
                 }
 
                 if (isDropHtml()) {
@@ -233,7 +241,7 @@ function drawTextSelection(ctx) {
 				}
 			}
         }else {
-            caret_color = 'salmon';
+            caret_color = 'yellow';
 		}
         
     }

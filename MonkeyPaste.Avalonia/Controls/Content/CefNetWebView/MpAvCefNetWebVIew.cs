@@ -159,14 +159,13 @@ namespace MonkeyPaste.Avalonia {
             this.ExecuteJavascript("selectAll_ext()");
         }
         public void DeselectAll() {
-            var selMsg = new MpQuillSetSelectionRangeRequestMessage() { index = 0, length = 0 };
-            this.ExecuteJavascript($"setSelection_ext('{selMsg.SerializeJsonObjectToBase64()}')");
+            this.ExecuteJavascript($"deselectAll_ext()");
         }
         #endregion
 
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
             base.OnAttachedToVisualTree(e);
-            //DragDrop.SetAllowDrop(this, true);
+            DragDrop.SetAllowDrop(this, true);
             //this.AddHandler(DragDrop.DragEnterEvent, DragEnter);
             //this.AddHandler(DragDrop.DragOverEvent, DragOver);
             //this.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
@@ -232,22 +231,59 @@ namespace MonkeyPaste.Avalonia {
         //    this.PointerMoved += dragControl_PointerMoved_Handler;
         //}
 
-        private void StartDragAsync(PointerPressedEventArgs e) {
-            //var dragStartMsg = new MpQuillIsDraggingNotification() { isDragging = true };
-            //this.ExecuteJavascript($"updateIsDraggingFromHost_ext('{dragStartMsg.SerializeJsonObjectToBase64()}')");
+        private void StartDrag(PointerPressedEventArgs e) {
+            MpAvIContentView cv = BindingContext.GetContentView();
+            // add temp key down listener for notifying editor for visual feedback
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed += Global_DragKeyUpOrDown;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased += Global_DragKeyUpOrDown;
 
+            MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();
+            MpAvMainWindowViewModel.Instance.IsDropOverMainWindow = true;
+            BindingContext.IsTileDragging = true;
+
+            if (cv is MpAvCefNetWebView wv) {
+                // notify editor that its dragging and not just in a drop state
+                var dragStartMsg = new MpQuillIsDraggingNotification() { isDragging = true };
+                wv.ExecuteJavascript($"updateIsDraggingFromHost_ext('{dragStartMsg.SerializeJsonObjectToBase64()}')");
+            }
             Dispatcher.UIThread.Post(async () => {
-                BindingContext.IsTileDragging = true;
-
                 IDataObject avmpdo = await GetWebViewDragDataAsync(false);
                 var result = await DragDrop.DoDragDrop(e, avmpdo, DragDropEffects.Copy | DragDropEffects.Move);
+                EndDrag();
             });
         }
-        private void EndDragAsync() {
-            //var dragEndMsg = new MpQuillIsDraggingNotification() { isDragging = false };
-            //this.ExecuteJavascript($"updateIsDraggingFromHost_ext('{dragEndMsg.SerializeJsonObjectToBase64()}')");
-            BindingContext.IsTileDragging = false;
+        private void ContinueDrag(PointerEventArgs e) {
+            MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();
+        }
+        private void EndDrag() {
+            if (BindingContext.IsTileDragging == false) {
+                // can be called twice when esc-canceled (first from StartDrag handler then from the checker pointer up so ignore 2nd
+                return;
+            }
+            MpAvIContentView cv = BindingContext.GetContentView();
+            if (cv is MpAvCefNetWebView wv) {
+                // notify editor that its dragging and not just in a drop state
+                var dragEndMsg = new MpQuillIsDraggingNotification() { isDragging = false };
+                wv.ExecuteJavascript($"updateIsDraggingFromHost_ext('{dragEndMsg.SerializeJsonObjectToBase64()}')");
+            }
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= Global_DragKeyUpOrDown;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= Global_DragKeyUpOrDown;
+
+            MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = null;
             MpAvMainWindowViewModel.Instance.IsDropOverMainWindow = false;
+            BindingContext.IsTileDragging = false;
+        }
+
+        private void Global_DragKeyUpOrDown(object sender, string e) {
+            if (BindingContext.GetContentView() is MpAvCefNetWebView wv) {
+                var modKeyMsg = new MpQuillModifierKeysNotification() {
+                    ctrlKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown,
+                    altKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsAltDown,
+                    shiftKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsShiftDown,
+                    escKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsEscapeDown
+                };
+                wv.ExecuteJavascript($"updateModifierKeysFromHost_ext('{modKeyMsg.SerializeJsonObjectToBase64()}')");
+            }
         }
 
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
@@ -257,69 +293,18 @@ namespace MonkeyPaste.Avalonia {
             }
 
             base.OnPointerPressed(e);
+            
+            return;
+
+
             if (!CanDrag || BindingContext is MpIResizableViewModel rvm && rvm.CanResize) {
                 return;
             }
-            this.DragCheckAndStart(e, StartDragAsync, EndDragAsync, true);
-
-            //DragCheckAndStart_old(e);
-
-            //if (!CanDrag) {
-            //    return;
-            //}
-            //bool wasAllSelected = false;
-            //if(IsNoneSelected()) {
-            //    wasAllSelected = true;
-            //    SelectAll();
-            //    await Task.Delay(78);
-            //}
-
-            //bool isPointerUp = false;
-            //Dispatcher.UIThread.Post(async () => {
-            //    while(true) {
-            //        if(isPointerUp) {
-            //            return;
-            //        }
-            //        await Task.Delay(94);
-            //        var modKeyMsg = new MpQuillModifierKeysNotification() {
-            //            ctrlKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown,
-            //            altKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsAltDown,
-            //            shiftKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsShiftDown,
-            //            escKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsEscapeDown
-            //        };
-            //        this.ExecuteJavascript($"updateModifierKeysFromHost_ext('{modKeyMsg.SerializeJsonObjectToBase64()}')");
-            //    }
-            //});
-
-            //var dragStartMsg = new MpQuillIsDraggingNotification() { isDragging = true };
-            //this.ExecuteJavascript($"updateIsDraggingFromHost_ext('{dragStartMsg.SerializeJsonObjectToBase64()}')");
-
-            //IDataObject avmpdo = await GetWebViewDragDataAsync(false);
-
-            //var result = await DragDrop.DoDragDrop(e, avmpdo, DragDropEffects.Copy | DragDropEffects.Move);
-            //MpConsole.WriteLine("Drag result: " + result);
-
-            //dragStartMsg.isDragging = false;
-            //this.ExecuteJavascript($"updateIsDraggingFromHost_ext('{dragStartMsg.SerializeJsonObjectToBase64()}')");
-            //isPointerUp = true;
-
-
-            //if(wasAllSelected) {
-            //    var setSelMsg = new MpQuillSetSelectionRangeRequestMessage() {
-            //        index = 0,
-            //        length = 0
-            //    };
-            //    this.ExecuteJavascript($"setSelection_ext('{setSelMsg.SerializeJsonObjectToBase64()}')");
-            //}
-            //var mp = e.GetClientMousePoint(this);
-
-            // DragSourceEndedAt((int)mp.X, (int)mp.Y, result.ToCefDragOperationsMask());
-            // DragSourceSystemDragEnded();
+            this.DragCheckAndStart(e, StartDrag, ContinueDrag, EndDrag);
         }
 
-        private async Task<IDataObject> GetWebViewDragDataAsync(bool fillTemplates) {
-            
-            var avdo = await BindingContext.ConvertToDataObject(fillTemplates);
+        private async Task<IDataObject> GetWebViewDragDataAsync(bool fillTemplates) {            
+            MpAvDataObject avdo = await BindingContext.ConvertToDataObject(fillTemplates);
             if (IsAllSelected()) {
                 // only attach internal data format for entire tile
                 avdo.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT, BindingContext);

@@ -60,10 +60,10 @@ function init_test(doText = true) {
 	}
 
 	init(initMsg);
-	disableReadOnly();
+	//disableReadOnly();
 
 	//enableFancyTextSelection();
-	//enableSubSelection();
+	enableSubSelection();
 }
 
 function init(initMsg) {
@@ -109,7 +109,6 @@ function init(initMsg) {
 	
 	initDragDrop();
 
-	initClipboard();
 	if (initMsg.isReadOnlyEnabled) {
 		enableReadOnly();
 	} else {
@@ -254,8 +253,8 @@ function onEditorSelectionChanged(range, oldRange, source) {
 		return;
 	}
 
-	if (IsDragCancel) {
-		IsDragCancel = false;
+	if (IsDropCancel) {
+		IsDropCancel = false;
 		if (oldRange) {
 			setEditorSelection(oldRange.index, oldRange.length);
 		}
@@ -281,7 +280,8 @@ function onEditorSelectionChanged(range, oldRange, source) {
 			//setEditorSelection(oldRange.index, oldRange.length,'silent');
 		} 
 	}
-	if (was_blur) {
+	if (was_blur && isEditorToolbarVisible()) {
+		// only do this to show selection when in toolbar drop down
 		BlurredSelectionRange = oldRange;
 		BlurredSelectionRects = getRangeRects(oldRange);
 		drawOverlay();
@@ -313,7 +313,7 @@ function onEditorTextChanged(delta, oldDelta, source) {
 }
 
 function selectAll() {
-	setEditorSelection(0, getDocLength(),'api');
+	setEditorSelection(0, getDocLength(),'silent');
 }
 
 function isAllSelected() {
@@ -352,29 +352,27 @@ function getText(rangeObj) {
 
 	let wasReadOnly = isReadOnly();
 	if (wasReadOnly) {
-		getEditorElement().setAttribute('contenteditable', true);
-		quill.update();
+		setEditorContentEditable(true);
 	}
 
 	rangeObj = rangeObj == null ? { index: 0, length: quill.getLength() } : rangeObj;
 
 	let text = quill.getText(rangeObj.index, rangeObj.length);
 	if (wasReadOnly) {
-		getEditorElement().setAttribute('contenteditable', false);
-		quill.update();
+		setEditorContentEditable(false);
 	}
 	return text;
 }
 
-function setTextInRange(range, text) {
-	quill.deleteText(range.index, range.length);
-	quill.insertText(range.index, text);
+function setTextInRange(range, text, source = 'api') {
+	quill.deleteText(range.index, range.length, source);
+	quill.insertText(range.index, text, source);
 
 	//quill.setText(text + "\n");
 }
 
-function insertText(docIdx, text) {
-	quill.insertText(docIdx, text);
+function insertTextAtDocIdx(docIdx, text, source = 'api') {
+	quill.insertText(docIdx, text, source);
 }
 
 function getSelectedText() {
@@ -385,15 +383,13 @@ function getSelectedText() {
 function getHtml(rangeObj) {
 	let wasReadOnly = isReadOnly();
 	if (wasReadOnly) {
-		getEditorElement().setAttribute('contenteditable', true);
-		quill.update();
+		setEditorContentEditable(true);
 	}
 
 	rangeObj = rangeObj == null ? { index: 0, length: quill.getLength() } : rangeObj;
 
 	if (wasReadOnly) {
-		getEditorElement().setAttribute('contenteditable', false);
-		quill.update();
+		setEditorContentEditable(false);
 	}
 
 	if (quill && quill.root) {
@@ -411,11 +407,47 @@ function insertHtml(docIdx, data) {
 function insertContent(docIdx, data, forcePlainText = false) {
 	// TODO need to determine data type here
 	if (forcePlainText) {
-		insertText(docIdx, data);
+		insertTextAtDocIdx(docIdx, data);
 		return;
 	}
 	debugger;
 	insertHtml(docIdx, data);
+}
+
+function insertDelta(range, deltaOrDeltaJsonStr) {
+	let deltaObj = deltaOrDeltaJsonStr;
+	if (typeof deltaObj === 'string' || deltaObj instanceof String) {
+		deltaObj = JSON.parse(deltaOrDeltaJsonStr);
+		//deltaObj = Object.assign(new Delta, plainObj);
+	}
+
+	setTextInRange(range, '');
+	deltaObj.ops = [{ retain: range.index }, ...deltaObj.ops];
+	quill.updateContents(deltaObj);
+}
+function getDelta(rangeObj) {
+	if (!quill || !quill.root) {
+		return '';
+	}
+
+	let wasReadOnly = isReadOnly();
+	if (wasReadOnly) {
+		setEditorContentEditable(true);
+	}
+
+	rangeObj = rangeObj == null ? { index: 0, length: quill.getLength() } : rangeObj;
+		
+	let delta = quill.getContents(rangeObj.index, rangeObj.length);
+	if (wasReadOnly) {
+		setEditorContentEditable(false);
+	}
+	return delta;
+}
+
+function getDeltaJson(rangeObj) {
+	let delta = getDelta(rangeObj);
+	let deltaJson = JSON.stringify(delta);
+	return deltaJson;
 }
 
 function getSelectedDelta() {
@@ -472,6 +504,16 @@ function getSelectedHtml2() {
 	return "";
 }
 
+function getSelectedHtml3() {
+	var selection = window.getSelection();
+	if (selection.rangeCount > 0) {
+		var range = selection.getRangeAt(0);
+		var documentFragment = range.cloneContents();
+	}
+	console.log(documentFragment || 'nothing selected');
+	return documentFragment;
+}
+
 function createLink() {
 	var range = quill.getSelection(true);
 	if (range) {
@@ -486,19 +528,28 @@ function createLink() {
 	}
 }
 
+function setEditorContentEditable(isEditable) {
+	getEditorElement().setAttribute('contenteditable', isEditable);
+	quill.update();
+}
+
 function isReadOnly() {
 	var isEditable = parseBool(getEditorElement().getAttribute('contenteditable'));
 	return !isEditable;
+
+	//let selState = getEditorElement().style.userSelect;
+	//if (selState == 'none') {
+	//	return true;
+	//}
+	//return false;
 }
 
 function enableReadOnly() {
-	//deleteJsComAdapter();
+	setEditorContentEditable(false);	
 
-	getEditorElement().setAttribute('contenteditable', false);	
+	hideAllToolbars();
 
-	quill.update();
-
-	hideEditorToolbar();
+	startClipboardHandler();
 
 	scrollToHome();
 	hideScrollbars();
@@ -513,9 +564,10 @@ function disableReadOnly(isSilent) {
 	if (!isSilent) {
 		showEditorToolbar();
 		showScrollbars();
-	}
+		stopClipboardHandler();
+	}	
 
-	getEditorElement().setAttribute('contenteditable', true);
+	setEditorContentEditable(true);
 	updateAllSizeAndPositions();
 
 	//refreshFontSizePicker();
@@ -526,24 +578,27 @@ function disableReadOnly(isSilent) {
 
 function enableSubSelection() {
 	getEditorContainerElement().style.cursor = 'text';
-
+	getEditorContainerElement().style.userSelect = 'auto';
+	setEditorContentEditable(true);
 	IsSubSelectionEnabled = true;
-
+	
 	if (!isEditorToolbarVisible()) {
 		//document.addEventListener('selectionchange', onDocumentSelectionChange);
 	} 
 	showScrollbars();
 	drawOverlay();
+	log('sub-selection ENABLED');
 }
 
 function disableSubSelection() {
 	getEditorContainerElement().style.cursor = 'default';
-
+	getEditorContainerElement().style.userSelect = 'none';
+	setEditorContentEditable(false);
 	IsSubSelectionEnabled = false;
 
 	if (!isEditorToolbarVisible()) {
 		//document.removeEventListener('selectionchange', onDocumentSelectionChange);
-		let selection = quill.getSelection();
+		let selection = getSelection();
 		if (selection) {
 			setEditorSelection(selection.index, 0);
 		}
@@ -551,6 +606,15 @@ function disableSubSelection() {
 	}
 
 	drawOverlay();
+	log('sub-selection DISABLED');
+}
+
+function hideAllToolbars() {
+	hideEditorToolbar();
+	hideEditTemplateToolbar();
+	hidePasteTemplateToolbar();
+	hideTemplateColorPaletteMenu();
+	hideTemplateToolbarContextMenu();
 }
 
 function getSelection() {
@@ -558,7 +622,8 @@ function getSelection() {
 	return selection;
 }
 
-function setEditorSelection(doc_idx,length, source = 'user') {
+function setEditorSelection(doc_idx, length, source = 'user') {
+	getEditorContainerElement().style.userSelect = 'auto';
 	quill.setSelection(doc_idx, length, source);
 }
 

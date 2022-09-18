@@ -1,4 +1,8 @@
-﻿var BlurredSelectionRange = null;
+﻿const DefaultSelectionBgColor = 'lightblue';
+const DefaultSelectionFgColor = 'black';
+const DefaultCaretColor = 'black';
+
+var BlurredSelectionRange = null;
 var BlurredSelectionRects = null;
 
 function setTextSelectionBgColor(bgColor) {
