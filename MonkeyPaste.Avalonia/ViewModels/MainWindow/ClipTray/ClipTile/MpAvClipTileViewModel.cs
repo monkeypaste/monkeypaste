@@ -420,22 +420,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string EditorPath {
-            get {
-                //file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html
-                //string editorPath = Path.Combine(Environment.CurrentDirectory, "Resources", "Html", "Editor", "index.html");
-                string editorPath = @"file:///C:/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html";
-                if (OperatingSystem.IsWindows()) {
-                    return editorPath;
-                }
-                if(OperatingSystem.IsMacOS()) {
-                    return @"file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html";
-                }
-                var uri = new Uri(editorPath, UriKind.Absolute);
-                string uriStr = uri.AbsoluteUri;
-                return uriStr;
-            }
-        }
 
         public int LineCount { get; private set; } = -1;
         public int CharCount { get; private set; } = -1;
@@ -2044,6 +2028,7 @@ namespace MonkeyPaste.Avalonia {
                         continue;
                 }
             }
+            d.MapAllPseudoFormats();
             return d;
         }
 
@@ -2368,7 +2353,7 @@ namespace MonkeyPaste.Avalonia {
                     //Next.OnPropertyChanged(nameof(Next.TrayX));
                     break;
                 case nameof(QueryOffsetIdx):
-                    if (IsPlaceholder || Parent.IsUnpinning) {
+                    if (IsPlaceholder || Parent.IsUnpinning || Parent.IsBatchOffsetChange) {
                         break;
                     }
                     //MpRect prevRect = Prev == null ? null : Prev.TrayRect;
@@ -2539,7 +2524,7 @@ namespace MonkeyPaste.Avalonia {
                 } while (string.IsNullOrEmpty(DetailText));
             });
 
-        public ICommand ToggleEditContentCommand => new MpCommand(
+                public ICommand ToggleEditContentCommand => new MpCommand(
             () => {
                 if (!IsSelected && IsContentReadOnly) {
                     Parent.SelectedItem = this;
@@ -2565,7 +2550,12 @@ namespace MonkeyPaste.Avalonia {
                 CopyItem.WriteToDatabaseAsync().FireAndForgetSafeAsync(this);
             });
 
-
+        public ICommand ShowCefDevToolsCommand => new MpCommand(
+            () => {
+                if(GetContentView() is MpAvCefNetWebView wv) {
+                    wv.ShowDevTools();
+                }
+            });
         #endregion
 
         #endregion

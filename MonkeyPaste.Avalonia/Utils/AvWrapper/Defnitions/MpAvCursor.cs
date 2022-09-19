@@ -89,7 +89,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         void MpICursor.SetCursor(object targetObj, MpCursorType newCursor) {
-            MpConsole.WriteLine("Ignoring Set cursor globally target was " + targetObj + " with cursor: "+newCursor);
+            //MpConsole.WriteLine("Ignoring Set cursor globally target was " + targetObj + " with cursor: "+newCursor);
             return;
             //if (MpAvClipTrayViewModel.Instance.HasScrollVelocity) {
             //    return;

@@ -1,30 +1,104 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Layout;
+using Avalonia.Threading;
+using CefNet.Avalonia;
+using MonkeyPaste.Avalonia.Utils.ToolWindow.Win;
+using MonkeyPaste.Common;
+using Org.BouncyCastle.Bcpg.OpenPgp;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using System.Windows.Markup;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpHtmlClipboardDataConverter {
+    public class MpAvHtmlClipboardDataConverter {
+        private static WebView _wv;
+
         public string Version { get; private set; }
         public string SourceUrl { get; private set; }
         public string Html { get; private set; }
 
-        //public string Rtf { get; private set; }
+        public static void Init() {
+            if(!MpAvCefNetApplication.UseCefNet) {
+                return;
+            }
 
-        public static async Task<MpHtmlClipboardDataConverter> ParseAsync(string htmlClipboardData) {
+            var quillWindow = new Window() {
+                Width = 300,
+                Height = 300,
+                ShowInTaskbar = false,
+                SystemDecorations = SystemDecorations.None,
+                Position = new PixelPoint(808080, 808080)
+            };
+            _wv = new WebView() {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+                IsVisible = false
+            };
+            quillWindow.Content = _wv;
+            
+            _wv.BrowserCreated += (s, e) => {
+                _wv.Navigated += (s, e) => {
+                    if (s is WebView wv) {
+                        var converter_init_msg = new MpQuillLoadRequestMessage() {
+                            isEditorPlainHtmlConverter = true
+                        };
+                        _wv.ExecuteJavascript($"init_ext('{converter_init_msg.SerializeJsonObjectToBase64}')");
+                    }
+                };
+                _wv.Navigate(MpAvClipTrayViewModel.EditorPath);
+            };
+
+            if(OperatingSystem.IsWindows()) {
+                // hide converter window from windows alt-tab menu
+                quillWindow.AttachedToVisualTree += (s, e) => {
+                    MpAvToolWindow_Win32.InitToolWindow(quillWindow.PlatformImpl.Handle.Handle);
+                    quillWindow.Hide();
+                };
+            }
+            
+            
+
+            //_browser.FrameLoadEnd += (sender, args) => {
+            //    if (args.Frame.IsMain) {
+            //        var initCoverterMsg = new MpQuillLoadRequestMessage() { isEditorPlainHtmlConverter = true };
+            //        _browser.EvaluateScriptAsync($"init_ext('{initCoverterMsg.SerializeJsonObjectToBase64()}')");
+
+            //        MpHelpers.RunOnMainThread(async () => {
+            //            while (true) {
+            //                if (_plainHtmlToConvert == null) {
+            //                    await Task.Delay(100);
+            //                } else {
+            //                    var convertPlainHtmlResponse = await _browser.EvaluateScriptAsync(null, "convertPlainHtml", _plainHtmlToConvert);
+            //                    if (convertPlainHtmlResponse.Success) {
+            //                        _plainHtmlToConvert = null;
+            //                        _quillHtml = HttpUtility.HtmlDecode(convertPlainHtmlResponse.Result.ToString());
+            //                    }
+            //                }
+            //            }
+            //        });
+            //    }
+            //};
+
+            quillWindow.Show();
+        }
+
+
+        public static async Task<MpAvHtmlClipboardDataConverter> ParseAsync(string htmlClipboardData) {
             await Task.Delay(1);
             if(string.IsNullOrWhiteSpace(htmlClipboardData)) {
                 return null;
             }
 
-            var hcd = new MpHtmlClipboardDataConverter();
+            var hcd = new MpAvHtmlClipboardDataConverter();
 
-            string versionToken = @"Version:";
-            string startHtmlToken = @"StartHTML:";
-            string endHtmlToken = @"EndHTML:";
+            //string versionToken = @"Version:";
+            //string startHtmlToken = @"StartHTML:";
+            //string endHtmlToken = @"EndHTML:";
 
             string htmlStartToken = @"<!--StartFragment-->";
             string htmlEndToken = @"<!--EndFragment-->";
@@ -36,9 +110,24 @@ namespace MonkeyPaste.Avalonia {
                 int html_length = html_end_idx - html_start_idx;
 
                 if(html_length > 0) {
-                    hcd.Html = htmlClipboardData.Substring(html_start_idx, html_length);
-                    hcd.Html = HttpUtility.HtmlDecode(hcd.Html);
-                    //hcd.Rtf = string.Empty;// await MpQuillHtmlToRtfConverter.ConvertStandardHtmlToRtf(hcd.Html);
+                    string plainHtml = htmlClipboardData.Substring(html_start_idx, html_length);
+                    plainHtml = HttpUtility.HtmlDecode(plainHtml);
+                    if(_wv == null) {
+                        // occurs when CefNet is disabled (hidden window not created in init)
+                        hcd.Html = plainHtml;
+                    } else {
+
+                        var plainHtmlToRichHtmlRequest = new MpQuillConvertPlainHtmlToQuillHtmlRequestMessage() { plainHtml = plainHtml };
+                        string qhtml = await _wv.EvaluateJavascriptAsync($"convertPlainHtml_ext('{plainHtmlToRichHtmlRequest.SerializeJsonObjectToBase64()}')");
+
+                        if (qhtml.IsStringEscapedHtml()) {
+                            // pretty sure this can't happen since its base64 encoded but curious to see, this means need to call HtmlDecode again..
+                            Debugger.Break();
+                            qhtml = HttpUtility.HtmlDecode(qhtml);
+                        }
+                        hcd.Html = qhtml;
+                        //hcd.Rtf = string.Empty;// await MpQuillHtmlToRtfConverter.ConvertStandardHtmlToRtf(hcd.Html);
+                    }
                 }
             }
             string sourceUrlToken = "SourceURL:";

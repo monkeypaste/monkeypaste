@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data;
+using Avalonia.Input;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using CefNet;
@@ -105,10 +106,15 @@ namespace MonkeyPaste.Avalonia {
                 element is MpAvCefNetWebView wv &&
                 GetIsContentReadOnly(wv) &&
                 wv.IsEditorInitialized) {
-                  if (isSubSelectionEnabled) {
+                if (isSubSelectionEnabled) {
                     wv.ExecuteJavascript("enableSubSelection_ext()");
                 } else {
                     wv.ExecuteJavascript("disableSubSelection_ext()");
+                }
+                if(wv.Parent is Control control) {
+                    control.Cursor = isSubSelectionEnabled ?
+                        new Cursor(StandardCursorType.Ibeam) :
+                        new Cursor(StandardCursorType.Arrow);
                 }
             }
         }
@@ -195,6 +201,7 @@ namespace MonkeyPaste.Avalonia {
                 if(isEnabled) {
                     wv.BrowserCreated += Wv_BrowserCreated;
                     wv.DevToolsProtocolEventAvailable += Wv_DevToolsProtocolEventAvailable;
+                    
                 }
             }
         }
@@ -209,7 +216,7 @@ namespace MonkeyPaste.Avalonia {
                 wv.IsEditorInitialized = false;
 
                 wv.Navigated += Wv_Navigated;
-                wv.Navigate(ctvm.EditorPath);
+                wv.Navigate(MpAvClipTrayViewModel.EditorPath);
             }
 
         }
@@ -488,7 +495,7 @@ namespace MonkeyPaste.Avalonia {
             if (control.DataContext is MpAvClipTileViewModel civm) {
                 MpConsole.WriteLine($"Tile content item '{civm.CopyItemTitle}' is editable");
 
-                var qrm = MpJsonObject.DeserializeObject<MpQuillDisableReadOnlyResponseMessage>(disableReadOnlyResponse);
+                var qrm = MpJsonObject.DeserializeBase64Object<MpQuillDisableReadOnlyResponseMessage>(disableReadOnlyResponse);
 
                 var ctv = control.GetVisualAncestor<MpAvClipTileView>();
                 if (ctv != null) {

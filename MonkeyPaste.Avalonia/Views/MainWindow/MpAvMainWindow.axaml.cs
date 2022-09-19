@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using WebViewControl;
 using MonkeyPaste.Common.Avalonia;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -102,7 +101,7 @@ namespace MonkeyPaste.Avalonia {
             this.PointerMoved += MainWindow_PointerMoved;
             this.PointerLeave += MainWindow_PointerLeave;
 
-           // MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove += ShortcutCollectionViewModel_OnGlobalMouseMove;
+            // MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove += ShortcutCollectionViewModel_OnGlobalMouseMove;
 
             var mwcg = this.FindControl<Grid>("MainWindowContainerGrid");
             mwcg.AttachedToVisualTree += MainWindowContainerGrid_AttachedToVisualTree;
@@ -116,6 +115,7 @@ namespace MonkeyPaste.Avalonia {
                 await InitAsync();
             });
         }
+
 
 
 
@@ -461,7 +461,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
-                //MpAvToolWindow_Win32.InitToolWindow(this.PlatformImpl.Handle.Handle);
+                MpAvToolWindow_Win32.InitToolWindow(this.PlatformImpl.Handle.Handle);
             }
 
 

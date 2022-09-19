@@ -47,6 +47,19 @@ function onContentDraggableChanged_ntf(isDraggable) {
 	}
 }
 
+function onDragStart_ntf() {
+	// output MpQuillDragDropDataObjectMessage
+
+	// should only be called on mouse down...
+	if (typeof notifyDragStart === 'function') {
+		let sel = getSelection();
+		let dragDropDataMsg = createHostMsgDataObjectObjectForRange(sel, 'drag');
+		let msgStr = toBase64FromJsonObj(dragDropDataMsg);
+		startDrag(true);
+		notifyDragStart(msgStr);
+	}
+}
+
 function onSubSelectionEnabledChanged_ntf(isEnabled) {
 	// output MpQuillSubSelectionChangedNotification
 

@@ -55,6 +55,9 @@
         <SolidColorBrush x:Key="IsResizingBorderBrush">
             LightPink
         </SolidColorBrush>
+        <SolidColorBrush x:Key="HitTestableTransparent"
+                         Color="Black"
+                         Opacity="0.01" />
         <Thickness x:Key="TileBorderThickness">
             5,5,5,5
         </Thickness>
@@ -92,6 +95,10 @@
         <Style Selector=":is(Button):pointerover">
             <Setter Property="Cursor"
                     Value="Hand" />
+        </Style>
+        <Style Selector=":is(Button):pointerover /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Transparent" />
         </Style>
         <Style Selector=":is(Button):pointerover PathIcon">
             <Setter Property="Foreground"

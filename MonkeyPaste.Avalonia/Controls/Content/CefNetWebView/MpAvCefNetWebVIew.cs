@@ -86,6 +86,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+
         public MpAvClipTileViewModel BindingContext => this.DataContext as MpAvClipTileViewModel;
         public bool IsEditorInitialized { get; set; } = false;
 
@@ -111,6 +112,7 @@ namespace MonkeyPaste.Avalonia {
             CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Copy, OnCopy, OnCanExecuteClipboardCommand));
             CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Cut, OnCut, OnCanExecuteClipboardCommand));
             CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Paste, OnPaste, OnCanExecuteClipboardCommand));
+
         }
 
         #endregion
@@ -155,6 +157,8 @@ namespace MonkeyPaste.Avalonia {
             Selection.RangeRects.AddRange(selRects);
         }
 
+
+
         public void SelectAll() {
             this.ExecuteJavascript("selectAll_ext()");
         }
@@ -165,13 +169,12 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
             base.OnAttachedToVisualTree(e);
-            DragDrop.SetAllowDrop(this, true);
+            //DragDrop.SetAllowDrop(this, true);
             //this.AddHandler(DragDrop.DragEnterEvent, DragEnter);
             //this.AddHandler(DragDrop.DragOverEvent, DragOver);
             //this.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
             //this.AddHandler(DragDrop.DragLeaveEvent, Drop);
         }
-
         //#region Drag
         //private void DragCheckAndStart_old(PointerPressedEventArgs e) {
         //    MpPoint dc_down_pos = e.GetClientMousePoint(this);
@@ -243,7 +246,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (cv is MpAvCefNetWebView wv) {
                 // notify editor that its dragging and not just in a drop state
-                var dragStartMsg = new MpQuillIsDraggingNotification() { isDragging = true };
+                var dragStartMsg = new MpQuillIsHostDraggingMessage() { isDragging = true };
                 wv.ExecuteJavascript($"updateIsDraggingFromHost_ext('{dragStartMsg.SerializeJsonObjectToBase64()}')");
             }
             Dispatcher.UIThread.Post(async () => {
@@ -263,7 +266,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvIContentView cv = BindingContext.GetContentView();
             if (cv is MpAvCefNetWebView wv) {
                 // notify editor that its dragging and not just in a drop state
-                var dragEndMsg = new MpQuillIsDraggingNotification() { isDragging = false };
+                var dragEndMsg = new MpQuillIsHostDraggingMessage() { isDragging = false };
                 wv.ExecuteJavascript($"updateIsDraggingFromHost_ext('{dragEndMsg.SerializeJsonObjectToBase64()}')");
             }
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= Global_DragKeyUpOrDown;
@@ -341,7 +344,7 @@ namespace MonkeyPaste.Avalonia {
         #region Drop
         private void DragEnter(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragEnter] CurDropEffects: " + _curDropEffects);
-            SendDropMsg(e.Data, "dragenter");
+            //SendDropMsg(e.Data, "dragenter");
             e.DragEffects = DragDropEffects.Copy | DragDropEffects.Move;
             //base.OnDragEnter(e);
         }
@@ -387,93 +390,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
 
-        #region Javascript Evaluation
-
-        public void SetJavascriptResult(string evalKey, string result) {
-            //if(result == MpAvCefNetApplication.JS_REF_ERROR) {
-            //    // ignore 
-            //}
-            if(_evalResultLookup.ContainsKey(evalKey)) {
-                //MpConsole.WriteLine("js eval key " + evalKey + " already has a result pending (replacing).");
-                //MpConsole.WriteLine("existing: " + _evalResultLookup[evalKey]);
-                //MpConsole.WriteLine("new: " + result);
-                _evalResultLookup[evalKey] = result;
-                return;
-            }
-            if(!_evalResultLookup.TryAdd(evalKey,result)) {
-               // MpConsole.WriteTraceLine("Js Eval error, couldn't write to lookup, if happens should probably loop here..");
-                Debugger.Break();
-            }
-        }
-        public async Task<string> EvaluateJavascriptAsync(string script) {
-            string evalKey = System.Guid.NewGuid().ToString();
-            if(_evalResultLookup.ContainsKey(evalKey)) {
-                // shouldn't happen
-                Debugger.Break();
-            }
-            _evalResultLookup.TryAdd(evalKey, null);
-
-            int max_attempts = 100;
-            int attempt = 0;
-            
-            while (attempt <= max_attempts) {                
-                string resp = await EvaluateJavascriptAsync_helper(script, evalKey);
-                bool is_valid = resp != null && resp != MpAvCefNetApplication.JS_REF_ERROR;
-                if(is_valid) {
-                    _evalResultLookup.Remove(evalKey, out string rmStr);
-                    return resp;
-                }
-                _evalResultLookup[evalKey] = null;
-                attempt++;
-                //MpConsole.WriteLine($"retrying '{script}' w/ key:'{evalKey}' attempt#:{attempt}");
-                await Task.Delay(100);
-            }
-            MpConsole.WriteLine($"retry count exceeded for '{script}' w/ key:'{evalKey}' attempts#:{attempt}");
-            Debugger.Break();
-            return MpAvCefNetApplication.JS_REF_ERROR;
-        }
-        private async Task<string> EvaluateJavascriptAsync_helper(string script,string evalKey, int retryAttempt = 0) {
-            var frame = GetMainFrame();
-            if (frame == null) {
-                return null;
-            }
-
-            string resp = null;
-            if (!Dispatcher.UIThread.CheckAccess()) {
-                await Dispatcher.UIThread.InvokeAsync(async () => {
-                    resp = await EvaluateJavascriptAsync(script);
-                });
-                return resp;
-            }
-            
-            CefProcessMessage cefMsg = new CefProcessMessage("EvaluateScript");
-            evalKey = string.IsNullOrEmpty(evalKey) ? System.Guid.NewGuid().ToString() : evalKey;
-            cefMsg.ArgumentList.SetString(0, evalKey);
-            cefMsg.ArgumentList.SetString(1, script);
-            frame.SendProcessMessage(CefProcessId.Renderer, cefMsg);
-
-            while(_evalResultLookup[evalKey] == null) {
-                await Task.Delay(100);
-            }
-            return _evalResultLookup[evalKey];
-        }
-
-
-       public void ExecuteJavascript(string script) {
-            var frame = GetMainFrame();
-            if (frame == null) {
-                throw new Exception("frame must be initialized");
-            }
-            if (!Dispatcher.UIThread.CheckAccess()) {
-                Dispatcher.UIThread.Post(() => {
-                    ExecuteJavascript(script);
-                });
-                return;
-            }
-            frame.ExecuteJavaScript(script, frame.Url, 0);
-        }
-
-        #endregion
+        
 
         #region Application Commands
 

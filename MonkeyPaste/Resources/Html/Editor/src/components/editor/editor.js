@@ -132,7 +132,8 @@ function focusEditor() {
 }
 function hideScrollbars() {
 	//document.querySelector('body').style.overflow = 'hidden';
-	document.getElementById("editor").style.overflow = "hidden";
+	getEditorContainerElement().style.overflow = "hidden";
+	getEditorElement().style.overflow = "hidden";
 }
 
 function showScrollbars() {
@@ -158,7 +159,9 @@ function getTotalHeight() {
 }
 
 function updateAllSizeAndPositions() {
-
+	if (isRunningInHost()) {
+		getEditorContainerElement().style.height = '100%';
+	}
 	$(".ql-toolbar").css("top", 0);
 
 	if (isEditorToolbarVisible()) {
@@ -166,6 +169,7 @@ function updateAllSizeAndPositions() {
 	} else {
 		$("#editor").css("top", 0);
 	}
+	
 
 	let wh = window.visualViewport.height;
 	let eth = getEditorToolbarHeight();
@@ -191,51 +195,6 @@ function updateAllSizeAndPositions() {
 		//}
 		//$("#editor").css("bottom", viewportBottom - tbh);
 	}
-
-
-	////$(".ql-toolbar").css("position", "fixed");
-	//let toolbarElm = getEditorToolbarElement();
-	//let editorContainerElm = getEditorContainerElement();
-	//let editorElm = getEditorElement();
-
-	//toolbarElm.style.top = 0;
-
-	//if (isEditorToolbarVisible()) {
-	//	toolbarElm.style.top = parseFloat(toolbarElm.style.height);
-	//	//$("#editor").css("top", $(".ql-toolbar").outerHeight()); 
-	//} else {
-	//	editorContainerElm.style.top = 0;
-	//	//$("#editor").css("top", 0);
-	//}
-
-	//let wh = parseFloat(window.visualViewport.height);
-	//let eth = getEditorToolbarHeight();
-	//let tth = getTemplateToolbarHeight();
-
-	////$("#editor").css("height", wh - eth - tth);
-	//editorContainerElm.style.height = (wh - eth - tth) + 'px';
-
-	//editorContainerElm.style.width = getContentWidth() + 'px';
-	//editorElm.style.height = getContentHeight() + 'px';
-
-	//updateEditTemplateToolbarPosition();
-	//updatePasteTemplateToolbarPosition();
-
-	//drawOverlay();
-
-	//if (EnvName == "android") {
-	//	//var viewportBottom = window.scrollY + window.innerHeight;
-	//	//let tbh = $(".ql-toolbar").outerHeight();
-	//	//if (y <= 0) {
-	//	//    //keyboard is not visible
-	//	//    $(".ql-toolbar").css("top", y);
-	//	//    $("#editor").css("top", y + tbh);
-	//	//} else {
-	//	//    $(".ql-toolbar").css("top", y - tbh);
-	//	//    $("#editor").css("top", 0);
-	//	//}
-	//	//$("#editor").css("bottom", viewportBottom - tbh);
-	//}
 }
 
 
@@ -365,9 +324,16 @@ function getText(rangeObj) {
 }
 
 function setTextInRange(range, text, source = 'api') {
+	//let wasEditable = isEditorContentEditable();
+	//if (!wasEditable) {
+	//	setEditorContentEditable(true);
+	//}
 	quill.deleteText(range.index, range.length, source);
 	quill.insertText(range.index, text, source);
 
+	//if (!wasEditable) {
+	//	setEditorContentEditable(false);
+	//}
 	//quill.setText(text + "\n");
 }
 
@@ -528,6 +494,10 @@ function createLink() {
 	}
 }
 
+function isEditorContentEditable() {
+	let isEditable = parseBool(getEditorElement().getAttribute('contenteditable'));
+	return isEditable;
+}
 function setEditorContentEditable(isEditable) {
 	getEditorElement().setAttribute('contenteditable', isEditable);
 	quill.update();

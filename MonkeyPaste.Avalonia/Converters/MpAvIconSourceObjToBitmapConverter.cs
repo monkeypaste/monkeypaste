@@ -9,6 +9,7 @@ using Avalonia.Media;
 using Avalonia.Controls.Shapes;
 using MonkeyPaste.Common.Avalonia;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvIconSourceObjToBitmapConverter : IValueConverter {
@@ -16,8 +17,9 @@ namespace MonkeyPaste.Avalonia {
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
             double scale = 1.0d;
-            if(parameter is string paramStr &&
-                paramStr.ToLower().StartsWith("scale_")) {
+            List<string> paramParts = parameter == null ? new List<string>() : parameter.ToString().Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            
+            if(paramParts.FirstOrDefault(x=>x.StartsWith("scale_")) is string paramStr) {
                 try {
                     scale = double.Parse(paramStr.ToLower().Replace("scale_", String.Empty));
                 }catch {
@@ -31,10 +33,8 @@ namespace MonkeyPaste.Avalonia {
                 if (ivm == null) {
                     return null;
                 }
-                if (parameter is string paramStr2) {
-                    if (paramStr2.ToLower() == "border") {
-                        return new MpAvStringBase64ToBitmapConverter().Convert(ivm.IconBorderBase64, null, scale.ToString(), CultureInfo.CurrentCulture);
-                    }
+                if (paramParts.Contains("border")) {
+                    return new MpAvStringBase64ToBitmapConverter().Convert(ivm.IconBorderBase64, null, scale.ToString(), CultureInfo.CurrentCulture);
                 }
                 return new MpAvStringBase64ToBitmapConverter().Convert(ivm.IconBase64, null, scale.ToString(), CultureInfo.CurrentCulture);
             } else if(value is string valStr) {

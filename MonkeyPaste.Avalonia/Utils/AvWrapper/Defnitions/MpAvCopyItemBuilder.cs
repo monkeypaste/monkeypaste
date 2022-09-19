@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
 
                 string itemData = null;
                 //string htmlData = string.Empty;
-                MpHtmlClipboardDataConverter htmlClipboardData = new MpHtmlClipboardDataConverter();
+                MpAvHtmlClipboardDataConverter htmlClipboardData = new MpAvHtmlClipboardDataConverter();
                 MpCopyItemType itemType = MpCopyItemType.None;
 
                 if (mpdo.ContainsData(MpPortableDataFormats.FileDrop)) {
@@ -60,7 +60,7 @@ namespace MonkeyPaste.Avalonia {
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Html)) {
                     itemType = MpCopyItemType.Text;
                     string rawHtmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
-                    htmlClipboardData = await MpHtmlClipboardDataConverter.ParseAsync(rawHtmlData);
+                    htmlClipboardData = await MpAvHtmlClipboardDataConverter.ParseAsync(rawHtmlData);
                     itemData = htmlClipboardData.Html;
                     //itemData = itemData.ToQuillText();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Text)) {

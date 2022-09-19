@@ -58,7 +58,21 @@ function getDataTransferObjectForRange(range) {
     dt.setData('application/json/quill-delta', getDeltaJson(range));
 }
 
-function isDataTransferValid(dt) {
+function createHostMsgDataObjectObjectForRange(range,eventName) {
+    let rangeDataObjMsg = {
+        eventType: eventName,
+        items: []
+    };
+    let pt = getText(range);
+    rangeDataObjMsg.items.push({ format: 'text/plain', data: pt });
+    let html = getHtml(range);
+    rangeDataObjMsg.items.push({ format: 'text/html', data: html });
+    let qJson = getDeltaJson(range);
+    rangeDataObjMsg.items.push({ format: 'application/json/quill-delta', data: qJson });
+    return rangeDataObjMsg;
+}
+
+function isDataTransferDataValid(dt) {
     if (CopyItemType == 'Text') {
         return hasPlainText(dt) || hasHtml(dt) || hasQuillDeltaJson(dt);
     }

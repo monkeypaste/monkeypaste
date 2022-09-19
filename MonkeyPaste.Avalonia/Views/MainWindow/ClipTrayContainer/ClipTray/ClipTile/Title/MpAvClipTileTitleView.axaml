@@ -14,6 +14,98 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileTitleView">
     <Grid x:Name="TitleContainerGrid"
           ColumnDefinitions="*,0.3*">
+        <Grid.Styles>
+            <Style Selector="Grid#SourceIconContainerGrid:pointerover">
+                <Style.Animations>
+                    <Animation Duration="0:0:0.4"
+                               FillMode="Forward">
+                        <KeyFrame Cue="0%">
+                            <Setter Property="RotateTransform.Angle"
+                                    Value="0" />
+                        </KeyFrame>
+                        <KeyFrame Cue="33%">
+                            <Setter Property="RotateTransform.Angle"
+                                    Value="15" />
+                        </KeyFrame>
+                        <KeyFrame Cue="66%">
+                            <Setter Property="RotateTransform.Angle"
+                                    Value="-15" />
+                        </KeyFrame>
+                        <KeyFrame Cue="100%">
+                            <Setter Property="RotateTransform.Angle"
+                                    Value="0" />
+                        </KeyFrame>
+                    </Animation>
+                </Style.Animations>
+            </Style>
+            <Style Selector="Grid#SourceIconContainerGrid:not(:pointerover)">
+                <Style.Animations>
+                    <Animation Duration="0:0:0.4"
+                               FillMode="Forward">
+                        <KeyFrame Cue="0%">
+                            <Setter Property="RotateTransform.Angle"
+                                    Value="0" />
+                        </KeyFrame>
+                        <KeyFrame Cue="33%">
+                            <Setter Property="RotateTransform.Angle"
+                                    Value="-15" />
+                        </KeyFrame>
+                        <KeyFrame Cue="66%">
+                            <Setter Property="RotateTransform.Angle"
+                                    Value="15" />
+                        </KeyFrame>
+                        <KeyFrame Cue="100%">
+                            <Setter Property="RotateTransform.Angle"
+                                    Value="0" />
+                        </KeyFrame>
+                    </Animation>
+                </Style.Animations>
+            </Style>
+            <Style Selector="Grid#SourceIconContainerGrid:pointerover Image#ClipTileAppIconBorderImage">
+                <Style.Animations>
+                    <Animation Duration="0:0:0.3"
+                               Easing="CubicEaseOut"
+                               FillMode="Forward">
+                        <KeyFrame Cue="0%">
+                            <Setter Property="IsVisible"
+                                    Value="True" />
+                            <Setter Property="ScaleTransform.ScaleX"
+                                    Value="1" />
+                            <Setter Property="ScaleTransform.ScaleY"
+                                    Value="1" />
+                        </KeyFrame>
+                        <KeyFrame Cue="100%">
+                            <Setter Property="ScaleTransform.ScaleX"
+                                    Value="1.1" />
+                            <Setter Property="ScaleTransform.ScaleY"
+                                    Value="1.1" />
+                        </KeyFrame>
+                    </Animation>
+                </Style.Animations>
+            </Style>
+            <Style Selector="Grid#SourceIconContainerGrid:not(:pointerover) Image#ClipTileAppIconBorderImage">
+                <Style.Animations>
+                    <Animation Duration="0:0:0.3"
+                               Easing="CubicEaseOut"
+                               FillMode="Forward">
+                        <KeyFrame Cue="0%">
+                            <Setter Property="ScaleTransform.ScaleX"
+                                    Value="1.1" />
+                            <Setter Property="ScaleTransform.ScaleY"
+                                    Value="1.1" />
+                        </KeyFrame>
+                        <KeyFrame Cue="100%">
+                            <Setter Property="IsVisible"
+                                    Value="False" />
+                            <Setter Property="ScaleTransform.ScaleX"
+                                    Value="1" />
+                            <Setter Property="ScaleTransform.ScaleY"
+                                    Value="1" />
+                        </KeyFrame>
+                    </Animation>
+                </Style.Animations>
+            </Style>
+        </Grid.Styles>
         <!--  Swirl  -->
         <Viewbox HorizontalAlignment="Left"
                  VerticalAlignment="Top"
@@ -178,22 +270,9 @@
         <Grid x:Name="SourceIconContainerGrid"
               Grid.Column="1"
               Width="{Binding Bounds.Height, ElementName=TitleContainerGrid}"
-              PointerPressed="SourceIconGrid_PointerPressed"
               HorizontalAlignment="Right"
               Margin="0,0,5,0"
               ClipToBounds="False">
-            <Image Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}, ConverterParameter=7}"
-                   Stretch="UniformToFill"
-                   HorizontalAlignment="Stretch"
-                   VerticalAlignment="Stretch">
-                <Image.RenderTransform>
-                    <TransformGroup>
-                        <TranslateTransform X="0"
-                                            Y="0" />
-                        <RotateTransform Angle="0" />
-                    </TransformGroup>
-                </Image.RenderTransform>
-            </Image>
 
             <!--<Ellipse x:Name="SourceMatchEllipse"
                      IsVisible="False"
@@ -202,6 +281,51 @@
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
                      Margin="0,3,13,0" />-->
+            <Button x:Name="ClipTileAppIconImageButton"
+                    local:MpAvPointerPressCommandExtension.IsEnabled="True"
+                    local:MpAvPointerPressCommandExtension.RightPressCommand="{Binding EnableFilterByAppCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                    local:MpAvPointerPressCommandExtension.RightPressCommandParameter="{Binding .}"
+                    local:MpAvPointerPressCommandExtension.LeftPressCommand="{Binding ShowCefDevToolsCommand}"
+                    ClipToBounds="False"
+                    BorderThickness="0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Margin="0,0,0,0"
+                    Padding="3">
+                <Button.RenderTransform>
+                    <RotateTransform />
+                </Button.RenderTransform>
+
+                <Grid>
+                    <Image x:Name="ClipTileAppIconBorderImage"
+                           IsHitTestVisible="False"
+                           Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}, ConverterParameter=scale_7|border}"
+                           Stretch="UniformToFill"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch">
+                        <Image.RenderTransform>
+                            <ScaleTransform />
+                        </Image.RenderTransform>
+                    </Image>
+                    <Image x:Name="ClipTileAppIconImage"
+                           IsHitTestVisible="False"
+                           Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}, ConverterParameter=scale_7}"
+                           Stretch="UniformToFill"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch">
+                        <!--<Image.RenderTransform>
+                            <TransformGroup>
+                                <TranslateTransform X="0"
+                                                    Y="0" />
+                                <RotateTransform Angle="0" />
+                            </TransformGroup>
+                        </Image.RenderTransform>-->
+                    </Image>
+                </Grid>
+            </Button>
+
         </Grid>
     </Grid>
 </local:MpAvUserControl>

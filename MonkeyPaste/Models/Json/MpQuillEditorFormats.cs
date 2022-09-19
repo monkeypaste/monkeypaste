@@ -102,6 +102,13 @@ templateType: "dynamic"
         public int index { get; set; }
         public int length { get; set; }
     }
+    public class MpQuillSetSelectionFromEditorPointMessage : MpJsonObject {
+        public double x { get; set; }
+        public double y { get; set; }
+        public string state { get; set; }
+
+        public string modkeyBase64Msg { get; set; }
+    }
 
     public class MpQuillConvertPlainHtmlToQuillHtmlRequestMessage : MpJsonObject {
         public string plainHtml { get; set; }
@@ -206,7 +213,7 @@ templateType: "dynamic"
         public bool escKey { get; set; }
     }
 
-    public class MpQuillIsDraggingNotification : MpJsonObject {
+    public class MpQuillIsHostDraggingMessage : MpJsonObject {
         public bool isDragging { get; set; }
     }
 }

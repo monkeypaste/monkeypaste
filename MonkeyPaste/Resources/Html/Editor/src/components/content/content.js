@@ -29,6 +29,10 @@ function getContentHeight() {
     return parseFloat(bounds.height);
 }
 
+function getContentRange() {
+	return { index: 0, length: getDocLength() };
+}
+
 function isBlockElement(elm) {
     if (elm == null || !elm instanceof HTMLElement) {
         return false;

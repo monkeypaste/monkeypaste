@@ -14,6 +14,22 @@ function updateOverlayBounds(overlayCanvas) {
 	overlayCanvas.height = editorRect.height;
 }
 
+function testOverlay() {
+    let canvas = document.getElementById('overlayCanvas');
+    updateOverlayBounds(canvas);
+
+    if (!canvas.getContext) {
+        return;
+    }
+
+    let ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    let overlay_rect = cleanRect(canvas.getBoundingClientRect())
+
+    drawRect(ctx,overlay_rect, 'transparent', 'blue', 3);
+}
+
 function drawUnderlines(ctx, color = 'red', thickness = '0.5') {
     let p1 = null;
     let p2 = null;
@@ -61,7 +77,8 @@ function drawUnderlines(ctx, color = 'red', thickness = '0.5') {
         //    p2 = { x: idx_rect.right, y: idx_rect.bottom };
         //}
 
-        if (isPointInRect(windowRect, p1) && isPointInRect(windowRect, p2)) {
+        //if (isPointInRect(windowRect, p1) && isPointInRect(windowRect, p2)) {
+        if (p1 && p2) {
             // force straight lines
 
             let max_line_bottom = Math.max(p1.y, p2.y);

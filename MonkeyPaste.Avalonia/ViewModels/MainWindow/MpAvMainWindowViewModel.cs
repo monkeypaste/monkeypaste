@@ -783,7 +783,7 @@ namespace MonkeyPaste.Avalonia {
                           !IsAnyDropDownOpen &&
                           !IsDropOverMainWindow &&
                           !IsShowingDialog &&
-                          MpAvDragExtension.CurrentDragHost == null &&
+                          !IsDropOverMainWindow &&
                           //!MpContextMenuView.Instance.IsOpen &&
                           !IsResizing &&
                           !IsMainWindowClosing;

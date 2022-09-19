@@ -205,7 +205,9 @@
     <script src="src/components/editor/editor.js"></script>
 
     <script>
-        init_test();
+        if (!isRunningInHost()) {
+            init_test();
+        }
 
     </script>
 

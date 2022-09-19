@@ -25,8 +25,8 @@ namespace MonkeyPaste.Common.Wpf {
         #region Public Methods
 
         public static string ConvertFormatToHtml(
-            string formatName,
             string formatData,
+            string formatName,
             Dictionary<string, string> globalBlockAttributes = null, Dictionary<string, string> globalInlineAttributes = null) {
             // allow empty document creation
             formatData = formatData == null ? string.Empty : formatData;
@@ -399,7 +399,7 @@ namespace MonkeyPaste.Common.Wpf {
 
             //string itemGuid = System.Guid.NewGuid().ToString();
             string rtf = ReadTextFromFile(@"C:\Users\tkefauver\Desktop\rtf_sample_short.rtf");
-            string plain_html = ConvertFormatToHtml(MpPortableDataFormats.Rtf, rtf);
+            string plain_html = ConvertFormatToHtml(rtf, MpPortableDataFormats.Rtf);
 
             WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtf_sample_to_plain_html_test.html", plain_html);
             return plain_html;

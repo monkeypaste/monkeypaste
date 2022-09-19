@@ -22,7 +22,8 @@ namespace MonkeyPaste.Avalonia {
         //NotifySubSelectionEnabledChanged,
         NotifyContentDraggableChanged,
         NotifyDropEffectChanged,
-        NotifyException
+        NotifyException,
+        NotifyDragStart
     }
     public class MpAvCefNetApplication : CefNetApplication {
         #region Private Variables
@@ -36,6 +37,7 @@ namespace MonkeyPaste.Avalonia {
 
         public const string JS_REF_ERROR = "JS_REF_ERROR";
 
+        public static bool UseCefNet { get; private set; } = true;
         #endregion
 
         #region Statics
@@ -52,7 +54,8 @@ namespace MonkeyPaste.Avalonia {
             //"notifySubSelectionEnabledChanged",
             "notifyContentDraggableChanged",
             "notifyDropEffectChanged",
-            "notifyException"
+            "notifyException",
+            "notifyDragStart"
         };
 
         public static Dictionary<string, MpAvEditorBindingFunctionType> BindingFunctionLookup {
@@ -262,6 +265,14 @@ namespace MonkeyPaste.Avalonia {
                         //    var subSelChangedNtf = MpJsonObject.DeserializeBase64Object<MpQuillSubSelectionChangedNotification>(msgJsonStr);
                         //    ctvm.IsSubSelectionEnabled = subSelChangedNtf.isSubSelectionEnabled;
                         //    break;
+                        case MpAvEditorBindingFunctionType.NotifyDragStart:
+                            if(wv.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv) {
+                                var dddmsg = MpJsonObject.DeserializeBase64Object<MpQuillDragDropDataObjectMessage>(msgJsonStr);
+                                ctv.UpdateSubSelectDragDataObject(dddmsg);
+                            }
+                            
+                            
+                            break;
                         case MpAvEditorBindingFunctionType.NotifyException:
                             var exceptionMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonStr);
                             MpConsole.WriteLine(exceptionMsgObj);

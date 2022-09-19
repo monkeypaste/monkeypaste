@@ -9,12 +9,11 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpClipTileContentDataTemplateSelector : IDataTemplate {
-        public static bool UseCefNet = true;
         [Content]
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
         public IControl Build(object param) {
-            string key = UseCefNet ? "CefNetWebViewTemplate" : "PlainTextTemplate";
+            string key = MpAvCefNetApplication.UseCefNet ? "CefNetWebViewTemplate" : "PlainTextTemplate";
             return AvailableTemplates[key].Build(param); 
         }
 

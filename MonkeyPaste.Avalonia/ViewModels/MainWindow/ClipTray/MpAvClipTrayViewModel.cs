@@ -46,6 +46,24 @@ namespace MonkeyPaste.Avalonia {
         private static MpAvClipTrayViewModel _instance;
         public static MpAvClipTrayViewModel Instance => _instance ?? (_instance = new MpAvClipTrayViewModel());
 
+
+        public static string EditorPath {
+            get {
+                //file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html
+                //string editorPath = Path.Combine(Environment.CurrentDirectory, "Resources", "Html", "Editor", "index.html");
+                string editorPath = @"file:///C:/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html";
+                if (OperatingSystem.IsWindows()) {
+                    return editorPath;
+                }
+                if (OperatingSystem.IsMacOS()) {
+                    return @"file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html";
+                }
+                var uri = new Uri(editorPath, UriKind.Absolute);
+                string uriStr = uri.AbsoluteUri;
+                return uriStr;
+            }
+        }
+
         #endregion
 
         #region Properties
@@ -873,7 +891,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsDragOverPinTray { get; set; }
         public bool IsPinTrayDropPopOutVisible {
             get {
-
+                return false;
                 // show popout when no items are visible
                 // TODO This needs to account for external dragover
                 // TODO? at some point using global drag event  when mw is hidden (and pref enabled) have pop out panel automatically pop out for drop
@@ -910,6 +928,8 @@ namespace MonkeyPaste.Avalonia {
 
 
         public bool IsUnpinning { get; set; }
+
+        public bool IsBatchOffsetChange { get; set; } = false;
         #endregion
 
         #endregion
@@ -1454,8 +1474,6 @@ namespace MonkeyPaste.Avalonia {
         private Dictionary<int, int> _manualSortOrderLookup = null;
 
 
-        private MpCopyItem _currentClipboardItem;
-
         #endregion
 
         #region Constants
@@ -1712,26 +1730,6 @@ namespace MonkeyPaste.Avalonia {
         public void UnregisterActionComponent(MpIActionTrigger mvm) {
             OnCopyItemAdd -= mvm.OnActionTriggered;
             MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnCopyItemAdded");
-        }
-
-        #endregion
-
-        #region MpIClipboardContentDataProvider Implementation
-
-        public async Task<string> GetClipboardContentData() {
-            while (IsAddingClipboardItem) {
-                try {
-                    await Task.Delay(100).TimeoutAfter(TimeSpan.FromMilliseconds(3000));
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine(ex);
-                    return null;
-                }
-            }
-            if (_currentClipboardItem == null) {
-                return null;
-            }
-            return _currentClipboardItem.ItemData;
         }
 
         #endregion
@@ -2216,8 +2214,6 @@ namespace MonkeyPaste.Avalonia {
 
             MpAvSystemTrayViewModel.Instance.TotalItemCountLabel = string.Format(@"{0} total entries", totalItems);
 
-
-
             MpPlatformWrapper.Services.ClipboardMonitor.OnClipboardChanged += ClipboardChanged;
             MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
             //await Task.Delay(3000);
@@ -2388,6 +2384,60 @@ namespace MonkeyPaste.Avalonia {
                 // reseting CopyDateTime will move item to top of recent list
                 newCopyItem.CopyDateTime = DateTime.Now;
                 await newCopyItem.WriteToDatabaseAsync();
+
+                var dup_ctvm = AllItems.FirstOrDefault(x => x.CopyItemId == newCopyItem.Id);
+                if(dup_ctvm == null) {
+                    // duplicate is not in the current query page
+                    int dup_query_offset_idx = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.IndexOf(newCopyItem.Id);
+                    if(dup_query_offset_idx < 0) {
+                        // duplicate is not in the current query at all so treat like a new model (pin tray or appeneded
+                        _newModels.Add(newCopyItem);                        
+                    } else {
+                        // dup is in current query 
+                        if(dup_query_offset_idx >= HeadQueryIdx && dup_query_offset_idx <= TailQueryIdx) {
+                            // this shouldn't happen, dup_ctvm should of been found in page
+                            Debugger.Break();
+                        } else {
+                            // remove dup from query since its pinning
+
+                            MpDataModelProvider.AllFetchedAndSortedCopyItemIds.RemoveAt(dup_query_offset_idx);
+                            if (HeadQueryIdx > dup_query_offset_idx) {
+                                // pinning dup alters current pages offsets so down tick them...
+
+                                IsBatchOffsetChange = true;
+                                Items.ForEach(x => x.QueryOffsetIdx--);
+                                IsBatchOffsetChange = false;
+                                RefreshLayout();
+                            } else {
+                                // dup is after current page so no need to adjust this page's offsets
+                            }
+
+                            _newModels.Add(newCopyItem);
+                        }
+                    }
+                } else {
+                    // dup is in current query page or already pinned
+                    if(dup_ctvm.IsPinned) {
+                        // if already pinned move to head and select
+                        int dup_pin_idx = PinnedItems.IndexOf(dup_ctvm);
+                        
+                        if(dup_pin_idx < 0) {
+                            // shouldn't happen
+                            Debugger.Break();
+                        } else if(dup_pin_idx > 0){
+                            // if 0 then its where it should be
+                            PinnedItems.Move(dup_pin_idx, 0);
+                        }
+                        //reacquire tile sents moving can do funky thinks to vm references
+                        dup_ctvm = PinnedItems.FirstOrDefault(x => x.CopyItemId == newCopyItem.Id);
+                        SelectedItem = dup_ctvm;
+                    } else {
+                        // dup is in query page 
+                        // to stay out of ui flip id back to negative and AddNewCommand will notice (or Append does abs val) and call toggle pin on window open
+                        newCopyItem.Id *= -1;
+                        _newModels.Add(newCopyItem);
+                    }
+                }
             } else if (!MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
                 if (newCopyItem.Id != 0) {
                     _newModels.Add(newCopyItem);
@@ -2395,21 +2445,15 @@ namespace MonkeyPaste.Avalonia {
 
                 MpAvTagTrayViewModel.Instance.AllTagViewModel.TagClipCount++;
 
-                if (IsAppendMode) {
-                    AppendNewItemsCommand.Execute(null);
-                } else {
-                    AddNewItemsCommand.Execute(null);
-                }
+               
+            }
+            if (IsAppendMode) {
+                AppendNewItemsCommand.Execute(null);
+            } else {
+                AddNewItemsCommand.Execute(null);
             }
 
-            while (IsBusy) {
-                await Task.Delay(100);
-            }
-            if (_appendModeCopyItem != null) {
-                _currentClipboardItem = _appendModeCopyItem;
-            } else {
-                _currentClipboardItem = newCopyItem;
-            }
+            
             IsAddingClipboardItem = false;
 
             OnCopyItemAdd?.Invoke(this, newCopyItem);
@@ -2651,10 +2695,11 @@ namespace MonkeyPaste.Avalonia {
         public ICommand AppendNewItemsCommand => new MpCommand(
             async () => {
                 IsBusy = true;
-
-                var amctvm = GetClipTileViewModelById(_appendModeCopyItem.Id);
+                // note abs id val if ClipboardChanged flagged this as a dup item (maybe negative of real id)
+                var amctvm = GetClipTileViewModelById((int)Math.Abs(_appendModeCopyItem.Id));
                 if (amctvm != null) {
                     await amctvm.InitializeAsync(amctvm.CopyItem, amctvm.QueryOffsetIdx);
+                    _appendModeCopyItem = amctvm.CopyItem;
                 }
 
                 IsBusy = false;
@@ -2669,7 +2714,18 @@ namespace MonkeyPaste.Avalonia {
                 }
                 for (int i = 0; i < _newModels.Count; i++) {
                     var ci = _newModels[i];
-                    var nctvm = await CreateClipTileViewModel(ci);
+                    MpAvClipTileViewModel nctvm = null;
+                    if(ci.Id < 0) {
+                        // special case for dup in current query page, grab tile instead of create
+                        nctvm = Items.FirstOrDefault(x => x.CopyItemId == -ci.Id);
+                        if(nctvm == null) {
+                            // something went wrong...will jsut creat instead
+                            Debugger.Break();
+                            nctvm = await CreateClipTileViewModel(ci);
+                        }
+                    } else {
+                        nctvm = await CreateClipTileViewModel(ci);
+                    }
                     while (nctvm.IsAnyBusy) {
                         await Task.Delay(100);
                     }
@@ -3348,7 +3404,22 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             });
 
+        public ICommand EnableFilterByAppCommand => new MpCommand<object>(
+            (targetCtvmArg) => {
+                var targetCtvm = targetCtvmArg as MpAvClipTileViewModel;
+                if(targetCtvm == null) {
+                    return;
+                }
 
+                //MpHelpers.OpenUrl(CopyItem.Source.App.AppPath);
+                ClearClipSelection();
+                targetCtvm.IsSelected = true;
+                //this triggers clip tray to swap out the app icons for the filtered app
+                //MpClipTrayViewModel.Instance.FilterByAppIcon = ctvm.CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64.ToBitmapSource();
+                IsFilteringByApp = true;
+            }, (targetCtvmArg) => {
+                return targetCtvmArg is MpAvClipTileViewModel tctvm && !tctvm.IsPinned;
+            });
         public ICommand AssignHotkeyCommand => new MpCommand(
             () => {
                 MpAvShortcutCollectionViewModel.Instance.ShowAssignShortcutDialogCommand.Execute(SelectedItem);

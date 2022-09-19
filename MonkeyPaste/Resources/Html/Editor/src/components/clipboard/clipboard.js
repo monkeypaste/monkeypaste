@@ -140,7 +140,7 @@ function onPaste(e) {
 function onManualClipboardKeyDown(e) {
     if (isEditorToolbarVisible() || !isReadOnly()) {
         // these events shouldn't be enabled in edit mode
-        debugger;
+        //debugger;
         return;
     }
     if (e.ctrlKey && e.key === 'z') {

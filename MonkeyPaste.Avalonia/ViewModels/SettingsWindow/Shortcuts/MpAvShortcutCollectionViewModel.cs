@@ -816,7 +816,7 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                     if (OperatingSystem.IsWindows()) {
-                        if (MpAvDragExtension.CurrentDragHost != null) {
+                      //  if (MpAvDragExtension.CurrentDragHost != null) {
                             // (I think...) This is supposed to capture pointer release before a drop w/ templates? Not sure though...
 
                             //Dispatcher.UIThread.Post(async () => {
@@ -829,7 +829,7 @@ namespace MonkeyPaste.Avalonia {
                             //    }
                             //    //MessageBox.Show("Mouse up");
                             //});
-                        }
+                       // }
                     }
 
                 } else {
@@ -925,7 +925,8 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (keyStr.IsEscape()) {
                     GlobalIsEscapeDown = true;
-                    if (MpAvDragExtension.CurrentDragHost != null) {
+                   // if (MpAvDragExtension.CurrentDragHost != null) 
+                    {
                         //_keyboardGestureHelper.Reset();
                         //e.SuppressKeyPress = true;
                         OnGlobalEscKeyPressed?.Invoke(this, EventArgs.Empty);

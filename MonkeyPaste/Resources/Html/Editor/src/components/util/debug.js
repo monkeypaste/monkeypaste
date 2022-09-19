@@ -1,7 +1,9 @@
 ﻿// from https://stackoverflow.com/a/32928812/105028
 Object.defineProperty(this, "log", {
     get: function () {
-        return isDebug ? console.log.bind(window.console, '[' + Date.now() + ']', '[DEBUG]')
+        const d = new Date();
+        let dateTimeStr = d.toLocaleTimeString().replace('AM', '').replace('PM', '').trim() + `.${d.getMilliseconds()}`;
+        return isDebug ? console.log.bind(window.console, '[' + dateTimeStr.trim() + ']', '[DEBUG]')
             : function () { };
     }
 });

@@ -6,7 +6,6 @@ using PropertyChanged;
 using System.Diagnostics;
 using System;
 using System.IO;
-using WebViewControl;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common;
 using Avalonia.Media.Imaging;
@@ -20,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
 
         public static IClassicDesktopStyleApplicationLifetime Desktop { get; private set; }
         public App() {
-            if(MpClipTileContentDataTemplateSelector.UseCefNet) {
+            if(MpAvCefNetApplication.UseCefNet) {
                 MpAvCefNetApplication.ResetEnv();
             }
             DataContext = MpAvSystemTrayViewModel.Instance;
@@ -38,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
                 Desktop = desktop;
 
-                if (MpClipTileContentDataTemplateSelector.UseCefNet) {
+                if (MpAvCefNetApplication.UseCefNet) {
                     MpAvCefNetApplication.InitCefNet(desktop);
                 } //else {
                    // MpAvCefWebViewExtension.InitCef();

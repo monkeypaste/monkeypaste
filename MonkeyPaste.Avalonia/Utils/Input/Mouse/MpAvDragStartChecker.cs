@@ -16,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
             this Control control, 
             PointerPressedEventArgs e, 
             Action<PointerPressedEventArgs> start, 
-            Action<PointerEventArgs> @continue, 
+            Action<PointerEventArgs> move, 
             Action end, 
             double MIN_DISTANCE = MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST) {
             MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();
@@ -35,13 +35,16 @@ namespace MonkeyPaste.Avalonia {
                 var drag_dist = dc_down_pos.Distance(dc_move_pos);
                 is_pointer_dragging = drag_dist >= MIN_DISTANCE;
                 if (is_pointer_dragging && !was_drag_started) {
-                    was_drag_started = true;
+
                     // DRAG START
 
+                    was_drag_started = true;
                     start?.Invoke(e);
                 }
 
-                @continue?.Invoke(e1);
+                if(was_drag_started) {
+                    move?.Invoke(e1);
+                }
             };
 
             // Drag Control PointerReleased Handler

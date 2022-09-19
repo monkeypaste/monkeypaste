@@ -266,6 +266,13 @@ namespace MonkeyPaste.Common {
                 return xmlStr;
             }
         }
+        public static bool IsStringEscapedHtml(this string str) {
+            if(str.Contains("&lt;") && str.Contains("&gt;")) {
+                // only check if both '<' and '>' are present otherwise it wouldn't be valid html
+                return true;
+            }
+            return false;
+        }
              
         public static string Escape(this string badString) {
             return badString.Replace("&", "&amp;").Replace("\"", "&quot;").Replace("'", "&apos;").Replace(">", "&gt;").Replace("<", "&lt;");

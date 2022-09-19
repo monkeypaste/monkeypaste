@@ -171,7 +171,11 @@ namespace MonkeyPaste.Avalonia {
         #region Control Event Handlers
         
         private static void EnabledControl_AttachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
-            if (s is Control control) {
+            if (s is Control control) {                
+                if (control is Button b && GetLeftPressCommand(control) is ICommand leftPressCommand) {
+                    // NOTE pointerpress is swallowed by button unless tunneled, may need for other controls too...
+                    b.AddHandler(Button.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
+                }
                 control.DetachedFromVisualTree += DisabledControl_DetachedToVisualHandler;
                 control.PointerPressed += Control_PointerPressed;
                 

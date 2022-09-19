@@ -18,22 +18,32 @@
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaXaml Remove="Assets\Images\backup\**" />
+    <AvaloniaXaml Remove="AttachedProperties\DragDrop\**" />
     <AvaloniaXaml Remove="Behaviors\**" />
     <AvaloniaXaml Remove="cef\**" />
     <AvaloniaXaml Remove="cef_old\**" />
+    <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <Compile Remove="Assets\Images\backup\**" />
+    <Compile Remove="AttachedProperties\DragDrop\**" />
     <Compile Remove="Behaviors\**" />
     <Compile Remove="cef\**" />
     <Compile Remove="cef_old\**" />
+    <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <EmbeddedResource Remove="Assets\Images\backup\**" />
+    <EmbeddedResource Remove="AttachedProperties\DragDrop\**" />
     <EmbeddedResource Remove="Behaviors\**" />
     <EmbeddedResource Remove="cef\**" />
     <EmbeddedResource Remove="cef_old\**" />
+    <EmbeddedResource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <None Remove="Assets\Images\backup\**" />
+    <None Remove="AttachedProperties\DragDrop\**" />
     <None Remove="Behaviors\**" />
     <None Remove="cef\**" />
     <None Remove="cef_old\**" />
+    <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
+    <Page Remove="AttachedProperties\DragDrop\**" />
     <Page Remove="cef_old\**" />
+    <Page Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <None Remove="Assets\Cursors\copy.png" />
     <None Remove="Assets\Cursors\hand_closed.png" />
     <None Remove="Assets\Cursors\hand_open.png" />
@@ -71,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Adorners\MpAvContentDragDropAdorner.cs" />
+    <Compile Remove="AttachedProperties\MpAvCefWebViewExtension.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -872,7 +883,6 @@
     <PackageReference Include="SharpHook" Version="3.1.1" />
     <PackageReference Include="WebkitGtkSharp" Version="3.24.24.38" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
-    <PackageReference Include="WebViewControl-Avalonia" Version="2.91.28" />
     <PackageReference Include="CefGlue.Avalonia" Version="91.4472.30" />
     <PackageReference Include="Dotnet.Bundle" Version="0.9.13" />
     <PackageReference Include="GtkSharp" Version="3.24.24.38" />

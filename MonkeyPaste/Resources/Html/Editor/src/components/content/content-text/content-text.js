@@ -1,8 +1,10 @@
 function initTextContent(itemDataStr) {
 	try {
-		//setHtml('');
-		//insertHtml(0, itemDataStr);
-		setHtml(itemDataStr);
+		// NOTE pretty sure pasteHtml has issues but using setHtml when <code> tag present for example doesn't render 
+		setTextInRange(getContentRange(),'');
+		insertHtml(0, itemDataStr);
+
+		//setHtml(itemDataStr);
 		
 	} catch (ex) {
 		//malformed or unsupported content was 

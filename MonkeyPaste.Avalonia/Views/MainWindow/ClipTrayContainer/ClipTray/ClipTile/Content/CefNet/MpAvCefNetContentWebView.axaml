@@ -17,7 +17,7 @@
                              local:MpAvCefNetWebViewExtension.IsContentReadOnly="{Binding IsContentReadOnly}"
                              local:MpAvCefNetWebViewExtension.IsSubSelectionEnabled="{Binding IsSubSelectionEnabled}"
                              local:MpAvCefNetWebViewExtension.HtmlData="{Binding CopyItemData}"
-                             IsHitTestVisible="{Binding IsHitTestEnabled}"
+                             IsHitTestVisible="False"
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch" />
 </local:MpAvUserControl>

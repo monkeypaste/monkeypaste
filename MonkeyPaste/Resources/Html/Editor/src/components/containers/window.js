@@ -161,30 +161,17 @@ function onWindowKeyUp(e) {
 
 function onWindowMouseDown_dragdrop(e) {
 	// used to notify host of drag may need to remove if editor initiaites drag
-	if (!IsSubSelectionEnabled) {
-		onContentDraggableChanged_ntf(true);
-		return;
-	}
-
-	let sel = getSelection();
-	let is_none_selected = sel == null || sel.length == 0;
-	if (is_none_selected) {
-		onContentDraggableChanged_ntf(false);
-		return;
-	}
-
-	let emp = getEditorMousePos(e);
-	let is_down_on_range = isPointInRange(emp, sel);
-	let is_all_selected = isAllSelected();
-
-	is_draggable = is_down_on_range || is_all_selected;
-	onContentDraggableChanged_ntf(is_draggable);
+	let mp = getEditorMousePos(e);
+	let can_drag = checkCanDrag(mp);
+	onContentDraggableChanged_ntf(can_drag);
 }
 
 function onWindowMouseMove_dragdrop(e) {
 	//let offset = getDocIdxFromPoint({ x: parseFloat(e.clientX), y: parseFloat(e.clientY) });
 	//log('offset: ' + offset);
-
+	if (IsDragging) {
+		return;
+	}
 	if (!isDropping()) {
 		if (parseInt(e.buttons) != 0) {
 			// mouse button is down but not dragging
@@ -215,15 +202,28 @@ function onWindowMouseMove_dragdrop(e) {
 	drawOverlay();
 }
 
-function onWindowDragStart_override(event) {
-	event.dataTransfer.effectAllowed = 'all';
+function onWindowDragStart_override(e) {
+	//if (isRunningInHost()) {
+	//	e.dataTransfer.effectAllowed = 'none';
+	//	e.preventDefault();
+	//} else {
+	//	e.dataTransfer.effectAllowed = 'all';
 
-	var event2 = new CustomEvent('mp_dragstart', { detail: { original: event } });
-	event.target.dispatchEvent(event2);
+	//}	
+	e.dataTransfer.effectAllowed = 'copyMove';
 
-	event.stopPropagation();
+	//var event2 = new CustomEvent('mp_dragstart', { detail: { original: e } });
+	//e.target.dispatchEvent(event2);
 
-	onDragStart(event);
+	//e.preventDefault();
+	e.stopPropagation();
+
+	//if (isRunningInHost()) {
+	//	onDragStart_ntf();
+	//} else {
+	//	onDragStart(e);
+	//}
+	onDragStart(e);
 }
 
 function onWindowDragEnd_ovveride(event) {
@@ -232,7 +232,10 @@ function onWindowDragEnd_ovveride(event) {
 
 	event.stopPropagation();
 
-	resetDragDrop(true);
+	if (!isRunningInHost()) {
+
+		resetDragDrop(true);
+	}
 }
 
 function onWindowDrop_override(event) {
@@ -240,6 +243,8 @@ function onWindowDrop_override(event) {
 	//event.target.dispatchEvent(event2);
 
 	event.stopPropagation();
+	if (!isRunningInHost()) {
 
+	}
 	onDrop(event);
 }

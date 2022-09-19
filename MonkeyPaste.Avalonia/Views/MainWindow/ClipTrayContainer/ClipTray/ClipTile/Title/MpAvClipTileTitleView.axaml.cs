@@ -12,36 +12,28 @@ using System.Linq;
 using Avalonia.Threading;
 using System;
 using System.Threading.Tasks;
+using Avalonia.Animation;
+using System.Threading;
+using Avalonia.VisualTree;
+using Avalonia.Styling;
+using System.Globalization;
+using Avalonia.Animation.Easings;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileTitleView : MpAvUserControl<MpAvClipTileViewModel> {
-        //public MpAvClipTileTitleHighlightBehavior ClipTileTitleHighlightBehavior { get; set; }
-        //public MpAvSourceHighlightBehavior SourceHighlightBehavior { get; set; }
 
         public MpAvClipTileTitleView() {
             InitializeComponent();
-            //this.AttachedToVisualTree += MpAvClipTileTitleView_AttachedToVisualTree;
+            //var iconGrid
         }
 
-        private void MpAvClipTileTitleView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            //MpAvViewBehaviorFactory.BuildAllViewBehaviors(this, this);
-        }
 
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }
-
-
         private void SourceIconGrid_PointerPressed(object sender, PointerPressedEventArgs e) {
-            var ctv = this.GetVisualAncestor<MpAvClipTileView>();
-            var wv = ctv.GetVisualDescendant<WebViewControl.WebView>();
-            if(wv != null) {
-                wv.ShowDeveloperTools();
-                return;
-            }
-            var cwv = ctv.GetVisualDescendant<MpAvCefNetWebView>();
-            if(cwv != null) {
-                cwv.ShowDevTools();
+            if(BindingContext.GetContentView() is MpAvCefNetWebView wv) {
+                wv.ShowDevTools();
             }
         }
     }

@@ -14,6 +14,7 @@ using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvBootstrapperViewModel : MpBootstrapperViewModelBase {
+        private List<MpBootstrappedItemViewModel> _avItems;
 
         public MpAvBootstrapperViewModel() : base() {
             if(_coreItems == null) {
@@ -73,6 +74,11 @@ namespace MonkeyPaste.Avalonia {
                     //new MpBootstrappedItemViewModel(this,typeof(MpTooltipInfoCollectionViewModel))
                     ////new MpBootstrappedItem(typeof(MpMouseHook))
                 });
+
+            _avItems = new List<MpBootstrappedItemViewModel>() {
+                new MpBootstrappedItemViewModel(this,typeof(MpAvHtmlClipboardDataConverter)),
+            };
+
         }
 
         public override async Task InitAsync() {
@@ -112,10 +118,23 @@ namespace MonkeyPaste.Avalonia {
             MpAvClipTrayViewModel.Instance.OnPostMainWindowLoaded();
             IsCoreLoaded = true;
 
-            //if (OperatingSystem.IsWindows()) {
-            //    string result = MonkeyPaste.Common.Wpf.MpWpfRtfToHtmlConverter.Test();
+            // MainWindow is now being created and Av AppLifetime desktop is being swapped to MainWindow
+            // wait for mw instance to exist
+            while(MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
+                await Task.Delay(100);
+            }
 
-            //}
+            // once mw and all mw views are loaded load platform items
+            for (int i = 0; i < _avItems.Count(); i++) {
+                await LoadItemAsync(_avItems[i], i);
+                while (IsBusy) {
+                    await Task.Delay(100);
+                }
+            }
+            while (_avItems.Any(x => x.IsBusy)) {
+                await Task.Delay(100);
+            }
+
         }
 
         protected override async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {
@@ -125,22 +144,25 @@ namespace MonkeyPaste.Avalonia {
             await item.LoadItemAsync();
             sw.Stop();
 
-            LoadedCount++;
-            MpConsole.WriteLine("Loaded " + item.Label + " at idx: " + index + " Load Count: " + LoadedCount + " Load Percent: " + PercentLoaded + " Time(ms): " + sw.ElapsedMilliseconds);
+            if(item.IsViewDependant) {
+                // nothing at this point will join somehow later
+            } else {
+                LoadedCount++;
 
-            OnPropertyChanged(nameof(PercentLoaded));
+                OnPropertyChanged(nameof(PercentLoaded));
+                OnPropertyChanged(nameof(Detail));
 
-            OnPropertyChanged(nameof(Detail));
+                Body = string.IsNullOrWhiteSpace(item.Label) ? Body : item.Label;
 
-            Body = string.IsNullOrWhiteSpace(item.Label) ? Body : item.Label;
-
-            int dotCount = index % 4;
-            Title = "LOADING";
-            for (int i = 0; i < dotCount; i++) {
-                Title += ".";
+                int dotCount = index % 4;
+                Title = "LOADING";
+                for (int i = 0; i < dotCount; i++) {
+                    Title += ".";
+                }
             }
 
             IsBusy = false;
+            MpConsole.WriteLine("Loaded " + item.Label + " at idx: " + index + " IsViewDependant: " + (item.IsViewDependant ? "YES" : "NO") + " Load Count: " + LoadedCount + " Load Percent: " + PercentLoaded + " Time(ms): " + sw.ElapsedMilliseconds);
         }
     }
 }

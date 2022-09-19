@@ -95,6 +95,96 @@ function setSelection_ext(selMsgReq) {
 	setEditorSelection(selMsg.index, selMsg.length);
 }
 
+function setSelectionFromEdiotrPoint_ext(selMsgReq) {
+	// input MpQuillSetSelectionFromEditorPointMessage
+
+	let selMsg = toJsonObjFromBase64Str(selMsgReq);
+	if (!selMsg) {
+		log('cannot parse setSelection_ext msg: ' + selMsgReq);
+		return '';
+	}
+	//let was_down = false;
+	
+	//if (can_drag && (selMsg.state == 'move' || selMsg.state == 'down')) {
+	//	was_down = selMsg.state == 'down';
+	//	selMsg.state = 'drag';
+	//}
+	//if (can_drag && selMsg.state == 'up') {
+	//	selMsg.state = 'drop';
+	//}
+
+	let doc_idx = getDocIdxFromPoint(selMsg);
+	if (selMsg.state == 'down') {
+
+		setEditorContentEditable(true);
+		setEditorSelection({ index: doc_idx, length: 0 });
+		return;
+	}
+	if (selMsg.state == 'move') {
+		let sel = getSelection();
+		if (doc_idx < sel.index) {
+			let temp = sel.index;
+			sel.index = doc_idx;
+			sel.length = temp - doc_idx;
+		} else {
+			sel.length = doc_idx - sel.index;
+		}
+
+		setEditorSelection(sel);
+		return;
+	}
+
+	if (selMsg.state == 'drag') {
+
+		let modKeyMsg = toJsonObjFromBase64Str(selMsg.modkeyBase64Msg);
+
+		let dt = new DataTransfer();
+		dt.setData('text/plain', getSelectedText());
+		dt.setData('text/html', getSelectedHtml());
+		dt.setData('application/json/quill-delta', getSelectedDeltaJson());
+
+		let e = {
+			dataTransfer: dt,
+			clientX: selMsg.x,
+			clientY: selMsg.y,
+			curretTarget: getEditorContainerElement(),
+			ctrlKey: modKeyMsg.ctrlKey,
+			altKey: modKeyMsg.altKey,
+			shiftKey: modKeyMsg.shiftKey
+		};
+		let editor_rect = getEditorContainerRect();
+		if (isDropping()) {
+			if (!isPointInRect(editor_rect, { x: selMsg.x, y: selMsg.y })) {
+				onContentDraggableChanged_ntf(false);
+				onDragLeave(e);
+			} else {
+				onDragOver(e);
+			}
+			
+		} else {
+			onDragEnter(e);
+		}
+	}
+	if (selMsg.state == 'drop') {
+		let dt = new DataTransfer();
+		dt.setData('text/plain', getSelectedText());
+		dt.setData('text/html', getSelectedHtml());
+		dt.setData('application/json/quill-delta', getSelectedDeltaJson());
+		let e = {
+			dataTransfer: dt
+		};
+		onDrop(e);
+	}
+	if (selMsg.state == 'up') {
+		let can_drag = checkCanDrag(selMsg);
+		onContentDraggableChanged_ntf(can_drag);
+		//setEditorContentEditable(false);
+		return;
+	}
+	log('unhandled selMsg.state: ' + selMsg.state);
+	
+}
+
 
 function getHtml_ext() {
 	// output MpQuillGetRangeHtmlResponseMessage
@@ -210,7 +300,7 @@ function updateModifierKeysFromHost_ext(modKeyMsgStr) {
 }
 
 function updateIsDraggingFromHost_ext(isDraggingMsgStr) {
-	// input MpQuillIsDraggingNotification
+	// input MpQuillIsHostDraggingMessage
 
 	// NOTE this msg is needed so its known to only reset drop and not drag after dragLeave
 	// for drag feedback

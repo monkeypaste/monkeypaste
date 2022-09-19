@@ -64,7 +64,7 @@ namespace MonkeyPaste.Common.Avalonia {
             if(str.IsStringRichText()) {
                 string qhtml = MpWpfRtfToHtmlConverter.ConvertFormatToHtml(str, strFormat);
                 return qhtml;
-            } else if(str.IsStringCsv()) {
+            }  else if(str.IsStringCsv()) {
                 // TODO create quill tables here
 
             }

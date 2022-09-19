@@ -70,10 +70,10 @@
                               ConverterParameter="OR">
                     <Binding Source="{x:Static local:MpAvClipTrayViewModel.Instance}"
                              Path="IsAnyTilePinned" />
-                    <Binding Source="{x:Static local:MpAvClipTrayViewModel.Instance}"
+                    <!--<Binding Source="{x:Static local:MpAvClipTrayViewModel.Instance}"
                              Path="IsAnyTileDragging" />
                     <Binding Source="{x:Static local:MpAvMainWindowViewModel.Instance}"
-                             Path="IsDropOverMainWindow" />
+                             Path="IsDropOverMainWindow" />-->
                 </MultiBinding>
             </local:MpAvPinTrayView.IsVisible>
         </local:MpAvPinTrayView>

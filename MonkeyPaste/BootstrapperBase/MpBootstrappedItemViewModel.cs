@@ -19,6 +19,9 @@ namespace MonkeyPaste {
             "Collection",
             " "
         };
+
+        public bool IsViewDependant { get; set; } = false;
+
         public object ItemArg { get; set; }
         public Type ItemType { get; set; }
 

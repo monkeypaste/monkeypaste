@@ -6,14 +6,13 @@ namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvDataFormats {
         #region Private Variables
 
-        private static MpIPlatformDataObjectRegistrar _registrar;
-
         private static string[] _defaultFormatNames = new string[] {
             //AvRtf,
             //AvHtml,
             AvFileNames,
             CefHtml,
-            CefText
+            CefText,
+            CefQuillDeltaJson
         };
 
         private static Dictionary<int, MpAvDataFormat> _formatLookup;
@@ -38,7 +37,7 @@ namespace MonkeyPaste.Common.Avalonia {
         public const string AvFileNames = "FileNames";
         public const string CefHtml = "text/html";
         public const string CefText = "text/plain";
-
+        public const string CefQuillDeltaJson = "application/json/quill-delta";
         #endregion
 
         #region Public Methods

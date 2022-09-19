@@ -51,7 +51,7 @@ function onTick() {
 
 
 function enableDragDropOnElement(elm) {
-    elm.addEventListener('dragenter', onDragEnter)
+    elm.addEventListener('dragenter', onDragEnter);
     elm.addEventListener('dragover', onDragOver);
     elm.addEventListener('dragleave', onDragLeave);
     elm.addEventListener('drop', onDrop);
@@ -90,15 +90,8 @@ function isDragSource() {
     return IsDragging || selection.length > 0;
 }
 
-function isDragDataValid(dt) {
-    if (isDataTransferValid(dt)) {
-        return true;
-    }
-    return false;
-}
-
-function isDragValid(dt,emp) {
-    if (isDragDataValid(dt)) {
+function isDragValid(dt, emp) {
+    if (isDataTransferDataValid(dt) && dt.effectAllowed !== undefined && dt.effectAllowed != 'none') {
         let sel_range = getSelection();
 
         if (sel_range && sel_range.length > 0 && isPointInRange(emp, sel_range)) {
@@ -211,6 +204,26 @@ function updateModKeys(e) {
 	}
 }
 
+function checkCanDrag(emp) {
+    //if (!IsSubSelectionEnabled) {
+    //	onContentDraggableChanged_ntf(true);
+    //	return true;
+    //}
+
+    let sel = getSelection();
+    let is_none_selected = sel == null || sel.length == 0;
+    if (is_none_selected) {
+        //onContentDraggableChanged_ntf(false);
+        return false;
+    }
+    let is_down_on_range = isPointInRange(emp, sel);
+    let is_all_selected = isAllSelected();
+
+    is_draggable = is_down_on_range || is_all_selected;
+    //onContentDraggableChanged_ntf(is_draggable);
+    return is_draggable;
+}
+
 function getDragData(dt) {
     // NOTE CefDragData should be pre-processed by host and ready from drop
 
@@ -268,7 +281,8 @@ function onDragEnter(e) {
         // currentTarget null when passed from host so force target to editor
         e.currentTarget = getEditorContainerElement();
         let dt = getDataTransferObject(e);
-        if (isDragDataValid(dt)) {
+        let emp = getEditorMousePos(e);
+        if (isDragValid(dt,emp)) {
             DropElm = e.currentTarget;
         }
     }
@@ -482,6 +496,10 @@ function onDrop(e) {
 function onDragStart(e) {
     log('drag started yo');
     startDrag(false);
-
-    e = setDataTransferObjectForSelection(e, 'drag');
+    let htmlStr = getSelectedHtml();
+    e.dataTransfer.setData('text/html', htmlStr);
+    let pt = getSelectedText();
+    e.dataTransfer.setData('text/plain', pt);
+    e.dataTransfer.setData('application/json/quill-delta', getSelectedDeltaJson());
+    //e = setDataTransferObjectForSelection(e, 'drag');
 }
