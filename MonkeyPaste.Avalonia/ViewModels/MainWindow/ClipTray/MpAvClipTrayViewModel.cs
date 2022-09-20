@@ -1608,6 +1608,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsTitleLayersVisible { get; set; } = true;
+        public bool IsMarqueeEnabled { get; set; } = true;
         public bool HasUserAlteredPinTrayWidth { get; set; } = false;
 
         public bool IsAddingClipboardItem { get; private set; } = false;

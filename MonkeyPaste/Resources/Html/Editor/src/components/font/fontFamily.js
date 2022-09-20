@@ -15,7 +15,7 @@ function initFontFamilyPicker() {
     ffp_elm.addEventListener('click', (e) => {
         return;
         IsFontFamilyPickerOpen = true;
-        let blurred_sel = getSelection(); 
+        let blurred_sel = getEditorSelection(); 
         if (!blurred_sel) {
             blurred_sel = BlurredSelectionRange;
             if (!blurred_sel) {
@@ -174,7 +174,7 @@ function findSelectionFontFamily() {
     if (curFontFamily) {
         return curFontFamily;
 	}
-    var selection = quill.getSelection();
+    var selection = getEditorSelection();
     if (!selection) {
         // selection outside editor, shouldn't happen since EditorSelectionChange handler forces oldSelection but check timing if occurs
         debugger;

@@ -5,6 +5,8 @@ var IsHighlightingVisible = false;
 var HighlightRects = [];
 var SelectedHighlightRectIdx = -1;
 
+var IsCaretBlinkOn = false;
+var CaretBlinkOffColor = null;
 
 function updateOverlayBounds(overlayCanvas) {
     let editorRect = getEditorContainerRect();
@@ -112,7 +114,7 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5', line_style = [5,
     if (isDragCopy()) {
         color = 'lime';
 	}
-    log('dropIdx: ' + drop_idx);
+    //log('dropIdx: ' + drop_idx);
     if (drop_idx < 0) {
         return;
     }
@@ -131,29 +133,17 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5', line_style = [5,
     let post_line = { x1: 0, y1: post_y, x2: editor_rect.width, y2: post_y };
 
     let caret_rect = getCharacterRect(drop_idx);
-
-    let caret_line = { x1: caret_rect.left, y1: caret_rect.top, x2: caret_rect.left, y2: caret_rect.bottom };
-    let left_clamp = 0;
-    let right_clamp = editor_rect.width;
-    if (caret_line.x1 < 0) {
-        caret_line.x1 = left_clamp;
-        caret_line.x2 = left_clamp;
-        log('caret_line was < editor_rect.left: ' + left_clamp);
-    } else if (caret_line.x1 > right_clamp) {
-        caret_rect.x1 = right_clamp;
-        caret_rect.x2 = right_clamp;
-        log('caret_line was > editor_rect.right: ' + right_clamp);
-    }
+    let caret_line = getCaretLine(drop_idx);
 
     IsSplitDrop = IsShiftDown; //IsCtrlDown || IsAltDown;
 
-    let block_threshold = Math.max(2, caret_rect.height / 4);
+    let block_threshold = Math.max(2, caret_line.height / 4);
     let doc_start_rect = getCharacterRect(0);
 
     // NOTE to avoid conflicts between each line as pre/post drop only use pre for first
     // line of content then only check post for others
-    IsPreBlockDrop = Math.abs(LastMousePos.y - doc_start_rect.top) < block_threshold || LastMousePos.y < doc_start_rect.top;
-    IsPostBlockDrop = Math.abs(LastMousePos.y - caret_rect.bottom) < block_threshold || LastMousePos.y > caret_rect.bottom;
+    IsPreBlockDrop = Math.abs(WindowMouseLoc.y - doc_start_rect.top) < block_threshold || WindowMouseLoc.y < doc_start_rect.top;
+    IsPostBlockDrop = Math.abs(WindowMouseLoc.y - caret_line.y2) < block_threshold || WindowMouseLoc.y > caret_line.y2;
 
     if (IsSplitDrop && CopyItemType != 'FileList') {
         IsPreBlockDrop = false;
@@ -191,12 +181,8 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5', line_style = [5,
         let line = render_lines[i];
         drawLine(ctx, line, color, thickness, line_style)
     }
-    if (render_caret_line) {
-        if (render_caret_line.x1 < 0 || render_caret_line.x2 < 0) {
-            render_caret_line.x1 = 0;
-            render_caret_line.x2 = 0;
-		}
-        drawLine(ctx, render_caret_line, color, thickness, [1, 0]);
+    if (render_caret_line) {        
+        drawLine(ctx, render_caret_line, color, thickness);
 	}
 	//for (var i = 0; i < render_rects.length; i++) {
  //       let rect = render_rects[i];
@@ -206,7 +192,7 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5', line_style = [5,
 }
 
 function drawFancyTextSelection(ctx) {
-    let sel_rects = getRangeRects(getSelection(), false, false);
+    let sel_rects = getRangeRects(getEditorSelection(), false, false);
 
     let r = FancyTextSelectionRoundedCornerRadius;
     let def_corner_radius = { tl: r, tr: r, br: r, bl: r };
@@ -228,12 +214,14 @@ function drawTextSelection(ctx) {
         return;
     }
 
+
+    let sel = getEditorSelection();
     let sel_bg_color = DefaultSelectionBgColor;
     let sel_fg_color = DefaultSelectionFgColor;
     let caret_color = DefaultCaretColor;
 
-    if (isDropping() || IsDragging) {
-        if (isDragSource()) {
+    if (IsDropping || IsDragging) {
+        if (IsDragging) {
             if (isDropValid() || IsDragging) {
                 if (isDragCopy()) {
                     sel_bg_color = 'lime';
@@ -247,18 +235,17 @@ function drawTextSelection(ctx) {
                 sel_bg_color = 'salmon';
             }
             // NOTE always override caret during drop to make it nice and thicky
-            caret_color = 'transparent';
+            //caret_color = 'transparent';
 		}
     } else if (IsSubSelectionEnabled) {
         if (isEditorToolbarVisible()) {
-            let sel = getSelection();
             if (sel && sel.length == 0) {
                 if (isTemplateAtDocIdx(sel.index)) {
                     caret_color = 'transparent';
 				}
 			}
-        }else {
-            caret_color = 'yellow';
+        } else {
+            caret_color = 'red';
 		}
         
     }
@@ -272,13 +259,46 @@ function drawTextSelection(ctx) {
         BlurredSelectionRects.forEach((sel_rect) => {
             drawRect(ctx, sel_rect, sel_bg_color,'transparent', 0, 75);
         });
+    }
+
+    if (IsSubSelectionEnabled && !IsDropping && sel && sel.length == 0) {
+        // caret is hidden when not editable, only draw caret if sel not range or dropping
+        // (drop preview draws if non-block dropping )
+  //      if (isEditorToolbarVisible()) {
+  //          IsCaretBlinkOn = false;
+  //          CaretBlinkOffColor = null;
+  //          clearInterval(caretBlinkTick);
+		//} else if (!IsCaretBlinkOn) {
+  //          IsCaretBlinkOn = true;
+  //          CaretBlinkOffColor = null;
+  //          setInterval(caretBlinkTick, 500);
+  //      } 
+        let caret_display_color = CaretBlinkOffColor ? CaretBlinkOffColor : caret_color;
+        let caret_line = getCaretLine(sel.index);
+        drawLine(ctx, caret_line, caret_display_color);
+    } else {
+        IsCaretBlinkOn = false;
+        CaretBlinkOffColor = null;
+        clearInterval(caretBlinkTick);
 	}
+}
+
+function caretBlinkTick() {
+    if (CaretBlinkOffColor) {
+        CaretBlinkOffColor = null;
+    } else {
+        CaretBlinkOffColor = 'transparent'
+    }
+    if (WindowMouseDownLoc != null) {
+        // don't blink if sel changing
+        return;
+	}
+    drawOverlay();
 }
 
 
 function drawOverlay() {
     let canvas = document.getElementById('overlayCanvas');
-
     updateOverlayBounds(canvas);
 
     if (!canvas.getContext) {
@@ -290,16 +310,16 @@ function drawOverlay() {
 
     drawTextSelection(ctx);
 
-    let isUnderlinesVisible = !isEditorToolbarVisible() && IsSubSelectionEnabled && !isDropping();
-    if (isUnderlinesVisible) {
-        drawUnderlines(ctx);
-    } 
+    //let isUnderlinesVisible = !isEditorToolbarVisible() && IsSubSelectionEnabled && !isDropping();
+    //if (isUnderlinesVisible) {
+    //    drawUnderlines(ctx);
+    //} 
 
     if (IsHighlightingVisible) {
         drawHighlighting(ctx);
     } 
 
-    let isDropPreviewVisible = isDropping();
+    let isDropPreviewVisible = IsDropping;
     if (isDropPreviewVisible) {
        drawDropPreview(ctx);
     } 

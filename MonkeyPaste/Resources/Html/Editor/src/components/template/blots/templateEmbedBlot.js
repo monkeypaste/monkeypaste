@@ -6,7 +6,7 @@ const Parchment = Quill.imports.parchment;
 
 class TemplateEmbedBlot extends Parchment.EmbedBlot {
     static blotName = 'template';
-    static tagName = 'SPAN';
+    static tagName = 'DIV';
     static className = TemplateEmbedClass;
 
     static create(value) {
@@ -96,7 +96,7 @@ function applyTemplateToDomNode(node, value) {
     node.setAttribute('isFocus', false);
     node.setAttribute("spellcheck", "false");
     node.classList.add(TemplateEmbedClass);
-    node.setAttribute('draggable', true);
+    node.setAttribute('draggable', false);
     node.setAttribute('contenteditable', false);
 
     var templateDocIdxCache;
@@ -147,10 +147,15 @@ function applyTemplateToDomNode(node, value) {
     //node.addEventListener('pointerup', onTemplatePointerUp);
 
     node.addEventListener('click', function (e) {
+        if (!IsSubSelectionEnabled) {
+            log("Selection disabled so ignoring click on template " + value.templateInstanceGuid);
+            return;
+		}
         focusTemplate(value.templateGuid, false, value.templateInstanceGuid);
-
-        //clearTemplateFocus();
-        //focusTemplate(node.getAttribute('templateGuid'), false, node.getAttribute('templateInstanceGuid'));
+    });
+    node.addEventListener('pointerdown', function (e) {
+        let ti_doc_idx = getTemplateDocIdx(value.templateInstanceGuid);
+        setEditorSelection(ti_doc_idx, 1, 'api');
     });
 
     return node;

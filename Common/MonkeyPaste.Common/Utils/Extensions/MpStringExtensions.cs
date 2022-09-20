@@ -149,18 +149,20 @@ namespace MonkeyPaste.Common {
             return str.ToLowerInvariant().Contains(compareStr.ToLowerInvariant());
         }
 
-        public static async Task<string> CheckSum(this string str) {
+        public static async Task<string> CheckSumAsync(this string str) {
             string result = await Task<string>.Run(() => {
-                using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create()) {
-                    string hash = BitConverter.ToString(
-                        md5.ComputeHash(
-                            Encoding.UTF8.GetBytes(str))).Replace("-", String.Empty);
-                    return hash;
-                }
+                return CheckSum(str);
             });
             return result;
         }
-
+        public static string CheckSum(this string str) {
+            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create()) {
+                string hash = BitConverter.ToString(
+                    md5.ComputeHash(
+                        Encoding.UTF8.GetBytes(str))).Replace("-", String.Empty);
+                return hash;
+            }
+        }
         public static string ToBase64String(this byte[] bytes) {
             if (bytes == null) {
                 return string.Empty;

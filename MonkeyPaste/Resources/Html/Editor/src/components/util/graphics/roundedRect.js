@@ -1,30 +1,4 @@
-function drawLine(ctx, line, stroke = 'black', width = 1, dash = [1, 0]) {
-    ctx.setLineDash(dash);
-
-    ctx.beginPath();
-
-    ctx.moveTo(line.x1, line.y1);
-    ctx.lineTo(line.x2, line.y2);
-
-    ctx.strokeStyle = stroke;
-    ctx.lineWidth = width;
-    ctx.stroke();
-}
-
-function drawRect(ctx, rect, fill = 'black', stroke = 'black', lineWidth = 0, alpha = 255) {
-    let strokStyleStr = cleanColorStyle(stroke, alpha != 255 ? alpha : null);
-    ctx.strokeStyle = strokStyleStr;
-    let fillStyleStr = cleanColorStyle(fill, alpha != 255 ? alpha : null);
-    ctx.fillStyle = fillStyleStr;
-    ctx.lineWidth = lineWidth;
-
-    ctx.fillRect(rect.left, rect.top, rect.width, rect.height);
-    if (lineWidth > 0) {
-        ctx.strokeRect(rect.left, rect.top, rect.width, rect.height);
-	}
-}
-
-function roundRectCornerCap(ctx,x, y, radius = 5, corner = 'tr',fill = true, stroke = false) {
+function roundRectCornerCap(ctx, x, y, radius = 5, corner = 'tr', fill = true, stroke = false) {
     ctx.beginPath();
 
     let cap_radius = radius / 2;
@@ -150,22 +124,22 @@ function roundRect(
     }
 
     // Now you can just call
-//var ctx = document.getElementById("rounded-rect").getContext("2d");
-//// Draw using default border radius,
-//// stroke it but no fill (function's default values)
-//roundRect(ctx, 5, 5, 50, 50);
-//// To change the color on the rectangle, just manipulate the context
-//ctx.strokeStyle = "rgb(255, 0, 0)";
-//ctx.fillStyle = "rgba(255, 255, 0, .5)";
-//roundRect(ctx, 100, 5, 100, 100, 20, true);
-//// Manipulate it again
-//ctx.strokeStyle = "#0f0";
-//ctx.fillStyle = "#ddd";
-//// Different radii for each corner, others default to 0
-//roundRect(ctx, 300, 5, 200, 100, {
-//    tl: 50,
-//    br: 25
-//}, true);
+    //var ctx = document.getElementById("rounded-rect").getContext("2d");
+    //// Draw using default border radius,
+    //// stroke it but no fill (function's default values)
+    //roundRect(ctx, 5, 5, 50, 50);
+    //// To change the color on the rectangle, just manipulate the context
+    //ctx.strokeStyle = "rgb(255, 0, 0)";
+    //ctx.fillStyle = "rgba(255, 255, 0, .5)";
+    //roundRect(ctx, 100, 5, 100, 100, 20, true);
+    //// Manipulate it again
+    //ctx.strokeStyle = "#0f0";
+    //ctx.fillStyle = "#ddd";
+    //// Different radii for each corner, others default to 0
+    //roundRect(ctx, 300, 5, 200, 100, {
+    //    tl: 50,
+    //    br: 25
+    //}, true);
 }
 
 function drawRoundedRect(ctx, sharp_rect, corner_radii, fill = 'black', stroke = 'black', lineWidth = 0, alpha = 255) {
@@ -179,56 +153,16 @@ function drawRoundedRect(ctx, sharp_rect, corner_radii, fill = 'black', stroke =
 
     roundRect(ctx, sharp_rect.left, sharp_rect.top, sharp_rect.width, sharp_rect.height, corner_radii, draw_fill, draw_lines);
 
- //   if (corner_radii.tl < 0) {
- //       roundRectCornerCap(ctx, sharp_rect.left, sharp_rect.top, -corner_radii.tl, 'tl',draw_fill, draw_lines)
-	//}
- //   if (corner_radii.tr < 0) {
- //       roundRectCornerCap(ctx, sharp_rect.right, sharp_rect.top, -corner_radii.tr, 'tr', draw_fill, draw_lines)
- //   }
- //   if (corner_radii.br < 0) {
- //       roundRectCornerCap(ctx, sharp_rect.right, sharp_rect.bottom, -corner_radii.br, 'br', draw_fill, draw_lines)
- //   }
- //   if (corner_radii.bl < 0) {
- //       roundRectCornerCap(ctx, sharp_rect.left, sharp_rect.bottom, -corner_radii.bl, 'bl', draw_fill, draw_lines)
- //   }
-}
-
-function drawPolygon(ctx, points, stroke = 'black', fill = 'black', width = 0) {
-    ctx.beginPath();
-
-    ctx.moveTo(r.left, r.top);
-    ctx.lineTo(r.right, r.top);
-    ctx.lineTo(r.right, r.bottom);
-    ctx.lineTo(r.left, r.bottom);
-    ctx.lineTo(r.left, r.top);
-
-    ctx.strokeStyle = stroke;
-    ctx.lineWidth = width;
-    ctx.stroke();
-}
-
-function editorToScreenPoint(ep) {
-    let editor_rect = getEditorContainerRect();
-    return { x: ep.x + editor_rect.left, y: ep.y + editor_rect.top };
-}
-
-function screenToEditorPoint(sp) {
-    let editor_rect = getEditorContainerRect();
-    return { x: sp.x - editor_rect.left, y: sp.y - editor_rect.top };
-}
-
-function editorToScreenRect(er) {
-    let s_origin = editorToScreenPoint({ x: er.left, y: er.top });
-    let sr = {};
-    sr.left = s_origin.x;
-    sr.top = s_origin.y;
-    sr.right = sr.left + er.width;
-    sr.bottom = sr.top + er.height;
-    sr = cleanRect(sr);
-    return sr;
-}
-
-function screenToEditorRect(sp) {
-    let editor_rect = getEditorContainerRect();
-    return { x: sp.x - editor_rect.left, y: sp.y - editor_rect.top };
+    //   if (corner_radii.tl < 0) {
+    //       roundRectCornerCap(ctx, sharp_rect.left, sharp_rect.top, -corner_radii.tl, 'tl',draw_fill, draw_lines)
+    //}
+    //   if (corner_radii.tr < 0) {
+    //       roundRectCornerCap(ctx, sharp_rect.right, sharp_rect.top, -corner_radii.tr, 'tr', draw_fill, draw_lines)
+    //   }
+    //   if (corner_radii.br < 0) {
+    //       roundRectCornerCap(ctx, sharp_rect.right, sharp_rect.bottom, -corner_radii.br, 'br', draw_fill, draw_lines)
+    //   }
+    //   if (corner_radii.bl < 0) {
+    //       roundRectCornerCap(ctx, sharp_rect.left, sharp_rect.bottom, -corner_radii.bl, 'bl', draw_fill, draw_lines)
+    //   }
 }

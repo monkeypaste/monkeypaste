@@ -1,10 +1,11 @@
 function initTextContent(itemDataStr) {
 	try {
-		// NOTE pretty sure pasteHtml has issues but using setHtml when <code> tag present for example doesn't render 
-		setTextInRange(getContentRange(),'');
-		insertHtml(0, itemDataStr);
+		// issues: template's are given parent spans and overflow outside of template
+		//setTextInRange(getContentRange(),'');
+		//insertHtml(0, itemDataStr);
 
-		//setHtml(itemDataStr);
+		//issues: plain html will not format correctly
+		setHtml(itemDataStr);
 		
 	} catch (ex) {
 		//malformed or unsupported content was 

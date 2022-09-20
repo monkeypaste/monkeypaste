@@ -52,7 +52,7 @@ namespace MonkeyPaste {
             string toGuid,
             string content) {
 
-            string checkSum = await content.CheckSum();
+            string checkSum = await content.CheckSumAsync();
             return new MpStreamMessage() {
                 Header = new MpStreamHeader(
                     msgType,
@@ -172,7 +172,7 @@ namespace MonkeyPaste {
                 throw new Exception("Header must be non-null");
             }
             string givenCheckSum = Header.ContentCheckSum;
-            string calcCheckSum = await Content.CheckSum();
+            string calcCheckSum = await Content.CheckSumAsync();
 
             if (calcCheckSum != givenCheckSum) {
                 throw new Exception(string.Format(@"Checksum mismatch given: {0} calc: {1} for msg: {2}", givenCheckSum, calcCheckSum, Content));

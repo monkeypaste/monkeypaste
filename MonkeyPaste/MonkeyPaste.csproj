@@ -97,7 +97,9 @@
     <None Remove="Resources\Html\Editor\src\components\content\content.js" />
     <None Remove="Resources\Html\Editor\src\components\content\content_with_source_attributes.js" />
     <None Remove="Resources\Html\Editor\src\components\converter\converter.js" />
+    <None Remove="Resources\Html\Editor\src\components\dragdrop\drag.js" />
     <None Remove="Resources\Html\Editor\src\components\dragdrop\dragdrop.js" />
+    <None Remove="Resources\Html\Editor\src\components\dragdrop\drop.js" />
     <None Remove="Resources\Html\Editor\src\components\editor\document.js" />
     <None Remove="Resources\Html\Editor\src\components\editor\editor.js" />
     <None Remove="Resources\Html\Editor\src\components\editor\selection.js" />
@@ -119,6 +121,9 @@
     <None Remove="Resources\Html\Editor\src\components\util\dataTransfer.js" />
     <None Remove="Resources\Html\Editor\src\components\util\debug.js" />
     <None Remove="Resources\Html\Editor\src\components\util\graphics.js" />
+    <None Remove="Resources\Html\Editor\src\components\util\graphics\line.js" />
+    <None Remove="Resources\Html\Editor\src\components\util\graphics\rect.js" />
+    <None Remove="Resources\Html\Editor\src\components\util\graphics\roundedRect.js" />
     <None Remove="Resources\Html\Editor\src\components\util\helpers.js" />
     <None Remove="Resources\Html\Editor\src\components\util\math.js" />
     <None Remove="Resources\Html\Editor\src\components\util\messages.js" />
@@ -183,6 +188,12 @@
     <EmbeddedResource Include="Resources\Html\Editor\src\components\converter\converter.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\dragdrop\drop.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\dragdrop\drag.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\dragdrop\dragdrop.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -240,13 +251,16 @@
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\debug.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\color.js">
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\graphics\line.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\graphics\roundedRect.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\graphics\rect.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\math.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\graphics.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\resize.js">

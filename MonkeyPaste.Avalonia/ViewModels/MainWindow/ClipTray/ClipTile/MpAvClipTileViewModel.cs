@@ -492,6 +492,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool CanEdit => IsSelected && IsTextItem;
 
+        public bool IsInitializing { get; private set; } = false;
 
         public bool IsContextMenuOpen { get; set; } = false;
 
@@ -707,6 +708,15 @@ namespace MonkeyPaste.Avalonia {
                     CopyItem.Id = value;
                     OnPropertyChanged(nameof(CopyItemId));
                 }
+            }
+        }
+
+        public string PublicHandle {
+            get {
+                if(CopyItem == null || CopyItemId == 0 || string.IsNullOrEmpty(CopyItemGuid)) {
+                    return string.Empty;
+                }
+                return CopyItem.PublicHandle;
             }
         }
 
@@ -1597,6 +1607,7 @@ namespace MonkeyPaste.Avalonia {
             _curItemRandomHexColor = string.Empty;
 
             IsBusy = true;
+            
             if (ci != null && MpAvPersistentClipTilePropertiesHelper.TryGetByPersistentSize_ById(ci.Id, out double uniqueWidth)) {
                 BoundSize = new MpSize(uniqueWidth, MinHeight);
             } else {
@@ -1622,9 +1633,9 @@ namespace MonkeyPaste.Avalonia {
             
             TemplateCollection = new MpAvTemplateCollectionViewModel(this);
 
-            if(ci != null) {
-                await InitTitleLayers();
-            }
+            //if(ci != null) {
+            //    InitTitleLayers().FireAndForgetSafeAsync(this);
+            //}
             CycleDetailCommand.Execute(null);
 
             if (ItemType == MpCopyItemType.Image) {
@@ -2292,9 +2303,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(CopyItemHexColor):
-                    Dispatcher.UIThread.Post(() => {
-                        InitTitleLayers().FireAndForgetSafeAsync(this);
-                    });
+                    InitTitleLayers().FireAndForgetSafeAsync(this);
                     break;
                 case nameof(CopyItemData):
                     ResetExpensiveDetails();

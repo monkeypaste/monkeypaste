@@ -73,6 +73,9 @@ function createHostMsgDataObjectObjectForRange(range,eventName) {
 }
 
 function isDataTransferDataValid(dt) {
+    if (!dt) {
+        return false;
+	}
     if (CopyItemType == 'Text') {
         return hasPlainText(dt) || hasHtml(dt) || hasQuillDeltaJson(dt);
     }

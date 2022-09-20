@@ -60,9 +60,11 @@
     <script src="src/components/util/helpers.js"></script>
     <script src="src/components/util/resize.js"></script>
     <script src="src/components/util/math.js"></script>
-    <script src="src/components/util/graphics.js"></script>
-    <script src="src/components/util/color.js"></script>
-
+    <script src="src/components/util/graphics/color.js"></script>
+    <script src="src/components/util/graphics/graphics.js"></script>
+    <script src="src/components/util/graphics/line.js"></script>
+    <script src="src/components/util/graphics/rect.js"></script>
+    <script src="src/components/util/graphics/roundedRect.js"></script>
     <script src="src/components/converter/converter.js"></script>
 
     <script src="src/components/messages/messages_core.js"></script>
@@ -88,6 +90,8 @@
 
     <script src="src/components/clipboard/clipboard.js"></script>
     <script src="src/components/dragdrop/dragdrop.js"></script>
+    <script src="src/components/dragdrop/drag.js"></script>
+    <script src="src/components/dragdrop/drop.js"></script>
     <script src="src/components/table/table.js"></script>
 
     <script src="src/components/overlay/overlay.js"></script>
@@ -107,7 +111,7 @@
         <textarea tabindex="0" style="width: 500px;height: 500px;background-color:hotpink;" contenteditable="true"></textarea>
     </div>-->
 
-    <div id='editor' tabindex="0">
+    <div id='editor' draggable="true" tabindex="0">
     </div>
 
 
@@ -205,9 +209,9 @@
     <script src="src/components/editor/editor.js"></script>
 
     <script>
-        if (!isRunningInHost()) {
-            init_test();
-        }
+        //if (!isRunningInHost()) {
+        //    init_test();
+        //}
 
     </script>
 

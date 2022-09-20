@@ -330,7 +330,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpPoint DragMouseMainWindowLocation { get; set; }
         public bool IsDropOverMainWindow { get; set; } = false;
-        public bool IsResizerVisible { get; set; } = false;
+        public bool IsResizerVisible { get; set; } = false;     
         public bool IsHovering { get; set; }
 
         public bool IsMainWindowInitiallyOpening { get; set; } = true;
@@ -379,21 +379,28 @@ namespace MonkeyPaste.Avalonia {
                     case MpMainWindowShowBehaviorType.Primary:
                     default:
                         // NOTE will need another monitor to build out non-primary display types
-                        return MpPlatformWrapper.Services.ScreenInfoCollection.Screens.IndexOf(x => x.IsPrimary);
+                        int monitorIdx = MpPlatformWrapper.Services.ScreenInfoCollection.Screens.IndexOf(x => x.IsPrimary);
+                        _mainWindowScreen = monitorIdx < 0 ? null : MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(monitorIdx);
+                        return monitorIdx;
                 }
             }
         }
 
+        private MpIPlatformScreenInfo _mainWindowScreen;
         public MpIPlatformScreenInfo MainWindowScreen {
             get {
-                if (MainWindowMonitorIdx < 0) {
-                    return null;
+                //if (MainWindowMonitorIdx < 0) {
+                //    return null;
+                //}
+                //if (MainWindowMonitorIdx >= MpPlatformWrapper.Services.ScreenInfoCollection.Screens.Count()) {
+                //    Debugger.Break();
+                //    return null;
+                //}
+                //return MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx);
+                if(_mainWindowScreen == null) {
+                    _mainWindowScreen = MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx);
                 }
-                if (MainWindowMonitorIdx >= MpPlatformWrapper.Services.ScreenInfoCollection.Screens.Count()) {
-                    Debugger.Break();
-                    return null;
-                }
-                return MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx);
+                return _mainWindowScreen;
             }
         }
 
@@ -517,7 +524,7 @@ namespace MonkeyPaste.Avalonia {
                     var p = new MpPoint(MainWindowLeft, MainWindowTop);
                     if (OperatingSystem.IsWindows()) {
                         // Window position on windows uses actual density not scaled value mac uses scaled haven't checked linux
-                        p *= MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx).PixelDensity;
+                        p *= MainWindowScreen.PixelDensity; //MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx).PixelDensity;
                     }
 
                     MpAvMainWindow.Instance.Position = new PixelPoint((int)p.X, (int)p.Y);

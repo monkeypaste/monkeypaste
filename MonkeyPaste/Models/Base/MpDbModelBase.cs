@@ -29,6 +29,8 @@ namespace MonkeyPaste {
         [Ignore]
         public virtual bool IsReadOnly { get; set; } = false;
 
+        [Ignore]
+        public virtual string PublicHandle => (Id.ToString() + Guid).CheckSum();
         #endregion
 
         #region Public Methods

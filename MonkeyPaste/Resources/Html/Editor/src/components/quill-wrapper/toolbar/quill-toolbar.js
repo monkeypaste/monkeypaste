@@ -86,14 +86,14 @@ function isEditorToolbarVisible() {
 }
 
 function getEditorToolbarWidth() {
-	if (isReadOnly()) {
+	if (!isEditorToolbarVisible()) {
 		return 0;
 	}
 	return getQuillToolbarContainerElement().getBoundingClientRect().width;
 }
 
 function getEditorToolbarHeight() {
-	if (isReadOnly()) {
+	if (!isEditorToolbarVisible()) {
 		return 0;
 	}
 	var toolbarHeight = parseInt($(".ql-toolbar").outerHeight());

@@ -109,6 +109,7 @@
         <!--  Swirl  -->
         <Viewbox HorizontalAlignment="Left"
                  VerticalAlignment="Top"
+                 IsVisible="{Binding IsTitleLayersVisible, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                  Width="{Binding Bounds.Width, ElementName=TitleContainerGrid}"
                  Height="{Binding Bounds.Height, ElementName=TitleContainerGrid}"
                  Stretch="Fill">
@@ -221,7 +222,7 @@
                      FontFamily="Segoe UI"
                      BorderThickness="0"
                      Padding="0"
-                     local:MpAvIsFocusedExtension.IsEnabled="True"
+                     local:MpAvIsFocusedExtension.IsEnabled="{Binding IsMarqueeEnabled, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                      local:MpAvIsFocusedExtension.IsReadOnly="{Binding IsTitleReadOnly, Mode=TwoWay}"
                      local:MpAvIsFocusedExtension.IsFocused="{Binding IsTitleFocused, Mode=TwoWay}"
                      local:MpAvIsFocusedExtension.SelectAllOnFocus="True"
@@ -301,7 +302,7 @@
                 <Grid>
                     <Image x:Name="ClipTileAppIconBorderImage"
                            IsHitTestVisible="False"
-                           Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}, ConverterParameter=scale_7|border}"
+                           Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}, ConverterParameter=border}"
                            Stretch="UniformToFill"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch">
@@ -311,7 +312,7 @@
                     </Image>
                     <Image x:Name="ClipTileAppIconImage"
                            IsHitTestVisible="False"
-                           Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}, ConverterParameter=scale_7}"
+                           Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}"
                            Stretch="UniformToFill"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch">

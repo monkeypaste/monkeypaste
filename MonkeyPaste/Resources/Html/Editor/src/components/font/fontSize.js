@@ -64,7 +64,7 @@ function getFontPickerOptionsContainerElement() {
 
 function onToolbarContainerClick(e) {
     IsFontSizePickerOpen = true;
-    StoredEditorSel = getSelection();
+    StoredEditorSel = getEditorSelection();
     getFontPickerOptionsContainerElement().addEventListener('click', onFontSizeOptionClick);
 }
 

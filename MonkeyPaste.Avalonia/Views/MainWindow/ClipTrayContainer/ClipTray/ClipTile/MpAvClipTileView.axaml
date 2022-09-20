@@ -114,7 +114,7 @@
                     Grid.RowSpan="3"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    IsVisible="{Binding IsAnyBusy}">
+                    IsVisible="False">
                 <Border.Background>
                     <SolidColorBrush Color="Black"
                                      Opacity="0.2" />

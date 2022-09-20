@@ -60,29 +60,6 @@ namespace MonkeyPaste.Avalonia {
                     quillWindow.Hide();
                 };
             }
-            
-            
-
-            //_browser.FrameLoadEnd += (sender, args) => {
-            //    if (args.Frame.IsMain) {
-            //        var initCoverterMsg = new MpQuillLoadRequestMessage() { isEditorPlainHtmlConverter = true };
-            //        _browser.EvaluateScriptAsync($"init_ext('{initCoverterMsg.SerializeJsonObjectToBase64()}')");
-
-            //        MpHelpers.RunOnMainThread(async () => {
-            //            while (true) {
-            //                if (_plainHtmlToConvert == null) {
-            //                    await Task.Delay(100);
-            //                } else {
-            //                    var convertPlainHtmlResponse = await _browser.EvaluateScriptAsync(null, "convertPlainHtml", _plainHtmlToConvert);
-            //                    if (convertPlainHtmlResponse.Success) {
-            //                        _plainHtmlToConvert = null;
-            //                        _quillHtml = HttpUtility.HtmlDecode(convertPlainHtmlResponse.Result.ToString());
-            //                    }
-            //                }
-            //            }
-            //        });
-            //    }
-            //};
 
             quillWindow.Show();
         }

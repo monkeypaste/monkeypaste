@@ -70,13 +70,17 @@ namespace MonkeyPaste.Avalonia {
         private static async void HandleIsContentReadOnlyChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isReadOnly &&
                 element is MpAvCefNetWebView wv && 
+                wv.DataContext is MpAvClipTileViewModel ctvm &&
                 wv.IsEditorInitialized) {
                 // only signal read only change after webview is loaded
                 if (isReadOnly) {
                     string enableReadOnlyRespStr = await wv.EvaluateJavascriptAsync("enableReadOnly_ext()");
                     ProcessEnableReadOnlyResponse(wv, enableReadOnlyRespStr);
                 } else {
-                    MpQuillDisableReadOnlyRequestMessage drorMsg = CreateDisableReadOnlyMessage(wv);
+                    var drorMsg = new MpQuillDisableReadOnlyRequestMessage() {
+                        allAvailableTextTemplates = new List<MpTextTemplate>(),// MpMasterTemplateModelCollectionViewModel.Instance.AllTemplates.ToList(),
+                        editorHeight = ctvm.EditorHeight
+                    };
                     string disableReadOnlyResp = await wv.EvaluateJavascriptAsync($"disableReadOnly_ext('{drorMsg.SerializeJsonObjectToBase64()}')");
                     ProcessDisableReadOnlyResponse(wv, disableReadOnlyResp);
                 }
@@ -393,7 +397,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 return new MpQuillLoadRequestMessage() {
-                    copyItemId = ctvm.CopyItemId,
+                    contentHandle = ctvm.PublicHandle,
                     copyItemType = ctvm.ItemType.ToString(),
                     envName = "wpf",
                     itemData = itemData,//ctvm.CopyItemData,
@@ -510,16 +514,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static MpQuillDisableReadOnlyRequestMessage CreateDisableReadOnlyMessage(Control fe) {
-            var ctvm = fe.DataContext as MpAvClipTileViewModel;
-            MpConsole.WriteLine($"Tile content item '{ctvm.CopyItemTitle}' is editable");
-
-            MpQuillDisableReadOnlyRequestMessage drorMsg = new MpQuillDisableReadOnlyRequestMessage() {
-                allAvailableTextTemplates = new List<MpTextTemplate>(),// MpMasterTemplateModelCollectionViewModel.Instance.AllTemplates.ToList(),
-                editorHeight = ctvm.EditorHeight
-            };
-            return drorMsg;
-        }
 
     }
 }

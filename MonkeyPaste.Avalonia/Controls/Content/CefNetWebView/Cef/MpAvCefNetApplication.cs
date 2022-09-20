@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
         GetAllTemplatesFromDb,
         NotifyEditorSelectionChanged,
         NotifyContentLengthChanged,
-        //NotifySubSelectionEnabledChanged,
+        NotifySubSelectionEnabledChanged,
         NotifyContentDraggableChanged,
         NotifyDropEffectChanged,
         NotifyException,
@@ -37,13 +37,14 @@ namespace MonkeyPaste.Avalonia {
 
         public const string JS_REF_ERROR = "JS_REF_ERROR";
 
-        public static bool UseCefNet { get; private set; } = true;
+        public static bool UseCefNet { get; private set; } = false;
         #endregion
 
         #region Statics
 
 
         #endregion
+
         #region Properties
 
         private static string[] BindingFunctionNames = new string[] {
@@ -51,7 +52,7 @@ namespace MonkeyPaste.Avalonia {
             "getAllTemplatesFromDb",
             "notifyEditorSelectionChanged",
             "notifyContentLengthChanged",
-            //"notifySubSelectionEnabledChanged",
+            "notifySubSelectionEnabledChanged",
             "notifyContentDraggableChanged",
             "notifyDropEffectChanged",
             "notifyException",
@@ -261,17 +262,15 @@ namespace MonkeyPaste.Avalonia {
                             wv.UpdateDropEffect(dropEffectChangedNtf.dropEffect);
                             MpConsole.WriteLine($"{ctvm.CopyItemTitle} dropEffects: {dropEffectChangedNtf.dropEffect}");
                             break;
-                        //case MpAvEditorBindingFunctionType.NotifySubSelectionEnabledChanged:
-                        //    var subSelChangedNtf = MpJsonObject.DeserializeBase64Object<MpQuillSubSelectionChangedNotification>(msgJsonStr);
-                        //    ctvm.IsSubSelectionEnabled = subSelChangedNtf.isSubSelectionEnabled;
-                        //    break;
+                        case MpAvEditorBindingFunctionType.NotifySubSelectionEnabledChanged:
+                            var subSelChangedNtf = MpJsonObject.DeserializeBase64Object<MpQuillSubSelectionChangedNotification>(msgJsonStr);
+                            ctvm.IsSubSelectionEnabled = subSelChangedNtf.isSubSelectionEnabled;
+                            break;
                         case MpAvEditorBindingFunctionType.NotifyDragStart:
                             if(wv.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv) {
                                 var dddmsg = MpJsonObject.DeserializeBase64Object<MpQuillDragDropDataObjectMessage>(msgJsonStr);
                                 ctv.UpdateSubSelectDragDataObject(dddmsg);
                             }
-                            
-                            
                             break;
                         case MpAvEditorBindingFunctionType.NotifyException:
                             var exceptionMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonStr);

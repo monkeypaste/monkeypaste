@@ -1,16 +1,20 @@
-
+//var LastWindowMouseDownLoc = null;
 var WindowMouseDownLoc = null;
+var WindowMouseLoc = null;
 
 function initWindow() {
 	window.addEventListener("resize", onWindowResize, true);
 	window.addEventListener('scroll', onWindowScroll);
 
 	window.addEventListener("mousedown", onWindowMouseDown);
-	//window.addEventListener("mouseup", onWindowMouseUp);
+	window.addEventListener("mousemove", onWindowMouseMove);
+	window.addEventListener("mouseup", onWindowMouseUp);
+
 	window.addEventListener("click", onWindowClick);
 
+	window.addEventListener('keyup', onWindowKeyUp);
 
-	window.addEventListener('keydown', onWindowKeyUp);
+	window.addEventListener('dblclick', onWindowDoubleClick);
 }
 
 function initWindowDragDrop() {
@@ -47,6 +51,30 @@ function initWindowDragDrop() {
     //}, true);
 }
 
+
+function getEditorSelection_safe() {
+	let cmp = WindowMouseLoc;
+	let dmp = WindowMouseDownLoc;
+	if (!dmp) {
+		dmp = cmp;
+	}
+	if (!cmp) {
+		return { index: 0, length: 0 };
+	}
+	let down_idx = getDocIdxFromPoint(dmp);
+	let cur_idx = getDocIdxFromPoint(cmp);
+
+	let safe_range = {};
+	if (cur_idx < down_idx) {
+		safe_range.index = cur_idx;
+		safe_range.length = down_idx - cur_idx;
+	} else {
+		safe_range.index = down_idx;
+		safe_range.length = cur_idx - down_idx;
+	}
+	return safe_range;
+}
+
 function onWindowClick(e) {
 	if (
 		e.path.find(
@@ -75,26 +103,60 @@ function onWindowClick(e) {
 		hidePasteTemplateToolbar();
 		clearTemplateFocus();
 	}
+}
 
+function onWindowDoubleClick(e) {
+	if (IsSubSelectionEnabled) {
+		return;
+	}
+	enableSubSelection();
 }
 
 function onWindowMouseDown(e) {
 	WindowMouseDownLoc = { x: e.clientX, y: e.clientY };
+	//LastWindowMouseDownLoc = WindowMouseDownLoc;
+}
+function onWindowMouseMove(e) {
+	WindowMouseLoc = { x: e.clientX, y: e.clientY }; 
+	//if (WindowMouseDownLoc == null) {
+	//	return;
+	//}
+	//const selection = document.getEditorSelection();
+	//const start_range = document.caretRangeFromPoint(WindowMouseDownLoc.x, WindowMouseDownLoc.y);
+	//const cur_range = document.caretRangeFromPoint(e.clientX, e.clientY);
+
+	//let actual_range = {};
+	//if (cur_range.startOffset < start_range.startOffset) {
+	//	actual_range.index = cur_range.startOffset;
+	//	actual_range.length = start_range.startOffset - cur_range.startOffset;
+	//} else {
+	//	actual_range.index = start_range.startOffset;
+	//	actual_range.length = cur_range.startOffset - start_range.startOffset;
+	//}
+	//updateTemplatesAfterSelectionChange(actual_range);
+	//log(' ');
+	//log('start sidx: ' + start_range.startOffset + ' eidx: ' + start_range.endOffset);
+	//log('cur sidx: ' + cur_range.startOffset + ' eidx: ' + cur_range.endOffset);
 }
 
 function onWindowMouseUp(e) {
-	if (!WindowMouseDownLoc) {
-		// mouse outside editor
-		return;
-	}
+	//LastWindowMouseDownLoc = WindowMouseDownLoc;
+	let last_dmp = WindowMouseDownLoc;
+	WindowMouseDownLoc = null;
+	//if (!WindowMouseDownLoc) {
+	//	// mouse outside editor
+	//	return;
+	//}
+	//WindowMouseDownLoc = null;
+	//return;
 	let window_up_mp = { x: e.clientX, y: e.clientY };
-	let wmdl_delta_dist = dist(WindowMouseDownLoc, window_up_mp);
+	let wmdl_delta_dist = dist(last_dmp, window_up_mp);
 	if (wmdl_delta_dist > MIN_DRAG_DIST) {
 		// ignore any drags
 		return;
 	}
 
-	let sel = getSelection();
+	let sel = getEditorSelection();
 	if (!sel) {
 		// mouse outside editor
 		return;
@@ -122,11 +184,10 @@ function onWindowMouseUp(e) {
 		}
 	}
 
-	WindowMouseDownLoc = null;
 }
 
 function onWindowScroll(e) {
-	if (isReadOnly()) {
+	if (isContentEditable()) {
 		return;
 	}
 
@@ -142,21 +203,39 @@ function onWindowResize(e) {
 
 function onWindowKeyUp(e) {
 	if (e.code == 'Escape') {
-		if (IsDragging) {
-			endDrag(true);
+		if (IsDragging || IsDropping) {			
 			return;
 		}
 		if (isTemplateFocused()) {
 			clearTemplateFocus();
 			return;
 		}
-		let sel = getSelection();
+
+		return;
+
+		let sel = getEditorSelection();
 		if (!sel) {
 			return;
 		}
+		if (!isReadOnly()) {
+			if (!sel) {
+				return;
+			}
+			setEditorSelection(sel.index, 0);
+			return;
+		}
+
+		if (IsSubSelectionEnabled) {
+			if (sel.length == 0) {
+				disableSubSelection();
+				return;
+			}
+			setEditorSelection(sel.index, 0);
+			return;
+		}
 		setEditorSelection(sel.index, 0);
-	}
-	
+		return;
+	}	
 }
 
 function onWindowMouseDown_dragdrop(e) {
@@ -167,6 +246,7 @@ function onWindowMouseDown_dragdrop(e) {
 }
 
 function onWindowMouseMove_dragdrop(e) {
+
 	//let offset = getDocIdxFromPoint({ x: parseFloat(e.clientX), y: parseFloat(e.clientY) });
 	//log('offset: ' + offset);
 	if (IsDragging) {
@@ -195,7 +275,7 @@ function onWindowMouseMove_dragdrop(e) {
 	if (DropIdx < 0) {
 		return;
 	}
-	LastMousePos = getEditorMousePos(e);
+	WindowMouseLoc = getEditorMousePos(e);
 	LastMouseUpdateDateTime = Date.now();
 
 	DropIdx = -1;

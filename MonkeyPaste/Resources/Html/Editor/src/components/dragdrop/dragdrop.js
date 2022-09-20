@@ -1,39 +1,27 @@
 ﻿var CefDragData;
 
-var IsCtrlDown = false; //duplicate
-var IsShiftDown = false; //split 
-var IsAltDown = false; // w/ formatting (as html)? ONLY formating? dunno
 
 
 var DropElm;
-var DropIdx = -1;
-var IsDropCancel = false; // flagged from drag_end  evt resetDragDrop then unset in editorSelectionChange which restores selection
 
-var IsSplitDrop = false;
-var IsPreBlockDrop = false;
-var IsPostBlockDrop = false;
-
-var IsDragging = false;
-var WasNoneSelectedBeforeDrag = false;
-var SelIdxBeforeDrag = -1;
-
-var PreDropState = null;
-
-var LastMousePos = null;
+//var WindowMouseLoc = null;
 var LastMouseUpdateDateTime = null;
 
 const MIN_DRAG_DIST = 10;
 
 function initDragDrop() {
-    initWindowDragDrop();
+    //initWindowDragDrop();
 
-    let allDocTags = [...InlineTags, ...BlockTags];
-    let allDocTagsQueryStr = allDocTags.join(',');
-    //let editorElms = document.getElementById('editor').querySelectorAll(allDocTagsQueryStr);
+    initDrop();
+    initDrag();
 
-    //enableDragDropOnElement(document.body);
-    //enableDragDropOnElement(window);
-    enableDragDropOnElement(getEditorContainerElement());
+    //let allDocTags = [...InlineTags, ...BlockTags];
+    //let allDocTagsQueryStr = allDocTags.join(',');
+    ////let editorElms = document.getElementById('editor').querySelectorAll(allDocTagsQueryStr);
+
+    ////enableDragDropOnElement(document.body);
+    ////enableDragDropOnElement(window);
+    //enableDragDropOnElement(getEditorContainerElement());
 
     //Array.from(editorElms).forEach(elm => {
     //    enableDragDropOnElement(elm);
@@ -44,7 +32,7 @@ function initDragDrop() {
 }
 
 function onTick() {
-    //let range = getSelection();
+    //let range = getEditorSelection();
     //log("dragover idx " + range.index + ' length "' + range.length);
 
 }
@@ -82,7 +70,7 @@ function isBlockDrop() {
 }
 
 function isDragSource() {
-    let selection = getSelection();
+    let selection = getEditorSelection();
     if (!selection) {
         // occurs when drag started from host w/o sub-selection
         return IsDragging;
@@ -92,7 +80,7 @@ function isDragSource() {
 
 function isDragValid(dt, emp) {
     if (isDataTransferDataValid(dt) && dt.effectAllowed !== undefined && dt.effectAllowed != 'none') {
-        let sel_range = getSelection();
+        let sel_range = getEditorSelection();
 
         if (sel_range && sel_range.length > 0 && isPointInRange(emp, sel_range)) {
             return false;
@@ -118,7 +106,7 @@ function resetDragDrop(isEscCancel = false) {
     IsPostBlockDrop = false;
     IsSplitDrop = false;
 
-    LastMousePos = null;
+    WindowMouseLoc = null;
     LastMouseUpdateDateTime = null;
 
     DropIdx = -1;
@@ -145,7 +133,7 @@ function resetDragDrop(isEscCancel = false) {
 
 function startDrag(isFromHost) {
     IsDragging = true;
-    let sel = getSelection();
+    let sel = getEditorSelection();
     if (sel.length == 0) {
         WasNoneSelectedBeforeDrag = true;
         SelIdxBeforeDrag = sel.index;
@@ -210,7 +198,7 @@ function checkCanDrag(emp) {
     //	return true;
     //}
 
-    let sel = getSelection();
+    let sel = getEditorSelection();
     let is_none_selected = sel == null || sel.length == 0;
     if (is_none_selected) {
         //onContentDraggableChanged_ntf(false);
@@ -234,7 +222,7 @@ function getDragData(dt) {
     //    getDataTransferPlainText(dt);
     //let drag_data = getDataTransferHtml(dt);
  //   if (isDragSource()) {
- //       let sel = getSelection();
+ //       let sel = getEditorSelection();
  //       if (sel) {
  //           return getText(sel);
 	//	}
@@ -328,34 +316,34 @@ function onDragOver(e) {
         LastMouseUpdateDateTime = LastMouseUpdateDateTime == null ? cur_date_time : LastMouseUpdateDateTime;
         let m_dt = LastMouseUpdateDateTime - cur_date_time;
 
-        LastMousePos = LastMousePos == null ? mp : LastMousePos;
-        let m_delta_dist = dist(mp, LastMousePos);
+        WindowMouseLoc = WindowMouseLoc == null ? mp : WindowMouseLoc;
+        let m_delta_dist = dist(mp, WindowMouseLoc);
 
         let m_v = m_delta_dist / m_dt;
 
-        let do_update = m_delta_dist == 0 && m_v == 0;//dist(LastMousePos, mp) > min_drag_mouse_delta_dist
+        let do_update = m_delta_dist == 0 && m_v == 0;//dist(WindowMouseLoc, mp) > min_drag_mouse_delta_dist
         //log('m_v: ' + m_v + ' m_delta_dist: ' + m_delta_dist);
         // NOTE to optimize only up
         //let do_drop_update = m_delta_dist > min_drag_mouse_delta_dist &&
-        LastMousePos = mp;
+        WindowMouseLoc = mp;
         LastMouseUpdateDateTime = cur_date_time;
         if (do_update) {
             
             let dt = getDataTransferObject(e);
-            let is_valid = isDragValid(dt, LastMousePos);
+            let is_valid = isDragValid(dt, WindowMouseLoc);
             if (is_valid) {
                 if (typeof e.preventDefault === 'function') {
                     e.preventDefault();
                 }
 
-                DropIdx = getDocIdxFromPoint(LastMousePos);
+                DropIdx = getDocIdxFromPoint(WindowMouseLoc);
 
 
-                //let mp_elm = document.elementFromPoint(LastMousePos.x, LastMousePos.y);
+                //let mp_elm = document.elementFromPoint(WindowMouseLoc.x, WindowMouseLoc.y);
                 //let blot = Quill.find(mp_elm);
                 //let test_index = blot.offset(quill.scroll);
 
-                //let caret_obj = Document.caretPositionFromPoint(LastMousePos.x, LastMousePos.y);
+                //let caret_obj = Document.caretPositionFromPoint(WindowMouseLoc.x, WindowMouseLoc.y);
                 //let caret_elm = caret_obj.offsetNode;
                 //let caret_blot = Quill.find(caret_elm);
                 //let test_index2 = blot.offset(quill.scroll);
@@ -368,7 +356,7 @@ function onDragOver(e) {
 
             // NOTE to optimize only updating overlay when mouse move is significant enough
             drawOverlay();
-            //log('Mouse DocIdx: ' + DropIdx + ' Mouse Pos: x: ' + LastMousePos.x + ' y: ' + LastMousePos.y + ' call count: '); 
+            //log('Mouse DocIdx: ' + DropIdx + ' Mouse Pos: x: ' + WindowMouseLoc.x + ' y: ' + WindowMouseLoc.y + ' call count: '); 
         }
     } 
     e = setDropEffect(e);
@@ -416,7 +404,7 @@ function onDrop(e) {
 
     if (isDragCut()) {
         if (is_internal_drop) {
-            let cur_sel = getSelection();
+            let cur_sel = getEditorSelection();
             if (!cur_sel) {
                 // should only happen for single template drag
                 cur_sel = {};

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace MonkeyPaste {
     public class MpQuillLoadRequestMessage : MpJsonObject {
-        public int copyItemId { get; set; }
+        public string contentHandle { get; set; }
         public string copyItemType { get; set; }
 
         public string itemData { get; set; }
@@ -170,10 +170,7 @@ templateType: "dynamic"
         public int docIdx { get; set; }
     }
 
-    public abstract class MpQuillContentMessageBase : MpJsonObject {
-        public int copyItemId { get; set; }
-    }
-    public class MpQuillContentSelectionChangedMessage : MpQuillContentMessageBase {
+    public class MpQuillContentSelectionChangedMessage : MpJsonObject {
         //public int copyItemId { get; set; }
         public int index { get; set; }
         public int length { get; set; }
@@ -182,19 +179,19 @@ templateType: "dynamic"
         public bool isChangeBegin { get; set; }
     }
 
-    public class MpQuillContentLengthChangedMessage : MpQuillContentMessageBase {
+    public class MpQuillContentLengthChangedMessage : MpJsonObject {
         public int length { get; set; }
     }
-    public class MpQuillContentDraggableChangedMessage : MpQuillContentMessageBase {
+    public class MpQuillContentDraggableChangedMessage : MpJsonObject {
         public bool isDraggable { get; set; }
     }
 
 
-    public class MpQuillExceptionMessage : MpQuillContentMessageBase {
+    public class MpQuillExceptionMessage : MpJsonObject {
         public string exType { get; set; }
         public string exData { get; set; }
         public override string ToString() {
-            return $"Quill Exception for copyItemId:{copyItemId} ofType:'{exType}' withData: '{exData}'";
+            return $"Quill Exception ofType:'{exType}' withData: '{exData}'";
         }
     }
     public class MpQuillFileListDataFragment : MpJsonObject {

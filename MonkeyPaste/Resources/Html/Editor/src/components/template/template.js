@@ -438,6 +438,43 @@ function getTemplateElementsWithDocIdx() {
     return tewdil;
 }
 
+function getTemplatePlainText(t) {
+    let template_text = '';
+    if (IsPastingTemplate) {
+        let t_elm = getTemplateElements(null, t['templateInstanceGuid']);
+        template_text = t_elm.innerText;
+    } else {
+        template_text = '{t{' + t['templateGuid'] + ',' + t['templateInstanceGuid'] + '}t}';
+    }
+    return template_text;
+}
+
+function getRangeTextWithTemplateText(range) {
+    let text = quill.getText(range.index, range.length);
+    let out_text = text;
+    let out_idx = 0;
+    // to seamlessly use templates check range and insert tguid or or display value for templates
+    for (var i = 0; i <= range.length; i++) {
+        let doc_idx = range.index + i;
+        let t_at_doc_idx = getTemplateAtDocIdx(doc_idx);
+        if (t_at_doc_idx == null) {
+            out_idx++;
+            continue;
+        }
+
+        let pre_text = substringByLength(out_text, 0, out_idx);
+        // remove leading pad
+        pre_text = substringByLength(pre_text, 0, pre_text.length - 1);
+        let post_text = substringByLength(text, i, text.length - i);
+        // remove trailing pad
+        post_text = substringByLength(post_text, 0, post_text.length - 1);
+        let template_text = getTemplatePlainText(t_at_doc_idx);
+        out_text = pre_text + template_text + post_text;
+        // offset out by template and adjust for 2 removed pad spaces
+        out_idx += template_text.length - 2;
+    }
+    return out_text;
+}
 function getUsedTemplateInstances() {
     //var domTemplates = document.querySelectorAll('.ql-template-embed-blot');
     var domTemplates = document.querySelectorAll('.' + TemplateEmbedClass);
@@ -898,12 +935,8 @@ function updateTemplatesAfterTextChanged(delta, oldDelta, source) {
         telm.innerText = t.templateName;
 	}
 }
-function updateTemplatesAfterSelectionChange() {
-    // BUG if template is at the end of a line (or maybe just block?) 
-    //and drag selecting up sel clears, its the reason and its that quill bug
-
-    let sel_range = getSelection();
-    let sel_bg_color = getTextSelectionBgColor();
+function updateTemplatesAfterSelectionChange(sel_range) {    
+    let sel_bg_color =  getTextSelectionBgColor();
     let template_elms_in_sel_range = sel_range ? getTemplateElementsInRange(sel_range) : [];
     let all_template_elms = getTemplateElements();
     let show_sel_bg_color = !isShowingEditTemplateToolbar() && IsSubSelectionEnabled;
@@ -937,3 +970,5 @@ function getTemplateToolbarHeight() {
     }
     return 0;
 }
+
+

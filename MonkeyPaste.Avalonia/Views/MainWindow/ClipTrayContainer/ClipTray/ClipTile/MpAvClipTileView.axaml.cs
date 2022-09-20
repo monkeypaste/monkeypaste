@@ -232,7 +232,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipTileView() {
             InitializeComponent();
-            this.PointerPressed += MpAvClipTileView_PointerPressed;
+            //this.PointerPressed += MpAvClipTileView_PointerPressed;
             //var ctv = this.FindControl<MpAvClipTileContentView>("ClipTileContentView");
             //ctv.PointerEnter += Ctv_PointerEnter;
             //ctv.PointerMoved += Ctv_PointerMoved;

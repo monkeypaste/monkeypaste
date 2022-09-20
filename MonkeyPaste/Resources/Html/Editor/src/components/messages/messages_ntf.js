@@ -5,7 +5,7 @@ function onEditorSelectionChanged_ntf(range,isSelChangeBegin) {
 
 	let text = getSelectedText();
 	let selChangedObj = {
-		copyItemId: CopyItemId,
+		//contentHandle: ContentHandle,
 		index: range.index,
 		length: range.length,
 		isChangeBegin: isSelChangeBegin,
@@ -24,7 +24,7 @@ function onContentLengthChanged_ntf() {
 	let docLength = getDocLength();
 	if (typeof notifyContentLengthChanged === 'function') {
 		let clMsg = {
-			copyItemId: CopyItemId,
+			//copyItemId: ContentHandle,
 			length: docLength
 		};
 		let msgStr = toBase64FromJsonObj(clMsg);
@@ -39,7 +39,7 @@ function onContentDraggableChanged_ntf(isDraggable) {
 	//log('is_draggable: ' + isDraggable);
 	if (typeof notifyContentDraggableChanged === 'function') {
 		let msg = {
-			copyItemId: CopyItemId,
+			//copyItemId: ContentHandle,
 			isDraggable: isDraggable
 		};
 		let msgStr = toBase64FromJsonObj(msg);
@@ -52,7 +52,7 @@ function onDragStart_ntf() {
 
 	// should only be called on mouse down...
 	if (typeof notifyDragStart === 'function') {
-		let sel = getSelection();
+		let sel = getEditorSelection();
 		let dragDropDataMsg = createHostMsgDataObjectObjectForRange(sel, 'drag');
 		let msgStr = toBase64FromJsonObj(dragDropDataMsg);
 		startDrag(true);
@@ -106,7 +106,7 @@ function onException_ntf(exType, exData) {
 		log('');
 		// out MpQuillExceptionMessage
 		let msg = {
-			copyItemId: CopyItemId,
+			//copyItemId: ContentHandle,
 			exType: exType,
 			exData: exDataStr
 		};

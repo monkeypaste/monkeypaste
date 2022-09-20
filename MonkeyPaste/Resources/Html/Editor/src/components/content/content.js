@@ -1,6 +1,6 @@
 var InlineTags = ['span', 'a', 'em', 'strong', 'u', 's', 'sub', 'sup', 'img'];
 var BlockTags = ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe','blockquote']
-var CopyItemId = -1;
+var ContentHandle = null;
 var CopyItemType = 'Text';
 
 function initContent(itemDataStr) {
@@ -306,6 +306,12 @@ function getBlockIdxFromPoint(p) {
 	let p_elm = document.elementFromPoint(p.x, p.y);
 	let blot = Quill.find(p_elm);
 	let block_idx = blot.offset(quill.scroll);
+	if (!isNaN(parseInt(block_idx))) {
+		debugger;
+		const p_range = document.caretRangeFromPoint(p.x, p.y);
+		log('block idx NaN, using caretRangeFromPoint which is ' + p_range.startOffset);
+		return p_range.startOffset;
+	}
 	return block_idx;
 }
 
@@ -369,6 +375,9 @@ function getDocIdxFromPoint_slow(p, snapToLine, invokeId = 0) {
 
 
 function getDocIdxFromPoint(p, fallbackIdx) {
+	if (!p || p.x === undefined || p.y === undefined) {
+		debugger;
+	}
 	fallbackIdx = fallbackIdx ? parseInt(fallbackIdx) : -1;
 
 	let textNode = null;
@@ -408,9 +417,13 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 							let block_idx = blot.offset(quill.scroll);
 							if (!isNaN(parseInt(block_idx))) {
 								doc_idx = block_idx;
+							} else {
+								debugger;
 							}
 						}
 
+					} else {
+						debugger;
 					}
 					
 				}
@@ -457,7 +470,7 @@ function getBlockElementAtDocIdx(docIdx) {
 }
 
 function getHtmlFromDocRange(docRange) {
-	let old_sel = getSelection();
+	let old_sel = getEditorSelection();
 
 	IgnoreNextSelectionChange = true;
 

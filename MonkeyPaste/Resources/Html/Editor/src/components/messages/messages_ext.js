@@ -121,7 +121,7 @@ function setSelectionFromEdiotrPoint_ext(selMsgReq) {
 		return;
 	}
 	if (selMsg.state == 'move') {
-		let sel = getSelection();
+		let sel = getEditorSelection();
 		if (doc_idx < sel.index) {
 			let temp = sel.index;
 			sel.index = doc_idx;
@@ -254,7 +254,7 @@ function disableReadOnly_ext(disableReadOnlyReqStrOrObj) {
 
 	let disableReadOnlyMsg = toJsonObjFromBase64Str(disableReadOnlyReqStrOrObj);
 	availableTemplates = disableReadOnlyMsg.allAvailableTextTemplates;
-	disableReadOnly(disableReadOnlyMsg.isSilent);
+	disableReadOnly();
 
 	// output MpQuillDisableReadOnlyResponseMessage
 
@@ -265,11 +265,11 @@ function disableReadOnly_ext(disableReadOnlyReqStrOrObj) {
 }
 
 function enableSubSelection_ext() {
-	enableSubSelection();
+	enableSubSelection(true);
 }
 
 function disableSubSelection_ext() {
-	disableSubSelection();
+	disableSubSelection(true);
 }
 
 function selectAll_ext() {
@@ -277,7 +277,7 @@ function selectAll_ext() {
 }
 
 function deselectAll_ext() {
-	let sel = getSelection();
+	let sel = getEditorSelection();
 	if (!sel) {
 		return;
 	}
