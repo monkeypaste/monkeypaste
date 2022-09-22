@@ -38,9 +38,12 @@ function initDrag() {
             e.stopPropagation();
 
             e.dataTransfer.effectAllowed = 'copyMove';
-            e.dataTransfer.setData('text/html', getHtml(sel));
-            e.dataTransfer.setData('text/plain', getText(sel));
-            e.dataTransfer.setData('application/json/quill-delta', getDeltaJson(sel));
+            let textStr = getText(sel);
+            e.dataTransfer.setData('text/plain', textStr);
+            let htmlStr = getHtml(sel);
+            e.dataTransfer.setData('text/html', htmlStr);
+            let deltaJsonStr = getDeltaJson(sel);
+            e.dataTransfer.setData('application/json/quill-delta', deltaJsonStr);
 
             if (isAllSelected()) {
                 e.dataTransfer.setData('application/mp', ContentHandle);

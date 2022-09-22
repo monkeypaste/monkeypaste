@@ -12,11 +12,9 @@ using System.Collections.Concurrent;
 using System.Threading;
 using Avalonia.Input;
 using MonkeyPaste.Common.Avalonia;
-using AvaloniaEdit;
 using CsvHelper;
 using Avalonia;
 using MonkeyPaste.Common;
-using AvaloniaEdit.Utils;
 using Avalonia.Interactivity;
 
 namespace MonkeyPaste.Avalonia {
@@ -100,7 +98,7 @@ namespace MonkeyPaste.Avalonia {
 
         MpAvIContentDocument MpAvIContentView.Document => Document;
 
-        public IList<RoutedCommandBinding> CommandBindings { get; } = new List<RoutedCommandBinding>();
+        //public IList<RoutedCommandBinding> CommandBindings { get; } = new List<RoutedCommandBinding>();
         #endregion
 
         #region Constructors
@@ -109,9 +107,9 @@ namespace MonkeyPaste.Avalonia {
             Document = new MpAvHtmlDocument(this);
             Selection = new MpAvTextSelection(Document);
 
-            CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Copy, OnCopy, OnCanExecuteClipboardCommand));
-            CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Cut, OnCut, OnCanExecuteClipboardCommand));
-            CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Paste, OnPaste, OnCanExecuteClipboardCommand));
+            //CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Copy, OnCopy, OnCanExecuteClipboardCommand));
+            //CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Cut, OnCut, OnCanExecuteClipboardCommand));
+            //CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Paste, OnPaste, OnCanExecuteClipboardCommand));
 
         }
 
@@ -148,16 +146,6 @@ namespace MonkeyPaste.Avalonia {
             _curDropEffects = dropEffectStr.ToTitleCase().ToEnum<DragDropEffects>();
             MpConsole.WriteLine($"Tile: '{(DataContext as MpAvClipTileViewModel).CopyItemTitle}' Drop Effect: '{_curDropEffects}'");
         }
-
-        public void UpdateSelectionRects(IEnumerable<MpRect> selRects) {
-            Selection.RangeRects.Clear();
-            if(selRects == null) {
-                return;
-            }
-            Selection.RangeRects.AddRange(selRects);
-        }
-
-
 
         public void SelectAll() {
             this.ExecuteJavascript("selectAll_ext()");
@@ -394,37 +382,37 @@ namespace MonkeyPaste.Avalonia {
 
         #region Application Commands
 
-        private static void OnCanExecuteClipboardCommand(object target, CanExecuteRoutedEventArgs args) {
-            MpAvCefNetWebView wv = (MpAvCefNetWebView)target;
-            args.CanExecute = wv.IsEnabled;
-        }
+        //private static void OnCanExecuteClipboardCommand(object target, CanExecuteRoutedEventArgs args) {
+        //    MpAvCefNetWebView wv = (MpAvCefNetWebView)target;
+        //    args.CanExecute = wv.IsEnabled;
+        //}
 
-        private static void OnCopy(object sender, ExecutedRoutedEventArgs e) {
-            MpAvCefNetWebView wv = (MpAvCefNetWebView)sender;
-            e.Handled = true;
-            wv.SetClipboardDataAsync(true).FireAndForgetSafeAsync(wv.DataContext as MpViewModelBase);
-        }
+        //private static void OnCopy(object sender, ExecutedRoutedEventArgs e) {
+        //    MpAvCefNetWebView wv = (MpAvCefNetWebView)sender;
+        //    e.Handled = true;
+        //    wv.SetClipboardDataAsync(true).FireAndForgetSafeAsync(wv.DataContext as MpViewModelBase);
+        //}
 
-        private static void OnCut(object sender, ExecutedRoutedEventArgs e) {
-            MpAvCefNetWebView wv = (MpAvCefNetWebView)sender;
-            e.Handled = true;
-            wv.SetClipboardDataAsync(false).FireAndForgetSafeAsync(wv.DataContext as MpViewModelBase);
-        }
+        //private static void OnCut(object sender, ExecutedRoutedEventArgs e) {
+        //    MpAvCefNetWebView wv = (MpAvCefNetWebView)sender;
+        //    e.Handled = true;
+        //    wv.SetClipboardDataAsync(false).FireAndForgetSafeAsync(wv.DataContext as MpViewModelBase);
+        //}
 
-        private static void OnPaste(object sender, ExecutedRoutedEventArgs e) {
-            MpAvCefNetWebView wv = (MpAvCefNetWebView)sender;
+        //private static void OnPaste(object sender, ExecutedRoutedEventArgs e) {
+        //    MpAvCefNetWebView wv = (MpAvCefNetWebView)sender;
 
-            e.Handled = true;
-            Dispatcher.UIThread.Post(async () => {
-                string cb_text = await Application.Current.Clipboard.GetTextAsync();
-                await wv.Selection.SetTextAsync(cb_text);
+        //    e.Handled = true;
+        //    Dispatcher.UIThread.Post(async () => {
+        //        string cb_text = await Application.Current.Clipboard.GetTextAsync();
+        //        await wv.Selection.SetTextAsync(cb_text);
 
-                if (wv.DataContext is MpAvClipTileViewModel ctvm) {
-                    MpAvCefNetWebViewExtension.SaveTextContentAsync(wv)
-                        .FireAndForgetSafeAsync(ctvm);
-                }
-            });            
-        }
+        //        if (wv.DataContext is MpAvClipTileViewModel ctvm) {
+        //            MpAvCefNetWebViewExtension.SaveTextContentAsync(wv)
+        //                .FireAndForgetSafeAsync(ctvm);
+        //        }
+        //    });            
+        //}
 
         #endregion
 

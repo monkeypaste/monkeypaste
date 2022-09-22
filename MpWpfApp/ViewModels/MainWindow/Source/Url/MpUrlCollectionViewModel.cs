@@ -10,8 +10,6 @@ using System.Windows.Input;
 using MonkeyPaste;
 using System.IO;
 
-using MonkeyPaste;
-
 namespace MpWpfApp {
     public class MpUrlCollectionViewModel : 
         MpSelectorViewModelBase<object,MpUrlViewModel>, 

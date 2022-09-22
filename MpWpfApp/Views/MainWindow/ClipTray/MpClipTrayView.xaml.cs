@@ -86,7 +86,7 @@ namespace MpWpfApp {
 
         private void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
             switch(msg) {
-                case MpMessageType.MainWindowOpening: 
+                case MpMessageType.MainWindowOpened: 
                     if(BindingContext.SelectedItem != null && 
                        BindingContext.SelectedItem.QueryOffsetIdx > 0) {
                         return;

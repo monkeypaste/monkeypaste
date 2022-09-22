@@ -68,7 +68,7 @@ namespace MpWpfApp {
 
         #region MpITooltipInfoViewModel Implementation
 
-        public object Tooltip {
+        public virtual object Tooltip {
             get {
                 string toolTipStr = string.Empty;
 

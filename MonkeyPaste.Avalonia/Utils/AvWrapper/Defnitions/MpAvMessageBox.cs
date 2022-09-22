@@ -5,70 +5,39 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
-using MessageBox.Avalonia;
-using MessageBox.Avalonia.DTO;
-using MessageBox.Avalonia.Enums;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Layout;
+using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMessageBox : MpINativeMessageBox {
         private object result;
 
         public bool ShowOkCancelMessageBox(string title, string message) {
-
-            Dispatcher.UIThread.Post(async () => {
-                var messageBoxStandardWindow = MessageBoxManager.GetMessageBoxStandardWindow(title, message);
-                result = await messageBoxStandardWindow.Show();
-
-                //var window = CreateSampleWindow(title,message);
-                //window.Height = 200;
-                //_ = window.ShowDialog(window);
-            });
-
-            while(result == null) {
-                Thread.Sleep(100);
+            if(OperatingSystem.IsWindows()) {
+                System.Windows.MessageBox.Show(message, title);
+            } else {
+                // add others
+                Debugger.Break();
             }
-
-            //if(result is string resultStr) {
-            //    return resultStr.ToLower() == "ok";
-            //}
-            //return false;
-            if (result is ButtonResult br) {
-                result = null;
-                return br == ButtonResult.Ok;
-            }
-            result = null;
             return false;
         }
 
         public bool? ShowYesNoCancelMessageBox(string title, string message) {
-            object result = null;
-
-            Dispatcher.UIThread.Post(async () => {
-                var iconBitmap = MpAvStringResourceToBitmapConverter.Instance.Convert(
-                    MpPlatformWrapper.Services.PlatformResource.GetResource("QuestionMarkImage"), null, null, null) as Bitmap;
-                
-                var messageBoxStandardWindow = MessageBoxManager.GetMessageBoxStandardWindow(new MessageBoxStandardParams {
-                    ButtonDefinitions = ButtonEnum.YesNoCancel,
-                    ContentTitle = title,
-                    ContentHeader = message,
-                    ContentMessage = String.Empty,
-                    WindowIcon = new WindowIcon(iconBitmap)
-                });
-                result = await messageBoxStandardWindow.Show();
-            });
-
-            while (result == null) {
-                Thread.Sleep(100);
-            }
-
-            if (result is ButtonResult br) {
-                if(br == ButtonResult.Cancel) {
-                    return null;
+            if(OperatingSystem.IsWindows()) {
+                var result = System.Windows.MessageBox.Show(message, title, System.Windows.MessageBoxButton.YesNoCancel);
+                if(result == System.Windows.MessageBoxResult.Yes) {
+                    return true;
                 }
-                return br == ButtonResult.Yes;
+                if(result == System.Windows.MessageBoxResult.No) {
+                    return false;
+                }
+                return null;
+            } else {
+                // fill in others
+                Debugger.Break();
+
             }
             return null;
         }

@@ -1,5 +1,4 @@
-﻿using AvaloniaEdit.Document;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Utils.Extensions;
 using System;
@@ -99,8 +98,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<bool> IsPointInRangeAsync(MpPoint point) {
-            var srect = await Start.GetCharacterRectAsync(LogicalDirection.Forward);
-            var erect = await End.GetCharacterRectAsync(LogicalDirection.Forward);
+            var srect = await Start.GetCharacterRectAsync(MpAvLogicalDirection.Forward);
+            var erect = await End.GetCharacterRectAsync(MpAvLogicalDirection.Forward);
             srect.Union(erect);
             bool result = srect.Contains(point);
             MpConsole.WriteLine("IsPointInRange: ");

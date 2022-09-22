@@ -2,6 +2,21 @@
 var WindowMouseDownLoc = null;
 var WindowMouseLoc = null;
 
+var PermittedReadOnlyKeys = [
+	"ArrowLeft",
+	"ArrowUp",
+	"ArrowRight",
+	"ArrowDown",
+	"Escape",
+	"Shift",
+	"Alt",
+	"Control",
+	"Home",
+	"End",
+	"PageUp",
+	"PageDown"
+];
+
 function initWindow() {
 	window.addEventListener("resize", onWindowResize, true);
 	window.addEventListener('scroll', onWindowScroll);
@@ -12,6 +27,7 @@ function initWindow() {
 
 	window.addEventListener("click", onWindowClick);
 
+	window.addEventListener('keydown', onWindowKeyDown);
 	window.addEventListener('keyup', onWindowKeyUp);
 
 	window.addEventListener('dblclick', onWindowDoubleClick);
@@ -113,11 +129,19 @@ function onWindowDoubleClick(e) {
 }
 
 function onWindowMouseDown(e) {
+	if (!isChildOfElement(e.target, getEditorContainerElement())) {
+		return;
+	}
 	WindowMouseDownLoc = { x: e.clientX, y: e.clientY };
 	//LastWindowMouseDownLoc = WindowMouseDownLoc;
 }
 function onWindowMouseMove(e) {
-	WindowMouseLoc = { x: e.clientX, y: e.clientY }; 
+	// NOTE! not called during drag over
+
+	if (!isChildOfElement(e.target, getEditorContainerElement())) {
+		return;
+	}
+	WindowMouseLoc = { x: e.clientX, y: e.clientY };
 	//if (WindowMouseDownLoc == null) {
 	//	return;
 	//}
@@ -140,6 +164,10 @@ function onWindowMouseMove(e) {
 }
 
 function onWindowMouseUp(e) {
+
+	if (!isChildOfElement(e.target, getEditorContainerElement())) {
+		return;
+	}
 	//LastWindowMouseDownLoc = WindowMouseDownLoc;
 	let last_dmp = WindowMouseDownLoc;
 	WindowMouseDownLoc = null;
@@ -149,6 +177,9 @@ function onWindowMouseUp(e) {
 	//}
 	//WindowMouseDownLoc = null;
 	//return;
+	if (last_dmp == null) {
+		debugger;
+	}
 	let window_up_mp = { x: e.clientX, y: e.clientY };
 	let wmdl_delta_dist = dist(last_dmp, window_up_mp);
 	if (wmdl_delta_dist > MIN_DRAG_DIST) {
@@ -197,6 +228,16 @@ function onWindowScroll(e) {
 function onWindowResize(e) {
 	updateAllSizeAndPositions();
 	drawOverlay();
+}
+
+function onWindowKeyDown(e) {
+	if (IsReadOnly) {
+		if (PermittedReadOnlyKeys.contains(e.key)) {
+			return;
+		}
+		e.stopPropagation();
+		e.preventDefault();
+	}
 }
 
 // DRAG DROP

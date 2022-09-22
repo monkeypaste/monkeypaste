@@ -1,12 +1,19 @@
 var TemplateEmbedClass = 'ql-template-embed-blot';
-var TemplateFocusInstanceClass = 'ql-template-embed-blot-focus';
-var TemplateFocusNotInstanceClass = 'ql-template-embed-blot-focus-not-instance';
-const Parchment = Quill.imports.parchment;
 
+var Template_FOCUSED_INSTANCE_Class = 'ql-template-embed-blot-focus';
+var Template_FOCUSED_NOT_INSTANCE_Class = 'ql-template-embed-blot-focus-not-instance';
+
+var Template_IN_SEL_RANGE_Class = 'ql-template-embed-blot-selected-overlay';
+
+var Template_BEFORE_INSERT_Class = 'ql-template-embed-blot-before-insert';
+var Template_AT_INSERT_Class = 'ql-template-embed-blot-at-insert'; 
+var Template_AFTER_INSERT_Class = 'ql-template-embed-blot-after-insert';
+
+const Parchment = Quill.imports.parchment;
 
 class TemplateEmbedBlot extends Parchment.EmbedBlot {
     static blotName = 'template';
-    static tagName = 'DIV';
+    static tagName = 'SPAN';
     static className = TemplateEmbedClass;
 
     static create(value) {
@@ -34,9 +41,9 @@ class TemplateEmbedBlot extends Parchment.EmbedBlot {
     }
 
 
-    length() {
-        return 1;
-    }
+    //length() {
+    //    return 1;
+    //}
 
     static value(domNode) {
         return getTemplateFromDomNode(domNode);
@@ -52,7 +59,7 @@ function getTemplateFromDomNode(domNode) {
         return null;
     }
     return {
-        domNode: domNode,
+        //domNode: domNode,
         templateGuid: domNode.getAttribute('templateGuid'),
         templateInstanceGuid: domNode.getAttribute('templateInstanceGuid'),
         isFocus: domNode.getAttribute('isFocus'),

@@ -31,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
                         };
                         wv.ExecuteJavascript($"setTextInRange_ext('{setTextMsg.SerializeJsonObjectToBase64()}')");
                         
-                    } else if(_document is MpAvTextBox tb) {
+                    } else if(_document is MpAvTextBox tb && tb.SelectedText != _text) {
                         tb.SelectedText = _text;
                     }
                     

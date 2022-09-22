@@ -35,7 +35,7 @@ namespace MpWpfApp {
 
         #region Appearance
 
-        public object Tooltip => "Prefix is used for non-file clipboard items. If unset file will use the content's title.";
+        public override object Tooltip => "Prefix is used for non-file clipboard items. If unset file will use the content's title.";
         #endregion
         #region State
 

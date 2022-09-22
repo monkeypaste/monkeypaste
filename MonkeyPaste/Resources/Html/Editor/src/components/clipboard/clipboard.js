@@ -131,7 +131,7 @@ function onPaste(e) {
     }
     if (hasPlainText(dt)) {
         setTextInRange(sel, '');
-        insertTextAtDocIdx(sel.index, getDataTransferPlainText(dt));
+        insertText(sel.index, getDataTransferPlainText(dt));
         return;
 	}
     log('unknown paste format');

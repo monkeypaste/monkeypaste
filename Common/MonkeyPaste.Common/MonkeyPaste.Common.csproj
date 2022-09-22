@@ -17,11 +17,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.45" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="PropertyChanged.Fody" Version="4.0.1" />
-    <PackageReference Include="SkiaSharp" Version="2.88.1" />
+    <PackageReference Include="PropertyChanged.Fody" Version="4.0.3" />
+    <PackageReference Include="SkiaSharp" Version="2.88.2" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Utils\Documents\" />
   </ItemGroup>
 
 </Project>

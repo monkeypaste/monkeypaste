@@ -12,7 +12,7 @@ using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
 using Avalonia.Input;
 using System.Runtime.InteropServices;
-using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -259,10 +259,10 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public MpPortableDataObject ReadClipboardOrDropObject(object forcedDataObject = null) {
+        public MpAvDataObject ReadClipboardOrDropObject(object forcedDataObject = null) {
             // NOTE forcedDataObject is used to read drag/drop, when null clipboard is read
 
-            var mpdo = new MpPortableDataObject();
+            var mpdo = new MpAvDataObject();
 
             //only iterate through actual handlers 
             var handlers = EnabledFormats.Where(x => x.CanRead)
@@ -277,21 +277,10 @@ namespace MonkeyPaste.Avalonia {
 
                 var req = new MpClipboardReaderRequest() {
                     isAvalonia = true,
-                    mainWindowImplicitHandle = int_test,//MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle.ToInt32(),
+                    mainWindowImplicitHandle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle.ToInt32(),
                     platform = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
                     readFormats = EnabledFormats.Where(x => x.Parent.ClipboardPluginComponent == handler).Select(x => x.Parent.HandledFormat).Distinct().ToList(),
                     items = EnabledFormats.Where(x => x.Parent.ClipboardPluginComponent == handler).SelectMany(x => x.Items.Cast<MpIParameterKeyValuePair>()).ToList(),
-                    //readFormats = EnabledReaderLookup
-                    //                .Where(x => x.Value.Parent.ClipboardPluginComponent == handler)
-                    //                .Select(x => x.Key).Distinct().ToList(),
-                    //items = EnabledReaderLookup
-                    //            .Where(x => x.Value.Parent.ClipboardPluginComponent == handler)
-                    //            .SelectMany(x => x.Value.Items
-                    //                .Select(y =>
-                    //                    new MpPluginRequestItemFormat() {
-                    //                        paramId = y.ParamEnumId,
-                    //                        value = y.CurrentValue
-                    //                    })).Cast<MpIParameterKeyValuePair>().ToList(),
                     forcedClipboardDataObject = forcedDataObject
                 };
 

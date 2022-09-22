@@ -1,4 +1,7 @@
 
+.ql-template-pad-blot {
+    /*display: inline;*/
+}
 
 .ql-template-embed-blot {
     display: inline-flex;
@@ -7,15 +10,14 @@
     border-radius: 3px;
     transition: .4s;
     cursor: pointer;
-    caret-color: transparent;
+    /*caret-color: transparent;*/
     border: 2px solid transparent;
+    background-blend-mode: multiply;
     /*-moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;*/
     z-index: 0;
     user-select: none;
-    margin-left: -3px;
-    margin-right: -5px;
 }
 
     .ql-template-embed-blot:hover:not(.ql-template-embed-blot-focus) {
@@ -25,6 +27,9 @@
         border: 2px solid yellow;
     }
 
+.ql-template-embed-blot-selected-overlay {
+    background-image: linear-gradient(0deg, var(--selbgcolor), var(--selbgcolor));
+}
 
 .ql-template-embed-blot-sub-selected {
 
@@ -49,7 +54,15 @@
 }
 
 .ql-template-embed-blot-at-insert {
-    border: 2px solid #31e40e !important;
+    border: 2px solid orange !important;
+}
+.ql-template-embed-blot-before-insert {
+    /* only used let selection caret exist before embed */
+    /*caret-color: var(--selfgcolor);*/
+}
+.ql-template-embed-blot-after-insert {
+    /* only used let selection caret exist before embed */
+    /*caret-color: var(--selfgcolor);*/
 }
 
 .resizable-textarea {

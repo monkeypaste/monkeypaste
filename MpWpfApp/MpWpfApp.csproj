@@ -156,13 +156,10 @@
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\Base\MpDropBehaviorBase.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpActionDesignerItemDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpClipTrayDropBehavior.cs" />
-    <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpContentListDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpContentViewDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpExternalDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpPinTrayDropBehavior.cs" />
-    <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpRtbViewDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\Interfaces\MpIContentDropTarget.cs" />
-    <Compile Include="Behaviors\DragDrop\MpContentListBoxSelectionBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\MpDragDropManager.cs" />
     <Compile Include="Behaviors\DragDrop\MpMouseHook.cs" />
     <Compile Include="Behaviors\Highlighting\MpClipTileTitleHighlightBehavior.cs" />
@@ -1616,7 +1613,7 @@
       <Version>1.5.7</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms.Platform.WPF">
-      <Version>5.0.0.2478</Version>
+      <Version>5.0.0.2515</Version>
     </PackageReference>
     <PackageReference Include="Yolov5Net">
       <Version>1.0.9</Version>
@@ -3063,24 +3060,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="Microsoft.Office.Core">
-      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>4</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="Microsoft.Office.Interop.Outlook">
-      <Guid>{00062FFF-0000-0000-C000-000000000046}</Guid>
-      <VersionMajor>9</VersionMajor>
-      <VersionMinor>3</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
     <COMReference Include="stdole">
       <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
       <VersionMajor>2</VersionMajor>

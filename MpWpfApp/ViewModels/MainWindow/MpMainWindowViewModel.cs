@@ -361,7 +361,6 @@ namespace MpWpfApp {
                 //MpHelpers.WriteBitmapSourceToFile(@"C:\Users\tkefauver\Desktop\ss.png", Ss);
                 
 
-                MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowOpening);
 
                 
                 var mw = (MpMainWindow)Application.Current.MainWindow;
@@ -407,6 +406,7 @@ namespace MpWpfApp {
                         IsMainWindowOpen = true;
                         OnMainWindowShow?.Invoke(this, null);
 
+                        MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowOpened);
                         MpClipTrayViewModel.Instance.AddNewItemsCommand.Execute(null);
                     }
                 };

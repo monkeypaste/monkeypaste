@@ -1,3 +1,4 @@
+
 const TEMPLATE_VALID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890#-_ ";
 const MIN_TEMPLATE_DRAG_DIST = 5;
 
@@ -8,6 +9,8 @@ var ENCODED_TEMPLATE_CLOSE_TOKEN = "}t}";
 var ENCODED_TEMPLATE_REGEXP;
 
 var IsMovingTemplate = false;
+
+var IsTemplateAtInsert = false;
 
 var IsAnyTemplateBgTemporary = false;
 var DragAnchorDocIdxWhenTemplateWithinSelection = -1;
@@ -56,14 +59,14 @@ function initTemplates(usedTemplates, isPasting) {
     if (usedTemplates != null) {
         decodeTemplates(usedTemplates);
     }
-    //let telml = getTemplateElements();
-    //for (var i = 0; i < telml.length; i++) {
-    //    let t_elm = telml[i];
-    //    let t_blot = getTemplateFromDomNode(t_elm);
-    //    applyTemplateToDomNode(t_elm, t_blot);
-    //    //t_blot.domNode = t_elm;
-    //    //TemplateEmbedBlot.create(t_blot);
-    //}
+    let telml = getTemplateElements();
+    for (var i = 0; i < telml.length; i++) {
+        let t_elm = telml[i];
+        let t_blot = getTemplateFromDomNode(t_elm);
+        applyTemplateToDomNode(t_elm, t_blot);
+        //t_blot.domNode = t_elm;
+        //TemplateEmbedBlot.create(t_blot);
+    }
 
     let resizers = Array.from(document.getElementsByClassName('resizable-textarea'));
     for (var i = 0; i < resizers.length; i++) {
@@ -73,9 +76,10 @@ function initTemplates(usedTemplates, isPasting) {
             updateEditTemplateToolbarPosition();
 		}).observe(rta);
 	}
-    
 
-    initTemplateToolbarButton();
+    if (!IsLoaded) {
+	}
+    
 
     document.getElementById('templateNameTextInput').addEventListener('focus',onTemplateNameTextAreaGotFocus);
     document.getElementById('templateNameTextInput').addEventListener('blur',onTemplateNameTextAreaLostFocus);
@@ -258,8 +262,8 @@ function clearTemplateFocus() {
         let te = tel[i];
         te.setAttribute('isFocus', false);
 
-        te.classList.remove(TemplateFocusInstanceClass);
-        te.classList.remove(TemplateFocusNotInstanceClass);
+        te.classList.remove(Template_FOCUSED_INSTANCE_Class);
+        te.classList.remove(Template_FOCUSED_NOT_INSTANCE_Class);
     }
 }
 
@@ -272,7 +276,7 @@ function getFocusTemplateElement() {
     let telml = getTemplateElements();
     for (var i = 0; i < telml.length; i++) {
         let telm = telml[i];
-        if (telm.classList.contains(TemplateFocusInstanceClass)) {
+        if (telm.classList.contains(Template_FOCUSED_INSTANCE_Class)) {
             return telm;
         }
         if (parseBool(telm.getAttribute('isFocus')) == true) {
@@ -294,32 +298,6 @@ function getFocusTemplateGuid() {
     return ft.getAttribute('templateGuid');
 }
 
-function getTemplateElementsInRange(range) {
-    if (range == null || range.index == null) {
-        log('invalid range: ' + range);
-    }
-    let tl = [];
-    let tel = getTemplateElements();
-    tel.forEach(function (te) {
-        let te_blot = Quill.find(te);
-        if (!te_blot) {
-            return;
-		}
-        let te_doc_idx = te_blot.offset(quill.scroll);
-        if (te_doc_idx >= range.index && te_doc_idx <= range.index + range.length) {
-            // template is range
-            tl.push(te);
-		}
-        //let t = getTemplateFromDomNode(te);
-        //let docIdx = getTemplateDocIdx(t.templateInstanceGuid);
-        //if (docIdx == range.index) {
-        //    tl.push(te);
-        //} else if (docIdx > range.index && docIdx < range.index + range.length) {
-        //    tl.push(te);
-        //}
-    });
-    return tl;
-}
 
 
 
@@ -414,7 +392,7 @@ function getTemplateDocIdx(tiguid) {
 }
 
 function getTemplateAtDocIdx(docIdx) {
-    let result = quill.getLeaf(docIdx);
+    let result = quill.getLeaf(docIdx + 1);
     if (!result || result.length < 2) {
         return null;
     }
@@ -425,16 +403,45 @@ function getTemplateAtDocIdx(docIdx) {
     return null;
 }
 
+function getTemplateElementsInRange(range) {
+    if (range == null || range.index == null) {
+        log('invalid range: ' + range);
+    }
+    let tl = [];
+    let tel = getTemplateElements();
+    tel.forEach(function (te) {
+        let te_blot = Quill.find(te);
+        if (!te_blot) {
+            return;
+        }
+        let te_doc_idx = te_blot.offset(quill.scroll);
+        if (te_doc_idx >= range.index && te_doc_idx <= range.index + range.length) {
+            // template is range
+            tl.push(te);
+        }
+        //let t = getTemplateFromDomNode(te);
+        //let docIdx = getTemplateDocIdx(t.templateInstanceGuid);
+        //if (docIdx == range.index) {
+        //    tl.push(te);
+        //} else if (docIdx > range.index && docIdx < range.index + range.length) {
+        //    tl.push(te);
+        //}
+    });
+    return tl;
+}
+
 function isTemplateAtDocIdx(docIdx) {
     return getTemplateAtDocIdx(docIdx) != null;
 }
 
 function getTemplateElementsWithDocIdx() {
     let tewdil = [];
-    getTemplateElements().forEach(te => {
+    let t_elms = getTemplateElements();
+    for (var i = 0; i < t_elms.length; i++) {
+        let te = t_elms[i];
         let teDocIdx = getTemplateDocIdx(te.getAttribute('templateInstanceGuid'));
         tewdil.push({ teDocIdx, te });
-    });
+	}
     return tewdil;
 }
 
@@ -451,27 +458,41 @@ function getTemplatePlainText(t) {
 
 function getRangeTextWithTemplateText(range) {
     let text = quill.getText(range.index, range.length);
-    let out_text = text;
-    let out_idx = 0;
-    // to seamlessly use templates check range and insert tguid or or display value for templates
-    for (var i = 0; i <= range.length; i++) {
+    let out_text = '';
+    for (var i = 0; i < range.length; i++) {
         let doc_idx = range.index + i;
-        let t_at_doc_idx = getTemplateAtDocIdx(doc_idx);
-        if (t_at_doc_idx == null) {
-            out_idx++;
-            continue;
+        let doc_idx_char = getText({ index: doc_idx, length: 1 });
+        let t_at_next_doc_idx = getTemplateAtDocIdx(doc_idx);
+        if (t_at_next_doc_idx != null) {
+            // check if pre template space is a pad space
+            let pre_t_doc_idx = doc_idx - 1;
+            let pre_t_doc_idx_char = getText({ index: pre_t_doc_idx, length: 1 });
+            if (pre_t_doc_idx_char == ' ') {
+                // previous is potentially pad since its a space
+                let pre_pre_t_doc_idx_char = getText({ index: pre_t_doc_idx - 1, length: 1 });
+                let is_pre_t_idx_pad_space = pre_t_doc_idx == 0 || pre_pre_t_doc_idx_char == '\n';
+                if (is_pre_t_idx_pad_space) {
+                    // occurs when previous pad space is beginning of doc or pad was start of new block
+                    // remove prev pad space
+                    out_text = substringByLength(out_text, 0, Math.max(0,out_text.length - 1));
+                }                
+            }
+            // check if pre temppostlate space is a pad space
+            let post_t_doc_idx = doc_idx + 1;
+            let post_t_doc_idx_char = getText({ index: post_t_doc_idx, length: 1 });
+            if (post_t_doc_idx_char == ' ') {
+                // next is potentially pad since its a space
+                let post_post_t_doc_idx_char = getText({ index: post_t_doc_idx + 1, length: 1 });
+                let is_post_t_idx_pad_space = post_t_doc_idx == getDocLength() - 1 || post_post_t_doc_idx_char == '\n';
+                if (is_post_t_idx_pad_space) {
+                    // occurs when post pad space is end of doc or pad is end of current block
+                    // skip next iteration so loop ignores the pad space and picks back up at end of block or terminates
+                    i++;
+                }
+            }
+            out_text += getTemplatePlainText(t_at_next_doc_idx);
         }
-
-        let pre_text = substringByLength(out_text, 0, out_idx);
-        // remove leading pad
-        pre_text = substringByLength(pre_text, 0, pre_text.length - 1);
-        let post_text = substringByLength(text, i, text.length - i);
-        // remove trailing pad
-        post_text = substringByLength(post_text, 0, post_text.length - 1);
-        let template_text = getTemplatePlainText(t_at_doc_idx);
-        out_text = pre_text + template_text + post_text;
-        // offset out by template and adjust for 2 removed pad spaces
-        out_idx += template_text.length - 2;
+        out_text += doc_idx_char;
     }
     return out_text;
 }
@@ -491,6 +512,15 @@ function getUsedTemplateInstances() {
         getTemplateDocIdx(b.domNode.getAttribute('templateInstanceGuid')) ? -1 : 1));
 }
 
+function getAllTemplateDocIdxs() {
+    let tDocIdxs = [];
+    for (var i = 0; i < getDocLength(); i++) {
+        if (getTemplateAtDocIdx(i)) {
+            tDocIdxs.push(i);
+		}
+    }
+    return tDocIdxs;
+}
 function createTemplate(templateObjOrId,newTemplateType) {
     var templateObj;
     if (templateObjOrId != null && typeof templateObjOrId === 'string') {
@@ -507,7 +537,7 @@ function createTemplate(templateObjOrId,newTemplateType) {
     if (isNew) {
         //grab the selection head's html to set formatting of template div
         let selectionInnerHtml = '';
-        let shtmlStr = getSelectedHtml(1);
+        let shtmlStr = getHtml({index:range.index, length: 1});
         if (shtmlStr != null && shtmlStr.length > 0) {
             let shtml = domParser.parseFromString(shtmlStr, 'text/html');
             let pc = shtml.getElementsByTagName('p');
@@ -553,11 +583,11 @@ function createTemplate(templateObjOrId,newTemplateType) {
 }
 
 function insertTemplate(range, t, isNew) {
-    IgnoreNextTextChange = true;
-    quill.deleteText(range.index, range.length);
-    quill.insertEmbed(range.index, "template", t, Quill.sources.USER);
-
-    focusTemplate(t.templateGuid, true);
+    quill.deleteText(range.index, range.length, 'silent');
+    quill.insertEmbed(range.index, "template", t, 'silent');
+    //quill.insertText(range.index, ' ', 'templatePad_pre',true, 'silent');
+    //quill.insertText(range.index+2, ' ', 'templatePad_post', true, 'silent');
+    focusTemplate(t.templateGuid, true, t.templateInstanceGuid);
 }
 
 function moveTemplate(tiguid, nidx, isCopy) {
@@ -705,17 +735,17 @@ function focusTemplate(ftguid, fromDropDown, ftiguid) {
             te.setAttribute('isFocus', true);
 
             if (ftiguid != null && te.getAttribute('templateInstanceGuid') == ftiguid) {
-                te.classList.add(TemplateFocusInstanceClass);
+                te.classList.add(Template_FOCUSED_INSTANCE_Class);
                 let teBlot = Quill.find(te);
                 let teIdx = quill.getIndex(teBlot);
                 setEditorSelection(teIdx,1,'silent');
             } else {
-                te.classList.add(TemplateFocusNotInstanceClass);
+                te.classList.add(Template_FOCUSED_NOT_INSTANCE_Class);
             }
         } else {
             te.setAttribute('isFocus', false);
-            te.classList.remove(TemplateFocusInstanceClass);
-            te.classList.remove(TemplateFocusNotInstanceClass);
+            te.classList.remove(Template_FOCUSED_INSTANCE_Class);
+            te.classList.remove(Template_FOCUSED_NOT_INSTANCE_Class);
         }
     }
 
@@ -890,7 +920,55 @@ function padTemplate(tiguid) {
     }
 }
 
+function isTemplateElementHavePad_pre(ti) {
+    if (!ti) {
+        return false;
+    }
+    if (!ti.previousSibling) {
+        return false;
+    }
+    if (ti.previousSibling.nodeType == 3) {
+        return false;
+    }
+    return ti.previousSibling.hasAttribute('templatePad_pre');
+}
+function isTemplateElementHavePad_post(ti) {
+    if (!ti) {
+        return false;
+    }
+    if (!ti.nextSibling) {
+        return false;
+    }
+    if (ti.nextSibling.nodeType == 3) {
+        return false;
+    }
+    return ti.nextSibling.hasAttribute('templatePad_post');
+}
+function cleanTemplateElementPad_pre(ti) {
+    let is_dirty = ti.previousSibling.innerText != ' ';
+
+}
+
+function isDocIdxTemplatePad_pre(docIdx) {
+    let format = quill.getFormat(docIdx, 0);
+    if (format.templatePad_pre !== undefined && format.templatePad_pre) {
+        return true;
+    } 
+    return false;
+}
+function isDocIdxTemplatePad_post(docIdx) {
+    let format = quill.getFormat(docIdx, 0);
+    if (format.templatePad_post !== undefined && format.templatePad_post) {
+        return true;
+    }
+    return false;
+}
+
 function updateTemplatesAfterTextChanged(delta, oldDelta, source) {
+  //  return;
+  //  if (!IsLoaded) {
+  //      return;
+  //  }
     let cur_template_elms = getTemplateElements();
     let tguids_to_content_fit = [];
     let idx = 0;
@@ -908,23 +986,103 @@ function updateTemplatesAfterTextChanged(delta, oldDelta, source) {
                 tguids_to_content_fit.push(op.attributes.templateInstanceGuid);
 			}
 		}
-        if (op.delete) {
-            for (var j = 0; j < cur_template_elms.length; j++) {
-                let ti = cur_template_elms[j];
-                let tiDocIdx = getTemplateDocIdx(ti.getAttribute('templateInstanceGuid'));
-                if (idx - op.delete == tiDocIdx) {
-                    // deleting post pad so delete template and pre pad
-                    IgnoreNextTextChange = true;
-                    quill.deleteText(tiDocIdx - 1, 2);
-                }
-            }
-        }
     }
-    cur_template_elms = getTemplateElements();
+    let max_idx = getDocLength() - 1;
     for (var i = 0; i < cur_template_elms.length; i++) {
-        let ti = cur_template_elms[i];
-        padTemplate(ti.getAttribute('templateInstanceGuid'));
-    }
+        let t_elm = cur_template_elms[i];
+        let t_doc_idx = getTemplateDocIdx(t_elm.getAttribute('templateInstanceGuid'));
+        let next_char = getText({ index: t_doc_idx + 1, length: 1 }, false);
+        if (next_char == '\n' || t_doc_idx == max_idx) {
+            insertText(t_doc_idx + 1, ' ', 'silent');
+            t_elm.style.marginRight = '-3px'
+        } else {
+            t_elm.style.marginRight = '0px';
+		}
+        let prev_char = getText({ index: t_doc_idx - 1, length: 1 }, false);
+        if (prev_char == '\n' || t_doc_idx == 0) {
+            insertText(t_doc_idx, ' ', 'silent');
+            t_elm.style.marginLeft = '0px';
+        } else {
+            t_elm.style.marginLeft = '0px';
+		}
+	}
+    //cur_template_elms = getTemplateElements();
+  //  for (var i = 0; i < cur_template_elms.length; i++) {
+  //      let ti = cur_template_elms[i];
+  //      let needs_pre = !isTemplateElementHavePad_pre(ti);
+  //      let needs_post = !isTemplateElementHavePad_post(ti);
+  //      if (needs_pre || needs_post) {
+  //          let insert_idx = getTemplateDocIdx(ti.getAttribute('templateInstanceGuid'));
+  //          if (needs_pre) {
+  //              quill.insertText(insert_idx, ' ', 'templatePad_pre', true, 'silent');
+  //              insert_idx += 2;
+  //          } else {
+  //              insert_idx += 1;
+  //          }
+  //          if (needs_post) {
+  //              quill.insertText(insert_idx, ' ', 'templatePad_post', true, 'silent');
+		//	}
+		//}
+        
+       
+  //      //padTemplate(ti.getAttribute('templateInstanceGuid'));
+  //  }
+  //  // clean up 
+  //  let pre_pad_elms = document.querySelectorAll('[templatepad_pre]');
+  //  for (var i = 0; i < pre_pad_elms.length; i++) {
+  //      let pre_pad_elm = pre_pad_elms[i];
+  //      if (pre_pad_elm.nextSibling && pre_pad_elm.nextSibling.nodeType != 3 && pre_pad_elm.nextSibling.hasAttribute('templateGuid')) {
+  //          // if next sibling is actually a template
+  //          if (pre_pad_elm.innerText == ' ') {
+  //              continue;
+  //          }
+  //          // this isn't right, space should be on either end don't know which but only 1 should be removed
+  //          if (!pre_pad_elm.previousSibling) {
+  //              let new_span = document.createTextNode('');
+  //              IgnoreNextTextChange = true;
+  //              pre_pad_elm.parentNode.insertBefore(new_span, pre_pad_elm.parentNode.firstChild);
+  //          }
+  //          if (pre_pad_elm.previousSibling.nodeType == 3) {
+  //              IgnoreNextTextChange = true;
+  //              pre_pad_elm.previousSibling.nodeValue = (pre_pad_elm.innerText.trim()) + pre_pad_elm.previousSibling.nodeValue;
+  //          } else {
+  //              IgnoreNextTextChange = true;
+  //              post_pad_elm.previousSibling.innerText = (pre_pad_elm.innerText.trim()) + pre_pad_elm.previousSibling.innerText;
+  //          }
+  //          IgnoreNextTextChange = true;
+  //          pre_pad_elm.innerText = ' ';
+  //      } else {
+  //          // get rid of baddies
+  //          pre_pad_elm.removeAttribute('templatepad_pre');
+		//}
+  //  }
+
+  //  let post_pad_elms = document.querySelectorAll('[templatepad_post]');
+  //  for (var i = 0; i < post_pad_elms.length; i++) {
+  //      let post_pad_elm = post_pad_elms[i];
+  //      if (post_pad_elm.previousSibling && post_pad_elm.previousSibling.nodeType != 3 && post_pad_elm.previousSibling.hasAttribute('templateGuid')) {
+  //          // if previous sibling is actually a template
+  //          if (post_pad_elm.innerText == ' ') {
+  //              continue;
+  //          }
+  //          // this isn't right, space should be on either end don't know which but only 1 should be removed
+  //          if (!post_pad_elm.nextSibling) {
+  //              let new_span = document.createTextNode('');
+  //              IgnoreNextTextChange = true;
+  //              post_pad_elm.parentNode.appendChild(new_span);
+		//	}
+  //          if (post_pad_elm.nextSibling.nodeType == 3) {
+  //              IgnoreNextTextChange = true;
+  //              post_pad_elm.nextSibling.nodeValue = (post_pad_elm.innerText.trim()) + post_pad_elm.nextSibling.nodeValue;
+  //          } else {
+  //              IgnoreNextTextChange = true;
+  //              post_pad_elm.nextSibling.innerText = (post_pad_elm.innerText.trim()) + post_pad_elm.nextSibling.innerText;
+  //          }
+  //          IgnoreNextTextChange = true;
+  //          post_pad_elm.innerText = ' ';
+  //      }
+  //  }
+  //  IgnoreNextTextChange = false;
     for (var i = 0; i < tguids_to_content_fit.length; i++) {        
         let t = getTemplateDefByInstanceGuid(tguids_to_content_fit[i]);
         let telm = getTemplateInstanceElement(t.templateInstanceGuid);
@@ -935,28 +1093,94 @@ function updateTemplatesAfterTextChanged(delta, oldDelta, source) {
         telm.innerText = t.templateName;
 	}
 }
-function updateTemplatesAfterSelectionChange(sel_range) {    
+
+function updateTemplatesAfterSelectionChange(sel_range, oldRange) {
+    oldRange = !oldRange ? sel_range : oldRange;
     let sel_bg_color =  getTextSelectionBgColor();
     let template_elms_in_sel_range = sel_range ? getTemplateElementsInRange(sel_range) : [];
     let all_template_elms = getTemplateElements();
     let show_sel_bg_color = !isShowingEditTemplateToolbar() && IsSubSelectionEnabled;
 
+    let old_closest_idx = sel_range.index > oldRange.index ? oldRange.index + oldRange.length : oldRange.index;
+    let is_nav_right = sel_range.index > old_closest_idx && sel_range.length == 0;
+    IsTemplateAtInsert = false;
     for (var i = 0; i < all_template_elms.length; i++) {
-        let te = all_template_elms[i];
-        let updated_bg_color = null;
-        let isTemporary = false;
-        let tiguid = te.getAttribute('templateInstanceGuid');
-        if (show_sel_bg_color && template_elms_in_sel_range.includes(te)) {
-            log('sel template: ' + te.getAttribute('templateInstanceGuid'));
+        let t_elm = all_template_elms[i];
+        let tiguid = t_elm.getAttribute('templateInstanceGuid');
+        let is_t_in_sel_range = template_elms_in_sel_range.includes(t_elm);
+        let t_doc_idx = getTemplateDocIdx(tiguid);
+        if (show_sel_bg_color) {
+            if (is_t_in_sel_range) {
+                if (is_nav_right &&
+                    !t_elm.classList.contains(Template_IN_SEL_RANGE_Class) &&
+                    !t_elm.classList.contains(Template_AT_INSERT_Class)) {
+                    setTemplateNavState(t_elm, Template_BEFORE_INSERT_Class);
+                    continue;
+                }
+                log('sel template: ' + t_elm.getAttribute('templateInstanceGuid'));
+                if (sel_range.length > 0) {
+                    let is_t_at_sel_bounds = t_doc_idx == sel_range.index || t_doc_idx == sel_range.index + sel_range.length;
+                    if (is_t_at_sel_bounds) {
+                        if (t_elm.classList.contains(Template_AT_INSERT_Class)) {
+                            setTemplateNavState(t_elm, Template_IN_SEL_RANGE_Class);
+                        } else {
+                            clearTemplateNavState(t_elm);
+						}
+                    } else {
+                        setTemplateNavState(t_elm, Template_IN_SEL_RANGE_Class);                        
+					}
+                } else {
+                    setTemplateNavState(t_elm, Template_AT_INSERT_Class);
+                    IsTemplateAtInsert = true;
+				}
+                
+            } else {
+                if (is_nav_right && sel_range.index == t_doc_idx + 1) {
+                    if (t_elm.classList.contains(Template_AT_INSERT_Class)) {
+                        setTemplateNavState(t_elm);
+                    } else {
+                        setEditorSelection(sel_range.index - 1, 0, 'silent');
+                        setTemplateNavState(t_elm, Template_AT_INSERT_Class);
+                        IsTemplateAtInsert = true;
+                    } 
 
-            updated_bg_color = sel_bg_color;
-            isTemporary = true;
-        } else {
-            updated_bg_color = te.getAttribute('templateColor');
-        }
-        te.style.backgroundColor = updated_bg_color;
-        te.style.color = isBright(updated_bg_color) ? 'black' : 'white';
+                } else if (!is_nav_right && sel_range.index == t_doc_idx - 1) {
+                    if (t_elm.classList.contains(Template_BEFORE_INSERT_Class)) {
+                        clearTemplateNavState(t_elm);
+                    } else {
+                        setEditorSelection(sel_range.index + 1, 0, 'silent');
+                        setTemplateNavState(t_elm, Template_BEFORE_INSERT_Class);
+					}
+                    
+                } else {
+                    clearTemplateNavState(t_elm);
+				}
+                
+            }
+		}        
+    }
+}
+
+function clearTemplateNavState(t_elm) {
+    t_elm.classList.remove(Template_BEFORE_INSERT_Class);
+    t_elm.classList.remove(Template_AT_INSERT_Class);
+    t_elm.classList.remove(Template_AFTER_INSERT_Class);
+    t_elm.classList.remove(Template_IN_SEL_RANGE_Class);
+}
+
+function isTemplateInNavState(t_elm) {
+    let is_before = t_elm.classList.contains(Template_BEFORE_INSERT_Class);
+    let is_at = t_elm.classList.contains(Template_AT_INSERT_Class);
+    let is_after = t_elm.classList.contains(Template_AT_INSERT_Class);
+    return is_before || is_at || is_after;
+}
+
+function setTemplateNavState(t_elm, navStateClass) {
+    clearTemplateNavState(t_elm);
+    if (!navStateClass) {
+        return;
 	}
+    t_elm.classList.add(navStateClass);
 }
 
 function getTemplateToolbarHeight() {

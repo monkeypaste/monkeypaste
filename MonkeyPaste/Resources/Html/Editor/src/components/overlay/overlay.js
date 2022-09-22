@@ -114,7 +114,7 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5', line_style = [5,
     if (isDragCopy()) {
         color = 'lime';
 	}
-    //log('dropIdx: ' + drop_idx);
+    log('dropIdx: ' + drop_idx);
     if (drop_idx < 0) {
         return;
     }
@@ -144,7 +144,7 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5', line_style = [5,
     // line of content then only check post for others
     IsPreBlockDrop = Math.abs(WindowMouseLoc.y - doc_start_rect.top) < block_threshold || WindowMouseLoc.y < doc_start_rect.top;
     IsPostBlockDrop = Math.abs(WindowMouseLoc.y - caret_line.y2) < block_threshold || WindowMouseLoc.y > caret_line.y2;
-
+  
     if (IsSplitDrop && CopyItemType != 'FileList') {
         IsPreBlockDrop = false;
         IsPostBlockDrop = false;
@@ -152,7 +152,6 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5', line_style = [5,
 
     let render_lines = [];
     let render_caret_line = null;
-    //let render_rects = [];
 
     if (IsSplitDrop) {
         let pre_split_line = pre_line;
@@ -165,16 +164,12 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5', line_style = [5,
         render_lines.push(post_split_line);
 
         render_caret_line = caret_line;
-        //render_lines.push(caret_line);
-        //render_rects.push(caret_render_rect)
     } else if (IsPreBlockDrop) {
         render_lines.push(pre_line);
     } else if (IsPostBlockDrop) {
         render_lines.push(post_line);
     } else {
         render_caret_line = caret_line;
-        //render_lines.push(caret_line);
-        //render_rects.push(caret_render_rect);
     }
 
     for (var i = 0; i < render_lines.length; i++) {
@@ -184,10 +179,6 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5', line_style = [5,
     if (render_caret_line) {        
         drawLine(ctx, render_caret_line, color, thickness);
 	}
-	//for (var i = 0; i < render_rects.length; i++) {
- //       let rect = render_rects[i];
- //       drawRect(ctx, rect, color, 'transparent', 0, alpha);
-	//}
 
 }
 
@@ -239,10 +230,8 @@ function drawTextSelection(ctx) {
 		}
     } else if (IsSubSelectionEnabled) {
         if (isEditorToolbarVisible()) {
-            if (sel && sel.length == 0) {
-                if (isTemplateAtDocIdx(sel.index)) {
-                    caret_color = 'transparent';
-				}
+            if (IsTemplateAtInsert) {
+                caret_color = 'transparent';
 			}
         } else {
             caret_color = 'red';
@@ -261,7 +250,7 @@ function drawTextSelection(ctx) {
         });
     }
 
-    if (IsSubSelectionEnabled && !IsDropping && sel && sel.length == 0) {
+    if (IsSubSelectionEnabled && !IsDropping && sel && sel.length == 0 && isReadOnly()) {
         // caret is hidden when not editable, only draw caret if sel not range or dropping
         // (drop preview draws if non-block dropping )
   //      if (isEditorToolbarVisible()) {

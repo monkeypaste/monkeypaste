@@ -7,6 +7,53 @@ function getRandomColor() {
     return color;
 }
 
+function getColorObjType(color) {
+    if (typeof color === 'string' || color instanceof String) {
+        if (color.startsWith('#')) {
+            return 'hex' + (color.length-1);
+        }
+        if (color.startsWith('rgb')) {
+            if (color.startsWith('rgba')) {
+                return 'rgba';
+            }
+            return 'rgb';
+        }
+        return 'named';
+    }
+    if (Array.isArray(color)) {
+        if (isInt(color[0])) {
+            return 'byte' + (color.length);
+        }
+        return 'decimal' + (color.length);
+    }
+    if (color.r !== undefined) {
+        if (color.a === undefined) {
+            if (isInt(color.r)) {
+                return 'obj_rgb_byte';
+            }
+            return 'obj_rgb_decimal';
+        }
+        if (isInt(color.r)) {
+            return 'obj_rgba_byte';
+        }
+        return 'obj_rgba_decimal';
+    }
+    return null;
+}
+
+function combineColors(color1, color2) {
+    let rgba1 = cleanColor(color1);
+    let rgba2 = cleanColor(color2);
+
+    let r = parseInt((rgba1.r + rgba2.r) / 2);
+    let g = parseInt((rgba1.g + rgba2.g) / 2);
+    let b = parseInt((rgba1.b + rgba2.b) / 2);
+    let a = parseInt((rgba1.a + rgba2.a) / 2);
+
+    let rgbaStr = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+    return rgbaStr;
+}
+
 function isBright(hex_or_color_name_or_rgb_or_rgba, brightThreshold = 150) {
     var rgb = hexToRgb(hex_or_color_name_or_rgb_or_rgba);
     var grayVal = Math.sqrt(

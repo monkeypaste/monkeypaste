@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 using MonkeyPaste;
 using System.Collections.Generic;
 using System.Linq;
-using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public class MpWpfClipboardWatcher : Form, 

@@ -22,7 +22,6 @@
     using System.Text.RegularExpressions;
     using MpProcessHelper;
     using stdole;
-    using MonkeyPaste.Common;
 
     public class MpClipTileViewModel : 
         MpViewModelBase<MpClipTrayViewModel>, 

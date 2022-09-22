@@ -24,6 +24,7 @@ function initDrop() {
             }
             log('drag enter');
             IsDropping = true;
+            WindowMouseLoc = null;
             items.forEach(function (item) {
                 item.classList.add('drop');
             });

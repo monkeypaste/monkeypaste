@@ -133,6 +133,20 @@ function isNullOrWhiteSpace(str) {
     return str == null || str.every(x => x == ' ');
 }
 
+function isChildOfElement(elm, parent) {
+    if (!elm || !parent) {
+        return false;
+    }
+    let elm_parent = elm.parentNode;
+    while (elm_parent != null) {
+        if (elm_parent == parent) {
+            return true;
+        }
+        elm_parent = elm_parent.parentNode;
+    }
+    return false;
+}
+
 function overrideEvent(elm, eventName, handler) {
     let overrideEventName = "mp_" + eventName;
 
@@ -157,7 +171,9 @@ function getAllElementsBetween(fromElm, toElm, inclusive = { from: true, to: tru
 
     }
 }
-
+function isInt(n) {
+    return n % 1 === 0;
+}
 function getAllElementsBetweenHelper(elm, elms) {
     if (elm == null) {
         return elms;

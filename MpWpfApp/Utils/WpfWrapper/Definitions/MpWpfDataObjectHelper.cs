@@ -15,7 +15,6 @@ using System.Threading;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Windows.Controls;
-using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public class MpWpfDataObjectHelper :

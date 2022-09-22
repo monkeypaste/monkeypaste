@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Media;
-using AvaloniaEdit.Document;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -8,9 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace MonkeyPaste.Avalonia {
-
     public class MpAvTextPointer : MpAvITextPointer {
         #region Private Variables
 
@@ -66,8 +63,8 @@ namespace MonkeyPaste.Avalonia {
             return Document == otp.Document;
         }
 
-        public MpAvITextPointer GetNextInsertionPosition(LogicalDirection dir) {
-            if (dir == LogicalDirection.Forward) {
+        public MpAvITextPointer GetNextInsertionPosition(MpAvLogicalDirection dir) {
+            if (dir == MpAvLogicalDirection.Forward) {
                 if (Document.ContentEnd.Offset == Offset) {
                     return null;
                 }
@@ -102,15 +99,15 @@ namespace MonkeyPaste.Avalonia {
             return new MpAvTextPointer(Document, newOffset);
         }
 
-        public MpAvITextPointer GetInsertionPosition(LogicalDirection dir) {
+        public MpAvITextPointer GetInsertionPosition(MpAvLogicalDirection dir) {
             //if(Document is MpAvHtmlDocument doc) {
             //    doc.HtmlDocument.DocumentNode.
             //}
-            return new MpAvTextPointer(Document, Offset + (dir == LogicalDirection.Forward ? 1 : -1));
+            return new MpAvTextPointer(Document, Offset + (dir == MpAvLogicalDirection.Forward ? 1 : -1));
         }
 
-        public async Task<MpRect> GetCharacterRectAsync(LogicalDirection dir) {
-            int offset = dir == LogicalDirection.Forward ? Offset : Math.Max(0, Offset - 1);
+        public async Task<MpRect> GetCharacterRectAsync(MpAvLogicalDirection dir) {
+            int offset = dir == MpAvLogicalDirection.Forward ? Offset : Math.Max(0, Offset - 1);
 
             if (Document.Owner is TextBox tb) {
                 var ft = tb.ToFormattedText();

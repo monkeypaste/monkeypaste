@@ -384,28 +384,79 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 	let text_node_idx = -1;
 	let parent_idx = 0;
 	let doc_idx = fallbackIdx;
-
+	let range = null;
 	if (document.caretRangeFromPoint) {
-		// see https://developer.mozilla.org/en-US/docs/Web/API/Document/caretRangeFromPoint
-		let range = document.caretRangeFromPoint(p.x, p.y);
+		// see https://developer.mozilla.org/en-US/docs/Wt! How are yeb/API/Document/caretRangeFromPoint
+		range = document.caretRangeFromPoint(p.x, p.y);
 		if (range) {
 			textNode = range.startContainer;
 			text_node_idx = range.startOffset;
 		}
 	} else if (document.caretPositionFromPoint) {
-		let range = document.caretPositionFromPoint(p.x, p.y);
+		range = document.caretPositionFromPoint(p.x, p.y);
 		textNode = range.offsetNode;
 		text_node_idx = range.offset;
 	}
 
 	if (!isNaN(parseInt(text_node_idx)) && text_node_idx >= 0) {
-		doc_idx = text_node_idx;
+		let text_blot = Quill.find(textNode);
+		if (text_blot && typeof text_blot.offset === 'function') {
+			doc_idx = Quill.find(textNode).offset(quill.scroll) + text_node_idx;
+		} else {
+			let parent_node = textNode.parentNode;
+			while (parent_node != null) {
+				if (typeof parent_node.offset === 'function') {
+					break;
+				}
+				parent_node = parent_node.parentNode;
+			}
+			if (parent_node) {
+				try {
+					doc_idx = Quill.find(textNode.parentNode, true).offset(quill.scroll);
+				} catch (Ex) {
+					debugger;
+				}
+			}		
 
+		}
+
+		return doc_idx;
 		if (textNode && textNode.parentElement) {
 			let parent_blot = Quill.find(textNode.parentElement);
 			if (parent_blot && typeof parent_blot.offset === 'function') {
+				// get doc idx of block
 				parent_idx = parent_blot.offset(quill.scroll);
-				doc_idx = text_node_idx + parent_idx;
+				let prev_sib_node = textNode.previousSibling;
+				if (prev_sib_node != null) {
+					let prev_sib_total_offset = 0;
+					while (prev_sib_node != null) {
+						// get prev siblings offset from parent block to current node
+						let prev_sib_offset = 0;
+						if (prev_sib_node.nodeType == 3) {
+							prev_sib_offset = prev_sib_node.textContent.length;;
+						} else {
+							let prev_sib_blot = Quill.find(prev_sib_node);
+							if (prev_sib_blot && typeof prev_sib_blot.offset === 'function') {
+								if (prev_sib_node.hasAttribute('templateGuid')) {
+									//length of 0
+								} else {
+									prev_sib_offset = prev_sib_node.innerText.length;
+								}
+						}
+						}
+						if (isNaN(parseInt(prev_sib_offset))) {
+							debugger;
+						} else {
+							prev_sib_total_offset += prev_sib_node.textContent.length;
+						}
+						prev_sib_node = prev_sib_node.previousSibling;
+					}
+					doc_idx = /*text_node_idx + */parent_idx + prev_sib_total_offset;
+				} else {
+					doc_idx = text_node_idx + parent_idx;
+				}
+				doc_idx += range.endOffset;
+				
 
 				if (doc_idx == 0) {
 					// NOTE parentElement is editor if p is outside of actual editable space (after line break)

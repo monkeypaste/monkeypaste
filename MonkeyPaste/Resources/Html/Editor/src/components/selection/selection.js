@@ -5,8 +5,22 @@ const DefaultCaretColor = 'black';
 var BlurredSelectionRange = null;
 var BlurredSelectionRects = null;
 
-function setTextSelectionBgColor(bgColor) {
-    document.body.style.setProperty('--selbgcolor', bgColor);
+function isSelectionChangeFromRightArrow(range, oldRange) {
+    if (!range && !oldRange) {
+        return false;
+    }
+    if (!oldRange) {
+        return true;
+    }
+    if (range.length > 0) {
+        return false;
+    }
+    let start_diff = Math.abs(range.index - oldRange.index);
+    if (start_diff == 1) {
+        re
+	}
+    let end_diff = Math.abs(range.index - (oldRange.index + oldRange.length));
+
 }
 
 function getCaretLine(forceDocIdx = -1) {
@@ -46,6 +60,12 @@ function getCaretLine(forceDocIdx = -1) {
     }
     caret_line = cleanLine(caret_line);
     return caret_line;
+}
+
+// SEL FG/BG SET/GET
+
+function setTextSelectionBgColor(bgColor) {
+    document.body.style.setProperty('--selbgcolor', bgColor);
 }
 
 function getTextSelectionBgColor() {
