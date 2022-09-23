@@ -135,7 +135,7 @@ namespace MonkeyPaste.Avalonia {
         private void DragEnter(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragEnter] MainWindowContainerGrid: ");
             var fl = e.Data.GetDataFormats();
-            foreach (var f in fl) {
+            foreach (var f in fl.Where(x=>MpPortableDataFormats.RegisteredFormats.Contains(x))) {
                 var data = e.Data.Get(f);
                 continue;
             }
@@ -481,6 +481,9 @@ namespace MonkeyPaste.Avalonia {
             MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeChanged);
 
             MpAvMainWindowViewModel.Instance.IsMainWindowLoading = false;
+
+            //MpAvCefNetWebView.InitOpener();
+            MpDataModelProvider.QueryInfo.NotifyQueryChanged(true);
             MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
 
             // Need to delay or resizer thinks bounds are empty on initial show

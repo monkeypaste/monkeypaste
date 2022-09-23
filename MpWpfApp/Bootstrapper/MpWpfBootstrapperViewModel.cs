@@ -18,60 +18,6 @@ namespace MpWpfApp {
     public class MpWpfBootstrapperViewModel : MpBootstrapperViewModelBase {
 
         public MpWpfBootstrapperViewModel() : base() {
-            if(_coreItems == null) {
-                _coreItems = new List<MpBootstrappedItemViewModel>();
-            }
-
-            _coreItems.AddRange(
-                new List<MpBootstrappedItemViewModel>() {
-                    new MpBootstrappedItemViewModel(this,typeof(MpPortableDataFormats),MpPlatformWrapper.Services.DataObjectRegistrar),
-                    new MpBootstrappedItemViewModel(this,typeof(MpDocumentHtmlExtension)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpProcessManager)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpProcessAutomation)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpScreenInformation)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpThemeColors)),
-
-                    new MpBootstrappedItemViewModel(this,typeof(MpMeasurements)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpFileSystemWatcher)),
-
-                    new MpBootstrappedItemViewModel(this,typeof(MpIconCollectionViewModel)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpAppCollectionViewModel)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpUrlCollectionViewModel)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpSourceCollectionViewModel)),
-
-
-                    new MpBootstrappedItemViewModel(this,typeof(MpSystemTrayViewModel)),
-
-                    new MpBootstrappedItemViewModel(this,typeof(MpSoundPlayerGroupCollectionViewModel)),
-
-                    new MpBootstrappedItemViewModel(this,typeof(MpClipTileSortViewModel)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpSearchBoxViewModel)),
-
-                    new MpBootstrappedItemViewModel(this,typeof(MpAnalyticItemCollectionViewModel)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpClipboardHandlerCollectionViewModel)),
-
-                    //new MpBootstrappedItemViewModel(this,typeof(MpClipboardManager)),
-
-                    new MpBootstrappedItemViewModel(this,typeof(MpClipTrayViewModel)),
-
-                    new MpBootstrappedItemViewModel(this,typeof(MpShortcutCollectionViewModel)),
-
-
-                    new MpBootstrappedItemViewModel(this,typeof(MpTagTrayViewModel)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpMainWindowViewModel)),
-
-                    new MpBootstrappedItemViewModel(this,typeof(MpActionCollectionViewModel)),
-
-                    new MpBootstrappedItemViewModel(this,typeof(MpContextMenuView)),
-
-                    new MpBootstrappedItemViewModel(this,typeof(MpDragDropManager)),
-
-
-                    new MpBootstrappedItemViewModel(this,typeof(MpWpfDataObjectHelper)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpQuillHtmlToRtfConverter)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpTooltipInfoCollectionViewModel))
-                    //new MpBootstrappedItem(typeof(MpMouseHook))
-                });
         }
 
         public override async Task InitAsync() {
@@ -185,6 +131,60 @@ namespace MpWpfApp {
             IsCoreLoaded = true;
         }
 
+        protected override void CreateLoaderItems() {
+            base.CreateLoaderItems();
+
+            _coreItems.AddRange(
+                new List<MpBootstrappedItemViewModel>() {
+                    new MpBootstrappedItemViewModel(this,typeof(MpPortableDataFormats),MpPlatformWrapper.Services.DataObjectRegistrar),
+                    new MpBootstrappedItemViewModel(this,typeof(MpDocumentHtmlExtension)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpProcessManager)),
+                    //new MpBootstrappedItemViewModel(this,typeof(MpProcessAutomation)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpScreenInformation)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpThemeColors)),
+
+                    new MpBootstrappedItemViewModel(this,typeof(MpMeasurements)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpFileSystemWatcher)),
+
+                    new MpBootstrappedItemViewModel(this,typeof(MpIconCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAppCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpUrlCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpSourceCollectionViewModel)),
+
+
+                    new MpBootstrappedItemViewModel(this,typeof(MpSystemTrayViewModel)),
+
+                    new MpBootstrappedItemViewModel(this,typeof(MpSoundPlayerGroupCollectionViewModel)),
+
+                    new MpBootstrappedItemViewModel(this,typeof(MpClipTileSortViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpSearchBoxViewModel)),
+
+                    new MpBootstrappedItemViewModel(this,typeof(MpAnalyticItemCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpClipboardHandlerCollectionViewModel)),
+
+                    //new MpBootstrappedItemViewModel(this,typeof(MpClipboardManager)),
+
+                    new MpBootstrappedItemViewModel(this,typeof(MpClipTrayViewModel)),
+
+                    new MpBootstrappedItemViewModel(this,typeof(MpShortcutCollectionViewModel)),
+
+
+                    new MpBootstrappedItemViewModel(this,typeof(MpTagTrayViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpMainWindowViewModel)),
+
+                    new MpBootstrappedItemViewModel(this,typeof(MpActionCollectionViewModel)),
+
+                    new MpBootstrappedItemViewModel(this,typeof(MpContextMenuView)),
+
+                    new MpBootstrappedItemViewModel(this,typeof(MpDragDropManager)),
+
+
+                    new MpBootstrappedItemViewModel(this,typeof(MpWpfDataObjectHelper)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpQuillHtmlToRtfConverter)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpTooltipInfoCollectionViewModel))
+                    //new MpBootstrappedItem(typeof(MpMouseHook))
+                });
+        }
         protected override async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {
             IsBusy = true;
             var sw = Stopwatch.StartNew();

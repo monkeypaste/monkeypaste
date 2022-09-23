@@ -9,7 +9,7 @@ using Avalonia.Interactivity;
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvCefNetContentWebView : MpAvUserControl<MpAvClipTileViewModel> {
         public MpAvCefNetContentWebView() {
-            InitializeComponent();            
+            InitializeComponent();         
         }
 
         private void InitializeComponent() {

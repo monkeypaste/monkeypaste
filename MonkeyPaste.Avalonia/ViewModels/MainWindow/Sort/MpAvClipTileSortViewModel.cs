@@ -11,7 +11,10 @@ using Avalonia;
 using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvClipTileSortViewModel : MpViewModelBase, MpIAsyncSingletonViewModel<MpAvClipTileSortViewModel> {
+    public class MpAvClipTileSortViewModel : 
+        MpViewModelBase, 
+        MpIAsyncSingletonViewModel<MpAvClipTileSortViewModel>,
+        MpIQueryInfoProvider {
         #region Statics
         private static MpAvClipTileSortViewModel _instance;
         public static MpAvClipTileSortViewModel Instance => _instance ?? (_instance = new MpAvClipTileSortViewModel());
@@ -19,6 +22,20 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+
+        #region MpIQueryInfoProvider Implementation
+        public void RestoreQueryInfo() {
+            SelectedSortTypeIdx = (int)MpAvQueryInfoViewModel.Current.SortType;
+            IsSortDescending = MpAvQueryInfoViewModel.Current.IsDescending;
+        }
+
+        public void SetQueryInfo() {
+            MpAvQueryInfoViewModel.Current.SortType = (MpContentSortType)SelectedSortTypeIdx;
+            MpAvQueryInfoViewModel.Current.IsDescending = IsSortDescending;
+            MpAvQueryInfoViewModel.Current.NotifyQueryChanged();
+        }
+
+        #endregion
 
         #region Layout
         public double ClipTileSortViewWidth { get; set; }
@@ -52,14 +69,17 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         public async Task InitAsync() {
             await Task.Delay(1);
-            ResetToDefault(true);
+            MpAvQueryInfoViewModel.Current.RegisterProvider(this);
+
+            //ResetToDefault(true);
         }
 
         public void ResetToDefault(bool suppressNotifyQueryChanged = false) {
             IsReseting = true;
 
-            SelectedSortTypeIdx = (int)MpContentSortType.CopyDateTime;
-            IsSortDescending = true;
+            //SelectedSortTypeIdx = (int)MpContentSortType.CopyDateTime;
+            //IsSortDescending = true;
+            RestoreQueryInfo();
 
             IsReseting = false;
 
@@ -80,17 +100,20 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(SelectedSortType):
                     if (!IsReseting) {
-                        MpDataModelProvider.QueryInfo.NotifyQueryChanged();
+                        // MpDataModelProvider.QueryInfo.NotifyQueryChanged();
+                        SetQueryInfo();
                     }
                     break;
                 case nameof(IsSortDescending):
                     if (!IsReseting) {
-                        MpDataModelProvider.QueryInfo.NotifyQueryChanged();
+                        //MpDataModelProvider.QueryInfo.NotifyQueryChanged();
+                        SetQueryInfo();
                     }
                     break;
             }
             
         }
+
         #endregion
 
         #region Commands

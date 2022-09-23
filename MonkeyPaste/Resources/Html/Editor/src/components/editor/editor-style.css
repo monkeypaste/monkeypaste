@@ -37,7 +37,6 @@ body {
     z-index: -1;
 }
 
-
 .no-select {
     user-select: none;
     cursor: default;

@@ -19,7 +19,8 @@ namespace MonkeyPaste.Avalonia {
 
     public class MpAvSearchBoxViewModel : MpViewModelBase, 
         MpIAsyncSingletonViewModel<MpAvSearchBoxViewModel>,
-        MpIPopupMenuViewModel {
+        MpIPopupMenuViewModel,
+        MpIQueryInfoProvider {
         #region Private Variables
         #endregion
 
@@ -110,6 +111,17 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return _filters;
             }
+        }
+
+        #endregion
+
+        #region MpIQueryInfoProvider Implementation
+        public void RestoreQueryInfo() {
+            SearchText = MpAvQueryInfoViewModel.Current.SearchText;
+        }
+
+        public void SetQueryInfo() {
+            MpAvQueryInfoViewModel.Current.SearchText = SearchText;
         }
 
         #endregion
@@ -331,6 +343,7 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task InitAsync() {
             await Dispatcher.UIThread.InvokeAsync(() => {
+                MpAvQueryInfoViewModel.Current.RegisterProvider(this);
                 CriteriaItems.CollectionChanged += CriteriaItems_CollectionChanged;
 
 
@@ -538,7 +551,8 @@ namespace MonkeyPaste.Avalonia {
                 IsMultipleMatches = false;
                 SearchText = string.Empty;
                 if(!string.IsNullOrWhiteSpace(LastSearchText)) {
-                    MpDataModelProvider.QueryInfo.NotifyQueryChanged();
+                    //MpDataModelProvider.QueryInfo.NotifyQueryChanged();
+                    SetQueryInfo();
                 }
                 LastSearchText = string.Empty;
             },
@@ -557,7 +571,8 @@ namespace MonkeyPaste.Avalonia {
                 }
                 IsMultipleMatches = false;
 
-                MpDataModelProvider.QueryInfo.NotifyQueryChanged();
+                //MpDataModelProvider.QueryInfo.NotifyQueryChanged();
+                SetQueryInfo();
                 UpdateRecentSearchTexts();
             },()=>!MpAvMainWindowViewModel.Instance.IsMainWindowLoading);
 

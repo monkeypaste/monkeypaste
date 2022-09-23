@@ -11,7 +11,7 @@ using Xamarin.Forms;
 
 namespace MonkeyPaste {
     
-    public static class MpDataModelProvider {
+    public static class MpDataModelProvider  {
         #region Private Variables
         private static IList<MpCopyItem> _lastResult;
 
@@ -21,6 +21,8 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
+
+        
         public static List<MpIQueryInfo> QueryInfos { get; private set; } = new List<MpIQueryInfo>();
 
         public static MpIQueryInfo QueryInfo {

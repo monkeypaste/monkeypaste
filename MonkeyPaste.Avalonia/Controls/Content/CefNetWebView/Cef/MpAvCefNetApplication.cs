@@ -30,7 +30,8 @@ namespace MonkeyPaste.Avalonia {
 
         private string _dbPath;
 
-
+        private Timer messagePump;
+        private const int messagePumpDelay = 10;
         #endregion
 
         #region Constants
@@ -75,6 +76,29 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Events
+
+        private bool _useExternalMessagePump = false;
+
+        private async void OnScheduleMessagePumpWorAsync(long delayMs) {
+            await Task.Delay((int)delayMs);
+            Dispatcher.UIThread.Post(CefApi.DoMessageLoopWork);
+        }
+
+
+        private void App_FrameworkInitialized(object sender, EventArgs e) {
+            if (Instance.UsesExternalMessageLoop) {
+                messagePump = new Timer(_ => Dispatcher.UIThread.Post(CefApi.DoMessageLoopWork), null, messagePumpDelay, messagePumpDelay);
+            }
+        }
+
+        protected override void OnScheduleMessagePumpWork(long delayMs) {
+            ScheduleMessagePumpWorkCallback(delayMs);
+        }
+        public Action<long> ScheduleMessagePumpWorkCallback { get; set; }
+
+        #endregion
+
         public static void ResetEnv() {
             //if(OperatingSystem.IsWindows()) {
             //    //int HWND = WinApi.FindWindow(null, "WebViewHost");//window title
@@ -91,8 +115,8 @@ namespace MonkeyPaste.Avalonia {
             //}
         }
 
-        public static void InitCefNet(IClassicDesktopStyleApplicationLifetime desktop) {
-            _ = new MpAvCefNetApplication(desktop);
+        public static void InitCefNet() {
+            _ = new MpAvCefNetApplication();
         }
 
         public static void ShutdownCefNet() {
@@ -104,7 +128,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         
-        private MpAvCefNetApplication(IClassicDesktopStyleApplicationLifetime desktop) {
+        private MpAvCefNetApplication() {
             _dbPath = new MpAvDbInfo().DbPath;
 
             string datFileName = "icudtl.dat";
@@ -146,24 +170,42 @@ namespace MonkeyPaste.Avalonia {
 
             var settings = new CefSettings();
             settings.NoSandbox = true;
-            settings.MultiThreadedMessageLoop = true;
+
+            if(_useExternalMessagePump) {
+                // when true will only work on windows or linux, also maybe pointless...trying to configure for single process
+                if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux()) {
+                    settings.MultiThreadedMessageLoop = false;
+                    settings.ExternalMessagePump = true;
+                    ScheduleMessagePumpWorkCallback = OnScheduleMessagePumpWorAsync;
+                    App.FrameworkInitialized += App_FrameworkInitialized;
+                } else {
+                    settings.MultiThreadedMessageLoop = true;
+                    settings.ExternalMessagePump = false;
+                }
+            } else {
+                settings.MultiThreadedMessageLoop = true;
+                settings.ExternalMessagePump = false;
+            }
+            
             settings.WindowlessRenderingEnabled = false;
             settings.LocalesDirPath = localDirPath;
             settings.ResourcesDirPath = resourceDirPath;
             settings.LogSeverity = CefLogSeverity.Error;
 
-            desktop.Exit += Desktop_Exit;           
-            
+            App.FrameworkShutdown += App_FrameworkShutdown;
+
             CefProcessMessageReceived += CefApp_CefProcessMessageReceived;
 
             Initialize(Path.Combine(cefRootDir, "Release"), settings);
-            //MpAvCefNetWebView.InitOpener();
         }
 
-        private void Desktop_Exit(object sender, ControlledApplicationLifetimeExitEventArgs e) {
-            // BUG this is NOT trigger from systray exitapp command
+
+        private void App_FrameworkShutdown(object sender, EventArgs e) {
+            messagePump?.Dispose();
             ShutdownCefNet();
         }
+
+
 
         protected override void OnContextCreated(CefBrowser browser, CefFrame frame, CefV8Context context) {
             if (!context.Enter()) {
@@ -242,7 +284,11 @@ namespace MonkeyPaste.Avalonia {
                         return;
                     }
 
-                    var wv = e.Frame.Browser.Host.Client.GetWebView() as MpAvCefNetWebView;
+                    MpAvCefNetWebView wv = e.Frame.Browser.Host.Client.GetWebView() as MpAvCefNetWebView;
+                    //while(wv == null) {
+                    //    await Task.Delay(100);
+                    //    wv = e.Frame.Browser.Host.Client.GetWebView() as MpAvCefNetWebView;
+                    //}
                     var ctvm = wv.DataContext as MpAvClipTileViewModel;
                     switch (funcType) {
                         case MpAvEditorBindingFunctionType.NotifyContentDraggableChanged: 

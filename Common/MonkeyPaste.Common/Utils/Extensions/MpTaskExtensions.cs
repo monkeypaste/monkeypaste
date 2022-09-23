@@ -14,6 +14,7 @@ namespace MonkeyPaste.Common {
                 await task;
             }
             catch (Exception ex) {
+                handler = handler == null ? MpDefaultErrorHandler.Instance : handler;
                 handler?.HandleError(ex);
             }
         }

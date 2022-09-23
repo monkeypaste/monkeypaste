@@ -60,6 +60,12 @@ namespace MonkeyPaste {
         RegEx
     }
 
+    public interface MpIQueryInfoProvider {
+
+        void RestoreQueryInfo();
+        void SetQueryInfo();
+    }
+
     public interface MpIQueryInfo : MpIJsonObject {
         public int TotalItemsInQuery { get; set; }
 
@@ -80,6 +86,8 @@ namespace MonkeyPaste {
         public string SearchText { get;  set; }
 
         public int SortOrderIdx { get; set; }
+
+        void RegisterProvider(MpIQueryInfoProvider qip);
 
         void NotifyQueryChanged(bool isFilterSortOrSearch = true);
     }

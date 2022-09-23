@@ -7,7 +7,6 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common;
 using MonkeyPaste.Common.Utils.Extensions;
 using System;
 using System.Collections.Generic;

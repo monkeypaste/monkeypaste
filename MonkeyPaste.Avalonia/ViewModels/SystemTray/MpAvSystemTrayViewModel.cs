@@ -67,7 +67,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string TotalItemCountLabel { get; set; }
 
         public string DbSizeInMbs {
             get {

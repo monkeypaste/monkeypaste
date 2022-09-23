@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 
 namespace MonkeyPaste.Common {
-    public abstract class MpJsonObject : MpIJsonObject {
+    public abstract class MpJsonObject : MpIJsonObject, MpIJsonBase64Object {
         public static T DeserializeObject<T>(object obj) where T: class{
             if(obj is string objStr) {
                 return JsonConvert.DeserializeObject<T>(objStr);
@@ -22,6 +22,7 @@ namespace MonkeyPaste.Common {
             }
             return null;
         }
+
 
         public static string SerializeObject(object obj) {
             if(obj == null) {

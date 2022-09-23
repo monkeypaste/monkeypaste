@@ -65,7 +65,9 @@ function init_test(doText = true) {
 	init(initMsg);
 	//disableReadOnly();
 	//enableFancyTextSelection();
-	enableSubSelection();
+	//enableSubSelection();
+	enableReadOnly();
+	disableSubSelection();
 }
 
 function init(initMsg) {
@@ -361,20 +363,15 @@ function disableReadOnly() {
 }
 
 function enableSubSelection(fromHost = false) {
-	//setEditorContentEditable(true);
 	IsSubSelectionEnabled = true;
 	
-	//if (!isEditorToolbarVisible()) {
-	//	//document.addEventListener('selectionchange', onDocumentSelectionChange);
-	//} 
-
-	//getEditorContainerElement().style.cursor = 'text';
-	//getEditorContainerElement().style.userSelect = 'auto';
-	//showScrollbars();
 	getEditorContainerElement().classList.remove('no-select');
 	getEditorContainerElement().classList.add('sub-select');
-	//getEditorElement().style.overflow = 'auto';
-	//getEditorElement().style.height = '100%';
+
+	getDragOverlayElement().classList.add('drag-overlay-disabled');
+	getDragOverlayElement().classList.remove('drag-overlay-enabled');
+	getDragOverlayElement().setAttribute('draggable', false);
+
 	updateAllSizeAndPositions();
 	drawOverlay();
 
@@ -391,18 +388,10 @@ function disableSubSelection(fromHost = false) {
 	getEditorContainerElement().classList.add('no-select');
 	getEditorContainerElement().classList.remove('sub-select');
 
-	//getEditorElement().style.overflow = 'hidden';
-	//getEditorElement().style.height = 'auto';
-	//getEditorContainerElement().style.cursor = 'default';
-	//getEditorContainerElement().style.userSelect = 'none';
-	//if (!isEditorToolbarVisible()) {
-	//	//document.removeEventListener('selectionchange', onDocumentSelectionChange);
-	//	let selection = getEditorSelection();
-	//	if (selection) {
-	//		setEditorSelection(selection.index, 0);
-	//	}
-	//	hideScrollbars();
-	//}
+	getDragOverlayElement().classList.remove('drag-overlay-disabled');
+	getDragOverlayElement().classList.add('drag-overlay-enabled');
+	getDragOverlayElement().setAttribute('draggable', true);
+
 	if (!fromHost) {
 		onSubSelectionEnabledChanged_ntf(IsSubSelectionEnabled);
 	}

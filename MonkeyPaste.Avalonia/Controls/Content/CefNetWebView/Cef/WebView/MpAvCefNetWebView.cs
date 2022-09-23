@@ -16,6 +16,9 @@ using CsvHelper;
 using Avalonia;
 using MonkeyPaste.Common;
 using Avalonia.Interactivity;
+using CefNet.Internal;
+using Avalonia.Controls;
+using Avalonia.Platform;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -24,10 +27,6 @@ namespace MonkeyPaste.Avalonia {
         MpAvIContentView {
         #region Private Variables
         private DragDropEffects _curDropEffects { get; set; } = DragDropEffects.None;
-        //private string _lastResult;
-        private ConcurrentDictionary<string, string> _evalResultLookup = new ConcurrentDictionary<string, string>();
-
-        private int _maxRetryCount = 10;
 
         #endregion
 
@@ -36,7 +35,10 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvCefNetWebView DraggingRtb { get; private set; } = null;
 
         public static void InitOpener() {
-            var opener = new MpAvCefNetWebView();
+            var opener = new MpAvCefNetWebView() {
+                IsVisible = false
+            };
+            (MpAvMainWindow.Instance.Content as Panel).Children.Add(opener);
             _openerWebView = opener;
         }
 
@@ -88,8 +90,6 @@ namespace MonkeyPaste.Avalonia {
         public MpAvClipTileViewModel BindingContext => this.DataContext as MpAvClipTileViewModel;
         public bool IsEditorInitialized { get; set; } = false;
 
-        public bool SuppressRightClick { get; set; } = true;
-
         public bool CanDrag { get; private set; } = true;
 
         public MpAvTextSelection Selection { get; private set; }
@@ -104,6 +104,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvCefNetWebView() : base() {
+            this.CreateWindow += MpAvCefNetWebView_CreateWindow;
             Document = new MpAvHtmlDocument(this);
             Selection = new MpAvTextSelection(Document);
 
@@ -111,6 +112,16 @@ namespace MonkeyPaste.Avalonia {
             //CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Cut, OnCut, OnCanExecuteClipboardCommand));
             //CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Paste, OnPaste, OnCanExecuteClipboardCommand));
 
+        }
+
+        private void MpAvCefNetWebView_CreateWindow(object sender, CreateWindowEventArgs e) {
+            IPlatformHandle platformHandle = MpAvMainWindow.Instance.PlatformImpl.Handle;
+            if (platformHandle is IMacOSTopLevelPlatformHandle macOSHandle)
+                e.WindowInfo.SetAsWindowless(macOSHandle.GetNSWindowRetained());
+            else
+                e.WindowInfo.SetAsWindowless(platformHandle.Handle);
+
+            e.Client = this.Client;
         }
 
         #endregion
@@ -155,6 +166,9 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
+        protected override WebViewGlue CreateWebViewGlue() {
+            return new MpAvCefNetWebViewGlue(this);
+        }
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
             base.OnAttachedToVisualTree(e);
             //DragDrop.SetAllowDrop(this, true);
@@ -163,6 +177,7 @@ namespace MonkeyPaste.Avalonia {
             //this.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
             //this.AddHandler(DragDrop.DragLeaveEvent, Drop);
         }
+
         //#region Drag
         //private void DragCheckAndStart_old(PointerPressedEventArgs e) {
         //    MpPoint dc_down_pos = e.GetClientMousePoint(this);
@@ -278,11 +293,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
-            // NOTE This only occurs when sub-selection is enabled (bound in container view)
-            if (e.IsRightPress(this) && SuppressRightClick) {
-                return;
-            }
-
             base.OnPointerPressed(e);
             
             return;

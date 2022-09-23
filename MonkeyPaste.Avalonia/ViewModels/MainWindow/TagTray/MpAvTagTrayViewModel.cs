@@ -15,7 +15,8 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncSingletonViewModel<MpAvTagTrayViewModel>,
         MpIHoverableViewModel,
         MpISelectableViewModel,
-        MpIOrientedSidebarItemViewModel {
+        MpIOrientedSidebarItemViewModel,
+        MpIQueryInfoProvider {
         #region Private Variables
         
         private bool _isSelecting = false;
@@ -54,6 +55,23 @@ namespace MonkeyPaste.Avalonia {
         public MpAvTagTileViewModel AllTagViewModel { get; set; }
         public MpAvTagTileViewModel HelpTagViewModel { get; set; }
 
+
+        #endregion
+
+        #region MpIQueryInfoProvider Implementation
+        public void RestoreQueryInfo() {
+            SelectTagCommand.Execute(MpAvQueryInfoViewModel.Current.TagId);
+        }
+
+        public void SetQueryInfo() {
+            if(SelectedItem == null) {
+                // default to all 
+                MpAvQueryInfoViewModel.Current.TagId = AllTagViewModel.TagId;
+            } else {
+                MpAvQueryInfoViewModel.Current.TagId = SelectedItem.TagId;
+            }
+            
+        }
 
         #endregion
 
@@ -183,6 +201,8 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         public async Task InitAsync() {
             IsBusy = true;
+
+            MpAvQueryInfoViewModel.Current.RegisterProvider(this);
 
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
@@ -490,11 +510,12 @@ namespace MonkeyPaste.Avalonia {
                     _isSelecting = false;
                     return;
                 }
-                if(MpDataModelProvider.QueryInfo.SortType == MpContentSortType.Manual) {
-                    MpAvClipTileSortViewModel.Instance.ResetToDefault();
-                } else if (MpDataModelProvider.QueryInfo.TagId != tagId) {
-                    MpDataModelProvider.QueryInfo.NotifyQueryChanged();
-                }
+                //if(MpDataModelProvider.QueryInfo.SortType == MpContentSortType.Manual) {
+                //    MpAvClipTileSortViewModel.Instance.ResetToDefault();
+                //} else if (MpDataModelProvider.QueryInfo.TagId != tagId) {
+                //    MpDataModelProvider.QueryInfo.NotifyQueryChanged();
+                //}
+                SetQueryInfo();
                 _isSelecting = false;
             },
             (args)=>args != null && !_isSelecting);

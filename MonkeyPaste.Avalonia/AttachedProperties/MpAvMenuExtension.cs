@@ -215,7 +215,8 @@ namespace MonkeyPaste.Avalonia {
 
                     _cmInstance.Items = mivm.SubItems.Where(x => x.IsVisible).Select(x => CreateMenuItem(x));
                     _cmInstance.PlacementTarget = control;
-                    _cmInstance.PlacementAnchor = PopupAnchor.TopRight;
+                    //_cmInstance.PlacementAnchor = PopupAnchor.Po;
+                    _cmInstance.PlacementMode = PlacementMode.Pointer;
                     _cmInstance.DataContext = mivm;
 
 

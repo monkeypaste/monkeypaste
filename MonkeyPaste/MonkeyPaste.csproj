@@ -312,6 +312,9 @@
     <EmbeddedResource Update="Resources\Html\Editor\src\components\content\content-file-list\content-file-list-style.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Html\Editor\src\components\dragdrop\drag-drop-style.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\src\components\editor\editor-style.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>

@@ -86,9 +86,7 @@ namespace MonkeyPaste {
 
         public string LocalStoragePath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
-        #region Db
-
-        
+        #region Db        
 
         #region Sync
         public string SyncCertFolderPath => Path.Combine(LocalStoragePath, "SyncCerts");
@@ -106,6 +104,7 @@ namespace MonkeyPaste {
         public string SyncServerEndpoint => $"{SyncServerProtocol}{SyncServerHostNameOrIp}:{SyncServerPort}";
 
         #endregion
+
         #endregion
 
         #region Appearance

@@ -23,7 +23,6 @@ const CB_DATA_TYPES = [
     'application/javascript',
     'application/json',
     'application/octet-stream',
-    'application/json/quill-delta' //custom for quill delta
 ];
 
 function startClipboardHandler() {

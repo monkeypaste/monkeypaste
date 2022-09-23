@@ -11,8 +11,8 @@ using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvWrapper : MpIPlatformWrapper {
-        private static MpAvWrapper _instance;
-        public static MpAvWrapper Instance => _instance ?? (_instance = new MpAvWrapper());
+        //private static MpAvWrapper _instance;
+        //public static MpAvWrapper Instance => _instance ?? (_instance = new MpAvWrapper());
         
         public MpIProcessWatcher ProcessWatcher { get; set; }
         public MpICursor? Cursor { get; set; }
@@ -65,8 +65,8 @@ namespace MonkeyPaste.Avalonia {
             DbInfo = new MpAvDbInfo();
             OsInfo = new MpAvOsInfo();
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, OsInfo);
-            
-            QueryInfo = new MpAvQueryInfo();
+
+            QueryInfo = MpAvQueryInfoViewModel.Current;
             ProcessWatcher = new MpAvProcessWatcher().Watcher;
             IconBuilder = new MpAvIconBuilder().IconBuilder;
             UrlBuilder = new MpUrlBuilder();

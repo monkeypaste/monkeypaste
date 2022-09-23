@@ -12,7 +12,7 @@ namespace MonkeyPaste.Common.Avalonia {
             AvFileNames,
             CefHtml,
             CefText,
-            CefQuillDeltaJson
+            CefJson
         };
 
         private static Dictionary<int, MpAvDataFormat> _formatLookup;
@@ -37,7 +37,7 @@ namespace MonkeyPaste.Common.Avalonia {
         public const string AvFileNames = "FileNames";
         public const string CefHtml = "text/html";
         public const string CefText = "text/plain";
-        public const string CefQuillDeltaJson = "application/json/quill-delta";
+        public const string CefJson = "application/json";
         #endregion
 
         #region Public Methods

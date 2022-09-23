@@ -51,22 +51,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region RightPressCommand AvaloniaProperty
-        public static ICommand GetRightPressCommand(AvaloniaObject obj) {
-            return obj.GetValue(RightPressCommandProperty);
-        }
-
-        public static void SetRightPressCommand(AvaloniaObject obj, ICommand value) {
-            obj.SetValue(RightPressCommandProperty, value);
-        }
-
-        public static readonly AttachedProperty<ICommand> RightPressCommandProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
-                "RightPressCommand",
-                null,
-                false);
-
-        #endregion
 
         #region DoubleLeftPressCommand AvaloniaProperty
         public static ICommand GetDoubleLeftPressCommand(AvaloniaObject obj) {
@@ -102,6 +86,23 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region RightPressCommand AvaloniaProperty
+        public static ICommand GetRightPressCommand(AvaloniaObject obj) {
+            return obj.GetValue(RightPressCommandProperty);
+        }
+
+        public static void SetRightPressCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(RightPressCommandProperty, value);
+        }
+
+        public static readonly AttachedProperty<ICommand> RightPressCommandProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
+                "RightPressCommand",
+                null,
+                false);
+
+        #endregion
+
         #region RightPressCommandParameter AvaloniaProperty
         public static object GetRightPressCommandParameter(AvaloniaObject obj) {
             return obj.GetValue(RightPressCommandParameterProperty);
@@ -116,6 +117,22 @@ namespace MonkeyPaste.Avalonia {
                 "RightPressCommandParameter",
                 null,
                 false);
+
+        #endregion
+
+        #region RoutingStrategy AvaloniaProperty
+        public static RoutingStrategies GetRoutingStrategy(AvaloniaObject obj) {
+            return obj.GetValue(RoutingStrategyProperty);
+        }
+
+        public static void SetRoutingStrategy(AvaloniaObject obj, RoutingStrategies value) {
+            obj.SetValue(RoutingStrategyProperty, value);
+        }
+
+        public static readonly AttachedProperty<RoutingStrategies> RoutingStrategyProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, RoutingStrategies>(
+                "RoutingStrategy",
+                RoutingStrategies.Direct);
 
         #endregion
 
@@ -135,6 +152,7 @@ namespace MonkeyPaste.Avalonia {
                 false);
 
         #endregion
+
 
 
         #region IsEnabled AvaloniaProperty
@@ -171,13 +189,13 @@ namespace MonkeyPaste.Avalonia {
         #region Control Event Handlers
         
         private static void EnabledControl_AttachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
-            if (s is Control control) {                
+            if (s is Control control) {
                 if (control is Button b && GetLeftPressCommand(control) is ICommand leftPressCommand) {
                     // NOTE pointerpress is swallowed by button unless tunneled, may need for other controls too...
                     b.AddHandler(Button.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
                 }
                 control.DetachedFromVisualTree += DisabledControl_DetachedToVisualHandler;
-                control.PointerPressed += Control_PointerPressed;
+                control.AddHandler(Button.PointerPressedEvent, Control_PointerPressed, GetRoutingStrategy(control));
                 
                 if (e == null) {
                     control.AttachedToVisualTree += EnabledControl_AttachedToVisualHandler;
@@ -197,6 +215,8 @@ namespace MonkeyPaste.Avalonia {
 
         private static void Control_PointerPressed(object sender, PointerPressedEventArgs e) {
             if(sender is Control control) {
+
+                e.Handled = true;
                 ICommand cmd = null;
                 object param = null;
                 if(e.IsLeftPress(control)) {

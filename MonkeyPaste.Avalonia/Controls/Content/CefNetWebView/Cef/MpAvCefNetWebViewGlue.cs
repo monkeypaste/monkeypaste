@@ -1,0 +1,72 @@
+﻿using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Threading;
+using CefNet;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using CefNet.Avalonia;
+using CefNet.Internal;
+using Avalonia.Input;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+
+namespace MonkeyPaste.Avalonia {
+    public class MpAvCefNetWebViewGlue : AvaloniaWebViewGlue {
+        public MpAvCefNetWebViewGlue(IAvaloniaWebViewPrivate view) : base(view) {
+
+        }
+
+
+        /// <summary>
+        /// Called when the user starts dragging content in the web view. OS APIs that run a system message
+        /// loop may be used within the StartDragging call. Don't call any of CefBrowserHost::DragSource*Ended*
+        /// methods after returning false. Call CefBrowserHost::DragSourceEndedAt and DragSourceSystemDragEnded
+        /// either synchronously or asynchronously to inform the web view that the drag operation has ended.
+        /// </summary>
+        /// <param name="browser"></param>
+        /// <param name="dragData">The contextual information about the dragged content.</param>
+        /// <param name="allowedOps"></param>
+        /// <param name="x">The X-location in screen coordinates.</param>
+        /// <param name="y">The Y-location in screen coordinates.</param>
+        /// <returns>Return false to abort the drag operation or true to handle the drag operation.</returns>
+        /// 
+        protected override bool StartDragging(CefBrowser browser, CefDragData dragData, CefDragOperationsMask allowedOps, int x, int y) {
+            //var result = base.StartDragging(browser, dragData, allowedOps, x, y);
+
+            Dispatcher.UIThread.Post(async () => {
+                var avmpdo = new MpAvDataObject();
+                avmpdo.SetData(MpPortableDataFormats.Text, dragData.FragmentText);
+                avmpdo.SetData(MpPortableDataFormats.Html, dragData.FragmentHtml);
+                avmpdo.MapAllPseudoFormats();
+                //Control control = browser.Host.Client.GetWebView();
+                Pointer p = new Pointer(Pointer.GetNextFreeId(), PointerType.Mouse, true);
+                var pe = new PointerEventArgs(
+                    Control.PointerPressedEvent,
+                    browser.Host.Client.GetWebView() as IInteractive,
+                    p,
+                    MpAvMainWindow.Instance,
+                    MpAvMainWindow.Instance.Position.ToAvPoint(),
+                    (ulong)DateTime.Now.Ticks,
+                    new PointerPointProperties(RawInputModifiers.LeftMouseButton, PointerUpdateKind.LeftButtonPressed), KeyModifiers.None);
+
+                var result = await DragDrop.DoDragDrop(pe, avmpdo, DragDropEffects.Copy | DragDropEffects.Move);
+                
+                MpConsole.WriteLine("Cef Drag Result: " + result);
+
+            });
+            return true;
+        }
+        protected override void OnBeforeContextMenu(CefBrowser browser, CefFrame frame, CefContextMenuParams menuParams, CefMenuModel model) {
+            //menuParams.IsCustomMenu = true;
+            model.Clear();
+            return;
+        }
+    }
+}

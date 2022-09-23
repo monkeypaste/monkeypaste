@@ -202,8 +202,11 @@ function getDelta(rangeObj) {
 	return delta;
 }
 
-function getDeltaJson(rangeObj) {
+function getDeltaJson(rangeObj,encodeWithContentHandle = false) {
 	let delta = getDelta(rangeObj);
+	if (encodeWithContentHandle) {
+		delta.contentHandle = ContentHandle;
+	}
 	let deltaJson = JSON.stringify(delta);
 	return deltaJson;
 }

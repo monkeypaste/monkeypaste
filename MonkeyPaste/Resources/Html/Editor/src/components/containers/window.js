@@ -142,6 +142,14 @@ function onWindowMouseMove(e) {
 		return;
 	}
 	WindowMouseLoc = { x: e.clientX, y: e.clientY };
+	if (WindowMouseDownLoc == null) {
+		return;
+	}
+	if (!IsReadOnly || IsSubSelectionEnabled) {
+		return;
+	}
+	let cur_dist = dist(WindowMouseLoc, WindowMouseDownLoc);
+	log('drag dist: ' + cur_dist);
 	//if (WindowMouseDownLoc == null) {
 	//	return;
 	//}
@@ -232,7 +240,7 @@ function onWindowResize(e) {
 
 function onWindowKeyDown(e) {
 	if (IsReadOnly) {
-		if (PermittedReadOnlyKeys.contains(e.key)) {
+		if (PermittedReadOnlyKeys.includes(e.key)) {
 			return;
 		}
 		e.stopPropagation();
@@ -252,6 +260,15 @@ function onWindowKeyUp(e) {
 			return;
 		}
 
+		if (IsSubSelectionEnabled) {
+			let sel = getEditorSelection();
+			if (!sel || sel.length == 0) {
+				disableSubSelection();
+				return;
+			}
+			setEditorSelection(sel.index, 0);
+			return;
+		}
 		return;
 
 		let sel = getEditorSelection();

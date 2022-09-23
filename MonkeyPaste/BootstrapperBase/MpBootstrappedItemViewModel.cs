@@ -62,10 +62,9 @@ namespace MonkeyPaste {
             PropertyInfo instancePropertyInfo = ItemType.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
 
             if (instancePropertyInfo == null) {
-                // singleton
+                // class
                 initMethodInfo = ItemType.GetMethod("Init", BindingFlags.Static | BindingFlags.Public);
                 if (initMethodInfo == null) {
-                    //asyn singleton
                     initMethodInfo = ItemType.GetMethod("InitAsync", BindingFlags.Static | BindingFlags.Public);
                     if (initMethodInfo == null) {
                         initMethodInfo = ItemType.GetMethod("InitializeAsync", BindingFlags.Static | BindingFlags.Public);
@@ -76,11 +75,12 @@ namespace MonkeyPaste {
                     }
                 }
             } else {
-                //static class
+                // singleton
                 itemObj = instancePropertyInfo.GetValue(null, null);
 
                 initMethodInfo = ItemType.GetMethod("Init");
                 if (itemObj == null || initMethodInfo == null) {
+                    //asyn singleton
                     initMethodInfo = ItemType.GetMethod("InitAsync");
                     if (initMethodInfo == null) {
                         initMethodInfo = ItemType.GetMethod("InitializeAsync");

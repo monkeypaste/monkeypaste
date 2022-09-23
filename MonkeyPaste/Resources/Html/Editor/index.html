@@ -19,7 +19,7 @@
 
     <link href="src/components/quill-wrapper/quill-style.css" rel="stylesheet" />
     <link href="src/components/editor/editor-style.css" rel="stylesheet" />
-
+    <link href="src/components/dragdrop/drag-drop-style.css" rel="stylesheet" />
     <link href="src/components/template/template-style.css" rel="stylesheet" />
     <link href="src/components/template/toolbar/edit/edit-template-toolbar-style.css" rel="stylesheet" />
     <link href="src/components/template/toolbar/paste/paste-template-toolbar-style.css" rel="stylesheet" />
@@ -206,13 +206,14 @@
 
     <canvas id="overlayCanvas"></canvas>
 
+    <div id="dragOverlay"></div>
     <script src="src/components/editor/editor.js"></script>
 
     <script>
         //if (!isRunningInHost()) {
         //    init_test();
         //}
-        init_test();
+        //init_test();
     </script>
 
 </body>

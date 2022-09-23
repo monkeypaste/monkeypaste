@@ -27,7 +27,8 @@ namespace MonkeyPaste.Avalonia {
         MpIBootstrappedItem, 
         MpIPagingScrollViewerViewModel,
         MpIActionComponent,
-        MpIContextMenuViewModel {
+        MpIContextMenuViewModel,
+        MpIQueryInfoProvider{
         #region Private Variables
         private int _anchor_query_idx { get; set; } = -1;
 
@@ -71,6 +72,17 @@ namespace MonkeyPaste.Avalonia {
         #region MpIBoostrappedItem Implementation
 
         string MpIBootstrappedItem.Label => "Content Tray";
+        #endregion
+
+        #region MpIQueryInfoProvider Implementation
+        public void RestoreQueryInfo() {
+            // unimplemented
+        }
+
+        public void SetQueryInfo() {
+            MpAvQueryInfoViewModel.Current.TotalItemsInQuery = TotalTilesInQuery;
+        }
+
         #endregion
 
 
@@ -956,6 +968,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
+            MpAvQueryInfoViewModel.Current.RegisterProvider(this);
 
             PropertyChanged += MpAvClipTrayViewModel_PropertyChanged;
             Items.CollectionChanged += Items_CollectionChanged;
@@ -966,7 +979,9 @@ namespace MonkeyPaste.Avalonia {
             MpDb.SyncUpdate += MpDbObject_SyncUpdate;
             MpDb.SyncDelete += MpDbObject_SyncDelete;
 
-            _oldMainWindowHeight = MpAvMainWindowViewModel.Instance.MainWindowHeight;
+            MpPlatformWrapper.Services.ClipboardMonitor.OnClipboardChanged += ClipboardChanged;
+            MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
+
             //DefaultLoadCount = MpMeasurements.Instance.DefaultTotalVisibleClipTiles * 1 + 2;
 
             MpMessenger.Register<MpMessageType>(MpDataModelProvider.QueryInfo, ReceivedQueryInfoMessage);
@@ -1300,7 +1315,7 @@ namespace MonkeyPaste.Avalonia {
 
                 // REQUERY
                 case MpMessageType.RequeryCompleted:
-
+                    SetQueryInfo();
                     break;
 
                 // Selection
@@ -2197,8 +2212,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private double _oldMainWindowHeight = 0;
-
         public void ValidateItemsTrayX() {
             var orderedItems = Items.OrderBy(x => x.QueryOffsetIdx).ToList();
             for (int i = 0; i < Items.Count; i++) {
@@ -2209,38 +2222,6 @@ namespace MonkeyPaste.Avalonia {
                     Debugger.Break();
                 }
             }
-        }
-
-        public void OnPostMainWindowLoaded() {
-            int totalItems = MpAvTagTrayViewModel.Instance.AllTagViewModel.TagClipCount;
-
-            MpAvSystemTrayViewModel.Instance.TotalItemCountLabel = string.Format(@"{0} total entries", totalItems);
-
-            MpPlatformWrapper.Services.ClipboardMonitor.OnClipboardChanged += ClipboardChanged;
-            MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
-            //await Task.Delay(3000);
-
-            if (!string.IsNullOrEmpty(MpPrefViewModel.Instance.LastQueryInfoJson)) {
-                var qi = JsonConvert.DeserializeObject<MpAvQueryInfo>(MpPrefViewModel.Instance.LastQueryInfoJson);
-                if (qi != null) {
-                    MpAvClipTileSortViewModel.Instance.SelectedSortTypeIdx = (int)qi.SortType;
-                    MpAvClipTileSortViewModel.Instance.IsSortDescending = qi.IsDescending;
-
-                    MpAvTagTrayViewModel.Instance.SelectTagCommand.Execute(qi.TagId);
-
-                    MpAvSearchBoxViewModel.Instance.SearchText = qi.SearchText;
-                    // NOTE Filter flags already set from Preferences
-
-                    MpPlatformWrapper.Services.QueryInfo = qi;
-
-
-                    MpDataModelProvider.Init();
-                }
-            }
-            MpAvMainWindowViewModel.Instance.IsMainWindowLoading = false;
-
-
-            MpDataModelProvider.QueryInfo.NotifyQueryChanged(true);
         }
 
 

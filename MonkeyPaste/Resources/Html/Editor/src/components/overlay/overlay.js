@@ -227,17 +227,18 @@ function drawTextSelection(ctx) {
             }
             // NOTE always override caret during drop to make it nice and thicky
             //caret_color = 'transparent';
-		}
+        }
     } else if (IsSubSelectionEnabled) {
         if (isEditorToolbarVisible()) {
             if (IsTemplateAtInsert) {
                 caret_color = 'transparent';
-			}
+            }
         } else {
             caret_color = 'red';
-		}
-        
-    }
+        }
+    } else {
+        caret_color = 'transparent';
+	}
 
     setTextSelectionBgColor(sel_bg_color);
     setTextSelectionFgColor(sel_fg_color);
@@ -250,26 +251,26 @@ function drawTextSelection(ctx) {
         });
     }
 
-    if (IsSubSelectionEnabled && !IsDropping && sel && sel.length == 0 && isReadOnly()) {
-        // caret is hidden when not editable, only draw caret if sel not range or dropping
-        // (drop preview draws if non-block dropping )
-  //      if (isEditorToolbarVisible()) {
-  //          IsCaretBlinkOn = false;
-  //          CaretBlinkOffColor = null;
-  //          clearInterval(caretBlinkTick);
-		//} else if (!IsCaretBlinkOn) {
-  //          IsCaretBlinkOn = true;
-  //          CaretBlinkOffColor = null;
-  //          setInterval(caretBlinkTick, 500);
-  //      } 
-        let caret_display_color = CaretBlinkOffColor ? CaretBlinkOffColor : caret_color;
-        let caret_line = getCaretLine(sel.index);
-        drawLine(ctx, caret_line, caret_display_color);
-    } else {
-        IsCaretBlinkOn = false;
-        CaretBlinkOffColor = null;
-        clearInterval(caretBlinkTick);
-	}
+ //   if (IsSubSelectionEnabled && !IsDropping && sel && sel.length == 0 && isReadOnly()) {
+ //       // caret is hidden when not editable, only draw caret if sel not range or dropping
+ //       // (drop preview draws if non-block dropping )
+ // //      if (isEditorToolbarVisible()) {
+ // //          IsCaretBlinkOn = false;
+ // //          CaretBlinkOffColor = null;
+ // //          clearInterval(caretBlinkTick);
+	//	//} else if (!IsCaretBlinkOn) {
+ // //          IsCaretBlinkOn = true;
+ // //          CaretBlinkOffColor = null;
+ // //          setInterval(caretBlinkTick, 500);
+ // //      } 
+ //       let caret_display_color = CaretBlinkOffColor ? CaretBlinkOffColor : caret_color;
+ //       let caret_line = getCaretLine(sel.index);
+ //       drawLine(ctx, caret_line, caret_display_color);
+ //   } else {
+ //       IsCaretBlinkOn = false;
+ //       CaretBlinkOffColor = null;
+ //       clearInterval(caretBlinkTick);
+	//}
 }
 
 function caretBlinkTick() {

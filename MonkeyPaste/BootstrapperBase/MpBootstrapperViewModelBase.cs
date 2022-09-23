@@ -12,8 +12,10 @@ namespace MonkeyPaste {
         #region Statics
 
         public static bool IsCoreLoaded { get; protected set; } = false;
+        public static bool IsPlatformLoaded { get; protected set; } = false;
 
-        protected static List<MpBootstrappedItemViewModel> _coreItems = new List<MpBootstrappedItemViewModel>();
+        protected static List<MpBootstrappedItemViewModel> _coreItems { get; private set; } = new List<MpBootstrappedItemViewModel>();
+        protected static List<MpBootstrappedItemViewModel> _platformItems { get; private set; } = new List<MpBootstrappedItemViewModel>();
 
         #endregion
 
@@ -44,6 +46,12 @@ namespace MonkeyPaste {
         #endregion
 
         public MpBootstrapperViewModelBase() {
+            
+        }
+
+        public abstract Task InitAsync();
+
+        protected virtual void CreateLoaderItems() {
             _coreItems.AddRange(
                 new List<MpBootstrappedItemViewModel>() {
                     new MpBootstrappedItemViewModel(this,typeof(MpConsole)),
@@ -51,11 +59,9 @@ namespace MonkeyPaste {
                     new MpBootstrappedItemViewModel(this,typeof(MpDb)),
                     new MpBootstrappedItemViewModel(this,typeof(MpDataModelProvider)),
                     new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpPluginLoader))                    
+                    new MpBootstrappedItemViewModel(this,typeof(MpPluginLoader))
                 });
         }
-
-        public abstract Task InitAsync();
 
         protected virtual async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {
             IsBusy = true;

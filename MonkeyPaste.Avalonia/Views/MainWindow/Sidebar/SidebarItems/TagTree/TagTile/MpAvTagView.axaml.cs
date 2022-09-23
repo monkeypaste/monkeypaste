@@ -41,7 +41,7 @@ namespace MonkeyPaste.Avalonia {
             if(e.ClickCount > 1) {
                 BindingContext.RenameTagCommand.Execute(null);
             } else if (BindingContext.IsSelected) {
-                MpDataModelProvider.QueryInfo.NotifyQueryChanged();
+                //MpDataModelProvider.QueryInfo.NotifyQueryChanged();
             }
             //MpAvDragDropManager.StartDragCheck(BindingContext);
         }

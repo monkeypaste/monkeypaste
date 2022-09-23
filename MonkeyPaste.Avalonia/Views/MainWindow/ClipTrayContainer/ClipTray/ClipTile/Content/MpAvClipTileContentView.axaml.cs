@@ -160,6 +160,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvClipTileContentView() {
             InitializeComponent();
         }
+
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }

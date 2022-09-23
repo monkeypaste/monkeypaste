@@ -17,6 +17,8 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class App : Application {
 
+        public static event EventHandler FrameworkInitialized;
+        public static event EventHandler FrameworkShutdown;
         public static IClassicDesktopStyleApplicationLifetime Desktop { get; private set; }
         public App() {
             if(MpAvCefNetApplication.UseCefNet) {
@@ -37,77 +39,24 @@ namespace MonkeyPaste.Avalonia {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
                 Desktop = desktop;
 
-                if (MpAvCefNetApplication.UseCefNet) {
-                    MpAvCefNetApplication.InitCefNet(desktop);
-                } //else {
-                   // MpAvCefWebViewExtension.InitCef();
-              //  }
+                desktop.Startup += Startup;
+                desktop.Exit += Exit;
 
-                if (OperatingSystem.IsLinux()) {
-                    await GtkHelper.EnsureInitialized();
-                } else if (OperatingSystem.IsMacOS()) {
-                    MpAvMacHelpers.EnsureInitialized();
-                }
-
-                await MpAvWrapper.Instance.InitializeAsync();
-                await MpPlatformWrapper.InitAsync(MpAvWrapper.Instance);
                 var bootstrapper = new MpAvBootstrapperViewModel();
                 await bootstrapper.InitAsync();
 
-                MpConsole.WriteLine("Core and ViewModel Bootstrap complete");
-
-
-                //desktop.MainWindow.Close();
-                desktop.MainWindow = new MpAvMainWindow();
-
-                CreateTrayIcon();
-
-                desktop.MainWindow.Show();
             }
 
             base.OnFrameworkInitializationCompleted();
         }
-        private void CreateTrayIcon() {
-            var trayIcons = new TrayIcons();
-            var rootIcon = new TrayIcon() {
-                Icon = new WindowIcon(
-                    MpAvStringResourceToBitmapConverter.Instance.Convert(
-                        MpPlatformWrapper.Services.PlatformResource.GetResource("AppImage"), null, null, null) as Bitmap),
-                Command = MpAvMainWindowViewModel.Instance.ShowWindowCommand,
-                ToolTipText = MpPrefViewModel.Instance.ApplicationName,
-                Menu = new NativeMenu()
-            };
-            rootIcon.Menu.Opening += Menu_Opening;
-            rootIcon.Menu.Closed += Menu_Closed;
-            //rootIcon.Clicked += RootIcon_Clicked;
-            trayIcons.Add(rootIcon);
-            var mil = new[] {
-                new NativeMenuItem() {
-                    Header = "_Open",
-                    Command = MpAvMainWindowViewModel.Instance.ShowWindowCommand
-                },
-                new NativeMenuItem() {
-                    Header = "_Settings",
-                    Command = MpAvSettingsWindowViewModel.Instance.ShowSettingsWindowCommand
-                },
-                new NativeMenuItem() {
-                    Header = "-"
-                },
-                new NativeMenuItem() {
-                    Header = "_Exit",
-                    Command = MpAvSystemTrayViewModel.Instance.ExitApplicationCommand
-                }
-            };
-            mil.ForEach(x => trayIcons.First().Menu.Items.Add(x));            
+
+
+        private void Startup(object sender, ControlledApplicationLifetimeStartupEventArgs e) {
+            FrameworkInitialized?.Invoke(this, EventArgs.Empty);
         }
 
-
-        private void Menu_Closed(object sender, EventArgs e) {
-            MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
-        }
-
-        private void Menu_Opening(object sender, EventArgs e) {
-            MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
+        private void Exit(object sender, ControlledApplicationLifetimeExitEventArgs e) {
+            FrameworkShutdown?.Invoke(this, EventArgs.Empty);
         }
 
         private void RootIcon_Clicked(object sender, EventArgs e) {

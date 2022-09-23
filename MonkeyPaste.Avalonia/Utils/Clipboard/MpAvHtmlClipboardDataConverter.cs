@@ -16,7 +16,7 @@ using System.Web;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvHtmlClipboardDataConverter {
-        private static WebView _wv;
+        public static WebView RootWebView { get; private set; }
 
         public string Version { get; private set; }
         public string SourceUrl { get; private set; }
@@ -34,23 +34,23 @@ namespace MonkeyPaste.Avalonia {
                 SystemDecorations = SystemDecorations.None,
                 Position = new PixelPoint(808080, 808080)
             };
-            _wv = new WebView() {
+            RootWebView = new WebView() {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
                 IsVisible = false
             };
-            quillWindow.Content = _wv;
+            quillWindow.Content = RootWebView;
             
-            _wv.BrowserCreated += (s, e) => {
-                _wv.Navigated += (s, e) => {
+            RootWebView.BrowserCreated += (s, e) => {
+                RootWebView.Navigated += (s, e) => {
                     if (s is WebView wv) {
                         var converter_init_msg = new MpQuillLoadRequestMessage() {
                             isEditorPlainHtmlConverter = true
                         };
-                        _wv.ExecuteJavascript($"init_ext('{converter_init_msg.SerializeJsonObjectToBase64}')");
+                        RootWebView.ExecuteJavascript($"init_ext('{converter_init_msg.SerializeJsonObjectToBase64}')");
                     }
                 };
-                _wv.Navigate(MpAvClipTrayViewModel.EditorPath);
+                RootWebView.Navigate(MpAvClipTrayViewModel.EditorPath);
             };
 
             if(OperatingSystem.IsWindows()) {
@@ -89,13 +89,13 @@ namespace MonkeyPaste.Avalonia {
                 if(html_length > 0) {
                     string plainHtml = htmlClipboardData.Substring(html_start_idx, html_length);
                     plainHtml = HttpUtility.HtmlDecode(plainHtml);
-                    if(_wv == null) {
+                    if(RootWebView == null) {
                         // occurs when CefNet is disabled (hidden window not created in init)
                         hcd.Html = plainHtml;
                     } else {
 
                         var plainHtmlToRichHtmlRequest = new MpQuillConvertPlainHtmlToQuillHtmlRequestMessage() { plainHtml = plainHtml };
-                        string qhtml = await _wv.EvaluateJavascriptAsync($"convertPlainHtml_ext('{plainHtmlToRichHtmlRequest.SerializeJsonObjectToBase64()}')");
+                        string qhtml = await RootWebView.EvaluateJavascriptAsync($"convertPlainHtml_ext('{plainHtmlToRichHtmlRequest.SerializeJsonObjectToBase64()}')");
 
                         if (qhtml.IsStringEscapedHtml()) {
                             // pretty sure this can't happen since its base64 encoded but curious to see, this means need to call HtmlDecode again..

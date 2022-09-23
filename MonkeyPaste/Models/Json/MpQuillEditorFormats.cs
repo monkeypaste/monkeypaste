@@ -32,6 +32,8 @@ namespace MonkeyPaste {
         public List<string> decodedTemplateGuids { get; set; }
     }
 
+    
+
     public class MpQuillDisableReadOnlyRequestMessage : MpJsonObject {
         public List<MpTextTemplate> allAvailableTextTemplates { get; set; }
         public double editorHeight { get; set; }
