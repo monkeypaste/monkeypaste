@@ -52,7 +52,11 @@ function setTextInRange(range, text, source = 'api') {
 	//quill.setText(text + "\n");
 }
 
-function insertText(docIdx, text, source = 'api') {
+function insertText(docIdx, text, source = 'api', decodeTemplates = false) {
+	if (decodeTemplates) {
+		decodeInsertedTemplates(docIdx, text, source);
+		return;
+	}
 	quill.insertText(docIdx, text, source);
 }
 
@@ -74,7 +78,7 @@ function getText(range, encodeTemplates = false) {
 	range = range == null ? { index: 0, length: quill.getLength() } : range;
 	let text = '';
 	if (IsLoaded & encodeTemplates) {
-		text = getRangeTextWithTemplateText(range);
+		text = getTemplatePlainTextForDocRange(range);
 	} else {
 		text = quill.getText(range.index, range.length);
 	}

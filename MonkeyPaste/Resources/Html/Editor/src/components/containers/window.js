@@ -2,19 +2,27 @@
 var WindowMouseDownLoc = null;
 var WindowMouseLoc = null;
 
-var PermittedReadOnlyKeys = [
+var DecreaseFocusLevelKey = 'Escape'
+var IncreaseFocusLevelKey = ' ';
+
+var PermittedNoSelectKeys = [
+	IncreaseFocusLevelKey
+];
+
+var PermittedSubSelectionKeys = [
 	"ArrowLeft",
 	"ArrowUp",
 	"ArrowRight",
 	"ArrowDown",
-	"Escape",
 	"Shift",
 	"Alt",
 	"Control",
 	"Home",
 	"End",
 	"PageUp",
-	"PageDown"
+	"PageDown",
+	DecreaseFocusLevelKey,
+	IncreaseFocusLevelKey
 ];
 
 function initWindow() {
@@ -25,12 +33,12 @@ function initWindow() {
 	window.addEventListener("mousemove", onWindowMouseMove);
 	window.addEventListener("mouseup", onWindowMouseUp);
 
+	window.addEventListener('dblclick', onWindowDoubleClick);
 	window.addEventListener("click", onWindowClick);
 
 	window.addEventListener('keydown', onWindowKeyDown);
 	window.addEventListener('keyup', onWindowKeyUp);
 
-	window.addEventListener('dblclick', onWindowDoubleClick);
 }
 
 function initWindowDragDrop() {
@@ -123,6 +131,7 @@ function onWindowClick(e) {
 
 function onWindowDoubleClick(e) {
 	if (IsSubSelectionEnabled) {
+		disableReadOnly();
 		return;
 	}
 	enableSubSelection();
@@ -186,7 +195,7 @@ function onWindowMouseUp(e) {
 	//WindowMouseDownLoc = null;
 	//return;
 	if (last_dmp == null) {
-		debugger;
+		return;
 	}
 	let window_up_mp = { x: e.clientX, y: e.clientY };
 	let wmdl_delta_dist = dist(last_dmp, window_up_mp);
@@ -240,60 +249,59 @@ function onWindowResize(e) {
 
 function onWindowKeyDown(e) {
 	if (IsReadOnly) {
-		if (PermittedReadOnlyKeys.includes(e.key)) {
-			return;
+		if (!IsSubSelectionEnabled) {
+			// no edit mode
+			if (PermittedNoSelectKeys.includes(e.key)) {
+				if (e.key == IncreaseFocusLevelKey) {
+					enableSubSelection();
+				}
+			}
+		} else {
+			//sub-select/droppable mode
+			if (PermittedSubSelectionKeys.includes(e.key)) {
+				if (e.key == IncreaseFocusLevelKey) {
+					disableReadOnly();
+				} else if (e.key == DecreaseFocusLevelKey) {
+					disableSubSelection();
+				}
+			}
 		}
+
 		e.stopPropagation();
 		e.preventDefault();
-	}
+	} 
 }
 
 // DRAG DROP
 
 function onWindowKeyUp(e) {
-	if (e.code == 'Escape') {
+	if (e.code == DecreaseFocusLevelKey) {
 		if (IsDragging || IsDropping) {			
 			return;
 		}
 		if (isTemplateFocused()) {
 			clearTemplateFocus();
+			if (!IsPastingTemplate) {
+				hideEditTemplateToolbar();
+			}
 			return;
 		}
+
 
 		if (IsSubSelectionEnabled) {
 			let sel = getEditorSelection();
 			if (!sel || sel.length == 0) {
+				if (!IsReadOnly) {
+					enableReadOnly();
+					return;
+				}
 				disableSubSelection();
 				return;
 			}
 			setEditorSelection(sel.index, 0);
 			return;
 		}
-		return;
-
-		let sel = getEditorSelection();
-		if (!sel) {
-			return;
-		}
-		if (!isReadOnly()) {
-			if (!sel) {
-				return;
-			}
-			setEditorSelection(sel.index, 0);
-			return;
-		}
-
-		if (IsSubSelectionEnabled) {
-			if (sel.length == 0) {
-				disableSubSelection();
-				return;
-			}
-			setEditorSelection(sel.index, 0);
-			return;
-		}
-		setEditorSelection(sel.index, 0);
-		return;
-	}	
+	}
 }
 
 function onWindowMouseDown_dragdrop(e) {

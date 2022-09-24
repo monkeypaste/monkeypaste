@@ -6,11 +6,11 @@ function initTextContent(itemDataStr) {
 			return;
 		}
 		// issues: template's are given parent spans and overflow outside of template
-		setTextInRange(getContentRange(),'','silent');
-		insertHtml(0, itemDataStr,'silent');
+		//setTextInRange(getContentRange(),'','silent');
+		//insertHtml(0, itemDataStr,'silent');
 
 		//issues: plain html will not format correctly
-		//setHtml(itemDataStr);
+		setHtml(itemDataStr);
 		
 	} catch (ex) {
 		//malformed or unsupported content was 

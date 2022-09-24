@@ -205,6 +205,6 @@ function onTemplateOptionClick(e, target) {
         }
     }
 
-    focusTemplate(s.options[s.selectedIndex].value, true);
+    focusTemplate(s.options[s.selectedIndex].value,null, true);
     h.click();
 }

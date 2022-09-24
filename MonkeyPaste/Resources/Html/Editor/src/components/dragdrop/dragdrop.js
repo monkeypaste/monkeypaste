@@ -1,6 +1,8 @@
 ﻿var CefDragData;
 
+var IsDropCancel = false; // flagged from drag_end  evt resetDragDrop then unset in editorSelectionChange which restores selection
 
+var PreDropState = null;
 
 var DropElm;
 
@@ -167,30 +169,7 @@ function getEditorMousePos(e) {
     return mp;
 }
 
-function updateModKeys(e) {
-    //if (e.fromHost === undefined && isRunningInHost()) {
-    //    // ignore internal mod key updates when running from host
-    //    return;
-    //}
 
-    let isModChanged =
-        IsCtrlDown != e.ctrlKey ||
-        IsAltDown != e.altKey ||
-        IsShiftDown != e.shiftKey;
-
-    IsCtrlDown = e.ctrlKey;
-    IsAltDown = e.altKey;
-    IsShiftDown = e.shiftKey;
-
-    if (isModChanged) {
-        log('mod changed: Ctrl: ' + (IsCtrlDown ? "YES" : "NO"));
-        drawOverlay();
-    }
-
-    if (e.escKey) {
-        resetDragDrop(true);
-	}
-}
 
 function checkCanDrag(emp) {
     //if (!IsSubSelectionEnabled) {
@@ -232,17 +211,7 @@ function getDragData(dt) {
     return drag_data;
 }
 
-function dropData(docIdx, data) {
-    if (data.includes('{t{') && data.includes('}t}')) {
-        // single template drop
-        let tguid = data.split(',')[0].replace('{t{', '');
-        let t = getTemplateDefByGuid(tguid);
-        insertTemplate({ index: docIdx, length: 1 }, t,true);
-        return;
-	}
-    //quill.clipboard.dangerouslyPasteHTML(DropIdx + 1, drop_content_data);
-    insertContent(docIdx, data, true);
-}
+
 
 function getDropEffect() {
     if (isDropping()) {
@@ -418,7 +387,7 @@ function onDrop(e) {
                     cur_drop_idx -= 3;
 				}
                 quill.deleteText(cur_sel.index - 1, 3);
-                insertTemplate({ index: cur_drop_idx, length: 0 }, t,true);
+                insertTemplate({ index: cur_drop_idx, length: 0 }, t);
                 //moveTemplate(tiguid, cur_drop_idx, false);
                 //focusTemplate(tguid, false, tiguid);
                 resetDragDrop();

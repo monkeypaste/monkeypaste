@@ -2,6 +2,7 @@
 var DragRange = null;
 
 var SelIdxBeforeDrag = -1;
+var DocLengthBeforeDrag = -1;
 
 var IsCtrlDown = false; //duplicate
 var IsShiftDown = false; //split 
@@ -16,6 +17,7 @@ function initDrag() {
         let sel = getEditorSelection();
 
         if (e.target.id == 'dragOverlay') {
+            // overlay drag is full content so select all
             SelIdxBeforeDrag = sel ? sel.index : -1;
             selectAll();
             sel = getEditorSelection();
@@ -24,12 +26,14 @@ function initDrag() {
         if (!sel || sel.length == 0) {
             e.preventDefault();
             e.stopPropagation();
+            SelIdxBeforeDrag = -1;
             return false;
         }
 
         log('drag start');
         DragRange = sel;
         IsDragging = true;
+        DocLengthBeforeDrag = getDocLength();
         e.stopPropagation();
 
         e.dataTransfer.effectAllowed = 'copyMove';
@@ -48,20 +52,39 @@ function initDrag() {
 
     function handleDragEnd(e) {
         log('drag end');
+
+        if (e.dataTransfer.dropEffect == 'move') {
+            // 'move' should imply it was an internal drop
+            if (DropIdx >= 0) {
+
+                let drop_doc_length_delta = getDocLength() - DocLengthBeforeDrag;
+                // this should only happen for internal drop
+                if (DropIdx < DragRange.index) {
+                    // when drop is before drag sel adjust drag range to clear the move
+                    DragRange.index += drop_doc_length_delta;
+                }
+			}
+            setTextInRange(DragRange, '','user');
+		}
         if (e.target.id == 'dragOverlay') {
             let desel = { index: 0, length: 0 };
             if (SelIdxBeforeDrag >= 0) {
                 desel.index = SelIdxBeforeDrag;
-            }
-            SelIdxBeforeDrag = -1;
+            }            
             setEditorSelection(desel);
         }
+
+        SelIdxBeforeDrag = -1;
+        DocLengthBeforeDrag = -1;
         DragRange = null;
         IsDragging = false;
         IsCtrlDown = false;
         IsAltDown = false
         IsShiftDown = false;
 
+        // this ensures dnd state is all reset
+        IsDropping = false;
+        DropIdx = -1;
 
         drawOverlay();
     }

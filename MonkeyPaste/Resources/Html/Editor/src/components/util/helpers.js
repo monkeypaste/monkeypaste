@@ -44,8 +44,11 @@ function changeInnerText(elm, text, newText) {
 
 function substringByLength(str, sIdx, length) {
     // js subsring is by sidx,eidx
-    // cs substring is by sidx,length 
+    // cs substring is by sidx,length
     // this mimics cs for ported code, etc.
+    if (!length) {
+        length = str.length - sIdx;
+	}
     let eIdx = sIdx + length;
     return str.substring(sIdx, eIdx);
 }

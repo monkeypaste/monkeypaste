@@ -23,7 +23,8 @@ namespace MonkeyPaste.Avalonia {
         NotifyContentDraggableChanged,
         NotifyDropEffectChanged,
         NotifyException,
-        NotifyDragStart
+        NotifyDragStart,
+        NotifyReadOnlyChanged
     }
     public class MpAvCefNetApplication : CefNetApplication {
         #region Private Variables
@@ -57,7 +58,8 @@ namespace MonkeyPaste.Avalonia {
             "notifyContentDraggableChanged",
             "notifyDropEffectChanged",
             "notifyException",
-            "notifyDragStart"
+            "notifyDragStart",
+            "notifyReadOnlyChanged"
         };
 
         public static Dictionary<string, MpAvEditorBindingFunctionType> BindingFunctionLookup {
@@ -277,7 +279,7 @@ namespace MonkeyPaste.Avalonia {
             if(e.Name == "WindowBindingResponse") {
                 string msgType = e.Message.ArgumentList.GetString(0);
                 string msgJsonStr = e.Message.ArgumentList.GetString(1);
-                Dispatcher.UIThread.Post(() => {
+                Dispatcher.UIThread.Post(async() => {
                     if(!BindingFunctionLookup.TryGetValue(msgType, out var funcType)) {
                         // function name mismatch
                         Debugger.Break();
@@ -285,7 +287,11 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                     MpAvCefNetWebView wv = e.Frame.Browser.Host.Client.GetWebView() as MpAvCefNetWebView;
-                    //while(wv == null) {
+                    if(wv == null) {
+                        // occurs for converter (not subclassed webview)
+                        return;
+                    }
+                    //while (wv == null) {
                     //    await Task.Delay(100);
                     //    wv = e.Frame.Browser.Host.Client.GetWebView() as MpAvCefNetWebView;
                     //}
@@ -308,15 +314,27 @@ namespace MonkeyPaste.Avalonia {
                             wv.UpdateDropEffect(dropEffectChangedNtf.dropEffect);
                             MpConsole.WriteLine($"{ctvm.CopyItemTitle} dropEffects: {dropEffectChangedNtf.dropEffect}");
                             break;
-                        case MpAvEditorBindingFunctionType.NotifySubSelectionEnabledChanged:
-                            var subSelChangedNtf = MpJsonObject.DeserializeBase64Object<MpQuillSubSelectionChangedNotification>(msgJsonStr);
-                            ctvm.IsSubSelectionEnabled = subSelChangedNtf.isSubSelectionEnabled;
-                            break;
                         case MpAvEditorBindingFunctionType.NotifyDragStart:
                             if(wv.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv) {
                                 var dddmsg = MpJsonObject.DeserializeBase64Object<MpQuillDragDropDataObjectMessage>(msgJsonStr);
                                 ctv.UpdateSubSelectDragDataObject(dddmsg);
                             }
+                            break;
+                        case MpAvEditorBindingFunctionType.NotifyReadOnlyChanged:
+                            // TODO coordinate readOnly and sub-selection processing w/ webview extension..
+
+                            if(ctvm.IsContentReadOnly) {
+                                var disableReadOnlyMsg = MpJsonObject.DeserializeBase64Object<MpQuillDisableReadOnlyResponseMessage>(msgJsonStr);
+                                ctvm.IsContentReadOnly = false;
+                            } else {
+                                var enableReadOnlyMsg = MpJsonObject.DeserializeBase64Object<MpQuillEnableReadOnlyResponseMessage>(msgJsonStr);
+                                ctvm.IsContentReadOnly = true;
+                            }
+                            break;
+
+                        case MpAvEditorBindingFunctionType.NotifySubSelectionEnabledChanged:
+                            var subSelChangedNtf = MpJsonObject.DeserializeBase64Object<MpQuillSubSelectionChangedNotification>(msgJsonStr);
+                            ctvm.IsSubSelectionEnabled = subSelChangedNtf.isSubSelectionEnabled;
                             break;
                         case MpAvEditorBindingFunctionType.NotifyException:
                             var exceptionMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonStr);

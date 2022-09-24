@@ -62,13 +62,38 @@ function onDragStart_ntf() {
 
 function onSubSelectionEnabledChanged_ntf(isEnabled) {
 	// output MpQuillSubSelectionChangedNotification
-
+	
 	if (typeof notifySubSelectionEnabledChanged === 'function') {
 		let msg = {
 			isSubSelectionEnabled: isEnabled
 		};
 		let msgStr = toBase64FromJsonObj(msg);
 		notifySubSelectionEnabledChanged(msgStr);
+	}
+}
+
+function onReadOnlyChanged_ntf(isReadOnly) {
+	// output (true) MpQuillEnableReadOnlyResponseMessage
+	// output (false) MpQuillDisableReadOnlyResponseMessage
+
+	if (!IsLoaded) {
+		return;
+	}
+	if (typeof notifyReadOnlyChanged === 'function') {
+		let msg = null;
+		if (isReadOnly) {
+			msg = {
+				itemData: getHtml(),
+				userDeletedTemplateGuids: userDeletedTemplateGuids,
+				updatedAllAvailableTextTemplates: getAvailableTemplateDefinitions()
+			};
+		} else {
+			msg = {
+				editorWidth: getEditorWidth()
+			};
+		}
+		let msgStr = toBase64FromJsonObj(msg);
+		notifyReadOnlyChanged(msgStr);
 	}
 }
 

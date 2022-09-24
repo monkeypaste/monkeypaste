@@ -158,7 +158,7 @@ function applyTemplateToDomNode(node, value) {
             log("Selection disabled so ignoring click on template " + value.templateInstanceGuid);
             return;
 		}
-        focusTemplate(value.templateGuid, false, value.templateInstanceGuid);
+        focusTemplate(value.templateGuid, value.templateInstanceGuid, false);
     });
     node.addEventListener('pointerdown', function (e) {
         let ti_doc_idx = getTemplateDocIdx(value.templateInstanceGuid);

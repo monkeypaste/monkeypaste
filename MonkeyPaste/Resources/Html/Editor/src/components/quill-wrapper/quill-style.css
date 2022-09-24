@@ -12,7 +12,7 @@
     width: 100%;
     position: fixed;
     top: 0em;
-    display: block;
+    /*display: block;*/ /* only set with showEditorToolbar() */
 }
 .ql-toolbar-env-web {
     display: block;

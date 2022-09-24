@@ -71,13 +71,13 @@ function getQuillToolbarContainerElement() {
 
 function hideEditorToolbar() {
 	getQuillToolbarContainerElement().classList.add("hidden");
-
-	//document.getElementById('editor').previousSibling.style.display = 'none';
+	getQuillToolbarContainerElement().style.display = 'none';
 	updateAllSizeAndPositions();
 }
 
 function showEditorToolbar() {
 	getQuillToolbarContainerElement().classList.remove("hidden");
+	getQuillToolbarContainerElement().style.display = 'block';
 	updateAllSizeAndPositions();
 }
 

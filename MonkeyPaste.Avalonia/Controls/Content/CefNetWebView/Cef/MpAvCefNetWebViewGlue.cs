@@ -40,16 +40,33 @@ namespace MonkeyPaste.Avalonia {
         protected override bool StartDragging(CefBrowser browser, CefDragData dragData, CefDragOperationsMask allowedOps, int x, int y) {
             //var result = base.StartDragging(browser, dragData, allowedOps, x, y);
 
+            //var ctv = (browser.Host.Client.GetWebView() as Control).GetVisualAncestor<MpAvClipTileView>();
             Dispatcher.UIThread.Post(async () => {
+                var wv = browser.Host.Client.GetWebView() as MpAvCefNetWebView;
+                var ctvm = wv.BindingContext;
+
+                EventHandler<string> modKeyUpOrDownHandler = (s, e) => {
+                    var modKeyMsg = new MpQuillModifierKeysNotification() {
+                        ctrlKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown,
+                        altKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsAltDown,
+                        shiftKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsShiftDown,
+                        escKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsEscapeDown
+                    };
+                    wv.ExecuteJavascript($"updateModifierKeysFromHost_ext('{modKeyMsg.SerializeJsonObjectToBase64()}')");
+                };
+
+                MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= modKeyUpOrDownHandler;
+                MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= modKeyUpOrDownHandler;
+
                 var avmpdo = new MpAvDataObject();
                 avmpdo.SetData(MpPortableDataFormats.Text, dragData.FragmentText);
                 avmpdo.SetData(MpPortableDataFormats.Html, dragData.FragmentHtml);
                 avmpdo.MapAllPseudoFormats();
-                //Control control = browser.Host.Client.GetWebView();
+
                 Pointer p = new Pointer(Pointer.GetNextFreeId(), PointerType.Mouse, true);
                 var pe = new PointerEventArgs(
                     Control.PointerPressedEvent,
-                    browser.Host.Client.GetWebView() as IInteractive,
+                    wv,
                     p,
                     MpAvMainWindow.Instance,
                     MpAvMainWindow.Instance.Position.ToAvPoint(),
@@ -57,7 +74,10 @@ namespace MonkeyPaste.Avalonia {
                     new PointerPointProperties(RawInputModifiers.LeftMouseButton, PointerUpdateKind.LeftButtonPressed), KeyModifiers.None);
 
                 var result = await DragDrop.DoDragDrop(pe, avmpdo, DragDropEffects.Copy | DragDropEffects.Move);
-                
+
+                MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= modKeyUpOrDownHandler;
+                MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= modKeyUpOrDownHandler;
+
                 MpConsole.WriteLine("Cef Drag Result: " + result);
 
             });

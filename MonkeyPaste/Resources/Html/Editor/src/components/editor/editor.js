@@ -66,8 +66,8 @@ function init_test(doText = true) {
 	//disableReadOnly();
 	//enableFancyTextSelection();
 	//enableSubSelection();
-	enableReadOnly();
-	disableSubSelection();
+	//enableReadOnly();
+	//disableSubSelection();
 }
 
 function init(initMsg) {
@@ -107,6 +107,8 @@ function init(initMsg) {
 		quill.on("selection-change", onEditorSelectionChanged);
 		quill.on("text-change", onEditorTextChanged);
 	}
+	// enusre IsLoaded is false so msg'ing doesn't get clogged up
+	IsLoaded = false;
 
 	showEditor();
 	initContent(initMsg.itemData);
@@ -277,6 +279,7 @@ function onEditorTextChanged(delta, oldDelta, source) {
 
 
 	onContentLengthChanged_ntf();
+	drawOverlay();
 }
 
 function selectAll() {
@@ -322,7 +325,7 @@ function isReadOnly() {
 	return !isEditorToolbarVisible();
 }
 
-function enableReadOnly() {
+function enableReadOnly(fromHost = false) {
 	IsReadOnly = true;
 	setEditorContentEditable(false);	
 
@@ -340,9 +343,14 @@ function enableReadOnly() {
 	updateAllSizeAndPositions();
 	disableSubSelection();
 	drawOverlay();
+
+	if (!fromHost) {
+		onReadOnlyChanged_ntf(IsReadOnly);
+	}
+	log('ReadOnly: ENABLED');
 }
 
-function disableReadOnly() {
+function disableReadOnly(fromHost = false) {
 	IsReadOnly = false;
 
 	showEditorToolbar();
@@ -360,6 +368,12 @@ function disableReadOnly() {
 	//refreshFontFamilyPicker();
 
 	drawOverlay();
+
+	if (!fromHost) {
+		onReadOnlyChanged_ntf(IsReadOnly);
+	}
+
+	log('ReadOnly: DISABLED');
 }
 
 function enableSubSelection(fromHost = false) {
@@ -371,6 +385,13 @@ function enableSubSelection(fromHost = false) {
 	getDragOverlayElement().classList.add('drag-overlay-disabled');
 	getDragOverlayElement().classList.remove('drag-overlay-enabled');
 	getDragOverlayElement().setAttribute('draggable', false);
+
+	if (IsReadOnly) {
+		// disable pointer-events on templates w/ sub-selection
+		getTemplateElements().forEach((te) => te.classList.add('no-select'));
+	} else {
+		getTemplateElements().forEach((te) => te.classList.remove('no-select'));
+	}
 
 	updateAllSizeAndPositions();
 	drawOverlay();
@@ -392,12 +413,14 @@ function disableSubSelection(fromHost = false) {
 	getDragOverlayElement().classList.add('drag-overlay-enabled');
 	getDragOverlayElement().setAttribute('draggable', true);
 
-	if (!fromHost) {
-		onSubSelectionEnabledChanged_ntf(IsSubSelectionEnabled);
-	}
+	//getTemplateElements().forEach((te) => te.classList.add('no-select'));
 
 	updateAllSizeAndPositions();
 	drawOverlay();
+
+	if (!fromHost) {
+		onSubSelectionEnabledChanged_ntf(IsSubSelectionEnabled);
+	}
 	log('sub-selection DISABLED');
 }
 

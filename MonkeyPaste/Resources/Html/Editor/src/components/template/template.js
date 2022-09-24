@@ -3,10 +3,11 @@ const TEMPLATE_VALID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwx
 const MIN_TEMPLATE_DRAG_DIST = 5;
 
 var availableTemplates = null;
+var userDeletedTemplateGuids = [];
 
 var ENCODED_TEMPLATE_OPEN_TOKEN = "{t{";
 var ENCODED_TEMPLATE_CLOSE_TOKEN = "}t}";
-var ENCODED_TEMPLATE_REGEXP;
+var ENCODED_TEMPLATE_REGEXP = new RegExp(ENCODED_TEMPLATE_OPEN_TOKEN + ".*?" + ENCODED_TEMPLATE_CLOSE_TOKEN, "");
 
 var IsMovingTemplate = false;
 
@@ -46,14 +47,13 @@ var templateTypesMenuOptions = [
     }
 ];
 
-var userDeletedTemplateGuids = [];
 
 
 
 //#region Init
 
 function initTemplates(usedTemplates, isPasting) {
-    ENCODED_TEMPLATE_REGEXP = new RegExp(ENCODED_TEMPLATE_OPEN_TOKEN + ".*?" + ENCODED_TEMPLATE_CLOSE_TOKEN, "");
+    //ENCODED_TEMPLATE_REGEXP = new RegExp(ENCODED_TEMPLATE_OPEN_TOKEN + ".*?" + ENCODED_TEMPLATE_CLOSE_TOKEN, "");
     // scan doc for templates even if none provided
 
     if (usedTemplates != null) {
@@ -445,18 +445,59 @@ function getTemplateElementsWithDocIdx() {
     return tewdil;
 }
 
-function getTemplatePlainText(t) {
+function getTemplateAsPlainText(t) {
     let template_text = '';
     if (IsPastingTemplate) {
         let t_elm = getTemplateElements(null, t['templateInstanceGuid']);
         template_text = t_elm.innerText;
     } else {
-        template_text = '{t{' + t['templateGuid'] + ',' + t['templateInstanceGuid'] + '}t}';
+        template_text = ENCODED_TEMPLATE_OPEN_TOKEN + t['templateGuid'] + ',' + t['templateInstanceGuid'] + ENCODED_TEMPLATE_CLOSE_TOKEN;
     }
     return template_text;
 }
 
-function getRangeTextWithTemplateText(range) {
+function getTemplateDefAndRangePairsFromPlainText(plainText) {
+    let template_refs = [];
+
+    while (result = ENCODED_TEMPLATE_REGEXP.exec(plainText)) {
+        let template_ref = {};
+        if (result[0].contains(',')) {
+            // FORMAT: [tguid,tiguid]
+            template_ref.tguid = result[0].split(',')[0];
+            template_ref.tiguid = result[0].split(',')[1];
+
+            // set range of encoded template and include open/closers
+            let template_ref_inner_start_idx = plainText.indexOf(result[0]);
+            template_ref.range = {
+                index: template_ref_inner_start_idx - ENCODED_TEMPLATE_OPEN_TOKEN.length,
+                length: ENCODED_TEMPLATE_OPEN_TOKEN.length + result[0].length + ENCODED_TEMPLATE_CLOSE_TOKEN
+			}
+            template_refs.push(template_ref);
+        } 
+    }
+    if (template_refs.length == 0) {
+        return [];
+    }
+
+    let template_def_and_range_pairs = [];
+    let template_defs_all = getAvailableTemplateDefinitions();
+    for (var i = 0; i < template_refs.length; i++) {
+        let template_ref = template_refs[i];
+        let template_def = template_defs_all.find(x => x.templateGuid == template_ref.tguid);
+        if (!template_def) {
+            log('Error! template ref tguid: ' + template_ref[0] + ' tiguid: ' + template_ref[1] + ' not found in available defs, ignoring');
+            continue;
+        }
+        let template_def_and_range_pair = {
+            template: template_def,
+            range: template_ref.range
+        };
+        template_def_and_range_pairs.push(template_def_and_range_pair);
+    }
+    return template_def_and_range_pairs;
+}
+
+function getTemplatePlainTextForDocRange(range) {
     let text = quill.getText(range.index, range.length);
     let out_text = '';
     for (var i = 0; i < range.length; i++) {
@@ -490,12 +531,13 @@ function getRangeTextWithTemplateText(range) {
                     i++;
                 }
             }
-            out_text += getTemplatePlainText(t_at_next_doc_idx);
+            out_text += getTemplateAsPlainText(t_at_next_doc_idx);
         }
         out_text += doc_idx_char;
     }
     return out_text;
 }
+
 function getUsedTemplateInstances() {
     //var domTemplates = document.querySelectorAll('.ql-template-embed-blot');
     var domTemplates = document.querySelectorAll('.' + TemplateEmbedClass);
@@ -521,73 +563,14 @@ function getAllTemplateDocIdxs() {
     }
     return tDocIdxs;
 }
-function createTemplate(templateObjOrId,newTemplateType) {
-    var templateObj;
-    if (templateObjOrId != null && typeof templateObjOrId === 'string') {
-        templateObj = getTemplateDefByGuid(templateObjOrId);
-    } else {
-        templateObj = templateObjOrId;
-    }
 
-    var range = quill.getSelection(true);
 
-    var isNew = templateObj == null;
-    var newTemplateObj = templateObj;
-
-    if (isNew) {
-        //grab the selection head's html to set formatting of template div
-        let selectionInnerHtml = '';
-        let shtmlStr = getHtml({index:range.index, length: 1});
-        if (shtmlStr != null && shtmlStr.length > 0) {
-            let shtml = domParser.parseFromString(shtmlStr, 'text/html');
-            let pc = shtml.getElementsByTagName('p');
-            if (pc != null && pc.length > 0) {
-                let p = pc[0];
-                //clear text from selection
-                selectionInnerHtml = p.innerHTML;
-            }
-        }
-
-        let newTemplateName = '';
-        if (range.length == 0) {
-            newTemplateName = getLowestAnonTemplateName();
-        } else {
-            newTemplateName = getText(range).trim();
-        }
-        if (selectionInnerHtml == '<br>') {
-            //this occurs when selection.length == 0
-            selectionInnerHtml = newTemplateName;
-        }
-        let formatInfo = quill.getFormat(range.index, 1);
-        newTemplateObj = {
-            templateGuid: generateGuid(),
-            templateColor: getRandomColor(),
-            templateName: newTemplateName,
-            templateType: newTemplateType,
-            templateData: '',
-            templateDeltaFormat: JSON.stringify(formatInfo),
-            templateHtmlFormat: selectionInnerHtml
-        };
-    }
-
-    insertTemplate(range, newTemplateObj,isNew);
-
-    if (isNew) {
-        showEditTemplateToolbar();
-    }
-    
-
-    hideTemplateToolbarContextMenu();
-
-    return newTemplateObj;
-}
-
-function insertTemplate(range, t, isNew) {
-    quill.deleteText(range.index, range.length, 'silent');
-    quill.insertEmbed(range.index, "template", t, 'silent');
+function insertTemplate(range, t, fromDropDown, source = 'silent') {
+    quill.deleteText(range.index, range.length, source);
+    quill.insertEmbed(range.index, "template", t, source);
     //quill.insertText(range.index, ' ', 'templatePad_pre',true, 'silent');
     //quill.insertText(range.index+2, ' ', 'templatePad_post', true, 'silent');
-    focusTemplate(t.templateGuid, true, t.templateInstanceGuid);
+    //focusTemplate(t.templateGuid, t.templateInstanceGuid, fromDropDown);
 }
 
 function moveTemplate(tiguid, nidx, isCopy) {
@@ -599,7 +582,7 @@ function moveTemplate(tiguid, nidx, isCopy) {
 
     if (isCopy) {
         t.templateInstanceGuid = generateGuid();
-        t = createTemplate(t);
+        t = createTemplateFromDropDown(t);
     } else {
         if (tidx < nidx) {
             //removing template decreases doc size by 3 characters
@@ -612,7 +595,7 @@ function moveTemplate(tiguid, nidx, isCopy) {
     }
 
     IsMovingTemplate = false;
-    focusTemplate(t, true);
+    focusTemplate(t, null, true);
 }
 
 
@@ -713,7 +696,7 @@ function getLowestAnonTemplateName(anonPrefix = 'Template #') {
     return anonPrefix + (parseInt(maxNum) + 1);
 }
 
-function focusTemplate(ftguid, fromDropDown, ftiguid) {
+function focusTemplate(ftguid, ftiguid, fromDropDown) {
     if (ftguid == null) {
         return;
     }
@@ -964,32 +947,60 @@ function isDocIdxTemplatePad_post(docIdx) {
     return false;
 }
 
-function updateTemplatesAfterTextChanged(delta, oldDelta, source) {
-  //  return;
-  //  if (!IsLoaded) {
-  //      return;
-  //  }
-    let cur_template_elms = getTemplateElements();
-    let tguids_to_content_fit = [];
-    let idx = 0;
-    for (var i = 0; i < delta.ops.length; i++) {
-        let op = delta.ops[i];
-
-        if (op.retain) {
-            idx += op.retain;
+function decodeInsertedTemplates(insertIdx, plainText, source = 'silent') {
+    // parse all text for encoded templates
+    // parse inserted text for [tguid,tiguid] and replace w/ template blot and mark for update
+    for (var i = 0; i < plainText.length; i++) {
+        let cur_pt = substringByLength(plainText, i);
+        if (cur_pt.startsWith(ENCODED_TEMPLATE_OPEN_TOKEN)) {
+            let t_end_idx = cur_pt.indexOf(ENCODED_TEMPLATE_CLOSE_TOKEN);
+            let encoded_template_str = substringByLength(cur_pt, ENCODED_TEMPLATE_OPEN_TOKEN.length, t_end_idx);
+            let template_def = getTemplateDefByGuid(encoded_template_str.split(',')[0]);
+            insertTemplate({ index: insertIdx, length: 0 }, template_def, false, source);
+            i += t_end_idx + ENCODED_TEMPLATE_CLOSE_TOKEN.length - 1;
+        } else {
+            insertText(insertIdx, cur_pt[0], source, false);
         }
-        if (op.insert) {
-            idx += op.insert.length;
-        }
-        if (op.attributes) {
-            if (op.attributes.templateInstanceGuid) {
-                tguids_to_content_fit.push(op.attributes.templateInstanceGuid);
-			}
-		}
+        insertIdx++;
     }
+    if (source == 'silent') {
+        updateTemplatesAfterTextChanged();
+	}
+}
+
+function updateTemplatesAfterTextChanged(delta, oldDelta, source) {
+    let cur_template_elms = getTemplateElements();
+    let tiguids_to_update = [];
+        
+
+    if (delta && delta.ops) {
+        // called from text change
+        let idx = 0;
+        for (var j = 0; j < delta.ops.length; j++) {
+            let op = delta.ops[j];
+
+            //if (op.retain) {
+            //    idx += op.retain;
+            //}
+
+            //if (op.insert) {
+            //    idx += op.insert.length;
+            //}
+
+            if (op.attributes && op.attributes.templateInstanceGuid) {
+                tiguids_to_update.push(op.attributes.templateInstanceGuid);
+            }
+        }
+    } else {
+        // called from somewhere (currently decodeInsertedTemplate)
+        tiguids_to_update = cur_template_elms.map((telm) => { return telm.getAttribute('templateInstanceGuid'); });
+	}
+    
+
+    // HACK after text change scan all templates and pad any at head/tail of block with a space to avoid text nav issues
     let max_idx = getDocLength() - 1;
-    for (var i = 0; i < cur_template_elms.length; i++) {
-        let t_elm = cur_template_elms[i];
+    for (var j = 0; j < cur_template_elms.length; j++) {
+        let t_elm = cur_template_elms[j];
         let t_doc_idx = getTemplateDocIdx(t_elm.getAttribute('templateInstanceGuid'));
         let next_char = getText({ index: t_doc_idx + 1, length: 1 }, false);
         if (next_char == '\n' || t_doc_idx == max_idx) {
@@ -1005,93 +1016,19 @@ function updateTemplatesAfterTextChanged(delta, oldDelta, source) {
         } else {
             t_elm.style.marginLeft = '0px';
 		}
-	}
-    //cur_template_elms = getTemplateElements();
-  //  for (var i = 0; i < cur_template_elms.length; i++) {
-  //      let ti = cur_template_elms[i];
-  //      let needs_pre = !isTemplateElementHavePad_pre(ti);
-  //      let needs_post = !isTemplateElementHavePad_post(ti);
-  //      if (needs_pre || needs_post) {
-  //          let insert_idx = getTemplateDocIdx(ti.getAttribute('templateInstanceGuid'));
-  //          if (needs_pre) {
-  //              quill.insertText(insert_idx, ' ', 'templatePad_pre', true, 'silent');
-  //              insert_idx += 2;
-  //          } else {
-  //              insert_idx += 1;
-  //          }
-  //          if (needs_post) {
-  //              quill.insertText(insert_idx, ' ', 'templatePad_post', true, 'silent');
-		//	}
-		//}
-        
-       
-  //      //padTemplate(ti.getAttribute('templateInstanceGuid'));
-  //  }
-  //  // clean up 
-  //  let pre_pad_elms = document.querySelectorAll('[templatepad_pre]');
-  //  for (var i = 0; i < pre_pad_elms.length; i++) {
-  //      let pre_pad_elm = pre_pad_elms[i];
-  //      if (pre_pad_elm.nextSibling && pre_pad_elm.nextSibling.nodeType != 3 && pre_pad_elm.nextSibling.hasAttribute('templateGuid')) {
-  //          // if next sibling is actually a template
-  //          if (pre_pad_elm.innerText == ' ') {
-  //              continue;
-  //          }
-  //          // this isn't right, space should be on either end don't know which but only 1 should be removed
-  //          if (!pre_pad_elm.previousSibling) {
-  //              let new_span = document.createTextNode('');
-  //              IgnoreNextTextChange = true;
-  //              pre_pad_elm.parentNode.insertBefore(new_span, pre_pad_elm.parentNode.firstChild);
-  //          }
-  //          if (pre_pad_elm.previousSibling.nodeType == 3) {
-  //              IgnoreNextTextChange = true;
-  //              pre_pad_elm.previousSibling.nodeValue = (pre_pad_elm.innerText.trim()) + pre_pad_elm.previousSibling.nodeValue;
-  //          } else {
-  //              IgnoreNextTextChange = true;
-  //              post_pad_elm.previousSibling.innerText = (pre_pad_elm.innerText.trim()) + pre_pad_elm.previousSibling.innerText;
-  //          }
-  //          IgnoreNextTextChange = true;
-  //          pre_pad_elm.innerText = ' ';
-  //      } else {
-  //          // get rid of baddies
-  //          pre_pad_elm.removeAttribute('templatepad_pre');
-		//}
-  //  }
+    }
 
-  //  let post_pad_elms = document.querySelectorAll('[templatepad_post]');
-  //  for (var i = 0; i < post_pad_elms.length; i++) {
-  //      let post_pad_elm = post_pad_elms[i];
-  //      if (post_pad_elm.previousSibling && post_pad_elm.previousSibling.nodeType != 3 && post_pad_elm.previousSibling.hasAttribute('templateGuid')) {
-  //          // if previous sibling is actually a template
-  //          if (post_pad_elm.innerText == ' ') {
-  //              continue;
-  //          }
-  //          // this isn't right, space should be on either end don't know which but only 1 should be removed
-  //          if (!post_pad_elm.nextSibling) {
-  //              let new_span = document.createTextNode('');
-  //              IgnoreNextTextChange = true;
-  //              post_pad_elm.parentNode.appendChild(new_span);
-		//	}
-  //          if (post_pad_elm.nextSibling.nodeType == 3) {
-  //              IgnoreNextTextChange = true;
-  //              post_pad_elm.nextSibling.nodeValue = (post_pad_elm.innerText.trim()) + post_pad_elm.nextSibling.nodeValue;
-  //          } else {
-  //              IgnoreNextTextChange = true;
-  //              post_pad_elm.nextSibling.innerText = (post_pad_elm.innerText.trim()) + post_pad_elm.nextSibling.innerText;
-  //          }
-  //          IgnoreNextTextChange = true;
-  //          post_pad_elm.innerText = ' ';
-  //      }
-  //  }
-  //  IgnoreNextTextChange = false;
-    for (var i = 0; i < tguids_to_content_fit.length; i++) {        
-        let t = getTemplateDefByInstanceGuid(tguids_to_content_fit[i]);
+    // HACK new templates (no other refs) added to list items (consistent example) 
+    // are real tiny, applying fit content here(can't do in creation) fixes
+    for (var j = 0; j < tiguids_to_update.length; j++) {        
+        let t = getTemplateDefByInstanceGuid(tiguids_to_update[j]);
         let telm = getTemplateInstanceElement(t.templateInstanceGuid);
         applyTemplateToDomNode(telm, t);
 
         telm.style.width = 'fit-content';
         telm.style.height = 'fit-content';
         telm.innerText = t.templateName;
-	}
+    }
 }
 
 function updateTemplatesAfterSelectionChange(sel_range, oldRange) {

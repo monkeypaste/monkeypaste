@@ -236,7 +236,7 @@ function getDecodedTemplateGuids_ext() {
 }
 
 function enableReadOnly_ext() {
-	enableReadOnly();
+	enableReadOnly(true);
 
 	// output 'MpQuillResponseMessage'  updated master collection of templates
 	let qrmObj = {
@@ -254,7 +254,7 @@ function disableReadOnly_ext(disableReadOnlyReqStrOrObj) {
 
 	let disableReadOnlyMsg = toJsonObjFromBase64Str(disableReadOnlyReqStrOrObj);
 	availableTemplates = disableReadOnlyMsg.allAvailableTextTemplates;
-	disableReadOnly();
+	disableReadOnly(true);
 
 	// output MpQuillDisableReadOnlyResponseMessage
 

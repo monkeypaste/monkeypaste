@@ -20,7 +20,7 @@
     user-select: none;
 }
 
-    .ql-template-embed-blot:hover:not(.ql-template-embed-blot-focus) {
+    .ql-template-embed-blot:hover:not(.ql-template-embed-blot-focus):not(.no-select) {
         padding: 1.5px;
         transition: .2s;
         cursor: pointer;

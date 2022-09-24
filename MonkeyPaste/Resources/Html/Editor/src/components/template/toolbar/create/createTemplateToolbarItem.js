@@ -20,7 +20,7 @@ function onTemplateToolbarButtonClick(e) {
     //if (tl.length > 0) {
     //    showTemplateToolbarContextMenu(templateButton);
     //} else {
-    //    createTemplate();
+    //    createTemplateFromDropDown();
     //}
 
     event.stopPropagation(e);
@@ -49,7 +49,7 @@ function showTemplateToolbarContextMenu(tb) {
                 iconBgColor: ttd.templateColor,
                 label: ttd.templateName,
                 action: function (option, contextMenuIndex, optionIndex) {
-                    createTemplate(ttd);
+                    createTemplateFromDropDown(ttd);
                 },
             }
         });
@@ -63,7 +63,7 @@ function showTemplateToolbarContextMenu(tb) {
                 iconFgColor: 'lime',
                 label: 'New...',
                 action: function (option, contextMenuIndex, optionIndex) {
-                    createTemplate(null, tmi.label.toLowerCase());
+                    createTemplateFromDropDown(null, tmi.label.toLowerCase());
                 },
             }
         )
@@ -105,4 +105,59 @@ function enableCanCreateTemplateToolbarItem() {
 function disableCanCreateTemplateToolbarItem() {
     CanUserAddTemplate = false;
     document.getElementById('templateToolbarButton').style.color = 'lightgray';
+}
+
+function createTemplateFromDropDown(templateObjOrId, newTemplateType) {
+    var templateObj;
+    if (templateObjOrId != null && typeof templateObjOrId === 'string') {
+        templateObj = getTemplateDefByGuid(templateObjOrId);
+    } else {
+        templateObj = templateObjOrId;
+    }
+
+    var range = quill.getSelection(true);
+
+    var isNew = templateObj == null;
+    var newTemplateObj = templateObj;
+
+    if (isNew) {
+        //grab the selection head's html to set formatting of template div
+        let selectionInnerHtml = '';
+        let shtmlStr = getHtml({ index: range.index, length: 1 });
+        if (shtmlStr != null && shtmlStr.length > 0) {
+            let shtml = domParser.parseFromString(shtmlStr, 'text/html');
+            let pc = shtml.getElementsByTagName('p');
+            if (pc != null && pc.length > 0) {
+                let p = pc[0];
+                //clear text from selection
+                selectionInnerHtml = p.innerHTML;
+            }
+        }
+
+        let newTemplateName = '';
+        if (range.length == 0) {
+            newTemplateName = getLowestAnonTemplateName();
+        } else {
+            newTemplateName = getText(range).trim();
+        }
+        if (selectionInnerHtml == '<br>') {
+            //this occurs when selection.length == 0
+            selectionInnerHtml = newTemplateName;
+        }
+        let formatInfo = quill.getFormat(range.index, 1);
+        newTemplateObj = {
+            templateGuid: generateGuid(),
+            templateColor: getRandomColor(),
+            templateName: newTemplateName,
+            templateType: newTemplateType,
+            templateData: '',
+            templateDeltaFormat: JSON.stringify(formatInfo),
+            templateHtmlFormat: selectionInnerHtml
+        };
+    }
+
+    hideTemplateToolbarContextMenu();
+    insertTemplate(range, newTemplateObj);
+    focusTemplate(newTemplateObj.templateGuid, null, true);
+    return newTemplateObj;
 }

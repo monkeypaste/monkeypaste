@@ -142,6 +142,9 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5', line_style = [5,
 
     // NOTE to avoid conflicts between each line as pre/post drop only use pre for first
     // line of content then only check post for others
+    if (!WindowMouseLoc || WindowMouseLoc.y === undefined) {
+        debugger;
+	}
     IsPreBlockDrop = Math.abs(WindowMouseLoc.y - doc_start_rect.top) < block_threshold || WindowMouseLoc.y < doc_start_rect.top;
     IsPostBlockDrop = Math.abs(WindowMouseLoc.y - caret_line.y2) < block_threshold || WindowMouseLoc.y > caret_line.y2;
   

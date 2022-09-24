@@ -111,14 +111,10 @@ namespace MonkeyPaste.Avalonia {
                 GetIsContentReadOnly(wv) &&
                 wv.IsEditorInitialized) {
                 if (isSubSelectionEnabled) {
-                    wv.ExecuteJavascript("enableSubSelection_ext()");
+                    // editor handles enabling by double clicking 
+                    //wv.ExecuteJavascript("enableSubSelection_ext()");
                 } else {
                     wv.ExecuteJavascript("disableSubSelection_ext()");
-                }
-                if(wv.Parent is Control control) {
-                    control.Cursor = isSubSelectionEnabled ?
-                        new Cursor(StandardCursorType.Ibeam) :
-                        new Cursor(StandardCursorType.Arrow);
                 }
             }
         }
