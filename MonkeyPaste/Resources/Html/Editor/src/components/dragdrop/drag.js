@@ -47,13 +47,15 @@ function initDrag() {
         let deltaJsonStr = getDeltaJson(sel, true);
         e.dataTransfer.setData('application/json', deltaJsonStr);
 
+        onDragStartOrEnd_ntf(true);
+
         return true;
     }
 
     function handleDragEnd(e) {
         log('drag end');
 
-        if (e.dataTransfer.dropEffect == 'move') {
+        if (e && e.dataTransfer.dropEffect == 'move') {
             // 'move' should imply it was an internal drop
             if (DropIdx >= 0) {
 
@@ -65,28 +67,10 @@ function initDrag() {
                 }
 			}
             setTextInRange(DragRange, '','user');
-		}
-        if (e.target.id == 'dragOverlay') {
-            let desel = { index: 0, length: 0 };
-            if (SelIdxBeforeDrag >= 0) {
-                desel.index = SelIdxBeforeDrag;
-            }            
-            setEditorSelection(desel);
         }
 
-        SelIdxBeforeDrag = -1;
-        DocLengthBeforeDrag = -1;
-        DragRange = null;
-        IsDragging = false;
-        IsCtrlDown = false;
-        IsAltDown = false
-        IsShiftDown = false;
+        resetDragDrop(false);
 
-        // this ensures dnd state is all reset
-        IsDropping = false;
-        DropIdx = -1;
-
-        drawOverlay();
     }
 
     let items = [getEditorContainerElement(), getDragOverlayElement()];

@@ -24,6 +24,31 @@
             <Setter Property="Height"
                     Value="{Binding BoundHeight}" />
         </Style>
+        <!--<Style Selector="ListBoxItem"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Width"
+                                      Duration="0:0:1" />
+                    <DoubleTransition Property="Height"
+                                      Duration="0:0:1" />
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="ListBoxItem.Editable"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="Width"
+                    Value="{Binding EditableWidth}" />
+            <Setter Property="Height"
+                    Value="{Binding EditableHeight}" />
+        </Style>
+        <Style Selector="ListBoxItem:not(.Editable)"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="Width"
+                    Value="{Binding ReadOnlyWidth}" />
+            <Setter Property="Height"
+                    Value="{Binding ReadOnlyHeight}" />
+        </Style>-->
         <!--<Style Selector="local|MpAvPinTrayView">
             <Setter Property="Transitions">
                 <Transitions>

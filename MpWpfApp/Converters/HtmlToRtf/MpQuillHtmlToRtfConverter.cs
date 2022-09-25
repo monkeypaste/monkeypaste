@@ -51,8 +51,8 @@ namespace MpWpfApp {
 
             _browser.FrameLoadEnd += (sender, args) => {
                 if (args.Frame.IsMain) {
-                    var initCoverterMsg = new MpQuillLoadRequestMessage() { isEditorPlainHtmlConverter = true };
-                    _browser.EvaluateScriptAsync($"init_ext('{initCoverterMsg.SerializeJsonObjectToBase64()}')");
+                    var initCoverterMsg = new MpQuillInitMainRequestMessage() { isPlainHtmlConverter = true };
+                    _browser.EvaluateScriptAsync($"initMain_ext('{initCoverterMsg.SerializeJsonObjectToBase64()}')");
 
                     MpHelpers.RunOnMainThread(async () => {
                         while (true) {

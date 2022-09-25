@@ -13,6 +13,8 @@ var IsMovingTemplate = false;
 
 var IsTemplateAtInsert = false;
 
+var HasTemplates = false;
+
 var IsAnyTemplateBgTemporary = false;
 var DragAnchorDocIdxWhenTemplateWithinSelection = -1;
 
@@ -48,67 +50,17 @@ var templateTypesMenuOptions = [
 ];
 
 
-
-
-//#region Init
-
-function initTemplates(usedTemplates, isPasting) {
-    //ENCODED_TEMPLATE_REGEXP = new RegExp(ENCODED_TEMPLATE_OPEN_TOKEN + ".*?" + ENCODED_TEMPLATE_CLOSE_TOKEN, "");
-    // scan doc for templates even if none provided
-
-    if (usedTemplates != null) {
-        decodeTemplates(usedTemplates);
-    }
+function loadTemplates() {
     let telml = getTemplateElements();
     for (var i = 0; i < telml.length; i++) {
         let t_elm = telml[i];
         let t_blot = getTemplateFromDomNode(t_elm);
         applyTemplateToDomNode(t_elm, t_blot);
-        //t_blot.domNode = t_elm;
-        //TemplateEmbedBlot.create(t_blot);
     }
 
-    let resizers = Array.from(document.getElementsByClassName('resizable-textarea'));
-    for (var i = 0; i < resizers.length; i++) {
-        let rta = resizers[i];
-
-        new ResizeObserver(() => {
-            updateEditTemplateToolbarPosition();
-		}).observe(rta);
-	}
-
-    if (!IsLoaded) {
-	}
-    
-
-    document.getElementById('templateNameTextInput').addEventListener('focus',onTemplateNameTextAreaGotFocus);
-    document.getElementById('templateNameTextInput').addEventListener('blur',onTemplateNameTextAreaLostFocus);
-    document.getElementById('templateNameTextInput').addEventListener('keydown',onTemplateNameTextArea_keydown);
-    document.getElementById('templateNameTextInput').addEventListener('keyup',onTemplateNameTextArea_keyup);
-
-    document.getElementById('templateDetailTextInput').addEventListener('focus',onTemplateDetailTextAreaGotFocus);
-    document.getElementById('templateDetailTextInput').addEventListener('blur',onTemplateDetailTextAreaLostFocus);
-
-
-    if (isPasting) {
-        // this SHOULD only happen when there are templates 
-        // since browser extension will just return data...
-        if (usedTemplates != null && usedTemplates.length > 0) {
-            // TODO need set templateText by template type/data here
-            showPasteTemplateToolbar();
-        } else {
-        }
-    }
+    HasTemplates = telml.length > 0;
 }
 
-//#endregion
-
-//#region Convert To/From Blot/DomNode
-
-
-
-
-//#endregion
 function setTemplateProperty(tguid, propertyName, propertyValue) {
     let til = getUsedTemplateInstances();
 	for (var i = 0; i < til.length; i++) {
@@ -454,47 +406,6 @@ function getTemplateAsPlainText(t) {
         template_text = ENCODED_TEMPLATE_OPEN_TOKEN + t['templateGuid'] + ',' + t['templateInstanceGuid'] + ENCODED_TEMPLATE_CLOSE_TOKEN;
     }
     return template_text;
-}
-
-function getTemplateDefAndRangePairsFromPlainText(plainText) {
-    let template_refs = [];
-
-    while (result = ENCODED_TEMPLATE_REGEXP.exec(plainText)) {
-        let template_ref = {};
-        if (result[0].contains(',')) {
-            // FORMAT: [tguid,tiguid]
-            template_ref.tguid = result[0].split(',')[0];
-            template_ref.tiguid = result[0].split(',')[1];
-
-            // set range of encoded template and include open/closers
-            let template_ref_inner_start_idx = plainText.indexOf(result[0]);
-            template_ref.range = {
-                index: template_ref_inner_start_idx - ENCODED_TEMPLATE_OPEN_TOKEN.length,
-                length: ENCODED_TEMPLATE_OPEN_TOKEN.length + result[0].length + ENCODED_TEMPLATE_CLOSE_TOKEN
-			}
-            template_refs.push(template_ref);
-        } 
-    }
-    if (template_refs.length == 0) {
-        return [];
-    }
-
-    let template_def_and_range_pairs = [];
-    let template_defs_all = getAvailableTemplateDefinitions();
-    for (var i = 0; i < template_refs.length; i++) {
-        let template_ref = template_refs[i];
-        let template_def = template_defs_all.find(x => x.templateGuid == template_ref.tguid);
-        if (!template_def) {
-            log('Error! template ref tguid: ' + template_ref[0] + ' tiguid: ' + template_ref[1] + ' not found in available defs, ignoring');
-            continue;
-        }
-        let template_def_and_range_pair = {
-            template: template_def,
-            range: template_ref.range
-        };
-        template_def_and_range_pairs.push(template_def_and_range_pair);
-    }
-    return template_def_and_range_pairs;
 }
 
 function getTemplatePlainTextForDocRange(range) {
@@ -1004,14 +915,14 @@ function updateTemplatesAfterTextChanged(delta, oldDelta, source) {
         let t_doc_idx = getTemplateDocIdx(t_elm.getAttribute('templateInstanceGuid'));
         let next_char = getText({ index: t_doc_idx + 1, length: 1 }, false);
         if (next_char == '\n' || t_doc_idx == max_idx) {
-            insertText(t_doc_idx + 1, ' ', 'silent');
+            insertText(t_doc_idx + 1, ' ', 'api');
             t_elm.style.marginRight = '-3px'
         } else {
             t_elm.style.marginRight = '0px';
 		}
         let prev_char = getText({ index: t_doc_idx - 1, length: 1 }, false);
         if (prev_char == '\n' || t_doc_idx == 0) {
-            insertText(t_doc_idx, ' ', 'silent');
+            insertText(t_doc_idx, ' ', 'api');
             t_elm.style.marginLeft = '0px';
         } else {
             t_elm.style.marginLeft = '0px';

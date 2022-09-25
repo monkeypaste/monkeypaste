@@ -23,8 +23,9 @@ namespace MonkeyPaste.Avalonia {
         NotifyContentDraggableChanged,
         NotifyDropEffectChanged,
         NotifyException,
-        NotifyDragStart,
-        NotifyReadOnlyChanged
+        NotifyDragStartOrEnd,
+        NotifyReadOnlyChanged,
+        NotifyDomLoaded
     }
     public class MpAvCefNetApplication : CefNetApplication {
         #region Private Variables
@@ -58,8 +59,9 @@ namespace MonkeyPaste.Avalonia {
             "notifyContentDraggableChanged",
             "notifyDropEffectChanged",
             "notifyException",
-            "notifyDragStart",
-            "notifyReadOnlyChanged"
+            "notifyDragStartOrEnd",
+            "notifyReadOnlyChanged",
+            "notifyDomLoaded"
         };
 
         public static Dictionary<string, MpAvEditorBindingFunctionType> BindingFunctionLookup {
@@ -314,11 +316,13 @@ namespace MonkeyPaste.Avalonia {
                             wv.UpdateDropEffect(dropEffectChangedNtf.dropEffect);
                             MpConsole.WriteLine($"{ctvm.CopyItemTitle} dropEffects: {dropEffectChangedNtf.dropEffect}");
                             break;
-                        case MpAvEditorBindingFunctionType.NotifyDragStart:
-                            if(wv.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv) {
-                                var dddmsg = MpJsonObject.DeserializeBase64Object<MpQuillDragDropDataObjectMessage>(msgJsonStr);
-                                ctv.UpdateSubSelectDragDataObject(dddmsg);
-                            }
+                        case MpAvEditorBindingFunctionType.NotifyDragStartOrEnd:
+                            //if(wv.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv) {
+                            //    var dddmsg = MpJsonObject.DeserializeBase64Object<MpQuillDragDropDataObjectMessage>(msgJsonStr);
+                            //    ctv.UpdateSubSelectDragDataObject(dddmsg);
+                            //}
+                            var dragStartOrEndMsg = MpJsonObject.DeserializeBase64Object<MpQuillDragStartOrEndNotification>(msgJsonStr);
+                            wv.WasDragStartedFromEditor = dragStartOrEndMsg.isStart;
                             break;
                         case MpAvEditorBindingFunctionType.NotifyReadOnlyChanged:
                             // TODO coordinate readOnly and sub-selection processing w/ webview extension..
@@ -335,6 +339,9 @@ namespace MonkeyPaste.Avalonia {
                         case MpAvEditorBindingFunctionType.NotifySubSelectionEnabledChanged:
                             var subSelChangedNtf = MpJsonObject.DeserializeBase64Object<MpQuillSubSelectionChangedNotification>(msgJsonStr);
                             ctvm.IsSubSelectionEnabled = subSelChangedNtf.isSubSelectionEnabled;
+                            break;
+                        case MpAvEditorBindingFunctionType.NotifyDomLoaded:
+                            wv.IsDomLoaded = true;
                             break;
                         case MpAvEditorBindingFunctionType.NotifyException:
                             var exceptionMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonStr);
@@ -384,7 +391,14 @@ namespace MonkeyPaste.Avalonia {
 
                 CefProcessMessage browserProcMsg = new CefProcessMessage("WindowBindingResponse");
                 browserProcMsg.ArgumentList.SetString(0, name);
-                browserProcMsg.ArgumentList.SetString(1, arguments[0].GetStringValue());
+                if(arguments != null) {
+                    for (int i = 0; i < arguments.Length; i++) {
+                        browserProcMsg.ArgumentList.SetString(i+1, arguments[i].GetStringValue());
+                    }
+                }else {
+                    browserProcMsg.ArgumentList.SetString(1, "<NO PARAM>");
+                }
+                
                 CefV8Context.GetCurrentContext().Frame.SendProcessMessage(CefProcessId.Browser, browserProcMsg);
 
                 exception = null;

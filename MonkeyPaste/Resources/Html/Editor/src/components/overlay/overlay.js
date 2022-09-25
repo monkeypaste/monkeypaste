@@ -148,7 +148,7 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5', line_style = [5,
     IsPreBlockDrop = Math.abs(WindowMouseLoc.y - doc_start_rect.top) < block_threshold || WindowMouseLoc.y < doc_start_rect.top;
     IsPostBlockDrop = Math.abs(WindowMouseLoc.y - caret_line.y2) < block_threshold || WindowMouseLoc.y > caret_line.y2;
   
-    if (IsSplitDrop && CopyItemType != 'FileList') {
+    if (IsSplitDrop && ContentItemType != 'FileList') {
         IsPreBlockDrop = false;
         IsPostBlockDrop = false;
     }
@@ -253,27 +253,6 @@ function drawTextSelection(ctx) {
             drawRect(ctx, sel_rect, sel_bg_color,'transparent', 0, 75);
         });
     }
-
- //   if (IsSubSelectionEnabled && !IsDropping && sel && sel.length == 0 && isReadOnly()) {
- //       // caret is hidden when not editable, only draw caret if sel not range or dropping
- //       // (drop preview draws if non-block dropping )
- // //      if (isEditorToolbarVisible()) {
- // //          IsCaretBlinkOn = false;
- // //          CaretBlinkOffColor = null;
- // //          clearInterval(caretBlinkTick);
-	//	//} else if (!IsCaretBlinkOn) {
- // //          IsCaretBlinkOn = true;
- // //          CaretBlinkOffColor = null;
- // //          setInterval(caretBlinkTick, 500);
- // //      } 
- //       let caret_display_color = CaretBlinkOffColor ? CaretBlinkOffColor : caret_color;
- //       let caret_line = getCaretLine(sel.index);
- //       drawLine(ctx, caret_line, caret_display_color);
- //   } else {
- //       IsCaretBlinkOn = false;
- //       CaretBlinkOffColor = null;
- //       clearInterval(caretBlinkTick);
-	//}
 }
 
 function caretBlinkTick() {

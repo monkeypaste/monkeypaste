@@ -2,6 +2,25 @@
 var IsTemplateNameTextAreaFocused = false;
 var IsTemplateDetailTextAreaFocused = false;
 
+function initEditTemplateToolbar() {
+    let resizers = Array.from(document.getElementsByClassName('resizable-textarea'));
+    for (var i = 0; i < resizers.length; i++) {
+        let rta = resizers[i];
+
+        new ResizeObserver(() => {
+            updateEditTemplateToolbarPosition();
+        }).observe(rta);
+    }
+
+    document.getElementById('templateNameTextInput').addEventListener('focus', onTemplateNameTextAreaGotFocus);
+    document.getElementById('templateNameTextInput').addEventListener('blur', onTemplateNameTextAreaLostFocus);
+    document.getElementById('templateNameTextInput').addEventListener('keydown', onTemplateNameTextArea_keydown);
+    document.getElementById('templateNameTextInput').addEventListener('keyup', onTemplateNameTextArea_keyup);
+
+    document.getElementById('templateDetailTextInput').addEventListener('focus', onTemplateDetailTextAreaGotFocus);
+    document.getElementById('templateDetailTextInput').addEventListener('blur', onTemplateDetailTextAreaLostFocus);
+}
+
 function showEditTemplateToolbar() {
     var ett = document.getElementById('editTemplateToolbar');
     ett.style.display = 'flex';

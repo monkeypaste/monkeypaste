@@ -407,6 +407,30 @@ namespace MonkeyPaste.Avalonia {
                 SetIsResizing(control, false);
             }
         }
+
+        public static void ResizeAnimated(Control control, double nw, double nh, double tt_ms) {
+            Dispatcher.UIThread.Post(async () => {
+                double dt_ms = 0;
+                double fps = 69;
+                double delay_ms = 1000 / fps;
+                double cw = GetBoundWidth(control);
+                double ch = GetBoundHeight(control);
+                double dw = nw - cw;
+                double dh = nh - ch;
+                double step_w = dw / delay_ms;
+                double step_h = dh / delay_ms;
+                do {
+                    ResizeByDelta(control, step_w, step_h, false);
+                    await Task.Delay((int)delay_ms);
+                    dt_ms += delay_ms;
+                } while (dt_ms < tt_ms);
+                double fw = GetBoundWidth(control);
+                double fh = GetBoundHeight(control);
+                double fdw = nw - fw;
+                double fdh = nh - fh;
+                ResizeByDelta(control, fdw, fdh, false);
+            });
+        }
         #endregion
 
         #region Private Event Handlers

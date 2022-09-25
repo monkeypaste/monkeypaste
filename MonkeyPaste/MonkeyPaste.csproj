@@ -129,6 +129,7 @@
     <None Remove="Resources\Html\Editor\src\components\util\messages.js" />
     <None Remove="Resources\Html\Editor\src\components\util\resize.js" />
     <None Remove="Resources\Html\Editor\src\editor.js" />
+    <None Remove="Resources\Html\Editor\src\components\main\main.js" />
     <None Remove="Resources\Html\Editor\webpack.config.js" />
     <None Remove="Resources\Icons\monkey.png" />
     <None Remove="Behaviors\" />
@@ -267,6 +268,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\helpers.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\main\main.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Icons\monkey.png" />

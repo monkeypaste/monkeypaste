@@ -1,20 +1,37 @@
 var InlineTags = ['span', 'a', 'em', 'strong', 'u', 's', 'sub', 'sup', 'img'];
 var BlockTags = ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe','blockquote']
 var ContentHandle = null;
-var CopyItemType = 'Text';
+var ContentItemType = 'Text';
 
-function initContent(itemDataStr) {
-	if (CopyItemType == 'FileList') {
-		initFileListContent(itemDataStr);
-		return;
-	}
-	disableFileList();
+function loadContent(contentHandle, contentType, contentData, isPasteRequest) {
+	resetDragDrop();
 
-	if (CopyItemType == 'Text') {
-		showEditor();
-		initTextContent(itemDataStr);
-		return;
+	ContentHandle = contentHandle;
+	ContentItemType = contentType;
+
+	if (ContentItemType.includes('.')) {
+		log('hey item type is ' + ContentItemType);
+		ContentItemType = ContentItemType.split('.')[1];
+		log('now item type is ' + ContentItemType);
 	}
+
+	// enusre IsLoaded is false so msg'ing doesn't get clogged up
+	IsLoaded = false;
+
+	enableReadOnly();
+
+	log('Editor loaded');
+
+	if (ContentItemType == 'FileList') {
+		initFileListContent(contentData);
+	} else if (ContentItemType == 'Text') {
+		loadTextContent(contentData, isPasteRequest);
+	}
+
+	updateAllSizeAndPositions();
+	IsLoaded = true;
+	// initial load content length ntf
+	onContentLengthChanged_ntf();
 }
 
 function getContentWidth() {

@@ -70,19 +70,37 @@ namespace MonkeyPaste.Avalonia {
         private static async void HandleIsContentReadOnlyChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isReadOnly &&
                 element is MpAvCefNetWebView wv && 
+
                 wv.DataContext is MpAvClipTileViewModel ctvm &&
                 wv.IsEditorInitialized) {
+                Control resizeControl = null;
+                var ctv = wv.GetVisualAncestor<MpAvClipTileView>();
+                if(ctv != null) {
+                    resizeControl = ctv.FindControl<Control>("ClipTileResizeBorder");
+                }
                 // only signal read only change after webview is loaded
                 if (isReadOnly) {
+                    if(resizeControl != null) {
+                        MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.ReadOnlyWidth, ctvm.ReadOnlyHeight, 3.0d);
+                    }
                     string enableReadOnlyRespStr = await wv.EvaluateJavascriptAsync("enableReadOnly_ext()");
-                    ProcessEnableReadOnlyResponse(wv, enableReadOnlyRespStr);
+                    //ProcessEnableReadOnlyResponse(wv, enableReadOnlyRespStr);
+                    var qrm = MpJsonObject.DeserializeBase64Object<MpQuillEnableReadOnlyResponseMessage>(enableReadOnlyRespStr);
+                    if (ctvm.CopyItemData != qrm.itemData) {
+                        ctvm.CopyItemData = qrm.itemData;
+                    }
+
                 } else {
-                    var drorMsg = new MpQuillDisableReadOnlyRequestMessage() {
-                        allAvailableTextTemplates = new List<MpTextTemplate>(),// MpMasterTemplateModelCollectionViewModel.Instance.AllTemplates.ToList(),
-                        editorHeight = ctvm.EditorHeight
-                    };
-                    string disableReadOnlyResp = await wv.EvaluateJavascriptAsync($"disableReadOnly_ext('{drorMsg.SerializeJsonObjectToBase64()}')");
-                    ProcessDisableReadOnlyResponse(wv, disableReadOnlyResp);
+                    if (resizeControl != null) {
+                        MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.EditableWidth, ctvm.EditableHeight, 3.0d);
+                    }
+                    //var drorMsg = new MpQuillDisableReadOnlyRequestMessage() {
+                    //    allAvailableTextTemplates = new List<MpTextTemplate>(),// MpMasterTemplateModelCollectionViewModel.Instance.AllTemplates.ToList(),
+                    //    editorHeight = ctvm.EditorHeight
+                    //};
+                    //string disableReadOnlyResp = await wv.ExecuteJavascript($"disableReadOnly_ext()");
+                    //ProcessDisableReadOnlyResponse(wv, disableReadOnlyResp);
+                    wv.ExecuteJavascript($"disableReadOnly_ext()");
                 }
             }                  
         }
@@ -171,13 +189,167 @@ namespace MonkeyPaste.Avalonia {
                 false);
 
         private static void HandleHtmlDataChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
-            if (e.NewValue is string &&//htmlDataStr &&
-                element is MpAvCefNetWebView wv &&
-                wv.IsEditorInitialized) {
+            if (element is MpAvCefNetWebView wv &&
+                wv.DataContext is MpAvClipTileViewModel ctvm) {
+                Dispatcher.UIThread.Post(async () => {
+                    if (ctvm.IsWaitingForDomLoad) {
+                        return;
+                    }
+                    ctvm.IsWaitingForDomLoad = true;
+                    while (!wv.IsEditorInitialized) {
+                        await Task.Delay(100);
+                    }
+                    while (ctvm.IsAnyBusy) {
+                        await Task.Delay(100);
+                    }
+                    if (ctvm.IsPlaceholder && !ctvm.IsPinned) {
+                        return;
+                    }
+
+                    var loadContentMsg = new MpQuillLoadContentRequestMessage() {
+                        contentHandle = ctvm.PublicHandle,
+                        contentType = ctvm.ItemType.ToString(),
+                        itemData = ctvm.EditorFormattedItemData,
+                        isPasteRequest = ctvm.IsPasting
+                    };
+
+                    var respStr = await wv.EvaluateJavascriptAsync($"loadContent_ext('{loadContentMsg.SerializeJsonObjectToBase64()}')");
+                    var resp = MpJsonObject.DeserializeBase64Object<MpQuillLoadContentResponseMessage>(respStr);
+                    ctvm.UnformattedContentSize = new Size(resp.contentWidth, resp.contentHeight);
+                    ctvm.IsWaitingForDomLoad = false;
+                });
                 // editor will know its loaded by IsLoaded and just set new html
-                LoadContentAsync(wv).FireAndForgetSafeAsync(null);
+                //LoadContentAsync(wv).FireAndForgetSafeAsync(null);
             }
         }
+
+
+
+        //private static async Task LoadContentAsync(Control control) {
+        //    if (control is MpAvCefNetWebView wv &&
+        //        control.DataContext is MpAvClipTileViewModel ctvm) {
+        //        while (ctvm.IsAnyBusy) {
+        //            await Task.Delay(100);
+        //        }
+        //        if (ctvm.IsPlaceholder && !ctvm.IsPinned) {
+        //            return;
+        //        }
+        //        ctvm.IsBusy = true;
+
+        //        var lrm = await CreateLoadRequestMessageAsync(wv);
+        //        var loadReqJsonStr = lrm.SerializeJsonObjectToBase64();
+        //        string loadResponseMsgStr = await wv.EvaluateJavascriptAsync($"initMain_ext('{loadReqJsonStr}')");
+        //        MpQuillLoadContentResponseMessage loadResponseMsg = MpJsonObject.DeserializeBase64Object<MpQuillLoadContentResponseMessage>(loadResponseMsgStr);
+
+        //        ctvm.UnformattedContentSize = new Size(loadResponseMsg.contentWidth, loadResponseMsg.contentHeight);
+        //        wv.IsEditorInitialized = true;
+        //        wv.Document.ContentEnd.Offset = loadResponseMsg.contentLength - 1;
+        //        ctvm.IsBusy = false;
+
+        //        MpConsole.WriteLine($"Tile Content Item '{ctvm.CopyItemTitle}' is loaded");
+        //    }
+        //}
+
+        //private static async Task<MpQuillLoadContentRequestMessage> CreateLoadRequestMessageAsync(Control control) {
+        //    if (control.DataContext is MpAvClipTileViewModel ctvm &&
+        //        control is MpAvCefNetWebView wv) {
+        //        await Task.Delay(1);
+        //        //var tcvm = ctvm.TemplateCollection;
+        //        //tcvm.IsBusy = true;
+
+        //        //var templateGuids = ParseTemplateGuids(ctvm.CopyItemData);
+        //        //var usedTemplates = await MpDataModelProvider.GetTextTemplatesByGuidsAsync(templateGuids);
+
+        //        //foreach (var cit in usedTemplates) {
+        //        //    if (tcvm.Items.Any(x => x.TextTemplateGuid == cit.Guid)) {
+        //        //        continue;
+        //        //    }
+        //        //    var ttvm = await tcvm.CreateTemplateViewModel(cit);
+        //        //    tcvm.Items.Add(ttvm);
+        //        //}
+
+        //        //tcvm.IsBusy = false;
+
+        //        string itemData = ctvm.CopyItemData;
+        //        if (ctvm.ItemType == MpCopyItemType.FileList) {
+        //            var fl_frag = new MpQuillFileListDataFragment() {
+        //                fileItems = ctvm.FileItems.Select(x => new MpQuillFileListItemDataFragmentMessage() {
+        //                    filePath = x.Path,
+        //                    fileIconBase64 = x.IconBase64
+        //                }).ToList()
+        //            };
+        //            itemData = fl_frag.SerializeJsonObjectToBase64();
+        //        }
+
+        //        return new MpQuillLoadContentRequestMessage() {
+        //            contentHandle = ctvm.PublicHandle,
+        //            contentType = ctvm.ItemType.ToString(),
+        //            envName = "wpf",
+        //            itemData = itemData,//ctvm.CopyItemData,
+        //            usedTextTemplates = new List<MpTextTemplate>(), //usedTemplates,
+        //            isPasteRequest = ctvm.IsPasting,
+        //            isReadOnlyEnabled = ctvm.IsContentReadOnly
+        //        };
+        //    }
+        //    return null;
+        //}
+
+        //private static async Task LoadTemplatesAsync(Control control) {
+        //    if (control.DataContext is MpAvClipTileViewModel ctvm &&
+        //        control is MpAvCefNetWebView wv) {
+        //        var tcvm = ctvm.TemplateCollection;
+        //        tcvm.IsBusy = true;
+
+        //        // get templates present in realtime document
+        //        string decodedTemplateGuidsRespStr = await wv.EvaluateJavascriptAsync("getDecodedTemplateGuids_ext()");
+        //        Debugger.Break();
+        //        var decodedTemplatesResp = MpJsonObject.DeserializeBase64Object<MpQuillActiveTemplateGuidsRequestMessage>(decodedTemplateGuidsRespStr);
+
+        //        // verify template loaded in document exists, if does add to collection if not present on remove from document 
+        //        List<MpTextTemplate> loadedTemplateItems = await MpDataModelProvider.GetTextTemplatesByGuidsAsync(decodedTemplatesResp.templateGuids);
+        //        var loadedTemplateGuids_toRemove = decodedTemplatesResp.templateGuids.Where(x => loadedTemplateItems.All(y => y.Guid != x));
+
+        //        foreach (var templateGuid_toRemove in loadedTemplateGuids_toRemove) {
+        //            wv.ExecuteJavascript($"removeTemplatesByGuid('{templateGuid_toRemove}')");
+
+        //            var templateViewModel_toRemove = tcvm.Items.FirstOrDefault(x => x.TextTemplateGuid == templateGuid_toRemove);
+        //            if (templateViewModel_toRemove != null) {
+        //                tcvm.Items.Remove(templateViewModel_toRemove);
+        //            }
+        //        }
+
+        //        string htmlToDecode = string.Empty;
+        //        bool isLoaded = await wv.EvaluateJavascriptAsync("checkIsEditorLoaded_ext()") == "true";
+        //        if (isLoaded) {
+        //            htmlToDecode = await wv.EvaluateJavascriptAsync("getHtml_ext()");
+        //        } else {
+        //            htmlToDecode = ctvm.CopyItemData;
+        //        }
+        //    }
+        //}
+
+        //private static List<string> ParseTemplateGuids(string text) {
+        //    List<string> templateGuids = new List<string>();
+        //    int curIdx = 0;
+        //    while (curIdx < text.Length) {
+        //        string curText = text.Substring(curIdx);
+        //        var encodedRangeOpenTagIdx = curText.IndexOf(MpTextTemplate.TextTemplateOpenToken);
+        //        if (encodedRangeOpenTagIdx < 0) {
+        //            break;
+        //        }
+        //        var encodedRangeCloseTagIdx = curText.IndexOf(MpTextTemplate.TextTemplateCloseToken);
+        //        if (encodedRangeCloseTagIdx < 0) {
+        //            MpConsole.WriteLine(@"Corrupt text content, missing ending range tag. Item html: ");
+        //            MpConsole.WriteLine(text);
+        //            throw new Exception("Corrupt text content see console");
+        //        }
+        //        string templateGuid = curText.Substring(encodedRangeOpenTagIdx + MpTextTemplate.TextTemplateOpenToken.Length, encodedRangeCloseTagIdx - (encodedRangeOpenTagIdx + MpTextTemplate.TextTemplateOpenToken.Length));
+
+        //        templateGuids.Add(templateGuid);
+        //        curIdx = curIdx + encodedRangeCloseTagIdx + 1;
+        //    }
+        //    return templateGuids.Distinct().ToList();
+        //}
 
         #endregion
 
@@ -199,20 +371,27 @@ namespace MonkeyPaste.Avalonia {
             if (e.NewValue is bool isEnabled &&
                 element is MpAvCefNetWebView wv) {
                 if(isEnabled) {
+                    if(wv.IsEditorInitialized) {
+                        Debugger.Break();
+                    }
                     wv.BrowserCreated += Wv_BrowserCreated;
                     wv.DevToolsProtocolEventAvailable += Wv_DevToolsProtocolEventAvailable;
-                    
+                    wv.DetachedFromVisualTree += Wv_DetachedFromVisualTree;
+                } else {
+                    Wv_DetachedFromVisualTree(element, null);
                 }
             }
         }
-        #endregion
-
-        #endregion
-
-
+        private static int browserCallCount = 0;
         private static void Wv_BrowserCreated(object sender, EventArgs e) {
             if (sender is MpAvCefNetWebView wv &&
                 wv.DataContext is MpAvClipTileViewModel ctvm) {
+                if (ctvm.CopyItemId == 1062) {
+                    browserCallCount++;
+                }
+                if (browserCallCount > 1) {
+                    Debugger.Break();
+                }
                 wv.IsEditorInitialized = false;
 
                 wv.Navigated += Wv_Navigated;
@@ -220,17 +399,61 @@ namespace MonkeyPaste.Avalonia {
             }
 
         }
-
+        private static int test = 0;
         private static void Wv_Navigated(object sender, NavigatedEventArgs e) {
-            if (sender is MpAvCefNetWebView wv) {
-                Dispatcher.UIThread.Post(() => {
-                    //await Task.Delay(3000);
-                    LoadContentAsync(wv).FireAndForgetSafeAsync(MpAvClipTrayViewModel.Instance);
-                    return;
+            if (e.Url == "about:blank") {
+                return;
+            }
+            if (sender is MpAvCefNetWebView wv && wv.DataContext is MpAvClipTileViewModel ctvm) {
+                Dispatcher.UIThread.Post(async () => {
+                    //if (ctvm.CopyItemId == 1063) {
+                    //    test++;
+                    //    wv.ShowDevTools();
+                    //}
+                    while (!wv.IsDomLoaded) {
+                        await Task.Delay(100);
+                    }
+
+                    //while (ctvm.IsAnyBusy) {
+                    //    await Task.Delay(100);
+                    //}
+                    //if (ctvm.IsPlaceholder && !ctvm.IsPinned) {
+                    //    return;
+                    //}
+
+                    //ctvm.IsBusy = true;
+                    var req = new MpQuillInitMainRequestMessage() {
+                        envName = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
+                        isPlainHtmlConverter = false
+                    };
+                    wv.ExecuteJavascript($"initMain_ext('{req.SerializeJsonObjectToBase64()}')");
+                    wv.IsEditorInitialized = true;
+
+                    //var respStr = await wv.EvaluateJavascriptAsync($"initMain_ext('{req.SerializeJsonObjectToBase64()}')");
+                    //var resp = MpJsonObject.DeserializeBase64Object<MpQuillInitMainResponseMessage>(respStr);
+                    //if (resp.mainStatus == "Success") {
+                    //    wv.IsEditorInitialized = true;
+                    //    return;
+                    //}
+                    //// whats the status?
+                    //Debugger.Break();
                 });
             }
         }
+        private static void Wv_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            var wv = sender as MpAvCefNetWebView;
+            if (wv == null) {
+                return;
+            }
+            wv.BrowserCreated -= Wv_BrowserCreated;
+            wv.DevToolsProtocolEventAvailable -= Wv_DevToolsProtocolEventAvailable;
+            wv.DetachedFromVisualTree -= Wv_DetachedFromVisualTree;
+            wv.Navigated -= Wv_Navigated;
+        }
 
+        #endregion
+
+        #endregion
         public static async Task SaveTextContentAsync(MpAvCefNetWebView wv) {
             if (MpAvClipTrayViewModel.Instance.IsRequery ||
                 MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
@@ -239,9 +462,17 @@ namespace MonkeyPaste.Avalonia {
 
             if (wv.DataContext is MpAvClipTileViewModel ctvm) {
                 // flags detail info to reload in ctvm propertychanged
+                var contentDataReq = new MpQuillContentDataRequestMessage() {
+                    formatRequested = ctvm.ItemType.ToString()
+                };
+                var contentDataRespStr = await wv.EvaluateJavascriptAsync($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");
+                var contentDataResp = MpJsonObject.DeserializeBase64Object<MpQuillContentDataResponseMessage>(contentDataRespStr);
+                ctvm.CopyItemData = contentDataResp.formattedContentData;
+
+                // this will trigger HtmlDataChanged
                 ctvm.CopyItemData = await GetEncodedContentAsync(wv);
 
-                await LoadContentAsync(wv);
+                //await LoadContentAsync(wv);
             }
         }
 
@@ -334,132 +565,6 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
             return cv;
-        }
-
-        private static async Task LoadContentAsync(Control control) {
-            if (control is MpAvCefNetWebView wv &&
-                control.DataContext is MpAvClipTileViewModel ctvm) {
-                while (ctvm.IsAnyBusy) {
-                    await Task.Delay(100);
-                }
-                if (ctvm.IsPlaceholder && !ctvm.IsPinned) {
-                    return;
-                }
-                ctvm.IsBusy = true;
-
-                var lrm = await CreateLoadRequestMessageAsync(wv);
-                var loadReqJsonStr = lrm.SerializeJsonObjectToBase64();
-                string loadResponseMsgStr = await wv.EvaluateJavascriptAsync($"init_ext('{loadReqJsonStr}')");
-                MpQuillLoadResponseMessage loadResponseMsg = MpJsonObject.DeserializeBase64Object<MpQuillLoadResponseMessage>(loadResponseMsgStr);
-
-                ctvm.UnformattedContentSize = new Size(loadResponseMsg.contentWidth, loadResponseMsg.contentHeight);
-                wv.IsEditorInitialized = true;
-                wv.Document.ContentEnd.Offset = loadResponseMsg.contentLength - 1;
-                ctvm.IsBusy = false;
-
-                MpConsole.WriteLine($"Tile Content Item '{ctvm.CopyItemTitle}' is loaded");
-            }
-        }
-
-        private static async Task<MpQuillLoadRequestMessage> CreateLoadRequestMessageAsync(Control control) {
-            if (control.DataContext is MpAvClipTileViewModel ctvm &&
-                control is MpAvCefNetWebView wv) {
-                await Task.Delay(1);
-                //var tcvm = ctvm.TemplateCollection;
-                //tcvm.IsBusy = true;
-
-                //var templateGuids = ParseTemplateGuids(ctvm.CopyItemData);
-                //var usedTemplates = await MpDataModelProvider.GetTextTemplatesByGuidsAsync(templateGuids);
-
-                //foreach (var cit in usedTemplates) {
-                //    if (tcvm.Items.Any(x => x.TextTemplateGuid == cit.Guid)) {
-                //        continue;
-                //    }
-                //    var ttvm = await tcvm.CreateTemplateViewModel(cit);
-                //    tcvm.Items.Add(ttvm);
-                //}
-
-                //tcvm.IsBusy = false;
-
-                string itemData = ctvm.CopyItemData;
-                if(ctvm.ItemType == MpCopyItemType.FileList) {
-                    var fl_frag = new MpQuillFileListDataFragment() {
-                        fileItems = ctvm.FileItems.Select(x => new MpQuillFileListItemDataFragmentMessage() {
-                            filePath = x.Path,
-                            fileIconBase64 = x.IconBase64
-                        }).ToList()
-                    };
-                    itemData = fl_frag.SerializeJsonObjectToBase64();
-                }
-
-                return new MpQuillLoadRequestMessage() {
-                    contentHandle = ctvm.PublicHandle,
-                    copyItemType = ctvm.ItemType.ToString(),
-                    envName = "wpf",
-                    itemData = itemData,//ctvm.CopyItemData,
-                    usedTextTemplates = new List<MpTextTemplate>(), //usedTemplates,
-                    isPasteRequest = ctvm.IsPasting,
-                    isReadOnlyEnabled = ctvm.IsContentReadOnly
-                };
-            }
-            return null;
-        }
-
-        private static async Task LoadTemplatesAsync(Control control) {
-            if (control.DataContext is MpAvClipTileViewModel ctvm &&
-                control is MpAvCefNetWebView wv) {
-                var tcvm = ctvm.TemplateCollection;
-                tcvm.IsBusy = true;
-
-                // get templates present in realtime document
-                string decodedTemplateGuidsRespStr = await wv.EvaluateJavascriptAsync("getDecodedTemplateGuids_ext()");
-                Debugger.Break();
-                var decodedTemplatesResp = MpJsonObject.DeserializeBase64Object<MpQuillActiveTemplateGuidsRequestMessage>(decodedTemplateGuidsRespStr);
-
-                // verify template loaded in document exists, if does add to collection if not present on remove from document 
-                List<MpTextTemplate> loadedTemplateItems = await MpDataModelProvider.GetTextTemplatesByGuidsAsync(decodedTemplatesResp.templateGuids);
-                var loadedTemplateGuids_toRemove = decodedTemplatesResp.templateGuids.Where(x => loadedTemplateItems.All(y => y.Guid != x));
-
-                foreach (var templateGuid_toRemove in loadedTemplateGuids_toRemove) {
-                    wv.ExecuteJavascript($"removeTemplatesByGuid('{templateGuid_toRemove}')");
-
-                    var templateViewModel_toRemove = tcvm.Items.FirstOrDefault(x => x.TextTemplateGuid == templateGuid_toRemove);
-                    if (templateViewModel_toRemove != null) {
-                        tcvm.Items.Remove(templateViewModel_toRemove);
-                    }
-                }
-
-                string htmlToDecode = string.Empty;
-                bool isLoaded = await wv.EvaluateJavascriptAsync("checkIsEditorLoaded_ext()") == "true";
-                if (isLoaded) {
-                    htmlToDecode = await wv.EvaluateJavascriptAsync("getHtml_ext()");
-                } else {
-                    htmlToDecode = ctvm.CopyItemData;
-                }
-            }
-        }
-
-        private static List<string> ParseTemplateGuids(string text) {
-            List<string> templateGuids = new List<string>();
-            int curIdx = 0;
-            while (curIdx < text.Length) {
-                string curText = text.Substring(curIdx);
-                var encodedRangeOpenTagIdx = curText.IndexOf(MpTextTemplate.TextTemplateOpenToken);
-                if (encodedRangeOpenTagIdx < 0) {
-                    break;
-                }
-                var encodedRangeCloseTagIdx = curText.IndexOf(MpTextTemplate.TextTemplateCloseToken);
-                if (encodedRangeCloseTagIdx < 0) {
-                    MpConsole.WriteLine(@"Corrupt text content, missing ending range tag. Item html: ");
-                    MpConsole.WriteLine(text);
-                    throw new Exception("Corrupt text content see console");
-                }
-                string templateGuid = curText.Substring(encodedRangeOpenTagIdx + MpTextTemplate.TextTemplateOpenToken.Length, encodedRangeCloseTagIdx - (encodedRangeOpenTagIdx + MpTextTemplate.TextTemplateOpenToken.Length));
-
-                templateGuids.Add(templateGuid);
-                curIdx = curIdx + encodedRangeCloseTagIdx + 1;
-            }
-            return templateGuids.Distinct().ToList();
         }
         private static string ProcessEnableReadOnlyResponse(Control control, string enableReadOnlyResponse) {
             if (control.DataContext is MpAvClipTileViewModel ctvm) {

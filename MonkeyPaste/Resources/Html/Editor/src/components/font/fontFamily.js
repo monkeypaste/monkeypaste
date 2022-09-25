@@ -44,7 +44,7 @@ function initFontFamilyPicker() {
 }
 
 function registerFontFamilys() {
-    let fontFamilys = getFontsByEnv(EnvName);
+    let fontFamilys = getFontsByEnv();
     var fontNames = fontFamilys.map(x => x.toLowerCase().replaceAll(' ', '-'));
 
     let fonts = Quill.import('formats/font');
@@ -72,7 +72,7 @@ function registerFontStyles(envName) {
 
     //return fontStyles;
 
-    let fontFamilys = getFontsByEnv(envName);
+    let fontFamilys = getFontsByEnv();
 
     let fontNames = fontFamilys.map(x => getFontFamilyCssStr(x)).join(' ');
     return fontNames;
@@ -221,11 +221,11 @@ function getFontFamilyDataValue(fontFamily) {
     return '';
 }
 
-function getFontsByEnv(env) {
-    env = env == null ? 'wpf' : env;
-    if (env == null || env == 'wpf' || env == 'web') {
+function getFontsByEnv() {
+    EnvName = EnvName == null ? WindowsEnv : EnvName;
+    if (EnvName == null || EnvName == WindowsEnv || EnvName == WebEnv) {
         return winFonts;
-    } else if (env == 'mac') {
+    } else if (EnvName == MacEnv) {
         return macFonts;
     }
 }

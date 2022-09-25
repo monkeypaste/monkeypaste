@@ -212,16 +212,19 @@ namespace MonkeyPaste.Avalonia {
                         e1.Cancel = false;
                     };
 
-
+                    
                     _cmInstance.Items = mivm.SubItems.Where(x => x.IsVisible).Select(x => CreateMenuItem(x));
                     _cmInstance.PlacementTarget = control;
-                    //_cmInstance.PlacementAnchor = PopupAnchor.Po;
+                    _cmInstance.PlacementAnchor = PopupAnchor.AllMask;
                     _cmInstance.PlacementMode = PlacementMode.Pointer;
                     _cmInstance.DataContext = mivm;
 
-
                     _cmInstance.ContextMenuOpening += onOpenHandler;
                     _cmInstance.ContextMenuClosing += onCloseHandler;
+
+                    var ctrl_mp = e.GetPosition(control);
+                    _cmInstance.HorizontalOffset = ctrl_mp.X;
+                    _cmInstance.VerticalOffset = ctrl_mp.Y;
 
                     _cmInstance.Open(MpAvMainWindow.Instance);
                     MpAvMainWindowViewModel.Instance.IsShowingDialog = true;

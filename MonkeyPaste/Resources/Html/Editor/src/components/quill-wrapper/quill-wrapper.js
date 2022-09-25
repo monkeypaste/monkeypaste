@@ -5,7 +5,6 @@ function initQuill() {
 	quill = new Quill("#editor", quillOptions);
 
 	registerTemplateBlots();
-	//registerTemplatePadAttribute();
 	initTable();
 
 	initFontFamilyPicker();
@@ -14,6 +13,9 @@ function initQuill() {
 	getEditorContainerElement().firstChild.id = 'quill-editor';
 
 	initTemplateToolbarButton();
+	initEditTemplateToolbar();
+	initPasteTemplateToolbar();
+
 }
 
 function createQuillOptions() {
@@ -133,7 +135,7 @@ function getSelectedHtml2() {
 		var range = selection.getRangeAt(0);
 		var docFrag = range.cloneContents();
 
-		let docFragStr = domSerializer.serializeToString(docFrag);
+		let docFragStr = DomSerializer.serializeToString(docFrag);
 
 		const xmlnAttribute = ' xmlns="http://www.w3.org/1999/xhtml"';
 		const regEx = new RegExp(xmlnAttribute, "g");

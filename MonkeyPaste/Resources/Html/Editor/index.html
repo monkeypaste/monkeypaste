@@ -29,6 +29,11 @@
 
     <link href="src/components/overlay/overlay-style.css" rel="stylesheet" />
 
+
+
+    <!-- EXTERNAL APIS -->
+
+
     <script src="lib/HighlightJs/highlight.min.js"></script>
     <script src="lib/HighlightJs/xml.min.js"></script>
 
@@ -44,14 +49,14 @@
     <script src="lib/html2canvas/html2canvas.min.js"></script>
     <script src="lib/font-awesome/fontawesome-free-6.1.1-web/all.min.js"></script>
 
-    <script>
-        // globals
-        //var quill;
-        //var availableTemplates = null;
 
-        const domParser = new DOMParser();
-        const domSerializer = new XMLSerializer();
-        var isDebug = true;
+    <!-- NOTIFIERS -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            //initMain();
+            onDomLoaded_ntf();
+        });
     </script>
 
 
@@ -66,6 +71,7 @@
     <script src="src/components/util/graphics/rect.js"></script>
     <script src="src/components/util/graphics/roundedRect.js"></script>
     <script src="src/components/converter/converter.js"></script>
+
 
     <script src="src/components/messages/messages_core.js"></script>
     <script src="src/components/messages/messages_ext.js"></script>
@@ -105,12 +111,9 @@
     <script src="src/components/quill-wrapper/quill-wrapper.js"></script>
     <script src="src/components/quill-wrapper/toolbar/quill-toolbar.js"></script>
 
+    <script src="src/components/editor/editor.js"></script>
 </head>
 <body>
-    <!--<div class="dropzone">
-        <textarea tabindex="0" style="width: 500px;height: 500px;background-color:hotpink;" contenteditable="true"></textarea>
-    </div>-->
-
     <div id='editor' draggable="true" tabindex="0">
     </div>
 
@@ -192,7 +195,7 @@
             <li id="fileListRootItem" class="content-file-list-item">
                 <img class="content-file-list-item-icon" src="../../Icons/search.png">
                 <!--<a class="content-file-list-item-path-link" href="https://www.youtube.com">-->
-                    <span class="content-file-list-item-path-link content-file-list-item-path-text">This is a path 1</span>
+                <span class="content-file-list-item-path-link content-file-list-item-path-text">This is a path 1</span>
                 <!--</a>-->
                 <div class="content-file-list-item-button">
                     <i class="delete-file-item content-file-list-item-button-icon fa-solid fa-circle-minus"></i>
@@ -207,11 +210,17 @@
     <canvas id="overlayCanvas"></canvas>
 
     <div id="dragOverlay"></div>
-    <script src="src/components/editor/editor.js"></script>
 
-    <script>
-        //init_test();
-    </script>
+    
+
+
+
+    <!-- COMPONENTS -->
+
+
+    <script src="src/components/main/main.js"></script>
+    
+
 
 </body>
 </html>

@@ -125,7 +125,7 @@ function createTemplateFromDropDown(templateObjOrId, newTemplateType) {
         let selectionInnerHtml = '';
         let shtmlStr = getHtml({ index: range.index, length: 1 });
         if (shtmlStr != null && shtmlStr.length > 0) {
-            let shtml = domParser.parseFromString(shtmlStr, 'text/html');
+            let shtml = DomParser.parseFromString(shtmlStr, 'text/html');
             let pc = shtml.getElementsByTagName('p');
             if (pc != null && pc.length > 0) {
                 let p = pc[0];

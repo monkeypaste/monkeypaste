@@ -12,25 +12,30 @@ var LastMouseUpdateDateTime = null;
 const MIN_DRAG_DIST = 10;
 
 function initDragDrop() {
-    //initWindowDragDrop();
-
     initDrop();
     initDrag();
+}
 
-    //let allDocTags = [...InlineTags, ...BlockTags];
-    //let allDocTagsQueryStr = allDocTags.join(',');
-    ////let editorElms = document.getElementById('editor').querySelectorAll(allDocTagsQueryStr);
+function resetDragDrop(fromHost = false) {
+    if (IsDragging) {
+        deselectAll(SelIdxBeforeDrag >= 0 ? SelIdxBeforeDrag : DragRange ? DragRange.index : 0);
+	}
+    SelIdxBeforeDrag = -1;
+    DocLengthBeforeDrag = -1;
+    DragRange = null;
+    IsDragging = false;
+    IsCtrlDown = false;
+    IsAltDown = false
+    IsShiftDown = false;
+    IsDropping = false;
+    DropIdx = -1;
 
-    ////enableDragDropOnElement(document.body);
-    ////enableDragDropOnElement(window);
-    //enableDragDropOnElement(getEditorContainerElement());
+    drawOverlay();
 
-    //Array.from(editorElms).forEach(elm => {
-    //    enableDragDropOnElement(elm);
-    //});    
-
-
-    //setInterval(onTick, 1000)
+    if (!fromHost) {
+        onDragStartOrEnd_ntf(false);
+	}
+    log('dragDrop reset: ' + (fromHost ? "FROM HOST" : "INTERNALLY"));
 }
 
 function onTick() {
@@ -96,7 +101,7 @@ function isDropValid() {
     return DropIdx >= 0;
 }
 
-function resetDragDrop(isEscCancel = false) {
+function resetDragDrop_old(isEscCancel = false) {
     IsDropCancel = isEscCancel;
 
     DropElm = null;

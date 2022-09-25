@@ -10,9 +10,12 @@ body {
     font-family: Arial;
     overflow: hidden;
     cursor: default;
+    
     background-color: transparent;
     --selbgcolor: lightblue;
     --selfgcolor: black;
+    --editableopacity: 0.5;
+    --defaultopacity: 0.0;
     /*white-space: pre-wrap;*/
 }
 ::selection {
@@ -52,19 +55,24 @@ body {
         height: auto;
     }
 
+
 .sub-select {
     user-select: auto;
     overflow: auto;
     cursor: auto;
     width: unset;
-    text-decoration: underline red;
-}
+    text-decoration: underline red;}
 
     .sub-select > .ql-editor {
         overflow: auto;
         height: 100%;
     }
 
+body:has(.sub-select) {
+    background-color: rgb(189, 188, 188,var(--editableopacity));
+    /*opacity: var(--editableopacity);*/
+    transition: .4s;
+}
 
 .editable {
     white-space: unset;
@@ -74,7 +82,11 @@ body {
     overflow: auto;
     text-decoration: unset;
 }
-
+body:has(.editable) {
+    background-color: rgba(255, 248, 220,var(--editableopacity));
+    /*opacity: var(--editableopacity);*/
+    transition: .4s;
+}
 .drop {
     white-space: nowrap;
     width: 100%;

@@ -89,7 +89,9 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipTileViewModel BindingContext => this.DataContext as MpAvClipTileViewModel;
         public bool IsEditorInitialized { get; set; } = false;
+        public bool IsDomLoaded { get; set; } = false;
 
+        public bool WasDragStartedFromEditor { get; set; } = false;
         public bool CanDrag { get; private set; } = true;
 
         public MpAvTextSelection Selection { get; private set; }
@@ -168,6 +170,15 @@ namespace MonkeyPaste.Avalonia {
 
         protected override WebViewGlue CreateWebViewGlue() {
             return new MpAvCefNetWebViewGlue(this);
+        }
+
+        protected override void OnPointerEnter(PointerEventArgs e) {
+            base.OnPointerEnter(e);
+            if(!e.IsLeftDown(this) && WasDragStartedFromEditor) {                
+                this.ExecuteJavascript($"resetDragDrop_ext()");
+                MpConsole.WriteLine("Dangling drag start canceled from mouse enter check");
+                WasDragStartedFromEditor = false;
+            }
         }
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
             base.OnAttachedToVisualTree(e);

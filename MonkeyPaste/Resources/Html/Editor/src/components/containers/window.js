@@ -130,10 +130,10 @@ function onWindowClick(e) {
 }
 
 function onWindowDoubleClick(e) {
-	if (IsSubSelectionEnabled) {
-		disableReadOnly();
-		return;
-	}
+	//if (IsSubSelectionEnabled) {
+	//	disableReadOnly();
+	//	return;
+	//}
 	enableSubSelection();
 }
 
@@ -365,7 +365,7 @@ function onWindowDragStart_override(e) {
 	e.stopPropagation();
 
 	//if (isRunningInHost()) {
-	//	onDragStart_ntf();
+	//	onDragStartOrEnd_ntf();
 	//} else {
 	//	onDragStart(e);
 	//}

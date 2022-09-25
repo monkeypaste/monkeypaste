@@ -113,7 +113,7 @@
                                  local:MpAvIsFocusedExtension.IsEnabled="True"
                                  local:MpAvIsFocusedExtension.IsFocused="{Binding IsTextBoxFocused, Mode=TwoWay}"
                                  Watermark="Search..."
-                                 FontSize="18"
+                                 FontSize="14"
                                  Background="Transparent"
                                  local:MpAvIsHoveringExtension.IsEnabled="True"
                                  local:MpAvIsHoveringExtension.HoverCursor="IBeam"
@@ -125,11 +125,22 @@
                                  FontStyle="{Binding TextBoxFontStyle}"
                                  BorderThickness="0"
                                  Padding="0"
-                                 Margin="0,7,0,0"
+                                 Margin="0,0,0,0"
                                  HorizontalAlignment="Stretch"
                                  VerticalAlignment="Center"
                                  KeyUp="SearchBox_KeyUp"
-                                 Text="{Binding SearchText, Mode=TwoWay}" />
+                                 Text="{Binding SearchText, Mode=TwoWay}">
+                    <AutoCompleteBox.Styles>
+                        <Style Selector="AutoCompleteBox /template/ TextBox#PART_TextBox">
+                            <Setter Property="VerticalContentAlignment"
+                                    Value="Center" />
+                        </Style>
+                        <Style Selector="AutoCompleteBox:focus-within /template/ TextBox#PART_TextBox /template/ Border#PART_BorderElement">
+                            <Setter Property="BorderBrush"
+                                    Value="Transparent" />
+                        </Style>
+                    </AutoCompleteBox.Styles>
+                </AutoCompleteBox>
                 <StackPanel Grid.Column="2"
                             Orientation="Horizontal">
                     <!--  IsSearching Spinner  -->
@@ -162,10 +173,6 @@
                                       IsVisible="{Binding IsOverClearTextButton}"
                                       Data="{StaticResource CloseXBoxSvg}" />
                             <PathIcon Foreground="Black"
-                                      Background="Transparent"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      Margin="5"
                                       IsVisible="{Binding !IsOverClearTextButton}"
                                       Data="{StaticResource CloseXSvg}">
                                 <PathIcon.Styles>

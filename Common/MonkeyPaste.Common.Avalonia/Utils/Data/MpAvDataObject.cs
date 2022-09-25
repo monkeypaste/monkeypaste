@@ -23,9 +23,12 @@ namespace MonkeyPaste.Common.Avalonia {
                         if (data is string dataStr) {
                             // only convert if it isn't already
                             data = Encoding.UTF8.GetBytes(dataStr);
-                        } else {
+                        } else if(data != null){
                             // what type is it?
                             Debugger.Break();
+                        } else {
+                            // cannot set null for html byte array, av throws error
+                            return;
                         }
                     }
                     

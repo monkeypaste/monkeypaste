@@ -299,6 +299,8 @@ namespace MonkeyPaste.Avalonia {
         public double TrayY => TrayLocation.Y;
         public MpPoint TrayLocation { get; set; } = MpPoint.Zero;
 
+        public double ObservedWidth { get; set; }
+        public double ObservedHeight { get; set; }
         public double BoundWidth {
             get => BoundSize.Width;
             set {
@@ -323,9 +325,36 @@ namespace MonkeyPaste.Avalonia {
 
         public MpRect ScreenRect => Parent == null ? MpRect.Empty : new MpRect(TrayLocation - Parent.ScrollOffset, BoundSize);
 
+
+        public double ReadOnlyWidth => MinWidth;
+        public double ReadOnlyHeight => MinHeight;
+        public MpSize ReadOnlySize => new MpSize(ReadOnlyWidth, ReadOnlyHeight);
+
+        public double EditableWidth {
+            get {
+                if (Parent == null) {
+                    return 0;
+                }
+                double w = Parent.DefaultEditableItemWidth;// Math.Min(Parent.DefaultEditableItemWidth, UnformattedContentSize.Width);
+                return w;
+            }
+        }
+
+        public double EditableHeight {
+            get {
+                if (Parent == null) {
+                    return 0;
+                }
+                return Parent.DefaultEditableItemSize.Height;
+            }
+        }
+        public MpSize EditableSize => new MpSize(EditableWidth, EditableHeight);
+
         #endregion
 
         #region State
+
+        public bool IsWaitingForDomLoad { get; set; } = false;
 
         public bool IsAnyCornerVisible => Parent == null ? false : 
             Parent.ScreenRect.Contains(ScreenRect.TopLeft) || 
@@ -604,6 +633,26 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
+        public string EditorFormattedItemData {
+            get {
+                if(IsPlaceholder) {
+                    return string.Empty;
+                }
+                switch(ItemType) {
+                    case MpCopyItemType.FileList:
+                        var fl_frag = new MpQuillFileListDataFragment() {
+                            fileItems = FileItems.Select(x => new MpQuillFileListItemDataFragmentMessage() {
+                                filePath = x.Path,
+                                fileIconBase64 = x.IconBase64
+                            }).ToList()
+                        };
+                        var itemData = fl_frag.SerializeJsonObjectToBase64();
+                        return itemData;
+                    default:
+                        return CopyItemData;
+                }
+            }
+        }
         public Size UnformattedContentSize {
             get {
                 if (CopyItem == null) {
@@ -753,12 +802,13 @@ namespace MonkeyPaste.Avalonia {
                 if (CopyItem.IconId > 0) {
                     return CopyItem.IconId;
                 }
-                if (SourceViewModel == null) {
+                if (SourceViewModel == null || SourceViewModel.PrimarySourceViewModel == null) {
                     // BUG currently when plugin creates new content it is not setting source info
                     // so return app icon
 
                     return MpPrefViewModel.Instance.ThisAppIcon.Id;
                 }
+
                 return SourceViewModel.PrimarySourceViewModel.IconId;
             }
             set {
@@ -2260,6 +2310,10 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
 
+                    if(Next == null) {
+                        break;
+                    }
+                    
                     //if (!IsContentReadOnly) {
                     //    IsFindMode = false;
                     //    IsReplaceMode = false;
@@ -2323,7 +2377,12 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(MinHeight));
                     BoundSize = new MpSize(IsCustomWidth ? BoundWidth : MinSize.Width, MinSize.Height);
                     break;
-                
+                case nameof(ObservedWidth):
+                    BoundWidth = ObservedWidth;
+                    break;
+                case nameof(ObservedHeight):
+                    BoundHeight = ObservedHeight;
+                    break;
                 case nameof(BoundSize):
                     if (IsResizing) {
                         //this occurs when mainwindow is resized and user gives tile unique width

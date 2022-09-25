@@ -1,13 +1,8 @@
-// this are only called from external sources and wrap in/out messaging
-function checkIsEditorLoaded_ext() {
-	if (IsLoaded) {
-		return true;
-	}
-	return false;
-}
+// these are only called from external sources and wrap in/out messaging
 
-function init_ext(initMsgStr_base64) {
-	// input 'MpQuillLoadResponseMessage'
+function initMain_ext(initMsgStr_base64) {
+	// input 'MpQuillInitMainRequestMessage'
+	// output 'MpQuillInitMainResponseMessage'
 
 	log("init request: " + initMsgStr_base64);
 	let initMsgObj = toJsonObjFromBase64Str(initMsgStr_base64);
@@ -16,21 +11,54 @@ function init_ext(initMsgStr_base64) {
 		initPlainHtmlConverter();
 		log('plainHtml converter initialized.');
 		return;
-	} 
-
-	init(initMsgObj);
-
-	if (initMsgObj.isReadOnlyEnabled) {
-		enableReadOnly();
 	}
-	
-	let initResponseMsg = {
+
+	let respMsg = {};
+	respMsg.status = initMain(initMsgObj.envName);
+	let resp = toBase64FromJsonObj(respMsg);
+
+	return resp;
+}
+
+function loadContent_ext(loadContentMsgStr_base64) {
+	// input 'MpQuillLoadContentRequestMessage'
+	// output 'MpQuillLoadContentResponseMessage'
+
+	let req = toJsonObjFromBase64Str(loadContentMsgStr_base64);
+
+	loadContent(req.contentHandle, req.contentType, req.itemData, req.usedTextTemplates, req.isPasteRequest);
+
+	let respObj = {
 		contentWidth: getContentWidth(),
 		contentHeight: getContentHeight(),
-		decodedTemplateGuids: getDecodedTemplateGuids(),
-		contentLength: getDocLength()
+		//decodedTemplateGuids: getDecodedTemplateGuids(),
+		//contentLength: getDocLength(),
+		hasTemplates: HasTemplates
 	}
-	let resp = toBase64FromJsonObj(initResponseMsg);
+	let resp = toBase64FromJsonObj(respObj);
+	//log('init Response: ');
+	//log(initResponseMsgStr);
+
+	return resp;
+}
+
+function contentRequest_ext(contentReqMsgStr_base64) {
+	// input 'MpQuillContentDataRequestMessage'
+	// output 'MpQuillContentDataResponseMessage'
+
+	let req = toJsonObjFromBase64Str(contentReqMsgStr_base64);
+
+	let respObj = {
+		formattedContentData: ''
+	};
+
+	//if (req.formatRequested == 'Text') {
+	//	respObj.formattedContentData = getHtml();
+	//} else {
+	//	// todo add other types as necessary?
+	//}
+	respObj.formattedContentData = getHtml();
+	let resp = toBase64FromJsonObj(respObj);
 	//log('init Response: ');
 	//log(initResponseMsgStr);
 
@@ -185,7 +213,6 @@ function setSelectionFromEdiotrPoint_ext(selMsgReq) {
 	
 }
 
-
 function getHtml_ext() {
 	// output MpQuillGetRangeHtmlResponseMessage
 	let respObj = {
@@ -194,7 +221,6 @@ function getHtml_ext() {
 	let resp = toBase64FromJsonObj(respObj);
 	return resp;
 }
-
 
 function getText_ext(rangeObjParamStrOrNull) {
 	// input MpQuillGetRangeTextRequestMessage
@@ -241,8 +267,8 @@ function enableReadOnly_ext() {
 	// output 'MpQuillResponseMessage'  updated master collection of templates
 	let qrmObj = {
 		itemData: getEncodedHtml(),
-		userDeletedTemplateGuids: userDeletedTemplateGuids,
-		updatedAllAvailableTextTemplates: IsLoaded ? getAvailableTemplateDefinitions() : []
+		//userDeletedTemplateGuids: userDeletedTemplateGuids,
+		//updatedAllAvailableTextTemplates: IsLoaded ? getAvailableTemplateDefinitions() : []
 	};
 	let resp = toBase64FromJsonObj(qrmObj);
 
@@ -252,8 +278,8 @@ function enableReadOnly_ext() {
 function disableReadOnly_ext(disableReadOnlyReqStrOrObj) {
 	// input MpQuillDisableReadOnlyRequestMessage
 
-	let disableReadOnlyMsg = toJsonObjFromBase64Str(disableReadOnlyReqStrOrObj);
-	availableTemplates = disableReadOnlyMsg.allAvailableTextTemplates;
+	//let disableReadOnlyMsg = toJsonObjFromBase64Str(disableReadOnlyReqStrOrObj);
+	//availableTemplates = disableReadOnlyMsg.allAvailableTextTemplates;
 	disableReadOnly(true);
 
 	// output MpQuillDisableReadOnlyResponseMessage
@@ -324,7 +350,7 @@ function isAllSelected_ext() {
 }
 
 function resetDragDrop_ext() {
-	resetDragDrop();
+	resetDragDrop(true);
 }
 function getEncodedDataFromRange_ext(encRangeMsgBase64Str) {
 	// input MpQuillGetEncodedRangeDataRequestMessage
@@ -336,7 +362,7 @@ function getEncodedDataFromRange_ext(encRangeMsgBase64Str) {
 	let rangeData = getHtmlFromDocRange({ index: encRangeReqMsg.index, length: encRangeReqMsg.length });
 
 	if (encRangeReqMsg.isPlainText) {
-		let range_doc = domParser.parseFromString(rangeData);
+		let range_doc = DomParser.parseFromString(rangeData);
 		rangeData = range_doc.body.innerText;
 	}
 

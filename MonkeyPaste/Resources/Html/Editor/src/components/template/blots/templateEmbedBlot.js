@@ -9,6 +9,12 @@ var Template_BEFORE_INSERT_Class = 'ql-template-embed-blot-before-insert';
 var Template_AT_INSERT_Class = 'ql-template-embed-blot-at-insert'; 
 var Template_AFTER_INSERT_Class = 'ql-template-embed-blot-after-insert';
 
+var TemplateEmbedHtmlAttributes = [
+    'isFocus',
+    'background-color',
+    //'color'
+];
+
 const Parchment = Quill.imports.parchment;
 
 class TemplateEmbedBlot extends Parchment.EmbedBlot {
@@ -45,12 +51,23 @@ class TemplateEmbedBlot extends Parchment.EmbedBlot {
     //    return 1;
     //}
 
-    static value(domNode) {
-        return getTemplateFromDomNode(domNode);
+    static value(node) {
+        return getTemplateFromDomNode(node);
     }
 }
-function registerTemplateBlots() {
-    
+
+function registerTemplateBlots() {    
+    let suppressWarning = false;
+    let config = {
+        scope: Parchment.Scope.INLINE,
+    };
+
+    for (var i = 0; i < TemplateEmbedHtmlAttributes.length; i++) {
+        let attrb_name = TemplateEmbedHtmlAttributes[i];
+        let attrb = new Parchment.Attributor(attrb_name, attrb_name, config);
+        Quill.register(attrb, suppressWarning);
+	}
+
     Quill.register(TemplateEmbedBlot, true);
 }
 

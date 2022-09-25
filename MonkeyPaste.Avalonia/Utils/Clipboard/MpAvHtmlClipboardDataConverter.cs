@@ -44,10 +44,10 @@ namespace MonkeyPaste.Avalonia {
             RootWebView.BrowserCreated += (s, e) => {
                 RootWebView.Navigated += (s, e) => {
                     if (s is WebView wv) {
-                        var converter_init_msg = new MpQuillLoadRequestMessage() {
-                            isEditorPlainHtmlConverter = true
+                        var converter_init_msg = new MpQuillInitMainRequestMessage() {
+                            isPlainHtmlConverter = true
                         };
-                        RootWebView.ExecuteJavascript($"init_ext('{converter_init_msg.SerializeJsonObjectToBase64}')");
+                        RootWebView.ExecuteJavascript($"initMain_ext('{converter_init_msg.SerializeJsonObjectToBase64}')");
                     }
                 };
                 RootWebView.Navigate(MpAvClipTrayViewModel.EditorPath);

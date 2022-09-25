@@ -4,6 +4,8 @@ using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
@@ -12,8 +14,41 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvSearchBoxView() {
             InitializeComponent();
+
+            var sb = this.FindControl<AutoCompleteBox>("SearchBox");
+            sb.AttachedToVisualTree += Sb_AttachedToVisualTree;
         }
 
+        #region Drop
+
+        private void Sb_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            var sb = sender as AutoCompleteBox;
+            
+            sb.AddHandler(DragDrop.DragOverEvent, DragOver);
+            sb.AddHandler(DragDrop.DropEvent, Drop);
+        }
+        private void DragEnter(object sender, DragEventArgs e) {
+            //MpConsole.WriteLine("[DragEnter] CurDropEffects: " + _curDropEffects);
+            //SendDropMsg(e.Data, "dragenter");
+            e.DragEffects = DragDropEffects.Copy | DragDropEffects.Move;
+            //base.OnDragEnter(e);
+        }
+
+        private void DragOver(object sender, DragEventArgs e) {
+            //e.DragEffects = DragDropEffects.None;
+            if(!e.Data.GetDataFormats().Contains(MpPortableDataFormats.Text)) {
+                e.DragEffects = DragDropEffects.None;
+            }
+        }
+        private void Drop(object sender, DragEventArgs e) {
+            if (!e.Data.GetDataFormats().Contains(MpPortableDataFormats.Text)) {
+                e.DragEffects = DragDropEffects.None;
+                return;
+            }
+            BindingContext.SearchText = e.Data.Get(MpPortableDataFormats.Text) as string;
+        }
+
+        #endregion
         private void SearchViewContainer_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             //InitContextMenu();
         }

@@ -11,6 +11,7 @@
 .ql-toolbar {
     width: 100%;
     position: fixed;
+    background-color: white;
     top: 0em;
     /*display: block;*/ /* only set with showEditorToolbar() */
 }

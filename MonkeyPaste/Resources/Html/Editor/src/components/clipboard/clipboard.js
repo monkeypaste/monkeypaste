@@ -25,6 +25,12 @@ const CB_DATA_TYPES = [
     'application/octet-stream',
 ];
 
+function initClipboard() {
+    //quill.clipboard.addMatcher('.' + TemplateEmbedClass, function (node, delta) {
+    //    return delta;// delta.compose(new Delta().retain(delta.length(), { bold: true }));
+    //});
+}
+
 function startClipboardHandler() {
     ReadOnlyCutPasteHistory_undo = [];
     ReadOnlyCutPasteHistory_redo = [];
@@ -204,7 +210,7 @@ function retargetHtmlClipboardData(htmlDataStr) {
     log(htmlDataStr);
 
     let newContentGuid = generateGuid();
-    let cb_html = domParser.parseFromString(htmlDataStr, 'text/html');
+    let cb_html = DomParser.parseFromString(htmlDataStr, 'text/html');
     let cb_elms = cb_html.querySelectorAll('*');
 
     for (var i = 0; i < cb_elms.length; i++) {

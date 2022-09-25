@@ -47,15 +47,21 @@ function onContentDraggableChanged_ntf(isDraggable) {
 	}
 }
 
-function onDragStart_ntf() {
-	// output MpQuillDragDropDataObjectMessage
+function onDragStartOrEnd_ntf(isDragStart) {
+	// output MpQuillDragStartOrEndNotification
 
 	// should only be called on mouse down...
-	if (typeof notifyDragStart === 'function') {
-		let sel = getEditorSelection();
-		let dragDropDataMsg = createHostMsgDataObjectObjectForRange(sel, 'drag');
-		let msgStr = toBase64FromJsonObj(dragDropDataMsg);
-		startDrag(true);
+	if (typeof notifyDragStartOrEnd === 'function') {
+		//let sel = getEditorSelection();
+		//let dragDropDataMsg = createHostMsgDataObjectObjectForRange(sel, 'drag');
+		//let msgStr = toBase64FromJsonObj(dragDropDataMsg);
+		//startDrag(true);
+		//notifyDragStart(msgStr);
+
+		let msg = {
+			isStart: isDragStart
+		};
+		let msgStr = toBase64FromJsonObj(msg);
 		notifyDragStart(msgStr);
 	}
 }
@@ -84,8 +90,8 @@ function onReadOnlyChanged_ntf(isReadOnly) {
 		if (isReadOnly) {
 			msg = {
 				itemData: getHtml(),
-				userDeletedTemplateGuids: userDeletedTemplateGuids,
-				updatedAllAvailableTextTemplates: getAvailableTemplateDefinitions()
+				//userDeletedTemplateGuids: userDeletedTemplateGuids,
+				//updatedAllAvailableTextTemplates: getAvailableTemplateDefinitions()
 			};
 		} else {
 			msg = {
@@ -110,6 +116,12 @@ function onDropEffectChanged_ntf(dropEffectStr) {
 		};
 		let msgStr = toBase64FromJsonObj(msg);
 		notifyDropEffectChanged(msgStr);
+	}
+}
+
+function onDomLoaded_ntf() {
+	if (typeof notifyDomLoaded === 'function') {
+		notifyDomLoaded();
 	}
 }
 

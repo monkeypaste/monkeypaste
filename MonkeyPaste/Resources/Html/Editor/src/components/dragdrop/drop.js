@@ -68,7 +68,7 @@ function initDrop() {
 
 
         // DROP EFFECT
-        if (isRunningInHost()) {
+        if (isRunningInHost() && !IsDragging) {
             // mod keys updated from host msg in updateModKeys
         } else {
             let isModChanged =
@@ -150,7 +150,7 @@ function initDrop() {
             item.classList.remove('drop');
         });
 
-        if (IsReadOnly) {
+        if (IsReadOnly && !IsDragging) {
             disableSubSelection();
         }
         drawOverlay();

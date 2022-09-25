@@ -122,9 +122,16 @@ namespace MonkeyPaste.Avalonia {
             // TODO add other platform support to CoreClipboardHandler
 
             if (OperatingSystem.IsWindows()) {
+                bool wasOpen = false;
                 while (WinApi.IsClipboardOpen(true) != IntPtr.Zero) {
+                    wasOpen = true;
                     MpConsole.WriteLine("Waiting on windows clipboard...");
                     await Task.Delay(100);
+                }
+                if(wasOpen) {
+                    // if it was open other things maybe waiting also so let them 
+                    // go first...
+                    await Task.Delay(1000);
                 }
 
                 ndo = MpAvClipboardHandlerCollectionViewModel.Instance.ReadClipboardOrDropObject();

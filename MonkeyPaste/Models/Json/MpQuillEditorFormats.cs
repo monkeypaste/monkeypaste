@@ -6,35 +6,52 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MonkeyPaste {
-    public class MpQuillLoadRequestMessage : MpJsonObject {
+    public class MpQuillInitMainRequestMessage : MpJsonObject {
+
+        public string envName { get; set; } // will be wpf,android, etc.
+        public bool isPlainHtmlConverter { get; set; }
+        public bool useBetterTable { get; set; } = true;
+    }
+
+    public class MpQuillInitMainResponseMessage : MpJsonObject {
+
+        public string mainStatus { get; set; }
+    }
+
+    public class MpQuillLoadContentRequestMessage : MpJsonObject {
         public string contentHandle { get; set; }
-        public string copyItemType { get; set; }
+        public string contentType { get; set; }
 
         public string itemData { get; set; }
 
-        public string envName { get; set; } // will be wpf,android, etc.
-
         public bool isPasteRequest { get; set; } = false; //request should ONLY happen if encoded w/ templates
 
-        public bool isEditorPlainHtmlConverter { get; set; }
-        public bool isReadOnlyEnabled { get; set; } = true;
-
-        public bool useBetterTable { get; set; } = true;
-
-        public List<MpTextTemplate> usedTextTemplates { get; set; }
+       // public List<MpTextTemplate> usedTextTemplates { get; set; }
     }
 
-    public class MpQuillLoadResponseMessage : MpJsonObject {
+    public class MpQuillLoadContentResponseMessage : MpJsonObject {
         public double contentWidth { get; set; }
         public double contentHeight { get; set; }
-        public int contentLength { get; set; }
+        //public int contentLength { get; set; }
 
-        public List<string> decodedTemplateGuids { get; set; }
+        public bool hasTemplates { get; set; }
+
+        //public List<string> decodedTemplateGuids { get; set; }
     }
 
-    
+    public class MpQuillContentDataRequestMessage : MpJsonObject {
+        public string formatRequested { get; set; }
+
+    }
+
+    public class MpQuillContentDataResponseMessage : MpJsonObject {
+        public string formattedContentData { get; set; }
+    }
+
+
 
     public class MpQuillDisableReadOnlyRequestMessage : MpJsonObject {
+        // NOTE props ignored in Avalonia only for wpf...
         public List<MpTextTemplate> allAvailableTextTemplates { get; set; }
         public double editorHeight { get; set; }
     }
@@ -152,6 +169,9 @@ templateType: "dynamic"
         public List<MpQuillDragDropDataObjectItemFragment> items { get; set; }
     }
 
+    public class MpQuillDragStartOrEndNotification : MpJsonObject {
+        public bool isStart { get; set; }
+    }
 
     public class MpQuillDragDropDataObjectItemFragment : MpJsonObject {
         public string format { get; set; }

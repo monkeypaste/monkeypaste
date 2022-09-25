@@ -3,7 +3,7 @@ Object.defineProperty(this, "log", {
     get: function () {
         const d = new Date();
         let dateTimeStr = d.toLocaleTimeString().replace('AM', '').replace('PM', '').trim() + `.${d.getMilliseconds()}`;
-        return isDebug ? console.log.bind(window.console, '[' + dateTimeStr.trim() + ']', '[DEBUG]')
+        return IsDebug ? console.log.bind(window.console, '[' + dateTimeStr.trim() + ']', '[DEBUG]')
             : function () { };
     }
 });

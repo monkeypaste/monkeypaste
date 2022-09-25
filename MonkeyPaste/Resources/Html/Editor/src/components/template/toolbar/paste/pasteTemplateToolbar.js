@@ -1,19 +1,7 @@
-﻿function showPasteTemplateToolbar() {
-    var ptt = document.getElementById('pasteTemplateToolbar');
-    ptt.style.display = 'flex';
+﻿
+var IsPastingTemplate = false;
 
-    document.getElementById('paste-template-custom-select').innerHTML = '<select id="pasteTemplateToolbarMenuSelector"></select >';
-
-    var templateMenuSelector = document.getElementById('pasteTemplateToolbarMenuSelector');
-    templateMenuSelector.innerHTML = '';
-
-    var tl = getUsedTemplateDefinitions();
-    for (var i = 0; i < tl.length; i++) {
-        var t = tl[i];
-        var templateItem = '<option class="templateOption" value="' + t['templateGuid'] + '" onchange="focusTemplate(' + t['templateGuid'] + ');">' +
-            t['templateName'] + '</option>';
-        templateMenuSelector.innerHTML += templateItem;
-    }
+function initPasteTemplateToolbar() {
 
     document.getElementById('nextTemplateButton').addEventListener('click', function (e) {
         gotoNextTemplate();
@@ -39,6 +27,25 @@
     document.getElementById('pasteTemplateButton').addEventListener('keydown', function (e) {
         isCompleted = true;
     });
+}
+
+function showPasteTemplateToolbar() {
+    var ptt = document.getElementById('pasteTemplateToolbar');
+    ptt.style.display = 'flex';
+
+    document.getElementById('paste-template-custom-select').innerHTML = '<select id="pasteTemplateToolbarMenuSelector"></select >';
+
+    var templateMenuSelector = document.getElementById('pasteTemplateToolbarMenuSelector');
+    templateMenuSelector.innerHTML = '';
+
+    var tl = getUsedTemplateDefinitions();
+    for (var i = 0; i < tl.length; i++) {
+        var t = tl[i];
+        var templateItem = '<option class="templateOption" value="' + t['templateGuid'] + '" onchange="focusTemplate(' + t['templateGuid'] + ');">' +
+            t['templateName'] + '</option>';
+        templateMenuSelector.innerHTML += templateItem;
+    }
+
 
     createTemplateSelectorStyling(templateMenuSelector);
 

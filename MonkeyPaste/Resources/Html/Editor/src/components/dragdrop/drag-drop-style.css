@@ -4,15 +4,15 @@
     position: fixed;
     padding: 0px;
     z-index: -1;
-    opacity: 0.3;
+    opacity: 0;
 }
 
 .drag-overlay-enabled {
-    background-color: orange;
+    /*background-color: orange;*/
     pointer-events: all;
 }
 
 .drag-overlay-disabled {
-    background-color: purple;
+    /*background-color: purple;*/
     pointer-events: none;
 }

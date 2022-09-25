@@ -76,7 +76,7 @@ function isDataTransferDataValid(dt) {
     if (!dt) {
         return false;
 	}
-    if (CopyItemType == 'Text') {
+    if (ContentItemType == 'Text') {
         return hasPlainText(dt) || hasHtml(dt) || hasQuillDeltaJson(dt);
     }
     return false;
@@ -119,7 +119,7 @@ function getDataTransferPlainText(dt) {
     if (hasHtml(dt)) {
         let itemData = getDataByType(dt, 'text/html');
         itemData = parseForHtmlContentStr(itemData);
-        let item_html_doc = domParser.parseFromString(itemData);
+        let item_html_doc = DomParser.parseFromString(itemData);
         //isHtml = true;
         return item_html_doc.body.innerText;
     }

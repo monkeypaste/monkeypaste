@@ -170,6 +170,7 @@ namespace MonkeyPaste.Common.Avalonia {
             return e.GetPosition(control).ToPortablePoint();
         }
 
+
         #endregion
 
         #region PropertyChanged

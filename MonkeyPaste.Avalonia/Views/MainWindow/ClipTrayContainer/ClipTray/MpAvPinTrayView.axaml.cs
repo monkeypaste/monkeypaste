@@ -24,6 +24,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+
         #region Drop
 
         #region Drop Events
@@ -277,6 +278,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvPinTrayView() {
             InitializeComponent();
+
             PinTrayListBox = this.FindControl<ListBox>("PinTrayListBox");
             PinTrayListBox.AttachedToVisualTree += PinTrayListBox_AttachedToVisualTree;
         }

@@ -85,7 +85,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region MpIContextMenuItemViewModel Implementation
 
         public MpMenuItemViewModel ContextMenuViewModel {
@@ -299,7 +298,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
                 
-
         #region View Models
 
         public IEnumerable<MpAvClipTileViewModel> SortOrderedItems => Items.OrderBy(x => x.QueryOffsetIdx);
@@ -445,9 +443,7 @@ namespace MonkeyPaste.Avalonia {
                 return 0.01d;
             }
         }
-
         public Orientation ListOrientation => MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ? Orientation.Horizontal : Orientation.Vertical;
-
 
         public bool IsHorizontalScrollBarVisible => true;// ClipTrayTotalTileWidth > ClipTrayScreenWidth;
         public bool IsVerticalScrollBarVisible => true;// ClipTrayTotalTileHeight > ClipTrayScreenHeight;
@@ -480,7 +476,6 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-
         public MpPoint ScrollOffset => new MpPoint(ScrollOffsetX, ScrollOffsetY);
 
         public double MaxScrollOffsetX {
@@ -496,7 +491,6 @@ namespace MonkeyPaste.Avalonia {
                 return maxScrollOffsetY;
             }
         }
-
         public MpPoint MaxScrollOffset => new MpPoint(MaxScrollOffsetX, MaxScrollOffsetY);
 
         public MpRect ScreenRect => new MpRect(0, 0, ClipTrayScreenWidth, ClipTrayScreenHeight);
@@ -512,7 +506,6 @@ namespace MonkeyPaste.Avalonia {
         public double ClipTrayScreenWidth { get; set; }
 
         public double ClipTrayScreenHeight { get; set; }
-
         public double LastZoomFactor { get; set; }
         private double _zoomFactor = 1;
         public double ZoomFactor {
@@ -565,7 +558,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsThumbDraggingY { get; set; } = false;
         public bool IsThumbDragging => IsThumbDraggingX || IsThumbDraggingY;
 
-
         public bool IsScrollJumping { get; set; }
 
         public void FindTotalTileSize() {
@@ -600,6 +592,10 @@ namespace MonkeyPaste.Avalonia {
             
             int totalTileCount = MpDataModelProvider.AvailableQueryCopyItemIds.Count;
             queryOffsetIdx = isFindTotalSize ? TotalTilesInQuery - 1 : queryOffsetIdx;
+            if(queryOffsetIdx >= totalTileCount) {
+                return null;
+            }
+
             int startIdx = 0;// prevOffsetRect == null ? 0 : queryOffsetIdx;
 
             var total_size = MpSize.Empty;
@@ -795,6 +791,9 @@ namespace MonkeyPaste.Avalonia {
 
         public MpSize DefaultItemSize => new MpSize(DefaultItemWidth, DefaultItemHeight);
 
+        public double DefaultEditableItemWidth => 1130.0d; // based on edit toolbar width
+
+        public MpSize DefaultEditableItemSize => new MpSize(DefaultEditableItemWidth, DefaultItemHeight);
         public double ScrollBarFixedAxisSize => 30;
 
         #endregion
@@ -854,6 +853,7 @@ namespace MonkeyPaste.Avalonia {
 
         public double PlayPauseButtonWidth { get; set; }
         public MpRect PlayPauseButtonBounds { get; set; } = new MpRect();
+
         #endregion
 
         #region Appearance

@@ -63,6 +63,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
             MpConsole.WriteLine($"retry count exceeded for '{script}' w/ key:'{evalKey}' attempts#:{attempt}");
+            // TODO not soon (this failing is likely my fault) but handle reloading the item here or something depending on the script called
             Debugger.Break();
             return MpAvCefNetApplication.JS_REF_ERROR;
         }

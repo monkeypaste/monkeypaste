@@ -38,9 +38,16 @@ namespace MonkeyPaste.Avalonia {
         /// <returns>Return false to abort the drag operation or true to handle the drag operation.</returns>
         /// 
         protected override bool StartDragging(CefBrowser browser, CefDragData dragData, CefDragOperationsMask allowedOps, int x, int y) {
-            //var result = base.StartDragging(browser, dragData, allowedOps, x, y);
+            bool isDragValid = true;
 
-            //var ctv = (browser.Host.Client.GetWebView() as Control).GetVisualAncestor<MpAvClipTileView>();
+            // TODO should check dragData here and when invalid return false
+
+            if (!isDragValid) {
+                return false;
+            }
+
+            bool? wasDropAborted = null;
+
             Dispatcher.UIThread.Post(async () => {
                 var wv = browser.Host.Client.GetWebView() as MpAvCefNetWebView;
                 var ctvm = wv.BindingContext;
@@ -55,14 +62,14 @@ namespace MonkeyPaste.Avalonia {
                     wv.ExecuteJavascript($"updateModifierKeysFromHost_ext('{modKeyMsg.SerializeJsonObjectToBase64()}')");
                 };
 
-                MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= modKeyUpOrDownHandler;
-                MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= modKeyUpOrDownHandler;
+                MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed += modKeyUpOrDownHandler;
+                MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased += modKeyUpOrDownHandler;
 
                 var avmpdo = new MpAvDataObject();
                 avmpdo.SetData(MpPortableDataFormats.Text, dragData.FragmentText);
                 avmpdo.SetData(MpPortableDataFormats.Html, dragData.FragmentHtml);
                 avmpdo.MapAllPseudoFormats();
-
+                
                 Pointer p = new Pointer(Pointer.GetNextFreeId(), PointerType.Mouse, true);
                 var pe = new PointerEventArgs(
                     Control.PointerPressedEvent,
@@ -74,13 +81,25 @@ namespace MonkeyPaste.Avalonia {
                     new PointerPointProperties(RawInputModifiers.LeftMouseButton, PointerUpdateKind.LeftButtonPressed), KeyModifiers.None);
 
                 var result = await DragDrop.DoDragDrop(pe, avmpdo, DragDropEffects.Copy | DragDropEffects.Move);
-
+                
                 MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= modKeyUpOrDownHandler;
                 MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= modKeyUpOrDownHandler;
 
                 MpConsole.WriteLine("Cef Drag Result: " + result);
-
+                                
+                //wv.DragSourceSystemDragEnded();
+                wasDropAborted = result == DragDropEffects.None;
+                if(wasDropAborted.Value) {
+                    //wv.SendMouseUpEvent(0, 0, CefMouseButtonType.Left, 0, CefEventFlags.None);
+                    wv.ExecuteJavascript($"resetDragDrop_ext()");
+                }
             });
+
+            //while(!wasDropAborted.HasValue) {
+            //    Thread.Sleep(100);
+            //}
+
+            //return !wasDropAborted.Value;
             return true;
         }
         protected override void OnBeforeContextMenu(CefBrowser browser, CefFrame frame, CefContextMenuParams menuParams, CefMenuModel model) {

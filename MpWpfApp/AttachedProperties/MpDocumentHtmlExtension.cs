@@ -203,21 +203,21 @@ namespace MpWpfApp {
 
         #region Messages
 
-        public static MpQuillLoadRequestMessage CreateConvertStandardHtmlMessage(string standardHtml) {
-            return new MpQuillLoadRequestMessage() {
+        public static MpQuillLoadContentRequestMessage CreateConvertStandardHtmlMessage(string standardHtml) {
+            return new MpQuillLoadContentRequestMessage() {
                 envName = "wpf",
                 itemData = standardHtml
             };
         }
 
-        public static MpQuillLoadRequestMessage CreateLoadRequestMessage(FrameworkElement fe, object newValue) {
+        public static MpQuillLoadContentRequestMessage CreateLoadRequestMessage(FrameworkElement fe, object newValue) {
             if (fe.DataContext is MpClipTileViewModel ctvm) {
 
                 MpConsole.WriteLine($"Tile Content Item '{(fe.DataContext as MpClipTileViewModel).CopyItemTitle}' is loaded");
 
                 string itemData = newValue == null ? string.Empty : (string)newValue;
 
-                return new MpQuillLoadRequestMessage() {
+                return new MpQuillLoadContentRequestMessage() {
                     envName = "wpf",
                     itemData = GetEncodedHtml(itemData,ctvm.CopyItemGuid),
                     usedTextTemplates = GetTextTemplates(itemData),
