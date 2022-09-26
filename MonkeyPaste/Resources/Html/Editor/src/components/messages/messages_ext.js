@@ -7,8 +7,8 @@ function initMain_ext(initMsgStr_base64) {
 	log("init request: " + initMsgStr_base64);
 	let initMsgObj = toJsonObjFromBase64Str(initMsgStr_base64);
 
-	if (initMsgObj && initMsgObj.isEditorPlainHtmlConverter) {
-		initPlainHtmlConverter();
+	if (initMsgObj && initMsgObj.isPlainHtmlConverter) {
+		initPlainHtmlConverter(initMsgObj.envName, initMsgObj.useBetterTable);
 		log('plainHtml converter initialized.');
 		return;
 	}
@@ -325,6 +325,18 @@ function updateModifierKeysFromHost_ext(modKeyMsgStr) {
 	drawOverlay();
 }
 
+function getState_ext() {
+	let cur_state = getState();
+	let resp = toBase64FromJsonObj(cur_state);
+	return resp;
+}
+
+function setState_ext(stateObjBase64Str) {
+	let new_state = toJsonObjFromBase64Str(stateObjBase64Str);
+	setState(new_state,true);
+	return 'done';
+}
+
 function updateIsDraggingFromHost_ext(isDraggingMsgStr) {
 	// input MpQuillIsHostDraggingMessage
 
@@ -352,6 +364,14 @@ function isAllSelected_ext() {
 function resetDragDrop_ext() {
 	resetDragDrop(true);
 }
+
+function dragEnd_ext(dragEndMsg_base64str) {
+	// input MpQuillDragEndMessage
+	let dragEnd_e = toJsonObjFromBase64Str(dragEndMsg_base64str);
+	handleDragEnd(dragEnd_e);
+	return 'done';
+}
+
 function getEncodedDataFromRange_ext(encRangeMsgBase64Str) {
 	// input MpQuillGetEncodedRangeDataRequestMessage
 	let encRangeReqMsg = toJsonObjFromBase64Str(encRangeMsgBase64Str);

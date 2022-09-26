@@ -11,15 +11,27 @@
                        x:TypeArguments="local:MpAvMainWindowViewModel"
                        x:DataType="local:MpAvMainWindowViewModel"
                        x:CompileBindings="True">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Border#MainWindowResizeOuterBorder.IsVertical:pointerover">
+            <Setter Property="Cursor"
+                    Value="SizeWestEast" />
+        </Style>
+        <Style Selector="Border#MainWindowResizeOuterBorder:not(.IsVertical):pointerover">
+            <Setter Property="Cursor"
+                    Value="SizeNorthSouth" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Border x:Name="MainWindowResizeOuterBorder"
             Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}"
             Background="Transparent"
+            Classes.IsVertical="{Binding IsVerticalOrientation}"
             local:MpAvIsHoveringExtension.HoverCursor="{Binding ResizerCursor}"
             local:MpAvIsHoveringExtension.IsSelected="{Binding IsResizing}"
             local:MpAvIsHoveringExtension.HoverBrush="Yellow"
             local:MpAvIsHoveringExtension.IsEnabled="True"
             local:MpAvPointerPressCommandExtension.IsEnabled="True"
             local:MpAvPointerPressCommandExtension.DoubleLeftPressCommand="{Binding WindowSizeToDefaultCommand}">
+
         <Border x:Name="MainWindowResizeBorder"
                 local:MpAvResizeExtension.MinHeight="{Binding MainWindowMinHeight}"
                 local:MpAvResizeExtension.MaxHeight="{Binding MainWindowMaxHeight}"

@@ -1,7 +1,7 @@
 var quill;
 
-function initQuill() {
-	let quillOptions = createQuillOptions();
+function initQuill(useBetterTable) {
+	let quillOptions = createQuillOptions(useBetterTable);
 	quill = new Quill("#editor", quillOptions);
 
 	registerTemplateBlots();
@@ -18,7 +18,7 @@ function initQuill() {
 
 }
 
-function createQuillOptions() {
+function createQuillOptions(useBetterTable) {
 	let quillOptions = {
 		//debug: true,
 		placeholder: "",
@@ -32,7 +32,7 @@ function createQuillOptions() {
 		}
 	}	
 
-	quillOptions = addToolbarToQuillOptions(quillOptions);
+	quillOptions = addToolbarToQuillOptions(useBetterTable,quillOptions);
 	return quillOptions;
 }
 

@@ -31,11 +31,11 @@
             </Style>
             <Style Selector="ToggleButton:checked PathIcon">
                 <Setter Property="Foreground"
-                        Value="Maroon" />
+                        Value="Lime" />
             </Style>
             <Style Selector=":is(Button):pointerover PathIcon">
                 <Setter Property="Foreground"
-                        Value="Maroon" />
+                        Value="Cornsilk" />
             </Style>
         </Grid.Styles>
         <!--  Left Side  -->

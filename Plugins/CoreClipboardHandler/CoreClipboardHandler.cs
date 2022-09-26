@@ -87,7 +87,6 @@ namespace CoreClipboardHandler {
             if (hasError != null) {
                 return hasError;
             }
-
             var currentOutput = new MpPortableDataObject();
             
             foreach (var supportedTypeName in request.readFormats) {
@@ -209,7 +208,7 @@ namespace CoreClipboardHandler {
             } else if (dataObj is string[] strArr) {
                 dataStr = string.Join(Environment.NewLine, strArr);
             } else if (dataObj is byte[] bytes) {
-                dataStr = Encoding.Default.GetString(bytes);
+                dataStr = Encoding.UTF8.GetString(bytes);
             }
             return dataStr;
         }

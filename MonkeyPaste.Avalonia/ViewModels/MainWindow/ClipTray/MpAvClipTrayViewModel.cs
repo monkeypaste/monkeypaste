@@ -901,15 +901,15 @@ namespace MonkeyPaste.Avalonia {
 
         //public bool IsExternalDragOverClipTrayContainer { get; set; }
         public bool IsDragOverPinTray { get; set; }
-        public bool IsPinTrayDropPopOutVisible {
-            get {
-                return false;
-                // show popout when no items are visible
-                // TODO This needs to account for external dragover
-                // TODO? at some point using global drag event  when mw is hidden (and pref enabled) have pop out panel automatically pop out for drop
-                return (IsAnyTileDragging || MpAvMainWindowViewModel.Instance.IsDropOverMainWindow) && IsPinTrayEmpty;
-            }
-        }
+        public bool IsPinTrayDropPopOutVisible { get; set; } = false;
+        //    get {
+        //        return false;
+        //        // show popout when no items are visible
+        //        // TODO This needs to account for external dragover
+        //        // TODO? at some point using global drag event  when mw is hidden (and pref enabled) have pop out panel automatically pop out for drop
+        //        return (IsAnyTileDragging || MpAvMainWindowViewModel.Instance.IsDropOverMainWindow) && IsPinTrayEmpty;
+        //    }
+        //}
 
         #endregion
 

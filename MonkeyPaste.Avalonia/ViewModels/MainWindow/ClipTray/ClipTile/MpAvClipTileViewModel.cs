@@ -353,7 +353,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
+        public string CachedState { get; set; } = null;
+        public bool IsReloading => !string.IsNullOrEmpty(CachedState);
         public bool IsWaitingForDomLoad { get; set; } = false;
 
         public bool IsAnyCornerVisible => Parent == null ? false : 

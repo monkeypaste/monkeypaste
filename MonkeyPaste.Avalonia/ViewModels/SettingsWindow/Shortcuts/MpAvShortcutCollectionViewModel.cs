@@ -627,6 +627,10 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 MpConsole.WriteTraceLine("Unknown mouse button released: SharpButton: " + e.Data.Button + " PortableButton: " + button);
             }
+
+            //if (MpAvClipTrayViewModel.Instance.IsPinTrayDropPopOutVisible) {
+            //    MpAvClipTrayViewModel.Instance.IsPinTrayDropPopOutVisible = false;
+            //}
         }
 
         private void Hook_MouseClicked(object sender, MouseHookEventArgs e) {
@@ -656,6 +660,15 @@ namespace MonkeyPaste.Avalonia {
             
             var gmp = GetScaledScreenPoint(e.Data);
             HandlePointerMove(gmp);
+
+            // TODO 1 should have a pref to auto show on drag and maybe a drag dist check here
+            // TODO 2 should use same logic as mw drag (not built) and show window from opposite edge of drag, something nice
+            //if(!MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+            //    MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
+            //}
+            //if (MpAvClipTrayViewModel.Instance.IsPinTrayEmpty) {
+            //    MpAvClipTrayViewModel.Instance.IsPinTrayDropPopOutVisible = true;
+            //}
         }
 
         #endregion

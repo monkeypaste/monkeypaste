@@ -42,12 +42,18 @@ namespace MonkeyPaste.Avalonia {
             quillWindow.Content = RootWebView;
             
             RootWebView.BrowserCreated += (s, e) => {
-                RootWebView.Navigated += (s, e) => {
+                RootWebView.Navigated += async(s, e) => {
                     if (s is WebView wv) {
+                        await Task.Delay(5000);
                         var converter_init_msg = new MpQuillInitMainRequestMessage() {
-                            isPlainHtmlConverter = true
+                            isPlainHtmlConverter = true,
+                            envName = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
+                            useBetterTable = true
                         };
-                        RootWebView.ExecuteJavascript($"initMain_ext('{converter_init_msg.SerializeJsonObjectToBase64}')");
+                        string msg64 = converter_init_msg.SerializeJsonObjectToBase64();
+                        RootWebView.ExecuteJavascript($"initMain_ext('{msg64}')");
+
+                        //wv.ShowDevTools();
                     }
                 };
                 RootWebView.Navigate(MpAvClipTrayViewModel.EditorPath);
@@ -95,13 +101,16 @@ namespace MonkeyPaste.Avalonia {
                     } else {
 
                         var plainHtmlToRichHtmlRequest = new MpQuillConvertPlainHtmlToQuillHtmlRequestMessage() { plainHtml = plainHtml };
-                        string qhtml = await RootWebView.EvaluateJavascriptAsync($"convertPlainHtml_ext('{plainHtmlToRichHtmlRequest.SerializeJsonObjectToBase64()}')");
+                        string respStr = await RootWebView.EvaluateJavascriptAsync($"convertPlainHtml_ext('{plainHtmlToRichHtmlRequest.SerializeJsonObjectToBase64()}')");
+                        var resp = MpJsonObject.DeserializeBase64Object<MpQuillConvertPlainHtmlToQuillHtmlResponseMessage>(respStr);
+                        string qhtml = resp.quillHtml;
 
-                        if (qhtml.IsStringEscapedHtml()) {
-                            // pretty sure this can't happen since its base64 encoded but curious to see, this means need to call HtmlDecode again..
-                            Debugger.Break();
-                            qhtml = HttpUtility.HtmlDecode(qhtml);
-                        }
+                        //if (qhtml.IsStringEscapedHtml()) {
+                        //    // pretty sure this can't happen since its base64 encoded but curious to see, this means need to call HtmlDecode again..
+                        //    Debugger.Break();
+
+                        //}
+                        qhtml = HttpUtility.HtmlDecode(qhtml);
                         hcd.Html = qhtml;
                         //hcd.Rtf = string.Empty;// await MpQuillHtmlToRtfConverter.ConvertStandardHtmlToRtf(hcd.Html);
                     }

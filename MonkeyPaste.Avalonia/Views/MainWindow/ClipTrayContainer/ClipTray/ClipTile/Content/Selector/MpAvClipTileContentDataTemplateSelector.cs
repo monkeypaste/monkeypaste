@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpClipTileContentDataTemplateSelector : IDataTemplate {
+    public class MpAvClipTileContentDataTemplateSelector : IDataTemplate {
         [Content]
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 

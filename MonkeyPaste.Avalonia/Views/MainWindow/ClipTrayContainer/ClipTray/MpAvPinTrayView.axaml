@@ -33,10 +33,10 @@
             </ListBox.Styles>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <!--<ListBoxItem Classes.Editable="{Binding !IsContentReadOnly}">-->
-                    <local:MpAvClipTileView DataContext="{Binding}"
-                                            IsVisible="{Binding IsPinned}" />
-                    <!--</ListBoxItem>-->
+                    <ListBoxItem Classes.TileHover="{Binding IsHovering}">
+                        <local:MpAvClipTileView DataContext="{Binding}"
+                                                IsVisible="{Binding IsPinned}" />
+                    </ListBoxItem>
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <ListBox.ItemsPanel>

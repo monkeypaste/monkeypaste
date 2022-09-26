@@ -71,13 +71,10 @@
 
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <!--<ListBoxItem Classes.Editable="{Binding !IsContentReadOnly}"
-                                         local:MpAvSizeObserverExtension.IsEnabled="True"
-                                         local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedWidth, Mode=OneWayToSource}"
-                                         local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedHeight, Mode=OneWayToSource}">-->
-                            <local:MpAvClipTileView DataContext="{Binding}"
-                                                    IsVisible="{Binding !IsPlaceholder}" />
-                            <!--</ListBoxItem>-->
+                            <ListBoxItem Classes.TileHover="{Binding IsHovering}">
+                                <local:MpAvClipTileView DataContext="{Binding}"
+                                                        IsVisible="{Binding !IsPlaceholder}" />
+                            </ListBoxItem>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                     <ListBox.ItemsPanel>

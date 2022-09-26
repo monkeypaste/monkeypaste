@@ -169,14 +169,22 @@ templateType: "dynamic"
         public List<MpQuillDragDropDataObjectItemFragment> items { get; set; }
     }
 
-    public class MpQuillDragStartOrEndNotification : MpJsonObject {
-        public bool isStart { get; set; }
-    }
-
     public class MpQuillDragDropDataObjectItemFragment : MpJsonObject {
         public string format { get; set; }
         public string data { get; set; }
     }
+
+    public class MpQuillDragEndMessage : MpJsonObject {
+        public bool fromHost { get; set; } = true;
+        public MpQuillDataTransferMessageFragment dataTransfer { get; set; }
+    }
+    public class MpQuillDataTransferMessageFragment : MpJsonObject {
+        public string dropEffect { get; set; }
+    }
+    public class MpQuillDragStartOrEndNotification : MpJsonObject {
+        public bool isStart { get; set; }
+    }
+
     public class MpQuillDropEffectChangedNotification : MpJsonObject {
         public string dropEffect { get; set; }
     }

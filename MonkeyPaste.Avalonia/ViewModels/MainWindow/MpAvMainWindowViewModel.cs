@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Utils.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -559,6 +560,23 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
+
+        private void ValidateWindowState() {
+            Dispatcher.UIThread.Post(() => {
+                if(IsMainWindowLocked) {
+                    return;
+                }
+                if(MpAvMainWindow.Instance.IsVisible && !MainWindowScreen.Bounds.Contains(MainWindowScreenRect.Location) && IsMainWindowOpen) {
+                    // when window is visible outside of screen mark as closed
+                    IsMainWindowOpen = false;
+                }
+                if (!MpAvMainWindow.Instance.IsVisible && IsMainWindowOpen && !IsMainWindowClosing) {
+                    // i think this is only a debugging error since at a breakpoint mw doesn't get deactivated event 
+                    // but this makes sure IsOpen doesn't get out of sync
+                    IsMainWindowOpen = false;
+                }
+            });
+        }
         #endregion
 
         #region Commands        
@@ -649,6 +667,8 @@ namespace MonkeyPaste.Avalonia {
                         IsMainWindowOpening = false;
                         IsMainWindowOpen = true;
 
+                        mw.Activate();
+
                         OnPropertyChanged(nameof(ExternalRect));
                         //OnMainWindowOpened?.Invoke(this, EventArgs.Empty);
                         MpMessenger.SendGlobal(MpMessageType.MainWindowOpened);
@@ -675,6 +695,7 @@ namespace MonkeyPaste.Avalonia {
                 timer.Start();
             },
             () => {
+                ValidateWindowState();
                 return !IsMainWindowLoading &&
                         !IsShowingDialog &&
                         !IsMainWindowOpen &&
@@ -784,6 +805,7 @@ namespace MonkeyPaste.Avalonia {
                 timer.Start();
             },
             () => {
+                ValidateWindowState();
                 return //MpAvMainWindow.Instance != null &&
                          // MpAvMainWindow.Instance.IsVisible &&
                          (IsMainWindowOpen || IsMainWindowOpening) &&

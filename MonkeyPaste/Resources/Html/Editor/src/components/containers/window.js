@@ -38,43 +38,7 @@ function initWindow() {
 
 	window.addEventListener('keydown', onWindowKeyDown);
 	window.addEventListener('keyup', onWindowKeyUp);
-
 }
-
-function initWindowDragDrop() {
-	//dragdrop handlers
-	window.addEventListener("mousedown", onWindowMouseDown_dragdrop);
-	window.addEventListener('mousemove', onWindowMouseMove_dragdrop);
-
-	// from https://stackoverflow.com/a/46986927/105028
-	window.addEventListener('dragstart', onWindowDragStart_override, true);
-	window.addEventListener('dragend', onWindowDragEnd_ovveride, true);
-	window.addEventListener('drop', onWindowDrop_override, true);
-
-	//window.addEventListener('dragenter', function (event) {
-    //    var event2 = new CustomEvent('mp_dragenter', { detail: { original: event } });
-    //    event.target.dispatchEvent(event2);
-
-    //    event.stopPropagation();
-    //}, true);
-
-    //window.addEventListener('dragover', function (/*event*/) {
-    //    //var event2 = new CustomEvent('mp_dragover', { detail: { original: event } });
-    //    //event.target.dispatchEvent(event2);
-
-
-    //    event.stopPropagation();
-    //}, true);
-
-
-    //window.addEventListener('dragover', function (event) {
-    //    var event2 = new CustomEvent('mp_dragover', { detail: { original: event } });
-    //    event.target.dispatchEvent(event2);
-
-    //    event.stopPropagation();
-    //}, true);
-}
-
 
 function getEditorSelection_safe() {
 	let cmp = WindowMouseLoc;

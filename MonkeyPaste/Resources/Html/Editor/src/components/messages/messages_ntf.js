@@ -62,7 +62,23 @@ function onDragStartOrEnd_ntf(isDragStart) {
 			isStart: isDragStart
 		};
 		let msgStr = toBase64FromJsonObj(msg);
-		notifyDragStart(msgStr);
+		notifyDragStartOrEnd(msgStr);
+	}
+}
+
+function onDropCompleted_ntf() {
+	if (typeof notifyDropCompleted === 'function') {
+		notifyDropCompleted();
+	}
+}
+function onDragEnter_ntf() {
+	if (typeof notifyDragEnter === 'function') {
+		notifyDragEnter();
+	}
+}
+function onDragLeave_ntf() {
+	if (typeof notifyDragLeave === 'function') {
+		notifyDragLeave();
 	}
 }
 

@@ -71,3 +71,38 @@ function initMain(envName, useBetterTable) {
 	log('Main Initialized.');
 	return 'Success';	
 }
+
+function getState() {
+	return {
+		envName: EnvName,
+		useBetterTable: true,
+		contentHandle: ContentHandle,
+		contentItemType: ContentItemType,
+		contentData: getHtml(),
+		isSubSelectionEnabled: IsSubSelectionEnabled,
+		isReadOnly: IsReadOnly,
+		sel: getEditorSelection(),
+		isPastingTemplate: IsPastingTemplate
+	}
+}
+
+function setState(stateObj) {
+	IsLoaded = false;
+	initMain(stateObj.envName, stateObj.useBetterTable);
+	loadContent(stateObj.contentHandle, stateObj.contentItemType, stateObj.contentData, stateObj.isPastingTemplate);
+	if (stateObj.isSubSelectionEnabled) {
+		enableSubSelection();
+	} else {
+		disableSubSelection();
+	}
+
+	if (stateObj.isReadOnly) {
+		enableReadOnly();
+	} else {
+		disableReadOnly();
+	}
+
+	if (stateObj.sel) {
+		setEditorSelection(stateObj.sel.index, stateObj.sel.length, 'silent');
+	}
+}

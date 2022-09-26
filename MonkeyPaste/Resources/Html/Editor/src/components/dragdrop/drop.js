@@ -34,6 +34,7 @@ function initDrop() {
         });
 
         enableSubSelection();
+        onDragEnter_ntf();
     }
 
     function handleDragOver(e) {
@@ -68,7 +69,7 @@ function initDrop() {
 
 
         // DROP EFFECT
-        if (isRunningInHost() && !IsDragging) {
+        if (isRunningInHost() && IsDragging) {
             // mod keys updated from host msg in updateModKeys
         } else {
             let isModChanged =
@@ -153,6 +154,7 @@ function initDrop() {
         if (IsReadOnly && !IsDragging) {
             disableSubSelection();
         }
+        onDragLeave_ntf()
         drawOverlay();
     }
 
@@ -160,6 +162,17 @@ function initDrop() {
         // OVERRIDE DEFAULT
 
         e.stopPropagation(); // stops the browser from redirecting.
+
+        // VALIDATE
+
+        if (isDragCopy()) {
+            e.dataTransfer.dropEffect = 'copy';
+        } else if (isDragCut()) {
+            e.dataTransfer.dropEffect = 'move';
+        } else {
+            e.dataTransfer.dropEffect = 'none';
+            return false;
+        }
 
         log('drop');
 
@@ -225,6 +238,7 @@ function initDrop() {
         if (IsReadOnly) {
             disableSubSelection();
         }
+        onDropCompleted_ntf();
         drawOverlay();
         return false;
     }

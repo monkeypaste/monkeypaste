@@ -1,17 +1,9 @@
 ﻿var IsConverterLoaded = false;
 
-function initPlainHtmlConverter() {
-	reqMsg = {
-		envName: 'wpf',
-		isReadOnlyEnabled: true,
-		usedTextTemplates: {},
-		isPasteRequest: false,
-		itemData: ''
-	}
+function initPlainHtmlConverter(envName, useBetterTable) {
+	EnvName = envName;
 
-	EnvName = reqMsg.envName;
-
-	loadQuill('wpf');
+	initQuill(useBetterTable);
 
 	//document.getElementsByClassName("ql-toolbar")[0].classList.add("env-wpf");
 	disableReadOnly();

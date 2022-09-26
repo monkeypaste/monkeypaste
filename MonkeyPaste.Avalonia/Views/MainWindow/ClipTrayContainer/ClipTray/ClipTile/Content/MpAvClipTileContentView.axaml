@@ -31,7 +31,7 @@
             <ContentControl x:Name="ClipTileContentControl"
                             Content="{Binding}">
                 <ContentControl.DataTemplates>
-                    <local:MpClipTileContentDataTemplateSelector>
+                    <local:MpAvClipTileContentDataTemplateSelector>
                         <!--<DataTemplate x:Key="CefWebViewTemplate"
                                       DataType="local:MpAvClipTileViewModel">
                             <local:MpAvContentWebView DataContext="{Binding}"
@@ -54,7 +54,7 @@
                                                             HorizontalAlignment="Stretch"
                                                             VerticalAlignment="Stretch" />
                         </DataTemplate>
-                    </local:MpClipTileContentDataTemplateSelector>
+                    </local:MpAvClipTileContentDataTemplateSelector>
                 </ContentControl.DataTemplates>
             </ContentControl>
         </Border>

@@ -70,9 +70,10 @@ namespace MonkeyPaste.Avalonia {
         private static async void HandleIsContentReadOnlyChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isReadOnly &&
                 element is MpAvCefNetWebView wv && 
-
                 wv.DataContext is MpAvClipTileViewModel ctvm &&
-                wv.IsEditorInitialized) {
+                wv.IsEditorInitialized //&&
+               // !wv.BindingContext.IsReloading
+                ) {
                 Control resizeControl = null;
                 var ctv = wv.GetVisualAncestor<MpAvClipTileView>();
                 if(ctv != null) {
@@ -127,10 +128,12 @@ namespace MonkeyPaste.Avalonia {
             if (e.NewValue is bool isSubSelectionEnabled &&
                 element is MpAvCefNetWebView wv &&
                 GetIsContentReadOnly(wv) &&
-                wv.IsEditorInitialized) {
+                wv.IsEditorInitialized &&
+                wv.DataContext is MpAvClipTileViewModel ctvm &&
+                !ctvm.IsReloading) {
                 if (isSubSelectionEnabled) {
                     // editor handles enabling by double clicking 
-                    //wv.ExecuteJavascript("enableSubSelection_ext()");
+                    wv.ExecuteJavascript("enableSubSelection_ext()");
                 } else {
                     wv.ExecuteJavascript("disableSubSelection_ext()");
                 }
@@ -190,11 +193,10 @@ namespace MonkeyPaste.Avalonia {
 
         private static void HandleHtmlDataChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
             if (element is MpAvCefNetWebView wv &&
-                wv.DataContext is MpAvClipTileViewModel ctvm) {
+                wv.DataContext is MpAvClipTileViewModel ctvm &&
+                !ctvm.IsWaitingForDomLoad &&
+                !ctvm.IsReloading) {
                 Dispatcher.UIThread.Post(async () => {
-                    if (ctvm.IsWaitingForDomLoad) {
-                        return;
-                    }
                     ctvm.IsWaitingForDomLoad = true;
                     while (!wv.IsEditorInitialized) {
                         await Task.Delay(100);
@@ -371,27 +373,19 @@ namespace MonkeyPaste.Avalonia {
             if (e.NewValue is bool isEnabled &&
                 element is MpAvCefNetWebView wv) {
                 if(isEnabled) {
-                    if(wv.IsEditorInitialized) {
-                        Debugger.Break();
-                    }
                     wv.BrowserCreated += Wv_BrowserCreated;
                     wv.DevToolsProtocolEventAvailable += Wv_DevToolsProtocolEventAvailable;
                     wv.DetachedFromVisualTree += Wv_DetachedFromVisualTree;
+
                 } else {
                     Wv_DetachedFromVisualTree(element, null);
                 }
             }
         }
-        private static int browserCallCount = 0;
+
         private static void Wv_BrowserCreated(object sender, EventArgs e) {
             if (sender is MpAvCefNetWebView wv &&
                 wv.DataContext is MpAvClipTileViewModel ctvm) {
-                if (ctvm.CopyItemId == 1062) {
-                    browserCallCount++;
-                }
-                if (browserCallCount > 1) {
-                    Debugger.Break();
-                }
                 wv.IsEditorInitialized = false;
 
                 wv.Navigated += Wv_Navigated;
@@ -399,17 +393,13 @@ namespace MonkeyPaste.Avalonia {
             }
 
         }
-        private static int test = 0;
+
         private static void Wv_Navigated(object sender, NavigatedEventArgs e) {
             if (e.Url == "about:blank") {
                 return;
             }
             if (sender is MpAvCefNetWebView wv && wv.DataContext is MpAvClipTileViewModel ctvm) {
                 Dispatcher.UIThread.Post(async () => {
-                    //if (ctvm.CopyItemId == 1063) {
-                    //    test++;
-                    //    wv.ShowDevTools();
-                    //}
                     while (!wv.IsDomLoaded) {
                         await Task.Delay(100);
                     }
@@ -422,11 +412,18 @@ namespace MonkeyPaste.Avalonia {
                     //}
 
                     //ctvm.IsBusy = true;
-                    var req = new MpQuillInitMainRequestMessage() {
-                        envName = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
-                        isPlainHtmlConverter = false
-                    };
-                    wv.ExecuteJavascript($"initMain_ext('{req.SerializeJsonObjectToBase64()}')");
+                    if (string.IsNullOrEmpty(ctvm.CachedState)) {
+
+                        var req = new MpQuillInitMainRequestMessage() {
+                            envName = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
+                            isPlainHtmlConverter = false
+                        };
+                        wv.ExecuteJavascript($"initMain_ext('{req.SerializeJsonObjectToBase64()}')");
+                    } else {
+                        await wv.EvaluateJavascriptAsync($"setState_ext('{ctvm.CachedState}')");
+
+                        ctvm.CachedState = null;
+                    }
                     wv.IsEditorInitialized = true;
 
                     //var respStr = await wv.EvaluateJavascriptAsync($"initMain_ext('{req.SerializeJsonObjectToBase64()}')");

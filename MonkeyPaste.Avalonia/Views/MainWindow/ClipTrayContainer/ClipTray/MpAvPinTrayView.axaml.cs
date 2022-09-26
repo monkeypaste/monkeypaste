@@ -36,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void DragOver(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragOver] PinTrayListBox: ");
-            e.DragEffects = DragDropEffects.None;
+           // e.DragEffects = DragDropEffects.None;
 
             var ptr_mp = e.GetPosition(sender as Control).ToPortablePoint();
             int drop_idx = GetDropIdx(ptr_mp);
@@ -288,7 +288,7 @@ namespace MonkeyPaste.Avalonia {
             ptrlb.AddHandler(DragDrop.DragEnterEvent, DragEnter);
             ptrlb.AddHandler(DragDrop.DragOverEvent, DragOver);
             ptrlb.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
-
+            ptrlb.AddHandler(DragDrop.DropEvent, Drop);
             InitAdorner(ptrlb);
         }
 

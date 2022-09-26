@@ -19,8 +19,26 @@ using Avalonia.Interactivity;
 using CefNet.Internal;
 using Avalonia.Controls;
 using Avalonia.Platform;
+using Cairo;
 
 namespace MonkeyPaste.Avalonia {
+
+    public enum MpAvEditorBindingFunctionType {
+        getDragData,
+        getAllTemplatesFromDb,
+        notifyEditorSelectionChanged,
+        notifyContentLengthChanged,
+        notifySubSelectionEnabledChanged,
+        notifyContentDraggableChanged,
+        notifyDropEffectChanged,
+        notifyException,
+        notifyDragStartOrEnd,
+        notifyReadOnlyChanged,
+        notifyDomLoaded,
+        notifyDropCompleted,
+        notifyDragEnter,
+        notifyDragLeave
+    }
     [DoNotNotify]
     public class MpAvCefNetWebView : 
         WebView, 
@@ -31,56 +49,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-        private static MpAvCefNetWebView _openerWebView { get; set; }
         public static MpAvCefNetWebView DraggingRtb { get; private set; } = null;
-
-        public static void InitOpener() {
-            var opener = new MpAvCefNetWebView() {
-                IsVisible = false
-            };
-            (MpAvMainWindow.Instance.Content as Panel).Children.Add(opener);
-            _openerWebView = opener;
-        }
-
-        static MpAvCefNetWebView() {
-            //IsHitTestVisibleProperty.Changed.AddClassHandler<MpAvCefNetWebView>((x, y) => HandleIsHitTestVisibleChanged(x, y));
-        }
-
-        private static void HandleIsHitTestVisibleChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
-            if (e.NewValue is bool isHitTestVisible &&
-                element is MpAvCefNetWebView wv) {
-                if(isHitTestVisible) {
-                    // when wv has hit test CanDrag is updated through window binding
-                    return;
-                }
-                wv.UpdateDraggable(true);
-            }
-        }
-        #endregion
-
-        #region MpAvIDropHost Implementation
-
-        //bool MpAvIDropHost.IsDropEnabled => true;
-
-        //bool MpAvIDropHost.IsDropValid(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects) {
-        //    return true;
-        //}
-
-        //void MpAvIDropHost.DragOver(MpPoint host_mp, IDataObject avdo, DragDropEffects dragEffects) {
-        //    //throw new NotImplementedException();
-        //}
-
-        //void MpAvIDropHost.DragLeave() {
-        //    this.ExecuteJavascript($"resetDragDrop()");
-        //    //throw new NotImplementedException();
-        //}
-
-        //async Task<DragDropEffects> MpAvIDropHost.DropDataObjectAsync(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects) {
-        //    //throw new NotImplementedException();
-        //    await Task.Delay(1);
-        //    return dragEffects;
-        //}
-
 
         #endregion
 
@@ -91,6 +60,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsEditorInitialized { get; set; } = false;
         public bool IsDomLoaded { get; set; } = false;
 
+        
+
         public bool WasDragStartedFromEditor { get; set; } = false;
         public bool CanDrag { get; private set; } = true;
 
@@ -100,13 +71,12 @@ namespace MonkeyPaste.Avalonia {
 
         MpAvIContentDocument MpAvIContentView.Document => Document;
 
-        //public IList<RoutedCommandBinding> CommandBindings { get; } = new List<RoutedCommandBinding>();
         #endregion
 
         #region Constructors
 
         public MpAvCefNetWebView() : base() {
-            this.CreateWindow += MpAvCefNetWebView_CreateWindow;
+            //this.CreateWindow += MpAvCefNetWebView_CreateWindow;
             Document = new MpAvHtmlDocument(this);
             Selection = new MpAvTextSelection(Document);
 
@@ -129,7 +99,91 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region WebView Binding Methods
+        public void HandleBindingNotification(MpAvEditorBindingFunctionType notificationTYpe, string msgJsonBase64Str) {
+            var ctvm =DataContext as MpAvClipTileViewModel;
+            switch (notificationTYpe) {
+                case MpAvEditorBindingFunctionType.notifyContentDraggableChanged:
+                    var draggableChanged = MpJsonObject.DeserializeBase64Object<MpQuillContentDraggableChangedMessage>(msgJsonBase64Str);
+                   UpdateDraggable(draggableChanged.isDraggable);
+                    break;
+                case MpAvEditorBindingFunctionType.notifyEditorSelectionChanged:
+                    var selChangedJsonMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillContentSelectionChangedMessage>(msgJsonBase64Str);
+                   UpdateSelection(selChangedJsonMsgObj.index, selChangedJsonMsgObj.length, selChangedJsonMsgObj.selText, true, selChangedJsonMsgObj.isChangeBegin);
+                    break;
+                case MpAvEditorBindingFunctionType.notifyContentLengthChanged:
+                    var contentLengthMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillContentLengthChangedMessage>(msgJsonBase64Str);
+                   Document.ContentEnd.Offset = contentLengthMsgObj.length;
+                    break;
+                case MpAvEditorBindingFunctionType.notifyDropEffectChanged:
+                    var dropEffectChangedNtf = MpJsonObject.DeserializeBase64Object<MpQuillDropEffectChangedNotification>(msgJsonBase64Str);
+                   UpdateDropEffect(dropEffectChangedNtf.dropEffect);
+                    MpConsole.WriteLine($"{ctvm.CopyItemTitle} dropEffects: {dropEffectChangedNtf.dropEffect}");
+                    break;
+                case MpAvEditorBindingFunctionType.notifyDragStartOrEnd:
+                    //if(wv.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv) {
+                    //    var dddmsg = MpJsonObject.DeserializeBase64Object<MpQuillDragDropDataObjectMessage>(msgJsonStr);
+                    //    ctv.UpdateSubSelectDragDataObject(dddmsg);
+                    //}
+                    var dragStartOrEndMsg = MpJsonObject.DeserializeBase64Object<MpQuillDragStartOrEndNotification>(msgJsonBase64Str);
+                   WasDragStartedFromEditor = dragStartOrEndMsg.isStart;
+                    break;
+                case MpAvEditorBindingFunctionType.notifyReadOnlyChanged:
+                    // TODO coordinate readOnly and sub-selection processing w/ webview extension..
 
+                    if (ctvm.IsContentReadOnly) {
+                        var disableReadOnlyMsg = MpJsonObject.DeserializeBase64Object<MpQuillDisableReadOnlyResponseMessage>(msgJsonBase64Str);
+                        ctvm.IsContentReadOnly = false;
+                    } else {
+                        var enableReadOnlyMsg = MpJsonObject.DeserializeBase64Object<MpQuillEnableReadOnlyResponseMessage>(msgJsonBase64Str);
+                        ctvm.IsContentReadOnly = true;
+                    }
+                    break;
+
+                case MpAvEditorBindingFunctionType.notifySubSelectionEnabledChanged:
+                    var subSelChangedNtf = MpJsonObject.DeserializeBase64Object<MpQuillSubSelectionChangedNotification>(msgJsonBase64Str);
+                    ctvm.IsSubSelectionEnabled = subSelChangedNtf.isSubSelectionEnabled;
+                    break;
+                case MpAvEditorBindingFunctionType.notifyDomLoaded:
+                   IsDomLoaded = true;
+                    break;
+                case MpAvEditorBindingFunctionType.notifyDropCompleted:
+                    Dispatcher.UIThread.Post(async () => {
+                        // when  drop completes wait for drag tile (if internal) to reload before updating selection to drop tile
+                        await Task.Delay(300);
+                        while (MpAvClipTrayViewModel.Instance.AllItems.Any(x => x.IsReloading)) {
+                            await Task.Delay(100);
+                        }
+                        await Task.Delay(300);
+                        MpAvMainWindow.Instance.Activate();
+                        MpAvClipTrayViewModel.Instance.ClearAllSelection();
+                        MpAvClipTrayViewModel.Instance.SelectedItem = BindingContext;
+                        MpAvClipTrayViewModel.Instance.AllItems.ForEach(x => x.IsHovering = x.CopyItemId == BindingContext.CopyItemId);
+
+                        //if (!BindingContext.IsPinned) {
+                        //    var lb = this.GetVisualAncestor<ListBox>();
+
+                        //    var lbi = this.GetVisualAncestor<ListBoxItem>();
+                        //    lb.SelectedItem = BindingContext;
+                        //}
+                       
+                        ////BindingContext.IsSelected = true;
+                        //if (!this.IsKeyboardFocusWithin) {
+                        //    this.Focus();
+                        //}
+                    });
+                    break;
+                case MpAvEditorBindingFunctionType.notifyDragEnter:
+                    BindingContext.IsHovering = true;
+                    break;
+                case MpAvEditorBindingFunctionType.notifyDragLeave:
+                    BindingContext.IsHovering = false;
+                    break;
+                case MpAvEditorBindingFunctionType.notifyException:
+                    var exceptionMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);
+                    MpConsole.WriteLine(exceptionMsgObj);
+                    break;
+            }
+        }
         public void UpdateSelection(int index, int length,string text, bool isFromEditor, bool isChangeBegin) {
             var newStart = new MpAvTextPointer(Document, index);
             var newEnd = new MpAvTextPointer(Document, index + length);
@@ -180,73 +234,8 @@ namespace MonkeyPaste.Avalonia {
                 WasDragStartedFromEditor = false;
             }
         }
-        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
-            base.OnAttachedToVisualTree(e);
-            //DragDrop.SetAllowDrop(this, true);
-            //this.AddHandler(DragDrop.DragEnterEvent, DragEnter);
-            //this.AddHandler(DragDrop.DragOverEvent, DragOver);
-            //this.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
-            //this.AddHandler(DragDrop.DragLeaveEvent, Drop);
-        }
 
-        //#region Drag
-        //private void DragCheckAndStart_old(PointerPressedEventArgs e) {
-        //    MpPoint dc_down_pos = e.GetClientMousePoint(this);
-        //    bool is_pointer_dragging = false;
-        //    bool was_drag_started = false;
-
-        //    EventHandler<PointerReleasedEventArgs> dragControl_PointerReleased_Handler = null;
-        //    EventHandler<PointerEventArgs> dragControl_PointerMoved_Handler = null;
-
-        //    // Drag Control PointerMoved Handler
-        //    dragControl_PointerMoved_Handler = (s, e) => {
-        //        MpPoint dc_move_pos = e.GetClientMousePoint(this);
-
-        //        var drag_dist = dc_down_pos.Distance(dc_move_pos);
-        //        is_pointer_dragging = drag_dist >= MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST;
-        //        if (is_pointer_dragging) {
-
-        //            // DRAG START
-
-        //            this.PointerMoved -= dragControl_PointerMoved_Handler;
-
-        //            Dispatcher.UIThread.Post(async () => {
-        //                if (CanDrag) {
-        //                    was_drag_started = true;
-        //                    StartDrag();
-
-        //                    IDataObject avmpdo = await GetWebViewDragDataAsync(false);
-        //                    var result = await DragDrop.DoDragDrop(e, avmpdo, DragDropEffects.Copy | DragDropEffects.Move);
-
-        //                    EndDrag();
-        //                    this.PointerReleased -= dragControl_PointerReleased_Handler;
-        //                    MpConsole.WriteLine("Drag End. Result effect: " + result);
-        //                }
-        //            });
-        //        }
-        //    };
-
-        //    // Drag Control PointerReleased Handler
-        //    dragControl_PointerReleased_Handler = (s, e) => {
-        //        if (was_drag_started) {
-        //            // this should not happen, or release is called before drop (if its called at all during drop
-        //            // release should be removed after drop
-        //            //Debugger.Break();
-        //        }
-
-        //        // DRAG END
-
-        //        this.PointerMoved -= dragControl_PointerMoved_Handler;
-        //        this.PointerReleased -= dragControl_PointerReleased_Handler;
-        //        MpConsole.WriteLine("DragCheck pointer released (was not drag)");
-
-        //        EndDrag();
-
-        //    };
-
-        //    this.PointerReleased += dragControl_PointerReleased_Handler;
-        //    this.PointerMoved += dragControl_PointerMoved_Handler;
-        //}
+        
 
         private void StartDrag(PointerPressedEventArgs e) {
             MpAvIContentView cv = BindingContext.GetContentView();
@@ -303,18 +292,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        protected override void OnPointerPressed(PointerPressedEventArgs e) {
-            base.OnPointerPressed(e);
-            
-            return;
-
-
-            if (!CanDrag || BindingContext is MpIResizableViewModel rvm && rvm.CanResize) {
-                return;
-            }
-            this.DragCheckAndStart(e, StartDrag, ContinueDrag, EndDrag);
-        }
-
         private async Task<IDataObject> GetWebViewDragDataAsync(bool fillTemplates) {            
             MpAvDataObject avdo = await BindingContext.ConvertToDataObject(fillTemplates);
             if (IsAllSelected()) {
@@ -350,110 +327,5 @@ namespace MonkeyPaste.Avalonia {
         //#endregion
 
 
-        #region Drop
-        private void DragEnter(object sender, DragEventArgs e) {
-            MpConsole.WriteLine("[DragEnter] CurDropEffects: " + _curDropEffects);
-            //SendDropMsg(e.Data, "dragenter");
-            e.DragEffects = DragDropEffects.Copy | DragDropEffects.Move;
-            //base.OnDragEnter(e);
-        }
-
-        private void DragOver(object sender, DragEventArgs e) {
-            MpConsole.WriteLine("[DragOver] CurDropEffects: " + _curDropEffects);
-            SendDropMsg(e.Data, "dragover");
-            e.DragEffects = DragDropEffects.Copy | DragDropEffects.Move;
-           // base.OnDragOver(e);
-        }
-        private void DragLeave(object sender, RoutedEventArgs e) {
-            SendDropMsg(null, "dragleave");
-            MpConsole.WriteLine("[DragLeave] CurDropEffects: " + _curDropEffects);
-           // base.OnDragLeave(e);
-        }
-
-        private void Drop(object sender, DragEventArgs e) {
-            MpConsole.WriteLine("[Drop] CurDropEffects: " + _curDropEffects);
-            SendDropMsg(e.Data, "dragleave");
-            e.DragEffects = DragDropEffects.Copy | DragDropEffects.Move;
-          //  base.OnDrop(e);
-        }
-
-        private void SendDropMsg(IDataObject avdo, string evtType) {
-            var jsonMsg = GetDragDropMessage(avdo, evtType);
-            this.ExecuteJavascript($"onDragEvent_ext('{jsonMsg.SerializeJsonObjectToBase64()}')");
-        }
-
-        private MpQuillDragDropDataObjectMessage GetDragDropMessage(IDataObject avdo, string evtType) {
-            var hdobjMsg = new MpQuillDragDropDataObjectMessage() {
-                eventType = evtType,
-                items = avdo == null ? null : avdo.GetDataFormats()
-                                        .Where(x => MpPortableDataFormats.RegisteredFormats.Contains(x))
-                                        .Select(x =>
-                                            new MpQuillDragDropDataObjectItemFragment() {
-                                                format = x,
-                                                data = x != MpPortableDataFormats.Html ? avdo.Get(x) as string : (avdo.Get(x) as byte[]).ToBase64String()
-                                            }).ToList()
-            };
-            return hdobjMsg;
-        }
-
-        #endregion
-
-
-        
-
-        #region Application Commands
-
-        //private static void OnCanExecuteClipboardCommand(object target, CanExecuteRoutedEventArgs args) {
-        //    MpAvCefNetWebView wv = (MpAvCefNetWebView)target;
-        //    args.CanExecute = wv.IsEnabled;
-        //}
-
-        //private static void OnCopy(object sender, ExecutedRoutedEventArgs e) {
-        //    MpAvCefNetWebView wv = (MpAvCefNetWebView)sender;
-        //    e.Handled = true;
-        //    wv.SetClipboardDataAsync(true).FireAndForgetSafeAsync(wv.DataContext as MpViewModelBase);
-        //}
-
-        //private static void OnCut(object sender, ExecutedRoutedEventArgs e) {
-        //    MpAvCefNetWebView wv = (MpAvCefNetWebView)sender;
-        //    e.Handled = true;
-        //    wv.SetClipboardDataAsync(false).FireAndForgetSafeAsync(wv.DataContext as MpViewModelBase);
-        //}
-
-        //private static void OnPaste(object sender, ExecutedRoutedEventArgs e) {
-        //    MpAvCefNetWebView wv = (MpAvCefNetWebView)sender;
-
-        //    e.Handled = true;
-        //    Dispatcher.UIThread.Post(async () => {
-        //        string cb_text = await Application.Current.Clipboard.GetTextAsync();
-        //        await wv.Selection.SetTextAsync(cb_text);
-
-        //        if (wv.DataContext is MpAvClipTileViewModel ctvm) {
-        //            MpAvCefNetWebViewExtension.SaveTextContentAsync(wv)
-        //                .FireAndForgetSafeAsync(ctvm);
-        //        }
-        //    });            
-        //}
-
-        #endregion
-
-        protected async Task SetClipboardDataAsync(bool isCopy) {
-            var ctvm = DataContext as MpAvClipTileViewModel;
-            if (Selection.IsEmpty) {
-                MpAvTextBoxSelectionExtension.SelectAll(ctvm);
-            }
-            string selectedText = await MpAvCefNetWebViewExtension.GetEncodedContentAsync(this, false, true);
-
-            MpPlatformWrapper.Services.ClipboardMonitor.IgnoreNextClipboardChangeEvent = true;
-            Application.Current.Clipboard.SetTextAsync(selectedText)
-                .FireAndForgetSafeAsync(ctvm);
-
-            if (!isCopy) {
-                MpAvCefNetWebViewExtension.FinishContentCutAsync(ctvm)
-                    .FireAndForgetSafeAsync(ctvm);
-            }
-        }
-
-       
     }
 }

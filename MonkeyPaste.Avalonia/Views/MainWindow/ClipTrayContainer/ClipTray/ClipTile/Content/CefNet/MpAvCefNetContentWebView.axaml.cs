@@ -5,6 +5,7 @@ using MonkeyPaste.Common.Avalonia;
 using System.Diagnostics;
 using CefNet.Avalonia;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvCefNetContentWebView : MpAvUserControl<MpAvClipTileViewModel> {
@@ -15,5 +16,8 @@ namespace MonkeyPaste.Avalonia {
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }
+
+
+
     }
 }

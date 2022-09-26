@@ -8,8 +8,6 @@ var IsSubSelectionEnabled = false;
 var EditorContainerElement = null;
 var QuillEditorElement = null;
 
-var UseBetterTable = true;
-
 var IsReadOnly = false;
 
 function initEditor(useBetterTable) {
@@ -17,13 +15,8 @@ function initEditor(useBetterTable) {
 		log('editor already initialized, ignoring init');
 		return;
 	}
-	// NOTE table flag is just for debugging
-	UseBetterTable = useBetterTable;
-	if (UseBetterTable == null) {
-		UseBetterTable = true;
-	}
 
-	initQuill();
+	initQuill(useBetterTable);
 
 
 

@@ -1,0 +1,138 @@
+﻿using MonkeyPaste.Common;
+using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using System;
+using CefNet;
+using CefNet.Avalonia;
+using System.Collections.Generic;
+using Avalonia.Threading;
+
+namespace MonkeyPaste.Avalonia {
+    public static class MpAvWebViewJsMessageExtensions {
+        #region Private Variables
+        private static ConcurrentDictionary<WebView, ConcurrentDictionary<string, string>> _webViewEvalJsLookup = new ConcurrentDictionary<WebView, ConcurrentDictionary<string, string>>();
+
+        #endregion
+
+
+        #region WebView Extensions
+
+        public static async Task<string> EvaluateJavascriptAsync(this WebView wv, string script) {
+            string evalKey = System.Guid.NewGuid().ToString();
+            var _evalResultLookup = GetJsPendingMessageLookup(wv);
+            if (_evalResultLookup.ContainsKey(evalKey)) {
+                // shouldn't happen
+                Debugger.Break();
+            }
+            _evalResultLookup.TryAdd(evalKey, null);
+
+            int max_attempts = 100;
+            int attempt = 0;
+
+            while (attempt <= max_attempts) {
+                string resp = await wv.EvaluateJavascriptAsync_helper(script, evalKey);
+                bool is_valid = resp != null && resp != MpAvCefNetApplication.JS_REF_ERROR;
+                if (is_valid) {
+                    _evalResultLookup.Remove(evalKey, out string rmStr);
+                    return resp;
+                }
+                _evalResultLookup[evalKey] = null;
+                attempt++;
+                //MpConsole.WriteLine($"retrying '{script}' w/ key:'{evalKey}' attempt#:{attempt}");
+                await Task.Delay(100);
+            }
+            MpConsole.WriteLine($"retry count exceeded for '{script}' w/ key:'{evalKey}' attempts#:{attempt}");
+            // TODO not soon (this failing is likely my fault) but handle reloading the item here or something depending on the script called
+            Debugger.Break();
+            return MpAvCefNetApplication.JS_REF_ERROR;
+        }
+
+
+        public static void ExecuteJavascript(this WebView wv, string script) {
+            var frame = wv.GetMainFrame();
+            if (frame == null) {
+                throw new Exception("frame must be initialized");
+            }
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                Dispatcher.UIThread.Post(() => {
+                    wv.ExecuteJavascript(script);
+                });
+                return;
+            }
+            frame.ExecuteJavaScript(script, frame.Url, 0);
+        }
+
+        public static void SetJavascriptResult(this WebView wv, string evalKey, string result) {
+            var _evalResultLookup = GetJsPendingMessageLookup(wv);
+            if (_evalResultLookup.ContainsKey(evalKey)) {
+                //MpConsole.WriteLine("js eval key " + evalKey + " already has a result pending (replacing).");
+                //MpConsole.WriteLine("existing: " + _evalResultLookup[evalKey]);
+                //MpConsole.WriteLine("new: " + result);
+                _evalResultLookup[evalKey] = result;
+                return;
+            }
+            if (!_evalResultLookup.TryAdd(evalKey, result)) {
+                // MpConsole.WriteTraceLine("Js Eval error, couldn't write to lookup, if happens should probably loop here..");
+                Debugger.Break();
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private static async Task<string> EvaluateJavascriptAsync_helper(this WebView wv, string script, string evalKey, int retryAttempt = 0) {
+            // create evaljs request to be picked up by HandleRequest on cef renderer thread
+            var frame = wv.GetMainFrame();
+            if (frame == null) {
+                return null;
+            }
+
+            string resp = null;
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                await Dispatcher.UIThread.InvokeAsync(async () => {
+                    resp = await wv.EvaluateJavascriptAsync(script);
+                });
+                return resp;
+            }
+
+            CefProcessMessage cefMsg = new CefProcessMessage("EvaluateScript");
+            evalKey = string.IsNullOrEmpty(evalKey) ? System.Guid.NewGuid().ToString() : evalKey;
+            cefMsg.ArgumentList.SetString(0, evalKey);
+            cefMsg.ArgumentList.SetString(1, script);
+            frame.SendProcessMessage(CefProcessId.Renderer, cefMsg);
+
+            var _evalResultLookup = GetJsPendingMessageLookup(wv);
+            while (_evalResultLookup[evalKey] == null) {
+                await Task.Delay(100);
+            }
+            return _evalResultLookup[evalKey];
+        }
+        private static ConcurrentDictionary<string, string> GetJsPendingMessageLookup(WebView wv) {
+            if (!_webViewEvalJsLookup.ContainsKey(wv)) {
+                // remove lookup if wv disposed
+                wv.DetachedFromVisualTree += Wv_DetachedFromVisualTree;
+                _webViewEvalJsLookup.TryAdd(wv, new ConcurrentDictionary<string, string>());
+            }
+            return _webViewEvalJsLookup[wv];
+        }
+
+        private static void Wv_DetachedFromVisualTree(object sender, global::Avalonia.VisualTreeAttachmentEventArgs e) {
+            var wv = sender as WebView;
+            if (wv == null) {
+                return;
+            }
+            wv.DetachedFromVisualTree -= Wv_DetachedFromVisualTree;
+            if (_webViewEvalJsLookup.Remove(wv, out var pendingEvalLookup)) {
+                MpConsole.WriteLine($"WebView w/ datacontext: '{wv.DataContext}' disposed with '{pendingEvalLookup.Count}' js evaluations pending: ");
+                pendingEvalLookup.ForEach(x => MpConsole.WriteLine($"Key: '{x.Key}' Script: '{x.Value}'"));
+                return;
+            }
+        }
+
+        
+
+        #endregion
+    }
+}

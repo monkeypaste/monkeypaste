@@ -46,8 +46,6 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
 
-            bool? wasDropAborted = null;
-
             Dispatcher.UIThread.Post(async () => {
                 var wv = browser.Host.Client.GetWebView() as MpAvCefNetWebView;
                 var ctvm = wv.BindingContext;
@@ -71,41 +69,33 @@ namespace MonkeyPaste.Avalonia {
                 avmpdo.MapAllPseudoFormats();
                 
                 Pointer p = new Pointer(Pointer.GetNextFreeId(), PointerType.Mouse, true);
-                var pe = new PointerEventArgs(
-                    Control.PointerPressedEvent,
-                    wv,
-                    p,
-                    MpAvMainWindow.Instance,
-                    MpAvMainWindow.Instance.Position.ToAvPoint(),
-                    (ulong)DateTime.Now.Ticks,
+                var pe = new PointerEventArgs(Control.PointerPressedEvent,wv,p,
+                    MpAvMainWindow.Instance, MpAvMainWindow.Instance.Position.ToAvPoint(),(ulong)DateTime.Now.Ticks,
                     new PointerPointProperties(RawInputModifiers.LeftMouseButton, PointerUpdateKind.LeftButtonPressed), KeyModifiers.None);
 
-                var result = await DragDrop.DoDragDrop(pe, avmpdo, DragDropEffects.Copy | DragDropEffects.Move);
+                var result = await DragDrop.DoDragDrop(pe, avmpdo, allowedOps.ToDragDropEffects());
                 
                 MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= modKeyUpOrDownHandler;
                 MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= modKeyUpOrDownHandler;
 
                 MpConsole.WriteLine("Cef Drag Result: " + result);
-                                
-                //wv.DragSourceSystemDragEnded();
-                wasDropAborted = result == DragDropEffects.None;
-                if(wasDropAborted.Value) {
-                    //wv.SendMouseUpEvent(0, 0, CefMouseButtonType.Left, 0, CefEventFlags.None);
-                    wv.ExecuteJavascript($"resetDragDrop_ext()");
+
+                var dragEndMsg = new MpQuillDragEndMessage() {
+                    dataTransfer = new MpQuillDataTransferMessageFragment() {
+                        dropEffect = result.ToCefDragOperationsMask().ToString()
+                    }
+                };
+
+                await wv.EvaluateJavascriptAsync($"dragEnd_ext('{dragEndMsg.SerializeJsonObjectToBase64()}')");
+                if (wv.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv) {
+                    ctv.ReloadContent();
                 }
             });
-
-            //while(!wasDropAborted.HasValue) {
-            //    Thread.Sleep(100);
-            //}
-
-            //return !wasDropAborted.Value;
             return true;
         }
         protected override void OnBeforeContextMenu(CefBrowser browser, CefFrame frame, CefContextMenuParams menuParams, CefMenuModel model) {
-            //menuParams.IsCustomMenu = true;
+            // ensure default cefnet context menu is empty
             model.Clear();
-            return;
         }
     }
 }

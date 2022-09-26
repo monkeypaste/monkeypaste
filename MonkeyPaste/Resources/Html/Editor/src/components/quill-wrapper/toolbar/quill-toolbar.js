@@ -1,4 +1,9 @@
-function addToolbarToQuillOptions(quillOptions) {
+
+var UseBetterTable = true;
+
+function addToolbarToQuillOptions(useBetterTable, quillOptions) {
+	UseBetterTable = useBetterTable;
+
 	var node = document.createElement("style");
 	node.innerHTML = registerFontStyles(EnvName);
 	document.body.appendChild(node);

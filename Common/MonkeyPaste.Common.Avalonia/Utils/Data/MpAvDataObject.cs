@@ -13,6 +13,10 @@ namespace MonkeyPaste.Common.Avalonia {
 
     public class MpAvDataObject : MpPortableDataObject, IDataObject {
         public override void SetData(string format, object data) {
+            if(data == null) {
+                // will cause error for sometypes
+                return;
+            }
             if(MpAvDataFormats.IsFormatOverride(format)) {
                 if(format == MpPortableDataFormats.FileDrop) {
                     // convert portable single line-separated string to enumerable of strings for avalonia
