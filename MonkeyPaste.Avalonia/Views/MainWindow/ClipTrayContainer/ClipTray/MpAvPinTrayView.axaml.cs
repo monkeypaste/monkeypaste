@@ -179,7 +179,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task PerformExternalDropAsync(int drop_idx, IDataObject avdo) {
-            MpPortableDataObject mpdo = MpPlatformWrapper.Services.DataObjectHelper.ConvertToSupportedPortableFormats(avdo);
+            MpPortableDataObject mpdo = await MpPlatformWrapper.Services.DataObjectHelperAsync.ConvertToSupportedPortableFormatsAsync(avdo);
 
             var avdo_ci = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(mpdo);
 

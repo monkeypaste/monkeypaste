@@ -27,6 +27,7 @@ namespace MonkeyPaste {
         MpIStringTools StringTools { get; set; }
         MpIOsInfo OsInfo { get; set; }
         MpIPlatformDataObjectHelper DataObjectHelper { get; set; }
+        MpIPlatformDataObjectHelperAsync DataObjectHelperAsync { get; set; }
         MpINativeMessageBox NativeMessageBox { get; set; }
 
         MpIClipboardMonitor ClipboardMonitor { get; set; }

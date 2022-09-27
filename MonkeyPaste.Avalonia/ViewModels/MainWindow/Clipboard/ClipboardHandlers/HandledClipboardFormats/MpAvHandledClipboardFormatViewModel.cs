@@ -20,14 +20,12 @@ using System.IO;
 
 
 namespace MonkeyPaste.Avalonia {
-    public class MpHandledClipboardFormatViewModel :
-        MpAvSelectorViewModelBase<MpClipboardHandlerItemViewModel,MpClipboardFormatPresetViewModel>,
+    public class MpAvHandledClipboardFormatViewModel :
+        MpAvSelectorViewModelBase<MpAvClipboardHandlerItemViewModel,MpAvClipboardFormatPresetViewModel>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpITreeItemViewModel {
         #region Private Variables
-
-        private static string _defaultHandlerPluginGuid = "a7df5078-8c85-4819-9518-dbf389612298";
         #endregion
 
         #region Properties
@@ -127,7 +125,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region ClipboardHandler (Reader or Writer) Plugin
 
-
+        public bool IsCoreHandler {
+            get {
+                if(PluginFormat == null) {
+                    return false;
+                }
+                return PluginFormat.guid == MpPrefViewModel.Instance.CoreClipboardHandlerGuid;
+            }
+        }
         public string Title {
             get {
                 if (ClipboardPluginFormat == null) {
@@ -197,9 +202,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpHandledClipboardFormatViewModel() : base(null) { }
+        public MpAvHandledClipboardFormatViewModel() : base(null) { }
 
-        public MpHandledClipboardFormatViewModel(MpClipboardHandlerItemViewModel parent) : base(parent) {
+        public MpAvHandledClipboardFormatViewModel(MpAvClipboardHandlerItemViewModel parent) : base(parent) {
             PropertyChanged += MpHandledClipboardFormatViewModel_PropertyChanged;
             Items.CollectionChanged += PresetViewModels_CollectionChanged;
         }
@@ -250,8 +255,8 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public async Task<MpClipboardFormatPresetViewModel> CreatePresetViewModelAsync(MpPluginPreset aip) {
-            MpClipboardFormatPresetViewModel naipvm = new MpClipboardFormatPresetViewModel(this);
+        public async Task<MpAvClipboardFormatPresetViewModel> CreatePresetViewModelAsync(MpPluginPreset aip) {
+            MpAvClipboardFormatPresetViewModel naipvm = new MpAvClipboardFormatPresetViewModel(this);
             await naipvm.InitializeAsync(aip);
             return naipvm;
         }
@@ -446,7 +451,7 @@ namespace MonkeyPaste.Avalonia {
 
             //presets.ForEach(x => x.ComponentFormat = ClipboardPluginFormat);
 
-            if(needsReset && PluginFormat.guid == _defaultHandlerPluginGuid) {
+            if(needsReset && IsCoreHandler) {
                 // this is supposed to handle initial startup for CoreClipboard handler when no formats are enabled 
                 // but there's many cases that this may not be initial startup so:
                 // TODO instead of doing should notify clipboard collection that default was reset and only enable formats
@@ -537,7 +542,7 @@ namespace MonkeyPaste.Avalonia {
                 IsBusy = false;
             });
 
-        public ICommand SelectPresetCommand => new MpCommand<MpClipboardFormatPresetViewModel>(
+        public ICommand SelectPresetCommand => new MpCommand<MpAvClipboardFormatPresetViewModel>(
              (selectedPresetVm) => {
                  //if(!IsLoaded) {
                  //    await LoadChildren();
@@ -563,7 +568,7 @@ namespace MonkeyPaste.Avalonia {
 
              });
 
-        public ICommand DeletePresetCommand => new MpAsyncCommand<MpClipboardFormatPresetViewModel>(
+        public ICommand DeletePresetCommand => new MpAsyncCommand<MpAvClipboardFormatPresetViewModel>(
             async (presetVm) => {
                 if (presetVm.IsDefault) {
                     return;
@@ -613,7 +618,7 @@ namespace MonkeyPaste.Avalonia {
             async (args) => {
                 var argParts = args as object[];
                 int dir = (int)Convert.ToInt32(argParts[0].ToString());
-                MpClipboardFormatPresetViewModel pvm = argParts[1] as MpClipboardFormatPresetViewModel;
+                MpAvClipboardFormatPresetViewModel pvm = argParts[1] as MpAvClipboardFormatPresetViewModel;
                 int curSortIdx = Items.IndexOf(pvm);
                 int newSortIdx = curSortIdx + dir;
 
@@ -629,7 +634,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (args is object[] argParts) {
                     int dir = (int)Convert.ToInt32(argParts[0].ToString());
-                    MpClipboardFormatPresetViewModel pvm = argParts[1] as MpClipboardFormatPresetViewModel;
+                    MpAvClipboardFormatPresetViewModel pvm = argParts[1] as MpAvClipboardFormatPresetViewModel;
                     int curSortIdx = Items.IndexOf(pvm);
                     int newSortIdx = curSortIdx + dir;
                     if (newSortIdx < 0 || newSortIdx >= Items.Count || newSortIdx == curSortIdx) {
@@ -645,7 +650,7 @@ namespace MonkeyPaste.Avalonia {
             async (args) => {
                 IsBusy = true;
 
-                var aipvm = args as MpClipboardFormatPresetViewModel;
+                var aipvm = args as MpAvClipboardFormatPresetViewModel;
                 if (aipvm == null) {
                     throw new Exception("DuplicatedPresetCommand must have preset as argument");
                 }

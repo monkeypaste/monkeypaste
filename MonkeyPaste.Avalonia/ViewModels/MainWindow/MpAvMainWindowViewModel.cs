@@ -562,6 +562,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ValidateWindowState() {
+            return;
             Dispatcher.UIThread.Post(() => {
                 if(IsMainWindowLocked) {
                     return;
@@ -667,7 +668,6 @@ namespace MonkeyPaste.Avalonia {
                         IsMainWindowOpening = false;
                         IsMainWindowOpen = true;
 
-                        mw.Activate();
 
                         OnPropertyChanged(nameof(ExternalRect));
                         //OnMainWindowOpened?.Invoke(this, EventArgs.Empty);

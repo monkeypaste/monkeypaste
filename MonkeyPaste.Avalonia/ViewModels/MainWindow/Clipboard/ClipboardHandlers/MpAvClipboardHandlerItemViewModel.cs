@@ -13,8 +13,8 @@ using System.Collections;
 
 
 namespace MonkeyPaste.Avalonia {
-    public class MpClipboardHandlerItemViewModel :
-        MpAvSelectorViewModelBase<MpAvClipboardHandlerCollectionViewModel, MpHandledClipboardFormatViewModel>,
+    public class MpAvClipboardHandlerItemViewModel :
+        MpAvSelectorViewModelBase<MpAvClipboardHandlerCollectionViewModel, MpAvHandledClipboardFormatViewModel>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpIMenuItemViewModel, 
@@ -119,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpClipboardHandlerItemViewModel(MpAvClipboardHandlerCollectionViewModel parent) : base(parent) {
+        public MpAvClipboardHandlerItemViewModel(MpAvClipboardHandlerCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpClipboardHandlerItemViewModel_PropertyChanged;
         }
 
@@ -161,8 +161,8 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public async Task<MpHandledClipboardFormatViewModel> CreateHandledClipboardFormatViewModelAsync(MpClipboardHandlerFormat format) {
-            var hcfvm = new MpHandledClipboardFormatViewModel(this);
+        public async Task<MpAvHandledClipboardFormatViewModel> CreateHandledClipboardFormatViewModelAsync(MpClipboardHandlerFormat format) {
+            var hcfvm = new MpAvHandledClipboardFormatViewModel(this);
             await hcfvm.InitializeAsync(format);
             return hcfvm;
         }

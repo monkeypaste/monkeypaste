@@ -59,8 +59,11 @@ namespace MonkeyPaste.Avalonia {
                     itemData = mpdo.GetData(MpPortableDataFormats.Bitmap).ToString();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Html)) {
                     itemType = MpCopyItemType.Text;
-                    string rawHtmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
-                    htmlClipboardData = await MpAvHtmlClipboardDataConverter.ParseAsync(rawHtmlData);
+                    object htmlData = mpdo.GetData(MpPortableDataFormats.Html);
+                    htmlClipboardData = await MpAvHtmlClipboardDataConverter.ParseAsync(htmlData);
+                    if(htmlClipboardData == null) {
+                        return null;
+                    }
                     itemData = htmlClipboardData.Html;
                     //itemData = itemData.ToQuillText();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Text)) {

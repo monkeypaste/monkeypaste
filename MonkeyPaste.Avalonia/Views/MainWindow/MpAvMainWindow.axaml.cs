@@ -134,19 +134,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void DragEnter(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragEnter] MainWindowContainerGrid: ");
-            var fl = e.Data.GetDataFormats();
-            foreach (var f in fl.Where(x=>MpPortableDataFormats.RegisteredFormats.Contains(x))) {
-                var data = e.Data.Get(f);
-                continue;
-            }
-            var mpdo = MpPlatformWrapper.Services.DataObjectHelper.ConvertToSupportedPortableFormats(e.Data);
-            if(mpdo is MpAvDataObject avdo) {
-                foreach(var kvp in avdo.DataFormatLookup) {
-                    string format = kvp.Key.Name;
-                    object data = kvp.Value;
-                    continue;
-                }
-            }
+            
             BindingContext.DragMouseMainWindowLocation = e.GetPosition(this).ToPortablePoint();
             e.DragEffects = DragDropEffects.None;
             BindingContext.IsDropOverMainWindow = true;

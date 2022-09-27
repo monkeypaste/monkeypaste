@@ -68,17 +68,31 @@ function contentRequest_ext(contentReqMsgStr_base64) {
 function convertPlainHtml_ext(convertPlainHtmlReqMsgBase64Str) {
 	// input is MpQuillConvertPlainHtmlToQuillHtmlRequestMessage
 
-	let convertPlainHtmlReqMsgObj = toJsonObjFromBase64Str(convertPlainHtmlReqMsgBase64Str);
-	if (!convertPlainHtmlReqMsgObj || !convertPlainHtmlReqMsgObj.plainHtml) {
+	let req = toJsonObjFromBase64Str(convertPlainHtmlReqMsgBase64Str);
+	if (!req || !req.data) {
 		return;
 	}
-	let qhtml = convertPlainHtml(convertPlainHtmlReqMsgObj.plainHtml);
+	let url = '';
+	let plainHtml = '';
+	let qhtml = '';
 
-	// output MpQuillConvertPlainHtmlToQuillHtmlResponseMessage
-	let convertPlainHtmlRespMsg = {
-		quillHtml: qhtml
+	if (req.isBase64) {
+		plainHtml = atob(req.data);
+	} else {
+		plainHtml = req.data;
+	}
+	if (req.isHtmlClipboardFormat) {
+		let cbData = parseHtmlClipboardFormat(plainHtml);
+		plainHtml = cbData.html;
+		url = cbData.sourceUrl;
+	}
+	qhtml = convertPlainHtml(plainHtml);
+
+	let respObj = {
+		quillHtml: qhtml,
+		sourceUrl: url
 	};
-	let resp = toBase64FromJsonObj(convertPlainHtmlRespMsg);
+	let resp = toBase64FromJsonObj(respObj);
 	return resp;
 }
 

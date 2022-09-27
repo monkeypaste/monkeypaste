@@ -38,6 +38,10 @@ namespace MonkeyPaste.Avalonia {
                     Command = MpAvSettingsWindowViewModel.Instance.ShowSettingsWindowCommand
                 },
                 new NativeMenuItem() {
+                    Header = "Show Converter DevTools",
+                    Command = MpAvHtmlClipboardDataConverter.ShowConverterDevTools
+                },
+                new NativeMenuItem() {
                     Header = "-"
                 },
                 new NativeMenuItem() {

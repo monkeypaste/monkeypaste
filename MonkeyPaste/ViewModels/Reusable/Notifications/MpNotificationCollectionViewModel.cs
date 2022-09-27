@@ -172,9 +172,8 @@ namespace MonkeyPaste {
                 while (uanvm.DialogResult == MpDialogResultType.None) {
                     await Task.Delay(100);
                 }
-                if (uanvm.DialogResult == MpDialogResultType.Retry &&
-                   retryAction != null) {
-                    retryAction.Invoke(retryActionObj);
+                if (uanvm.DialogResult == MpDialogResultType.Retry) {
+                    retryAction?.Invoke(retryActionObj);
                 }
             }
 

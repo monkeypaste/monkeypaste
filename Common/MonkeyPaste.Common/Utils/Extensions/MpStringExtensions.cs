@@ -321,9 +321,10 @@ namespace MonkeyPaste.Common {
             return sb.ToString();
         }
 
-        public static byte[] ToByteArray(this string str) {
+        public static byte[] ToByteArray(this string str, Encoding enc = null) {
             if(!str.IsStringBase64()) {
-                return new byte[] { };
+                enc = enc == null ? Encoding.UTF8 : enc;
+                return enc.GetBytes(str);
             }
 
             var bytes = Convert.FromBase64String(str);

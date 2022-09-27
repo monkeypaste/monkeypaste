@@ -47,33 +47,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        #region MpIPlatformDataObjectHelper Implementation
-
-        public MpPortableDataObject ConvertToSupportedPortableFormats(object nativeDataObj, int retryCount = 5) {
-            var mpdo = MpAvClipboardHandlerCollectionViewModel.Instance.ReadClipboardOrDropObject(nativeDataObj);
-            return mpdo;
-        }
-
-        public object ConvertToPlatformClipboardDataObject(MpPortableDataObject mpdo) {
-            object pdo = MpAvClipboardHandlerCollectionViewModel.Instance.WriteClipboardOrDropObject(mpdo, false);
-            return pdo;
-        }
-
-
-        public void SetPlatformClipboard(MpPortableDataObject portableObj, bool ignoreChange) {
-            MpPlatformWrapper.Services.ClipboardMonitor.IgnoreNextClipboardChangeEvent = ignoreChange;
-            MpAvClipboardHandlerCollectionViewModel.Instance.WriteClipboardOrDropObject(portableObj, true);
-        }
-
-        public MpPortableDataObject GetPlatformClipboardDataObject() {
-            return MpAvClipboardHandlerCollectionViewModel.Instance.ReadClipboardOrDropObject(null);
-        }
-
-
-
-        #endregion
-
-
         #region MpIExternalPasteHandler Implementation
 
         async Task MpIExternalPasteHandler.PasteDataObject(MpPortableDataObject mpdo, object handleOrProcessInfo, bool finishWithEnterKey = false) {
@@ -155,12 +128,12 @@ namespace MonkeyPaste.Avalonia {
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch(msg) {
                 case MpMessageType.MainWindowHid:
-                    ProcessPasteQueue();
+                    ProcessPasteQueue().FireAndForgetSafeAsync();
                     break;
             }
         }
 
-        private void ProcessPasteQueue() {
+        private async Task ProcessPasteQueue() {
             if (_pasteQueue == null || _pasteQueue.IsNullOrEmpty()) {
                 return;
             }
@@ -173,12 +146,12 @@ namespace MonkeyPaste.Avalonia {
 
                     MpPlatformWrapper.Services.ClipboardMonitor.IgnoreNextClipboardChangeEvent = true;
 
-                    SetPlatformClipboard(pasteItem.PortableDataObject, true);
-                    Thread.Sleep(100);
+                    await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(pasteItem.PortableDataObject, true);
+                    await Task.Delay(100);
                     MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeSequence(pasteItem.PasteCmdKeyString);
                     //System.Windows.Forms.SendKeys.SendWait(pasteItem.PasteCmdKeyString);
 
-                    Thread.Sleep(100);
+                    await Task.Delay(100);
                     if (pasteItem.FinishWithEnterKey) {
                         //System.Windows.Forms.SendKeys.SendWait("{ENTER}");
                         MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeSequence(MpKeyLiteralStringHelpers.ENTER_KEY_LITERAL);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -86,8 +87,7 @@ namespace MonkeyPaste.Common {
                 WriteLineWrapper(@"-----------------------------------------------------------------------",true);
                 WriteLineWrapper("",true);
                 if(ex != null) {
-                    WriteLineWrapper("Exception: ",true);
-                    WriteLineWrapper(ex.ToString(),true);
+                    LogException(ex);
                 }
             }
             if (LogToFile) {
@@ -96,6 +96,26 @@ namespace MonkeyPaste.Common {
                     WriteLogLine("Exception: ");
                     WriteLogLine(ex);
                 }
+            }
+        }
+
+        private static void LogException(object ex, bool isTrace = true, bool recursive = true, int depth = 0) {
+            if(ex == null) {
+                return;
+            }
+            if(ex is Exception exObj) {
+                string tabs = string.Join(string.Empty,Enumerable.Repeat("\t", depth));
+                WriteLineWrapper(tabs+"Exception: ", true);
+                WriteLineWrapper(tabs + $"Type: {ex.GetType()}", true);
+                WriteLineWrapper(tabs + $"Source: {exObj.Source}", true);
+                WriteLineWrapper(tabs + $"StackTrace: {exObj.StackTrace}", true);
+                WriteLineWrapper(tabs + $"Message: {exObj.Message}", true);
+                WriteLineWrapper(tabs + $"Raw: {ex}");
+                if (recursive && exObj.InnerException != null) {
+                    LogException(exObj.InnerException, isTrace, recursive, depth + 1);
+                }
+            } else {
+                WriteLineWrapper("Exception: "+ex.ToString(),isTrace);
             }
         }
 

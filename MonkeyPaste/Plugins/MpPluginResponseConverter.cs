@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public static class MpPluginResponseConverter {
-        public static async Task<MpCopyItem> Convert(
+        public static async Task<MpCopyItem> ConvertAsync(
             MpAnalyzerTransaction trans,
             MpCopyItem sourceCopyItem,
             int transSourceId,
@@ -15,13 +15,13 @@ namespace MonkeyPaste {
             MpCopyItem targetCopyItem;
 
             if (trans.Response is MpPluginResponseFormatBase prf) {
-                targetCopyItem = await ProcessNewContentItem(prf, sourceCopyItem, transSourceId, suppressWrite);
+                targetCopyItem = await ProcessNewContentItemAsync(prf, sourceCopyItem, transSourceId, suppressWrite);
             } else {
                 targetCopyItem = sourceCopyItem;
             }
-            await ProcessAnnotations(trans, targetCopyItem, transSourceId, suppressWrite);
+            await ProcessAnnotationsAsync(trans, targetCopyItem, transSourceId, suppressWrite);
 
-            await ProcessDataObject(trans, targetCopyItem, transSourceId, suppressWrite);
+            await ProcessDataObjectAsync(trans, targetCopyItem, transSourceId, suppressWrite);
 
             if (suppressWrite == false && targetCopyItem != null) {
                 // NOTE when target is in tray it will get notified from db update and re-initialize
@@ -41,7 +41,7 @@ namespace MonkeyPaste {
         }
 
 
-        private static async Task<MpCopyItem> ProcessNewContentItem(
+        private static async Task<MpCopyItem> ProcessNewContentItemAsync(
             MpPluginResponseFormatBase prf,
             MpCopyItem sourceCopyItem,
             int transSourceId,
@@ -67,18 +67,18 @@ namespace MonkeyPaste {
             return targetCopyItem;
         }
 
-        private static async Task ProcessAnnotations(MpAnalyzerTransaction trans, MpCopyItem sourceCopyItem, int transSourceId, bool suppressWrite = false) {
+        private static async Task ProcessAnnotationsAsync(MpAnalyzerTransaction trans, MpCopyItem sourceCopyItem, int transSourceId, bool suppressWrite = false) {
             if (trans == null || trans.Response == null) {
                 return;
             }
             if (trans.Response is MpPluginResponseFormatBase prf && prf.annotations != null) {
 
-                await Task.WhenAll(prf.annotations.Select(x => ProcesseAnnotation(x, sourceCopyItem.Id, sourceCopyItem.ItemType, trans.RequestContent, transSourceId, suppressWrite)));
+                await Task.WhenAll(prf.annotations.Select(x => ProcesseAnnotationAsync(x, sourceCopyItem.Id, sourceCopyItem.ItemType, trans.RequestContent, transSourceId, suppressWrite)));
             }
 
         }
 
-        private static async Task ProcesseAnnotation(
+        private static async Task ProcesseAnnotationAsync(
             MpPluginResponseAnnotationFormat a,
             int copyItemId,
             MpCopyItemType copyItemType,
@@ -144,21 +144,20 @@ namespace MonkeyPaste {
             }
 
             if (a.children != null) {
-                await Task.WhenAll(a.children.Select(x => ProcesseAnnotation(x, copyItemId, copyItemType, reqContent, transSourceId, suppressWrite)));
+                await Task.WhenAll(a.children.Select(x => ProcesseAnnotationAsync(x, copyItemId, copyItemType, reqContent, transSourceId, suppressWrite)));
             }
         }
 
-        private static async Task ProcessDataObject(MpAnalyzerTransaction trans, MpCopyItem sourceCopyItem, int transSourceId, bool suppressWrite = false) {
+        private static async Task ProcessDataObjectAsync(MpAnalyzerTransaction trans, MpCopyItem sourceCopyItem, int transSourceId, bool suppressWrite = false) {
             if (trans == null || trans.Response == null) {
                 return;
             }
-            await Task.Delay(1);
 
             if (trans.Response is MpPluginResponseFormatBase prf && prf.dataObject != null) {
                 //var pdo_ci = await MpPlatformWrapper.Services.CopyItemBuilder.Create(prf.dataObject,suppressWrite);
                 //sourceCopyItem.ItemData = pdo_ci.ItemData;
 
-                MpPlatformWrapper.Services.DataObjectHelper.SetPlatformClipboard(prf.dataObject, false);
+                await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(prf.dataObject, false);
             }
         }
     }

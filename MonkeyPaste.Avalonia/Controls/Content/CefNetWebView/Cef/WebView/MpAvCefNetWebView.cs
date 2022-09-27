@@ -101,6 +101,10 @@ namespace MonkeyPaste.Avalonia {
         #region WebView Binding Methods
         public void HandleBindingNotification(MpAvEditorBindingFunctionType notificationTYpe, string msgJsonBase64Str) {
             var ctvm =DataContext as MpAvClipTileViewModel;
+            if(ctvm == null && notificationTYpe != MpAvEditorBindingFunctionType.notifyDomLoaded) {
+                // converter doesn't have data context but needs to notify dom loaded which doesn't need it
+                return;
+            }
             switch (notificationTYpe) {
                 case MpAvEditorBindingFunctionType.notifyContentDraggableChanged:
                     var draggableChanged = MpJsonObject.DeserializeBase64Object<MpQuillContentDraggableChangedMessage>(msgJsonBase64Str);

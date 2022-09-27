@@ -120,7 +120,8 @@ function getHtml(range) {
 	tempContainer.remove();
 
 	let htmlStr = result;
-	return htmlStr;
+	let htmlStr_unescaped = unescapeHtml(htmlStr);
+	return htmlStr_unescaped;
 }
 
 function getSelectedHtml() {
@@ -157,7 +158,7 @@ function getSelectedHtml3() {
 
 
 function insertHtml(docIdx, data, source='api') {
-	quill.clipboard.dangerouslyPasteHTML(docIdx, data,'source');
+	quill.clipboard.dangerouslyPasteHTML(docIdx, data, source);
 }
 
 // DELTA

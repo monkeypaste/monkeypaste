@@ -11,8 +11,8 @@ using MonkeyPaste;
 using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpClipboardFormatViewModel : 
-        MpAvSelectorViewModelBase<MpAvClipboardHandlerCollectionViewModel,MpClipboardHandlerItemViewModel>,
+    public class MpAvClipboardFormatViewModel : 
+        MpAvSelectorViewModelBase<MpAvClipboardHandlerCollectionViewModel,MpAvClipboardHandlerItemViewModel>,
         MpITreeItemViewModel,
         MpISelectableViewModel {
 
@@ -20,19 +20,19 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public IEnumerable<MpClipboardHandlerItemViewModel> Readers {
+        public IEnumerable<MpAvClipboardHandlerItemViewModel> Readers {
             get {
                 if(Parent == null) {
-                    return new ObservableCollection<MpClipboardHandlerItemViewModel>();
+                    return new ObservableCollection<MpAvClipboardHandlerItemViewModel>();
                 }
                 return Parent.Items.Where(x => x.Items.Any(y => y.HandledFormat == FormatName && y.Items.Any(z=>z.CanRead)));
             }
         }
 
-        public IEnumerable<MpClipboardHandlerItemViewModel> Writers {
+        public IEnumerable<MpAvClipboardHandlerItemViewModel> Writers {
             get {
                 if (Parent == null) {
-                    return new ObservableCollection<MpClipboardHandlerItemViewModel>();
+                    return new ObservableCollection<MpAvClipboardHandlerItemViewModel>();
                 }
                 return Parent.Items.Where(x => x.Items.Any(y => y.HandledFormat == FormatName && y.Items.Any(z => z.CanWrite)));
             }
@@ -134,9 +134,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpClipboardFormatViewModel() : base(null) { }
+        public MpAvClipboardFormatViewModel() : base(null) { }
 
-        public MpClipboardFormatViewModel(MpAvClipboardHandlerCollectionViewModel parent, string format) : base(parent) {
+        public MpAvClipboardFormatViewModel(MpAvClipboardHandlerCollectionViewModel parent, string format) : base(parent) {
             PropertyChanged += MpClipboardFormatViewModel_PropertyChanged;
             Format = MpPortableDataFormats.GetDataFormat(format);
         }

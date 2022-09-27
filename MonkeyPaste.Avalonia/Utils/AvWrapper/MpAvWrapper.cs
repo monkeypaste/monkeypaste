@@ -33,6 +33,7 @@ namespace MonkeyPaste.Avalonia {
         public MpIStringTools? StringTools { get; set; }
         public MpIOsInfo? OsInfo { get; set; }
         public MpIPlatformDataObjectHelper? DataObjectHelper { get; set; }
+        public MpIPlatformDataObjectHelperAsync DataObjectHelperAsync { get; set; }
         public MpINativeMessageBox? NativeMessageBox { get; set; }
 
         public MpIClipboardMonitor? ClipboardMonitor { get; set; }
@@ -79,7 +80,8 @@ namespace MonkeyPaste.Avalonia {
             StringTools = new MpAvStringTools();
             NativeMessageBox = new MpAvMessageBox();
             //DataObjectHelper = MpAvDataObjectHelper.Instance;
-            DataObjectHelper = MpAvClipboardHandlerCollectionViewModel.Instance;
+            //DataObjectHelper = MpAvClipboardHandlerCollectionViewModel.Instance;
+            DataObjectHelperAsync = MpAvClipboardHandlerCollectionViewModel.Instance;
             //ExternalPasteHandler = MpWpfDataObjectHelper.Instance;
             CopyItemBuilder = new MpAvCopyItemBuilder();
             ClipboardMonitor = new MpAvClipboardWatcher();

@@ -11,8 +11,8 @@ using System.Diagnostics;
 
 
 namespace MonkeyPaste.Avalonia {
-    public class MpClipboardFormatPresetViewModel : 
-        MpAvSelectorViewModelBase<MpHandledClipboardFormatViewModel,MpPluginParameterViewModelBase>,
+    public class MpAvClipboardFormatPresetViewModel : 
+        MpAvSelectorViewModelBase<MpAvHandledClipboardFormatViewModel,MpPluginParameterViewModelBase>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpISidebarItemViewModel,
@@ -257,7 +257,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpClipboardFormatPresetViewModel(MpHandledClipboardFormatViewModel parent) : base(parent) {
+        public MpAvClipboardFormatPresetViewModel(MpAvHandledClipboardFormatViewModel parent) : base(parent) {
             PropertyChanged += MpClipboardFormatPresetViewModel_PropertyChanged;
         }
 

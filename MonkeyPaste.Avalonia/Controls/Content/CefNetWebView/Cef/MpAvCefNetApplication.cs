@@ -153,7 +153,6 @@ namespace MonkeyPaste.Avalonia {
                 settings.MultiThreadedMessageLoop = true;
                 settings.ExternalMessagePump = false;
             }
-            
             settings.WindowlessRenderingEnabled = false;
             settings.LocalesDirPath = localDirPath;
             settings.ResourcesDirPath = resourceDirPath;
@@ -173,7 +172,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override void OnContextCreated(CefBrowser browser, CefFrame frame, CefV8Context context) {
-            OnCefNetContextCreated?.Invoke(this,context);
+            _messageHub.WindowBinder.CefNetApp_OnCefNetContextCreated(this, context);
         }
 
 

@@ -10,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvCefNetMessageHub {
         #region Private Variables
 
-        private MpAvCefNetWindowBinder _windowBinder;
+        public MpAvCefNetWindowBinder WindowBinder { get; private set; }
         private MpAvCefNetJsEvaluator _jsEvaluator;
 
         #endregion
@@ -23,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         public MpAvCefNetMessageHub(MpAvCefNetApplication cefNetApp) {
-            _windowBinder = new MpAvCefNetWindowBinder(cefNetApp);
+            WindowBinder = new MpAvCefNetWindowBinder();
             _jsEvaluator = new MpAvCefNetJsEvaluator();
             cefNetApp.CefProcessMessageReceived += MessageReceived;
         }
@@ -36,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
                 e.Handled = true;
                 return;
             }
-            if(_windowBinder.HandleCefMessage(e)) {
+            if(WindowBinder.HandleCefMessage(e)) {
                 e.Handled = true;
                 return;
             }

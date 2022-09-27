@@ -122,7 +122,11 @@ namespace MonkeyPaste {
                 var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotificationAsync(
                         dialogType: MpNotificationDialogType.InvalidPlugin,
                         msg: $"Error parsing plugin manifest '{manifestPath}': {ex.Message}",
-                        retryAction: async (args) => { await LoadPluginAsync(manifestPath); },
+                        retryAction: (args) => {
+                            MpPlatformWrapper.Services.MainThreadMarshal.RunOnMainThread(() => {
+                                LoadPluginAsync(manifestPath).FireAndForgetSafeAsync();
+                            });
+                        },
                         fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(Path.GetDirectoryName(manifestPath))));
 
                 //if (userAction == MpDialogResultType.Retry) {
@@ -140,7 +144,11 @@ namespace MonkeyPaste {
                     var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotificationAsync(
                             dialogType: MpNotificationDialogType.InvalidPlugin,
                             msg: ex.Message,
-                            retryAction: async (args) => { await LoadPluginAsync(manifestPath); },
+                            retryAction: (args) => {
+                                MpPlatformWrapper.Services.MainThreadMarshal.RunOnMainThread(() => {
+                                    LoadPluginAsync(manifestPath).FireAndForgetSafeAsync();
+                                });
+                            },
                             fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(Path.GetDirectoryName(manifestPath))));
 
 

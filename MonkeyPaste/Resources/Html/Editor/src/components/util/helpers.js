@@ -22,6 +22,29 @@ function toJsonObjFromBase64Str(base64Str) {
     return null;
 }
 
+function envNewLine() {
+    // Windows = CR LF
+    // Linux = LF
+    // MAC < 0SX = CR
+    // MAC >= OSX = LF
+    if (EnvName == WindowsEnv) {
+        return '\r\n';
+    }
+    return '\n';
+}
+
+function isValidHttpUrl(text) {
+    let url;
+
+    try {
+        url = new URL(text);
+    } catch (_) {
+        return false;
+    }
+
+    return url.protocol === "http:" || url.protocol === "https:";
+}
+
 function changeInnerText(elm, text, newText) {
     if (elm == null) {
         return;
@@ -236,11 +259,19 @@ function isTextElement(elm) {
 //    td.insertBefore(child, before); //attempt to insert it   
 //}
 function unescapeHtml(htmlStr) {
-    return htmlStr.replace(/&lt;/g, "<")
-        .replace(/&gt;/g, ">")
-        .replace(/&quot;/g, '"')
-        .replace(/&amp;/g, "&");
+    //return htmlStr.replace(/&lt;/g, "<")
+    //    .replace(/&gt;/g, ">")
+    //    .replace(/&quot;/g, '"')
+    //    .replace(/&amp;/g, "&");
+
+    //const doc = DomParser.parseFromString(htmlStr, "text/html");
+    //return doc.documentElement.textContent;
+
+    const e = document.createElement('textarea');
+    e.innerHTML = htmlStr;
+    return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
 }
+
 function escapeHtml(htmlStr) {
     const htmlEntities = {
         "&": "&amp;",

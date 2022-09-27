@@ -13,17 +13,18 @@ using MonkeyPaste.Common;
 using Avalonia.Input;
 using System.Runtime.InteropServices;
 using MonkeyPaste.Common.Avalonia;
+using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
 
     public class MpAvClipboardHandlerCollectionViewModel :
-        MpAvSelectorViewModelBase<object, MpClipboardHandlerItemViewModel>,
+        MpAvSelectorViewModelBase<object, MpAvClipboardHandlerItemViewModel>,
         MpIMenuItemViewModel,
         MpIAsyncSingletonViewModel<MpAvClipboardHandlerCollectionViewModel>,
         MpITreeItemViewModel,
         MpISidebarItemViewModel,
         MpIClipboardFormatDataHandlers,
-        MpIPlatformDataObjectHelper{ //
+        MpIPlatformDataObjectHelperAsync { //
         #region Properties
 
         #region View Models
@@ -42,13 +43,13 @@ namespace MonkeyPaste.Avalonia {
 
         public MpITreeItemViewModel ParentTreeItem => null;
 
-        public List<MpClipboardFormatPresetViewModel> AllPresets {
+        public List<MpAvClipboardFormatPresetViewModel> AllPresets {
             get {
                 return Items.SelectMany(x => x.Items.SelectMany(y => y.Items)).ToList();
             }
         }
 
-        public MpClipboardFormatPresetViewModel SelectedPresetViewModel {
+        public MpAvClipboardFormatPresetViewModel SelectedPresetViewModel {
             get {
                 if (SelectedItem == null) {
                     return null;
@@ -73,8 +74,8 @@ namespace MonkeyPaste.Avalonia {
         //        return _formatViewModels;
         //    }
         //}
-        public IEnumerable<MpClipboardFormatViewModel> FormatViewModels =>
-            MpPortableDataFormats.RegisteredFormats.Select(x => new MpClipboardFormatViewModel(this, x));
+        public IEnumerable<MpAvClipboardFormatViewModel> FormatViewModels =>
+            MpPortableDataFormats.RegisteredFormats.Select(x => new MpAvClipboardFormatViewModel(this, x));
 
         //public Dictionary<string, MpClipboardFormatPresetViewModel> EnabledFormatHandlerLookup {
         //    get {
@@ -92,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
         //    }
         //}
 
-        public IEnumerable<MpClipboardFormatPresetViewModel> EnabledFormats {
+        public IEnumerable<MpAvClipboardFormatPresetViewModel> EnabledFormats {
             get {
                 foreach (var i in Items) {
                     foreach (var j in i.Items) {
@@ -185,7 +186,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
 
             //MpMessenger.Register<MpMessageType>(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
-
+           
             Items.Clear();
 
             var pail = MpPluginLoader.Plugins.Where(x => x.Value.Component is MpIClipboardPluginComponent);
@@ -202,7 +203,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (Items.Count > 0) {
                 // select most recent preset and init default handlers
-                MpClipboardFormatPresetViewModel presetToSelect = null;
+                MpAvClipboardFormatPresetViewModel presetToSelect = null;
                 foreach (var chivm in Items) {
                     foreach (var hivm in chivm.Items) {
                         foreach (var hipvm in hivm.Items) {
@@ -246,6 +247,8 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
 
+                
+
                 if (presetToSelect != null) {
                     presetToSelect.Parent.SelectedItem = presetToSelect;
                     presetToSelect.Parent.Parent.SelectedItem = presetToSelect.Parent;
@@ -259,7 +262,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public MpAvDataObject ReadClipboardOrDropObject(object forcedDataObject = null) {
+        public async Task<MpAvDataObject> ReadClipboardOrDropObjectAsync(object forcedDataObject = null) {
             // NOTE forcedDataObject is used to read drag/drop, when null clipboard is read
 
             var mpdo = new MpAvDataObject();
@@ -267,7 +270,7 @@ namespace MonkeyPaste.Avalonia {
             //only iterate through actual handlers 
             var handlers = EnabledFormats.Where(x => x.CanRead)
                                          .Select(x => x.Parent.ClipboardPluginComponent)
-                                         .Distinct().Cast<MpIClipboardReaderComponent>();
+                                         .Distinct().Cast<MpIClipboardReaderComponentAsync>();
 
             foreach (var handler in handlers) {
                 IntPtr mw_handle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle;                
@@ -284,7 +287,7 @@ namespace MonkeyPaste.Avalonia {
                     forcedClipboardDataObject = forcedDataObject
                 };
 
-                var response = handler.ReadClipboardData(req);
+                var response = await handler.ReadClipboardDataAsync(req);
 
                 bool isValid = MpPluginTransactor.ValidatePluginResponse(response);
                 if (isValid) {
@@ -294,10 +297,10 @@ namespace MonkeyPaste.Avalonia {
             return mpdo;
         }
 
-        public object WriteClipboardOrDropObject(MpPortableDataObject mpdo, bool writeToClipboard) {
+        public async Task<object> WriteClipboardOrDropObjectAsync(MpPortableDataObject mpdo, bool writeToClipboard) {
             var dobj = new DataObject();
             var handlers = EnabledFormats.Where(x => x.CanWrite && MpPortableDataFormats.RegisteredFormats.Contains(x.Parent.HandledFormat))
-                                         .Select(x => x.Parent.ClipboardPluginComponent).Distinct().Cast<MpIClipboardReaderComponent>();
+                                         .Select(x => x.Parent.ClipboardPluginComponent).Distinct().Cast<MpIClipboardReaderComponentAsync>();
             foreach (var format in MpPortableDataFormats.RegisteredFormats) {
                 var handler = EnabledFormats.FirstOrDefault(x => x.CanWrite && x.Parent.HandledFormat == format);
                 if (handler == null) {
@@ -308,11 +311,11 @@ namespace MonkeyPaste.Avalonia {
                     writeToClipboard = writeToClipboard,
                     items = handler.Items.Cast<MpIParameterKeyValuePair>().ToList()
                 };
-                var writer_component = handler.Parent.ClipboardPluginComponent as MpIClipboardWriterComponent;
+                var writer_component = handler.Parent.ClipboardPluginComponent as MpIClipboardWriterComponentAsync;
                 if (writer_component == null) {
                     Debugger.Break();
                 }
-                MpClipboardWriterResponse writerResponse = writer_component.WriteClipboardData(writeRequest);
+                MpClipboardWriterResponse writerResponse = await writer_component.WriteClipboardDataAsync(writeRequest);
                 bool isValid = MpPluginTransactor.ValidatePluginResponse(writerResponse);
                 if (isValid && writerResponse.platformDataObject is IDataObject ido) {
                     if (ido.Contains(format)) {
@@ -328,8 +331,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task<MpClipboardHandlerItemViewModel> CreateClipboardHandlerItemViewModelAsync(MpPluginFormat plugin) {
-            MpClipboardHandlerItemViewModel aivm = new MpClipboardHandlerItemViewModel(this);
+        private async Task<MpAvClipboardHandlerItemViewModel> CreateClipboardHandlerItemViewModelAsync(MpPluginFormat plugin) {
+            MpAvClipboardHandlerItemViewModel aivm = new MpAvClipboardHandlerItemViewModel(this);
             await aivm.InitializeAsync(plugin);
             return aivm;
         }
@@ -388,7 +391,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ToggleFormatPresetIsEnabled => new MpCommand<object>(
             (presetVmArg) => {
-                if (presetVmArg is MpClipboardFormatPresetViewModel cfpvm) {
+                if (presetVmArg is MpAvClipboardFormatPresetViewModel cfpvm) {
                     if (cfpvm.CanRead) {
                         ToggleFormatPresetIsReadEnabledCommand.Execute(cfpvm);
                     } else if (cfpvm.CanWrite) {
@@ -400,7 +403,7 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand ToggleFormatPresetIsReadEnabledCommand => new MpCommand<object>(
             (presetVmArg) => {
-                var presetVm = presetVmArg as MpClipboardFormatPresetViewModel;
+                var presetVm = presetVmArg as MpAvClipboardFormatPresetViewModel;
                 if (presetVm == null) {
                     return;
                 }
@@ -427,12 +430,12 @@ namespace MonkeyPaste.Avalonia {
 
                 OnPropertyChanged(nameof(EnabledFormats));
                 OnPropertyChanged(nameof(FormatViewModels));
-            }, (presetVmArg) => presetVmArg is MpClipboardFormatPresetViewModel cfpvm && cfpvm.CanRead);
+            }, (presetVmArg) => presetVmArg is MpAvClipboardFormatPresetViewModel cfpvm && cfpvm.CanRead);
 
 
         public ICommand ToggleFormatPresetIsWriteEnabledCommand => new MpCommand<object>(
             (presetVmArg) => {
-                var presetVm = presetVmArg as MpClipboardFormatPresetViewModel;
+                var presetVm = presetVmArg as MpAvClipboardFormatPresetViewModel;
                 if (presetVm == null) {
                     return;
                 }
@@ -460,7 +463,7 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(EnabledFormats));
                 OnPropertyChanged(nameof(FormatViewModels));
                 OnPropertyChanged(nameof(FormatViewModels));
-            }, (presetVmArg) => presetVmArg is MpClipboardFormatPresetViewModel cfpvm && cfpvm.CanRead);
+            }, (presetVmArg) => presetVmArg is MpAvClipboardFormatPresetViewModel cfpvm && cfpvm.CanRead);
 
         public ICommand UnregisterClipboardFormatCommand => new MpCommand<object>(
             (args) => {
@@ -491,25 +494,112 @@ namespace MonkeyPaste.Avalonia {
                 }
             });
 
-        MpPortableDataObject MpIPlatformDataObjectHelper.ConvertToSupportedPortableFormats(object nativeDataObj, int retryCount) {
-            var mpdo = ReadClipboardOrDropObject(nativeDataObj);
+        async Task<MpPortableDataObject> MpIPlatformDataObjectHelperAsync.ConvertToSupportedPortableFormatsAsync(object nativeDataObj, int retryCount) {
+            var mpdo = await ReadClipboardOrDropObjectAsync(nativeDataObj);
             return mpdo;
         }
 
-        object MpIPlatformDataObjectHelper.ConvertToPlatformClipboardDataObject(MpPortableDataObject mpdo) {
-            object pdo = WriteClipboardOrDropObject(mpdo, false);
+        async Task<object> MpIPlatformDataObjectHelperAsync.ConvertToPlatformClipboardDataObjectAsync(MpPortableDataObject mpdo) {
+            object pdo = await WriteClipboardOrDropObjectAsync(mpdo, false);
             return pdo;
         }
 
-        void MpIPlatformDataObjectHelper.SetPlatformClipboard(MpPortableDataObject portableObj, bool ignoreClipboardChange) {
+        async Task MpIPlatformDataObjectHelperAsync.SetPlatformClipboardAsync(MpPortableDataObject portableObj, bool ignoreClipboardChange) {
             MpPlatformWrapper.Services.ClipboardMonitor.IgnoreNextClipboardChangeEvent = ignoreClipboardChange;
-            WriteClipboardOrDropObject(portableObj, true);
+            await WriteClipboardOrDropObjectAsync(portableObj, true);
         }
 
-        MpPortableDataObject MpIPlatformDataObjectHelper.GetPlatformClipboardDataObject() {
-            var pdo = ReadClipboardOrDropObject(null);
+        async Task<MpPortableDataObject> MpIPlatformDataObjectHelperAsync.GetPlatformClipboardDataObjectAsync() {
+            var pdo = await ReadClipboardOrDropObjectAsync(null);
             return pdo;
         }
+        #endregion
+
+        #region MpIPlatformDataObjectHelper (sync, unused)
+        //MpPortableDataObject MpIPlatformDataObjectHelper.ConvertToSupportedPortableFormats(object nativeDataObj, int retryCount) {
+        //    var mpdo = ReadClipboardOrDropObject(nativeDataObj);
+        //    return mpdo;
+        //}
+
+        //object MpIPlatformDataObjectHelper.ConvertToPlatformClipboardDataObject(MpPortableDataObject mpdo) {
+        //    object pdo = WriteClipboardOrDropObject(mpdo, false);
+        //    return pdo;
+        //}
+
+        //void MpIPlatformDataObjectHelper.SetPlatformClipboard(MpPortableDataObject portableObj, bool ignoreClipboardChange) {
+        //    MpPlatformWrapper.Services.ClipboardMonitor.IgnoreNextClipboardChangeEvent = ignoreClipboardChange;
+        //    WriteClipboardOrDropObject(portableObj, true);
+        //}
+
+        //MpPortableDataObject MpIPlatformDataObjectHelper.GetPlatformClipboardDataObject() {
+        //    var pdo = ReadClipboardOrDropObject(null);
+        //    return pdo;
+        //}
+
+        //public MpAvDataObject ReadClipboardOrDropObject(object forcedDataObject = null) {
+        //    // NOTE forcedDataObject is used to read drag/drop, when null clipboard is read
+
+        //    var mpdo = new MpAvDataObject();
+
+        //    //only iterate through actual handlers 
+        //    var handlers = EnabledFormats.Where(x => x.CanRead)
+        //                                 .Select(x => x.Parent.ClipboardPluginComponent)
+        //                                 .Distinct().Cast<MpIClipboardReaderComponent>();
+
+        //    foreach (var handler in handlers) {
+        //        IntPtr mw_handle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle;
+        //        //string str_test = Marshal.PtrToStringAuto(mw_handle);
+        //        int int_test = mw_handle.ToInt32();
+        //        long long_test = mw_handle.ToInt64();
+
+        //        var req = new MpClipboardReaderRequest() {
+        //            isAvalonia = true,
+        //            mainWindowImplicitHandle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle.ToInt32(),
+        //            platform = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
+        //            readFormats = EnabledFormats.Where(x => x.Parent.ClipboardPluginComponent == handler).Select(x => x.Parent.HandledFormat).Distinct().ToList(),
+        //            items = EnabledFormats.Where(x => x.Parent.ClipboardPluginComponent == handler).SelectMany(x => x.Items.Cast<MpIParameterKeyValuePair>()).ToList(),
+        //            forcedClipboardDataObject = forcedDataObject
+        //        };
+
+        //        var response = handler.ReadClipboardData(req);
+
+        //        bool isValid = MpPluginTransactor.ValidatePluginResponse(response);
+        //        if (isValid) {
+        //            response.dataObject.DataFormatLookup.ForEach(x => mpdo.DataFormatLookup.AddOrReplace(x.Key, x.Value));
+        //        }
+        //    }
+        //    return mpdo;
+        //}
+
+        //public object WriteClipboardOrDropObject(MpPortableDataObject mpdo, bool writeToClipboard) {
+        //    var dobj = new DataObject();
+        //    var handlers = EnabledFormats.Where(x => x.CanWrite && MpPortableDataFormats.RegisteredFormats.Contains(x.Parent.HandledFormat))
+        //                                 .Select(x => x.Parent.ClipboardPluginComponent).Distinct().Cast<MpIClipboardReaderComponent>();
+        //    foreach (var format in MpPortableDataFormats.RegisteredFormats) {
+        //        var handler = EnabledFormats.FirstOrDefault(x => x.CanWrite && x.Parent.HandledFormat == format);
+        //        if (handler == null) {
+        //            continue;
+        //        }
+        //        var writeRequest = new MpClipboardWriterRequest() {
+        //            data = mpdo,
+        //            writeToClipboard = writeToClipboard,
+        //            items = handler.Items.Cast<MpIParameterKeyValuePair>().ToList()
+        //        };
+        //        var writer_component = handler.Parent.ClipboardPluginComponent as MpIClipboardWriterComponent;
+        //        if (writer_component == null) {
+        //            Debugger.Break();
+        //        }
+        //        MpClipboardWriterResponse writerResponse = writer_component.WriteClipboardData(writeRequest);
+        //        bool isValid = MpPluginTransactor.ValidatePluginResponse(writerResponse);
+        //        if (isValid && writerResponse.platformDataObject is IDataObject ido) {
+        //            if (ido.Contains(format)) {
+        //                dobj.Set(format, ido.Get(format));
+        //            }
+        //        }
+        //    }
+
+        //    return dobj;
+        //}
         #endregion
     }
 }

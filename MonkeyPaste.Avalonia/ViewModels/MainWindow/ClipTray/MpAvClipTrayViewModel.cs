@@ -3199,7 +3199,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand CopySelectedClipsCommand => new MpAsyncCommand(
             async () => {
                 var mpdo = await SelectedItem.ConvertToDataObject(false);
-                MpPlatformWrapper.Services.DataObjectHelper.SetPlatformClipboard(mpdo, true);
+                await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo, true);
             }, ()=>SelectedItem != null);
 
         public ICommand PasteSelectedClipsCommand => new MpAsyncCommand<object>(
@@ -3270,7 +3270,7 @@ namespace MonkeyPaste.Avalonia {
 
                 // NOTE even though re-creating paste object here the copy item
                 // builder should recognize it as a duplicate and use original (just created)
-                var mpdo = MpPlatformWrapper.Services.DataObjectHelper.GetPlatformClipboardDataObject();
+                var mpdo = await MpPlatformWrapper.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync();
 
                 SelectedItem.RequestPastePortableDataObject(mpdo);
             }, ()=>SelectedItem != null && !SelectedItem.IsPlaceholder);

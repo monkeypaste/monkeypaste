@@ -49,7 +49,16 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             catch (CefNet.CefNetJSExcepton ex) {
-                MpConsole.WriteLine("EvalJs Exception: " + ex.ToString());
+                MpConsole.WriteTraceLine("EvalJs Exception: ",ex);
+                /*
+                SourceLine = sourceLine;
+            ScriptName = scriptName;
+            Line = line;
+            Column = column;*/
+                MpConsole.WriteLine($"Source Line: {ex.SourceLine}");
+                MpConsole.WriteLine($"Script Name: {ex.ScriptName}");
+                MpConsole.WriteLine($"Line: {ex.Line}");
+                MpConsole.WriteLine($"Column: {ex.Column}");
                 jsRespStr_renderer = MpAvCefNetApplication.JS_REF_ERROR;
             }
             finally {
@@ -68,7 +77,7 @@ namespace MonkeyPaste.Avalonia {
             string evalKey = responseFromCef.ArgumentList.GetString(0);
             string jsRespStr_browser = responseFromCef.ArgumentList.GetString(1);
             Dispatcher.UIThread.Post(() => {
-                if (frame.Browser.Host.Client.GetWebView() is WebView wv) {
+                if (frame.Browser.Host.Client.GetWebView() is MpAvCefNetWebView wv) {
                     wv.SetJavascriptResult(evalKey, jsRespStr_browser);
                     wasHandled = true;
                 }

@@ -13,10 +13,11 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvHtmlClipboardDataConverter {
-        public static WebView RootWebView { get; private set; }
+        public static MpAvCefNetWebView RootWebView { get; private set; }
 
         public string Version { get; private set; }
         public string SourceUrl { get; private set; }
@@ -34,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
                 SystemDecorations = SystemDecorations.None,
                 Position = new PixelPoint(808080, 808080)
             };
-            RootWebView = new WebView() {
+            RootWebView = new MpAvCefNetWebView() {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
                 IsVisible = false
@@ -43,8 +44,10 @@ namespace MonkeyPaste.Avalonia {
             
             RootWebView.BrowserCreated += (s, e) => {
                 RootWebView.Navigated += async(s, e) => {
-                    if (s is WebView wv) {
-                        await Task.Delay(5000);
+                    if (s is MpAvCefNetWebView wv) {
+                        while(!wv.IsDomLoaded) {
+                            await Task.Delay(100);
+                        }
                         var converter_init_msg = new MpQuillInitMainRequestMessage() {
                             isPlainHtmlConverter = true,
                             envName = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
@@ -52,8 +55,6 @@ namespace MonkeyPaste.Avalonia {
                         };
                         string msg64 = converter_init_msg.SerializeJsonObjectToBase64();
                         RootWebView.ExecuteJavascript($"initMain_ext('{msg64}')");
-
-                        //wv.ShowDevTools();
                     }
                 };
                 RootWebView.Navigate(MpAvClipTrayViewModel.EditorPath);
@@ -67,161 +68,44 @@ namespace MonkeyPaste.Avalonia {
                 };
             }
 
-            quillWindow.Show();
         }
 
 
-        public static async Task<MpAvHtmlClipboardDataConverter> ParseAsync(string htmlClipboardData) {
-            await Task.Delay(1);
-            if(string.IsNullOrWhiteSpace(htmlClipboardData)) {
+        public static async Task<MpAvHtmlClipboardDataConverter> ParseAsync(object htmlData, bool isBase64 = false) {
+            if(htmlData == null) {
+                return null;
+            }
+            string htmlDataStr = null;
+            if(htmlData is byte[] htmlDataBytes) {
+                isBase64 = true;
+                htmlDataStr = htmlDataBytes.ToBase64String();
+            } else {
+                htmlDataStr = htmlData.ToString();
+                //htmlDataStr = htmlDataStr.ToByteArray(Encoding.UTF32).ToBase64String();
+                //isBase64 = true;
+            }
+            if(string.IsNullOrWhiteSpace(htmlDataStr)) {
+                MpConsole.WriteTraceLine("Error parsing html data obj, no data found");
+                Debugger.Break();
                 return null;
             }
 
-            var hcd = new MpAvHtmlClipboardDataConverter();
-
-            //string versionToken = @"Version:";
-            //string startHtmlToken = @"StartHTML:";
-            //string endHtmlToken = @"EndHTML:";
-
-            string htmlStartToken = @"<!--StartFragment-->";
-            string htmlEndToken = @"<!--EndFragment-->";
-            
-
-            int html_start_idx = htmlClipboardData.IndexOf(htmlStartToken) + htmlStartToken.Length;
-            if(html_start_idx >= 0) {
-                int html_end_idx = htmlClipboardData.IndexOf(htmlEndToken);
-                int html_length = html_end_idx - html_start_idx;
-
-                if(html_length > 0) {
-                    string plainHtml = htmlClipboardData.Substring(html_start_idx, html_length);
-                    plainHtml = HttpUtility.HtmlDecode(plainHtml);
-                    if(RootWebView == null) {
-                        // occurs when CefNet is disabled (hidden window not created in init)
-                        hcd.Html = plainHtml;
-                    } else {
-
-                        var plainHtmlToRichHtmlRequest = new MpQuillConvertPlainHtmlToQuillHtmlRequestMessage() { plainHtml = plainHtml };
-                        string respStr = await RootWebView.EvaluateJavascriptAsync($"convertPlainHtml_ext('{plainHtmlToRichHtmlRequest.SerializeJsonObjectToBase64()}')");
-                        var resp = MpJsonObject.DeserializeBase64Object<MpQuillConvertPlainHtmlToQuillHtmlResponseMessage>(respStr);
-                        string qhtml = resp.quillHtml;
-
-                        //if (qhtml.IsStringEscapedHtml()) {
-                        //    // pretty sure this can't happen since its base64 encoded but curious to see, this means need to call HtmlDecode again..
-                        //    Debugger.Break();
-
-                        //}
-                        qhtml = HttpUtility.HtmlDecode(qhtml);
-                        hcd.Html = qhtml;
-                        //hcd.Rtf = string.Empty;// await MpQuillHtmlToRtfConverter.ConvertStandardHtmlToRtf(hcd.Html);
-                    }
-                }
-            }
-            string sourceUrlToken = "SourceURL:";
-            int source_url_start_idx = htmlClipboardData.IndexOf(sourceUrlToken) + sourceUrlToken.Length;
-            if(source_url_start_idx >= 0) {
-                int source_url_length = htmlClipboardData.Substring(source_url_start_idx).IndexOf(Environment.NewLine);
-                if(source_url_length >= 0) {
-                    string parsed_url = htmlClipboardData.Substring(source_url_start_idx, source_url_length);
-                    if(Uri.IsWellFormedUriString(parsed_url,UriKind.Absolute)) {
-                        hcd.SourceUrl = parsed_url;
-                    } else {
-                        MpConsole.WriteTraceLine("Malformed uri: " + parsed_url);
-                        hcd.SourceUrl = null;
-                    }
-                }
-            }
-            return hcd;
+            var req = new MpQuillConvertPlainHtmlToQuillHtmlRequestMessage() { 
+                data = htmlDataStr,
+                isBase64 = isBase64,
+                isHtmlClipboardFormat = true
+            };
+            string respStr = await RootWebView.EvaluateJavascriptAsync($"convertPlainHtml_ext('{req.SerializeJsonObjectToBase64()}')");
+            var resp = MpJsonObject.DeserializeBase64Object<MpQuillConvertPlainHtmlToQuillHtmlResponseMessage>(respStr);
+            return new MpAvHtmlClipboardDataConverter() {
+                Html = resp.quillHtml,
+                SourceUrl = resp.sourceUrl
+            };
         }
 
-        /// <summary>
-        /// Extracts Html string from clipboard data by parsing header information in htmlDataString
-        /// </summary>
-        /// <param name="htmlDataString">
-        /// String representing Html clipboard data. This includes Html header
-        /// </param>
-        /// <returns>
-        /// String containing only the Html data part of htmlDataString, without header
-        /// </returns>
-        internal static string ExtractHtmlFromClipboardData(string htmlDataString) {
-            int startHtmlIndex = htmlDataString.IndexOf("StartHTML:");
-            if (startHtmlIndex < 0) {
-                return "ERROR: Urecognized html header";
-            }
-            // TODO: We assume that indices represented by strictly 10 zeros ("0123456789".Length),
-            // which could be wrong assumption. We need to implement more flrxible parsing here
-            startHtmlIndex = Int32.Parse(htmlDataString.Substring(startHtmlIndex + "StartHTML:".Length, "0123456789".Length));
-            if (startHtmlIndex < 0 || startHtmlIndex > htmlDataString.Length) {
-                return "ERROR: Urecognized html header";
-            }
-
-            int endHtmlIndex = htmlDataString.IndexOf("EndHTML:");
-            if (endHtmlIndex < 0) {
-                return "ERROR: Urecognized html header";
-            }
-            // TODO: We assume that indices represented by strictly 10 zeros ("0123456789".Length),
-            // which could be wrong assumption. We need to implement more flrxible parsing here
-            endHtmlIndex = Int32.Parse(htmlDataString.Substring(endHtmlIndex + "EndHTML:".Length, "0123456789".Length));
-            if (endHtmlIndex > htmlDataString.Length) {
-                endHtmlIndex = htmlDataString.Length;
-            }
-
-            return htmlDataString.Substring(startHtmlIndex, endHtmlIndex - startHtmlIndex);
-        }
-
-        /// <summary>
-        /// Extracts selected Html fragment string from clipboard data by parsing header information 
-        /// in htmlDataString
-        /// </summary>
-        /// <param name="htmlDataString">
-        /// String representing Html clipboard data. This includes Html header
-        /// </param>
-        /// <returns>
-        /// String containing only the Html selection part of htmlDataString, without header
-        /// </returns>
-        internal static string ExtractHtmlFragmentFromClipboardData(string htmlDataString) {
-            // HTML Clipboard Format
-            // (https://msdn.microsoft.com/en-us/library/aa767917(v=vs.85).aspx)
-
-            // The fragment contains valid HTML representing the area the user has selected. This 
-            // includes the information required for basic pasting of an HTML fragment, as follows:
-            //  - Selected text. 
-            //  - Opening tags and attributes of any element that has an end tag within the selected text. 
-            //  - End tags that match the included opening tags. 
-
-            // The fragment should be preceded and followed by the HTML comments <!--StartFragment--> and 
-            // <!--EndFragment--> (no space allowed between the !-- and the text) to indicate where the 
-            // fragment starts and ends. So the start and end of the fragment are indicated by these 
-            // comments as well as by the StartFragment and EndFragment byte counts. Though redundant, 
-            // this makes it easier to find the start of the fragment (from the byte count) and mark the 
-            // position of the fragment directly in the HTML tree.
-
-            // Byte count from the beginning of the clipboard to the start of the fragment.
-            int startFragmentIndex = htmlDataString.IndexOf("StartFragment:");
-            if (startFragmentIndex < 0) {
-                return "ERROR: Unrecognized html header";
-            }
-            // TODO: We assume that indices represented by strictly 10 zeros ("0123456789".Length),
-            // which could be wrong assumption. We need to implement more flrxible parsing here
-            startFragmentIndex = Int32.Parse(htmlDataString.Substring(startFragmentIndex + "StartFragment:".Length, 10));
-            if (startFragmentIndex < 0 || startFragmentIndex > htmlDataString.Length) {
-                return "ERROR: Unrecognized html header";
-            }
-
-            // Byte count from the beginning of the clipboard to the end of the fragment.
-            int endFragmentIndex = htmlDataString.IndexOf("EndFragment:");
-            if (endFragmentIndex < 0) {
-                return "ERROR: Unrecognized html header";
-            }
-            // TODO: We assume that indices represented by strictly 10 zeros ("0123456789".Length),
-            // which could be wrong assumption. We need to implement more flrxible parsing here
-            endFragmentIndex = Int32.Parse(htmlDataString.Substring(endFragmentIndex + "EndFragment:".Length, 10));
-            if (endFragmentIndex > htmlDataString.Length) {
-                endFragmentIndex = htmlDataString.Length;
-            }
-
-            // CF_HTML is entirely text format and uses the transformation format UTF-8
-            byte[] bytes = Encoding.UTF8.GetBytes(htmlDataString);
-            return Encoding.UTF8.GetString(bytes, startFragmentIndex, endFragmentIndex - startFragmentIndex);
-        }
+        public static ICommand ShowConverterDevTools => new MpCommand(
+            () => {
+                RootWebView.ShowDevTools(); 
+            }, () => { return RootWebView != null; });
     }
 }

@@ -130,11 +130,14 @@ templateType: "dynamic"
     }
 
     public class MpQuillConvertPlainHtmlToQuillHtmlRequestMessage : MpJsonObject {
-        public string plainHtml { get; set; }
+        public string data { get; set; }
+        public bool isBase64 { get; set; }
+        public bool isHtmlClipboardFormat{ get; set; }
     }
 
     public class MpQuillConvertPlainHtmlToQuillHtmlResponseMessage : MpJsonObject {
         public string quillHtml { get; set; }
+        public string sourceUrl { get; set; }
     }
 
     public class MpQuillContentSetTextRangeMessage : MpJsonObject {

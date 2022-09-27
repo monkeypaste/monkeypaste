@@ -84,7 +84,7 @@ function onDragLeave_ntf() {
 
 function onSubSelectionEnabledChanged_ntf(isEnabled) {
 	// output MpQuillSubSelectionChangedNotification
-	
+
 	if (typeof notifySubSelectionEnabledChanged === 'function') {
 		let msg = {
 			isSubSelectionEnabled: isEnabled

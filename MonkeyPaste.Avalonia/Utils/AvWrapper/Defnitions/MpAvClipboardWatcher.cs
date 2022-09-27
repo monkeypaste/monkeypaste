@@ -18,8 +18,6 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using MonkeyPaste.Common.Wpf;
 using WinApi = MonkeyPaste.Common.Avalonia.WinApi;
-using MonkeyPaste.Common;
-
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipboardWatcher : MpIClipboardMonitor, MpIPlatformDataObjectRegistrar {
         #region Private Variables
@@ -109,7 +107,9 @@ namespace MonkeyPaste.Avalonia {
             if (HasChanged(cbo)) {
                 _lastCbo = cbo;
                 // TODO Add plugin handling here
-
+                //if(cbo.ContainsData(MpPortableDataFormats.Html)) {
+                //    Debugger.Break();
+                //}
                 OnClipboardChanged?.Invoke(typeof(MpAvClipboardWatcher).ToString(), cbo);
             }
         }
@@ -134,7 +134,7 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(1000);
                 }
 
-                ndo = MpAvClipboardHandlerCollectionViewModel.Instance.ReadClipboardOrDropObject();
+                ndo = await MpAvClipboardHandlerCollectionViewModel.Instance.ReadClipboardOrDropObjectAsync();
             } else {
                 ndo = await ConvertManagedFormats2();
             }

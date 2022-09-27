@@ -42,7 +42,7 @@ namespace MonkeyPaste.Avalonia {
             }
             var mpavdo = await BindingContext.ConvertToDataObject(fillTemplates);
 
-            var avdo = MpPlatformWrapper.Services.DataObjectHelper.ConvertToPlatformClipboardDataObject(mpavdo) as DataObject;
+            var avdo = await MpPlatformWrapper.Services.DataObjectHelperAsync.ConvertToPlatformClipboardDataObjectAsync(mpavdo) as DataObject;
 
             bool is_all_selected = false;
             if (BindingContext.IsSubSelectionEnabled) {

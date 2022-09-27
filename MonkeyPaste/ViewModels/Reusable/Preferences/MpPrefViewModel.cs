@@ -137,6 +137,11 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region Ole
+
+        // This is used to discern core cb handler so it is automatically enabled on first startup (not the typical workflow)
+        public string CoreClipboardHandlerGuid => "cf2ec03f-9edd-45e9-a605-2a2df71e03bd";
+
         #region Drag & Drop
         public string CompositeItemDragDropFormatName {
             get {
@@ -149,6 +154,8 @@ namespace MonkeyPaste {
                 return "MpClipDragDropFormat";
             }
         }
+        #endregion
+
         #endregion
 
         #region Experience
@@ -506,7 +513,6 @@ namespace MonkeyPaste {
         public MpUserDevice ThisUserDevice { get; set; }
 
         #endregion
-
 
         #region MpIJsonObject Implementation
         public string SerializeJsonObject() {
