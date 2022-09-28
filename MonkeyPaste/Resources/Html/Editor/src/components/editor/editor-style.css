@@ -23,9 +23,9 @@ body {
     color: var(--selfgcolor);
 }
 
-/*#editor span, a, em, strong, u, s, sub, sup, img, p, ol, ul, li, div, table, colgroup, col, tbody, tr, td, iframe, blockquote {
+#editor span, a, em, strong, u, s, sub, sup, img, p, ol, ul, li, div, table, colgroup, col, tbody, tr, td, iframe, blockquote {
     background-color: transparent;
-}*/
+}
 
 .duplicate {
     color: lime;

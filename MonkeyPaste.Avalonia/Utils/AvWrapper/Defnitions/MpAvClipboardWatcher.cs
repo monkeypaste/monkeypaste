@@ -169,8 +169,7 @@ namespace MonkeyPaste.Avalonia {
                     
                     if (formatData is byte[] formatDataBytes) {
                         try {
-                            formatData = Encoding.UTF8.GetString(formatDataBytes, 0, formatDataBytes.Length);
-                            
+                            formatData = formatDataBytes.ToDecodedString();
                         }
                         catch (Exception ex) {
                             MpConsole.WriteTraceLine($"Exception parsing bytes (ignoring format '{format}'): ", ex);

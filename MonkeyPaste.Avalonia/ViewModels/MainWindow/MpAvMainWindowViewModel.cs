@@ -245,7 +245,7 @@ namespace MonkeyPaste.Avalonia {
         public double ExternalTop => ExternalRect.Top;
 
         public double ExternalHeight => ExternalRect.Height;
-        public MpRect MainWindowOpenedRect {
+        public MpRect MainWindowOpenedScreenRect {
             get {
                 switch (MainWindowOrientationType) {
                     case MpMainWindowOrientationType.Bottom:
@@ -278,7 +278,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpRect MainWindowClosedRect {
+        public MpRect MainWindowClosedScreenRect {
             get {
                 switch (MainWindowOrientationType) {
                     case MpMainWindowOrientationType.Bottom:
@@ -336,11 +336,32 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsMainWindowInitiallyOpening { get; set; } = true;
 
-        public bool IsMainWindowOpening { get; set; } = false;
+        public bool IsMainWindowOpening { get; private set; }
+        //    get {
+        //        if(IsMainWindowOpen) {
+        //            return false;
+        //        }
+        //        return MainWindowScreenRect.IsAnyPointWithinOtherRect(MainWindowScreen.Bounds);
+        //    }
+        //}
 
-        public bool IsMainWindowClosing { get; set; } = false;
+        public bool IsMainWindowClosing { get; private set; }
+        //    get {
+        //        if (IsMainWindowOpen) {
+        //            return false;
+        //        }
+        //        if (MainWindowRect.FuzzyEquals(MainWindowClosedRect)) {
+        //            return false;
+        //        }
+        //        return MainWindowScreenRect.IsAnyPointWithinOtherRect(MainWindowScreen.Bounds);
+        //    }
+        //}
 
-        public bool IsMainWindowOpen { get; private set; } = false;
+        public bool IsMainWindowOpen { 
+            get {
+                return MainWindowRect.FuzzyEquals(MainWindowOpenedScreenRect);
+            }
+        }
 
         public bool IsMainWindowLoading { get; set; } = true;
 
@@ -503,8 +524,8 @@ namespace MonkeyPaste.Avalonia {
                     if (!IsResizing) {
                         return;
                     }
-                    MainWindowTop = MainWindowOpenedRect.Top;
-                    MainWindowBottom = MainWindowOpenedRect.Bottom;
+                    MainWindowTop = MainWindowOpenedScreenRect.Top;
+                    MainWindowBottom = MainWindowOpenedScreenRect.Bottom;
 
                     //MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeChanged);
                     break;
@@ -512,8 +533,8 @@ namespace MonkeyPaste.Avalonia {
                     if (!IsResizing) {
                         return;
                     }
-                    MainWindowLeft = MainWindowOpenedRect.Left;
-                    MainWindowRight = MainWindowOpenedRect.Right;
+                    MainWindowLeft = MainWindowOpenedScreenRect.Left;
+                    MainWindowRight = MainWindowOpenedScreenRect.Right;
                     //MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayScreenWidth));
                     //MpMessenger.SendGlobal(MpMessageType.MainWindowSizeChanged);
                     break;
@@ -554,27 +575,21 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsMainWindowActive):
                     if(IsMainWindowActive) {
                         MpMessenger.SendGlobal(MpMessageType.MainWindowActivated);
+                        // NOTE do NOT show window on activate to animate close it temporariliy activates 
                     } else {
                         MpMessenger.SendGlobal(MpMessageType.MainWindowDeactivated);
+                        HideWindowCommand.Execute(null);
                     }
                     break;
             }
         }
-
         private void ValidateWindowState() {
-            return;
             Dispatcher.UIThread.Post(() => {
-                if(IsMainWindowLocked) {
-                    return;
-                }
-                if(MpAvMainWindow.Instance.IsVisible && !MainWindowScreen.Bounds.Contains(MainWindowScreenRect.Location) && IsMainWindowOpen) {
-                    // when window is visible outside of screen mark as closed
-                    IsMainWindowOpen = false;
-                }
-                if (!MpAvMainWindow.Instance.IsVisible && IsMainWindowOpen && !IsMainWindowClosing) {
-                    // i think this is only a debugging error since at a breakpoint mw doesn't get deactivated event 
-                    // but this makes sure IsOpen doesn't get out of sync
-                    IsMainWindowOpen = false;
+                //if(MpAvMainWindow.Instance.IsVisible && (!IsMainWindowOpening || !IsMainWindowClosing) {
+                //    Debugger.Break();
+                //}
+                if(IsMainWindowOpen && (IsMainWindowClosing || IsMainWindowOpening)) {
+                    Debugger.Break();
                 }
             });
         }
@@ -609,7 +624,7 @@ namespace MonkeyPaste.Avalonia {
                 // NOTE on windows setting Topmost= true here makes mw in animate in front of taskbar
                 mw.Topmost = false;
 
-                MpRect openStartRect = MainWindowClosedRect;
+                MpRect openStartRect = MainWindowClosedScreenRect;
                 if (IsMainWindowClosing) {
                     IsMainWindowClosing = false;
                     openStartRect = MainWindowRect;
@@ -629,7 +644,7 @@ namespace MonkeyPaste.Avalonia {
 
                 //MpConsole.WriteLine($"SHOW WINDOW START: L: " + MainWindowLeft + " T: " + MainWindowTop + " R:" + MainWindowRight + " B:" + MainWindowBottom);
 
-                MpRect openEndRect = MainWindowOpenedRect;
+                MpRect openEndRect = MainWindowOpenedScreenRect;
 
                 double test = MpPrefViewModel.Instance.ShowMainWindowAnimationMilliseconds;
                 double tt = 500;
@@ -647,6 +662,11 @@ namespace MonkeyPaste.Avalonia {
                 timer.Interval = TimeSpan.FromMilliseconds(fps);
 
                 timer.Tick += (s, e32) => {
+                    if (IsMainWindowClosing) {
+                        timer.Stop();
+                        IsMainWindowOpening = false;
+                        return;
+                    }
                     bool isDone = MainWindowOrientationType switch {
                         MpMainWindowOrientationType.Bottom => MainWindowTop < openEndRect.Top,
                         MpMainWindowOrientationType.Top => MainWindowTop > openEndRect.Top,
@@ -666,17 +686,14 @@ namespace MonkeyPaste.Avalonia {
                         MpAvMainWindow.Instance.Topmost = true;
                         IsMainWindowLoading = false;
                         IsMainWindowOpening = false;
-                        IsMainWindowOpen = true;
+                        ValidateWindowState();
 
-
+                        OnPropertyChanged(nameof(IsMainWindowOpen));
                         OnPropertyChanged(nameof(ExternalRect));
                         //OnMainWindowOpened?.Invoke(this, EventArgs.Empty);
                         MpMessenger.SendGlobal(MpMessageType.MainWindowOpened);
                     } else {
-                        if (IsMainWindowClosing) {
-                            timer.Stop();
-                            return;
-                        }
+                        
                         //MpConsole.WriteLine($"SHOW WINDOW ANIMATING: L: " + MainWindowLeft + " T: " + MainWindowTop + " R:" + MainWindowRight + " B:" + MainWindowBottom);
                         //MainWindowLeft = Math.Min(openEndRect.Left,MainWindowLeft + d_l);
                         //MainWindowTop = Math.Min(openEndRect.Top,MainWindowTop + d_t);
@@ -695,53 +712,80 @@ namespace MonkeyPaste.Avalonia {
                 timer.Start();
             },
             () => {
-                ValidateWindowState();
-                return !IsMainWindowLoading &&
+                bool canShow = !IsMainWindowLoading &&
                         !IsShowingDialog &&
-                        !IsMainWindowOpen &&
+                        //!IsMainWindowOpen &&
+                        !IsMainWindowClosing &&
                         !IsMainWindowOpening;
+                if(!canShow) {
+                    ValidateWindowState();
+                }
+                return canShow;
             });
 
-        public ICommand HideWindowCommand => new MpCommand(
-            () => {
+        public ICommand HideWindowCommand => new MpAsyncCommand(
+            async() => {
                 if (!Dispatcher.UIThread.CheckAccess()) {
                     Dispatcher.UIThread.Post(() => {
-                        ShowWindowCommand.Execute(null);
+                        HideWindowCommand.Execute(null);
                     });
                     return;
                 }
 
-                if (IsMainWindowLocked ||
-                    IsResizing ||
-                    IsMainWindowClosing ||
-                    IsShowingDialog ||
-                    !IsMainWindowOpen) {
-                    return;
-                }
+                MpRect closeStartRect = MainWindowOpenedScreenRect;
+                MpRect closeEndRect = MainWindowClosedScreenRect;
 
                 // Hide START Events - start
 
-                MpAvMainWindow.Instance.Activate();
-                MpAvMainWindow.Instance.Topmost = false;
 
-                // Hide START Events - end
-
-                IsMainWindowClosing = true;
-
-                MpRect closeStartRect = MainWindowOpenedRect;
                 if (IsMainWindowOpening) {
                     // this occurs when mw is opening and window is deactivated, either by clicking
                     // off or alt-tab, etc. w/o accounting for the deactivate mw will open
                     // and stick until activated/deactivated
-                    IsMainWindowOpening = false;
-                    closeStartRect = MainWindowRect;
+
+                    // to deal with just move to closed rect and hide (won't animate on windows right)
+
+                    IsMainWindowClosing = true;
+                    while(IsMainWindowOpening) {
+                        await Task.Delay(20);
+                    }
+
+                    MainWindowLeft = closeEndRect.Left;
+                    MainWindowTop = closeEndRect.Top;
+                    MainWindowRight = closeEndRect.Right;
+                    MainWindowBottom = closeEndRect.Bottom;
+
+                    IsMainWindowLocked = false;
+                    IsMainWindowClosing = false;
+
+                    MpAvMainWindow.Instance.IsVisible = false;
+                    MpAvMainWindow.Instance.Topmost = false;
+                    //MpAvMainWindow.Instance.Hide();
+
+                    // Hide END - end
+                    OnPropertyChanged(nameof(IsMainWindowOpen));
+                    OnPropertyChanged(nameof(ExternalRect));
+
+                    ValidateWindowState();
+
+                    OnMainWindowClosed?.Invoke(this, EventArgs.Empty);
+                    MpMessenger.SendGlobal(MpMessageType.MainWindowHid);
+                    return;
                 }
+
+                IsMainWindowClosing = true;
+
+                MpAvMainWindow.Instance.Activate(); // must activate to animate (on windows at least)
+                MpAvMainWindow.Instance.Topmost = false;
+
+                // Hide START Events - end
+
+
                 MainWindowLeft = closeStartRect.Left;
                 MainWindowTop = closeStartRect.Top;
                 MainWindowRight = closeStartRect.Right;
                 MainWindowBottom = closeStartRect.Bottom;
 
-                MpRect closeEndRect = MainWindowClosedRect;
 
                 double tt = MpPrefViewModel.Instance.HideMainWindowAnimationMilliseconds;
                 const double fps = 30;
@@ -773,7 +817,7 @@ namespace MonkeyPaste.Avalonia {
                         timer.Stop();
 
                         IsMainWindowLocked = false;
-                        IsMainWindowOpen = false;
+                        //IsMainWindowOpen = false;
                         IsMainWindowClosing = false;
 
 
@@ -784,16 +828,18 @@ namespace MonkeyPaste.Avalonia {
                         //MpAvMainWindow.Instance.Hide();
 
                         // Hide END - end
-
+                        OnPropertyChanged(nameof(IsMainWindowOpen));
                         OnPropertyChanged(nameof(ExternalRect));
+
+                        ValidateWindowState();
 
                         OnMainWindowClosed?.Invoke(this, EventArgs.Empty);
                         MpMessenger.SendGlobal(MpMessageType.MainWindowHid);
                     } else {
-                        if (IsMainWindowOpening) {
-                            timer.Stop();
-                            return;
-                        }
+                        //if (IsMainWindowOpening) {
+                        //    timer.Stop();
+                        //    return;
+                        //}
                         MainWindowLeft += d_l;
                         MainWindowTop += d_t;
                         MainWindowRight += d_r;
@@ -805,17 +851,21 @@ namespace MonkeyPaste.Avalonia {
                 timer.Start();
             },
             () => {
-                ValidateWindowState();
-                return //MpAvMainWindow.Instance != null &&
-                         // MpAvMainWindow.Instance.IsVisible &&
-                         (IsMainWindowOpen || IsMainWindowOpening) &&
+
+                bool canHide = 
+                        !IsMainWindowLocked &&
                           !IsAnyDropDownOpen &&
                           !IsDropOverMainWindow &&
                           !IsShowingDialog &&
                           !IsDropOverMainWindow &&
                           //!MpContextMenuView.Instance.IsOpen &&
+                          //!IsMainWindowOpening &&
                           !IsResizing &&
                           !IsMainWindowClosing;
+                if(!canHide) {
+                    ValidateWindowState();
+                }
+                return canHide;
             });
 
         public ICommand CycleOrientationCommand => new MpCommand<object>(
@@ -840,10 +890,10 @@ namespace MonkeyPaste.Avalonia {
                 MainWindowOrientationType = (MpMainWindowOrientationType)nextOr;
                 SetupMainWindowSize(true);
 
-                MainWindowLeft = MainWindowOpenedRect.Left;
-                MainWindowTop = MainWindowOpenedRect.Top;
-                MainWindowRight = MainWindowOpenedRect.Right;
-                MainWindowBottom = MainWindowOpenedRect.Bottom;
+                MainWindowLeft = MainWindowOpenedScreenRect.Left;
+                MainWindowTop = MainWindowOpenedScreenRect.Top;
+                MainWindowRight = MainWindowOpenedScreenRect.Right;
+                MainWindowBottom = MainWindowOpenedScreenRect.Bottom;
 
                 var mw = MpAvMainWindow.Instance;
                 mw.UpdateContentOrientation();

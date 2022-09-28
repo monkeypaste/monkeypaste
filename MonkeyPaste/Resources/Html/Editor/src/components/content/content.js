@@ -1,5 +1,3 @@
-var InlineTags = ['span', 'a', 'em', 'strong', 'u', 's', 'sub', 'sup', 'img'];
-var BlockTags = ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe','blockquote']
 var ContentHandle = null;
 var ContentItemType = 'Text';
 

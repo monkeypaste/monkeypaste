@@ -115,6 +115,8 @@
                                         Value="-10" />
                                 <Setter Property="ToolTip.HorizontalOffset"
                                         Value="-30" />
+                                <Setter Property="Cursor"
+                                        Value="SizeWestEast" />
                             </Style>
                             <Style Selector="Slider /template/ RepeatButton">
                                 <Setter Property="IsVisible"

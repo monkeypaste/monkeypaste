@@ -898,6 +898,7 @@
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
     <Folder Include="Utils\Clipboard\Win32\" />
     <Folder Include="Controls\ProgressRing\" />
+    <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />

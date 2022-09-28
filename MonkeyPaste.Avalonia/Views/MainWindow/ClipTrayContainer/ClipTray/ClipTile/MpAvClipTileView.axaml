@@ -19,6 +19,7 @@
                           ClipToBounds="True"
                           HorizontalAlignment="Stretch"
                           Classes.TileBorder="True"
+                          Classes.TileHover="{Binding IsHovering}"
                           Classes.CanResize="{Binding CanResize}"
                           Classes.IsResizing="{Binding IsResizing}"
                           VerticalAlignment="Stretch"

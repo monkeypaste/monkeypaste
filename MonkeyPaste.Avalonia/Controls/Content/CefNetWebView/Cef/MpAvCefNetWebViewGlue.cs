@@ -49,6 +49,7 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(async () => {
                 var wv = browser.Host.Client.GetWebView() as MpAvCefNetWebView;
                 var ctvm = wv.BindingContext;
+                ctvm.IsTileDragging = true;
 
                 EventHandler<string> modKeyUpOrDownHandler = (s, e) => {
                     var modKeyMsg = new MpQuillModifierKeysNotification() {
@@ -67,6 +68,12 @@ namespace MonkeyPaste.Avalonia {
                 avmpdo.SetData(MpPortableDataFormats.Text, dragData.FragmentText);
                 avmpdo.SetData(MpPortableDataFormats.Html, dragData.FragmentHtml);
                 avmpdo.MapAllPseudoFormats();
+
+                if(wv.IsAllSelected() || wv.Selection.Length == 0) {
+                    avmpdo.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT, ctvm);
+                } else {
+                    //Debugger.Break();
+                }
                 
                 Pointer p = new Pointer(Pointer.GetNextFreeId(), PointerType.Mouse, true);
                 var pe = new PointerEventArgs(Control.PointerPressedEvent,wv,p,
@@ -74,7 +81,8 @@ namespace MonkeyPaste.Avalonia {
                     new PointerPointProperties(RawInputModifiers.LeftMouseButton, PointerUpdateKind.LeftButtonPressed), KeyModifiers.None);
 
                 var result = await DragDrop.DoDragDrop(pe, avmpdo, allowedOps.ToDragDropEffects());
-                
+
+                ctvm.IsTileDragging = false;
                 MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= modKeyUpOrDownHandler;
                 MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= modKeyUpOrDownHandler;
 

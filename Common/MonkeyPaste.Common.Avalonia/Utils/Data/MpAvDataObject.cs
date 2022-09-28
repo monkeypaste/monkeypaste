@@ -26,7 +26,7 @@ namespace MonkeyPaste.Common.Avalonia {
                     if(data is not byte[]) {
                         if (data is string dataStr) {
                             // only convert if it isn't already
-                            data = Encoding.UTF8.GetBytes(dataStr);
+                            data = dataStr.ToEncodedBytes();
                         } else if(data != null){
                             // what type is it?
                             Debugger.Break();
@@ -43,19 +43,19 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public void MapAllPseudoFormats() {
             // called after all available formats created to map cef types to avalonia and/or vice versa
-            var html_f = MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.Html);
+            var html_f = MpPortableDataFormats.GetDataFormat(MpAvDataFormats.AvHtml_bytes);
             var cefHtml_f = MpPortableDataFormats.GetDataFormat(MpAvDataFormats.CefHtml);
 
             if(DataFormatLookup.ContainsKey(html_f) &&
                 !DataFormatLookup.ContainsKey(cefHtml_f)) {
                 // convert html bytes to string and map to cef html
-                string htmlStr = Encoding.UTF8.GetString(GetData(html_f.Name) as byte[]);
+                string htmlStr = (GetData(html_f.Name) as byte[]).ToDecodedString();
                 SetData(cefHtml_f.Name,htmlStr);
             }
             if (DataFormatLookup.ContainsKey(cefHtml_f) &&
                 !DataFormatLookup.ContainsKey(html_f)) {
                 // convert html sring to to bytes
-                byte[] htmlBytes = Encoding.UTF8.GetBytes(GetData(cefHtml_f.Name) as string);
+                byte[] htmlBytes = (GetData(cefHtml_f.Name) as string).ToEncodedBytes();
                 SetData(html_f.Name, htmlBytes);
             }
 

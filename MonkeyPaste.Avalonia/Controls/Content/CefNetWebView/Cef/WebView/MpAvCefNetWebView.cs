@@ -71,6 +71,7 @@ namespace MonkeyPaste.Avalonia {
 
         MpAvIContentDocument MpAvIContentView.Document => Document;
 
+
         #endregion
 
         #region Constructors
@@ -238,9 +239,6 @@ namespace MonkeyPaste.Avalonia {
                 WasDragStartedFromEditor = false;
             }
         }
-
-        
-
         private void StartDrag(PointerPressedEventArgs e) {
             MpAvIContentView cv = BindingContext.GetContentView();
             // add temp key down listener for notifying editor for visual feedback
@@ -305,7 +303,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (avdo.ContainsData(MpPortableDataFormats.Html)) {
                 var bytes = avdo.GetData(MpPortableDataFormats.Html) as byte[];
-                string htmlStr = Encoding.UTF8.GetString(bytes);
+                string htmlStr = bytes.ToDecodedString();
                 avdo.SetData("text/html", htmlStr);
             }
             if (avdo.ContainsData(MpPortableDataFormats.Text)) {
@@ -314,7 +312,7 @@ namespace MonkeyPaste.Avalonia {
             return avdo;
         }
 
-        private bool IsAllSelected() {
+        public bool IsAllSelected() {
             bool is_all_selected;
             if (BindingContext.IsSubSelectionEnabled) {
                 is_all_selected = Selection.Start.Offset == Document.ContentStart.Offset &&

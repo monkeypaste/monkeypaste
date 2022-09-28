@@ -1,7 +1,7 @@
 ﻿
 using System;
 using System.Runtime.InteropServices;
-
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvWin32HtmlClipboardHelper {
@@ -78,7 +78,7 @@ namespace MonkeyPaste.Avalonia {
 
                     Marshal.Copy(pointer, buff, 0, (int)size);
 
-                    strHTMLUTF8 = System.Text.Encoding.UTF8.GetString(buff);
+                    strHTMLUTF8 = buff.ToDecodedString();
                 }
                 finally {
                     if (pointer != IntPtr.Zero)

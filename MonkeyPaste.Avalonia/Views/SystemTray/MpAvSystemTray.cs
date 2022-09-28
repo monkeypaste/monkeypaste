@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
                 },
                 new NativeMenuItem() {
                     Header = "Show Converter DevTools",
-                    Command = MpAvHtmlClipboardDataConverter.ShowConverterDevTools
+                    Command = MpAvHtmlClipboardData.ShowConverterDevTools
                 },
                 new NativeMenuItem() {
                     Header = "-"

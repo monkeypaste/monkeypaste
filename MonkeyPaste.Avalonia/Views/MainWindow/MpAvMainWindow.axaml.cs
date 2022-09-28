@@ -38,44 +38,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpAvIDropHost Implementation
-
-        //bool MpAvIDropHost.IsDropEnabled => false;
-        //bool MpAvIDropHost.IsDropValid(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects) {
-        //    // since this is on mw grid, its a container for any internal drop
-        //    // it will only be valid when another drophost is set
-        //    if(MpAvDropExtension.CurrentDropHost == this) {
-        //        Debugger.Break();
-        //    }
-        //    return MpAvDropExtension.CurrentDropHost != null;
-        //}
-
-        //void MpAvIDropHost.DragOver(MpPoint host_mp, IDataObject avdo, DragDropEffects dragEffects) {
-        //    MpConsole.WriteLine("[MainWindow DragOver]");
-        //    // only care about showing pin tray when empty from external drag
-        //    if (MpAvDragExtension.CurrentDragHost != null) {
-        //        // internal drag ignore
-        //        return;
-        //    }
-        //    MpAvClipTrayViewModel.Instance.IsExternalDragOverClipTrayContainer = true;
-        //}
-
-        //void MpAvIDropHost.DragLeave() {
-        //    MpConsole.WriteLine("[MainWindow DragLeave]");
-        //    if (MpAvDragExtension.CurrentDragHost != null) {
-        //        // internal drag ignore
-        //        return;
-        //    }
-        //    MpAvClipTrayViewModel.Instance.IsExternalDragOverClipTrayContainer = false;
-        //}
-
-        //Task<DragDropEffects> MpAvIDropHost.DropDataObjectAsync(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects) {
-        //    MpConsole.WriteLine("[MainWindow Drop]");
-        //    throw new NotImplementedException();
-        //}
-
-        #endregion
-
         #region Properties
 
         public MpAvMainWindowViewModel BindingContext => MpAvMainWindowViewModel.Instance;
@@ -116,10 +78,6 @@ namespace MonkeyPaste.Avalonia {
             });
         }
 
-
-
-
-
         #endregion
 
         #region Drop
@@ -138,6 +96,8 @@ namespace MonkeyPaste.Avalonia {
             BindingContext.DragMouseMainWindowLocation = e.GetPosition(this).ToPortablePoint();
             e.DragEffects = DragDropEffects.None;
             BindingContext.IsDropOverMainWindow = true;
+
+            MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.IsPinTrayDropPopOutVisible));
         }
 
         //private void DragOver(object sender, DragEventArgs e) {
@@ -319,25 +279,30 @@ namespace MonkeyPaste.Avalonia {
                 };
 
                 //pin tray view margin (horizontal)
-                ctrcv_ptrv.Margin = new Thickness(0, 0, 5, 0);
+                //ctrcv_ptrv.Margin = new Thickness(0, 0, 5, 0);
 
                 // pin tray listbox padding (horizontal) for head/tail drop adorners
-                ctrcv_ptr_lb.Padding = new Thickness(10, 0, 10, 0);
+                if(MpAvClipTrayViewModel.Instance.IsAnyTilePinned) {
+                    ctrcv_ptr_lb.Padding = new Thickness(10, 0, 10, 0);
+                } else {
+                    ctrcv_ptr_lb.Padding = new Thickness();
+                }
+                
 
                 // pin tray min/max size (horizontal)
                 // pintray min width/height
-                ctrcv_ptrv.Bind(
-                    MpAvPinTrayView.MinWidthProperty,
-                    new Binding() {
-                        Source = MpAvClipTrayViewModel.Instance,
-                        Path = nameof(MpAvClipTrayViewModel.Instance.MinPinTrayScreenWidth)
-                    });
-                ctrcv_ptrv.Bind(
-                    MpAvPinTrayView.MinHeightProperty,
-                    new Binding() {
-                        Source = MpAvClipTrayViewModel.Instance,
-                        Path = nameof(MpAvClipTrayViewModel.Instance.MinPinTrayScreenHeight)
-                    });
+                //ctrcv_ptrv.Bind(
+                //    MpAvPinTrayView.MinWidthProperty,
+                //    new Binding() {
+                //        Source = MpAvClipTrayViewModel.Instance,
+                //        Path = nameof(MpAvClipTrayViewModel.Instance.MinPinTrayScreenWidth)
+                //    });
+                //ctrcv_ptrv.Bind(
+                //    MpAvPinTrayView.MinHeightProperty,
+                //    new Binding() {
+                //        Source = MpAvClipTrayViewModel.Instance,
+                //        Path = nameof(MpAvClipTrayViewModel.Instance.MinPinTrayScreenHeight)
+                //    });
 
 
                 // clip/pin tray grid splitter
@@ -414,9 +379,14 @@ namespace MonkeyPaste.Avalonia {
                 };
 
                 //pin tray (vertical)
-                ctrcv_ptrv.Margin = new Thickness(0, 5, 0, 5);
+                //ctrcv_ptrv.Margin = new Thickness(0, 5, 0, 5);
                 // pin tray listbox padding (vertical) for head/tail drop adorners
-                ctrcv_ptr_lb.Padding = new Thickness(10, 10, 10, 10);
+                
+                if (MpAvClipTrayViewModel.Instance.IsAnyTilePinned) {
+                    ctrcv_ptr_lb.Padding = new Thickness(10, 10, 10, 10);
+                } else {
+                    ctrcv_ptr_lb.Padding = new Thickness();
+                }
 
                 // clip/pin tray grid splitter
                 ctrcv_gs.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -585,7 +555,6 @@ namespace MonkeyPaste.Avalonia {
 
         private void MainWindow_Deactivated(object? sender, System.EventArgs e) {
             MpAvMainWindowViewModel.Instance.IsMainWindowActive = false;
-            MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
         }
 
         #endregion

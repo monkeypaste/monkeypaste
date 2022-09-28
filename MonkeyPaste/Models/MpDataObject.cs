@@ -4,6 +4,7 @@ using SQLiteNetExtensions;
 using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -54,10 +55,20 @@ namespace MonkeyPaste {
 
             if(pdo != null) {
                 foreach(var kvp in pdo.DataFormatLookup) {
+                    string itemData64Str = null;
+                    if(kvp.Value is byte[] bytes) {
+                        itemData64Str = bytes.ToBase64String();
+                    }  else if(kvp.Value is not string) {
+                        // what type is it?
+                        Debugger.Break();
+                        itemData64Str = kvp.Value.ToString();
+                    } else {
+                        itemData64Str = kvp.Value.ToString();
+                    }
                     var pdoi = await MpDataObjectItem.CreateAsync(
                         dataObjectId: ndio.Id,
                         itemFormat: kvp.Key.Name,
-                        itemData64: kvp.Value.ToString());
+                        itemData64: itemData64Str);
                 }
             }
             return ndio;

@@ -16,8 +16,8 @@ using System.Web;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvHtmlClipboardDataConverter {
-        public static MpAvCefNetWebView RootWebView { get; private set; }
+    public class MpAvHtmlClipboardData {
+        private static MpAvCefNetWebView _rootWebView { get; set; }
 
         public string Version { get; private set; }
         public string SourceUrl { get; private set; }
@@ -35,15 +35,15 @@ namespace MonkeyPaste.Avalonia {
                 SystemDecorations = SystemDecorations.None,
                 Position = new PixelPoint(808080, 808080)
             };
-            RootWebView = new MpAvCefNetWebView() {
+            _rootWebView = new MpAvCefNetWebView() {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
                 IsVisible = false
             };
-            quillWindow.Content = RootWebView;
+            quillWindow.Content = _rootWebView;
             
-            RootWebView.BrowserCreated += (s, e) => {
-                RootWebView.Navigated += async(s, e) => {
+            _rootWebView.BrowserCreated += (s, e) => {
+                _rootWebView.Navigated += async(s, e) => {
                     if (s is MpAvCefNetWebView wv) {
                         while(!wv.IsDomLoaded) {
                             await Task.Delay(100);
@@ -54,10 +54,10 @@ namespace MonkeyPaste.Avalonia {
                             useBetterTable = true
                         };
                         string msg64 = converter_init_msg.SerializeJsonObjectToBase64();
-                        RootWebView.ExecuteJavascript($"initMain_ext('{msg64}')");
+                        _rootWebView.ExecuteJavascript($"initMain_ext('{msg64}')");
                     }
                 };
-                RootWebView.Navigate(MpAvClipTrayViewModel.EditorPath);
+                _rootWebView.Navigate(MpAvClipTrayViewModel.EditorPath);
             };
 
             if(OperatingSystem.IsWindows()) {
@@ -71,18 +71,27 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public static async Task<MpAvHtmlClipboardDataConverter> ParseAsync(object htmlData, bool isBase64 = false) {
+        public static async Task<MpAvHtmlClipboardData> ParseAsync(object htmlData, bool isBase64 = false) {
             if(htmlData == null) {
                 return null;
             }
             string htmlDataStr = null;
-            if(htmlData is byte[] htmlDataBytes) {
+            if (htmlData is byte[] htmlDataBytes) {
                 isBase64 = true;
                 htmlDataStr = htmlDataBytes.ToBase64String();
             } else {
-                htmlDataStr = htmlData.ToString();
-                //htmlDataStr = htmlDataStr.ToByteArray(Encoding.UTF32).ToBase64String();
-                //isBase64 = true;
+                if(htmlData is not string) {
+                    // what format is it?
+                    Debugger.Break();
+                    return null;
+                }
+                if(isBase64) {
+                    htmlDataStr = htmlData.ToString();
+                } else {
+                    htmlDataStr = htmlData.ToString().ToBase64String();
+                    isBase64 = true;
+                }
+                
             }
             if(string.IsNullOrWhiteSpace(htmlDataStr)) {
                 MpConsole.WriteTraceLine("Error parsing html data obj, no data found");
@@ -95,9 +104,9 @@ namespace MonkeyPaste.Avalonia {
                 isBase64 = isBase64,
                 isHtmlClipboardFormat = true
             };
-            string respStr = await RootWebView.EvaluateJavascriptAsync($"convertPlainHtml_ext('{req.SerializeJsonObjectToBase64()}')");
+            string respStr = await _rootWebView.EvaluateJavascriptAsync($"convertPlainHtml_ext('{req.SerializeJsonObjectToBase64()}')");
             var resp = MpJsonObject.DeserializeBase64Object<MpQuillConvertPlainHtmlToQuillHtmlResponseMessage>(respStr);
-            return new MpAvHtmlClipboardDataConverter() {
+            return new MpAvHtmlClipboardData() {
                 Html = resp.quillHtml,
                 SourceUrl = resp.sourceUrl
             };
@@ -105,7 +114,7 @@ namespace MonkeyPaste.Avalonia {
 
         public static ICommand ShowConverterDevTools => new MpCommand(
             () => {
-                RootWebView.ShowDevTools(); 
-            }, () => { return RootWebView != null; });
+                _rootWebView.ShowDevTools(); 
+            }, () => { return _rootWebView != null; });
     }
 }

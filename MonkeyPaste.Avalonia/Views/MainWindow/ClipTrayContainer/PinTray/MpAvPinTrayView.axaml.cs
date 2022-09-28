@@ -31,6 +31,8 @@ namespace MonkeyPaste.Avalonia {
 
         private void DragEnter(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragEnter] PinTrayListBox: ");
+
+            BindingContext.OnPropertyChanged(nameof(BindingContext.IsPinTrayDropPopOutVisible));
             BindingContext.IsDragOverPinTray = true;
         }
 
@@ -290,6 +292,25 @@ namespace MonkeyPaste.Avalonia {
             ptrlb.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
             ptrlb.AddHandler(DragDrop.DropEvent, Drop);
             InitAdorner(ptrlb);
+
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+        }
+
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch(msg) {
+                case MpMessageType.PinTrayEmptyOrHasTile:
+                    // NOTE these layout values need to match UpdateContentOrientation settings
+                    var ptrlb = this.FindControl<ListBox>("PinTrayListBox");
+                    if(!MpAvClipTrayViewModel.Instance.IsAnyTilePinned) {
+                        ptrlb.Padding = new Thickness();
+                    }
+                    if(MpAvClipTrayViewModel.Instance.ListOrientation == Orientation.Horizontal) {
+                        ptrlb.Padding = new Thickness(10, 0, 10, 0);
+                    } else {
+                        ptrlb.Padding = new Thickness(10, 10, 10, 10);
+                    }
+                    break;
+            }
         }
 
         private void InitializeComponent() {

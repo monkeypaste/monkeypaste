@@ -17,7 +17,14 @@ namespace MonkeyPaste.Avalonia {
         public MpAvITextPointer End { get; set; }
 
 
-        public int Length => End.Offset - Start.Offset;
+        public int Length {
+            get {
+                if(End.Offset == Start.Offset) {
+                    return 0;
+                }
+                return End.Offset - Start.Offset + 1;
+            }
+        }
         //public string Text {
         //    get {
         //        if (!Start.IsInSameDocument(End)) {

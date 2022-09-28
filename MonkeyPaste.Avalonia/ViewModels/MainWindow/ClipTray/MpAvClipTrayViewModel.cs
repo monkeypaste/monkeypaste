@@ -860,9 +860,12 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipTrayLayoutType LayoutType { get; set; } = MpAvClipTrayLayoutType.Stack;
 
-        public string PinTrayBackgroundHexColor => MpSystemColors.salmon.AdjustAlpha(MpPrefViewModel.Instance.MainWindowOpacity);
+        public string PinTrayBackgroundHexColor => IsDragOverPinTray ?
+            MpSystemColors.lightcyan1.AdjustAlpha(MpPrefViewModel.Instance.MainWindowOpacity) :
+            MpSystemColors.salmon.AdjustAlpha(MpPrefViewModel.Instance.MainWindowOpacity);
 
-        public string ClipTrayBackgroundHexColor => MpSystemColors.darkviolet.AdjustAlpha(MpPrefViewModel.Instance.MainWindowOpacity);
+        public string ClipTrayBackgroundHexColor => 
+            MpSystemColors.darkviolet.AdjustAlpha(MpPrefViewModel.Instance.MainWindowOpacity);
 
         #endregion
 
@@ -877,9 +880,9 @@ namespace MonkeyPaste.Avalonia {
                 if (!IsPinTrayEmpty) {
                     return true;
                 }
-                if (IsPinTrayDropPopOutVisible) {
-                    return true;
-                } 
+                //if (IsPinTrayDropPopOutVisible) {
+                //    return true;
+                //} 
                 return false;
             }
         }
@@ -1201,45 +1204,53 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
                     break;
-                case nameof(IsAnyTileDragging):
+                case nameof(IsDragOverPinTray):
                     //notify pin tray to pop out if no item pinned
-                    OnPropertyChanged(nameof(IsPinTrayDropPopOutVisible));                    
+                    OnPropertyChanged(nameof(PinTrayBackgroundHexColor));
                     break;
-                case nameof(IsPinTrayDropPopOutVisible):
-
-                    OnPropertyChanged(nameof(MinPinTrayScreenWidth));
-                    OnPropertyChanged(nameof(MinPinTrayScreenHeight));
-                    OnPropertyChanged(nameof(MaxPinTrayScreenWidth));
-                    OnPropertyChanged(nameof(MaxPinTrayScreenHeight));
-
-                    if(!IsPinTrayDropPopOutVisible) {
-                        // normalize scroll offset for pin tray popout 
-
-                        // popout gone check if scroll needs adjusting
-                        if (IsPinTrayEmpty) {
-                            if (ListOrientation == Orientation.Horizontal) {
-                                ForceScrollOffsetX(ScrollOffsetX - PinTrayPopOutObservedWidth - 5);
-                            } else {
-                                ForceScrollOffsetY(ScrollOffsetY - PinTrayPopOutObservedHeight - 5);
-                            }
-                        } else {
-                            // item was dropped so don't need to adjust                            
-                        }
-
-                    }
+               
+                case nameof(IsAnyTilePinned):
+                    MpMessenger.SendGlobal(MpMessageType.PinTrayEmptyOrHasTile);
                     break;
-                case nameof(PinTrayPopOutObservedHeight):
-                    if (IsPinTrayDropPopOutVisible && ListOrientation == Orientation.Vertical) {
-                        // only matters when vertical
-                        ForceScrollOffsetY(ScrollOffsetY + PinTrayPopOutObservedHeight + 5);
-                    }
-                    break;
-                case nameof(PinTrayPopOutObservedWidth):
-                    // these change when pop out becomes visible but won't be updated when isVisible becomes true
-                    if (IsPinTrayDropPopOutVisible && ListOrientation == Orientation.Horizontal) {
-                        ForceScrollOffsetX(ScrollOffsetX + PinTrayPopOutObservedWidth + 5);
-                    } 
-                    break;
+                //case nameof(IsAnyTileDragging):
+                //    //notify pin tray to pop out if no item pinned
+                //    OnPropertyChanged(nameof(IsPinTrayDropPopOutVisible));
+                //    break;
+                //case nameof(IsPinTrayDropPopOutVisible):
+
+                //    OnPropertyChanged(nameof(MinPinTrayScreenWidth));
+                //    OnPropertyChanged(nameof(MinPinTrayScreenHeight));
+                //    OnPropertyChanged(nameof(MaxPinTrayScreenWidth));
+                //    OnPropertyChanged(nameof(MaxPinTrayScreenHeight));
+
+                //    if (!IsPinTrayDropPopOutVisible) {
+                //        // normalize scroll offset for pin tray popout 
+
+                //        // popout gone check if scroll needs adjusting
+                //        if (IsPinTrayEmpty) {
+                //            if (ListOrientation == Orientation.Horizontal) {
+                //                ForceScrollOffsetX(ScrollOffsetX - PinTrayPopOutObservedWidth - 5);
+                //            } else {
+                //                ForceScrollOffsetY(ScrollOffsetY - PinTrayPopOutObservedHeight - 5);
+                //            }
+                //        } else {
+                //            // item was dropped so don't need to adjust                            
+                //        }
+
+                //    }
+                //    break;
+                //case nameof(PinTrayPopOutObservedHeight):
+                //    if (IsPinTrayDropPopOutVisible && ListOrientation == Orientation.Vertical) {
+                //        // only matters when vertical
+                //        ForceScrollOffsetY(ScrollOffsetY + PinTrayPopOutObservedHeight + 5);
+                //    }
+                //    break;
+                //case nameof(PinTrayPopOutObservedWidth):
+                //    // these change when pop out becomes visible but won't be updated when isVisible becomes true
+                //    if (IsPinTrayDropPopOutVisible && ListOrientation == Orientation.Horizontal) {
+                //        ForceScrollOffsetX(ScrollOffsetX + PinTrayPopOutObservedWidth + 5);
+                //    }
+                //    break;
             }
         }
 
@@ -1503,11 +1514,11 @@ namespace MonkeyPaste.Avalonia {
         #region Layout
 
         public double DefaultPinTrayWidth => DefaultItemWidth*1.4;
-        public double PinTrayScreenWidth { get; set; }
-        public double PinTrayScreenHeight { get; set; }
+        public double ObservedPinTrayScreenWidth { get; set; }
+        public double ObservedPinTrayScreenHeight { get; set; }
 
-        public double PinTrayPopOutObservedWidth { get; set; }
-        public double PinTrayPopOutObservedHeight { get; set; }
+        //public double PinTrayPopOutObservedWidth { get; set; }
+        //public double PinTrayPopOutObservedHeight { get; set; }
         public double PinTrayTotalWidth { get; set; } = 0;
 
         public double MinPinTrayScreenWidth {
@@ -1523,26 +1534,36 @@ namespace MonkeyPaste.Avalonia {
 
         public double MaxPinTrayScreenWidth {
             get {
-                if(IsAnyTilePinned) {
+                if(ListOrientation == Orientation.Horizontal) {
+
                     return ClipTrayContainerScreenWidth - MinClipTrayScreenWidth;
                 }
-                if(IsPinTrayDropPopOutVisible) {
-                    return double.PositiveInfinity;
-                }
-                // When pin tray pops out max has to be reset to 0 which will be min after dragend
-                return MinPinTrayScreenWidth;
+                return double.PositiveInfinity;
+                //if(IsAnyTilePinned) {
+                //    return ClipTrayContainerScreenWidth - MinClipTrayScreenWidth;
+                //}
+                //if(IsPinTrayDropPopOutVisible) {
+                //    return double.PositiveInfinity;
+                //}
+                //// When pin tray pops out max has to be reset to 0 which will be min after dragend
+                //return MinPinTrayScreenWidth;
             }
         }
         public double MaxPinTrayScreenHeight {
             get {
-                if (IsAnyTilePinned) {
-                    return ClipTrayContainerScreenHeight - MinClipTrayScreenHeight; ;
-                }
-                if (IsPinTrayDropPopOutVisible) {
+                if (ListOrientation == Orientation.Horizontal) {
+
                     return double.PositiveInfinity;
                 }
-                // When pin tray pops out max has to be reset to 0 which will be min after dragend
-                return MinPinTrayScreenHeight;
+                return ClipTrayContainerScreenHeight - MinClipTrayScreenHeight;
+                //if (IsAnyTilePinned) {
+                //    return ClipTrayContainerScreenHeight - MinClipTrayScreenHeight; ;
+                //}
+                //if (IsPinTrayDropPopOutVisible) {
+                //    return double.PositiveInfinity;
+                //}
+                //// When pin tray pops out max has to be reset to 0 which will be min after dragend
+                //return MinPinTrayScreenHeight;
             }
         }
 
@@ -1550,8 +1571,8 @@ namespace MonkeyPaste.Avalonia {
         public double MinClipTrayScreenWidth => MinClipOrPinTrayScreenWidth;
         public double MinClipTrayScreenHeight => MinClipOrPinTrayScreenHeight;
 
-        public double MinClipOrPinTrayScreenWidth => 30;
-        public double MinClipOrPinTrayScreenHeight => 30;
+        public double MinClipOrPinTrayScreenWidth => 0;
+        public double MinClipOrPinTrayScreenHeight => 0;
 
 
         public double ClipTrayContainerScreenWidth { get; set; }
@@ -2534,7 +2555,7 @@ namespace MonkeyPaste.Avalonia {
                  OnPropertyChanged(nameof(IsPinTrayDropPopOutVisible));
 
                  if (!IsAnyTilePinned) {
-                     PinTrayTotalWidth = PinTrayScreenWidth = 0;
+                     PinTrayTotalWidth = ObservedPinTrayScreenWidth = 0;
                  }
                  int queryIdx = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.FastIndexOf(upctvm.CopyItemId);
                  if(queryIdx > 0) {

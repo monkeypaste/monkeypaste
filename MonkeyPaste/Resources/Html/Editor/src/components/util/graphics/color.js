@@ -41,19 +41,6 @@ function getColorObjType(color) {
     return null;
 }
 
-function combineColors(color1, color2) {
-    let rgba1 = cleanColor(color1);
-    let rgba2 = cleanColor(color2);
-
-    let r = parseInt((rgba1.r + rgba2.r) / 2);
-    let g = parseInt((rgba1.g + rgba2.g) / 2);
-    let b = parseInt((rgba1.b + rgba2.b) / 2);
-    let a = parseInt((rgba1.a + rgba2.a) / 2);
-
-    let rgbaStr = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
-    return rgbaStr;
-}
-
 function isBright(hex_or_color_name_or_rgb_or_rgba, brightThreshold = 150) {
     var rgb = hexToRgb(hex_or_color_name_or_rgb_or_rgba);
     var grayVal = Math.sqrt(
@@ -64,38 +51,72 @@ function isBright(hex_or_color_name_or_rgb_or_rgba, brightThreshold = 150) {
 }
 
 function parseRgba(rgb_Or_rgba_Or_colorName_Str) {
+    let rgba = null;
     if (typeof rgb_Or_rgba_Or_colorName_Str === 'string' || rgb_Or_rgba_Or_colorName_Str instanceof String) {
-        if (!rgb_Or_rgba_Or_colorName_Str.startsWith('#')) {
-            let hex = colorNameToHex(rgb_Or_rgba_Or_colorName_Str);
-            let rgba = hexToRgba(hex);
+        // is string
+        if (rgb_Or_rgba_Or_colorName_Str.startsWith('#')) {
+            // is hex color string
+            rgba = hexToRgba(rgb_Or_rgba_Or_colorName_Str);
             return rgba;
-		}
-        let rgba = { r: 0, g: 0, b: 0, a: 255 };
-        if (!rgb_Or_rgba_Or_colorName_Str) {
+        } 
+        let hex = colorNameToHex(rgb_Or_rgba_Or_colorName_Str);
+        if (hex) {
+            // is color name
+            rgba = hexToRgba(hex);
             return rgba;
         }
-        if (rgb_Or_rgba_Or_colorName_Str.startsWith('rgba(')) {
-            let colorParts = rgb_Or_rgba_Or_colorName_Str.split("(")[1].split(")")[0].split(",");
+        // rgb or rgba color
+        rgba = rgbaCssStrToRgba(rgb_Or_rgba_Or_colorName_Str);
+        if (!rgba) {
+            // what is the data?
+            debugger;
 
-            rgba.r = parseInt(colorParts[0]);
-            rgba.g = parseInt(colorParts[1]);
-            rgba.b = parseInt(colorParts[2]);
-            if (colorParts.length > 3) {
-                rgba.a = parseInt(colorParts[3]);
-            } else {
-                rgba.a = 255;
-            }
-            return rgba;
         }
+        return rgba;
     }
+    if (rgb_Or_rgba_Or_colorName_Str.r === undefined) {
+        // what is the data?
+        debugger;
+	}
     return rgb_Or_rgba_Or_colorName_Str;
 }
 
 function rgbaToRgbaStyle(rgba) {
     if (rgba.a === undefined) {
-        rgba.a = 255;
+        rgba.a = 1;
 	}
-    return 'rgba(' + rgba.r + ',' + rgba.g + ',' + rgba.b + ',' + (rgba.a / 255) + ')';
+    return 'rgba(' + rgba.r + ',' + rgba.g + ',' + rgba.b + ',' + (rgba.a / 1) + ')';
+}
+
+function rgbaCssStrToRgba(rgbaCssStr) {
+    if (!rgbaCssStr || rgbaCssStr.length == 0) {
+        return null;
+    }
+    rgbaCssStr = rgbaCssStr.replace('(', '').replace(')', '');
+    if (rgbaCssStr.startsWith('rgb')) {
+        rgbaCssStr = rgbaCssStr.replace('rgb', '');
+    } else if (rgbaCssStr.startsWith('rgba')) {
+        rgbaCssStr = rgbaCssStr.replace('rgba', '');
+    } else {
+        return null;
+    }
+    let rgbaParts = rgbaCssStr.split(',');
+    let rgba = {};
+    for (var i = 0; i < 4; i++) {
+        if (rgbaParts.length - 1 < i) {
+            // for rgb set a to 1
+            rgba.a = 1;
+        } else {
+            if (i == 0) {
+                rgba.r = parseFloat(rgbaParts[i]);
+            } else if (i == 1) {
+                rgba.g = parseFloat(rgbaParts[i]);
+            } if (i == 2) {
+                rgba.b = parseFloat(rgbaParts[i]);
+            }
+		}
+    }
+    return rgba;
 }
 
 
@@ -109,7 +130,7 @@ function hexToRgba(hexStr) {
     }
     let x = hexStr.length == 8 ? 2 : 0;
 
-    let a = x > 0 ? parseInt(hexStr.substring(0, 2), 16) : 255;
+    let a = x > 0 ? parseInt(hexStr.substring(0, 2), 16) : 1;
     let r = parseInt(substringByLength(hexStr,x, 2), 16);
     let g = parseInt(substringByLength(hexStr,x + 2, 2), 16);
     let b = parseInt(substringByLength(hexStr,x + 4, 2), 16);
@@ -144,6 +165,12 @@ function cleanColorStyle(rgb_Or_rgba_Or_colorName_Str, forceAlpha) {
     return rgbaToRgbaStyle(color);
 }
 
+function rgbaToCssColor(rgba) {
+    if (!rgba) {
+        return 'rgba(0,0,0,0)';
+    }
+    return 'rgba(' + rgba.r + ',' + rgba.g + ',' + rgba.b + ',' + rgba.a + ')';
+}
 
 function colorNameToHex(color) {
     var colors = {

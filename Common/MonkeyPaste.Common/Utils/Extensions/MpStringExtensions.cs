@@ -21,6 +21,41 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
+        #region Encoding Extensions
+        public static string ToDecodedString(this byte[] bytes, Encoding enc = null) {
+            // TODO should use local encoding here
+            enc = enc == null ? Encoding.UTF8 : enc;
+            return enc.GetString(bytes);
+        }
+
+        public static byte[] ToEncodedBytes(this string str, Encoding enc = null) {
+            // NOTE str intended to be text not base64
+            // TODO should use local encoding here
+            enc = enc == null ? Encoding.UTF8 : enc;
+            return enc.GetBytes(str);
+        }
+        public static byte[] ToByteArray(this string str, Encoding enc = null) {
+            // NOTE intended for str to be base64
+            if (!str.IsStringBase64()) {
+                return str.ToEncodedBytes(enc);
+            }
+
+            var bytes = Convert.FromBase64String(str);
+            return bytes;
+        }
+
+        public static string ToStringFromBase64(this string str, Encoding enc = null) {
+            var bytes = Convert.FromBase64String(str);
+            var text = bytes.ToDecodedString(enc);
+            return text;
+        }
+
+        public static string ToBase64String(this string str, Encoding enc = null) {
+            return str.ToEncodedBytes(enc).ToBase64String();
+        }
+
+        #endregion
+
         public static string ReplaceRange(this string str, int index, int length, string text) {
             int preStrLength = index + 1;
             if(str.Length < preStrLength) {
@@ -169,6 +204,8 @@ namespace MonkeyPaste.Common {
             }
             return Convert.ToBase64String(bytes);
         }
+
+       
 
         public static string ToCsv(this List<string> strList) {
             if(strList == null || strList.Count == 0) {
@@ -321,21 +358,6 @@ namespace MonkeyPaste.Common {
             return sb.ToString();
         }
 
-        public static byte[] ToByteArray(this string str, Encoding enc = null) {
-            if(!str.IsStringBase64()) {
-                enc = enc == null ? Encoding.UTF8 : enc;
-                return enc.GetBytes(str);
-            }
-
-            var bytes = Convert.FromBase64String(str);
-            return bytes;
-        }
-
-        public static string ToStringFromBase64(this string str) {
-            var bytes = Convert.FromBase64String(str);
-            var text = System.Text.Encoding.UTF8.GetString(bytes, 0, bytes.Length);
-            return text;
-        }
 
         public static string ExpandEnvVars(this string text) {
             string envTokenRegExStr = @"%\w*%{1}";

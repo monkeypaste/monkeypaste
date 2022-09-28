@@ -54,6 +54,8 @@ namespace MonkeyPaste {
 
         TrayLayoutChanged,
 
+        PinTrayEmptyOrHasTile,
+
         TrayZoomFactorChangeBegin,
         TrayZoomFactorChanged,
         TrayZoomFactorChangeEnd,

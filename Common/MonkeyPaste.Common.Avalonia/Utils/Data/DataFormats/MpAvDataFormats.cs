@@ -7,8 +7,8 @@ namespace MonkeyPaste.Common.Avalonia {
         #region Private Variables
 
         private static string[] _defaultFormatNames = new string[] {
-            //AvRtf,
-            //AvHtml,
+            AvRtf_bytes,
+            AvHtml_bytes,
             AvFileNames,
             CefHtml,
             CefText,
@@ -18,9 +18,9 @@ namespace MonkeyPaste.Common.Avalonia {
         private static Dictionary<int, MpAvDataFormat> _formatLookup;
 
         private static string[] _overrideFormatNames = new string[] {
+            MpPortableDataFormats.Rtf,
             MpPortableDataFormats.Html,
             MpPortableDataFormats.FileDrop,
-            MpPortableDataFormats.Rtf
         };
 
         #endregion
@@ -32,12 +32,14 @@ namespace MonkeyPaste.Common.Avalonia {
         #region Constants
 
 
-        //public const string AvRtf = MpPortableDataFormats.Rtf;
-        //public const string AvHtml = MpPortableDataFormats.Html;
+        public const string AvRtf_bytes = MpPortableDataFormats.Rtf;
+        public const string AvHtml_bytes = MpPortableDataFormats.Html;
         public const string AvFileNames = "FileNames";
+
         public const string CefHtml = "text/html";
         public const string CefText = "text/plain";
         public const string CefJson = "application/json";
+
         #endregion
 
         #region Public Methods

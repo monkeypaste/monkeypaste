@@ -24,7 +24,7 @@ namespace MonkeyPaste.Common {
             DataFormatLookup.TryGetValue(pdf, out object data);
             return data;
         }
-
+        
         public virtual void SetData(string format, object data) {
             var pdf = MpPortableDataFormats.GetDataFormat(format);
             if (pdf == null) {

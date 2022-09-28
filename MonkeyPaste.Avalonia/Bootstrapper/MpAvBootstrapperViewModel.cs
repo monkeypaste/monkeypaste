@@ -155,7 +155,7 @@ namespace MonkeyPaste.Avalonia {
 
             _platformItems.AddRange(
                 new List<MpBootstrappedItemViewModel>() {
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvHtmlClipboardDataConverter)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvHtmlClipboardData)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvSystemTray))
                 });
         }

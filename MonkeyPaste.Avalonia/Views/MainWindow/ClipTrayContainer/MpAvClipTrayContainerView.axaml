@@ -24,51 +24,7 @@
             <Setter Property="Height"
                     Value="{Binding BoundHeight}" />
         </Style>
-        <!--<Style Selector="ListBoxItem"
-               x:DataType="local:MpAvClipTileViewModel">
-            <Setter Property="Transitions">
-                <Transitions>
-                    <DoubleTransition Property="Width"
-                                      Duration="0:0:1" />
-                    <DoubleTransition Property="Height"
-                                      Duration="0:0:1" />
-                </Transitions>
-            </Setter>
-        </Style>
-        <Style Selector="ListBoxItem.Editable"
-               x:DataType="local:MpAvClipTileViewModel">
-            <Setter Property="Width"
-                    Value="{Binding EditableWidth}" />
-            <Setter Property="Height"
-                    Value="{Binding EditableHeight}" />
-        </Style>
-        <Style Selector="ListBoxItem:not(.Editable)"
-               x:DataType="local:MpAvClipTileViewModel">
-            <Setter Property="Width"
-                    Value="{Binding ReadOnlyWidth}" />
-            <Setter Property="Height"
-                    Value="{Binding ReadOnlyHeight}" />
-        </Style>-->
-        <!--<Style Selector="local|MpAvPinTrayView">
-            <Setter Property="Transitions">
-                <Transitions>
-                    <DoubleTransition Property="Width"
-                                      Duration="0:0:1.5" />
-                </Transitions>
-            </Setter>
-        </Style>
-        <Style Selector="local|MpAvPinTrayView.showpintray"
-               x:DataType="local:MpAvClipTrayViewModel">
-            <Setter Property="Width"
-                    Value="200" />
-        </Style>
-        <Style Selector="local|MpAvPinTrayView:not(.showpintray)"
-               x:DataType="local:MpAvClipTrayViewModel">
-            <Setter Property="Width"
-                    Value="0" />
-        </Style>-->
     </local:MpAvUserControl.Styles>
-    <!--<AdornerLayer>-->
     <!--  NOTE! Layout is in mw code behind orientation change  -->
     <Grid x:Name="ClipTrayContainerGrid"
           HorizontalAlignment="Stretch"
@@ -77,36 +33,34 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <!--
-            Classes.showpintray="{Binding IsPinTrayVisible}"
-        -->
         <local:MpAvPinTrayView x:Name="PinTrayView"
                                Grid.Column="0"
                                DataContext="{Binding}"
                                Classes.dragoverpintray="{Binding IsDragOverPinTray}"
                                MinWidth="{Binding MinPinTrayScreenWidth}"
                                MinHeight="{Binding MinPinTrayScreenHeight}"
+                               MaxWidth="{Binding MaxPinTrayScreenWidth}"
+                               MaxHeight="{Binding MaxPinTrayScreenHeight}"
                                Background="{Binding PinTrayBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                                local:MpAvSizeObserverExtension.IsEnabled="True"
-                               local:MpAvSizeObserverExtension.ObservedWidth="{Binding PinTrayScreenWidth, Mode=OneWayToSource}"
-                               local:MpAvSizeObserverExtension.ObservedHeight="{Binding PinTrayScreenHeight, Mode=OneWayToSource}">
-            <local:MpAvPinTrayView.IsVisible>
+                               local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedPinTrayScreenWidth, Mode=OneWayToSource}"
+                               local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedPinTrayScreenHeight, Mode=OneWayToSource}">
+            <!--<local:MpAvPinTrayView.IsVisible>
                 <MultiBinding Converter="{StaticResource MultiBoolConverter}"
                               ConverterParameter="OR">
                     <Binding Source="{x:Static local:MpAvClipTrayViewModel.Instance}"
                              Path="IsAnyTilePinned" />
-                    <!--<Binding Source="{x:Static local:MpAvClipTrayViewModel.Instance}"
+            -->
+            <!--<Binding Source="{x:Static local:MpAvClipTrayViewModel.Instance}"
                              Path="IsAnyTileDragging" />
                     <Binding Source="{x:Static local:MpAvMainWindowViewModel.Instance}"
                              Path="IsDropOverMainWindow" />-->
+            <!--
                 </MultiBinding>
-            </local:MpAvPinTrayView.IsVisible>
+            </local:MpAvPinTrayView.IsVisible>-->
         </local:MpAvPinTrayView>
         <GridSplitter x:Name="ClipTraySplitter"
                       Grid.Column="0"
-                      IsEnabled="{Binding IsAnyTilePinned}"
-                      IsVisible="{Binding IsAnyTilePinned}"
-                      Margin="0,0,0,0"
                       Background="Magenta">
             <GridSplitter.Styles>
                 <Style Selector="GridSplitter /template/ Border">
@@ -124,5 +78,4 @@
                                 Background="{Binding ClipTrayBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                                 DataContext="{Binding}" />
     </Grid>
-    <!--</AdornerLayer>-->
 </local:MpAvUserControl>

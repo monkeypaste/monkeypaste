@@ -33,10 +33,10 @@
             </ListBox.Styles>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <ListBoxItem Classes.TileHover="{Binding IsHovering}">
-                        <local:MpAvClipTileView DataContext="{Binding}"
-                                                IsVisible="{Binding IsPinned}" />
-                    </ListBoxItem>
+                    <!--<ListBoxItem Classes.TileHover="{Binding IsHovering}">-->
+                    <local:MpAvClipTileView DataContext="{Binding}"
+                                            IsVisible="{Binding IsPinned}" />
+                    <!--</ListBoxItem>-->
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <ListBox.ItemsPanel>
@@ -46,7 +46,7 @@
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
-        <local:MpAvPinTrayDropPopoutOverlayView HorizontalAlignment="Stretch"
+        <!--<local:MpAvPinTrayDropPopoutOverlayView HorizontalAlignment="Stretch"
                                                 VerticalAlignment="Stretch"
                                                 local:MpAvSizeObserverExtension.IsEnabled="True"
                                                 local:MpAvSizeObserverExtension.ObservedWidth="{Binding PinTrayPopOutObservedWidth, Mode=OneWayToSource}"
@@ -105,7 +105,8 @@
                     </Binding>
                 </MultiBinding>
             </local:MpAvPinTrayDropPopoutOverlayView.MinWidth>
-            <!--<local:MpAvPinTrayDropPopoutOverlayView.IsVisible>
+        -->
+        <!--<local:MpAvPinTrayDropPopoutOverlayView.IsVisible>
                 <MultiBinding Converter="{StaticResource MultiBoolConverter}"
                               ConverterParameter="AND">
                     <Binding Source="{x:Static local:MpAvClipTrayViewModel.Instance}"
@@ -114,6 +115,7 @@
                              Path="IsAnyTileDragging" />
                 </MultiBinding>
             </local:MpAvPinTrayDropPopoutOverlayView.IsVisible>-->
-        </local:MpAvPinTrayDropPopoutOverlayView>
+        <!--
+        </local:MpAvPinTrayDropPopoutOverlayView>-->
     </Grid>
 </local:MpAvUserControl>

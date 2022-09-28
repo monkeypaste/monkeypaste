@@ -29,52 +29,79 @@ namespace MonkeyPaste.Avalonia {
 
                 string itemData = null;
                 //string htmlData = string.Empty;
-                MpAvHtmlClipboardDataConverter htmlClipboardData = new MpAvHtmlClipboardDataConverter();
+                MpAvHtmlClipboardData htmlClipboardData = new MpAvHtmlClipboardData();
                 MpCopyItemType itemType = MpCopyItemType.None;
 
                 if (mpdo.ContainsData(MpPortableDataFormats.FileDrop)) {
+
+                    // FILES
+
                     itemType = MpCopyItemType.FileList;
                     itemData = mpdo.GetData(MpPortableDataFormats.FileDrop).ToString();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Csv)) {
+
+                    // CSV
+
                     itemType = MpCopyItemType.Text;
 
-                    if (mpdo.ContainsData(MpPortableDataFormats.Rtf)) {
+                    if (mpdo.ContainsData(MpAvDataFormats.AvRtf_bytes) && 
+                        mpdo.GetData(MpAvDataFormats.AvRtf_bytes) is byte[] rtfCsvBytes) {
                         // NOTE this is assuming the content is a rich text table. But it may not be 
                         // depending on the source so may need to be careful handling these. 
                         itemType = MpCopyItemType.Text;
-                        itemData = mpdo.GetData(MpPortableDataFormats.Rtf).ToString().EscapeExtraOfficeRtfFormatting();
-                        itemData = itemData.ToRichHtmlText(MpPortableDataFormats.Rtf);
+                        itemData = rtfCsvBytes.ToDecodedString().EscapeExtraOfficeRtfFormatting();
+                        itemData = itemData.ToRichHtmlText(MpAvDataFormats.AvRtf_bytes);
                     } else {
                         string csvStr = mpdo.GetData(MpPortableDataFormats.Csv).ToString();
                         //itemData = csvStr.ToRichText();
                         itemData = itemData.ToRichHtmlText(MpPortableDataFormats.Csv);
                     }
-                } else if (mpdo.ContainsData(MpPortableDataFormats.Rtf)) {
+                } else if (mpdo.ContainsData(MpAvDataFormats.AvRtf_bytes) &&
+                        mpdo.GetData(MpAvDataFormats.AvRtf_bytes) is byte[] rtfBytes &&
+                        rtfBytes.ToDecodedString() is string rtfStr) {
+
+                    // RTF
+
                     // for now and simplicity there are no platform checks for rtf because it should only (by the DataFormat name at least) be on windows
                     itemType = MpCopyItemType.Text;
-                    itemData = mpdo.GetData(MpPortableDataFormats.Rtf).ToString().EscapeExtraOfficeRtfFormatting();
-                    itemData = itemData.ToRichHtmlText(MpPortableDataFormats.Rtf);
+                    itemData = rtfStr.EscapeExtraOfficeRtfFormatting();
+                    itemData = itemData.ToRichHtmlText(MpAvDataFormats.AvRtf_bytes);
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Bitmap)) {
+
+                    // BITMAP
                     itemType = MpCopyItemType.Image;
                     itemData = mpdo.GetData(MpPortableDataFormats.Bitmap).ToString();
-                } else if (mpdo.ContainsData(MpPortableDataFormats.Html)) {
+                } else if (mpdo.ContainsData(MpAvDataFormats.AvHtml_bytes) &&
+                        mpdo.GetData(MpAvDataFormats.AvHtml_bytes) is byte[] htmlBytes &&
+                        htmlBytes.ToDecodedString() is string htmlStr) {
+
+                    // HTML
+
                     itemType = MpCopyItemType.Text;
-                    object htmlData = mpdo.GetData(MpPortableDataFormats.Html);
-                    htmlClipboardData = await MpAvHtmlClipboardDataConverter.ParseAsync(htmlData);
+                    htmlClipboardData = await MpAvHtmlClipboardData.ParseAsync(htmlStr);
                     if(htmlClipboardData == null) {
                         return null;
                     }
                     itemData = htmlClipboardData.Html;
                     //itemData = itemData.ToQuillText();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Text)) {
+
+                    // TEXT
+
                     itemType = MpCopyItemType.Text;
                     itemData = mpdo.GetData(MpPortableDataFormats.Text).ToString().ToContentRichText();
                     //itemData = itemData.ToQuillText();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Unicode)) {
+                    
+                    // UNICODE
+                    
                     itemType = MpCopyItemType.Text;
                     itemData = mpdo.GetData(MpPortableDataFormats.Unicode).ToString().ToContentRichText();
                     //itemData = itemData.ToQuillText();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.OemText)) {
+
+                    // OEM TEXT
+
                     itemType = MpCopyItemType.Text;
                     itemData = mpdo.GetData(MpPortableDataFormats.OemText).ToString().ToContentRichText();
                     //itemData = itemData.ToQuillText();
@@ -95,10 +122,10 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
 
-                //if (mpdo.ContainsData(MpPortableDataFormats.Html)) {
-                //    string rawHtmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
+                //if (mpdo.ContainsData(MpAvDataFormats.AvHtml_bytes)) {
+                //    string rawHtmlData = mpdo.GetData(MpAvDataFormats.AvHtml_bytes).ToString();
                 //    htmlClipboardData = MpHtmlClipboardDataConverter.Parse(rawHtmlData);
-                //    //htmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
+                //    //htmlData = mpdo.GetData(MpAvDataFormats.AvHtml_bytes).ToString();
                 //}
 
                 if (itemType == MpCopyItemType.Text && ((string)itemData).Length > MpPrefViewModel.Instance.MaxRtfCharCount) {
@@ -125,34 +152,6 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 var app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(MpPlatformWrapper.Services.ProcessWatcher.LastHandle);
-
-                //string processPath, appName, processIconImg64;
-
-                //var processHandle = MpProcessManager.LastHandle;
-                //if (processHandle == IntPtr.Zero) {
-                //    // since source is unknown set to this app
-
-                //    processPath = Assembly.GetExecutingAssembly().Location;
-                //    appName = MpJsonPreferenceIO.Instance.ThisAppName;
-                //    processIconImg64 = MpBase64Images.AppIcon;
-                //} else {
-                //    processPath = MpProcessManager.GetProcessPath(processHandle);
-                //    appName = MpProcessManager.GetProcessApplicationName(processHandle);
-                //    processIconImg64 = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(processPath);
-                //}
-
-                //MpApp app = await MpDataModelProvider.GetAppByPath(processPath);
-                //if (app == null) {
-                //    var icon = await MpDataModelProvider.GetIconByImageStr(processIconImg64);
-                //    if (icon == null) {
-                //        icon = await MpIcon.Create(processIconImg64);
-                //    } else {
-                //        icon = await MpDb.GetItemAsync<MpIcon>(icon.Id);
-                //    }
-                //    app = await MpApp.Create(processPath, appName, icon.Id);
-                //} else {
-                //    app = await MpDb.GetItemAsync<MpApp>(app.Id);
-                //}
 
                 MpUrl url = htmlClipboardData == null ?
                     null : await MpUrlBuilder.CreateUrl(htmlClipboardData.SourceUrl);
@@ -183,7 +182,7 @@ namespace MonkeyPaste.Avalonia {
                 var ci = await MpCopyItem.Create(
                     sourceId: source.Id,
                     dataObjectId: dobj.Id,
-                    //preferredFormatName: htmlClipboardData == null ? null : MpPortableDataFormats.Html,
+                    //preferredFormatName: htmlClipboardData == null ? null : MpAvDataFormats.AvHtml_bytes,
                     data: itemData,
                     itemType: itemType,
                     suppressWrite: suppressWrite);

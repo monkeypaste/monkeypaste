@@ -357,11 +357,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsReloading => !string.IsNullOrEmpty(CachedState);
         public bool IsWaitingForDomLoad { get; set; } = false;
 
-        public bool IsAnyCornerVisible => Parent == null ? false : 
-            Parent.ScreenRect.Contains(ScreenRect.TopLeft) || 
-            Parent.ScreenRect.Contains(ScreenRect.TopRight) || 
-            Parent.ScreenRect.Contains(ScreenRect.BottomLeft) || 
-            Parent.ScreenRect.Contains(ScreenRect.BottomRight);
+        public bool IsAnyCornerVisible => Parent == null ? false : ScreenRect.IsAnyPointWithinOtherRect(Parent.ScreenRect);
 
         public bool IsDevToolsVisible { get; set; } = false;
 

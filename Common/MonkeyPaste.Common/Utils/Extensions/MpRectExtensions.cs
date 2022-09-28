@@ -5,6 +5,21 @@ using System.Linq;
 
 namespace MonkeyPaste.Common.Utils.Extensions {
     public static class MpRectExtensions {
+        public static bool FuzzyEquals(this MpRect rect,MpRect otherRect, double maxThresh = 0.1d) {
+            bool isMatch_l = Math.Abs(rect.Left - otherRect.Left) <= maxThresh;
+            bool isMatch_t = Math.Abs(rect.Top - otherRect.Top) <= maxThresh;
+            bool isMatch_r = Math.Abs(rect.Right - otherRect.Right) <= maxThresh;
+            bool isMatch_b = Math.Abs(rect.Bottom - otherRect.Bottom) <= maxThresh;
+            return isMatch_l && isMatch_t && isMatch_r && isMatch_b;
+        }
+
+        public static bool IsAnyPointWithinOtherRect(this MpRect rect, MpRect otherRect) {
+            return otherRect.Contains(rect.TopLeft) ||
+                    otherRect.Contains(rect.TopRight) ||
+                    otherRect.Contains(rect.BottomLeft) ||
+                    otherRect.Contains(rect.BottomRight);
+        }
+
         public static bool Contains(this MpRect rect, MpPoint p) {
             return p.X >= rect.Left && p.X <= rect.Right &&
                    p.Y >= rect.Top && p.Y <= rect.Bottom;

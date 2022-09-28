@@ -122,15 +122,15 @@ namespace AvCoreClipboardHandler {
             } else if (dataObj is string[] strArr) {
                 dataStr = string.Join(Environment.NewLine, strArr);
             } else if (dataObj is byte[] bytes) {
-                if(OperatingSystem.IsWindows() && format == MpPortableDataFormats.Html) {
-                    if(avdo == null) {
-                        string htmlData = MpAvWin32HtmlClipboardHelper.GetHTMLWin32Native(_mainWindowHandle);
-                        return htmlData;
+                //if(OperatingSystem.IsWindows() && format == MpPortableDataFormats.Html) {
+                //    if(avdo == null) {
+                //        string htmlData = MpAvWin32HtmlClipboardHelper.GetHTMLWin32Native(_mainWindowHandle);
+                //        return htmlData;
 
-                        //var bytes2 = htmlData.ToByteArray();
-                        //return bytes2;
-                    }
-                } 
+                //        //var bytes2 = htmlData.ToByteArray();
+                //        //return bytes2;
+                //    }
+                //} 
                 //if (format == MpPortableDataFormats.Html) {
                 //    return dataObj;
                 //}

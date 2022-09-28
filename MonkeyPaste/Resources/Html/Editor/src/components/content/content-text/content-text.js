@@ -1,3 +1,6 @@
+var InlineTags = ['span', 'a', 'em', 'strong', 'u', 's', 'sub', 'sup', 'img'];
+var BlockTags = ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe', 'blockquote']
+
 function loadTextContent(itemDataStr, isPasteRequest) {
 	try {
 		disableFileList();
@@ -32,3 +35,4 @@ function loadTextContent(itemDataStr, isPasteRequest) {
 		//loadContent(item_pt);
 	}
 }
+

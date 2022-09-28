@@ -28,10 +28,10 @@ namespace MonkeyPaste.Avalonia {
             InitializeComponent();
 
             //this.DataContextChanged += MpAvClipTrayContainerView_DataContextChanged;
-            var gs = this.FindControl<GridSplitter>("ClipTraySplitter");
-            gs.GetObservable(GridSplitter.IsEnabledProperty).Subscribe(value => GridSplitter_IsEnabledChanged(gs, value));
+            //var gs = this.FindControl<GridSplitter>("ClipTraySplitter");
+            //gs.GetObservable(GridSplitter.IsEnabledProperty).Subscribe(value => GridSplitter_IsEnabledChanged(gs, value));
             //gs.AddHandler(GridSplitter.PointerPressedEvent, Gs_PointerPressed, RoutingStrategies.Tunnel);
-            gs.AddHandler(GridSplitter.PointerReleasedEvent, Gs_PointerReleased, RoutingStrategies.Tunnel);
+            //gs.AddHandler(GridSplitter.PointerReleasedEvent, Gs_PointerReleased, RoutingStrategies.Tunnel);
 
             //gs.DragDelta += Gs_DragDelta;
         }

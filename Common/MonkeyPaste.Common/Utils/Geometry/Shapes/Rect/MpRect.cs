@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using System;
 using System.Linq;
+using MonkeyPaste.Common.Utils.Extensions;
 
 namespace MonkeyPaste.Common {
     public class MpRect : MpShape {
@@ -137,6 +138,7 @@ namespace MonkeyPaste.Common {
         }
 
         
+
         #endregion
 
         #region Private Methods

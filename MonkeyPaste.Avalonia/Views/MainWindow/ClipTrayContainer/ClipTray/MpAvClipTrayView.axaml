@@ -71,10 +71,8 @@
 
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <ListBoxItem Classes.TileHover="{Binding IsHovering}">
-                                <local:MpAvClipTileView DataContext="{Binding}"
-                                                        IsVisible="{Binding !IsPlaceholder}" />
-                            </ListBoxItem>
+                            <local:MpAvClipTileView DataContext="{Binding}"
+                                                    IsVisible="{Binding !IsPlaceholder}" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                     <ListBox.ItemsPanel>
