@@ -50,11 +50,6 @@ function handleDragStart(e) {
     let htmlStr = getHtml(sel);
     e.dataTransfer.setData('text/html', htmlStr);
 
-    let deltaJsonStr = getDeltaJson(sel, true);
-    e.dataTransfer.setData('application/json', deltaJsonStr);
-
-    onDragStartOrEnd_ntf(true);
-
     return true;
 }
 

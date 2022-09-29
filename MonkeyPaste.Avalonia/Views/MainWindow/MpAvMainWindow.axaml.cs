@@ -95,9 +95,6 @@ namespace MonkeyPaste.Avalonia {
             
             BindingContext.DragMouseMainWindowLocation = e.GetPosition(this).ToPortablePoint();
             e.DragEffects = DragDropEffects.None;
-            BindingContext.IsDropOverMainWindow = true;
-
-            MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.IsPinTrayDropPopOutVisible));
         }
 
         //private void DragOver(object sender, DragEventArgs e) {
@@ -105,16 +102,20 @@ namespace MonkeyPaste.Avalonia {
         //    e.DragEffects = DragDropEffects.None;
         //}
         private void DragLeave(object sender, RoutedEventArgs e) {
+
             if(BindingContext.DragMouseMainWindowLocation == null) {
-                Debugger.Break();
+                //Debugger.Break();
+                return;
             }
             bool isPointerWithinWindow = BindingContext.MainWindowRect.Contains(BindingContext.DragMouseMainWindowLocation);
-
-            MpConsole.WriteLine("[DragLeave] MainWindowContainerGrid: Inside Bounds: "+isPointerWithinWindow);
-            BindingContext.IsDropOverMainWindow = isPointerWithinWindow;
-            if(!BindingContext.IsDropOverMainWindow) {
-                Debugger.Break();
+            if(!isPointerWithinWindow) {
+                BindingContext.DragMouseMainWindowLocation = null;
             }
+            MpConsole.WriteLine("[DragLeave] MainWindowContainerGrid: Inside Bounds: "+isPointerWithinWindow);
+            //BindingContext.IsDropOverMainWindow = isPointerWithinWindow;
+            //if(!BindingContext.IsDropOverMainWindow) {
+            //    Debugger.Break();
+            //}
         }
 
         private void Drop(object sender, DragEventArgs e) {
@@ -434,7 +435,6 @@ namespace MonkeyPaste.Avalonia {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                 MpAvToolWindow_Win32.InitToolWindow(this.PlatformImpl.Handle.Handle);
             }
-
 
             MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeChanged);
 

@@ -181,9 +181,11 @@ function getCharacterRect(docIdx, inflateX = false, inflateY = false) {
 	if (isNaN(parseFloat(docIdx))) {
 		return cleanRect();
 	}
+	
 
 	let docIdx_rect = quill.getBounds(docIdx, 1);
 	docIdx_rect = editorToScreenRect(docIdx_rect);
+
 
 	if (inflateX || inflateY) {
 		inflateCharacterRect(docIdx, docIdx_rect, inflateX, inflateY);
@@ -239,12 +241,14 @@ function inflateCharacterRect(docIdx, docIdx_rect, inflateX, inflateY) {
 	return docIdx_rect;
 }
 
-function getLineRect(lineIdx) {
+function getLineRect(lineIdx,snapToEditor = true) {
 	let line_doc_range = getLineDocRange(lineIdx);
 	let line_start_rect = getCharacterRect(line_doc_range[0]);
 	let line_end_rect = getCharacterRect(line_doc_range[1]);
 	let line_rect = rectUnion(line_start_rect, line_end_rect);
-
+	if (!snapToEditor) {
+		return line_rect;
+	}
 	let editor_rect = getEditorContainerRect();
 	//union line with editor left/right edges
 	line_rect.left = editor_rect.left;
@@ -552,4 +556,6 @@ function getHtmlFromDocRange(docRange) {
 	}
 	return rangeHtml;
 }
+
+
 

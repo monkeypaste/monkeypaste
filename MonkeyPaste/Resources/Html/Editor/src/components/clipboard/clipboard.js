@@ -26,9 +26,13 @@ const CB_DATA_TYPES = [
 ];
 
 function initClipboard() {
-    //quill.clipboard.addMatcher('.' + TemplateEmbedClass, function (node, delta) {
-    //    return delta;// delta.compose(new Delta().retain(delta.length(), { bold: true }));
-    //});
+    startClipboardHandler();
+}
+
+function addClipboardMatchers() {
+    quill.clipboard.addMatcher('.' + TemplateEmbedClass, function (node, delta) {
+        return delta;// delta.compose(new Delta().retain(delta.length(), { bold: true }));
+    });
 }
 
 function startClipboardHandler() {
@@ -55,88 +59,100 @@ function stopClipboardHandler() {
 
 function updateClipboardHandlers(elm, isEnabled) {
     if (isEnabled) {
-        elm.addEventListener('paste', onPaste);
-        elm.addEventListener('cut', onCut);
-        elm.addEventListener('copy', onCopy);
-        elm.addEventListener('keydown', onManualClipboardKeyDown);
+        elm.addEventListener('paste', onPaste, true);
+        elm.addEventListener('cut', onCut,true);
+        elm.addEventListener('copy', onCopy, true);
+        //elm.addEventListener('keydown', onManualClipboardKeyDown);
         return;
     }
     elm.removeEventListener('paste', onPaste);
     elm.removeEventListener('cut', onCut);
     elm.removeEventListener('copy', onCopy);
-    elm.removeEventListener('keydown', onManualClipboardKeyDown);
+    //elm.removeEventListener('keydown', onManualClipboardKeyDown);
 }
 
 function onCut(e) {
-    if (isEditorToolbarVisible() || !isContentEditable()) {
-        // these events shouldn't be enabled in edit mode
-        debugger;
-        return;
-	}
     let sel = getEditorSelection();
     if (!sel) {
         return;
     }
-    setEditorContentEditable(true);
+    let selHtml = getHtml(sel);
+    let selText = getText(sel, true);
+    e.clipboardData.setData('text/html', selHtml);
+    e.clipboardData.setData('text/plain', selText);
 
-    e = setDataTransferObjectForSelection(e, 'cut');
-    setTextInRange(sel, '', 'user');
+    setTextInRange(sel, '', 'silent');
+
+    //let dt = getDataTransferObject(e);
+    //let cut_action = {
+    //    cut: getDataTransferDeltaJson(dt),
+    //    range: sel
+    //};
+    //ReadOnlyCutPasteHistory_undo = [cut_action, ...ReadOnlyCutPasteHistory_undo];
+    log('cut plaintext: ' + selText);
+    log('cut html: ' + selHtml);
 
 
-    let dt = getDataTransferObject(e);
-    let cut_action = {
-        cut: getDataTransferDeltaJson(dt),
-        range: sel
-    };
-    ReadOnlyCutPasteHistory_undo = [cut_action, ...ReadOnlyCutPasteHistory_undo];
-    log('cut plaintext: ' + getDataTransferPlainText(dt));
-    log('cut html: ' + getDataTransferHtml(dt));
-
-
-    setEditorContentEditable(false);
+    e.preventDefault();
+    return true;
+    //e.stopPropagation();
+    //setEditorContentEditable(false);
 }
 function onCopy(e) {
-    e = setDataTransferObjectForSelection(e, 'copy');
-    let dt = getDataTransferObject(e);
-    log('copy plaintext: ' + getDataTransferPlainText(dt));
-    log('copy html: ' + getDataTransferHtml(dt));
+    let sel = getEditorSelection();
+    if (!sel) {
+        return;
+    }
+    let selHtml = getHtml(sel);
+    let selText = getText(sel, true);
+    e.clipboardData.setData('text/html', selHtml);
+    e.clipboardData.setData('text/plain', selText);
+
+    e.preventDefault();
+    //e.stopPropagation();
+    //e = setDataTransferObjectForSelection(e, 'copy');
+    //let dt = getDataTransferObject(e);
+    //log('copy plaintext: ' + getDataTransferPlainText(dt));
+    //log('copy html: ' + getDataTransferHtml(dt));
 }
 
 function onPaste(e) {
-    let dt = getDataTransferObject(e);
-    if (!isDataTransferValid(dt)) {
-        log('cannot paste, dt is invalid');
-        return;
-    }
+    //let dt = getDataTransferObject(e);
+    //if (!dt) {
+    //    log('cannot paste, dt is invalid');
+    //    return;
+    //}
     let sel = getEditorSelection();
     if (!sel) {
         log('no selection, cannot paste');
         return;
     }
+    e.preventDefault();
+    e.stopPropagation();
 
-    let paste_action = {
-        paste: getDataTransferDeltaJson(dt),
-        range: sel,
-        removed: JSON.stringify(getDelta(sel))
-    };
+    //let paste_action = {
+    //    paste: getDataTransferDeltaJson(dt),
+    //    range: sel,
+    //    removed: JSON.stringify(getDelta(sel))
+    //};
 
-    ReadOnlyCutPasteHistory_undo = [paste_action, ...ReadOnlyCutPasteHistory_undo];
+    //ReadOnlyCutPasteHistory_undo = [paste_action, ...ReadOnlyCutPasteHistory_undo];
 
-    if (hasQuillDeltaJson(dt)) {
+ //   if (e.clipboardData.) {
+ //       setTextInRange(sel, '');
+ //       let deltaObj = JSON.parse(getDataTransferDeltaJson(dt));
+ //       deltaObj = [{ retain: sel.index }, ...deltaObj.ops];
+ //       quill.updateContents(deltaObj);
+ //       return;
+    //}
+    if (e.clipboardData.types.includes('text/html')) {
         setTextInRange(sel, '');
-        let deltaObj = JSON.parse(getDataTransferDeltaJson(dt));
-        deltaObj = [{ retain: sel.index }, ...deltaObj.ops];
-        quill.updateContents(deltaObj);
-        return;
-	}
-    if (hasHtml(dt)) {
-        setTextInRange(sel, '');
-        insertHtml(sel.index, getDataTransferHtml(dt));
+        insertHtml(sel.index, e.clipboardData.getData('text/html'),'user');
         return;
     }
-    if (hasPlainText(dt)) {
+    if (e.clipboardData.types.includes('text/plain')) {
         setTextInRange(sel, '');
-        insertText(sel.index, getDataTransferPlainText(dt));
+        insertText(sel.index, e.clipboardData.getData('text/plain'),'user',true);
         return;
 	}
     log('unknown paste format');
@@ -168,7 +184,7 @@ function undoManualClipboardAction() {
     ReadOnlyCutPasteHistory_undo.shift();
     ReadOnlyCutPasteHistory_redo = [undo_action, ...ReadOnlyCutPasteHistory_redo];
 
-    setEditorContentEditable(true);
+    // setEditorContentEditable(true);
 
     if (undo_action.cut) {
         insertDelta({ index: undo_action.range.index, length: 0 }, undo_action.cut);
@@ -178,7 +194,7 @@ function undoManualClipboardAction() {
         log('unknown undo action: ' + JSON.stringify(undo_action));
     }
     //quill.history.undo();
-    setEditorContentEditable(false);
+    //setEditorContentEditable(false);
 }
 
 function redoManualClipboardAction() {
@@ -189,7 +205,7 @@ function redoManualClipboardAction() {
     ReadOnlyCutPasteHistory_redo.shift();
     ReadOnlyCutPasteHistory_undo = [redo_action, ...ReadOnlyCutPasteHistory_undo];
 
-    setEditorContentEditable(true);
+    //setEditorContentEditable(true);
 
     if (redo_action.cut) {
         setTextInRange(redo_action.range, '');
@@ -200,7 +216,7 @@ function redoManualClipboardAction() {
         log('unknown undo action: ' + JSON.stringify(redo_action));
     }
     //quill.history.undo();
-    setEditorContentEditable(false);
+    //setEditorContentEditable(false);
 }
 
 

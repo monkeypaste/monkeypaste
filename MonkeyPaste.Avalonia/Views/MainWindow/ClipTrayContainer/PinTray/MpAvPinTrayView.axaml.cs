@@ -31,14 +31,15 @@ namespace MonkeyPaste.Avalonia {
 
         private void DragEnter(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragEnter] PinTrayListBox: ");
-
-            BindingContext.OnPropertyChanged(nameof(BindingContext.IsPinTrayDropPopOutVisible));
+            MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();
+            //BindingContext.OnPropertyChanged(nameof(BindingContext.IsPinTrayDropPopOutVisible));
             BindingContext.IsDragOverPinTray = true;
         }
 
         private void DragOver(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragOver] PinTrayListBox: ");
-           // e.DragEffects = DragDropEffects.None;
+            // e.DragEffects = DragDropEffects.None;
+            MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();
 
             var ptr_mp = e.GetPosition(sender as Control).ToPortablePoint();
             int drop_idx = GetDropIdx(ptr_mp);
@@ -131,8 +132,10 @@ namespace MonkeyPaste.Avalonia {
             int drag_pctvm_idx = BindingContext.PinnedItems.IndexOf(drag_pctvm);
             
             bool is_drop_onto_same_idx = drop_idx == drag_pctvm_idx || drop_idx == drag_pctvm_idx + 1;
-            if (!is_copy && is_drop_onto_same_idx) {
-                // don't allow moving item if it'll be at same position
+            bool is_partial_drop = avdo.Get(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT) == null;
+
+            if (!is_copy && !is_partial_drop && is_drop_onto_same_idx) {
+                // don't allow moving full item if it'll be at same position 
                 return false;
             }
             // TODO Check data here (which shouldn't matter for internal but would be general app-level check from external)
@@ -145,7 +148,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void ResetDrop() {
             BindingContext.IsDragOverPinTray = false;
-            BindingContext.OnPropertyChanged(nameof(BindingContext.IsPinTrayDropPopOutVisible));
+            MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = null;
             ClearAdorner();
         }
 

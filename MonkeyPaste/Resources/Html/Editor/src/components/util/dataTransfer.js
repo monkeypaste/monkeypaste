@@ -2,10 +2,6 @@
 
 
 function getDataTransferObject(e) {
-    if (CefDragData) {
-        let hdto = convertHostDataToDataTransferObject(CefDragData);
-        return hdto;
-    }
     if (e.detail !== undefined) {
         // drag drop override (unused)
         if (e.detail.original !== undefined) {
@@ -136,7 +132,7 @@ function getDataTransferHtml(dt) {
 
     if (hasHtml(dt)) {
         let itemData = getDataByType(dt, 'text/html');
-        itemData = parseForHtmlContentStr(itemData);
+        //itemData = parseForHtmlContentStr(itemData);
         //isHtml = true;
         return itemData;
     }
@@ -180,46 +176,4 @@ function parseForHtmlContentStr(htmlStr) {
     }
     let result = htmlStr.substring(preIdx, postIdx);
     return result;
-}
-
-// host (system format) converters
-
-function convertHostDataToDataTransferObject(hdo) {
-    let dtObj = {
-        types: {}
-    };
-    if (!hdo.items) {
-        // occurs or dragleave
-        return dtObj;
-    }
-    for (var i = 0; i < hdo.items.length; i++) {
-        let hdo_item = hdo.items[i];
-        let dtf = hdo_item.format;// convertHostDataFormatToDataTransferFormat(hdo_item.format);
-        if (dtf) {
-            dtObj.types[dtf] = hdo_item.data;// dtf == 'text/html' ? atob(hdo_item.data) : hdo_item.data;
-        }
-    }
-    return dtObj;
-}
-
-function convertHostDataFormatToDataTransferFormat(hdof) {
-    if (hdof == 'HTML Format') {
-        return 'text/html';
-    }
-    if (hdof == 'Text') {
-        return 'text/plain';
-    }
-    log('unknown host format (passing through): ' + hdof);
-    return null;
-}
-
-function convertDataTransferFormatToHostDataFormat(dtf) {
-    if (dtf == 'text/html') {
-        return 'HTML Format';
-    }
-    if (dtf == 'text/plain') {
-        return 'Text';
-    }
-    log('unknown data transfer format (passing through): ' + dtf);
-    return dtf;
 }

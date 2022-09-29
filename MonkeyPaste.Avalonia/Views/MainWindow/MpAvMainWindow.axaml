@@ -17,6 +17,7 @@
         ClipToBounds="True"
         Background="Transparent"
         ShowInTaskbar="False"
+        IsVisible="{Binding IsMainWindowVisible}"
         MinWidth="{Binding MainWindowMinWidth}"
         MinHeight="{Binding MainWindowMinHeight}"
         Width="{Binding MainWindowWidth}"

@@ -24,7 +24,7 @@ function initPlainHtmlConverter(envName, useBetterTable) {
 }
 
 
-function convertPlainHtml(plainHtml, forceBgOpacity = 0.7) {
+function convertPlainHtml(plainHtml, forceBgOpacity = 0.0) {
 	if (!IsConverterLoaded) {
 		log('convertPlainHtml error! converter not initialized, returning null');
 		return null;
@@ -46,7 +46,7 @@ function convertPlainHtml(plainHtml, forceBgOpacity = 0.7) {
 	let qhtml = getHtml();
 	qhtml = removeUnicode(qhtml);
 	qhtml = fixUnicode(qhtml);
-	qhtml = forceHtmlBgAlpha(qhtml);
+	qhtml = forceHtmlBgAlpha(qhtml, forceBgOpacity);
 
 	setHtml(qhtml);
 
@@ -56,7 +56,7 @@ function convertPlainHtml(plainHtml, forceBgOpacity = 0.7) {
 	return qhtml;
 }
 
-function forceHtmlBgAlpha(htmlStr, opacity = .25) {
+function forceHtmlBgAlpha(htmlStr, opacity) {
 	let html_doc = DomParser.parseFromString(htmlStr, 'text/html');
 	let elms = html_doc.querySelectorAll(InlineTags.join(", ") + ',' + BlockTags.join(','));
 	for (var i = 0; i < elms.length; i++) {
@@ -111,4 +111,12 @@ function parseHtmlClipboardFormat(cbDataStr) {
 	}
 
 	return cbData;
+}
+
+function isHtmlClipboardData(dataStr) {
+	// TODO need to check common browser html clipboard formats this is only for Chrome on Windows
+	if (!dataStr.startsWith("Version:") || !dataStr.includes("StartHTML:") || !dataStr.includes("EndHTML:")) {
+		return false;
+	}
+	return true;
 }

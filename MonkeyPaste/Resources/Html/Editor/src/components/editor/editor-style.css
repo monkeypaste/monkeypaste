@@ -6,7 +6,6 @@
 body {
     margin: 0px;
     padding: 0px;
-    width: 100%;
     font-family: Arial;
     overflow: hidden;
     cursor: default;
@@ -73,10 +72,18 @@ body:has(.sub-select) {
     /*opacity: var(--editableopacity);*/
     transition: .4s;
 }
+body:has(.drop) {
+    /*width: 808080px !important;*/
+    /*overflow: scroll !important;*/
+}
+
+/*body:not(:has(.drop)) {
+    width: 100%;
+}*/
 
 .editable {
-    white-space: unset;
     user-select: auto;
+    white-space: unset;
     cursor: auto;
     width: unset;
     overflow: auto;
@@ -88,10 +95,14 @@ body:has(.editable) {
     transition: .4s;
 }
 .drop {
-    white-space: nowrap;
-    width: 100%;
+    white-space: nowrap !important;
+    /*width: 100%;*/
     overflow: auto;
 }
+    .drop > .ql-editor {
+        width: 808080px;
+        /*width: 100%;*/
+    }
 
 .hidden {
     display: none;

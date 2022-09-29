@@ -118,24 +118,25 @@
             <!--  IsBusy Overlay  -->
             <Border Grid.Row="0"
                     Grid.RowSpan="3"
+                    Cursor="Wait"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    IsVisible="False">
-                <Border.Background>
+                    IsVisible="{Binding IsBusy}">
+                <!--<Border.Background>
                     <SolidColorBrush Color="Black"
                                      Opacity="0.2" />
-                </Border.Background>
-                <!--<local:ProgressRing Width="50"
+                </Border.Background>-->
+                <local:ProgressRing Width="50"
                                     Height="50"
                                     IsActive="True"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Foreground="Green" />-->
-                <Ellipse Fill="Transparent"
+                                    Foreground="Green" />
+                <!--<Ellipse Fill="Transparent"
                          Stroke="DimGray"
                          StrokeThickness="10"
                          Width="50"
-                         Height="50" />
+                         Height="50" />-->
             </Border>
 
             <!--  Trial Expired Overlay  -->

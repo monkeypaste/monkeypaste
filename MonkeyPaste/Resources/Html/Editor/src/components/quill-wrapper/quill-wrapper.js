@@ -131,17 +131,22 @@ function getSelectedHtml() {
 }
 
 function getSelectedHtml2() {
-	var selection = window.getEditorSelection();
+	var selection = window.getSelection();
 	if (selection.rangeCount > 0) {
 		var range = selection.getRangeAt(0);
-		var docFrag = range.cloneContents();
+		//var docFrag = range.cloneContents();
 
-		let docFragStr = DomSerializer.serializeToString(docFrag);
+		//let docFragStr = DomSerializer.serializeToString(docFrag);
 
-		const xmlnAttribute = ' xmlns="http://www.w3.org/1999/xhtml"';
-		const regEx = new RegExp(xmlnAttribute, "g");
-		docFragStr = docFragStr.replace(regEx, "");
-		return docFragStr;
+		//const xmlnAttribute = ' xmlns="http://www.w3.org/1999/xhtml"';
+		//const regEx = new RegExp(xmlnAttribute, "g");
+		//docFragStr = docFragStr.replace(regEx, "");
+		//return docFragStr;
+		var clonedSelection = range.cloneContents();
+		var div = document.createElement('div');
+		div.appendChild(clonedSelection);
+		let htmlStr = div.innerHTML;
+		return htmlStr;
 	}
 	return "";
 }
@@ -191,21 +196,9 @@ function insertDelta(range, deltaOrDeltaJsonStr) {
 	quill.updateContents(deltaObj);
 }
 function getDelta(rangeObj) {
-	if (!quill || !quill.root) {
-		return '';
-	}
-
-	let wasReadOnly = isContentEditable();
-	if (wasReadOnly) {
-		setEditorContentEditable(true);
-	}
-
 	rangeObj = rangeObj == null ? { index: 0, length: quill.getLength() } : rangeObj;
 
 	let delta = quill.getContents(rangeObj.index, rangeObj.length);
-	if (wasReadOnly) {
-		setEditorContentEditable(false);
-	}
 	return delta;
 }
 

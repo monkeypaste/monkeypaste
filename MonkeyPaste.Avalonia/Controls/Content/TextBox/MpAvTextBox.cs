@@ -88,7 +88,6 @@ namespace MonkeyPaste.Avalonia {
         #region MpAvIContentView Implementation
         public IControl Owner => this;
         public MpAvIContentDocument Document => this;
-        bool MpAvIContentView.CanDrag => true;
 
         public void DeselectAll() {
             UpdateSelection(0, 0, String.Empty, false, false);

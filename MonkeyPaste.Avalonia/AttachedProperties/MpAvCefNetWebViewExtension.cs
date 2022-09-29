@@ -217,7 +217,7 @@ namespace MonkeyPaste.Avalonia {
 
                     var respStr = await wv.EvaluateJavascriptAsync($"loadContent_ext('{loadContentMsg.SerializeJsonObjectToBase64()}')");
                     var resp = MpJsonObject.DeserializeBase64Object<MpQuillLoadContentResponseMessage>(respStr);
-                    ctvm.UnformattedContentSize = new Size(resp.contentWidth, resp.contentHeight);
+                    ctvm.UnformattedContentSize = new MpSize(resp.contentWidth, resp.contentHeight);
                     ctvm.IsWaitingForDomLoad = false;
                 });
                 // editor will know its loaded by IsLoaded and just set new html

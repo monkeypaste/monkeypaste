@@ -18,8 +18,8 @@
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
         <ListBox x:Name="PinTrayListBox"
-                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Visible"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
                  SelectedItem="{Binding SelectedPinTrayItem, Mode=TwoWay}"

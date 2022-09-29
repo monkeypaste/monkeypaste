@@ -51,6 +51,16 @@ namespace MonkeyPaste.Avalonia {
                 var ctvm = wv.BindingContext;
                 ctvm.IsTileDragging = true;
 
+                PointerEventArgs pe = null;
+                EventHandler<PointerEventArgs> pointer_move_handler = null;
+                pointer_move_handler = (s, e) => {
+                    pe = e;
+                    MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();
+                };
+
+                wv.PointerMoved += pointer_move_handler;
+
+
                 EventHandler<string> modKeyUpOrDownHandler = (s, e) => {
                     var modKeyMsg = new MpQuillModifierKeysNotification() {
                         ctrlKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown,
@@ -74,17 +84,23 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     //Debugger.Break();
                 }
-                
-                Pointer p = new Pointer(Pointer.GetNextFreeId(), PointerType.Mouse, true);
-                var pe = new PointerEventArgs(Control.PointerPressedEvent,wv,p,
-                    MpAvMainWindow.Instance, MpAvMainWindow.Instance.Position.ToAvPoint(),(ulong)DateTime.Now.Ticks,
-                    new PointerPointProperties(RawInputModifiers.LeftMouseButton, PointerUpdateKind.LeftButtonPressed), KeyModifiers.None);
+
+                //Pointer p = new Pointer(Pointer.GetNextFreeId(), PointerType.Mouse, true);
+                //var pe = new PointerEventArgs(Control.PointerPressedEvent,wv,p,
+                //    MpAvMainWindow.Instance, MpAvMainWindow.Instance.Position.ToAvPoint(),(ulong)DateTime.Now.Ticks,
+                //    new PointerPointProperties(RawInputModifiers.LeftMouseButton, PointerUpdateKind.LeftButtonPressed), KeyModifiers.None);
+
+                while (pe == null) {
+                    await Task.Delay(100);
+                }
 
                 var result = await DragDrop.DoDragDrop(pe, avmpdo, allowedOps.ToDragDropEffects());
 
                 ctvm.IsTileDragging = false;
+                MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = null;
                 MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= modKeyUpOrDownHandler;
                 MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= modKeyUpOrDownHandler;
+                wv.PointerMoved -= pointer_move_handler;
 
                 MpConsole.WriteLine("Cef Drag Result: " + result);
 

@@ -185,18 +185,18 @@
 
         <!--  Hover Unselected  -->
 
-        <!--<Style Selector="ListBoxItem:pointerover:not(:selected) :is(Border).TileBorder"
-               x:DataType="local:MpAvClipTileViewModel">
-            <Setter Property="BorderBrush"
-                    Value="{StaticResource IsHoveringBorderBrush_unselected}" />
-        </Style>-->
-
-        <!--  Hover Unselected (dnd)  -->
-        <Style Selector="ListBoxItem:not(:selected) :is(Border).TileHover"
+        <Style Selector="ListBoxItem:pointerover:not(:selected) :is(Border).TileBorder"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="BorderBrush"
                     Value="{StaticResource IsHoveringBorderBrush_unselected}" />
         </Style>
+
+        <!--  Hover Unselected (dnd)  -->
+        <!--<Style Selector="ListBoxItem:not(:selected) :is(Border).TileHover"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource IsHoveringBorderBrush_unselected}" />
+        </Style>-->
 
 
         <!--  Default Selected  -->
@@ -210,17 +210,18 @@
 
         <!--  Hover Selected  -->
 
-        <!--<Style Selector="ListBoxItem:selected:pointerover :is(Border).TileBorder:not(.CanResize):not(.IsResizing)"
-               x:DataType="local:MpAvClipTileViewModel">
-            <Setter Property="BorderBrush"
-                    Value="{StaticResource IsHoveringBorderBrush_selected}" />
-        </Style>-->
-
-        <Style Selector="ListBoxItem:selected :is(Border).TileHover:not(.CanResize):not(.IsResizing)"
+        <Style Selector="ListBoxItem:selected:pointerover :is(Border).TileBorder:not(.CanResize):not(.IsResizing)"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="BorderBrush"
                     Value="{StaticResource IsHoveringBorderBrush_selected}" />
         </Style>
+
+        <!--  Hover Selected (dnd)  -->
+        <!--<Style Selector="ListBoxItem:selected :is(Border).TileHover:not(.CanResize):not(.IsResizing)"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource IsHoveringBorderBrush_selected}" />
+        </Style>-->
 
         <!--  Default Resize  -->
 

@@ -32,40 +32,6 @@ function onContentLengthChanged_ntf() {
 	}	
 }
 
-function onContentDraggableChanged_ntf(isDraggable) {
-	// output MpQuillContentDraggableChangedMessage
-
-	// should only be called on mouse down...
-	//log('is_draggable: ' + isDraggable);
-	if (typeof notifyContentDraggableChanged === 'function') {
-		let msg = {
-			//copyItemId: ContentHandle,
-			isDraggable: isDraggable
-		};
-		let msgStr = toBase64FromJsonObj(msg);
-		notifyContentDraggableChanged(msgStr);
-	}
-}
-
-function onDragStartOrEnd_ntf(isDragStart) {
-	// output MpQuillDragStartOrEndNotification
-
-	// should only be called on mouse down...
-	if (typeof notifyDragStartOrEnd === 'function') {
-		//let sel = getEditorSelection();
-		//let dragDropDataMsg = createHostMsgDataObjectObjectForRange(sel, 'drag');
-		//let msgStr = toBase64FromJsonObj(dragDropDataMsg);
-		//startDrag(true);
-		//notifyDragStart(msgStr);
-
-		let msg = {
-			isStart: isDragStart
-		};
-		let msgStr = toBase64FromJsonObj(msg);
-		notifyDragStartOrEnd(msgStr);
-	}
-}
-
 function onDropCompleted_ntf() {
 	if (typeof notifyDropCompleted === 'function') {
 		notifyDropCompleted();
@@ -101,39 +67,26 @@ function onReadOnlyChanged_ntf(isReadOnly) {
 	if (!IsLoaded) {
 		return;
 	}
-	if (typeof notifyReadOnlyChanged === 'function') {
-		let msg = null;
-		if (isReadOnly) {
-			msg = {
-				itemData: getHtml(),
-				//userDeletedTemplateGuids: userDeletedTemplateGuids,
-				//updatedAllAvailableTextTemplates: getAvailableTemplateDefinitions()
+	if (isReadOnly) {
+		if (typeof notifyReadOnlyEnabled === 'function') {
+			let msg = {
+				itemData: getHtml()
 			};
-		} else {
-			msg = {
-				editorWidth: getEditorWidth()
-			};
+			let msgStr = toBase64FromJsonObj(msg);
+			notifyReadOnlyEnabled(msgStr);
 		}
-		let msgStr = toBase64FromJsonObj(msg);
-		notifyReadOnlyChanged(msgStr);
-	}
+	} else {
+		if (typeof notifyReadOnlyDisabled === 'function') {
+			let msg = {
+				editorWidth: getEditorWidth(),
+				editorHeight: getEditorHeight()
+			};
+			let msgStr = toBase64FromJsonObj(msg);
+			notifyReadOnlyDisabled(msgStr);
+		}
+	}	
 }
 
-function onDropEffectChanged_ntf(dropEffectStr) {
-	// output MpQuillDropEffectChangedNotification
-
-	if (!dropEffectStr) {
-		dropEffectStr = 'none';
-	}
-	//log('drop effect: ' + dropEffectStr);
-	if (typeof notifyDropEffectChanged === 'function') {
-		let msg = {
-			dropEffect: dropEffectStr
-		};
-		let msgStr = toBase64FromJsonObj(msg);
-		notifyDropEffectChanged(msgStr);
-	}
-}
 
 function onDomLoaded_ntf() {
 	if (typeof notifyDomLoaded === 'function') {

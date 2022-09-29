@@ -145,13 +145,14 @@ function onWindowMouseMove(e) {
 }
 
 function onWindowMouseUp(e) {
-
+	
 	if (!isChildOfElement(e.target, getEditorContainerElement())) {
 		return;
 	}
 	//LastWindowMouseDownLoc = WindowMouseDownLoc;
 	let last_dmp = WindowMouseDownLoc;
 	WindowMouseDownLoc = null;
+
 	//if (!WindowMouseDownLoc) {
 	//	// mouse outside editor
 	//	return;
@@ -199,10 +200,6 @@ function onWindowMouseUp(e) {
 }
 
 function onWindowScroll(e) {
-	if (isContentEditable()) {
-		return;
-	}
-
 	updateAllSizeAndPositions();
 }
 
@@ -236,8 +233,6 @@ function onWindowKeyDown(e) {
 	} 
 }
 
-// DRAG DROP
-
 function onWindowKeyUp(e) {
 	if (e.code == DecreaseFocusLevelKey) {
 		if (IsDragging || IsDropping) {			
@@ -268,93 +263,10 @@ function onWindowKeyUp(e) {
 	}
 }
 
-function onWindowMouseDown_dragdrop(e) {
-	// used to notify host of drag may need to remove if editor initiaites drag
-	let mp = getEditorMousePos(e);
-	let can_drag = checkCanDrag(mp);
-	onContentDraggableChanged_ntf(can_drag);
-}
-
-function onWindowMouseMove_dragdrop(e) {
-
-	//let offset = getDocIdxFromPoint({ x: parseFloat(e.clientX), y: parseFloat(e.clientY) });
-	//log('offset: ' + offset);
-	if (IsDragging) {
-		return;
-	}
-	if (!isDropping()) {
-		if (parseInt(e.buttons) != 0) {
-			// mouse button is down but not dragging
-
-
-			//showTemplateUserSelection();
-		}
-
-		return;
-	}
-	log('window.mousemove dragover fallback resetting drag drop');
-	resetDragDrop();
-	return;
-
-	if (parseInt(e.buttons) == 0) {
-		resetDragDrop();
-		return;
-	}
-
-	// dragging must be outside editor (otherwise this event is suppressed), likely in a toolbar but still within window
-	if (DropIdx < 0) {
-		return;
-	}
-	WindowMouseLoc = getEditorMousePos(e);
-	LastMouseUpdateDateTime = Date.now();
-
-	DropIdx = -1;
-	drawOverlay();
-}
-
-function onWindowDragStart_override(e) {
-	//if (isRunningInHost()) {
-	//	e.dataTransfer.effectAllowed = 'none';
-	//	e.preventDefault();
-	//} else {
-	//	e.dataTransfer.effectAllowed = 'all';
-
-	//}	
-	e.dataTransfer.effectAllowed = 'copyMove';
-
-	//var event2 = new CustomEvent('mp_dragstart', { detail: { original: e } });
-	//e.target.dispatchEvent(event2);
-
-	//e.preventDefault();
-	e.stopPropagation();
-
-	//if (isRunningInHost()) {
-	//	onDragStartOrEnd_ntf();
-	//} else {
-	//	onDragStart(e);
-	//}
-	onDragStart(e);
-}
-
-function onWindowDragEnd_ovveride(event) {
-	//var event2 = new CustomEvent('mp_dragend', { detail: { original: event } });
-	//event.target.dispatchEvent(event2);
-
-	event.stopPropagation();
-
-	if (!isRunningInHost()) {
-
-		resetDragDrop(true);
-	}
-}
-
-function onWindowDrop_override(event) {
-	//var event2 = new CustomEvent('mp_drop', { detail: { original: event } });
-	//event.target.dispatchEvent(event2);
-
-	event.stopPropagation();
-	if (!isRunningInHost()) {
-
-	}
-	onDrop(event);
+function getWindowRect() {
+	let wrect = cleanRect();
+	wrect.right = window.innerWidth;
+	wrect.bottom = window.innerHeight;
+	wrect = cleanRect(wrect);
+	return wrect;
 }

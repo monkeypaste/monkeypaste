@@ -62,6 +62,7 @@ namespace MonkeyPaste {
 
     public class MpQuillDisableReadOnlyResponseMessage : MpJsonObject {
         public double editorWidth { get; set; }
+        public double editorHeight { get; set; }
     }
 
     public class MpQuillEnableReadOnlyResponseMessage : MpJsonObject {
@@ -121,18 +122,10 @@ templateType: "dynamic"
         public int index { get; set; }
         public int length { get; set; }
     }
-    public class MpQuillSetSelectionFromEditorPointMessage : MpJsonObject {
-        public double x { get; set; }
-        public double y { get; set; }
-        public string state { get; set; }
-
-        public string modkeyBase64Msg { get; set; }
-    }
 
     public class MpQuillConvertPlainHtmlToQuillHtmlRequestMessage : MpJsonObject {
         public string data { get; set; }
         public bool isBase64 { get; set; }
-        public bool isHtmlClipboardFormat{ get; set; }
     }
 
     public class MpQuillConvertPlainHtmlToQuillHtmlResponseMessage : MpJsonObject {
@@ -167,15 +160,6 @@ templateType: "dynamic"
         public bool isSubSelectionEnabled { get; set; }
     }
 
-    public class MpQuillDragDropDataObjectMessage : MpJsonObject {
-        public string eventType { get; set; }
-        public List<MpQuillDragDropDataObjectItemFragment> items { get; set; }
-    }
-
-    public class MpQuillDragDropDataObjectItemFragment : MpJsonObject {
-        public string format { get; set; }
-        public string data { get; set; }
-    }
 
     public class MpQuillDragEndMessage : MpJsonObject {
         public bool fromHost { get; set; } = true;
@@ -184,13 +168,7 @@ templateType: "dynamic"
     public class MpQuillDataTransferMessageFragment : MpJsonObject {
         public string dropEffect { get; set; }
     }
-    public class MpQuillDragStartOrEndNotification : MpJsonObject {
-        public bool isStart { get; set; }
-    }
 
-    public class MpQuillDropEffectChangedNotification : MpJsonObject {
-        public string dropEffect { get; set; }
-    }
     public class MpQuillEditorIndexFromPointRequestMessage : MpJsonObject {
         public double x { get; set; }
         public double y { get; set; }
@@ -215,10 +193,6 @@ templateType: "dynamic"
     public class MpQuillContentLengthChangedMessage : MpJsonObject {
         public int length { get; set; }
     }
-    public class MpQuillContentDraggableChangedMessage : MpJsonObject {
-        public bool isDraggable { get; set; }
-    }
-
 
     public class MpQuillExceptionMessage : MpJsonObject {
         public string exType { get; set; }

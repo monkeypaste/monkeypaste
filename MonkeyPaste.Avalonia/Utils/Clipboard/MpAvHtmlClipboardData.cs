@@ -101,8 +101,7 @@ namespace MonkeyPaste.Avalonia {
 
             var req = new MpQuillConvertPlainHtmlToQuillHtmlRequestMessage() { 
                 data = htmlDataStr,
-                isBase64 = isBase64,
-                isHtmlClipboardFormat = true
+                isBase64 = isBase64
             };
             string respStr = await _rootWebView.EvaluateJavascriptAsync($"convertPlainHtml_ext('{req.SerializeJsonObjectToBase64()}')");
             var resp = MpJsonObject.DeserializeBase64Object<MpQuillConvertPlainHtmlToQuillHtmlResponseMessage>(respStr);
@@ -116,5 +115,6 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 _rootWebView.ShowDevTools(); 
             }, () => { return _rootWebView != null; });
+
     }
 }

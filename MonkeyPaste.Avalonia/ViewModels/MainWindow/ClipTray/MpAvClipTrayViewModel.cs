@@ -904,15 +904,6 @@ namespace MonkeyPaste.Avalonia {
 
         //public bool IsExternalDragOverClipTrayContainer { get; set; }
         public bool IsDragOverPinTray { get; set; }
-        public bool IsPinTrayDropPopOutVisible { get; set; } = false;
-        //    get {
-        //        return false;
-        //        // show popout when no items are visible
-        //        // TODO This needs to account for external dragover
-        //        // TODO? at some point using global drag event  when mw is hidden (and pref enabled) have pop out panel automatically pop out for drop
-        //        return (IsAnyTileDragging || MpAvMainWindowViewModel.Instance.IsDropOverMainWindow) && IsPinTrayEmpty;
-        //    }
-        //}
 
         #endregion
 
@@ -1212,45 +1203,6 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsAnyTilePinned):
                     MpMessenger.SendGlobal(MpMessageType.PinTrayEmptyOrHasTile);
                     break;
-                //case nameof(IsAnyTileDragging):
-                //    //notify pin tray to pop out if no item pinned
-                //    OnPropertyChanged(nameof(IsPinTrayDropPopOutVisible));
-                //    break;
-                //case nameof(IsPinTrayDropPopOutVisible):
-
-                //    OnPropertyChanged(nameof(MinPinTrayScreenWidth));
-                //    OnPropertyChanged(nameof(MinPinTrayScreenHeight));
-                //    OnPropertyChanged(nameof(MaxPinTrayScreenWidth));
-                //    OnPropertyChanged(nameof(MaxPinTrayScreenHeight));
-
-                //    if (!IsPinTrayDropPopOutVisible) {
-                //        // normalize scroll offset for pin tray popout 
-
-                //        // popout gone check if scroll needs adjusting
-                //        if (IsPinTrayEmpty) {
-                //            if (ListOrientation == Orientation.Horizontal) {
-                //                ForceScrollOffsetX(ScrollOffsetX - PinTrayPopOutObservedWidth - 5);
-                //            } else {
-                //                ForceScrollOffsetY(ScrollOffsetY - PinTrayPopOutObservedHeight - 5);
-                //            }
-                //        } else {
-                //            // item was dropped so don't need to adjust                            
-                //        }
-
-                //    }
-                //    break;
-                //case nameof(PinTrayPopOutObservedHeight):
-                //    if (IsPinTrayDropPopOutVisible && ListOrientation == Orientation.Vertical) {
-                //        // only matters when vertical
-                //        ForceScrollOffsetY(ScrollOffsetY + PinTrayPopOutObservedHeight + 5);
-                //    }
-                //    break;
-                //case nameof(PinTrayPopOutObservedWidth):
-                //    // these change when pop out becomes visible but won't be updated when isVisible becomes true
-                //    if (IsPinTrayDropPopOutVisible && ListOrientation == Orientation.Horizontal) {
-                //        ForceScrollOffsetX(ScrollOffsetX + PinTrayPopOutObservedWidth + 5);
-                //    }
-                //    break;
             }
         }
 
@@ -1539,14 +1491,6 @@ namespace MonkeyPaste.Avalonia {
                     return ClipTrayContainerScreenWidth - MinClipTrayScreenWidth;
                 }
                 return double.PositiveInfinity;
-                //if(IsAnyTilePinned) {
-                //    return ClipTrayContainerScreenWidth - MinClipTrayScreenWidth;
-                //}
-                //if(IsPinTrayDropPopOutVisible) {
-                //    return double.PositiveInfinity;
-                //}
-                //// When pin tray pops out max has to be reset to 0 which will be min after dragend
-                //return MinPinTrayScreenWidth;
             }
         }
         public double MaxPinTrayScreenHeight {
@@ -1556,14 +1500,6 @@ namespace MonkeyPaste.Avalonia {
                     return double.PositiveInfinity;
                 }
                 return ClipTrayContainerScreenHeight - MinClipTrayScreenHeight;
-                //if (IsAnyTilePinned) {
-                //    return ClipTrayContainerScreenHeight - MinClipTrayScreenHeight; ;
-                //}
-                //if (IsPinTrayDropPopOutVisible) {
-                //    return double.PositiveInfinity;
-                //}
-                //// When pin tray pops out max has to be reset to 0 which will be min after dragend
-                //return MinPinTrayScreenHeight;
             }
         }
 
@@ -2010,6 +1946,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void StoreSelectionState(MpAvClipTileViewModel tile) {
+            if(tile.IsPlaceholder) {
+                // started happening in external pin tray drop
+                Debugger.Break();
+                return;
+            }
             if (!tile.IsSelected) {
                 return;
             }
@@ -2552,7 +2493,6 @@ namespace MonkeyPaste.Avalonia {
 
                  PinnedItems.Remove(upctvm);
                  OnPropertyChanged(nameof(IsAnyTilePinned));
-                 OnPropertyChanged(nameof(IsPinTrayDropPopOutVisible));
 
                  if (!IsAnyTilePinned) {
                      PinTrayTotalWidth = ObservedPinTrayScreenWidth = 0;

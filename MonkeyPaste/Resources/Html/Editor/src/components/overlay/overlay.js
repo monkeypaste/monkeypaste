@@ -9,11 +9,16 @@ var IsCaretBlinkOn = false;
 var CaretBlinkOffColor = null;
 
 function updateOverlayBounds(overlayCanvas) {
+ //   if (IsDropping) {
+ //       debugger;
+	//}
     let editorRect = getEditorContainerRect();
-	overlayCanvas.style.left = editorRect.left;
+    let window_rect = getWindowRect();
+
+    overlayCanvas.style.left = window_rect.left;
 	overlayCanvas.style.top = editorRect.top;
-	overlayCanvas.width = editorRect.width;
-	overlayCanvas.height = editorRect.height;
+    overlayCanvas.width = window_rect.width;
+    overlayCanvas.height = window_rect.height;
 }
 
 function testOverlay() {
@@ -121,6 +126,7 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5', line_style = [5,
 
     let block_line_offset = 3.0;
     let editor_rect = getEditorContainerRect();
+    //let editor_rect = getWindowRect();
 
     let line_start_idx = getLineStartDocIdx(drop_idx);
     let line_start_rect = getCharacterRect(line_start_idx);
@@ -216,7 +222,8 @@ function drawTextSelection(ctx) {
 
     if (IsDropping || IsDragging) {
         if (IsDragging) {
-            if (isDropValid() || IsDragging) {
+            let is_drop_valid = DropIdx >= 0;
+            if (is_drop_valid || IsDragging) {
                 if (isDragCopy()) {
                     sel_bg_color = 'lime';
                     log('copy recognized in sel draw');
@@ -228,8 +235,6 @@ function drawTextSelection(ctx) {
             } else {
                 sel_bg_color = 'salmon';
             }
-            // NOTE always override caret during drop to make it nice and thicky
-            //caret_color = 'transparent';
         }
     } else if (IsSubSelectionEnabled) {
         if (isEditorToolbarVisible()) {

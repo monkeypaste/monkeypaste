@@ -112,16 +112,7 @@ function onEditorSelectionChanged(range, oldRange, source) {
 		return;
 	}
 
-	if (IsDropCancel) {
-		IsDropCancel = false;
-		if (oldRange) {
-			setEditorSelection(oldRange.index, oldRange.length);
-		}
-		return;
-	}
-
 	if (range) {
-
 		refreshFontSizePicker();
 		refreshFontFamilyPicker();
 		updateTemplatesAfterSelectionChange(range,oldRange);
@@ -208,11 +199,6 @@ function isContentEditable() {
 	let isEditable = parseBool(getEditorElement().getAttribute('contenteditable'));
 	return isEditable;
 }
-function setEditorContentEditable(isEditable) {
-	return;
-	getEditorElement().setAttribute('contenteditable', isEditable);
-	quill.update();
-}
 
 function isReadOnly() {
 	return !isEditorToolbarVisible();
@@ -220,11 +206,11 @@ function isReadOnly() {
 
 function enableReadOnly(fromHost = false) {
 	IsReadOnly = true;
-	setEditorContentEditable(false);	
+	//setEditorContentEditable(false);	
 
 	hideAllToolbars();
 
-	startClipboardHandler();
+	//startClipboardHandler();
 
 	scrollToHome();
 	//hideScrollbars();
@@ -252,9 +238,9 @@ function disableReadOnly(fromHost = false) {
 	//showScrollbars();
 	getEditorContainerElement().classList.remove('no-select');
 	getEditorContainerElement().classList.add('editable');
-	stopClipboardHandler();
+	//stopClipboardHandler();
 
-	setEditorContentEditable(true);
+	//setEditorContentEditable(true);
 	updateAllSizeAndPositions();
 
 	//refreshFontSizePicker();
@@ -296,7 +282,6 @@ function enableSubSelection(fromHost = false) {
 }
 
 function disableSubSelection(fromHost = false) {
-	setEditorContentEditable(false);
 	IsSubSelectionEnabled = false;
 
 	let sel = getEditorSelection();
@@ -329,44 +314,35 @@ function hideAllToolbars() {
 }
 
 function getEditorSelection() {
-	let docSel = null;
-	if (IsLoaded && !isContentEditable()) {
-		// when non-editable is when selection has problems
-		for (var i = 0; i < document.getSelection().rangeCount; i++) {
-			if (docSel == null) {
-				docSel = [];
-			}
-			docSel.push(document.getSelection().getRangeAt(i));
-		}
-		setEditorContentEditable(true);
-	}
-	let selection = quill.getSelection();
-	if (docSel) {
-		setEditorContentEditable(false);
-		document.getSelection().removeAllRanges();
-		for (var i = 0; i < docSel.length; i++) {
-			let range = docSel[i];
-			document.getSelection().addRange(range);
-		}
-	}
-	return selection;
-
+	//let docSel = null;
 	//if (IsLoaded && !isContentEditable()) {
 	//	// when non-editable is when selection has problems
-	//	return getEditorSelection_safe();
+	//	for (var i = 0; i < document.getSelection().rangeCount; i++) {
+	//		if (docSel == null) {
+	//			docSel = [];
+	//		}
+	//		docSel.push(document.getSelection().getRangeAt(i));
+	//	}
+	//	setEditorContentEditable(true);
 	//}
-	//let selection = quill.getSelection();
-	//if (!selection && IsLoaded) {
-		
-	//	//log('warning! sel null reverting to safe selection...')
-	//	return getEditorSelection_safe();
+	let selection = quill.getSelection();
+	//if (docSel) {
+	//	setEditorContentEditable(false);
+	//	document.getSelection().removeAllRanges();
+	//	for (var i = 0; i < docSel.length; i++) {
+	//		let range = docSel[i];
+	//		document.getSelection().addRange(range);
+	//	}
 	//}
-	//return selection;
+	return selection;
 }
 
-function setEditorSelection(doc_idx, length, source = 'user') {
-	getEditorContainerElement().style.userSelect = 'auto';
-	quill.setSelection(doc_idx, length, source);
+function setEditorSelection(doc_idx, len, source = 'user') {
+	//getEditorContainerElement().style.userSelect = 'auto';
+	quill.setSelection(doc_idx, len, source);
+	if (source == 'silent') {
+		onEditorSelectionChanged_ntf({ index: doc_idx, length: len });
+	}
 }
 
 

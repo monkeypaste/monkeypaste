@@ -211,17 +211,18 @@ namespace MonkeyPaste.Avalonia {
 
         // Last and Cur Rect set in view bounds changed handler
         public MpRect LastMainWindowRect { get; set; } = new MpRect();
-        public MpRect MainWindowRect { get; set; } = new MpRect(); 
+        public MpRect MainWindowRect { get; set; } = new MpRect();
 
-        public MpRect MainWindowScreenRect {
-            get {
-                if(MpAvMainWindow.Instance == null) {
-                    return MpRect.Empty;
-                }
-                var mw_screen_origin = VisualExtensions.PointToScreen(MpAvMainWindow.Instance, MpPoint.Zero.ToAvPoint()).ToPortablePoint();
-                return new MpRect(mw_screen_origin, MainWindowRect.Size);
-            }
-        }
+        public MpRect MainWindowScreenRect => new MpRect(MainWindowLeft, MainWindowTop, MainWindowRight - MainWindowLeft, MainWindowBottom - MainWindowTop); //{
+        //    get {
+        //        if(MpAvMainWindow.Instance == null) {
+        //            return MpRect.Empty;
+        //        }
+        //        var pd = MainWindowScreen.PixelDensity;
+        //        var mw_screen_origin = new MpPoint((double)MpAvMainWindow.Instance.Position.X / pd, (double)MpAvMainWindow.Instance.Position.Y / pd);
+        //        return new MpRect(mw_screen_origin, MainWindowRect.Size);
+        //    }
+        //}
 
         public MpRect ExternalRect {
             get {
@@ -330,7 +331,7 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public MpPoint DragMouseMainWindowLocation { get; set; }
-        public bool IsDropOverMainWindow { get; set; } = false;
+        public bool IsDropOverMainWindow { get; private set; } = false;
         public bool IsResizerVisible { get; set; } = false;     
         public bool IsHovering { get; set; }
 
@@ -357,11 +358,16 @@ namespace MonkeyPaste.Avalonia {
         //    }
         //}
 
-        public bool IsMainWindowOpen { 
-            get {
-                return MainWindowRect.FuzzyEquals(MainWindowOpenedScreenRect);
-            }
-        }
+        public bool IsMainWindowOpen { get; private set; } = false;
+        //    get {
+        //        if(!IsMainWindowVisible) {
+        //            return false;
+        //        }
+        //        return MainWindowScreenRect.FuzzyEquals(MainWindowOpenedScreenRect);
+        //    }
+        //}
+
+        public bool IsMainWindowVisible { get; set; }
 
         public bool IsMainWindowLoading { get; set; } = true;
 
@@ -509,9 +515,6 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(IsDropOverMainWindow):
                     MpConsole.WriteLine("IsDropOverMainWindow: " + (IsDropOverMainWindow ? "YES" : "NO"));
-                    MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.IsPinTrayDropPopOutVisible));
-                    MpAvClipTrayViewModel.Instance.AllItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsHitTestEnabled)));
-
                     break;
                 case nameof(IsHovering):
                     MpConsole.WriteLine("MainWindow Hover: " + (IsHovering ? "TRUE" : "FALSE"));
@@ -579,6 +582,16 @@ namespace MonkeyPaste.Avalonia {
                     } else {
                         MpMessenger.SendGlobal(MpMessageType.MainWindowDeactivated);
                         HideWindowCommand.Execute(null);
+                    }
+                    break;
+                case nameof(DragMouseMainWindowLocation):
+                    if(DragMouseMainWindowLocation == null) {
+                        IsDropOverMainWindow = false;
+                        return;
+                    }
+                    IsDropOverMainWindow = MainWindowRect.Contains(DragMouseMainWindowLocation);
+                    if(!IsDropOverMainWindow) {
+                        DragMouseMainWindowLocation = null;
                     }
                     break;
             }
@@ -685,10 +698,11 @@ namespace MonkeyPaste.Avalonia {
 
                         MpAvMainWindow.Instance.Topmost = true;
                         IsMainWindowLoading = false;
+                        IsMainWindowOpen = true;
                         IsMainWindowOpening = false;
                         ValidateWindowState();
 
-                        OnPropertyChanged(nameof(IsMainWindowOpen));
+                        //OnPropertyChanged(nameof(IsMainWindowOpen));
                         OnPropertyChanged(nameof(ExternalRect));
                         //OnMainWindowOpened?.Invoke(this, EventArgs.Empty);
                         MpMessenger.SendGlobal(MpMessageType.MainWindowOpened);
@@ -757,6 +771,7 @@ namespace MonkeyPaste.Avalonia {
 
                     IsMainWindowLocked = false;
                     IsMainWindowClosing = false;
+                    IsMainWindowOpen = false;
 
                     MpAvMainWindow.Instance.IsVisible = false;
                     MpAvMainWindow.Instance.Topmost = false;
@@ -817,7 +832,7 @@ namespace MonkeyPaste.Avalonia {
                         timer.Stop();
 
                         IsMainWindowLocked = false;
-                        //IsMainWindowOpen = false;
+                        IsMainWindowOpen = false;
                         IsMainWindowClosing = false;
 
 
@@ -828,7 +843,7 @@ namespace MonkeyPaste.Avalonia {
                         //MpAvMainWindow.Instance.Hide();
 
                         // Hide END - end
-                        OnPropertyChanged(nameof(IsMainWindowOpen));
+                        //OnPropertyChanged(nameof(IsMainWindowOpen));
                         OnPropertyChanged(nameof(ExternalRect));
 
                         ValidateWindowState();

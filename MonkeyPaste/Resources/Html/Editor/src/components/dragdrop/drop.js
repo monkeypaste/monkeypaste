@@ -7,6 +7,16 @@ var IsSplitDrop = false;
 var IsPreBlockDrop = false;
 var IsPostBlockDrop = false;
 
+var AutoScrollVelX = 0;
+var AutoScrollVelY = 0;
+
+var AutoScrollAccumlator = 5;
+var AutoScrollBaseVelocity = 25;
+
+const MIN_AUTO_SCROLL_DIST = 30;
+
+var AutoScrollInterval = null;
+
 const AllowedEffects = ['copy', 'copyLink', 'copyMove', 'link', 'linkMove', 'move'];
 
 const AllowedDropTypes = ['text/plain', 'text/html', 'application/json', 'files'];
@@ -29,9 +39,10 @@ function initDrop() {
         log('drag enter');
         IsDropping = true;
 
-        items.forEach(function (item) {
-            item.classList.add('drop');
-        });
+        for (var i = 0; i < items.length; i++) {
+            items[i].classList.add('drop');
+        }
+        startAutoScroll();
 
         enableSubSelection();
         onDragEnter_ntf();
@@ -91,7 +102,7 @@ function initDrop() {
             return false;
         }
 
-        if (isDragCopy()) {
+        if (isDragCopy() || e.dataTransfer.effectAllowed == 'copy') {
             e.dataTransfer.dropEffect = 'copy';
         } else if (isDragCut()) {
             e.dataTransfer.dropEffect = 'move';
@@ -147,15 +158,17 @@ function initDrop() {
         IsDropping = false;
         DropIdx = -1;
 
-        items.forEach(function (item) {
-            item.classList.remove('drop');
-        });
+        for (var i = 0; i < items.length; i++) {
+            items[i].classList.remove('drop');
+        }
 
         if (IsReadOnly && !IsDragging) {
             disableSubSelection();
         }
         onDragLeave_ntf()
         drawOverlay();
+
+        stopAutoScroll(true);
     }
 
     function handleDrop(e) {
@@ -165,7 +178,7 @@ function initDrop() {
 
         // VALIDATE
 
-        if (isDragCopy()) {
+        if (isDragCopy() || e.dataTransfer.effectAllowed == 'copy') {
             e.dataTransfer.dropEffect = 'copy';
         } else if (isDragCut()) {
             e.dataTransfer.dropEffect = 'move';
@@ -231,17 +244,19 @@ function initDrop() {
 		}
         
 
-        items.forEach(function (item) {
-            item.classList.remove('drop');
-        });
-
+        for (var i = 0; i < items.length; i++) {
+            items[i].classList.remove('drop');
+        }
+        updateAllSizeAndPositions();
         if (IsReadOnly) {
             disableSubSelection();
         }
+        stopAutoScroll(false);
         onDropCompleted_ntf();
         drawOverlay();
         return false;
     }
+
 
     let items = [getEditorContainerElement(), getDragOverlayElement()];
         items.forEach(function (item) {
@@ -289,5 +304,81 @@ function updateModKeys(e) {
     //if (e.escKey) {
     //    resetDragDrop(true);
     //}
+}
+
+
+function getEditorMousePos(e) {
+    if (!e || !e.clientX || !e.clientY) {
+        return { x: -1, y: -1 };
+    }
+
+    let mp = { x: parseFloat(e.clientX), y: parseFloat(e.clientY) };
+
+    //let editor_rect = getEditorRect(false);
+
+    //mp.x = mp.x - editor_rect.left;
+    //mp.y = mp.y - editor_rect.top;
+
+    return mp;
+}
+
+function isDragCopy() {
+    return IsCtrlDown;
+}
+
+function isDragCut() {
+    return !IsCtrlDown;
+}
+
+function isDropHtml() {
+    return IsAltDown;
+}
+
+function startAutoScroll() {
+    // drop class makes .ql-editor huge so no wrapping this finds actual max width and sets so won't overscroll...
+    let max_x = 0;
+    //let max_y = 0;
+    let lines = getLineCount();
+    for (var i = 0; i < lines; i++) {
+        let line_rect = getLineRect(i, false);
+        max_x = Math.max(max_x, line_rect.width);
+        //max_y = Math.max(max_y, line_rect.height);
+    }
+    // add 100 in case template at the end ( i think its from extra spaces or somethign...)
+    max_x += 100;
+    getEditorElement().style.width = max_x + 'px';
+    AutoScrollInterval = setInterval(onAutoScrollTick, 300);
+}
+
+function stopAutoScroll(isLeave) {
+    if (AutoScrollInterval == null) {
+        return;
+    }
+    getEditorElement().style.width = '';
+    clearInterval(AutoScrollInterval);
+    AutoScrollInterval = null;
+}
+
+function onAutoScrollTick() {
+    if (WindowMouseLoc == null) {
+        return;
+    }
+    let window_rect = getWindowRect();
+    if (!isPointInRect(window_rect, WindowMouseLoc)) {
+        return;
+    }
+
+    let orig_scroll_x = document.body.scrollLeft;
+    let orig_scroll_y = document.body.scrollTop;
+
+    if (Math.abs(window_rect.right - WindowMouseLoc.x) <= MIN_AUTO_SCROLL_DIST) {
+        document.body.scrollLeft += AutoScrollVelX;
+    } else if (Math.abs(window_rect.left - WindowMouseLoc.x) <= MIN_AUTO_SCROLL_DIST) {
+        document.body.scrollLeft -= AutoScrollVelX;
+    }
+
+    if (orig_scroll_x != document.body.scrollLeft) {
+        AutoScrollVelX += AutoScrollAccumlator;
+	}
 }
 

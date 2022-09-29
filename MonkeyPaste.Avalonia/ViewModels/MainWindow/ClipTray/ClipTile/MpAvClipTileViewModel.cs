@@ -373,15 +373,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsSubSelectionEnabled { get; set; } = false;
 
-        public bool IsHitTestEnabled {
-            get {
-                if(IsSubSelectionEnabled) {
-                    return true;
-                }
-                return MpAvMainWindowViewModel.Instance.IsDropOverMainWindow;
-            }
-        }
-        
 
         public bool IsVerticalScrollbarVisibile {
             get {
@@ -650,16 +641,16 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        public Size UnformattedContentSize {
+        public MpSize UnformattedContentSize {
             get {
                 if (CopyItem == null) {
-                    return new Size();
+                    return new MpSize();
                 }
-                return CopyItem.ItemSize.ToAvSize();
+                return CopyItem.ItemSize;
             }
             set {
                 if (UnformattedContentSize != value) {
-                    CopyItem.ItemSize = value.ToPortableSize();
+                    CopyItem.ItemSize = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(UnformattedContentSize));
                 }
@@ -1463,7 +1454,7 @@ namespace MonkeyPaste.Avalonia {
         //    }
         //}
 
-        public Size ContentSize => IsContentReadOnly ? ReadOnlyContentSize : UnformattedContentSize;
+        public MpSize ContentSize => IsContentReadOnly ? ReadOnlyContentSize : UnformattedContentSize;
             //new Size(
             //        ContainerSize.Width - MpMeasurements.Instance.ClipTileBorderThickness,
             //        ContainerSize.Height - MpMeasurements.Instance.ClipTileBorderThickness);
@@ -1479,7 +1470,7 @@ namespace MonkeyPaste.Avalonia {
         public double ContentWidth => ContentSize.Width;
 
 
-        public Size ReadOnlyContentSize => new Size(TileContentWidth, TileContentHeight);
+        public MpSize ReadOnlyContentSize => new MpSize(TileContentWidth, TileContentHeight);
                     //MpMeasurements.Instance.ClipTileContentDefaultWidth,
                     //MpMeasurements.Instance.ClipTileContentDefaultHeight);
 
@@ -1512,10 +1503,10 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public Size EditableContentSize {
+        public MpSize EditableContentSize {
             get {
                 if (Parent == null || CopyItem == null) {
-                    return new Size();
+                    return new MpSize();
                 }
                 //get contents actual size
                 var ds = UnformattedContentSize;//CopyItemData.ToFlowDocument().GetDocumentSize();
@@ -1526,14 +1517,14 @@ namespace MonkeyPaste.Avalonia {
                 //let height in expanded mode match content's height
                 double h = ds.Height;
 
-                return new Size(w, h);
+                return new MpSize(w, h);
             }
         }
 
-        public Size CurrentSize {
+        public MpSize CurrentSize {
             get {
                 if (Parent == null) {
-                    return new Size();
+                    return new MpSize();
                 }
                 if (!IsContentReadOnly) {
                     return EditableContentSize;
@@ -2262,7 +2253,6 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.CanScroll));
                     OnPropertyChanged(nameof(IsHorizontalScrollbarVisibile));
                     OnPropertyChanged(nameof(IsVerticalScrollbarVisibile));
-                    OnPropertyChanged(nameof(IsHitTestEnabled));
                     break;
                 case nameof(IsContentFocused):
                     if (IsContentFocused) {
