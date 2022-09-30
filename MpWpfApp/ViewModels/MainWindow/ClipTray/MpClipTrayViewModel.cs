@@ -1501,7 +1501,7 @@ namespace MpWpfApp {
             createItemSw.Start();
 
 
-            var newCopyItem = await MpWpfCopyItemBuilder.CreateFromDataObject(cd, IsAnyAppendMode && _appendModeCopyItem != null);
+            var newCopyItem = await MpWpfCopyItemBuilder.CreateFromDataObjectAsync(cd, IsAnyAppendMode && _appendModeCopyItem != null);
 
             MpConsole.WriteLine("CreateFromClipboardAsync: " + createItemSw.ElapsedMilliseconds + "ms");
 

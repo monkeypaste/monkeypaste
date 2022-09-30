@@ -4,96 +4,69 @@ function initFileListContent(itemDataStr) {
 	// item data is MpQuillFileListDataFragment
 
 	// itemData must remain file-paths separated by new-line
-
-	hideEditorAndAllToolbars();
-	setupEmptyFileList();
+	quill.enable(false);
+	hideAllToolbars();
+	enableReadOnly();
+	disableSubSelection();
 	FileListItems = [];
 
 	let fldfObj = toJsonObjFromBase64Str(itemDataStr);
-
-	fldfObj.fileItems.forEach((flif, idx) => {
-		addFileListItem(flif.filePath,flif.fileIconBase64, idx);
-	});
-}
-
-function addFileListItem(fp,fi) {
-	if (!fp || fp.trim == '') {
-		log('insertFileListItem error fp is empty, ignoring item');
+	for (var i = 0; i < fldfObj.fileItems.length; i++) {
+		let flif = fldfObj.fileItems[i];
+		FileListItems.push(flif);
 	}
-
-	getFileListContainerElement().innerHTML += getFileListRootItemElement().outerHTML;
-	let fli_elm = getFileListContainerElement().lastChild;
-	fli_elm.style.display = 'flex';
-	fli_elm.classList.remove('hidden');
-	setFileListItemIcon(fli_elm, fi);
-	setFileListItemFilePath(fli_elm, fp);
-	FileListItems.push(fp);
+	createFileList();
 }
 
-function setFileListItemIcon(fli_elm, iconBase64) {
-	let icon_img_elm = getFileListItemIconImageElement(fli_elm);
-	icon_img_elm.setAttribute('src', 'data:image/png;base64,' + iconBase64);
-}
+function createFileList() {
+	let file_list_tbody_inner_html = '';
+	for (var i = 0; i < FileListItems.length; i++) {
+		let row_id = getTableItemIdentifier('row');
+		let file_item_tr_outer_html =
+			'<tr class="file-list-row" data-row="' + row_id + '">' +
+			'<td class="file-list-cell" data-row="' + row_id + '" rowspan="1" colspan="1">' +
+			'<p class="qlbt-cell-line" data-row="' + row_id + '" data-cell="' + getTableItemIdentifier('cell') + '" data-rowspan="1" data-colspan="1">' +
+			'<img class="file-list-icon" src="data:image/png;base64,' + FileListItems[i].fileIconBase64 + '">' +
+			'</p></td>' +
+			'<td class="file-list-cell" data-row="' + row_id + '" rowspan="1" colspan="1">' +
+			'<p class="qlbt-cell-line ql-align-right" data-row="' + row_id + '" data-cell="' + getTableItemIdentifier('cell') + '" data-rowspan="1" data-colspan="1">' +
+			'<span class="file-list-path ql-font-consolas ql-align-right">' + formatFilePathDisplayValue(FileListItems[i].filePath) + '</span>' +
+			'</p></td>';
+		file_list_tbody_inner_html += file_item_tr_outer_html;
 
-function getFileListItemIconImageElement(fli_elm) {
-	if (!fli_elm) {
-		return null;
 	}
-	var icon_elm = fli_elm.getElementsByTagName('img')[0];
-	return icon_elm;
-}
+	let file_list_table_html = 
+	'<div id="fileListTableDiv" class="quill-better-table-wrapper">' +
+	'<table class="quill-better-table file-list-table">' +
+	'<colgroup><col class="file-list-icon-col"><col class="file-list-path-col"></colgroup>' +
+	'<tbody>' + file_list_tbody_inner_html + '</tbody></table></div>';
 
-function setFileListItemFilePath(fli_elm,fp) {
-	if (!fli_elm) {
-		return null;
-	}
-	var span_elm = getFileListItemFilePathSpanElement(fli_elm);
-	span_elm.innerText = formatFilePathDisplayValue(fp);
-}
-
-function getFileListItemFilePathSpanElement(fli_elm) {
-	if (!fli_elm) {
-		return null;
-	}
-	var span_elm = fli_elm.getElementsByTagName('span')[0];
-	return span_elm;
-}
-
-function setupEmptyFileList() {
-	getFileListContainerElement().classList.remove('hidden');
-	getFileListRootItemElement().style.display = 'none';
-
-	let flc_children = getFileListContainerElement().children;
-	let children_to_remove = flc_children.length - 1;
-	while (children_to_remove > 0) {
-		let to_remove = flc_children[flc_children.length - 1]
-		getFileListContainerElement().removeChild(to_remove);
-		children_to_remove--;
-	}
-}
-function disableFileList() {
-	FileListItems = [];
-	hideFileList();
-}
-function hideFileList() {
-	getFileListContainerElement().classList.add('hidden');
+	setHtml(file_list_table_html);
 }
 
 function formatFilePathDisplayValue(fp) {
-	//let max_length = 10;
-	//let s_idx = Math.max(0, fp.length - max_length - 1);
-	//let dv = substringByLength(s_idx, max_length);
-	let fp_parts = fp.split('\\');
+	let fp_parts = [];
+	if (fp.includes('\\')) {
+		fp_parts = fp.split('\\');
+	} else if (fp.includes('/')) {
+		fp_parts = fp.split('/');
+	} else {
+		fp_parts.push(fp);
+	}
 
 	return fp_parts[fp_parts.length - 1];
 }
 
-function getFileListRootItemElement() {
-	let flri_elm = document.getElementById('fileListRootItem');
-	return flri_elm;
+function getTableItemIdentifier(prefix) {
+	let chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+	let id = '';
+	for (let i = 0; i < 4; i++) {
+		id += chars[getRandomInt(chars.length - 1)];
+	}
+	return prefix + '-' + id;
 }
 
-function getFileListContainerElement() {
-	let flc_elm = document.getElementById('fileListContainer');
+function getFileListTableDivElement() {
+	let flc_elm = document.getElementById('fileListTableDiv');
 	return flc_elm;
 }

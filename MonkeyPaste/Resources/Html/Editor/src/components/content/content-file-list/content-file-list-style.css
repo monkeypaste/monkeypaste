@@ -1,4 +1,40 @@
-﻿.content-file-list-container {
+﻿.file-list-table {
+    width: 95%;
+    overflow: hidden;
+}
+
+.file-list-icon-col {
+    width: 35px;
+}
+.file-list-path-col {
+    width: 100%;
+}
+.file-list-icon {
+    max-width: 25px;
+    max-height: 25px;
+}
+
+.file-list-path {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /*max-width: 100px;*/
+}
+
+.file-list-row {
+    background-color: transparent;
+}
+    .file-list-row:hover {
+        background-color: rgb(189, 188, 188,var(--editableopacity));
+        cursor: pointer;
+    }
+
+.file-list-cell {
+    pointer-events: none;
+}
+
+.content-file-list-container {
     width: 100%;
     height: 100%;
     margin: 0px;

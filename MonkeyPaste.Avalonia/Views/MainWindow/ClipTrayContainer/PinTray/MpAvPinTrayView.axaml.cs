@@ -73,10 +73,10 @@ namespace MonkeyPaste.Avalonia {
                 e.DragEffects = is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
                 if (e.Data.GetDataFormats().Contains(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT)) {
                     // Internal Drop
-                    await PerformInternalDropAsync(drop_idx, e.Data, is_copy);
+                    await PerformTileDropAsync(drop_idx, e.Data, is_copy);
                 } else {
                     // External Drop
-                    await PerformExternalDropAsync(drop_idx, e.Data);
+                    await PerformExternalOrPartialDropAsync(drop_idx, e.Data);
                 }
             }
 
@@ -152,7 +152,7 @@ namespace MonkeyPaste.Avalonia {
             ClearAdorner();
         }
 
-        private async Task PerformInternalDropAsync(int drop_idx, IDataObject avdo, bool isCopy) {
+        private async Task PerformTileDropAsync(int drop_idx, IDataObject avdo, bool isCopy) {
             var drop_ctvm = avdo.Get(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT) as MpAvClipTileViewModel;
             if (drop_ctvm == null) {
                 Debugger.Break();
@@ -183,10 +183,11 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private async Task PerformExternalDropAsync(int drop_idx, IDataObject avdo) {
+        private async Task PerformExternalOrPartialDropAsync(int drop_idx, IDataObject avdo) {
             MpPortableDataObject mpdo = await MpPlatformWrapper.Services.DataObjectHelperAsync.ConvertToSupportedPortableFormatsAsync(avdo);
 
-            var avdo_ci = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(mpdo);
+            bool isFromInternal = MpAvClipTrayViewModel.Instance.IsAnyTileDragging;
+            var avdo_ci = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(mpdo,isFromInternal);
 
             var drop_ctvm = await BindingContext.CreateClipTileViewModel(avdo_ci, -1);
             BindingContext.PinTileCommand.Execute(new object[] { drop_ctvm, drop_idx });

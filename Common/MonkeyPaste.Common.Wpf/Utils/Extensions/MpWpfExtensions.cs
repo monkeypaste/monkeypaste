@@ -76,10 +76,6 @@ namespace MonkeyPaste.Common.Wpf {
 
         #region Collections
 
-        public static void Refresh(this CollectionView cv,[CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
-            cv.Refresh();
-            MpConsole.WriteTraceLine("Collection refreshed",null,callerName,callerFilePath,lineNum);
-        }
 
         public static bool IsEmpty<T>(this IList<T> source) {
             return source.Count == 0;

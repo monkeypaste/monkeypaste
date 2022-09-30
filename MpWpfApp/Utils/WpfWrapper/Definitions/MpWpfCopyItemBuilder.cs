@@ -22,7 +22,7 @@ namespace MpWpfApp {
 
         #region Public Methods
         
-        public static async Task<MpCopyItem> CreateFromDataObject(MpPortableDataObject mpdo, bool suppressWrite = false) {
+        public static async Task<MpCopyItem> CreateFromDataObjectAsync(MpPortableDataObject mpdo, bool suppressWrite = false) {
             try {
                 if (mpdo == null || mpdo.DataFormatLookup.Count == 0) {
                     return null;
@@ -189,8 +189,8 @@ namespace MpWpfApp {
             }
         }
 
-        public async Task<MpCopyItem> CreateAsync(MpPortableDataObject pdo, bool suppressWrite = false) {
-            var ci = await CreateFromDataObject(pdo,suppressWrite);
+        public async Task<MpCopyItem> CreateAsync(MpPortableDataObject pdo, bool fromInternalSource, bool suppressWrite = false) {
+            var ci = await CreateFromDataObjectAsync(pdo,suppressWrite);
             return ci;
         }
 

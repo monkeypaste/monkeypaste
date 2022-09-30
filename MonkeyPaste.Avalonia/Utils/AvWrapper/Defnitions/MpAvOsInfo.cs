@@ -6,7 +6,7 @@ using MonkeyPaste.Common;
 namespace MonkeyPaste.Avalonia {
     public class MpAvOsInfo : MpIOsInfo {
         public string OsMachineName => Environment.MachineName;
-
+        public bool IsAvalonia => true;
         public string OsFileManagerPath {
             get {
                 if(OperatingSystem.IsWindows()) {

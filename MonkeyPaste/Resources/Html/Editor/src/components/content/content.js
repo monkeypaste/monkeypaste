@@ -20,7 +20,9 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest) {
 
 	log('Editor loaded');
 
-	if (ContentItemType == 'FileList') {
+	if (ContentItemType == 'Image') {
+		initImageContent(contentData);
+	} else if (ContentItemType == 'FileList') {
 		initFileListContent(contentData);
 	} else if (ContentItemType == 'Text') {
 		loadTextContent(contentData, isPasteRequest);
@@ -147,8 +149,21 @@ function getLineEndDocIdx(docIdx) {
 }
 
 function getLineIdx(docIdx) {
-	let line_blot = quill.getLine(docIdx);
-	return line_blot ? line_blot[1] : -1;
+	// NOTE below doesn't work like doc's say it returns the same docIdx given for lineIdx (at least for 1 line content) maybe since this is dev 2.0 quill
+	//let line_blot = quill.getLine(docIdx);
+	//return line_blot ? line_blot[1] : -1;
+
+	let docLength = getDocLength();
+	let cur_line_idx = 0;
+	for (var i = 0; i < docLength; i++) {
+		let line_start_doc_idx = getLineStartDocIdx(i);
+		let line_end_doc_idx = getLineEndDocIdx(i);
+		if (docIdx >= line_start_doc_idx && docIdx <= line_end_doc_idx) {
+			return cur_line_idx;
+		}
+		i = line_end_doc_idx + 1;
+	}
+	return -1;
 }
 
 
@@ -350,47 +365,6 @@ function isPointInRange(p, range, snapToBlock) {
 	//return is_in_range;
 }
 
-
-function getDocIdxFromPoint_slow(p, snapToLine, invokeId = 0) {
-	if (!p) {
-		return -1;
-	}
-	
-	let editor_rect = getEditorContainerRect();
-
-	if (!isPointInRect(editor_rect,p)) {
-		return -1;
-	}
-
-	let point_line = getLineIdxAndRectFromPoint(p);
-
-	if (!point_line || point_line[0] < 0 || !point_line[1]) {
-		return -1;
-	}
-	let line_idx = point_line[0];
-	let line_rect = point_line[1];
-	let line_doc_range = getLineDocRange(line_idx);
-	for (var i = line_doc_range[0]; i <= line_doc_range[1]; i++) {
-		let i_rect = getCharacterRect(i);
-		i_rect.top = line_rect.top;
-		i_rect.bottom = line_rect.bottom;
-
-		if (snapToLine) {
-			//inflate edge rects to editor bounds
-			if (i == line_doc_range[0]) {
-				i_rect.left = editor_rect.left;
-			}
-			if (i == line_doc_range[1]) {
-				i_rect.right = editor_rect.right;
-			}
-		}
-		i_rect = cleanRect(i_rect);
-		if (isPointInRect(i_rect, p)) {
-			return i;
-		}
-	}
-	return -1;
-}
 
 
 function getDocIdxFromPoint(p, fallbackIdx) {

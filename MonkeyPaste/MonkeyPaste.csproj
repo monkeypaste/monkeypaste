@@ -310,6 +310,9 @@
     <EmbeddedResource Include="Resources\Icons\search.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Update="Resources\Html\Editor\src\components\content\content-image\content-image-style.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\src\components\content\content-style.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>

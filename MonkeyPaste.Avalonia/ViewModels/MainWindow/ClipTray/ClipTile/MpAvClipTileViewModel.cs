@@ -2013,7 +2013,8 @@ namespace MonkeyPaste.Avalonia {
 
             foreach (string format in MpPortableDataFormats.RegisteredFormats) {
                 switch (format) {
-                    case MpPortableDataFormats.FileDrop:
+                    case MpAvDataFormats.AvFileNames:
+                    //case MpPortableDataFormats.FileDrop:
                         switch (ItemType) {
                             case MpCopyItemType.Text:
                                 sctfl.Add(qhtml.ToFile(null, CopyItemTitle));

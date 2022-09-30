@@ -1,20 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <!--<TargetFramework>net6.0-windows</TargetFramework>-->
+    <!--<UseWPF>True</UseWPF>-->
+    <TargetFramework>net6.0</TargetFramework>
     <Nullable>disable</Nullable>
     <!--Avalonia doesen't support TrimMode=link currently,but we are working on that https://github.com/AvaloniaUI/Avalonia/issues/6892 -->
     <TrimMode>copyused</TrimMode>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-    <UseWPF>True</UseWPF>  
   </PropertyGroup>
 
   <ItemGroup>
     <KnownFrameworkReference Update="Microsoft.WindowsDesktop.App.WPF" IsWindowsOnly="false" />
 </ItemGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DefineConstants></DefineConstants>
+    <DefineConstants>LINUX;</DefineConstants>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>LINUX;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaXaml Remove="Assets\Images\backup\**" />

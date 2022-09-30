@@ -13,8 +13,12 @@ namespace AvCoreClipboardHandler {
         MpIClipboardWriterComponentAsync {
         #region Private Variables
 
+        private const int MAX_READ_RETRY_COUNT = 5;
+
         private IntPtr _mainWindowHandle;
 
+        private int _readCount = 0;
+        private bool _isReading = false;
         private enum CoreClipboardParamType {
             None = 0,
             //readers
@@ -71,16 +75,32 @@ namespace AvCoreClipboardHandler {
         #region MpIClipboardReaderComponentAsync Implementation
 
         async Task<MpClipboardReaderResponse> MpIClipboardReaderComponentAsync.ReadClipboardDataAsync(MpClipboardReaderRequest request) {
+           
+            
             MpClipboardReaderResponse hasError = CanHandleDataObject(request);
             if (hasError != null) {
                 return hasError;
             }
+            _isReading = true;
+            IDataObject avdo = null;
+            string[] availableFormats = null;
+            // only actually read formats found for data
+            if (request.forcedClipboardDataObject == null) {
+                // clipboard read
+                availableFormats = await Application.Current.Clipboard.GetFormatsAsync();
+            } else if(request.forcedClipboardDataObject is IDataObject) {
+                avdo = request.forcedClipboardDataObject as IDataObject;
+                availableFormats = avdo.GetDataFormats().ToArray();
+            }
+
+            var readFormats = request.readFormats.Where(x => availableFormats.Contains(x));
             var currentOutput = new MpAvDataObject();
 
-            foreach (var supportedTypeName in request.readFormats) {
-                object data = await ReadDataObjectFormat(supportedTypeName, request.forcedClipboardDataObject as IDataObject);
+            foreach (var supportedTypeName in readFormats) {
+                object data = await ReadDataObjectFormat(supportedTypeName, avdo);
                 currentOutput.SetData(supportedTypeName, data);
             }
+            _isReading = false;
             return new MpClipboardReaderResponse() {
                 dataObject = currentOutput
             };
@@ -90,58 +110,81 @@ namespace AvCoreClipboardHandler {
             object dataObj;
             if(avdo == null) {
                 if (OperatingSystem.IsWindows()) {
-                    bool wasOpen = false;
-                    while (WinApi.IsClipboardOpen(true) != IntPtr.Zero) {
-                        wasOpen = true;
-                        MpConsole.WriteLine("Waiting on windows clipboard...");
-                        await Task.Delay(100);
-                    }
-                    if (wasOpen) {
-                        // if it was open other things maybe waiting also so let them 
-                        // go first...
-                        await Task.Delay(1000);
-                    }
+                    dataObj = await ReadDataObjectFormatHelper_windows(format, avdo);
+                } else {
+                    dataObj = await Application.Current.Clipboard.GetDataAsync(format);
                 }
-                dataObj = await Application.Current.Clipboard.GetDataAsync(format);
-                if(format == "FileNames") {
-                    Debugger.Break();
-                }
+                
             } else {
                 if (format == "FileNames") {
                     if (avdo.GetFileNames() == null) {
                         return String.Empty;
                     }
-                    return string.Join(Environment.NewLine, avdo.GetFileNames());
-                }
-                dataObj = avdo.Get(format);
+                    dataObj = avdo.GetFileNames();
+                } else {
+                    dataObj = avdo.Get(format);
+                }                
             }
             string dataStr = null;
 
             if (dataObj is string) {
                 dataStr = dataObj as string;
-            } else if (dataObj is string[] strArr) {
+            } else if (dataObj is IEnumerable<string> strArr) {
+                // should only happen for files
                 dataStr = string.Join(Environment.NewLine, strArr);
             } else if (dataObj is byte[] bytes) {
-                //if(OperatingSystem.IsWindows() && format == MpPortableDataFormats.Html) {
-                //    if(avdo == null) {
-                //        string htmlData = MpAvWin32HtmlClipboardHelper.GetHTMLWin32Native(_mainWindowHandle);
-                //        return htmlData;
-
-                //        //var bytes2 = htmlData.ToByteArray();
-                //        //return bytes2;
-                //    }
-                //} 
-                //if (format == MpPortableDataFormats.Html) {
-                //    return dataObj;
-                //}
-                //dataStr = Encoding.UTF8.GetString(bytes);                
-
-                //dataStr = bytes.ToBase64String();
                 return bytes;
             }
             return dataStr;
         }
 
+        private async Task<object> ReadDataObjectFormatHelper_windows(string format, IDataObject avdo, int retryCount = MAX_READ_RETRY_COUNT) { 
+            if (retryCount < 0) {
+                return null;
+            }
+
+            object dataObj;
+            //bool wasOpen = false;
+            //while (WinApi.IsClipboardOpen(true) != IntPtr.Zero) {
+            //    wasOpen = true;
+            //    MpConsole.WriteLine("Waiting on windows clipboard...");
+            //    await Task.Delay(100);
+            //}
+            //if (wasOpen) {
+            //    // if it was open other things maybe waiting also so let them 
+            //    // go first...
+            //    await Task.Delay(1000);
+            //}
+            //WinApi.OpenClipboard(_mainWindowHandle);
+            try {
+                if(format == TEXT_FORMAT) {
+                    dataObj = await Application.Current.Clipboard.GetTextAsync();
+                } else {
+                    dataObj = await Application.Current.Clipboard.GetDataAsync(format);
+                }
+                
+                //bool wasClosed = WinApi.CloseClipboard();
+            }
+            catch (Exception ex) {
+                //bool wasClosed = WinApi.CloseClipboard();
+                MpConsole.WriteTraceLine($"Error reading clipboard! Retry attempt #{5 - retryCount} of 5 starting..", ex);
+                if (retryCount == MAX_READ_RETRY_COUNT) {
+                    // only retry from initial call
+                    object result;
+                    while (retryCount > 0) {
+                        await Task.Delay(100);
+                        result = await ReadDataObjectFormatHelper_windows(format, avdo, retryCount--);
+                        if (result != null) {
+                            return result;
+                        }
+                    }
+                    return null;
+                } else {
+                    return null;
+                }
+            }
+            return dataObj;
+        }
         private string ProcessReaderFormatParamsOnData_windows(MpClipboardReaderRequest req, string format, string data) {
             if (string.IsNullOrEmpty(data)) {
                 return null;
@@ -263,6 +306,11 @@ namespace AvCoreClipboardHandler {
         private MpClipboardReaderResponse CanHandleDataObject(MpClipboardReaderRequest request) {
             if (request == null || !OperatingSystem.IsWindows()) {
                 return null;
+            }
+            if (_isReading) {
+                return new MpClipboardReaderResponse() {
+                    errorMessage = "Already reading clipboard"
+                };
             }
             IntPtr mwHandle = new IntPtr(request.mainWindowImplicitHandle);
             //MpConsole.WriteLine("mw handle - int: " + request.mainWindowImplicitHandle + " intPtr: " + mwHandle);

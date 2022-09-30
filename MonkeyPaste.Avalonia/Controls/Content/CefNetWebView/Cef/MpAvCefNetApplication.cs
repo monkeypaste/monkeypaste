@@ -94,12 +94,28 @@ namespace MonkeyPaste.Avalonia {
             Instance.Shutdown();
             MpConsole.WriteLine("CefNet Successfully shutdown");
         }
+        private static string GetProjectPath() {
+            string projectPath = Path.GetDirectoryName(typeof(App).Assembly.Location);
+            string projectName = PlatformInfo.IsMacOS ? "MonkeyPaste.Avalonia.app" : "MonkeyPaste.Avalonia";
+            string rootPath = Path.GetPathRoot(projectPath);
+            while (Path.GetFileName(projectPath) != projectName) {
+                if (projectPath == rootPath)
+                    throw new DirectoryNotFoundException("Could not find the project directory.");
+                projectPath = Path.GetDirectoryName(projectPath);
+            }
+            return projectPath;
+        }
 
-        
+        public static string GetEditorPath() {
+            string proj_path = GetProjectPath();
+            return Path.Combine(Directory.GetParent(proj_path).FullName, "MonkeyPaste", "Resources", "Html", "Editor", "index.html");
+        }
+
         private MpAvCefNetApplication() {
 
             string datFileName = "icudtl.dat";
-            string cefRootDir = @"C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia\cef";
+            //string cefRootDir = @"C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia\cef";
+            string cefRootDir = Path.Combine(GetProjectPath(), "cef");
 
             string localDirPath = string.Empty;
             string resourceDirPath = string.Empty;
@@ -114,11 +130,16 @@ namespace MonkeyPaste.Avalonia {
                 releaseDir = Path.Combine(cefRootDir, "Release");
                 datFileSourcePath = Path.Combine(resourceDirPath, datFileName);
                 datFileTargetPath = Path.Combine(releaseDir, datFileName);
+            } else if (OperatingSystem.IsLinux()) {
+                cefRootDir = Path.Combine(cefRootDir, "linux");
+                localDirPath = Path.Combine(cefRootDir, "Resources", "locales");
+                resourceDirPath = Path.Combine(cefRootDir, "Resources");
+                releaseDir = Path.Combine(cefRootDir, "Release");
+                datFileSourcePath = Path.Combine(resourceDirPath, datFileName);
+                datFileTargetPath = Path.Combine(releaseDir, datFileName);
             } else if(OperatingSystem.IsMacOS()) {
                 cefRootDir = Path.Combine(cefRootDir, "mac");
-            } else if(OperatingSystem.IsLinux()) {
-                cefRootDir = Path.Combine(cefRootDir, "linux");
-            } else {
+            }  else {
                 throw new Exception("No cef implementation found for this architecture");
             }
 
@@ -153,6 +174,7 @@ namespace MonkeyPaste.Avalonia {
                 settings.MultiThreadedMessageLoop = true;
                 settings.ExternalMessagePump = false;
             }
+            settings.CommandLineArgsDisabled = true;
             settings.WindowlessRenderingEnabled = false;
             settings.LocalesDirPath = localDirPath;
             settings.ResourcesDirPath = resourceDirPath;

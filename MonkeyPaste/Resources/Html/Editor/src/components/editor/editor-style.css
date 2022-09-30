@@ -60,7 +60,8 @@ body {
     overflow: auto;
     cursor: auto;
     width: unset;
-    text-decoration: underline red;}
+    text-decoration: underline blink dimgray;
+}
 
     .sub-select > .ql-editor {
         overflow: auto;
@@ -69,17 +70,8 @@ body {
 
 body:has(.sub-select) {
     background-color: rgb(189, 188, 188,var(--editableopacity));
-    /*opacity: var(--editableopacity);*/
     transition: .4s;
 }
-body:has(.drop) {
-    /*width: 808080px !important;*/
-    /*overflow: scroll !important;*/
-}
-
-/*body:not(:has(.drop)) {
-    width: 100%;
-}*/
 
 .editable {
     user-select: auto;
@@ -100,8 +92,8 @@ body:has(.editable) {
     overflow: auto;
 }
     .drop > .ql-editor {
+        /* NOTE only temporary, adjusted to actual width after layout update in auto scroll*/
         width: 808080px;
-        /*width: 100%;*/
     }
 
 .hidden {

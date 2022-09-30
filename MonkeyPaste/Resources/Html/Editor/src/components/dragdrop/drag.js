@@ -42,13 +42,25 @@ function handleDragStart(e) {
     DocLengthBeforeDrag = getDocLength();
     e.stopPropagation();
 
-    e.dataTransfer.effectAllowed = 'copyMove';
+    if (ContentItemType == 'Text') {
+        e.dataTransfer.effectAllowed = 'copyMove';
 
-    let textStr = getText(sel, true);
-    e.dataTransfer.setData('text/plain', textStr);
+        let textStr = getText(sel, true);
+        e.dataTransfer.setData('text/plain', textStr);
 
-    let htmlStr = getHtml(sel);
-    e.dataTransfer.setData('text/html', htmlStr);
+        let htmlStr = getHtml(sel);
+        e.dataTransfer.setData('text/html', htmlStr);
+    } else if (ContentItemType == 'FileList') {
+        e.dataTransfer.effectAllowed = 'copy';
+
+        e.dataTransfer.setData('text\plain', FileListItems.join('\n'));
+    } else if (ContentItemType == 'Image') {
+        e.dataTransfer.effectAllowed = 'copy';
+
+        e.dataTransfer.setData('text\plain', ImgBase64);
+    }
+
+    
 
     return true;
 }

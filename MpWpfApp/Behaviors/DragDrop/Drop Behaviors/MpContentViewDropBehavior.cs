@@ -315,7 +315,7 @@ namespace MpWpfApp {
                         return;
                     }
                     // from external source
-                    var tempCopyItem = await MpWpfCopyItemBuilder.CreateFromDataObject(mpdo, true);
+                    var tempCopyItem = await MpWpfCopyItemBuilder.CreateFromDataObjectAsync(mpdo, true);
                     if(tempCopyItem == null) {
                         //empty item ignore (or was a bug and unnecessary check here
                         return;

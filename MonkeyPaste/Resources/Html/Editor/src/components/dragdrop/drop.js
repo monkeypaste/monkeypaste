@@ -28,6 +28,9 @@ function initDrop() {
             // NOTE called on every element drag enters, only need once
             return;
         }
+        if (ContentItemType != 'Text') {
+            return true;
+		}
         if (e.target.id == 'dragOverlay') {
             // this should be able to happen when sub-selection is disabled
             if (IsDragging) {
@@ -51,7 +54,7 @@ function initDrop() {
     function handleDragOver(e) {
         if (!IsDropping) {
             // IsDropping won't be set to true when its dragOverlay ie. can't drop whole tile on itself.
-            return;
+            return true;
 		}
         //if (e.target.id == 'dragOverlay') {
         //    debugger;
@@ -74,6 +77,7 @@ function initDrop() {
                 break;
 			}
         }
+        
         if (!is_valid) {
             return false;
         }
@@ -204,29 +208,33 @@ function initDrop() {
             } else {
                 cur_drop_idx = 0;
             }
-            quill.insertText(0, '\n');
+            insertText(0, '\n');
             dropData(0, e.dataTransfer);
 
-            length_delta = quill.getLength() - pre_doc_length - 1;
+            length_delta = getDocLength() - pre_doc_length - 1;
             post_sel_start_idx = 0;
         } else if (IsPostBlockDrop) {
             cur_drop_idx = getLineEndDocIdx(cur_drop_idx);
-            quill.insertText(cur_drop_idx, '\n');
-            dropData(cur_drop_idx + 1, e.dataTransfer);
+            if (cur_drop_idx < getDocLength() - 1) {
+                // ignore new line for last line since it already is a new line
+                insertText(cur_drop_idx, '\n');
+                cur_drop_idx += 1;
+            } 
+            dropData(cur_drop_idx, e.dataTransfer);
 
-            length_delta = quill.getLength() - pre_doc_length - 1;
-            post_sel_start_idx = cur_drop_idx + 1;
+            length_delta = getDocLength() - pre_doc_length - 1;
+            post_sel_start_idx = cur_drop_idx;
         } else if (IsSplitDrop) {
-            quill.insertText(cur_drop_idx, '\n');
-            quill.insertText(cur_drop_idx, '\n');
+            insertText(cur_drop_idx, '\n');
+            insertText(cur_drop_idx, '\n');
             dropData(cur_drop_idx + 1, e.dataTransfer);
 
-            length_delta = quill.getLength() - pre_doc_length - 2;
+            length_delta = getDocLength() - pre_doc_length - 2;
             post_sel_start_idx = cur_drop_idx + 1;
         } else {
             dropData(cur_drop_idx, e.dataTransfer);
 
-            length_delta = quill.getLength() - pre_doc_length;
+            length_delta = getDocLength() - pre_doc_length;
         }
 
         // SELECT DROP CONTENT

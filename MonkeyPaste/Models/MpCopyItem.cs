@@ -93,13 +93,26 @@ namespace MonkeyPaste {
         }
 
         public static MpPortableDataFormat GetDefaultFormatForItemType(MpCopyItemType itemType) {
-            switch(itemType) {                
-                case MpCopyItemType.Text:
-                    return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.Rtf);
-                case MpCopyItemType.Image:
-                    return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.Bitmap);
-                case MpCopyItemType.FileList:
-                    return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.FileDrop);
+            if(MpPlatformWrapper.Services.OsInfo.IsAvalonia) {
+                switch (itemType) {
+                    case MpCopyItemType.Text:
+                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.Html);
+                    case MpCopyItemType.Image:
+                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.Bitmap);
+                    case MpCopyItemType.FileList:
+                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.FileDrop);
+                }
+
+            } else {
+                switch (itemType) {
+                    case MpCopyItemType.Text:
+                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.Rtf);
+                    case MpCopyItemType.Image:
+                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.Bitmap);
+                    case MpCopyItemType.FileList:
+                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.FileDrop);
+                }
+
             }
             return null;
         }

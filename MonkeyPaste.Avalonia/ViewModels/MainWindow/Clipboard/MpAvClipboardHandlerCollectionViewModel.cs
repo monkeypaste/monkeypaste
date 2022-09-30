@@ -417,7 +417,7 @@ namespace MonkeyPaste.Avalonia {
                         return;
                     }
                     otherEnabled.IsEnabled = false;
-
+                    
                     MpPortableDataFormats.RegisterDataFormat(handlerVm.HandledFormat);
                 } else {
                     // when preset isDisabled unregister format 

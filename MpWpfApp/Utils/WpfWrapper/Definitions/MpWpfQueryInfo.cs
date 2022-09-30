@@ -58,5 +58,8 @@ namespace MpWpfApp {
             });
         }
 
+        public void RegisterProvider(MpIQueryInfoProvider qip) {
+            throw new NotImplementedException();
+        }
     }
 }

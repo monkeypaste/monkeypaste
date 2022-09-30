@@ -19,10 +19,16 @@ using Avalonia.Interactivity;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvCefNetWebViewGlue : AvaloniaWebViewGlue {
-        public MpAvCefNetWebViewGlue(IAvaloniaWebViewPrivate view) : base(view) {
+        public MpAvCefNetWebViewGlue(MpAvCefNetWebView view) : base(view) {
 
         }
 
+        protected override bool OnSetFocus(CefBrowser browser, CefFocusSource source) {
+            if (source == CefFocusSource.Navigation) {
+                return true;
+            }
+            return false;
+        }
 
         /// <summary>
         /// Called when the user starts dragging content in the web view. OS APIs that run a system message
@@ -74,27 +80,38 @@ namespace MonkeyPaste.Avalonia {
                 MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed += modKeyUpOrDownHandler;
                 MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased += modKeyUpOrDownHandler;
 
-                var avmpdo = new MpAvDataObject();
-                avmpdo.SetData(MpPortableDataFormats.Text, dragData.FragmentText);
-                avmpdo.SetData(MpPortableDataFormats.Html, dragData.FragmentHtml);
-                avmpdo.MapAllPseudoFormats();
+                bool is_tile_drag = false;
+                DragDropEffects allowedEffects = allowedOps.ToDragDropEffects();
 
-                if(wv.IsAllSelected() || wv.Selection.Length == 0) {
-                    avmpdo.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT, ctvm);
-                } else {
-                    //Debugger.Break();
+                var avmpdo = new MpAvDataObject();
+                if(ctvm.ItemType == MpCopyItemType.Text) {
+                    is_tile_drag = wv.IsAllSelected() || wv.Selection.Length == 0;
+                    avmpdo.SetData(MpPortableDataFormats.Text, dragData.FragmentText);
+                    avmpdo.SetData(MpPortableDataFormats.Html, dragData.FragmentHtml);
+                } else if(ctvm.ItemType == MpCopyItemType.FileList) {
+                    is_tile_drag = true;
+                    allowedEffects = DragDropEffects.Copy;
+                    avmpdo.SetData(MpPortableDataFormats.Text, dragData.FragmentText);
+                    avmpdo.SetData(MpAvDataFormats.AvFileNames, ctvm.FileItems.Select(x => x.Path));
+                } else if (ctvm.ItemType == MpCopyItemType.Image) {
+                    is_tile_drag = true;
+                    allowedEffects = DragDropEffects.Move;
+                    avmpdo.SetData(MpAvDataFormats.AvPNG, ctvm.CopyItemData.ToByteArray());
+                    string img_path = ctvm.CopyItemData.ToFile(null, ctvm.CopyItemTitle, "png", true);
+                    avmpdo.SetData(MpAvDataFormats.AvFileNames, new List<string>() { img_path });
                 }
 
-                //Pointer p = new Pointer(Pointer.GetNextFreeId(), PointerType.Mouse, true);
-                //var pe = new PointerEventArgs(Control.PointerPressedEvent,wv,p,
-                //    MpAvMainWindow.Instance, MpAvMainWindow.Instance.Position.ToAvPoint(),(ulong)DateTime.Now.Ticks,
-                //    new PointerPointProperties(RawInputModifiers.LeftMouseButton, PointerUpdateKind.LeftButtonPressed), KeyModifiers.None);
+                avmpdo.MapAllPseudoFormats();
+
+                if(is_tile_drag) {
+                    avmpdo.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT, ctvm);
+                } 
 
                 while (pe == null) {
                     await Task.Delay(100);
                 }
 
-                var result = await DragDrop.DoDragDrop(pe, avmpdo, allowedOps.ToDragDropEffects());
+                var result = await DragDrop.DoDragDrop(pe, avmpdo, allowedEffects);
 
                 ctvm.IsTileDragging = false;
                 MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = null;
@@ -110,12 +127,13 @@ namespace MonkeyPaste.Avalonia {
                     }
                 };
 
+                
                 await wv.EvaluateJavascriptAsync($"dragEnd_ext('{dragEndMsg.SerializeJsonObjectToBase64()}')");
-                if (wv.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv) {
-                    ctv.ReloadContent();
-                }
+                //if (wv.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv) {
+                //    ctv.ReloadContent();
+                //}
             });
-            return true;
+            return false;
         }
         protected override void OnBeforeContextMenu(CefBrowser browser, CefFrame frame, CefContextMenuParams menuParams, CefMenuModel model) {
             // ensure default cefnet context menu is empty

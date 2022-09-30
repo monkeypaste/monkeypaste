@@ -124,9 +124,9 @@
       },
       {
         "handlerGuid": "8af77575-fd03-4c39-87c5-688eda230f06",
-        "displayName": "Image",
+        "displayName": "Bitmap",
         "iconUri": "bitmap.png",
-        "clipboardName": "PNG",
+        "clipboardName": "Bitmap",
         "parameters": [
           {
             "label": "Ignore",
@@ -145,9 +145,9 @@
       },
       {
         "handlerGuid": "bb997630-985a-420e-808f-60e31625c06f",
-        "displayName": "Files",
+        "displayName": "File",
         "iconUri": "folder.png",
-        "clipboardName": "FileNames",
+        "clipboardName": "FileDrop",
         "parameters": [
           {
             "label": "Ignore",
@@ -314,9 +314,9 @@
       },
       {
         "handlerGuid": "57f363e9-b478-46e7-a39b-4b143c3d3e7d",
-        "displayName": "Image",
+        "displayName": "Bitmap",
         "iconUri": "bitmap.png",
-        "clipboardName": "PNG",
+        "clipboardName": "Bitmap",
         "parameters": [
           {
             "label": "Default Export Type",
@@ -362,7 +362,7 @@
         "handlerGuid": "e05ed3da-3b2a-4339-8524-2ea339c0856b",
         "displayName": "File",
         "iconUri": "folder.png",
-        "clipboardName": "FileNames",
+        "clipboardName": "FileDrop",
         "parameters": [
           {
             "label": "Ignore",

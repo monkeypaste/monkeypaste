@@ -25,6 +25,7 @@ namespace MpWpfApp {
         public MpIStringTools StringTools { get; set; }
         public MpIOsInfo OsInfo { get; set; }
         public MpIPlatformDataObjectHelper DataObjectHelper { get; set; }
+        public MpIPlatformDataObjectHelperAsync DataObjectHelperAsync { get; set; }
         public MpINativeMessageBox NativeMessageBox { get; set; }
         
         public MpIClipboardMonitor ClipboardMonitor { get; set; }
@@ -61,6 +62,5 @@ namespace MpWpfApp {
             ScreenInfoCollection = new MpWpfScreenInfoCollection();            
         }
 
-        
     }
 }

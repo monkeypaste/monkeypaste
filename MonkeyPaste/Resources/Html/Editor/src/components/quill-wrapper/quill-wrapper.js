@@ -12,6 +12,7 @@ function initQuill(useBetterTable) {
 
 	getEditorContainerElement().firstChild.id = 'quill-editor';
 
+	initLinkToolbarButton();
 	initTemplateToolbarButton();
 	initEditTemplateToolbar();
 	initPasteTemplateToolbar();

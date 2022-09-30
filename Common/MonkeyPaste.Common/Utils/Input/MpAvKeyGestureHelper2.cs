@@ -7,7 +7,7 @@ namespace MonkeyPaste.Common {
         #region Private Variables
         public const string COMBO_SEPARATOR = "+";
         public const string SEQUENCE_SEPARATOR = "|";
-        private const int _MAX_COMBOS = int.MaxValue;
+        private const int _MAX_COMBOS = 1;// int.MaxValue;
 
         private int _downCount = 0;
 

@@ -186,10 +186,10 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
+
         protected override WebViewGlue CreateWebViewGlue() {
             return new MpAvCefNetWebViewGlue(this);
         }
-
         public bool IsAllSelected() {
             bool is_all_selected;
             if (BindingContext.IsSubSelectionEnabled) {

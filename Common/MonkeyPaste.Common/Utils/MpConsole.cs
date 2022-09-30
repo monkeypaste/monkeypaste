@@ -70,11 +70,8 @@ namespace MonkeyPaste.Common {
             }
         }
 
-        public static void WriteTraceLine(object line, object ex = null, object args = null, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
+        public static void WriteTraceLine(object line, object ex = null, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
             line = line == null ? string.Empty: line;
-            if(args != null) {
-                line += args.ToString();
-            }
 
             line = $"[{DateTime.Now.ToString()}] {line}";
             if (LogToConsole) {
@@ -119,14 +116,14 @@ namespace MonkeyPaste.Common {
             }
         }
 
-        public static void WriteTraceLine(string format,object args, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath="",[CallerLineNumber] int lineNum = 0) {
-            if(args == null || args.GetType() != typeof(Exception)) {
-                WriteTraceLine(string.Format(format, args),null,callerName,callerFilePath,lineNum);
-            } else {
-                WriteTraceLine(format, args, callerName, callerFilePath, lineNum);
-            }
+        //public static void WriteTraceLine(string format,object args, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath="",[CallerLineNumber] int lineNum = 0) {
+        //    if(args == null || args.GetType() != typeof(Exception)) {
+        //        WriteTraceLine(string.Format(format, args),null,callerName,callerFilePath,lineNum);
+        //    } else {
+        //        WriteTraceLine(format, args, callerName, callerFilePath, lineNum);
+        //    }
             
-        }
+        //}
 
         public static void WriteLogLine(object line, params object[] args) {
             line = line == null ? string.Empty : line;

@@ -11,6 +11,7 @@ namespace MpWpfApp {
         public string OsFileManagerName => "Explorer";
 
         public MpUserDeviceType OsType => MpUserDeviceType.Windows;
-        
+
+        public bool IsAvalonia => false;
     }
 }

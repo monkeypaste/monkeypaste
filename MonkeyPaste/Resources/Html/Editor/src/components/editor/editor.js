@@ -230,6 +230,10 @@ function enableReadOnly(fromHost = false) {
 }
 
 function disableReadOnly(fromHost = false) {
+	if (ContentItemType != 'Text') {
+		return;
+	}
+
 	IsReadOnly = false;
 
 	showEditorToolbar();
@@ -256,6 +260,9 @@ function disableReadOnly(fromHost = false) {
 }
 
 function enableSubSelection(fromHost = false) {
+	//if (ContentItemType != 'Text') {
+	//	return;
+	//}
 	IsSubSelectionEnabled = true;
 	
 	getEditorContainerElement().classList.remove('no-select');
@@ -350,19 +357,12 @@ function isShowingEditorToolbar() {
 	$(".ql-toolbar").css("display") != "none";
 }
 
-function hideEditorAndAllToolbars() {
+
+function hideAllToolbars() {
+
 	hideEditorToolbar();
-	hideEditor();
 	hideEditTemplateToolbar();
 	hidePasteTemplateToolbar();
-}
-
-function showEditor() {
-	getEditorContainerElement().classList.remove('hidden');
-}
-
-function hideEditor() {
-	getEditorContainerElement().classList.add('hidden');
 }
 
 function isEditorHidden() {

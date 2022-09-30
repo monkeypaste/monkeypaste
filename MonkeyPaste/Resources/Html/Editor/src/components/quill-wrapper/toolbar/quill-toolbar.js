@@ -26,11 +26,10 @@ function addToolbarToQuillOptions(useBetterTable, quillOptions) {
 			[{ direction: "rtl" }], // text direction
 
 			// [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-			["link", "image", "video", "formula"],
+			["link", "image"],//, "video", "formula"],
 			[{ color: [] }, { background: [] }], // dropdown with defaults from theme
 			[{ align: [] }],
-			// ['clean'],                                         // remove formatting button
-			// ['templatebutton'],
+			// ['clean'],
 			[{ "Table-Input": registerTables() }]
 		],
 		handlers: {
@@ -67,6 +66,19 @@ function addToolbarToQuillOptions(useBetterTable, quillOptions) {
 	}
 
 	return quillOptions;
+}
+
+function initLinkToolbarButton() {
+	// workaround because link button does show up for some reason...
+	let link_button_elm = document.getElementsByClassName('ql-link')[0];
+	function onLinkButtonClick(e) {
+		let tooltip_elm = document.getElementsByClassName('ql-tooltip')[0];
+		tooltip_elm.setAttribute('data-mode', 'link');
+		tooltip_elm.classList.remove('hidden');
+		tooltip_elm.classList.add('ql-editing');
+	}
+
+	link_button_elm.addEventListener('click', onLinkButtonClick);
 }
 
 function getQuillToolbarContainerElement() {

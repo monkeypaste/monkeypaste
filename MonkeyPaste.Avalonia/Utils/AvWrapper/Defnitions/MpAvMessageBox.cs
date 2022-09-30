@@ -13,10 +13,11 @@ using System.Diagnostics;
 namespace MonkeyPaste.Avalonia {
     public class MpAvMessageBox : MpINativeMessageBox {
         private object result;
-
         public bool ShowOkCancelMessageBox(string title, string message) {
             if(OperatingSystem.IsWindows()) {
+#if WINDOWS
                 System.Windows.MessageBox.Show(message, title);
+#endif
             } else {
                 // add others
                 Debugger.Break();
@@ -26,6 +27,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool? ShowYesNoCancelMessageBox(string title, string message) {
             if(OperatingSystem.IsWindows()) {
+#if WINDOWS
                 var result = System.Windows.MessageBox.Show(message, title, System.Windows.MessageBoxButton.YesNoCancel);
                 if(result == System.Windows.MessageBoxResult.Yes) {
                     return true;
@@ -33,6 +35,7 @@ namespace MonkeyPaste.Avalonia {
                 if(result == System.Windows.MessageBoxResult.No) {
                     return false;
                 }
+#endif
                 return null;
             } else {
                 // fill in others

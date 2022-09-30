@@ -12,7 +12,8 @@ namespace MonkeyPaste.Common.Avalonia {
             AvFileNames,
             CefHtml,
             CefText,
-            CefJson
+            CefJson,
+            AvPNG
         };
 
         private static Dictionary<int, MpAvDataFormat> _formatLookup;
@@ -35,6 +36,7 @@ namespace MonkeyPaste.Common.Avalonia {
         public const string AvRtf_bytes = MpPortableDataFormats.Rtf;
         public const string AvHtml_bytes = MpPortableDataFormats.Html;
         public const string AvFileNames = "FileNames";
+        public const string AvPNG = "PNG";
 
         public const string CefHtml = "text/html";
         public const string CefText = "text/plain";

@@ -18,6 +18,9 @@
 .ql-toolbar-env-web {
     display: block;
 }
+/*.ql-tooltip {
+    z-index: 1;
+}*/
 
 .ql-toolbar-env-wpf {
     display: block;
@@ -31,8 +34,8 @@
 .ql-toolbar.ql-snow 
 .ql-picker.ql-expanded 
 .ql-picker-options {
-    max-height: 500px;Sel Changed. range.index: 189 range.length: 0 oldRange.index: 188 oldRange.length: 0 source: user
-    overflow-y: scroll !important;
+    max-height: 500px;
+    overflow-y: auto !important;
 }
 
 .ql-picker.ql-font .ql-picker-label {

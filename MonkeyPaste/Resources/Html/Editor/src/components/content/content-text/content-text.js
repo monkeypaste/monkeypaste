@@ -3,8 +3,7 @@ var BlockTags = ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbod
 
 function loadTextContent(itemDataStr, isPasteRequest) {
 	try {
-		disableFileList();
-		showEditor();
+		quill.enable(true);
 
 		//if (hasJsonStructure(itemDataStr)) {
 		//	let delta = JSON.parse(itemDataStr);

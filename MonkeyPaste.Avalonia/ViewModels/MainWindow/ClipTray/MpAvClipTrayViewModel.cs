@@ -52,14 +52,17 @@ namespace MonkeyPaste.Avalonia {
             get {
                 //file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html
                 //string editorPath = Path.Combine(Environment.CurrentDirectory, "Resources", "Html", "Editor", "index.html");
-                string editorPath = @"file:///C:/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html";
-                if (OperatingSystem.IsWindows()) {
-                    return editorPath;
-                }
-                if (OperatingSystem.IsMacOS()) {
-                    return @"file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html";
-                }
-                var uri = new Uri(editorPath, UriKind.Absolute);
+                //string editorPath = @"file:///C:/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html";
+                //if (OperatingSystem.IsWindows()) {
+                //    return editorPath;
+                //}
+                //if (OperatingSystem.IsMacOS()) {
+                //    return @"file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html";
+                //}
+                //if(OperatingSystem.IsLinux()) {
+
+                //}
+                var uri = new Uri(MpAvCefNetApplication.GetEditorPath(), UriKind.Absolute);
                 string uriStr = uri.AbsoluteUri;
                 return uriStr;
             }
@@ -2226,7 +2229,7 @@ namespace MonkeyPaste.Avalonia {
             createItemSw.Start();
 
 
-            var newCopyItem = await MpAvCopyItemBuilder.CreateFromDataObject(cd, IsAnyAppendMode && _appendModeCopyItem != null);
+            var newCopyItem = await MpAvCopyItemBuilder.CreateFromDataObject(cd, false, IsAnyAppendMode && _appendModeCopyItem != null);
 
             MpConsole.WriteLine("CreateFromClipboardAsync: " + createItemSw.ElapsedMilliseconds + "ms");
 
@@ -3311,6 +3314,7 @@ namespace MonkeyPaste.Avalonia {
             },
             () => {
                 return MpAvMainWindowViewModel.Instance.IsShowingDialog == false &&
+                        MpAvMainWindowViewModel.Instance.IsMainWindowActive &&
                         SelectedModels.Count > 0 &&
                         !IsAnyEditingClipTile &&
                         !IsAnyEditingClipTitle &&

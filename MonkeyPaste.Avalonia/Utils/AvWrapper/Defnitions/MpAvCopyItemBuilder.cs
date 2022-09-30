@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         
-        public static async Task<MpCopyItem> CreateFromDataObject(MpPortableDataObject mpdo, bool suppressWrite = false) {
+        public static async Task<MpCopyItem> CreateFromDataObject(MpPortableDataObject mpdo, bool fromInternalSource, bool suppressWrite = false) {
             try {
                 if (mpdo == null || mpdo.DataFormatLookup.Count == 0) {
                     return null;
@@ -32,12 +32,12 @@ namespace MonkeyPaste.Avalonia {
                 MpAvHtmlClipboardData htmlClipboardData = new MpAvHtmlClipboardData();
                 MpCopyItemType itemType = MpCopyItemType.None;
 
-                if (mpdo.ContainsData(MpPortableDataFormats.FileDrop)) {
+                if (mpdo.ContainsData(MpAvDataFormats.AvFileNames)) {
 
                     // FILES
 
                     itemType = MpCopyItemType.FileList;
-                    itemData = mpdo.GetData(MpPortableDataFormats.FileDrop).ToString();
+                    itemData = mpdo.GetData(MpAvDataFormats.AvFileNames).ToString();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Csv)) {
 
                     // CSV
@@ -66,11 +66,13 @@ namespace MonkeyPaste.Avalonia {
                     itemType = MpCopyItemType.Text;
                     itemData = rtfStr.EscapeExtraOfficeRtfFormatting();
                     itemData = itemData.ToRichHtmlText(MpAvDataFormats.AvRtf_bytes);
-                } else if (mpdo.ContainsData(MpPortableDataFormats.Bitmap)) {
+                } else if (mpdo.ContainsData(MpAvDataFormats.AvPNG) && 
+                            mpdo.GetData(MpAvDataFormats.AvPNG) is byte[] pngBytes &&
+                            pngBytes.ToBase64String() is string pngBase64Str) {
 
                     // BITMAP
                     itemType = MpCopyItemType.Image;
-                    itemData = mpdo.GetData(MpPortableDataFormats.Bitmap).ToString();
+                    itemData = pngBase64Str;
                 } else if (mpdo.ContainsData(MpAvDataFormats.AvHtml_bytes) &&
                         mpdo.GetData(MpAvDataFormats.AvHtml_bytes) is byte[] htmlBytes &&
                         htmlBytes.ToDecodedString() is string htmlStr) {
@@ -151,22 +153,27 @@ namespace MonkeyPaste.Avalonia {
                     return dupCheck;
                 }
 
-                var app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(MpPlatformWrapper.Services.ProcessWatcher.LastHandle);
+                MpApp app = null;
+                MpUrl url = null;
+                if(fromInternalSource) {
+                    app = await MpDb.GetItemAsync<MpApp>(MpPrefViewModel.Instance.ThisAppSource.AppId);
+                } else {
+                    app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(MpPlatformWrapper.Services.ProcessWatcher.LastHandle);
 
-                MpUrl url = htmlClipboardData == null ?
-                    null : await MpUrlBuilder.CreateUrl(htmlClipboardData.SourceUrl);
+                    url = htmlClipboardData == null ?
+                   null : await MpUrlBuilder.CreateUrl(htmlClipboardData.SourceUrl);
 
-                if (url != null) {
-                    if (MpAvUrlCollectionViewModel.Instance.IsRejected(url.UrlDomainPath)) {
-                        MpConsole.WriteLine("Clipboard Monitor: Ignoring url domain '" + url.UrlDomainPath);
-                        return null;
-                    }
-                    if (MpAvUrlCollectionViewModel.Instance.IsUrlRejected(url.UrlPath)) {
-                        MpConsole.WriteLine("Clipboard Monitor: Ignoring url domain '" + url.UrlPath);
-                        return null;
+                    if (url != null) {
+                        if (MpAvUrlCollectionViewModel.Instance.IsRejected(url.UrlDomainPath)) {
+                            MpConsole.WriteLine("Clipboard Monitor: Ignoring url domain '" + url.UrlDomainPath);
+                            return null;
+                        }
+                        if (MpAvUrlCollectionViewModel.Instance.IsUrlRejected(url.UrlPath)) {
+                            MpConsole.WriteLine("Clipboard Monitor: Ignoring url domain '" + url.UrlPath);
+                            return null;
+                        }
                     }
                 }
-
 
                 if (app == null) {
                     throw new Exception("Error creating copy item no source discovered");
@@ -194,8 +201,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public async Task<MpCopyItem> CreateAsync(MpPortableDataObject pdo, bool suppressWrite = false) {
-            var ci = await CreateFromDataObject(pdo,suppressWrite);
+        public async Task<MpCopyItem> CreateAsync(MpPortableDataObject pdo, bool fromInternalSource, bool suppressWrite = false) {
+            var ci = await CreateFromDataObject(pdo,fromInternalSource,suppressWrite);
             return ci;
         }
 

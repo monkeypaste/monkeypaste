@@ -27,6 +27,7 @@
 
     <link href="src/components/content/content-style.css" rel="stylesheet" />
     <link href="src/components/content/content-file-list/content-file-list-style.css" rel="stylesheet" />
+    <link href="src/components/content/content-image/content-image-style.css" rel="stylesheet" />
 
     <link href="src/components/overlay/overlay-style.css" rel="stylesheet" />
 
@@ -43,7 +44,7 @@
     <script src="lib/Quill-Better-Table/quill-better-table.min.js"></script>
     <script src="lib/jquery/jquery.min.js"></script>
     <script src="lib/DynamicQuillTools/DynamicQuillTools.js"></script>
-    <script src="lib/Quill-Html-Edit-Button/quill.htmlEditButton.min.js"></script>
+    <!--<script src="lib/Quill-Html-Edit-Button/quill.htmlEditButton.min.js"></script>-->
     <script src="lib/DateFormatter/jquery.dateFormat.js"></script>
     <script src="lib/katex/katex.min.js"></script>
     <script src="lib/jquery-context-menus/src/context-menu.js"></script>
@@ -191,14 +192,14 @@
 
     <div id="templateColorPaletteMenu" class="ql-toolbar-template-context-menu"></div>
 
-    <div id="fileListContainer" class="hidden content-file-list-container">
+    <!--<div id="fileListContainer" class="hidden content-file-list-container">
         <ul class="content-file-list">
             <li id="fileListRootItem" class="content-file-list-item">
-                <img class="content-file-list-item-icon" src="../../Icons/search.png">
-                <!--<a class="content-file-list-item-path-link" href="https://www.youtube.com">-->
-                <span class="content-file-list-item-path-link content-file-list-item-path-text">This is a path 1</span>
-                <!--</a>-->
-                <div class="content-file-list-item-button">
+                <img class="content-file-list-item-icon" src="../../Icons/search.png">-->
+    <!--<a class="content-file-list-item-path-link" href="https://www.youtube.com">-->
+    <!--<span class="content-file-list-item-path-link content-file-list-item-path-text">This is a path 1</span>-->
+    <!--</a>-->
+    <!--<div class="content-file-list-item-button">
                     <i class="delete-file-item content-file-list-item-button-icon fa-solid fa-circle-minus"></i>
                 </div>
                 <div class="content-file-list-item-button">
@@ -206,13 +207,30 @@
                 </div>
             </li>
         </ul>
-    </div>
+    </div>-->
+    <!--<div id="fileListTableDivTemplate" class="quill-better-table-wrapper hidden">
+        <table class="quill-better-table" style="width: 95%;">
+            <colgroup>
+                <col width="15%">
+                <col width="85%">
+            </colgroup>
+            <tbody>
+                <tr data-row="row-ihvp">
+                    <td data-row="row-ihvp" rowspan="1" colspan="1">
+                        <p class="qlbt-cell-line" data-row="row-ihvp" data-cell="cell-ifuf" data-rowspan="1" data-colspan="1">
+                            <br>
+                        </p>
+                     </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>-->
 
     <canvas id="overlayCanvas"></canvas>
 
     <div id="dragOverlay"></div>
 
-    
+
 
 
 
@@ -220,7 +238,7 @@
 
 
     <script src="src/components/main/main.js"></script>
-    
+
 
 
 </body>
