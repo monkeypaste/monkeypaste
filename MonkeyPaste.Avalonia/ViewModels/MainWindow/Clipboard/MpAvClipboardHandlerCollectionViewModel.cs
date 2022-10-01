@@ -300,7 +300,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task<object> WriteClipboardOrDropObjectAsync(MpPortableDataObject mpdo, bool writeToClipboard) {
             var dobj = new DataObject();
             var handlers = EnabledFormats.Where(x => x.CanWrite && MpPortableDataFormats.RegisteredFormats.Contains(x.Parent.HandledFormat))
-                                         .Select(x => x.Parent.ClipboardPluginComponent).Distinct().Cast<MpIClipboardReaderComponentAsync>();
+                                         .Select(x => x.Parent.ClipboardPluginComponent).Distinct().Cast<MpIClipboardWriterComponentAsync>();
             foreach (var format in MpPortableDataFormats.RegisteredFormats) {
                 var handler = EnabledFormats.FirstOrDefault(x => x.CanWrite && x.Parent.HandledFormat == format);
                 if (handler == null) {
@@ -505,8 +505,17 @@ namespace MonkeyPaste.Avalonia {
         }
 
         async Task MpIPlatformDataObjectHelperAsync.SetPlatformClipboardAsync(MpPortableDataObject portableObj, bool ignoreClipboardChange) {
-            MpPlatformWrapper.Services.ClipboardMonitor.IgnoreNextClipboardChangeEvent = ignoreClipboardChange;
+            if (ignoreClipboardChange) {
+
+                MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = true;
+
+            }
             await WriteClipboardOrDropObjectAsync(portableObj, true);
+            if(ignoreClipboardChange) {
+
+                MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = false;
+
+            }
         }
 
         async Task<MpPortableDataObject> MpIPlatformDataObjectHelperAsync.GetPlatformClipboardDataObjectAsync() {

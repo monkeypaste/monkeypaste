@@ -3168,61 +3168,27 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand PasteSelectedClipsCommand => new MpAsyncCommand<object>(
             async (args) => {
-                //IsPasting = true;
-                //var pi = new MpProcessInfo() {
-                //    Handle = MpProcessManager.LastHandle,
-                //    ProcessPath = MpProcessManager.LastProcessPath
+                
+                IsPasting = true;
+                //var pi = new MpPortableProcessInfo() {
+                //    Handle = MpPlatformWrapper.Services.ProcessWatcher.LastHandle,
+                //    ProcessPath = MpPlatformWrapper.Services.ProcessWatcher.LastProcessPath
                 //};
-                //MpPortableDataObject mpdo = null;
+                MpAvDataObject mpdo = await SelectedItem.GetContentView().Document.GetDataObjectAsync(false,true);
 
-                //MpPasteToAppPathViewModel ptapvm = null;
-                //if (args != null && args is int appId && appId > 0) {
-                //    //when pasting to a user defined application
-                //    pi.Handle = IntPtr.Zero;
-                //    ptapvm = MpPasteToAppPathViewModelCollection.Instance.FindById(appId);
-                //    if (ptapvm != null) {
-                //        pi.ProcessPath = ptapvm.AppPath;
-                //        pi.IsAdmin = ptapvm.IsAdmin;
-                //        pi.IsSilent = ptapvm.IsSilent;
-                //        pi.ArgumentList = new List<string>() { ptapvm.Args };
-                //        pi.WindowState = ptapvm.WindowState;
-                //    }
-                //} else if (args != null && args is IntPtr handle && handle != IntPtr.Zero) {
-                //    // TODO Currently only place passing handle to this command is external drop
-                //    // should probably either alter procesInfo object and add IsDragDrop or make another command for it
-                //    // but for now just flagging that this is drag drop
+                await MpPlatformWrapper.Services.ExternalPasteHandler.PasteDataObject(
+                    mpdo, MpPlatformWrapper.Services.ProcessWatcher.LastHandle, false);
 
-                //    //when pasting to a running application
-                //    pi.Handle = handle;
-                //    ptapvm = null;
-                //} else if (args is MpPortableDataObject) {
-                //    mpdo = args as MpPortableDataObject;
-                //}
-
-                ////In order to paste the app must hide first 
-                ////this triggers hidewindow to paste selected items
-
-                //if (mpdo == null) {
-                //    //is non-null for external template drop
-                //    mpdo = await SelectedItem.ConvertToPortableDataObject(true);
-                //    if (mpdo == null) {
-                //        // paste was canceled
-                //        return;
-                //    }
-                //}
-
-                //await MpPlatformWrapper.Services.ExternalPasteHandler.PasteDataObject(
-                //    mpdo, pi, ptapvm == null ? false : ptapvm.PressEnter);
-
-                //CleanupAfterPaste(SelectedItem);
+                CleanupAfterPaste(SelectedItem);
             },
             (args) => {
                 return MpAvMainWindowViewModel.Instance.IsShowingDialog == false &&
                         SelectedItem != null &&
-                    !IsAnyEditingClipTile &&
-                    !IsAnyEditingClipTitle &&
-                    !IsAnyPastingTemplate &&
-                    !MpPrefViewModel.Instance.IsTrialExpired;
+                        MpAvMainWindowViewModel.Instance.IsMainWindowActive &&
+                        !IsAnyEditingClipTile &&
+                        !IsAnyEditingClipTitle &&
+                        !IsAnyPastingTemplate &&
+                        !MpPrefViewModel.Instance.IsTrialExpired;
             });
 
         public ICommand PasteCurrentClipboardIntoSelectedTileCommand => new MpAsyncCommand(

@@ -18,7 +18,7 @@ namespace AvCoreClipboardHandler {
         private IntPtr _mainWindowHandle;
 
         private int _readCount = 0;
-        private bool _isReading = false;
+        private bool _isReadingOrWriting = false;
         private enum CoreClipboardParamType {
             None = 0,
             //readers
@@ -75,13 +75,15 @@ namespace AvCoreClipboardHandler {
         #region MpIClipboardReaderComponentAsync Implementation
 
         async Task<MpClipboardReaderResponse> MpIClipboardReaderComponentAsync.ReadClipboardDataAsync(MpClipboardReaderRequest request) {
-           
+           if(_isReadingOrWriting) {
+                Debugger.Break();
+            }
             
             MpClipboardReaderResponse hasError = CanHandleDataObject(request);
             if (hasError != null) {
                 return hasError;
             }
-            _isReading = true;
+            _isReadingOrWriting = true;
             IDataObject avdo = null;
             string[] availableFormats = null;
             // only actually read formats found for data
@@ -100,7 +102,7 @@ namespace AvCoreClipboardHandler {
                 object data = await ReadDataObjectFormat(supportedTypeName, avdo);
                 currentOutput.SetData(supportedTypeName, data);
             }
-            _isReading = false;
+            _isReadingOrWriting = false;
             return new MpClipboardReaderResponse() {
                 dataObject = currentOutput
             };
@@ -307,7 +309,7 @@ namespace AvCoreClipboardHandler {
             if (request == null || !OperatingSystem.IsWindows()) {
                 return null;
             }
-            if (_isReading) {
+            if (_isReadingOrWriting) {
                 return new MpClipboardReaderResponse() {
                     errorMessage = "Already reading clipboard"
                 };
@@ -347,7 +349,21 @@ namespace AvCoreClipboardHandler {
                 return null;
             }
 
-            MpAvDataObject dataObj = new MpAvDataObject();
+            if (_isReadingOrWriting) {
+                Debugger.Break();
+            }
+            MpAvDataObject dataObj = null;
+            if(request.data is MpAvDataObject) {
+                dataObj = request.data as MpAvDataObject;
+            } else {
+                if(request.data != null) {
+                    // needs to be avdo
+                    Debugger.Break();
+                    return null;
+                }
+                dataObj = new MpAvDataObject();
+            }
+            _isReadingOrWriting = true;
             foreach (var kvp in request.data.DataFormatLookup) {
                 string format = kvp.Key.Name;
                 object data = kvp.Value;
@@ -379,17 +395,20 @@ namespace AvCoreClipboardHandler {
                 }
             }
             if (request.writeToClipboard) {
-                bool wasOpen = false;
-                while (WinApi.IsClipboardOpen() != IntPtr.Zero) {
-                    wasOpen = true;
-                    await Task.Delay(10);
-                }
-                if(wasOpen) {
-                    await Task.Delay(100);
-                }
+                //bool wasOpen = false;
+                //while (WinApi.IsClipboardOpen() != IntPtr.Zero) {
+                //    wasOpen = true;
+                //    await Task.Delay(10);
+                //}
+                //if(wasOpen) {
+                //    await Task.Delay(100);
+                //}
                 await Application.Current.Clipboard.SetDataObjectAsync(dataObj);
-            }
+                //await Application.Current.Clipboard.SetTextAsync("TESTZZZZZZZZZ");
 
+
+            }
+            _isReadingOrWriting = false;
             return new MpClipboardWriterResponse() {
                 platformDataObject = dataObj
             };

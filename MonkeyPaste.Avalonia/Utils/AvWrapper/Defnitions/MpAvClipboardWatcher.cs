@@ -40,6 +40,7 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
         public bool IgnoreNextClipboardChangeEvent { get; set; } = false;
 
+        public bool IgnoreClipboardChanges { get; set; }
         #endregion
 
         #region Events
@@ -84,6 +85,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void _timer_Tick(object sender, EventArgs e) {
+            
             CheckClipboard();
         }
 
@@ -91,6 +93,7 @@ namespace MonkeyPaste.Avalonia {
             if(_isCheckingClipboard) {
                 return;
             }
+            
             Dispatcher.UIThread.Post(async () => { await CheckClipboardHelper(); });
         }
         private async Task CheckClipboardHelper() {
@@ -106,15 +109,17 @@ namespace MonkeyPaste.Avalonia {
             var cbo = await ConvertManagedFormats();
             if (HasChanged(cbo)) {
                 _lastCbo = cbo;
-                // TODO Add plugin handling here
-                //if(cbo.ContainsData(MpPortableDataFormats.Html)) {
-                //    Debugger.Break();
-                //}
+                if(IgnoreClipboardChanges) {
+                    return;
+                }
                 OnClipboardChanged?.Invoke(typeof(MpAvClipboardWatcher).ToString(), cbo);
             }
         }
 
         private async Task<MpPortableDataObject> ConvertManagedFormats() {
+            if(_isCheckingClipboard) {
+                Debugger.Break();
+            }
             _isCheckingClipboard = true;
             MpPortableDataObject ndo;
 
@@ -232,6 +237,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return false;
         }
+
 
         #endregion
     }

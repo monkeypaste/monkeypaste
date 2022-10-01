@@ -4,7 +4,6 @@ function initFileListContent(itemDataStr) {
 	// item data is MpQuillFileListDataFragment
 
 	// itemData must remain file-paths separated by new-line
-	quill.enable(false);
 	hideAllToolbars();
 	enableReadOnly();
 	disableSubSelection();
@@ -16,6 +15,7 @@ function initFileListContent(itemDataStr) {
 		FileListItems.push(flif);
 	}
 	createFileList();
+	quill.enable(false);
 }
 
 function createFileList() {

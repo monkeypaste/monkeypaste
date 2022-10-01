@@ -37,7 +37,8 @@ namespace MonkeyPaste.Avalonia {
         notifyDomLoaded,
         notifyDropCompleted,
         notifyDragEnter,
-        notifyDragLeave
+        notifyDragLeave,
+        notifyContentScreenShot
     }
     [DoNotNotify]
     public class MpAvCefNetWebView : 
@@ -156,6 +157,10 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpAvEditorBindingFunctionType.notifyDragLeave:
                     BindingContext.IsHovering = false;
+                    break;
+                case MpAvEditorBindingFunctionType.notifyContentScreenShot:
+                    var ssMsg = MpJsonObject.DeserializeBase64Object<MpQuillContentScreenShotNotificationMessage>(msgJsonBase64Str);
+                    Document.ContentScreenShotBase64 = ssMsg.contentScreenShotBase64;
                     break;
                 case MpAvEditorBindingFunctionType.notifyException:
                     var exceptionMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);

@@ -46,10 +46,7 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static KeyCode GetKeyValue(string keyStr) {
-            if(Enum.TryParse(typeof(KeyCode), keyStr.StartsWith("Vc") ? keyStr : "Vc" + keyStr, out object? keyCodeObj) &&
-                keyCodeObj is KeyCode keyCode) {
-                return keyCode;
-            }
+           
             string lks = keyStr.ToLower();
             if (lks == "control") {
                 return KeyCode.VcLeftControl;//.LeftCtrl;
@@ -95,6 +92,10 @@ namespace MonkeyPaste.Common.Avalonia {
             }
             if (lks == "PageDown") {
                 return KeyCode.VcPageDown;
+            }
+            if (Enum.TryParse(typeof(KeyCode), keyStr.StartsWith("Vc") ? keyStr : "Vc" + keyStr.ToUpper(), out object? keyCodeObj) &&
+               keyCodeObj is KeyCode keyCode) {
+                return keyCode;
             }
             throw new Exception("unkown key: " + lks);
         }

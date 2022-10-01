@@ -40,15 +40,23 @@ namespace MonkeyPaste {
     }
 
     public class MpQuillContentDataRequestMessage : MpJsonObject {
-        public string formatRequested { get; set; }
+        public List<string> formats { get; set; }
 
+        public bool forPaste { get; set; } // flag to omit trailing newline for paste db is fine
     }
 
     public class MpQuillContentDataResponseMessage : MpJsonObject {
-        public string formattedContentData { get; set; }
+        public List<MpQuillContentDataResponseFormattedDataItemFragment> dataItems { get; set; }
     }
 
+    public class MpQuillContentDataResponseFormattedDataItemFragment : MpJsonObject {
+        public string format { get; set; }
+        public string data { get; set; }
+    }
 
+    public class MpQuillContentScreenShotNotificationMessage : MpJsonObject {
+        public string contentScreenShotBase64 { get; set; }
+    }
 
     public class MpQuillDisableReadOnlyRequestMessage : MpJsonObject {
         // NOTE props ignored in Avalonia only for wpf...

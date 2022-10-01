@@ -581,7 +581,10 @@ namespace MonkeyPaste.Avalonia {
                         // NOTE do NOT show window on activate to animate close it temporariliy activates 
                     } else {
                         MpMessenger.SendGlobal(MpMessageType.MainWindowDeactivated);
-                        HideWindowCommand.Execute(null);
+                        //if(!MpAvClipTrayViewModel.Instance.IsPasting) {
+                            // wehen pasting hide window is called in paste workflow
+                            HideWindowCommand.Execute(null);
+                       // }
                     }
                     break;
                 case nameof(DragMouseMainWindowLocation):
@@ -752,7 +755,7 @@ namespace MonkeyPaste.Avalonia {
                 // Hide START Events - start
 
 
-                if (IsMainWindowOpening) {
+                if (IsMainWindowOpening || MpAvClipTrayViewModel.Instance.IsPasting) {
                     // this occurs when mw is opening and window is deactivated, either by clicking
                     // off or alt-tab, etc. w/o accounting for the deactivate mw will open
                     // and stick until activated/deactivated
@@ -760,7 +763,10 @@ namespace MonkeyPaste.Avalonia {
                     // to deal with just move to closed rect and hide (won't animate on windows right)
 
                     IsMainWindowClosing = true;
-                    while(IsMainWindowOpening) {
+
+                    MpAvMainWindow.Instance.IsVisible = false;
+                    MpAvMainWindow.Instance.Topmost = false;
+                    while (IsMainWindowOpening) {
                         await Task.Delay(20);
                     }
 
@@ -772,9 +778,6 @@ namespace MonkeyPaste.Avalonia {
                     IsMainWindowLocked = false;
                     IsMainWindowClosing = false;
                     IsMainWindowOpen = false;
-
-                    MpAvMainWindow.Instance.IsVisible = false;
-                    MpAvMainWindow.Instance.Topmost = false;
                     //MpAvMainWindow.Instance.Hide();
 
                     // Hide END - end

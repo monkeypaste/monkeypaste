@@ -256,7 +256,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool SimulateKeyStrokeSequence(string keystr) {
-            ;
             List<List<KeyCode>> seq = MpSharpHookKeyboardInputHelpers.ConvertStringToKeySequence(keystr);
             foreach (var combo in seq) {
                 foreach (var key in combo) {
@@ -267,6 +266,29 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
 
+                foreach (var key in combo) {
+                    UioHookResult result = _eventSimulator.SimulateKeyRelease(key);
+                    if (result != UioHookResult.Success) {
+                        throw new Exception($"Error releasing key: '{key}' in seq: '{keystr}' error: '{result}'");
+                        //return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr, int holdDelay = 300) {
+            
+            List<List<KeyCode>> seq = MpSharpHookKeyboardInputHelpers.ConvertStringToKeySequence(keystr);
+            foreach (var combo in seq) {
+                foreach (var key in combo) {
+                    UioHookResult result = _eventSimulator.SimulateKeyPress(key);
+                    if (result != UioHookResult.Success) {
+                        throw new Exception($"Error pressing key: '{key}' in seq: '{keystr}' error: '{result}'");
+                        //return false;
+                    }
+                }
+                await Task.Delay(100);
                 foreach (var key in combo) {
                     UioHookResult result = _eventSimulator.SimulateKeyRelease(key);
                     if (result != UioHookResult.Success) {

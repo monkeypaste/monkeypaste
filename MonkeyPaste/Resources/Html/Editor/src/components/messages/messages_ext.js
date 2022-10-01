@@ -44,20 +44,42 @@ function loadContent_ext(loadContentMsgStr_base64) {
 
 function contentRequest_ext(contentReqMsgStr_base64) {
 	// input 'MpQuillContentDataRequestMessage'
-	// output 'MpQuillContentDataResponseMessage'
+	// output 'MpQuillContentDataResponseMessage' (with 'MpQuillContentDataResponseFormattedDataItemFragment' items)
 
 	let req = toJsonObjFromBase64Str(contentReqMsgStr_base64);
 
+	let items = [];
+	for (var i = 0; i < req.formats.length; i++) {
+		let format = req.formats[i];
+		let data = '';
+
+		if (ContentItemType == 'Text') {
+			if (format == 'HTML Format') {
+				data = getHtml();
+			} else if (format == 'Text') {
+				data = getText();
+				if (req.forPaste) {
+					// remove trailing line ending
+					data = data.trim();
+				}
+			} else if (format == 'CSV') {
+				data = getTableCsv('Text');
+			} else if (format == 'PNG') {
+				// trigger async screenshot notification where host needs to null and wait for value to avoid async issues
+				onCreateContentScreenShot_ntf();
+				data = 'pending...';
+			}
+		}
+		let item = {
+			format: format,
+			data: data
+		};
+		items.push(item);
+	}
 	let respObj = {
-		formattedContentData: ''
+		dataItems: items
 	};
 
-	//if (req.formatRequested == 'Text') {
-	//	respObj.formattedContentData = getHtml();
-	//} else {
-	//	// todo add other types as necessary?
-	//}
-	respObj.formattedContentData = getHtml();
 	let resp = toBase64FromJsonObj(respObj);
 	//log('init Response: ');
 	//log(initResponseMsgStr);

@@ -205,7 +205,7 @@ namespace MpWpfApp {
 
         public static MpQuillLoadContentRequestMessage CreateConvertStandardHtmlMessage(string standardHtml) {
             return new MpQuillLoadContentRequestMessage() {
-                envName = "wpf",
+                //envName = "wpf",
                 itemData = standardHtml
             };
         }
@@ -218,11 +218,11 @@ namespace MpWpfApp {
                 string itemData = newValue == null ? string.Empty : (string)newValue;
 
                 return new MpQuillLoadContentRequestMessage() {
-                    envName = "wpf",
+                    //envName = "wpf",
                     itemData = GetEncodedHtml(itemData,ctvm.CopyItemGuid),
-                    usedTextTemplates = GetTextTemplates(itemData),
+                    //usedTextTemplates = GetTextTemplates(itemData),
                     isPasteRequest = ctvm.IsPasting,
-                    isReadOnlyEnabled = ctvm.IsContentReadOnly
+                    //isReadOnlyEnabled = ctvm.IsContentReadOnly
                 };
             }
             return null;

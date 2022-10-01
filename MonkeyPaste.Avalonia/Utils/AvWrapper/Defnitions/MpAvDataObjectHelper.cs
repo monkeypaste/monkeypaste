@@ -10,8 +10,6 @@ using Avalonia.Threading;
 using Avalonia;
 using System.Threading;
 using Avalonia.Input;
-using MonkeyPaste.Common;
-
 namespace MonkeyPaste.Avalonia {
     public class MpAvDataObjectHelper :
         MpIExternalPasteHandler,
@@ -43,8 +41,10 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public void Init() {
-            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+            //MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+            //MpAvMainWindowViewModel.Instance.OnMainWindowClosed += Instance_OnMainWindowClosed;
         }
+
 
 
         #region MpIExternalPasteHandler Implementation
@@ -61,8 +61,19 @@ namespace MonkeyPaste.Avalonia {
             //} else {
             //    Debugger.Break();
             //}
+            
             IntPtr pasteToHandle = IntPtr.Zero;
             if (handleOrProcessInfo is IntPtr handle) {
+
+                IntPtr parentHandle = WinApi.GetParent(handle);
+                if(parentHandle != IntPtr.Zero) {
+                    MpConsole.WriteLine("LastActive handle parented.");
+                    while (WinApi.GetParent(parentHandle) != IntPtr.Zero) {
+                        parentHandle = WinApi.GetParent(parentHandle);
+                        MpConsole.WriteLine("LastActive handle parented. more");
+                    }
+                    handle = parentHandle;
+                }
                 pasteToHandle = handle;
             } else if (handleOrProcessInfo is string processPath) {
                 // todo check running apps and use last active handle for path, when none exist will need to use open process stuff
@@ -104,17 +115,18 @@ namespace MonkeyPaste.Avalonia {
                 PasteCmdKeyString = pasteCmdKeyString
             };
             _pasteQueue.Enqueue(pasteItem);
+            await ProcessPasteQueueAsync();
 
-            if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                MpAvMainWindowViewModel.Instance.IsMainWindowLocked = false;
+            //if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+            //    MpAvMainWindowViewModel.Instance.IsMainWindowLocked = false;
 
-                MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
-            } else {
-                ProcessPasteQueue();
-            }
-            while (!_pasteQueue.IsNullOrEmpty()) {
-                await Task.Delay(100);
-            }
+            //    MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
+            //} else {
+            //    await ProcessPasteQueueAsync();
+            //}
+            //while (!_pasteQueue.IsNullOrEmpty()) {
+            //    await Task.Delay(100);
+            //}
         }
 
         public void HandleError(Exception ex) {
@@ -128,12 +140,18 @@ namespace MonkeyPaste.Avalonia {
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch(msg) {
                 case MpMessageType.MainWindowHid:
-                    ProcessPasteQueue().FireAndForgetSafeAsync();
+                    ProcessPasteQueueAsync().FireAndForgetSafeAsync();
                     break;
             }
         }
 
-        private async Task ProcessPasteQueue() {
+        private void Instance_OnMainWindowClosed(object sender, EventArgs e) {
+            Dispatcher.UIThread.Post(async()=>{
+                await ProcessPasteQueueAsync();
+            });
+        }
+
+        private async Task ProcessPasteQueueAsync() {
             if (_pasteQueue == null || _pasteQueue.IsNullOrEmpty()) {
                 return;
             }
@@ -142,16 +160,19 @@ namespace MonkeyPaste.Avalonia {
                 var pasteItem = _pasteQueue.Dequeue();
 
                 if (pasteItem.PasteToProcessHandle != IntPtr.Zero) {
-                    MpPlatformWrapper.Services.ProcessWatcher.SetActiveProcess(pasteItem.PasteToProcessHandle);
-
-                    MpPlatformWrapper.Services.ClipboardMonitor.IgnoreNextClipboardChangeEvent = true;
-
+                    MpConsole.WriteLine("Pasting to process: " + MpPlatformWrapper.Services.ProcessWatcher.GetProcessPath(pasteItem.PasteToProcessHandle));
+                    // SET CLIPBOARD
                     await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(pasteItem.PortableDataObject, true);
+
+                    // ACTIVATE TARGET (HIDE MW)
+                    MpPlatformWrapper.Services.ProcessWatcher.SetActiveProcess(pasteItem.PasteToProcessHandle);
                     await Task.Delay(100);
-                    MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeSequence(pasteItem.PasteCmdKeyString);
-                    //System.Windows.Forms.SendKeys.SendWait(pasteItem.PasteCmdKeyString);
+
+                    // PERFORM PAST CMD
+                    await MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeSequenceAsync(pasteItem.PasteCmdKeyString);
 
                     await Task.Delay(100);
+                    //await MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeSequenceAsync("T|E|S|T");
                     if (pasteItem.FinishWithEnterKey) {
                         //System.Windows.Forms.SendKeys.SendWait("{ENTER}");
                         MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeSequence(MpKeyLiteralStringHelpers.ENTER_KEY_LITERAL);

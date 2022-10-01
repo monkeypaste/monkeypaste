@@ -2081,6 +2081,16 @@ namespace MonkeyPaste.Avalonia {
             return d;
         }
 
+        public async Task<List<string>> GetSupportedDataFormatsAsync() {
+            await Task.Delay(1);
+            var sdfl = new List<string>();
+            sdfl.Add(MpPortableDataFormats.Text);
+            //sdfl.Add(MpAvDataFormats.AvFileNames);
+            //if (ItemType == MpCopyItemType.Text) {
+            //    sdfl.Add(MpPortableDataFormats.Text);
+            //}
+            return sdfl;
+        }
 
         public void DeleteTempFiles() {
             foreach (var f in _tempFileList) {

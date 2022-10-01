@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,7 +9,9 @@ namespace MonkeyPaste.Avalonia {
     public interface MpAvIContentDocument {
         IControl Owner { get; }
 
-        
+        string ContentScreenShotBase64 { get; }
+
+        Task<MpAvDataObject> GetDataObjectAsync(bool ignoreSelection, bool fillTemplates);
         MpAvITextPointer ContentStart { get; }
         MpAvITextPointer ContentEnd { get; }
 

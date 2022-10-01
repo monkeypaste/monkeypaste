@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonkeyPaste.Common.Avalonia.Utils.Input {
+namespace MonkeyPaste.Common.Avalonia {
     public static class MpWin32InputHelpers {
         public static string ConvertKeyStringToSendKeysString(string keyString) {
             // NOTE keyString should NOT be a sequence

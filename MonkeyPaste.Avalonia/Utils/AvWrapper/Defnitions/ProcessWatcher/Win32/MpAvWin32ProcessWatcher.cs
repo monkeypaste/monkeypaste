@@ -55,7 +55,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override void SetActiveProcess(IntPtr handle) {
-            WinApi.SetActiveWindow(handle);
+            //WinApi.SetActiveWindow(handle);
+            bool success = WinApi.SetForegroundWindow(handle);
+            MpConsole.WriteLine($"SetForegroundWindow to '{handle}' was {(success ? "SUCCESSFUL" : "FAILED")}");
         }
 
         protected override Tuple<string, string, IntPtr> RefreshRunningProcessLookup() {

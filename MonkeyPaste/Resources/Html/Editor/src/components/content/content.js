@@ -531,5 +531,47 @@ function getHtmlFromDocRange(docRange) {
 	return rangeHtml;
 }
 
+function getElementDocRange(elm) {
+	let elm_blot = Quill.find(elm);
+	if (!elm_blot) {
+		return null;
+	}
+	let elm_index = elm_blot.offset(quill.scroll);
+	let elm_length = 0;
+
+	if (elm.nextSibling) {
+		let elm_next_blot = Quill.find(elm.nextSibling);
+		if (elm_next_blot) {
+			let elm_next_index = elm_next_blot.offset(quill.scroll);
+			elm_length = elm_next_index - elm_index;
+		}
+	}
+	if (elm_length == 0) {
+		// no next sibling
+		let parent_elm = elm.parentElement;
+		while (true) {
+			if (parent_elm == getEditorElement() || parent_elm == null) {
+				elm_length = getDocLength() - elm_index;
+				break;
+			}
+			if (parent_elm.nextSibling == null) {
+				parent_elm = parent_elm.parentElement;
+			} else {
+				parent_elm = parent_elm.nextSibling;
+				let elm_next_parent_blot = Quill.find(parent_elm);
+				if (elm_next_parent_blot) {
+					let elm_next_parent_index = elm_next_parent_blot.offset(quill.scroll);
+					elm_length = elm_next_parent_index - elm_index;
+					break;
+				}
+			}
+		}
+	}
+	return {
+		index: elm_index,
+		length: elm_length
+	};
+}
+
 
 

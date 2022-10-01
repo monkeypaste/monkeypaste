@@ -102,7 +102,6 @@ namespace MonkeyPaste.Avalonia {
                     new MpBootstrappedItemViewModel(this,typeof(MpAvDataFormats),MpPlatformWrapper.Services.DataObjectRegistrar),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvQueryInfoViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpDocumentHtmlExtension)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpProcessManager), Properties.Settings.Default.IgnoredProcessNames),
                     ////new MpBootstrappedItemViewModel(this,typeof(MpProcessAutomation)),
@@ -139,6 +138,7 @@ namespace MonkeyPaste.Avalonia {
                     new MpBootstrappedItemViewModel(this,typeof(MpAvTagTrayViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindowViewModel)),
 
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvDataObjectHelper)),
                    //new MpBootstrappedItemViewModel(this,typeof(MpActionCollectionViewModel)),
 
                    //new MpBootstrappedItemViewModel(this,typeof(MpContextMenuView)),

@@ -28,6 +28,24 @@ namespace MonkeyPaste.Avalonia {
         public MpAvITextPointer ContentStart { get; private set; }
         public MpAvITextPointer ContentEnd { get; private set; }
 
+        public async Task<MpAvDataObject> GetDataObjectAsync(bool ignoreSelection, bool fillTemplates) {
+            if (Owner is MpAvCefNetWebView wv && wv.DataContext is MpAvClipTileViewModel ctvm) {
+                var contentDataReq = new MpQuillContentDataRequestMessage() { forPaste = true };
+                contentDataReq.formats = await ctvm.GetSupportedDataFormatsAsync();
+                var contentDataRespStr = await wv.EvaluateJavascriptAsync($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");
+                var contentDataResp = MpJsonObject.DeserializeBase64Object<MpQuillContentDataResponseMessage>(contentDataRespStr);
+
+                var avdo = new MpAvDataObject();
+                foreach(var di in contentDataResp.dataItems) {
+                    avdo.SetData(di.format, di.data);
+                }
+                avdo.MapAllPseudoFormats();
+                return avdo;
+            }
+            return null;
+        }
+
+        public string ContentScreenShotBase64 { get; set; }
         #endregion
 
         #endregion
@@ -150,6 +168,7 @@ namespace MonkeyPaste.Avalonia {
 
             return matches;
         }
+
 
         #endregion
     }

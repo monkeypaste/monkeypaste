@@ -89,6 +89,7 @@ namespace MonkeyPaste.Avalonia {
         public IControl Owner => this;
         public MpAvIContentDocument Document => this;
 
+
         public void DeselectAll() {
             UpdateSelection(0, 0, String.Empty, false, false);
         }
@@ -96,6 +97,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIContentDocument Implementation
 
+        public string ContentScreenShotBase64 { get; }
         public MpAvITextPointer ContentStart => new MpAvTextPointer(this, 0);
         public MpAvITextPointer ContentEnd => new MpAvTextPointer(this, Text == null ? 0 : Text.Length - 1);
 
@@ -146,6 +148,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
+        public async Task<MpAvDataObject> GetDataObjectAsync(bool ignoreSelection, bool fillTemplates) {
+            await Task.Delay(1);
+            var avdo = new MpAvDataObject();
+            avdo.SetData(MpPortableDataFormats.Text, ignoreSelection || string.IsNullOrEmpty(SelectedText) ? Text : SelectedText);
+            return avdo;
+        }
 
         #endregion
 
@@ -194,6 +202,8 @@ namespace MonkeyPaste.Avalonia {
             return value;
 
         }
+
+
 
 
         #endregion

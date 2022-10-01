@@ -120,3 +120,15 @@ function onException_ntf(exType, exData) {
 		notifyException(msgStr);
 	}	
 } 
+
+async function onCreateContentScreenShot_ntf() {
+	// output 'MpQuillContentScreenShotNotificationMessage'
+	if (typeof notifyContentScreenShot === 'function') {
+		let result = await getBase64ScreenshotOfElementAsync(getEditorContainerElement());
+		let msg = {
+			contentScreenShotBase64: result
+		};
+		let msgStr = toBase64FromJsonObj(msg);
+		notifyContentScreenShot(msgStr);
+	}	
+}

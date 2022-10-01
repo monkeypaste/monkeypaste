@@ -452,25 +452,25 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
         public static async Task SaveTextContentAsync(MpAvCefNetWebView wv) {
-            if (MpAvClipTrayViewModel.Instance.IsRequery ||
-                MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
-                return;
-            }
+            //if (MpAvClipTrayViewModel.Instance.IsRequery ||
+            //    MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
+            //    return;
+            //}
 
-            if (wv.DataContext is MpAvClipTileViewModel ctvm) {
-                // flags detail info to reload in ctvm propertychanged
-                var contentDataReq = new MpQuillContentDataRequestMessage() {
-                    formatRequested = ctvm.ItemType.ToString()
-                };
-                var contentDataRespStr = await wv.EvaluateJavascriptAsync($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");
-                var contentDataResp = MpJsonObject.DeserializeBase64Object<MpQuillContentDataResponseMessage>(contentDataRespStr);
-                ctvm.CopyItemData = contentDataResp.formattedContentData;
+            //if (wv.DataContext is MpAvClipTileViewModel ctvm) {
+            //    // flags detail info to reload in ctvm propertychanged
+            //    var contentDataReq = new MpQuillContentDataRequestMessage() {
+            //        forceFormat = ctvm.ItemType.ToString()
+            //    };
+            //    var contentDataRespStr = await wv.EvaluateJavascriptAsync($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");
+            //    var contentDataResp = MpJsonObject.DeserializeBase64Object<MpQuillContentDataResponseMessage>(contentDataRespStr);
+            //    ctvm.CopyItemData = contentDataResp.contentData;
 
-                // this will trigger HtmlDataChanged
-                ctvm.CopyItemData = await GetEncodedContentAsync(wv);
+            //    // this will trigger HtmlDataChanged
+            //    ctvm.CopyItemData = await GetEncodedContentAsync(wv);
 
-                //await LoadContentAsync(wv);
-            }
+            //    //await LoadContentAsync(wv);
+            //}
         }
 
         public static async Task<string> GetEncodedContentAsync(
