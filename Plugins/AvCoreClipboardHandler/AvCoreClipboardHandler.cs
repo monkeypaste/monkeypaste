@@ -17,7 +17,6 @@ namespace AvCoreClipboardHandler {
 
         private IntPtr _mainWindowHandle;
 
-        private int _readCount = 0;
         private bool _isReadingOrWriting = false;
         private enum CoreClipboardParamType {
             None = 0,

@@ -2323,8 +2323,8 @@ namespace MpWpfApp {
                     }
                 }
 
-                await MpPlatformWrapper.Services.ExternalPasteHandler.PasteDataObject(
-                    mpdo, pi, ptapvm == null ? false : ptapvm.PressEnter);
+            await MpPlatformWrapper.Services.ExternalPasteHandler.PasteDataObject(
+                mpdo, pi);//, ptapvm == null ? false : ptapvm.PressEnter);
                 //MpMainWindowViewModel.Instance.HideWindowCommand.Execute(true);
                 
                 CleanupAfterPaste(SelectedItem);

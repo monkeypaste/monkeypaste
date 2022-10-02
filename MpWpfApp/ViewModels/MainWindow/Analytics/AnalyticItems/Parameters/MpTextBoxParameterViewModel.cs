@@ -18,7 +18,7 @@ namespace MpWpfApp {
         MpIContentQueryTextBoxViewModel {
         #region Private Variables
         
-        private string _defaultValue;
+        //private string _defaultValue;
 
         #endregion
 

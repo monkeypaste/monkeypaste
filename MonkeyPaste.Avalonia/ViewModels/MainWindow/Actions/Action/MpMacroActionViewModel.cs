@@ -88,7 +88,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Overrides
 
-        public override async Task PerformAction(object arg) {
+        public override async Task PerformActionAsync(object arg) {
+            await Task.Delay(1);
             //if (!CanPerformAction(arg)) {
             //    return;
             //}

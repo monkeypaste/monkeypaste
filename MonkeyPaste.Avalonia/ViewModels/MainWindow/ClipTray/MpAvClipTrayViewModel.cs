@@ -3177,7 +3177,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvDataObject mpdo = await SelectedItem.GetContentView().Document.GetDataObjectAsync(false,true);
 
                 await MpPlatformWrapper.Services.ExternalPasteHandler.PasteDataObject(
-                    mpdo, MpPlatformWrapper.Services.ProcessWatcher.LastHandle, false);
+                    mpdo, MpPlatformWrapper.Services.ProcessWatcher.LastHandle);
 
                 CleanupAfterPaste(SelectedItem);
             },
@@ -3207,6 +3207,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand PasteCopyItemByIdCommand => new MpAsyncCommand<object>(
             async (args) => {
+                await Task.Delay(1);
                 //if (args is int ciid) {
                 //    IsPasting = true;
                 //    var pi = new MpProcessInfo() {
@@ -3422,6 +3423,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand SpeakSelectedClipsCommand => new MpAsyncCommand(
             async () => {
+                await Task.Delay(1);
                 //await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
                 //    var speechSynthesizer = new SpeechSynthesizer();
                 //    speechSynthesizer.SetOutputToDefaultAudioDevice();

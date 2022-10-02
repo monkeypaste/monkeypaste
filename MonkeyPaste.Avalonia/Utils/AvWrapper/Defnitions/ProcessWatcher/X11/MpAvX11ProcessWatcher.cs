@@ -11,13 +11,17 @@ using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using Avalonia.Gtk3;
+//using Avalonia.Gtk3;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     
     public class MpAvX11ProcessWatcher : MpAvProcessWatcherBase {
+        private string[] _requiredTools = new string[] {
+            "xdotool"
+        };
+
         private object _lockObj = new object();
 
         public override void SetActiveProcess(IntPtr handle) {
@@ -63,7 +67,14 @@ namespace MonkeyPaste.Avalonia {
                 if(winHandle.IsStringNullOrWhiteSpace()) {
                     continue;
                 }
-                int handleInt = int.Parse(winHandle);
+                int handleInt = 0;
+
+                try {
+                    handleInt = int.Parse(winHandle);
+                }catch(FormatException ex) {
+                    MpConsole.WriteTraceLine($"Error parsing x11 handle: '{winHandle}'", ex);
+
+                }
                 if(handleInt == 0) {
                     continue;
                 }

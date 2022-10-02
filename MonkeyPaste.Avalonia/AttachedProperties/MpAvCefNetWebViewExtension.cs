@@ -452,6 +452,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
         public static async Task SaveTextContentAsync(MpAvCefNetWebView wv) {
+            await Task.Delay(1);
             //if (MpAvClipTrayViewModel.Instance.IsRequery ||
             //    MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
             //    return;

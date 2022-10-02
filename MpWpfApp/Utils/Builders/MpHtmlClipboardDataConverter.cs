@@ -22,9 +22,9 @@ namespace MpWpfApp {
 
             var hcd = new MpHtmlClipboardDataConverter();
 
-            string versionToken = @"Version:";
-            string startHtmlToken = @"StartHTML:";
-            string endHtmlToken = @"EndHTML:";
+            //string versionToken = @"Version:";
+            //string startHtmlToken = @"StartHTML:";
+            //string endHtmlToken = @"EndHTML:";
 
             string htmlStartToken = @"<!--StartFragment-->";
             string htmlEndToken = @"<!--EndFragment-->";

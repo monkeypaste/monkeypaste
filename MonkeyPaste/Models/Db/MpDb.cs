@@ -171,7 +171,7 @@ namespace MonkeyPaste {
                 return;
             }
 
-            await LogWrite(MpDbLogActionType.Create, item as MpDbModelBase, sourceClientGuid, ignoreTracking);
+            await LogWriteAsync(MpDbLogActionType.Create, item as MpDbModelBase, sourceClientGuid, ignoreTracking);
 
             if (item is MpCopyItemTag cit) {
                 if(cit.CopyItemId == 0 && cit.TagId == 0) {
@@ -198,7 +198,7 @@ namespace MonkeyPaste {
                 return;
             }
 
-            await LogWrite(MpDbLogActionType.Modify, item as MpDbModelBase, sourceClientGuid, ignoreTracking);
+            await LogWriteAsync(MpDbLogActionType.Modify, item as MpDbModelBase, sourceClientGuid, ignoreTracking);
 
             //await RunInMutex(async () => {
             await _connectionAsync.UpdateWithChildrenAsync(item);
@@ -226,7 +226,7 @@ namespace MonkeyPaste {
                 return;
             }
 
-            await LogWrite(MpDbLogActionType.Delete, item as MpDbModelBase, sourceClientGuid, ignoreTracking);
+            await LogWriteAsync(MpDbLogActionType.Delete, item as MpDbModelBase, sourceClientGuid, ignoreTracking);
 
             //await RunInMutex( async()=> {
             await _connectionAsync.DeleteAsync(item, true);
@@ -329,7 +329,7 @@ namespace MonkeyPaste {
             return string.IsNullOrEmpty(providedSourceClientGuid) ? MpPrefViewModel.Instance.ThisDeviceGuid : providedSourceClientGuid;
         }
 
-        private static async Task LogWrite(MpDbLogActionType actionType, MpDbModelBase item, string sourceClientGuid, bool ignoreTracking) {
+        private static async Task LogWriteAsync(MpDbLogActionType actionType, MpDbModelBase item, string sourceClientGuid, bool ignoreTracking) {
             if(!IsLoaded || IgnoreLogging) {
                 return;
             }
@@ -374,7 +374,7 @@ namespace MonkeyPaste {
             bool isNewDb = !File.Exists(dbPath);
 
             if (isNewDb && allowCreate) {
-                using (File.Create(dbPath)) ;
+                using (File.Create(dbPath)) { }
             }
 
             CreateConnection(dbPath);
@@ -394,7 +394,7 @@ namespace MonkeyPaste {
             await InitTablesAsync();
             
             if (isNewDb) {
-                await CreateViews();
+                await CreateViewsAsync();
                 await InitDefaultDataAsync();
 
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
@@ -507,7 +507,7 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpUserTransaction>();
         }
 
-        private static async Task CreateViews() {
+        private static async Task CreateViewsAsync() {
             await _connectionAsync.ExecuteAsync(@"CREATE VIEW MpSortableCopyItem_View as
                                                     SELECT 
 	                                                    pk_MpCopyItemId as RootId,
@@ -596,7 +596,7 @@ namespace MonkeyPaste {
                 return false;
             }
             await _connectionAsync.CreateTableAsync<MpUserDevice>();
-            MpUserDevice this_device = await MpDataModelProvider.GetUserDeviceByMachineNameAsync(osInfo.OsMachineName);
+            MpUserDevice this_device = await MpDataModelProvider.GetUserDeviceByMachineNameAndDeviceTypeAsync(osInfo.OsMachineName,osInfo.OsType);
             MpPrefViewModel.Instance.ThisDeviceGuid = this_device.Guid;
             MpPrefViewModel.Instance.ThisDeviceType = osInfo.OsType;
 
@@ -812,12 +812,12 @@ namespace MonkeyPaste {
             return MpNetworkHelpers.GetExternalIp4Address();
         }
 
-        public static async Task<List<MpDbLog>> GetDbObjectLogs(string dboGuid, DateTime fromDtUtc) {
+        public static async Task<List<MpDbLog>> GetDbObjectLogsAsync(string dboGuid, DateTime fromDtUtc) {
             var logs = await MpDataModelProvider.GetDbLogsByGuidAsync(dboGuid, fromDtUtc);
             return logs;
         }
 
-        public static async Task<DateTime> GetLastSyncForRemoteDevice(string otherDeviceGuid) {
+        public static async Task<DateTime> GetLastSyncForRemoteDeviceAsync(string otherDeviceGuid) {
             var shl = await GetItemsAsync<MpSyncHistory>();
             if(shl.Count == 0) {
                 return DateTime.MinValue;
@@ -832,7 +832,7 @@ namespace MonkeyPaste {
             return DateTime.MinValue;
         }
 
-        public static async Task<string> GetLocalLogFromSyncDate(DateTime fromDateTime, string ignoreGuid = "") {
+        public static async Task<string> GetLocalLogFromSyncDateAsync(DateTime fromDateTime, string ignoreGuid = "") {
             var logItems = await GetItemsAsync<MpDbLog>();
             var matchLogItems = logItems.Where(x => x.LogActionDateTime > fromDateTime && x.SourceClientGuid.ToString() != ignoreGuid).ToList();
 
@@ -847,7 +847,7 @@ namespace MonkeyPaste {
             return dbMsgStr;
         }
 
-        public static async Task<Dictionary<Guid, List<MpDbLog>>> PrepareRemoteLogForSyncing(string dbLogMessageStr) {
+        public static async Task<Dictionary<Guid, List<MpDbLog>>> PrepareRemoteLogForSyncingAsync(string dbLogMessageStr) {
             var dbLogMessage = MpDbMessage.Parse(dbLogMessageStr, GetTypeConverter());
 
             var remoteDbLogs = new List<MpDbLog>();
@@ -856,7 +856,7 @@ namespace MonkeyPaste {
             //deserialize logs and put into guid buckets
             var remoteItemChangeLookup = new Dictionary<Guid, List<MpDbLog>>();
             foreach (var remoteLogRow in dbLogMessage.DbObjects) {
-                var logItem = await dbLogWorker.DeserializeDbObject(remoteLogRow.ObjStr) as MpDbLog;
+                var logItem = await dbLogWorker.DeserializeDbObjectAsync(remoteLogRow.ObjStr) as MpDbLog;
                 if (remoteItemChangeLookup.ContainsKey(logItem.DbObjectGuid)) {
                     remoteItemChangeLookup[logItem.DbObjectGuid].Add(logItem);
                 } else {
@@ -867,10 +867,10 @@ namespace MonkeyPaste {
             return remoteItemChangeLookup;
         }
 
-        public static async Task PerformSync(
+        public static async Task PerformSyncAsync(
             Dictionary<Guid, List<MpDbLog>> changeLookup,
             string remoteClientGuid) {            
-            var lastSyncDt = await GetLastSyncForRemoteDevice(remoteClientGuid);
+            var lastSyncDt = await GetLastSyncForRemoteDeviceAsync(remoteClientGuid);
             //filter & separate remote logs w/ local updates after remote action dt 
             var addChanges = new Dictionary<Guid, List<MpDbLog>>();
             var updateChanges = new Dictionary<Guid, List<MpDbLog>>();
@@ -964,7 +964,7 @@ namespace MonkeyPaste {
                 }
                 var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var dbo = Activator.CreateInstance(dbot);
-                dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
+                dbo = await (dbo as MpISyncableDbObject).CreateFromLogsAsync(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
                 //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
                 var addMethod = typeof(MpDb).GetMethod(nameof(AddOrUpdateAsync));
                 var addByDboTypeMethod = addMethod.MakeGenericMethod(new[] { dbot });
@@ -979,7 +979,7 @@ namespace MonkeyPaste {
                 }
                 var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var dbo = Activator.CreateInstance(dbot);
-                dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);                
+                dbo = await (dbo as MpISyncableDbObject).CreateFromLogsAsync(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);                
                 //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
                 var updateMethod = typeof(MpDb).GetMethod(nameof(AddOrUpdateAsync));
                 var updateByDboTypeMethod = updateMethod.MakeGenericMethod(new[] { dbot });
@@ -990,7 +990,7 @@ namespace MonkeyPaste {
             return;
         }
 
-        public static async Task UpdateSyncHistory(string otherDeviceGuid, DateTime utcDtSentLocalChanges) {
+        public static async Task UpdateSyncHistoryAsync(string otherDeviceGuid, DateTime utcDtSentLocalChanges) {
             MpSyncHistory sh = await MpDataModelProvider.GetSyncHistoryByDeviceGuidAsync(otherDeviceGuid);
 
             if (sh == null) {

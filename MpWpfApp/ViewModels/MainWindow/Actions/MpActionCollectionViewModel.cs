@@ -218,7 +218,7 @@ namespace MpWpfApp {
             var tal = await MpDataModelProvider.GetAllTriggerActionsAsync();
 
             foreach (var ta in tal) {
-                var tavm = await CreateTriggerViewModel(ta);
+                var tavm = await CreateTriggerViewModelAsync(ta);
                 Items.Add(tavm);
             }
 
@@ -231,7 +231,7 @@ namespace MpWpfApp {
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.Children)));
             OnPropertyChanged(nameof(Items));
 
-            await RestoreAllEnabled();//.FireAndForgetSafeAsync(this);
+            await RestoreAllEnabledAsync();//.FireAndForgetSafeAsync(this);
 
             // select most recent action
             MpActionViewModelBase actionToSelect = AllActions
@@ -246,7 +246,7 @@ namespace MpWpfApp {
 
             IsBusy = false;
         }
-        public async Task<MpTriggerActionViewModelBase> CreateTriggerViewModel(MpAction a) {
+        public async Task<MpTriggerActionViewModelBase> CreateTriggerViewModelAsync(MpAction a) {
             
             if(a.ActionType != MpActionType.Trigger || 
                (MpTriggerType)a.ActionObjId == MpTriggerType.ParentOutput) {
@@ -276,7 +276,7 @@ namespace MpWpfApp {
             return tavm;
         }
 
-        public async Task RestoreAllEnabled() {
+        public async Task RestoreAllEnabledAsync() {
             // NOTE this is only called on init and needs to wait for dependant vm's to load so wait here
 
             //while(MpTagTrayViewModel.Instance.IsBusy)
@@ -296,7 +296,7 @@ namespace MpWpfApp {
             //}
         }
 
-        public async Task DisableAll() {
+        public async Task DisableAllAsync() {
             await Task.Delay(1);
             Items.ForEach(x => x.ToggleIsEnabledCommand.Execute(false));
         }
@@ -404,7 +404,7 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private async Task UpdateSortOrder() {
+        private async Task UpdateSortOrderAsync() {
             Items.ForEach(x => x.SortOrderIdx = Items.IndexOf(x));
             await Task.WhenAll(Items.Select(x => x.Action.WriteToDatabaseAsync()));
         }
@@ -452,7 +452,7 @@ namespace MpWpfApp {
                         Task.Run(async () => {
                             await SelectedItem.Action.WriteToDatabaseAsync();
                             HasModelChanged = false;
-                        });
+                        }).FireAndForgetSafeAsync();
                     }
                     break;
             }
@@ -478,20 +478,20 @@ namespace MpWpfApp {
                  fe.ContextMenu.IsOpen = true;
              });
 
-        public ICommand AddTriggerCommand => new RelayCommand<object>(
+        public ICommand AddTriggerCommand => new MpAsyncCommand<object>(
              async (args) => {
                  IsBusy = true;
                                   
                  MpTriggerType tt = args == null ? MpTriggerType.None : (MpTriggerType)args;
                  
-                 MpAction na = await MpAction.Create(
+                 MpAction na = await MpAction.CreateAsync(
                          label: GetUniqueTriggerName(tt.ToString()),
                          actionType: MpActionType.Trigger,
                          actionObjId: (int)tt,
                          sortOrderIdx: Items.Count,
                          location: DefaultTriggerLocation.ToPortablePoint());
 
-                 var navm = await CreateTriggerViewModel(na);
+                 var navm = await CreateTriggerViewModelAsync(na);
 
                  Items.Add(navm);
                  SelectedItem = navm;
@@ -512,7 +512,7 @@ namespace MpWpfApp {
                  IsBusy = false;
              });
 
-        public ICommand DeleteTriggerCommand => new RelayCommand<object>(
+        public ICommand DeleteTriggerCommand => new MpAsyncCommand<object>(
             async (args) => {
                 IsBusy = true;
 
@@ -527,7 +527,7 @@ namespace MpWpfApp {
 
                 OnPropertyChanged(nameof(AllSelectedTriggerActions));
 
-                await UpdateSortOrder();
+                await UpdateSortOrderAsync();
                 OnPropertyChanged(nameof(Items));
                 OnPropertyChanged(nameof(SelectedItem));
 

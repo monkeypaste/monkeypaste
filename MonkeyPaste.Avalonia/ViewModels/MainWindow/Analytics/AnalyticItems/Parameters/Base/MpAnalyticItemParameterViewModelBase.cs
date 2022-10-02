@@ -6,9 +6,10 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; 
-using Newtonsoft.Json;
-using SQLite;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common; 
+//using Newtonsoft.Json;
+//using SQLite;
 
 namespace MonkeyPaste.Avalonia {
     public class MpPluginParameterViewModelBase : 

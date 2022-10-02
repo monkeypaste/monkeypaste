@@ -55,7 +55,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
     public static unsafe class GtkApi {
 
-        private static IntPtr s_display;
+        private static IntPtr s_display = IntPtr.Zero;
         private const string GdkName = "libgdk-3.so.0";
         private const string GtkName = "libgtk-3.so.0";
 
@@ -258,7 +258,7 @@ namespace MonkeyPaste.Common.Avalonia {
     }
 
     public class GtkSystemDialog : ISystemDialogImpl {
-        private Task<bool> _initialized;
+        //private Task<bool> _initialized;
 
         private unsafe Task<string[]> ShowDialog(string title, IWindowImpl parent, GtkFileChooserAction action,
             bool multiSelect, string initialDirectory, string initialFileName, IEnumerable<FileDialogFilter> filters, string defaultExtension, bool overwritePrompt) {

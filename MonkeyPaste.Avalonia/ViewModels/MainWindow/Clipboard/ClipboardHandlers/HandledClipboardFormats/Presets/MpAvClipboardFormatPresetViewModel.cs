@@ -391,7 +391,7 @@ namespace MonkeyPaste.Avalonia {
                             paramVal = paramFormat.values[0].value;
                         }
                     }
-                    var newPresetVal = await MpPluginPresetParameterValue.Create(
+                    var newPresetVal = await MpPluginPresetParameterValue.CreateAsync(
                         presetId: Preset.Id,
                         paramEnumId: paramFormat.paramId,
                         value: paramVal

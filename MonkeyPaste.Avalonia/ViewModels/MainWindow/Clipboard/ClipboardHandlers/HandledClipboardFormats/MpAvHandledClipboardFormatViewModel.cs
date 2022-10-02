@@ -13,7 +13,7 @@ using MonkeyPaste;
 using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
 using System.Diagnostics;
-using FFImageLoading.Forms.Handlers;
+
 
 
 using System.IO;

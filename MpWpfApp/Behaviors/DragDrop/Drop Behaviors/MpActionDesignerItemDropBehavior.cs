@@ -123,7 +123,7 @@ namespace MpWpfApp {
 
             var avm = AssociatedObject.DataContext as MpActionViewModelBase;
 
-            await Task.WhenAll(dragModels.Select(x => avm.PerformAction(x)));
+            await Task.WhenAll(dragModels.Select(x => avm.PerformActionAsync(x)));
         }
 
 

@@ -216,8 +216,8 @@ namespace MpWpfApp {
 
         #region Protected Methods
 
-        protected override async Task Enable() {
-            await base.Enable();
+        protected override async Task EnableAsync() {
+            await base.EnableAsync();
         }
 
         protected async Task ShowUserEnableChangeNotification() {
@@ -268,7 +268,7 @@ namespace MpWpfApp {
                 var thisTrigger = Parent.Items.FirstOrDefault(x => x.ActionId == ActionId);
                 if (thisTrigger != null) {
                     MpHelpers.RunOnMainThread(async () => {
-                        thisTrigger = await Parent.CreateTriggerViewModel(Action);
+                        thisTrigger = await Parent.CreateTriggerViewModelAsync(Action);
                     });
                 }
             });

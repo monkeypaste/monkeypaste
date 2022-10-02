@@ -36,7 +36,7 @@ namespace MpWpfApp {
                     AnalyticItemPresetId = value.AnalyticItemPresetId;
                     // NOTE dont understand why but HasModelChanged property change not firing from this
                     // so forcing db write for now..
-                    Task.Run(async () => { await Action.WriteToDatabaseAsync(); });
+                    Task.Run(async () => { await Action.WriteToDatabaseAsync(); }).FireAndForgetSafeAsync(this);
                     OnPropertyChanged(nameof(SelectedPreset));
                 }
             }
@@ -81,7 +81,7 @@ namespace MpWpfApp {
 
         #region Public Overrides
 
-        public override async Task PerformAction(object arg) {
+        public override async Task PerformActionAsync(object arg) {
             if (!CanPerformAction(arg)) {
                 return;
             }
@@ -101,7 +101,7 @@ namespace MpWpfApp {
                 }
 
                 if(aipvm.Parent.LastTransaction != null && aipvm.Parent.LastTransaction.Response != null) {
-                    await base.PerformAction(
+                    await base.PerformActionAsync(
                         new MpAnalyzeOutput() {
                             Previous = arg as MpActionOutput,
                             CopyItem = actionInput.CopyItem,
@@ -127,12 +127,12 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if(e is MpPluginPreset aip && aip.Id == AnalyticItemPresetId) {
-                Task.Run(Validate);
+                Task.Run(ValidateAsync);
             }
         }
 
-        protected override async Task<bool> Validate() {
-            await base.Validate();
+        protected override async Task<bool> ValidateAsync() {
+            await base.ValidateAsync();
             if (!IsValid) {
                 return IsValid;
             }
@@ -140,7 +140,7 @@ namespace MpWpfApp {
             var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(Action.ActionObjId);
             if (aipvm == null) {
                 ValidationText = $"Analyzer for Action '{FullName}' not found";
-                await ShowValidationNotification();
+                await ShowValidationNotificationAsync();
             } else {
                 var pavm = ParentActionViewModel;
                 while(pavm != null) {
@@ -148,7 +148,7 @@ namespace MpWpfApp {
                         if(cavm.IsItemTypeCompare) {
                             if(!aipvm.Parent.IsContentTypeValid(cavm.ContentItemType)) {
                                 ValidationText = $"Parent Comparer '{pavm.Label}' filters only for '{cavm.ContentItemType.ToString()}' type content and analyzer '{aipvm.FullName}' will never execute because it does not support '{cavm.ContentItemType.ToString()}' type of input ";
-                                await ShowValidationNotification();
+                                await ShowValidationNotificationAsync();
                                 return IsValid;
                             }
                         }

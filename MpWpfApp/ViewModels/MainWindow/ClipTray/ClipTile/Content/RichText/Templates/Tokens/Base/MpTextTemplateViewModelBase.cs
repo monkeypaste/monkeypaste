@@ -489,8 +489,8 @@ namespace MpWpfApp {
             }
         }
 
-        public ICommand CancelEditTemplateCommand => new MpAsyncCommand(
-            async() => {
+        public ICommand CancelEditTemplateCommand => new MpCommand(
+            () => {
                 IsSelected = false;
                 TextTemplate = _originalModel;
                 IsEditingTemplate = false;

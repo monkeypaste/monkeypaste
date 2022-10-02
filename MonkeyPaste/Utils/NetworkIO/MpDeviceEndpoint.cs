@@ -85,18 +85,18 @@ namespace MonkeyPaste {
         }
 
         public async Task<string> ToStringAsync() {
-            string result = await SerializeDbObject();
+            string result = await SerializeDbObjectAsync();
             return result;
         }
 
         public static async Task<MpDeviceEndpoint> Parse(string str) {
             var temp = new MpDeviceEndpoint();
-            var result = await temp.DeserializeDbObject(str);
+            var result = await temp.DeserializeDbObjectAsync(str);
 
             return result as MpDeviceEndpoint;
         }
 
-        public async Task<string> SerializeDbObject() {
+        public async Task<string> SerializeDbObjectAsync() {
             await Task.Delay(1);
             return string.Format(
                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}{0}{11}{0}",
@@ -118,7 +118,7 @@ namespace MonkeyPaste {
             return typeof(MpDeviceEndpoint);
         }
 
-        public async Task<object> DeserializeDbObject(string objStr) {
+        public async Task<object> DeserializeDbObjectAsync(string objStr) {
             var epParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
             var ep = new MpDeviceEndpoint() {
                 PublicIp4Address = epParts[0],
@@ -135,11 +135,11 @@ namespace MonkeyPaste {
             return ep;
         }
 
-        public Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+        public Task<Dictionary<string, string>> DbDiffAsync(object drOrModel) {
             throw new NotImplementedException();
         }
 
-        public Task<object> CreateFromLogs(string dboGuid, List<MpDbLog> logs, string fromClientGuid) {
+        public Task<object> CreateFromLogsAsync(string dboGuid, List<MpDbLog> logs, string fromClientGuid) {
             throw new NotImplementedException();
         }
 

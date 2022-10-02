@@ -71,9 +71,9 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpAvTitleMenuViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
+            //switch (e.PropertyName) {
 
-            }
+            //}
         }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {

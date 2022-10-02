@@ -127,7 +127,7 @@ namespace MpWpfApp {
             async () => {
                 IsBusy = true;
 
-                var cfais = await MpAppClipboardFormatInfo.Create(
+                var cfais = await MpAppClipboardFormatInfo.CreateAsync(
                     appId: Parent.AppId);
 
                 var cfaisvm = await CreateAppClipboardFormatViewModel(cfais);

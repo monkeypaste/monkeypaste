@@ -145,7 +145,7 @@ namespace MpWpfApp {
 
             var pail = MpPluginLoader.Plugins.Where(x => x.Value.Component is MpIAnalyzeAsyncComponent || x.Value.Component is MpIAnalyzerComponent);
             foreach(var pai in pail) {
-                var paivm = await CreateAnalyticItemViewModel(pai.Value);
+                var paivm = await CreateAnalyticItemViewModelAsync(pai.Value);
                 Items.Add(paivm);
             }
 
@@ -195,7 +195,7 @@ namespace MpWpfApp {
 
         #region Private Methods
         
-        private async Task<MpAnalyticItemViewModel> CreateAnalyticItemViewModel(MpPluginFormat plugin) {
+        private async Task<MpAnalyticItemViewModel> CreateAnalyticItemViewModelAsync(MpPluginFormat plugin) {
             MpAnalyticItemViewModel aivm = new MpAnalyticItemViewModel(this);
 
             await aivm.InitializeAsync(plugin);

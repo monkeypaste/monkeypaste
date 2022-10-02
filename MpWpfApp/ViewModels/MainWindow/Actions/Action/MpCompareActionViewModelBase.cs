@@ -252,7 +252,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public override async Task PerformAction(object arg) {
+        public override async Task PerformActionAsync(object arg) {
             if (!CanPerformAction(arg)) {
                 return;
             }
@@ -270,7 +270,7 @@ namespace MpWpfApp {
             compareOutput.Matches = GetMatches(compareStr);
 
             if (compareOutput.Matches != null && compareOutput.Matches.Count > 0) {
-                base.PerformAction(compareOutput).FireAndForgetSafeAsync(this);
+                base.PerformActionAsync(compareOutput).FireAndForgetSafeAsync(this);
             }
         }
 
@@ -314,7 +314,7 @@ namespace MpWpfApp {
                             MpConsole.WriteTraceLine(ex);
 
                             ValidationText = $"Error performing action '{RootTriggerActionViewModel.Label}/{Label}': {ex}";
-                            await ShowValidationNotification();
+                            await ShowValidationNotificationAsync();
                         }
                     } else if(ao.OutputData != null) {
                         return ao.OutputData.ToString();

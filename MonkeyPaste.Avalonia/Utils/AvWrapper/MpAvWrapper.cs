@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
 using System.Linq;
 using System.Text;
-using Avalonia.Win32;
+//using Avalonia.Win32;
 using Avalonia.Media.Imaging;
 using System.Threading.Tasks;
 using System;

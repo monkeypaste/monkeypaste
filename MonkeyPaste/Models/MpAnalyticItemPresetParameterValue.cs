@@ -50,7 +50,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public static async Task<MpPluginPresetParameterValue> Create(
+        public static async Task<MpPluginPresetParameterValue> CreateAsync(
             int presetId = 0, 
             int paramEnumId = 0, 
             string value = ""

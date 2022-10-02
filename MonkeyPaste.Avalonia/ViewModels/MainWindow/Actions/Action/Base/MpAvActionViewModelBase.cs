@@ -33,9 +33,9 @@ namespace MonkeyPaste.Avalonia {
         MpIActionTrigger {
         #region Private Variables
 
-        private double _maxDeltaLocation = 10;
+        //private double _maxDeltaLocation = 10;
 
-        private MpPoint _lastLocation;
+        private MpPoint _lastLocation = null;
 
 
         #endregion
@@ -71,7 +71,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpITooltipInfoViewModel Implementation
 
-        public object Tooltip {
+        public virtual object Tooltip {
             get {
                 string toolTipStr = string.Empty;
 
@@ -766,11 +766,11 @@ namespace MonkeyPaste.Avalonia {
                 OnActionComplete?.Invoke(this, args);
                 return;
             }
-            Task.Run(() => PerformAction(args).FireAndForgetSafeAsync(this));
+            Task.Run(() => PerformActionAsync(args).FireAndForgetSafeAsync(this));
         }
 
 
-        public virtual async Task PerformAction(object arg) {
+        public virtual async Task PerformActionAsync(object arg) {
             if (!CanPerformAction(arg)) {
                 return;
             }
@@ -1064,7 +1064,7 @@ namespace MonkeyPaste.Avalonia {
                  IsBusy = true;
 
                  MpActionType at = (MpActionType)args;
-                 MpAction na = await MpAction.Create(
+                 MpAction na = await MpAction.CreateAsync(
                                          actionType: at,
                                          label: GetUniqueActionName(at.ToString()),
                                          parentId: ActionId,
@@ -1144,7 +1144,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 IsPerformingActionFromCommand = true;
                 var ao = GetInput(ci);
-                await PerformAction(ao);
+                await PerformActionAsync(ao);
                 IsPerformingActionFromCommand = false;
             });
 

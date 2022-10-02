@@ -59,6 +59,7 @@ namespace MpWpfApp {
         }
 
         public async Task InitializeAsync(string path) {
+            await Task.Delay(1);
             IsBusy = true;
 
             Path = path;

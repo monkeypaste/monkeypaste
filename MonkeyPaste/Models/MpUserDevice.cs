@@ -81,7 +81,7 @@ namespace MonkeyPaste {
             PlatformType = platformTypeId;
         }
 
-        public async Task<object> CreateFromLogs(string udGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {            
+        public async Task<object> CreateFromLogsAsync(string udGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {            
             var ud = await MpDb.GetDbObjectByTableGuidAsync("MpUserDevice", udGuid) as MpUserDevice;
 
             foreach (var li in logs) {
@@ -100,7 +100,7 @@ namespace MonkeyPaste {
             return ud;
         }
 
-        public async Task<object> DeserializeDbObject(string objStr) {
+        public async Task<object> DeserializeDbObjectAsync(string objStr) {
             await Task.Delay(0);
             var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
             var ud = new MpUserDevice() {
@@ -110,7 +110,7 @@ namespace MonkeyPaste {
             return ud;
         }
 
-        public async Task<string> SerializeDbObject() {
+        public async Task<string> SerializeDbObjectAsync() {
             await Task.Delay(1);
 
             return string.Format(
@@ -124,7 +124,7 @@ namespace MonkeyPaste {
             return typeof(MpUserDevice);
         }
 
-        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+        public async Task<Dictionary<string, string>> DbDiffAsync(object drOrModel) {
             await Task.Delay(1);
 
             MpUserDevice other = null;

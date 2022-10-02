@@ -167,7 +167,7 @@ namespace MonkeyPaste {
         public MpApp() { }
 
 
-        public async Task<object> CreateFromLogs(string appGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+        public async Task<object> CreateFromLogsAsync(string appGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             var adr = await MpDb.GetDbObjectByTableGuidAsync("MpApp", appGuid);
             MpApp appFromLog = null;
             if (adr == null) {
@@ -209,7 +209,7 @@ namespace MonkeyPaste {
             return appFromLog;
         }
 
-        public async Task<object> DeserializeDbObject(string objStr) {
+        public async Task<object> DeserializeDbObjectAsync(string objStr) {
             await Task.Delay(0);
             var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
             var a = new MpApp() {
@@ -236,15 +236,15 @@ namespace MonkeyPaste {
             return a;
         }
 
-        public async Task<string> SerializeDbObject() {
-            await Task.Delay(1);
-
+        public async Task<string> SerializeDbObjectAsync() {
+            var ud = await MpDb.GetItemAsync<MpUserDevice>(UserDeviceId);
+            var icon = await MpDb.GetItemAsync<MpIcon>(IconId);
             return string.Format(
                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}",
                 ParseToken,
                 AppGuid.ToString(),
-                MpDb.GetItem<MpUserDevice>(UserDeviceId).Guid,
-                MpDb.GetItem<MpIcon>(IconId).Guid,
+                ud.Guid,
+                icon.Guid,
                 AppPath,
                 AppName,
                 IsAppRejected ? "1" : "0");
@@ -254,7 +254,7 @@ namespace MonkeyPaste {
             return typeof(MpApp);
         }
 
-        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+        public async Task<Dictionary<string, string>> DbDiffAsync(object drOrModel) {
             await Task.Delay(1);
 
             MpApp other = null;

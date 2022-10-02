@@ -16,6 +16,7 @@ namespace MonkeyPaste {
             var oldContext = SynchronizationContext.Current;
             var synch = new ExclusiveSynchronizationContext();
             SynchronizationContext.SetSynchronizationContext(synch);
+#pragma warning disable VSTHRD101 // Avoid unsupported async delegates
             synch.Post(async _ => {
                 try {
                     await task();
@@ -28,6 +29,7 @@ namespace MonkeyPaste {
                     synch.EndMessageLoop();
                 }
             }, null);
+#pragma warning restore VSTHRD101 // Avoid unsupported async delegates
             synch.BeginMessageLoop();
 
             SynchronizationContext.SetSynchronizationContext(oldContext);
@@ -45,6 +47,7 @@ namespace MonkeyPaste {
             var synch = new ExclusiveSynchronizationContext();
             SynchronizationContext.SetSynchronizationContext(synch);
             T ret = default(T);
+#pragma warning disable VSTHRD101 // Avoid unsupported async delegates
             synch.Post(async _ => {
                 try {
                     ret = await task();
@@ -57,6 +60,7 @@ namespace MonkeyPaste {
                     synch.EndMessageLoop();
                 }
             }, null);
+#pragma warning restore VSTHRD101 // Avoid unsupported async delegates
             synch.BeginMessageLoop();
             SynchronizationContext.SetSynchronizationContext(oldContext);
             return ret;

@@ -16,7 +16,7 @@ using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common.Avalonia;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using MonkeyPaste.Common.Wpf;
+//using MonkeyPaste.Common.Wpf;
 using WinApi = MonkeyPaste.Common.Avalonia.WinApi;
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipboardWatcher : MpIClipboardMonitor, MpIPlatformDataObjectRegistrar {

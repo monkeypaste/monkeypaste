@@ -19,8 +19,7 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel,
         MpIMenuItemViewModel, 
         MpITreeItemViewModel,
-        MpIBoxViewModel,
-        INotifyDataErrorInfo {
+        MpIBoxViewModel {
 
         #region Private
 
@@ -67,17 +66,6 @@ namespace MonkeyPaste.Avalonia {
         #region MpIMenuItemViewModel Implementation
 
         public MpMenuItemViewModel ContextMenuItemViewModel { get; }
-
-        #endregion
-
-        #region INotifyDataErrorInfo Implementation
-        public IEnumerable GetErrors(string propertyName) {
-            throw new NotImplementedException();
-        }
-
-        public bool HasErrors { get; }
-
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
         #endregion
 

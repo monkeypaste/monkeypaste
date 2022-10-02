@@ -19,7 +19,7 @@ namespace MpWpfApp {
     /// Interaction logic for MpClipTrayContainerView.xaml
     /// </summary>
     public partial class MpClipTrayContainerView : MpUserControl<MpClipTrayViewModel> {
-        private bool _isUserResizingPinTray = false;
+        //private bool _isUserResizingPinTray = false;
         public MpClipTrayContainerView() {
             InitializeComponent();
         }

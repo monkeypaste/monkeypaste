@@ -1,4 +1,4 @@
-﻿using MonkeyPaste.Common.Wpf;
+﻿//using MonkeyPaste.Common.Wpf;
 using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
@@ -49,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIExternalPasteHandler Implementation
 
-        async Task MpIExternalPasteHandler.PasteDataObject(MpPortableDataObject mpdo, object handleOrProcessInfo, bool finishWithEnterKey = false) {
+        async Task MpIExternalPasteHandler.PasteDataObject(MpPortableDataObject mpdo, object handleOrProcessInfo) {
             if (handleOrProcessInfo == null) {
                 Debugger.Break();
             }
@@ -65,15 +65,15 @@ namespace MonkeyPaste.Avalonia {
             IntPtr pasteToHandle = IntPtr.Zero;
             if (handleOrProcessInfo is IntPtr handle) {
 
-                IntPtr parentHandle = WinApi.GetParent(handle);
-                if(parentHandle != IntPtr.Zero) {
-                    MpConsole.WriteLine("LastActive handle parented.");
-                    while (WinApi.GetParent(parentHandle) != IntPtr.Zero) {
-                        parentHandle = WinApi.GetParent(parentHandle);
-                        MpConsole.WriteLine("LastActive handle parented. more");
-                    }
-                    handle = parentHandle;
-                }
+                // IntPtr parentHandle = WinApi.GetParent(handle);
+                // if(parentHandle != IntPtr.Zero) {
+                //     MpConsole.WriteLine("LastActive handle parented.");
+                //     while (WinApi.GetParent(parentHandle) != IntPtr.Zero) {
+                //         parentHandle = WinApi.GetParent(parentHandle);
+                //         MpConsole.WriteLine("LastActive handle parented. more");
+                //     }
+                //     handle = parentHandle;
+                // }
                 pasteToHandle = handle;
             } else if (handleOrProcessInfo is string processPath) {
                 // todo check running apps and use last active handle for path, when none exist will need to use open process stuff
@@ -88,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
             }
 
-            await PasteDataObjectAsync_internal(mpdo, pasteToHandle, finishWithEnterKey);
+            await PasteDataObjectAsync_internal(mpdo, pasteToHandle, false);
         }
 
         #endregion
@@ -102,11 +102,11 @@ namespace MonkeyPaste.Avalonia {
 
             // update pasteCmd key's if app has defined unqiue paste shortcut for sendKeys (on windows unknown for others atm)
 
-            var avm = MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppPath.ToLower() == handlePath.ToLower());
-            if (avm != null && avm.PasteShortcutViewModel != null) {
-                pasteCmdKeyString = MpWpfKeyboardInputHelpers.ConvertKeyStringToSendKeysString(
-                                        avm.PasteShortcutViewModel.PasteCmdKeyString);
-            }
+            // var avm = MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppPath.ToLower() == handlePath.ToLower());
+            // if (avm != null && avm.PasteShortcutViewModel != null) {
+            //     pasteCmdKeyString = MpWpfKeyboardInputHelpers.ConvertKeyStringToSendKeysString(
+            //                             avm.PasteShortcutViewModel.PasteCmdKeyString);
+            // }
             var pasteItem = new MpPasteItem() {
                 PortableDataObject = mpdo,
                 //ProcessInfo = pi,

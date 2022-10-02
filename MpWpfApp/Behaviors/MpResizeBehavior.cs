@@ -26,7 +26,7 @@ namespace MpWpfApp {
         private Point? _mouseDownPosition;
 
 
-        private MpCursorType _curCursor = MpCursorType.None;
+        //private MpCursorType _curCursor = MpCursorType.None;
 
         #endregion
 
@@ -522,7 +522,7 @@ namespace MpWpfApp {
         #endregion
 
         private void Reset() {
-            _curCursor = MpCursorType.None;
+            //_curCursor = MpCursorType.None;
             IsResizing = false;
             _lastMousePosition = _mouseDownPosition = null;
             if (AssociatedObject.IsMouseCaptured) {

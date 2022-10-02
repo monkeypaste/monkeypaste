@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using System.Windows;
 
 using System.Windows.Input;
+using Avalonia.Controls;
+using static SQLite.SQLite3;
 
 namespace MonkeyPaste.Avalonia {
     public class MpFileWriterOutput : MpAvActionOutput {        
@@ -35,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-        public object Tooltip => "Prefix is used for non-file clipboard items. If unset file will use the content's title.";
+        public override object Tooltip => "Prefix is used for non-file clipboard items. If unset file will use the content's title.";
         #endregion
         #region State
 
@@ -98,7 +100,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Overrides
 
-        public override async Task PerformAction(object arg) {
+        public override async Task PerformActionAsync(object arg) {
             if (!CanPerformAction(arg)) {
                 return;
             }
@@ -121,7 +123,7 @@ namespace MonkeyPaste.Avalonia {
                 outputData += tfp;
             }
 
-            await base.PerformAction(
+            await base.PerformActionAsync(
                     new MpFileWriterOutput() {
                         Previous = arg as MpAvActionOutput,
                         CopyItem = actionInput.CopyItem,
@@ -179,18 +181,19 @@ namespace MonkeyPaste.Avalonia {
                 } else if (File.Exists(initDir)) {
                     initDir = Path.GetDirectoryName(initDir);
                 }
-                //MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
-                //var dlg = new MpFolderPicker() {
-                //    InputPath = initDir,
-                //    Title = "Select folder"
-                //};
-                //bool result = dlg.ShowDialog() == true;
 
-                //MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
-                //if (result) {
-                //    FileSystemPath = dlg.ResultPath;
-                //    await ReEnable();
-                //}
+                MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
+                var selectedDir = await new OpenFolderDialog() {
+                    Title = "Select folder",
+                    Directory = initDir
+                }.ShowAsync(MpAvMainWindow.Instance);
+                
+
+                MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
+                if (string.IsNullOrEmpty(selectedDir)) {
+                    FileSystemPath = selectedDir;
+                    await ReEnable();
+                }
             });
 
         #endregion

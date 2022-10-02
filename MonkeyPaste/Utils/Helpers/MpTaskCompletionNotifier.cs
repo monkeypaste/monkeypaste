@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -127,7 +128,7 @@ namespace MonkeyPaste {
                     },
                     CancellationToken.None,
                     TaskContinuationOptions.ExecuteSynchronously,
-                    scheduler);
+                    scheduler).FireAndForgetSafeAsync();
                 }
             }
 

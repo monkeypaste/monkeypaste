@@ -26,7 +26,7 @@ namespace MonkeyPaste.Avalonia
                             //})
                             //.With(new Win32PlatformOptions { AllowEglInitialization = true, UseWgl = true })
                             //.With(new X11PlatformOptions { UseGpu = false, UseEGL = false, EnableSessionManagement = false })
-                            //.With(new AvaloniaNativePlatformOptions { UseGpu = true })
+                            //.With(new AvaloniaNativePlatformOptions { UseGpu = false })
                             .UsePlatformDetect()
                             .LogToTrace();
     }

@@ -349,7 +349,7 @@ namespace MpWpfApp {
             var presetValues = await PrepareParameterValueModelsAsync();
 
             foreach (var paramVal in presetValues) {                                
-                var naipvm = await CreateParameterViewModel(paramVal);
+                var naipvm = await CreateParameterViewModelAsync(paramVal);
                 Items.Add(naipvm);
             }
 
@@ -366,7 +366,7 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
-        public async Task<MpPluginParameterViewModelBase> CreateParameterViewModel(MpPluginPresetParameterValue aipv) {
+        public async Task<MpPluginParameterViewModelBase> CreateParameterViewModelAsync(MpPluginPresetParameterValue aipv) {
             MpPluginParameterControlType controlType = AnalyzerFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId).controlType;
 
             MpPluginParameterViewModelBase naipvm = null;
@@ -480,7 +480,7 @@ namespace MpWpfApp {
                         Task.Run(async () => { 
                             await Preset.WriteToDatabaseAsync();
                             HasModelChanged = false;
-                        });
+                        }).FireAndForgetSafeAsync(this);
                     }
                     break;
                 case nameof(IsLabelReadOnly):
@@ -512,7 +512,7 @@ namespace MpWpfApp {
                             paramVal = paramFormat.values[0].value;
                         }
                     }
-                    var newPresetVal = await MpPluginPresetParameterValue.Create(
+                    var newPresetVal = await MpPluginPresetParameterValue.CreateAsync(
                         presetId: Preset.Id,
                         paramEnumId: paramFormat.paramId,
                         value: paramVal

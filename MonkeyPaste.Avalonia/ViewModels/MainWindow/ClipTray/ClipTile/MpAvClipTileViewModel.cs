@@ -38,7 +38,6 @@ namespace MonkeyPaste.Avalonia {
         private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
         //private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
 
-        private int _lastQueryOffset = -1;
 
         private DispatcherTimer _timer;
 
@@ -848,8 +847,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
-            switch(msg) {
-            }
+
         }
 
         #endregion
@@ -1606,20 +1604,20 @@ namespace MonkeyPaste.Avalonia {
 
         public event EventHandler OnUiUpdateRequest;
         public event EventHandler OnScrollToHomeRequest;
-        public event EventHandler OnFocusRequest;
+        //public event EventHandler OnFocusRequest;
         public event EventHandler OnSyncModels;
 
-        public event EventHandler<Point> OnScrollOffsetRequest;
+        //public event EventHandler<Point> OnScrollOffsetRequest;
         public event EventHandler<object> OnPastePortableDataObject;
 
         public event EventHandler<double> OnScrollWheelRequest;
-        public event EventHandler OnFitContentRequest;
+        //public event EventHandler OnFitContentRequest;
         //public event EventHandler OnSubSelected;
 
         public event EventHandler OnMergeRequest;
-        public event EventHandler<bool> OnUiResetRequest;
+        //public event EventHandler<bool> OnUiResetRequest;
         public event EventHandler OnClearTemplatesRequest;
-        public event EventHandler OnCreateTemplatesRequest;
+        //public event EventHandler OnCreateTemplatesRequest;
         #endregion
 
 
@@ -1631,7 +1629,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipTileViewModel(MpAvClipTrayViewModel parent) : base(parent) {
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
-            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+            //MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             IsBusy = true;
         }
 
@@ -1858,17 +1856,17 @@ namespace MonkeyPaste.Avalonia {
             OnSyncModels?.Invoke(this, null);
         }
 
-        public void RequestScrollOffset(Point p) {
-            OnScrollOffsetRequest?.Invoke(this, p);
-        }
+        //public void RequestScrollOffset(Point p) {
+        //    OnScrollOffsetRequest?.Invoke(this, p);
+        //}
 
         public void RequestPastePortableDataObject(object portableDataObjectOrCopyItem) {
             OnPastePortableDataObject?.Invoke(this, portableDataObjectOrCopyItem);
         }
 
-        public void RequestFitContent() {
-            OnFitContentRequest?.Invoke(this, null);
-        }
+        //public void RequestFitContent() {
+        //    OnFitContentRequest?.Invoke(this, null);
+        //}
 
 
         public void RequestMerge() {
@@ -1879,9 +1877,9 @@ namespace MonkeyPaste.Avalonia {
             OnClearTemplatesRequest?.Invoke(this, null);
         }
 
-        public void RequestCreateHyperlinks() {
-            OnCreateTemplatesRequest?.Invoke(this, null);
-        }
+        //public void RequestCreateHyperlinks() {
+        //    OnCreateTemplatesRequest?.Invoke(this, null);
+        //}
 
         public void RequestScrollWheelChange(double delta) {
             OnScrollWheelRequest?.Invoke(this, delta);
@@ -2154,7 +2152,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        protected override async void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+        protected override  void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
                 if (sc.CommandParameter == CopyItemId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(SelfBindingRef));

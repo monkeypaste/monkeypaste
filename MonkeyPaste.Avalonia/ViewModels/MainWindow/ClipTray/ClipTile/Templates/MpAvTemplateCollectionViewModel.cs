@@ -210,7 +210,7 @@ namespace MonkeyPaste.Avalonia {
                 //Items.Remove(toRemove_tvm);
                 //OnPropertyChanged(nameof(Items));
 
-                Dispatcher.UIThread.Post(async () => {
+                //Dispatcher.UIThread.Post(async () => {
                     //var ctv = Application.Current.MainWindow.GetVisualDescendents<MpRtbContentView>()
                     //                                        .FirstOrDefault(x => x.DataContext == Parent);
                     //if (ctv == null) {
@@ -218,7 +218,7 @@ namespace MonkeyPaste.Avalonia {
                     //}
 
                     //await MpContentDocumentRtfExtension.LoadTemplates(ctv.Rtb);
-                });
+                //});
             }
         }
 

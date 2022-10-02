@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
 using System.Windows.Input;
+using Avalonia.Controls;
+using Avalonia.Media.Imaging;
 using Avalonia.Threading;
-using Microsoft.Win32;
 using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -155,6 +155,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task SetUserIconToCurrentHexColorAsync(string hexColor, MpIUserIconViewModel uivm) {
+            await Task.Delay(1);
             //var bmpSrc = (Bitmap)new BitmapImage(new Uri(MpPrefViewModel.Instance.AbsoluteResourcesPath + @"/Images/texture.png"));
             //bmpSrc = bmpSrc.Tint(hexColor.ToWinMediaColor());
             //MpIcon icon ;
@@ -179,43 +180,54 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand SelectImagePathCommand => new MpAsyncCommand<object>(
             async (args) => {
-                //var uivm = args as MpIUserIconViewModel;
-                //if(uivm == null) {
-                //    throw new Exception("SelectImagePathCommand require MpIUserIconViewModel argument");
-                //}
+                var uivm = args as MpIUserIconViewModel;
+                if (uivm == null) {
+                    throw new Exception("SelectImagePathCommand require MpIUserIconViewModel argument");
+                }
 
                 //var openFileDialog = new OpenFileDialog() {
                 //    Filter = "Image|*.png;*.gif;*.jpg;*.jpeg;*.bmp",
                 //    Title = "Select Image for Icon",
                 //    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
                 //};
-                //MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
 
-                //MpContextMenuView.Instance.CloseMenu();
-                //bool? openResult = openFileDialog.ShowDialog();
-                //if (openResult != null && openResult.Value) {
-                //    string imagePath = openFileDialog.FileName;
-                //    var bmpSrc = (BitmapSource)new BitmapImage(new Uri(imagePath));
+                MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
 
-                //    MpIcon icon = null;
-                //    if(uivm.IconId == 0) {
-                //        // likely means its current icon is a default reference to a parent
-                //        icon = await MpIcon.Create(
-                //            iconImgBase64: bmpSrc.ToBase64String(), 
-                //            createBorder: false);
-                //        uivm.IconId = icon.Id;
-                //    } else {
-                //        var img = await MpDb.GetItemAsync<MpDbImage>(icon.IconImageId);
-                //        img.ImageBase64 = bmpSrc.ToBase64String();
-                //        await img.WriteToDatabaseAsync();
+                var selectedImagePath = await new OpenFileDialog() {
+                    Filters = new List<FileDialogFilter>() {
+                        new FileDialogFilter() {
+                            Name = "Image",
+                            Extensions = new List<string>("png,gif,jpg,jpeg,bmp".Split(","))
+                            }},
+                    Title = "Select Image for Icon",
+                    Directory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+                }.ShowAsync(MpAvMainWindow.Instance);
+                
+                MpAvMenuExtension.CloseMenu();
+                
+                if (selectedImagePath != null && selectedImagePath.Length == 1 && string.IsNullOrEmpty(selectedImagePath[0])) {
+                    string imagePath = selectedImagePath[0];
+                    var bmpSrc = new Bitmap(imagePath); 
 
-                //        await icon.CreateOrUpdateBorderAsync();
-                //    }
-                //    uivm.OnPropertyChanged(nameof(uivm.IconId));
+                    MpIcon icon = null;
+                    if (uivm.IconId == 0) {
+                        // likely means its current icon is a default reference to a parent
+                        icon = await MpIcon.Create(
+                            iconImgBase64: bmpSrc.ToBase64String(),
+                            createBorder: false);
+                        uivm.IconId = icon.Id;
+                    } else {
+                        var img = await MpDb.GetItemAsync<MpDbImage>(icon.IconImageId);
+                        img.ImageBase64 = bmpSrc.ToBase64String();
+                        await img.WriteToDatabaseAsync();
 
-                //    //uivm.SetIconCommand.Execute(icon);
-                //}
-                //MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
+                        await icon.CreateOrUpdateBorderAsync();
+                    }
+                    uivm.OnPropertyChanged(nameof(uivm.IconId));
+
+                    //uivm.SetIconCommand.Execute(icon);
+                }
+                MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
             });
 
         public ICommand ChangeIconCommand => new MpCommand<object>(

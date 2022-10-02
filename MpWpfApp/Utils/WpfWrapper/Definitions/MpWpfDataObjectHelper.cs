@@ -65,7 +65,7 @@ namespace MpWpfApp {
         }
 
         #region MpIExternalPasteHandler Implementation
-        public async Task PasteDataObject(MpPortableDataObject mpdo, object handleOrProcessInfo, bool finishWithEnterKey = false) {
+        public async Task PasteDataObject(MpPortableDataObject mpdo, object handleOrProcessInfo) {
             if(handleOrProcessInfo == null) {
                 Debugger.Break();
             }
@@ -78,7 +78,7 @@ namespace MpWpfApp {
                 Debugger.Break();
             }
 
-            await PasteDataObjectAsync(mpdo, pi, finishWithEnterKey);
+            await PasteDataObjectAsync(mpdo, pi);
         }
 
         #endregion
@@ -104,7 +104,7 @@ namespace MpWpfApp {
             return MpClipboardHandlerCollectionViewModel.Instance.ReadClipboardOrDropObject(null);
         }
 
-        public async Task PasteDataObjectAsync(MpPortableDataObject mpdo, MpProcessInfo pi, bool finishWithEnterKey = false) {
+        public async Task PasteDataObjectAsync(MpPortableDataObject mpdo, MpProcessInfo pi) {
             string pasteCmdKeyString = "^v";
             var avm = MpAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppPath.ToLower() == pi.ProcessPath.ToLower());
             if(avm != null && avm.PasteShortcutViewModel != null) {
@@ -114,7 +114,7 @@ namespace MpWpfApp {
             var pasteItem = new MpPasteItem() {
                 PortableDataObject = mpdo,
                 ProcessInfo = pi,
-                FinishWithEnterKey = finishWithEnterKey,
+                FinishWithEnterKey = false,
                 PasteCmdKeyString = pasteCmdKeyString
             };
             _pasteQueue.Enqueue(pasteItem);

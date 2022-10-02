@@ -46,7 +46,7 @@ namespace MpWpfApp {
                 MpContextMenuView.Instance.DataContext = await BindingContext.GetAddTemplateMenuItemViewModel();
                 MpContextMenuView.Instance.PlacementTarget = this;
                 MpContextMenuView.Instance.IsOpen = true;
-            });
+            }).FireAndForgetSafeAsync(BindingContext);
         }
 
         private void AddButton_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e) {

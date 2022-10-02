@@ -18,7 +18,7 @@ using Xamarin.Forms;
 namespace MonkeyPaste {
     public class MpHttpPlugin : MpIAnalyzeAsyncComponent {
         #region Private Variables
-        private bool _showDebug = true;
+        /*private bool _showDebug = true;
 
         private string _testResponse = @"{
 	""categories"": [],
@@ -477,7 +477,7 @@ namespace MonkeyPaste {
 		""width"": 640,
 		""format"": ""Bmp""
 	}
-}";
+}";*/
         private IEnumerable<MpIParameterKeyValuePair> _reqParams;
         private MpHttpTransactionFormat _httpTransactionFormat;
         private JToken _rootResponseToken;
@@ -814,7 +814,7 @@ namespace MonkeyPaste {
                     }
                     if (a.score != null) {
                         a.score.SetValue(curToken, _reqParams, idx);
-                        a.score = a.score.omitIfPathNotFound && a.score.value == null ? null : a.score;
+                        a.score = a.score.omitIfPathNotFound && a.score.value == default ? null : a.score;
                     }
                     a.children = CreateAnnotations(a.children, curToken, 0);
 

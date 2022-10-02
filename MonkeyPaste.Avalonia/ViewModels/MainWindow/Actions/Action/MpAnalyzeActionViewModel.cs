@@ -72,7 +72,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Overrides
 
-        public override async Task PerformAction(object arg) {
+        public override async Task PerformActionAsync(object arg) {
             if (!CanPerformAction(arg)) {
                 return;
             }
@@ -92,7 +92,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if(aipvm.Parent.LastTransaction != null && aipvm.Parent.LastTransaction.Response != null) {
-                    await base.PerformAction(
+                    await base.PerformActionAsync(
                         new MpAnalyzeOutput() {
                             Previous = arg as MpAvActionOutput,
                             CopyItem = actionInput.CopyItem,

@@ -236,7 +236,7 @@ namespace MonkeyPaste {
         }
         #region Sync
 
-        public async Task<object> CreateFromLogs(string iconGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+        public async Task<object> CreateFromLogsAsync(string iconGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             var icon = await MpDb.GetDbObjectByTableGuidAsync<MpIcon>(iconGuid);
 
             foreach (var li in logs) {
@@ -280,7 +280,7 @@ namespace MonkeyPaste {
             return icon;
         }
 
-        public async Task<object> DeserializeDbObject(string objStr) {
+        public async Task<object> DeserializeDbObjectAsync(string objStr) {
             await Task.Delay(0);
             var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
             var icon = new MpIcon() {
@@ -304,7 +304,7 @@ namespace MonkeyPaste {
             return icon;
         }
 
-        public async Task<string> SerializeDbObject() {
+        public async Task<string> SerializeDbObjectAsync() {
             await Task.Delay(1);
             return string.Format(
                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}{0}",
@@ -323,7 +323,7 @@ namespace MonkeyPaste {
             return typeof(MpIcon);
         }
 
-        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+        public async Task<Dictionary<string, string>> DbDiffAsync(object drOrModel) {
             await Task.Delay(1);
 
             MpIcon other = null;

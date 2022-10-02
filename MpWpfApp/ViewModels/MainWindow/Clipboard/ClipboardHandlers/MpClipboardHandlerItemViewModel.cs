@@ -17,8 +17,7 @@ namespace MpWpfApp {
         MpIHoverableViewModel,
         MpIMenuItemViewModel, 
         MpITreeItemViewModel,
-        MpIBoxViewModel,
-        INotifyDataErrorInfo {
+        MpIBoxViewModel {
 
         #region Private
 
@@ -68,16 +67,6 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region INotifyDataErrorInfo Implementation
-        public IEnumerable GetErrors(string propertyName) {
-            throw new NotImplementedException();
-        }
-
-        public bool HasErrors { get; }
-
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
-        #endregion
 
         #region State
 

@@ -118,6 +118,8 @@ namespace MpWpfApp {
             }
         }
 
+        public bool IgnoreClipboardChanges { get; set; }
+
 
         #endregion
 

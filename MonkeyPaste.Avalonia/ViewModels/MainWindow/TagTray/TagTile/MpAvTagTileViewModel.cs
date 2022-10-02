@@ -882,9 +882,14 @@ namespace MonkeyPaste.Avalonia {
                     if (!isLinked) {
                         var ncit = await MpCopyItemTag.Create(TagId, ciid);
                         await ncit.WriteToDatabaseAsync();
+                        Task.Run(async () => {
+                            var nci = await MpDb.GetItemAsync<MpCopyItem>(ciid);
+                            OnCopyItemLinked?.Invoke(this, nci);
+                        }).FireAndForgetSafeAsync(this);
                     }
 
                     IsBusy = false;
+                    
                 }
             });
 
@@ -904,6 +909,10 @@ namespace MonkeyPaste.Avalonia {
                     }
                     await cit.DeleteFromDatabaseAsync();
 
+                    Task.Run(async () => {
+                        var nci = await MpDb.GetItemAsync<MpCopyItem>(ciid);
+                        OnCopyItemUnlinked?.Invoke(this, nci);
+                    }).FireAndForgetSafeAsync(this);
                     IsBusy = false;
                 }
             });

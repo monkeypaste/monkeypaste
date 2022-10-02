@@ -100,7 +100,7 @@ namespace MpWpfApp {
 
         #region Protected Overrides
 
-        public override async Task PerformAction(object arg) {
+        public override async Task PerformActionAsync(object arg) {
             if (!CanPerformAction(arg)) {
                 return;
             }
@@ -155,17 +155,17 @@ namespace MpWpfApp {
                 CommandPresetGuid = outputItem == null ? null : SelectedPreset.PresetGuid
             };
 
-            base.PerformAction(macroOutput).FireAndForgetSafeAsync(this);
+            base.PerformActionAsync(macroOutput).FireAndForgetSafeAsync(this);
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpPluginPreset aip && aip.Id == AnalyticItemPresetId) {
-                Task.Run(Validate);
+                Task.Run(ValidateAsync);
             }
         }
 
-        protected override async Task<bool> Validate() {
-            await base.Validate();
+        protected override async Task<bool> ValidateAsync() {
+            await base.ValidateAsync();
             if (!IsValid) {
                 return IsValid;
             }
@@ -173,7 +173,7 @@ namespace MpWpfApp {
             var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(AnalyticItemPresetId);
             if (aipvm == null) {
                 ValidationText = $"Analyzer for Action '{FullName}' not found";
-                await ShowValidationNotification();
+                await ShowValidationNotificationAsync();
             } else {
                 ValidationText = string.Empty;
             }

@@ -4,13 +4,13 @@ using Xamarin.Forms;
 
 namespace MonkeyPaste {
     public class MpNavigator : MpINavigate {
-        public async Task NavigateTo(string route) {
+        public async Task NavigateToAsync(string route) {
             await Shell.Current.GoToAsync(route);
         }
-        public async Task PushModal(Page page) {
+        public async Task PushModalAsync(Page page) {
             await Shell.Current.Navigation.PushModalAsync(page);
         }
-        public async Task PopModal() {
+        public async Task PopModalAsync() {
             await Shell.Current.Navigation.PopModalAsync();
         }
     }

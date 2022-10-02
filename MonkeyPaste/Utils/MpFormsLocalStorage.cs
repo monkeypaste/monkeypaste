@@ -8,7 +8,7 @@ namespace MonkeyPaste
 {
     public class MpFormsLocalStorage : MpIPhotoGalleryManager {
         public const string FavoritePhotosKey = "FavoritePhotos";
-        public async Task<List<string>> Get()
+        public async Task<List<string>> GetAsync()
         {
             await Task.Delay(1);
             if (Application.Current.Properties.ContainsKey(FavoritePhotosKey))
@@ -19,9 +19,9 @@ namespace MonkeyPaste
             return new List<string>();
         }
 
-        public async Task Store(string filename)
+        public async Task StoreAsync(string filename)
         {
-            var filenames = await Get();
+            var filenames = await GetAsync();
             filenames.Add(filename);
             var json = JsonConvert.SerializeObject(filenames);
             Application.Current.Properties[FavoritePhotosKey] = json;

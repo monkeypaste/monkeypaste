@@ -14,7 +14,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Avalonia.Threading;
 using Avalonia.Controls.Primitives;
-using static SQLite.SQLite3;
 using System.Diagnostics;
 using System.Threading.Tasks;
 

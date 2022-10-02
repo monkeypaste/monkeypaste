@@ -31,7 +31,7 @@ namespace MpWpfApp {
 
             var ciTransactions = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemIdAsync(copyItemId);
             foreach(var cit in ciTransactions) {
-                var rvm = await CreateReportViewModel(cit.ResponseJson);
+                var rvm = await CreateReportViewModelAsync(cit.ResponseJson);
                 Items.Add(rvm);
             }
             if(Items.Count > 0) {
@@ -44,7 +44,7 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
-        public async Task<MpAnalysisReportViewModel> CreateReportViewModel(string responseStr) {
+        public async Task<MpAnalysisReportViewModel> CreateReportViewModelAsync(string responseStr) {
             var rvm = new MpAnalysisReportViewModel(this);
             await rvm.InitializeAsync(responseStr);
             return rvm;

@@ -1,13 +1,48 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
+  <!-- WINDOWS -->
+  <!--<PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>disable</Nullable>
-    <!--Avalonia doesen't support TrimMode=link currently,but we are working on that https://github.com/AvaloniaUI/Avalonia/issues/6892 -->
     <TrimMode>copyused</TrimMode>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
+  <PropertyGroup> 
+    <RunningOnWindows>True</RunningOnWindows>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>WINDOWS</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>WINDOWS</DefineConstants>
+  </PropertyGroup>
+   <PropertyGroup> 
+    <RunningOnWindows>true</RunningOnWindows>
+  </PropertyGroup>-->
+  
+  <!-- LINUX-->
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <TrimMode>copyused</TrimMode>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup> 
+    <RunningOnWindows>True</RunningOnWindows>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>LINUX</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>LINUX</DefineConstants>
+  </PropertyGroup>
+   <PropertyGroup> 
+    <RunningOnWindows>false</RunningOnWindows>
+  </PropertyGroup>
+  
   <ItemGroup>
     <None Remove=".gitignore" />
     <None Remove="Mono.GtkSharp" />
@@ -29,21 +64,21 @@
     <PackageReference Include="GioSharp" Version="3.24.24.38" />
     <PackageReference Include="GtkSharp" Version="3.24.24.38" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
-    <PackageReference Include="PropertyChanged.Fody" Version="4.0.3" />
+    <PackageReference Include="PropertyChanged.Fody" Version="4.0.3"  PrivateAssets="All" />
     <PackageReference Include="SharpHook" Version="3.1.1" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
     <PackageReference Include="Avalonia.Gtk3" Version="0.8.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
-    <ProjectReference Include="..\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj" />
+    <ProjectReference Include="..\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj"  Condition="$(RunningOnWindows)" />
     <ProjectReference Include="..\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utils\Helpers\" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="PresentationFramework">
+    <Reference Include="PresentationFramework"  Condition="$(RunningOnWindows)">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\PresentationFramework.dll</HintPath>
     </Reference>
   </ItemGroup>

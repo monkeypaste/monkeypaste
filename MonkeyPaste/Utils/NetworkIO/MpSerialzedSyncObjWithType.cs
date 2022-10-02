@@ -12,7 +12,7 @@ namespace MonkeyPaste {
 
 		public static string ConvertTo(MpISyncableDbObject sdbo) {
 			string objTypeStr = sdbo.GetDbObjectType().ToString();
-			var objJson = sdbo.SerializeDbObject();
+			var objJson = sdbo.SerializeDbObjectAsync();
 			return string.Format(@"{0},{1}", objTypeStr, objJson);
 		}
 

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 
 namespace MonkeyPaste.Common {
-    public class MpPoint : ICloneable, INotifyPropertyChanged {
+    public class MpPoint : ICloneable { //, INotifyPropertyChanged {
         #region Statics
         public static MpPoint Zero => new MpPoint(0, 0);
 
@@ -47,7 +47,7 @@ namespace MonkeyPaste.Common {
 
         #region Events
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        //public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
 

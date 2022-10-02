@@ -21,9 +21,6 @@ namespace MonkeyPaste.Avalonia {
         public static event EventHandler FrameworkShutdown;
         public static IClassicDesktopStyleApplicationLifetime Desktop { get; private set; }
         public App() {
-            if(MpAvCefNetApplication.UseCefNet) {
-                MpAvCefNetApplication.ResetEnv();
-            }
             DataContext = MpAvSystemTrayViewModel.Instance;
         }
         public override void Initialize() { 

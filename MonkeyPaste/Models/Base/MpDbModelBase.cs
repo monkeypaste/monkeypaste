@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using SQLite;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public abstract class MpDbModelBase : IComparer {
@@ -108,8 +108,8 @@ namespace MonkeyPaste {
             }
         }
 
-        public static async Task<object> CreateOrUpdateFromLogs(
-            List<MonkeyPaste.MpDbLog> logs,
+        public static async Task<object> CreateOrUpdateFromLogsAsync(
+            List<MpDbLog> logs,
             string fromClientGuid) {
             string tableName = logs[0].DbTableName;
             var tm = await MpDb.GetTableMappingAsync(tableName);
@@ -217,7 +217,7 @@ namespace MonkeyPaste {
         //}
 
         //private void LoadDataRow(DataRow dr) {
-        //    var tn = GetType().ToString().Replace("MonkeyPaste.", string.Empty);
+        //    var tn = GetType().ToString().Replace("", string.Empty);
         //    var tm = MpDb.GetTableMapping(tn);
 
         //    foreach (var rowProp in dr.GetType().GetProperties()) {

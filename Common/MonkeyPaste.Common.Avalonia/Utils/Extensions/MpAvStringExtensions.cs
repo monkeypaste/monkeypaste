@@ -1,8 +1,8 @@
 ﻿using HtmlAgilityPack;
-using MonkeyPaste.Common.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
@@ -59,11 +59,12 @@ namespace MonkeyPaste.Common.Avalonia {
             }
             return text;
         }
-
         public static string ToRichHtmlText(this string str, string strFormat) {
             if(str.IsStringRichText()) {
-                string qhtml = MpWpfRtfToHtmlConverter.ConvertFormatToHtml(str, strFormat);
+#if WINDOWS
+                string qhtml = MonkeyPaste.Common.Wpf.MpWpfRtfToHtmlConverter.ConvertFormatToHtml(str, strFormat);
                 return qhtml;
+#endif
             }  else if(str.IsStringCsv()) {
                 // TODO create quill tables here
 

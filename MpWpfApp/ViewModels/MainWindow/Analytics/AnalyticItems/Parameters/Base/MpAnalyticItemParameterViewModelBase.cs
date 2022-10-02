@@ -439,7 +439,7 @@ namespace MpWpfApp {
                             //    cbpvm.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
                             //    cbpvm.Items.ForEach(x => x.HasModelChanged = false);
                             //}
-                        });
+                        }).FireAndForgetSafeAsync(this);
                     }
                     break;
                 case nameof(ValidationMessage):

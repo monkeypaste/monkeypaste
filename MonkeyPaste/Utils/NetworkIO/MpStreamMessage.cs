@@ -68,7 +68,7 @@ namespace MonkeyPaste {
 
         #region Sync Phase Message Builders
         public static async Task<MpStreamMessage> CreateWebDeviceRequest(MpDeviceEndpoint dep) {
-            string depStr = await dep.SerializeDbObject();
+            string depStr = await dep.SerializeDbObjectAsync();
             var sm = await MpStreamMessage.Create(
                 MpSyncMesageType.WebDeviceRequest,
                 dep.DeviceGuid,
@@ -78,7 +78,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<MpStreamMessage> CreateHandshakeRequest(MpDeviceEndpoint dep) {
-            string depStr = await dep.SerializeDbObject();
+            string depStr = await dep.SerializeDbObjectAsync();
             var sm = await MpStreamMessage.Create(
                 MpSyncMesageType.HandshakeRequest,
                 dep.DeviceGuid,
@@ -88,7 +88,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<MpStreamMessage> CreateHandshakeResponse(MpDeviceEndpoint dep, string toGuid) {
-            string depStr = await dep.SerializeDbObject();
+            string depStr = await dep.SerializeDbObjectAsync();
             var sm = await MpStreamMessage.Create(
                 MpSyncMesageType.HandshakeResponse,
                 dep.DeviceGuid,
@@ -98,7 +98,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<MpStreamMessage> CreateDbLogRequest(MpDeviceEndpoint dep, string toGuid, DateTime lastSyncUtc) {
-            string depStr = await dep.SerializeDbObject();
+            string depStr = await dep.SerializeDbObjectAsync();
             var sm = await MpStreamMessage.Create(
                 MpSyncMesageType.DbLogRequest,
                 dep.DeviceGuid,
@@ -108,7 +108,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<MpStreamMessage> CreateDbLogResponse(MpDeviceEndpoint dep, string toGuid, string logDbMessageStr) {
-            string depStr = await dep.SerializeDbObject();
+            string depStr = await dep.SerializeDbObjectAsync();
             var sm = await MpStreamMessage.Create(
                 MpSyncMesageType.DbLogResponse,
                 dep.DeviceGuid,
@@ -118,7 +118,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<MpStreamMessage> CreateFlipRequest(MpDeviceEndpoint dep, string toGuid) {
-            string depStr = await dep.SerializeDbObject();
+            string depStr = await dep.SerializeDbObjectAsync();
             // once B has needed A data it will make a flipRequest = true
             // once A has needed B data it will make a flipRequest of false to finish sync
             var sm = await MpStreamMessage.Create(
@@ -130,7 +130,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<MpStreamMessage> CreateDisconnectRequest(MpDeviceEndpoint dep, string toGuid, DateTime newSyncUtc) {
-            string depStr = await dep.SerializeDbObject();
+            string depStr = await dep.SerializeDbObjectAsync();
             var sm = await MpStreamMessage.Create(
                 MpSyncMesageType.DisconnectRequest,
                 dep.DeviceGuid,
@@ -140,7 +140,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<MpStreamMessage> CreateDisconnectResponse(MpDeviceEndpoint dep, string toGuid, DateTime newSyncUtc) {
-            string depStr = await dep.SerializeDbObject();
+            string depStr = await dep.SerializeDbObjectAsync();
             var sm = await MpStreamMessage.Create(
                 MpSyncMesageType.DisconnectRequest,
                 dep.DeviceGuid,
@@ -186,14 +186,14 @@ namespace MonkeyPaste {
             return (int)Header.MessageType > (int)MpSyncMesageType.ErrorBase;
         }
 
-        public async Task<string> SerializeDbObject() {
+        public async Task<string> SerializeDbObjectAsync() {
             await Task.Delay(1);
 
             //format: <header><content><Eof>
             return string.Format(
                 @"{1}{0}{2}{0}{3}",
                 HeaderContentParseToken,
-                Header.SerializeDbObject(),
+                Header.SerializeDbObjectAsync(),
                 Content,
                 EofToken);
         }
@@ -202,15 +202,15 @@ namespace MonkeyPaste {
             return typeof(MpStreamMessage);
         }
 
-        public Task<object> DeserializeDbObject(string objStr) {
+        public Task<object> DeserializeDbObjectAsync(string objStr) {
             throw new NotImplementedException();
         }
 
-        public Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+        public Task<Dictionary<string, string>> DbDiffAsync(object drOrModel) {
             throw new NotImplementedException();
         }
 
-        public Task<object> CreateFromLogs(string dboGuid, List<MpDbLog> logs, string fromClientGuid) {
+        public Task<object> CreateFromLogsAsync(string dboGuid, List<MpDbLog> logs, string fromClientGuid) {
             throw new NotImplementedException();
         }
 

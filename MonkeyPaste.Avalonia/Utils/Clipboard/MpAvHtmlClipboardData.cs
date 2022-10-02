@@ -5,7 +5,7 @@ using Avalonia.Threading;
 using CefNet.Avalonia;
 using MonkeyPaste.Avalonia.Utils.ToolWindow.Win;
 using MonkeyPaste.Common;
-using Org.BouncyCastle.Bcpg.OpenPgp;
+//using Org.BouncyCastle.Bcpg.OpenPgp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

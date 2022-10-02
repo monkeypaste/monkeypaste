@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public interface MpIPhotoGalleryManager {
-        Task Store(string filename);
-        Task<List<string>> Get();
+        Task StoreAsync(string filename);
+        Task<List<string>> GetAsync();
     }
 }

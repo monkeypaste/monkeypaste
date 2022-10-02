@@ -149,7 +149,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public static async Task<MpAction> Create(
+        public static async Task<MpAction> CreateAsync(
             MpActionType actionType = MpActionType.None,
             int actionObjId = 0,
             string label = "",

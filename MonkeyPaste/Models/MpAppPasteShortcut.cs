@@ -26,7 +26,7 @@ namespace MonkeyPaste {
 
         public string PasteCmdKeyString { get; set; } = "Control+V";
 
-        public static async Task<MpAppPasteShortcut> Create(
+        public static async Task<MpAppPasteShortcut> CreateAsync(
             int appId = 0,
             string pasteCmdKeyString = "Control+V") {
             var aps = new MpAppPasteShortcut() {

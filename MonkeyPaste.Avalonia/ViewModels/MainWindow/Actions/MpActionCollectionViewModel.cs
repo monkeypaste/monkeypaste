@@ -482,7 +482,7 @@ namespace MonkeyPaste.Avalonia {
                                   
                  MpTriggerType tt = args == null ? MpTriggerType.None : (MpTriggerType)args;
                  
-                 MpAction na = await MpAction.Create(
+                 MpAction na = await MpAction.CreateAsync(
                          label: GetUniqueTriggerName(tt.ToString()),
                          actionType: MpActionType.Trigger,
                          actionObjId: (int)tt,

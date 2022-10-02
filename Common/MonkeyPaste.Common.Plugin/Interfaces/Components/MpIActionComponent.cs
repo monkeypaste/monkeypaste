@@ -6,7 +6,7 @@ namespace MonkeyPaste.Common.Plugin {
         //Task<bool> Validate();
         //string ValidationText { get; set; }
 
-        Task PerformAction(object arg);
+        Task PerformActionAsync(object arg);
         event EventHandler<object> OnActionComplete;
     }
 

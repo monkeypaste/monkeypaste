@@ -98,7 +98,7 @@ namespace MpWpfApp {
 
         #region Protected Overrides
 
-        public override async Task PerformAction(object arg) {
+        public override async Task PerformActionAsync(object arg) {
             if (!CanPerformAction(arg)) {
                 return;
             }
@@ -121,7 +121,7 @@ namespace MpWpfApp {
                 outputData += tfp;
             }
 
-            await base.PerformAction(
+            await base.PerformActionAsync(
                     new MpFileWriterOutput() {
                         Previous = arg as MpActionOutput,
                         CopyItem = actionInput.CopyItem,
@@ -132,18 +132,18 @@ namespace MpWpfApp {
         #endregion
 
         #region Protected Methods
-        protected override async Task<bool> Validate() {
-            await base.Validate();
+        protected override async Task<bool> ValidateAsync() {
+            await base.ValidateAsync();
             if (!IsValid) {
                 return IsValid;
             }
 
             if (string.IsNullOrWhiteSpace(FileSystemPath)) {
                 ValidationText = $"File Writer Path for Action '{FullName}' not set";
-                await ShowValidationNotification();
+                await ShowValidationNotificationAsync();
             } else if (!IsValidFileSystemPath) {
                 ValidationText = $"File Writer Path '{FileSystemPath}' for Action '{FullName}' not found.";
-                await ShowValidationNotification();
+                await ShowValidationNotificationAsync();
             } else {
                 ValidationText = string.Empty;
             }
@@ -161,7 +161,7 @@ namespace MpWpfApp {
                         return;
                     }
                     if (IsEnabled.HasValue && IsEnabled.Value) {
-                        ReEnable().FireAndForgetSafeAsync(this);
+                        ReEnableAsync().FireAndForgetSafeAsync(this);
                     }
                     break;
             }
@@ -189,7 +189,7 @@ namespace MpWpfApp {
                 MpMainWindowViewModel.Instance.IsShowingDialog = false;
                 if (result) {
                     FileSystemPath = dlg.ResultPath;
-                    await ReEnable();
+                    await ReEnableAsync();
                 }
             });
 

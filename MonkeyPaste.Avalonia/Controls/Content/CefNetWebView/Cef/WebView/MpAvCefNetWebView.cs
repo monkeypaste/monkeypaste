@@ -12,14 +12,12 @@ using System.Collections.Concurrent;
 using System.Threading;
 using Avalonia.Input;
 using MonkeyPaste.Common.Avalonia;
-using CsvHelper;
 using Avalonia;
 using MonkeyPaste.Common;
 using Avalonia.Interactivity;
 using CefNet.Internal;
 using Avalonia.Controls;
 using Avalonia.Platform;
-using Cairo;
 
 namespace MonkeyPaste.Avalonia {
 

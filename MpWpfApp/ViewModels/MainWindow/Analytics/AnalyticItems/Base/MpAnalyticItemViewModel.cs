@@ -475,7 +475,7 @@ namespace MpWpfApp {
             return uniqueName + uniqueIdx;
         }
 
-        public virtual async Task<MpPluginParameterFormat> DeferredCreateParameterModel(MpPluginParameterFormat aip) {
+        public virtual async Task<MpPluginParameterFormat> DeferredCreateParameterModelAsync(MpPluginParameterFormat aip) {
             //used to load remote content and called from CreateParameterViewModel in preset
             await Task.Delay(1);
             return aip;
@@ -537,11 +537,11 @@ namespace MpWpfApp {
 
         
 
-        protected virtual async Task TransformContent() {
+        protected virtual async Task TransformContentAsync() {
             await Task.Delay(1);
         }
 
-        protected virtual async Task AppendContent() {
+        protected virtual async Task AppendContentAsync() {
             await Task.Delay(1);
         }
 
@@ -692,7 +692,7 @@ namespace MpWpfApp {
 
                     foreach(var presetValueModel in presetFormat.values) {
                         // only creat preset values in db, they will then be picked up when the preset vm is initialized
-                        var aipv = await MpPluginPresetParameterValue.Create(
+                        var aipv = await MpPluginPresetParameterValue.CreateAsync(
                             presetId: presetModel.Id, 
                             paramEnumId: presetValueModel.paramId,
                             value: presetValueModel.value

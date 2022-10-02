@@ -102,7 +102,7 @@ namespace MonkeyPaste {
         }
 
 
-        public async Task<object> CreateFromLogs(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+        public async Task<object> CreateFromLogsAsync(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             //await Task.Delay(1);
             //return MpDbModelBase.CreateOrUpdateFromLogs(logs, fromClientGuid);
 
@@ -137,7 +137,7 @@ namespace MonkeyPaste {
             return newTag;
         }
 
-        public async Task<object> DeserializeDbObject(string objStr) {
+        public async Task<object> DeserializeDbObjectAsync(string objStr) {
             var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
             await Task.Delay(0);
             var dbLog = new MpTag() {
@@ -149,7 +149,7 @@ namespace MonkeyPaste {
             return dbLog;
         }
 
-        public async Task<string> SerializeDbObject() {
+        public async Task<string> SerializeDbObjectAsync() {
             await Task.Delay(1);
 
             return string.Format(
@@ -165,7 +165,7 @@ namespace MonkeyPaste {
             return typeof(MpTag);
         }
 
-        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+        public async Task<Dictionary<string, string>> DbDiffAsync(object drOrModel) {
             await Task.Delay(1);
 
             MpTag other = null;

@@ -343,6 +343,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool IsProcessAdmin(IntPtr handle) {
+#if WINDOWS
             if (handle == null || handle == IntPtr.Zero) {
                 return false;
             }
@@ -374,8 +375,12 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine("IsProcessAdmin error: " + ex.ToString());
                 return true;
             }
+#endif
+#pragma warning disable CS0162 // Unreachable code detected
+            return false;
+#pragma warning restore CS0162 // Unreachable code detected
         }
 
-        #endregion
+#endregion
     }
 }

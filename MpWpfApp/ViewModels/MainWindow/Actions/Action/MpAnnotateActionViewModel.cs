@@ -59,7 +59,7 @@ namespace MpWpfApp {
 
         #region Protected Overrides
 
-        public override async Task PerformAction(object arg) {
+        public override async Task PerformActionAsync(object arg) {
             if (!CanPerformAction(arg)) {
                 return;
             }

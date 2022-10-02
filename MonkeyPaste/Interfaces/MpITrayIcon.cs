@@ -28,20 +28,20 @@ namespace MonkeyPaste {
         /// </summary>
         public void Remove();
 
-        /// <summary>
-        /// This event is raised when a user clicks on the notification icon.
-        /// </summary>
-        public event EventHandler<EventArgs> Click;
+        ///// <summary>
+        ///// This event is raised when a user clicks on the notification icon.
+        ///// </summary>
+        //public event EventHandler<EventArgs> Click;
 
-        /// <summary>
-        /// This event is raised when a user doubleclicks on the notification icon.
-        /// </summary>
-        public event EventHandler<EventArgs> DoubleClick;
+        ///// <summary>
+        ///// This event is raised when a user doubleclicks on the notification icon.
+        ///// </summary>
+        //public event EventHandler<EventArgs> DoubleClick;
 
-        /// <summary>
-        /// This event is raised when a user right-clicks on the notification icon.
-        /// </summary>
-        public event EventHandler<EventArgs> RightClick;
+        ///// <summary>
+        ///// This event is raised when a user right-clicks on the notification icon.
+        ///// </summary>
+        //public event EventHandler<EventArgs> RightClick;
     }
 }
 

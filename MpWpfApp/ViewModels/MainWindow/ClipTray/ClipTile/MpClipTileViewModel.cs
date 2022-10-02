@@ -39,9 +39,9 @@
 
         private List<string> _tempFileList = new List<string>();
         private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
-        private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
+        //private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
 
-        private int _lastQueryOffset = -1;
+        //private int _lastQueryOffset = -1;
 
         private DispatcherTimer _timer;
 
@@ -1328,7 +1328,7 @@
 
         public event EventHandler OnUiUpdateRequest;
         public event EventHandler OnScrollToHomeRequest;
-        public event EventHandler OnFocusRequest;
+        //public event EventHandler OnFocusRequest;
         public event EventHandler OnSyncModels;
 
         public event EventHandler<Point> OnScrollOffsetRequest;
@@ -1339,7 +1339,7 @@
         //public event EventHandler OnSubSelected;
 
         public event EventHandler OnMergeRequest;
-        public event EventHandler<bool> OnUiResetRequest;
+        //public event EventHandler<bool> OnUiResetRequest;
         public event EventHandler OnClearTemplatesRequest;
         public event EventHandler OnCreateTemplatesRequest;
         #endregion
@@ -1832,7 +1832,7 @@
             }
         }
 
-        protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             //if(MpDragDropManager.IsDragAndDrop) {
             //    return;
             //}

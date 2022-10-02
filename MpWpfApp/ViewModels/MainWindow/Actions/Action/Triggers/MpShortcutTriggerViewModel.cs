@@ -64,8 +64,8 @@ namespace MpWpfApp {
 
         #region Protected Methods
 
-        protected override async Task<bool> Validate() {
-            await base.Validate();
+        protected override async Task<bool> ValidateAsync() {
+            await base.ValidateAsync();
 
             if (!IsValid) {
                 return IsValid;
@@ -74,12 +74,12 @@ namespace MpWpfApp {
             var scvm = MpShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
             if (scvm == null) {
                 ValidationText = $"Shortcut for Trigger Action '{FullName}' not found";
-                await ShowValidationNotification();
+                await ShowValidationNotificationAsync();
             } else if (IsPerformingActionFromCommand) {
                 if(MpClipTrayViewModel.Instance.SelectedModels == null ||
                    MpClipTrayViewModel.Instance.SelectedModels.Count == 0) {
                     ValidationText = $"No content selected, cannot execute '{FullName}' ";
-                    await ShowValidationNotification();
+                    await ShowValidationNotificationAsync();
                 }
             } else {
                 ValidationText = string.Empty;
@@ -87,16 +87,16 @@ namespace MpWpfApp {
             return IsValid;
         }
 
-        protected override async Task Enable() {
-            await base.Enable();
+        protected override async Task EnableAsync() {
+            await base.EnableAsync();
             var scvm = MpShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
             if (scvm != null) {
                 scvm.RegisterActionComponent(this);
             }
         }
 
-        protected override async Task Disable() {
-            await base.Disable();
+        protected override async Task DisableAsync() {
+            await base.DisableAsync();
             var scvm = MpShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
             if (scvm != null) {
                 scvm.UnregisterActionComponent(this);

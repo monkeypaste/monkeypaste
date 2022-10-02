@@ -22,6 +22,7 @@ namespace MpWpfApp {
         private static Mutex SingleMutex;
         public static uint MessageId;
 
+#pragma warning disable VSTHRD100 // Avoid async void methods
         protected override async void OnStartup(StartupEventArgs e) {
             // single-instance stuff from https://stackoverflow.com/a/5919904/105028
 
@@ -93,6 +94,7 @@ namespace MpWpfApp {
             }
 
         }
+#pragma warning restore VSTHRD100 // Avoid async void methods
 
         public void Activate() {
             // Reactivate the main window
@@ -110,27 +112,27 @@ namespace MpWpfApp {
                     appPath: @"c:\windows\system32\notepad.exe",
                     appName: "Notepad");
 
-                var notepadSetting1 = await MpAppClipboardFormatInfo.Create(
+                var notepadSetting1 = await MpAppClipboardFormatInfo.CreateAsync(
                     appId: notepadApp.Id,
                     format: MpClipboardFormatType.Bitmap,
                     ignoreFormat: true);
 
-                var notepadSetting2 = await MpAppClipboardFormatInfo.Create(
+                var notepadSetting2 = await MpAppClipboardFormatInfo.CreateAsync(
                     appId: notepadApp.Id,
                     format: MpClipboardFormatType.Rtf,
                     ignoreFormat: true);
 
-                var notepadSetting3 = await MpAppClipboardFormatInfo.Create(
+                var notepadSetting3 = await MpAppClipboardFormatInfo.CreateAsync(
                     appId: notepadApp.Id,
                     format: MpClipboardFormatType.Text,
                     ignoreFormat: true);
 
-                var notepadSetting4 = await MpAppClipboardFormatInfo.Create(
+                var notepadSetting4 = await MpAppClipboardFormatInfo.CreateAsync(
                    appId: notepadApp.Id,
                    format: MpClipboardFormatType.Csv,
                    ignoreFormat: true);
 
-                var notepadSetting5 = await MpAppClipboardFormatInfo.Create(
+                var notepadSetting5 = await MpAppClipboardFormatInfo.CreateAsync(
                     appId: notepadApp.Id,
                     format: MpClipboardFormatType.FileDrop,
                     formatInfo: "txt");
@@ -141,27 +143,27 @@ namespace MpWpfApp {
                     appPath: @"c:\windows\explorer.exe",
                     appName: "Explorer");
 
-                var explorerSetting1 = await MpAppClipboardFormatInfo.Create(
+                var explorerSetting1 = await MpAppClipboardFormatInfo.CreateAsync(
                     appId: explorerApp.Id,
                     format: MpClipboardFormatType.Bitmap,
                     ignoreFormat: true);
 
-                var explorerSetting2 = await MpAppClipboardFormatInfo.Create(
+                var explorerSetting2 = await MpAppClipboardFormatInfo.CreateAsync(
                     appId: explorerApp.Id,
                     format: MpClipboardFormatType.Rtf,
                     ignoreFormat: true);
 
-                var explorerSetting3 = await MpAppClipboardFormatInfo.Create(
+                var explorerSetting3 = await MpAppClipboardFormatInfo.CreateAsync(
                     appId: explorerApp.Id,
                     format: MpClipboardFormatType.Text,
                     ignoreFormat: true);
 
-                var explorerSetting4 = await MpAppClipboardFormatInfo.Create(
+                var explorerSetting4 = await MpAppClipboardFormatInfo.CreateAsync(
                     appId: explorerApp.Id,
                     format: MpClipboardFormatType.Csv,
                     ignoreFormat: true);
 
-                var explorerSetting5 = await MpAppClipboardFormatInfo.Create(
+                var explorerSetting5 = await MpAppClipboardFormatInfo.CreateAsync(
                     appId: explorerApp.Id,
                     format: MpClipboardFormatType.FileDrop);
 
@@ -171,31 +173,31 @@ namespace MpWpfApp {
                     appPath: @"c:\windows\system32\mspaint.exe",
                     appName: "Paint");
 
-                var paintSetting1 = await MpAppClipboardFormatInfo.Create(
+                var paintSetting1 = await MpAppClipboardFormatInfo.CreateAsync(
                     appId: paintApp.Id,
                     format: MpClipboardFormatType.Bitmap,
                     ignoreFormat: true);
 
-                var paintSetting2 = await MpAppClipboardFormatInfo.Create(
+                var paintSetting2 = await MpAppClipboardFormatInfo.CreateAsync(
                     appId: paintApp.Id,
                     format: MpClipboardFormatType.Rtf,
                     ignoreFormat: true);
 
-                var paintSetting3 = await MpAppClipboardFormatInfo.Create(
+                var paintSetting3 = await MpAppClipboardFormatInfo.CreateAsync(
                     appId: paintApp.Id,
                     format: MpClipboardFormatType.Text,
                     ignoreFormat: true);
 
-                var paintSetting4 = await MpAppClipboardFormatInfo.Create(
+                var paintSetting4 = await MpAppClipboardFormatInfo.CreateAsync(
                    appId: paintApp.Id,
                    format: MpClipboardFormatType.Csv,
                    ignoreFormat: true);
 
-                var paintSetting5 = await MpAppClipboardFormatInfo.Create(
+                var paintSetting5 = await MpAppClipboardFormatInfo.CreateAsync(
                     appId: paintApp.Id,
                     format: MpClipboardFormatType.FileDrop,
                     formatInfo: "bmp");
-            });            
+            }).FireAndForgetSafeAsync();            
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {

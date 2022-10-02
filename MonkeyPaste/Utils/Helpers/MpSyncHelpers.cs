@@ -98,7 +98,7 @@ namespace MonkeyPaste {
             //deserialize logs and put into guid buckets
             var remoteItemChangeLookup = new Dictionary<Guid, List<MpDbLog>>();
             foreach (var remoteLogRow in dbLogMessage.DbObjects) {
-                var logItem = await dbLogWorker.DeserializeDbObject(remoteLogRow.ObjStr) as MpDbLog;
+                var logItem = await dbLogWorker.DeserializeDbObjectAsync(remoteLogRow.ObjStr) as MpDbLog;
                 if (remoteItemChangeLookup.ContainsKey(logItem.DbObjectGuid)) {
                     remoteItemChangeLookup[logItem.DbObjectGuid].Add(logItem);
                 } else {
@@ -206,7 +206,7 @@ namespace MonkeyPaste {
                 }
                 var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var dbo = Activator.CreateInstance(dbot);
-                dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
+                dbo = await (dbo as MpISyncableDbObject).CreateFromLogsAsync(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
                 //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
                 var addMethod = typeof(MpDb).GetMethod(nameof(MpDb.AddOrUpdateAsync));
                 var addByDboTypeMethod = addMethod.MakeGenericMethod(new[] { dbot });
@@ -221,7 +221,7 @@ namespace MonkeyPaste {
                 }
                 var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var dbo = Activator.CreateInstance(dbot);
-                dbo = await (dbo as MpISyncableDbObject).CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
+                dbo = await (dbo as MpISyncableDbObject).CreateFromLogsAsync(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
                 //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
                 var updateMethod = typeof(MpDb).GetMethod(nameof(MpDb.AddOrUpdateAsync));
                 var updateByDboTypeMethod = updateMethod.MakeGenericMethod(new[] { dbot });

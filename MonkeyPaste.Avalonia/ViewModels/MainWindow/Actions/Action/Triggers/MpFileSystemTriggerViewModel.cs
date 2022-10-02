@@ -5,6 +5,8 @@ using System.IO;
 using System.Threading.Tasks;
 using MonkeyPaste.Common;
 using Avalonia.Threading;
+using PropertyChanged;
+using Avalonia.Controls;
 
 namespace MonkeyPaste.Avalonia {
     public class MpFileSystemTriggerViewModel : MpAvTriggerActionViewModelBase, MpIFileSystemEventHandler {
@@ -105,6 +107,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIFileSystemWatcher Implementation
 
+        [SuppressPropertyChangedWarnings]
         public void OnFileSystemItemChanged(object sender, FileSystemEventArgs e) {
             if(!MpBootstrapperViewModelBase.IsCoreLoaded) {
                 // NOTE this check maybe unnecessary. Rtf test was being generated onto desktop during startup and interfering w/ this trigger's lifecycle
@@ -152,7 +155,7 @@ namespace MonkeyPaste.Avalonia {
                         CopyItem = ci,
                         FileSystemChangeType = e.ChangeType
                     };
-                    await base.PerformAction(ao);
+                    await base.PerformActionAsync(ao);
                 }
             });
         }
@@ -187,18 +190,18 @@ namespace MonkeyPaste.Avalonia {
                 } else if(File.Exists(initDir)) {
                     initDir = Path.GetDirectoryName(initDir);
                 }
-                //MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
-                //var dlg = new MpFolderPicker() {
-                //    InputPath = initDir,
-                //    Title = "Select folder"
-                //};
-                //bool result = dlg.ShowDialog() == true;
+                MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
+                var selectedDir = await new OpenFolderDialog() {
+                    Title = "Select folder",
+                    Directory = initDir
+                }.ShowAsync(MpAvMainWindow.Instance);
 
-                //MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
-                //if (result) {
-                //    FileSystemPath = dlg.ResultPath;
-                //    await ReEnable();
-                //}
+
+                MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
+                if (string.IsNullOrEmpty(selectedDir)) {
+                    FileSystemPath = selectedDir;
+                    await ReEnable();
+                }
             });
 
         #endregion

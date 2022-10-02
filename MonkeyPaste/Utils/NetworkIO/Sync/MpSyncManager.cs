@@ -26,7 +26,7 @@ namespace MonkeyPaste {
         private static CancellationToken _ct;
         #endregion
 
-        public static event EventHandler<string> OnError;
+        //public static event EventHandler<string> OnError;
 
         #region Properties
         public static string[] DbTableSyncOrder { get; private set; } = new string[] {
@@ -425,7 +425,7 @@ namespace MonkeyPaste {
                 var rd = ConnectedDevices.Where(x => x.RemoteSocket == (object)s).FirstOrDefault();
                 throw new MpSyncException(MpSyncMesageType.ErrorNotConnected, rd);
             }
-            string smsgStr = await smsg.SerializeDbObject();
+            string smsgStr = await smsg.SerializeDbObjectAsync();
             Byte[] bytesSent = Encoding.ASCII.GetBytes(smsgStr);
 
             MpConsole.WriteLine(string.Format(@"{0} Sending {1}: {2}", DateTime.Now.ToString(), Enum.GetName(typeof(MpSyncMesageType), smsg.Header.MessageType), smsgStr));
@@ -434,7 +434,7 @@ namespace MonkeyPaste {
             }
             catch (Exception ex) {
                 var rd = ConnectedDevices.Where(x => x.RemoteSocket == (object)s).FirstOrDefault();
-                throw new MpSyncException(MpSyncMesageType.ErrorNotConnected, rd);
+                throw new MpSyncException(MpSyncMesageType.ErrorNotConnected, rd, ex);
             }
 
             if(smsg.Header.MessageType == MpSyncMesageType.DbLogResponse) {
@@ -484,7 +484,7 @@ namespace MonkeyPaste {
                     }
                     catch (Exception ex) {
                         var rd = ConnectedDevices.Where(x => x.RemoteSocket == (object)socket).FirstOrDefault();
-                        throw new MpSyncException(MpSyncMesageType.ErrorNotConnected, rd);
+                        throw new MpSyncException(MpSyncMesageType.ErrorNotConnected, rd, ex);
                     }
                 }
                 response += Encoding.ASCII.GetString(buffer.ToArray());
@@ -495,28 +495,28 @@ namespace MonkeyPaste {
 
         private static bool IsConnected(Socket s, bool isWrite) {
             return true;
-            int pt = 500000; //500000 microseconds is .5 seconds
-            if (s == null) {
-                return false;
-            }
-            //bool isConnected = true;
-            if (!s.Connected) {
-                return false;
-            }
-            if (isWrite && !s.Poll(pt, SelectMode.SelectWrite)) {
-                Console.WriteLine("This Socket is not writable.");
-                //isConnected = false;
-                return false;
-            }
-            if (!isWrite && !s.Poll(pt, SelectMode.SelectRead)) {
-                //Console.WriteLine("This Socket is not readable.");
-                return false;
-            }
-            //if (s.Poll(pt, SelectMode.SelectError)) {
-            //    //Console.WriteLine("This Socket has an error.");
+            //int pt = 500000; //500000 microseconds is .5 seconds
+            //if (s == null) {
             //    return false;
             //}
-            return true;
+            ////bool isConnected = true;
+            //if (!s.Connected) {
+            //    return false;
+            //}
+            //if (isWrite && !s.Poll(pt, SelectMode.SelectWrite)) {
+            //    Console.WriteLine("This Socket is not writable.");
+            //    //isConnected = false;
+            //    return false;
+            //}
+            //if (!isWrite && !s.Poll(pt, SelectMode.SelectRead)) {
+            //    //Console.WriteLine("This Socket is not readable.");
+            //    return false;
+            //}
+            ////if (s.Poll(pt, SelectMode.SelectError)) {
+            ////    //Console.WriteLine("This Socket has an error.");
+            ////    return false;
+            ////}
+            //return true;
         }
         #endregion
 
@@ -567,7 +567,7 @@ namespace MonkeyPaste {
         }
 
         private static async Task SendWebSocketAsync(ClientWebSocket cws, MpStreamMessage smsg) {
-            string smsgStr = await smsg.SerializeDbObject();
+            string smsgStr = await smsg.SerializeDbObjectAsync();
             var bytes = Encoding.ASCII.GetBytes(smsgStr);
             var buffer = new ArraySegment<Byte>(bytes, 0, bytes.Length);
 

@@ -40,7 +40,7 @@ namespace MonkeyPaste.Avalonia {
         private string _sim_keystr_to_this_app = string.Empty;
         private MpAvKeyGestureHelper2 _keyboardGestureHelper;
 
-        private DateTime? _waitToExecuteShortcutStartDateTime;
+        //private DateTime? _waitToExecuteShortcutStartDateTime;
 
         private const int _MAX_WAIT_TO_EXECUTE_SHORTCUT_MS = 500;
 
@@ -542,7 +542,7 @@ namespace MonkeyPaste.Avalonia {
                 });
             }
             //_keyboardGestureHelper.Reset();
-            _waitToExecuteShortcutStartDateTime = null;
+            //_waitToExecuteShortcutStartDateTime = null;
             return true;
         }
 

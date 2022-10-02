@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste;
+using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -96,7 +97,7 @@ namespace MpWpfApp {
                     await Task.Delay(10);
                 }
                 AnimateEnter();
-            });
+            }).FireAndForgetSafeAsync();
         }
 
         private void ClipTileAppIconImageButton_MouseLeave(object sender, MouseEventArgs e) {

@@ -218,9 +218,7 @@ namespace MpWpfApp {
                         SetLoadOnLogin(IsLoadOnLoginChecked);
                         break;
                     case nameof(SelectedLanguage):
-                        Task.Run(async () => { 
-                            await SetLanguage(SelectedLanguage); 
-                        });
+                        SetLanguage(SelectedLanguage);
                         break;
                 }
             };
@@ -234,7 +232,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
-        private async Task SetLanguage(string newLanguage) {
+        private void SetLanguage(string newLanguage) {
             foreach (SettingsProperty dsp in Properties.DefaultUiStrings.Default.Properties) {
                 foreach (SettingsProperty usp in Properties.UserUiStrings.Default.Properties) {
                     if (dsp.Name == usp.Name) {

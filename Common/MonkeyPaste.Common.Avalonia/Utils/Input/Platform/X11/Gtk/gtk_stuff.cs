@@ -304,7 +304,7 @@ namespace MonkeyPaste.Common.Avalonia {
 //    }
 
     public class WScreen {
-        private IntPtr WnckScreen;
+        //private IntPtr WnckScreen;
 
         [DllImport("libwnck-1")]
         public static extern IntPtr wnck_screen_get_default();

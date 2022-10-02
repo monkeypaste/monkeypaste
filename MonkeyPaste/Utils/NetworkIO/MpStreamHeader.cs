@@ -43,7 +43,7 @@ namespace MonkeyPaste {
             return header;
         }
 
-        public async Task<string> SerializeDbObject() {
+        public async Task<string> SerializeDbObjectAsync() {
             await Task.Delay(1);
             //header string format: <MessageTypeId><FromGuid><ToGuid><SendDateTime><checksum>
             return string.Format(
@@ -61,15 +61,15 @@ namespace MonkeyPaste {
         }
 
 
-        public Task<object> DeserializeDbObject(string objStr) {
+        public Task<object> DeserializeDbObjectAsync(string objStr) {
             throw new NotImplementedException();
         }
 
-        public Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+        public Task<Dictionary<string, string>> DbDiffAsync(object drOrModel) {
             throw new NotImplementedException();
         }
 
-        public Task<object> CreateFromLogs(string dboGuid, List<MpDbLog> logs, string fromClientGuid) {
+        public Task<object> CreateFromLogsAsync(string dboGuid, List<MpDbLog> logs, string fromClientGuid) {
             throw new NotImplementedException();
         }
     }

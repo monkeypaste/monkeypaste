@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Wpf;
+using PropertyChanged;
+
 namespace MpWpfApp {
     public class MpFileSystemTriggerOutput : MpActionOutput {
         public override object OutputData { get; }
@@ -80,28 +82,28 @@ namespace MpWpfApp {
 
         #region Protected Methods
 
-        protected override async Task Enable() {
-            await base.Enable();
+        protected override async Task EnableAsync() {
+            await base.EnableAsync();
             MpFileSystemWatcher.Instance.RegisterActionComponent(this);
         }
 
-        protected override async Task Disable() {
-            await base.Disable();
+        protected override async Task DisableAsync() {
+            await base.DisableAsync();
             MpFileSystemWatcher.Instance.UnregisterActionComponent(this);
         }
 
-        protected override async Task<bool> Validate() {
-            await base.Validate();
+        protected override async Task<bool> ValidateAsync() {
+            await base.ValidateAsync();
             if (!IsValid) {
                 return IsValid;
             }
 
             if (string.IsNullOrEmpty(FileSystemPath)) {
                 ValidationText = $"No file system path specified for trigger action '{FullName}'";
-                await ShowValidationNotification();
+                await ShowValidationNotificationAsync();
             } else if(!IsValidFileSystemPath) {
                 ValidationText = $"File system path '{FileSystemPath}' not found for trigger action '{FullName}'";
-                await ShowValidationNotification();
+                await ShowValidationNotificationAsync();
             } else {
                 ValidationText = string.Empty;
             }
@@ -111,12 +113,13 @@ namespace MpWpfApp {
 
         #region MpIFileSystemWatcher Implementation
 
+        [SuppressPropertyChangedWarnings]
         public void OnFileSystemItemChanged(object sender, FileSystemEventArgs e) {
             if(!MpBootstrapperViewModelBase.IsCoreLoaded) {
                 // NOTE this check maybe unnecessary. Rtf test was being generated onto desktop during startup and interfering w/ this trigger's lifecycle
                 return;
             }
-            MpHelpers.RunOnMainThread((Func<Task>)(async () => {
+            _ = MpHelpers.RunOnMainThread(async () => {
                 MpCopyItem ci = null;
                 switch (e.ChangeType) {
                     case WatcherChangeTypes.Changed:
@@ -130,7 +133,7 @@ namespace MpWpfApp {
                     case WatcherChangeTypes.Renamed:
                         RenamedEventArgs re = e as RenamedEventArgs;
                         ci = await MpDataModelProvider.GetCopyItemByDataAsync(re.OldFullPath);
-                        if(ci == null) {
+                        if (ci == null) {
                             ci = await MpCopyItem.Create(
                                 sourceId: MpPrefViewModel.Instance.ThisOsFileManagerSource.Id,
                                 itemType: MpCopyItemType.FileList,
@@ -142,12 +145,12 @@ namespace MpWpfApp {
                         break;
                     case WatcherChangeTypes.Deleted:
                         ci = await MpDataModelProvider.GetCopyItemByDataAsync(e.FullPath);
-                        if(ci == null) {
+                        if (ci == null) {
                             return;
                         }
                         bool isVisible = MpClipTrayViewModel.Instance.GetClipTileViewModelById((int)ci.Id) != null;
                         await ci.DeleteFromDatabaseAsync();
-                        if(isVisible) {
+                        if (isVisible) {
                             MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
                         }
                         break;
@@ -158,9 +161,9 @@ namespace MpWpfApp {
                         CopyItem = ci,
                         FileSystemChangeType = e.ChangeType
                     };
-                    await base.PerformAction(ao);
+                    await base.PerformActionAsync(ao);
                 }
-            }));
+            });
         }
 
         #endregion
@@ -175,7 +178,7 @@ namespace MpWpfApp {
                         return;
                     }
                     if(IsEnabled.HasValue && IsEnabled.Value) {
-                        ReEnable().FireAndForgetSafeAsync(this);
+                        ReEnableAsync().FireAndForgetSafeAsync(this);
                     }
                     break;
             }
@@ -203,7 +206,7 @@ namespace MpWpfApp {
                 MpMainWindowViewModel.Instance.IsShowingDialog = false;
                 if (result) {
                     FileSystemPath = dlg.ResultPath;
-                    await ReEnable();
+                    await ReEnableAsync();
                 }
             });
 

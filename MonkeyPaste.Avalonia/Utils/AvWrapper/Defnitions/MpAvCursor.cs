@@ -43,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
 
         private static Dictionary<MpCursorType, Cursor> _cursorLookup;
 
-        private object _waitObj = null;
+        //private object _waitObj = null;
 
         #endregion
 
@@ -94,57 +94,58 @@ namespace MonkeyPaste.Avalonia {
             //if (MpAvClipTrayViewModel.Instance.HasScrollVelocity) {
             //    return;
             //}
-            if (targetObj != null && !targetObj.GetType().IsSubclassOf(typeof(InputElement)) && !targetObj.GetType().IsSubclassOf(typeof(MpViewModelBase))) {
-                Debugger.Break();
-                return;
-            }
+
+            //if (targetObj != null && !targetObj.GetType().IsSubclassOf(typeof(InputElement)) && !targetObj.GetType().IsSubclassOf(typeof(MpViewModelBase))) {
+            //    Debugger.Break();
+            //    return;
+            //}
 
 
-            Dispatcher.UIThread.Post(() => {
-                Cursor cursor = _cursorLookup[newCursor];
-                InputElement targetElm = null;
-                if(targetObj is InputElement) {
-                    targetElm = targetObj as InputElement;
-                } else {
-                    targetElm = App.Desktop.MainWindow;
-                }
+            //Dispatcher.UIThread.Post(() => {
+            //    Cursor cursor = _cursorLookup[newCursor];
+            //    InputElement targetElm = null;
+            //    if(targetObj is InputElement) {
+            //        targetElm = targetObj as InputElement;
+            //    } else {
+            //        targetElm = App.Desktop.MainWindow;
+            //    }
 
 
-                if (targetElm == null) {
-                    return;
-                }
+            //    if (targetElm == null) {
+            //        return;
+            //    }
 
 
-                if (_waitObj != null) {
-                    if(targetObj != _waitObj) {
+            //    if (_waitObj != null) {
+            //        if(targetObj != _waitObj) {
                         
 
-                        MpConsole.WriteLine("Set cursor rejected for " +targetObj+". " + _waitObj + " is overriding because its busy");
-                        return;
-                    } else if(newCursor == MpCursorType.Waiting) {
-                        MpConsole.WriteLine("Set cursor rejected for " + targetObj + " it is already waiting");
-                        return;
-                    } else {
-                        _waitObj = null;
-                    }
-                } else {
-                    if(newCursor == MpCursorType.Waiting) {
-                        // TODO? instead of rejecting here maybe cursor should be pushed on a set stack?
-                        if(targetObj is MpViewModelBase) {
-                            // NOTE only forece cursor when view model is busy
-                            _waitObj = targetObj;
-                        }
+            //            MpConsole.WriteLine("Set cursor rejected for " +targetObj+". " + _waitObj + " is overriding because its busy");
+            //            return;
+            //        } else if(newCursor == MpCursorType.Waiting) {
+            //            MpConsole.WriteLine("Set cursor rejected for " + targetObj + " it is already waiting");
+            //            return;
+            //        } else {
+            //            _waitObj = null;
+            //        }
+            //    } else {
+            //        if(newCursor == MpCursorType.Waiting) {
+            //            // TODO? instead of rejecting here maybe cursor should be pushed on a set stack?
+            //            if(targetObj is MpViewModelBase) {
+            //                // NOTE only forece cursor when view model is busy
+            //                _waitObj = targetObj;
+            //            }
                         
-                    }
-                }
+            //        }
+            //    }
 
 
-                targetElm.Cursor = cursor;
-                _currentCursor = newCursor;
+            //    targetElm.Cursor = cursor;
+            //    _currentCursor = newCursor;
 
-                string logStr = $"Type: '{targetObj}' set Cursor to: '{_currentCursor}'";
-                MpConsole.WriteLogLine(logStr);
-            });
+            //    string logStr = $"Type: '{targetObj}' set Cursor to: '{_currentCursor}'";
+            //    MpConsole.WriteLogLine(logStr);
+            //});
         }
 
         void MpICursor.UnsetCursor(object targetObj) {

@@ -19,13 +19,11 @@ namespace MonkeyPaste.Avalonia {
         private const int messagePumpDelay = 10;
         #endregion
 
-
-
         #region Constants
 
         public const string JS_REF_ERROR = "JS_REF_ERROR";
 
-        public static bool UseCefNet { get; private set; } = true;
+        public static bool UseCefNet { get; private set; } = false;
         #endregion
 
         #region Statics
@@ -64,25 +62,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Events
 
-        public event EventHandler<CefV8Context> OnCefNetContextCreated;
         #endregion
-
-        public static void ResetEnv() {
-            //if(OperatingSystem.IsWindows()) {
-            //    //int HWND = WinApi.FindWindow(null, "WebViewHost");//window title
-            //    var wvhp = Process.GetProcesses().FirstOrDefault(x => x.ProcessName.ToLower() == "webviewhost");
-            //    if(wvhp != null) {
-            //        WinApi.SendMessage(wvhp.Handle.ToInt32(), WinApi.WM_SYSCOMMAND, WinApi.SC_CLOSE, 0);
-            //    }
-                
-            //}
-
-            //string cefNetLogPath = Path.Combine(Environment.CurrentDirectory, "debug.log");
-            //if (File.Exists(cefNetLogPath)) {
-            //    File.Delete(cefNetLogPath);
-            //}
-        }
-
         public static void InitCefNet() {
             _ = new MpAvCefNetApplication();
         }
@@ -175,7 +155,7 @@ namespace MonkeyPaste.Avalonia {
                 settings.ExternalMessagePump = false;
             }
             settings.CommandLineArgsDisabled = true;
-            settings.WindowlessRenderingEnabled = false;
+            settings.WindowlessRenderingEnabled = true;
             settings.LocalesDirPath = localDirPath;
             settings.ResourcesDirPath = resourceDirPath;
             settings.LogSeverity = CefLogSeverity.Error;

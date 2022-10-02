@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace MpWpfApp {
     public class MpSliderParameterViewModel : MpPluginParameterViewModelBase, MpISliderViewModel {
         #region Private Variables
-        private string _defaultValue;
+        //private string _defaultValue;
         #endregion
 
         #region Properties

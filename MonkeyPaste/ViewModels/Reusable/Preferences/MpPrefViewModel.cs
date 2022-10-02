@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using PropertyChanged;
 
 namespace MonkeyPaste {
     public class MpPrefViewModel : MpViewModelBase, MpIJsonObject {
@@ -27,10 +28,10 @@ namespace MonkeyPaste {
         //[JsonIgnore]
         //public const string PREFERENCES_FILE_NAME = "Pref.json";
         [JsonIgnore]
-        public const string STRING_ARRAY_SPLIT_TOKEN = "<&>SPLIT</&>";
+        public static string STRING_ARRAY_SPLIT_TOKEN = "<&>SPLIT</&>";
 
         [JsonIgnore]
-        public const bool UseEncryption = false;
+        public static bool UseEncryption = false;
 
         #endregion
 
@@ -47,6 +48,7 @@ namespace MonkeyPaste {
 
         #region Property Reflection Referencer
 
+        [SuppressPropertyChangedWarnings]
         [JsonIgnore]
         public object this[string propertyName] {
             get {
@@ -334,7 +336,7 @@ namespace MonkeyPaste {
 
         public DateTime SslCertExpirationDateTime { get; set; } = DateTime.UtcNow.AddDays(-1);
 
-        public string FallbackProcessPath { get; set; } = @"C:\WINDOWS\Explorer.EXE";
+        public string FallbackProcessPath { get; set; } // set in constructor based on os
         #endregion
 
         #region Db
@@ -540,6 +542,14 @@ namespace MonkeyPaste {
         #region Constructors
 
         public MpPrefViewModel() : base(){
+            if(_osInfo.OsType == MpUserDeviceType.Windows) {
+                FallbackProcessPath = @"C:\WINDOWS\Explorer.EXE";
+            } else if(_osInfo.OsType == MpUserDeviceType.Linux) {
+                FallbackProcessPath = "/usr/bin/systemd";
+            } else {
+                // pick somethin
+                Debugger.Break();
+            }
             PropertyChanged += MpJsonPreferenceIO_PropertyChanged;
         }
 

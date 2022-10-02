@@ -180,6 +180,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand AddAppCommand => new MpAsyncCommand(
             async () => {
+                await Task.Delay(1);
                 //string appPath = string.Empty;
 
                 //var openFileDialog = new System.Windows.Forms.OpenFileDialog() {

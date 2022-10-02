@@ -11,7 +11,6 @@ using MonkeyPaste.Common.Avalonia;
 using Avalonia.Threading;
 using Avalonia.Controls.Generators;
 using System.Linq;
-using Xamarin.Forms.Internals;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]

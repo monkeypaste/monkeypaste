@@ -99,7 +99,7 @@ namespace MonkeyPaste.Avalonia {
             return IsValid;
         }
 
-        public override async Task PerformAction(object arg) {
+        public override async Task PerformActionAsync(object arg) {
             if (!CanPerformAction(arg)) {
                 return;
             }
@@ -113,7 +113,7 @@ namespace MonkeyPaste.Avalonia {
 
             }
 
-            await base.PerformAction(new MpClassifyOutput() {
+            await base.PerformActionAsync(new MpClassifyOutput() {
                 Previous = arg as MpAvActionOutput,
                 CopyItem = actionInput.CopyItem,
                 TagId = TagId

@@ -23,6 +23,7 @@ namespace MonkeyPaste {
     public class MpCertificateManager {
         private X509Certificate2 _cert = null;
 
+        [Obsolete]
         public MpCertificateManager() {
             if (DateTime.UtcNow > MpPrefViewModel.Instance.SslCertExpirationDateTime) {
                 CreateCertificate();
@@ -34,6 +35,7 @@ namespace MonkeyPaste {
             }
         }
 
+        [Obsolete]
         private void CreateCertificate() {
             AsymmetricKeyParameter caPrivKey = GenerateCACertificate(MpPrefViewModel.Instance.SslCASubject);
 
@@ -44,6 +46,7 @@ namespace MonkeyPaste {
             SaveCertificate(MpPrefViewModel.Instance.SyncCertPath, cert);
         }
 
+        [Obsolete]
         private AsymmetricKeyParameter GenerateCACertificate(string subjectName, int keyStrength = 2048) {
             // Generating Random Numbers
             var randomGenerator = new CryptoApiRandomGenerator();
@@ -114,6 +117,7 @@ namespace MonkeyPaste {
             return issuerKeyPair.Private;
         }
 
+        [Obsolete]
         private X509Certificate2 GenerateSelfSignedCertificate(
             string subjectName,
             string issuerName,

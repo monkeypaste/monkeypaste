@@ -23,10 +23,10 @@ namespace MonkeyPaste {
 
 
 
-    public class MpSetColorArguments {
-        public event EventHandler<string> SetColorEventCallback;
-        public string OriginalColor { get; }
-    }
+    //public class MpSetColorArguments {
+    //    public event EventHandler<string> SetColorEventCallback;
+    //    public string OriginalColor { get; }
+    //}
 
     public enum MpMenuItemType {
         None = 0,

@@ -26,7 +26,7 @@ namespace MonkeyPaste {
             }
 
             var oldItem = await MpDb.GetDbObjectByTableGuidAsync(tableName, objectGuid.ToString());
-            var alteredColumnNameValuePairs = await (dbModel as MpISyncableDbObject).DbDiff(oldItem);
+            var alteredColumnNameValuePairs = await (dbModel as MpISyncableDbObject).DbDiffAsync(oldItem);
             if (alteredColumnNameValuePairs.Count == 0) {
                 return;
             }

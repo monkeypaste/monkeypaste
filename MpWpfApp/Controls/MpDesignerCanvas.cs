@@ -125,11 +125,6 @@ namespace MpWpfApp {
 
                 Point head = new Point(pavm.X + (pavm.Width / 2), pavm.Y + (pavm.Height / 2));
 
-
-                if(pavm is MpMacroActionViewModel) {
-                    int i = 0;
-                }
-                
                 DrawArrow(dc, head, tail, avm.Width / 2, borderBrush, fillBrush);
             }
         }

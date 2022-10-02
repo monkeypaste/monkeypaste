@@ -55,9 +55,9 @@ namespace MonkeyPaste.Avalonia {
 
         public bool Visible { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public event EventHandler<EventArgs>? Click;
-        public event EventHandler<EventArgs>? DoubleClick;
-        public event EventHandler<EventArgs>? RightClick;
+        //public event EventHandler<EventArgs>? Click;
+        //public event EventHandler<EventArgs>? DoubleClick;
+        //public event EventHandler<EventArgs>? RightClick;
 
         public abstract void Remove();
     }

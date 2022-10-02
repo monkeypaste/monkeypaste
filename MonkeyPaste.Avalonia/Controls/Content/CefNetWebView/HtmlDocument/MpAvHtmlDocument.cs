@@ -1,6 +1,4 @@
 ﻿using Avalonia.Controls;
-using Google.Apis.PeopleService.v1.Data;
-using Gtk;
 using HtmlAgilityPack;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -12,7 +10,6 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvHtmlDocument : MpAvIContentDocument {

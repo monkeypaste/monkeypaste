@@ -10,7 +10,7 @@ using Avalonia;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Visuals.Media.Imaging;
-using MonkeyPaste.Common.Wpf;
+//using MonkeyPaste.Common.Wpf;
 
 namespace MonkeyPaste.Common.Avalonia {
     [StructLayout(LayoutKind.Sequential)]
@@ -181,7 +181,7 @@ namespace MonkeyPaste.Common.Avalonia {
                         for (int col = 0; col < width; col++) {
                             PixelColor c = pixels[col, row];
                             byte avg = (byte)((double)(c.Red + c.Green + c.Blue) / 3.0d);
-                            PixelColor grayColor = new PixelColor() { Alpha = 255, Red = avg, Green = avg, Blue = avg }; //System.Drawing.Color.FromArgb(avg, avg, avg);
+                            PixelColor grayColor = new PixelColor() { Alpha = 255, Red = avg, Green = avg, Blue = avg }; 
                             int index = (int)((double)(grayColor.Red * 10) / 255.0d);
                             outStr += asciiChars[index];
                             bmpPtr = PutPixel(writeableBitmap, c, bmpPtr);

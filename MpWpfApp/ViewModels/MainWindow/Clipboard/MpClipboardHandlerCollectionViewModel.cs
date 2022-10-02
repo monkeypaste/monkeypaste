@@ -470,30 +470,30 @@ namespace MpWpfApp {
         public ICommand UnregisterClipboardFormatCommand => new RelayCommand<object>(
             (args) => {
                 return;
-                if (args is Object[] argParts &&
-                   argParts.Length == 3 &&
-                   argParts[0] is string format &&
-                   argParts[2] is bool isReadUnregister &&
-                   argParts[1] is bool isWriteUnregister) {
+                //if (args is Object[] argParts &&
+                //   argParts.Length == 3 &&
+                //   argParts[0] is string format &&
+                //   argParts[2] is bool isReadUnregister &&
+                //   argParts[1] is bool isWriteUnregister) {
 
-                    bool canUnregister = false;
-                    if(isReadUnregister && isWriteUnregister) {
-                        // when both read and write are unregistered (i don't know when this would happen)
-                        // it doesn't matter if format is known anymore so just unregister
-                        canUnregister = true;
-                    } else if(isReadUnregister && EnabledFormats.Any(x=>x.CanWrite && x.Parent.HandledFormat == format)) {
-                        MpConsole.WriteTraceLine($"Note! Attempting to unregister '{format}' because read unregistered but a writer uses it so ignoring");
-                    } else if (isWriteUnregister && EnabledFormats.Any(x => x.CanRead && x.Parent.HandledFormat == format)) {
-                        MpConsole.WriteTraceLine($"Note! Attempting to unregister '{format}' because writer unregistered but a reader uses it so ignoring");
-                    } else {
-                        canUnregister = true;
-                    }
+                //    bool canUnregister = false;
+                //    if(isReadUnregister && isWriteUnregister) {
+                //        // when both read and write are unregistered (i don't know when this would happen)
+                //        // it doesn't matter if format is known anymore so just unregister
+                //        canUnregister = true;
+                //    } else if(isReadUnregister && EnabledFormats.Any(x=>x.CanWrite && x.Parent.HandledFormat == format)) {
+                //        MpConsole.WriteTraceLine($"Note! Attempting to unregister '{format}' because read unregistered but a writer uses it so ignoring");
+                //    } else if (isWriteUnregister && EnabledFormats.Any(x => x.CanRead && x.Parent.HandledFormat == format)) {
+                //        MpConsole.WriteTraceLine($"Note! Attempting to unregister '{format}' because writer unregistered but a reader uses it so ignoring");
+                //    } else {
+                //        canUnregister = true;
+                //    }
 
-                    if (canUnregister) {
-                        MpPortableDataFormats.UnregisterDataFormat(format);
-                    }
-                    OnPropertyChanged(nameof(FormatViewModels));
-                }
+                //    if (canUnregister) {
+                //        MpPortableDataFormats.UnregisterDataFormat(format);
+                //    }
+                //    OnPropertyChanged(nameof(FormatViewModels));
+                //}
             });
         #endregion
     }

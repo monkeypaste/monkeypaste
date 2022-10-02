@@ -39,19 +39,19 @@ namespace MpWpfApp {
 
         #region Protected Methods
 
-        protected override async Task Enable() {
+        protected override async Task EnableAsync() {
             if(IsEnabled.HasValue && IsEnabled.Value) {
                 return;
             }
-            await base.Enable();
+            await base.EnableAsync();
             MpClipTrayViewModel.Instance.RegisterActionComponent(this);
         }
 
-        protected override async Task Disable() {
+        protected override async Task DisableAsync() {
             if(IsEnabled.HasValue && !IsEnabled.Value) {
                 return;
             }
-            await base.Disable();
+            await base.DisableAsync();
             MpClipTrayViewModel.Instance.UnregisterActionComponent(this);
         }
 

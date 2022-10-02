@@ -369,7 +369,7 @@ namespace MonkeyPaste {
 
         #region Sync
 
-        public async Task<object> DeserializeDbObject(string objStr) {
+        public async Task<object> DeserializeDbObjectAsync(string objStr) {
             var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
             await Task.Delay(0);
 
@@ -391,7 +391,7 @@ namespace MonkeyPaste {
             return ci;
         }
 
-        public async Task<string> SerializeDbObject() {
+        public async Task<string> SerializeDbObjectAsync() {
             await Task.Delay(1);
 
             return string.Format(
@@ -412,7 +412,7 @@ namespace MonkeyPaste {
             return typeof(MpCopyItem);
         }
 
-        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+        public async Task<Dictionary<string, string>> DbDiffAsync(object drOrModel) {
             await Task.Delay(1);
 
             MpCopyItem other = null;
@@ -471,7 +471,7 @@ namespace MonkeyPaste {
             return diffLookup;
         }
 
-        public async Task<object> CreateFromLogs(string dboGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+        public async Task<object> CreateFromLogsAsync(string dboGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             var cidr = await MpDb.GetDbObjectByTableGuidAsync("MpCopyItem", CopyItemGuid.ToString());
             MpCopyItem newCopyItem = null;
             if (cidr == null) {

@@ -74,11 +74,11 @@ namespace MpWpfApp {
         #region Protected Overrides
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpTag t && t.Id == TagId) {
-                Task.Run(Validate);
+                Task.Run(ValidateAsync);
             }
         }
-        protected override async Task<bool> Validate() {
-            await base.Validate();
+        protected override async Task<bool> ValidateAsync() {
+            await base.ValidateAsync();
 
             if (!IsValid) {
                 return IsValid;
@@ -92,14 +92,14 @@ namespace MpWpfApp {
             if (ttvm == null) {
                 ValidationText = $"Tag for Classifier '{RootTriggerActionViewModel.Label}/{Label}' not found";
 
-                await ShowValidationNotification();
+                await ShowValidationNotificationAsync();
             } else {
                 ValidationText = string.Empty;
             }
             return IsValid;
         }
 
-        public override async Task PerformAction(object arg) {
+        public override async Task PerformActionAsync(object arg) {
             if (!CanPerformAction(arg)) {
                 return;
             }
@@ -109,7 +109,7 @@ namespace MpWpfApp {
             var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
             await ttvm.AddContentItem(actionInput.CopyItem.Id);
 
-            await base.PerformAction(new MpClassifyOutput() {
+            await base.PerformActionAsync(new MpClassifyOutput() {
                 Previous = arg as MpActionOutput,
                 CopyItem = actionInput.CopyItem,
                 TagId = TagId

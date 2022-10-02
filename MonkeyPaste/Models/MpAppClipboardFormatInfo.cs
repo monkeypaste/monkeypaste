@@ -54,7 +54,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public static async Task<MpAppClipboardFormatInfo> Create(
+        public static async Task<MpAppClipboardFormatInfo> CreateAsync(
             int appId = 0,
             MpClipboardFormatType format = MpClipboardFormatType.None,
             string formatInfo = "",

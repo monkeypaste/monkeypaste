@@ -11,7 +11,6 @@ using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using SharpHook.Native;
-using Xamarin.Forms.Internals;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAssignShortcutModalWindowViewModel : MpViewModelBase {

@@ -7,8 +7,8 @@ namespace MonkeyPaste
 {
     public interface MpIPhotoImporter
     {
-        Task<ObservableCollection<Photo>> Get(int start, int count, Quality quality = Quality.Low);
-        Task<ObservableCollection<Photo>> Get(List<string> filenames, Quality quality = Quality.Low);
+        Task<ObservableCollection<Photo>> GetAsync(int start, int count, Quality quality = Quality.Low);
+        Task<ObservableCollection<Photo>> GetAsync(List<string> filenames, Quality quality = Quality.Low);
     }
     public enum Quality
     {

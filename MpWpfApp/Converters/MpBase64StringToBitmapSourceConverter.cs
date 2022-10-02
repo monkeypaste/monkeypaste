@@ -9,7 +9,7 @@ using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public class MpBase64StringToBitmapSourceConverter : IValueConverter {
-        private static ImageSourceConverter _isc = null;
+        //private static ImageSourceConverter _isc = null;
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is string valueStr) {
                 //byte[] byteBuffer = System.Convert.FromBase64String(valueStr);

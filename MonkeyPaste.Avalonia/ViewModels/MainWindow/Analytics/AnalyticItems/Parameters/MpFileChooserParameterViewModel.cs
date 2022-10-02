@@ -4,12 +4,13 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Controls;
 
 namespace MonkeyPaste.Avalonia {
     public class MpFileChooserParameterViewModel : MpPluginParameterViewModelBase {
         #region Private Variables
 
-        private string _defaultValue;
+        //private string _defaultValue;
 
         #endregion
 
@@ -62,25 +63,33 @@ namespace MonkeyPaste.Avalonia {
                 }
                 MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
 
-                //if(IsDirectoryChooser) {
-                //    var dlg = new MpFolderPicker() {
-                //        InputPath = initDir,
-                //        Title = "Select " + Label
-                //    };
-                //    bool result = dlg.ShowDialog() == true;
-                //    if (result) {
-                //        CurrentValue = dlg.ResultPath;
-                //    }
-                //} else {
-                //    var openFileDialog = new Microsoft.Win32.OpenFileDialog() {
-                //        Title = "Select " + Label,
-                //        InitialDirectory = initDir
-                //    };
-                //    bool? openResult = openFileDialog.ShowDialog();
-                //    if (openResult != null && openResult.Value) {
-                //        CurrentValue = openFileDialog.FileName;
-                //    }
-                //}
+
+                if (IsDirectoryChooser) {
+                    //var dlg = new MpFolderPicker() {
+                    //    InputPath = initDir,
+                    //    Title = "Select " + Label
+                    //};
+                    //bool result = dlg.ShowDialog() == true;
+                    //if (result) {
+                    //    CurrentValue = dlg.ResultPath;
+                    //}
+
+                    var selectedDir = await new OpenFolderDialog() {
+                        Title = "Select " + Label,
+                        Directory = initDir
+                    }.ShowAsync(MpAvMainWindow.Instance);
+                    if(!string.IsNullOrEmpty(selectedDir)) {
+                        CurrentValue = selectedDir;
+                    }
+                } else {
+                    var selectedFile = await new OpenFileDialog() {
+                        Title = "Select " + Label,
+                        Directory = initDir
+                    }.ShowAsync(MpAvMainWindow.Instance);
+                    if (selectedFile != null && selectedFile.Length == 1 && string.IsNullOrEmpty(selectedFile[0])) {
+                        CurrentValue = selectedFile[0];
+                    }
+                }
 
                 MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
             });

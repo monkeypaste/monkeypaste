@@ -77,7 +77,7 @@ namespace MonkeyPaste {
 
         #region Sync
 
-        public async Task<object> CreateFromLogs(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+        public async Task<object> CreateFromLogsAsync(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             var citdr = await MpDb.GetDbObjectByTableGuidAsync("MpCopyItemTag", tagGuid);
             MpCopyItemTag newCopyItemTag = null;
             if (citdr == null) {
@@ -107,7 +107,7 @@ namespace MonkeyPaste {
             return newCopyItemTag;
         }
 
-        public async Task<object> DeserializeDbObject(string objStr) {
+        public async Task<object> DeserializeDbObjectAsync(string objStr) {
             await Task.Delay(0);
             var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
             var cit = new MpCopyItemTag() {
@@ -120,7 +120,7 @@ namespace MonkeyPaste {
             return cit;
         }
 
-        public async Task<string> SerializeDbObject() {
+        public async Task<string> SerializeDbObjectAsync() {
             var cit =await  MpDb.GetItemAsync<MpCopyItem>(CopyItemId);
             var t = await MpDb.GetItemAsync<MpTag>(TagId);
 
@@ -136,7 +136,7 @@ namespace MonkeyPaste {
             return typeof(MpCopyItemTag);
         }
 
-        public async Task<Dictionary<string, string>> DbDiff(object drOrModel) {
+        public async Task<Dictionary<string, string>> DbDiffAsync(object drOrModel) {
             var cit = await MpDb.GetItemAsync<MpCopyItem>(CopyItemId);
             var t = await MpDb.GetItemAsync<MpTag>(TagId);
 

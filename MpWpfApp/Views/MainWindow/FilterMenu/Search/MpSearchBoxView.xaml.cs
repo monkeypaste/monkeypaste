@@ -52,7 +52,7 @@ namespace MpWpfApp {
                     await Task.Delay(100);
                 }
                 MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseDown += ApplicationHook_MouseDown;
-            });
+            }).FireAndForgetSafeAsync();
             
         }
 

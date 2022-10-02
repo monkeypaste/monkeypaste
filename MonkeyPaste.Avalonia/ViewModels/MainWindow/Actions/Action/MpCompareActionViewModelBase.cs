@@ -16,7 +16,7 @@ using MonkeyPaste.Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-using Xamarin.Essentials;
+//using Xamarin.Essentials;
 using MonkeyPaste.Common.Plugin;
 
 namespace MonkeyPaste.Avalonia {
@@ -239,7 +239,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public override async Task PerformAction(object arg) {
+        public override async Task PerformActionAsync(object arg) {
             if (!CanPerformAction(arg)) {
                 return;
             }
@@ -257,7 +257,7 @@ namespace MonkeyPaste.Avalonia {
             compareOutput.Matches = GetMatches(compareStr);
 
             if (compareOutput.Matches != null && compareOutput.Matches.Count > 0) {
-                base.PerformAction(compareOutput).FireAndForgetSafeAsync(this);
+                base.PerformActionAsync(compareOutput).FireAndForgetSafeAsync(this);
             }
         }
 

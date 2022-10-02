@@ -855,7 +855,7 @@ namespace MpWpfApp {
             });
 
         public ICommand ChangeColorCommand => new RelayCommand<object>(
-            async (args) => {
+             (args) => {
                 TagHexColor = args.ToString();
                
             });

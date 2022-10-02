@@ -30,7 +30,7 @@ namespace MpWpfApp {
         MpIActionTrigger {
         #region Private Variables
 
-        private double _maxDeltaLocation = 10;
+        //private double _maxDeltaLocation = 10;
 
         private Point _lastLocation;
 
@@ -693,7 +693,7 @@ namespace MpWpfApp {
                 var cal = await MpDataModelProvider.GetChildActionsAsync(ActionId);
 
                 foreach (var ca in cal.OrderBy(x => x.SortOrderIdx)) {
-                    var cavm = await CreateActionViewModel(ca);
+                    var cavm = await CreateActionViewModelAsync(ca);
                     Items.Add(cavm);
                 }
             }
@@ -707,7 +707,7 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
-        public async Task<MpActionViewModelBase> CreateActionViewModel(MpAction a) {
+        public async Task<MpActionViewModelBase> CreateActionViewModelAsync(MpAction a) {
             a = a == null ? new MpAction() : a;
             MpActionViewModelBase avm = null;
             switch (a.ActionType) {
@@ -763,11 +763,11 @@ namespace MpWpfApp {
                 OnActionComplete?.Invoke(this, args);
                 return;
             }
-            Task.Run(() => PerformAction(args).FireAndForgetSafeAsync(this));
+            _ = Task.Run(() => PerformActionAsync(args).FireAndForgetSafeAsync(this));
         }
 
 
-        public virtual async Task PerformAction(object arg) {
+        public virtual async Task PerformActionAsync(object arg) {
             if (!CanPerformAction(arg)) {
                 return;
             }
@@ -801,7 +801,7 @@ namespace MpWpfApp {
 
         #region Protected Methods
 
-        protected async Task ShowValidationNotification() {
+        protected async Task ShowValidationNotificationAsync() {
             //bool wasBusy = IsBusy;
             //IsBusy = true;
             //MpDialogResultType userAction = MpDialogResultType.None;
@@ -820,7 +820,7 @@ namespace MpWpfApp {
                 MpNotificationCollectionViewModel.Instance.ShowNotificationAsync(
                     dialogType: MpNotificationDialogType.InvalidAction,
                     msg: ValidationText,
-                    retryAction: async (args) => { await Validate(); },
+                    retryAction: (args) => { ValidateAsync().FireAndForgetSafeAsync(this); },
                     fixCommand: Parent.SelectActionCommand,
                     fixCommandArgs: ActionId).FireAndForgetSafeAsync(this);
             });
@@ -855,22 +855,22 @@ namespace MpWpfApp {
             throw new Exception("Unknown action input: " + arg.ToString());
         }
 
-        protected virtual async Task<bool> Validate() {
+        protected virtual async Task<bool> ValidateAsync() {
             if (!IsRootAction && ParentActionViewModel == null) {
                 // this shouldn't happen...
                 ValidationText = $"Action '{RootTriggerActionViewModel.Label}/{Label}' must be linked to a trigger";
-                await ShowValidationNotification();
+                await ShowValidationNotificationAsync();
             } else {
                 ValidationText = string.Empty;
             }
             return IsValid;
         }
 
-        protected virtual async Task Enable() {
+        protected virtual async Task EnableAsync() {
             await Task.Delay(1);
         }
 
-        protected virtual async Task Disable() { await Task.Delay(1); }
+        protected virtual async Task DisableAsync() { await Task.Delay(1); }
 
         protected virtual bool CanPerformAction(object arg) {
             if (!IsValid ||
@@ -905,7 +905,7 @@ namespace MpWpfApp {
             }
         }
 
-        protected async Task ReEnable() {
+        protected async Task ReEnableAsync() {
             if (IsEnabled.HasValue && IsEnabled.Value) {
                 //if is enabled disable
                 ToggleIsEnabledCommand.Execute(null);
@@ -919,7 +919,7 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private async Task UpdateSortOrder() {
+        private async Task UpdateSortOrderAsync() {
             Items.ForEach(x => x.SortOrderIdx = Items.IndexOf(x));
             await Task.WhenAll(Items.Select(x => x.Action.WriteToDatabaseAsync()));
         }
@@ -968,7 +968,7 @@ namespace MpWpfApp {
                         Task.Run(async () => {
                             await Action.WriteToDatabaseAsync();
                             HasModelChanged = false;
-                        });
+                        }).FireAndForgetSafeAsync(this);
                     }
                     break;
                 case nameof(Items):
@@ -1018,16 +1018,16 @@ namespace MpWpfApp {
                 }
 
                 if (newIsEnabledState) {
-                    await Validate();
+                    await ValidateAsync();
                     if (!IsValid) {
                         IsEnabled = null;
                     } else {
-                        await Enable();
+                        await EnableAsync();
                         IsEnabled = true;
                         LastIsEnabledState = true;
                     }
                 } else {
-                    await Disable();
+                    await DisableAsync();
                     IsEnabled = false;
                     LastIsEnabledState = false;
                 }
@@ -1061,19 +1061,19 @@ namespace MpWpfApp {
             return;
         }
 
-        public ICommand AddChildActionCommand => new RelayCommand<object>(
+        public ICommand AddChildActionCommand => new MpAsyncCommand<object>(
              async (args) => {
                  IsBusy = true;
 
                  MpActionType at = (MpActionType)args;
-                 MpAction na = await MpAction.Create(
+                 MpAction na = await MpAction.CreateAsync(
                                          actionType: at,
                                          label: GetUniqueActionName(at.ToString()),
                                          parentId: ActionId,
                                          sortOrderIdx: Items.Count,
                                          location: Parent.FindOpenDesignerLocation(Location).ToPortablePoint());
 
-                 var navm = await CreateActionViewModel(na);
+                 var navm = await CreateActionViewModelAsync(na);
 
                  Items.Add(navm);
 
@@ -1096,12 +1096,12 @@ namespace MpWpfApp {
                  IsBusy = false;
              }, (args) => ActionType != MpActionType.None);
 
-        public ICommand DeleteChildActionCommand => new RelayCommand<object>(
+        public ICommand DeleteChildActionCommand => new MpAsyncCommand<object>(
             async (args) => {
                 IsBusy = true;
 
                 var avm = args as MpActionViewModelBase;
-                await avm.Disable();
+                await avm.DisableAsync();
 
                 var grandChildren = Parent.AllSelectedTriggerActions.Where(x => x.ParentActionId == avm.ActionId);
                 grandChildren.ForEach(x => x.ParentActionId = ActionId);
@@ -1143,7 +1143,7 @@ namespace MpWpfApp {
                 }
                 IsPerformingActionFromCommand = true;
                 var ao = GetInput(cil[0]);
-                await PerformAction(ao);
+                await PerformActionAsync(ao);
                 IsPerformingActionFromCommand = false;
             });
 

@@ -4,12 +4,13 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MpWpfApp {
     public class MpFileChooserParameterViewModel : MpPluginParameterViewModelBase {
         #region Private Variables
 
-        private string _defaultValue;
+        //private string _defaultValue;
 
         #endregion
 
@@ -52,8 +53,8 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public MpIAsyncCommand SelectFileSystemPathCommand => new MpAsyncCommand(
-            async () => {
+        public ICommand SelectFileSystemPathCommand => new MpCommand(
+            () => {
                 string initDir = CurrentValue;
                 if (string.IsNullOrEmpty(initDir)) {
                     initDir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);

@@ -29,7 +29,7 @@ namespace MpWpfApp {
     /// Interaction logic for MpQuillEditorView.xaml
     /// </summary>
     public partial class MpQuillEditorView : MpUserControl<MpClipTileViewModel> {
-        private DispatcherTimer timer;
+        //private DispatcherTimer timer;
         private string _standardHtmlConvertedToQuillHtml = null;
         public bool IsDomContentLoaded { get; private set; }
 

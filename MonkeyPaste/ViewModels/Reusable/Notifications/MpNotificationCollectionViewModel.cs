@@ -230,8 +230,8 @@ namespace MonkeyPaste {
 
         #region Commands
 
-        public MpIAsyncCommand ResetAllNotificationsCommand => new MpAsyncCommand(
-            async () => {
+        public ICommand ResetAllNotificationsCommand => new MpCommand(
+             () => {
                 MpPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr = string.Empty;
 
             }, () => MpBootstrapperViewModelBase.IsCoreLoaded);

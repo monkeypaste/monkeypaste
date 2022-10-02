@@ -63,7 +63,7 @@ namespace MonkeyPaste {
         #endregion
 
 
-        public static async Task<MpBox> Create(
+        public static async Task<MpBox> CreateAsync(
             MpBoxType boxType = MpBoxType.None,
             int boxObjId = 0,
             double x = 0, double y = 0, double w = 0, double h = 0,

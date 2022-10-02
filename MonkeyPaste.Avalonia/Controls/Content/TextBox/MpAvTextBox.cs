@@ -23,7 +23,6 @@ namespace MonkeyPaste.Avalonia {
         IStyleable {
         #region Private Variables
 
-        private bool _ignoreSelectionChanges = false;
         #endregion
 
         #region Statics
