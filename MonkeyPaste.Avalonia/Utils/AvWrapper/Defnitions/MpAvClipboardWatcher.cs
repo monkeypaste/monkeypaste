@@ -165,7 +165,7 @@ namespace MonkeyPaste.Avalonia {
             foreach (string format in validFormats) {
                 object formatData = null;
                 try {
-                    if(OperatingSystem.IsWindows() && format == MpPortableDataFormats.Html) {
+                    if(OperatingSystem.IsWindows() && format == MpPortableDataFormats.AvHtml_bytes) {
                         // windows bug uses Win-1252 encoding not UTF8 this pinkvokes actual html
                         formatData = MpAvWin32HtmlClipboardHelper.GetHTMLWin32Native();
                     } else {

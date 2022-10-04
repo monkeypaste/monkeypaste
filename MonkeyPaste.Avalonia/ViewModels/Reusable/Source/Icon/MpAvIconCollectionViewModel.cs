@@ -93,6 +93,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override async void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if(e is MpIcon i) {
+
                 IsBusy = true;
                 var ivm = await CreateIconViewModel(i);
                 IconViewModels.Add(ivm);

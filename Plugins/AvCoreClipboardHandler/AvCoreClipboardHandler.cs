@@ -367,26 +367,23 @@ namespace AvCoreClipboardHandler {
                 string format = kvp.Key.Name;
                 object data = kvp.Value;
                 switch (format) {
-                    case MpPortableDataFormats.Bitmap:
+                    case MpPortableDataFormats.AvPNG:
                         //var bmpSrc = data.ToString().ToBitmapSource(false);
 
                         //var winforms_dataobject = MpClipoardImageHelpers.GetClipboardImage_WinForms(bmpSrc.ToBitmap(), null, null);
                         //var pngData = winforms_dataobject.GetData("PNG");
                         //var dibData = winforms_dataobject.GetData(DataFormats.Dib);
                         //dataObj.Set(MpPortableDataFormats.Bitmap, bmpSrc);
-                        //dataObj.Set("PNG", pngData);
+                        dataObj.SetData(MpPortableDataFormats.AvPNG, data.ToString().ToByteArray());
                         //dataObj.Set(DataFormats.Dib, dibData);
                         break;
-                    case MpPortableDataFormats.FileDrop:
+                    case MpPortableDataFormats.AvFileNames:
                         var fl = data.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-                        //var sc = new StringCollection();
-                        //sc.AddRange(fl);
-                        //dataObj.Set("FileNames", fl.ToList());
                         dataObj.SetData("FileNames", fl.ToList());
                         break;
-                    case MpPortableDataFormats.Html:
-                        var bytes = Encoding.Default.GetBytes(data.ToString());
-                        dataObj.SetData(MpPortableDataFormats.Html, bytes);
+                    case MpPortableDataFormats.AvHtml_bytes:
+                        var bytes = data.ToString().ToEncodedBytes();
+                        dataObj.SetData(MpPortableDataFormats.AvHtml_bytes, bytes);
                         break;
                     default:
                         dataObj.SetData(format, data);

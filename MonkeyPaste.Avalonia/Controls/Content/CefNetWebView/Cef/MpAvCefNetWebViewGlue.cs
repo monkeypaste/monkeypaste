@@ -87,18 +87,18 @@ namespace MonkeyPaste.Avalonia {
                 if(ctvm.ItemType == MpCopyItemType.Text) {
                     is_tile_drag = wv.IsAllSelected() || wv.Selection.Length == 0;
                     avmpdo.SetData(MpPortableDataFormats.Text, dragData.FragmentText);
-                    avmpdo.SetData(MpPortableDataFormats.Html, dragData.FragmentHtml);
+                    avmpdo.SetData(MpPortableDataFormats.AvHtml_bytes, dragData.FragmentHtml);
                 } else if(ctvm.ItemType == MpCopyItemType.FileList) {
                     is_tile_drag = true;
                     allowedEffects = DragDropEffects.Copy;
                     avmpdo.SetData(MpPortableDataFormats.Text, dragData.FragmentText);
-                    avmpdo.SetData(MpAvDataFormats.AvFileNames, ctvm.FileItems.Select(x => x.Path));
+                    avmpdo.SetData(MpPortableDataFormats.AvFileNames, ctvm.FileItems.Select(x => x.Path));
                 } else if (ctvm.ItemType == MpCopyItemType.Image) {
                     is_tile_drag = true;
                     allowedEffects = DragDropEffects.Move;
-                    avmpdo.SetData(MpAvDataFormats.AvPNG, ctvm.CopyItemData.ToByteArray());
+                    avmpdo.SetData(MpPortableDataFormats.AvPNG, ctvm.CopyItemData.ToByteArray());
                     string img_path = ctvm.CopyItemData.ToFile(null, ctvm.CopyItemTitle, "png", true);
-                    avmpdo.SetData(MpAvDataFormats.AvFileNames, new List<string>() { img_path });
+                    avmpdo.SetData(MpPortableDataFormats.AvFileNames, new List<string>() { img_path });
                 }
 
                 avmpdo.MapAllPseudoFormats();

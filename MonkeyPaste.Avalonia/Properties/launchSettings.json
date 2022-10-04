@@ -7,7 +7,7 @@
       "commandName": "WSL2",
       "environmentVariables": {
         "LIBGL_ALWAYS_INDIRECT": "1",
-        "DISPLAY": "192.168.43.33:0.0"
+        "DISPLAY": ":0"
       },
       "distributionName": ""
     }

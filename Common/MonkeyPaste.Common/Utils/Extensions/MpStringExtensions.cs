@@ -56,6 +56,7 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
+
         public static string ReplaceRange(this string str, int index, int length, string text) {
             int preStrLength = index + 1;
             if(str.Length < preStrLength) {

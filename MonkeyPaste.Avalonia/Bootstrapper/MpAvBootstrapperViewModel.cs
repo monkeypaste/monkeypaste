@@ -71,6 +71,7 @@ namespace MonkeyPaste.Avalonia {
             //        itemType: MpCopyItemType.Text);
             //}
 
+
             MpNotificationCollectionViewModel.Instance.FinishLoading();
             //MpAvClipTrayViewModel.Instance.OnPostMainWindowLoaded();
             IsCoreLoaded = true;
@@ -99,8 +100,8 @@ namespace MonkeyPaste.Avalonia {
 
             _coreItems.AddRange(
                new List<MpBootstrappedItemViewModel>() {
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvDataFormats),MpPlatformWrapper.Services.DataObjectRegistrar),
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvQueryInfoViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpPortableDataFormats),MpPlatformWrapper.Services.DataObjectRegistrar),
+                    //new MpBootstrappedItemViewModel(this,typeof(MpAvQueryInfoViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpDocumentHtmlExtension)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpProcessManager), Properties.Settings.Default.IgnoredProcessNames),

@@ -23,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
 
         public const string JS_REF_ERROR = "JS_REF_ERROR";
 
-        public static bool UseCefNet { get; private set; } = false;
+        public static bool UseCefNet { get; private set; } = true;
         #endregion
 
         #region Statics

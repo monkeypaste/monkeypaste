@@ -372,7 +372,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsSubSelectionEnabled { get; set; } = false;
 
-
         public bool IsVerticalScrollbarVisibile {
             get {
                 if (IsContentReadOnly && !IsSubSelectionEnabled) {
@@ -434,7 +433,38 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
         }
+        public bool IsHorizontalScrollbarVisibile {
+            get {
+                if (!IsContentReadOnly) {
+                    // NOTE from margin padding auto false positives for horizontal and has been working
+                    return EditableContentSize.Width > ContentWidth;
+                }
+                return false;
+            }
+        }
 
+
+        public bool IsPinButtonVisible {
+            get {
+                return IsSelected || IsHovering ? true : false;
+            }
+        }
+
+
+        public bool IsTooltipVisible {
+            get {
+                if (!MpPrefViewModel.Instance.ShowItemPreview) {
+                    return false;
+                }
+                return (Parent.HasScrollVelocity || IsSelected) ? false : true;
+            }
+        }
+
+        public bool TrialOverlayVisibility {
+            get {
+                return MpPrefViewModel.Instance.IsTrialExpired ? true : false;
+            }
+        }
 
         public int LineCount { get; private set; } = -1;
         public int CharCount { get; private set; } = -1;
@@ -1247,7 +1277,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public ObservableCollection<MpAvFileItemViewModel> FileItems { get; set; } = new ObservableCollection<MpAvFileItemViewModel>();
+        public ObservableCollection<MpAvFileDataObjectItemViewModel> FileItems { get; set; } = new ObservableCollection<MpAvFileDataObjectItemViewModel>();
         public MpImageAnnotationCollectionViewModel DetectedImageObjectCollectionViewModel { get; set; }
 
         public MpAvTemplateCollectionViewModel TemplateCollection { get; set; }
@@ -1473,34 +1503,6 @@ namespace MonkeyPaste.Avalonia {
                     //MpMeasurements.Instance.ClipTileContentDefaultHeight);
 
 
-        public double EditorHeight {
-            get {
-                if (Parent == null || CopyItem == null) {
-                    return 0;
-                }
-                if (IsChromiumEditor) {
-                    double h;
-                    if (!IsContentReadOnly) {
-                        //return Parent.TileContentHeight; //quil editor height
-                        h = TileContentHeight;// - MpMeasurements.Instance.ClipTileEditToolbarHeight - 15;
-                    } else {
-
-                        h = ReadOnlyContentSize.Height;
-                    }
-                    if (double.IsInfinity(h)) {
-                        return Double.NaN;
-                    }
-                    return h;
-                } else {
-
-                    if (!IsContentReadOnly) {
-                        return TileContentHeight - TileEditToolbarHeight - 15;
-                    }
-                    return ReadOnlyContentSize.Height;
-                }
-            }
-        }
-
         public MpSize EditableContentSize {
             get {
                 if (Parent == null || CopyItem == null) {
@@ -1537,48 +1539,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Visibility
 
-        public bool IsHorizontalScrollbarVisibile {
-            get {
-                if (!IsContentReadOnly) {
-                    // NOTE from margin padding auto false positives for horizontal and has been working
-                    return EditableContentSize.Width > ContentWidth;
-                }
-                return false;
-            }
-        }
-
-
-        public bool IsPinButtonVisible {
-            get {
-                return IsSelected || IsHovering ? true : false;
-            }
-        }
-
-
-        public bool IsTooltipVisible {
-            get {
-                if (!MpPrefViewModel.Instance.ShowItemPreview) {
-                    return false;
-                }
-                return (Parent.HasScrollVelocity || IsSelected) ? false : true;
-            }
-        }
-
-        public bool TrialOverlayVisibility {
-            get {
-                return MpPrefViewModel.Instance.IsTrialExpired ? true : false;
-            }
-        }
-        #endregion
-
-
-        #region State 
-
-        public bool IsChromiumEditor => PreferredFormat != null && PreferredFormat.Name == MpPortableDataFormats.Html;
-
         
-
         #endregion
+
 
         #region Business Logic
 
@@ -1658,10 +1621,9 @@ namespace MonkeyPaste.Avalonia {
             if (ItemType == MpCopyItemType.FileList) {
                 // BUG will need to check source here... pretty much most places using env.newLine to parse right i think
                 //  or substitute for 'portableNewLine' where necessary
-                var fil = await Task.WhenAll(
-                    CopyItemData.Split(new String[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
-                                .Select(x=>CreateFileItemViewModel(x)));
-                FileItems = new ObservableCollection<MpAvFileItemViewModel>(fil);
+                var ci_dobil = await MpDataModelProvider.GetDataObjectItemsByDataObjectId(DataObjectId);
+                var fivml = await Task.WhenAll(ci_dobil.Select(x=>CreateFileItemViewModel(x)));
+                FileItems = new ObservableCollection<MpAvFileDataObjectItemViewModel>(fivml);
             }else {
                 FileItems.Clear();
             }
@@ -1687,13 +1649,8 @@ namespace MonkeyPaste.Avalonia {
                 SelectionBgColorPopupViewModel.OnColorChanged += SelectionBgColorPopupViewModel_OnColorChanged;
             }
 
-
-
-            //RequestUiUpdate();
-            //OnPropertyChanged(nameof(EditorHeight));
             OnPropertyChanged(nameof(TileBorderBrushRect));
 
-            OnPropertyChanged(nameof(EditorHeight));
             OnPropertyChanged(nameof(IsPlaceholder));
             OnPropertyChanged(nameof(TrayX));
             OnPropertyChanged(nameof(TileBorderHexColor));
@@ -1764,9 +1721,9 @@ namespace MonkeyPaste.Avalonia {
             return ctcv.ContentView;
         }
 
-        private async Task<MpAvFileItemViewModel> CreateFileItemViewModel(string path) {
-            var fivm = new MpAvFileItemViewModel(this);
-            await fivm.InitializeAsync(path);
+        private async Task<MpAvFileDataObjectItemViewModel> CreateFileItemViewModel(MpDataObjectItem dobjItem) {
+            var fivm = new MpAvFileDataObjectItemViewModel(this);
+            await fivm.InitializeAsync(dobjItem);
             return fivm;
         }
         public void ResetSubSelection(bool clearEditing = true, bool reqFocus = false) {
@@ -2011,7 +1968,7 @@ namespace MonkeyPaste.Avalonia {
 
             foreach (string format in MpPortableDataFormats.RegisteredFormats) {
                 switch (format) {
-                    case MpAvDataFormats.AvFileNames:
+                    case MpPortableDataFormats.AvFileNames:
                     //case MpPortableDataFormats.FileDrop:
                         switch (ItemType) {
                             case MpCopyItemType.Text:
@@ -2030,11 +1987,11 @@ namespace MonkeyPaste.Avalonia {
                         }
                         //d.SetData(MpPortableDataFormats.FileDrop, string.Join(Environment.NewLine, sctfl));
                         break;
-                    case MpPortableDataFormats.Html:
+                    case MpPortableDataFormats.AvHtml_bytes:
                         if (string.IsNullOrEmpty(qhtml)) {
                             break;
                         }
-                        d.SetData(MpPortableDataFormats.Html, qhtml);
+                        d.SetData(MpPortableDataFormats.AvHtml_bytes, qhtml);
                         break;
                     // TODO add rtf conversion here...
                     case MpPortableDataFormats.Text:
@@ -2043,11 +2000,11 @@ namespace MonkeyPaste.Avalonia {
                         }
                         d.SetData(MpPortableDataFormats.Text, pt);
                         break;
-                    case MpPortableDataFormats.Bitmap:
+                    case MpPortableDataFormats.AvPNG:
                         if (string.IsNullOrEmpty(bmpBase64)) {
                             break;
                         }
-                        d.SetData(MpPortableDataFormats.Bitmap, bmpBase64);
+                        d.SetData(MpPortableDataFormats.AvPNG, bmpBase64);
                         break;
                     case MpPortableDataFormats.Csv:
                         switch (ItemType) {
@@ -2083,7 +2040,7 @@ namespace MonkeyPaste.Avalonia {
             await Task.Delay(1);
             var sdfl = new List<string>();
             sdfl.Add(MpPortableDataFormats.Text);
-            //sdfl.Add(MpAvDataFormats.AvFileNames);
+            //sdfl.Add(MpPortableDataFormats.AvFileNames);
             //if (ItemType == MpCopyItemType.Text) {
             //    sdfl.Add(MpPortableDataFormats.Text);
             //}
@@ -2297,7 +2254,6 @@ namespace MonkeyPaste.Avalonia {
 
                     OnPropertyChanged(nameof(IsHorizontalScrollbarVisibile));
                     OnPropertyChanged(nameof(IsVerticalScrollbarVisibile));
-                    OnPropertyChanged(nameof(EditorHeight));
                     OnPropertyChanged(nameof(CanVerticallyScroll));
                     IsSubSelectionEnabled = !IsContentReadOnly;
                     OnPropertyChanged(nameof(IsSubSelectionEnabled));

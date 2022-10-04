@@ -918,7 +918,7 @@
 
         #region State 
 
-        public bool IsChromiumEditor => PreferredFormat != null && PreferredFormat.Name == MpPortableDataFormats.Html;
+        public bool IsChromiumEditor => PreferredFormat != null && PreferredFormat.Name == MpPortableDataFormats.WpfHtml;
 
         public int LineCount { get; private set; } = -1;
         public int CharCount { get; private set; } = -1;
@@ -1689,7 +1689,7 @@
 
             foreach (string format in MpPortableDataFormats.RegisteredFormats) {
                 switch (format) {
-                    case MpPortableDataFormats.FileDrop:
+                    case MpPortableDataFormats.WpfFileDrop:
                         switch(ItemType) {
                             case MpCopyItemType.Text:
                                 sctfl.Add(rtf.ToFile(null, CopyItemTitle));
@@ -1705,13 +1705,13 @@
                                 }
                                 break;
                         }
-                        d.SetData(MpPortableDataFormats.FileDrop, string.Join(Environment.NewLine, sctfl));
+                        d.SetData(MpPortableDataFormats.WpfFileDrop, string.Join(Environment.NewLine, sctfl));
                         break;
-                    case MpPortableDataFormats.Rtf:
+                    case MpPortableDataFormats.WpfRtf:
                         if(string.IsNullOrEmpty(rtf)) {
                             break;
                         }
-                        d.SetData(MpPortableDataFormats.Rtf, rtf);
+                        d.SetData(MpPortableDataFormats.WpfRtf, rtf);
                         break;
                     case MpPortableDataFormats.Text:
                         if (string.IsNullOrEmpty(pt)) {
@@ -1719,11 +1719,11 @@
                         }
                         d.SetData(MpPortableDataFormats.Text, pt);
                         break;
-                    case MpPortableDataFormats.Bitmap:
+                    case MpPortableDataFormats.WpfBitmap:
                         if (string.IsNullOrEmpty(bmpBase64)) {
                             break;
                         }
-                        d.SetData(MpPortableDataFormats.Bitmap, bmpBase64);
+                        d.SetData(MpPortableDataFormats.WpfBitmap, bmpBase64);
                         break;
                     case MpPortableDataFormats.Csv:
                         switch(ItemType) {

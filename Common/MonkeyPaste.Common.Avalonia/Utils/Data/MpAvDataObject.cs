@@ -1,6 +1,7 @@
 ﻿using Avalonia.Input;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -17,34 +18,20 @@ namespace MonkeyPaste.Common.Avalonia {
                 // will cause error for sometypes
                 return;
             }
-            if(MpAvDataFormats.IsFormatOverride(format)) {
-                if(format == MpPortableDataFormats.FileDrop) {
-                    // convert portable single line-separated string to enumerable of strings for avalonia
-                    data = data.ToString().Split(new string[] {Environment.NewLine},StringSplitOptions.RemoveEmptyEntries) as IEnumerable<string>;
-                } else if(format == MpPortableDataFormats.Html || 
-                          format == MpPortableDataFormats.Rtf) {
-                    if(data is not byte[]) {
-                        if (data is string dataStr) {
-                            // only convert if it isn't already
-                            data = dataStr.ToEncodedBytes();
-                        } else if(data != null){
-                            // what type is it?
-                            Debugger.Break();
-                        } else {
-                            // cannot set null for html byte array, av throws error
-                            return;
-                        }
-                    }
-                    
-                }
-            }            
+            if (format == MpPortableDataFormats.AvFileNames && data is string portablePathStr) {
+                // convert portable single line-separated string to enumerable of strings for avalonia
+                data = portablePathStr.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries) as IEnumerable<string>;
+            } else if ((format == MpPortableDataFormats.AvHtml_bytes || format == MpPortableDataFormats.AvRtf_bytes) && data is string portableDecodedFormattedTextStr) {
+                // avalona like rtf and html to be stored as bytes
+                data = portableDecodedFormattedTextStr.ToEncodedBytes();
+            }
             base.SetData(format, data);
         }
 
         public void MapAllPseudoFormats() {
             // called after all available formats created to map cef types to avalonia and/or vice versa
-            var html_f = MpPortableDataFormats.GetDataFormat(MpAvDataFormats.AvHtml_bytes);
-            var cefHtml_f = MpPortableDataFormats.GetDataFormat(MpAvDataFormats.CefHtml);
+            var html_f = MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvHtml_bytes);
+            var cefHtml_f = MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.CefHtml);
 
             if(DataFormatLookup.ContainsKey(html_f) &&
                 !DataFormatLookup.ContainsKey(cefHtml_f)) {
@@ -60,7 +47,7 @@ namespace MonkeyPaste.Common.Avalonia {
             }
 
             var text_f = MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.Text);
-            var cefText_f = MpPortableDataFormats.GetDataFormat(MpAvDataFormats.CefText);
+            var cefText_f = MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.CefText);
 
             if (DataFormatLookup.ContainsKey(text_f) &&
                 !DataFormatLookup.ContainsKey(cefText_f)) {
@@ -92,12 +79,10 @@ namespace MonkeyPaste.Common.Avalonia {
 
         IEnumerable<string> IDataObject.GetFileNames() {
 
-            if(GetData(MpAvDataFormats.AvFileNames) is IEnumerable<string> files) {
+            if(GetData(MpPortableDataFormats.AvFileNames) is IEnumerable<string> files) {
                 return files;
             }
-            if(GetData(MpPortableDataFormats.FileDrop) is string filesStr) {
-                return filesStr.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-            }
+           
             return null;
         }
 

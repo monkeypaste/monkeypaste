@@ -96,21 +96,22 @@ namespace MonkeyPaste {
             if(MpPlatformWrapper.Services.OsInfo.IsAvalonia) {
                 switch (itemType) {
                     case MpCopyItemType.Text:
-                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.Html);
+                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvHtml_bytes);
                     case MpCopyItemType.Image:
-                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.Bitmap);
+                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvPNG);
                     case MpCopyItemType.FileList:
-                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.FileDrop);
+                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvFileNames);
                 }
 
             } else {
+                // this is bad but its only so wpf still builds...
                 switch (itemType) {
                     case MpCopyItemType.Text:
-                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.Rtf);
+                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.WpfRtf);
                     case MpCopyItemType.Image:
-                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.Bitmap);
+                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.WpfBitmap);
                     case MpCopyItemType.FileList:
-                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.FileDrop);
+                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.WpfFileDrop);
                 }
 
             }

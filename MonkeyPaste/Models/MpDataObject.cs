@@ -52,24 +52,62 @@ namespace MonkeyPaste {
             if(!suppressWrite) {
                 await ndio.WriteToDatabaseAsync();
             }
+            if(pdo == null) {
+                return ndio;
+            }
 
-            if(pdo != null) {
-                foreach(var kvp in pdo.DataFormatLookup) {
-                    string itemData64Str = null;
-                    if(kvp.Value is byte[] bytes) {
-                        itemData64Str = bytes.ToBase64String();
-                    }  else if(kvp.Value is not string) {
-                        // what type is it?
+            foreach (var kvp in pdo.DataFormatLookup) {
+                string itemDataStr;
+
+                if (kvp.Value is byte[] bytes) {
+                    // html, rtf or png
+
+                    itemDataStr = bytes.ToBase64String();
+                } else if (kvp.Value is IEnumerable<string> valueParts) {
+                    // file list
+
+                    if (kvp.Key.Name != MpPortableDataFormats.AvFileNames) {
+                        // why is this a string list?
                         Debugger.Break();
-                        itemData64Str = kvp.Value.ToString();
-                    } else {
-                        itemData64Str = kvp.Value.ToString();
+                        continue;
                     }
-                    var pdoi = await MpDataObjectItem.CreateAsync(
-                        dataObjectId: ndio.Id,
-                        itemFormat: kvp.Key.Name,
-                        itemData64: itemData64Str);
+                    // store file/path icon with path
+                    // 1. both icon and path will become redundant but is unavoidable (impossible to uniformly know a path's icon and path ref needs to be associated with that clipboard object)
+                    // 2. can change so maybe best when accessed on source device to 'create' again which does dup check
+                    foreach (var fp in valueParts) {
+                        int fp_icon_id = 0;
+                        if (fp.IsFileOrDirectory()) {
+                            var fp_icon_base64_str = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(fp);
+                            var fp_icon = await MpPlatformWrapper.Services.IconBuilder.CreateAsync(fp_icon_base64_str);
+                            fp_icon_id = fp_icon.Id;
+                        } else {
+                            // what's wrong with the path string?
+                            Debugger.Break();
+                        }
+                        // store each file item separately
+                        _ = await MpDataObjectItem.CreateAsync(
+                                    dataObjectId: ndio.Id,
+                                    itemFormat: kvp.Key.Name,
+                                    itemData: fp,
+                                    itemIconId: fp_icon_id);
+
+                    }
+                    // files are handled individually...
+                    continue;
+
+                } else if (kvp.Value is string) {
+                    // text
+
+                    itemDataStr = kvp.Value.ToString();
+                } else {
+                    // what type is it?
+                    Debugger.Break();
+                    itemDataStr = kvp.Value.ToString();
                 }
+                _ = await MpDataObjectItem.CreateAsync(
+                    dataObjectId: ndio.Id,
+                    itemFormat: kvp.Key.Name,
+                    itemData: itemDataStr);
             }
             return ndio;
         }

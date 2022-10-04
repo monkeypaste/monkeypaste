@@ -399,7 +399,7 @@ namespace MonkeyPaste.Common.Wpf {
 
             //string itemGuid = System.Guid.NewGuid().ToString();
             string rtf = ReadTextFromFile(@"C:\Users\tkefauver\Desktop\rtf_sample_short.rtf");
-            string plain_html = ConvertFormatToHtml(rtf, MpPortableDataFormats.Rtf);
+            string plain_html = ConvertFormatToHtml(rtf, MpPortableDataFormats.AvRtf_bytes);
 
             WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtf_sample_to_plain_html_test.html", plain_html);
             return plain_html;

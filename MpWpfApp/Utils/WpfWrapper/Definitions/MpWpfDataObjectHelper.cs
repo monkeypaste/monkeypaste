@@ -171,7 +171,7 @@ namespace MpWpfApp {
             }
 
             switch (format) {
-                case MpPortableDataFormats.Bitmap:
+                case MpPortableDataFormats.WpfBitmap:
                     var bmpSrc = data.ToString().ToBitmapSource(false);
 
                     var winforms_dataobject = new DataObject();// MpClipboardHelper.MpClipoardImageHelpers.GetClipboardImage_WinForms(bmpSrc.ToBitmap(), null, null);
@@ -191,7 +191,7 @@ namespace MpWpfApp {
                     dobj.SetData("PNG", pngData);
                     dobj.SetData(DataFormats.Dib, dibData);
                     break;
-                case MpPortableDataFormats.FileDrop:
+                case MpPortableDataFormats.WpfFileDrop:
                     var fl = data.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                     var sc = new StringCollection();
                     sc.AddRange(fl);

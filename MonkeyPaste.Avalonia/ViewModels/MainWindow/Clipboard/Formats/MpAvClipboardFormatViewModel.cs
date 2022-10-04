@@ -72,7 +72,7 @@ namespace MonkeyPaste.Avalonia {
             get {
                 string keyStr = "FormatIcon";
                 switch(FormatName) {
-                    case MpPortableDataFormats.Rtf:
+                    case MpPortableDataFormats.AvRtf_bytes:
                         keyStr = "Rtf" + keyStr;
                         break;
                     case MpPortableDataFormats.OemText:
@@ -80,13 +80,13 @@ namespace MonkeyPaste.Avalonia {
                     case MpPortableDataFormats.Text:
                         keyStr = "Text" + keyStr;
                         break;
-                    case MpPortableDataFormats.Html:
+                    case MpPortableDataFormats.AvHtml_bytes:
                         keyStr = "Html" + keyStr;
                         break;
                     case MpPortableDataFormats.Csv:
                         keyStr = "Csv" + keyStr;
                         break;
-                    case MpPortableDataFormats.Bitmap:
+                    case MpPortableDataFormats.AvPNG:
                         keyStr = "Bitmap" + keyStr;
                         break;
                     default:

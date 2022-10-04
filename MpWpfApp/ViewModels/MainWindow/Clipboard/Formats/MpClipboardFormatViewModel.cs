@@ -71,7 +71,7 @@ namespace MpWpfApp {
             get {
                 string keyStr = "FormatIcon";
                 switch(FormatName) {
-                    case MpPortableDataFormats.Rtf:
+                    case MpPortableDataFormats.WpfRtf:
                         keyStr = "Rtf" + keyStr;
                         break;
                     case MpPortableDataFormats.OemText:
@@ -79,13 +79,13 @@ namespace MpWpfApp {
                     case MpPortableDataFormats.Text:
                         keyStr = "Text" + keyStr;
                         break;
-                    case MpPortableDataFormats.Html:
+                    case MpPortableDataFormats.WpfHtml:
                         keyStr = "Html" + keyStr;
                         break;
                     case MpPortableDataFormats.Csv:
                         keyStr = "Csv" + keyStr;
                         break;
-                    case MpPortableDataFormats.Bitmap:
+                    case MpPortableDataFormats.WpfBitmap:
                         keyStr = "Bitmap" + keyStr;
                         break;
                     default:

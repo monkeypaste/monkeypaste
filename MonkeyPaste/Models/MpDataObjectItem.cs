@@ -22,6 +22,10 @@ namespace MonkeyPaste {
         public string ItemFormat { get; set; }
 
         public string ItemDataBase64 { get; set; }
+        public string ItemData { get; set; }
+
+        [Column("fk_MpIconId")]
+        public int ItemDataIconId { get; set; }
 
         #endregion
 
@@ -46,14 +50,19 @@ namespace MonkeyPaste {
         public static async Task<MpDataObjectItem> CreateAsync(
             int dataObjectId = 0,
             string itemFormat = "",
-            string itemData64 = null,
+            string itemData = null,
+            int itemIconId = 0,
             bool suppressWrite = false) {
+            if(dataObjectId <= 0) {
+                throw new Exception("Must have valid dataObject id, id is " + dataObjectId);
+            }
 
             var ndio = new MpDataObjectItem() {
                 DataObjectItemGuid = System.Guid.NewGuid(),
                 DataObjectId = dataObjectId,
                 ItemFormat = itemFormat,
-                ItemDataBase64 = itemData64
+                ItemData = itemData,
+                ItemDataIconId = itemIconId
             };
 
             if(!suppressWrite) {

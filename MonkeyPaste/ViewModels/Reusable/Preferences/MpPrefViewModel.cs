@@ -627,6 +627,7 @@ namespace MonkeyPaste {
             }
             
             if(prefVm == null) {
+                // this means pref file is invalid, likely app crashed while saving so attempt recovery
                 await CreateDefaultPrefsAsync(true);
                 if(Instance == null) {
                     // shouldn't happen
@@ -644,8 +645,8 @@ namespace MonkeyPaste {
             if(string.IsNullOrWhiteSpace(prefStr)) {
                 return false;
             }
-            if(prefStr.StartsWith("{"+Environment.NewLine) && 
-                prefStr.EndsWith(Environment.NewLine+"}")) {
+            if(prefStr.StartsWith("{") && 
+                prefStr.EndsWith("}")) {
                 return true;
             }
             return false;

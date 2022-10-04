@@ -35,32 +35,32 @@ namespace MpWpfApp {
                 MpHtmlClipboardDataConverter htmlClipboardData = new MpHtmlClipboardDataConverter();
                 MpCopyItemType itemType = MpCopyItemType.None;
 
-                if (mpdo.ContainsData(MpPortableDataFormats.FileDrop)) {
+                if (mpdo.ContainsData(MpPortableDataFormats.WpfFileDrop)) {
                     itemType = MpCopyItemType.FileList;
-                    itemData = mpdo.GetData(MpPortableDataFormats.FileDrop).ToString();
+                    itemData = mpdo.GetData(MpPortableDataFormats.WpfFileDrop).ToString();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Csv)) {
                     itemType = MpCopyItemType.Text;
 
-                    if (mpdo.ContainsData(MpPortableDataFormats.Rtf)) {
+                    if (mpdo.ContainsData(MpPortableDataFormats.WpfRtf)) {
                         // NOTE this is assuming the content is a rich text table. But it may not be 
                         // depending on the source so may need to be careful handling these. 
                         itemType = MpCopyItemType.Text;
-                        itemData = mpdo.GetData(MpPortableDataFormats.Rtf).ToString().EscapeExtraOfficeRtfFormatting();
+                        itemData = mpdo.GetData(MpPortableDataFormats.WpfRtf).ToString().EscapeExtraOfficeRtfFormatting();
                     } else {
                         string csvStr = mpdo.GetData(MpPortableDataFormats.Csv).ToString();
                         itemData = csvStr.ToRichTextTable();
                         //itemData = itemData.ToQuillText();
                     }
-                } else if (mpdo.ContainsData(MpPortableDataFormats.Rtf)) {
+                } else if (mpdo.ContainsData(MpPortableDataFormats.WpfRtf)) {
                     itemType = MpCopyItemType.Text;
-                    itemData = mpdo.GetData(MpPortableDataFormats.Rtf).ToString().EscapeExtraOfficeRtfFormatting();
+                    itemData = mpdo.GetData(MpPortableDataFormats.WpfRtf).ToString().EscapeExtraOfficeRtfFormatting();
                     //itemData = itemData.ToQuillText();
-                } else if (mpdo.ContainsData(MpPortableDataFormats.Bitmap)) {
+                } else if (mpdo.ContainsData(MpPortableDataFormats.WpfBitmap)) {
                     itemType = MpCopyItemType.Image;
-                    itemData = mpdo.GetData(MpPortableDataFormats.Bitmap).ToString();
-                } else if (mpdo.ContainsData(MpPortableDataFormats.Html)) {
+                    itemData = mpdo.GetData(MpPortableDataFormats.WpfBitmap).ToString();
+                } else if (mpdo.ContainsData(MpPortableDataFormats.WpfHtml)) {
                     itemType = MpCopyItemType.Text;
-                    string rawHtmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
+                    string rawHtmlData = mpdo.GetData(MpPortableDataFormats.WpfHtml).ToString();
                     htmlClipboardData = await MpHtmlClipboardDataConverter.Parse(rawHtmlData);
                     itemData = htmlClipboardData.Rtf;
                     //itemData = itemData.ToQuillText();

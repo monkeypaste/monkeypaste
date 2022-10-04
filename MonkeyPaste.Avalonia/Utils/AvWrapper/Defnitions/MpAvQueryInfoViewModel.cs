@@ -13,24 +13,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
 
-        public static void Init() {
-            
+        public static void Init(string lastQueryInfoStr) {
+            _current = JsonConvert.DeserializeObject<MpAvQueryInfoViewModel>(lastQueryInfoStr);
         }
 
         [JsonIgnore]
         private static MpAvQueryInfoViewModel _current;
-        public static MpAvQueryInfoViewModel Current { 
-            get {
-                if(_current == null) {
-                    _current = JsonConvert.DeserializeObject<MpAvQueryInfoViewModel>(MpPrefViewModel.Instance.LastQueryInfoJson);
-                    if (_current == null) {
-                        // occurs on initial startup or after corrupted pref recovery i guess
-                        _current = new MpAvQueryInfoViewModel();
-                    }
-                }
-                return _current;
-            }
-        }
+        public static MpAvQueryInfoViewModel Current => _current;
         #endregion
 
         #region Properties

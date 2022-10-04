@@ -32,32 +32,32 @@ namespace MonkeyPaste.Avalonia {
                 MpAvHtmlClipboardData htmlClipboardData = new MpAvHtmlClipboardData();
                 MpCopyItemType itemType = MpCopyItemType.None;
 
-                if (mpdo.ContainsData(MpAvDataFormats.AvFileNames)) {
+                if (mpdo.ContainsData(MpPortableDataFormats.AvFileNames)) {
 
                     // FILES
 
                     itemType = MpCopyItemType.FileList;
-                    itemData = mpdo.GetData(MpAvDataFormats.AvFileNames).ToString();
+                    itemData = mpdo.GetData(MpPortableDataFormats.AvFileNames).ToString();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Csv)) {
 
                     // CSV
 
                     itemType = MpCopyItemType.Text;
 
-                    if (mpdo.ContainsData(MpAvDataFormats.AvRtf_bytes) && 
-                        mpdo.GetData(MpAvDataFormats.AvRtf_bytes) is byte[] rtfCsvBytes) {
+                    if (mpdo.ContainsData(MpPortableDataFormats.AvRtf_bytes) && 
+                        mpdo.GetData(MpPortableDataFormats.AvRtf_bytes) is byte[] rtfCsvBytes) {
                         // NOTE this is assuming the content is a rich text table. But it may not be 
                         // depending on the source so may need to be careful handling these. 
                         itemType = MpCopyItemType.Text;
                         itemData = rtfCsvBytes.ToDecodedString().EscapeExtraOfficeRtfFormatting();
-                        itemData = itemData.ToRichHtmlText(MpAvDataFormats.AvRtf_bytes);
+                        itemData = itemData.ToRichHtmlText(MpPortableDataFormats.AvRtf_bytes);
                     } else {
                         string csvStr = mpdo.GetData(MpPortableDataFormats.Csv).ToString();
                         //itemData = csvStr.ToRichText();
                         itemData = itemData.ToRichHtmlText(MpPortableDataFormats.Csv);
                     }
-                } else if (mpdo.ContainsData(MpAvDataFormats.AvRtf_bytes) &&
-                        mpdo.GetData(MpAvDataFormats.AvRtf_bytes) is byte[] rtfBytes &&
+                } else if (mpdo.ContainsData(MpPortableDataFormats.AvRtf_bytes) &&
+                        mpdo.GetData(MpPortableDataFormats.AvRtf_bytes) is byte[] rtfBytes &&
                         rtfBytes.ToDecodedString() is string rtfStr) {
 
                     // RTF
@@ -65,16 +65,16 @@ namespace MonkeyPaste.Avalonia {
                     // for now and simplicity there are no platform checks for rtf because it should only (by the DataFormat name at least) be on windows
                     itemType = MpCopyItemType.Text;
                     itemData = rtfStr.EscapeExtraOfficeRtfFormatting();
-                    itemData = itemData.ToRichHtmlText(MpAvDataFormats.AvRtf_bytes);
-                } else if (mpdo.ContainsData(MpAvDataFormats.AvPNG) && 
-                            mpdo.GetData(MpAvDataFormats.AvPNG) is byte[] pngBytes &&
+                    itemData = itemData.ToRichHtmlText(MpPortableDataFormats.AvRtf_bytes);
+                } else if (mpdo.ContainsData(MpPortableDataFormats.AvPNG) && 
+                            mpdo.GetData(MpPortableDataFormats.AvPNG) is byte[] pngBytes &&
                             pngBytes.ToBase64String() is string pngBase64Str) {
 
                     // BITMAP
                     itemType = MpCopyItemType.Image;
                     itemData = pngBase64Str;
-                } else if (mpdo.ContainsData(MpAvDataFormats.AvHtml_bytes) &&
-                        mpdo.GetData(MpAvDataFormats.AvHtml_bytes) is byte[] htmlBytes &&
+                } else if (mpdo.ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
+                        mpdo.GetData(MpPortableDataFormats.AvHtml_bytes) is byte[] htmlBytes &&
                         htmlBytes.ToDecodedString() is string htmlStr) {
 
                     // HTML
@@ -124,10 +124,10 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
 
-                //if (mpdo.ContainsData(MpAvDataFormats.AvHtml_bytes)) {
-                //    string rawHtmlData = mpdo.GetData(MpAvDataFormats.AvHtml_bytes).ToString();
+                //if (mpdo.ContainsData(MpPortableDataFormats.AvHtml_bytes)) {
+                //    string rawHtmlData = mpdo.GetData(MpPortableDataFormats.AvHtml_bytes).ToString();
                 //    htmlClipboardData = MpHtmlClipboardDataConverter.Parse(rawHtmlData);
-                //    //htmlData = mpdo.GetData(MpAvDataFormats.AvHtml_bytes).ToString();
+                //    //htmlData = mpdo.GetData(MpPortableDataFormats.AvHtml_bytes).ToString();
                 //}
 
                 if (itemType == MpCopyItemType.Text && ((string)itemData).Length > MpPrefViewModel.Instance.MaxRtfCharCount) {
@@ -189,7 +189,7 @@ namespace MonkeyPaste.Avalonia {
                 var ci = await MpCopyItem.Create(
                     sourceId: source.Id,
                     dataObjectId: dobj.Id,
-                    //preferredFormatName: htmlClipboardData == null ? null : MpAvDataFormats.AvHtml_bytes,
+                    //preferredFormatName: htmlClipboardData == null ? null : MpPortableDataFormats.AvHtml_bytes,
                     data: itemData,
                     itemType: itemType,
                     suppressWrite: suppressWrite);

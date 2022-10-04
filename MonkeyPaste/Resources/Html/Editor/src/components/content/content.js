@@ -1,6 +1,8 @@
 var ContentHandle = null;
 var ContentItemType = 'Text';
 
+var ContentScreenshotBase64Str = null;
+
 function loadContent(contentHandle, contentType, contentData, isPasteRequest) {
 	resetDragDrop();
 

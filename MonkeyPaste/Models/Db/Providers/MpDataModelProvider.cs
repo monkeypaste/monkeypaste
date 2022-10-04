@@ -987,6 +987,12 @@ namespace MonkeyPaste {
             return result > 0;
         }
 
+        public static async Task<List<MpDataObjectItem>> GetDataObjectItemsByDataObjectId(int dobjid) {
+            string query = "select * from MpDataObjectItem where fk_MpDataObjectId=?";
+            var result = await MpDb.QueryAsync<MpDataObjectItem>(query, dobjid);
+            return result;
+        }
+
         #endregion
 
         #endregion

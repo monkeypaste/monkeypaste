@@ -9,17 +9,35 @@ namespace MonkeyPaste.Common {
         private static MpIPlatformDataObjectRegistrar _registrar;
 
         private static string[] _defaultFormatNames = new string[] {
+
+            // windows
+
             Text,
-            Rtf,
+            //Rtf,
             Xaml,
             XamlPackage,
-            Html,
+            //Html,
             Csv,
             Unicode,
             OemText,
-            FileDrop,
-            //FileNames,
-            Bitmap,
+            //FileDrop,
+            //Bitmap,
+
+            // avalonia
+
+            AvRtf_bytes,
+            AvHtml_bytes,
+            AvFileNames,
+            AvPNG,
+
+            // cef
+
+            CefHtml,
+            CefText,
+            CefJson,
+
+            // internal
+
             INTERNAL_CLIP_TILE_DATA_FORMAT
         };
 
@@ -29,17 +47,33 @@ namespace MonkeyPaste.Common {
 
         #region Constants
 
+        // Legacy Wpf formats
+
+        public const string WpfRtf = "Rich Text Format";
+        public const string WpfBitmap = "Bitmap";
+        public const string WpfHtml = "HTML Format";
+        public const string WpfFileDrop = "FileDrop";
+
+        // Windows Formats
         public const string Text = "Text";
-        public const string Rtf = "Rich Text Format";
         public const string Xaml = "Xaml";
         public const string XamlPackage = "XamlPackage";
-        public const string Bitmap = "Bitmap";
-        public const string Html = "HTML Format";
-        public const string FileDrop = "FileDrop";
-       //public const string FileNames = "FileNames";
         public const string Csv = "CSV";
         public const string Unicode = "Unicode";
         public const string OemText = "OEMText";
+
+        // Avalonia Formats
+
+        public const string AvRtf_bytes = "Rich Text Format";
+        public const string AvHtml_bytes = "HTML Format";
+        public const string AvFileNames = "FileNames";
+        public const string AvPNG = "PNG";
+
+        // Cef Formats
+
+        public const string CefHtml = "text/html";
+        public const string CefText = "text/plain";
+        public const string CefJson = "application/json";
 
         public const string INTERNAL_CLIP_TILE_DATA_FORMAT = "Mp Internal Content";
 
