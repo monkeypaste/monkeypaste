@@ -561,10 +561,10 @@ namespace MonkeyPaste {
             _prefPath = prefPath;
             _dbInfo = dbInfo;
             _osInfo = osInfo;
-            if (!File.Exists(_prefPath)) {
-                await CreateDefaultPrefsAsync();
-            } else {
+            if (File.Exists(_prefPath)) {
                 await LoadPrefsAsync();
+            } else {
+                await CreateDefaultPrefsAsync();
             }
             
         }
@@ -655,10 +655,35 @@ namespace MonkeyPaste {
         private static async Task CreateDefaultPrefsAsync(bool isReset = false) {
             MpConsole.WriteTraceLine("Pref file was either missing or empty, (re)creating");
 
-            Instance = new MpPrefViewModel();
             if(isReset) {
+                Instance = new MpPrefViewModel();
                 bool success = await MpDb.ResetPreferenceDefaultsAsync(_dbInfo, _osInfo);
+            } else {
+                // TODO remove this later only to automate restoring test db and preferences
+                string execute_path = Assembly.GetExecutingAssembly().Location;
+                string execute_dir = Path.GetDirectoryName(execute_path);
+                string backup_path = Path.Combine(MpCommonHelpers.GetSolutionDir(), "db", "backup");
+                if(_osInfo.OsType == MpUserDeviceType.Windows) {
+                    backup_path = Path.Combine(backup_path, "win");
+                    File.Copy(Path.Combine(backup_path, "mp_win.db"), Path.Combine(execute_dir, "mp_win.db"));
+                    File.Copy(Path.Combine(backup_path, "pref_win.json"), Path.Combine(execute_dir, "pref_win.json"));
+                } else if (_osInfo.OsType == MpUserDeviceType.Linux) {
+                    backup_path = Path.Combine(backup_path, "x11");
+                    File.Copy(Path.Combine(backup_path, "mp_x11.db"), Path.Combine(execute_dir, "mp_x11.db"));
+                    File.Copy(Path.Combine(backup_path, "pref_x11.json"), Path.Combine(execute_dir, "pref_x11.json"));
+                }
+                MpConsole.WriteLine("Debug Settings restored from " + backup_path + " reinitializing...");
+                await InitAsync(_prefPath, _dbInfo, _osInfo);
+                return;
             }
+
+            IsLoading = true;
+            
+            // init last queryinfo to default values
+            Instance.LastQueryInfoJson = Instance.SerializeJsonObject();
+            
+            IsLoading = false;
+            
             Instance.Save();
 
             // NOTE this line should be removed and is only valid for current wpf db
@@ -666,7 +691,7 @@ namespace MonkeyPaste {
             while (Instance.IsSaving) {
                 await Task.Delay(100);
             }
-            return;
+
         }
 
         #endregion

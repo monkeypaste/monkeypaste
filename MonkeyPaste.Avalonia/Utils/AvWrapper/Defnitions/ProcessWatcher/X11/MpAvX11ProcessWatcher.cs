@@ -12,17 +12,26 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Diagnostics;
 //using Avalonia.Gtk3;
+using X11;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace MonkeyPaste.Avalonia {
     
     public class MpAvX11ProcessWatcher : MpAvProcessWatcherBase {
+        #region Private Variables
+
         private string[] _requiredTools = new string[] {
             "xdotool"
         };
 
+        private IntPtr _displayPtr;
+        private Window _rootWindow;
+        
         private object _lockObj = new object();
+
+        #endregion
 
         public override void SetActiveProcess(IntPtr handle) {
             throw new NotImplementedException();
@@ -37,19 +46,16 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override void CreateRunningProcessLookup() {
-            if (RunningProcessLookup == null) {
-                RunningProcessLookup = new ConcurrentDictionary<string, ObservableCollection<IntPtr>>();
+            var runningApps = GetRunningAppsWrapper();
+            if (runningApps == null) {
+                return;
             }
-            RunningProcessLookup.Clear();
-
-            var runningApps = GetRunningApps();
-
-            foreach(var kvp in runningApps) {
-                foreach(var handle in kvp.Value) {
+            foreach (var kvp in runningApps) {
+                foreach (var handle in kvp.Value) {
                     IntPtr handlePtr = new IntPtr(int.Parse(handle));
-                    if(!RunningProcessLookup.ContainsKey(kvp.Key)) {
+                    if (!RunningProcessLookup.ContainsKey(kvp.Key)) {
                         RunningProcessLookup.TryAdd(kvp.Key, new() { handlePtr });
-                    } else if(RunningProcessLookup.TryGetValue(kvp.Key, out var handles)) {
+                    } else if (RunningProcessLookup.TryGetValue(kvp.Key, out var handles)) {
                         handles.Add(handlePtr);
                         RunningProcessLookup[kvp.Key] = handles;
                     }
@@ -57,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private Dictionary<string, List<string>> GetRunningApps() {
+        private Dictionary<string, List<string>> GetRunningAppsWrapper() {
             var runningApps = new Dictionary<string, List<string>>();
 
             string winHandleStr = @"ps -o pid=".Bash();
@@ -78,15 +84,15 @@ namespace MonkeyPaste.Avalonia {
                 if(handleInt == 0) {
                     continue;
                 }
-                MpConsole.WriteLine("WindowHandleStr: " + winHandle + " Int: "+handleInt);
+                //MpConsole.WriteLine("WindowHandleStr: " + winHandle + " Int: "+handleInt);
                 string processPathsStr = $"ps -q {winHandle} -o cmd=".Bash();
-                MpConsole.WriteLine("Window Paths: " + processPathsStr);
+                //MpConsole.WriteLine("Window Paths: " + processPathsStr);
                 if (!processPathsStr.IsNullOrEmpty()) {
                     var processPaths = processPathsStr.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                     if (processPaths != null && processPaths.Length > 0) {
                         string processPath = processPaths[0];
-                        MpConsole.WriteLine("Found path: " + processPath);
-                        MpConsole.WriteLine("Parsed Handle Ptr: " + winHandle);
+                        //MpConsole.WriteLine("Found path: " + processPath);
+                        //MpConsole.WriteLine("Parsed Handle Ptr: " + winHandle);
                         if (runningApps.TryGetValue(processPath.ToLower(), out var handles)) {
                             handles.Add(winHandle);
                             runningApps[processPath.ToLower()] = handles;
@@ -119,7 +125,7 @@ namespace MonkeyPaste.Avalonia {
                 Tuple<string, string, IntPtr>? activeAppTuple = _lastProcessTuple;
 
 
-                var filteredApps = GetRunningApps();
+                var filteredApps = GetRunningAppsWrapper();
                 var refreshedPaths = new List<string>();
 
                 foreach (var runningApp in filteredApps) {
@@ -144,9 +150,9 @@ namespace MonkeyPaste.Avalonia {
                         }
                         if (handlePtr == activeIntPtr) {
                             // handle is active
-                            if (activeAppTuple != null) {
-                                Debugger.Break();
-                            } else {
+                            // if (activeAppTuple != null) {
+                            //     Debugger.Break();
+                            // } else {
                                 int runningAppIdx = handles.IndexOf(handlePtr);
                                 handles.Move(runningAppIdx, 0);
 
@@ -154,7 +160,7 @@ namespace MonkeyPaste.Avalonia {
                                     runningApp.Key.ToLower(),
                                     activeWindowTitle,
                                     handlePtr);
-                            }
+                            //}
                         }
 
                         RunningProcessLookup[runningApp.Key.ToLower()] = handles;
@@ -175,57 +181,6 @@ namespace MonkeyPaste.Avalonia {
                 return activeAppTuple;
             }
         }
-    }
-
-    public static class X11Extensions {
-
-        //await $"scripts/00magic.sh --param {arg}".Bash(this.logger);
-        public static string Bash(this string cmd) {
-            var escapedArgs = cmd.Replace("\"", "\\\"");
-            var process = new System.Diagnostics.Process {
-                StartInfo = new ProcessStartInfo {
-                    FileName = "bash",
-                    Arguments = $"-c \"{escapedArgs}\"",
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                },
-                EnableRaisingEvents = true
-            };
-            string output = null;
-
-            process.Exited += (sender, args) =>
-            {
-                string errorStr = process.StandardError.ReadToEnd();
-                if(!errorStr.IsNullOrEmpty()) {
-                    MpConsole.WriteLine($"Error for cmd '{cmd}':");
-                    MpConsole.WriteLine(errorStr);
-                    output = errorStr;
-                    return;
-                }
-
-                string outputStr = process.StandardOutput.ReadToEnd();
-                MpConsole.WriteLine($"Output for cmd '{cmd}'");
-                MpConsole.WriteLine(outputStr);
-
-                process.Dispose();
-                output = outputStr;
-            };
-
-            try {
-                process.Start();
-
-                while(output == null) {
-                    //await System.Threading.Tasks.Task.Delay(100);
-                    System.Threading.Thread.Sleep(100);
-                }
-            }
-            catch (Exception e) {
-                MpConsole.WriteLine(e, "Command {} failed", cmd);                
-            }
-
-            return output;
-        }
+        
     }
 }

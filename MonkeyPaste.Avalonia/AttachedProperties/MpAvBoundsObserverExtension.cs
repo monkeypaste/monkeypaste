@@ -77,7 +77,7 @@ namespace MonkeyPaste.Avalonia {
                 DetachedToVisualHandler(element, null);
             }
 
-            void AttachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+            void AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs e) {
                 if (s is Control control) {
                     if (e == null) {
                         control.AttachedToVisualTree += AttachedToVisualHandler;
@@ -87,7 +87,7 @@ namespace MonkeyPaste.Avalonia {
                     Control_EffectiveViewportChanged(control, null);
                 }
             }
-            void DetachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+            void DetachedToVisualHandler(object s, VisualTreeAttachmentEventArgs e) {
                 if (s is Control control) {
                     control.AttachedToVisualTree -= AttachedToVisualHandler;
                     control.DetachedFromVisualTree -= DetachedToVisualHandler;
@@ -95,7 +95,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            void Control_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs? e) {
+            void Control_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
                 if (sender is Control control) {
                     MpRect bounds = control.Bounds.ToPortableRect();
                     if (GetRelativeTo(control) is IVisual relativeTo) {

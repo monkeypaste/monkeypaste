@@ -1,9 +1,7 @@
-﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Utils.Extensions;
-using System;
+﻿using System;
 using System.Linq;
 
-namespace MonkeyPaste.Common.Utils.Extensions {
+namespace MonkeyPaste.Common {
     public static class MpRectExtensions {
         public static bool FuzzyEquals(this MpRect rect,MpRect otherRect, double maxThresh = 0.1d) {
             bool isMatch_l = Math.Abs(rect.Left - otherRect.Left) <= maxThresh;

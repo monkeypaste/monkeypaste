@@ -211,7 +211,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private static void AttachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+        private static void AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs e) {
             if (s is Control control) {
                 control.DetachedFromVisualTree += DetachedToVisualHandler;
                 control.PointerEnter += PointerEnterHandler;
@@ -223,7 +223,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void DetachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+        private static void DetachedToVisualHandler(object s, VisualTreeAttachmentEventArgs e) {
             if (s is Control control) {
                 control.AttachedToVisualTree -= AttachedToVisualHandler;
                 control.DetachedFromVisualTree -= DetachedToVisualHandler;
@@ -232,7 +232,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void PointerEnterHandler(object? s, PointerEventArgs e) {
+        private static void PointerEnterHandler(object s, PointerEventArgs e) {
             if (s is Control control) {
                 if (!GetCanHover(control)) {
                     return;
@@ -302,7 +302,7 @@ namespace MonkeyPaste.Avalonia {
             //    //img.Source = (img.Source as IImage).Tint(hoverBrush);
             //}
         }
-        private static void PointerLeaveHandler(object? s, PointerEventArgs e) {
+        private static void PointerLeaveHandler(object s, PointerEventArgs e) {
             if (s is Control control) {
                 SetIsHovering(control, false);
                 if (GetHoverCursor(control) is MpCursorType ct) {

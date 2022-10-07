@@ -13,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
         public IControl Build(object param) {
-            string key = MpAvCefNetApplication.UseCefNet ? "CefNetWebViewTemplate" : "PlainTextTemplate";
+            string key =  MpAvCefNetApplication.UseCefNet ? "CefNetWebViewTemplate" : "PlainTextTemplate";
             return AvailableTemplates[key].Build(param); 
         }
 

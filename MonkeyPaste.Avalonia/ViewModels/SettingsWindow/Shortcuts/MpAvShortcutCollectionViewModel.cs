@@ -19,7 +19,7 @@ using Avalonia.Interactivity;
 using MonkeyPaste.Common.Avalonia.Utils.Extensions;
 using KeyEventArgs = Avalonia.Input.KeyEventArgs;
 using Key = Avalonia.Input.Key;
-using MonkeyPaste.Common.Utils.Extensions;
+
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvShortcutCollectionViewModel : 

@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common.Utils.Extensions;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -547,7 +547,8 @@ namespace MonkeyPaste.Avalonia {
                         return;
                     }
                     var p = new MpPoint(MainWindowLeft, MainWindowTop);
-                    if (OperatingSystem.IsWindows()) {
+                    //if (OperatingSystem.IsWindows()) 
+                    {
                         // Window position on windows uses actual density not scaled value mac uses scaled haven't checked linux
                         p *= MainWindowScreen.PixelDensity; //MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx).PixelDensity;
                     }
@@ -615,6 +616,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ShowWindowCommand => new MpAsyncCommand(
             async () => {
+                MpConsole.WriteLine("Opening Main WIndow");
                 if (!Dispatcher.UIThread.CheckAccess()) {
                     Dispatcher.UIThread.Post(() => {
                         ShowWindowCommand.Execute(null);

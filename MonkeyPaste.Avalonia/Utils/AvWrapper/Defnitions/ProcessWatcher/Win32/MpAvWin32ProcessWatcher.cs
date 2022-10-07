@@ -220,8 +220,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override void CreateRunningProcessLookup() {
+            // get lookup of all window handles by process path
             var pkvp = GetOpenWindows();
             foreach (var kvp in pkvp) {
+                // migrate lookup to concurrent dictionary
                 if (RunningProcessLookup.ContainsKey(kvp.Key)) {
                     RunningProcessLookup[kvp.Key].Add(kvp.Value);
                 } else {

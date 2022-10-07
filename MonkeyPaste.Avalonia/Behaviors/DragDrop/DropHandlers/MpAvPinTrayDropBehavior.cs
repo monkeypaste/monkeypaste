@@ -14,7 +14,7 @@ using Avalonia;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using MonoMac.CoreText;
-using MonkeyPaste.Common.Utils.Extensions;
+
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvPinTrayDropBehavior : MpAvDropBehaviorBase<MpAvPinTrayView> {

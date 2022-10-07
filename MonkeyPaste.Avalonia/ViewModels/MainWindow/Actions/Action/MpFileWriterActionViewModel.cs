@@ -13,7 +13,6 @@ using System.Windows;
 
 using System.Windows.Input;
 using Avalonia.Controls;
-using static SQLite.SQLite3;
 
 namespace MonkeyPaste.Avalonia {
     public class MpFileWriterOutput : MpAvActionOutput {        

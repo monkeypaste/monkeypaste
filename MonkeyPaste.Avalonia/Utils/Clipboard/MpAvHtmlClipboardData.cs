@@ -31,14 +31,14 @@ namespace MonkeyPaste.Avalonia {
             var quillWindow = new Window() {
                 Width = 300,
                 Height = 300,
-                ShowInTaskbar = false,
+                //ShowInTaskbar = false,
                 SystemDecorations = SystemDecorations.None,
-                Position = new PixelPoint(808080, 808080)
+                //Position = new PixelPoint(808080, 808080)
             };
             _rootWebView = new MpAvCefNetWebView() {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
-                IsVisible = false
+                //IsVisible = false
             };
             quillWindow.Content = _rootWebView;
             
@@ -59,14 +59,15 @@ namespace MonkeyPaste.Avalonia {
                 };
                 _rootWebView.Navigate(MpAvClipTrayViewModel.EditorPath);
             };
-
-            if(OperatingSystem.IsWindows()) {
-                // hide converter window from windows alt-tab menu
-                quillWindow.AttachedToVisualTree += (s, e) => {
+            quillWindow.AttachedToVisualTree += (s, e) => {
+                if(OperatingSystem.IsWindows()) {
+                    // hide converter window from windows alt-tab menu
+                
                     MpAvToolWindow_Win32.InitToolWindow(quillWindow.PlatformImpl.Handle.Handle);
-                    quillWindow.Hide();
-                };
-            }
+                }
+                quillWindow.Hide();
+            };
+            
 
         }
 

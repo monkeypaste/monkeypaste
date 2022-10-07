@@ -43,16 +43,16 @@ namespace MonkeyPaste.Avalonia {
             }
             var screens = new MpAvScreenInfoCollection();
 
-            var primaryScreen = screens.Screens.FirstOrDefault(x => x.IsPrimary); //MpPlatformWrapper.Services.ScreenInfoCollection.Screens.FirstOrDefault(x => x.IsPrimary);
+            var primaryScreen = screens.Screens.FirstOrDefault(x => x.IsPrimary);
             
             double pad = 10;
-            double x = primaryScreen.WorkArea.Width - this.Bounds.Width - pad;
-
+            double x = primaryScreen.WorkArea.Right - this.Bounds.Width - pad;
             double offsetY = _windows.Where(x => _windows.IndexOf(x) < _windows.IndexOf(this)).Sum(x => x.Bounds.Height + pad);
             offsetY += this.Bounds.Height + pad;
-            double y = primaryScreen.WorkArea.Height - offsetY;
+            double y = primaryScreen.WorkArea.Bottom - offsetY;
 
-            if(OperatingSystem.IsWindows()) {
+            //if(OperatingSystem.IsWindows()) 
+            {
                 x *= primaryScreen.PixelDensity;
                 y *= primaryScreen.PixelDensity;
             }

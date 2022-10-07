@@ -11,7 +11,7 @@ using Avalonia.VisualTree;
 using System.Threading.Tasks;
 using MonkeyPaste.Common;
 using System.Linq;
-using MonkeyPaste.Common.Utils.Extensions;
+
 using Avalonia.Threading;
 using System.Text;
 

@@ -17,7 +17,7 @@ using Avalonia.Layout;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-using MonkeyPaste.Common.Utils.Extensions;
+
 
 namespace MonkeyPaste.Avalonia {
 

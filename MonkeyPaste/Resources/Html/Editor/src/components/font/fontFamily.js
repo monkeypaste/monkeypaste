@@ -223,11 +223,10 @@ function getFontFamilyDataValue(fontFamily) {
 
 function getFontsByEnv() {
     EnvName = EnvName == null ? WindowsEnv : EnvName;
-    if (EnvName == null || EnvName == WindowsEnv || EnvName == WebEnv) {
-        return winFonts;
-    } else if (EnvName == MacEnv) {
+    if (EnvName == MacEnv) {
         return macFonts;
     }
+    return winFonts;
 }
 
 const winFonts = [

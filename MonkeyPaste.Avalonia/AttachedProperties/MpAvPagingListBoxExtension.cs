@@ -431,7 +431,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Internal Event Handlers
 
-        private static void AttachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+        private static void AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
             if (s is ListBox lb) {
                 lb.DetachedFromVisualTree += DetachedFromVisualHandler;
 
@@ -480,7 +480,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void DetachedFromVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+        private static void DetachedFromVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
             if (s is ListBox lb) {
                 if (GetScrollViewer(lb) is ScrollViewer sv) {
                     sv.RemoveHandler(
@@ -507,7 +507,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void PreviewControlPointerPressedHandler(object? s, PointerPressedEventArgs e) {
+        private static void PreviewControlPointerPressedHandler(object s, PointerPressedEventArgs e) {
             // when user clicks always halt any animated scrolling
             if (s is ListBox lb) {
                 SetVelocityX(lb, 0);
@@ -516,7 +516,7 @@ namespace MonkeyPaste.Avalonia {
             e.Handled = false;
         }
 
-        private static void PointerMouseWheelHandler(object? s, global::Avalonia.Input.PointerWheelEventArgs e) {
+        private static void PointerMouseWheelHandler(object s, global::Avalonia.Input.PointerWheelEventArgs e) {
             if (s is ListBox lb) {
                 bool canScroll = GetCanScrollX(lb) || GetCanScrollY(lb);
                 if (!canScroll) {
@@ -554,7 +554,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         
-        private static void ScrollViewerPointerPressedHandler(object? s, PointerPressedEventArgs e) {
+        private static void ScrollViewerPointerPressedHandler(object s, PointerPressedEventArgs e) {
             //BUG not sure why but track and thumb don't have tag set here after orientation changes
             var sv = s as ScrollViewer;
             Track track = (e.Source as Control).GetVisualAncestor<Track>();
@@ -581,7 +581,7 @@ namespace MonkeyPaste.Avalonia {
             e.Handled = true;
         }
 
-        private static void ScrollViewerPointerMovedHandler(object? s, PointerEventArgs e) {
+        private static void ScrollViewerPointerMovedHandler(object s, PointerEventArgs e) {
             if (//s is Track track &&
                 //s is ScrollBar sb &&
                 s is ScrollViewer sv &&
@@ -602,7 +602,7 @@ namespace MonkeyPaste.Avalonia {
                 e.Handled = true;
             }
         }
-        private static void ScrollViewerPointerReleasedHandler(object? s, PointerReleasedEventArgs e) {
+        private static void ScrollViewerPointerReleasedHandler(object s, PointerReleasedEventArgs e) {
             //MpConsole.WriteLine("ScrollViewer Release");
             if (s is ScrollViewer sv &&
                 sv.Tag is ListBox lb) {

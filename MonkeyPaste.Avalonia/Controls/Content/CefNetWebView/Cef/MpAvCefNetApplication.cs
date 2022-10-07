@@ -1,5 +1,4 @@
-﻿using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
 using CefNet;
 using System;
 using System.IO;
@@ -74,28 +73,16 @@ namespace MonkeyPaste.Avalonia {
             Instance.Shutdown();
             MpConsole.WriteLine("CefNet Successfully shutdown");
         }
-        private static string GetProjectPath() {
-            string projectPath = Path.GetDirectoryName(typeof(App).Assembly.Location);
-            string projectName = PlatformInfo.IsMacOS ? "MonkeyPaste.Avalonia.app" : "MonkeyPaste.Avalonia";
-            string rootPath = Path.GetPathRoot(projectPath);
-            while (Path.GetFileName(projectPath) != projectName) {
-                if (projectPath == rootPath)
-                    throw new DirectoryNotFoundException("Could not find the project directory.");
-                projectPath = Path.GetDirectoryName(projectPath);
-            }
-            return projectPath;
-        }
-
         public static string GetEditorPath() {
-            string proj_path = GetProjectPath();
-            return Path.Combine(Directory.GetParent(proj_path).FullName, "MonkeyPaste", "Resources", "Html", "Editor", "index.html");
+            string solution_path = MpCommonHelpers.GetSolutionDir();
+            return Path.Combine(solution_path, "MonkeyPaste", "Resources", "Html", "Editor", "index.html");
         }
 
-        private MpAvCefNetApplication() {
-
+        private MpAvCefNetApplication() : base() {
             string datFileName = "icudtl.dat";
             //string cefRootDir = @"C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia\cef";
-            string cefRootDir = Path.Combine(GetProjectPath(), "cef");
+            string solution_dir = MpCommonHelpers.GetSolutionDir();
+            string cefRootDir = Path.Combine(solution_dir,"MonkeyPaste.Avalonia", "cef");
 
             string localDirPath = string.Empty;
             string resourceDirPath = string.Empty;
@@ -137,8 +124,6 @@ namespace MonkeyPaste.Avalonia {
             
 
             var settings = new CefSettings();
-            settings.NoSandbox = true;
-
             if(_useExternalMessagePump) {
                 // when true will only work on windows or linux, also maybe pointless...trying to configure for single process
                 if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux()) {
@@ -154,19 +139,56 @@ namespace MonkeyPaste.Avalonia {
                 settings.MultiThreadedMessageLoop = true;
                 settings.ExternalMessagePump = false;
             }
-            settings.CommandLineArgsDisabled = true;
-            settings.WindowlessRenderingEnabled = true;
+            settings.NoSandbox = true;
+            //settings.CommandLineArgsDisabled = true;
+            settings.WindowlessRenderingEnabled = false;
             settings.LocalesDirPath = localDirPath;
             settings.ResourcesDirPath = resourceDirPath;
-            settings.LogSeverity = CefLogSeverity.Error;
-
+            settings.LogSeverity = CefLogSeverity.Verbose;
+        
             App.FrameworkShutdown += App_FrameworkShutdown;
 
             _messageHub = new MpAvCefNetMessageHub(this);
 
             Initialize(Path.Combine(cefRootDir, "Release"), settings);
+            MpConsole.WriteLine("CefNet Initialized.");
+            return;
         }
-
+        
+        protected override void OnBeforeCommandLineProcessing(string processType, CefCommandLine commandLine)
+        {
+            base.OnBeforeCommandLineProcessing(processType, commandLine);
+            //return;
+            // Console.WriteLine("ChromiumWebBrowser_OnBeforeCommandLineProcessing");
+            // Console.WriteLine(commandLine.CommandLineString);
+            //
+            // //commandLine.AppendSwitchWithValue("proxy-server", "127.0.0.1:8888");
+            //
+            // commandLine.AppendSwitch("ignore-certificate-errors");
+            // commandLine.AppendSwitchWithValue("remote-debugging-port", "9222");
+			         //
+            // //enable-devtools-experiments
+            // commandLine.AppendSwitch("enable-devtools-experiments");
+            //
+            // //e.CommandLine.AppendSwitchWithValue("user-agent", "Mozilla/5.0 (Windows 10.0) WebKa/" + DateTime.UtcNow.Ticks);
+            //
+            // //("force-device-scale-factor", "1");
+            //
+            // //commandLine.AppendSwitch("disable-gpu");
+            // //commandLine.AppendSwitch("disable-gpu-compositing");
+            // //commandLine.AppendSwitch("disable-gpu-vsync");
+            //
+            // commandLine.AppendSwitch("enable-begin-frame-scheduling");
+            // commandLine.AppendSwitch("enable-media-stream");
+            //
+            // commandLine.AppendSwitchWithValue("enable-blink-features", "CSSPseudoHas");
+            commandLine.AppendSwitch("disable-component-update");
+            if (OperatingSystem.IsLinux())
+            {
+                commandLine.AppendSwitch("no-zygote");
+                commandLine.AppendSwitch("no-sandbox");
+            }
+        }
 
         private void App_FrameworkShutdown(object sender, EventArgs e) {
             messagePump?.Dispose();
@@ -179,4 +201,6 @@ namespace MonkeyPaste.Avalonia {
 
 
     }
+
+    
 }

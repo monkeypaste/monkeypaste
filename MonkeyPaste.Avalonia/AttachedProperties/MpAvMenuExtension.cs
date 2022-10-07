@@ -141,7 +141,7 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
-        private static void AttachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+        private static void AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
             if (s is Control control) {
                 if (e == null) {
                     control.AttachedToVisualTree += AttachedToVisualHandler;
@@ -151,7 +151,7 @@ namespace MonkeyPaste.Avalonia {
                 control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
             }
         }
-        private static void DetachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+        private static void DetachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
             if (s is Control control) {
                 control.AttachedToVisualTree -= AttachedToVisualHandler;
                 control.DetachedFromVisualTree -= DetachedToVisualHandler;

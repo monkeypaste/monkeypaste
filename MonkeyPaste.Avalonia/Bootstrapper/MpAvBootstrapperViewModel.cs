@@ -20,11 +20,11 @@ namespace MonkeyPaste.Avalonia {
                 MpAvCefNetApplication.InitCefNet();
             } 
 
-            if (OperatingSystem.IsLinux()) {
-                await GtkHelper.EnsureInitialized();
-            } else if (OperatingSystem.IsMacOS()) {
-                MpAvMacHelpers.EnsureInitialized();
-            }
+            // if (OperatingSystem.IsLinux()) {
+            //     await GtkHelper.EnsureInitialized();
+            // } else if (OperatingSystem.IsMacOS()) {
+            //     MpAvMacHelpers.EnsureInitialized();
+            // }
 
             var pw = new MpAvWrapper();
             await pw.InitializeAsync();

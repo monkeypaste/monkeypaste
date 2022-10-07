@@ -121,12 +121,13 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
             }
             _isCheckingClipboard = true;
-            MpPortableDataObject ndo;
+            MpPortableDataObject ndo= await MpAvClipboardHandlerCollectionViewModel.Instance.ReadClipboardOrDropObjectAsync();
 
             //  CoreClipboard only works w/ windows so pass handling to old way on other os
             // TODO add other platform support to CoreClipboardHandler
 
-            if (OperatingSystem.IsWindows()) {
+            //if (OperatingSystem.IsWindows()) 
+            //{
                 //bool wasOpen = false;
                 //while (WinApi.IsClipboardOpen(true) != IntPtr.Zero) {
                 //    wasOpen = true;
@@ -140,9 +141,9 @@ namespace MonkeyPaste.Avalonia {
                 //}
 
                 ndo = await MpAvClipboardHandlerCollectionViewModel.Instance.ReadClipboardOrDropObjectAsync();
-            } else {
-                ndo = await ConvertManagedFormats2();
-            }
+            // } else {
+            //     ndo = await ConvertManagedFormats2();
+            // }
             
 
             _isCheckingClipboard = false;

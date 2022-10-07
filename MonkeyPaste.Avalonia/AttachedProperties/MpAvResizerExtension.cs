@@ -435,7 +435,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Event Handlers
 
-        private static void AttachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+        private static void AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
             if (s is Control control) {
                 control.DetachedFromVisualTree += DetachedToVisualHandler;
                 control.PointerEnter += PointerEnterHandler;
@@ -449,7 +449,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void DetachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+        private static void DetachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
             if (s is Control control) {
                 control.AttachedToVisualTree -= AttachedToVisualHandler;
                 control.DetachedFromVisualTree -= DetachedToVisualHandler;
@@ -461,7 +461,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void PointerEnterHandler(object? s, PointerEventArgs e) {
+        private static void PointerEnterHandler(object s, PointerEventArgs e) {
             if (s is AvaloniaObject ao) {
                 if (!GetIsEnabled(ao) ||
                     IsAnyResizing) {
@@ -471,7 +471,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void PointerLeaveHandler(object? s, PointerEventArgs e) {
+        private static void PointerLeaveHandler(object s, PointerEventArgs e) {
             if (s is Control control) {
                 if (!GetIsEnabled(control) || GetIsResizing(control)) {
                     return;
@@ -482,7 +482,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void PointerPressedHandler(object? s, PointerPressedEventArgs e) {
+        private static void PointerPressedHandler(object s, PointerPressedEventArgs e) {
             if (s is Control control &&
                 e.GetCurrentPoint(control)
                 .Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed) {
@@ -502,7 +502,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void PointerReleasedHandler(object? s, PointerReleasedEventArgs e) {
+        private static void PointerReleasedHandler(object s, PointerReleasedEventArgs e) {
             if (s is Control control &&
                 e.GetCurrentPoint(control)
                 .Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonReleased) {
@@ -516,7 +516,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void PointerMovedHandler(object? s, PointerEventArgs e) {
+        private static void PointerMovedHandler(object s, PointerEventArgs e) {
             if (s is Control control) {
                 if (!GetIsResizing(control) ||
                    !GetIsEnabled(control) ||

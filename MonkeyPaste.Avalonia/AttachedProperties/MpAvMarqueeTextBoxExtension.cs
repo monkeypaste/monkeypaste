@@ -325,7 +325,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Event Handlers
 
-        private static void AttachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+        private static void AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs e) {
             if (s is TextBox tb) {
                 tb.IsVisible = false;
                 //tb.RenderTransformOrigin = RelativePoint.TopLeft;
@@ -409,7 +409,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void DetachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+        private static void DetachedToVisualHandler(object s, VisualTreeAttachmentEventArgs e) {
             if (s is TextBox tb) {
                 tb.AttachedToVisualTree -= AttachedToVisualHandler;
                 tb.DetachedFromVisualTree -= DetachedToVisualHandler;

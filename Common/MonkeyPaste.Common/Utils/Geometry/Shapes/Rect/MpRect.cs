@@ -1,10 +1,9 @@
-﻿using System.Drawing;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System;
 using System.Linq;
-using MonkeyPaste.Common.Utils.Extensions;
+
 
 namespace MonkeyPaste.Common {
     public class MpRect : MpShape {

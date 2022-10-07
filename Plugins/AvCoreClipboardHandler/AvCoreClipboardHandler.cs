@@ -78,10 +78,10 @@ namespace AvCoreClipboardHandler {
                 Debugger.Break();
             }
             
-            MpClipboardReaderResponse hasError = CanHandleDataObject(request);
-            if (hasError != null) {
-                return hasError;
-            }
+            // MpClipboardReaderResponse hasError = CanHandleDataObject(request);
+            // if (hasError != null) {
+            //     return hasError;
+            // }
             _isReadingOrWriting = true;
             IDataObject avdo = null;
             string[] availableFormats = null;

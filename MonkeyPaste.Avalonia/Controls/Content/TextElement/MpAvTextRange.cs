@@ -1,6 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common.Utils.Extensions;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

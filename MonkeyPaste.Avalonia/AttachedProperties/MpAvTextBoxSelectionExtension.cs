@@ -144,7 +144,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Event Handlers
 
-        private static void AttachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+        private static void AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
             if (s is Control control) {
                 control.DetachedFromVisualTree += DetachedToVisualHandler;
 
@@ -154,7 +154,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void DetachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+        private static void DetachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
             if (s is Control control) {
                 control.AttachedToVisualTree -= AttachedToVisualHandler;
                 control.DetachedFromVisualTree -= DetachedToVisualHandler;

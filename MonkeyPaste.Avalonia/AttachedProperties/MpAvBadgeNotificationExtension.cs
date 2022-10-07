@@ -42,7 +42,7 @@ namespace MonkeyPaste.Avalonia {
                 DetachedToVisualHandler(element, null);
             }
 
-            void AttachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+            void AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs e) {
                 if (s is Control control) {
                     if (e == null) {
                         control.AttachedToVisualTree += AttachedToVisualHandler;
@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            void DetachedToVisualHandler(object? s, VisualTreeAttachmentEventArgs? e) {
+            void DetachedToVisualHandler(object s, VisualTreeAttachmentEventArgs e) {
                 if (s is Control control) {
                     control.AttachedToVisualTree -= AttachedToVisualHandler;
                     control.DetachedFromVisualTree -= DetachedToVisualHandler;

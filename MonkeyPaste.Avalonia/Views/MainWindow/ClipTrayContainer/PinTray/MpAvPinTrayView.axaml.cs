@@ -10,7 +10,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common.Utils.Extensions;
+
 using System;
 using System.Diagnostics;
 using System.Linq;

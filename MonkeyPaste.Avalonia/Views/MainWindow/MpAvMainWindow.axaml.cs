@@ -19,7 +19,7 @@ using System;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using MonkeyPaste.Common.Utils.Extensions;
+
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -47,9 +47,9 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvMainWindow() {
-            while (!Debugger.IsAttached) {
-                Thread.Sleep(100);
-            }
+            // while (!Debugger.IsAttached) {
+            //     Thread.Sleep(100);
+            // }
             if (Instance == null) {
                 Instance = this;
             }

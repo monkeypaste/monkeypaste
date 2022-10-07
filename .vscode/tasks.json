@@ -2,21 +2,26 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "clean",
-            "command": "/home/tkefauver/dotnet/dotnet",
-            "type": "process",
-            "args": [
-                "clean",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile"
-        },
-        {
             "label": "build",
             "command": "/home/tkefauver/dotnet/dotnet",
             "type": "process",
             "args": [
                 "build",
+                "${workspaceFolder}/MonkeyPaste.Avalonia/MonkeyPaste.Avalonia.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary",
+                "-nowarn:CS8632",
+                "-nowarn:CS8073"
+
+            ],
+            "problemMatcher": "$tsc"
+        },
+        {
+            "label": "publish",
+            "command": "/home/tkefauver/dotnet/dotnet",
+            "type": "process",
+            "args": [
+                "publish",
                 "${workspaceFolder}/MonkeyPaste.Avalonia/MonkeyPaste.Avalonia.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
@@ -32,18 +37,6 @@
                 "run",
                 "--project",
                 "${workspaceFolder}/MonkeyPaste.Avalonia/MonkeyPaste.Avalonia.csproj"
-            ],
-            "problemMatcher": "$tsc"
-        },
-        {
-            "label": "publish",
-            "command": "/home/tkefauver/dotnet/dotnet",
-            "type": "process",
-            "args": [
-                "publish",
-                "${workspaceFolder}/MonkeyPaste.Avalonia/MonkeyPaste.Avalonia.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
             ],
             "problemMatcher": "$tsc"
         }

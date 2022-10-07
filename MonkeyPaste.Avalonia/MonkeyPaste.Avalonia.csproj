@@ -35,6 +35,11 @@
   <PropertyGroup>
     <RunningOnWindows>false</RunningOnWindows>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <NoWarn>CS8632</NoWarn>
+    <NoWarn>CS8073</NoWarn>
+  </PropertyGroup>
   
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DefineConstants>LINUX;</DefineConstants>
@@ -898,6 +903,7 @@
   <ItemGroup>
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Include="Avalonia" Version="0.10.18" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.18" />
     <PackageReference Include="Avalonia.MonoMac" Version="0.6.1" />
     <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.18" />
@@ -910,7 +916,9 @@
     <PackageReference Include="PropertyChanged.Fody" Version="4.0.3" PrivateAssets="All" />
     <PackageReference Include="SharpHook" Version="3.1.1" />
     <PackageReference Include="SkiaSharp" Version="2.88.2" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="WebkitGtkSharp" Version="3.24.24.38" />
+    <PackageReference Include="X11" Version="1.0.6" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
     <PackageReference Include="CefGlue.Avalonia" Version="91.4472.30" />
     <PackageReference Include="Dotnet.Bundle" Version="0.9.13" />

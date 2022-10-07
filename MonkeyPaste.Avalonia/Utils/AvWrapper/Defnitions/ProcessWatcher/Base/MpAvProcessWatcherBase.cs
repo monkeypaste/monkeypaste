@@ -141,6 +141,11 @@ namespace MonkeyPaste.Avalonia {
                     ThisAppHandle = App.Desktop.MainWindow.PlatformImpl.Handle.Handle;
                 }
             }
+            if(OperatingSystem.IsLinux()) {
+                // needs more filtering and is slow or certain process states aren't accounted for
+                // so just ignoring
+                return;
+            }
 
             bool didActiveChange = false;
             var activeProcessTuple = RefreshRunningProcessLookup();

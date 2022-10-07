@@ -13,7 +13,7 @@ using MonkeyPaste.Common.Avalonia;
 using Avalonia.Input;
 using AvaloniaEdit.Document;
 using Avalonia.Controls.Primitives;
-using MonkeyPaste.Common.Utils.Extensions;
+
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvContentViewDropBehavior : MpAvDropBehaviorBase<Control> {

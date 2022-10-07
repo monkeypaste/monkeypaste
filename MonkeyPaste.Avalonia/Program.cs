@@ -1,7 +1,4 @@
- using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
-
+using Avalonia;
 using System;
 
 namespace MonkeyPaste.Avalonia
