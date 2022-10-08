@@ -69,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
 
             MpAvQueryInfoViewModel.Init(MpPrefViewModel.Instance.LastQueryInfoJson);
             QueryInfo = MpAvQueryInfoViewModel.Current;
-            ProcessWatcher = new MpAvProcessWatcher().Watcher;
+            ProcessWatcher = new MpAvProcessWatcherSelector().Watcher;
             IconBuilder = new MpAvIconBuilder().IconBuilder;
             UrlBuilder = new MpUrlBuilder();
             AppBuilder = new MpAvAppBuilder();

@@ -158,7 +158,13 @@ namespace MonkeyPaste.Avalonia {
                 if(fromInternalSource) {
                     app = await MpDb.GetItemAsync<MpApp>(MpPrefViewModel.Instance.ThisAppSource.AppId);
                 } else {
-                    app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(MpPlatformWrapper.Services.ProcessWatcher.LastHandle);
+                    if(OperatingSystem.IsLinux()) {
+                        // this maybe temporary but linux not following process watching convention because its SLOW
+                        app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(MpPlatformWrapper.Services.ProcessWatcher.LastProcessPath);
+                    } else {
+                        app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(MpPlatformWrapper.Services.ProcessWatcher.LastHandle);
+                    }
+                    
 
                     url = htmlClipboardData == null ?
                    null : await MpUrlBuilder.CreateUrl(htmlClipboardData.SourceUrl);

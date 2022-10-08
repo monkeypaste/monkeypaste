@@ -701,7 +701,9 @@ namespace MonkeyPaste.Avalonia {
 
                         timer.Stop();
 
-                        MpAvMainWindow.Instance.Topmost = true;
+                        if(OperatingSystem.IsWindows()) {
+                            MpAvMainWindow.Instance.Topmost = true;
+                        }
                         IsMainWindowLoading = false;
                         IsMainWindowOpen = true;
                         IsMainWindowOpening = false;
@@ -714,10 +716,7 @@ namespace MonkeyPaste.Avalonia {
                     } else {
                         
                         //MpConsole.WriteLine($"SHOW WINDOW ANIMATING: L: " + MainWindowLeft + " T: " + MainWindowTop + " R:" + MainWindowRight + " B:" + MainWindowBottom);
-                        //MainWindowLeft = Math.Min(openEndRect.Left,MainWindowLeft + d_l);
-                        //MainWindowTop = Math.Min(openEndRect.Top,MainWindowTop + d_t);
-                        //MainWindowRight = Math.Min(openEndRect.Right,MainWindowRight + d_r);
-                        //MainWindowBottom = Math.Min(openEndRect.Bottom,MainWindowBottom + d_b);
+                        
 
                         MainWindowLeft += d_l;
                         MainWindowTop += d_t;
@@ -780,7 +779,9 @@ namespace MonkeyPaste.Avalonia {
                     IsMainWindowLocked = false;
                     IsMainWindowClosing = false;
                     IsMainWindowOpen = false;
-                    //MpAvMainWindow.Instance.Hide();
+                    if(OperatingSystem.IsLinux()) {
+                        MpAvMainWindow.Instance.Hide();
+                    }
 
                     // Hide END - end
                     OnPropertyChanged(nameof(IsMainWindowOpen));
@@ -795,8 +796,10 @@ namespace MonkeyPaste.Avalonia {
 
                 IsMainWindowClosing = true;
 
-                MpAvMainWindow.Instance.Activate(); // must activate to animate (on windows at least)
-                MpAvMainWindow.Instance.Topmost = false;
+                if(OperatingSystem.IsWindows()) {
+                    MpAvMainWindow.Instance.Activate(); // must activate to animate (on windows at least)
+                    MpAvMainWindow.Instance.Topmost = false;
+                }
 
                 // Hide START Events - end
 

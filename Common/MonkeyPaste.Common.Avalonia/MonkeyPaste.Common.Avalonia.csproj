@@ -7,8 +7,6 @@
     <TrimMode>copyused</TrimMode>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup> 
     <RunningOnWindows>True</RunningOnWindows>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -16,9 +14,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>WINDOWS</DefineConstants>
-  </PropertyGroup>
-   <PropertyGroup> 
-    <RunningOnWindows>true</RunningOnWindows>
   </PropertyGroup>-->
   
   <!-- LINUX-->
@@ -29,20 +24,22 @@
     <TrimMode>copyused</TrimMode>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <RunningOnWindows>False</RunningOnWindows>
   </PropertyGroup>
-  <PropertyGroup> 
-    <RunningOnWindows>True</RunningOnWindows>
-  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>LINUX</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>LINUX</DefineConstants>
   </PropertyGroup>
-   <PropertyGroup> 
-    <RunningOnWindows>false</RunningOnWindows>
+
+  <PropertyGroup>
+    <NoWarn>CS8632</NoWarn>
+    <NoWarn>CS8073</NoWarn>
+    <NoWarn>$(NoWarn),IDE1006</NoWarn>
+    <NoWarn>$(NoWarn),CA1401</NoWarn>
   </PropertyGroup>
-  
   <ItemGroup>
     <None Remove=".gitignore" />
     <None Remove="Mono.GtkSharp" />
@@ -82,4 +79,11 @@
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\PresentationFramework.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <PropertyGroup>
+     <!-- 
+     Turns off reference assembly generation 
+     See: https://learn.microsoft.com/en-us/dotnet/standard/assembly/reference-assemblies
+     -->
+     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+</PropertyGroup>
 </Project>

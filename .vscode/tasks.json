@@ -9,12 +9,9 @@
                 "build",
                 "${workspaceFolder}/MonkeyPaste.Avalonia/MonkeyPaste.Avalonia.csproj",
                 "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary",
-                "-nowarn:CS8632",
-                "-nowarn:CS8073"
-
+                "/consoleloggerparameters:NoSummary"
             ],
-            "problemMatcher": "$tsc"
+            "problemMatcher": "$msCompile"
         },
         {
             "label": "publish",
@@ -26,7 +23,7 @@
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
-            "problemMatcher": "$tsc"
+            "problemMatcher": "$msCompile"
         },
         {
             "label": "watch",
@@ -38,7 +35,7 @@
                 "--project",
                 "${workspaceFolder}/MonkeyPaste.Avalonia/MonkeyPaste.Avalonia.csproj"
             ],
-            "problemMatcher": "$tsc"
+            "problemMatcher": "$msCompile"
         }
     ]
 }

@@ -27,29 +27,9 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
-
-        //#region INotifyDataErrorInfo Implementation
-
-        //private readonly Dictionary<string, List<string>> _errorsByPropertyName = new Dictionary<string, List<string>>();
-
-        //public bool HasErrors => _errorsByPropertyName.Any();
-
-        //public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
-        //public IEnumerable GetErrors(string propertyName) {
-        //    return _errorsByPropertyName.ContainsKey(propertyName) ?
-        //        _errorsByPropertyName[propertyName] : null;
-        //}
-
-        //private void OnErrorsChanged(string propertyName) {
-        //    ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-        //}
-
-        //#endregion
-
         public static Dictionary<string, MpPluginFormat> Plugins { get; set; } = new Dictionary<string, MpPluginFormat>();
 
-        public static string PluginRootFolderPath => Path.Combine(Directory.GetCurrentDirectory(), PLUG_FOLDER_NAME);
+        public static string PluginRootFolderPath => Path.Combine(MpCommonHelpers.GetExecutingDir(), PLUG_FOLDER_NAME);
         #endregion
 
         #region Public Methods
@@ -59,6 +39,7 @@ namespace MonkeyPaste {
             //find plugin folder in main app folder
 
             if (!Directory.Exists(PluginRootFolderPath)) {
+                MpConsole.WriteLine("Plugin folder missing from: " + PluginRootFolderPath);
                 // if plugin folder doesn't exist then no plugins so nothing to do but it should                
                 return;
             }

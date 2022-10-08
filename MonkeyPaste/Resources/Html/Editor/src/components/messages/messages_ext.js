@@ -4,7 +4,7 @@ function initMain_ext(initMsgStr_base64) {
 	// input 'MpQuillInitMainRequestMessage'
 	// output 'MpQuillInitMainResponseMessage'
 
-	log("init request: " + initMsgStr_base64);
+	//log("init request: " + initMsgStr_base64);
 	let initMsgObj = toJsonObjFromBase64Str(initMsgStr_base64);
 
 	if (initMsgObj && initMsgObj.isPlainHtmlConverter) {

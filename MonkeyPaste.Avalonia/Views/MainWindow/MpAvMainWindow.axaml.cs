@@ -550,10 +550,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MainWindow_Activated(object? sender, System.EventArgs e) {
+            //MpConsole.WriteLine("MainWindow ACTIVATED");
             MpAvMainWindowViewModel.Instance.IsMainWindowActive = true;
         }
 
         private void MainWindow_Deactivated(object? sender, System.EventArgs e) {
+            //MpConsole.WriteLine("MainWindow DEACTIVATED");
             MpAvMainWindowViewModel.Instance.IsMainWindowActive = false;
         }
 

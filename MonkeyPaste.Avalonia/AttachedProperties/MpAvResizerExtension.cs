@@ -380,10 +380,10 @@ namespace MonkeyPaste.Avalonia {
 
             double max_w = GetMaxWidth(control);
             double max_h = GetMaxHeight(control);
-            MpConsole.WriteLine("Bound w " + bound_width + " h " + bound_height);
-            MpConsole.WriteLine("Min w " + min_w + " h " + min_h);
-            MpConsole.WriteLine("Max w " + max_w + " h " + max_h);
-            MpConsole.WriteLine("Delta w " + dx + " h " + dy);
+            // MpConsole.WriteLine("Bound w " + bound_width + " h " + bound_height);
+            // MpConsole.WriteLine("Min w " + min_w + " h " + min_h);
+            // MpConsole.WriteLine("Max w " + max_w + " h " + max_h);
+            // MpConsole.WriteLine("Delta w " + dx + " h " + dy);
 
             if (bound_width + dx < 0) {
                 ResetToDefault(control);
@@ -532,7 +532,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 var mw_mp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;// e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();//MpAvMainWindow.Instance.PointToScreen(e.GetCurrentPoint(null).Position).ToPoint(1).ToPortablePoint();
-                MpConsole.WriteLine("mp: " + mw_mp + " s_mp"+_mouseDownPosition);
+                //MpConsole.WriteLine("mp: " + mw_mp + " s_mp"+_mouseDownPosition);
                 if (GetIsResizing(control)) {
                     var delta = _lastMousePosition - mw_mp; //new Point(mw_mp.X - _lastMousePosition.X, mw_mp.Y - _lastMousePosition.Y);
                     ResizeByDelta(control, delta.X, delta.Y);

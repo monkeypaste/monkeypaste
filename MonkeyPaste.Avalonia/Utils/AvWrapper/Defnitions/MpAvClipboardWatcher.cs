@@ -108,8 +108,10 @@ namespace MonkeyPaste.Avalonia {
 
             var cbo = await ConvertManagedFormats();
             if (HasChanged(cbo)) {
-                _lastCbo = cbo;
+                MpConsole.WriteLine("Cb changed");
+                 _lastCbo = cbo;
                 if(IgnoreClipboardChanges) {
+                    MpConsole.WriteLine("...but ignoring it :p");
                     return;
                 }
                 OnClipboardChanged?.Invoke(typeof(MpAvClipboardWatcher).ToString(), cbo);
@@ -121,31 +123,7 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
             }
             _isCheckingClipboard = true;
-            MpPortableDataObject ndo= await MpAvClipboardHandlerCollectionViewModel.Instance.ReadClipboardOrDropObjectAsync();
-
-            //  CoreClipboard only works w/ windows so pass handling to old way on other os
-            // TODO add other platform support to CoreClipboardHandler
-
-            //if (OperatingSystem.IsWindows()) 
-            //{
-                //bool wasOpen = false;
-                //while (WinApi.IsClipboardOpen(true) != IntPtr.Zero) {
-                //    wasOpen = true;
-                //    MpConsole.WriteLine("Waiting on windows clipboard...");
-                //    await Task.Delay(100);
-                //}
-                //if(wasOpen) {
-                //    // if it was open other things maybe waiting also so let them 
-                //    // go first...
-                //    await Task.Delay(1000);
-                //}
-
-                ndo = await MpAvClipboardHandlerCollectionViewModel.Instance.ReadClipboardOrDropObjectAsync();
-            // } else {
-            //     ndo = await ConvertManagedFormats2();
-            // }
-            
-
+            MpPortableDataObject ndo = await MpAvClipboardHandlerCollectionViewModel.Instance.ReadClipboardOrDropObjectAsync();
             _isCheckingClipboard = false;
             return ndo;
         }

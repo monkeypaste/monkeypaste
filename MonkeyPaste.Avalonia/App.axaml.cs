@@ -21,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
         public static event EventHandler FrameworkShutdown;
         public static IClassicDesktopStyleApplicationLifetime Desktop { get; private set; }
         public App() {
-            DataContext = MpAvSystemTrayViewModel.Instance;
+            //DataContext = MpAvSystemTrayViewModel.Instance;
         }
         public override void Initialize() { 
             AvaloniaXamlLoader.Load(this);

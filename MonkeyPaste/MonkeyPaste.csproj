@@ -398,4 +398,11 @@
         <Copy SourceFiles="@(MySourceFiles)" OverwriteReadOnlyFiles="False" SkipUnchangedFiles="true" ContinueOnError="true"
               DestinationFolder="$(TargetDir)Resources\Html\%(RecursiveDir)%(Filename)%(Extension)"/>-->
   </Target>
+  <PropertyGroup>
+     <!-- 
+     Turns off reference assembly generation 
+     See: https://learn.microsoft.com/en-us/dotnet/standard/assembly/reference-assemblies
+     -->
+     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+</PropertyGroup>
 </Project>

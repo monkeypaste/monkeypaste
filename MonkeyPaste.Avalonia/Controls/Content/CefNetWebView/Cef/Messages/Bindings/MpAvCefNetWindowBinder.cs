@@ -59,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
                     // occurs for converter (not subclassed webview)
                     return;
                 }
-                MpConsole.WriteLine($"Binding msg received: {msgTypeStr} data: {msgJsonStr}");
+                //MpConsole.WriteLine($"Binding msg received: {msgTypeStr} data: {msgJsonStr}");
                 wv.HandleBindingNotification(funcType, msgJsonStr);
             });
 

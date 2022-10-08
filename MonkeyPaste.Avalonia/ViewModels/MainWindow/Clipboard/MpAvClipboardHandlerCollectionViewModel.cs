@@ -11,6 +11,7 @@ using MonkeyPaste;
 using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
 using Avalonia.Input;
+using Avalonia;
 using System.Runtime.InteropServices;
 using MonkeyPaste.Common.Avalonia;
 using Avalonia.Threading;
@@ -264,20 +265,15 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task<MpAvDataObject> ReadClipboardOrDropObjectAsync(object forcedDataObject = null) {
             // NOTE forcedDataObject is used to read drag/drop, when null clipboard is read
-
+            
             var mpdo = new MpAvDataObject();
-
+            
             //only iterate through actual handlers 
             var handlers = EnabledFormats.Where(x => x.CanRead)
                                          .Select(x => x.Parent.ClipboardPluginComponent)
                                          .Distinct().Cast<MpIClipboardReaderComponentAsync>();
-
+                                         
             foreach (var handler in handlers) {
-                IntPtr mw_handle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle;                
-                //string str_test = Marshal.PtrToStringAuto(mw_handle);
-                int int_test = mw_handle.ToInt32();
-                long long_test = mw_handle.ToInt64();
-
                 var req = new MpClipboardReaderRequest() {
                     isAvalonia = true,
                     mainWindowImplicitHandle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle.ToInt32(),
@@ -286,12 +282,14 @@ namespace MonkeyPaste.Avalonia {
                     items = EnabledFormats.Where(x => x.Parent.ClipboardPluginComponent == handler).SelectMany(x => x.Items.Cast<MpIParameterKeyValuePair>()).ToList(),
                     forcedClipboardDataObject = forcedDataObject
                 };
-
+                
                 var response = await handler.ReadClipboardDataAsync(req);
 
                 bool isValid = MpPluginTransactor.ValidatePluginResponse(response);
                 if (isValid) {
                     response.dataObject.DataFormatLookup.ForEach(x => mpdo.DataFormatLookup.AddOrReplace(x.Key, x.Value));
+                } else {
+                    MpConsole.WriteLine("Invalid cb reader response: " + response);
                 }
             }
             return mpdo;

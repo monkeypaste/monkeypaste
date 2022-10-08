@@ -5,6 +5,9 @@ using System.Text;
 
 namespace MonkeyPaste.Common {
     public static class MpCommonHelpers {
+        public static string GetExecutingDir() {
+            return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        }
         public static string GetSolutionDir() {
             string solution_path = Environment.CurrentDirectory.FindParentDir("MonkeyPaste");
             return solution_path;

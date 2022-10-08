@@ -21,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
                 wasSuccess = HandleResponse(e.Frame, e.Message);
             }
             if(!wasSuccess) {
-                MpConsole.WriteTraceLine("Error processing evalJs msg");
+                //MpConsole.WriteTraceLine("Error processing evalJs msg");
             }
             return true;
         }
@@ -49,16 +49,11 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             catch (CefNet.CefNetJSExcepton ex) {
-                MpConsole.WriteTraceLine("EvalJs Exception: ",ex);
-                /*
-                SourceLine = sourceLine;
-            ScriptName = scriptName;
-            Line = line;
-            Column = column;*/
-                MpConsole.WriteLine($"Source Line: {ex.SourceLine}");
-                MpConsole.WriteLine($"Script Name: {ex.ScriptName}");
-                MpConsole.WriteLine($"Line: {ex.Line}");
-                MpConsole.WriteLine($"Column: {ex.Column}");
+                //MpConsole.WriteTraceLine("EvalJs Exception: ",ex);
+                // MpConsole.WriteLine($"Source Line: {ex.SourceLine}");
+                // MpConsole.WriteLine($"Script Name: {ex.ScriptName}");
+                // MpConsole.WriteLine($"Line: {ex.Line}");
+                // MpConsole.WriteLine($"Column: {ex.Column}");
                 jsRespStr_renderer = MpAvCefNetApplication.JS_REF_ERROR;
             }
             finally {

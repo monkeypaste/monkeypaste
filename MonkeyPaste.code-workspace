@@ -26,17 +26,6 @@
 			"**/MpWpfApp": true,
 			"**/obj": true,
 			"**/bin": true,
-		},
-		"editor.semanticHighlighting.enabled": true,
-		"editor.semanticTokenColorCustomizations": {
-			"enabled": true,
-			"rules": {
-				"field.static": {
-					"foreground": "#FF0000",
-					"fontStyle": "italic",
-				}
-			},
-		}
-		
+		}		
 	}
 }

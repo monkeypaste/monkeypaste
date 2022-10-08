@@ -27,6 +27,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <Nullable>disable</Nullable>
     <TrimMode>copyused</TrimMode>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
@@ -34,11 +35,6 @@
 
   <PropertyGroup>
     <RunningOnWindows>false</RunningOnWindows>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <NoWarn>CS8632</NoWarn>
-    <NoWarn>CS8073</NoWarn>
   </PropertyGroup>
   
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -49,6 +45,12 @@
     <DefineConstants>LINUX;</DefineConstants>
   </PropertyGroup>
   
+
+  <PropertyGroup>
+    <NoWarn>CS8632</NoWarn>
+    <NoWarn>CS8073</NoWarn>
+    <NoWarn>$(NoWarn),IDE1006</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <AvaloniaXaml Remove="Assets\Images\backup\**" />
     <AvaloniaXaml Remove="AttachedProperties\DragDrop\**" />
@@ -981,6 +983,8 @@
     </ItemGroup>
         <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(TargetDir)%(RecursiveDir)%(Filename)%(Extension)" />-->
   </Target>
+
+  <Target Name="_CollectWatchItems" />
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Reusable\ShortcutWindow\MpAvAssignShortcutWindow.axaml" />
   </ItemGroup>
@@ -998,4 +1002,11 @@
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="call $(ProjectDir)scripts\kill_mpav_processes.bat" Condition="$(RunningOnWindows)" />
   </Target>
+  <PropertyGroup>
+     <!-- 
+     Turns off reference assembly generation 
+     See: https://learn.microsoft.com/en-us/dotnet/standard/assembly/reference-assemblies
+     -->
+     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+</PropertyGroup>
 </Project>

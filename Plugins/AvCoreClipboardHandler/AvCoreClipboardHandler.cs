@@ -74,6 +74,7 @@ namespace AvCoreClipboardHandler {
         #region MpIClipboardReaderComponentAsync Implementation
 
         async Task<MpClipboardReaderResponse> MpIClipboardReaderComponentAsync.ReadClipboardDataAsync(MpClipboardReaderRequest request) {
+            //MpConsole.WriteLine("Reading clipboard...");
            if(_isReadingOrWriting) {
                 Debugger.Break();
             }

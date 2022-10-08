@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -31,6 +32,11 @@ namespace MonkeyPaste.Avalonia {
         }
         public virtual string ThisAppProcessPath { get; set; }
 
+        public virtual bool CanWatchProcesses() {
+            // overridden on linux
+            return true;
+        }
+
         public IntPtr LastHandle => _lastProcessTuple == null ? IntPtr.Zero : _lastProcessTuple.Item3;
 
         public string LastProcessPath => _lastProcessTuple == null ? string.Empty : _lastProcessTuple.Item1;
@@ -51,9 +57,13 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvProcessWatcherBase() {
+            if(!CanWatchProcesses()) {
+                MpConsole.WriteLine("Cannot watch processes (likely on linux and xdotool isn't installed)");
+                return;
+            }
             CreateRunningProcessLookup();
             if (_timer == null) {
-                _timer = new DispatcherTimer() {
+                _timer = new DispatcherTimer(DispatcherPriority.Background) {
                     Interval = TimeSpan.FromMilliseconds(300)
                 };
                 _timer.Tick += ProcessWatcherTimer_tick;
@@ -113,12 +123,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public virtual bool IsHandleRunningProcess(IntPtr handle) {
-            foreach (var kvp in RunningProcessLookup) {
-                if (kvp.Value.Contains(handle)) {
-                    return true;
-                }
+            if (handle == null || handle == IntPtr.Zero) {
+                return false;
             }
-            return false;
+            return RunningProcessLookup.Any(x => x.Value.Contains(handle));
         }
 
         #endregion
@@ -144,7 +152,7 @@ namespace MonkeyPaste.Avalonia {
             if(OperatingSystem.IsLinux()) {
                 // needs more filtering and is slow or certain process states aren't accounted for
                 // so just ignoring
-                return;
+                //return;
             }
 
             bool didActiveChange = false;

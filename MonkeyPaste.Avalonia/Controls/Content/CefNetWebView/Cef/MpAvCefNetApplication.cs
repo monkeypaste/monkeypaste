@@ -141,10 +141,10 @@ namespace MonkeyPaste.Avalonia {
             }
             settings.NoSandbox = true;
             //settings.CommandLineArgsDisabled = true;
-            settings.WindowlessRenderingEnabled = false;
+            settings.WindowlessRenderingEnabled = true;
             settings.LocalesDirPath = localDirPath;
             settings.ResourcesDirPath = resourceDirPath;
-            settings.LogSeverity = CefLogSeverity.Verbose;
+            settings.LogSeverity = CefLogSeverity.Error;
         
             App.FrameworkShutdown += App_FrameworkShutdown;
 

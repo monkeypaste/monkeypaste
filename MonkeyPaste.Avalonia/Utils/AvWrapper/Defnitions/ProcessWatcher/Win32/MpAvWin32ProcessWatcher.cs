@@ -75,7 +75,7 @@ namespace MonkeyPaste.Avalonia {
                         //loop through all known handles to that process
                         if (WinApi.IsWindow(handle)) {
                             var curTuple = new Tuple<string, string, IntPtr>(
-                                    GetProcessPath(handle),
+                                    GetProcessPath_internal(handle),
                                     GetProcessApplicationName(handle),
                                     handle);
 
@@ -147,13 +147,13 @@ namespace MonkeyPaste.Avalonia {
             if (string.IsNullOrWhiteSpace(appName) || appName.HasSpecialCharacters()) {
                 // NOTE trying to enforce app name to not be empty or end up
                 // being file name when window title is normal pattern
-                string processPath = GetProcessPath(hWnd);
+                string processPath = GetProcessPath_internal(hWnd);
                 return Path.GetFileName(processPath);
             }
             return appName;
         }
 
-        public override string GetProcessPath(IntPtr hwnd) {
+        private string GetProcessPath_internal(IntPtr hwnd) {
             string fallback = _FallbackProcessPath;
             try {
                 if (hwnd == null || hwnd == IntPtr.Zero) {
@@ -200,24 +200,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public override IntPtr GetLastActiveInstance(string processPath) {
-            if (string.IsNullOrWhiteSpace(processPath)) {
-                return IntPtr.Zero;
-            }
-            processPath = processPath.ToLower();
-            if (RunningProcessLookup.ContainsKey(processPath) &&
-               RunningProcessLookup[processPath].Count > 0) {
-                return RunningProcessLookup[processPath][0];
-            }
-            return IntPtr.Zero;
-        }
-
-        public override bool IsHandleRunningProcess(IntPtr handle) {
-            if (handle == null || handle == IntPtr.Zero) {
-                return false;
-            }
-            return RunningProcessLookup.Any(x => x.Value.Contains(handle));
-        }
 
         protected override void CreateRunningProcessLookup() {
             // get lookup of all window handles by process path
@@ -264,7 +246,7 @@ namespace MonkeyPaste.Avalonia {
                     //StringBuilder builder = new StringBuilder(length);
                     //WinApi.GetWindowText(hWnd, builder, length + 1);
 
-                    windows.AddOrReplace(GetProcessPath(hWnd), hWnd);
+                    windows.AddOrReplace(GetProcessPath_internal(hWnd), hWnd);
                 }
                 catch (InvalidOperationException ex) {
                     // no graphical interface
@@ -284,7 +266,7 @@ namespace MonkeyPaste.Avalonia {
                 string processName = GetKnownProcessPath(fgHandle);
                 if (string.IsNullOrEmpty(processName)) {
                     //if it is not resolve its process path
-                    processName = GetProcessPath(fgHandle);
+                    processName = GetProcessPath_internal(fgHandle);
                 }
                 //if (processName == fallback) {
                 //    return;

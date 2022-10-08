@@ -14,10 +14,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override bool Execute(string name, CefV8Value @object, CefV8Value[] arguments, ref CefV8Value retval, ref string exception) {
-            MpConsole.WriteLine("Received window binding msg name: " + name);
-            if(arguments != null) {
-                arguments.ForEach((x, i) => MpConsole.WriteLine("Arg " + i + ": " + x.ToString()));
-            }
+            //MpConsole.WriteLine("Received window binding msg name: " + name);
+            // if(arguments != null) {
+            //     arguments.ForEach((x, i) => MpConsole.WriteLine("Arg " + i + ": " + x.ToString()));
+            // }
             if(name.StartsWith("get")) {
                 // js is accessing data from cs...
                 // is it accessible?
