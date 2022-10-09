@@ -49,6 +49,43 @@
         ]
       },
       {
+        "handlerGuid": "3023b18c-5f15-4284-ae51-a16bb2ba0f23",
+        "iconUri": "text.png",
+        "displayName": "Text",
+        "clipboardName": "text/plain",
+        "parameters": [
+          {
+            "label": "Max Characters",
+            "description": "For performance concerns, a maximum amount characters is needed :(",
+            "controlType": "Slider",
+            "unitType": "Integer",
+            "paramId": 1,
+            "isRequired": true,
+            "minimum": 1,
+            "maximum": 10000000,
+            "values": [
+              {
+                "value": "150000",
+                "isDefault": true
+              }
+            ]
+          },
+          {
+            "label": "Ignore",
+            "description": "When checked Plain Text format will be completely ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramId": 2,
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
+      },
+      {
         "handlerGuid": "58558048-a275-4377-9108-8fb1bed3cd5e",
         "displayName": "Rtf",
         "iconUri": "rtf.png",
@@ -107,6 +144,64 @@
               }
             ]
           },
+          {
+            "label": "Ignore",
+            "description": "When checked Html format will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramId": 6,
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "handlerGuid": "b9d78892-d519-4f6e-a1bf-a287780714bc",
+        "displayName": "Html (web)",
+        "iconUri": "html.png",
+        "clipboardName": "text/html",
+        "parameters": [
+          {
+            "label": "Max Characters",
+            "description": "For performance concerns, a maximum amount characters is needed :(",
+            "controlType": "Slider",
+            "unitType": "Integer",
+            "paramId": 5,
+            "isRequired": true,
+            "minimum": 1,
+            "maximum": 10000000,
+            "values": [
+              {
+                "value": "150000",
+                "isDefault": true
+              }
+            ]
+          },
+          {
+            "label": "Ignore",
+            "description": "When checked Html format will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramId": 6,
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "handlerGuid": "7ea7e3eb-4c18-4f2f-a4b5-bcc16cd882e3",
+        "displayName": "Html (url)",
+        "iconUri": "html.png",
+        "clipboardName": "text/x-moz-url-priv",
+        "parameters": [
           {
             "label": "Ignore",
             "description": "When checked Html format will be ignored",
@@ -239,6 +334,43 @@
         ]
       },
       {
+        "handlerGuid": "826c32fa-b3ae-46f3-9495-eb1f476b0b1e",
+        "iconUri": "text.png",
+        "displayName": "Text",
+        "clipboardName": "text/plain",
+        "parameters": [
+          {
+            "label": "Max Characters",
+            "description": "For performance concerns, a maximum amount characters is needed :(",
+            "controlType": "Slider",
+            "unitType": "Integer",
+            "paramId": 12,
+            "isRequired": true,
+            "minimum": 1,
+            "maximum": 10000000,
+            "values": [
+              {
+                "value": "150000",
+                "isDefault": true
+              }
+            ]
+          },
+          {
+            "label": "Ignore",
+            "description": "When checked Plain Text format will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramId": 13,
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
+      },
+      {
         "handlerGuid": "ac15a058-dae6-4a66-9700-c415fd5b89f9",
         "displayName": "Rtf",
         "iconUri": "rtf.png",
@@ -313,6 +445,64 @@
         ]
       },
       {
+        "handlerGuid": "46fc39af-982d-4c47-8a6b-7b6e074c45d8",
+        "displayName": "Html (web)",
+        "iconUri": "html.png",
+        "clipboardName": "text/html",
+        "parameters": [
+          {
+            "label": "Max Characters",
+            "description": "For performance concerns, a maximum amount characters is needed :(",
+            "controlType": "Slider",
+            "unitType": "Integer",
+            "paramId": 16,
+            "isRequired": true,
+            "minimum": 1,
+            "maximum": 10000000,
+            "values": [
+              {
+                "value": "150000",
+                "isDefault": true
+              }
+            ]
+          },
+          {
+            "label": "Ignore",
+            "description": "When checked Html format will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramId": 17,
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "handlerGuid": "95ed025a-fde5-4b51-8be4-32dcebeb1f15",
+        "displayName": "Html (url)",
+        "iconUri": "html.png",
+        "clipboardName": "text/x-moz-url-priv",
+        "parameters": [
+          {
+            "label": "Ignore",
+            "description": "When checked Html format will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramId": 17,
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
+      },
+      {
         "handlerGuid": "57f363e9-b478-46e7-a39b-4b143c3d3e7d",
         "displayName": "Image",
         "iconUri": "bitmap.png",
@@ -363,6 +553,34 @@
         "displayName": "File",
         "iconUri": "folder.png",
         "clipboardName": "FileNames",
+        "parameters": [
+          {
+            "label": "Ignore",
+            "description": "When checked Files will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramId": 20,
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          },
+          {
+            "label": "Ignored File Extensions",
+            "description": "These file types will be ignored",
+            "controlType": "EditableList",
+            "unitType": "PlainText",
+            "paramId": 21
+          }
+        ]
+      },
+      {
+        "handlerGuid": "e05ed3da-3b2a-4339-8524-2ea339c0856b",
+        "displayName": "File (Gnome)",
+        "iconUri": "folder.png",
+        "clipboardName": "x-special/gnome-copied-files",
         "parameters": [
           {
             "label": "Ignore",

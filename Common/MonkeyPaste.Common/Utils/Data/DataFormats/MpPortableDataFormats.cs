@@ -23,6 +23,11 @@ namespace MonkeyPaste.Common {
             //FileDrop,
             //Bitmap,
 
+            // linux
+            LinuxSourceUrl,
+            LinuxGnomeFiles,
+            //LinuxUriList //not adding this one cause i don't like it
+
             // avalonia
 
             AvRtf_bytes,
@@ -61,6 +66,12 @@ namespace MonkeyPaste.Common {
         public const string Csv = "CSV";
         public const string Unicode = "Unicode";
         public const string OemText = "OEMText";
+
+        // Linux Formats
+        public const string LinuxSourceUrl = "text/x-moz-url-priv";
+
+        public const string LinuxUriList = "text/uri-list";
+        public const string LinuxGnomeFiles = "x-special/gnome-copied-files";
 
         // Avalonia Formats
 

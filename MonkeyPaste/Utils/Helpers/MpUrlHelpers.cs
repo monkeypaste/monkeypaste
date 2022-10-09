@@ -11,10 +11,23 @@ namespace MonkeyPaste {
 
     public static class MpUrlHelpers {
         public static string GetFullyFormattedUrl(string str) {
-            //returns url so it has protocol prefix
-            if (str.StartsWith(@"http://")) {
-                return str;
+            // reading linux moz url source pads every character of url w/ empty character
+            // but trying to trim it doesn't work this manually parses string for actual characters
+            // because Uri throws error on create
+
+            var sb = new StringBuilder();
+            for (int i = 0; i < str.Length;i++) {
+                if((int)((char)str[i]) == 0) {
+                    // one of the dudz
+                    continue;
+                } else {
+                    sb.Append(str[i]);
+                }
             }
+            str = sb.ToString();
+            if (str.StartsWith(@"http://")) {
+                    return str;
+                }
             if (str.StartsWith(@"https://")) {
                 return str;
             }

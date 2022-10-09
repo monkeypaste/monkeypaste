@@ -20,11 +20,11 @@ namespace MonkeyPaste.Avalonia {
                 MpAvCefNetApplication.InitCefNet();
             } 
 
-            // if (OperatingSystem.IsLinux()) {
-            //     await GtkHelper.EnsureInitialized();
-            // } else if (OperatingSystem.IsMacOS()) {
-            //     MpAvMacHelpers.EnsureInitialized();
-            // }
+            if (OperatingSystem.IsLinux()) {
+                await GtkHelper.EnsureInitialized();
+            } else if (OperatingSystem.IsMacOS()) {
+                MpAvMacHelpers.EnsureInitialized();
+            }
 
             var pw = new MpAvWrapper();
             await pw.InitializeAsync();
@@ -157,7 +157,7 @@ namespace MonkeyPaste.Avalonia {
             _platformItems.AddRange(
                 new List<MpBootstrappedItemViewModel>() {
                     new MpBootstrappedItemViewModel(this,typeof(MpAvHtmlClipboardData)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvSystemTray))
+                    //new MpBootstrappedItemViewModel(this,typeof(MpAvSystemTray))
                 });
         }
         protected override async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {

@@ -6,7 +6,8 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Text;
 
-public static class MpAvX11ShellEval {
+namespace MonkeyPaste.Common {
+    public static class MpX11ShellEval {
         #region Private Variables
 
         #endregion
@@ -30,11 +31,11 @@ public static class MpAvX11ShellEval {
 
             try {
                 process.Start();
-                while((output_line = await process.StandardOutput.ReadLineAsync()) != null) {
+                while ((output_line = await process.StandardOutput.ReadLineAsync()) != null) {
                     sb.AppendLine(output_line);
                 }
             }
-            catch (Exception) {             
+            catch (Exception) {
             }
 
             return sb.ToString();
@@ -56,11 +57,10 @@ public static class MpAvX11ShellEval {
                 EnableRaisingEvents = true
             };
             string output = null;
-            
-            process.Exited += (sender, args) =>
-            {
+
+            process.Exited += (sender, args) => {
                 string errorStr = process.StandardError.ReadToEnd();
-                if(!string.IsNullOrEmpty(errorStr)) {
+                if (!string.IsNullOrEmpty(errorStr)) {
                     MpConsole.WriteLine($"Error for cmd '{cmd}':");
                     MpConsole.WriteLine(errorStr);
                     output = errorStr;
@@ -78,13 +78,13 @@ public static class MpAvX11ShellEval {
             try {
                 process.Start();
 
-                while(output == null) {
-                    if(DateTime.Now - start_dt >= TimeSpan.FromMilliseconds(timeout_ms)) {
+                while (output == null) {
+                    if (DateTime.Now - start_dt >= TimeSpan.FromMilliseconds(timeout_ms)) {
                         // timeout reached
-                        output = string.Empty;    
+                        output = string.Empty;
                         //MpConsole.WriteLine("waiting for shell output timeout reached, aborting");                    
                     }
-                   //MpConsole.WriteLine("waiting for shell output...");
+                    //MpConsole.WriteLine("waiting for shell output...");
                     //await System.Threading.Tasks.Task.Delay(100);
                     System.Threading.Thread.Sleep(100);
                 }
@@ -97,3 +97,4 @@ public static class MpAvX11ShellEval {
             return output;
         }
     }
+}

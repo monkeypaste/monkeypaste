@@ -18,6 +18,8 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest) {
 	// enusre IsLoaded is false so msg'ing doesn't get clogged up
 	IsLoaded = false;
 
+	let contentBg_rgba = getContentBg(contentData);
+
 	enableReadOnly();
 
 	log('Editor loaded');
@@ -30,22 +32,56 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest) {
 		loadTextContent(contentData, isPasteRequest);
 	}
 
+	getEditorElement().style.backgroundColor = rgbaToCssColor(contentBg_rgba);
+
 	updateAllSizeAndPositions();
 	IsLoaded = true;
 	// initial load content length ntf
 	onContentLengthChanged_ntf();
 }
 
+function getContentBg(htmlStr, contrast_opacity = 0.5) {
+	if (ContentItemType != 'Text') {
+		return cleanColor();
+	}
+
+	let html_doc = DomParser.parseFromString(htmlStr, 'text/html');
+	let elms = html_doc.querySelectorAll(InlineTags.join(", ") + ',' + BlockTags.join(','));
+
+	let bright_fg_count = 0;
+	let dark_fg_count = 0;
+	for (var i = 0; i < elms.length; i++) {
+		let has_fg = !(elms[i].style.color === undefined || elms[i].style.color == '');
+		if (has_fg) {
+			if (isBright(elms[i].style.color)) {
+				bright_fg_count++;
+			} else {
+				dark_fg_count++;
+			}
+		}
+	}
+	log('brights: ' + bright_fg_count);
+	log('darks' + dark_fg_count);
+	// TODO need to pass theme info in init for color stuff
+	let contrast_bg_rgba = cleanColor();
+	if (bright_fg_count > dark_fg_count) {
+		contrast_bg_rgba = cleanColor('black', contrast_opacity);
+	} else if (bright_fg_count < dark_fg_count) {
+		contrast_bg_rgba = cleanColor('white', contrast_opacity);
+	}
+	return contrast_bg_rgba;
+}
+
 function getContentWidth() {
 	var bounds = quill.getBounds(0, quill.getLength());
 	bounds = cleanRect(bounds);
-    return parseFloat(bounds.width);
+	return parseFloat(bounds.width);
 }
 
 function getContentHeight() {
 	var bounds = quill.getBounds(0, quill.getLength());
 	bounds = cleanRect(bounds);
-    return parseFloat(bounds.height);
+	return parseFloat(bounds.height);
 }
 
 function getContentRange() {
@@ -53,19 +89,19 @@ function getContentRange() {
 }
 
 function isBlockElement(elm) {
-    if (elm == null || !elm instanceof HTMLElement) {
-        return false;
-    }
-    let tn = elm.tagName.toLowerCase();
-    return BlockTags.includes(tn);
+	if (elm == null || !elm instanceof HTMLElement) {
+		return false;
+	}
+	let tn = elm.tagName.toLowerCase();
+	return BlockTags.includes(tn);
 }
 
 function isInlineElement(elm) {
-    if (elm == null || !elm instanceof HTMLElement) {
-        return false;
-    }
-    let tn = elm.tagName.toLowerCase();
-    return InlineTags.includes(tn);
+	if (elm == null || !elm instanceof HTMLElement) {
+		return false;
+	}
+	let tn = elm.tagName.toLowerCase();
+	return InlineTags.includes(tn);
 }
 
 function isDocIdxInListItem(docIdx) {
@@ -91,41 +127,41 @@ function isDocIdxLineStart(docIdx) {
 	if (isNaN(parseFloat(docIdx))) {
 		return false;
 	}
-    if (docIdx == 0) {
-        return true;
-    }
-    if (docIdx >= quill.getLength()) {
-        return false;
-    }
-    let idxLine = quill.getLine(docIdx);
-    let prevIdxLine = quill.getLine(docIdx - 1);
-    return idxLine[0] != prevIdxLine[0];
+	if (docIdx == 0) {
+		return true;
+	}
+	if (docIdx >= quill.getLength()) {
+		return false;
+	}
+	let idxLine = quill.getLine(docIdx);
+	let prevIdxLine = quill.getLine(docIdx - 1);
+	return idxLine[0] != prevIdxLine[0];
 }
 
 function isDocIdxLineEnd(docIdx) {
 	if (isNaN(parseFloat(docIdx))) {
 		return false;
 	}
-    if (docIdx == quill.getLength()) {
-        return true;
-    }
-    if (docIdx < 0) {
-        return false;
-    }
-    let idxLine = quill.getLine(docIdx);
-    let nextIdxLine = quill.getLine(docIdx + 1);
-    return idxLine[0] != nextIdxLine[0];
+	if (docIdx == quill.getLength()) {
+		return true;
+	}
+	if (docIdx < 0) {
+		return false;
+	}
+	let idxLine = quill.getLine(docIdx);
+	let nextIdxLine = quill.getLine(docIdx + 1);
+	return idxLine[0] != nextIdxLine[0];
 }
 
 
 function getLineStartDocIdx(docIdx) {
-    //let lineStartDocIdx = 0;
-    //let pt = getText();
-    //for (var i = 0; i < docIdx; i++) {
-    //    if (pt[i] == '\n') {
-    //        lineStartDocIdx = Math.min(i + 1, pt.length);
-    //    }
-    //}
+	//let lineStartDocIdx = 0;
+	//let pt = getText();
+	//for (var i = 0; i < docIdx; i++) {
+	//    if (pt[i] == '\n') {
+	//        lineStartDocIdx = Math.min(i + 1, pt.length);
+	//    }
+	//}
 	//return lineStartDocIdx;
 	docIdx = docIdx < 0 ? 0 : docIdx >= quill.getLength() ? quill.getLength() - 1 : docIdx;
 	while (!isDocIdxLineStart(docIdx)) {
@@ -135,14 +171,14 @@ function getLineStartDocIdx(docIdx) {
 }
 
 function getLineEndDocIdx(docIdx) {
-    //let pt = getText();
-    //let lineEndDocIdx = pt.length - 1;
-    //for (var i = pt.length - 1; i >= docIdx; i--) {
-    //    if (pt[i] == '\n') {
-    //        lineEndDocIdx = i;
-    //    }
-    //}
-    //return lineEndDocIdx;
+	//let pt = getText();
+	//let lineEndDocIdx = pt.length - 1;
+	//for (var i = pt.length - 1; i >= docIdx; i--) {
+	//    if (pt[i] == '\n') {
+	//        lineEndDocIdx = i;
+	//    }
+	//}
+	//return lineEndDocIdx;
 	docIdx = docIdx < 0 ? 0 : docIdx >= quill.getLength() ? quill.getLength() - 1 : docIdx;
 	while (!isDocIdxLineEnd(docIdx)) {
 		docIdx++;
@@ -198,7 +234,7 @@ function getCharacterRect(docIdx, inflateX = false, inflateY = false) {
 	if (isNaN(parseFloat(docIdx))) {
 		return cleanRect();
 	}
-	
+
 
 	let docIdx_rect = quill.getBounds(docIdx, 1);
 	docIdx_rect = editorToScreenRect(docIdx_rect);
@@ -241,7 +277,7 @@ function inflateCharacterRect(docIdx, docIdx_rect, inflateX, inflateY) {
 		if (inflateY) {
 			let line_idx = getLineIdx(docIdx);
 			let line_count = getLineCount();
-			
+
 			if (line_idx == 0) {
 				docIdx_rect.top = editor_rect.top;
 			} else {
@@ -258,7 +294,7 @@ function inflateCharacterRect(docIdx, docIdx_rect, inflateX, inflateY) {
 	return docIdx_rect;
 }
 
-function getLineRect(lineIdx,snapToEditor = true) {
+function getLineRect(lineIdx, snapToEditor = true) {
 	let line_doc_range = getLineDocRange(lineIdx);
 	let line_start_rect = getCharacterRect(line_doc_range[0]);
 	let line_end_rect = getCharacterRect(line_doc_range[1]);
@@ -293,14 +329,14 @@ function getLineRect(lineIdx,snapToEditor = true) {
 	return line_rect;
 }
 
-function getRangeRects(range,inflateX = null, inflateY = null) {
+function getRangeRects(range, inflateX = null, inflateY = null) {
 	let range_rects = [];
 	if (!range || range.length == 0) {
 		return range_rects;
 	}
 	let cur_line_rect = null;
 	for (var i = range.index; i < range.index + range.length; i++) {
-		let cur_idx_rect = getCharacterRect(i,inflateX,inflateY);
+		let cur_idx_rect = getCharacterRect(i, inflateX, inflateY);
 		if (cur_line_rect == null) {
 			//new line
 			cur_line_rect = cur_idx_rect
@@ -331,7 +367,7 @@ function getLineIdxAndRectFromPoint(p) {
 	for (var i = start_line_idx; i < lineCount; i++) {
 		let line_rect = getLineRect(i);
 		if (isPointInRect(line_rect, p)) {
-			return [i,line_rect];
+			return [i, line_rect];
 		}
 	}
 
@@ -411,7 +447,7 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 				} catch (Ex) {
 					debugger;
 				}
-			}		
+			}
 
 		}
 
@@ -437,7 +473,7 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 								} else {
 									prev_sib_offset = prev_sib_node.innerText.length;
 								}
-						}
+							}
 						}
 						if (isNaN(parseInt(prev_sib_offset))) {
 							debugger;
@@ -451,7 +487,7 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 					doc_idx = text_node_idx + parent_idx;
 				}
 				doc_idx += range.endOffset;
-				
+
 
 				if (doc_idx == 0) {
 					// NOTE parentElement is editor if p is outside of actual editable space (after line break)
@@ -471,9 +507,9 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 					} else {
 						debugger;
 					}
-					
+
 				}
-				
+
 			}
 		}
 	}

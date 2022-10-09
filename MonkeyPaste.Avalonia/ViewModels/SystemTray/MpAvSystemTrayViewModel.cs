@@ -141,7 +141,7 @@ namespace MonkeyPaste.Avalonia {
                         lifetime.Shutdown();
                     }
                 });
-            },()=> MpBootstrapperViewModelBase.IsCoreLoaded);
+            });
 
         public ICommand ShowLogDialogCommand => new MpCommand(
             () => {

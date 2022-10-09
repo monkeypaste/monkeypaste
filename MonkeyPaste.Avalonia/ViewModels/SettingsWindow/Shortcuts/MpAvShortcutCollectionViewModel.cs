@@ -877,7 +877,8 @@ namespace MonkeyPaste.Avalonia {
                     if (!MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
                         if (MpAvClipTrayViewModel.Instance.IsAutoCopyMode) {
                             if (isLeftButton && !MpAvMainWindow.Instance.IsActive) {
-                                SimulateKeyStrokeSequence("control+c");
+                                //SimulateKeyStrokeSequence("control+c");
+                                MpConsole.WriteLine("Auto copy is ON");
                             }
                         }
                         if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
@@ -956,7 +957,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (keyStr.IsCtrl()) {
                     GlobalIsCtrlDown = true;
-                    MpConsole.WriteLine("Global ctrl key: DOWN");
+                    //MpConsole.WriteLine("Global ctrl key: DOWN");
                 }
                 if (keyStr.IsEscape()) {
                     GlobalIsEscapeDown = true;
@@ -995,7 +996,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (keyStr.IsCtrl()) {
                     GlobalIsCtrlDown = false; 
-                    MpConsole.WriteLine("Global ctrl key: UP");
+                    //MpConsole.WriteLine("Global ctrl key: UP");
                 }
                 if (keyStr.IsEscape()) {
                     GlobalIsEscapeDown = false;
@@ -1055,7 +1056,7 @@ namespace MonkeyPaste.Avalonia {
 
             string curGestureStr = _keyboardGestureHelper.GetCurrentGesture();
 
-            MpConsole.WriteLine("Current Gesture: " + curGestureStr);
+            //MpConsole.WriteLine("Current Gesture: " + curGestureStr);
 
             var exactMatch = Items.FirstOrDefault(x => x.KeyString.ToLower() == curGestureStr.ToLower());
             if(exactMatch != default) {

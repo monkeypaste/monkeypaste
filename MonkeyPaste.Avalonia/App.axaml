@@ -258,13 +258,13 @@
 
     <!--  NOTE Below is systray icon menu which has avalonia bug (may get fixed) that makes extra icons for cef process  -->
 
-    <!--<NativeMenu.Menu>
+    <NativeMenu.Menu>
         <NativeMenu>
             <NativeMenuItem Header="About Monkey Paste" />
         </NativeMenu>
-    </NativeMenu.Menu>-->
+    </NativeMenu.Menu>
 
-    <!--<TrayIcon.Icons>
+    <TrayIcon.Icons>
         <TrayIcons Capacity="1">
             <TrayIcon Icon="/Assets/Icons/monkey.ico"
                       Command="{Binding ShowWindowCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
@@ -274,28 +274,15 @@
                         <NativeMenuItem Header="Show"
                                         Command="{Binding ShowWindowCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />
 
-                        <NativeMenuItem Header="Settings">
-                            <NativeMenu>
-                                <NativeMenuItem Header="Option 1"
-                                                ToggleType="Radio"
-                                                IsChecked="True" />
-                                <NativeMenuItem Header="Option 2"
-                                                ToggleType="Radio"
-                                                IsChecked="True"/>
-                                <NativeMenuItemSeparator />
-                                <NativeMenuItem Header="Option 3"
-                                                ToggleType="CheckBox"
-                                                IsChecked="True" />
-                                <NativeMenuItem Icon="/Assets/Icons/cog.ico"
-                                                Header="Restore Defaults" />
-                            </NativeMenu>
-                        </NativeMenuItem>
-
+                        <NativeMenuItem Header="Settings"
+                                        Command="{Binding ShowSettingsWindowCommand, Source={x:Static local:MpAvSettingsWindowViewModel.Instance}}" />
+                        <NativeMenuItem Header="Show Converter DevTools"
+                                        Command="{x:Static local:MpAvHtmlClipboardData.ShowConverterDevTools}" />
                         <NativeMenuItem Header="Exit"
                                         Command="{Binding ExitApplicationCommand, Source={x:Static local:MpAvSystemTrayViewModel.Instance}}" />
                     </NativeMenu>
                 </TrayIcon.Menu>
             </TrayIcon>
         </TrayIcons>
-    </TrayIcon.Icons>-->
+    </TrayIcon.Icons>
 </Application>

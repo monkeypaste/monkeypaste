@@ -10,7 +10,7 @@ function getRandomColor() {
 function getColorObjType(color) {
     if (typeof color === 'string' || color instanceof String) {
         if (color.startsWith('#')) {
-            return 'hex' + (color.length-1);
+            return 'hex' + (color.length - 1);
         }
         if (color.startsWith('rgb')) {
             if (color.startsWith('rgba')) {
@@ -42,31 +42,31 @@ function getColorObjType(color) {
 }
 
 function isBright(hex_or_color_name_or_rgb_or_rgba, brightThreshold = 150) {
-    var rgb = hexToRgb(hex_or_color_name_or_rgb_or_rgba);
+    var rgb = parseRgba(hex_or_color_name_or_rgb_or_rgba);
     var grayVal = Math.sqrt(
-        rgb.R * rgb.R * .299 +
-        rgb.G * rgb.G * .587 +
-        rgb.B * rgb.B * .114);
+        rgb.r * rgb.r * .299 +
+        rgb.g * rgb.g * .587 +
+        rgb.b * rgb.b * .114);
     return grayVal > brightThreshold;
 }
 
-function parseRgba(rgb_Or_rgba_Or_colorName_Str) {
+function parseRgba(rgb_Or_rgba_Or_colorName_Or_hex_Str) {
     let rgba = null;
-    if (typeof rgb_Or_rgba_Or_colorName_Str === 'string' || rgb_Or_rgba_Or_colorName_Str instanceof String) {
+    if (typeof rgb_Or_rgba_Or_colorName_Or_hex_Str === 'string' || rgb_Or_rgba_Or_colorName_Or_hex_Str instanceof String) {
         // is string
-        if (rgb_Or_rgba_Or_colorName_Str.startsWith('#')) {
+        if (rgb_Or_rgba_Or_colorName_Or_hex_Str.startsWith('#')) {
             // is hex color string
-            rgba = hexToRgba(rgb_Or_rgba_Or_colorName_Str);
+            rgba = hexToRgba(rgb_Or_rgba_Or_colorName_Or_hex_Str);
             return rgba;
-        } 
-        let hex = colorNameToHex(rgb_Or_rgba_Or_colorName_Str);
+        }
+        let hex = colorNameToHex(rgb_Or_rgba_Or_colorName_Or_hex_Str);
         if (hex) {
             // is color name
             rgba = hexToRgba(hex);
             return rgba;
         }
         // rgb or rgba color
-        rgba = rgbaCssStrToRgba(rgb_Or_rgba_Or_colorName_Str);
+        rgba = rgbaCssStrToRgba(rgb_Or_rgba_Or_colorName_Or_hex_Str);
         if (!rgba) {
             // what is the data?
             debugger;
@@ -74,17 +74,17 @@ function parseRgba(rgb_Or_rgba_Or_colorName_Str) {
         }
         return rgba;
     }
-    if (rgb_Or_rgba_Or_colorName_Str.r === undefined) {
+    if (rgb_Or_rgba_Or_colorName_Or_hex_Str.r === undefined) {
         // what is the data?
         debugger;
-	}
-    return rgb_Or_rgba_Or_colorName_Str;
+    }
+    return rgb_Or_rgba_Or_colorName_Or_hex_Str;
 }
 
 function rgbaToRgbaStyle(rgba) {
     if (rgba.a === undefined) {
         rgba.a = 1;
-	}
+    }
     return 'rgba(' + rgba.r + ',' + rgba.g + ',' + rgba.b + ',' + (rgba.a / 1) + ')';
 }
 
@@ -114,7 +114,7 @@ function rgbaCssStrToRgba(rgbaCssStr) {
             } if (i == 2) {
                 rgba.b = parseFloat(rgbaParts[i]);
             }
-		}
+        }
     }
     return rgba;
 }
@@ -131,9 +131,9 @@ function hexToRgba(hexStr) {
     let x = hexStr.length == 8 ? 2 : 0;
 
     let a = x > 0 ? parseInt(hexStr.substring(0, 2), 16) : 1;
-    let r = parseInt(substringByLength(hexStr,x, 2), 16);
-    let g = parseInt(substringByLength(hexStr,x + 2, 2), 16);
-    let b = parseInt(substringByLength(hexStr,x + 4, 2), 16);
+    let r = parseInt(substringByLength(hexStr, x, 2), 16);
+    let g = parseInt(substringByLength(hexStr, x + 2, 2), 16);
+    let b = parseInt(substringByLength(hexStr, x + 4, 2), 16);
 
     return { r: r, g: g, b: b, a: a };
 }
@@ -154,6 +154,9 @@ function hexToRgb(hex) {
 
 
 function cleanColor(rgb_Or_rgba_Or_colorName_Str, forceAlpha) {
+    if (!rgb_Or_rgba_Or_colorName_Str) {
+        return { r: 0, g: 0, b: 0, a: 0 };
+    }
     let color = parseRgba(rgb_Or_rgba_Or_colorName_Str);
     if (forceAlpha) {
         color.a = forceAlpha;

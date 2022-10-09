@@ -9,9 +9,18 @@ using Gio;
 using Gtk;
 using GLib;
 using Gdk;
+using X11;
+using System.Runtime.InteropServices;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvX11PathIconHelper {
+        #region Private Variables
+
+        private static IntPtr _displayPtr;
+        private static X11.Window _rootWindow;
+
+        #endregion
+
         #region Path Icon
         /* --from handle---
             #define WNCK_I_KNOW_THIS_IS_UNSTABLE = 1
@@ -77,37 +86,110 @@ namespace MonkeyPaste.Common.Avalonia {
             return iconInfo.load_icon();
         */
 
-        public static string GetIconBase64FromX11Path(string path) {
-            return null;
-            // MpConsole.WriteLine("Getting x11 icon for path: " + path);
-            // try {
-            //     var file = FileFactory.NewForPath(path);
-            //     var fileInfo = file.QueryInfo("standard::icon", 0, Cancellable.Current);
-            //     var fileIcon = fileInfo.Icon;
-            //     var iconTheme = IconTheme.GetForScreen(Screen.Default);
-
-            //     //IconInfo iconInfo = null;
-            //     //foreach (var contextName in iconTheme.ListContexts()) {
-            //     //    foreach(var iconName in iconTheme.ListIcons(contextName)) {
-            //     //        for (int i = 0; i < 1024; i++) {
-            //     //            iconInfo = iconTheme.LookupIcon(fileIcon, i, IconLookupFlags.ForceSize | IconLookupFlags.UseBuiltin);
-            //     //            if (iconInfo != null) {
-            //     //                break;
-            //     //            }
-            //     //        }
-            //     //    }
-            //     //}
-            //     var iconInfo = iconTheme.LookupIcon(fileIcon, 128, IconLookupFlags.ForceSize | IconLookupFlags.UseBuiltin);
-
-
-            //     var pixBuf = iconInfo.LoadIcon();
-            //     string base64 = pixBuf.PixelBytes.Data.ToBase64String();
-            //     return base64;
-            // }catch(Exception ex) {
-            //     MpConsole.WriteTraceLine("Error reading icon for path: " + path, ex);
-            //     return null;
+        public static string GetIconBase64FromX11Path(string path, string pathType, int iconSize = 48) {
+            //return null;
+            MpConsole.WriteLine("Getting x11 icon for path: " + path);
+            // if(pathType == "EXECUTABLE") {
+            //     string app_icon = GetAppIcon(path, iconSize);
+            //     if(!string.IsNullOrEmpty(app_icon)) {
+            //         return app_icon;
+            //     }
             // }
+            return GetFileIcon(path, iconSize);
         }
+
+        private static string GetAppIcon(string path, int iconSize) {
+            if(_displayPtr == IntPtr.Zero) {
+                _displayPtr = Xlib.XOpenDisplay(null);
+
+                if (_displayPtr == IntPtr.Zero) {
+                    MpConsole.WriteTraceLine("Unable to open the default X display");
+                    return null;
+                }
+
+                _rootWindow = Xlib.XDefaultRootWindow(_displayPtr);
+                
+                if (_rootWindow == default) {
+                    MpConsole.WriteTraceLine("Unable to open root window");
+                    return null;
+                }
+            }
+            Xlib.XGrabServer(_displayPtr);
+
+            // var icon_prop = XInternAtom(_displayPtr, "_NET_CLIENT_LIST", true);
+
+            // int result = XGetWindowProperty(
+            //     _displayPtr,
+            //     _rootWindow,
+            //     icon_prop,
+            //     0,
+            //     long.MaxValue,
+            //     false,
+            //     X11.Atom.)
+            // Xlib.XUngrabServer(_displayPtr); 
+            return null;
+        }
+
+        private static string GetFileIcon(string path, int iconSize) {
+            try {
+                var file = FileFactory.NewForPath(path);
+                
+                var fileInfo = file.QueryInfo("standard::icon", 0, Cancellable.Current);
+                var fileIcon = fileInfo.Icon;
+                var iconTheme = Gtk.IconTheme.Default;
+                if(iconTheme == null) {
+                    MpConsole.WriteLine("IconTheme not found");
+                } else {
+                    MpConsole.WriteLine("IconTheme exists");
+                }
+                
+                var iconInfo = iconTheme.LookupIcon(
+                    fileIcon, iconSize, IconLookupFlags.ForceSize | IconLookupFlags.UseBuiltin);
+
+
+                var pixBuf = iconInfo.LoadIcon();
+                //string base64 = pixBuf.PixelBytes.Data.ToBase64String();
+                var bytes = pixBuf.SaveToBuffer("png");
+                return bytes.ToBase64String();
+            }catch(Exception ex) {
+                MpConsole.WriteTraceLine("Error reading icon for path: " + path, ex);
+                return null;
+            }
+        }
+
+        [DllImport("libX11.so.6")]
+        private static extern X11.Atom XInternAtom(IntPtr display, string name, bool only_if_exists);
+
+        /*
+        int XGetWindowProperty(display, w, property, long_offset, long_length, delete, req_type, 
+                        actual_type_return, actual_format_return, nitems_return, bytes_after_return, 
+                        prop_return)
+      Display *display;
+      Window w;
+      Atom property;
+      long long_offset, long_length;
+      Bool delete;
+      Atom req_type; 
+      Atom *actual_type_return;
+      int *actual_format_return;
+      unsigned long *nitems_return;
+      unsigned long *bytes_after_return;
+      unsigned char **prop_return;
+      */
+        [DllImport("libX11.so.6")]
+        private static extern int XGetWindowProperty(
+            IntPtr display,
+            X11.Window window,
+            X11.Atom atom,
+            long long_offset,
+            long long_length,
+            bool delete,
+            X11.Atom req_type,
+            IntPtr actual_type_return, //atom
+            IntPtr actual_format_return, //int
+            IntPtr nitems_return, //ulong
+            IntPtr bytes_after_return, //ulong
+            byte prop_return);
         #endregion
     }
 }

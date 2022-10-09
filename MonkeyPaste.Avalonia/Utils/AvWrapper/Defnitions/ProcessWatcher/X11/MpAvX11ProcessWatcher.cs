@@ -28,6 +28,10 @@ namespace MonkeyPaste.Avalonia {
         
         private object _lockObj = new object();
 
+        private Tuple<string, string, IntPtr> _lastActiveTuple;
+
+        private List<string> _errorWindows = new List<string>();
+        
         #endregion
 
         #region Properties
@@ -72,19 +76,13 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private string _lastActiveWindow = null;
-        private string _errorWindow = null;
-        private string _lastActiveWindowPid = null;
-        private Tuple<string, string, IntPtr> _lastActiveTuple;
-
         protected override Tuple<string, string, IntPtr> RefreshRunningProcessLookup() {
             lock (_lockObj) {
                 string activeWindow = "xdotool getactivewindow".ShellExec().Trim();
-                if(activeWindow == _errorWindow) {
+                if(_errorWindows.Contains(activeWindow)) {
                     // window reports error when accessing pid, i think this slows system down
                     return null;
                 }
-                _errorWindow = null;
 
                 string activePidStr = "xdotool getactivewindow getwindowpid".ShellExec().Trim();
                 IntPtr activeIntPtr = IntPtr.Zero;
@@ -94,7 +92,7 @@ namespace MonkeyPaste.Avalonia {
                 if (!activePidStr.IsStringNullOrWhiteSpace()) {
                     if(activePidStr.Contains(xdotool_error)) {
                         // window handle was found but no pid, note this to avoid rechecking since it errors
-                        _errorWindow = activeWindow;
+                        _errorWindows.Add(activeWindow);
                         return null;
                     }
                     try {

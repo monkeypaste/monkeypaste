@@ -20,8 +20,8 @@ namespace MonkeyPaste.Avalonia {
         private static MpAvCefNetWebView _rootWebView { get; set; }
 
         public string Version { get; private set; }
-        public string SourceUrl { get; private set; }
-        public string Html { get; private set; }
+        public string SourceUrl { get; set; }
+        public string Html { get; set; }
 
         public static void Init() {
             if(!MpAvCefNetApplication.UseCefNet) {
@@ -115,7 +115,7 @@ namespace MonkeyPaste.Avalonia {
         public static ICommand ShowConverterDevTools => new MpCommand(
             () => {
                 _rootWebView.ShowDevTools(); 
-            }, () => { return _rootWebView != null; });
+            });
 
     }
 }

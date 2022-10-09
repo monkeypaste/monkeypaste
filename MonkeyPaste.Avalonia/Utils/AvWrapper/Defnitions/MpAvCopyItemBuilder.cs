@@ -6,8 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common; 
+using MonkeyPaste.Common.Avalonia;
 using System.Reflection;
+using Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvCopyItemBuilder : MpICopyItemBuilder {
@@ -24,6 +27,59 @@ namespace MonkeyPaste.Avalonia {
                 if (mpdo == null || mpdo.DataFormatLookup.Count == 0) {
                     return null;
                 }
+
+                var actual_formats = await Application.Current.Clipboard.GetFormatsAsync();
+                actual_formats.ForEach(x => MpConsole.WriteLine("Actual format: " + x));
+
+                if(OperatingSystem.IsLinux()) {
+                    // linux doesn't case non-html formats the same as windows so mapping them here
+                    bool isLinuxFileList = mpdo.ContainsData(MpPortableDataFormats.CefText) &&
+                                        actual_formats.Contains(MpPortableDataFormats.LinuxGnomeFiles);
+                    if(isLinuxFileList) {
+                        // NOTE avalonia doesn't acknowledge files (no 'FileNames' entry) on Ubuntu 22.04
+                        // and is beyond support for the clipboard plugin right now so..
+                        // TODO eventually should tidy up clipboard handling so plugins are clear example code
+                        string files_text_base64 = mpdo.GetData(MpPortableDataFormats.CefText) as string;
+                        if(!string.IsNullOrEmpty(files_text_base64)) {
+                            string files_text = files_text_base64.ToStringFromBase64();
+                            MpConsole.WriteLine("Got file text: " + files_text);
+                            mpdo.SetData(MpPortableDataFormats.AvFileNames, files_text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
+                        }
+                        
+                    } else {
+                        bool isLinuxAndNeedsCommonPlainText = mpdo.ContainsData(MpPortableDataFormats.CefText) &&
+                                                                !mpdo.ContainsData(MpPortableDataFormats.Text);
+                        if(isLinuxAndNeedsCommonPlainText) {
+                            string plain_text = mpdo.GetData(MpPortableDataFormats.CefText) as string;
+                            mpdo.SetData(MpPortableDataFormats.Text, plain_text);
+                        }
+                    }
+                }
+                
+
+                // foreach(var af in actual_formats) {
+                //     MpConsole.WriteLine("Actual available format: " + af);
+                //     object af_data = await Application.Current.Clipboard.GetDataAsync(af);
+                //     if(af_data == null) {
+                //         MpConsole.WriteLine("data null");
+                //         continue;
+                //     }
+                //     if(af_data is string af_data_str) {
+                //         MpConsole.WriteLine("(string)");
+                //         MpConsole.WriteLine(af_data_str);
+                //     } else if(af_data is IEnumerable<string> strl) {
+                //         MpConsole.WriteLine("(string[]");
+                //         strl.ForEach(x => MpConsole.WriteLine(x));
+                //     } else if(af_data is byte[] bytes && bytes.ToDecodedString() is string bytes_str) {
+                //         MpConsole.WriteLine("(bytes)");
+                //         MpConsole.WriteLine(bytes_str);
+                //     } else {
+                //         MpConsole.WriteLine("(unknown): " + af_data.GetType());
+                //     }
+                // }
+
+                mpdo.DataFormatLookup.ForEach(x => MpConsole.WriteLine("Creating copyItem w/ available format; " + x.Key.Name));
+                
                 var iData = mpdo.DataFormatLookup as Dictionary<MpPortableDataFormat, object>;
 
 
@@ -74,8 +130,8 @@ namespace MonkeyPaste.Avalonia {
                     itemType = MpCopyItemType.Image;
                     itemData = pngBase64Str;
                 } else if (mpdo.ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
-                        mpdo.GetData(MpPortableDataFormats.AvHtml_bytes) is byte[] htmlBytes &&
-                        htmlBytes.ToDecodedString() is string htmlStr) {
+                            mpdo.GetData(MpPortableDataFormats.AvHtml_bytes) is byte[] htmlBytes &&
+                            htmlBytes.ToDecodedString() is string htmlStr) {
 
                     // HTML
 
@@ -85,6 +141,15 @@ namespace MonkeyPaste.Avalonia {
                         return null;
                     }
                     itemData = htmlClipboardData.Html;
+
+                    if(mpdo.ContainsData(MpPortableDataFormats.LinuxSourceUrl) && 
+                        mpdo.GetData(MpPortableDataFormats.LinuxSourceUrl) is byte[] url_bytes &&
+                        url_bytes.ToDecodedString(Encoding.ASCII) is string source_url_str) {
+                        // on linux html is not in fragment format like windows and firefox supports this format
+                        // but chrome doesn't
+                        //source_url_str = System.Web.HttpUtility.HtmlDecode(source_url_str);
+                        htmlClipboardData.SourceUrl = source_url_str;
+                    }
                     //itemData = itemData.ToQuillText();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Text)) {
 
@@ -160,7 +225,8 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     if(OperatingSystem.IsLinux()) {
                         // this maybe temporary but linux not following process watching convention because its SLOW
-                        app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(MpPlatformWrapper.Services.ProcessWatcher.LastProcessPath);
+                        string exe_path = MpX11ShellHelpers.GetExeWithArgsToExePath(MpPlatformWrapper.Services.ProcessWatcher.LastProcessPath);
+                        app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(exe_path);
                     } else {
                         app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(MpPlatformWrapper.Services.ProcessWatcher.LastHandle);
                     }

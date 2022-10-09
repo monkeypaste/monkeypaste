@@ -56,7 +56,14 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
-
+        public static string TrimWithUnicodeSpace(this string str) {
+            // this happens getting firefox urlSource...
+            if(str == null) {
+                return string.Empty;
+            }
+            return str.Replace("\u200B","");
+        }
+        
         public static string ReplaceRange(this string str, int index, int length, string text) {
             int preStrLength = index + 1;
             if(str.Length < preStrLength) {

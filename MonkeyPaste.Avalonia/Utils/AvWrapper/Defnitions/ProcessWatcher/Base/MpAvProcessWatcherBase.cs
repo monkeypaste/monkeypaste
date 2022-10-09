@@ -30,6 +30,8 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+
+        
         public virtual string ThisAppProcessPath { get; set; }
 
         public virtual bool CanWatchProcesses() {
@@ -152,7 +154,7 @@ namespace MonkeyPaste.Avalonia {
             if(OperatingSystem.IsLinux()) {
                 // needs more filtering and is slow or certain process states aren't accounted for
                 // so just ignoring
-                //return;
+                return;
             }
 
             bool didActiveChange = false;

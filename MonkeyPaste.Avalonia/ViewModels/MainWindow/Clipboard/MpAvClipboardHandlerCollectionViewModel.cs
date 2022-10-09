@@ -292,6 +292,7 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine("Invalid cb reader response: " + response);
                 }
             }
+            mpdo.MapAllPseudoFormats();
             return mpdo;
         }
 

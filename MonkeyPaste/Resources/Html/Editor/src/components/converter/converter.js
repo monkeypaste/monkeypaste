@@ -24,11 +24,11 @@ function initPlainHtmlConverter(envName, useBetterTable) {
 }
 
 
-function convertPlainHtml(plainHtml, forceBgOpacity = 0.0) {
+function convertPlainHtml(plainHtml, bgOpacity = 0.0) {
 	if (!IsConverterLoaded) {
 		log('convertPlainHtml error! converter not initialized, returning null');
 		return null;
-	} 
+	}
 	plainHtml = unescapeHtml(plainHtml);
 	//plainHtml = removeUnicode(plainHtml);
 
@@ -46,7 +46,7 @@ function convertPlainHtml(plainHtml, forceBgOpacity = 0.0) {
 	let qhtml = getHtml();
 	qhtml = removeUnicode(qhtml);
 	qhtml = fixUnicode(qhtml);
-	qhtml = forceHtmlBgAlpha(qhtml, forceBgOpacity);
+	qhtml = forceBgOpacity(qhtml, bgOpacity);
 
 	setHtml(qhtml);
 
@@ -56,7 +56,8 @@ function convertPlainHtml(plainHtml, forceBgOpacity = 0.0) {
 	return qhtml;
 }
 
-function forceHtmlBgAlpha(htmlStr, opacity) {
+
+function forceBgOpacity(htmlStr, opacity) {
 	let html_doc = DomParser.parseFromString(htmlStr, 'text/html');
 	let elms = html_doc.querySelectorAll(InlineTags.join(", ") + ',' + BlockTags.join(','));
 	for (var i = 0; i < elms.length; i++) {
@@ -79,7 +80,10 @@ function removeUnicode(str) {
 function fixUnicode(text) {
 	// replaces any combo of chars in [] with single space
 	const regex = /(?!\w*(\w)\w*\1)[Âï¿½]+/ig;
+	const regex2 = /[^\u0000-\u007F]+/ig;
+
 	let fixedText = text.replaceAll(regex, ' ');
+	fixedText = fixedText.replaceAll(regex2, '');
 	return fixedText;
 }
 

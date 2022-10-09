@@ -8,6 +8,8 @@ var IsSubSelectionEnabled = false;
 var EditorContainerElement = null;
 var QuillEditorElement = null;
 
+var EditorTheme = 'light';
+
 var IsReadOnly = false;
 
 function initEditor(useBetterTable) {
@@ -66,7 +68,7 @@ function updateAllSizeAndPositions() {
 	} else {
 		$("#editor").css("top", 0);
 	}
-	
+
 
 	let wh = window.visualViewport.height;
 	let eth = getEditorToolbarHeight();
@@ -104,7 +106,7 @@ function onEditorSelectionChanged(range, oldRange, source) {
 	let logRange = range ? range : { index: -1, length: 0 };
 	let logOldRange = oldRange ? oldRange : { oldRange: -1, length: 0 };
 	log('Sel Changed. range.index: ' + logRange.index + ' range.length: ' + logRange.length + ' oldRange.index: ' + logOldRange.index + ' oldRange.length: ' + logOldRange.length + ' source: ' + source);
-	
+
 	drawOverlay();
 
 	if (IgnoreNextSelectionChange) {
@@ -115,7 +117,7 @@ function onEditorSelectionChanged(range, oldRange, source) {
 	if (range) {
 		refreshFontSizePicker();
 		refreshFontFamilyPicker();
-		updateTemplatesAfterSelectionChange(range,oldRange);
+		updateTemplatesAfterSelectionChange(range, oldRange);
 		//coereceSelectionWithTemplatePadding(range, oldRange, source);
 
 		onEditorSelectionChanged_ntf(range);
@@ -128,7 +130,7 @@ function onEditorSelectionChanged(range, oldRange, source) {
 			was_blur = true;
 			//blur occured
 			//setEditorSelection(oldRange.index, oldRange.length,'silent');
-		} 
+		}
 	}
 	if (was_blur && isEditorToolbarVisible()) {
 		// only do this to show selection when in toolbar drop down
@@ -163,7 +165,7 @@ function onEditorTextChanged(delta, oldDelta, source) {
 }
 
 function selectAll() {
-	setEditorSelection(0, getDocLength(),'api');
+	setEditorSelection(0, getDocLength(), 'api');
 }
 
 function deselectAll(forceCaretDocIdx = 0) {
@@ -264,7 +266,7 @@ function enableSubSelection(fromHost = false) {
 	//	return;
 	//}
 	IsSubSelectionEnabled = true;
-	
+
 	getEditorContainerElement().classList.remove('no-select');
 	getEditorContainerElement().classList.add('sub-select');
 
