@@ -35,37 +35,37 @@ namespace MonkeyPaste.Avalonia {
                 SystemDecorations = SystemDecorations.None,
                 //Position = new PixelPoint(808080, 808080)
             };
-            _rootWebView = new MpAvCefNetWebView() {
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch,
-                //IsVisible = false
-            };
-            quillWindow.Content = _rootWebView;
             
-            _rootWebView.BrowserCreated += (s, e) => {
-                _rootWebView.Navigated += async(s, e) => {
-                    if (s is MpAvCefNetWebView wv) {
-                        while(!wv.IsDomLoaded) {
-                            await Task.Delay(100);
-                        }
-                        var converter_init_msg = new MpQuillInitMainRequestMessage() {
-                            isPlainHtmlConverter = true,
-                            envName = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
-                            useBetterTable = true
-                        };
-                        string msg64 = converter_init_msg.SerializeJsonObjectToBase64();
-                        _rootWebView.ExecuteJavascript($"initMain_ext('{msg64}')");
-                    }
-                };
-                _rootWebView.Navigate(MpAvClipTrayViewModel.EditorPath);
-            };
+            
             quillWindow.AttachedToVisualTree += (s, e) => {
                 if(OperatingSystem.IsWindows()) {
                     // hide converter window from windows alt-tab menu
                 
-                    MpAvToolWindow_Win32.InitToolWindow(quillWindow.PlatformImpl.Handle.Handle);
+                    //MpAvToolWindow_Win32.InitToolWindow(quillWindow.PlatformImpl.Handle.Handle);
                 }
                 quillWindow.Hide();
+                _rootWebView = new MpAvCefNetWebView() {
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch
+                };
+
+                _rootWebView.BrowserCreated += (s, e) => {
+                    _rootWebView.Navigated += async (s, e) => {
+                        if (s is MpAvCefNetWebView wv) {
+                            while (!wv.IsDomLoaded) {
+                                await Task.Delay(100);
+                            }
+                            var converter_init_msg = new MpQuillInitMainRequestMessage() {
+                                isPlainHtmlConverter = true,
+                                envName = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
+                                useBetterTable = true
+                            };
+                            string msg64 = converter_init_msg.SerializeJsonObjectToBase64();
+                            wv.ExecuteJavascript($"initMain_ext('{msg64}')");
+                        }
+                    };
+                    _rootWebView.Navigate(MpAvClipTrayViewModel.EditorPath);
+                };
             };
             
 

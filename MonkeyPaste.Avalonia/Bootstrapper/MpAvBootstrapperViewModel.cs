@@ -12,14 +12,11 @@ using System.IO;
 using System.Collections;
 using MonkeyPaste.Common.Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvBootstrapperViewModel : MpBootstrapperViewModelBase {
         public override async Task InitAsync() {
-            if (MpAvCefNetApplication.UseCefNet) {
-                MpAvCefNetApplication.InitCefNet();
-            } 
-
             if (OperatingSystem.IsLinux()) {
                 await GtkHelper.EnsureInitialized();
             } else if (OperatingSystem.IsMacOS()) {
@@ -32,11 +29,12 @@ namespace MonkeyPaste.Avalonia {
 
             await MpNotificationCollectionViewModel.Instance.InitAsync(null);
 
-            var nw = new MpAvNotificationWindow();
-            nw.Opened += Nw_Opened;
+            if (MpPlatformWrapper.Services.NotificationView is Window nw) {
+                nw.Opened += Nw_Opened;
+            }
 
-            await MpNotificationCollectionViewModel.Instance.RegisterWithWindowAsync(nw);
             CreateLoaderItems();
+            //Nw_Opened(null, null);
             await MpNotificationCollectionViewModel.Instance.BeginLoaderAsync(this);
             while (IsCoreLoaded == false) {
                 await Task.Delay(100);
@@ -44,11 +42,17 @@ namespace MonkeyPaste.Avalonia {
 
             MpConsole.WriteLine("Core and ViewModel Bootstrap complete");
 
-
+            Window omw = null;
+            if(App.Desktop.MainWindow != null) {
+                //Debugger.Break();
+                omw = App.Desktop.MainWindow;
+                //App.Desktop.MainWindow = null;
+            }
             App.Desktop.MainWindow = new MpAvMainWindow();
+            //omw?.Close();
             App.Desktop.MainWindow.Show();
 
-
+            
         }
 
         private async void Nw_Opened(object sender, EventArgs e) {
@@ -93,7 +97,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
             IsPlatformLoaded = true;
-        }
+            }
 
         protected override void CreateLoaderItems() {
             base.CreateLoaderItems();
@@ -137,7 +141,7 @@ namespace MonkeyPaste.Avalonia {
 
 
                     new MpBootstrappedItemViewModel(this,typeof(MpAvTagTrayViewModel)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindowViewModel)),
+                    //new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindowViewModel)),
 
                     new MpBootstrappedItemViewModel(this,typeof(MpAvDataObjectHelper)),
                    //new MpBootstrappedItemViewModel(this,typeof(MpActionCollectionViewModel)),
@@ -157,7 +161,7 @@ namespace MonkeyPaste.Avalonia {
             _platformItems.AddRange(
                 new List<MpBootstrappedItemViewModel>() {
                     new MpBootstrappedItemViewModel(this,typeof(MpAvHtmlClipboardData)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpAvSystemTray))
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvSystemTray))
                 });
         }
         protected override async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {

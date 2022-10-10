@@ -135,28 +135,25 @@ namespace MonkeyPaste.Common {
         }
 
         public static string ToReadableTimeSpan(this DateTime dt) {
-            int totalYears, totalMonths, totalWeeks, totalDays, totalHours, totalMinutes;
-
-            var ts = DateTime.Now - dt;
-            string outStr = string.Empty;
-            totalYears = (int)(ts.TotalDays / 365);
-            totalMonths = DateTime.Now.MonthDifference(dt);
-            totalWeeks = DateTime.Now.WeekDifference(dt);
-            totalDays = (int)ts.TotalDays;
-            totalHours = (int)ts.TotalHours;
-            totalMinutes = (int)ts.TotalMinutes;
+            TimeSpan ts = DateTime.Now - dt;
+            int totalYears = (int)(ts.TotalDays / 365);
+            int totalMonths = DateTime.Now.MonthDifference(dt);
+            int totalWeeks = DateTime.Now.WeekDifference(dt);
+            int totalDays = (int)ts.TotalDays;
+            int totalHours = (int)ts.TotalHours;
+            int totalMinutes = (int)ts.TotalMinutes;
 
             if (totalYears > 1) {
                 return string.Format($"{totalYears} years ago");
             }
-            if (totalMonths >= 1) {
-                return string.Format($"{totalMonths} month{(totalMonths == 1 ? string.Empty : "s")} ago");
+            if (totalMonths >= 1 && totalWeeks >= 4) {
+                return string.Format($"{(totalMonths == 1 ? "Last":totalMonths.ToString())} month{(totalMonths == 1 ? string.Empty : "s ago")}");
             }
             if (totalWeeks >= 1) {
-                return string.Format($"{totalWeeks} week{(totalWeeks == 1 ? string.Empty : "s")} ago");
+                return string.Format($"{(totalWeeks == 1 ? "Last":totalWeeks.ToString())} week{(totalWeeks == 1 ? string.Empty : "s ago")}");
             }
             if (totalDays >= 1) {
-                return string.Format($"{totalDays} day{(totalDays == 1 ? string.Empty : "s")} ago");
+                return string.Format($"{(totalDays == 1 ? "Yesterday":totalDays.ToString())} day{(totalDays == 1 ? string.Empty : "s ago")}");
             }
             if (totalHours >= 1) {
                 return string.Format($"{totalHours} hour{(totalHours == 1 ? string.Empty : "s")} ago");
@@ -173,7 +170,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static int MonthDifference(this DateTime lValue, DateTime rValue) {
-            return (lValue.Month - rValue.Month) + 12 * (lValue.Year - rValue.Year);
+            return (lValue.Month - rValue.Month) + (12 * (lValue.Year - rValue.Year));
         }
 
         public static string ToTitleCase(this string str) {

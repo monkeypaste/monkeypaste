@@ -24,7 +24,7 @@
   </PropertyGroup>-->
   
   <!-- LINUX -->
-  <PropertyGroup>
+  <!-- <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
@@ -32,6 +32,7 @@
     <TrimMode>copyused</TrimMode>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
   </PropertyGroup>
+  
 
   <PropertyGroup>
     <RunningOnWindows>false</RunningOnWindows>
@@ -39,12 +40,39 @@
   
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DefineConstants>LINUX;</DefineConstants>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>LINUX;</DefineConstants>
+  </PropertyGroup> -->
+
+  <!-- DYNAMIC-->
+
+   <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <Nullable>disable</Nullable>
+    <TrimMode>copyused</TrimMode>
+    <WarningLevel>4</WarningLevel>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
   </PropertyGroup>
+  <ItemGroup>
+    <KnownFrameworkReference Update="Microsoft.WindowsDesktop.App.WPF" IsWindowsOnly="false" />
+  </ItemGroup>
   
+  <PropertyGroup Condition="'$(BuildOs)' == 'WINDOWS'">  
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <DefineConstants>WINDOWS;</DefineConstants>    
+    <UseWPF>True</UseWPF> 
+  </PropertyGroup>
+
+  <!-- <ItemGroup Condition="'$(BuildOs)' == 'WINDOWS'">  
+    <KnownFrameworkReference Update="Microsoft.WindowsDesktop.App.WPF" IsWindowsOnly="false" />
+  </PropertyGroup> -->
+
+   <PropertyGroup Condition="'$(BuildOs)' == 'LINUX'">  
+    <TargetFramework>net6.0</TargetFramework>
+    <DefineConstants>LINUX;</DefineConstants>
+  </PropertyGroup>
 
   <PropertyGroup>
     <NoWarn>CS8632</NoWarn>
@@ -1000,7 +1028,7 @@
     </AvaloniaResource>
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="call $(ProjectDir)scripts\kill_mpav_processes.bat" Condition="$(RunningOnWindows)" />
+    <Exec Command="call $(ProjectDir)scripts\kill_mpav_processes.bat" Condition="'$(BuildOs)' == 'WINDOWS'" />
   </Target>
   <PropertyGroup>
      <!-- 

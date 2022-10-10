@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -39,6 +40,10 @@ namespace MonkeyPaste.Avalonia {
 
         private double _resize_shortcut_nudge_amount = 50;
 
+        private DispatcherTimer _windowOpenTimer;
+        private DispatcherTimer _windowCloseTimer;
+        private double _windowTimerStep;
+        private double d_l, d_r, d_t, d_b;
         #endregion
 
         #region Statics
@@ -425,7 +430,7 @@ namespace MonkeyPaste.Avalonia {
                 //    return null;
                 //}
                 //return MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx);
-                if(_mainWindowScreen == null) {
+                if (_mainWindowScreen == null) {
                     _mainWindowScreen = MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx);
                 }
                 return _mainWindowScreen;
@@ -447,6 +452,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvMainWindowViewModel() : base() {
             PropertyChanged += MpAvMainWindowViewModel_PropertyChanged;
+            InitWindowTimers();
         }
 
         #region Public Methods
@@ -553,7 +559,7 @@ namespace MonkeyPaste.Avalonia {
                         p *= MainWindowScreen.PixelDensity; //MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx).PixelDensity;
                     }
 
-                    MpAvMainWindow.Instance.Position = new PixelPoint((int)p.X, (int)p.Y);
+                    MpAvMainWindow.Instance.Position = p.ToAvPixelPoint();
                     break;
                 case nameof(IsResizing):
                     if (IsResizing) {
@@ -600,16 +606,130 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
-        private void ValidateWindowState() {
-            Dispatcher.UIThread.Post(() => {
-                //if(MpAvMainWindow.Instance.IsVisible && (!IsMainWindowOpening || !IsMainWindowClosing) {
-                //    Debugger.Break();
-                //}
-                if(IsMainWindowOpen && (IsMainWindowClosing || IsMainWindowOpening)) {
-                    Debugger.Break();
-                }
-            });
+
+        private void InitWindowTimers() {
+            double test = MpPrefViewModel.Instance.ShowMainWindowAnimationMilliseconds;
+            double tt = 250;
+            double fps = 30;
+            _windowTimerStep = tt / (fps);
+
+            _windowOpenTimer = new DispatcherTimer(DispatcherPriority.Normal);
+            _windowOpenTimer.Interval = TimeSpan.FromMilliseconds(fps);
+            _windowOpenTimer.Tick += WindowOpenTimer_Tick;
+
+            _windowCloseTimer = new DispatcherTimer(DispatcherPriority.Normal);
+            _windowCloseTimer.Interval = TimeSpan.FromMilliseconds(fps);
+            _windowCloseTimer.Tick += WindowCloseTimer_Tick;
         }
+        private void FinishOpenWindow() {
+            MpRect openEndRect = MainWindowOpenedScreenRect;
+
+            MainWindowLeft = openEndRect.Left;
+            MainWindowTop = openEndRect.Top;
+            MainWindowRight = openEndRect.Right;
+            MainWindowBottom = openEndRect.Bottom;
+
+            _windowOpenTimer.Stop();
+
+            if(OperatingSystem.IsWindows()) {
+                MpAvMainWindow.Instance.Topmost = true;
+            }
+            IsMainWindowLoading = false;
+            IsMainWindowOpen = true;
+            IsMainWindowOpening = false;
+
+            //OnPropertyChanged(nameof(IsMainWindowOpen));
+            OnPropertyChanged(nameof(ExternalRect));
+            //OnMainWindowOpened?.Invoke(this, EventArgs.Empty);
+            MpMessenger.SendGlobal(MpMessageType.MainWindowOpened);
+            MpConsole.WriteLine("SHOW WINDOW DONE");
+        }
+        
+        private void FinishCloseWindow() {
+            MpRect closeEndRect = MainWindowClosedScreenRect;
+
+            MainWindowLeft = closeEndRect.Left;
+            MainWindowTop = closeEndRect.Top;
+            MainWindowRight = closeEndRect.Right;
+            MainWindowBottom = closeEndRect.Bottom;
+
+            _windowCloseTimer.Stop();
+
+            IsMainWindowLocked = false;
+            IsMainWindowOpen = false;
+            IsMainWindowClosing = false;
+
+            MpAvMainWindow.Instance.Hide();
+            // MpAvMainWindow.Instance.IsVisible = false;
+            // MpAvMainWindow.Instance.Topmost = false;
+            // if(OperatingSystem.IsLinux()) {
+            //     MpAvMainWindow.Instance.Hide();
+            // }
+            
+            OnPropertyChanged(nameof(ExternalRect));
+
+
+            OnMainWindowClosed?.Invoke(this, EventArgs.Empty);
+            MpMessenger.SendGlobal(MpMessageType.MainWindowHid);
+            MpConsole.WriteLine("CLOSE WINDOW DONE");
+        }
+
+
+        private void WindowOpenTimer_Tick(object sender, EventArgs e) {
+            if (IsMainWindowClosing) {
+                _windowOpenTimer.Stop();
+                IsMainWindowOpening = false;
+                return;
+            }
+            MpRect openEndRect = MainWindowOpenedScreenRect;
+
+            bool isDone = MainWindowOrientationType switch {
+                MpMainWindowOrientationType.Bottom => MainWindowTop < openEndRect.Top,
+                MpMainWindowOrientationType.Top => MainWindowTop > openEndRect.Top,
+                MpMainWindowOrientationType.Left => MainWindowLeft > openEndRect.Left,
+                MpMainWindowOrientationType.Right => MainWindowLeft < openEndRect.Left,
+                _ => false
+            };
+            if (isDone) {
+                FinishOpenWindow();
+            } else {                
+                //MpConsole.WriteLine($"SHOW WINDOW ANIMATING: L: " + MainWindowLeft + " T: " + MainWindowTop + " R:" + MainWindowRight + " B:" + MainWindowBottom);                
+
+                MainWindowLeft += d_l;
+                MainWindowTop += d_t;
+                MainWindowRight += d_r;
+                MainWindowBottom += d_b;
+
+                OnPropertyChanged(nameof(ExternalRect));
+            }
+        }
+
+        private void WindowCloseTimer_Tick(object sender, EventArgs e) {        
+            MpRect closeEndRect = MainWindowClosedScreenRect;
+
+            bool isDone = MainWindowOrientationType switch {
+                        MpMainWindowOrientationType.Bottom => MainWindowTop > closeEndRect.Top,
+                        MpMainWindowOrientationType.Top => MainWindowTop < closeEndRect.Top,
+                        MpMainWindowOrientationType.Left => MainWindowLeft < closeEndRect.Left,
+                        MpMainWindowOrientationType.Right => MainWindowLeft > closeEndRect.Left,
+                        _ => false
+                    };
+            if (isDone) {
+                FinishCloseWindow();
+            } else {
+                //if (IsMainWindowOpening) {
+                //    timer.Stop();
+                //    return;
+                //}
+                MainWindowLeft += d_l;
+                MainWindowTop += d_t;
+                MainWindowRight += d_r;
+                MainWindowBottom += d_b;
+
+                OnPropertyChanged(nameof(ExternalRect));
+            }
+        }
+
         #endregion
 
         #region Commands        
@@ -653,81 +773,18 @@ namespace MonkeyPaste.Avalonia {
                 MainWindowRight = openStartRect.Right;
                 MainWindowBottom = openStartRect.Bottom;
 
-                if (IsMainWindowInitiallyOpening) {
-                    //while (!MpAvClipTrayViewModel.Instance.IsAllTileViewsLoaded) {
-                    //    await Task.Delay(100);
-                    //}
-                    IsMainWindowInitiallyOpening = false;
-                }
+                IsMainWindowInitiallyOpening = false;
 
                 //MpConsole.WriteLine($"SHOW WINDOW START: L: " + MainWindowLeft + " T: " + MainWindowTop + " R:" + MainWindowRight + " B:" + MainWindowBottom);
 
                 MpRect openEndRect = MainWindowOpenedScreenRect;
 
-                double test = MpPrefViewModel.Instance.ShowMainWindowAnimationMilliseconds;
-                double tt = 500;
-                double fps = 30;
-                double step = tt / (fps);
+                d_l = (openEndRect.Left - openStartRect.Left) / _windowTimerStep;
+                d_t = (openEndRect.Top - openStartRect.Top) / _windowTimerStep;
+                d_r = (openEndRect.Right - openStartRect.Right) / _windowTimerStep;
+                d_b = (openEndRect.Bottom - openStartRect.Bottom) / _windowTimerStep;
 
-                double d_l = (openEndRect.Left - openStartRect.Left) / step;
-                double d_t = (openEndRect.Top - openStartRect.Top) / step;
-                double d_r = (openEndRect.Right - openStartRect.Right) / step;
-                double d_b = (openEndRect.Bottom - openStartRect.Bottom) / step;
-
-                //MpConsole.WriteLine($"SHOW WINDOW STEP: L: " + d_l + " T: " + d_t + " R:" + d_r + " B:" + d_b);
-
-                var timer = new DispatcherTimer(DispatcherPriority.Normal);
-                timer.Interval = TimeSpan.FromMilliseconds(fps);
-
-                timer.Tick += (s, e32) => {
-                    if (IsMainWindowClosing) {
-                        timer.Stop();
-                        IsMainWindowOpening = false;
-                        return;
-                    }
-                    bool isDone = MainWindowOrientationType switch {
-                        MpMainWindowOrientationType.Bottom => MainWindowTop < openEndRect.Top,
-                        MpMainWindowOrientationType.Top => MainWindowTop > openEndRect.Top,
-                        MpMainWindowOrientationType.Left => MainWindowLeft > openEndRect.Left,
-                        MpMainWindowOrientationType.Right => MainWindowLeft < openEndRect.Left,
-                        _ => false
-                    };
-                    if (isDone) {
-                        //MpConsole.WriteLine("SHOW WINDOW DONE");
-                        MainWindowLeft = openEndRect.Left;
-                        MainWindowTop = openEndRect.Top;
-                        MainWindowRight = openEndRect.Right;
-                        MainWindowBottom = openEndRect.Bottom;
-
-                        timer.Stop();
-
-                        if(OperatingSystem.IsWindows()) {
-                            MpAvMainWindow.Instance.Topmost = true;
-                        }
-                        IsMainWindowLoading = false;
-                        IsMainWindowOpen = true;
-                        IsMainWindowOpening = false;
-                        ValidateWindowState();
-
-                        //OnPropertyChanged(nameof(IsMainWindowOpen));
-                        OnPropertyChanged(nameof(ExternalRect));
-                        //OnMainWindowOpened?.Invoke(this, EventArgs.Empty);
-                        MpMessenger.SendGlobal(MpMessageType.MainWindowOpened);
-                    } else {
-                        
-                        //MpConsole.WriteLine($"SHOW WINDOW ANIMATING: L: " + MainWindowLeft + " T: " + MainWindowTop + " R:" + MainWindowRight + " B:" + MainWindowBottom);
-                        
-
-                        MainWindowLeft += d_l;
-                        MainWindowTop += d_t;
-                        MainWindowRight += d_r;
-                        MainWindowBottom += d_b;
-
-                        OnPropertyChanged(nameof(ExternalRect));
-                    }
-                };
-
-                timer.Start();
+                _windowOpenTimer.Start();
             },
             () => {
                 bool canShow = !IsMainWindowLoading &&
@@ -736,13 +793,19 @@ namespace MonkeyPaste.Avalonia {
                         !IsMainWindowClosing &&
                         !IsMainWindowOpening;
                 if(!canShow) {
-                    ValidateWindowState();
+                    MpConsole.WriteLine($"Cannot show main window:");
+                    MpConsole.WriteLine($"IsMainWindowLoading: {(IsMainWindowLoading)}");
+                    MpConsole.WriteLine($"IsShowingDialog: {(IsShowingDialog)}");
+                    MpConsole.WriteLine($"IsMainWindowClosing: {(IsMainWindowClosing)}");
+                    MpConsole.WriteLine($"IsMainWindowOpening: {(IsMainWindowOpening)}");
                 }
                 return canShow;
             });
 
         public ICommand HideWindowCommand => new MpAsyncCommand(
             async() => {
+                MpConsole.WriteLine("Closing Main WIndow");
+
                 if (!Dispatcher.UIThread.CheckAccess()) {
                     Dispatcher.UIThread.Post(() => {
                         HideWindowCommand.Execute(null);
@@ -753,9 +816,6 @@ namespace MonkeyPaste.Avalonia {
                 MpRect closeStartRect = MainWindowOpenedScreenRect;
                 MpRect closeEndRect = MainWindowClosedScreenRect;
 
-                // Hide START Events - start
-
-
                 if (IsMainWindowOpening || MpAvClipTrayViewModel.Instance.IsPasting) {
                     // this occurs when mw is opening and window is deactivated, either by clicking
                     // off or alt-tab, etc. w/o accounting for the deactivate mw will open
@@ -765,32 +825,11 @@ namespace MonkeyPaste.Avalonia {
 
                     IsMainWindowClosing = true;
 
-                    MpAvMainWindow.Instance.IsVisible = false;
-                    MpAvMainWindow.Instance.Topmost = false;
                     while (IsMainWindowOpening) {
                         await Task.Delay(20);
                     }
 
-                    MainWindowLeft = closeEndRect.Left;
-                    MainWindowTop = closeEndRect.Top;
-                    MainWindowRight = closeEndRect.Right;
-                    MainWindowBottom = closeEndRect.Bottom;
-
-                    IsMainWindowLocked = false;
-                    IsMainWindowClosing = false;
-                    IsMainWindowOpen = false;
-                    if(OperatingSystem.IsLinux()) {
-                        MpAvMainWindow.Instance.Hide();
-                    }
-
-                    // Hide END - end
-                    OnPropertyChanged(nameof(IsMainWindowOpen));
-                    OnPropertyChanged(nameof(ExternalRect));
-
-                    ValidateWindowState();
-
-                    OnMainWindowClosed?.Invoke(this, EventArgs.Empty);
-                    MpMessenger.SendGlobal(MpMessageType.MainWindowHid);
+                    FinishCloseWindow();
                     return;
                 }
 
@@ -801,77 +840,17 @@ namespace MonkeyPaste.Avalonia {
                     MpAvMainWindow.Instance.Topmost = false;
                 }
 
-                // Hide START Events - end
-
-
                 MainWindowLeft = closeStartRect.Left;
                 MainWindowTop = closeStartRect.Top;
                 MainWindowRight = closeStartRect.Right;
                 MainWindowBottom = closeStartRect.Bottom;
 
+                d_l = (closeEndRect.Left - closeStartRect.Left) / _windowTimerStep;
+                d_t = (closeEndRect.Top - closeStartRect.Top) / _windowTimerStep;
+                d_r = (closeEndRect.Right - closeStartRect.Right) / _windowTimerStep;
+                d_b = (closeEndRect.Bottom - closeStartRect.Bottom) / _windowTimerStep;
 
-                double tt = MpPrefViewModel.Instance.HideMainWindowAnimationMilliseconds;
-                const double fps = 30;
-                double step = tt / (fps);
-
-                double d_l = (closeEndRect.Left - closeStartRect.Left) / step;
-                double d_t = (closeEndRect.Top - closeStartRect.Top) / step;
-                double d_r = (closeEndRect.Right - closeStartRect.Right) / step;
-                double d_b = (closeEndRect.Bottom - closeStartRect.Bottom) / step;
-
-                var timer = new DispatcherTimer(DispatcherPriority.Normal) {
-                    Interval = TimeSpan.FromMilliseconds(fps)
-                };
-
-                timer.Tick += (s, e32) => {
-                    bool isDone = MainWindowOrientationType switch {
-                        MpMainWindowOrientationType.Bottom => MainWindowTop > closeEndRect.Top,
-                        MpMainWindowOrientationType.Top => MainWindowTop < closeEndRect.Top,
-                        MpMainWindowOrientationType.Left => MainWindowLeft < closeEndRect.Left,
-                        MpMainWindowOrientationType.Right => MainWindowLeft > closeEndRect.Left,
-                        _ => false
-                    };
-                    if (isDone) {
-                        MainWindowLeft = closeEndRect.Left;
-                        MainWindowTop = closeEndRect.Top;
-                        MainWindowRight = closeEndRect.Right;
-                        MainWindowBottom = closeEndRect.Bottom;
-
-                        timer.Stop();
-
-                        IsMainWindowLocked = false;
-                        IsMainWindowOpen = false;
-                        IsMainWindowClosing = false;
-
-
-                        // Hide END - start
-
-                        MpAvMainWindow.Instance.IsVisible = false;
-                        MpAvMainWindow.Instance.Topmost = false;
-                        //MpAvMainWindow.Instance.Hide();
-
-                        // Hide END - end
-                        //OnPropertyChanged(nameof(IsMainWindowOpen));
-                        OnPropertyChanged(nameof(ExternalRect));
-
-                        ValidateWindowState();
-
-                        OnMainWindowClosed?.Invoke(this, EventArgs.Empty);
-                        MpMessenger.SendGlobal(MpMessageType.MainWindowHid);
-                    } else {
-                        //if (IsMainWindowOpening) {
-                        //    timer.Stop();
-                        //    return;
-                        //}
-                        MainWindowLeft += d_l;
-                        MainWindowTop += d_t;
-                        MainWindowRight += d_r;
-                        MainWindowBottom += d_b;
-
-                        OnPropertyChanged(nameof(ExternalRect));
-                    }
-                };
-                timer.Start();
+                _windowCloseTimer.Start();
             },
             () => {
 
@@ -886,7 +865,13 @@ namespace MonkeyPaste.Avalonia {
                           !IsResizing &&
                           !IsMainWindowClosing;
                 if(!canHide) {
-                    ValidateWindowState();
+                    MpConsole.WriteLine($"Cannot hide main window:");
+                    MpConsole.WriteLine($"IsMainWindowLocked: {(IsMainWindowLocked)}");
+                    MpConsole.WriteLine($"IsAnyDropDownOpen: {(IsAnyDropDownOpen)}");
+                    MpConsole.WriteLine($"IsDropOverMainWindow: {(IsDropOverMainWindow)}");
+                    MpConsole.WriteLine($"IsShowingDialog: {(IsShowingDialog)}");
+                    MpConsole.WriteLine($"IsResizing: {(IsResizing)}");
+                    MpConsole.WriteLine($"IsMainWindowClosing: {(IsMainWindowClosing)}");
                 }
                 return canHide;
             });

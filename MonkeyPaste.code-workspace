@@ -26,6 +26,7 @@
 			"**/MpWpfApp": true,
 			"**/obj": true,
 			"**/bin": true,
-		}		
+		},
+		"editor.smoothScrolling": true
 	}
 }

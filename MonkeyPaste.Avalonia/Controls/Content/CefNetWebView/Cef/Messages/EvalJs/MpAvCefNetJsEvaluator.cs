@@ -48,7 +48,7 @@ namespace MonkeyPaste.Avalonia {
                     jsRespStr_renderer = result.GetStringValue();
                 }
             }
-            catch (CefNet.CefNetJSExcepton ex) {
+            catch (CefNet.CefNetJSExcepton) {// ex) {
                 //MpConsole.WriteTraceLine("EvalJs Exception: ",ex);
                 // MpConsole.WriteLine($"Source Line: {ex.SourceLine}");
                 // MpConsole.WriteLine($"Script Name: {ex.ScriptName}");

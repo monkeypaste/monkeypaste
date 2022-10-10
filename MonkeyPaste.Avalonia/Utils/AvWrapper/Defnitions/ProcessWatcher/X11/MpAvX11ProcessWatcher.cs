@@ -38,6 +38,7 @@ namespace MonkeyPaste.Avalonia {
 
         public override bool CanWatchProcesses() {
             string xdotoolPath = "command -v xdotool".ShellExec();
+            MpConsole.WriteLine("CanWatchProcessOutput: " + xdotoolPath);
             return !string.IsNullOrEmpty(xdotoolPath);
         }
 
@@ -55,7 +56,7 @@ namespace MonkeyPaste.Avalonia {
 
         public override void SetActiveProcess(IntPtr handle) {
             int handle_val = handle.ToInt32();
-            $"xdotool windowactivate {handle_val}".ShellExecAsync().FireAndForgetSafeAsync();
+            $"xdotool windowactivate {handle_val}".ShellExec();
         }
         
         protected override void CreateRunningProcessLookup() {

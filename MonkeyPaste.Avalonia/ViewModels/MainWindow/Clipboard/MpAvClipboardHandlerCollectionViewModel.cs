@@ -272,7 +272,7 @@ namespace MonkeyPaste.Avalonia {
             var handlers = EnabledFormats.Where(x => x.CanRead)
                                          .Select(x => x.Parent.ClipboardPluginComponent)
                                          .Distinct().Cast<MpIClipboardReaderComponentAsync>();
-                                         
+            //MpConsole.WriteLine("Handlers available: " + handlers.Count());
             foreach (var handler in handlers) {
                 var req = new MpClipboardReaderRequest() {
                     isAvalonia = true,

@@ -152,7 +152,13 @@ namespace MonkeyPaste {
                 if (IconHexStr.IsStringHexColor()) {
                     return IconHexStr;
                 }
-                return IconResourceKey;
+                if (!string.IsNullOrEmpty(IconResourceKey)) {
+                    return IconResourceKey;
+                }
+                if (!string.IsNullOrEmpty(IconImageBase64)) {
+                    return IconImageBase64;
+                }
+                return MpBase64Images.QuestionMark;
             }
         }
 
@@ -196,7 +202,7 @@ namespace MonkeyPaste {
         #region Model
 
         
-
+        public string NotifierGuid { get; private set; }
         public bool DoNotShowAgain { get; set; } = false;
 
         
@@ -224,6 +230,7 @@ namespace MonkeyPaste {
 
         public MpNotificationViewModelBase(MpNotificationCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpNotificationViewModelBase_PropertyChanged;
+            NotifierGuid = System.Guid.NewGuid().ToString();
         }
 
 

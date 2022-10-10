@@ -431,6 +431,7 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine("MainWindow waiting to initialize...");
                 await Task.Delay(100);
             }
+            DataContext = MpAvMainWindowViewModel.Instance;
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                 MpAvToolWindow_Win32.InitToolWindow(this.PlatformImpl.Handle.Handle);
@@ -440,7 +441,7 @@ namespace MonkeyPaste.Avalonia {
 
             MpAvMainWindowViewModel.Instance.IsMainWindowLoading = false;
 
-            //MpAvCefNetWebView.InitOpener();
+            MpPlatformWrapper.Services.ProcessWatcher.StartWatcher();
             MpDataModelProvider.QueryInfo.NotifyQueryChanged(true);
             MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
 

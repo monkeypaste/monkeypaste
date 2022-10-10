@@ -11,7 +11,6 @@
         x:Name="AvMainWindow"
         x:DataType="local:MpAvMainWindowViewModel"
         x:CompileBindings="True"
-        DataContext="{x:Static local:MpAvMainWindowViewModel.Instance}"
         WindowState="Normal"
         SystemDecorations="None"
         ClipToBounds="True"

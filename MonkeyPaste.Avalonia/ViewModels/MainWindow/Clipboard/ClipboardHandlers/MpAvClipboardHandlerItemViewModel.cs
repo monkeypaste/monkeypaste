@@ -190,41 +190,51 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
 
-            bool isValid = true;
             var sb = new StringBuilder();
 
             var dupNames = pf.clipboardHandler.readers.GroupBy(x => x.clipboardName).Where(x => x.Count() > 1);
             if (dupNames.Count() > 0) {
-                sb.AppendLine("clipboard format names must be unique, " + String.Join(",", dupNames) + " are duplicated in readers");
-                isValid = false;
+                sb.AppendLine("plugin error: clipboard format names must be unique, " + String.Join(",", dupNames) + " are duplicated in readers");
             }
 
             dupNames = pf.clipboardHandler.writers.GroupBy(x => x.clipboardName).Where(x => x.Count() > 1);
             if (dupNames.Count() > 0) {
-                sb.AppendLine("clipboard format names must be unique, " + String.Join(",", dupNames) + " are duplicated in writers");
-                isValid = false;
-            }
-            var dupGuids = pf.clipboardHandler.readers.GroupBy(x => x.handlerGuid).Where(x => x.Count() > 1);
-            if (dupGuids.Count() > 0) {
-                sb.AppendLine("clipboard guids must be unique, " + 
-                    String.Join(",", pf.clipboardHandler.readers.Where(x => 
-                    dupGuids.Any(y => y.Key == x.handlerGuid)).Select(x => x.handlerGuid))+" are duplicated reader guids");
-                isValid = false;
+                sb.AppendLine("plugin error: clipboard format names must be unique, " + String.Join(",", dupNames) + " are duplicated in writers");
             }
 
-            dupGuids = pf.clipboardHandler.writers.GroupBy(x => x.handlerGuid).Where(x => x.Count() > 1);
+            var allHandlers = new List<MpClipboardHandlerFormat>();
+            allHandlers.AddRange(pf.clipboardHandler.readers);
+            allHandlers.AddRange(pf.clipboardHandler.writers);
+
+            var dupGuids = allHandlers.GroupBy(x => x.handlerGuid).Where(x => x.Count() > 1);
             if (dupGuids.Count() > 0) {
-                sb.AppendLine("clipboard guids must be unique, " +
-                    String.Join(",", pf.clipboardHandler.writers.Where(x =>
-                    dupGuids.Any(y => y.Key == x.handlerGuid)).Select(x => x.handlerGuid)) + " are duplicated writer guids");
-                isValid = false;
+                foreach(var dupGuid_group in dupGuids) {
+                    sb.AppendLine(string.Empty);
+                    sb.AppendLine("plugin error: clipboard 'handlerGuid' must be unique");
+                    string error_msg = $"'{string.Join(" and ", dupGuid_group.Select(x => $"'{x.displayName}'"))}'";
+                    error_msg += $" have matching 'handlerGuid': '{dupGuid_group.Key}'";
+                    sb.AppendLine(error_msg);
+                }
             }
 
-            if(isValid) {
-                return true;
+            var allParameters = allHandlers.SelectMany(x => x.parameters);
+
+            var dupParamIds = allParameters.GroupBy(x => x.paramId).Where(x => x.Count() > 1);
+            if (dupParamIds.Count() > 0) {
+                foreach(var dupParamId_group in dupParamIds) {
+                    sb.AppendLine(string.Empty);
+                    sb.AppendLine("plugin error: all plugin 'paramId' fields must be unique for the given plugin");
+                    string error_msg = $" '{string.Join(" and ", dupParamId_group.Select(x => $"'{x.label}'"))}'";
+                    error_msg += $" have matching 'paramId': '{dupParamId_group.Key}'";
+                    sb.AppendLine(error_msg);
+                }
             }
-            MpConsole.WriteLine(sb.ToString());
-            return false;
+
+            string output = sb.ToString();
+
+            MpConsole.WriteLine(output);
+
+            return string.IsNullOrEmpty(output);
         }
 
         private async Task<int> GetOrCreateIconIdAsync() {

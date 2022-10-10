@@ -439,6 +439,9 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
                 var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == HandledFormatIconId);
+                //if(ivm == null) {
+                //    Debugger.Break();
+                //}
                 MpNotificationCollectionViewModel.Instance.ShowMessageAsync(
                     msgType: MpNotificationDialogType.PluginUpdated,
                     title: $"Clipboard Handler '{Title}' Updated",

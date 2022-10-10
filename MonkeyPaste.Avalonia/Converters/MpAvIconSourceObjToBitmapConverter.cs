@@ -10,6 +10,7 @@ using Avalonia.Controls.Shapes;
 using MonkeyPaste.Common.Avalonia;
 using System.Linq;
 using System.Collections.Generic;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvIconSourceObjToBitmapConverter : IValueConverter {
@@ -48,6 +49,9 @@ namespace MonkeyPaste.Avalonia {
                         return data as Geometry;
                     }
 
+                }
+                if(valStr.IsStringBase64()) {
+                    return new MpAvStringBase64ToBitmapConverter().Convert(valStr, null, null, CultureInfo.CurrentCulture);
                 }
             } 
             return null;

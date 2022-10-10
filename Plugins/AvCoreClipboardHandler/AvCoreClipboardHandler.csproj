@@ -6,6 +6,7 @@
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
+
   <ItemGroup>
     <None Remove="manifest_windows.json" />
   </ItemGroup>
@@ -41,7 +42,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent"><ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(BuildOs)' == 'WINDOWS'">
+    <ItemGroup>
       <BuildFiles Include="$(TargetDir)\*.*" />
       <ProjectFiles Include="$(ProjectDir)\*.*" />
     </ItemGroup>

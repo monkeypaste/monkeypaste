@@ -258,7 +258,7 @@
 
     <!--  NOTE Below is systray icon menu which has avalonia bug (may get fixed) that makes extra icons for cef process  -->
 
-    <NativeMenu.Menu>
+    <!--<NativeMenu.Menu>
         <NativeMenu>
             <NativeMenuItem Header="About Monkey Paste" />
         </NativeMenu>
@@ -284,5 +284,5 @@
                 </TrayIcon.Menu>
             </TrayIcon>
         </TrayIcons>
-    </TrayIcon.Icons>
+    </TrayIcon.Icons>-->
 </Application>

@@ -68,8 +68,8 @@ namespace MonkeyPaste.Common {
                 }
 
                 string outputStr = process.StandardOutput.ReadToEnd();
-                //MpConsole.WriteLine($"Output for cmd '{cmd}'");
-                //MpConsole.WriteLine(outputStr);
+                // MpConsole.WriteLine($"Output for cmd '{cmd}'");
+                // MpConsole.WriteLine(outputStr);
 
                 process.Dispose();
                 output = outputStr;

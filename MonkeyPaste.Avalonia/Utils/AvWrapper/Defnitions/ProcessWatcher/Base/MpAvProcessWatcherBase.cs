@@ -58,11 +58,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvProcessWatcherBase() {
-            if(!CanWatchProcesses()) {
-                MpConsole.WriteLine("Cannot watch processes (likely on linux and xdotool isn't installed)");
-                return;
-            }
+
+
+        #endregion
+
+        #region Public Methods
+
+        public void StartWatcher() {
             CreateRunningProcessLookup();
             if (_timer == null) {
                 _timer = new DispatcherTimer(DispatcherPriority.Background) {
@@ -72,15 +74,6 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 _timer.Stop();
             }
-            _timer.Start();
-        }
-
-
-        #endregion
-
-        #region Public Methods
-
-        public void StartWatcher() {
             _timer.Start();
         }
         public void StopWatcher() {
@@ -154,7 +147,7 @@ namespace MonkeyPaste.Avalonia {
             if(OperatingSystem.IsLinux()) {
                 // needs more filtering and is slow or certain process states aren't accounted for
                 // so just ignoring
-                return;
+                //return;
             }
 
             bool didActiveChange = false;

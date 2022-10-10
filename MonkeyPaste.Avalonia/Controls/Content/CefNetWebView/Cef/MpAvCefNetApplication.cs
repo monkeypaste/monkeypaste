@@ -139,12 +139,20 @@ namespace MonkeyPaste.Avalonia {
                 settings.MultiThreadedMessageLoop = true;
                 settings.ExternalMessagePump = false;
             }
-            settings.NoSandbox = true;
-            //settings.CommandLineArgsDisabled = true;
-            settings.WindowlessRenderingEnabled = true;
+
+            if(OperatingSystem.IsLinux()) {
+                settings.NoSandbox = true;
+                //settings.CommandLineArgsDisabled = true;
+                settings.WindowlessRenderingEnabled = true;
+            } else if(OperatingSystem.IsWindows()) {
+                settings.NoSandbox = true;
+                //settings.CommandLineArgsDisabled = true;
+                settings.WindowlessRenderingEnabled = true;
+            }
+            
             settings.LocalesDirPath = localDirPath;
             settings.ResourcesDirPath = resourceDirPath;
-            settings.LogSeverity = CefLogSeverity.Error;
+            settings.LogSeverity = CefLogSeverity.Verbose;
         
             App.FrameworkShutdown += App_FrameworkShutdown;
 
@@ -162,26 +170,27 @@ namespace MonkeyPaste.Avalonia {
             // Console.WriteLine("ChromiumWebBrowser_OnBeforeCommandLineProcessing");
             // Console.WriteLine(commandLine.CommandLineString);
             //
-            // //commandLine.AppendSwitchWithValue("proxy-server", "127.0.0.1:8888");
-            //
+             //commandLine.AppendSwitchWithValue("proxy-server", "127.0.0.1:8888");
+            
             // commandLine.AppendSwitch("ignore-certificate-errors");
             // commandLine.AppendSwitchWithValue("remote-debugging-port", "9222");
-			         //
+			         
             // //enable-devtools-experiments
             // commandLine.AppendSwitch("enable-devtools-experiments");
-            //
+            
             // //e.CommandLine.AppendSwitchWithValue("user-agent", "Mozilla/5.0 (Windows 10.0) WebKa/" + DateTime.UtcNow.Ticks);
-            //
+            
             // //("force-device-scale-factor", "1");
-            //
+            
             // //commandLine.AppendSwitch("disable-gpu");
             // //commandLine.AppendSwitch("disable-gpu-compositing");
             // //commandLine.AppendSwitch("disable-gpu-vsync");
-            //
+            
             // commandLine.AppendSwitch("enable-begin-frame-scheduling");
             // commandLine.AppendSwitch("enable-media-stream");
-            //
+            
             // commandLine.AppendSwitchWithValue("enable-blink-features", "CSSPseudoHas");
+            
             commandLine.AppendSwitch("disable-component-update");
             if (OperatingSystem.IsLinux())
             {

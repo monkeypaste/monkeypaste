@@ -203,6 +203,13 @@ namespace MonkeyPaste.Avalonia {
                         if (!newBytes.SequenceEqual(oldBytes)) {
                             return true;
                         }
+                    } else if (nce.Value is IEnumerable<string> valStrs &&
+                                _lastCbo.DataFormatLookup[nce.Key] is IEnumerable<string> lastStrs) { 
+                        // must check actual string entries since the ref is always different 
+                        if(valStrs.Count() != lastStrs.Count()) {
+                            return true;
+                        }
+                        return valStrs.Any(x => !lastStrs.Contains(x));
                     } else {
                         if (!_lastCbo.DataFormatLookup[nce.Key].Equals(nce.Value)) {
                             return true;

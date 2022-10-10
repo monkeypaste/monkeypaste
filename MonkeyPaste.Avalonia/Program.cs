@@ -18,6 +18,9 @@ namespace MonkeyPaste.Avalonia
             //     Thread.Sleep(10000); // Wait 10 Seconds
             // }
 //#endif
+            if(MpAvCefNetApplication.UseCefNet) {
+                MpAvCefNetApplication.InitCefNet();
+            }
             BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
         }

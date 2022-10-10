@@ -18,7 +18,7 @@ namespace MonkeyPaste {
 
         #region Private Variables        
 
-        private MpINotificationBalloonView _nbv;
+        //private MpINotificationBalloonView _nbv;
 
         #endregion
 
@@ -71,10 +71,10 @@ namespace MonkeyPaste {
             //IsVisible = true;
         }
 
-        public async Task RegisterWithWindowAsync(MpINotificationBalloonView nbv) {
-            await Task.Delay(1);
-            _nbv = nbv;
-        }
+        //public async Task RegisterWithWindowAsync(MpINotificationBalloonView nbv) {
+        //    await Task.Delay(1);
+        //    //_nbv = nbv;
+        //}
 
         public async Task ShowMessageAsync(
             string title = "", 
@@ -193,6 +193,9 @@ namespace MonkeyPaste {
             //OnPropertyChanged(nameof(CurrentNotificationViewModel));
 
             ShowBalloon(lvm);
+
+            // await Task.Delay(100);
+            // ShowMessageAsync("Test title", "Test Message", 2000, MpNotificationDialogType.Message).FireAndForgetSafeAsync(this);
         }
 
         public void FinishLoading() {
@@ -207,12 +210,14 @@ namespace MonkeyPaste {
         #region Private Methods
 
         private void ShowBalloon(MpNotificationViewModelBase nvmb) {
-            _nbv.ShowWindow(nvmb);
+            //_nbv.ShowWindow(nvmb);
             //IsVisible = true;
+            MpPlatformWrapper.Services.NotificationView.ShowWindow(nvmb);
         }
 
         private void HideBalloon(MpNotificationViewModelBase nvmb) {
-            _nbv.HideWindow(nvmb);
+            //_nbv.HideWindow(nvmb);
+            MpPlatformWrapper.Services.NotificationView.HideWindow(nvmb);
             Notifications.Remove(nvmb);
             //IsVisible = false;
         }

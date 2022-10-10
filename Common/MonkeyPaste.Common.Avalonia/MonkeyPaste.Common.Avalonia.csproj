@@ -17,7 +17,7 @@
   </PropertyGroup>-->
   
   <!-- LINUX-->
-  <PropertyGroup>
+  <!-- <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>disable</Nullable>
@@ -32,6 +32,24 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>LINUX</DefineConstants>
+  </PropertyGroup> -->
+
+  <!-- DYNAMIC -->
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <TrimMode>copyused</TrimMode>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(BuildOs)' == 'WINDOWS'">  
+    <DefineConstants>WINDOWS;</DefineConstants>    
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(BuildOs)' == 'LINUX'">  
+    <DefineConstants>LINUX;</DefineConstants>    
   </PropertyGroup>
 
   <PropertyGroup>
@@ -69,14 +87,14 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
-    <ProjectReference Include="..\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj" Condition="$(RunningOnWindows)" />
+    <ProjectReference Include="..\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj" Condition="'$(BuildOs)' == 'WINDOWS'" />
     <ProjectReference Include="..\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utils\Helpers\" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="PresentationFramework" Condition="$(RunningOnWindows)">
+    <Reference Include="PresentationFramework" Condition="'$(BuildOs)' == 'WINDOWS'">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\PresentationFramework.dll</HintPath>
     </Reference>
   </ItemGroup>

@@ -14,9 +14,8 @@
         EffectiveViewportChanged="MpAvNotificationWindow_EffectiveViewportChanged"
         Opened="MpAvNotificationWindow_Opened"
         Closed="MpAvNotificationWindow_Closed"
-        MinHeight="125"
+        Topmost="True"    
         Width="350"
-        Topmost="True"
         SizeToContent="Height"
         ShowInTaskbar="False"
         WindowState="Normal"
@@ -24,6 +23,7 @@
         Title="">
     <Border HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
+            MinHeight="130"
             BorderThickness="7"
             BorderBrush="{Binding BorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
             Background="{Binding BackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
@@ -86,6 +86,10 @@
                         <DataTemplate x:Key="LoaderTemplate"
                                       DataType="pcl:MpLoaderNotificationViewModel">
                             <local:MpAvLoaderNotificationView DataContext="{Binding}" />
+                        </DataTemplate>
+                        <DataTemplate x:Key="MessageTemplate"
+                                      DataType="pcl:MpMessageNotificationViewModel">
+                            <local:MpAvMessageNotificationView DataContext="{Binding}" />
                         </DataTemplate>
                     </local:MpAvNotificationTemplateSelector>
                 </ContentControl.DataTemplates>

@@ -13,7 +13,8 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvWrapper : MpIPlatformWrapper {
         //private static MpAvWrapper _instance;
         //public static MpAvWrapper Instance => _instance ?? (_instance = new MpAvWrapper());
-        
+
+        public MpINotificationBalloonView NotificationView { get; set; }
         public MpIProcessWatcher ProcessWatcher { get; set; }
         public MpICursor? Cursor { get; set; }
         public MpIDbInfo? DbInfo { get; set; }
@@ -87,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
             //ClipboardData = MpClipboardHandlerCollectionViewModel.Instance;
             DataObjectRegistrar = ClipboardMonitor as MpIPlatformDataObjectRegistrar;
             ScreenInfoCollection = new MpAvScreenInfoCollection();
-            
+            NotificationView = MpAvNotificationWindow.Instance;
         }
 
     }
