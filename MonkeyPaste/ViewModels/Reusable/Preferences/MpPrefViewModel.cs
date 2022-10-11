@@ -306,9 +306,9 @@ namespace MonkeyPaste {
 
         public string AppStorageFilePath { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-        public string MainWindowOrientation { get; set; } = "Bottom";
+        public string MainWindowOrientation { get; set; } = MpMainWindowOrientationType.Bottom.ToString();
 
-        public string MainWindowDisplayType { get; set; } = "Primary";
+        public string MainWindowDisplayType { get; set; } = MpMainWindowShowBehaviorType.Primary.ToString();
 
         public double MainWindowInitialWidth { get; set; } = 0;
         public double MainWindowInitialHeight { get; set; } = 0;

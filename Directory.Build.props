@@ -1,5 +1,4 @@
-<Project>
- 
+<Project> 
   <PropertyGroup>
     <BuildOs>WINDOWS</BuildOs>
   </PropertyGroup>

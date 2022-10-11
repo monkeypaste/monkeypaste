@@ -6,11 +6,13 @@ using System.Collections.ObjectModel;
 
 namespace MonkeyPaste {
     public interface MpIProcessWatcher {
-        IntPtr ThisAppHandle { get; set; }
-        string ThisAppProcessPath { get; }
+        IntPtr ThisAppHandle { get;}
         IntPtr LastHandle { get; }
         string LastProcessPath { get; }
         string LastMainWindowTitle { get; }
+
+        MpPortableProcessInfo LastProcessInfo { get; }
+
 
         ConcurrentDictionary<string,ObservableCollection<IntPtr>> RunningProcessLookup { get; }
 

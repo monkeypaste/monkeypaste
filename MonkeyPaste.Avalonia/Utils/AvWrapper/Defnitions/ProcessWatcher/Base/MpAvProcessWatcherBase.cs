@@ -7,43 +7,66 @@ using Avalonia.Threading;
 using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonoMac.AppKit;
+using System.Collections.Generic;
 
 namespace MonkeyPaste.Avalonia {
     
     public abstract class MpAvProcessWatcherBase : MpIProcessWatcher {
         #region Private Variables
         
-        protected Tuple<string, string, IntPtr>? _lastProcessTuple = default;
+        //protected Tuple<string, string, IntPtr>? _lastProcessTuple = default;
         private DispatcherTimer _timer;
 
         #endregion
 
         #region Properties
 
-        private IntPtr _thisAppHandle;
-        public virtual IntPtr ThisAppHandle {
-            get => _thisAppHandle;
-            set {
-                if(_thisAppHandle != value) {
-                    _thisAppHandle = value;
-                    ThisAppProcessPath = GetProcessPath(_thisAppHandle);
+        //private IntPtr _thisAppHandle;
+        //public virtual IntPtr ThisAppHandle {
+        //    get => _thisAppHandle;
+        //    set {
+        //        if(_thisAppHandle != value) {
+        //            _thisAppHandle = value;
+        //            ThisAppProcessPath = GetProcessPath(_thisAppHandle);
+        //        }
+        //    }
+        //}
+
+        public IntPtr ThisAppHandle {
+            get {
+                if(App.Desktop == null || App.Desktop.MainWindow == null) {
+                    return IntPtr.Zero;
                 }
+                return App.Desktop.MainWindow.PlatformImpl.Handle.Handle;
             }
         }
 
         
-        public virtual string ThisAppProcessPath { get; set; }
-
         public virtual bool CanWatchProcesses() {
             // overridden on linux
             return true;
         }
 
-        public IntPtr LastHandle => _lastProcessTuple == null ? IntPtr.Zero : _lastProcessTuple.Item3;
+        public IntPtr LastHandle => LastProcessInfo == null ? IntPtr.Zero : LastProcessInfo.Handle;
 
-        public string LastProcessPath => _lastProcessTuple == null ? string.Empty : _lastProcessTuple.Item1;
+        public string LastProcessPath => LastProcessInfo == null ? string.Empty : LastProcessInfo.ProcessPath;
 
-        public string LastMainWindowTitle => _lastProcessTuple == null ? string.Empty : _lastProcessTuple.Item2;
+        public string LastMainWindowTitle => LastProcessInfo == null ? string.Empty : LastProcessInfo.MainWindowTitle;
+
+        private MpPortableProcessInfo _lastProcessInfo;
+        public MpPortableProcessInfo LastProcessInfo {
+            get {
+                var active_info = GetActiveProcessInfo();
+                if(active_info == null) {
+                    return null;
+                }
+                if(active_info.Handle == ThisAppHandle) {
+                    return _lastProcessInfo;
+                }
+                _lastProcessInfo = active_info;
+                return _lastProcessInfo;
+            }
+        }
 
         public ConcurrentDictionary<string, ObservableCollection<IntPtr>> RunningProcessLookup { get; protected set; } = new ConcurrentDictionary<string, ObservableCollection<IntPtr>>();
 
@@ -65,19 +88,19 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public void StartWatcher() {
-            CreateRunningProcessLookup();
-            if (_timer == null) {
-                _timer = new DispatcherTimer(DispatcherPriority.Background) {
-                    Interval = TimeSpan.FromMilliseconds(300)
-                };
-                _timer.Tick += ProcessWatcherTimer_tick;
-            } else {
-                _timer.Stop();
-            }
-            _timer.Start();
+            //CreateRunningProcessLookup();
+            //if (_timer == null) {
+            //    _timer = new DispatcherTimer(DispatcherPriority.Background) {
+            //        Interval = TimeSpan.FromMilliseconds(300)
+            //    };
+            //    _timer.Tick += ProcessWatcherTimer_tick;
+            //} else {
+            //    _timer.Stop();
+            //}
+            //_timer.Start();
         }
         public void StopWatcher() {
-            _timer.Stop();
+           // _timer.Stop();
         }
 
         public virtual IntPtr GetLastActiveInstance(string path) {
@@ -127,23 +150,27 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-        protected abstract Tuple<string, string, IntPtr> RefreshRunningProcessLookup();
+
+        protected abstract MpPortableProcessInfo GetActiveProcessInfo();
+       // protected abstract IEnumerable<MpPortableProcessInfo> GetRunningProcessInfos();
+
+        protected abstract MpPortableProcessInfo RefreshRunningProcessLookup();
 
         protected abstract void CreateRunningProcessLookup();
 
         protected virtual void ProcessWatcherTimer_tick(object sender, EventArgs e) {
-            if (ThisAppHandle == IntPtr.Zero) {
-                if (App.Desktop.MainWindow != null) {
-                    ThisAppHandle = App.Desktop.MainWindow.PlatformImpl.Handle.Handle;
-                }
-            } else {
-                if (ThisAppHandle != App.Desktop.MainWindow.PlatformImpl.Handle.Handle) {
-                    // issue from loader/mainwindow swap?
-                    //Debugger.Break();
-                    MpConsole.WriteLine($"mw handle swapped from {ThisAppHandle} to {App.Desktop.MainWindow.PlatformImpl.Handle.Handle}");
-                    ThisAppHandle = App.Desktop.MainWindow.PlatformImpl.Handle.Handle;
-                }
-            }
+            //if (ThisAppHandle == IntPtr.Zero) {
+            //    if (App.Desktop.MainWindow != null) {
+            //        ThisAppHandle = App.Desktop.MainWindow.PlatformImpl.Handle.Handle;
+            //    }
+            //} else {
+            //    if (ThisAppHandle != App.Desktop.MainWindow.PlatformImpl.Handle.Handle) {
+            //        // issue from loader/mainwindow swap?
+            //        //Debugger.Break();
+            //        MpConsole.WriteLine($"mw handle swapped from {ThisAppHandle} to {App.Desktop.MainWindow.PlatformImpl.Handle.Handle}");
+            //        ThisAppHandle = App.Desktop.MainWindow.PlatformImpl.Handle.Handle;
+            //    }
+            //}
             if(OperatingSystem.IsLinux()) {
                 // needs more filtering and is slow or certain process states aren't accounted for
                 // so just ignoring
@@ -151,18 +178,18 @@ namespace MonkeyPaste.Avalonia {
             }
 
             bool didActiveChange = false;
-            var activeProcessTuple = RefreshRunningProcessLookup();
+            var activeProcessInfo = RefreshRunningProcessLookup();
 
-            if (activeProcessTuple == null ||
-               activeProcessTuple.Item3 == ThisAppHandle) {
+            if (activeProcessInfo == null ||
+               activeProcessInfo.Handle == ThisAppHandle) {
                 return;
             }
 
-            if (activeProcessTuple.Item1 != _lastProcessTuple?.Item1) {
+            if (activeProcessInfo.ProcessPath != LastProcessInfo?.ProcessPath) {
                 didActiveChange = true;
             }
 
-            _lastProcessTuple = activeProcessTuple;
+            //LastProcessInfo = activeProcessInfo;
             if (didActiveChange) {
                 MpConsole.WriteLine(string.Format(@"Last Window: {0} '{1}' ({2})", LastMainWindowTitle, LastProcessPath, LastHandle));
                 OnAppActivated?.Invoke(

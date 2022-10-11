@@ -4,16 +4,30 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using MonkeyPaste;
+using MonkeyPaste.Common;
+
 namespace MonkeyPaste.Avalonia {
     public class MpAvAppBuilder : MpIAppBuilder {
-        public async Task<MpApp> CreateAsync(object handleOrAppPath, string appName = "") {
+        public async Task<MpApp> CreateAsync(object handleOrAppPathOrProcessInfo, string appName = "") {
             string processPath, processIconImg64;
 
-            if (handleOrAppPath is string) {
-                processPath = (string)handleOrAppPath;
+            if(handleOrAppPathOrProcessInfo is MpPortableProcessInfo ppi) {
+                appName = ppi.MainWindowTitle;
+                processIconImg64 = ppi.MainWindowIconBase64;
+
+                if(string.IsNullOrWhiteSpace(ppi.ProcessPath)) {
+                    handleOrAppPathOrProcessInfo = ppi.Handle;
+                } else {
+
+                    handleOrAppPathOrProcessInfo = ppi.ProcessPath;
+                }
+            } 
+
+            if (handleOrAppPathOrProcessInfo is string) {
+                processPath = (string)handleOrAppPathOrProcessInfo;
                 appName = string.IsNullOrEmpty(appName) ? Path.GetFileNameWithoutExtension(processPath) : appName;
                 processIconImg64 = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(processPath);
-            } else if (handleOrAppPath is IntPtr processHandle) {
+            } else if (handleOrAppPathOrProcessInfo is IntPtr processHandle) {
                 //processPath = MpProcessManager.GetProcessPath(processHandle);
                 processPath = MpPlatformWrapper.Services.ProcessWatcher.GetProcessPath(processHandle);
 

@@ -45,6 +45,7 @@ namespace MonkeyPaste.Common {
 
         public override MpPoint[] Points => new MpPoint[] { TopLeft, TopRight, BottomRight, BottomLeft };
 
+        public double[] Sides => new double[] { Left, Top, Right, Bottom };
         public double Width => _right - _left;
 
         public double Height => _bottom - _top;
@@ -119,6 +120,7 @@ namespace MonkeyPaste.Common {
 
         public MpRect() : base() { }
 
+        public MpRect(double[] sides) : this(sides[0], sides[1], sides[2] - sides[0], sides[3] - sides[1]) { }
         public MpRect(double x, double y, double w, double h) : this(new MpPoint(x, y), new MpSize(w, h)) { }
 
         public MpRect(MpPoint location, MpSize size) : this() {

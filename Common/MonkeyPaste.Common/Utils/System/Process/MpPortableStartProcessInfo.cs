@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MonkeyPaste.Common {
-    public class MpPortableProcessInfo {
-        public IntPtr Handle { get; set; } = IntPtr.Zero;
-        public string ProcessPath { get; set; } = string.Empty;
-
-        public List<string> ArgumentList { get; set; }
+﻿namespace MonkeyPaste.Common {
+    public class MpPortableStartProcessInfo : MpPortableProcessInfo {
         public bool IsSilent { get; set; }
         public bool IsAdmin { get; set; }
         public bool CreateNoWindow { get; set; }
@@ -23,13 +15,5 @@ namespace MonkeyPaste.Common {
 
         public string StandardOutput { get; set; } = string.Empty;
         public string StandardError { get; set; } = string.Empty;
-
-        public string WindowState { get; set; }
-
-        public MpPortableProcessInfo() { }
-
-        public MpPortableProcessInfo(IntPtr handle) {
-            Handle = handle;
-        }
     }
 }

@@ -16,6 +16,7 @@ using X11;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using MonoMac.AppKit;
 
 namespace MonkeyPaste.Avalonia {
     
@@ -28,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
         
         private object _lockObj = new object();
 
-        private Tuple<string, string, IntPtr> _lastActiveTuple;
+        private MpPortableProcessInfo _lastActiveInfo;
 
         private List<string> _errorWindows = new List<string>();
         
@@ -58,7 +59,52 @@ namespace MonkeyPaste.Avalonia {
             int handle_val = handle.ToInt32();
             $"xdotool windowactivate {handle_val}".ShellExec();
         }
-        
+        protected override MpPortableProcessInfo GetActiveProcessInfo() {
+            var active_info = new MpPortableProcessInfo();
+            string activeWindow = "xdotool getfocuswindow".ShellExec().Trim();
+            active_info.MainWindowTitle = "xdotool getfocuswindow getwindowname".ShellExec().Trim();
+            try {
+                active_info.Handle = new IntPtr(int.Parse(activeWindow));
+
+                if(!_errorWindows.Contains(activeWindow)) {
+                    string activePidStr = "xdotool getfocuswindow getwindowpid".ShellExec().Trim();
+
+                    if (!activePidStr.IsStringNullOrWhiteSpace()) {
+                        string xdotool_error = "has no pid associated with it.";
+                        if (activePidStr.Contains(xdotool_error)) {
+                            // window handle was found but no pid, note this to avoid rechecking since it errors
+                            _errorWindows.Add(activeWindow);
+                        } else {
+                            try {
+                                IntPtr active_pid = new IntPtr(int.Parse(activePidStr));
+                                if (active_pid != IntPtr.Zero) {
+                                    string active_path_with_args = $"ps -q {activePidStr} -o cmd=".ShellExec().Trim();          
+                                    if(!string.IsNullOrWhiteSpace(active_path_with_args)) {
+                                        string clean_path = MpX11ShellHelpers.GetCleanShellStr(active_path_with_args);
+                                        if(!string.IsNullOrWhiteSpace(clean_path)) {
+                                            // check parse here
+                                            string argParts = active_path_with_args.Substring(clean_path.Length, active_path_with_args.Length - clean_path.Length);
+                                            Debugger.Break();
+                                            if(!string.IsNullOrWhiteSpace(argParts)) {
+                                                active_info.ArgumentList = new List<string>() { argParts };
+                                            }
+                                            active_info.ProcessPath = clean_path;
+                                        }
+                                    }
+                                }
+                            }
+                            catch (Exception) {
+                                //MpConsole.WriteTraceLine(ex);
+                            }
+                        }
+                    }
+                    
+                }
+            }catch(Exception) {
+            }
+            return active_info;
+        }
+
         protected override void CreateRunningProcessLookup() {
             var runningApps = GetRunningAppsWrapper();
             if (runningApps == null) {
@@ -77,7 +123,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        protected override Tuple<string, string, IntPtr> RefreshRunningProcessLookup() {
+        protected override MpPortableProcessInfo RefreshRunningProcessLookup() {
             lock (_lockObj) {
                 string activeWindow = "xdotool getactivewindow".ShellExec().Trim();
                 if(_errorWindows.Contains(activeWindow)) {
@@ -99,18 +145,19 @@ namespace MonkeyPaste.Avalonia {
                     try {
                         activeIntPtr = new IntPtr(int.Parse(activePidStr));
                         if (activeIntPtr != IntPtr.Zero) {
-                            if(_lastActiveTuple != null && _lastActiveTuple.Item3 == activeIntPtr) {
-                                return _lastActiveTuple;
+                            if(_lastActiveInfo != null && _lastActiveInfo.Handle == activeIntPtr) {
+                                return _lastActiveInfo;
                             }
 
                             activeWindowTitle = "xdotool getactivewindow getwindowname".ShellExec().Trim();
                             string activeWindowPath = $"ps -q {activePidStr} -o cmd=".ShellExec().Trim();
                             if(!string.IsNullOrEmpty(activeWindowPath)) {
-                                _lastActiveTuple = new Tuple<string, string, IntPtr>(
-                                    activeWindowPath,
-                                    activeWindowTitle,
-                                    activeIntPtr);
-                                return _lastActiveTuple;
+                                _lastActiveInfo = new MpPortableProcessInfo() {
+                                    Handle = activeIntPtr,
+                                    ProcessPath = activeWindowPath,
+                                    MainWindowTitle = activeWindowTitle
+                                };
+                                return _lastActiveInfo;
                             }
                         }
                     }

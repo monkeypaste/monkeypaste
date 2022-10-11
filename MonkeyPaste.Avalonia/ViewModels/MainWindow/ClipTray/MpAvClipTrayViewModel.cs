@@ -1898,12 +1898,6 @@ namespace MonkeyPaste.Avalonia {
                 IsAppPaused) {
                 return;
             }
-            if (MpPlatformWrapper.Services.ProcessWatcher.LastProcessPath == 
-                MpPlatformWrapper.Services.ProcessWatcher.ThisAppProcessPath) {
-                // TODO? have some pref about this or better to handle clipboard from this app
-                MpConsole.WriteLine("Clipboard changed from this app, ignoring...");
-                return;
-            }
             Dispatcher.UIThread.Post(async () => {
                 await AddItemFromClipboard(mpdo);
             });

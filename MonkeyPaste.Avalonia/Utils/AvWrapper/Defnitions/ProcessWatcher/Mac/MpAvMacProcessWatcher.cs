@@ -32,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
         //    var runningapps = nsworkspace.sharedworkspace.runningapplications;
         //    var matchapp = runningapps.firstordefault(x => x.handle == handle);
         //    string name = matchapp == default ? string.empty : matchapp.localizedname;
-            
+
         //    runningapps.foreach(x => x.dispose());
         //    return name;
         //}
@@ -61,6 +61,15 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
+        protected override MpPortableProcessInfo GetActiveProcessInfo() {
+            var active_app = NSWorkspace.SharedWorkspace.FrontmostApplication;
+            var active_info = new MpPortableProcessInfo() {
+                Handle = active_app.Handle,
+                ProcessPath = active_app.ExecutableUrl.AbsoluteString.ToLower(),
+                MainWindowTitle = active_app.LocalizedName
+            };
+            return active_info;
+        }
 
         protected override void CreateRunningProcessLookup() {
             if (RunningProcessLookup == null) {
@@ -81,9 +90,9 @@ namespace MonkeyPaste.Avalonia {
             runningApps.ForEach(x => x.Dispose());
         }
 
-        protected override Tuple<string, string, IntPtr> RefreshRunningProcessLookup() {
+        protected override MpPortableProcessInfo RefreshRunningProcessLookup() {
             lock(_lockObj) {
-                Tuple<string, string, IntPtr>? activeAppTuple = null;
+                MpPortableProcessInfo activeAppInfo = null;
 
                 var runningApps = NSWorkspace.SharedWorkspace.RunningApplications;
                 var filteredApps = FilterRunningApplications(runningApps);
@@ -108,16 +117,17 @@ namespace MonkeyPaste.Avalonia {
                     }
                     if (runningApp.Active) {                        
                         // handle is active
-                        if (activeAppTuple != null) {
+                        if (activeAppInfo != null) {
                             Debugger.Break();
                         } else {
                             int runningAppIdx = handles.IndexOf(runningApp.Handle);
                             handles.Move(runningAppIdx, 0);
 
-                            activeAppTuple = new Tuple<string, string, IntPtr>(
-                                runningApp.ExecutableUrl.AbsoluteString.ToLower(),
-                                runningApp.LocalizedName,
-                                runningApp.Handle);
+                            activeAppInfo = new MpPortableProcessInfo() {
+                                Handle = runningApp.Handle,
+                                ProcessPath = runningApp.ExecutableUrl.AbsoluteString.ToLower(),
+                                MainWindowTitle = runningApp.LocalizedName
+                            };
                         }
                     }
 
@@ -135,7 +145,7 @@ namespace MonkeyPaste.Avalonia {
                     RunningProcessLookup.TryRemove(appsToRemove.ElementAt(i));
                 }
 
-                return activeAppTuple;
+                return activeAppInfo;
             }
         }
 

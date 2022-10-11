@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -24,18 +25,18 @@ namespace MonkeyPaste.Avalonia {
 
         private string _FallbackProcessPath = @"C:\WINDOWS\Explorer.EXE";
 
-        private IntPtr _thisAppHandle;
-        public override IntPtr ThisAppHandle {
-            get => _thisAppHandle;
-            set {
-                if (_thisAppHandle != value) {
-                    _thisAppHandle = value;
-                    if (_thisAppHandle != IntPtr.Zero) {
-                        IsThisAppAdmin = IsProcessAdmin(ThisAppHandle);
-                    }
-                }
-            }
-        }
+        //private IntPtr _thisAppHandle;
+        //public override IntPtr ThisAppHandle {
+        //    get => _thisAppHandle;
+        //    set {
+        //        if (_thisAppHandle != value) {
+        //            _thisAppHandle = value;
+        //            if (_thisAppHandle != IntPtr.Zero) {
+        //                IsThisAppAdmin = IsProcessAdmin(ThisAppHandle);
+        //            }
+        //        }
+        //    }
+        //}
 
         public bool IsThisAppAdmin { get; private set; } = false;
         public override IntPtr GetParentHandleAtPoint(MpPoint p) {
@@ -59,12 +60,24 @@ namespace MonkeyPaste.Avalonia {
             bool success = WinApi.SetForegroundWindow(handle);
             MpConsole.WriteLine($"SetForegroundWindow to '{handle}' was {(success ? "SUCCESSFUL" : "FAILED")}");
         }
+        protected override MpPortableProcessInfo GetActiveProcessInfo() {
+            IntPtr active_handle = WinApi.GetForegroundWindow();
+            var active_info = new MpPortableProcessInfo() {
+                Handle = active_handle,
+                ProcessPath = GetProcessPath_internal(active_handle),
+                MainWindowTitle = GetProcessApplicationName(active_handle)
+            };
+            return active_info;
+        }
+        //protected override IEnumerable<MpPortableProcessInfo> GetRunningProcessInfos() {
 
-        protected override Tuple<string, string, IntPtr> RefreshRunningProcessLookup() {
+        //}
+
+        protected override MpPortableProcessInfo RefreshRunningProcessLookup() {
             lock (RunningProcessLookup) {
                 //called in LastWindowWatcher's timer to remove closed window handles and processes
                 IntPtr active_handle = WinApi.GetForegroundWindow();
-                Tuple<string, string, IntPtr>? activeAppTuple = null;
+                MpPortableProcessInfo activeProcessInfo = null;
 
                 var toRemoveProcessNameList = new List<string>();
                 var toRemoveHandleKeyValueList = new List<KeyValuePair<string, IntPtr>>();
@@ -74,17 +87,18 @@ namespace MonkeyPaste.Avalonia {
                     foreach (var handle in processStack.Value) {
                         //loop through all known handles to that process
                         if (WinApi.IsWindow(handle)) {
-                            var curTuple = new Tuple<string, string, IntPtr>(
-                                    GetProcessPath_internal(handle),
-                                    GetProcessApplicationName(handle),
-                                    handle);
+                            var cur_info = new MpPortableProcessInfo() {
+                                Handle = handle,
+                                ProcessPath = GetProcessPath_internal(handle),
+                                MainWindowTitle = GetProcessApplicationName(handle)
+                            };
 
                             if (handle == active_handle) {
-                                if(activeAppTuple != null) {
+                                if(activeProcessInfo != null) {
                                     // should only be set once how come?
                                     Debugger.Break();
                                 }
-                                activeAppTuple = curTuple;
+                                activeProcessInfo = cur_info;
                             }
                         } else {
                             //if handle gone mark it to be removed from its handle stack
@@ -117,7 +131,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 UpdateHandleStack(active_handle);
 
-                return activeAppTuple;
+                return activeProcessInfo;
             }
         }
 

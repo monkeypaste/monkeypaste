@@ -107,7 +107,7 @@ namespace MonkeyPaste.Avalonia {
                 //Debugger.Break();
                 return;
             }
-            bool isPointerWithinWindow = BindingContext.MainWindowRect.Contains(BindingContext.DragMouseMainWindowLocation);
+            bool isPointerWithinWindow = BindingContext.ObservedMainWindowRect.Contains(BindingContext.DragMouseMainWindowLocation);
             if(!isPointerWithinWindow) {
                 BindingContext.DragMouseMainWindowLocation = null;
             }
@@ -513,7 +513,7 @@ namespace MonkeyPaste.Avalonia {
         private void BoundsChangedHandler(AvaloniaPropertyChangedEventArgs<Rect> e) {
             var oldAndNewVals = e.GetOldAndNewValue<Rect>();
             MpAvMainWindowViewModel.Instance.LastMainWindowRect = oldAndNewVals.oldValue.ToPortableRect();
-            MpAvMainWindowViewModel.Instance.MainWindowRect = oldAndNewVals.newValue.ToPortableRect();
+            MpAvMainWindowViewModel.Instance.ObservedMainWindowRect = oldAndNewVals.newValue.ToPortableRect();
         }
 
 

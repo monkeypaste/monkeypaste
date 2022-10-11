@@ -222,17 +222,22 @@ namespace MonkeyPaste.Avalonia {
                 if(fromInternalSource) {
                     app = await MpDb.GetItemAsync<MpApp>(MpPrefViewModel.Instance.ThisAppSource.AppId);
                 } else {
-                    if(OperatingSystem.IsLinux()) {
-                        // this maybe temporary but linux not following process watching convention because its SLOW
-                        string exe_path = MpX11ShellHelpers.GetExeWithArgsToExePath(MpPlatformWrapper.Services.ProcessWatcher.LastProcessPath);
-                        app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(exe_path);
-                    } else {
-                        app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(MpPlatformWrapper.Services.ProcessWatcher.LastHandle);
+                    var last_pinfo = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
+
+                    //if(OperatingSystem.IsLinux()) {
+                    //    // this maybe temporary but linux not following process watching convention because its SLOW
+                    //    string exe_path = MpX11ShellHelpers.GetExeWithArgsToExePath(MpPlatformWrapper.Services.ProcessWatcher.LastProcessPath);
+                    //    app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(exe_path);
+                    //} else {
+                    //    app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(MpPlatformWrapper.Services.ProcessWatcher.LastHandle);
+                    //}
+                    if(last_pinfo == null) {
+                        Debugger.Break();
                     }
-                    
+                    app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(last_pinfo);
 
                     url = htmlClipboardData == null ?
-                   null : await MpUrlBuilder.CreateUrl(htmlClipboardData.SourceUrl);
+                            null : await MpUrlBuilder.CreateUrl(htmlClipboardData.SourceUrl);
 
                     if (url != null) {
                         if (MpAvUrlCollectionViewModel.Instance.IsRejected(url.UrlDomainPath)) {
