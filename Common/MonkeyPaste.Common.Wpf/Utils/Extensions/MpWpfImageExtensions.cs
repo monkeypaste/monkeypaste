@@ -200,6 +200,8 @@ namespace MonkeyPaste.Common.Wpf {
 
                 double dpiX = MpScreenInformation.DpiX;
                 double dpiY = MpScreenInformation.DpiY;
+                dpiX = dpiX == 0 ? 96 : dpiX;
+                dpiY = dpiY == 0 ? 96 : dpiY;
                 bmp.SetResolution((float)dpiX, (float)dpiY);
 
                 return bmp;                

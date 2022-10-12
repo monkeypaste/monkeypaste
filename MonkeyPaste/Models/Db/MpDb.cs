@@ -603,14 +603,15 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpApp>();
             var process = Process.GetCurrentProcess();
             string thisAppPath = process.MainModule.FileName;
-            var thisApp = await MpDataModelProvider.GetAppByPathAsync(thisAppPath, this_device.Id);
+            string thisAppArgs = process.StartInfo == null ? string.Empty : process.StartInfo.Arguments;
+            var thisApp = await MpDataModelProvider.GetAppByPathAsync(thisAppPath, thisAppArgs, this_device.Id);
 
             await _connectionAsync.CreateTableAsync<MpSource>();
             var thisAppSource = await MpSource.Create(appId: thisApp.Id, urlId: 0);
             MpPrefViewModel.Instance.ThisAppSourceId = thisAppSource.Id;
 
 
-            var osApp = await MpDataModelProvider.GetAppByPathAsync(osInfo.OsFileManagerPath, this_device.Id);
+            var osApp = await MpDataModelProvider.GetAppByPathAsync(osInfo.OsFileManagerPath, string.Empty, this_device.Id);
             var osAppSource = await MpDataModelProvider.GetSourceByMembersAsync(osApp.Id,0);
             MpPrefViewModel.Instance.ThisOsFileManagerSourceId = osAppSource.Id;
 
@@ -684,11 +685,17 @@ namespace MonkeyPaste {
             var process = Process.GetCurrentProcess();
             string thisAppPath = process.MainModule.FileName;
             string thisAppName = MpPrefViewModel.Instance.ApplicationName;
-            var thisApp = await MpApp.CreateAsync(thisAppPath, thisAppName, sourceIcon.Id);
+            var thisApp = await MpApp.CreateAsync(
+                appPath: thisAppPath, 
+                appName: thisAppName, 
+                iconId: sourceIcon.Id);
             var thisAppSource = await MpSource.Create(appId: thisApp.Id, urlId: 0);
             MpPrefViewModel.Instance.ThisAppSourceId = thisAppSource.Id;
 
-            var osApp = await MpApp.CreateAsync(MpPlatformWrapper.Services.OsInfo.OsFileManagerPath, MpPlatformWrapper.Services.OsInfo.OsFileManagerName);
+            var osApp = await MpApp.CreateAsync(
+                appPath: MpPlatformWrapper.Services.OsInfo.OsFileManagerPath, 
+                appName: MpPlatformWrapper.Services.OsInfo.OsFileManagerName);
+
             var osAppSource = await MpSource.Create(osApp.Id, 0);
             MpPrefViewModel.Instance.ThisOsFileManagerSourceId = osAppSource.Id;
 

@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Text;
 
 namespace MonkeyPaste.Common {
 
@@ -38,6 +39,15 @@ namespace MonkeyPaste.Common {
         }
         public MpPortableDataObject(string format, object data) : this() {
             SetData(format, data);
+        }
+
+        public override string ToString() {
+            var sb = new StringBuilder();
+            foreach(var kvp in DataFormatLookup) {
+                sb.AppendLine($"Format '{kvp.Key.Name}':");
+                sb.AppendLine($"'{kvp.Value.ToString()}'");
+            }
+            return sb.ToString();
         }
 
     }

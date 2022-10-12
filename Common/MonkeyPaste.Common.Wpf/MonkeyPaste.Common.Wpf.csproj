@@ -65,6 +65,7 @@
     <Compile Include="Utils\Extensions\MpWpfRichDocumentExtensions.cs" />
     <Compile Include="Utils\Extensions\MpWpfStringExtensions.cs" />
     <Compile Include="Utils\Helpers\Graphics\Color\MpWpfColorHelpers.cs" />
+    <Compile Include="Utils\Helpers\Graphics\Imaging\MpWpfClipboardImageHelper.cs" />
     <Compile Include="Utils\Helpers\Graphics\Imaging\MpWpfImagingHelper.cs" />
     <Compile Include="Utils\Helpers\Graphics\MpScreenInformation.cs" />
     <Compile Include="Utils\PInvoke\WinApi.cs" />

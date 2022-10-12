@@ -308,7 +308,7 @@ namespace MonkeyPaste {
 
         public string MainWindowOrientation { get; set; } = MpMainWindowOrientationType.Bottom.ToString();
 
-        public string MainWindowDisplayType { get; set; } = MpMainWindowShowBehaviorType.Primary.ToString();
+        public string MainWindowShowBehaviorType { get; set; } = MpMainWindowShowBehaviorType.Primary.ToString();
 
         public double MainWindowInitialWidth { get; set; } = 0;
         public double MainWindowInitialHeight { get; set; } = 0;

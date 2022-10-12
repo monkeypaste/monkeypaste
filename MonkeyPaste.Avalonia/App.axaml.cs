@@ -39,6 +39,10 @@ namespace MonkeyPaste.Avalonia {
                 desktop.Startup += Startup;
                 desktop.Exit += Exit;
 
+                if (MpAvCefNetApplication.UseCefNet) {
+                    MpAvCefNetApplication.InitCefNet();
+                }
+
                 var bootstrapper = new MpAvBootstrapperViewModel();
                 await bootstrapper.InitAsync();
 

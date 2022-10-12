@@ -143,7 +143,7 @@ namespace MonkeyPaste.Avalonia {
                     new MpBootstrappedItemViewModel(this,typeof(MpAvTagTrayViewModel)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindowViewModel)),
 
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvDataObjectHelper)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvExternalPasteHandler)),
                    //new MpBootstrappedItemViewModel(this,typeof(MpActionCollectionViewModel)),
 
                    //new MpBootstrappedItemViewModel(this,typeof(MpContextMenuView)),

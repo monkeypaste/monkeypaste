@@ -8,12 +8,15 @@ var IsCtrlDown = false; //duplicate
 var IsShiftDown = false; //split 
 var IsAltDown = false; // w/ formatting (as html)? ONLY formating? dunno
 
+var DragItemElms = [];
+
 function initDrag() {
-    let items = [getEditorContainerElement(), getDragOverlayElement()];
-    items.forEach(function (item) {
+    DragItemElms = [getEditorContainerElement(), getDragOverlayElement()];
+    for (var i = 0; i < DragItemElms.length; i++) {
+        let item = DragItemElms[i];
         item.addEventListener('dragstart', handleDragStart, true);
         item.addEventListener('dragend', handleDragEnd);
-    });
+	}
 }
 
 function handleDragStart(e) {

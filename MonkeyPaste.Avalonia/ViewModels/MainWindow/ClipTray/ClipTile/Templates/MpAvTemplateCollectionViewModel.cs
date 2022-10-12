@@ -408,14 +408,14 @@ namespace MonkeyPaste.Avalonia {
                 }
                 MpMessenger.Unregister<MpMessageType>(cv, ReceivedContentViewMessage);
 
-                Parent.IsBusy = true;
-                EventHandler hideEvent = null;
-                hideEvent = (s, e) => {
-                    Parent.IsBusy = false;
-                    MpAvMainWindowViewModel.Instance.OnMainWindowClosed -= hideEvent;
-                };
+                //Parent.IsBusy = true;
+                //EventHandler hideEvent = null;
+                //hideEvent = (s, e) => {
+                //    Parent.IsBusy = false;
+                //    MpAvMainWindowViewModel.Instance.OnMainWindowClosed -= hideEvent;
+                //};
 
-                MpAvMainWindowViewModel.Instance.OnMainWindowClosed += hideEvent;
+                //MpAvMainWindowViewModel.Instance.OnMainWindowClosed += hideEvent;
 
                 // NOTE templates are only available w/ webview not there in plain mode
                 var wv = cv as MpAvCefNetWebView;

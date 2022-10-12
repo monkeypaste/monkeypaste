@@ -17,7 +17,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvHtmlClipboardData {
-        private static MpAvCefNetWebView _rootWebView { get; set; }
+        public static MpAvCefNetWebView ConverterWebView { get; private set; }
 
         public string Version { get; private set; }
         public string SourceUrl { get; set; }
@@ -27,48 +27,51 @@ namespace MonkeyPaste.Avalonia {
             if(!MpAvCefNetApplication.UseCefNet) {
                 return;
             }
+            ConverterWebView = new MpAvCefNetWebView() {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+            };
+
+            ConverterWebView.BrowserCreated += (s, e) => {
+                ConverterWebView.Navigated += async (s, e) => {
+                    if(e.Url == MpAvCefNetApplication.BLANK_URL) {
+                        return;
+                    }
+                    if (s is MpAvCefNetWebView wv) {
+                        while (!wv.IsDomLoaded) {
+                            await Task.Delay(100);
+                        }
+                        var converter_init_msg = new MpQuillInitMainRequestMessage() {
+                            isPlainHtmlConverter = true,
+                            envName = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
+                            useBetterTable = true
+                        };
+                        string msg64 = converter_init_msg.SerializeJsonObjectToBase64();
+                        wv.ExecuteJavascript($"initMain_ext('{msg64}')");
+                        MpConsole.WriteLine("Plain Html Converter Initialized.");
+                    }
+                };
+                ConverterWebView.Navigate(MpAvClipTrayViewModel.EditorPath);
+            };
 
             var quillWindow = new Window() {
                 Width = 300,
                 Height = 300,
-                //ShowInTaskbar = false,
+                ShowInTaskbar = false,
                 SystemDecorations = SystemDecorations.None,
                 //Position = new PixelPoint(808080, 808080)
             };
             
-            
+            quillWindow.Content = ConverterWebView;
+
             quillWindow.AttachedToVisualTree += (s, e) => {
                 if(OperatingSystem.IsWindows()) {
                     // hide converter window from windows alt-tab menu
                 
-                    //MpAvToolWindow_Win32.InitToolWindow(quillWindow.PlatformImpl.Handle.Handle);
+                    MpAvToolWindow_Win32.InitToolWindow(quillWindow.PlatformImpl.Handle.Handle);
                 }
-                quillWindow.Hide();
-                _rootWebView = new MpAvCefNetWebView() {
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Stretch
-                };
-
-                _rootWebView.BrowserCreated += (s, e) => {
-                    _rootWebView.Navigated += async (s, e) => {
-                        if (s is MpAvCefNetWebView wv) {
-                            while (!wv.IsDomLoaded) {
-                                await Task.Delay(100);
-                            }
-                            var converter_init_msg = new MpQuillInitMainRequestMessage() {
-                                isPlainHtmlConverter = true,
-                                envName = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
-                                useBetterTable = true
-                            };
-                            string msg64 = converter_init_msg.SerializeJsonObjectToBase64();
-                            wv.ExecuteJavascript($"initMain_ext('{msg64}')");
-                        }
-                    };
-                    _rootWebView.Navigate(MpAvClipTrayViewModel.EditorPath);
-                };
+                quillWindow.Hide();       
             };
-            
-
         }
 
 
@@ -104,7 +107,7 @@ namespace MonkeyPaste.Avalonia {
                 data = htmlDataStr,
                 isBase64 = isBase64
             };
-            string respStr = await _rootWebView.EvaluateJavascriptAsync($"convertPlainHtml_ext('{req.SerializeJsonObjectToBase64()}')");
+            string respStr = await ConverterWebView.EvaluateJavascriptAsync($"convertPlainHtml_ext('{req.SerializeJsonObjectToBase64()}')");
             var resp = MpJsonObject.DeserializeBase64Object<MpQuillConvertPlainHtmlToQuillHtmlResponseMessage>(respStr);
             return new MpAvHtmlClipboardData() {
                 Html = resp.quillHtml,
@@ -114,7 +117,7 @@ namespace MonkeyPaste.Avalonia {
 
         public static ICommand ShowConverterDevTools => new MpCommand(
             () => {
-                _rootWebView.ShowDevTools(); 
+                ConverterWebView.ShowDevTools(); 
             });
 
     }

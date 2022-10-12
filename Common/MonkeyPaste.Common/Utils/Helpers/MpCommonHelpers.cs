@@ -25,5 +25,14 @@ namespace MonkeyPaste.Common {
             }
             return curPath;
         }
+
+        public static string NewLineByEnv(MpUserDeviceType deviceType) {
+            switch(deviceType) {
+                case MpUserDeviceType.Windows:
+                    return "/r/n";
+                default:
+                    return "/n";
+            }
+        }
     }
 }

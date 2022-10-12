@@ -26,6 +26,8 @@ namespace MonkeyPaste {
 
         public string AppName { get; set; } = string.Empty;
 
+        public string Arguments { get; set; } = string.Empty;
+
         [Column("IsAppRejected")]
         public int IsRejectedVal { get; set; } = 0;        
 
@@ -62,6 +64,23 @@ namespace MonkeyPaste {
 
         [Ignore]
         public bool IsUrl => false;
+
+        [Ignore]
+        public IEnumerable<string> ArgumentList {
+            get {
+                if(string.IsNullOrWhiteSpace(Arguments)) {
+                    return null;
+                }
+                return Arguments.SplitNoEmpty(MpCommonHelpers.NewLineByEnv(DeviceType));
+            }
+        }
+
+        [Ignore]
+        public MpUserDeviceType DeviceType {
+            get {
+                return (MpUserDeviceType)UserDeviceId;
+            }
+        }
 
         [Ignore]
         public Guid AppGuid {
@@ -110,6 +129,7 @@ namespace MonkeyPaste {
         public static async Task<MpApp> CreateAsync(
             string appPath = "", 
             string appName = "", 
+            string arguments = "",
             int iconId = 0,
             string guid = "",
             bool suppressWrite = false) {
@@ -119,8 +139,9 @@ namespace MonkeyPaste {
             if(appPath != null) {
                 appPath = appPath.ToLower();
             }
-            // NOTE checking app by path and device here
-            var dupApp = await MpDataModelProvider.GetAppByPathAsync(appPath, MpPrefViewModel.Instance.ThisUserDevice.Id);
+            // NOTE checking app by path and arguments and device here
+            // NOTE when args are differnt should be treated as unique app since it could be significantly different
+            var dupApp = await MpDataModelProvider.GetAppByPathAsync(appPath, arguments, MpPrefViewModel.Instance.ThisUserDevice.Id);
             if (dupApp != null) {
                 if(dupApp.IconId != iconId && iconId > 0) {
                     // this means app icon has changed (probably from an update)

@@ -7,9 +7,9 @@ using System.Collections.ObjectModel;
 namespace MonkeyPaste {
     public interface MpIProcessWatcher {
         IntPtr ThisAppHandle { get;}
-        IntPtr LastHandle { get; }
-        string LastProcessPath { get; }
-        string LastMainWindowTitle { get; }
+        //IntPtr LastHandle { get; }
+        //string LastProcessPath { get; }
+        //string LastMainWindowTitle { get; }
 
         MpPortableProcessInfo LastProcessInfo { get; }
 
@@ -20,9 +20,10 @@ namespace MonkeyPaste {
         IntPtr GetLastActiveInstance(string path);
         bool IsHandleRunningProcess(IntPtr handle);
         string GetProcessPath(IntPtr handle);
+        string ParseTitleForApplicationName(string windowTitle);
         string GetProcessApplicationName(IntPtr handle);
-        string GetProcessMainWindowTitle(IntPtr handle);
-        void SetActiveProcess(IntPtr handle);
+        string GetProcessTitle(IntPtr handle);
+        IntPtr SetActiveProcess(IntPtr handle);
 
         event EventHandler<MpProcessActivatedEventArgs> OnAppActivated;
 

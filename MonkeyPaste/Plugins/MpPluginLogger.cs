@@ -81,7 +81,11 @@ namespace MonkeyPaste {
                         string processPath = Path.Combine(pluginDir, pluginName + ".exe");
                         
                         if (pluginFormat.ioType.isCli) {
-                            var app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(processPath, preset.Label);
+                            var pluginProcessInfo = new MpPortableProcessInfo() {
+                                ProcessPath = processPath,
+                                MainWindowTitle = preset.Label
+                            };
+                            var app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(pluginProcessInfo);
 
                             var cliTrans = await MpCliTransaction.Create(
                                 presetId: preset.Id,

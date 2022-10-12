@@ -6,6 +6,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonoMac.Foundation;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -359,7 +360,12 @@ namespace MonkeyPaste.Avalonia {
                 return SelectedItem;
             }
             set {
-                if (value == null) {
+                if (value == null || value.IsPlaceholder) {
+                    // BUG trying to stop case when placeholder is being treated like
+                    // init'd tile and selectionState isb being stored but 
+                    // presistentSelectedModel will be null and it trips lots of things up
+                    // 
+                    // NOTE maybe righter to set AllItems to unselected here but not sure.
                     PinnedItems.ForEach(x => x.IsSelected = false);
                 } else {
                     SelectedItem = value;
@@ -375,7 +381,8 @@ namespace MonkeyPaste.Avalonia {
                 return SelectedItem;
             }
             set {
-                if(value == null) {
+                if(value == null || value.IsPlaceholder) {
+                    // see SelectedPinTray comments
                     Items.ForEach(x => x.IsSelected = false);
                 } else {
                     SelectedItem = value;
@@ -977,7 +984,6 @@ namespace MonkeyPaste.Avalonia {
             MpDb.SyncDelete += MpDbObject_SyncDelete;
 
             MpPlatformWrapper.Services.ClipboardMonitor.OnClipboardChanged += ClipboardChanged;
-            MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
 
             //DefaultLoadCount = MpMeasurements.Instance.DefaultTotalVisibleClipTiles * 1 + 2;
 
@@ -2235,6 +2241,9 @@ namespace MonkeyPaste.Avalonia {
             }
 
             bool isDup = newCopyItem.Id < 0;
+            if(isDup) {
+                MpConsole.WriteLine("Duplicate copy item detected, item: " + newCopyItem);
+            }
             newCopyItem.Id = isDup ? -newCopyItem.Id : newCopyItem.Id;
 
             if (IsAppendMode || IsAppendLineMode) {
@@ -2418,7 +2427,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand PinTileCommand => new MpAsyncCommand<object>(
              async (args) => {
-                 int pin_idx = PinnedItems.Count;
+                 int pin_idx = 0;// PinnedItems.Count;
                  MpAvClipTileViewModel pctvm = null;
                  if (args is MpAvClipTileViewModel) {
                      pctvm = args as MpAvClipTileViewModel;
@@ -3156,22 +3165,40 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand CopySelectedClipsCommand => new MpAsyncCommand(
             async () => {
-                var mpdo = await SelectedItem.ConvertToDataObject(false);
-                await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo, true);
+                MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = true;
+                var mpdo = await SelectedItem.GetContentView().Document.GetDataObjectAsync(true, false); //.ConvertToDataObject(false);
+                await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo);
+
+                // wait extra for cb watcher to know about data
+                await Task.Delay(300);
+                MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = false;
             }, ()=>SelectedItem != null);
 
         public ICommand PasteSelectedClipsCommand => new MpAsyncCommand<object>(
             async (args) => {
                 
                 IsPasting = true;
-                //var pi = new MpPortableProcessInfo() {
-                //    Handle = MpPlatformWrapper.Services.ProcessWatcher.LastHandle,
-                //    ProcessPath = MpPlatformWrapper.Services.ProcessWatcher.LastProcessPath
-                //};
+
+
                 MpAvDataObject mpdo = await SelectedItem.GetContentView().Document.GetDataObjectAsync(false,true);
 
+                await Task.Delay(100);
+                var pi = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
+                //if(pi == null) {
+                //    var sw = Stopwatch.StartNew();
+                //    await Task.Delay(20);
+                //    while (pi == null) {
+                //        pi = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
+                //        if(pi == null && sw.ElapsedMilliseconds > 500) {
+                //            // need to put watcher back...
+                //            Debugger.Break();
+                //            return;
+                //        }
+                //        await Task.Delay(20);
+                //    }
+                //}
                 await MpPlatformWrapper.Services.ExternalPasteHandler.PasteDataObject(
-                    mpdo, MpPlatformWrapper.Services.ProcessWatcher.LastHandle);
+                    mpdo, pi);
 
                 CleanupAfterPaste(SelectedItem);
             },

@@ -55,9 +55,11 @@ namespace MonkeyPaste.Avalonia {
             return IntPtr.Zero;
         }
 
-        public override void SetActiveProcess(IntPtr handle) {
+        public override IntPtr SetActiveProcess(IntPtr handle) {
+            IntPtr lastHandle = GetActiveProcessInfo().Handle;
             int handle_val = handle.ToInt32();
             $"xdotool windowactivate {handle_val}".ShellExec();
+            return lastHandle;
         }
         protected override MpPortableProcessInfo GetActiveProcessInfo() {
             var active_info = new MpPortableProcessInfo();

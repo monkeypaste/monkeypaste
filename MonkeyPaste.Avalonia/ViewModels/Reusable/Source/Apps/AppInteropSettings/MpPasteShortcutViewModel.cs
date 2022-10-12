@@ -32,6 +32,22 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public bool EnterAfterPaste {
+            get {
+                if (PasteShortcut == null) {
+                    return false;
+                }
+                return PasteShortcut.EnterAfterPaste;
+            }
+            set {
+                if (EnterAfterPaste != value) {
+                    PasteShortcut.EnterAfterPaste = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(EnterAfterPaste));
+                }
+            }
+        }
+
         public MpAppPasteShortcut PasteShortcut { get; set; }
 
         #endregion

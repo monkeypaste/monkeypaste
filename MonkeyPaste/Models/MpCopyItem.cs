@@ -107,11 +107,11 @@ namespace MonkeyPaste {
                 // this is bad but its only so wpf still builds...
                 switch (itemType) {
                     case MpCopyItemType.Text:
-                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.WpfRtf);
+                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.WinRtf);
                     case MpCopyItemType.Image:
-                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.WpfBitmap);
+                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.WinBitmap);
                     case MpCopyItemType.FileList:
-                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.WpfFileDrop);
+                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.WinFileDrop);
                 }
 
             }

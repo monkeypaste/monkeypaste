@@ -22,7 +22,7 @@ namespace MonkeyPaste {
     }
 
     public interface MpIAppBuilder {
-        Task<MpApp> CreateAsync(object handleOrAppPath, string appName = "");
+        Task<MpApp> CreateAsync(MpPortableProcessInfo handleOrAppPath);
     }
 
     public interface MpIIconBuilder {

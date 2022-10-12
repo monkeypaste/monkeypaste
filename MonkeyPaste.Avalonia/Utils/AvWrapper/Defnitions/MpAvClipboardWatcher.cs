@@ -22,6 +22,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvClipboardWatcher : MpIClipboardMonitor, MpIPlatformDataObjectRegistrar {
         #region Private Variables
 
+        private bool _ignoringChanges = false;
         private MpPortableDataObject _lastCbo;
 
         private object _lockObj = new object();
@@ -90,7 +91,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void CheckClipboard() {
-            if(_isCheckingClipboard) {
+            if(_isCheckingClipboard || _ignoringChanges) {
+                // NOTE internal ignore is set after last read
                 return;
             }
             
@@ -112,6 +114,11 @@ namespace MonkeyPaste.Avalonia {
                  _lastCbo = cbo;
                 if(IgnoreClipboardChanges) {
                     MpConsole.WriteLine("...but ignoring it :p");
+                    _ignoringChanges = true;
+                    return;
+                } else if(_ignoringChanges) {
+                    MpConsole.WriteLine("Resuming cb watching. Noting new cbo but suppressing change signal");
+                    _ignoringChanges = false;
                     return;
                 }
                 OnClipboardChanged?.Invoke(typeof(MpAvClipboardWatcher).ToString(), cbo);

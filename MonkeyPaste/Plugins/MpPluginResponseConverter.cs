@@ -157,7 +157,7 @@ namespace MonkeyPaste {
                 //var pdo_ci = await MpPlatformWrapper.Services.CopyItemBuilder.Create(prf.dataObject,suppressWrite);
                 //sourceCopyItem.ItemData = pdo_ci.ItemData;
 
-                await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(prf.dataObject, false);
+                await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(prf.dataObject);
             }
         }
     }

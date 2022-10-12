@@ -27,8 +27,13 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task<MpAvDataObject> GetDataObjectAsync(bool ignoreSelection, bool fillTemplates) {
             if (Owner is MpAvCefNetWebView wv && wv.DataContext is MpAvClipTileViewModel ctvm) {
-                var contentDataReq = new MpQuillContentDataRequestMessage() { forPaste = true };
-                contentDataReq.formats = await ctvm.GetSupportedDataFormatsAsync();
+                // clear screenshot
+                ContentScreenShotBase64 = null;
+
+                var contentDataReq = new MpQuillContentDataRequestMessage() { 
+                    forPaste = ctvm.IsPasting || ctvm.IsTileDragging
+                };
+                contentDataReq.formats = MpPortableDataFormats.RegisteredFormats.ToList();
                 var contentDataRespStr = await wv.EvaluateJavascriptAsync($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");
                 var contentDataResp = MpJsonObject.DeserializeBase64Object<MpQuillContentDataResponseMessage>(contentDataRespStr);
 
@@ -36,6 +41,37 @@ namespace MonkeyPaste.Avalonia {
                 foreach(var di in contentDataResp.dataItems) {
                     avdo.SetData(di.format, di.data);
                 }
+
+                if (contentDataReq.forPaste) {
+                    if(ctvm.ItemType == MpCopyItemType.Image) {
+                        var bmp = ctvm.CopyItemData.ToAvBitmap();
+                        avdo.SetData(MpPortableDataFormats.AvPNG, ctvm.CopyItemData.ToAvBitmap().ToByteArray());
+                        //avdo.SetData(MpPortableDataFormats.Text, bmp.ToAsciiImage());
+                        //avdo.SetData(MpPortableDataFormats.AvHtml_bytes, bmp.ToRichHtmlImage());
+                        // TODO add colorized ascii maybe as html and rtf!!
+                    } else {
+                        // screen shot is async and js notifies w/ base64 property here
+                        while(ContentScreenShotBase64 == null) { await Task.Delay(100); }
+                        avdo.SetData(MpPortableDataFormats.AvPNG, ContentScreenShotBase64);
+                    }
+
+                    if(ctvm.ItemType != MpCopyItemType.FileList) {
+                        // js doesn't set file stuff for non-files
+                        avdo.SetData(
+                            MpPortableDataFormats.AvFileNames, 
+                            ctvm.CopyItemData.ToFile(
+                                forceNamePrefix: ctvm.CopyItemTitle,
+                                isTemporary: true));
+                    }
+
+                    bool add_tile_data = ctvm.ItemType != MpCopyItemType.Text ||
+                                       (wv.IsAllSelected() || wv.Selection.Length == 0);
+                    if (add_tile_data) {
+                        avdo.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT, ctvm);
+                    }
+                }
+
+               
                 avdo.MapAllPseudoFormats();
                 return avdo;
             }

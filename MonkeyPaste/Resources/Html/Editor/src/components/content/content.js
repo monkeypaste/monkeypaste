@@ -1,5 +1,6 @@
 var ContentHandle = null;
 var ContentItemType = 'Text';
+var ContentData = null;
 
 var ContentScreenshotBase64Str = null;
 
@@ -8,6 +9,7 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest) {
 
 	ContentHandle = contentHandle;
 	ContentItemType = contentType;
+	ContentData = contentData;
 
 	if (ContentItemType.includes('.')) {
 		log('hey item type is ' + ContentItemType);

@@ -442,6 +442,8 @@ namespace MonkeyPaste.Avalonia {
             MpAvMainWindowViewModel.Instance.IsMainWindowLoading = false;
 
             MpPlatformWrapper.Services.ProcessWatcher.StartWatcher();
+
+            MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
             MpDataModelProvider.QueryInfo.NotifyQueryChanged(true);
             MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
 

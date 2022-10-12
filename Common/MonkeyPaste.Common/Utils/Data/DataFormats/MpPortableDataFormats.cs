@@ -21,7 +21,8 @@ namespace MonkeyPaste.Common {
             Unicode,
             OemText,
             //FileDrop,
-            //Bitmap,
+            WinBitmap,
+            WinDib,
 
             // linux
             LinuxSourceUrl,
@@ -52,13 +53,6 @@ namespace MonkeyPaste.Common {
 
         #region Constants
 
-        // Legacy Wpf formats
-
-        public const string WpfRtf = "Rich Text Format";
-        public const string WpfBitmap = "Bitmap";
-        public const string WpfHtml = "HTML Format";
-        public const string WpfFileDrop = "FileDrop";
-
         // Windows Formats
         public const string Text = "Text";
         public const string Xaml = "Xaml";
@@ -66,6 +60,12 @@ namespace MonkeyPaste.Common {
         public const string Csv = "CSV";
         public const string Unicode = "Unicode";
         public const string OemText = "OEMText";
+        public const string WinBitmap = "CF_BITMAP";
+        public const string WinDib = "CF_DIB";
+
+        public const string WinRtf = "Rich Text Format";
+        public const string WinHtml = "HTML Format";
+        public const string WinFileDrop = "FileDrop";
 
         // Linux Formats
         public const string LinuxSourceUrl = "text/x-moz-url-priv";

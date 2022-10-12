@@ -6,6 +6,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Runtime.InteropServices;
+using Avalonia.Media.Imaging;
+using GLib;
+
+#if WINDOWS
+using MonkeyPaste.Common.Wpf;
+#endif
 
 namespace MonkeyPaste.Common.Avalonia {
     public class MpAvDataFormat : MpPortableDataFormat {
@@ -28,12 +36,14 @@ namespace MonkeyPaste.Common.Avalonia {
             if (format == MpPortableDataFormats.AvFileNames && 
                 data is string portablePathStr) {
                 // convert portable single line-separated string to enumerable of strings for avalonia
-                data = portablePathStr.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries) as IEnumerable<string>;
+                data = portablePathStr.SplitNoEmpty(Environment.NewLine);
             } else if ((format == MpPortableDataFormats.AvHtml_bytes || format == MpPortableDataFormats.AvRtf_bytes) && data is string portableDecodedFormattedTextStr) {
                 // avalona like rtf and html to be stored as bytes
                 data = portableDecodedFormattedTextStr.ToEncodedBytes();
             } else if(format == MpPortableDataFormats.CefHtml && data is byte[] html_bytes) {
                 data = html_bytes.ToDecodedString();
+            } else if(format == MpPortableDataFormats.AvPNG && data is string png64) {
+                data = png64.ToByteArray();
             }
             base.SetData(format, data);
         }
@@ -57,6 +67,8 @@ namespace MonkeyPaste.Common.Avalonia {
                 byte[] htmlBytes = cef_html_str.ToEncodedBytes();
                 SetData(html_bytes_f.Name, htmlBytes);
             }
+
+            
             
             var text_f = MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.Text);
             var cefText_f = MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.CefText);
@@ -93,10 +105,113 @@ namespace MonkeyPaste.Common.Avalonia {
                     // ensure avalonia style text is in formats
                     SetData(av_fileNames_f.Name, gn_files);
                 }
+            } else if(OperatingSystem.IsWindows()) {
+                if(ContainsData(MpPortableDataFormats.AvPNG) && 
+                    GetData(MpPortableDataFormats.AvPNG) is string png64) {
+                    SetData(MpPortableDataFormats.AvPNG, png64.ToByteArray());
+                }
+                if(ContainsData(MpPortableDataFormats.AvPNG) &&
+                    GetData(MpPortableDataFormats.AvPNG) is byte[] pngBytes) {
+#if WINDOWS
+                    //SetData(MpPortableDataFormats.WinBitmap, pngBytes);
+                    //SetData(MpPortableDataFormats.WinDib, pngBytes);
+                    SetBitmap(pngBytes);
+#endif
+                } 
             }
+
+
 
             // TODO should add unicode, oem, etc. here for greater compatibility
         }
+
+       // private  uint CF_BITMAP = 0;
+        public void SetBitmap(byte[] bytes) {
+            //if(CF_BITMAP == 0) {
+            //    CF_BITMAP = WinApi.RegisterClipboardFormatA("Bitmap");
+            //}
+
+            //if (bitmap == null)
+            //    throw new ArgumentNullException(nameof(bitmap));
+
+            //// Convert from Avalonia Bitmap to System Bitmap
+            //var memoryStream = new MemoryStream(1000000);
+            //bitmap.Save(memoryStream); // this returns a png from Skia (we could save/load it from the system bitmap to convert it to a bmp first, but this seems to work well already)
+
+            var systemBitmap = new System.Drawing.Bitmap(new MemoryStream(bytes));
+            //var systemBitmap = MpWpfClipoardImageHelper.GetSysDrawingBitmap(bytes);
+
+            var hBitmap = systemBitmap.GetHbitmap();
+
+            var screenDC = GetDC(IntPtr.Zero);
+
+            var sourceDC = CreateCompatibleDC(screenDC);
+            var sourceBitmapSelection = SelectObject(sourceDC, hBitmap);
+
+            var destDC = CreateCompatibleDC(screenDC);
+            var compatibleBitmap = CreateCompatibleBitmap(screenDC, systemBitmap.Width, systemBitmap.Height);
+
+            var destinationBitmapSelection = SelectObject(destDC, compatibleBitmap);
+
+            BitBlt(
+                destDC,
+                0,
+                0,
+                systemBitmap.Width,
+                systemBitmap.Height,
+                sourceDC,
+                0,
+                0,
+                0x00CC0020); // SRCCOPY
+
+            try {
+                //WinApi.OpenClipboard(IntPtr.Zero);
+                //WinApi.EmptyClipboard();
+
+                //IntPtr result = SetClipboardData(CF_BITMAP, compatibleBitmap);
+
+                //if (result == IntPtr.Zero) {
+                //    int errno = Marshal.GetLastWin32Error();
+                //}
+
+                SetData(MpPortableDataFormats.WinBitmap, compatibleBitmap);
+            }
+            catch (Exception e) {
+
+            }
+            finally {
+                WinApi.CloseClipboard();
+            }
+        }
+
+        [DllImport("user32.dll")]
+        static extern IntPtr SetClipboardData(uint uFormat, IntPtr hMem);
+
+        [DllImport("user32.dll", ExactSpelling = true)]
+        public static extern IntPtr GetDC(IntPtr hWnd);
+
+
+        [DllImport("gdi32.dll", ExactSpelling = true)]
+        public static extern IntPtr CreateCompatibleDC(IntPtr hDC);
+
+
+        [DllImport("gdi32.dll", ExactSpelling = true)]
+        public static extern IntPtr CreateCompatibleBitmap(IntPtr hdc, int cx, int cy);
+
+        [DllImport("gdi32.dll", SetLastError = true, ExactSpelling = true)]
+        public static extern IntPtr SelectObject(IntPtr hdc, IntPtr h);
+
+        [DllImport("gdi32.dll", SetLastError = true, ExactSpelling = true)]
+        public static extern bool BitBlt(
+            IntPtr hdc,
+            int x,
+            int y,
+            int cx,
+            int cy,
+            IntPtr hdcSrc,
+            int x1,
+            int y1,
+            uint rop);
 
         #region Avalonia.Input.IDataObject Implementation
 

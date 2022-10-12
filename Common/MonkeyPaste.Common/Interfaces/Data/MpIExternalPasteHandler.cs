@@ -2,6 +2,6 @@
 
 namespace MonkeyPaste.Common {
     public interface MpIExternalPasteHandler {
-        Task PasteDataObject(MpPortableDataObject mpdo, object handleOrProcessInfo);
+        Task PasteDataObject(MpPortableDataObject mpdo, MpPortableProcessInfo processInfo);
     }
 }

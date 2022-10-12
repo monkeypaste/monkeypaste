@@ -92,7 +92,7 @@ namespace AvCoreClipboardHandler {
                 availableFormats = await Application.Current.Clipboard.GetFormatsAsync();
             } else if(request.forcedClipboardDataObject is IDataObject) {
                 avdo = request.forcedClipboardDataObject as IDataObject;
-                availableFormats = avdo.GetDataFormats().ToArray();
+                availableFormats = avdo.GetDataFormats().Where(x=>avdo.Get(x) != null).ToArray();
             }
 
             var readFormats = request.readFormats.Where(x => availableFormats.Contains(x));
@@ -111,12 +111,8 @@ namespace AvCoreClipboardHandler {
         private async Task<object> ReadDataObjectFormat(string format, IDataObject avdo) {
             object dataObj;
             if(avdo == null) {
-                if (OperatingSystem.IsWindows()) {
-                    dataObj = await ReadDataObjectFormatHelper_windows(format, avdo);
-                } else {
-                    dataObj = await Application.Current.Clipboard.GetDataAsync(format);
-                }
-                
+                dataObj = await Application.Current.Clipboard.GetDataAsync(format);
+
             } else {
                 if (format == "FileNames") {
                     if (avdo.GetFileNames() == null) {

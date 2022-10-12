@@ -55,17 +55,27 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(async () => {
                 var wv = browser.Host.Client.GetWebView() as MpAvCefNetWebView;
                 var ctvm = wv.BindingContext;
-                ctvm.IsTileDragging = true;
+                
+                // NOTE only setting this true (maynot be if not all selected) for js msg to know its for ole
+                ctvm.IsTileDragging = true; 
 
                 PointerEventArgs pe = null;
                 EventHandler<PointerEventArgs> pointer_move_handler = null;
                 pointer_move_handler = (s, e) => {
                     pe = e;
-                    MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();
+                    if(e.IsLeftDown(wv)) {
+                        MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();
+                    } else {
+                        // NOTE not sure if these events are received since dnd is progress 
+                        // but probably good to keep since drag end is so annoying to handle...
+                        MpConsole.WriteLine("CefGlue pointer move event detached ITSELF");
+                        MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = null;
+                        wv.PointerMoved -= pointer_move_handler;
+                    }
+                    
                 };
 
                 wv.PointerMoved += pointer_move_handler;
-
 
                 EventHandler<string> modKeyUpOrDownHandler = (s, e) => {
                     var modKeyMsg = new MpQuillModifierKeysNotification() {
@@ -80,33 +90,16 @@ namespace MonkeyPaste.Avalonia {
                 MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed += modKeyUpOrDownHandler;
                 MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased += modKeyUpOrDownHandler;
 
-                bool is_tile_drag = false;
+                //bool is_tile_drag = false;
                 DragDropEffects allowedEffects = allowedOps.ToDragDropEffects();
 
-                var avmpdo = new MpAvDataObject();
-                if(ctvm.ItemType == MpCopyItemType.Text) {
-                    is_tile_drag = wv.IsAllSelected() || wv.Selection.Length == 0;
-                    avmpdo.SetData(MpPortableDataFormats.Text, dragData.FragmentText);
-                    avmpdo.SetData(MpPortableDataFormats.AvHtml_bytes, dragData.FragmentHtml);
-                } else if(ctvm.ItemType == MpCopyItemType.FileList) {
-                    is_tile_drag = true;
+                if (ctvm.ItemType == MpCopyItemType.FileList) {
                     allowedEffects = DragDropEffects.Copy;
-                    avmpdo.SetData(MpPortableDataFormats.Text, dragData.FragmentText);
-                    avmpdo.SetData(MpPortableDataFormats.AvFileNames, ctvm.FileItems.Select(x => x.Path));
                 } else if (ctvm.ItemType == MpCopyItemType.Image) {
-                    is_tile_drag = true;
                     allowedEffects = DragDropEffects.Move;
-                    avmpdo.SetData(MpPortableDataFormats.AvPNG, ctvm.CopyItemData.ToByteArray());
-                    string img_path = ctvm.CopyItemData.ToFile(null, ctvm.CopyItemTitle, "png", true);
-                    avmpdo.SetData(MpPortableDataFormats.AvFileNames, new List<string>() { img_path });
                 }
-
-                avmpdo.MapAllPseudoFormats();
-
-                if(is_tile_drag) {
-                    avmpdo.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT, ctvm);
-                } 
-
+                MpAvDataObject avmpdo = await wv.Document.GetDataObjectAsync(false, false);
+                ctvm.IsTileDragging = avmpdo.ContainsData(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT);
                 while (pe == null) {
                     await Task.Delay(100);
                 }
@@ -114,24 +107,22 @@ namespace MonkeyPaste.Avalonia {
                 var result = await DragDrop.DoDragDrop(pe, avmpdo, allowedEffects);
 
                 ctvm.IsTileDragging = false;
+                wv.PointerMoved -= pointer_move_handler;
                 MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = null;
+
                 MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= modKeyUpOrDownHandler;
                 MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= modKeyUpOrDownHandler;
-                wv.PointerMoved -= pointer_move_handler;
 
                 MpConsole.WriteLine("Cef Drag Result: " + result);
 
                 var dragEndMsg = new MpQuillDragEndMessage() {
                     dataTransfer = new MpQuillDataTransferMessageFragment() {
-                        dropEffect = result.ToCefDragOperationsMask().ToString()
+                        dropEffect = result.ToString()
                     }
                 };
 
                 
                 await wv.EvaluateJavascriptAsync($"dragEnd_ext('{dragEndMsg.SerializeJsonObjectToBase64()}')");
-                //if (wv.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv) {
-                //    ctv.ReloadContent();
-                //}
             });
             return false;
         }

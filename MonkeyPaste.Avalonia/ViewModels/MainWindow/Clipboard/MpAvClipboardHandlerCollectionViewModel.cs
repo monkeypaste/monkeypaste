@@ -140,6 +140,29 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region MpIPlatformDataObjectHelperAsync Implementation
+
+        async Task<MpPortableDataObject> MpIPlatformDataObjectHelperAsync.ConvertToSupportedPortableFormatsAsync(object nativeDataObj, int retryCount) {
+            var mpdo = await ReadClipboardOrDropObjectAsync(nativeDataObj);
+            return mpdo;
+        }
+
+        async Task<object> MpIPlatformDataObjectHelperAsync.ConvertToPlatformClipboardDataObjectAsync(MpPortableDataObject mpdo) {
+            object pdo = await WriteClipboardOrDropObjectAsync(mpdo, false);
+            return pdo;
+        }
+
+        async Task MpIPlatformDataObjectHelperAsync.SetPlatformClipboardAsync(MpPortableDataObject portableObj) {
+            await WriteClipboardOrDropObjectAsync(portableObj, true);
+        }
+
+        async Task<MpPortableDataObject> MpIPlatformDataObjectHelperAsync.GetPlatformClipboardDataObjectAsync() {
+            var pdo = await ReadClipboardOrDropObjectAsync(null);
+            return pdo;
+        }
+
+        #endregion
+
         #region Layout
 
         #endregion
@@ -323,6 +346,9 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
+            //MpConsole.WriteLine("Data written to " + (writeToClipboard ? "CLIPBOARD" : "DATAOBJECT")+":");
+            //MpConsole.WriteLine(mpdo);
+
             return dobj;
         }
 
@@ -493,121 +519,6 @@ namespace MonkeyPaste.Avalonia {
                 //}
             });
 
-        async Task<MpPortableDataObject> MpIPlatformDataObjectHelperAsync.ConvertToSupportedPortableFormatsAsync(object nativeDataObj, int retryCount) {
-            var mpdo = await ReadClipboardOrDropObjectAsync(nativeDataObj);
-            return mpdo;
-        }
-
-        async Task<object> MpIPlatformDataObjectHelperAsync.ConvertToPlatformClipboardDataObjectAsync(MpPortableDataObject mpdo) {
-            object pdo = await WriteClipboardOrDropObjectAsync(mpdo, false);
-            return pdo;
-        }
-
-        async Task MpIPlatformDataObjectHelperAsync.SetPlatformClipboardAsync(MpPortableDataObject portableObj, bool ignoreClipboardChange) {
-            if (ignoreClipboardChange) {
-
-                MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = true;
-
-            }
-            await WriteClipboardOrDropObjectAsync(portableObj, true);
-            if(ignoreClipboardChange) {
-
-                MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = false;
-
-            }
-        }
-
-        async Task<MpPortableDataObject> MpIPlatformDataObjectHelperAsync.GetPlatformClipboardDataObjectAsync() {
-            var pdo = await ReadClipboardOrDropObjectAsync(null);
-            return pdo;
-        }
-        #endregion
-
-        #region MpIPlatformDataObjectHelper (sync, unused)
-        //MpPortableDataObject MpIPlatformDataObjectHelper.ConvertToSupportedPortableFormats(object nativeDataObj, int retryCount) {
-        //    var mpdo = ReadClipboardOrDropObject(nativeDataObj);
-        //    return mpdo;
-        //}
-
-        //object MpIPlatformDataObjectHelper.ConvertToPlatformClipboardDataObject(MpPortableDataObject mpdo) {
-        //    object pdo = WriteClipboardOrDropObject(mpdo, false);
-        //    return pdo;
-        //}
-
-        //void MpIPlatformDataObjectHelper.SetPlatformClipboard(MpPortableDataObject portableObj, bool ignoreClipboardChange) {
-        //    MpPlatformWrapper.Services.ClipboardMonitor.IgnoreNextClipboardChangeEvent = ignoreClipboardChange;
-        //    WriteClipboardOrDropObject(portableObj, true);
-        //}
-
-        //MpPortableDataObject MpIPlatformDataObjectHelper.GetPlatformClipboardDataObject() {
-        //    var pdo = ReadClipboardOrDropObject(null);
-        //    return pdo;
-        //}
-
-        //public MpAvDataObject ReadClipboardOrDropObject(object forcedDataObject = null) {
-        //    // NOTE forcedDataObject is used to read drag/drop, when null clipboard is read
-
-        //    var mpdo = new MpAvDataObject();
-
-        //    //only iterate through actual handlers 
-        //    var handlers = EnabledFormats.Where(x => x.CanRead)
-        //                                 .Select(x => x.Parent.ClipboardPluginComponent)
-        //                                 .Distinct().Cast<MpIClipboardReaderComponent>();
-
-        //    foreach (var handler in handlers) {
-        //        IntPtr mw_handle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle;
-        //        //string str_test = Marshal.PtrToStringAuto(mw_handle);
-        //        int int_test = mw_handle.ToInt32();
-        //        long long_test = mw_handle.ToInt64();
-
-        //        var req = new MpClipboardReaderRequest() {
-        //            isAvalonia = true,
-        //            mainWindowImplicitHandle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle.ToInt32(),
-        //            platform = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
-        //            readFormats = EnabledFormats.Where(x => x.Parent.ClipboardPluginComponent == handler).Select(x => x.Parent.HandledFormat).Distinct().ToList(),
-        //            items = EnabledFormats.Where(x => x.Parent.ClipboardPluginComponent == handler).SelectMany(x => x.Items.Cast<MpIParameterKeyValuePair>()).ToList(),
-        //            forcedClipboardDataObject = forcedDataObject
-        //        };
-
-        //        var response = handler.ReadClipboardData(req);
-
-        //        bool isValid = MpPluginTransactor.ValidatePluginResponse(response);
-        //        if (isValid) {
-        //            response.dataObject.DataFormatLookup.ForEach(x => mpdo.DataFormatLookup.AddOrReplace(x.Key, x.Value));
-        //        }
-        //    }
-        //    return mpdo;
-        //}
-
-        //public object WriteClipboardOrDropObject(MpPortableDataObject mpdo, bool writeToClipboard) {
-        //    var dobj = new DataObject();
-        //    var handlers = EnabledFormats.Where(x => x.CanWrite && MpPortableDataFormats.RegisteredFormats.Contains(x.Parent.HandledFormat))
-        //                                 .Select(x => x.Parent.ClipboardPluginComponent).Distinct().Cast<MpIClipboardReaderComponent>();
-        //    foreach (var format in MpPortableDataFormats.RegisteredFormats) {
-        //        var handler = EnabledFormats.FirstOrDefault(x => x.CanWrite && x.Parent.HandledFormat == format);
-        //        if (handler == null) {
-        //            continue;
-        //        }
-        //        var writeRequest = new MpClipboardWriterRequest() {
-        //            data = mpdo,
-        //            writeToClipboard = writeToClipboard,
-        //            items = handler.Items.Cast<MpIParameterKeyValuePair>().ToList()
-        //        };
-        //        var writer_component = handler.Parent.ClipboardPluginComponent as MpIClipboardWriterComponent;
-        //        if (writer_component == null) {
-        //            Debugger.Break();
-        //        }
-        //        MpClipboardWriterResponse writerResponse = writer_component.WriteClipboardData(writeRequest);
-        //        bool isValid = MpPluginTransactor.ValidatePluginResponse(writerResponse);
-        //        if (isValid && writerResponse.platformDataObject is IDataObject ido) {
-        //            if (ido.Contains(format)) {
-        //                dobj.Set(format, ido.Get(format));
-        //            }
-        //        }
-        //    }
-
-        //    return dobj;
-        //}
         #endregion
     }
 }

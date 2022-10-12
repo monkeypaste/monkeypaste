@@ -21,6 +21,8 @@ const AllowedEffects = ['copy', 'copyLink', 'copyMove', 'link', 'linkMove', 'mov
 
 const AllowedDropTypes = ['text/plain', 'text/html', 'application/json', 'files'];
 
+var DropItemElms = [];
+
 function initDrop() {
 
     function handleDragEnter(e) {
@@ -42,8 +44,8 @@ function initDrop() {
         log('drag enter');
         IsDropping = true;
 
-        for (var i = 0; i < items.length; i++) {
-            items[i].classList.add('drop');
+        for (var i = 0; i < DropItemElms.length; i++) {
+            DropItemElms[i].classList.add('drop');
         }
         startAutoScroll();
 
@@ -146,7 +148,6 @@ function initDrop() {
         return false;
     }
 
-
     function handleDragLeave(e) {
         if (e.target.id == 'dragOverlay') {
             return;
@@ -162,8 +163,8 @@ function initDrop() {
         IsDropping = false;
         DropIdx = -1;
 
-        for (var i = 0; i < items.length; i++) {
-            items[i].classList.remove('drop');
+        for (var i = 0; i < DropItemElms.length; i++) {
+            DropItemElms[i].classList.remove('drop');
         }
 
         if (IsReadOnly && !IsDragging) {
@@ -252,8 +253,8 @@ function initDrop() {
 		}
         
 
-        for (var i = 0; i < items.length; i++) {
-            items[i].classList.remove('drop');
+        for (var i = 0; i < DropItemElms.length; i++) {
+            DropItemElms[i].classList.remove('drop');
         }
         updateAllSizeAndPositions();
         if (IsReadOnly) {
@@ -265,14 +266,15 @@ function initDrop() {
         return false;
     }
 
+    DropItemElms = [getEditorContainerElement(), getDragOverlayElement()];
 
-    let items = [getEditorContainerElement(), getDragOverlayElement()];
-        items.forEach(function (item) {
-            item.addEventListener('dragenter', handleDragEnter,true);
-            item.addEventListener('dragover', handleDragOver, true);
-            item.addEventListener('dragleave', handleDragLeave, true);
-            item.addEventListener('drop', handleDrop, true);
-        });
+    for (var i = 0; i < DropItemElms.length; i++) {
+        let item = DropItemElms[i];
+        item.addEventListener('dragenter', handleDragEnter, true);
+        item.addEventListener('dragover', handleDragOver, true);
+        item.addEventListener('dragleave', handleDragLeave, true);
+        item.addEventListener('drop', handleDrop, true);
+	}
 }
 
 function dropData(docIdx, dt) {

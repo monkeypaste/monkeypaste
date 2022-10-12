@@ -47,29 +47,52 @@ function contentRequest_ext(contentReqMsgStr_base64) {
 	// output 'MpQuillContentDataResponseMessage' (with 'MpQuillContentDataResponseFormattedDataItemFragment' items)
 
 	let req = toJsonObjFromBase64Str(contentReqMsgStr_base64);
+	let sel = null;
+	if (req.forPaste && IsSubSelectionEnabled) {
+		if (ContentItemType != 'Text') {
+			log('Editor State Error! Type is ' + ContentItemType + ' and subselection is enabled, which should only be for text');
+			disableSubSelection();
+		} else {
+			if (!isAllSelected() && !isNoneSelected()) {
+				// only respond w/ sub-selection if neither none nor all is selected
+				sel = getEditorSelection();
+			}
+		}
+		
+	}
 
 	let items = [];
 	for (var i = 0; i < req.formats.length; i++) {
 		let format = req.formats[i];
-		let data = '';
+		let data = null;
 
-		if (ContentItemType == 'Text') {
-			if (format == 'HTML Format') {
-				data = getHtml();
-			} else if (format == 'Text') {
-				data = getText();
-				if (req.forPaste) {
-					// remove trailing line ending
-					data = data.trim();
-				}
-			} else if (format == 'CSV') {
-				data = getTableCsv('Text');
-			} else if (format == 'PNG') {
-				// trigger async screenshot notification where host needs to null and wait for value to avoid async issues
+		//if (ContentItemType == 'Text') {
+		if (format == 'HTML Format') {
+			data = getHtml(sel);
+		} else if (format == 'Text' && ContentItemType != 'Image') {
+			data = getText(sel);
+			if (req.forPaste && data.endsWith('\n')) {
+				// remove trailing line ending
+				data = substringByLength(data, 0, data.length - 1);
+			}
+		} else if (format == 'CSV') {
+			// TODO figure out handling table selectinn logic and check here 
+			data = getTableCsv('Text');
+		} else if (format == 'PNG') {
+			// trigger async screenshot notification where host needs to null and wait for value to avoid async issues
+			if (ContentItemType != 'Image') {
 				onCreateContentScreenShot_ntf();
 				data = 'pending...';
+			} else {
+				//data = ContentData;
 			}
+		} else if (format == 'FileNames' && ContentItemType == 'FileList') {
+			data = ContentData;
 		}
+		if (!data || data == '') {
+			continue;
+		}
+		//} 
 		let item = {
 			format: format,
 			data: data

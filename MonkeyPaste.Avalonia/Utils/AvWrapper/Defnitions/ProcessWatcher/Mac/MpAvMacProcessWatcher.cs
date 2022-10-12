@@ -21,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        public override void SetActiveProcess(IntPtr handle) {
+        public override IntPtr SetActiveProcess(IntPtr handle) {
             throw new NotImplementedException();
         }
         public override IntPtr GetParentHandleAtPoint(MpPoint poIntPtr) {

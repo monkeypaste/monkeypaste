@@ -9,6 +9,7 @@ using System.Reflection.Metadata;
 using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using MonkeyPaste;
@@ -55,16 +56,25 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public override void SetActiveProcess(IntPtr handle) {
-            //WinApi.SetActiveWindow(handle);
+        public override IntPtr SetActiveProcess(IntPtr handle) {
+            if(handle == IntPtr.Zero) {
+                MpConsole.WriteLine("Warning cannot set active process to IntPtr.Zero, ignoring");
+                return IntPtr.Zero;
+            }
+            if (!MpAvMainWindow.Instance.IsVisible) {
+                MpConsole.WriteLine("Warning cannot set active process mw is not visible");
+                return IntPtr.Zero;
+            }
+            IntPtr lastActive = WinApi.SetActiveWindow(ThisAppHandle);
             bool success = WinApi.SetForegroundWindow(handle);
-            MpConsole.WriteLine($"SetForegroundWindow to '{handle}' was {(success ? "SUCCESSFUL" : "FAILED")}");
+            MpConsole.WriteLine($"SetForegroundWindow to '{handle}' from '{lastActive}' was {(success ? "SUCCESSFUL" : "FAILED")}");
+            return lastActive;
         }
         protected override MpPortableProcessInfo GetActiveProcessInfo() {
             IntPtr active_handle = WinApi.GetForegroundWindow();
             var active_info = new MpPortableProcessInfo() {
                 Handle = active_handle,
-                ProcessPath = GetProcessPath_internal(active_handle),
+                ProcessPath = GetProcessPath(active_handle),
                 MainWindowTitle = GetProcessApplicationName(active_handle)
             };
             return active_info;
@@ -89,7 +99,7 @@ namespace MonkeyPaste.Avalonia {
                         if (WinApi.IsWindow(handle)) {
                             var cur_info = new MpPortableProcessInfo() {
                                 Handle = handle,
-                                ProcessPath = GetProcessPath_internal(handle),
+                                ProcessPath = GetProcessPath(handle),
                                 MainWindowTitle = GetProcessApplicationName(handle)
                             };
 
@@ -135,7 +145,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public override string GetProcessMainWindowTitle(IntPtr hWnd) {
+        public override string GetProcessTitle(IntPtr hWnd) {
             try {
                 if (hWnd == null || hWnd == IntPtr.Zero) {
                     return "Unknown Application";
@@ -154,20 +164,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public override string GetProcessApplicationName(IntPtr hWnd) {
-            string mwTitle = GetProcessMainWindowTitle(hWnd);
-            string appName = GetProcessApplicationName(mwTitle);
 
-            if (string.IsNullOrWhiteSpace(appName) || appName.HasSpecialCharacters()) {
-                // NOTE trying to enforce app name to not be empty or end up
-                // being file name when window title is normal pattern
-                string processPath = GetProcessPath_internal(hWnd);
-                return Path.GetFileName(processPath);
-            }
-            return appName;
-        }
-
-        private string GetProcessPath_internal(IntPtr hwnd) {
+        public override string GetProcessPath(IntPtr hwnd) {
             string fallback = _FallbackProcessPath;
             try {
                 if (hwnd == null || hwnd == IntPtr.Zero) {
@@ -260,7 +258,7 @@ namespace MonkeyPaste.Avalonia {
                     //StringBuilder builder = new StringBuilder(length);
                     //WinApi.GetWindowText(hWnd, builder, length + 1);
 
-                    windows.AddOrReplace(GetProcessPath_internal(hWnd), hWnd);
+                    windows.AddOrReplace(GetProcessPath(hWnd), hWnd);
                 }
                 catch (InvalidOperationException ex) {
                     // no graphical interface
@@ -280,7 +278,7 @@ namespace MonkeyPaste.Avalonia {
                 string processName = GetKnownProcessPath(fgHandle);
                 if (string.IsNullOrEmpty(processName)) {
                     //if it is not resolve its process path
-                    processName = GetProcessPath_internal(fgHandle);
+                    processName = GetProcessPath(fgHandle);
                 }
                 //if (processName == fallback) {
                 //    return;
@@ -324,20 +322,6 @@ namespace MonkeyPaste.Avalonia {
             if (!WinApi.IsWow64Process(process.Handle, out isWow64))
                 throw new Win32Exception();
             return !isWow64;
-        }
-        private string GetProcessApplicationName(string windowTitle) {
-            string mwt = windowTitle;
-            if (string.IsNullOrEmpty(mwt)) {
-                return mwt;
-            }
-            var mwta = mwt.Split(new string[] { "-" }, StringSplitOptions.RemoveEmptyEntries);
-            if (mwta.Length == 1) {
-                if (string.IsNullOrEmpty(mwta[0])) {
-                    return "Explorer";
-                }
-                return mwta[0];
-            }
-            return mwta[mwta.Length - 1].Trim();
         }
 
         public bool IsProcessAdmin(IntPtr handle) {

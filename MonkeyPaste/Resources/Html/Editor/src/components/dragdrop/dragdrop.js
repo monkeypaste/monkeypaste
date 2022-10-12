@@ -23,6 +23,13 @@ function resetDragDrop(fromHost = false) {
     IsAltDown = false
     IsShiftDown = false;
 
+    for (var i = 0; i < DropItemElms.length; i++) {
+        DropItemElms[i].classList.remove('drop');
+	}
+
+    updateAllSizeAndPositions();
+
+    
     drawOverlay();
 
     log('dragDrop reset: ' + (fromHost ? "FROM HOST" : "INTERNALLY"));

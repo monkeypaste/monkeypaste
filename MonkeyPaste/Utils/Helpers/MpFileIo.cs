@@ -98,24 +98,32 @@ namespace MonkeyPaste {
         }
 
         public static string ToFile(this string fileData, string forceDir = "", string forceNamePrefix = "", string forceExt = "", bool overwrite = false, bool isTemporary = true) {
+            // NOTE csv is too annoying to discern (probably all are) need to check before and force/convert
+            forceExt = string.IsNullOrEmpty(forceExt) ? forceExt : forceExt.Replace(".", string.Empty);
+
             if (string.IsNullOrEmpty(forceExt)) {
                 // when ext is not given infer from content
                 if (fileData.IsStringRichText()) {
                     forceExt = "rtf";
                 } else if (fileData.IsStringBase64()) {
                     forceExt = "png";
-                } else if (fileData.IsStringCsv()) {
+                } /*else if (fileData.IsStringCsv()) {
                     forceExt = "csv";
+                }*/ else if (fileData.IsStringRichHtmlText()) {
+                    forceExt = "html";
                 } else if (!fileData.IsFileOrDirectory()) {
                     forceExt = "txt";
                 }
             } else {
-                if (forceExt.ToLower().Contains("rtf")) {
+                if (forceExt.ToLower().Equals("rtf")) {
                     fileData = MpPlatformWrapper.Services.StringTools.ToRichText(fileData);
-                } else if (forceExt.ToLower().Contains("txt")) {
+                } else if (forceExt.ToLower().Equals("txt")) {
                     fileData = MpPlatformWrapper.Services.StringTools.ToPlainText(fileData);
-                } else if (forceExt.ToLower().Contains("csv")) {
+                } else if (forceExt.ToLower().Equals("csv")) {
                     fileData = MpPlatformWrapper.Services.StringTools.ToCsv(fileData);
+                } else if (forceExt.ToLower().Equals("html")) {
+                    // add to string tools
+                    Debugger.Break();
                 }
             }
 
@@ -123,9 +131,9 @@ namespace MonkeyPaste {
             if (fileData.IsFileOrDirectory()) {
                 tfp = fileData;
             } else if (forceExt == "png" ||
-                       forceExt.ToLower().Contains("bmp") ||
-                       forceExt.ToLower().Contains("jpg") ||
-                       forceExt.ToLower().Contains("jpeg")) {
+                       forceExt.ToLower().Equals("bmp") ||
+                       forceExt.ToLower().Equals("jpg") ||
+                       forceExt.ToLower().Equals("jpeg")) {
                 tfp = WriteByteArrayToFile(Path.GetTempFileName(), fileData.ToByteArray(), isTemporary);
             } else {
                 tfp = WriteTextToFile(Path.GetTempFileName(), fileData, isTemporary);
@@ -140,9 +148,8 @@ namespace MonkeyPaste {
             }
 
             if (!string.IsNullOrEmpty(forceExt)) {
-                forceExt = forceExt.Contains(".") ? forceExt : "." + forceExt;
                 string tfe = Path.GetExtension(tfp);
-                ofp = ofp.Replace("." + tfe, forceExt);
+                ofp = ofp.Replace(tfe, "." + forceExt.Replace(".",string.Empty));
             }
 
             if (!string.IsNullOrEmpty(forceDir)) {

@@ -179,6 +179,10 @@ function isAllSelected() {
 	let result = sel.index == 0 && sel.length == doc_len;
 	return result;
 }
+function isNoneSelected() {
+	let sel = getEditorSelection();
+	return !sel || sel.length == 0;
+}
 
 
 

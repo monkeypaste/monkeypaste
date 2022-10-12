@@ -8,6 +8,7 @@ using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonoMac.AppKit;
 using System.Collections.Generic;
+using System.IO;
 
 namespace MonkeyPaste.Avalonia {
     
@@ -20,17 +21,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
-
-        //private IntPtr _thisAppHandle;
-        //public virtual IntPtr ThisAppHandle {
-        //    get => _thisAppHandle;
-        //    set {
-        //        if(_thisAppHandle != value) {
-        //            _thisAppHandle = value;
-        //            ThisAppProcessPath = GetProcessPath(_thisAppHandle);
-        //        }
-        //    }
-        //}
 
         public IntPtr ThisAppHandle {
             get {
@@ -56,9 +46,12 @@ namespace MonkeyPaste.Avalonia {
         private MpPortableProcessInfo _lastProcessInfo;
         public MpPortableProcessInfo LastProcessInfo {
             get {
+                if(OperatingSystem.IsWindows()) {
+                    return _lastProcessInfo;
+                }
                 var active_info = GetActiveProcessInfo();
                 if(active_info == null) {
-                    return null;
+                    return _lastProcessInfo;
                 }
                 if(active_info.Handle == ThisAppHandle) {
                     return _lastProcessInfo;
@@ -88,21 +81,39 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public void StartWatcher() {
-            //CreateRunningProcessLookup();
-            //if (_timer == null) {
-            //    _timer = new DispatcherTimer(DispatcherPriority.Background) {
-            //        Interval = TimeSpan.FromMilliseconds(300)
-            //    };
-            //    _timer.Tick += ProcessWatcherTimer_tick;
-            //} else {
-            //    _timer.Stop();
-            //}
-            //_timer.Start();
+            if(OperatingSystem.IsWindows()) {
+                CreateRunningProcessLookup();
+                if (_timer == null) {
+                    _timer = new DispatcherTimer(DispatcherPriority.Background) {
+                        Interval = TimeSpan.FromMilliseconds(300)
+                    };
+                    _timer.Tick += ProcessWatcherTimer_tick;
+                } else {
+                    _timer.Stop();
+                }
+                _timer.Start();
+            }
+
         }
         public void StopWatcher() {
            // _timer.Stop();
         }
 
+
+        public string ParseTitleForApplicationName(string windowTitle) {
+            string mwt = windowTitle;
+            if (string.IsNullOrEmpty(mwt)) {
+                return mwt;
+            }
+            var mwta = mwt.Split(new string[] { "-" }, StringSplitOptions.RemoveEmptyEntries);
+            if (mwta.Length == 1) {
+                if (string.IsNullOrEmpty(mwta[0])) {
+                    return "Explorer";
+                }
+                return mwta[0];
+            }
+            return mwta[mwta.Length - 1].Trim();
+        }
         public virtual IntPtr GetLastActiveInstance(string path) {
             if (RunningProcessLookup.TryGetValue(path.ToLower(), out var handles) && handles.Count > 0) {
                 return handles[0];
@@ -112,22 +123,23 @@ namespace MonkeyPaste.Avalonia {
 
         public abstract IntPtr GetParentHandleAtPoint(MpPoint poIntPtr);
 
-        public abstract void SetActiveProcess(IntPtr handle);
+        public abstract IntPtr SetActiveProcess(IntPtr handle);
 
-        public void SetActiveProcess(MpPortableProcessInfo pi, int waitForInputIdleTimeout = 30000) {
-            // is this necessary? 
-        }
 
-        public virtual string GetProcessApplicationName(IntPtr handle) {
-            foreach(var kvp in RunningProcessLookup) {
-                if(kvp.Value.Contains(handle)) {
-                    return kvp.Key;
-                }
+        public virtual string GetProcessApplicationName(IntPtr hWnd) {
+            string mwTitle = GetProcessTitle(hWnd);
+            string appName = ParseTitleForApplicationName(mwTitle);
+
+            if (string.IsNullOrWhiteSpace(appName)) {
+                // NOTE trying to enforce app name to not be empty or end up
+                // being file name when window title is normal pattern
+                string processPath = GetProcessPath(hWnd);
+                return Path.GetFileName(processPath);
             }
-            return String.Empty;
+            return appName;
         }
 
-        public virtual string GetProcessMainWindowTitle(IntPtr handle) {
+        public virtual string GetProcessTitle(IntPtr handle) {
             return GetProcessApplicationName(handle);
         }
 
@@ -189,7 +201,7 @@ namespace MonkeyPaste.Avalonia {
                 didActiveChange = true;
             }
 
-            //LastProcessInfo = activeProcessInfo;
+            _lastProcessInfo = activeProcessInfo;
             if (didActiveChange) {
                 MpConsole.WriteLine(string.Format(@"Last Window: {0} '{1}' ({2})", LastMainWindowTitle, LastProcessPath, LastHandle));
                 OnAppActivated?.Invoke(

@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common;
 using CefNet.Avalonia;
+using System.Reflection;
+using Avalonia.Controls;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvCefNetApplication : CefNetApplication {
@@ -21,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constants
 
         public const string JS_REF_ERROR = "JS_REF_ERROR";
-
+        public const string BLANK_URL = "about:blank";
         public static bool UseCefNet { get; private set; } = true;
         #endregion
 
@@ -63,7 +65,15 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
         public static void InitCefNet() {
+            ResetCefNetLogging();
             _ = new MpAvCefNetApplication();
+        }
+
+        public static void ResetCefNetLogging() {
+            string debug_log_path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "debug.log");
+            if (!string.IsNullOrEmpty(debug_log_path)) {
+                MpFileIo.WriteTextToFile(debug_log_path, string.Empty, false);
+            }
         }
 
         public static void ShutdownCefNet() {
@@ -121,6 +131,7 @@ namespace MonkeyPaste.Avalonia {
                     throw new Exception($"'CefNet cannot initialize, '{datFileSourcePath}' cannot be written to '{datFileTargetPath}'"+Environment.NewLine,ex);
                 }
             }
+
             
 
             var settings = new CefSettings();
@@ -155,7 +166,7 @@ namespace MonkeyPaste.Avalonia {
             settings.LogSeverity = CefLogSeverity.Verbose;
         
             App.FrameworkShutdown += App_FrameworkShutdown;
-
+            
             _messageHub = new MpAvCefNetMessageHub(this);
 
             Initialize(Path.Combine(cefRootDir, "Release"), settings);
@@ -163,34 +174,39 @@ namespace MonkeyPaste.Avalonia {
             return;
         }
         
-        protected override void OnBeforeCommandLineProcessing(string processType, CefCommandLine commandLine)
-        {
+        protected override void OnBeforeCommandLineProcessing(string processType, CefCommandLine commandLine)  {
             base.OnBeforeCommandLineProcessing(processType, commandLine);
             //return;
             // Console.WriteLine("ChromiumWebBrowser_OnBeforeCommandLineProcessing");
             // Console.WriteLine(commandLine.CommandLineString);
             //
-             //commandLine.AppendSwitchWithValue("proxy-server", "127.0.0.1:8888");
-            
-            // commandLine.AppendSwitch("ignore-certificate-errors");
-            // commandLine.AppendSwitchWithValue("remote-debugging-port", "9222");
-			         
-            // //enable-devtools-experiments
-            // commandLine.AppendSwitch("enable-devtools-experiments");
-            
-            // //e.CommandLine.AppendSwitchWithValue("user-agent", "Mozilla/5.0 (Windows 10.0) WebKa/" + DateTime.UtcNow.Ticks);
-            
-            // //("force-device-scale-factor", "1");
-            
-            // //commandLine.AppendSwitch("disable-gpu");
-            // //commandLine.AppendSwitch("disable-gpu-compositing");
-            // //commandLine.AppendSwitch("disable-gpu-vsync");
-            
-            // commandLine.AppendSwitch("enable-begin-frame-scheduling");
-            // commandLine.AppendSwitch("enable-media-stream");
-            
-            // commandLine.AppendSwitchWithValue("enable-blink-features", "CSSPseudoHas");
-            
+            //commandLine.AppendSwitchWithValue("proxy-server", "127.0.0.1:8888");
+
+            //commandLine.AppendSwitch("ignore-certificate-errors");
+            //commandLine.AppendSwitchWithValue("remote-debugging-port", "9222");
+
+            //enable-devtools-experiments
+            //commandLine.AppendSwitch("enable-devtools-experiments");
+
+            //e.CommandLine.AppendSwitchWithValue("user-agent", "Mozilla/5.0 (Windows 10.0) WebKa/" + DateTime.UtcNow.Ticks);
+
+            //double scale;
+            //if (App.Desktop == null || App.Desktop.MainWindow == null) {
+            //    scale = new Window().PlatformImpl.DesktopScaling;
+            //} else {
+            //    scale = App.Desktop.MainWindow.PlatformImpl.DesktopScaling;
+            //}
+            //commandLine.AppendSwitchWithValue("force-device-scale-factor", scale.ToString());
+
+            //commandLine.AppendSwitch("disable-gpu");
+            //commandLine.AppendSwitch("disable-gpu-compositing");
+            //commandLine.AppendSwitch("disable-gpu-vsync");
+
+            //commandLine.AppendSwitch("enable-begin-frame-scheduling");
+            //commandLine.AppendSwitch("enable-media-stream");
+
+            //commandLine.AppendSwitchWithValue("enable-blink-features", "CSSPseudoHas");
+
             commandLine.AppendSwitch("disable-component-update");
             if (OperatingSystem.IsLinux())
             {

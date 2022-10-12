@@ -369,14 +369,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsVerticalOrientation => !IsHorizontalOrientation;
 
-        //public MpMainWindowOrientationType MainWindowOrientationType {
-        //    get => (MpMainWindowOrientationType)Enum.Parse(typeof(MpMainWindowOrientationType), MpPrefViewModel.Instance.MainWindowOrientation, false);
-        //    set => MpPrefViewModel.Instance.MainWindowOrientation = value.ToString();
-        //}
-        //public MpMainWindowShowBehaviorType MainWindowShowBehaviorType {
-        //    get => (MpMainWindowShowBehaviorType)Enum.Parse(typeof(MpMainWindowShowBehaviorType), MpPrefViewModel.Instance.MainWindowDisplayType, false);
-        //    set => MpPrefViewModel.Instance.MainWindowDisplayType = value.ToString();
-        //}
         public MpMainWindowOrientationType MainWindowOrientationType { get; private set; }
         public MpMainWindowShowBehaviorType MainWindowShowBehaviorType { get; private set; }
         public int MainWindowMonitorIdx {
@@ -420,13 +412,13 @@ namespace MonkeyPaste.Avalonia {
 
         //public event EventHandler? OnMainWindowOpened;
 
-        public event EventHandler? OnMainWindowClosed;
+        //public event EventHandler? OnMainWindowClosed;
         #endregion
 
         public MpAvMainWindowViewModel() : base() {
             _animationCts = new CancellationTokenSource();
             MainWindowOrientationType = (MpMainWindowOrientationType)Enum.Parse(typeof(MpMainWindowOrientationType), MpPrefViewModel.Instance.MainWindowOrientation, false);
-            MainWindowShowBehaviorType = (MpMainWindowShowBehaviorType)Enum.Parse(typeof(MpMainWindowShowBehaviorType), MpPrefViewModel.Instance.MainWindowDisplayType, false);
+            MainWindowShowBehaviorType = (MpMainWindowShowBehaviorType)Enum.Parse(typeof(MpMainWindowShowBehaviorType), MpPrefViewModel.Instance.MainWindowShowBehaviorType, false);
             PropertyChanged += MpAvMainWindowViewModel_PropertyChanged;
             //InitWindowTimers();
         }
@@ -561,13 +553,9 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsMainWindowActive):
                     if(IsMainWindowActive) {
                         MpMessenger.SendGlobal(MpMessageType.MainWindowActivated);
-                        // NOTE do NOT show window on activate to animate close it temporariliy activates 
                     } else {
                         MpMessenger.SendGlobal(MpMessageType.MainWindowDeactivated);
-                        //if(!MpAvClipTrayViewModel.Instance.IsPasting) {
-                            // wehen pasting hide window is called in paste workflow
-                            HideWindowCommand.Execute(null);
-                       // }
+                        HideWindowCommand.Execute(null);
                     }
                     break;
                 case nameof(DragMouseMainWindowLocation):
@@ -581,10 +569,10 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(MainWindowOrientationType):
-                    MpPrefViewModel.Instance.MainWindowDisplayType = MainWindowOrientationType.ToString();
+                    MpPrefViewModel.Instance.MainWindowOrientation = MainWindowOrientationType.ToString();
                     break;
                 case nameof(MainWindowShowBehaviorType):
-                    MpPrefViewModel.Instance.MainWindowDisplayType = MainWindowShowBehaviorType.ToString();
+                    MpPrefViewModel.Instance.MainWindowShowBehaviorType = MainWindowShowBehaviorType.ToString();
                     break;
             }
         }
@@ -609,7 +597,7 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine("SHOW WINDOW DONE");
         }
         
-        private void FinishMainWindowHide(MpPortableProcessInfo active_pinfo) {
+        public void FinishMainWindowHide(MpPortableProcessInfo active_pinfo) {
 
             if(_animationCts.IsCancellationRequested) {
                 MpConsole.WriteLine("FinishHide canceled, ignoring view changes");
@@ -623,9 +611,10 @@ namespace MonkeyPaste.Avalonia {
             MainWindowScreenRect = MainWindowClosedScreenRect;
             IsMainWindowVisible = false;
             MpAvMainWindow.Instance.Hide();
-            MpAvMainWindow.Instance.Renderer.Stop();
+            MpAvMainWindow.Instance.Topmost = false;
+            //MpAvMainWindow.Instance.Renderer.Stop();
 
-            OnMainWindowClosed?.Invoke(this, EventArgs.Empty);
+            //OnMainWindowClosed?.Invoke(this, EventArgs.Empty);
             MpMessenger.SendGlobal(MpMessageType.MainWindowHid);
 
             if(active_pinfo != null) {
@@ -652,6 +641,14 @@ namespace MonkeyPaste.Avalonia {
             double[] xt = endRect.Sides;
             double[] v = new double[4];
 
+            int anchor_idx = MainWindowOrientationType switch {
+                MpMainWindowOrientationType.Left => 0,
+                MpMainWindowOrientationType.Top => 1,
+                MpMainWindowOrientationType.Right => 2,
+                MpMainWindowOrientationType.Bottom => 3,
+                _ => throw new NotImplementedException()
+            };
+
             bool isDone = false;
             DateTime prevTime = DateTime.Now;
             EventHandler tick = (s, e) => {
@@ -659,10 +656,13 @@ namespace MonkeyPaste.Avalonia {
                 double dt = (curTime - prevTime).TotalMilliseconds / 1000.0d;
                 prevTime = curTime;
                 for (int i = 0; i < x.Length; i++) {
-                    Spring(ref x[i], ref v[i], xt[i], zeta, omega, dt);
-                    //ClampAnchoredSide(ref x[i], ref v[i], i);
+                    if(i == anchor_idx) {
+                        // anchor_idx is 'critically dampened' to 1 so it does not oscillate (doesn't animate past screen edge)
+                        Spring(ref x[i], ref v[i], xt[i], 1, omega, dt);
+                    } else {
+                        Spring(ref x[i], ref v[i], xt[i], zeta, omega, dt);
+                    }
                 }
-                //x = ClampAnchoredSide(x);
                 MainWindowScreenRect = new MpRect(x);
 
                 bool is_v_zero = v.All(x => Math.Abs(x) < 0.1d);
@@ -794,7 +794,7 @@ namespace MonkeyPaste.Avalonia {
                 if (AnimateShowWindow) {
                     MpAvMainWindow.Instance.Show();
                     MpAvMainWindow.Instance.Topmost = false;
-                    MpAvMainWindow.Instance.Renderer.Start();
+                    //MpAvMainWindow.Instance.Renderer.Start();
 
                     _animationCts.TryReset();
                     await AnimateMainWindowAsync(MainWindowScreenRect, MainWindowOpenedScreenRect, _animationCts.Token);
@@ -839,11 +839,15 @@ namespace MonkeyPaste.Avalonia {
                 IsMainWindowClosing = true;
 
                 MpPortableProcessInfo active_pinfo = null;
-                if(AnimateHideWindow) {
-                    active_pinfo = MpAvMainWindow.Instance.IsActive ? null : MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
-                    MpAvMainWindow.Instance.Activate();
+                if(!MpAvClipTrayViewModel.Instance.IsPasting) {
+                    // let external paste handler sets active after hide signal because when pasting the activated app may not be last active 
+                    active_pinfo = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
+                }
+                if(AnimateHideWindow) {// && ) {
+                    //MpAvMainWindow.Instance.Activate();
+                    //MpPlatformWrapper.Services.ProcessWatcher.SetActiveProcess(MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle);
                     MpAvMainWindow.Instance.Topmost = false;
-                    MpAvMainWindow.Instance.Renderer.Start();
+                    //MpAvMainWindow.Instance.Renderer.Start();
                     _animationCts.TryReset();
                     await AnimateMainWindowAsync(MainWindowScreenRect, MainWindowClosedScreenRect, _animationCts.Token);
                 }
@@ -856,8 +860,7 @@ namespace MonkeyPaste.Avalonia {
                           !IsAnyDropDownOpen &&
                           !IsDropOverMainWindow &&
                           !IsMainWindowInitiallyOpening &&
-                          !IsShowingDialog &&
-                          
+                          !IsShowingDialog &&                          
                           !IsDropOverMainWindow &&
                           //!MpContextMenuView.Instance.IsOpen &&
                           //!IsMainWindowOpening &&
