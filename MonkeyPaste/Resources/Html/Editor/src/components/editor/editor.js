@@ -423,17 +423,7 @@ function isEditorElement(elm) {
 	return false;
 }
 
-async function getContentImageBase64Async() {
-	let base64Str = await getBase64ScreenshotOfElementAsync(getEditorElement());
 
-	return base64Str;
-}
-
-function getContentImageBase64() {
-	let base64Str = getBase64ScreenshotOfElement(getEditorElement());
-
-	return base64Str;
-}
 
 function isRunningInHost() {
 	return typeof notifyException === 'function';

@@ -25,6 +25,17 @@ function rectContainsRect(rect, r) {
     return isPointInRect(rect, { x: r.left, y: r.top }) && isPointInRect(rect, { x: r.right, y: r.bottom });
 }
 
+function rectIntersect(rect_a, rect_b) {
+    let rect_u = {
+        left: Math.min(rect_a.left, rect_b.left),
+        top: Math.min(rect_a.top, rect_b.top),
+        right: Math.max(rect_a.right, rect_b.right),
+        bottom: Math.max(rect_a.bottom, rect_b.bottom),
+    }
+    rect_u = cleanRect(rect_u);
+    return rect_u;
+}
+
 function rectUnion(rect_a, rect_b) {
     let rect_u = {
         left: Math.min(rect_a.left, rect_b.left),
@@ -34,6 +45,18 @@ function rectUnion(rect_a, rect_b) {
     }
     rect_u = cleanRect(rect_u);
     return rect_u;
+}
+
+function rectsUnion(rects) {
+    let union_rect = null;
+    for (var i = 0; i < rects.length; i++) {
+        if (!union_rect) {
+            union_rect = rects[i];
+        } else {
+            union_rect = rectUnion(union_rect, rects[i]);
+        }
+    }
+    return union_rect;
 }
 
 function inflateRect(rect, dl, dt, dr, db) {

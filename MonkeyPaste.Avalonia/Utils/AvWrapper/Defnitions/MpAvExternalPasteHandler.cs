@@ -86,6 +86,7 @@ namespace MonkeyPaste.Avalonia {
             // SET CLIPBOARD
 
             MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = true;
+
             await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo);
 
             // ACTIVATE TARGET
@@ -104,8 +105,7 @@ namespace MonkeyPaste.Avalonia {
             await MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeSequenceAsync(pasteCmdKeyString);
 
             if (finishWithEnterKey) {
-                await Task.Delay(100);
-                MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeSequence(MpKeyLiteralStringHelpers.ENTER_KEY_LITERAL);
+                await MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeSequenceAsync(MpKeyLiteralStringHelpers.ENTER_KEY_LITERAL);
             }
 
             await Task.Delay(300);

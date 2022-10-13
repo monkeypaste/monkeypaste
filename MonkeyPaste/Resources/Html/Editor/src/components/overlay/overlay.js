@@ -275,15 +275,15 @@ function caretBlinkTick() {
 
 
 function drawOverlay() {
-    let canvas = document.getElementById('overlayCanvas');
-    updateOverlayBounds(canvas);
+    let overlayCanvas = document.getElementById('overlayCanvas');
+    updateOverlayBounds(overlayCanvas);
 
-    if (!canvas.getContext) {
+    if (!overlayCanvas.getContext) {
         return;
     }
 
-    let ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let ctx = overlayCanvas.getContext('2d');
+    ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
     drawTextSelection(ctx);
 

@@ -3177,26 +3177,12 @@ namespace MonkeyPaste.Avalonia {
         public ICommand PasteSelectedClipsCommand => new MpAsyncCommand<object>(
             async (args) => {
                 
-                IsPasting = true;
-
+                SelectedItem.IsPasting = true;
 
                 MpAvDataObject mpdo = await SelectedItem.GetContentView().Document.GetDataObjectAsync(false,true);
 
                 await Task.Delay(100);
                 var pi = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
-                //if(pi == null) {
-                //    var sw = Stopwatch.StartNew();
-                //    await Task.Delay(20);
-                //    while (pi == null) {
-                //        pi = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
-                //        if(pi == null && sw.ElapsedMilliseconds > 500) {
-                //            // need to put watcher back...
-                //            Debugger.Break();
-                //            return;
-                //        }
-                //        await Task.Delay(20);
-                //    }
-                //}
                 await MpPlatformWrapper.Services.ExternalPasteHandler.PasteDataObject(
                     mpdo, pi);
 

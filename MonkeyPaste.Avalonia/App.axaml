@@ -1,6 +1,6 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:s="clr-namespace:System;assembly=mscorlib"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="using:MonkeyPaste.Avalonia"
              x:DataType="local:MpAvSystemTrayViewModel"
              x:CompileBindings="True"
@@ -64,6 +64,20 @@
         <CornerRadius x:Key="TileCornerRadius">
             10,10,10,10
         </CornerRadius>
+
+        <!--  Theme  -->
+        <sys:Double x:Key="GlobalBgOpacity">
+            0.7
+        </sys:Double>
+        <SolidColorBrush x:Key="FilterMenuBgColor"
+                         Color="Purple"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="QueryTrayBgColor"
+                         Color="Purple"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="PinTrayBgColor"
+                         Color="Teal"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
     </Application.Resources>
     <Application.Styles>
         <FluentTheme Mode="Light" />

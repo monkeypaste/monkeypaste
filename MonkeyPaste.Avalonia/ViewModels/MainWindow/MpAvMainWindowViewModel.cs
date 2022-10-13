@@ -25,6 +25,8 @@ namespace MonkeyPaste.Avalonia {
         //private DispatcherTimer _windowCloseTimer;
         //private double _windowTimerStep;
         //private double d_l, d_r, d_t, d_b;
+
+        private int _animateTimeOut_ms = 5000;
         private CancellationTokenSource _animationCts;
 
         #endregion
@@ -780,7 +782,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (IsMainWindowClosing) {
                     _animationCts?.Cancel();
-                    while (IsMainWindowClosing) { await Task.Delay(5); }
+                    //while (IsMainWindowClosing) { await Task.Delay(5); }
                 }
 
                 SetupMainWindowSize();
@@ -816,6 +818,18 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine($"IsMainWindowClosing: {(IsMainWindowClosing)}");
                     MpConsole.WriteLine($"IsMainWindowOpening: {(IsMainWindowOpening)}");
                     MpConsole.WriteLine("");
+                    if(IsMainWindowInitiallyOpening) {
+                        return canShow;
+                    }
+
+                    if(IsMainWindowOpening) {
+                        canShow = _animationCts.TryReset();
+                        MpConsole.WriteLine("Canceling opening: " + canShow);
+                    }
+                    if (IsMainWindowClosing) {
+                        canShow = _animationCts.TryReset();
+                        MpConsole.WriteLine("Canceling closing: " + canShow);
+                    }
                 }
                 return canShow;
             });
@@ -832,7 +846,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if(IsMainWindowOpening) {
                     _animationCts?.Cancel();
-                    while(IsMainWindowOpening) { await Task.Delay(5); }
+                    //while(IsMainWindowOpening) { await Task.Delay(5); }
                 }
                 
 
@@ -843,9 +857,12 @@ namespace MonkeyPaste.Avalonia {
                     // let external paste handler sets active after hide signal because when pasting the activated app may not be last active 
                     active_pinfo = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
                 }
-                if(AnimateHideWindow) {// && ) {
-                    //MpAvMainWindow.Instance.Activate();
-                    //MpPlatformWrapper.Services.ProcessWatcher.SetActiveProcess(MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle);
+                if(AnimateHideWindow) {
+                    if (!MpAvClipTrayViewModel.Instance.IsPasting) {
+                        // let external paste handler sets active after hide signal because when pasting the activated app may not be last active 
+                        MpPlatformWrapper.Services.ProcessWatcher.SetActiveProcess(MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle);
+                    }
+                    //
                     MpAvMainWindow.Instance.Topmost = false;
                     //MpAvMainWindow.Instance.Renderer.Start();
                     _animationCts.TryReset();

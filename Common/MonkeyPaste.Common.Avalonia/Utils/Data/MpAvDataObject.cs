@@ -108,15 +108,16 @@ namespace MonkeyPaste.Common.Avalonia {
             } else if(OperatingSystem.IsWindows()) {
                 if(ContainsData(MpPortableDataFormats.AvPNG) && 
                     GetData(MpPortableDataFormats.AvPNG) is string png64) {
-                    SetData(MpPortableDataFormats.AvPNG, png64.ToByteArray());
+                    //SetData(MpPortableDataFormats.AvPNG, png64.ToByteArray());
                 }
                 if(ContainsData(MpPortableDataFormats.AvPNG) &&
                     GetData(MpPortableDataFormats.AvPNG) is byte[] pngBytes) {
-#if WINDOWS
-                    //SetData(MpPortableDataFormats.WinBitmap, pngBytes);
-                    //SetData(MpPortableDataFormats.WinDib, pngBytes);
-                    SetBitmap(pngBytes);
-#endif
+//#if WINDOWS
+//                    //SetData(MpPortableDataFormats.WinBitmap, pngBytes);
+//                    //SetData(MpPortableDataFormats.WinDib, pngBytes);
+//                    SetBitmap(pngBytes);
+//#endif
+                    
                 } 
             }
 
@@ -176,7 +177,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
                 SetData(MpPortableDataFormats.WinBitmap, compatibleBitmap);
             }
-            catch (Exception e) {
+            catch (Exception) {
 
             }
             finally {

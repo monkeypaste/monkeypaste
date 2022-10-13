@@ -60,8 +60,8 @@ namespace MonkeyPaste.Common {
         public const string Csv = "CSV";
         public const string Unicode = "Unicode";
         public const string OemText = "OEMText";
-        public const string WinBitmap = "CF_BITMAP";
-        public const string WinDib = "CF_DIB";
+        public const string WinBitmap = "Bitmap";
+        public const string WinDib = "DeviceIndependentBitmap";
 
         public const string WinRtf = "Rich Text Format";
         public const string WinHtml = "HTML Format";

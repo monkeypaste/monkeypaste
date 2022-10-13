@@ -57,8 +57,7 @@ function contentRequest_ext(contentReqMsgStr_base64) {
 				// only respond w/ sub-selection if neither none nor all is selected
 				sel = getEditorSelection();
 			}
-		}
-		
+		}		
 	}
 
 	let items = [];
@@ -81,7 +80,7 @@ function contentRequest_ext(contentReqMsgStr_base64) {
 		} else if (format == 'PNG') {
 			// trigger async screenshot notification where host needs to null and wait for value to avoid async issues
 			if (ContentItemType != 'Image') {
-				onCreateContentScreenShot_ntf();
+				onCreateContentScreenShot_ntf(sel);
 				data = 'pending...';
 			} else {
 				//data = ContentData;
@@ -364,16 +363,6 @@ function getEncodedDataFromRange_ext(encRangeMsgBase64Str) {
 		encodedRangeData: rangeData
 	};
 	let resp = toBase64FromJsonObj(encRangeRespMsg);
-	return resp;
-}
-
-async function getContentImageBase64Async_ext() {
-	// output MpQuillGetEditorScreenshotResponseMessage
-	let base64Str = await getContentImageBase64Async();
-	let ssRespMsg = {
-		base64ImgStr: base64Str
-	};
-	let resp = toBase64FromJsonObj(ssRespMsg);
 	return resp;
 }
 

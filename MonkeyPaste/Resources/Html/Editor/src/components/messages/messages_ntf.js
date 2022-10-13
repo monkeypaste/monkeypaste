@@ -121,10 +121,10 @@ function onException_ntf(exType, exData) {
 	}	
 } 
 
-async function onCreateContentScreenShot_ntf() {
+async function onCreateContentScreenShot_ntf(sel) {
 	// output 'MpQuillContentScreenShotNotificationMessage'
 	if (typeof notifyContentScreenShot === 'function') {
-		let result = await getBase64ScreenshotOfElementAsync(getEditorContainerElement());
+		let result = await getContentImageBase64Async(sel);
 		let msg = {
 			contentScreenShotBase64: result
 		};

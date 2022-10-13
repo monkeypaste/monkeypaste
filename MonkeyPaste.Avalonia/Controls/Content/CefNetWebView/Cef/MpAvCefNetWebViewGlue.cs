@@ -100,6 +100,11 @@ namespace MonkeyPaste.Avalonia {
                 }
                 MpAvDataObject avmpdo = await wv.Document.GetDataObjectAsync(false, false);
                 ctvm.IsTileDragging = avmpdo.ContainsData(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT);
+
+                // seems excessive...but ultimately all ole pref's come from plugins so pass everthing through cb plugin system just like writing to clipboard
+                avmpdo = await MpPlatformWrapper.Services.DataObjectHelperAsync.WriteDragDropDataObject(avmpdo) as MpAvDataObject;
+
+
                 while (pe == null) {
                     await Task.Delay(100);
                 }

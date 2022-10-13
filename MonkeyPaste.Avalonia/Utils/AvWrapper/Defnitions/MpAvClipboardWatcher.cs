@@ -91,7 +91,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void CheckClipboard() {
-            if(_isCheckingClipboard || _ignoringChanges) {
+            if(_isCheckingClipboard || IgnoreClipboardChanges) {
+                if(IgnoreClipboardChanges && !_ignoringChanges) {
+                    _ignoringChanges = true;
+                }
                 // NOTE internal ignore is set after last read
                 return;
             }
@@ -99,9 +102,6 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(async () => { await CheckClipboardHelper(); });
         }
         private async Task CheckClipboardHelper() {
-            //while (MpClipboardManager.ThisAppHandle == null || MpClipboardManager.ThisAppHandle == IntPtr.Zero) {
-            //    Thread.Sleep(100);
-            //}
             //setting last here will ensure item on cb isn't added when starting
             if (_lastCbo == null) {
                 _lastCbo = await ConvertManagedFormats();
@@ -112,11 +112,7 @@ namespace MonkeyPaste.Avalonia {
             if (HasChanged(cbo)) {
                 MpConsole.WriteLine("Cb changed");
                  _lastCbo = cbo;
-                if(IgnoreClipboardChanges) {
-                    MpConsole.WriteLine("...but ignoring it :p");
-                    _ignoringChanges = true;
-                    return;
-                } else if(_ignoringChanges) {
+                 if(_ignoringChanges) {
                     MpConsole.WriteLine("Resuming cb watching. Noting new cbo but suppressing change signal");
                     _ignoringChanges = false;
                     return;

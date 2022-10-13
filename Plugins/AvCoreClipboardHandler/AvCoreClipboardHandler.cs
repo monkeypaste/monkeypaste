@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using Avalonia;
+using MonkeyPaste.Common.Wpf;
+using Clowd.Clipboard;
 
 namespace AvCoreClipboardHandler {
     public class AvCoreClipboardHandler :
@@ -17,7 +19,7 @@ namespace AvCoreClipboardHandler {
 
         private IntPtr _mainWindowHandle;
 
-        private bool _isReadingOrWriting = false;
+        private static bool _isReadingOrWriting = false;
         private enum CoreClipboardParamType {
             None = 0,
             //readers
@@ -75,8 +77,10 @@ namespace AvCoreClipboardHandler {
 
         async Task<MpClipboardReaderResponse> MpIClipboardReaderComponentAsync.ReadClipboardDataAsync(MpClipboardReaderRequest request) {
             //MpConsole.WriteLine("Reading clipboard...");
-           if(_isReadingOrWriting) {
-                Debugger.Break();
+
+           while(_isReadingOrWriting) {
+                MpConsole.WriteLine("waiting for clipboard (READER)...");
+                await Task.Delay(100);
             }
             
             // MpClipboardReaderResponse hasError = CanHandleDataObject(request);
@@ -312,7 +316,7 @@ namespace AvCoreClipboardHandler {
             }
             IntPtr mwHandle = new IntPtr(request.mainWindowImplicitHandle);
             //MpConsole.WriteLine("mw handle - int: " + request.mainWindowImplicitHandle + " intPtr: " + mwHandle);
-            uint CF_HTML;//, CF_RTF, CF_CSV, CF_TEXT = 1, CF_BITMAP = 2, CF_DIB = 8, CF_HDROP = 15, CF_UNICODE_TEXT, CF_OEM_TEXT;
+            //uint CF_HTML;//, CF_RTF, CF_CSV, CF_TEXT = 1, CF_BITMAP = 2, CF_DIB = 8, CF_HDROP = 15, CF_UNICODE_TEXT, CF_OEM_TEXT;
             if (mwHandle != IntPtr.Zero &&
                 _mainWindowHandle == IntPtr.Zero) {
                 // isolate first posssible request (need handle for WinApi.IsClipboardOpen)
@@ -320,7 +324,7 @@ namespace AvCoreClipboardHandler {
                 //CF_UNICODE_TEXT = WinApi.RegisterClipboardFormatA("UnicodeText");
                 //CF_BITMAP = WinApi.RegisterClipboardFormatA("Bitmap");
                 //CF_OEM_TEXT = WinApi.RegisterClipboardFormatA("OemText");
-                CF_HTML = WinApi.RegisterClipboardFormatA("HTML Format");
+                //CF_HTML = WinApi.RegisterClipboardFormatA("HTML Format");
                 //CF_RTF = WinApi.RegisterClipboardFormatA("Rich Text Format");
                 //CF_CSV = WinApi.RegisterClipboardFormatA(DataFormats.CommaSeparatedValue);
                 //CF_DIB = WinApi.RegisterClipboardFormatA("DeviceIndependentBitmap");
@@ -345,62 +349,66 @@ namespace AvCoreClipboardHandler {
                 return null;
             }
 
-            if (_isReadingOrWriting) {
-                Debugger.Break();
+            while (_isReadingOrWriting) {
+                //Debugger.Break();
+                MpConsole.WriteLine("waiting for clipboard (WRITER)...");
+                await Task.Delay(10);
             }
-            MpAvDataObject dataObj = null;
-            if(request.data is MpAvDataObject) {
-                dataObj = request.data as MpAvDataObject;
-            } else {
-                if(request.data != null) {
-                    // needs to be avdo
-                    Debugger.Break();
-                    return null;
-                }
-                dataObj = new MpAvDataObject();
-            }
+            MpAvDataObject dataObj = request.data as MpAvDataObject ?? new MpAvDataObject();
             _isReadingOrWriting = true;
-            foreach (var kvp in request.data.DataFormatLookup) {
-                string format = kvp.Key.Name;
-                object data = kvp.Value;
-                switch (format) {
-                    case MpPortableDataFormats.AvPNG:
-                        //var bmpSrc = data.ToString().ToBitmapSource(false);
+            //foreach (var kvp in request.data.DataFormatLookup) {
+            //    string format = kvp.Key.Name;
+            //    object data = kvp.Value;
+            //    switch (format) {
+            //        case MpPortableDataFormats.AvPNG:
+            //            //var bmpSrc = data.ToString().ToBitmapSource(false);
 
-                        //var winforms_dataobject = MpClipoardImageHelpers.GetClipboardImage_WinForms(bmpSrc.ToBitmap(), null, null);
-                        //var pngData = winforms_dataobject.GetData("PNG");
-                        //var dibData = winforms_dataobject.GetData(DataFormats.Dib);
-                        //dataObj.Set(MpPortableDataFormats.Bitmap, bmpSrc);
-                        dataObj.SetData(MpPortableDataFormats.AvPNG, data.ToString().ToByteArray());
-                        //dataObj.Set(DataFormats.Dib, dibData);
-                        break;
-                    case MpPortableDataFormats.AvFileNames:
-                        var fl = data.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-                        dataObj.SetData("FileNames", fl.ToList());
-                        break;
-                    case MpPortableDataFormats.AvHtml_bytes:
-                        var bytes = data.ToString().ToEncodedBytes();
-                        dataObj.SetData(MpPortableDataFormats.AvHtml_bytes, bytes);
-                        break;
-                    default:
-                        dataObj.SetData(format, data);
-                        break;
+            //            //var winforms_dataobject = MpClipoardImageHelpers.GetClipboardImage_WinForms(bmpSrc.ToBitmap(), null, null);
+            //            //var pngData = winforms_dataobject.GetData("PNG");
+            //            //var dibData = winforms_dataobject.GetData(DataFormats.Dib);
+            //            //dataObj.Set(MpPortableDataFormats.Bitmap, bmpSrc);
+            //            dataObj.SetData(MpPortableDataFormats.AvPNG, data.ToString().ToByteArray());
+            //            //dataObj.Set(DataFormats.Dib, dibData);
+            //            break;
+            //        case MpPortableDataFormats.AvFileNames:
+            //            var fl = data.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            //            dataObj.SetData("FileNames", fl.ToList());
+            //            break;
+            //        case MpPortableDataFormats.AvHtml_bytes:
+            //            var bytes = data.ToString().ToEncodedBytes();
+            //            dataObj.SetData(MpPortableDataFormats.AvHtml_bytes, bytes);
+            //            break;
+            //        default:
+            //            dataObj.SetData(format, data);
+            //            break;
+            //    }
+            //}
+
+           
+            if (request.writeToClipboard) {
+                await Application.Current.Clipboard.SetDataObjectAsync(dataObj);
+
+
+                if (OperatingSystem.IsWindows()) {
+                    if (dataObj.ContainsData(MpPortableDataFormats.AvPNG) &&
+                        dataObj.GetData(MpPortableDataFormats.AvPNG) is byte[] pngBytes) {
+                        MpWpfClipoardImageHelper.SetWinImageDataObjects(pngBytes);
+                        //var win_img_obj_parts = MpWpfClipoardImageHelper.GetWinImageDataObjects(pngBytes);
+
+                        //dataObj.SetData(MpPortableDataFormats.WinBitmap, win_img_obj_parts[0]);
+                        //dataObj.SetData(MpPortableDataFormats.WinDib, win_img_obj_parts[1]);
+                        //if (request.writeToClipboard) {
+                        //    imgSet = true;
+                        //    ClipboardAvalonia.SetImage(pngBytes.ToAvBitmap());
+                        //}
+
+                    }
+
+                    // TODO add HTML->RTF convertsion here
                 }
             }
-            if (request.writeToClipboard) {
-                //bool wasOpen = false;
-                //while (WinApi.IsClipboardOpen() != IntPtr.Zero) {
-                //    wasOpen = true;
-                //    await Task.Delay(10);
-                //}
-                //if(wasOpen) {
-                //    await Task.Delay(100);
-                //}
-                await Application.Current.Clipboard.SetDataObjectAsync(dataObj);
-                //await Application.Current.Clipboard.SetTextAsync("TESTZZZZZZZZZ");
 
 
-            }
             _isReadingOrWriting = false;
             return new MpClipboardWriterResponse() {
                 platformDataObject = dataObj

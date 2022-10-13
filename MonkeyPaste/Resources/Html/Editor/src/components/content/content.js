@@ -20,7 +20,7 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest) {
 	// enusre IsLoaded is false so msg'ing doesn't get clogged up
 	IsLoaded = false;
 
-	let contentBg_rgba = getContentBg(contentData);
+	//let contentBg_rgba = getContentBg(contentData);
 
 	enableReadOnly();
 
@@ -34,7 +34,7 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest) {
 		loadTextContent(contentData, isPasteRequest);
 	}
 
-	getEditorElement().style.backgroundColor = rgbaToCssColor(contentBg_rgba);
+	//getEditorElement().style.backgroundColor = rgbaToCssColor(contentBg_rgba);
 
 	updateAllSizeAndPositions();
 	IsLoaded = true;
@@ -232,15 +232,15 @@ function getDocLength() {
 	return quill.getLength();
 }
 
-function getCharacterRect(docIdx, inflateX = false, inflateY = false) {
+function getCharacterRect(docIdx, inflateX = false, inflateY = false, isWindowOrigin = true) {
 	if (isNaN(parseFloat(docIdx))) {
 		return cleanRect();
 	}
 
-
 	let docIdx_rect = quill.getBounds(docIdx, 1);
-	docIdx_rect = editorToScreenRect(docIdx_rect);
-
+	if (isWindowOrigin) {
+		docIdx_rect = editorToScreenRect(docIdx_rect);
+	}
 
 	if (inflateX || inflateY) {
 		inflateCharacterRect(docIdx, docIdx_rect, inflateX, inflateY);
@@ -331,14 +331,14 @@ function getLineRect(lineIdx, snapToEditor = true) {
 	return line_rect;
 }
 
-function getRangeRects(range, inflateX = null, inflateY = null) {
+function getRangeRects(range, inflateX = null, inflateY = null, isWindowOrigin = true) {
 	let range_rects = [];
 	if (!range || range.length == 0) {
 		return range_rects;
 	}
 	let cur_line_rect = null;
 	for (var i = range.index; i < range.index + range.length; i++) {
-		let cur_idx_rect = getCharacterRect(i, inflateX, inflateY);
+		let cur_idx_rect = getCharacterRect(i, inflateX, inflateY, isWindowOrigin);
 		if (cur_line_rect == null) {
 			//new line
 			cur_line_rect = cur_idx_rect
@@ -611,6 +611,17 @@ function getElementDocRange(elm) {
 		index: elm_index,
 		length: elm_length
 	};
+}
+
+
+async function getContentImageBase64Async(sel) {
+	let sel_rects = null;
+	if (sel) {
+		sel_rects = getRangeRects(sel, null, null, false);
+	}
+	let base64Str = await getBase64ScreenshotOfElementAsync(getEditorContainerElement(), sel_rects);
+
+	return base64Str;
 }
 
 

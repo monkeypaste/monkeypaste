@@ -50,8 +50,10 @@ function init_test() {
 		useBetterTable: true
 	};
 
+
 	initMain_ext(toBase64FromJsonObj(req));
 
+	//enableFancyTextSelection();
 	// let contentHandle = '<TEST-CONTENT-HANDLE';
 	// let contentType = 'Text';// 'FileList';
 	// let isPasteRequest = false;

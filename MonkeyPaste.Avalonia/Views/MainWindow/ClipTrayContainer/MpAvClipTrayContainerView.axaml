@@ -75,7 +75,12 @@
         </GridSplitter>
         <local:MpAvClipTrayView x:Name="ClipTrayView"
                                 Grid.Column="1"
-                                Background="{Binding ClipTrayBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                                DataContext="{Binding}" />
+                                Background="{DynamicResource QueryTrayBgColor}"
+                                DataContext="{Binding}">
+            <!--<local:MpAvClipTrayView.Background>
+                <SolidColorBrush Color="Purple"
+                                 Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
+            </local:MpAvClipTrayView.Background>-->
+        </local:MpAvClipTrayView>
     </Grid>
 </local:MpAvUserControl>

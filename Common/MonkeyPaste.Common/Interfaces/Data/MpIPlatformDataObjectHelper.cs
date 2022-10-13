@@ -9,8 +9,8 @@ namespace MonkeyPaste.Common {
     }
 
     public interface MpIPlatformDataObjectHelperAsync {
-        Task<MpPortableDataObject> ConvertToSupportedPortableFormatsAsync(object nativeDataObj, int retryCount = 5);
-        Task<object> ConvertToPlatformClipboardDataObjectAsync(MpPortableDataObject portableObj);
+        Task<MpPortableDataObject> ReadDragDropDataObject(object nativeDataObj, int retryCount = 5);
+        Task<object> WriteDragDropDataObject(MpPortableDataObject portableObj);
         Task SetPlatformClipboardAsync(MpPortableDataObject portableObj);
         Task<MpPortableDataObject> GetPlatformClipboardDataObjectAsync();
     }

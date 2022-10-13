@@ -29,6 +29,32 @@ namespace MonkeyPaste.Common.Wpf {
             return null;
         }
 
+        public static object[] GetWinImageDataObjects(byte[] bytes) {
+            if (bytes.ToBitmapSource() is BitmapSource bmpSrc &&
+               bmpSrc.ToBitmap() is Bitmap bmp) {
+
+                var wpfdo = GetClipboardImage_WinForms(bmp, null, null);
+                var dib_data = wpfdo.GetData(DataFormats.Dib);
+                return new[] { bmpSrc, dib_data };
+            }
+            return null;
+        }
+
+        public static void SetWinImageDataObjects(byte[] bytes) {
+            if (bytes.ToBitmapSource() is BitmapSource bmpSrc &&
+               bmpSrc.ToBitmap(System.Drawing.Color.White) is Bitmap bmp) {
+
+                var wpfdo = GetClipboardImage_WinForms(bmp, null, null);
+                var dib_data = wpfdo.GetData(DataFormats.Dib);
+                //System.Windows.Clipboard.SetImage(bmpSrc);
+                //Clipboard.SetData(DataFormats.Bitmap, bmp);
+                Clipboard.SetImage(bmp);
+                Clipboard.SetData(DataFormats.Dib, dib_data);
+
+            }
+
+        }
+
         /// <summary>
         /// Copies the given image to the clipboard as PNG, DIB and standard Bitmap format.
         /// </summary>
@@ -58,6 +84,7 @@ namespace MonkeyPaste.Common.Wpf {
             Byte[] dibData = ConvertToDib(image);
             dibMemStream.Write(dibData, 0, dibData.Length);
             data.SetData(DataFormats.Dib, false, dibMemStream);
+            //dibMemStream.Position = 0;
             // The 'copy=true' argument means the MemoryStreams can be safely disposed after the operation.
             //Clipboard.SetDataObject(data, true);
             return data;

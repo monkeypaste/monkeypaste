@@ -2278,8 +2278,10 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsContextMenuOpen));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyTileContextMenuOpened));
                     break;
+                case nameof(IsPasting):
+                    Parent.OnPropertyChanged(nameof(Parent.IsPasting));
+                    break;
                 case nameof(IsTileDragging):
-                    //Parent.OnPropertyChanged(nameof(Parent.TileBorderBrush));
                     if (IsTileDragging) {
                         StartAnimation();
                         if (!IsSubSelectionEnabled) {

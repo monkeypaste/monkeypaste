@@ -61,6 +61,7 @@ namespace MonkeyPaste.Avalonia {
                             MpPortableDataFormats.AvFileNames, 
                             ctvm.CopyItemData.ToFile(
                                 forceNamePrefix: ctvm.CopyItemTitle,
+                                forceExt: ctvm.ItemType == MpCopyItemType.Image ? "png":"txt",
                                 isTemporary: true));
                     }
 
@@ -73,6 +74,8 @@ namespace MonkeyPaste.Avalonia {
 
                
                 avdo.MapAllPseudoFormats();
+
+
                 return avdo;
             }
             return null;

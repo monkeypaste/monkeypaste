@@ -277,7 +277,7 @@ namespace MonkeyPaste.Avalonia {
             return true;
         }
 
-        public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr, int holdDelay = 300) {
+        public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr, int holdDelay = 300, int releaseDelay = 300) {
             
             List<List<KeyCode>> seq = MpSharpHookKeyboardInputHelpers.ConvertStringToKeySequence(keystr);
             foreach (var combo in seq) {
@@ -288,7 +288,7 @@ namespace MonkeyPaste.Avalonia {
                         //return false;
                     }
                 }
-                await Task.Delay(100);
+                await Task.Delay(holdDelay);
                 foreach (var key in combo) {
                     UioHookResult result = _eventSimulator.SimulateKeyRelease(key);
                     if (result != UioHookResult.Success) {
@@ -296,6 +296,7 @@ namespace MonkeyPaste.Avalonia {
                         //return false;
                     }
                 }
+                await Task.Delay(releaseDelay);
             }
             return true;
         }

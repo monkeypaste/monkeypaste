@@ -1,8 +1,4 @@
 
-
-
-
-
 function drawPolygon(ctx, points, stroke = 'black', fill = 'black', width = 0) {
     ctx.beginPath();
 
