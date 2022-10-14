@@ -100,6 +100,7 @@
     <None Remove="Resources\Html\Editor\src\components\dragdrop\drag.js" />
     <None Remove="Resources\Html\Editor\src\components\dragdrop\dragdrop.js" />
     <None Remove="Resources\Html\Editor\src\components\dragdrop\drop.js" />
+    <None Remove="Resources\Html\Editor\src\components\dragdrop\editorscroll.js" />
     <None Remove="Resources\Html\Editor\src\components\editor\document.js" />
     <None Remove="Resources\Html\Editor\src\components\editor\editor.js" />
     <None Remove="Resources\Html\Editor\src\components\editor\selection.js" />
@@ -187,6 +188,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\converter\converter.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\dragdrop\editorscroll.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\dragdrop\drop.js">

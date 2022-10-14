@@ -76,8 +76,12 @@ namespace MonkeyPaste.Avalonia {
                 };
 
                 wv.PointerMoved += pointer_move_handler;
+                bool wasEscapePressed = false;
 
                 EventHandler<string> modKeyUpOrDownHandler = (s, e) => {
+                    if(MpAvShortcutCollectionViewModel.Instance.GlobalIsEscapeDown) {
+                        wasEscapePressed = true;
+                    }
                     var modKeyMsg = new MpQuillModifierKeysNotification() {
                         ctrlKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown,
                         altKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsAltDown,
@@ -120,14 +124,23 @@ namespace MonkeyPaste.Avalonia {
 
                 MpConsole.WriteLine("Cef Drag Result: " + result);
 
+                bool wasSelfDrop = !wasEscapePressed && ctvm.IsHovering;
+
+                MpConsole.WriteLine("Was Self drop: " + wasSelfDrop);
+                //if(!wasSelfDrop) {
                 var dragEndMsg = new MpQuillDragEndMessage() {
                     dataTransfer = new MpQuillDataTransferMessageFragment() {
                         dropEffect = result.ToString()
-                    }
+                    },
+                    fromHost = true,
+                    wasCancel = wasEscapePressed
                 };
 
-                
+                // wait before singaling drag end, 
+                //await Task.Delay(500);
                 await wv.EvaluateJavascriptAsync($"dragEnd_ext('{dragEndMsg.SerializeJsonObjectToBase64()}')");
+                //}
+
             });
             return false;
         }

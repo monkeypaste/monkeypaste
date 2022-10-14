@@ -86,7 +86,7 @@ function contentRequest_ext(contentReqMsgStr_base64) {
 				//data = ContentData;
 			}
 		} else if (format == 'FileNames' && ContentItemType == 'FileList') {
-			data = ContentData;
+			//data = ContentData;
 		}
 		if (!data || data == '') {
 			continue;
@@ -309,20 +309,6 @@ function setState_ext(stateObjBase64Str) {
 	return 'done';
 }
 
-function updateIsDraggingFromHost_ext(isDraggingMsgStr) {
-	// input MpQuillIsHostDraggingMessage
-
-	// NOTE this msg is needed so its known to only reset drop and not drag after dragLeave
-	// for drag feedback
-
-	let isDraggingMsg = toJsonObjFromBase64Str(isDraggingMsgStr);
-	if (isDraggingMsg.isDragging) {
-		startDrag(true);
-	} else {
-		endDrag();
-	}
-	
-}
 function isAllSelected_ext() {
 	// output MpQuillIsAllSelectedResponseMessage
 	let is_all_selected = isAllSelected();
@@ -333,9 +319,6 @@ function isAllSelected_ext() {
 	return resp;
 }
 
-function resetDragDrop_ext() {
-	resetDragDrop(true);
-}
 
 function dragEnd_ext(dragEndMsg_base64str) {
 	// input MpQuillDragEndMessage
@@ -374,46 +357,4 @@ function getEditorScreenShot_ext() {
 	};
 	let resp = toBase64FromJsonObj(ssRespMsg);
 	return resp;
-}
-
-function onDragEvent_ext(ddoMsgStr) {
-	// input MpQuillDragDropDataObjectMessage
-
-	let ddoMsg = toJsonObjFromBase64Str(ddoMsgStr);
-
-	let sim_event = {
-		dataTransfer: convertHostDataToDataTransferObject(ddoMsg)
-	};
-	sim_event.dataTransfer.fromHost = true;
-	if (ddoMsg.eventType == 'dragenter') {
-		onDragEnter(sim_event);
-		return;
-	}
-	if (ddoMsg.eventType == 'dragover') {
-		onDragOver(sim_event);
-		return;
-	}
-	if (ddoMsg.eventType == 'dragleave') {
-		//onDragLeave(sim_event);
-		resetDragDrop();
-		return;
-	}
-	if (ddoMsg.eventType == 'drop') {
-		onDrop(sim_event);
-		return;
-	}
-}
-// unused
-
-
-function getDropIdx_ext() {
-	return DropIdx;
-}
-
-function getCharacterRect_ext(docIdxStr) {
-	let idxVal = parseInt(docIdxStr);
-
-	let rect = getCharacterRect(idxVal);
-	let rectJsonStr = JSON.stringify(rect);
-	return rectJsonStr;
 }

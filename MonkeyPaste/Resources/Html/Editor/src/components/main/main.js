@@ -46,7 +46,7 @@ function init_test() {
 
 	let req = {
 		envName: WindowsEnv,
-		isPlainHtmlConverter: true,
+		isPlainHtmlConverter: false,
 		useBetterTable: true
 	};
 
@@ -54,14 +54,14 @@ function init_test() {
 	initMain_ext(toBase64FromJsonObj(req));
 
 	//enableFancyTextSelection();
-	// let contentHandle = '<TEST-CONTENT-HANDLE';
-	// let contentType = 'Text';// 'FileList';
-	// let isPasteRequest = false;
+	 let contentHandle = '<TEST-CONTENT-HANDLE';
+	 let contentType = 'Text';// 'FileList';
+	 let isPasteRequest = false;
 
-	// loadContent(contentHandle, contentType, sample_in_use, isPasteRequest);
+	 loadContent(contentHandle, contentType, sample_in_use, isPasteRequest);
 
 
-	//disableReadOnly();
+	disableReadOnly();
 	//enableFancyTextSelection();
 	//enableSubSelection();
 	//enableReadOnly();
@@ -77,16 +77,22 @@ function init_test() {
 }
 
 function initMain(envName, useBetterTable) {
-	envName = !envName ? WindowsEnv : envName;
 	useBetterTable = !useBetterTable ? true : useBetterTable;
 
-	EnvName = envName;
+	EnvName = !envName ? WindowsEnv : envName;
+
 	initClipboard();
+
 	initDocument();
 	initWindow();
-	initDragDrop();
+
+	initDrop();
+	initDrag();
+	
 	initEditor(useBetterTable);
+
 	enableReadOnly();
+
 	IsLoaded = true;
 	log('Main Initialized.');
 	return 'Success';

@@ -100,8 +100,7 @@ function updateAllSizeAndPositions() {
 
 
 function onEditorSelectionChanged(range, oldRange, source) {
-	//LastSelectedHtml = SelectedHtml;
-	//SelectedHtml = getSelectedHtml();
+	
 
 	let logRange = range ? range : { index: -1, length: 0 };
 	let logOldRange = oldRange ? oldRange : { oldRange: -1, length: 0 };
@@ -297,6 +296,8 @@ function enableSubSelection(fromHost = false) {
 function disableSubSelection(fromHost = false) {
 	IsSubSelectionEnabled = false;
 
+	DragSelectionRange = null;
+
 	let sel = getEditorSelection();
 	deselectAll(sel ? sel.index : 0);
 
@@ -327,17 +328,10 @@ function hideAllToolbars() {
 }
 
 function getEditorSelection() {
-	//let docSel = null;
-	//if (IsLoaded && !isContentEditable()) {
-	//	// when non-editable is when selection has problems
-	//	for (var i = 0; i < document.getSelection().rangeCount; i++) {
-	//		if (docSel == null) {
-	//			docSel = [];
-	//		}
-	//		docSel.push(document.getSelection().getRangeAt(i));
-	//	}
-	//	setEditorContentEditable(true);
-	//}
+	if (IsDragging) {
+		// when dragging checking selection changes it, not sure why yet
+		return DragSelectionRange;
+	}
 	let selection = quill.getSelection();
 	//if (docSel) {
 	//	setEditorContentEditable(false);

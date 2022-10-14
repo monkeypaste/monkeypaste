@@ -187,6 +187,8 @@ namespace MonkeyPaste.Avalonia {
         public void DeselectAll() {
             this.ExecuteJavascript($"deselectAll_ext()");
         }
+
+
         #endregion
 
 

@@ -9,6 +9,14 @@ using System.Windows.Resources;
 using MonkeyPaste.Common.Plugin; 
 using MonkeyPaste.Common;
 using System.Diagnostics;
+using WinformsBitmap = System.Drawing.Bitmap;
+using WinformsRectangle = System.Drawing.Rectangle;
+using WinformsPoint = System.Drawing.Point;
+using WinformsPixelFormat = System.Drawing.Imaging.PixelFormat;
+using WinformsBitmapData = System.Drawing.Imaging.BitmapData;
+using WinformsImageLockMode = System.Drawing.Imaging.ImageLockMode;
+using System.Runtime.InteropServices;
+using System.Windows.Interop;
 
 namespace MonkeyPaste.Common.Wpf {
     public static class MpWpfImageExtensions {
@@ -158,7 +166,7 @@ namespace MonkeyPaste.Common.Wpf {
             }
         }
 
-        public static BitmapSource ToBitmapSource(this System.Drawing.Bitmap bitmap) {
+        public static BitmapSource ToBitmapSource(this WinformsBitmap bitmap) {
             var bitmapData = bitmap.LockBits(
                 new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, bitmap.PixelFormat);
 
@@ -188,13 +196,13 @@ namespace MonkeyPaste.Common.Wpf {
             return bmp;
         }
 
-        public static System.Drawing.Bitmap ToBitmap(this BitmapSource bitmapsource, System.Drawing.Color? transColor = null) {
+        public static WinformsBitmap ToBitmap(this BitmapSource bitmapsource, System.Drawing.Color? transColor = null) {
             transColor = !transColor.HasValue ? System.Drawing.Color.Black : transColor.Value;
             using (MemoryStream outStream = new MemoryStream()) {
                 System.Windows.Media.Imaging.BitmapEncoder enc = new BmpBitmapEncoder();
                 enc.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(bitmapsource));
                 enc.Save(outStream);
-                var bmp = new System.Drawing.Bitmap(outStream);
+                var bmp = new WinformsBitmap(outStream);
 
                 bmp.MakeTransparent(transColor.Value);
 
@@ -207,7 +215,53 @@ namespace MonkeyPaste.Common.Wpf {
                 return bmp;                
             }
         }
-        
+
+
+
+        public static WinformsBitmap BitmapSourceToBitmap(BitmapSource source) {
+            // from https://weblog.west-wind.com/posts/2020/Sep/16/Retrieving-Images-from-the-Clipboard-and-WPF-Image-Control-Woes#clipboardgetimage-isnt-reliable
+            if (source == null)
+                return null;
+
+            var pixelFormat = WinformsPixelFormat.Format32bppArgb;  //Bgr32 equiv default
+            if (source.Format == PixelFormats.Bgr24)
+                pixelFormat = WinformsPixelFormat.Format24bppRgb;
+            else if (source.Format == PixelFormats.Pbgra32)
+                pixelFormat = WinformsPixelFormat.Format32bppPArgb;
+            else if (source.Format == PixelFormats.Prgba64)
+                pixelFormat = WinformsPixelFormat.Format64bppPArgb;
+
+            WinformsBitmap bmp = new WinformsBitmap(
+                source.PixelWidth,
+                source.PixelHeight,
+                pixelFormat);
+
+            WinformsBitmapData data = bmp.LockBits(
+                new WinformsRectangle(WinformsPoint.Empty, bmp.Size),
+                WinformsImageLockMode.WriteOnly,
+                pixelFormat);
+
+            source.CopyPixels(
+                Int32Rect.Empty,
+                data.Scan0,
+                data.Height * data.Stride,
+                data.Stride);
+
+            bmp.UnlockBits(data);
+
+            return bmp;
+        }
+        public static BitmapSource BitmapToBitmapSource(WinformsBitmap bmp) {
+            // from https://weblog.west-wind.com/posts/2020/Sep/16/Retrieving-Images-from-the-Clipboard-and-WPF-Image-Control-Woes#clipboardgetimage-isnt-reliable
+            
+            var hBitmap = bmp.GetHbitmap();
+            var imageSource = Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero,
+                System.Windows.Int32Rect.Empty,
+                System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
+            WinApi.DeleteObject(hBitmap);
+            return imageSource;
+        }
+
         public static string ToAsciiImage(this BitmapSource bmpSrc, Size? docSize = null) {
             //Size size = docSize.HasValue ? docSize.Value : new Size(50, 50);
             Size size = new Size(100,100);
@@ -225,7 +279,7 @@ namespace MonkeyPaste.Common.Wpf {
             }
             string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
             bmpSrc = bmpSrc.Resize(size);
-            using (System.Drawing.Bitmap image = bmpSrc.ToBitmap()) {
+            using (WinformsBitmap image = bmpSrc.ToBitmap()) {
                 string outStr = string.Empty;
                 for (int h = 0; h < image.Height; h++) {
                     for (int w = 0; w < image.Width; w++) {
@@ -254,7 +308,7 @@ namespace MonkeyPaste.Common.Wpf {
             var p = new Paragraph();
             fd.Blocks.Add(p);
             var ctp = fd.ContentStart;
-            using (System.Drawing.Bitmap image = bmpSrc.ToBitmap()) {
+            using (WinformsBitmap image = bmpSrc.ToBitmap()) {
                 string outStr = string.Empty;
                 for (int h = 0; h < image.Height; h++) {
                     for (int w = 0; w < image.Width; w++) {
@@ -344,7 +398,7 @@ namespace MonkeyPaste.Common.Wpf {
             return new System.Drawing.Icon(streamInfo.Stream);
         }
 
-        public static System.Drawing.Icon ToIcon(this System.Drawing.Bitmap bmp) {
+        public static System.Drawing.Icon ToIcon(this WinformsBitmap bmp) {
             IntPtr hIcon = bmp.GetHicon();
             return System.Drawing.Icon.FromHandle(hIcon);
         }

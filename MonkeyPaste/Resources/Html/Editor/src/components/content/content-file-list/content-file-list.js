@@ -8,15 +8,26 @@ function initFileListContent(itemDataStr) {
 	enableReadOnly();
 	disableSubSelection();
 	FileListItems = [];
-	ContentData = '';
+	//ContentData = '';
 	let fldfObj = toJsonObjFromBase64Str(itemDataStr);
 	for (var i = 0; i < fldfObj.fileItems.length; i++) {
 		let flif = fldfObj.fileItems[i];
 		FileListItems.push(flif);
-		ContentData = flif.filePath + envNewLine();
+		//ContentData = flif.filePath + envNewLine();
 	}
 	createFileList();
 	quill.enable(false);
+}
+
+function getPathsStr() {
+	let paths_str = '';
+	for (var i = 0; i < FileListItems.length; i++) {
+		paths_str += FileListItems[i].filePath;
+		if (i < FileListItems.length - 1) {
+			paths_str += envNewLine();
+		}
+	}
+	return paths_str;
 }
 
 function createFileList() {

@@ -668,6 +668,10 @@ namespace MonkeyPaste.Common.Wpf {
         [DllImport("user32.dll")]
         public static extern bool GetCursorPos(out System.Windows.Point lpPoint);
 
-        
+
+        [DllImport("gdi32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool DeleteObject(IntPtr hObject);
+
     }
 }

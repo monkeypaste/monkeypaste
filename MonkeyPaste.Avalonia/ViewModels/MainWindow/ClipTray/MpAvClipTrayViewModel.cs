@@ -1309,6 +1309,10 @@ namespace MonkeyPaste.Avalonia {
                         AddNewItemsCommand.Execute(null);
                     //});
                     break;
+                case MpMessageType.MainWindowHid:
+                    // reset so tray will autosize/bringIntoView on ListBox items changed (since actual size is not bound)
+                    HasUserAlteredPinTrayWidthSinceWindowShow = false;
+                    break;
             }
         }
 
@@ -1591,7 +1595,11 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsTitleLayersVisible { get; set; } = true;
         public bool IsMarqueeEnabled { get; set; } = true;
-        public bool HasUserAlteredPinTrayWidth { get; set; } = false;
+
+        // this is to help keep new items added pin tray visible when created
+        // but avoid overriding user splitter changes DURING one of their workflows
+        // and presuming that unless the window hides its still a workflow
+        public bool HasUserAlteredPinTrayWidthSinceWindowShow { get; set; } = false;
 
         public bool IsAddingClipboardItem { get; private set; } = false;
 
@@ -2441,20 +2449,6 @@ namespace MonkeyPaste.Avalonia {
                  }
                  MpDataModelProvider.AvailableQueryCopyItemIds.Remove(pctvm.CopyItemId);
 
-                 
-                 //var trayItemToRemove = Items.FirstOrDefault(x => x.CopyItemId == pctvm.CopyItemId);
-                 //if (trayItemToRemove != null) {
-                 //    //swap to-be-pinned item w/ a new placeholder
-                 //    Items.Remove(trayItemToRemove);
-                 //    var sub_tray_ctvm = await CreateClipTileViewModel(null);
-                 //    Items.Add(sub_tray_ctvm);
-
-                 //}
-
-                 //if (pctvm.QueryOffsetIdx >= 0) {
-                 //    // only recreate tiles that are already in the tray (they won't be if new)
-                 //    pctvm = await CreateClipTileViewModel(pctvm.CopyItem, pctvm.QueryOffsetIdx);
-                 //}
                  Items.Remove(pctvm);
                  Items.Where(x => x.QueryOffsetIdx > pctvm.QueryOffsetIdx).ForEach(x => x.QueryOffsetIdx = x.QueryOffsetIdx - 1);
                  pctvm.QueryOffsetIdx = -1;
@@ -2903,7 +2897,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (isRequery) {
-                    HasUserAlteredPinTrayWidth = false;
+                   // HasUserAlteredPinTrayWidthSinceWindowShow = false;
 
                     if (SelectedItem == null &&
                         MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Count == 0 &&

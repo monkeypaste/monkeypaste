@@ -7,7 +7,7 @@ namespace MonkeyPaste.Common {
         #region Private Variables
         public const string COMBO_SEPARATOR = "+";
         public const string SEQUENCE_SEPARATOR = "|";
-        private const int _MAX_COMBOS = 1;// int.MaxValue;
+        private const int _MAX_COMBOS = 1;
 
         private int _downCount = 0;
 
@@ -70,6 +70,10 @@ namespace MonkeyPaste.Common {
                 return _currentGesture;
             }
             return _curKeysDown;
+        }
+
+        public void ClearCurrentGesture() {
+            Reset();
         }
 
         #endregion

@@ -65,7 +65,7 @@ body {
 
     .sub-select > .ql-editor {
         overflow: auto;
-        height: 100%;
+        /*height: 100%;*/
     }
 
 body:has(.sub-select) {
@@ -86,15 +86,7 @@ body:has(.editable) {
     /*opacity: var(--editableopacity);*/
     transition: .4s;
 }
-.drop {
-    white-space: nowrap !important;
-    /*width: 100%;*/
-    overflow: auto;
-}
-    .drop > .ql-editor {
-        /* NOTE only temporary, adjusted to actual width after layout update in auto scroll*/
-        width: 808080px;
-    }
+
 
 .hidden {
     display: none;

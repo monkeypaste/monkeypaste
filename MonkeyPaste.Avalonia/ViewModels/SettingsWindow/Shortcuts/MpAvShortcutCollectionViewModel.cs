@@ -47,6 +47,8 @@ namespace MonkeyPaste.Avalonia {
         private SimpleGlobalHook _hook;
         private EventSimulator _eventSimulator;
 
+        private CancellationTokenSource _simInputCts;
+
         #endregion
 
         #region Statics
@@ -143,6 +145,8 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task InitAsync() {
             _keyboardGestureHelper = new MpAvKeyGestureHelper2();
+            _simInputCts = new CancellationTokenSource();
+
             await InitShortcutsAsync();
 
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
@@ -255,30 +259,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool SimulateKeyStrokeSequence(string keystr) {
-            List<List<KeyCode>> seq = MpSharpHookKeyboardInputHelpers.ConvertStringToKeySequence(keystr);
-            foreach (var combo in seq) {
-                foreach (var key in combo) {
-                    UioHookResult result = _eventSimulator.SimulateKeyPress(key);
-                    if (result != UioHookResult.Success) {
-                        throw new Exception($"Error pressing key: '{key}' in seq: '{keystr}' error: '{result}'");
-                        //return false;
-                    }
-                }
-
-                foreach (var key in combo) {
-                    UioHookResult result = _eventSimulator.SimulateKeyRelease(key);
-                    if (result != UioHookResult.Success) {
-                        throw new Exception($"Error releasing key: '{key}' in seq: '{keystr}' error: '{result}'");
-                        //return false;
-                    }
-                }
-            }
-            return true;
-        }
-
-        public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr, int holdDelay = 300, int releaseDelay = 300) {
-            
+        public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr, int holdDelay = 100, int releaseDelay = 50) {            
             List<List<KeyCode>> seq = MpSharpHookKeyboardInputHelpers.ConvertStringToKeySequence(keystr);
             foreach (var combo in seq) {
                 foreach (var key in combo) {
@@ -298,6 +279,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 await Task.Delay(releaseDelay);
             }
+            MpConsole.WriteLine($"Key Gesture '{keystr}' successfully simulated");
             return true;
         }
 
@@ -505,15 +487,15 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        private bool PerformMatchedShortcut(MpAvShortcutViewModel matchedShortcut, string cur_keystr) {
-            if (!matchedShortcut.PerformShortcutCommand.CanExecute(null)) {
-                //when shortcut can't execute pass gesture and clear buffer
-                if (matchedShortcut.RoutingType == MpRoutingType.Internal) {
-                    _sim_keystr_to_this_app = cur_keystr;
-                }
-                return false;
-            } else {
-                Dispatcher.UIThread.Post(async () => {
+        private async Task<bool> PerformMatchedShortcut(MpAvShortcutViewModel matchedShortcut, string cur_keystr) {
+            bool result = false;
+            await Dispatcher.UIThread.InvokeAsync(async () => {
+                if (!matchedShortcut.PerformShortcutCommand.CanExecute(null)) {
+                    //when shortcut can't execute pass gesture and clear buffer
+                    if (matchedShortcut.RoutingType == MpRoutingType.Internal) {
+                        _sim_keystr_to_this_app = cur_keystr;
+                    }
+                } else {
                     switch (matchedShortcut.RoutingType) {
                         case MpRoutingType.Internal:
                         case MpRoutingType.Direct:
@@ -524,27 +506,24 @@ namespace MonkeyPaste.Avalonia {
                             // pass gesture before invoking command
 
                             //System.Windows.Forms.SendKeys.SendWait(cur_keystr);
-                            SimulateKeyStrokeSequence(cur_keystr);
-
-                            await Task.Delay(matchedShortcut.RoutingDelayMs);
-
+                            await SimulateKeyStrokeSequenceAsync(cur_keystr);
                             matchedShortcut.PerformShortcutCommand.Execute(null);
                             break;
                         case MpRoutingType.Tunnel:
                             // pass gesture after invoking command                                
 
                             matchedShortcut.PerformShortcutCommand.Execute(null);
-
-                            await Task.Delay(matchedShortcut.RoutingDelayMs);
                             //System.Windows.Forms.SendKeys.SendWait(cur_keystr);
-                            SimulateKeyStrokeSequence(cur_keystr);
+                            await SimulateKeyStrokeSequenceAsync(cur_keystr);
                             break;
                     }
-                });
-            }
+                    result = true;
+                }
+            });
+            
             //_keyboardGestureHelper.Reset();
             //_waitToExecuteShortcutStartDateTime = null;
-            return true;
+            return result;
         }
 
 
@@ -884,7 +863,9 @@ namespace MonkeyPaste.Avalonia {
                         }
                         if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
                             if (!isLeftButton && !MpAvMainWindow.Instance.IsActive) {
-                                SimulateKeyStrokeSequence("control+v");
+                                // TODO this is hacky because mouse gestures are not formally handled
+                                // also app collection should be queried for custom paste cmd instead of this
+                                SimulateKeyStrokeSequenceAsync("control+v").FireAndForgetSafeAsync();
                             }
                         }
                     } else if (!MpAvMainWindowViewModel.Instance.IsMainWindowClosing &&
@@ -936,13 +917,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Keyboard
-        private int c_idx = -1;
         private void HandleKeyDown(string keyStr) {
+
             Dispatcher.UIThread.Post(() => {
-                if (c_idx >= typeof(MpCursorType).Length()) {
-                    c_idx = -1;
-                }
-                MpPlatformWrapper.Services.Cursor.SetCursor(this, (MpCursorType)(++c_idx));
+
                 if (string.IsNullOrEmpty(keyStr)) {
                     // what key is this with no string val?
                     Debugger.Break();
@@ -967,7 +945,7 @@ namespace MonkeyPaste.Avalonia {
                         //_keyboardGestureHelper.Reset();
                         //e.SuppressKeyPress = true;
                         OnGlobalEscKeyPressed?.Invoke(this, EventArgs.Empty);
-                        return;
+                        //return;
                     }
                 }
 
@@ -976,9 +954,7 @@ namespace MonkeyPaste.Avalonia {
                 if (IsShortcutsEnabled) {
                     HandleGestureRouting_Down(keyStr);
                 }
-            });
-
-           
+            });           
         }
 
         private void HandleKeyUp(string keyStr) {
@@ -1009,22 +985,18 @@ namespace MonkeyPaste.Avalonia {
                 if (IsShortcutsEnabled) {
                     HandleGestureRouting_Up(keyStr);
                 }
-            });
-
-            
+            });            
         }
-
-        #endregion
-
-        #endregion
 
         #region Gesture Handling
 
+        private int _downCount = 0;
         private void HandleGestureRouting_Down(string keyLiteral) {
+            _downCount++;
             _keyboardGestureHelper.AddKeyDown(keyLiteral);
-
+            ValidateGesture();
             //string curGesture = _keyboardGestureHelper.GetCurrentGesture();
-            
+
             //if (!string.IsNullOrEmpty(_sim_keystr_to_this_app) && _sim_keystr_to_this_app.StartsWith(curGesture)) {
             //    // user MAY be pressing a defined shortcut
 
@@ -1053,14 +1025,16 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void HandleGestureRouting_Up(string keyLiteral) {
+            _downCount--;
             _keyboardGestureHelper.RemoveKeyDown(keyLiteral);
 
+            ValidateGesture();
             string curGestureStr = _keyboardGestureHelper.GetCurrentGesture();
 
             //MpConsole.WriteLine("Current Gesture: " + curGestureStr);
 
             var exactMatch = Items.FirstOrDefault(x => x.KeyString.ToLower() == curGestureStr.ToLower());
-            if(exactMatch != default) {
+            if (exactMatch != default) {
                 exactMatch.PerformShortcutCommand.Execute(null);
             }
 
@@ -1122,6 +1096,26 @@ namespace MonkeyPaste.Avalonia {
 
 
         #endregion
+
+        private void ValidateGesture() {
+            if(_downCount < 0) {
+                // should never be below zero
+                Debugger.Break();
+            }
+            string cur_gesture = _keyboardGestureHelper.GetCurrentGesture();
+            if (_downCount == 0 && !string.IsNullOrWhiteSpace(cur_gesture)) {
+                // gesture should be cleared
+                //Debugger.Break();
+                _keyboardGestureHelper.ClearCurrentGesture();
+                MpConsole.WriteLine($"KeyDown Count 0, gesture cleared: '{cur_gesture}'");
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+       
 
 
         #endregion

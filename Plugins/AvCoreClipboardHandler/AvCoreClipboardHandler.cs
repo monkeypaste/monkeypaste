@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Avalonia;
 using MonkeyPaste.Common.Wpf;
-using Clowd.Clipboard;
 
 namespace AvCoreClipboardHandler {
     public class AvCoreClipboardHandler :
@@ -389,23 +388,23 @@ namespace AvCoreClipboardHandler {
                 await Application.Current.Clipboard.SetDataObjectAsync(dataObj);
 
 
-                if (OperatingSystem.IsWindows()) {
-                    if (dataObj.ContainsData(MpPortableDataFormats.AvPNG) &&
-                        dataObj.GetData(MpPortableDataFormats.AvPNG) is byte[] pngBytes) {
-                        MpWpfClipoardImageHelper.SetWinImageDataObjects(pngBytes);
-                        //var win_img_obj_parts = MpWpfClipoardImageHelper.GetWinImageDataObjects(pngBytes);
+                //if (OperatingSystem.IsWindows()) {
+                //    if (dataObj.ContainsData(MpPortableDataFormats.AvPNG) &&
+                //        dataObj.GetData(MpPortableDataFormats.AvPNG) is byte[] pngBytes) {
+                //        MpWpfClipoardImageHelper.SetWinImageDataObjects(pngBytes);
+                //        //var win_img_obj_parts = MpWpfClipoardImageHelper.GetWinImageDataObjects(pngBytes);
 
-                        //dataObj.SetData(MpPortableDataFormats.WinBitmap, win_img_obj_parts[0]);
-                        //dataObj.SetData(MpPortableDataFormats.WinDib, win_img_obj_parts[1]);
-                        //if (request.writeToClipboard) {
-                        //    imgSet = true;
-                        //    ClipboardAvalonia.SetImage(pngBytes.ToAvBitmap());
-                        //}
+                //        //dataObj.SetData(MpPortableDataFormats.WinBitmap, win_img_obj_parts[0]);
+                //        //dataObj.SetData(MpPortableDataFormats.WinDib, win_img_obj_parts[1]);
+                //        //if (request.writeToClipboard) {
+                //        //    imgSet = true;
+                //        //    ClipboardAvalonia.SetImage(pngBytes.ToAvBitmap());
+                //        //}
 
-                    }
+                //    }
 
-                    // TODO add HTML->RTF convertsion here
-                }
+                //    // TODO add HTML->RTF convertsion here
+                //}
             }
 
 

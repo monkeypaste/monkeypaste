@@ -16,3 +16,17 @@
     /*background-color: purple;*/
     pointer-events: none;
 }
+
+.drop {
+    white-space: nowrap !important;
+    /*user-select: none;*/
+    /*width: 100%;*/
+    /*touch-action: none;*/
+    overflow: auto;
+}
+
+    .drop > .ql-editor {
+        /* NOTE only temporary, adjusted to actual width after layout update in auto scroll*/
+        /*user-select: none;*/
+        width: 808080px;
+    }

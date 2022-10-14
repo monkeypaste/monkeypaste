@@ -7,16 +7,6 @@ var IsSplitDrop = false;
 var IsPreBlockDrop = false;
 var IsPostBlockDrop = false;
 
-var AutoScrollVelX = 0;
-var AutoScrollVelY = 0;
-
-var AutoScrollAccumlator = 5;
-var AutoScrollBaseVelocity = 25;
-
-const MIN_AUTO_SCROLL_DIST = 30;
-
-var AutoScrollInterval = null;
-
 const AllowedEffects = ['copy', 'copyLink', 'copyMove', 'link', 'linkMove', 'move'];
 
 const AllowedDropTypes = ['text/plain', 'text/html', 'application/json', 'files'];
@@ -63,7 +53,9 @@ function initDrop() {
         //}
         let emp = getEditorMousePos(e);
 
+        e.stopPropagation();
         e.preventDefault();
+
         // VALIDATE
 
         if (SelIdxBeforeDrag >= 0) {
@@ -160,27 +152,18 @@ function initDrop() {
 		}
 
         log('drag leave');
-        IsDropping = false;
-        DropIdx = -1;
 
-        for (var i = 0; i < DropItemElms.length; i++) {
-            DropItemElms[i].classList.remove('drop');
-        }
-
-        if (IsReadOnly && !IsDragging) {
-            disableSubSelection();
-        }
-        onDragLeave_ntf()
-        drawOverlay();
-
-        stopAutoScroll(true);
+        resetDrop(e.fromHost, true);
+        
+        onDragLeave_ntf();
     }
 
     function handleDrop(e) {
         // OVERRIDE DEFAULT
 
-        e.stopPropagation(); // stops the browser from redirecting.
-
+        // stops the browser from redirecting.
+        e.stopPropagation(); 
+        e.preventDefault();
         // VALIDATE
 
         if (isDragCopy() || e.dataTransfer.effectAllowed == 'copy') {
@@ -244,29 +227,47 @@ function initDrop() {
 
         // RESET
 
-        IsDropping = false;
+        //IsDropping = false;
         
-        if (IsDragging) {
-            // for internal drop do nothing, let dragEnd handler reset DropIdx
-        } else {            
-            DropIdx = -1;
-		}
+  //      if (IsDragging) {
+  //          // for internal drop do nothing, let dragEnd handler reset DropIdx
+  //      } else {            
+  //          //DropIdx = -1;
+  //          resetDrop(e.fromHost);
+		//}
         
 
-        for (var i = 0; i < DropItemElms.length; i++) {
-            DropItemElms[i].classList.remove('drop');
-        }
-        updateAllSizeAndPositions();
-        if (IsReadOnly) {
-            disableSubSelection();
-        }
-        stopAutoScroll(false);
+  //      for (var i = 0; i < DropItemElms.length; i++) {
+  //          DropItemElms[i].classList.remove('drop');
+  //      }
+        //updateAllSizeAndPositions();
+        resetDrop(e.fromHost, false);
+       
         onDropCompleted_ntf();
         drawOverlay();
         return false;
     }
 
+    function onScrollChange(e) {
+       
+        if (IsDragging) {
+            //debugger;
+            e.target.scrollLeft = DragStartScrollOffset.x;
+            e.target.scrollTop = DragStartScrollOffset.y;
+            log(e.target.id, ' scroll RESET FOR DRAG  top ', e.target.scrollTop, ' left ', e.target.scrollLeft, ' IsDragging: ', IsDragging, ' IsDropping: ', IsDropping);
+        } else {
+            log(e.target.id, ' scroll changed top ', e.target.scrollTop, ' left ', e.target.scrollLeft, ' IsDragging: ', IsDragging, ' IsDropping: ', IsDropping);
+
+            DragStartScrollOffset = {
+                x: e.target.scrollLeft,
+                y: e.target.scrollTop
+            };
+		}
+    }
+
     DropItemElms = [getEditorContainerElement(), getDragOverlayElement()];
+
+   
 
     for (var i = 0; i < DropItemElms.length; i++) {
         let item = DropItemElms[i];
@@ -274,7 +275,36 @@ function initDrop() {
         item.addEventListener('dragover', handleDragOver, true);
         item.addEventListener('dragleave', handleDragLeave, true);
         item.addEventListener('drop', handleDrop, true);
+
+        //item.addEventListener('scroll', onScrollChange, true);
 	}
+}
+
+function resetDrop(fromHost, wasLeave) {
+    IsDropping = false;
+    if (!IsDragging) {
+        // drag end needs dropIdx if effect was move
+        DropIdx = -1;
+	}   
+
+    IsCtrlDown = false;
+    IsAltDown = false
+    IsShiftDown = false;
+
+    for (var i = 0; i < DropItemElms.length; i++) {
+        DropItemElms[i].classList.remove('drop');
+    }
+
+    updateAllSizeAndPositions();
+    stopAutoScroll(wasLeave);
+
+    if (IsReadOnly && !IsDragging) {
+        disableSubSelection();
+    }
+
+    drawOverlay();
+
+    log('drop reset: ' + (fromHost ? "FROM HOST" : "INTERNALLY"));
 }
 
 function dropData(docIdx, dt) {
@@ -344,51 +374,6 @@ function isDropHtml() {
     return IsAltDown;
 }
 
-function startAutoScroll() {
-    // drop class makes .ql-editor huge so no wrapping this finds actual max width and sets so won't overscroll...
-    let max_x = 0;
-    //let max_y = 0;
-    let lines = getLineCount();
-    for (var i = 0; i < lines; i++) {
-        let line_rect = getLineRect(i, false);
-        max_x = Math.max(max_x, line_rect.width);
-        //max_y = Math.max(max_y, line_rect.height);
-    }
-    // add 100 in case template at the end ( i think its from extra spaces or somethign...)
-    max_x += 100;
-    getEditorElement().style.width = max_x + 'px';
-    AutoScrollInterval = setInterval(onAutoScrollTick, 300);
-}
 
-function stopAutoScroll(isLeave) {
-    if (AutoScrollInterval == null) {
-        return;
-    }
-    getEditorElement().style.width = '';
-    clearInterval(AutoScrollInterval);
-    AutoScrollInterval = null;
-}
 
-function onAutoScrollTick() {
-    if (WindowMouseLoc == null) {
-        return;
-    }
-    let window_rect = getWindowRect();
-    if (!isPointInRect(window_rect, WindowMouseLoc)) {
-        return;
-    }
-
-    let orig_scroll_x = document.body.scrollLeft;
-    let orig_scroll_y = document.body.scrollTop;
-
-    if (Math.abs(window_rect.right - WindowMouseLoc.x) <= MIN_AUTO_SCROLL_DIST) {
-        document.body.scrollLeft += AutoScrollVelX;
-    } else if (Math.abs(window_rect.left - WindowMouseLoc.x) <= MIN_AUTO_SCROLL_DIST) {
-        document.body.scrollLeft -= AutoScrollVelX;
-    }
-
-    if (orig_scroll_x != document.body.scrollLeft) {
-        AutoScrollVelX += AutoScrollAccumlator;
-	}
-}
 

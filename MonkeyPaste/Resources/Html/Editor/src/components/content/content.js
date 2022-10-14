@@ -1,15 +1,13 @@
 var ContentHandle = null;
 var ContentItemType = 'Text';
-var ContentData = null;
 
 var ContentScreenshotBase64Str = null;
 
 function loadContent(contentHandle, contentType, contentData, isPasteRequest) {
-	resetDragDrop();
+	//resetDragDrop(true);
 
 	ContentHandle = contentHandle;
 	ContentItemType = contentType;
-	ContentData = contentData;
 
 	if (ContentItemType.includes('.')) {
 		log('hey item type is ' + ContentItemType);
@@ -454,6 +452,7 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 		}
 
 		return doc_idx;
+
 		if (textNode && textNode.parentElement) {
 			let parent_blot = Quill.find(textNode.parentElement);
 			if (parent_blot && typeof parent_blot.offset === 'function') {

@@ -54,14 +54,17 @@ namespace MonkeyPaste.Avalonia {
                         while(ContentScreenShotBase64 == null) { await Task.Delay(100); }
                         avdo.SetData(MpPortableDataFormats.AvPNG, ContentScreenShotBase64);
                     }
-
-                    if(ctvm.ItemType != MpCopyItemType.FileList) {
+                    if (ctvm.ItemType != MpCopyItemType.FileList) {
+                        avdo.SetData(MpPortableDataFormats.AvFileNames, ctvm.CopyItemData);
+                    }
+                    
+                    if (ctvm.ItemType != MpCopyItemType.FileList) {
                         // js doesn't set file stuff for non-files
                         avdo.SetData(
-                            MpPortableDataFormats.AvFileNames, 
+                            MpPortableDataFormats.AvFileNames,
                             ctvm.CopyItemData.ToFile(
                                 forceNamePrefix: ctvm.CopyItemTitle,
-                                forceExt: ctvm.ItemType == MpCopyItemType.Image ? "png":"txt",
+                                forceExt: ctvm.ItemType == MpCopyItemType.Image ? "png" : "txt",
                                 isTemporary: true));
                     }
 

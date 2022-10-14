@@ -171,6 +171,7 @@ templateType: "dynamic"
 
     public class MpQuillDragEndMessage : MpJsonObject {
         public bool fromHost { get; set; } = true;
+        public bool wasCancel { get; set; } = false;
         public MpQuillDataTransferMessageFragment dataTransfer { get; set; }
     }
     public class MpQuillDataTransferMessageFragment : MpJsonObject {

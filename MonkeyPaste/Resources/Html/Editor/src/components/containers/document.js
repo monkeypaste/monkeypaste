@@ -4,6 +4,17 @@ function initDocument() {
 }
 
 function onDocumentSelectionChange(e) {
+	if (IsDragging && DragSelectionRange) {
+		setEditorSelection(DragSelectionRange.index, DragSelectionRange.length, 'api');
+		return;
+	}
+	if (WasDragCanceled && DragSelectionRange) {
+		setEditorSelection(DragSelectionRange.index, DragSelectionRange.length, 'api');
+		// NOTE only clearing drag range on cancel or this will always override sel
+		DragSelectionRange = null;
+		return;
+	}
+
 	return;
 	if (IsDragging || IsDropping || WindowMouseDownLoc == null) {
 		return;

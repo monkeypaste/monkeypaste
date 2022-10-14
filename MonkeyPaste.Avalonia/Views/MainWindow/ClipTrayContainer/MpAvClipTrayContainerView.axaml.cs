@@ -28,12 +28,12 @@ namespace MonkeyPaste.Avalonia {
             InitializeComponent();
 
             //this.DataContextChanged += MpAvClipTrayContainerView_DataContextChanged;
-            //var gs = this.FindControl<GridSplitter>("ClipTraySplitter");
+            var gs = this.FindControl<GridSplitter>("ClipTraySplitter");
             //gs.GetObservable(GridSplitter.IsEnabledProperty).Subscribe(value => GridSplitter_IsEnabledChanged(gs, value));
             //gs.AddHandler(GridSplitter.PointerPressedEvent, Gs_PointerPressed, RoutingStrategies.Tunnel);
             //gs.AddHandler(GridSplitter.PointerReleasedEvent, Gs_PointerReleased, RoutingStrategies.Tunnel);
 
-            //gs.DragDelta += Gs_DragDelta;
+            gs.DragDelta += Gs_DragDelta;
         }
 
         private void MpAvClipTrayContainerView_DataContextChanged(object sender, EventArgs e) {
@@ -125,13 +125,13 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void Gs_DragDelta(object sender, global::Avalonia.Input.VectorEventArgs e) {
-            BindingContext.HasUserAlteredPinTrayWidth = true;
-            var ptr = this.FindControl<MpAvPinTrayView>("PinTrayView");
+            BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow = true;
+            //var ptr = this.FindControl<MpAvPinTrayView>("PinTrayView");
 
-            var ptrlb = ptr.FindControl<ListBox>("PinTrayListBox");
-            if(ptrlb == null) {
-                return;
-            }
+            //var ptrlb = ptr.FindControl<ListBox>("PinTrayListBox");
+            //if(ptrlb == null) {
+            //    return;
+            //}
             //var ptrsv = ptrlb.GetVisualDescendant<ScrollViewer>();
             //if(ptrsv == null) {
             //    return;

@@ -103,6 +103,7 @@ function onWindowDoubleClick(e) {
 
 function onWindowMouseDown(e) {
 	if (!isChildOfElement(e.target, getEditorContainerElement())) {
+		log('window mouse down rejected ', e.target, ' is not a child of editor container');
 		return;
 	}
 	WindowMouseDownLoc = { x: e.clientX, y: e.clientY };
@@ -111,18 +112,19 @@ function onWindowMouseDown(e) {
 function onWindowMouseMove(e) {
 	// NOTE! not called during drag over
 
-	if (!isChildOfElement(e.target, getEditorContainerElement())) {
-		return;
-	}
+	//if (!isChildOfElement(e.target, getEditorContainerElement())) {
+	//	log('window mouse move rejected ', e.target, ' is not a child of editor container');
+	//	return;
+	//}
 	WindowMouseLoc = { x: e.clientX, y: e.clientY };
-	if (WindowMouseDownLoc == null) {
-		return;
-	}
-	if (!IsReadOnly || IsSubSelectionEnabled) {
-		return;
-	}
-	let cur_dist = dist(WindowMouseLoc, WindowMouseDownLoc);
-	log('drag dist: ' + cur_dist);
+	//if (WindowMouseDownLoc == null) {
+	//	return;
+	//}
+	//if (!IsReadOnly || IsSubSelectionEnabled) {
+	//	return;
+	//}
+	//let cur_dist = dist(WindowMouseLoc, WindowMouseDownLoc);
+	//log('drag dist: ' + cur_dist);
 	//if (WindowMouseDownLoc == null) {
 	//	return;
 	//}
@@ -146,12 +148,14 @@ function onWindowMouseMove(e) {
 
 function onWindowMouseUp(e) {
 	
-	if (!isChildOfElement(e.target, getEditorContainerElement())) {
-		return;
-	}
+	//if (!isChildOfElement(e.target, getEditorContainerElement())) {
+	//	log('window mouse up rejected ', e.target, ' is not a child of editor container');
+	//	return;
+	//}
 	//LastWindowMouseDownLoc = WindowMouseDownLoc;
 	let last_dmp = WindowMouseDownLoc;
 	WindowMouseDownLoc = null;
+	return;
 
 	//if (!WindowMouseDownLoc) {
 	//	// mouse outside editor
@@ -235,7 +239,7 @@ function onWindowKeyDown(e) {
 
 function onWindowKeyUp(e) {
 	if (e.code == DecreaseFocusLevelKey) {
-		if (IsDragging || IsDropping) {			
+		if (IsDragging || IsDropping || WasDragCanceled) {			
 			return;
 		}
 		if (isTemplateFocused()) {
