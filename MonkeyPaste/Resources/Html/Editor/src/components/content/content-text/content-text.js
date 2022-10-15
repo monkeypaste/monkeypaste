@@ -16,7 +16,7 @@ function loadTextContent(itemDataStr, isPasteRequest) {
 		//insertHtml(0, itemDataStr,'silent');
 
 		//issues: plain html will not format correctly
-		setHtml(itemDataStr);
+		setRootHtml(itemDataStr);
 
 		loadTemplates();
 		if (isPasteRequest && HasTemplates) {

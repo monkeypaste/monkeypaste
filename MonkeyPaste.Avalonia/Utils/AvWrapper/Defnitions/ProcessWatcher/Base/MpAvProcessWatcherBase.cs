@@ -22,6 +22,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        public bool IsProcessTreePolled {
+            get {
+                if(OperatingSystem.IsWindows()) {
+                    return true;
+                }
+                return false;
+            }
+        }
         public IntPtr ThisAppHandle {
             get {
                 if(App.Desktop == null || App.Desktop.MainWindow == null) {
@@ -31,29 +39,39 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private bool _isThisAppActive = false;
+        public bool IsThisAppActive { 
+            get {
+                if(IsProcessTreePolled) {
+                    return _isThisAppActive;
+                }
+                var active_info = GetActiveProcessInfo();
+                if(active_info == null) {
+                    return false;
+                }
+                return active_info.Handle == ThisAppHandle;
+            }
+        }
+
         
         public virtual bool CanWatchProcesses() {
             // overridden on linux
             return true;
         }
 
-        public IntPtr LastHandle => LastProcessInfo == null ? IntPtr.Zero : LastProcessInfo.Handle;
-
-        public string LastProcessPath => LastProcessInfo == null ? string.Empty : LastProcessInfo.ProcessPath;
-
-        public string LastMainWindowTitle => LastProcessInfo == null ? string.Empty : LastProcessInfo.MainWindowTitle;
-
         private MpPortableProcessInfo _lastProcessInfo;
         public MpPortableProcessInfo LastProcessInfo {
             get {
-                if(OperatingSystem.IsWindows()) {
+                if(IsProcessTreePolled) {
                     return _lastProcessInfo;
                 }
+
                 var active_info = GetActiveProcessInfo();
                 if(active_info == null) {
                     return _lastProcessInfo;
                 }
                 if(active_info.Handle == ThisAppHandle) {
+
                     return _lastProcessInfo;
                 }
                 _lastProcessInfo = active_info;
@@ -68,7 +86,7 @@ namespace MonkeyPaste.Avalonia {
         #region Events
 
 
-        public event EventHandler<MpProcessActivatedEventArgs> OnAppActivated;
+        public event EventHandler<MpPortableProcessInfo> OnAppActivated;
 
         #endregion
 
@@ -81,7 +99,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public void StartWatcher() {
-            if(OperatingSystem.IsWindows()) {
+            if(IsProcessTreePolled) {
                 CreateRunningProcessLookup();
                 if (_timer == null) {
                     _timer = new DispatcherTimer(DispatcherPriority.Background) {
@@ -96,7 +114,7 @@ namespace MonkeyPaste.Avalonia {
 
         }
         public void StopWatcher() {
-           // _timer.Stop();
+           _timer?.Stop();
         }
 
 
@@ -171,29 +189,14 @@ namespace MonkeyPaste.Avalonia {
         protected abstract void CreateRunningProcessLookup();
 
         protected virtual void ProcessWatcherTimer_tick(object sender, EventArgs e) {
-            //if (ThisAppHandle == IntPtr.Zero) {
-            //    if (App.Desktop.MainWindow != null) {
-            //        ThisAppHandle = App.Desktop.MainWindow.PlatformImpl.Handle.Handle;
-            //    }
-            //} else {
-            //    if (ThisAppHandle != App.Desktop.MainWindow.PlatformImpl.Handle.Handle) {
-            //        // issue from loader/mainwindow swap?
-            //        //Debugger.Break();
-            //        MpConsole.WriteLine($"mw handle swapped from {ThisAppHandle} to {App.Desktop.MainWindow.PlatformImpl.Handle.Handle}");
-            //        ThisAppHandle = App.Desktop.MainWindow.PlatformImpl.Handle.Handle;
-            //    }
-            //}
-            if(OperatingSystem.IsLinux()) {
-                // needs more filtering and is slow or certain process states aren't accounted for
-                // so just ignoring
-                //return;
-            }
-
             bool didActiveChange = false;
             var activeProcessInfo = RefreshRunningProcessLookup();
 
-            if (activeProcessInfo == null ||
-               activeProcessInfo.Handle == ThisAppHandle) {
+            if (activeProcessInfo == null) {
+                return;
+            }
+            if(activeProcessInfo.Handle == ThisAppHandle) {
+                _isThisAppActive = true;
                 return;
             }
 
@@ -203,14 +206,9 @@ namespace MonkeyPaste.Avalonia {
 
             _lastProcessInfo = activeProcessInfo;
             if (didActiveChange) {
-                MpConsole.WriteLine(string.Format(@"Last Window: {0} '{1}' ({2})", LastMainWindowTitle, LastProcessPath, LastHandle));
-                OnAppActivated?.Invoke(
-                    this,
-                    new MpProcessActivatedEventArgs() {
-                        ApplicationName = LastMainWindowTitle,
-                        ProcessPath = LastProcessPath,
-                        Handle = LastHandle
-                    });
+                MpConsole.WriteLine(string.Format(@"Last Window: {0} '{1}' ({2})", _lastProcessInfo.MainWindowTitle, _lastProcessInfo.ProcessPath, _lastProcessInfo.Handle));
+
+                OnAppActivated?.Invoke(this, _lastProcessInfo);
             }
         }
 

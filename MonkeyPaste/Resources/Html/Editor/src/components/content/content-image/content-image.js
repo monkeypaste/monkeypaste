@@ -7,7 +7,7 @@ function initImageContent(itemDataStr) {
 	disableSubSelection();
 
 	let img_html = '<p class="ql-align-center"><img class="content-image" src="data:image/png;base64,' + itemDataStr + '"></p>';
-	setHtml(img_html);
+	setRootHtml(img_html);
 }
 
 function getImageContentData() {

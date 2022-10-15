@@ -18,13 +18,15 @@ function registerFontSizes() {
     return DefaultFontSizes;
 }
 
-function refreshFontSizePicker(forcedSize = null) {
+function refreshFontSizePicker(forcedSize = null, sel = null) {
     if (IsFontSizePickerOpen) {
         return;
-	}
+    }
+
+    sel = sel ? sel : getEditorSelection();
     let curFontSize = forcedSize;
     if (curFontSize == null) {
-        let curFormat = quill.getFormat();
+        let curFormat = quill.getFormat(sel);
         curFontSize = curFormat != null && curFormat.hasOwnProperty('size') && curFormat.size.length > 0 ? parseInt(curFormat.size) + 'px' : DefaultFontSize;
 	}
     let fontSizeFound = false;

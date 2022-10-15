@@ -40,7 +40,7 @@ function convertPlainHtml(plainHtml, bgOpacity = 0.0) {
 
 	insertHtml(0, plainHtml);
 
-	//setHtml(plainHtml);
+	//setRootHtml(plainHtml);
 
 	quill.update();
 	let qhtml = getHtml();
@@ -48,7 +48,7 @@ function convertPlainHtml(plainHtml, bgOpacity = 0.0) {
 	qhtml = fixUnicode(qhtml);
 	qhtml = forceBgOpacity(qhtml, bgOpacity);
 
-	setHtml(qhtml);
+	setRootHtml(qhtml);
 
 	log('');
 	log('RichHtml: ');

@@ -14,7 +14,6 @@ function drawLine(ctx, line, stroke = 'black', width = 1, dash = [1, 0]) {
     ctx.stroke();
 }
 
-
 function cleanLine(line) {
     let cleaned_line = {
         x1: line ? line.x1 : 0,

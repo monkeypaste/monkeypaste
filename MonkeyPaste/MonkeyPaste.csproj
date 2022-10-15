@@ -126,9 +126,11 @@
     <None Remove="Resources\Html\Editor\src\components\util\graphics\rect.js" />
     <None Remove="Resources\Html\Editor\src\components\util\graphics\roundedRect.js" />
     <None Remove="Resources\Html\Editor\src\components\util\helpers.js" />
+    <None Remove="Resources\Html\Editor\src\components\util\keyboard.js" />
     <None Remove="Resources\Html\Editor\src\components\util\math.js" />
     <None Remove="Resources\Html\Editor\src\components\util\messages.js" />
     <None Remove="Resources\Html\Editor\src\components\util\resize.js" />
+    <None Remove="Resources\Html\Editor\src\components\window\mouse.js" />
     <None Remove="Resources\Html\Editor\src\editor.js" />
     <None Remove="Resources\Html\Editor\src\components\main\main.js" />
     <None Remove="Resources\Html\Editor\webpack.config.js" />
@@ -205,9 +207,6 @@
     <EmbeddedResource Include="Resources\Html\Editor\src\components\containers\document.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\containers\window.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\editor\editor.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -263,6 +262,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\graphics\rect.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\window\mouse.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\window\keyboard.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\math.js">

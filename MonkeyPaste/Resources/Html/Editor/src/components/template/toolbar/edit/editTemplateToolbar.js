@@ -12,6 +12,8 @@ function initEditTemplateToolbar() {
         }).observe(rta);
     }
 
+    enableResize(document.getElementById('editTemplateToolbar'));
+
     document.getElementById('templateNameTextInput').addEventListener('focus', onTemplateNameTextAreaGotFocus);
     document.getElementById('templateNameTextInput').addEventListener('blur', onTemplateNameTextAreaLostFocus);
     document.getElementById('templateNameTextInput').addEventListener('keydown', onTemplateNameTextArea_keydown);
@@ -19,13 +21,18 @@ function initEditTemplateToolbar() {
 
     document.getElementById('templateDetailTextInput').addEventListener('focus', onTemplateDetailTextAreaGotFocus);
     document.getElementById('templateDetailTextInput').addEventListener('blur', onTemplateDetailTextAreaLostFocus);
+
+    document.getElementById('templateDetailTextInput').addEventListener('input', onTemplateDetailChanged);
+
+    document.getElementById('templateColorBox').addEventListener('click', onTemplateColorBoxContainerClick);
+
+    document.getElementById('templateNameTextInput').addEventListener('input', onTemplateNameChanged);
 }
 
 function showEditTemplateToolbar() {
     var ett = document.getElementById('editTemplateToolbar');
     ett.style.display = 'flex';
 
-    enableResize(document.getElementById('editTemplateToolbar'));
 
     updateAllSizeAndPositions();
 
@@ -140,14 +147,14 @@ function deleteFocusTemplate() {
 function setTemplateType(tguid, ttype) {
     log('Template: ' + tguid + " selected type: " + ttype);
 
-    setTemplateProperty(tguid, 'templateType', ttype);
+    //setTemplateProperty(tguid, 'templateType', ttype);
 
     var t = getTemplateDefByGuid(tguid);
     //t.domNode.setAttribute('templateType', templateTypeValue);
     //document.getElementById("editTemplateTypeMenuSelector").value = ttype;
 
     if (ttype == 'datetime' && t.domNode.getAttribute('templateData') == '') {
-        setTemplateProperty(tguid, 'templateData', 'MM/dd/yyy HH:mm:ss');
+        //setTemplateProperty(tguid, 'templateData', 'MM/dd/yyy HH:mm:ss');
     }
 
     if (ttype == 'dynamic') {
@@ -155,14 +162,14 @@ function setTemplateType(tguid, ttype) {
     } else {
         document.getElementById('templateDetailTextInputContainer').style.display = 'inline-block';
         document.getElementById('templateDetailTextInput').value = getTemplateProperty(tguid, 'templateData');
-        document.getElementById('templateDetailTextInput').addEventListener('input', onTemplateDetailChanged);
+        //document.getElementById('templateDetailTextInput').addEventListener('input', onTemplateDetailChanged);
     }
 
     document.getElementById('templateColorBox').style.backgroundColor = getTemplateProperty(tguid, 'templateColor');
-    document.getElementById('templateColorBox').addEventListener('click', onTemplateColorBoxContainerClick);
+    //document.getElementById('templateColorBox').addEventListener('click', onTemplateColorBoxContainerClick);
 
     document.getElementById('templateNameTextInput').value = getTemplateProperty(tguid, 'templateName');
-    document.getElementById('templateNameTextInput').addEventListener('input', onTemplateNameChanged);
+    //document.getElementById('templateNameTextInput').addEventListener('input', onTemplateNameChanged);
 }
 
 function templateTextAreaChange() {

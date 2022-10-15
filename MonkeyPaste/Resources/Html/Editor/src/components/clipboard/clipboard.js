@@ -117,11 +117,6 @@ function onCopy(e) {
 }
 
 function onPaste(e) {
-    //let dt = getDataTransferObject(e);
-    //if (!dt) {
-    //    log('cannot paste, dt is invalid');
-    //    return;
-    //}
     let sel = getEditorSelection();
     if (!sel) {
         log('no selection, cannot paste');
@@ -130,29 +125,12 @@ function onPaste(e) {
     e.preventDefault();
     e.stopPropagation();
 
-    //let paste_action = {
-    //    paste: getDataTransferDeltaJson(dt),
-    //    range: sel,
-    //    removed: JSON.stringify(getDelta(sel))
-    //};
-
-    //ReadOnlyCutPasteHistory_undo = [paste_action, ...ReadOnlyCutPasteHistory_undo];
-
- //   if (e.clipboardData.) {
- //       setTextInRange(sel, '');
- //       let deltaObj = JSON.parse(getDataTransferDeltaJson(dt));
- //       deltaObj = [{ retain: sel.index }, ...deltaObj.ops];
- //       quill.updateContents(deltaObj);
- //       return;
-    //}
     if (e.clipboardData.types.includes('text/html')) {
-        setTextInRange(sel, '');
-        insertHtml(sel.index, e.clipboardData.getData('text/html'),'user');
+        setHtmlInRange(sel, e.clipboardData.getData('text/html'), 'user', true);
         return;
     }
     if (e.clipboardData.types.includes('text/plain')) {
-        setTextInRange(sel, '');
-        insertText(sel.index, e.clipboardData.getData('text/plain'),'user',true);
+        setTextInRange(sel, e.clipboardData.getData('text/plain'), 'user', true);
         return;
 	}
     log('unknown paste format');

@@ -1,66 +1,10 @@
-//var LastWindowMouseDownLoc = null;
-var WindowMouseDownLoc = null;
-var WindowMouseLoc = null;
-
-var DecreaseFocusLevelKey = 'Escape'
-var IncreaseFocusLevelKey = ' ';
-
-var PermittedNoSelectKeys = [
-	IncreaseFocusLevelKey
-];
-
-var PermittedSubSelectionKeys = [
-	"ArrowLeft",
-	"ArrowUp",
-	"ArrowRight",
-	"ArrowDown",
-	"Shift",
-	"Alt",
-	"Control",
-	"Home",
-	"End",
-	"PageUp",
-	"PageDown",
-	DecreaseFocusLevelKey,
-	IncreaseFocusLevelKey
-];
-
-function initWindow() {
-	window.addEventListener("resize", onWindowResize, true);
-	window.addEventListener('scroll', onWindowScroll);
-
+﻿function initMouse() {
 	window.addEventListener("mousedown", onWindowMouseDown);
 	window.addEventListener("mousemove", onWindowMouseMove);
 	window.addEventListener("mouseup", onWindowMouseUp);
 
 	window.addEventListener('dblclick', onWindowDoubleClick);
 	window.addEventListener("click", onWindowClick);
-
-	window.addEventListener('keydown', onWindowKeyDown);
-	window.addEventListener('keyup', onWindowKeyUp);
-}
-
-function getEditorSelection_safe() {
-	let cmp = WindowMouseLoc;
-	let dmp = WindowMouseDownLoc;
-	if (!dmp) {
-		dmp = cmp;
-	}
-	if (!cmp) {
-		return { index: 0, length: 0 };
-	}
-	let down_idx = getDocIdxFromPoint(dmp);
-	let cur_idx = getDocIdxFromPoint(cmp);
-
-	let safe_range = {};
-	if (cur_idx < down_idx) {
-		safe_range.index = cur_idx;
-		safe_range.length = down_idx - cur_idx;
-	} else {
-		safe_range.index = down_idx;
-		safe_range.length = cur_idx - down_idx;
-	}
-	return safe_range;
 }
 
 function onWindowClick(e) {
@@ -109,6 +53,7 @@ function onWindowMouseDown(e) {
 	WindowMouseDownLoc = { x: e.clientX, y: e.clientY };
 	//LastWindowMouseDownLoc = WindowMouseDownLoc;
 }
+
 function onWindowMouseMove(e) {
 	// NOTE! not called during drag over
 
@@ -147,7 +92,7 @@ function onWindowMouseMove(e) {
 }
 
 function onWindowMouseUp(e) {
-	
+
 	//if (!isChildOfElement(e.target, getEditorContainerElement())) {
 	//	log('window mouse up rejected ', e.target, ' is not a child of editor container');
 	//	return;
@@ -203,74 +148,3 @@ function onWindowMouseUp(e) {
 
 }
 
-function onWindowScroll(e) {
-	updateAllSizeAndPositions();
-}
-
-function onWindowResize(e) {
-	updateAllSizeAndPositions();
-	drawOverlay();
-}
-
-function onWindowKeyDown(e) {
-	if (IsReadOnly) {
-		if (!IsSubSelectionEnabled) {
-			// no edit mode
-			if (PermittedNoSelectKeys.includes(e.key)) {
-				if (e.key == IncreaseFocusLevelKey) {
-					enableSubSelection();
-				}
-			}
-		} else {
-			//sub-select/droppable mode
-			if (PermittedSubSelectionKeys.includes(e.key)) {
-				if (e.key == IncreaseFocusLevelKey) {
-					disableReadOnly();
-				} else if (e.key == DecreaseFocusLevelKey) {
-					disableSubSelection();
-				}
-			}
-		}
-
-		e.stopPropagation();
-		e.preventDefault();
-	} 
-}
-
-function onWindowKeyUp(e) {
-	if (e.code == DecreaseFocusLevelKey) {
-		if (IsDragging || IsDropping || WasDragCanceled) {			
-			return;
-		}
-		if (isTemplateFocused()) {
-			clearTemplateFocus();
-			if (!IsPastingTemplate) {
-				hideEditTemplateToolbar();
-			}
-			return;
-		}
-
-
-		if (IsSubSelectionEnabled) {
-			let sel = getEditorSelection();
-			if (!sel || sel.length == 0) {
-				if (!IsReadOnly) {
-					enableReadOnly();
-					return;
-				}
-				disableSubSelection();
-				return;
-			}
-			setEditorSelection(sel.index, 0);
-			return;
-		}
-	}
-}
-
-function getWindowRect() {
-	let wrect = cleanRect();
-	wrect.right = window.innerWidth;
-	wrect.bottom = window.innerHeight;
-	wrect = cleanRect(wrect);
-	return wrect;
-}

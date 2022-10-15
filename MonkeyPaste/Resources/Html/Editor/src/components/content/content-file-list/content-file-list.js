@@ -53,7 +53,7 @@ function createFileList() {
 	'<colgroup><col class="file-list-icon-col"><col class="file-list-path-col"></colgroup>' +
 	'<tbody>' + file_list_tbody_inner_html + '</tbody></table></div>';
 
-	setHtml(file_list_table_html);
+	setRootHtml(file_list_table_html);
 }
 
 function formatFilePathDisplayValue(fp) {

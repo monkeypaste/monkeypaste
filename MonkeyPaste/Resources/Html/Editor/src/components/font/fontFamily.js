@@ -116,14 +116,16 @@ function getFontFamilyCssStr(ff) {
             .replaceAll('Times New Roman', ff);
 }
 
-function refreshFontFamilyPicker(forceFamily = null) {
+function refreshFontFamilyPicker(forceFamily = null, sel = null) {
     if (IsFontFamilyPickerOpen) {
         return;
     }
+    sel = sel ? sel : getEditorSelection();
+
     let curFontFamily = forceFamily;
     if (curFontFamily == null) {
         //use selection leaf and iterate up tree until font family is defined or return empty string
-        curFontFamily = findSelectionFontFamily();
+        curFontFamily = findRangeFontFamily(sel);
         if (curFontFamily == null || curFontFamily == '') {
             // debugger;
         }
@@ -168,13 +170,13 @@ function refreshFontFamilyPicker(forceFamily = null) {
     }
 }
 
-function findSelectionFontFamily() {
-    let curFormat = quill.getFormat();
+function findRangeFontFamily(range) {
+    let curFormat = quill.getFormat(range);
     let curFontFamily = curFormat != null && curFormat.hasOwnProperty('font') ? curFormat.font : null;// DefaultFontFamily;
     if (curFontFamily) {
         return curFontFamily;
 	}
-    var selection = getEditorSelection();
+    var selection = range;
     if (!selection) {
         // selection outside editor, shouldn't happen since EditorSelectionChange handler forces oldSelection but check timing if occurs
         debugger;

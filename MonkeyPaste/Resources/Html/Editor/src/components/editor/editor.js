@@ -20,10 +20,25 @@ function initEditor(useBetterTable) {
 
 	initQuill(useBetterTable);
 
-
-
-	quill.on("selection-change", onEditorSelectionChanged);
+	//quill.on("selection-change", onEditorSelectionChanged);
 	quill.on("text-change", onEditorTextChanged);
+
+	getEditorElement().addEventListener('focus', onEditorFocus);
+	getEditorElement().addEventListener('blur', onEditorBlur);
+}
+
+function onEditorFocus() {
+	log('editor got focus');
+	BlurredSelectionRects = null;
+}
+
+function onEditorBlur() {
+	log('editor lost focus');
+	if (isTemplateFocused()) {
+
+		return;
+	}
+	BlurredSelectionRects = getRangeRects(getEditorSelection());
 }
 
 function focusEditor() {
@@ -100,45 +115,42 @@ function updateAllSizeAndPositions() {
 
 
 function onEditorSelectionChanged(range, oldRange, source) {
-	
-
 	let logRange = range ? range : { index: -1, length: 0 };
 	let logOldRange = oldRange ? oldRange : { oldRange: -1, length: 0 };
-	log('Sel Changed. range.index: ' + logRange.index + ' range.length: ' + logRange.length + ' oldRange.index: ' + logOldRange.index + ' oldRange.length: ' + logOldRange.length + ' source: ' + source);
+	//log('Sel Changed. range.index: ' + logRange.index + ' range.length: ' + logRange.length + ' oldRange.index: ' + logOldRange.index + ' oldRange.length: ' + logOldRange.length + ' source: ' + source);
 
-	drawOverlay();
 
 	if (IgnoreNextSelectionChange) {
 		IgnoreNextSelectionChange = false;
+		drawOverlay();
 		return;
 	}
 
-	if (range) {
-		refreshFontSizePicker();
-		refreshFontFamilyPicker();
-		updateTemplatesAfterSelectionChange(range, oldRange);
-		//coereceSelectionWithTemplatePadding(range, oldRange, source);
+	//if (range) {
+	//	refreshFontSizePicker();
+	//	refreshFontFamilyPicker();
+	//	//updateTemplatesAfterSelectionChange(range, oldRange);
+	//	onEditorSelectionChanged_ntf(range);
+	//} else {
+	//	log("Cursor not in the editor");
+	//}
 
-		onEditorSelectionChanged_ntf(range);
-	} else {
-		log("Cursor not in the editor");
-	}
-	let was_blur = false;
-	if (!range && !isEditTemplateTextAreaFocused()) {
-		if (oldRange) {
-			was_blur = true;
-			//blur occured
-			//setEditorSelection(oldRange.index, oldRange.length,'silent');
-		}
-	}
-	if (was_blur && isEditorToolbarVisible()) {
-		// only do this to show selection when in toolbar drop down
-		BlurredSelectionRange = oldRange;
-		BlurredSelectionRects = getRangeRects(oldRange);
-	} else {
-		BlurredSelectionRange = null;
-		BlurredSelectionRects = null;
-	}
+	//let was_blur = false;
+	//if (!range && !isEditTemplateTextAreaFocused()) {
+	//	if (oldRange) {
+	//		was_blur = true;
+	//		//blur occured
+	//		//setEditorSelection(oldRange.index, oldRange.length,'silent');
+	//	}
+	//}
+	//if (was_blur && isEditorToolbarVisible()) {
+	//	// only do this to show selection when in toolbar drop down
+	//	BlurredSelectionRange = oldRange;
+	//	BlurredSelectionRects = getRangeRects(oldRange);
+	//} else {
+	//	BlurredSelectionRange = null;
+	//	BlurredSelectionRects = null;
+	//}
 	drawOverlay();
 }
 
@@ -328,11 +340,11 @@ function hideAllToolbars() {
 }
 
 function getEditorSelection() {
-	if (IsDragging) {
-		// when dragging checking selection changes it, not sure why yet
-		return DragSelectionRange;
-	}
-	let selection = quill.getSelection();
+	//if (IsDragging) {
+	//	// when dragging checking selection changes it, not sure why yet
+	//	return DragSelectionRange;
+	//}
+	let selection = getDocumentSelection();// quill.getSelection();
 	//if (docSel) {
 	//	setEditorContentEditable(false);
 	//	document.getSelection().removeAllRanges();
@@ -403,6 +415,7 @@ function getEditorElement() {
 	}
 	return QuillEditorElement;
 }
+
 
 function getEditorContainerRect() {
 	let editor_container_rect = getEditorContainerElement().getBoundingClientRect();

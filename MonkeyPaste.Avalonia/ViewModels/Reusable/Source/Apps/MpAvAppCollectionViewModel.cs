@@ -162,7 +162,7 @@ namespace MonkeyPaste.Avalonia {
             return al;
         }
 
-        private void MpProcessManager_OnAppActivated(object sender, MpProcessActivatedEventArgs e) {
+        private void MpProcessManager_OnAppActivated(object sender, MpPortableProcessInfo e) {
             // if app is unknown add it
             // TODO device logic
             bool isUnknown = Items.FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower()) == null;
@@ -173,7 +173,7 @@ namespace MonkeyPaste.Avalonia {
                     var icon = await MpIcon.Create(iconStr);
                     var app = await MpApp.CreateAsync(
                         appPath: e.ProcessPath, 
-                        appName: e.ApplicationName, 
+                        appName: MpPlatformWrapper.Services.ProcessWatcher.ParseTitleForApplicationName(e.MainWindowTitle), 
                         iconId: icon.Id);
                     // vm is added in db add handler
                 });

@@ -180,6 +180,7 @@ function setSelection_ext(selMsgReq) {
 		log('cannot parse setSelection_ext msg: ' + selMsgReq);
 		return '';
 	}
+	log('selection set from external: ', selMsg);
 
 	setEditorSelection(selMsg.index, selMsg.length,'api');
 }

@@ -4,7 +4,7 @@ var ContentItemType = 'Text';
 var ContentScreenshotBase64Str = null;
 
 function loadContent(contentHandle, contentType, contentData, isPasteRequest) {
-	//resetDragDrop(true);
+	resetSelection();
 
 	ContentHandle = contentHandle;
 	ContentItemType = contentType;
@@ -230,21 +230,22 @@ function getDocLength() {
 	return quill.getLength();
 }
 
-function getCharacterRect(docIdx, inflateX = false, inflateY = false, isWindowOrigin = true) {
-	if (isNaN(parseFloat(docIdx))) {
+function getCharacterRect(docIdx, isWindowOrigin = true) {
+	docIdx = parseInt(docIdx);
+	if (isNaN(docIdx)) {
 		return cleanRect();
 	}
 
 	let docIdx_rect = quill.getBounds(docIdx, 1);
+
 	if (isWindowOrigin) {
 		docIdx_rect = editorToScreenRect(docIdx_rect);
-	}
-
-	if (inflateX || inflateY) {
-		inflateCharacterRect(docIdx, docIdx_rect, inflateX, inflateY);
 	} else {
 		docIdx_rect = cleanRect(docIdx_rect);
 	}
+	let lh = getLineHeightAtDocIdx(docIdx);
+	let inflate_y_amt = Math.ceil((lh - docIdx_rect.height) / 2);
+	docIdx_rect = inflateRect(docIdx_rect, 0, -inflate_y_amt, 0, inflate_y_amt);
 	return docIdx_rect;
 }
 
@@ -329,14 +330,14 @@ function getLineRect(lineIdx, snapToEditor = true) {
 	return line_rect;
 }
 
-function getRangeRects(range, inflateX = null, inflateY = null, isWindowOrigin = true) {
+function getRangeRects(range, isWindowOrigin = true) {
 	let range_rects = [];
 	if (!range || range.length == 0) {
 		return range_rects;
 	}
 	let cur_line_rect = null;
 	for (var i = range.index; i < range.index + range.length; i++) {
-		let cur_idx_rect = getCharacterRect(i, inflateX, inflateY, isWindowOrigin);
+		let cur_idx_rect = getCharacterRect(i, isWindowOrigin);
 		if (cur_line_rect == null) {
 			//new line
 			cur_line_rect = cur_idx_rect
@@ -403,7 +404,28 @@ function isPointInRange(p, range, snapToBlock) {
 	//return is_in_range;
 }
 
+function getElementBlot(elm) {
+	let cur_elm = elm;
+	while (true) {
+		if (cur_elm == null) {
+			return null;
+		}
 
+		let cur_blot = Quill.find(cur_elm);
+		if (cur_blot && typeof cur_blot.offset === 'function') {
+			return cur_blot;
+		}
+		cur_elm = cur_elm.parentNode;
+	}
+}
+
+function getElementDocIdx(elm) {
+	let elm_blot = getElementBlot(elm);
+	if (elm_blot == null) {
+		return 0;
+	}
+	return elm_blot.offset(quill.scroll);
+}
 
 function getDocIdxFromPoint(p, fallbackIdx) {
 	if (!p || p.x === undefined || p.y === undefined) {
@@ -527,14 +549,11 @@ function getBlotAtDocIdx(docIdx) {
 }
 
 function getElementAtDocIdx(docIdx) {
-	let leafNode = getNodeAtDocIdx(docIdx);
-	let leafElementNode =
-		leafNode.nodeType == 3 ? leafNode.parentElement : leafNode;
-	return leafElementNode;
-}
-function getNodeAtDocIdx(docIdx) {
-	let leafNode = quill.getLeaf(docIdx)[0].domNode;
-	return leafNode;
+	let doc_idx_blot = getBlotAtDocIdx(docIdx);
+	if (!doc_idx_blot) {
+		return getEditorElement();
+	}
+	return doc_idx_blot.domNode;
 }
 
 function getBlockElementAtDocIdx(docIdx) {
@@ -616,12 +635,33 @@ function getElementDocRange(elm) {
 async function getContentImageBase64Async(sel) {
 	let sel_rects = null;
 	if (sel) {
-		sel_rects = getRangeRects(sel, null, null, false);
+		sel_rects = getRangeRects(sel, false);
 	}
 	let base64Str = await getBase64ScreenshotOfElementAsync(getEditorContainerElement(), sel_rects);
 
 	return base64Str;
 }
 
+function getDefaultLineHeight() {
+	let editor_height = getElementLineHeight(getEditorElement());
+	return editor_height;
+}
 
+function getLineHeightAtDocIdx(docIdx) {
+	let doc_idx_elm = getElementAtDocIdx(docIdx);
+	if (!doc_idx_elm) {
+		return getDefaultLineHeight();
+	}
+	let line_height = getElementLineHeight(doc_idx_elm);
+	if (isNaN(line_height)) {
+		return getDefaultLineHeight();
+	}
+	return line_height;
+}
+
+function getElementLineHeight(elm) {
+	let attrb_val = window.getComputedStyle(getEditorElement()).getPropertyValue('line-height');
+	let float_val = parseFloat(attrb_val);
+	return float_val;
+}
 

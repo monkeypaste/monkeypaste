@@ -26,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
         //private double _windowTimerStep;
         //private double d_l, d_r, d_t, d_b;
 
-        private int _animateTimeOut_ms = 5000;
+        //private int _animateTimeOut_ms = 5000;
         private CancellationTokenSource _animationCts;
 
         #endregion

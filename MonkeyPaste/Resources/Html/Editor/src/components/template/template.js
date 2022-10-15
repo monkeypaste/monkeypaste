@@ -607,13 +607,14 @@ function getLowestAnonTemplateName(anonPrefix = 'Template #') {
     return anonPrefix + (parseInt(maxNum) + 1);
 }
 
-function focusTemplate(ftguid, ftiguid, fromDropDown) {
+function focusTemplate(ftguid, ftiguid, fromDropDown, isNew) {
     if (ftguid == null) {
         return;
     }
     clearTemplateFocus();
     hideAllTemplateContextMenus();
 
+    let wasFocusSet = false;
     var tel = getTemplateElements();
     for (var i = 0; i < tel.length; i++) {
         var te = tel[i];
@@ -626,16 +627,31 @@ function focusTemplate(ftguid, ftiguid, fromDropDown) {
                     $('#templateTextArea').val('');
                 }
             }
-            te.setAttribute('isFocus', true);
 
-            if (ftiguid != null && te.getAttribute('templateInstanceGuid') == ftiguid) {
+            let ft_instance_elm = null;
+
+            if (ftiguid) {
+                if (te.getAttribute('templateInstanceGuid') == ftiguid) {
+                    ft_instance_elm = te;
+				}                
+            } else if (!wasFocusSet) {
+                ft_instance_elm = te;
+            }
+
+            if (ft_instance_elm) {
+                wasFocusSet = true;
+
+                te.setAttribute('isFocus', true);
                 te.classList.add(Template_FOCUSED_INSTANCE_Class);
                 let teBlot = Quill.find(te);
                 let teIdx = quill.getIndex(teBlot);
-                setEditorSelection(teIdx,1,'silent');
-            } else {
+                //setEditorSelection(teIdx, 1);
+			} else {
                 te.classList.add(Template_FOCUSED_NOT_INSTANCE_Class);
+                te.setAttribute('isFocus', false);
             }
+           // te.setAttribute('isFocus', true);
+
         } else {
             te.setAttribute('isFocus', false);
             te.classList.remove(Template_FOCUSED_INSTANCE_Class);

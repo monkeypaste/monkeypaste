@@ -3,7 +3,7 @@
 function onEditorSelectionChanged_ntf(range,isSelChangeBegin) {
 	// output MpQuillContentSelectionChangedMessage
 
-	let text = getSelectedText();
+	let text = getText(range,false); 
 	let selChangedObj = {
 		//contentHandle: ContentHandle,
 		index: range.index,

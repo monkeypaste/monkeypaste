@@ -95,6 +95,10 @@ function applyTemplateToDomNode(node, value) {
         return node;
     }
 
+    if (value.templateType == 'datetime' && value.templateData == '') {
+        value.templateData = 'MM/dd/yyy HH:mm:ss';
+    }
+
     node.setAttribute('templateGuid', value.templateGuid);
     node.setAttribute('templateInstanceGuid', value.templateInstanceGuid);
     node.setAttribute('templateName', value.templateName);
@@ -105,7 +109,8 @@ function applyTemplateToDomNode(node, value) {
     node.setAttribute('templateDeltaFormat', value.templateDeltaFormat);
     node.setAttribute('templateHtmlFormat', value.templateHtmlFormat);
 
-    setTemplateBgColor(null, value.templateInstanceGuid, value.templateColor, false);
+    //setTemplateBgColor(null, value.templateInstanceGuid, value.templateColor, false);
+    setTemplateBgColor(value.templateGuid, null, value.templateColor, false);
 
     node.innerHTML = value.templateHtmlFormat;
     changeInnerText(node, node.innerText, value.templateName);
@@ -123,65 +128,69 @@ function applyTemplateToDomNode(node, value) {
     node.setAttribute('draggable', false);
     node.setAttribute('contenteditable', false);
 
-    var templateDocIdxCache;
-    function onTemplatePointerDown(e) {
-        node.addEventListener('pointermove', onTemplatePointerMove);
-        node.setPointerCapture(e.pointerId);
-        templateDocIdxCache
-    }
-
-    function onTemplatePointerUp(e) {
-        templateDocIdxCache = null;
-
-        node.removeEventListener('pointermove', onTemplatePointerMove);
-        node.releasePointerCapture(e.pointerId);
-    }
-
-    function onTemplatePointerMove(e) {
-        let curMousePos = getEditorPosFromTemplateMouse(e);
-        if (!IsMovingTemplate && dist(MouseDownOnTemplatePos, curMousePos) < MIN_TEMPLATE_DRAG_DIST) {
-            return;
-        }
-        if (templateDocIdxCache == null) {
-            templateDocIdxCache = getTemplateElementsWithDocIdx();
-        }
-
-        let docIdx = getDocIdxFromPoint(curMousePos, templateDocIdxCache);
-        log('docIdx: ' + docIdx);
-        if (docIdx < 0) {
-            return;
-        }
-        moveTemplate(value.templateInstanceGuid, docIdx, false);
-
-        //if (!quill.hasFocus()) {
-        //    quill.focus();
-        //}
-        //setEditorSelection(docIdx, 0);
-    }
-
-    function getEditorPosFromTemplateMouse(e) {
-        return getEditorMousePos(e);
-        let curMousePos = { x: e.pageX, y: e.pageY };
-        curMousePos.x -= e.currentTarget.offsetLeft;
-        curMousePos.y -= e.currentTarget.offsetTop;
-        return curMousePos;
-    }
-
+    //var templateDocIdxCache;
     //node.addEventListener('pointerdown', onTemplatePointerDown);
     //node.addEventListener('pointerup', onTemplatePointerUp);
 
-    node.addEventListener('click', function (e) {
-        if (!IsSubSelectionEnabled) {
-            log("Selection disabled so ignoring click on template " + value.templateInstanceGuid);
-            return;
-		}
-        focusTemplate(value.templateGuid, value.templateInstanceGuid, false);
-    });
-    node.addEventListener('pointerdown', function (e) {
-        let ti_doc_idx = getTemplateDocIdx(value.templateInstanceGuid);
-        setEditorSelection(ti_doc_idx, 1, 'api');
-    });
+    node.addEventListener('click', onTemplateClick);
+    //node.addEventListener('pointerdown', function (e) {
+    //    let ti_doc_idx = getTemplateDocIdx(value.templateInstanceGuid);
+    //    setEditorSelection(ti_doc_idx, 1, 'api');
+    //});
 
     return node;
 }
 
+function onTemplateClick(e) {
+    let t = getTemplateFromDomNode(e.target);
+    if (!IsSubSelectionEnabled) {
+        log("Selection disabled so ignoring click on template " + value.templateInstanceGuid);
+        return;
+    }
+
+    focusTemplate(t.templateGuid, t.templateInstanceGuid, false);
+}
+
+// unused drag drop stuff
+
+function getEditorPosFromTemplateMouse(e) {
+    return getEditorMousePos(e);
+    let curMousePos = { x: e.pageX, y: e.pageY };
+    curMousePos.x -= e.currentTarget.offsetLeft;
+    curMousePos.y -= e.currentTarget.offsetTop;
+    return curMousePos;
+}
+function onTemplatePointerDown(e) {
+    node.addEventListener('pointermove', onTemplatePointerMove);
+    node.setPointerCapture(e.pointerId);
+    //templateDocIdxCache
+}
+
+function onTemplatePointerUp(e) {
+    templateDocIdxCache = null;
+
+    node.removeEventListener('pointermove', onTemplatePointerMove);
+    node.releasePointerCapture(e.pointerId);
+}
+
+function onTemplatePointerMove(e) {
+    let curMousePos = getEditorPosFromTemplateMouse(e);
+    if (!IsMovingTemplate && dist(MouseDownOnTemplatePos, curMousePos) < MIN_TEMPLATE_DRAG_DIST) {
+        return;
+    }
+    if (templateDocIdxCache == null) {
+        templateDocIdxCache = getTemplateElementsWithDocIdx();
+    }
+
+    let docIdx = getDocIdxFromPoint(curMousePos, templateDocIdxCache);
+    log('docIdx: ' + docIdx);
+    if (docIdx < 0) {
+        return;
+    }
+    moveTemplate(value.templateInstanceGuid, docIdx, false);
+
+    //if (!quill.hasFocus()) {
+    //    quill.focus();
+    //}
+    //setEditorSelection(docIdx, 0);
+}

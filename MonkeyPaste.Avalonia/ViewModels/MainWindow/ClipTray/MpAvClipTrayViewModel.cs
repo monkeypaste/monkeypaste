@@ -1908,10 +1908,17 @@ namespace MonkeyPaste.Avalonia {
 
 
         public void ClipboardChanged(object sender, MpPortableDataObject mpdo) {
-            if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading || 
-                IsAppPaused) {
+            bool is_change_ignored = MpAvMainWindowViewModel.Instance.IsMainWindowLoading ||
+                                        IsAppPaused ||
+                                        (MpPrefViewModel.Instance.IgnoreInternalClipboardChanges && MpPlatformWrapper.Services.ProcessWatcher.IsThisAppActive);
+            if (is_change_ignored) {
+                MpConsole.WriteLine("Clipboard Change Ignored by tray");
+                MpConsole.WriteLine($"IsMainWindowLoading: {MpAvMainWindowViewModel.Instance.IsMainWindowLoading}");
+                MpConsole.WriteLine($"IsAppPaused: {IsAppPaused}");
+                MpConsole.WriteLine($"IgnoreInternalClipboardChanges: {MpPrefViewModel.Instance.IgnoreInternalClipboardChanges} IsThisAppActive: {MpPlatformWrapper.Services.ProcessWatcher.IsThisAppActive}");
                 return;
             }
+            
             Dispatcher.UIThread.Post(async () => {
                 await AddItemFromClipboard(mpdo);
             });
@@ -2237,7 +2244,7 @@ namespace MonkeyPaste.Avalonia {
             createItemSw.Start();
 
 
-            var newCopyItem = await MpAvCopyItemBuilder.CreateFromDataObject(cd, false, IsAnyAppendMode && _appendModeCopyItem != null);
+            var newCopyItem = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(cd, false, IsAnyAppendMode && _appendModeCopyItem != null);
 
             MpConsole.WriteLine("CreateFromClipboardAsync: " + createItemSw.ElapsedMilliseconds + "ms");
 

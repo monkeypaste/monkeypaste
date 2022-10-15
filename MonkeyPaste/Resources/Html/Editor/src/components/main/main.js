@@ -86,6 +86,11 @@ function initMain(envName, useBetterTable) {
 	initDocument();
 	initWindow();
 
+	initSelection();
+
+	initKeyboard();
+	initMouse();
+
 	initDrop();
 	initDrag();
 	

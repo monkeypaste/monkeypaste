@@ -114,12 +114,12 @@ function drawHighlighting(ctx, forceColor) {
 	}
 }
 
-function drawDropPreview(ctx, color = 'red', thickness = '0.5', line_style = [5,5], alpha = 255) {
+function drawDropPreview(ctx, color = 'red', thickness = '1.0', line_style = [5,5]) {
     let drop_idx = DropIdx;
     if (isDragCopy()) {
         color = 'lime';
 	}
-    log('dropIdx: ' + drop_idx);
+    //log('dropIdx: ' + drop_idx);
     if (drop_idx < 0) {
         return;
     }
@@ -192,7 +192,7 @@ function drawDropPreview(ctx, color = 'red', thickness = '0.5', line_style = [5,
 }
 
 function drawFancyTextSelection(ctx) {
-    let sel_rects = getRangeRects(getEditorSelection(), false, false);
+    let sel_rects = getRangeRects(getEditorSelection());
 
     let r = FancyTextSelectionRoundedCornerRadius;
     let def_corner_radius = { tl: r, tr: r, br: r, bl: r };
@@ -201,7 +201,7 @@ function drawFancyTextSelection(ctx) {
     for (var i = 0; i < round_rect_groups.length; i++) {
         for (var j = 0; j < round_rect_groups[i].length; j++) {
             let rrect = round_rect_groups[i][j];
-            drawRoundedRect(ctx, rrect[1], rrect[0], 'purple', 'goldenrod', 0, 100)
+            drawRoundedRect(ctx, rrect[1], rrect[0], 'purple', 'goldenrod', 0, 100/255)
         }
     }
 
@@ -222,8 +222,9 @@ function drawTextSelection(ctx) {
 
     if (IsDropping || IsDragging) {
         if (IsDragging) {
-            let is_drop_valid = DropIdx >= 0;
-            if (is_drop_valid || IsDragging) {
+            // ignoring invalidity if external drop
+            let is_drop_valid = DropIdx >= 0 || !IsDropping;
+            if (is_drop_valid) {
                 if (isDragCopy()) {
                     sel_bg_color = 'lime';
                     log('copy recognized in sel draw');
@@ -253,9 +254,9 @@ function drawTextSelection(ctx) {
 
     setCaretColor(caret_color);
 
-    if (BlurredSelectionRects != null) {
+    if (BlurredSelectionRects) {
         BlurredSelectionRects.forEach((sel_rect) => {
-            drawRect(ctx, sel_rect, sel_bg_color,'transparent', 0, 75);
+            drawRect(ctx, sel_rect, sel_bg_color, sel_fg_color, 0.5, 125/255);
         });
     }
 }

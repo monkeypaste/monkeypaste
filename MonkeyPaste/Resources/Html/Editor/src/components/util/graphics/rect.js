@@ -1,7 +1,7 @@
-function drawRect(ctx, rect, fill = 'black', stroke = 'black', lineWidth = 0, alpha = 255) {
-    let strokStyleStr = cleanColorStyle(stroke, alpha != 255 ? alpha : null);
+function drawRect(ctx, rect, fill = 'black', stroke = 'black', lineWidth = 0, opacity = 1.0) {
+    let strokStyleStr = cleanColorStyle(stroke, opacity != 1.0 ? opacity : null);
     ctx.strokeStyle = strokStyleStr;
-    let fillStyleStr = cleanColorStyle(fill, alpha != 255 ? alpha : null);
+    let fillStyleStr = cleanColorStyle(fill, opacity != 1.0 ? opacity : null);
     ctx.fillStyle = fillStyleStr;
     ctx.lineWidth = lineWidth;
 
@@ -23,17 +23,6 @@ function rectContainsRect(rect, r) {
         return false;
     }
     return isPointInRect(rect, { x: r.left, y: r.top }) && isPointInRect(rect, { x: r.right, y: r.bottom });
-}
-
-function rectIntersect(rect_a, rect_b) {
-    let rect_u = {
-        left: Math.min(rect_a.left, rect_b.left),
-        top: Math.min(rect_a.top, rect_b.top),
-        right: Math.max(rect_a.right, rect_b.right),
-        bottom: Math.max(rect_a.bottom, rect_b.bottom),
-    }
-    rect_u = cleanRect(rect_u);
-    return rect_u;
 }
 
 function rectUnion(rect_a, rect_b) {

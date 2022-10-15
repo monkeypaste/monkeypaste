@@ -143,28 +143,20 @@ function hexToRgb(hex) {
     let rgba = hexToRgba(hex);
     delete rgba.a;
     return rgba;
-
-    //var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    //return result ? {
-    //    R: parseInt(result[1], 16),
-    //    G: parseInt(result[2], 16),
-    //    B: parseInt(result[3], 16)
-    //} : null;
 }
 
-
-function cleanColor(rgb_Or_rgba_Or_colorName_Str, forceAlpha) {
+function cleanColor(rgb_Or_rgba_Or_colorName_Str, forceOpacity) {
     if (!rgb_Or_rgba_Or_colorName_Str) {
         return { r: 0, g: 0, b: 0, a: 0 };
     }
     let color = parseRgba(rgb_Or_rgba_Or_colorName_Str);
-    if (forceAlpha) {
-        color.a = forceAlpha;
+    if (forceOpacity) {
+        color.a = forceOpacity;
     }
     return color;
 }
-function cleanColorStyle(rgb_Or_rgba_Or_colorName_Str, forceAlpha) {
-    let color = cleanColor(rgb_Or_rgba_Or_colorName_Str, forceAlpha);
+function cleanColorStyle(rgb_Or_rgba_Or_colorName_Str, forceOpacity) {
+    let color = cleanColor(rgb_Or_rgba_Or_colorName_Str, forceOpacity);
     return rgbaToRgbaStyle(color);
 }
 

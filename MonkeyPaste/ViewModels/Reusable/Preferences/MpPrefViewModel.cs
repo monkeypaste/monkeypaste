@@ -311,8 +311,7 @@ namespace MonkeyPaste {
         public string MainWindowShowBehaviorType { get; set; } = MpMainWindowShowBehaviorType.Primary.ToString();
 
         public double MainWindowInitialWidth { get; set; } = 0;
-        public double MainWindowInitialHeight { get; set; } = 0;
-        
+        public double MainWindowInitialHeight { get; set; } = 0;        
 
         public DateTime StartupDateTime { get; set; } = DateTime.MinValue;
 
@@ -327,6 +326,8 @@ namespace MonkeyPaste {
         public int ThisAppSourceId { get; set; } = 0;
 
         public int ThisOsFileManagerSourceId { get; set; } = 0;
+
+        public bool IgnoreInternalClipboardChanges { get; set; } = true;
 
         #region Encrytion
 

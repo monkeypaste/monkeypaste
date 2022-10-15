@@ -9,9 +9,6 @@ var DragStartScrollOffset = null;
 var SelIdxBeforeDrag = -1;
 var DocLengthBeforeDrag = -1;
 
-var IsCtrlDown = false; //duplicate
-var IsShiftDown = false; //split 
-var IsAltDown = false; // w/ formatting (as html)? ONLY formating? dunno
 
 var DragItemElms = [];
 
@@ -46,8 +43,9 @@ function handleDragStart(e) {
         return false;
     }
 
-    log('drag start');
     DragSelectionRange = sel;    
+
+    log('drag start sel: ', DragSelectionRange);
 
     IsDragging = true;
     DocLengthBeforeDrag = getDocLength();
@@ -77,8 +75,13 @@ function handleDragStart(e) {
 }
 
 function handleDragEnd(e) {
-    log('drag end');
     let fromHost = e.fromHost ? e.fromHost : false;
+    log('drag end fromHost: ', fromHost);
+    if (IsDropping && fromHost) {
+        log('ignoring host drag end');
+        return;
+    }
+    log('drag end not rejected and finishing..');
     let selfDrop = DropIdx >= 0;
     if (selfDrop && e && e.dataTransfer.dropEffect.toLowerCase().includes('move')) {
         // 'move' should imply it was an internal drop
@@ -99,10 +102,7 @@ function handleDragEnd(e) {
         wasCanceled = e.wasCancel;
 	}
 
-    if (!isRunningInHost()) {
-        resetDrag(fromHost, wasCanceled);
-	}
-    
+    resetDrag(fromHost, wasCanceled);    
 }
 
 function resetDrag(fromHost = false, wasDragCanceled = false) {
@@ -110,11 +110,11 @@ function resetDrag(fromHost = false, wasDragCanceled = false) {
     // NOTE only flagging drag cancel in drag source to avoid confuse other state changes
     // when true, window keyup handler ignores decrease focus 
     WasDragCanceled = wasDragCanceled;
-    if (!WasDragCanceled) {
+    //if (!WasDragCanceled) {
         // NOTE don't know why but selection is reset when drag cancels
         // and document sel change will null this after it restores sel
         DragSelectionRange = null;
-    }
+    //}
     IsDragging = false
     SelIdxBeforeDrag = -1;
     DocLengthBeforeDrag = -1;

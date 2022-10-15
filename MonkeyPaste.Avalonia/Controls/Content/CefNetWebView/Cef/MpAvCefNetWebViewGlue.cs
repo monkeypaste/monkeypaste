@@ -108,13 +108,13 @@ namespace MonkeyPaste.Avalonia {
                 // seems excessive...but ultimately all ole pref's come from plugins so pass everthing through cb plugin system just like writing to clipboard
                 avmpdo = await MpPlatformWrapper.Services.DataObjectHelperAsync.WriteDragDropDataObject(avmpdo) as MpAvDataObject;
 
-
                 while (pe == null) {
                     await Task.Delay(100);
                 }
 
                 var result = await DragDrop.DoDragDrop(pe, avmpdo, allowedEffects);
-
+                bool wasCopy = MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown;
+                bool wasSelfDrop = !wasEscapePressed && ctvm.IsHovering;
                 ctvm.IsTileDragging = false;
                 wv.PointerMoved -= pointer_move_handler;
                 MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = null;
@@ -124,13 +124,20 @@ namespace MonkeyPaste.Avalonia {
 
                 MpConsole.WriteLine("Cef Drag Result: " + result);
 
-                bool wasSelfDrop = !wasEscapePressed && ctvm.IsHovering;
 
                 MpConsole.WriteLine("Was Self drop: " + wasSelfDrop);
+
+                string dropEffect = wasSelfDrop && !wasCopy ? "move":"copy";
+
+                if(wasEscapePressed) {
+                    dropEffect = "none";
+                }
+
+                MpConsole.WriteLine("ACTUAL drag result: " + dropEffect);
                 //if(!wasSelfDrop) {
                 var dragEndMsg = new MpQuillDragEndMessage() {
                     dataTransfer = new MpQuillDataTransferMessageFragment() {
-                        dropEffect = result.ToString()
+                        dropEffect = dropEffect
                     },
                     fromHost = true,
                     wasCancel = wasEscapePressed

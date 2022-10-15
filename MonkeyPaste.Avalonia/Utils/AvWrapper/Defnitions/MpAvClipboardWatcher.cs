@@ -85,8 +85,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private void _timer_Tick(object sender, EventArgs e) {
-            
+        private void _timer_Tick(object sender, EventArgs e) {            
             CheckClipboard();
         }
 
@@ -127,61 +126,6 @@ namespace MonkeyPaste.Avalonia {
             }
             _isCheckingClipboard = true;
             MpPortableDataObject ndo = await MpAvClipboardHandlerCollectionViewModel.Instance.ReadClipboardOrDropObjectAsync();
-            _isCheckingClipboard = false;
-            return ndo;
-        }
-        private async Task<MpPortableDataObject> ConvertManagedFormats2() {
-            _isCheckingClipboard = true;
-
-            //if(OperatingSystem.IsWindows()) {
-            //    while(WinApi.IsClipboardOpen(true) != IntPtr.Zero) {
-            //        MpConsole.WriteLine("Waiting on windows clipboard...");
-            //        await Task.Delay(100);
-            //    }
-            //}
-
-            var ndo = new MpPortableDataObject();
-            string[] formats = await Application.Current.Clipboard.GetFormatsAsync();
-            var validFormats = formats.Where(x => MpPortableDataFormats.RegisteredFormats.Contains(x)); //formats.Where(x => !x.StartsWith("Unknown_Format") && !_rejectedFormats.Contains(x));
-
-            foreach (string format in validFormats) {
-                object formatData = null;
-                try {
-                    if(OperatingSystem.IsWindows() && format == MpPortableDataFormats.AvHtml_bytes) {
-                        // windows bug uses Win-1252 encoding not UTF8 this pinkvokes actual html
-                        formatData = MpAvWin32HtmlClipboardHelper.GetHTMLWin32Native();
-                    } else {
-                        formatData = await Application.Current.Clipboard.GetDataAsync(format);
-                    }
-                    
-                    if (formatData is byte[] formatDataBytes) {
-                        try {
-                            formatData = formatDataBytes.ToDecodedString();
-                        }
-                        catch (Exception ex) {
-                            MpConsole.WriteTraceLine($"Exception parsing bytes (ignoring format '{format}'): ", ex);
-                            continue;
-                        }
-                    }
-                } catch(COMException com_ex) {
-                    MpConsole.WriteTraceLine($"Error reading clipboard format '{format}'", com_ex);
-                    continue;
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Error reading clipboard format '{format}'", ex);
-                    continue;
-                }
-                if(formatData == null) {
-                    continue;
-                }
-                try {
-                    ndo.SetData(format, formatData);
-                }catch(MpUnregisteredDataFormatException){                    
-                    MpPortableDataFormats.RegisterDataFormat(format);
-                    ndo.SetData(format, formatData);
-                }
-            }
-
             _isCheckingClipboard = false;
             return ndo;
         }

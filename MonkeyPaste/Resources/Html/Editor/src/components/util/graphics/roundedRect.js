@@ -142,10 +142,10 @@ function roundRect(
     //}, true);
 }
 
-function drawRoundedRect(ctx, sharp_rect, corner_radii, fill = 'black', stroke = 'black', lineWidth = 0, alpha = 255) {
-    let strokStyleStr = cleanColorStyle(stroke, alpha != 255 ? alpha : null);
+function drawRoundedRect(ctx, sharp_rect, corner_radii, fill = 'black', stroke = 'black', lineWidth = 0, opacity = 1.0) {
+    let strokStyleStr = cleanColorStyle(stroke, opacity != 1.0 ? opacity : null);
     ctx.strokeStyle = strokStyleStr;
-    let fillStyleStr = cleanColorStyle(fill, alpha != 255 ? alpha : null);
+    let fillStyleStr = cleanColorStyle(fill, opacity != 1.0 ? opacity : null);
     ctx.fillStyle = fillStyleStr;
     ctx.lineWidth = lineWidth;
     let draw_lines = lineWidth > 0;

@@ -41,18 +41,9 @@ function createQuillOptions(useBetterTable) {
 // TEXT
 
 
-function setTextInRange(range, text, source = 'api') {
-	//let wasEditable = isContentEditable();
-	//if (!wasEditable) {
-	//	setEditorContentEditable(true);
-	//}
+function setTextInRange(range, text, source = 'api', decodeTemplates = false) {	
 	quill.deleteText(range.index, range.length, source);
-	quill.insertText(range.index, text, source);
-
-	//if (!wasEditable) {
-	//	setEditorContentEditable(false);
-	//}
-	//quill.setText(text + "\n");
+	insertText(range.index, text, source, decodeTemplates);
 }
 
 function insertText(docIdx, text, source = 'api', decodeTemplates = false) {
@@ -69,15 +60,6 @@ function getSelectedText(encodeTemplates = false) {
 }
 
 function getText(range, encodeTemplates = false) {
-	//if (!quill || !quill.root) {
-	//	return '';
-	//}
-
-	//let wasReadOnly = isContentEditable();
-	//if (wasReadOnly) {
-	//	setEditorContentEditable(true);
-	//}
-
 	range = range == null ? { index: 0, length: quill.getLength() } : range;
 	let text = '';
 	if (IsLoaded & encodeTemplates) {
@@ -85,29 +67,13 @@ function getText(range, encodeTemplates = false) {
 	} else {
 		text = quill.getText(range.index, range.length);
 	}
-
-	//if (wasReadOnly) {
-	//	setEditorContentEditable(false);
-	//}
 	return text;
 }
 
 // HTML
 
-function setHtml(html) {
+function setRootHtml(html) {
 	quill.root.innerHTML = html;
-	//getEditorElement().innerHTML = html;
-}
-
-function setHtmlFromBase64(base64Html) {
-	console.log("base64: " + base64Html);
-	let html = atob(base64Html);
-	console.log("html: " + html);
-
-	quill.root.innerHTML = html;
-
-	var output = getHtmlBase64();
-	return output;
 }
 
 function getHtml(range) {
@@ -162,9 +128,17 @@ function getSelectedHtml3() {
 	return documentFragment;
 }
 
+function setHtmlInRange(range, htmlStr, source = 'api', decodeTemplates = false) {
+	quill.deleteText(range.index, range.length, source);
+	insertHtml(range.index, htmlStr, source, decodeTemplates);
+}
 
-function insertHtml(docIdx, data, source='api') {
-	quill.clipboard.dangerouslyPasteHTML(docIdx, data, source);
+function insertHtml(docIdx, htmlStr, source='api', decodeTemplates = true) {
+	quill.clipboard.dangerouslyPasteHTML(docIdx, htmlStr, source);
+	if (decodeTemplates) {
+		// default is true unlike text, since blot's need to be bound to events not sure if thats always right
+		loadTemplates();
+	}
 }
 
 // DELTA
@@ -172,8 +146,6 @@ function insertHtml(docIdx, data, source='api') {
 function setContents(jsonStr) {
 	quill.setContents(JSON.parse(jsonStr));
 }
-
-
 
 function insertContent(docIdx, data, forcePlainText = false) {
 	// TODO need to determine data type here
