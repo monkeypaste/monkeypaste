@@ -1,6 +1,6 @@
 var FileListItems = [];
 
-function initFileListContent(itemDataStr) {
+function loadFileListContent(itemDataStr) {
 	// item data is MpQuillFileListDataFragment
 
 	// itemData must remain file-paths separated by new-line
@@ -19,7 +19,7 @@ function initFileListContent(itemDataStr) {
 	quill.enable(false);
 }
 
-function getPathsStr() {
+function getFileListContentData() {
 	let paths_str = '';
 	for (var i = 0; i < FileListItems.length; i++) {
 		paths_str += FileListItems[i].filePath;

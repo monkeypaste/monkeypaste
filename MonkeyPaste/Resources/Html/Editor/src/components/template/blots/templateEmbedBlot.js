@@ -12,6 +12,7 @@ var Template_AFTER_INSERT_Class = 'ql-template-embed-blot-after-insert';
 var TemplateEmbedHtmlAttributes = [
     'isFocus',
     'background-color',
+    'wasVisited'
     //'color'
 ];
 
@@ -75,6 +76,9 @@ function getTemplateFromDomNode(domNode) {
     if (domNode == null) {
         return null;
     }
+    if (!domNode.hasAttribute('wasVisited')) {
+        domNode.setAttribute('wasVisited', false);
+	}
     return {
         //domNode: domNode,
         templateGuid: domNode.getAttribute('templateGuid'),
@@ -86,7 +90,8 @@ function getTemplateFromDomNode(domNode) {
         templateType: domNode.getAttribute('templateType'),
         templateData: domNode.getAttribute('templateData'),
         templateDeltaFormat: domNode.getAttribute('templateDeltaFormat'),
-        templateHtmlFormat: domNode.getAttribute('templateHtmlFormat')
+        templateHtmlFormat: domNode.getAttribute('templateHtmlFormat'),
+        wasVisited: domNode.getAttribute('wasVisited')
     }
 }
 
@@ -98,6 +103,9 @@ function applyTemplateToDomNode(node, value) {
     if (value.templateType == 'datetime' && value.templateData == '') {
         value.templateData = 'MM/dd/yyy HH:mm:ss';
     }
+    if (!value.wasVisited) {
+        value.wasVisited = false;
+    }
 
     node.setAttribute('templateGuid', value.templateGuid);
     node.setAttribute('templateInstanceGuid', value.templateInstanceGuid);
@@ -108,12 +116,17 @@ function applyTemplateToDomNode(node, value) {
     node.setAttribute('templateText', value.templateText);
     node.setAttribute('templateDeltaFormat', value.templateDeltaFormat);
     node.setAttribute('templateHtmlFormat', value.templateHtmlFormat);
+    node.setAttribute('wasVisited', value.wasVisited);
 
-    //setTemplateBgColor(null, value.templateInstanceGuid, value.templateColor, false);
-    setTemplateBgColor(value.templateGuid, null, value.templateColor, false);
+    node.setAttribute('isFocus', value.isFocus);
 
-    node.innerHTML = value.templateHtmlFormat;
-    changeInnerText(node, node.innerText, value.templateName);
+    if (IsPastingTemplate && value.templateText != '') {
+        changeInnerText(node, node.innerText, value.templateText);
+    } else {
+        setTemplateBgColor(value.templateGuid, null, value.templateColor, false);
+        node.innerHTML = value.templateHtmlFormat;
+        changeInnerText(node, node.innerText, value.templateName);
+	}   
 
     // TODO instead of rejecting mouse down, template should be draggable
 
@@ -122,7 +135,6 @@ function applyTemplateToDomNode(node, value) {
     //node.setAttribute('onselectstart', 'return false;');
     //node.setAttribute('onmousedown', 'return false;');
 
-    node.setAttribute('isFocus', false);
     node.setAttribute("spellcheck", "false");
     node.classList.add(TemplateEmbedClass);
     node.setAttribute('draggable', false);
@@ -148,7 +160,7 @@ function onTemplateClick(e) {
         return;
     }
 
-    focusTemplate(t.templateGuid, t.templateInstanceGuid, false);
+    focusTemplate(t.templateGuid, null, false);
 }
 
 // unused drag drop stuff

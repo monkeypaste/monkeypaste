@@ -1,5 +1,5 @@
 
-function initImageContent(itemDataStr) {
+function loadImageContent(itemDataStr) {
 	// itemData must remain base64 image string
 	quill.enable(false);
 	hideAllToolbars();

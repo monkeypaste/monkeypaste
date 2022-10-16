@@ -2,9 +2,10 @@ var quill;
 
 function initQuill(useBetterTable) {
 	let quillOptions = createQuillOptions(useBetterTable);
-	quill = new Quill("#editor", quillOptions);
+	quill = new Quill(
+		"#editor",
+		quillOptions);
 
-	registerTemplateBlots();
 	initTable();
 
 	initFontFamilyPicker();
@@ -16,7 +17,6 @@ function initQuill(useBetterTable) {
 	initTemplateToolbarButton();
 	initEditTemplateToolbar();
 	initPasteTemplateToolbar();
-
 }
 
 function createQuillOptions(useBetterTable) {
@@ -26,6 +26,7 @@ function createQuillOptions(useBetterTable) {
 		//allowReadOnlyEdits: true,
 		theme: "snow",
 		modules: {
+			//toolbar: '#editorToolbar',
 			table: false,
 			//htmlEditButton: {
 			//	syntax: true

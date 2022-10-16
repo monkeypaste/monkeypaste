@@ -12,12 +12,12 @@ function initEditTemplateToolbar() {
         }).observe(rta);
     }
 
-    enableResize(document.getElementById('editTemplateToolbar'));
+    enableResize(getEditTemplateToolbarContainerElement());
 
     document.getElementById('templateNameTextInput').addEventListener('focus', onTemplateNameTextAreaGotFocus);
     document.getElementById('templateNameTextInput').addEventListener('blur', onTemplateNameTextAreaLostFocus);
-    document.getElementById('templateNameTextInput').addEventListener('keydown', onTemplateNameTextArea_keydown);
-    document.getElementById('templateNameTextInput').addEventListener('keyup', onTemplateNameTextArea_keyup);
+    document.getElementById('templateNameTextInput').addEventListener('input', onTemplateNameChanged);
+    initBouncyTextArea('templateNameTextInput');
 
     document.getElementById('templateDetailTextInput').addEventListener('focus', onTemplateDetailTextAreaGotFocus);
     document.getElementById('templateDetailTextInput').addEventListener('blur', onTemplateDetailTextAreaLostFocus);
@@ -26,13 +26,11 @@ function initEditTemplateToolbar() {
 
     document.getElementById('templateColorBox').addEventListener('click', onTemplateColorBoxContainerClick);
 
-    document.getElementById('templateNameTextInput').addEventListener('input', onTemplateNameChanged);
 }
 
 function showEditTemplateToolbar() {
-    var ett = document.getElementById('editTemplateToolbar');
-    ett.style.display = 'flex';
-
+    var ett = getEditTemplateToolbarContainerElement();
+    ett.classList.remove('hidden');
 
     updateAllSizeAndPositions();
 
@@ -47,8 +45,8 @@ function showEditTemplateToolbar() {
 function hideEditTemplateToolbar() {
     clearAllTemplateEditClasses();
 
-    var ett = document.getElementById('editTemplateToolbar');
-    ett.style.display = 'none';
+    var ett = getEditTemplateToolbarContainerElement();
+    ett.classList.add('hidden');
 
     //document.getElementById('editTemplateTypeMenuSelector').removeEventListener('change', onTemplateTypeChanged);
 }
@@ -172,11 +170,6 @@ function setTemplateType(tguid, ttype) {
     //document.getElementById('templateNameTextInput').addEventListener('input', onTemplateNameChanged);
 }
 
-function templateTextAreaChange() {
-    var curText = $('#templateTextArea').val();
-    setTemplateText(getFocusTemplateGuid(), curText);
-}
-
 function setTemplateName(tguid, name) {
     var tl = getTemplateElements(tguid);
     for (var i = 0; i < tl.length; i++) {
@@ -205,56 +198,8 @@ function isEditTemplateTextAreaFocused() {
     return IsTemplateNameTextAreaFocused || IsTemplateDetailTextAreaFocused;
 }
 
-function clearAllTemplateEditClasses() {
-    getTemplateElements().forEach((telm) => {
-        telm.classList.remove('ql-template-embed-blot-display-key-up');
-        telm.classList.remove('ql-template-embed-blot-display-key-down');
-    });
-}
 
-async function scaleFocusTemplates(scaleType, tguid) {
-    if (!tguid) {
-        tguid = getFocusTemplateGuid();
-        if (!tguid) {
-            return;
-		}
-	}
 
-    let f_cit_elm_l = getTemplateElements(tguid);
-    for (var i = 0; i < f_cit_elm_l.length; i++) {
-        let f_cit_elm = f_cit_elm_l[i];
-        if (scaleType == 'bigger') {
-            f_cit_elm.classList.remove('ql-template-embed-blot-display-key-up');
-            f_cit_elm.classList.add('ql-template-embed-blot-display-key-down');
-        } else if (scaleType == 'default') {
-            f_cit_elm.classList.remove('ql-template-embed-blot-display-key-down');
-            f_cit_elm.classList.add('ql-template-embed-blot-display-key-up');
-        } else {
-
-            f_cit_elm.classList.remove('ql-template-embed-blot-display-key-down');
-            f_cit_elm.classList.remove('ql-template-embed-blot-display-key-up');
-        }
-	}
-}
-
-async function jiggleFocusTemplates(resetOnComplete = false) {
-    return;
-    //let f_cit = getFocusTemplateElement();
-    let tguid = getFocusTemplateGuid();
-    if (!tguid) {
-        return;
-	}
-    let scale_ms = 100;
-    for (var i = 0; i < 2; i++) {
-        await scaleFocusTemplates('bigger', tguid);
-        await delay(scale_ms);
-        await scaleFocusTemplates('default', tguid);
-        await delay(scale_ms);
-    }
-    if (resetOnComplete) {
-        scaleFocusTemplates('reset', tguid);
-	}
-}
 
 //#endregion
 
@@ -281,14 +226,10 @@ function onTemplateDetailChanged(e) {
 
 function onTemplateNameTextAreaGotFocus() {
     IsTemplateNameTextAreaFocused = true;
-
-    jiggleFocusTemplates();
 }
 
 function onTemplateNameTextAreaLostFocus() {
     IsTemplateNameTextAreaFocused = false;
-
-    jiggleFocusTemplates(true);
 }
 
 function onTemplateDetailTextAreaGotFocus() {
@@ -300,12 +241,8 @@ function onTemplateDetailTextAreaLostFocus() {
     IsTemplateDetailTextAreaFocused = false;
 }
 
-async function onTemplateNameTextArea_keydown() {
-    await scaleFocusTemplates('bigger');
-}
-
-async function onTemplateNameTextArea_keyup() {
-    await scaleFocusTemplates('default');
+function getEditTemplateToolbarContainerElement() {
+    return document.getElementById('editTemplateToolbar');
 }
 
 //#endregion

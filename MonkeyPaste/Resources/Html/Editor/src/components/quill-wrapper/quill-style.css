@@ -15,9 +15,6 @@
     top: 0em;
     /*display: block;*/ /* only set with showEditorToolbar() */
 }
-.ql-toolbar-env-web {
-    display: block;
-}
 /*.ql-tooltip {
     z-index: 1;
 }*/

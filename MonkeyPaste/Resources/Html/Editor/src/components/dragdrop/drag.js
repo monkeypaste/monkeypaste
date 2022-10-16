@@ -57,12 +57,11 @@ function handleDragStart(e) {
         let textStr = getText(sel, true);
         e.dataTransfer.setData('text/plain', textStr);
 
-        let htmlStr = getHtml(sel);
-        e.dataTransfer.setData('text/html', htmlStr);
+        e.dataTransfer.setData('text/html', getTextContentData());
     } else if (ContentItemType == 'FileList') {
         e.dataTransfer.effectAllowed = 'copy';
 
-        e.dataTransfer.setData('text\plain', getPathsStr());
+        e.dataTransfer.setData('text\plain', getFileListContentData());
     } else if (ContentItemType == 'Image') {
         e.dataTransfer.effectAllowed = 'copy';
 

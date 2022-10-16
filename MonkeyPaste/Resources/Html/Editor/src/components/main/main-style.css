@@ -1,0 +1,47 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    font-family: Arial;
+    overflow: hidden;
+    cursor: default;
+    background-color: transparent;
+    --selbgcolor: lightblue;
+    --selfgcolor: black;
+    --editableopacity: 0.5;
+    --defaultopacity: 0.0;
+    /*white-space: pre-wrap;*/
+}
+
+::selection {
+    background-color: var(--selbgcolor);
+    color: var(--selfgcolor);
+}
+
+
+.hidden {
+    display: none !important;
+}
+
+.duplicate {
+    color: lime;
+}
+
+.bottom-align {
+    position: fixed;
+    bottom: 0px;
+}
+
+.right-align {
+    position: fixed;
+    right: 0px;
+}
+
+.left-align {
+    position: fixed;
+    left: 0px;
+}
+
+textarea {
+    border-width: 0px;
+    border-color: transparent;
+}

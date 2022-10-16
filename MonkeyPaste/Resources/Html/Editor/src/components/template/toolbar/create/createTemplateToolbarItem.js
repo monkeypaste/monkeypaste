@@ -15,14 +15,6 @@ function initTemplateToolbarButton() {
 function onTemplateToolbarButtonClick(e) {
     var templateButton = document.getElementById('templateToolbarButton');
     showTemplateToolbarContextMenu(templateButton);
-
-    //var tl = getAvailableTemplateDefinitions();
-    //if (tl.length > 0) {
-    //    showTemplateToolbarContextMenu(templateButton);
-    //} else {
-    //    createTemplateFromDropDown();
-    //}
-
     event.stopPropagation(e);
 }
 

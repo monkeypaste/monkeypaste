@@ -183,7 +183,7 @@ function findRangeFontFamily(range) {
         return '';
     } 
     let [leaf, offset] = quill.getLeaf(selection.index);
-    if (leaf.parent && leaf.parent.domNode) {
+    if (leaf && leaf.parent && leaf.parent.domNode) {
                     let parentBlot = leaf.parent;
                     while (parentBlot) {
                         let fontFamilyParts = parentBlot.domNode.style.fontFamily.split(',');

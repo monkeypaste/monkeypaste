@@ -3,6 +3,10 @@ var ContentItemType = 'Text';
 
 var ContentScreenshotBase64Str = null;
 
+function initContent() {
+	registerTemplateBlots();
+}
+
 function loadContent(contentHandle, contentType, contentData, isPasteRequest) {
 	resetSelection();
 
@@ -25,9 +29,9 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest) {
 	log('Editor loaded');
 
 	if (ContentItemType == 'Image') {
-		initImageContent(contentData);
+		loadImageContent(contentData);
 	} else if (ContentItemType == 'FileList') {
-		initFileListContent(contentData);
+		loadFileListContent(contentData);
 	} else if (ContentItemType == 'Text') {
 		loadTextContent(contentData, isPasteRequest);
 	}
@@ -40,6 +44,18 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest) {
 	onContentLengthChanged_ntf();
 }
 
+function getContentData() {
+	if (ContentItemType == 'Text') {
+		return getTextContentData();
+	}
+	if (ContentItemType == 'Image') {
+		return getImageContentData();
+	}
+	if (ContentItemType == 'FileList') {
+		return getFileListContentData();
+	}
+	return '';
+}
 function getContentBg(htmlStr, contrast_opacity = 0.5) {
 	if (ContentItemType != 'Text') {
 		return cleanColor();

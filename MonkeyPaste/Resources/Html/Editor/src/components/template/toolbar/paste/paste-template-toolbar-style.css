@@ -1,116 +1,94 @@
 ﻿.paste-template-toolbar {
-    display: none;
-    width: 100%;
-    background-color: lightyellow;
-    border: solid 1px yellow;
-    padding: 5px 10px;
-    position: fixed;
+    background-color: teal;
+}
+    .paste-template-toolbar > .common-template-toolbar-button {
+        background-color: dodgerblue;
+        border: solid 2px #67c5ff;
+        color: white;
+    }
+    .paste-template-toolbar > .common-template-toolbar-button:hover {
+        border-color: yellow;
+    }
+
+#templatePasteValueTextArea {
 }
 
-.paste-template-toolbar-btn {
-    display: inline-block;
-    padding: 2px 5px;
-    text-decoration: none;
-    font-size: 14px;
-    border: 1px solid #CCC;
-    color: white;
-    border: solid 2px #67c5ff;
-    border-radius: 7px;
-    transition: .4s;
-    margin: 0 5px;
-    background-color: dodgerblue;
-    cursor: pointer;
+div:has( > #templatePasteValueTextArea) {
+    width: 45%;
 }
 
-    .paste-template-toolbar-btn:hover {
-        color: dimgray;
-        transition: .4s;
+#pasteTemplateToolbarMenuSelectorDiv {
+    display: inline-flex;
+    align-items: center;
+    font-family: Arial;
+    margin: 5px 5px 5px 10px;
+    padding: 3px;
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 3px;
+    transition: 0.4s;
+}
+    #pasteTemplateToolbarMenuSelectorDiv:hover {
+        border: 1.25px solid yellow;
         cursor: pointer;
     }
 
-/* Custom Selector style*/
-.Select-menu-outer {
-    top: auto;
-    bottom: 100%
+#selectedPasteTemplateOptionDiv {
+    min-width: 160px;
 }
 
-
-/*.edit-template-custom-select select {
-        display: none;
-    }*/
-
-.paste-template-custom-select {
-    display: inline-block;
-    position: relative;
-    font-family: Arial;
-}
-
-    .paste-template-custom-select select {
-        display: none;
-    }
-
-.select-selected {
-    background-color: DodgerBlue;
-}
-
-.select-selected-item {
-    background-color: lightblue;
-}
-
-.select-selected:before {
-    position: absolute;
+#pasteTemplateToolbarMenuSelectorArrowDiv {
+    /*style the arrow inside the select element:*/
     content: "";
-    top: 7px;
-    left: 5px;
+    transform: translate(0,3px);
     width: 0;
     height: 0;
     border: 6px solid transparent;
-    border-color: #fff transparent transparent transparent;
+    border-color: black transparent transparent transparent;
+}
+    #pasteTemplateToolbarMenuSelectorArrowDiv .active {
+        border-color: transparent transparent black transparent;
+    }
+
+
+
+.paste-template-option-div {
+    display: inline-flex;
+    align-items: center;
 }
 
-.select-selected.select-arrow-active:before {
-    border-color: transparent transparent #fff transparent;
-    top: 10px;
+.paste-template-option-icon {
+    border-radius: 3px;
+    border: 1px solid black;
+    width: 25px;
+    height: 25px;
+    margin: 5px;
 }
 
-.select-items div,
-.select-selected {
-    color: #ffffff;
-    padding: 12px 5px;
-    border: 1px solid transparent;
-    border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
-    cursor: pointer;
-    user-select: none;
+.paste-template-option-label {
+    margin-left: 10px;
 }
 
-.select-items {
+#pasteOptionsDiv {
     position: absolute;
-    background-color: DodgerBlue;
-    top: 100%;
-    left: 0;
-    right: 0;
-    z-index: 99;
+    display: block;
+    overflow: auto;
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 3px;
+    transition: 0.4s;
 }
 
-.select-hide {
-    display: none;
-}
+    #pasteOptionsDiv > div {
+        display: flex;
+    }
 
-.select-items div:hover,
-.same-as-selected {
-    background-color: rgba(0, 0, 0, 0.1);
-}
+    #pasteOptionsDiv .paste-template-option-icon,
+    #pasteOptionsDiv .paste-template-option-label {
+        margin: 5px;
+    }
 
-.select-items .square-box {
-    height: 18px;
-    width: 18px;
-    float: left;
-    margin: 0 20px 0 20px;
-}
-
-.select-selected .square-box {
-    height: 18px;
-    width: 18px;
-    position: absolute;
-    margin: 0 20px 0 20px;
-}
+    #pasteOptionsDiv .selected-paste-option,
+    #pasteOptionsDiv .paste-template-option-div:hover {
+        background-color: silver;
+    }

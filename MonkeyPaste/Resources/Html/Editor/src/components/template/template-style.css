@@ -65,23 +65,3 @@
     /*caret-color: var(--selfgcolor);*/
 }
 
-.resizable-textarea {
-    min-height: 30px;
-    resize: both;
-    display: inline-block;
-    margin: 12px;
-}
-
-.resizer {
-    /* All resizers are positioned absolutely inside the element */
-    position: absolute;
-}
-
-/* Placed at the top side */
-.resizer-t {
-    top: 0;
-    cursor: row-resize;
-    height: 5px;
-    left: 0;
-    width: 100%;
-}

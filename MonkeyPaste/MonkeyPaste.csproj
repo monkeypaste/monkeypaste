@@ -115,6 +115,7 @@
     <None Remove="Resources\Html\Editor\src\components\template\blots\templateEmbedBlot.js" />
     <None Remove="Resources\Html\Editor\src\components\template\template.js" />
     <None Remove="Resources\Html\Editor\src\components\template\templatePadAttribute.js" />
+    <None Remove="Resources\Html\Editor\src\components\template\toolbar\commonTemplateToolbar.js" />
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\create\createTemplateToolbarItem.js" />
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\edit\editTemplateToolbar.js" />
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\paste\pasteTemplateToolbar.js" />
@@ -243,6 +244,9 @@
     <EmbeddedResource Include="Resources\Html\Editor\src\components\template\toolbar\create\createTemplateToolbarItem.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\template\toolbar\commonTemplateToolbar.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\template\toolbar\edit\editTemplateToolbar.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -333,6 +337,9 @@
     <EmbeddedResource Update="Resources\Html\Editor\src\components\editor\quill-style.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Html\Editor\src\components\main\main-style.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\src\components\overlay\overlay-style.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -340,6 +347,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\src\components\template\toolbar\edit\edit-template-toolbar-style.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Html\Editor\src\components\template\toolbar\common-template-toolbar-style.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\src\components\template\toolbar\paste\paste-template-toolbar-style.css">

@@ -10,8 +10,7 @@
 function onWindowClick(e) {
 	if (
 		e.path.find(
-			(x) => x.classList && x.classList.contains("edit-template-toolbar")
-		) != null ||
+			(x) => x.classList && x.classList.contains("edit-template-toolbar")) != null ||
 		e.path.find(
 			(x) => x.classList && x.classList.contains("paste-template-toolbar")
 		) != null ||
@@ -32,6 +31,9 @@ function onWindowClick(e) {
 		// unfocus templates 
 		hideAllTemplateContextMenus();
 		hideEditTemplateToolbar();
+		if (IsPastingTemplate) {
+			return;
+		}
 		hidePasteTemplateToolbar();
 		clearTemplateFocus();
 	}

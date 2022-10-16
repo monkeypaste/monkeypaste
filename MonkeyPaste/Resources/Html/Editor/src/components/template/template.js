@@ -50,16 +50,52 @@ var templateTypesMenuOptions = [
 ];
 
 
-function loadTemplates() {
+function loadTemplates(isPasteRequest) {
     let telml = getTemplateElements();
-    for (var i = 0; i < telml.length; i++) {
-        let t_elm = telml[i];
-        let t_blot = getTemplateFromDomNode(t_elm);
-        applyTemplateToDomNode(t_elm, t_blot);
+    HasTemplates = telml.length > 0;
+
+    if (isPasteRequest && HasTemplates) {
+        IsPastingTemplate = true;
     }
 
-    HasTemplates = telml.length > 0;
+    for (var i = 0; i < telml.length; i++) {
+        let t_elm = telml[i];
+        //resetTemplateElement(t_elm);
+        let t = getTemplateFromDomNode(t_elm);
+        applyTemplateToDomNode(t_elm, t);
+    }
+
+    if (HasTemplates) {
+        // since data is already set, manually trigger template update (for list item bug)
+        updateTemplatesAfterTextChanged();
+	}
+    
+    if (IsPastingTemplate) {
+        showPasteTemplateToolbar();
+	}
 }
+
+function resetTemplateElement(telm) {
+    let ti = getTemplateFromDomNode(telm);
+    ti.templateText = '';
+    ti.isFocus = false;
+    ti.wasVisited = false;
+    applyTemplateToDomNode(ti);
+}
+function resetTemplates() {
+    var til = getUsedTemplateInstances();
+    for (var i = 0; i < til.length; i++) {
+        var ti = til[i];
+        ti.templateText = '';
+        ti.isFocus = false;
+        ti.wasVisited = false;
+        a
+        ti.domNode.setAttribute('templateText', '');
+        ti.domNode.setAttribute('isFocus', 'false');
+        ti.domNode.innerHTML = ti.domNode.getAttribute('templateName');
+    }
+}
+
 
 function setTemplateProperty(tguid, propertyName, propertyValue) {
     let til = getUsedTemplateInstances();
@@ -86,127 +122,25 @@ function isTemplateNode(node) {
 
 //#endregion
 
-//#region Encode/Decode
-
-function getEncodedTemplateGuids() {
-    // this returns all parsed templates to html extension on load BEFORE init
-    let etgl = [];
-
-    let tcount = 0;
-    while (result = ENCODED_TEMPLATE_REGEXP.exec(itemData)) {
-        let encodedTemplateStr = result[0];
-        let tguid = parseEncodedTemplateGuid(encodedTemplateStr);
-
-        let isDefined = etgl.some(function (etg) {
-            return etg == tguid
-        });
-        if (!isDefined) {
-            etgl.push(tguid);
-        }
-    }
-    return etgl;
-}
-
-function getDecodedTemplateGuids() {
-    //this returns all load template blots distinct guid's
-    let dtgl = [];
-
+function removeTemplatesByGuid(tguid) {
     let util = getUsedTemplateInstances();
     for (var i = 0; i < util.length; i++) {
         let cit = util[i];
-        if (!dtgl.includes(cit.templateGuid)) {
-            dtgl.push(cit.templateGuid);
-        }        
-    }
-
-    return dtgl;
-}
-
-function removeTemplatesByGuid(tguid) {
-    getUsedTemplateInstances().forEach(function (cit) {
         if (cit.templateGuid == tguid) {
             let docIdx = getTemplateDocIdx(cit.templateInstanceGuid);
             if (docIdx >= 0) {
                 quill.deleteText(docIdx, 1);
-			}
-		}
-    });
-}
-
-function decodeTemplates(templateDefs) {
-    //templateDefs is all FOUND template defs in db from pre init getEncodedTempalteGuids
-    //when def is not found that means user clicked delete template which removes it from db
-    //and deletes all current instances in active document so when not provided replace 
-    //encoded template w/ empty character
-
-    let qtext = getText();
-    let tcount = 0; 
-    while (result = ENCODED_TEMPLATE_REGEXP.exec(qtext)) {
-        let encodedTemplateStr = result[0];
-        let tguid = parseEncodedTemplateGuid(encodedTemplateStr);
-
-        // NOTE embed blots have zero length in text (completely ignored) 
-        // BUT take up a signle character in actual content so tcount keeps track of the
-        // ignored character as they are added (SHEESH)
-        let tsIdx = qtext.indexOf(encodedTemplateStr) + tcount;
-
-        // remove ' ' padding from both ends of template or extra ' ' will be added time it loads
-        quill.deleteText(tsIdx-1, encodedTemplateStr.length + 1);
-
-        let t = templateDefs.forEach(function (td) {
-            if (td.templateGuid == tguid) {
-                return td;
             }
-        });
-
-        if (t != null) {
-            quill.insertEmbed(tsIdx, 'template', t);
-            tcount++;
-        } else {
-            log('template def \'' + tguid + '\' not found so omitting from editor');
         }
-        qtext = getText();
-    }
+	}
 }
 
-function parseEncodedTemplateGuid(encodedTemplateStr, sToken = ENCODED_TEMPLATE_OPEN_TOKEN, eToken = ENCODED_TEMPLATE_CLOSE_TOKEN) {
-    var tsIdx = encodedTemplateStr.indexOf(sToken);
-    var teIdx = encodedTemplateStr.indexOf(eToken);
-
-    if (tsIdx < 0 || teIdx < 0) {
-        return null;
-    }
-
-    return encodedTemplateStr.substring(tsIdx + sToken.length, teIdx);
-}
 
 function getTemplateEmbedStr(t, sToken = ENCODED_TEMPLATE_OPEN_TOKEN, eToken = ENCODED_TEMPLATE_CLOSE_TOKEN) {
     var result = sToken + t.domNode.getAttribute('templateGuid') + eToken;
     return result;
 }
 
-
-function getEncodedHtml() {
-    resetTemplates();
-    var result = encodeTemplates();
-    return result;
-}
-
-function encodeTemplates() {
-    // NOTE template text should be cleared from html before calling this
-    var html = getHtml();
-    var til = getUsedTemplateInstances();
-    for (var i = 0; i < til.length; i++) {
-        var ti = til[i];
-        var tin = ti.domNode;
-        var tihtml = tin.outerHTML;
-        var ties = getTemplateEmbedStr(ti);
-        html = html.replaceAll(tihtml, ties);
-    }
-    return html;
-}
-
-//#endregion
 
 function clearTemplateFocus() {
     let tel = getTemplateElements();
@@ -251,38 +185,19 @@ function getFocusTemplateGuid() {
 }
 
 
-
-
-//#region Paste 
-
-function getTextWithEmbedTokens() {
-    // for pasting NOT encoding for db
-    var text = getText().split('');
-    var otl = getUsedTemplateInstances();
-    var outText = '';
-    var offset = 0;
-    otl.forEach(function (ot) {
-        offset += parseInt(ot.docIdx);
-        var embedStr = getTemplateEmbedStr(ot);
-        //text.splice(offset, 1);
-        for (var i = 0; i < embedStr.length; i++) {
-            text.splice(offset + i, 0, embedStr[i]);
-        }
-        offset += (embedStr.length);
-    });
-    return text.join('');
-}
-
-//#endregion
-
 function getUsedTemplateDefinitions() {
+    let util = getUsedTemplateInstances();
     let tdl = [];
-    getUsedTemplateInstances().forEach(function (ti) {
-        let isDefined = tdl.find(x => x.domNode.getAttribute('templateGuid') == ti.domNode.getAttribute('templateGuid')) != null;
-        if (!isDefined) {
-            tdl.push(ti);
+    for (var i = 0; i < util.length; i++) {
+        let uti = util[i];
+        let isDefined = tdl.find(x => x.templateGuid == uti.templateGuid) != null;
+        if (isDefined) {
+            continue;
         }
-    });
+        delete uti.domNode;
+        delete uti.docIdx;
+        tdl.push(uti);
+	}
     return tdl;
 }
 
@@ -290,9 +205,9 @@ function getAvailableTemplateDefinitions() {
     if (availableTemplates == null || availableTemplates.length == 0) {
         availableTemplates = getAllTemplatesFromDb_get();
 
-        if (availableTemplates == null || availableTemplates.length == 0) {
-            return getUsedTemplateDefinitions().map(x => getTemplateFromDomNode(x.domNode));
-		}
+  //      if (availableTemplates == null || availableTemplates.length == 0) {
+  //          return getUsedTemplateDefinitions().map(x => getTemplateFromDomNode(x.domNode));
+		//}
     }
 
     let utdl = getUsedTemplateDefinitions();
@@ -304,9 +219,9 @@ function getAvailableTemplateDefinitions() {
         for (var j = 0; j < utdl.length; j++) {
             //check if this editor is using one available in master
             let utd = utdl[j];
-            if (utd.domNode.getAttribute('templateGuid') == atd.templateGuid) {
+            if (utd.templateGuid == atd.templateGuid) {
                 //if this editor is using a template already known from master use this editor's version
-                allMergedTemplates.push(getTemplateFromDomNode(utd.domNode));
+                allMergedTemplates.push(utd);
                 isUsed = true;
                 break;
             }
@@ -450,20 +365,24 @@ function getTemplatePlainTextForDocRange(range) {
 }
 
 function getUsedTemplateInstances() {
-    //var domTemplates = document.querySelectorAll('.ql-template-embed-blot');
-    var domTemplates = document.querySelectorAll('.' + TemplateEmbedClass);
+    var telml = getTemplateElements();
     var templates = [];
-    for (var i = 0; i < domTemplates.length; i++) {
-        var domTemplate = domTemplates[i];
-        var templateBlot = Quill.find(domTemplate);
-        if (templateBlot != null) {
-            templates.push(templateBlot);
-        }
+    for (var i = 0; i < telml.length; i++) {
+        let telm = telml[i];
+        let template = getTemplateFromDomNode(telm);
+        template.domNode = telm;
+        template.docIdx = getTemplateDocIdx(template.templateInstanceGuid);
+
+        //var templateBlot = Quill.find(telm);
+        //if (templateBlot != null) {
+        //    templates.push(templateBlot);
+        //}
+        templates.push(template);
     }
-    return templates.sort((a, b) => (
-        getTemplateDocIdx(a.domNode.getAttribute('templateInstanceGuid')) < 
-        getTemplateDocIdx(b.domNode.getAttribute('templateInstanceGuid')) ? -1 : 1));
+
+    return templates.sort((a, b) => a.docIdx < b.docIdx ? -1 : 1);
 }
+
 
 function getAllTemplateDocIdxs() {
     let tDocIdxs = [];
@@ -596,14 +515,15 @@ function coereceSelectionWithTemplatePadding(range, oldRange, source) {
 }
 
 function getLowestAnonTemplateName(anonPrefix = 'Template #') {
-    var tl = getUsedTemplateDefinitions();
-    var maxNum = 0;
-    tl.forEach(function (t) {
-        if (t.domNode.getAttribute('templateName').startsWith(anonPrefix)) {
-            var anonNum = parseInt(t.domNode.getAttribute('templateName').substring(anonPrefix.length));
+    let utdl = getUsedTemplateDefinitions();
+    let maxNum = 0;
+    for (var i = 0; i < utdl.length; i++) {
+        let t = utdl[i];
+        if (t.templateName.startsWith(anonPrefix)) {
+            var anonNum = parseInt(t.templateName.substring(anonPrefix.length));
             maxNum = Math.max(maxNum, anonNum);
         }
-    });
+	}
     return anonPrefix + (parseInt(maxNum) + 1);
 }
 
@@ -659,23 +579,11 @@ function focusTemplate(ftguid, ftiguid, fromDropDown, isNew) {
         }
     }
 
-    if (fromDropDown == null || !fromDropDown) {
-        if (IsPastingTemplate) {
-            //when user clicks a template this will adjust to drop dwon to the clicked element
-            var items = document.getElementById('paste-template-custom-select').getElementsByTagName("div");
-            for (var i = 0; i < items.length; i++) {
-                if (items[i].getAttribute('optionId') != null && items[i].getAttribute('optionId') == getFocusTemplateGuid()) {
-                    eventFire(items[i], 'click');
-                    break;
-                }
-            }
-        }
-        //moved from quill embed constructor maybe causing selection issue on android
-        
-        hideAllTemplateContextMenus();
+    if (IsPastingTemplate) {
+        updatePasteTemplateSelectorToFocus();
+    } else {
         showEditTemplateToolbar();
-    }
-
+	}
 }
 
 function getTemplateElements(tguid, iguid) {
@@ -708,16 +616,6 @@ function onColorPaletteItemClick(chex) {
     hideAllTemplateContextMenus();
 }
 
-function eventFire(el, etype) {
-    if (el.fireEvent) {
-        el.fireEvent('on' + etype);
-    } else {
-        var evObj = document.createEvent('Events');
-        evObj.initEvent(etype, true, false);
-        el.dispatchEvent(evObj);
-    }
-}
-
 function setTemplateBgColor(tguid, tiguid, color_name_or_hex, isTemporary) {
     let tel = [];
     if (tguid && !tiguid) {
@@ -741,21 +639,15 @@ function setTemplateBgColor(tguid, tiguid, color_name_or_hex, isTemporary) {
     }
 }
 
-function resetAllTemporaryTemplateBgColors() {
-    let temp_template_bg_elms = document.querySelectorAll('.temporary-bg-color');
-    Array.from(temp_template_bg_elms)
-        .forEach((te) => {
-            te.classList.remove('temporary-bg-color');
-            let template_color = te.getAttribute('templateColor');
-            te.style.backgroundColor = template_color;
-            te.style.color = isBright(template_color) ? 'black' : 'white';
-        });
-    IsAnyTemplateBgTemporary = false;
-}
-
-
 function getTemplateDefByGuid(tguid) {
-    return getUsedTemplateDefinitions().find(x=>x.domNode.getAttribute('templateGuid') == tguid);
+    let utdl = getUsedTemplateDefinitions();
+    for (var i = 0; i < utdl.length; i++) {
+        let t = utdl[i];
+        if (t.templateGuid == tguid) {
+            return t;
+		}
+	}
+    return null;
 }
 
 function getTemplateDefByInstanceGuid(tiguid) {
@@ -785,94 +677,7 @@ function hideAllTemplateContextMenus() {
     hideTemplateToolbarContextMenu();
 }
 
-function resetTemplates() {
-    var til = getUsedTemplateInstances();
-    for (var i = 0; i < til.length; i++) {
-        var ti = til[i];
 
-        ti.domNode.setAttribute('templateText', '');
-        ti.domNode.setAttribute('isFocus', 'false');
-        ti.domNode.innerHTML = ti.domNode.getAttribute('templateName');
-    }
-}
-
-function padTemplate(tiguid) {
-    let teDocIdx = getTemplateDocIdx(tiguid);
-    if (teDocIdx < 0) {
-        throw 'tiguid: ' + tiguid + ' cannot have docIdx: ' + teDocIdx;
-    }
-    let needsPre = false;
-    let needsPost = false;
-
-    if (isDocIdxLineStart(teDocIdx)) {
-        needsPre = true;
-    } else {
-        let preText = getText({ index: teDocIdx - 1, length: 1 });
-        needsPre = preText != ' ';
-    }
-    if (isDocIdxLineEnd(teDocIdx)) {
-        needsPost = true;
-    } else {
-        let postText = getText({ index: teDocIdx + 1, length: 1 });
-        needsPost = postText != ' ';
-    }
-
-    if (needsPre) {
-        //IgnoreNextTextChange = true;
-        //IgnoreNextSelectionChange = true;
-        quill.insertText(teDocIdx, ' ');
-        teDocIdx++;
-    }
-    if (needsPost) {
-        //IgnoreNextTextChange = true;
-        //IgnoreNextSelectionChange = true;
-        quill.insertText(teDocIdx + 1, ' ');
-    }
-}
-
-function isTemplateElementHavePad_pre(ti) {
-    if (!ti) {
-        return false;
-    }
-    if (!ti.previousSibling) {
-        return false;
-    }
-    if (ti.previousSibling.nodeType == 3) {
-        return false;
-    }
-    return ti.previousSibling.hasAttribute('templatePad_pre');
-}
-function isTemplateElementHavePad_post(ti) {
-    if (!ti) {
-        return false;
-    }
-    if (!ti.nextSibling) {
-        return false;
-    }
-    if (ti.nextSibling.nodeType == 3) {
-        return false;
-    }
-    return ti.nextSibling.hasAttribute('templatePad_post');
-}
-function cleanTemplateElementPad_pre(ti) {
-    let is_dirty = ti.previousSibling.innerText != ' ';
-
-}
-
-function isDocIdxTemplatePad_pre(docIdx) {
-    let format = quill.getFormat(docIdx, 0);
-    if (format.templatePad_pre !== undefined && format.templatePad_pre) {
-        return true;
-    } 
-    return false;
-}
-function isDocIdxTemplatePad_post(docIdx) {
-    let format = quill.getFormat(docIdx, 0);
-    if (format.templatePad_post !== undefined && format.templatePad_post) {
-        return true;
-    }
-    return false;
-}
 
 function decodeInsertedTemplates(insertIdx, plainText, source = 'silent') {
     // parse all text for encoded templates

@@ -223,23 +223,12 @@ function setTextInRange_ext(setTextInRangeMsgStr) {
 	setTextInRange(rangeObj, rangeText);
 }
 
-function getDecodedTemplateGuids_ext() {
-	// output MpQuillActiveTemplateGuidsRequestMessage
-
-	let tgl = getDecodedTemplateGuids();
-	let tgMsg = {
-		templateGuids: tgl
-	};
-	let resp = toBase64FromJsonObj(tgMsg);
-	return resp;
-}
-
 function enableReadOnly_ext() {
 	enableReadOnly(true);
 
 	// output 'MpQuillResponseMessage'  updated master collection of templates
 	let qrmObj = {
-		itemData: getEncodedHtml(),
+		itemData: getContentData(),
 		//userDeletedTemplateGuids: userDeletedTemplateGuids,
 		//updatedAllAvailableTextTemplates: IsLoaded ? getAvailableTemplateDefinitions() : []
 	};

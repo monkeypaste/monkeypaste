@@ -1,35 +1,7 @@
-/** {
-    box-sizing: border-box;
-}*/
-
-
-body {
-    margin: 0px;
-    padding: 0px;
-    font-family: Arial;
-    overflow: hidden;
-    cursor: default;
-    
-    background-color: transparent;
-    --selbgcolor: lightblue;
-    --selfgcolor: black;
-    --editableopacity: 0.5;
-    --defaultopacity: 0.0;
-    /*white-space: pre-wrap;*/
-}
-::selection {
-    background-color: var(--selbgcolor);
-    color: var(--selfgcolor);
-}
 
 #editor span, a, em, strong, u, s, sub, sup, img, p, ol, ul, li, div, table, colgroup, col, tbody, tr, td, iframe, blockquote {
     background-color: transparent;
 }
-
-.duplicate {
-    color: lime;
-}
-
 
 #editor {
     width: 100%;
@@ -81,13 +53,10 @@ body:has(.sub-select) {
     overflow: auto;
     text-decoration: unset;
 }
+
 body:has(.editable) {
     background-color: rgba(255, 248, 220,var(--editableopacity));
     /*opacity: var(--editableopacity);*/
     transition: .4s;
 }
 
-
-.hidden {
-    display: none;
-}

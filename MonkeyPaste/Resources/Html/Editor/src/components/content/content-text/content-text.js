@@ -4,24 +4,9 @@ var BlockTags = ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbod
 function loadTextContent(itemDataStr, isPasteRequest) {
 	try {
 		quill.enable(true);
-
-		//if (hasJsonStructure(itemDataStr)) {
-		//	let delta = JSON.parse(itemDataStr);
-		//	quill.setContents(delta.ops, 'silent');
-		//	return;
-		//}
-
-		// issues: template's are given parent spans and overflow outside of template
-		//setTextInRange(getContentRange(),'','silent');
-		//insertHtml(0, itemDataStr,'silent');
-
-		//issues: plain html will not format correctly
 		setRootHtml(itemDataStr);
 
-		loadTemplates();
-		if (isPasteRequest && HasTemplates) {
-			showPasteTemplateToolbar();
-		}		
+		loadTemplates(isPasteRequest);
 	} catch (ex) {
 		//malformed or unsupported content was 
 		onException_ntf('setHtml', ex);
@@ -33,5 +18,10 @@ function loadTextContent(itemDataStr, isPasteRequest) {
 		//log(item_pt);
 		//loadContent(item_pt);
 	}
+}
+
+function getTextContentData() {
+	let qhtml = getHtml();
+	return qhtml;
 }
 
