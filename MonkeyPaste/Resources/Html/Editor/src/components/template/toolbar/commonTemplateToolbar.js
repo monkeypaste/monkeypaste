@@ -49,10 +49,12 @@ async function scaleFocusTemplates(scaleType, tguid) {
 
 
 function clearAllTemplateEditClasses() {
-    getTemplateElements().forEach((telm) => {
+    let telms = getTemplateElements();
+    for (var i = 0; i < telms.length; i++) {
+        let telm = telms[i];
         telm.classList.remove('ql-template-embed-blot-display-key-up');
         telm.classList.remove('ql-template-embed-blot-display-key-down');
-    });
+	}
 }
 
 // unused

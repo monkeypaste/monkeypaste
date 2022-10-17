@@ -228,9 +228,7 @@ function enableReadOnly_ext() {
 
 	// output 'MpQuillResponseMessage'  updated master collection of templates
 	let qrmObj = {
-		itemData: getContentData(),
-		//userDeletedTemplateGuids: userDeletedTemplateGuids,
-		//updatedAllAvailableTextTemplates: IsLoaded ? getAvailableTemplateDefinitions() : []
+		itemData: getContentData()
 	};
 	let resp = toBase64FromJsonObj(qrmObj);
 

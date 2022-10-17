@@ -61,7 +61,7 @@ function forceBgOpacity(htmlStr, opacity) {
 	let html_doc = DomParser.parseFromString(htmlStr, 'text/html');
 	let elms = html_doc.querySelectorAll(InlineTags.join(", ") + ',' + BlockTags.join(','));
 	for (var i = 0; i < elms.length; i++) {
-		if (elms[i].style.backgroundColor === undefined || elms[i].style.backgroundColor == '') {
+		if ( elms[i].style.backgroundColor === undefined || elms[i].style.backgroundColor == '') {
 			continue;
 		}
 		let rgba = cleanColor(elms[i].style.backgroundColor);

@@ -76,10 +76,19 @@ namespace MonkeyPaste {
     public class MpQuillEnableReadOnlyResponseMessage : MpJsonObject {
         public string itemData { get; set; }
 
-        public List<string> userDeletedTemplateGuids { get; set; }
-        public List<MpTextTemplate> updatedAllAvailableTextTemplates { get; set; }
+        //public List<string> userDeletedTemplateGuids { get; set; }
+        //public List<MpTextTemplate> updatedAllAvailableTextTemplates { get; set; }
+        public double editorWidth { get; set; }
+        public double editorHeight { get; set; }
     }
 
+    public class MpQuillUserDeletedTemplateNotification : MpJsonObject {
+        public string userDeletedTemplateGuid { get; set; }
+    }
+
+    public class MpQuillTemplateAddOrUpdateNotification : MpJsonObject {
+        public MpTextTemplate addedOrUpdatedTextTemplate { get; set; }
+    }
     public class MpQuillTextTemplateBlot : MpJsonObject {
         /*
         isFocus: "false"

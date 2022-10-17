@@ -1,5 +1,35 @@
 ﻿var CanUserAddTemplate = true;
 
+var TemplateTypesMenuOptions = [
+    {
+        label: 'Dynamic',
+        icon: 'fa-solid fa-keyboard'
+    },
+    {
+        label: 'Static',
+        icon: 'fa-solid fa-icicles'
+    },
+    /* {
+         label: 'Content',
+         icon: 'fa-solid fa-clipboard'
+     },
+     {
+         label: 'Analyzer',
+         icon: 'fa-solid fa-scale-balanced'
+     },
+     {
+         label: 'Action',
+         icon: 'fa-solid fa-bolt-lightning'
+     },*/
+    {
+        label: 'Contact',
+        icon: 'fa-solid fa-id-card'
+    },
+    {
+        label: 'DateTime',
+        icon: 'fa-solid fa-clock'
+    }
+];
 
 function initTemplateToolbarButton() {
     // Toolbar Template Button
@@ -30,8 +60,8 @@ function showTemplateToolbarContextMenu(tb) {
     let allTemplateDefs = getAvailableTemplateDefinitions()
     var cm = [];
 
-    for (var i = 0; i < templateTypesMenuOptions.length; i++) {
-        let tmi = templateTypesMenuOptions[i];
+    for (var i = 0; i < TemplateTypesMenuOptions.length; i++) {
+        let tmi = TemplateTypesMenuOptions[i];
 
         let allTemplateDefsForType = allTemplateDefs.filter(x => x.templateType.toLowerCase() == tmi.label.toLowerCase());
 
@@ -150,6 +180,6 @@ function createTemplateFromDropDown(templateObjOrId, newTemplateType) {
 
     hideTemplateToolbarContextMenu();
     insertTemplate(range, newTemplateObj);
-    focusTemplate(newTemplateObj.templateGuid, null, true);
+    focusTemplate(newTemplateObj.templateGuid, null, true, isNew);
     return newTemplateObj;
 }

@@ -2,18 +2,24 @@
 var IsTemplateNameTextAreaFocused = false;
 var IsTemplateDetailTextAreaFocused = false;
 
-function initEditTemplateToolbar() {
-    let resizers = Array.from(document.getElementsByClassName('resizable-textarea'));
-    for (var i = 0; i < resizers.length; i++) {
-        let rta = resizers[i];
+var TemplateBeforeEdit = null;
 
-        new ResizeObserver(() => {
-            updateEditTemplateToolbarPosition();
-        }).observe(rta);
-    }
+// #region Life Cycle
+
+function initEditTemplateToolbar() {
+    //let resizers = Array.from(document.getElementsByClassName('resizable-textarea'));
+    //for (var i = 0; i < resizers.length; i++) {
+    //    let rta = resizers[i];
+
+    //    new ResizeObserver(() => {
+    //        updateEditTemplateToolbarPosition();
+    //    }).observe(rta);
+    //}
 
     enableResize(getEditTemplateToolbarContainerElement());
 
+    document.getElementById('templateColorBox').addEventListener('click', onTemplateColorBoxContainerClick);
+    
     document.getElementById('templateNameTextInput').addEventListener('focus', onTemplateNameTextAreaGotFocus);
     document.getElementById('templateNameTextInput').addEventListener('blur', onTemplateNameTextAreaLostFocus);
     document.getElementById('templateNameTextInput').addEventListener('input', onTemplateNameChanged);
@@ -23,44 +29,70 @@ function initEditTemplateToolbar() {
     document.getElementById('templateDetailTextInput').addEventListener('blur', onTemplateDetailTextAreaLostFocus);
 
     document.getElementById('templateDetailTextInput').addEventListener('input', onTemplateDetailChanged);
-
-    document.getElementById('templateColorBox').addEventListener('click', onTemplateColorBoxContainerClick);
-
+       
+    document.getElementById('editTemplateDeleteButton').addEventListener('click', onDeleteTemplateButtonClick);
 }
 
-function showEditTemplateToolbar() {
+function loadEditTemplateToolbar() {
+    IsTemplateDetailTextAreaFocused = false;
+    IsTemplateNameTextAreaFocused = false;
+    TemplateBeforeEdit = null;
+}
+
+function createEditTemplateToolbarForTemplate(t) {
+    log('Editing Template: ' + t.templateGuid + " selected type: " + t.templateType);
+    let ttype = t.templateType.toLowerCase();
+    if (ttype == 'dynamic') {
+        document.getElementById('templateDetailTextInputContainer').classList.add('hidden');
+        document.getElementById('editTemplateToolbar').classList.remove('template-with-detail-layout');
+    } else {
+        document.getElementById('templateDetailTextInputContainer').classList.remove('hidden');
+        document.getElementById('editTemplateToolbar').classList.add('template-with-detail-layout');
+
+        document.getElementById('templateDetailTextInput').value = t.templateData;
+        document.getElementById('templateDetailTextInput').addEventListener('input', onTemplateDetailChanged);
+    }
+
+    document.getElementById('templateColorBox').style.backgroundColor = t.templateColor;
+
+    document.getElementById('templateNameTextInput').value = t.templateName;
+}
+
+function showEditTemplateToolbar(isNew = false) {
     var ett = getEditTemplateToolbarContainerElement();
     ett.classList.remove('hidden');
 
     updateAllSizeAndPositions();
 
     var t = getTemplateDefByGuid(getFocusTemplateGuid());
-    if (t && t.domNode) {
-        setTemplateType(t.domNode.getAttribute('templateGuid'), t.domNode.getAttribute('templateType'));
+    if (t) {
+        if (isNew) {
+            // keep comprarer empty besides guid to ensure host is notified of add
+            TemplateBeforeEdit = { templateGuid: t.templateGuid };
+        } else {
+            TemplateBeforeEdit = t;
+		}
+        createEditTemplateToolbarForTemplate(t);
     }
-
-    //document.getElementById('editTemplateTypeMenuSelector').addEventListener('change', onTemplateTypeChanged);
 }
 
-function hideEditTemplateToolbar() {
+function hideEditTemplateToolbar() {    
     clearAllTemplateEditClasses();
+    if (TemplateBeforeEdit != null) {
+        // get new or updated def
+        let updated_t = getTemplateDefByGuid(TemplateBeforeEdit.templateGuid);
+        if (isTemplateDefChanged(TemplateBeforeEdit, updated_t)) {
+            // t new or updated
+            onAddOrUpdateTemplate_ntf(updated_t);
+        }
+        // reset comprarer template
+        TemplateBeforeEdit = null;
+    }
+    
 
     var ett = getEditTemplateToolbarContainerElement();
     ett.classList.add('hidden');
-
-    //document.getElementById('editTemplateTypeMenuSelector').removeEventListener('change', onTemplateTypeChanged);
 }
-
-function updateEditTemplateToolbarPosition() {
-    let wh = window.visualViewport.height;
-    let etth = $("#editTemplateToolbar").outerHeight();
-    $("#editTemplateToolbar").css("top", wh - etth);
-}
-
-function isShowingEditTemplateToolbar() {
-    return $("#editTemplateToolbar").css("display") != 'none';
-}
-
 function showTemplateColorPaletteMenu() {
     if (isShowingTemplateColorPaletteMenu()) {
         hideTemplateColorPaletteMenu();
@@ -102,73 +134,16 @@ function hideTemplateColorPaletteMenu() {
     paletteMenuElm.style.display = 'none';
 }
 
-function isShowingTemplateColorPaletteMenu() {
-    return $('templateColorPaletteMenu').css('display') != 'none';
+// #endregion Life Cycle
+
+// #region Getters
+
+function getEditTemplateToolbarContainerElement() {
+    return document.getElementById('editTemplateToolbar');
 }
+// #endregion Getters
 
-//#region Model Changes
-
-function deleteFocusTemplate() {
-    let tguid_to_delete = getFocusTemplateGuid();
-    if (tguid_to_delete == null) {
-        log('error, no focus template to delete, ignoring...');
-        return;
-    }
-
-    let td = getTemplateFromDomNode(getTemplateDefByGuid(tguid_to_delete).domNode);
-    let result = window.confirm('Are you sure you want to delete ALL usages of \'' + td.templateName + '\'?')
-
-    if (!result) {
-        return;
-    }
-
-    userDeletedTemplateGuids.push(tguid_to_delete);
-
-    let availTemplateRef = availableTemplates.filter(x => x.templateGuid == tguid_to_delete);
-    if (availTemplateRef != null && availTemplateRef.length > 0) {
-        let availIdx = availableTemplates.indexOf(availTemplateRef[0]);
-        availableTemplates.splice(availIdx, 1);
-    }
-
-    getUsedTemplateInstances()
-        .filter(x => x.domNode.getAttribute('templateGuid') == tguid_to_delete)
-        .forEach((ti) => {
-            let t = getTemplateFromDomNode(ti.domNode);
-            let docIdx = getTemplateDocIdx(t.templateInstanceGuid);
-            quill.deleteText(docIdx, 1, Quill.sources.USER);
-        });
-
-    hideEditTemplateToolbar();
-    log('Template \'' + tguid_to_delete + '\' \'' + td.templateName + '\' was DELETED');
-}
-
-function setTemplateType(tguid, ttype) {
-    log('Template: ' + tguid + " selected type: " + ttype);
-
-    //setTemplateProperty(tguid, 'templateType', ttype);
-
-    var t = getTemplateDefByGuid(tguid);
-    //t.domNode.setAttribute('templateType', templateTypeValue);
-    //document.getElementById("editTemplateTypeMenuSelector").value = ttype;
-
-    if (ttype == 'datetime' && t.domNode.getAttribute('templateData') == '') {
-        //setTemplateProperty(tguid, 'templateData', 'MM/dd/yyy HH:mm:ss');
-    }
-
-    if (ttype == 'dynamic') {
-        document.getElementById('templateDetailTextInputContainer').style.display = 'none';
-    } else {
-        document.getElementById('templateDetailTextInputContainer').style.display = 'inline-block';
-        document.getElementById('templateDetailTextInput').value = getTemplateProperty(tguid, 'templateData');
-        //document.getElementById('templateDetailTextInput').addEventListener('input', onTemplateDetailChanged);
-    }
-
-    document.getElementById('templateColorBox').style.backgroundColor = getTemplateProperty(tguid, 'templateColor');
-    //document.getElementById('templateColorBox').addEventListener('click', onTemplateColorBoxContainerClick);
-
-    document.getElementById('templateNameTextInput').value = getTemplateProperty(tguid, 'templateName');
-    //document.getElementById('templateNameTextInput').addEventListener('input', onTemplateNameChanged);
-}
+// #region Setters
 
 function setTemplateName(tguid, name) {
     var tl = getTemplateElements(tguid);
@@ -193,21 +168,57 @@ function setTemplateDetailData(tguid, detailData) {
         }
     }
 }
+// #endregion Setters
+
+// #region Actions
+
+// #endregion Actions
+
+// #region State
+
+function isShowingEditTemplateToolbar() {
+    return $("#editTemplateToolbar").css("display") != 'none';
+}
+
+function isShowingTemplateColorPaletteMenu() {
+    return $('templateColorPaletteMenu').css('display') != 'none';
+}
+
+
+
+// #endregion State
+
+
+
+//#region Model Changes
+
+function deleteFocusTemplate() {
+    let ftguid = getFocusTemplateGuid();
+    if (!ftguid) {
+        debugger;
+    }
+
+    let ft = getTemplateDefByGuid(ftguid);
+    let result = window.confirm('Are you sure you want to delete ALL usages of \'' + ft.templateName + '\'? This cannot be undone.')
+
+    if (!result) {
+        return;
+    }
+
+    removeTemplatesByGuid(ftguid);
+    onUserDeletedTemplate_ntf(ftguid);
+
+    hideEditTemplateToolbar();
+    log('Template \'' + ftguid + '\' \'' + td.templateName + '\' was DELETED');
+}
 
 function isEditTemplateTextAreaFocused() {
     return IsTemplateNameTextAreaFocused || IsTemplateDetailTextAreaFocused;
 }
 
-
-
-
 //#endregion
 
-//#region Event Callbacks
-
-function onTemplateTypeChanged(e) {
-    setTemplateType(getFocusTemplateGuid(), this.value);
-}
+//#region Event Handlers
 
 function onTemplateColorBoxContainerClick(e) {
     showTemplateColorPaletteMenu();
@@ -236,13 +247,21 @@ function onTemplateDetailTextAreaGotFocus() {
     IsTemplateDetailTextAreaFocused = true;
 }
 
-
 function onTemplateDetailTextAreaLostFocus() {
     IsTemplateDetailTextAreaFocused = false;
 }
 
-function getEditTemplateToolbarContainerElement() {
-    return document.getElementById('editTemplateToolbar');
+function onDeleteTemplateButtonClick(e) {
+    deleteFocusTemplate();
 }
 
-//#endregion
+function onColorPaletteItemClick(chex) {
+    let tguid = getFocusTemplateGuid();
+    let t = getTemplateDefByGuid(tguid);
+
+    setTemplateBgColor(tguid, chex, false);
+    document.getElementById('templateColorBox').style.backgroundColor = chex;
+
+    hideAllTemplateContextMenus();
+}
+//#endregion Event Handlers

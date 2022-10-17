@@ -73,9 +73,6 @@ function getTotalHeight() {
 }
 
 function updateAllSizeAndPositions() {
-	//if (isRunningInHost()) {
-	//	getEditorContainerElement().style.height = '100%';
-	//}
 	$(".ql-toolbar").css("top", 0);
 
 	if (isEditorToolbarVisible()) {
@@ -90,9 +87,6 @@ function updateAllSizeAndPositions() {
 	let tth = getTemplateToolbarHeight();
 
 	$("#editor").css("height", wh - eth - tth);
-
-	updateEditTemplateToolbarPosition();
-	updatePasteTemplateToolbarPosition();
 
 	drawOverlay();
 
@@ -156,7 +150,7 @@ function onEditorSelectionChanged(range, oldRange, source) {
 
 function onEditorTextChanged(delta, oldDelta, source) {
 	updateAllSizeAndPositions();
-	updateTemplatesAfterTextChanged(delta, oldDelta, source);
+	WasTextChanged = true;
 
 	if (!IsLoaded) {
 		return;
@@ -289,11 +283,15 @@ function enableSubSelection(fromHost = false) {
 	getDragOverlayElement().classList.remove('drag-overlay-enabled');
 	getDragOverlayElement().setAttribute('draggable', false);
 
-	if (IsReadOnly) {
+	let telms = getTemplateElements();
+	for (var i = 0; i < telms.length; i++) {
+		let telm = telms[i];
+		if (IsReadOnly) {
 		// disable pointer-events on templates w/ sub-selection
-		getTemplateElements().forEach((te) => te.classList.add('no-select'));
-	} else {
-		getTemplateElements().forEach((te) => te.classList.remove('no-select'));
+			telm.classList.add('no-select');
+		} else {
+			telm.classList.remove('no-select');
+		}
 	}
 
 	updateAllSizeAndPositions();
@@ -358,6 +356,7 @@ function getEditorSelection() {
 
 function setEditorSelection(doc_idx, len, source = 'user') {
 	//getEditorContainerElement().style.userSelect = 'auto';
+	LastSelRange = { index: doc_idx, length: len };
 	quill.setSelection(doc_idx, len, source);
 	if (source == 'silent') {
 		onEditorSelectionChanged_ntf({ index: doc_idx, length: len });

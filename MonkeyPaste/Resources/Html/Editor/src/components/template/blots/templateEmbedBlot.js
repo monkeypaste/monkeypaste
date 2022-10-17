@@ -12,7 +12,8 @@ var Template_AFTER_INSERT_Class = 'ql-template-embed-blot-after-insert';
 var TemplateEmbedHtmlAttributes = [
     'isFocus',
     'background-color',
-    'wasVisited'
+    'wasVisited',
+    'docIdx'
     //'color'
 ];
 
@@ -83,7 +84,7 @@ function getTemplateFromDomNode(domNode) {
         //domNode: domNode,
         templateGuid: domNode.getAttribute('templateGuid'),
         templateInstanceGuid: domNode.getAttribute('templateInstanceGuid'),
-        isFocus: domNode.getAttribute('isFocus'),
+        isFocus: parseBool(domNode.getAttribute('isFocus')),
         templateName: domNode.getAttribute('templateName'),
         templateColor: domNode.getAttribute('templateColor'),
         templateText: domNode.getAttribute('templateText'),
@@ -91,7 +92,7 @@ function getTemplateFromDomNode(domNode) {
         templateData: domNode.getAttribute('templateData'),
         templateDeltaFormat: domNode.getAttribute('templateDeltaFormat'),
         templateHtmlFormat: domNode.getAttribute('templateHtmlFormat'),
-        wasVisited: domNode.getAttribute('wasVisited')
+        wasVisited: parseBool(domNode.getAttribute('wasVisited'))
     }
 }
 
@@ -100,12 +101,20 @@ function applyTemplateToDomNode(node, value) {
         return node;
     }
 
-    if (value.templateType == 'datetime' && value.templateData == '') {
+    let ttype = value.templateType.toLowerCase();
+    if (ttype == 'datetime' && isNullOrWhiteSpace(value.templateData)) {
         value.templateData = 'MM/dd/yyy HH:mm:ss';
     }
+    if (ttype == 'static' && value.templateData == null) {
+        value.templateData = '';
+    }
+
     if (!value.wasVisited) {
         value.wasVisited = false;
     }
+    if (!value.templateText) {
+        value.templateText = '';
+	}
 
     node.setAttribute('templateGuid', value.templateGuid);
     node.setAttribute('templateInstanceGuid', value.templateInstanceGuid);
@@ -117,39 +126,20 @@ function applyTemplateToDomNode(node, value) {
     node.setAttribute('templateDeltaFormat', value.templateDeltaFormat);
     node.setAttribute('templateHtmlFormat', value.templateHtmlFormat);
     node.setAttribute('wasVisited', value.wasVisited);
-
     node.setAttribute('isFocus', value.isFocus);
-
-    if (IsPastingTemplate && value.templateText != '') {
-        changeInnerText(node, node.innerText, value.templateText);
-    } else {
-        setTemplateBgColor(value.templateGuid, null, value.templateColor, false);
-        node.innerHTML = value.templateHtmlFormat;
-        changeInnerText(node, node.innerText, value.templateName);
-	}   
-
-    // TODO instead of rejecting mouse down, template should be draggable
-
-    //disable text selection
-    //node.setAttribute('unselectable', 'on');
-    //node.setAttribute('onselectstart', 'return false;');
-    //node.setAttribute('onmousedown', 'return false;');
-
     node.setAttribute("spellcheck", "false");
     node.classList.add(TemplateEmbedClass);
     node.setAttribute('draggable', false);
     node.setAttribute('contenteditable', false);
 
-    //var templateDocIdxCache;
-    //node.addEventListener('pointerdown', onTemplatePointerDown);
-    //node.addEventListener('pointerup', onTemplatePointerUp);
+    setTemplateBgColor(value.templateGuid, value.templateColor, false);
+    node.innerHTML = value.templateHtmlFormat;
+
+    //log('Name: ' + value.templateName + '" Text: "' + value.templateText + ' display val: ' + getTemplateDisplayValue(value) + ' tiguid: ' + value.templateInstanceGuid);
+
+    changeInnerText(node, node.innerText, getTemplateDisplayValue(value));
 
     node.addEventListener('click', onTemplateClick);
-    //node.addEventListener('pointerdown', function (e) {
-    //    let ti_doc_idx = getTemplateDocIdx(value.templateInstanceGuid);
-    //    setEditorSelection(ti_doc_idx, 1, 'api');
-    //});
-
     return node;
 }
 

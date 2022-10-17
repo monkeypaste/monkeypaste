@@ -67,7 +67,7 @@ function getContentBg(htmlStr, contrast_opacity = 0.5) {
 	let bright_fg_count = 0;
 	let dark_fg_count = 0;
 	for (var i = 0; i < elms.length; i++) {
-		let has_fg = !(elms[i].style.color === undefined || elms[i].style.color == '');
+		let has_fg = !isNullOrWhiteSpace(elms[i].style.color);
 		if (has_fg) {
 			if (isBright(elms[i].style.color)) {
 				bright_fg_count++;

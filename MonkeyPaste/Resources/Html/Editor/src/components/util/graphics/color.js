@@ -119,6 +119,9 @@ function rgbaCssStrToRgba(rgbaCssStr) {
     return rgba;
 }
 
+function isHexColorStr(str) {
+    return hexToRgba(str) != null;
+}
 
 function hexToRgba(hexStr) {
     if (typeof hexStr !== 'string' && !(hexStr instanceof String)) {

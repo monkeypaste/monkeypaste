@@ -54,6 +54,7 @@ namespace MonkeyPaste {
 
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpTextTokenId")]
+        [JsonIgnore]
         public override int Id { get; set; }
 
         [Column("MpTextTemplateGuid")]
@@ -66,13 +67,14 @@ namespace MonkeyPaste {
 
         [JsonProperty("templateType")]
         public string TemplateTypeStr { get; set; }
+
         [JsonProperty("templateData")]
         public string TemplateData { get; set; }
 
         [JsonProperty("templateName")]
         public string TemplateName { get; set; }
         
-        //[JsonProperty("templateColor")]
+        [JsonProperty("templateColor")]
         public string HexColor { get; set; }
 
 
@@ -81,7 +83,7 @@ namespace MonkeyPaste {
 
         [JsonProperty("templateHtmlFormat")]
         public string TemplateHtmlFormat { get; set; } = string.Empty;
-
+        [JsonIgnore]
         public string RichTextFormatJson { get; set; } = string.Empty;
   
         #endregion
@@ -92,6 +94,7 @@ namespace MonkeyPaste {
         #region Properties
 
         [Ignore]
+        [JsonIgnore]
         public MpRichTextFormatInfoFormat RichTextFormat {
             get => JsonConvert.DeserializeObject<MpRichTextFormatInfoFormat>(RichTextFormatJson);
             set => RichTextFormatJson = JsonConvert.SerializeObject(value);
@@ -104,12 +107,14 @@ namespace MonkeyPaste {
         //}
 
         [Ignore]
+        [JsonIgnore]
         public MpTextTemplateType TemplateType {
             get => TemplateTypeStr.ToEnum<MpTextTemplateType>();
             set => TemplateTypeStr = value.ToString();
         }
 
         [Ignore]
+        [JsonIgnore]
         public Guid TextTemplateGuid {
             get {
                 if (string.IsNullOrEmpty(Guid)) {
@@ -123,9 +128,11 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
+        [JsonProperty("templateText")]
         public string TemplateText { get; set; }
 
         [Ignore]
+        [JsonIgnore]
         public string EncodedTemplate {
             get {
                 return TextTemplateOpenToken+Guid+TextTemplateCloseToken;
@@ -133,6 +140,7 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
+        [JsonIgnore]
         public string EncodedTemplateRtf {
             get {
                 return TextTemplateOpenTokenRtf + Guid + TextTemplateCloseTokenRtf;

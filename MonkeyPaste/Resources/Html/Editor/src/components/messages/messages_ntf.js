@@ -87,6 +87,12 @@ function onReadOnlyChanged_ntf(isReadOnly) {
 	}	
 }
 
+function onPasteTemplateRequest_ntf() {
+	// isRequest is for paste (when true) or drag drop doesn't care just waits for this msg 
+	if (typeof notifyPasteTemplateRequest === 'function') {
+		notifyPasteTemplateRequest();
+	}
+}
 
 function onDomLoaded_ntf() {
 	if (typeof notifyDomLoaded === 'function') {
@@ -94,6 +100,29 @@ function onDomLoaded_ntf() {
 	}
 }
 
+function onUserDeletedTemplate_ntf(dtguid) {
+	// output MpQuillUserDeletedTemplateNotification
+	log('userDeletedTemplate called for tguid: ' + dtguid);
+
+	if (typeof notifyUserDeletedTemplate === 'function') {
+		let ntf = {
+			userDeletedTemplateGuid: dtguid
+		};
+
+		notifyUserDeletedTemplate(toBase64FromJsonObj(ntf));
+	}
+}
+
+function onAddOrUpdateTemplate_ntf(t) {
+	// output MpQuillTemplateAddOrUpdateNotification
+	log('addOrUpdateTemplate called for: ' + JSON.stringify(t));
+	if (typeof notifyAddOrUpdateTemplate === 'function') {
+		let ntf = {
+			addedOrUpdatedTextTemplate: t
+		};
+		notifyAddOrUpdateTemplate(toBase64FromJsonObj(ntf));
+	}
+}
 
 function onException_ntf(exType, exData) {
 	// output MpQuillExceptionMessage

@@ -130,3 +130,10 @@ function updateModKeys(e) {
 		drawOverlay();
 	}
 }
+
+function isKeyboardButtonClick(e) {
+	if (e.key == ' ' || e.key == 'Enter') {
+		return true;
+	}
+	return false;
+}

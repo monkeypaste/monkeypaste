@@ -152,11 +152,11 @@ function getRandomInt(max = Number.MAX_SAFE_INTEGER) {
 }
 
 function isNullOrEmpty(str) {
-    return str == null || str == '';
+    return str == null || str == '' || str === undefined;
 }
 
 function isNullOrWhiteSpace(str) {
-    return str == null || str.every(x => x == ' ');
+    return isNullOrEmpty(str) || (typeof str.every === 'function' && str.every(x => x == ' '));
 }
 
 function isChildOfElement(elm, parent) {
@@ -208,9 +208,6 @@ function getAllElementsBetweenHelper(elm, elms) {
     getAllElementsBetweenHelper(elm.firstChild, elms);
     getAllElementsBetweenHelper(elm.nextSibling, elms);
 }
-
-
-
 
 function isEmptyOrSpaces(str) {
     return str === null || str.match(/^ *$/) !== null;

@@ -60,3 +60,39 @@ body:has(.editable) {
     transition: .4s;
 }
 
+.info-marker {
+    color: cornflowerblue;
+    width: 8%;
+    /*position: relative;
+    vertical-align: top;
+    margin-top: 15px;*/
+}
+
+.info-tooltip {
+    display:block;
+    position: absolute;
+    font-family: consolas;
+    font-size: 10px;
+    opacity: 0;
+    z-index: 1;
+    left: 5%;
+    transform: translateY(-100%);
+}
+
+.info-marker:hover .info-tooltip {
+    opacity: 1;
+    transition: 0.5s;
+    transition-delay: 0.1s;
+}
+
+.tooltiptext {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: #0366d6;
+    padding: 18px;
+    border-radius: 5px;
+    color: white;
+    transition: 1s;
+    width: 200px;
+}

@@ -45,3 +45,10 @@ textarea {
     border-width: 0px;
     border-color: transparent;
 }
+
+.disabled-button {
+    background-color: dimgray !important;
+    color: silver !important;
+    cursor: not-allowed !important;
+    border-color: red;
+}

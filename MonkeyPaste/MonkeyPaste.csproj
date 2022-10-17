@@ -118,6 +118,7 @@
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\commonTemplateToolbar.js" />
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\create\createTemplateToolbarItem.js" />
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\edit\editTemplateToolbar.js" />
+    <None Remove="Resources\Html\Editor\src\components\template\types\contacts\contacts.js" />
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\paste\pasteTemplateToolbar.js" />
     <None Remove="Resources\Html\Editor\src\components\util\color.js" />
     <None Remove="Resources\Html\Editor\src\components\util\dataTransfer.js" />
@@ -248,6 +249,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\template\toolbar\edit\editTemplateToolbar.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\template\types\contacts\contacts.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\template\toolbar\paste\pasteTemplateToolbar.js">

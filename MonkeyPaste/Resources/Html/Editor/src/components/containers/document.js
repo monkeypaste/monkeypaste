@@ -1,6 +1,6 @@
 
 function initDocument() {
-	document.addEventListener('selectionchange', onDocumentSelectionChange);
+	//document.addEventListener('selectionchange', onDocumentSelectionChange);
 }
 
 function onDocumentSelectionChange(e) {

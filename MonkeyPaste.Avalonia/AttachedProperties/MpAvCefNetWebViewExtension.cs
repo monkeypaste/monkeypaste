@@ -586,9 +586,9 @@ namespace MonkeyPaste.Avalonia {
                     MpAvResizeExtension.ResizeByDelta(resizeBorder, deltaWidth, 0, false);
                 }
 
-                MpMasterTemplateModelCollectionViewModel.Instance
-                    .UpdateAsync(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids)
-                    .FireAndForgetSafeAsync(ctvm);
+                //MpMasterTemplateModelCollectionViewModel.Instance
+                //    .UpdateAsync(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids)
+                //    .FireAndForgetSafeAsync(ctvm);
 
                 return qrm.itemData;
             }

@@ -4,12 +4,14 @@ const DefaultCaretColor = 'black';
 
 var BlurredSelectionRects = null;
 
-var LastSelRange = { index: 0, length: 0 } ;
+var LastSelRange = { index: 0, length: 0 };
+
+var WasTextChanged = false;
 
 var SelTimerInterval = null;
 
 function initSelection() {	
-	SelTimerInterval = setInterval(onSelectionCheckTick, 300);
+	SelTimerInterval = setInterval(onSelectionCheckTick, 100);
 }
 
 function resetSelection() {
@@ -18,9 +20,13 @@ function resetSelection() {
 }
 
 function onSelectionCheckTick(e) {
+	//if (WasTextChanged) {
+	//	LastSelRange = getDocumentSelection_internal();
+	//	WasTextChanged = false;
+	//	return;
+	//}
 	let cur_sel_range = getDocumentSelection();
-	if (didSelectionChange(cur_sel_range, LastSelRange)) {
-		
+	if (didSelectionChange(cur_sel_range, LastSelRange)) {		
 		log('Sel Changed from Timer.');
 		if (IsDragging) {
 			if (DragSelectionRange) {
@@ -44,7 +50,7 @@ function onSelectionCheckTick(e) {
 
 		if (cur_sel_range) {
 			refreshFontSizePicker(null,cur_sel_range);
-			refreshFontFamilyPicker(null,cur_sel_range);
+			refreshFontFamilyPicker(null, cur_sel_range);
 			updateTemplatesAfterSelectionChange(cur_sel_range, oldRange);
 			onEditorSelectionChanged_ntf(cur_sel_range);
 		}

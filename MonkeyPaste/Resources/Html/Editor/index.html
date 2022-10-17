@@ -34,8 +34,6 @@
 
     <link href="src/components/overlay/overlay-style.css" rel="stylesheet" />
 
-
-
     <!-- EXTERNAL APIS -->
 
 
@@ -84,10 +82,11 @@
     <script src="src/components/messages/messages_get.js"></script>
 
     <script src="src/components/template/template.js"></script>
-    
+
     <script src="src/components/template/blots/templateEmbedBlot.js"></script>
     <script src="src/components/template/blots/templatePadAttribute.js"></script>
-    
+    <script src="src/components/template/types/contacts/contacts.js"></script>
+
     <script src="src/components/template/toolbar/create/createTemplateToolbarItem.js"></script>
     <script src="src/components/template/toolbar/commonTemplateToolbar.js"></script>
     <script src="src/components/template/toolbar/edit/editTemplateToolbar.js"></script>
@@ -148,68 +147,75 @@
     <div id="editTemplateToolbar"
          class="common-template-toolbar edit-template-toolbar bottom-align hidden">
         <div class="resizer resizer-t"></div>
-        <div id="templateColorBox"
-             class="edit-template-color-box"></div>
-        <textarea id="templateNameTextInput"
-                  rows="1"
-                  cols="20"
-                  class="resizable-textarea"
-                  placeholder="Template Name"></textarea>
-        <div id="templateDetailTextInputContainer"
-             class="edit-template-detail-text-input-container">
+        <div id="templateColorBox"></div>
+        <div>
+            <textarea id="templateNameTextInput"
+                      rows="1"
+                      cols="20"
+                      class="resizable-textarea"
+                      placeholder="Template Name"></textarea>
+        </div>
+        <div id="templateDetailTextInputContainer">
             <textarea id="templateDetailTextInput"
                       rows="1"
                       cols="20"
                       class="resizable-textarea"
                       placeholder="Enter Details"></textarea>
-            <i class="fa-solid fa-circle-info info-marker">
-                <span class="info-tooltip">
-                    <ul dir="auto" class="tooltiptext">
-                        <li>yy = short year</li>
-                        <li>yyyy = long year</li>
-                        <li>M = month (1-12)</li>
-                        <li>MM = month (01-12)</li>
-                        <li>MMM = month abbreviation (Jan, Feb ... Dec)</li>
-                        <li>MMMM = long month (January, February ... December)</li>
-                        <li>d = day (1 - 31)</li>
-                        <li>dd = day (01 - 31)</li>
-                        <li>ddd = day of the week in words (Monday, Tuesday ... Sunday)</li>
-                        <li>E = short day of the week in words (Mon, Tue ... Sun)</li>
-                        <li>D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)</li>
-                        <li>h = hour in am/pm (0-12)</li>
-                        <li>hh = hour in am/pm (00-12)</li>
-                        <li>H = hour in day (0-23)</li>
-                        <li>HH = hour in day (00-23)</li>
-                        <li>mm = minute</li>
-                        <li>ss = second</li>
-                        <li>SSS = milliseconds</li>
-                        <li>a = AM/PM marker</li>
-                        <li>p = a.m./p.m. marker</li>
-                    </ul>
-                </span>
-            </i>
-        </div>
 
+        </div>
+        <div class="info-marker">
+            <i class="fa-solid fa-circle-info"></i>
+            <div class="info-tooltip">
+                <ul dir="auto" class="tooltiptext">
+                    <li>yy = short year</li>
+                    <li>yyyy = long year</li>
+                    <li>M = month (1-12)</li>
+                    <li>MM = month (01-12)</li>
+                    <li>MMM = month abbreviation (Jan, Feb ... Dec)</li>
+                    <li>MMMM = long month (January, February ... December)</li>
+                    <li>d = day (1 - 31)</li>
+                    <li>dd = day (01 - 31)</li>
+                    <li>ddd = day of the week in words (Monday, Tuesday ... Sunday)</li>
+                    <li>E = short day of the week in words (Mon, Tue ... Sun)</li>
+                    <li>D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)</li>
+                    <li>h = hour in am/pm (0-12)</li>
+                    <li>hh = hour in am/pm (00-12)</li>
+                    <li>H = hour in day (0-23)</li>
+                    <li>HH = hour in day (00-23)</li>
+                    <li>mm = minute</li>
+                    <li>ss = second</li>
+                    <li>SSS = milliseconds</li>
+                    <li>a = AM/PM marker</li>
+                    <li>p = a.m./p.m. marker</li>
+                </ul>
+            </div>
+        </div>
+        
         <div class="common-template-toolbar-button right-align">
-            <input id="editTemplateDeleteButton" type="button" value="DELETE" onclick="deleteFocusTemplate();" />
+            <!--<input id="editTemplateDeleteButton" type="button" value="DELETE"/>-->
+            <button id="editTemplateDeleteButton" type="button">DELETE</button>
         </div>
     </div>
 
     <div id="pasteTemplateToolbar"
          class="common-template-toolbar paste-template-toolbar bottom-align hidden">
         <div class="resizer resizer-t"></div>
+        <!-- SELCTOR -->
         <div id="pasteTemplateToolbarMenuSelectorDiv"
              class="">
             <select id="pasteTemplateToolbarMenuSelector"
+                    tabindex="0"
                     class="hidden">
             </select>
             <div id="selectedPasteTemplateOptionDiv"
                  class="paste-template-option-div">
-                <div class="paste-template-option-icon"></div>
+                <!--<div class="paste-template-option-icon"></div>-->
+                <i class="paste-template-option-icon"></i>
                 <span class="paste-template-option-label"></span>
             </div>
             <div id="pasteTemplateToolbarMenuSelectorArrowDiv"></div>
         </div>
+        <!-- TEXT AREA-->
         <div>
             <textarea id="templatePasteValueTextArea"
                       rows="1"
@@ -218,19 +224,24 @@
                       tabindex="1"
                       placeholder="Enter paste text..."></textarea>
         </div>
+        <!-- CLEAR BUTTON -->
         <div id="clearAllTemplateTextButton"
-             tabindex="0"
+             tabindex="2"
              class="common-template-toolbar-button">
             <span>CLEAR ALL</span>
         </div>
-        <div id="previousTemplateButton" tabindex="2" class="common-template-toolbar-button">
+        <!-- PREV BUTTON -->
+        <div id="previousTemplateButton" tabindex="3" class="common-template-toolbar-button">
             <span>◄</span>
         </div>
-        <div id="nextTemplateButton" tabindex="3" class="common-template-toolbar-button">
+        <!-- NEXT BUTTON -->
+        <div id="nextTemplateButton" tabindex="4" class="common-template-toolbar-button">
             <span>►</span>
         </div>
-        <div id="pasteTemplateButton" tabindex="4" class="common-template-toolbar-button right-align">
-            <span>FINISH</span>
+        <!-- PASTE BUTTON -->
+        <div id="pasteTemplateButton" tabindex="5"
+             class="common-template-toolbar-button disabled-button right-align">
+            <span>PASTE</span>
         </div>
     </div>
 

@@ -1,68 +1,51 @@
 ﻿.edit-template-toolbar {
-    background-color: lightyellow;
+    background-color: palegreen;
 }
 
 
-.edit-template-color-box {
-    display: inline-block;
+#templateColorBox {
+    display: inline-block !important;
     height: 30px;
     width: 30px;
     border-radius: 5px;
     border: solid 3px black;
     cursor: pointer;
     margin-left: 10px;
-    margin-top: 5px;
+    /*margin-top: 5px;*/
 }
 
-    .edit-template-color-box:hover {
+    #templateColorBox:hover {
         transition: .2s;
-        border: solid 3px dimgray;
+        border-color: dimgray;
     }
 
-
-
-.edit-template-type-select-container {
-    margin-top: 11px;
-    margin-right: 12px;
-    vertical-align: middle;
-    font-family: Arial;
-    min-width: 160px;
+/*div:has( > #templateDetailTextInput) {
+    width: 30%;
 }
 
-    .edit-template-type-select-container select {
-        padding: 3px;
-    }
+div:has( > #templateNameTextInput) {
+    width: 45%;
+}*/
 
-.edit-template-type-option {
-    margin: 5px;
+.edit-template-toolbar.template-with-detail-layout > div:has( > #templateNameTextInput) {
+    width: 45%;
 }
-
-.edit-template-detail-text-input-container {
+.edit-template-toolbar:not(.template-with-detail-layout) > div:has( > #templateNameTextInput) {
+    width: 75%;
+}
+.edit-template-toolbar.template-with-detail-layout > .info-marker {
+    /*display: inline-flex;*/
+}
+.edit-template-toolbar:not(.template-with-detail-layout) > .info-marker {
     display: none;
-    right: 140px;
-    font-family: Arial;
-    min-width: 160px;
 }
 
-.edit-template-ok-cancel-button-container {
-    right: 0;
-    position: absolute;
-    margin: 12px;
+.edit-template-toolbar.template-with-detail-layout > div:has( > #templateDetailTextInput) {
+    width: 30%;
 }
 
-div#editTemplateOkCancelButtonContainer input {
-    margin-left: 10px;
-}
-
-div#editTemplateOkCancelButtonContainer {
-}
-
-.template-name-and-color-container {
-    display: inline-block;
-    float: right;
-    position: relative;
-    font-family: Arial;
-    min-width: 160px;
+.edit-template-toolbar:not(.template-with-detail-layout) > div:has( > #templateDetailTextInput) {
+    width: 0;
 }
 
 #editTemplateDeleteButton {
@@ -76,7 +59,26 @@ div#editTemplateOkCancelButtonContainer {
     #editTemplateDeleteButton:hover {
         background-color: red;
     }
+/*#templateDetailTextInputContainer {
+    right: 140px;
+    font-family: Arial;
+    min-width: 160px;
+}*/
 
+.edit-template-type-select-container {
+    margin-top: 11px;
+    margin-right: 12px;
+    vertical-align: middle;
+    font-family: Arial;
+    min-width: 160px;
+}
+
+    .edit-template-type-select-container select {
+        padding: 3px;
+    }
+
+
+/* Color Pallete */
 
 .template_color_palette_item {
     height: 15px;
@@ -89,6 +91,8 @@ div#editTemplateOkCancelButtonContainer {
         transition: .2s;
         border: solid 3px dimgray;
     }
+
+/* Editor Toolbar */
 
 .ql-toolbar-template-context-menu {
     display: none;
