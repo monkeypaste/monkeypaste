@@ -1545,10 +1545,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Business Logic
 
-        public Uri QuillEditorUri => new Uri(Path.Combine(Environment.CurrentDirectory, "Resources/Html/Editor/index.html"));
-
-        public string QuillEditorPath => Path.Combine(Environment.CurrentDirectory, "Resources/Html/Editor/index.html");
-
         public string TemplateRichHtml { get; set; }
 
         public string DetailText { get; set; }

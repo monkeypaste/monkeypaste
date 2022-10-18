@@ -1,0 +1,115 @@
+﻿.paste-template-toolbar {
+    background-color: teal;
+}
+    .paste-template-toolbar > .common-template-toolbar-button:not(.disabled) {
+        background-color: dodgerblue;
+        border: solid 2px #67c5ff;
+        color: white;
+    }
+    .paste-template-toolbar > .common-template-toolbar-button:hover {
+        border-color: yellow;
+    }
+
+#templatePasteValueTextArea {
+}
+
+div:has( > #templatePasteValueTextArea) {
+    width: 45%;
+}
+
+#pasteTemplateToolbarMenuSelectorDiv {
+    width: 15%;
+    align-items: center;
+    font-family: Arial;
+    margin: 5px 5px 5px 10px;
+    padding: 3px;
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 3px;
+    transition: 0.4s;
+}
+    #pasteTemplateToolbarMenuSelectorDiv.disabled {
+        /*user-select: none;*/
+        
+    }
+    #pasteTemplateToolbarMenuSelectorDiv:hover {
+        border: 1.25px solid yellow;
+        cursor: pointer;
+    }
+
+#selectedPasteTemplateOptionDiv {
+    width: 100%;
+}
+
+#pasteTemplateToolbarMenuSelectorArrowDiv {
+    /*style the arrow inside the select element:*/
+    content: "";
+    transform: translate(0,3px);
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-color: black transparent transparent transparent;
+}
+    #pasteTemplateToolbarMenuSelectorArrowDiv.active {
+        border-color: transparent transparent black transparent;
+        transform: translate(0,-3px) scaleY(1);
+    }
+
+
+
+.paste-template-option-div {
+    display: inline-flex;
+    align-items: center;
+}
+    .paste-template-option-div:not(.no-input-template):hover {
+        cursor: pointer;
+    }
+
+.paste-template-option-icon {
+    border-radius: 3px;
+    border: 0px solid black;
+    width: fit-content;
+    height: fit-content;
+    max-width: 30px;
+    max-height: 30px;
+    margin: 5px;
+}
+
+.paste-template-option-label {
+    margin-left: 10px;
+}
+
+.paste-template-option-div.no-input-template > .paste-template-option-label {
+    font-style: italic;
+    color: silver;    
+}
+
+#pasteOptionsDiv {
+    position: absolute;
+    min-width: 150px;
+    display: block;
+    overflow: auto;
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 3px;
+    transition: 0.4s;
+}
+
+    #pasteOptionsDiv > div {
+        display: flex;
+    }
+
+    #pasteOptionsDiv .paste-template-option-icon,
+    #pasteOptionsDiv .paste-template-option-label {
+        margin: 5px;
+    }
+
+    #pasteOptionsDiv .selected-paste-option,
+    #pasteOptionsDiv .paste-template-option-div:not(.no-input-template):hover {
+        background-color: silver;
+    }
+
+#pasteTemplateButton span {
+    margin-left: 10px;
+    margin-right: 10px;
+}

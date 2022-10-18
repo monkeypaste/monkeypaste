@@ -22,11 +22,7 @@
     <Compile Remove="Models\PreferenceModels\**" />
     <Compile Remove="Repositories\**" />
     <Compile Remove="Resources\Data\Analytics\**" />
-    <Compile Remove="Resources\Html\Editor\dist\**" />
-    <Compile Remove="Resources\Html\Editor\lib\**" />
-    <Compile Remove="Resources\Html\Editor\node_modules\**" />
-    <Compile Remove="Resources\Html\Editor\src\modules\**" />
-    <Compile Remove="Resources\Html\Editor\TestData\**" />
+    <Compile Remove="Resources\Html\Editor\**" />
     <Compile Remove="Resources\Html\temp\**" />
     <Compile Remove="Selectors\**" />
     <Compile Remove="Services\**" />
@@ -40,11 +36,7 @@
     <EmbeddedResource Remove="Models\PreferenceModels\**" />
     <EmbeddedResource Remove="Repositories\**" />
     <EmbeddedResource Remove="Resources\Data\Analytics\**" />
-    <EmbeddedResource Remove="Resources\Html\Editor\dist\**" />
-    <EmbeddedResource Remove="Resources\Html\Editor\lib\**" />
-    <EmbeddedResource Remove="Resources\Html\Editor\node_modules\**" />
-    <EmbeddedResource Remove="Resources\Html\Editor\src\modules\**" />
-    <EmbeddedResource Remove="Resources\Html\Editor\TestData\**" />
+    <EmbeddedResource Remove="Resources\Html\Editor\**" />
     <EmbeddedResource Remove="Resources\Html\temp\**" />
     <EmbeddedResource Remove="Selectors\**" />
     <EmbeddedResource Remove="Services\**" />
@@ -58,11 +50,7 @@
     <None Remove="Models\PreferenceModels\**" />
     <None Remove="Repositories\**" />
     <None Remove="Resources\Data\Analytics\**" />
-    <None Remove="Resources\Html\Editor\dist\**" />
-    <None Remove="Resources\Html\Editor\lib\**" />
-    <None Remove="Resources\Html\Editor\node_modules\**" />
-    <None Remove="Resources\Html\Editor\src\modules\**" />
-    <None Remove="Resources\Html\Editor\TestData\**" />
+    <None Remove="Resources\Html\Editor\**" />
     <None Remove="Resources\Html\temp\**" />
     <None Remove="Selectors\**" />
     <None Remove="Services\**" />
@@ -85,57 +73,6 @@
     <None Remove="Resources\Data\Google\client_secrets_desktop.json" />
     <None Remove="Resources\Fonts\password.ttf" />
     <None Remove="Resources\Html\Editor.html" />
-    <None Remove="Resources\Html\Editor\Editor2.js" />
-    <None Remove="Resources\Html\Editor\Editor_with_selection_toolbar.html" />
-    <None Remove="Resources\Html\Editor\index.html" />
-    <None Remove="Resources\Html\Editor\package-lock.json" />
-    <None Remove="Resources\Html\Editor\package.json" />
-    <None Remove="Resources\Html\Editor\Quill_Formated_Text.html" />
-    <None Remove="Resources\Html\Editor\src\components\content\content-file-list\content-file-list.js" />
-    <None Remove="Resources\Html\Editor\src\components\content\content-image\content-image.js" />
-    <None Remove="Resources\Html\Editor\src\components\content\content-text\content-text.js" />
-    <None Remove="Resources\Html\Editor\src\components\content\content.js" />
-    <None Remove="Resources\Html\Editor\src\components\content\content_with_source_attributes.js" />
-    <None Remove="Resources\Html\Editor\src\components\converter\converter.js" />
-    <None Remove="Resources\Html\Editor\src\components\dragdrop\drag.js" />
-    <None Remove="Resources\Html\Editor\src\components\dragdrop\dragdrop.js" />
-    <None Remove="Resources\Html\Editor\src\components\dragdrop\drop.js" />
-    <None Remove="Resources\Html\Editor\src\components\dragdrop\editorscroll.js" />
-    <None Remove="Resources\Html\Editor\src\components\editor\document.js" />
-    <None Remove="Resources\Html\Editor\src\components\editor\editor.js" />
-    <None Remove="Resources\Html\Editor\src\components\editor\selection.js" />
-    <None Remove="Resources\Html\Editor\src\components\editor\window.js" />
-    <None Remove="Resources\Html\Editor\src\components\font\font.js" />
-    <None Remove="Resources\Html\Editor\src\components\font\fontFamily.js" />
-    <None Remove="Resources\Html\Editor\src\components\font\fontSize.js" />
-    <None Remove="Resources\Html\Editor\src\components\overlay\overlay.js" />
-    <None Remove="Resources\Html\Editor\src\components\quill-wrapper\quill-wrapper.js" />
-    <None Remove="Resources\Html\Editor\src\components\quill-wrapper\toolbar\quill-toolbar.js" />
-    <None Remove="Resources\Html\Editor\src\components\table\table.js" />
-    <None Remove="Resources\Html\Editor\src\components\template\blots\templateEmbedBlot.js" />
-    <None Remove="Resources\Html\Editor\src\components\template\template.js" />
-    <None Remove="Resources\Html\Editor\src\components\template\templatePadAttribute.js" />
-    <None Remove="Resources\Html\Editor\src\components\template\toolbar\commonTemplateToolbar.js" />
-    <None Remove="Resources\Html\Editor\src\components\template\toolbar\create\createTemplateToolbarItem.js" />
-    <None Remove="Resources\Html\Editor\src\components\template\toolbar\edit\editTemplateToolbar.js" />
-    <None Remove="Resources\Html\Editor\src\components\template\types\contacts\contacts.js" />
-    <None Remove="Resources\Html\Editor\src\components\template\toolbar\paste\pasteTemplateToolbar.js" />
-    <None Remove="Resources\Html\Editor\src\components\util\color.js" />
-    <None Remove="Resources\Html\Editor\src\components\util\dataTransfer.js" />
-    <None Remove="Resources\Html\Editor\src\components\util\debug.js" />
-    <None Remove="Resources\Html\Editor\src\components\util\graphics.js" />
-    <None Remove="Resources\Html\Editor\src\components\util\graphics\line.js" />
-    <None Remove="Resources\Html\Editor\src\components\util\graphics\rect.js" />
-    <None Remove="Resources\Html\Editor\src\components\util\graphics\roundedRect.js" />
-    <None Remove="Resources\Html\Editor\src\components\util\helpers.js" />
-    <None Remove="Resources\Html\Editor\src\components\util\keyboard.js" />
-    <None Remove="Resources\Html\Editor\src\components\util\math.js" />
-    <None Remove="Resources\Html\Editor\src\components\util\messages.js" />
-    <None Remove="Resources\Html\Editor\src\components\util\resize.js" />
-    <None Remove="Resources\Html\Editor\src\components\window\mouse.js" />
-    <None Remove="Resources\Html\Editor\src\editor.js" />
-    <None Remove="Resources\Html\Editor\src\components\main\main.js" />
-    <None Remove="Resources\Html\Editor\webpack.config.js" />
     <None Remove="Resources\Icons\monkey.png" />
     <None Remove="Behaviors\" />
     <EmbeddedResource Remove="App.xaml" />
@@ -170,126 +107,9 @@
     <Content Include="Resources\Data\Google\client_secrets_desktop.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Resources\Html\Editor\index.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\clipboard\clipboard.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\content\content.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\content\content-file-list\content-file-list.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\content\content-image\content-image.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\content\content-text\content-text.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\converter\converter.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\dragdrop\editorscroll.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\dragdrop\drop.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\dragdrop\drag.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\dragdrop\dragdrop.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\containers\document.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\editor\editor.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\font\fontFamily.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\font\fontSize.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\font\font.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\overlay\overlay.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\quill-wrapper\quill-wrapper.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\quill-wrapper\toolbar\quill-toolbar.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\table\table.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\template\blots\templateEmbedBlot.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\template\blots\templatePadAttribute.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\template\template.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\template\toolbar\create\createTemplateToolbarItem.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\template\toolbar\commonTemplateToolbar.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\template\toolbar\edit\editTemplateToolbar.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\template\types\contacts\contacts.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\template\toolbar\paste\pasteTemplateToolbar.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\dataTransfer.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\debug.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\graphics\line.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\graphics\roundedRect.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\graphics\rect.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\window\mouse.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\window\keyboard.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\math.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\resize.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\helpers.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\components\main\main.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Icons\monkey.png" />
   </ItemGroup>
 
@@ -322,56 +142,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Icons\search.png" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\Html\Editor\src\components\content\content-image\content-image-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\src\components\content\content-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\src\components\content\content-file-list\content-file-list-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\src\components\dragdrop\drag-drop-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\src\components\editor\editor-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\src\components\editor\quill-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\src\components\main\main-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\src\components\overlay\overlay-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\src\components\template\template-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\src\components\template\toolbar\edit\edit-template-toolbar-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\src\components\template\toolbar\common-template-toolbar-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\src\components\template\toolbar\paste\paste-template-toolbar-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\style\content-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\style\editor-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\style\quill-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\style\template-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
 
   <ItemGroup>
     <None Include="Views\Shell\MpMainShell.xaml" />
@@ -387,15 +157,13 @@
     <None Include="Controls\MpPopupPage.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="Resources\Html\Editor\images\icons\monkey.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Resources\Icons\search.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Resources\Html\" />
     <Folder Include="Resources\Styles" />
   </ItemGroup>
 

@@ -50,6 +50,7 @@ namespace MonkeyPaste.Common {
         public static string IsInactiveBorderColor => Transparent;
 
         public static List<string> ContentColors => new List<string>() {
+            // NOTE is 5x14 
             "#FFF8A0AE",
             "#FFFCA845",
             "#FFD79D3C",
