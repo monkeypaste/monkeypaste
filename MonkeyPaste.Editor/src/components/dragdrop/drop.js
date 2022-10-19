@@ -162,7 +162,7 @@ function onDragOver(e) {
     e.stopPropagation();
     e.preventDefault();
 
-    // VALIDATE
+    // VALIDATE (EXTERNAL)
 
     if (SelIdxBeforeDrag >= 0) {
         // don't allow overlay drag to drop, needs to be sub-selectable to allow
@@ -229,7 +229,18 @@ function onDragOver(e) {
     // DROP IDX
 
     DropIdx = getDocIdxFromPoint(emp);
-    if (IsDragging && isDocIdxInRange(DropIdx, DragSelectionRange)) {
+
+    // VALIDATE (INTERNAL)
+
+    let drop_over_drag_range = IsDragging && isDocIdxInRange(DropIdx, DragSelectionRange);
+    if (drop_over_drag_range) {
+        log('invalidating drop over drag range');
+    }
+    let drop_over_template = getAllTemplateDocIdxs().includes(DropIdx);
+    if (drop_over_template) {
+        log('invalidating drop over template');
+    }
+    if (drop_over_drag_range || drop_over_template || DropIdx < 0) {
         DropIdx = -1;
         e.dataTransfer.dropEffect = 'none';
     }
@@ -336,15 +347,15 @@ function onScrollChange(e) {
 
     if (IsDragging) {
         //debugger;
-        e.target.scrollLeft = DragStartScrollOffset.x;
-        e.target.scrollTop = DragStartScrollOffset.y;
-        log(e.target.id, ' scroll RESET FOR DRAG  top ', e.target.scrollTop, ' left ', e.target.scrollLeft, ' IsDragging: ', IsDragging, ' IsDropping: ', IsDropping);
+        e.currentTarget.scrollLeft = DragStartScrollOffset.x;
+        e.currentTarget.scrollTop = DragStartScrollOffset.y;
+        log(e.currentTarget.id, ' scroll RESET FOR DRAG  top ', e.currentTarget.scrollTop, ' left ', e.currentTarget.scrollLeft, ' IsDragging: ', IsDragging, ' IsDropping: ', IsDropping);
     } else {
-        log(e.target.id, ' scroll changed top ', e.target.scrollTop, ' left ', e.target.scrollLeft, ' IsDragging: ', IsDragging, ' IsDropping: ', IsDropping);
+        log(e.currentTarget.id, ' scroll changed top ', e.currentTarget.scrollTop, ' left ', e.currentTarget.scrollLeft, ' IsDragging: ', IsDragging, ' IsDropping: ', IsDropping);
 
         DragStartScrollOffset = {
-            x: e.target.scrollLeft,
-            y: e.target.scrollTop
+            x: e.currentTarget.scrollLeft,
+            y: e.currentTarget.scrollTop
         };
     }
 }

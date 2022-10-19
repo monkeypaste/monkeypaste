@@ -125,6 +125,12 @@ function applyTemplateToDomNode(node, value) {
     node.setAttribute('templateDeltaFormat', value.templateDeltaFormat);
     node.setAttribute('templateHtmlFormat', value.templateHtmlFormat);
     node.setAttribute('wasVisited', value.wasVisited);
+
+    node.setAttribute("spellcheck", "false");
+    node.classList.add(TemplateEmbedClass);
+    node.setAttribute('draggable', false);
+    node.setAttribute('contenteditable', false);
+
     if (value.isFocus) {
         if (node.classList.contains(Template_FOCUSED_INSTANCE_Class)) {
             // is this ok time to remove this?
@@ -141,26 +147,19 @@ function applyTemplateToDomNode(node, value) {
         node.classList.remove(Template_FOCUSED_NOT_INSTANCE_Class);
         node.classList.remove(Template_FOCUSED_INSTANCE_Class);
 	}
-    node.setAttribute("spellcheck", "false");
-    node.classList.add(TemplateEmbedClass);
-    node.setAttribute('draggable', false);
-    node.setAttribute('contenteditable', false);
 
     node.style.backgroundColor = value.templateColor;
     node.style.color = isBright(value.templateColor) ? 'black' : 'white';
 
     node.innerHTML = value.templateHtmlFormat;
     node.innerText = getTemplateDisplayValue(value);
-    //log('Name: ' + value.templateName + '" Text: "' + value.templateText + ' display val: ' + getTemplateDisplayValue(value) + ' tiguid: ' + value.templateInstanceGuid);
-
-    //changeInnerText(node, node.innerText, getTemplateDisplayValue(value));
 
     node.addEventListener('click', onTemplateClick);
     return node;
 }
 
 function onTemplateClick(e) {
-    let t = getTemplateFromDomNode(e.target);
+    let t = getTemplateFromDomNode(e.currentTarget);
     if (!t) {
         debugger;
 	}
@@ -170,7 +169,7 @@ function onTemplateClick(e) {
     }
 
     focusTemplate(t.templateGuid, false, false, true);
-    //setTemplateElementFocus(e.target, true, true);
+    //setTemplateElementFocus(e.currentTarget, true, true);
 }
 
 // unused drag drop stuff

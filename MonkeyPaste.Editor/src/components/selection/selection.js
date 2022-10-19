@@ -19,7 +19,7 @@ var SelTimerInterval = null;
 // #region Life Cycle
 
 function initSelection() {
-	document.addEventListener('selectionchange', onDocumentSelectionChange, true);
+	//document.addEventListener('selectionchange', onDocumentSelectionChange, true);
 	//SelTimerInterval = setInterval(onSelectionCheckTick, 100);
 }
 
@@ -33,9 +33,11 @@ function resetSelection() {
 // #region Getters
 
 function getTextSelectionFgColor() {
-	let bodyStyles = window.getComputedStyle(document.body);
-	let fg_color = bodyStyles.getPropertyValue('--selfgcolor');
-	return bg_color;
+	return getElementComputedStyleProp(document.body, '--selfgcolor');
+}
+
+function getTextSelectionBgColor() {
+	return getElementComputedStyleProp(document.body, '--selbgcolor');
 }
 
 function setCaretColor(caretColor) {
@@ -47,25 +49,19 @@ function getCaretColor() {
 }
 
 function getDocumentSelection() {
-	let cur_sel = getDocumentSelection_internal();
-	if (!cur_sel) {
+	let cur_sel = null;
+
+	if (window.getSelection().rangeCount == 0 || (quill && !quill.hasFocus())) {
 		log('no window selection, falling back to last: ' + JSON.stringify(LastSelRange));
 		cur_sel = LastSelRange;
+	} else {
+		let range = window.getSelection().getRangeAt(0);
+		cur_sel = convertDocRangeToEditorRange(range);
+		LastSelRange = cur_sel;
 	}
 
-	return cur_sel;// cleanDocumentSelection(cur_sel);
+	return cur_sel;
 }
-
-function getDocumentSelection_internal() {
-	if (window.getSelection().rangeCount == 0) {
-		return null;
-	}
-
-	let range = window.getSelection().getRangeAt(0);
-	let sel = convertDocRangeToEditorRange(range);
-	return sel;
-}
-
 
 function getDocumentSelectionHtml(docSel) {
 	//if (docSel.rangeCount > 0) {
@@ -117,22 +113,19 @@ function getCaretLine(forceDocIdx = -1) {
 	return caret_line;
 }
 
-function getTextSelectionBgColor() {
-	let bodyStyles = window.getComputedStyle(document.body);
-	let bg_color = bodyStyles.getPropertyValue('--selbgcolor');
-	return bg_color;
-}
 
 // #endregion Getters
 
 // #region Setters
 
 function setTextSelectionFgColor(fgColor) {
-	document.body.style.setProperty('--selfgcolor', fgColor);
+	//document.body.style.setProperty('--selfgcolor', fgColor);
+	setElementComputedStyleProp(document.body, '--selfgcolor', fgColor);
 }
 
 function setTextSelectionBgColor(bgColor) {
-	document.body.style.setProperty('--selbgcolor', bgColor);
+	//document.body.style.setProperty('--selbgcolor', bgColor);
+	setElementComputedStyleProp(document.body, '--selbgcolor', bgColor);
 }
 // #endregion Setters
 
@@ -183,7 +176,7 @@ function convertEditorRangeToDocRange(editorRange) {
 }
 
 function cleanDocumentSelection(cur_sel) {
-	if (IsDragging || IsDropping || !WindowMouseDownLoc || !WindowMouseLoc) {
+	if (IsDragging || IsDropping || !WindowMouseDownLoc || !WindowMouseLoc || (quill && !quill.hasFocus())) {
 		return cur_sel;
 	}
 
@@ -230,15 +223,6 @@ function coerceCleanSelection() {
 
 			drawOverlay();
 			return cur_sel_range;
-		} else if (WindowMouseDownLoc) {
-			if (cur_sel_range) {
-				refreshFontSizePicker(null, cur_sel_range);
-				refreshFontFamilyPicker(null, cur_sel_range);
-				updateTemplatesAfterSelectionChange(cur_sel_range, LastSelRange);
-				onEditorSelectionChanged_ntf(cur_sel_range);
-			}
-			drawOverlay();
-			return cur_sel_range;
 		}
 
 		log('timer: index: ', cur_sel_range.index, ' length: ', cur_sel_range.length);
@@ -253,7 +237,7 @@ function coerceCleanSelection() {
 			LastSelRange = cur_sel_range;
 			refreshFontSizePicker(null, cur_sel_range);
 			refreshFontFamilyPicker(null, cur_sel_range);
-			updateTemplatesAfterSelectionChange(cur_sel_range, oldRange);
+			//updateTemplatesAfterSelectionChange(cur_sel_range, oldRange);
 			onEditorSelectionChanged_ntf(cur_sel_range);
 			LastSelRange = cur_sel_range;
 		}
@@ -271,6 +255,6 @@ function onDocumentSelectionChange(e) {
 }
 
 function onSelectionCheckTick(e) {
-	//coerceCleanSelection();
+	coerceCleanSelection();
 }
 // #endregion Event Handlers

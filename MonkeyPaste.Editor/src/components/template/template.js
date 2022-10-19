@@ -590,7 +590,7 @@ function clearTemplateFocus() {
 
 function hideAllTemplateContextMenus() {
     hideColorPaletteMenu();
-    hideTemplateToolbarContextMenu();
+    hideCreateTemplateToolbarContextMenu();
 }
 
 function decodeInsertedTemplates(insertIdx, plainText, source = 'silent') {
@@ -727,7 +727,6 @@ function updateTemplatesAfterSelectionChange(sel_range, oldRange) {
                 } else {
                     clearTemplateNavState(t_elm);
                 }
-
             }
         }
     }
@@ -780,7 +779,7 @@ function moveTemplate(tiguid, nidx, isCopy) {
     focusTemplate(t, true);
 }
 
-function focusTemplate(ftguid, fromDropDown, isNew, fromClickOnTemplate) {
+function focusTemplate(ftguid, fromDropDown = false, isNew = false, fromClickOnTemplate = false) {
     if (IsPastingTemplate) {
         // only mark template as visited after it loses focus
         let old_ftguid = getFocusTemplateGuid();
@@ -811,11 +810,14 @@ function focusTemplate(ftguid, fromDropDown, isNew, fromClickOnTemplate) {
 		}
     }
 
-    if (IsPastingTemplate && !IsPasteToolbarLoading && !fromClickOnTemplate) {
+    if (IsPastingTemplate) {
         updatePasteTemplateToolbarToSelection(ftguid);
     } else {
-        showEditTemplateToolbar(isNew);
+        //showEditTemplateToolbar(isNew);
     }
+    if (isNew || fromClickOnTemplate) {
+        showEditTemplateToolbar(isNew);
+	}
 }
 // #endregion Actions
 

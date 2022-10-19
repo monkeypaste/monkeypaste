@@ -141,6 +141,17 @@ function hexToRgba(hexStr) {
     return { r: r, g: g, b: b, a: a };
 }
 
+function rgbaToHex(rgba, ignoreAlpha = true) {
+    let hex = '#';
+    if (!ignoreAlpha && rgba.a !== undefined) {
+        hex += parseInt(rgba.a * 255).toString(16);
+	}
+    hex += rgba.r.toString(16);
+    hex += rgba.g.toString(16);
+    hex += rgba.b.toString(16);
+    return hex;
+}
+
 
 function hexToRgb(hex) {
     let rgba = hexToRgba(hex);
@@ -148,18 +159,23 @@ function hexToRgb(hex) {
     return rgba;
 }
 
-function cleanColor(rgb_Or_rgba_Or_colorName_Str, forceOpacity) {
-    if (!rgb_Or_rgba_Or_colorName_Str) {
+function cleanHexColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forceOpacity) {    
+    let rgba = cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forceOpacity);
+    return rgbaToHex(rgba);
+}
+
+function cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forceOpacity) {
+    if (!rgb_Or_rgba_Or_colorName_Or_hex_Str) {
         return { r: 0, g: 0, b: 0, a: 0 };
     }
-    let color = parseRgba(rgb_Or_rgba_Or_colorName_Str);
+    let color = parseRgba(rgb_Or_rgba_Or_colorName_Or_hex_Str);
     if (forceOpacity) {
         color.a = forceOpacity;
     }
     return color;
 }
-function cleanColorStyle(rgb_Or_rgba_Or_colorName_Str, forceOpacity) {
-    let color = cleanColor(rgb_Or_rgba_Or_colorName_Str, forceOpacity);
+function cleanColorStyle(rgb_Or_rgba_Or_colorName_Hex_Str, forceOpacity) {
+    let color = cleanColor(rgb_Or_rgba_Or_colorName_Hex_Str, forceOpacity);
     return rgbaToRgbaStyle(color);
 }
 

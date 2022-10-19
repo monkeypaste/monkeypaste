@@ -163,14 +163,57 @@ function isChildOfElement(elm, parent) {
     if (!elm || !parent) {
         return false;
     }
-    let elm_parent = elm.parentNode;
-    while (elm_parent != null) {
-        if (elm_parent == parent) {
+    let search_elm = elm;
+    while (search_elm != null) {
+        if (search_elm == parent) {
             return true;
         }
-        elm_parent = elm_parent.parentNode;
+        search_elm = search_elm.parentNode;
     }
     return false;
+}
+
+function isClassInElementPath(elm, classOrClasses, compareOp = 'OR') {
+    if (!elm || !classOrClasses) {
+        return false
+	}
+    let classes = [];
+    if (typeof classOrClasses === 'string' || classOrClasses instanceof String) {
+        classes = classOrClasses.split(' ');
+    } else if (Array.isArray(classOrClasses)) {
+        classes = classOrClasses;
+    } else {
+        // what type is it?
+        debugger;
+        return false;
+    }
+
+    let search_elm = elm;
+    while (search_elm != null) {
+        let was_and_valid = compareOp == 'AND';
+        for (var i = 0; i < classes.length; i++) {
+            if (search_elm.classList === undefined) {
+                continue;
+			}
+            if (compareOp == 'OR') {
+                if (search_elm.classList.contains(classes[i])) {
+                    return true;
+				}
+            } else if (compareOp == 'AND') {
+                if (!search_elm.classList.contains(classes[i])) {
+                    was_and_valid = false;
+                }
+            } else {
+                // whats the op?
+                debugger;
+                return false;
+			}
+        }
+        if (was_and_valid) {
+            return true;
+		}
+        search_elm = search_elm.parentNode;
+    }
 }
 
 function overrideEvent(elm, eventName, handler) {
@@ -281,5 +324,12 @@ function escapeHtml(htmlStr) {
 }
 const delay = time => new Promise(res => setTimeout(res, time));
 
+function getElementComputedStyleProp(elm, propName) {
+    let elmStyles = window.getComputedStyle(elm);
+    return elmStyles.getPropertyValue(propName);
+}
 
+function setElementComputedStyleProp(elm, propName, value) {
+    elm.style.setProperty(propName, value);
+}
 

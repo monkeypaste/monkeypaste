@@ -8,7 +8,7 @@
     text-decoration: none;
     color: #67c5ff;
     border-radius: 3px;
-    transition: .4s;
+    /*transition: .4s;*/
     cursor: pointer;
     /*caret-color: transparent;*/
     border: 2px solid transparent;
@@ -17,12 +17,12 @@
     -webkit-user-select: none;
     -ms-user-select: none;*/
     z-index: 0;
-    user-select: none;
+    /*user-select: none;*/
 }
 
     .ql-template-embed-blot:hover:not(.ql-template-embed-blot-focus):not(.no-select):not(.ql-template-embed-blot-focus-not-instance) {
         padding: 1.5px;
-        transition: .2s;
+        /*transition: .2s;*/
         cursor: pointer;
         border: 2px solid yellow;
     }

@@ -7,9 +7,6 @@ var IgnoreNextSelectionChange = false;
 
 var IsSubSelectionEnabled = false;
 
-var EditorContainerElement = null;
-var QuillEditorElement = null;
-
 var EditorTheme = 'light';
 
 var IsReadOnly = false;
@@ -43,17 +40,11 @@ function getTotalHeight() {
 }
 
 function getEditorContainerElement() {
-	if (EditorContainerElement == null) {
-		EditorContainerElement = document.getElementById("editor");
-	}
-	return EditorContainerElement;
+	return document.getElementById("editor");
 }
 
 function getEditorElement() {
-	if (QuillEditorElement == null) {
-		QuillEditorElement = getEditorContainerElement().firstChild;
-	}
-	return QuillEditorElement;
+	return document.getElementById("quill-editor");
 }
 
 function getEditorContainerRect() {
@@ -72,13 +63,13 @@ function getEditorSelection(isForPaste = false) {
 }
 
 function getEditorWidth() {
-	var editorRect = document.getElementById("editor").getBoundingClientRect();
+	var editorRect = getEditorElement().getBoundingClientRect();
 	//var editorHeight = parseInt($('.ql-editor').wi());
 	return editorRect.width;
 }
 
 function getEditorHeight() {
-	var editorRect = document.getElementById("editor").getBoundingClientRect();
+	var editorRect = getEditorElement().getBoundingClientRect();
 	//var editorHeight = parseInt($('.ql-editor').outerHeight());
 	return editorRect.height;
 }
@@ -147,11 +138,10 @@ function isEditorHidden() {
 // #region Actions
 
 function scrollToHome() {
-	document.getElementById("editor").scrollTop = 0;
+	getEditorElement().scrollTop = 0;
 }
 
 function hideAllToolbars() {
-
 	hideEditorToolbar();
 	hideEditTemplateToolbar();
 	hidePasteTemplateToolbar();
@@ -173,6 +163,7 @@ function updateAllSizeAndPositions() {
 
 	$("#editor").css("height", wh - eth - tth);
 
+	updateTemplateToolbarSizesAndPositions();
 	drawOverlay();
 
 	if (EnvName == "android") {
@@ -199,7 +190,7 @@ function deselectAll(forceCaretDocIdx = 0) {
 }
 
 function focusEditor() {
-	document.getElementById("editor").focus();
+	getEditorElement().focus();
 }
 
 function hideScrollbars() {
@@ -210,7 +201,7 @@ function hideScrollbars() {
 
 function showScrollbars() {
 	//document.querySelector('body').style.overflow = 'scroll';
-	document.getElementById("editor").style.overflow = "auto";
+	getEditorElement().style.overflow = "auto";
 }
 
 function disableTextWrapping() {
@@ -352,32 +343,30 @@ function hideAllToolbars() {
 	hideEditorToolbar();
 	hideEditTemplateToolbar();
 	hidePasteTemplateToolbar();
-	hideTemplateToolbarContextMenu();
+	hideCreateTemplateToolbarContextMenu();
 	hideColorPaletteMenu();
 }
 // #endregion Actions
 
 // #region Event Handlers
 
-function onEditorFocus() {
+function onEditorFocus(e) {
 	log('editor got focus');
 	BlurredSelectionRects = null;
 	drawOverlay();
 }
 
-function onEditorBlur() {
+function onEditorBlur(e) {
 	log('editor lost focus');
-	if (isTemplateFocused()) {
-		return;
-	}
+	//if (isTemplateFocused()) {
+	//	return;
+	//}
 	BlurredSelectionRects = getRangeRects(getEditorSelection());
 	drawOverlay();
 }
 
 
-
 function onEditorSelectionChanged(range, oldRange, source) {
-
 	if (IsPastingTemplate) {
 		updatePasteTemplateToolbarToSelection();
 	}

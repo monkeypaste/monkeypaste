@@ -70,7 +70,7 @@ function getTemplateIconStr(isEnabled) {
 
 // #region State
 
-function isShowingTemplateToolbarMenu() {
+function isShowingCreateTemplateToolbarMenu() {
     return superCm.isOpen();
 }
 // #endregion State
@@ -126,8 +126,8 @@ function showTemplateToolbarContextMenu() {
     return;
 }
 
-function hideTemplateToolbarContextMenu() {
-    if (isShowingTemplateToolbarMenu()) {
+function hideCreateTemplateToolbarContextMenu() {
+    if (isShowingCreateTemplateToolbarMenu()) {
         superCm.destroyMenu();
 	}    
 }
@@ -157,15 +157,16 @@ function createTemplateFromDropDown(templateObjOrId, newTemplateType) {
 
     if (isNew) {
         //grab the selection head's html to set formatting of template div
-        let selectionInnerHtml = '';
-        let shtmlStr = getHtml({ index: range.index, length: 1 });
-        if (shtmlStr != null && shtmlStr.length > 0) {
-            let shtml = DomParser.parseFromString(shtmlStr, 'text/html');
-            let pc = shtml.getElementsByTagName('p');
-            if (pc != null && pc.length > 0) {
-                let p = pc[0];
+        let sel_html_format = '';
+        let sel_head_html_str = getHtml({ index: range.index, length: 1 });
+        if (sel_head_html_str != null && sel_head_html_str.length > 0) {
+            let sel_head_html_doc = DomParser.parseFromString(sel_head_html_str, 'text/html');
+            let sel_head_p_elms = sel_head_html_doc.getElementsByTagName('p');
+            if (sel_head_p_elms != null && sel_head_p_elms.length > 0) {
+                let sel_head_p_elm = sel_head_p_elms[0];
                 //clear text from selection
-                selectionInnerHtml = p.innerHTML;
+                sel_head_p_elm.innerText = '';
+                sel_html_format = sel_head_p_elm.innerHTML;
             }
         }
 
@@ -175,9 +176,9 @@ function createTemplateFromDropDown(templateObjOrId, newTemplateType) {
         } else {
             newTemplateName = getText(range).trim();
         }
-        if (selectionInnerHtml == '<br>') {
+        if (sel_html_format == '<br>') {
             //this occurs when selection.length == 0
-            selectionInnerHtml = newTemplateName;
+            sel_html_format = '';// newTemplateName;
         }
         let formatInfo = quill.getFormat(range.index, 1);
         newTemplateObj = {
@@ -187,11 +188,11 @@ function createTemplateFromDropDown(templateObjOrId, newTemplateType) {
             templateType: newTemplateType,
             templateData: '',
             templateDeltaFormat: JSON.stringify(formatInfo),
-            templateHtmlFormat: selectionInnerHtml
+            templateHtmlFormat: sel_html_format
         };
     }
 
-    hideTemplateToolbarContextMenu();
+    hideCreateTemplateToolbarContextMenu();
     insertTemplate(range, newTemplateObj);
     focusTemplate(newTemplateObj.templateGuid, true, isNew);
     return newTemplateObj;

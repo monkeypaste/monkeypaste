@@ -83,7 +83,7 @@ function handleWindowKeyUp(e) {
 		if (isTemplateFocused()) {
 			clearTemplateFocus();
 			if (!IsPastingTemplate) {
-				hideEditTemplateToolbar();
+				hideEditTemplateToolbar(true);
 			}
 			return;
 		}

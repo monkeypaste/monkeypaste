@@ -9,6 +9,7 @@ body {
     --selfgcolor: black;
     --editableopacity: 0.5;
     --defaultopacity: 0.0;
+    --defaultFontFamily: consolas;
     /*white-space: pre-wrap;*/
 }
 
@@ -42,12 +43,34 @@ body {
 }
 
 textarea {
+    font-size: 16px;
+    resize: none;
     border-width: 0px;
     border-color: transparent;
+    font-family: var(--defaultFontFamily);
 }
+
+    textarea::placeholder {
+        color: silver;
+        font-style: italic;
+        font-family: var(--defaultFontFamily);
+    }
+
+div:has( > textarea) {
+    background-color: white;
+    border-radius: 3px;
+    margin: 12px;
+    padding: 8px;
+}
+    div:has( > textarea) textarea {
+        width: 100%;
+        height: 100%;
+        border-color: transparent;
+    }
 
 .disabled {
     background-color: dimgray !important;
+    opacity: 0.5;
     color: silver !important;
     cursor: not-allowed !important;
     border-color: red;

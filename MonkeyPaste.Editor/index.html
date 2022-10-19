@@ -92,6 +92,7 @@
     <script src="src/components/template/toolbar/commonTemplateToolbar.js"></script>
     <script src="src/components/template/toolbar/edit/editTemplateToolbar.js"></script>
     <script src="src/components/template/toolbar/paste/pasteTemplateToolbar.js"></script>
+    <script src="src/components/template/toolbar/paste/selector/pasteTemplateFocusSelector.js"></script>
 
     <script src="src/components/color/colorpalette.js"></script>
     <script src="src/components/color/contentcolors.js"></script>
@@ -151,17 +152,15 @@
         <div class="resizer resizer-t"></div>
         <div id="templateColorBox"></div>
         <div>
-            <textarea id="templateNameTextInput"
+            <textarea id="templateNameTextArea"
                       rows="1"
                       cols="20"
-                      class="resizable-textarea"
                       placeholder="Template Name"></textarea>
         </div>
         <div id="templateDetailTextInputContainer">
-            <textarea id="templateDetailTextInput"
+            <textarea id="templateDetailTextArea"
                       rows="1"
                       cols="20"
-                      class="resizable-textarea"
                       placeholder="Enter Details"></textarea>
 
         </div>
@@ -205,7 +204,7 @@
         <!-- SELCTOR -->
         <div id="pasteTemplateToolbarMenuSelectorDiv"
              class="">
-            <select id="pasteTemplateToolbarMenuSelector"
+            <select id="pasteTemplateToolbarMenuHiddenSelect"
                     tabindex="0"
                     class="hidden">
             </select>
@@ -222,7 +221,6 @@
             <textarea id="templatePasteValueTextArea"
                       rows="1"
                       cols="20"
-                      class="resizable-textarea"
                       tabindex="1"
                       placeholder="Enter paste text..."></textarea>
         </div>

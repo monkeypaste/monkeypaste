@@ -4,130 +4,27 @@
 var IsPastingTemplate = false;
 var IsTemplatePasteValueTextAreaFocused = false;
 var IsPasteToolbarLoading = false;
+
+var PasteTemplateTimerInterval = null;
+
 // #endregion Globals
 
 // #region Life Cycle
 
 function initPasteTemplateToolbar() {
-    //let resizers = Array.from(document.getElementsByClassName('resizable-textarea'));
-    //for (var i = 0; i < resizers.length; i++) {
-    //    let rta = resizers[i];
-
-    //    new ResizeObserver(() => {
-    //        updatePasteTemplateToolbarPosition();
-    //    }).observe(rta);
-    //}
-
     enableResize(getPasteTemplateToolbarContainerElement());
 
-    document.getElementById('nextTemplateButton').addEventListener('click', function (e) {
-        gotoNextTemplate();
-    });
-    document.getElementById('nextTemplateButton').addEventListener('keydown', function (e) {
-        if (!isKeyboardButtonClick(e)) {
-            return;
-        }
-        gotoNextTemplate();
-    });
-    document.getElementById('previousTemplateButton').addEventListener('click', function (e) {
-        gotoPrevTemplate();
-    });
-    document.getElementById('previousTemplateButton').addEventListener('keydown', function (e) {
-        if (!isKeyboardButtonClick(e)) {
-            return;
-        }
-        gotoPrevTemplate();
-    });
-    document.getElementById('clearAllTemplateTextButton').addEventListener('click', function (e) {
-        
-        clearAllTemplateText();
-    });
-    document.getElementById('clearAllTemplateTextButton').addEventListener('keydown', function (e) {
-        if (!isKeyboardButtonClick(e)) {
-            return;
-        }
-        clearAllTemplateText();
-    });
-    document.getElementById('pasteTemplateButton').addEventListener('click', function (e) {
-        if (!isPasteButtonEnabled()) {
-            return;
-        }
-        alert(getText(getEditorSelection(true), true));
+    addClickOrKeyClickEventListener(getPasteGotoNextButtonElement(), onPasteTemplateGotoNextClickOrKeyDown);
+    addClickOrKeyClickEventListener(getPasteGotoPrevButtonElement(), onPasteTemplateGotoPrevClickOrKeyDown);
+    addClickOrKeyClickEventListener(getPasteClearTextButtonElement(), onPasteTemplateClearAllValuesClickOrKeyDown);
+    addClickOrKeyClickEventListener(getPasteButtonElement(), onPasteButtonClickOrKeyDown);
 
-        onPasteTemplateRequest_ntf();
-	});
-    document.getElementById('pasteTemplateButton').addEventListener('keydown', function (e) {
-        if (!isPasteButtonEnabled()) {
-            return;
-        }
+    getPasteValueTextAreaElement().addEventListener('input', onTemplatePasteValueChanged);
+    initBouncyTextArea(getPasteValueTextAreaElement());
 
-        if (isKeyboardButtonClick(e)) {
-            onPasteTemplateRequest_ntf();
-        }
-	});
-
-    document.getElementById('templatePasteValueTextArea').addEventListener('input', onTemplatePasteValueChanged);
-    initBouncyTextArea('templatePasteValueTextArea');
-
-    document.getElementById('pasteOptionsDiv').classList.add('hidden');
+    initPasteTemplateFocusSelector();
 }
 
-function showPasteTemplateToolbar() {
-    IsPasteToolbarLoading = true;
-    var ptt = getPasteTemplateToolbarContainerElement();
-    ptt.classList.remove('hidden');
-
-    updatePasteTemplateToolbarToSelection();
-
-    document.getElementById('templatePasteValueTextArea').focus();
-    IsPasteToolbarLoading = false;
-}
-
-function createTemplateSelector(ftguid, paste_sel) {
-    let sel_div = document.getElementById("pasteTemplateToolbarMenuSelectorDiv");
-    let sel_elm = document.getElementById('pasteTemplateToolbarMenuSelector');
-    let sel_opt_div = document.getElementById('selectedPasteTemplateOptionDiv');
-    let all_opts_div = document.getElementById('pasteOptionsDiv');
-
-    sel_elm.innerHTML = '';
-    all_opts_div.innerHTML = '';
-
-    sel_div.addEventListener('click', onTemplateSelectorClick, true);
-
-    let tl = getTemplateDefsInRange(paste_sel); //getTemplateDefs();
-    //let ftguid = getFocusTemplateGuid();
-
-    for (var i = 0; i < tl.length; i++) {
-        let t = tl[i];
-        let option_value = t.templateGuid;
-        let option_onChange = `focusTemplate('${t.templateGuid}');`;
-        let t_option_str = `<option class="templateOption" value="${option_value}" onchange="${option_onChange}">${t.templateName}</option>`;
-        sel_elm.innerHTML += t_option_str;
-
-        let cur_option_div = sel_opt_div.cloneNode(true);
-        all_opts_div.appendChild(cur_option_div);
-        cur_option_div.removeAttribute('id');
-
-        applyTemplateToOptionDiv(cur_option_div, t);
-        cur_option_div.addEventListener('click', onTemplateOptionClick);
-        if (t.templateGuid == ftguid) {
-            cur_option_div.classList.add('selected-paste-option');
-            applyTemplateToOptionDiv(sel_opt_div, t);
-        }
-
-        cur_option_div.setAttribute('templateGuid', t.templateGuid);
-    }
-    if (!ftguid) {
-        applyTemplateToOptionDiv(sel_opt_div, null);
-    }
-    // NOTE adding close template selector at end so event signaled before show (if on selector) 
-    document.addEventListener('click', onDocumenClickToClosePasteTemplateSelector);
-}
-
-function hidePasteTemplateToolbar() {
-    var ptt = getPasteTemplateToolbarContainerElement();
-    ptt.classList.add('hidden');
-}
 // #endregion Life Cycle
 
 // #region Getters
@@ -136,7 +33,31 @@ function getPasteTemplateToolbarContainerElement() {
     return document.getElementById('pasteTemplateToolbar');
 }
 
+function getPasteGotoNextButtonElement() {
+    return document.getElementById('nextTemplateButton');
+}
+
+function getPasteGotoPrevButtonElement() {
+    return document.getElementById('previousTemplateButton');
+}
+
+function getPasteClearTextButtonElement() {
+    return document.getElementById('clearAllTemplateTextButton');
+}
+
+function getPasteButtonElement() {
+    return document.getElementById('pasteTemplateButton');
+}
+
+function getPasteValueTextAreaElement() {
+    return document.getElementById('templatePasteValueTextArea');
+}
+
 function getTemplatePasteValue(t) {
+    if (!t) {
+        return '';
+    }
+
     let ttype = t.templateType.toLowerCase();
 
     if (ttype == 'dynamic') {
@@ -164,22 +85,40 @@ function getTemplatePasteValue(t) {
 	}
 }
 
+function getPasteTemplateDefs() {
+    let paste_sel = getEditorSelection(true);
+    return getTemplateDefsInRange(paste_sel);
+}
+
 // #endregion Getters
 
 // #region Setters
 
 function setTemplatePasteValue(tguid, val) {
-    let t = getTemplateDefByGuid(tguid);
-    if (!t) {
-        debugger;
-	}
-    t.templateText = val;
     var telms = getTemplateElements(tguid);
     for (var i = 0; i < telms.length; i++) {
         var telm = telms[i];
-        applyTemplateToDomNode(telm, t);
+        let t = getTemplateFromDomNode(telm);
+        let bouncing = false;
+        if (!isTemplateAnInputType(t)) {
+            if (telm.innerText == val) {
+                telm.style.transform = 'scale(1)';
+            } else {
+                telm.style.transform = 'scale(1.1)'
+                bouncing = true;
+
+			}
+        } 
+        let paste_val = getTemplatePasteValue(t);
+        let has_changed = paste_val != val;
+        telm.innerText = val;
+        telm.setAttribute('templateText', val);
+        if (!bouncing) {
+            debabyTemplateElement(telm);
+
+		}
     }
-    updateTemplatesAfterTextChanged();
+    //updateTemplatesAfterTextChanged();
 }
 
 // #endregion Setters
@@ -200,7 +139,7 @@ function isTemplateReadyToPaste(t) {
 }
 
 function isPasteButtonEnabled() {
-    return !document.getElementById('pasteTemplateButton').classList.contains('disabled');
+    return !getPasteButtonElement().classList.contains('disabled');
 }
 
 function isShowingPasteTemplateToolbar() {
@@ -210,11 +149,32 @@ function isShowingPasteTemplateToolbar() {
 
 // #region Actions
 
+function showPasteTemplateToolbar() {
+    IsPasteToolbarLoading = true;
+    var ptt_elm = getPasteTemplateToolbarContainerElement();
+    ptt_elm.classList.remove('hidden');
+
+    updatePasteTemplateToolbarToSelection();
+
+    PasteTemplateTimerInterval = setInterval(onPasteTemplateTimer, 300, ptt_elm);
+
+    getPasteValueTextAreaElement().focus();
+    IsPasteToolbarLoading = false;
+}
+
+function hidePasteTemplateToolbar() {
+    var ptt = getPasteTemplateToolbarContainerElement();
+    ptt.classList.add('hidden');
+}
+
 function findPasteFocusTemplate(sel) {
     let tl = getTemplateDefsInRange(sel);
     let ftguid = getFocusTemplateGuid();
-    if (tl.find(x => x.templateGuid == ftguid) == null) {
-        // last focus template not in selection so ignore last focus
+    if (ftguid &&
+        (tl.filter(x => x.templateGuid == ftguid).length == 0 || // last focus template is not in range
+            !isTemplateAnInputType(getTemplateDefByGuid(ftguid)) // last focus was not input type
+        )) {
+        // flag for reset to current sel range
         ftguid = null;
     }
     if (!ftguid && tl.length > 0) {
@@ -231,47 +191,52 @@ function findPasteFocusTemplate(sel) {
     return ftguid;
 }
 
-function gotoNextTemplate(ignoreNonInputTemplates = true, force_tguid = null) {
+function gotoNextTemplate(force_tguid = null) {
     let ftguid = force_tguid ? force_tguid : getFocusTemplateGuid();
-    var tl = getTemplateDefs();
-    var curIdx = 0;
-    for (var i = 0; i < tl.length; i++) {
-        if (tl[i].templateGuid == ftguid) {
+    let sel_tl = getPasteTemplateDefs();
+    // ignore non-input if input is in selection
+    let ignoreNonInputTemplates = sel_tl.filter(x => isTemplateAnInputType(x)).length > 0;
+    let curIdx = 0;
+    for (var i = 0; i < sel_tl.length; i++) {
+        if (sel_tl[i].templateGuid == ftguid) {
             curIdx = i;
             break;
         }
     }
-    var nextIdx = curIdx + 1;
-    if (nextIdx >= tl.length) {
+    let nextIdx = curIdx + 1;
+    if (nextIdx >= sel_tl.length) {
         nextIdx = 0;
     }
-    let t = tl[nextIdx];
+    let t = sel_tl[nextIdx];
 
     if (ignoreNonInputTemplates && !isTemplateAnInputType(t)) {
-        gotoNextTemplate(true, t.templateGuid);
+        gotoNextTemplate(t.templateGuid);
         return;
     }
 
     focusTemplate(t.templateGuid);
 }
 
-function gotoPrevTemplate(ignoreNonInputTemplates = true, force_tguid = null) {
+function gotoPrevTemplate(force_tguid = null) {
     let ftguid = force_tguid ? force_tguid : getFocusTemplateGuid();
-    var tl = getTemplateDefs();
-    var curIdx = 0;
-    for (var i = 0; i < tl.length; i++) {
-        if (tl[i].templateGuid == ftguid) {
+    let sel_tl = getPasteTemplateDefs();
+
+    // ignore non-input if input is in selection
+    let ignoreNonInputTemplates = sel_tl.filter(x => isTemplateAnInputType(x)).length > 0;
+    let curIdx = 0;
+    for (var i = 0; i < sel_tl.length; i++) {
+        if (sel_tl[i].templateGuid == ftguid) {
             curIdx = i;
             break;
         }
     }
-    var prevIdx = curIdx - 1;
+    let prevIdx = curIdx - 1;
     if (prevIdx < 0) {
-        prevIdx = tl.length - 1;
+        prevIdx = sel_tl.length - 1;
     }
-    let t = tl[prevIdx];
+    let t = sel_tl[prevIdx];
     if (ignoreNonInputTemplates && !isTemplateAnInputType(t)) {
-        gotoPrevTemplate(true, t.templateGuid);
+        gotoPrevTemplate(t.templateGuid);
         return
     }
     focusTemplate(t.templateGuid);
@@ -284,42 +249,29 @@ function clearAllTemplateText() {
     }
 }
 
-function applyTemplateToOptionDiv(opt_div, t) {
+function updatePasteToolbarSizesAndPositions() {
+    updatePasteValueTextAreaSize();
+    updatePasteTemplateOptionsBounds();
+}
 
-    if (opt_div.id == 'selectedPasteTemplateOptionDiv') {
-        if (t) {
-            opt_div.classList.remove('hidden');
-        } else {
-            opt_div.classList.add('hidden');
-            return;
-        }
-    } else {
-        if (!t) {
-            debugger;
-		}
-    }
+function updatePasteValueTextAreaSize() {
+    getPasteValueTextAreaElement().style.height = '0px';
 
-    opt_div.removeChild(opt_div.children[0]);
-    opt_div.removeChild(opt_div.children[0]);
+    let ptth = getPasteTemplateToolbarContainerElement().getBoundingClientRect().height;
+    let ta_parent = getPasteValueTextAreaElement().parentElement;
 
-    let icon_i = document.createElement('I');
-    icon_i.style.color = t.templateColor;
+    let ta_parent_y_margin =
+        parseFloat(getElementComputedStyleProp(ta_parent, 'margin-top')) +
+        parseFloat(getElementComputedStyleProp(ta_parent, 'margin-bottom'));
 
-    icon_i.classList.add('paste-template-option-icon');
-    icon_i.classList.add('fa-solid');
-    icon_i.classList.add(getTemplateTypeIcon(t.templateType));
-    opt_div.appendChild(icon_i);
+    let ta_parent_y_padding =
+        parseFloat(getElementComputedStyleProp(ta_parent, 'padding-top')) +
+        parseFloat(getElementComputedStyleProp(ta_parent, 'padding-bottom'));
 
-    let label_span = document.createElement('SPAN');
-    label_span.innerText = t.templateName;
-    label_span.classList.add('paste-template-option-label');
-   
-    opt_div.appendChild(label_span);
-    if (isTemplateAnInputType(t)) {
-        opt_div.classList.remove('no-input-template');
-    } else {
-        opt_div.classList.add('no-input-template');
-    }
+    let pvta_parent_offset = ta_parent_y_margin + ta_parent_y_padding;
+
+    let ta_height = ptth - pvta_parent_offset;
+    getPasteValueTextAreaElement().style.height = ta_height + 'px';
 }
 
 function updatePasteTemplateToolbarToSelection(force_ftguid) {
@@ -332,10 +284,10 @@ function updatePasteTemplateToolbarToSelection(force_ftguid) {
         updatePasteTemplateValues();
         ftguid = findPasteFocusTemplate(paste_sel);
 
-        if (pre_ftguid != ftguid) {
+       // if (pre_ftguid != ftguid) {
             // terminates a circular ref
             focusTemplate(ftguid);
-        }
+      //  }
     } else {
         // called from focus template when either:
         // 1. template blot was clicked
@@ -360,36 +312,14 @@ function updatePasteTemplateToolbarToFocus(ftguid, paste_sel) {
             ft = sel_tl[0];
 		}
     }
-    if (ft) {
-        // reset disabled stuff...
-
-        document.getElementById('pasteTemplateToolbarMenuSelectorDiv').classList.remove('disabled');
-        document.getElementById('templatePasteValueTextArea').classList.remove('disabled');
-        document.getElementById('clearAllTemplateTextButton').classList.remove('disabled');
-        document.getElementById('previousTemplateButton').classList.remove('disabled');
-        document.getElementById('nextTemplateButton').classList.remove('disabled');
-	} else {
-        // occurs when no templates at all are in selection
-        // TODO disable everything but paste button
-        document.getElementById('pasteTemplateToolbarMenuSelectorDiv').classList.add('disabled');
-        document.getElementById('templatePasteValueTextArea').classList.add('disabled');
-        document.getElementById('templatePasteValueTextArea').readOnly = true;
-
-        document.getElementById('clearAllTemplateTextButton').classList.add('disabled');
-        document.getElementById('previousTemplateButton').classList.add('disabled');
-        document.getElementById('nextTemplateButton').classList.add('disabled');
-
-        document.getElementById('pasteTemplateButton').classList.remove('disabled');
-        return;
-	}
 
     // UPDATE SELECTOR 
 
         // update option list
-    let opt_elms = document.getElementById('pasteOptionsDiv').getElementsByClassName('paste-template-option-div');
+    let opt_elms = getPasteFocusTemplateOptionsElement().children;//.getElementsByClassName('paste-template-option-div');
     for (var i = 0; i < opt_elms.length; i++) {
         let opt_elm = opt_elms[i];
-        if (opt_elm.getAttribute('templateGuid') == ft.templateGuid) {
+        if (opt_elm.getAttribute('templateGuid') == ftguid) {
             opt_elm.classList.add('selected-paste-option');
         } else {
             opt_elm.classList.remove('selected-paste-option');
@@ -400,123 +330,93 @@ function updatePasteTemplateToolbarToFocus(ftguid, paste_sel) {
     applyTemplateToOptionDiv(sel_opt_div, ft);
 
     // UPDATE INPUT
-    let pv_textarea_elm = document.getElementById('templatePasteValueTextArea');
-    pv_textarea_elm.value = getTemplatePasteValue(ft);
-    if (isTemplateAnInputType(ft)) {
+    let pv_textarea_elm = getPasteValueTextAreaElement();
+    
+    if (ft && isTemplateAnInputType(ft)) {
         // TODO need have html/css for contact here
         // but just pass field name by text for now...
         pv_textarea_elm.readOnly = false;
+        pv_textarea_elm.value = getTemplatePasteValue(ft);
         pv_textarea_elm.placeholder = `Enter paste text for [${ft.templateName}] here...`;
+    } else if (ft) {
+        pv_textarea_elm.readOnly = true;
+        pv_textarea_elm.value = '';
+        pv_textarea_elm.placeholder = getTemplatePasteValue(ft);
     } else {
         pv_textarea_elm.readOnly = true;
-    }
+        pv_textarea_elm.value = '';
+        pv_textarea_elm.placeholder = 'No templates to paste...';
+	}
 
     // CHECK FOR READY
-    checkForReadyToPaste();
+    updatePasteElementInteractivity();
 }
 
-function updatePasteTemplateValues() {
+function updatePasteTemplateValues(fromTimer = false) {
     let tl = getTemplateDefs();
     for (var i = 0; i < tl.length; i++) {
         let t = tl[i];
+        if (fromTimer && TemplateBeforeEdit && TemplateBeforeEdit.templateGuid == t.templateGuid) {
+            // don't auto-update template if is editing
+            continue;
+		}
         setTemplatePasteValue(t.templateGuid, getTemplatePasteValue(t));
     }
 }
 
-function checkForReadyToPaste() {
-    let isReadyToPaste = true;
-    let tl = getTemplateDefs();
-    for (var i = 0; i < tl.length; i++) {
-        let t = tl[i];
-        if (isTemplateReadyToPaste(t)) {
-            continue;
-        }
-        isReadyToPaste = false;
-    }
-    if (isReadyToPaste) {
-        document.getElementById('pasteTemplateButton').classList.remove('disabled');
+function updatePasteElementInteractivity() {
+    let paste_t_defs = getPasteTemplateDefs();
+    let can_navigate =  // when input in sel only nav to them otherwise allow if there's more than one non input...
+        paste_t_defs.filter(x => isTemplateAnInputType(x)).length > 1 ||
+        (paste_t_defs.filter(x => isTemplateAnInputType(x)).length == 0 && paste_t_defs.length > 1)
+    let is_selector_enabled = paste_t_defs.length > 0;
+
+    let can_clear =
+        paste_t_defs.filter(x => isTemplateAnInputType(x) && !isNullOrEmpty(getTemplatePasteValue(x))).length > 0;
+
+    let can_paste =
+        paste_t_defs.filter(x => !isTemplateReadyToPaste(x)).length == 0;
+
+    if (can_navigate) {
+        getPasteGotoPrevButtonElement().classList.remove('disabled');
+        getPasteGotoNextButtonElement().classList.remove('disabled');
     } else {
-        document.getElementById('pasteTemplateButton').classList.add('disabled');
+        getPasteGotoPrevButtonElement().classList.add('disabled');
+        getPasteGotoNextButtonElement().classList.add('disabled');
+    }
+
+    if (is_selector_enabled) {
+        getPasteFocusTemplateContainerElement().classList.remove('disabled');
+    } else {
+        getPasteFocusTemplateContainerElement().classList.add('disabled');
+    }
+
+    if (can_clear) {
+        getPasteClearTextButtonElement().classList.remove('disabled');
+    } else {
+        getPasteClearTextButtonElement().classList.add('disabled');
+    }
+
+    if (can_paste) {
+        getPasteButtonElement().classList.remove('disabled');
+    } else {
+        getPasteButtonElement().classList.add('disabled');
 	}
 
-    return isReadyToPaste;
+    return can_paste;
 }
+
 
 // #endregion Actions
 
 // #region Event Handlers
 
-function onDocumenClickToClosePasteTemplateSelector(e) {
-    if (isChildOfElement(e.target, document.getElementById("pasteTemplateToolbarMenuSelectorDiv"))) {
-        return;
-    }
-    document.getElementById('pasteOptionsDiv').classList.add('hidden');
-    document.getElementById('pasteTemplateToolbarMenuSelectorArrowDiv').classList.remove('active');
-}
-
-function onTemplateOptionClick(e) {
-    if (e.currentTarget.classList.contains('no-input-template')) {
-        return;
-    }
-
-    let clicked_templateGuid = e.currentTarget.getAttribute('templateGuid');
-    focusTemplate(clicked_templateGuid);
-    log('templateGuid: ' + clicked_templateGuid);
-}
-
-function onTemplateSelectorClick(e) {
-    let opts_div = document.getElementById('pasteOptionsDiv');
-    opts_div.classList.toggle('hidden');
-    if (opts_div.classList.contains('hidden')) {
-        return;
-    }
-    if (opts_div.children.length == 0) {
-        return;
-	}
-    let sel_div = document.getElementById("pasteTemplateToolbarMenuSelectorDiv");
-
-    let opt_item_height = opts_div.children[0].getBoundingClientRect().height;
-    let opts_actual_height = opt_item_height * opts_div.children.length;
-
-    let t = getPasteTemplateToolbarContainerElement().getBoundingClientRect().top - opts_actual_height;
-    let w = sel_div.getBoundingClientRect().width;
-    opts_div.style.left = sel_div.getBoundingClientRect().left + 'px';
-    opts_div.style.top = t + 'px';
-    opts_div.style.width = w + 'px';
-    //t = Math.max()
-
-
- //   let opts_div_rect = cleanRect(opts_div.getBoundingClientRect());
- //   let sel_div_rect = cleanRect(sel_div.getBoundingClientRect());
- //   if (opts_div_rect.height == 0) {
- //       debugger;
-	//}
- //   let max_opts_height_ratio = 0.5;
- //   let max_opts_height = getWindowRect().height * max_opts_height_ratio;
- //   let min_opts_top = getWindowRect().height - max_opts_height;
-
- //   let x_pad = 0;
- //   let y_pad = 0;
-
- //   let fitted_opts_win_rect = cleanRect();
- //   fitted_opts_win_rect.left = sel_div_rect.left + x_pad;
- //   fitted_opts_win_rect.right = sel_div_rect.right - x_pad;
- //   fitted_opts_win_rect.bottom = sel_div_rect.top - y_pad;
- //   fitted_opts_win_rect.top = Math.max(min_opts_top, fitted_opts_win_rect.bottom - opts_div_rect.height - y_pad);
- //   fitted_opts_win_rect = cleanRect(fitted_opts_win_rect);
-
- //   //let bottom = getPasteTemplateToolbarContainerElement().getBoundingClientRect().top;
- //   //let top = 
- //   opts_div.style.left = fitted_opts_win_rect.left + 'px';
- //   opts_div.style.top = fitted_opts_win_rect.top + 'px';
- //   opts_div.style.minWidth = fitted_opts_win_rect.width + 'px';
-    //opts_div.style.height = fitted_opts_win_rect.height + 'px';
-
-    document.getElementById('pasteTemplateToolbarMenuSelectorArrowDiv').classList.add('active');
+function onPasteTemplateTimer(e) {
+    updatePasteTemplateValues(true);
 }
 
 function onTemplatePasteValueChanged(e) {
-    let newTemplatePasteValue = document.getElementById('templatePasteValueTextArea').value;
+    let newTemplatePasteValue = getPasteValueTextAreaElement().value;
     let ftguid = getFocusTemplateGuid();
     if (!ftguid) {
         debugger;
@@ -524,6 +424,24 @@ function onTemplatePasteValueChanged(e) {
         ftguid = getFocusTemplateGuid();
 	}
     setTemplatePasteValue(ftguid, newTemplatePasteValue);
-    checkForReadyToPaste();
+    updatePasteElementInteractivity();
+}
+
+function onPasteTemplateGotoNextClickOrKeyDown(e) {
+    gotoNextTemplate();
+}
+
+function onPasteTemplateGotoPrevClickOrKeyDown(e) {
+    gotoPrevTemplate();
+}
+
+function onPasteTemplateClearAllValuesClickOrKeyDown(e) {
+    clearAllTemplateText();
+}
+
+function onPasteButtonClickOrKeyDown(e) {
+    alert(getText(getEditorSelection(true), true));
+
+    onPasteTemplateRequest_ntf();
 }
 // #endregion Event Handlers

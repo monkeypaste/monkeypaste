@@ -1,9 +1,31 @@
 ﻿
-function initBouncyTextArea(elmId) {
-    document.getElementById(elmId).addEventListener('focus', onBouncyTextAreaFocus);
-    document.getElementById(elmId).addEventListener('blur', onBouncyTextAreaBlur);
-    document.getElementById(elmId).addEventListener('keydown', onBouncyTextAreaKeyUp);
-    document.getElementById(elmId).addEventListener('keyup', onBouncyTextAreaKeyDown);
+function initBouncyTextArea(elm) {
+    elm.addEventListener('focus', onBouncyTextAreaFocus);
+    elm.addEventListener('blur', onBouncyTextAreaBlur);
+    elm.addEventListener('keydown', onBouncyTextAreaKeyUp);
+    elm.addEventListener('keyup', onBouncyTextAreaKeyDown);
+}
+
+function updateTemplateToolbarSizesAndPositions() {
+    if (isShowingPasteTemplateToolbar()) {
+        updatePasteToolbarSizesAndPositions();
+    }
+    if (isShowingEditTemplateToolbar()) {
+        updateEditTemplateToolbarSizesAndPositions()
+	}
+}
+
+function addClickOrKeyClickEventListener(elm, handler) {
+    elm.addEventListener('click', function (e) {
+        if (!isElementDisabled(e.currentTarget)) {
+            handler(e);
+		}
+    });
+    elm.addEventListener('keydown', function (e) {
+        if (isMouseOrKeyboardButtonClick(e)) {
+            handler(e);
+		}
+    });
 }
 
 function onBouncyTextAreaFocus(e) {
@@ -12,6 +34,15 @@ function onBouncyTextAreaFocus(e) {
 
 function onBouncyTextAreaBlur(e) {
     //jiggleFocusTemplates(true);
+}
+
+async function bounceElement(elm) {
+    sleep(100);
+    elm.style.transform = 'scale(1.3)';
+    //scaleElement(elm, 'bigger');
+    sleep(300);
+    elm.style.transform = 'scale(1.0)';
+    //scaleElement(elm, 'default');
 }
 
 async function onBouncyTextAreaKeyDown(e) {
@@ -33,17 +64,21 @@ async function scaleFocusTemplates(scaleType, tguid) {
     let f_cit_elm_l = getTemplateElements(tguid);
     for (var i = 0; i < f_cit_elm_l.length; i++) {
         let f_cit_elm = f_cit_elm_l[i];
-        if (scaleType == 'bigger') {
-            f_cit_elm.classList.remove('ql-template-embed-blot-display-key-up');
-            f_cit_elm.classList.add('ql-template-embed-blot-display-key-down');
-        } else if (scaleType == 'default') {
-            f_cit_elm.classList.remove('ql-template-embed-blot-display-key-down');
-            f_cit_elm.classList.add('ql-template-embed-blot-display-key-up');
-        } else {
+        scaleElement(f_cit_elm, scaleType);
+    }
+}
 
-            f_cit_elm.classList.remove('ql-template-embed-blot-display-key-down');
-            f_cit_elm.classList.remove('ql-template-embed-blot-display-key-up');
-        }
+function scaleElement(elm,scaleType) {
+    if (scaleType == 'bigger') {
+        elm.classList.remove('ql-template-embed-blot-display-key-up');
+        elm.classList.add('ql-template-embed-blot-display-key-down');
+    } else if (scaleType == 'default') {
+        elm.classList.remove('ql-template-embed-blot-display-key-down');
+        elm.classList.add('ql-template-embed-blot-display-key-up');
+    } else {
+
+        elm.classList.remove('ql-template-embed-blot-display-key-down');
+        elm.classList.remove('ql-template-embed-blot-display-key-up');
     }
 }
 

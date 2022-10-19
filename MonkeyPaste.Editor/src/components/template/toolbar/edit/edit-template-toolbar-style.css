@@ -19,18 +19,18 @@
         border-color: dimgray;
     }
 
-/*div:has( > #templateDetailTextInput) {
+/*div:has( > #templateDetailTextArea) {
     width: 30%;
 }
 
-div:has( > #templateNameTextInput) {
+div:has( > #templateNameTextArea) {
     width: 45%;
 }*/
 
-.edit-template-toolbar.template-with-detail-layout > div:has( > #templateNameTextInput) {
+.edit-template-toolbar.template-with-detail-layout > div:has( > #templateNameTextArea) {
     width: 45%;
 }
-.edit-template-toolbar:not(.template-with-detail-layout) > div:has( > #templateNameTextInput) {
+.edit-template-toolbar:not(.template-with-detail-layout) > div:has( > #templateNameTextArea) {
     width: 75%;
 }
 .edit-template-toolbar.template-with-detail-layout > .info-marker {
@@ -40,11 +40,11 @@ div:has( > #templateNameTextInput) {
     display: none;
 }
 
-.edit-template-toolbar.template-with-detail-layout > div:has( > #templateDetailTextInput) {
+.edit-template-toolbar.template-with-detail-layout > div:has( > #templateDetailTextArea) {
     width: 30%;
 }
 
-.edit-template-toolbar:not(.template-with-detail-layout) > div:has( > #templateDetailTextInput) {
+.edit-template-toolbar:not(.template-with-detail-layout) > div:has( > #templateDetailTextArea) {
     width: 0;
 }
 

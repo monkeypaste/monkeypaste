@@ -38,33 +38,27 @@ function initMouse() {
 // #region Event Handlers
 
 function onWindowClick(e) {
-	if (
-		e.path.find(
-			(x) => x.classList && x.classList.contains("edit-template-toolbar")) != null ||
-		e.path.find(
-			(x) => x.classList && x.classList.contains("paste-template-toolbar")
-		) != null ||
-		e.path.find(
-			(x) => x.classList && x.classList.contains("context-menu-option")
-		) != null ||
-		e.path.find((x) => x.classList && x.classList.contains("ql-toolbar")) !=
-		null
-	) {
-		//ignore clicks within template toolbars
+	let ignore_classes = [
+		"edit-template-toolbar",
+		"paste-template-toolbar",
+		"context-menu-option",
+		"ql-toolbar"
+	];
+	if (isClassInElementPath(e.target, ignore_classes)) {
 		return;
 	}
-	if (
-		e.path.find(
-			(x) => x.classList && x.classList.contains(TemplateEmbedClass)
-		) == null
-	) {
+	if (!isClassInElementPath(e.target, TemplateEmbedClass)) {
 		// unfocus templates 
-		//
 		if (TemplateBeforeEdit) {
-			hideEditTemplateToolbar();
-			clearTemplateFocus();
-			hideAllTemplateContextMenus();
-		}		
+			if (isShowingColorPaletteMenu()) {
+				hideColorPaletteMenu();
+			} else if (isShowingCreateTemplateToolbarMenu()) {
+				hideCreateTemplateToolbarContextMenu();
+			} else {
+				hideEditTemplateToolbar();
+				clearTemplateFocus();
+			}
+		}
 
 		if (IsPastingTemplate) {
 			//hidePasteTemplateToolbar();

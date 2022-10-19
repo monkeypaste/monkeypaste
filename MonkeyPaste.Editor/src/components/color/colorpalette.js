@@ -27,12 +27,7 @@ function isShowingColorPaletteMenu() {
 
 // #region Actions
 
-function showColorPaletteMenu(anchor_x,anchor_y, sel_color, color_click_handler_name) {
-    var palette_item = {
-        style_class: 'template-color-palette-item',
-        func_name: color_click_handler_name
-    };
-
+function showColorPaletteMenu(anchor_x,anchor_y, sel_color, color_change_callback) {
     let rc = 5;
     let cc = 14;
     let idx = 0;
@@ -44,7 +39,7 @@ function showColorPaletteMenu(anchor_x,anchor_y, sel_color, color_click_handler_
         for (var c = 0; c < cc; c++) {
             let c = ContentColors[idx];
             let is_selected = false;
-            let item_class = palette_item.style_class;
+            let item_class = 'template-color-palette-item';
             if (sel_color) {
                 if (c.toLowerCase() == sel_color.toLowerCase() ||
                     (idx == ContentColors.length - 1 && !wasSelColorFound)) {
@@ -53,9 +48,7 @@ function showColorPaletteMenu(anchor_x,anchor_y, sel_color, color_click_handler_
                 }
             }
             let item_style = '';
-            let item_func_name = palette_item.func_name;
             if (idx == ContentColors.length - 1) {
-                item_func_name = 'showCustomColorPicker';
                 c = sel_color;
                 item_class += ' fa-solid fa-plus';
                 item_style = `background-color: transparent;`;
@@ -66,11 +59,9 @@ function showColorPaletteMenu(anchor_x,anchor_y, sel_color, color_click_handler_
 				}
             } else {
                 item_style = 'background-color: ' + c + ';';
-			}
-            let item = '<td><a href="javascript:void(0);" onclick="' + palette_item.func_name + '(\'' + c + '\'); event.stopPropagation();">' +
-                '<div class="' + item_class + '" style="background-color: ' + c + '" ></div></a></td > ';
+            }
+            let item = `<td><a href="javascript:void(0);"><div class="${item_class}" style="${item_style}" ></div></a></td>`;
             paletteHtml += item;
-
             idx++;
         }
         paletteHtml += '</tr>';
@@ -80,6 +71,21 @@ function showColorPaletteMenu(anchor_x,anchor_y, sel_color, color_click_handler_
     pal_elm.innerHTML = paletteHtml;
 
     pal_elm.classList.remove('hidden');
+
+    let pal_elm_items = pal_elm.querySelectorAll('a');
+    pal_elm_items.forEach((x, idx) => {
+        x.addEventListener('click', function (e) {
+            if (idx < pal_elm_items.length - 1) {
+                let item_color = x.firstChild.style.backgroundColor;
+                item_color = cleanHexColor(item_color);
+                color_change_callback(item_color);
+            } else {
+                onCustomColorPaletteItemClick(e, color_change_callback);
+                log('custom color item clicked');
+            }
+        });
+    });
+
     var paletteMenuRect = pal_elm.getBoundingClientRect();
     anchor_y -= paletteMenuRect.height;
 
@@ -91,10 +97,9 @@ function hideColorPaletteMenu() {
 	getColorPaletteContainerElement().classList.add('hidden');
 }
 
-function showCustomColorPicker(...args) {
+function onCustomColorPaletteItemClick(e, orgCallbackHandler) {
     // TODO this should be a binding to host to show color chooser and there should be a ext msg that's returned w/ hex color
-    args = args ? args : [''];
-    alert('yo homey ' + JSON.stringify(args));
+    alert('yo homey');
 }
 
 // #endregion Actions
