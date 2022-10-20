@@ -2215,6 +2215,7 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.CanScroll));
                     OnPropertyChanged(nameof(IsHorizontalScrollbarVisibile));
                     OnPropertyChanged(nameof(IsVerticalScrollbarVisibile));
+
                     break;
                 case nameof(IsContentFocused):
                     if (IsContentFocused) {

@@ -1032,6 +1032,7 @@ namespace MonkeyPaste.Avalonia {
             string curGestureStr = _keyboardGestureHelper.GetCurrentGesture();
 
             //MpConsole.WriteLine("Current Gesture: " + curGestureStr);
+            MpConsole.WriteLine("Down Count: " + _downCount);
 
             var exactMatch = Items.FirstOrDefault(x => x.KeyString.ToLower() == curGestureStr.ToLower());
             if (exactMatch != default) {

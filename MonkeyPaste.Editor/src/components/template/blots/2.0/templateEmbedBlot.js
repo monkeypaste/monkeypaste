@@ -47,7 +47,16 @@ class TemplateEmbedBlot extends Parchment.EmbedBlot {
         super.format(name, value);
     }
 
-
+    update(mutations,context) {
+        //super.update(mutations, context);
+        //const attributeChanged = mutations.some(
+        //    (mutation) =>
+        //        mutation.target === this.domNode && mutation.type === 'attributes',
+        //);
+        //if (attributeChanged) {
+        //    this.attributes.build();
+        //}
+    }
     //length() {
     //    return 1;
     //}

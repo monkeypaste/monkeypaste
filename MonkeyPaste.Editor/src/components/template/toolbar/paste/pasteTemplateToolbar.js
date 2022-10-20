@@ -17,6 +17,7 @@ function initPasteTemplateToolbar() {
     addClickOrKeyClickEventListener(getPasteGotoNextButtonElement(), onPasteTemplateGotoNextClickOrKeyDown);
     addClickOrKeyClickEventListener(getPasteGotoPrevButtonElement(), onPasteTemplateGotoPrevClickOrKeyDown);
     addClickOrKeyClickEventListener(getPasteClearTextButtonElement(), onPasteTemplateClearAllValuesClickOrKeyDown);
+    addClickOrKeyClickEventListener(getPasteEditFocusTemplateButtonElement(), onPasteEditFocusTemplateClickOrKeyDown);
     addClickOrKeyClickEventListener(getPasteButtonElement(), onPasteButtonClickOrKeyDown);
 
     getPasteValueTextAreaElement().addEventListener('input', onTemplatePasteValueChanged);
@@ -43,6 +44,10 @@ function getPasteGotoPrevButtonElement() {
 
 function getPasteClearTextButtonElement() {
     return document.getElementById('clearAllTemplateTextButton');
+}
+
+function getPasteEditFocusTemplateButtonElement() {
+    return document.getElementById('pasteEditFocusTemplateButton');
 }
 
 function getPasteButtonElement() {
@@ -145,6 +150,7 @@ function isPasteButtonEnabled() {
 function isShowingPasteTemplateToolbar() {
     return !getPasteTemplateToolbarContainerElement().classList.contains('hidden');
 }
+
 // #endregion State
 
 // #region Actions
@@ -156,7 +162,7 @@ function showPasteTemplateToolbar() {
 
     updatePasteTemplateToolbarToSelection();
 
-    PasteTemplateTimerInterval = setInterval(onPasteTemplateTimer, 300, ptt_elm);
+    PasteTemplateTimerInterval = setInterval(onPasteTemplateTimer, 300, getEditorElement());
 
     getPasteValueTextAreaElement().focus();
     IsPasteToolbarLoading = false;
@@ -165,6 +171,8 @@ function showPasteTemplateToolbar() {
 function hidePasteTemplateToolbar() {
     var ptt = getPasteTemplateToolbarContainerElement();
     ptt.classList.add('hidden');
+
+    clearInterval(PasteTemplateTimerInterval);
 }
 
 function findPasteFocusTemplate(sel) {
@@ -374,28 +382,43 @@ function updatePasteElementInteractivity() {
     let can_clear =
         paste_t_defs.filter(x => isTemplateAnInputType(x) && !isNullOrEmpty(getTemplatePasteValue(x))).length > 0;
 
+    let can_edit = paste_t_defs.length > 0;
+
     let can_paste =
         paste_t_defs.filter(x => !isTemplateReadyToPaste(x)).length == 0;
 
+    let template_button_classes = 'disabled';
+    if (getTemplateDefs().length == 0) {
+        template_button_classes = 'hidden';
+    }
+
     if (can_navigate) {
-        getPasteGotoPrevButtonElement().classList.remove('disabled');
-        getPasteGotoNextButtonElement().classList.remove('disabled');
+        getPasteGotoPrevButtonElement().classList.remove(template_button_classes);
+        getPasteGotoNextButtonElement().classList.remove(template_button_classes);
     } else {
-        getPasteGotoPrevButtonElement().classList.add('disabled');
-        getPasteGotoNextButtonElement().classList.add('disabled');
+        getPasteGotoPrevButtonElement().classList.add(template_button_classes);
+        getPasteGotoNextButtonElement().classList.add(template_button_classes);
     }
 
     if (is_selector_enabled) {
-        getPasteFocusTemplateContainerElement().classList.remove('disabled');
+        getPasteFocusTemplateContainerElement().classList.remove(template_button_classes);
     } else {
-        getPasteFocusTemplateContainerElement().classList.add('disabled');
+        getPasteFocusTemplateContainerElement().classList.add(template_button_classes);
     }
 
     if (can_clear) {
-        getPasteClearTextButtonElement().classList.remove('disabled');
+        getPasteClearTextButtonElement().classList.remove(template_button_classes);
     } else {
-        getPasteClearTextButtonElement().classList.add('disabled');
+        getPasteClearTextButtonElement().classList.add(template_button_classes);
     }
+
+    if (can_edit) {
+        getPasteEditFocusTemplateButtonElement().classList.remove(template_button_classes);
+        getPasteValueTextAreaElement().parentElement.classList.remove(template_button_classes);
+    } else {
+        getPasteEditFocusTemplateButtonElement().classList.add(template_button_classes);
+        getPasteValueTextAreaElement().parentElement.classList.add(template_button_classes);
+	}
 
     if (can_paste) {
         getPasteButtonElement().classList.remove('disabled');
@@ -439,8 +462,16 @@ function onPasteTemplateClearAllValuesClickOrKeyDown(e) {
     clearAllTemplateText();
 }
 
+function onPasteEditFocusTemplateClickOrKeyDown(e) {
+    if (isShowingEditTemplateToolbar()) {
+        hideEditTemplateToolbar();
+    } else {
+        showEditTemplateToolbar();
+	}
+}
+
 function onPasteButtonClickOrKeyDown(e) {
-    alert(getText(getEditorSelection(true), true));
+    //alert(getText(getEditorSelection(true), true));
 
     onPasteTemplateRequest_ntf();
 }

@@ -19,7 +19,7 @@ var SelTimerInterval = null;
 // #region Life Cycle
 
 function initSelection() {
-	//document.addEventListener('selectionchange', onDocumentSelectionChange, true);
+	document.addEventListener('selectionchange', onDocumentSelectionChange, true);
 	//SelTimerInterval = setInterval(onSelectionCheckTick, 100);
 }
 
@@ -57,7 +57,7 @@ function getDocumentSelection() {
 	} else {
 		let range = window.getSelection().getRangeAt(0);
 		cur_sel = convertDocRangeToEditorRange(range);
-		LastSelRange = cur_sel;
+		//LastSelRange = cur_sel;
 	}
 
 	return cur_sel;
@@ -216,10 +216,10 @@ function coerceCleanSelection() {
 		//log('Sel Changed from Timer.');
 		if (IsDragging) {
 			if (DragSelectionRange) {
-				LastSelRange = DragSelectionRange;
+				cur_sel_range = DragSelectionRange;
 			}
 			log('drag detected sel timer overriding selection. LastRange: ', LastSelRange, ' DragRange: ', DragSelectionRange);
-			setEditorSelection(LastSelRange.index, LastSelRange.length, 'api');
+			setEditorSelection(LastSelRange.index, LastSelRange.length, 'silent');
 
 			drawOverlay();
 			return cur_sel_range;
@@ -251,10 +251,12 @@ function coerceCleanSelection() {
 // #region Event Handlers
 
 function onDocumentSelectionChange(e) {
-	coerceCleanSelection();
+	// Selection Change issues:
+	// 1. 
+	LastSelRange = coerceCleanSelection();
 }
 
 function onSelectionCheckTick(e) {
-	coerceCleanSelection();
+	LastSelRange = coerceCleanSelection();
 }
 // #endregion Event Handlers

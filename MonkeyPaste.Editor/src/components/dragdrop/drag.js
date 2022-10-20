@@ -84,16 +84,16 @@ function onDragStart(e) {
     if (IsDragging) {
         return;
     }
-    if (!WindowMouseDownLoc || !SelectionOnMouseDown) {
-        return;
-    }
-    let is_valid_drag_gesture = isPointInRange(WindowMouseDownLoc, SelectionOnMouseDown);
-    if (!is_valid_drag_gesture) {
-        log('drag rejected, mouse down' + JSON.stringify(WindowMouseDownLoc) + ' not in range' + JSON.stringify(SelectionOnMouseDown));
-        e.preventDefault();
-        //e.stopPropagation();
-        return false;
-	}
+ //   if (!WindowMouseDownLoc || !SelectionOnMouseDown) {
+ //       return;
+ //   }
+ //   let is_valid_drag_gesture = isPointInRange(WindowMouseDownLoc, SelectionOnMouseDown);
+ //   if (!is_valid_drag_gesture) {
+ //       log('drag rejected, mouse down' + JSON.stringify(WindowMouseDownLoc) + ' not in range' + JSON.stringify(SelectionOnMouseDown));
+ //       e.preventDefault();
+ //       //e.stopPropagation();
+ //       return false;
+	//}
     let sel = getEditorSelection();
 
     if (e.target.id == 'dragOverlay') {

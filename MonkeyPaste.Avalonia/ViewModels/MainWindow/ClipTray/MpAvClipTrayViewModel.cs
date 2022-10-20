@@ -3190,12 +3190,16 @@ namespace MonkeyPaste.Avalonia {
                 CleanupAfterPaste(SelectedItem);
             },
             (args) => {
+                bool isFromEditorButton = args != null ? (bool)args : false;
+
                 return MpAvMainWindowViewModel.Instance.IsShowingDialog == false &&
                         SelectedItem != null &&
                         MpAvMainWindowViewModel.Instance.IsMainWindowActive &&
-                        !IsAnyEditingClipTile &&
-                        !IsAnyEditingClipTitle &&
-                        !IsAnyPastingTemplate &&
+                        (isFromEditorButton || (
+                            !isFromEditorButton &&
+                            !IsAnyEditingClipTile &&
+                            !IsAnyEditingClipTitle &&
+                            !IsAnyPastingTemplate)) &&
                         !MpPrefViewModel.Instance.IsTrialExpired;
             });
 

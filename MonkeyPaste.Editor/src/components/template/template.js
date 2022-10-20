@@ -813,11 +813,11 @@ function focusTemplate(ftguid, fromDropDown = false, isNew = false, fromClickOnT
     if (IsPastingTemplate) {
         updatePasteTemplateToolbarToSelection(ftguid);
     } else {
-        //showEditTemplateToolbar(isNew);
+        if (isNew || fromClickOnTemplate) {
+            showEditTemplateToolbar(isNew);
+        }
     }
-    if (isNew || fromClickOnTemplate) {
-        showEditTemplateToolbar(isNew);
-	}
+   
 }
 // #endregion Actions
 

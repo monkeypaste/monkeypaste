@@ -437,6 +437,18 @@ namespace MonkeyPaste.Avalonia {
                 });
             }
         }
+
+        public static MpQuillEditorStateMessage GetEditorStateFromClipTile(MpAvClipTileViewModel ctvm) {
+            return new MpQuillEditorStateMessage() {
+                envName = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
+                contentHandle = ctvm.PublicHandle,
+                contentItemType = ctvm.ItemType.ToString(),
+                contentData = ctvm.CopyItemData,
+                isSubSelectionEnabled = ctvm.IsSubSelectionEnabled,
+                isReadOnly = ctvm.IsContentReadOnly,
+                isPastimgTemplate = ctvm.IsPastingTemplate
+            };
+        }
         private static void Wv_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             var wv = sender as MpAvCefNetWebView;
             if (wv == null) {

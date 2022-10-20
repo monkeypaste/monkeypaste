@@ -51,6 +51,12 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return active_info.Handle == ThisAppHandle;
             }
+            set {
+                if(!IsProcessTreePolled) {
+                    throw new Exception("Cannot set when not polling");
+                }
+                _isThisAppActive = value;
+            }
         }
 
         
@@ -71,11 +77,13 @@ namespace MonkeyPaste.Avalonia {
                     return _lastProcessInfo;
                 }
                 if(active_info.Handle == ThisAppHandle) {
-
                     return _lastProcessInfo;
                 }
                 _lastProcessInfo = active_info;
                 return _lastProcessInfo;
+            }
+            set {
+                _lastProcessInfo = value;
             }
         }
 
@@ -192,11 +200,13 @@ namespace MonkeyPaste.Avalonia {
             bool didActiveChange = false;
             var activeProcessInfo = RefreshRunningProcessLookup();
 
+            IsThisAppActive = false;
+
             if (activeProcessInfo == null) {
                 return;
             }
             if(activeProcessInfo.Handle == ThisAppHandle) {
-                _isThisAppActive = true;
+                IsThisAppActive = true;
                 return;
             }
 
@@ -204,11 +214,11 @@ namespace MonkeyPaste.Avalonia {
                 didActiveChange = true;
             }
 
-            _lastProcessInfo = activeProcessInfo;
+            LastProcessInfo = activeProcessInfo;
             if (didActiveChange) {
-                MpConsole.WriteLine(string.Format(@"Last Window: {0} '{1}' ({2})", _lastProcessInfo.MainWindowTitle, _lastProcessInfo.ProcessPath, _lastProcessInfo.Handle));
+                MpConsole.WriteLine(string.Format(@"Last Window: {0} '{1}' ({2})", LastProcessInfo.MainWindowTitle, LastProcessInfo.ProcessPath, LastProcessInfo.Handle));
 
-                OnAppActivated?.Invoke(this, _lastProcessInfo);
+                OnAppActivated?.Invoke(this, LastProcessInfo);
             }
         }
 

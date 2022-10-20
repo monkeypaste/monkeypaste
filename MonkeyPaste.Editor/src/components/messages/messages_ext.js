@@ -8,7 +8,7 @@ function initMain_ext(initMsgStr_base64) {
 	let initMsgObj = toJsonObjFromBase64Str(initMsgStr_base64);
 
 	if (initMsgObj && initMsgObj.isPlainHtmlConverter) {
-		initPlainHtmlConverter(initMsgObj.envName, initMsgObj.useBetterTable);
+		initPlainHtmlConverter(initMsgObj.envName);
 		log('plainHtml converter initialized.');
 		return;
 	}

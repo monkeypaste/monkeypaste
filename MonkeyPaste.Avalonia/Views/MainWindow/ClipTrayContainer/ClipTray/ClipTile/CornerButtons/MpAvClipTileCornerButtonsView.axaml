@@ -61,6 +61,14 @@
             </Grid>
         </ToggleButton>
 
+        <!--  Detail View  -->
+        <local:MpAvClipTileDetailView Grid.Row="2"
+                                      Height="20"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Bottom"
+                                      DataContext="{Binding}" />
+
+
         <!--  Hotkey Button  -->
         <Button x:Name="ClipTileHotkeyButton"
                 Width="16"

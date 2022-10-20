@@ -7,6 +7,7 @@ using CefNet;
 using CefNet.Avalonia;
 using System.Collections.Generic;
 using Avalonia.Threading;
+using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvWebViewJsMessageExtensions {
@@ -46,8 +47,27 @@ namespace MonkeyPaste.Avalonia {
                 //MpConsole.WriteLine($"retrying '{script}' w/ key:'{evalKey}' attempt#:{attempt}");
                 await Task.Delay(100);
             }
+
             MpConsole.WriteLine($"retry count exceeded for '{script}' w/ key:'{evalKey}' attempts#:{attempt}");
-            // TODO not soon (this failing is likely my fault) but handle reloading the item here or something depending on the script called
+
+            if (wv.DataContext is MpAvClipTileViewModel ctvm) {
+                MpConsole.WriteLine($"Attempting reload of item: {ctvm.CopyItemTitle}");
+                var stateMsg = MpAvCefNetWebViewExtension.GetEditorStateFromClipTile(ctvm);
+                if(wv.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv) {
+                    await ctv.ReloadContentAsync(stateMsg.SerializeJsonObjectToBase64());
+                    // should probably try to re eval script here but not sure depending on what it was so keep
+                    // looking at the case of failure but it gets here that shows this at least works :)
+                    Debugger.Break();
+                    var reloaded_result = await wv.EvaluateJavascriptAsync(script);
+                    return reloaded_result;
+                } else {
+                    MpConsole.WriteLine("Reload failed, webview container not found");
+                }
+            } else {
+                MpConsole.WriteLine("Reload failed, webview data context lost");
+            }
+            
+            
             Debugger.Break();
             return MpAvCefNetApplication.JS_REF_ERROR;
         }

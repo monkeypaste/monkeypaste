@@ -15,13 +15,13 @@ var IsReadOnly = false;
 
 // #region Life Cycle
 
-function initEditor(useBetterTable) {
+function initEditor() {
 	if (IsLoaded) {
 		log('editor already initialized, ignoring init');
 		return;
 	}
 
-	initQuill(useBetterTable);
+	initQuill();
 
 	quill.on("selection-change", onEditorSelectionChanged);
 	quill.on("text-change", onEditorTextChanged);
@@ -306,13 +306,14 @@ function enableSubSelection(fromHost = false) {
 		}
 	}
 
+	showPasteTemplateToolbar();
 	updateAllSizeAndPositions();
 	drawOverlay();
 
 	if (!fromHost) {
 		onSubSelectionEnabledChanged_ntf(IsSubSelectionEnabled);
 	}
-	log('sub-selection ENABLED');
+	log('sub-selection ENABLED from: ' + (fromHost ? 'HOST' : 'INTERNAL'));
 }
 
 function disableSubSelection(fromHost = false) {
@@ -328,7 +329,7 @@ function disableSubSelection(fromHost = false) {
 
 	enableDragOverlay();
 
-	//getTemplateElements().forEach((te) => te.classList.add('no-select'));
+	hidePasteTemplateToolbar();
 
 	updateAllSizeAndPositions();
 	drawOverlay();
@@ -336,7 +337,7 @@ function disableSubSelection(fromHost = false) {
 	if (!fromHost) {
 		onSubSelectionEnabledChanged_ntf(IsSubSelectionEnabled);
 	}
-	log('sub-selection DISABLED');
+	log('sub-selection DISABLED from: '+(fromHost ? 'HOST':'INTERNAL'));
 }
 
 function hideAllToolbars() {

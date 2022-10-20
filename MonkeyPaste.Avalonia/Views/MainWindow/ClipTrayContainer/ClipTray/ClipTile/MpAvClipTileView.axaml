@@ -52,7 +52,6 @@
                 <RowDefinition Height="0.25*"
                                MaxHeight="40" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="20" />
             </Grid.RowDefinitions>
             <!--  Title  -->
             <local:MpAvClipTileTitleView x:Name="TileTitleView"
@@ -72,23 +71,26 @@
                                            DataContext="{Binding}" />
 
             <!--  Detail  -->
-            <local:MpAvClipTileDetailView Grid.Row="2"
-                                          HorizontalAlignment="Stretch"
-                                          VerticalAlignment="Stretch"
-                                          IsVisible="{Binding IsHovering}"
-                                          DataContext="{Binding}" />
+
 
             <!--  Corner Button Overlay  -->
             <local:MpAvClipTileCornerButtonsView Grid.Row="0"
-                                                 Grid.RowSpan="3"
-                                                 IsVisible="{Binding IsHovering}"
+                                                 Grid.RowSpan="2"
                                                  HorizontalAlignment="Stretch"
                                                  VerticalAlignment="Stretch"
-                                                 DataContext="{Binding}" />
+                                                 DataContext="{Binding}">
+                <local:MpAvClipTileCornerButtonsView.IsVisible>
+                    <MultiBinding Converter="{StaticResource MultiBoolConverter}"
+                                  ConverterParameter="AND">
+                        <Binding Path="IsHovering" />
+                        <Binding Path="!IsSubSelectionEnabled" />
+                    </MultiBinding>
+                </local:MpAvClipTileCornerButtonsView.IsVisible>
+            </local:MpAvClipTileCornerButtonsView>
 
             <Border x:Name="ClipTileResizeBorder"
                     Grid.Row="0"
-                    Grid.RowSpan="3"
+                    Grid.RowSpan="2"
                     local:MpAvResizeExtension.MinHeight="{Binding MinHeight}"
                     local:MpAvResizeExtension.MaxHeight="{Binding MaxHeight}"
                     local:MpAvResizeExtension.MinWidth="{Binding MinWidth}"
@@ -117,7 +119,7 @@
 
             <!--  IsBusy Overlay  -->
             <Border Grid.Row="0"
-                    Grid.RowSpan="3"
+                    Grid.RowSpan="2"
                     Cursor="Wait"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"

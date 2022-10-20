@@ -115,7 +115,9 @@ function showEditTemplateToolbar(isNew = false) {
             TemplateBeforeEdit = t;
         }
         createEditTemplateToolbarForTemplate(t);
-    }
+    } else {
+        log('no focus template found');
+	}
 }
 
 function hideEditTemplateToolbar(wasEscCancel = false, wasDelete = false) {
@@ -166,7 +168,7 @@ function updateEditTemplateToolbarSizesAndPositions() {
         return;
     }
     let ett = getEditTemplateToolbarContainerElement();
-    if (IsPastingTemplate) {
+    if (isShowingPasteTemplateToolbar()) {
         //ett.classList.remove('bottom-align');
         let pttb_h = getPasteTemplateToolbarContainerElement().getBoundingClientRect().height;
         ett.style.bottom = pttb_h + 'px';
@@ -183,8 +185,6 @@ function updateEditTemplateToolbarSizesAndPositions() {
 function isShowingEditTemplateToolbar() {
     return !getEditTemplateToolbarContainerElement().classList.contains('hidden');
 }
-
-
 
 
 // #endregion State

@@ -43,8 +43,7 @@ namespace MonkeyPaste.Avalonia {
                         }
                         var converter_init_msg = new MpQuillInitMainRequestMessage() {
                             isPlainHtmlConverter = true,
-                            envName = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
-                            useBetterTable = true
+                            envName = MpPlatformWrapper.Services.OsInfo.OsType.ToString()
                         };
                         string msg64 = converter_init_msg.SerializeJsonObjectToBase64();
                         wv.ExecuteJavascript($"initMain_ext('{msg64}')");

@@ -10,7 +10,6 @@ namespace MonkeyPaste {
 
         public string envName { get; set; } // will be wpf,android, etc.
         public bool isPlainHtmlConverter { get; set; }
-        public bool useBetterTable { get; set; } = true;
     }
 
     public class MpQuillInitMainResponseMessage : MpJsonObject {
@@ -237,5 +236,15 @@ templateType: "dynamic"
 
     public class MpQuillIsHostDraggingMessage : MpJsonObject {
         public bool isDragging { get; set; }
+    }
+
+    public class MpQuillEditorStateMessage : MpJsonObject {
+        public string envName { get; set; }
+        public string contentHandle { get; set; }
+        public string contentItemType { get; set; }
+        public string contentData { get; set; }
+        public bool isSubSelectionEnabled { get; set; }
+        public bool isReadOnly { get; set; }
+        public bool isPastimgTemplate { get; set; }
     }
 }

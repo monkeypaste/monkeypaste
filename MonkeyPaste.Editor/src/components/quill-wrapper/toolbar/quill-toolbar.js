@@ -1,9 +1,10 @@
+// #region Globals
 
-var UseBetterTable = true;
+// #endregion Globals
 
-function addToolbarToQuillOptions(useBetterTable, quillOptions) {
-	UseBetterTable = useBetterTable;
+// #region Life Cycle
 
+function initEditorToolbarQuillOptions(quillOptions) {
 	var node = document.createElement("style");
 	node.innerHTML = registerFontStyles(EnvName);
 	document.body.appendChild(node);
@@ -11,7 +12,7 @@ function addToolbarToQuillOptions(useBetterTable, quillOptions) {
 	let fonts = registerFontFamilys();
 	let sizes = registerFontSizes();
 	//container.unshift([{ size: sizes }]);
-	let toolbar = {
+	quillOptions.modules.toolbar = {
 		container: [
 			//[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
 			[{ size: sizes }], // font sizes
@@ -30,23 +31,28 @@ function addToolbarToQuillOptions(useBetterTable, quillOptions) {
 			[{ color: [] }, { background: [] }], // dropdown with defaults from theme
 			[{ align: [] }],
 			// ['clean'],
-			[{ "Table-Input": registerTables() }]
+			//[{ "Table-Input": registerTables() }]
 		],
-		handlers: {
-			"Table-Input": () => {
-				return;
-			}
-		}
+		//handlers: {
+		//	"Table-Input": () => {
+		//		return;
+		//	}
+		//}
 	};
 
 	//initFonts();
 	//toolbar.container = addFontFamiliesToQuillContainerOptions(toolbar.container);
 	//toolbar.container = addFontSizesToQuillContainerOptions(toolbar.container);
 
-	quillOptions.modules.toolbar = toolbar;
+	//quillOptions.modules.toolbar = toolbar;
 	if (UseBetterTable) {
 		Quill.register({ "modules/better-table": quillBetterTable }, true);
-
+		quillOptions.modules.toolbar.container.push([{ "Table-Input": registerTables() }]);
+		quillOptions.modules.toolbar.handlers = {
+			"Table-Input": () => {
+				return;
+			}
+		};
 		quillOptions.modules['better-table'] = {
 			operationMenu: {
 				items: {
@@ -63,11 +69,12 @@ function addToolbarToQuillOptions(useBetterTable, quillOptions) {
 		quillOptions.modules.keyboard = {
 			bindings: quillBetterTable.keyboardBindings
 		};
+	} else if (UseQuill2) {
+		quillOptions.modules.table = true;
 	}
 
 	return quillOptions;
 }
-
 function initLinkToolbarButton() {
 	// workaround because link button does show up for some reason...
 	let link_button_elm = document.getElementsByClassName('ql-link')[0];
@@ -81,32 +88,20 @@ function initLinkToolbarButton() {
 	link_button_elm.addEventListener('click', onLinkButtonClick);
 }
 
-function getQuillToolbarContainerElement() {
-	return document.getElementsByClassName("ql-toolbar")[0];
-}
+// #endregion Life Cycle
 
+// #region Getters
 
-function hideEditorToolbar() {
-	getQuillToolbarContainerElement().classList.add("hidden");
-	getQuillToolbarContainerElement().style.display = 'none';
-	updateAllSizeAndPositions();
+function getEditorToolbarElement() {
+	return document.getElementsByClassName('ql-toolbar')[0];
 }
-
-function showEditorToolbar() {
-	getQuillToolbarContainerElement().classList.remove("hidden");
-	getQuillToolbarContainerElement().style.display = 'block';
-	updateAllSizeAndPositions();
-}
-
-function isEditorToolbarVisible() {
-	return !getQuillToolbarContainerElement().classList.contains('hidden');
-}
+// #endregion Getters
 
 function getEditorToolbarWidth() {
 	if (!isEditorToolbarVisible()) {
 		return 0;
 	}
-	return getQuillToolbarContainerElement().getBoundingClientRect().width;
+	return getEditorToolbarElement().getBoundingClientRect().width;
 }
 
 function getEditorToolbarHeight() {
@@ -116,3 +111,37 @@ function getEditorToolbarHeight() {
 	var toolbarHeight = parseInt($(".ql-toolbar").outerHeight());
 	return toolbarHeight;
 }
+// #region Setters
+
+// #endregion Setters
+
+// #region State
+
+// #endregion State
+
+function isEditorToolbarVisible() {
+	return !getEditorToolbarElement().classList.contains('hidden');
+}
+// #region Actions
+function hideEditorToolbar() {
+	getEditorToolbarElement().classList.add("hidden");
+	getEditorToolbarElement().style.display = 'none';
+	updateAllSizeAndPositions();
+}
+
+function showEditorToolbar() {
+	getEditorToolbarElement().classList.remove("hidden");
+	getEditorToolbarElement().style.display = 'block';
+	updateAllSizeAndPositions();
+}
+// #endregion Actions
+
+// #region Event Handlers
+
+// #endregion Event Handlers
+
+
+
+
+
+

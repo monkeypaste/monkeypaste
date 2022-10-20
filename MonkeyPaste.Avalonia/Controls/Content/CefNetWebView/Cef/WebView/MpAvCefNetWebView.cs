@@ -38,7 +38,8 @@ namespace MonkeyPaste.Avalonia {
         notifyDragLeave,
         notifyContentScreenShot,
         notifyUserDeletedTemplate,
-        notifyAddOrUpdateTemplate
+        notifyAddOrUpdateTemplate,
+        notifyPasteTemplateRequest
     }
     [DoNotNotify]
     public class MpAvCefNetWebView : 
@@ -157,11 +158,11 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpAvEditorBindingFunctionType.notifyAddOrUpdateTemplate:
                     var aoumsg = MpJsonObject.DeserializeBase64Object<MpQuillTemplateAddOrUpdateNotification>(msgJsonBase64Str);
-                    Debugger.Break();
+                    //Debugger.Break();
                     break;
                 case MpAvEditorBindingFunctionType.notifyUserDeletedTemplate:
                     var udmsg = MpJsonObject.DeserializeBase64Object<MpQuillUserDeletedTemplateNotification>(msgJsonBase64Str);
-                    Debugger.Break();
+                    //Debugger.Break();
                     break;
                 case MpAvEditorBindingFunctionType.notifyDragLeave:
                     BindingContext.IsHovering = false;
@@ -169,6 +170,9 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.notifyContentScreenShot:
                     var ssMsg = MpJsonObject.DeserializeBase64Object<MpQuillContentScreenShotNotificationMessage>(msgJsonBase64Str);
                     Document.ContentScreenShotBase64 = ssMsg.contentScreenShotBase64;
+                    break;
+                case MpAvEditorBindingFunctionType.notifyPasteTemplateRequest:
+                    MpAvClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(true);
                     break;
                 case MpAvEditorBindingFunctionType.notifyException:
                     var exceptionMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);

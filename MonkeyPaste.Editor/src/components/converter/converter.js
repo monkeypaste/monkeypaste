@@ -1,9 +1,9 @@
 ﻿var IsConverterLoaded = false;
 
-function initPlainHtmlConverter(envName, useBetterTable) {
+function initPlainHtmlConverter(envName) {
 	EnvName = envName;
 
-	initQuill(useBetterTable);
+	initQuill();
 
 	//document.getElementsByClassName("ql-toolbar")[0].classList.add("env-wpf");
 	disableReadOnly();

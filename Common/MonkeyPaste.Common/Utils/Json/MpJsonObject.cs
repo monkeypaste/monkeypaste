@@ -8,17 +8,26 @@ namespace MonkeyPaste.Common {
     public abstract class MpJsonObject : MpIJsonObject, MpIJsonBase64Object {
         public static T DeserializeObject<T>(object obj) where T: class{
             if(obj is string objStr) {
-                return JsonConvert.DeserializeObject<T>(objStr);
+                try {
+                    return JsonConvert.DeserializeObject<T>(objStr);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine("Error deserializing str: "+objStr, ex);
+                }
+
             }
             return null;
         }
 
         public static T DeserializeBase64Object<T>(object obj) where T : class {
             if (obj is string objBase64Str) {
-                byte[] bytes = Convert.FromBase64String(objBase64Str);
-                string objStr = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
-                var outObj = JsonConvert.DeserializeObject<T>(objStr);
-                return outObj;
+                try {
+                    byte[] bytes = Convert.FromBase64String(objBase64Str);
+                    string objStr = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+                    return JsonConvert.DeserializeObject<T>(objStr);
+                }catch(Exception ex) {
+                    MpConsole.WriteTraceLine("Error deserializing base64 str: "+objBase64Str, ex);
+                }
             }
             return null;
         }

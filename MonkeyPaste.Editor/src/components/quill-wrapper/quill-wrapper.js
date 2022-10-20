@@ -1,10 +1,31 @@
-var quill;
+// #region Globals
 
-function initQuill(useBetterTable) {
-	let quillOptions = createQuillOptions(useBetterTable);
+var quill;
+// #endregion Globals
+
+// #region Life Cycle
+function initQuill() {
+	let quillOptions = {
+		//debug: true,
+		placeholder: "",
+		//allowReadOnlyEdits: true,
+		theme: "snow",
+		modules: {
+			//toolbar: '#editorToolbar',
+			//table: !UseBetterTable,
+			//htmlEditButton: {
+			//	syntax: true
+			//}
+		}
+	}
+
+	quillOptions = initEditorToolbarQuillOptions(quillOptions);
+
 	quill = new Quill(
 		"#editor",
 		quillOptions);
+
+	getEditorToolbarElement().classList.add('hidden');
 
 	initTable();
 
@@ -19,41 +40,9 @@ function initQuill(useBetterTable) {
 	initPasteTemplateToolbar();
 }
 
-function createQuillOptions(useBetterTable) {
-	let quillOptions = {
-		//debug: true,
-		placeholder: "",
-		//allowReadOnlyEdits: true,
-		theme: "snow",
-		modules: {
-			//toolbar: '#editorToolbar',
-			table: false,
-			//htmlEditButton: {
-			//	syntax: true
-			//}
-		}
-	}	
+// #endregion Life Cycle
 
-	quillOptions = addToolbarToQuillOptions(useBetterTable,quillOptions);
-	return quillOptions;
-}
-
-
-// TEXT
-
-
-function setTextInRange(range, text, source = 'api', decodeTemplates = false) {	
-	quill.deleteText(range.index, range.length, source);
-	insertText(range.index, text, source, decodeTemplates);
-}
-
-function insertText(docIdx, text, source = 'api', decodeTemplates = false) {
-	if (decodeTemplates) {
-		decodeInsertedTemplates(docIdx, text, source);
-		return;
-	}
-	quill.insertText(docIdx, text, source);
-}
+// #region Getters
 
 function getSelectedText(encodeTemplates = false) {
 	var selection = getEditorSelection();
@@ -69,12 +58,6 @@ function getText(range, encodeTemplates = false) {
 		text = quill.getText(range.index, range.length);
 	}
 	return text;
-}
-
-// HTML
-
-function setRootHtml(html) {
-	quill.root.innerHTML = html;
 }
 
 function getHtml(range) {
@@ -129,23 +112,80 @@ function getSelectedHtml3() {
 	return documentFragment;
 }
 
+function getDelta(rangeObj) {
+	rangeObj = rangeObj == null ? { index: 0, length: quill.getLength() } : rangeObj;
+
+	let delta = quill.getContents(rangeObj.index, rangeObj.length);
+	return delta;
+}
+
+function getDeltaJson(rangeObj, encodeWithContentHandle = false) {
+	let delta = getDelta(rangeObj);
+	if (encodeWithContentHandle) {
+		delta.contentHandle = ContentHandle;
+	}
+	let deltaJson = JSON.stringify(delta);
+	return deltaJson;
+}
+
+function getSelectedDelta() {
+	let sel = getEditorSelection();
+	if (!sel) {
+		return null;
+	}
+	let selDelta = quill.getContents(sel.index, sel.length);
+	return selDelta;
+}
+
+function getSelectedDeltaJson() {
+	let selDelta = getSelectedDelta();
+	let selDeltaStr = JSON.stringify(selDelta);
+	return selDeltaStr;
+}
+// #endregion Getters
+
+// #region Setters
+
+function setTextInRange(range, text, source = 'api', decodeTemplates = false) {
+	quill.deleteText(range.index, range.length, source);
+	insertText(range.index, text, source, decodeTemplates);
+}
+
+function setRootHtml(html) {
+	quill.root.innerHTML = html;
+}
+
 function setHtmlInRange(range, htmlStr, source = 'api', decodeTemplates = false) {
 	quill.deleteText(range.index, range.length, source);
 	insertHtml(range.index, htmlStr, source, decodeTemplates);
 }
 
-function insertHtml(docIdx, htmlStr, source='api', decodeTemplates = true) {
+function setContents(jsonStr) {
+	quill.setContents(JSON.parse(jsonStr));
+}
+// #endregion Setters
+
+// #region State
+
+// #endregion State
+
+// #region Actions
+
+function insertText(docIdx, text, source = 'api', decodeTemplates = false) {
+	if (decodeTemplates) {
+		decodeInsertedTemplates(docIdx, text, source);
+		return;
+	}
+	quill.insertText(docIdx, text, source);
+}
+
+
+function insertHtml(docIdx, htmlStr, source = 'api', decodeTemplates = true) {
 	quill.clipboard.dangerouslyPasteHTML(docIdx, htmlStr, source);
 	if (decodeTemplates) {
 		// default is true unlike text, since blot's need to be bound to events not sure if thats always right
 		loadTemplates();
 	}
-}
-
-// DELTA
-
-function setContents(jsonStr) {
-	quill.setContents(JSON.parse(jsonStr));
 }
 
 function insertContent(docIdx, data, forcePlainText = false) {
@@ -169,34 +209,9 @@ function insertDelta(range, deltaOrDeltaJsonStr) {
 	deltaObj.ops = [{ retain: range.index }, ...deltaObj.ops];
 	quill.updateContents(deltaObj);
 }
-function getDelta(rangeObj) {
-	rangeObj = rangeObj == null ? { index: 0, length: quill.getLength() } : rangeObj;
 
-	let delta = quill.getContents(rangeObj.index, rangeObj.length);
-	return delta;
-}
+// #endregion Actions
 
-function getDeltaJson(rangeObj,encodeWithContentHandle = false) {
-	let delta = getDelta(rangeObj);
-	if (encodeWithContentHandle) {
-		delta.contentHandle = ContentHandle;
-	}
-	let deltaJson = JSON.stringify(delta);
-	return deltaJson;
-}
+// #region Event Handlers
 
-function getSelectedDelta() {
-	let sel = getEditorSelection();
-	if (!sel) {
-		return null;
-	}
-	let selDelta = quill.getContents(sel.index, sel.length);
-	return selDelta;
-}
-
-function getSelectedDeltaJson() {
-	let selDelta = getSelectedDelta();
-	let selDeltaStr = JSON.stringify(selDelta);
-	return selDeltaStr;
-}
-
+// #endregion Event Handlers

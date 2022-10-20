@@ -8,6 +8,8 @@ function initContent() {
 }
 
 function loadContent(contentHandle, contentType, contentData, isPasteRequest) {
+	quill.history.clear();
+
 	resetSelection();
 
 	ContentHandle = contentHandle;
