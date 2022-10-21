@@ -73,6 +73,8 @@ function init_test() {
 		loadContent(contentHandle, contentType, sample_in_use, isPasteRequest);
 
 		disableReadOnly();
+
+		//getPasteButtonElement().focus({ focusVisible: true });
 		//enableFancyTextSelection();
 		//enableSubSelection();
 		//enableReadOnly();
@@ -87,10 +89,7 @@ function initMain(envName) {
 
 	initWindow();
 
-	initSelection();
-
-	initKeyboard();
-	initMouse();
+	initInput();
 
 	initDrop();
 	initDrag();
@@ -135,6 +134,26 @@ function setState(stateObj) {
 
 	if (stateObj.sel) {
 		setEditorSelection(stateObj.sel.index, stateObj.sel.length, 'silent');
+	}
+}
+
+function updateAllSizeAndPositions() {
+	updateTemplateToolbarSizesAndPositions();
+	updateEditorSizesAndPositions();
+	drawOverlay();
+
+	if (EnvName == "android") {
+		//var viewportBottom = window.scrollY + window.innerHeight;
+		//let tbh = $(".ql-toolbar").outerHeight();
+		//if (y <= 0) {
+		//    //keyboard is not visible
+		//    $(".ql-toolbar").css("top", y);
+		//    $("#editor").css("top", y + tbh);
+		//} else {
+		//    $(".ql-toolbar").css("top", y - tbh);
+		//    $("#editor").css("top", 0);
+		//}
+		//$("#editor").css("bottom", viewportBottom - tbh);
 	}
 }
 

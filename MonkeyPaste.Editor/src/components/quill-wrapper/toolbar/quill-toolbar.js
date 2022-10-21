@@ -6,12 +6,12 @@
 
 function initEditorToolbarQuillOptions(quillOptions) {
 	var node = document.createElement("style");
-	node.innerHTML = registerFontStyles(EnvName);
+	node.innerHTML = registerFontStyles();
 	document.body.appendChild(node);
 
 	let fonts = registerFontFamilys();
 	let sizes = registerFontSizes();
-	//container.unshift([{ size: sizes }]);
+
 	quillOptions.modules.toolbar = {
 		container: [
 			//[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
@@ -40,11 +40,6 @@ function initEditorToolbarQuillOptions(quillOptions) {
 		//}
 	};
 
-	//initFonts();
-	//toolbar.container = addFontFamiliesToQuillContainerOptions(toolbar.container);
-	//toolbar.container = addFontSizesToQuillContainerOptions(toolbar.container);
-
-	//quillOptions.modules.toolbar = toolbar;
 	if (UseBetterTable) {
 		Quill.register({ "modules/better-table": quillBetterTable }, true);
 		quillOptions.modules.toolbar.container.push([{ "Table-Input": registerTables() }]);
@@ -74,6 +69,21 @@ function initEditorToolbarQuillOptions(quillOptions) {
 	}
 
 	return quillOptions;
+}
+
+function initEditorToolbar() {
+	// called after options are returned and quill creates toolbar
+
+	getEditorContainerElement().firstChild.id = 'quill-editor';
+	getEditorToolbarElement().classList.add('hidden');
+	getEditorToolbarElement().classList.add('top-align');
+
+	initTable();
+
+	initFontFamilyPicker();
+
+	initLinkToolbarButton();
+	initTemplateToolbarButton();
 }
 function initLinkToolbarButton() {
 	// workaround because link button does show up for some reason...
@@ -108,8 +118,8 @@ function getEditorToolbarHeight() {
 	if (!isEditorToolbarVisible()) {
 		return 0;
 	}
-	var toolbarHeight = parseInt($(".ql-toolbar").outerHeight());
-	return toolbarHeight;
+	let eth = getEditorToolbarElement().getBoundingClientRect().height;
+	return eth;
 }
 // #region Setters
 

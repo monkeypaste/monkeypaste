@@ -1,10 +1,35 @@
-﻿
+﻿// #region Globals
+
+// #endregion Globals
+
+// #region Life Cycle
 function initBouncyTextArea(elm) {
     elm.addEventListener('focus', onBouncyTextAreaFocus);
     elm.addEventListener('blur', onBouncyTextAreaBlur);
     elm.addEventListener('keydown', onBouncyTextAreaKeyUp);
     elm.addEventListener('keyup', onBouncyTextAreaKeyDown);
 }
+// #endregion Life Cycle
+
+// #region Getters
+
+function getTemplateToolbarsHeight() {
+    let total_h = getEditTemplateToolbarHeight();
+    total_h += getPasteTemplateToolbarHeight();
+    return total_h;
+}
+
+// #endregion Getters
+
+// #region Setters
+
+// #endregion Setters
+
+// #region State
+
+// #endregion State
+
+// #region Actions
 
 function updateTemplateToolbarSizesAndPositions() {
     if (isShowingPasteTemplateToolbar()) {
@@ -12,47 +37,21 @@ function updateTemplateToolbarSizesAndPositions() {
     }
     if (isShowingEditTemplateToolbar()) {
         updateEditTemplateToolbarSizesAndPositions()
-	}
+    }
 }
 
 function addClickOrKeyClickEventListener(elm, handler) {
     elm.addEventListener('click', function (e) {
         if (!isElementDisabled(e.currentTarget)) {
             handler(e);
-		}
+        }
     });
     elm.addEventListener('keydown', function (e) {
         if (isMouseOrKeyboardButtonClick(e)) {
             handler(e);
-		}
+        }
     });
 }
-
-function onBouncyTextAreaFocus(e) {
-    //jiggleFocusTemplates();
-}
-
-function onBouncyTextAreaBlur(e) {
-    //jiggleFocusTemplates(true);
-}
-
-async function bounceElement(elm) {
-    sleep(100);
-    elm.style.transform = 'scale(1.3)';
-    //scaleElement(elm, 'bigger');
-    sleep(300);
-    elm.style.transform = 'scale(1.0)';
-    //scaleElement(elm, 'default');
-}
-
-async function onBouncyTextAreaKeyDown(e) {
-    await scaleFocusTemplates('bigger');
-}
-
-async function onBouncyTextAreaKeyUp(e) {
-    await scaleFocusTemplates('default');
-}
-
 async function scaleFocusTemplates(scaleType, tguid) {
     if (!tguid) {
         tguid = getFocusTemplateGuid();
@@ -68,7 +67,7 @@ async function scaleFocusTemplates(scaleType, tguid) {
     }
 }
 
-function scaleElement(elm,scaleType) {
+function scaleElement(elm, scaleType) {
     if (scaleType == 'bigger') {
         elm.classList.remove('ql-template-embed-blot-display-key-up');
         elm.classList.add('ql-template-embed-blot-display-key-down');
@@ -89,7 +88,16 @@ function clearAllTemplateEditClasses() {
         let telm = telms[i];
         telm.classList.remove('ql-template-embed-blot-display-key-up');
         telm.classList.remove('ql-template-embed-blot-display-key-down');
-	}
+    }
+}
+
+async function bounceElement(elm) {
+    sleep(100);
+    elm.style.transform = 'scale(1.3)';
+    //scaleElement(elm, 'bigger');
+    sleep(300);
+    elm.style.transform = 'scale(1.0)';
+    //scaleElement(elm, 'default');
 }
 
 // unused
@@ -111,3 +119,24 @@ async function jiggleFocusTemplates(resetOnComplete = false) {
         scaleFocusTemplates('reset', tguid);
     }
 }
+// #endregion Actions
+
+// #region Event Handlers
+
+function onBouncyTextAreaFocus(e) {
+    //jiggleFocusTemplates();
+}
+
+function onBouncyTextAreaBlur(e) {
+    //jiggleFocusTemplates(true);
+}
+
+
+async function onBouncyTextAreaKeyDown(e) {
+    await scaleFocusTemplates('bigger');
+}
+
+async function onBouncyTextAreaKeyUp(e) {
+    await scaleFocusTemplates('default');
+}
+// #endregion Event Handlers

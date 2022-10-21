@@ -815,8 +815,15 @@ namespace MonkeyPaste {
         #region MpShortcut
 
         public static async Task<MpShortcut> GetShortcutAsync(string shortcutTypeName, string commandParameter = "") {
-            string query = string.Format(@"select * from MpShortcut where ShortcutTypeName=? and CommandParameter=?");
-            var result = await MpDb.QueryAsync<MpShortcut>(query, shortcutTypeName, commandParameter);
+            List<MpShortcut> result;
+           
+            if (commandParameter == null) {
+                string query = string.Format(@"select * from MpShortcut where ShortcutTypeName=? and CommandParameter is NULL");
+                result = await MpDb.QueryAsync<MpShortcut>(query, shortcutTypeName);
+            } else {
+                string query = string.Format(@"select * from MpShortcut where ShortcutTypeName=? and CommandParameter=?");
+                result = await MpDb.QueryAsync<MpShortcut>(query, shortcutTypeName, commandParameter);
+            }
             if (result == null || result.Count == 0) {
                 return null;
             }

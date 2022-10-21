@@ -55,6 +55,9 @@ function onSubSelectionEnabledChanged_ntf(isEnabled) {
 		let msg = {
 			isSubSelectionEnabled: isEnabled
 		};
+		if (isEnabled && hasTemplates()) {
+			msg.editorWidth = PasteToolbarDefaultWidth;
+		}
 		let msgStr = toBase64FromJsonObj(msg);
 		notifySubSelectionEnabledChanged(msgStr);
 	}

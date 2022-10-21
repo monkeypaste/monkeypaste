@@ -1,21 +1,16 @@
 ﻿.paste-template-toolbar {
     background-color: teal;
 }
-    .paste-template-toolbar > .common-template-toolbar-button:not(.disabled) {
+    .paste-template-toolbar > button {
         background-color: dodgerblue;
         border: solid 2px #67c5ff;
         color: white;
     }
-    .paste-template-toolbar > .common-template-toolbar-button:hover {
-        border-color: yellow;
-    }
 
 #templatePasteValueTextArea {
-}
-
-div:has( > #templatePasteValueTextArea) {
     width: 45%;
 }
+
 
 #pasteTemplateToolbarMenuSelectorDiv {
     width: 15%;
@@ -107,7 +102,7 @@ div:has( > #templatePasteValueTextArea) {
         background-color: silver;
     }
 
-#pasteTemplateButton span {
+#pasteTemplateButton {
     margin-left: 10px;
     margin-right: 10px;
 }

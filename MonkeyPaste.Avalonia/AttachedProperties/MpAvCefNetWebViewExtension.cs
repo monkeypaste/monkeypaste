@@ -32,6 +32,7 @@ namespace MonkeyPaste.Avalonia {
             IsSubSelectionEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsSubSelectionEnabledChanged(x, y));
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
             IsDevToolsVisibleProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsDevToolsVisibleChanged(x, y));
+            IsHostSelectedProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsHostSelectedChanged(x, y));
             HtmlDataProperty.Changed.AddClassHandler<Control>((x, y) => HandleHtmlDataChanged(x, y));
         }
 
@@ -51,6 +52,35 @@ namespace MonkeyPaste.Avalonia {
                 260.0d,
                 false);
 
+        #endregion
+
+        #region IsHostSelected AvaloniaProperty
+        public static bool GetIsHostSelected(AvaloniaObject obj) {
+            return obj.GetValue(IsHostSelectedProperty);
+        }
+        public static void SetIsHostSelected(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsHostSelectedProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsHostSelectedProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "IsHostSelected",
+                false,
+                false);
+        private static void HandleIsHostSelectedChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+            if (e.NewValue is bool isHostSelected &&
+               element is MpAvCefNetWebView wv &&
+               wv.DataContext is MpAvClipTileViewModel ctvm &&
+               wv.IsEditorInitialized) {
+                var msg = new MpQuillIsHostSelectedChangedMessage() {
+                    isHostSelected = isHostSelected
+                };
+                if(isHostSelected) {
+                    wv.Focus();
+                }
+                wv.ExecuteJavascript($"hostIsSelectedChanged_ext('{msg.SerializeJsonObjectToBase64()}')");
+            }
+        }
         #endregion
 
         #region IsContentReadOnly AvaloniaProperty
@@ -124,17 +154,33 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 false);
 
-        private static void HandleIsSubSelectionEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+        private static async void HandleIsSubSelectionEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isSubSelectionEnabled &&
                 element is MpAvCefNetWebView wv &&
                 GetIsContentReadOnly(wv) &&
                 wv.IsEditorInitialized &&
                 wv.DataContext is MpAvClipTileViewModel ctvm &&
                 !ctvm.IsReloading) {
+                Control resizeControl = null;
+                //if(ctvm.HasTemplates) {
+                    var ctv = wv.GetVisualAncestor<MpAvClipTileView>();
+                    if (ctv != null) {
+                        resizeControl = ctv.FindControl<Control>("ClipTileResizeBorder");
+                    }
+                //}
                 if (isSubSelectionEnabled) {
                     // editor handles enabling by double clicking 
-                    wv.ExecuteJavascript("enableSubSelection_ext()");
+                    var respStr = await wv.EvaluateJavascriptAsync("enableSubSelection_ext()");
+                    var resp = MpJsonObject.DeserializeBase64Object<MpQuillSubSelectionChangedMessageOrNotification>(respStr);
+                    if(resp.editorWidth > 0) {
+                        if (resizeControl != null) {
+                            MpAvResizeExtension.ResizeAnimated(resizeControl, resp.editorWidth, ctvm.ReadOnlyHeight, 1000.0d);
+                        }
+                    }
                 } else {
+                    if (resizeControl != null) {
+                        MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.ReadOnlyWidth, ctvm.ReadOnlyHeight, 1000.0d);
+                    }
                     wv.ExecuteJavascript("disableSubSelection_ext()");
                 }
             }

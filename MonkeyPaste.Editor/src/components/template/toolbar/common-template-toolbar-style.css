@@ -12,26 +12,12 @@
     border-width: 0.5px 0 0 0;
 }
 
-.common-template-toolbar > div {
-    display: inline-flex;
-}
-
-.common-template-toolbar-button {
-    padding: 5px;
-    margin: 0 5px;
-    text-decoration: none;
-    font-size: 10px;
-    border-radius: 5px;
-    transition: .4s;
-    align-items: center;
-    cursor: pointer;
-    user-select: none;}
-
-    .common-template-toolbar-button:hover {
-        color: dimgray;
-        transition: .4s;
-        cursor: pointer;
+    .common-template-toolbar > div,
+    .common-template-toolbar > textarea,
+    .common-template-toolbar > button {
+        display: inline-flex;
     }
+
 
 input[type=button] {
     border-width: 0;

@@ -1026,10 +1026,10 @@ namespace MonkeyPaste.Avalonia {
 
         private void HandleGestureRouting_Up(string keyLiteral) {
             _downCount--;
+            string curGestureStr = _keyboardGestureHelper.GetCurrentGesture();
             _keyboardGestureHelper.RemoveKeyDown(keyLiteral);
 
             ValidateGesture();
-            string curGestureStr = _keyboardGestureHelper.GetCurrentGesture();
 
             //MpConsole.WriteLine("Current Gesture: " + curGestureStr);
             MpConsole.WriteLine("Down Count: " + _downCount);
@@ -1100,8 +1100,9 @@ namespace MonkeyPaste.Avalonia {
 
         private void ValidateGesture() {
             if(_downCount < 0) {
+                _downCount = 0;
                 // should never be below zero
-                Debugger.Break();
+                //Debugger.Break();
             }
             string cur_gesture = _keyboardGestureHelper.GetCurrentGesture();
             if (_downCount == 0 && !string.IsNullOrWhiteSpace(cur_gesture)) {

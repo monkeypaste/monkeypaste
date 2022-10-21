@@ -121,7 +121,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
 
                 case MpAvEditorBindingFunctionType.notifySubSelectionEnabledChanged:
-                    var subSelChangedNtf = MpJsonObject.DeserializeBase64Object<MpQuillSubSelectionChangedNotification>(msgJsonBase64Str);
+                    var subSelChangedNtf = MpJsonObject.DeserializeBase64Object<MpQuillSubSelectionChangedMessageOrNotification>(msgJsonBase64Str);
                     ctvm.IsSubSelectionEnabled = subSelChangedNtf.isSubSelectionEnabled;
                     break;
                 case MpAvEditorBindingFunctionType.notifyDomLoaded:

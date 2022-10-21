@@ -119,17 +119,20 @@ function dropData(docIdx, dt) {
 
 // #region Event Handlers
 function onDragEnter(e) {
+    e.stopPropagation();
+    e.preventDefault();
+
     if (IsDropping) {
         // NOTE called on every element drag enters, only need once
-        return;
+        return false;
     }
     if (ContentItemType != 'Text') {
-        return true;
+        return false;
     }
     if (e.target.id == 'dragOverlay') {
         // this should be able to happen when sub-selection is disabled
         if (IsDragging) {
-            return;
+            return false;
         }
         if (!IsSubSelectionEnabled) {
             enableSubSelection();
@@ -147,20 +150,23 @@ function onDragEnter(e) {
         enableSubSelection();
     }
     onDragEnter_ntf();
+    return false;
 }
 
 function onDragOver(e) {
+    e.stopPropagation();
+    e.preventDefault();
+
     if (!IsDropping) {
         // IsDropping won't be set to true when its dragOverlay ie. can't drop whole tile on itself.
-        return true;
+        log('onDragOver called but not dropping, returning false');
+        return false;
     }
     //if (e.target.id == 'dragOverlay') {
     //    debugger;
     //}
     let emp = getEditorMousePos(e);
 
-    e.stopPropagation();
-    e.preventDefault();
 
     // VALIDATE (EXTERNAL)
 
@@ -273,7 +279,13 @@ function onDrop(e) {
     // stops the browser from redirecting.
     e.stopPropagation();
     e.preventDefault();
+
     // VALIDATE
+
+    if (!IsDropping) {
+        log('onDrop called but not dropping, ignoring and returning false');
+        return false;
+    }
 
     if (isDragCopy() || e.dataTransfer.effectAllowed == 'copy') {
         e.dataTransfer.dropEffect = 'copy';

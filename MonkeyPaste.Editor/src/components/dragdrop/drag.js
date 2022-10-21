@@ -56,12 +56,14 @@ function resetDrag(fromHost = false, wasDragCanceled = false) {
     // NOTE don't know why but selection is reset when drag cancels
     // and document sel change will null this after it restores sel
     DragSelectionRange = null;
+    resetSelection();
     //}
     IsDragging = false
     SelIdxBeforeDrag = -1;
     DocLengthBeforeDrag = -1;
 
     log('drag reset: ' + (fromHost ? "FROM HOST" : "INTERNALLY"));
+    drawOverlay();
 }
 function enableDragOverlay() {
     getDragOverlayElement().classList.remove('drag-overlay-disabled');

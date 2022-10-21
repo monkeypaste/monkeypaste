@@ -23,7 +23,7 @@ function initEditor() {
 
 	initQuill();
 
-	quill.on("selection-change", onEditorSelectionChanged);
+	//quill.on("selection-change", onEditorSelectionChanged);
 	quill.on("text-change", onEditorTextChanged);
 
 	getEditorElement().addEventListener('focus', onEditorFocus);
@@ -35,7 +35,7 @@ function initEditor() {
 
 function getTotalHeight() {
 	var totalHeight =
-		getEditorToolbarHeight() + getEditorHeight() + getTemplateToolbarHeight();
+		getEditorToolbarHeight() + getEditorHeight() + getTemplateToolbarsHeight();
 	return totalHeight;
 }
 
@@ -147,38 +147,14 @@ function hideAllToolbars() {
 	hidePasteTemplateToolbar();
 }
 
-function updateAllSizeAndPositions() {
-	$(".ql-toolbar").css("top", 0);
-
-	if (isEditorToolbarVisible()) {
-		$("#editor").css("top", $(".ql-toolbar").outerHeight());
-	} else {
-		$("#editor").css("top", 0);
-	}
-
-
+function updateEditorSizesAndPositions() {
 	let wh = window.visualViewport.height;
 	let eth = getEditorToolbarHeight();
-	let tth = getTemplateToolbarHeight();
+	let tth = getTemplateToolbarsHeight();
 
-	$("#editor").css("height", wh - eth - tth);
-
-	updateTemplateToolbarSizesAndPositions();
-	drawOverlay();
-
-	if (EnvName == "android") {
-		//var viewportBottom = window.scrollY + window.innerHeight;
-		//let tbh = $(".ql-toolbar").outerHeight();
-		//if (y <= 0) {
-		//    //keyboard is not visible
-		//    $(".ql-toolbar").css("top", y);
-		//    $("#editor").css("top", y + tbh);
-		//} else {
-		//    $(".ql-toolbar").css("top", y - tbh);
-		//    $("#editor").css("top", 0);
-		//}
-		//$("#editor").css("bottom", viewportBottom - tbh);
-	}
+	let eh = wh - eth - tth;
+	getEditorContainerElement().style.top = eth + 'px';
+	getEditorContainerElement().style.height = eh + 'px';
 }
 
 function selectAll() {
@@ -368,9 +344,6 @@ function onEditorBlur(e) {
 
 
 function onEditorSelectionChanged(range, oldRange, source) {
-	if (IsPastingTemplate) {
-		updatePasteTemplateToolbarToSelection();
-	}
 	return;
 	let logRange = range ? range : { index: -1, length: 0 };
 	let logOldRange = oldRange ? oldRange : { oldRange: -1, length: 0 };

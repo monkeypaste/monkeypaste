@@ -11,6 +11,7 @@
     <script type="text/javascript">
         var UseQuill2 = true;
         var UseBetterTable = true;
+
     </script>
 
     <!--<link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">-->
@@ -83,6 +84,11 @@
             //init_test();
             onDomLoaded_ntf();
         });
+
+        window.onbeforeunload = function () {
+            alert('Are you sure you want to leave?');
+            return 'poop';
+        };
     </script>
 
 
@@ -114,8 +120,7 @@
         }
     </script>
 
-    
-    
+
     <script src="src/components/template/types/contacts/contacts.js"></script>
 
     <script src="src/components/template/toolbar/create/createTemplateToolbarItem.js"></script>
@@ -133,7 +138,7 @@
     <script src="src/components/content/content-file-list/content-file-list.js"></script>
     <script src="src/components/content/content-image/content-image.js"></script>
 
-    <script src="src/components/font/font.js"></script>
+    <script src="src/components/font/fontFamilyLookup.js"></script>
     <script src="src/components/font/fontFamily.js"></script>
     <script src="src/components/font/fontSize.js"></script>
 
@@ -149,8 +154,10 @@
     <script src="src/components/selection/fancy-selection/fancy-selection.js"></script>
 
     <script src="src/components/window/window.js"></script>
-    <script src="src/components/window/keyboard.js"></script>
-    <script src="src/components/window/mouse.js"></script>
+
+    <script src="src/components/input/keyboard.js"></script>
+    <script src="src/components/input/mouse.js"></script>
+    <script src="src/components/input/input.js"></script>
 
     <script src="src/components/quill-wrapper/quill-wrapper.js"></script>
     <script src="src/components/quill-wrapper/toolbar/quill-toolbar.js"></script>
@@ -173,7 +180,7 @@
     <!--<button class="ql-script" value="sub"></button>
         <button class="ql-script" value="super"></button>
     </div>-->
-    <div id='editor' draggable="false" tabindex="0">
+    <div id='editor' draggable="false">
     </div>
 
 
@@ -181,19 +188,14 @@
          class="common-template-toolbar edit-template-toolbar bottom-align hidden">
         <div class="resizer resizer-t"></div>
         <div id="templateColorBox"></div>
-        <div>
-            <textarea id="templateNameTextArea"
-                      rows="1"
-                      cols="20"
-                      placeholder="Template Name"></textarea>
-        </div>
-        <div id="templateDetailTextInputContainer">
-            <textarea id="templateDetailTextArea"
-                      rows="1"
-                      cols="20"
-                      placeholder="Enter Details"></textarea>
-
-        </div>
+        <textarea id="templateNameTextArea"
+                  rows="1"
+                  cols="20"
+                  placeholder="Template Name"></textarea>
+        <textarea id="templateDetailTextArea"
+                  rows="1"
+                  cols="20"
+                  placeholder="Enter Details"></textarea>
         <div class="info-marker">
             <i class="fa-solid fa-circle-info"></i>
             <div class="info-tooltip">
@@ -222,16 +224,15 @@
             </div>
         </div>
         
-        <div class="common-template-toolbar-button right-align">
-            <!--<input id="editTemplateDeleteButton" type="button" value="DELETE"/>-->
-            <button id="editTemplateDeleteButton" type="button">DELETE</button>
-        </div>
+        <button id="editTemplateDeleteButton" class="right-align" type="button">
+            <span>DELETE</span>
+        </button>
     </div>
 
     <div id="pasteTemplateToolbar"
          class="common-template-toolbar paste-template-toolbar bottom-align hidden">
         <div class="resizer resizer-t"></div>
-        <!-- SELCTOR -->
+        <!-- SELECTOR -->
         <div id="pasteTemplateToolbarMenuSelectorDiv"
              class="">
             <select id="pasteTemplateToolbarMenuHiddenSelect"
@@ -240,97 +241,52 @@
             </select>
             <div id="selectedPasteTemplateOptionDiv"
                  class="paste-template-option-div">
-                <!--<div class="paste-template-option-icon"></div>-->
                 <i class="paste-template-option-icon"></i>
                 <span class="paste-template-option-label"></span>
             </div>
             <div id="pasteTemplateToolbarMenuSelectorArrowDiv"></div>
         </div>
-        <!-- TEXT AREA-->
-        <div>
-            <textarea id="templatePasteValueTextArea"
-                      rows="1"
-                      cols="20"
-                      tabindex="1"
-                      placeholder="Enter paste text..."></textarea>
-        </div>
+        <!-- PASTE VALUE TEXT AREA-->
+        <textarea id="templatePasteValueTextArea"
+                  rows="1"
+                  cols="20"
+                  tabindex="1"
+                  placeholder="Enter paste text..."></textarea>
         <!-- CLEAR BUTTON -->
-        <div id="clearAllTemplateTextButton"
-             tabindex="2"
-             class="common-template-toolbar-button">
-            <span>CLEAR ALL</span>
-        </div>
+        <button id="clearAllTemplateTextButton"
+                tabindex="2">
+            <i class="fa-solid fa-eraser"></i><span>CLEAR ALL</span>
+        </button>
         <!-- PREV BUTTON -->
-        <div id="previousTemplateButton" tabindex="3" class="common-template-toolbar-button">
-            <span>◄</span>
-        </div>
+        <button id="previousTemplateButton" 
+             tabindex="3">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
         <!-- NEXT BUTTON -->
-        <div id="nextTemplateButton" tabindex="4" class="common-template-toolbar-button">
-            <span>►</span>
-        </div>
+        <button id="nextTemplateButton" 
+             tabindex="4">
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
         <!-- EDIT BUTTON -->
-        <div id="pasteEditFocusTemplateButton" tabindex="5" class="common-template-toolbar-button">
+        <button id="pasteEditFocusTemplateButton" 
+             tabindex="5">
             <i class="fa-solid fa-pen-to-square"></i><span>Edit</span>
-        </div>
+        </button>
         <!-- PASTE BUTTON -->
-        <div id="pasteTemplateButton" tabindex="6"
-             class="common-template-toolbar-button disabled-button right-align">
-            <span>PASTE</span>
-        </div>
+        <button id="pasteTemplateButton"
+                tabindex="6"
+                class="right-align">
+            <i class="fa-solid fa-paste"></i><span>PASTE</span>
+        </button>
     </div>
 
-    <div id="pasteOptionsDiv"
-         class=""></div>
-    <div id="colorPaletteContainer" class="ql-toolbar-template-context-menu"></div>
-
-    <!--<div id="fileListContainer" class="hidden content-file-list-container">
-        <ul class="content-file-list">
-            <li id="fileListRootItem" class="content-file-list-item">
-                <img class="content-file-list-item-icon" src="../../Icons/search.png">-->
-    <!--<a class="content-file-list-item-path-link" href="https://www.youtube.com">-->
-    <!--<span class="content-file-list-item-path-link content-file-list-item-path-text">This is a path 1</span>-->
-    <!--</a>-->
-    <!--<div class="content-file-list-item-button">
-                    <i class="delete-file-item content-file-list-item-button-icon fa-solid fa-circle-minus"></i>
-                </div>
-                <div class="content-file-list-item-button">
-                    <i class="goto-file-item content-file-list-item-button-icon fa-solid fa-square-up-right"></i>
-                </div>
-            </li>
-        </ul>
-    </div>-->
-    <!--<div id="fileListTableDivTemplate" class="quill-better-table-wrapper hidden">
-        <table class="quill-better-table" style="width: 95%;">
-            <colgroup>
-                <col width="15%">
-                <col width="85%">
-            </colgroup>
-            <tbody>
-                <tr data-row="row-ihvp">
-                    <td data-row="row-ihvp" rowspan="1" colspan="1">
-                        <p class="qlbt-cell-line" data-row="row-ihvp" data-cell="cell-ifuf" data-rowspan="1" data-colspan="1">
-                            <br>
-                        </p>
-                     </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>-->
+    <div id="pasteOptionsDiv"></div>
+    <div id="colorPaletteContainer" 
+         class="ql-toolbar-template-context-menu"></div>
 
     <canvas id="overlayCanvas"></canvas>
-
     <div id="dragOverlay"></div>
 
-
-
-
-
-    <!-- COMPONENTS -->
-
-
     <script src="src/components/main/main.js"></script>
-
-
-
 </body>
 </html>

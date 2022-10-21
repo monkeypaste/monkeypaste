@@ -184,7 +184,7 @@ namespace MonkeyPaste.Avalonia {
         public string CommandParameter {
             get {
                 if(Shortcut == null) {
-                    return string.Empty;
+                    return null;
                 }
                 //if(IsCustom()) {
                 //    return Shortcut.CommandId;
@@ -495,11 +495,8 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
         public ICommand PerformShortcutCommand => new MpCommand(
             () => {
-                if (IsCustom()) {
-                    Command?.Execute(CommandParameter);
-                } else {
-                    Command?.Execute(null);
-                }
+
+                Command?.Execute(CommandParameter);
 
                 if (ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset) {
                     //var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(CommandId);

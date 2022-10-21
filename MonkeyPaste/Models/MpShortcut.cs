@@ -887,7 +887,7 @@ namespace MonkeyPaste {
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         //[Column("fk_MpCommandId")]
-        public string CommandParameter { get; set; }
+        public string CommandParameter { get; set; } = null;
 
         public string ShortcutLabel { get; set; } = string.Empty;
         public string KeyString { get; set; } = string.Empty;
@@ -963,7 +963,7 @@ namespace MonkeyPaste {
             string defKeyString = "",
             MpRoutingType routeType = MpRoutingType.Direct,
             MpShortcutType shortcutType = MpShortcutType.None,
-            string commandParameter = "",
+            string commandParameter = null,
             string guid = "") {
             if(shortcutType == MpShortcutType.None) {
                 throw new Exception("Needs type");

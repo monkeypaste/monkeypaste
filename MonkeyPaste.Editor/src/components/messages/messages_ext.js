@@ -33,7 +33,7 @@ function loadContent_ext(loadContentMsgStr_base64) {
 		contentHeight: getContentHeight(),
 		//decodedTemplateGuids: getDecodedTemplateGuids(),
 		//contentLength: getDocLength(),
-		hasTemplates: HasTemplates
+		hasTemplates: hasTemplates()
 	}
 	let resp = toBase64FromJsonObj(respObj);
 	//log('init Response: ');
@@ -42,6 +42,10 @@ function loadContent_ext(loadContentMsgStr_base64) {
 	return resp;
 }
 
+function hostIsSelectedChanged_ext(hostIsSelectedMsgStr_base64) {
+	let msg = toJsonObjFromBase64Str(hostIsSelectedMsgStr_base64);
+	setInputFocusable(msg.isHostSelected);
+}
 function contentRequest_ext(contentReqMsgStr_base64) {
 	// input 'MpQuillContentDataRequestMessage'
 	// output 'MpQuillContentDataResponseMessage' (with 'MpQuillContentDataResponseFormattedDataItemFragment' items)

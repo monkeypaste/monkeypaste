@@ -14,6 +14,7 @@
     <local:MpAvCefNetWebView x:Name="CefNetWebView"
                              local:MpAvCefNetWebViewExtension.IsEnabled="True"
                              local:MpAvCefNetWebViewExtension.IsDevToolsVisible="{Binding IsDevToolsVisible, Mode=TwoWay}"
+                             local:MpAvCefNetWebViewExtension.IsHostSelected="{Binding IsSelected}"
                              local:MpAvCefNetWebViewExtension.IsContentReadOnly="{Binding IsContentReadOnly, Mode=TwoWay}"
                              local:MpAvCefNetWebViewExtension.IsSubSelectionEnabled="{Binding IsSubSelectionEnabled, Mode=TwoWay}"
                              local:MpAvCefNetWebViewExtension.HtmlData="{Binding CopyItemData}"

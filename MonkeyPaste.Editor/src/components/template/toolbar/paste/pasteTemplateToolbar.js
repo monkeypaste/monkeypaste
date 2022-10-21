@@ -1,6 +1,8 @@
 ﻿
 // #region Globals
 
+const PasteToolbarDefaultWidth = 1125.0;
+
 var IsPastingTemplate = false;
 var IsTemplatePasteValueTextAreaFocused = false;
 var IsPasteToolbarLoading = false;
@@ -32,6 +34,10 @@ function initPasteTemplateToolbar() {
 
 function getPasteTemplateToolbarContainerElement() {
     return document.getElementById('pasteTemplateToolbar');
+}
+
+function getPasteTemplateToolbarHeight() {
+    return getPasteTemplateToolbarContainerElement().getBoundingClientRect().height;
 }
 
 function getPasteGotoNextButtonElement() {
@@ -99,6 +105,21 @@ function getPasteTemplateDefs() {
 
 // #region Setters
 
+function setPasteToolbarDefaultFocus() {
+    let pvta_elm = getPasteValueTextAreaElement();
+    let pb_elm = getPasteButtonElement();
+
+    if (isElementDisabled(pvta_elm)) {
+        if (isElementDisabled(pb_elm)) {
+            getEditorElement().focus();
+        } else {
+            pb_elm.focus({ focusVisible: true });
+		}        
+    } else {
+        getPasteValueTextAreaElement().focus({ focusVisible: true });
+    }
+}
+
 function setTemplatePasteValue(tguid, val) {
     var telms = getTemplateElements(tguid);
     for (var i = 0; i < telms.length; i++) {
@@ -163,8 +184,7 @@ function showPasteTemplateToolbar() {
     updatePasteTemplateToolbarToSelection();
 
     PasteTemplateTimerInterval = setInterval(onPasteTemplateTimer, 300, getEditorElement());
-
-    getPasteValueTextAreaElement().focus();
+    setPasteToolbarDefaultFocus();
     IsPasteToolbarLoading = false;
 }
 
@@ -263,20 +283,22 @@ function updatePasteToolbarSizesAndPositions() {
 }
 
 function updatePasteValueTextAreaSize() {
+    // sanity padding to avoid single line y scroll bar
+
     getPasteValueTextAreaElement().style.height = '0px';
 
-    let ptth = getPasteTemplateToolbarContainerElement().getBoundingClientRect().height;
-    let ta_parent = getPasteValueTextAreaElement().parentElement;
+    let ptth = getPasteTemplateToolbarHeight();
+    let pvta_elm = getPasteValueTextAreaElement();
 
     let ta_parent_y_margin =
-        parseFloat(getElementComputedStyleProp(ta_parent, 'margin-top')) +
-        parseFloat(getElementComputedStyleProp(ta_parent, 'margin-bottom'));
+        parseFloat(getElementComputedStyleProp(pvta_elm, 'margin-top')) +
+        parseFloat(getElementComputedStyleProp(pvta_elm, 'margin-bottom'));
 
     let ta_parent_y_padding =
-        parseFloat(getElementComputedStyleProp(ta_parent, 'padding-top')) +
-        parseFloat(getElementComputedStyleProp(ta_parent, 'padding-bottom'));
+        parseFloat(getElementComputedStyleProp(pvta_elm, 'padding-top')) +
+        parseFloat(getElementComputedStyleProp(pvta_elm, 'padding-bottom'));
 
-    let pvta_parent_offset = ta_parent_y_margin + ta_parent_y_padding;
+    let pvta_parent_offset = ta_parent_y_margin;// + ta_parent_y_padding;
 
     let ta_height = ptth - pvta_parent_offset;
     getPasteValueTextAreaElement().style.height = ta_height + 'px';
@@ -414,10 +436,10 @@ function updatePasteElementInteractivity() {
 
     if (can_edit) {
         getPasteEditFocusTemplateButtonElement().classList.remove(template_button_classes);
-        getPasteValueTextAreaElement().parentElement.classList.remove(template_button_classes);
+        getPasteValueTextAreaElement().classList.remove(template_button_classes);
     } else {
         getPasteEditFocusTemplateButtonElement().classList.add(template_button_classes);
-        getPasteValueTextAreaElement().parentElement.classList.add(template_button_classes);
+        getPasteValueTextAreaElement().classList.add(template_button_classes);
 	}
 
     if (can_paste) {
@@ -471,7 +493,9 @@ function onPasteEditFocusTemplateClickOrKeyDown(e) {
 }
 
 function onPasteButtonClickOrKeyDown(e) {
-    //alert(getText(getEditorSelection(true), true));
+    if (!isRunningInHost()) {
+        alert(getText(getEditorSelection(true), true));
+	}    
 
     onPasteTemplateRequest_ntf();
 }

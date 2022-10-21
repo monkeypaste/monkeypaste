@@ -414,6 +414,21 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<MpAvClipTileViewModel> VisibleItems => Items.Where(x => x.IsAnyCornerVisible);
 
+        public Orientation DefaultScrollOrientation {
+            get {
+                if(ListOrientation == Orientation.Horizontal) {
+                    if(IsGridLayout) {
+                        return Orientation.Vertical;
+                    }
+                    return Orientation.Horizontal;
+                }
+                if(IsGridLayout) {
+                    return Orientation.Horizontal;
+                }
+                return Orientation.Vertical;
+            }
+        }
+
         #endregion
 
         #region MpIPagingScrollViewer Implementation
@@ -531,14 +546,23 @@ namespace MonkeyPaste.Avalonia {
         public double ScrollVelocityX { get; set; }
         public double ScrollVelocityY { get; set; }
 
+        public MpPoint ScrollVelocity {
+            get => new MpPoint(ScrollVelocityX, ScrollVelocityY);
+            set {
+                var newVal = value == null ? MpPoint.Zero : value;
+                ScrollVelocityX = newVal.X;
+                ScrollVelocityY = newVal.Y;
+            }
+        }
+
         public bool CanScroll {
             get {
                 //return true;
 
                 if (MpAvMainWindowViewModel.Instance.IsMainWindowOpening ||
                    !MpAvMainWindowViewModel.Instance.IsMainWindowOpen ||
-                    IsRequery ||
-                   IsScrollingIntoView) {
+                    IsRequery/* ||
+                   IsScrollingIntoView*/) {
                     return false;
                 }
 
@@ -1696,8 +1720,7 @@ namespace MonkeyPaste.Avalonia {
 
         public event EventHandler<object> OnFocusRequest;
         public event EventHandler OnUiRefreshRequest;
-        public event EventHandler<object> OnScrollIntoViewRequest;
-        public event EventHandler<double> OnScrollToXRequest;
+        public event EventHandler<object> OnScrollIntoPinTrayViewRequest;
         public event EventHandler OnScrollToHomeRequest;
 
         public event EventHandler<MpCopyItem> OnCopyItemAdd;
@@ -1726,12 +1749,75 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region View Invokers
-        public void RequestScrollToX(double xoffset) {
-            OnScrollToXRequest?.Invoke(this, xoffset);
-        }
 
-        public void RequestScrollIntoView(object obj) {
-            OnScrollIntoViewRequest?.Invoke(this, obj);
+        public void ScrollIntoView(object obj) {
+            var ctvm = obj as MpAvClipTileViewModel;
+            if(ctvm == null) {
+                return;
+            }
+            if (IsScrollingIntoView || IsAnyBusy) {
+                return;
+            }
+            IsScrollingIntoView = true;
+            if (ctvm.IsPinned) {
+                OnScrollIntoPinTrayViewRequest?.Invoke(this, obj);
+                IsScrollingIntoView = false;
+                return;
+            }
+
+            Dispatcher.UIThread.Post(async () => {
+
+                double pad = 0;
+                MpRect svr = new MpRect(0, 0, ClipTrayScreenWidth, ClipTrayScreenHeight);
+                MpRect ctvm_rect = ctvm.ScreenRect;
+
+                MpPoint delta_scroll_offset = new MpPoint();
+                if (DefaultScrollOrientation == Orientation.Horizontal) {
+                    if (ctvm_rect.Left < svr.Left) {
+                        //item is outside on left
+                        delta_scroll_offset.X = ctvm_rect.Left - svr.Left - pad;
+                    } else if (ctvm_rect.Right > svr.Right) {
+                        //item is outside on right
+                        delta_scroll_offset.X = ctvm_rect.Right - svr.Right + pad;
+                    }
+                } else {
+                    if (ctvm_rect.Top < svr.Top) {
+                        //item is outside above
+                        delta_scroll_offset.Y = ctvm_rect.Top - svr.Top - pad;
+                    } else if (ctvm_rect.Bottom > svr.Bottom) {
+                        //item is outside below
+                        delta_scroll_offset.Y = ctvm_rect.Bottom - svr.Bottom + pad;
+                    }
+                }
+
+                var target_offset = ScrollOffset + delta_scroll_offset;
+                //double scroll_damp = 0.25d;
+                ////var delta_step = new MpPoint(
+                ////    delta_scroll_offset.X == 0 ? 0 : delta_scroll_offset.X < 0 ? -MpAvPagingListBoxExtension.MIN_SCROLL_VELOCITY_MAGNITUDE : MpAvPagingListBoxExtension.MIN_SCROLL_VELOCITY_MAGNITUDE,
+                ////    delta_scroll_offset.Y == 0 ? 0 : delta_scroll_offset.Y < 0 ? -MpAvPagingListBoxExtension.MIN_SCROLL_VELOCITY_MAGNITUDE : MpAvPagingListBoxExtension.MIN_SCROLL_VELOCITY_MAGNITUDE);
+
+                //var delta_step = delta_scroll_offset * scroll_damp;
+                //MpConsole.WriteLine($"total scroll delta: {delta_scroll_offset} delta step: {delta_step}");
+                                
+                //double delta_dist = target_offset.Distance(ScrollOffset);
+                //double last_delta_dist = 0;
+                //while (delta_dist > 1) {
+                //    // NOTE continually setting velocity to cancel friction in scroll timer
+
+                //    ScrollVelocity = delta_step;
+                //    last_delta_dist = delta_dist;
+                //    delta_dist = target_offset.Distance(ScrollOffset);
+                //    await Task.Delay(MpAvPagingListBoxExtension.SCROLL_TICK_INTERVAL_MS);
+
+                //    if(delta_dist > last_delta_dist) {
+                //        // avoid tunneling
+                //        break;
+                //    }
+                //}
+                ScrollVelocity = MpPoint.Zero;
+                ForceScrollOffset(target_offset);
+                IsScrollingIntoView = false;
+            });
         }
 
         public void RequestScrollToHome() {
@@ -3085,10 +3171,12 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
                 IsArrowSelecting = false;
             },
-            () => !IsAnyBusy && !IsArrowSelecting &&
+            () => {
+                return !IsAnyBusy && !IsArrowSelecting &&
                   !HasScrollVelocity &&
                   !IsScrollingIntoView &&
-                  (SelectedItem == null || (SelectedItem != null && !SelectedItem.IsPinned)));
+                  (SelectedItem == null || (SelectedItem != null && !SelectedItem.IsPinned));
+            });
 
         public ICommand SelectPreviousItemCommand => new MpCommand(
             async () => {
@@ -3142,8 +3230,10 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
                 IsArrowSelecting = false;
             },
-            () => !IsAnyBusy && !HasScrollVelocity && !IsScrollingIntoView && !IsArrowSelecting &&
-            (SelectedItem == null || (SelectedItem != null && !SelectedItem.IsPinned)));
+            () => {
+                return !IsAnyBusy && !HasScrollVelocity && !IsScrollingIntoView && !IsArrowSelecting &&
+                        (SelectedItem == null || (SelectedItem != null && !SelectedItem.IsPinned));
+            });
 
         public ICommand SelectAllCommand => new MpCommand(
             () => {

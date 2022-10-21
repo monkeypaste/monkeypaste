@@ -709,7 +709,7 @@ namespace MonkeyPaste {
                 // ORDER:
                 // guid,keyString,shortcutType,routeType
                  new string[] {"5dff238e-770e-4665-93f5-419e48326f01","Control+Shift+D", "ShowMainWindow", "Direct"},
-                 new string[] {"cb807500-9121-4e41-80d3-8c3682ce90d9","Escape", "HideMainWindow", "Internal"},
+                 new string[] {"cb807500-9121-4e41-80d3-8c3682ce90d9","Escape", "HideMainWindow", "Internal","ShortcutKey"},
                  new string[] {"a41aeed8-d4f3-47de-86c5-f9ca296fb103","Control+Shift+A", "ToggleAppendMode", "Direct"},
                  new string[] {"892bf7d7-ba8e-4db1-b2ca-62b41ff6614c","Control+Shift+C", "ToggleAutoCopyMode", "Direct"},
                  new string[] {"a12c4211-ab1f-4b97-98ff-fbeb514e9a1c","Control+Shift+R", "ToggleRightClickPasteMode", "Direct"},
@@ -755,7 +755,8 @@ namespace MonkeyPaste {
                     guid: defaultShortcut[0],
                     keyString: defaultShortcut[1],
                     shortcutType: defaultShortcut[2].ToEnum<MpShortcutType>(),
-                    routeType: defaultShortcut[3].ToEnum<MpRoutingType>());
+                    routeType: defaultShortcut[3].ToEnum<MpRoutingType>(),
+                    commandParameter: defaultShortcut.Length <= 4 ? null : defaultShortcut[4]);
             }
         }
 

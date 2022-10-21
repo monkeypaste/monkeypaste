@@ -52,9 +52,12 @@
     <Content Include="src\components\dragdrop\editorscroll.js" />
     <Content Include="src\components\editor\editor-style.css" />
     <Content Include="src\components\editor\editor.js" />
-    <Content Include="src\components\font\font.js" />
+    <Content Include="src\components\font\fontFamilyLookup.js" />
     <Content Include="src\components\font\fontFamily.js" />
     <Content Include="src\components\font\fontSize.js" />
+    <Content Include="src\components\input\input.js" />
+    <Content Include="src\components\input\keyboard.js" />
+    <Content Include="src\components\input\mouse.js" />
     <Content Include="src\components\main\main-style.css" />
     <Content Include="src\components\main\main.js" />
     <Content Include="src\components\messages\messages_core.js" />
@@ -93,8 +96,6 @@
     <Content Include="src\components\util\helpers.js" />
     <Content Include="src\components\util\math.js" />
     <Content Include="src\components\util\resize.js" />
-    <Content Include="src\components\window\keyboard.js" />
-    <Content Include="src\components\window\mouse.js" />
     <Content Include="src\components\window\window.js" />
     <Content Include="webpack.config.js" />
   </ItemGroup>
@@ -113,6 +114,7 @@
     <Folder Include="src\components\main\" />
     <Folder Include="src\components\messages\" />
     <Folder Include="src\components\color\" />
+    <Folder Include="src\components\input\" />
     <Folder Include="src\components\overlay\" />
     <Folder Include="src\components\quill-wrapper\" />
     <Folder Include="src\components\quill-wrapper\toolbar\" />

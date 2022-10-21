@@ -1,14 +1,12 @@
-﻿const DefaultFontSizes = ['8px', '9px', '10px', '12px', '14px', '16px', '20px', '24px', '32px', '42px', '54px', '68px', '84px', '98px'];
+﻿// #region Globals
+const DefaultFontSizes = ['8px', '9px', '10px', '12px', '14px', '16px', '20px', '24px', '32px', '42px', '54px', '68px', '84px', '98px'];
 var DefaultFontSize = '12px'
 var IsFontSizePickerOpen = false;
 var StoredEditorSel = null;
 
-function addFontSizesToQuillContainerOptions(container) {
-    let sizes = registerFontSizes();
-    container.unshift([{ size: sizes }]);
-    return container;
-}
+// #endregion Globals
 
+// #region Life Cycle
 
 function registerFontSizes() {
     var size = Quill.import('attributors/style/size');
@@ -17,6 +15,29 @@ function registerFontSizes() {
 
     return DefaultFontSizes;
 }
+// #endregion Life Cycle
+
+// #region Getters
+
+function getFontPickerToolbarContainerElement() {
+    return document.getElementsByClassName('ql-size ql-picker')[0];
+}
+function getFontPickerOptionsContainerElement() {
+    // should only be accessed when toolbar is opened
+
+    return getFontPickerToolbarContainerElement().getElementsByClassName('ql-picker-options')[0];
+}
+// #endregion Getters
+
+// #region Setters
+
+// #endregion Setters
+
+// #region State
+
+// #endregion State
+
+// #region Actions
 
 function refreshFontSizePicker(forcedSize = null, sel = null) {
     if (IsFontSizePickerOpen) {
@@ -28,7 +49,7 @@ function refreshFontSizePicker(forcedSize = null, sel = null) {
     if (curFontSize == null) {
         let curFormat = quill.getFormat(sel);
         curFontSize = curFormat != null && curFormat.hasOwnProperty('size') && curFormat.size.length > 0 ? parseInt(curFormat.size) + 'px' : DefaultFontSize;
-	}
+    }
     let fontSizeFound = false;
 
     let font_picker_elm = document.getElementsByClassName('ql-size ql-picker')[0];
@@ -54,29 +75,13 @@ function refreshFontSizePicker(forcedSize = null, sel = null) {
     }
 
 }
+// #endregion Actions
 
-function getFontPickerToolbarContainerElement() {
-    return document.getElementsByClassName('ql-size ql-picker')[0];
-}
-function getFontPickerOptionsContainerElement() {
-    // should only be accessed when toolbar is opened
+// #region Event Handlers
 
-    return getFontPickerToolbarContainerElement().getElementsByClassName('ql-picker-options')[0];
-}
+// #endregion Event Handlers
 
-function onToolbarContainerClick(e) {
-    IsFontSizePickerOpen = true;
-    StoredEditorSel = getEditorSelection();
-    getFontPickerOptionsContainerElement().addEventListener('click', onFontSizeOptionClick);
-}
 
-function onFontSizeOptionClick(e) {
-    quill.focus();
-    setEditorSelection(StoredEditorSel.index, StoredEditorSel.length,'api');
-    StoredEditorSel = null;
-    IsFontSizePickerOpen = false;
-    let sel_font_size = e.target.getAttribute('data-value');
-    refreshFontSizePicker(sel_font_size);
-    getFontPickerOptionsContainerElement().removeEventListener('click', onFontSizeOptionClick);
-    return;
-}
+
+
+

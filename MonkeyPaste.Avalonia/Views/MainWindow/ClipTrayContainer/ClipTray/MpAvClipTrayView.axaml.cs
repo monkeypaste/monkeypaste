@@ -26,6 +26,7 @@ namespace MonkeyPaste.Avalonia {
 
             sv = this.FindControl<ScrollViewer>("ClipTrayScrollViewer");            
             lb = this.FindControl<ListBox>("ClipTrayListBox");
+
             var lb_sv = lb.GetVisualDescendant<ScrollViewer>();
             Dispatcher.UIThread.Post(async () => {
                 while(lb_sv == null) {

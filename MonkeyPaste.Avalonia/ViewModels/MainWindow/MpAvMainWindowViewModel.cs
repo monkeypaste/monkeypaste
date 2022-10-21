@@ -834,8 +834,8 @@ namespace MonkeyPaste.Avalonia {
                 return canShow;
             });
 
-        public ICommand HideWindowCommand => new MpAsyncCommand(
-            async() => {
+        public ICommand HideWindowCommand => new MpAsyncCommand<object>(
+            async(args) => {
                 MpConsole.WriteLine("Closing Main WIndow");
 
                 if (!Dispatcher.UIThread.CheckAccess()) {
@@ -870,7 +870,8 @@ namespace MonkeyPaste.Avalonia {
                 }
                 FinishMainWindowHide(active_pinfo);
             },
-            () => {
+            (args) => {
+                bool fromShorcutKey = args != null;
 
                 bool canHide = 
                         !IsMainWindowLocked &&
@@ -883,9 +884,20 @@ namespace MonkeyPaste.Avalonia {
                           //!IsMainWindowOpening &&
                           !IsResizing &&
                           !IsMainWindowClosing;
+
+                if(canHide && fromShorcutKey) {
+                    var sctvm = MpAvClipTrayViewModel.Instance.SelectedItem;
+                    if (sctvm != null && (
+                            sctvm.IsSubSelectionEnabled ||
+                            !sctvm.IsContentAndTitleReadOnly)) {
+                        // escape is at a higher focus level than main window so ignore 
+                        canHide = false;
+                    }
+                }
                 if(!canHide) {
                     MpConsole.WriteLine("");
                     MpConsole.WriteLine($"Cannot hide main window:");
+                    MpConsole.WriteLine($"fromShortcutKey: {(fromShorcutKey)}");
                     MpConsole.WriteLine($"IsMainWindowLocked: {(IsMainWindowLocked)}");
                     MpConsole.WriteLine($"IsMainWindowInitiallyOpening: {(IsMainWindowInitiallyOpening)}");
                     MpConsole.WriteLine($"IsAnyDropDownOpen: {(IsAnyDropDownOpen)}");

@@ -48,9 +48,13 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
+            // NOTE Reasons for failures:
+            // 1. I think this happens from drag/drop using fileItem and redirecting to file 
+            // what else?
             MpConsole.WriteLine($"retry count exceeded for '{script}' w/ key:'{evalKey}' attempts#:{attempt}");
 
             if (wv.DataContext is MpAvClipTileViewModel ctvm) {
+
                 MpConsole.WriteLine($"Attempting reload of item: {ctvm.CopyItemTitle}");
                 var stateMsg = MpAvCefNetWebViewExtension.GetEditorStateFromClipTile(ctvm);
                 if(wv.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv) {

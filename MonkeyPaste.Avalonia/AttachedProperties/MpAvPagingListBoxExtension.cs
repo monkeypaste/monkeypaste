@@ -22,6 +22,13 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Constants
+
+        public const int SCROLL_TICK_INTERVAL_MS = 20;
+        public const double MIN_SCROLL_VELOCITY_MAGNITUDE = 0.1d;
+
+        #endregion
+
         #region Constructors
 
         static MpAvPagingListBoxExtension() {
@@ -451,7 +458,7 @@ namespace MonkeyPaste.Avalonia {
 
                 var timer = new DispatcherTimer(DispatcherPriority.Normal);
                 timer.Tag = lb;
-                timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
+                timer.Interval = new TimeSpan(0, 0, 0, 0, SCROLL_TICK_INTERVAL_MS);
                 timer.Tick += HandleWorldTimerTick;
 
                 timer.Start();
@@ -552,8 +559,7 @@ namespace MonkeyPaste.Avalonia {
                 SetVelocityY(lb, vy);
             }
         }
-
-        
+                
         private static void ScrollViewerPointerPressedHandler(object s, PointerPressedEventArgs e) {
             //BUG not sure why but track and thumb don't have tag set here after orientation changes
             var sv = s as ScrollViewer;
@@ -678,8 +684,8 @@ namespace MonkeyPaste.Avalonia {
                     vy = 0;
                 }
 
-                vx = Math.Abs(vx) < 0.1d ? 0 : vx;
-                vy = Math.Abs(vy) < 0.1d ? 0 : vy;
+                //vx = Math.Abs(vx) < MIN_SCROLL_VELOCITY_MAGNITUDE ? 0 : vx;
+                //vy = Math.Abs(vy) < MIN_SCROLL_VELOCITY_MAGNITUDE ? 0 : vy;
 
                 scrollOffsetX += vx;
                 scrollOffsetY += vy;
@@ -763,8 +769,6 @@ namespace MonkeyPaste.Avalonia {
             }
             return false;
         }
-
-
         private static void AdjustThumbTransform(Track track, Point track_mp, bool isThumbPress) {
             var attached_control = track.Tag as AvaloniaObject;
 
@@ -798,6 +802,11 @@ namespace MonkeyPaste.Avalonia {
                 } 
             }
         }
+
+        #endregion
+
+        #region Public Methods
+
         #endregion
     }
 

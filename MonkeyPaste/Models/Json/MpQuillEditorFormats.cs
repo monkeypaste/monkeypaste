@@ -164,6 +164,10 @@ templateType: "dynamic"
         public bool isPlainText { get; set; }
     }
 
+    public class MpQuillIsHostSelectedChangedMessage : MpJsonObject {
+        public bool isHostSelected { get; set; }
+    }
+
     public class MpQuillGetEncodedRangeDataResponseMessage : MpJsonObject {
         public string encodedRangeData { get; set; }
     }
@@ -172,8 +176,9 @@ templateType: "dynamic"
         public string base64ImgStr { get; set; }
     }
 
-    public class MpQuillSubSelectionChangedNotification : MpJsonObject {
+    public class MpQuillSubSelectionChangedMessageOrNotification : MpJsonObject {
         public bool isSubSelectionEnabled { get; set; }
+        public double editorWidth { get; set; }
     }
 
 

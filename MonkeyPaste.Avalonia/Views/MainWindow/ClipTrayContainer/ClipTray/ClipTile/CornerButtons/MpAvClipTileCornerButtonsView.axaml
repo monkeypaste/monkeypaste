@@ -64,9 +64,9 @@
         <!--  Detail View  -->
         <local:MpAvClipTileDetailView Grid.Row="2"
                                       Height="20"
+                                      IsVisible="{Binding !IsSubSelectionEnabled}"
                                       HorizontalAlignment="Stretch"
-                                      VerticalAlignment="Bottom"
-                                      DataContext="{Binding}" />
+                                      VerticalAlignment="Bottom" />
 
 
         <!--  Hotkey Button  -->

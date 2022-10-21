@@ -27,7 +27,12 @@ namespace MonkeyPaste.Avalonia {
 
             InitializeComponent();
 
-            //this.DataContextChanged += MpAvClipTrayContainerView_DataContextChanged;
+            if(BindingContext == null) {
+                this.DataContextChanged += MpAvClipTrayContainerView_DataContextChanged;
+            } else {
+                MpAvClipTrayContainerView_DataContextChanged(null, null);
+            }
+            
             var gs = this.FindControl<GridSplitter>("ClipTraySplitter");
             //gs.GetObservable(GridSplitter.IsEnabledProperty).Subscribe(value => GridSplitter_IsEnabledChanged(gs, value));
             //gs.AddHandler(GridSplitter.PointerPressedEvent, Gs_PointerPressed, RoutingStrategies.Tunnel);
@@ -40,7 +45,27 @@ namespace MonkeyPaste.Avalonia {
             if(BindingContext == null) {
                 return;
             }
-            BindingContext.PropertyChanged += BindingContext_PropertyChanged;
+            //BindingContext.PropertyChanged += BindingContext_PropertyChanged;
+            BindingContext.OnScrollIntoPinTrayViewRequest += BindingContext_OnScrollIntoPinTrayViewRequest;
+        }
+
+        private void BindingContext_OnScrollIntoPinTrayViewRequest(object sender, object e) {
+            var ctvm = e as MpAvClipTileViewModel;
+            if(ctvm == null) {
+                return;
+            }
+            if(ctvm.IsPinned) {
+                var ptr_lb = this.GetVisualDescendant<MpAvPinTrayView>().GetVisualDescendant<ListBox>();
+                int ctvm_pin_idx = BindingContext.PinnedItems.IndexOf(ctvm);
+                var ptr_ctvm_lbi = ptr_lb.ItemContainerGenerator.ContainerFromIndex(ctvm_pin_idx);
+                ptr_ctvm_lbi?.BringIntoView();
+                return;
+            }
+            
+            //var ctr_lb = this.GetVisualDescendant<MpAvPinTrayView>().GetVisualDescendant<ListBox>();
+            //var ctr_ctvm_lbi = ctr_lb.ItemContainerGenerator.ContainerFromIndex(ctvm.ItemIdx);
+            //ctr_ctvm_lbi?.BringIntoView();
+            return;
         }
 
         private void BindingContext_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

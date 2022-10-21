@@ -23,6 +23,7 @@ namespace MonkeyPaste.Avalonia {
         MpISelectableViewModel,
         MpISelectorItemViewModel,
         MpIShortcutCommandViewModel,
+        MpIScrollIntoView,
         MpIUserColorViewModel,
         MpIHoverableViewModel,
         MpIResizableViewModel,
@@ -69,8 +70,18 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-       
 
+
+        #region MpIScrollIntoView Implementation
+
+        void MpIScrollIntoView.ScrollIntoView() {
+            if(Parent == null) {
+                return;
+            }
+            Parent.ScrollIntoView(this);
+        }
+
+        #endregion
         //#region MpISelectorItemViewModel<MpAvClipTileViewModel> Implementation
         //MpISelectorViewModel<MpAvClipTileViewModel> MpISelectorItemViewModel<MpAvClipTileViewModel>.Selector => Parent;
 
@@ -2164,7 +2175,7 @@ namespace MonkeyPaste.Avalonia {
                             Parent.SelectedItem = this;
                         }
 
-                        Parent.RequestScrollIntoView(this);
+                        Parent.ScrollIntoView(this);
                         //if (!IsTitleFocused && !Parent.IsPasting) {
                         //    // NOTE checking Parent.IsPasting because setting focus will clear current selection
                         //    IsContentFocused = true;

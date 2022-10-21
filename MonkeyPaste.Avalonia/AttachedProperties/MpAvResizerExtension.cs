@@ -363,6 +363,7 @@ namespace MonkeyPaste.Avalonia {
 
         public static void ResizeByDelta(Control control, double dx, double dy, bool isFromUser = true) {
             if (Math.Abs(dx) + Math.Abs(dy) < 0.1) {
+                control.BringIntoView();
                 return;
             }
             if (isFromUser) {
@@ -429,6 +430,12 @@ namespace MonkeyPaste.Avalonia {
                 double fdw = nw - fw;
                 double fdh = nh - fh;
                 ResizeByDelta(control, fdw, fdh, false);
+                if(control.DataContext is MpIScrollIntoView scv) {
+                    scv.ScrollIntoView();
+                } else {
+                    control.BringIntoView();
+                }
+                
             });
         }
         #endregion

@@ -25,17 +25,11 @@ function initQuill() {
 		"#editor",
 		quillOptions);
 
-	getEditorToolbarElement().classList.add('hidden');
+	initEditorToolbar();
 
-	initTable();
-
-	initFontFamilyPicker();
 	quill.root.setAttribute("spellcheck", "false");
 
-	getEditorContainerElement().firstChild.id = 'quill-editor';
 
-	initLinkToolbarButton();
-	initTemplateToolbarButton();
 	initEditTemplateToolbar();
 	initPasteTemplateToolbar();
 }

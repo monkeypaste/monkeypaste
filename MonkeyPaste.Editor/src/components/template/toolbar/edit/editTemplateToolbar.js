@@ -30,6 +30,10 @@ function getEditTemplateToolbarContainerElement() {
     return document.getElementById('editTemplateToolbar');
 }
 
+function getEditTemplateToolbarHeight() {
+    return getEditTemplateToolbarContainerElement().getBoundingClientRect().height;
+}
+
 function getEditTemplateColorBoxElement() {
     return document.getElementById('templateColorBox');
 }
@@ -86,12 +90,13 @@ function createEditTemplateToolbarForTemplate(t) {
     log('Editing Template: ' + t.templateGuid + " selected type: " + t.templateType);
     let ttype = t.templateType.toLowerCase();
     if (ttype == 'dynamic') {
-        document.getElementById('templateDetailTextInputContainer').classList.add('hidden');
         getEditTemplateToolbarContainerElement().classList.remove('template-with-detail-layout');
+
+        getEditTemplateDetailTextAreaElement().classList.add('hidden');
     } else {
-        document.getElementById('templateDetailTextInputContainer').classList.remove('hidden');
         getEditTemplateToolbarContainerElement().classList.add('template-with-detail-layout');
 
+        getEditTemplateDetailTextAreaElement().classList.remove('hidden');
         getEditTemplateDetailTextAreaElement().value = t.templateData;
         getEditTemplateDetailTextAreaElement().addEventListener('input', onTemplateDetailChanged);
     }

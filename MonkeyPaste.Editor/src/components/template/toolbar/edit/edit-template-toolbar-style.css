@@ -19,18 +19,10 @@
         border-color: dimgray;
     }
 
-/*div:has( > #templateDetailTextArea) {
-    width: 30%;
-}
-
-div:has( > #templateNameTextArea) {
-    width: 45%;
-}*/
-
-.edit-template-toolbar.template-with-detail-layout > div:has( > #templateNameTextArea) {
+.edit-template-toolbar.template-with-detail-layout > #templateNameTextArea {
     width: 45%;
 }
-.edit-template-toolbar:not(.template-with-detail-layout) > div:has( > #templateNameTextArea) {
+.edit-template-toolbar:not(.template-with-detail-layout) > #templateNameTextArea {
     width: 75%;
 }
 .edit-template-toolbar.template-with-detail-layout > .info-marker {
@@ -40,11 +32,11 @@ div:has( > #templateNameTextArea) {
     display: none;
 }
 
-.edit-template-toolbar.template-with-detail-layout > div:has( > #templateDetailTextArea) {
+.edit-template-toolbar.template-with-detail-layout > #templateDetailTextArea {
     width: 30%;
 }
 
-.edit-template-toolbar:not(.template-with-detail-layout) > div:has( > #templateDetailTextArea) {
+.edit-template-toolbar:not(.template-with-detail-layout) > #templateDetailTextArea {
     width: 0;
 }
 
@@ -52,28 +44,9 @@ div:has( > #templateNameTextArea) {
     background-color: salmon;
     color: white;
     font-weight: bold;
-    padding: 5px 10px;
-    cursor: pointer;
 }
 
     #editTemplateDeleteButton:hover {
         background-color: red;
-    }
-/*#templateDetailTextInputContainer {
-    right: 140px;
-    font-family: Arial;
-    min-width: 160px;
-}*/
-
-.edit-template-type-select-container {
-    margin-top: 11px;
-    margin-right: 12px;
-    vertical-align: middle;
-    font-family: Arial;
-    min-width: 160px;
-}
-
-    .edit-template-type-select-container select {
-        padding: 3px;
     }
 

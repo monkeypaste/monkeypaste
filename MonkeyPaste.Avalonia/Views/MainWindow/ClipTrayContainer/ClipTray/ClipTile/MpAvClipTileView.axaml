@@ -76,17 +76,10 @@
             <!--  Corner Button Overlay  -->
             <local:MpAvClipTileCornerButtonsView Grid.Row="0"
                                                  Grid.RowSpan="2"
+                                                 IsVisible="{Binding IsHovering}"
                                                  HorizontalAlignment="Stretch"
                                                  VerticalAlignment="Stretch"
-                                                 DataContext="{Binding}">
-                <local:MpAvClipTileCornerButtonsView.IsVisible>
-                    <MultiBinding Converter="{StaticResource MultiBoolConverter}"
-                                  ConverterParameter="AND">
-                        <Binding Path="IsHovering" />
-                        <Binding Path="!IsSubSelectionEnabled" />
-                    </MultiBinding>
-                </local:MpAvClipTileCornerButtonsView.IsVisible>
-            </local:MpAvClipTileCornerButtonsView>
+                                                 DataContext="{Binding}"/>
 
             <Border x:Name="ClipTileResizeBorder"
                     Grid.Row="0"

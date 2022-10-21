@@ -25,6 +25,7 @@ function initSelection() {
 
 function resetSelection() {
 	LastSelRange = null;
+	SelectionOnMouseDown = null;
 	BlurredSelectionRects = null;
 }
 
@@ -237,7 +238,13 @@ function coerceCleanSelection() {
 			LastSelRange = cur_sel_range;
 			refreshFontSizePicker(null, cur_sel_range);
 			refreshFontFamilyPicker(null, cur_sel_range);
-			//updateTemplatesAfterSelectionChange(cur_sel_range, oldRange);
+			if (hasTemplates()) {
+				if (isShowingPasteTemplateToolbar()) {
+					updatePasteTemplateToolbarToSelection();
+				}
+				updateTemplatesAfterSelectionChange(cur_sel_range, oldRange);
+			}
+			
 			onEditorSelectionChanged_ntf(cur_sel_range);
 			LastSelRange = cur_sel_range;
 		}

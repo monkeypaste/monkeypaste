@@ -36,6 +36,9 @@ function initKeyboard() {
 }
 
 function handleWindowKeyDown(e) {
+	if (!isWindowFocused()) {
+		return;
+	}
 	let suppresKeyDown = true;
 	updateModKeys(e);
 
@@ -74,6 +77,9 @@ function handleWindowKeyDown(e) {
 }
 
 function handleWindowKeyUp(e) {
+	if (!isWindowFocused()) {
+		return;
+	}
 	updateModKeys(e);
 
 	if (e.code == DecreaseFocusLevelKey) {
@@ -97,6 +103,9 @@ function handleWindowKeyUp(e) {
 					return;
 				}
 				disableSubSelection();
+
+				e.stopPropagation();
+				e.preventDefault();
 				return;
 			}
 			if (quill.hasFocus()) {

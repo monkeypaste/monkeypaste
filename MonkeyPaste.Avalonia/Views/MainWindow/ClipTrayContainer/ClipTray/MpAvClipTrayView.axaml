@@ -30,6 +30,7 @@
                           Height="{Binding ClipTrayScreenHeight}">
                 <ListBox x:Name="ClipTrayListBox"
                          BorderThickness="0"
+                         AutoScrollToSelectedItem="False"
                          SelectedItem="{Binding SelectedClipTrayItem, Mode=TwoWay}"
                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                          ScrollViewer.VerticalScrollBarVisibility="Hidden"

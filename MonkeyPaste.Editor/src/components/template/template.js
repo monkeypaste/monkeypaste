@@ -12,59 +12,11 @@ var IsMovingTemplate = false;
 
 var IsTemplateAtInsert = false;
 
-var HasTemplates = false;
-
 var IsAnyTemplateBgTemporary = false;
 var DragAnchorDocIdxWhenTemplateWithinSelection = -1;
 
 // #region Life Cycle
 
-function loadTemplates(isPasteRequest) {
-    loadEditTemplateToolbar();
-
-    let telml = getTemplateElements();
-    HasTemplates = telml.length > 0;
-
-    if (isPasteRequest && HasTemplates) {
-        IsPastingTemplate = true;
-    }
-
-    for (var i = 0; i < telml.length; i++) {
-        let t_elm = telml[i];
-        //resetTemplateElement(t_elm);
-        let t = getTemplateFromDomNode(t_elm);
-        applyTemplateToDomNode(t_elm, t);
-    }
-
-    if (HasTemplates) {
-        // since data is already set, manually trigger template update (for list item bug)
-        updateTemplatesAfterTextChanged();
-	}
-    
-    if (IsPastingTemplate) {
-        if (isAnyTemplateRequireInput()) {
-            showPasteTemplateToolbar();
-        } else {
-            finishTemplatePaste();
-		}
-        
-	}
-}
-
-function resetTemplateElement(telm) {
-    let ti = getTemplateFromDomNode(telm);
-    ti.templateText = '';
-    ti.isFocus = false;
-    ti.wasVisited = false;
-    applyTemplateToDomNode(telm, ti);
-}
-
-function resetTemplates() {
-    var telms = getTemplateElements();
-    for (var i = 0; i < telms.length; i++) {
-        resetTemplateElement(telms[i]);
-    }
-}
 
 //#endregion Life Cycle
 
@@ -383,18 +335,6 @@ function getAllTemplateDocIdxs() {
     return tDocIdxs;
 }
 
-function getTemplateToolbarHeight() {
-    if (!isShowingEditTemplateToolbar() && !isShowingPasteTemplateToolbar()) {
-        return 0;
-    }
-    if (isShowingEditTemplateToolbar()) {
-        return parseInt($("#editTemplateToolbar").outerHeight());
-    } else if (isShowingPasteTemplateToolbar()) {
-        return parseInt($("#pasteTemplateToolbar").outerHeight());
-    }
-    return 0;
-}
-
 function getTemplateEmbedStr(t, sToken = ENCODED_TEMPLATE_OPEN_TOKEN, eToken = ENCODED_TEMPLATE_CLOSE_TOKEN) {
     var result = sToken + t.domNode.getAttribute('templateGuid') + eToken;
     return result;
@@ -467,6 +407,11 @@ function setTemplateNavState(t_elm, navStateClass) {
 // #endregion Setters
 
 // #region State
+
+function hasTemplates() {
+    let telml = getTemplateElements();
+    return telml.length > 0;
+}
 
 function isTemplateElementFocused(telm) {
     if (!telm) {
@@ -562,6 +507,51 @@ function isTemplateAnInputType(t) {
 // #endregion State
 
 // #region Actions
+
+function loadTemplates(isPasteRequest) {
+    loadEditTemplateToolbar();
+
+    if (isPasteRequest && hasTemplates()) {
+        IsPastingTemplate = true;
+    }
+
+    let telml = getTemplateElements();
+    for (var i = 0; i < telml.length; i++) {
+        let t_elm = telml[i];
+        //resetTemplateElement(t_elm);
+        let t = getTemplateFromDomNode(t_elm);
+        applyTemplateToDomNode(t_elm, t);
+    }
+
+    if (hasTemplates()) {
+        // since data is already set, manually trigger template update (for list item bug)
+        updateTemplatesAfterTextChanged();
+    }
+
+    if (IsPastingTemplate) {
+        if (isAnyTemplateRequireInput()) {
+            showPasteTemplateToolbar();
+        } else {
+            finishTemplatePaste();
+        }
+
+    }
+}
+
+function resetTemplateElement(telm) {
+    let ti = getTemplateFromDomNode(telm);
+    ti.templateText = '';
+    ti.isFocus = false;
+    ti.wasVisited = false;
+    applyTemplateToDomNode(telm, ti);
+}
+
+function resetTemplates() {
+    var telms = getTemplateElements();
+    for (var i = 0; i < telms.length; i++) {
+        resetTemplateElement(telms[i]);
+    }
+}
 
 function finishTemplatePaste() {
 
