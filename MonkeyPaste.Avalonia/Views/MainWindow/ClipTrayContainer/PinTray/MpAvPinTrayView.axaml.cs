@@ -24,6 +24,12 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Statics
+
+        public static MpAvPinTrayView Instance { get; private set; }
+
+        #endregion
+
 
         #region Drop
 
@@ -283,12 +289,34 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         public MpAvPinTrayView() {
+            if (Instance != null) {
+                // ensure singleton
+                Debugger.Break();
+                return;
+            }
+            Instance = this;
+
             InitializeComponent();
 
             PinTrayListBox = this.FindControl<ListBox>("PinTrayListBox");
             PinTrayListBox.AttachedToVisualTree += PinTrayListBox_AttachedToVisualTree;
             PinTrayListBox.ItemContainerGenerator.Materialized += ItemContainerGenerator_Materialized;
             PinTrayListBox.ItemContainerGenerator.Dematerialized += ItemContainerGenerator_Dematerialized;
+            PinTrayListBox.GotFocus += PinTrayListBox_GotFocus;
+        }
+
+        private void PinTrayListBox_GotFocus(object sender, GotFocusEventArgs e) {
+            if(BindingContext.IsPinTrayEmpty) {
+                return;
+            }
+            if(e.NavigationMethod == NavigationMethod.Tab) {
+                if(e.KeyModifiers.HasFlag(KeyModifiers.Shift)) {
+                    // shift tab from clip tray select last
+                    BindingContext.SelectedItem = BindingContext.PinnedItems.Last();
+                } else {
+                    BindingContext.SelectedItem = BindingContext.PinnedItems.First();
+                }
+            }
         }
 
         private void ItemContainerGenerator_Dematerialized(object sender, ItemContainerEventArgs e) {

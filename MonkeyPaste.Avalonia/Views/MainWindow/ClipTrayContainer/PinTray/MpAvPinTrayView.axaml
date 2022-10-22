@@ -18,6 +18,9 @@
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
         <ListBox x:Name="PinTrayListBox"
+                 Focusable="True"
+                 TabIndex="1"
+                 IsTabStop="True"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ScrollViewer.VerticalScrollBarVisibility="Visible"
                  HorizontalAlignment="Stretch"
@@ -35,6 +38,8 @@
                 <DataTemplate>
                     <!--<ListBoxItem Classes.TileHover="{Binding IsHovering}">-->
                     <local:MpAvClipTileView DataContext="{Binding}"
+                                            local:MpAvListBoxItemBoundsObserverExtension.IsEnabled="True"
+                                            local:MpAvListBoxItemBoundsObserverExtension.ObservedBounds="{Binding ObservedBounds, Mode=TwoWay}"
                                             IsVisible="{Binding IsPinned}" />
                     <!--</ListBoxItem>-->
                 </DataTemplate>

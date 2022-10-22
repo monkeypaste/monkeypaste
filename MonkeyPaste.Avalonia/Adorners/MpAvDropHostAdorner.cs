@@ -42,7 +42,7 @@ namespace MonkeyPaste.Avalonia {
 
         public void DrawDropAdorner(MpShape[] dropShapes) {
             _dropShapes = dropShapes; 
-            //IsVisible = _isAdornerVisible;
+            //IsTileOnScreen = _isAdornerVisible;
             this.InvalidateVisual();
         }
         #endregion

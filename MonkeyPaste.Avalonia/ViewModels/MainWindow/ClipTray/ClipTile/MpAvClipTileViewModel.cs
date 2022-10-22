@@ -48,7 +48,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region Properties
 
         #region MpIHoverableViewModel Implementation
@@ -70,8 +69,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
-
         #region MpIScrollIntoView Implementation
 
         void MpIScrollIntoView.ScrollIntoView() {
@@ -82,6 +79,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
+
         //#region MpISelectorItemViewModel<MpAvClipTileViewModel> Implementation
         //MpISelectorViewModel<MpAvClipTileViewModel> MpISelectorItemViewModel<MpAvClipTileViewModel>.Selector => Parent;
 
@@ -236,6 +234,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
+        public MpRect ObservedBounds { get; set; }
         public double OuterSpacing => 5;
         public double InnerSpacing => 0;
         public MpSize MinSize => Parent == null ? MpSize.Empty : Parent.DefaultItemSize;
@@ -401,12 +400,12 @@ namespace MonkeyPaste.Avalonia {
         //public int RowIdx {
         //    get {
         //        int rowIdx = 0;
-        //        if(Parent == null) {
+        //        if (Parent == null) {
         //            return rowIdx;
         //        }
-        //        if(Parent.LayoutType == MpAvClipTrayLayoutType.Stack) {
+        //        if (Parent.LayoutType == MpAvClipTrayLayoutType.Stack) {
         //            rowIdx = Parent.ListOrientation == Orientation.Horizontal ?
-        //                            0 : QueryOffsetIdx;                    
+        //                            0 : QueryOffsetIdx;
         //        } else {
         //            rowIdx = (int)((double)QueryOffsetIdx / (double)Parent.ColCount);
         //        }
@@ -423,25 +422,21 @@ namespace MonkeyPaste.Avalonia {
         //        }
         //        if (Parent.LayoutType == MpAvClipTrayLayoutType.Stack) {
         //            colIdx = Parent.ListOrientation == Orientation.Horizontal ?
-        //                            QueryOffsetIdx : 0;                    
+        //                            QueryOffsetIdx : 0;
         //        } else {
         //            colIdx = QueryOffsetIdx - (RowIdx * Parent.ColCount);
-        //        }                
-                
+        //        }
+
         //        return colIdx;
         //    }
         //}
 
-        public bool IsVisible {
+        public bool IsTileOnScreen {
             get {
-                //if (Parent == null) {
-                //    return false;
-                //}
-                //double screenX = TrayX - Parent.ScrollOffset;
-                //return screenX >= 0 &&
-                //       screenX < Parent.ClipTrayScreenWidth &&
-                //       screenX + TileBorderWidth <= Parent.ClipTrayScreenWidth;
-                return true;
+                if (Parent == null) {
+                    return false;
+                }
+                return Parent.ClipTrayScreenRect.Contains(ScreenRect);
             }
         }
         public bool IsHorizontalScrollbarVisibile {
@@ -876,7 +871,6 @@ namespace MonkeyPaste.Avalonia {
 
 
         #endregion
-
 
         #region Public Methods
 
@@ -1745,6 +1739,100 @@ namespace MonkeyPaste.Avalonia {
             });
         }
 
+        public async Task<MpAvClipTileViewModel> GetNeighborByRowOffsetAsync(int row_offset) {
+            var items = IsPinned ? Parent.PinnedItems : Parent.Items;
+            MpAvClipTileViewModel target_ctvm = null;
+            if(row_offset < 0) {
+                var pre_items =
+                    items
+                    .Where(x => x != this && x.ObservedBounds.Y < ObservedBounds.Y)
+                    .OrderByDescending(x => x.ObservedBounds.Y);
+                if(pre_items.Count() > 0) {
+                    target_ctvm =
+                       pre_items.Aggregate( (a, b) =>
+                               a.ObservedBounds.Location.Distance(ObservedBounds.Location) <
+                               b.ObservedBounds.Location.Distance(ObservedBounds.Location) ? a : b);
+                }
+               
+                if(target_ctvm == null) {
+                    if (IsPinned || Parent.LayoutType == MpAvClipTrayLayoutType.Stack || Parent.HeadQueryIdx == 0) {
+                        // fallback and treat up as left
+                        target_ctvm = await GetNeighborByColumnOffsetAsync(row_offset);
+                    } else {
+                        Parent.ScrollToPreviousPageCommand.Execute(null);
+                        await Task.Delay(100);
+                        while (Parent.IsAnyBusy) { await Task.Delay(100); }
+                        target_ctvm = await GetNeighborByRowOffsetAsync(row_offset);
+                    }
+                }
+            } else {
+                var post_items =
+                    items
+                    .Where(x => x != this && x.ObservedBounds.Y > ObservedBounds.Y)
+                    .OrderBy(x => x.ObservedBounds.Y);
+                if(post_items.Count() > 0) {
+                    target_ctvm =
+                        post_items.Aggregate((a, b) =>
+                            a.ObservedBounds.Location.Distance(ObservedBounds.Location) <
+                            b.ObservedBounds.Location.Distance(ObservedBounds.Location) ? a : b);
+                }
+                if(target_ctvm == null) {
+                    if(IsPinned || Parent.LayoutType == MpAvClipTrayLayoutType.Stack || Parent.TailQueryIdx == Parent.MaxClipTrayQueryIdx) {
+                        // fallback and treat down as right
+                        target_ctvm = await GetNeighborByColumnOffsetAsync(row_offset);
+                    } else {
+                        Parent.ScrollToNextPageCommand.Execute(null);
+                        await Task.Delay(100);
+                        while (Parent.IsAnyBusy) { await Task.Delay(100); }
+                        target_ctvm = await GetNeighborByRowOffsetAsync(row_offset);
+                    }
+                }
+            }
+            return target_ctvm;
+        }
+
+        public async Task<MpAvClipTileViewModel> GetNeighborByColumnOffsetAsync(int col_offset) {
+            int target_idx = -1;
+            if(IsPinned) {
+                target_idx = Parent.PinnedItems.IndexOf(this) + col_offset;
+                if(target_idx < 0) {
+                    return null;
+                }
+                if(target_idx >= Parent.PinnedItems.Count) {
+                    target_idx = target_idx - Parent.PinnedItems.Count;
+                    if(target_idx < Parent.VisibleItems.Count()) {
+                        if(Parent.DefaultScrollOrientation == Orientation.Horizontal) {
+                            return Parent.VisibleItems.OrderBy(x => TrayX).ElementAt(target_idx);
+                        }
+                        return Parent.VisibleItems.OrderBy(x => TrayY).ElementAt(target_idx);
+                    }
+                    return null;
+                }
+                return Parent.PinnedItems[target_idx];
+            }
+            target_idx = QueryOffsetIdx + col_offset;
+            if (target_idx < 0) {
+                if (Parent.IsPinTrayEmpty) {
+                    return null;
+                }
+                target_idx = Parent.PinnedItems.Count + target_idx;
+                if (target_idx < 0) {
+                    return null;
+                }
+                return Parent.PinnedItems[target_idx];
+            } else if (target_idx >= Parent.TotalTilesInQuery) {
+                return null;
+            }
+            var neighbor_ctvm = Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == target_idx);
+            if(neighbor_ctvm == null) {
+                int neighbor_ciid = MpDataModelProvider.AvailableQueryCopyItemIds[target_idx];
+                Parent.ScrollIntoView(neighbor_ciid);
+                await Task.Delay(100);
+                while(Parent.IsAnyBusy) { await Task.Delay(100); }
+                return Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == target_idx);
+            }
+            return neighbor_ctvm;
+        }
 
         public void SubSelectAll() {
             AllowMultiSelect = true;
@@ -2330,7 +2418,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsResizing):
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyResizing));
-                    if (!IsResizing) {
+                    if (!IsResizing && !IsPinned) {
                         Parent.RefreshLayout();
                     }
                     break;

@@ -684,8 +684,8 @@ namespace MonkeyPaste.Avalonia {
                     vy = 0;
                 }
 
-                //vx = Math.Abs(vx) < MIN_SCROLL_VELOCITY_MAGNITUDE ? 0 : vx;
-                //vy = Math.Abs(vy) < MIN_SCROLL_VELOCITY_MAGNITUDE ? 0 : vy;
+                vx = Math.Abs(vx) < MIN_SCROLL_VELOCITY_MAGNITUDE ? 0 : vx;
+                vy = Math.Abs(vy) < MIN_SCROLL_VELOCITY_MAGNITUDE ? 0 : vy;
 
                 scrollOffsetX += vx;
                 scrollOffsetY += vy;

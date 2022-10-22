@@ -61,6 +61,7 @@
         </local:MpAvPinTrayView>
         <GridSplitter x:Name="ClipTraySplitter"
                       Grid.Column="0"
+                      IsTabStop="False"
                       Background="Magenta">
             <GridSplitter.Styles>
                 <Style Selector="GridSplitter /template/ Border">

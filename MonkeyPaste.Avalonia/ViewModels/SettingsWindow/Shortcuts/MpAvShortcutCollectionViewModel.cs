@@ -350,11 +350,17 @@ namespace MonkeyPaste.Avalonia {
                         case MpShortcutType.DeleteSelectedItems:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.DeleteSelectedClipsCommand;
                             break;
-                        case MpShortcutType.SelectNextItem:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.SelectNextItemCommand;
+                        case MpShortcutType.SelectNextColumnItem:
+                            shortcutCommand = MpAvClipTrayViewModel.Instance.SelectNextColumnItemCommand;
                             break;
-                        case MpShortcutType.SelectPreviousItem:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.SelectPreviousItemCommand;
+                        case MpShortcutType.SelectPreviousColumnItem:
+                            shortcutCommand = MpAvClipTrayViewModel.Instance.SelectPreviousColumnItemCommand;
+                            break;
+                        case MpShortcutType.SelectNextRowItem:
+                            shortcutCommand = MpAvClipTrayViewModel.Instance.SelectNextRowItemCommand;
+                            break;
+                        case MpShortcutType.SelectPreviousRowItem:
+                            shortcutCommand = MpAvClipTrayViewModel.Instance.SelectPreviousRowItemCommand;
                             break;
                         case MpShortcutType.SelectAll:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.SelectAllCommand;

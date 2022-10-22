@@ -14,9 +14,44 @@ using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTrayContainerView : MpAvUserControl<MpAvClipTrayViewModel> {
-
-
         public static MpAvClipTrayContainerView Instance { get; private set; }
+
+        //private ListBox _pinTrayListBox;
+        //public ListBox PinTrayListBox {
+        //    get {
+        //        if(_pinTrayListBox == null) {
+        //            var ptrv = this.GetVisualDescendant<MpAvPinTrayView>();
+        //            if(ptrv == null) {
+        //                return null;
+        //            }
+        //            var ptrv_lb = ptrv.GetVisualDescendant<ListBox>();
+        //            if(ptrv_lb == null) {
+        //                return null;
+        //            }
+        //            _pinTrayListBox = ptrv_lb;
+        //        }
+        //        return _pinTrayListBox;
+        //    }
+        //}
+
+        //private ListBox _clipTrayListBox;
+        //public ListBox ClipTrayListBoxRef {
+        //    get {
+        //        if (_clipTrayListBox == null) {
+        //            var ctrv = this.GetVisualDescendant<MpAvClipTrayView>();
+        //            if (ctrv == null) {
+        //                return null;
+        //            }
+        //            var ctrv_lb = ctrv.GetVisualDescendant<ListBox>();
+        //            if (ctrv_lb == null) {
+        //                return null;
+        //            }
+        //            _clipTrayListBox = ctrv_lb;
+        //        }
+        //        return _clipTrayListBox;
+        //    }
+        //}
+
         public MpAvClipTrayContainerView() {
             if (Instance != null) {
                 // ensure singleton
@@ -39,6 +74,7 @@ namespace MonkeyPaste.Avalonia {
             //gs.AddHandler(GridSplitter.PointerReleasedEvent, Gs_PointerReleased, RoutingStrategies.Tunnel);
 
             gs.DragDelta += Gs_DragDelta;
+            
         }
 
         private void MpAvClipTrayContainerView_DataContextChanged(object sender, EventArgs e) {

@@ -4,6 +4,12 @@ using System.Linq;
 namespace MonkeyPaste.Common {
     public static class MpRectExtensions {
         public static bool FuzzyEquals(this MpRect rect,MpRect otherRect, double maxThresh = 0.1d) {
+            if(rect == null && otherRect == null) {
+                return true;
+            }
+            if(rect == null || otherRect == null) {
+                return false;
+            }
             bool isMatch_l = Math.Abs(rect.Left - otherRect.Left) <= maxThresh;
             bool isMatch_t = Math.Abs(rect.Top - otherRect.Top) <= maxThresh;
             bool isMatch_r = Math.Abs(rect.Right - otherRect.Right) <= maxThresh;

@@ -421,7 +421,6 @@ namespace MonkeyPaste {
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
 
-
             MpConsole.WriteLine(@"Db file located: " + MpPlatformWrapper.Services.DbInfo.DbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPrefViewModel.Instance.ThisDeviceGuid);
             MpConsole.WriteLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
@@ -704,6 +703,13 @@ namespace MonkeyPaste {
             MpConsole.WriteTraceLine(@"Created all default tables");
         }
 
+        public static async Task ResetShortcutsAsync() {
+            var sl = await MpDb.GetItemsAsync<MpShortcut>();
+            await Task.WhenAll(sl.Select(x => x.DeleteFromDatabaseAsync()));
+
+            await InitDefaultShortcutsAsync();
+        }
+
         private static async Task InitDefaultShortcutsAsync() {
             List<string[]> defaultShortcutDefinitions = new List<string[]>() {
                 // ORDER:
@@ -715,8 +721,12 @@ namespace MonkeyPaste {
                  new string[] {"a12c4211-ab1f-4b97-98ff-fbeb514e9a1c","Control+Shift+R", "ToggleRightClickPasteMode", "Direct"},
                  new string[] {"1d212ca5-fb2a-4962-8f58-24ed9a5d007d","Enter", "PasteSelectedItems", "Internal"},
                  new string[] {"e94ca4f3-4c6e-40dc-8941-c476a81543c7","Delete", "DeleteSelectedItems", "Internal"},
-                 new string[] {"7fe24929-6c9e-49c0-a880-2f49780dfb3a","Right", "SelectNextItem", "Internal"},
-                 new string[] {"ee657845-f1dc-40cf-848d-6768c0081670","Left", "SelectPreviousItem", "Internal"},
+                 new string[] {"7fe24929-6c9e-49c0-a880-2f49780dfb3a","Right", "SelectNextColumnItem", "Internal"},
+                 new string[] {"ee657845-f1dc-40cf-848d-6768c0081670","Left", "SelectPreviousColumnItem", "Internal"},
+
+                 new string[] { "674bae7f-0a60-4f17-ac2c-81d5c6c3d879", "Down", "SelectNextRowItem", "Internal"},
+                 new string[] { "b916ab44-d4bd-4d8b-ac4a-de947343bd5a", "Up", "SelectPreviousRowItem", "Internal"},
+
                  new string[] {"5480f103-eabd-4e40-983c-ebae81645a10","Control+A", "SelectAll", "Internal"},
                  new string[] {"39a6b8b5-a585-455b-af83-015fd97ac3fa","Control+Shift+Alt+A", "InvertSelection", "Internal"},
                  new string[] {"166abd7e-7295-47f2-bbae-c96c03aa6082","Control+Home", "BringSelectedToFront", "Internal"},

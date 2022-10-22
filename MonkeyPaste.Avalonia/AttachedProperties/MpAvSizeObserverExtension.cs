@@ -64,15 +64,14 @@ namespace MonkeyPaste.Avalonia {
         private static void HandleIsEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isEnabledVal && isEnabledVal) {
                 if (element is Control control) {
+                    control.AttachedToVisualTree += AttachedToVisualHandler;
+                    control.DetachedFromVisualTree += DetachedFromVisualHandler;
                     if (control.IsInitialized) {
                         AttachedToVisualHandler(control, null);
-                    } else {
-                        control.AttachedToVisualTree += AttachedToVisualHandler;
-
-                    }
+                    } 
                 }
             } else {
-                DetachedToVisualHandler(element, null);
+                DetachedFromVisualHandler(element, null);
             }
 
             void AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
@@ -80,15 +79,15 @@ namespace MonkeyPaste.Avalonia {
                     if (e == null) {
                         control.AttachedToVisualTree += AttachedToVisualHandler;
                     }
-                    control.DetachedFromVisualTree += DetachedToVisualHandler;
+                    control.DetachedFromVisualTree += DetachedFromVisualHandler;
                     control.EffectiveViewportChanged += Control_EffectiveViewportChanged;
                     Control_EffectiveViewportChanged(control, null);
                 }
             }
-            void DetachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
+            void DetachedFromVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
                 if (s is Control control) {
                     control.AttachedToVisualTree -= AttachedToVisualHandler;
-                    control.DetachedFromVisualTree -= DetachedToVisualHandler;
+                    control.DetachedFromVisualTree -= DetachedFromVisualHandler;
                     control.EffectiveViewportChanged -= Control_EffectiveViewportChanged;
                 }
             }

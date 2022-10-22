@@ -66,6 +66,12 @@ namespace MonkeyPaste.Common.Avalonia {
             control?.InvalidateVisual();            
         }
 
+        public static MpRect RelativeBounds(this Control control, IVisual relTo) {
+            var relative_origin = control.TranslatePoint(new Point(0, 0), relTo).Value.ToPortablePoint();
+            var observed_size = control.Bounds.Size.ToPortableSize();
+            return new MpRect(relative_origin, observed_size);
+        }
+
         #endregion
 
         #region TextBox

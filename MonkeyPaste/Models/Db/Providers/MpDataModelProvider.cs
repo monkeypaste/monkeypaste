@@ -34,7 +34,6 @@ namespace MonkeyPaste {
             }
         }
 
-        public static ObservableCollection<int> AllFetchedAndSortedCopyItemIds { get; private set; } = new ObservableCollection<int>();
         public static ObservableCollection<int> AvailableQueryCopyItemIds { get; private set; } = new ObservableCollection<int>();
 
 
@@ -57,7 +56,7 @@ namespace MonkeyPaste {
         #region Public Methods
 
         public static void ResetQuery() {
-            AllFetchedAndSortedCopyItemIds.Clear();
+            AvailableQueryCopyItemIds.Clear();
             AvailableQueryCopyItemIds.Clear();
 
             _lastResult = new List<MpCopyItem>();
@@ -80,13 +79,13 @@ namespace MonkeyPaste {
             idsToOmit = idsToOmit == null ? new List<int>() : idsToOmit;
 
             string viewQueryStr = string.Empty;
-            AllFetchedAndSortedCopyItemIds.Clear();
+            AvailableQueryCopyItemIds.Clear();
 
             if (_manualQueryIds != null) {
                 foreach(var copyItemId in _manualQueryIds) {
-                    AllFetchedAndSortedCopyItemIds.Add(copyItemId);
+                    AvailableQueryCopyItemIds.Add(copyItemId);
                 }
-                QueryInfo.TotalItemsInQuery = AllFetchedAndSortedCopyItemIds.Count;
+                QueryInfo.TotalItemsInQuery = AvailableQueryCopyItemIds.Count;
                 return viewQueryStr;
             }
             MpLogicalFilterFlagType lastLogicFlag = MpLogicalFilterFlagType.None;
@@ -120,25 +119,25 @@ namespace MonkeyPaste {
 
                 var totalIds = new List<int>();
                 if (i == 0) {
-                    AllFetchedAndSortedCopyItemIds = curIds;
+                    AvailableQueryCopyItemIds = curIds;
                 } else if (lastLogicFlag == MpLogicalFilterFlagType.And) {
-                    foreach (var allId in AllFetchedAndSortedCopyItemIds) {
+                    foreach (var allId in AvailableQueryCopyItemIds) {
                         if (curIds.Contains(allId)) {
                             totalIds.Add(allId);
                         }
                     }
                 } else {
                     //same as or
-                    totalIds.AddRange(AllFetchedAndSortedCopyItemIds);
+                    totalIds.AddRange(AvailableQueryCopyItemIds);
                     totalIds.AddRange(curIds);
                     totalIds = totalIds.Distinct().ToList();
                 }
 
                 if(totalIds.Count > 0) {
-                    AllFetchedAndSortedCopyItemIds = new ObservableCollection<int>(idl.Distinct());
+                    AvailableQueryCopyItemIds = new ObservableCollection<int>(idl.Distinct());
                 }
             }
-            AvailableQueryCopyItemIds =  new ObservableCollection<int>(AllFetchedAndSortedCopyItemIds.Where(x => !idsToOmit.Contains(x)));
+            AvailableQueryCopyItemIds =  new ObservableCollection<int>(AvailableQueryCopyItemIds.Where(x => !idsToOmit.Contains(x)));
             QueryInfo.TotalItemsInQuery = AvailableQueryCopyItemIds.Count;
 
             return viewQueryStr;
@@ -1009,12 +1008,12 @@ namespace MonkeyPaste {
         public static MpCopyItem RemoveQueryItem(int copyItemId) {
             //returns first child or null
             //return value is used to adjust dropIdx in ClipTrayDrop
-            if (!AllFetchedAndSortedCopyItemIds.Contains(copyItemId)) {
+            if (!AvailableQueryCopyItemIds.Contains(copyItemId)) {
                 //throw new Exception("Query does not contain item " + copyItemId);
                 return null;
             }
-            int itemIdx = AllFetchedAndSortedCopyItemIds.IndexOf(copyItemId);
-            AllFetchedAndSortedCopyItemIds.Remove(copyItemId);
+            int itemIdx = AvailableQueryCopyItemIds.IndexOf(copyItemId);
+            AvailableQueryCopyItemIds.Remove(copyItemId);
             AvailableQueryCopyItemIds.Remove(copyItemId);
 
             MpConsole.WriteLine($"QueryItem {copyItemId} was removed from [{itemIdx}]");

@@ -30,6 +30,9 @@
                           Height="{Binding ClipTrayScreenHeight}">
                 <ListBox x:Name="ClipTrayListBox"
                          BorderThickness="0"
+                         Focusable="True"
+                         TabIndex="2"
+                         IsTabStop="True"
                          AutoScrollToSelectedItem="False"
                          SelectedItem="{Binding SelectedClipTrayItem, Mode=TwoWay}"
                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
@@ -73,6 +76,8 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <local:MpAvClipTileView DataContext="{Binding}"
+                                                    local:MpAvListBoxItemBoundsObserverExtension.IsEnabled="True"
+                                                    local:MpAvListBoxItemBoundsObserverExtension.ObservedBounds="{Binding ObservedBounds, Mode=TwoWay}"
                                                     IsVisible="{Binding !IsPlaceholder}" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
