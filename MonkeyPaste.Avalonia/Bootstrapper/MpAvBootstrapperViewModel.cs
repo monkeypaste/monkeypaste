@@ -13,6 +13,7 @@ using System.Collections;
 using MonkeyPaste.Common.Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls;
+using Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvBootstrapperViewModel : MpBootstrapperViewModelBase {
@@ -27,15 +28,34 @@ namespace MonkeyPaste.Avalonia {
             await pw.InitializeAsync();
             await MpPlatformWrapper.InitAsync(pw);
 
-            await MpNotificationCollectionViewModel.Instance.InitAsync(null);
+            //await MpNotificationBuilder.Instance.InitAsync(null);
 
             if (MpPlatformWrapper.Services.NotificationView is Window nw) {
-                nw.Opened += Nw_Opened;
+                //nw.Opened += Nw_Opened;
+                //nw.Closed += Nw_Closed;
+                bool wasVisible = false;
+                nw.GetObservable(Window.IsVisibleProperty).Subscribe(value => {
+                    if(nw.IsVisible) {
+                        if(wasVisible) {
+                            Debugger.Break();
+                        }
+                        wasVisible = true;
+                        Nw_Opened(nw, null);
+                    } else if(wasVisible) {
+                        Nw_Closed(nw, null); 
+                    } else {
+                       // Debugger.Break();
+                    }
+                });
             }
 
             CreateLoaderItems();
             //Nw_Opened(null, null);
-            await MpNotificationCollectionViewModel.Instance.BeginLoaderAsync(this);
+            //await MpNotificationBuilder.Instance.BeginLoaderAsync(this);
+            var result = await MpNotificationBuilder.ShowLoaderNotificationAsync(this);
+            if(result == MpNotificationDialogResultType.DoNotShow) {
+                Nw_Opened(MpPlatformWrapper.Services.NotificationView, null);
+            }
             while (IsCoreLoaded == false) {
                 await Task.Delay(100);
             }
@@ -54,6 +74,7 @@ namespace MonkeyPaste.Avalonia {
 
             
         }
+
 
         private async void Nw_Opened(object sender, EventArgs e) {
             for (int i = 0; i < _coreItems.Count; i++) {
@@ -76,13 +97,17 @@ namespace MonkeyPaste.Avalonia {
             //}
 
 
-            MpNotificationCollectionViewModel.Instance.FinishLoading();
+            //MpNotificationBuilder.Instance.FinishLoading();
             //MpAvClipTrayViewModel.Instance.OnPostMainWindowLoaded();
+           
+            }
+
+        private async void Nw_Closed(object sender, EventArgs e) {
             IsCoreLoaded = true;
 
             // MainWindow is now being created and Av AppLifetime desktop is being swapped to MainWindow
             // wait for mw instance to exist
-            while(MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
+            while (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
                 await Task.Delay(100);
             }
 
@@ -97,8 +122,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
             IsPlatformLoaded = true;
-            }
-
+        }
         protected override void CreateLoaderItems() {
             base.CreateLoaderItems();
 

@@ -362,6 +362,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool HasContentDataChanged { get; set; }
+        
         public string CachedState { get; set; } = null;
         public bool IsReloading => !string.IsNullOrEmpty(CachedState);
         public bool IsWaitingForDomLoad { get; set; } = false;
@@ -373,11 +376,23 @@ namespace MonkeyPaste.Avalonia {
         public bool IsViewLoaded { get; set; } = false;
 
         public bool IsTitleReadOnly { get; set; } = true;
-        public bool IsContentReadOnly { get; set; } = true;
 
-        public bool IsContentEditable {
-            get => !IsContentReadOnly;
-            set => IsContentReadOnly = !value;
+        private bool _isContentReadOnly = true;
+        public bool IsContentReadOnly {
+            get => _isContentReadOnly;
+            set {
+
+                if(IsContentReadOnly != value) {
+                    if(!value && !MpAvCefNetApplication.UseCefNet) {
+                        // this circumvents standard property changes (if user hasn't added to ignore) 
+                        // so content isn't degraded in edit mode (and just to keep it simpler its on mode change not data change)
+                        DisableReadOnlyInPlainTextHandlerAsync().FireAndForgetSafeAsync();
+                        return;
+                    }
+                    _isContentReadOnly = value;
+                    OnPropertyChanged(nameof(IsContentReadOnly));
+                }
+            }
         }
 
         public bool IsSubSelectionEnabled { get; set; } = false;
@@ -701,7 +716,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
         public string CopyItemTitle {
             get {
                 if (CopyItem == null) {
@@ -810,6 +824,7 @@ namespace MonkeyPaste.Avalonia {
             set {
                 if (CopyItem != null && CopyItem.ItemData != value) {
                     CopyItem.ItemData = value;
+                    HasContentDataChanged = true;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(CopyItemData));
                 }
@@ -1601,12 +1616,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpCopyItem ci, int queryOffset = -1) {
-
+        public async Task InitializeAsync(MpCopyItem ci, int queryOffset = -1, bool isRestoringSelection = false) { 
             _curItemRandomHexColor = string.Empty;
 
             IsBusy = true;
-            
+            IsInitializing = true;
+
             if (ci != null && MpAvPersistentClipTilePropertiesHelper.TryGetByPersistentSize_ById(ci.Id, out double uniqueWidth)) {
                 BoundSize = new MpSize(uniqueWidth, MinHeight);
             } else {
@@ -1650,6 +1665,10 @@ namespace MonkeyPaste.Avalonia {
                 SelectionBgColorPopupViewModel.OnColorChanged += SelectionBgColorPopupViewModel_OnColorChanged;
             }
 
+            if(isRestoringSelection) {
+                Parent.RestoreSelectionState(this);
+            }
+
             OnPropertyChanged(nameof(TileBorderBrushRect));
 
             OnPropertyChanged(nameof(IsPlaceholder));
@@ -1675,6 +1694,7 @@ namespace MonkeyPaste.Avalonia {
                 IsContentReadOnly = false;
             }
 
+            IsInitializing = false;
             IsBusy = false;
         }
 
@@ -2332,9 +2352,6 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTitle));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
                     break;
-                case nameof(IsContentEditable):
-
-                    break;
                 case nameof(IsContentReadOnly):
                     if (!IsContentReadOnly && !IsSelected) {
                         IsSelected = true;
@@ -2399,9 +2416,18 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(HasModelChanged):
                     if (HasModelChanged) {
+                        if(!MpAvCefNetApplication.UseCefNet && HasContentDataChanged) {
+                            if(IsInitializing) {
+                                MpConsole.WriteLine("Ignoring plain text mode initialize data overwrite");
+                                HasContentDataChanged = false;
+                                HasModelChanged = false;
+                                return;
+                            }
+                        }
                         Task.Run(async () => {
                             await CopyItem.WriteToDatabaseAsync();
                             HasModelChanged = false;
+                            HasContentDataChanged = false;
                         });
                     }
                     break;
@@ -2418,7 +2444,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsResizing):
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyResizing));
-                    if (!IsResizing && !IsPinned) {
+                    if (!IsResizing) {
                         Parent.RefreshLayout();
                     }
                     break;
@@ -2522,6 +2548,19 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private async Task DisableReadOnlyInPlainTextHandlerAsync() {
+            Dispatcher.UIThread.VerifyAccess();
+
+            var result = await MpNotificationBuilder.ShowNotificationAsync(
+                                    notificationType: MpNotificationType.ContentFormatDegradation,
+                                    title: "Data Degradation Warning",
+                                    msg: $"Editing in comptability mode will remove all rich formatting. Are you sure you wish to modify this?");
+
+            if(result == MpNotificationDialogResultType.Ok) {
+                _isContentReadOnly = false;
+                OnPropertyChanged(nameof(IsContentReadOnly));
+            }
+        }
         private void SelectionBgColorPopupViewModel_OnColorChanged(object sender, string e) {
             SelectionBackgroundColor = e;
         }

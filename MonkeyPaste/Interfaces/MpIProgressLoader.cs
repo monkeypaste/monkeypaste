@@ -6,11 +6,11 @@
 
         string IconResourceKey { get; }
 
-        MpNotificationDialogType DialogType { get; }
+        MpNotificationType DialogType { get; }
     }
 
     public interface MpIUserActionNotification : MpINotification {
-        MpNotificationExceptionSeverityType ExceptionType { get; set; }
+        MpNotificationLayoutType ExceptionType { get; set; }
     }
 
     public interface MpIProgressLoader : MpINotification {        

@@ -994,6 +994,9 @@
     <Compile Update="Views\Reusable\ContextMenu\DefaultMenuItem\MpAvDefaultMenuItemView.axaml.cs">
       <DependentUpon>MpAvDefaultMenuItemView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml.cs">
+      <DependentUpon>MpAvUserActionNotificationView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\KeyGroup\Key\MpAvShortcutKeyView.axaml.cs">
       <DependentUpon>MpAvShortcutKeyView.axaml</DependentUpon>
     </Compile>

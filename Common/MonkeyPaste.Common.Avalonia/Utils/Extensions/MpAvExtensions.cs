@@ -209,8 +209,8 @@ namespace MonkeyPaste.Common.Avalonia {
             return new Point(p.X, p.Y);
         }
 
-        public static PixelPoint ToAvPixelPoint(this MpPoint p) {
-            return new PixelPoint((int)p.X, (int)p.Y);
+        public static PixelPoint ToAvPixelPoint(this MpPoint p, double pixelDensity = 1.0d) {
+            return new PixelPoint((int)(p.X* pixelDensity), (int)(p.Y*pixelDensity));
         }
 
         public static PixelPoint ToAvPixelPoint(this PixelSize p) {

@@ -41,8 +41,10 @@ namespace MonkeyPaste {
         [JsonIgnore]
         public static MpPrefViewModel Instance { get; private set; } //=> _instance ?? (new MpJsonPreferenceIO());
 
-        #endregion
+        [JsonIgnore]
+        public static string PreferencesPath => _prefPath;
 
+        #endregion
 
         #region Properties
 
@@ -525,11 +527,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region Preferences Properties
-        [JsonIgnore]
-        public static string PreferencesPath => _prefPath;
-            //Path.Combine(
-            //    Environment.CurrentDirectory,
-            //    PREFERENCES_FILE_NAME);
 
         [JsonIgnore]
         public bool IsSaving { get; private set; }
@@ -654,7 +651,7 @@ namespace MonkeyPaste {
         }
 
         private static async Task CreateDefaultPrefsAsync(bool isReset = false) {
-            MpConsole.WriteTraceLine("Pref file was either missing or empty, (re)creating");
+            MpConsole.WriteTraceLine("Pref file was either missing, empty or this is initial startup. (re)creating");
 
             if(isReset) {
                 Instance = new MpPrefViewModel();

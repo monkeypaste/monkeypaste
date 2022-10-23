@@ -442,10 +442,10 @@ namespace MonkeyPaste.Avalonia {
                 //if(ivm == null) {
                 //    Debugger.Break();
                 //}
-                MpNotificationCollectionViewModel.Instance.ShowMessageAsync(
-                    msgType: MpNotificationDialogType.PluginUpdated,
+                MpNotificationBuilder.ShowMessageAsync(
+                    msgType: MpNotificationType.PluginUpdated,
                     title: $"Clipboard Handler '{Title}' Updated",
-                    iconBase64Str: ivm == null ? null : ivm.IconBase64,                    
+                    iconSourceStr: ivm == null ? null : ivm.IconBase64,                    
                     msg: "Reseting presets to default...")
                     .FireAndForgetSafeAsync(this);
 

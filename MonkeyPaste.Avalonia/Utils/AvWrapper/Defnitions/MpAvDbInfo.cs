@@ -1,24 +1,26 @@
 ﻿using MonkeyPaste;
 using System.IO;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common;
 using System.Reflection;
 using System;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvDbInfo : MonkeyPaste.MpIDbInfo {
+        public string DbExtension => "mpcdb";
         public string DbName {
-            get {                
+            get {
+                string db_name_by_os = string.Empty;
                 if(OperatingSystem.IsWindows()) {
-                    return "mp_win.db";
-                } 
-                if(OperatingSystem.IsLinux()) {
-                    return "mp_x11.db";
+                    db_name_by_os = "mp_win";
+                } else if(OperatingSystem.IsLinux()) {
+                    db_name_by_os = "mp_x11";
+                } else if(OperatingSystem.IsMacOS()) {
+                    db_name_by_os = "mp_mac";
+                } else {
+                    throw new Exception("Unmanaged os");
                 }
-                if(OperatingSystem.IsMacOS()) {
-                    return "mp_mac.db";
-                }
-                throw new Exception("Unknown os");
-
+                return $"{db_name_by_os}.{DbExtension}";
             }
         }
         public string DbPath => Path.Combine(

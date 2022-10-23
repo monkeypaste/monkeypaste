@@ -1,6 +1,30 @@
-﻿namespace MonkeyPaste {
+﻿using System;
+using System.Threading.Tasks;
+
+namespace MonkeyPaste {
     public class MpMessageNotificationViewModel : MpNotificationViewModelBase {
-        public MpMessageNotificationViewModel() : base(null) { }
-        public MpMessageNotificationViewModel(MpNotificationCollectionViewModel parent) : base(parent) { }
+        #region Constructors
+        public MpMessageNotificationViewModel() : base() { }
+        #endregion
+
+        #region Public Methods
+
+        public override async Task<MpNotificationDialogResultType> ShowNotificationAsync() {
+            if (MaxShowTimeMs > 0) {
+                DateTime startTime = DateTime.Now;
+                while (DateTime.Now - startTime <= TimeSpan.FromMilliseconds(MaxShowTimeMs)) {
+                    await Task.Delay(100);
+
+                    while (IsHovering) {
+                        await Task.Delay(100);
+                        if(DoNotShowAgain) {
+                            return MpNotificationDialogResultType.DoNotShow;
+                        }
+                    }
+                }
+            }
+            return MpNotificationDialogResultType.None;
+        }
+        #endregion
     }
 }

@@ -322,6 +322,7 @@ namespace MonkeyPaste.Avalonia {
         private void ItemContainerGenerator_Dematerialized(object sender, ItemContainerEventArgs e) {
             if (BindingContext == null || BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow) {
                 // ignore collection changed if user in workflow
+                MpConsole.WriteLine($"PinTray dematerialized {e.Containers.Count} items was ignored. HasUserAlteredPinTrayWidthSinceWindowShow: {BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow} ");
                 return;
             }
             MpSize remaining_size = new MpSize();
@@ -347,6 +348,7 @@ namespace MonkeyPaste.Avalonia {
                 BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow ||
                 e.Containers.Count == 0) {
                 // ignore collection changed if user in workflow
+                MpConsole.WriteLine($"PinTray materialized {e.Containers.Count} items was ignored. HasUserAlteredPinTrayWidthSinceWindowShow: {BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow} ");
                 return;
             }
             MpSize added_size = new MpSize();
@@ -363,14 +365,15 @@ namespace MonkeyPaste.Avalonia {
 
             var gs = this.GetVisualAncestor<MpAvClipTrayContainerView>().GetVisualDescendant<GridSplitter>();
             var gs_grid = gs.GetVisualAncestor<Grid>();
+            var adjusted_size = new MpSize();
             if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {              
-
-                double adjusted_width = Math.Min(BindingContext.MaxPinTrayScreenWidth + gs.Bounds.Width, Math.Max(this.Bounds.Width + gs.Bounds.Width, added_size.Width));
-                gs_grid.ColumnDefinitions[0].Width = new GridLength(adjusted_width, GridUnitType.Auto);
+                adjusted_size.Width = Math.Min(BindingContext.MaxPinTrayScreenWidth + gs.Bounds.Width, Math.Max(this.Bounds.Width + gs.Bounds.Width, added_size.Width));
+                gs_grid.ColumnDefinitions[0].Width = new GridLength(adjusted_size.Width, GridUnitType.Auto);
             } else {
-                double adjusted_height = Math.Min(BindingContext.MaxPinTrayScreenHeight + gs.Bounds.Height, Math.Max(this.Bounds.Height + gs.Bounds.Height, added_size.Height));
-                gs_grid.RowDefinitions[0].Height = new GridLength(adjusted_height, GridUnitType.Auto);
+                adjusted_size.Height = Math.Min(BindingContext.MaxPinTrayScreenHeight + gs.Bounds.Height, Math.Max(this.Bounds.Height + gs.Bounds.Height, added_size.Height));
+                gs_grid.RowDefinitions[0].Height = new GridLength(adjusted_size.Height, GridUnitType.Auto);
             }
+            MpConsole.WriteLine($"PinTray materialized {e.Containers.Count} items. AddedSize: {added_size} AdjustedSize: {adjusted_size}");
         }
 
         private void PinTrayListBox_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {

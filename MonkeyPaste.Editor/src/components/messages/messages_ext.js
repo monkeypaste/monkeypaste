@@ -23,7 +23,7 @@ function initMain_ext(initMsgStr_base64) {
 function loadContent_ext(loadContentMsgStr_base64) {
 	// input 'MpQuillLoadContentRequestMessage'
 	// output 'MpQuillLoadContentResponseMessage'
-
+	log('log content msg: ' + loadContentMsgStr_base64);
 	let req = toJsonObjFromBase64Str(loadContentMsgStr_base64);
 
 	loadContent(req.contentHandle, req.contentType, req.itemData, req.usedTextTemplates, req.isPasteRequest);

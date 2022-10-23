@@ -111,15 +111,15 @@ namespace MonkeyPaste {
             await MpPluginLogger.LogTransactionAsync(pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite)
                                     .TimeoutAfter(TimeSpan.FromMilliseconds(_PROCESS_TIMEOUT_MS));
 
-            var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotificationAsync(
-                dialogType: MpNotificationDialogType.InvalidRequest,
+            var userAction = await MpNotificationBuilder.ShowNotificationAsync(
+                notificationType: MpNotificationType.InvalidRequest,
                 msg: ex.Message,
                 maxShowTimeMs: 5000);
             
             if (at.Response == null) {
                 at.Response = new MpPluginResponseFormatBase();
             }
-            if (userAction == MpDialogResultType.Retry) {
+            if (userAction == MpNotificationDialogResultType.Retry) {
                 
                 at.Response.retryMessage = "Retry";
             } else {

@@ -858,13 +858,12 @@ namespace MonkeyPaste.Avalonia {
                     defaultHeight = ListOrientation == Orientation.Horizontal ?
                                     (ClipTrayScreenHeight * ZoomFactor) :
                                     (ClipTrayScreenWidth * ZoomFactor);
-                    //defaultHeight = 260.0d * ZoomFactor;
                 } else {
                     defaultHeight = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds.Width *
                                 ZoomFactor * MIN_SIZE_ZOOM_FACTOR_COEFF;
                 }
                 double scrollBarSize = ScrollBarFixedAxisSize;// IsVerticalScrollBarVisible ? 30 : 0;
-                return Math.Clamp(defaultHeight - scrollBarSize,0,MaxTileHeight);
+                return Math.Clamp(defaultHeight - scrollBarSize,0, MaxTileHeight);
             }
         }
 
@@ -873,7 +872,7 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultEditableItemWidth => 1130.0d; // based on edit toolbar width
 
         public MpSize DefaultEditableItemSize => new MpSize(DefaultEditableItemWidth, DefaultItemHeight);
-        public double ScrollBarFixedAxisSize => 10;
+        public double ScrollBarFixedAxisSize => 30;
 
         #endregion
 
@@ -1493,15 +1492,11 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ScrollToNextPageCommand => new MpAsyncCommand(
              async () => {
-                 // BUG scrolling tray from origin by screen width updates w/ empty head idx
-                 // I think since its exact (tested w/ no unique tile sizes) something is isn't
-                 // calculating right, probably load more
-                 double pad = -15;
                  MpPoint scroll_delta = MpPoint.Zero;
                  if (DefaultScrollOrientation == Orientation.Horizontal) {
-                     scroll_delta.X = ClipTrayScreenWidth + pad;
+                     scroll_delta.X = ClipTrayScreenWidth;
                  } else {
-                     scroll_delta.Y = ClipTrayScreenHeight + pad;
+                     scroll_delta.Y = ClipTrayScreenHeight;
                  }
                  var nextPageOffset = (ScrollOffset + scroll_delta);
                  QueryCommand.Execute(nextPageOffset);
@@ -1512,12 +1507,11 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ScrollToPreviousPageCommand => new MpAsyncCommand(
             async() => {
-                double pad = 15;
                 MpPoint scroll_delta = MpPoint.Zero;
                 if (DefaultScrollOrientation == Orientation.Horizontal) {
-                    scroll_delta.X = ClipTrayScreenWidth + pad;
+                    scroll_delta.X = ClipTrayScreenWidth;
                 } else {
-                    scroll_delta.Y = ClipTrayScreenHeight + pad;
+                    scroll_delta.Y = ClipTrayScreenHeight;
                 }
                 var prevPageOffset = (ScrollOffset - scroll_delta);
                 QueryCommand.Execute(prevPageOffset);
@@ -1683,20 +1677,23 @@ namespace MonkeyPaste.Avalonia {
                 if(LayoutType == MpAvClipTrayLayoutType.Stack) {
                     return 20;
                 } else {
+                    return 40;
                     // for grid try to make default load count so it lands at the end of the fixed side
-                    double length = ListOrientation == Orientation.Horizontal ? ClipTrayScreenHeight : ClipTrayScreenWidth;
-                    double item_length = ListOrientation == Orientation.Horizontal ? DefaultItemSize.Height : DefaultItemSize.Width;
-                    double items_per_length = length / item_length;
+                    //double length = ListOrientation != Orientation.Horizontal ? ClipTrayScreenHeight : ClipTrayScreenWidth;
+                    //double item_length = ListOrientation != Orientation.Horizontal ? DefaultItemSize.Height : DefaultItemSize.Width;
+                    //double items_per_length = length / item_length;
 
-                    double count_val = (double)CurGridFixedCount * items_per_length;
-                    int count = (int)count_val;
-                    while(count % CurGridFixedCount != 0) {
-                        count--;
-                        if(count <= 0) {
-                            Debugger.Break();
-                        }
-                    }
-                    return count * 3;
+                    //return (int)items_per_length * 2;
+
+                    //double count_val = (double)CurGridFixedCount * items_per_length;
+                    //int count = (int)count_val;
+                    //while(count % CurGridFixedCount != 0) {
+                    //    count--;
+                    //    if(count <= 0) {
+                    //        Debugger.Break();
+                    //    }
+                    //}
+                    //return count * 3;
                 }
             }
         }
@@ -2565,10 +2562,10 @@ namespace MonkeyPaste.Avalonia {
                         //    // TODO now composite item doesn't roll up children so the buffer needs to be created here
                         //    // if I use this at all
 
-                        //    MpNotificationCollectionViewModel.Instance.ShowMessageAsync(
+                        //    MpNotificationBuilder.ShowMessageAsync(
                         //        title: "Append Buffer",
                         //        msg: _appendModeCopyItem.ItemData.ToPlainText(),
-                        //        msgType: MpNotificationDialogType.AppendBuffer)
+                        //        msgType: MpNotificationType.AppendBuffer)
                         //        .FireAndForgetSafeAsync(this);
                         //}
 
@@ -2583,11 +2580,11 @@ namespace MonkeyPaste.Avalonia {
                     //MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
                 }
                 if (MpPrefViewModel.Instance.IsTrialExpired) {
-                    MpNotificationCollectionViewModel.Instance.ShowMessageAsync(
+                    MpNotificationBuilder.ShowMessageAsync(
                         title: "Trial Expired",
                         msg: "Please update your membership to use Monkey Paste",
-                        msgType: MpNotificationDialogType.TrialExpired,
-                        iconResourceKey: MpPrefViewModel.Instance.AbsoluteResourcesPath + @"/Images/monkey (2).png")
+                        msgType: MpNotificationType.TrialExpired,
+                        iconSourceStr: MpPrefViewModel.Instance.AbsoluteResourcesPath + @"/Images/monkey (2).png")
                         .FireAndForgetSafeAsync(this);
                 }
             }
@@ -2996,10 +2993,9 @@ namespace MonkeyPaste.Avalonia {
                     } else if (isScrollJump) {
                         // sub-query to visual (scroll position) offset 
 
-                        //loadOffsetIdx = FindJumpTileIdx(ScrollOffsetX,ScrollOffsetY, out MpRect offsetTileRect);
-                        //newScrollOffset = offsetTileRect.Location;
                         newScrollOffset = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg as MpPoint;
-                        loadOffsetIdx = FindJumpTileIdx(newScrollOffset.X,newScrollOffset.Y, out MpRect offsetTileRect);                        
+                        loadOffsetIdx = FindJumpTileIdx(newScrollOffset.X,newScrollOffset.Y, out MpRect offsetTileRect);
+                        newScrollOffset = offsetTileRect.Location;
                     } else if (isLoadMore) {
                         // sub-query either forward (true) or backward (false) based on current offset
 
@@ -3027,7 +3023,6 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     // new query all content and offsets are re-initialized
 
-                    //newScrollOffset = 0;
                     ClearClipSelection();
                     MpDataModelProvider.ResetQuery();
 
@@ -3084,7 +3079,7 @@ namespace MonkeyPaste.Avalonia {
                     int recycle_base_query_idx = isLoadMoreTail ? HeadQueryIdx : TailQueryIdx;
                     int dir = isLoadMoreTail ? 1 : -1;
                     List<Task> initTasks = new List<Task>();
-                    MpAvClipTileViewModel ctvm_needs_restore = null;
+                    //MpAvClipTileViewModel ctvm_needs_restore = null;
 
                     for (int i = 0; i < cil.Count; i++) {
                         MpAvClipTileViewModel cur_ctvm = null;
@@ -3104,25 +3099,25 @@ namespace MonkeyPaste.Avalonia {
                             StoreSelectionState(cur_ctvm);
                             cur_ctvm.ClearSelection();
                         }
-                        initTasks.Add(cur_ctvm.InitializeAsync(cil[i], fetchQueryIdxList[i]));
-
+                        bool needsRestore = false;
                         if (isSubQuery && MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Any(x => x.Id == cil[i].Id)) {
-                            ctvm_needs_restore = cur_ctvm;
+                            needsRestore = true;
                         }
+                        initTasks.Add(cur_ctvm.InitializeAsync(cil[i], fetchQueryIdxList[i], needsRestore));
+
+                        
                     }
-                    await Task.WhenAll(initTasks.ToArray());
-                    if (ctvm_needs_restore != null) {
-                        RestoreSelectionState(ctvm_needs_restore);
+                    //await Task.WhenAll(initTasks.ToArray());
+                    foreach (var initTask in initTasks) {
+                        initTask.FireAndForgetSafeAsync(this);
                     }
                 }
 
-                while (Items.Any(x => x.IsAnyBusy)) {
-                    await Task.Delay(100);
-                }
+                //while (Items.Any(x => x.IsAnyBusy)) {
+                //    await Task.Delay(100);
+                //}
 
                 if (isRequery) {
-                   // HasUserAlteredPinTrayWidthSinceWindowShow = false;
-
                     if (SelectedItem == null &&
                         MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Count == 0 &&
                         TotalTilesInQuery > 0) {
@@ -3149,7 +3144,6 @@ namespace MonkeyPaste.Avalonia {
                     //_scrollOffset = LastScrollOffsetX = 0;
                     //ForceScrollOffset(MpPoint.Zero);
                     MpMessenger.SendGlobal<MpMessageType>(MpMessageType.RequeryCompleted);
-
                 } else if (isOffsetJump || isScrollJump) {
                     ForceScrollOffset(newScrollOffset);
                     MpMessenger.SendGlobal<MpMessageType>(MpMessageType.JumpToIdxCompleted);
@@ -3538,13 +3532,13 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ToggleRightClickPasteCommand => new MpCommand(
             () => {
                 IsRightClickPasteMode = !IsRightClickPasteMode;
-                MpNotificationCollectionViewModel.Instance.ShowMessageAsync("MODE CHANGED", string.Format("RIGHT CLICK PASTE MODE: {0}", IsRightClickPasteMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
+                MpNotificationBuilder.ShowMessageAsync("MODE CHANGED", string.Format("RIGHT CLICK PASTE MODE: {0}", IsRightClickPasteMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
             }, ()=>!IsAppPaused);
 
         public ICommand ToggleAutoCopyModeCommand => new MpCommand(
             () => {
                 IsAutoCopyMode = !IsAutoCopyMode;
-                MpNotificationCollectionViewModel.Instance.ShowMessageAsync("MODE CHANGED", string.Format("AUTO-COPY SELECTION MODE: {0}", IsAutoCopyMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
+                MpNotificationBuilder.ShowMessageAsync("MODE CHANGED", string.Format("AUTO-COPY SELECTION MODE: {0}", IsAutoCopyMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
             }, () => !IsAppPaused);
 
         public ICommand ToggleAppendModeCommand => new MpCommand(
@@ -3553,7 +3547,7 @@ namespace MonkeyPaste.Avalonia {
                 if (IsAppendMode && IsAppendLineMode) {
                     ToggleAppendLineModeCommand.Execute(null);
                 }
-                MpNotificationCollectionViewModel.Instance.ShowMessageAsync("MODE CHANGED", string.Format("APPEND MODE: {0}", IsAppendMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
+                MpNotificationBuilder.ShowMessageAsync("MODE CHANGED", string.Format("APPEND MODE: {0}", IsAppendMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
             }, () => !IsAppPaused);
 
         public ICommand ToggleAppendLineModeCommand => new MpCommand(
@@ -3562,7 +3556,7 @@ namespace MonkeyPaste.Avalonia {
                 if (IsAppendLineMode && IsAppendMode) {
                     ToggleAppendModeCommand.Execute(null);
                 }
-                MpNotificationCollectionViewModel.Instance.ShowMessageAsync("MODE CHANGED", string.Format("APPEND LINE MODE: {0}", IsAppendLineMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
+                MpNotificationBuilder.ShowMessageAsync("MODE CHANGED", string.Format("APPEND LINE MODE: {0}", IsAppendLineMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
             }, () => !IsAppPaused);
 
         public ICommand FindAndReplaceSelectedItem => new MpCommand(

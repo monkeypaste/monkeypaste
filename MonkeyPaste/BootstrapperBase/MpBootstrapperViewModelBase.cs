@@ -36,7 +36,7 @@ namespace MonkeyPaste {
 
         public double PercentLoaded => (double)LoadedCount / (double)_coreItems.Count;
 
-        public MpNotificationDialogType DialogType => MpNotificationDialogType.StartupLoader;
+        public MpNotificationType DialogType => MpNotificationType.Loader;
 
         #endregion
 

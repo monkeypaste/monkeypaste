@@ -225,8 +225,8 @@ namespace MonkeyPaste.Avalonia {
             string notificationText = $"Action '{FullName}' is now  {enabledText}";
             MpAvMainWindowViewModel.Instance.IsShowingDialog = MpAvMainWindowViewModel.Instance.IsMainWindowOpen;
 
-            await MpNotificationCollectionViewModel.Instance.ShowMessageAsync(
-                iconResourceKey: IconResourceKeyStr,
+            await MpNotificationBuilder.ShowMessageAsync(
+                iconSourceStr: IconResourceKeyStr,
                 title: "ACTION STATUS",
                 msg: notificationText);
 

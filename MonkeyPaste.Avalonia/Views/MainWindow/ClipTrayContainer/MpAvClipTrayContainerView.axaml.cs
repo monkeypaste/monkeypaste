@@ -16,42 +16,6 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTrayContainerView : MpAvUserControl<MpAvClipTrayViewModel> {
         public static MpAvClipTrayContainerView Instance { get; private set; }
 
-        //private ListBox _pinTrayListBox;
-        //public ListBox PinTrayListBox {
-        //    get {
-        //        if(_pinTrayListBox == null) {
-        //            var ptrv = this.GetVisualDescendant<MpAvPinTrayView>();
-        //            if(ptrv == null) {
-        //                return null;
-        //            }
-        //            var ptrv_lb = ptrv.GetVisualDescendant<ListBox>();
-        //            if(ptrv_lb == null) {
-        //                return null;
-        //            }
-        //            _pinTrayListBox = ptrv_lb;
-        //        }
-        //        return _pinTrayListBox;
-        //    }
-        //}
-
-        //private ListBox _clipTrayListBox;
-        //public ListBox ClipTrayListBoxRef {
-        //    get {
-        //        if (_clipTrayListBox == null) {
-        //            var ctrv = this.GetVisualDescendant<MpAvClipTrayView>();
-        //            if (ctrv == null) {
-        //                return null;
-        //            }
-        //            var ctrv_lb = ctrv.GetVisualDescendant<ListBox>();
-        //            if (ctrv_lb == null) {
-        //                return null;
-        //            }
-        //            _clipTrayListBox = ctrv_lb;
-        //        }
-        //        return _clipTrayListBox;
-        //    }
-        //}
-
         public MpAvClipTrayContainerView() {
             if (Instance != null) {
                 // ensure singleton
@@ -104,77 +68,8 @@ namespace MonkeyPaste.Avalonia {
             return;
         }
 
-        private void BindingContext_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            if(e.PropertyName == nameof(BindingContext.IsPinTrayVisible)) {
-                var ptrv = this.FindControl<MpAvPinTrayView>("PinTrayView");
-                if(BindingContext.IsPinTrayVisible) {
-                    ptrv.IsVisible = true;
-                    Dispatcher.UIThread.Post(async () => {
-                        while (ptrv.Width < BindingContext.DefaultPinTrayWidth) {
-                            ptrv.Width += 5.0d;
-                            await Task.Delay(30);
-                        }
-                        ptrv.Width = BindingContext.DefaultPinTrayWidth;
-                    });
-                } else {
-                    Dispatcher.UIThread.Post(async () => {
-                        while (ptrv.Width > 0) {
-                            double nw = Math.Max(0, ptrv.Width - 5.0d);
-                            ptrv.Width = nw;
-                            await Task.Delay(30);
-                        }
-                        ptrv.Width = 0;
-                        ptrv.IsVisible = false;
-                    });
-                }
-            }
-        }
-
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
-        }
-
-        private void GridSplitter_IsEnabledChanged(GridSplitter gs, bool isEnabled) {
-            if (!gs.IsEnabled) {
-                // this ensures when gs is disabled the pin tray column is hidden inlcuding splitter
-                var ctrcg = this.FindControl<Grid>("ClipTrayContainerGrid");
-                if(MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    ctrcg.ColumnDefinitions[0].Width = new GridLength(0, GridUnitType.Auto);
-                } else {
-                    ctrcg.RowDefinitions[0].Height = new GridLength(0, GridUnitType.Auto);
-                }                
-            }
-        }
-
-        private void Gs_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
-            var gs = sender as GridSplitter;
-            if (gs.IsEnabled) {
-                //pin tray has items
-
-                //MpSize pinTraySize = this.FindControl<MpAvPinTrayView>("PinTrayView").Bounds.Size.ToPortableSize();
-                var ctrcg = this.FindControl<Grid>("ClipTrayContainerGrid");
-                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    GridLength pinColWidth = ctrcg.ColumnDefinitions[0].Width;
-                    if (pinColWidth.IsAuto) {
-                        //is default, collapsed so pop it out to show one item
-                        pinColWidth = new GridLength(BindingContext.DefaultItemWidth, GridUnitType.Pixel);
-                    } else {
-                        //pinColWidth = new GridLength(pinTraySize.Width, GridUnitType.Pixel);
-                        pinColWidth = new GridLength(gs.Width, GridUnitType.Pixel);
-                    }
-                    ctrcg.ColumnDefinitions[0].Width = pinColWidth;
-                } else {
-                    GridLength pinRowHeight = ctrcg.RowDefinitions[0].Height;
-                    if (pinRowHeight.IsAuto) {
-                        //is default, collapsed so pop it out to show one item
-                        pinRowHeight = new GridLength(BindingContext.DefaultItemHeight, GridUnitType.Pixel);
-                    } else {
-                        //pinRowHeight = new GridLength(pinTraySize.Height, GridUnitType.Pixel);
-                        pinRowHeight = new GridLength(gs.Height, GridUnitType.Pixel);
-                    }
-                    ctrcg.RowDefinitions[0].Height = pinRowHeight;
-                }                
-            }
         }
 
         private void Gs_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
@@ -187,19 +82,6 @@ namespace MonkeyPaste.Avalonia {
 
         private void Gs_DragDelta(object sender, global::Avalonia.Input.VectorEventArgs e) {
             BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow = true;
-            //var ptr = this.FindControl<MpAvPinTrayView>("PinTrayView");
-
-            //var ptrlb = ptr.FindControl<ListBox>("PinTrayListBox");
-            //if(ptrlb == null) {
-            //    return;
-            //}
-            //var ptrsv = ptrlb.GetVisualDescendant<ScrollViewer>();
-            //if(ptrsv == null) {
-            //    return;
-            //}
-            //BindingContext.PinTrayTotalWidth = ptrsv.Extent.Width;
-            //BindingContext.OnPropertyChanged(nameof(BindingContext.ClipTrayScreenWidth));
-            //ptrlb.InvalidateMeasure();
         }
 
     }

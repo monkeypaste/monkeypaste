@@ -807,12 +807,12 @@ namespace MonkeyPaste.Avalonia {
         protected async Task ShowValidationNotification() {
             //bool wasBusy = IsBusy;
             //IsBusy = true;
-            //MpDialogResultType userAction = MpDialogResultType.None;
+            //MpNotificationDialogResultType userAction = MpNotificationDialogResultType.None;
 
             //await Dispatcher.UIThread.InvokeAsync(async () => {
-            //    userAction = await MpNotificationCollectionViewModel.Instance.ShowUserAction(
-            //        dialogType: MpNotificationDialogType.InvalidAction,
-            //        exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
+            //    userAction = await MpNotificationBuilder.Instance.ShowUserAction(
+            //        notificationType: MpNotificationType.InvalidAction,
+            //        exceptionType: MpNotificationLayoutType.WarningWithOption,
             //        msg: ValidationText,
             //        retryAction: async(args)=> { await Validate(); },
             //        fixCommand: Parent.SelectActionCommand,
@@ -820,8 +820,8 @@ namespace MonkeyPaste.Avalonia {
             //});
             await Task.Delay(1);
             Dispatcher.UIThread.Post(() => {
-                MpNotificationCollectionViewModel.Instance.ShowNotificationAsync(
-                    dialogType: MpNotificationDialogType.InvalidAction,
+                MpNotificationBuilder.ShowNotificationAsync(
+                    notificationType: MpNotificationType.InvalidAction,
                     msg: ValidationText,
                     retryAction: async (args) => { await Validate(); },
                     fixCommand: Parent.SelectActionCommand,
@@ -829,14 +829,14 @@ namespace MonkeyPaste.Avalonia {
             });
 
 
-            //if (userAction == MpDialogResultType.Retry) {
+            //if (userAction == MpNotificationDialogResultType.Retry) {
             //    if(ParentActionViewModel == null) {
             //        // NOTE parent vm is nulled when invalid action was deleted so is no longer an issue
             //        wasBusy = false;
             //    } else {
             //        await Validate();
             //    }
-            //} else if (userAction == MpDialogResultType.Ignore) {
+            //} else if (userAction == MpNotificationDialogResultType.Ignore) {
             //    wasBusy = false;
             //}
             //IsBusy = wasBusy;

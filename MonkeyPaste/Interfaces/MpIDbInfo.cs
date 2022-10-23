@@ -11,6 +11,7 @@ namespace MonkeyPaste {
         //public string DbMediaFolderPath => Path.Combine(LocalStoragePath, "media");
 
         //public int MaxDbPasswordAttempts => 3;
+        string DbExtension { get; }
         string DbName { get; }
         string DbPath { get; }
 

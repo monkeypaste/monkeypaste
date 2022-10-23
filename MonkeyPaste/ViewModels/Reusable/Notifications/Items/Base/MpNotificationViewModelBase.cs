@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -12,9 +13,37 @@ namespace MonkeyPaste {
     //    Dialog
     //}
 
-    public enum MpNotificationDialogType {
+    public enum MpNotificationPlacementType {
         None = 0,
-        StartupLoader,
+        SystemTray,
+        CenterActiveScreen
+    }
+
+    public enum MpNotificationDialogResultType {
+        None = 0,
+        Yes,
+        No,
+        Ok,
+        Cancel,
+        Ignore,
+        Retry,
+        Fix,
+        Shutdown,
+        DoNotShow,
+        Loading
+    }
+
+    public enum MpNotificationButtonsType {
+        None = 0,
+        YesNoCancel,
+        Ok,
+        OkCancel,
+        IgnoreRetryFix,
+        IgnoreRetryShutdown,
+        ProgressBar
+    }
+    public enum MpNotificationType {
+        None = 0,
         Loader,
         InvalidPlugin,
         InvalidClipboardFormatHandler,
@@ -32,10 +61,11 @@ namespace MonkeyPaste {
         UserTriggerDisabled,
         AppModeChange,
         AppendBuffer,
+        ContentFormatDegradation,
         TrialExpired
     }
 
-    public enum MpNotificationExceptionSeverityType {
+    public enum MpNotificationLayoutType {
         None = 0,
         Warning, //confirm
         WarningWithOption, //retry/ignore/quit
@@ -43,46 +73,89 @@ namespace MonkeyPaste {
         ErrorWithOption, //retry/ignore/quit
         ErrorAndShutdown //confirm
     }
-    public abstract class MpNotificationViewModelBase : MpViewModelBase<MpNotificationCollectionViewModel> {
+    public abstract class MpNotificationViewModelBase : MpViewModelBase {
         #region Statics
 
-        public static MpNotificationExceptionSeverityType GetExceptionFromNotificationType(MpNotificationDialogType ndt) {
+        public static MpNotificationLayoutType GetLayoutTypeFromNotificationType(MpNotificationType ndt) {
             switch(ndt) {
-                case MpNotificationDialogType.InvalidPlugin:
-                case MpNotificationDialogType.InvalidAction:
-                case MpNotificationDialogType.InvalidClipboardFormatHandler:
-                    return MpNotificationExceptionSeverityType.WarningWithOption;
-                case MpNotificationDialogType.AnalyzerTimeout:
-                case MpNotificationDialogType.InvalidRequest:
-                case MpNotificationDialogType.InvalidResponse:
-                case MpNotificationDialogType.TrialExpired:
-                    return MpNotificationExceptionSeverityType.Warning;
-                case MpNotificationDialogType.BadHttpRequest:
-                case MpNotificationDialogType.DbError:
-                    return MpNotificationExceptionSeverityType.Error;
+                case MpNotificationType.ContentFormatDegradation:
+                case MpNotificationType.InvalidPlugin:
+                case MpNotificationType.InvalidAction:
+                case MpNotificationType.InvalidClipboardFormatHandler:
+                    return MpNotificationLayoutType.WarningWithOption;
+                case MpNotificationType.AnalyzerTimeout:
+                case MpNotificationType.InvalidRequest:
+                case MpNotificationType.InvalidResponse:
+                case MpNotificationType.TrialExpired:
+                    return MpNotificationLayoutType.Warning;
+                case MpNotificationType.BadHttpRequest:
+                case MpNotificationType.DbError:
+                    return MpNotificationLayoutType.Error;
                 default:
-                    return MpNotificationExceptionSeverityType.None;
+                    return MpNotificationLayoutType.None;
+            }
+        }
+        public static MpNotificationButtonsType GetNotificationButtonsType(MpNotificationType ndt) {
+            switch (ndt) {
+                case MpNotificationType.ContentFormatDegradation:
+                    return MpNotificationButtonsType.OkCancel;
+                default:
+                    MpNotificationLayoutType layoutType = GetLayoutTypeFromNotificationType(ndt);
+                    switch (layoutType) {
+                        case MpNotificationLayoutType.WarningWithOption:
+                            return MpNotificationButtonsType.IgnoreRetryFix;
+                        case MpNotificationLayoutType.Warning:
+                            return MpNotificationButtonsType.Ok;
+                        case MpNotificationLayoutType.Error:
+                            return MpNotificationButtonsType.IgnoreRetryShutdown;
+                        default:
+                            return MpNotificationButtonsType.None;
+                    }
             }
         }
 
+        public static MpNotificationPlacementType GetNotificationPlacementType(MpNotificationType ndt) {
+            switch (ndt) {
+                case MpNotificationType.ContentFormatDegradation:
+                    return MpNotificationPlacementType.CenterActiveScreen;
+                default:
+                    return MpNotificationPlacementType.SystemTray;
+            }
+        }
+
+        public static bool GetNotificationTypeModality(MpNotificationType ndt) {
+            switch(ndt) {
+                case MpNotificationType.ContentFormatDegradation:
+                    return true;
+                default:
+                    return false;
+            }
+        }
 
         #endregion
 
         #region Properties
 
         #region Appearance
-
+        public object IconSourceStr {
+            get {
+                if (NotificationFormat == null) {
+                    return string.Empty;
+                }
+                return NotificationFormat.IconSourceStr;
+            }
+        }
         public string NotificationTextForegroundColor {
             get {
-                if (ExceptionType == MpNotificationExceptionSeverityType.Warning ||
-                    ExceptionType == MpNotificationExceptionSeverityType.WarningWithOption) {
+                if (LayoutType == MpNotificationLayoutType.Warning ||
+                    LayoutType == MpNotificationLayoutType.WarningWithOption) {
                     return MpSystemColors.Yellow;
                 }
-                if (ExceptionType == MpNotificationExceptionSeverityType.ErrorAndShutdown ||
-                    ExceptionType == MpNotificationExceptionSeverityType.ErrorWithOption) {
+                if (LayoutType == MpNotificationLayoutType.ErrorAndShutdown ||
+                    LayoutType == MpNotificationLayoutType.ErrorWithOption) {
                     return MpSystemColors.Red;
                 }
-                if (ExceptionType != MpNotificationExceptionSeverityType.None) {
+                if (LayoutType != MpNotificationLayoutType.None) {
                     return MpSystemColors.royalblue;
                 }
                 return MpSystemColors.White;
@@ -113,57 +186,16 @@ namespace MonkeyPaste {
 
         public string BackgroundHexColor { get; set; } = MpSystemColors.mediumpurple;
 
-        #region Icon
-
-
-        public int IconId { get; set; } = 0;
-
-        public string IconResourceKey { get; set; } = string.Empty;
-
-        public string IconHexStr { get; set; } = string.Empty;
-
-        private string _iconImageBase64;
-        public string IconImageBase64 {
-            get {
-                if (string.IsNullOrEmpty(_iconImageBase64)) {
-                    if (IsErrorNotification) {
-                        return MpBase64Images.Error;
-                    }
-                    if (IsWarningNotification) {
-                        return MpBase64Images.Warning;
-                    }
-                    return MpBase64Images.AppIcon;
-                }
-                return _iconImageBase64;
-            }
-            set {
-                if (IconImageBase64 != value) {
-                    _iconImageBase64 = value;
-                    OnPropertyChanged(nameof(IconImageBase64));
-                }
-            }
-        }
-
-        public object IconSourceObj {
-            get {
-                if (IconId > 0) {
-                    return IconId;
-                }
-                if (IconHexStr.IsStringHexColor()) {
-                    return IconHexStr;
-                }
-                if (!string.IsNullOrEmpty(IconResourceKey)) {
-                    return IconResourceKey;
-                }
-                if (!string.IsNullOrEmpty(IconImageBase64)) {
-                    return IconImageBase64;
-                }
-                return MpBase64Images.QuestionMark;
-            }
-        }
-
         #endregion
 
+        #region Layout
+
+        public MpNotificationButtonsType ButtonsType => GetNotificationButtonsType(NotificationType);
+        public MpNotificationLayoutType LayoutType => GetLayoutTypeFromNotificationType(NotificationType);
+
+        public MpNotificationPlacementType PlacementType => GetNotificationPlacementType(NotificationType);
+
+        public bool IsModal => GetNotificationTypeModality(NotificationType);
 
         #endregion
 
@@ -175,69 +207,136 @@ namespace MonkeyPaste {
 
         public bool IsErrorNotification {
             get {
-                return ExceptionType == MpNotificationExceptionSeverityType.Error ||
-                    ExceptionType == MpNotificationExceptionSeverityType.ErrorAndShutdown ||
-                    ExceptionType == MpNotificationExceptionSeverityType.ErrorWithOption;
+                return LayoutType == MpNotificationLayoutType.Error ||
+                    LayoutType == MpNotificationLayoutType.ErrorAndShutdown ||
+                    LayoutType == MpNotificationLayoutType.ErrorWithOption;
             }
         }
 
         public bool IsWarningNotification {
             get {
-                return ExceptionType == MpNotificationExceptionSeverityType.Warning ||
-                    ExceptionType == MpNotificationExceptionSeverityType.WarningWithOption;
+                return LayoutType == MpNotificationLayoutType.Warning ||
+                    LayoutType == MpNotificationLayoutType.WarningWithOption;
             }
         }
 
-        public bool IsStartupNotification => DialogType == MpNotificationDialogType.StartupLoader;
-
-        public bool IsLoaderNotification => DialogType == MpNotificationDialogType.Loader;
-
-        public bool IsIconBase64 => string.IsNullOrEmpty(IconResourceKey);
 
         public bool IsHovering { get; set; } = false;
 
         public bool IsVisible { get; set; } = false;
+
+        public bool IsClosing { get; set; }
+        public string NotifierGuid { get; private set; }
+        public bool DoNotShowAgain { get; set; } = false;
+
+        public virtual int MaxShowTimeMs {
+            get {
+                if (NotificationFormat == null) {
+                    return 0;
+                }
+                return NotificationFormat.MaxShowTimeMs;
+            }
+        }
         #endregion
 
         #region Model
 
-        
-        public string NotifierGuid { get; private set; }
-        public bool DoNotShowAgain { get; set; } = false;
+        public virtual string Title {
+            get {
+                if(NotificationFormat == null) {
+                    return string.Empty;
+                }
+                return NotificationFormat.Title;
+            }
+        }
+
+        public virtual string Body {
+            get {
+                if (NotificationFormat == null) {
+                    return string.Empty;
+                }
+                return NotificationFormat.Body;
+            }
+        }
+
+        public virtual string Detail {
+            get {
+                if (NotificationFormat == null) {
+                    return string.Empty;
+                }
+                return NotificationFormat.Detail;
+            }
+        }
+
+        public virtual MpNotificationType NotificationType {
+            get {
+                if (NotificationFormat == null) {
+                    return MpNotificationType.None;
+                }
+                return NotificationFormat.NotificationType;
+            }
+        }
 
         
 
+        public int NotificationId => (int)NotificationType;
 
-        public virtual string Title { get; set; }
-
-        public virtual string Body { get; set; }
-
-        public virtual string Detail { get; set; }
-
-        public virtual MpNotificationDialogType DialogType { get; set; }
-
-        public MpNotificationExceptionSeverityType ExceptionType => GetExceptionFromNotificationType(DialogType);
-
-        public int NotificationId => (int)DialogType;
-
+        public MpNotificationFormat NotificationFormat { get; private set; }
         #endregion
 
         #endregion
 
         #region Constructors
 
-        public MpNotificationViewModelBase() : base(null) { }
-
-        public MpNotificationViewModelBase(MpNotificationCollectionViewModel parent) : base(parent) {
+        public MpNotificationViewModelBase() : base(null) {
             PropertyChanged += MpNotificationViewModelBase_PropertyChanged;
             NotifierGuid = System.Guid.NewGuid().ToString();
         }
-
-
-
         #endregion
 
         #region Public Methods
+
+        public virtual async Task InitializeAsync(MpNotificationFormat nf, object nfArgs) {
+            bool wasBusy = IsBusy;
+
+            IsBusy = true;
+            await Task.Delay(1);
+
+            if (string.IsNullOrEmpty(nf.IconSourceStr)) {
+                nf.IconSourceStr = MpBase64Images.AppIcon;
+            }
+            NotificationFormat = nf;
+
+            IsBusy = wasBusy;
+        }
+
+        public virtual async Task<MpNotificationDialogResultType> ShowNotificationAsync() {
+            await Task.Delay(1);
+            ShowBalloon();
+            return MpNotificationDialogResultType.None;
+        }
+
+        public virtual void HideNotification() {
+            HideBalloon();
+        }
+
+        #endregion
+
+        #region Protected Methods
+        protected void ShowBalloon() {
+            //_nbv.ShowWindow(nvmb);
+            //IsVisible = true;
+            MpPlatformWrapper.Services.NotificationView.ShowWindow(this);
+        }
+
+        protected void HideBalloon() {
+            //_nbv.HideWindow(nvmb);
+            MpPlatformWrapper.Services.NotificationView.HideWindow(this);
+            //Parent.RemoveNotificationCommand.Execute(this);
+            //Notifications.Remove(nvmb);
+            //IsVisible = false;
+        }
+
         #endregion
 
         #region Private Methods
@@ -245,17 +344,24 @@ namespace MonkeyPaste {
             switch(e.PropertyName) {
                 case nameof(DoNotShowAgain):
                     if(DoNotShowAgain) {
-                        Parent.DoNotShowAgainCommand.Execute((int)DialogType);
+                        MpPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr += NotificationId + ",";
+                        // show loop checks if DoNotShowAgain is true to hide
                     }
                     break;
-                case nameof(DialogType):
-                    OnPropertyChanged(nameof(ExceptionType));
+                case nameof(NotificationType):
+                    OnPropertyChanged(nameof(LayoutType));
                     break;
             }
         }
         #endregion
 
         #region Commands
+        public ICommand ResetAllNotificationsCommand => new MpCommand(
+             () => {
+                 // TODO this should be moved to somewhere in preferences
+                 MpPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr = string.Empty;
+
+             }, () => MpBootstrapperViewModelBase.IsCoreLoaded);
 
         #endregion
     }

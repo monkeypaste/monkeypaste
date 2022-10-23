@@ -23,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
                 key = "MessageTemplate";
             } else if(param is MpUserActionNotificationViewModel) {
                 key = "UserActionTemplate";
-            } else {
+            }  else {
                 throw new Exception("Unknown notification: " + param);
             }
             // build the control to display

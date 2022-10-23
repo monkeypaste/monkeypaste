@@ -81,14 +81,14 @@ namespace MonkeyPaste {
             if (string.IsNullOrEmpty(manifestStr)) {
                 // Empty or io error on manifest file read
 
-                var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotificationAsync(
-                    dialogType: MpNotificationDialogType.InvalidPlugin,
+                var userAction = await MpNotificationBuilder.ShowNotificationAsync(
+                    notificationType: MpNotificationType.InvalidPlugin,
                     msg: $"Plugin manifest not found in '{manifestPath}'", 
                     retryAction: async (args) => { await LoadPluginAsync(manifestPath); },
                     fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(Path.GetDirectoryName(manifestPath))));
 
 
-                //if (userAction == MpDialogResultType.Retry) {
+                //if (userAction == MpNotificationDialogResultType.Retry) {
                 //    var retryPlugin = await LoadPlugin(manifestPath);
                 //    return retryPlugin;
                 //}
@@ -100,8 +100,8 @@ namespace MonkeyPaste {
                 bool isValid = ValidatePluginManifest(plugin,manifestPath);
             }
             catch (Exception ex) {
-                var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotificationAsync(
-                        dialogType: MpNotificationDialogType.InvalidPlugin,
+                var userAction = await MpNotificationBuilder.ShowNotificationAsync(
+                        notificationType: MpNotificationType.InvalidPlugin,
                         msg: $"Error parsing plugin manifest '{manifestPath}': {ex.Message}",
                         retryAction: (args) => {
                             MpPlatformWrapper.Services.MainThreadMarshal.RunOnMainThread(() => {
@@ -110,7 +110,7 @@ namespace MonkeyPaste {
                         },
                         fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(Path.GetDirectoryName(manifestPath))));
 
-                //if (userAction == MpDialogResultType.Retry) {
+                //if (userAction == MpNotificationDialogResultType.Retry) {
                 //    var retryPlugin = await LoadPlugin(manifestPath);
                 //    return retryPlugin;
                 //}
@@ -122,8 +122,8 @@ namespace MonkeyPaste {
                     plugin.RootDirectory = Path.GetDirectoryName(manifestPath);
                 }
                 catch (Exception ex) {
-                    var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotificationAsync(
-                            dialogType: MpNotificationDialogType.InvalidPlugin,
+                    var userAction = await MpNotificationBuilder.ShowNotificationAsync(
+                            notificationType: MpNotificationType.InvalidPlugin,
                             msg: ex.Message,
                             retryAction: (args) => {
                                 MpPlatformWrapper.Services.MainThreadMarshal.RunOnMainThread(() => {
@@ -133,7 +133,7 @@ namespace MonkeyPaste {
                             fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(Path.GetDirectoryName(manifestPath))));
 
 
-                    //if (userAction == MpDialogResultType.Retry) {
+                    //if (userAction == MpNotificationDialogResultType.Retry) {
                     //    var retryPlugin = await LoadPlugin(manifestPath);
                     //    return retryPlugin;
                     //}

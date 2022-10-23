@@ -43,10 +43,10 @@ namespace MonkeyPaste {
 
         #region Model
 
-        public override MpNotificationDialogType DialogType {
+        public override MpNotificationType NotificationType {
             get {
                 if(ProgressLoader == null) {
-                    return MpNotificationDialogType.None;
+                    return MpNotificationType.None;
                 }
                 return ProgressLoader.DialogType;
             }
@@ -60,23 +60,24 @@ namespace MonkeyPaste {
 
         #region Constructors
 
-        public MpLoaderNotificationViewModel() : base(null) { }
-
-        public MpLoaderNotificationViewModel(MpNotificationCollectionViewModel parent) : base(parent) { }
+        public MpLoaderNotificationViewModel() : base() { }
 
         #endregion
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpIProgressLoader progressLoader) {
+        public override async Task InitializeAsync(MpNotificationFormat nf, object nfArgs) {            
             IsBusy = true;
-            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("AppImage") as string;
-            OnPropertyChanged(nameof(IconSourceObj));
-            await Task.Delay(1);
-            ProgressLoader = progressLoader;
+            await base.InitializeAsync(nf, nfArgs);
+            ProgressLoader = (MpIProgressLoader)nfArgs;
             IsBusy = false;
         }
- 
+
+        public override async Task<MpNotificationDialogResultType> ShowNotificationAsync() {
+            var base_result = await base.ShowNotificationAsync();
+            // NOTE returning loading notifies builder not to hide loader
+            return MpNotificationDialogResultType.Loading;
+        }
         #endregion
 
         #region Private Methods

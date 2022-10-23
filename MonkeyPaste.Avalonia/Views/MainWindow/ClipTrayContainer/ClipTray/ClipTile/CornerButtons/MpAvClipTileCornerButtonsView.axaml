@@ -95,7 +95,7 @@
                       Height="16"
                       HorizontalAlignment="Right"
                       VerticalAlignment="Bottom"
-                      IsChecked="{Binding IsContentEditable, Mode=TwoWay}">
+                      IsChecked="{Binding !IsContentReadOnly, Mode=TwoWay}">
             <ToggleButton.Styles>
                 <Style Selector="ToggleButton:checked /template/ ContentPresenter">
                     <Setter Property="Background"

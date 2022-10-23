@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using System;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvLoaderNotificationView : MpAvUserControl<MpLoaderNotificationViewModel> {
@@ -29,12 +30,16 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private void _updateTimer_Tick(object sender, EventArgs e) {
+        private async void _updateTimer_Tick(object sender, EventArgs e) {
             BindingContext.OnPropertyChanged(nameof(BindingContext.ProgressBarCurrentWidth));
             BindingContext.OnPropertyChanged(nameof(BindingContext.Title));
             BindingContext.OnPropertyChanged(nameof(BindingContext.Body));
             BindingContext.OnPropertyChanged(nameof(BindingContext.Detail));
             BindingContext.OnPropertyChanged(nameof(BindingContext.ValueLoaded));
+            if(BindingContext.ValueLoaded >= 100.0d) {
+                await Task.Delay(1000);
+                BindingContext.HideNotification();
+            }
         }
 
 

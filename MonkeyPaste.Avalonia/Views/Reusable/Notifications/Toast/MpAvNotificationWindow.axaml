@@ -11,16 +11,94 @@
         x:DataType="pcl:MpNotificationViewModelBase"
         x:CompileBindings="True"
         x:Class="MonkeyPaste.Avalonia.MpAvNotificationWindow"
-        EffectiveViewportChanged="MpAvNotificationWindow_EffectiveViewportChanged"
-        Opened="MpAvNotificationWindow_Opened"
-        Closed="MpAvNotificationWindow_Closed"
-        Topmost="True"    
+        Classes.IsClosing="{Binding IsClosing}"
+        IsVisible="{Binding IsVisible, Mode=TwoWay}"
+        Topmost="True"
         Width="350"
         SizeToContent="Height"
         ShowInTaskbar="False"
         WindowState="Normal"
         SystemDecorations="None"
+        TransparencyLevelHint="Transparent"
+        Background="Transparent"
         Title="">
+    <Window.Styles>
+        <Style Selector="Button">
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
+            <Setter Property="CornerRadius"
+                    Value="3" />
+            <Setter Property="BorderThickness"
+                    Value="2" />
+            <Setter Property="Padding"
+                    Value="5" />
+            <Setter Property="Background"
+                    Value="Silver" />
+            <Setter Property="BorderBrush"
+                    Value="DimGray" />
+            <Setter Property="Foreground"
+                    Value="White" />
+
+        </Style>
+        <Style Selector="Button:pointerover">
+            <Setter Property="BorderBrush"
+                    Value="Yellow" />
+            <Setter Property="Background"
+                    Value="Silver" />
+        </Style>
+        <Style Selector="Button:pressed">
+            <Setter Property="BorderBrush"
+                    Value="Lime" />
+        </Style>
+        <Style Selector="Window[IsVisible=true] > Border">
+            <Style.Animations>
+                <Animation Duration="0:0:0.4"
+                           FillMode="Forward">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity"
+                                Value="0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity"
+                                Value="1" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="Window.IsClosing > Border">
+            <Style.Animations>
+                <Animation Duration="0:0:0.4"
+                           FillMode="Forward">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity"
+                                Value="1" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity"
+                                Value="0" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="Window.IsClosing">
+            <Style.Animations>
+                <Animation Duration="0:0:1.4"
+                           FillMode="Forward">
+                    <KeyFrame Cue="100%">
+                        <Setter Property="IsVisible"
+                                Value="False" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+    </Window.Styles>
     <Border HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             MinHeight="130"
@@ -29,8 +107,7 @@
             Background="{Binding BackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
             local:MpAvIsHoveringExtension.IsEnabled="True"
             local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
-        <Grid x:Name="grid"
-              PointerReleased="MpAvNotificationWindow_PointerReleased">
+        <Grid x:Name="NotificationWindowContainerGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.35*" />
                 <ColumnDefinition Width="0.75*" />
@@ -39,8 +116,8 @@
                    Grid.Column="0"
                    Width="72"
                    Height="72"
-                   IsVisible="{Binding IconSourceObj, Converter={StaticResource IsNotNullToBoolConverter}}"
-                   Source="{Binding IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                   IsVisible="{Binding IconSourceStr, Converter={StaticResource IsNotNullToBoolConverter}}"
+                   Source="{Binding IconSourceStr, Converter={StaticResource IconSourceObjToBitmapConverter}}"
                    Stretch="Fill"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Top"
@@ -75,7 +152,8 @@
                        Stretch="Fill"
                        Source="{Binding ., Converter={StaticResource StringResourceToBitmapConverter}, Source={StaticResource CloseImage}}" />
             </Button>
-            <ContentControl Grid.Column="1"
+            <ContentControl x:Name="NotificationContentControl"
+                            Grid.Column="1"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
                             DataContext="{Binding}"
@@ -90,6 +168,10 @@
                         <DataTemplate x:Key="MessageTemplate"
                                       DataType="pcl:MpMessageNotificationViewModel">
                             <local:MpAvMessageNotificationView DataContext="{Binding}" />
+                        </DataTemplate>
+                        <DataTemplate x:Key="UserActionTemplate"
+                                      DataType="pcl:MpUserActionNotificationViewModel">
+                            <local:MpAvUserActionNotificationView DataContext="{Binding}" />
                         </DataTemplate>
                     </local:MpAvNotificationTemplateSelector>
                 </ContentControl.DataTemplates>

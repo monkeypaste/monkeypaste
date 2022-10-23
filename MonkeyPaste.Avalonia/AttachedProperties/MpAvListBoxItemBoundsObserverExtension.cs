@@ -93,10 +93,10 @@ namespace MonkeyPaste.Avalonia {
 
             //    //rt_control.EffectiveViewportChanged += Rt_control_EffectiveViewportChanged;
             //    var relativeToBoundsObserver = rt_control.GetObservable(Control.BoundsProperty);
-            //    relativeToBoundsObserver.Subscribe(x => BoundsChangedHandler(rt_control, x));
+            //    relativeToBoundsObserver.Subscribe(x => MpAvNotificationWindow_BoundsChangedHandler(rt_control, x));
             //}
             //var boundsObserver = control.GetObservable(Control.BoundsProperty);
-            //boundsObserver.Subscribe(x => BoundsChangedHandler(control, x));
+            //boundsObserver.Subscribe(x => MpAvNotificationWindow_BoundsChangedHandler(control, x));
             //control.EffectiveViewportChanged += Rt_control_EffectiveViewportChanged;
         }
 

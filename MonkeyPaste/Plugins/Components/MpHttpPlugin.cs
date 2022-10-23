@@ -529,12 +529,12 @@ namespace MonkeyPaste {
                         
                         if (!response.IsSuccessStatusCode) {
                             // NOTE fix command should probably open manfiest folder but only http plugin info is provided so just opening plugin folder
-                            var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotificationAsync(
-                                                    dialogType: MpNotificationDialogType.BadHttpRequest,
+                            var userAction = await MpNotificationBuilder.ShowNotificationAsync(
+                                                    notificationType: MpNotificationType.BadHttpRequest,
                                                     msg: $"{response.ReasonPhrase}",
                                                     fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(Path.GetDirectoryName(MpPluginLoader.PluginRootFolderPath))));
 
-                            //if(userAction == MpDialogResultType.Retry) {
+                            //if(userAction == MpNotificationDialogResultType.Retry) {
                             //    return new MpPluginResponseFormatBase() {
                             //        message = MpPluginResponseFormatBase.RETRY_MESSAGE
                             //    };

@@ -634,11 +634,10 @@ namespace MonkeyPaste.Avalonia {
             if (needsReset) {
                 var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == PluginIconId);
 
-                MpNotificationCollectionViewModel.Instance.ShowMessageAsync(
-                    msgType: MpNotificationDialogType.PluginUpdated,
+                MpNotificationBuilder.ShowMessageAsync(
+                    msgType: MpNotificationType.PluginUpdated,
                     title: $"Analyzer '{Title}' Updated",
-
-                    iconBase64Str: ivm.IconBase64,
+                    iconSourceStr: ivm.IconBase64,
                     msg: "Reseting presets to default...")
                     .FireAndForgetSafeAsync(this);
 
