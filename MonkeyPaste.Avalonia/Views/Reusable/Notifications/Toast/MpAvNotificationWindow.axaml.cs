@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
             }
 
-            Dispatcher.UIThread.Post(async () => {
+            Dispatcher.UIThread.Post(() => {
                 MpAvNotificationWindow nw = null;
 
                 if (App.Desktop.MainWindow == null) {

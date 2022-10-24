@@ -462,18 +462,9 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     var pttvm = new MpAvTagTileViewModel(this);
                     await pttvm.InitializeAsync(ttvm.Tag, true);
-                    //pttvm.ParentTreeItem = ttvm.ParentTreeItem;
+                    pttvm.TagClipCount = ttvm.TagClipCount;
                     PinnedItems.Add(pttvm);
                     pttvm.IsModelPinned = true;
-
-                    //while(pttvm.IsBusy) {
-                    //    await Task.Delay(100);
-                    //}
-                    //var tree_ttvm = Items.FirstOrDefault(x => x.TagId == ttvm.TagId);
-                    //if (tree_ttvm == null) {
-                    //    Debugger.Break();
-                    //}
-                    //tree_ttvm
                 }
 
                 OnPropertyChanged(nameof(PinnedItems));
@@ -510,13 +501,10 @@ namespace MonkeyPaste.Avalonia {
                     _isSelecting = false;
                     return;
                 }
-                //if(MpDataModelProvider.QueryInfo.SortType == MpContentSortType.Manual) {
-                //    MpAvClipTileSortViewModel.Instance.ResetToDefault();
-                //} else if (MpDataModelProvider.QueryInfo.TagId != tagId) {
-                //    MpDataModelProvider.QueryInfo.NotifyQueryChanged();
-                //}
                 SetQueryInfo();
                 _isSelecting = false;
+
+                MpAvQueryInfoViewModel.Current.NotifyQueryChanged();
             },
             (args)=>args != null && !_isSelecting);
 

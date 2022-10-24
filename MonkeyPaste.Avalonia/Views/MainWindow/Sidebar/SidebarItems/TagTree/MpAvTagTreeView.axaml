@@ -2,6 +2,7 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        x:TypeArguments="local:MpAvTagTrayViewModel"
                        x:DataType="local:MpAvTagTrayViewModel"
@@ -13,7 +14,7 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvTagTreeView">
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
-          Background="{Binding TagTreeBgOctColor, Converter={StaticResource StringHexToBrushConverter}}"
+          Background="{DynamicResource TagTreeBgColor}"
           local:MpAvSizeObserverExtension.IsEnabled="True"
           local:MpAvSizeObserverExtension.ObservedWidth="{Binding SidebarWidth, Mode=OneWayToSource}"
           local:MpAvSizeObserverExtension.ObservedHeight="{Binding SidebarHeight, Mode=OneWayToSource}">
@@ -55,48 +56,30 @@
             <TreeView.ItemTemplate>
                 <TreeDataTemplate DataType="{x:Type local:MpAvTagTileViewModel}"
                                   ItemsSource="{Binding Items}">
-                    <local:MpAvTagView DataContext="{Binding}"
-                                       local:MpAvIsHoveringExtension.IsEnabled="True"
-                                       local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                                       local:MpAvIsHoveringExtension.HoverCursor="Hand" />
+                    <local:MpAvTagView DataContext="{Binding}" />
                 </TreeDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
         <Button x:Name="AddTagButton"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
+                IsVisible="{Binding SelectedItem.CanAddChild}"
                 CornerRadius="7"
-                Margin="0,10,10,0"
-                BorderThickness="1"
-                local:MpAvIsHoveringExtension.IsEnabled="True"
-                local:MpAvIsHoveringExtension.HoverCursor="Hand"
+                Margin="0,0,10,0"
+                BorderThickness="0"
                 Command="{Binding SelectedItem.AddChildTagCommand}">
             <Button.Styles>
-                <Style Selector="Button:pointerover">
-                    <Setter Property="BorderBrush"
-                            Value="Yellow" />
-                </Style>
-                <Style Selector="Button:disabled">
-                    <Setter Property="BorderBrush"
-                            Value="DimGray" />
-                </Style>
-                <Style Selector="Button:disabled PathIcon">
+                <Style Selector="PathIcon">
                     <Setter Property="Foreground"
-                            Value="DimGray" />
-                </Style>
-                <Style Selector="Button">
-                    <Setter Property="BorderBrush"
                             Value="Wheat" />
-                    <Setter Property="Background"
-                            Value="Transparent" />
+                    <Setter Property="Data"
+                            Value="{StaticResource PlusSvg}" />
                 </Style>
                 <Style Selector="Button:pointerover PathIcon">
                     <Setter Property="Foreground"
                             Value="Yellow" />
-                </Style>
-                <Style Selector="PathIcon">
-                    <Setter Property="Foreground"
-                            Value="Wheat" />
+                    <Setter Property="Data"
+                            Value="{StaticResource PlusBoxSvg}" />
                 </Style>
                 <Style Selector="PathIcon /template/ Path">
                     <Setter Property="Margin"
@@ -104,9 +87,26 @@
                 </Style>
             </Button.Styles>
             <ToolTip.Tip>
-                <local:MpAvTooltipView ToolTipText="Add Sub Item" />
+                <local:MpAvTooltipView>
+                    <local:MpAvTooltipView.ToolTipText>
+                        <MultiBinding Converter="{StaticResource MultiStringAppendConverter}">
+                            <Binding>
+                                <Binding.Source>
+                                    <sys:String>Add Collection to '</sys:String>
+                                </Binding.Source>
+                            </Binding>
+                            <Binding Path="SelectedItem.TagName"
+                                     Source="{x:Static local:MpAvTagTrayViewModel.Instance}" />
+                            <Binding>
+                                <Binding.Source>
+                                    <sys:String>'</sys:String>
+                                </Binding.Source>
+                            </Binding>
+                        </MultiBinding>
+                    </local:MpAvTooltipView.ToolTipText>
+                </local:MpAvTooltipView>
             </ToolTip.Tip>
-            <PathIcon Data="{StaticResource PlusSvg}" />
+            <PathIcon />
         </Button>
     </Grid>
 </local:MpAvUserControl>

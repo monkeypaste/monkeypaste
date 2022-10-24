@@ -13,7 +13,6 @@
                        d:DesignHeight="30"
                        x:Class="MonkeyPaste.Avalonia.MpAvMainWindowTitleMenuView">
     <Grid x:Name="TitlePanel"
-          Background="{Binding TitleBarBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
         <Grid.Styles>
@@ -64,6 +63,32 @@
                 <PathIcon Data="{StaticResource LockOutlineSvg}" />
             </ToggleButton>
         </StackPanel>
+
+        <Border x:Name="WindowOrientationHandleBorder"
+                Width="100"
+                Height="20"
+                Margin="0,5,0,5"
+                BorderThickness="1"
+                VerticalAlignment="Center"
+                Cursor="SizeAll">
+            <Border.Styles>
+                <Style Selector="Border">
+                    <Setter Property="BorderBrush"
+                            Value="Transparent" />
+                </Style>
+                <Style Selector="Border:pointerover">
+                    <Setter Property="BorderBrush"
+                            Value="Yellow" />
+                </Style>
+            </Border.Styles>
+            <Border.Background>
+                <ImageBrush Source="{Binding Source={StaticResource FrameGripTile}, Converter={StaticResource StringResourceToBitmapConverter}}"
+                            TileMode="Tile"
+                            Stretch="Fill"
+                            DestinationRect="0,0,5,7" />
+            </Border.Background>
+        </Border>
+
 
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right">

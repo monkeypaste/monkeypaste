@@ -548,13 +548,13 @@ namespace MonkeyPaste.Avalonia {
                 return maxScrollOffsetX;
             }
         }
-
         public double MaxScrollOffsetY {
             get {
                 double maxScrollOffsetY = Math.Max(0,ClipTrayTotalTileHeight - ClipTrayScreenHeight);
                 return maxScrollOffsetY;
             }
         }
+
         public MpPoint MaxScrollOffset => new MpPoint(MaxScrollOffsetX, MaxScrollOffsetY);
 
         public MpRect ScreenRect => new MpRect(0, 0, ClipTrayScreenWidth, ClipTrayScreenHeight);
@@ -571,6 +571,7 @@ namespace MonkeyPaste.Avalonia {
 
         public double ClipTrayScreenHeight { get; set; }
 
+        public MpRect PinTrayScreenRect => new MpRect(MpPoint.Zero, new MpSize(ObservedPinTrayScreenWidth, ObservedPinTrayScreenHeight));
         public MpRect ClipTrayScreenRect => new MpRect(MpPoint.Zero, new MpSize(ClipTrayScreenWidth, ClipTrayScreenHeight));
         public double LastZoomFactor { get; set; }
 
@@ -1490,8 +1491,8 @@ namespace MonkeyPaste.Avalonia {
                 return CanTileNavigate();
             });
 
-        public ICommand ScrollToNextPageCommand => new MpAsyncCommand(
-             async () => {
+        public ICommand ScrollToNextPageCommand => new MpCommand(
+             () => {
                  MpPoint scroll_delta = MpPoint.Zero;
                  if (DefaultScrollOrientation == Orientation.Horizontal) {
                      scroll_delta.X = ClipTrayScreenWidth;
@@ -1505,8 +1506,8 @@ namespace MonkeyPaste.Avalonia {
                 return CanTileNavigate();
             });
 
-        public ICommand ScrollToPreviousPageCommand => new MpAsyncCommand(
-            async() => {
+        public ICommand ScrollToPreviousPageCommand => new MpCommand(
+            () => {
                 MpPoint scroll_delta = MpPoint.Zero;
                 if (DefaultScrollOrientation == Orientation.Horizontal) {
                     scroll_delta.X = ClipTrayScreenWidth;
@@ -1626,11 +1627,8 @@ namespace MonkeyPaste.Avalonia {
 
         public double MinClipTrayScreenWidth => MinClipOrPinTrayScreenWidth;
         public double MinClipTrayScreenHeight => MinClipOrPinTrayScreenHeight;
-
         public double MinClipOrPinTrayScreenWidth => 0;
         public double MinClipOrPinTrayScreenHeight => 0;
-
-
         public double ClipTrayContainerScreenWidth { get; set; }
         public double ClipTrayContainerScreenHeight { get; set; }
         public double MaxTileWidth => Math.Max(0, ClipTrayScreenWidth - MAX_TILE_SIZE_CONTAINER_PAD);
@@ -2402,11 +2400,6 @@ namespace MonkeyPaste.Avalonia {
                     QueryCommand.Execute(ScrollOffset);
                     break;
             }
-
-            //if(MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
-
-            //    Dispatcher.UIThread.InvokeAsync(OnPostMainWindowLoaded);
-            //}
         }
 
         private void ReceivedDragDropManagerMessage(MpMessageType msg) {
@@ -2875,7 +2868,7 @@ namespace MonkeyPaste.Avalonia {
             (args) => args != null);
 
 
-        public ICommand DuplicateSelectedClipsCommand => new MpCommand(
+        public ICommand DuplicateSelectedClipsCommand => new MpAsyncCommand(
             async () => {
                 IsBusy = true;
                 var clonedCopyItem = (MpCopyItem)await SelectedItem.CopyItem.Clone(true);
@@ -2888,7 +2881,7 @@ namespace MonkeyPaste.Avalonia {
                 IsBusy = false;
             },()=> SelectedItem != null);
 
-        public ICommand AppendNewItemsCommand => new MpCommand(
+        public ICommand AppendNewItemsCommand => new MpAsyncCommand(
             async () => {
                 IsBusy = true;
                 // note abs id val if ClipboardChanged flagged this as a dup item (maybe negative of real id)
@@ -2902,8 +2895,8 @@ namespace MonkeyPaste.Avalonia {
             },
             ()=>_appendModeCopyItem != null);
 
-        public ICommand AddNewItemsCommand => new MpCommand(
-            async () => {
+        public ICommand AddNewItemsCommand => new MpAsyncCommand<object>(
+            async (tagDropCopyItemOnlyArg) => {
                 int selectedId = -1;
                 if (MpAvMainWindowViewModel.Instance.IsMainWindowLocked && SelectedItem != null) {
                     selectedId = SelectedItem.CopyItemId;
@@ -2941,7 +2934,15 @@ namespace MonkeyPaste.Avalonia {
 
                 //using tray scroll changed so tile drop behaviors update their drop rects
             },
-            () => {
+            (tagDropCopyItemOnlyArg) => {
+                if(tagDropCopyItemOnlyArg is MpCopyItem tag_drop_ci) {
+                    if(_newModels.Any(x=>x.Id == tag_drop_ci.Id)) {
+                        // should only happen once from drop in tag view
+                        Debugger.Break();
+                    } else {
+                        _newModels.Add(tag_drop_ci);
+                    }
+                }
                 if (_newModels.Count == 0) {
                     return false;
                 }

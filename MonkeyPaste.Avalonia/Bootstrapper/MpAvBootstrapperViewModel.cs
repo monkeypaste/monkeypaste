@@ -95,12 +95,7 @@ namespace MonkeyPaste.Avalonia {
             //        data: $"This is the content for test {i}",
             //        itemType: MpCopyItemType.Text);
             //}
-
-
-            //MpNotificationBuilder.Instance.FinishLoading();
-            //MpAvClipTrayViewModel.Instance.OnPostMainWindowLoaded();
-           
-            }
+        }
 
         private async void Nw_Closed(object sender, EventArgs e) {
             IsCoreLoaded = true;

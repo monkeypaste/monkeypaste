@@ -310,6 +310,8 @@ namespace MonkeyPaste.Avalonia {
         public bool AnimateHideWindow { get; set; } = true;
 
         public MpPoint DragMouseMainWindowLocation { get; set; }
+
+        public bool IsMainWindowOrientationDragging { get; set; } = false;
         public bool IsDropOverMainWindow { get; private set; } = false;
         public bool IsResizerVisible { get; set; } = false;     
         public bool IsHovering { get; set; }
@@ -526,10 +528,10 @@ namespace MonkeyPaste.Avalonia {
                     //if (OperatingSystem.IsWindows()) 
                     {
                         // Window position on windows uses actual density not scaled value mac uses scaled haven't checked linux
-                        p *= MainWindowScreen.PixelDensity; //MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx).PixelDensity;
+                        //p *= ; //MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx).PixelDensity;
                     }
 
-                    MpAvMainWindow.Instance.Position = p.ToAvPixelPoint();
+                    MpAvMainWindow.Instance.Position = p.ToAvPixelPoint(MainWindowScreen.PixelDensity);
                     break;
                 case nameof(IsResizing):
                     if (IsResizing) {
@@ -566,9 +568,15 @@ namespace MonkeyPaste.Avalonia {
                         return;
                     }
                     IsDropOverMainWindow = ObservedMainWindowRect.Contains(DragMouseMainWindowLocation);
-                    if(!IsDropOverMainWindow) {
+                    if(!IsDropOverMainWindow && !IsMainWindowOrientationDragging) {
                         DragMouseMainWindowLocation = null;
                     }
+                    break;
+                case nameof(IsMainWindowOrientationDragging):
+                    if(IsMainWindowOrientationDragging) {
+                        break;
+                    }
+                    DragMouseMainWindowLocation = null;
                     break;
                 case nameof(MainWindowOrientationType):
                     MpPrefViewModel.Instance.MainWindowOrientation = MainWindowOrientationType.ToString();
@@ -1019,6 +1027,7 @@ namespace MonkeyPaste.Avalonia {
 
                 IsResizing = false;
             });
+
 
         private MpCommand _undoCommand;
         public ICommand UndoCommand {

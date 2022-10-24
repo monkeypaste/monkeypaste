@@ -3,6 +3,35 @@ using System.Linq;
 
 namespace MonkeyPaste.Common {
     public static class MpRectExtensions {
+
+        public static MpTriangle[] ToFaces(this MpRect rect) {
+            // NOTE wrapping clock-wise
+
+            if(rect == null) {
+                return new MpTriangle[] {};
+            }
+            MpPoint c = rect.Centroid();
+
+            return new MpTriangle[] {
+                //BR+BL (Bottom)
+                new MpTriangle(rect.BottomRight,rect.BottomLeft,c),
+                //TR+BR (Right)
+                new MpTriangle(rect.TopRight,rect.BottomRight,c),
+                //TL+TR (Top)
+                new MpTriangle(rect.TopLeft,rect.TopRight,c),
+                //BL+TL (Left)
+                new MpTriangle(rect.BottomLeft,rect.TopLeft,c)
+            };
+        }
+
+        public static MpPoint Centroid(this MpRect rect) {
+            if(rect == null) {
+                return MpPoint.Zero;
+            }
+            double mid_x = rect.Left + (rect.Width / 2);
+            double mid_y = rect.Top + (rect.Height / 2);
+            return new MpPoint(mid_x, mid_y);
+        }
         public static bool FuzzyEquals(this MpRect rect,MpRect otherRect, double maxThresh = 0.1d) {
             if(rect == null && otherRect == null) {
                 return true;

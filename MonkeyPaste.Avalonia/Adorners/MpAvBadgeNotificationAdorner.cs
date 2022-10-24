@@ -9,6 +9,9 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using PropertyChanged;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
+
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvBadgeNotificationAdorner : MpAvAdornerBase {
@@ -32,7 +35,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        public MpAvBadgeNotificationAdorner(Control control) : base(control) { 
+        public MpAvBadgeNotificationAdorner(Control control) : base(control) {
+            ClipToBounds = false;
             if(control != null && control.DataContext is MpIBadgeNotificationViewModel) {
                 _notifier = control.DataContext as MpIBadgeNotificationViewModel;
             }
@@ -45,7 +49,10 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             
-            var rect = AdornedControl.Bounds;
+            MpRect rect = AdornedControl.Bounds.ToPortableRect();
+            if(AdornedControl.GetVisualAncestor<ListBoxItem>() is ListBoxItem lbi) {
+                rect = lbi.Bounds.ToPortableRect();
+            }
 
             if(!HasNotification) {
                 IsVisible = false;
@@ -53,7 +60,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             IsVisible = true;
-            context.DrawEllipse(Brushes.Red, new Pen(Brushes.White, 1), rect.TopLeft, 5, 5);
+            context.DrawEllipse(Brushes.Red, new Pen(Brushes.White, 1), rect.TopRight.ToAvPoint(), 5, 5);
 
             base.Render(context);
         }

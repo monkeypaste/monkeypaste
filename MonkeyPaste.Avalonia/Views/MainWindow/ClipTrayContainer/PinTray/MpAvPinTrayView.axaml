@@ -1,7 +1,7 @@
 <local:MpAvUserControl xmlns="https://github.com/avaloniaui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                       xmlns:core="clr-namespace:System;assembly=mscorlib"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
@@ -105,7 +105,7 @@
                              Path="DefaultItemWidth" />
                     <Binding>
                         <Binding.Source>
-                            <core:Double>20</core:Double>
+                            <sys:Double>20</sys:Double>
                         </Binding.Source>
                     </Binding>
                 </MultiBinding>

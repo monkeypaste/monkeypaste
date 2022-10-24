@@ -201,29 +201,18 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
        
-        public static MpPoint ToPortablePoint(this PixelPoint p) {
-            return new MpPoint(p.X, p.Y);
+        public static MpPoint ToPortablePoint(this PixelPoint p, double pixelDensity) {
+            return new MpPoint(((double)p.X/pixelDensity), ((double)p.Y/pixelDensity));
         }
 
         public static Point ToAvPoint(this MpPoint p) {
             return new Point(p.X, p.Y);
         }
 
-        public static PixelPoint ToAvPixelPoint(this MpPoint p, double pixelDensity = 1.0d) {
+        public static PixelPoint ToAvPixelPoint(this MpPoint p, double pixelDensity) {
             return new PixelPoint((int)(p.X* pixelDensity), (int)(p.Y*pixelDensity));
         }
 
-        public static PixelPoint ToAvPixelPoint(this PixelSize p) {
-            return new PixelPoint(p.Width, p.Height);
-        }
-
-        public static Point ToAvPoint(this PixelPoint p) {
-            return new Point(p.X, p.Y);
-        }
-
-        public static PixelPoint ToAvPixelPoint(this Point p) {
-            return new PixelPoint((int)p.X, (int)p.Y);
-        }
 
         #endregion
 
@@ -285,12 +274,12 @@ namespace MonkeyPaste.Common.Avalonia {
             return new Rect(rect.Location.ToAvPoint(), rect.Size.ToAvSize());
         }
 
-        public static MpRect ToPortableRect(this PixelRect rect) {
-            return new MpRect(rect.Position.ToPortablePoint(), rect.Size.ToPortableSize());
+        public static MpRect ToPortableRect(this PixelRect rect, double pixelDensity) {
+            return new MpRect(rect.Position.ToPortablePoint(pixelDensity), rect.Size.ToPortableSize());
         }
 
-        public static PixelRect ToAvPixelRect(this MpRect rect) {
-            return new PixelRect(rect.Location.ToAvPixelPoint(), rect.Size.ToAvPixelSize());
+        public static PixelRect ToAvPixelRect(this MpRect rect, double pixelDensity) {
+            return new PixelRect(rect.Location.ToAvPixelPoint(pixelDensity), rect.Size.ToAvPixelSize());
         }
 
 

@@ -18,14 +18,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-        public string TitleBarBackgroundHexColor {
-            get {
-                if (MpAvMainWindowViewModel.Instance.IsMainWindowActive) {
-                    return MpSystemColors.goldenrod.AdjustAlpha(MpPrefViewModel.Instance.MainWindowOpacity);
-                }
-                return MpSystemColors.gainsboro.AdjustAlpha(MpPrefViewModel.Instance.MainWindowOpacity);
-            }
-        }
 
         public string ZoomSliderHexColor {
             get {
@@ -81,7 +73,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.MainWindowActivated:
                 case MpMessageType.MainWindowDeactivated:
                 case MpMessageType.MainWindowOpened:
-                    OnPropertyChanged(nameof(TitleBarBackgroundHexColor));
+                    //OnPropertyChanged(nameof(TitleBarBackgroundHexColor));
                     break;
             }
         }

@@ -55,7 +55,8 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(async () => {
                 var wv = browser.Host.Client.GetWebView() as MpAvCefNetWebView;
                 var ctvm = wv.BindingContext;
-                
+                object drag_lock = System.Guid.NewGuid().ToString();
+
                 // NOTE only setting this true (maynot be if not all selected) for js msg to know its for ole
                 ctvm.IsTileDragging = true; 
 
@@ -103,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
                     allowedEffects = DragDropEffects.Move;
                 }
                 MpAvDataObject avmpdo = await wv.Document.GetDataObjectAsync(false, false);
-                ctvm.IsTileDragging = avmpdo.ContainsData(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT);
+                ctvm.IsTileDragging = await avmpdo.ContainsInternalContentItem_safe(drag_lock);
 
                 // seems excessive...but ultimately all ole pref's come from plugins so pass everthing through cb plugin system just like writing to clipboard
                 avmpdo = await MpPlatformWrapper.Services.DataObjectHelperAsync.WriteDragDropDataObject(avmpdo) as MpAvDataObject;

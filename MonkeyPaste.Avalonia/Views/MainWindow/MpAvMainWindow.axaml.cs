@@ -23,7 +23,7 @@ using Avalonia.Interactivity;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvMainWindow : Window { //}, MpAvIDropHost {
+    public partial class MpAvMainWindow : Window, MpIDndWindowPointerLocator { //}, MpAvIDropHost {
         #region Private Variables
 
         private int? _origResizerIdx;
@@ -34,6 +34,25 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvMainWindow? Instance { get; private set; } = null;
         static MpAvMainWindow() {
             BoundsProperty.Changed.AddClassHandler<MpAvMainWindow>((x, y) => x.BoundsChangedHandler(y as AvaloniaPropertyChangedEventArgs<Rect>));
+        }
+
+        #endregion
+
+        #region MpIDndWindowPointerLocator Implementation
+
+        MpPoint MpIDndWindowPointerLocator.DragPointerPosition { 
+            get {
+                if(BindingContext == null) {
+                    return null;
+                }
+                return BindingContext.DragMouseMainWindowLocation;
+            }
+            set {
+                if(BindingContext == null) {
+                    throw new Exception("No data context defined");
+                }
+                BindingContext.DragMouseMainWindowLocation = value;
+            }
         }
 
         #endregion

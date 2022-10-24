@@ -1,0 +1,113 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+    <Styles.Resources>
+        <Thickness x:Key="ListBoxItemPadding">
+            5,5,5,5
+        </Thickness>
+    </Styles.Resources>
+
+    <Style Selector="ListBoxItem">
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="VerticalAlignment"
+                Value="Top" />
+        <Setter Property="FocusAdorner"
+                Value="{x:Null}" />
+    </Style>
+    <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>
+
+    <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>
+
+    <Style Selector="ListBoxItem:selected:focus /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>
+
+    <Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>
+
+    <Style Selector="ListBoxItem:selected:focus:pointerover /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>
+
+    <!--  ListBoxItem Border .TileBorder  -->
+    <Style Selector=":is(local|MpAvClipBorder).TileBorder"
+           x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="BorderBrush"
+                                 Duration="0:0:0.2" />
+            </Transitions>
+        </Setter>
+        <Setter Property="BorderBrush"
+                Value="{StaticResource DefaultBorderBrush_unselected}" />
+    </Style>
+
+    <!--  Hover Unselected  -->
+
+    <Style Selector="ListBoxItem:pointerover:not(:selected) :is(Border).TileBorder"
+           x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="BorderBrush"
+                Value="{StaticResource IsHoveringBorderBrush_unselected}" />
+    </Style>
+
+    <!--  Hover Unselected (dnd)  -->
+    <!--<Style Selector="ListBoxItem:not(:selected) :is(Border).TileHover"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource IsHoveringBorderBrush_unselected}" />
+        </Style>-->
+
+
+    <!--  Default Selected  -->
+
+    <Style Selector="ListBoxItem:selected :is(Border).TileBorder"
+           x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="BorderBrush"
+                Value="{StaticResource DefaultBorderBrush_selected}" />
+    </Style>
+
+
+    <!--  Hover Selected  -->
+
+    <Style Selector="ListBoxItem:selected:pointerover :is(Border).TileBorder:not(.CanResize):not(.IsResizing)"
+           x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="BorderBrush"
+                Value="{StaticResource IsHoveringBorderBrush_selected}" />
+    </Style>
+
+    <!--  Hover Selected (dnd)  -->
+    <!--<Style Selector="ListBoxItem:selected :is(Border).TileHover:not(.CanResize):not(.IsResizing)"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource IsHoveringBorderBrush_selected}" />
+        </Style>-->
+
+    <!--  Default Resize  -->
+
+    <Style Selector="ListBoxItem :is(Border).TileBorder.IsResizing"
+           x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="BorderBrush"
+                Value="{StaticResource IsResizingBorderBrush}" />
+    </Style>
+
+
+    <!--  Hover Resizing  -->
+
+    <Style Selector="ListBoxItem:selected:pointerover :is(Border).TileBorder.CanResize:not(.IsResizing)"
+           x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="BorderBrush"
+                Value="{StaticResource CanResizeBorderBrush}" />
+    </Style>
+</Styles>

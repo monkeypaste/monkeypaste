@@ -15,6 +15,7 @@
     <DockPanel x:Name="FilterDockPanel"
                HorizontalAlignment="Stretch"
                VerticalAlignment="Stretch"
+               Background="{StaticResource FilterMenuBgColor}"
                LastChildFill="True">
         <DockPanel.Styles>
             <Style Selector="ToggleButton">
@@ -22,11 +23,6 @@
                         Value="0" />
             </Style>
         </DockPanel.Styles>
-
-        <DockPanel.Background>
-            <SolidColorBrush Color="Purple"
-                             Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
-        </DockPanel.Background>
         <!--  Pause / Resume Clipboard Listener Toggle Button  -->
         <ToggleButton Tag="PlayPause"
                       local:MpAvSizeObserverExtension.IsEnabled="False"
@@ -70,7 +66,7 @@
                                  local:MpAvSizeObserverExtension.IsEnabled="False"
                                  local:MpAvSizeObserverExtension.ObservedWidth="{Binding SearchBoxViewWidth, Source={x:Static local:MpAvSearchBoxViewModel.Instance}, Mode=OneWayToSource}" />
 
-      <!-- Tag Tray View -->
+        <!--  Tag Tray View  -->
         <local:MpAvTagTrayView IsVisible="{Binding IsHorizontalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />
 
         <!--</mech:ToolBarTray>-->

@@ -359,6 +359,17 @@ namespace MonkeyPaste.Avalonia {
         }
         public MpSize EditableSize => new MpSize(EditableWidth, EditableHeight);
 
+        public MpRect ParentScreenRect {
+            get {
+                if(Parent == null || IsPlaceholder) {
+                    return MpRect.Empty;
+                }
+                if(IsPinned) {
+                    return Parent.PinTrayScreenRect;
+                }
+                return Parent.ClipTrayScreenRect;
+            }
+        }
         #endregion
 
         #region State
@@ -448,12 +459,10 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsTileOnScreen {
             get {
-                if (Parent == null) {
-                    return false;
-                }
-                return Parent.ClipTrayScreenRect.Contains(ScreenRect);
+                return ParentScreenRect.IsAnyPointWithinOtherRect(ObservedBounds);
             }
         }
+
         public bool IsHorizontalScrollbarVisibile {
             get {
                 if (!IsContentReadOnly) {

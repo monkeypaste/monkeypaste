@@ -1,0 +1,30 @@
+<Style xmlns="https://github.com/avaloniaui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:local="using:MonkeyPaste.Avalonia"
+       xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <Style.Resources>
+
+        <SolidColorBrush x:Key="HitTestableTransparent"
+                         Color="Black"
+                         Opacity="0.01" />
+
+        <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">
+            Transparent
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">
+            Transparent
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">
+            Transparent
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">
+            Transparent
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">
+            Transparent
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">
+            Transparent
+        </SolidColorBrush>
+    </Style.Resources>
+</Style>

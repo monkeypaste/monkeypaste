@@ -1,0 +1,60 @@
+<Style xmlns="https://github.com/avaloniaui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+       xmlns:local="using:MonkeyPaste.Avalonia">
+    <Style.Resources>
+        <!--  COMMON  -->
+
+        <sys:Double x:Key="GlobalBgOpacity">
+            0.7
+        </sys:Double>
+        <SolidColorBrush x:Key="DefaultBorderBrush_unselected">
+            Transparent
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="DefaultBorderBrush_selected">
+            Red
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="IsHoveringBorderBrush_unselected">
+            Yellow
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="IsHoveringBorderBrush_selected">
+            SpringGreen
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="CanResizeBorderBrush">
+            DeepPink
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="IsResizingBorderBrush">
+            LightPink
+        </SolidColorBrush>
+
+        <!--  TITLE MENU  -->
+        <SolidColorBrush x:Key="TitleMenuActiveBgColor"
+                         Color="Goldenrod"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="TitleMenuInactiveBgColor"
+                         Color="Gainsboro"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+
+        <!--  FILTER MENU  -->
+        <SolidColorBrush x:Key="FilterMenuBgColor"
+                         Color="Purple"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+
+        <!--  SIDE BAR  -->
+        <!--  TAG TREE  -->
+        <SolidColorBrush x:Key="TagTreeBgColor"
+                         Color="Purple"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+
+        <!--  CLIP TRAY  -->
+
+        <SolidColorBrush x:Key="QueryTrayBgColor"
+                         Color="Purple"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+
+        <SolidColorBrush x:Key="PinTrayBgColor"
+                         Color="Teal"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+    </Style.Resources>
+
+</Style>

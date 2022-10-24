@@ -46,7 +46,6 @@
                 local:MpAvResizeExtension.XFactor="{Binding ResizeXFactor}"
                 local:MpAvResizeExtension.YFactor="{Binding ResizeYFactor}"
                 local:MpAvResizeExtension.GlobalResizeMessage="MainWindowSizeChanged"
-                Background="{Binding TitleBarBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}, Source={x:Static local:MpAvMainWindowTitleMenuViewModel.Instance}}"
                 local:MpAvResizeExtension.IsEnabled="True"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"

@@ -38,9 +38,80 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
             });
+
+            var windowDragBorder = this.FindControl<Control>("WindowOrientationHandleBorder");
+            windowDragBorder.AddHandler(Border.PointerPressedEvent, WindowDragBorder_PointerPressed, RoutingStrategies.Tunnel);
             //var ltb = this.FindControl<Button>("MainWindowOrientationButton");
             //ltb.AddHandler(Button.PointerPressedEvent, Ltb_PointerPressed, RoutingStrategies.Tunnel);
         }
+
+        #region Window Drag
+        private MpMainWindowOrientationType _startOrientation;
+        private MpMainWindowOrientationType _curOrientation;
+        private void WindowDragBorder_PointerPressed(object sender, PointerPressedEventArgs e) {
+            var windowDragBorder = sender as Control;
+            if(windowDragBorder == null) {
+                return;
+            }
+            windowDragBorder.DragCheckAndStart(
+                e, 
+                WindowDragBorder_Start, WindowDragBorder_Move, WindowDragBorder_End, 
+                MpAvMainWindow.Instance,
+                MpAvShortcutCollectionViewModel.Instance);
+        }
+
+        private void WindowDragBorder_Start(PointerPressedEventArgs e) {
+            MpAvMainWindowViewModel.Instance.IsMainWindowOrientationDragging = true;
+            _startOrientation = MpAvMainWindowViewModel.Instance.MainWindowOrientationType;
+            e.Pointer.Capture(e.Source as Control);
+        }
+        private void WindowDragBorder_Move(PointerEventArgs e) {
+            //
+
+            MpPoint screen_mp = MpAvMainWindow.Instance.PointToScreen(
+                MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation.ToAvPoint())
+                .ToPortablePoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.PixelDensity);
+
+            MpRect mw_screen_rect = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds;
+            var screen_faces = mw_screen_rect.ToFaces();
+
+            int cur_face_idx = -1;
+            for (int i = 0; i < screen_faces.Length; i++) {
+                var face = screen_faces[i];
+                if(face.Contains(screen_mp)) {
+                    cur_face_idx = i;
+                    break;
+                }
+            }
+            if(cur_face_idx < 0) {
+                Debugger.Break();
+            }
+
+            _curOrientation = (MpMainWindowOrientationType)cur_face_idx;
+            MpConsole.WriteLine("");
+            MpConsole.WriteLine("Window Drag mp: " + MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation);
+            MpConsole.WriteLine("Screen Drag mp: " + screen_mp);
+            MpConsole.WriteLine("Cur Orientation: " + _curOrientation);
+            MpConsole.WriteLine("");
+            if(MpAvMainWindowViewModel.Instance.MainWindowOrientationType != _curOrientation) {
+                MpAvMainWindowViewModel.Instance.CycleOrientationCommand.Execute(_curOrientation);
+            }
+        }
+
+        private void WindowDragBorder_End(PointerReleasedEventArgs e) {
+            MpAvMainWindowViewModel.Instance.IsMainWindowOrientationDragging = false;
+
+            MpMainWindowOrientationType final_or = _curOrientation;
+            bool was_canceled = e == null;
+            if(was_canceled) {
+                final_or = _startOrientation;
+            }
+            if(MpAvMainWindowViewModel.Instance.MainWindowOrientationType != final_or) {
+                MpAvMainWindowViewModel.Instance.CycleOrientationCommand.Execute(final_or);
+            }
+        }
+
+        #endregion
 
         private void Children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             

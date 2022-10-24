@@ -17,10 +17,12 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public partial class MpAvPinTrayView : MpAvUserControl<MpAvClipTrayViewModel> { //, MpAvIDropHost {
+    public partial class MpAvPinTrayView : MpAvUserControl<MpAvClipTrayViewModel> { 
         #region Private Variables
 
         private MpAvDropHostAdorner _dropAdorner;
+
+        private object _dropLock = System.Guid.NewGuid().ToString();
 
         #endregion
 
@@ -42,7 +44,7 @@ namespace MonkeyPaste.Avalonia {
             BindingContext.IsDragOverPinTray = true;
         }
 
-        private void DragOver(object sender, DragEventArgs e) {
+        private async void DragOver(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragOver] PinTrayListBox: ");
             // e.DragEffects = DragDropEffects.None;
             MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();
@@ -50,9 +52,9 @@ namespace MonkeyPaste.Avalonia {
             var ptr_mp = e.GetPosition(sender as Control).ToPortablePoint();
             int drop_idx = GetDropIdx(ptr_mp);
             bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
-            bool is_drop_valid = IsDropValid(e.Data, drop_idx, is_copy);
+            bool is_drop_valid = await IsDropValidAsync(e.Data, drop_idx, is_copy);
             MpConsole.WriteLine("[DragOver] PinTrayListBox DropIdx: " + drop_idx + " IsCopy: "+is_copy+" IsValid: "+is_drop_valid);
-
+            e.DragEffects = DragDropEffects.None;
             if (is_drop_valid) {
                 e.DragEffects = is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
                 MpLine dropLine = CreateDropLine(drop_idx, is_copy);
@@ -72,12 +74,14 @@ namespace MonkeyPaste.Avalonia {
             var host_mp = e.GetPosition(sender as Control).ToPortablePoint();
             int drop_idx = GetDropIdx(host_mp);
             bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
-            bool is_drop_valid = IsDropValid(e.Data, drop_idx, is_copy);
+            bool is_drop_valid = await IsDropValidAsync(e.Data, drop_idx, is_copy);
             MpConsole.WriteLine("[Drop] PinTrayListBox DropIdx: " + drop_idx + " IsCopy: " + is_copy + " IsValid: " + is_drop_valid);
 
+            e.DragEffects = DragDropEffects.None;
             if (is_drop_valid) {
                 e.DragEffects = is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
-                if (e.Data.GetDataFormats().Contains(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT)) {
+                bool is_internal = await e.Data.ContainsInternalContentItem_safe(_dropLock);
+                if (is_internal) {
                     // Internal Drop
                     await PerformTileDropAsync(drop_idx, e.Data, is_copy);
                 } else {
@@ -87,6 +91,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             ResetDrop();
+            MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = null;
         }
 
         #endregion
@@ -123,7 +128,7 @@ namespace MonkeyPaste.Avalonia {
             return closest_side_lbi_idx;
         }
 
-        private bool IsDropValid(IDataObject avdo, int drop_idx, bool is_copy) {
+        private async Task<bool> IsDropValidAsync(IDataObject avdo, int drop_idx, bool is_copy) {
             // called in DropExtension DragOver 
 
             MpConsole.WriteLine("IsDropValid DropIdx: " + drop_idx);
@@ -138,7 +143,8 @@ namespace MonkeyPaste.Avalonia {
             int drag_pctvm_idx = BindingContext.PinnedItems.IndexOf(drag_pctvm);
             
             bool is_drop_onto_same_idx = drop_idx == drag_pctvm_idx || drop_idx == drag_pctvm_idx + 1;
-            bool is_partial_drop = avdo.Get(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT) == null;
+            bool is_internal = await avdo.ContainsInternalContentItem_safe(_dropLock);
+            bool is_partial_drop = !is_internal;
 
             if (!is_copy && !is_partial_drop && is_drop_onto_same_idx) {
                 // don't allow moving full item if it'll be at same position 
@@ -146,7 +152,7 @@ namespace MonkeyPaste.Avalonia {
             }
             // TODO Check data here (which shouldn't matter for internal but would be general app-level check from external)
 
-            avdo.GetDataFormats().ForEach(x => MpConsole.WriteLine($"FORMAT: '{x}' Data: '{avdo.Get(x)}'"));
+            //avdo.GetDataFormats().ForEach(x => MpConsole.WriteLine($"FORMAT: '{x}' Data: '{avdo.Get(x)}'"));
 
 
             return true;
@@ -154,12 +160,11 @@ namespace MonkeyPaste.Avalonia {
 
         private void ResetDrop() {
             BindingContext.IsDragOverPinTray = false;
-            MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = null;
             ClearAdorner();
         }
 
         private async Task PerformTileDropAsync(int drop_idx, IDataObject avdo, bool isCopy) {
-            var drop_ctvm = avdo.Get(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT) as MpAvClipTileViewModel;
+            var drop_ctvm = await avdo.Get_safe(_dropLock, MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT) as MpAvClipTileViewModel;
             if (drop_ctvm == null) {
                 Debugger.Break();
             }

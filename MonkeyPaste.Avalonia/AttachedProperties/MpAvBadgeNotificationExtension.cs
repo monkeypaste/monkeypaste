@@ -2,8 +2,12 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using MonkeyPaste.Common.Avalonia;
+using System;
 using System.Diagnostics;
 using System.Linq;
+using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -31,41 +35,51 @@ namespace MonkeyPaste.Avalonia {
         private static void HandleIsEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isEnabledVal && isEnabledVal) {
                 if (element is Control control) {
-                    if (control.IsInitialized) {
+                    control.AttachedToVisualTree += AttachedToVisualHandler;
+                    control.DetachedFromVisualTree += DetachedToVisualHandler;
+                    control.DataContextChanged += Control_DataContextChanged;
+                    if(control.IsInitialized) {
                         AttachedToVisualHandler(control, null);
-                    } else {
-                        control.AttachedToVisualTree += AttachedToVisualHandler;
-
                     }
                 }
             } else {
+
                 DetachedToVisualHandler(element, null);
+                return;
             }
 
             void AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs e) {
                 if (s is Control control) {
-                    if (e == null) {
-                        control.AttachedToVisualTree += AttachedToVisualHandler;
-                    }
-                    control.DetachedFromVisualTree += DetachedToVisualHandler;
-
                     var adornerLayer = AdornerLayer.GetAdornerLayer(control);
                     if (adornerLayer != null) {
                         var adorner = new MpAvBadgeNotificationAdorner(control);
-                        adornerLayer.Children.Add(adorner); 
+                        adornerLayer.Children.Add(adorner);
                         AdornerLayer.SetAdornedElement(adorner, control);
                     }
 
-                    if(control.DataContext is MpIBadgeNotificationViewModel bnvm) {
+                    if (control.DataContext is MpIBadgeNotificationViewModel bnvm) {
                         bnvm.PropertyChanged += Bnvm_PropertyChanged;
                     }
                 }
             }
 
+            void Control_DataContextChanged(object sender, System.EventArgs e) {
+                if (sender is Control control &&
+                    control.DataContext is MpIBadgeNotificationViewModel bnvm) {
+
+                    bnvm.PropertyChanged += Bnvm_PropertyChanged;
+                }
+            }
+
+
             void DetachedToVisualHandler(object s, VisualTreeAttachmentEventArgs e) {
                 if (s is Control control) {
-                    control.AttachedToVisualTree -= AttachedToVisualHandler;
+                    control.DataContextChanged -= Control_DataContextChanged;
                     control.DetachedFromVisualTree -= DetachedToVisualHandler;
+                    control.AttachedToVisualTree -= AttachedToVisualHandler;
+                    if (control.DataContext is MpIBadgeNotificationViewModel bnvm) {
+                        bnvm.PropertyChanged -= Bnvm_PropertyChanged;
+                    }
                 }
             }
 
@@ -73,15 +87,26 @@ namespace MonkeyPaste.Avalonia {
                 if (sender is MpIBadgeNotificationViewModel bnvm) {
                     switch (e.PropertyName) {
                         case nameof(bnvm.HasBadgeNotification):
-                            if(element is Control control) {
+                            if (element is Control control) {
                                 var adornerLayer = AdornerLayer.GetAdornerLayer(control);
-                                if(adornerLayer != null) {
-                                    var notificationAdorner = adornerLayer.Children.FirstOrDefault(x => x is MpAvBadgeNotificationAdorner);
-                                    if(notificationAdorner != default) {
-                                        notificationAdorner.InvalidateVisual();
-                                    }
+                                if (adornerLayer == null) {
+                                    // where is it?
+                                    Debugger.Break();
+                                    return;
                                 }
-                                
+                                var notificationAdorners = adornerLayer.Children
+                                    .Where(x => x is MpAvBadgeNotificationAdorner bna && bna.AdornedControl == control)
+                                    .Cast<MpAvBadgeNotificationAdorner>();
+
+                                if (notificationAdorners == null || notificationAdorners.Count() == 0) {
+                                    // shouldn't happen
+                                    Debugger.Break();
+                                    // add it lazy
+                                    //notificationAdorners = new MpAvBadgeNotificationAdorner(control);
+                                    //adornerLayer.Children.Add(notificationAdorners);
+                                }
+
+                                notificationAdorners.ForEach(x => x.InvalidateAll());
                             }
                             break;
                     }
@@ -89,7 +114,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
+        
 
         #endregion
 

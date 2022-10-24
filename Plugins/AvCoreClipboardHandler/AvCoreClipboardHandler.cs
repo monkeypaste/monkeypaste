@@ -13,6 +13,7 @@ namespace AvCoreClipboardHandler {
         MpIClipboardReaderComponentAsync,
         MpIClipboardWriterComponentAsync {
         #region Private Variables
+        private object _readLock = System.Guid.NewGuid().ToString();
 
         private const int MAX_READ_RETRY_COUNT = 5;
 
@@ -88,14 +89,16 @@ namespace AvCoreClipboardHandler {
             // }
             _isReadingOrWriting = true;
             IDataObject avdo = null;
-            string[] availableFormats = null;
+            IEnumerable<string> availableFormats = null;
             // only actually read formats found for data
             if (request.forcedClipboardDataObject == null) {
                 // clipboard read
                 availableFormats = await Application.Current.Clipboard.GetFormatsAsync();
             } else if(request.forcedClipboardDataObject is IDataObject) {
                 avdo = request.forcedClipboardDataObject as IDataObject;
-                availableFormats = avdo.GetDataFormats().Where(x=>avdo.Get(x) != null).ToArray();
+
+                availableFormats = await avdo.GetDataFormats_safe(_readLock);
+                //availableFormats = avdo.GetDataFormats().Where(x=>avdo.Get(x) != null).ToArray();
             }
 
             var readFormats = request.readFormats.Where(x => availableFormats.Contains(x));
@@ -121,9 +124,11 @@ namespace AvCoreClipboardHandler {
                     if (avdo.GetFileNames() == null) {
                         return String.Empty;
                     }
-                    dataObj = avdo.GetFileNames();
+                    dataObj = await avdo.GetFileNames_safe(_readLock);
+                    //dataObj = avdo.GetFileNames();
                 } else {
-                    dataObj = avdo.Get(format);
+                    //dataObj = avdo.Get(format);
+                    dataObj = await avdo.Get_safe(_readLock,format);
                 }                
             }
             string dataStr = null;
@@ -139,205 +144,6 @@ namespace AvCoreClipboardHandler {
             return dataStr;
         }
 
-        private async Task<object> ReadDataObjectFormatHelper_windows(string format, IDataObject avdo, int retryCount = MAX_READ_RETRY_COUNT) { 
-            if (retryCount < 0) {
-                return null;
-            }
-
-            object dataObj;
-            //bool wasOpen = false;
-            //while (WinApi.IsClipboardOpen(true) != IntPtr.Zero) {
-            //    wasOpen = true;
-            //    MpConsole.WriteLine("Waiting on windows clipboard...");
-            //    await Task.Delay(100);
-            //}
-            //if (wasOpen) {
-            //    // if it was open other things maybe waiting also so let them 
-            //    // go first...
-            //    await Task.Delay(1000);
-            //}
-            //WinApi.OpenClipboard(_mainWindowHandle);
-            try {
-                if(format == TEXT_FORMAT) {
-                    dataObj = await Application.Current.Clipboard.GetTextAsync();
-                } else {
-                    dataObj = await Application.Current.Clipboard.GetDataAsync(format);
-                }
-                
-                //bool wasClosed = WinApi.CloseClipboard();
-            }
-            catch (Exception ex) {
-                //bool wasClosed = WinApi.CloseClipboard();
-                MpConsole.WriteTraceLine($"Error reading clipboard! Retry attempt #{5 - retryCount} of 5 starting..", ex);
-                if (retryCount == MAX_READ_RETRY_COUNT) {
-                    // only retry from initial call
-                    object result;
-                    while (retryCount > 0) {
-                        await Task.Delay(100);
-                        result = await ReadDataObjectFormatHelper_windows(format, avdo, retryCount--);
-                        if (result != null) {
-                            return result;
-                        }
-                    }
-                    return null;
-                } else {
-                    return null;
-                }
-            }
-            return dataObj;
-        }
-        private string ProcessReaderFormatParamsOnData_windows(MpClipboardReaderRequest req, string format, string data) {
-            if (string.IsNullOrEmpty(data)) {
-                return null;
-            }
-
-            switch (format) {
-                case TEXT_FORMAT: {
-                        if (req.ParamLookup.TryGetValue((int)CoreClipboardParamType.R_Ignore_Text, out string ignoreStr)
-                            && bool.Parse(ignoreStr)) {
-                            return null;
-                        }
-
-                        if (req.ParamLookup.TryGetValue((int)CoreClipboardParamType.R_MaxCharCount_Text, out string maxCharCountStr)) {
-                            int maxCharCount = int.Parse(maxCharCountStr);
-                            if (data.Length > maxCharCount) {
-                                return data.Substring(0, maxCharCount);
-                            }
-                        }
-
-                        return data;
-                    }
-                case RTF_FORMAT: {
-                        if (req.ParamLookup.TryGetValue((int)CoreClipboardParamType.R_Ignore_Rtf, out string ignoreStr)
-                            && bool.Parse(ignoreStr)) {
-                            return null;
-                        }
-
-                        //if (req.ParamLookup.TryGetValue((int)CoreClipboardParamType.R_MaxCharCount_Rtf, out string maxCharCountStr)) {
-                        //    int maxCharCount = int.Parse(maxCharCountStr);
-
-                        //    string pt = data.ToPlainText();
-                        //    if (pt.Length > maxCharCount) {
-                        //        // NOTE for rtf 
-                        //        var fd = data.ToFlowDocument();
-                        //        var ctp = fd.ContentEnd;
-                        //        while (new TextRange(fd.ContentStart, ctp).Text.Length > maxCharCount) {
-                        //            ctp = ctp.GetPositionAtOffset(-1);
-                        //            if (ctp == fd.ContentStart || ctp == null) {
-                        //                ctp = null;
-                        //                break;
-                        //            }
-                        //        }
-                        //        if (ctp != null) {
-                        //            return new TextRange(fd.ContentStart, ctp).ToRichText();
-                        //        }
-                        //        return data.Substring(0, maxCharCount);
-                        //    }
-                        //}
-
-                        return data;
-                    }
-                case HTML_FORMAT: {
-                        if (req.ParamLookup.TryGetValue((int)CoreClipboardParamType.R_Ignore_Html, out string ignoreStr)
-                            && bool.Parse(ignoreStr)) {
-                            return null;
-                        }
-
-                        if (req.ParamLookup.TryGetValue((int)CoreClipboardParamType.R_MaxCharCount_Html, out string maxCharCountStr)) {
-                            int maxCharCount = int.Parse(maxCharCountStr);
-                            if (data.Length > maxCharCount) {
-                                return data.Substring(0, maxCharCount);
-                            }
-                        }
-
-                        return data;
-                    }
-                case BMP_FORMAT: {
-                        if (req.ParamLookup.TryGetValue((int)CoreClipboardParamType.R_Ignore_Bitmap, out string ignoreStr)
-                            && bool.Parse(ignoreStr)) {
-                            return null;
-                        }
-                        return data;
-                    }
-                case FILE_DROP_FORMAT: {
-                        if (req.ParamLookup.TryGetValue((int)CoreClipboardParamType.R_IgnoreAll_FileDrop, out string ignoreStr)
-                            && bool.Parse(ignoreStr)) {
-                            return null;
-                        }
-                        // NOTE path's are all lower cased after read from clipboard
-
-                        List<string> fpl = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
-
-                        IEnumerable<string> ignoreExt = req.items
-                                                    .FirstOrDefault(x => (CoreClipboardParamType)x.paramId == CoreClipboardParamType.R_IgnoredExt_FileDrop)
-                                                    .value.ToListFromCsv().Select(x => x.ToLower());
-
-                        IEnumerable<string> fpl_filesToRemove = fpl.Where(x => ignoreExt.Any(y => x.EndsWith(y)));
-                        for (int i = 0; i < fpl_filesToRemove.Count(); i++) {
-                            fpl.Remove(fpl_filesToRemove.ElementAt(i));
-                        }
-
-                        IEnumerable<string> ignoreDir = req.items.FirstOrDefault(x => (CoreClipboardParamType)x.paramId == CoreClipboardParamType.R_IgnoredDir_FileDrop)
-                                                    .value.ToListFromCsv().Select(x => x.ToLower());
-
-                        IEnumerable<string> fpl_dirToRemove = fpl.Where(x => ignoreDir.Any(y => x.StartsWith(y)));
-                        for (int i = 0; i < fpl_dirToRemove.Count(); i++) {
-                            fpl.Remove(fpl_dirToRemove.ElementAt(i));
-                        }
-                        if (fpl.Count == 0) {
-                            return null;
-                        }
-                        return String.Join(Environment.NewLine, fpl);
-                    }
-                case CSV_FORMAT: {
-
-                        if (req.ParamLookup.TryGetValue((int)CoreClipboardParamType.R_Ignore_Csv, out string ignoreStr)
-                            && bool.Parse(ignoreStr)) {
-                            return null;
-                        }
-
-                        return data;
-                    }
-                default:
-                    MpConsole.WriteTraceLine($"Warning, format '{format}' has no clipboard read parameter handler specified, returning raw clipboard data");
-                    return data;
-            }
-        }
-
-        private MpClipboardReaderResponse CanHandleDataObject(MpClipboardReaderRequest request) {
-            if (request == null || !OperatingSystem.IsWindows()) {
-                return null;
-            }
-            if (_isReadingOrWriting) {
-                return new MpClipboardReaderResponse() {
-                    errorMessage = "Already reading clipboard"
-                };
-            }
-            IntPtr mwHandle = new IntPtr(request.mainWindowImplicitHandle);
-            //MpConsole.WriteLine("mw handle - int: " + request.mainWindowImplicitHandle + " intPtr: " + mwHandle);
-            //uint CF_HTML;//, CF_RTF, CF_CSV, CF_TEXT = 1, CF_BITMAP = 2, CF_DIB = 8, CF_HDROP = 15, CF_UNICODE_TEXT, CF_OEM_TEXT;
-            if (mwHandle != IntPtr.Zero &&
-                _mainWindowHandle == IntPtr.Zero) {
-                // isolate first posssible request (need handle for WinApi.IsClipboardOpen)
-
-                //CF_UNICODE_TEXT = WinApi.RegisterClipboardFormatA("UnicodeText");
-                //CF_BITMAP = WinApi.RegisterClipboardFormatA("Bitmap");
-                //CF_OEM_TEXT = WinApi.RegisterClipboardFormatA("OemText");
-                //CF_HTML = WinApi.RegisterClipboardFormatA("HTML Format");
-                //CF_RTF = WinApi.RegisterClipboardFormatA("Rich Text Format");
-                //CF_CSV = WinApi.RegisterClipboardFormatA(DataFormats.CommaSeparatedValue);
-                //CF_DIB = WinApi.RegisterClipboardFormatA("DeviceIndependentBitmap");
-                //CF_HDROP = WinApi.RegisterClipboardFormatA(DataFormats.FileDrop);
-
-                _mainWindowHandle = mwHandle;
-            }
-            if (_mainWindowHandle == null || _mainWindowHandle == IntPtr.Zero) {
-                return new MpClipboardReaderResponse() {
-                    errorMessage = "No Window Handle"
-                };
-            }
-            return null;
-        }
         #endregion
 
 

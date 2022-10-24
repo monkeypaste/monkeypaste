@@ -63,8 +63,6 @@ namespace MonkeyPaste.Common {
         public string BoxShadows { get; set; } = string.Empty;
 
         #endregion
-
-
         public double X {
             get => Left;
             set => Left = value;

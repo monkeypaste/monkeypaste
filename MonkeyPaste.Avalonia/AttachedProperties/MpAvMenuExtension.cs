@@ -10,6 +10,7 @@ using Avalonia.Media.Imaging;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -262,9 +263,11 @@ namespace MonkeyPaste.Avalonia {
                             //Padding = new Thickness(5),
                             Background = mivm.IconHexStr.ToAvBrush(),
                             Child = new PathIcon() {
-                                HorizontalAlignment = HorizontalAlignment.Stretch,
-                                VerticalAlignment = VerticalAlignment.Stretch,
-                                Margin = new Thickness(5),
+                                HorizontalAlignment = HorizontalAlignment.Center,
+                                VerticalAlignment = VerticalAlignment.Center,
+                                Width = 15,
+                                Height = 15,
+                                //Margin = new Thickness(5),
                                 Data = MpPlatformWrapper.Services.PlatformResource.GetResource("CheckSvg") as StreamGeometry,
                                 Foreground = Brushes.Black,
                                 IsVisible = mivm.IsChecked
@@ -330,6 +333,13 @@ namespace MonkeyPaste.Avalonia {
                 if(pi != null) {
                     pi.IsVisible = mivm.IsChecked;
                 }
+                // wait to close menu till off item, that way see the check but still closes? 
+                EventHandler<PointerEventArgs> leave_handler = null;
+                leave_handler = (s, e) => {
+                    CloseMenu();
+                    mi.PointerLeave -= leave_handler;
+                };
+                mi.PointerLeave += leave_handler;
             }
             e.Handled = false;
         }
@@ -350,8 +360,7 @@ namespace MonkeyPaste.Avalonia {
                 foreach(var osmi in openSubMenuItems) {
                     var cmil = GetChildMenuItems(osmi);
                     var pmil = GetParentMenuItems(mi);
-                    if (cmil.Select(x => x.DataContext).Cast<MpMenuItemViewModel>().All(x => x != mivm)) { // &&
-                        //pmil.Select(x => x.DataContext).All(x => x != openSubMenuItem.DataContext)) {
+                    if (cmil.Select(x => x.DataContext).Cast<MpMenuItemViewModel>().All(x => x != mivm)) {
                         osmi.Close();
                         osmi.Background = Brushes.Transparent;
                         //var pcl = openSubMenuItem.GetVisualAncestors<Control>();

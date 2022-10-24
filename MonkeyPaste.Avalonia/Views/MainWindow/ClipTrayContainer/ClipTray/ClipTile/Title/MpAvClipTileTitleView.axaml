@@ -1,6 +1,6 @@
 <local:MpAvUserControl xmlns="https://github.com/avaloniaui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                       xmlns:core="clr-namespace:System;assembly=mscorlib"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:local="using:MonkeyPaste.Avalonia"
@@ -213,7 +213,7 @@
                              Converter="{StaticResource NegateDoubleConverter}" />
                     <Binding>
                         <Binding.Source>
-                            <core:Double>-5</core:Double>
+                            <sys:Double>-5</sys:Double>
                         </Binding.Source>
                     </Binding>
                 </MultiBinding>
@@ -249,12 +249,12 @@
                                  ElementName="TitleContainerGrid" />
                         <Binding>
                             <Binding.Source>
-                                <core:Double>2</core:Double>
+                                <sys:Double>2</sys:Double>
                             </Binding.Source>
                         </Binding>
                         <Binding>
                             <Binding.Source>
-                                <core:Double>2</core:Double>
+                                <sys:Double>2</sys:Double>
                             </Binding.Source>
                         </Binding>
                     </MultiBinding>

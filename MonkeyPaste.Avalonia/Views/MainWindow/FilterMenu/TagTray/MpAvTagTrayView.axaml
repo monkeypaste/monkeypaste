@@ -76,10 +76,7 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <local:MpAvTagView local:MpAvIsHoveringExtension.IsEnabled="True"
-                                       local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                                       local:MpAvIsHoveringExtension.HoverCursor="Hand"
-                                       local:MpAvSizeObserverExtension.IsEnabled="True"
+                    <local:MpAvTagView local:MpAvSizeObserverExtension.IsEnabled="True"
                                        local:MpAvSizeObserverExtension.ObservedWidth="{Binding TagTileTrayWidth, Mode=OneWayToSource}"
                                        DataContext="{Binding}" />
 

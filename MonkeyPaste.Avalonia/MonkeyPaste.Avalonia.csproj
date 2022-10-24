@@ -107,6 +107,19 @@
     <Page Remove="AttachedProperties\DragDrop\**" />
     <Page Remove="cef_old\**" />
     <Page Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
+    <AvaloniaXaml Remove="Themes\Default\Accents\Base.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Accents\BaseLight.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\ButtonBase.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\DefaultControls.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\ListBox.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\ListBoxItem.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTileView.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMainWindow.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMainWindowTitle.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\PathIcon.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\TextBlock.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\TreeViewItem.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\DefaultLight.axaml" />
     <None Remove="Assets\Cursors\copy.png" />
     <None Remove="Assets\Cursors\hand_closed.png" />
     <None Remove="Assets\Cursors\hand_open.png" />
@@ -137,10 +150,6 @@
     <None Remove="MonoMac.NetStandard" />
     <None Remove="Microsoft.AspNetCore" />
     <None Remove="Microsoft.AspNetCore.StaticFiles" />
-  </ItemGroup>
-  <ItemGroup>
-    <AvaloniaXaml Remove="Styles\Buttons\MpAvButtonStyles.axaml" />
-    <AvaloniaXaml Remove="Styles\MpAvAllStyles.axaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Adorners\MpAvContentDragDropAdorner.cs" />
@@ -915,13 +924,39 @@
     <AvaloniaResource Include="Assets\Images\yinyang.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AvaloniaResource Include="Styles\Buttons\MpAvButtonStyles.axaml">
-      <Generator></Generator>
+    <AvaloniaResource Include="Themes\Default\Accents\BaseLight.axaml">
+      
     </AvaloniaResource>
-    <AvaloniaResource Include="Styles\MpAvAllStyles.axaml">
-      <Generator></Generator>
+    <AvaloniaResource Include="Themes\Default\Accents\Base.axaml">
+      
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Default\Controls\ListBoxItem.axaml">
+      
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvMainWindow.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvMainWindowTitle.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\TextBlock.axaml">
+      
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Default\Controls\TreeViewItem.axaml">
+      
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Default\Controls\PathIcon.axaml">
+      
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Default\Controls\DefaultControls.axaml">
+      
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Default\Controls\ButtonBase.axaml">
+      
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvClipTileView.axaml">
+      
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Default\Controls\ListBox.axaml">
+      
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Default\DefaultLight.axaml">
     </AvaloniaResource>
   </ItemGroup>
   <ItemGroup>
@@ -956,6 +991,8 @@
   <ItemGroup>
     <Folder Include="Controls\Content\CefNetWebView\Cef\WebView\" />
     <Folder Include="Styles\ProgressRing\" />
+    <Folder Include="Themes\Default\Assets\" />
+    <Folder Include="Themes\Default\DensityStyles\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Base\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\" />
@@ -963,6 +1000,7 @@
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
     <Folder Include="Utils\Clipboard\Win32\" />
     <Folder Include="Controls\ProgressRing\" />
+    <Folder Include="Utils\Input\Mouse\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
     <Folder Include="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\" />
   </ItemGroup>

@@ -1,6 +1,6 @@
 <local:MpAvUserControl xmlns="https://github.com/avaloniaui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                       xmlns:core="clr-namespace:System;assembly=mscorlib"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:local="using:MonkeyPaste.Avalonia"
@@ -124,14 +124,14 @@
                     <MultiBinding Converter="{StaticResource MultiStringAppendConverter}">
                         <Binding>
                             <Binding.Source>
-                                <core:String>Collection '</core:String>
+                                <sys:String>Collection '</sys:String>
                             </Binding.Source>
                         </Binding>
                         <Binding Path="SelectedItem.TagName"
                                  Source="{x:Static local:MpAvTagTrayViewModel.Instance}" />
                         <Binding>
                             <Binding.Source>
-                                <core:String>' Is Empty</core:String>
+                                <sys:String>' Is Empty</sys:String>
                             </Binding.Source>
                         </Binding>
 

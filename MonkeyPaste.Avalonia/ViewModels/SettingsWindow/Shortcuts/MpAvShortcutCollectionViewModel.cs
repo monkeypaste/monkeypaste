@@ -24,7 +24,8 @@ using Key = Avalonia.Input.Key;
 namespace MonkeyPaste.Avalonia {
     public class MpAvShortcutCollectionViewModel : 
         MpAvSelectorViewModelBase<object,MpAvShortcutViewModel>, 
-        MpIAsyncSingletonViewModel<MpAvShortcutCollectionViewModel> {
+        MpIAsyncSingletonViewModel<MpAvShortcutCollectionViewModel>,
+        MpIDndUserCancelNotifier {
 
         #region Constants
         public static bool IS_GLOBAL_MOUSE_INPUT_ENABLED = true;
@@ -57,6 +58,7 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvShortcutCollectionViewModel Instance => _instance ?? (_instance = new MpAvShortcutCollectionViewModel());
 
         #endregion
+
 
         #region Properties
 
@@ -734,7 +736,7 @@ namespace MonkeyPaste.Avalonia {
         private void PseudoGlobalControl_PointerMoved(object sender, PointerEventArgs e) {
             // NOTE only called when global input is disabled
             var mw_mp = e.GetClientMousePoint(MpAvMainWindow.Instance);
-            var gmp = VisualExtensions.PointToScreen(MpAvMainWindow.Instance, mw_mp.ToAvPoint()).ToPortablePoint();
+            var gmp = VisualExtensions.PointToScreen(MpAvMainWindow.Instance, mw_mp.ToAvPoint()).ToPortablePoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.PixelDensity);
             HandlePointerMove(gmp);
         }
 
@@ -946,13 +948,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (keyStr.IsEscape()) {
                     GlobalIsEscapeDown = true;
-                   // if (MpAvDragExtension.CurrentDragHost != null) 
-                    {
-                        //_keyboardGestureHelper.Reset();
-                        //e.SuppressKeyPress = true;
-                        OnGlobalEscKeyPressed?.Invoke(this, EventArgs.Empty);
-                        //return;
-                    }
+                    OnGlobalEscKeyPressed?.Invoke(this, EventArgs.Empty);
                 }
 
                 OnGlobalKeyPressed?.Invoke(this, keyStr);

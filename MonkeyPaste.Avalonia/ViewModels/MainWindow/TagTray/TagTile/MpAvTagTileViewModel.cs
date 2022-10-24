@@ -8,10 +8,10 @@ using System.IO;
 using System.Collections.ObjectModel;
 using MonkeyPaste.Common.Plugin; 
 using MonkeyPaste.Common; 
-
 using System.Diagnostics;
 using Avalonia.Threading;
 using Avalonia.Controls;
+using System.Runtime.CompilerServices;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvTagTileViewModel : 
@@ -26,7 +26,8 @@ namespace MonkeyPaste.Avalonia {
         MpIContextMenuViewModel {
 
         #region Private Variables
-        private ObservableCollection<int> _copyItemIdsNeedingView = new ObservableCollection<int>();
+        private object _notifierLock = new object();
+        private ObservableCollection<int> _copyItemIdsNeedingView { get; set; } = new ObservableCollection<int>();
 
         private string _originalTagName = string.Empty;
         private bool _wasEditingName = false;
@@ -190,12 +191,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIBadgeNotifierViewModel Implementation
 
-        bool MpIBadgeNotificationViewModel.HasBadgeNotification { get; set; } = false;
+        public bool HasBadgeNotification { get; set; } = false;
 
         #endregion
 
         #region State
 
+        public bool IsThisThePinnedViewModel {
+            get {
+                if(Parent == null) {
+                    return false;
+                }
+                return Parent.PinnedItems.Contains(this);
+            }
+        }
         public bool CanAddChild {
             get {
                 if(IsHelpTag) {
@@ -227,6 +236,9 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsUserTag => !IsSudoTag;
 
+        public bool IsDragOverTag { get; set; }
+
+        public bool IsDragOverTagValid { get; set; }
         public bool IsAllTag => TagId == MpTag.AllTagId;
         public bool IsFavoriteTag => TagId == MpTag.FavoritesTagId;
         public bool IsHelpTag => TagId == MpTag.HelpTagId;
@@ -244,9 +256,25 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
+        public double[] TagBorderDashArray {
+            get {
+                if (IsDragOverTag) {
+                    return new double[] { 5, 5 };
+                }
+                return null;
+            }
+        }
+        public double TagBorderDashOffset {
+            get {
+                if(IsDragOverTag) {
+                    return 5;
+                }
+                return 0;
+            }
+        }
 
         public string TagBorderBackgroundHexColor {
-            get {
+            get { 
                 if (IsSelected) {
                     return MpSystemColors.dimgray;
                 }
@@ -259,10 +287,17 @@ namespace MonkeyPaste.Avalonia {
 
         public string TagBorderHexColor {
             get {
+                if(IsDragOverTag) {
+                    if(IsDragOverTagValid) {
+                        return MpSystemColors.limegreen;
+                    }
+                    return MpSystemColors.red1;
+                }
+
                 if(IsContextMenuOpened) {
                     return MpSystemColors.red1;
                 }
-                if (IsSelected && IsLinkedToSelectedClipTile) {
+                if (!IsSelected && IsLinkedToSelectedClipTile) {
                     return TagHexColor;
                 }
                 return MpSystemColors.Transparent;
@@ -544,6 +579,10 @@ namespace MonkeyPaste.Avalonia {
             PropertyChanged -= MpTagTileViewModel_PropertyChanged;
         }
 
+        public override string ToString() {
+            return TagName;
+        }
+
 
         #endregion
 
@@ -551,6 +590,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Db Events
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
+            
             if (e is MpShortcut sc) {
                 if (sc.CommandParameter == TagId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
@@ -561,13 +601,18 @@ namespace MonkeyPaste.Avalonia {
                     if(!_copyItemIdsNeedingView.Contains(cit.CopyItemId)) {
                         _copyItemIdsNeedingView.Add(cit.CopyItemId);
                     }
-                    Dispatcher.UIThread.Post(() => {
+                    Dispatcher.UIThread.Post(async() => {
                         TagClipCount++;
+                        //if(IsSelected && !IsAllTag && !IsThisThePinnedViewModel) {
+                        //    // this should only happen from an external or partial drop drop
+                        //    // for selected tag so it auto-adds the new one 
+                        //}
                     });
-                } else if(IsParentOfTag(cit.TagId,false)) {
+                } else if(IsParentOfTag(cit.TagId,false) && !IsAllTag) {
+                    // when direct parent of last new link (walks up hierarchy except for all which is added w/ item)
                     LinkCopyItemCommand.Execute(cit.CopyItemId);
                 }                
-            } else if(e is MpCopyItem ci && IsAllTag) {
+            } else if(e is MpCopyItem ci && IsAllTag && !IsThisThePinnedViewModel) {
                 LinkCopyItemCommand.Execute(ci.Id);
             } 
         }
@@ -595,12 +640,13 @@ namespace MonkeyPaste.Avalonia {
                 if(cit.TagId == TagId) {
                     // unlink command was already called
                     if (_copyItemIdsNeedingView.Contains(cit.CopyItemId)) {
-                        _copyItemIdsNeedingView.Add(cit.CopyItemId);
+                        _copyItemIdsNeedingView.Remove(cit.CopyItemId);
                     }
                     Dispatcher.UIThread.Post(() => {
                         TagClipCount--;
                     });
-                } else if(IsParentOfTag(cit.TagId,false)) {
+                } else if(IsParentOfTag(cit.TagId,false) && !IsAllTag) {
+                    // only remove from all tag when actual item is deleted
                     UnlinkCopyItemCommand.Execute(cit.CopyItemId);
                 }
             } else if (e is MpCopyItem ci && IsCopyItemLinked(ci.Id)) {
@@ -693,7 +739,10 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.TrayScrollChanged:
                 case MpMessageType.RequeryCompleted:
                 case MpMessageType.JumpToIdxCompleted:
-                    Dispatcher.UIThread.Post(UpdateNotifier);
+                    UpdateBadge();
+                    break;
+                case MpMessageType.TraySelectionChanged:
+
                     break;
             }
         }
@@ -704,7 +753,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        private void UpdateNotifier() {
+        private void UpdateBadge() {
             var idsSeen = new List<int>();
             foreach (int ciid in _copyItemIdsNeedingView.ToList()) {
                 var civm = MpAvClipTrayViewModel.Instance.GetClipTileViewModelById(ciid);
@@ -726,10 +775,11 @@ namespace MonkeyPaste.Avalonia {
             }
 
             (this as MpIBadgeNotificationViewModel).HasBadgeNotification = _copyItemIdsNeedingView.Count > 0;
+
         }
 
         private void _copyItemIdsNeedingView_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            Dispatcher.UIThread.Post(UpdateNotifier);
+            //Dispatcher.UIThread.Post();
         }
 
         #region Sync Event Handlers
@@ -777,6 +827,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
+        public ICommand SelectTagCommand => new MpCommand(
+            () => {
+                Parent.SelectTagCommand.Execute(this);
+            });
         public ICommand AssignHotkeyCommand => new MpCommand(
             async () => {
                 await MpAvShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
