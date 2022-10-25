@@ -91,6 +91,7 @@
     <ProjectReference Include="..\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controls\Adorner\" />
     <Folder Include="Utils\Helpers\" />
   </ItemGroup>
   <ItemGroup>

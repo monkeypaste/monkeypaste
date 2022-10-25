@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,9 +13,26 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpAvAppViewModel AppViewModel => MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppId == AppId);
+        public MpAvAppViewModel AppViewModel {
+            get {
+                if(MpAvAppCollectionViewModel.Instance.IsAnyBusy) {
+                    Debugger.Break();
+                    return null;
+                }
+                return MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppId == AppId);
+            }
+        }
 
-        public MpAvUrlViewModel UrlViewModel => MpAvUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == UrlId);
+        //public MpAvUrlViewModel UrlViewModel => MpAvUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == UrlId);
+        public MpAvUrlViewModel UrlViewModel {
+            get {
+                if (MpAvUrlCollectionViewModel.Instance.IsAnyBusy) {
+                    Debugger.Break();
+                    return null;
+                }
+                return MpAvUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == UrlId);
+            }
+        }
 
         public MpISourceItemViewModel PrimarySourceViewModel {
             get {

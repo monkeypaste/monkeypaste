@@ -31,6 +31,7 @@ namespace MonkeyPaste.Avalonia {
 
         private bool _isAdornerVisible => _dropShapes != null && _dropShapes.Length > 0;
         #endregion
+
         #region Constructors
 
         public MpAvDropHostAdorner(Control uie) : base(uie) {

@@ -42,13 +42,18 @@ namespace MonkeyPaste.Avalonia {
 
         private DispatcherTimer _timer;
 
-        private int _detailIdx = 0;
 
         private string _originalTitle;
 
         #endregion
 
         #region Properties
+        
+        #region View Models
+
+        public MpAvClipTileDetailCollectionViewModel DetailCollectionViewModel { get; private set; }
+
+        #endregion
 
         #region MpIHoverableViewModel Implementation
         public bool IsHovering { get; set; }
@@ -527,13 +532,6 @@ namespace MonkeyPaste.Avalonia {
         public bool HasDetectedObjects => DetectedImageObjectCollectionViewModel != null && DetectedImageObjectCollectionViewModel.Items.Count > 0;
 
         public bool IsOverHyperlink { get; set; } = false;
-
-        public MpCopyItemDetailType CurDetailType {
-            get {
-                return (MpCopyItemDetailType)_detailIdx;
-            }
-        }
-
 
         private bool _isHoveringOnTitleTextGrid = false;
         public bool IsHoveringOnTitleTextGrid {
@@ -1315,6 +1313,10 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvSourceViewModel SourceViewModel {
             get {
+                if(MpAvSourceCollectionViewModel.Instance.IsAnyBusy) {
+                    Debugger.Break();
+                    return null;
+                }
                 var svm = MpAvSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == SourceId);
                 if (svm == null) {
                     return MpAvSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == MpPrefViewModel.Instance.ThisAppSourceId);
@@ -1323,9 +1325,23 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpAvAppViewModel AppViewModel => SourceViewModel == null ? null : SourceViewModel.AppViewModel;
+        public MpAvAppViewModel AppViewModel {
+            get {
+                if(SourceViewModel == null) {
+                    return null;
+                }
+                return SourceViewModel.AppViewModel;
+            }
+        }
 
-        public MpAvUrlViewModel UrlViewModel => SourceViewModel == null ? null : SourceViewModel.UrlViewModel;
+        public MpAvUrlViewModel UrlViewModel {
+            get {
+                if (SourceViewModel == null) {
+                    return null;
+                }
+                return SourceViewModel.UrlViewModel;
+            }
+        }
 
         public MpAvClipTileViewModel Next {
             get {
@@ -1617,6 +1633,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipTileViewModel(MpAvClipTrayViewModel parent) : base(parent) {
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
+            DetailCollectionViewModel = new MpAvClipTileDetailCollectionViewModel(this);
             //MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             IsBusy = true;
         }
@@ -1655,10 +1672,11 @@ namespace MonkeyPaste.Avalonia {
             
             TemplateCollection = new MpAvTemplateCollectionViewModel(this);
 
+            
             //if(ci != null) {
             //    InitTitleLayers().FireAndForgetSafeAsync(this);
             //}
-            CycleDetailCommand.Execute(null);
+            //CycleDetailCommand.Execute(null);
 
             if (ItemType == MpCopyItemType.Image) {
                 DetectedImageObjectCollectionViewModel = new MpImageAnnotationCollectionViewModel(this);
@@ -1871,54 +1889,6 @@ namespace MonkeyPaste.Avalonia {
 
         public void ResetExpensiveDetails() {
             LineCount = CharCount = -1;
-        }
-
-        private string GetDetailText(MpCopyItemDetailType detailType) {
-            if (CopyItem == null) {
-                return string.Empty;
-            }
-
-            switch (detailType) {
-                //created
-                case MpCopyItemDetailType.DateTimeCreated:
-                    // TODO convert to human readable time span like "Copied an hour ago...23 days ago etc
-
-                    return "Copied " + CopyItemCreatedDateTime.ToReadableTimeSpan();
-                //chars/lines
-                case MpCopyItemDetailType.DataSize:
-                    if (CopyItem.ItemType == MpCopyItemType.Image) {
-                        return "(" + (int)UnformattedContentSize.Width + "px) x (" + (int)UnformattedContentSize.Height + "px)";
-                    } else if (CopyItem.ItemType == MpCopyItemType.Text) {
-                        if (LineCount < 0 && CharCount < 0) {
-                            //Line and Char count are set to -1 when initialized so they're lazy loaded
-                            var textTuple = new Tuple<int, int>(0, 0);//MpContentDocumentRtfExtension.GetLineAndCharCount(this);
-                            LineCount = textTuple.Item1;
-                            CharCount = textTuple.Item2;
-                        }
-
-                        return CharCount + " chars | " + LineCount + " lines";
-                    } else if (CopyItem.ItemType == MpCopyItemType.FileList) {
-                        break;// return GetDetailText((MpCopyItemDetailType)(++_detailIdx));
-                    }
-                    break;
-                //# copies/# pastes
-                case MpCopyItemDetailType.UsageStats:
-                    return CopyItem.CopyCount + " copies | " + CopyItem.PasteCount + " pastes";
-                case MpCopyItemDetailType.UrlInfo:
-                    if (UrlViewModel == null) {
-                        break;// return GetDetailText((MpCopyItemDetailType)(++_detailIdx));
-                    }
-                    return UrlViewModel.UrlPath;
-                //case MpCopyItemDetailType.AppInfo:
-                //    if (AppViewModel == null) {
-                //        return GetDetailText((MpCopyItemDetailType)(++_detailIdx));
-                //    }
-                //    return AppViewModel.AppPath;
-                default:
-                    break;
-            }
-
-            return string.Empty;
         }
 
         #region View Event Invokers
@@ -2316,6 +2286,8 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(TileBorderHexColor));
                     break;
                 case nameof(CopyItem):
+                    DetailCollectionViewModel.OnPropertyChanged(nameof(DetailCollectionViewModel.CopyItem));
+
                     if (CopyItem == null) {
                         break;
                     }
@@ -2670,33 +2642,15 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public ICommand CycleDetailCommand => new MpCommand(
-            () => {
-                if(IsPlaceholder) {
-                    _detailIdx = -1;
-                    DetailText = String.Empty;
-                    return;
-                }
 
-                do {
-                    _detailIdx++;
-                    if (_detailIdx >= Enum.GetValues(typeof(MpCopyItemDetailType)).Length) {
-                        _detailIdx = 1;
-                    }
-
-                    // TODO this should aggregate details over all sub items 
-                    DetailText = GetDetailText((MpCopyItemDetailType)_detailIdx);
-                } while (string.IsNullOrEmpty(DetailText));
-            });
-
-                public ICommand ToggleEditContentCommand => new MpCommand(
+        public ICommand ToggleEditContentCommand => new MpCommand(
             () => {
                 if (!IsSelected && IsContentReadOnly) {
                     Parent.SelectedItem = this;
                 }
                 IsContentReadOnly = !IsContentReadOnly;
 
-            }, ()=>IsTextItem);
+            }, () => IsTextItem);
 
         public ICommand ToggleHideTitleCommand => new MpCommand(
             () => {

@@ -65,20 +65,32 @@
         </StackPanel>
 
         <Border x:Name="WindowOrientationHandleBorder"
-                Width="100"
-                Height="20"
-                Margin="0,5,0,5"
-                BorderThickness="1"
-                VerticalAlignment="Center"
-                Cursor="SizeAll">
+                Width="103"
+                Height="7"
+                BorderThickness="0"
+                VerticalAlignment="Center">
             <Border.Styles>
                 <Style Selector="Border">
                     <Setter Property="BorderBrush"
+                            Value="Transparent" />
+                    <Setter Property="Background"
                             Value="Transparent" />
                 </Style>
                 <Style Selector="Border:pointerover">
                     <Setter Property="BorderBrush"
                             Value="Yellow" />
+                    <Setter Property="Background"
+                            Value="Yellow" />
+                    <Setter Property="Cursor"
+                            Value="SizeAll" />
+                </Style>
+                <Style Selector="Border:pressed">
+                    <Setter Property="BorderBrush"
+                            Value="Lime" />
+                    <Setter Property="Background"
+                            Value="Lime" />
+                    <Setter Property="Cursor"
+                            Value="SizeAll" />
                 </Style>
             </Border.Styles>
             <Border.Background>

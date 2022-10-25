@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MonkeyPaste {
-    public interface MpIBadgeNotificationViewModel : MpIViewModel {
-        bool HasBadgeNotification { get; set; }
+    public interface MpIBadgeNotifier {
+        //bool HasBadgeNotification { get; set; }
+        int NotificationCount { get; }
     }
 }

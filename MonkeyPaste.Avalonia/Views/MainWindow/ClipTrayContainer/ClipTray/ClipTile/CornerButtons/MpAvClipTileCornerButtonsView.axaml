@@ -62,11 +62,15 @@
         </ToggleButton>
 
         <!--  Detail View  -->
-        <local:MpAvClipTileDetailView Grid.Row="2"
-                                      Height="20"
-                                      IsVisible="{Binding !IsSubSelectionEnabled}"
-                                      HorizontalAlignment="Stretch"
-                                      VerticalAlignment="Bottom" />
+        <Grid Grid.Row="2"
+              VerticalAlignment="Bottom"
+              Height="20"
+              IsVisible="{Binding !IsSubSelectionEnabled}">
+            <local:MpAvClipTileDetailView DataContext="{Binding DetailCollectionViewModel}"
+                                          HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Stretch" />
+        </Grid>
+
 
 
         <!--  Hotkey Button  -->

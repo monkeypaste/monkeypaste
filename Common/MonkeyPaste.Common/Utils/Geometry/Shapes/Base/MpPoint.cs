@@ -27,7 +27,12 @@ namespace MonkeyPaste.Common {
         public static MpPoint operator /(MpPoint a, MpPoint b) {
             return new MpPoint(b.X == 0 ? 0 : a.X / b.X, b.Y == 0 ? 0 : a.Y / b.Y);
         }
-
+        public static MpPoint operator +(MpPoint a, double val) {
+            return new MpPoint(a.X + val, a.Y + val);
+        }
+        public static MpPoint operator -(MpPoint a, double val) {
+            return new MpPoint(a.X - val, a.Y - val);
+        }
         public static MpPoint operator *(MpPoint a, double val) {
             return new MpPoint(a.X * val, a.Y * val);
         }

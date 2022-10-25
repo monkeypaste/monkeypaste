@@ -1001,6 +1001,7 @@
     <Folder Include="Utils\Clipboard\Win32\" />
     <Folder Include="Controls\ProgressRing\" />
     <Folder Include="Utils\Input\Mouse\" />
+    <Folder Include="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
     <Folder Include="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\" />
   </ItemGroup>

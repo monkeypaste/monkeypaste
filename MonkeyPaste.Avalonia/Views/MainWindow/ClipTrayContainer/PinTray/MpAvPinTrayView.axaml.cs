@@ -266,27 +266,14 @@ namespace MonkeyPaste.Avalonia {
             if(_dropAdorner != null) {
                 // should only happen once
                 Debugger.Break();
-                return;
-            }
-            var adornerLayer = AdornerLayer.GetAdornerLayer(adornedControl);
-
-            if (adornerLayer == null) {
-                Dispatcher.UIThread.Post(async () => {
-                    adornerLayer = AdornerLayer.GetAdornerLayer(adornedControl);
-                    while (adornerLayer == null) {
-                        await Task.Delay(100);
-                    }
-                    InitAdorner(adornedControl);
-                    return;
-                });
-                return;
             }
 
             _dropAdorner = new MpAvDropHostAdorner(adornedControl);
-            adornerLayer.Children.Add(_dropAdorner);
-            AdornerLayer.SetAdornedElement(_dropAdorner, adornedControl);
+            adornedControl
+                .AddOrReplaceAdornerAsync(_dropAdorner)
+                .FireAndForgetSafeAsync(BindingContext);
+
             MpConsole.WriteLine("Adorner added to control: " + adornedControl);
-            return;
         }
 
         #endregion

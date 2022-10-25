@@ -67,6 +67,9 @@ namespace MonkeyPaste.Avalonia {
         }
         private void WindowDragBorder_Move(PointerEventArgs e) {
             //
+            if(MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation == null) {
+                MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = e.GetClientMousePoint(MpAvMainWindow.Instance);
+            }
 
             MpPoint screen_mp = MpAvMainWindow.Instance.PointToScreen(
                 MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation.ToAvPoint())

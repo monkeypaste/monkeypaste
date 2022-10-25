@@ -1,0 +1,72 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:DataType="local:MpAvClipTileDetailCollectionViewModel"
+                       x:TypeArguments="local:MpAvClipTileDetailCollectionViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvClipTileDetailView">
+    <Border x:Name="ClipTileDetailContainer"
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+            Height="20"
+            Background="Transparent"
+            BorderThickness="0">
+        <Border.Styles>
+            <Style Selector="TextBlock#ClipTile_Detail_TextBlock">
+                <Setter Property="Foreground"
+                        Value="Black" />
+            </Style>
+            <Style Selector="TextBlock#ClipTile_Detail_TextBlock.IsLink">
+                <Setter Property="Foreground"
+                        Value="Blue" />
+                <Setter Property="TextDecorations"
+                        Value="Underline" />
+            </Style>
+            <Style Selector="Border#ClipTileDetailContainer:pointerover TextBlock#ClipTile_Detail_TextBlock.IsLink">
+                <Setter Property="Foreground"
+                        Value="Red" />
+                <Setter Property="TextDecorations"
+                        Value="Underline" />
+                <Setter Property="Cursor"
+                        Value="Hand" />
+            </Style>
+        </Border.Styles>
+        <TextBlock x:Name="ClipTile_Detail_TextBlock"
+                   DataContext="{Binding SelectedItem}"
+                   Classes.IsLink="{Binding IsUriEnabled}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Background="Transparent"
+                   Height="20"
+                   MinWidth="50"
+                   FontSize="10"
+                   Text="{Binding DetailText}">
+            <ToolTip.Tip>
+                <local:MpAvTooltipView IsVisible="{Binding IsUriEnabled}">
+                    <local:MpAvTooltipView.ToolTipText>
+                        <MultiBinding Converter="{StaticResource MultiStringAppendConverter}">
+                            <Binding>
+                                <Binding.Source>
+                                    <sys:String>Goto '</sys:String>
+                                </Binding.Source>
+                            </Binding>
+                            <Binding Path="DetailUri" />
+                            <Binding>
+                                <Binding.Source>
+                                    <sys:String>' [Ctrl+Click]</sys:String>
+                                </Binding.Source>
+                            </Binding>
+                        </MultiBinding>
+                    </local:MpAvTooltipView.ToolTipText>
+                </local:MpAvTooltipView>
+            </ToolTip.Tip>
+        </TextBlock>
+    </Border>
+</local:MpAvUserControl>

@@ -238,7 +238,9 @@ namespace MonkeyPaste.Avalonia {
         private static Control CreateMenuItem(MpMenuItemViewModel mivm) {
             Control control = null;
             string itemType = new MpAvMenuItemDataTemplateSelector().GetTemplateName(mivm);
-
+            if(!string.IsNullOrEmpty(mivm.InputGestureText)) {
+                var testGesutre = KeyGesture.Parse(mivm.InputGestureText);
+            }
             switch (itemType) {
                 case "CheckableMenuItemTemplate":
                 case "DefaultMenuItemTemplate":
