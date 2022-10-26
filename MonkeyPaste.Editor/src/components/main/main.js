@@ -65,12 +65,21 @@ function init_test() {
 
 		convertPlainHtml_ext(toBase64FromJsonObj(cnvTest));
 	} else {
-		let sample_in_use = sample_big;// sampe_table_list_templates;//sample_file_list;// sample_lulu_img;//	 
-		let contentHandle = '<TEST-CONTENT-HANDLE';
-		let contentType = 'Text';// 'FileList';
-		let isPasteRequest = true;
+		//let sample_in_use = sample_big;// sampe_table_list_templates;//sample_file_list;// sample_lulu_img;//	 
+		//let contentHandle = '<TEST-CONTENT-HANDLE';
+		//let contentType = 'Text';// 'FileList';
+		//let isPasteRequest = true;
 
-		loadContent(contentHandle, contentType, sample_in_use, isPasteRequest);
+		let load_req = {
+			contentHandle: '<TEST-CONTENT-HANDLE>',
+			contentType: 'Text',
+			isPasteRequest: false,
+			itemData: sample_big
+		};
+
+		loadContent_ext(toBase64FromJsonObj(load_req));
+
+		//loadContent(contentHandle, contentType, sample_in_use, isPasteRequest);
 
 		disableReadOnly();
 

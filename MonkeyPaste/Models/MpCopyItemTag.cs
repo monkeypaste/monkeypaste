@@ -55,9 +55,10 @@ namespace MonkeyPaste {
 
         #region Statics
 
-        public static async Task<MpCopyItemTag> Create(int tagId,int copyItemId, int sortIdx = 0) {
+        public static async Task<MpCopyItemTag> Create(int tagId, int copyItemId, int sortIdx = 0) {
             var dupCheck = await MpDataModelProvider.GetCopyItemTagForTagAsync(copyItemId,tagId);
             if(dupCheck != null) {
+                dupCheck.WasDupOnCreate = true;
                 return dupCheck;
             }
 

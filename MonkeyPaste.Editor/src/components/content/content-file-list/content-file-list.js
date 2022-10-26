@@ -30,6 +30,13 @@ function getFileListContentData() {
 	return paths_str;
 }
 
+function getTotalFileSize() {
+	return '';
+}
+function getFileCount() {
+	return FileListItems.length;
+}
+
 function createFileList() {
 	let file_list_tbody_inner_html = '';
 	for (var i = 0; i < FileListItems.length; i++) {

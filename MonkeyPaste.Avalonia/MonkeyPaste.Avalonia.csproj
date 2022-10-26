@@ -118,6 +118,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMainWindowTitle.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\PathIcon.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBlock.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\ToolTip.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TreeViewItem.axaml" />
     <AvaloniaXaml Remove="Themes\Default\DefaultLight.axaml" />
     <None Remove="Assets\Cursors\copy.png" />
@@ -930,6 +931,7 @@
     <AvaloniaResource Include="Themes\Default\Accents\Base.axaml">
       
     </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Default\Controls\ToolTip.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ListBoxItem.axaml">
       
     </AvaloniaResource>
@@ -1001,7 +1003,6 @@
     <Folder Include="Utils\Clipboard\Win32\" />
     <Folder Include="Controls\ProgressRing\" />
     <Folder Include="Utils\Input\Mouse\" />
-    <Folder Include="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
     <Folder Include="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\" />
   </ItemGroup>
@@ -1015,6 +1016,12 @@
     <Resource Include="Assets\Icons\monkey.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\Items\MpAvClipTileDetailItemTipView.axaml.cs">
+      <DependentUpon>MpAvClipTileDetailItemTipView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\Items\MpAvClipTileDetailItemView.axaml.cs">
+      <DependentUpon>MpAvClipTileDetailItemView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\MpAvClipTrayContainerView.axaml.cs">
       <DependentUpon>MpAvClipTrayContainerView.axaml</DependentUpon>
     </Compile>
@@ -1041,6 +1048,9 @@
     </Compile>
     <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\KeyGroup\MpAvShortcutKeyGroupView.axaml.cs">
       <DependentUpon>MpAvShortcutKeyGroupView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\ToolTip\MpAvToolTipLinkView.axaml.cs">
+      <DependentUpon>MpAvToolTipLinkView.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

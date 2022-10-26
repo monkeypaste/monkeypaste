@@ -8,24 +8,33 @@
         <sys:Double x:Key="GlobalBgOpacity">
             0.7
         </sys:Double>
-        <SolidColorBrush x:Key="DefaultBorderBrush_unselected">
+
+        <!--  COLORS  -->
+
+        <Color x:Key="ClipTileContentBackgroundColor">
+            OldLace
+        </Color>
+
+        <Color x:Key="UnselectedBorderColor">
             Transparent
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="DefaultBorderBrush_selected">
+        </Color>
+        <Color x:Key="SelectedBorderColor">
             Red
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="IsHoveringBorderBrush_unselected">
+        </Color>
+        <Color x:Key="HoverUnselectedBorderColor">
             Yellow
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="IsHoveringBorderBrush_selected">
+        </Color>
+        <Color x:Key="HoverSelectedBorderColor">
             SpringGreen
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="CanResizeBorderBrush">
+        </Color>
+        <Color x:Key="CanResizeBorderColor">
             DeepPink
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="IsResizingBorderBrush">
+        </Color>
+        <Color x:Key="IsResizingBorderColor">
             LightPink
-        </SolidColorBrush>
+        </Color>
+
+        <!--  BRUSHES  -->
 
         <!--  TITLE MENU  -->
         <SolidColorBrush x:Key="TitleMenuActiveBgColor"
@@ -54,6 +63,38 @@
 
         <SolidColorBrush x:Key="PinTrayBgColor"
                          Color="Teal"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+
+        <!--  CLIP TILE  -->
+
+        <!--  CONTENT  -->
+        <SolidColorBrush x:Key="ClipTileContentBackgroundBrush"
+                         Color="{DynamicResource ClipTileContentBackgroundColor}"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+
+        <!--  BORDER  -->
+        <SolidColorBrush x:Key="DefaultBorderBrush_unselected"
+                         Color="{DynamicResource UnselectedBorderColor}"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+
+        <SolidColorBrush x:Key="DefaultBorderBrush_selected"
+                         Color="{DynamicResource SelectedBorderColor}"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+
+        <SolidColorBrush x:Key="IsHoveringBorderBrush_unselected"
+                         Color="{DynamicResource HoverUnselectedBorderColor}"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+
+        <SolidColorBrush x:Key="IsHoveringBorderBrush_selected"
+                         Color="{DynamicResource HoverSelectedBorderColor}"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+
+        <SolidColorBrush x:Key="CanResizeBorderBrush"
+                         Color="{DynamicResource CanResizeBorderColor}"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+
+        <SolidColorBrush x:Key="IsResizingBorderBrush"
+                         Color="{DynamicResource IsResizingBorderColor}"
                          Opacity="{DynamicResource GlobalBgOpacity}" />
     </Style.Resources>
 

@@ -15,7 +15,7 @@ using Avalonia.Input;
 namespace MonkeyPaste.Avalonia {
 
     [DoNotNotify]
-    public partial class MpAvToolTipView : UserControl {
+    public partial class MpAvToolTipLinkView : UserControl {
         #region Private Variables
         
         private MpPoint _lastMousePos;
@@ -24,9 +24,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
 
-        static MpAvToolTipView() {
+        static MpAvToolTipLinkView() {
             ToolTipTextProperty.Changed.AddClassHandler<Control>((s, e) => {
-                if (s is MpAvToolTipView ttv) {
+                if (s is MpAvToolTipLinkView ttv) {
                     if (e.NewValue is string text && !string.IsNullOrEmpty(text)) {
                         ttv.IsVisible = true;
                         var tb = ttv.FindControl<TextBlock>("ToolTipTextBlock");
@@ -42,8 +42,8 @@ namespace MonkeyPaste.Avalonia {
 
         private string _ToolTipText = default;
 
-        public static readonly DirectProperty<MpAvToolTipView, string> ToolTipTextProperty =
-            AvaloniaProperty.RegisterDirect<MpAvToolTipView, string>
+        public static readonly DirectProperty<MpAvToolTipLinkView, string> ToolTipTextProperty =
+            AvaloniaProperty.RegisterDirect<MpAvToolTipLinkView, string>
             (
                 nameof(ToolTipText),
                 o => o.ToolTipText,
@@ -59,18 +59,56 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion 
 
+        #region ToolTipUri Property
+
+        private string _ToolTipUri = default;
+
+        public static readonly DirectProperty<MpAvToolTipLinkView, string> ToolTipUriProperty =
+            AvaloniaProperty.RegisterDirect<MpAvToolTipLinkView, string>
+            (
+                nameof(ToolTipUri),
+                o => o.ToolTipUri,
+                (o, v) => o.ToolTipUri = v
+            );
+
+        public string ToolTipUri {
+            get => _ToolTipUri;
+            set {
+                SetAndRaise(ToolTipUriProperty, ref _ToolTipUri, value);
+
+            }
+        }
 
         #endregion
-        public MpAvToolTipView() {
+
+        #endregion
+        public MpAvToolTipLinkView() {
             InitializeComponent();
             this.AttachedToVisualTree += MpAvTooltipView_AttachedToVisualTree;
             this.DetachedFromVisualTree += MpAvTooltipView_DetachedFromVisualTree;
             this.GetObservable(Control.IsVisibleProperty).Subscribe(value => OnVisibleChanged());
+            this.GetObservable(MpAvToolTipLinkView.ToolTipUriProperty).Subscribe(value => OnUriChanged());
+            var tb = this.FindControl<TextBlock>("ToolTipTextBlock");
+            tb.PointerPressed += MpAvClipTileDetailView_PointerPressed;
 
         }
 
         private void OnVisibleChanged() {
             _lastMousePos = null;
+        }
+
+        private void OnUriChanged() {
+            var tb = this.FindControl<TextBlock>("ToolTipTextBlock");
+            if(tb == null) {
+                Debugger.Break();
+                return;
+            }
+            if(string.IsNullOrEmpty(ToolTipUri)) {
+                tb.Classes.Add("IsLink");
+            } else {
+                tb.Classes.Remove("IsLink");
+            }
+            
         }
 
 
@@ -103,6 +141,27 @@ namespace MonkeyPaste.Avalonia {
             if (GetHostControl() is Control host_control) {
                 host_control.PointerMoved -= Host_control_PointerMoved;
             }
+        }
+
+        private void MpAvClipTileDetailView_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
+            if (string.IsNullOrEmpty(ToolTipUri)) {
+                return;
+            }
+
+            bool can_goto = e.KeyModifiers.HasFlag(KeyModifiers.Control);
+            if (can_goto) {
+                if (OperatingSystem.IsWindows()) {
+                    Process.Start("explorer", ToolTipUri);
+                } else {
+                    using (var myProcess = new Process()) {
+                        myProcess.StartInfo.UseShellExecute = true;
+                        myProcess.StartInfo.FileName = ToolTipUri;
+                        myProcess.Start();
+                    }
+                }
+                return;
+            }
+
         }
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);

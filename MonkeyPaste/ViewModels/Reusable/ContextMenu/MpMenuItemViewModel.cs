@@ -84,8 +84,11 @@ namespace MonkeyPaste {
         public bool IsEnabled { get; set; }
 
         public bool IsChecked { get; set; } = false;
-
         public bool IsPartiallySelected { get; set; } = false; // for multi-select tag ischecked overlay
+        //public bool? IsChecked { get; set; } = false;
+
+        //// for multi-select tag ischecked overlay
+        //public bool IsPartialChecked => !IsChecked.HasValue;
 
         public bool IsHovering { get; set; }
 
@@ -139,6 +142,7 @@ namespace MonkeyPaste {
 
         public string BorderHexColor {
             get {
+                //if (IsChecked.HasValue && IsChecked.Value) {
                 if (IsChecked) {
                     return MpSystemColors.IsSelectedBorderColor;
                 } else if (IsHovering) {

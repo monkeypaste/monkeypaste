@@ -10,24 +10,22 @@
                        x:CompileBindings="True"
                        mc:Ignorable="d"
                        x:Class="MonkeyPaste.Avalonia.MpAvTagView">
-    <DockPanel x:Name="TagViewContainerDockPanel"
-               ClipToBounds="False"
-               local:MpAvIsHoveringExtension.IsEnabled="True"
-               local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-               local:MpAvIsHoveringExtension.HoverCursor="Hand"
-               local:MpAvMenuExtension.IsEnabled="True"
-               local:MpAvMenuExtension.SelectOnRightClick="False"
-               local:MpAvMenuExtension.IsOpen="{Binding IsContextMenuOpened, Mode=TwoWay}"
-               local:MpAvPointerPressCommandExtension.IsEnabled="True"
-               local:MpAvPointerPressCommandExtension.LeftPressCommand="{Binding SelectTagCommand}"
-               local:MpAvPointerPressCommandExtension.DoubleLeftPressCommand="{Binding RenameTagCommand}"
-               Cursor="Hand"
-               HorizontalAlignment="Stretch"
-               VerticalAlignment="Stretch"
-               Height="30">
+    <Grid x:Name="TagViewContainerDockPanel"
+          ClipToBounds="False"
+          local:MpAvIsHoveringExtension.IsEnabled="True"
+          local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+          local:MpAvIsHoveringExtension.HoverCursor="Hand"
+          local:MpAvMenuExtension.IsEnabled="True"
+          local:MpAvMenuExtension.SelectOnRightClick="False"
+          local:MpAvMenuExtension.IsOpen="{Binding IsContextMenuOpened, Mode=TwoWay}"
+          local:MpAvPointerPressCommandExtension.IsEnabled="True"
+          local:MpAvPointerPressCommandExtension.LeftPressCommand="{Binding SelectTagCommand}"
+          local:MpAvPointerPressCommandExtension.DoubleLeftPressCommand="{Binding RenameTagCommand}"
+          Cursor="Hand"
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          Height="30">
         <local:MpAvClipBorder x:Name="TagNameBorder"
-                              ClipToBounds="False"
-                              DockPanel.Dock="Left"
                               CornerRadius="7"
                               Margin="5,0,0,0"
                               Padding="1"
@@ -41,9 +39,7 @@
                               BorderThickness="1.5">
             <StackPanel Orientation="Horizontal"
                         ClipToBounds="False">
-                <Grid ClipToBounds="False"
-                      local:MpAvBadgeNotificationExtension.IsEnabled="True"
-                      local:MpAvBadgeNotificationExtension.NotificationCount="{Binding NotificationCount}">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition Width="Auto" />
@@ -65,7 +61,6 @@
                     </local:MpAvClipBorder>
                     <!--  Tag Name TextBox/ Marquee  -->
                     <Grid Grid.Column="1"
-                          ClipToBounds="True"
                           HorizontalAlignment="Left"
                           Margin="5,0,0,0"
                           MaxWidth="100">
@@ -105,5 +100,18 @@
                 </Grid>
             </StackPanel>
         </local:MpAvClipBorder>
-    </DockPanel>
+
+        <Border Background="Red"
+                MinWidth="10"
+                Height="10"
+                BorderThickness="1"
+                BorderBrush="White"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                IsVisible="{Binding CopyItemIdsNeedingView, Converter={StaticResource CollectionIsNotEmptyToBoolConverter}}">
+            <TextBlock Foreground="White"
+                       FontSize="9"
+                       Text="{Binding CopyItemIdsNeedingView, Converter={StaticResource CollectionCountToStringConverter}}" />
+        </Border>
+    </Grid>
 </local:MpAvUserControl>

@@ -683,3 +683,27 @@ function getElementLineHeight(elm) {
 	return float_val;
 }
 
+function getContentWidthByType() {
+	if (ContentItemType == 'Text') {
+		return getTextContentCharCount();
+	}
+	if (ContentItemType == 'FileList') {
+		return getTotalFileSize();
+	}
+	if (ContentItemType == 'Image') {
+		return getImageContentWidth();
+	}
+}
+
+function getContentHeightByType() {
+	if (ContentItemType == 'Text') {
+		return getTextContenLineCount();
+	}
+	if (ContentItemType == 'FileList') {
+		return getFileCount();
+	}
+	if (ContentItemType == 'Image') {
+		return getImageContentHeight();
+	}
+}
+

@@ -6,7 +6,7 @@
              mc:Ignorable="d"
              d:DesignWidth="800"
              d:DesignHeight="450"
-             x:Class="MonkeyPaste.Avalonia.MpAvToolTipView"
+             x:Class="MonkeyPaste.Avalonia.MpAvToolTipLinkView"
              Background="Transparent">
     <UserControl.RenderTransform>
         <TranslateTransform />
@@ -47,10 +47,13 @@
                           BlurRadius="5" />
       </Border.Effect>-->
             <TextBlock x:Name="ToolTipTextBlock"
-                       MaxWidth="300"
-                       Foreground="Black"
+                       MaxWidth="1000"
                        FontWeight="Light"
-                       TextWrapping="WrapWithOverflow" />
+                       TextWrapping="WrapWithOverflow"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="10"
+                       Text="{Binding DetailText}" />
 
         </Border>
     </Grid>

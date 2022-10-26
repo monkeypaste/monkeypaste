@@ -27,14 +27,18 @@ function loadContent_ext(loadContentMsgStr_base64) {
 	let req = toJsonObjFromBase64Str(loadContentMsgStr_base64);
 
 	loadContent(req.contentHandle, req.contentType, req.itemData, req.usedTextTemplates, req.isPasteRequest);
+	quill.update();
 
 	let respObj = {
 		contentWidth: getContentWidth(),
 		contentHeight: getContentHeight(),
+		lineCount: parseInt(getContentHeightByType()),
+		charCount: parseInt(getContentWidthByType()),
 		//decodedTemplateGuids: getDecodedTemplateGuids(),
 		//contentLength: getDocLength(),
 		hasTemplates: hasTemplates()
 	}
+	log(respObj);
 	let resp = toBase64FromJsonObj(respObj);
 	//log('init Response: ');
 	//log(initResponseMsgStr);

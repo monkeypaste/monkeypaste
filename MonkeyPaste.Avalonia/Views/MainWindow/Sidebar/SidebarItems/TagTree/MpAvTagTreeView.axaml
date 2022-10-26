@@ -87,8 +87,8 @@
                 </Style>
             </Button.Styles>
             <ToolTip.Tip>
-                <local:MpAvTooltipView>
-                    <local:MpAvTooltipView.ToolTipText>
+                <local:MpAvToolTipView>
+                    <local:MpAvToolTipView.ToolTipText>
                         <MultiBinding Converter="{StaticResource MultiStringAppendConverter}">
                             <Binding>
                                 <Binding.Source>
@@ -103,8 +103,8 @@
                                 </Binding.Source>
                             </Binding>
                         </MultiBinding>
-                    </local:MpAvTooltipView.ToolTipText>
-                </local:MpAvTooltipView>
+                    </local:MpAvToolTipView.ToolTipText>
+                </local:MpAvToolTipView>
             </ToolTip.Tip>
             <PathIcon />
         </Button>

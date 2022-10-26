@@ -237,8 +237,6 @@ namespace MonkeyPaste.Avalonia {
 
             Items.FirstOrDefault(x => x.TagId == DefaultTagId).IsSelected = true;
 
-            await RefreshAllCounts();
-
             AllTagViewModel.IsExpanded = true;
 
             SelectTagCommand.Execute(DefaultTagId);
@@ -279,29 +277,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public async Task RefreshAllCounts() {
-            var countTasks = new Dictionary<int, Task<int>>();
-            foreach (var ttvm in Items) {
-                if (ttvm.IsAllTag) {
-                    countTasks.Add(ttvm.TagId, MpDataModelProvider.GetTotalCopyItemCountAsync());
-                } else {
-                    countTasks.Add(ttvm.TagId, MpDataModelProvider.GetCopyItemCountForTagAsync(ttvm.TagId));
-                }
-            }
-
-            await Task.WhenAll(countTasks.Values.ToArray());
-
-            foreach (var ct in countTasks) {
-                int count = await ct.Value;
-                var ttvm = Items.FirstOrDefault(x => x.TagId == ct.Key);
-                if (ttvm != null) {
-                    ttvm.TagClipCount = count;
-                    if(ttvm.IsModelPinned) {
-                        PinnedItems.FirstOrDefault(x => x.TagId == ttvm.TagId).TagClipCount = count;
-                    }
-                }
-            }           
-        }
 
         public void ClearTagEditing() {
             Items.ForEach(x => x.IsTagNameReadOnly = true);
@@ -461,8 +436,9 @@ namespace MonkeyPaste.Avalonia {
                     tree_ttvm.IsModelPinned = false;
                 } else {
                     var pttvm = new MpAvTagTileViewModel(this);
-                    await pttvm.InitializeAsync(ttvm.Tag, true);
+                    await pttvm.InitializeAsync(ttvm.Tag, false);
                     pttvm.TagClipCount = ttvm.TagClipCount;
+                    pttvm.CopyItemIdsNeedingView = ttvm.CopyItemIdsNeedingView;
                     PinnedItems.Add(pttvm);
                     pttvm.IsModelPinned = true;
                 }

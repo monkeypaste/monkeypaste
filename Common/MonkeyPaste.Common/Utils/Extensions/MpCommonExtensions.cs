@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
-    public static class MpExtensions {
+    public static class MpCommonExtensions {
 
         #region Collections
 
@@ -294,6 +294,18 @@ namespace MonkeyPaste.Common {
 
         public static int EnumToInt<TValue>(this TValue value)
             where TValue : Enum => Convert.ToInt32(value);
+
+        #endregion
+
+        #region EventHandler
+
+        public static bool HasInvokers(this EventHandler eventHandler) {
+            return eventHandler != null && eventHandler.GetInvocationList().Length > 0;
+        }
+
+        public static bool HasInvokers<T>(this EventHandler<T> eventHandler) {
+            return eventHandler != null && eventHandler.GetInvocationList().Length > 0;
+        }
 
         #endregion
 

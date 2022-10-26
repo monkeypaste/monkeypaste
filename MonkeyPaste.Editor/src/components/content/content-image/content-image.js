@@ -10,6 +10,14 @@ function loadImageContent(itemDataStr) {
 	setRootHtml(img_html);
 }
 
+function getImageContentWidth() {
+	// TODO need to test still if images are being scaled on copy but definitely need to calculate differently
+	return getContentWidth();
+}
+function getImageContentHeight() {
+	return getContentHeight();
+}
+
 function getImageContentData() {
 	if (ContentItemType != 'Image') {
 		return null;

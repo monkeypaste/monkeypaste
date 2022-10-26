@@ -794,6 +794,12 @@ namespace MonkeyPaste {
         }
 
         public static bool IsTagLinkedWithCopyItem(int tagId, int copyItemId) {
+            // returns true if:
+            // 1. tag is linked and has no children
+            // 2. tag is linked and all descendants are linked
+            // returns false if tag is not linked and no children are linked
+            // returns null if tag is linked and any children are linked
+
             string query = $"select count(*) from MpCopyItemTag where fk_MpTagId=? and fk_MpCopyItemId=?";
             var result = MpDb.QueryScalar<int>(query, tagId, copyItemId);
             return result > 0;

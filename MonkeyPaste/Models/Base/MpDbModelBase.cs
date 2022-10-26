@@ -31,6 +31,10 @@ namespace MonkeyPaste {
 
         [Ignore]
         public virtual string PublicHandle => (Id.ToString() + Guid).CheckSum();
+
+        [Ignore]
+        public virtual bool WasDupOnCreate { get; set; } = false;
+
         #endregion
 
         #region Public Methods

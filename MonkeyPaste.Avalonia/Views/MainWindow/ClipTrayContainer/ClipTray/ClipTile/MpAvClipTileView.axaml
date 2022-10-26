@@ -15,6 +15,11 @@
                        HorizontalContentAlignment="Stretch"
                        VerticalContentAlignment="Stretch"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileView">
+    <!--
+        local:MpAvIsHoveringExtension.IsEnabled="True"
+        local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+        local:MpAvIsHoveringExtension.IsSelected="{Binding IsSelected, Mode=TwoWay}"
+    -->
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
                           ClipToBounds="True"
                           HorizontalAlignment="Stretch"
@@ -32,10 +37,7 @@
                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
                           CornerRadius="{StaticResource TileCornerRadius}"
                           BorderThickness="{StaticResource TileBorderThickness}"
-                          Background="{Binding TileBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                          local:MpAvIsHoveringExtension.IsEnabled="True"
-                          local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                          local:MpAvIsHoveringExtension.IsSelected="{Binding IsSelected, Mode=TwoWay}">
+                          Background="{DynamicResource ClipTileContentBackgroundBrush}">
         <local:MpAvClipBorder.Styles>
             <Style Selector="PathIcon">
                 <Setter Property="Width"
@@ -52,6 +54,7 @@
                 <RowDefinition Height="0.25*"
                                MaxHeight="40" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="20" />
             </Grid.RowDefinitions>
             <!--  Title  -->
             <local:MpAvClipTileTitleView x:Name="TileTitleView"
@@ -71,11 +74,17 @@
                                            DataContext="{Binding}" />
 
             <!--  Detail  -->
-
-
+            <Grid Grid.Row="2"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Bottom"
+                  IsVisible="{Binding IsHovering}">
+                <local:MpAvClipTileDetailView DataContext="{Binding DetailCollectionViewModel}"
+                                              VerticalAlignment="Stretch"
+                                              HorizontalAlignment="Stretch" />
+            </Grid>
             <!--  Corner Button Overlay  -->
             <local:MpAvClipTileCornerButtonsView Grid.Row="0"
-                                                 Grid.RowSpan="2"
+                                                 Grid.RowSpan="3"
                                                  IsVisible="{Binding IsHovering}"
                                                  HorizontalAlignment="Stretch"
                                                  VerticalAlignment="Stretch"
@@ -83,7 +92,7 @@
 
             <Border x:Name="ClipTileResizeBorder"
                     Grid.Row="0"
-                    Grid.RowSpan="2"
+                    Grid.RowSpan="3"
                     local:MpAvResizeExtension.MinHeight="{Binding MinHeight}"
                     local:MpAvResizeExtension.MaxHeight="{Binding MaxHeight}"
                     local:MpAvResizeExtension.MinWidth="{Binding MinWidth}"
@@ -112,11 +121,11 @@
 
             <!--  IsBusy Overlay  -->
             <Border Grid.Row="0"
-                    Grid.RowSpan="2"
+                    Grid.RowSpan="3"
                     Cursor="Wait"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    IsVisible="{Binding IsBusy}">
+                    IsVisible="False">
                 <!--<Border.Background>
                     <SolidColorBrush Color="Black"
                                      Opacity="0.2" />

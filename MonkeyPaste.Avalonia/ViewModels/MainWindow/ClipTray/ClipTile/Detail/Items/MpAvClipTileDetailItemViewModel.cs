@@ -10,23 +10,47 @@ using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipTileDetailItemViewModel : 
-        MpViewModelBase<MpAvClipTileDetailCollectionViewModel>,
-        MpISelectableViewModel {
+        MpViewModelBase<MpAvClipTileDetailCollectionViewModel>, MpISelectableViewModel,MpIHoverableViewModel {
         #region MpISelectableViewModel Implementation
 
         public bool IsSelected { get; set; }
         public DateTime LastSelectedDateTime { get; set; }
         #endregion
 
+        #region MpIHoverableViewModel Implementation
+        public bool IsHovering { get; set; }
+        #endregion
+
+        #region Statics
+
+        private static string[] _bgColors = {
+            MpSystemColors.Red,
+            MpSystemColors.Yellow,
+            MpSystemColors.blue1,
+            MpSystemColors.green1,
+            MpSystemColors.orange1
+        };
+        #endregion
+
         #region Properties
 
-        
+
 
         #region Appearance
 
         public string DetailText { get; private set; }
 
         public string DetailUri { get; private set; }
+
+
+        public string BorderBgHexColor {
+            get {
+                if (Parent == null) {
+                    return MpSystemColors.Transparent;
+                }
+                return _bgColors[(int)DetailType - 1];//.AdjustAlpha(MpPrefViewModel.Instance.MainWindowOpacity);
+            }
+        }
 
         #endregion
 
@@ -37,25 +61,25 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
-        public MpSize ItemSize {
-            get {
-                if(CopyItem == null) {
-                    return MpSize.Empty;
-                }
-                return CopyItem.ItemSize;
-            }
-        }
+        //public MpSize ItemSize {
+        //    get {
+        //        if(CopyItem == null) {
+        //            return MpSize.Empty;
+        //        }
+        //        return CopyItem.ItemSize;
+        //    }
+        //}
 
         public MpCopyItemDetailType DetailType { get; private set; }
 
-        public MpCopyItem CopyItem {
-            get {
-                if(Parent == null) {
-                    return null;
-                }
-                return Parent.CopyItem;
-            }
-        }
+        //public MpCopyItem CopyItem {
+        //    get {
+        //        if(Parent == null) {
+        //            return null;
+        //        }
+        //        return Parent.CopyItem;
+        //    }
+        //}
 
         #endregion
 
@@ -73,32 +97,48 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task IntializeAsync() {
-            IsBusy = true;
-            await Task.Delay(1);
-            Reset();
-            IsBusy = false;
+            //IsBusy = true;
+            //await Task.Delay(1);
+            //Reset();
+            UpdateDetailTextCommand.Execute(null);
+            //IsBusy = false;
         }
 
+        public override string ToString() {
+            return DetailText;
+        }
         #endregion
 
         #region Private Methods
 
         private void MpAvClipTileDetailItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(IsSelected):
-                    if (IsSelected) {
-                        LastSelectedDateTime = DateTime.Now;
-                        if(string.IsNullOrEmpty(DetailText)) {
-                            UpdateDetailTextCommand.Execute(null);
-                        }
+                case nameof(IsHovering):
+                    if(IsSelected && !IsHovering) {
+                        Parent.CycleDetailCommand.Execute(null);
                     }
+                    //IsSelected = IsHovering;
+                    //Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
+                    //if (IsHovering) {
+
+                    //    Parent.SelectedItem = this;
+                    //} else {
+                    //    Parent.SelectedItem = null;
+                    //}
                     break;
+                    //case nameof(IsSelected):
+                    //    if (IsSelected) {
+                    //        LastSelectedDateTime = DateTime.Now;
+                    //        if(string.IsNullOrEmpty(DetailText)) {
+                    //            UpdateDetailTextCommand.Execute(null);
+                    //        }
+                    //    }
+                    //    break;
             }
         }
 
         private void Reset() {
-
-            DetailText = String.Empty;
+            DetailText = null;
             DetailUri = String.Empty;
             IsUriEnabled = false;
         }
@@ -108,14 +148,16 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand UpdateDetailTextCommand => new MpCommand(
             () => {
-                IsBusy = true;
+                //IsBusy = true;
 
                 Reset();
 
                 var ctvm = Parent.Parent;
-                if(CopyItem == null || ctvm.IsPlaceholder) {
+                if(ctvm == null || ctvm.IsPlaceholder) {
                     return;
                 }
+                var CopyItem = ctvm.CopyItem;
+                var ItemSize = CopyItem.ItemSize;
                 
                 switch (DetailType) {
                     //created
@@ -128,11 +170,11 @@ namespace MonkeyPaste.Avalonia {
                                 DetailText = $"({ItemSize.Width}px) | ({ItemSize.Height}px)";
                                 break;
                             case MpCopyItemType.Text:
-                                DetailText = $"{ItemSize.Width} chars | {ItemSize.Height} lines";
+                                DetailText = $"{ctvm.CharCount} chars | {ctvm.LineCount} lines";
                                 break;
                             case MpCopyItemType.FileList:
 
-                                DetailText = $"{ItemSize.Width} files | {ItemSize.Height} MBs";
+                                DetailText = $"{ctvm.LineCount} files | {ctvm.CharCount} MBs";
                                 break;
                         }
                         break;
@@ -144,7 +186,7 @@ namespace MonkeyPaste.Avalonia {
                         if (ctvm.UrlViewModel == null) {
                             break;
                         }
-                        DetailText = ctvm.UrlViewModel.UrlTitle;
+                        DetailText = $"Goto url '{ctvm.UrlViewModel.UrlTitle}'";
                         DetailUri = ctvm.UrlViewModel.UrlPath;
                         IsUriEnabled = true;
                         break;
@@ -152,14 +194,25 @@ namespace MonkeyPaste.Avalonia {
                         if (ctvm.AppViewModel == null) {
                             break;
                         }
+                        DetailText = $"Open folder for '{ctvm.AppViewModel.AppName}'";
+                        IsUriEnabled = ctvm.AppViewModel.UserDeviceId == MpPrefViewModel.Instance.ThisUserDevice.Id;                        
+                        if(IsUriEnabled) {
 
-                        DetailText = ctvm.AppViewModel.AppName;
-                        DetailUri = ctvm.AppViewModel.AppPath;
-                        IsUriEnabled = ctvm.AppViewModel.UserDeviceId == MpPrefViewModel.Instance.ThisUserDevice.Id;
+                            DetailUri = ctvm.AppViewModel.AppPath;
+                        } else {
+                            DetailText += " [EXTERNAL SOURCE]";                            
+                        }
                         break;
                     default:
                         break;
                 }
+                if(DetailText == String.Empty) {
+                    DetailText = null;
+                }
+
+                OnPropertyChanged(nameof(DetailText));
+                OnPropertyChanged(nameof(DetailUri));
+                OnPropertyChanged(nameof(IsUriEnabled));
             });
         #endregion
     }

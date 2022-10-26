@@ -47,7 +47,7 @@
                           IsChecked="{Binding IsVisible, Source={x:Static local:MpAvSettingsWindowViewModel.Instance}}"
                           ToolTip.ShowDelay="500">
                 <ToolTip.Tip>
-                    <local:MpAvTooltipView ToolTipText="Settings" />
+                    <local:MpAvToolTipView ToolTipText="Settings" />
                 </ToolTip.Tip>
                 <PathIcon Data="{StaticResource CogSvg}" />
             </ToggleButton>
@@ -58,7 +58,7 @@
                           IsChecked="{Binding IsMainWindowLocked, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=TwoWay}"
                           ToolTip.ShowDelay="500">
                 <ToolTip.Tip>
-                    <local:MpAvTooltipView ToolTipText="Lock" />
+                    <local:MpAvToolTipView ToolTipText="Lock" />
                 </ToolTip.Tip>
                 <PathIcon Data="{StaticResource LockOutlineSvg}" />
             </ToggleButton>
@@ -215,13 +215,13 @@
                     <PathIcon IsVisible="{Binding IsGridLayout, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                               Data="{StaticResource StackLayoutSvg}">
                         <ToolTip.Tip>
-                            <local:MpAvTooltipView ToolTipText="Stack Layout" />
+                            <local:MpAvToolTipView ToolTipText="Stack Layout" />
                         </ToolTip.Tip>
                     </PathIcon>
                     <PathIcon IsVisible="{Binding !IsGridLayout, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                               Data="{StaticResource GridLayoutSvg}">
                         <ToolTip.Tip>
-                            <local:MpAvTooltipView ToolTipText="Grid Layout" />
+                            <local:MpAvToolTipView ToolTipText="Grid Layout" />
                         </ToolTip.Tip>
                     </PathIcon>
                 </Grid>
@@ -234,7 +234,7 @@
                     CommandParameter="CW"
                     ToolTip.ShowDelay="0">
                 <ToolTip.Tip>
-                    <local:MpAvTooltipView ToolTipText="Cycle Orientation CW" />
+                    <local:MpAvToolTipView ToolTipText="Cycle Orientation CW" />
                 </ToolTip.Tip>
 
                 <PathIcon Data="{StaticResource RotateCcwSvg}">
@@ -254,7 +254,7 @@
                     local:MpAvPointerPressCommandExtension.RightPressCommandParameter="CW"
                     ToolTip.ShowDelay="0">
                 <ToolTip.Tip>
-                    <local:MpAvTooltipView ToolTipText="Cycle Orientation CCW" />
+                    <local:MpAvToolTipView ToolTipText="Cycle Orientation CCW" />
                 </ToolTip.Tip>
 
                 <PathIcon Data="{StaticResource RotateCcwSvg}" />

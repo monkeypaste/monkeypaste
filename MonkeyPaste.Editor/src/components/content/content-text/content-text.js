@@ -25,3 +25,10 @@ function getTextContentData() {
 	return qhtml;
 }
 
+function getTextContenLineCount() {
+	return getLineCount();
+}
+function getTextContentCharCount() {
+	return getText().length;
+}
+

@@ -22,4 +22,6 @@
     <local:MpAvContentDataConverter x:Key="ContentDataConverter" />
     <local:MpAvMultiDoubleMathConverter x:Key="MultiDoubleMathConverter" />
     <local:MpAvDoubleToGridLengthConverter x:Key="DoubleToGridLengthConverter" />
+    <local:MpAvCollectionIsNotEmptyToBoolConverter x:Key="CollectionIsNotEmptyToBoolConverter" />
+    <local:MpAvCollectionCountToStringConverter x:Key="CollectionCountToStringConverter" />
 </ResourceDictionary>

@@ -501,8 +501,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public int LineCount { get; private set; } = -1;
-        public int CharCount { get; private set; } = -1;
+        public int LineCount { get; set; }
+        public int CharCount { get; set; }
 
         public bool IsAnyBusy {
             get {
@@ -706,7 +706,8 @@ namespace MonkeyPaste.Avalonia {
                 return CopyItem.ItemSize;
             }
             set {
-                if (UnformattedContentSize != value) {
+                if (UnformattedContentSize.Width != value.Width && 
+                    UnformattedContentSize.Height != value.Height) {
                     CopyItem.ItemSize = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(UnformattedContentSize));
@@ -1633,7 +1634,6 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipTileViewModel(MpAvClipTrayViewModel parent) : base(parent) {
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
-            DetailCollectionViewModel = new MpAvClipTileDetailCollectionViewModel(this);
             //MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             IsBusy = true;
         }
@@ -1653,6 +1653,7 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 BoundSize = MinSize;
             }
+            DetailCollectionViewModel = new MpAvClipTileDetailCollectionViewModel(this);
 
             CopyItem = ci;
             QueryOffsetIdx = queryOffset < 0 && ci != null ? QueryOffsetIdx : queryOffset;
@@ -1887,9 +1888,6 @@ namespace MonkeyPaste.Avalonia {
             AllowMultiSelect = false;
         }
 
-        public void ResetExpensiveDetails() {
-            LineCount = CharCount = -1;
-        }
 
         #region View Event Invokers
 
@@ -2286,7 +2284,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(TileBorderHexColor));
                     break;
                 case nameof(CopyItem):
-                    DetailCollectionViewModel.OnPropertyChanged(nameof(DetailCollectionViewModel.CopyItem));
+                    DetailCollectionViewModel.InitializeAsync().FireAndForgetSafeAsync();
 
                     if (CopyItem == null) {
                         break;
@@ -2416,7 +2414,6 @@ namespace MonkeyPaste.Avalonia {
                     InitTitleLayers().FireAndForgetSafeAsync(this);
                     break;
                 case nameof(CopyItemData):
-                    ResetExpensiveDetails();
                     break;
 
                 case nameof(CanResize):

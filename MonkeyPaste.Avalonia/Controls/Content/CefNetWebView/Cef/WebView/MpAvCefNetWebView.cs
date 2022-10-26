@@ -108,6 +108,8 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.notifyContentLengthChanged:
                     var contentLengthMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillContentLengthChangedMessage>(msgJsonBase64Str);
                    Document.ContentEnd.Offset = contentLengthMsgObj.length;
+                    ctvm.CharCount = contentLengthMsgObj.length;
+                    ctvm.LineCount = contentLengthMsgObj.lines;
                     break;
                 case MpAvEditorBindingFunctionType.notifyReadOnlyEnabled:
                     var enableReadOnlyMsg = MpJsonObject.DeserializeBase64Object<MpQuillEnableReadOnlyResponseMessage>(msgJsonBase64Str);

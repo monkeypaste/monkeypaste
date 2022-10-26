@@ -38,6 +38,7 @@
                 <DataTemplate>
                     <!--<ListBoxItem Classes.TileHover="{Binding IsHovering}">-->
                     <local:MpAvClipTileView DataContext="{Binding}"
+                                            IsPointerOver="{Binding IsHovering, Mode=OneWayToSource}"
                                             local:MpAvListBoxItemBoundsObserverExtension.IsEnabled="True"
                                             local:MpAvListBoxItemBoundsObserverExtension.ObservedBounds="{Binding ObservedBounds, Mode=TwoWay}"
                                             IsVisible="{Binding IsPinned}" />

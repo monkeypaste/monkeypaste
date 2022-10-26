@@ -31,6 +31,8 @@ namespace MonkeyPaste {
     public class MpQuillLoadContentResponseMessage : MpJsonObject {
         public double contentWidth { get; set; }
         public double contentHeight { get; set; }
+        public int lineCount { get; set; }
+        public int charCount { get; set; }
         //public int contentLength { get; set; }
 
         public bool hasTemplates { get; set; }
@@ -214,6 +216,7 @@ templateType: "dynamic"
 
     public class MpQuillContentLengthChangedMessage : MpJsonObject {
         public int length { get; set; }
+        public int lines { get; set; }
     }
 
     public class MpQuillExceptionMessage : MpJsonObject {

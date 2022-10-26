@@ -76,7 +76,7 @@
                       IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
                       Padding="10">
             <ToolTip.Tip>
-                <local:MpAvTooltipView ToolTipText="Collection Tree" />
+                <local:MpAvToolTipView ToolTipText="Collection Tree" />
             </ToolTip.Tip>
             <PathIcon Data="{StaticResource BooksSvg}" />
         </ToggleButton>
@@ -87,7 +87,7 @@
                       IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpAvClipboardHandlerCollectionViewModel.Instance}}"
                       Padding="10">
             <ToolTip.Tip>
-                <local:MpAvTooltipView ToolTipText="Clipboard Handlers" />
+                <local:MpAvToolTipView ToolTipText="Clipboard Handlers" />
             </ToolTip.Tip>
             <PathIcon Data="{StaticResource ClipboardSvg}" />
         </ToggleButton>
@@ -98,7 +98,7 @@
                       IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance}}"
                       Padding="10">
             <ToolTip.Tip>
-                <local:MpAvTooltipView ToolTipText="Analyze" />
+                <local:MpAvToolTipView ToolTipText="Analyze" />
             </ToolTip.Tip>
             <PathIcon Data="{StaticResource BrainOutlineSvg}" />
         </ToggleButton>
@@ -110,7 +110,7 @@
                       IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpActionCollectionViewModel.Instance}}"
                       Padding="10">
             <ToolTip.Tip>
-                <local:MpAvTooltipView ToolTipText="Actions" />
+                <local:MpAvToolTipView ToolTipText="Actions" />
             </ToolTip.Tip>
             <PathIcon Data="{StaticResource BoltSvg}" />
         </ToggleButton>
@@ -121,7 +121,7 @@
                       Padding="10"
                       IsEnabled="{Binding !IsAppPaused}">
             <ToolTip.Tip>
-                <local:MpAvTooltipView ToolTipText="Clipboard Modes" />
+                <local:MpAvToolTipView ToolTipText="Clipboard Modes" />
             </ToolTip.Tip>
             <!--<ToggleButton.Resources>
                 <StackPanel x:Key="AppModeToggleButtonStackPanel"

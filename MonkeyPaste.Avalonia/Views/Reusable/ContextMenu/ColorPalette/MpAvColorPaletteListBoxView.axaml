@@ -72,7 +72,7 @@
                             BorderThickness="1"
                             CornerRadius="2">
                         <ToolTip.Tip>
-                            <local:MpAvTooltipView ToolTipText="{Binding Header}" />
+                            <local:MpAvToolTipView ToolTipText="{Binding Header}" />
                         </ToolTip.Tip>
                         <Image HorizontalAlignment="Stretch"
                                VerticalAlignment="Stretch"
