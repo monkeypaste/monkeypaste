@@ -83,7 +83,7 @@ namespace MonkeyPaste.Avalonia {
                 if (PrimaryAction is MpAvTriggerActionViewModelBase) {
                     return PrimaryAction as MpAvTriggerActionViewModelBase;
                 }
-                return PrimaryAction.FindRootParent() as MpAvTriggerActionViewModelBase;
+                return (PrimaryAction as MpITreeItemViewModel).FindRootParent() as MpAvTriggerActionViewModelBase;
             }
             set {
                 if (SelectedItem != value) {
@@ -108,7 +108,7 @@ namespace MonkeyPaste.Avalonia {
                 var avml = new List<MpAvActionViewModelBase>();
                 foreach (var tavm in Items.ToList()) {
                     avml.Add(tavm);
-                    avml.AddRange(tavm.FindAllChildren());
+                    avml.AddRange(tavm.FindAllChildren().Cast<MpAvActionViewModelBase>());
                 }
                 return avml;
             }
@@ -121,7 +121,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 var avml = SelectedItem.FindAllChildren().ToList();
                 avml.Insert(0, SelectedItem);
-                return avml;
+                return avml.Cast<MpAvActionViewModelBase>().ToList();
             }
         }
 
@@ -517,7 +517,7 @@ namespace MonkeyPaste.Avalonia {
                 var tavm = args as MpAvTriggerActionViewModelBase;
                 tavm.ToggleIsEnabledCommand.Execute(false);
 
-                var deleteTasks = tavm.FindAllChildren().Select(x => x.Action.DeleteFromDatabaseAsync()).ToList();
+                var deleteTasks = tavm.FindAllChildren().Cast<MpAvActionViewModelBase>().Select(x => x.Action.DeleteFromDatabaseAsync()).ToList();
                 deleteTasks.Add(tavm.Action.DeleteFromDatabaseAsync());
                 await Task.WhenAll(deleteTasks);
 

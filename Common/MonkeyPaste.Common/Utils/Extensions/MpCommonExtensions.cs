@@ -60,22 +60,39 @@ namespace MonkeyPaste.Common {
         }
 
         public static int IndexOf<T>(this IEnumerable<T> source, Func<T, bool> predicate) {
-            int retval = -1;
+            int result = -1;
             var enumerator = source.GetEnumerator();
 
             while (enumerator.MoveNext()) {
-                retval += 1;
+                result += 1;
                 if (predicate(enumerator.Current)) {
-                    IDisposable disposable = enumerator as System.IDisposable;
-                    if (disposable != null) {
-                        disposable.Dispose();
+                    if (enumerator is IDisposable) {
+                        (enumerator as IDisposable).Dispose();
                     }
-                    return retval;
+                    return result;
                 }
             }
-            IDisposable disposable2 = enumerator as System.IDisposable;
-            if (disposable2 != null) {
-                disposable2.Dispose();
+            if (enumerator is IDisposable) {
+                (enumerator as IDisposable).Dispose();
+            }
+            return -1;
+        }
+
+        public static int IndexOf<T>(this IEnumerable<T> source, T item) {
+            int result = -1;
+            var enumerator = source.GetEnumerator();
+
+            while (enumerator.MoveNext()) {
+                result += 1;
+                if (enumerator.Current.Equals(item)) {
+                    if (enumerator is IDisposable) {
+                        (enumerator as IDisposable).Dispose();
+                    }
+                    return result;
+                }
+            }
+            if (enumerator is IDisposable) {
+                (enumerator as IDisposable).Dispose();
             }
             return -1;
         }

@@ -35,7 +35,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public ObservableCollection<MpAvTagTileViewModel> PinnedItems { get; set; } = new ObservableCollection<MpAvTagTileViewModel>();
+        //public ObservableCollection<MpAvTagTileViewModel> PinnedItems { get; set; } = new ObservableCollection<MpAvTagTileViewModel>();
+        public IEnumerable<MpAvTagTileViewModel> PinnedItems => Items.Where(x => x.IsModelPinned).OrderBy(x=>x.TagTraySortIdx);
 
         public MpAvTagTileViewModel SelectedPinnedItem {
             get => PinnedItems.FirstOrDefault(x => x.IsSelected);
@@ -224,15 +225,15 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            foreach (var ttvm in Items.Where(x => x.Tag.IsPinned).OrderBy(x => x.TagTraySortIdx)) {
-                var pttvm = new MpAvTagTileViewModel(this);
-                await pttvm.InitializeAsync(ttvm.Tag);
-                pttvm.ParentTreeItem = ttvm.ParentTreeItem;
-                PinnedItems.Add(pttvm);
-            }
+            //foreach (var ttvm in Items.Where(x => x.Tag.IsPinned).OrderBy(x => x.TagTraySortIdx)) {
+            //    var pttvm = new MpAvTagTileViewModel(this);
+            //    await pttvm.InitializeAsync(ttvm.Tag);
+            //    pttvm.ParentTreeItem = ttvm.ParentTreeItem;
+            //    PinnedItems.Add(pttvm);
+            //}
 
             Items.CollectionChanged += TagTileViewModels_CollectionChanged;
-            PinnedItems.CollectionChanged += PinnedItems_CollectionChanged;
+            //PinnedItems.CollectionChanged += PinnedItems_CollectionChanged;
             //UpdateSortOrder(true);
 
             Items.FirstOrDefault(x => x.TagId == DefaultTagId).IsSelected = true;
@@ -424,24 +425,29 @@ namespace MonkeyPaste.Avalonia {
                 if(ttvm == null) {
                     return;
                 }
-                bool wasPinned = ttvm.IsModelPinned;
-
-                if(wasPinned) {
-                    var ttvm_toRemove = PinnedItems.FirstOrDefault(x => x.TagId == ttvm.TagId);
-                    PinnedItems.Remove(ttvm_toRemove);
-                    var tree_ttvm = Items.FirstOrDefault(x => x.TagId == ttvm.TagId);
-                    if(tree_ttvm == null) {
-                        Debugger.Break();
-                    }
-                    tree_ttvm.IsModelPinned = false;
+                ttvm.IsModelPinned = !ttvm.IsModelPinned;
+                if(ttvm.IsModelPinned) {
+                    ttvm.TagTraySortIdx = PinnedItems.Count() - 1;
                 } else {
-                    var pttvm = new MpAvTagTileViewModel(this);
-                    await pttvm.InitializeAsync(ttvm.Tag, false);
-                    pttvm.TagClipCount = ttvm.TagClipCount;
-                    pttvm.CopyItemIdsNeedingView = ttvm.CopyItemIdsNeedingView;
-                    PinnedItems.Add(pttvm);
-                    pttvm.IsModelPinned = true;
+                    ttvm.TagTraySortIdx = -1;
                 }
+                //if(wasPinned) {
+                //    var ttvm_toRemove = PinnedItems.FirstOrDefault(x => x.TagId == ttvm.TagId);
+                //    PinnedItems.Remove(ttvm_toRemove);
+                //    var tree_ttvm = Items.FirstOrDefault(x => x.TagId == ttvm.TagId);
+                //    if(tree_ttvm == null) {
+                //        Debugger.Break();
+                //    }
+                //    tree_ttvm.IsModelPinned = false;
+                //} else {
+                //    var pttvm = new MpAvTagTileViewModel(this);
+                //    await pttvm.InitializeAsync(ttvm.Tag, false);
+                //    pttvm.ParentTreeItem = ttvm.ParentTreeItem;
+                //    pttvm.TagClipCount = ttvm.TagClipCount;
+                //    pttvm.CopyItemIdsNeedingView = ttvm.CopyItemIdsNeedingView;
+                //    PinnedItems.Add(pttvm);
+                //    pttvm.IsModelPinned = true;
+                //}
 
                 OnPropertyChanged(nameof(PinnedItems));
                 OnPropertyChanged(nameof(IsNavButtonsVisible));

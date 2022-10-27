@@ -44,7 +44,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsExpanded { get; set; }
         public MpITreeItemViewModel ParentTreeItem => Parent;
-        public ObservableCollection<MpITreeItemViewModel> Children => new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
+        public IEnumerable<MpITreeItemViewModel> Children => Items;// new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
 
         #endregion
 

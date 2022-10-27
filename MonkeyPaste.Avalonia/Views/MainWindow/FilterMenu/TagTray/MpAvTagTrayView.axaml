@@ -76,8 +76,8 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <local:MpAvTagView local:MpAvSizeObserverExtension.IsEnabled="True"
-                                       local:MpAvSizeObserverExtension.ObservedWidth="{Binding TagTileTrayWidth, Mode=OneWayToSource}"
+                    <local:MpAvTagView local:MpAvListBoxItemBoundsObserverExtension.IsEnabled="True"
+                                       local:MpAvListBoxItemBoundsObserverExtension.ObservedBounds="{Binding ObservedTagTrayBounds, Mode=TwoWay}"
                                        DataContext="{Binding}" />
 
                 </DataTemplate>

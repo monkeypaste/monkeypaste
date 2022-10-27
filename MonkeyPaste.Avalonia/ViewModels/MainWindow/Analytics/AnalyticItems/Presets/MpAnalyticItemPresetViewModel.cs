@@ -25,6 +25,14 @@ namespace MonkeyPaste.Avalonia {
         MpIPluginComponentViewModel {
         #region Properties
 
+        #region MpITreeItemViewModel Implementation
+
+        public IEnumerable<MpITreeItemViewModel> Children => Items;
+
+        public MpITreeItemViewModel ParentTreeItem => Parent;
+        public bool IsExpanded { get; set; }
+        #endregion
+
         #region View Models
 
         public Dictionary<int, MpPluginParameterViewModelBase> ParamLookup {
@@ -49,9 +57,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpITreeItemViewModel ParentTreeItem => Parent;
+        //public MpITreeItemViewModel ParentTreeItem => Parent;
 
-        public ObservableCollection<MpITreeItemViewModel> Children { get; set; } = null;
+        //public ObservableCollection<MpITreeItemViewModel> Children { get; set; } = null;
 
         #endregion
 
@@ -118,7 +126,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsAllValid => Items.All(x => x.IsValid);
 
-        public bool IsExpanded { get; set; }
 
         public bool IsReadOnly => IsDefault;
 

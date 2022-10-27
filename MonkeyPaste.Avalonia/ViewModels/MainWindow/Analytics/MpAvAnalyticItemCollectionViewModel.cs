@@ -36,6 +36,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        #region MpITreeItemViewModel Implementation
+
+        public IEnumerable<MpITreeItemViewModel> Children => Items;
+
+        public MpITreeItemViewModel ParentTreeItem => null;
+        public bool IsExpanded { get; set; }
+        #endregion
+
         #region View Models
 
         public MpAnalyticItemViewModel ProcessAutomationViewModel => Items.FirstOrDefault(x => x.PluginGuid == _processAutomationGuid);
@@ -58,9 +66,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public ObservableCollection<MpITreeItemViewModel> Children => new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
-
-        public MpITreeItemViewModel ParentTreeItem => null;
+        
 
         public List<MpAnalyticItemPresetViewModel> AllPresets => Items.OrderBy(x => x.Title).SelectMany(x => x.Items).ToList();
 
@@ -107,7 +113,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsLoaded => Items.Count > 0;
 
-        public bool IsExpanded { get; set; }
 
         //public bool IsAnyEditingParameters => Items.Any(x => x.IsAnyEditingParameters);
 

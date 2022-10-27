@@ -40,22 +40,10 @@
                     <Setter Property="IsExpanded"
                             Value="{Binding IsExpanded, Mode=TwoWay}" />
                 </Style>
-                <Style Selector="TreeViewItem /template/ Border#SelectionBorder:pointerover">
-                    <Setter Property="Background"
-                            Value="Transparent" />
-                </Style>
-                <Style Selector="TreeViewItem /template/ Border#SelectionBorder">
-                    <Setter Property="Background"
-                            Value="Transparent" />
-                </Style>
-                <Style Selector="TreeViewItem:selected /template/ Border#SelectionBorder">
-                    <Setter Property="Background"
-                            Value="Transparent" />
-                </Style>
             </TreeView.Styles>
             <TreeView.ItemTemplate>
-                <TreeDataTemplate DataType="{x:Type local:MpAvTagTileViewModel}"
-                                  ItemsSource="{Binding Items}">
+                <TreeDataTemplate DataType="{x:Type local:MpAvTagTileViewModel}" 
+                                  ItemsSource="{Binding SortedItems}">
                     <local:MpAvTagView DataContext="{Binding}" />
                 </TreeDataTemplate>
             </TreeView.ItemTemplate>
@@ -67,7 +55,7 @@
                 CornerRadius="7"
                 Margin="0,0,10,0"
                 BorderThickness="0"
-                Command="{Binding SelectedItem.AddChildTagCommand}">
+                Command="{Binding SelectedItem.AddNewChildTagCommand}">
             <Button.Styles>
                 <Style Selector="PathIcon">
                     <Setter Property="Foreground"

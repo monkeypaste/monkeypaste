@@ -14,7 +14,7 @@ namespace MonkeyPaste.Avalonia {
         //List<ToolBar> toolbars = new List<ToolBar>();
         public MpAvFilterMenuView() {
             InitializeComponent();
-            MpAvTagTrayViewModel.Instance.PinnedItems.CollectionChanged += PinnedItems_CollectionChanged;
+            //MpAvTagTrayViewModel.Instance.PinnedItems.CollectionChanged += PinnedItems_CollectionChanged;
             //Dispatcher.UIThread.Post(async () => {
             //    while (toolbars.Count < 4) {
             //        toolbars = this.GetVisualDescendants<ToolBar>().ToList();

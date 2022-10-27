@@ -18,7 +18,8 @@ namespace MonkeyPaste.Avalonia {
         MpAvSelectorViewModelBase<MpAvTagTrayViewModel, MpAvTagTileViewModel>, 
         MpIHoverableViewModel,
         MpISelectableViewModel,
-        MpITreeItemViewModel<MpAvTagTileViewModel>,
+        //MpITreeItemViewModel<MpAvTagTileViewModel>,
+        MpITreeItemViewModel,
         MpAvIShortcutCommand, 
         MpIUserColorViewModel,
         MpIActionComponent,
@@ -35,18 +36,69 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
+        public MpAvTagTileViewModel ParentTagViewModel => Parent.Items.FirstOrDefault(x => x.TagId == ParentTagId);
+
+        public IEnumerable<MpAvTagTileViewModel> AllAncestors {
+            get {
+                var aal = new List<MpAvTagTileViewModel>();
+                var cur = this;
+                while(cur != null) {
+                    if(cur.ParentTagViewModel != null) {
+                        aal.Add(cur.ParentTagViewModel);
+                    }
+                    cur = cur.ParentTagViewModel;
+                }
+                return aal;
+            }
+        }        
+
+        public IEnumerable<MpAvTagTileViewModel> AllDescendants {
+            get {
+                var adl = new List<MpAvTagTileViewModel>();
+                foreach(var cttvm in SortedItems) {
+                    adl.Add(cttvm);
+                    adl.AddRange(cttvm.AllDescendants);
+                }
+                return adl;
+            }
+        }
+
+        public IEnumerable<MpAvTagTileViewModel> SelfAndAllDescendants {
+            get {
+                var saldttvml = AllDescendants.ToList();
+                saldttvml.Insert(0, this);
+                return saldttvml;
+            }
+        }
+
+        public IEnumerable<MpAvTagTileViewModel> SelfAndAllAncestors {
+            get {
+                var salattvml = AllAncestors.ToList();
+                salattvml.Insert(0, this);
+                return salattvml;
+            }
+        }
+
+        public IEnumerable<MpAvTagTileViewModel> SortedItems => Items.OrderBy(x => x.TagSortIdx);
         #endregion
+
+        //#region MpITreeItemViewModel<MpAvTagTileViewModel> Implementation
+
+        //public ObservableCollection<MpAvTagTileViewModel> Children => new ObservableCollection<MpAvTagTileViewModel>(SortedItems);
+        //public bool IsExpanded { get; set; }
+
+        //public MpAvTagTileViewModel ParentTreeItem { get; set; }
+
+        //MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem => ParentTreeItem;
+        //ObservableCollection<MpITreeItemViewModel> MpITreeItemViewModel.Children => new ObservableCollection<MpITreeItemViewModel>(Children.Cast<MpITreeItemViewModel>());
+
+        //#endregion
 
         #region MpITreeItemViewModel Implementation
 
-        public ObservableCollection<MpAvTagTileViewModel> Children => new ObservableCollection<MpAvTagTileViewModel>(Items.OrderBy(x => x.TagSortIdx));
         public bool IsExpanded { get; set; }
-
-        public MpAvTagTileViewModel ParentTreeItem { get; set; }
-
-        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem => ParentTreeItem;
-        ObservableCollection<MpITreeItemViewModel> MpITreeItemViewModel.Children => new ObservableCollection<MpITreeItemViewModel>(Children.Cast<MpITreeItemViewModel>());
-
+        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem => ParentTagViewModel;
+        IEnumerable<MpITreeItemViewModel> MpITreeItemViewModel.Children => SortedItems;
         #endregion
 
         #region MpISelectableViewModel Implementation
@@ -188,15 +240,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public IEnumerable<int> LinkedCopyItemIds { get; private set; } = new List<int>();
         public ObservableCollection<int> CopyItemIdsNeedingView { get; set; } = new ObservableCollection<int>();
-        public bool IsThisThePinnedViewModel {
-            get {
-                if(Parent == null) {
-                    return false;
-                }
-                return Parent.PinnedItems.Contains(this);
-            }
-        }
+        //public bool IsThisThePinnedViewModel {
+        //    get {
+        //        if(Parent == null) {
+        //            return false;
+        //        }
+        //        return Parent.PinnedItems.Contains(this);
+        //    }
+        //}
         public bool CanAddChild {
             get {
                 if(IsHelpTag) {
@@ -324,7 +377,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public double TagTileTrayWidth { get; set; }
+        //public double TagTileTrayWidth { get; set; }
+        public MpRect ObservedTagTrayBounds { get; set; }
 
         #endregion
 
@@ -471,36 +525,36 @@ namespace MonkeyPaste.Avalonia {
             MpDb.SyncDelete += MpDbObject_SyncDelete;
 
             PropertyChanged += MpTagTileViewModel_PropertyChanged;
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
 
-        public virtual async Task InitializeAsync(MpTag tag, bool isTreeItem = true) {
-            PropertyChanged -= MpTagTileViewModel_PropertyChanged;
-            PropertyChanged += MpTagTileViewModel_PropertyChanged;
+        public virtual async Task InitializeAsync(MpTag tag) {
+            //PropertyChanged -= MpTagTileViewModel_PropertyChanged;
+            //PropertyChanged += MpTagTileViewModel_PropertyChanged;
 
             IsBusy = true;
 
             Tag = tag;
 
-            if (isTreeItem) {
-                TagClipCount = await MpDataModelProvider.GetCopyItemCountForTagAsync(TagId);
 
-                var ctl = await MpDataModelProvider.GetChildTagsAsync(TagId);
+            var ctl = await MpDataModelProvider.GetChildTagsAsync(TagId);
 
-                foreach (var ct in ctl.OrderBy(x => x.TagSortIdx)) {
-                    var ttvm = await CreateChildTagTileViewModel(ct);
-                    Items.Add(ttvm);
-                }
-
-                while (Items.Any(x => x.IsBusy)) {
-                    await Task.Delay(100);
-                }
+            foreach (var ct in ctl.OrderBy(x => x.TagSortIdx)) {
+                var ttvm = await CreateChildTagTileViewModel(ct);
+                Items.Add(ttvm);
             }
 
-            MpMessenger.UnregisterGlobal(ReceivedGlobalMessage);
-            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+            while (Items.Any(x => x.IsBusy)) {
+                await Task.Delay(100);
+            }
+
+
+            await UpdateClipCountAsync();
+            //MpMessenger.UnregisterGlobal(ReceivedGlobalMessage);
+            //MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
             OnPropertyChanged(nameof(Items));
-            OnPropertyChanged(nameof(Children));
+            //OnPropertyChanged(nameof(Children));
             OnPropertyChanged(nameof(IsTagNameReadOnly));
 
             if (Parent.Items.All(x => x.TagId != TagId)) {
@@ -517,7 +571,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task<MpAvTagTileViewModel> CreateChildTagTileViewModel(MpTag tag) {
             MpAvTagTileViewModel ttvm = new MpAvTagTileViewModel(Parent);
             await ttvm.InitializeAsync(tag);
-            ttvm.ParentTreeItem = this;
+            //ttvm.ParentTreeItem = this;
             return ttvm;
         }
 
@@ -540,23 +594,26 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsChildOfTag(int tid, bool recursive) {
             if(recursive) {
-                var curTagItem = ParentTreeItem;
-                while (curTagItem != null) {
-                    if (curTagItem.TagId == tid) {
-                        return true;
-                    }
-                    curTagItem = curTagItem.ParentTreeItem;
-                }
-                return false;
+                //var curTagItem = ParentTreeItem;
+                //while (curTagItem != null) {
+                //    if (curTagItem.TagId == tid) {
+                //        return true;
+                //    }
+                //    curTagItem = curTagItem.ParentTreeItem;
+                //}
+                //return false;
+                return AllAncestors.Any(x => x.TagId == tid);
             }
             return tid == ParentTagId;
         }
 
         public bool IsParentOfTag(int tid, bool recursive) {
             if(recursive) {
-                return this.FindAllChildren().Any(x => x.TagId == tid);
+                //return this.FindAllChildren().Any(x => x.TagId == tid);
+                return AllDescendants.Any(x => x.TagId == tid);
             }
-            return Children.Any(x => x.TagId == tid);
+            //return Children.Any(x => x.TagId == tid);
+            return Items.Any(x => x.TagId == tid);
         }
 
 
@@ -585,9 +642,10 @@ namespace MonkeyPaste.Avalonia {
                 if (sc.CommandParameter == TagId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
-            } else if(e is MpCopyItem ci && IsAllTag && !IsThisThePinnedViewModel) {
-                LinkCopyItemCommand.Execute(ci.Id);
             } 
+            //else if(e is MpCopyItem ci && IsAllTag) { // && !IsThisThePinnedViewModel
+            //    LinkCopyItemCommand.Execute(ci.Id);
+            //} 
         }
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
@@ -685,12 +743,28 @@ namespace MonkeyPaste.Avalonia {
                         await Task.WhenAll(MpAvClipTrayViewModel.Instance.Items.Select(x => x.InitTitleLayers()));
                     });
                     break;
-                case nameof(TagTileTrayWidth):
+                //case nameof(TagTileTrayWidth):
+                case nameof(ObservedTagTrayBounds):
                     if (Parent == null) {
                         return;
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsNavButtonsVisible));
                     Parent.OnPropertyChanged(nameof(Parent.TagTrayScreenWidth));
+                    break;
+                case nameof(Items):
+                    OnPropertyChanged(nameof(SortedItems));
+                    break;
+                case nameof(TagSortIdx):
+                    if(ParentTagViewModel == null) {
+                        break;
+                    }
+                    ParentTagViewModel.OnPropertyChanged(nameof(ParentTagViewModel.SortedItems));
+                    break;
+                case nameof(TagTraySortIdx):
+                    if (Parent == null) {
+                        break;
+                    }
+                    Parent.OnPropertyChanged(nameof(Parent.PinnedItems));
                     break;
             }
         }
@@ -707,10 +781,18 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
+
         private async Task UpdateTreeSortOrder() {
             Items.ForEach(x => x.TagSortIdx = Items.IndexOf(x));
             await Task.WhenAll(Items.Select(x => x.Tag.WriteToDatabaseAsync()));
         }
+
+        private async Task UpdateClipCountAsync() {
+            LinkedCopyItemIds = await MpDataModelProvider.GetCopyItemIdsForTagAsync(TagId);
+            TagClipCount = SelfAndAllDescendants.SelectMany(x => x.LinkedCopyItemIds).Distinct().Count();
+            //TagClipCount = this_tag_link_count + Items.Sum(x => x.TagClipCount);
+        }
+
         private void UpdateBadge() {
             Dispatcher.UIThread.VerifyAccess();
 
@@ -780,11 +862,17 @@ namespace MonkeyPaste.Avalonia {
                 await NotifyTriggersAsync(ciid, isLink);
                 
                 Dispatcher.UIThread.VerifyAccess();
-                TagClipCount += isLink ? 1 : -1;
+                //TagClipCount += isLink ? 1 : -1;
+                
                 UpdateBadge();
+
+                foreach(var this_or_ancestor_ttvm in SelfAndAllAncestors) {
+                    await this_or_ancestor_ttvm.UpdateClipCountAsync();
+                }
             }
             IsBusy = false;
         }
+
 
         #region Sync Event Handlers
         private void MpDbObject_SyncDelete(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
@@ -833,6 +921,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 Parent.SelectTagCommand.Execute(this);
             });
+
         public ICommand AssignHotkeyCommand => new MpCommand(
             async () => {
                 await MpAvShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
@@ -871,62 +960,51 @@ namespace MonkeyPaste.Avalonia {
                 return !IsTagReadOnly;
             });
 
-        public ICommand AddChildTagCommand => new MpAsyncCommand<object>(
-             async (arg) => {
-                 //only called in All Tag
-                 MpAvTagTileViewModel ttvm = null;
-
-                 if(arg == null) {
-                     MpTag t = await MpTag.Create(
+        public ICommand AddNewChildTagCommand => new MpAsyncCommand(
+             async () => {
+                 MpTag t = await MpTag.Create(
                      parentTagId: Parent.SelectedItem.TagId,
                      sortIdx: Parent.SelectedItem.Items.Count);
 
-                     ttvm = await Parent.SelectedItem.CreateChildTagTileViewModel(t);
-                 } else if(arg is MpAvTagTileViewModel) {
-                     ttvm = arg as MpAvTagTileViewModel;
-                     if(ttvm.ParentTreeItem != null) {
-                         ttvm.ParentTreeItem.Items.Remove(ttvm);
-                     }
-                 }
+                 MpAvTagTileViewModel ttvm = await CreateChildTagTileViewModel(t);
 
                  Parent.SelectedItem.Items.Add(ttvm);
-
                  Parent.SelectedItem.SelectedItem = ttvm;
-
                  Parent.SelectedItem.OnPropertyChanged(nameof(Parent.SelectedItem.Items));
                  Parent.OnPropertyChanged(nameof(Parent.Items));
-             },(arg) => CanAddChild);
+             },() => CanAddChild);
 
         public ICommand DeleteChildTagCommand => new MpAsyncCommand<object>(
             async (args) => {
-                var ttvm = args as MpAvTagTileViewModel;
-                if (ttvm.IsModelPinned) {
-                    var pttvm_toRemove = Parent.PinnedItems.FirstOrDefault(x => x.TagId == ttvm.TagId);
-                    Parent.PinnedItems.Remove(pttvm_toRemove);
-                }
+                var child_ttvm_to_remove = args as MpAvTagTileViewModel;
+                //if (child_ttvm_to_remove.IsModelPinned) {
+                //    var pttvm_toRemove = Parent.PinnedItems.FirstOrDefault(x => x.TagId == child_ttvm_to_remove.TagId);
+                //    Parent.PinnedItems.Remove(pttvm_toRemove);
+                //}
                 
-                var deleteTasks = ttvm.FindAllChildren().Select(x => x.Tag.DeleteFromDatabaseAsync()).ToList();
-                deleteTasks.Add(ttvm.Tag.DeleteFromDatabaseAsync());
-                await Task.WhenAll(deleteTasks);
+                //var deleteTasks = child_ttvm_to_remove.FindAllChildren().Select(x => x.Tag.DeleteFromDatabaseAsync()).ToList();
+                //deleteTasks.Add(child_ttvm_to_remove.Tag.DeleteFromDatabaseAsync());
+                await Task.WhenAll(child_ttvm_to_remove.SelfAndAllDescendants.Select(x=>x.Tag.DeleteFromDatabaseAsync()));
 
-                var ttvm_toRemove = Parent.PinnedItems.FirstOrDefault(x => x.TagId == ttvm.TagId);
-                Parent.PinnedItems.Remove(ttvm_toRemove);
-                Items.Remove(ttvm_toRemove);
+                //var ttvm_toRemove = Parent.PinnedItems.FirstOrDefault(x => x.TagId == child_ttvm_to_remove.TagId);
+                //Parent.PinnedItems.Remove(ttvm_toRemove);
+                Items.Remove(child_ttvm_to_remove);
                 
 
                 await UpdateTreeSortOrder();
                 OnPropertyChanged(nameof(Items));
+                Parent.OnPropertyChanged(nameof(Parent.PinnedItems));
 
                 Parent.SelectTagCommand.Execute(this);                
             });
 
         public ICommand DeleteThisTagCommand => new MpCommand(
             () => {
-                ParentTreeItem.DeleteChildTagCommand.Execute(this);
+                ParentTagViewModel.DeleteChildTagCommand.Execute(this);
             }, ()=> !IsTagReadOnly);
 
         public ICommand LinkCopyItemCommand => new MpCommand<object>(
-            async (ciidArg) => {
+            (ciidArg) => {
                 if(ciidArg is not int) {
                     return;
                 }
@@ -935,11 +1013,12 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteTraceLine("Cannot add CopyItemId 0 to Tag: " + TagName + " Id: " + TagId);
                     return;
                 }
-                var cur_ctvm = this;
-                while(!cur_ctvm.IsAllTag) {
-                    cur_ctvm.LinkOrUnlinkCopyItemAsync(ciid, true).FireAndForgetSafeAsync(cur_ctvm);
-                    cur_ctvm = cur_ctvm.ParentTreeItem;
-                }
+                //var cur_ctvm = this;
+                //while(!cur_ctvm.IsAllTag) {
+                //    cur_ctvm.LinkOrUnlinkCopyItemAsync(ciid, true).FireAndForgetSafeAsync(cur_ctvm);
+                //    cur_ctvm = cur_ctvm.ParentTreeItem;
+                //}
+                LinkOrUnlinkCopyItemAsync(ciid, true).FireAndForgetSafeAsync(this);
             });
 
         public ICommand UnlinkCopyItemCommand => new MpCommand<object>(
@@ -949,13 +1028,15 @@ namespace MonkeyPaste.Avalonia {
                         MpConsole.WriteTraceLine("Cannot remove CopyItemId 0 to Tag: " + TagName + " Id: " + TagId);
                         return;
                     }
-                    var cur_ctvm = this;
-                    while (!cur_ctvm.IsAllTag) {
-                        cur_ctvm.LinkOrUnlinkCopyItemAsync(ciid, false).FireAndForgetSafeAsync(cur_ctvm);
-                        cur_ctvm = cur_ctvm.ParentTreeItem;
-                    }
+                    //var cur_ctvm = this;
+                    //while (!cur_ctvm.IsAllTag) {
+                    //    cur_ctvm.LinkOrUnlinkCopyItemAsync(ciid, false).FireAndForgetSafeAsync(cur_ctvm);
+                    //    cur_ctvm = cur_ctvm.ParentTreeItem;
+                    //}
+                    LinkOrUnlinkCopyItemAsync(ciid, false).FireAndForgetSafeAsync(this);
                 }
             });
+
 
 
         #endregion

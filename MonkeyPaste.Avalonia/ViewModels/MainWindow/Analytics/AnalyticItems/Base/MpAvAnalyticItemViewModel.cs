@@ -40,11 +40,19 @@ namespace MonkeyPaste.Avalonia {
         MpITreeItemViewModel, 
         MpIMenuItemViewModel {
         #region Private Variables
-        
+
 
         #endregion
 
         #region Properties
+
+        #region MpITreeItemViewModel Implementation
+
+        public IEnumerable<MpITreeItemViewModel> Children => Items;
+
+        public MpITreeItemViewModel ParentTreeItem => Parent;
+        public bool IsExpanded { get; set; }
+        #endregion
 
         #region View Models
 
@@ -73,9 +81,9 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<MpMenuItemViewModel> QuickActionPresetMenuItems => Items.Where(x => x.IsQuickAction).Select(x => x.ContextMenuItemViewModel);
 
-        public MpITreeItemViewModel ParentTreeItem => Parent;
+        //public MpITreeItemViewModel ParentTreeItem => Parent;
 
-        public ObservableCollection<MpITreeItemViewModel> Children => new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
+        //public ObservableCollection<MpITreeItemViewModel> Children => new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
 
         #endregion
 
@@ -150,9 +158,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsHovering { get; set; } = false;
 
-        
-
-        public bool IsExpanded { get; set; } = false;
 
         public MpAnalyzerTransaction LastTransaction { get; private set; } = null;
 

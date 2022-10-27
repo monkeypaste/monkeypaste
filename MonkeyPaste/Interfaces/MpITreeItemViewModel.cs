@@ -41,7 +41,7 @@ namespace MonkeyPaste {
 
         MpITreeItemViewModel ParentTreeItem { get; }
 
-        ObservableCollection<MpITreeItemViewModel> Children { get; }
+        IEnumerable<MpITreeItemViewModel> Children { get; }
     }
 
     public interface MpITreeItemViewModel<T> :MpITreeItemViewModel where T:MpViewModelBase {
@@ -53,6 +53,33 @@ namespace MonkeyPaste {
     }
 
     public static class MpITreeItemViewModelExtensions {
+        #region Anon Version
+
+
+        public static IEnumerable<MpITreeItemViewModel> FindAllChildren(this MpITreeItemViewModel tivm) {
+            var activml = new List<MpITreeItemViewModel>();
+            foreach (MpITreeItemViewModel c in tivm.Children) {
+                activml.Add(c);
+                var ccl = c.FindAllChildren();
+                foreach (var cc in ccl) {
+                    activml.Add(cc);
+                }
+            }
+            return activml;
+        }
+
+        public static MpITreeItemViewModel FindRootParent(this MpITreeItemViewModel tivm)  {
+            MpITreeItemViewModel rootParent = tivm.ParentTreeItem as MpITreeItemViewModel;
+            while (rootParent.ParentTreeItem != null) {
+                rootParent = rootParent.ParentTreeItem as MpITreeItemViewModel;
+            }
+            return rootParent;
+        }
+
+        #endregion
+
+        #region Generic Version
+
         public static IList<T> ToList<T>(this MpITreeItemViewModel<T> tivm) where T : MpViewModelBase, MpITreeItemViewModel {
             var activml = new List<T>() { tivm as T };
 
@@ -60,23 +87,11 @@ namespace MonkeyPaste {
             return activml;
         }
 
-        public static IEnumerable<T> FindAllChildren<T>(this MpITreeItemViewModel<T> tivm) where T:MpViewModelBase, MpITreeItemViewModel {
+        public static IEnumerable<T> FindAllChildren<T>(this MpITreeItemViewModel<T> tivm) where T : MpViewModelBase, MpITreeItemViewModel {
             var activml = new List<T>();
-            foreach(MpITreeItemViewModel<T> c in tivm.Children) {
+            foreach (MpITreeItemViewModel<T> c in tivm.Children) {
                 activml.Add(c as T);
                 activml.AddRange(c.FindAllChildren());
-            }
-            return activml;
-        }
-
-        public static ObservableCollection<MpITreeItemViewModel> FindAllChildren(this MpITreeItemViewModel tivm)  {
-            var activml = new ObservableCollection<MpITreeItemViewModel>();
-            foreach (MpITreeItemViewModel c in tivm.Children) {
-                activml.Add(c);
-                var ccl = c.FindAllChildren();
-                foreach(var cc in ccl) {
-                    activml.Add(cc);
-                }
             }
             return activml;
         }
@@ -98,5 +113,7 @@ namespace MonkeyPaste {
             }
             return level;
         }
+
+        #endregion
     }
 }

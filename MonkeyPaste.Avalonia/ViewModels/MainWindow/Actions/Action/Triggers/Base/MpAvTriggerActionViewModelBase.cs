@@ -25,7 +25,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public ObservableCollection<MpAvActionViewModelBase> AllChildren => new ObservableCollection<MpAvActionViewModelBase>(this.FindAllChildren());
+        public IEnumerable<MpAvActionViewModelBase> AllChildren => this.FindAllChildren().Cast<MpAvActionViewModelBase>();//new ObservableCollection<MpAvActionViewModelBase>();
 
         #endregion
 

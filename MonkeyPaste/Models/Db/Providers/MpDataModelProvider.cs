@@ -13,10 +13,6 @@ namespace MonkeyPaste {
     
     public static class MpDataModelProvider  {
         #region Private Variables
-        private static IList<MpCopyItem> _lastResult;
-
-        private static List<int> _manualQueryIds;
-
         #endregion
 
         #region Properties
@@ -57,37 +53,17 @@ namespace MonkeyPaste {
 
         public static void ResetQuery() {
             AvailableQueryCopyItemIds.Clear();
-            AvailableQueryCopyItemIds.Clear();
-
-            _lastResult = new List<MpCopyItem>();
         }
 
-        public static void SetManualQuery(List<int> copyItemIds) {
-            _manualQueryIds = copyItemIds;
-
-            QueryInfo.NotifyQueryChanged();
-        }
-
-        public static void UnsetManualQuery() {
-            _manualQueryIds = null;
-            QueryInfo.NotifyQueryChanged();
-        }
 
         #region MpQueryInfo Fetch Methods      
         
-        public static async Task<string> QueryForTotalCountAsync(IEnumerable<int> idsToOmit = null) {
+        public static async Task<string> QueryForTotalCountAsync(IEnumerable<int> idsToOmit, IEnumerable<int> tagIds) { // = null) {
             idsToOmit = idsToOmit == null ? new List<int>() : idsToOmit;
 
             string viewQueryStr = string.Empty;
             AvailableQueryCopyItemIds.Clear();
 
-            if (_manualQueryIds != null) {
-                foreach(var copyItemId in _manualQueryIds) {
-                    AvailableQueryCopyItemIds.Add(copyItemId);
-                }
-                QueryInfo.TotalItemsInQuery = AvailableQueryCopyItemIds.Count;
-                return viewQueryStr;
-            }
             MpLogicalFilterFlagType lastLogicFlag = MpLogicalFilterFlagType.None;
 
             for (int i = 0;i < QueryInfos.Count;i++) {
@@ -108,7 +84,7 @@ namespace MonkeyPaste {
                     lastLogicFlag = qi.LogicFlags;
                     continue;
                 }
-                string allRootIdQuery = GetQueryForCount(i);
+                string allRootIdQuery = GetQueryForCount(i,tagIds);
                 viewQueryStr = allRootIdQuery;
                 string totalWidthQuery = allRootIdQuery.Replace("RootId", "SUM(ItemWidth)");
 
@@ -159,7 +135,7 @@ namespace MonkeyPaste {
         #region View Queries
 
 
-        public static string GetQueryForCount(int qiIdx = 0) {
+        public static string GetQueryForCount(int qiIdx, IEnumerable<int> tagIds) {
             var qi = QueryInfos[qiIdx];
             string query = "select RootId from MpSortableCopyItem_View";
             string tagClause = string.Empty;
@@ -168,11 +144,13 @@ namespace MonkeyPaste {
             List<string> filters = new List<string>();
 
             if (qi.TagId != MpTag.AllTagId) {
+                // NOTE ignoring tagIds for all is just to optimize since they're all included anyway
+                string tag_where_stmt = string.Join(" or ", tagIds.Select(x => $"fk_MpTagId={x}"));
                 tagClause = string.Format(
                     @"RootId in 
-                    (select pk_MpCopyItemId from MpCopyItem where pk_MpCopyItemId in 
-		                (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId={0}))",
-                    qi.TagId);
+                    (select distinct pk_MpCopyItemId from MpCopyItem where pk_MpCopyItemId in 
+		                (select fk_MpCopyItemId from MpCopyItemTag where {0}))",
+                    tag_where_stmt);
             }
             if (!string.IsNullOrEmpty(qi.SearchText)) {
                 string searchOp = "like";
@@ -256,9 +234,6 @@ namespace MonkeyPaste {
                     break;
                 case MpContentSortType.UsageScore:
                     sortClause = string.Format(@"order by {0}", "UsageScore");
-                    break;
-                case MpContentSortType.Manual:
-
                     break;
             }
 
@@ -794,11 +769,9 @@ namespace MonkeyPaste {
         }
 
         public static bool IsTagLinkedWithCopyItem(int tagId, int copyItemId) {
-            // returns true if:
-            // 1. tag is linked and has no children
-            // 2. tag is linked and all descendants are linked
+            // returns true if tag is linked
             // returns false if tag is not linked and no children are linked
-            // returns null if tag is linked and any children are linked
+            // returns null if not linked and 1 or more children are linked 
 
             string query = $"select count(*) from MpCopyItemTag where fk_MpTagId=? and fk_MpCopyItemId=?";
             var result = MpDb.QueryScalar<int>(query, tagId, copyItemId);
@@ -812,6 +785,12 @@ namespace MonkeyPaste {
         public static async Task<List<MpTag>> GetChildTagsAsync(int tagId) {
             string query = "select * from MpTag where fk_ParentTagId=?";
             var result = await MpDb.QueryAsync<MpTag>(query,tagId);
+            return result;
+        }
+
+        public static async Task<int> GetChildTagCountAsync(int tagId) {
+            string query = "select count(pk_MpTagId) from MpTag where fk_ParentTagId=?";
+            var result = await MpDb.QueryScalarAsync<int>(query, tagId);
             return result;
         }
 

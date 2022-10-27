@@ -292,8 +292,8 @@ namespace MonkeyPaste.Avalonia {
 
             PinTrayListBox = this.FindControl<ListBox>("PinTrayListBox");
             PinTrayListBox.AttachedToVisualTree += PinTrayListBox_AttachedToVisualTree;
-            PinTrayListBox.ItemContainerGenerator.Materialized += ItemContainerGenerator_Materialized;
-            PinTrayListBox.ItemContainerGenerator.Dematerialized += ItemContainerGenerator_Dematerialized;
+            //PinTrayListBox.ItemContainerGenerator.Materialized += ItemContainerGenerator_Materialized;
+            //PinTrayListBox.ItemContainerGenerator.Dematerialized += ItemContainerGenerator_Dematerialized;
             PinTrayListBox.GotFocus += PinTrayListBox_GotFocus;
         }
 
@@ -359,11 +359,14 @@ namespace MonkeyPaste.Avalonia {
             var gs_grid = gs.GetVisualAncestor<Grid>();
             var adjusted_size = new MpSize();
             if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {              
+                if(!this.Bounds.Width.IsNumber() || !gs.Bounds.Width.IsNumber() || !added_size.Width.IsNumber()) {
+                    Debugger.Break();
+                }
                 adjusted_size.Width = Math.Min(BindingContext.MaxPinTrayScreenWidth + gs.Bounds.Width, Math.Max(this.Bounds.Width + gs.Bounds.Width, added_size.Width));
-                gs_grid.ColumnDefinitions[0].Width = new GridLength(adjusted_size.Width, GridUnitType.Auto);
+                gs_grid.ColumnDefinitions[0].Width = new GridLength(adjusted_size.Width, GridUnitType.Pixel);
             } else {
                 adjusted_size.Height = Math.Min(BindingContext.MaxPinTrayScreenHeight + gs.Bounds.Height, Math.Max(this.Bounds.Height + gs.Bounds.Height, added_size.Height));
-                gs_grid.RowDefinitions[0].Height = new GridLength(adjusted_size.Height, GridUnitType.Auto);
+                gs_grid.RowDefinitions[0].Height = new GridLength(adjusted_size.Height, GridUnitType.Pixel);
             }
             MpConsole.WriteLine($"PinTray materialized {e.Containers.Count} items. AddedSize: {added_size} AdjustedSize: {adjusted_size}");
         }

@@ -28,6 +28,16 @@ namespace MonkeyPaste.Avalonia {
         MpIPlatformDataObjectHelperAsync { //
         #region Properties
 
+        #region MpITreeItemViewModel Implementation
+
+        public IEnumerable<MpITreeItemViewModel> Children => Items;// new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
+
+        public MpITreeItemViewModel ParentTreeItem => null;
+
+        public bool IsExpanded { get; set; }
+
+        #endregion
+
         #region View Models
 
         public MpMenuItemViewModel ContextMenuItemViewModel {
@@ -40,9 +50,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public ObservableCollection<MpITreeItemViewModel> Children => new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
-
-        public MpITreeItemViewModel ParentTreeItem => null;
 
         public List<MpAvClipboardFormatPresetViewModel> AllPresets {
             get {
@@ -177,8 +184,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsSelected { get; set; }
 
         public bool IsHovering { get; set; }
-
-        public bool IsExpanded { get; set; }
 
 
         #endregion

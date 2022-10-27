@@ -30,11 +30,21 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        #region MpITreeItemViewModel Implementation
+
+        public IEnumerable<MpITreeItemViewModel> Children => Items;// new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
+
+        public MpITreeItemViewModel ParentTreeItem => null;
+
+        public bool IsExpanded { get; set; }
+
+        #endregion
+
         #region View Models
 
-        public MpITreeItemViewModel ParentTreeItem => Parent;
+        //public MpITreeItemViewModel ParentTreeItem => Parent;
 
-        public ObservableCollection<MpITreeItemViewModel> Children => new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
+        //public ObservableCollection<MpITreeItemViewModel> Children => new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
 
         #endregion
 
@@ -102,8 +112,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsHovering { get; set; } = false;
 
-
-        public bool IsExpanded { get; set; } = false;
 
         public string HandledFormat {
             get {

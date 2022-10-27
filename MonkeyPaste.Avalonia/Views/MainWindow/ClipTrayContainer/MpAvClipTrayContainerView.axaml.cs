@@ -81,7 +81,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void Gs_DragDelta(object sender, global::Avalonia.Input.VectorEventArgs e) {
-            BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow = true;
+            //BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow = true;
         }
 
     }

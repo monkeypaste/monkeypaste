@@ -2395,13 +2395,18 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(HasModelChanged):
                     if (HasModelChanged) {
-                        if(!MpAvCefNetApplication.UseCefNet && HasContentDataChanged) {
-                            if(IsInitializing) {
-                                MpConsole.WriteLine("Ignoring plain text mode initialize data overwrite");
-                                HasContentDataChanged = false;
-                                HasModelChanged = false;
-                                return;
-                            }
+                        //if(!MpAvCefNetApplication.UseCefNet && HasContentDataChanged) {
+                        //    if(IsInitializing) {
+                        //        MpConsole.WriteLine("Ignoring plain text mode initialize data overwrite");
+                        //        HasContentDataChanged = false;
+                        //        HasModelChanged = false;
+                        //        return;
+                        //    }
+                        //}
+                        if (!MpAvCefNetApplication.UseCefNet) {
+                            MpConsole.WriteLine("Ignoring plain text mode copyitem write for "+this);
+                            HasModelChanged = false;
+                            return;
                         }
                         Task.Run(async () => {
                             await CopyItem.WriteToDatabaseAsync();

@@ -1570,9 +1570,6 @@ namespace MonkeyPaste.Avalonia {
 
         private MpCopyItem _appendModeCopyItem;
 
-        private Dictionary<int, int> _manualSortOrderLookup = null;
-
-
         #endregion
 
         #region Constants
@@ -1933,18 +1930,6 @@ namespace MonkeyPaste.Avalonia {
             if (fromModel) {
                 //ClipTileViewModels.Sort(x => x.CopyItem.CompositeSortOrderIdx);
             } else {
-                bool isManualSort = MpDataModelProvider.QueryInfo.SortType == MpContentSortType.Manual;
-
-                if (isManualSort) {
-                    _manualSortOrderLookup = new Dictionary<int, int>();
-                    foreach (var ctvm in Items) {
-                        if (_manualSortOrderLookup.ContainsKey(ctvm.CopyItemId)) {
-                            continue;
-                        }
-                        _manualSortOrderLookup.Add(ctvm.CopyItemId, Items.IndexOf(ctvm));
-                    }
-                }
-
                 bool isDesc = MpDataModelProvider.QueryInfo.IsDescending;
                 int tagId = MpDataModelProvider.QueryInfo.TagId;
                 var citl = await MpDataModelProvider.GetCopyItemTagsForTagAsync(tagId);
@@ -2647,9 +2632,10 @@ namespace MonkeyPaste.Avalonia {
                     _newModels.Add(newCopyItem);
                 }
 
-                MpAvTagTrayViewModel.Instance.AllTagViewModel.TagClipCount++;
+                //MpAvTagTrayViewModel.Instance.AllTagViewModel.TagClipCount++;
+                MpAvTagTrayViewModel.Instance.AllTagViewModel.LinkCopyItemCommand.Execute(newCopyItem.Id);
 
-               
+
             }
             if (IsAppendMode) {
                 AppendNewItemsCommand.Execute(null);
@@ -3027,7 +3013,9 @@ namespace MonkeyPaste.Avalonia {
                     ClearClipSelection();
                     MpDataModelProvider.ResetQuery();
 
-                    await MpDataModelProvider.QueryForTotalCountAsync(PinnedItems.Select(x=>x.CopyItemId));
+                    await MpDataModelProvider.QueryForTotalCountAsync(
+                        PinnedItems.Select(x=>x.CopyItemId),
+                        MpAvTagTrayViewModel.Instance.SelectedItem.SelfAndAllDescendants.Select(x=>x.TagId));
 
                     Items.Clear();
                     MpAvPersistentClipTilePropertiesHelper.ClearPersistentWidths();

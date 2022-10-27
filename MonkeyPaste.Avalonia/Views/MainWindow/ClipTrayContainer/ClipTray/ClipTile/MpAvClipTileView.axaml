@@ -15,11 +15,6 @@
                        HorizontalContentAlignment="Stretch"
                        VerticalContentAlignment="Stretch"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileView">
-    <!--
-        local:MpAvIsHoveringExtension.IsEnabled="True"
-        local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-        local:MpAvIsHoveringExtension.IsSelected="{Binding IsSelected, Mode=TwoWay}"
-    -->
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
                           ClipToBounds="True"
                           HorizontalAlignment="Stretch"

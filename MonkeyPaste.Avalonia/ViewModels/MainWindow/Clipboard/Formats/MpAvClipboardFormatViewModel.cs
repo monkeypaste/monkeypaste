@@ -52,7 +52,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsExpanded { get; set; }
         public MpITreeItemViewModel ParentTreeItem => null;
-        public ObservableCollection<MpITreeItemViewModel> Children { 
+        public IEnumerable<MpITreeItemViewModel> Children { 
             get {
                 var c = new ObservableCollection<MpITreeItemViewModel>();
                 foreach(var r in Readers) {

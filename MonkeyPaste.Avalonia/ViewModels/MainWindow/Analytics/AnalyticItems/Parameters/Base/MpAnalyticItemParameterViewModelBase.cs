@@ -14,6 +14,7 @@ using MonkeyPaste.Common;
 namespace MonkeyPaste.Avalonia {
     public class MpPluginParameterViewModelBase : 
         MpViewModelBase<MpIPluginComponentViewModel>,
+        MpITreeItemViewModel,
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpITooltipInfoViewModel,
@@ -23,6 +24,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+
+        #region MpITreeItemViewModel Implementation
+
+        public IEnumerable<MpITreeItemViewModel> Children => null;
+
+        public MpITreeItemViewModel ParentTreeItem => Parent as MpITreeItemViewModel;
+        public bool IsExpanded { get; set; }
+        #endregion
 
         #region View Models
 

@@ -26,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel,
         MpISelectableViewModel,
         MpIUserIconViewModel,
-        MpITreeItemViewModel<MpAvActionViewModelBase>,
+        MpITreeItemViewModel,
         MpITooltipInfoViewModel,
         MpIBoxViewModel,
         MpIMovableViewModel,
@@ -42,8 +42,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-        #region View Models               
+        #region MpITreeItemViewModel Implementation
 
+        public IEnumerable<MpITreeItemViewModel> Children => Items;
+
+        public MpITreeItemViewModel ParentTreeItem => null;
+        public bool IsExpanded { get; set; }
+
+        #endregion
+
+        #region View Models               
+        public ObservableCollection<MpAvActionViewModelBase> Items { get; set; } = new ObservableCollection<MpAvActionViewModelBase>();
         public MpAvActionViewModelBase ParentActionViewModel { get; set; }
 
         //public MpEmptyActionViewModel AddChildEmptyActionViewModel => Items.FirstOrDefault(x => x is MpEmptyActionViewModel) as MpEmptyActionViewModel;
@@ -103,17 +112,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpITreeItemViewModel Implementation
 
-        public bool IsExpanded { get; set; } = false;
+        //public bool IsExpanded { get; set; } = false;
 
-        public MpAvActionViewModelBase ParentTreeItem => ParentActionViewModel;
+        //public MpAvActionViewModelBase ParentTreeItem => ParentActionViewModel;
 
-        public ObservableCollection<MpAvActionViewModelBase> Items { get; set; } = new ObservableCollection<MpAvActionViewModelBase>();
+        //public ObservableCollection<MpAvActionViewModelBase> Items { get; set; } = new ObservableCollection<MpAvActionViewModelBase>();
 
-        public ObservableCollection<MpAvActionViewModelBase> Children => Items;
+        //public IEnumerable<MpAvActionViewModelBase> Children => Items;
 
 
-        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem { get; }
-        ObservableCollection<MpITreeItemViewModel> MpITreeItemViewModel.Children { get; }
+        //MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem { get; }
+        //ObservableCollection<MpITreeItemViewModel> MpITreeItemViewModel.Children { get; }
         #endregion
 
         #region MpIUserIcon Implementation
@@ -346,7 +355,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsActionTextBoxFocused { get; set; } = false;
 
-        public bool IsAnyActionTextBoxFocused => IsActionTextBoxFocused || this.FindAllChildren().Any(x => x.IsActionTextBoxFocused);
+        public bool IsAnyActionTextBoxFocused => IsActionTextBoxFocused || this.FindAllChildren().Cast<MpAvActionViewModelBase>().Any(x => x.IsActionTextBoxFocused);
 
         public bool IsValid => string.IsNullOrEmpty(ValidationText);
 
@@ -356,7 +365,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsLabelFocused { get; set; } = false;
 
-        public bool IsAnyChildSelected => this.FindAllChildren().Any(x => x.IsSelected);
+        public bool IsAnyChildSelected => this.FindAllChildren().Cast<MpAvActionViewModelBase>().Any(x => x.IsSelected);
 
         public MpPoint DefaultEmptyActionLocation => new MpPoint(X, Y - (Height * 2));
 

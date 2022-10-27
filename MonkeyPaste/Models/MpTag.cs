@@ -31,10 +31,10 @@ namespace MonkeyPaste {
        
 
         [Column("SortIdx")]
-        public int TagSortIdx { get; set; } = 0;
+        public int TagSortIdx { get; set; } = -1;
 
         [Column("TraySortIdx")]
-        public int TagTraySortIdx { get; set; } = 0;
+        public int TagTraySortIdx { get; set; } = -1;
 
 
         [Column("HexColor")]
@@ -82,10 +82,17 @@ namespace MonkeyPaste {
 
         public static async Task<MpTag> Create(
             string tagName = "Untitled", 
-            int sortIdx = 0,
+            int sortIdx = -1,
             int parentTagId = 0, 
             string hexColor = "") {
             hexColor = string.IsNullOrEmpty(hexColor) ? MpHelpers.GetRandomColor().ToHex() : hexColor;
+            if(sortIdx < 0) {
+                if(parentTagId <= 0) {
+                    sortIdx = 0;
+                } else {
+                    sortIdx = await MpDataModelProvider.GetChildTagCountAsync(parentTagId);
+                }
+            }
             MpTag newTag = new MpTag() {
                 TagName = tagName,
                 HexColor = hexColor,
