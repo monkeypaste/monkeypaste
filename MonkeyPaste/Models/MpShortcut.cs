@@ -53,6 +53,8 @@ namespace MonkeyPaste {
         FindAndReplaceSelectedItem,
         ToggleMainWindowLocked,
         ToggleFilterMenuVisible,
+        // CUT-OFF 
+        MAX_APP_SHORTCUT,
         //remaining are data (not context) driven using commandId
         PasteCopyItem = 101,
         SelectTag = 102,
@@ -1007,6 +1009,11 @@ namespace MonkeyPaste {
 
             return newShortcut;
         }
+
+        public static bool IsUserDefinedShortcut(MpShortcutType stype) {
+            return (int)stype > (int)MpShortcutType.MAX_APP_SHORTCUT;
+        }
+
         #endregion
 
         #region Public Methods

@@ -51,8 +51,11 @@ namespace MonkeyPaste.Avalonia {
                     Command = MpAvClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
                     CommandParameter = AnalyticItemPresetId,
                     IconId = IconId,
-                    ShortcutType = MpShortcutType.AnalyzeCopyItemWithPreset,
-                    ShortcutObjId = AnalyticItemPresetId
+                    //ShortcutType = MpShortcutType.AnalyzeCopyItemWithPreset,
+                    //ShortcutObjId = AnalyticItemPresetId,
+                    ShortcutArgs = new object[] {
+                        MpShortcutType.AnalyzeCopyItemWithPreset,
+                        AnalyticItemPresetId}
                 };
             }
         }

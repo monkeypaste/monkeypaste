@@ -76,7 +76,7 @@ namespace MonkeyPaste.Avalonia {
                     c = new Cursor(ct);
                 } else {
                     string cursor_resource_path = resLoader.GetResource(cdkvp.Value) as string;
-                    var cbmp = MpAvStringResourceToBitmapConverter.Instance.Convert(cursor_resource_path, null, null, null) as IBitmap;
+                    var cbmp = MpAvStringResourceConverter.Instance.Convert(cursor_resource_path, null, null, null) as IBitmap;
                     c = new Cursor(cbmp, PixelPoint.Origin);
                 }
                 if (c == null) {

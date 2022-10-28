@@ -56,6 +56,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvTagTileViewModel AllTagViewModel { get; set; }
         public MpAvTagTileViewModel HelpTagViewModel { get; set; }
 
+        public IList<MpMenuItemViewModel> ContentMenuItemViewModels => AllTagViewModel.ContextMenuViewModel.SubItems;
 
         #endregion
 
@@ -339,12 +340,12 @@ namespace MonkeyPaste.Avalonia {
                 //    break;
 
                 case MpMessageType.TraySelectionChanged:
-                    HandleClipTraySelectionChangeAsync().FireAndForgetSafeAsync(this);
+                    HandleClipTraySelectionChange();//.FireAndForgetSafeAsync(this);
                     break;
             }
         }
 
-        private async Task HandleClipTraySelectionChangeAsync() {
+        private void HandleClipTraySelectionChange() {
             var ctrvm = MpAvClipTrayViewModel.Instance;
 
             if(ctrvm.SelectedItem == null) {
@@ -352,8 +353,11 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            var tag_ids_for_selected_copy_item = await MpDataModelProvider.GetTagIdsForCopyItemAsync(ctrvm.SelectedItem.CopyItemId);
-            Items.ForEach(x => x.IsLinkedToSelectedClipTile = tag_ids_for_selected_copy_item.Contains(x.TagId));
+            var tag_ids_for_selected_copy_item = MpDataModelProvider.GetTagIdsForCopyItem(ctrvm.SelectedItem.CopyItemId);
+            Items.ForEach(x => x.UpdateLinkToSelectedClipTile(tag_ids_for_selected_copy_item));
+
+            // Notify clip tray context menu changed if was selected w/ right click
+            MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.ContextMenuViewModel));
         }
 
 

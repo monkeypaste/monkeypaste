@@ -41,7 +41,7 @@ namespace MonkeyPaste.Avalonia {
             } else if(value is string valStr) {
                 //types: resource key, hex color, base64
                 if(valStr.EndsWith("Image") || valStr.IsAvResourceString()) {
-                    return new MpAvStringResourceToBitmapConverter()
+                    return new MpAvStringResourceConverter()
                                 .Convert(value, targetType, parameter, culture) as Bitmap;
                 }
                 if(valStr.EndsWith("Svg")) {

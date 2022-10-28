@@ -13,6 +13,7 @@ using MonkeyPaste.Common.Avalonia;
 using Avalonia.Controls;
 using System.Windows.Input;
 using Key = Avalonia.Input.Key;
+using SkiaSharp;
 
 namespace MonkeyPaste.Avalonia {
     public interface MpIShortcutCommandViewModel<T> where T:struct,Enum {

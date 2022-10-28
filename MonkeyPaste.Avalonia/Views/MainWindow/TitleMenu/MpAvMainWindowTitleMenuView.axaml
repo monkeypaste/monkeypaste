@@ -94,7 +94,7 @@
                 </Style>
             </Border.Styles>
             <Border.Background>
-                <ImageBrush Source="{Binding Source={StaticResource FrameGripTile}, Converter={StaticResource StringResourceToBitmapConverter}}"
+                <ImageBrush Source="{Binding Source={StaticResource FrameGripTile}, Converter={StaticResource StringResourceConverter}}"
                             TileMode="Tile"
                             Stretch="Fill"
                             DestinationRect="0,0,5,7" />

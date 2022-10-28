@@ -8,6 +8,9 @@ using MonkeyPaste;
 namespace MonkeyPaste.Avalonia {
     public class MpAvPlatformResource : MpIPlatformResource {
         public object GetResource(string resourceKey) {
+            if(string.IsNullOrEmpty(resourceKey)) {
+                return null;
+            }
             if(Application.Current.Resources.TryGetResource(resourceKey,out object value)) {
                 return value;
             }

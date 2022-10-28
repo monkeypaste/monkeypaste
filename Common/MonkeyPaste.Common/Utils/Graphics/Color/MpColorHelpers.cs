@@ -44,6 +44,25 @@ namespace MonkeyPaste.Common {
             return grayVal > brightThreshold;
         }
 
+
+        public static bool IsHexStringBright(this string hexStr, int brightThreshold = 150) {
+            return IsBright(hexStr, brightThreshold);
+        }
+
+        public static string HexColorToContrastingFgHexColor(
+            this string hexStr, 
+            string darkHexColor = null, 
+            string lightHexColor = null, 
+            int brighThreshold = 150) {
+            if(string.IsNullOrEmpty(hexStr)) {
+                return darkHexColor ?? MpSystemColors.Black;
+            }
+            if (hexStr.IsHexStringBright(brighThreshold)) {
+                return darkHexColor ?? MpSystemColors.Black;
+            }
+            return lightHexColor ?? MpSystemColors.White;
+        }
+
         public static string ChangeBrushBrightness(string hexStr, double correctionFactor) {
             if (correctionFactor == 0.0f) {
                 return hexStr;

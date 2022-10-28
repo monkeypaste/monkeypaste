@@ -326,6 +326,24 @@ namespace MonkeyPaste.Common {
             return badString.Replace("&", "&amp;").Replace("\"", "&quot;").Replace("'", "&apos;").Replace(">", "&gt;").Replace("<", "&lt;");
         }
 
+        public static string EscapeMenuItemHeader(this string str, int altNavIdx = -1) {
+            if(str == null) {
+                return null;
+            }
+            // NOTE underscores are ommitted from menu items and when dynamic this is problematic, allow for 0 idx though cause that's the shor
+            var sb = new StringBuilder();
+            for (int i = 0; i < str.Length; i++) {
+                if(i == altNavIdx) {
+                    sb.Append("_");
+                }
+                if (str[i] == '_') {
+                    sb.Append("_");
+                }
+                sb.Append(str[i]);
+            }
+            return sb.ToString();
+        }
+
         public static bool HasGuid(this string str) {
             return str.ParseGuid() != null;
         }

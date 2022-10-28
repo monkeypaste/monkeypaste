@@ -42,7 +42,7 @@
         </ItemsControl>-->
         <TextBlock x:Name="ClipTile_Detail_TextBlock"
                    HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
+                   VerticalAlignment="Bottom"
                    Background="Transparent"
                    Height="20"
                    MinWidth="50"

@@ -15,27 +15,7 @@ namespace MonkeyPaste.Avalonia {
         public string GetTemplateName(object param) {
             string keyStr = string.Empty;
             if (param is MpMenuItemViewModel cmivm) {
-                if (cmivm.IsHeaderedSeparator) {
-                    keyStr = "HeaderedSeperatorMenuItemTemplate";
-                } else if (cmivm.IsSeparator) {
-                    keyStr = "SeperatorMenuItemTemplate";
-                } else if (cmivm.IsPasteToPathRuntimeItem) {
-                    keyStr = "PasteToPathRuntimeMenuItemTemplate";
-                } else if (cmivm.IsColorPallete) {
-                    keyStr = "ColorPalleteMenuItemTemplate";
-                } else if (cmivm.IsColorPalleteItem) {
-                    keyStr = "ColorPalleteItemMenuItemTemplate";
-                } else if (cmivm.IsNewTableSelector) {
-                    keyStr = "NewTableSelectorMenuItem";
-                } else if (!string.IsNullOrEmpty(cmivm.IconResourceKey)) {
-                    keyStr = "DefaultMenuItemTemplate";
-                } else if (!string.IsNullOrEmpty(cmivm.IconHexStr)) {
-                    keyStr = "CheckableMenuItemTemplate";
-                } else if (cmivm.IconId > 0) {
-                    keyStr = "DefaultMenuItemTemplate";
-                } else {
-                    keyStr = "DefaultMenuItemTemplate";
-                }
+                keyStr = cmivm.ContentTemplateName;
             }
             return keyStr;
         }

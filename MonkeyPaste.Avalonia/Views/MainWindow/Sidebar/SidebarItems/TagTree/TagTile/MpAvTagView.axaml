@@ -34,11 +34,10 @@
                               MinHeight="20"
                               Background="{Binding TagBorderBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                               BorderBrush="{Binding TagBorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                              BorderDashArray="{Binding TagBorderDashArray}"
+                              BorderDashArray="{Binding TagBorderDashArray, Converter={StaticResource DoubleArrayToAvListConverter}}"
                               BorderDashOffset="{Binding TagBorderDashOffset}"
                               BorderThickness="1.5">
-            <StackPanel Orientation="Horizontal"
-                        ClipToBounds="False">
+            <StackPanel Orientation="Horizontal">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />

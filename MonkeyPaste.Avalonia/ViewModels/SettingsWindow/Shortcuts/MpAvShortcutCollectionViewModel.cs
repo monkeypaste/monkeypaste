@@ -1140,7 +1140,8 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ShowAssignShortcutDialogCommand => new MpCommand<MpIShortcutCommandViewModel>(
             async (sccvm) => {
-                string shortcutKeyString = await MpDataModelProvider.GetShortcutKeystringAsync(sccvm.ShortcutType.ToString(), sccvm.ModelId.ToString());
+                string param = MpShortcut.IsUserDefinedShortcut(sccvm.ShortcutType) ? sccvm.ModelId.ToString() : null;
+                string shortcutKeyString = await MpDataModelProvider.GetShortcutKeystringAsync(sccvm.ShortcutType.ToString(), param);
 
                 await RegisterViewModelShortcutAsync(
                     sccvm.ShortcutLabel,

@@ -7,6 +7,9 @@ namespace MonkeyPaste.Avalonia {
         public static readonly MpAvIsNotNullToBoolConverter Instance = new();
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
+            if(parameter is string paramStr && paramStr.ToLower() == "flip") {
+                return value == null;
+            }
             return value != null;
         }
 

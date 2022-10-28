@@ -42,6 +42,9 @@
     <StreamGeometry x:Key="TriangleSvg">
         M1,21H23L12,2
     </StreamGeometry>
+    <StreamGeometry x:Key="DotSvg">
+        F1 M256 8C119 8 8 119 8 256C8 393 119 504 256 504C393 504 504 393 504 256C504 119 393 8 256 8Z
+    </StreamGeometry>
     <StreamGeometry x:Key="TriangleOutlineSvg">
         M12,2L1,21H23M12,6L19.53,19H4.47
     </StreamGeometry>

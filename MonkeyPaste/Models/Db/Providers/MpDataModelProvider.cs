@@ -722,6 +722,12 @@ namespace MonkeyPaste {
             return result;
         }
 
+        public static List<int> GetTagIdsForCopyItem(int ciid) {
+            string query = string.Format(@"select fk_MpTagId from MpCopyItemTag where fk_MpCopyItemId={0}", ciid);
+            var result = MpDb.QueryScalars<int>(query);
+            return result;
+        }
+
         public static async Task<int> GetCopyItemCountForTagAsync(int tagId) {
             string query = @"select count(pk_MpCopyItemTagId) from MpCopyItemTag where fk_MpTagId=?";
             var result = await MpDb.QueryScalarAsync<int>(query,tagId);
@@ -798,7 +804,7 @@ namespace MonkeyPaste {
 
         #region MpShortcut
 
-        public static async Task<MpShortcut> GetShortcutAsync(string shortcutTypeName, string commandParameter = "") {
+        public static async Task<MpShortcut> GetShortcutAsync(string shortcutTypeName, string commandParameter = null) {
             List<MpShortcut> result;
            
             if (commandParameter == null) {
@@ -814,15 +820,28 @@ namespace MonkeyPaste {
             return result[0];
         }
 
-        public static async Task<string> GetShortcutKeystringAsync(string shortcutTypeName, string commandParameter = "") {
-            string query = string.Format(@"select KeyString from MpShortcut where ShortcutTypeName=? and CommandParameter=?");
-            var result = await MpDb.QueryScalarAsync<string>(query, shortcutTypeName, commandParameter);
+        public static async Task<string> GetShortcutKeystringAsync(string shortcutTypeName, string commandParameter = null) {
+            string result;
+            if (commandParameter == null) {
+                string query = string.Format(@"select KeyString from MpShortcut where ShortcutTypeName=? and CommandParameter is NULL");
+                result = await MpDb.QueryScalarAsync<string>(query, shortcutTypeName);
+            } else {
+                string query = string.Format(@"select KeyString from MpShortcut where ShortcutTypeName=? and CommandParameter=?");
+                result = await MpDb.QueryScalarAsync<string>(query, shortcutTypeName, commandParameter);
+            }
+
             return result;
         }
 
-        public static string GetShortcutKeystring(string shortcutTypeName, string commandParameter = "") {
-            string query = string.Format(@"select KeyString from MpShortcut where ShortcutTypeName=? and CommandParameter=?");
-            var result = MpDb.QueryScalar<string>(query, shortcutTypeName, commandParameter);
+        public static string GetShortcutKeystring(string shortcutTypeName, string commandParameter = null) {
+            string result;
+            if(commandParameter == null) {
+                string query = string.Format(@"select KeyString from MpShortcut where ShortcutTypeName=? and CommandParameter is NULL");
+                result = MpDb.QueryScalar<string>(query, shortcutTypeName);
+            } else {
+                string query = string.Format(@"select KeyString from MpShortcut where ShortcutTypeName=? and CommandParameter=?");
+                result = MpDb.QueryScalar<string>(query, shortcutTypeName, commandParameter);
+            }
             return result;
         }
 

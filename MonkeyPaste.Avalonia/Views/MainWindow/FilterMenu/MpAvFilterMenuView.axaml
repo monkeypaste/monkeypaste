@@ -34,7 +34,7 @@
             <Grid>
                 <Image HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       Source="{Binding Source={StaticResource PauseImage}, Converter={StaticResource StringResourceToBitmapConverter}}"
+                       Source="{Binding Source={StaticResource PauseImage}, Converter={StaticResource StringResourceConverter}}"
                        IsVisible="{Binding !IsAppPaused, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
                     <ToolTip.Tip>
                         <local:MpAvToolTipView ToolTipText="Pause Clipboard Listener" />
@@ -42,7 +42,7 @@
                 </Image>
                 <Image HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       Source="{Binding Source={StaticResource PlayImage}, Converter={StaticResource StringResourceToBitmapConverter}}"
+                       Source="{Binding Source={StaticResource PlayImage}, Converter={StaticResource StringResourceConverter}}"
                        IsVisible="{Binding IsAppPaused, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
                     <ToolTip.Tip>
                         <local:MpAvToolTipView ToolTipText="Resume Clipboard Listener" />

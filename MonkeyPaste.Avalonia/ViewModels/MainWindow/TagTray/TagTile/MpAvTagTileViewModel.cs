@@ -135,17 +135,18 @@ namespace MonkeyPaste.Avalonia {
         //content menu item
         public MpMenuItemViewModel ContentMenuItemViewModel {
             get {
-                int totalCount = 1;// MpAvClipTrayViewModel.Instance.SelectedModels.Count;
-                int linkCount = IsCopyItemLinked(MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem.Id) ? 1 : 0;//MpAvClipTrayViewModel.Instance.SelectedModels.Where(x => IsLinked(x)).Count();
+                //int totalCount = 1;// MpAvClipTrayViewModel.Instance.SelectedModels.Count;
+                //int linkCount = IsCopyItemLinked(MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem.Id) ? 1 : 0;//MpAvClipTrayViewModel.Instance.SelectedModels.Where(x => IsLinked(x)).Count();
                 return new MpMenuItemViewModel() {
                     Header = TagName,
-                    Command = MpAvClipTrayViewModel.Instance.ToggleLinkTagToCopyItemCommand,
-                    CommandParameter = this,
-                    IsChecked = totalCount == linkCount && totalCount > 0,
-                    IsPartiallySelected = linkCount != totalCount && totalCount > 0,
+                    Command = ToggleLinkToSelectedClipTileCommand,
+                    //IsChecked = totalCount == linkCount && totalCount > 0,
+                    //IsPartiallySelected = linkCount != totalCount && totalCount > 0,
+                    IsChecked = IsLinkedToSelectedClipTile,
                     IconHexStr = TagHexColor,
-                    ShortcutObjId = TagId,
-                    ShortcutType = MpShortcutType.SelectTag,
+                    //ShortcutObjId = TagId,
+                    //ShortcutType = MpShortcutType.SelectTag,
+                    ShortcutArgs = new object[] { MpShortcutType.SelectTag, TagId },
                     SubItems = Items.Select(x => x.ContentMenuItemViewModel).ToList()
                 };
             }
@@ -165,8 +166,9 @@ namespace MonkeyPaste.Avalonia {
                             Header = "_Assign Hotkey",
                             IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("HotkeyImage") as string,
                             Command = AssignHotkeyCommand,
-                            ShortcutObjId = TagId,
-                            ShortcutType = MpShortcutType.SelectTag
+                            //ShortcutObjId = TagId,
+                            //ShortcutType = MpShortcutType.SelectTag
+                            ShortcutArgs = new object[] { MpShortcutType.SelectTag, TagId },
                         },
                         new MpMenuItemViewModel() {
                             Header = IsModelPinned ? "_Unpin" : "_Pin",
@@ -289,7 +291,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsHelpTag => TagId == MpTag.HelpTagId;
         public bool IsTagNameReadOnly { get; set; } = true;
         public bool IsTagNameTextBoxFocused { get; set; } = false;
-        public bool IsLinkedToSelectedClipTile { get; set; }
+        public bool? IsLinkedToSelectedClipTile { get; set; }
 
         public bool IsContextMenuOpened { get; set; } = false;
 
@@ -298,7 +300,7 @@ namespace MonkeyPaste.Avalonia {
         #region Appearance
         public double[] TagBorderDashArray {
             get {
-                if (IsDragOverTag) {
+                if (IsDragOverTag || IsLinkedToSelectedClipTile.IsNull()) {
                     return new double[] { 5, 5 };
                 }
                 return null;
@@ -306,7 +308,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public double TagBorderDashOffset {
             get {
-                if(IsDragOverTag) {
+                if(IsDragOverTag || IsLinkedToSelectedClipTile.IsNull()) {
                     return 5;
                 }
                 return 0;
@@ -337,7 +339,7 @@ namespace MonkeyPaste.Avalonia {
                 if(IsContextMenuOpened) {
                     return MpSystemColors.red1;
                 }
-                if (!IsSelected && IsLinkedToSelectedClipTile) {
+                if (!IsSelected && IsLinkedToSelectedClipTile.IsTrueOrNull() && !IsAllTag) {
                     return TagHexColor;
                 }
                 return MpSystemColors.Transparent;
@@ -575,14 +577,14 @@ namespace MonkeyPaste.Avalonia {
             return ttvm;
         }
 
-        public bool IsCopyItemLinked(int ciid) {
-            if (ciid == 0 || Tag == null || Tag.Id == 0) {
-                return false;
-            }
-            bool isLinked = MpDataModelProvider.IsTagLinkedWithCopyItem(Tag.Id, ciid);
+        //public bool IsCopyItemLinked(int ciid) {
+        //    if (ciid == 0 || Tag == null || Tag.Id == 0) {
+        //        return false;
+        //    }
+        //    bool isLinked = MpDataModelProvider.IsTagLinkedWithCopyItem(Tag.Id, ciid);
 
-            return isLinked;
-        }
+        //    return isLinked;
+        //}
 
         public async Task<bool> IsCopyItemLinkedAsync(int ciid) {
             if (ciid == 0 || Tag == null ||  Tag.Id == 0) {
@@ -614,6 +616,16 @@ namespace MonkeyPaste.Avalonia {
             }
             //return Children.Any(x => x.TagId == tid);
             return Items.Any(x => x.TagId == tid);
+        }
+
+        public void UpdateLinkToSelectedClipTile(IEnumerable<int> assocTagIds) {
+            if(assocTagIds.Any(x=>x == TagId)) {
+                IsLinkedToSelectedClipTile = true;
+            } else if(AllDescendants.Any(x=>assocTagIds.Any(y=>y == x.TagId))) {
+                IsLinkedToSelectedClipTile = null;
+            } else {
+                IsLinkedToSelectedClipTile = false;
+            }
         }
 
 
@@ -668,7 +680,7 @@ namespace MonkeyPaste.Avalonia {
                 if (sc.CommandParameter == TagId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
-            } else if (e is MpCopyItem ci && IsCopyItemLinked(ci.Id)) {
+            } else if (e is MpCopyItem ci && LinkedCopyItemIds.Contains(ci.Id)) {
                 UnlinkCopyItemCommand.Execute(ci.Id);
             }
         }
@@ -857,17 +869,23 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             
-            if(success) {
-                // await notify so IsBusy doesn't trip
-                await NotifyTriggersAsync(ciid, isLink);
-                
+            if(success) {                
                 Dispatcher.UIThread.VerifyAccess();
                 //TagClipCount += isLink ? 1 : -1;
                 
-                UpdateBadge();
 
                 foreach(var this_or_ancestor_ttvm in SelfAndAllAncestors) {
                     await this_or_ancestor_ttvm.UpdateClipCountAsync();
+                    
+                }
+
+                // await notify so IsBusy doesn't trip
+                await NotifyTriggersAsync(ciid, isLink);
+                UpdateBadge();
+
+                if(MpAvClipTrayViewModel.Instance.PersistantSelectedItemId == ciid) {
+                    // trigger selection changed message to notify tag association change
+                    MpMessenger.SendGlobal(MpMessageType.TraySelectionChanged);
                 }
             }
             IsBusy = false;
@@ -1003,38 +1021,51 @@ namespace MonkeyPaste.Avalonia {
                 ParentTagViewModel.DeleteChildTagCommand.Execute(this);
             }, ()=> !IsTagReadOnly);
 
+        public ICommand ToggleLinkToSelectedClipTileCommand => new MpCommand(
+            () => {
+                if(MpAvClipTrayViewModel.Instance.SelectedItem == null) {
+                    return;
+                }
+                int ciid = MpAvClipTrayViewModel.Instance.SelectedItem.CopyItemId;
+
+               if (IsLinkedToSelectedClipTile.IsTrue()) {
+                    UnlinkCopyItemCommand.Execute(ciid);
+                } else if(IsLinkedToSelectedClipTile.IsFalseOrNull()) {
+                    LinkCopyItemCommand.Execute(ciid);
+                } //else {
+                //    var linked_descendants = AllDescendants.Where(x => x.LinkedCopyItemIds.Contains(ciid));
+                //    linked_descendants.ForEach(x => x.UnlinkCopyItemCommand.Execute(ciid));
+                //}
+            });
+
         public ICommand LinkCopyItemCommand => new MpCommand<object>(
             (ciidArg) => {
-                if(ciidArg is not int) {
-                    return;
+                LinkOrUnlinkCopyItemAsync((int)ciidArg, true).FireAndForgetSafeAsync(this);
+            }, (ciidArg) => {
+                if (ciidArg is not int) {
+                    return false;
                 }
                 int ciid = (int)ciidArg;
                 if (ciid == 0) {
-                    MpConsole.WriteTraceLine("Cannot add CopyItemId 0 to Tag: " + TagName + " Id: " + TagId);
-                    return;
+                    MpConsole.WriteTraceLine("Cannot link CopyItemId 0 to Tag: " + TagName + " Id: " + TagId);
+                    return false;
                 }
-                //var cur_ctvm = this;
-                //while(!cur_ctvm.IsAllTag) {
-                //    cur_ctvm.LinkOrUnlinkCopyItemAsync(ciid, true).FireAndForgetSafeAsync(cur_ctvm);
-                //    cur_ctvm = cur_ctvm.ParentTreeItem;
-                //}
-                LinkOrUnlinkCopyItemAsync(ciid, true).FireAndForgetSafeAsync(this);
+                return true;
             });
 
         public ICommand UnlinkCopyItemCommand => new MpCommand<object>(
             (ciidArg) => {
-                if (ciidArg is int ciid) {
-                    if (ciid == 0) {
-                        MpConsole.WriteTraceLine("Cannot remove CopyItemId 0 to Tag: " + TagName + " Id: " + TagId);
-                        return;
-                    }
-                    //var cur_ctvm = this;
-                    //while (!cur_ctvm.IsAllTag) {
-                    //    cur_ctvm.LinkOrUnlinkCopyItemAsync(ciid, false).FireAndForgetSafeAsync(cur_ctvm);
-                    //    cur_ctvm = cur_ctvm.ParentTreeItem;
-                    //}
-                    LinkOrUnlinkCopyItemAsync(ciid, false).FireAndForgetSafeAsync(this);
+                LinkOrUnlinkCopyItemAsync((int)ciidArg, false).FireAndForgetSafeAsync(this);
+            }, (ciidArg) => {
+                if (ciidArg is not int) {
+                    return false;
                 }
+                int ciid = (int)ciidArg;
+                if (ciid == 0) {
+                    MpConsole.WriteTraceLine("Cannot unlink CopyItemId 0 to Tag: " + TagName + " Id: " + TagId);
+                    return false;
+                }
+                return true;
             });
 
 

@@ -51,7 +51,7 @@
                 VerticalAlignment="Stretch"
                 BorderThickness="0">
             <!--<Border.Background>
-                <ImageBrush Source="{Binding ., Source={StaticResource FrameGripTile}, Converter={StaticResource StringResourceToBitmapConverter}}"
+                <ImageBrush Source="{Binding ., Source={StaticResource FrameGripTile}, Converter={StaticResource StringResourceConverter}}"
                             TileMode="Tile"
                             SourceRect="0,0,5,5"
                             DestinationRect="0,0,5,5" />

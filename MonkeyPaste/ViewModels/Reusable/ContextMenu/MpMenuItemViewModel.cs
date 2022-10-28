@@ -44,6 +44,19 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region Constants
+
+        public const string DEFAULT_TEMPLATE_NAME = "DefaultMenuItemTemplate";
+        public const string CHECKABLE_TEMPLATE_NAME = "CheckableMenuItemTemplate";
+        public const string SEPERATOR_TEMPLATE_NAME = "SeperatorMenuItemTemplate";
+        public const string COLOR_PALETTE_TEMPLATE_NAME = "ColorPaletteMenuItemTemplate";
+        public const string COLOR_PALETTE_ITEM_TEMPLATE_NAME = "ColorPaletteItemMenuItemTemplate";
+        public const string HEADERED_ITEM_TEMPLATE_NAME = "HeaderedSeperatorMenuItemTemplate";
+        public const string PASTE_TO_PATH_ITEM_TEMPLATE_NAME = "PasteToPathRuntimeMenuItemTemplate";
+        public const string NEW_TABLE_ITEM_TEMPLATE_NAME = "NewTableSelectorMenuItem";
+
+        #endregion
+
         #region Properties
 
         #region View Models
@@ -65,6 +78,31 @@ namespace MonkeyPaste {
 
         public bool IsNewTableSelector { get; set; }
 
+        public string ContentTemplateName {
+            get {
+                if (IsHeaderedSeparator) {
+                    return HEADERED_ITEM_TEMPLATE_NAME;
+                } else if (IsSeparator) {
+                    return SEPERATOR_TEMPLATE_NAME;
+                } else if (IsPasteToPathRuntimeItem) {
+                    return PASTE_TO_PATH_ITEM_TEMPLATE_NAME;
+                } else if (IsColorPallete) {
+                    return COLOR_PALETTE_TEMPLATE_NAME;
+                } else if (IsColorPalleteItem) {
+                    return COLOR_PALETTE_ITEM_TEMPLATE_NAME;
+                } else if (IsNewTableSelector) {
+                    return NEW_TABLE_ITEM_TEMPLATE_NAME;
+                } else if (!string.IsNullOrEmpty(IconResourceKey)) {
+                    return DEFAULT_TEMPLATE_NAME;
+                } else if (!string.IsNullOrEmpty(IconHexStr)) {
+                    return CHECKABLE_TEMPLATE_NAME;
+                } else if (IconId > 0) {
+                    return DEFAULT_TEMPLATE_NAME;
+                }
+                return DEFAULT_TEMPLATE_NAME;
+            }
+        }
+
         #endregion
 
         #region Header
@@ -77,14 +115,16 @@ namespace MonkeyPaste {
 
         public string Header { get; set; }
 
+        public int AltNavIdx { get; set; } = -1;
+
         #endregion
 
         #region State
 
         public bool IsEnabled { get; set; }
 
-        public bool IsChecked { get; set; } = false;
-        public bool IsPartiallySelected { get; set; } = false; // for multi-select tag ischecked overlay
+        public bool? IsChecked { get; set; } = false;
+        //public bool IsPartiallySelected { get; set; } = false; // for multi-select tag ischecked overlay
         //public bool? IsChecked { get; set; } = false;
 
         //// for multi-select tag ischecked overlay
@@ -103,6 +143,17 @@ namespace MonkeyPaste {
 
         public bool IsVisible { get; set; } = true;
 
+        public string CheckResourceKey { 
+            get {
+                if(IsChecked.IsTrue()) {
+                    return "CheckSvg";
+                }
+                if (IsChecked.IsNull()) {
+                    return "DotSvg";
+                }
+                return null;
+            } 
+        }
         #endregion
 
         #region Commands
@@ -115,26 +166,36 @@ namespace MonkeyPaste {
 
         #region InputGesture
 
-        private string _inputGestureText = string.Empty;
+        //private string _inputGestureText = string.Empty;
+        //public string InputGestureText {
+        //    get {
+        //        if (ShortcutObjId > 0 || ShortcutType != MpShortcutType.None) {
+        //            string shortcutObjIdStr = ShortcutObjId == 0 ? string.Empty : ShortcutObjId.ToString();
+        //            _inputGestureText = MpDataModelProvider.GetShortcutKeystring(ShortcutType.ToString(), shortcutObjIdStr);
+        //        }
+        //        return _inputGestureText;
+        //    }
+        //    set {
+        //        if(InputGestureText != value) {
+        //            _inputGestureText = value;
+        //            OnPropertyChanged(nameof(InputGestureText));
+        //        }
+        //    }
+        //}
+
+        //public int ShortcutObjId { get; set; } = 0;
+
+        //public MpShortcutType ShortcutType { get; set; } = MpShortcutType.None;
         public string InputGestureText {
             get {
-                if (ShortcutObjId > 0 || ShortcutType != MpShortcutType.None) {
-                    string shortcutObjIdStr = ShortcutObjId == 0 ? string.Empty : ShortcutObjId.ToString();
-                    _inputGestureText = MpDataModelProvider.GetShortcutKeystring(ShortcutType.ToString(), shortcutObjIdStr);
+                if(MpShortcutRef.Create(ShortcutArgs) is MpShortcutRef sr) {
+                    return MpDataModelProvider.GetShortcutKeystring(sr.ShortcutType.ToString(), sr.CommandParameter);
                 }
-                return _inputGestureText;
-            }
-            set {
-                if(InputGestureText != value) {
-                    _inputGestureText = value;
-                    OnPropertyChanged(nameof(InputGestureText));
-                }
+                return null;
             }
         }
 
-        public int ShortcutObjId { get; set; } = 0;
-
-        public MpShortcutType ShortcutType { get; set; } = MpShortcutType.None;
+        public object ShortcutArgs { get; set; }
 
         #endregion
 
@@ -143,7 +204,7 @@ namespace MonkeyPaste {
         public string BorderHexColor {
             get {
                 //if (IsChecked.HasValue && IsChecked.Value) {
-                if (IsChecked) {
+                if (IsChecked.IsTrueOrNull()) {
                     return MpSystemColors.IsSelectedBorderColor;
                 } else if (IsHovering) {
                     return MpSystemColors.IsHoveringBorderColor;

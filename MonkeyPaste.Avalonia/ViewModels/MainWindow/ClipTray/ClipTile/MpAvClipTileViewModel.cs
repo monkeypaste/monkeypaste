@@ -1370,9 +1370,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpColorPalletePopupMenuViewModel SelectionFgColorPopupViewModel { get; private set; } = new MpColorPalletePopupMenuViewModel();
+        public MpColorPalettePopupMenuViewModel SelectionFgColorPopupViewModel { get; private set; } = new MpColorPalettePopupMenuViewModel();
 
-        public MpColorPalletePopupMenuViewModel SelectionBgColorPopupViewModel { get; private set; } = new MpColorPalletePopupMenuViewModel();
+        public MpColorPalettePopupMenuViewModel SelectionBgColorPopupViewModel { get; private set; } = new MpColorPalettePopupMenuViewModel();
         #endregion
 
         //#region MpAvIShortcutCommand Implementation

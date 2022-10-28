@@ -16,30 +16,40 @@ using static Avalonia.VisualExtensions;
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvCommonExtensions {
         #region Collections
-        public static T GetVisualAncestor<T>(this IVisual control) where T : IVisual? {
-            if (control is T) {
-                return (T)control;
+        public static T GetVisualAncestor<T>(this IVisual visual, bool includeSelf = true) where T : IVisual? {
+            if (includeSelf && visual is T) {
+                return (T)visual;
             }
-            return (T)control.GetVisualAncestors().FirstOrDefault(x => x is T);
+            var visualResult = (T)visual.GetVisualAncestors().FirstOrDefault(x => x is T);
+            //if (visualResult == null && visual is Control control && control.TemplatedParent is Control templatedParent) {
+            //    return templatedParent.GetVisualAncestor<T>(includeSelf);
+            //}
+            return visualResult;
         }
-        public static IEnumerable<T> GetVisualAncestors<T>(this IVisual control) where T : IVisual {
-            IEnumerable<T> result;
-            result = control.GetVisualAncestors().Where(x => x is T).Cast<T>();
-            if (control is T ct) {
-                result.Append(ct);
+        public static IEnumerable<T> GetVisualAncestors<T>(this IVisual visual, bool includeSelf = true) where T : IVisual {
+            IEnumerable<T> visualResult;
+            visualResult = visual.GetVisualAncestors().Where(x => x is T).Cast<T>();
+
+            //if ((visualResult == null || visualResult.Count() == 0) && 
+            //    visual is Control control && control.TemplatedParent is Control templatedParent) {
+            //    return templatedParent.GetVisualAncestors<T>(includeSelf);
+            //}
+            if (includeSelf && visual is T ct) {
+                visualResult.Append(ct);
             }
-            return result;
+
+            return visualResult;
         }
-        public static T GetVisualDescendant<T>(this IVisual control) where T : IVisual {
-            if (control is T) {
+        public static T GetVisualDescendant<T>(this IVisual control, bool includeSelf = true) where T : IVisual {
+            if (includeSelf && control is T) {
                 return (T)control;
             }
             return (T)control.GetVisualDescendants().FirstOrDefault(x => x is T);
         }
-        public static IEnumerable<T> GetVisualDescendants<T>(this IVisual control) where T : IVisual {
+        public static IEnumerable<T> GetVisualDescendants<T>(this IVisual control, bool includeSelf = true) where T : IVisual {
             IEnumerable<T> result;
             result = control.GetVisualDescendants().Where(x => x is T).Cast<T>();
-            if (control is T ct) {
+            if (includeSelf && control is T ct) {
                 result.Append(ct);
             }
             return result;
@@ -165,7 +175,7 @@ namespace MonkeyPaste.Common.Avalonia {
         #region Adorner
 
         public static async Task<AdornerLayer> GetAdornerLayerAsync(this Control adornedControl, int timeout_ms = 1000) {
-            // used to simplify lifecycle issues w/ control attach and adding adorner
+            // used to simplify lifecycle issues w/ visual attach and adding adorner
             Dispatcher.UIThread.VerifyAccess();
 
             var adornerLayer = AdornerLayer.GetAdornerLayer(adornedControl);

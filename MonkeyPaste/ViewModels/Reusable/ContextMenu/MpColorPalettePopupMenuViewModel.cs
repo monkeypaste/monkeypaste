@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using MonkeyPaste;
 
 namespace MonkeyPaste {
-    public class MpColorPalletePopupMenuViewModel : MpViewModelBase, MpIPopupMenuViewModel, MpIUserColorViewModel {
+    public class MpColorPalettePopupMenuViewModel : MpViewModelBase, MpIPopupMenuViewModel, MpIUserColorViewModel {
         public event EventHandler<string> OnColorChanged;
 
         private string _userHexColor;
@@ -24,6 +24,6 @@ namespace MonkeyPaste {
             }
         };
 
-        public MpColorPalletePopupMenuViewModel() : base(null) { }
+        public MpColorPalettePopupMenuViewModel() : base(null) { }
     }
 }

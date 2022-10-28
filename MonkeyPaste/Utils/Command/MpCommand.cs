@@ -9,6 +9,7 @@ using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
+
     public class MpCommandErrorHandler : MpIErrorHandler {
         private static MpCommandErrorHandler _instance;
         public static MpCommandErrorHandler Instance => _instance ??= (_instance = new MpCommandErrorHandler());

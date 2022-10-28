@@ -159,7 +159,7 @@
                                                                     ConverterParameter={x:Static pcl:MpShortcutType.ToggleAppendMode}}"
                                                   Padding="10">
                                         <Image Source="{Binding Source={StaticResource AppendRunImage},
-                                                                Converter={StaticResource StringResourceToBitmapConverter}}"
+                                                                Converter={StaticResource StringResourceConverter}}"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                     </ToggleButton>
@@ -185,14 +185,14 @@
                                         </ToggleButton.ToolTip>-->
             <!--
                                         <Image Source="{Binding Source={StaticResource AppendLineImage},
-                                                                Converter={StaticResource StringResourceToBitmapConverter}}"
+                                                                Converter={StaticResource StringResourceConverter}}"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                     </ToggleButton>
                                 </StackPanel>
                             </Popup>
                             <Image Source="{Binding Source={StaticResource AppendImage},
-                                                    Converter={StaticResource StringResourceToBitmapConverter}}"
+                                                    Converter={StaticResource StringResourceConverter}}"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center" />
                         </Grid>
@@ -235,7 +235,7 @@
                                             </TextBlock>
                                         </ToggleButton.ToolTip>
                                         <Image Source="{Binding Source={StaticResource LeftClickImage},
-                                                                Converter={StaticResource StringResourceToBitmapConverter}}"
+                                                                Converter={StaticResource StringResourceConverter}}"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                     </ToggleButton>
@@ -260,14 +260,14 @@
                                             </TextBlock>
                                         </ToggleButton.ToolTip>
                                         <Image Source="{Binding Source={StaticResource RightClickImage},
-                                                                Converter={StaticResource StringResourceToBitmapConverter}}"
+                                                                Converter={StaticResource StringResourceConverter}}"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                     </ToggleButton>
                                 </StackPanel>
                             </Popup>
                             <Image Source="{Binding MouseModeImageSourcePath,
-                                                    Converter={StaticResource StringResourceToBitmapConverter}}"
+                                                    Converter={StaticResource StringResourceConverter}}"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center" />
                         </Grid>

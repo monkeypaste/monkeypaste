@@ -150,7 +150,7 @@
                 <Image Width="15"
                        Height="15"
                        Stretch="Fill"
-                       Source="{Binding ., Converter={StaticResource StringResourceToBitmapConverter}, Source={StaticResource CloseImage}}" />
+                       Source="{Binding ., Converter={StaticResource StringResourceConverter}, Source={StaticResource CloseImage}}" />
             </Button>
             <ContentControl x:Name="NotificationContentControl"
                             Grid.Column="1"

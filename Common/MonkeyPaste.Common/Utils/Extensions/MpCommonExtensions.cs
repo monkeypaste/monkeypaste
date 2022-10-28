@@ -15,7 +15,6 @@ namespace MonkeyPaste.Common {
     public static class MpCommonExtensions {
 
         #region Collections
-
         public static IEnumerable<T> Randomize<T>(this IEnumerable<T> enumerable) {
             List<T> enumerable_copy = enumerable.ToList();
             List<T> rand_list = new List<T>();
@@ -375,6 +374,44 @@ namespace MonkeyPaste.Common {
             DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             dateTime = dateTime.AddSeconds(unixTimeStamp).ToLocalTime();
             return dateTime;
+        }
+
+        #endregion
+
+        #region Nullables
+
+        public static bool IsTrue(this bool? boolVal) {
+            return boolVal != null && boolVal.HasValue && boolVal.Value;
+        }
+
+        public static bool IsFalse(this bool? boolVal) {
+            return boolVal != null && boolVal.HasValue && !boolVal.Value;
+        }
+
+        public static bool IsNull(this bool? boolVal) {
+            return boolVal == null;
+        }
+
+        public static bool IsTrueOrFalse(this bool? boolVal) {
+            return !boolVal.IsNull();
+        }
+
+        public static bool IsTrueOrNull(this bool? boolVal) {
+            return boolVal.IsTrue() || boolVal.IsNull();
+        }
+
+        public static bool IsFalseOrNull(this bool? boolVal) {
+            return boolVal.IsFalse() || boolVal.IsNull();
+        }
+
+        public static bool? DefaultToggleValue(this bool? boolVal, bool nullToggleValue = false) {
+            if(boolVal.IsTrue()) {
+                return false;
+            }
+            if(boolVal.IsFalse()) {
+                return true;
+            }
+            return nullToggleValue;
         }
 
         #endregion
