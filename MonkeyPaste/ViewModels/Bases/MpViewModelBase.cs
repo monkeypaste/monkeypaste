@@ -12,6 +12,7 @@ namespace MonkeyPaste {
         [JsonIgnore]
         bool IsBusy { get; set; }
 
+
         [JsonIgnore]
         bool HasModelChanged { get; set; }
 
@@ -23,6 +24,7 @@ namespace MonkeyPaste {
 
         event PropertyChangedEventHandler PropertyChanged;
     }
+
     public abstract class MpViewModelBase : 
         INotifyPropertyChanged, 
         MpIErrorHandler, 
@@ -33,7 +35,6 @@ namespace MonkeyPaste {
 
         #region Properties
 
-        [JsonIgnore]
         public virtual object ParentObj { get; protected set; }
 
         [JsonIgnore]

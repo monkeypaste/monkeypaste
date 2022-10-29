@@ -8,7 +8,7 @@ using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     //public enum MpNotifierType {
-    //    None = 0,
+    //    Default = 0,
     //    Startup,
     //    Dialog
     //}
@@ -66,7 +66,9 @@ namespace MonkeyPaste {
     }
 
     public enum MpNotificationLayoutType {
-        None = 0,
+        Default = 0,
+        Message,
+        Loader,
         Warning, //confirm
         WarningWithOption, //retry/ignore/quit
         Error, //confirm
@@ -78,6 +80,8 @@ namespace MonkeyPaste {
 
         public static MpNotificationLayoutType GetLayoutTypeFromNotificationType(MpNotificationType ndt) {
             switch(ndt) {
+                case MpNotificationType.Loader:
+                    return MpNotificationLayoutType.Loader;
                 case MpNotificationType.ContentFormatDegradation:
                 case MpNotificationType.InvalidPlugin:
                 case MpNotificationType.InvalidAction:
@@ -92,7 +96,7 @@ namespace MonkeyPaste {
                 case MpNotificationType.DbError:
                     return MpNotificationLayoutType.Error;
                 default:
-                    return MpNotificationLayoutType.None;
+                    return MpNotificationLayoutType.Default;
             }
         }
         public static MpNotificationButtonsType GetNotificationButtonsType(MpNotificationType ndt) {
@@ -155,7 +159,7 @@ namespace MonkeyPaste {
                     LayoutType == MpNotificationLayoutType.ErrorWithOption) {
                     return MpSystemColors.Red;
                 }
-                if (LayoutType != MpNotificationLayoutType.None) {
+                if (LayoutType != MpNotificationLayoutType.Default) {
                     return MpSystemColors.royalblue;
                 }
                 return MpSystemColors.White;

@@ -132,50 +132,60 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (element is Control control) {
                     if (control.IsInitialized) {
-                        AttachedToVisualHandler(control, null);
+                        HostControl_AttachedToVisualHandler(control, null);
                     } else {
-                        control.AttachedToVisualTree += AttachedToVisualHandler;
+                        control.AttachedToVisualTree += HostControl_AttachedToVisualHandler;
 
                     }
                 }
             } else {
-                DetachedToVisualHandler(element, null);
+                HostControl_DetachedToVisualHandler(element, null);
             }
             
 
         }
 
-        private static void AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
+        private static void HostControl_AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
             if (s is Control control) {
                 if (e == null) {
-                    control.AttachedToVisualTree += AttachedToVisualHandler;
+                    control.AttachedToVisualTree += HostControl_AttachedToVisualHandler;
                 }
-                control.DetachedFromVisualTree += DetachedToVisualHandler;
+                control.DetachedFromVisualTree += HostControl_DetachedToVisualHandler;
                 //mi.ContextMenu.ContextMenuOpening += ContextMenu_ContextMenuOpening;
-                control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
+                control.AddHandler(Control.PointerPressedEvent, HostControl_PointerPressed, RoutingStrategies.Tunnel);
             }
         }
-        private static void DetachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
-            if (s is Control control) {
-                control.AttachedToVisualTree -= AttachedToVisualHandler;
-                control.DetachedFromVisualTree -= DetachedToVisualHandler;
-                control.RemoveHandler(Control.PointerPressedEvent, Control_PointerPressed);
+        private static void HostControl_DetachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
+            if (s is Control host_control) {
+                host_control.AttachedToVisualTree -= HostControl_AttachedToVisualHandler;
+                host_control.DetachedFromVisualTree -= HostControl_DetachedToVisualHandler;
+                host_control.RemoveHandler(Control.PointerPressedEvent, HostControl_PointerPressed);
             }
         }
 
-        private static void Control_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
+        private static async void HostControl_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
             if (sender is Control control) {
                 if (GetIsEnabled(control)) {
                     e.Handled = false;
 
+                    bool wait_for_selection = false;
                     if (control.DataContext is MpISelectorItemViewModel sivm) {
                         if (e.IsLeftPress(control) || GetSelectOnRightClick(control)) {
+                            if(sivm.Selector.SelectedItem != control.DataContext) {
+                                wait_for_selection = true;
+                            }
                             sivm.Selector.SelectedItem = control.DataContext;
                         }
                     } else if (control.DataContext is MpISelectableViewModel svm) {
                         if (e.IsLeftPress(control) || GetSelectOnRightClick(control)) {
+                            if(!svm.IsSelected) {
+                                wait_for_selection = true;
+                            }
                             svm.IsSelected = true;
                         }
+                    }
+                    if(wait_for_selection) {
+                        await Task.Delay(500);
                     }
 
                     MpMenuItemViewModel mivm = null;
@@ -232,178 +242,47 @@ namespace MonkeyPaste.Avalonia {
 
                     _cmInstance.Open(MpAvMainWindow.Instance);
                     MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
-                    //flyout.ShowAt(mi);
                 }
             }            
         }
-        private static void UpdateMenu() {
-            if(_cmInstance != null && _cmInstance.DataContext is MpMenuItemViewModel mivm) {
-                _cmInstance.Items = mivm.SubItems.Where(x => x.IsVisible).Select(x => CreateMenuItem(x));
-            }
-        }
-        private static Control CreateMenuItem(MpMenuItemViewModel mivm) {
-            Control control = null;
-            string itemType = new MpAvMenuItemDataTemplateSelector().GetTemplateName(mivm);
-            KeyGesture inputGesture = null;
-            if(!string.IsNullOrEmpty(mivm.InputGestureText)) {
-                inputGesture = KeyGesture.Parse(mivm.InputGestureText);
-            }
 
-            switch (itemType) {
-                case MpMenuItemViewModel.DEFAULT_TEMPLATE_NAME:
-                case MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME:
-                    var mi = new MenuItem() { 
-                        Header = mivm.Header.EscapeMenuItemHeader(mivm.AltNavIdx),
-                        Command = mivm.Command,
-                        CommandParameter = mivm.CommandParameter,
-                        InputGesture = inputGesture,
-                        DataContext = mivm,
-                    };
-                    if(itemType == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
-                        mi.Icon = CreateCheckableIcon(mivm);
-                    } else {
-                        mi.Icon = mivm.IconSourceObj == null ?
-                            null :
-                            new Image() {
-                                HorizontalAlignment = HorizontalAlignment.Stretch,
-                                VerticalAlignment = VerticalAlignment.Stretch,
-                                Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(mivm.IconSourceObj, null, null, null) as Bitmap,
-                            };
-                    }
-                    if(mivm.SubItems != null && mivm.SubItems.Count > 0) {
-                        var subItems = new ObservableCollection<Control>();
-                        foreach(var si in mivm.SubItems) {
-                            subItems.Add(CreateMenuItem(si));
-                        }
-                        mi.Items = subItems;
-                    }
-                    mi.PointerEnterItem += Control_PointerEnter;
-                    mi.DetachedFromVisualTree += Control_DetachedFromVisualTree;
-                    if (mi.Command != null) {
-                        mi.AddHandler(Control.PointerReleasedEvent, Control_PointerReleased, RoutingStrategies.Tunnel);
-                        //mi.GetVisualDescendants().Where(x => x is Control).Cast<Control>().ForEach(x => x.PointerReleased += Control_PointerReleased);
-                    }
-                    control = mi;
-                    break;
-                case MpMenuItemViewModel.SEPERATOR_TEMPLATE_NAME:
-                    control = new MenuItem() {
-                        Header = "-",
-                        DataContext = mivm
-                    };
-                    break;
-                case MpMenuItemViewModel.COLOR_PALETTE_TEMPLATE_NAME:
-                    control = new MenuItem() {
-                        Header = new MpAvColorPaletteListBoxView() {
-                            DataContext = mivm
-                        },
-                        DataContext = mivm
-                    };
-
-                    control.PointerEnter += Control_PointerEnter;
-                    control.DetachedFromVisualTree += Control_DetachedFromVisualTree;
-                    break;
-            }
-            return control;
-        }
-
-        private static object CreateCheckableIcon(MpMenuItemViewModel mivm) {
-            var iconBorder = new Border() {
-                HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Center,
-                MinWidth = 20,
-                MinHeight = 20,
-                BorderThickness = new Thickness(1),
-                BorderBrush = mivm.BorderHexColor.ToAvBrush(),
-                CornerRadius = new CornerRadius(2.5),
-                Margin = new Thickness(5, 0, 30, 0),
-                Background = mivm.IconHexStr.ToAvBrush()
-            };
-            var pi = new PathIcon() {
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                Width = mivm.CheckResourceKey == "CheckSvg" ? 15:7,
-                Height = mivm.CheckResourceKey == "CheckSvg" ? 15 : 7,
-                Data = MpPlatformWrapper.Services.PlatformResource.GetResource(mivm.CheckResourceKey) as StreamGeometry,
-                Foreground = mivm.IconHexStr.HexColorToContrastingFgHexColor().ToAvBrush()
-            };
-            iconBorder.Child = pi;
-            return iconBorder;
-        }
-
-        private static void Control_PointerReleased(object sender, PointerReleasedEventArgs e) {
+        private static void MenuItem_PointerReleased(object sender, PointerReleasedEventArgs e) {
             MenuItem mi = null;
             if (e.Source is IVisual sourceVisual &&
                 sourceVisual.GetVisualAncestor<MenuItem>() is MenuItem smi) {
-                MpConsole.WriteLine("Released (source): " + mi);
+                //MpConsole.WriteLine("Released (source): " + mi);
                 mi = smi;
             } else if (sender is MenuItem sender_mi) {
                 mi = sender_mi;
-                MpConsole.WriteLine("Released (sender): " + mi);
+                //MpConsole.WriteLine("Released (sender): " + mi);
             }
-            if (mi != null &&
-                mi.DataContext is MpMenuItemViewModel mivm) {
-
-                if (mivm.ContentTemplateName == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
-                    e.Handled = true;
-                    mivm.Command.Execute(mivm.CommandParameter);
-
-                    // update toggled cb
-                    mivm.IsChecked = mivm.IsChecked.DefaultToggleValue(true);
-                    var self_ancestor_mil = GetParentMenuItems(mi, true)
-                                .Where(x => x.DataContext is MpMenuItemViewModel pmivm && pmivm.ContentTemplateName == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME);
-
-                    foreach (var cur_mi in self_ancestor_mil) {
-                        var cur_mi_mivm = cur_mi.DataContext as MpMenuItemViewModel;
-                        bool? is_cur_mi_checked = false;
-                        if (cur_mi_mivm.IsChecked.IsTrue()) {
-                            is_cur_mi_checked = true;
-                        } else {
-                            is_cur_mi_checked = cur_mi_mivm.SubItems.Any(x => x.IsChecked.IsTrueOrNull()) ? null : false;
-                        }
-                        cur_mi_mivm.IsChecked = is_cur_mi_checked;
-                        cur_mi.Icon = CreateCheckableIcon(cur_mi_mivm);
-                    }
-
-                    EventHandler<PointerEventArgs> move_handler = null;
-                    move_handler = (s, e1) => {
-                        _cmInstance.RemoveHandler(InputElement.PointerLeaveEvent, move_handler);
-                        CloseMenu();
-                    };
-                    _cmInstance.AddHandler(InputElement.PointerLeaveEvent, move_handler, RoutingStrategies.Tunnel, true);
-                } else {
-
-                    MpPlatformWrapper.Services.ContextMenuCloser.CloseMenu();
-                    e.Handled = false;
-                }
+            if (mi == null) {
+                return;
             }
+            MpMenuItemViewModel mivm = mi.DataContext as MpMenuItemViewModel;
+            if (mivm == null) {
+                return;
+            }
+
+            if (mivm.ContentTemplateName == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
+                //ToggleCheckableMenuItem(mi, e);
+                mivm.Command.Execute(mivm.CommandParameter);
+                e.Handled = true;
+            } else {
+                e.Handled = false;
+            }
+            MpPlatformWrapper.Services.ContextMenuCloser.CloseMenu();            
         }
 
-        private static void CheckableControl_PointerReleased(object sender, PointerReleasedEventArgs e) {
-            if (sender is MenuItem mi && mi.DataContext is MpMenuItemViewModel mivm) {
-                mivm.IsChecked = mivm.IsChecked.DefaultToggleValue();
-
-                
-                // wait to close menu till off item, that way see the check but still closes? 
-                EventHandler<PointerEventArgs> leave_handler = null;
-                leave_handler = (s, e) => {
-                    CloseMenu();
-                    mi.PointerLeave -= leave_handler;
-                };
-                mi.PointerLeave += leave_handler;
-            }
-            e.Handled = false;
-        }
-
-
-        private static void Control_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+        private static void MenuItem_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             if (sender is MenuItem control) {
-                control.PointerEnterItem -= Control_PointerEnter;
-                control.PointerReleased -= Control_PointerReleased;
-                control.RemoveHandler(Control.PointerReleasedEvent, Control_PointerReleased);
+                control.PointerEnterItem -= MenuItem_PointerEnter;
+                control.PointerReleased -= MenuItem_PointerReleased;
+                control.RemoveHandler(Control.PointerReleasedEvent, MenuItem_PointerReleased);
             }
         }
 
-        private static void Control_PointerEnter(object sender, PointerEventArgs e) {
+        private static void MenuItem_PointerEnter(object sender, PointerEventArgs e) {
             if (e.Source is MenuItem mi && mi.DataContext is MpMenuItemViewModel mivm) {
                // MpConsole.WriteLine("Pointer enter: " + mivm.Header);
                
@@ -447,6 +326,111 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        #region Helpers
+
+        private static Control CreateMenuItem(MpMenuItemViewModel mivm) {
+            Control control = null;
+            string itemType = new MpAvMenuItemDataTemplateSelector().GetTemplateName(mivm);
+            KeyGesture inputGesture = null;
+            if (!string.IsNullOrEmpty(mivm.InputGestureText)) {
+                inputGesture = KeyGesture.Parse(mivm.InputGestureText);
+            }
+
+            switch (itemType) {
+                case MpMenuItemViewModel.DEFAULT_TEMPLATE_NAME:
+                case MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME:
+                    var mi = new MenuItem() {
+                        Header = mivm.Header,
+                        Command = mivm.Command,
+                        CommandParameter = mivm.CommandParameter,
+                        InputGesture = inputGesture,
+                        DataContext = mivm,
+                        Icon = CreateIcon(mivm),
+                        Items = mivm.SubItems == null ? null : mivm.SubItems.Select(x=>CreateMenuItem(x))
+                    };
+                    //if (itemType == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
+                    //    mi.Icon = CreateCheckableIcon(mivm);
+                    //} else {
+                    //    mi.Icon = mivm.IconSourceObj == null ?
+                    //        null :
+                    //        new Image() {
+                    //            HorizontalAlignment = HorizontalAlignment.Stretch,
+                    //            VerticalAlignment = VerticalAlignment.Stretch,
+                    //            Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(mivm.IconSourceObj, null, null, null) as Bitmap,
+                    //        };
+                    //}
+                    //if (mivm.SubItems != null && mivm.SubItems.Count > 0) {
+                    //    var subItems = new ObservableCollection<Control>();
+                    //    foreach (var si in mivm.SubItems) {
+                    //        subItems.Add(CreateMenuItem(si));
+                    //    }
+                    //    mi.Items = subItems;
+                    //}
+                    mi.PointerEnterItem += MenuItem_PointerEnter;
+                    mi.DetachedFromVisualTree += MenuItem_DetachedFromVisualTree;
+                    if (mi.Command != null) {
+                        mi.AddHandler(Control.PointerReleasedEvent, MenuItem_PointerReleased, RoutingStrategies.Tunnel);
+                    }
+                    control = mi;
+                    break;
+                case MpMenuItemViewModel.SEPERATOR_TEMPLATE_NAME:
+                    control = new MenuItem() {
+                        Header = "-",
+                        DataContext = mivm
+                    };
+                    break;
+                case MpMenuItemViewModel.COLOR_PALETTE_TEMPLATE_NAME:
+                    control = new MenuItem() {
+                        Header = new MpAvColorPaletteListBoxView() {
+                            DataContext = mivm
+                        },
+                        DataContext = mivm
+                    };
+
+                    control.PointerEnter += MenuItem_PointerEnter;
+                    control.DetachedFromVisualTree += MenuItem_DetachedFromVisualTree;
+                    break;
+            }
+            return control;
+        }
+
+        private static object CreateIcon(MpMenuItemViewModel mivm) {
+            if(mivm.ContentTemplateName == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
+                return CreateCheckableIcon(mivm);
+            }
+            if(mivm.IconSourceObj == null) {
+                return null;
+            }
+            return new Image() {
+                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                        VerticalAlignment = VerticalAlignment.Stretch,
+                        Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(mivm.IconSourceObj, null, null, null) as Bitmap,
+                    };
+        }
+        private static object CreateCheckableIcon(MpMenuItemViewModel mivm) {
+            var iconBorder = new Border() {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Center,
+                MinWidth = 20,
+                MinHeight = 20,
+                BorderThickness = new Thickness(1),
+                BorderBrush = mivm.BorderHexColor.ToAvBrush(),
+                CornerRadius = new CornerRadius(2.5),
+                Margin = new Thickness(5, 0, 30, 0),
+                Background = mivm.IconHexStr.ToAvBrush()
+            };
+            var pi = new PathIcon() {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = mivm.CheckResourceKey == "CheckSvg" ? 15 : 7,
+                Height = mivm.CheckResourceKey == "CheckSvg" ? 15 : 7,
+                Data = MpPlatformWrapper.Services.PlatformResource.GetResource(mivm.CheckResourceKey) as StreamGeometry,
+                Foreground = mivm.IconHexStr.HexColorToContrastingFgHexColor().ToAvBrush()
+            };
+            iconBorder.Child = pi;
+            return iconBorder;
+        }
+
         private static IEnumerable<MenuItem> GetChildMenuItems(MenuItem mi) {
             var items = new List<MenuItem>();
             if(mi != null) {
@@ -482,27 +466,63 @@ namespace MonkeyPaste.Avalonia {
             }
             return items;
         }
-        //private static List<MenuItem> GetParentMenuItems(MenuItem mi, bool includeSelf = false) {
-        //    var items = new List<MenuItem>();
-        //    if (mi != null) {
-        //        if(includeSelf) {
-        //            items.Add(mi);
-        //        }
-        //        object parentObj = mi.GetVisualAncestor<MenuItem>(false);
-        //        while (parentObj != null) {
-        //            if (parentObj is MenuItem pmi) {
-        //                items.Add(pmi);
-        //                parentObj = pmi.GetVisualAncestor<MenuItem>(false);
-        //            } else {
-        //                parentObj = null;
-        //            }
-        //        }
-        //    }
-        //    return items;
-        //}
         #endregion
 
         #endregion
+
+        #endregion
+
+        // unused
+
+        private static void MenuItem_PointerReleased2(object sender, PointerReleasedEventArgs e) {
+            // unused can't consistently get checks to change w/o reloading...i think its from right click selecting 
+            MenuItem mi = null;
+            if (e.Source is IVisual sourceVisual &&
+                sourceVisual.GetVisualAncestor<MenuItem>() is MenuItem smi) {
+                //MpConsole.WriteLine("Released (source): " + mi);
+                mi = smi;
+            } else if (sender is MenuItem sender_mi) {
+                mi = sender_mi;
+                //MpConsole.WriteLine("Released (sender): " + mi);
+            }
+            if (mi == null) {
+                return;
+            }
+            MpMenuItemViewModel mivm = mi.DataContext as MpMenuItemViewModel;
+            if (mivm == null) {
+                return;
+            }
+
+            if (mivm.ContentTemplateName == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
+                //ToggleCheckableMenuItem(mi, e);
+                mivm.Command.Execute(mivm.CommandParameter);
+                e.Handled = true;
+            }
+            // update toggled cb
+            mivm.IsChecked = mivm.IsChecked.DefaultToggleValue(true);
+            var self_ancestor_mil = GetParentMenuItems(mi, true)
+                        .Where(x => x.DataContext is MpMenuItemViewModel pmivm && pmivm.ContentTemplateName == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME);
+
+            foreach (var cur_mi in self_ancestor_mil) {
+                var cur_mi_mivm = cur_mi.DataContext as MpMenuItemViewModel;
+                bool? is_cur_mi_checked = false;
+                if (cur_mi_mivm.IsChecked.IsTrue()) {
+                    is_cur_mi_checked = true;
+                } else {
+                    is_cur_mi_checked = cur_mi_mivm.SubItems.Any(x => x.IsChecked.IsTrueOrNull()) ? null : false;
+                }
+                cur_mi_mivm.IsChecked = is_cur_mi_checked;
+                cur_mi.Icon = null;
+                cur_mi.Icon = CreateCheckableIcon(cur_mi_mivm);
+            }
+
+            EventHandler<PointerEventArgs> move_handler = null;
+            move_handler = (s, e1) => {
+                _cmInstance.RemoveHandler(InputElement.PointerLeaveEvent, move_handler);
+                CloseMenu();
+            };
+            _cmInstance.AddHandler(InputElement.PointerLeaveEvent, move_handler, RoutingStrategies.Tunnel, true);
+        }
     }
 
     public class MpAvContextMenuCloser : MpIContextMenuCloser {

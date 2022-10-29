@@ -286,9 +286,11 @@ namespace MonkeyPaste {
             int dataObjectId = 0,
             bool suppressWrite = false) {
             var dupCheck = await MpDataModelProvider.GetCopyItemByDataAsync(data);
-            if (MpPrefViewModel.Instance.IgnoreNewDuplicates && dupCheck != null && !suppressWrite) {
+            if (MpPrefViewModel.Instance.IgnoreNewDuplicates && 
+                dupCheck != null && !suppressWrite) {
                 //flipping pk sign notifies AddItemThread item already exists and flips it back
-                dupCheck.Id *= -1;
+                //dupCheck.Id *= -1;
+                dupCheck.WasDupOnCreate = true;
                 return dupCheck;
             }
 

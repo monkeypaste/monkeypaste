@@ -218,7 +218,7 @@ namespace MonkeyPaste.Avalonia {
                 //if (GetSelectAllOnFocus(control)) {
                 //    tb.CaretIndex = 0;
                 //    SetIsReadOnly(control, false);
-                //    KeyboardDevice.Instance.SetFocusedElement(control, NavigationMethod.Unspecified, KeyModifiers.None);
+                //    KeyboardDevice.Instance.SetFocusedElement(control, NavigationMethod.Unspecified, KeyModifiers.Default);
                 //    tb.SelectAll();
                 //}
 

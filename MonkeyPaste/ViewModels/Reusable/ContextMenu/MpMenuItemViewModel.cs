@@ -113,7 +113,16 @@ namespace MonkeyPaste {
 
         public string HeaderedSeparatorLabel { get; set; }
 
-        public string Header { get; set; }
+        private string _header;
+        public string Header {
+            get => _header.EscapeMenuItemHeader(AltNavIdx);
+            set {
+                if(Header != value && Header != value.EscapeMenuItemHeader(AltNavIdx)) {
+                    _header = value;
+                    OnPropertyChanged(nameof(Header));
+                }
+            }
+        }
 
         public int AltNavIdx { get; set; } = -1;
 
@@ -169,7 +178,7 @@ namespace MonkeyPaste {
         //private string _inputGestureText = string.Empty;
         //public string InputGestureText {
         //    get {
-        //        if (ShortcutObjId > 0 || ShortcutType != MpShortcutType.None) {
+        //        if (ShortcutObjId > 0 || ShortcutType != MpShortcutType.Default) {
         //            string shortcutObjIdStr = ShortcutObjId == 0 ? string.Empty : ShortcutObjId.ToString();
         //            _inputGestureText = MpDataModelProvider.GetShortcutKeystring(ShortcutType.ToString(), shortcutObjIdStr);
         //        }
@@ -185,7 +194,7 @@ namespace MonkeyPaste {
 
         //public int ShortcutObjId { get; set; } = 0;
 
-        //public MpShortcutType ShortcutType { get; set; } = MpShortcutType.None;
+        //public MpShortcutType ShortcutType { get; set; } = MpShortcutType.Default;
         public string InputGestureText {
             get {
                 if(MpShortcutRef.Create(ShortcutArgs) is MpShortcutRef sr) {

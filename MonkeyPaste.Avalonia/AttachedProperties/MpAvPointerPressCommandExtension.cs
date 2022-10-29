@@ -25,13 +25,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
         #endregion
-
-        #region Properties
-         #endregion
-
         static MpAvPointerPressCommandExtension() {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
         }
+
+        #region Properties
+
 
         #region LeftPressCommand AvaloniaProperty
         public static ICommand GetLeftPressCommand(AvaloniaObject obj) {
@@ -49,7 +48,6 @@ namespace MonkeyPaste.Avalonia {
                 false);
 
         #endregion
-
 
         #region DoubleLeftPressCommand AvaloniaProperty
         public static ICommand GetDoubleLeftPressCommand(AvaloniaObject obj) {
@@ -135,6 +133,23 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region IsPressEventHandled AvaloniaProperty
+        public static bool GetIsPressEventHandled(AvaloniaObject obj) {
+            return obj.GetValue(IsPressEventHandledProperty);
+        }
+
+        public static void SetIsPressEventHandled(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsPressEventHandledProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsPressEventHandledProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "IsPressEventHandled",
+                true,
+                false);
+
+        #endregion
+
         #region DoubleLeftPressCommandParameter AvaloniaProperty
         public static object GetDoubleLeftPressCommandParameter(AvaloniaObject obj) {
             return obj.GetValue(DoubleLeftPressCommandParameterProperty);
@@ -152,13 +167,10 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
-
         #region IsEnabled AvaloniaProperty
         public static bool GetIsEnabled(AvaloniaObject obj) {
             return obj.GetValue(IsEnabledProperty);
         }
-
         public static void SetIsEnabled(AvaloniaObject obj, bool value) {
             obj.SetValue(IsEnabledProperty, value);
         }
@@ -172,11 +184,11 @@ namespace MonkeyPaste.Avalonia {
         private static void HandleIsEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
             if(e.NewValue is bool isEnabledVal && isEnabledVal) {
                 if (element is Control control) {
+                    control.AttachedToVisualTree += EnabledControl_AttachedToVisualHandler;
+                    control.DetachedFromVisualTree += DisabledControl_DetachedToVisualHandler;
                     if (control.IsInitialized) {
                         EnabledControl_AttachedToVisualHandler(control, null);
-                    } else {
-                        control.AttachedToVisualTree += EnabledControl_AttachedToVisualHandler;                        
-                    }
+                    } 
                 }
             } else {
                 DisabledControl_DetachedToVisualHandler(element, null);
@@ -185,20 +197,17 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #endregion
+
         #region Control Event Handlers
-        
+
         private static void EnabledControl_AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
             if (s is Control control) {
                 if (control is Button b && GetLeftPressCommand(control) is ICommand leftPressCommand) {
                     // NOTE pointerpress is swallowed by button unless tunneled, may need for other controls too...
                     b.AddHandler(Button.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
                 }
-                control.DetachedFromVisualTree += DisabledControl_DetachedToVisualHandler;
                 control.AddHandler(Button.PointerPressedEvent, Control_PointerPressed, GetRoutingStrategy(control));
-                
-                if (e == null) {
-                    control.AttachedToVisualTree += EnabledControl_AttachedToVisualHandler;
-                }
             }
         }
 
@@ -214,8 +223,6 @@ namespace MonkeyPaste.Avalonia {
 
         private static void Control_PointerPressed(object sender, PointerPressedEventArgs e) {
             if(sender is Control control) {
-
-                e.Handled = true;
                 ICommand cmd = null;
                 object param = null;
                 if(e.IsLeftPress(control)) {
@@ -230,8 +237,9 @@ namespace MonkeyPaste.Avalonia {
                     cmd = GetRightPressCommand(control);
                     param = GetRightPressCommandParameter(control);
                 }
-                if (cmd != null) {
+                if (cmd != null && cmd.CanExecute(param)) {
                    cmd.Execute(param);
+                   e.Handled = GetIsPressEventHandled(control);
                 }
             }
         }

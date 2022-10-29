@@ -6,7 +6,7 @@ using System.Text;
 
 namespace MonkeyPaste.Common {
     public abstract class MpJsonObject : MpIJsonObject, MpIJsonBase64Object {
-        public static T DeserializeObject<T>(object obj) where T: class{
+        public static T DeserializeObject<T>(object obj) where T: new(){
             if(obj is string objStr) {
                 try {
                     return JsonConvert.DeserializeObject<T>(objStr);
@@ -16,10 +16,10 @@ namespace MonkeyPaste.Common {
                 }
 
             }
-            return null;
+            return new T();
         }
 
-        public static T DeserializeBase64Object<T>(object obj) where T : class {
+        public static T DeserializeBase64Object<T>(object obj) where T : new() {
             if (obj is string objBase64Str) {
                 try {
                     byte[] bytes = Convert.FromBase64String(objBase64Str);
@@ -29,7 +29,7 @@ namespace MonkeyPaste.Common {
                     MpConsole.WriteTraceLine("Error deserializing base64 str: "+objBase64Str, ex);
                 }
             }
-            return null;
+            return new T();
         }
 
 

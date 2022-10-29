@@ -118,7 +118,7 @@ namespace MonkeyPaste.Avalonia {
 
         //private void DragOver(object sender, DragEventArgs e) {
         //    MpConsole.WriteLine("[DragOver] MainWindowContainerGrid: ");
-        //    e.DragEffects = DragDropEffects.None;
+        //    e.DragEffects = DragDropEffects.Default;
         //}
         private void DragLeave(object sender, RoutedEventArgs e) {
 

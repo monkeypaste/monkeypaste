@@ -60,7 +60,7 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
             if(AddedContentType == MpCopyItemType.None) {
-                // NOTE None is treated as all types
+                // NOTE Default is treated as all types
                 return true;
             }
             if(arg is MpCopyItem ci && ci.ItemType != AddedContentType) {

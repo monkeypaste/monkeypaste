@@ -80,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
 
         private async void DragOver(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragOver] TagTile: " + BindingContext);
-            // e.DragEffects = DragDropEffects.None;
+            // e.DragEffects = DragDropEffects.Default;
             MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();
             
             bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);

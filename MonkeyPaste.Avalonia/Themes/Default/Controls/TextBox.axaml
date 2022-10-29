@@ -1,0 +1,17 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+    <Styles.Resources>
+        <Thickness x:Key="TextControlThemePadding">
+            0,0,0,0
+        </Thickness>
+        <x:Double x:Key="TextControlThemeMinHeight">
+            0
+        </x:Double>
+    </Styles.Resources>
+    <Style Selector="TextBox">
+        <Setter Property="FontFamily"
+                Value="Helvetica" />
+    </Style>
+</Styles>

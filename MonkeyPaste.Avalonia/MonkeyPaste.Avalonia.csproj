@@ -118,6 +118,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMainWindowTitle.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\PathIcon.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBlock.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\TextBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ToolTip.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TreeViewItem.axaml" />
     <AvaloniaXaml Remove="Themes\Default\DefaultLight.axaml" />
@@ -931,6 +932,7 @@
     <AvaloniaResource Include="Themes\Default\Accents\Base.axaml">
       
     </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Default\Controls\TextBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ToolTip.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ListBoxItem.axaml">
       
@@ -980,8 +982,8 @@
     <PackageReference Include="CefNet.Avalonia" Version="105.3.22248.142" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="PropertyChanged.Fody" Version="4.0.4" PrivateAssets="All" />
-    <PackageReference Include="SharpHook" Version="3.1.1" />
+    <PackageReference Include="PropertyChanged.Fody" Version="4.0.5" PrivateAssets="All" />
+    <PackageReference Include="SharpHook" Version="3.1.3" />
     <PackageReference Include="SkiaSharp" Version="2.88.3" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="X11" Version="1.0.6" />
@@ -1075,6 +1077,11 @@
     <AvaloniaResource Include="Assets\Cursors\hand_open.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Avalonia.DragDrop">
+      <HintPath>..\..\..\..\Desktop\DotNetExamples\Avalonia.DragDrop\src\Avalonia.DragDrop\bin\Debug\net5.0\Avalonia.DragDrop.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="call $(ProjectDir)scripts\kill_mpav_processes.bat" Condition="'$(BuildOs)' == 'WINDOWS'" />

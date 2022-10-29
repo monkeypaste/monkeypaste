@@ -48,26 +48,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-
-        //public static async Task InitAsync(List<int> doNotShowNotifications) {
-        //    await Task.Delay(1);
-        //    if(doNotShowNotifications == null) {
-        //        doNotShowNotifications = MpPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr
-        //            .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries)
-        //            .Select(x => Convert.ToInt32(x)).ToList();
-        //    }
-
-        //    if(doNotShowNotifications != null) {
-        //        DoNotShowNotificationIds = doNotShowNotifications;
-        //    }
-        //    //IsVisible = true;
-        //}
-
-        //public async Task RegisterWithWindowAsync(MpINotificationBalloonView nbv) {
-        //    await Task.Delay(1);
-        //    //_nbv = nbv;
-        //}
-
         public static async Task ShowMessageAsync(
             string title = "", 
             string msg = "", 
@@ -131,29 +111,6 @@ namespace MonkeyPaste {
                 IconSourceStr = iconSourceStr
             };
 
-            
-            //MpNotificationViewModelBase nvm;
-            //switch(layoutType) {
-            //    case MpNotificationLayoutType.None:
-            //        nvm = new MpMessageNotificationViewModel(this) {
-            //            NotificationType = notificationType,
-            //            Title = title,
-            //            Body = msg,
-            //            IconResourceKey = iconSourceStr
-            //        };
-            //        break;
-            //    default:
-            //        nvm = new MpUserActionNotificationViewModel(this) {
-            //            NotificationType = notificationType,
-            //            Title = title,
-            //            Body = msg,
-            //            FixCommand = fixCommand,
-            //            FixCommandArgs = fixCommandArgs,
-            //            IconResourceKey = iconSourceStr
-            //        };
-            //        break;
-            //}
-
             MpConsole.WriteLines(
                 $"Notification balloon set to:",
                 $"msg: '{msg}'",
@@ -163,123 +120,41 @@ namespace MonkeyPaste {
             var nvm = await CreateNotifcationViewModelAsync(nf, nf_args);
 
             MpNotificationDialogResultType result = await nvm.ShowNotificationAsync();
-            if(result != MpNotificationDialogResultType.Loading) {
-                nvm.HideNotification();
-            }
-            //Notifications.Add(nvm);
-
-            //ShowBalloon(nvm);
-
-
-            //MpNotificationDialogResultType result = MpNotificationDialogResultType.None;
-            //if(nvm is MpMessageNotificationViewModel) {
-            //    if (maxShowTimeMs > 0) {
-            //        DateTime startTime = DateTime.Now;
-            //        while (DateTime.Now - startTime <= TimeSpan.FromMilliseconds(maxShowTimeMs)) {
-            //            await Task.Delay(100);
-
-            //            while (nvm.IsHovering) {
-            //                await Task.Delay(100);
-            //            }
-            //        }
-            //    }
-            //} else if(nvm is MpUserActionNotificationViewModel uanvm) {
-            //    while (uanvm.DialogResult == MpNotificationDialogResultType.None) {
-            //        await Task.Delay(100);
-            //    }
-            //    if (uanvm.DialogResult == MpNotificationDialogResultType.Retry) {
-            //        retryAction?.Invoke(retryActionObj);
-            //    }
-            //}
-
-            //RemoveNotificationCommand.Execute(nvm);
             return result;
         }
-
-        //public async Task BeginLoaderAsync(MpIProgressLoader loader) {
-        //    if (DoNotShowNotificationIds.Contains((int)loader.DialogType)) {
-        //        MpConsole.WriteTraceLine($"Notification: {loader.DialogType.ToString()} marked as hidden");
-        //        return;
-        //    }
-        //    var lnf = new MpNotificationFormat() { NotificationType = MpNotificationType.Loader };
-
-        //    var lvm = await CreateNotifcationViewModelAsync(lnf,loader); 
-        //    Notifications.Add(lvm);
-
-        //    //OnPropertyChanged(nameof(CurrentNotificationViewModel));
-
-        //    ShowBalloon(lvm);
-
-        //    // await Task.Delay(100);
-        //    // ShowMessageAsync("Test title", "Test Message", 2000, MpNotificationType.Message).FireAndForgetSafeAsync(this);
-        //}
-
-        //public void FinishLoading() {
-        //    var lvm = Notifications.FirstOrDefault(x => x is MpLoaderNotificationViewModel);
-        //    if(lvm != null) {
-        //        RemoveNotificationCommand.Execute(lvm);
-        //    }
-        //}
 
         #endregion
 
         #region Private Methods
 
         private static async Task<MpNotificationViewModelBase> CreateNotifcationViewModelAsync(MpNotificationFormat nf, object nfArgs) {
-            switch(nf.NotificationType) {
-                case MpNotificationType.Loader:
+            MpNotificationLayoutType layoutType = MpNotificationViewModelBase.GetLayoutTypeFromNotificationType(nf.NotificationType);
+            switch (layoutType) {
+                case MpNotificationLayoutType.Loader:
                     if(nfArgs is MpIProgressLoader loader) {
                         var lvm = new MpLoaderNotificationViewModel();
                         await lvm.InitializeAsync(nf,loader);
                         return lvm;
                     }
                     break;
-                case MpNotificationType.Message:
+                case MpNotificationLayoutType.Default:
+                case MpNotificationLayoutType.Warning:
+                case MpNotificationLayoutType.Error:
+                case MpNotificationLayoutType.Message:
                     var mnvm = new MpMessageNotificationViewModel();
                     await mnvm.InitializeAsync(nf, nfArgs);
                     return mnvm;
-                case MpNotificationType.None:
-                    throw new Exception("Error uknown notification type");
-                default:
+                case MpNotificationLayoutType.WarningWithOption:
+                case MpNotificationLayoutType.ErrorWithOption:
+                case MpNotificationLayoutType.ErrorAndShutdown:
                     var uanvm = new MpUserActionNotificationViewModel();
                     await uanvm.InitializeAsync(nf, nfArgs);
                     return uanvm;
             }
-            return null;
+            throw new Exception("Unhandled notification type: " + nf.NotificationType);
         }
 
 
-        #endregion
-
-        #region Commands
-
-        
-
-        //public ICommand ShiftToNextNotificationCommand => new MpCommand(
-        //     () => {                
-        //         if (CurrentNotificationViewModel == null || NotificationQueue.Count <= 1) {
-        //            if(NotificationQueue.Count > 0) {
-        //                 HideBalloon(NotificationQueue[0]);
-        //             } else {
-        //                 HideBalloon(null);
-        //             }
-        //         }
-
-        //         if (NotificationQueue.Count >= 1) {
-        //             NotificationQueue.RemoveAt(0);
-        //         }
-        //         OnPropertyChanged(nameof(CurrentNotificationViewModel));
-        //     });
-
-        //public ICommand RemoveNotificationCommand => new MpCommand<object>(
-        //    (arg) => {
-        //        var nvm = arg as MpNotificationViewModelBase;
-        //        if(nvm == null) {
-        //            return;
-        //        }
-        //        HideBalloon(nvm);
-        //        //OnPropertyChanged(nameof(CurrentNotificationViewModel));
-        //    });
         #endregion
     }
 }

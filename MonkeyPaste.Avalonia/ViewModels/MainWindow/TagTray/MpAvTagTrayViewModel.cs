@@ -282,12 +282,12 @@ namespace MonkeyPaste.Avalonia {
 
         public void ClearTagEditing() {
             Items.ForEach(x => x.IsTagNameReadOnly = true);
-            PinnedItems.ForEach(x => x.IsTagNameReadOnly = true);
+            //PinnedItems.ForEach(x => x.IsTagNameReadOnly = true);
         }
         public void ClearTagSelection() {
             ClearTagEditing();
             Items.ForEach(x => x.IsSelected = false);
-            PinnedItems.ForEach(x => x.IsSelected = false);
+            //PinnedItems.ForEach(x => x.IsSelected = false);
         }
 
         public void ResetTagSelection() {
@@ -476,8 +476,10 @@ namespace MonkeyPaste.Avalonia {
                 ClearTagSelection();
 
                 Items.ForEach(x => x.IsSelected = x.TagId == tagId);
-                PinnedItems.ForEach(x => x.IsSelected = x.TagId == tagId);
+                //PinnedItems.ForEach(x => x.IsSelected = x.TagId == tagId);
 
+                //OnPropertyChanged(nameof(Items));
+                //OnPropertyChanged(nameof(PinnedItems));
                 OnPropertyChanged(nameof(SelectedItem));
                 OnPropertyChanged(nameof(SelectedPinnedItem));
 

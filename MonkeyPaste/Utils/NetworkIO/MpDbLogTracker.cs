@@ -65,13 +65,13 @@ namespace MonkeyPaste {
         //public static MonkeyPaste.MpDbLogActionType TrackDbWrite(string query, Dictionary<string, object> args, string objGuid, string clientGuid, object obj) {
         //    if (string.IsNullOrEmpty(objGuid)) {
         //        MpConsole.WriteLine(@"Cannot track item without a guid");
-        //        return MpDbLogActionType.None;
+        //        return MpDbLogActionType.Default;
         //    }
 
         //    Guid objectGuid = Guid.Parse(objGuid);
         //    Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(MpJsonPreferenceIO.Instance.ThisDeviceGuid) : Guid.Parse(clientGuid);
         //    string tableName = "UnknownTableName";
-        //    var actionType = MonkeyPaste.MpDbLogActionType.None;
+        //    var actionType = MonkeyPaste.MpDbLogActionType.Default;
         //    var actionDateTime = DateTime.UtcNow;
 
         //    if (query.ToLower().StartsWith("insert")) {
@@ -101,7 +101,7 @@ namespace MonkeyPaste {
         //        var alteredColumnNameValueLookUp = (obj as MonkeyPaste.MpISyncableDbObject).DbDiff(oldRow);
         //        if (alteredColumnNameValueLookUp.Count == 0) {
         //            //since no data is altered return false to not write to db or change log
-        //            return MonkeyPaste.MpDbLogActionType.None;
+        //            return MonkeyPaste.MpDbLogActionType.Default;
         //        }
         //        foreach (var kvp in alteredColumnNameValueLookUp) {
         //            var newLog = new MpDbLog(objectGuid, tableName, kvp.Key, kvp.Value.ToString(), actionType, actionDateTime, sourceClientGuid);

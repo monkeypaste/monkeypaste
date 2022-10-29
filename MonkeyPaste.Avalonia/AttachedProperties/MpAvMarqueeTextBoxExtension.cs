@@ -24,6 +24,7 @@ namespace MonkeyPaste.Avalonia {
     public static class MpAvMarqueeTextBoxExtension {
         static MpAvMarqueeTextBoxExtension() {
             IsEnabledProperty.Changed.AddClassHandler<TextBox>((x, y) => HandleIsEnabledChanged(x, y));
+            ForegroundBrushProperty.Changed.AddClassHandler<TextBox>((x, y) => HandleForegroundBrushChanged(x, y));
         }
         #region Properties
 
@@ -104,7 +105,11 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaProperty.RegisterAttached<object, TextBox, IBrush>(
                 "ForegroundBrush",
                 Brushes.White);
-
+        private static void HandleForegroundBrushChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+            if(element is TextBox textbox) {
+                Init(textbox);
+            }
+        }
         #endregion
 
         #region DropShadowBrush AvaloniaProperty

@@ -816,7 +816,7 @@ namespace MonkeyPaste.Avalonia {
         protected async Task ShowValidationNotification() {
             //bool wasBusy = IsBusy;
             //IsBusy = true;
-            //MpNotificationDialogResultType userAction = MpNotificationDialogResultType.None;
+            //MpNotificationDialogResultType userAction = MpNotificationDialogResultType.Default;
 
             //await Dispatcher.UIThread.InvokeAsync(async () => {
             //    userAction = await MpNotificationBuilder.Instance.ShowUserAction(

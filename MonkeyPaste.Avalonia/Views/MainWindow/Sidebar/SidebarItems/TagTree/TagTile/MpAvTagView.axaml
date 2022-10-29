@@ -19,6 +19,7 @@
           local:MpAvMenuExtension.SelectOnRightClick="False"
           local:MpAvMenuExtension.IsOpen="{Binding IsContextMenuOpened, Mode=TwoWay}"
           local:MpAvPointerPressCommandExtension.IsEnabled="True"
+          local:MpAvPointerPressCommandExtension.RoutingStrategy="Tunnel"
           local:MpAvPointerPressCommandExtension.LeftPressCommand="{Binding SelectTagCommand}"
           local:MpAvPointerPressCommandExtension.DoubleLeftPressCommand="{Binding RenameTagCommand}"
           Cursor="Hand"
@@ -73,6 +74,7 @@
                                  local:MpAvMarqueeTextBoxExtension.CancelEditCommand="{Binding CancelRenameTagCommand}"
                                  local:MpAvMarqueeTextBoxExtension.FinishEditCommand="{Binding FinishRenameTagCommand}"
                                  local:MpAvMarqueeTextBoxExtension.IsReadOnly="{Binding IsTagNameReadOnly, Mode=TwoWay}"
+                                 local:MpAvMarqueeTextBoxExtension.ForegroundBrush="{Binding TagTextHexColor}"
                                  local:MpAvMarqueeTextBoxExtension.Margin="0,2.5,0,0"
                                  Background="White"
                                  Foreground="Black"
@@ -84,33 +86,30 @@
                                  VerticalAlignment="Center"
                                  IsReadOnly="{Binding IsTagNameReadOnly, Mode=OneWay}"
                                  FontSize="16"
-                                 Text="{Binding TagName, Mode=TwoWay}">
-
-                            <TextBox.Resources>
-                                <Thickness x:Key="TextControlThemePadding">
-                                    0,0,0,0
-                                </Thickness>
-                                <x:Double x:Key="TextControlThemeMinHeight">
-                                    0
-                                </x:Double>
-                            </TextBox.Resources>
-                        </TextBox>
+                                 Text="{Binding TagName, Mode=TwoWay}" />
                     </Grid>
                 </Grid>
             </StackPanel>
         </local:MpAvClipBorder>
 
         <Border Background="Red"
-                MinWidth="10"
-                Height="10"
+                ClipToBounds="False"
+                MinWidth="15"
+                Height="15"
+                CornerRadius="7.5"
                 BorderThickness="1"
                 BorderBrush="White"
                 VerticalAlignment="Top"
                 HorizontalAlignment="Left"
-                IsVisible="{Binding CopyItemIdsNeedingView, Converter={StaticResource CollectionIsNotEmptyToBoolConverter}}">
+                IsVisible="{Binding BadgeCount, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}">
             <TextBlock Foreground="White"
-                       FontSize="9"
-                       Text="{Binding CopyItemIdsNeedingView, Converter={StaticResource CollectionCountToStringConverter}}" />
+                       FontSize="10"
+                       MinWidth="15"
+                       Height="15"
+                       TextAlignment="Center"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Text="{Binding BadgeCount}" />
         </Border>
     </Grid>
 </local:MpAvUserControl>

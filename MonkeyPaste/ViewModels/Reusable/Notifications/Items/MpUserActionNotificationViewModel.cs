@@ -20,7 +20,7 @@ namespace MonkeyPaste {
 
         public bool IsFixing { get; set; } = false;
 
-        public bool CanFix => FixCommand != null && FixCommandArgs != null;
+        public bool CanFix => FixCommand != null && FixCommand.CanExecute(FixCommandArgs);
 
         public bool ShowIgnoreButton { get; set; }
         public bool ShowFixButton => CanFix && !IsFixing;
@@ -105,26 +105,49 @@ namespace MonkeyPaste {
             while (DialogResult == MpNotificationDialogResultType.None) {
                 await Task.Delay(100);
             }
-            if (DialogResult == MpNotificationDialogResultType.Retry) {
-                _retryAction?.Invoke(_retryActionObj);
+            if(DialogResult == MpNotificationDialogResultType.Fix) {
+                // if fix is result, fix button becomes retry 
+                // either wait for retry to become result or immediatly trigger
+                // retry where caller should block return until retry invoked (isFixing becomes false)
+                _ = Task.Run(async () => {
+                        while (IsFixing) {
+                            await Task.Delay(100);
+                        }
+                        HideNotification();
+                        _retryAction?.Invoke(_retryActionObj);
+                });
             } else {
                 HideNotification();
             }
+
+            //if (DialogResult == MpNotificationDialogResultType.Retry) {
+            //    _retryAction?.Invoke(_retryActionObj);
+            //} else if(DialogResult != MpNotificationDialogResultType.Fix) {
+            //    HideNotification();
+            //}
+            
             return DialogResult;
         }
 
         #endregion
 
         #region Commands
-
         public ICommand IgnoreCommand => new MpCommand(
             () => {
-                DialogResult = MpNotificationDialogResultType.Ignore;                
+                DialogResult = MpNotificationDialogResultType.Ignore;
             });
+
+        public ICommand FixWrapperCommand => new MpCommand(
+            () => {
+                IsFixing = true;
+                FixCommand.Execute(FixCommandArgs);
+                DialogResult = MpNotificationDialogResultType.Fix;
+            },()=>CanFix);
 
         public ICommand RetryCommand => new MpCommand(
             () => {
-                DialogResult = MpNotificationDialogResultType.Retry;
+                IsFixing = false;
+                //DialogResult = MpNotificationDialogResultType.Retry;
             });
 
 

@@ -99,7 +99,9 @@ namespace MonkeyPaste.Avalonia {
                 //if(SelectedItem.IsTableSelected) {
                 //    return SelectedItem.TableViewModel.ContextMenuViewModel;
                 //}
-
+                if(MpAvTagTrayViewModel.Instance.IsAnyBusy) {
+                    Debugger.Break();
+                }
                 var tagItems = MpAvTagTrayViewModel.Instance.AllTagViewModel.ContentMenuItemViewModel.SubItems;
                 return new MpMenuItemViewModel() {
                     SubItems = new List<MpMenuItemViewModel>() {
@@ -322,8 +324,8 @@ namespace MonkeyPaste.Avalonia {
                         MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(SelectedItem),
                         new MpMenuItemViewModel() {IsSeparator = true},
                         new MpMenuItemViewModel() {
-                            Header = @"Pin To _Collection",
-                            AltNavIdx = 7,
+                            Header = @"Collections",
+                            AltNavIdx = 0,
                             IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("PinToCollectionImage") as string,
                             SubItems = tagItems
                         }
@@ -2308,6 +2310,7 @@ namespace MonkeyPaste.Avalonia {
                 bool is_part_of_query = 
                     sttvm
                     .SelfAndAllDescendants
+                    .Cast<MpAvTagTileViewModel>()
                     .Select(x => x.TagId)
                     .Any(x => x == cit.TagId);
 
@@ -2511,11 +2514,11 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            bool isDup = newCopyItem.Id < 0;
+            bool isDup = newCopyItem.WasDupOnCreate;
             if(isDup) {
                 MpConsole.WriteLine("Duplicate copy item detected, item: " + newCopyItem);
             }
-            newCopyItem.Id = isDup ? -newCopyItem.Id : newCopyItem.Id;
+            //newCopyItem.Id = isDup ? -newCopyItem.Id : newCopyItem.Id;
 
             if (IsAppendMode || IsAppendLineMode) {
                 if (isDup) {
@@ -2609,7 +2612,7 @@ namespace MonkeyPaste.Avalonia {
 
                 var dup_ctvm = AllItems.FirstOrDefault(x => x.CopyItemId == newCopyItem.Id);
                 if(dup_ctvm == null) {
-                    // duplicate is not in the current query page
+                    // duplicate is not in the current query page or pin tray
                     int dup_query_offset_idx = MpDataModelProvider.AvailableQueryCopyItemIds.IndexOf(newCopyItem.Id);
                     if(dup_query_offset_idx < 0) {
                         // duplicate is not in the current query at all so treat like a new model (pin tray or appeneded
@@ -2656,7 +2659,7 @@ namespace MonkeyPaste.Avalonia {
                     } else {
                         // dup is in query page 
                         // to stay out of ui flip id back to negative and AddNewCommand will notice (or Append does abs val) and call toggle pin on window open
-                        newCopyItem.Id *= -1;
+                        //newCopyItem.Id *= -1;
                         _newModels.Add(newCopyItem);
                     }
                 }
@@ -2923,9 +2926,9 @@ namespace MonkeyPaste.Avalonia {
                 for (int i = 0; i < _newModels.Count; i++) {
                     var ci = _newModels[i];
                     MpAvClipTileViewModel nctvm = null;
-                    if(ci.Id < 0) {
+                    if(ci.WasDupOnCreate) {
                         // special case for dup in current query page, grab tile instead of create
-                        nctvm = Items.FirstOrDefault(x => x.CopyItemId == -ci.Id);
+                        nctvm = Items.FirstOrDefault(x => x.CopyItemId == ci.Id);
                         if(nctvm == null) {
                             // something went wrong...will jsut creat instead
                             Debugger.Break();
@@ -3048,7 +3051,9 @@ namespace MonkeyPaste.Avalonia {
 
                     await MpDataModelProvider.QueryForTotalCountAsync(
                         PinnedItems.Select(x=>x.CopyItemId),
-                        MpAvTagTrayViewModel.Instance.SelectedItem.SelfAndAllDescendants.Select(x=>x.TagId));
+                        MpAvTagTrayViewModel.Instance.SelectedItem
+                        .SelfAndAllDescendants
+                        .Cast<MpAvTagTileViewModel>().Select(x=>x.TagId));
 
                     Items.Clear();
                     MpAvPersistentClipTilePropertiesHelper.ClearPersistentWidths();

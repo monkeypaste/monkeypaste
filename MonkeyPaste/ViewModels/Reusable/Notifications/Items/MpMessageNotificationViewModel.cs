@@ -22,6 +22,7 @@ namespace MonkeyPaste {
                         }
                     }
                 }
+                HideNotification();
             }
             return MpNotificationDialogResultType.None;
         }

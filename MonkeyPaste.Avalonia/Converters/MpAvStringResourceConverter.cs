@@ -41,6 +41,7 @@ namespace MonkeyPaste.Avalonia {
 
             var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
             var asset = assets.Open(uri);
+            asset.Seek(0, SeekOrigin.Begin);
 
             if (targetType != null && (targetType == typeof(Geometry) ||
                 targetType.IsSubclassOf(typeof(Geometry)))) {

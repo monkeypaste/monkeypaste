@@ -77,69 +77,71 @@ namespace MonkeyPaste {
         }
 
         private static async Task<MpPluginFormat> LoadPluginAsync(string manifestPath) {
+            bool needsFixing = false;
+            MpPluginFormat plugin = null;
             string manifestStr = MpFileIo.ReadTextFromFile(manifestPath);
             if (string.IsNullOrEmpty(manifestStr)) {
                 // Empty or io error on manifest file read
-
-                var userAction = await MpNotificationBuilder.ShowNotificationAsync(
+                var manifest_not_found_result = await MpNotificationBuilder.ShowNotificationAsync(
                     notificationType: MpNotificationType.InvalidPlugin,
-                    msg: $"Plugin manifest not found in '{manifestPath}'", 
-                    retryAction: async (args) => { await LoadPluginAsync(manifestPath); },
+                    msg: $"Plugin manifest not found in '{manifestPath}'",
+                    retryAction: (args) => {
+                        //await LoadPluginAsync(manifestPath); 
+                        needsFixing = false;
+                    },
                     fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(Path.GetDirectoryName(manifestPath))));
 
-
-                //if (userAction == MpNotificationDialogResultType.Retry) {
-                //    var retryPlugin = await LoadPlugin(manifestPath);
-                //    return retryPlugin;
-                //}
-                return null;
-            }
-            MpPluginFormat plugin;
-            try {
-                plugin = JsonConvert.DeserializeObject<MpPluginFormat>(manifestStr);
-                bool isValid = ValidatePluginManifest(plugin,manifestPath);
-            }
-            catch (Exception ex) {
-                var userAction = await MpNotificationBuilder.ShowNotificationAsync(
-                        notificationType: MpNotificationType.InvalidPlugin,
-                        msg: $"Error parsing plugin manifest '{manifestPath}': {ex.Message}",
-                        retryAction: (args) => {
-                            MpPlatformWrapper.Services.MainThreadMarshal.RunOnMainThread(() => {
-                                LoadPluginAsync(manifestPath).FireAndForgetSafeAsync();
-                            });
-                        },
-                        fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(Path.GetDirectoryName(manifestPath))));
-
-                //if (userAction == MpNotificationDialogResultType.Retry) {
-                //    var retryPlugin = await LoadPlugin(manifestPath);
-                //    return retryPlugin;
-                //}
-                return null;
-            }
-            if (plugin != null) {
-                try {
-                    plugin.Component = GetPluginComponent(manifestPath, plugin);
-                    plugin.RootDirectory = Path.GetDirectoryName(manifestPath);
-                }
-                catch (Exception ex) {
-                    var userAction = await MpNotificationBuilder.ShowNotificationAsync(
-                            notificationType: MpNotificationType.InvalidPlugin,
-                            msg: ex.Message,
-                            retryAction: (args) => {
-                                MpPlatformWrapper.Services.MainThreadMarshal.RunOnMainThread(() => {
-                                    LoadPluginAsync(manifestPath).FireAndForgetSafeAsync();
-                                });
-                            },
-                            fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(Path.GetDirectoryName(manifestPath))));
-
-
-                    //if (userAction == MpNotificationDialogResultType.Retry) {
-                    //    var retryPlugin = await LoadPlugin(manifestPath);
-                    //    return retryPlugin;
-                    //}
+               
+                if(manifest_not_found_result == MpNotificationDialogResultType.Ignore) {
                     return null;
                 }
+                needsFixing = true;
+            }
+            if(!needsFixing) {
+                try {
+                    plugin = JsonConvert.DeserializeObject<MpPluginFormat>(manifestStr);
+                    bool isValid = ValidatePluginManifest(plugin, manifestPath);
+                }
+                catch (Exception ex) {
+                    var invalid_or_malformed_json_result = await MpNotificationBuilder.ShowNotificationAsync(
+                            notificationType: MpNotificationType.InvalidPlugin,
+                            msg: $"Error parsing plugin manifest '{manifestPath}': {ex.Message}",
+                            retryAction: (args) => {
+                                needsFixing = false;
+                            },
+                            fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(manifestPath)));
+                    if (invalid_or_malformed_json_result == MpNotificationDialogResultType.Ignore) {
+                        return null;
+                    }
+                    needsFixing = true;
+                }
 
+                if (!needsFixing) {
+                    try {
+                        plugin.Component = GetPluginComponent(manifestPath, plugin);
+                        plugin.RootDirectory = Path.GetDirectoryName(manifestPath);
+                    }
+                    catch (Exception ex) {
+                        var ivalid_plugin_component_result = await MpNotificationBuilder.ShowNotificationAsync(
+                                notificationType: MpNotificationType.InvalidPlugin,
+                                msg: ex.Message,
+                                retryAction: (args) => {
+                                    needsFixing = false;
+                                },
+                                fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(manifestPath)));
+                        if (ivalid_plugin_component_result == MpNotificationDialogResultType.Ignore) {
+                            return null;
+                        }
+                        needsFixing = true;
+                    }
+                }
+            }
+            
+            if(needsFixing) {
+                while (needsFixing) {
+                    await Task.Delay(100);
+                }
+                return await LoadPluginAsync(manifestPath);
             }
             return plugin;
         }

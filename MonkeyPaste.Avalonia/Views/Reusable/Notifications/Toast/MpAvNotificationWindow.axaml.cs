@@ -77,6 +77,11 @@ namespace MonkeyPaste.Avalonia {
                 // somethigns wrong
                 Debugger.Break();
             } 
+            if(nvmb is MpUserActionNotificationViewModel uanvm) {
+                var uaw = _windows.FirstOrDefault(x => x.DataContext == uanvm);
+                uaw.Close();
+                return;
+            }
             // this triggers fade out which ends w/ IsVisible=false
             nvmb.IsClosing = true;
         }
@@ -97,7 +102,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void HideWindow(object dc) {
-            _HideWindow(dc);
+            Dispatcher.UIThread.Post(() => {
+                _HideWindow(dc);
+            });
         }
 
         public void SetDataContext(object dataContext) {
@@ -133,6 +140,9 @@ namespace MonkeyPaste.Avalonia {
             var ncc = this.FindControl<Control>("NotificationContentControl");
             ncc.DataContextChanged += ContentControl_DataContextChanged;
 
+            var cb = this.FindControl<Button>("CloseButton");
+            cb.Click += CloseButton_Click;
+
             this.GetObservable(Window.BoundsProperty).Subscribe(value => MpAvNotificationWindow_BoundsChangedHandler());
             this.GetObservable(Window.IsVisibleProperty).Subscribe(value => MpAvNotificationWindow_IsVisibleChangedHandler());
         }
@@ -166,7 +176,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void CloseButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-            HideWindow(DataContext as MpNotificationViewModelBase);
+            //HideWindow(DataContext as MpNotificationViewModelBase);
+            this.GetVisualAncestor<Window>().Close();
         }
 
         private void MpAvNotificationWindow_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {

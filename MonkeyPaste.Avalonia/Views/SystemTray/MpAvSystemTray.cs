@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
             var rootIcon = new TrayIcon() {
                 Icon = new WindowIcon(
                     MpAvStringResourceConverter.Instance.Convert(
-                        MpPlatformWrapper.Services.PlatformResource.GetResource("AppImage"), null, null, null) as Bitmap),
+                        MpPlatformWrapper.Services.PlatformResource.GetResource("AppTrayIcon"), null, null, null) as Bitmap),
                 Command = MpAvMainWindowViewModel.Instance.ShowWindowCommand,
                 ToolTipText = MpPrefViewModel.Instance.ApplicationName,
                 Menu = new NativeMenu()

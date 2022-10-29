@@ -157,7 +157,7 @@ namespace MonkeyPaste.Common {
                 return string.Format($"{(totalWeeks == 1 ? "Last":totalWeeks.ToString())} week{(totalWeeks == 1 ? string.Empty : "s ago")}");
             }
             if (totalDays >= 1) {
-                return string.Format($"{(totalDays == 1 ? "Yesterday":totalDays.ToString())} day{(totalDays == 1 ? string.Empty : "s ago")}");
+                return string.Format($"{(totalDays == 1 ? "Yesterday":totalDays.ToString())} {(totalDays == 1 ? string.Empty : "days ago")}");
             }
             if (totalHours >= 1) {
                 return string.Format($"{totalHours} hour{(totalHours == 1 ? string.Empty : "s")} ago");

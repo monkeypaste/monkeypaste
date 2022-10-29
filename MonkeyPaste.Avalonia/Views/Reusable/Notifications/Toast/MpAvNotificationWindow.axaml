@@ -116,7 +116,7 @@
                    Grid.Column="0"
                    Width="72"
                    Height="72"
-                   IsVisible="{Binding IconSourceStr, Converter={StaticResource IsNotNullToBoolConverter}}"
+                   IsVisible="{Binding IconSourceStr, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
                    Source="{Binding IconSourceStr, Converter={StaticResource IconSourceObjToBitmapConverter}}"
                    Stretch="Fill"
                    HorizontalAlignment="Left"
@@ -145,7 +145,6 @@
                     VerticalAlignment="Top"
                     Margin="5"
                     Background="Transparent"
-                    Click="CloseButton_Click"
                     BorderThickness="0">
                 <Image Width="15"
                        Height="15"

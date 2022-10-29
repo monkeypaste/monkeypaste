@@ -46,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
 
         private async void DragOver(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragOver] PinTrayListBox: ");
-            // e.DragEffects = DragDropEffects.None;
+            // e.DragEffects = DragDropEffects.Default;
             MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();
 
             var ptr_mp = e.GetPosition(sender as Control).ToPortablePoint();

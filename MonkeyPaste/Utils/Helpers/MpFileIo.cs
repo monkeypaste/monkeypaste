@@ -14,13 +14,27 @@ using System.Diagnostics;
 
 namespace MonkeyPaste {
     public static class MpFileIo {
-        public static void OpenFileBrowser(string path, string browserFileName = "explorer.exe") {
+        public static void OpenFileBrowser(string path, string browserFileName = null) {
             if(!path.IsFileOrDirectory()) {
                 MpPlatformWrapper.Services.NativeMessageBox.ShowOkCancelMessageBox($"Error", $"{path} not found");
                 path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
             }
+
+            if(string.IsNullOrEmpty(browserFileName)) {
+                if(MpPlatformWrapper.Services.OsInfo.OsType == MpUserDeviceType.Windows) {
+                    browserFileName = "explorer.exe";
+                } else {
+                    throw new Exception("need file browser paths for non-windows os here");
+                }
+            }
+
+            string args = path;
+            if(File.Exists(path)) {
+                // when path is file and not folder add select arg to process start
+                args = string.Format("/select,\"{0}\"", path);
+            }
             ProcessStartInfo startInfo = new ProcessStartInfo {
-                Arguments = path,
+                Arguments = args,
                 FileName = browserFileName
             };
 

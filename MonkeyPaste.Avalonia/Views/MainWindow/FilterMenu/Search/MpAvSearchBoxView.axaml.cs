@@ -36,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async void DragOver(object sender, DragEventArgs e) {
-            //e.DragEffects = DragDropEffects.None;
+            //e.DragEffects = DragDropEffects.Default;
             var formats = await e.Data.GetDataFormats_safe(_dropLock);
             if(!formats.Contains(MpPortableDataFormats.Text)) {
                 e.DragEffects = DragDropEffects.None;

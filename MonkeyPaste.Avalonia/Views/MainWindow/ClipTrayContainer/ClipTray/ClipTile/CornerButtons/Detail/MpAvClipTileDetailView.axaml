@@ -32,19 +32,19 @@
                 <DataTemplate>
         -->
         <!--
-            IsEnabled="{Binding DetailText, Converter={StaticResource IsNotNullToBoolConverter}}"
+            IsEnabled="{Binding DetailText, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
         -->
         <!--
                     <local:MpAvClipTileDetailItemTipView DataContext="{Binding}"
-                                                      IsVisible="{Binding DetailText, Converter={StaticResource IsNotNullToBoolConverter}}" />
+                                                      IsVisible="{Binding DetailText, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>-->
         <TextBlock x:Name="ClipTile_Detail_TextBlock"
                    HorizontalAlignment="Center"
-                   VerticalAlignment="Bottom"
+                   VerticalAlignment="Bottom" 
                    Background="Transparent"
-                   Height="20"
+                   MinHeight="10"
                    MinWidth="50"
                    FontSize="10"
                    Text="{Binding SelectedItem}" />
