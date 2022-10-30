@@ -17,6 +17,8 @@ function onWindowBlur(e) {
 
 function onWindowScroll(e) {
 	updateAllSizeAndPositions();
+
+	
 }
 
 function onWindowResize(e) {

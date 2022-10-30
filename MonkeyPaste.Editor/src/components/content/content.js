@@ -26,7 +26,7 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest) {
 
 	//let contentBg_rgba = getContentBg(contentData);
 
-	enableReadOnly();
+	//enableReadOnly();
 
 	log('Editor loaded');
 
@@ -566,10 +566,13 @@ function getBlotAtDocIdx(docIdx) {
 	return null;
 }
 
-function getElementAtDocIdx(docIdx) {
+function getElementAtDocIdx(docIdx, ignoreTextNode = false) {
 	let doc_idx_blot = getBlotAtDocIdx(docIdx);
 	if (!doc_idx_blot) {
 		return getEditorElement();
+	}
+	if (ignoreTextNode && doc_idx_blot.domNode && doc_idx_blot.domNode.nodeType !== undefined && doc_idx_blot.domNode.nodeType === 3) {
+		return doc_idx_blot.domNode.parentNode;
 	}
 	return doc_idx_blot.domNode;
 }

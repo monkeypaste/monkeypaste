@@ -1,6 +1,13 @@
-﻿//#endregion
-
-//#region DOM Traversal
+﻿function parseInt_safe(obj) {
+    if (!obj) {
+        return 0;
+    }
+    let result = parseInt(obj);
+    if (isNaN(result)) {
+        return 0;
+    }
+    return result;
+}
 
 function toBase64FromJsonObj(obj) {
     let objStr = null
@@ -326,10 +333,23 @@ const delay = time => new Promise(res => setTimeout(res, time));
 
 function getElementComputedStyleProp(elm, propName) {
     let elmStyles = window.getComputedStyle(elm);
-    return elmStyles.getPropertyValue(propName);
+    return elmStyles.getPropertyValue(propName).trim();
 }
 
 function setElementComputedStyleProp(elm, propName, value) {
     elm.style.setProperty(propName, value);
+}
+
+async function readFileAsDataURL(file) {
+    let result_base64 = await new Promise((resolve) => {
+        let fileReader = new FileReader();
+        fileReader.onload = (e) => resolve(fileReader.result);
+        fileReader.readAsDataURL(file);
+    });
+
+    log('loaded file: ' + file);
+    log('data: '+result_base64); 
+
+    return result_base64;
 }
 

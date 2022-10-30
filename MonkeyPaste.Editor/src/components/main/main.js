@@ -83,6 +83,8 @@ function init_test() {
 
 		disableReadOnly();
 
+		showFindReplaceToolbar();
+
 		//getPasteButtonElement().focus({ focusVisible: true });
 		//enableFancyTextSelection();
 		//enableSubSelection();
@@ -148,6 +150,7 @@ function setState(stateObj) {
 
 function updateAllSizeAndPositions() {
 	updateTemplateToolbarSizesAndPositions();
+	updateFindReplaceToolbarSizesAndPositions();
 	updateEditorSizesAndPositions();
 	drawOverlay();
 

@@ -1,27 +1,71 @@
-﻿var DefaultCsvProps = {
+﻿// #region Globals
+
+var DefaultCsvProps = {
     ColSeparator: ',',
     RowSeparator: '\n'
 };
 
-function registerTables() {
-    var tableOptions = [];
-    var maxRows = 7;
-    var maxCols = 7;
+const MAX_TABLE_ROWS = 7;
+const MAX_TABLE_COLS = 7;
 
-    for (let r = 1; r <= maxRows; r++) {
-        for (let c = 1; c <= maxCols; c++) {
-            tableOptions.push('newtable_' + r + '_' + c);
-        }
-    }
-    return tableOptions;
-}
+// #endregion Globals
+
+// #region Life Cycle
 
 function initTable() {
     initTableToolbarButton();
     DefaultCsvProps.RowSeparator = envNewLine();
 }
 
-function getTableCsv(format,csvProps, encodeTemplates = false) {
+function initTableToolbarButton() {
+    if (!UseBetterTable) {
+        return;
+    }
+    //const addTableToolbarButton = new QuillToolbarButton({
+    //    icon: getSvgHtml('addtable')
+    //});
+
+    //addTableToolbarButton.qlFormatsEl.addEventListener('click', onAddTableToolbarButtonClick);
+    //addTableToolbarButton.attach(quill);
+
+    let addTableButton_elm = getAddTableToolbarButtonElement();
+    addClickOrKeyClickEventListener(addTableButton_elm, onAddTableToolbarButtonClick);
+
+    getAddTableToolbarLabelElement().innerHTML = getSvgHtml('addtable');
+}
+// #endregion Life Cycle
+
+// #region Getters
+
+function getAddTableToolbarButtonElement() {
+    return document.getElementById('addTableToolbarButton');
+}
+
+function getAddTableToolbarLabelElement() {
+    let ttb_elm = getAddTableToolbarButtonElement();
+    return ttb_elm.getElementsByClassName('ql-picker-label')[0];
+}
+
+function getAddTableToolbarOptionsElement() {
+    let ttb_elm = getAddTableToolbarButtonElement();
+    if (!ttb_elm) {
+        return null;
+    }
+    return ttb_elm.getElementsByClassName('ql-picker-options')[0];
+}
+
+function getAddTableOptionDataValues() {
+    var tableOptions = [];
+
+    for (let r = 1; r <= MAX_TABLE_ROWS; r++) {
+        for (let c = 1; c <= MAX_TABLE_COLS; c++) {
+            tableOptions.push('newtable_' + r + '_' + c);
+        }
+    }
+    return tableOptions;
+}
+
+function getTableCsv(format, csvProps, encodeTemplates = false) {
 
     let table = document.getElementsByClassName('quill-better-table')[0];
     if (!table) {
@@ -37,7 +81,7 @@ function getTableCsv(format,csvProps, encodeTemplates = false) {
     if (!was_enabled) {
         quill.enable(true);
         quill.update();
-	}
+    }
     let csv_output = '';
 
     for (var i = 0; i < rows.length; i++) {
@@ -47,13 +91,13 @@ function getTableCsv(format,csvProps, encodeTemplates = false) {
         for (var j = 0; j < cells.length; j++) {
             if (j > 0) {
                 row_str += csvProps.ColSeparator;
-			}
+            }
             let cell = cells[j];
             if (format == 'HTML Format') {
                 row_str += cell.innerHTML;
             } else if (format == 'Text') {
                 let cell_range = getElementDocRange(cell);
-                
+
                 let cell_text = getText(cell_range, encodeTemplates).trim(); // remove new line ending
                 row_str += cell_text;
             }
@@ -63,49 +107,98 @@ function getTableCsv(format,csvProps, encodeTemplates = false) {
     }
     if (!was_enabled) {
         quill.enable(false);
-	}
+    }
     return csv_output;
 }
+// #endregion Getters
 
-function initTableToolbarButton() {
-    if (!UseBetterTable) {
+// #region Setters
+
+// #endregion Setters
+
+// #region State
+
+function isAddTableValid() {
+    return true;
+}
+
+// #endregion State
+
+// #region Actions
+
+function hideAddTableContextMenu() {
+    getAddTableToolbarButtonElement().classList.remove('ql-expanded');
+    getAddTableToolbarOptionsElement().classList.add('hidden');
+}
+
+function showAddTableContextMenu() {
+    getAddTableToolbarButtonElement().classList.add('ql-expanded');
+
+    let addTableOptions_elm = getAddTableToolbarOptionsElement();
+    getAddTableToolbarOptionsElement().classList.remove('hidden');
+    
+    addTableOptions_elm.innerHTML = '';
+
+    let table_options = getAddTableOptionDataValues();
+    for (var i = 0; i < table_options.length; i++) {
+        //<span tabindex="0" role="button" class="ql-picker-item" data-value="newtable_1_1"></span>
+        let opt_span = document.createElement('SPAN');
+        opt_span.tabIndex = i;
+        opt_span.role = 'button';
+        opt_span.classList.add('ql-picker-item');
+        opt_span.classList.add('add-table-item');
+        opt_span.setAttribute('data-value', table_options[i]);
+        addTableOptions_elm.appendChild(opt_span);
+
+        opt_span.addEventListener('mouseover', onAddTableOptionMouseOver);
+        addClickOrKeyClickEventListener(opt_span, onAddTableOptionClick);
+    }
+}
+// #endregion Actions
+
+// #region Event Handlers
+
+function onAddTableOptionMouseOver(e) {
+    let data_val = e.currentTarget.getAttribute('data-value');
+    let over_row = parseInt_safe(data_val.split('_')[1]);
+    let over_col = parseInt_safe(data_val.split('_')[2]);
+
+    for (let r = 1; r <= MAX_TABLE_ROWS; r++) {
+        for (let c = 1; c <= MAX_TABLE_COLS; c++) {
+            let dataVal = `newtable_${r}_${c}`;
+            let opt_elm = Array.from(getAddTableToolbarOptionsElement().children).find(x => x.getAttribute('data-value') == dataVal);
+
+            let is_included = r <= over_row && c <= over_col;
+            if (is_included) {
+                opt_elm.classList.add('add-table-item-included');
+            } else {
+                opt_elm.classList.remove('add-table-item-included');
+			}
+        }
+    }
+}
+
+function onAddTableOptionClick(e) {
+    let data_val = e.currentTarget.getAttribute('data-value');
+    let row_count = parseInt_safe(data_val.split('_')[1]);
+    let col_count = parseInt_safe(data_val.split('_')[2]);
+
+    let better_table_mod = quill.getModule('better-table');
+    better_table_mod.insertTable(row_count, col_count);
+
+    hideAddTableContextMenu();
+}
+
+function onAddTableToolbarButtonClick(e) {
+    if (!isAddTableValid()) {
         return;
     }
 
-    let editorDiv = $("#editor");
-
-    var curTableIconSpan = editorDiv.parent().find('span.ql-Table-Input.ql-picker')[0].childNodes[0];
-    curTableIconSpan.innerHTML = "<svg style=\"right: 4px;\" viewbox=\"0 0 18 18\"> <rect class=ql-stroke height=12 width=12 x=3 y=3></rect> <rect class=ql-fill height=2 width=3 x=5 y=5></rect> <rect class=ql-fill height=2 width=4 x=9 y=5></rect> <g class=\"ql-fill ql-transparent\"> <rect height=2 width=3 x=5 y=8></rect> <rect height=2 width=4 x=9 y=8></rect> <rect height=2 width=3 x=5 y=11></rect> <rect height=2 width=4 x=9 y=11></rect> </g> </svg>";
-    var curTableCellIconSpans = $(curTableIconSpan.parentNode.childNodes[1]).children();
-    curTableCellIconSpans.click((function () {
-        var curQuillBetterTable = quill.getModule('better-table');
-        var curQuillToolbar = quill.getModule('toolbar');
-        return function () {
-            var curRowIndex = Number(this.dataset.value.substring(9).split('_')[0]);
-            var curColIndex = Number(this.dataset.value.substring(9).split('_')[1]);
-            curQuillBetterTable.insertTable(curRowIndex, curColIndex);
-            // The following two lines have been added, thinking that it would fix the issue 
-            // of keeping the icon in blue color.
-            // However Quill keeps adding the classes back, so this fix doesn't work.
-            $(this).parent().parent().find(".ql-selected").removeClass("ql-selected");
-            $(this).parent().parent().find(".ql-active").removeClass("ql-active");
-        };
-    })());
-    curTableCellIconSpans.hover(function () {
-        var curRowIndex = Number(this.dataset.value.substring(9).split('_')[0]);
-        var curColIndex = Number(this.dataset.value.substring(9).split('_')[1]);
-        $(this).parent().children().each((function () {
-            var curRowIndex1 = curRowIndex;
-            var curColIndex1 = curColIndex;
-            return function () {
-                var curRowIndex2 = Number(this.dataset.value.substring(9).split('_')[0]);
-                var curColIndex2 = Number(this.dataset.value.substring(9).split('_')[1]);
-                if (curRowIndex2 <= curRowIndex1 && curColIndex2 <= curColIndex1) {
-                    $(this).addClass("ql-picker-item-highlight");
-                }
-            };
-        })());
-    }, function () {
-        $(this).parent().children().removeClass("ql-picker-item-highlight");
-    });
+    showAddTableContextMenu();
 }
+// #endregion Event Handlers
+
+
+
+
+

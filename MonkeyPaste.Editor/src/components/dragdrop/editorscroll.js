@@ -1,4 +1,5 @@
-﻿var AutoScrolledOffset = null;
+﻿// #region Globals
+var AutoScrolledOffset = null;
 
 var AutoScrollVelX = 0;
 var AutoScrollVelY = 0;
@@ -9,6 +10,34 @@ var AutoScrollBaseVelocity = 25;
 const MIN_AUTO_SCROLL_DIST = 30;
 
 var AutoScrollInterval = null;
+// #endregion Globals
+
+// #region Life Cycle
+
+function initEditorScroll() {
+    getEditorContainerElement().addEventListener('scroll', onEditorContainerScroll);
+}
+// #endregion Life Cycle
+
+// #region Getters
+
+// #endregion Getters
+
+// #region Setters
+
+// #endregion Setters
+
+// #region State
+
+function isAutoScrolling() {
+    if (!AutoScrollInterval || (AutoScrollVelX == 0 && AutoScrollVelX == 0)) {
+        return false;
+    }
+    return AutoScrollVelX != 0 || AutoScrollVelY != 0;
+}
+// #endregion State
+
+// #region Actions
 
 function startAutoScroll() {
     //AutoScrolledOffset
@@ -57,6 +86,46 @@ function stopAutoScroll(isLeave) {
     }
 }
 
+function scrollToDocRange(docRange, target) {
+    target = target ? target : getEditorContainerElement();
+    if (!docRange) {
+        return;
+    }
+    let range_rects = getRangeRects(docRange);
+    if (!range_rects || range_rects.length == 0) {
+        scrollToHome();
+        return;
+    }
+    scrollToOffset(range_rects[0], target);
+}
+
+function scrollEditorTop(new_top) {
+    let eh = getEditorContainerElement().getBoundingClientRect().height;
+    if (new_top > eh) {
+        getEditorContainerElement().scrollTop = new_top - eh;
+    } else {
+        getEditorContainerElement().scrollTop = 0;
+    }
+}
+function scrollToHome(target) {
+    if (!target) {
+        // maybe default to editor here?
+        return;
+    }
+    scrollToOffset(null);
+}
+
+function scrollToOffset(offset, target) {
+    target = !target ? document.body : target;
+    offset = !offset ? { left: 0, top: 0 } : offset;
+
+    target.scrollLeft = offset.left;
+    target.scrollTop = offset.top;
+}
+// #endregion Actions
+
+// #region Event Handlers
+
 function onAutoScrollTick(e) {
     if (WindowMouseLoc == null) {
         log('auto-scroll reject, mp is null');
@@ -82,39 +151,12 @@ function onAutoScrollTick(e) {
         AutoScrollVelX += AutoScrollAccumlator;
     }
 }
-
-function isAutoScrolling() {
-    if (!AutoScrollInterval || (AutoScrollVelX == 0 && AutoScrollVelX == 0)) {
-        return false;
-    }
-    return AutoScrollVelX != 0 || AutoScrollVelY != 0;
+function onEditorContainerScroll(e) {
+ //   if (isShowingFindReplaceToolbar()) {
+ //       updateFindReplaceRangeRects();
+ //   } else if (BlurredSelectionRects) {
+ //       // TODO update these guys
+    //}
+    drawOverlay();
 }
-
-function scrollToDocRange(docRange, target) {
-    if (!docRange || !target) {
-        return;
-	}
-    let range_rects = getRangeRects(docRange);
-    if (!range_rects || range_rects.length == 0) {
-        scrollToHome();
-        return;
-    }
-    scrollToOffset(range_rects[0], target);
-}
-
-
-function scrollToHome(target) {
-    if (!target) {
-        // maybe default to editor here?
-        return;
-    }
-    scrollToOffset(null);
-}
-
-function scrollToOffset(offset, target) {
-    target = !target ? document.body : target;
-    offset = !offset ? { left: 0, top: 0 } : offset;
-
-    target.scrollLeft = offset.left;
-    target.scrollTop = offset.top;
-}
+// #endregion Event Handlers

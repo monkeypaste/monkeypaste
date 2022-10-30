@@ -5,49 +5,46 @@
 // #region Life Cycle
 
 function initEditorToolbarQuillOptions(quillOptions) {
-	var node = document.createElement("style");
-	node.innerHTML = registerFontStyles();
-	document.body.appendChild(node);
-
-	let fonts = registerFontFamilys();
+	//initFontFamilySelector();
+	initFontFamilySelector();
 	let sizes = registerFontSizes();
 
-	quillOptions.modules.toolbar = {
-		container: [
-			//[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-			[{ size: sizes }], // font sizes
-			[{ font: fonts.whitelist }],
-			["bold", "italic", "underline", "strike"], // toggled buttons
-			["blockquote", "code-block"],
+	//quillOptions.modules.toolbar = {
+	//	container: [
+	//		//[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+	//		[{ size: sizes }], // font sizes
+	//		[{ font: fonts.whitelist }],
+	//		["bold", "italic", "underline", "strike"], // toggled buttons
+	//		["blockquote", "code-block"],
 
-			// [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-			[{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
-			[{ script: "sub" }, { script: "super" }], // superscript/subscript
-			[{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-			[{ direction: "rtl" }], // text direction
+	//		// [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+	//		[{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
+	//		[{ script: "sub" }, { script: "super" }], // superscript/subscript
+	//		[{ indent: "-1" }, { indent: "+1" }], // outdent/indent
+	//		[{ direction: "rtl" }], // text direction
 
-			// [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-			["link", "image"],//, "video", "formula"],
-			[{ color: [] }, { background: [] }], // dropdown with defaults from theme
-			[{ align: [] }],
-			// ['clean'],
-			//[{ "Table-Input": registerTables() }]
-		],
-		//handlers: {
-		//	"Table-Input": () => {
-		//		return;
-		//	}
-		//}
-	};
+	//		// [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+	//		["link", "image"],//, "video", "formula"],
+	//		[{ color: [] }, { background: [] }], // dropdown with defaults from theme
+	//		[{ align: [] }],
+	//		// ['clean'],
+	//		//[{ "Table-Input": registerTables() }]
+	//	],
+	//	//handlers: {
+	//	//	"Table-Input": () => {
+	//	//		return;
+	//	//	}
+	//	//}
+	//};
 
 	if (UseBetterTable) {
 		Quill.register({ "modules/better-table": quillBetterTable }, true);
-		quillOptions.modules.toolbar.container.push([{ "Table-Input": registerTables() }]);
-		quillOptions.modules.toolbar.handlers = {
-			"Table-Input": () => {
-				return;
-			}
-		};
+		//quillOptions.modules.toolbar.container.push([{ "Table-Input": registerTables() }]);
+		//quillOptions.modules.toolbar.handlers = {
+		//	"Table-Input": () => {
+		//		return;
+		//	}
+		//};
 		quillOptions.modules['better-table'] = {
 			operationMenu: {
 				items: {
@@ -81,9 +78,9 @@ function initEditorToolbar() {
 	initTable();
 
 	initFontFamilyPicker();
-
-	initLinkToolbarButton();
+	//initLinkToolbarButton();
 	initTemplateToolbarButton();
+	initFindReplaceToolbar();
 }
 function initLinkToolbarButton() {
 	// workaround because link button does show up for some reason...

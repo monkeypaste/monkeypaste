@@ -29,6 +29,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="app.js" />
+    <Content Include="images\icons\monkey.ico" />
+    <Content Include="src\components\svg\assets\findreplace.svg" />
     <Content Include="index.html" />
     <Content Include="package.json" />
     <Content Include="README.md" />
@@ -52,6 +54,8 @@
     <Content Include="src\components\dragdrop\editorscroll.js" />
     <Content Include="src\components\editor\editor-style.css" />
     <Content Include="src\components\editor\editor.js" />
+    <Content Include="src\components\findreplace\find-replace-style.css" />
+    <Content Include="src\components\findreplace\findreplace.js" />
     <Content Include="src\components\font\fontFamilyLookup.js" />
     <Content Include="src\components\font\fontFamily.js" />
     <Content Include="src\components\font\fontSize.js" />
@@ -71,6 +75,7 @@
     <Content Include="src\components\quill-wrapper\toolbar\quill-toolbar.js" />
     <Content Include="src\components\selection\fancy-selection\fancy-selection.js" />
     <Content Include="src\components\selection\selection.js" />
+    <Content Include="src\components\table\table-style.css" />
     <Content Include="src\components\table\table.js" />
     <Content Include="src\components\template\blots\1.0\templateEmbedBlot.js" />
     <Content Include="src\components\template\blots\1.0\templatePadAttribute.js" />
@@ -94,12 +99,16 @@
     <Content Include="src\components\util\graphics\rect.js" />
     <Content Include="src\components\util\graphics\roundedRect.js" />
     <Content Include="src\components\util\helpers.js" />
+    <Content Include="src\components\svg\svgloader.js" />
     <Content Include="src\components\util\math.js" />
     <Content Include="src\components\util\resize.js" />
     <Content Include="src\components\window\window.js" />
     <Content Include="webpack.config.js" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="images\" />
+    <Folder Include="images\icons\" />
+    <Folder Include="images\svg\" />
     <Folder Include="src\" />
     <Folder Include="src\components\" />
     <Folder Include="src\components\clipboard\" />
@@ -115,11 +124,14 @@
     <Folder Include="src\components\messages\" />
     <Folder Include="src\components\color\" />
     <Folder Include="src\components\input\" />
+    <Folder Include="src\components\findreplace\" />
+    <Folder Include="src\components\svg\" />
     <Folder Include="src\components\overlay\" />
     <Folder Include="src\components\quill-wrapper\" />
     <Folder Include="src\components\quill-wrapper\toolbar\" />
     <Folder Include="src\components\selection\" />
     <Folder Include="src\components\selection\fancy-selection\" />
+    <Folder Include="src\components\svg\assets\" />
     <Folder Include="src\components\table\" />
     <Folder Include="src\components\template\" />
     <Folder Include="src\components\template\blots\" />

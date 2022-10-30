@@ -44,6 +44,8 @@
     <link href="src/components/content/content-file-list/content-file-list-style.css" rel="stylesheet" />
     <link href="src/components/content/content-image/content-image-style.css" rel="stylesheet" />
     <link href="src/components/overlay/overlay-style.css" rel="stylesheet" />
+    <link href="src/components/findreplace/find-replace-style.css" rel="stylesheet" />
+    <link href="src/components/table/table-style.css" rel="stylesheet" />
 
     <!-- EXTERNAL APIS -->
 
@@ -86,11 +88,15 @@
         });
 
         window.onbeforeunload = function () {
+            if (!isRunningInHost()) {
+                return;
+            }
             alert('Are you sure you want to leave?');
             return 'poop';
         };
     </script>
 
+    <script src="src/components/svg/svgloader.js"></script>
 
     <script src="src/components/util/dataTransfer.js"></script>
     <script src="src/components/util/debug.js"></script>
@@ -109,6 +115,11 @@
     <script src="src/components/messages/messages_get.js"></script>
 
     <script src="src/components/template/template.js"></script>
+    <script src="src/components/template/toolbar/create/createTemplateToolbarItem.js"></script>
+    <script src="src/components/template/toolbar/commonTemplateToolbar.js"></script>
+    <script src="src/components/template/toolbar/edit/editTemplateToolbar.js"></script>
+    <script src="src/components/template/toolbar/paste/pasteTemplateToolbar.js"></script>
+    <script src="src/components/template/toolbar/paste/selector/pasteTemplateFocusSelector.js"></script>
 
     <script type="text/javascript">
         if (UseQuill2) {
@@ -122,12 +133,6 @@
 
 
     <script src="src/components/template/types/contacts/contacts.js"></script>
-
-    <script src="src/components/template/toolbar/create/createTemplateToolbarItem.js"></script>
-    <script src="src/components/template/toolbar/commonTemplateToolbar.js"></script>
-    <script src="src/components/template/toolbar/edit/editTemplateToolbar.js"></script>
-    <script src="src/components/template/toolbar/paste/pasteTemplateToolbar.js"></script>
-    <script src="src/components/template/toolbar/paste/selector/pasteTemplateFocusSelector.js"></script>
 
     <script src="src/components/color/colorpalette.js"></script>
     <script src="src/components/color/contentcolors.js"></script>
@@ -162,28 +167,122 @@
     <script src="src/components/quill-wrapper/quill-wrapper.js"></script>
     <script src="src/components/quill-wrapper/toolbar/quill-toolbar.js"></script>
 
+    <script src="src/components/findreplace/findreplace.js"></script>
+
     <script src="src/components/editor/editor.js"></script>
 </head>
 <body>
-    <!--<div id="editorToolbar">-->
-    <!-- Add font size dropdown -->
-    <!--<select class="ql-size">
-        <option value="small"></option>-->
-    <!-- Note a missing, thus falsy value, is used to reset to default -->
-    <!--<option selected></option>
-        <option value="large"></option>
-        <option value="huge"></option>
-    </select>-->
-    <!-- Add a bold button -->
-    <!--<button class="ql-bold"></button>-->
-    <!-- Add subscript and superscript buttons -->
-    <!--<button class="ql-script" value="sub"></button>
+    <!-- EDITOR TOOLBAR -->
+    <div id="editorToolbar">
+        <!-- FONT SIZE -->
+        <select class="ql-size">
+            <option value="8px" />
+            <option value="9px" />
+            <option value="10px" />
+            <option value="12px" />
+            <option value="14px" />
+            <option value="16px" />
+            <option value="20px" />
+            <option value="24px" />
+            <option value="32px" />
+            <option value="42px" />
+            <option value="54px" />
+            <option value="68px" />
+            <option value="84px" />
+            <option value="98px" />
+        </select>
+
+        <!-- FONT FAMILY -->
+        <select class="ql-font"></select>
+
+        <!-- BOLD -->
+        <button class="ql-bold"></button>
+
+        <!-- ITALIC-->
+        <button class="ql-italic"></button>
+
+        <!-- BLOCK QUOTE-->
+        <button class="ql-blockquote"></button>
+
+        <!-- LIST -->
+        <button class="ql-list" value="ordered"></button>
+        <button class="ql-list" value="bullet"></button>
+        <button class="ql-list" value="check"></button>
+
+        <!-- SUB/SUPER SCRIPT -->
+        <button class="ql-script" value="sub"></button>
         <button class="ql-script" value="super"></button>
-    </div>-->
+
+        <!-- INDENT -->
+        <button class="ql-indent" value="-1"></button>
+        <button class="ql-indent" value="+1"></button>
+
+        <!-- FLOW DIRECTION -->
+        <button class="ql-direction" value="rtl"></button>
+
+        <!-- LINK -->
+        <button class="ql-link"></button>
+        <button class="ql-image"></button>
+        <button class="ql-video"></button>
+        <button class="ql-formula"></button>
+
+        <!-- FG/BG COLOR -->
+        <button class="ql-color"></button>
+        <button class="ql-background"></button>
+
+        <!-- ALIGN -->
+        <button class="ql-align"></button>
+
+        <!-- TABLE -->
+        <span id="addTableToolbarButton" class="ql-Table-Input ql-picker">
+            <span id="addTableToolbarButtonLabel" class="ql-picker-label"></span>
+            <span id="addTableToolbarButtonOptionsContainer" class="ql-picker-options hidden"></span>
+        </span>
+    </div>
+
+    <!-- FIND/REPLACE TOOLBAR -->
+    <div id="findReplaceToolbar" class="top-align hidden">
+        <div id="findReplaceTabContainer">
+            <div id="findTabButton" class="tab-button">
+                <i class="fa-sharp fa-solid fa-magnifying-glass"></i><span>Find</span>
+            </div>
+            <div id="replaceTabButton" class="tab-button">
+                <i class="fa-solid fa-arrow-right-arrow-left"></i><span>Replace</span>
+            </div>
+            <button id="closeFindReplaceToolbarButton" class="right-align">X</button>
+        </div>
+        <form >
+            <label for="findInput">Find:</label>
+            <input type="text" id="findInput" name="findInput"><br />
+
+            <label for="replaceInput" id="replaceInputLabel">Replace:</label>
+            <input type="text" id="replaceInput" name="replaceInput"><br />
+
+            <input type="checkbox" id="matchCaseInput" name="matchCaseInput">
+            <label for="matchCaseInput"> Match Case</label><br>
+
+            <input type="checkbox" id="wholeWordInput" name="wholeWordInput">
+            <label for="wholeWordInput"> Whole Word</label><br>
+
+            <input type="checkbox" id="useRegexInput" name="useRegexInput">
+            <label for="useRegexInput"> Regular Expression</label>
+
+            <div id="executeFindReplaceButtonContainer" class="right-align">
+                <button id="findReplacePreviousButton" type="button">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <button id="findReplaceNextButton" type="button">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- EDITOR CONTAINER -->
     <div id='editor' draggable="false">
     </div>
 
-
+    <!-- EDIT TEMPLATE TOOLBAR -->
     <div id="editTemplateToolbar"
          class="common-template-toolbar edit-template-toolbar bottom-align hidden">
         <div class="resizer resizer-t"></div>
@@ -223,7 +322,7 @@
                 </ul>
             </div>
         </div>
-        
+
         <button id="editTemplateDeleteButton" class="right-align" type="button">
             <span>DELETE</span>
         </button>
@@ -258,18 +357,18 @@
             <i class="fa-solid fa-eraser"></i><span>CLEAR ALL</span>
         </button>
         <!-- PREV BUTTON -->
-        <button id="previousTemplateButton" 
-             tabindex="3">
+        <button id="previousTemplateButton"
+                tabindex="3">
             <i class="fa-solid fa-arrow-left"></i>
         </button>
         <!-- NEXT BUTTON -->
-        <button id="nextTemplateButton" 
-             tabindex="4">
+        <button id="nextTemplateButton"
+                tabindex="4">
             <i class="fa-solid fa-arrow-right"></i>
         </button>
         <!-- EDIT BUTTON -->
-        <button id="pasteEditFocusTemplateButton" 
-             tabindex="5">
+        <button id="pasteEditFocusTemplateButton"
+                tabindex="5">
             <i class="fa-solid fa-pen-to-square"></i><span>Edit</span>
         </button>
         <!-- PASTE BUTTON -->
@@ -281,7 +380,7 @@
     </div>
 
     <div id="pasteOptionsDiv"></div>
-    <div id="colorPaletteContainer" 
+    <div id="colorPaletteContainer"
          class="ql-toolbar-template-context-menu"></div>
 
     <canvas id="overlayCanvas"></canvas>

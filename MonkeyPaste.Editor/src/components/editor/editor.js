@@ -22,6 +22,7 @@ function initEditor() {
 	}
 
 	initQuill();
+	initEditorScroll();
 
 	//quill.on("selection-change", onEditorSelectionChanged);
 	quill.on("text-change", onEditorTextChanged);
@@ -149,11 +150,13 @@ function hideAllToolbars() {
 
 function updateEditorSizesAndPositions() {
 	let wh = window.visualViewport.height;
+	let frth = getFindReplaceToolbarHeight();
 	let eth = getEditorToolbarHeight();
 	let tth = getTemplateToolbarsHeight();
 
-	let eh = wh - eth - tth;
-	getEditorContainerElement().style.top = eth + 'px';
+	let et = eth + frth;
+	getEditorContainerElement().style.top = et + 'px';
+	let eh = wh - eth - tth - frth;
 	getEditorContainerElement().style.height = eh + 'px';
 }
 
@@ -249,7 +252,7 @@ function disableReadOnly(fromHost = false) {
 	updateAllSizeAndPositions();
 
 	//refreshFontSizePicker();
-	//refreshFontFamilyPicker();
+	//updateFontFamilyPickerToSelection();
 
 	drawOverlay();
 
@@ -358,7 +361,7 @@ function onEditorSelectionChanged(range, oldRange, source) {
 
 	//if (range) {
 	//	refreshFontSizePicker();
-	//	refreshFontFamilyPicker();
+	//	updateFontFamilyPickerToSelection();
 	//	//updateTemplatesAfterSelectionChange(range, oldRange);
 	//	onEditorSelectionChanged_ntf(range);
 	//} else {

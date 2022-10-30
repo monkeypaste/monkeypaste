@@ -1,0 +1,42 @@
+﻿#findReplaceToolbar {
+    width: 100%;
+    min-height: 80px;
+    display: block;
+    background-color: white;
+}
+#findReplaceTabContainer {
+    background-color: transparent;
+    display: flex !important;
+    border: solid black;
+    border-width: 0 0 1px 0;
+}
+
+.tab-button {
+    padding: 5px;
+    margin-right: 10px;
+    border-radius: 5px 5px 0 0;
+    cursor: pointer;
+    border-width: 1px;
+    border: solid black;
+}
+    .tab-button:hover {
+        background-color: yellow;
+    }
+    .tab-button.selected {
+        border-color: transparent;
+        background-color: silver;
+    }
+
+#findReplaceToolbar > div {
+    display: block;
+}
+
+#findReplaceToolbar form {
+    margin: 5px;
+    padding: 10px;
+    background-color: silver;
+}
+
+.tab-container form label {
+    display: inline-flex;
+}

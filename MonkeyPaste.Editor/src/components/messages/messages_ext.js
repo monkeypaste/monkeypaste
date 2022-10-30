@@ -32,8 +32,8 @@ function loadContent_ext(loadContentMsgStr_base64) {
 	let respObj = {
 		contentWidth: getContentWidth(),
 		contentHeight: getContentHeight(),
-		lineCount: parseInt(getContentHeightByType()),
-		charCount: parseInt(getContentWidthByType()),
+		lineCount: parseInt_safe(getContentHeightByType()),
+		charCount: parseInt_safe(getContentWidthByType()),
 		//decodedTemplateGuids: getDecodedTemplateGuids(),
 		//contentLength: getDocLength(),
 		hasTemplates: hasTemplates()

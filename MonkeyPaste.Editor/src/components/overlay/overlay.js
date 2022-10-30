@@ -213,7 +213,7 @@ function drawTextSelection(ctx) {
         drawFancyTextSelection(ctx);
         return;
     }
-    if (!IsDragging && !IsDropping && !BlurredSelectionRects) {
+    if (!IsDragging && !IsDropping && !BlurredSelectionRects && !CurFindReplaceDocRangesRects) {
         return;
 	}
 
@@ -257,10 +257,36 @@ function drawTextSelection(ctx) {
 
     setCaretColor(caret_color);
 
-    if (BlurredSelectionRects) {
-        BlurredSelectionRects.forEach((sel_rect) => {
-            drawRect(ctx, sel_rect, sel_bg_color, sel_fg_color, 0.5, 125/255);
+    if (CurFindReplaceDocRangesRects) {
+        let scroll_y = getEditorContainerElement().scrollTop;
+        let active_rect_range_kvp = CurFindReplaceDocRangeRectIdxLookup[CurFindReplaceDocRangeIdx];
+        CurFindReplaceDocRangesRects.forEach((cur_rect, rect_idx) => {
+            
+            let cur_bg_color = sel_bg_color;
+            if (rect_idx >= active_rect_range_kvp[0] &&
+                rect_idx <= active_rect_range_kvp[1]) {
+                cur_bg_color = 'lime';
+            } else {
+                cur_bg_color = sel_bg_color
+            }
+            let adj_rect = cleanRect(cur_rect);
+            adj_rect.top -= scroll_y;
+            adj_rect.bottom -= scroll_y;
+            drawRect(ctx, adj_rect, cur_bg_color, sel_fg_color, 0.5, 125 / 255);
         });
+    } else if (BlurredSelectionRects) {
+        let scroll_y = getEditorContainerElement().scrollTop;
+
+        BlurredSelectionRects.forEach((sel_rect) => {
+            sel_rect.top -= scroll_y;
+            sel_rect.bottom -= scroll_y;
+            drawRect(ctx, sel_rect, sel_bg_color, sel_fg_color, 0.5, 125 / 255);
+        });
+	}
+
+    if (BlurredSelectionRects) {
+
+        
     }
 }
 

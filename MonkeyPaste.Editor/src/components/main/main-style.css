@@ -26,6 +26,11 @@ body {
     color: lime;
 }
 
+.top-align {
+    position: fixed;
+    top: 0px;
+}
+
 .bottom-align {
     position: fixed;
     bottom: 0px;
@@ -95,4 +100,13 @@ button {
     button:focus {
         outline: 0px solid transparent !important;
     }
+
+.fa-solid {
+    margin-right: 5px;
+}
+
+.svg-icon {
+    width: 18px;
+    height: 18px;
+}
 

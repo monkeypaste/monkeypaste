@@ -15,7 +15,9 @@ function drawPolygon(ctx, points, stroke = 'black', fill = 'black', width = 0) {
 
 function editorToScreenPoint(ep) {
     let editor_rect = getEditorContainerRect();
-    return { x: ep.x + editor_rect.left, y: ep.y + editor_rect.top };
+    let sp = { x: ep.x + editor_rect.left, y: ep.y + editor_rect.top };
+
+    return sp;
 }
 
 function screenToEditorPoint(sp) {
@@ -25,6 +27,7 @@ function screenToEditorPoint(sp) {
 
 function editorToScreenRect(er) {
     let s_origin = editorToScreenPoint({ x: er.left, y: er.top });
+
     let sr = {};
     sr.left = s_origin.x;
     sr.top = s_origin.y;

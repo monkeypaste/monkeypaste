@@ -6,102 +6,102 @@ var IsFontFamilyPickerOpen = false;
 // #endregion Globals
 
 // #region Life Cycle
+function initFontFamilySelector(active_ff_dv) {
+    // NOTE must be called before quill init or:
+    // 1. fonts won't initialize right
+    // 2. getFontFamilyToolbarSelector() will return the toolbar span quill creates
+
+    initFontFamilyStyles();
+    initFontWhiteList();
+
+    active_ff_dv = active_ff_dv ? active_ff_dv : getFontFamilyDataValue(getDefaultFontFamily());
+    let font_families = getFontsByEnv();
+    let fontSelector_elm = getFontFamilyToolbarSelector();
+    fontSelector_elm.innerHTML = '';
+
+    for (var i = 0; i < font_families.length; i++) {
+        let ff = font_families[i];
+
+        let opt_elm = document.createElement('OPTION');
+        let ff_dv = getFontFamilyDataValue(ff);
+        if (ff_dv == active_ff_dv) {
+            opt_elm.setAttribute('selected', '');
+        } else {
+            opt_elm.setAttribute('value', ff);
+        }
+        opt_elm.innerText = ff;
+        fontSelector_elm.appendChild(opt_elm);        
+    }
+}
 
 function initFontFamilyPicker() {
     // needs to be called after quill init
-
-    let ffp_elm = document.getElementsByClassName('ql-font ql-picker')[0];
-    ffp_elm.addEventListener('click', (e) => {
+    if (!quill) {
+        debugger;
         return;
-        IsFontFamilyPickerOpen = true;
-        let blurred_sel = getEditorSelection();
-        if (!blurred_sel) {
-            blurred_sel = BlurredSelectionRange;
-            if (!blurred_sel) {
-                // should be caught in onEditorSelChange but who knows anymore
-                debugger;
-                return;
-            }
-        }
-        let ffp_opts_elm = ffp_elm.getElementsByClassName('ql-picker-options')[0];
-        ffp_opts_elm.addEventListener('click', (e2) => {
-            let ff = e2.target.getAttribute('data-value');
-            if (ff.length == 0) {
-                debugger;
-                return;
-            }
-            ffp_elm.classList.remove('ql-expanded');
-            IsFontFamilyPickerOpen = false;
-            //quill.focus();
-            //quill.formatText(blurred_sel.index, blurred_sel.length, 'font', ff);
-            refreshFontFamilyPicker(ff);
-            return;
-        });
+    }
+    let ff_picker_items = getFontFamilyToolbarPicker().getElementsByClassName('ql-picker-item');
 
-        return;
-    });
+    for (var i = 0; i < ff_picker_items.length; i++) {
+        addClickOrKeyClickEventListener(ff_picker_items[i], onFontPickerItemClick);
+	}
 }
 
 
-function registerFontFamilys() {
+function initFontWhiteList() {
     let fontFamilys = getFontsByEnv();
-    var fontNames = fontFamilys.map(x => x.toLowerCase().replaceAll(' ', '-'));
+    // TODO may need to remove current/selected font family here...
+
+    var fontNames = fontFamilys.map(x => getFontFamilyDataValue(x));
 
     let fonts = Quill.import('formats/font');
-
-    //var fonts = Quill.import('attributors/class/font');
     fonts.whitelist = fontNames;
     Quill.register(fonts, true);
-
-    return fonts;
 }
 
-function registerFontStyles() {
-    //// Add fonts to CSS style
-    //var fontStyles = "";
-    //fontFamilys.forEach(function (font) {
-    //    var fontName = getFontName(font);
-    //    fontStyles += ".ql-snow .ql-picker.ql-font .ql-picker-label[data-value=" + fontName + "]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value=" + fontName + "]::before {" +
-    //        "content: '" + font + "';" +
-    //        "font-family: '" + font + "', sans-serif;" +
-    //        "}" +
-    //        ".ql-font-" + fontName + "{" +
-    //        " font-family: '" + font + "', sans-serif;" +
-    //        "}";
-    //});
-
-    //return fontStyles;
-
+function initFontFamilyStyles() {
     let fontFamilys = getFontsByEnv();
 
     let fontNames = fontFamilys.map(x => getFontFamilyCssStr(x)).join(' ');
+    var node = document.createElement("style");
+    node.innerHTML = fontNames;
+    document.body.appendChild(node);
     return fontNames;
-
-    //// Add fonts to CSS style
-    //var fontstyles = "";
-
-    //fontFamilys.forEach(function (font) {
-    //        var fontName = getFontFamilyDataValue(font);
-    //        fontstyles += ".ql-snow .ql-picker.ql-font .ql-picker-label[data-value=" + fontName + "]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value=" + fontName + "]::before {" +
-    //            "content: '" + font + "';" +
-    //            "font-family: '" + font + "', sans-serif;" +
-    //            "}" +
-    //            ".ql-font-" + fontName + "{" +
-    //            " font-family: '" + font + "', sans-serif;" +
-    //            "}";
-    //    });
-
-    //return fontstyles;
 }
 // #endregion Life Cycle
 
 // #region Getters
+
+function getFontFamilyToolbarSelector() {
+    let elm_idx = IsLoaded ? 1 : 0;
+    return document.getElementsByClassName('ql-font')[elm_idx];
+}
+
+function getFontFamilyToolbarPicker() {
+    if (!quill) {
+        return null;
+    }
+    // NOTE if called before init will return select and not span
+    return document.getElementsByClassName('ql-font')[0];
+}
+function getFontFamilyToolbarPickerLabel() {
+    let picker_elm = getFontFamilyToolbarPicker();
+    if (!picker_elm) {
+        return null;
+    }
+    return getFontFamilyToolbarPicker().firstChild;
+}
+
+function getDefaultFontFamily() {
+    return getElementComputedStyleProp(document.body, "--defaultFontFamily");
+}
+
+
 function getElementFontFamily(elm) {
     let elmStyles = window.getComputedStyle(elm);
     let ff = elmStyles.getPropertyValue('font-family');
     return ff;
 }
-
 
 function getFontFamilyDataValue(fontFamily) {
     // Generate code-friendly font names
@@ -111,38 +111,52 @@ function getFontFamilyDataValue(fontFamily) {
     return '';
 }
 
+function getFontFamilyDataValueFontFamily(ff_dv) {
+    if (ff_dv.includes(' ')) {
+        debugger;
+	}
+    let ffa = getFontsByEnv();
+    for (var i = 0; i < ffa.length; i++) {
+        let cur_ff_dv = getFontFamilyDataValue(ffa[i]);
+        if (cur_ff_dv == ff_dv) {
+            return ffa[i];
+		}
+    }
+    debugger;
+    return null;
+}
+
 function getFontsByEnv() {
     EnvName = EnvName == null ? WindowsEnv : EnvName;
+    let result = null;
     if (EnvName == MacEnv) {
-        return macFonts;
+        result = macFonts;
+    } else {
+        result = winFonts;
     }
-    return winFonts;
+
+    return result.sort();
 }
 
 function getFontFamilyCssStr(ff) {
     let fontFamilyDropDownCssTemplateStr = "" +
-        ".ql-snow .ql-picker.ql-font .ql-picker-label[data-value='times-new-roman']::before, " +
-        ".ql-snow .ql-picker.ql-font .ql-picker-item[data-value='times-new-roman']::before {" +
-        "content: 'Times New Roman';" +
-        "font-family: 'Times New Roman', sans-serif; }";
+        `#editorToolbar .ql-font span[data-label='${ff}']::before {`  +
+        `font-family: '${ff}'; }`;
 
-    //Set the font-family content used for the HTML content.
+    let ff_dv = getFontFamilyDataValue(ff);
+
     let fontFamilyContentTemplateStr = "" +
-        ".ql-font-times-new-roman {" +
-        "font-family: 'Times New Roman', sans-serif;" +
-        "}";
+        `.ql-font-${ff_dv} { font-family: '${ff}';}`;
 
-    return fontFamilyDropDownCssTemplateStr
-        .replaceAll('times-new-roman', ff.toLowerCase().replaceAll(' ', '-'))
-        .replaceAll('Times New Roman', ff) +
-        ' ' +
-        fontFamilyContentTemplateStr
-            .replaceAll('times-new-roman', ff.toLowerCase().replaceAll(' ', '-'))
-            .replaceAll('Times New Roman', ff);
+    return fontFamilyDropDownCssTemplateStr + ' ' + fontFamilyContentTemplateStr;
 }
 // #endregion Getters
 
 // #region Setters
+
+function setDocRangeFontFamily(range, ff_dv) {
+    formatDocRange(range, { 'font': ff_dv });
+}
 
 // #endregion Setters
 
@@ -152,65 +166,31 @@ function getFontFamilyCssStr(ff) {
 
 // #region Actions
 
-function refreshFontFamilyPicker(forceFamily = null, sel = null) {
+function updateFontFamilyPickerToSelection(force_ff_dv = null, sel = null) {
     if (IsFontFamilyPickerOpen) {
         return;
     }
     sel = sel ? sel : getEditorSelection();
 
-    let curFontFamily = forceFamily;
-    if (curFontFamily == null) {
+    let cur_ff_dv = force_ff_dv;
+    if (cur_ff_dv == null) {
         //use selection leaf and iterate up tree until font family is defined or return empty string
-        curFontFamily = findRangeFontFamily(sel);
-        if (curFontFamily == null || curFontFamily == '') {
-            // debugger;
+        cur_ff_dv = findRangeFontFamilyDataValue(sel);
+        if (cur_ff_dv == null || cur_ff_dv == '') {
+            debugger;
         }
     }
-    let curFontFamily_dataValue = getFontFamilyDataValue(curFontFamily);
 
-    let fontFamilyFound = false;
-
-    //set font family picker to found font family (may need to use default if none found)
-    let font_family_picker_elm = document.getElementsByClassName('ql-font ql-picker')[0];
-    let font_family_picker_label_elm = font_family_picker_elm.getElementsByClassName('ql-picker-label')[0];
-    let font_family_picker_options_elm = font_family_picker_elm.getElementsByClassName('ql-picker-options')[0];
-
-    font_family_picker_label_elm.setAttribute('data-value', curFontFamily_dataValue);
-
-    let opts = Array.from(font_family_picker_options_elm.children);
-
-    //iterate through font picker items and clear selection and if there's match set as selected
-    for (var i = 0; i < opts.length; i++) {
-        let fontFamilySpan = opts[i];
-        fontFamilySpan.classList.remove('ql-selected');
-        if (fontFamilySpan.getAttribute('data-value') == curFontFamily_dataValue) {
-            fontFamilySpan.classList.add('ql-selected');
-            fontFamilyFound = true;
-        }
-    }
-    //Array.from(font_family_picker_options_elm.children)
-    //    .forEach((fontFamilySpan) => {
-    //        fontFamilySpan.classList.remove('ql-selected');
-    //        if (fontFamilySpan.getAttribute('data-value') == curFontFamily_dataValue) {
-    //            fontFamilySpan.classList.add('ql-selected');
-    //            fontFamilyFound = true;
-    //        }
-    //    });
-
-    if (!fontFamilyFound) {
-        let familyElm = font_family_picker_options_elm.firstChild.cloneNode();
-
-        familyElm.setAttribute('data-value', curFontFamily);
-        familyElm.classList.add('ql-selected');
-        font_family_picker_label_elm.innerHTML += familyElm.outerHTML;
-    }
+    let picker_label_elm = getFontFamilyToolbarPickerLabel();
+    picker_label_elm.setAttribute('data-label', getFontFamilyDataValueFontFamily(cur_ff_dv));
+    //initFontFamilySelector(cur_ff_dv);
 }
 
-function findRangeFontFamily(range) {
+function findRangeFontFamilyDataValue(range) {
     let curFormat = quill.getFormat(range);
     let curFontFamily = curFormat != null && curFormat.hasOwnProperty('font') ? curFormat.font : null;// DefaultFontFamily;
     if (curFontFamily) {
-        return curFontFamily;
+        return getFontFamilyDataValue(curFontFamily);
     }
     var selection = range;
     if (!selection) {
@@ -218,33 +198,25 @@ function findRangeFontFamily(range) {
         debugger;
         return '';
     }
-    let [leaf, offset] = quill.getLeaf(selection.index);
-    if (leaf && leaf.parent && leaf.parent.domNode) {
-        let parentBlot = leaf.parent;
-        while (parentBlot) {
-            let fontFamilyParts = parentBlot.domNode.style.fontFamily.split(',');
-            if (fontFamilyParts.length > 0 && fontFamilyParts[0].length > 0) {
-                curFontFamily = fontFamilyParts[0].trim().replace(/"/g, '');
-                break;
-            }
-            parentBlot = parentBlot.parent;
-        }
-        //     let parent_elm = leaf.parent.domNode;
-        //     while (parent_elm) {
-        //         if (parent_elm.style['fontFamily'] != null && parent_elm.style['fontFamily'] != '') {
-        //             let fontFamilyParts = parent_elm.style.fontFamily.split(','); //getElementFontFamily(parent_elm).split(',');
-        //             if (fontFamilyParts.length > 0 && fontFamilyParts[0].length > 0) {
-        //                 let found_font_family = fontFamilyParts[0].trim().replace(/"/g, '');
-        //                 return found_font_family;
-        //             }
-        //}
-        //         parent_elm = parent_elm.parentNode;
-        //     }
+    let sel_elm = getElementAtDocIdx(selection.index, true);
+    let sel_ff_str = getElementComputedStyleProp(sel_elm, 'font-family');
+    if (!sel_ff_str || sel_ff_str.length == 0) {
+        return getFontFamilyDataValue(getDefaultFontFamily());
     }
-    return '';
+    return getFontFamilyDataValue(sel_ff_str.split(',')[0].replaceAll('"',''));
 }
 // #endregion Actions
 
 // #region Event Handlers
 
+function onFontPickerItemClick(e) {
+    let ff = e.currentTarget.getAttribute('data-value');
+    let ff_dv = getFontFamilyDataValue(ff);
+    let sel = getEditorSelection();
+    if (!sel) {
+        return;
+    }
+    setDocRangeFontFamily(sel, ff_dv);
+    updateFontFamilyPickerToSelection();
+}
 // #endregion Event Handlers

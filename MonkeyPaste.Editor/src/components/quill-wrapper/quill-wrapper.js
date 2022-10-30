@@ -11,7 +11,7 @@ function initQuill() {
 		//allowReadOnlyEdits: true,
 		theme: "snow",
 		modules: {
-			//toolbar: '#editorToolbar',
+			toolbar: '#editorToolbar',
 			//table: !UseBetterTable,
 			//htmlEditButton: {
 			//	syntax: true
@@ -156,6 +156,10 @@ function setHtmlInRange(range, htmlStr, source = 'api', decodeTemplates = false)
 
 function setContents(jsonStr) {
 	quill.setContents(JSON.parse(jsonStr));
+}
+
+function formatDocRange(range, format, source = 'api') {
+	quill.formatText(range.index, range.length, format, source);
 }
 // #endregion Setters
 

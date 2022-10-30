@@ -26,7 +26,7 @@ function onContentLengthChanged_ntf() {
 		let clMsg = {
 			//copyItemId: ContentHandle,
 			length: docLength,
-			lines: parseInt(getLineCount())
+			lines: parseInt_safe(getLineCount())
 		};
 		let msgStr = toBase64FromJsonObj(clMsg);
 		return notifyContentLengthChanged(msgStr);

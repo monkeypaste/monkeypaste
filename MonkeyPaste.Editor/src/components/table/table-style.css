@@ -1,0 +1,14 @@
+﻿.add-table-item {
+    background-color: dimgray !important;
+    width: 15px;
+    height: 15px;
+    transition: 0.4s;
+}
+
+.add-table-item-included {
+    background-color: lightblue !important;
+}
+
+#addTableToolbarButtonOptionsContainer {
+    max-width: 160px;
+}

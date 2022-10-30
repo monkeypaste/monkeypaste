@@ -6,6 +6,7 @@ const DefaultCaretColor = 'black';
 
 var BlurredSelectionRects = null;
 
+
 var LastSelRange = { index: 0, length: 0 };
 
 var SelectionOnMouseDown = null;
@@ -237,7 +238,7 @@ function coerceCleanSelection() {
 		if (cur_sel_range) {
 			LastSelRange = cur_sel_range;
 			refreshFontSizePicker(null, cur_sel_range);
-			refreshFontFamilyPicker(null, cur_sel_range);
+			updateFontFamilyPickerToSelection(null, cur_sel_range);
 			if (hasTemplates()) {
 				if (isShowingPasteTemplateToolbar()) {
 					updatePasteTemplateToolbarToSelection();
