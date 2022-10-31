@@ -74,16 +74,17 @@ function init_test() {
 			contentHandle: '<TEST-CONTENT-HANDLE>',
 			contentType: 'Text',
 			isPasteRequest: false,
-			itemData: sample_big
+			itemData: sample_big,
+			searchText: 'can'
 		};
 
 		loadContent_ext(toBase64FromJsonObj(load_req));
 
 		//loadContent(contentHandle, contentType, sample_in_use, isPasteRequest);
 
-		disableReadOnly();
+		//disableReadOnly();
 
-		showFindReplaceToolbar();
+		//showFindReplaceToolbar();
 
 		//getPasteButtonElement().focus({ focusVisible: true });
 		//enableFancyTextSelection();

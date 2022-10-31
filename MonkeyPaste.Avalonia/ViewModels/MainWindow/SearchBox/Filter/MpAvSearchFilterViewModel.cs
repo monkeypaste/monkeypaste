@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using MonkeyPaste;
 using MonkeyPaste.Common;
 
@@ -26,7 +27,9 @@ namespace MonkeyPaste.Avalonia {
                 return new MpMenuItemViewModel() {
                     IsChecked = IsChecked,
                     IsEnabled = IsEnabled,
+                    Command = ToggleIsCheckedCommand,
                     Header = Label,
+                    BorderHexColor = MpSystemColors.Black,
                     IconHexStr = MpSystemColors.White,
                 };
             }
@@ -42,13 +45,15 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsSeperator { get; set; } = false;
 
-        public bool IsChecked { get; set; }
+        public bool? IsChecked { get; set; }
 
-        public bool IsEnabled { get; set; } = true;
+        public bool IsEnabled => !IsChecked.IsNull();
 
         public string PreferenceName { get; set; }
 
-        public MpContentFilterType FilterValue => IsChecked ? _filterType : MpContentFilterType.None;
+        public MpContentFilterType FilterType => _filterType;
+
+        public MpContentFilterType FilterValue => IsChecked.IsTrue() ? _filterType : MpContentFilterType.None;
 
         #endregion
 
@@ -87,6 +92,14 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        #endregion
+
+        #region Commands
+
+        public ICommand ToggleIsCheckedCommand => new MpCommand(
+            () => {
+                IsChecked = !IsChecked;
+            }, () => IsEnabled);
         #endregion
     }
 }

@@ -88,9 +88,9 @@
         });
 
         window.onbeforeunload = function () {
-            if (!isRunningInHost()) {
-                return;
-            }
+            //if (!isRunningInHost()) {
+            //    return;
+            //}
             alert('Are you sure you want to leave?');
             return 'poop';
         };
@@ -173,7 +173,7 @@
 </head>
 <body>
     <!-- EDITOR TOOLBAR -->
-    <div id="editorToolbar">
+    <div id="editorToolbar" class="hidden">
         <!-- FONT SIZE -->
         <select class="ql-size">
             <option value="8px" />
@@ -242,21 +242,17 @@
 
     <!-- FIND/REPLACE TOOLBAR -->
     <div id="findReplaceToolbar" class="top-align hidden">
-        <div id="findReplaceTabContainer">
-            <div id="findTabButton" class="tab-button">
-                <i class="fa-sharp fa-solid fa-magnifying-glass"></i><span>Find</span>
-            </div>
-            <div id="replaceTabButton" class="tab-button">
-                <i class="fa-solid fa-arrow-right-arrow-left"></i><span>Replace</span>
-            </div>
-            <button id="closeFindReplaceToolbarButton" class="right-align">X</button>
-        </div>
-        <form >
+        <form>
             <label for="findInput">Find:</label>
-            <input type="text" id="findInput" name="findInput"><br />
+            <input type="text" id="findInput" name="findInput">
 
-            <label for="replaceInput" id="replaceInputLabel">Replace:</label>
-            <input type="text" id="replaceInput" name="replaceInput"><br />
+            <input type="radio" id="isFindInput" name="findOrReplace">
+            <label for="isFindInput">Find</label>
+            <input type="radio" id="isReplaceInput" name="findOrReplace">
+            <label for="isReplaceInput">Replace</label><br>
+
+            <label for="replaceInput" id="replaceInputLabel" class="is-replace">Replace:</label>
+            <input type="text" id="replaceInput" name="replaceInput" class="is-replace"><br />
 
             <input type="checkbox" id="matchCaseInput" name="matchCaseInput">
             <label for="matchCaseInput"> Match Case</label><br>
@@ -266,16 +262,44 @@
 
             <input type="checkbox" id="useRegexInput" name="useRegexInput">
             <label for="useRegexInput"> Regular Expression</label>
-
-            <div id="executeFindReplaceButtonContainer" class="right-align">
-                <button id="findReplacePreviousButton" type="button">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </button>
-                <button id="findReplaceNextButton" type="button">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </button>
-            </div>
         </form>
+        <div id="findReplaceButtonContainer" class="right-align">
+            <!--<div class="right-align">
+        <button id="closeFindReplaceToolbarButton">X</button>
+    </div>
+    <div id="findReplaceButtonOuterContainer" class="right-align">
+        <div id="findReplaceNavButtonContainer" class="right-align">
+            <button id="findReplacePreviousButton" type="button">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <button id="findReplaceNextButton" type="button">
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+        <div id="findReplaceNavButtonContainer" class="right-align is-replace">
+            <button id="replaceButton" type="button">
+                Replace
+            </button>
+            <button id="replaceAllButton" type="button">
+                Replace All
+            </button>
+        </div>
+    </div>-->
+            <button id="closeFindReplaceToolbarButton">X</button>
+            <button id="findReplacePreviousButton" type="button">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <button id="findReplaceNextButton" type="button">
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <button id="replaceButton" type="button" class="is-replace">
+                Replace
+            </button>
+            <button id="replaceAllButton" type="button" class="is-replace">
+                Replace All
+            </button>
+        </div>
+        <div class="resizer resizer-b"></div>
     </div>
 
     <!-- EDITOR CONTAINER -->

@@ -38,6 +38,14 @@ input[type=button] {
     width: 100%;
 }
 
+.resizer-b {
+    bottom: 0;
+    cursor: row-resize;
+    height: 5px;
+    left: 0;
+    width: 100%;
+}
+
 .resize-x-handle-flip {
     transform: rotateX(180deg);
     resize: horizontal;

@@ -33,6 +33,7 @@ namespace MonkeyPaste.Avalonia {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
             IsDevToolsVisibleProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsDevToolsVisibleChanged(x, y));
             IsHostSelectedProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsHostSelectedChanged(x, y));
+            IsFindAndReplaceVisibleProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsFindAndReplaceVisibleChanged(x, y));
             HtmlDataProperty.Changed.AddClassHandler<Control>((x, y) => HandleHtmlDataChanged(x, y));
         }
 
@@ -52,6 +53,34 @@ namespace MonkeyPaste.Avalonia {
                 260.0d,
                 false);
 
+        #endregion
+
+
+        #region IsFindAndReplaceVisible AvaloniaProperty
+        public static bool GetIsFindAndReplaceVisible(AvaloniaObject obj) {
+            return obj.GetValue(IsFindAndReplaceVisibleProperty);
+        }
+        public static void SetIsFindAndReplaceVisible(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsFindAndReplaceVisibleProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsFindAndReplaceVisibleProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "IsFindAndReplaceVisible",
+                false,
+                false);
+        private static void HandleIsFindAndReplaceVisibleChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+            if (e.NewValue is bool isFindReplaceVisible &&
+               element is MpAvCefNetWebView wv &&
+               wv.DataContext is MpAvClipTileViewModel ctvm &&
+               wv.IsEditorInitialized) {
+                if(isFindReplaceVisible) {
+                    wv.ExecuteJavascript($"showFindAndReplace_ext()");
+                } else {
+                    wv.ExecuteJavascript($"hideFindAndReplace_ext()");
+                }                
+            }
+        }
         #endregion
 
         #region IsHostSelected AvaloniaProperty
@@ -260,6 +289,14 @@ namespace MonkeyPaste.Avalonia {
                         itemData = ctvm.EditorFormattedItemData,
                         isPasteRequest = ctvm.IsPasting
                     };
+
+                    if(!string.IsNullOrEmpty(MpAvSearchBoxViewModel.Instance.SearchText)) {
+                        var sbvm = MpAvSearchBoxViewModel.Instance;
+                        loadContentMsg.searchText = sbvm.SearchText;
+                        loadContentMsg.isCaseSensitive = sbvm.Filters.FirstOrDefault(x => x.FilterType == MpContentFilterType.CaseSensitive).IsChecked.IsTrue();
+                        loadContentMsg.isWholeWord = sbvm.Filters.FirstOrDefault(x => x.FilterType == MpContentFilterType.WholeWord).IsChecked.IsTrue();
+                        loadContentMsg.useRegex = sbvm.Filters.FirstOrDefault(x => x.FilterType == MpContentFilterType.Regex).IsChecked.IsTrue();
+                    }
 
                     var respStr = await wv.EvaluateJavascriptAsync($"loadContent_ext('{loadContentMsg.SerializeJsonObjectToBase64()}')");
                     var resp = MpJsonObject.DeserializeBase64Object<MpQuillLoadContentResponseMessage>(respStr);

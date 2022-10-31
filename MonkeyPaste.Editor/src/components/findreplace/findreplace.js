@@ -6,8 +6,17 @@ var CurFindReplaceDocRangeIdx = -1;
 var CurFindReplaceDocRangeRectIdxLookup = null;
 
 var CurFindReplaceDocRangesRects = null;
-var CurFindReplaceDocRangeIdx_rects_sidx = -1;
-var CurFindReplaceDocRangeIdx_rects_eidx = -1;
+
+const DefaultFindReplaceInputState = {
+	searchText: '',
+	replaceText: '',
+	isReplace: false,
+	isCaseSensitive: false,
+	isWholeWordMatch: false,
+	useRegEx: false
+};
+
+var LastFindReplaceInputState = null;
 
 // #endregion Globals
 
@@ -21,25 +30,52 @@ function initFindReplaceToolbar() {
 	findReplaceToolbarButton.qlFormatsEl.addEventListener('click', onFindReplaceToolbarButtonClick);
 	findReplaceToolbarButton.attach(quill);
 
-	let findButton = getFindTabButtonElement();
-	addClickOrKeyClickEventListener(findButton, onTabButtonClick);
+	getIsFindInputElement().addEventListener('change', onFindOrReplaceRadioChange);
+	getIsReplaceInputElement().addEventListener('change', onFindOrReplaceRadioChange);
 
-	let replaceButton = getReplaceTabButtonElement();
-	addClickOrKeyClickEventListener(replaceButton, onTabButtonClick);
+	getFindInputElement().addEventListener('keypress', onFindReplaceFindInputKeyDown);
 
-	let closeButton = getFindReplaceCloseButtonElement();
-	addClickOrKeyClickEventListener(closeButton, onFindReplaceCloseButtonClick);
+	addClickOrKeyClickEventListener(getFindReplaceCloseButtonElement(), onFindReplaceCloseButtonClick);
 
-	let nextButton = getFindReplaceNextButton();
-	addClickOrKeyClickEventListener(nextButton, onFindReplaceNextButtonClick);
+	addClickOrKeyClickEventListener(getFindReplaceNextButton(), onFindReplaceNextButtonClick);
+	addClickOrKeyClickEventListener(getFindReplacePreviousButton(), onFindReplacePreviousButtonClick);
 
-	let previousButton = getFindReplacePreviousButton();
-	addClickOrKeyClickEventListener(previousButton, onFindReplacePreviousButtonClick);
+	addClickOrKeyClickEventListener(getFindReplaceReplaceAllButton(), onFindReplaceReplaceAllButtonClick);
+	addClickOrKeyClickEventListener(getFindReplaceReplaceButton(), onFindReplaceReplaceButtonClick);
+
+	enableResize(getFindReplaceToolbarElement());
 }
+
+
 
 // #endregion Life Cycle
 
 // #region Getters
+
+function getFindInputElement() {
+	return document.getElementById('findInput');
+}
+
+function getIsFindInputElement() {
+	return document.getElementById('isFindInput');
+}
+
+function getIsReplaceInputElement() {
+	return document.getElementById('isReplaceInput');
+}
+
+function getIsCaseSensitiveInputElement() {
+	return document.getElementById('matchCaseInput');
+}
+
+function getIsWholeWordInputElement() {
+	return document.getElementById('wholeWordInput');
+}
+
+function getUseRegExInputElement() {
+	return document.getElementById('useRegexInput');
+}
+
 
 function getReplaceInputElement() {
 	return document.getElementById('replaceInput');
@@ -49,23 +85,18 @@ function getReplaceInputLabelElement() {
 }
 
 
-function getReplaceTabElement() {
-	return document.getElementById('replaceTab');
-}
-function getReplaceTabButtonElement() {
-	return document.getElementById('replaceTabButton');
-}
-
-function getFindTabButtonElement() {
-	return document.getElementById('findTabButton');
-}
-
 function getFindReplaceNextButton() {
 	return document.getElementById('findReplaceNextButton');
 }
 
 function getFindReplacePreviousButton() {
 	return document.getElementById('findReplacePreviousButton');
+}
+function getFindReplaceReplaceButton() {
+	return document.getElementById('replaceButton');
+}
+function getFindReplaceReplaceAllButton() {
+	return document.getElementById('replaceAllButton');
 }
 
 function getFindReplaceToolbarElement() {
@@ -78,32 +109,39 @@ function getFindReplaceToolbarHeight() {
 function getFindReplaceCloseButtonElement() {
 	return document.getElementById('closeFindReplaceToolbarButton');
 }
+
+function getFindReplaceInputState() {	
+	return {
+		searchText: getFindInputElement().value,
+		replaceText: getReplaceInputElement().value,
+		isReplace: getIsReplaceInputElement().checked,
+		isCaseSensitive: getIsCaseSensitiveInputElement().checked,
+		isWholeWordMatch: getIsWholeWordInputElement().checked,
+		useRegEx: getUseRegExInputElement().checked
+	};
+}
+
 // #endregion Getters
 
 // #region Setters
 
-function setSelectedFindReplaceTab(tabButtonId) {
-	let tabId = tabButtonId.replace('Button', '');
-	if (tabId == 'findTab') {
-		getReplaceInputElement().classList.add('hidden');
-		getReplaceInputLabelElement().classList.add('hidden');
-
-		getFindTabButtonElement().classList.add('selected');
-		getReplaceTabButtonElement().classList.remove('selected');
-
-		//getFindReplaceNextButton().innerHTML = "Find Next";
-	} else if (tabId == 'replaceTab') {
-		getReplaceInputElement().classList.remove('hidden');
-		getReplaceInputLabelElement().classList.remove('hidden');
-
-		getFindTabButtonElement().classList.remove('selected');
-		getReplaceTabButtonElement().classList.add('selected');
-
-		//getFindReplaceNextButton().innerHTML = "Replace Next";
-	} else {
-		log('unknown tabId: ' + tabId);
+function setFindReplaceInputState(inputState) {
+	if (!inputState) {
 		debugger;
+		return;
 	}
+
+	getIsReplaceInputElement().checked = inputState.isReplace;
+	getIsFindInputElement().checked = !inputState.isReplace;
+
+	getIsCaseSensitiveInputElement().checked = inputState.isCaseMatch;
+	getIsWholeWordInputElement().checked = inputState.isWholeWordMatch;
+	getUseRegExInputElement().checked = inputState.useRegEx;
+
+	getFindInputElement().value = inputState.searchText;
+	getReplaceInputElement().value = inputState.replaceText;
+
+	toggleFindOrReplace();
 }
 
 // #endregion Setters
@@ -132,63 +170,114 @@ function isFindReplaceActive() {
 	// do other toolbar focuses matter here?
 	return true;
 }
+
+function isFindReplaceStateChanged() {
+	let cur_state = getFindReplaceInputState();
+	if (cur_state.searchText != LastFindReplaceInputState.searchText) {
+		return true;
+	}
+	if (cur_state.replaceText != LastFindReplaceInputState.replaceText) {
+		return true;
+	}
+	if (cur_state.isReplace != LastFindReplaceInputState.isReplace) {
+		return true;
+	}
+	if (cur_state.isCaseSensitive != LastFindReplaceInputState.isCaseSensitive) {
+		return true;
+	}
+	if (cur_state.isWholeWordMatch != LastFindReplaceInputState.isWholeWordMatch) {
+		return true;
+	}
+	if (cur_state.useRegEx != LastFindReplaceInputState.useRegEx) {
+		return true;
+	}
+	return false;
+}
+
 // #endregion State
 
 // #region Actions
 
-function showFindReplaceToolbar(isReplaceSelected = false, searchText = '', isCaseMatch = false, isWholeWordMatch = false, useRegex = false) {
+function showFindReplaceToolbar(fromHost = false) {
 	getFindReplaceToolbarElement().classList.remove('hidden');
-	if (isReplaceSelected) {
-		setSelectedFindReplaceTab('replaceTab');
-	} else {
-		setSelectedFindReplaceTab('findTab');
+
+	let inputState = LastFindReplaceInputState ? LastFindReplaceInputState : DefaultFindReplaceInputState;
+	LastFindReplaceInputState = null;
+
+	if (isNullOrEmpty(inputState.searchText)) {
+		let sel = getEditorSelection();
+		if (sel.length > 0) {
+			inputState.searchText = getText(sel);
+		}
 	}
+
+	setFindReplaceInputState(inputState);
+
 	updateAllSizeAndPositions();
+
+	if (!fromHost) {
+		onFindReplaceVisibleChange_ntf(true);
+	}
 }
 
-function hideFindReplaceToolbar() {
+function hideFindReplaceToolbar(fromHost = false) {
 	resetFindReplaceResults();
 	getFindReplaceToolbarElement().classList.add('hidden');
 	updateAllSizeAndPositions();
+
+	if (!fromHost) {
+		onFindReplaceVisibleChange_ntf(false);
+	}
 }
 
+function toggleFindOrReplace() {
+	Array.from(getFindReplaceToolbarElement().getElementsByClassName('is-replace')).forEach(x => {
+		if (getIsReplaceInputElement().checked) {
+			x.classList.remove('hidden');
+		} else {
+			x.classList.add('hidden');
+		}
+	});
+}
+
+
 function updateFindReplaceToolbarSizesAndPositions() {
-	if (!isShowingFindReplaceToolbar()) {
-		return;
+	if (isShowingFindReplaceToolbar()) {
+
+		let et_bottom = getEditorToolbarElement().getBoundingClientRect().bottom;
+		getFindReplaceToolbarElement().style.top = et_bottom + 'px';
 	}
-	let et_bottom = getEditorToolbarElement().getBoundingClientRect().bottom;
-	getFindReplaceToolbarElement().style.top = et_bottom + 'px';
+	if (CurFindReplaceDocRanges != null) {
+		updateFindReplaceRangeRects();
+	}
 }
 
 function resetFindReplaceResults() {
+	CurFindReplaceSearchText = null;
+
 	CurFindReplaceDocRanges = null;
 	CurFindReplaceDocRangeIdx = -1;
 
 	CurFindReplaceDocRangesRects = null;
 	CurFindReplaceDocRangeRectIdxLookup = null;
-	CurFindReplaceDocRangeIdx_rects_sidx = -1;
-	CurFindReplaceDocRangeIdx_rects_eidx = -1;
 }
 
-function executeFindReplace() {
+function resetFindReplaceInput() {
+	setFindReplaceInputState(DefaultFindReplaceInputState);
+}
+
+function resetFindReplaceToolbar() {
+	resetFindReplaceInput();
+	resetFindReplaceResults();
+}
+
+function populateFindReplaceResults(search_text, is_case_sensitive, is_whole_word, use_regex) {
 	resetFindReplaceResults();
 
-	let search_text = document.getElementById('findInput').value;
-	let replace_text = isShowingReplaceTab() ? document.getElementById('replaceInput').value : null;
-
-	let is_case_sensitive = document.getElementById('matchCaseInput').checked;
-	let is_whole_word = document.getElementById('wholeWordInput').checked;
-	let use_regex = document.getElementById('useRegexInput').checked;
-
-	if (isNullOrEmpty(search_text)) {
-		return;
-	}
-
-	let pt = getText();
-	if (!is_case_sensitive) {
-		pt = pt.toLowerCase();
-		search_text = search_text.toLowerCase();
-	}
+	search_text = search_text ? search_text : document.getElementById('findInput').value;
+	is_case_sensitive = is_case_sensitive ? is_case_sensitive : document.getElementById('matchCaseInput').checked;
+	is_whole_word = is_whole_word ? is_whole_word : document.getElementById('wholeWordInput').checked;
+	use_regex = use_regex ? use_regex : document.getElementById('useRegexInput').checked;	
 
 	let sel = getEditorSelection();
 	if (sel && sel.length > 0) {		
@@ -198,41 +287,45 @@ function executeFindReplace() {
 	}
 	sel = sel ? sel : { index: 0, length: 0 };
 
-
-	let cur_idx = pt.indexOf(search_text);
-	while (cur_idx >= 0) {
-		if (CurFindReplaceDocRanges == null) {
-			CurFindReplaceDocRanges = [];
-			//CurFindReplaceDocRangeIdx = 0;
-		}
-		let cur_range = { index: cur_idx, length: search_text.length }
-		CurFindReplaceDocRanges.push(cur_range);
-
-		if (cur_idx > sel.index) {
-			CurFindReplaceDocRangeIdx = Math.max(0, CurFindReplaceDocRanges.length - 1);
-		}
-
-		let cur_pt = substringByLength(pt, cur_idx + search_text.length);
-		let rel_idx = cur_pt.indexOf(search_text);
-		if (rel_idx < 0) {
-			break;
-		}
-		cur_idx = pt.length - cur_pt.length + rel_idx;
-	}
+	if (isNullOrEmpty(search_text)) {
+		resetFindReplaceResults();
+		updateFindReplaceRangeRects();
+		return;
+	} 
+	CurFindReplaceDocRanges = queryText(getText(), search_text, is_case_sensitive, is_whole_word, use_regex);
 
 	if (CurFindReplaceDocRanges.length == 0) {
-		return;
-	}
-	if (CurFindReplaceDocRangeIdx < 0) {
+		resetFindReplaceResults();
+	} else {
 		CurFindReplaceDocRangeIdx = 0;
 	}
-
-
 	updateFindReplaceRangeRects();
+}
 
+function replaceFindResultIdx(replace_idx) {
+	let replace_range = CurFindReplaceDocRanges[replace_idx];
+	let replace_text = getReplaceInputElement().value;
+	replace_text = !replace_text ? '' : replace_text;
+
+	setTextInRange(replace_range, replace_text, true);
+
+	populateFindReplaceResults();
+
+	if (replace_idx < CurFindReplaceDocRanges.length) {
+		// when there is remaining replacable result before eod set current to it 
+		CurFindReplaceDocRangeIdx = replace_idx;
+		drawOverlay();
+	}
 }
 
 function updateFindReplaceRangeRects() {
+	if (CurFindReplaceDocRanges == null) {
+		CurFindReplaceDocRangesRects = null;
+		CurFindReplaceDocRangeRectIdxLookup = null;
+		drawOverlay();
+		return;
+	}
+
 	CurFindReplaceDocRangesRects = [];
 	CurFindReplaceDocRangeRectIdxLookup = [];
 	for (var i = 0; i < CurFindReplaceDocRanges.length; i++) {
@@ -250,9 +343,40 @@ function updateFindReplaceRangeRects() {
 	drawOverlay();
 }
 
+function navigateFindReplaceResults(dir) {
+	let needsPopulate = CurFindReplaceDocRanges == null || isFindReplaceStateChanged();
+	if (needsPopulate) {
+		LastFindReplaceInputState = getFindReplaceInputState();
+		populateFindReplaceResults();
+		if (CurFindReplaceDocRanges == null) {
+			// TODO show validate here
+			return;
+		}
+	}
+	CurFindReplaceDocRangeIdx += dir;
+	if (CurFindReplaceDocRangeIdx >= CurFindReplaceDocRanges.length) {
+		CurFindReplaceDocRangeIdx = 0;
+	}
+
+	if (CurFindReplaceDocRangeIdx < 0) {
+		CurFindReplaceDocRangeIdx = CurFindReplaceDocRanges.length - 1;
+	}
+	let active_y = CurFindReplaceDocRangesRects[CurFindReplaceDocRangeRectIdxLookup[CurFindReplaceDocRangeIdx][0]].top;
+	scrollEditorTop(active_y);
+
+	drawOverlay();
+}
+
 // #endregion Actions
 
 // #region Event Handlers
+
+function onFindReplaceFindInputKeyDown(e) {
+	if (e.key != 'Enter') {
+		return;
+	}
+	populateFindReplaceResults();
+}
 
 function onFindReplaceToolbarButtonClick(e) {
 	if (isShowingFindReplaceToolbar()) {
@@ -262,10 +386,8 @@ function onFindReplaceToolbarButtonClick(e) {
 	}
 }
 
-function onTabButtonClick(e) {
-	let tabId = e.currentTarget.id;
-
-	setSelectedFindReplaceTab(tabId);
+function onFindOrReplaceRadioChange(e) {
+	toggleFindOrReplace();
 }
 
 function onFindReplaceCloseButtonClick(e) {
@@ -273,39 +395,21 @@ function onFindReplaceCloseButtonClick(e) {
 }
 
 function onFindReplaceNextButtonClick(e) {
-	if (CurFindReplaceDocRanges == null) {
-		executeFindReplace();
-		if (CurFindReplaceDocRanges == null) {
-			// TODO show validate here
-			return;
-		}
-	}
-	CurFindReplaceDocRangeIdx++;
-	if (CurFindReplaceDocRangeIdx >= CurFindReplaceDocRanges.length) {
-		CurFindReplaceDocRangeIdx = 0;
-	}
-	let active_y = CurFindReplaceDocRangesRects[CurFindReplaceDocRangeRectIdxLookup[CurFindReplaceDocRangeIdx][0]].top;
-	scrollEditorTop(active_y);
-
-	drawOverlay();
+	navigateFindReplaceResults(1);
 }
 
 function onFindReplacePreviousButtonClick(e) {
-	if (CurFindReplaceDocRanges == null) {
-		executeFindReplace();
-		if (CurFindReplaceDocRanges == null) {
-			// TODO show validate here
-			return;
-		}
+	navigateFindReplaceResults(-1);
+}
+function onFindReplaceReplaceButtonClick(e) {
+	replaceFindResultIdx(CurFindReplaceDocRangeIdx);
+}
+function onFindReplaceReplaceAllButtonClick(e) {
+	let replace_count = CurFindReplaceDocRanges.length;
+	while (replace_count > 0) {
+		replaceFindResultIdx(0);
+		replace_count--;
 	}
-
-	CurFindReplaceDocRangeIdx--;
-	if (CurFindReplaceDocRangeIdx < 0) {
-		CurFindReplaceDocRangeIdx = CurFindReplaceDocRanges.length - 1;
-	}
-	let active_y = CurFindReplaceDocRangesRects[CurFindReplaceDocRangeRectIdxLookup[CurFindReplaceDocRangeIdx][0]].top;
-	scrollEditorTop(active_y);
-	drawOverlay();
 }
 
 // #endregion Event Handlers

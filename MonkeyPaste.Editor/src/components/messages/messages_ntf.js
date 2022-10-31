@@ -165,3 +165,25 @@ async function onCreateContentScreenShot_ntf(sel) {
 		notifyContentScreenShot(msgStr);
 	}	
 }
+
+function onFindReplaceVisibleChange_ntf(isVisible) {
+	// output 'MpQuillContentFindReplaceVisibleChanedNotificationMessage'
+	if (typeof notifyFindReplaceVisibleChange === 'function') {
+		let msg = {
+			isFindReplaceVisible: isVisible
+		};
+		let msgStr = toBase64FromJsonObj(msg);
+		notifyFindReplaceVisibleChange(msgStr);
+	}
+}
+
+function onQuerySearchRangesChanged_ntf(range_count) {
+	// output 'MpQuillContentFindReplaceVisibleChanedotificationMessage'
+	if (typeof notifyQuerySearchRangesChanged === 'function') {
+		let msg = {
+			rangeCount: range_count
+		};
+		let msgStr = toBase64FromJsonObj(msg);
+		notifyQuerySearchRangesChanged(msgStr);
+	}
+}

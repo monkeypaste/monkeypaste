@@ -26,7 +26,7 @@ function loadContent_ext(loadContentMsgStr_base64) {
 	log('log content msg: ' + loadContentMsgStr_base64);
 	let req = toJsonObjFromBase64Str(loadContentMsgStr_base64);
 
-	loadContent(req.contentHandle, req.contentType, req.itemData, req.usedTextTemplates, req.isPasteRequest);
+	loadContent(req.contentHandle, req.contentType, req.itemData, req.isPasteRequest, req.searchText, req.isCaseSensitive, req.isWholeWord, req.useRegex);
 	quill.update();
 
 	let respObj = {
@@ -353,4 +353,25 @@ function getEditorScreenShot_ext() {
 	};
 	let resp = toBase64FromJsonObj(ssRespMsg);
 	return resp;
+}
+
+function showFindAndReplace_ext() {
+	if (isShowingFindReplaceToolbar()) {
+		return;
+	}
+	showFindReplaceToolbar(true);
+}
+
+function hideFindAndReplace_ext() {
+	if (!isShowingFindReplaceToolbar()) {
+		return;
+	}
+	hideFindReplaceToolbar(true);
+}
+
+function searchNavOffsetChanged_ext(msgBase64Str) {
+	// input 'MpQuillContentSearchRangeNavigationMessage'
+
+	let msg = toJsonObjFromBase64Str(msgBase64Str);
+	navigateFindReplaceResults(msg.curIdxOffset);
 }

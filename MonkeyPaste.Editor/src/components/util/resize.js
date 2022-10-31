@@ -26,11 +26,15 @@
 
     const mouseMoveHandler = function (e) {
         // How far the mouse has been moved
-        const dx = e.clientX - x;
-        const dy = e.clientY - y;
+        let dx = e.clientX - x;
+        let dy = e.clientY - y;
 
         // Adjust the dimension of element
         //ele.style.width = `${w + dx}px`;
+
+        if (Array.from(ele.querySelectorAll('.resizer-b')).length > 0) {
+            dy *= -1;
+		}
         ele.style.height = `${h - dy}px`;
 
         updateAllSizeAndPositions()

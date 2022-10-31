@@ -76,9 +76,9 @@ namespace MonkeyPaste.Avalonia {
 
             MpPlatformWrapper.Services.MainThreadMarshal.RunOnMainThread(() => {
                 if (isFilterSortOrSearch) {
-                    MpMessenger.SendGlobal<MpMessageType>(MpMessageType.QueryChanged);
+                    MpMessenger.SendGlobal(MpMessageType.QueryChanged);
                 } else {
-                    MpMessenger.SendGlobal<MpMessageType>(MpMessageType.SubQueryChanged);
+                    MpMessenger.SendGlobal(MpMessageType.SubQueryChanged);
                 }
             });
         }

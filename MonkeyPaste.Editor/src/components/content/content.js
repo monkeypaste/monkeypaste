@@ -7,7 +7,7 @@ function initContent() {
 	registerTemplateBlots();
 }
 
-function loadContent(contentHandle, contentType, contentData, isPasteRequest) {
+function loadContent(contentHandle, contentType, contentData, isPasteRequest, searchText, isCaseSensitive, isWholeWord, useRegex) {
 	quill.history.clear();
 
 	resetSelection();
@@ -26,7 +26,7 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest) {
 
 	//let contentBg_rgba = getContentBg(contentData);
 
-	//enableReadOnly();
+	enableReadOnly();
 
 	log('Editor loaded');
 
@@ -38,10 +38,21 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest) {
 		loadTextContent(contentData, isPasteRequest);
 	}
 
+
 	//getEditorElement().style.backgroundColor = rgbaToCssColor(contentBg_rgba);
 
 	updateAllSizeAndPositions();
 	IsLoaded = true;
+
+	if (isNullOrEmpty(searchText)) {
+		resetFindReplaceToolbar();
+		hideFindReplaceToolbar();
+	} else {
+		quill.update();
+		populateFindReplaceResults(searchText, isCaseSensitive, isWholeWord, useRegex);
+		searchNavOffsetChanged_ext(CurFindReplaceDocRanges.length);
+	}
+
 	// initial load content length ntf
 	onContentLengthChanged_ntf();
 }

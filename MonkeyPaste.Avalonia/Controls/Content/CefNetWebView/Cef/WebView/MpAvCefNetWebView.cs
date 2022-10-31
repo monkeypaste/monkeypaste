@@ -39,7 +39,9 @@ namespace MonkeyPaste.Avalonia {
         notifyContentScreenShot,
         notifyUserDeletedTemplate,
         notifyAddOrUpdateTemplate,
-        notifyPasteTemplateRequest
+        notifyPasteTemplateRequest,
+        notifyFindReplaceVisibleChange,
+        notifyQuerySearchRangesChanged
     }
     [DoNotNotify]
     public class MpAvCefNetWebView : 
@@ -74,7 +76,7 @@ namespace MonkeyPaste.Avalonia {
             //this.CreateWindow += MpAvCefNetWebView_CreateWindow;
             Document = new MpAvHtmlDocument(this);
             Selection = new MpAvTextSelection(Document);
-
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessega);
             //CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Copy, OnCopy, OnCanExecuteClipboardCommand));
             //CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Cut, OnCut, OnCanExecuteClipboardCommand));
             //CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Paste, OnPaste, OnCanExecuteClipboardCommand));
@@ -91,6 +93,18 @@ namespace MonkeyPaste.Avalonia {
             e.Client = this.Client;
         }
 
+        private void ReceivedGlobalMessega(MpMessageType msg) {
+            switch(msg) {
+                case MpMessageType.SelectNextMatch:
+                    var navNextMsg = new MpQuillContentSearchRangeNavigationMessage() { curIdxOffset = 1 };
+                    this.ExecuteJavascript($"searchNavOffsetChanged_ext('{navNextMsg.SerializeJsonObjectToBase64()}')");
+                    break;
+                case MpMessageType.SelectPreviousMatch:
+                    var navPrevMsg = new MpQuillContentSearchRangeNavigationMessage() { curIdxOffset = -1 };
+                    this.ExecuteJavascript($"searchNavOffsetChanged_ext('{navPrevMsg.SerializeJsonObjectToBase64()}')");
+                    break;
+            }
+        }
         #endregion
 
         #region WebView Binding Methods
@@ -179,6 +193,16 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.notifyException:
                     var exceptionMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);
                     MpConsole.WriteLine(exceptionMsgObj);
+                    break;
+                case MpAvEditorBindingFunctionType.notifyFindReplaceVisibleChange:
+                    var findReplaceMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillContentFindReplaceVisibleChanedNotificationMessage>(msgJsonBase64Str);
+                    ctvm.IsFindAndReplaceVisible = findReplaceMsgObj.isFindReplaceVisible;
+                    break;
+                case MpAvEditorBindingFunctionType.notifyQuerySearchRangesChanged:
+                    var searchRangeCountMsg = MpJsonObject.DeserializeBase64Object<MpQuillContentQuerySearchRangesChangedNotificationMessage>(msgJsonBase64Str);
+                    if(searchRangeCountMsg.rangeCount > 1) {
+                        MpAvSearchBoxViewModel.Instance.NotifyHasMultipleMatches();
+                    }
                     break;
             }
         }

@@ -1094,6 +1094,7 @@ namespace MonkeyPaste.Avalonia {
         //        return cv.RtbHighlightBehavior;
         //    }
         //}
+
         public bool IsFindAndReplaceVisible { get; set; } = false;
 
         //private string _findText;
@@ -1727,6 +1728,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task InitTitleLayers() {
+            if(IsPlaceholder) {
+                return;
+            }
+
             bool wasBusy = IsBusy;
             IsBusy = true;
 
@@ -2395,6 +2400,10 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(HasModelChanged):
                     if (HasModelChanged) {
+                        if (CopyItemData == "<p><br></p>") {
+                            // what IS this nasty shit??
+                            Debugger.Break();
+                        }
                         //if(!MpAvCefNetApplication.UseCefNet && HasContentDataChanged) {
                         //    if(IsInitializing) {
                         //        MpConsole.WriteLine("Ignoring plain text mode initialize data overwrite");

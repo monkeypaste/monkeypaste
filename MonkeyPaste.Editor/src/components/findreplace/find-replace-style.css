@@ -1,42 +1,51 @@
 ﻿#findReplaceToolbar {
     width: 100%;
-    min-height: 80px;
-    display: block;
-    background-color: white;
-}
-#findReplaceTabContainer {
-    background-color: transparent;
-    display: flex !important;
-    border: solid black;
-    border-width: 0 0 1px 0;
-}
-
-.tab-button {
-    padding: 5px;
-    margin-right: 10px;
-    border-radius: 5px 5px 0 0;
-    cursor: pointer;
-    border-width: 1px;
-    border: solid black;
-}
-    .tab-button:hover {
-        background-color: yellow;
-    }
-    .tab-button.selected {
-        border-color: transparent;
-        background-color: silver;
-    }
-
-#findReplaceToolbar > div {
-    display: block;
-}
-
-#findReplaceToolbar form {
-    margin: 5px;
-    padding: 10px;
+    min-height: 125px;
+    display: flex;
     background-color: silver;
 }
 
-.tab-container form label {
-    display: inline-flex;
+    #findReplaceToolbar form {
+        margin: 5px;
+        padding: 10px;
+    }
+
+        #findReplaceToolbar form label {
+            user-select: none;
+        }
+
+#findReplaceButtonContainer {
+    width: 50%;
+    display: grid;
+    gap: 13px;
+}
+    #findReplaceButtonContainer button {
+        max-width: 70px;
+    }
+
+#closeFindReplaceToolbarButton {
+    grid-column: 2;
+    position: fixed;
+    right: 0;
+}
+
+#findReplacePreviousButton {
+    grid-row: 6;
+    grid-column-start: 1;
+    grid-column-end: 1;
+}
+#findReplaceNextButton {
+    grid-row: 6;
+    grid-column-start: 2;
+    grid-column-end: 2;
+}
+#replaceButton {     
+    grid-row: 7;
+    grid-column-start: 1;
+    grid-column-end: 1;
+}
+#replaceAllButton {
+    grid-row: 7;
+    grid-column-start: 2;
+    grid-column-end: 2;
 }

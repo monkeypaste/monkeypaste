@@ -59,7 +59,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region Properties
 
         #region View Models
@@ -443,7 +442,7 @@ namespace MonkeyPaste.Avalonia {
                             shortcutCommand = MpAvClipTrayViewModel.Instance.ScrollToNextPageCommand;
                             break;
                         case MpShortcutType.FindAndReplaceSelectedItem:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.FindAndReplaceSelectedItem;
+                            shortcutCommand = MpAvClipTrayViewModel.Instance.EnableFindAndReplaceForSelectedItem;
                             break;
                         case MpShortcutType.ToggleMainWindowLocked:
                             shortcutCommand = MpAvMainWindowViewModel.Instance.ToggleMainWindowLockCommand;
@@ -997,104 +996,19 @@ namespace MonkeyPaste.Avalonia {
             _downCount++;
             _keyboardGestureHelper.AddKeyDown(keyLiteral);
             ValidateGesture();
-            //string curGesture = _keyboardGestureHelper.GetCurrentGesture();
-
-            //if (!string.IsNullOrEmpty(_sim_keystr_to_this_app) && _sim_keystr_to_this_app.StartsWith(curGesture)) {
-            //    // user MAY be pressing a defined shortcut
-
-            //    if (_sim_keystr_to_this_app.Length > curGesture.Length) {
-            //        _sim_keystr_to_this_app = _sim_keystr_to_this_app.Substring(curGesture.Length);
-            //    } else {
-            //        _sim_keystr_to_this_app = String.Empty;
-            //    }
-
-            //    //_keyboardGestureHelper.Reset();
-            //    e.Reserved = EventReservedValueMask.SuppressEvent;
-            //    return;
-            //}
-
-            //_waitToExecuteShortcutStartDateTime = null;
-
-            //var possibleMatches = Items.Where(x => x.KeyString.StartsWith(curGesture));
-            //if (possibleMatches.Count() == 0) {
-            //    //_keyboardGestureHelper.Reset();
-            //    return;
-            //}
-
-            //e.SuppressKeyPress = true;
-
-            //possibleMatches.ForEach(x => MpConsole.WriteLine("Possible match DOWN: " + x));
         }
 
         private void HandleGestureRouting_Up(string keyLiteral) {
             _downCount--;
             string curGestureStr = _keyboardGestureHelper.GetCurrentGesture();
-            _keyboardGestureHelper.RemoveKeyDown(keyLiteral);
-
+            _keyboardGestureHelper.ClearCurrentGesture();
             ValidateGesture();
-
-            //MpConsole.WriteLine("Current Gesture: " + curGestureStr);
-            MpConsole.WriteLine("Down Count: " + _downCount);
 
             var exactMatch = Items.FirstOrDefault(x => x.KeyString.ToLower() == curGestureStr.ToLower());
             if (exactMatch != default) {
+                MpConsole.WriteLine($"Shorcut Gesture '{curGestureStr}' matched for shortcut '{exactMatch.ShortcutType}'");
                 exactMatch.PerformShortcutCommand.Execute(null);
             }
-
-            //IEnumerable<MpAvShortcutViewModel> exactMatches = null;
-            //IEnumerable<MpAvShortcutViewModel> possibleMatches = null;
-
-            //if(IsApplicationShortcutsEnabled) {
-            //    exactMatches = Items.Where(x => x.KeyString == curGestureStr);
-            //    possibleMatches = Items.Where(x => exactMatches.All(y => y != x) && x.KeyString.StartsWith(curGestureStr));
-            //} else if(IsGlobalShortcutsEnabled) {
-            //    exactMatches = GlobalShortcuts.Where(x => x.KeyString.ToLower() == curGestureStr.ToLower());
-            //    possibleMatches = GlobalShortcuts.Where(x => exactMatches.All(y => y != x) && x.KeyString.ToLower().StartsWith(curGestureStr.ToLower()));
-            //}
-
-            //bool passInput = false;
-
-            //if (exactMatches.Count() > 0) {
-            //    if (exactMatches.Count() > 1) {
-            //        // should only be 1
-            //        Debugger.Break();
-            //    }
-            //    // when current gesture is exact match check if it maybe part of a longer sequence
-            //    var matchedShortcut = exactMatches.ElementAt(0);
-
-            //    if (possibleMatches.Count() == 0) {
-            //        // this means user issued the exact match so no need to dump suppressed input                   
-
-            //        passInput = !PerformMatchedShortcut(matchedShortcut, curGestureStr);
-            //    } else {
-            //        // when current gesture is a match but a longer is possible set wait delay
-            //        _waitToExecuteShortcutStartDateTime = DateTime.Now;
-
-            //        while (true) {
-            //            if (!_waitToExecuteShortcutStartDateTime.HasValue) {
-            //                // a new key down was issued so the exact is not the final gesture
-            //                break;
-            //            }
-            //            if (DateTime.Now - _waitToExecuteShortcutStartDateTime.Value >
-            //                TimeSpan.FromMilliseconds(_MAX_WAIT_TO_EXECUTE_SHORTCUT_MS)) {
-            //                // since no new key down was issued in given delay execute shortcut and clear buffer
-            //                passInput = !PerformMatchedShortcut(matchedShortcut,curGestureStr);
-            //                break;
-            //            }
-            //            await Task.Delay(10);
-            //        }
-            //    }
-            //} else if (possibleMatches.Count() == 0) {
-            //    passInput = true;
-            //}
-            //if (passInput && !string.IsNullOrEmpty(curGestureStr)) {
-            //    // (i don't think this can happen) when both exact and possible have no matches pass current buffer
-            //    //System.Windows.Forms.SendKeys.SendWait(curGestureStr);
-            //    SimulateKeyPress(curGestureStr);
-
-            //    MpConsole.WriteLine("Emptied gesture buffer with sendkey string: " + curGestureStr);
-            //    //_keyboardGestureHelper.Reset();
-            //}
         }
 
 

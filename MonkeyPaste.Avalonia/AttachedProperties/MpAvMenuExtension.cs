@@ -60,6 +60,22 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region HideOnClick AvaloniaProperty
+        public static bool GetHideOnClick(AvaloniaObject obj) {
+            return obj.GetValue(HideOnClickProperty);
+        }
+
+        public static void SetHideOnClick(AvaloniaObject obj, bool value) {
+            obj.SetValue(HideOnClickProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> HideOnClickProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "HideOnClick",
+                true);
+
+        #endregion
+
         #region SuppressDefaultRightClick AvaloniaProperty
         public static bool GetSuppressDefaultRightClick(AvaloniaObject obj) {
             return obj.GetValue(SuppressDefaultRightClickProperty);
@@ -264,14 +280,26 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
+
+            bool hide_on_click = GetHideOnClick(_cmInstance.PlacementTarget);
             if (mivm.ContentTemplateName == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
-                //ToggleCheckableMenuItem(mi, e);
-                mivm.Command.Execute(mivm.CommandParameter);
+                
+                if(hide_on_click) {
+                    mivm.Command.Execute(mivm.CommandParameter);
+                } else {
+                    MenuItem_PointerReleased2(mi, e);
+                }
                 e.Handled = true;
             } else {
                 e.Handled = false;
+                // NOTE hide_on_click only matters for checkbox templates
+                hide_on_click = true;
             }
-            MpPlatformWrapper.Services.ContextMenuCloser.CloseMenu();            
+            
+            if(hide_on_click) {
+                MpPlatformWrapper.Services.ContextMenuCloser.CloseMenu();
+            }
+            
         }
 
         private static void MenuItem_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
@@ -348,24 +376,6 @@ namespace MonkeyPaste.Avalonia {
                         Icon = CreateIcon(mivm),
                         Items = mivm.SubItems == null ? null : mivm.SubItems.Select(x=>CreateMenuItem(x))
                     };
-                    //if (itemType == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
-                    //    mi.Icon = CreateCheckableIcon(mivm);
-                    //} else {
-                    //    mi.Icon = mivm.IconSourceObj == null ?
-                    //        null :
-                    //        new Image() {
-                    //            HorizontalAlignment = HorizontalAlignment.Stretch,
-                    //            VerticalAlignment = VerticalAlignment.Stretch,
-                    //            Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(mivm.IconSourceObj, null, null, null) as Bitmap,
-                    //        };
-                    //}
-                    //if (mivm.SubItems != null && mivm.SubItems.Count > 0) {
-                    //    var subItems = new ObservableCollection<Control>();
-                    //    foreach (var si in mivm.SubItems) {
-                    //        subItems.Add(CreateMenuItem(si));
-                    //    }
-                    //    mi.Items = subItems;
-                    //}
                     mi.PointerEnterItem += MenuItem_PointerEnter;
                     mi.DetachedFromVisualTree += MenuItem_DetachedFromVisualTree;
                     if (mi.Command != null) {
@@ -508,7 +518,7 @@ namespace MonkeyPaste.Avalonia {
                 bool? is_cur_mi_checked = false;
                 if (cur_mi_mivm.IsChecked.IsTrue()) {
                     is_cur_mi_checked = true;
-                } else {
+                } else if(cur_mi_mivm.SubItems != null && cur_mi_mivm.SubItems.Count > 0){
                     is_cur_mi_checked = cur_mi_mivm.SubItems.Any(x => x.IsChecked.IsTrueOrNull()) ? null : false;
                 }
                 cur_mi_mivm.IsChecked = is_cur_mi_checked;
@@ -516,12 +526,12 @@ namespace MonkeyPaste.Avalonia {
                 cur_mi.Icon = CreateCheckableIcon(cur_mi_mivm);
             }
 
-            EventHandler<PointerEventArgs> move_handler = null;
-            move_handler = (s, e1) => {
-                _cmInstance.RemoveHandler(InputElement.PointerLeaveEvent, move_handler);
-                CloseMenu();
-            };
-            _cmInstance.AddHandler(InputElement.PointerLeaveEvent, move_handler, RoutingStrategies.Tunnel, true);
+            //EventHandler<PointerEventArgs> move_handler = null;
+            //move_handler = (s, e1) => {
+            //    _cmInstance.RemoveHandler(InputElement.PointerLeaveEvent, move_handler);
+            //    CloseMenu();
+            //};
+            //_cmInstance.AddHandler(InputElement.PointerLeaveEvent, move_handler, RoutingStrategies.Tunnel, true);
         }
     }
 

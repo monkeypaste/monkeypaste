@@ -29,7 +29,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
 
-
         #endregion
 
         #region Properties
@@ -131,9 +130,7 @@ namespace MonkeyPaste.Avalonia {
                 }catch(Exception ex) {
                     throw new Exception($"'CefNet cannot initialize, '{datFileSourcePath}' cannot be written to '{datFileTargetPath}'"+Environment.NewLine,ex);
                 }
-            }
-
-            
+            }            
 
             var settings = new CefSettings();
             if(_useExternalMessagePump) {

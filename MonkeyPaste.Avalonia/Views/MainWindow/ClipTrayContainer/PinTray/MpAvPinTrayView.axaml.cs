@@ -164,7 +164,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task PerformTileDropAsync(int drop_idx, IDataObject avdo, bool isCopy) {
-            var drop_ctvm = await avdo.Get_safe(_dropLock, MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT) as MpAvClipTileViewModel;
+            string drop_ctvm_pub_handle = await avdo.Get_safe(_dropLock, MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT) as string;
+            var drop_ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x=>x.PublicHandle == drop_ctvm_pub_handle);
             if (drop_ctvm == null) {
                 Debugger.Break();
             }

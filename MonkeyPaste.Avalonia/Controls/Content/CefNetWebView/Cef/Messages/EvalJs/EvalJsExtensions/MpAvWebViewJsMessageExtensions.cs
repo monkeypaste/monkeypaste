@@ -16,7 +16,17 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        static MpAvWebViewJsMessageExtensions() {
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+        }
 
+        private static void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.QueryChanged:
+                    //_webViewEvalJsLookup.Clear();
+                    break;
+            }
+        }
         #region MpAvCefNetWebView Extensions
 
         public static async Task<string> EvaluateJavascriptAsync(this MpAvCefNetWebView wv, string script) {
@@ -61,8 +71,11 @@ namespace MonkeyPaste.Avalonia {
                     await ctv.ReloadContentAsync(stateMsg.SerializeJsonObjectToBase64());
                     // should probably try to re eval script here but not sure depending on what it was so keep
                     // looking at the case of failure but it gets here that shows this at least works :)
-                    Debugger.Break();
+                    //Debugger.Break();
                     var reloaded_result = await wv.EvaluateJavascriptAsync(script);
+                    if(reloaded_result == MpAvCefNetApplication.JS_REF_ERROR) {
+                        return null;
+                    }
                     return reloaded_result;
                 } else {
                     MpConsole.WriteLine("Reload failed, webview container not found");
@@ -70,10 +83,10 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 MpConsole.WriteLine("Reload failed, webview data context lost");
             }
-            
-            
-            Debugger.Break();
-            return MpAvCefNetApplication.JS_REF_ERROR;
+
+
+            //Debugger.Break();
+            return null;
         }
 
 
@@ -132,10 +145,18 @@ namespace MonkeyPaste.Avalonia {
             frame.SendProcessMessage(CefProcessId.Renderer, cefMsg);
 
             var _evalResultLookup = GetJsPendingMessageLookup(wv);
-            while (_evalResultLookup[evalKey] == null) {
-                await Task.Delay(100);
+            while (true) {
+                if (_evalResultLookup == null ||
+                    !_evalResultLookup.ContainsKey(evalKey)) {
+                    return null;
+                }
+                if(_evalResultLookup[evalKey] == null) {
+                    await Task.Delay(100);
+                } else {
+                    return _evalResultLookup[evalKey];
+                }
+                
             }
-            return _evalResultLookup[evalKey];
         }
         private static ConcurrentDictionary<string, string> GetJsPendingMessageLookup(MpAvCefNetWebView wv) {
             if (!_webViewEvalJsLookup.ContainsKey(wv)) {

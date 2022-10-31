@@ -39,15 +39,15 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Lb_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
-            MpConsole.WriteLine("TagTray lb size: " + e.EffectiveViewport);
+            //MpConsole.WriteLine("TagTray lb size: " + e.EffectiveViewport);
         }
 
         private void Sv_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
-            MpConsole.WriteLine("TagTray Sv size: " + e.EffectiveViewport);
+            //MpConsole.WriteLine("TagTray Sv size: " + e.EffectiveViewport);
         }
 
         private void Wp_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
-            MpConsole.WriteLine("TagTray Wp size: " + e.EffectiveViewport);
+           // MpConsole.WriteLine("TagTray Wp size: " + e.EffectiveViewport);
         }
 
         private void NavRightRepeatButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {

@@ -175,26 +175,6 @@ namespace MonkeyPaste {
 
         #region InputGesture
 
-        //private string _inputGestureText = string.Empty;
-        //public string InputGestureText {
-        //    get {
-        //        if (ShortcutObjId > 0 || ShortcutType != MpShortcutType.Default) {
-        //            string shortcutObjIdStr = ShortcutObjId == 0 ? string.Empty : ShortcutObjId.ToString();
-        //            _inputGestureText = MpDataModelProvider.GetShortcutKeystring(ShortcutType.ToString(), shortcutObjIdStr);
-        //        }
-        //        return _inputGestureText;
-        //    }
-        //    set {
-        //        if(InputGestureText != value) {
-        //            _inputGestureText = value;
-        //            OnPropertyChanged(nameof(InputGestureText));
-        //        }
-        //    }
-        //}
-
-        //public int ShortcutObjId { get; set; } = 0;
-
-        //public MpShortcutType ShortcutType { get; set; } = MpShortcutType.Default;
         public string InputGestureText {
             get {
                 if(MpShortcutRef.Create(ShortcutArgs) is MpShortcutRef sr) {
@@ -210,8 +190,12 @@ namespace MonkeyPaste {
 
         #region Icon
 
+        private string _borderHexColor;
         public string BorderHexColor {
             get {
+                if(!string.IsNullOrEmpty(_borderHexColor)) {
+                    return _borderHexColor;
+                }
                 //if (IsChecked.HasValue && IsChecked.Value) {
                 if (IsChecked.IsTrueOrNull()) {
                     return MpSystemColors.IsSelectedBorderColor;
@@ -219,6 +203,12 @@ namespace MonkeyPaste {
                     return MpSystemColors.IsHoveringBorderColor;
                 }
                 return MpSystemColors.DarkGray;
+            }
+            set {
+                if(BorderHexColor != value) {
+                    _borderHexColor = value;
+                    OnPropertyChanged(nameof(BorderHexColor));
+                }
             }
         }
 

@@ -157,12 +157,12 @@ namespace MonkeyPaste.Avalonia {
                 case MpMainWindowOrientationType.Bottom:
                     resizerHandle.Width = resizer_long_side;
                     resizerHandle.Height = resizer_short_side;
-                    resizerHandle.HorizontalAlignment = HorizontalAlignment.Center;
+                    resizerHandle.HorizontalAlignment = HorizontalAlignment.Stretch;
                     resizerHandle.VerticalAlignment = VerticalAlignment.Stretch;
 
                     resizerView.Width = resizer_long_side;
                     resizerView.Height = resizer_short_side;
-                    resizerView.HorizontalAlignment = HorizontalAlignment.Center;
+                    resizerView.HorizontalAlignment = HorizontalAlignment.Stretch;
                     resizerView.VerticalAlignment = VerticalAlignment.Top;
 
                     resizerTransform.Y = 0;

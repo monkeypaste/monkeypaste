@@ -59,7 +59,8 @@ namespace MonkeyPaste.Avalonia {
                 subItems.AddRange(Items.Select(x => x.ContextMenuItemViewModel));
 
                 return new MpMenuItemViewModel() {
-                    Header = @"_Analyze",
+                    Header = @"Analyze",
+                    AltNavIdx = 0,
                     IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("BrainImage") as string,
                     SubItems = subItems
                 };

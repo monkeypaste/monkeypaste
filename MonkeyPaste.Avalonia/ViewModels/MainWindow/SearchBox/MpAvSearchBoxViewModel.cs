@@ -147,15 +147,23 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
-        public GridLength ClearAndAddCriteriaColumnWidth {
+        public GridLength ClearAndBusyColumnWidth {
             get {
-                if (IsMultipleMatches) {
-                    return new GridLength(0.3, GridUnitType.Star);
-                } else if (string.IsNullOrEmpty(LastSearchText) || IsSearching || HasText) {
-                    return new GridLength(0.1, GridUnitType.Star);
-                } else {
-                    return new GridLength(0, GridUnitType.Star);
+                double w = 0;
+                if (string.IsNullOrEmpty(LastSearchText) || IsSearching || HasText) {
+                    w = 15;
                 }
+                return new GridLength(w, GridUnitType.Pixel);
+            }
+        }
+
+        public GridLength NavButtonsColumnWidth {
+            get {
+                double w = 20;
+                if (IsMultipleMatches) {
+                    w = 20;
+                }
+                return new GridLength(w, GridUnitType.Pixel);
             }
         }
 
@@ -188,6 +196,8 @@ namespace MonkeyPaste.Avalonia {
             get => new ObservableCollection<string>(MpPrefViewModel.Instance.RecentSearchTexts.Split(new string[] { MpPrefViewModel.STRING_ARRAY_SPLIT_TOKEN }, StringSplitOptions.RemoveEmptyEntries));
             set => MpPrefViewModel.Instance.RecentSearchTexts = string.Join(MpPrefViewModel.STRING_ARRAY_SPLIT_TOKEN, value);
         }
+
+        public bool IsPopupMenuOpened { get; set; } = false;
 
         public bool CanDeleteSearch => UserSearch != null && UserSearch.Id > 0;
 
@@ -397,26 +407,28 @@ namespace MonkeyPaste.Avalonia {
         private void ValidateFilters() {
             var resfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByRegex));
             var cssfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByIsCaseSensitive));
-            if (resfvm.IsChecked) {
-                cssfvm.IsChecked = false;
-                cssfvm.IsEnabled = false;
+            if (resfvm.IsChecked.IsTrue()) {
+                cssfvm.IsChecked = null;
             } else {
-                cssfvm.IsEnabled = true;
+                cssfvm.IsChecked = false;
             }
 
             var sbtfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByTextType));
             var sbifvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByImageType));
             var sbffvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByFileType));
 
-            if(!sbtfvm.IsChecked && !sbifvm.IsChecked && !sbffvm.IsChecked) {
+            if(sbtfvm.IsChecked.IsFalse() && sbifvm.IsChecked.IsFalse() && sbffvm.IsChecked.IsFalse()) {
                 sbtfvm.IsChecked = sbifvm.IsChecked = sbffvm.IsChecked = true;
             }
         }
 
         public void NotifyHasMultipleMatches() {
-            IsMultipleMatches = true;
+            Dispatcher.UIThread.Post(() => {
+                IsMultipleMatches = true;
 
-            OnPropertyChanged(nameof(ClearAndAddCriteriaColumnWidth));
+                OnPropertyChanged(nameof(ClearAndBusyColumnWidth));
+                OnPropertyChanged(nameof(NavButtonsColumnWidth));
+            });            
         }
 
         #region View Method Invokers
@@ -443,7 +455,8 @@ namespace MonkeyPaste.Avalonia {
                     IsSearching = false;
                     Validate();
                     OnPropertyChanged(nameof(IsClearTextButtonVisible));
-                    OnPropertyChanged(nameof(ClearAndAddCriteriaColumnWidth));
+                    OnPropertyChanged(nameof(ClearAndBusyColumnWidth));
+                    OnPropertyChanged(nameof(NavButtonsColumnWidth));
                     break;
             }
         }
@@ -459,10 +472,12 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(SearchText):
                     Validate();
                     OnPropertyChanged(nameof(IsClearTextButtonVisible));
-                    OnPropertyChanged(nameof(ClearAndAddCriteriaColumnWidth));
+                    OnPropertyChanged(nameof(ClearAndBusyColumnWidth));
+                    OnPropertyChanged(nameof(NavButtonsColumnWidth));
                     break;
                 case nameof(IsSearching):
-                    OnPropertyChanged(nameof(ClearAndAddCriteriaColumnWidth));
+                    OnPropertyChanged(nameof(ClearAndBusyColumnWidth));
+                    OnPropertyChanged(nameof(NavButtonsColumnWidth));
                     OnPropertyChanged(nameof(IsClearTextButtonVisible));
                     OnPropertyChanged(nameof(CanAddCriteriaItem));
                     break;
@@ -553,6 +568,7 @@ namespace MonkeyPaste.Avalonia {
                 if(!string.IsNullOrWhiteSpace(LastSearchText)) {
                     //MpDataModelProvider.QueryInfo.NotifyQueryChanged();
                     SetQueryInfo();
+                    MpDataModelProvider.QueryInfo.NotifyQueryChanged();
                 }
                 LastSearchText = string.Empty;
             },
@@ -571,8 +587,8 @@ namespace MonkeyPaste.Avalonia {
                 }
                 IsMultipleMatches = false;
 
-                //MpDataModelProvider.QueryInfo.NotifyQueryChanged();
-                SetQueryInfo();
+                SetQueryInfo(); 
+                MpDataModelProvider.QueryInfo.NotifyQueryChanged();
                 UpdateRecentSearchTexts();
             },()=>!MpAvMainWindowViewModel.Instance.IsMainWindowLoading);
 

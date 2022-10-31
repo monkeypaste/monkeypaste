@@ -55,6 +55,10 @@ function getDocumentSelection() {
 
 	if (window.getSelection().rangeCount == 0 || (quill && !quill.hasFocus())) {
 		log('no window selection, falling back to last: ' + JSON.stringify(LastSelRange));
+		if (!LastSelRange) {
+			log('lastSelRange was nul, resetting to home');
+			LastSelRange = { index: 0, length: 0 };
+		}
 		cur_sel = LastSelRange;
 	} else {
 		let range = window.getSelection().getRangeAt(0);

@@ -43,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (contentDataReq.forPaste) {
-                    if(ctvm.ItemType == MpCopyItemType.Image) {
+                    if (ctvm.ItemType == MpCopyItemType.Image) {
                         var bmp = ctvm.CopyItemData.ToAvBitmap();
                         avdo.SetData(MpPortableDataFormats.AvPNG, ctvm.CopyItemData.ToAvBitmap().ToByteArray());
                         //avdo.SetData(MpPortableDataFormats.Text, bmp.ToAsciiImage());
@@ -51,13 +51,12 @@ namespace MonkeyPaste.Avalonia {
                         // TODO add colorized ascii maybe as html and rtf!!
                     } else {
                         // screen shot is async and js notifies w/ base64 property here
-                        while(ContentScreenShotBase64 == null) { await Task.Delay(100); }
+                        while (ContentScreenShotBase64 == null) { await Task.Delay(100); }
                         avdo.SetData(MpPortableDataFormats.AvPNG, ContentScreenShotBase64);
                     }
-                    if (ctvm.ItemType != MpCopyItemType.FileList) {
+                    if (ctvm.ItemType == MpCopyItemType.FileList) {
                         avdo.SetData(MpPortableDataFormats.AvFileNames, ctvm.CopyItemData);
                     }
-                    
                     if (ctvm.ItemType != MpCopyItemType.FileList) {
                         // js doesn't set file stuff for non-files
                         avdo.SetData(
@@ -71,13 +70,19 @@ namespace MonkeyPaste.Avalonia {
                     bool add_tile_data = ctvm.ItemType != MpCopyItemType.Text ||
                                        (wv.IsAllSelected() || wv.Selection.Length == 0);
                     if (add_tile_data) {
-                        avdo.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT, ctvm);
+                        avdo.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT, ctvm.PublicHandle);
                     }
                 }
 
                
                 avdo.MapAllPseudoFormats();
 
+                avdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvPNG));
+                //avdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT));
+                avdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvFileNames));
+                //avdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvHtml_bytes));
+                //avdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.CefHtml));
+                //avdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.CefText));
 
                 return avdo;
             }

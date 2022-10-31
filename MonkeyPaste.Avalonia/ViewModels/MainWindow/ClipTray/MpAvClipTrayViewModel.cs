@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using X11;
 
 namespace MonkeyPaste.Avalonia {
     public enum MpAvClipTrayLayoutType {
@@ -106,14 +107,14 @@ namespace MonkeyPaste.Avalonia {
                 return new MpMenuItemViewModel() {
                     SubItems = new List<MpMenuItemViewModel>() {
                         new MpMenuItemViewModel() {
-                            Header = @"_Copy",
+                            Header = @"Copy",
                             AltNavIdx = 0,
                             IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("CopyImage") as string,
                             Command = CopySelectedClipsCommand,
                             ShortcutArgs = new object[] { MpShortcutType.CopySelection }
                         },
                         new MpMenuItemViewModel() {
-                            Header = @"_Paste",
+                            Header = @"Paste",
                             AltNavIdx = 0,
                             IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("PasteImage") as string,
                             Command = PasteSelectedClipsCommand,
@@ -164,7 +165,7 @@ namespace MonkeyPaste.Avalonia {
                                     Header = @"Find and Replace",
                                     AltNavIdx = 0,
                                     IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("SearchImage") as string,
-                                    Command = FindAndReplaceSelectedItem,
+                                    Command = EnableFindAndReplaceForSelectedItem,
                                     ShortcutArgs = new object[] { MpShortcutType.FindAndReplaceSelectedItem },
                                 },
                                 new MpMenuItemViewModel() {
@@ -1060,7 +1061,7 @@ namespace MonkeyPaste.Avalonia {
 
             //DefaultLoadCount = MpMeasurements.Instance.DefaultTotalVisibleClipTiles * 1 + 2;
 
-            MpMessenger.Register<MpMessageType>(MpDataModelProvider.QueryInfo, ReceivedQueryInfoMessage);
+            //MpMessenger.Register<MpMessageType>(MpDataModelProvider.QueryInfo, ReceivedQueryInfoMessage);
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
 
@@ -1385,6 +1386,12 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.MainWindowHid:
                     // reset so tray will autosize/bringIntoView on ListBox items changed (since actual size is not bound)
                     HasUserAlteredPinTrayWidthSinceWindowShow = false;
+                    break;
+                case MpMessageType.QueryChanged:
+                    QueryCommand.Execute(null);
+                    break;
+                case MpMessageType.SubQueryChanged:
+                    QueryCommand.Execute(ScrollOffset);
                     break;
             }
         }
@@ -2412,17 +2419,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        private void ReceivedQueryInfoMessage(MpMessageType msg) {
-            switch (msg) {
-                case MpMessageType.QueryChanged:
-                    QueryCommand.Execute(null);
-                    break;
-                case MpMessageType.SubQueryChanged:
-                    QueryCommand.Execute(ScrollOffset);
-                    break;
-            }
-        }
-
         private void ReceivedDragDropManagerMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.ItemDragBegin:
@@ -3055,6 +3051,7 @@ namespace MonkeyPaste.Avalonia {
                         .SelfAndAllDescendants
                         .Cast<MpAvTagTileViewModel>().Select(x=>x.TagId));
 
+                    //Items.ForEach(x => x.CopyItem = null);
                     Items.Clear();
                     MpAvPersistentClipTilePropertiesHelper.ClearPersistentWidths();
 
@@ -3276,6 +3273,8 @@ namespace MonkeyPaste.Avalonia {
                         MpAvMainWindowViewModel.Instance.IsMainWindowActive &&
                         (isFromEditorButton || (
                             !isFromEditorButton &&
+                            !MpAvMainWindowViewModel.Instance.IsAnyTextBoxFocused &&
+                            !MpAvMainWindowViewModel.Instance.IsAnyDropDownOpen &&
                             !IsAnyEditingClipTile &&
                             !IsAnyEditingClipTitle &&
                             !IsAnyPastingTemplate)) &&
@@ -3586,9 +3585,9 @@ namespace MonkeyPaste.Avalonia {
                 MpNotificationBuilder.ShowMessageAsync("MODE CHANGED", string.Format("APPEND LINE MODE: {0}", IsAppendLineMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
             }, () => !IsAppPaused);
 
-        public ICommand FindAndReplaceSelectedItem => new MpCommand(
+        public ICommand EnableFindAndReplaceForSelectedItem => new MpCommand(
             () => {
-                //SelectedItem.ToggleFindAndReplaceVisibleCommand.Execute(null);
+                SelectedItem.IsFindAndReplaceVisible = true;
             }, () => SelectedItem != null && !SelectedItem.IsFindAndReplaceVisible && SelectedItem.IsTextItem);
         #endregion
         #endregion

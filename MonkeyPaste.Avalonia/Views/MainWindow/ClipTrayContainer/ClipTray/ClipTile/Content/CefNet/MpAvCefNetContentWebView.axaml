@@ -18,6 +18,7 @@
                              local:MpAvCefNetWebViewExtension.IsContentReadOnly="{Binding IsContentReadOnly, Mode=TwoWay}"
                              local:MpAvCefNetWebViewExtension.IsSubSelectionEnabled="{Binding IsSubSelectionEnabled, Mode=TwoWay}"
                              local:MpAvCefNetWebViewExtension.HtmlData="{Binding CopyItemData}"
+                             local:MpAvCefNetWebViewExtension.IsFindAndReplaceVisible="{Binding IsFindAndReplaceVisible}"
                              Focusable="True"
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch" />

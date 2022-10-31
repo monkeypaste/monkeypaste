@@ -1,4 +1,54 @@
-﻿function parseInt_safe(obj) {
+﻿function indexOfAll(pt, search_text, case_sensitive = true) {
+    let indexes = [];
+
+    pt = case_sensitive ? pt : pt.toLowerCase();
+    search_text = case_sensitive ? search_text : search_text.toLowerCase();
+
+    let cur_idx = pt.indexOf(search_text);
+    while (cur_idx >= 0) {
+        let cur_pt = substringByLength(pt, cur_idx + search_text.length);
+        let rel_idx = cur_pt.indexOf(search_text);
+        if (rel_idx < 0) {
+            break;
+        }
+        cur_idx = pt.length - cur_pt.length + rel_idx;
+        indexes.push(cur_idx);
+    }
+    return indexes;
+}
+
+function findRanges(pt, search_text, case_sensitive) {
+    let indexes = indexOfAll(pt, search_text, case_sensitive);
+    let ranges = [];
+    for (var i = 0; i < indexes.length; i++) {
+        ranges.push({ index: indexes[i], length: search_text.length });
+    }
+    return ranges;
+}
+
+function queryText(pt, search_text, case_sensitive, whole_word, use_regex) {
+    let regex = null;
+    let flags = 'g';
+    if (!case_sensitive) {
+        flags += 'i';
+	}
+
+    if (use_regex) {
+        regex = new RegExp(search_text, flags);
+    } else {
+        let word_str = whole_word ? '\\b' : '';
+        regex = new RegExp(`${word_str}${search_text}${word_str}`, flags);
+    }
+    let match_ranges = [];
+    var result;
+    while (result = regex.exec(pt)) {
+        let cur_range = { index: result.index, length: result[0].length };
+        match_ranges.push(cur_range);
+    }
+    return match_ranges;
+}
+
+function parseInt_safe(obj) {
     if (!obj) {
         return 0;
     }

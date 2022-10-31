@@ -15,6 +15,7 @@ using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using Avalonia.Threading;
+using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public enum MpResizeEdgeType {
@@ -445,6 +446,7 @@ namespace MonkeyPaste.Avalonia {
         private static void AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
             if (s is Control control) {
                 control.DetachedFromVisualTree += DetachedToVisualHandler;
+                //control.AddHandler(InputElement.PointerEnterEvent, PointerEnterHandler, RoutingStrategies.Tunnel);
                 control.PointerEnter += PointerEnterHandler;
                 control.PointerLeave += PointerLeaveHandler;
                 control.PointerPressed += PointerPressedHandler;

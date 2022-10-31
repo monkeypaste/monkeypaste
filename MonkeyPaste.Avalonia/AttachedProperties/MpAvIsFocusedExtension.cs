@@ -2,8 +2,8 @@
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
+using MonkeyPaste.Common.Avalonia;
 using System.Diagnostics;
-
 namespace MonkeyPaste.Avalonia {
     public static class MpAvIsFocusedExtension {
         static MpAvIsFocusedExtension() {
@@ -118,7 +118,7 @@ namespace MonkeyPaste.Avalonia {
                     control.DetachedFromVisualTree += DetachedToVisualHandler;
                     control.GotFocus += Control_GotFocus;
                     control.LostFocus += Control_LostFocus;   
-                    if(control is TextBox tb) {
+                    if(control.GetVisualDescendant<TextBox>() is TextBox tb) {
                         tb.PropertyChanged += Tb_PropertyChanged;
                     }
                 }
@@ -129,7 +129,7 @@ namespace MonkeyPaste.Avalonia {
                     control.DetachedFromVisualTree -= DetachedToVisualHandler;
                     control.GotFocus -= Control_GotFocus;
                     control.LostFocus -= Control_LostFocus;
-                    if(control is TextBox tb) {
+                    if(control.GetVisualDescendant<TextBox>() is TextBox tb) {
                         tb.PropertyChanged -= Tb_PropertyChanged;
                     }
                 }
@@ -137,7 +137,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void Tb_PropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e) {
-            if(sender is TextBox tb) {
+            if(sender is Control control && control.GetVisualDescendant<TextBox>() is TextBox tb) {
                 if(e.Property.Name == "IsReadOnly") {
                     //HandleIsReadOnlyChanged(tb, e);
                 } else if(e.Property.Name == "IsKeyboardFocusWithin") {
@@ -176,7 +176,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void HandleIsReadOnlyChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
-            if(element is TextBox tb) {
+            if(element is Control control && 
+                control.GetVisualDescendant<TextBox>() is TextBox tb) {
                 if (!GetIsEnabled(tb)) {
                     // control must not be registered with this attached property
                     //Debugger.Break();
@@ -208,7 +209,8 @@ namespace MonkeyPaste.Avalonia {
                GetSelectViewModelOnFocus(control)) {
                 svm.IsSelected = true;
             }
-            if(control is TextBox tb) {
+
+            if (control.GetVisualDescendant<TextBox>() is TextBox tb) {
                 if(tb.IsReadOnly) {
                     MpAvMainWindowViewModel.Instance.IsAnyTextBoxFocused = false;
                 } else {
@@ -222,13 +224,13 @@ namespace MonkeyPaste.Avalonia {
                 //    tb.SelectAll();
                 //}
 
-            }
+            } 
         }
 
         private static void LostFocus(Control control) {
-            if(control is TextBox tb) {
+            if (control.GetVisualDescendant<TextBox>() is TextBox tb) {
                 MpAvMainWindowViewModel.Instance.IsAnyTextBoxFocused = false;
-            }
+            } 
             SetIsFocused(control, false);
         }
 

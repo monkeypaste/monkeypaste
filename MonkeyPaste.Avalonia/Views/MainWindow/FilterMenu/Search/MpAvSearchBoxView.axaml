@@ -68,11 +68,22 @@
                               BorderThickness="2"
                               CornerRadius="10">
             <Grid>
+                <Grid.Styles>
+                    <Style Selector="Button PathIcon">
+                        <Setter Property="Foreground"
+                                Value="Black" />
+                    </Style>
+                    <Style Selector="Button PathIcon:pointerover">
+                        <Setter Property="Foreground"
+                                Value="DimGray" />
+                    </Style>
+                </Grid.Styles>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.15*" />
                     <ColumnDefinition Width="*" />
-                    <!--  Width is 0.1* or 0.2*  -->
-                    <ColumnDefinition Width="{Binding ClearAndAddCriteriaColumnWidth}" />
+                    <ColumnDefinition Width="{Binding ClearAndBusyColumnWidth}" />
+                    <ColumnDefinition Width="{Binding NavButtonsColumnWidth}" />
+                    <ColumnDefinition Width="{Binding NavButtonsColumnWidth}" />
                 </Grid.ColumnDefinitions>
 
                 <!--  Search Icon Dropdown Button  -->
@@ -85,6 +96,9 @@
                         local:MpAvIsHoveringExtension.IsEnabled="True"
                         local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverSearchByButton}"
                         local:MpAvMenuExtension.IsEnabled="True"
+                        local:MpAvMenuExtension.HideOnClick="False"
+                        local:MpAvMenuExtension.SelectOnRightClick="False"
+                        local:MpAvMenuExtension.IsOpen="{Binding IsPopupMenuOpened, Mode=TwoWay}"
                         Background="Transparent"
                         BorderBrush="Transparent"
                         BorderThickness="1">
@@ -107,7 +121,10 @@
                                   Data="{StaticResource MenuDownArrowSvg}" />
                     </Grid>
                 </Button>
-                <!--  Search TextBox  -->
+                <!--
+                    Search TextBox
+                    IsDropDownOpen="{Binding IsAnyDropDownOpen, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=TwoWay}"
+                -->
                 <AutoCompleteBox x:Name="SearchBox"
                                  Grid.Column="1"
                                  local:MpAvIsFocusedExtension.IsEnabled="True"
@@ -117,7 +134,6 @@
                                  Background="Transparent"
                                  local:MpAvIsHoveringExtension.IsEnabled="True"
                                  local:MpAvIsHoveringExtension.HoverCursor="IBeam"
-                                 IsDropDownOpen="{Binding IsAnyDropDownOpen, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=TwoWay}"
                                  IsTextCompletionEnabled="True"
                                  MinimumPrefixLength="1"
                                  MinimumPopulateDelay="0.25"
@@ -128,7 +144,6 @@
                                  Margin="0,0,0,0"
                                  HorizontalAlignment="Stretch"
                                  VerticalAlignment="Center"
-                                 KeyUp="SearchBox_KeyUp"
                                  Text="{Binding SearchText, Mode=TwoWay}">
                     <AutoCompleteBox.Styles>
                         <Style Selector="AutoCompleteBox /template/ TextBox#PART_TextBox">
@@ -141,86 +156,90 @@
                         </Style>
                     </AutoCompleteBox.Styles>
                 </AutoCompleteBox>
-                <StackPanel Grid.Column="2"
-                            Orientation="Horizontal">
-                    <!--  IsSearching Spinner  -->
-                    <!--<local:ProgressRing x:Name="IsSearchingSpinner"
+                <!--  IsSearching Spinner  -->
+                <!--<local:ProgressRing x:Name="IsSearchingSpinner"
                                         Margin="0,0,10,0"
                                         IsActive="{Binding IsSearching}"
                                         IsVisible="{Binding IsSearching}"
                                         VerticalAlignment="Center"
                                         Foreground="DimGray"
                                         Background="Transparent" />-->
-                    <Ellipse Fill="Transparent"
-                             Stroke="DimGray"
-                             IsVisible="{Binding IsSearching}"
-                             StrokeThickness="10"
-                             Width="10"
-                             Height="10" />
-                    <!--  Clear SearchText Button  -->
-                    <Button x:Name="ClearTextBoxButton"
-                            Width="15"
-                            Height="15"
-                            VerticalAlignment="Center"
-                            local:MpAvIsHoveringExtension.IsEnabled="True"
-                            local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverClearTextButton, Mode=TwoWay}"
-                            BorderThickness="0"
-                            Background="Transparent"
-                            Command="{Binding ClearTextCommand}"
-                            IsVisible="{Binding HasText}">
-                        <Grid>
-                            <PathIcon Foreground="Black"
-                                      IsVisible="{Binding IsOverClearTextButton}"
-                                      Data="{StaticResource CloseXBoxSvg}" />
-                            <PathIcon Foreground="Black"
-                                      IsVisible="{Binding !IsOverClearTextButton}"
-                                      Data="{StaticResource CloseXSvg}">
-                                <PathIcon.Styles>
-                                    <Style Selector="Viewbox">
-                                        <Setter Property="MaxWidth"
-                                                Value="10" />
-                                        <Setter Property="MaxHeight"
-                                                Value="10" />
-                                    </Style>
-                                </PathIcon.Styles>
-                            </PathIcon>
-                        </Grid>
-                    </Button>
-                    <!--  Search Navigation Border  -->
-                    <Border Margin="10,0,0,0"
-                            HorizontalAlignment="Left"
-                            CornerRadius="10"
-                            IsVisible="{Binding IsMultipleMatches}">
-                        <StackPanel Orientation="Horizontal">
-                            <Button x:Name="PreviousTemplateButton"
-                                    Width="10"
-                                    Height="10"
-                                    Padding="5"
-                                    Command="{Binding PrevMatchCommand}"
-                                    TabIndex="2">
-                                <PathIcon Data="{StaticResource MenuDownArrowSvg}">
-                                    <PathIcon.RenderTransform>
-                                        <RotateTransform Angle="-90" />
-                                    </PathIcon.RenderTransform>
-                                </PathIcon>
-                            </Button>
-                            <Button x:Name="NextTemplateButton"
-                                    Width="10"
-                                    Height="10"
-                                    Margin="3,0,0,0"
-                                    Padding="5"
-                                    Command="{Binding NextMatchCommand}"
-                                    TabIndex="3">
-                                <PathIcon IsVisible="{Binding IsOverSearchByButton}"
-                                          Data="{StaticResource MenuDownArrowSvg}">
-                                    <PathIcon.RenderTransform>
-                                        <RotateTransform Angle="90" />
-                                    </PathIcon.RenderTransform>
-                                </PathIcon>
-                            </Button>
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
+                <Ellipse Grid.Column="2"
+                         Fill="Transparent"
+                         Stroke="Pink"
+                         IsVisible="{Binding IsSearching}"
+                         StrokeThickness="2"
+                         Width="10"
+                         Height="10" />
+                <!--  Clear SearchText Button  -->
+                <Button x:Name="ClearTextBoxButton"
+                        Grid.Column="2"
+                        Width="15"
+                        Height="15"
+                        VerticalAlignment="Center"
+                        local:MpAvIsHoveringExtension.IsEnabled="True"
+                        local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverClearTextButton, Mode=TwoWay}"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Command="{Binding ClearTextCommand}">
+                    <Button.IsVisible>
+                        <MultiBinding Converter="{StaticResource MultiBoolConverter}"
+                                      ConverterParameter="AND">
+                            <Binding Path="HasText" />
+                            <Binding Path="!IsSearching" />
+                        </MultiBinding>
+                    </Button.IsVisible>
+                    <Grid>
+                        <PathIcon Foreground="Black"
+                                  IsVisible="{Binding IsOverClearTextButton}"
+                                  Data="{StaticResource CloseXBoxSvg}" />
+                        <PathIcon Foreground="Black"
+                                  IsVisible="{Binding !IsOverClearTextButton}"
+                                  Data="{StaticResource CloseXSvg}">
+                            <PathIcon.Styles>
+                                <Style Selector="Viewbox">
+                                    <Setter Property="MaxWidth"
+                                            Value="10" />
+                                    <Setter Property="MaxHeight"
+                                            Value="10" />
+                                </Style>
+                            </PathIcon.Styles>
+                        </PathIcon>
+                    </Grid>
+                </Button>
+                <!--  Search Navigation Border  -->
+
+                <Button x:Name="PreviousTemplateButton"
+                        Grid.Column="3"
+                        Margin="10,0,0,0"
+                        Width="10"
+                        Height="10"
+                        Padding="5"
+                        IsVisible="{Binding IsMultipleMatches}"
+                        Command="{Binding PrevMatchCommand}"
+                        TabIndex="2">
+                    <PathIcon Data="{StaticResource MenuDownArrowSvg}">
+                        <PathIcon.RenderTransform>
+                            <RotateTransform Angle="90" />
+                        </PathIcon.RenderTransform>
+                    </PathIcon>
+                </Button>
+                <Button x:Name="NextTemplateButton"
+                        Grid.Column="4"
+                        Width="10"
+                        Height="10"
+                        Margin="3,0,0,0"
+                        Padding="5"
+                        IsVisible="{Binding IsMultipleMatches}"
+                        Command="{Binding NextMatchCommand}"
+                        TabIndex="3">
+                    <PathIcon Data="{StaticResource MenuDownArrowSvg}">
+                        <PathIcon.RenderTransform>
+                            <RotateTransform Angle="-90" />
+                        </PathIcon.RenderTransform>
+                    </PathIcon>
+                </Button>
+
             </Grid>
         </local:MpAvClipBorder>
         <!--  Add Or Clear Search Criteria Button  -->

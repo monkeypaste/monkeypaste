@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using System.Diagnostics;
 
 namespace MonkeyPaste {
     public enum MpCopyItemPropertyPathType {
@@ -354,6 +355,20 @@ namespace MonkeyPaste {
                 MpConsole.WriteLine($"Db write for '{ToString()}' was ignored");
                 return;
             }
+
+            //if(Id > 0) {
+            //    // somethings wrong and ignoring updates for now
+            //    return;
+            //}
+            if(ItemData == "<p><br></p>") {
+                // what IS this nasty shit??
+                Debugger.Break();
+            }
+            //var test_ci = await MpDb.GetItemAsync<MpCopyItem>(Id);
+            //if(test_ci != null && test_ci.ItemData != ItemData) {
+            //    // why is the data changing hmmmmmm?
+            //    Debugger.Break();
+            //}
             await base.WriteToDatabaseAsync();
         }
 
@@ -364,10 +379,21 @@ namespace MonkeyPaste {
                 return;
             }
 
-            var citl = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(Id);
-            await Task.WhenAll(citl.Select(x => x.DeleteFromDatabaseAsync()));
+            var delete_tasks = new List<Task>();
 
-            await base.DeleteFromDatabaseAsync();
+            var citl = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(Id);
+            delete_tasks.AddRange(citl.Select(x => x.DeleteFromDatabaseAsync()));
+
+            var doil = await MpDataModelProvider.GetDataObjectItemsByDataObjectId(DataObjectId);
+            delete_tasks.AddRange(doil.Select(x => x.DeleteFromDatabaseAsync()));
+
+            var do_model = await MpDb.GetItemAsync<MpDataObject>(DataObjectId);
+            if(do_model != null) {
+                delete_tasks.Add(do_model.DeleteFromDatabaseAsync());
+            }
+            delete_tasks.Add(base.DeleteFromDatabaseAsync());
+
+            await Task.WhenAll(delete_tasks);
         }
 
         #region Sync

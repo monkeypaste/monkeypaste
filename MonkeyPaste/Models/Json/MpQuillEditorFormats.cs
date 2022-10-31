@@ -23,9 +23,13 @@ namespace MonkeyPaste {
 
         public string itemData { get; set; }
 
+
         public bool isPasteRequest { get; set; } = false; //request should ONLY happen if encoded w/ templates
 
-       // public List<MpTextTemplate> usedTextTemplates { get; set; }
+        public string searchText { get; set; } = null;
+        public bool isCaseSensitive { get; set; } = false;
+        public bool isWholeWord { get; set; } = false;
+        public bool useRegex { get; set; } = false;
     }
 
     public class MpQuillLoadContentResponseMessage : MpJsonObject {
@@ -59,6 +63,16 @@ namespace MonkeyPaste {
         public string contentScreenShotBase64 { get; set; }
     }
 
+    public class MpQuillContentFindReplaceVisibleChanedNotificationMessage : MpJsonObject {
+        public bool isFindReplaceVisible { get; set; }
+    }
+    public class MpQuillContentQuerySearchRangesChangedNotificationMessage : MpJsonObject {
+        public int rangeCount { get; set; }
+    }
+
+    public class MpQuillContentSearchRangeNavigationMessage : MpJsonObject {
+        public int curIdxOffset { get; set; }
+    }
     public class MpQuillDisableReadOnlyRequestMessage : MpJsonObject {
         // NOTE props ignored in Avalonia only for wpf...
         public List<MpTextTemplate> allAvailableTextTemplates { get; set; }

@@ -12,25 +12,30 @@
                        x:DataType="local:MpAvMainWindowViewModel"
                        x:CompileBindings="True">
     <local:MpAvUserControl.Styles>
-        <Style Selector="Border#MainWindowResizeOuterBorder.IsVertical:pointerover">
+        <Style Selector="Border#MainWindowResizeBorder">
+            <Setter Property="Background"
+                    Value="Transparent" />
+        </Style>
+        <Style Selector="Border#MainWindowResizeBorder:pointerover">
+            <Setter Property="Background"
+                    Value="Yellow" />
+        </Style>
+        <Style Selector="Border#MainWindowResizeBorder.IsVertical:pointerover">
             <Setter Property="Cursor"
                     Value="SizeWestEast" />
         </Style>
-        <Style Selector="Border#MainWindowResizeOuterBorder:not(.IsVertical):pointerover">
+        <Style Selector="Border#MainWindowResizeBorder:not(.IsVertical):pointerover">
             <Setter Property="Cursor"
                     Value="SizeNorthSouth" />
         </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="MainWindowResizeOuterBorder"
+            
             Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}"
-            Background="Transparent"
-            Classes.IsVertical="{Binding IsVerticalOrientation}"
-            local:MpAvIsHoveringExtension.HoverCursor="{Binding ResizerCursor}"
-            local:MpAvIsHoveringExtension.IsSelected="{Binding IsResizing}"
-            local:MpAvIsHoveringExtension.HoverBrush="Yellow"
-            local:MpAvIsHoveringExtension.IsEnabled="True"
-            local:MpAvPointerPressCommandExtension.IsEnabled="True"
-            local:MpAvPointerPressCommandExtension.DoubleLeftPressCommand="{Binding WindowSizeToDefaultCommand}">
+            Classes.IsVertical="{Binding IsVerticalOrientation}">
+        <!--Border.RenderTransform>
+            <TranslateTransform Y="-5" />
+        </Border.RenderTransform>-->
 
         <Border x:Name="MainWindowResizeBorder"
                 local:MpAvResizeExtension.MinHeight="{Binding MainWindowMinHeight}"
@@ -46,16 +51,9 @@
                 local:MpAvResizeExtension.XFactor="{Binding ResizeXFactor}"
                 local:MpAvResizeExtension.YFactor="{Binding ResizeYFactor}"
                 local:MpAvResizeExtension.GlobalResizeMessage="MainWindowSizeChanged"
-                local:MpAvResizeExtension.IsEnabled="True"
+                local:MpAvResizeExtension.IsEnabled="True"                
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                BorderThickness="0">
-            <!--<Border.Background>
-                <ImageBrush Source="{Binding ., Source={StaticResource FrameGripTile}, Converter={StaticResource StringResourceConverter}}"
-                            TileMode="Tile"
-                            SourceRect="0,0,5,5"
-                            DestinationRect="0,0,5,5" />
-            </Border.Background>-->
-        </Border>
+                BorderThickness="0" />
     </Border>
 </local:MpAvUserControl>

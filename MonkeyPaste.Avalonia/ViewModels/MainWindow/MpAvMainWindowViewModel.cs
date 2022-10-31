@@ -641,11 +641,11 @@ namespace MonkeyPaste.Avalonia {
             // open 
             double zeta = 0.22d;
             double omega = 25;
-            if(MpAvSearchBoxViewModel.Instance.HasText) {
-                var st_parts = MpAvSearchBoxViewModel.Instance.SearchText.Split(",");
-                zeta = double.Parse(st_parts[0]);
-                omega = double.Parse(st_parts[1]);
-            }
+            //if(MpAvSearchBoxViewModel.Instance.HasText) {
+            //    var st_parts = MpAvSearchBoxViewModel.Instance.SearchText.Split(",");
+            //    zeta = double.Parse(st_parts[0]);
+            //    omega = double.Parse(st_parts[1]);
+            //}
             MainWindowScreenRect = startRect;
             double[] x = startRect.Sides;
             double[] xt = endRect.Sides;
@@ -842,8 +842,8 @@ namespace MonkeyPaste.Avalonia {
                 return canShow;
             });
 
-        public ICommand HideWindowCommand => new MpAsyncCommand<object>(
-            async(args) => {
+        public ICommand HideWindowCommand => new MpAsyncCommand(
+            async() => {
                 MpConsole.WriteLine("Closing Main WIndow");
 
                 if (!Dispatcher.UIThread.CheckAccess()) {
@@ -878,12 +878,13 @@ namespace MonkeyPaste.Avalonia {
                 }
                 FinishMainWindowHide(active_pinfo);
             },
-            (args) => {
-                bool fromShorcutKey = args != null;
+            () => {
+                bool fromShorcutKey = false;
 
                 bool canHide = 
                         !IsMainWindowLocked &&
                           !IsAnyDropDownOpen &&
+                          !IsAnyTextBoxFocused &&
                           !IsDropOverMainWindow &&
                           !IsMainWindowInitiallyOpening &&
                           !IsShowingDialog &&                          
