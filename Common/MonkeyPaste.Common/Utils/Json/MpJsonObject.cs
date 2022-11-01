@@ -63,9 +63,11 @@ namespace MonkeyPaste.Common {
             return deserializer.Invoke(null, new object[] { jsonMsgStr });
         }
 
-        public override string ToString() {
-            
+        public override string ToString() {            
             return SerializeJsonObject();
+        }
+        public string ToPrettyPrintJsonString() {
+            return SerializeJsonObject().ToPrettyPrintJson();
         }
     }
 

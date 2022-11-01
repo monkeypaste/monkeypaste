@@ -370,6 +370,10 @@ function unescapeHtml(htmlStr) {
 }
 
 function escapeHtml(htmlStr) {
+    if (!htmlStr) {
+        htmlStr = '';
+    }
+
     const htmlEntities = {
         "&": "&amp;",
         "<": "&lt;",

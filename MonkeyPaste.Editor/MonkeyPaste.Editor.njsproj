@@ -46,7 +46,6 @@
     <Content Include="src\components\content\content-style.css" />
     <Content Include="src\components\content\content-text\content-text.js" />
     <Content Include="src\components\content\content.js" />
-    <Content Include="src\components\content\content_with_source_attributes.js" />
     <Content Include="src\components\converter\converter.js" />
     <Content Include="src\components\dragdrop\drag-drop-style.css" />
     <Content Include="src\components\dragdrop\drag.js" />

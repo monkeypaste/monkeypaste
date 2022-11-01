@@ -456,7 +456,7 @@ namespace MonkeyPaste.Avalonia {
                     if(!string.IsNullOrEmpty(ValidationMessage)) {
                         dynamic pp = Parent;
                         
-                        MpConsole.WriteLine(pp.Parent.Title + " "+pp.Label+" "+ ValidationMessage);
+                        MpConsole.WriteLine($"Validation Msg Changed for ['{pp.Parent.Title}' {pp.Label}]: {ValidationMessage}");
                     }
                     OnPropertyChanged(nameof(IsValid));
                     break;

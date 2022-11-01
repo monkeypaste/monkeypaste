@@ -92,7 +92,7 @@ function resetDrop(fromHost, wasLeave) {
     updateAllSizeAndPositions();
     stopAutoScroll(wasLeave);
 
-    if (IsReadOnly && !IsDragging) {
+    if (isReadOnly() && !IsDragging) {
         disableSubSelection();
     }
 
@@ -134,7 +134,7 @@ function onDragEnter(e) {
         if (IsDragging) {
             return false;
         }
-        if (!IsSubSelectionEnabled) {
+        if (!isSubSelectionEnabled()) {
             enableSubSelection();
 		}
         //return;
@@ -146,7 +146,7 @@ function onDragEnter(e) {
         DropItemElms[i].classList.add('drop');
     }
     startAutoScroll();
-    if (!IsSubSelectionEnabled) {
+    if (!isSubSelectionEnabled()) {
         enableSubSelection();
     }
     onDragEnter_ntf();

@@ -6,10 +6,10 @@ var IgnoreNextTextChange = false;
 var IgnoreNextSelectionChange = false;
 
 var IsSubSelectionEnabled = false;
+var IsReadOnly = false;
 
 var EditorTheme = 'light';
 
-var IsReadOnly = false;
 
 // #endregion Globals
 
@@ -71,8 +71,15 @@ function getEditorWidth() {
 
 function getEditorHeight() {
 	var editorRect = getEditorElement().getBoundingClientRect();
-	//var editorHeight = parseInt($('.ql-editor').outerHeight());
 	return editorRect.height;
+}
+
+function getEditorVisibleHeight() {
+	let frth = getFindReplaceToolbarHeight();
+	let eth = getEditorToolbarHeight();
+	let tth = getTemplateToolbarsHeight();
+
+	return getEditorContainerElement().getBoundingClientRect().height - frth - eth - tth;
 }
 
 // #endregion Getters
@@ -114,10 +121,6 @@ function isContentEditable() {
 	return isEditable;
 }
 
-function isReadOnly() {
-	return !isEditorToolbarVisible();
-}
-
 function isEditorElement(elm) {
 	if (elm instanceof HTMLElement) {
 		return elm.classList.contains('ql-editor');
@@ -132,6 +135,14 @@ function isRunningInHost() {
 function isEditorHidden() {
 	let isHidden = getEditorContainerElement().classList.contains('hidden');
 	return isHidden;
+}
+
+function isReadOnly() {
+	return !getEditorContainerElement().classList.contains('editable');
+}
+
+function isSubSelectionEnabled() {
+	return getEditorContainerElement().classList.contains('sub-select');
 }
 
 // #endregion State
@@ -150,6 +161,7 @@ function hideAllToolbars() {
 
 function updateEditorSizesAndPositions() {
 	let wh = window.visualViewport.height;
+
 	let frth = getFindReplaceToolbarHeight();
 	let eth = getEditorToolbarHeight();
 	let tth = getTemplateToolbarsHeight();
@@ -209,15 +221,13 @@ function createLink() {
 
 
 function enableReadOnly(fromHost = false) {
-	IsReadOnly = true;
-	//setEditorContentEditable(false);	
+	if (isReadOnly()) {
+		log('enableReadOnly ignored, already read-only. fromHost: ' + fromHost);
+		return;
+	}
 
 	hideAllToolbars();
-
-	//startClipboardHandler();
-
 	scrollToHome();
-	//hideScrollbars();
 
 	getEditorContainerElement().classList.remove('editable');
 	getEditorContainerElement().classList.remove('sub-select');
@@ -225,78 +235,76 @@ function enableReadOnly(fromHost = false) {
 
 	updateAllSizeAndPositions();
 	disableSubSelection();
+	disableTemplateSubSelection();
+
 	drawOverlay();
 
 	if (!fromHost) {
-		onReadOnlyChanged_ntf(IsReadOnly);
+		onReadOnlyChanged_ntf(isReadOnly());
 	}
-	log('ReadOnly: ENABLED');
+	log('ReadOnly: ENABLED fromHost: ' + fromHost);
 }
 
 function disableReadOnly(fromHost = false) {
+	if (!isReadOnly()) {
+		log('disableReadOnly ignored, already editable. fromHost: ' + fromHost);
+		return;
+	}
 	if (ContentItemType != 'Text') {
 		return;
 	}
 
-	IsReadOnly = false;
-
 	showEditorToolbar();
-	enableSubSelection();
 
-	//showScrollbars();
 	getEditorContainerElement().classList.remove('no-select');
 	getEditorContainerElement().classList.add('editable');
-	//stopClipboardHandler();
 
-	//setEditorContentEditable(true);
+	enableSubSelection();
+	enableTemplateSubSelection();
+
+	refreshFontSizePicker();
+	updateFontFamilyPickerToSelection();
+
 	updateAllSizeAndPositions();
-
-	//refreshFontSizePicker();
-	//updateFontFamilyPickerToSelection();
 
 	drawOverlay();
 
 	if (!fromHost) {
-		onReadOnlyChanged_ntf(IsReadOnly);
+		onReadOnlyChanged_ntf(isReadOnly());
 	}
 
-	log('ReadOnly: DISABLED');
+	log('ReadOnly: DISABLED fromHost: ' + fromHost);
 }
 
-function enableSubSelection(fromHost = false) {
-	//if (ContentItemType != 'Text') {
-	//	return;
-	//}
-	IsSubSelectionEnabled = true;
+function enableSubSelection(fromHost = false, showUnderlines = true) {
+	if (isSubSelectionEnabled()) {
+		log('enableSubSelection ignored, already sub-selectable. fromHost: ' + fromHost);
+		return;
+	}
 
 	getEditorContainerElement().classList.remove('no-select');
 	getEditorContainerElement().classList.add('sub-select');
-
+	if (showUnderlines) {
+		getEditorContainerElement().classList.add('underline-content');
+	} 
 	disableDragOverlay();
-
-	let telms = getTemplateElements();
-	for (var i = 0; i < telms.length; i++) {
-		let telm = telms[i];
-		if (IsReadOnly) {
-			// disable pointer-events on templates w/ sub-selection
-			telm.classList.add('no-select');
-		} else {
-			telm.classList.remove('no-select');
-		}
-	}
-
+	enableTemplateSubSelection();
 	showPasteTemplateToolbar();
 	updateAllSizeAndPositions();
+
 	drawOverlay();
 
 	if (!fromHost) {
-		onSubSelectionEnabledChanged_ntf(IsSubSelectionEnabled);
+		onSubSelectionEnabledChanged_ntf(isSubSelectionEnabled());
 	}
-	log('sub-selection ENABLED from: ' + (fromHost ? 'HOST' : 'INTERNAL'));
+	log('sub-selection ENABLED fromHost: ' + fromHost);
 }
 
 function disableSubSelection(fromHost = false) {
-	IsSubSelectionEnabled = false;
+	if (!isSubSelectionEnabled()) {
+		log('disableSubSelection ignored, already sub-selectable. fromHost: ' + fromHost);
+		return;
+	}
 
 	DragSelectionRange = null;
 
@@ -305,6 +313,7 @@ function disableSubSelection(fromHost = false) {
 
 	getEditorContainerElement().classList.add('no-select');
 	getEditorContainerElement().classList.remove('sub-select');
+	getEditorContainerElement().classList.remove('underline-content');
 
 	enableDragOverlay();
 
@@ -314,7 +323,7 @@ function disableSubSelection(fromHost = false) {
 	drawOverlay();
 
 	if (!fromHost) {
-		onSubSelectionEnabledChanged_ntf(IsSubSelectionEnabled);
+		onSubSelectionEnabledChanged_ntf(isSubSelectionEnabled());
 	}
 	log('sub-selection DISABLED from: '+(fromHost ? 'HOST':'INTERNAL'));
 }
@@ -388,6 +397,8 @@ function onEditorSelectionChanged(range, oldRange, source) {
 }
 
 function onEditorTextChanged(delta, oldDelta, source) {
+	log('quill event: text changed');
+
 	updateAllSizeAndPositions();
 	updateTemplatesAfterTextChanged();
 	WasTextChanged = true;
@@ -403,7 +414,6 @@ function onEditorTextChanged(delta, oldDelta, source) {
 	if (!srange) {
 		return;
 	}
-
 
 	onContentLengthChanged_ntf();
 	drawOverlay();

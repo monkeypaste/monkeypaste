@@ -538,6 +538,22 @@ function loadTemplates(isPasteRequest) {
     }
 }
 
+function enableTemplateSubSelection() {
+    let telms = getTemplateElements();
+    for (var i = 0; i < telms.length; i++) {
+        let telm = telms[i];
+        telm.classList.remove('no-select');
+    }
+}
+
+function disableTemplateSubSelection() {
+    let telms = getTemplateElements();
+    for (var i = 0; i < telms.length; i++) {
+        let telm = telms[i];
+        telm.classList.add('no-select');
+    }
+}
+
 function resetTemplateElement(telm) {
     let ti = getTemplateFromDomNode(telm);
     ti.templateText = '';
@@ -661,7 +677,7 @@ function updateTemplatesAfterSelectionChange(sel_range, oldRange) {
     let sel_bg_color = getTextSelectionBgColor();
     let template_elms_in_sel_range = sel_range ? getTemplateElementsInRange(sel_range) : [];
     let all_template_elms = getTemplateElements();
-    let show_sel_bg_color = !isShowingEditTemplateToolbar() && IsSubSelectionEnabled;
+    let show_sel_bg_color = !isShowingEditTemplateToolbar() && isSubSelectionEnabled();
 
     let old_closest_idx = sel_range.index > oldRange.index ? oldRange.index + oldRange.length : oldRange.index;
     let is_nav_right = sel_range.index > old_closest_idx && sel_range.length == 0;

@@ -5,6 +5,7 @@ function initPlainHtmlConverter(envName) {
 
 	initQuill();
 
+	addPlainHtmlClipboardMatchers();
 	//document.getElementsByClassName("ql-toolbar")[0].classList.add("env-wpf");
 	disableReadOnly();
 	//hideEditorToolbar();
@@ -30,7 +31,6 @@ function convertPlainHtml(plainHtml, bgOpacity = 0.0) {
 		return null;
 	}
 	plainHtml = unescapeHtml(plainHtml);
-	//plainHtml = removeUnicode(plainHtml);
 
 	log("Converting This Plain Html:");
 	log(plainHtml);
@@ -38,7 +38,7 @@ function convertPlainHtml(plainHtml, bgOpacity = 0.0) {
 	let doc_range = { index: 0, length: getDocLength() };
 	setTextInRange(doc_range, '');
 
-	insertHtml(0, plainHtml);
+	insertHtml(0, plainHtml, 'user', false);
 
 	//setRootHtml(plainHtml);
 

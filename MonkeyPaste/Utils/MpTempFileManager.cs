@@ -62,8 +62,7 @@ namespace MonkeyPaste {
                         File.Delete(tfp);
                     }
                     catch (Exception ex) {
-                        MpConsole.WriteLine("MainwindowViewModel Dispose error deleteing temp file '" + tfp + "' with exception:");
-                        MpConsole.WriteLine(ex);
+                        MpConsole.WriteTraceLine("MainwindowViewModel Dispose error deleteing temp file '" + tfp + "' with exception:", ex);
                     }
                 }
             }

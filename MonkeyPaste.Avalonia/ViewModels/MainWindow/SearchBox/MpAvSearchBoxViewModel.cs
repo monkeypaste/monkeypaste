@@ -159,7 +159,7 @@ namespace MonkeyPaste.Avalonia {
 
         public GridLength NavButtonsColumnWidth {
             get {
-                double w = 20;
+                double w = 0;
                 if (IsMultipleMatches) {
                     w = 20;
                 }
@@ -423,12 +423,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void NotifyHasMultipleMatches() {
-            Dispatcher.UIThread.Post(() => {
-                IsMultipleMatches = true;
+            Dispatcher.UIThread.VerifyAccess();
+            IsMultipleMatches = true;
 
-                OnPropertyChanged(nameof(ClearAndBusyColumnWidth));
-                OnPropertyChanged(nameof(NavButtonsColumnWidth));
-            });            
+            OnPropertyChanged(nameof(ClearAndBusyColumnWidth));
+            OnPropertyChanged(nameof(NavButtonsColumnWidth));
         }
 
         #region View Method Invokers

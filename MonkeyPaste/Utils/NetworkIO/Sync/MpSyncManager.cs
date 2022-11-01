@@ -441,7 +441,7 @@ namespace MonkeyPaste {
                await MpSyncHelpers.UpdateSyncHistory(smsg.Header.ToGuid, DateTime.UtcNow);
             }
 
-            MpConsole.WriteLine(@"{0} Sent: {1} bytes", DateTime.Now.ToString(), bytesSent.Length);
+            MpConsole.WriteLine(string.Format(@"{0} Sent: {1} bytes", DateTime.Now.ToString(), bytesSent.Length));
             return null;
         }
 

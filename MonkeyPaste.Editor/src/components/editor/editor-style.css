@@ -33,14 +33,15 @@
     overflow: auto;
     cursor: auto;
     width: unset;
-    text-decoration: underline blink dimgray;
 }
 
     .sub-select > .ql-editor {
         overflow: auto;
         /*height: 100%;*/
     }
-
+.underline-content {
+    text-decoration: underline blink dimgray;
+}
 body:has(.sub-select) {
     background-color: rgb(189, 188, 188,var(--editableopacity));
     transition: .4s;

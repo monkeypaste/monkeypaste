@@ -111,11 +111,10 @@ namespace MonkeyPaste {
                 IconSourceStr = iconSourceStr
             };
 
-            MpConsole.WriteLines(
-                $"Notification balloon set to:",
-                $"msg: '{msg}'",
-                $"type: '{notificationType.ToString()}'",
-                $"severity: '{layoutType.ToString()}'");
+            MpConsole.WriteLine($"Notification balloon set to:", true);
+            MpConsole.WriteLine($"\tmsg: '{msg}'");
+            MpConsole.WriteLine($"\ttype: '{notificationType.ToString()}'");
+            MpConsole.WriteLine($"\tseverity: '{layoutType.ToString()}'",false,true);
 
             var nvm = await CreateNotifcationViewModelAsync(nf, nf_args);
 

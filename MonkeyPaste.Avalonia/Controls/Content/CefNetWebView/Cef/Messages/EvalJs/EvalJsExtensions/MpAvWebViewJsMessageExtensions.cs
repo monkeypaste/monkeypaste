@@ -48,8 +48,15 @@ namespace MonkeyPaste.Avalonia {
             while (attempt <= max_attempts) {
                 string resp = await wv.EvaluateJavascriptAsync_helper(script, evalKey);
                 bool is_valid = resp != null && resp != MpAvCefNetApplication.JS_REF_ERROR;
+
+                if(wv.IsContentUnloaded) {
+                    // wv is being recycled so clear evals and breakout here
+                    ClearWebViewEvals(wv);
+
+                    return null;
+                }
                 if (is_valid) {
-                    _evalResultLookup.Remove(evalKey, out string rmStr);
+                    _evalResultLookup.TryRemove(evalKey, out string rmStr);
                     return resp;
                 }
                 _evalResultLookup[evalKey] = null;
@@ -123,7 +130,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private static async Task<string> EvaluateJavascriptAsync_helper(this MpAvCefNetWebView wv, string script, string evalKey, int retryAttempt = 0) {
+        private static async Task<string> EvaluateJavascriptAsync_helper(this MpAvCefNetWebView wv, string script, string evalKey) {
             // create evaljs request to be picked up by HandleRequest on cef renderer thread
             var frame = wv.GetMainFrame();
             if (frame == null) {
@@ -146,8 +153,12 @@ namespace MonkeyPaste.Avalonia {
 
             var _evalResultLookup = GetJsPendingMessageLookup(wv);
             while (true) {
-                if (_evalResultLookup == null ||
-                    !_evalResultLookup.ContainsKey(evalKey)) {
+                if (_evalResultLookup == null || !_evalResultLookup.ContainsKey(evalKey)) {
+                    // one case for ths is wv is being recycled and calling method has already acknowledge and removed this requeset
+                    return null;
+                }
+                if(wv.IsContentUnloaded) {
+                    MpConsole.WriteLine("wv unload caught in eval helper, returning null");
                     return null;
                 }
                 if(_evalResultLookup[evalKey] == null) {
@@ -161,8 +172,7 @@ namespace MonkeyPaste.Avalonia {
         private static ConcurrentDictionary<string, string> GetJsPendingMessageLookup(MpAvCefNetWebView wv) {
             if (!_webViewEvalJsLookup.ContainsKey(wv)) {
                 // remove lookup if wv disposed
-                wv.DetachedFromVisualTree += Wv_DetachedFromVisualTree;
-                _webViewEvalJsLookup.TryAdd(wv, new ConcurrentDictionary<string, string>());
+                AddWebView(wv);
             }
             return _webViewEvalJsLookup[wv];
         }
@@ -172,16 +182,38 @@ namespace MonkeyPaste.Avalonia {
             if (wv == null) {
                 return;
             }
-            wv.DetachedFromVisualTree -= Wv_DetachedFromVisualTree;
-            if (_webViewEvalJsLookup.Remove(wv, out var pendingEvalLookup)) {
-                MpConsole.WriteLine($"MpAvCefNetWebView w/ datacontext: '{wv.DataContext}' disposed with '{pendingEvalLookup.Count}' js evaluations pending: ");
-                pendingEvalLookup.ForEach(x => MpConsole.WriteLine($"Key: '{x.Key}' Script: '{x.Value}'"));
-                return;
-            }
+            RemoveWebView(wv);
         }
 
-        
+        private static void AddWebView(MpAvCefNetWebView wv) {
+            wv.DetachedFromVisualTree += Wv_DetachedFromVisualTree;
+            _webViewEvalJsLookup.TryAdd(wv, new ConcurrentDictionary<string, string>());
+        }
 
+        private static void RemoveWebView(MpAvCefNetWebView wv) {
+
+            wv.DetachedFromVisualTree -= Wv_DetachedFromVisualTree;
+
+            Dispatcher.UIThread.Post(async () => {
+                if (_webViewEvalJsLookup.Remove(wv, out var pendingEvalLookup)) {
+                    MpConsole.WriteLine($"MpAvCefNetWebView w/ datacontext: '{wv.DataContext}' disposed with '{pendingEvalLookup.Count}' js evaluations pending: ");
+                    pendingEvalLookup.ForEach(x => MpConsole.WriteLine($"Key: '{x.Key}' Script: '{x.Value}'"));
+                    return;
+                }
+            });            
+        }
+
+        private static void ClearWebViewEvals(MpAvCefNetWebView wv) {
+            if(!_webViewEvalJsLookup.ContainsKey(wv)) {
+                return;
+            }
+            int eval_count = _webViewEvalJsLookup[wv].Count;
+            _webViewEvalJsLookup[wv].Clear();
+
+            // NOTE reseting this flag here since its the only place that needs to know
+            wv.IsContentUnloaded = false;
+            MpConsole.WriteLine($"{eval_count} pending eval's cleared from wv '{wv.DataContext}' and wv unload flag was reset");
+        }
         #endregion
     }
 }

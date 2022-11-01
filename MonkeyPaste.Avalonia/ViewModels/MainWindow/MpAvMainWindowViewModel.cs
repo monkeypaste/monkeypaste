@@ -817,6 +817,7 @@ namespace MonkeyPaste.Avalonia {
                         !IsMainWindowOpen &&
                         //!IsMainWindowClosing &&
                         !IsMainWindowOpening;
+
                 if(!canShow) {
                     MpConsole.WriteLine("");
                     MpConsole.WriteLine($"Cannot show main window:");
@@ -831,8 +832,17 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                     if(IsMainWindowOpening) {
-                        canShow = _animationCts.TryReset();
+                        bool wasOpening = _animationCts.TryReset();
                         MpConsole.WriteLine("Canceling opening: " + canShow);
+                        if (!wasOpening) {
+                            // don't allow in this, recall Can
+                            IsMainWindowOpening = false;
+                            bool recallResult = ShowWindowCommand.CanExecute(null);
+                            MpConsole.WriteLine("Wasn't opening, unset IsMainWindowOpening to false, recall result: " + recallResult);
+                            return recallResult;
+                        } else {
+                            canShow = true;
+                        }
                     }
                     if (IsMainWindowClosing) {
                         canShow = _animationCts.TryReset();

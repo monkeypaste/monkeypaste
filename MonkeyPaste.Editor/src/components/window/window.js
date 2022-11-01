@@ -16,9 +16,7 @@ function onWindowBlur(e) {
 }
 
 function onWindowScroll(e) {
-	updateAllSizeAndPositions();
-
-	
+	updateAllSizeAndPositions();	
 }
 
 function onWindowResize(e) {

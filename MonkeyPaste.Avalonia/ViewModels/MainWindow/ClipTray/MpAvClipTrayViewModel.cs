@@ -3051,8 +3051,12 @@ namespace MonkeyPaste.Avalonia {
                         .SelfAndAllDescendants
                         .Cast<MpAvTagTileViewModel>().Select(x=>x.TagId));
 
-                    //Items.ForEach(x => x.CopyItem = null);
-                    Items.Clear();
+                    // trigger unload event to wipe js eval's that maybe pending 
+                    Items.ForEach(x => x.CopyItem = null);
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));
+                    Items.ForEach(x => x.TriggerUnloadedNotification());
+                    //Items.Clear();
+
                     MpAvPersistentClipTilePropertiesHelper.ClearPersistentWidths();
 
                     //RefreshLayout();

@@ -42,8 +42,8 @@ function handleWindowKeyDown(e) {
 	let suppresKeyDown = true;
 	updateModKeys(e);
 
-	if (IsSubSelectionEnabled) {
-		if (IsReadOnly) {
+	if (isSubSelectionEnabled()) {
+		if (isReadOnly()) {
 			//sub-select/droppable mode
 			if (e.key == IncreaseFocusLevelKey) {
 				disableReadOnly();
@@ -95,10 +95,10 @@ function handleWindowKeyUp(e) {
 		}
 
 
-		if (IsSubSelectionEnabled) {
+		if (isSubSelectionEnabled()) {
 			let sel = getEditorSelection();
 			if (!sel || sel.length == 0) {
-				if (!IsReadOnly) {
+				if (!isReadOnly()) {
 					enableReadOnly();
 					return;
 				}

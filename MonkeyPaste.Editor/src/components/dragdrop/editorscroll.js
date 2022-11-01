@@ -100,7 +100,7 @@ function scrollToDocRange(docRange, target) {
 }
 
 function scrollEditorTop(new_top) {
-    let eh = getEditorContainerElement().getBoundingClientRect().height;
+    let eh = getEditorVisibleHeight();
     if (new_top > eh) {
         getEditorContainerElement().scrollTop = new_top - eh;
     } else {

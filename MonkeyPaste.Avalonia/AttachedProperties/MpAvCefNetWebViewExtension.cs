@@ -140,26 +140,16 @@ namespace MonkeyPaste.Avalonia {
                 }
                 // only signal read only change after webview is loaded
                 if (isReadOnly) {
-                    if(resizeControl != null) {
-                        MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.ReadOnlyWidth, ctvm.ReadOnlyHeight, 3.0d);
-                    }
+                    MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.ReadOnlyWidth, ctvm.ReadOnlyHeight, 3.0d);
+                    ctvm.IsBusy = true;
                     string enableReadOnlyRespStr = await wv.EvaluateJavascriptAsync("enableReadOnly_ext()");
-                    //ProcessEnableReadOnlyResponse(wv, enableReadOnlyRespStr);
                     var qrm = MpJsonObject.DeserializeBase64Object<MpQuillEnableReadOnlyResponseMessage>(enableReadOnlyRespStr);
                     if (ctvm.CopyItemData != qrm.itemData) {
                         ctvm.CopyItemData = qrm.itemData;
                     }
-
+                    ctvm.IsBusy = false;
                 } else {
-                    if (resizeControl != null) {
-                        MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.EditableWidth, ctvm.EditableHeight, 3.0d);
-                    }
-                    //var drorMsg = new MpQuillDisableReadOnlyRequestMessage() {
-                    //    allAvailableTextTemplates = new List<MpTextTemplate>(),// MpMasterTemplateModelCollectionViewModel.Instance.AllTemplates.ToList(),
-                    //    editorHeight = ctvm.EditorHeight
-                    //};
-                    //string disableReadOnlyResp = await wv.ExecuteJavascript($"disableReadOnly_ext()");
-                    //ProcessDisableReadOnlyResponse(wv, disableReadOnlyResp);
+                    MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.EditableWidth, ctvm.EditableHeight, 3.0d);
                     wv.ExecuteJavascript($"disableReadOnly_ext()");
                 }
             }                  
@@ -282,6 +272,7 @@ namespace MonkeyPaste.Avalonia {
                     if (ctvm.IsPlaceholder && !ctvm.IsPinned) {
                         return;
                     }
+                    ctvm.IsBusy = true;
 
                     var loadContentMsg = new MpQuillLoadContentRequestMessage() {
                         contentHandle = ctvm.PublicHandle,
@@ -303,7 +294,10 @@ namespace MonkeyPaste.Avalonia {
                     ctvm.UnformattedContentSize = new MpSize(resp.contentWidth, resp.contentHeight);
                     ctvm.LineCount = resp.lineCount;
                     ctvm.CharCount = resp.charCount;
+                    wv.Document.ContentEnd.Offset = resp.charCount;
+
                     ctvm.IsWaitingForDomLoad = false;
+                    ctvm.IsBusy = false;
                 });
                 // editor will know its loaded by IsLoaded and just set new html
                 //LoadContentAsync(wv).FireAndForgetSafeAsync(null);

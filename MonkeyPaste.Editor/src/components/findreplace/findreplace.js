@@ -46,8 +46,6 @@ function initFindReplaceToolbar() {
 	enableResize(getFindReplaceToolbarElement());
 }
 
-
-
 // #endregion Life Cycle
 
 // #region Getters
@@ -76,14 +74,12 @@ function getUseRegExInputElement() {
 	return document.getElementById('useRegexInput');
 }
 
-
 function getReplaceInputElement() {
 	return document.getElementById('replaceInput');
 }
 function getReplaceInputLabelElement() {
 	return document.getElementById('replaceInputLabel');
 }
-
 
 function getFindReplaceNextButton() {
 	return document.getElementById('findReplaceNextButton');
@@ -106,6 +102,7 @@ function getFindReplaceToolbarElement() {
 function getFindReplaceToolbarHeight() {
 	return getFindReplaceToolbarElement().getBoundingClientRect().height;
 }
+
 function getFindReplaceCloseButtonElement() {
 	return document.getElementById('closeFindReplaceToolbarButton');
 }
@@ -172,6 +169,10 @@ function isFindReplaceActive() {
 }
 
 function isFindReplaceStateChanged() {
+	if (LastFindReplaceInputState == null || LastFindReplaceInputState.searchText === undefined) {
+		return true;
+	}
+
 	let cur_state = getFindReplaceInputState();
 	if (cur_state.searchText != LastFindReplaceInputState.searchText) {
 		return true;
@@ -221,7 +222,6 @@ function showFindReplaceToolbar(fromHost = false) {
 }
 
 function hideFindReplaceToolbar(fromHost = false) {
-	resetFindReplaceResults();
 	getFindReplaceToolbarElement().classList.add('hidden');
 	updateAllSizeAndPositions();
 
@@ -243,10 +243,10 @@ function toggleFindOrReplace() {
 
 function updateFindReplaceToolbarSizesAndPositions() {
 	if (isShowingFindReplaceToolbar()) {
-
 		let et_bottom = getEditorToolbarElement().getBoundingClientRect().bottom;
 		getFindReplaceToolbarElement().style.top = et_bottom + 'px';
 	}
+
 	if (CurFindReplaceDocRanges != null) {
 		updateFindReplaceRangeRects();
 	}
@@ -271,13 +271,13 @@ function resetFindReplaceToolbar() {
 	resetFindReplaceResults();
 }
 
-function populateFindReplaceResults(search_text, is_case_sensitive, is_whole_word, use_regex) {
+function populateFindReplaceResults() {
 	resetFindReplaceResults();
 
-	search_text = search_text ? search_text : document.getElementById('findInput').value;
-	is_case_sensitive = is_case_sensitive ? is_case_sensitive : document.getElementById('matchCaseInput').checked;
-	is_whole_word = is_whole_word ? is_whole_word : document.getElementById('wholeWordInput').checked;
-	use_regex = use_regex ? use_regex : document.getElementById('useRegexInput').checked;	
+	let search_text = document.getElementById('findInput').value;
+	let is_case_sensitive = document.getElementById('matchCaseInput').checked;
+	let is_whole_word = document.getElementById('wholeWordInput').checked;
+	let use_regex = document.getElementById('useRegexInput').checked;	
 
 	let sel = getEditorSelection();
 	if (sel && sel.length > 0) {		
@@ -300,6 +300,7 @@ function populateFindReplaceResults(search_text, is_case_sensitive, is_whole_wor
 		CurFindReplaceDocRangeIdx = 0;
 	}
 	updateFindReplaceRangeRects();
+	navigateFindReplaceResults(0);
 }
 
 function replaceFindResultIdx(replace_idx) {

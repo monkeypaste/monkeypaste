@@ -57,7 +57,7 @@ namespace MonkeyPaste {
             try {
                 ValidateLoadedPlugins();
             }catch(Exception ex) {
-                MpConsole.WriteLine("Plugin loader error, invalid plugins will be ignored: ", ex); 
+                MpConsole.WriteTraceLine("Plugin loader error, invalid plugins will be ignored: ", ex); 
             }            
         }
 
@@ -70,8 +70,7 @@ namespace MonkeyPaste {
                 return Directory.EnumerateFiles(root, "manifest.json", SearchOption.AllDirectories);
             }
             catch (Exception ex) {
-                MpConsole.WriteTraceLine(@"Error scanning plug-in directory: " + root);
-                MpConsole.WriteLine(ex);
+                MpConsole.WriteTraceLine(@"Error scanning plug-in directory: " + root,ex);
                 return new List<string>();
             }
         }

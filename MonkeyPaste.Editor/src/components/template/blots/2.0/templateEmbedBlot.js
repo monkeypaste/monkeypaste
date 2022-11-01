@@ -172,7 +172,7 @@ function onTemplateClick(e) {
     if (!t) {
         debugger;
 	}
-    if (!IsSubSelectionEnabled) {
+    if (!isSubSelectionEnabled()) {
         log("Selection disabled so ignoring click on template " + value.templateInstanceGuid);
         return;
     }

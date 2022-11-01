@@ -411,6 +411,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static void ResizeAnimated(Control control, double nw, double nh, double tt_ms) {
+            if(control == null) {
+                return;
+            }
             Dispatcher.UIThread.Post(async () => {
                 double dt_ms = 0;
                 double fps = 69;

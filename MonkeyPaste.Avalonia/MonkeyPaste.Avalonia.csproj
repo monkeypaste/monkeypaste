@@ -1051,6 +1051,9 @@
     <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\KeyGroup\MpAvShortcutKeyGroupView.axaml.cs">
       <DependentUpon>MpAvShortcutKeyGroupView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Reusable\Spinners\MpAvBusySpinnerView.axaml.cs">
+      <DependentUpon>MpAvBusySpinnerView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Reusable\ToolTip\MpAvToolTipLinkView.axaml.cs">
       <DependentUpon>MpAvToolTipLinkView.axaml</DependentUpon>
     </Compile>

@@ -37,35 +37,14 @@ namespace MonkeyPaste.Common {
             }
         }
 
-        public static void WriteLine(string line) {
+        public static void WriteLine(string line, bool pad_pre = false, bool pad_post = false) {
             line = line == null ? string.Empty : line;
             string str = line.ToString();
             str = $"[{DateTime.Now.ToString()}] {str}";
             if (LogToConsole) {
-                WriteLineWrapper(str);
+                WriteLineWrapper(str, false, pad_pre, pad_post);
             }
             if(LogToFile) {
-                WriteLogLine(str);
-            }
-        }
-
-        public static void WriteLines(params object[] lines) {
-            if(lines == null) {
-                return;
-            }
-            foreach(var l in lines) {
-                WriteLine(l);
-            }
-        }
-
-        public static void WriteLine(object line, params object[] args) {
-            line = line == null ? string.Empty : line;
-            string str = line.ToString();
-            str = $"<{DateTime.Now}> {str}";
-            if (LogToConsole) {
-                WriteLineWrapper(str);
-            }
-            if (LogToFile) {
                 WriteLogLine(str);
             }
         }
@@ -140,17 +119,35 @@ namespace MonkeyPaste.Common {
 
         #region Private Methods
 
-        private static void WriteLineWrapper(string str, bool isTrace = false) {
+        private static void WriteLineWrapper(string str, bool isTrace = false, bool pad_pre = false, bool pad_post = false) {
             if (RuntimeInformation.FrameworkDescription.ToLower().Contains(".net framework") || isTrace) {
                 // wpf
+                if(pad_pre) {
+                    Console.WriteLine("");
+                }
                 Console.WriteLine(str);
+                if (pad_post) {
+                    Console.WriteLine("");
+                }
                 return;
             } else if (RuntimeInformation.FrameworkDescription.ToLower().Contains(".net 6")) {
                 // avalonia
                 if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                    if (pad_pre) {
+                        Debug.WriteLine("");
+                    }
                     Debug.WriteLine(str);
+                    if (pad_post) {
+                        Debug.WriteLine("");
+                    }
                 } else {
+                    if (pad_pre) {
+                        Console.WriteLine("");
+                    }
                     Console.WriteLine(str);
+                    if (pad_post) {
+                        Console.WriteLine("");
+                    }
                 }
                 return;
             } else {

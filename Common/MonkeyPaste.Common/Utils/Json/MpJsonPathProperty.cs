@@ -196,8 +196,7 @@ namespace MonkeyPaste.Common {
                 }
             }
             catch (Exception ex) {
-                MpConsole.WriteLine($"Error converting '{result}' to type '{typeof(T)}'");
-                MpConsole.WriteLine(ex);
+                MpConsole.WriteTraceLine($"Error converting '{result}' to type '{typeof(T)}'", ex);
 
                 value = default;
             }

@@ -23,10 +23,22 @@ function initMain_ext(initMsgStr_base64) {
 function loadContent_ext(loadContentMsgStr_base64) {
 	// input 'MpQuillLoadContentRequestMessage'
 	// output 'MpQuillLoadContentResponseMessage'
-	log('log content msg: ' + loadContentMsgStr_base64);
 	let req = toJsonObjFromBase64Str(loadContentMsgStr_base64);
 
-	loadContent(req.contentHandle, req.contentType, req.itemData, req.isPasteRequest, req.searchText, req.isCaseSensitive, req.isWholeWord, req.useRegex);
+	log('load content request msg: ' + JSON.stringify(req));
+
+	let searchStateObj = null;
+	if (!isNullOrEmpty(req.searchText)) {
+		searchStateObj = {
+			searchText: req.searchText,
+			replaceText: null,
+			isReplace: false,
+			isCaseSensitive: req.isCaseSensitive,
+			isWholeWordMatch: req.isWholeWord,
+			useRegEx: req.useRegex
+		};
+	}
+	loadContent(req.contentHandle, req.contentType, req.itemData, req.isPasteRequest, searchStateObj);
 	quill.update();
 
 	let respObj = {
@@ -34,11 +46,9 @@ function loadContent_ext(loadContentMsgStr_base64) {
 		contentHeight: getContentHeight(),
 		lineCount: parseInt_safe(getContentHeightByType()),
 		charCount: parseInt_safe(getContentWidthByType()),
-		//decodedTemplateGuids: getDecodedTemplateGuids(),
-		//contentLength: getDocLength(),
 		hasTemplates: hasTemplates()
 	}
-	log(respObj);
+	log('load content resp msg: '+respObj);
 	let resp = toBase64FromJsonObj(respObj);
 	//log('init Response: ');
 	//log(initResponseMsgStr);
@@ -50,13 +60,14 @@ function hostIsSelectedChanged_ext(hostIsSelectedMsgStr_base64) {
 	let msg = toJsonObjFromBase64Str(hostIsSelectedMsgStr_base64);
 	setInputFocusable(msg.isHostSelected);
 }
+
 function contentRequest_ext(contentReqMsgStr_base64) {
 	// input 'MpQuillContentDataRequestMessage'
 	// output 'MpQuillContentDataResponseMessage' (with 'MpQuillContentDataResponseFormattedDataItemFragment' items)
 
 	let req = toJsonObjFromBase64Str(contentReqMsgStr_base64);
 	let sel = null;
-	if (req.forPaste && IsSubSelectionEnabled) {
+	if (req.forPaste && isSubSelectionEnabled()) {
 		if (ContentItemType != 'Text') {
 			log('Editor State Error! Type is ' + ContentItemType + ' and subselection is enabled, which should only be for text');
 			disableSubSelection();
@@ -277,7 +288,7 @@ function deselectAll_ext() {
 	}
 
 	setEditorSelection(0, 0);
-	if (IsSubSelectionEnabled) {
+	if (isSubSelectionEnabled()) {
 		return;
 	}
 	getEditorContainerElement().style.userSelect = 'none';

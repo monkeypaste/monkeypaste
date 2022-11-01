@@ -37,11 +37,7 @@ namespace MonkeyPaste {
         public double contentHeight { get; set; }
         public int lineCount { get; set; }
         public int charCount { get; set; }
-        //public int contentLength { get; set; }
-
         public bool hasTemplates { get; set; }
-
-        //public List<string> decodedTemplateGuids { get; set; }
     }
 
     public class MpQuillContentDataRequestMessage : MpJsonObject {

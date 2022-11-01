@@ -7,7 +7,7 @@ function initContent() {
 	registerTemplateBlots();
 }
 
-function loadContent(contentHandle, contentType, contentData, isPasteRequest, searchText, isCaseSensitive, isWholeWord, useRegex) {
+function loadContent(contentHandle, contentType, contentData, isPasteRequest, searchStateObj) {
 	quill.history.clear();
 
 	resetSelection();
@@ -42,19 +42,23 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 	//getEditorElement().style.backgroundColor = rgbaToCssColor(contentBg_rgba);
 
 	updateAllSizeAndPositions();
-	IsLoaded = true;
 
-	if (isNullOrEmpty(searchText)) {
-		resetFindReplaceToolbar();
-		hideFindReplaceToolbar();
+	if (searchStateObj == null) {
+		if (isShowingFindReplaceToolbar()) {
+			resetFindReplaceToolbar();
+			hideFindReplaceToolbar();
+		}
 	} else {
 		quill.update();
-		populateFindReplaceResults(searchText, isCaseSensitive, isWholeWord, useRegex);
-		searchNavOffsetChanged_ext(CurFindReplaceDocRanges.length);
+		enableSubSelection(false, false);
+		setFindReplaceInputState(searchStateObj);
+		populateFindReplaceResults();		
+		onQuerySearchRangesChanged_ntf(CurFindReplaceDocRanges.length);
 	}
 
+	IsLoaded = true;
 	// initial load content length ntf
-	onContentLengthChanged_ntf();
+	//onContentLengthChanged_ntf();
 }
 
 function getContentData() {
@@ -181,7 +185,6 @@ function isDocIdxLineEnd(docIdx) {
 	let nextIdxLine = quill.getLine(docIdx + 1);
 	return idxLine[0] != nextIdxLine[0];
 }
-
 
 function getLineStartDocIdx(docIdx) {
 	//let lineStartDocIdx = 0;
@@ -366,12 +369,28 @@ function getRangeRects(range, isWindowOrigin = true) {
 	}
 	let cur_line_rect = null;
 	for (var i = range.index; i < range.index + range.length; i++) {
+		if (i == 95) {
+			//debugger;
+		}
 		let cur_idx_rect = getCharacterRect(i, isWindowOrigin);
+
+		let is_cur_idx_wrapped = false;
 		if (cur_line_rect == null) {
-			//new line
+			//new line 
 			cur_line_rect = cur_idx_rect
 		} else {
-			cur_line_rect = rectUnion(cur_line_rect, cur_idx_rect);
+			// check if idx rect is wrapped if its top is closer to the cur line rects bottom than the current line rect's top
+			let top_dist = Math.abs(cur_idx_rect.top - cur_line_rect.top);
+			let bottom_dist = Math.abs(cur_idx_rect.top - cur_line_rect.bottom);
+			is_cur_idx_wrapped = bottom_dist < top_dist;
+			if (is_cur_idx_wrapped) {
+				let pre_wrap_text = getText({ index: range.index, length: i - range.index });
+				//debugger;
+				range_rects.push(cur_line_rect);
+				cur_line_rect = cur_idx_rect;
+			} else {
+				cur_line_rect = rectUnion(cur_line_rect, cur_idx_rect);
+			}			
 		}
 		if (isDocIdxLineEnd(i)) {
 			range_rects.push(cur_line_rect);

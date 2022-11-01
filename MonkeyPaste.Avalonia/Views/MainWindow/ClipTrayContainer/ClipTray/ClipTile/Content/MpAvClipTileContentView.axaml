@@ -14,17 +14,6 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileContentView">
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
-        <!--<Grid.Styles>
-            <Style Selector=":is(Control).ContentDragAndDrop">
-                <Setter Property="(i:Interaction.Behaviors)">
-                    <i:BehaviorCollectionTemplate>
-                        <i:BehaviorCollection>
-                            <local:MpAvContentViewDropBehavior x:Key="ContentViewDropBehavior" />
-                        </i:BehaviorCollection>
-                    </i:BehaviorCollectionTemplate>
-                </Setter>
-            </Style>
-        </Grid.Styles>-->
         <Border x:Name="ClipTileContainerBorder"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
@@ -32,12 +21,6 @@
                             Content="{Binding}">
                 <ContentControl.DataTemplates>
                     <local:MpAvClipTileContentDataTemplateSelector>
-                        <!--<DataTemplate x:Key="CefWebViewTemplate"
-                                      DataType="local:MpAvClipTileViewModel">
-                            <local:MpAvContentWebView DataContext="{Binding}"
-                                                      HorizontalAlignment="Stretch"
-                                                      VerticalAlignment="Stretch" />
-                        </DataTemplate>-->
                         <DataTemplate x:Key="CefNetWebViewTemplate"
                                       DataType="local:MpAvClipTileViewModel">
                             <local:MpAvCefNetContentWebView AttachedToVisualTree="ContentTemplate_AttachedToVisualTree"
@@ -58,5 +41,11 @@
                 </ContentControl.DataTemplates>
             </ContentControl>
         </Border>
+        <local:MpAvBusySpinnerView Cursor="Wait"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Width="50"
+                                   Height="50"
+                                   IsVisible="{Binding IsAnyBusy}" />
     </Grid>
 </local:MpAvUserControl>

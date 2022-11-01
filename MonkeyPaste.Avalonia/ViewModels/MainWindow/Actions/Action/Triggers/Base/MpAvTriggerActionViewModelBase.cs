@@ -108,8 +108,7 @@ namespace MonkeyPaste.Avalonia {
                 scale.X = Convert.ToDouble(arg2Parts[0]);
                 scale.Y = Convert.ToDouble(arg2Parts[1]);
             }catch(Exception ex) {
-                MpConsole.WriteTraceLine($"Error parsing scale from arg2: '{Arg2}'");
-                MpConsole.WriteLine(ex);
+                MpConsole.WriteTraceLine($"Error parsing scale from arg2: '{Arg2}'",ex);
             }
             return scale;
         }
@@ -125,8 +124,7 @@ namespace MonkeyPaste.Avalonia {
                 offset.Y = Convert.ToDouble(arg2Parts[3]);
             }
             catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error parsing offset from arg2: '{Arg2}'");
-                MpConsole.WriteLine(ex);
+                MpConsole.WriteTraceLine($"Error parsing offset from arg2: '{Arg2}'",ex);
             }
             return offset;
         }

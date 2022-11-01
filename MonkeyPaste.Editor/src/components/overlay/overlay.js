@@ -240,7 +240,7 @@ function drawTextSelection(ctx) {
                 sel_bg_color = 'salmon';
             }
         }
-    } else if (IsSubSelectionEnabled) {
+    } else if (isSubSelectionEnabled()) {
         if (isEditorToolbarVisible()) {
             if (IsTemplateAtInsert) {
                 caret_color = 'transparent';
@@ -317,7 +317,7 @@ function drawOverlay() {
 
     drawTextSelection(ctx);
 
-    //let isUnderlinesVisible = !isEditorToolbarVisible() && IsSubSelectionEnabled && !isDropping();
+    //let isUnderlinesVisible = !isEditorToolbarVisible() && isSubSelectionEnabled() && !isDropping();
     //if (isUnderlinesVisible) {
     //    drawUnderlines(ctx);
     //} 

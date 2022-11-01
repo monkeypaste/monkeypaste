@@ -89,7 +89,7 @@ namespace MonkeyPaste {
                 viewQueryStr = allRootIdQuery;
                 string totalWidthQuery = allRootIdQuery.Replace("RootId", "SUM(ItemWidth)");
 
-                MpConsole.WriteTraceLine("Current DataModel Query: " + allRootIdQuery);
+                MpConsole.WriteLine("Current DataModel Query: " + allRootIdQuery);
                 
                 var idl = await MpDb.QueryScalarsAsync<int>(allRootIdQuery);
                 var curIds = new ObservableCollection<int>(idl.Distinct());
@@ -265,9 +265,7 @@ namespace MonkeyPaste {
             } else if(types.Count > 0) {
                 query += " where ";
                 query += string.Join(" or ", types);
-            }
-
-            
+            }            
             query += " " + sortClause;
             return query;
         }

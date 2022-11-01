@@ -1,0 +1,94 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:MonkeyPaste.Avalonia"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             ClipToBounds="False"
+             x:Class="MonkeyPaste.Avalonia.MpAvBusySpinnerView"
+             Background="Transparent">
+    <UserControl.Styles>
+        <Style Selector="Grid#SpinnerGroup1">
+            <Setter Property="RotateTransform.Angle"
+                    Value="0" />
+        </Style>
+        <Style Selector="Grid#SpinnerGroup2">
+            <Setter Property="RotateTransform.Angle"
+                    Value="45" />
+        </Style>
+
+        <Style Selector="Grid#ContainerGrid[IsVisible=true]">
+            <Style.Animations>
+                <Animation Duration="0:0:2"
+                           IterationCount="0"
+                           FillMode="Forward">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="RotateTransform.Angle"
+                                Value="0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="50%">
+                        <Setter Property="RotateTransform.Angle"
+                                Value="180" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="RotateTransform.Angle"
+                                Value="360" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="Ellipse">
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="Width"
+                    Value="10" />
+            <Setter Property="Height"
+                    Value="10" />
+            <Setter Property="Fill"
+                    Value="PowderBlue" />
+        </Style>
+    </UserControl.Styles>
+    <Grid x:Name="ContainerGrid">
+        <Grid x:Name="SpinnerGroup1"
+              Width="100"
+              Height="100"
+              ClipToBounds="False"
+              Background="Transparent">
+            <Grid.RenderTransform>
+                <RotateTransform />
+            </Grid.RenderTransform>
+            <!--  12 o'clock  -->
+            <Ellipse>
+                <Ellipse.RenderTransform>
+                    <TranslateTransform X="0"
+                                        Y="-30" />
+                </Ellipse.RenderTransform>
+            </Ellipse>
+            <!--  6 o'clock  -->
+            <Ellipse>
+                <Ellipse.RenderTransform>
+                    <TranslateTransform X="0"
+                                        Y="30" />
+                </Ellipse.RenderTransform>
+            </Ellipse>
+            <!--  3 o'clock  -->
+            <Ellipse>
+                <Ellipse.RenderTransform>
+                    <TranslateTransform X="30"
+                                        Y="0" />
+                </Ellipse.RenderTransform>
+            </Ellipse>
+            <!--  9 o'clock  -->
+            <Ellipse>
+                <Ellipse.RenderTransform>
+                    <TranslateTransform X="-30"
+                                        Y="0" />
+                </Ellipse.RenderTransform>
+            </Ellipse>
+        </Grid>
+    </Grid>
+</UserControl>

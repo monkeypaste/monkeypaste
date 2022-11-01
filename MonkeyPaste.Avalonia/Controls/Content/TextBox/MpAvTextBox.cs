@@ -202,6 +202,8 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
+        public bool IsContentUnloaded { get; set; }
+
 
 
 

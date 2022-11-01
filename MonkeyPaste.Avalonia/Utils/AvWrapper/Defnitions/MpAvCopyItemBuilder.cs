@@ -233,6 +233,7 @@ namespace MonkeyPaste.Avalonia {
                     //}
                     if(last_pinfo == null) {
                         Debugger.Break();
+                        return null;
                     }
                     app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(last_pinfo);
 

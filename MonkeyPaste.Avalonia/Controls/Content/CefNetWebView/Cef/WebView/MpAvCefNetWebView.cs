@@ -60,7 +60,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsEditorInitialized { get; set; } = false;
         public bool IsDomLoaded { get; set; } = false;
 
-
+        public bool IsContentUnloaded { get; set; } = false;
         public MpAvTextSelection Selection { get; private set; }
 
         public MpAvHtmlDocument Document { get; set; }
@@ -77,9 +77,6 @@ namespace MonkeyPaste.Avalonia {
             Document = new MpAvHtmlDocument(this);
             Selection = new MpAvTextSelection(Document);
             MpMessenger.RegisterGlobal(ReceivedGlobalMessega);
-            //CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Copy, OnCopy, OnCanExecuteClipboardCommand));
-            //CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Cut, OnCut, OnCanExecuteClipboardCommand));
-            //CommandBindings.Add(new RoutedCommandBinding(ApplicationCommands.Paste, OnPaste, OnCanExecuteClipboardCommand));
 
         }
 
@@ -108,40 +105,51 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region WebView Binding Methods
-        public void HandleBindingNotification(MpAvEditorBindingFunctionType notificationTYpe, string msgJsonBase64Str) {
+        public void HandleBindingNotification(MpAvEditorBindingFunctionType notificationType, string msgJsonBase64Str) {
             var ctvm =DataContext as MpAvClipTileViewModel;
-            if(ctvm == null && notificationTYpe != MpAvEditorBindingFunctionType.notifyDomLoaded) {
+            if(ctvm == null && notificationType != MpAvEditorBindingFunctionType.notifyDomLoaded) {
                 // converter doesn't have data context but needs to notify dom loaded which doesn't need it
                 return;
             }
-            switch (notificationTYpe) {
+            MpJsonObject ntf = null;
+            switch (notificationType) {
                 case MpAvEditorBindingFunctionType.notifyEditorSelectionChanged:
-                    var selChangedJsonMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillContentSelectionChangedMessage>(msgJsonBase64Str);
-                   UpdateSelection(selChangedJsonMsgObj.index, selChangedJsonMsgObj.length, selChangedJsonMsgObj.selText, true, selChangedJsonMsgObj.isChangeBegin);
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillContentSelectionChangedMessage>(msgJsonBase64Str);
+                    if(ntf is MpQuillContentSelectionChangedMessage selChange_ntf) {
+                        UpdateSelection(selChange_ntf.index, selChange_ntf.length, selChange_ntf.selText, true, selChange_ntf.isChangeBegin);
+                    }
                     break;
                 case MpAvEditorBindingFunctionType.notifyContentLengthChanged:
-                    var contentLengthMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillContentLengthChangedMessage>(msgJsonBase64Str);
-                   Document.ContentEnd.Offset = contentLengthMsgObj.length;
-                    ctvm.CharCount = contentLengthMsgObj.length;
-                    ctvm.LineCount = contentLengthMsgObj.lines;
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillContentLengthChangedMessage>(msgJsonBase64Str);
+                    if(ntf is MpQuillContentLengthChangedMessage cntLength_ntf) {
+                        Document.ContentEnd.Offset = cntLength_ntf.length;
+                        ctvm.CharCount = cntLength_ntf.length;
+                        ctvm.LineCount = cntLength_ntf.lines;
+                    }
                     break;
                 case MpAvEditorBindingFunctionType.notifyReadOnlyEnabled:
-                    var enableReadOnlyMsg = MpJsonObject.DeserializeBase64Object<MpQuillEnableReadOnlyResponseMessage>(msgJsonBase64Str);
-                    ctvm.IsContentReadOnly = true;
-                    ctvm.CopyItemData = enableReadOnlyMsg.itemData;
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillEnableReadOnlyResponseMessage>(msgJsonBase64Str);
+                    if(ntf is MpQuillEnableReadOnlyResponseMessage enableReadOnlyMsg) {
+                        ctvm.IsContentReadOnly = true;
+                        ctvm.CopyItemData = enableReadOnlyMsg.itemData;
+                    }                    
                     break;
                 case MpAvEditorBindingFunctionType.notifyReadOnlyDisabled:
-                    var disableReadOnlyMsg = MpJsonObject.DeserializeBase64Object<MpQuillDisableReadOnlyResponseMessage>(msgJsonBase64Str);
-                    ctvm.IsContentReadOnly = false;
-                    ctvm.UnformattedContentSize = new MpSize(disableReadOnlyMsg.editorWidth, disableReadOnlyMsg.editorHeight);
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillDisableReadOnlyResponseMessage>(msgJsonBase64Str);
+                    if(ntf is MpQuillDisableReadOnlyResponseMessage disableReadOnlyMsg) {
+                        ctvm.IsContentReadOnly = false;
+                        ctvm.UnformattedContentSize = new MpSize(disableReadOnlyMsg.editorWidth, disableReadOnlyMsg.editorHeight);
+                    }
                     break;
 
                 case MpAvEditorBindingFunctionType.notifySubSelectionEnabledChanged:
-                    var subSelChangedNtf = MpJsonObject.DeserializeBase64Object<MpQuillSubSelectionChangedMessageOrNotification>(msgJsonBase64Str);
-                    ctvm.IsSubSelectionEnabled = subSelChangedNtf.isSubSelectionEnabled;
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillSubSelectionChangedMessageOrNotification>(msgJsonBase64Str);
+                    if (ntf is MpQuillSubSelectionChangedMessageOrNotification subSelChangedNtf) {
+                        ctvm.IsSubSelectionEnabled = subSelChangedNtf.isSubSelectionEnabled;
+                    }
                     break;
                 case MpAvEditorBindingFunctionType.notifyDomLoaded:
-                   IsDomLoaded = true;
+                    IsDomLoaded = true;
                     break;
                 case MpAvEditorBindingFunctionType.notifyDropCompleted:
                     Dispatcher.UIThread.Post(async () => {
@@ -184,27 +192,39 @@ namespace MonkeyPaste.Avalonia {
                     BindingContext.IsHovering = false;
                     break;
                 case MpAvEditorBindingFunctionType.notifyContentScreenShot:
-                    var ssMsg = MpJsonObject.DeserializeBase64Object<MpQuillContentScreenShotNotificationMessage>(msgJsonBase64Str);
-                    Document.ContentScreenShotBase64 = ssMsg.contentScreenShotBase64;
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillContentScreenShotNotificationMessage>(msgJsonBase64Str);
+                    if (ntf is MpQuillContentScreenShotNotificationMessage ssMsg) {
+                        Document.ContentScreenShotBase64 = ssMsg.contentScreenShotBase64;
+                    }
                     break;
                 case MpAvEditorBindingFunctionType.notifyPasteTemplateRequest:
                     MpAvClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(true);
                     break;
                 case MpAvEditorBindingFunctionType.notifyException:
-                    var exceptionMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);
-                    MpConsole.WriteLine(exceptionMsgObj);
-                    break;
-                case MpAvEditorBindingFunctionType.notifyFindReplaceVisibleChange:
-                    var findReplaceMsgObj = MpJsonObject.DeserializeBase64Object<MpQuillContentFindReplaceVisibleChanedNotificationMessage>(msgJsonBase64Str);
-                    ctvm.IsFindAndReplaceVisible = findReplaceMsgObj.isFindReplaceVisible;
-                    break;
-                case MpAvEditorBindingFunctionType.notifyQuerySearchRangesChanged:
-                    var searchRangeCountMsg = MpJsonObject.DeserializeBase64Object<MpQuillContentQuerySearchRangesChangedNotificationMessage>(msgJsonBase64Str);
-                    if(searchRangeCountMsg.rangeCount > 1) {
-                        MpAvSearchBoxViewModel.Instance.NotifyHasMultipleMatches();
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);
+                    if(ntf is MpQuillExceptionMessage exceptionMsgObj) {
+                        // handled post-case
                     }
                     break;
+                case MpAvEditorBindingFunctionType.notifyFindReplaceVisibleChange:
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillContentFindReplaceVisibleChanedNotificationMessage>(msgJsonBase64Str);
+                    if(ntf is MpQuillContentFindReplaceVisibleChanedNotificationMessage findReplaceMsgObj) {
+                        ctvm.IsFindAndReplaceVisible = findReplaceMsgObj.isFindReplaceVisible;
+                    }
+                    break;
+                case MpAvEditorBindingFunctionType.notifyQuerySearchRangesChanged:
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillContentQuerySearchRangesChangedNotificationMessage>(msgJsonBase64Str);
+                    if(ntf is MpQuillContentQuerySearchRangesChangedNotificationMessage searchRangeCountMsg) {
+                        if (searchRangeCountMsg.rangeCount > 1) {
+                            MpAvSearchBoxViewModel.Instance.NotifyHasMultipleMatches();
+                        }
+                    }
+                   
+                    break;
             }
+
+            MpConsole.WriteLine($"Tile {ctvm} received cef notification type '{notificationType}' w/ msg:",true);
+            MpConsole.WriteLine($"'{(ntf == null ? "NO DATA RECEIVED":ntf.ToPrettyPrintJsonString())}'", false, true);
         }
         public void UpdateSelection(int index, int length,string text, bool isFromEditor, bool isChangeBegin) {
             var newStart = new MpAvTextPointer(Document, index);
