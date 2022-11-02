@@ -39,12 +39,12 @@ function getFontPickerOptionsContainerElement() {
 
 // #region Actions
 
-function refreshFontSizePicker(forcedSize = null, sel = null) {
+function updateFontSizePickerToSelection(forcedSize = null, sel = null) {
     if (IsFontSizePickerOpen) {
         return;
     }
 
-    sel = sel ? sel : getEditorSelection();
+    sel = sel ? sel : getDocSelection();
     let curFontSize = forcedSize;
     if (curFontSize == null) {
         let curFormat = quill.getFormat(sel);

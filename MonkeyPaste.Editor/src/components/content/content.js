@@ -41,7 +41,8 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 
 	//getEditorElement().style.backgroundColor = rgbaToCssColor(contentBg_rgba);
 
-	updateAllSizeAndPositions();
+	quill.update();
+	updateAllElements();
 
 	if (searchStateObj == null) {
 		if (isShowingFindReplaceToolbar()) {
@@ -49,14 +50,14 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 			hideFindReplaceToolbar();
 		}
 	} else {
-		quill.update();
-		enableSubSelection(false, false);
+		enableSubSelection(false, false, false);
 		setFindReplaceInputState(searchStateObj);
 		populateFindReplaceResults();		
 		onQuerySearchRangesChanged_ntf(CurFindReplaceDocRanges.length);
 	}
 
 	IsLoaded = true;
+	onContentLoaded_ntf();
 	// initial load content length ntf
 	//onContentLengthChanged_ntf();
 }
@@ -262,7 +263,7 @@ function getDocLength() {
 	return quill.getLength();
 }
 
-function getCharacterRect(docIdx, isWindowOrigin = true) {
+function getCharacterRect(docIdx, isWindowOrigin = true, inflateToLineRect = true) {
 	docIdx = parseInt(docIdx);
 	if (isNaN(docIdx)) {
 		return cleanRect();
@@ -275,9 +276,13 @@ function getCharacterRect(docIdx, isWindowOrigin = true) {
 	} else {
 		docIdx_rect = cleanRect(docIdx_rect);
 	}
-	let lh = getLineHeightAtDocIdx(docIdx);
-	let inflate_y_amt = Math.ceil((lh - docIdx_rect.height) / 2);
-	docIdx_rect = inflateRect(docIdx_rect, 0, -inflate_y_amt, 0, inflate_y_amt);
+	if (inflateToLineRect) {
+		let lh = getLineHeightAtDocIdx(docIdx);
+		let inflate_y_amt = Math.ceil((lh - docIdx_rect.height) / 2);
+		docIdx_rect = inflateRect(docIdx_rect, 0, -inflate_y_amt, 0, inflate_y_amt);
+		
+	}
+	
 	return docIdx_rect;
 }
 
@@ -362,7 +367,7 @@ function getLineRect(lineIdx, snapToEditor = true) {
 	return line_rect;
 }
 
-function getRangeRects(range, isWindowOrigin = true) {
+function getRangeRects(range, isWindowOrigin = true, inflateToLineHeight = true) {
 	let range_rects = [];
 	if (!range || range.length == 0) {
 		return range_rects;
@@ -372,7 +377,7 @@ function getRangeRects(range, isWindowOrigin = true) {
 		if (i == 95) {
 			//debugger;
 		}
-		let cur_idx_rect = getCharacterRect(i, isWindowOrigin);
+		let cur_idx_rect = getCharacterRect(i, isWindowOrigin, inflateToLineHeight);
 
 		let is_cur_idx_wrapped = false;
 		if (cur_line_rect == null) {
@@ -601,7 +606,10 @@ function getElementAtDocIdx(docIdx, ignoreTextNode = false) {
 	if (!doc_idx_blot) {
 		return getEditorElement();
 	}
-	if (ignoreTextNode && doc_idx_blot.domNode && doc_idx_blot.domNode.nodeType !== undefined && doc_idx_blot.domNode.nodeType === 3) {
+	if (ignoreTextNode &&
+		doc_idx_blot.domNode &&
+		doc_idx_blot.domNode.nodeType !== undefined &&
+		doc_idx_blot.domNode.nodeType === 3) {
 		return doc_idx_blot.domNode.parentNode;
 	}
 	return doc_idx_blot.domNode;
@@ -623,15 +631,15 @@ function getBlockElementAtDocIdx(docIdx) {
 }
 
 function getHtmlFromDocRange(docRange) {
-	let old_sel = getEditorSelection();
+	let old_sel = getDocSelection();
 
 	IgnoreNextSelectionChange = true;
 
-	setEditorSelection(docRange.index, docRange.length, 'silent');
+	setDocSelection(docRange.index, docRange.length, 'silent');
 	let rangeHtml = getSelectedHtml();
 
 	IgnoreNextSelectionChange = true;
-	setEditorSelection(old_sel.index, old_sel.length, 'silent');
+	setDocSelection(old_sel.index, old_sel.length, 'silent');
 
 	if (IgnoreNextSelectionChange) {
 		log('Hey! setSelection by silent doesnt trigger sel change event');

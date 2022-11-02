@@ -46,6 +46,6 @@
                                    VerticalAlignment="Center"
                                    Width="50"
                                    Height="50"
-                                   IsVisible="{Binding IsAnyBusy}" />
+                                   IsVisible="False" />
     </Grid>
 </local:MpAvUserControl>

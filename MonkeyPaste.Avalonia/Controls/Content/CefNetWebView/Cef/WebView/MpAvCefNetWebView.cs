@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
     public enum MpAvEditorBindingFunctionType {
         getDragData,
         getAllTemplatesFromDb,
-        notifyEditorSelectionChanged,
+        notifyDocSelectionChanged,
         notifyContentLengthChanged,
         notifySubSelectionEnabledChanged,
         notifyDropEffectChanged,
@@ -41,7 +41,8 @@ namespace MonkeyPaste.Avalonia {
         notifyAddOrUpdateTemplate,
         notifyPasteTemplateRequest,
         notifyFindReplaceVisibleChange,
-        notifyQuerySearchRangesChanged
+        notifyQuerySearchRangesChanged,
+        notifyLoadComplete
     }
     [DoNotNotify]
     public class MpAvCefNetWebView : 
@@ -54,8 +55,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
-
-
         public MpAvClipTileViewModel BindingContext => this.DataContext as MpAvClipTileViewModel;
         public bool IsEditorInitialized { get; set; } = false;
         public bool IsDomLoaded { get; set; } = false;
@@ -113,7 +112,7 @@ namespace MonkeyPaste.Avalonia {
             }
             MpJsonObject ntf = null;
             switch (notificationType) {
-                case MpAvEditorBindingFunctionType.notifyEditorSelectionChanged:
+                case MpAvEditorBindingFunctionType.notifyDocSelectionChanged:
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillContentSelectionChangedMessage>(msgJsonBase64Str);
                     if(ntf is MpQuillContentSelectionChangedMessage selChange_ntf) {
                         UpdateSelection(selChange_ntf.index, selChange_ntf.length, selChange_ntf.selText, true, selChange_ntf.isChangeBegin);
@@ -143,8 +142,8 @@ namespace MonkeyPaste.Avalonia {
                     break;
 
                 case MpAvEditorBindingFunctionType.notifySubSelectionEnabledChanged:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillSubSelectionChangedMessageOrNotification>(msgJsonBase64Str);
-                    if (ntf is MpQuillSubSelectionChangedMessageOrNotification subSelChangedNtf) {
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillSubSelectionChangedNotification>(msgJsonBase64Str);
+                    if (ntf is MpQuillSubSelectionChangedNotification subSelChangedNtf) {
                         ctvm.IsSubSelectionEnabled = subSelChangedNtf.isSubSelectionEnabled;
                     }
                     break;
@@ -221,10 +220,22 @@ namespace MonkeyPaste.Avalonia {
                     }
                    
                     break;
+                case MpAvEditorBindingFunctionType.notifyLoadComplete:
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillLoadContentResponseMessage>(msgJsonBase64Str);
+                    if(ntf is MpQuillLoadContentResponseMessage resp) {
+                        ctvm.UnformattedContentSize = new MpSize(resp.contentWidth, resp.contentHeight);
+                        ctvm.LineCount = resp.lineCount;
+                        ctvm.CharCount = resp.charCount;
+                        Document.ContentEnd.Offset = resp.charCount;
+
+                        //ctvm.IsWaitingForDomLoad = false;
+                        ctvm.IsBusy = false;
+                    }
+                    break;
             }
 
-            MpConsole.WriteLine($"Tile {ctvm} received cef notification type '{notificationType}' w/ msg:",true);
-            MpConsole.WriteLine($"'{(ntf == null ? "NO DATA RECEIVED":ntf.ToPrettyPrintJsonString())}'", false, true);
+            //MpConsole.WriteLine($"Tile {ctvm} received cef notification type '{notificationType}' w/ msg:",true);
+            //MpConsole.WriteLine($"'{(ntf == null ? "NO DATA RECEIVED":ntf.ToPrettyPrintJsonString())}'", false, true);
         }
         public void UpdateSelection(int index, int length,string text, bool isFromEditor, bool isChangeBegin) {
             var newStart = new MpAvTextPointer(Document, index);

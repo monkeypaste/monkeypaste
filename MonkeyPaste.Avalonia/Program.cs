@@ -6,19 +6,20 @@ namespace MonkeyPaste.Avalonia
 {
     internal class Program
     {
+        public static string[] Args { get; private set; }
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
         // yet and stuff might break.
         
         [STAThread]
         public static void Main(string[] args) {
-//#if DEBUG
+            //#if DEBUG
             // if(args.Length > 0 && args[0] == "waitfordebugger") {
             //     MpConsole.WriteLine("Waiting for debugger...");
             //     Thread.Sleep(10000); // Wait 10 Seconds
             // }
-//#endif
-            
+            //#endif
+            Args = args;
             BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
         }

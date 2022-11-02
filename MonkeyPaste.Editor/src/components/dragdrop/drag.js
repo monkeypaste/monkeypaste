@@ -96,13 +96,13 @@ function onDragStart(e) {
  //       //e.stopPropagation();
  //       return false;
 	//}
-    let sel = getEditorSelection();
+    let sel = getDocSelection();
 
     if (e.target.id == 'dragOverlay') {
         // overlay drag is full content so select all
         SelIdxBeforeDrag = sel ? sel.index : -1;
         selectAll();
-        sel = getEditorSelection();
+        sel = getDocSelection();
     }
 
     if (!sel || sel.length == 0) {

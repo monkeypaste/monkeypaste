@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using SQLiteNetExtensions.Extensions;
+using System.Reflection;
 
 namespace MonkeyPaste {
     public static class MpDb {
@@ -601,17 +602,19 @@ namespace MonkeyPaste {
             MpPrefViewModel.Instance.ThisDeviceType = osInfo.OsType;
 
             await _connectionAsync.CreateTableAsync<MpApp>();
-            var process = Process.GetCurrentProcess();
+            using var process = Process.GetCurrentProcess();
             string thisAppPath = process.MainModule.FileName;
-            string thisAppArgs = process.StartInfo == null ? string.Empty : process.StartInfo.Arguments;
-            var thisApp = await MpDataModelProvider.GetAppByPathAsync(thisAppPath, thisAppArgs, this_device.Id);
+            //string thisAppArgs = process.StartInfo == null ? string.Empty : process.StartInfo.Arguments;
+            //var thisApp = await MpDataModelProvider.GetAppByPathAsync(thisAppPath, thisAppArgs, this_device.Id);
+            //string thisAppPath = Assembly.GetEntryAssembly().Location;
+            var thisApp = await MpDataModelProvider.GetAppByPathAsync(thisAppPath, null, this_device.Id);
 
             await _connectionAsync.CreateTableAsync<MpSource>();
             var thisAppSource = await MpSource.Create(appId: thisApp.Id, urlId: 0);
             MpPrefViewModel.Instance.ThisAppSourceId = thisAppSource.Id;
 
 
-            var osApp = await MpDataModelProvider.GetAppByPathAsync(osInfo.OsFileManagerPath, string.Empty, this_device.Id);
+            var osApp = await MpDataModelProvider.GetAppByPathAsync(osInfo.OsFileManagerPath, null, this_device.Id);
             var osAppSource = await MpDataModelProvider.GetSourceByMembersAsync(osApp.Id,0);
             MpPrefViewModel.Instance.ThisOsFileManagerSourceId = osAppSource.Id;
 

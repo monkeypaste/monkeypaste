@@ -97,7 +97,7 @@ function getTemplatePasteValue(t) {
 }
 
 function getPasteTemplateDefs() {
-    let paste_sel = getEditorSelection(true);
+    let paste_sel = getDocSelection(true);
     return getTemplateDefsInRange(paste_sel);
 }
 
@@ -305,7 +305,7 @@ function updatePasteValueTextAreaSize() {
 }
 
 function updatePasteTemplateToolbarToSelection(force_ftguid) {
-    let paste_sel = getEditorSelection(true);
+    let paste_sel = getDocSelection(true);
     let pre_ftguid = getFocusTemplateGuid();
 
     let ftguid = force_ftguid;
@@ -328,7 +328,7 @@ function updatePasteTemplateToolbarToSelection(force_ftguid) {
     createTemplateSelector(ftguid, paste_sel);
     updatePasteTemplateToolbarToFocus(ftguid, paste_sel);
     //updateTemplatesAfterTextChanged();
-    updateAllSizeAndPositions();
+    updateAllElements();
 }
 
 function updatePasteTemplateToolbarToFocus(ftguid, paste_sel) {
@@ -494,7 +494,7 @@ function onPasteEditFocusTemplateClickOrKeyDown(e) {
 
 function onPasteButtonClickOrKeyDown(e) {
     if (!isRunningInHost()) {
-        alert(getText(getEditorSelection(true), true));
+        alert(getText(getDocSelection(true), true));
 	}    
 
     onPasteTemplateRequest_ntf();

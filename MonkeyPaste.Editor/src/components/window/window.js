@@ -16,11 +16,11 @@ function onWindowBlur(e) {
 }
 
 function onWindowScroll(e) {
-	updateAllSizeAndPositions();	
+	updateAllElements();	
 }
 
 function onWindowResize(e) {
-	updateAllSizeAndPositions();
+	updateAllElements();
 	drawOverlay();
 }
 

@@ -170,7 +170,7 @@ function updateFontFamilyPickerToSelection(force_ff_dv = null, sel = null) {
     if (IsFontFamilyPickerOpen) {
         return;
     }
-    sel = sel ? sel : getEditorSelection();
+    sel = sel ? sel : getDocSelection();
 
     let cur_ff_dv = force_ff_dv;
     if (cur_ff_dv == null) {
@@ -212,7 +212,7 @@ function findRangeFontFamilyDataValue(range) {
 function onFontPickerItemClick(e) {
     let ff = e.currentTarget.getAttribute('data-value');
     let ff_dv = getFontFamilyDataValue(ff);
-    let sel = getEditorSelection();
+    let sel = getDocSelection();
     if (!sel) {
         return;
     }

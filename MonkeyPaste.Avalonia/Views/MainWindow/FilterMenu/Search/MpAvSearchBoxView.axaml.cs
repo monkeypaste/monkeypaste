@@ -31,10 +31,7 @@ namespace MonkeyPaste.Avalonia {
             sb.AddHandler(DragDrop.DropEvent, Drop);
         }
         private void DragEnter(object sender, DragEventArgs e) {
-            //MpConsole.WriteLine("[DragEnter] CurDropEffects: " + _curDropEffects);
-            //SendDropMsg(e.Data, "dragenter");
             e.DragEffects = DragDropEffects.Copy | DragDropEffects.Move;
-            //base.OnDragEnter(e);
         }
 
         private async void DragOver(object sender, DragEventArgs e) {
@@ -54,9 +51,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
-        private void SearchViewContainer_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            //InitContextMenu();
-        }
 
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
@@ -64,6 +58,10 @@ namespace MonkeyPaste.Avalonia {
 
         private void SearchBox_KeyUp(object sender, global::Avalonia.Input.KeyEventArgs e) {
             if (e.Key == Key.Enter) {
+                if(sender is Control control && 
+                    control.GetVisualDescendant<TextBox>() is TextBox tb) {
+                    tb.SelectAll();
+                }
                 e.Handled = true;
                 BindingContext.PerformSearchCommand.Execute(null);
                 

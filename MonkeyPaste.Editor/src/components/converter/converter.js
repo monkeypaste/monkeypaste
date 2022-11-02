@@ -12,12 +12,12 @@ function initPlainHtmlConverter(envName) {
 	window.addEventListener(
 		"resize",
 		function (event) {
-			updateAllSizeAndPositions();
+			updateAllElements();
 		},
 		true
 	);
 
-	updateAllSizeAndPositions();
+	updateAllElements();
 
 	IsConverterLoaded = true;
 	IsLoaded = true;

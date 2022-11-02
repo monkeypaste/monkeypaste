@@ -413,8 +413,15 @@ namespace MonkeyPaste {
         #region MpApp
 
         public static async Task<MpApp> GetAppByPathAsync(string path, string args, int deviceId) {
-            string query = $"select * from MpApp where LOWER(SourcePath)=? and Arguments=? and fk_MpUserDeviceId=?";
-            var result = await MpDb.QueryAsync<MpApp>(query, args, path.ToLower(),deviceId);
+            List<MpApp> result;
+            if(args == null) {
+                string query = $"select * from MpApp where LOWER(SourcePath)=? and Arguments is NULL and fk_MpUserDeviceId=?";
+                result = await MpDb.QueryAsync<MpApp>(query, path.ToLower(), deviceId);
+            } else {
+                string query = $"select * from MpApp where LOWER(SourcePath)=? and Arguments=? and fk_MpUserDeviceId=?";
+                result = await MpDb.QueryAsync<MpApp>(query, args, path.ToLower(), deviceId);
+            }
+            
             if (result == null || result.Count == 0) {
                 return null;
             }

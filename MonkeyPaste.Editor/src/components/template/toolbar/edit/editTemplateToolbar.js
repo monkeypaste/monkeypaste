@@ -109,7 +109,7 @@ function createEditTemplateToolbarForTemplate(t) {
 function showEditTemplateToolbar(isNew = false) {
     let ett = getEditTemplateToolbarContainerElement();
     ett.classList.remove('hidden');
-    updateAllSizeAndPositions();
+    updateAllElements();
 
     let t = getTemplateDefByGuid(getFocusTemplateGuid());
     if (t) {

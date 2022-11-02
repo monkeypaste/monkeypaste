@@ -89,7 +89,7 @@ function resetDrop(fromHost, wasLeave) {
         DropItemElms[i].classList.remove('drop');
     }
 
-    updateAllSizeAndPositions();
+    updateAllElements();
     stopAutoScroll(wasLeave);
 
     if (isReadOnly() && !IsDragging) {
@@ -344,7 +344,7 @@ function onDrop(e) {
 
     // SELECT DROP CONTENT
 
-    setEditorSelection(post_sel_start_idx, length_delta);
+    setDocSelection(post_sel_start_idx, length_delta);
 
     // RESET
 

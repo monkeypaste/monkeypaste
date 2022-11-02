@@ -133,13 +133,13 @@ function isEditorToolbarVisible() {
 function hideEditorToolbar() {
 	getEditorToolbarElement().classList.add("hidden");
 	getEditorToolbarElement().style.display = 'none';
-	updateAllSizeAndPositions();
+	updateAllElements();
 }
 
 function showEditorToolbar() {
 	getEditorToolbarElement().classList.remove("hidden");
 	getEditorToolbarElement().style.display = 'block';
-	updateAllSizeAndPositions();
+	updateAllElements();
 }
 // #endregion Actions
 

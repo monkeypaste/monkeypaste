@@ -39,7 +39,7 @@ function initQuill() {
 // #region Getters
 
 function getSelectedText(encodeTemplates = false) {
-	var selection = getEditorSelection();
+	var selection = getDocSelection();
 	return getText(selection, encodeTemplates);
 }
 
@@ -70,7 +70,7 @@ function getHtml(range) {
 }
 
 function getSelectedHtml() {
-	var selection = getEditorSelection();
+	var selection = getDocSelection();
 	let sel_html = getHtml(selection);
 	return sel_html;
 }
@@ -97,7 +97,7 @@ function getSelectedHtml2() {
 }
 
 function getSelectedHtml3() {
-	var selection = window.getEditorSelection();
+	var selection = window.getDocSelection();
 	if (selection.rangeCount > 0) {
 		var range = selection.getRangeAt(0);
 		var documentFragment = range.cloneContents();
@@ -123,7 +123,7 @@ function getDeltaJson(rangeObj, encodeWithContentHandle = false) {
 }
 
 function getSelectedDelta() {
-	let sel = getEditorSelection();
+	let sel = getDocSelection();
 	if (!sel) {
 		return null;
 	}

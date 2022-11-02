@@ -79,7 +79,7 @@ function onWindowMouseDown(e) {
 		return;
 	}
 	WindowMouseDownLoc = { x: e.clientX, y: e.clientY };
-	SelectionOnMouseDown = getEditorSelection();
+	SelectionOnMouseDown = getDocSelection();
 }
 
 function onWindowMouseMove(e) {

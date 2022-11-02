@@ -188,7 +188,7 @@ templateType: "dynamic"
         public string base64ImgStr { get; set; }
     }
 
-    public class MpQuillSubSelectionChangedMessageOrNotification : MpJsonObject {
+    public class MpQuillSubSelectionChangedNotification : MpJsonObject {
         public bool isSubSelectionEnabled { get; set; }
         public double editorWidth { get; set; }
     }

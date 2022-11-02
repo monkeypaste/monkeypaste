@@ -14,7 +14,6 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvSearchBoxView">
 
     <StackPanel x:Name="SearchViewContainerStackPanel"
-                AttachedToVisualTree="SearchViewContainer_AttachedToVisualTree"
                 Orientation="Horizontal">
         <!--  Delete Advanced Search Button  -->
         <Button x:Name="DeleteSearchButton"

@@ -114,7 +114,7 @@ function drawHighlighting(ctx, forceColor) {
 	}
 }
 
-function drawDropPreview(ctx, color = 'red', thickness = '1.0', line_style = [5,5]) {
+function drawDropPreview(ctx, color = 'red', thickness = 1.0, line_style = [5,5]) {
     let drop_idx = DropIdx;
     if (isDragCopy()) {
         color = 'lime';
@@ -192,7 +192,7 @@ function drawDropPreview(ctx, color = 'red', thickness = '1.0', line_style = [5,
 }
 
 function drawFancyTextSelection(ctx) {
-    let sel_rects = getRangeRects(getEditorSelection());
+    let sel_rects = getRangeRects(getDocSelection());
     sel_rects.forEach((srect) => drawRect(ctx, srect, 'purple', 'goldenrod', 1.5, 100/255));
     //let r = FancyTextSelectionRoundedCornerRadius;
     //let def_corner_radius = { tl: r, tr: r, br: r, bl: r };
@@ -218,7 +218,7 @@ function drawTextSelection(ctx) {
 	}
 
 
-    let sel = getEditorSelection();
+    let sel = getDocSelection();
     let sel_bg_color = DefaultSelectionBgColor;
     let sel_fg_color = DefaultSelectionFgColor;
     let caret_color = DefaultCaretColor;
@@ -261,7 +261,7 @@ function drawTextSelection(ctx) {
         let scroll_y = getEditorContainerElement().scrollTop;
         let active_rect_range_kvp = CurFindReplaceDocRangeRectIdxLookup[CurFindReplaceDocRangeIdx];
         CurFindReplaceDocRangesRects.forEach((cur_rect, rect_idx) => {
-            
+
             let cur_bg_color = sel_bg_color;
             if (rect_idx >= active_rect_range_kvp[0] &&
                 rect_idx <= active_rect_range_kvp[1]) {
@@ -283,11 +283,6 @@ function drawTextSelection(ctx) {
             drawRect(ctx, sel_rect, sel_bg_color, sel_fg_color, 0.5, 125 / 255);
         });
 	}
-
-    if (BlurredSelectionRects) {
-
-        
-    }
 }
 
 function caretBlinkTick() {

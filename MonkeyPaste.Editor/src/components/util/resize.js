@@ -37,7 +37,7 @@
 		}
         ele.style.height = `${h - dy}px`;
 
-        updateAllSizeAndPositions()
+        updateAllElements()
     };
 
     const mouseUpHandler = function () {

@@ -54,15 +54,6 @@ function getEditorContainerRect() {
 	return editor_container_rect;
 }
 
-function getEditorSelection(isForPaste = false) {
-	let sel = getDocumentSelection();
-	if (isForPaste && (!sel || (sel && sel.length == 0))) {
-		return { index: 0, length: getDocLength() };
-	}
-
-	return sel;
-}
-
 function getEditorWidth() {
 	var editorRect = getEditorElement().getBoundingClientRect();
 	//var editorHeight = parseInt($('.ql-editor').wi());
@@ -86,14 +77,6 @@ function getEditorVisibleHeight() {
 
 // #region Setters
 
-function setEditorSelection(doc_idx, len, source = 'user') {
-	//getEditorContainerElement().style.userSelect = 'auto';
-	LastSelRange = { index: doc_idx, length: len };
-	quill.setSelection(doc_idx, len, source);
-	if (source == 'silent') {
-		onEditorSelectionChanged_ntf({ index: doc_idx, length: len });
-	}
-}
 
 // #endregion Setters
 
@@ -112,7 +95,7 @@ function isAllSelected() {
 }
 
 function isNoneSelected() {
-	let sel = getEditorSelection();
+	let sel = getDocSelection();
 	return !sel || sel.length == 0;
 }
 
@@ -173,11 +156,11 @@ function updateEditorSizesAndPositions() {
 }
 
 function selectAll() {
-	setEditorSelection(0, getDocLength(), 'api');
+	setDocSelection(0, getDocLength(), 'api');
 }
 
 function deselectAll(forceCaretDocIdx = 0) {
-	setEditorSelection(forceCaretDocIdx, 0, 'api');
+	setDocSelection(forceCaretDocIdx, 0, 'api');
 }
 
 function focusEditor() {
@@ -233,7 +216,7 @@ function enableReadOnly(fromHost = false) {
 	getEditorContainerElement().classList.remove('sub-select');
 	getEditorContainerElement().classList.add('no-select');
 
-	updateAllSizeAndPositions();
+	updateAllElements();
 	disableSubSelection();
 	disableTemplateSubSelection();
 
@@ -262,10 +245,10 @@ function disableReadOnly(fromHost = false) {
 	enableSubSelection();
 	enableTemplateSubSelection();
 
-	refreshFontSizePicker();
+	updateFontSizePickerToSelection();
 	updateFontFamilyPickerToSelection();
 
-	updateAllSizeAndPositions();
+	updateAllElements();
 
 	drawOverlay();
 
@@ -276,7 +259,7 @@ function disableReadOnly(fromHost = false) {
 	log('ReadOnly: DISABLED fromHost: ' + fromHost);
 }
 
-function enableSubSelection(fromHost = false, showUnderlines = true) {
+function enableSubSelection(fromHost = false, showUnderlines = true, showPasteToolbar = true) {
 	if (isSubSelectionEnabled()) {
 		log('enableSubSelection ignored, already sub-selectable. fromHost: ' + fromHost);
 		return;
@@ -289,8 +272,11 @@ function enableSubSelection(fromHost = false, showUnderlines = true) {
 	} 
 	disableDragOverlay();
 	enableTemplateSubSelection();
-	showPasteTemplateToolbar();
-	updateAllSizeAndPositions();
+
+	if (showPasteToolbar) {
+		showPasteTemplateToolbar();
+	}
+	updateAllElements();
 
 	drawOverlay();
 
@@ -308,7 +294,7 @@ function disableSubSelection(fromHost = false) {
 
 	DragSelectionRange = null;
 
-	let sel = getEditorSelection();
+	let sel = getDocSelection();
 	deselectAll(sel ? sel.index : 0);
 
 	getEditorContainerElement().classList.add('no-select');
@@ -319,7 +305,7 @@ function disableSubSelection(fromHost = false) {
 
 	hidePasteTemplateToolbar();
 
-	updateAllSizeAndPositions();
+	updateAllElements();
 	drawOverlay();
 
 	if (!fromHost) {
@@ -350,7 +336,7 @@ function onEditorBlur(e) {
 	//if (isTemplateFocused()) {
 	//	return;
 	//}
-	BlurredSelectionRects = getRangeRects(getEditorSelection());
+	BlurredSelectionRects = getRangeRects(getDocSelection());
 	drawOverlay();
 }
 
@@ -369,10 +355,10 @@ function onEditorSelectionChanged(range, oldRange, source) {
 	}
 
 	//if (range) {
-	//	refreshFontSizePicker();
+	//	updateFontSizePickerToSelection();
 	//	updateFontFamilyPickerToSelection();
 	//	//updateTemplatesAfterSelectionChange(range, oldRange);
-	//	onEditorSelectionChanged_ntf(range);
+	//	onDocSelectionChanged_ntf(range);
 	//} else {
 	//	log("Cursor not in the editor");
 	//}
@@ -382,7 +368,7 @@ function onEditorSelectionChanged(range, oldRange, source) {
 	//	if (oldRange) {
 	//		was_blur = true;
 	//		//blur occured
-	//		//setEditorSelection(oldRange.index, oldRange.length,'silent');
+	//		//setDocSelection(oldRange.index, oldRange.length,'silent');
 	//	}
 	//}
 	//if (was_blur && isEditorToolbarVisible()) {
@@ -399,7 +385,7 @@ function onEditorSelectionChanged(range, oldRange, source) {
 function onEditorTextChanged(delta, oldDelta, source) {
 	log('quill event: text changed');
 
-	updateAllSizeAndPositions();
+	updateAllElements();
 	updateTemplatesAfterTextChanged();
 	WasTextChanged = true;
 
@@ -410,7 +396,7 @@ function onEditorTextChanged(delta, oldDelta, source) {
 		IgnoreNextTextChange = false;
 		return;
 	}
-	let srange = getEditorSelection();
+	let srange = getDocSelection();
 	if (!srange) {
 		return;
 	}

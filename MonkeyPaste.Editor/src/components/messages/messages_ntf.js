@@ -1,6 +1,6 @@
 // these functions wrap window binding so main editor doesn't worry about details
 
-function onEditorSelectionChanged_ntf(range,isSelChangeBegin) {
+function onDocSelectionChanged_ntf(range,isSelChangeBegin) {
 	// output MpQuillContentSelectionChangedMessage
 
 	let text = getText(range,false); 
@@ -13,8 +13,8 @@ function onEditorSelectionChanged_ntf(range,isSelChangeBegin) {
 	};
 
 	let base64Str = toBase64FromJsonObj(selChangedObj);
-	if (typeof notifyEditorSelectionChanged === 'function') {
-		notifyEditorSelectionChanged(base64Str);
+	if (typeof notifyDocSelectionChanged === 'function') {
+		notifyDocSelectionChanged(base64Str);
 	}
 }
 
@@ -46,6 +46,21 @@ function onDragEnter_ntf() {
 function onDragLeave_ntf() {
 	if (typeof notifyDragLeave === 'function') {
 		notifyDragLeave();
+	}
+}
+
+function onContentLoaded_ntf() {
+	if (typeof notifyLoadComplete === 'function') {
+		let respObj = {
+			contentWidth: getContentWidth(),
+			contentHeight: getContentHeight(),
+			lineCount: parseInt_safe(getContentHeightByType()),
+			charCount: parseInt_safe(getContentWidthByType()),
+			hasTemplates: hasTemplates()
+		}
+		log('load content resp msg: ' + respObj);
+		let resp = toBase64FromJsonObj(respObj);
+		notifyLoadComplete(resp);
 	}
 }
 

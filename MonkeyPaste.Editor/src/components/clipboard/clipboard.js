@@ -97,7 +97,7 @@ function updateClipboardHandlers(elm, isEnabled) {
 }
 
 function onCut(e) {
-    let sel = getEditorSelection();
+    let sel = getDocSelection();
     if (!sel) {
         return;
     }
@@ -124,7 +124,7 @@ function onCut(e) {
     //setEditorContentEditable(false);
 }
 function onCopy(e) {
-    let sel = getEditorSelection();
+    let sel = getDocSelection();
     if (!sel) {
         return;
     }
@@ -142,7 +142,7 @@ function onCopy(e) {
 }
 
 function onPaste(e) {
-    let sel = getEditorSelection();
+    let sel = getDocSelection();
     if (!sel) {
         log('no selection, cannot paste');
         return;
@@ -245,7 +245,7 @@ function retargetHtmlClipboardData(htmlDataStr) {
 
 function retargetPlainTextClipboardData(pt) {
     // TODO maybe wise to use requestRecentClipboardData here 
-    let newContentGuid = getContentGuidByIdx(quill.getEditorSelection().index);
+    let newContentGuid = getContentGuidByIdx(quill.getDocSelection().index);
     let ptHtmlStr = '<span copyItemInlineGuid="' + newContentGuid + '">' + pt + '"</span>';
     return ptHtmlStr;
 }

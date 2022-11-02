@@ -39,21 +39,7 @@ function loadContent_ext(loadContentMsgStr_base64) {
 		};
 	}
 	loadContent(req.contentHandle, req.contentType, req.itemData, req.isPasteRequest, searchStateObj);
-	quill.update();
 
-	let respObj = {
-		contentWidth: getContentWidth(),
-		contentHeight: getContentHeight(),
-		lineCount: parseInt_safe(getContentHeightByType()),
-		charCount: parseInt_safe(getContentWidthByType()),
-		hasTemplates: hasTemplates()
-	}
-	log('load content resp msg: '+respObj);
-	let resp = toBase64FromJsonObj(respObj);
-	//log('init Response: ');
-	//log(initResponseMsgStr);
-
-	return resp;
 }
 
 function hostIsSelectedChanged_ext(hostIsSelectedMsgStr_base64) {
@@ -74,7 +60,7 @@ function contentRequest_ext(contentReqMsgStr_base64) {
 		} else {
 			if (!isAllSelected() && !isNoneSelected()) {
 				// only respond w/ sub-selection if neither none nor all is selected
-				sel = getEditorSelection();
+				sel = getDocSelection();
 			}
 		}		
 	}
@@ -201,7 +187,7 @@ function setSelection_ext(selMsgReq) {
 	}
 	log('selection set from external: ', selMsg);
 
-	setEditorSelection(selMsg.index, selMsg.length,'api');
+	setDocSelection(selMsg.index, selMsg.length,'api');
 }
 
 
@@ -282,12 +268,12 @@ function selectAll_ext() {
 }
 
 function deselectAll_ext() {
-	let sel = getEditorSelection();
+	let sel = getDocSelection();
 	if (!sel) {
 		return;
 	}
 
-	setEditorSelection(0, 0);
+	setDocSelection(0, 0);
 	if (isSubSelectionEnabled()) {
 		return;
 	}

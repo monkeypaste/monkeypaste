@@ -371,6 +371,7 @@ namespace MonkeyPaste.Avalonia {
                         Header = mivm.Header,
                         Command = mivm.Command,
                         CommandParameter = mivm.CommandParameter,
+                        IsEnabled = mivm.IsEnabled,
                         InputGesture = inputGesture,
                         DataContext = mivm,
                         Icon = CreateIcon(mivm),
@@ -378,7 +379,7 @@ namespace MonkeyPaste.Avalonia {
                     };
                     mi.PointerEnterItem += MenuItem_PointerEnter;
                     mi.DetachedFromVisualTree += MenuItem_DetachedFromVisualTree;
-                    if (mi.Command != null) {
+                    if (mi.Command != null && mivm.IsEnabled) {
                         mi.AddHandler(Control.PointerReleasedEvent, MenuItem_PointerReleased, RoutingStrategies.Tunnel);
                     }
                     control = mi;

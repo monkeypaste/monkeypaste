@@ -657,7 +657,7 @@ function updateTemplatesAfterTextChanged() {
     }
 }
 
-function updateTemplatesAfterSelectionChange(sel_range, oldRange) {
+function updateTemplatesAfterSelectionChange() {
     if (WasTextChanged) {
         // selection timer and input can throw off sel_range here
         // probably bugs w/ the nav classes but hard to tell..
@@ -672,14 +672,17 @@ function updateTemplatesAfterSelectionChange(sel_range, oldRange) {
     }
     if (IsPastingTemplate) {
         updatePasteTemplateToolbarToSelection();
-	}
-    oldRange = !oldRange ? sel_range : oldRange;
+    }
+    let sel_range = getDocSelection();
+    let last_sel_range = LastSelRange;
+
+    last_sel_range = last_sel_range ? last_sel_range : sel_range;
     let sel_bg_color = getTextSelectionBgColor();
     let template_elms_in_sel_range = sel_range ? getTemplateElementsInRange(sel_range) : [];
     let all_template_elms = getTemplateElements();
     let show_sel_bg_color = !isShowingEditTemplateToolbar() && isSubSelectionEnabled();
 
-    let old_closest_idx = sel_range.index > oldRange.index ? oldRange.index + oldRange.length : oldRange.index;
+    let old_closest_idx = sel_range.index > last_sel_range.index ? last_sel_range.index + last_sel_range.length : last_sel_range.index;
     let is_nav_right = sel_range.index > old_closest_idx && sel_range.length == 0;
     IsTemplateAtInsert = false;
     for (var i = 0; i < all_template_elms.length; i++) {
@@ -717,7 +720,7 @@ function updateTemplatesAfterSelectionChange(sel_range, oldRange) {
                     if (t_elm.classList.contains(Template_AT_INSERT_Class)) {
                         setTemplateNavState(t_elm);
                     } else {
-                        setEditorSelection(sel_range.index - 1, 0, 'silent');
+                        setDocSelection(sel_range.index - 1, 0, 'silent');
                         setTemplateNavState(t_elm, Template_AT_INSERT_Class);
                         IsTemplateAtInsert = true;
                     }
@@ -726,7 +729,7 @@ function updateTemplatesAfterSelectionChange(sel_range, oldRange) {
                     if (t_elm.classList.contains(Template_BEFORE_INSERT_Class)) {
                         clearTemplateNavState(t_elm);
                     } else {
-                        setEditorSelection(sel_range.index + 1, 0, 'silent');
+                        setDocSelection(sel_range.index + 1, 0, 'silent');
                         setTemplateNavState(t_elm, Template_BEFORE_INSERT_Class);
                     }
 

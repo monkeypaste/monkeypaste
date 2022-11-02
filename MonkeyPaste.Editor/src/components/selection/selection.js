@@ -6,8 +6,10 @@ const DefaultCaretColor = 'black';
 
 var BlurredSelectionRects = null;
 
+var SelectionHistory = [];
 
-var LastSelRange = { index: 0, length: 0 };
+var LastSelRange = null;
+var CurSelRange = { index: 0, length: 0 };
 
 var SelectionOnMouseDown = null;
 
@@ -26,6 +28,7 @@ function initSelection() {
 
 function resetSelection() {
 	LastSelRange = null;
+	CurSelRange = null;
 	SelectionOnMouseDown = null;
 	BlurredSelectionRects = null;
 }
@@ -50,23 +53,104 @@ function getCaretColor() {
 	return getEditorElement().style.caretColor;
 }
 
-function getDocumentSelection() {
-	let cur_sel = null;
+function getDocSelection(isForPaste = false) {
+	let dom_sel = getDomFocusRange();
+	if (isForPaste && (!dom_sel || (dom_sel && dom_sel.length == 0))) {
+		return { index: 0, length: getDocLength() };
+	}
+	let doc_sel = convertDomRangeToDocRange(dom_sel);
+	return doc_sel;
+}
 
-	if (window.getSelection().rangeCount == 0 || (quill && !quill.hasFocus())) {
-		log('no window selection, falling back to last: ' + JSON.stringify(LastSelRange));
-		if (!LastSelRange) {
-			log('lastSelRange was nul, resetting to home');
-			LastSelRange = { index: 0, length: 0 };
+function getDomFocusRange(forceToEditor = true) {
+	let dom_focus_range = null;
+	
+	if (forceToEditor) {
+		let needs_fallback = false;
+		if (!window.getSelection().focusNode) {
+			log("There is currently NO focus node will fallback");
+			needs_fallback = true;
+		} else if (!isChildOfElement(window.getSelection().focusNode, getEditorElement())) {
+			log('Document focus is not within the editor, will fallback');
+			needs_fallback = true;
+		} else if (document.getSelection().rangeCount == 0) {
+			log('no sel ranges in document, will fallback')
+			needs_fallback = true;
 		}
-		cur_sel = LastSelRange;
-	} else {
-		let range = window.getSelection().getRangeAt(0);
-		cur_sel = convertDocRangeToEditorRange(range);
-		//LastSelRange = cur_sel;
+
+		if (needs_fallback) {
+			if (!CurSelRange) {
+				log('CurSelRange was null, resetting to home');
+				CurSelRange = { index: 0, length: 0 };
+			}
+			log('Selection focus falling back to last: ' + JSON.stringify(CurSelRange));
+			dom_focus_range = convertDocRangeToDomRange(CurSelRange);
+		}
+	}
+	if (!dom_focus_range) {
+		if (document.getSelection().focusNode) {
+			dom_focus_range = document.createRange();
+			let dom_sel = document.getSelection();
+			// NOTE anchor node/offset is where selection begins and focus node/offset is where last included
+			let start_offset = dom_sel.focusOffset < dom_sel.anchorOffset ? dom_sel.focusOffset : dom_sel.anchorOffset;
+			let start_node = dom_sel.focusOffset < dom_sel.anchorOffset ? dom_sel.focusNode : dom_sel.anchorNode;
+
+			let end_offset = dom_sel.focusOffset < dom_sel.anchorOffset ? dom_sel.anchorOffset : dom_sel.focusOffset;
+			let end_node = dom_sel.focusOffset < dom_sel.anchorOffset ? dom_sel.anchorNode : dom_sel.focusNode;
+
+			dom_focus_range.setStart(start_node, start_offset);
+			dom_focus_range.setEnd(end_node, end_offset);
+
+			//if (document.getSelection().rangeCount > 1) {
+			//	// when there's multiple selections need find focus range
+			//	let possible_ranges = [];
+			//	for (var i = 0; i < document.getSelection().rangeCount; i++) {
+			//		let cur_range = document.getSelection().getRangeAt(i);
+			//		if (cur_range.startContainer == document.getSelection().focusNode) {
+			//			// cur_range is in same element of focus but offset may not be within
+			//			if (cur_range.startOffset <= document.getSelection().focusOffset) {
+			//				// for debugging since its unclear how to compare all ranges to offset
+			//				// am dumping possibles and will break if more than 1
+			//				possible_ranges.push(cur_range);
+			//			}
+			//		}
+			//	}
+			//	if (possible_ranges.length > 0) {
+			//		if (possible_ranges.length > 1) {
+			//			log('Warning, multiple selection ranges found within focus node, whats going on? which should actually be focus?');
+
+			//			let exact_match_range = null;
+			//			for (var i = 0; i < possible_ranges.length; i++) {
+			//				if (possible_ranges[i].startOffset == document.getSelection().focusOffset &&
+			//					possible_ranges[i].endOffset == document.getSelection().focusOffset &&
+			//					possible_ranges[i].startContainer == document.getSelection().focusNode &&
+			//					possible_ranges[i].endContainer == document.getSelection().focusNode) {
+			//					exact_match_range = possible_ranges[i];
+			//					break;
+			//				}
+			//			}
+			//			if (exact_match_range) {
+			//				dom_focus_range = exact_match_range;
+			//			} else {
+			//				log('Warning, no exact match for focus range found, using first possible');
+			//				debugger;
+			//			}
+			//		}
+			//		if (!dom_focus_range) {
+			//			//debugger;
+			//			dom_focus_range = possible_ranges[0];
+			//		}
+					
+			//	}
+			//}
+		}
+		if (!dom_focus_range) {
+			// when theres only 1 selection range or no focus node
+			dom_focus_range = document.getSelection().getRangeAt(0);
+		}
 	}
 
-	return cur_sel;
+	return dom_focus_range;
 }
 
 function getDocumentSelectionHtml(docSel) {
@@ -83,7 +167,7 @@ function getDocumentSelectionHtml(docSel) {
 function getCaretLine(forceDocIdx = -1) {
 	let caret_doc_idx = forceDocIdx;
 	if (caret_doc_idx < 0) {
-		let sel = getEditorSelection();
+		let sel = getDocSelection();
 		if (!sel) {
 			log('no selection, cannot get caret line');
 			return;
@@ -119,10 +203,51 @@ function getCaretLine(forceDocIdx = -1) {
 	return caret_line;
 }
 
+function getDocRangeScrollOffset(doc_range) {
+	let scroll_offset = { top: 0, left: 0 };
+	if (!doc_range) {
+		return scroll_offset;
+	}
+	let dom_range = convertDocRangeToDomRange(doc_range);
 
+	scroll_offset.top = dom_range.getBoundingClientRect().top;
+	scroll_offset.left = dom_range.getBoundingClientRect().left;
+
+	return scroll_offset;
+}
 // #endregion Getters
 
 // #region Setters
+
+function setDocSelection(doc_idx, len, source = 'user') {
+	CurSelRange = { index: doc_idx, length: len };
+	quill.setSelection(doc_idx, len, source);
+	if (source == 'silent') {
+		onDocSelectionChanged_ntf({ index: doc_idx, length: len });
+	}
+}
+
+function setDocSelectionRanges(docRanges, retainFocus = true) {
+	let dom_focus_range = getDomFocusRange();
+
+	clearDomSelectionRanges();
+
+	if (docRanges) {
+		for (var i = 0; i < docRanges.length; i++) {
+			let dom_sel = convertDocRangeToDomRange(docRanges[i]);
+			if (retainFocus && isDomRangeEqual(dom_sel, dom_focus_range)) {
+				// if focus is in ranges wait till after looping so it stays focus
+				continue;
+			}
+			document.getSelection().addRange(dom_sel);
+		}
+	}
+
+
+	if (retainFocus && dom_focus_range) {
+		document.getSelection().addRange(dom_focus_range);
+	}
+}
 
 function setTextSelectionFgColor(fgColor) {
 	//document.body.style.setProperty('--selfgcolor', fgColor);
@@ -149,30 +274,56 @@ function didSelectionChange(old_sel, new_sel) {
 	}
 	return old_sel.index != new_sel.index || old_sel.length != new_sel.length;
 }
+
+function isDomRangeEqual(dom_range_1, dom_range_2) {
+	if (!dom_range_1 && !dom_range_2) {
+		return true;
+	}
+	if (!dom_range_1) {
+		return false;
+	}
+	if (!dom_range_2) {
+		return false;
+	}
+
+	return
+		dom_range_1.startContainer == dom_range_2.startContainer &&
+		dom_range_1.endContainer == dom_range_2.endContainer &&
+		dom_range_1.startOffset == dom_range_2.startOffset &&
+		dom_range_1.endOffset == dom_range_2.endOffset;
+
+}
 // #endregion State
 
 // #region Actions
 
-function convertDocRangeToEditorRange(docRange) {
-	let start_elm_doc_idx = getElementDocIdx(docRange.startContainer);
-	let end_elm_doc_idx = getElementDocIdx(docRange.endContainer);
+function clearDomSelectionRanges() {
+	document.getSelection().removeAllRanges();
+}
+
+function convertDomRangeToDocRange(dom_range) {
+	if (!dom_range) {
+		debugger;
+	}
+	let start_elm_doc_idx = getElementDocIdx(dom_range.startContainer);
+	let end_elm_doc_idx = getElementDocIdx(dom_range.endContainer);
 
 	let sel = { index: 0, length: 0 };
-	sel.index = start_elm_doc_idx + docRange.startOffset;
-	sel.length = (end_elm_doc_idx + docRange.endOffset) - sel.index;
+	sel.index = start_elm_doc_idx + dom_range.startOffset;
+	sel.length = (end_elm_doc_idx + dom_range.endOffset) - sel.index;
 
 	return sel;
 }
 
-function convertEditorRangeToDocRange(editorRange) {
-	let start_elm = getElementAtDocIdx(editorRange.index);
-	let end_elm = getElementAtDocIdx(editorRange.index + editorRange.length);
+function convertDocRangeToDomRange(doc_range) {
+	let start_elm = getElementAtDocIdx(doc_range.index);
+	let end_elm = getElementAtDocIdx(doc_range.index + doc_range.length);
 
 	let start_elm_doc_idx = getElementDocIdx(start_elm);
 	let end_elm_doc_idx = getElementDocIdx(end_elm);
 
-	let start_offset = editorRange.index - start_elm_doc_idx;
-	let end_offset = (editorRange.index + editorRange.length) - end_elm_doc_idx;
+	let start_offset = doc_range.index - start_elm_doc_idx;
+	let end_offset = (doc_range.index + doc_range.length) - end_elm_doc_idx;
 
 	let clean_range = document.createRange();
 	clean_range.setStart(start_elm, start_offset);
@@ -181,81 +332,49 @@ function convertEditorRangeToDocRange(editorRange) {
 	return clean_range;
 }
 
-function cleanDocumentSelection(cur_sel) {
-	if (IsDragging || IsDropping || !WindowMouseDownLoc || !WindowMouseLoc || (quill && !quill.hasFocus())) {
-		return cur_sel;
-	}
-
-
-	let mp_down_dist = dist(WindowMouseDownLoc, WindowMouseLoc);
-	if (mp_down_dist > 1) {
-		// this is drag check time
-		return cur_sel;
-	}
-
-	let mp_down_doc_idx = getDocIdxFromPoint(WindowMouseDownLoc);
-	let mp_cur_doc_idx = getDocIdxFromPoint(WindowMouseLoc);
-
-	let start_idx = Math.min(mp_cur_doc_idx, mp_down_doc_idx);
-	let end_idx = Math.max(mp_cur_doc_idx, mp_down_doc_idx);
-	if (start_idx >= 0 && end_idx >= 0) {
-		let clean_sel = { index: start_idx, length: end_idx - start_idx };
-		
-		if (clean_sel.index != cur_sel.index || clean_sel.length != cur_sel.length) {
-			log(`Trying to clean selection from [idx:${cur_sel.index} len:${cur_sel.length}] to [idx:${clean_sel.index} len:${clean_sel.length}]`);
-			let clean_win_range = convertEditorRangeToDocRange(clean_sel);
-
-			let win_sel = window.getSelection();
-			win_sel.removeAllRanges();
-
-			win_sel.addRange(clean_win_range);
-			return clean_sel;
-		}
-	}
-	
-	return cur_sel;
-}
-
-function coerceCleanSelection() {
-	let cur_sel_range = getDocumentSelection();
-	if (didSelectionChange(cur_sel_range, LastSelRange)) {
+function coerceCleanSelection(new_range,old_range) {
+	if (didSelectionChange(new_range, old_range)) {
 		//log('Sel Changed from Timer.');
 		if (IsDragging) {
 			if (DragSelectionRange) {
-				cur_sel_range = DragSelectionRange;
+				new_range = DragSelectionRange;
 			}
-			log('drag detected sel timer overriding selection. LastRange: ', LastSelRange, ' DragRange: ', DragSelectionRange);
-			setEditorSelection(LastSelRange.index, LastSelRange.length, 'silent');
+			log('drag detected sel timer overriding selection. LastRange: ', old_range, ' DragRange: ', DragSelectionRange);
+			setDocSelection(old_range.index, old_range.length, 'silent');
 
-			drawOverlay();
-			return cur_sel_range;
+			//drawOverlay();
+			return new_range;
 		}
 
-		log('timer: index: ', cur_sel_range.index, ' length: ', cur_sel_range.length);
+		if (!new_range || new_range.index === undefined) {
+			debugger;
+		}
 
-		let qsel = getEditorSelection();
+		log('timer: index: ', new_range.index, ' length: ', new_range.length);
+
+		let qsel = getDocSelection();
 		log('quill: index: ', qsel.index, ' length: ', qsel.length);
 
-		let oldRange = LastSelRange;
+		let oldRange = old_range;
 		// updating Last
 
-		if (cur_sel_range) {
-			LastSelRange = cur_sel_range;
-			refreshFontSizePicker(null, cur_sel_range);
-			updateFontFamilyPickerToSelection(null, cur_sel_range);
-			if (hasTemplates()) {
-				if (isShowingPasteTemplateToolbar()) {
-					updatePasteTemplateToolbarToSelection();
-				}
-				updateTemplatesAfterSelectionChange(cur_sel_range, oldRange);
-			}
+		//if (new_range) {
+		//	old_range = new_range;
+		//	updateFontSizePickerToSelection(null, new_range);
+		//	updateFontFamilyPickerToSelection(null, new_range);
+		//	if (hasTemplates()) {
+		//		if (isShowingPasteTemplateToolbar()) {
+		//			updatePasteTemplateToolbarToSelection();
+		//		}
+		//		updateTemplatesAfterSelectionChange(new_range, oldRange);
+		//	}
 			
-			onEditorSelectionChanged_ntf(cur_sel_range);
-			LastSelRange = cur_sel_range;
-		}
-		drawOverlay();
+		//	onDocSelectionChanged_ntf(new_range);
+		//	old_range = new_range;
+		//}
+		//drawOverlay();
 	}
-	return cur_sel_range;
+	return new_range;
 }
 
 // #endregion Actions
@@ -265,10 +384,18 @@ function coerceCleanSelection() {
 function onDocumentSelectionChange(e) {
 	// Selection Change issues:
 	// 1. 
-	LastSelRange = coerceCleanSelection();
+	let new_range = getDocSelection();
+	new_range = coerceCleanSelection(new_range, CurSelRange);
+
+	if (didSelectionChange(new_range, CurSelRange)) {
+		LastSelRange = CurSelRange;
+		CurSelRange = new_range;
+		onDocSelectionChanged_ntf(new_range);
+		updateAllElements();
+	}
 }
 
 function onSelectionCheckTick(e) {
-	LastSelRange = coerceCleanSelection();
+	CurSelRange = coerceCleanSelection();
 }
 // #endregion Event Handlers

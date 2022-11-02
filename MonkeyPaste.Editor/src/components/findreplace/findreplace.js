@@ -206,7 +206,7 @@ function showFindReplaceToolbar(fromHost = false) {
 	LastFindReplaceInputState = null;
 
 	if (isNullOrEmpty(inputState.searchText)) {
-		let sel = getEditorSelection();
+		let sel = getDocSelection();
 		if (sel.length > 0) {
 			inputState.searchText = getText(sel);
 		}
@@ -214,7 +214,7 @@ function showFindReplaceToolbar(fromHost = false) {
 
 	setFindReplaceInputState(inputState);
 
-	updateAllSizeAndPositions();
+	updateAllElements();
 
 	if (!fromHost) {
 		onFindReplaceVisibleChange_ntf(true);
@@ -223,7 +223,7 @@ function showFindReplaceToolbar(fromHost = false) {
 
 function hideFindReplaceToolbar(fromHost = false) {
 	getFindReplaceToolbarElement().classList.add('hidden');
-	updateAllSizeAndPositions();
+	updateAllElements();
 
 	if (!fromHost) {
 		onFindReplaceVisibleChange_ntf(false);
@@ -247,9 +247,6 @@ function updateFindReplaceToolbarSizesAndPositions() {
 		getFindReplaceToolbarElement().style.top = et_bottom + 'px';
 	}
 
-	if (CurFindReplaceDocRanges != null) {
-		updateFindReplaceRangeRects();
-	}
 }
 
 function resetFindReplaceResults() {
@@ -279,11 +276,11 @@ function populateFindReplaceResults() {
 	let is_whole_word = document.getElementById('wholeWordInput').checked;
 	let use_regex = document.getElementById('useRegexInput').checked;	
 
-	let sel = getEditorSelection();
+	let sel = getDocSelection();
 	if (sel && sel.length > 0) {		
 		// when text is selected unselect but retain caret idx
 		sel.length = 0;
-		setEditorSelection(sel.index, 0);
+		setDocSelection(sel.index, 0);
 	}
 	sel = sel ? sel : { index: 0, length: 0 };
 
@@ -320,17 +317,16 @@ function replaceFindResultIdx(replace_idx) {
 }
 
 function updateFindReplaceRangeRects() {
+	//setDocSelectionRanges(CurFindReplaceDocRanges);
+
 	if (CurFindReplaceDocRanges == null) {
-		CurFindReplaceDocRangesRects = null;
-		CurFindReplaceDocRangeRectIdxLookup = null;
 		drawOverlay();
 		return;
 	}
-
 	CurFindReplaceDocRangesRects = [];
 	CurFindReplaceDocRangeRectIdxLookup = [];
 	for (var i = 0; i < CurFindReplaceDocRanges.length; i++) {
-		let cur_range_rects = getRangeRects(CurFindReplaceDocRanges[i]);
+		let cur_range_rects = getRangeRects(CurFindReplaceDocRanges[i], true, false);
 
 		let rect_lookup = [
 			CurFindReplaceDocRangesRects.length,
@@ -362,10 +358,23 @@ function navigateFindReplaceResults(dir) {
 	if (CurFindReplaceDocRangeIdx < 0) {
 		CurFindReplaceDocRangeIdx = CurFindReplaceDocRanges.length - 1;
 	}
-	let active_y = CurFindReplaceDocRangesRects[CurFindReplaceDocRangeRectIdxLookup[CurFindReplaceDocRangeIdx][0]].top;
-	scrollEditorTop(active_y);
 
-	drawOverlay();
+	let cur_doc_range = CurFindReplaceDocRanges[CurFindReplaceDocRangeIdx];
+	let cur_dom_range = convertDocRangeToDomRange(cur_doc_range);
+	if (cur_dom_range && cur_dom_range.startContainer) {
+		if (cur_dom_range.startContainer.nodeType === 3) {
+			cur_dom_range.startContainer.parentNode.scrollIntoView();
+		} else {
+			cur_dom_range.startContainer.scrollIntoView();
+		}
+	}
+	//let cur_doc_range_scroll_offset = getDocRangeScrollOffset(cur_doc_range);
+	//scrollEditorTop(cur_doc_range_scroll_offset.top);
+
+	//let active_y = CurFindReplaceDocRangesRects[CurFindReplaceDocRangeRectIdxLookup[CurFindReplaceDocRangeIdx][0]].top;
+	//scrollEditorTop(active_y);
+
+	//drawOverlay();
 }
 
 // #endregion Actions

@@ -19,14 +19,13 @@ namespace MonkeyPaste.Avalonia {
 
         public MpMenuItemViewModel MenuItemViewModel {
             get {
-                if(IsSeperator) {
+                if (IsSeperator) {
                     return new MpMenuItemViewModel() {
                         IsSeparator = true
                     };
                 }
                 return new MpMenuItemViewModel() {
                     IsChecked = IsChecked,
-                    IsEnabled = IsEnabled,
                     Command = ToggleIsCheckedCommand,
                     Header = Label,
                     BorderHexColor = MpSystemColors.Black,
@@ -67,7 +66,7 @@ namespace MonkeyPaste.Avalonia {
             IsSeperator = isSeperator;
         }
 
-        public MpAvSearchFilterViewModel(MpAvSearchBoxViewModel parent,string label, string prefName, MpContentFilterType filterType) : base(parent) {
+        public MpAvSearchFilterViewModel(MpAvSearchBoxViewModel parent, string label, string prefName, MpContentFilterType filterType) : base(parent) {
             PropertyChanged += MpSearchFilterViewModel_PropertyChanged;
             _filterType = filterType;
             Label = label;
@@ -77,7 +76,7 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 IsChecked = (bool)MpPrefViewModel.Instance[PreferenceName];
             }
-            
+
         }
 
         #endregion
@@ -85,7 +84,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpSearchFilterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(IsChecked):
                     MpPrefViewModel.Instance[PreferenceName] = IsChecked;
                     break;
@@ -99,7 +98,16 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ToggleIsCheckedCommand => new MpCommand(
             () => {
                 IsChecked = !IsChecked;
-            }, () => IsEnabled);
+            }, () => {
+                //if (FilterType == MpContentFilterType.FileType ||
+                //FilterType == MpContentFilterType.ImageType ||
+                //FilterType == MpContentFilterType.TextType) {
+
+                //}
+
+                //return true;
+                return IsEnabled;
+            });
         #endregion
     }
 }

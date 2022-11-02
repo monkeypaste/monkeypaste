@@ -714,7 +714,7 @@ namespace MonkeyPaste.Avalonia {
         
         public string CachedState { get; set; } = null;
         public bool IsReloading => !string.IsNullOrEmpty(CachedState);
-        public bool IsWaitingForDomLoad { get; set; } = false;
+        //public bool IsWaitingForDomLoad { get; set; } = false;
 
         public bool IsAnyCornerVisible => Parent == null ? false : ScreenRect.IsAnyPointWithinOtherRect(Parent.ScreenRect);
 
@@ -1228,7 +1228,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Events
 
-        public event EventHandler OnUiUpdateRequest;
         public event EventHandler OnScrollToHomeRequest;
         //public event EventHandler OnFocusRequest;
         public event EventHandler OnSyncModels;
@@ -1331,13 +1330,12 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(Next));
             OnPropertyChanged(nameof(Prev));
 
-            RequestUiUpdate();
 
             MpMessenger.Send<MpMessageType>(MpMessageType.ContentItemsChanged, this);
 
-            OnPropertyChanged(nameof(CopyItemTitle));
+            //OnPropertyChanged(nameof(CopyItemTitle));
 
-            OnPropertyChanged(nameof(CopyItemData));
+            //OnPropertyChanged(nameof(CopyItemData));
 
             if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileEditable_ById(CopyItemId)) {
                 IsContentReadOnly = false;
@@ -1522,10 +1520,6 @@ namespace MonkeyPaste.Avalonia {
 
         public void RequestScrollToHome() {
             OnScrollToHomeRequest?.Invoke(this, null);
-        }
-
-        public void RequestUiUpdate() {
-            OnUiUpdateRequest?.Invoke(this, null);
         }
 
 
@@ -1903,10 +1897,9 @@ namespace MonkeyPaste.Avalonia {
                             Parent.StoreSelectionState(this);
                         }
                     } else {
-                        if (IsContentReadOnly) {
+                        if (IsContentReadOnly && string.IsNullOrEmpty(MpAvSearchBoxViewModel.Instance.SearchText)) {
                             if (IsSubSelectionEnabled) {
                                 IsSubSelectionEnabled = false;
-                                RequestUiUpdate();
                             }
                         }
                         FileItems.ForEach(x => x.IsSelected = false);
@@ -1926,7 +1919,6 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(CopyItemData));
                     OnPropertyChanged(nameof(CurrentSize));
                     //UpdateDetails();
-                    RequestUiUpdate();
                     break;
                 case nameof(IsEditingTemplate):
                     //OnPropertyChanged(nameof(De))

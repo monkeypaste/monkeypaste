@@ -63,7 +63,6 @@ function startAutoScroll() {
         adjusted_editor_width = container_width;
     }
 
-
     editor_elm.style.width = adjusted_editor_width + 'px';
 
     scrollToDocRange(DragSelectionRange, editor_elm);
@@ -107,6 +106,7 @@ function scrollEditorTop(new_top) {
         getEditorContainerElement().scrollTop = 0;
     }
 }
+
 function scrollToHome(target) {
     if (!target) {
         // maybe default to editor here?
@@ -137,17 +137,18 @@ function onAutoScrollTick(e) {
         return;
     }
     //debugger;
+    let scroll_elm = getEditorContainerElement();//document.body;
 
-    let orig_scroll_x = document.body.scrollLeft;
-    let orig_scroll_y = document.body.scrollTop;
+    let orig_scroll_x = scroll_elm.scrollLeft;
+    let orig_scroll_y = scroll_elm.scrollTop;
 
     if (Math.abs(window_rect.right - WindowMouseLoc.x) <= MIN_AUTO_SCROLL_DIST) {
-        document.body.scrollLeft += AutoScrollVelX;
+        scroll_elm.scrollLeft += AutoScrollVelX;
     } else if (Math.abs(window_rect.left - WindowMouseLoc.x) <= MIN_AUTO_SCROLL_DIST) {
-        document.body.scrollLeft -= AutoScrollVelX;
+        scroll_elm.scrollLeft -= AutoScrollVelX;
     }
 
-    if (orig_scroll_x != document.body.scrollLeft) {
+    if (orig_scroll_x != scroll_elm.scrollLeft) {
         AutoScrollVelX += AutoScrollAccumlator;
     }
 }

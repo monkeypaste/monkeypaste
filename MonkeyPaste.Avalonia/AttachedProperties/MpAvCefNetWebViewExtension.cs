@@ -173,31 +173,20 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 false);
 
-        private static async void HandleIsSubSelectionEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+        private static void HandleIsSubSelectionEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isSubSelectionEnabled &&
                 element is MpAvCefNetWebView wv &&
                 GetIsContentReadOnly(wv) &&
                 wv.IsEditorInitialized &&
                 wv.DataContext is MpAvClipTileViewModel ctvm &&
                 !ctvm.IsReloading) {
-                Control resizeControl = null;
-                //if(ctvm.HasTemplates) {
-                    var ctv = wv.GetVisualAncestor<MpAvClipTileView>();
-                    if (ctv != null) {
-                        resizeControl = ctv.FindControl<Control>("ClipTileResizeBorder");
-                    }
-                //}
                 if (isSubSelectionEnabled) {
                     // editor handles enabling by double clicking 
-                    var respStr = await wv.EvaluateJavascriptAsync("enableSubSelection_ext()");
-                    var resp = MpJsonObject.DeserializeBase64Object<MpQuillSubSelectionChangedMessageOrNotification>(respStr);
-                    if(resp.editorWidth > 0) {
-                        if (resizeControl != null) {
-                            MpAvResizeExtension.ResizeAnimated(resizeControl, resp.editorWidth, ctvm.ReadOnlyHeight, 1000.0d);
-                        }
-                    }
+                    wv.ExecuteJavascript("enableSubSelection_ext()");
                 } else {
-                    if (resizeControl != null) {
+                    var ctv = wv.GetVisualAncestor<MpAvClipTileView>();
+                    if (ctv != null) {
+                        var resizeControl = ctv.FindControl<Control>("ClipTileResizeBorder");
                         MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.ReadOnlyWidth, ctvm.ReadOnlyHeight, 1000.0d);
                     }
                     wv.ExecuteJavascript("disableSubSelection_ext()");
@@ -259,10 +248,10 @@ namespace MonkeyPaste.Avalonia {
         private static void HandleHtmlDataChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
             if (element is MpAvCefNetWebView wv &&
                 wv.DataContext is MpAvClipTileViewModel ctvm &&
-                !ctvm.IsWaitingForDomLoad &&
+                //!ctvm.IsWaitingForDomLoad &&
                 !ctvm.IsReloading) {
                 Dispatcher.UIThread.Post(async () => {
-                    ctvm.IsWaitingForDomLoad = true;
+                    //ctvm.IsWaitingForDomLoad = true;
                     while (!wv.IsEditorInitialized) {
                         await Task.Delay(100);
                     }
@@ -272,7 +261,7 @@ namespace MonkeyPaste.Avalonia {
                     if (ctvm.IsPlaceholder && !ctvm.IsPinned) {
                         return;
                     }
-                    ctvm.IsBusy = true;
+                    //ctvm.IsBusy = true;
 
                     var loadContentMsg = new MpQuillLoadContentRequestMessage() {
                         contentHandle = ctvm.PublicHandle,
@@ -289,15 +278,16 @@ namespace MonkeyPaste.Avalonia {
                         loadContentMsg.useRegex = sbvm.Filters.FirstOrDefault(x => x.FilterType == MpContentFilterType.Regex).IsChecked.IsTrue();
                     }
 
-                    var respStr = await wv.EvaluateJavascriptAsync($"loadContent_ext('{loadContentMsg.SerializeJsonObjectToBase64()}')");
-                    var resp = MpJsonObject.DeserializeBase64Object<MpQuillLoadContentResponseMessage>(respStr);
-                    ctvm.UnformattedContentSize = new MpSize(resp.contentWidth, resp.contentHeight);
-                    ctvm.LineCount = resp.lineCount;
-                    ctvm.CharCount = resp.charCount;
-                    wv.Document.ContentEnd.Offset = resp.charCount;
+                    wv.ExecuteJavascript($"loadContent_ext('{loadContentMsg.SerializeJsonObjectToBase64()}')");
+                    //var respStr = await wv.EvaluateJavascriptAsync($"loadContent_ext('{loadContentMsg.SerializeJsonObjectToBase64()}')");
+                    //var resp = MpJsonObject.DeserializeBase64Object<MpQuillLoadContentResponseMessage>(respStr);
+                    //ctvm.UnformattedContentSize = new MpSize(resp.contentWidth, resp.contentHeight);
+                    //ctvm.LineCount = resp.lineCount;
+                    //ctvm.CharCount = resp.charCount;
+                    //wv.Document.ContentEnd.Offset = resp.charCount;
 
-                    ctvm.IsWaitingForDomLoad = false;
-                    ctvm.IsBusy = false;
+                    //ctvm.IsWaitingForDomLoad = false;
+                    //ctvm.IsBusy = false;
                 });
                 // editor will know its loaded by IsLoaded and just set new html
                 //LoadContentAsync(wv).FireAndForgetSafeAsync(null);

@@ -405,21 +405,26 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ValidateFilters() {
-            var resfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByRegex));
-            var cssfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByIsCaseSensitive));
-            if (resfvm.IsChecked.IsTrue()) {
-                cssfvm.IsChecked = null;
-            } else {
-                cssfvm.IsChecked = false;
-            }
+            //var regex_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByRegex));
+            //var case_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByIsCaseSensitive));
+            //var whole_word_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByWholeWord));
 
-            var sbtfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByTextType));
-            var sbifvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByImageType));
-            var sbffvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByFileType));
+            //if (regex_filter.IsChecked.IsTrue()) {
+            //    case_filter.IsChecked = null;
+            //    whole_word_filter.IsChecked = null;
+            //} else {
+            //    case_filter.IsChecked = false;
+            //}
 
-            if(sbtfvm.IsChecked.IsFalse() && sbifvm.IsChecked.IsFalse() && sbffvm.IsChecked.IsFalse()) {
-                sbtfvm.IsChecked = sbifvm.IsChecked = sbffvm.IsChecked = true;
-            }
+            //var text_type_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByTextType));
+            //var image_type_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByImageType));
+            //var file_type_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByFileType));
+
+            //if(text_type_filter.IsChecked.IsFalse() && image_type_filter.IsChecked.IsFalse() && file_type_filter.IsChecked.IsFalse()) {
+            //    text_type_filter.IsChecked = true;
+            //    image_type_filter.IsChecked = true;
+            //    file_type_filter.IsChecked = true;
+            //}
         }
 
         public void NotifyHasMultipleMatches() {

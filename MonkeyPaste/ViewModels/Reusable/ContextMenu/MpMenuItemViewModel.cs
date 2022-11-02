@@ -130,7 +130,14 @@ namespace MonkeyPaste {
 
         #region State
 
-        public bool IsEnabled { get; set; }
+        public bool IsEnabled {
+            get {
+                if(Command == null) {
+                    return true;
+                }
+                return Command.CanExecute(CommandParameter);
+            }
+        }
 
         public bool? IsChecked { get; set; } = false;
         //public bool IsPartiallySelected { get; set; } = false; // for multi-select tag ischecked overlay
@@ -193,6 +200,9 @@ namespace MonkeyPaste {
         private string _borderHexColor;
         public string BorderHexColor {
             get {
+                if(!IsEnabled) {
+                    return MpSystemColors.dimgray;
+                }
                 if(!string.IsNullOrEmpty(_borderHexColor)) {
                     return _borderHexColor;
                 }
@@ -218,7 +228,21 @@ namespace MonkeyPaste {
 
         public string IconResourceKey { get; set; } = string.Empty;
 
-        public string IconHexStr { get; set; } = string.Empty;
+        private string _iconHexStr;
+        public string IconHexStr { 
+            get {
+                if(IsEnabled) {
+                    return _iconHexStr;
+                }
+                return MpSystemColors.gray;
+            }
+            set {
+                if(_iconHexStr != value) {
+                    _iconHexStr = value;
+                    OnPropertyChanged(nameof(IconHexStr));
+                }
+            } 
+        }
 
         public Uri IconSourceUri { get; set; }
 

@@ -3055,6 +3055,7 @@ namespace MonkeyPaste.Avalonia {
                     Items.ForEach(x => x.CopyItem = null);
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));
                     Items.ForEach(x => x.TriggerUnloadedNotification());
+
                     //Items.Clear();
 
                     MpAvPersistentClipTilePropertiesHelper.ClearPersistentWidths();

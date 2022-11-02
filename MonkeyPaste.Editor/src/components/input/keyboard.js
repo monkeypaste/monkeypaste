@@ -96,7 +96,7 @@ function handleWindowKeyUp(e) {
 
 
 		if (isSubSelectionEnabled()) {
-			let sel = getEditorSelection();
+			let sel = getDocSelection();
 			if (!sel || sel.length == 0) {
 				if (!isReadOnly()) {
 					enableReadOnly();
@@ -109,7 +109,7 @@ function handleWindowKeyUp(e) {
 				return;
 			}
 			if (quill.hasFocus()) {
-				setEditorSelection(sel.index, 0);
+				setDocSelection(sel.index, 0);
 			}
 			
 			return;

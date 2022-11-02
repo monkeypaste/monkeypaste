@@ -37,6 +37,9 @@ namespace MonkeyPaste.Avalonia {
                 var contentDataRespStr = await wv.EvaluateJavascriptAsync($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");
                 var contentDataResp = MpJsonObject.DeserializeBase64Object<MpQuillContentDataResponseMessage>(contentDataRespStr);
 
+                if(contentDataResp.dataItems == null) {
+                    return null;
+                }
                 var avdo = new MpAvDataObject();
                 foreach(var di in contentDataResp.dataItems) {
                     avdo.SetData(di.format, di.data);

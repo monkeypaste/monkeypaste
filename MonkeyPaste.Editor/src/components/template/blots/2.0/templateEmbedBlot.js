@@ -222,5 +222,5 @@ function onTemplatePointerMove(e) {
     //if (!quill.hasFocus()) {
     //    quill.focus();
     //}
-    //setEditorSelection(docIdx, 0);
+    //setDocSelection(docIdx, 0);
 }
