@@ -38,7 +38,6 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 		loadTextContent(contentData, isPasteRequest);
 	}
 
-
 	//getEditorElement().style.backgroundColor = rgbaToCssColor(contentBg_rgba);
 
 	quill.update();
@@ -49,14 +48,19 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 			resetFindReplaceToolbar();
 			hideFindReplaceToolbar();
 		}
+		if (CurFindReplaceDocRanges) {
+			hideScrollbars();
+			resetFindReplaceResults();
+		}
 	} else {
-		enableSubSelection(false, false, false);
+		showScrollbars();
 		setFindReplaceInputState(searchStateObj);
 		populateFindReplaceResults();		
 		onQuerySearchRangesChanged_ntf(CurFindReplaceDocRanges.length);
 	}
 
 	IsLoaded = true;
+	drawOverlay();
 	onContentLoaded_ntf();
 	// initial load content length ntf
 	//onContentLengthChanged_ntf();
@@ -268,6 +272,15 @@ function getCharacterRect(docIdx, isWindowOrigin = true, inflateToLineRect = tru
 	if (isNaN(docIdx)) {
 		return cleanRect();
 	}
+
+	//let doc_idx_t = getTemplateAtDocIdx(docIdx);
+
+	//if (doc_idx_t) {
+	//	let doc_idx_t_elm = getTemplateElementsInRange({ index: docIdx, length: 1 });
+	//	if (doc_idx_t_elm) {
+	//		return cleanRect(doc_idx_t_elm.getBoundingClientRect());
+	//	}
+	//}
 
 	let docIdx_rect = quill.getBounds(docIdx, 1);
 

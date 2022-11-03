@@ -1,5 +1,5 @@
 ﻿using SQLite;
-using SQLiteNetExtensionsAsync.Extensions;
+//using SQLiteNetExtensionsAsync.Extensions;
 using SQLitePCL;
 using System;
 using System.Collections;
@@ -14,7 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
-using SQLiteNetExtensions.Extensions;
+//using SQLiteNetExtensions.Extensions;
 using System.Reflection;
 
 namespace MonkeyPaste {
@@ -131,34 +131,7 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public static async Task<List<T>> GetItemsAsync<T>() where T : new() {
-            if (_connectionAsync == null) {
-                CreateConnection();
-            }
-            var dbol = await _connectionAsync.GetAllWithChildrenAsync<T>(recursive: true);
-            return dbol;
-        }
-        public static async Task<T> GetItemAsync<T>(int id) where T : new() {
-            if (_connectionAsync == null) {
-                CreateConnection();
-            }
-            T dbo;
-            try {
-                dbo = await _connectionAsync.GetWithChildrenAsync<T>(id, true);
-            } catch(Exception ex) {
-                MpConsole.WriteTraceLine($"Likely trying to access item of type '{typeof(T).Name}' with id {id} and it does not exist.", ex);
-                return default;
-            }
-            return dbo;
-        }
 
-        public static async Task<List<T>> GetAllWithChildrenAsync<T>(Expression<Func<T, bool>> exp, bool recursive = true) where T : new() {
-            if (_connectionAsync == null) {
-                CreateConnection();
-            }
-            var result = await _connectionAsync.GetAllWithChildrenAsync<T>(exp, recursive);
-            return result;
-        }
 
         private static async Task AddItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             if (_connectionAsync == null) {
@@ -181,7 +154,7 @@ namespace MonkeyPaste {
             }
 
             //await RunInMutex(async () => {
-                await _connectionAsync.InsertOrReplaceWithChildrenAsync(item, recursive: true);
+                await _connectionAsync.InsertAsync(item);
             //});            
 
             NotifyWrite(MpDbLogActionType.Create, item as MpDbModelBase, ignoreSyncing);
@@ -202,7 +175,7 @@ namespace MonkeyPaste {
             await LogWriteAsync(MpDbLogActionType.Modify, item as MpDbModelBase, sourceClientGuid, ignoreTracking);
 
             //await RunInMutex(async () => {
-            await _connectionAsync.UpdateWithChildrenAsync(item);
+            await _connectionAsync.UpdateAsync(item);
             //});
 
             NotifyWrite(MpDbLogActionType.Modify, item as MpDbModelBase, ignoreSyncing);
@@ -230,7 +203,7 @@ namespace MonkeyPaste {
             await LogWriteAsync(MpDbLogActionType.Delete, item as MpDbModelBase, sourceClientGuid, ignoreTracking);
 
             //await RunInMutex( async()=> {
-            await _connectionAsync.DeleteAsync(item, true);
+            await _connectionAsync.DeleteAsync(item);
             //});
 
             NotifyWrite(MpDbLogActionType.Delete, item as MpDbModelBase, ignoreSyncing);
@@ -259,7 +232,7 @@ namespace MonkeyPaste {
                 objGuid);
 
             if (dt != null && dt.Count > 0) {
-                var item = await GetItemAsync<T>((dt[0] as MpDbModelBase).Id);
+                var item = await MpDataModelProvider.GetItemAsync<T>((dt[0] as MpDbModelBase).Id);
                 return item;
                 //return dbo;
                 //return dt[0];
@@ -272,21 +245,9 @@ namespace MonkeyPaste {
         #endregion
 
         #region Sync
-        public static List<T> GetItems<T>(string dbPath = "") where T : new() {
-            if (_connection == null) {
-                CreateConnection(dbPath);
-            }
-            var dbol = _connection.GetAllWithChildren<T>(recursive: true);
-            return dbol;
-        }
+        
 
-        public static T GetItem<T>(int id) where T : new() {
-            if (_connection == null) {
-                CreateConnection();
-            }
-            var dbo = _connection.Get<T>(id);
-            return dbo;
-        }
+        
 
         public static List<T> Query<T>(string query, params object[] args) where T : new() {
             if (_connection == null) {
@@ -412,10 +373,10 @@ namespace MonkeyPaste {
 
             MpPrefViewModel.Instance.ThisUserDevice = await MpDataModelProvider.GetUserDeviceByGuidAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
             
-            MpPrefViewModel.Instance.ThisAppSource = await GetItemAsync<MpSource>(MpPrefViewModel.Instance.ThisAppSourceId);
-            var thisAppApp = await MpDb.GetItemAsync<MpApp>(MpPrefViewModel.Instance.ThisAppSource.AppId);
-            MpPrefViewModel.Instance.ThisAppIcon = await GetItemAsync<MpIcon>(thisAppApp.IconId);
-            MpPrefViewModel.Instance.ThisOsFileManagerSource = await GetItemAsync<MpSource>(MpPrefViewModel.Instance.ThisOsFileManagerSourceId);
+            MpPrefViewModel.Instance.ThisAppSource = await MpDataModelProvider.GetItemAsync<MpSource>(MpPrefViewModel.Instance.ThisAppSourceId);
+            var thisAppApp = await MpDataModelProvider.GetItemAsync<MpApp>(MpPrefViewModel.Instance.ThisAppSource.AppId);
+            MpPrefViewModel.Instance.ThisAppIcon = await MpDataModelProvider.GetItemAsync<MpIcon>(thisAppApp.IconId);
+            MpPrefViewModel.Instance.ThisOsFileManagerSource = await MpDataModelProvider.GetItemAsync<MpSource>(MpPrefViewModel.Instance.ThisOsFileManagerSourceId);
 
 
             if(isNewDb) {
@@ -515,8 +476,6 @@ namespace MonkeyPaste {
 	                                                    fk_MpCopyItemTypeId,
 	                                                    Title,
 	                                                    ItemData,
-	                                                    ItemWidth,
-	                                                    ItemHeight,
 	                                                    ItemDescription,
 	                                                    CopyDateTime,
 	                                                    (select PasteDateTime from MpPasteHistory where fk_MpCopyItemId=pk_MpCopyItemId order by PasteDateTime desc limit 1) AS LastPasteDateTime,
@@ -546,47 +505,6 @@ namespace MonkeyPaste {
                                                     INNER JOIN MpApp ON MpApp.pk_MpAppId = MpSource.fk_MpAppId
                                                     LEFT JOIN MpUrl ON MpUrl.pk_MpUrlId = MpSource.fk_MpUrlId");
 
-            //await _connectionAsync.ExecuteAsync(@"CREATE VIEW MpSortableCopyItem_View as
-            //                                        SELECT 
-	           //                                         case fk_ParentCopyItemId
-		          //                                          when 0
-			         //                                           then pk_MpCopyItemId
-		          //                                          ELSE
-			         //                                           fk_ParentCopyItemId
-	           //                                         end as RootId,
-	           //                                         pk_MpCopyItemId as RootId,
-	           //                                         fk_MpCopyItemTypeId,
-	           //                                         CompositeSortOrderIdx,
-	           //                                         Title,
-	           //                                         ItemData,
-	           //                                         ItemDescription,
-	           //                                         CopyDateTime,
-	           //                                         (select PasteDateTime from MpPasteHistory where fk_MpCopyItemId=pk_MpCopyItemId order by PasteDateTime desc limit 1) AS LastPasteDateTime,
-	           //                                         CopyCount,
-	           //                                         PasteCount,
-	           //                                         CopyCount + PasteCount as UsageScore,
-	           //                                         MpSource.pk_MpSourceId AS SourceId,
-	           //                                         case MpSource.fk_MpUrlId
-		          //                                          when 0
-			         //                                           then MpApp.SourcePath
-		          //                                          ELSE
-			         //                                           MpUrl.UrlPath
-	           //                                         end as SourcePath,
-	           //                                         MpApp.AppName,
-	           //                                         MpApp.SourcePath as AppPath,
-	           //                                         MpApp.pk_MpAppId AS AppId,
-	           //                                         MpUrl.pk_MpUrlId AS UrlId,
-	           //                                         MpUrl.UrlPath,
-	           //                                         MpUrl.UrlDomainPath,
-	           //                                         MpUrl.UrlTitle,
-	           //                                         MpUserDevice.MachineName AS SourceDeviceName,
-	           //                                         MpUserDevice.PlatformTypeId AS SourceDeviceType
-            //                                        FROM
-	           //                                         MpCopyItem
-            //                                        INNER JOIN MpUserDevice ON MpUserDevice.pk_MpUserDeviceId = MpApp.fk_MpUserDeviceId
-            //                                        INNER JOIN MpSource ON MpSource.pk_MpSourceId = MpCopyItem.fk_MpSourceId
-            //                                        INNER JOIN MpApp ON MpApp.pk_MpAppId = MpSource.fk_MpAppId
-            //                                        LEFT JOIN MpUrl ON MpUrl.pk_MpUrlId = MpSource.fk_MpUrlId");
         }
 
         public static async Task<bool> ResetPreferenceDefaultsAsync(MpIDbInfo dbInfo, MpIOsInfo osInfo) {
@@ -708,7 +626,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task ResetShortcutsAsync() {
-            var sl = await MpDb.GetItemsAsync<MpShortcut>();
+            var sl = await MpDataModelProvider.GetItemsAsync<MpShortcut>();
             await Task.WhenAll(sl.Select(x => x.DeleteFromDatabaseAsync()));
 
             await InitDefaultShortcutsAsync();
@@ -839,7 +757,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<DateTime> GetLastSyncForRemoteDeviceAsync(string otherDeviceGuid) {
-            var shl = await GetItemsAsync<MpSyncHistory>();
+            var shl = await MpDataModelProvider.GetItemsAsync<MpSyncHistory>();
             if(shl.Count == 0) {
                 return DateTime.MinValue;
             }
@@ -854,7 +772,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<string> GetLocalLogFromSyncDateAsync(DateTime fromDateTime, string ignoreGuid = "") {
-            var logItems = await GetItemsAsync<MpDbLog>();
+            var logItems = await MpDataModelProvider.GetItemsAsync<MpDbLog>();
             var matchLogItems = logItems.Where(x => x.LogActionDateTime > fromDateTime && x.SourceClientGuid.ToString() != ignoreGuid).ToList();
 
             var dbol = new List<MpISyncableDbObject>();

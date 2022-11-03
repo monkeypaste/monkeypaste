@@ -212,12 +212,12 @@ namespace MonkeyPaste.Avalonia {
             MpDb.SyncUpdate += MpDbObject_SyncUpdate;
             MpDb.SyncDelete += MpDbObject_SyncDelete;
 
-            MpTag allTag = await MpDb.GetItemAsync<MpTag>(MpTag.AllTagId);
+            MpTag allTag = await MpDataModelProvider.GetItemAsync<MpTag>(MpTag.AllTagId);
 
             AllTagViewModel = new MpAvTagTileViewModel(this);
             await AllTagViewModel.InitializeAsync(allTag);
 
-            MpTag helpTag = await MpDb.GetItemAsync<MpTag>(MpTag.HelpTagId);
+            MpTag helpTag = await MpDataModelProvider.GetItemAsync<MpTag>(MpTag.HelpTagId);
 
             HelpTagViewModel = new MpAvTagTileViewModel(this);
             await HelpTagViewModel.InitializeAsync(helpTag);

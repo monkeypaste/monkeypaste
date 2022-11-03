@@ -5,8 +5,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
-using SQLiteNetExtensions.Attributes;
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public class MpAppClipboardFormatInfo : MpDbModelBase {
@@ -17,7 +17,6 @@ namespace MonkeyPaste {
         [Column("MpAppClipboardFormatInfoGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        [ForeignKey(typeof(MpApp))]
         [Column("fk_MpAppId")]
         public int AppId { get; set; }
 

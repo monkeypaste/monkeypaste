@@ -156,18 +156,16 @@ namespace MonkeyPaste.Avalonia {
                 if(ctvm == null || ctvm.IsPlaceholder) {
                     return;
                 }
-                var CopyItem = ctvm.CopyItem;
-                var ItemSize = CopyItem.ItemSize;
                 
                 switch (DetailType) {
                     //created
                     case MpCopyItemDetailType.DateTimeCreated:
-                        DetailText = "Copied " + CopyItem.CopyDateTime.ToReadableTimeSpan();
+                        DetailText = "Copied " + ctvm.CopyItemCreatedDateTime.ToReadableTimeSpan();
                         break;
                     case MpCopyItemDetailType.DataSize:
-                        switch(CopyItem.ItemType) {
+                        switch(ctvm.ItemType) {
                             case MpCopyItemType.Image:
-                                DetailText = $"({ItemSize.Width}px) | ({ItemSize.Height}px)";
+                                DetailText = $"({(int)ctvm.UnformattedContentSize.Width}px) | ({(int)ctvm.UnformattedContentSize.Height}px)";
                                 break;
                             case MpCopyItemType.Text:
                                 DetailText = $"{ctvm.CharCount} chars | {ctvm.LineCount} lines";
@@ -180,7 +178,7 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     //# copies/# pastes
                     case MpCopyItemDetailType.UsageStats:
-                        DetailText = $"{CopyItem.CopyCount} copies | {CopyItem.PasteCount} pastes";
+                        DetailText = $"{ctvm.CopyCount} copies | {ctvm.PasteCount} pastes";
                         break;
                     case MpCopyItemDetailType.UrlInfo:
                         if (ctvm.UrlViewModel == null) {

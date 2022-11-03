@@ -63,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
 
             IconViewModels.Clear();
-            var il = await MpDb.GetItemsAsync<MpIcon>();
+            var il = await MpDataModelProvider.GetItemsAsync<MpIcon>();
             foreach(var i in il) {
                 var ivm = await CreateIconViewModel(i);
                 IconViewModels.Add(ivm);
@@ -167,8 +167,8 @@ namespace MonkeyPaste.Avalonia {
             //        createBorder: false);
             //    uivm.IconId = icon.Id;
             //} else {
-            //    icon = await MpDb.GetItemAsync<MpIcon>(uivm.IconId);
-            //    var img = await MpDb.GetItemAsync<MpDbImage>(icon.IconImageId);
+            //    icon = await MpDataModelProvider.GetItemAsync<MpIcon>(uivm.IconId);
+            //    var img = await MpDataModelProvider.GetItemAsync<MpDbImage>(icon.IconImageId);
             //    img.ImageBase64 = bmpSrc.ToBase64String();
             //    await img.WriteToDatabaseAsync();
             //    await icon.CreateOrUpdateBorderAsync(forceHexColor: hexColor);
@@ -218,7 +218,7 @@ namespace MonkeyPaste.Avalonia {
                             createBorder: false);
                         uivm.IconId = icon.Id;
                     } else {
-                        var img = await MpDb.GetItemAsync<MpDbImage>(icon.IconImageId);
+                        var img = await MpDataModelProvider.GetItemAsync<MpDbImage>(icon.IconImageId);
                         img.ImageBase64 = bmpSrc.ToBase64String();
                         await img.WriteToDatabaseAsync();
 

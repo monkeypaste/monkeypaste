@@ -1,5 +1,4 @@
 ﻿using SQLite;
-using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,13 +29,11 @@ namespace MonkeyPaste {
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
 
-        [ForeignKey(typeof(MpCopyItem))]
         [Column("fk_MpCopyItemId")]
         public int CopyItemId { get; set; }
 
         public string TransactionData { get; set; }
 
-        [ForeignKey(typeof(MpUserDevice))]
         [Column("fk_MpUserDeviceId")]
         public int DeviceId { get; set; }
 
@@ -46,11 +43,6 @@ namespace MonkeyPaste {
         public int UserTransactionTypeId { get; set; } = 0;
 
         public DateTime TransactionDateTime { get; set; }
-
-
-        #endregion
-
-        #region Fk Objects
 
 
         #endregion
@@ -101,7 +93,7 @@ namespace MonkeyPaste {
                 TransactionErrorMessage = errorMsg
             };
             if (copyItemId > 0) {
-                var preset = await MpDb.GetItemAsync<MpPluginPreset>(copyItemId);
+                var preset = await MpDataModelProvider.GetItemAsync<MpPluginPreset>(copyItemId);
                 if (preset != null) {
                     mr.iconId = preset.IconId;
                 }

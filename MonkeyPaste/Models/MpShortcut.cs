@@ -1,6 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using SQLite;
-using SQLiteNetExtensions.Attributes;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -987,7 +987,7 @@ namespace MonkeyPaste {
                 MpConsole.WriteLine($"Updating keyString from '{dupShortcut.KeyString}' to '{keyString}'");
                 MpConsole.WriteLine($"Updating routing type from '{dupShortcut.RoutingType}' to '{routeType}'");
 
-                dupShortcut = await MpDb.GetItemAsync<MpShortcut>(dupShortcut.Id);
+                dupShortcut = await MpDataModelProvider.GetItemAsync<MpShortcut>(dupShortcut.Id);
                 dupShortcut.ShortcutLabel = shortcutLabel;
                 dupShortcut.KeyString = keyString;
                 dupShortcut.RoutingType = routeType;

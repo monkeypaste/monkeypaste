@@ -54,11 +54,10 @@ function getCaretColor() {
 }
 
 function getDocSelection(isForPaste = false) {
-	let dom_sel = getDomFocusRange();
-	if (isForPaste && (!dom_sel || (dom_sel && dom_sel.length == 0))) {
+	let doc_sel = convertDomRangeToDocRange(getDomFocusRange());
+	if (isForPaste && (!doc_sel || (doc_sel && doc_sel.length == 0))) {
 		return { index: 0, length: getDocLength() };
 	}
-	let doc_sel = convertDomRangeToDocRange(dom_sel);
 	return doc_sel;
 }
 

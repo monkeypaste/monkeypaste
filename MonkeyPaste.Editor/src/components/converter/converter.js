@@ -5,19 +5,19 @@ function initPlainHtmlConverter(envName) {
 
 	initQuill();
 
-	addPlainHtmlClipboardMatchers();
+	//addPlainHtmlClipboardMatchers();
 	//document.getElementsByClassName("ql-toolbar")[0].classList.add("env-wpf");
-	disableReadOnly();
+	//disableReadOnly();
 	//hideEditorToolbar();
-	window.addEventListener(
-		"resize",
-		function (event) {
-			updateAllElements();
-		},
-		true
-	);
+	//window.addEventListener(
+	//	"resize",
+	//	function (event) {
+	//		updateAllElements();
+	//	},
+	//	true
+	//);
 
-	updateAllElements();
+	//updateAllElements();
 
 	IsConverterLoaded = true;
 	IsLoaded = true;
@@ -25,28 +25,36 @@ function initPlainHtmlConverter(envName) {
 }
 
 
-function convertPlainHtml(plainHtml, bgOpacity = 0.0) {
+function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 	if (!IsConverterLoaded) {
 		log('convertPlainHtml error! converter not initialized, returning null');
 		return null;
 	}
-	plainHtml = unescapeHtml(plainHtml);
+	
 
 	log("Converting This Plain Html:");
-	log(plainHtml);
+	log(dataStr);
 
-	let doc_range = { index: 0, length: getDocLength() };
-	setTextInRange(doc_range, '');
+	setRootHtml('');
+	quill.update();
 
-	insertHtml(0, plainHtml, 'user', false);
-
-	//setRootHtml(plainHtml);
+	if (formatType == 'text') {
+		//dataStr = unescapeHtml(dataStr);
+		//insertHtml(0, dataStr, 'api');
+		//setRootHtml(escapeHtml(dataStr));
+		//insertText(0, dataStr);
+		insertText(0, escapeHtml(dataStr),'silent');
+		//setRootText(escapeHtml(dataStr));
+	} else if (formatType == 'html') {
+		dataStr = unescapeHtml(dataStr);
+		insertHtml(0, dataStr, 'api', false);
+	} 
 
 	quill.update();
 	let qhtml = getHtml();
-	qhtml = removeUnicode(qhtml);
-	qhtml = fixUnicode(qhtml);
-	qhtml = forceBgOpacity(qhtml, bgOpacity);
+	//qhtml = removeUnicode(qhtml);
+	//qhtml = fixUnicode(qhtml);
+	//qhtml = forceBgOpacity(qhtml, bgOpacity);
 
 	setRootHtml(qhtml);
 

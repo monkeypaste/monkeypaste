@@ -71,7 +71,7 @@ namespace MonkeyPaste {
         #region Public Methods
 
         public async Task InitAsync() {
-            var ttl = await MpDb.GetItemsAsync<MpTextTemplate>();
+            var ttl = await MpDataModelProvider.GetItemsAsync<MpTextTemplate>();
             AllTemplates = new ObservableCollection<MpTextTemplate>(ttl);
 
         }

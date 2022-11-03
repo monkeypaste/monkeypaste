@@ -109,6 +109,7 @@
     <Page Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <AvaloniaXaml Remove="Themes\Default\Accents\Base.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Accents\BaseLight.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\Button.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ButtonBase.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\DefaultControls.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ListBox.axaml" />
@@ -932,6 +933,7 @@
     <AvaloniaResource Include="Themes\Default\Accents\Base.axaml">
       
     </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Default\Controls\Button.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TextBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ToolTip.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ListBoxItem.axaml">
@@ -1007,6 +1009,7 @@
     <Folder Include="Utils\Input\Mouse\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
     <Folder Include="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\" />
+    <Folder Include="Views\Reusable\NewFolder\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />
@@ -1035,6 +1038,9 @@
     </Compile>
     <Compile Update="Views\MainWindow\FilterMenu\MpAvFilterMenuView.axaml.cs">
       <DependentUpon>MpAvFilterMenuView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\Buttons\MpAvClearTextButton.axaml.cs">
+      <DependentUpon>MpAvClearTextButton.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\ContextMenu\CheckableMenuItem\MpAvCheckableMenuItemView.axaml.cs">
       <DependentUpon>MpAvCheckableMenuItemView.axaml</DependentUpon>

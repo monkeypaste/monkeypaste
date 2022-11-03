@@ -1,6 +1,4 @@
 ﻿using SQLite;
-using SQLiteNetExtensions;
-using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,7 +17,6 @@ namespace MonkeyPaste {
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         [Column("fk_MpCopyItemId")]
-        [ForeignKey(typeof(MpCopyItem))]
         public int CopyItemId { get; set; }
 
         public double Score { get; set; } = 0;

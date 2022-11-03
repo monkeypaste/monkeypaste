@@ -140,7 +140,7 @@ namespace MonkeyPaste.Avalonia {
         private async Task<List<MpApp>> RegisterWithProcessesManager() {
             // This is only called during init to keep app storage in sync so any running apps are added if unknown
 
-            var al = await MpDb.GetItemsAsync<MpApp>();
+            var al = await MpDataModelProvider.GetItemsAsync<MpApp>();
             var unknownApps = MpPlatformWrapper.Services.ProcessWatcher.RunningProcessLookup.Keys
                                     .Where(x => !al.Any(y => y.AppPath.ToLower() == x.ToLower())).ToList();
 

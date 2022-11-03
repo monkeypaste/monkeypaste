@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using SQLite;
-using SQLiteNetExtensions;
-using SQLiteNetExtensions.Attributes;
 using System.Linq;
-using Xamarin.Forms;
-using SQLiteNetExtensions.Extensions.TextBlob;
 using System.Text;
 using Newtonsoft.Json;
 using MonkeyPaste.Common;
@@ -61,10 +57,6 @@ namespace MonkeyPaste {
         [JsonProperty("templateGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        //[Column("fk_MpCopyItemId")]
-        //[ForeignKey(typeof(MpCopyItem))]
-        //public int CopyItemId { get; set; }
-
         [JsonProperty("templateType")]
         public string TemplateTypeStr { get; set; }
 
@@ -88,8 +80,6 @@ namespace MonkeyPaste {
   
         #endregion
 
-        #region Fk Models
-        #endregion
 
         #region Properties
 

@@ -153,6 +153,7 @@ templateType: "dynamic"
 
     public class MpQuillConvertPlainHtmlToQuillHtmlRequestMessage : MpJsonObject {
         public string data { get; set; }
+        public string dataFormatType { get; set; }
         public bool isBase64 { get; set; }
     }
 

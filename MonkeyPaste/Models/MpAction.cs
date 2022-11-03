@@ -1,5 +1,4 @@
 ﻿using SQLite;
-using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -64,11 +63,9 @@ namespace MonkeyPaste {
         [Column("MpActionGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        [ForeignKey(typeof(MpAction))]
         [Column("fk_ParentActionId")]
         public int ParentActionId { get; set; } = 0;
 
-        [ForeignKey(typeof(MpIcon))]
         [Column("fk_MpIconId")]
         public int IconId { get; set; } = 0;
 
@@ -104,11 +101,6 @@ namespace MonkeyPaste {
         public int IsEnabledValue { get; set; }
 
         public DateTime LastSelectedDateTime { get; set; }
-
-        #endregion
-
-        #region Fk Objects
-
 
         #endregion
 

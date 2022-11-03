@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.Text.RegularExpressions;
 using Xamarin.Forms;
+using System.Data.Common;
 
 namespace MonkeyPaste {
     
@@ -280,32 +281,46 @@ namespace MonkeyPaste {
 
         #region Select queries
 
-        #region Base Select Queries
+        #region Table Query
 
-        public static T SelectModel<T>(string query, params object[] args) where T : new() {
-            var result = SelectModels<T>(query, args);
-            if (result == null || result.Count == 0) {
-                return default(T);
+        public static async Task<List<T>> GetItemsAsync<T>() where T : new() {
+            string table_name = typeof(T).ToString().Replace("MonkeyPaste.", string.Empty);
+            string query = $"select * from {table_name}";
+            var result = await MpDb.QueryAsync<T>(query);
+            return result;
+        }
+
+        public static List<T> GetItems<T>() where T : new() {
+            string table_name = typeof(T).ToString().Replace("MonkeyPaste.", string.Empty);
+            string query = $"select * from {table_name}";
+            var result = MpDb.Query<T>(query);
+            return result;
+        }
+
+        #endregion
+
+        #region Id Query
+
+        public static async Task<T> GetItemAsync<T>(int id) where T : new() {
+            string table_name = typeof(T).ToString().Replace("MonkeyPaste.", string.Empty);
+            string pk_name = $"pk_{table_name}Id";
+            string query = $"select * from {table_name} where {pk_name}=?";
+            var result = await MpDb.QueryAsync<T>(query, id);
+            if(result == null || result.Count == 0) {
+                return default;
             }
             return result[0];
         }
 
-        public static List<T> SelectModels<T>(string query, params object[] args) where T : new() {
-            var result = MpDb.Query<T>(query, args);
-            return result;
-        }
-
-        public static async Task<T> SelectModelAsync<T>(string query, params object[] args) where T : new() {
-            var result = await SelectModelsAsync<T>(query, args);
+        public static T GetItem<T>(int id) where T : new() {
+            string table_name = typeof(T).ToString().Replace("MonkeyPaste.", string.Empty);
+            string pk_name = $"pk_{table_name}Id";
+            string query = $"select * from {table_name} where {pk_name}=?";
+            var result = MpDb.Query<T>(query, id);
             if (result == null || result.Count == 0) {
-                return default(T);
+                return default;
             }
             return result[0];
-        }
-
-        public static async Task<List<T>> SelectModelsAsync<T>(string query, params object[] args) where T : new() {
-            var result = await MpDb.QueryAsync<T>(query, args);
-            return result;
         }
 
         #endregion
@@ -369,9 +384,6 @@ namespace MonkeyPaste {
 
         #region MpIcon
 
-        public static MpIcon GetIconById(int iconId) {
-            return SelectModel<MpIcon>("select * from MpIcon where pk_MpIconId=?", iconId);
-        }
 
         public static async Task<MpIcon> GetIconByImageStrAsync(string text64) {
             string query = $"select pk_MpDbImageId from MpDbImage where ImageBase64=?";
@@ -579,7 +591,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<MpCopyItem> GetCopyItemByIdAsync(int ciid) {
-            // NOTE this is used to safely try to get item instead of MpDb.GetItemAsync 
+            // NOTE this is used to safely try to get item instead of MpDataModelProvider.GetItemAsync 
             // which crashes if the key doesn't exist...
             string query = "select * from MpCopyItem where pk_MpCopyItemId=?";
             var result = await MpDb.QueryAsync<MpCopyItem>(query, ciid);
@@ -1006,6 +1018,17 @@ namespace MonkeyPaste {
         public static async Task<List<MpDataObjectItem>> GetDataObjectItemsByDataObjectId(int dobjid) {
             string query = "select * from MpDataObjectItem where fk_MpDataObjectId=?";
             var result = await MpDb.QueryAsync<MpDataObjectItem>(query, dobjid);
+            return result;
+        }
+
+        #endregion
+
+        #region MpUserSearch
+
+
+        public static async Task<List<MpSearchCriteriaItem>> GetCriteriaItemsByUserSearchId(int usid) {
+            string query = "select * from MpSearchCriteriaItem where fk_MpUserSearchId=?";
+            var result = await MpDb.QueryAsync<MpSearchCriteriaItem>(query, usid);
             return result;
         }
 

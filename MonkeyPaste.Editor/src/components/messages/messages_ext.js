@@ -138,7 +138,7 @@ function convertPlainHtml_ext(convertPlainHtmlReqMsgBase64Str) {
 		plainHtml = cbData.html;
 		url = cbData.sourceUrl;
 	}
-	qhtml = convertPlainHtml(plainHtml);
+	qhtml = convertPlainHtml(plainHtml, req.dataFormatType);
 
 	let respObj = {
 		quillHtml: qhtml,

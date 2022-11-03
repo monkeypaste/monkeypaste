@@ -379,7 +379,7 @@ function escapeHtml(htmlStr) {
         "<": "&lt;",
         ">": "&gt;",
         '"': "&quot;",
-        "'": "&apos;"
+        "'": "&apos;",
     };
     return htmlStr.replace(/([&<>\"'])/g, match => htmlEntities[match]);
 }

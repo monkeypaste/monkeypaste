@@ -39,46 +39,6 @@ namespace MonkeyPaste.Avalonia {
         public MpAvTagTileViewModel ParentTagViewModel => Parent.Items.FirstOrDefault(x => x.TagId == ParentTagId);
 
         public override MpAvTagTileViewModel ParentTreeItem => ParentTagViewModel;
-        //public override IEnumerable<MpAvTagTileViewModel> AllAncestors {
-        //    get {
-        //        var aal = new List<MpAvTagTileViewModel>();
-        //        var cur = this;
-        //        while(cur != null) {
-        //            if(cur.ParentTagViewModel != null) {
-        //                aal.Add(cur.ParentTagViewModel);
-        //            }
-        //            cur = cur.ParentTagViewModel;
-        //        }
-        //        return aal;
-        //    }
-        //}        
-
-        //public override IEnumerable<MpAvTagTileViewModel> AllDescendants {
-        //    get {
-        //        var adl = new List<MpAvTagTileViewModel>();
-        //        foreach(var cttvm in SortedItems) {
-        //            adl.Add(cttvm);
-        //            adl.AddRange(cttvm.AllDescendants);
-        //        }
-        //        return adl;
-        //    }
-        //}
-
-        //public override IEnumerable<MpAvTagTileViewModel> SelfAndAllDescendants {
-        //    get {
-        //        var saldttvml = AllDescendants.ToList();
-        //        saldttvml.Insert(0, this);
-        //        return saldttvml;
-        //    }
-        //}
-
-        //public override IEnumerable<MpAvTagTileViewModel> SelfAndAllAncestors {
-        //    get {
-        //        var salattvml = AllAncestors.ToList();
-        //        salattvml.Insert(0, this);
-        //        return salattvml;
-        //    }
-        //}
 
         public IEnumerable<MpAvTagTileViewModel> SortedItems => Items.OrderBy(x => x.TagSortIdx);
         #endregion
@@ -233,22 +193,8 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<int> LinkedCopyItemIds { get; private set; } = new List<int>();
         public ObservableCollection<int> CopyItemIdsNeedingView { get; set; } = new ObservableCollection<int>();
-        public int BadgeCount => CopyItemIdsNeedingView.Count;//{
-        //    get {
-        //        if(IsAllTag) {
-        //            // not sure the way to describe this...
-        //            // but since all is a global tag the notification is redundant
-        //            // and distracting? maybe ultimately this should be omitted, will make more sense w/ actions implemented 
-        //            return CopyItemIdsNeedingView.Count;
-        //        }
-        //        //int badgeCount = 0;
-        //        //foreach(MpAvTagTileViewModel ttvm in SelfAndAllDescendants) {
-        //        //    badgeCount += ttvm.CopyItemIdsNeedingView.Count;
-        //        //}
-        //        //return badgeCount;
-        //        return SelfAndAllDescendants.Cast<MpAvTagTileViewModel>().SelectMany(x => x.CopyItemIdsNeedingView).Distinct().Count();
-        //    }
-        //}
+        public int BadgeCount => CopyItemIdsNeedingView.Count;
+
         public bool CanAddChild {
             get {
                 if(IsHelpTag) {
@@ -659,7 +605,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             } else if (e is MpCopyItem ci && LinkedCopyItemIds.Contains(ci.Id)) {
                 UnlinkCopyItemCommand.Execute(ci.Id);
-            }
+            } 
         }
         #endregion
 
@@ -822,10 +768,10 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
 
             if(isLink && OnCopyItemLinked.HasInvokers()) {
-                var linked_ci = await MpDb.GetItemAsync<MpCopyItem>(ciid);
+                var linked_ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(ciid);
                 OnCopyItemLinked?.Invoke(this, linked_ci);
             } else if(!isLink && OnCopyItemUnlinked.HasInvokers()) {
-                var unlinked_ci = await MpDb.GetItemAsync<MpCopyItem>(ciid);
+                var unlinked_ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(ciid);
                 OnCopyItemUnlinked?.Invoke(this, unlinked_ci);
             }
 
@@ -835,14 +781,14 @@ namespace MonkeyPaste.Avalonia {
 
         private async Task LinkOrUnlinkCopyItemAsync(int ciid, bool isLink) {
             IsBusy = true;
-            bool success = false;
+            bool affectedDb = false;
             
             if(isLink) {
                 // try to create link, if it was created (and didn't already exist) notify any triggers
                 var cit = await MpCopyItemTag.Create(TagId, ciid);
 
                 if (!cit.WasDupOnCreate) {
-                    success = true;
+                    affectedDb = true;
                     if(IsSelected) {
                         var linked_ctvm = MpAvClipTrayViewModel.Instance.GetClipTileViewModelById(ciid);
                         if(linked_ctvm == null || !linked_ctvm.IsAnyCornerVisible) {
@@ -858,15 +804,15 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 var cit = await MpDataModelProvider.GetCopyItemTagForTagAsync(ciid, TagId);
 
-                if(cit != null) {
+                if (cit != null) {
                     // only delete link/notify if exists
                     await MpDb.DeleteItemAsync(cit);
-                    success = true;
-                    CopyItemIdsNeedingView.Remove(ciid);
+                    affectedDb = true;
                 }
+                CopyItemIdsNeedingView.Remove(ciid);
             }
             
-            if(success) {                
+            if(affectedDb) {                
                 Dispatcher.UIThread.VerifyAccess();
                 //TagClipCount += isLink ? 1 : -1;
 

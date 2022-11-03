@@ -116,7 +116,7 @@ namespace MonkeyPaste {
 
         public static void PrintDbLog() {
             Task.Run(async () => {
-                var dblil = await MpDb.GetItemsAsync<MpDbLog>();
+                var dblil = await MpDataModelProvider.GetItemsAsync<MpDbLog>();
 
                 foreach(var dbli in dblil) {
                     Console.WriteLine(dbli.ToString());

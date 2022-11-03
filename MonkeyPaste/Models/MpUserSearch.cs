@@ -1,5 +1,5 @@
 ﻿using SQLite;
-using SQLiteNetExtensions.Attributes;
+
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,13 +17,6 @@ namespace MonkeyPaste {
         public string Name { get; set; }
 
         public DateTime CreatedDateTime { get; set; }
-
-        #endregion
-
-        #region Fk Models
-
-        [OneToMany(CascadeOperations = CascadeOperation.All)]
-        public List<MpSearchCriteriaItem> CriteriaItems { get; set; } = new List<MpSearchCriteriaItem>();
 
         #endregion
 

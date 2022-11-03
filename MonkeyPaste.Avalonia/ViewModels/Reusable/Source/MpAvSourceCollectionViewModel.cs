@@ -43,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            var sl = await MpDb.GetItemsAsync<MpSource>();
+            var sl = await MpDataModelProvider.GetItemsAsync<MpSource>();
             foreach(var s in sl) {
                 var svm = await CreateSourceViewModel(s);
                 Items.Add(svm);

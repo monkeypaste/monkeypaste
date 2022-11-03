@@ -94,6 +94,11 @@ function getTemplateDefByGuid(tguid) {
     return null;
 }
 
+function getTemplateCountBeforeDocIdx(docIdx) {
+    let t_docIdx_L = getAllTemplateDocIdxs().filter(x => x < docIdx);
+    return t_docIdx_L.length;
+}
+
 function getTemplateDefByInstanceGuid(tiguid) {
     let telm = getTemplateInstanceElement(tiguid);
     if (!telm) {

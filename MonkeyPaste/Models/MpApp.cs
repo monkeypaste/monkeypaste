@@ -2,11 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using SQLiteNetExtensions.Attributes;
 using System.Threading.Tasks;
 using System.Linq;
 using System.IO;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common;
 using System.Diagnostics;
 
 namespace MonkeyPaste {
@@ -31,20 +31,11 @@ namespace MonkeyPaste {
         [Column("IsAppRejected")]
         public int IsRejectedVal { get; set; } = 0;        
 
-        //[ForeignKey(typeof(MpIcon))]
         [Column("fk_MpIconId")]
         public int IconId { get; set; }
 
-        //[ForeignKey(typeof(MpUserDevice))]
         [Column("fk_MpUserDeviceId")]
         public int UserDeviceId { get; set; }
-
-        #endregion
-
-        #region Fk Models
-
-        //[ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
-        //public MpUserDevice UserDevice { get; set; }
 
         #endregion
 
@@ -129,7 +120,7 @@ namespace MonkeyPaste {
         public static async Task<MpApp> CreateAsync(
             string appPath = "", 
             string appName = "", 
-            string arguments = "",
+            string arguments = null,
             int iconId = 0,
             string guid = "",
             bool suppressWrite = false) {
@@ -138,6 +129,9 @@ namespace MonkeyPaste {
             }
             if(appPath != null) {
                 appPath = appPath.ToLower();
+            }
+            if(string.IsNullOrWhiteSpace(arguments)) {
+                arguments = null;
             }
             // NOTE checking app by path and arguments and device here
             // NOTE when args are differnt should be treated as unique app since it could be significantly different
@@ -176,6 +170,7 @@ namespace MonkeyPaste {
                 AppGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),
                 AppPath = appPath.ToLower(),
                 AppName = appName,
+                Arguments = arguments,
                 IconId = iconId,
                 UserDeviceId = thisDevice.Id
             };
@@ -258,8 +253,8 @@ namespace MonkeyPaste {
         }
 
         public async Task<string> SerializeDbObjectAsync() {
-            var ud = await MpDb.GetItemAsync<MpUserDevice>(UserDeviceId);
-            var icon = await MpDb.GetItemAsync<MpIcon>(IconId);
+            var ud = await MpDataModelProvider.GetItemAsync<MpUserDevice>(UserDeviceId);
+            var icon = await MpDataModelProvider.GetItemAsync<MpIcon>(IconId);
             return string.Format(
                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}",
                 ParseToken,
@@ -294,11 +289,11 @@ namespace MonkeyPaste {
             diffLookup = CheckValue(UserDeviceId, other.UserDeviceId,
                 "fk_MpUserDeviceId",
                 diffLookup,
-                MpDb.GetItem<MpUserDevice>(UserDeviceId).Guid);
+                MpDataModelProvider.GetItem<MpUserDevice>(UserDeviceId).Guid);
             diffLookup = CheckValue(IconId, other.IconId,
                 "fk_MpIconId",
                 diffLookup,
-                MpDb.GetItem<MpIcon>(IconId).Guid);
+                MpDataModelProvider.GetItem<MpIcon>(IconId).Guid);
             diffLookup = CheckValue(AppPath, other.AppPath,
                 "SourcePath",
                 diffLookup);

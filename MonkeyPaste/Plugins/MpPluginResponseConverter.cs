@@ -49,7 +49,7 @@ namespace MonkeyPaste {
             if (prf == null || prf.newContentItem == null) {
                 return sourceCopyItem;
             }
-            var source = await MpDb.GetItemAsync<MpSource>(transSourceId);
+            var source = await MpDataModelProvider.GetItemAsync<MpSource>(transSourceId);
 
             string title = sourceCopyItem.Title + " Analysis";
             if (prf.newContentItem.label != null) {

@@ -1051,17 +1051,11 @@ namespace MonkeyPaste.Avalonia {
             PropertyChanged += MpAvClipTrayViewModel_PropertyChanged;
             Items.CollectionChanged += Items_CollectionChanged;
 
-            //MpDataModelProvider.AvailableQueryCopyItemIds.CollectionChanged += AllFetchedAndSortedCopyItemIds_CollectionChanged;
-
             MpDb.SyncAdd += MpDbObject_SyncAdd;
             MpDb.SyncUpdate += MpDbObject_SyncUpdate;
             MpDb.SyncDelete += MpDbObject_SyncDelete;
 
             MpPlatformWrapper.Services.ClipboardMonitor.OnClipboardChanged += ClipboardChanged;
-
-            //DefaultLoadCount = MpMeasurements.Instance.DefaultTotalVisibleClipTiles * 1 + 2;
-
-            //MpMessenger.Register<MpMessageType>(MpDataModelProvider.QueryInfo, ReceivedQueryInfoMessage);
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
 
@@ -2206,7 +2200,7 @@ namespace MonkeyPaste.Avalonia {
         public void CleanupAfterPaste(MpAvClipTileViewModel sctvm) {
             IsPasting = false;
             //clean up pasted items state after paste
-
+            sctvm.PasteCount++;
             sctvm.IsPasting = false;
             if (sctvm.HasTemplates) {
                 sctvm.ClearEditing();
@@ -2241,7 +2235,6 @@ namespace MonkeyPaste.Avalonia {
                 MpAvPersistentClipTilePropertiesHelper.RemovePersistentSize_ById(ci.Id);
 
                 MpDataModelProvider.AvailableQueryCopyItemIds.Remove(ci.Id);
-                //MpDataModelProvider.RemoveQueryItem(ci.Id);
 
                 var removed_ctvm = GetClipTileViewModelById(ci.Id);
                 if (removed_ctvm != null) {
@@ -2250,59 +2243,74 @@ namespace MonkeyPaste.Avalonia {
                     if (removed_ctvm.IsPinned) {
                         var pctvm = PinnedItems.FirstOrDefault(x => x.CopyItemId == ci.Id);
 
-
                         if (pctvm != null) {
                             int pinIdx = PinnedItems.IndexOf(pctvm);
                             // Flag QueryOffsetIdx = -1 so doesn't attempt to return it to tray
-                            pctvm.QueryOffsetIdx = -1;
-                            await Dispatcher.UIThread.InvokeAsync(async () => {
-                                ToggleTileIsPinnedCommand.Execute(pctvm);
+                            //pctvm.QueryOffsetIdx = -1;
+                            //await Dispatcher.UIThread.InvokeAsync(async () => {
+                            //    ToggleTileIsPinnedCommand.Execute(pctvm);
 
-                                while (IsAnyBusy) {
-                                    await Task.Delay(100);
-                                }
+                            //    while (IsAnyBusy) {
+                            //        await Task.Delay(100);
+                            //    }
 
-                                if (PinnedItems.Count == 0) {
-                                    return;
-                                }
-                                pinIdx = Math.Min(pinIdx, PinnedItems.Count - 1);
-                                PinnedItems[pinIdx].IsSelected = true;
-                            });
+                            //    if (PinnedItems.Count == 0) {
+                            //        return;
+                            //    }
+                            //    pinIdx = Math.Min(pinIdx, PinnedItems.Count - 1);
+                            //    PinnedItems[pinIdx].IsSelected = true;
+                            //});
+                            UnpinTileCommand.Execute(pctvm);
+
                         }
                     } else {
-                        int removedTrayIdx = removed_ctvm.ItemIdx;
+                        //IsBatchOffsetChange = true;
                         int removedQueryOffsetIdx = removed_ctvm.QueryOffsetIdx;
-                        bool wasTail = removedQueryOffsetIdx == TailQueryIdx;
+                        removed_ctvm.TriggerUnloadedNotification();
+                        Items.Where(x => x.QueryOffsetIdx >= removedQueryOffsetIdx).ForEach(x => x.QueryOffsetIdx--);
+                        //IsBatchOffsetChange = false;
 
-                        Items[removedTrayIdx] = await CreateClipTileViewModel(null);
-                        Items.Move(removedTrayIdx, Items.Count - 1);
+                        if(wasSelected) {
+                            var sel_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == removedQueryOffsetIdx);
+                            if(sel_ctvm == null) {
+                                // when tail
+                                sel_ctvm = Items.OrderBy(x => x.QueryOffsetIdx).Last();
+                            }
+                            SelectedItem = sel_ctvm;
+                        }
+                        RefreshLayout();
 
-                        foreach (var ctvm in Items) {
-                            if (ctvm.QueryOffsetIdx <= removedQueryOffsetIdx) {
-                                continue;
-                            }
-                            ctvm.QueryOffsetIdx--;
-                            if(MpAvPersistentClipTilePropertiesHelper.IsTileHaveUniqueSize(ctvm.CopyItemId)) {
-                                MpAvPersistentClipTilePropertiesHelper.ShiftPersistentSize(ctvm.CopyItemId, ctvm.QueryOffsetIdx + 1, ctvm.QueryOffsetIdx);
-                            }
+                        //bool wasTail = removedQueryOffsetIdx == TailQueryIdx;
+
+                        //Items[removedTrayIdx] = await CreateClipTileViewModel(null);
+                        //Items.Move(removedTrayIdx, Items.Count - 1);
+
+                        //foreach (var ctvm in Items) {
+                        //    if (ctvm.QueryOffsetIdx <= removedQueryOffsetIdx) {
+                        //        continue;
+                        //    }
+                        //    ctvm.QueryOffsetIdx--;
+                        //    if(MpAvPersistentClipTilePropertiesHelper.IsTileHaveUniqueSize(ctvm.CopyItemId)) {
+                        //        MpAvPersistentClipTilePropertiesHelper.ShiftPersistentSize(ctvm.CopyItemId, ctvm.QueryOffsetIdx + 1, ctvm.QueryOffsetIdx);
+                        //    }
                             
-                            ctvm.OnPropertyChanged(nameof(ctvm.TrayX));
-                        }
+                        //    ctvm.OnPropertyChanged(nameof(ctvm.TrayX));
+                        //}
 
-                        if (wasSelected) {
-                            MpAvClipTileViewModel newSelected_ctvm = null;
-                            if (wasTail) {
-                                newSelected_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == TailQueryIdx);
-                            } else {
-                                newSelected_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == removedQueryOffsetIdx);
-                            }
-                            if (newSelected_ctvm == null && Items.Where(x => !x.IsPlaceholder).Count() > 0) {
-                                newSelected_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == HeadQueryIdx);
-                            }
-                            if (newSelected_ctvm != null) {
-                                newSelected_ctvm.IsSelected = true;
-                            }
-                        }
+                        //if (wasSelected) {
+                        //    MpAvClipTileViewModel newSelected_ctvm = null;
+                        //    if (wasTail) {
+                        //        newSelected_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == TailQueryIdx);
+                        //    } else {
+                        //        newSelected_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == removedQueryOffsetIdx);
+                        //    }
+                        //    if (newSelected_ctvm == null && Items.Where(x => !x.IsPlaceholder).Count() > 0) {
+                        //        newSelected_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == HeadQueryIdx);
+                        //    }
+                        //    if (newSelected_ctvm != null) {
+                        //        newSelected_ctvm.IsSelected = true;
+                        //    }
+                        //}
                         //MpConsole.Write(string.Join(Environment.NewLine,Items.OrderBy(x => x.QueryOffsetIdx).Select(x => "Query Offset: " + x.QueryOffsetIdx)));
 
                         // NOTE since queryOffsetIdx's were decremented, now must notify at this queryIdx
@@ -2753,6 +2761,7 @@ namespace MonkeyPaste.Avalonia {
 
                  var upctvm = args as MpAvClipTileViewModel;
                  int unpinnedId = upctvm.CopyItemId;
+                 int unpinned_ctvm_idx = PinnedItems.IndexOf(upctvm);
 
                  PinnedItems.Remove(upctvm);
                  OnPropertyChanged(nameof(IsAnyTilePinned));
@@ -2820,51 +2829,10 @@ namespace MonkeyPaste.Avalonia {
                  var ctvm_to_select = AllItems.FirstOrDefault(x => x.CopyItemId == unpinnedId);
                  if (ctvm_to_select != default) {
                      SelectedItem = ctvm_to_select;
-
-                     //OnPropertyChanged(nameof(SelectedPinTrayItem));
-                     //OnPropertyChanged(nameof(SelectedClipTrayItem));
+                 } else if (!IsPinTrayEmpty) {
+                     int sel_idx = Math.Min(PinnedItems.Count - 1, Math.Max(0, unpinned_ctvm_idx));
+                     SelectedItem = PinnedItems[sel_idx];
                  }
-
-                 //upctvm.OnPropertyChanged(nameof(upctvm.IsPinned));
-                 //upctvm.OnPropertyChanged(nameof(upctvm.IsPlaceholder));
-
-                 // if (upctvm.QueryOffsetIdx >= 0) {
-                 //    //resultTile = await CreateClipTileViewModel(pctvm.Items.Select(x => x.CopyItem).ToList(), pctvm.QueryOffsetIdx);
-                 //    if (upctvm.QueryOffsetIdx >= HeadQueryIdx && upctvm.QueryOffsetIdx <= TailQueryIdx) {
-                 //        var insertBeforeItem = Items.Aggregate((a, b) => a.QueryOffsetIdx > b.QueryOffsetIdx && a.QueryOffsetIdx < upctvm.QueryOffsetIdx ? a : b);
-                 //        if (insertBeforeItem == null) {
-                 //            Items.Add(upctvm);
-                 //        } else {
-                 //            int insertIdx = Items.IndexOf(insertBeforeItem);
-                 //            Items.Insert(insertIdx, upctvm);
-                 //        }
-                 //    }
-                 //} else {
-                 //     // either the pinned tile is not part of this query or its new or was added to query while pinned
-                 //     // so for now requery because unpinning seems to mismatch view/view model...
-                 //     QueryCommand.Execute(ScrollOffset);
-                 //     while(IsAnyBusy) {
-                 //         await Task.Delay(100);
-                 //     }
-                 // }
-                 //QueryCommand.Execute(ScrollOffsetX);
-                 //while (IsAnyBusy) {
-                 //    await Task.Delay(100);
-                 //}
-
-                 //Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
-
-                 //OnPropertyChanged(nameof(ClipTrayScreenWidth));
-                 //OnPropertyChanged(nameof(ClipTrayTotalTileWidth));
-                 //OnPropertyChanged(nameof(ClipTrayScreenWidth));
-                 //OnPropertyChanged(nameof(ClipTrayTotalWidth));
-                 //OnPropertyChanged(nameof(MaxScrollOffsetX));
-                 //OnPropertyChanged(nameof(MaxScrollOffsetY));
-
-                 //upctvm = GetClipTileViewModelById(unpinnedId);
-                 //if (upctvm != null) {
-                 //    upctvm.IsSelected = true;
-                 //}
              },
             (args) => args != null && args is MpAvClipTileViewModel ctvm && ctvm.IsPinned);
 
@@ -3052,8 +3020,6 @@ namespace MonkeyPaste.Avalonia {
                         .Cast<MpAvTagTileViewModel>().Select(x=>x.TagId));
 
                     // trigger unload event to wipe js eval's that maybe pending 
-                    Items.ForEach(x => x.CopyItem = null);
-                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));
                     Items.ForEach(x => x.TriggerUnloadedNotification());
 
                     //Items.Clear();
@@ -3547,7 +3513,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand AnalyzeSelectedItemCommand => new MpAsyncCommand<object>(
             async (presetIdObj) => {
-                var preset = await MpDb.GetItemAsync<MpPluginPreset>((int)presetIdObj);
+                var preset = await MpDataModelProvider.GetItemAsync<MpPluginPreset>((int)presetIdObj);
                 var analyticItemVm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.PluginGuid == preset.PluginGuid);
                 var presetVm = analyticItemVm.Items.FirstOrDefault(x => x.Preset.Id == preset.Id);
 

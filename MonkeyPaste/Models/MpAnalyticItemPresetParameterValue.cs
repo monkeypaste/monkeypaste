@@ -1,6 +1,6 @@
-﻿using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common;
 using SQLite;
-using SQLiteNetExtensions.Attributes;
 using System;
 using System.Threading.Tasks;
 
@@ -16,17 +16,12 @@ namespace MonkeyPaste {
         [Column("MpPluginPresetParameterValueGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        [ForeignKey(typeof(MpPluginPreset))]
         [Column("fk_MpPluginPresetId")]
         public int PluginPresetId { get; set; }
 
         public int ParamId { get; set; }
 
         public string Value { get; set; } = string.Empty;
-
-        #endregion
-
-        #region Fk Models
 
         #endregion
 
@@ -67,7 +62,7 @@ namespace MonkeyPaste {
             if (dupItem != null) {
                 MpConsole.WriteLine($"Updating preset Id{presetId} for {paramEnumId}");
 
-                dupItem = await MpDb.GetItemAsync<MpPluginPresetParameterValue>(dupItem.Id);
+                dupItem = await MpDataModelProvider.GetItemAsync<MpPluginPresetParameterValue>(dupItem.Id);
                 dupItem.PluginPresetId = presetId;
                 dupItem.ParamId = paramEnumId;
                 dupItem.Value = value;

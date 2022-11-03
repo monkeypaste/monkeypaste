@@ -1,5 +1,5 @@
 ﻿using SQLite;
-using SQLiteNetExtensions.Attributes;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -122,8 +122,8 @@ namespace MonkeyPaste {
         }
 
         public async Task<string> SerializeDbObjectAsync() {
-            var cit =await  MpDb.GetItemAsync<MpCopyItem>(CopyItemId);
-            var t = await MpDb.GetItemAsync<MpTag>(TagId);
+            var cit =await  MpDataModelProvider.GetItemAsync<MpCopyItem>(CopyItemId);
+            var t = await MpDataModelProvider.GetItemAsync<MpTag>(TagId);
 
             return string.Format(
                 @"{0}{1}{0}{2}{0}{3}{0}",
@@ -138,8 +138,8 @@ namespace MonkeyPaste {
         }
 
         public async Task<Dictionary<string, string>> DbDiffAsync(object drOrModel) {
-            var cit = await MpDb.GetItemAsync<MpCopyItem>(CopyItemId);
-            var t = await MpDb.GetItemAsync<MpTag>(TagId);
+            var cit = await MpDataModelProvider.GetItemAsync<MpCopyItem>(CopyItemId);
+            var t = await MpDataModelProvider.GetItemAsync<MpTag>(TagId);
 
             MpCopyItemTag other = null;
             if (drOrModel is MpCopyItemTag) {

@@ -5,9 +5,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
-using SQLiteNetExtensions.Attributes;
-using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common;
 using System.Security.Cryptography;
 
 namespace MonkeyPaste {
@@ -22,7 +21,6 @@ namespace MonkeyPaste {
         [Column("MpAppPasteShortcutGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        [ForeignKey(typeof(MpApp))]
         [Column("fk_MpAppId")]
         public int AppId { get; set; }
 

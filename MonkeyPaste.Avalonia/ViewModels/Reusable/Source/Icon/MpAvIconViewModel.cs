@@ -80,11 +80,11 @@ namespace MonkeyPaste.Avalonia {
 
             Icon = i;
             if(Icon != null && Icon.IconImageId > 0) {
-                IconImage = await MpDb.GetItemAsync<MpDbImage>(Icon.IconImageId);
+                IconImage = await MpDataModelProvider.GetItemAsync<MpDbImage>(Icon.IconImageId);
                 OnPropertyChanged(nameof(IconBase64));
             }
             if (Icon != null && Icon.IconBorderImageId > 0) {
-                IconBorderImage = await MpDb.GetItemAsync<MpDbImage>(Icon.IconBorderImageId);
+                IconBorderImage = await MpDataModelProvider.GetItemAsync<MpDbImage>(Icon.IconBorderImageId);
                 
             }
 

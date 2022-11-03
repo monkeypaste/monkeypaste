@@ -63,7 +63,7 @@
                               Width="280"
                               Margin="5"
                               Background="White"
-                              BorderBrush="{Binding IsTextValid, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='#FFFFFFFF|#FFFF0000'}"
+                              BorderBrush="{Binding IsSearchValid, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='#FFFFFFFF|#FFFF0000', FallbackValue=True, TargetNullValue=True}"
                               BorderThickness="2"
                               CornerRadius="10">
             <Grid>
@@ -120,10 +120,6 @@
                                   Data="{StaticResource MenuDownArrowSvg}" />
                     </Grid>
                 </Button>
-                <!--
-                    Search TextBox
-                    IsDropDownOpen="{Binding IsAnyDropDownOpen, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=TwoWay}"
-                -->
                 <AutoCompleteBox x:Name="SearchBox"
                                  Grid.Column="1"
                                  local:MpAvIsFocusedExtension.IsEnabled="True"
@@ -156,64 +152,42 @@
                     </AutoCompleteBox.Styles>
                 </AutoCompleteBox>
                 <!--  IsSearching Spinner  -->
-                <!--<local:ProgressRing x:Name="IsSearchingSpinner"
-                                        Margin="0,0,10,0"
-                                        IsActive="{Binding IsSearching}"
-                                        IsVisible="{Binding IsSearching}"
-                                        VerticalAlignment="Center"
-                                        Foreground="DimGray"
-                                        Background="Transparent" />-->
-                <Ellipse Grid.Column="2"
-                         Fill="Transparent"
-                         Stroke="Pink"
-                         IsVisible="{Binding IsSearching}"
-                         StrokeThickness="2"
-                         Width="10"
-                         Height="10" />
+
+                <local:MpAvBusySpinnerView Grid.Column="2"
+                                           Margin="5"
+                                           VerticalAlignment="Stretch"
+                                           Width="{Binding $self.Bounds.Height}">
+                    <local:MpAvBusySpinnerView.IsVisible>
+                        <MultiBinding Converter="{StaticResource MultiBoolConverter}"
+                                      ConverterParameter="AND">
+                            <Binding Path="HasText" />
+                            <Binding Path="IsSearching" />
+                        </MultiBinding>
+                    </local:MpAvBusySpinnerView.IsVisible>
+                </local:MpAvBusySpinnerView>
+
                 <!--  Clear SearchText Button  -->
-                <Button x:Name="ClearTextBoxButton"
-                        Grid.Column="2"
-                        Width="15"
-                        Height="15"
-                        VerticalAlignment="Center"
-                        local:MpAvIsHoveringExtension.IsEnabled="True"
-                        local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverClearTextButton, Mode=TwoWay}"
-                        BorderThickness="0"
-                        Background="Transparent"
-                        Command="{Binding ClearTextCommand}">
-                    <Button.IsVisible>
+                <local:MpAvClearTextButton x:Name="ClearSearchTextButton"
+                                           Grid.Column="2"
+                                           Margin="5"
+                                           Command="{Binding ClearTextCommand}"
+                                           Width="{Binding $self.Bounds.Height}"
+                                           VerticalAlignment="Stretch">
+                    <local:MpAvClearTextButton.IsVisible>
                         <MultiBinding Converter="{StaticResource MultiBoolConverter}"
                                       ConverterParameter="AND">
                             <Binding Path="HasText" />
                             <Binding Path="!IsSearching" />
                         </MultiBinding>
-                    </Button.IsVisible>
-                    <Grid>
-                        <PathIcon Foreground="Black"
-                                  IsVisible="{Binding IsOverClearTextButton}"
-                                  Data="{StaticResource CloseXBoxSvg}" />
-                        <PathIcon Foreground="Black"
-                                  IsVisible="{Binding !IsOverClearTextButton}"
-                                  Data="{StaticResource CloseXSvg}">
-                            <PathIcon.Styles>
-                                <Style Selector="Viewbox">
-                                    <Setter Property="MaxWidth"
-                                            Value="10" />
-                                    <Setter Property="MaxHeight"
-                                            Value="10" />
-                                </Style>
-                            </PathIcon.Styles>
-                        </PathIcon>
-                    </Grid>
-                </Button>
-                <!--  Search Navigation Border  -->
+                    </local:MpAvClearTextButton.IsVisible>
+                </local:MpAvClearTextButton>
+
+                <!--  Previous Result Button  -->
 
                 <Button x:Name="PreviousTemplateButton"
                         Grid.Column="3"
-                        Margin="10,0,0,0"
-                        Width="10"
-                        Height="10"
-                        Padding="5"
+                        Width="{Binding $self.Bounds.Height}"
+                        VerticalAlignment="Stretch"
                         IsVisible="{Binding IsMultipleMatches}"
                         Command="{Binding PrevMatchCommand}"
                         TabIndex="2">
@@ -223,12 +197,12 @@
                         </PathIcon.RenderTransform>
                     </PathIcon>
                 </Button>
+
+                <!--  Next Result Button  -->
                 <Button x:Name="NextTemplateButton"
                         Grid.Column="4"
-                        Width="10"
-                        Height="10"
-                        Margin="3,0,0,0"
-                        Padding="5"
+                        Width="{Binding $self.Bounds.Height}"
+                        VerticalAlignment="Stretch"
                         IsVisible="{Binding IsMultipleMatches}"
                         Command="{Binding NextMatchCommand}"
                         TabIndex="3">

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using SQLite;
-using SQLiteNetExtensions;
+
 using System.Threading.Tasks;
 using System.Linq;
-using SQLiteNetExtensions.Attributes;
+
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {

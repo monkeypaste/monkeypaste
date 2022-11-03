@@ -1,5 +1,5 @@
 ﻿using SQLite;
-using SQLiteNetExtensions.Attributes;
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,11 +18,9 @@ namespace MonkeyPaste {
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         [Column("fk_MpCopyItemId")]
-        [ForeignKey(typeof(MpCopyItem))]
         public int CopyItemId { get; set; } = 0;
 
         [Column("fk_MpActionId")]
-        [ForeignKey(typeof(MpAction))]
         public int ActionId { get; set; } = 0;
 
         public int X { get; set; }
@@ -36,11 +34,6 @@ namespace MonkeyPaste {
         public string Label { get; set; } = string.Empty;
 
         public string Description { get; set; } = string.Empty;
-
-        #endregion
-
-        #region Fk Objects
-
 
         #endregion
 

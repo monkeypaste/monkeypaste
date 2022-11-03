@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using SQLite;
-using SQLiteNetExtensions.Attributes;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.Diagnostics;
 
@@ -29,7 +28,7 @@ namespace MonkeyPaste {
         LastOutput
     }
 
-    public class MpCopyItem : MpUserObject, MpISyncableDbObject {
+    public class MpCopyItem : MpDbModelBase, MpISyncableDbObject {
         #region Statics
 
         public static string[] PhysicalComparePropertyPaths {
@@ -124,14 +123,12 @@ namespace MonkeyPaste {
         #region Column Definitions
 
         [PrimaryKey, AutoIncrement]
-        [ForeignKey(typeof(MpUserObject))]
         [Column("pk_MpCopyItemId")]
         public override int Id { get; set; } = 0;
 
         [Column("MpCopyItemGuid")]
         [Indexed]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
-
 
         public string CopyItemSourceGuid { get; set; }
         //public string ParentCopyItemGuid { get; set; }
@@ -176,9 +173,6 @@ namespace MonkeyPaste {
 
         public string PrefferedFormatName { get; set; } = string.Empty;
 
-        public double ItemWidth { get; set; }
-
-        public double ItemHeight { get; set; }
 
         #endregion
 
@@ -239,19 +233,6 @@ namespace MonkeyPaste {
             set => PrefferedFormatName = value == null ? null : value.Name;
         }
 
-        [Ignore]
-        public MpSize ItemSize {
-            get => new MpSize(ItemWidth, ItemHeight);
-            set {
-                if(value == null) {
-                    ItemWidth = 0;
-                    ItemHeight = 0;
-                } else {
-                    ItemWidth = value.Width;
-                    ItemHeight = value.Height;
-                }
-            }
-        }
         #endregion
 
         #region MpICopyItemReference Implementation
@@ -262,8 +243,8 @@ namespace MonkeyPaste {
         #region Static Methods
 
         //public static async Task<ObservableCollection<MpCopyItem>> SearchAsync(int tagId, string searchString) {
-        //    var allCopyItems = await MpDb.GetItemsAsync<MpCopyItem>();
-        //    var allCopyItemTags = await MpDb.GetItemsAsync<MpCopyItemTag>();
+        //    var allCopyItems = await MpDataModelProvider.GetItemsAsync<MpCopyItem>();
+        //    var allCopyItemTags = await MpDataModelProvider.GetItemsAsync<MpCopyItemTag>();
 
         //    var searchResult = (from ci in allCopyItems
         //                        join cit in allCopyItemTags on
@@ -282,8 +263,6 @@ namespace MonkeyPaste {
             MpCopyItemType itemType = MpCopyItemType.None,
             string title = "",
             string description = "",
-            double w = 0,
-            double h = 0,
             int dataObjectId = 0,
             bool suppressWrite = false) {
             var dupCheck = await MpDataModelProvider.GetCopyItemByDataAsync(data);
@@ -325,7 +304,6 @@ namespace MonkeyPaste {
                 PrefferedFormatName = preferredFormatName,                                        
                 SourceId = sourceId,
                 CopyCount = 1,
-                ItemSize = new MpSize(w,h),
                 CopyItemSourceGuid = copyItemSourceGuid,
                 DataObjectId = dataObjectId
             };
@@ -364,7 +342,7 @@ namespace MonkeyPaste {
                 // what IS this nasty shit??
                 Debugger.Break();
             }
-            //var test_ci = await MpDb.GetItemAsync<MpCopyItem>(Id);
+            //var test_ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(Id);
             //if(test_ci != null && test_ci.ItemData != ItemData) {
             //    // why is the data changing hmmmmmm?
             //    Debugger.Break();
@@ -379,15 +357,15 @@ namespace MonkeyPaste {
                 return;
             }
 
+            // NOTE copy item tag is handled by tag when copy item is deleted
             var delete_tasks = new List<Task>();
 
-            var citl = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(Id);
-            delete_tasks.AddRange(citl.Select(x => x.DeleteFromDatabaseAsync()));
+            
 
             var doil = await MpDataModelProvider.GetDataObjectItemsByDataObjectId(DataObjectId);
             delete_tasks.AddRange(doil.Select(x => x.DeleteFromDatabaseAsync()));
 
-            var do_model = await MpDb.GetItemAsync<MpDataObject>(DataObjectId);
+            var do_model = await MpDataModelProvider.GetItemAsync<MpDataObject>(DataObjectId);
             if(do_model != null) {
                 delete_tasks.Add(do_model.DeleteFromDatabaseAsync());
             }
@@ -433,7 +411,7 @@ namespace MonkeyPaste {
                 ItemData,
                 ItemDescription,
                 ((int)ItemType).ToString(),
-                MpDb.GetItem<MpSource>(SourceId).Guid//Source.SourceGuid.ToString()
+                MpDataModelProvider.GetItem<MpSource>(SourceId).Guid//Source.SourceGuid.ToString()
                 );
         }
 
@@ -489,7 +467,7 @@ namespace MonkeyPaste {
                 other.SourceId,
                 "fk_MpSourceId",
                 diffLookup,
-                MpDb.GetItem<MpSource>(SourceId).Guid);
+                MpDataModelProvider.GetItem<MpSource>(SourceId).Guid);
             diffLookup = CheckValue(
                 ItemType,
                 other.ItemType,
@@ -531,7 +509,7 @@ namespace MonkeyPaste {
                     case "fk_MpSourceId":
                         var source = await MpDataModelProvider.GetSourceByGuidAsync(li.AffectedColumnValue);
                         if(source != null) {
-                            source = await MpDb.GetItemAsync<MpSource>(source.Id);
+                            source = await MpDataModelProvider.GetItemAsync<MpSource>(source.Id);
                         }
                         newCopyItem.SourceId = Convert.ToInt32(source.Id);
                         break;
@@ -552,7 +530,7 @@ namespace MonkeyPaste {
             // NOTE isReplica is used when duplicating item which retains tag associations but not shortcuts
 
             //if(Source == null) {
-            //    Source = await MpDb.GetItemAsync<MpSource>(SourceId);
+            //    Source = await MpDataModelProvider.GetItemAsync<MpSource>(SourceId);
             //}
 
             var newItem = new MpCopyItem() {

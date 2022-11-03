@@ -122,8 +122,11 @@ function getFontFamilyDataValueFontFamily(ff_dv) {
             return ffa[i];
 		}
     }
-    debugger;
-    return null;
+
+    log('uncataloged font-family detecte (data-value): ' + ff_dv);
+    return ff_dv;
+    //debugger;
+    //return null;
 }
 
 function getFontsByEnv() {

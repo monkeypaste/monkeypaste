@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
                 //Debugger.Break();
 
                 if (name == "getAllTemplatesFromDb") {
-                    List<MpTextTemplate> citl = MpDb.GetItems<MpTextTemplate>(_dbPath);
+                    List<MpTextTemplate> citl = MpDataModelProvider.GetItems<MpTextTemplate>();
 
                     exception = null;
                     retval = CefV8Value.CreateString(JsonConvert.SerializeObject(citl));

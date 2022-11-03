@@ -144,7 +144,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         public async Task<MpMenuItemViewModel> GetAddTemplateMenuItemViewModel() {
-            var ttl = await MpDb.GetItemsAsync<MpTextTemplate>();
+            var ttl = await MpDataModelProvider.GetItemsAsync<MpTextTemplate>();
             var mivm = new MpMenuItemViewModel() {
                 SubItems = new List<MpMenuItemViewModel>()
             };

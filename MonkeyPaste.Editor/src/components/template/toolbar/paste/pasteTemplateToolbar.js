@@ -126,15 +126,15 @@ function setTemplatePasteValue(tguid, val) {
         var telm = telms[i];
         let t = getTemplateFromDomNode(telm);
         let bouncing = false;
-        if (!isTemplateAnInputType(t)) {
-            if (telm.innerText == val) {
-                telm.style.transform = 'scale(1)';
-            } else {
-                telm.style.transform = 'scale(1.1)'
-                bouncing = true;
+   //     if (!isTemplateAnInputType(t)) {
+   //         if (telm.innerText == val) {
+   //             telm.style.transform = 'scale(1)';
+   //         } else {
+   //             telm.style.transform = 'scale(1.1)'
+   //             bouncing = true;
 
-			}
-        } 
+			//}
+   //     } 
         let paste_val = getTemplatePasteValue(t);
         let has_changed = paste_val != val;
         telm.innerText = val;
@@ -181,10 +181,12 @@ function showPasteTemplateToolbar() {
     var ptt_elm = getPasteTemplateToolbarContainerElement();
     ptt_elm.classList.remove('hidden');
 
-    updatePasteTemplateToolbarToSelection();
 
-    PasteTemplateTimerInterval = setInterval(onPasteTemplateTimer, 300, getEditorElement());
-    setPasteToolbarDefaultFocus();
+    //if (IsPastingTemplate) {
+        updatePasteTemplateToolbarToSelection();
+        PasteTemplateTimerInterval = setInterval(onPasteTemplateTimer, 300, getEditorElement());
+        setPasteToolbarDefaultFocus();
+	//}
     IsPasteToolbarLoading = false;
 }
 
@@ -305,6 +307,10 @@ function updatePasteValueTextAreaSize() {
 }
 
 function updatePasteTemplateToolbarToSelection(force_ftguid) {
+    if (!IsPastingTemplate) {
+        return;
+    }
+
     let paste_sel = getDocSelection(true);
     let pre_ftguid = getFocusTemplateGuid();
 
@@ -328,7 +334,7 @@ function updatePasteTemplateToolbarToSelection(force_ftguid) {
     createTemplateSelector(ftguid, paste_sel);
     updatePasteTemplateToolbarToFocus(ftguid, paste_sel);
     //updateTemplatesAfterTextChanged();
-    updateAllElements();
+    //updateAllElements();
 }
 
 function updatePasteTemplateToolbarToFocus(ftguid, paste_sel) {
@@ -495,8 +501,15 @@ function onPasteEditFocusTemplateClickOrKeyDown(e) {
 function onPasteButtonClickOrKeyDown(e) {
     if (!isRunningInHost()) {
         alert(getText(getDocSelection(true), true));
-	}    
+    }    
 
-    onPasteTemplateRequest_ntf();
+    let can_paste = updatePasteElementInteractivity();
+    if (can_paste) {
+        onPasteTemplateRequest_ntf();
+    } else {
+
+	}
+
+    
 }
 // #endregion Event Handlers

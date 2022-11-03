@@ -289,7 +289,9 @@ function populateFindReplaceResults() {
 		updateFindReplaceRangeRects();
 		return;
 	} 
-	CurFindReplaceDocRanges = queryText(getText(), search_text, is_case_sensitive, is_whole_word, use_regex);
+	let dirty_ranges = queryText(getText(), search_text, is_case_sensitive, is_whole_word, use_regex);
+	CurFindReplaceDocRanges = adjustQueryRangesForEmptyContent(dirty_ranges);
+
 
 	if (CurFindReplaceDocRanges.length == 0) {
 		resetFindReplaceResults();

@@ -81,7 +81,7 @@ namespace MonkeyPaste.Avalonia {
                 
                 var iData = mpdo.DataFormatLookup as Dictionary<MpPortableDataFormat, object>;
 
-
+                string inputTextFormat = null;
                 string itemData = null;
                 //string htmlData = string.Empty;
                 MpAvHtmlClipboardData htmlClipboardData = new MpAvHtmlClipboardData();
@@ -96,7 +96,7 @@ namespace MonkeyPaste.Avalonia {
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Csv)) {
 
                     // CSV
-
+                    inputTextFormat = "csv";
                     itemType = MpCopyItemType.Text;
 
                     if (mpdo.ContainsData(MpPortableDataFormats.AvRtf_bytes) && 
@@ -118,9 +118,9 @@ namespace MonkeyPaste.Avalonia {
                     // RTF
 
                     // for now and simplicity there are no platform checks for rtf because it should only (by the DataFormat name at least) be on windows
+                    inputTextFormat = "rtf";
                     itemType = MpCopyItemType.Text;
                     itemData = rtfStr.EscapeExtraOfficeRtfFormatting();
-                    itemData = itemData.ToRichHtmlText(MpPortableDataFormats.AvRtf_bytes);
                 } else if (mpdo.ContainsData(MpPortableDataFormats.AvPNG) && 
                             mpdo.GetData(MpPortableDataFormats.AvPNG) is byte[] pngBytes &&
                             pngBytes.ToBase64String() is string pngBase64Str) {
@@ -133,41 +133,28 @@ namespace MonkeyPaste.Avalonia {
                             htmlBytes.ToDecodedString() is string htmlStr) {
 
                     // HTML
-
+                    inputTextFormat = "html";
                     itemType = MpCopyItemType.Text;
-                    htmlClipboardData = await MpAvHtmlClipboardData.ParseAsync(htmlStr);
-                    if(htmlClipboardData == null) {
-                        return null;
-                    }
-                    itemData = htmlClipboardData.Html;
-
-                    if(mpdo.ContainsData(MpPortableDataFormats.LinuxSourceUrl) && 
-                        mpdo.GetData(MpPortableDataFormats.LinuxSourceUrl) is byte[] url_bytes &&
-                        url_bytes.ToDecodedString(Encoding.ASCII) is string source_url_str) {
-                        // on linux html is not in fragment format like windows and firefox supports this format
-                        // but chrome doesn't
-                        //source_url_str = System.Web.HttpUtility.HtmlDecode(source_url_str);
-                        htmlClipboardData.SourceUrl = source_url_str;
-                    }
+                    itemData = htmlStr;
                     //itemData = itemData.ToQuillText();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Text)) {
 
                     // TEXT
-
+                    inputTextFormat = "text";
                     itemType = MpCopyItemType.Text;
                     itemData = mpdo.GetData(MpPortableDataFormats.Text).ToString().ToContentRichText();
                     //itemData = itemData.ToQuillText();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Unicode)) {
-                    
+
                     // UNICODE
-                    
+                    inputTextFormat = "text";
                     itemType = MpCopyItemType.Text;
                     itemData = mpdo.GetData(MpPortableDataFormats.Unicode).ToString().ToContentRichText();
                     //itemData = itemData.ToQuillText();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.OemText)) {
 
                     // OEM TEXT
-
+                    inputTextFormat = "text";
                     itemType = MpCopyItemType.Text;
                     itemData = mpdo.GetData(MpPortableDataFormats.OemText).ToString().ToContentRichText();
                     //itemData = itemData.ToQuillText();
@@ -181,12 +168,38 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
 
-
                 if (MpPrefViewModel.Instance.IgnoreWhiteSpaceCopyItems &&
                     itemType == MpCopyItemType.Text &&
-                    string.IsNullOrWhiteSpace((itemData).ToPlainText().Replace(Environment.NewLine, ""))) {
+                    string.IsNullOrWhiteSpace((itemData).ToPlainText(inputTextFormat).Replace(Environment.NewLine, ""))) {
+                    MpConsole.WriteLine($"Whitespace text item detected. Input Format '{inputTextFormat}' Input Data '{itemData}'");
                     return null;
                 }
+
+                if (itemType == MpCopyItemType.Text) {
+                    if(string.IsNullOrEmpty(inputTextFormat)) {
+                        // should be set
+                        Debugger.Break();
+                        inputTextFormat = "text";
+                    }
+
+                    htmlClipboardData = await MpAvHtmlClipboardData.ParseAsync(itemData, inputTextFormat);
+                    if (htmlClipboardData == null) {
+                        return null;
+                    }
+                    itemData = htmlClipboardData.Html;
+
+                    if (mpdo.ContainsData(MpPortableDataFormats.LinuxSourceUrl) &&
+                        mpdo.GetData(MpPortableDataFormats.LinuxSourceUrl) is byte[] url_bytes &&
+                        url_bytes.ToDecodedString(Encoding.ASCII) is string source_url_str) {
+                        // on linux html is not in fragment format like windows and firefox supports this format
+                        // but chrome doesn't
+                        //source_url_str = System.Web.HttpUtility.HtmlDecode(source_url_str);
+                        htmlClipboardData.SourceUrl = source_url_str;
+                    }
+                }
+
+
+                
 
                 //if (mpdo.ContainsData(MpPortableDataFormats.AvHtml_bytes)) {
                 //    string rawHtmlData = mpdo.GetData(MpPortableDataFormats.AvHtml_bytes).ToString();
@@ -212,7 +225,7 @@ namespace MonkeyPaste.Avalonia {
                 var dupCheck = await MpDataModelProvider.GetCopyItemByDataAsync(itemData);
                 if (dupCheck != null) {
                     MpConsole.WriteLine("Duplicate item detected, flipping id and returning");
-                    dupCheck = await MpDb.GetItemAsync<MpCopyItem>(dupCheck.Id);
+                    dupCheck = await MpDataModelProvider.GetItemAsync<MpCopyItem>(dupCheck.Id);
                     dupCheck.Id *= -1;
                     return dupCheck;
                 }
@@ -220,7 +233,7 @@ namespace MonkeyPaste.Avalonia {
                 MpApp app = null;
                 MpUrl url = null;
                 if(fromInternalSource) {
-                    app = await MpDb.GetItemAsync<MpApp>(MpPrefViewModel.Instance.ThisAppSource.AppId);
+                    app = await MpDataModelProvider.GetItemAsync<MpApp>(MpPrefViewModel.Instance.ThisAppSource.AppId);
                 } else {
                     var last_pinfo = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
 

@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using SQLite;
-using SQLiteNetExtensions;
-using SQLiteNetExtensions.Attributes;
 using System.Linq;
-using Xamarin.Forms;
-using SQLiteNetExtensions.Extensions.TextBlob;
 using System.Text;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public class MpTextAnnotation : MpDbModelBase, MpIAnnotation {
@@ -36,11 +33,9 @@ namespace MonkeyPaste {
         }
                 
         [Column("fk_MpCopyItemId")]
-        [ForeignKey(typeof(MpCopyItem))]
         public int CopyItemId { get; set; }
 
         [Column("fk_MpSourceId")]
-        [ForeignKey(typeof(MpSource))]
         public int SourceId { get; set; }
 
         public string HexColor { get; set; }
@@ -53,12 +48,6 @@ namespace MonkeyPaste {
 
         public string Description { get; set; }
 
-        #endregion
-
-        #region Fk Models
-
-        //[ManyToOne]
-        //public MpCopyItem CopyItem { get; set; }
         #endregion
 
         public static async Task<MpTextAnnotation> Create(

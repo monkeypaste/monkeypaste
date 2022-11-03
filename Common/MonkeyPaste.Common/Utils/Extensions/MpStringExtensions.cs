@@ -165,7 +165,7 @@ namespace MonkeyPaste.Common {
             if (totalMinutes >= 1) {
                 return string.Format($"{totalMinutes} minute{(totalMinutes == 1 ? string.Empty : "s")} ago");
             }
-            return "Less than a minute ago";
+            return "Just Now";
         }
 
         public static int WeekDifference(this DateTime lValue, DateTime rValue) {

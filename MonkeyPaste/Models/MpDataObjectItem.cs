@@ -1,6 +1,4 @@
 ﻿using SQLite;
-using SQLiteNetExtensions;
-using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,7 +19,6 @@ namespace MonkeyPaste {
         public int DataObjectId { get; set; }
         public string ItemFormat { get; set; }
 
-        public string ItemDataBase64 { get; set; }
         public string ItemData { get; set; }
 
         [Column("fk_MpIconId")]

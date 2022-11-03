@@ -328,11 +328,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        //#region MpISelectorItemViewModel<MpAvClipTileViewModel> Implementation
-        //MpISelectorViewModel<MpAvClipTileViewModel> MpISelectorItemViewModel<MpAvClipTileViewModel>.Selector => Parent;
-
-        //#endregion
-
         #region Appearance
 
         public int[] TitleLayerZIndexes { get; private set; } = Enumerable.Range(1, 3).ToArray();
@@ -491,6 +486,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public MpSize UnformattedContentSize { get; set; }
         public double TileTitleHeight => IsTitleVisible ? 100 : 0;
         public double TileDetailHeight => 25;// MpMeasurements.Instance.ClipTileDetailHeight;
 
@@ -995,9 +991,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
-
-
         public bool IsContentAndTitleReadOnly => IsContentReadOnly && IsTitleReadOnly;
 
 
@@ -1008,6 +1001,38 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Model
+
+        public int CopyCount {
+            get {
+                if(IsPlaceholder) {
+                    return 0;
+                }
+                return CopyItem.CopyCount;
+            }
+            set {
+                if(CopyCount != value) {
+                    CopyItem.CopyCount = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(CopyCount));
+                }
+            }
+        }
+
+        public int PasteCount {
+            get {
+                if (IsPlaceholder) {
+                    return 0;
+                }
+                return CopyItem.PasteCount;
+            }
+            set {
+                if (PasteCount != value) {
+                    CopyItem.PasteCount = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(PasteCount));
+                }
+            }
+        }
 
         public string EditorFormattedItemData {
             get {
@@ -1026,22 +1051,6 @@ namespace MonkeyPaste.Avalonia {
                         return itemData;
                     default:
                         return CopyItemData;
-                }
-            }
-        }
-        public MpSize UnformattedContentSize {
-            get {
-                if (CopyItem == null) {
-                    return new MpSize();
-                }
-                return CopyItem.ItemSize;
-            }
-            set {
-                if (UnformattedContentSize.Width != value.Width && 
-                    UnformattedContentSize.Height != value.Height) {
-                    CopyItem.ItemSize = value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(UnformattedContentSize));
                 }
             }
         }
@@ -1362,7 +1371,7 @@ namespace MonkeyPaste.Avalonia {
             if (IconId > 0 && !HasUserDefinedColor) {
                 var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId);
                 if (ivm == null) {
-                    var icon = await MpDb.GetItemAsync<MpIcon>(IconId);
+                    var icon = await MpDataModelProvider.GetItemAsync<MpIcon>(IconId);
                     hexColors = icon.HexColors;
                 } else {
                     hexColors = ivm.PrimaryIconColorList.ToList();
@@ -1386,7 +1395,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void TriggerUnloadedNotification() {
-            GetContentView().IsContentUnloaded = true;
+            CopyItem = null;
+            QueryOffsetIdx = -1;
+            OnPropertyChanged(nameof(IsPlaceholder));
+            if(GetContentView() is MpAvIContentView cv) {
+                cv.IsContentUnloaded = true;
+            }
         }
         public MpAvIContentView GetContentView() {
             var ctcv = MpAvClipTrayContainerView.Instance.GetVisualDescendants<MpAvClipTileContentView>().FirstOrDefault(x => x.DataContext == this);
@@ -1878,26 +1892,16 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsSelected):
                     if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
-                        // BUGGY this clears the alternate selection if tile is pinned/unpinned probably bad
-                        //if (IsPinned) {
-                        //    Parent.ClearClipSelection(false);
-                        //} else {
-                        //    Parent.ClearPinnedSelection(false);
-                        //}
                         if (Parent.SelectedItem != this) {
                             Parent.SelectedItem = this;
                         }
 
                         Parent.ScrollIntoView(this);
-                        //if (!IsTitleFocused && !Parent.IsPasting) {
-                        //    // NOTE checking Parent.IsPasting because setting focus will clear current selection
-                        //    IsContentFocused = true;
-                        //}
                         if (!Parent.IsRestoringSelection) {
                             Parent.StoreSelectionState(this);
                         }
                     } else {
-                        if (IsContentReadOnly && string.IsNullOrEmpty(MpAvSearchBoxViewModel.Instance.SearchText)) {
+                        if (IsContentReadOnly) {
                             if (IsSubSelectionEnabled) {
                                 IsSubSelectionEnabled = false;
                             }

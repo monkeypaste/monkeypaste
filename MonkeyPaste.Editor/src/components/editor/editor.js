@@ -167,16 +167,6 @@ function focusEditor() {
 	getEditorElement().focus();
 }
 
-function hideScrollbars() {
-	//document.querySelector('body').style.overflow = 'hidden';
-	getEditorContainerElement().style.overflow = "hidden";
-	getEditorElement().style.overflow = "hidden";
-}
-
-function showScrollbars() {
-	//document.querySelector('body').style.overflow = 'scroll';
-	getEditorElement().style.overflow = "auto";
-}
 
 function disableTextWrapping() {
 	getEditorElement().style.whiteSpace = 'nowrap';
@@ -203,6 +193,15 @@ function createLink() {
 }
 
 
+function hideScrollbars() {
+	getEditorContainerElement().classList.remove('show-scrollbars');
+	getEditorContainerElement().classList.add('hide-scrollbars');
+}
+
+function showScrollbars() {
+	getEditorContainerElement().classList.add('show-scrollbars');
+	getEditorContainerElement().classList.remove('hide-scrollbars');
+}
 function enableReadOnly(fromHost = false) {
 	if (isReadOnly()) {
 		log('enableReadOnly ignored, already read-only. fromHost: ' + fromHost);
@@ -210,12 +209,12 @@ function enableReadOnly(fromHost = false) {
 	}
 
 	hideAllToolbars();
-	scrollToHome();
 
 	getEditorContainerElement().classList.remove('editable');
 	getEditorContainerElement().classList.remove('sub-select');
 	getEditorContainerElement().classList.add('no-select');
 
+	scrollToHome();
 	updateAllElements();
 	disableSubSelection();
 	disableTemplateSubSelection();
@@ -269,7 +268,8 @@ function enableSubSelection(fromHost = false, showUnderlines = true, showPasteTo
 	getEditorContainerElement().classList.add('sub-select');
 	if (showUnderlines) {
 		getEditorContainerElement().classList.add('underline-content');
-	} 
+	}
+	showScrollbars();
 	disableDragOverlay();
 	enableTemplateSubSelection();
 
@@ -300,7 +300,7 @@ function disableSubSelection(fromHost = false) {
 	getEditorContainerElement().classList.add('no-select');
 	getEditorContainerElement().classList.remove('sub-select');
 	getEditorContainerElement().classList.remove('underline-content');
-
+	hideScrollbars();
 	enableDragOverlay();
 
 	hidePasteTemplateToolbar();

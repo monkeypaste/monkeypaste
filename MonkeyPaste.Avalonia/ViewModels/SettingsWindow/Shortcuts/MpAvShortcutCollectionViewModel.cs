@@ -316,7 +316,7 @@ namespace MonkeyPaste.Avalonia {
         private async Task InitShortcutsAsync() {
             await Dispatcher.UIThread.InvokeAsync(async () => {
                 //using mainwindow, map all saved shortcuts to their commands
-                var scl = await MpDb.GetItemsAsync<MpShortcut>();
+                var scl = await MpDataModelProvider.GetItemsAsync<MpShortcut>();
 
                 //IsCustomRoutingEnabled = scl.All(x => x.RoutingType == MpRoutingType.Internal || x.RoutingType == MpRoutingType.Direct);
 

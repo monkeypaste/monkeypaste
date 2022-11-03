@@ -1,6 +1,6 @@
 ﻿using SQLite;
-using SQLiteNetExtensions;
-using SQLiteNetExtensions.Attributes;
+
+
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -47,11 +47,14 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static string ToCsv(this string str) {
-            // (currently) this assumes str is html table and down converting 
+            // (currently) this assumes csvStr is html table and down converting 
             string csvStr = MpCsvToRichHtmlTableConverter.RichHtmlTableToCsv(str);
             return csvStr;
         }
-        public static string ToPlainText(this string text) {
+        public static string ToPlainText(this string text, string sourceFormat = null) {
+            if(sourceFormat == "text") {
+                return text;
+            }
             if (text.IsStringRichHtmlText()) {
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(text);
@@ -79,8 +82,8 @@ namespace MonkeyPaste.Common.Avalonia {
         public static string ToContentRichText(this string str) {
             return str;
         }
-        public static string ToRichTextTable(this string str) {
-            return str;
+        public static string ToRichHtmlTable(this string csvStr, MpCsvFormatProperties csvProps = null) {
+            return MpCsvToRichHtmlTableConverter.CreateRichHtmlTableFromCsv(csvStr, csvProps);
         }
 
         public static string EscapeExtraOfficeRtfFormatting(this string str) {

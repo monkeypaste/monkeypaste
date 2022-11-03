@@ -1,5 +1,4 @@
 ﻿using SQLite;
-using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +15,6 @@ namespace MonkeyPaste {
         [Column("MpSearchCriteriaItemGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        [ForeignKey(typeof(MpUserSearch))]
         [Column("fk_MpUserSearchId")]
         public int UserSearchId { get; set; } = 0;
 
@@ -26,12 +24,6 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region Fk Models
-
-        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
-        public MpUserSearch UserSearch { get; set; }
-
-        #endregion
 
         #region Properties
 

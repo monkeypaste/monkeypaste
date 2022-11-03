@@ -55,10 +55,13 @@ namespace MonkeyPaste.Avalonia {
 
             var icon = await MpPlatformWrapper.Services.IconBuilder.CreateAsync(iconBase64);
 
+            string args = pi.ArgumentList == null || pi.ArgumentList.Count == 0 ?
+                null : string.Join(Environment.NewLine, pi.ArgumentList);
+
             var app = await MpApp.CreateAsync(
                 appPath: processPath,
                 appName: appName,
-                arguments: string.Join(Environment.NewLine,pi.ArgumentList),
+                arguments: args,
                 iconId: icon.Id);
 
             return app;

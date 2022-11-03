@@ -5,6 +5,7 @@ using Avalonia.Threading;
 using CefNet.Avalonia;
 using MonkeyPaste.Avalonia.Utils.ToolWindow.Win;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 //using Org.BouncyCastle.Bcpg.OpenPgp;
 using System;
 using System.Collections.Generic;
@@ -74,35 +75,26 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public static async Task<MpAvHtmlClipboardData> ParseAsync(object htmlData, bool isBase64 = false) {
-            if(htmlData == null) {
+        public static async Task<MpAvHtmlClipboardData> ParseAsync(string htmlDataStr, string inputFormatType, MpCsvFormatProperties csvProps = null) {
+            if(htmlDataStr == null) {
                 return null;
             }
-            if(!MpAvCefNetApplication.UseCefNet) {
-                if(isBase64) {
-                    return ParseWithoutCefFallback(htmlData.ToString().ToStringFromBase64());
-                }
-                return ParseWithoutCefFallback(htmlData.ToString());
+            if (!MpAvCefNetApplication.UseCefNet) {
+                return ParseWithoutCefFallback(htmlDataStr.ToString());
             }
-            string htmlDataStr = null;
-            if (htmlData is byte[] htmlDataBytes) {
-                isBase64 = true;
-                htmlDataStr = htmlDataBytes.ToBase64String();
-            } else {
-                if(htmlData is not string) {
-                    // what format is it?
-                    Debugger.Break();
-                    return null;
-                }
-                if(isBase64) {
-                    htmlDataStr = htmlData.ToString();
-                } else {
-                    htmlDataStr = htmlData.ToString().ToBase64String();
-                    isBase64 = true;
-                }
-                
+            if(inputFormatType == "rtf") {
+                // create 'dirty' quill html w/ internal converter and treat as plain for quill to parse
+                htmlDataStr = htmlDataStr.ToRichHtmlText(MpPortableDataFormats.AvRtf_bytes);
+                inputFormatType = "html";
+            } else if(inputFormatType == "csv") {
+                htmlDataStr = htmlDataStr.ToRichHtmlTable(csvProps);
+                inputFormatType = "html";
+            } else if(inputFormatType == "text") {
+                htmlDataStr = htmlDataStr.Replace(Environment.NewLine, "\n");
             }
-            if(string.IsNullOrWhiteSpace(htmlDataStr)) {
+            htmlDataStr = htmlDataStr.ToString().ToBase64String();
+
+            if (string.IsNullOrWhiteSpace(htmlDataStr)) {
                 MpConsole.WriteTraceLine("Error parsing html data obj, no data found");
                 Debugger.Break();
                 return null;
@@ -110,7 +102,8 @@ namespace MonkeyPaste.Avalonia {
 
             var req = new MpQuillConvertPlainHtmlToQuillHtmlRequestMessage() { 
                 data = htmlDataStr,
-                isBase64 = isBase64
+                dataFormatType = inputFormatType,
+                isBase64 = true
             };
             string respStr = await ConverterWebView.EvaluateJavascriptAsync($"convertPlainHtml_ext('{req.SerializeJsonObjectToBase64()}')");
             var resp = MpJsonObject.DeserializeBase64Object<MpQuillConvertPlainHtmlToQuillHtmlResponseMessage>(respStr);

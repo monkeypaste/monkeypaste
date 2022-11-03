@@ -4,8 +4,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using SQLite;
-using SQLiteNetExtensions.Attributes;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public class MpUrl : MpDbModelBase, MpISourceItem {
@@ -29,16 +29,8 @@ namespace MonkeyPaste {
 
         public int DomainRejected { get; set; } = 0;
 
-        [ForeignKey(typeof(MpIcon))]
         [Column("fk_MpIconId")]
         public int IconId { get; set; } = 0;
-
-        #endregion
-
-        #region Fk Objects
-
-        //[OneToOne(CascadeOperations = CascadeOperation.All)]
-        //public MpIcon Icon { get; set; }
 
         #endregion
 
@@ -116,7 +108,7 @@ namespace MonkeyPaste {
             bool suppressWrite = false) {
             var dupCheck = await MpDataModelProvider.GetUrlByPathAsync(urlPath);
             if(dupCheck != null) {
-                dupCheck = await MpDb.GetItemAsync<MpUrl>(dupCheck.Id);
+                dupCheck = await MpDataModelProvider.GetItemAsync<MpUrl>(dupCheck.Id);
                 return dupCheck;
             }
 
@@ -135,7 +127,7 @@ namespace MonkeyPaste {
             }
             MpIcon icon = null;
             if(urlIconId > 0) {
-                icon = await MpDb.GetItemAsync<MpIcon>(urlIconId);
+                icon = await MpDataModelProvider.GetItemAsync<MpIcon>(urlIconId);
             } else if(!string.IsNullOrEmpty(urlIconPath)) {
                 icon = await MpIcon.Create2Async(
                     iconUrl: urlIconPath, 
@@ -216,7 +208,7 @@ namespace MonkeyPaste {
                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}",
                 ParseToken,
                 UrlGuid.ToString(),
-                MpDb.GetItem<MpIcon>(IconId).Guid,
+                MpDataModelProvider.GetItem<MpIcon>(IconId).Guid,
                 UrlPath,
                 UrlTitle);
         }
@@ -242,7 +234,7 @@ namespace MonkeyPaste {
             diffLookup = CheckValue(IconId, other.IconId,
                 "fk_MpIconId",
                 diffLookup,
-                MpDb.GetItem<MpIcon>(IconId).Guid);
+                MpDataModelProvider.GetItem<MpIcon>(IconId).Guid);
             diffLookup = CheckValue(UrlPath, other.UrlPath,
                 "UrlPath",
                 diffLookup);

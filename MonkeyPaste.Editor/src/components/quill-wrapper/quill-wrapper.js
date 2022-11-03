@@ -5,11 +5,17 @@ var quill;
 
 // #region Life Cycle
 function initQuill() {
+	hljs.configure({   // optionally configure hljs
+		languages: ['javascript', 'ruby', 'python', 'xml', 'html', 'xhtml']
+	});
+
 	let quillOptions = {
 		//debug: true,
 		placeholder: "",
 		//allowReadOnlyEdits: true,
 		theme: "snow",
+        formula: true,
+		syntax: true,
 		modules: {
 			toolbar: '#editorToolbar',
 			//table: !UseBetterTable,
@@ -56,6 +62,14 @@ function getText(range, encodeTemplates = false) {
 
 function getHtml(range) {
 	range = !range ? { index: 0, length: getDocLength() } : range;
+	//let delta = quill.getContents();
+	////log(delta.ops);
+	//let qdc = new window.QuillDeltaToHtmlConverter(delta.ops, window.opts_ || {});
+	//let html = qdc.convert();
+	////log(html);
+	//return html;
+
+
 	var range_content = quill.getContents(range.index, range.length);
 	var tempContainer = document.createElement("div");
 	var tempQuill = new Quill(tempContainer);
@@ -147,6 +161,11 @@ function setTextInRange(range, text, source = 'api', decodeTemplates = false) {
 
 function setRootHtml(html) {
 	quill.root.innerHTML = html;
+}
+
+function setRootText(text) {
+	setRootHtml('');
+	quill.root.innerText = text;
 }
 
 function setHtmlInRange(range, htmlStr, source = 'api', decodeTemplates = false) {

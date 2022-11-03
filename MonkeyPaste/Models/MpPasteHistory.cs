@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using SQLite;
-using SQLiteNetExtensions;
-using SQLiteNetExtensions.Attributes;
 using System.Linq;
 
 namespace MonkeyPaste {
@@ -31,20 +29,15 @@ namespace MonkeyPaste {
                 Guid = value.ToString();
             }
         }
-
-        [ForeignKey(typeof(MpUserDevice))]
         [Column("fk_MpUserDeviceId")]
         public int UserDeviceId { get; set; }
 
-        [ForeignKey(typeof(MpCopyItem))]
         [Column("fk_MpCopyItemId")]
         public int CopyItemId { get; set; }
 
-        [ForeignKey(typeof(MpUrl))]
         [Column("fk_MpUrlId")]
         public int UrlId { get; set; }
 
-        [ForeignKey(typeof(MpApp))]
         [Column("fk_MpAppId")]
         public int AppId { get; set; }
 

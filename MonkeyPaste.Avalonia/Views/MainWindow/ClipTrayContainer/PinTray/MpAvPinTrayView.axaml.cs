@@ -293,8 +293,8 @@ namespace MonkeyPaste.Avalonia {
 
             PinTrayListBox = this.FindControl<ListBox>("PinTrayListBox");
             PinTrayListBox.AttachedToVisualTree += PinTrayListBox_AttachedToVisualTree;
-            //PinTrayListBox.ItemContainerGenerator.Materialized += ItemContainerGenerator_Materialized;
-            //PinTrayListBox.ItemContainerGenerator.Dematerialized += ItemContainerGenerator_Dematerialized;
+            PinTrayListBox.ItemContainerGenerator.Materialized += ItemContainerGenerator_Materialized;
+            PinTrayListBox.ItemContainerGenerator.Dematerialized += ItemContainerGenerator_Dematerialized;
             PinTrayListBox.GotFocus += PinTrayListBox_GotFocus;
         }
 
@@ -337,7 +337,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ItemContainerGenerator_Materialized(object sender, ItemContainerEventArgs e) {
-            if(BindingContext == null || 
+            if (BindingContext == null ||
                 BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow ||
                 e.Containers.Count == 0) {
                 // ignore collection changed if user in workflow
@@ -349,27 +349,29 @@ namespace MonkeyPaste.Avalonia {
                     .Where(x => x.ContainerControl != null && x.ContainerControl.DataContext != null && x.ContainerControl.DataContext is MpAvClipTileViewModel)
                     .Select(x => x.ContainerControl.DataContext)
                     .Cast<MpAvClipTileViewModel>()
-                    .Max(x => x.TrayRect.Right);
+                    .Sum(x => x.TrayRect.Width);
             added_size.Height = e.Containers
                     .Where(x => x.ContainerControl != null && x.ContainerControl.DataContext != null && x.ContainerControl.DataContext is MpAvClipTileViewModel)
                     .Select(x => x.ContainerControl.DataContext)
                     .Cast<MpAvClipTileViewModel>()
-                    .Max(x => x.TrayRect.Bottom);
+                    .Sum(x => x.TrayRect.Height);
+
+
 
             var gs = this.GetVisualAncestor<MpAvClipTrayContainerView>().GetVisualDescendant<GridSplitter>();
             var gs_grid = gs.GetVisualAncestor<Grid>();
             var adjusted_size = new MpSize();
-            if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {              
-                if(!this.Bounds.Width.IsNumber() || !gs.Bounds.Width.IsNumber() || !added_size.Width.IsNumber()) {
-                    Debugger.Break();
-                }
-                adjusted_size.Width = Math.Min(BindingContext.MaxPinTrayScreenWidth + gs.Bounds.Width, Math.Max(this.Bounds.Width + gs.Bounds.Width, added_size.Width));
+            if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                //if (!this.Bounds.Width.IsNumber() || !gs.Bounds.Width.IsNumber() || !added_size.Width.IsNumber()) {
+                //    Debugger.Break();
+                //}
+                adjusted_size.Width = Math.Min(BindingContext.MaxPinTrayScreenWidth + gs.Bounds.Width, Math.Max(this.Bounds.Width + gs.Bounds.Width, added_size.Width + 40.0d));
                 gs_grid.ColumnDefinitions[0].Width = new GridLength(adjusted_size.Width, GridUnitType.Pixel);
             } else {
                 adjusted_size.Height = Math.Min(BindingContext.MaxPinTrayScreenHeight + gs.Bounds.Height, Math.Max(this.Bounds.Height + gs.Bounds.Height, added_size.Height));
                 gs_grid.RowDefinitions[0].Height = new GridLength(adjusted_size.Height, GridUnitType.Pixel);
             }
-            MpConsole.WriteLine($"PinTray materialized {e.Containers.Count} items. AddedSize: {added_size} AdjustedSize: {adjusted_size}");
+            //MpConsole.WriteLine($"PinTray materialized {e.Containers.Count} items. AddedSize: {added_size} AdjustedSize: {adjusted_size}");
         }
 
         private void PinTrayListBox_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {

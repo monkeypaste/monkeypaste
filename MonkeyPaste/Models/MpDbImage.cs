@@ -34,13 +34,13 @@ namespace MonkeyPaste {
         public static async Task<MpDbImage> Create(string base64Str, bool suppressWrite = false) {
             if(!base64Str.IsStringBase64()) {
                 MpConsole.WriteLine("Warning malformed base64 str, cannot create dbimage so returing default");
-                var img = await MpDb.GetItemAsync<MpDbImage>(MpPrefViewModel.Instance.ThisAppIcon.IconImageId);
+                var img = await MpDataModelProvider.GetItemAsync<MpDbImage>(MpPrefViewModel.Instance.ThisAppIcon.IconImageId);
                 return img;
             }
 
             var dupCheck = await MpDataModelProvider.GetDbImageByBase64StrAsync(base64Str);
             if(dupCheck != null) {
-                dupCheck = await MpDb.GetItemAsync<MpDbImage>(dupCheck.Id);
+                dupCheck = await MpDataModelProvider.GetItemAsync<MpDbImage>(dupCheck.Id);
                 return dupCheck;
             }
             var i = new MpDbImage() {

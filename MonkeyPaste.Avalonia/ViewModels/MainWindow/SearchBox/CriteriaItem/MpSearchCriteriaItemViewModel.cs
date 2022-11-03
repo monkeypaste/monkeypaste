@@ -787,7 +787,7 @@ namespace MonkeyPaste.Avalonia {
 
             SearchCriteriaItem = sci;
 
-            var dl = await MpDb.GetItemsAsync<MpUserDevice>();
+            var dl = await MpDataModelProvider.GetItemsAsync<MpUserDevice>();
             _deviceNames = dl.Select(x => x.MachineName).ToList();
 
             RootOptionViewModel = GetRootOption();

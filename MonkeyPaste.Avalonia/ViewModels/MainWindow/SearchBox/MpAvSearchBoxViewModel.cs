@@ -183,11 +183,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Business Logic Properties
 
-        public string PlaceholderText {
-            get {
-                return MpPrefViewModel.Instance.SearchPlaceHolderText;
-            }
-        }
+        public string PlaceholderText => MpPrefViewModel.Instance.SearchPlaceHolderText;
 
         #endregion
 
@@ -215,29 +211,28 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsTextBoxFocused { get; set; }
 
-        public bool IsOverClearTextButton { get; set; } = false;
 
-        public bool IsTextValid { get; private set; } = true;
-
-        private bool _isSearching = false;
-        public bool IsSearching {
+        public bool IsSearchValid { 
             get {
-                return _isSearching;
-            }
-            set {
-                if (_isSearching != value) {
-                    _isSearching = value;
-                    OnPropertyChanged(nameof(IsSearching));
-                    OnPropertyChanged(nameof(IsClearTextButtonVisible));
+                if(IsSearching) {
+                    return true;
                 }
+                if(MpAvTagTrayViewModel.Instance.SelectedItem == null) {
+                    return true;
+                } else if (MpAvTagTrayViewModel.Instance.SelectedItem.TagClipCount == 0) {
+                    return true;
+                } else if(MpAvClipTrayViewModel.Instance.TotalTilesInQuery == 0) {
+                    // when current tag has items but current search criteria produces no result mark as invalid
+                    return false;
+                }
+                return true;
             }
         }
 
-        public bool HasText {
-            get {
-                return SearchText.Length > 0;
-            }
-        }
+
+        public bool IsSearching { get; set; }
+
+        public bool HasText => SearchText.Length > 0;
 
         public bool IsOverSearchByButton { get; set; }
         public bool IsOverSaveSearchButton { get; set; }
@@ -288,18 +283,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Visibility Proeprties
-        public bool IsClearTextButtonVisible {
-            get {
-                if (HasText && !IsSearching) {
-                    return true;// Visibility.Visible;
-                }
-                return false;// Visibility.Collapsed;
-            }
-        }
-
-        #endregion
-
         #region Model
 
         private string _text = string.Empty;
@@ -313,7 +296,6 @@ namespace MonkeyPaste.Avalonia {
                     //SearchText = Text;
                     OnPropertyChanged(nameof(SearchText));
                     OnPropertyChanged(nameof(HasText));
-                    OnPropertyChanged(nameof(IsClearTextButtonVisible));
                     OnPropertyChanged(nameof(TextBoxFontStyle));
                 }
             }
@@ -377,13 +359,10 @@ namespace MonkeyPaste.Avalonia {
             if (us == null) {
                 UserSearch = null;
             } else {
-                if (us.CriteriaItems == null || us.CriteriaItems.Count == 0) {
-                    us = await MpDb.GetItemAsync<MpUserSearch>(us.Id);
-                }
-
+                var cil = await MpDataModelProvider.GetCriteriaItemsByUserSearchId(us.Id);
                 UserSearch = us;
                 CriteriaItems.Clear();
-                foreach (var ci in UserSearch.CriteriaItems) {
+                foreach (var ci in cil) {
                     var civm = await CreateCriteriaItemViewModel(ci);
                     CriteriaItems.Add(civm);
                 }
@@ -457,11 +436,9 @@ namespace MonkeyPaste.Avalonia {
             switch (msg) {
                 case MpMessageType.RequeryCompleted:
                     IsSearching = false;
-                    Validate();
-                    OnPropertyChanged(nameof(IsClearTextButtonVisible));
-                    OnPropertyChanged(nameof(ClearAndBusyColumnWidth));
-                    OnPropertyChanged(nameof(NavButtonsColumnWidth));
+                    OnPropertyChanged(nameof(IsSearchValid));
                     break;
+
             }
         }
 
@@ -474,15 +451,12 @@ namespace MonkeyPaste.Avalonia {
                     MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayScreenWidth));
                     break;
                 case nameof(SearchText):
-                    Validate();
-                    OnPropertyChanged(nameof(IsClearTextButtonVisible));
                     OnPropertyChanged(nameof(ClearAndBusyColumnWidth));
                     OnPropertyChanged(nameof(NavButtonsColumnWidth));
                     break;
                 case nameof(IsSearching):
                     OnPropertyChanged(nameof(ClearAndBusyColumnWidth));
                     OnPropertyChanged(nameof(NavButtonsColumnWidth));
-                    OnPropertyChanged(nameof(IsClearTextButtonVisible));
                     OnPropertyChanged(nameof(CanAddCriteriaItem));
                     break;
                 case nameof(IsTextBoxFocused):
@@ -536,17 +510,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private bool Validate() {
-            if (!HasText) {
-                IsTextValid = true;
-            } else {
-                if(MpAvClipTrayViewModel.Instance.TotalTilesInQuery == 0) {
-                    IsTextValid = false;
-                }
-            }
-            return IsTextValid;
-        }
-
         private void UpdateRecentSearchTexts() {
             if (!string.IsNullOrEmpty(_text)) {
                 var rftl = RecentSearchTexts;
@@ -582,14 +545,17 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand PerformSearchCommand => new MpCommand(
             () => {
-                if (!HasText) {
-                    IsTextValid = true;
-                    LastSearchText = string.Empty;
-                } else {
-                    IsSearching = true;
-                    LastSearchText = SearchText;
-                }
+                //if (!HasText) {
+                //    LastSearchText = string.Empty;
+                //} else {
+                //    IsSearching = true;
+                //    LastSearchText = SearchText;
+                //}
+                IsSearching = true;
+                LastSearchText = SearchText;
                 IsMultipleMatches = false;
+
+                OnPropertyChanged(nameof(IsSearchValid));
 
                 SetQueryInfo(); 
                 MpDataModelProvider.QueryInfo.NotifyQueryChanged();

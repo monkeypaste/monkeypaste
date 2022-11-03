@@ -1,7 +1,8 @@
-﻿using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common;
 using Newtonsoft.Json;
 using SQLite;
-using SQLiteNetExtensions.Attributes;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,11 +22,9 @@ namespace MonkeyPaste {
 
         public string PluginGuid { get; set; }
 
-        [ForeignKey(typeof(MpIcon))]
         [Column("fk_MpIconId")]
         public int IconId { get; set; }
 
-        [ForeignKey(typeof(MpShortcut))]
         [Column("fk_MpShortcutId")]
         public int ShortcutId { get; set; } = 0;
 
@@ -54,14 +53,6 @@ namespace MonkeyPaste {
         public int Pinned { get; set; } = 0;
 
         public DateTime LastSelectedDateTime { get; set; }
-
-        #endregion
-
-        #region Fk Models
-
-        //[OneToMany(CascadeOperations = CascadeOperation.All)]
-        //[Ignore]
-        //public List<MpPluginPresetParameterValue> PresetParameterValues { get; set; } = new List<MpPluginPresetParameterValue>();
 
         #endregion
 
@@ -191,7 +182,7 @@ namespace MonkeyPaste {
 
             if(deepClone) {
                 if (IconId > 0) {
-                    var icon = await MpDb.GetItemAsync<MpIcon>(IconId);
+                    var icon = await MpDataModelProvider.GetItemAsync<MpIcon>(IconId);
                     var ci = await icon.CloneDbModelAsync(
                         deepClone: deepClone,
                         suppressWrite: suppressWrite);

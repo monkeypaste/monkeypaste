@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SQLite;
-using SQLiteNetExtensions.Attributes;
+
 
 namespace MonkeyPaste {
     public class MpPasteToAppPath : MpDbModelBase {
@@ -30,17 +30,10 @@ namespace MonkeyPaste {
         public string Label { get; set; }
 
         [Column("fk_MpIconId")]
-        [ForeignKey(typeof(MpIcon))]
         public int IconId { get; set; }
 
         public int WindowState { get; set; }
 
-        #endregion
-
-        #region Fk Models
-
-        //[OneToOne(CascadeOperations = CascadeOperation.All)]
-        //public MpIcon Icon { get; set; }
         #endregion
 
         #region Properties

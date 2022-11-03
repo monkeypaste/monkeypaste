@@ -45,7 +45,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            var urll = await MpDb.GetItemsAsync<MpUrl>();
+            var urll = await MpDataModelProvider.GetItemsAsync<MpUrl>();
             Items.Clear();
             foreach (var url in urll) {
                 var uvm = await CreateUrlViewModel(url);

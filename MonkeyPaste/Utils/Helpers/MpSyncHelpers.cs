@@ -60,7 +60,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<DateTime> GetLastSyncForRemoteDevice(string otherDeviceGuid) {
-            var shl = await MpDb.GetItemsAsync<MpSyncHistory>();
+            var shl = await MpDataModelProvider.GetItemsAsync<MpSyncHistory>();
             if (shl.Count == 0) {
                 return DateTime.MinValue;
             }
@@ -75,7 +75,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<string> GetLocalLogFromSyncDate(DateTime fromDateTime, string ignoreGuid = "") {
-            var logItems = await MpDb.GetItemsAsync<MpDbLog>();
+            var logItems = await MpDataModelProvider.GetItemsAsync<MpDbLog>();
             var matchLogItems = logItems.Where(x => x.LogActionDateTime > fromDateTime && x.SourceClientGuid.ToString() != ignoreGuid).ToList();
 
             var dbol = new List<MpISyncableDbObject>();
