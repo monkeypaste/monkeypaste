@@ -37,7 +37,7 @@ function initQuill() {
 
 
 	initEditTemplateToolbar();
-	initPasteTemplateToolbar();
+	initPasteToolbar();
 }
 
 // #endregion Life Cycle

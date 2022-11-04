@@ -135,7 +135,7 @@ function updatePasteTemplateOptionsBounds() {
     //   fitted_opts_win_rect.top = Math.max(min_opts_top, fitted_opts_win_rect.bottom - opts_div_rect.height - y_pad);
     //   fitted_opts_win_rect = cleanRect(fitted_opts_win_rect);
 
-    //   //let bottom = getPasteTemplateToolbarContainerElement().getBoundingClientRect().top;
+    //   //let bottom = getPasteToolbarContainerElement().getBoundingClientRect().top;
     //   //let top =
     //   opts_div.style.left = fitted_opts_win_rect.left + 'px';
     //   opts_div.style.top = fitted_opts_win_rect.top + 'px';

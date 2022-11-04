@@ -15,7 +15,7 @@ function initBouncyTextArea(elm) {
 
 function getTemplateToolbarsHeight() {
     let total_h = getEditTemplateToolbarHeight();
-    total_h += getPasteTemplateToolbarHeight();
+    total_h += getPasteToolbarHeight();
     return total_h;
 }
 

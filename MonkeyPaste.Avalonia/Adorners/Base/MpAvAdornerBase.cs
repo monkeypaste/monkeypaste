@@ -12,7 +12,6 @@ using Avalonia;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public abstract class MpAvAdornerBase : Control {
-        private bool _wasVisible = false;
         public Control AdornedControl { get; private set; }
 
         public MpAvAdornerBase(Control adornedControl) : base() {            

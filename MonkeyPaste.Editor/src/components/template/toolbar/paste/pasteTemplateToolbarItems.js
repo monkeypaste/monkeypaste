@@ -5,7 +5,6 @@ const PasteToolbarDefaultWidth = 1125.0;
 
 var IsPastingTemplate = false;
 var IsTemplatePasteValueTextAreaFocused = false;
-var IsPasteToolbarLoading = false;
 
 var PasteTemplateTimerInterval = null;
 
@@ -13,14 +12,11 @@ var PasteTemplateTimerInterval = null;
 
 // #region Life Cycle
 
-function initPasteTemplateToolbar() {
-    enableResize(getPasteTemplateToolbarContainerElement());
-
+function initPasteTemplateToolbarItems() {
     addClickOrKeyClickEventListener(getPasteGotoNextButtonElement(), onPasteTemplateGotoNextClickOrKeyDown);
     addClickOrKeyClickEventListener(getPasteGotoPrevButtonElement(), onPasteTemplateGotoPrevClickOrKeyDown);
     addClickOrKeyClickEventListener(getPasteClearTextButtonElement(), onPasteTemplateClearAllValuesClickOrKeyDown);
     addClickOrKeyClickEventListener(getPasteEditFocusTemplateButtonElement(), onPasteEditFocusTemplateClickOrKeyDown);
-    addClickOrKeyClickEventListener(getPasteButtonElement(), onPasteButtonClickOrKeyDown);
 
     getPasteValueTextAreaElement().addEventListener('input', onTemplatePasteValueChanged);
     initBouncyTextArea(getPasteValueTextAreaElement());
@@ -31,14 +27,6 @@ function initPasteTemplateToolbar() {
 // #endregion Life Cycle
 
 // #region Getters
-
-function getPasteTemplateToolbarContainerElement() {
-    return document.getElementById('pasteTemplateToolbar');
-}
-
-function getPasteTemplateToolbarHeight() {
-    return getPasteTemplateToolbarContainerElement().getBoundingClientRect().height;
-}
 
 function getPasteGotoNextButtonElement() {
     return document.getElementById('nextTemplateButton');
@@ -54,10 +42,6 @@ function getPasteClearTextButtonElement() {
 
 function getPasteEditFocusTemplateButtonElement() {
     return document.getElementById('pasteEditFocusTemplateButton');
-}
-
-function getPasteButtonElement() {
-    return document.getElementById('pasteTemplateButton');
 }
 
 function getPasteValueTextAreaElement() {
@@ -104,21 +88,6 @@ function getPasteTemplateDefs() {
 // #endregion Getters
 
 // #region Setters
-
-function setPasteToolbarDefaultFocus() {
-    let pvta_elm = getPasteValueTextAreaElement();
-    let pb_elm = getPasteButtonElement();
-
-    if (isElementDisabled(pvta_elm)) {
-        if (isElementDisabled(pb_elm)) {
-            getEditorElement().focus();
-        } else {
-            pb_elm.focus({ focusVisible: true });
-		}        
-    } else {
-        getPasteValueTextAreaElement().focus({ focusVisible: true });
-    }
-}
 
 function setTemplatePasteValue(tguid, val) {
     var telms = getTemplateElements(tguid);
@@ -169,30 +138,29 @@ function isPasteButtonEnabled() {
 }
 
 function isShowingPasteTemplateToolbar() {
-    return !getPasteTemplateToolbarContainerElement().classList.contains('hidden');
+    return !getPasteToolbarContainerElement().classList.contains('hidden');
 }
 
 // #endregion State
 
 // #region Actions
 
-function showPasteTemplateToolbar() {
-    IsPasteToolbarLoading = true;
-    var ptt_elm = getPasteTemplateToolbarContainerElement();
-    ptt_elm.classList.remove('hidden');
+function showPasteTemplateToolbarItems() {
+    let ptil = Array.from(document.getElementsByClassName('paste-template-item'));
+    for (var i = 0; i < ptil.length; i++) {
+        ptil[i].classList.remove('hidden');
+	}
 
+    updatePasteTemplateToolbarToSelection();
 
-    //if (IsPastingTemplate) {
-        updatePasteTemplateToolbarToSelection();
-        PasteTemplateTimerInterval = setInterval(onPasteTemplateTimer, 300, getEditorElement());
-        setPasteToolbarDefaultFocus();
-	//}
-    IsPasteToolbarLoading = false;
+    PasteTemplateTimerInterval = setInterval(onPasteTemplateTimer, 300, getEditorElement());
 }
 
-function hidePasteTemplateToolbar() {
-    var ptt = getPasteTemplateToolbarContainerElement();
-    ptt.classList.add('hidden');
+function hidePasteTemplateToolbarItems() {
+    let ptil = Array.from(document.getElementsByClassName('paste-template-item'));
+    for (var i = 0; i < ptil.length; i++) {
+        ptil[i].classList.add('hidden');
+    }
 
     clearInterval(PasteTemplateTimerInterval);
 }
@@ -289,7 +257,7 @@ function updatePasteValueTextAreaSize() {
 
     getPasteValueTextAreaElement().style.height = '0px';
 
-    let ptth = getPasteTemplateToolbarHeight();
+    let ptth = getPasteToolbarHeight();
     let pvta_elm = getPasteValueTextAreaElement();
 
     let ta_parent_y_margin =
@@ -307,10 +275,6 @@ function updatePasteValueTextAreaSize() {
 }
 
 function updatePasteTemplateToolbarToSelection(force_ftguid) {
-    if (!IsPastingTemplate) {
-        return;
-    }
-
     let paste_sel = getDocSelection(true);
     let pre_ftguid = getFocusTemplateGuid();
 
@@ -320,10 +284,7 @@ function updatePasteTemplateToolbarToSelection(force_ftguid) {
         updatePasteTemplateValues();
         ftguid = findPasteFocusTemplate(paste_sel);
 
-       // if (pre_ftguid != ftguid) {
-            // terminates a circular ref
-            focusTemplate(ftguid);
-      //  }
+        focusTemplate(ftguid);
     } else {
         // called from focus template when either:
         // 1. template blot was clicked
@@ -498,18 +459,4 @@ function onPasteEditFocusTemplateClickOrKeyDown(e) {
 	}
 }
 
-function onPasteButtonClickOrKeyDown(e) {
-    if (!isRunningInHost()) {
-        alert(getText(getDocSelection(true), true));
-    }    
-
-    let can_paste = updatePasteElementInteractivity();
-    if (can_paste) {
-        onPasteTemplateRequest_ntf();
-    } else {
-
-	}
-
-    
-}
 // #endregion Event Handlers

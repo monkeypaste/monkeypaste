@@ -76,7 +76,7 @@ function init_test() {
 		let load_req = {
 			contentHandle: '<TEST-CONTENT-HANDLE>',
 			contentType: 'Text',
-			isPasteRequest: true,
+			isPasteRequest: false,
 			itemData: sample6_templates,
 			//searchText: 'instalment in the following sequence of articles:'
 		};
@@ -85,13 +85,13 @@ function init_test() {
 
 		//loadContent(contentHandle, contentType, sample_in_use, isPasteRequest);
 
-		disableReadOnly();
+		//disableReadOnly();
 
 		//showFindReplaceToolbar();
 
 		//getPasteButtonElement().focus({ focusVisible: true });
 		//enableFancyTextSelection();
-		//enableSubSelection();
+		enableSubSelection();
 		//enableReadOnly();
 		//disableSubSelection();
 	}
@@ -164,6 +164,9 @@ function setState(stateObj) {
 function isElementDisabled(elm) {
 	if (!elm) {
 		debugger;
+		return true;
+	}
+	if (elm.classList.contains('hidden')) {
 		return true;
 	}
 	return elm.classList.contains('disabled');

@@ -97,8 +97,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-        public ICommand CycleDetailCommand => new MpAsyncCommand(
-            async () => {
+        public ICommand CycleDetailCommand => new MpCommand(
+            () => {
                 if (Parent == null || Parent.IsPlaceholder) {
                     //_detailIdx = -1;
                     //DetailText = String.Empty;

@@ -31,7 +31,8 @@ namespace MonkeyPaste.Avalonia {
         notifyException,
         notifyDragStartOrEnd,
         notifyReadOnlyEnabled,
-        notifyReadOnlyDisabled,
+        notifyReadOnlyDisabled, 
+        notifyInitComplete,
         notifyDomLoaded,
         notifyDropCompleted,
         notifyDragEnter,
@@ -56,16 +57,47 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
         public MpAvClipTileViewModel BindingContext => this.DataContext as MpAvClipTileViewModel;
-        public bool IsEditorInitialized { get; set; } = false;
+
+
+        private bool _isContentLoaded = false;
+        public bool IsContentLoaded {
+            get => _isContentLoaded;
+            set {
+                if(IsContentLoaded != value) {
+                    _isContentLoaded = value;
+                    if(BindingContext != null) {
+                        BindingContext.OnPropertyChanged(nameof(BindingContext.IsAnyBusy));
+                    }
+                }
+            }
+        }
+
+        public bool IsEditorInitialized { get; private set; } = false;
+
         public bool IsDomLoaded { get; set; } = false;
 
-        public bool IsContentUnloaded { get; set; } = false;
-        public MpAvTextSelection Selection { get; private set; }
+        #region MpAvIContentView Implementation
 
-        public MpAvHtmlDocument Document { get; set; }
+        public bool IsViewLoaded => IsDomLoaded;
+
+        public bool IsContentUnloaded { get; set; } = false;
+        public MpAvTextSelection Selection { get; private set; }        
 
         MpAvIContentDocument MpAvIContentView.Document => Document;
 
+        #endregion
+
+        #region Document Property
+
+        public MpAvHtmlDocument Document { get; set; }
+
+        public static readonly DirectProperty<MpAvCefNetWebView, MpAvHtmlDocument> DocumentProperty =
+            AvaloniaProperty.RegisterDirect<MpAvCefNetWebView, MpAvHtmlDocument>(
+                nameof(Document),
+                x => x.Document,
+                enableDataValidation: true);
+
+        #endregion
 
         #endregion
 
@@ -112,6 +144,23 @@ namespace MonkeyPaste.Avalonia {
             }
             MpJsonObject ntf = null;
             switch (notificationType) {
+                case MpAvEditorBindingFunctionType.notifyDomLoaded:
+                    IsDomLoaded = true;
+                    break;
+                case MpAvEditorBindingFunctionType.notifyInitComplete:
+                    IsEditorInitialized = true;
+                    break;
+
+                case MpAvEditorBindingFunctionType.notifyLoadComplete:
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillLoadContentResponseMessage>(msgJsonBase64Str);
+                    if (ntf is MpQuillLoadContentResponseMessage resp) {
+                        ctvm.UnformattedContentSize = new MpSize(resp.contentWidth, resp.contentHeight);
+                        ctvm.LineCount = resp.lineCount;
+                        ctvm.CharCount = resp.charCount;
+                        Document.ContentEnd.Offset = resp.charCount;
+                        IsContentLoaded = true;
+                    }
+                    break;
                 case MpAvEditorBindingFunctionType.notifyDocSelectionChanged:
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillContentSelectionChangedMessage>(msgJsonBase64Str);
                     if(ntf is MpQuillContentSelectionChangedMessage selChange_ntf) {
@@ -147,9 +196,7 @@ namespace MonkeyPaste.Avalonia {
                         ctvm.IsSubSelectionEnabled = subSelChangedNtf.isSubSelectionEnabled;
                     }
                     break;
-                case MpAvEditorBindingFunctionType.notifyDomLoaded:
-                    IsDomLoaded = true;
-                    break;
+               
                 case MpAvEditorBindingFunctionType.notifyDropCompleted:
                     Dispatcher.UIThread.Post(async () => {
                         // when  drop completes wait for drag tile (if internal) to reload before updating selection to drop tile
@@ -219,18 +266,6 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
                    
-                    break;
-                case MpAvEditorBindingFunctionType.notifyLoadComplete:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillLoadContentResponseMessage>(msgJsonBase64Str);
-                    if(ntf is MpQuillLoadContentResponseMessage resp) {
-                        ctvm.UnformattedContentSize = new MpSize(resp.contentWidth, resp.contentHeight);
-                        ctvm.LineCount = resp.lineCount;
-                        ctvm.CharCount = resp.charCount;
-                        Document.ContentEnd.Offset = resp.charCount;
-
-                        //ctvm.IsWaitingForDomLoad = false;
-                        ctvm.IsBusy = false;
-                    }
                     break;
             }
 

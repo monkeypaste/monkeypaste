@@ -37,16 +37,24 @@
     <link href="src/components/quill-wrapper/quill-style.css" rel="stylesheet" />
     <link href="src/components/editor/editor-style.css" rel="stylesheet" />
     <link href="src/components/dragdrop/drag-drop-style.css" rel="stylesheet" />
+
     <link href="src/components/template/template-style.css" rel="stylesheet" />
-    <link href="src/components/template/toolbar/common-template-toolbar-style.css" rel="stylesheet" />
     <link href="src/components/template/toolbar/edit/edit-template-toolbar-style.css" rel="stylesheet" />
-    <link href="src/components/template/toolbar/paste/paste-template-toolbar-style.css" rel="stylesheet" />
+    <link href="src/components/template/toolbar/paste/paste-template-toolbar-items-style.css" rel="stylesheet" />
+    <link href="src/components/template/toolbar/paste/selector/paste-toolbar-template-selector-style.css" rel="stylesheet" />
+    
     <link href="src/components/content/content-style.css" rel="stylesheet" />
     <link href="src/components/content/content-file-list/content-file-list-style.css" rel="stylesheet" />
     <link href="src/components/content/content-image/content-image-style.css" rel="stylesheet" />
+    <link href="src/components/content/paste/paste-toolbar-style.css" rel="stylesheet" />
+
     <link href="src/components/overlay/overlay-style.css" rel="stylesheet" />
+
     <link href="src/components/findreplace/find-replace-style.css" rel="stylesheet" />
+
     <link href="src/components/table/table-style.css" rel="stylesheet" />
+
+    <link href="src/components/common/toolbar/common-toolbar-style.css" rel="stylesheet" />
 
     <!-- EXTERNAL APIS -->
 
@@ -117,9 +125,8 @@
 
     <script src="src/components/template/template.js"></script>
     <script src="src/components/template/toolbar/create/createTemplateToolbarItem.js"></script>
-    <script src="src/components/template/toolbar/commonTemplateToolbar.js"></script>
     <script src="src/components/template/toolbar/edit/editTemplateToolbar.js"></script>
-    <script src="src/components/template/toolbar/paste/pasteTemplateToolbar.js"></script>
+    <script src="src/components/template/toolbar/paste/pasteTemplateToolbarItems.js"></script>
     <script src="src/components/template/toolbar/paste/selector/pasteTemplateFocusSelector.js"></script>
 
     <script type="text/javascript">
@@ -143,6 +150,9 @@
     <script src="src/components/content/content-text/content-text.js"></script>
     <script src="src/components/content/content-file-list/content-file-list.js"></script>
     <script src="src/components/content/content-image/content-image.js"></script>
+    <script src="src/components/content/paste/pastetoolbar.js"></script>
+
+    <script src="src/components/common/toolbar/commonToolbar.js"></script>
 
     <script src="src/components/font/fontFamilyLookup.js"></script>
     <script src="src/components/font/fontFamily.js"></script>
@@ -267,27 +277,6 @@
             <label for="useRegexInput"> Regular Expression</label>
         </form>
         <div id="findReplaceButtonContainer" class="right-align">
-            <!--<div class="right-align">
-        <button id="closeFindReplaceToolbarButton">X</button>
-    </div>
-    <div id="findReplaceButtonOuterContainer" class="right-align">
-        <div id="findReplaceNavButtonContainer" class="right-align">
-            <button id="findReplacePreviousButton" type="button">
-                <i class="fa-solid fa-arrow-left"></i>
-            </button>
-            <button id="findReplaceNextButton" type="button">
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
-        </div>
-        <div id="findReplaceNavButtonContainer" class="right-align is-replace">
-            <button id="replaceButton" type="button">
-                Replace
-            </button>
-            <button id="replaceAllButton" type="button">
-                Replace All
-            </button>
-        </div>
-    </div>-->
             <button id="closeFindReplaceToolbarButton">X</button>
             <button id="findReplacePreviousButton" type="button">
                 <i class="fa-solid fa-arrow-left"></i>
@@ -311,7 +300,7 @@
 
     <!-- EDIT TEMPLATE TOOLBAR -->
     <div id="editTemplateToolbar"
-         class="common-template-toolbar edit-template-toolbar bottom-align hidden">
+         class="common-toolbar edit-template-toolbar bottom-align hidden">
         <div class="resizer resizer-t"></div>
         <div id="templateColorBox"></div>
         <textarea id="templateNameTextArea"
@@ -355,12 +344,13 @@
         </button>
     </div>
 
-    <div id="pasteTemplateToolbar"
-         class="common-template-toolbar paste-template-toolbar bottom-align hidden">
+    <!-- PASTE TOOLBAR -->
+    <div id="pasteToolbar"
+         class="common-toolbar paste-toolbar bottom-align hidden">
         <div class="resizer resizer-t"></div>
         <!-- SELECTOR -->
         <div id="pasteTemplateToolbarMenuSelectorDiv"
-             class="">
+             class="paste-template-item">
             <select id="pasteTemplateToolbarMenuHiddenSelect"
                     tabindex="0"
                     class="hidden">
@@ -374,44 +364,50 @@
         </div>
         <!-- PASTE VALUE TEXT AREA-->
         <textarea id="templatePasteValueTextArea"
+                  class="paste-template-item"
                   rows="1"
                   cols="20"
                   tabindex="1"
                   placeholder="Enter paste text..."></textarea>
         <!-- CLEAR BUTTON -->
         <button id="clearAllTemplateTextButton"
+                class="paste-template-item"
                 tabindex="2">
             <i class="fa-solid fa-eraser"></i><span>CLEAR ALL</span>
         </button>
         <!-- PREV BUTTON -->
         <button id="previousTemplateButton"
+                class="paste-template-item"
                 tabindex="3">
             <i class="fa-solid fa-arrow-left"></i>
         </button>
         <!-- NEXT BUTTON -->
         <button id="nextTemplateButton"
+                class="paste-template-item"
                 tabindex="4">
             <i class="fa-solid fa-arrow-right"></i>
         </button>
         <!-- EDIT BUTTON -->
         <button id="pasteEditFocusTemplateButton"
+                class="paste-template-item"
                 tabindex="5">
             <i class="fa-solid fa-pen-to-square"></i><span>Edit</span>
         </button>
         <!-- PASTE BUTTON -->
-        <button id="pasteTemplateButton"
+        <button id="pasteButton"
                 tabindex="6"
                 class="right-align">
             <i class="fa-solid fa-paste"></i><span>PASTE</span>
         </button>
     </div>
 
-    <div id="pasteOptionsDiv"></div>
+    <div id="pasteOptionsDiv"
+         class="paste-template-item"></div>
     <div id="colorPaletteContainer"
          class="ql-toolbar-template-context-menu"></div>
 
     <canvas id="overlayCanvas"></canvas>
-    <div id="dragOverlay"></div>
+    <div id="dragOverlay" draggable="true"></div>
 
     <script src="src/components/main/main.js"></script>
 </body>

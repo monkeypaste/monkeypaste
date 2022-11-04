@@ -45,19 +45,6 @@
                                local:MpAvSizeObserverExtension.IsEnabled="True"
                                local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedPinTrayScreenWidth, Mode=OneWayToSource}"
                                local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedPinTrayScreenHeight, Mode=OneWayToSource}">
-            <!--<local:MpAvPinTrayView.IsVisible>
-                <MultiBinding Converter="{StaticResource MultiBoolConverter}"
-                              ConverterParameter="OR">
-                    <Binding Source="{x:Static local:MpAvClipTrayViewModel.Instance}"
-                             Path="IsAnyTilePinned" />
-            -->
-            <!--<Binding Source="{x:Static local:MpAvClipTrayViewModel.Instance}"
-                             Path="IsAnyTileDragging" />
-                    <Binding Source="{x:Static local:MpAvMainWindowViewModel.Instance}"
-                             Path="IsDropOverMainWindow" />-->
-            <!--
-                </MultiBinding>
-            </local:MpAvPinTrayView.IsVisible>-->
         </local:MpAvPinTrayView>
         <GridSplitter x:Name="ClipTraySplitter"
                       Grid.Column="0"

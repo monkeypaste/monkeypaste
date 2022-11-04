@@ -2229,7 +2229,7 @@ namespace MonkeyPaste.Avalonia {
            // }
         }
 
-        protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
                 MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Remove(ci);
                 MpAvPersistentClipTilePropertiesHelper.RemovePersistentSize_ById(ci.Id);

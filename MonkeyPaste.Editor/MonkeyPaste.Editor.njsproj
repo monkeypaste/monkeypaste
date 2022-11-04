@@ -33,6 +33,8 @@
   <ItemGroup>
     <Content Include="app.js" />
     <Content Include="images\icons\monkey.ico" />
+    <Content Include="src\components\content\paste\paste-toolbar-style.css" />
+    <Content Include="src\components\content\paste\pastetoolbar.js" />
     <Content Include="src\components\svg\assets\findreplace.svg" />
     <Content Include="index.html" />
     <Content Include="package.json" />
@@ -85,13 +87,14 @@
     <Content Include="src\components\template\blots\2.0\templatePadAttribute.js" />
     <Content Include="src\components\template\template-style.css" />
     <Content Include="src\components\template\template.js" />
-    <Content Include="src\components\template\toolbar\common-template-toolbar-style.css" />
-    <Content Include="src\components\template\toolbar\commonTemplateToolbar.js" />
+    <Content Include="src\components\common\toolbar\common-toolbar-style.css" />
+    <Content Include="src\components\common\toolbar\commonToolbar.js" />
     <Content Include="src\components\template\toolbar\create\createTemplateToolbarItem.js" />
     <Content Include="src\components\template\toolbar\edit\edit-template-toolbar-style.css" />
     <Content Include="src\components\template\toolbar\edit\editTemplateToolbar.js" />
-    <Content Include="src\components\template\toolbar\paste\paste-template-toolbar-style.css" />
-    <Content Include="src\components\template\toolbar\paste\pasteTemplateToolbar.js" />
+    <Content Include="src\components\template\toolbar\paste\paste-template-toolbar-items-style.css" />
+    <Content Include="src\components\template\toolbar\paste\pasteTemplateToolbarItems.js" />
+    <Content Include="src\components\template\toolbar\paste\selector\paste-toolbar-template-selector-style.css" />
     <Content Include="src\components\template\toolbar\paste\selector\pasteTemplateFocusSelector.js" />
     <Content Include="src\components\template\types\contacts\contacts.js" />
     <Content Include="src\components\util\dataTransfer.js" />
@@ -114,10 +117,12 @@
     <Folder Include="src\" />
     <Folder Include="src\components\" />
     <Folder Include="src\components\clipboard\" />
+    <Folder Include="src\components\common\toolbar\" />
     <Folder Include="src\components\content\" />
     <Folder Include="src\components\content\content-file-list\" />
     <Folder Include="src\components\content\content-image\" />
     <Folder Include="src\components\content\content-text\" />
+    <Folder Include="src\components\content\paste\" />
     <Folder Include="src\components\converter\" />
     <Folder Include="src\components\dragdrop\" />
     <Folder Include="src\components\editor\" />
@@ -127,6 +132,7 @@
     <Folder Include="src\components\color\" />
     <Folder Include="src\components\input\" />
     <Folder Include="src\components\findreplace\" />
+    <Folder Include="src\components\common\" />
     <Folder Include="src\components\svg\" />
     <Folder Include="src\components\overlay\" />
     <Folder Include="src\components\quill-wrapper\" />

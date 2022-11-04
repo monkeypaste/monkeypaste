@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using MonkeyPaste.Common.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,6 +81,12 @@ namespace MonkeyPaste.Common.Avalonia {
             return str;
         }
         public static string ToContentRichText(this string str) {
+#if WINDOWS
+            if(str.IsStringRichHtmlText()) {
+                string rtf = MpWpfHtmlToRtfConverter.ConvertQuillHtmlToRtf(str);
+                return rtf;
+            }
+#endif
             return str;
         }
         public static string ToRichHtmlTable(this string csvStr, MpCsvFormatProperties csvProps = null) {

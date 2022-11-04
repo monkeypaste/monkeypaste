@@ -330,18 +330,18 @@ namespace MonkeyPaste.Common.Wpf {
 
         private static string GetFontSize(Span s) {
             double fs = (double)s.FontSize;//new FontSizeConverter().ConvertFrom(s.FontSize+"pt");
-            //MpRichTextFormatProperties.Instance.AddFontSize(fs);
+            //MpWpfRtfDefaultProperties.Instance.AddFontSize(fs);
             return string.Format(@" style='font-size: {0}px;", fs);
         }
 
         private static string GetHtmlColor(Color c) {
-            //MpRichTextFormatProperties.Instance.AddFontColor(c);
+            //MpWpfRtfDefaultProperties.Instance.AddFontColor(c);
             return string.Format(@"rgb({0},{1},{2})", c.R, c.G, c.B);
         }
 
         private static string GetHtmlFont(Span s) {
             string ff = s.FontFamily.ToString().ToLower().Trim();
-            //MpRichTextFormatProperties.Instance.AddFont(ff);
+            //MpWpfRtfDefaultProperties.Instance.AddFont(ff);
             return ff.Replace(" ", "-");
         }
 

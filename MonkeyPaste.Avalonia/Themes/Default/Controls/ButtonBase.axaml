@@ -11,7 +11,7 @@
         <Setter Property="Background"
                 Value="Transparent" />
     </Style>
-    <Style Selector=":is(Button):pointerover PathIcon">
+    <Style Selector=":is(Button):not(.TextBoxButton):pointerover PathIcon">
         <Setter Property="Foreground"
                 Value="Yellow" />
     </Style>

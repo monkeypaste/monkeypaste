@@ -1,0 +1,94 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="using:MonkeyPaste.Avalonia"
+        mc:Ignorable="d"
+        d:DesignWidth="800"
+        d:DesignHeight="450"
+        x:Class="MonkeyPaste.Avalonia.MpAvExternalDropWindow"
+        IsVisible="False"
+        Topmost="True"
+        Width="300"
+        Height="75"
+        Background="Transparent"
+        TransparencyLevelHint="Transparent"
+        WindowState="Normal"
+        HasSystemDecorations="False"
+        ShowInTaskbar="False"
+        DataContext="{x:Static local:MpAvClipboardHandlerCollectionViewModel.Instance}">
+    <Border x:Name="DumbParentBorder"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+        <Border x:Name="DropMenuBorderContainer"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                CornerRadius="5"
+                BorderThickness="1"
+                BorderBrush="Black">
+            <Border.Background>
+                <SolidColorBrush Color="DimGray"
+                                 Opacity="0.85" />
+            </Border.Background>
+            <Grid HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch">
+                <!--<Button x:Name="MoveDropMenuButton"
+                        Background="Blue"
+                        Cursor="SizeAll"
+                        Width="8"
+                        Height="8"
+                        Margin="0,3,20,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top">
+                    Move
+                </Button>-->
+                <Button x:Name="HideDropMenuButton"
+                        Background="Blue"
+                        Width="8"
+                        Height="8"
+                        Margin="0,3,3,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top">
+                    <TextBlock FontSize="6"
+                               Foreground="White"
+                               Text="x" />
+                </Button>
+                <ListBox x:Name="DropItemListBox"
+                         Background="Transparent"
+                         BorderBrush="Transparent"
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Top"
+                         SelectionMode="Toggle"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         Items="{Binding AllAvailableWriterPresets}">
+                    <ListBox.Styles>
+
+                        <!--<Style Selector="ListBoxItem"
+                               x:DataType="local:MpAvClipboardFormatPresetViewModel">
+                            <Setter Property="IsSelected"
+                                    Value="{Binding IsEnabled}" />
+                        </Style>-->
+                    </ListBox.Styles>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Stretch" />
+                            <!--<VirtualizingStackPanel Background="Red"
+                                                    HorizontalAlignment="Stretch"
+                                                    VerticalAlignment="Stretch"
+                                                    Orientation="Horizontal" />-->
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <local:MpAvDropFormatItemView HorizontalAlignment="Stretch"
+                                                          VerticalAlignment="Stretch"
+                                                          DataContext="{Binding}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Border>
+    </Border>
+</Window>

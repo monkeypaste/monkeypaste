@@ -19,6 +19,10 @@ using Avalonia.Interactivity;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvCefNetWebViewGlue : AvaloniaWebViewGlue {
+        public static MpAvDataObject DragDataObject { get; private set; }
+
+        public static MpAvDataObject SourceDataObject { get; private set; }
+
         public MpAvCefNetWebViewGlue(MpAvCefNetWebView view) : base(view) {
 
         }
@@ -53,6 +57,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             Dispatcher.UIThread.Post(async () => {
+
                 var wv = browser.Host.Client.GetWebView() as MpAvCefNetWebView;
                 var ctvm = wv.BindingContext;
                 object drag_lock = System.Guid.NewGuid().ToString();
@@ -103,17 +108,19 @@ namespace MonkeyPaste.Avalonia {
                 } else if (ctvm.ItemType == MpCopyItemType.Image) {
                     allowedEffects = DragDropEffects.Move;
                 }
-                MpAvDataObject avmpdo = await wv.Document.GetDataObjectAsync(false, false);
-                ctvm.IsTileDragging = await avmpdo.ContainsInternalContentItem_safe(drag_lock);
+                SourceDataObject = await wv.Document.GetDataObjectAsync(false, false);
+
+                ctvm.IsTileDragging = await SourceDataObject.ContainsInternalContentItem_safe(drag_lock);
 
                 // seems excessive...but ultimately all ole pref's come from plugins so pass everthing through cb plugin system just like writing to clipboard
-                avmpdo = await MpPlatformWrapper.Services.DataObjectHelperAsync.WriteDragDropDataObject(avmpdo) as MpAvDataObject;
+                DragDataObject = await MpPlatformWrapper.Services.DataObjectHelperAsync.WriteDragDropDataObject(SourceDataObject) as MpAvDataObject;
+                MpAvExternalDropWindow.Instance.Show();
 
                 while (pe == null) {
                     await Task.Delay(100);
                 }
 
-                var result = await DragDrop.DoDragDrop(pe, avmpdo, allowedEffects);
+                var result = await DragDrop.DoDragDrop(pe, DragDataObject, allowedEffects);
                 bool wasCopy = MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown;
                 bool wasSelfDrop = !wasEscapePressed && ctvm.IsHovering;
                 ctvm.IsTileDragging = false;
@@ -148,6 +155,8 @@ namespace MonkeyPaste.Avalonia {
                 //await Task.Delay(500);
                 await wv.EvaluateJavascriptAsync($"dragEnd_ext('{dragEndMsg.SerializeJsonObjectToBase64()}')");
                 //}
+
+                MpAvExternalDropWindow.Instance.Hide();
 
             });
             return false;

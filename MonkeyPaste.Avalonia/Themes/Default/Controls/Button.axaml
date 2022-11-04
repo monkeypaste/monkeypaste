@@ -7,4 +7,12 @@
             0,0,0,0
         </Thickness>
     </Styles.Resources>
+    <Style Selector="Button.TextBoxButton PathIcon">
+        <Setter Property="Foreground"
+                Value="Black" />
+    </Style>
+    <Style Selector="Button.TextBoxButton PathIcon:pointerover">
+        <Setter Property="Foreground"
+                Value="DimGray" />
+    </Style>
 </Styles>

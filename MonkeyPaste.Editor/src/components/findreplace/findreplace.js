@@ -246,7 +246,6 @@ function updateFindReplaceToolbarSizesAndPositions() {
 		let et_bottom = getEditorToolbarElement().getBoundingClientRect().bottom;
 		getFindReplaceToolbarElement().style.top = et_bottom + 'px';
 	}
-
 }
 
 function resetFindReplaceResults() {

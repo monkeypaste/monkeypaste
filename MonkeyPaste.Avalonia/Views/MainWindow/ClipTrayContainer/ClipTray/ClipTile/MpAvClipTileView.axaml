@@ -15,6 +15,20 @@
                        HorizontalContentAlignment="Stretch"
                        VerticalContentAlignment="Stretch"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileView">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="PathIcon">
+            <Setter Property="Width"
+                    Value="8" />
+            <Setter Property="Height"
+                    Value="8" />
+            <Setter Property="Foreground"
+                    Value="Black" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.IsAnyBusy">
+            <Setter Property="Cursor"
+                    Value="Wait" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
                           ClipToBounds="True"
                           HorizontalAlignment="Stretch"
@@ -22,6 +36,7 @@
                           Classes.TileHover="{Binding IsHovering}"
                           Classes.CanResize="{Binding CanResize}"
                           Classes.IsResizing="{Binding IsResizing}"
+                          Classes.IsAnyBusy="{Binding IsAnyBusy}"
                           VerticalAlignment="Stretch"
                           local:MpAvMenuExtension.IsEnabled="True"
                           local:MpAvMenuExtension.SuppressDefaultRightClick="True"
@@ -33,16 +48,6 @@
                           CornerRadius="{StaticResource TileCornerRadius}"
                           BorderThickness="{StaticResource TileBorderThickness}"
                           Background="{DynamicResource ClipTileContentBackgroundBrush}">
-        <local:MpAvClipBorder.Styles>
-            <Style Selector="PathIcon">
-                <Setter Property="Width"
-                        Value="8" />
-                <Setter Property="Height"
-                        Value="8" />
-                <Setter Property="Foreground"
-                        Value="Black" />
-            </Style>
-        </local:MpAvClipBorder.Styles>
         <Grid HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
@@ -68,6 +73,20 @@
                                            VerticalAlignment="Stretch"
                                            DataContext="{Binding}" />
 
+            <!--
+                IsBusy Overlay
+            -->
+            <Border Grid.Row="1"
+                    IsVisible="{Binding IsAnyBusy, FallbackValue=True, TargetNullValue=True}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+
+                <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Width="70"
+                                           Height="70" />
+            </Border>
+
             <!--  Detail  -->
             <Grid Grid.Row="2"
                   HorizontalAlignment="Stretch"
@@ -77,6 +96,9 @@
                                               VerticalAlignment="Stretch"
                                               HorizontalAlignment="Stretch" />
             </Grid>
+
+
+
 
             <!--  Corner Button Overlay  -->
             <local:MpAvClipTileCornerButtonsView Grid.Row="0"
@@ -114,17 +136,6 @@
                     <TranslateTransform X="5" />
                 </Border.RenderTransform>
             </Border>
-
-            <!--  IsBusy Overlay  -->
-            <!--<local:MpAvBusySpinnerView Grid.Row="0"
-                                       Grid.RowSpan="3"
-                                       Cursor="Wait"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       Width="50"
-                                       Height="50"
-                                       IsVisible="{Binding IsAnyBusy}" />-->
-
             <!--  Trial Expired Overlay  -->
             <Border HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"

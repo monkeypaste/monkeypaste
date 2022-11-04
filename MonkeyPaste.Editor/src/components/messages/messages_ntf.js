@@ -202,3 +202,9 @@ function onQuerySearchRangesChanged_ntf(range_count) {
 		notifyQuerySearchRangesChanged(msgStr);
 	}
 }
+
+function onInitComplete_ntf() {
+	if (typeof notifyInitComplete === 'function') {
+		notifyInitComplete();
+	}
+}

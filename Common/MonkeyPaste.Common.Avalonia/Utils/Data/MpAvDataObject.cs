@@ -53,57 +53,49 @@ namespace MonkeyPaste.Common.Avalonia {
             var html_bytes_f = MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvHtml_bytes);
             var cefHtml_str_f = MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.CefHtml);
 
-            if(DataFormatLookup.ContainsKey(html_bytes_f) &&
-                !DataFormatLookup.ContainsKey(cefHtml_str_f) &&
-                GetData(html_bytes_f.Name) is byte[] html_bytes) {
+            if(ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
+                !ContainsData(MpPortableDataFormats.CefHtml) &&
+                GetData(MpPortableDataFormats.AvHtml_bytes) is byte[] html_bytes) {
                 // convert html bytes to string and map to cef html
                 string htmlStr = html_bytes.ToDecodedString();
-                SetData(cefHtml_str_f.Name,htmlStr);
+                SetData(MpPortableDataFormats.CefHtml, htmlStr);
             }
-            if (DataFormatLookup.ContainsKey(cefHtml_str_f) &&
-                !DataFormatLookup.ContainsKey(html_bytes_f) &&
-                GetData(cefHtml_str_f.Name) is string cef_html_str) {
+            if (ContainsData(MpPortableDataFormats.CefHtml) &&
+                !ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
+                GetData(MpPortableDataFormats.CefHtml) is string cef_html_str) {
                 // convert html sring to to bytes
                 byte[] htmlBytes = cef_html_str.ToEncodedBytes();
-                SetData(html_bytes_f.Name, htmlBytes);
+                SetData(MpPortableDataFormats.AvHtml_bytes, htmlBytes);
             }
 
-            
-            
-            var text_f = MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.Text);
-            var cefText_f = MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.CefText);
-
-            if (DataFormatLookup.ContainsKey(text_f) &&
-                !DataFormatLookup.ContainsKey(cefText_f)) {
+            if (ContainsData(MpPortableDataFormats.Text) &&
+                !ContainsData(MpPortableDataFormats.CefText)) {
                 // ensure cef style text is in formats
-                SetData(cefText_f.Name, GetData(text_f.Name));
+                SetData(MpPortableDataFormats.CefText, GetData(MpPortableDataFormats.Text));
             }
-            if (DataFormatLookup.ContainsKey(cefHtml_str_f) &&
-                !DataFormatLookup.ContainsKey(text_f)) {
+            if (ContainsData(MpPortableDataFormats.CefText) &&
+                !ContainsData(MpPortableDataFormats.Text)) {
                 // ensure avalonia style text is in formats
-                SetData(text_f.Name, GetData(cefText_f.Name));
+                SetData(MpPortableDataFormats.Text, GetData(MpPortableDataFormats.CefText));
             }
 
             if(OperatingSystem.IsLinux()) {
                 // TODO this should only be for gnome based linux
 
-                var av_fileNames_f = MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvFileNames);
-                var gnomeFiles_f = MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.LinuxGnomeFiles);
-
-                if (DataFormatLookup.ContainsKey(av_fileNames_f) &&
-                    !DataFormatLookup.ContainsKey(gnomeFiles_f) && 
-                    GetData(av_fileNames_f.Name) is IEnumerable<string> files &&
+                if (ContainsData(MpPortableDataFormats.AvFileNames) &&
+                    !ContainsData(MpPortableDataFormats.LinuxGnomeFiles) && 
+                    GetData(MpPortableDataFormats.AvFileNames) is IEnumerable<string> files &&
                     string.Join(Environment.NewLine,files) is string av_files_str) {
                     // ensure cef style text is in formats
-                    SetData(gnomeFiles_f.Name, av_files_str);
+                    SetData(MpPortableDataFormats.LinuxGnomeFiles, av_files_str);
                 }
-                if (DataFormatLookup.ContainsKey(gnomeFiles_f) &&
-                    !DataFormatLookup.ContainsKey(av_fileNames_f) &&
-                    GetData(gnomeFiles_f.Name) is string gn_files_str &&
+                if (ContainsData(MpPortableDataFormats.LinuxGnomeFiles) &&
+                    !ContainsData(MpPortableDataFormats.AvFileNames) &&
+                    GetData(MpPortableDataFormats.LinuxGnomeFiles) is string gn_files_str &&
                     gn_files_str.Split(new string[]{Environment.NewLine},StringSplitOptions.RemoveEmptyEntries) is IEnumerable<string> gn_files
                     ) {
                     // ensure avalonia style text is in formats
-                    SetData(av_fileNames_f.Name, gn_files);
+                    SetData(MpPortableDataFormats.AvFileNames, gn_files);
                 }
             } else if(OperatingSystem.IsWindows()) {
                 if(ContainsData(MpPortableDataFormats.AvPNG) && 
@@ -119,6 +111,13 @@ namespace MonkeyPaste.Common.Avalonia {
 //#endif
                     
                 } 
+                if(ContainsData(MpPortableDataFormats.CefHtml) &&
+                    !ContainsData(MpPortableDataFormats.AvRtf_bytes) &&
+                    GetData(MpPortableDataFormats.CefHtml) is string htmlStr) {
+                    // TODO should check if content is csv here (or in another if?) and create rtf table 
+                    string rtf = htmlStr.ToContentRichText();
+                    SetData(MpPortableDataFormats.AvRtf_bytes, rtf.ToEncodedBytes());
+                }
             }
 
 

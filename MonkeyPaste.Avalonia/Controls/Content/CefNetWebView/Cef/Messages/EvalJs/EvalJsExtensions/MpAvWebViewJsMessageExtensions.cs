@@ -194,7 +194,7 @@ namespace MonkeyPaste.Avalonia {
 
             wv.DetachedFromVisualTree -= Wv_DetachedFromVisualTree;
 
-            Dispatcher.UIThread.Post(async () => {
+            Dispatcher.UIThread.Post(() => {
                 if (_webViewEvalJsLookup.Remove(wv, out var pendingEvalLookup)) {
                     MpConsole.WriteLine($"MpAvCefNetWebView w/ datacontext: '{wv.DataContext}' disposed with '{pendingEvalLookup.Count}' js evaluations pending: ");
                     pendingEvalLookup.ForEach(x => MpConsole.WriteLine($"Key: '{x.Key}' Script: '{x.Value}'"));

@@ -1,4 +1,4 @@
-﻿.common-template-toolbar {
+﻿.common-toolbar {
     display: flex;
     flex-wrap: nowrap;
     min-height: 40px;
@@ -12,9 +12,9 @@
     border-width: 0.5px 0 0 0;
 }
 
-    .common-template-toolbar > div,
-    .common-template-toolbar > textarea,
-    .common-template-toolbar > button {
+    .common-toolbar > div,
+    .common-toolbar > textarea,
+    .common-toolbar > button {
         display: inline-flex;
     }
 

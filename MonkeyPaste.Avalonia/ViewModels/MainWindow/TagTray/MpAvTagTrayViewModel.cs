@@ -424,7 +424,7 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
 
         public ICommand ToggleTileIsPinnedCommand => new MpCommand<object>(
-            async(args) => {
+            (args) => {
                 var ttvm = args as MpAvTagTileViewModel;
                 if(ttvm == null) {
                     return;

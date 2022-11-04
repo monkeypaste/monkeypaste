@@ -836,6 +836,12 @@ namespace MonkeyPaste.Avalonia {
                 if (IsBusy) {
                     return true;
                 }
+
+                var cv = GetContentView();
+                if(cv == null || !cv.IsViewLoaded) {
+                    return true;
+                }
+
                 if (DetectedImageObjectCollectionViewModel != null && DetectedImageObjectCollectionViewModel.IsAnyBusy) {
                     return true;
                 }
@@ -892,7 +898,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool CanEdit => IsSelected && IsTextItem;
 
-        public bool IsInitializing { get; private set; } = false;
 
         public bool IsContextMenuOpen { get; set; } = false;
 
@@ -1274,7 +1279,6 @@ namespace MonkeyPaste.Avalonia {
             //GetContentView().IsContentUnloaded = false;
 
             IsBusy = true;
-            IsInitializing = true;
 
 
             if (ci != null && MpAvPersistentClipTilePropertiesHelper.TryGetByPersistentSize_ById(ci.Id, out double uniqueWidth)) {
@@ -1350,7 +1354,6 @@ namespace MonkeyPaste.Avalonia {
                 IsContentReadOnly = false;
             }
 
-            IsInitializing = false;
             IsBusy = false;
         }
 
@@ -1402,13 +1405,20 @@ namespace MonkeyPaste.Avalonia {
                 cv.IsContentUnloaded = true;
             }
         }
+
+        private MpAvIContentView _contentView;
         public MpAvIContentView GetContentView() {
+            if(_contentView != null) {
+                return _contentView;
+            }
             var ctcv = MpAvClipTrayContainerView.Instance.GetVisualDescendants<MpAvClipTileContentView>().FirstOrDefault(x => x.DataContext == this);
             if (ctcv == null) {
-                Debugger.Break();
+                return null;
             }
-            return ctcv.ContentView;
+            _contentView = ctcv.ContentView;
+            return _contentView;
         }
+       
 
         private async Task<MpAvFileDataObjectItemViewModel> CreateFileItemViewModel(MpDataObjectItem dobjItem) {
             var fivm = new MpAvFileDataObjectItemViewModel(this);

@@ -535,7 +535,7 @@ function loadTemplates(isPasteRequest) {
 
     if (IsPastingTemplate) {
         if (isAnyTemplateRequireInput()) {
-            showPasteTemplateToolbar();
+            showPasteToolbar();
         } else {
             finishTemplatePaste();
         }

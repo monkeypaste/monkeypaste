@@ -10,14 +10,18 @@ function initMain_ext(initMsgStr_base64) {
 	if (initMsgObj && initMsgObj.isPlainHtmlConverter) {
 		initPlainHtmlConverter(initMsgObj.envName);
 		log('plainHtml converter initialized.');
-		return;
+	} else {
+		initMain(initMsgObj.envName);
 	}
 
-	let respMsg = {};
-	respMsg.status = initMain(initMsgObj.envName);
-	let resp = toBase64FromJsonObj(respMsg);
+	onInitComplete_ntf();
+	//let respMsg = {};
+	//respMsg.status = initMain(initMsgObj.envName);
 
-	return resp;
+
+	//let resp = toBase64FromJsonObj(respMsg);
+
+	//return resp;
 }
 
 function loadContent_ext(loadContentMsgStr_base64) {

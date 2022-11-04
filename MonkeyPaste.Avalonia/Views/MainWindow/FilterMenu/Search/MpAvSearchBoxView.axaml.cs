@@ -11,8 +11,6 @@ using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvSearchBoxView : MpAvUserControl<MpAvSearchBoxViewModel> {
-        private ContextMenu _searchByContextMenu;
-
         public MpAvSearchBoxView() {
             InitializeComponent();
 

@@ -85,6 +85,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpAvIContentView Implementation
+
+        public bool IsViewLoaded { get; set; } = false;
         public IControl Owner => this;
         public MpAvIContentDocument Document => this;
 

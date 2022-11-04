@@ -258,7 +258,7 @@ function disableReadOnly(fromHost = false) {
 	log('ReadOnly: DISABLED fromHost: ' + fromHost);
 }
 
-function enableSubSelection(fromHost = false, showUnderlines = true, showPasteToolbar = true) {
+function enableSubSelection(fromHost = false, showUnderlines = true, showPaste = true) {
 	if (isSubSelectionEnabled()) {
 		log('enableSubSelection ignored, already sub-selectable. fromHost: ' + fromHost);
 		return;
@@ -273,8 +273,8 @@ function enableSubSelection(fromHost = false, showUnderlines = true, showPasteTo
 	disableDragOverlay();
 	enableTemplateSubSelection();
 
-	if (showPasteToolbar) {
-		showPasteTemplateToolbar();
+	if (showPaste) {
+		showPasteToolbar();
 	}
 	updateAllElements();
 

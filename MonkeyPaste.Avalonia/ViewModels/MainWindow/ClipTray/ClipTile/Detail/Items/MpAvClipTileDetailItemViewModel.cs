@@ -98,7 +98,7 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task IntializeAsync() {
             //IsBusy = true;
-            //await Task.Delay(1);
+            await Task.Delay(1);
             //Reset();
             UpdateDetailTextCommand.Execute(null);
             //IsBusy = false;

@@ -22,9 +22,6 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public static class MpAvCefNetWebViewExtension {
         #region Private Variables
-
-        private static readonly double _EDITOR_DEFAULT_WIDTH = 1130;
-
         #endregion
 
         static MpAvCefNetWebViewExtension() {
@@ -34,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
             IsDevToolsVisibleProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsDevToolsVisibleChanged(x, y));
             IsHostSelectedProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsHostSelectedChanged(x, y));
             IsFindAndReplaceVisibleProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsFindAndReplaceVisibleChanged(x, y));
-            HtmlDataProperty.Changed.AddClassHandler<Control>((x, y) => HandleHtmlDataChanged(x, y));
+            CopyItemIdProperty.Changed.AddClassHandler<Control>((x, y) => HandleCopyItemIdChanged(x, y));
         }
 
         #region Properties
@@ -73,7 +70,7 @@ namespace MonkeyPaste.Avalonia {
             if (e.NewValue is bool isFindReplaceVisible &&
                element is MpAvCefNetWebView wv &&
                wv.DataContext is MpAvClipTileViewModel ctvm &&
-               wv.IsEditorInitialized) {
+               wv.IsContentLoaded) {
                 if(isFindReplaceVisible) {
                     wv.ExecuteJavascript($"showFindAndReplace_ext()");
                 } else {
@@ -100,7 +97,7 @@ namespace MonkeyPaste.Avalonia {
             if (e.NewValue is bool isHostSelected &&
                element is MpAvCefNetWebView wv &&
                wv.DataContext is MpAvClipTileViewModel ctvm &&
-               wv.IsEditorInitialized) {
+               wv.IsContentLoaded) {
                 var msg = new MpQuillIsHostSelectedChangedMessage() {
                     isHostSelected = isHostSelected
                 };
@@ -130,7 +127,7 @@ namespace MonkeyPaste.Avalonia {
             if (e.NewValue is bool isReadOnly &&
                 element is MpAvCefNetWebView wv && 
                 wv.DataContext is MpAvClipTileViewModel ctvm &&
-                wv.IsEditorInitialized //&&
+                wv.IsContentLoaded //&&
                // !wv.BindingContext.IsReloading
                 ) {
                 Control resizeControl = null;
@@ -141,13 +138,11 @@ namespace MonkeyPaste.Avalonia {
                 // only signal read only change after webview is loaded
                 if (isReadOnly) {
                     MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.ReadOnlyWidth, ctvm.ReadOnlyHeight, 3.0d);
-                    ctvm.IsBusy = true;
                     string enableReadOnlyRespStr = await wv.EvaluateJavascriptAsync("enableReadOnly_ext()");
                     var qrm = MpJsonObject.DeserializeBase64Object<MpQuillEnableReadOnlyResponseMessage>(enableReadOnlyRespStr);
                     if (ctvm.CopyItemData != qrm.itemData) {
                         ctvm.CopyItemData = qrm.itemData;
                     }
-                    ctvm.IsBusy = false;
                 } else {
                     MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.EditableWidth, ctvm.EditableHeight, 3.0d);
                     wv.ExecuteJavascript($"disableReadOnly_ext()");
@@ -177,7 +172,7 @@ namespace MonkeyPaste.Avalonia {
             if (e.NewValue is bool isSubSelectionEnabled &&
                 element is MpAvCefNetWebView wv &&
                 GetIsContentReadOnly(wv) &&
-                wv.IsEditorInitialized &&
+                wv.IsContentLoaded &&
                 wv.DataContext is MpAvClipTileViewModel ctvm &&
                 !ctvm.IsReloading) {
                 if (isSubSelectionEnabled) {
@@ -229,39 +224,36 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-        #region HtmlData AvaloniaProperty
+        #region CopyItemId AvaloniaProperty
 
-        public static string GetHtmlData(AvaloniaObject obj) {
-            return obj.GetValue(HtmlDataProperty);
+        public static int GetCopyItemId(AvaloniaObject obj) {
+            return obj.GetValue(CopyItemIdProperty);
         }
 
-        public static void SetHtmlData(AvaloniaObject obj, string value) {
-            obj.SetValue(HtmlDataProperty, value);
+        public static void SetCopyItemId(AvaloniaObject obj, int value) {
+            obj.SetValue(CopyItemIdProperty, value);
         }
-
-        public static readonly AttachedProperty<string> HtmlDataProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, string>(
-                "HtmlData",
-                string.Empty,
+        public static readonly AttachedProperty<int> CopyItemIdProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, int>(
+                "CopyItemId",
+                0,
                 false);
 
-        private static void HandleHtmlDataChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+        private static void HandleCopyItemIdChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
             if (element is MpAvCefNetWebView wv &&
                 wv.DataContext is MpAvClipTileViewModel ctvm &&
-                //!ctvm.IsWaitingForDomLoad &&
                 !ctvm.IsReloading) {
                 Dispatcher.UIThread.Post(async () => {
-                    //ctvm.IsWaitingForDomLoad = true;
-                    while (!wv.IsEditorInitialized) {
-                        await Task.Delay(100);
-                    }
-                    while (ctvm.IsAnyBusy) {
-                        await Task.Delay(100);
-                    }
+                    // NOTE IsContentLoaded is set true in binding response (notifyLoadComplete) after editor loadContent()
+                    wv.IsContentLoaded = false;
+
+                    
                     if (ctvm.IsPlaceholder && !ctvm.IsPinned) {
                         return;
                     }
-                    //ctvm.IsBusy = true;
+                    while (!wv.IsEditorInitialized) {
+                        await Task.Delay(100);
+                    }
 
                     var loadContentMsg = new MpQuillLoadContentRequestMessage() {
                         contentHandle = ctvm.PublicHandle,
@@ -327,8 +319,6 @@ namespace MonkeyPaste.Avalonia {
         private static void Wv_BrowserCreated(object sender, EventArgs e) {
             if (sender is MpAvCefNetWebView wv &&
                 wv.DataContext is MpAvClipTileViewModel ctvm) {
-                wv.IsEditorInitialized = false;
-
                 wv.Navigated += Wv_Navigated;
                 wv.Navigate(MpAvClipTrayViewModel.EditorPath);
             }
@@ -344,17 +334,7 @@ namespace MonkeyPaste.Avalonia {
                     while (!wv.IsDomLoaded) {
                         await Task.Delay(100);
                     }
-
-                    //while (ctvm.IsAnyBusy) {
-                    //    await Task.Delay(100);
-                    //}
-                    //if (ctvm.IsPlaceholder && !ctvm.IsPinned) {
-                    //    return;
-                    //}
-
-                    //ctvm.IsBusy = true;
                     if (string.IsNullOrEmpty(ctvm.CachedState)) {
-
                         var req = new MpQuillInitMainRequestMessage() {
                             envName = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
                             isPlainHtmlConverter = false
@@ -365,16 +345,6 @@ namespace MonkeyPaste.Avalonia {
 
                         ctvm.CachedState = null;
                     }
-                    wv.IsEditorInitialized = true;
-
-                    //var respStr = await wv.EvaluateJavascriptAsync($"initMain_ext('{req.SerializeJsonObjectToBase64()}')");
-                    //var resp = MpJsonObject.DeserializeBase64Object<MpQuillInitMainResponseMessage>(respStr);
-                    //if (resp.mainStatus == "Success") {
-                    //    wv.IsEditorInitialized = true;
-                    //    return;
-                    //}
-                    //// whats the status?
-                    //Debugger.Break();
                 });
             }
         }
@@ -517,55 +487,5 @@ namespace MonkeyPaste.Avalonia {
             }
             return cv;
         }
-        private static string ProcessEnableReadOnlyResponse(Control control, string enableReadOnlyResponse) {
-            if (control.DataContext is MpAvClipTileViewModel ctvm) {
-                MpConsole.WriteLine($"Tile content item '{ctvm.CopyItemTitle}' is readonly");
-
-                var qrm = MpJsonObject.DeserializeBase64Object<MpQuillEnableReadOnlyResponseMessage>(enableReadOnlyResponse);
-
-                if (ctvm.CopyItemData != qrm.itemData) {
-
-                    ctvm.CopyItemData = qrm.itemData;
-                }
-
-                var ctv = control.GetVisualAncestor<MpAvClipTileView>();
-                if (ctv != null) {
-                    if (GetReadOnlyWidth(control) < MpAvClipTrayViewModel.Instance.DefaultItemWidth) {
-                        SetReadOnlyWidth(control, MpAvClipTrayViewModel.Instance.DefaultItemWidth);
-                    }
-                    double deltaWidth = GetReadOnlyWidth(control) - ctv.Bounds.Width;
-
-                    var resizeBorder = ctv.FindControl<Border>("ClipTileResizeBorder");
-                    MpAvResizeExtension.ResizeByDelta(resizeBorder, deltaWidth, 0, false);
-                }
-
-                //MpMasterTemplateModelCollectionViewModel.Instance
-                //    .UpdateAsync(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids)
-                //    .FireAndForgetSafeAsync(ctvm);
-
-                return qrm.itemData;
-            }
-            return null;
-        }
-        private static void ProcessDisableReadOnlyResponse(Control control, string disableReadOnlyResponse) {
-            if (control.DataContext is MpAvClipTileViewModel civm) {
-                MpConsole.WriteLine($"Tile content item '{civm.CopyItemTitle}' is editable");
-
-                var qrm = MpJsonObject.DeserializeBase64Object<MpQuillDisableReadOnlyResponseMessage>(disableReadOnlyResponse);
-
-                var ctv = control.GetVisualAncestor<MpAvClipTileView>();
-                if (ctv != null) {
-                    SetReadOnlyWidth(control, ctv.Bounds.Width);
-
-                    double deltaWidth = _EDITOR_DEFAULT_WIDTH - ctv.Bounds.Width;
-                    if (deltaWidth > 0) {
-                        var resizeBorder = ctv.FindControl<Border>("ClipTileResizeBorder");
-                        MpAvResizeExtension.ResizeByDelta(resizeBorder, deltaWidth, 0, false);
-                    }
-                }
-            }
-        }
-
-
     }
 }

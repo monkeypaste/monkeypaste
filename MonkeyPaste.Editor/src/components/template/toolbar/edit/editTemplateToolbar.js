@@ -175,7 +175,7 @@ function updateEditTemplateToolbarSizesAndPositions() {
     let ett = getEditTemplateToolbarContainerElement();
     if (isShowingPasteTemplateToolbar()) {
         //ett.classList.remove('bottom-align');
-        let pttb_h = getPasteTemplateToolbarContainerElement().getBoundingClientRect().height;
+        let pttb_h = getPasteToolbarContainerElement().getBoundingClientRect().height;
         ett.style.bottom = pttb_h + 'px';
     } else {
         //ett.classList.add('bottom-align');

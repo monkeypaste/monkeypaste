@@ -180,7 +180,8 @@ namespace MonkeyPaste.Avalonia {
             _platformItems.AddRange(
                 new List<MpBootstrappedItemViewModel>() {
                     new MpBootstrappedItemViewModel(this,typeof(MpAvHtmlClipboardData)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvSystemTray))
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvSystemTray)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvExternalDropWindow))
                 });
         }
         protected override async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {

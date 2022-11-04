@@ -5,17 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-
 using System.Windows.Input;
-
-
 using MonkeyPaste;
 using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
 using System.Diagnostics;
-
-
-
 using System.IO;
 
 
@@ -85,6 +79,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+
         public string HandledFormatIconResourceKey {
             get {
                 return MpPlatformWrapper.Services.PlatformResource.GetResource("AppImage") as string;
@@ -111,7 +106,6 @@ namespace MonkeyPaste.Avalonia {
         //public bool IsAnyEditingParameters => Items.Any(x => x.IsEditingParameters);
 
         public bool IsHovering { get; set; } = false;
-
 
         public string HandledFormat {
             get {
@@ -311,6 +305,9 @@ namespace MonkeyPaste.Avalonia {
             return pdo.ContainsData(HandledFormat);
         }
 
+        public override string ToString() {
+            return $"Format: {Title} Preset: {(SelectedItem == null ? "None" : SelectedItem.Label)} Enabled: {(SelectedItem == null ? "Null" : SelectedItem.IsEnabled)}";
+        }
         #endregion
 
         #region Protected Methods

@@ -136,28 +136,27 @@ namespace MonkeyPaste.Avalonia {
                     inputTextFormat = "html";
                     itemType = MpCopyItemType.Text;
                     itemData = htmlStr;
-                    //itemData = itemData.ToQuillText();
-                } else if (mpdo.ContainsData(MpPortableDataFormats.Text)) {
+                } else if (mpdo.ContainsData(MpPortableDataFormats.Text) &&
+                            mpdo.GetData(MpPortableDataFormats.Text) is string textStr) {
 
                     // TEXT
                     inputTextFormat = "text";
                     itemType = MpCopyItemType.Text;
-                    itemData = mpdo.GetData(MpPortableDataFormats.Text).ToString().ToContentRichText();
-                    //itemData = itemData.ToQuillText();
-                } else if (mpdo.ContainsData(MpPortableDataFormats.Unicode)) {
+                    itemData = textStr;
+                } else if (mpdo.ContainsData(MpPortableDataFormats.Unicode) &&
+                            mpdo.GetData(MpPortableDataFormats.Text) is string unicodeStr) {
 
                     // UNICODE
                     inputTextFormat = "text";
                     itemType = MpCopyItemType.Text;
-                    itemData = mpdo.GetData(MpPortableDataFormats.Unicode).ToString().ToContentRichText();
-                    //itemData = itemData.ToQuillText();
-                } else if (mpdo.ContainsData(MpPortableDataFormats.OemText)) {
+                    itemData = unicodeStr;
+                } else if (mpdo.ContainsData(MpPortableDataFormats.OemText) &&
+                            mpdo.GetData(MpPortableDataFormats.Text) is string oemStr) {
 
                     // OEM TEXT
                     inputTextFormat = "text";
                     itemType = MpCopyItemType.Text;
-                    itemData = mpdo.GetData(MpPortableDataFormats.OemText).ToString().ToContentRichText();
-                    //itemData = itemData.ToQuillText();
+                    itemData = oemStr;
                 } else {
                     MpConsole.WriteTraceLine("clipboard data is not known format");
                     return null;

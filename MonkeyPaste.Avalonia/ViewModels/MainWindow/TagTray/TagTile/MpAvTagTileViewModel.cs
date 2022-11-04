@@ -45,7 +45,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpITreeItemViewModel Implementation
 
-        public bool IsExpanded { get; set; }
+        //public bool IsExpanded { get; set; }
         MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem => ParentTagViewModel;
         IEnumerable<MpITreeItemViewModel> MpITreeItemViewModel.Children => SortedItems;
         #endregion

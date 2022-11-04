@@ -61,7 +61,32 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Appearance
+
+
+        public string DropItemTitleHexColor {
+            get {
+                if (!IsEnabled) {
+                    return MpSystemColors.Red;
+                }
+                return MpSystemColors.limegreen;
+            }
+        }
+
+        public string DropItemBorderHexColor {
+            get {
+                if (IsDropItemHovering) {
+                    return MpSystemColors.Yellow;
+                }
+                return MpSystemColors.dimgray;
+            }
+        }
+        #endregion
+
         #region State
+
+
+        public bool IsDropItemHovering { get; set; } = false;
         public bool IsLabelTextBoxFocused { get; set; } = false;
         public bool IsLabelReadOnly { get; set; } = true;
 
@@ -80,7 +105,7 @@ namespace MonkeyPaste.Avalonia {
                 if (Preset == null || Parent == null) {
                     return string.Empty;
                 }
-                return $"{Parent.Title}/{Label}";
+                return $"{Parent.Title} - {Label}";
             }
         }
 
@@ -358,6 +383,8 @@ namespace MonkeyPaste.Avalonia {
                     if (CanWrite) {
                         Parent.Parent.Parent.ToggleFormatPresetIsWriteEnabledCommand.Execute(this);
                     }
+                    OnPropertyChanged(nameof(DropItemBorderHexColor));
+                    OnPropertyChanged(nameof(DropItemTitleHexColor));
                     break;
                 case nameof(HasModelChanged):
                     if(HasModelChanged && IsAllValid) {
@@ -365,6 +392,13 @@ namespace MonkeyPaste.Avalonia {
                             await Preset.WriteToDatabaseAsync();
                             HasModelChanged = false;
                         }).FireAndForgetSafeAsync(this);
+                    }
+                    break;
+
+                case nameof(IsDropItemHovering):
+                    if (IsDropItemHovering) {
+                        // on mouse enter toggle current preset enabled/disabled
+                        IsEnabled = !IsEnabled;
                     }
                     break;
             }

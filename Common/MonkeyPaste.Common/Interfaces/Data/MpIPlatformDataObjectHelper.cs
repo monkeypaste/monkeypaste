@@ -13,5 +13,7 @@ namespace MonkeyPaste.Common {
         Task<object> WriteDragDropDataObject(MpPortableDataObject portableObj);
         Task SetPlatformClipboardAsync(MpPortableDataObject portableObj);
         Task<MpPortableDataObject> GetPlatformClipboardDataObjectAsync();
+
+        Task UpdateDragDropDataObjectAsync(MpPortableDataObject source, MpPortableDataObject target);
     }
 }

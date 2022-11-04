@@ -23,12 +23,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private
 
-       
+
         #endregion
 
         #region Properties
 
         #region View Models
+
+        public IEnumerable<MpAvHandledClipboardFormatViewModel> Writers => Items.Where(x => x.IsWriter);
+        public IEnumerable<MpAvHandledClipboardFormatViewModel> Readers => Items.Where(x => !x.IsWriter);
 
         #endregion
 

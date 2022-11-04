@@ -1,18 +1,4 @@
-﻿.paste-template-toolbar {
-    background-color: teal;
-}
-    .paste-template-toolbar > button {
-        background-color: dodgerblue;
-        border: solid 2px #67c5ff;
-        color: white;
-    }
-
-#templatePasteValueTextArea {
-    width: 45%;
-}
-
-
-#pasteTemplateToolbarMenuSelectorDiv {
+﻿#pasteTemplateToolbarMenuSelectorDiv {
     width: 15%;
     align-items: center;
     font-family: Arial;
@@ -23,10 +9,11 @@
     border-radius: 3px;
     /*transition: 0.4s;*/
 }
+
     #pasteTemplateToolbarMenuSelectorDiv.disabled {
         /*user-select: none;*/
-        
     }
+
     #pasteTemplateToolbarMenuSelectorDiv:hover {
         border: 1.25px solid yellow;
         cursor: pointer;
@@ -45,6 +32,7 @@
     border: 6px solid transparent;
     border-color: black transparent transparent transparent;
 }
+
     #pasteTemplateToolbarMenuSelectorArrowDiv.active {
         border-color: transparent transparent black transparent;
         transform: translate(0,-3px) scaleY(1);
@@ -54,6 +42,7 @@
     display: inline-flex;
     align-items: center;
 }
+
     .paste-template-option-div:not(.no-input-template):hover {
         cursor: pointer;
     }
@@ -73,7 +62,7 @@
 
 .paste-template-option-div.no-input-template > .paste-template-option-label {
     font-style: italic;
-    color: silver;    
+    color: silver;
 }
 
 #pasteOptionsDiv {
@@ -101,12 +90,3 @@
     #pasteOptionsDiv .paste-template-option-div:not(.no-input-template):hover {
         background-color: silver;
     }
-
-#pasteTemplateButton {
-    margin-left: 10px;
-    margin-right: 10px;
-}
-
-#pasteTemplateButton span {
-    margin-left: 5px;
-}

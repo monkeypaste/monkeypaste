@@ -51,9 +51,18 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public List<MpAvClipboardFormatPresetViewModel> AllPresets {
+        public IEnumerable<MpAvClipboardFormatPresetViewModel> AllPresets => Items.SelectMany(x => x.Items.SelectMany(y => y.Items));
+
+        public IEnumerable<MpAvClipboardFormatPresetViewModel> AllSelectedPresets => AllPresets.Where(x => x.IsSelected);
+
+        public IEnumerable<MpAvClipboardFormatPresetViewModel> AllAvailableWriterPresets {
             get {
-                return Items.SelectMany(x => x.Items.SelectMany(y => y.Items)).ToList();
+                var aawpl = new List<MpAvClipboardFormatPresetViewModel>();
+                foreach(var handlerItem in Items) {
+                    foreach(var writerFormat in handlerItem.Writers) {
+                        yield return writerFormat.Items.OrderByDescending(x => x.LastSelectedDateTime).First();
+                    }
+                }
             }
         }
 
@@ -291,10 +300,18 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
+        public async Task UpdateDragDropDataObjectAsync(MpPortableDataObject source, MpPortableDataObject target) {
+            // NOTE this is called during a drag drop when user toggles a format preset
+            // source should be the initial output of ContentView dataObject and should have the highest fidelity of data on it for conversions
+            // NOTE DO NOT re-instantiate target haven't tested but I imagine the reference must persist that which was given to .DoDragDrop in StartDragging
+
+
+        }
+
         public async Task<MpAvDataObject> ReadClipboardOrDropObjectAsync(object forcedDataObject = null) {
             // NOTE forcedDataObject is used to read drag/drop, when null clipboard is read
-            
-            var mpdo = new MpAvDataObject();
+            MpAvDataObject mpdo = new MpAvDataObject();
+
             
             //only iterate through actual handlers 
             var handlers = EnabledFormats.Where(x => x.CanRead)

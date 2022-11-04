@@ -1,0 +1,57 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="local:MpAvClipboardFormatPresetViewModel"
+                       x:DataType="local:MpAvClipboardFormatPresetViewModel"
+                       x:CompileBindings="False"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvDropFormatItemView">
+    <Border HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Height="65"
+            Background="Transparent"
+            CornerRadius="5"
+            BorderThickness="1"
+            local:MpAvIsHoveringExtension.IsEnabled="True"
+            local:MpAvIsHoveringExtension.IsHovering="{Binding IsDropItemHovering, Mode=TwoWay}"
+            BorderBrush="{Binding DropItemBorderHexColor, Converter={StaticResource StringHexToBrushConverter}}">
+        <Grid HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              RowDefinitions="15,40">
+            <Grid.Styles>
+                <Style Selector="TextBlock"
+                       x:DataType="local:MpAvClipboardFormatPresetViewModel">
+                    <Setter Property="TextAlignment"
+                            Value="Center" />
+                    <Setter Property="FontSize"
+                            Value="12" />
+                    <Setter Property="Height"
+                            Value="15" />
+                    <Setter Property="HorizontalAlignment"
+                            Value="Stretch" />
+                    <Setter Property="Background"
+                            Value="Transparent" />
+                </Style>
+            </Grid.Styles>
+            <Image Grid.Row="0"
+                   Width="30"
+                   Height="30"
+                   Margin="5"
+                   Stretch="Fill"
+                   Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+
+            <TextBlock Grid.Row="1"
+                       Foreground="{Binding DropItemTitleHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                       Text="{Binding Parent.Title}" />
+            <!--<TextBlock Grid.Row="1"
+
+                       Foreground="{Binding DropItemTitleHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                       Text="{Binding Label}" />-->
+        </Grid>
+    </Border>
+</local:MpAvUserControl>

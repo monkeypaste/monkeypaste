@@ -1021,6 +1021,12 @@
     <Resource Include="Assets\Icons\monkey.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Views\ExternalDropWindow\DropFormatItemView\MpAvDropFormatItemView.axaml.cs">
+      <DependentUpon>MpAvDropFormatItemView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ExternalDropWindow\MpAvExternalDropWindow.axaml.cs">
+      <DependentUpon>MpAvExternalDropWindow.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\Items\MpAvClipTileDetailItemTipView.axaml.cs">
       <DependentUpon>MpAvClipTileDetailItemTipView.axaml</DependentUpon>
     </Compile>
@@ -1032,9 +1038,6 @@
     </Compile>
     <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\MpAvPinTrayView.axaml.cs">
       <DependentUpon>MpAvPinTrayView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\Overlays\MpAvPinTrayDropPopoutOverlayView.axaml.cs">
-      <DependentUpon>MpAvPinTrayDropPopoutOverlayView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\MainWindow\FilterMenu\MpAvFilterMenuView.axaml.cs">
       <DependentUpon>MpAvFilterMenuView.axaml</DependentUpon>
@@ -1086,11 +1089,6 @@
     <AvaloniaResource Include="Assets\Cursors\hand_open.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Avalonia.DragDrop">
-      <HintPath>..\..\..\..\Desktop\DotNetExamples\Avalonia.DragDrop\src\Avalonia.DragDrop\bin\Debug\net5.0\Avalonia.DragDrop.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="call $(ProjectDir)scripts\kill_mpav_processes.bat" Condition="'$(BuildOs)' == 'WINDOWS'" />
