@@ -124,6 +124,9 @@ namespace MonkeyPaste.Avalonia {
             if(_isCheckingClipboard) {
                 Debugger.Break();
             }
+            //while(MpAvClipboardHandlerCollectionViewModel.Instance.IsBusy) {
+            //    await Task.Delay(100);
+            //}
             _isCheckingClipboard = true;
             MpPortableDataObject ndo = await MpAvClipboardHandlerCollectionViewModel.Instance.ReadClipboardOrDropObjectAsync();
             _isCheckingClipboard = false;

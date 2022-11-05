@@ -688,9 +688,9 @@ namespace MonkeyPaste.Avalonia {
                         // only creat preset values in db, they will then be picked up when the preset vm is initialized
                         var aipv = await MpPluginPresetParameterValue.CreateAsync(
                             presetId: presetModel.Id, 
-                            paramEnumId: presetValueModel.paramId,
+                            paramName: presetValueModel.paramName,
                             value: presetValueModel.value
-                            //format: AnalyzerPluginFormat.parameters.FirstOrDefault(x => x.paramId == presetValueModel.paramId)
+                            //format: AnalyzerPluginFormat.parameters.FirstOrDefault(x => x.paramName == presetValueModel.paramName)
                             );                        
                     }
 

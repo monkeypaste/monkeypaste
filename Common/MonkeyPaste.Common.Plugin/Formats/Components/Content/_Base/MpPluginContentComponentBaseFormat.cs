@@ -1,4 +1,4 @@
-﻿namespace MonkeyPaste.Common.Plugin.Formats.Components.Content.Base {
+﻿namespace MonkeyPaste.Common.Plugin {
 
     public class MpPluginInputFormat : MpJsonObject {
         public bool text { get; set; } = false;

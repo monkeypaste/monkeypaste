@@ -891,9 +891,9 @@ namespace MonkeyPaste {
         }
 
 
-        public static async Task<MpPluginPresetParameterValue> GetPluginPresetValueAsync(int presetid, int paramEnumId) {
-            string query = $"select * from MpPluginPresetParameterValue where fk_MpPluginPresetId=? and ParamId=?";
-            var result = await MpDb.QueryAsync<MpPluginPresetParameterValue>(query, presetid, paramEnumId);
+        public static async Task<MpPluginPresetParameterValue> GetPluginPresetValueAsync(int presetId, string paramName) {
+            string query = $"select * from MpPluginPresetParameterValue where fk_MpPluginPresetId=? and ParamName=?";
+            var result = await MpDb.QueryAsync<MpPluginPresetParameterValue>(query, presetId, paramName);
             if (result == null || result.Count == 0) {
                 return null;
             }

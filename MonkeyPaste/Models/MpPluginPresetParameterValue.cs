@@ -8,6 +8,7 @@ namespace MonkeyPaste {
     public class MpPluginPresetParameterValue : 
         MpDbModelBase, 
         MpIClonableDbModel<MpPluginPresetParameterValue> {
+
         #region Columns
         [Column("pk_MpPluginPresetParameterValueId")]
         [PrimaryKey, AutoIncrement]
@@ -19,7 +20,7 @@ namespace MonkeyPaste {
         [Column("fk_MpPluginPresetId")]
         public int PluginPresetId { get; set; }
 
-        public int ParamId { get; set; }
+        public string ParamName { get; set; }
 
         public string Value { get; set; } = string.Empty;
 
@@ -40,31 +41,28 @@ namespace MonkeyPaste {
             }
         }
 
-        //[Ignore]
-        //public MpPluginParameterFormat ParameterFormat { get; set; }
-
         #endregion
 
         public static async Task<MpPluginPresetParameterValue> CreateAsync(
             int presetId = 0, 
-            int paramEnumId = 0, 
+            string paramName = null,
             string value = ""
             //MpPluginParameterFormat format = null
             ) {
             if (presetId == 0) {
                 throw new Exception("Preset Value must be associated with a preset and parameter");
             }
-            //if(format == null) {
-            //    throw new Exception("Must have format");
-            //}
+            if(string.IsNullOrEmpty(paramName)) {
+                throw new Exception("ParamName must cannot be null or empty");
+            }
 
-            var dupItem = await MpDataModelProvider.GetPluginPresetValueAsync(presetId, paramEnumId);
+            var dupItem = await MpDataModelProvider.GetPluginPresetValueAsync(presetId, paramName);
             if (dupItem != null) {
-                MpConsole.WriteLine($"Updating preset Id{presetId} for {paramEnumId}");
+                MpConsole.WriteLine($"Updating preset Id{presetId} for {paramName}");
 
                 dupItem = await MpDataModelProvider.GetItemAsync<MpPluginPresetParameterValue>(dupItem.Id);
                 dupItem.PluginPresetId = presetId;
-                dupItem.ParamId = paramEnumId;
+                dupItem.ParamName = paramName;
                 dupItem.Value = value;
                 //dupItem.ParameterFormat = format;
                 await dupItem.WriteToDatabaseAsync();
@@ -75,7 +73,7 @@ namespace MonkeyPaste {
                 PluginPresetParameterValueGuid = System.Guid.NewGuid(),
                 //ParameterFormat = format,
                 PluginPresetId = presetId,
-                ParamId = paramEnumId,
+                ParamName = paramName,
                 Value = value
             };
 
@@ -92,7 +90,7 @@ namespace MonkeyPaste {
             var cppv = new MpPluginPresetParameterValue() {
                 PluginPresetParameterValueGuid = System.Guid.NewGuid(),
                 PluginPresetId = this.PluginPresetId,
-                ParamId = this.ParamId,
+                ParamName = this.ParamName,
                 Value = this.Value,
                 //ParameterFormat = this.ParameterFormat
             };

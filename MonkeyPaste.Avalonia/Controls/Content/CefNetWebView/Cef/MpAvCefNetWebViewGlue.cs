@@ -109,6 +109,17 @@ namespace MonkeyPaste.Avalonia {
                     allowedEffects = DragDropEffects.Move;
                 }
                 SourceDataObject = await wv.Document.GetDataObjectAsync(false, false);
+                if(SourceDataObject == null) {
+                    if(ctvm != null) {
+                        ctvm.IsTileDragging = false;
+                    }
+                    // NOTE i think this occurs because of a bug when wv is recycled 
+                    MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= modKeyUpOrDownHandler;
+                    MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= modKeyUpOrDownHandler;
+                    wv.PointerMoved -= pointer_move_handler;
+                    allowedOps = CefDragOperationsMask.None;
+                    return;
+                }
 
                 ctvm.IsTileDragging = await SourceDataObject.ContainsInternalContentItem_safe(drag_lock);
 

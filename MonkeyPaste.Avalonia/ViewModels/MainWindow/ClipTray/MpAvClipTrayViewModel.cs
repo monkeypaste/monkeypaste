@@ -2901,7 +2901,7 @@ namespace MonkeyPaste.Avalonia {
                     } else {
                         nctvm = await CreateClipTileViewModel(ci);
                     }
-                    while (nctvm.IsAnyBusy) {
+                    while (nctvm.IsBusy) {
                         await Task.Delay(100);
                     }
                     ToggleTileIsPinnedCommand.Execute(nctvm);

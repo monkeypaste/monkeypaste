@@ -89,7 +89,7 @@ namespace MonkeyPaste.Avalonia {
                 //        return MpPlatformWrapper.Services.PlatformResource.GetResource("ImageIcon") as string;
                 //    case MpClipboardFormatType.Html:
                 //        return MpPlatformWrapper.Services.PlatformResource.GetResource("HtmlIcon") as string;
-                //    case MpClipboardFormatType.Csv:
+                //    case MpClipboardFormatType.AvCsv:
                 //        return MpPlatformWrapper.Services.PlatformResource.GetResource("CsvIcon") as string;
                 //    case MpClipboardFormatType.FileDrop:
                 //        return MpPlatformWrapper.Services.PlatformResource.GetResource("CsvIcon") as string;
@@ -477,7 +477,7 @@ namespace MonkeyPaste.Avalonia {
         private async Task<List<MpPluginPreset>> ResetPresetsAsync(List<MpPluginPreset> presets = null) {
             // NOTE Reseting may not be necessary in release, honestly don't remember why I do in the first place
             // I think its for debugging parameter lifecycle so keep for now..
-            // avoiding changing paramId to string but I think it may aid plugin scaling and this reseting thing so just
+            // avoiding changing paramName to string but I think it may aid plugin scaling and this reseting thing so just
             // am just trying to make what sense I can of it when re-encounter
 
             //if manifest has been modified

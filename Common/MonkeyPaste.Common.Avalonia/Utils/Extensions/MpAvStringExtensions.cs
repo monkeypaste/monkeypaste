@@ -64,11 +64,9 @@ namespace MonkeyPaste.Common.Avalonia {
             return text;
         }
         public static string ToRichHtmlText(this string str, string strFormat) {
-            if(str.IsStringRichText()) {
-#if WINDOWS
+            if(str.IsStringRichText() && OperatingSystem.IsWindows()) {
                 string qhtml = MonkeyPaste.Common.Wpf.MpWpfRtfToHtmlConverter.ConvertFormatToHtml(str, strFormat);
                 return qhtml;
-#endif
             }  else if(str.IsStringCsv()) {
                 // TODO create quill tables here
 
@@ -77,16 +75,11 @@ namespace MonkeyPaste.Common.Avalonia {
             return str;
         }
 
-        public static string ToRichText(this string str) {
-            return str;
-        }
         public static string ToContentRichText(this string str) {
-#if WINDOWS
-            if(str.IsStringRichHtmlText()) {
+            if(str.IsStringRichHtmlText() && OperatingSystem.IsWindows()) {
                 string rtf = MpWpfHtmlToRtfConverter.ConvertQuillHtmlToRtf(str);
                 return rtf;
             }
-#endif
             return str;
         }
         public static string ToRichHtmlTable(this string csvStr, MpCsvFormatProperties csvProps = null) {

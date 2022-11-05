@@ -8,8 +8,6 @@ namespace MonkeyPaste {
     public class MpUserActionNotificationViewModel : MpNotificationViewModelBase {
         #region Private Variables
 
-        private Action<object> _retryAction;
-        private object _retryActionObj;
 
 
         #endregion
@@ -39,9 +37,40 @@ namespace MonkeyPaste {
 
         #region Model
 
-        public object FixCommandArgs { get; set; }
+        public object FixCommandArgs { 
+            get {
+                if(NotificationFormat == null) {
+                    return null;
+                }
+                return NotificationFormat.FixCommandArgs;
+            }
+        }
 
-        public ICommand FixCommand { get; set; }
+        public ICommand FixCommand {
+            get {
+                if (NotificationFormat == null) {
+                    return null;
+                }
+                return NotificationFormat.FixCommand;
+            }
+        }
+
+        public Action<object> RetryAction {
+            get {
+                if (NotificationFormat == null) {
+                    return null;
+                }
+                return NotificationFormat.RetryAction;
+            }
+        }
+        public object RetryActionObj {
+            get {
+                if (NotificationFormat == null) {
+                    return null;
+                }
+                return NotificationFormat.RetryActionObj;
+            }
+        }
         #endregion
 
         #endregion
@@ -53,7 +82,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-        public override async Task InitializeAsync(MpNotificationFormat nf, object nfArgs) {
+        public override async Task InitializeAsync(MpNotificationFormat nf) {
             IsBusy = true;
             if(string.IsNullOrEmpty(nf.IconSourceStr)) {
                 if(IsErrorNotification) {
@@ -64,20 +93,8 @@ namespace MonkeyPaste {
                     nf.IconSourceStr = MpBase64Images.QuestionMark;
                 }
             }
-            await base.InitializeAsync(nf, nfArgs);
+            await base.InitializeAsync(nf);
 
-            if(nfArgs is Object[] argParts) {
-                if(argParts.Length > 0) {
-                    if (argParts[0] is Object[] retryParts) {
-                        _retryAction = retryParts[0] as Action<object>;
-                        _retryActionObj = retryParts[1];
-                    }
-                    if (argParts[1] is object[] fixParts) {
-                        FixCommand = fixParts[0] as ICommand;
-                        FixCommandArgs = fixParts[1];
-                    }
-                }
-            }
             switch(ButtonsType) {
                 case MpNotificationButtonsType.YesNoCancel:
                     ShowYesButton = true;
@@ -114,14 +131,14 @@ namespace MonkeyPaste {
                             await Task.Delay(100);
                         }
                         HideNotification();
-                        _retryAction?.Invoke(_retryActionObj);
+                        RetryAction?.Invoke(RetryActionObj);
                 });
             } else {
                 HideNotification();
             }
 
             //if (DialogResult == MpNotificationDialogResultType.Retry) {
-            //    _retryAction?.Invoke(_retryActionObj);
+            //    RetryAction?.Invoke(RetryActionObj);
             //} else if(DialogResult != MpNotificationDialogResultType.Fix) {
             //    HideNotification();
             //}

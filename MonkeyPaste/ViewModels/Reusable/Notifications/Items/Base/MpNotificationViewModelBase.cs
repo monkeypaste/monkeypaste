@@ -279,9 +279,7 @@ namespace MonkeyPaste {
                 }
                 return NotificationFormat.NotificationType;
             }
-        }
-
-        
+        }        
 
         public int NotificationId => (int)NotificationType;
 
@@ -300,7 +298,7 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-        public virtual async Task InitializeAsync(MpNotificationFormat nf, object nfArgs) {
+        public virtual async Task InitializeAsync(MpNotificationFormat nf) {
             bool wasBusy = IsBusy;
 
             IsBusy = true;

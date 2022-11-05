@@ -10,6 +10,7 @@ using System.Text;
 
 namespace MonkeyPaste.Common {
     public class MpCsvFormatProperties {
+        public static string EXCEL_EOF_MARKER = "\0"; // tested in excel 365 on windows csv terminates with \0 on a trailing line
         public static string CSV_DEFAULT_COLUMN_SEPARATOR = ",";
         public static string CSV_DEFAULT_ROW_SEPARATOR = Environment.NewLine;
 
@@ -54,10 +55,16 @@ namespace MonkeyPaste.Common {
 
             string tableBodyHtmlStr = @"<tbody>";
             List<double> colWidths = new List<double>();
-            var csvRows = csvStr.Split(new string[] { csvProps.EorSeparator }, StringSplitOptions.None);
-
-            for (int r = 0; r < csvRows.Length; r++) {
+            var csvRows = csvStr.Split(new string[] { csvProps.EorSeparator }, StringSplitOptions.None).ToList();
+            for (int r = 0; r < csvRows.Count; r++) {
                 string csvRowStr = csvRows[r];
+                if (r == csvRows.Count - 1) {
+                    Debugger.Break();
+                    if(string.IsNullOrEmpty(csvRowStr) || csvRowStr == MpCsvFormatProperties.EXCEL_EOF_MARKER) {
+                        // ignoring trailing end line
+                        continue;
+                    }
+                }
                 var csvCols = csvRowStr.Split(new string[] { csvProps.EocSeparator }, StringSplitOptions.None);
                 string curRowCellHtmlStr = string.Empty;
 
@@ -83,7 +90,7 @@ namespace MonkeyPaste.Common {
             }
             tableBodyHtmlStr += "</tbody>";
 
-            string colGroupHtml = string.Format(@"<colgroup>{0}</colgroup>", colWidths.Select(x=> string.Format(@"<col width='{0}px'>", x)));
+            string colGroupHtml = string.Format(@"<colgroup>{0}</colgroup>", string.Join(string.Empty,colWidths.Select(x=> string.Format(@"<col width='{0}px'>", x))));
             double tableWidth = colWidths.Sum();
 
             string tableHtmlStr = string.Format(

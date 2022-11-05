@@ -35,15 +35,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public Dictionary<int, MpPluginParameterViewModelBase> ParamLookup {
-            get {
-                var paraDict = new Dictionary<int, MpPluginParameterViewModelBase>();
-                foreach (var pvm in Items) {
-                    paraDict.Add(pvm.ParamEnumId, pvm);
-                }
-                return paraDict;
-            }
-        }
+        public Dictionary<string, MpPluginParameterViewModelBase> ParamLookup => Items.ToDictionary(x => x.ParamName,x => x); //{
+        //    get {
+        //        var paraDict = new Dictionary<int, MpPluginParameterViewModelBase>();
+        //        foreach (var pvm in Items) {
+        //            paraDict.Add(pvm.ParamName, pvm);
+        //        }
+        //        return paraDict;
+        //    }
+        //}
         public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 return new MpMenuItemViewModel() {
@@ -108,8 +108,6 @@ namespace MonkeyPaste.Avalonia {
         public MpPluginComponentBaseFormat ComponentFormat => AnalyzerFormat;
 
         #endregion
-
-
 
         #region Appearance
 
@@ -369,7 +367,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<MpPluginParameterViewModelBase> CreateParameterViewModel(MpPluginPresetParameterValue aipv) {
-            MpPluginParameterControlType controlType = AnalyzerFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId).controlType;
+            MpPluginParameterControlType controlType = AnalyzerFormat.parameters.FirstOrDefault(x => x.paramName == aipv.ParamName).controlType;
 
             MpPluginParameterViewModelBase naipvm = null;
 
@@ -500,7 +498,7 @@ namespace MonkeyPaste.Avalonia {
 
             // loop through plugin formats parameters and add or replace (if found in db) to the preset values
             foreach (var paramFormat in AnalyzerFormat.parameters) {
-                if (!presetValues.Any(x => x.ParamId == paramFormat.paramId)) {
+                if (!presetValues.Any(x => x.ParamName == paramFormat.paramName)) {
                     // if no value is found in db for a parameter defined in manifest...
 
                     string paramVal = string.Empty;
@@ -516,7 +514,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     var newPresetVal = await MpPluginPresetParameterValue.CreateAsync(
                         presetId: Preset.Id,
-                        paramEnumId: paramFormat.paramId,
+                        paramName: paramFormat.paramName,
                         value: paramVal
                         //format: paramFormat
                         );
@@ -524,7 +522,7 @@ namespace MonkeyPaste.Avalonia {
                     presetValues.Add(newPresetVal);
                 }
             }
-            //presetValues.ForEach(x => x.ParameterFormat = AnalyzerFormat.parameters.FirstOrDefault(y => y.paramId == x.ParamId));
+            //presetValues.ForEach(x => x.ParameterFormat = AnalyzerFormat.parameters.FirstOrDefault(y => y.paramName == x.ParamName));
             return presetValues;
         }
         #endregion

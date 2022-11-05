@@ -407,3 +407,16 @@ async function readFileAsDataURL(file) {
     return result_base64;
 }
 
+function numToPaddedStr(num, padStr, padCount) {
+    let numStr = '';
+    if (typeof num === 'string' || num instanceof String) {
+        numStr = num;
+    } else {
+        numStr = num.toString();
+    }
+    let pad_needed = padCount - numStr.length;
+    for (var i = 0; i < pad_needed; i++) {
+        numStr = padStr + numStr;
+    }
+    return numStr;
+}

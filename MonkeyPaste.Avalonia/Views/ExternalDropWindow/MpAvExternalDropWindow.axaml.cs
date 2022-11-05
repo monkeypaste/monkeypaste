@@ -101,26 +101,38 @@ namespace MonkeyPaste.Avalonia {
 
         public void AutoScrollListBox(DragEventArgs e) {
             var lb = this.GetVisualDescendant<ListBox>();
-
+            var sv = lb.GetVisualDescendant<ScrollViewer>();
+            
             double amt = 5;
             double max_scroll_dist = 10;
-            var lb_mp = e.GetPosition(lb).ToPortablePoint();
-            if (Math.Abs(lb_mp.X) <= max_scroll_dist) {
-                lb.GetVisualDescendant<ScrollViewer>().ScrollByPointDelta(new MpPoint(-amt, 0));
-            } else if (Math.Abs(lb.Bounds.Right - lb_mp.X) <= max_scroll_dist) {
-                lb.GetVisualDescendant<ScrollViewer>().ScrollByPointDelta(new MpPoint(amt, 0));
+            var sv_mp = e.GetPosition(lb).ToPortablePoint();
+
+            double l_dist = Math.Abs(sv_mp.X);
+            double r_dist = Math.Abs(sv.Extent.Width - sv_mp.X);
+            double t_dist = Math.Abs(sv_mp.Y);
+            double b_dist = Math.Abs(sv.Extent.Height - sv_mp.Y);
+
+            MpConsole.WriteLine(string.Format(@"L:{0} R:{1} T:{2} B:{3}", l_dist, r_dist, t_dist, b_dist));
+
+            if (l_dist <= max_scroll_dist) {
+                sv.ScrollByPointDelta(new MpPoint(-amt, 0));
+            } else if (r_dist <= max_scroll_dist) {
+                sv.ScrollByPointDelta(new MpPoint(amt, 0));
             }
 
-            if (Math.Abs(lb_mp.Y) <= max_scroll_dist) {
-                lb.GetVisualDescendant<ScrollViewer>().ScrollByPointDelta(new MpPoint(0, -amt));
-            } else if (Math.Abs(lb.Bounds.Bottom - lb_mp.Y) <= max_scroll_dist) {
-                lb.GetVisualDescendant<ScrollViewer>().ScrollByPointDelta(new MpPoint(0, amt));
+            if (t_dist <= max_scroll_dist) {
+                sv.ScrollByPointDelta(new MpPoint(0, -amt));
+            } else if (b_dist <= max_scroll_dist) {
+                sv.ScrollByPointDelta(new MpPoint(0, amt));
             }
         }
 
         private void DragOver(object sender, DragEventArgs e) {
+            MpConsole.WriteLine("[DragOver] Dnd Widget Window Cur Formats: " +String.Join(Environment.NewLine,e.Data.GetDataFormats()));
             AutoScrollListBox(e);
             e.DragEffects = DragDropEffects.None;
+
+
             //MpAvCefNetWebViewGlue.DragDataObject.SetData(MpPortableDataFormats.Text, "GOTCHA!!");
         }
 

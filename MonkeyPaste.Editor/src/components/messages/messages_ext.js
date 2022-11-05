@@ -73,17 +73,26 @@ function contentRequest_ext(contentReqMsgStr_base64) {
 	for (var i = 0; i < req.formats.length; i++) {
 		let format = req.formats[i];
 		let data = null;
-
 		//if (ContentItemType == 'Text') {
 		if (format == 'HTML Format') {
-			data = getHtml(sel);
+			let htmlStr = getHtml(sel);
+			if (req.forPaste) {
+				data = createHtmlClipboardFragment(htmlStr, sel);
+			} else {
+				data = htmlStr;
+			}
 		} else if (format == 'Text' && ContentItemType != 'Image') {
-			data = getText(sel);
+			if (isContentATable()) {
+				data = getTableCsv('Text');
+			} else {
+				data = getText(sel);
+			}
+			
 			if (req.forPaste && data.endsWith('\n')) {
 				// remove trailing line ending
 				data = substringByLength(data, 0, data.length - 1);
 			}
-		} else if (format == 'CSV') {
+		} else if (format == 'Csv') {
 			// TODO figure out handling table selectinn logic and check here 
 			data = getTableCsv('Text');
 		} else if (format == 'PNG') {

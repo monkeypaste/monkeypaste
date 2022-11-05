@@ -1,5 +1,5 @@
 ﻿
-using MonkeyPaste.Common.Plugin.Formats.Components.Content.Base;
+
 
 namespace MonkeyPaste.Common.Plugin {
     public class MpAnnotatorPluginFormat : MpPluginContentComponentBaseFormat {

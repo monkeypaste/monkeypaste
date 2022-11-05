@@ -61,6 +61,15 @@ namespace MonkeyPaste {
             }            
         }
 
+        public static async Task<MpPluginFormat> ReloadPluginAsync(string manifestPath) {
+            if(!Plugins.ContainsKey(manifestPath)) {
+                throw new Exception($"No plugin loaded from manifest path: '{manifestPath}'");
+            }
+            var reloaded_pf = await LoadPluginAsync(manifestPath);
+            Plugins[manifestPath] = reloaded_pf;
+            return reloaded_pf;
+        }
+
         #endregion
 
         #region Private Methods

@@ -1744,13 +1744,13 @@ namespace MonkeyPaste.Avalonia {
                         }
                         d.SetData(MpPortableDataFormats.AvPNG, bmpBase64);
                         break;
-                    case MpPortableDataFormats.Csv:
+                    case MpPortableDataFormats.AvCsv:
                         switch (ItemType) {
                             case MpCopyItemType.Text:
 
-                                bool hasCsv = await MpDataModelProvider.IsDataObjectContainFormatAsync(DataObjectId, MpPortableDataFormats.Csv);
+                                bool hasCsv = await MpDataModelProvider.IsDataObjectContainFormatAsync(DataObjectId, MpPortableDataFormats.AvCsv);
                                 if (hasCsv) {
-                                    d.SetData(MpPortableDataFormats.Csv, CopyItemData.ToCsv());
+                                    d.SetData(MpPortableDataFormats.AvCsv, CopyItemData.ToCsv());
                                 }
 
                                 break;
@@ -1759,7 +1759,7 @@ namespace MonkeyPaste.Avalonia {
                                 break;
                             case MpCopyItemType.FileList:
                                 d.SetData(
-                                    MpPortableDataFormats.Csv,
+                                    MpPortableDataFormats.AvCsv,
                                     string.Join(
                                         ",",
                                         FileItems.Where(x => x.IsSelected).Select(x => x.Path)));

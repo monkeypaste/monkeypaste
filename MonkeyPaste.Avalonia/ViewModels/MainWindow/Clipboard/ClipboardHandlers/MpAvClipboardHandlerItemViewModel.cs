@@ -10,6 +10,8 @@ using MonkeyPaste.Common;
 using System.IO;
 using System.ComponentModel;
 using System.Collections;
+using Avalonia.Controls.Notifications;
+using System.Windows.Input;
 
 
 namespace MonkeyPaste.Avalonia {
@@ -120,12 +122,16 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync(MpPluginFormat pf) {
-            if (!ValidateClipboardHandler(pf)) {
-                return;
-            }
-            IsBusy = true;            
+            IsBusy = true;
 
             PluginFormat = pf;
+            bool is_plugin_valid = await ValidateClipboardHandlerAsync();
+            if (!is_plugin_valid) {
+                PluginFormat = null;
+                IsBusy = false;
+                return;
+            }
+
 
             PluginIconId = await GetOrCreateIconIdAsync();
 
@@ -178,66 +184,101 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private bool ValidateClipboardHandler(MpPluginFormat pf) {
-            if(pf == null) {
+        private async Task<bool> ValidateClipboardHandlerAsync() {
+            if(PluginFormat == null) {
                 MpConsole.WriteTraceLine("plugin error, not registered");
                 return false;
             }
-            if(pf.clipboardHandler == null) {
+            if(PluginFormat.clipboardHandler == null) {
                 MpConsole.WriteTraceLine("clipboard handler empty, ignoring");
                 return false;            
             }
-            if(pf.clipboardHandler.readers.Count == 0 &&
-               pf.clipboardHandler.writers.Count == 0) {
-                MpConsole.WriteTraceLine($"Plugin '{pf.title}' is identified as a clipboard handler but has no readers or writerss, ignoring");
+            if(PluginFormat.clipboardHandler.readers.Count == 0 &&
+               PluginFormat.clipboardHandler.writers.Count == 0) {
+                MpConsole.WriteTraceLine($"Plugin '{PluginFormat.title}' is identified as a clipboard handler but has no readers or writerss, ignoring");
                 return false;
             }
 
-            var sb = new StringBuilder();
+            //var sb = new StringBuilder();
+            var error_notifications = new List<MpNotificationFormat>();
 
-            var dupNames = pf.clipboardHandler.readers.GroupBy(x => x.clipboardName).Where(x => x.Count() > 1);
+            var dupNames = PluginFormat.clipboardHandler.readers.GroupBy(x => x.clipboardName).Where(x => x.Count() > 1);
             if (dupNames.Count() > 0) {
-                sb.AppendLine("plugin error: clipboard format names must be unique, " + String.Join(",", dupNames) + " are duplicated in readers");
+                string msg = $"plugin error: clipboard format names must be unique, {string.Join(",", dupNames)} are duplicated in readers";
+                error_notifications.Add(CreateInvalidNotification(msg,PluginFormat));
             }
 
-            dupNames = pf.clipboardHandler.writers.GroupBy(x => x.clipboardName).Where(x => x.Count() > 1);
+            dupNames = PluginFormat.clipboardHandler.writers.GroupBy(x => x.clipboardName).Where(x => x.Count() > 1);
             if (dupNames.Count() > 0) {
-                sb.AppendLine("plugin error: clipboard format names must be unique, " + String.Join(",", dupNames) + " are duplicated in writers");
+                string msg = $"plugin error: clipboard format names must be unique, {string.Join(",", dupNames)} are duplicated in writers";
+                error_notifications.Add(CreateInvalidNotification(msg,PluginFormat));
             }
 
             var allHandlers = new List<MpClipboardHandlerFormat>();
-            allHandlers.AddRange(pf.clipboardHandler.readers);
-            allHandlers.AddRange(pf.clipboardHandler.writers);
+            allHandlers.AddRange(PluginFormat.clipboardHandler.readers);
+            allHandlers.AddRange(PluginFormat.clipboardHandler.writers);
 
             var dupGuids = allHandlers.GroupBy(x => x.handlerGuid).Where(x => x.Count() > 1);
             if (dupGuids.Count() > 0) {
                 foreach(var dupGuid_group in dupGuids) {
-                    sb.AppendLine(string.Empty);
-                    sb.AppendLine("plugin error: clipboard 'handlerGuid' must be unique");
-                    string error_msg = $"'{string.Join(" and ", dupGuid_group.Select(x => $"'{x.displayName}'"))}'";
-                    error_msg += $" have matching 'handlerGuid': '{dupGuid_group.Key}'";
-                    sb.AppendLine(error_msg);
+                    string msg = "plugin error: clipboard 'handlerGuid' must be unique." + Environment.NewLine;
+                    msg += $"'{string.Join(" and ", dupGuid_group.Select(x => $"'{x.displayName}'"))}'";
+                    msg += $" have matching 'handlerGuid': '{dupGuid_group.Key}'";
+                    error_notifications.Add(CreateInvalidNotification(msg,PluginFormat));
                 }
             }
 
-            var allParameters = allHandlers.SelectMany(x => x.parameters);
-
-            var dupParamIds = allParameters.GroupBy(x => x.paramId).Where(x => x.Count() > 1);
-            if (dupParamIds.Count() > 0) {
-                foreach(var dupParamId_group in dupParamIds) {
-                    sb.AppendLine(string.Empty);
-                    sb.AppendLine("plugin error: all plugin 'paramId' fields must be unique for the given plugin");
-                    string error_msg = $" '{string.Join(" and ", dupParamId_group.Select(x => $"'{x.label}'"))}'";
-                    error_msg += $" have matching 'paramId': '{dupParamId_group.Key}'";
-                    sb.AppendLine(error_msg);
+            foreach (var handler in allHandlers) {
+                var paramNameGroups = handler.parameters.GroupBy(x => x.paramName);
+                foreach(var paramNameGroup in paramNameGroups) {
+                    if(paramNameGroup.Count() <= 1) {
+                        continue;
+                    }
+                    // TODO each notification type should probably have a pop up link to help...
+                    // In this case more info should be given about paramName falling back to label, etc.
+                    string msg = $"plugin error: all plugin 'paramName' fields must be unique for handler '{handler.displayName}'." + Environment.NewLine;
+                    //msg += $" '{string.Join(" and ", paramNameGroup.Key.Select(x => $"'{x}'"))}'";
+                    msg += $"paramName '{paramNameGroup.Key}' has multiple entries";
+                    error_notifications.Add(CreateInvalidNotification(msg, PluginFormat));
                 }
+                
             }
 
-            string output = sb.ToString();
+            bool needs_fixing = error_notifications.Count > 0;
+            if(needs_fixing) {
+                // only need first error to recurse
 
-            MpConsole.WriteLine(output);
+                var invalid_nf = error_notifications[0];
 
-            return string.IsNullOrEmpty(output);
+                invalid_nf.RetryAction = (args) => {
+                    needs_fixing = false;
+                };
+
+                var result = await MpNotificationBuilder.ShowNotificationAsync(invalid_nf);
+                if (result == MpNotificationDialogResultType.Ignore) {
+                    // ignoring these errors flags plugin to be completely ignored
+                    return false;
+                }
+                while (needs_fixing) {
+                    await Task.Delay(100);
+                }
+
+                PluginFormat = await MpPluginLoader.ReloadPluginAsync(Path.Combine(PluginFormat.RootDirectory, "manifest.json"));
+                // loop through another validation pass
+                return await ValidateClipboardHandlerAsync();
+            }
+            //MpConsole.WriteLine(output);
+
+            return true;
+        }
+
+        private MpNotificationFormat CreateInvalidNotification(string msg, MpPluginFormat pf) {
+            return new MpNotificationFormat() {
+                Title = $"{pf.title} Error",
+                Body = msg,
+                NotificationType = MpNotificationType.InvalidPlugin,
+                FixCommand = new MpCommand(() => MpFileIo.OpenFileBrowser(Path.Combine(pf.RootDirectory,"manifest.json")))
+            };
         }
 
         private async Task<int> GetOrCreateIconIdAsync() {

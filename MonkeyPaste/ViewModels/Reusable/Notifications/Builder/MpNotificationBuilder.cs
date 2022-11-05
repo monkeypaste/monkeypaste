@@ -63,9 +63,14 @@ namespace MonkeyPaste {
         }
 
         public static async Task<MpNotificationDialogResultType> ShowLoaderNotificationAsync(MpIProgressLoader loader) {
-            var result = await ShowNotificationAsync(loader: loader);
+            var result = await ShowNotificationAsync(
+                title: loader.Title,
+                notificationType: MpNotificationType.Loader,
+                loader: loader);
             return result;
         }
+
+
         public static async Task<MpNotificationDialogResultType> ShowNotificationAsync(
             MpNotificationType notificationType = MpNotificationType.None,
             string title = "",
@@ -76,31 +81,10 @@ namespace MonkeyPaste {
             string iconSourceStr = null,
             ICommand fixCommand = null,
             object fixCommandArgs = null,
-            MpIProgressLoader loader = null) {
-
-            bool isDoNotShowType = MpPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr
-                    .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(x => Convert.ToInt32(x)).Any(x => x == (int)notificationType);
-
-            if (isDoNotShowType) {
-                MpConsole.WriteTraceLine($"Notification: {notificationType.ToString()} marked as hidden");
-                return MpNotificationDialogResultType.DoNotShow;
-            }
-
-            var layoutType = MpNotificationViewModelBase.GetLayoutTypeFromNotificationType(notificationType);
-            
+            MpIProgressLoader loader = null) {                                   
 
             if (string.IsNullOrEmpty(title)) {
                 title = notificationType.EnumToLabel();
-            }
-            object nf_args = null;
-
-            if (loader == null) {
-                nf_args = new[] { new[] { retryAction, retryActionObj }, new[] { fixCommand, fixCommandArgs } };
-            } else {
-                title = loader.Title;
-                notificationType = MpNotificationType.Loader;
-                nf_args = loader;
             }
 
             MpNotificationFormat nf = new MpNotificationFormat() {
@@ -108,49 +92,65 @@ namespace MonkeyPaste {
                 Body = msg,
                 MaxShowTimeMs = maxShowTimeMs,
                 NotificationType = notificationType,
-                IconSourceStr = iconSourceStr
+                IconSourceStr = iconSourceStr,
+                FixCommand = fixCommand,
+                FixCommandArgs = fixCommandArgs,
+                RetryAction = retryAction,
+                RetryActionObj = retryActionObj,
+                OtherArgs = loader
             };
+
 
             MpConsole.WriteLine($"Notification balloon set to:", true);
             MpConsole.WriteLine($"\tmsg: '{msg}'");
             MpConsole.WriteLine($"\ttype: '{notificationType.ToString()}'");
-            MpConsole.WriteLine($"\tseverity: '{layoutType.ToString()}'",false,true);
 
-            var nvm = await CreateNotifcationViewModelAsync(nf, nf_args);
+            MpNotificationDialogResultType result = await ShowNotificationAsync(nf);
+            return result;            
+        }
+
+        public static async Task<MpNotificationDialogResultType> ShowNotificationAsync(MpNotificationFormat nf) {
+            bool isDoNotShowType = MpPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr
+                    .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => Convert.ToInt32(x)).Any(x => x == (int)nf.NotificationType);
+
+            if (isDoNotShowType) {
+                MpConsole.WriteTraceLine($"Notification: {nf.NotificationType.ToString()} marked as hidden");
+                return MpNotificationDialogResultType.DoNotShow;
+            }
+
+            var nvm = await CreateNotifcationViewModelAsync(nf);
 
             MpNotificationDialogResultType result = await nvm.ShowNotificationAsync();
             return result;
         }
-
         #endregion
 
         #region Private Methods
 
-        private static async Task<MpNotificationViewModelBase> CreateNotifcationViewModelAsync(MpNotificationFormat nf, object nfArgs) {
+        private static async Task<MpNotificationViewModelBase> CreateNotifcationViewModelAsync(MpNotificationFormat nf) {            
             MpNotificationLayoutType layoutType = MpNotificationViewModelBase.GetLayoutTypeFromNotificationType(nf.NotificationType);
+            MpNotificationViewModelBase nvmb = null;
             switch (layoutType) {
                 case MpNotificationLayoutType.Loader:
-                    if(nfArgs is MpIProgressLoader loader) {
-                        var lvm = new MpLoaderNotificationViewModel();
-                        await lvm.InitializeAsync(nf,loader);
-                        return lvm;
-                    }
+                    nvmb = new MpLoaderNotificationViewModel();
                     break;
                 case MpNotificationLayoutType.Default:
                 case MpNotificationLayoutType.Warning:
                 case MpNotificationLayoutType.Error:
                 case MpNotificationLayoutType.Message:
-                    var mnvm = new MpMessageNotificationViewModel();
-                    await mnvm.InitializeAsync(nf, nfArgs);
-                    return mnvm;
+                    nvmb = new MpMessageNotificationViewModel();
+                    break;
                 case MpNotificationLayoutType.WarningWithOption:
                 case MpNotificationLayoutType.ErrorWithOption:
                 case MpNotificationLayoutType.ErrorAndShutdown:
-                    var uanvm = new MpUserActionNotificationViewModel();
-                    await uanvm.InitializeAsync(nf, nfArgs);
-                    return uanvm;
+                    nvmb = new MpUserActionNotificationViewModel();
+                    break;
+                default:
+                    throw new Exception("Unhandled notification type: " + nf.NotificationType);
             }
-            throw new Exception("Unhandled notification type: " + nf.NotificationType);
+            await nvmb.InitializeAsync(nf);
+            return nvmb;
         }
 
 

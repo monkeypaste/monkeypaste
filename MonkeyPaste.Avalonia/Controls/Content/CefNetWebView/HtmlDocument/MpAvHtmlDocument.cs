@@ -27,6 +27,9 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task<MpAvDataObject> GetDataObjectAsync(bool ignoreSelection, bool fillTemplates) {
             if (Owner is MpAvCefNetWebView wv && wv.DataContext is MpAvClipTileViewModel ctvm) {
+                bool ignore_ss = true;
+                bool ignore_pseudo_file = false;
+
                 // clear screenshot
                 ContentScreenShotBase64 = null;
 
@@ -52,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
                         //avdo.SetData(MpPortableDataFormats.Text, bmp.ToAsciiImage());
                         //avdo.SetData(MpPortableDataFormats.AvHtml_bytes, bmp.ToRichHtmlImage());
                         // TODO add colorized ascii maybe as html and rtf!!
-                    } else {
+                    } else if(!ignore_ss) {
                         // screen shot is async and js notifies w/ base64 property here
                         while (ContentScreenShotBase64 == null) { 
                             
@@ -62,7 +65,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     if (ctvm.ItemType == MpCopyItemType.FileList) {
                         avdo.SetData(MpPortableDataFormats.AvFileNames, ctvm.CopyItemData);
-                    } else {
+                    } else if(!ignore_pseudo_file) {
                         // js doesn't set file stuff for non-files
                         avdo.SetData(
                             MpPortableDataFormats.AvFileNames,

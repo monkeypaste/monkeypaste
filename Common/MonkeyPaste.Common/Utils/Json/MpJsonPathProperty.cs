@@ -9,7 +9,7 @@ using MonkeyPaste.Common;
 namespace MonkeyPaste.Common {
     public enum MpJsonDataTokenType {
         None = 0,
-        RequestParam, // @<enumId>
+        RequestParam, // @<paramName>
         Subsititution, // value: '...{0}...' where valuePath={0}
         PathIndex, // [#] where # is swapped for * and Property is list
         Eof, // <EOF> used to denoted contentEnd for text range annotation
@@ -135,18 +135,18 @@ namespace MonkeyPaste.Common {
         }
 
         private string GetParamValue(string queryParamValueStr, IEnumerable<MpIParameterKeyValuePair> reqParams) {
-            int enumId = GetParamId(queryParamValueStr);
-            var enumParam = reqParams.FirstOrDefault(x => x.paramId == enumId);
-            if (enumParam == null) {
-                MpConsole.WriteLine($"Error parsing dynamic query item, enumId: '{enumId}' does not exist");
+            string paramName = GetParamName(queryParamValueStr);
+            MpIParameterKeyValuePair param_kvp = reqParams.FirstOrDefault(x => x.paramName == paramName);
+            if (param_kvp == null) {
+                MpConsole.WriteLine($"Error parsing dynamic query item, enumId: '{paramName}' does not exist");
                 MpConsole.WriteLine($"In request with params: ");
                 MpConsole.WriteLine(JsonConvert.SerializeObject(reqParams));
                 return null;
             }
-            return enumParam.value;
+            return param_kvp.value;
         }
 
-        private int GetParamId(string queryParamValueStr) {
+        private string GetParamName(string queryParamValueStr) {
             if (string.IsNullOrEmpty(queryParamValueStr)) {
                 throw new Exception("Error creating http uri, dynamic query item has undefined value");
             }
@@ -154,7 +154,7 @@ namespace MonkeyPaste.Common {
                 throw new Exception("Parameterized values must start with '@'");
             }
             try {
-                return Convert.ToInt32(queryParamValueStr.Substring(1, queryParamValueStr.Length - 1));
+                return queryParamValueStr.Substring(1, queryParamValueStr.Length - 1);
             }
             catch (Exception ex) {
                 throw new Exception("Error converting param reference: " + queryParamValueStr + " " + ex);

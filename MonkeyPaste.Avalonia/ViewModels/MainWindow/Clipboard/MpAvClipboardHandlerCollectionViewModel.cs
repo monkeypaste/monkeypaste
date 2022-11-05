@@ -55,6 +55,13 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<MpAvClipboardFormatPresetViewModel> AllSelectedPresets => AllPresets.Where(x => x.IsSelected);
 
+        public IEnumerable<MpAvClipboardFormatViewModel> FormatViewModels =>
+            MpPortableDataFormats.RegisteredFormats.Select(x => new MpAvClipboardFormatViewModel(this, x));
+        public IEnumerable<MpAvClipboardFormatPresetViewModel> EnabledFormats => AllPresets.Where(x => x.IsEnabled);
+
+        public IEnumerable<MpAvClipboardFormatPresetViewModel> EnabledReaders => EnabledFormats.Where(x => x.IsReader);
+        public IEnumerable<MpAvClipboardFormatPresetViewModel> EnabledWriters => EnabledFormats.Where(x => x.IsWriter);
+
         public IEnumerable<MpAvClipboardFormatPresetViewModel> AllAvailableWriterPresets {
             get {
                 var aawpl = new List<MpAvClipboardFormatPresetViewModel>();
@@ -81,63 +88,6 @@ namespace MonkeyPaste.Avalonia {
                 return SelectedItem.SelectedItem.SelectedItem;
             }
         }
-
-        //private ObservableCollection<MpClipboardFormatViewModel> _formatViewModels;
-        //public ObservableCollection<MpClipboardFormatViewModel> FormatViewModels {
-        //    get {
-        //        if(_formatViewModels == null) {
-        //            _formatViewModels = new ObservableCollection<MpClipboardFormatViewModel>();
-        //        }
-        //        return _formatViewModels;
-        //    }
-        //}
-        public IEnumerable<MpAvClipboardFormatViewModel> FormatViewModels =>
-            MpPortableDataFormats.RegisteredFormats.Select(x => new MpAvClipboardFormatViewModel(this, x));
-
-        //public Dictionary<string, MpClipboardFormatPresetViewModel> EnabledFormatHandlerLookup {
-        //    get {
-        //        var efl = new Dictionary<string, MpClipboardFormatPresetViewModel>();
-        //        foreach(var chivm in Items) {
-        //            foreach(var hcfvm in chivm.Items) {
-        //                foreach(var cpvm in hcfvm.Items) {
-        //                    if(cpvm.IsDefault) {
-        //                        efl.Add(cpvm.Parent.HandledFormat, cpvm);
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        return efl;
-        //    }
-        //}
-
-        public IEnumerable<MpAvClipboardFormatPresetViewModel> EnabledFormats {
-            get {
-                foreach (var i in Items) {
-                    foreach (var j in i.Items) {
-                        foreach (var k in j.Items) {
-                            if (k.IsEnabled) {
-                                yield return k;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-
-        //public Dictionary<string, MpClipboardFormatPresetViewModel> EnabledReaderLookup =>
-        //    Enab
-        //    .Where(x => x.Value.Parent.IsReader)
-        //    .ToDictionary(
-        //        x => x.Key,
-        //        x => x.Value);
-
-        //public Dictionary<string, MpClipboardFormatPresetViewModel> EnabledWriterLookup =>
-        //    EnabledFormatHandlerLookup
-        //    .Where(x => x.Value.Parent.IsWriter)
-        //    .ToDictionary(
-        //        x => x.Key,
-        //        x => x.Value);
         #endregion
 
         #region MpIClipboardFormatHandlers Implementation
@@ -250,42 +200,9 @@ namespace MonkeyPaste.Avalonia {
                             } else if (hipvm.LastSelectedDateTime > presetToSelect.LastSelectedDateTime) {
                                 presetToSelect = hipvm;
                             }
-
-                            //if(hipvm.IsEnabled) {
-                            //    if(hipvm.CanWrite && hipvm.CanRead) {
-                            //        Debugger.Break();
-                            //    }
-                            //    if(hipvm.CanRead) {
-                            //        ToggleFormatPresetIsReadEnabledCommand.Execute(hipvm);
-                            //    }
-                            //    if(hipvm.CanWrite) {
-                            //        ToggleFormatPresetIsWriteEnabledCommand.Execute(hipvm);
-                            //    }
-                            //bool replace = true;
-                            //if (EnabledFormatHandlerLookup.TryGetValue(hipvm.Parent.HandledFormat, out var curPreset)) {
-
-                            //    string errorMsg = $"Warning clipboard format handler conflict for {curPreset.FullName} and {hipvm.FullName}";
-                            //    // two handled formats are marked as default so check which was last selected and use that one if none override previous
-                            //    if(curPreset.LastSelectedDateTime > hipvm.LastSelectedDateTime) {
-                            //        replace = false;
-                            //        errorMsg += $" {curPreset} is more recent so ignoring {hipvm}";
-                            //    } else if(curPreset.LastSelectedDateTime == hipvm.LastSelectedDateTime) {
-                            //        errorMsg += $" have same date time {hipvm.LastSelectedDateTime} so using {hipvm}";
-                            //    } else {
-                            //        errorMsg += $" {hipvm} is more recent so ignoring {curPreset}";
-                            //    }
-                            //    MpConsole.WriteTraceLine(errorMsg);
-                            //    if(!replace) {
-                            //        continue;
-                            //    }
-                            //}
-                            //EnabledFormatHandlerLookup.AddOrReplace(hipvm.Parent.HandledFormat, hipvm);
-                            //
                         }
                     }
-                }
-
-                
+                }                
 
                 if (presetToSelect != null) {
                     presetToSelect.Parent.SelectedItem = presetToSelect;
@@ -304,17 +221,33 @@ namespace MonkeyPaste.Avalonia {
             // NOTE this is called during a drag drop when user toggles a format preset
             // source should be the initial output of ContentView dataObject and should have the highest fidelity of data on it for conversions
             // NOTE DO NOT re-instantiate target haven't tested but I imagine the reference must persist that which was given to .DoDragDrop in StartDragging
-
+            if(source is not MpAvDataObject) {
+                // need to cast or whats goin on here?
+                Debugger.Break();
+                return;
+            }
+            var temp = await WriteClipboardOrDropObjectAsync(source as MpAvDataObject, false);
+            if(temp is MpAvDataObject temp_avdo) {
+                target.DataFormatLookup.Clear();
+                foreach (var kvp in temp_avdo.DataFormatLookup) {
+                    target.SetData(kvp.Key.Name, kvp.Value);
+                }
+            }
 
         }
 
         public async Task<MpAvDataObject> ReadClipboardOrDropObjectAsync(object forcedDataObject = null) {
             // NOTE forcedDataObject is used to read drag/drop, when null clipboard is read
+            //while(IsBusy) {
+            //    await Task.Delay(100);
+            //}
+            //IsBusy = true;
+
             MpAvDataObject mpdo = new MpAvDataObject();
 
             
             //only iterate through actual handlers 
-            var handlers = EnabledFormats.Where(x => x.CanRead)
+            var handlers = EnabledFormats.Where(x => x.IsReader)
                                          .Select(x => x.Parent.ClipboardPluginComponent)
                                          .Distinct().Cast<MpIClipboardReaderComponentAsync>();
             //MpConsole.WriteLine("Handlers available: " + handlers.Count());
@@ -338,13 +271,33 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             mpdo.MapAllPseudoFormats();
+            //IsBusy = false;
             return mpdo;
         }
 
         public async Task<object> WriteClipboardOrDropObjectAsync(MpPortableDataObject mpdo, bool writeToClipboard) {
+            //while (IsBusy) {
+            //    await Task.Delay(100);
+            //}
+            //IsBusy = true;
+
+            // pre-pass data object and remove disabled formats
+            var formatsToRemove = 
+                mpdo.DataFormatLookup
+                .Where(x => EnabledWriters.All(y => y.ClipboardFormat.clipboardName != x.Key.Name))
+                .Select(x => x.Key);
+
+            foreach(var format_to_remove in formatsToRemove) {
+                mpdo.DataFormatLookup.Remove(format_to_remove);
+
+            }
+
+
             var dobj = new MpAvDataObject();
-            var handlers = EnabledFormats.Where(x => x.CanWrite && MpPortableDataFormats.RegisteredFormats.Contains(x.Parent.HandledFormat)).Distinct();
-                                         //.Select(x => x.Parent.ClipboardPluginComponent).Distinct();//.Cast<MpIClipboardWriterComponentAsync>();
+            var handlers = 
+                EnabledFormats
+                .Where(x => x.IsWriter && MpPortableDataFormats.RegisteredFormats.Contains(x.Parent.HandledFormat))
+                .Distinct();
 
             foreach(var handler in handlers) {
                 var writeRequest = new MpClipboardWriterRequest() {
@@ -356,7 +309,9 @@ namespace MonkeyPaste.Avalonia {
                 if (writer_component == null) {
                     Debugger.Break();
                 }
+
                 MpClipboardWriterResponse writerResponse = await writer_component.WriteClipboardDataAsync(writeRequest);
+
                 bool isValid = MpPluginTransactor.ValidatePluginResponse(writerResponse);
                 if (isValid && writerResponse.platformDataObject is MpPortableDataObject ido) {
                     ido.DataFormatLookup.Where(x => x.Value != null).ForEach(x => dobj.SetData(x.Key.Name, x.Value));
@@ -365,7 +320,7 @@ namespace MonkeyPaste.Avalonia {
 
             MpConsole.WriteLine("Data written to " + (writeToClipboard ? "CLIPBOARD" : "DATAOBJECT")+":");
             mpdo.DataFormatLookup.ForEach(x => MpConsole.WriteLine("Format: " + x.Key.Name));
-
+            //IsBusy = false;
             return dobj;
         }
 
@@ -434,9 +389,9 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ToggleFormatPresetIsEnabled => new MpCommand<object>(
             (presetVmArg) => {
                 if (presetVmArg is MpAvClipboardFormatPresetViewModel cfpvm) {
-                    if (cfpvm.CanRead) {
+                    if (cfpvm.IsReader) {
                         ToggleFormatPresetIsReadEnabledCommand.Execute(cfpvm);
-                    } else if (cfpvm.CanWrite) {
+                    } else if (cfpvm.IsWriter) {
                         ToggleFormatPresetIsWriteEnabledCommand.Execute(cfpvm);
                     } else {
                         Debugger.Break();
@@ -453,7 +408,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (presetVm.IsEnabled) {
                     //when toggled on, untoggle any other preset handling same format
-                    var otherEnabled = EnabledFormats.Where(x => x.CanRead).FirstOrDefault(x => x.Parent.HandledFormat == presetVm.Parent.HandledFormat && x.PresetId != presetVm.PresetId);
+                    var otherEnabled = EnabledFormats.Where(x => x.IsReader).FirstOrDefault(x => x.Parent.HandledFormat == presetVm.Parent.HandledFormat && x.PresetId != presetVm.PresetId);
                     if (otherEnabled == null) {
                         //no other preset was enabled so nothing to replace
                         return;
@@ -472,7 +427,7 @@ namespace MonkeyPaste.Avalonia {
 
                 OnPropertyChanged(nameof(EnabledFormats));
                 OnPropertyChanged(nameof(FormatViewModels));
-            }, (presetVmArg) => presetVmArg is MpAvClipboardFormatPresetViewModel cfpvm && cfpvm.CanRead);
+            }, (presetVmArg) => presetVmArg is MpAvClipboardFormatPresetViewModel cfpvm && cfpvm.IsReader);
 
 
         public ICommand ToggleFormatPresetIsWriteEnabledCommand => new MpCommand<object>(
@@ -485,7 +440,8 @@ namespace MonkeyPaste.Avalonia {
 
                 if (presetVm.IsEnabled) {
                     //when toggled on, untoggle any other preset handling same format
-                    var otherEnabled = EnabledFormats.Where(x => x.CanWrite).FirstOrDefault(x => x.Parent.HandledFormat == presetVm.Parent.HandledFormat && x.PresetId != presetVm.PresetId);
+                    var otherEnabled = EnabledFormats.Where(x => x.IsWriter)
+                    .FirstOrDefault(x => x.Parent.HandledFormat == presetVm.Parent.HandledFormat && x.PresetId != presetVm.PresetId);
                     if (otherEnabled == null) {
                         //no other preset was enabled so nothing to replace
                         return;
@@ -504,8 +460,8 @@ namespace MonkeyPaste.Avalonia {
 
                 OnPropertyChanged(nameof(EnabledFormats));
                 OnPropertyChanged(nameof(FormatViewModels));
-                OnPropertyChanged(nameof(FormatViewModels));
-            }, (presetVmArg) => presetVmArg is MpAvClipboardFormatPresetViewModel cfpvm && cfpvm.CanRead);
+                OnPropertyChanged(nameof(AllAvailableWriterPresets));
+            }, (presetVmArg) => presetVmArg is MpAvClipboardFormatPresetViewModel cfpvm && cfpvm.IsWriter);
 
         public ICommand UnregisterClipboardFormatCommand => new MpCommand<object>(
             (args) => {
@@ -521,9 +477,9 @@ namespace MonkeyPaste.Avalonia {
                 //        // when both read and write are unregistered (i don't know when this would happen)
                 //        // it doesn't matter if format is known anymore so just unregister
                 //        canUnregister = true;
-                //    } else if (isReadUnregister && EnabledFormats.Any(x => x.CanWrite && x.Parent.HandledFormat == format)) {
+                //    } else if (isReadUnregister && EnabledFormats.Any(x => x.IsWriter && x.Parent.HandledFormat == format)) {
                 //        MpConsole.WriteTraceLine($"Note! Attempting to unregister '{format}' because read unregistered but a writer uses it so ignoring");
-                //    } else if (isWriteUnregister && EnabledFormats.Any(x => x.CanRead && x.Parent.HandledFormat == format)) {
+                //    } else if (isWriteUnregister && EnabledFormats.Any(x => x.IsReader && x.Parent.HandledFormat == format)) {
                 //        MpConsole.WriteTraceLine($"Note! Attempting to unregister '{format}' because writer unregistered but a reader uses it so ignoring");
                 //    } else {
                 //        canUnregister = true;

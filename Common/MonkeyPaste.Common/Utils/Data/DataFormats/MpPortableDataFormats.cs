@@ -17,7 +17,7 @@ namespace MonkeyPaste.Common {
             Xaml,
             XamlPackage,
             //Html,
-            Csv,
+            AvCsv,
             Unicode,
             OemText,
             //FileDrop,
@@ -57,12 +57,13 @@ namespace MonkeyPaste.Common {
         public const string Text = "Text";
         public const string Xaml = "Xaml";
         public const string XamlPackage = "XamlPackage";
-        public const string Csv = "CSV";
         public const string Unicode = "Unicode";
         public const string OemText = "OEMText";
+
+
+        public const string WinCsv = "CSV";
         public const string WinBitmap = "Bitmap";
         public const string WinDib = "DeviceIndependentBitmap";
-
         public const string WinRtf = "Rich Text Format";
         public const string WinHtml = "HTML Format";
         public const string WinFileDrop = "FileDrop";
@@ -75,6 +76,7 @@ namespace MonkeyPaste.Common {
 
         // Avalonia Formats
 
+        public const string AvCsv = "Csv";
         public const string AvRtf_bytes = "Rich Text Format";
         public const string AvHtml_bytes = "HTML Format";
         public const string AvFileNames = "FileNames";

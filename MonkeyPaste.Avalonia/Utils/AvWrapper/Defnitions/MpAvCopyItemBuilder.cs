@@ -79,8 +79,6 @@ namespace MonkeyPaste.Avalonia {
 
                 mpdo.DataFormatLookup.ForEach(x => MpConsole.WriteLine("Creating copyItem w/ available format; " + x.Key.Name));
                 
-                var iData = mpdo.DataFormatLookup as Dictionary<MpPortableDataFormat, object>;
-
                 string inputTextFormat = null;
                 string itemData = null;
                 //string htmlData = string.Empty;
@@ -93,24 +91,29 @@ namespace MonkeyPaste.Avalonia {
 
                     itemType = MpCopyItemType.FileList;
                     itemData = mpdo.GetData(MpPortableDataFormats.AvFileNames).ToString();
-                } else if (mpdo.ContainsData(MpPortableDataFormats.Csv)) {
+                } else if (mpdo.ContainsData(MpPortableDataFormats.AvCsv) && 
+                            mpdo.GetData(MpPortableDataFormats.AvCsv) is byte[] csvBytes &&
+                            csvBytes.ToDecodedString() is string csvStr){
 
                     // CSV
-                    inputTextFormat = "csv";
-                    itemType = MpCopyItemType.Text;
 
-                    if (mpdo.ContainsData(MpPortableDataFormats.AvRtf_bytes) && 
-                        mpdo.GetData(MpPortableDataFormats.AvRtf_bytes) is byte[] rtfCsvBytes) {
-                        // NOTE this is assuming the content is a rich text table. But it may not be 
-                        // depending on the source so may need to be careful handling these. 
-                        itemType = MpCopyItemType.Text;
-                        itemData = rtfCsvBytes.ToDecodedString().EscapeExtraOfficeRtfFormatting();
-                        itemData = itemData.ToRichHtmlText(MpPortableDataFormats.AvRtf_bytes);
-                    } else {
-                        string csvStr = mpdo.GetData(MpPortableDataFormats.Csv).ToString();
-                        //itemData = csvStr.ToRichText();
-                        itemData = itemData.ToRichHtmlText(MpPortableDataFormats.Csv);
-                    }
+                    inputTextFormat = "html";
+                    itemType = MpCopyItemType.Text;
+                    //itemData = csvStr.ToRichText();
+                    itemData = csvStr.ToRichHtmlTable();
+
+                    //if (mpdo.ContainsData(MpPortableDataFormats.AvRtf_bytes) && 
+                    //    mpdo.GetData(MpPortableDataFormats.AvRtf_bytes) is byte[] rtfCsvBytes) {
+                    //    // NOTE this is assuming the content is a rich text table. But it may not be 
+                    //    // depending on the source so may need to be careful handling these. 
+                    //    itemType = MpCopyItemType.Text;
+                    //    itemData = rtfCsvBytes.ToDecodedString().EscapeExtraOfficeRtfFormatting();
+                    //    itemData = itemData.ToRichHtmlText(MpPortableDataFormats.AvRtf_bytes);
+                    //} else {
+                    //    string csvStr = mpdo.GetData(MpPortableDataFormats.AvCsv).ToString();
+                    //    //itemData = csvStr.ToRichText();
+                    //    itemData = itemData.ToRichHtmlText(MpPortableDataFormats.AvCsv);
+                    //}
                 } else if (mpdo.ContainsData(MpPortableDataFormats.AvRtf_bytes) &&
                         mpdo.GetData(MpPortableDataFormats.AvRtf_bytes) is byte[] rtfBytes &&
                         rtfBytes.ToDecodedString() is string rtfStr) {

@@ -17,7 +17,7 @@ namespace MonkeyPaste {
         public static async Task<MpPluginTransactionBase> PerformTransaction(
             MpPluginFormat pluginFormat, 
             MpIPluginComponentBase pluginComponent,
-            Dictionary<int,string> paramValues,
+            Dictionary<string,string> paramValues,
             MpCopyItem sourceCopyItem,
             object sourceHandler,
             bool suppressWrite = false) { 
@@ -53,7 +53,7 @@ namespace MonkeyPaste {
                 at.RequestContent = contentParam == null ? 
                     null :
                     (at.Request as MpAnalyzerPluginRequestFormat).items
-                    .FirstOrDefault(x => x.paramId == contentParam.paramId).value;
+                    .FirstOrDefault(x => x.paramName == contentParam.paramName).value;
 
                 // GET RESPONSE
                 try {

@@ -708,10 +708,10 @@ namespace MonkeyPaste {
         }
 
         private string GetParamValue(string queryParamValueStr) {
-            int enumId = GetParamId(queryParamValueStr);
-            var enumParam = _reqParams.FirstOrDefault(x => x.paramId == enumId);
+            string paramName = GetParamName(queryParamValueStr);
+            var enumParam = _reqParams.FirstOrDefault(x => x.paramName == paramName);
             if (enumParam == null) {
-                Console.WriteLine($"Error parsing dynamic query item, enumId: '{enumId}' does not exist");
+                Console.WriteLine($"Error parsing dynamic query item, enumId: '{paramName}' does not exist");
                 Console.WriteLine($"In request with params: ");
                 Console.WriteLine(JsonConvert.SerializeObject(_reqParams));
                 return null;
@@ -719,7 +719,7 @@ namespace MonkeyPaste {
             return enumParam.value;
         }
 
-        private int GetParamId(string queryParamValueStr) {
+        private string GetParamName(string queryParamValueStr) {
             if(string.IsNullOrEmpty(queryParamValueStr)) {
                 throw new Exception("Error creating http uri, dynamic query item has undefined value");
             }
@@ -727,7 +727,7 @@ namespace MonkeyPaste {
                 throw new Exception("Parameterized values must start with '@'");
             }
             try {
-                return Convert.ToInt32(queryParamValueStr.Substring(1, queryParamValueStr.Length - 1));
+                return queryParamValueStr.Substring(1, queryParamValueStr.Length - 1);
             } catch(Exception ex) {
                 throw new Exception("Error converting param reference: " + queryParamValueStr + " "+ex);
             }

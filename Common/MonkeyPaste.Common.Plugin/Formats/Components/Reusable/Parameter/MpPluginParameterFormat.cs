@@ -35,13 +35,29 @@ namespace MonkeyPaste.Common.Plugin {
     }
     
     public class MpPluginParameterFormat : MpJsonObject {
-        public int paramId { get; set; } = 0;
+        // NOTE paramName can be empty in manifest and will fall back to index of parameter in manifest
+        // internally this doesn't matter but plugin needs to either name them or be aware of the order
+        // or request args will be mismatched
+        // NOTE! important when using manifest index that readers are counted before writers no matter 
+        // order in file so readers should be defined before writers as a convention, not mandated
 
-        //paramName is intended to replace paramId and is a unique key for
-        //a user supplied value passed into portable data object param of plugin
-        //method
-        public string paramName { get; set; }
-
+        private string _paramName = string.Empty;
+        public string paramName {
+            get {
+                if (string.IsNullOrEmpty(_paramName)) {
+                    // fallback
+                    _paramName = label;
+                }
+                return _paramName;
+            }
+            set {
+                if (!string.IsNullOrEmpty(value) && paramName != value) {
+                    // don't let omitted/empty name become value
+                    _paramName = value;
+                }
+            }
+        }
+        //public string paramName { get; set; } = string.Empty;
 
         public string label { get; set; } = string.Empty;
         public string description { get; set; } = string.Empty;

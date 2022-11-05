@@ -122,6 +122,13 @@ function isAddTableValid() {
     return true;
 }
 
+function isContentATable() {
+    if (ContentItemType != 'Text') {
+        return false;
+    }
+    return Array.from(document.getElementsByClassName('quill-better-table-wrapper')).length == 1;
+}
+
 // #endregion State
 
 // #region Actions
@@ -197,8 +204,3 @@ function onAddTableToolbarButtonClick(e) {
     showAddTableContextMenu();
 }
 // #endregion Event Handlers
-
-
-
-
-

@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
-using Gdk;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System.Collections.Generic;
@@ -38,7 +37,17 @@ namespace MonkeyPaste.Avalonia {
 
         private void DragEnter(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragEnter] ClipboardFormat: "+BindingContext);
-            BindingContext.IsDropItemHovering = true;
+
+            Dispatcher.UIThread.Post(async () => {
+                BindingContext.TogglePresetIsEnabledCommand.Execute(null);
+
+                //var lastCursor = MpAvExternalDropWindow.Instance.Cursor;
+                //MpAvExternalDropWindow.Instance.Cursor = new Cursor(StandardCursorType.Wait);
+                await MpPlatformWrapper.Services.DataObjectHelperAsync.UpdateDragDropDataObjectAsync(
+                    MpAvCefNetWebViewGlue.SourceDataObject,
+                    MpAvCefNetWebViewGlue.DragDataObject);
+                //MpAvExternalDropWindow.Instance.Cursor = lastCursor;
+            });
         }
 
         private void DragOver(object sender, DragEventArgs e) {

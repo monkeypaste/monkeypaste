@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace MonkeyPaste.Common.Plugin {
     public class MpPluginRequestItemFormat : MpJsonObject, MpIParameterKeyValuePair {
-        public int paramId { get; set; } = 0;
+        public string paramName { get; set; }
         public string value { get; set; } = string.Empty;
     }
 
@@ -16,7 +16,7 @@ namespace MonkeyPaste.Common.Plugin {
             items == null ?
                 new Dictionary<object, string>() :
                 items.ToDictionary(
-                    x => (object)x.paramId,
+                    x => (object)x.paramName,
                     x => x.value);
     }
 }

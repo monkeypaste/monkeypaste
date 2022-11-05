@@ -8,7 +8,7 @@ using MonkeyPaste;
 using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
 using System.Diagnostics;
-
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipboardFormatPresetViewModel : 
@@ -92,8 +92,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsAllValid => Items.All(x => x.IsValid);
 
-        public bool CanRead => Parent == null ? false : Parent.IsReader;
-        public bool CanWrite => Parent == null ? false : Parent.IsWriter;
+        public bool IsReader => Parent == null ? false : Parent.IsReader;
+        public bool IsWriter => Parent == null ? false : Parent.IsWriter;
 
         #endregion
 
@@ -317,7 +317,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
         public async Task<MpPluginParameterViewModelBase> CreateParameterViewModelAsync(MpPluginPresetParameterValue aipv) {
-            MpPluginParameterControlType controlType = ClipboardFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId).controlType;
+            MpPluginParameterControlType controlType = ClipboardFormat.parameters.FirstOrDefault(x => x.paramName == aipv.ParamName).controlType;
             MpPluginParameterViewModelBase naipvm = null;
 
             switch (controlType) {
@@ -374,13 +374,13 @@ namespace MonkeyPaste.Avalonia {
             switch(e.PropertyName) {
                 case nameof(IsEnabled):
                     // NOTE Preset should only be able to Read or Write NOT both
-                    if(CanRead && CanWrite) {
+                    if(IsReader && IsWriter) {
                         Debugger.Break();
                     }
-                    if(CanRead) {
+                    if (IsReader) {
                         Parent.Parent.Parent.ToggleFormatPresetIsReadEnabledCommand.Execute(this);
                     }
-                    if (CanWrite) {
+                    if (IsWriter) {
                         Parent.Parent.Parent.ToggleFormatPresetIsWriteEnabledCommand.Execute(this);
                     }
                     OnPropertyChanged(nameof(DropItemBorderHexColor));
@@ -407,9 +407,20 @@ namespace MonkeyPaste.Avalonia {
         private async Task<IEnumerable<MpPluginPresetParameterValue>> PrepareParameterValueModelsAsync() {
             // get all preset values from db
             var presetValues = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(PresetId);
+
+            //var cbh = Parent.Parent.PluginFormat.clipboardHandler;
+            //int base_param_idx = 0;
+            //if(IsReader) {
+            //    int handler_idx = cbh.readers.IndexOf(Parent.ClipboardPluginFormat);
+            //    base_param_idx = cbh.readers.Where(x => cbh.readers.IndexOf(x) < handler_idx).SelectMany(x => x.parameters).Count();
+            //} else {
+            //    base_param_idx = cbh.readers.Count;
+            //    int handler_idx = cbh.writers.IndexOf(Parent.ClipboardPluginFormat);                
+            //    base_param_idx += cbh.writers.Where(x => cbh.writers.IndexOf(x) < handler_idx).SelectMany(x => x.parameters).Count();
+            //}
             // loop through plugin formats parameters and add or replace (if found in db) to the preset values
             foreach (var paramFormat in ClipboardFormat.parameters) {
-                if (!presetValues.Any(x => x.ParamId == paramFormat.paramId)) {
+                if (!presetValues.Any(x => x.ParamName == paramFormat.paramName)) {
                     // if no value is found in db for a parameter defined in manifest...
 
                     string paramVal = string.Empty;
@@ -425,9 +436,10 @@ namespace MonkeyPaste.Avalonia {
                             paramVal = paramFormat.values[0].value;
                         }
                     }
+
                     var newPresetVal = await MpPluginPresetParameterValue.CreateAsync(
                         presetId: Preset.Id,
-                        paramEnumId: paramFormat.paramId,
+                        paramName: paramFormat.paramName,
                         value: paramVal
                         //format: paramFormat
                         );
@@ -435,11 +447,19 @@ namespace MonkeyPaste.Avalonia {
                     presetValues.Add(newPresetVal);
                 }
             }
-            //presetValues.ForEach(x => x.ParameterFormat = ClipboardFormat.parameters.FirstOrDefault(y => y.paramId == x.ParamId));
+            //presetValues.ForEach(x => x.ParameterFormat = ClipboardFormat.parameters.FirstOrDefault(y => y.paramName == x.ParamName));
 
             return presetValues;
         }
 
+        #endregion
+
+        #region Commands
+
+        public ICommand TogglePresetIsEnabledCommand => new MpCommand(
+            () => {
+                IsEnabled = !IsEnabled;
+            });
         #endregion
     }
 }

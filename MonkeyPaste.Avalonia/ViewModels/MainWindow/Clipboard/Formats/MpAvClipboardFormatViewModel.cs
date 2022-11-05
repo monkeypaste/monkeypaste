@@ -25,7 +25,7 @@ namespace MonkeyPaste.Avalonia {
                 if(Parent == null) {
                     return new ObservableCollection<MpAvClipboardHandlerItemViewModel>();
                 }
-                return Parent.Items.Where(x => x.Items.Any(y => y.HandledFormat == FormatName && y.Items.Any(z=>z.CanRead)));
+                return Parent.Items.Where(x => x.Items.Any(y => y.HandledFormat == FormatName && y.Items.Any(z=>z.IsReader)));
             }
         }
 
@@ -34,7 +34,7 @@ namespace MonkeyPaste.Avalonia {
                 if (Parent == null) {
                     return new ObservableCollection<MpAvClipboardHandlerItemViewModel>();
                 }
-                return Parent.Items.Where(x => x.Items.Any(y => y.HandledFormat == FormatName && y.Items.Any(z => z.CanWrite)));
+                return Parent.Items.Where(x => x.Items.Any(y => y.HandledFormat == FormatName && y.Items.Any(z => z.IsWriter)));
             }
         }
 
@@ -83,7 +83,7 @@ namespace MonkeyPaste.Avalonia {
                     case MpPortableDataFormats.AvHtml_bytes:
                         keyStr = "Html" + keyStr;
                         break;
-                    case MpPortableDataFormats.Csv:
+                    case MpPortableDataFormats.AvCsv:
                         keyStr = "Csv" + keyStr;
                         break;
                     case MpPortableDataFormats.AvPNG:

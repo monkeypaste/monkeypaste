@@ -52,7 +52,14 @@ namespace MonkeyPaste {
             }
         }
 
-        public MpIProgressLoader ProgressLoader { get; set; }
+        public MpIProgressLoader ProgressLoader {
+            get {
+                if (NotificationFormat == null) {
+                    return null;
+                }
+                return NotificationFormat.OtherArgs as MpIProgressLoader;
+            }
+        }
 
         #endregion
 
@@ -66,12 +73,6 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-        public override async Task InitializeAsync(MpNotificationFormat nf, object nfArgs) {            
-            IsBusy = true;
-            await base.InitializeAsync(nf, nfArgs);
-            ProgressLoader = (MpIProgressLoader)nfArgs;
-            IsBusy = false;
-        }
 
         public override async Task<MpNotificationDialogResultType> ShowNotificationAsync() {
             var base_result = await base.ShowNotificationAsync();
