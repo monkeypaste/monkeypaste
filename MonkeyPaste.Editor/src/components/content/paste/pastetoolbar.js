@@ -72,11 +72,13 @@ function showPasteToolbar() {
     setPasteToolbarDefaultFocus();
 }
 
-function hidePasteTemplateToolbar() {
+function hidePasteToolbar() {
     var ptt = getPasteToolbarContainerElement();
     ptt.classList.add('hidden');
 
     hidePasteTemplateToolbarItems();
+
+    updateAllElements();
 }
 
 // #endregion Actions

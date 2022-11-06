@@ -309,10 +309,14 @@ namespace MonkeyPaste.Avalonia {
         public bool AnimateShowWindow { get; set; } = true;
         public bool AnimateHideWindow { get; set; } = true;
 
-        public MpPoint DragMouseMainWindowLocation { get; set; }
-
+        public bool IsAnyItemDragging {
+            get {
+                // TODO this only contains clip tiles now but should be the central
+                // check for dnd state
+                return MpAvClipTrayViewModel.Instance.IsAnyTileDragging;
+            }
+        }
         public bool IsMainWindowOrientationDragging { get; set; } = false;
-        public bool IsDropOverMainWindow { get; private set; } = false;
         public bool IsResizerVisible { get; set; } = false;     
         public bool IsHovering { get; set; }
 
@@ -491,9 +495,6 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvMainWindowViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(IsDropOverMainWindow):
-                    MpConsole.WriteLine("IsDropOverMainWindow: " + (IsDropOverMainWindow ? "YES" : "NO"));
-                    break;
                 case nameof(IsHovering):
                     MpConsole.WriteLine("MainWindow Hover: " + (IsHovering ? "TRUE" : "FALSE"));
                     break;
@@ -561,22 +562,6 @@ namespace MonkeyPaste.Avalonia {
                         MpMessenger.SendGlobal(MpMessageType.MainWindowDeactivated);
                         HideWindowCommand.Execute(null);
                     }
-                    break;
-                case nameof(DragMouseMainWindowLocation):
-                    if(DragMouseMainWindowLocation == null) {
-                        IsDropOverMainWindow = false;
-                        return;
-                    }
-                    IsDropOverMainWindow = ObservedMainWindowRect.Contains(DragMouseMainWindowLocation);
-                    if(!IsDropOverMainWindow && !IsMainWindowOrientationDragging) {
-                        DragMouseMainWindowLocation = null;
-                    }
-                    break;
-                case nameof(IsMainWindowOrientationDragging):
-                    if(IsMainWindowOrientationDragging) {
-                        break;
-                    }
-                    DragMouseMainWindowLocation = null;
                     break;
                 case nameof(MainWindowOrientationType):
                     MpPrefViewModel.Instance.MainWindowOrientation = MainWindowOrientationType.ToString();
@@ -704,7 +689,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void Spring(ref double x, ref double v, double xt, double zeta, double omega, double h) {
             /*
-                from https://allenchou.net/2015/04/game-math-precise-control-over-numeric-springing/
+              from https://allenchou.net/2015/04/game-math-precise-control-over-numeric-springing/
               x     - value             (input/output)
               v     - velocity          (input/output)
               xt    - target value      (input)
@@ -833,7 +818,7 @@ namespace MonkeyPaste.Avalonia {
 
                     if(IsMainWindowOpening) {
                         bool wasOpening = _animationCts.TryReset();
-                        MpConsole.WriteLine("Canceling opening: " + canShow);
+                        MpConsole.WriteLine("Canceling opening: " + wasOpening);
                         if (!wasOpening) {
                             // don't allow in this, recall Can
                             IsMainWindowOpening = false;
@@ -845,8 +830,17 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
                     if (IsMainWindowClosing) {
-                        canShow = _animationCts.TryReset();
-                        MpConsole.WriteLine("Canceling closing: " + canShow);
+                        bool wasClosing = _animationCts.TryReset();
+                        MpConsole.WriteLine("Canceling closing: " + wasClosing);
+                        if (!wasClosing) {
+                            // don't allow in this, recall Can
+                            IsMainWindowClosing = false;
+                            bool recallResult = ShowWindowCommand.CanExecute(null);
+                            MpConsole.WriteLine("Wasn't closing, unset IsMainWindowClosing to false, recall result: " + recallResult);
+                            return recallResult;
+                        } else {
+                            canShow = true;
+                        }
                     }
                 }
                 return canShow;
@@ -889,16 +883,20 @@ namespace MonkeyPaste.Avalonia {
                 FinishMainWindowHide(active_pinfo);
             },
             () => {
+                if(IsAnyItemDragging) {
+                    MpConsole.WriteLine("Force ignore mw close, dnd in progress");
+                    return false;
+                }
+
                 bool fromShorcutKey = false;
 
                 bool canHide = 
                         !IsMainWindowLocked &&
                           !IsAnyDropDownOpen &&
                           !IsAnyTextBoxFocused &&
-                          !IsDropOverMainWindow &&
                           !IsMainWindowInitiallyOpening &&
-                          !IsShowingDialog &&                          
-                          !IsDropOverMainWindow &&
+                          !IsShowingDialog &&    
+                          !IsAnyItemDragging &&
                           //!MpContextMenuView.Instance.IsOpen &&
                           //!IsMainWindowOpening &&
                           !IsResizing &&
@@ -920,7 +918,6 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine($"IsMainWindowLocked: {(IsMainWindowLocked)}");
                     MpConsole.WriteLine($"IsMainWindowInitiallyOpening: {(IsMainWindowInitiallyOpening)}");
                     MpConsole.WriteLine($"IsAnyDropDownOpen: {(IsAnyDropDownOpen)}");
-                    MpConsole.WriteLine($"IsDropOverMainWindow: {(IsDropOverMainWindow)}");
                     MpConsole.WriteLine($"IsShowingDialog: {(IsShowingDialog)}");
                     MpConsole.WriteLine($"IsResizing: {(IsResizing)}");
                     MpConsole.WriteLine($"IsMainWindowClosing: {(IsMainWindowClosing)}");

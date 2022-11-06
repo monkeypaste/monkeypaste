@@ -227,21 +227,39 @@ namespace MonkeyPaste.Common.Avalonia {
                     new Size());
             return ft;
         }
-
+        public static FormattedText ToFormattedText(this TextBlock tb) {
+            var ft = new FormattedText(
+                    tb.Text,
+                    new Typeface(tb.FontFamily, tb.FontStyle, tb.FontWeight),
+                    tb.FontSize,
+                    tb.TextAlignment,
+                    tb.TextWrapping,
+                    new Size());
+            return ft;
+        }
 
         #endregion
 
         #region Scroll Viewer
         public static ScrollBar GetScrollBar(this ScrollViewer sv, Orientation orientation) {
-            if (orientation == Orientation.Vertical) {
-                //return sv.Template..FindName("PART_VerticalScrollBar", sv) as ScrollBar;
+            if(sv == null) {
+                return null;
 
-                var vresult = sv.FindControl<ScrollBar>("PART_VerticalScrollBar");
-                return vresult;
             }
-            //return sv.Template.FindName("PART_HorizontalScrollBar", sv) as ScrollBar;
-            var hresult = sv.FindControl<ScrollBar>("PART_HorizontalScrollBar");
-            return hresult;
+
+            var sbl = sv.GetVisualDescendants<ScrollBar>();
+            return sbl.FirstOrDefault(x => x.Orientation == orientation);
+
+            //if (orientation == Orientation.Vertical) {
+            //    //return sv.Template..FindName("PART_VerticalScrollBar", sv) as ScrollBar;
+
+            //    var vresult = sv.FindControl<ScrollBar>("PART_VerticalScrollBar");
+                
+            //    return vresult;
+            //}
+            ////return sv.Template.FindName("PART_HorizontalScrollBar", sv) as ScrollBar;
+            //var hresult = sv.FindControl<ScrollBar>("PART_HorizontalScrollBar");
+            //return hresult;
         }
 
         public static void ScrollToHorizontalOffset(this ScrollViewer sv, double xOffset) {

@@ -6,13 +6,13 @@ using MonkeyPaste.Common;
 using Avalonia.Media;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvIsBrightToBrushConverter : IValueConverter {
-        public static readonly MpAvIsBrightToBrushConverter Instance = new();
+    public class MpAvBrushToContrastBrushConverter : IValueConverter {
+        public static readonly MpAvBrushToContrastBrushConverter Instance = new();
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
-            var color = (Color)new MpAvIsBrightToColorConverter().Convert(value, targetType, parameter, culture);
+            var color = (Color)new MpAvColorToContrastColorConverter().Convert(value, targetType, parameter, culture);
             if(color == null) {
-                return null;
+                return Brushes.Red;
             }
             return new SolidColorBrush() {
                 Color = color

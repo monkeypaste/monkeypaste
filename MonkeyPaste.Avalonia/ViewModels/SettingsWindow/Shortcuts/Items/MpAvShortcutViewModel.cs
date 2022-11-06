@@ -16,11 +16,6 @@ using Key = Avalonia.Input.Key;
 using SkiaSharp;
 
 namespace MonkeyPaste.Avalonia {
-    public interface MpIShortcutCommandViewModel<T> where T:struct,Enum {
-        int CommandId { get; }
-        ICommand Command { get; }
-        object CommandParameter { get; }
-    }
 
     public class MpAvShortcutViewModel : MpViewModelBase<MpAvShortcutCollectionViewModel>, 
         MpIActionComponent,
@@ -82,11 +77,9 @@ namespace MonkeyPaste.Avalonia {
 
         public IDisposable KeysObservable { get; set; }
 
-        public bool IsRoutable {
-            get {
-                return RoutingType != MpRoutingType.None && RoutingType != MpRoutingType.Internal;
-            }
-        }
+        public bool IsGlobalShortcut => RoutingType != MpRoutingType.None && RoutingType != MpRoutingType.Internal;
+
+
 
         public bool CanDelete => IsCustom();
 
@@ -147,7 +140,7 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if(_routingTypes == null) {
                     _routingTypes = new ObservableCollection<string>();
-                    if(IsRoutable) {
+                    if(IsGlobalShortcut) {
                         _routingTypes.Add("Direct");
                         _routingTypes.Add("Bubble");
                         _routingTypes.Add("Tunnel");
@@ -514,36 +507,41 @@ namespace MonkeyPaste.Avalonia {
                 }
             },
             () => {
-                if(MpAvMainWindowViewModel.Instance.IsAnyTextBoxFocused) {
-                    return false;
-                }
                 var mwvm = MpAvMainWindowViewModel.Instance;
                 var ctrvm = MpAvClipTrayViewModel.Instance;
                 var ttrvm = MpAvTagTrayViewModel.Instance;
                 var sbvm = MpAvSearchBoxViewModel.Instance;
                 var acvm = MpActionCollectionViewModel.Instance;
-                //never perform shortcuts in the following states
-                //if (mwvm.IsShowingDialog ||
-                //   //ctrvm.IsAnyPastingTemplate ||
-                //   //ctrvm.IsAnyEditingClipTile ||
-                //   //ctrvm.IsAnyEditingClipTitle ||
-                //   ttrvm.IsEditingTagName) {
-                //    return false;
-                //}
-                if(mwvm.IsMainWindowOpen) {
-                    if(sbvm.IsTextBoxFocused) {
-                        return false;
+
+                bool canPerformShortcut = true;
+
+                if(IsGlobalShortcut && !mwvm.IsMainWindowActive) {
+                    // should be fine and up to commands when its gloabl and app isn't active
+                } else {
+                    // when mw is active treat global shortcuts like any other
+                    if(mwvm.IsMainWindowActive) {
+                        if (mwvm.IsShowingDialog ||
+                            mwvm.IsAnyItemDragging ||
+                            mwvm.IsAnyTextBoxFocused ||
+                            !mwvm.IsMainWindowActive) {
+                            canPerformShortcut = false;
+                        }
+                    } else {
+                        canPerformShortcut = false;
                     }
                 }
-                //otherwise check basic type routing for validity
-                if (RoutingType == MpRoutingType.Internal) {
-                    return MpAvMainWindowViewModel.Instance.IsMainWindowOpen;
-                } else {
-                    //return !MpAvMainWindowViewModel.Instance.IsMainWindowOpen;
 
-                    //always allow global shortcut when context is ok
-                    return true;
+                MpConsole.WriteLine($"CanPerformShortcut '{ShortcutType}': {canPerformShortcut.ToString().ToUpper()}");
+
+                if(!canPerformShortcut) {
+                    MpConsole.WriteLine($"IsGlobalShortcut: "+IsGlobalShortcut);
+                    MpConsole.WriteLine($"IsMainWindowActive: "+mwvm.IsMainWindowActive);
+                    MpConsole.WriteLine($"IsShowingDialog: "+mwvm.IsShowingDialog);
+                    MpConsole.WriteLine($"IsAnyItemDragging: "+mwvm.IsAnyItemDragging);
+                    MpConsole.WriteLine($"IsAnyTextBoxFocused: "+mwvm.IsAnyTextBoxFocused);
+                    MpConsole.WriteLine($"IsMainWindowActive: "+mwvm.IsMainWindowActive);
                 }
+                return canPerformShortcut;
             });
 
 

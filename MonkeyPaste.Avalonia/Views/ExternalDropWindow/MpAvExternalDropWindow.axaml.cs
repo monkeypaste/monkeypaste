@@ -34,7 +34,7 @@ namespace MonkeyPaste.Avalonia {
 #if DEBUG
             this.AttachDevTools();
 #endif
-            var hdmb = this.FindControl<Button>("HideDropMenuButton");
+            var hdmb = this.FindControl<Border>("HideDropMenuButton");
             hdmb.AddHandler(DragDrop.DragOverEvent, OnHideOver);
 
             var dilb = this.FindControl<ListBox>("DropItemListBox");
@@ -104,13 +104,13 @@ namespace MonkeyPaste.Avalonia {
             var sv = lb.GetVisualDescendant<ScrollViewer>();
             
             double amt = 5;
-            double max_scroll_dist = 10;
+            double max_scroll_dist = 25;
             var sv_mp = e.GetPosition(lb).ToPortablePoint();
 
             double l_dist = Math.Abs(sv_mp.X);
-            double r_dist = Math.Abs(sv.Extent.Width - sv_mp.X);
+            double r_dist = Math.Abs(lb.Bounds.Width - sv_mp.X);
             double t_dist = Math.Abs(sv_mp.Y);
-            double b_dist = Math.Abs(sv.Extent.Height - sv_mp.Y);
+            double b_dist = Math.Abs(lb.Bounds.Height - sv_mp.Y);
 
             MpConsole.WriteLine(string.Format(@"L:{0} R:{1} T:{2} B:{3}", l_dist, r_dist, t_dist, b_dist));
 
@@ -130,10 +130,6 @@ namespace MonkeyPaste.Avalonia {
         private void DragOver(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragOver] Dnd Widget Window Cur Formats: " +String.Join(Environment.NewLine,e.Data.GetDataFormats()));
             AutoScrollListBox(e);
-            e.DragEffects = DragDropEffects.None;
-
-
-            //MpAvCefNetWebViewGlue.DragDataObject.SetData(MpPortableDataFormats.Text, "GOTCHA!!");
         }
 
         private void OnHideOver(object sender, DragEventArgs e) {

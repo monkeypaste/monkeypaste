@@ -43,6 +43,7 @@ namespace MonkeyPaste.Avalonia {
             windowDragBorder.AddHandler(Border.PointerPressedEvent, WindowDragBorder_PointerPressed, RoutingStrategies.Tunnel);
             //var ltb = this.FindControl<Button>("MainWindowOrientationButton");
             //ltb.AddHandler(Button.PointerPressedEvent, Ltb_PointerPressed, RoutingStrategies.Tunnel);
+
         }
 
         #region Window Drag
@@ -56,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
             windowDragBorder.DragCheckAndStart(
                 e, 
                 WindowDragBorder_Start, WindowDragBorder_Move, WindowDragBorder_End, 
-                MpAvMainWindow.Instance,
+                null,
                 MpAvShortcutCollectionViewModel.Instance);
         }
 
@@ -66,13 +67,10 @@ namespace MonkeyPaste.Avalonia {
             e.Pointer.Capture(e.Source as Control);
         }
         private void WindowDragBorder_Move(PointerEventArgs e) {
-            //
-            if(MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation == null) {
-                MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = e.GetClientMousePoint(MpAvMainWindow.Instance);
-            }
+            MpPoint mw_mp = e.GetClientMousePoint(MpAvMainWindow.Instance);
 
             MpPoint screen_mp = MpAvMainWindow.Instance.PointToScreen(
-                MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation.ToAvPoint())
+                mw_mp.ToAvPoint())
                 .ToPortablePoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.PixelDensity);
 
             MpRect mw_screen_rect = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds;
@@ -92,7 +90,7 @@ namespace MonkeyPaste.Avalonia {
 
             _curOrientation = (MpMainWindowOrientationType)cur_face_idx;
             MpConsole.WriteLine("");
-            MpConsole.WriteLine("Window Drag mp: " + MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation);
+            MpConsole.WriteLine("Window Drag mp: " + mw_mp);
             MpConsole.WriteLine("Screen Drag mp: " + screen_mp);
             MpConsole.WriteLine("Cur Orientation: " + _curOrientation);
             MpConsole.WriteLine("");

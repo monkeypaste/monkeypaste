@@ -84,6 +84,18 @@ namespace MonkeyPaste.Avalonia {
         public MpAvTextSelection Selection { get; private set; }        
 
         MpAvIContentDocument MpAvIContentView.Document => Document;
+        public bool IsAllSelected() {
+            bool is_all_selected;
+            if (BindingContext.IsSubSelectionEnabled) {
+                // NOTE blindly accounting for quill's extra new line at doc end that can't seem to be gathered
+                is_all_selected = Selection.Start.Offset == Document.ContentStart.Offset &&
+                                    (Selection.End.Offset == Document.ContentEnd.Offset ||
+                                     Selection.End.Offset == Document.ContentEnd.Offset - 1);
+            } else {
+                is_all_selected = true;
+            }
+            return is_all_selected;
+        }
 
         #endregion
 
@@ -297,21 +309,28 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         protected override WebViewGlue CreateWebViewGlue() {
             return new MpAvCefNetWebViewGlue(this);
         }
-        public bool IsAllSelected() {
-            bool is_all_selected;
-            if (BindingContext.IsSubSelectionEnabled) {
-                // NOTE blindly accounting for quill's extra new line at doc end that can't seem to be gathered
-                is_all_selected = Selection.Start.Offset == Document.ContentStart.Offset &&
-                                    (Selection.End.Offset == Document.ContentEnd.Offset ||
-                                     Selection.End.Offset == Document.ContentEnd.Offset - 1); 
-            } else {
-                is_all_selected = true;
+
+        protected override void OnGotFocus(GotFocusEventArgs e) {
+            base.OnGotFocus(e);
+            if(BindingContext == null) {
+                return;
             }
-            return is_all_selected;
+            if(!BindingContext.IsContentReadOnly) {
+                MpAvMainWindowViewModel.Instance.IsAnyTextBoxFocused = true;
+            }
+        }
+
+        protected override void OnLostFocus(RoutedEventArgs e) {
+            base.OnLostFocus(e);
+            if (BindingContext == null) {
+                return;
+            }
+            if (!BindingContext.IsContentReadOnly) {
+                MpAvMainWindowViewModel.Instance.IsAnyTextBoxFocused = false;
+            }
         }
     }
 }

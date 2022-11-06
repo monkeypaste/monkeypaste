@@ -26,13 +26,6 @@ function initSelection() {
 	//SelTimerInterval = setInterval(onSelectionCheckTick, 100);
 }
 
-function resetSelection() {
-	LastSelRange = null;
-	CurSelRange = null;
-	SelectionOnMouseDown = null;
-	BlurredSelectionRects = null;
-}
-
 // #endregion Life Cycle
 
 // #region Getters
@@ -99,49 +92,6 @@ function getDomFocusRange(forceToEditor = true) {
 
 			dom_focus_range.setStart(start_node, start_offset);
 			dom_focus_range.setEnd(end_node, end_offset);
-
-			//if (document.getSelection().rangeCount > 1) {
-			//	// when there's multiple selections need find focus range
-			//	let possible_ranges = [];
-			//	for (var i = 0; i < document.getSelection().rangeCount; i++) {
-			//		let cur_range = document.getSelection().getRangeAt(i);
-			//		if (cur_range.startContainer == document.getSelection().focusNode) {
-			//			// cur_range is in same element of focus but offset may not be within
-			//			if (cur_range.startOffset <= document.getSelection().focusOffset) {
-			//				// for debugging since its unclear how to compare all ranges to offset
-			//				// am dumping possibles and will break if more than 1
-			//				possible_ranges.push(cur_range);
-			//			}
-			//		}
-			//	}
-			//	if (possible_ranges.length > 0) {
-			//		if (possible_ranges.length > 1) {
-			//			log('Warning, multiple selection ranges found within focus node, whats going on? which should actually be focus?');
-
-			//			let exact_match_range = null;
-			//			for (var i = 0; i < possible_ranges.length; i++) {
-			//				if (possible_ranges[i].startOffset == document.getSelection().focusOffset &&
-			//					possible_ranges[i].endOffset == document.getSelection().focusOffset &&
-			//					possible_ranges[i].startContainer == document.getSelection().focusNode &&
-			//					possible_ranges[i].endContainer == document.getSelection().focusNode) {
-			//					exact_match_range = possible_ranges[i];
-			//					break;
-			//				}
-			//			}
-			//			if (exact_match_range) {
-			//				dom_focus_range = exact_match_range;
-			//			} else {
-			//				log('Warning, no exact match for focus range found, using first possible');
-			//				debugger;
-			//			}
-			//		}
-			//		if (!dom_focus_range) {
-			//			//debugger;
-			//			dom_focus_range = possible_ranges[0];
-			//		}
-					
-			//	}
-			//}
 		}
 		if (!dom_focus_range) {
 			// when theres only 1 selection range or no focus node
@@ -296,6 +246,14 @@ function isDomRangeEqual(dom_range_1, dom_range_2) {
 
 // #region Actions
 
+function resetSelection() {
+	LastSelRange = null;
+	CurSelRange = null;
+	SelectionOnMouseDown = null;
+	BlurredSelectionRects = null;
+	DragSelectionRange = null;
+	clearDomSelectionRanges();
+}
 function clearDomSelectionRanges() {
 	document.getSelection().removeAllRanges();
 }

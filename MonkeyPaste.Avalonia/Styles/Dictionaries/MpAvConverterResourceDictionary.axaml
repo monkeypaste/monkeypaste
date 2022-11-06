@@ -9,8 +9,8 @@
     <local:MpAvIconSourceObjToBitmapConverter x:Key="IconSourceObjToBitmapConverter" />
     <local:MpAvIsNotNullOrZeroToBoolConverter x:Key="IsNotNullOrZeroToBoolConverter" />
     <local:MpAvStringBase64ToBitmapConverter x:Key="MpAvStringBase64ToBitmapConverter" />
-    <local:MpAvIsBrightToBrushConverter x:Key="IsBrightToBrushConverter" />
-    <local:MpAvIsBrightToColorConverter x:Key="IsBrightToColorConverter" />
+    <local:MpAvBrushToContrastBrushConverter x:Key="BrushToContrastBrushConverter" />
+    <local:MpAvColorToContrastColorConverter x:Key="ColorToContrastColorConverter" />
     <local:MpAvItemToItemsSourceConverter x:Key="ItemToItemsSourceConverter" />
     <local:MpAvMultiBoolConverter x:Key="MultiBoolConverter" />
     <local:MpAvEnumToKeyLiteralConverter x:Key="EnumToKeyLiteralConverter" />

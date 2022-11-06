@@ -360,8 +360,6 @@ namespace MonkeyPaste {
             // NOTE copy item tag is handled by tag when copy item is deleted
             var delete_tasks = new List<Task>();
 
-            
-
             var doil = await MpDataModelProvider.GetDataObjectItemsByDataObjectId(DataObjectId);
             delete_tasks.AddRange(doil.Select(x => x.DeleteFromDatabaseAsync()));
 

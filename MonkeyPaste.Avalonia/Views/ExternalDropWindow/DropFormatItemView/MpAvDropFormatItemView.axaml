@@ -14,15 +14,16 @@
     <Border HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Height="65"
+            Margin="0,0,0,0"
             Background="Transparent"
             CornerRadius="5"
             BorderThickness="1"
-            local:MpAvIsHoveringExtension.IsEnabled="True"
-            local:MpAvIsHoveringExtension.IsHovering="{Binding IsDropItemHovering, Mode=TwoWay}"
             BorderBrush="{Binding DropItemBorderHexColor, Converter={StaticResource StringHexToBrushConverter}}">
         <Grid HorizontalAlignment="Stretch"
+              IsHitTestVisible="False"
+              DragDrop.AllowDrop="False"
               VerticalAlignment="Stretch"
-              RowDefinitions="15,40">
+              RowDefinitions="40,15">
             <Grid.Styles>
                 <Style Selector="TextBlock"
                        x:DataType="local:MpAvClipboardFormatPresetViewModel">
@@ -39,6 +40,7 @@
                 </Style>
             </Grid.Styles>
             <Image Grid.Row="0"
+                   DragDrop.AllowDrop="False"
                    Width="30"
                    Height="30"
                    Margin="5"
@@ -46,12 +48,9 @@
                    Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
 
             <TextBlock Grid.Row="1"
+                       DragDrop.AllowDrop="False"
                        Foreground="{Binding DropItemTitleHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                        Text="{Binding Parent.Title}" />
-            <!--<TextBlock Grid.Row="1"
-
-                       Foreground="{Binding DropItemTitleHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                       Text="{Binding Label}" />-->
         </Grid>
     </Border>
 </local:MpAvUserControl>

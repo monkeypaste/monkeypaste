@@ -36,11 +36,9 @@ namespace MonkeyPaste {
         }
 
         public static async Task<string> GetUrlTitle(string url) {
+            // TODO (pretty complex and unnecessary but more efficient)
+            // read source as stream only up to title tag
             string urlSource = await GetHttpSourceCode(url);
-
-            //sdf<title>poop</title>
-            //pre 3
-            //post 14
             return GetXmlElementContent(urlSource, @"title");
         }
 
@@ -67,8 +65,7 @@ namespace MonkeyPaste {
             catch (Exception ex) {
                 MpConsole.WriteTraceLine("Error scanning for url title at " + url, ex);
                 return string.Empty;
-            } 
-            
+            }            
         }
 
         public static bool IsValidUrl(string str) {

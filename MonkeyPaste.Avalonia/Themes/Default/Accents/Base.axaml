@@ -4,6 +4,10 @@
        xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <Style.Resources>
 
+        <sys:Double x:Key="GlobalBgOpacity">
+            0.7
+        </sys:Double>
+      
         <SolidColorBrush x:Key="HitTestableTransparent"
                          Color="Black"
                          Opacity="0.01" />

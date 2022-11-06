@@ -1,0 +1,40 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+    <!--  TAG TILE CLIP BORDER  -->
+    <Style Selector="local|MpAvClipBorder#TagNameBorder">
+        <Setter Property="Background"
+                Value="{DynamicResource TagTileBgColor}" />
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource TagTileBorderColor}" />
+        <Setter Property="BorderDashArray"
+                Value="{x:Null}" />
+        <Setter Property="BorderDashOffset"
+                Value="0" />
+    </Style>
+    <Style Selector="local|MpAvClipBorder#TagNameBorder.isselected">
+        <Setter Property="Background"
+                Value="{DynamicResource TagTileSelectedBgColor}" />
+    </Style>
+    <Style Selector="local|MpAvClipBorder#TagNameBorder:pointerover:not(.isselected)">
+        <Setter Property="Background"
+                Value="{DynamicResource TagTileHoverBgColor}" />
+    </Style>
+    <Style Selector="local|MpAvClipBorder#TagNameBorder.contextfocus">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource TagTileContextFocusBorderColor}" />
+    </Style>
+    <Style Selector="local|MpAvClipBorder#TagNameBorder.dragover">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource TagTileDragOverBorderColor}" />
+        <Setter Property="BorderDashArray"
+                Value="2,2" />
+        <Setter Property="BorderDashOffset"
+                Value="2" />
+    </Style>
+    <Style Selector="local|MpAvClipBorder#TagNameBorder.dragover.dragover_invalid">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource TagTileDragOverInvalidBorderColor}" />
+    </Style>
+</Styles>

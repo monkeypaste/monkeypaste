@@ -69,13 +69,10 @@ namespace MonkeyPaste.Avalonia {
                 EventHandler<PointerEventArgs> pointer_move_handler = null;
                 pointer_move_handler = (s, e) => {
                     pe = e;
-                    if(e.IsLeftDown(wv)) {
-                        MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();
-                    } else {
+                    if(!e.IsLeftDown(wv)) {
                         // NOTE not sure if these events are received since dnd is progress 
                         // but probably good to keep since drag end is so annoying to handle...
                         MpConsole.WriteLine("CefGlue pointer move event detached ITSELF");
-                        MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = null;
                         wv.PointerMoved -= pointer_move_handler;
                     }
                     
@@ -121,7 +118,7 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                ctvm.IsTileDragging = await SourceDataObject.ContainsInternalContentItem_safe(drag_lock);
+                await SourceDataObject.ContainsInternalContentItem_safe(drag_lock);
 
                 // seems excessive...but ultimately all ole pref's come from plugins so pass everthing through cb plugin system just like writing to clipboard
                 DragDataObject = await MpPlatformWrapper.Services.DataObjectHelperAsync.WriteDragDropDataObject(SourceDataObject) as MpAvDataObject;
@@ -136,14 +133,11 @@ namespace MonkeyPaste.Avalonia {
                 bool wasSelfDrop = !wasEscapePressed && ctvm.IsHovering;
                 ctvm.IsTileDragging = false;
                 wv.PointerMoved -= pointer_move_handler;
-                MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = null;
 
                 MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= modKeyUpOrDownHandler;
                 MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= modKeyUpOrDownHandler;
 
                 MpConsole.WriteLine("Cef Drag Result: " + result);
-
-
                 MpConsole.WriteLine("Was Self drop: " + wasSelfDrop);
 
                 string dropEffect = wasSelfDrop && !wasCopy ? "move":"copy";
@@ -153,7 +147,6 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 MpConsole.WriteLine("ACTUAL drag result: " + dropEffect);
-                //if(!wasSelfDrop) {
                 var dragEndMsg = new MpQuillDragEndMessage() {
                     dataTransfer = new MpQuillDataTransferMessageFragment() {
                         dropEffect = dropEffect
@@ -162,10 +155,7 @@ namespace MonkeyPaste.Avalonia {
                     wasCancel = wasEscapePressed
                 };
 
-                // wait before singaling drag end, 
-                //await Task.Delay(500);
                 await wv.EvaluateJavascriptAsync($"dragEnd_ext('{dragEndMsg.SerializeJsonObjectToBase64()}')");
-                //}
 
                 MpAvExternalDropWindow.Instance.Hide();
 

@@ -5,10 +5,6 @@
     <Style.Resources>
         <!--  COMMON  -->
 
-        <sys:Double x:Key="GlobalBgOpacity">
-            0.7
-        </sys:Double>
-
         <!--  COLORS  -->
 
         <Color x:Key="ClipTileContentBackgroundColor">
@@ -55,14 +51,41 @@
                          Color="Purple"
                          Opacity="{DynamicResource GlobalBgOpacity}" />
 
+        <!--  TAG TILE  -->
+        <!--  BG  -->
+        <SolidColorBrush x:Key="TagTileBgColor"
+                         Color="Transparent" />
+
+        <SolidColorBrush x:Key="TagTileSelectedBgColor"
+                         Color="DimGray" />
+
+        <SolidColorBrush x:Key="TagTileHoverBgColor"
+                         Color="LightGray" />
+        <!--  BORDER  -->
+        <SolidColorBrush x:Key="TagTileBorderColor"
+                         Color="Transparent" />
+
+        <SolidColorBrush x:Key="TagTileDragOverBorderColor"
+                         Color="Lime" />
+
+        <SolidColorBrush x:Key="TagTileDragOverInvalidBorderColor"
+                         Color="Red" />
+        <SolidColorBrush x:Key="TagTileContextFocusBorderColor"
+                         Color="Red" />
+
         <!--  CLIP TRAY  -->
 
-        <SolidColorBrush x:Key="QueryTrayBgColor"
+        <SolidColorBrush x:Key="ClipTrayBgColor"
                          Color="Purple"
                          Opacity="{DynamicResource GlobalBgOpacity}" />
 
+        <!--  PIN TRAY  -->
         <SolidColorBrush x:Key="PinTrayBgColor"
-                         Color="Teal"
+                         Color="Salmon"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+
+        <SolidColorBrush x:Key="PinTrayDragOverBgColor"
+                         Color="LightSalmon"
                          Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  CLIP TILE  -->

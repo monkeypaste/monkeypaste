@@ -193,7 +193,89 @@
 
         </Viewbox>
         <!--  Title Text Box  -->
-        <Grid x:Name="TitleTextBoxContainerGrid"
+        <local:MpAvMarqueeTextBox x:Name="TileTitleTextBox"
+                                  Grid.Column="0"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Top"
+                                  HorizontalContentAlignment="Left"
+                                  VerticalContentAlignment="Top"
+                                  BorderThickness="0"
+                                  Background="White"
+                                  Foreground="Black"
+                                  ReadOnlyBackground="Transparent"
+                                  ReadOnlyForeground="White"
+                                  Margin="15,0,0,0"
+                                  Padding="0"
+                                  ClipToBounds="True"
+                                  ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                  FontFamily="Segoe UI"
+                                  local:MpAvIsHoveringExtension.IsEnabled="True"
+                                  local:MpAvIsHoveringExtension.IsHovering="{Binding IsHoveringOnTitleTextGrid, Mode=TwoWay}"
+                                  local:MpAvIsFocusedExtension.IsEnabled="{Binding IsMarqueeEnabled, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                                  local:MpAvIsFocusedExtension.IsReadOnly="{Binding IsTitleReadOnly, Mode=TwoWay}"
+                                  local:MpAvIsFocusedExtension.IsFocused="{Binding IsTitleFocused, Mode=TwoWay}"
+                                  IsMarqueeEnabled="{Binding IsMarqueeEnabled, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                                  IsHitTestVisible="{Binding !HasScrollVelocity, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                                  EndEditCommand="{Binding FinishEditTitleCommand}"
+                                  CancelEditCommand="{Binding CancelEditTitleCommand}"
+                                  IsReadOnly="{Binding IsTitleReadOnly, Mode=TwoWay}"
+                                  Text="{Binding CopyItemTitle, Mode=TwoWay}">
+            <local:MpAvMarqueeTextBox.Styles>
+                <Style Selector="local|MpAvMarqueeTextBox:focus DataValidationErrors /template/ ScrollViewer ScrollBar">
+                    <Setter Property="IsVisible"
+                            Value="False" />
+                </Style>
+                <Style Selector="local|MpAvMarqueeTextBox:focus DataValidationErrors /template/ ScrollViewer ScrollBar:pointerover">
+                    <Setter Property="IsVisible"
+                            Value="False" />
+                </Style>
+            </local:MpAvMarqueeTextBox.Styles>
+            <local:MpAvMarqueeTextBox.Height>
+                <MultiBinding Converter="{StaticResource MultiDoubleMathConverter}"
+                              ConverterParameter="+">
+                    <Binding Path="FontSize"
+                             ElementName="TileTitleTextBox" />
+                    <Binding>
+                        <Binding.Source>
+                            <sys:Double>5</sys:Double>
+                        </Binding.Source>
+                    </Binding>
+                </MultiBinding>
+            </local:MpAvMarqueeTextBox.Height>
+            <!--<local:MpAvMarqueeTextBox.MaxWidth>
+                <MultiBinding Converter="{StaticResource MultiDoubleMathConverter}">
+                    <Binding Path="Bounds.Width"
+                             ElementName="TileTitleTextBox" />
+                    <Binding Path="Bounds.Width"
+                             ElementName="SourceIconContainerGrid"
+                             Converter="{StaticResource NegateDoubleConverter}" />
+                    <Binding>
+                        <Binding.Source>
+                            <sys:Double>-5</sys:Double>
+                        </Binding.Source>
+                    </Binding>
+                </MultiBinding>
+            </local:MpAvMarqueeTextBox.MaxWidth>-->
+            <local:MpAvMarqueeTextBox.FontSize>
+                <MultiBinding Converter="{StaticResource MultiDoubleMathConverter}"
+                              ConverterParameter="/,-">
+                    <Binding Path="Bounds.Height"
+                             ElementName="TitleContainerGrid" />
+                    <Binding>
+                        <Binding.Source>
+                            <sys:Double>2</sys:Double>
+                        </Binding.Source>
+                    </Binding>
+                    <Binding>
+                        <Binding.Source>
+                            <sys:Double>2</sys:Double>
+                        </Binding.Source>
+                    </Binding>
+                </MultiBinding>
+            </local:MpAvMarqueeTextBox.FontSize>
+        </local:MpAvMarqueeTextBox>
+        <!--<Grid x:Name="TitleTextBoxContainerGrid"
               Grid.Column="0"
               HorizontalAlignment="Left"
               VerticalAlignment="Stretch"
@@ -259,13 +341,8 @@
                         </Binding>
                     </MultiBinding>
                 </TextBox.FontSize>
-                <TextBox.Resources>
-                    <Thickness x:Key="TextControlThemePadding">
-                        0,0,0,0
-                    </Thickness>
-                </TextBox.Resources>
             </TextBox>
-        </Grid>
+        </Grid>-->
 
         <!--  Source Icon  -->
         <Grid x:Name="SourceIconContainerGrid"

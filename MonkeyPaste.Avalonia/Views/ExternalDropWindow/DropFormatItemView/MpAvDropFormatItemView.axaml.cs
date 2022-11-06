@@ -24,6 +24,8 @@ namespace MonkeyPaste.Avalonia {
             this.AddHandler(DragDrop.DragOverEvent, DragOver);
             this.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
             this.AddHandler(DragDrop.DropEvent, Drop);
+
+            this.GetVisualDescendants<Control>(false).ForEach(x => DragDrop.SetAllowDrop(x, false));
         }
 
         private void InitializeComponent() {
@@ -36,11 +38,17 @@ namespace MonkeyPaste.Avalonia {
         #region Drop Events
 
         private void DragEnter(object sender, DragEventArgs e) {
+            MpConsole.WriteLine("[DragEnter] Source: " + e.Source);
+            if (BindingContext.IsDropItemHovering || e.Source is not Border) {
+                // false drag enter, ignore
+                return;
+            }
+            BindingContext.IsDropItemHovering = true;
+
             MpConsole.WriteLine("[DragEnter] ClipboardFormat: "+BindingContext);
-
+            BindingContext.TogglePresetIsEnabledCommand.Execute(null);
             Dispatcher.UIThread.Post(async () => {
-                BindingContext.TogglePresetIsEnabledCommand.Execute(null);
-
+                
                 //var lastCursor = MpAvExternalDropWindow.Instance.Cursor;
                 //MpAvExternalDropWindow.Instance.Cursor = new Cursor(StandardCursorType.Wait);
                 await MpPlatformWrapper.Services.DataObjectHelperAsync.UpdateDragDropDataObjectAsync(
@@ -52,18 +60,21 @@ namespace MonkeyPaste.Avalonia {
 
         private void DragOver(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragOver] ClipboardFormat: " + BindingContext);
-            if(BindingContext.IsEnabled) {
-                e.DragEffects = DragDropEffects.Link;
-            } else {
-                e.DragEffects = DragDropEffects.None;
-            }
 
-           this.GetVisualAncestor<MpAvExternalDropWindow>().AutoScrollListBox(e);
+            e.DragEffects = DragDropEffects.Link;
+            this.GetVisualAncestor<MpAvExternalDropWindow>().AutoScrollListBox(e);
 
         }
         private void DragLeave(object sender, RoutedEventArgs e) {
-            MpConsole.WriteLine("[DragLeave] ClipboardFormat: " + BindingContext);
-            BindingContext.IsDropItemHovering = false;
+            MpConsole.WriteLine("[DragLeave] Source: " + e.Source);
+            // if (e.Source is Border ) {
+            // assume its the container border, false readings from internal textblock
+
+            //    }
+            if(e.Source is Border) {
+                BindingContext.IsDropItemHovering = false;
+            }
+            
         }
 
         private void Drop(object sender, DragEventArgs e) {

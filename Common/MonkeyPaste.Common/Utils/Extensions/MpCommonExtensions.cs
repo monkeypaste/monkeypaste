@@ -378,6 +378,10 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
+        #region Reflection
+
+        #endregion
+
         #region Nullables
 
         public static bool IsTrue(this bool? boolVal) {

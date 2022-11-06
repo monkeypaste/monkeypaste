@@ -42,7 +42,7 @@
                         VerticalAlignment="Top">
                     Move
                 </Button>-->
-                <Button x:Name="HideDropMenuButton"
+                <Border x:Name="HideDropMenuButton"
                         Background="Blue"
                         Width="8"
                         Height="8"
@@ -52,7 +52,7 @@
                     <TextBlock FontSize="6"
                                Foreground="White"
                                Text="x" />
-                </Button>
+                </Border>
                 <ListBox x:Name="DropItemListBox"
                          Background="Transparent"
                          BorderBrush="Transparent"
@@ -62,22 +62,10 @@
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          Items="{Binding AllAvailableWriterPresets}">
-                    <ListBox.Styles>
-
-                        <!--<Style Selector="ListBoxItem"
-                               x:DataType="local:MpAvClipboardFormatPresetViewModel">
-                            <Setter Property="IsSelected"
-                                    Value="{Binding IsEnabled}" />
-                        </Style>-->
-                    </ListBox.Styles>
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel HorizontalAlignment="Stretch"
                                        VerticalAlignment="Stretch" />
-                            <!--<VirtualizingStackPanel Background="Red"
-                                                    HorizontalAlignment="Stretch"
-                                                    VerticalAlignment="Stretch"
-                                                    Orientation="Horizontal" />-->
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>

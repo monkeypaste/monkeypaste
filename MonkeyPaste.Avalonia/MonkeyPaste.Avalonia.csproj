@@ -114,9 +114,12 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\DefaultControls.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ListBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ListBoxItem.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTileView.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTile.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTray.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMainWindow.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMainWindowTitle.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPinTray.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTagTile.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\PathIcon.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBlock.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBox.axaml" />
@@ -934,6 +937,9 @@
       
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Controls\Button.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvTagTile.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvClipTray.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvPinTray.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TextBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ToolTip.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ListBoxItem.axaml">
@@ -956,7 +962,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\ButtonBase.axaml">
       
     </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Default\Controls\MpAvClipTileView.axaml">
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvClipTile.axaml">
       
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Controls\ListBox.axaml">
@@ -1009,7 +1015,6 @@
     <Folder Include="Utils\Input\Mouse\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
     <Folder Include="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\" />
-    <Folder Include="Views\Reusable\NewFolder\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />

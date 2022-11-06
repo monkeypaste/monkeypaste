@@ -40,8 +40,6 @@ namespace MonkeyPaste.Avalonia {
         //private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
 
 
-        private DispatcherTimer _timer;
-
 
         private string _originalTitle;
 
@@ -460,18 +458,6 @@ namespace MonkeyPaste.Avalonia {
                 return MpPlatformWrapper.Services.PlatformResource.GetResource(path) as string;
             }
         }
-
-        public double TileBorderBrushTranslateOffsetX { get; set; }
-
-        public Rect TileBorderBrushRect {
-            get {
-                if (IsTileDragging || IsContextMenuOpen) {
-                    return new Rect(); //MpMeasurements.Instance.DottedBorderRect;
-                }
-                return new Rect(); //MpMeasurements.Instance.SolidBorderRect;
-            }
-        }
-
 
         #endregion
 
@@ -943,11 +929,9 @@ namespace MonkeyPaste.Avalonia {
         #region Drag & Drop
 
         public bool IsTileDragging { get; set; } = false;
-        public bool IsCurrentDropTarget { get; set; } = false;
 
         #endregion
 
-        public bool IsContentFocused { get; set; } = false;
 
         public bool IsOverPinButton { get; set; } = false;
 
@@ -1330,8 +1314,6 @@ namespace MonkeyPaste.Avalonia {
                 Parent.RestoreSelectionState(this);
             }
 
-            OnPropertyChanged(nameof(TileBorderBrushRect));
-
             OnPropertyChanged(nameof(IsPlaceholder));
             OnPropertyChanged(nameof(TrayX));
             OnPropertyChanged(nameof(TileBorderHexColor));
@@ -1424,17 +1406,6 @@ namespace MonkeyPaste.Avalonia {
             var fivm = new MpAvFileDataObjectItemViewModel(this);
             await fivm.InitializeAsync(dobjItem);
             return fivm;
-        }
-        public void ResetSubSelection(bool clearEditing = true, bool reqFocus = false) {
-            Dispatcher.UIThread.Post(() => {
-                ClearSelection(clearEditing);
-                Parent.IsSelectionReset = true;
-                IsSelected = true;
-                Parent.IsSelectionReset = false;
-                if (reqFocus) {
-                    IsContentFocused = true;
-                }
-            });
         }
 
         public async Task<MpAvClipTileViewModel> GetNeighborByRowOffsetAsync(int row_offset) {
@@ -1955,13 +1926,6 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsVerticalScrollbarVisibile));
 
                     break;
-                case nameof(IsContentFocused):
-                    if (IsContentFocused) {
-                        if (IsEditingTemplate) {
-                            TemplateCollection.Items.FirstOrDefault(x => x.IsEditingTemplate).FinishEditTemplateCommand.Execute(null);
-                        }
-                    }
-                    break;
                 case nameof(IsTitleReadOnly):
                     if (!IsTitleReadOnly) {
                         _originalTitle = CopyItemTitle;
@@ -2005,8 +1969,6 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsContextMenuOpen):
                     OnPropertyChanged(nameof(TileBorderHexColor));
-                    //Parent.OnPropertyChanged(nameof(Parent.TileBorderBrush));
-                    OnPropertyChanged(nameof(TileBorderBrushRect));
                     OnPropertyChanged(nameof(IsContextMenuOpen));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyTileContextMenuOpened));
                     break;
@@ -2014,23 +1976,6 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.IsPasting));
                     break;
                 case nameof(IsTileDragging):
-                    if (IsTileDragging) {
-                        StartAnimation();
-                        if (!IsSubSelectionEnabled) {
-                            // BUG checking selection length here (when IsSubSelectionEnabled=false)
-                            // to see if partial selection always returns some size when
-                            // none is actually selected. So force it to select all and 
-                            // make sure selection extension updates ui of selection
-                            IsContentFocused = true;
-                            //MpContentDocumentRtfExtension.SelectAll(this);
-                        }
-
-                        TemplateCollection.ClearAllEditing();
-                    } else {
-                        StopAnimation();
-                    }
-                    OnPropertyChanged(nameof(TileBorderHexColor));
-                    OnPropertyChanged(nameof(TileBorderBrushRect));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyTileDragging));
                     break;
                 case nameof(HasModelChanged):
@@ -2196,32 +2141,6 @@ namespace MonkeyPaste.Avalonia {
             SelectionForegroundColor = e;
         }
 
-        private void StartAnimation() {
-            //return;
-            if (_timer == null) {
-                _timer = new DispatcherTimer(DispatcherPriority.Render);
-                _timer.Interval = TimeSpan.FromMilliseconds(30);
-                _timer.Tick += _timer_Tick;
-            }
-            _timer.Start();
-        }
-
-        private void _timer_Tick(object sender, EventArgs e) {
-            if (!IsTileDragging) {
-                StopAnimation();
-                return;
-            }
-            if (TileBorderBrushTranslateOffsetX > 50) {
-                TileBorderBrushTranslateOffsetX = 0;
-            }
-            TileBorderBrushTranslateOffsetX += 0.01d;
-        }
-
-        private void StopAnimation() {
-            TileBorderBrushTranslateOffsetX = 0.0d;
-            OnPropertyChanged(nameof(TileBorderBrushRect));
-            _timer.Stop();
-        }
         #endregion
 
         #region Commands

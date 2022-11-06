@@ -74,15 +74,13 @@ namespace MonkeyPaste.Avalonia {
 
         private void DragEnter(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragEnter] TagTile: " + BindingContext);
-            MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();
-            BindingContext.IsDragOverTag  = true;
+             BindingContext.IsDragOverTag  = true;
         }
 
         private async void DragOver(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragOver] TagTile: " + BindingContext);
             // e.DragEffects = DragDropEffects.Default;
-            MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();
-            
+             
             bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
             BindingContext.IsDragOverTagValid = await IsDropValidAsync(e.Data, is_copy);
             MpConsole.WriteLine("[DragOver] TagTile: " + BindingContext + " IsCopy: " + is_copy + " IsValid: " + BindingContext.IsDragOverTagValid);
@@ -119,7 +117,6 @@ namespace MonkeyPaste.Avalonia {
             }
 
             ResetDrop();
-            MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = null;
         }
 
         #endregion

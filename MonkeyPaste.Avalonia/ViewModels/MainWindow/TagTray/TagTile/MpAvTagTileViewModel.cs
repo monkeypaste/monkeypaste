@@ -106,13 +106,15 @@ namespace MonkeyPaste.Avalonia {
                 return new MpMenuItemViewModel() {
                     SubItems = new List<MpMenuItemViewModel>() {
                         new MpMenuItemViewModel() {
-                            Header = "_Rename",
+                            Header = "Rename",
+                            AltNavIdx = 0,
                             IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("RenameImage") as string, //MpPlatformWrapper.Services.PlatformResource.GetResource("RenameIcon") as string,
                             Command = RenameTagCommand,
                             IsVisible = RenameTagCommand.CanExecute(null)
                         },
                         new MpMenuItemViewModel() {
-                            Header = "_Assign Hotkey",
+                            Header = "Assign Hotkey",
+                            AltNavIdx = 0,
                             IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("HotkeyImage") as string,
                             Command = AssignHotkeyCommand,
                             //ShortcutObjId = TagId,
@@ -120,7 +122,8 @@ namespace MonkeyPaste.Avalonia {
                             ShortcutArgs = new object[] { MpShortcutType.SelectTag, TagId },
                         },
                         new MpMenuItemViewModel() {
-                            Header = IsModelPinned ? "_Unpin" : "_Pin",
+                            Header = IsModelPinned ? "Unpin" : "Pin",
+                            AltNavIdx = 0,
                             IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("PinImage") as string,
                             Command = Parent.ToggleTileIsPinnedCommand,
                             CommandParameter = this

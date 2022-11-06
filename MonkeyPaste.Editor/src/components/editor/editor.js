@@ -139,7 +139,7 @@ function scrollToHome() {
 function hideAllToolbars() {
 	hideEditorToolbar();
 	hideEditTemplateToolbar();
-	hidePasteTemplateToolbar();
+	hidePasteToolbar();
 }
 
 function updateEditorSizesAndPositions() {
@@ -268,6 +268,8 @@ function enableSubSelection(fromHost = false, showUnderlines = true, showPaste =
 	getEditorContainerElement().classList.add('sub-select');
 	if (showUnderlines) {
 		getEditorContainerElement().classList.add('underline-content');
+	} else {
+		getEditorContainerElement().classList.remove('underline-content');
 	}
 	showScrollbars();
 	disableDragOverlay();
@@ -275,6 +277,8 @@ function enableSubSelection(fromHost = false, showUnderlines = true, showPaste =
 
 	if (showPaste) {
 		showPasteToolbar();
+	} else {
+		hidePasteToolbar();
 	}
 	updateAllElements();
 
@@ -292,10 +296,12 @@ function disableSubSelection(fromHost = false) {
 		return;
 	}
 
-	DragSelectionRange = null;
+	//DragSelectionRange = null;
+	//BlurredSelectionRects = null;
 
-	let sel = getDocSelection();
-	deselectAll(sel ? sel.index : 0);
+	//let sel = getDocSelection();
+	//deselectAll(sel ? sel.index : 0);
+	resetSelection();
 
 	getEditorContainerElement().classList.add('no-select');
 	getEditorContainerElement().classList.remove('sub-select');
@@ -303,7 +309,7 @@ function disableSubSelection(fromHost = false) {
 	hideScrollbars();
 	enableDragOverlay();
 
-	hidePasteTemplateToolbar();
+	hidePasteToolbar();
 
 	updateAllElements();
 	drawOverlay();
@@ -317,7 +323,7 @@ function disableSubSelection(fromHost = false) {
 function hideAllToolbars() {
 	hideEditorToolbar();
 	hideEditTemplateToolbar();
-	hidePasteTemplateToolbar();
+	hidePasteToolbar();
 	hideCreateTemplateToolbarContextMenu();
 	hideColorPaletteMenu();
 }

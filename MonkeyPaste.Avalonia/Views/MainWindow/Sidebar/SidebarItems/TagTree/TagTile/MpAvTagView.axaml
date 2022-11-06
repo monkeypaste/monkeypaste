@@ -33,10 +33,11 @@
                               VerticalAlignment="Stretch"
                               HorizontalAlignment="Left"
                               MinHeight="20"
-                              Background="{Binding TagBorderBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                              BorderBrush="{Binding TagBorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                              BorderDashArray="{Binding TagBorderDashArray, Converter={StaticResource DoubleArrayToAvListConverter}}"
-                              BorderDashOffset="{Binding TagBorderDashOffset}"
+                              Classes.islinked="{Binding IsLinkedToSelectedClipTile}"
+                              Classes.isselected="{Binding IsSelected}"
+                              Classes.dragover="{Binding IsDragOverTag}"
+                              Classes.dragover_invalid="{Binding !IsDragOverTagValid}"
+                              Classes.contextfocus="{Binding IsContextMenuOpened}"
                               BorderThickness="1.5">
             <StackPanel Orientation="Horizontal">
                 <Grid>
@@ -52,11 +53,12 @@
                                           Padding="4,1"
                                           BorderThickness="0"
                                           Background="{Binding TagHexColor, Converter={StaticResource StringHexToBrushConverter}}">
-                        <TextBlock Background="Transparent"
+                        <TextBlock x:Name="TagCountTextBlock"
+                                   Background="Transparent"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center"
                                    Text="{Binding TagClipCount}"
-                                   Foreground="{Binding TagCountTextHexColor, Converter={StaticResource StringHexToBrushConverter}}" />
+                                   Foreground="{Binding $parent.Background, Converter={StaticResource BrushToContrastBrushConverter}}" />
 
                     </local:MpAvClipBorder>
                     <!--  Tag Name TextBox/ Marquee  -->

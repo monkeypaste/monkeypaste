@@ -78,7 +78,7 @@ namespace MonkeyPaste.Avalonia {
                 if (IsDropItemHovering) {
                     return MpSystemColors.Yellow;
                 }
-                return MpSystemColors.dimgray;
+                return MpSystemColors.white;
             }
         }
         #endregion
@@ -377,11 +377,14 @@ namespace MonkeyPaste.Avalonia {
                     if(IsReader && IsWriter) {
                         Debugger.Break();
                     }
+                    // BUG commented out these root commands, they cause problems and are hard to test w/o 
+                    // having the clipboard sidebar in the view so..
+                    // NOTE put these commands back and test when clipboard sidebar is back
                     if (IsReader) {
-                        Parent.Parent.Parent.ToggleFormatPresetIsReadEnabledCommand.Execute(this);
+                        //Parent.Parent.Parent.ToggleFormatPresetIsReadEnabledCommand.Execute(this);
                     }
                     if (IsWriter) {
-                        Parent.Parent.Parent.ToggleFormatPresetIsWriteEnabledCommand.Execute(this);
+                        //Parent.Parent.Parent.ToggleFormatPresetIsWriteEnabledCommand.Execute(this);
                     }
                     OnPropertyChanged(nameof(DropItemBorderHexColor));
                     OnPropertyChanged(nameof(DropItemTitleHexColor));
@@ -396,10 +399,10 @@ namespace MonkeyPaste.Avalonia {
                     break;
 
                 case nameof(IsDropItemHovering):
-                    if (IsDropItemHovering) {
-                        // on mouse enter toggle current preset enabled/disabled
-                        IsEnabled = !IsEnabled;
-                    }
+                    //if (IsDropItemHovering) {
+                    //    // on mouse enter toggle current preset enabled/disabled
+                    //    IsEnabled = !IsEnabled;
+                    //}
                     break;
             }
         }

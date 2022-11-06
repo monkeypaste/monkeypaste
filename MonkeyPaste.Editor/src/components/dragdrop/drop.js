@@ -147,8 +147,9 @@ function onDragEnter(e) {
     }
     startAutoScroll();
     if (!isSubSelectionEnabled()) {
-        enableSubSelection();
+        enableSubSelection(false,false,false);
     }
+    hidePasteToolbar();
     onDragEnter_ntf();
     return false;
 }

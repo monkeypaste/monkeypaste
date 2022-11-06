@@ -23,7 +23,7 @@ using Avalonia.Interactivity;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvMainWindow : Window, MpIDndWindowPointerLocator { //}, MpAvIDropHost {
+    public partial class MpAvMainWindow : Window { 
         #region Private Variables
 
         private int? _origResizerIdx;
@@ -34,25 +34,6 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvMainWindow? Instance { get; private set; } = null;
         static MpAvMainWindow() {
             BoundsProperty.Changed.AddClassHandler<MpAvMainWindow>((x, y) => x.BoundsChangedHandler(y as AvaloniaPropertyChangedEventArgs<Rect>));
-        }
-
-        #endregion
-
-        #region MpIDndWindowPointerLocator Implementation
-
-        MpPoint MpIDndWindowPointerLocator.DragPointerPosition { 
-            get {
-                if(BindingContext == null) {
-                    return null;
-                }
-                return BindingContext.DragMouseMainWindowLocation;
-            }
-            set {
-                if(BindingContext == null) {
-                    throw new Exception("No data context defined");
-                }
-                BindingContext.DragMouseMainWindowLocation = value;
-            }
         }
 
         #endregion
@@ -82,11 +63,6 @@ namespace MonkeyPaste.Avalonia {
             this.PointerMoved += MainWindow_PointerMoved;
             this.PointerLeave += MainWindow_PointerLeave;
 
-            // MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove += ShortcutCollectionViewModel_OnGlobalMouseMove;
-
-            var mwcg = this.FindControl<Grid>("MainWindowContainerGrid");
-            mwcg.AttachedToVisualTree += MainWindowContainerGrid_AttachedToVisualTree;
-
             var sidebarSplitter = this.FindControl<GridSplitter>("SidebarGridSplitter");
             sidebarSplitter.GetObservable(GridSplitter.IsVisibleProperty).Subscribe(value => SidebarSplitter_isVisibleChange(sidebarSplitter, value));
 
@@ -97,49 +73,6 @@ namespace MonkeyPaste.Avalonia {
             });
         }
 
-        #endregion
-
-        #region Drop
-
-        private void MainWindowContainerGrid_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            var mwcg = sender as Control;
-            DragDrop.SetAllowDrop(mwcg, true);
-            mwcg.AddHandler(DragDrop.DragEnterEvent, DragEnter);
-            //mwcg.AddHandler(DragDrop.DragOverEvent, DragOver);
-            mwcg.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
-        }
-
-        private void DragEnter(object sender, DragEventArgs e) {
-            MpConsole.WriteLine("[DragEnter] MainWindowContainerGrid: ");
-            
-            BindingContext.DragMouseMainWindowLocation = e.GetPosition(this).ToPortablePoint();
-            e.DragEffects = DragDropEffects.None;
-        }
-
-        //private void DragOver(object sender, DragEventArgs e) {
-        //    MpConsole.WriteLine("[DragOver] MainWindowContainerGrid: ");
-        //    e.DragEffects = DragDropEffects.Default;
-        //}
-        private void DragLeave(object sender, RoutedEventArgs e) {
-
-            if(BindingContext.DragMouseMainWindowLocation == null) {
-                //Debugger.Break();
-                return;
-            }
-            bool isPointerWithinWindow = BindingContext.ObservedMainWindowRect.Contains(BindingContext.DragMouseMainWindowLocation);
-            if(!isPointerWithinWindow) {
-                BindingContext.DragMouseMainWindowLocation = null;
-            }
-            MpConsole.WriteLine("[DragLeave] MainWindowContainerGrid: Inside Bounds: "+isPointerWithinWindow);
-            //BindingContext.IsDropOverMainWindow = isPointerWithinWindow;
-            //if(!BindingContext.IsDropOverMainWindow) {
-            //    Debugger.Break();
-            //}
-        }
-
-        private void Drop(object sender, DragEventArgs e) {
-            MpConsole.WriteLine("[Drop] MainWindowContainerGrid: ");
-        }
         #endregion
 
         #region Public Methods

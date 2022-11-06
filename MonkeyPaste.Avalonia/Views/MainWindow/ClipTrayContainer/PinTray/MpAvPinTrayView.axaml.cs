@@ -39,16 +39,11 @@ namespace MonkeyPaste.Avalonia {
 
         private void DragEnter(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragEnter] PinTrayListBox: ");
-            MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();
-            //BindingContext.OnPropertyChanged(nameof(BindingContext.IsPinTrayDropPopOutVisible));
             BindingContext.IsDragOverPinTray = true;
         }
 
         private async void DragOver(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragOver] PinTrayListBox: ");
-            // e.DragEffects = DragDropEffects.Default;
-            MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();
-
             var ptr_mp = e.GetPosition(sender as Control).ToPortablePoint();
             int drop_idx = GetDropIdx(ptr_mp);
             bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
@@ -91,7 +86,6 @@ namespace MonkeyPaste.Avalonia {
             }
 
             ResetDrop();
-            MpAvMainWindowViewModel.Instance.DragMouseMainWindowLocation = null;
         }
 
         #endregion

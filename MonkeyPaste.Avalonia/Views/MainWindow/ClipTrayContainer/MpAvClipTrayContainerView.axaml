@@ -12,19 +12,6 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTrayContainerView">
-    <local:MpAvUserControl.Styles>
-        <Style Selector="ListBoxItem"
-               x:DataType="local:MpAvClipTileViewModel">
-            <Setter Property="Margin"
-                    Value="{Binding OuterSpacing}" />
-            <Setter Property="Padding"
-                    Value="{Binding InnerSpacing}" />
-            <Setter Property="Width"
-                    Value="{Binding BoundWidth}" />
-            <Setter Property="Height"
-                    Value="{Binding BoundHeight}" />
-        </Style>
-    </local:MpAvUserControl.Styles>
     <!--  NOTE! Layout is in mw code behind orientation change  -->
     <Grid x:Name="ClipTrayContainerGrid"
           HorizontalAlignment="Stretch"
@@ -36,12 +23,11 @@
         <local:MpAvPinTrayView x:Name="PinTrayView"
                                Grid.Column="0"
                                DataContext="{Binding}"
-                               Classes.dragoverpintray="{Binding IsDragOverPinTray}"
+                               Classes.dragover="{Binding IsDragOverPinTray}"
                                MinWidth="{Binding MinPinTrayScreenWidth}"
                                MinHeight="{Binding MinPinTrayScreenHeight}"
                                MaxWidth="{Binding MaxPinTrayScreenWidth}"
                                MaxHeight="{Binding MaxPinTrayScreenHeight}"
-                               Background="{Binding PinTrayBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                                local:MpAvSizeObserverExtension.IsEnabled="True"
                                local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedPinTrayScreenWidth, Mode=OneWayToSource}"
                                local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedPinTrayScreenHeight, Mode=OneWayToSource}">
@@ -63,12 +49,6 @@
         </GridSplitter>
         <local:MpAvClipTrayView x:Name="ClipTrayView"
                                 Grid.Column="1"
-                                Background="{DynamicResource QueryTrayBgColor}"
-                                DataContext="{Binding}">
-            <!--<local:MpAvClipTrayView.Background>
-                <SolidColorBrush Color="Purple"
-                                 Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
-            </local:MpAvClipTrayView.Background>-->
-        </local:MpAvClipTrayView>
+                                DataContext="{Binding}"/>
     </Grid>
 </local:MpAvUserControl>
