@@ -150,6 +150,12 @@ function getSelectedDeltaJson() {
 	let selDeltaStr = JSON.stringify(selDelta);
 	return selDeltaStr;
 }
+function getFormatAtDocIdx(docIdx) {
+	return quill.getFormat(docIdx, 0);
+}
+function getFormatForDocRange(docRange) {
+	return quill.getFormat(docRange);
+}
 // #endregion Getters
 
 // #region Setters
@@ -177,9 +183,6 @@ function setContents(jsonStr) {
 	quill.setContents(JSON.parse(jsonStr));
 }
 
-function formatDocRange(range, format, source = 'api') {
-	quill.formatText(range.index, range.length, format, source);
-}
 // #endregion Setters
 
 // #region State
@@ -187,6 +190,10 @@ function formatDocRange(range, format, source = 'api') {
 // #endregion State
 
 // #region Actions
+
+function formatDocRange(range, format, source = 'api') {
+	quill.formatText(range.index, range.length, format, source);
+}
 
 function insertText(docIdx, text, source = 'api', decodeTemplates = false) {
 	if (decodeTemplates) {

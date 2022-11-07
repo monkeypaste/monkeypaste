@@ -146,3 +146,19 @@ function isKeyboardButtonClick(e) {
 	}
 	return false;
 }
+
+function getArrowVal(key) {
+	if (key == 'ArrowLeft') {
+		return { x: -1, y: 0 };
+	}
+	if (key == 'ArrowRight') {
+		return { x: 1, y: 0 };
+	}
+	if (key == 'ArrowUp') {
+		return { x: 0, y: -1 };
+	}
+	if (key == 'ArrowDown') {
+		return { x: 0, y: 1 };
+	}
+	return null;
+}

@@ -1,28 +1,15 @@
-//var LastWindowMouseDownLoc = null;
+// #region Globals
 
+// #endregion Globals
 
-
+// #region Life Cycle
 function initWindow() {
 	window.addEventListener("resize", onWindowResize, true);
 	window.addEventListener('scroll', onWindowScroll);
 }
+// #endregion Life Cycle
 
-function onWindowFocus(e) {
-
-}
-
-function onWindowBlur(e) {
-
-}
-
-function onWindowScroll(e) {
-	updateAllElements();	
-}
-
-function onWindowResize(e) {
-	updateAllElements();
-	drawOverlay();
-}
+// #region Getters
 
 function getEditorSelection_safe() {
 	let cmp = WindowMouseLoc;
@@ -47,8 +34,6 @@ function getEditorSelection_safe() {
 	return safe_range;
 }
 
-
-
 function getWindowRect() {
 	let wrect = cleanRect();
 	wrect.right = window.innerWidth;
@@ -56,3 +41,36 @@ function getWindowRect() {
 	wrect = cleanRect(wrect);
 	return wrect;
 }
+
+// #endregion Getters
+
+// #region Setters
+
+// #endregion Setters
+
+// #region State
+
+// #endregion State
+
+// #region Actions
+
+// #endregion Actions
+
+// #region Event Handlers
+function onWindowFocus(e) {
+
+}
+
+function onWindowBlur(e) {
+
+}
+
+function onWindowScroll(e) {
+	updateAllElements();
+}
+
+function onWindowResize(e) {
+	updateAllElements();
+	drawOverlay();
+}
+// #endregion Event Handlers

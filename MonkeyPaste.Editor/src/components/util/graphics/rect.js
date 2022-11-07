@@ -18,11 +18,11 @@ function isPointInRect(rect, p) {
     return p.x >= rect.left && p.x <= rect.right && p.y >= rect.top && p.y <= rect.bottom;
 }
 
-function rectContainsRect(rect, r) {
-    if (!rect || !p) {
+function rectContainsRect(rect, other_rect) {
+    if (!rect || !other_rect) {
         return false;
     }
-    return isPointInRect(rect, { x: r.left, y: r.top }) && isPointInRect(rect, { x: r.right, y: r.bottom });
+    return isPointInRect(rect, { x: other_rect.left, y: other_rect.top }) && isPointInRect(rect, { x: other_rect.right, y: other_rect.bottom });
 }
 
 function rectUnion(rect_a, rect_b) {
@@ -48,6 +48,24 @@ function rectsUnion(rects) {
     return union_rect;
 }
 
+function parsePointFromSides(rect, sides) {
+    let p = { x: 0, y: 0 };
+    if (!sides) {
+        return p;
+    }
+    if (sides.split('|').includes('left')) {
+        p.x = rect.left;
+    } else if (sides.split('|').includes('right')) {
+        p.x = rect.right;
+    }
+    if (sides.split('|').includes('top')) {
+        p.y = rect.top;
+    } else if (sides.split('|').includes('bottom')) {
+        p.y = rect.bottom;
+    }
+    return p;
+}
+
 function inflateRect(rect, dl, dt, dr, db) {
     rect.left += dl;
     rect.top += dt;
@@ -55,6 +73,17 @@ function inflateRect(rect, dl, dt, dr, db) {
     rect.bottom += db;
     rect = cleanRect(rect);
     return rect;
+}
+
+function moveRectLocation(rect, loc) {
+    let w = rect.width;
+    let h = rect.height;
+    return cleanRect({
+        left: loc.x,
+        top: loc.y,
+        right: loc.x + w,
+        bottom: loc.y + h
+    });
 }
 
 function cleanRect(rect) {

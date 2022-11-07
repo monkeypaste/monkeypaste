@@ -208,3 +208,15 @@ function onInitComplete_ntf() {
 		notifyInitComplete();
 	}
 }
+
+function onShowCustomColorPicker_ntf(hexStr,title) {
+	// output 'MpQuillShowCustomColorPickerNotification'
+	if (typeof notifyShowCustomColorPicker === 'function') {
+		let msg = {
+			currentHexColor: hexStr,
+			pickerTitle: title
+		};
+		let msgStr = toBase64FromJsonObj(msg);
+		notifyShowCustomColorPicker(msgStr);
+	}
+}

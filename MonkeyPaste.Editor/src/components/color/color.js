@@ -93,29 +93,19 @@ function rgbaCssStrToRgba(rgbaCssStr) {
         return null;
     }
     rgbaCssStr = rgbaCssStr.replace('(', '').replace(')', '');
-    if (rgbaCssStr.startsWith('rgb')) {
-        rgbaCssStr = rgbaCssStr.replace('rgb', '');
-    } else if (rgbaCssStr.startsWith('rgba')) {
+    if (rgbaCssStr.startsWith('rgba')) {
         rgbaCssStr = rgbaCssStr.replace('rgba', '');
+    } else if (rgbaCssStr.startsWith('rgb')) {
+        rgbaCssStr = rgbaCssStr.replace('rgb', '');
     } else {
         return null;
     }
     let rgbaParts = rgbaCssStr.split(',');
     let rgba = {};
-    for (var i = 0; i < 4; i++) {
-        if (rgbaParts.length - 1 < i) {
-            // for rgb set a to 1
-            rgba.a = 1;
-        } else {
-            if (i == 0) {
-                rgba.r = parseFloat(rgbaParts[i]);
-            } else if (i == 1) {
-                rgba.g = parseFloat(rgbaParts[i]);
-            } if (i == 2) {
-                rgba.b = parseFloat(rgbaParts[i]);
-            }
-        }
-    }
+    rgba.r = parseFloat(rgbaParts[0]);
+    rgba.g = parseFloat(rgbaParts[1]);
+    rgba.b = parseFloat(rgbaParts[2]);
+    rgba.a = rgbaParts.length == 3 ? 1 : parseFloat(rgbaParts[3]);
     return rgba;
 }
 
@@ -144,11 +134,12 @@ function hexToRgba(hexStr) {
 function rgbaToHex(rgba, ignoreAlpha = true) {
     let hex = '#';
     if (!ignoreAlpha && rgba.a !== undefined) {
-        hex += parseInt(rgba.a * 255).toString(16);
-	}
-    hex += rgba.r.toString(16);
-    hex += rgba.g.toString(16);
-    hex += rgba.b.toString(16);
+        // BUG when a is 0 
+        hex += getHexChannelStrPart(rgba.a, 255);
+    }
+    hex += getHexChannelStrPart(rgba.r);
+    hex += getHexChannelStrPart(rgba.g);
+    hex += getHexChannelStrPart(rgba.b);
     return hex;
 }
 
@@ -159,9 +150,18 @@ function hexToRgb(hex) {
     return rgba;
 }
 
-function cleanHexColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forceOpacity) {    
+function getHexChannelStrPart(val, multiplier = 1) {
+    // BUG workaround when val is 0 only 1 '0' digit is returned for hex
+    let strPart = parseInt(val * multiplier).toString(16);
+    if (strPart == '0') {
+        strPart += '0';
+    }
+    return strPart;
+}
+
+function cleanHexColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forceOpacity, ignoreAlpha) {    
     let rgba = cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forceOpacity);
-    return rgbaToHex(rgba);
+    return rgbaToHex(rgba, ignoreAlpha);
 }
 
 function cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forceOpacity) {

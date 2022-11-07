@@ -266,4 +266,11 @@ templateType: "dynamic"
         public bool isReadOnly { get; set; }
         public bool isPastimgTemplate { get; set; }
     }
+    public class MpQuillShowCustomColorPickerNotification : MpJsonObject {
+        public string currentHexColor { get; set; }
+        public string pickerTitle { get; set; }
+    }
+    public class MpQuillCustomColorResultMessage : MpJsonObject {
+        public string customColorResult { get; set; }
+    }
 }

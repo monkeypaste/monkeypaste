@@ -11,6 +11,7 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 	quill.history.clear();
 
 	resetSelection();
+	resetColorPaletteState();
 
 	ContentHandle = contentHandle;
 	ContentItemType = contentType;
@@ -142,24 +143,6 @@ function isInlineElement(elm) {
 	return InlineTags.includes(tn);
 }
 
-function isDocIdxInListItem(docIdx) {
-	let doc_idx_elm = getElementAtDocIdx(docIdx);
-	while (doc_idx_elm != null) {
-		if (doc_idx_elm && doc_idx_elm.tagName == 'LI') {
-			return true;
-		}
-		doc_idx_elm = doc_idx_elm.parentNode;
-	}
-	return false;
-}
-function isDocIdxAtEmptyListItem(docIdx) {
-	let block_elm = getBlockElementAtDocIdx(docIdx);
-	if (block_elm.tagName == 'LI') {
-		let doc_idx_elm = getElementAtDocIdx(docIdx);
-		return doc_idx_elm && doc_idx_elm.tagName == 'BR';
-	}
-	return false;
-}
 
 function isDocIdxLineStart(docIdx) {
 	if (isNaN(parseFloat(docIdx))) {

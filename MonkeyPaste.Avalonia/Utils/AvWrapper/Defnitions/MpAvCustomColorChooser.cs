@@ -18,12 +18,12 @@ namespace MonkeyPaste.Avalonia {
             async(args) => {
                 if (args is MpIUserColorViewModel ucvm) {
                     string selectedColor = ucvm.UserHexColor;
-                    string newColor = await ShowCustomColorMenuAsync(selectedColor, ucvm);
+                    string newColor = await ShowCustomColorMenuAsync(selectedColor, null, ucvm);
                 }
             });
 
 
-        public async Task<string> ShowCustomColorMenuAsync(string selectedColor, MpIUserColorViewModel ucvm) {
+        public async Task<string> ShowCustomColorMenuAsync(string selectedColor, string title = null, MpIUserColorViewModel ucvm = null) {
             string newColor = String.Empty;
 
             MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
@@ -31,7 +31,8 @@ namespace MonkeyPaste.Avalonia {
 
             var cpw = new ColorPickerWindow(selectedColor.ToAvColor()) {
                 IsPaletteVisible = true,
-                Topmost = true
+                Topmost = true,
+                Title = string.IsNullOrWhiteSpace(title) ? "Pick a color, any color" : title
             };
             var result = await cpw.ShowDialog(MpAvMainWindow.Instance);
 
@@ -47,9 +48,8 @@ namespace MonkeyPaste.Avalonia {
 
             return newColor;
         }
-
-        public string ShowCustomColorMenu(string selectedColor, MpIUserColorViewModel ucvm) {
-            return ShowCustomColorMenuAsync(selectedColor, ucvm).Result;
+        public string ShowCustomColorMenu(string selectedColor, string title = null, MpIUserColorViewModel ucvm = null) {
+            return ShowCustomColorMenuAsync(selectedColor,title, ucvm).Result;
         }
     }
 }

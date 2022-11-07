@@ -1,0 +1,7 @@
+#editor li[data-list='checked'] {
+    text-decoration: line-through;
+    font-style: italic;
+    mix-blend-mode: lighten;
+    color: silver;
+    transition: 3s;
+}

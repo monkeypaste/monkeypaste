@@ -80,23 +80,30 @@ function getDomFocusRange(forceToEditor = true) {
 		}
 	}
 	if (!dom_focus_range) {
-		if (document.getSelection().focusNode) {
-			dom_focus_range = document.createRange();
-			let dom_sel = document.getSelection();
-			// NOTE anchor node/offset is where selection begins and focus node/offset is where last included
-			let start_offset = dom_sel.focusOffset < dom_sel.anchorOffset ? dom_sel.focusOffset : dom_sel.anchorOffset;
-			let start_node = dom_sel.focusOffset < dom_sel.anchorOffset ? dom_sel.focusNode : dom_sel.anchorNode;
+		// NOTE omittdd code was for multi range selection (highlighting search)
+		// which didn't work right so its not necessary to discern focus from selection, selection is easier
 
-			let end_offset = dom_sel.focusOffset < dom_sel.anchorOffset ? dom_sel.anchorOffset : dom_sel.focusOffset;
-			let end_node = dom_sel.focusOffset < dom_sel.anchorOffset ? dom_sel.anchorNode : dom_sel.focusNode;
+		//if (document.getSelection().focusNode) {
+		//	// NOTE this doesn't work in all cases, i think the problem is in nested blocks, like p->li
 
-			dom_focus_range.setStart(start_node, start_offset);
-			dom_focus_range.setEnd(end_node, end_offset);
-		}
-		if (!dom_focus_range) {
-			// when theres only 1 selection range or no focus node
-			dom_focus_range = document.getSelection().getRangeAt(0);
-		}
+		//	dom_focus_range = document.createRange();
+		//	let dom_sel = document.getSelection();
+		//	// NOTE anchor node/offset is where selection begins and focus node/offset is where last included
+		//	let start_offset = dom_sel.focusOffset < dom_sel.anchorOffset ? dom_sel.focusOffset : dom_sel.anchorOffset;
+		//	let start_node = dom_sel.focusOffset < dom_sel.anchorOffset ? dom_sel.focusNode : dom_sel.anchorNode;
+
+		//	let end_offset = dom_sel.focusOffset < dom_sel.anchorOffset ? dom_sel.anchorOffset : dom_sel.focusOffset;
+		//	let end_node = dom_sel.focusOffset < dom_sel.anchorOffset ? dom_sel.anchorNode : dom_sel.focusNode;
+
+		//	dom_focus_range.setStart(start_node, start_offset);
+		//	dom_focus_range.setEnd(end_node, end_offset);
+		//}
+		//if (!dom_focus_range) {
+		//	// when theres only 1 selection range or no focus node
+		//	dom_focus_range = document.getSelection().getRangeAt(0);
+		//}
+
+		dom_focus_range = document.getSelection().getRangeAt(0);
 	}
 
 	return dom_focus_range;

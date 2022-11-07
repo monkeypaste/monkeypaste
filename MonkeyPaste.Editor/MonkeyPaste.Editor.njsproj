@@ -35,6 +35,11 @@
     <Content Include="images\icons\monkey.ico" />
     <Content Include="src\components\content\paste\paste-toolbar-style.css" />
     <Content Include="src\components\content\paste\pastetoolbar.js" />
+    <Content Include="src\components\font\fontcolor.js" />
+    <Content Include="src\components\list\checkable\checkable-list-style.css" />
+    <Content Include="src\components\list\checkable\checkablelist.js" />
+    <Content Include="src\components\list\list.js" />
+    <Content Include="src\components\list\list-style.css" />
     <Content Include="src\components\svg\assets\findreplace.svg" />
     <Content Include="index.html" />
     <Content Include="package.json" />
@@ -81,6 +86,8 @@
     <Content Include="src\components\selection\selection.js" />
     <Content Include="src\components\table\table-style.css" />
     <Content Include="src\components\table\table.js" />
+    <Content Include="src\components\table\toolbar\create-table-style.css" />
+    <Content Include="src\components\table\toolbar\createTableToolbarButton.js" />
     <Content Include="src\components\template\blots\1.0\templateEmbedBlot.js" />
     <Content Include="src\components\template\blots\1.0\templatePadAttribute.js" />
     <Content Include="src\components\template\blots\2.0\templateEmbedBlot.js" />
@@ -100,6 +107,7 @@
     <Content Include="src\components\util\dataTransfer.js" />
     <Content Include="src\components\util\debug.js" />
     <Content Include="src\components\util\graphics\graphics.js" />
+    <Content Include="src\components\util\graphics\point.js" />
     <Content Include="src\components\util\graphics\line.js" />
     <Content Include="src\components\util\graphics\rect.js" />
     <Content Include="src\components\util\graphics\roundedRect.js" />
@@ -127,12 +135,14 @@
     <Folder Include="src\components\dragdrop\" />
     <Folder Include="src\components\editor\" />
     <Folder Include="src\components\font\" />
+    <Folder Include="src\components\list\checkable\" />
     <Folder Include="src\components\main\" />
     <Folder Include="src\components\messages\" />
     <Folder Include="src\components\color\" />
     <Folder Include="src\components\input\" />
     <Folder Include="src\components\findreplace\" />
     <Folder Include="src\components\common\" />
+    <Folder Include="src\components\list\" />
     <Folder Include="src\components\svg\" />
     <Folder Include="src\components\overlay\" />
     <Folder Include="src\components\quill-wrapper\" />
@@ -141,6 +151,7 @@
     <Folder Include="src\components\selection\fancy-selection\" />
     <Folder Include="src\components\svg\assets\" />
     <Folder Include="src\components\table\" />
+    <Folder Include="src\components\table\toolbar\" />
     <Folder Include="src\components\template\" />
     <Folder Include="src\components\template\blots\" />
     <Folder Include="src\components\template\blots\2.0\" />

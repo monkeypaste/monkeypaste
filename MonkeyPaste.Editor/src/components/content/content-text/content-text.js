@@ -11,20 +11,6 @@ function loadTextContent(itemDataStr, isPasteRequest) {
 	loadTemplates(isPasteRequest);
 }
 
-function getListItemCountBefoeDocIdx(docIdx) {
-	let list_item_count = 0;
-	for (var i = 0; i <= docIdx; i++) {
-		i = getLineEndDocIdx(i);
-		if (i > docIdx) {
-			break;
-		}
-		if (isDocIdxInListItem(i)) {
-			list_item_count++;
-		}
-
-	}
-	return list_item_count;
-}
 
 function adjustQueryRangesForEmptyContent(ranges) {
 	// HACK embed's are empty string in getText.

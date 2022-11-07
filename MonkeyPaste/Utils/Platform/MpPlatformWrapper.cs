@@ -16,6 +16,7 @@ namespace MonkeyPaste {
         MpIUrlBuilder UrlBuilder { get; set; }
         MpIAppBuilder AppBuilder { get; set; }
         MpICustomColorChooserMenu CustomColorChooserMenu { get; set; }
+        MpICustomColorChooserMenuAsync CustomColorChooserMenuAsync { get; set; }
         MpIKeyboardInteractionService KeyboardInteractionService { get; set; }
         MpIGlobalTouch GlobalTouch { get; set; }
         MpIUiLocationFetcher LocationFetcher { get; set; }

@@ -112,5 +112,13 @@ button {
 .svg-icon {
     width: 18px;
     height: 18px;
+    margin-right: 3px;
 }
 
+.toolbar-separator {
+    width: 1px;
+    height: 25px;
+    background-color: silver;
+    display: inline-block;
+    float: left;
+}

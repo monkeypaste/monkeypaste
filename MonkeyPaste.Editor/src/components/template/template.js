@@ -600,7 +600,7 @@ function clearTemplateFocus() {
 }
 
 function hideAllTemplateContextMenus() {
-    hideColorPaletteMenu();
+    hideTemplateColorPaletteMenu()
     hideCreateTemplateToolbarContextMenu();
 }
 

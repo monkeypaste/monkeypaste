@@ -74,11 +74,11 @@ function onWindowDoubleClick(e) {
 }
 
 function onWindowMouseDown(e) {
-	if (!isChildOfElement(e.target, getEditorContainerElement()) && !isChildOfElement(e.target, getDragOverlayElement())) {
-		// NOTE this is to ignore tracking of mouse events in toolbars for the sake of drag and drop
-		log('window mouse down rejected ', e.target, ' is not a child of editor container or drag overlay');
-		return;
-	}
+	//if (!isChildOfElement(e.target, getEditorContainerElement()) && !isChildOfElement(e.target, getDragOverlayElement())) {
+	//	// NOTE this is to ignore tracking of mouse events in toolbars for the sake of drag and drop
+	//	log('window mouse down rejected ', e.target, ' is not a child of editor container or drag overlay');
+	//	return;
+	//}
 	WindowMouseDownLoc = { x: e.clientX, y: e.clientY };
 	SelectionOnMouseDown = getDocSelection();
 }

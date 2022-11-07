@@ -85,13 +85,13 @@ function init_test() {
 
 		//loadContent(contentHandle, contentType, sample_in_use, isPasteRequest);
 
-		//disableReadOnly();
+		disableReadOnly();
 
 		//showFindReplaceToolbar();
 
 		//getPasteButtonElement().focus({ focusVisible: true });
 		//enableFancyTextSelection();
-		enableSubSelection();
+		//enableSubSelection();
 		//enableReadOnly();
 		//disableSubSelection();
 	}
@@ -202,6 +202,9 @@ function updateAllSelectionDependantElements() {
 		updateTemplatesAfterSelectionChange();
 	}
 	updateFindReplaceRangeRects();
+	updateCreateTableToolbarButtonIsEnabled();
+	updateCreateTemplateToolbarButtonToSelection();
+	updateFontColorToolbarItemsToSelection();
 }
 
 function updateAllSizeAndPositions() {
@@ -228,6 +231,16 @@ function updateAllElements() {
 	updateAllSizeAndPositions();
 	updateAllSelectionDependantElements();
 	drawOverlay();
+}
+
+
+function hideAllToolbars() {
+	hideEditorToolbar();
+	hideEditTemplateToolbar();
+	hidePasteToolbar();
+	hideCreateTemplateToolbarContextMenu();
+	hideColorPaletteMenu();
+	hideCreateTableContextMenu();
 }
 // #endregion Actions
 

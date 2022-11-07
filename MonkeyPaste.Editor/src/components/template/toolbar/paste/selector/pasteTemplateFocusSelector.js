@@ -3,11 +3,30 @@
 // #endregion Globals
 
 // #region Life Cycle
+
 function initPasteTemplateFocusSelector() {
     getPasteFocusTemplateOptionsElement().classList.add('hidden');
 
     getPasteFocusTemplateContainerElement().addEventListener('click', onTemplateSelectorClick, true);
 }
+
+
+function showPasteTemplateSelectorOptions() {
+    if (isElementDisabled(getPasteFocusTemplateOptionsElement())) {
+        return;
+    }
+    if (isPasteTemplateHaveOptions()) {
+        getPasteFocusTemplateOptionsElement().classList.remove('hidden');
+        updatePasteTemplateOptionsBounds();
+    }
+    getPasteTemplateSelectorArrowElement().classList.add('active');
+}
+
+function hidePasteTemplateSelectorOptions() {
+    getPasteFocusTemplateOptionsElement().classList.add('hidden');
+    getPasteTemplateSelectorArrowElement().classList.remove('active');
+}
+
 // #endregion Life Cycle
 
 // #region Getters
@@ -210,22 +229,6 @@ function applyTemplateToOptionDiv(opt_div, t) {
     //} else {
     //    opt_div.classList.add('no-input-template');
     //}
-}
-
-function hidePasteTemplateSelectorOptions() {
-    getPasteFocusTemplateOptionsElement().classList.add('hidden');
-    getPasteTemplateSelectorArrowElement().classList.remove('active');
-}
-
-function showPasteTemplateSelectorOptions() {
-    if (isElementDisabled(getPasteFocusTemplateOptionsElement())) {
-        return;
-	}
-    if (isPasteTemplateHaveOptions()) {
-        getPasteFocusTemplateOptionsElement().classList.remove('hidden');
-        updatePasteTemplateOptionsBounds();
-	}
-    getPasteTemplateSelectorArrowElement().classList.add('active');
 }
 
 function toggleShowPasteTemplateSelectorOptions() {

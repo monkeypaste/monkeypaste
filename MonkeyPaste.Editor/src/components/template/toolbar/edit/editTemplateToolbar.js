@@ -22,6 +22,60 @@ function initEditTemplateToolbar() {
     getEditTemplateDetailTextAreaElement().addEventListener('blur', onTemplateDetailTextAreaLostFocus);
     getEditTemplateDetailTextAreaElement().addEventListener('input', onTemplateDetailChanged);       
 }
+
+function showTemplateColorPaletteMenu() {
+    hideColorPaletteMenu();
+
+    let color_box_elm = getEditTemplateColorBoxElement();
+    let ft = getFocusTemplate();
+    if (!ft) {
+        debugger;
+    }
+
+    const colorBoxRect = color_box_elm.getBoundingClientRect();
+    const x = colorBoxRect.left;
+    const y = getEditTemplateToolbarContainerElement().getBoundingClientRect().top;
+
+    showColorPaletteMenu(
+        color_box_elm,
+        x, y,
+        ft.templateColor,
+        onColorPaletteItemClick);
+
+}
+
+function hideTemplateColorPaletteMenu() {
+    if (ColorPaletteAnchorElement != getEditTemplateColorBoxElement()) {
+        // only hide if color palette is for template
+        return;
+    }
+    hideColorPaletteMenu();
+
+}
+
+function hideEditTemplateToolbar(wasEscCancel = false, wasDelete = false) {
+    if (!isShowingEditTemplateToolbar()) {
+        TemplateBeforeEdit = null;
+        return;
+    }
+    hideColorPaletteMenu();
+
+    clearAllTemplateEditClasses();
+    if (TemplateBeforeEdit != null && !wasDelete) {
+        // get new or updated def
+        let updated_t = getTemplateDefByGuid(TemplateBeforeEdit.templateGuid);
+        if (isTemplateDefChanged(TemplateBeforeEdit, updated_t) && !wasEscCancel) {
+            // t new or updated
+            onAddOrUpdateTemplate_ntf(updated_t);
+        }
+        // reset comprarer template
+        TemplateBeforeEdit = null;
+    }
+
+    var ett = getEditTemplateToolbarContainerElement();
+    ett.classList.add('hidden');
+}
+
 // #endregion Life Cycle
 
 // #region Getters
@@ -125,48 +179,7 @@ function showEditTemplateToolbar(isNew = false) {
 	}
 }
 
-function hideEditTemplateToolbar(wasEscCancel = false, wasDelete = false) {
-    if (!isShowingEditTemplateToolbar()) {
-        TemplateBeforeEdit = null;
-        return;
-    }
-    hideColorPaletteMenu();
 
-    clearAllTemplateEditClasses();
-    if (TemplateBeforeEdit != null && !wasDelete) {
-        // get new or updated def
-        let updated_t = getTemplateDefByGuid(TemplateBeforeEdit.templateGuid);
-        if (isTemplateDefChanged(TemplateBeforeEdit, updated_t) && !wasEscCancel) {
-            // t new or updated
-            onAddOrUpdateTemplate_ntf(updated_t);
-        }
-        // reset comprarer template
-        TemplateBeforeEdit = null;
-    }
-
-    var ett = getEditTemplateToolbarContainerElement();
-    ett.classList.add('hidden');
-}
-
-function showTemplateColorPaletteMenu() {
-    hideColorPaletteMenu();
-
-    let color_box_elm = getEditTemplateColorBoxElement();
-    let ft = getFocusTemplate();
-    if (!ft) {
-        debugger;
-    }
-
-    const colorBoxRect = color_box_elm.getBoundingClientRect();
-    const x = colorBoxRect.left;
-    const y = getEditTemplateToolbarContainerElement().getBoundingClientRect().top;
-
-    showColorPaletteMenu(
-        x, y,
-        ft.templateColor,
-        onColorPaletteItemClick);
-
-}
 
 function updateEditTemplateToolbarSizesAndPositions() {
     if (!isShowingEditTemplateToolbar()) {

@@ -76,6 +76,8 @@ function initEditorToolbar() {
 	getEditorToolbarElement().classList.add('top-align');
 
 	initTable();
+	initLists();
+	initFontColorToolbarItems();
 
 	initFontFamilyPicker();
 	//initLinkToolbarButton();

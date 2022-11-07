@@ -7,17 +7,17 @@
     transition: 0.5s;
 }
 
-.template-color-palette-item {
+.color-palette-item {
     height: 15px;
     width: 15px;
     border-radius: 1px;
     border: solid 1px black;
 }
 
-    .template-color-palette-item:hover {
+    .color-palette-item:hover {
         border: solid 1px yellow;
     }
 
-.template-color-palette-item-selected {
+.color-palette-item-selected {
     border-color: black !important;
 }

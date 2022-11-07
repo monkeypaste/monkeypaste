@@ -23,12 +23,8 @@ var LastFindReplaceInputState = null;
 // #region Life Cycle
 
 function initFindReplaceToolbar() {
-	const findReplaceToolbarButton = new QuillToolbarButton({
-		icon: getSvgHtml('findreplace')
-	});
-
-	findReplaceToolbarButton.qlFormatsEl.addEventListener('click', onFindReplaceToolbarButtonClick);
-	findReplaceToolbarButton.attach(quill);
+	addClickOrKeyClickEventListener(getFindReplaceEditorToolbarButton(), onFindReplaceToolbarButtonClick);
+	getFindReplaceEditorToolbarButton().innerHTML = getSvgHtml('findreplace')
 
 	getIsFindInputElement().addEventListener('change', onFindOrReplaceRadioChange);
 	getIsReplaceInputElement().addEventListener('change', onFindOrReplaceRadioChange);
@@ -49,6 +45,10 @@ function initFindReplaceToolbar() {
 // #endregion Life Cycle
 
 // #region Getters
+
+function getFindReplaceEditorToolbarButton() {
+	return document.getElementById('findReplaceToolbarButton');
+}
 
 function getFindInputElement() {
 	return document.getElementById('findInput');

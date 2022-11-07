@@ -24,6 +24,29 @@ function initPasteTemplateToolbarItems() {
     initPasteTemplateFocusSelector();
 }
 
+
+function showPasteTemplateToolbarItems() {
+    let ptil = Array.from(document.getElementsByClassName('paste-template-item'));
+    for (var i = 0; i < ptil.length; i++) {
+        ptil[i].classList.remove('hidden');
+    }
+
+    hidePasteTemplateSelectorOptions();
+
+    updatePasteTemplateToolbarToSelection();
+
+    PasteTemplateTimerInterval = setInterval(onPasteTemplateTimer, 300, getEditorElement());
+}
+
+function hidePasteTemplateToolbarItems() {
+    let ptil = Array.from(document.getElementsByClassName('paste-template-item'));
+    for (var i = 0; i < ptil.length; i++) {
+        ptil[i].classList.add('hidden');
+    }
+
+    clearInterval(PasteTemplateTimerInterval);
+}
+
 // #endregion Life Cycle
 
 // #region Getters
@@ -106,12 +129,15 @@ function setTemplatePasteValue(tguid, val) {
    //     } 
         let paste_val = getTemplatePasteValue(t);
         let has_changed = paste_val != val;
-        telm.innerText = val;
-        telm.setAttribute('templateText', val);
-        if (!bouncing) {
-            debabyTemplateElement(telm);
+        if (has_changed) {
+            telm.innerText = val;
+            telm.setAttribute('templateText', val);
+            if (!bouncing) {
+                debabyTemplateElement(telm);
 
+            }
 		}
+        
     }
     //updateTemplatesAfterTextChanged();
 }
@@ -144,26 +170,6 @@ function isShowingPasteTemplateToolbar() {
 // #endregion State
 
 // #region Actions
-
-function showPasteTemplateToolbarItems() {
-    let ptil = Array.from(document.getElementsByClassName('paste-template-item'));
-    for (var i = 0; i < ptil.length; i++) {
-        ptil[i].classList.remove('hidden');
-	}
-
-    updatePasteTemplateToolbarToSelection();
-
-    PasteTemplateTimerInterval = setInterval(onPasteTemplateTimer, 300, getEditorElement());
-}
-
-function hidePasteTemplateToolbarItems() {
-    let ptil = Array.from(document.getElementsByClassName('paste-template-item'));
-    for (var i = 0; i < ptil.length; i++) {
-        ptil[i].classList.add('hidden');
-    }
-
-    clearInterval(PasteTemplateTimerInterval);
-}
 
 function findPasteFocusTemplate(sel) {
     let tl = getTemplateDefsInRange(sel);

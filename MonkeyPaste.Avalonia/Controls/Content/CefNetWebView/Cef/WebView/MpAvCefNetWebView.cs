@@ -43,7 +43,8 @@ namespace MonkeyPaste.Avalonia {
         notifyPasteTemplateRequest,
         notifyFindReplaceVisibleChange,
         notifyQuerySearchRangesChanged,
-        notifyLoadComplete
+        notifyLoadComplete,
+        notifyShowCustomColorPicker
     }
     [DoNotNotify]
     public class MpAvCefNetWebView : 
@@ -278,6 +279,27 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
                    
+                    break;
+                case MpAvEditorBindingFunctionType.notifyShowCustomColorPicker:
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillShowCustomColorPickerNotification>(msgJsonBase64Str);
+                    if(ntf is MpQuillShowCustomColorPickerNotification showCustomColorPickerMsg) {
+                        Dispatcher.UIThread.Post(async () => {
+
+                            if(string.IsNullOrWhiteSpace(showCustomColorPickerMsg.pickerTitle)) {
+                                // editor should provide title for templates but for content set to title here if ya want (may
+                                showCustomColorPickerMsg.pickerTitle = $"Pick a color, any color for '{ctvm.CopyItemTitle}'";
+                            }
+                            string pickerResult = await MpPlatformWrapper.Services.CustomColorChooserMenuAsync.ShowCustomColorMenuAsync(
+                                showCustomColorPickerMsg.currentHexColor,
+                                showCustomColorPickerMsg.pickerTitle,
+                                null);
+
+                            var resp = new MpQuillCustomColorResultMessage() {
+                                customColorResult = pickerResult
+                            };
+                            this.ExecuteJavascript($"provideCustomColorPickerResult_ext('{resp.SerializeJsonObjectToBase64()}')");
+                        });
+                    }
                     break;
             }
 

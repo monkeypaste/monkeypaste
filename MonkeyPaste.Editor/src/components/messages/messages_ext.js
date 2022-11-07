@@ -385,3 +385,9 @@ function searchNavOffsetChanged_ext(msgBase64Str) {
 	let msg = toJsonObjFromBase64Str(msgBase64Str);
 	navigateFindReplaceResults(msg.curIdxOffset);
 }
+
+function provideCustomColorPickerResult_ext(msgBase64Str) {
+	// input 'MpQuillCustomColorResultMessage'
+	let msg = toJsonObjFromBase64Str(msgBase64Str);
+	processCustomColorResult(msg.customColorResult);
+}

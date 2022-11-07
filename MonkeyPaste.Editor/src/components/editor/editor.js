@@ -320,13 +320,6 @@ function disableSubSelection(fromHost = false) {
 	log('sub-selection DISABLED from: '+(fromHost ? 'HOST':'INTERNAL'));
 }
 
-function hideAllToolbars() {
-	hideEditorToolbar();
-	hideEditTemplateToolbar();
-	hidePasteToolbar();
-	hideCreateTemplateToolbarContextMenu();
-	hideColorPaletteMenu();
-}
 // #endregion Actions
 
 // #region Event Handlers

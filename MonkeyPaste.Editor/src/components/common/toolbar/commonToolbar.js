@@ -44,6 +44,9 @@ function addClickOrKeyClickEventListener(elm, handler) {
     elm.addEventListener('click', function (e) {
         if (!isElementDisabled(e.currentTarget)) {
             handler(e);
+
+            // prevent parent/children handlers from receiving
+            e.stopPropagation();
         }
     });
     elm.addEventListener('keydown', function (e) {

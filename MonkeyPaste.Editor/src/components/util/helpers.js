@@ -216,11 +216,11 @@ function isNullOrWhiteSpace(str) {
     return isNullOrEmpty(str) || (typeof str.every === 'function' && str.every(x => x == ' '));
 }
 
-function isChildOfElement(elm, parent) {
+function isChildOfElement(elm, parent, include_self = true) {
     if (!elm || !parent) {
         return false;
     }
-    let search_elm = elm;
+    let search_elm = include_self ? elm : elm.parentNode;
     while (search_elm != null) {
         if (search_elm == parent) {
             return true;
