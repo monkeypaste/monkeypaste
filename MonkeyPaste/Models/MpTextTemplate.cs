@@ -49,7 +49,7 @@ namespace MonkeyPaste {
         #region Columns
 
         [PrimaryKey, AutoIncrement]
-        [Column("pk_MpTextTokenId")]
+        [Column("pk_MpTextTemplateId")]
         [JsonIgnore]
         public override int Id { get; set; }
 
@@ -193,6 +193,10 @@ namespace MonkeyPaste {
             return ccit;
         }
 
+        public bool IsInputTypeTemplate() {
+            return TemplateType == MpTextTemplateType.Dynamic;
+        }
+
         public MpQuillTextTemplateBlot ToTextTemplateBlot() {
             return new MpQuillTextTemplateBlot() {
                 templateColor = HexColor,
@@ -211,7 +215,7 @@ namespace MonkeyPaste {
         }
 
         public override string ToString() {
-            return EncodedTemplate;
+            return $"'{TemplateName}' - [{TemplateType}]";
         }
     }
 }

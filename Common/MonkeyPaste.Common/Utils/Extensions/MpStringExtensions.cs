@@ -28,16 +28,16 @@ namespace MonkeyPaste.Common {
             return enc.GetString(bytes);
         }
 
-        public static byte[] ToEncodedBytes(this string str, Encoding enc = null) {
+        public static byte[] ToBytesFromString(this string str, Encoding enc = null) {
             // NOTE str intended to be text not base64
             // TODO should use local encoding here
             enc = enc == null ? Encoding.UTF8 : enc;
             return enc.GetBytes(str);
         }
-        public static byte[] ToByteArray(this string str, Encoding enc = null) {
+        public static byte[] ToBytesFromBase64String(this string str, Encoding enc = null) {
             // NOTE intended for str to be base64
             if (!str.IsStringBase64()) {
-                return str.ToEncodedBytes(enc);
+                return str.ToBytesFromString(enc);
             }
 
             var bytes = Convert.FromBase64String(str);
@@ -51,7 +51,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static string ToBase64String(this string str, Encoding enc = null) {
-            return str.ToEncodedBytes(enc).ToBase64String();
+            return str.ToBytesFromString(enc).ToBase64String();
         }
 
         #endregion

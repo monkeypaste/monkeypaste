@@ -225,6 +225,8 @@ function deleteFocusTemplate() {
     }
 
     removeTemplatesByGuid(ftguid);
+
+    // NOTE may need to force (notify) content write to db here so MasterTemplateCollection doesn't pick this item up
     onUserDeletedTemplate_ntf(ftguid);
 
     hideEditTemplateToolbar(false, true);

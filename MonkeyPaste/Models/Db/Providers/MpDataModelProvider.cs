@@ -619,7 +619,7 @@ namespace MonkeyPaste {
 
         #endregion MpCopyItem
 
-        #region MpTextToken
+        #region MpTextTemplate
         public static Task<List<string>> ParseTextTemplateGuidsByCopyItemIdAsync(MpCopyItem ci) {
             var textTemplateGuids = new List<string>();
             if (ci == null) {
@@ -637,14 +637,16 @@ namespace MonkeyPaste {
             return Task.FromResult(textTemplateGuids);
         }
 
-        public static async Task<List<MpTextTemplate>> ParseTextTemplatesByCopyItemIdAsync(MpCopyItem ci) {
-            if(!ci.ItemData.Contains(MpTextTemplate.TextTemplateOpenTokenRtf)) {
-                // pre-pass data because this may be a bottle neck
-                return new List<MpTextTemplate>();
+        public static async Task<List<MpTextTemplate>> GetTextTemplatesByType(IEnumerable<MpTextTemplateType> templateTypes) {
+            string whereStr;
+            if (templateTypes == null || templateTypes.Count() == 0) {
+                whereStr = string.Empty;
+            } else {
+                string where_clause = string.Join(" or ", templateTypes.Select(x => string.Format(@"TemplateTypeStr='{0}'", x)));
+                whereStr = $"where {where_clause}";
             }
-
-            var templateGuids = await ParseTextTemplateGuidsByCopyItemIdAsync(ci);
-            var result = await GetTextTemplatesByGuidsAsync(templateGuids);
+            string query = $"select * from MpTextTemplate {whereStr}";
+            var result = await MpDb.QueryAsync<MpTextTemplate>(query, whereStr);
             return result;
         }
 
@@ -655,6 +657,11 @@ namespace MonkeyPaste {
                 return null;
             }
             return result[0];
+        }
+        public static async Task<int> GetTextTemplateIdByGuidAsync(string tguid) {
+            string query = $"select pk_MpTextTemplateId from MpTextTemplate where MpTextTemplateGuid=?";
+            var result = await MpDb.QueryScalarAsync<int>(query, tguid);
+            return result;
         }
 
         public static async Task<List<MpTextTemplate>> GetTextTemplatesByGuidsAsync(List<string> guids) {
@@ -675,7 +682,12 @@ namespace MonkeyPaste {
             }
             return result[0];
         }
-
+        public static async Task<List<MpCopyItem>> GetCopyItemsByTextTemplateGuid(string tguid) {
+            string whereStr = $"where CopyItemData LIKE '%templateguid=''{tguid}''%'";
+            string query = $"select * from MpCopyItem {whereStr}";
+            var result = await MpDb.QueryAsync<MpCopyItem>(query);
+            return result;
+        }
         #endregion
 
         #region MpTextAnnotation

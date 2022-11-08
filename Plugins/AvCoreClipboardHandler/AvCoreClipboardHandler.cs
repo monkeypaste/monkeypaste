@@ -225,7 +225,7 @@ namespace AvCoreClipboardHandler {
             //            //var pngData = winforms_dataobject.GetData("PNG");
             //            //var dibData = winforms_dataobject.GetData(DataFormats.Dib);
             //            //dataObj.Set(MpPortableDataFormats.Bitmap, bmpSrc);
-            //            dataObj.SetData(MpPortableDataFormats.AvPNG, data.ToString().ToByteArray());
+            //            dataObj.SetData(MpPortableDataFormats.AvPNG, data.ToString().ToBytesFromBase64String());
             //            //dataObj.Set(DataFormats.Dib, dibData);
             //            break;
             //        case MpPortableDataFormats.AvFileNames:
@@ -233,7 +233,7 @@ namespace AvCoreClipboardHandler {
             //            dataObj.SetData("FileNames", fl.ToList());
             //            break;
             //        case MpPortableDataFormats.AvHtml_bytes:
-            //            var bytes = data.ToString().ToEncodedBytes();
+            //            var bytes = data.ToString().ToBytesFromString();
             //            dataObj.SetData(MpPortableDataFormats.AvHtml_bytes, bytes);
             //            break;
             //        default:

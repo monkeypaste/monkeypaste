@@ -98,7 +98,7 @@ namespace MonkeyPaste {
     }
 
     public class MpQuillTemplateAddOrUpdateNotification : MpJsonObject {
-        public MpTextTemplate addedOrUpdatedTextTemplate { get; set; }
+        public string addedOrUpdatedTextTemplateBase64JsonStr { get; set; }
     }
     public class MpQuillTextTemplateBlot : MpJsonObject {
         /*
@@ -272,5 +272,19 @@ templateType: "dynamic"
     }
     public class MpQuillCustomColorResultMessage : MpJsonObject {
         public string customColorResult { get; set; }
+    }
+
+    public class MpQuillTemplateDbQueryRequestMessage : MpJsonObject {
+        public List<string> templateTypes { get; set; } = new List<string>();
+    }
+
+    public class MpQuillGetRequestNotification : MpJsonObject {
+        public string requestGuid { get; set; }
+        public string reqMsgFragmentBase64JsonStr { get; set; } = String.Empty;
+    }
+    
+    public class MpQuillGetResponseNotification : MpJsonObject {
+        public string requestGuid { get; set; }
+        public string responseFragmentBase64JsonStr { get; set; } = string.Empty;
     }
 }

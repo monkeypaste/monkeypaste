@@ -19,11 +19,17 @@ namespace MonkeyPaste.Common {
             return new T();
         }
 
-        public static T DeserializeBase64Object<T>(object obj) where T : new() {
-            if (obj is string objBase64Str) {
+        public static T DeserializeBase64Object<T>(object obj, Encoding enc = null) where T : new() {
+            if (obj is string objBase64Str && !string.IsNullOrWhiteSpace(objBase64Str)) {
                 try {
-                    byte[] bytes = Convert.FromBase64String(objBase64Str);
-                    string objStr = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+
+                    //byte[] bytes = Convert.FromBase64String(objBase64Str);
+                    //enc = enc == null ? Encoding.UTF8 : enc;
+                    //string objStr = enc.GetString(bytes, 0, bytes.Length);
+
+                    // NOTE ignoring encoding since string is base 64
+                    byte[] bytes = objBase64Str.ToBytesFromBase64String(null);
+                    string objStr = bytes.ToDecodedString(enc);
                     return JsonConvert.DeserializeObject<T>(objStr);
                 }catch(Exception ex) {
                     MpConsole.WriteTraceLine("Error deserializing base64 str: "+objBase64Str, ex);
@@ -40,15 +46,25 @@ namespace MonkeyPaste.Common {
             return JsonConvert.SerializeObject(obj);
         }
 
-        public string SerializeJsonObject() {
-            return JsonConvert.SerializeObject(this);
+        public static string SerializeObjectToBase64JsonStr(object obj, Encoding enc = null) {
+            if (obj == null) {
+                return string.Empty;
+            }
+            string jsonStr = SerializeObject(obj);
+            var json_bytes = jsonStr.ToBytesFromString(enc);
+            return json_bytes.ToBase64String();
         }
 
-        public string SerializeJsonObjectToBase64() {
-            string jsonStr = SerializeJsonObject();
-            byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonStr);
-            string jsonBase64 = Convert.ToBase64String(jsonBytes);
-            return jsonBase64;
+        public string SerializeJsonObject() {
+            return SerializeObject(this);
+        }
+
+        public string SerializeJsonObjectToBase64(Encoding enc = null) {
+            //string jsonStr = SerializeJsonObject();
+            //byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonStr);
+            //string jsonBase64 = Convert.ToBase64String(jsonBytes);
+            //return jsonBase64;
+            return SerializeObjectToBase64JsonStr(this, enc);
         }
 
         public object Deserialize(string jsonMsgStr) {

@@ -39,11 +39,11 @@ namespace MonkeyPaste.Common.Avalonia {
                 data = portablePathStr.SplitNoEmpty(Environment.NewLine);
             } else if ((format == MpPortableDataFormats.AvHtml_bytes || format == MpPortableDataFormats.AvRtf_bytes) && data is string portableDecodedFormattedTextStr) {
                 // avalona like rtf and html to be stored as bytes
-                data = portableDecodedFormattedTextStr.ToEncodedBytes();
+                data = portableDecodedFormattedTextStr.ToBytesFromString();
             } else if(format == MpPortableDataFormats.CefHtml && data is byte[] html_bytes) {
                 data = html_bytes.ToDecodedString();
             } else if(format == MpPortableDataFormats.AvPNG && data is string png64) {
-                data = png64.ToByteArray();
+                data = png64.ToBytesFromBase64String();
             }
             base.SetData(format, data);
         }
@@ -64,7 +64,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 !ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
                 GetData(MpPortableDataFormats.CefHtml) is string cef_html_str) {
                 // convert html sring to to bytes
-                byte[] htmlBytes = cef_html_str.ToEncodedBytes();
+                byte[] htmlBytes = cef_html_str.ToBytesFromString();
                 SetData(MpPortableDataFormats.AvHtml_bytes, htmlBytes);
             }
 
@@ -100,7 +100,7 @@ namespace MonkeyPaste.Common.Avalonia {
             } else if(OperatingSystem.IsWindows()) {
                 if(ContainsData(MpPortableDataFormats.AvPNG) && 
                     GetData(MpPortableDataFormats.AvPNG) is string png64) {
-                    //SetData(MpPortableDataFormats.AvPNG, png64.ToByteArray());
+                    //SetData(MpPortableDataFormats.AvPNG, png64.ToBytesFromBase64String());
                 }
                 if(ContainsData(MpPortableDataFormats.AvPNG) &&
                     GetData(MpPortableDataFormats.AvPNG) is byte[] pngBytes) {
@@ -116,7 +116,7 @@ namespace MonkeyPaste.Common.Avalonia {
                     GetData(MpPortableDataFormats.CefHtml) is string htmlStr) {
                     // TODO should check if content is csv here (or in another if?) and create rtf table 
                     string rtf = htmlStr.ToContentRichText();
-                    SetData(MpPortableDataFormats.AvRtf_bytes, rtf.ToEncodedBytes());
+                    SetData(MpPortableDataFormats.AvRtf_bytes, rtf.ToBytesFromString());
                 }
             }
 

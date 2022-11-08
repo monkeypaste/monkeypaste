@@ -148,7 +148,7 @@ namespace MonkeyPaste {
                        forceExt.ToLower().Equals("bmp") ||
                        forceExt.ToLower().Equals("jpg") ||
                        forceExt.ToLower().Equals("jpeg")) {
-                tfp = WriteByteArrayToFile(Path.GetTempFileName(), fileData.ToByteArray(), isTemporary);
+                tfp = WriteByteArrayToFile(Path.GetTempFileName(), fileData.ToBytesFromBase64String(), isTemporary);
             } else {
                 tfp = WriteTextToFile(Path.GetTempFileName(), fileData, isTemporary);
             }

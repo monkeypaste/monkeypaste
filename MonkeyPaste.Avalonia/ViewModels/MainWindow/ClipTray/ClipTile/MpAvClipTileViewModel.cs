@@ -1842,7 +1842,7 @@ namespace MonkeyPaste.Avalonia {
             //}
             if (e is MpCopyItem ci && CopyItemId == ci.Id) {
 
-            }
+            } 
         }
 
 

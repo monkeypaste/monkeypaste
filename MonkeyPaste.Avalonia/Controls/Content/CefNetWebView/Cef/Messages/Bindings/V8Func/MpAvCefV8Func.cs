@@ -3,6 +3,7 @@ using System.Diagnostics;
 using MonkeyPaste.Common;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System;
 
 namespace MonkeyPaste.Avalonia {
     class MpAvCefV8Func : CefV8Handler {
@@ -14,51 +15,21 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override bool Execute(string name, CefV8Value @object, CefV8Value[] arguments, ref CefV8Value retval, ref string exception) {
-            //MpConsole.WriteLine("Received window binding msg name: " + name);
-            // if(arguments != null) {
-            //     arguments.ForEach((x, i) => MpConsole.WriteLine("Arg " + i + ": " + x.ToString()));
-            // }
-            if(name.StartsWith("get")) {
-                // js is accessing data from cs...
-                // is it accessible?
-                //Debugger.Break();
-
-                if (name == "getAllTemplatesFromDb") {
-                    List<MpTextTemplate> citl = MpDataModelProvider.GetItems<MpTextTemplate>();
-
-                    exception = null;
-                    retval = CefV8Value.CreateString(JsonConvert.SerializeObject(citl));
-                    return true;
+            CefProcessMessage browserProcMsg = new CefProcessMessage("WindowBindingResponse");
+            browserProcMsg.ArgumentList.SetString(0, name);
+            if (arguments != null) {
+                for (int i = 0; i < arguments.Length; i++) {
+                    browserProcMsg.ArgumentList.SetString(i + 1, arguments[i].GetStringValue());
                 }
-                if(name == "getDragData") {
-
-                }
-            } else if(name.StartsWith("notify")) {
-                // js is setting cs data..
-
-                CefProcessMessage browserProcMsg = new CefProcessMessage("WindowBindingResponse");
-                browserProcMsg.ArgumentList.SetString(0, name);
-                if(arguments != null) {
-                    for (int i = 0; i < arguments.Length; i++) {
-                        browserProcMsg.ArgumentList.SetString(i+1, arguments[i].GetStringValue());
-                    }
-                }else {
-                    browserProcMsg.ArgumentList.SetString(1, "<NO PARAM>");
-                }
-                
-                CefV8Context.GetCurrentContext().Frame.SendProcessMessage(CefProcessId.Browser, browserProcMsg);
-
-                exception = null;
-                retval = null;
-                return true;
+            } else {
+                browserProcMsg.ArgumentList.SetString(1, String.Empty);
             }
 
-            // unknown msg name
-            MpConsole.WriteTraceLine("Uknown msg name: " + name);
+            CefV8Context.GetCurrentContext().Frame.SendProcessMessage(CefProcessId.Browser, browserProcMsg);
 
-            Debugger.Break();
-
-            return false;
+            exception = null;
+            retval = null;
+            return true;
         }
     }
 }

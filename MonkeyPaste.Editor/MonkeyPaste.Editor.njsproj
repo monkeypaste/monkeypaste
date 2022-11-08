@@ -73,7 +73,6 @@
     <Content Include="src\components\input\mouse.js" />
     <Content Include="src\components\main\main-style.css" />
     <Content Include="src\components\main\main.js" />
-    <Content Include="src\components\messages\messages_core.js" />
     <Content Include="src\components\messages\messages_ext.js" />
     <Content Include="src\components\messages\messages_get.js" />
     <Content Include="src\components\messages\messages_ntf.js" />
@@ -143,6 +142,7 @@
     <Folder Include="src\components\findreplace\" />
     <Folder Include="src\components\common\" />
     <Folder Include="src\components\list\" />
+    <Folder Include="src\components\messages\async\" />
     <Folder Include="src\components\svg\" />
     <Folder Include="src\components\overlay\" />
     <Folder Include="src\components\quill-wrapper\" />

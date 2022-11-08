@@ -149,7 +149,7 @@ function getFocusTemplateGuid() {
 
 function getAvailableTemplateDefinitions() {
     if (availableTemplates == null || availableTemplates.length == 0) {
-        availableTemplates = getAllTemplatesFromDb_get();
+        availableTemplates = getAllNonInputTemplatesFromDb_get();
 
         if (availableTemplates == null || availableTemplates.length == 0) {
             return getTemplateDefs();

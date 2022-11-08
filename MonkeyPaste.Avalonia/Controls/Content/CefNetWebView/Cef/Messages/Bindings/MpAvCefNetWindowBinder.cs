@@ -53,13 +53,7 @@ namespace MonkeyPaste.Avalonia {
             var funcType = msgTypeStr.ToEnum<MpAvEditorBindingFunctionType>();
 
             Dispatcher.UIThread.Post(() => {
-
                 MpAvCefNetWebView wv = e.Frame.Browser.Host.Client.GetWebView() as MpAvCefNetWebView;
-                if (wv == null) {
-                    // occurs for converter (not subclassed webview)
-                    return;
-                }
-                //MpConsole.WriteLine($"Binding msg received: {msgTypeStr} data: {msgJsonStr}");
                 wv.HandleBindingNotification(funcType, msgJsonStr);
             });
 
@@ -69,7 +63,6 @@ namespace MonkeyPaste.Avalonia {
 
 
         #endregion
-
 
         #region Private Methods
 

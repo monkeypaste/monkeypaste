@@ -51,7 +51,7 @@ namespace MonkeyPaste {
                     curVal = await GetParameterQueryResult(curVal, ci, true);
                     break;
                 case MpPluginParameterValueUnitType.Base64Text:
-                    curVal = curVal.ToByteArray().ToBase64String();
+                    curVal = curVal.ToBytesFromBase64String().ToBase64String();
                     break;
                 case MpPluginParameterValueUnitType.FileSystemPath:
                     if (string.IsNullOrWhiteSpace(curVal)) {

@@ -121,5 +121,22 @@ namespace MonkeyPaste {
         }
 
         #endregion
+
+        #region Protected Methods
+
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if(e is MpTextTemplate tt) {
+                // TODO will need to scan CopyItemData for TemplateGuid and remove span tag here
+                // also note ciid then notify clip tray items where match exists
+
+                Task.Run(async () => {
+                    var cil = await MpDataModelProvider.GetCopyItemsByTextTemplateGuid(tt.Guid);
+                    foreach(var ci in cil) {
+
+                    }
+                });
+            }
+        }
+        #endregion
     }
 }

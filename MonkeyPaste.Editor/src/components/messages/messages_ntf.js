@@ -120,7 +120,7 @@ function onDomLoaded_ntf() {
 }
 
 function onUserDeletedTemplate_ntf(dtguid) {
-	// output MpQuillUserDeletedTemplateNotification
+	// output 'MpQuillUserDeletedTemplateNotification'
 	log('userDeletedTemplate called for tguid: ' + dtguid);
 
 	if (typeof notifyUserDeletedTemplate === 'function') {
@@ -133,18 +133,18 @@ function onUserDeletedTemplate_ntf(dtguid) {
 }
 
 function onAddOrUpdateTemplate_ntf(t) {
-	// output MpQuillTemplateAddOrUpdateNotification
+	// output 'MpQuillTemplateAddOrUpdateNotification'
 	log('addOrUpdateTemplate called for: ' + JSON.stringify(t));
 	if (typeof notifyAddOrUpdateTemplate === 'function') {
 		let ntf = {
-			addedOrUpdatedTextTemplate: t
+			addedOrUpdatedTextTemplateBase64JsonStr: toBase64FromJsonObj(t)
 		};
 		notifyAddOrUpdateTemplate(toBase64FromJsonObj(ntf));
 	}
 }
 
 function onException_ntf(exType, exData) {
-	// output MpQuillExceptionMessage
+	// output 'MpQuillExceptionMessage'
 
 	if (typeof notifyException === 'function') {
 		let exDataStr = null;

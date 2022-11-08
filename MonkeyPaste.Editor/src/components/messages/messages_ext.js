@@ -391,3 +391,9 @@ function provideCustomColorPickerResult_ext(msgBase64Str) {
 	let msg = toJsonObjFromBase64Str(msgBase64Str);
 	processCustomColorResult(msg.customColorResult);
 }
+
+function getRequestResponse_ext(getRespBase64Str) {
+	// input 'MpQuillGetResponseNotification'
+	let msg = toJsonObjFromBase64Str(getRespBase64Str);
+	PendingGetResponses.push(msg);
+}

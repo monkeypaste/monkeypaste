@@ -730,7 +730,7 @@ namespace MonkeyPaste.Avalonia {
 
             var bmp = ftBmp.ToAvBitmap();
 
-            //MpFileIo.WriteByteArrayToFile(@"C:\Users\tkefauver\Desktop\text_bmp.png", bmp.ToByteArray(), false);
+            //MpFileIo.WriteByteArrayToFile(@"C:\Users\tkefauver\Desktop\text_bmp.png", bmp.ToBytesFromBase64String(), false);
 
             return bmp;
         }

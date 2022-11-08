@@ -22,8 +22,11 @@ using Avalonia.Platform;
 namespace MonkeyPaste.Avalonia {
 
     public enum MpAvEditorBindingFunctionType {
+        // two-way *_get async requests
         getDragData,
-        getAllTemplatesFromDb,
+        getAllNonInputTemplatesFromDb,
+
+        // one-way *_ntf notifications
         notifyDocSelectionChanged,
         notifyContentLengthChanged,
         notifySubSelectionEnabledChanged,
@@ -240,12 +243,40 @@ namespace MonkeyPaste.Avalonia {
                     BindingContext.IsHovering = true;
                     break;
                 case MpAvEditorBindingFunctionType.notifyAddOrUpdateTemplate:
-                    var aoumsg = MpJsonObject.DeserializeBase64Object<MpQuillTemplateAddOrUpdateNotification>(msgJsonBase64Str);
-                    //Debugger.Break();
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillTemplateAddOrUpdateNotification>(msgJsonBase64Str);
+                    if(ntf is MpQuillTemplateAddOrUpdateNotification addOrUpdateTemplateMsg) {
+                        var t = MpJsonObject.DeserializeBase64Object<MpTextTemplate>(addOrUpdateTemplateMsg.addedOrUpdatedTextTemplateBase64JsonStr);
+                        if(t.IsInputTypeTemplate()) {
+                            // ignore, no point persisting input templates since they're only relevant during a paste 
+                            MpConsole.WriteLine($"Ignoring addOrUpdate INPUT template: '{t}'");
+                            return;
+                        }
+                        Task.Run(async () => {
+                            int tid = await MpDataModelProvider.GetTextTemplateIdByGuidAsync(t.Guid);
+                            t.Id = tid;
+                            await t.WriteToDatabaseAsync();
+                            MpConsole.WriteLine($"Template '{t}': {(tid == 0 ? "Added" : "Updated")}");
+                        });
+                    }
+
                     break;
                 case MpAvEditorBindingFunctionType.notifyUserDeletedTemplate:
-                    var udmsg = MpJsonObject.DeserializeBase64Object<MpQuillUserDeletedTemplateNotification>(msgJsonBase64Str);
-                    //Debugger.Break();
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillUserDeletedTemplateNotification>(msgJsonBase64Str);
+                    if (ntf is MpQuillUserDeletedTemplateNotification deleteTemplateMsg) {
+                        Task.Run(async () => {
+                            var t = await MpDataModelProvider.GetTextTemplateByGuidAsync(deleteTemplateMsg.userDeletedTemplateGuid);
+                            if(t == null) {
+                                MpConsole.WriteLine($"Template not found to delete. Guid '{deleteTemplateMsg.userDeletedTemplateGuid}' Tile: '{ctvm}'");
+                                return;
+                            }
+                            if(t.IsInputTypeTemplate()) {
+                                // shouldn't exist
+                                Debugger.Break();
+                            }
+                            await t.DeleteFromDatabaseAsync();
+                            MpConsole.WriteLine($"Template '{t}': DELETED");
+                        });
+                    }
                     break;
                 case MpAvEditorBindingFunctionType.notifyDragLeave:
                     BindingContext.IsHovering = false;
@@ -301,11 +332,32 @@ namespace MonkeyPaste.Avalonia {
                         });
                     }
                     break;
+                case MpAvEditorBindingFunctionType.getAllNonInputTemplatesFromDb:
+                    HandleBindingGetRequest(notificationType, msgJsonBase64Str).FireAndForgetSafeAsync(ctvm);
+                    break;
             }
 
             //MpConsole.WriteLine($"Tile {ctvm} received cef notification type '{notificationType}' w/ msg:",true);
             //MpConsole.WriteLine($"'{(ntf == null ? "NO DATA RECEIVED":ntf.ToPrettyPrintJsonString())}'", false, true);
         }
+
+        private async Task HandleBindingGetRequest(MpAvEditorBindingFunctionType getReqType, string msgJsonBase64) {
+            var getReq = MpJsonObject.DeserializeBase64Object<MpQuillGetRequestNotification>(msgJsonBase64);
+            switch(getReqType) {
+                case MpAvEditorBindingFunctionType.getAllNonInputTemplatesFromDb:
+                    var templateReq = MpJsonObject.DeserializeBase64Object<MpQuillTemplateDbQueryRequestMessage>(getReq.reqMsgFragmentBase64JsonStr);
+                    var tl = await MpDataModelProvider.GetTextTemplatesByType(templateReq.templateTypes.Select(x=>x.ToEnum<MpTextTemplateType>()));
+
+                    var getResp = new MpQuillGetResponseNotification() {
+                        requestGuid = getReq.requestGuid,
+                        responseFragmentBase64JsonStr = MpJsonObject.SerializeObjectToBase64JsonStr(tl)
+                    };
+
+                    this.ExecuteJavascript($"getRequestResponse_ext('{getResp.SerializeJsonObjectToBase64()}')");
+                    break;
+            }
+        }
+
         public void UpdateSelection(int index, int length,string text, bool isFromEditor, bool isChangeBegin) {
             var newStart = new MpAvTextPointer(Document, index);
             var newEnd = new MpAvTextPointer(Document, index + length);
