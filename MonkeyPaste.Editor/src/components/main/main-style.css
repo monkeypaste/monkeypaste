@@ -122,3 +122,14 @@ button {
     display: inline-block;
     float: left;
 }
+
+/* ENDLESS ROTATE */
+.rotate {
+    animation: rotate 1.5s linear infinite;
+}
+
+@keyframes rotate {
+    to {
+        transform: rotate(360deg);
+    }
+}

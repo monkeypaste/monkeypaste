@@ -143,6 +143,33 @@ function isInlineElement(elm) {
 	return InlineTags.includes(tn);
 }
 
+function isDocIdxBlockStart(docIdx) {
+	if (isNaN(parseFloat(docIdx))) {
+		return false;
+	}
+	if (docIdx == 0) {
+		return true;
+	}
+	if (docIdx >= quill.getLength()) {
+		return false;
+	}
+	let prev_char = getText({ index: docIdx - 1, length: 1 });
+	return prev_char == '\n';
+}
+
+function isDocIdxBlockEnd(docIdx) {
+	if (isNaN(parseFloat(docIdx))) {
+		return false;
+	}
+	if (docIdx == quill.getLength()) {
+		return true;
+	}
+	if (docIdx < 0) {
+		return false;
+	}
+	let next_char = getText({ index: docIdx + 1, length: 1 });
+	return next_char == '\n';
+}
 
 function isDocIdxLineStart(docIdx) {
 	if (isNaN(parseFloat(docIdx))) {

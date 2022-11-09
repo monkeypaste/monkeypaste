@@ -9,29 +9,31 @@ using System.Linq;
 using System.Threading.Tasks;
 using SQLite;
 using MonkeyPaste.Common;
+using Newtonsoft.Json;
 
 namespace MonkeyPaste {
     public abstract class MpDbModelBase : IComparer {
         public const string ParseToken = @"^(@!@";
+        [JsonIgnore]
         public abstract int Id { set; get; }
 
         #region Properties
-
+        [JsonIgnore]
         [Ignore]
         protected string SyncingWithDeviceGuid { get; set; } = string.Empty;
-
+        [JsonIgnore]
         [Ignore]
         public bool IsSyncing => !string.IsNullOrEmpty(SyncingWithDeviceGuid);
-
+        [JsonIgnore]
         [Ignore]
         public string Guid { get; set; }
-
+        [JsonIgnore]
         [Ignore]
         public virtual bool IsReadOnly { get; set; } = false;
-
+        [JsonIgnore]
         [Ignore]
         public virtual string PublicHandle => (Id.ToString() + Guid).CheckSum();
-
+        [JsonIgnore]
         [Ignore]
         public virtual bool WasDupOnCreate { get; set; } = false;
 

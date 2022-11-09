@@ -87,8 +87,6 @@
     <Content Include="src\components\table\table.js" />
     <Content Include="src\components\table\toolbar\create-table-style.css" />
     <Content Include="src\components\table\toolbar\createTableToolbarButton.js" />
-    <Content Include="src\components\template\blots\1.0\templateEmbedBlot.js" />
-    <Content Include="src\components\template\blots\1.0\templatePadAttribute.js" />
     <Content Include="src\components\template\blots\2.0\templateEmbedBlot.js" />
     <Content Include="src\components\template\blots\2.0\templatePadAttribute.js" />
     <Content Include="src\components\template\template-style.css" />
@@ -155,7 +153,6 @@
     <Folder Include="src\components\template\" />
     <Folder Include="src\components\template\blots\" />
     <Folder Include="src\components\template\blots\2.0\" />
-    <Folder Include="src\components\template\blots\1.0\" />
     <Folder Include="src\components\template\toolbar\" />
     <Folder Include="src\components\template\toolbar\create\" />
     <Folder Include="src\components\template\toolbar\edit\" />

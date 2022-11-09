@@ -23,34 +23,24 @@ function initEditTemplateToolbar() {
     getEditTemplateDetailTextAreaElement().addEventListener('input', onTemplateDetailChanged);       
 }
 
-function showTemplateColorPaletteMenu() {
-    hideColorPaletteMenu();
+function showEditTemplateToolbar(isNew = false) {
+    let ett = getEditTemplateToolbarContainerElement();
+    ett.classList.remove('hidden');
 
-    let color_box_elm = getEditTemplateColorBoxElement();
-    let ft = getFocusTemplate();
-    if (!ft) {
-        debugger;
+    let t = getTemplateDefByGuid(getFocusTemplateGuid());
+    if (t) {
+        if (isNew) {
+            // keep comprarer empty besides guid to ensure host is notified of add
+            TemplateBeforeEdit = { templateGuid: t.templateGuid };
+        } else {
+            TemplateBeforeEdit = t;
+        }
+        createEditTemplateToolbarForTemplate(t);
+    } else {
+        log('no focus template found');
     }
 
-    const colorBoxRect = color_box_elm.getBoundingClientRect();
-    const x = colorBoxRect.left;
-    const y = getEditTemplateToolbarContainerElement().getBoundingClientRect().top;
-
-    showColorPaletteMenu(
-        color_box_elm,
-        x, y,
-        ft.templateColor,
-        onColorPaletteItemClick);
-
-}
-
-function hideTemplateColorPaletteMenu() {
-    if (ColorPaletteAnchorElement != getEditTemplateColorBoxElement()) {
-        // only hide if color palette is for template
-        return;
-    }
-    hideColorPaletteMenu();
-
+    updateAllElements();
 }
 
 function hideEditTemplateToolbar(wasEscCancel = false, wasDelete = false) {
@@ -134,10 +124,36 @@ function setTemplateDetailData(tguid, detailData) {
 // #endregion Setters
 
 // #region Actions
-function loadEditTemplateToolbar() {
-    IsTemplateDetailTextAreaFocused = false;
-    IsTemplateNameTextAreaFocused = false;
-    TemplateBeforeEdit = null;
+
+function showTemplateColorPaletteMenu() {
+    hideColorPaletteMenu();
+
+    let color_box_elm = getEditTemplateColorBoxElement();
+    let ft = getFocusTemplate();
+    if (!ft) {
+        debugger;
+    }
+
+    const colorBoxRect = color_box_elm.getBoundingClientRect();
+    const x = colorBoxRect.left;
+    const y = getEditTemplateToolbarContainerElement().getBoundingClientRect().top;
+
+    showColorPaletteMenu(
+        color_box_elm,
+        'top|left',
+        'above',
+        ft.templateColor,
+        onColorPaletteItemClick);
+
+}
+
+function hideTemplateColorPaletteMenu() {
+    if (ColorPaletteAnchorElement != getEditTemplateColorBoxElement()) {
+        // only hide if color palette is for template
+        return;
+    }
+    hideColorPaletteMenu();
+
 }
 
 function createEditTemplateToolbarForTemplate(t) {
@@ -159,27 +175,6 @@ function createEditTemplateToolbarForTemplate(t) {
 
     getEditTemplateNameTextAreaElement().value = t.templateName;
 }
-
-function showEditTemplateToolbar(isNew = false) {
-    let ett = getEditTemplateToolbarContainerElement();
-    ett.classList.remove('hidden');
-    updateAllElements();
-
-    let t = getTemplateDefByGuid(getFocusTemplateGuid());
-    if (t) {
-        if (isNew) {
-            // keep comprarer empty besides guid to ensure host is notified of add
-            TemplateBeforeEdit = { templateGuid: t.templateGuid };
-        } else {
-            TemplateBeforeEdit = t;
-        }
-        createEditTemplateToolbarForTemplate(t);
-    } else {
-        log('no focus template found');
-	}
-}
-
-
 
 function updateEditTemplateToolbarSizesAndPositions() {
     if (!isShowingEditTemplateToolbar()) {
@@ -204,6 +199,13 @@ function isShowingEditTemplateToolbar() {
     return !getEditTemplateToolbarContainerElement().classList.contains('hidden');
 }
 
+function resetEditTemplateToolbar() {
+    IsTemplateDetailTextAreaFocused = false;
+    IsTemplateNameTextAreaFocused = false;
+    TemplateBeforeEdit = null;
+
+    hideEditTemplateToolbar();
+}
 
 // #endregion State
 

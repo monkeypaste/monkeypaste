@@ -4,9 +4,9 @@ const AllDocumentTags = [...InlineTags,...BlockTags];
 
 function loadTextContent(itemDataStr, isPasteRequest) {
 	quill.enable(true);
-	//setRootHtml(itemDataStr);
-	setRootHtml('');
-	insertHtml(0, itemDataStr);
+	setRootHtml(itemDataStr);
+	//setRootHtml('');
+	//insertHtml(0, itemDataStr);
 
 	loadTemplates(isPasteRequest);
 }

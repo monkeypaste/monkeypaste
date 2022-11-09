@@ -7,7 +7,7 @@ var PendingGetResponses = [];
 // #endregion Life Cycle
 
 // #region Getters
-async function getAllNonInputTemplatesFromDb_get() {
+async function getAllNonInputTemplatesFromDbAsync_get() {
     // output 'MpQuillNonInputTemplateRequestMessage'
     let all_non_input_templates = [];
     if (typeof getAllNonInputTemplatesFromDb === 'function') {
@@ -18,9 +18,10 @@ async function getAllNonInputTemplatesFromDb_get() {
                 'DateTime'
             ]
         };
-        let resp = await processGetRequestAsync(getAllNonInputTemplatesFromDb, toBase64FromJsonObj(req));
-        all_non_input_templates = toJsonObjFromBase64Str(resp);
-    }
+        all_non_input_templates = await processGetRequestAsync(getAllNonInputTemplatesFromDb, JSON.stringify(req));
+    } else {
+        await delay(1000);
+	}
     return all_non_input_templates;
 }
 
@@ -81,43 +82,46 @@ function getContactFieldValue_get(contact_guid, field) {
 
 function receiveGetResponse(reqGuid) {
     // check if any response has matching request guid
-    let resp = PendingGetResponses.find(x => x.requestGuid == reqGuid);
-    if (!resp || resp.length == 0) {
+    let respMsg = PendingGetResponses.find(x => x.requestGuid == reqGuid);
+    if (!respMsg || respMsg.length == 0) {
         return null;
     }
-    if (Array.isArray(resp)) {
+    if (Array.isArray(respMsg)) {
         // this really shouldn't happen...
         log('Error, multiple get responses detected for request guid (both will be removed): ' + reqGuid);
         debugger;
-        resp = resp[0];
+        respMsg = respMsg[0];
     }
     // remove request from pending
     PendingGetResponses = PendingGetResponses.filter(x => x.requestGuid != reqGuid);
 
-    // return resp and unblock processGet
+    // return respMsg and unblock processGet
+    let resp = JSON.parse(respMsg.responseFragmentJsonStr);
+    if (resp == null) {
+        resp = '';
+    }
     return resp;
 }
 // #endregion State
 
 // #region Actions
 
-async function processGetRequestAsync(func, reqMsgBase64Str) {
+async function processGetRequestAsync(func, reqMsgStr) {
     // output 'MpQuillGetRequestNotification'
 
     let reqObj = {
         requestGuid: generateGuid(),
-        reqMsgFragmentBase64JsonStrreqArg: reqMsgBase64Str
+        reqMsgFragmentJsonStr: reqMsgStr
     };
 
     let req = toBase64FromJsonObj(reqObj);
     func(req);
 
     while (true) {
-        let esp = receiveGetResponse(reqObj.requestGuid);
+        let resp = receiveGetResponse(reqObj.requestGuid);
         if (resp) {
             // input see calling func
-            let resp_data_obj = toJsonObjFromBase64Str(resp.responseFragmentBase64JsonStr);
-            return resp_data_obj;
+            return resp;
         }
         await delay(100);
 	}

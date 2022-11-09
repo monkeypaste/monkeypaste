@@ -12,11 +12,16 @@ var IsMovingTemplate = false;
 
 var IsTemplateAtInsert = false;
 
+var IsTemplatePaddingAfterTextChange = false;
+
 var IsAnyTemplateBgTemporary = false;
 var DragAnchorDocIdxWhenTemplateWithinSelection = -1;
 
 // #region Life Cycle
 
+function initTemplates() {
+    quill.on("text-change", onEditorTextChangedPadTemplates);
+}
 
 //#endregion Life Cycle
 
@@ -147,9 +152,9 @@ function getFocusTemplateGuid() {
     return ft.getAttribute('templateGuid');
 }
 
-function getAvailableTemplateDefinitions() {
+async function getAvailableTemplateDefinitions() {
     if (availableTemplates == null || availableTemplates.length == 0) {
-        availableTemplates = getAllNonInputTemplatesFromDb_get();
+        availableTemplates = await getAllNonInputTemplatesFromDbAsync_get();
 
         if (availableTemplates == null || availableTemplates.length == 0) {
             return getTemplateDefs();
@@ -514,7 +519,7 @@ function isTemplateAnInputType(t) {
 // #region Actions
 
 function loadTemplates(isPasteRequest) {
-    loadEditTemplateToolbar();
+    resetEditTemplateToolbar();
 
     if (isPasteRequest && hasTemplates()) {
         IsPastingTemplate = true;
@@ -626,6 +631,11 @@ function decodeInsertedTemplates(insertIdx, plainText, source = 'silent') {
 }
 
 function updateTemplatesAfterTextChanged() {
+    if (IsTemplatePaddingAfterTextChange) {
+        debugger;
+	}
+    IsTemplatePaddingAfterTextChange = true;
+
     let all_template_elms = getTemplateElements(null,null);
 
     // HACK after text change scan all templates and pad any at head/tail of block with a space to avoid text nav issues
@@ -633,45 +643,39 @@ function updateTemplatesAfterTextChanged() {
     for (var j = 0; j < all_template_elms.length; j++) {
         let telm = all_template_elms[j];
 
+        // IMPORTANT!!! source MUST be silent or the change compounds itself
         // ensure templates along block edges are padded w/ a space
         let t_doc_idx = getTemplateDocIdx(telm.getAttribute('templateInstanceGuid'));
-        let next_char = getText({ index: t_doc_idx + 1, length: 1 }, false);
-        if (next_char == '\n' || t_doc_idx == max_idx) {
-            insertText(t_doc_idx + 1, ' ', 'api');
+        if (isDocIdxBlockStart(t_doc_idx)) {
+            insertText(t_doc_idx, ' ', 'silent');
+            t_doc_idx++;
+            telm.style.marginLeft = '0px';
+        } else {
+            telm.style.marginLeft = '0px';
+		}
+        if (isDocIdxBlockEnd(t_doc_idx)) {
+            insertText(t_doc_idx + 1, ' ', 'silent');
             telm.style.marginRight = '-3px'
         } else {
             telm.style.marginRight = '0px';
-        }
-        let prev_char = getText({ index: t_doc_idx - 1, length: 1 }, false);
-        if (prev_char == '\n' || t_doc_idx == 0) {
-            insertText(t_doc_idx, ' ', 'api');
-            telm.style.marginLeft = '0px';
-        } else {
-            telm.style.marginLeft = '0px';
-        }
-
-        // set css size to 'fit-contnet' for templates or templates in lists will be tiny or unformatted
-
+		}
         let t = getTemplateFromDomNode(telm);
         applyTemplateToDomNode(telm, t);
 
-        //telm.style.width = 'fit-content';
-        //telm.style.height = 'fit-content';
-        //telm.innerText = getTemplateDisplayValue(t);
         debabyTemplateElement(telm);
     }
 }
 
 function updateTemplatesAfterSelectionChange() {
-    if (WasTextChanged) {
-        // selection timer and input can throw off sel_range here
-        // probably bugs w/ the nav classes but hard to tell..
-        // but keeping a one-or-the-other approach (when sel changes)
-        // is appearing less problematic for now
-        updateTemplatesAfterTextChanged();
-        WasTextChanged = false;
-        return;
-    }
+    //if (WasTextChanged) {
+    //    // selection timer and input can throw off sel_range here
+    //    // probably bugs w/ the nav classes but hard to tell..
+    //    // but keeping a one-or-the-other approach (when sel changes)
+    //    // is appearing less problematic for now
+    //    updateTemplatesAfterTextChanged();
+    //    WasTextChanged = false;
+    //    return;
+    //}
     if (WindowMouseDownLoc) {
         return;
     }
@@ -753,15 +757,21 @@ function clearTemplateNavState(t_elm) {
     t_elm.classList.remove(Template_IN_SEL_RANGE_Class);
 }
 
-function insertTemplate(range, t, fromDropDown, source = 'silent') {
+function insertTemplate(range, t, fromDropDown, source = 'api') {
     quill.deleteText(range.index, range.length, source);
     quill.insertEmbed(range.index, "template", t, source);
 
+    //quill.insertText(range.index, t.templateName, source);
+    //range.length = t.templateName.length;
+    //quill.formatText(range.index, range.length, 'template', t);
+
+    //debugger;
     let telm = getTemplateInstanceElement(t.templateInstanceGuid);
     debabyTemplateElement(telm);
 }
 
 function debabyTemplateElement(telm) {
+    return;
     let t = getTemplateFromDomNode(telm);
     telm.style.width = 'fit-content';
     telm.style.height = 'fit-content';
@@ -834,6 +844,14 @@ function focusTemplate(ftguid, fromDropDown = false, isNew = false, fromClickOnT
    
 }
 // #endregion Actions
+
+//#region Events
+
+function onEditorTextChangedPadTemplates(delta, oldDelta, source) {
+
+}
+
+//#endregion
 
 
 

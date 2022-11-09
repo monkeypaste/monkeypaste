@@ -183,6 +183,17 @@ function setDocSelection(doc_idx, len, source = 'user') {
 	}
 }
 
+function setDomSelection(domRange) {
+	document.getSelection().removeAllRanges();
+	document.getSelection().addRange(domRange);
+}
+
+function setDomSelectionFromDocRange(docRange) {
+	let domRange = convertDocRangeToDomRange(docRange);
+	document.getSelection().removeAllRanges();
+	document.getSelection().addRange(domRange);
+}
+
 function setDocSelectionRanges(docRanges, retainFocus = true) {
 	let dom_focus_range = getDomFocusRange();
 
@@ -249,6 +260,16 @@ function isDomRangeEqual(dom_range_1, dom_range_2) {
 		dom_range_1.endOffset == dom_range_2.endOffset;
 
 }
+
+function isNavJump(sel, last_sel) {
+
+}
+function isNavRight(sel, last_sel) {
+	if (!sel || !last_sel) {
+		return;
+	}
+	//if(sel.index)
+}
 // #endregion State
 
 // #region Actions
@@ -290,9 +311,26 @@ function convertDocRangeToDomRange(doc_range) {
 	let end_offset = (doc_range.index + doc_range.length) - end_elm_doc_idx;
 
 	let clean_range = document.createRange();
-	clean_range.setStart(start_elm, start_offset);
-	clean_range.setEnd(end_elm, end_offset);
+	try {
+		clean_range.setStart(start_elm, start_offset);
+	} catch(ex) {
+		//debugger;
+		if (doc_range.index == 0) {
+			// how do we deal with this case?
+			debugger;
+			return;
+		} else {
+			doc_range.index--;
+			return convertDocRangeToDomRange(doc_range);
+		}
+	}
+	
 
+	try {
+		clean_range.setEnd(end_elm, end_offset);
+	} catch (ex) {
+		debugger;
+	}
 	return clean_range;
 }
 

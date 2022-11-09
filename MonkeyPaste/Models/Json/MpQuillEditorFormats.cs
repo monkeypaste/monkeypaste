@@ -275,16 +275,16 @@ templateType: "dynamic"
     }
 
     public class MpQuillTemplateDbQueryRequestMessage : MpJsonObject {
-        public List<string> templateTypes { get; set; } = new List<string>();
+        public List<string> templateTypes { get; set; }
     }
 
     public class MpQuillGetRequestNotification : MpJsonObject {
         public string requestGuid { get; set; }
-        public string reqMsgFragmentBase64JsonStr { get; set; } = String.Empty;
+        public string reqMsgFragmentJsonStr { get; set; } = String.Empty;
     }
     
     public class MpQuillGetResponseNotification : MpJsonObject {
         public string requestGuid { get; set; }
-        public string responseFragmentBase64JsonStr { get; set; } = string.Empty;
+        public string responseFragmentJsonStr { get; set; } = string.Empty;
     }
 }

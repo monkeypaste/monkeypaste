@@ -124,7 +124,7 @@ function applyTemplateToDomNode(node, value) {
     node.setAttribute("spellcheck", "false");
     node.classList.add(TemplateEmbedClass);
     node.setAttribute('draggable', false);
-    node.setAttribute('contenteditable', false);
+    //node.setAttribute('contenteditable', false);
 
     if (value.isFocus) {
         if (node.classList.contains(Template_FOCUSED_INSTANCE_Class)) {

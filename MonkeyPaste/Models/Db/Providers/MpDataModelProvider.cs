@@ -642,7 +642,7 @@ namespace MonkeyPaste {
             if (templateTypes == null || templateTypes.Count() == 0) {
                 whereStr = string.Empty;
             } else {
-                string where_clause = string.Join(" or ", templateTypes.Select(x => string.Format(@"TemplateTypeStr='{0}'", x)));
+                string where_clause = string.Join(" or ", templateTypes.Select(x => string.Format(@"LOWER(TemplateTypeStr)=LOWER('{0}')", x)));
                 whereStr = $"where {where_clause}";
             }
             string query = $"select * from MpTextTemplate {whereStr}";

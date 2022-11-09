@@ -77,7 +77,7 @@ function init_test() {
 			contentHandle: '<TEST-CONTENT-HANDLE>',
 			contentType: 'Text',
 			isPasteRequest: false,
-			itemData: sample6_templates,
+			itemData: '',
 			//searchText: 'instalment in the following sequence of articles:'
 		};
 

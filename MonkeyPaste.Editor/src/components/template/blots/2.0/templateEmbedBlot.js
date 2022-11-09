@@ -14,6 +14,18 @@ var TemplateEmbedHtmlAttributes = [
     'wasVisited',
     'docIdx'
     //'color'
+
+    //'templateGuid',
+    //'templateInstanceGuid',
+    //'isFocus',
+    //'templateName',
+    //'templateColor',
+    //'templateText',
+    //'templateType',
+    //'templateData',
+    //'templateDeltaFormat',
+    //'templateHtmlFormat',
+    //'wasVisited'
 ];
 
 const Parchment = Quill.imports.parchment;
@@ -47,16 +59,34 @@ class TemplateEmbedBlot extends Parchment.EmbedBlot {
         super.format(name, value);
     }
 
-    update(mutations,context) {
-        //super.update(mutations, context);
-        //const attributeChanged = mutations.some(
-        //    (mutation) =>
-        //        mutation.target === this.domNode && mutation.type === 'attributes',
-        //);
-        //if (attributeChanged) {
-        //    this.attributes.build();
+    update(mutations, context) {
+        //let last_sel = LastSelRange;
+        //let sel = getDocSelection();
+
+        //for (var i = 0; i < mutations.length; i++) {
+        //    let outstr = 'mutation: ' + mutations[i].type;
+        //    if (mutations[i].type == 'attributes') {
+        //        outstr += ' ' + mutations[i].attributeName;
+        //    }
+        //    if (mutations[i].type == 'characterData') {
+        //        let forced_text = this.domNode.getAttribute('templateName');
+        //        let added_text = substringByLength(this.domNode.innerText, forced_text.length);
+        //        this.domNode.innerText = forced_text;
+        //        insertText(sel.index + 1, added_text, 'user');
+        //        if (!sel || sel.length > 0) {
+        //            // what's happening? how do we handle this?
+        //            debugger;
+        //            continue;
+        //        }
+
+        //        setDocSelection(sel.index + added_text.length + 1, 0, 'api');
+        //        return;
+        //    }
+        //    log(outstr);
         //}
+        //super.update(mutations, context);
     }
+
     //length() {
     //    return 1;
     //}
@@ -164,7 +194,26 @@ function applyTemplateToDomNode(node, value) {
     node.innerText = getTemplateDisplayValue(value);
 
     node.addEventListener('click', onTemplateClick);
+    //node.addEventListener('mousedown', rejectEvent, true);
+    //node.addEventListener('mousemove', rejectEvent, true);
+    //node.addEventListener('mouseup', rejectEvent, true);
+    //node.addEventListener('keydown', rejectEvent,true);
+    //node.addEventListener('keyup', rejectEvent,true);
+    //node.addEventListener('keypress', rejectEvent,true);
     return node;
+}
+
+function rejectEvent(e) {
+    e.stopPropagation();
+    e.preventDefault();
+}
+
+function onTemplateMouseDown(e) {
+    e.stopPropagation();
+}
+
+function onTemplateKeyDown(e) {
+    e.stopPropagation();
 }
 
 function onTemplateClick(e) {

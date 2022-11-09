@@ -2,7 +2,6 @@
 
 var DefaultEditorWidth = 1200;
 
-var IgnoreNextTextChange = false;
 var IgnoreNextSelectionChange = false;
 
 var IsSubSelectionEnabled = false;
@@ -23,6 +22,7 @@ function initEditor() {
 
 	initQuill();
 	initEditorScroll();
+	initTemplates();
 
 	//quill.on("selection-change", onEditorSelectionChanged);
 	quill.on("text-change", onEditorTextChanged);
@@ -385,16 +385,16 @@ function onEditorTextChanged(delta, oldDelta, source) {
 	log('quill event: text changed');
 
 	updateAllElements();
-	updateTemplatesAfterTextChanged();
-	WasTextChanged = true;
+	//WasTextChanged = true;
 
 	if (!IsLoaded) {
 		return;
 	}
-	if (IgnoreNextTextChange) {
-		IgnoreNextTextChange = false;
-		return;
+
+	if (!IsTemplatePaddingAfterTextChange) {
+		updateTemplatesAfterTextChanged();
 	}
+	
 	let srange = getDocSelection();
 	if (!srange) {
 		return;

@@ -345,12 +345,12 @@ namespace MonkeyPaste.Avalonia {
             var getReq = MpJsonObject.DeserializeBase64Object<MpQuillGetRequestNotification>(msgJsonBase64);
             switch(getReqType) {
                 case MpAvEditorBindingFunctionType.getAllNonInputTemplatesFromDb:
-                    var templateReq = MpJsonObject.DeserializeBase64Object<MpQuillTemplateDbQueryRequestMessage>(getReq.reqMsgFragmentBase64JsonStr);
+                    var templateReq = MpJsonObject.DeserializeObject<MpQuillTemplateDbQueryRequestMessage>(getReq.reqMsgFragmentJsonStr);
                     var tl = await MpDataModelProvider.GetTextTemplatesByType(templateReq.templateTypes.Select(x=>x.ToEnum<MpTextTemplateType>()));
 
                     var getResp = new MpQuillGetResponseNotification() {
                         requestGuid = getReq.requestGuid,
-                        responseFragmentBase64JsonStr = MpJsonObject.SerializeObjectToBase64JsonStr(tl)
+                        responseFragmentJsonStr = MpJsonObject.SerializeObject(tl)
                     };
 
                     this.ExecuteJavascript($"getRequestResponse_ext('{getResp.SerializeJsonObjectToBase64()}')");

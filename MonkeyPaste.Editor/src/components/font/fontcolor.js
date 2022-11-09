@@ -27,7 +27,7 @@ function getFontBackgroundToolbarButton() {
 
 function getFontHexColorAtDocIdx(docIdx) {
 	let css_color = getElementComputedStyleProp(getElementAtDocIdx(docIdx, true), 'color');
-	return cleanHexColor(css_color,null,false);
+	return cleanHexColor(css_color,1,true);
 }
 
 function getFontHexBgColorAtDocIdx(docIdx) {
