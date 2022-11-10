@@ -12,7 +12,7 @@ function initPasteTemplateFocusSelector() {
 
 
 function showPasteTemplateSelectorOptions() {
-    if (isElementDisabled(getPasteFocusTemplateOptionsElement())) {
+    if (isElementDisabled(getPasteFocusTemplateOptionsElement(), true)) {
         return;
     }
     if (isPasteTemplateHaveOptions()) {
@@ -166,69 +166,30 @@ function updatePasteTemplateOptionsBounds() {
 }
 
 function applyTemplateToOptionDiv(opt_div, t) {
+    let icon_elm = document.createElement('DIV');
+    let label_elm = document.createElement('SPAN');
+    opt_div.replaceChildren(icon_elm, label_elm);
+
+
     let icon_color = t ? t.templateColor : 'black';
-    let icon_class = t ? getTemplateTypeIcon(t.templateType) : 'fa-empty-set';
+    icon_elm.classList.add('paste-template-option-icon');
+    icon_elm.style.backgroundColor = icon_color;
+
+    let icon_svg_elm = document.createElement('SVG');
+    icon_elm.appendChild(icon_svg_elm);
+    let icon_svg_key = t ? getTemplateTypeSvgKey(t.templateType) : 'empty';
+    icon_svg_elm.outerHTML = getSvgHtml(icon_svg_key,'');
+    //setSvgElmColor(icon_svg_elm, icon_color);
+
     let label_text = t ? t.templateName : '';
-    let is_input_type = t ? isTemplateAnInputType(t) : false;
+    label_elm.classList.add('paste-template-option-label');
+    label_elm.innerText = label_text;
 
-    if (opt_div.children.length == 2) {
-        opt_div.removeChild(opt_div.children[0]);
-        opt_div.removeChild(opt_div.children[0]);
-	}
-    
-
-    let icon_i = document.createElement('I');
-    icon_i.classList.add('paste-template-option-icon');
-    icon_i.classList.add('fa-solid');
-    icon_i.style.color = icon_color;
-    icon_i.classList.add(icon_class);
-    opt_div.appendChild(icon_i);
-
-    let label_span = document.createElement('SPAN');
-    label_span.classList.add('paste-template-option-label');
-    label_span.innerText = label_text;
-
-    opt_div.appendChild(label_span);
-
-    if (is_input_type) {
+    if (isTemplateAnInputType(t)) {
         opt_div.classList.remove('no-input-template');
     } else {
         opt_div.classList.add('no-input-template');
     }
-    //if (opt_div == getPasteFocusSelectedTemplateElement()) {
-    //    if (t) {
-    //        opt_div.classList.remove('hidden');
-    //    } else {
-    //        opt_div.classList.add('hidden');
-    //        return;
-    //    }
-    //} else {
-    //    if (!t) {
-    //        debugger;
-    //    }
-    //}
-
-    //opt_div.removeChild(opt_div.children[0]);
-    //opt_div.removeChild(opt_div.children[0]);
-
-    //let icon_i = document.createElement('I');
-    //icon_i.style.color = t.templateColor;
-
-    //icon_i.classList.add('paste-template-option-icon');
-    //icon_i.classList.add('fa-solid');
-    //icon_i.classList.add(getTemplateTypeIcon(t.templateType));
-    //opt_div.appendChild(icon_i);
-
-    //let label_span = document.createElement('SPAN');
-    //label_span.innerText = t.templateName;
-    //label_span.classList.add('paste-template-option-label');
-
-    //opt_div.appendChild(label_span);
-    //if (isTemplateAnInputType(t)) {
-    //    opt_div.classList.remove('no-input-template');
-    //} else {
-    //    opt_div.classList.add('no-input-template');
-    //}
 }
 
 function toggleShowPasteTemplateSelectorOptions() {

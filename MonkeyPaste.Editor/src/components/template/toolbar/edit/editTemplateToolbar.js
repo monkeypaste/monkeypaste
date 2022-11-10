@@ -98,12 +98,13 @@ function getDeleteTemplateButtonElement() {
 // #region Setters
 
 function setTemplateName(tguid, name) {
-    var tl = getTemplateElements(tguid);
-    for (var i = 0; i < tl.length; i++) {
-        var te = tl[i];
-        if (te.getAttribute('templateGuid') == tguid) {
-            te.setAttribute('templateName', name);
-            changeInnerText(te, te.innerText, name);
+    var telms = getTemplateElements(tguid);
+    for (var i = 0; i < telms.length; i++) {
+        var telm = telms[i];
+        if (telm.getAttribute('templateGuid') == tguid) {
+            telm.setAttribute('templateName', name);
+            //changeInnerText(telm, telm.innerText, name);
+            setTemplateElementText(telm, name);
         }
     }
 }
@@ -113,11 +114,12 @@ function setTemplateDetailData(tguid, detailData) {
     for (var i = 0; i < telms.length; i++) {
         let telm = telms[i];
         telm.setAttribute('templateData', detailData);
-        if (IsPastingTemplate) {
+        if (isShowingPasteToolbar()) {
             let t = getTemplateFromDomNode(telm);
             let t_text = getTemplatePasteValue(t);
             telm.setAttribute('templateText', t_text);
-            telm.innerText = t_text;
+            setTemplateElementText(telm, t_text);
+            //telm.innerText = t_text;
 		}
 	}
 }
@@ -181,7 +183,7 @@ function updateEditTemplateToolbarSizesAndPositions() {
         return;
     }
     let ett = getEditTemplateToolbarContainerElement();
-    if (isShowingPasteTemplateToolbar()) {
+    if (isShowingPasteToolbar()) {
         //ett.classList.remove('bottom-align');
         let pttb_h = getPasteToolbarContainerElement().getBoundingClientRect().height;
         ett.style.bottom = pttb_h + 'px';

@@ -60,7 +60,7 @@ function onWindowClick(e) {
 			}
 		}
 
-		if (IsPastingTemplate) {
+		if (isShowingPasteToolbar()) {
 			//hidePasteToolbar();
 			//clearTemplateFocus();
 			hideAllTemplateContextMenus();

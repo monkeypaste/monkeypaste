@@ -38,11 +38,14 @@ function getFontHexBgColorAtDocIdx(docIdx) {
 // #region Setters
 
 function setFontColorToolbarButtonColor(fg_hex_color) {
+	getFontColorToolbarButton().style.backgroundColor = getContrastHexColor(fg_hex_color);
+
 	let fg_svg_elm = Array.from(getFontColorToolbarButton().querySelectorAll('path'))[0];
 	setElementComputedStyleProp(fg_svg_elm, 'fill', cleanColorStyle(fg_hex_color));
 }
 
 function setFontBackgroundToolbarButtonColor(bg_hex_color) {
+	getFontBackgroundToolbarButton().style.backgroundColor = getContrastHexColor(bg_hex_color);
 	let bg_svg_elm = Array.from(getFontBackgroundToolbarButton().querySelectorAll('g'))[0];
 	setElementComputedStyleProp(bg_svg_elm, 'fill', cleanColorStyle(bg_hex_color));
 }

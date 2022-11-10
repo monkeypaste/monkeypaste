@@ -352,7 +352,7 @@ function coerceCleanSelection(new_range,old_range) {
 			debugger;
 		}
 
-		log('timer: index: ', new_range.index, ' length: ', new_range.length);
+		//log('timer: index: ', new_range.index, ' length: ', new_range.length);
 
 		let qsel = getDocSelection();
 		log('quill: index: ', qsel.index, ' length: ', qsel.length);
@@ -365,7 +365,7 @@ function coerceCleanSelection(new_range,old_range) {
 		//	updateFontSizePickerToSelection(null, new_range);
 		//	updateFontFamilyPickerToSelection(null, new_range);
 		//	if (hasTemplates()) {
-		//		if (isShowingPasteTemplateToolbar()) {
+		//		if (isShowingPasteToolbar()) {
 		//			updatePasteTemplateToolbarToSelection();
 		//		}
 		//		updateTemplatesAfterSelectionChange(new_range, oldRange);

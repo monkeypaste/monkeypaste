@@ -185,38 +185,42 @@ function applyTemplateToDomNode(node, value) {
         }
         node.classList.remove(Template_FOCUSED_NOT_INSTANCE_Class);
         node.classList.remove(Template_FOCUSED_INSTANCE_Class);
-	}
+    }
+    let icon_elm = document.createElement('SVG');
+    let span_elm = document.createElement('SPAN');
+    let delete_elm = document.createElement('SVG');
+
+    node.replaceChildren(icon_elm, span_elm, delete_elm);
 
     node.style.backgroundColor = value.templateColor;
-    node.style.color = isBright(value.templateColor) ? 'black' : 'white';
+    node.style.color = getContrastHexColor(value.templateColor);
 
-    node.innerHTML = value.templateHtmlFormat;
-    node.innerText = getTemplateDisplayValue(value);
+    icon_elm.outerHTML = getSvgHtml(getTemplateTypeSvgKey(value.templateType));
+    setSvgElmColor(icon_elm, node.style.color);
+
+    span_elm.innerHTML = value.templateHtmlFormat;
+    span_elm.innerText = getTemplateDisplayValue(value);
+    span_elm.style.color = node.style.color;
+
+    delete_elm.outerHTML = getSvgHtml('delete','delete-template-button');
+    delete_elm.addEventListener('click', onTemplateDeleteButtonClick);
 
     node.addEventListener('click', onTemplateClick);
-    //node.addEventListener('mousedown', rejectEvent, true);
-    //node.addEventListener('mousemove', rejectEvent, true);
-    //node.addEventListener('mouseup', rejectEvent, true);
-    //node.addEventListener('keydown', rejectEvent,true);
-    //node.addEventListener('keyup', rejectEvent,true);
-    //node.addEventListener('keypress', rejectEvent,true);
     return node;
 }
 
-function rejectEvent(e) {
-    e.stopPropagation();
-    e.preventDefault();
-}
-
-function onTemplateMouseDown(e) {
-    e.stopPropagation();
-}
-
-function onTemplateKeyDown(e) {
-    e.stopPropagation();
+function onTemplateDeleteButtonClick(e) {
+    let telm = e.target.parentNode;
+    if (telm) {
+        telm.parentNode.removeChild(telm);
+    }
 }
 
 function onTemplateClick(e) {
+    if (e.target.classList.contains('delete-template-button')) {
+        onTemplateDeleteButtonClick(e);
+        return;
+    }
     let t = getTemplateFromDomNode(e.currentTarget);
     if (!t) {
         debugger;

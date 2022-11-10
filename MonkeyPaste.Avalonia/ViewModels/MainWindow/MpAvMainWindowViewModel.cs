@@ -888,6 +888,11 @@ namespace MonkeyPaste.Avalonia {
                     return false;
                 }
 
+                if (IsShowingDialog) {
+                    MpConsole.WriteLine("Force ignore mw close, dialog is open");
+                    return false;
+                }
+
                 bool fromShorcutKey = false;
 
                 bool canHide = 

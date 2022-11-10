@@ -6,8 +6,8 @@
 .ql-template-embed-blot {
     display: inline;
     text-decoration: none;
-    color: #67c5ff;
     border-radius: 3px;
+    padding: 1px;
     /*transition: .4s;*/
     cursor: pointer;
     /*caret-color: transparent;*/
@@ -22,39 +22,65 @@
 }
 
     .ql-template-embed-blot:hover:not(.ql-template-embed-blot-focus):not(.no-select):not(.ql-template-embed-blot-focus-not-instance) {
-        padding: 1.5px;
+        /*padding: 1.5px;*/
         /*transition: .2s;*/
         cursor: pointer;
         border: 2px solid yellow;
     }
 
+    .ql-template-embed-blot .delete-template-button {
+        padding: 1px;
+        margin-left: 10px;
+        cursor: pointer;
+        width: 10px !important;
+        height: 10px !important;
+    }
+    .ql-template-embed-blot .delete-template-button path {
+        fill: black;
+    }
+
+        .ql-template-embed-blot .delete-template-button:hover {
+            background-color: black;
+        }
+        .ql-template-embed-blot .delete-template-button:hover path {
+            fill: white;
+        }
+
+    #editor:not(.no-select) .ql-template-embed-blot-focus {
+        border: 2px solid var(--focusbordercolor);
+    }
+
+#editor:not(.no-select) .ql-template-embed-blot-focus-not-instance {
+    border: 2px solid var(--selectedbordercolor);
+}
+
+#editor:not(.no-select) .ql-template-embed-blot-at-insert {
+    border: 2px solid orange !important;
+}
+
 .ql-template-embed-blot-selected-overlay {
     background-image: linear-gradient(0deg, var(--selbgcolor), var(--selbgcolor));
 }
 
-.ql-template-embed-blot-sub-selected {
+.ql-template-embed-blot .svg-icon {
+    width: 10px !important;
+    height: 10px !important;
+    margin-left: 1px;
+}
 
+.ql-template-embed-blot-sub-selected {
 }
 
 .ql-template-embed-blot-display-key-down {
-    transition: .0s;
+    display: inline-flex;
     transform: scale(1.1);
 }
 
 .ql-template-embed-blot-display-key-up {
-    transition: .0s;
+    display: inline-flex;
     transform: scale(1);
 }
 
-.ql-template-embed-blot-focus,
-.ql-template-embed-blot-focus-not-instance {
-    border: 2px solid red;
-}
-
-
-.ql-template-embed-blot-at-insert {
-    border: 2px solid orange !important;
-}
 .ql-template-embed-blot-before-insert {
     /* only used let selection caret exist before embed */
     /*caret-color: var(--selfgcolor);*/

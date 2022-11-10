@@ -7,6 +7,7 @@ var PendingGetResponses = [];
 // #endregion Life Cycle
 
 // #region Getters
+
 async function getAllNonInputTemplatesFromDbAsync_get() {
     // output 'MpQuillNonInputTemplateRequestMessage'
     let all_non_input_templates = [];

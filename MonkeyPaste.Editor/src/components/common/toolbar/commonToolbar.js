@@ -32,7 +32,7 @@ function getTemplateToolbarsHeight() {
 // #region Actions
 
 function updateTemplateToolbarSizesAndPositions() {
-    if (isShowingPasteTemplateToolbar()) {
+    if (isShowingPasteToolbar()) {
         updatePasteToolbarSizesAndPositions();
     }
     if (isShowingEditTemplateToolbar()) {
@@ -127,11 +127,11 @@ async function jiggleFocusTemplates(resetOnComplete = false) {
 // #region Event Handlers
 
 function onBouncyTextAreaFocus(e) {
-    //jiggleFocusTemplates();
+    jiggleFocusTemplates();
 }
 
 function onBouncyTextAreaBlur(e) {
-    //jiggleFocusTemplates(true);
+    jiggleFocusTemplates(true);
 }
 
 
@@ -141,5 +141,7 @@ async function onBouncyTextAreaKeyDown(e) {
 
 async function onBouncyTextAreaKeyUp(e) {
     await scaleFocusTemplates('default');
+    await delay(100);
+    clearAllTemplateEditClasses();
 }
 // #endregion Event Handlers

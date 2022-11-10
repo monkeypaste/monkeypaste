@@ -126,6 +126,9 @@ function substringByLength(str, sIdx, length) {
     // js subsring is by sidx,eidx
     // cs substring is by sidx,length
     // this mimics cs for ported code, etc.
+    if (length == 0) {
+        return '';
+    }
     if (!length) {
         length = str.length - sIdx;
 	}
@@ -419,4 +422,11 @@ function numToPaddedStr(num, padStr, padCount) {
         numStr = padStr + numStr;
     }
     return numStr;
+}
+
+function get2dIdx(idx, cols) {
+    return [
+        parseInt(idx / cols), // row
+        parseInt(idx % cols) // col
+    ];
 }

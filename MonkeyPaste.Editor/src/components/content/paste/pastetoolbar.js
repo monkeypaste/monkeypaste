@@ -55,6 +55,10 @@ function isPasteAvailable() {
     return isSubSelectionEnabled();
 }
 
+function isShowingPasteToolbar() {
+    return !getPasteToolbarContainerElement().classList.contains('hidden');
+}
+
 // #endregion State
 
 // #region Actions

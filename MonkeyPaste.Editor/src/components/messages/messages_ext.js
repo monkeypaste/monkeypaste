@@ -83,18 +83,18 @@ function contentRequest_ext(contentReqMsgStr_base64) {
 			}
 		} else if (format == 'Text' && ContentItemType != 'Image') {
 			if (isContentATable()) {
-				data = getTableCsv('Text');
+				data = getTableCsv('Text', null, req.forPaste);
 			} else {
-				data = getText(sel);
+				data = getText(sel, req.forPaste);
 			}
 			
 			if (req.forPaste && data.endsWith('\n')) {
 				// remove trailing line ending
-				data = substringByLength(data, 0, data.length - 1);
+				data = substringByLength(data, 0, data.length - 2);
 			}
 		} else if (format == 'Csv') {
 			// TODO figure out handling table selectinn logic and check here 
-			data = getTableCsv('Text');
+			data = getTableCsv('Text', null, req.forPaste);
 		} else if (format == 'PNG') {
 			// trigger async screenshot notification where host needs to null and wait for value to avoid async issues
 			if (ContentItemType != 'Image') {

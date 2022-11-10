@@ -43,7 +43,7 @@ function getContactFieldList() {
 }
 
 function getContactFieldValue(contact_guid, fieldName) {
-	let contact_field_value = etContactFieldValue_get(contact_guid, fieldName)
+	let contact_field_value = getContactFieldValue_get(contact_guid, fieldName)
 	return contact_field_value;
 }
 

@@ -21,21 +21,6 @@ function updateOverlayBounds(overlayCanvas) {
     overlayCanvas.height = window_rect.height;
 }
 
-function testOverlay() {
-    let canvas = document.getElementById('overlayCanvas');
-    updateOverlayBounds(canvas);
-
-    if (!canvas.getContext) {
-        return;
-    }
-
-    let ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    let overlay_rect = cleanRect(canvas.getBoundingClientRect())
-
-    drawRect(ctx,overlay_rect, 'transparent', 'blue', 3);
-}
 
 function drawUnderlines(ctx, color = 'red', thickness = '0.5') {
     let p1 = null;
@@ -242,13 +227,15 @@ function drawTextSelection(ctx) {
         }
     } else if (isSubSelectionEnabled()) {
         if (isEditorToolbarVisible()) {
-            if (IsTemplateAtInsert) {
+            if (isSelAtFocusTemplateInsert()) {
+                // hide cursor within focus template
                 caret_color = 'transparent';
             }
         } else {
             caret_color = 'red';
         }
     } else {
+        // in no select hide cursor
         caret_color = 'transparent';
 	}
 

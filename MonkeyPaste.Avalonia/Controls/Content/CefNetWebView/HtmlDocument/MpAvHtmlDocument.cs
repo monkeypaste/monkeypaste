@@ -34,7 +34,8 @@ namespace MonkeyPaste.Avalonia {
                 ContentScreenShotBase64 = null;
 
                 var contentDataReq = new MpQuillContentDataRequestMessage() { 
-                    forPaste = ctvm.IsPasting || ctvm.IsTileDragging
+                    forPaste = ctvm.IsPasting,
+                    forDragDrop = ctvm.IsTileDragging
                 };
                 contentDataReq.formats = MpPortableDataFormats.RegisteredFormats.ToList();
                 var contentDataRespStr = await wv.EvaluateJavascriptAsync($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");

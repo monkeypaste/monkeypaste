@@ -41,12 +41,6 @@ function getEditorMousePos(e) {
     }
 
     let mp = { x: parseFloat(e.clientX), y: parseFloat(e.clientY) };
-
-    //let editor_rect = getEditorRect(false);
-
-    //mp.x = mp.x - editor_rect.left;
-    //mp.y = mp.y - editor_rect.top;
-
     return mp;
 }
 
@@ -105,11 +99,20 @@ function dropData(docIdx, dt) {
     let drop_content_data = '';
     let drop_content_data_type = '';
 
-    if (isDropHtml() && dt.types.includes('text/html')) {
+    if (dt.types.includes('text/html')) {
         let drop_html_str = dt.getData('text/html');
-        insertHtml(docIdx, drop_html_str, 'user');
-        return;
+        if (isDropHtml()) {
+            insertHtml(docIdx, drop_html_str, 'user');
+            return;
+        }
+        if (drop_html_str.toLowerCase().indexOf('templateguid') >= 0) {
+            // when templates are in html just use it (too much trouble using text since only non-inputs are in db)
+            insertHtml(docIdx, drop_html_str, 'user'); 
+            loadTemplates();
+            return;
+        }
     }
+    
     let drop_pt = dt.getData('text/plain');
 
     insertText(docIdx, drop_pt, 'silent', true);

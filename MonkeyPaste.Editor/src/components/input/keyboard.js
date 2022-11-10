@@ -43,6 +43,9 @@ function handleWindowKeyDown(e) {
 	updateModKeys(e);
 
 	if (isSubSelectionEnabled()) {
+		if (!quill.hasFocus()) {
+			suppresKeyDown = false;
+		}
 		if (isReadOnly()) {
 			//sub-select/droppable mode
 			if (e.key == IncreaseFocusLevelKey) {
@@ -88,7 +91,7 @@ function handleWindowKeyUp(e) {
 		}
 		if (isTemplateFocused()) {
 			clearTemplateFocus();
-			if (!IsPastingTemplate) {
+			if (!isShowingPasteToolbar()) {
 				hideEditTemplateToolbar(true);
 			}
 			return;

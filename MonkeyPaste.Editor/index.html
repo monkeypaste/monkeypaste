@@ -150,7 +150,7 @@
     <script src="src/components/template/types/contacts/contacts.js"></script>
 
     <script src="src/components/color/colorpalette.js"></script>
-    <script src="src/components/color/contentcolors.js"></script>
+    <script src="src/components/color/colordata.js"></script>
     <script src="src/components/color/color.js"></script>
 
     <script src="src/components/content/content.js"></script>
@@ -220,11 +220,30 @@
         <select class="ql-font"></select>
 
         <div class="toolbar-separator"></div>
+
+        <!-- CREATE TEMPLATE -->
+        <button id="createTemplateToolbarButton"></button>
+        <div class="toolbar-separator"></div>
+
+        <!-- FG/BG COLOR -->
+        <button id="fontColorToolbarButton"></button>
+        <button id="fontBackgroundToolbarButton"></button>
+
+        <div class="toolbar-separator"></div>
+
         <!-- BOLD -->
         <button class="ql-bold"></button>
 
         <!-- ITALIC-->
         <button class="ql-italic"></button>
+
+        <div class="toolbar-separator"></div>
+
+        <!-- CREATE TABLE -->
+        <span id="createTableToolbarButton" class="ql-Table-Input ql-picker">
+            <span id="createTableToolbarButtonLabel" class="ql-picker-label"></span>
+            <span id="createTableToolbarButtonOptionsContainer" class="ql-picker-options hidden"></span>
+        </span>
 
         <div class="toolbar-separator"></div>
 
@@ -268,30 +287,13 @@
 
         <div class="toolbar-separator"></div>
 
-        <!-- FG/BG COLOR -->
-        <button id="fontColorToolbarButton"></button>
-        <button id="fontBackgroundToolbarButton"></button>
-
-        <div class="toolbar-separator"></div>
-
         <!-- ALIGN -->
         <button class="ql-align"></button>
 
-        <div class="toolbar-separator"></div>
-
-        <!-- CREATE TABLE -->
-        <span id="createTableToolbarButton" class="ql-Table-Input ql-picker">
-            <span id="createTableToolbarButtonLabel" class="ql-picker-label"></span>
-            <span id="createTableToolbarButtonOptionsContainer" class="ql-picker-options hidden"></span>
-        </span>
-
-        <div class="toolbar-separator"></div>
-        <!-- CREATE TEMPLATE -->
-        <button id="createTemplateToolbarButton"></button>
 
         <div class="toolbar-separator"></div>
         <!-- FIND/REPLACE -->
-        <button id="findReplaceToolbarButton"></button>
+        <button id="findReplaceToolbarButton" class="right-align"></button>
     </div>
 
     <!-- FIND/REPLACE TOOLBAR -->
@@ -336,7 +338,7 @@
     </div>
 
     <!-- EDITOR CONTAINER -->
-    <div id='editor' draggable="false">
+    <div id='editor' draggable="false" class="no-select">
     </div>
 
     <!-- EDIT TEMPLATE TOOLBAR -->

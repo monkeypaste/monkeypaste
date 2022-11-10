@@ -43,6 +43,7 @@ namespace MonkeyPaste {
     public class MpQuillContentDataRequestMessage : MpJsonObject {
         public List<string> formats { get; set; }
 
+        public bool forDragDrop { get; set; }
         public bool forPaste { get; set; } // flag to omit trailing newline for paste db is fine
     }
 

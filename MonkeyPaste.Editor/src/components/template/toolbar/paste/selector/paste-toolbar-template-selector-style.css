@@ -54,6 +54,13 @@
     height: inherit;
     max-width: 30px;
     margin: 5px;
+    padding: 3px;
+}
+.paste-template-option-icon svg {
+    width: 15px;
+    height: 15px;
+    margin-left: 3px;
+    margin-top: 3px;
 }
 
 .paste-template-option-label {

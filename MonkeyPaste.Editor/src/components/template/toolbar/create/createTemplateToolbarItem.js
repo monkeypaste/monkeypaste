@@ -3,11 +3,11 @@
 var TemplateTypesMenuOptions = [
     {
         label: 'Dynamic',
-        icon: 'fa-solid fa-keyboard'
+        icon: 'text'
     },
     {
         label: 'Static',
-        icon: 'fa-solid fa-icicles'
+        icon: 'snowflake'
     },
     /* {
          label: 'Content',
@@ -23,11 +23,11 @@ var TemplateTypesMenuOptions = [
      },*/
     {
         label: 'Contact',
-        icon: 'fa-solid fa-id-card'
+        icon: 'contact'
     },
     {
         label: 'DateTime',
-        icon: 'fa-solid fa-clock'
+        icon: 'datetime'
     }
 ];
 
@@ -64,7 +64,12 @@ function showTemplateToolbarContextMenu() {
     getAllNonInputTemplatesFromDbAsync_get()
         .then((result) => {
             result = result ? result : [];
-            let allTemplateDefs = result;
+
+            let all_non_input_defs = result;
+            let all_local_defs = getTemplateDefs();
+            let db_defs_to_add = all_non_input_defs.filter(x => all_local_defs.every(y => y.templateGuid != x.templateGuid));
+
+            let allTemplateDefs = [...all_local_defs, ...db_defs_to_add];
 
             let cm = [];
 
@@ -117,6 +122,7 @@ function hideCreateTemplateToolbarContextMenu() {
 function getCreateTemplateToolbarButton() {
     return document.getElementById('createTemplateToolbarButton');
 }
+
 // #endregion Getters
 
 // #region Setters
@@ -185,7 +191,7 @@ function createTemplateFromDropDown(templateObjOrId, newTemplateType) {
         let formatInfo = quill.getFormat(range.index, 1);
         newTemplateObj = {
             templateGuid: generateGuid(),
-            templateColor: getRandomColor(),
+            templateColor: getRandomPaletteColor(),
             templateName: newTemplateName,
             templateType: newTemplateType,
             templateData: '',

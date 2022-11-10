@@ -130,7 +130,7 @@ function getState() {
 		isSubSelectionEnabled: isSubSelectionEnabled(),
 		isReadOnly: isReadOnly(),
 		sel: getDocSelection(),
-		isPastingTemplate: IsPastingTemplate
+		isPastingTemplate: isShowingPasteToolbar()
 	}
 }
 // #endregion Getters
@@ -161,12 +161,12 @@ function setState(stateObj) {
 
 // #region State
 
-function isElementDisabled(elm) {
+function isElementDisabled(elm, ignoreHidden = false) {
 	if (!elm) {
 		debugger;
 		return true;
 	}
-	if (elm.classList.contains('hidden')) {
+	if (!ignoreHidden && elm.classList.contains('hidden')) {
 		return true;
 	}
 	return elm.classList.contains('disabled');
@@ -195,12 +195,12 @@ function updateAllSelectionDependantElements() {
 
 	updateFontSizePickerToSelection();
 	updateFontFamilyPickerToSelection();
-	if (hasTemplates()) {
-		if (isShowingPasteTemplateToolbar()) {
+	//if (hasTemplates()) {
+		if (isShowingPasteToolbar()) {
 			updatePasteTemplateToolbarToSelection();
 		}
 		updateTemplatesAfterSelectionChange();
-	}
+	//}
 	updateFindReplaceRangeRects();
 	updateCreateTableToolbarButtonIsEnabled();
 	updateCreateTemplateToolbarButtonToSelection();

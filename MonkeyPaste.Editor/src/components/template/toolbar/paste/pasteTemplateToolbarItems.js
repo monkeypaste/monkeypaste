@@ -3,7 +3,6 @@
 
 const PasteToolbarDefaultWidth = 1125.0;
 
-var IsPastingTemplate = false;
 var IsTemplatePasteValueTextAreaFocused = false;
 
 var PasteTemplateTimerInterval = null;
@@ -89,9 +88,10 @@ function getTemplatePasteValue(t) {
     }
     if (ttype == 'contact') {
         if (isNullOrWhiteSpace(t.templateData)) {
-            // error, data must be contact field on hide edit template 
-            debugger;
-            return null;
+            // error, data must be contact field on hide edit template
+            //debugger;
+            //return null;
+            return 'Full Name';
         }
 
         if (SelectedContactGuid == null) {
@@ -130,7 +130,8 @@ function setTemplatePasteValue(tguid, val) {
         let paste_val = getTemplatePasteValue(t);
         let has_changed = paste_val != val;
         if (has_changed) {
-            telm.innerText = val;
+            //telm.innerText = val;
+            setTemplateElementText(telm, val);
             telm.setAttribute('templateText', val);
             if (!bouncing) {
                 debabyTemplateElement(telm);
@@ -163,8 +164,8 @@ function isPasteButtonEnabled() {
     return !getPasteButtonElement().classList.contains('disabled');
 }
 
-function isShowingPasteTemplateToolbar() {
-    return !getPasteToolbarContainerElement().classList.contains('hidden');
+function isShowingPasteToolbarItems() {
+    return !getPasteFocusTemplateContainerElement().classList.contains('hidden');
 }
 
 // #endregion State
@@ -281,6 +282,11 @@ function updatePasteValueTextAreaSize() {
 }
 
 function updatePasteTemplateToolbarToSelection(force_ftguid) {
+    if (!hasTemplates()) {
+        hidePasteTemplateToolbarItems();
+    } else if (!isShowingPasteToolbarItems()) {
+        showPasteTemplateToolbarItems();
+    }
     let paste_sel = getDocSelection(true);
     let pre_ftguid = getFocusTemplateGuid();
 

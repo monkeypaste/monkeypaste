@@ -1,6 +1,10 @@
 // #region Globals
 var ColorPaletteAnchorElement = null;
 var ColorPaletteAnchorResultCallback = null;
+
+const COLOR_PALETTE_ROW_COUNT = 5;
+const COLOR_PALETTE_COL_COUNT = 14;
+
 // #endregion Globals
 
 // #region Life Cycle
@@ -86,8 +90,8 @@ function getColorPaletteContainerElement() {
 }
 
 function getColorPaletteHtml(sel_color) {
-    let rc = 5;
-    let cc = 14;
+    let rc = COLOR_PALETTE_ROW_COUNT;
+    let cc = COLOR_PALETTE_COL_COUNT;
     let idx = 0;
     let paletteHtml = '<table>';
     let wasSelColorFound = false;

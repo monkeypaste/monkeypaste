@@ -10,8 +10,6 @@ var ENCODED_TEMPLATE_REGEXP = new RegExp(ENCODED_TEMPLATE_OPEN_TOKEN + ".*?" + E
 
 var IsMovingTemplate = false;
 
-var IsTemplateAtInsert = false;
-
 var IsTemplatePaddingAfterTextChange = false;
 
 var IsAnyTemplateBgTemporary = false;
@@ -50,6 +48,10 @@ function getTemplateElements(tguid, sortBy = 'docIdx', isDescending = false) {
 		}
         return a.getAttribute(sortBy) < a.getAttribute(sortBy) ? -1 : 1
 	});
+}
+
+function getTemplateElementTextSpan(telm) {
+    return telm.firstChild.nextSibling;
 }
 
 function getTemplateInstanceDefs() {
@@ -275,9 +277,7 @@ function getTemplateElementsWithDocIdx() {
 }
 
 function getTemplateAsPlainText(t) {
-    if (IsPastingTemplate) {
-        //let t_elm = getTemplateInstanceElement(t.templateInstanceGuid);
-        //template_text = t_elm.innerText;
+    if (isShowingPasteToolbar()) {
         return t.templateText;
     }
     let template_text = `${ENCODED_TEMPLATE_OPEN_TOKEN}${t.templateGuid},${t.templateInstanceGuid}${ENCODED_TEMPLATE_CLOSE_TOKEN}`;
@@ -288,7 +288,7 @@ function getTemplateDisplayValue(t) {
     if (!t) {
         return '';
     }
-    if (IsPastingTemplate && !isNullOrEmpty(t.templateText)) {
+    if (isShowingPasteToolbar() && !isNullOrEmpty(t.templateText)) {
         return t.templateText;
     }
     return t.templateName;
@@ -302,32 +302,38 @@ function getTemplatePlainTextForDocRange(range) {
         let doc_idx_char = getText({ index: doc_idx, length: 1 });
         let t_at_next_doc_idx = getTemplateAtDocIdx(doc_idx);
         if (t_at_next_doc_idx != null) {
+            if (isTemplateAtDocIdxPrePadded(doc_idx)) {
+                out_text = substringByLength(out_text, 0, Math.max(0, out_text.length - 1));
+            }
+            if (isTemplateAtDocIdxPostPadded(doc_idx)) {
+                i++;
+            }
             // check if pre template space is a pad space
-            let pre_t_doc_idx = doc_idx - 1;
-            let pre_t_doc_idx_char = getText({ index: pre_t_doc_idx, length: 1 });
-            if (pre_t_doc_idx_char == ' ') {
-                // previous is potentially pad since its a space
-                let pre_pre_t_doc_idx_char = getText({ index: pre_t_doc_idx - 1, length: 1 });
-                let is_pre_t_idx_pad_space = pre_t_doc_idx == 0 || pre_pre_t_doc_idx_char == '\n';
-                if (is_pre_t_idx_pad_space) {
-                    // occurs when previous pad space is beginning of doc or pad was start of new block
-                    // remove prev pad space
-                    out_text = substringByLength(out_text, 0, Math.max(0, out_text.length - 1));
-                }
-            }
-            // check if pre temppostlate space is a pad space
-            let post_t_doc_idx = doc_idx + 1;
-            let post_t_doc_idx_char = getText({ index: post_t_doc_idx, length: 1 });
-            if (post_t_doc_idx_char == ' ') {
-                // next is potentially pad since its a space
-                let post_post_t_doc_idx_char = getText({ index: post_t_doc_idx + 1, length: 1 });
-                let is_post_t_idx_pad_space = post_t_doc_idx == getDocLength() - 1 || post_post_t_doc_idx_char == '\n';
-                if (is_post_t_idx_pad_space) {
-                    // occurs when post pad space is end of doc or pad is end of current block
-                    // skip next iteration so loop ignores the pad space and picks back up at end of block or terminates
-                    i++;
-                }
-            }
+            //let pre_t_doc_idx = doc_idx - 1;
+            //let pre_t_doc_idx_char = getText({ index: pre_t_doc_idx, length: 1 });
+            //if (pre_t_doc_idx_char == ' ') {
+            //    // previous is potentially pad since its a space
+            //    let pre_pre_t_doc_idx_char = getText({ index: pre_t_doc_idx - 1, length: 1 });
+            //    let is_pre_t_idx_pad_space = pre_t_doc_idx == 0 || pre_pre_t_doc_idx_char == '\n';
+            //    if (is_pre_t_idx_pad_space) {
+            //        // occurs when previous pad space is beginning of doc or pad was start of new block
+            //        // remove prev pad space
+            //        out_text = substringByLength(out_text, 0, Math.max(0, out_text.length - 1));
+            //    }
+            //}
+            //// check if pre temppostlate space is a pad space
+            //let post_t_doc_idx = doc_idx + 1;
+            //let post_t_doc_idx_char = getText({ index: post_t_doc_idx, length: 1 });
+            //if (post_t_doc_idx_char == ' ') {
+            //    // next is potentially pad since its a space
+            //    let post_post_t_doc_idx_char = getText({ index: post_t_doc_idx + 1, length: 1 });
+            //    let is_post_t_idx_pad_space = post_t_doc_idx == getDocLength() - 1 || post_post_t_doc_idx_char == '\n';
+            //    if (is_post_t_idx_pad_space) {
+            //        // occurs when post pad space is end of doc or pad is end of current block
+            //        // skip next iteration so loop ignores the pad space and picks back up at end of block or terminates
+            //        i++;
+            //    }
+            //}
             out_text += getTemplateAsPlainText(t_at_next_doc_idx);
         }
         out_text += doc_idx_char;
@@ -363,15 +369,15 @@ function getLowestAnonTemplateName(anonPrefix = 'Template #') {
     return anonPrefix + (parseInt(maxNum) + 1);
 }
 
-function getTemplateTypeIcon(ttype) {
-    ttype = ttype.toLowerCase();
+function getTemplateTypeSvgKey(ttype) {
     for (var i = 0; i < TemplateTypesMenuOptions.length; i++) {
-        if (TemplateTypesMenuOptions[i].label.toLowerCase() == ttype) {
-            return TemplateTypesMenuOptions[i].icon.replace('fa-solid ','');
+        if (TemplateTypesMenuOptions[i].label.toLowerCase() == ttype.toLowerCase()) {
+            return TemplateTypesMenuOptions[i].icon;
 		}
     }
-    return 'fa-solid';
+    return 'empty';
 }
+
 
 // #endregion Getters
 
@@ -396,7 +402,8 @@ function setTemplateBgColor(tguid, color_name_or_hex, isTemporary) {
     let tel = getTemplateElements(tguid);
     for (var i = 0; i < tel.length; i++) {
         tel[i].style.backgroundColor = color_name_or_hex;
-        tel[i].style.color = isBright(color_name_or_hex) ? 'black' : 'white';
+        tel[i].style.color = getContrastHexColor(color_name_or_hex);
+        setSvgElmColor(tel[i].firstChild, tel[i].style.color);
         if (isTemporary) {
             tel[i].classList.add('temporary-bg-color');
             continue;
@@ -414,6 +421,9 @@ function setTemplateNavState(t_elm, navStateClass) {
     t_elm.classList.add(navStateClass);
 }
 
+function setTemplateElementText(telm, text) {
+    getTemplateElementTextSpan(telm).innerText = text;
+}
 // #endregion Setters
 
 // #region State
@@ -514,6 +524,29 @@ function isTemplateAnInputType(t) {
     return false;
 }
 
+function isSelAtFocusTemplateInsert() {
+    let ftelm = getFocusTemplateElement();
+    if (!ftelm) {
+        return false;
+    }
+    return ftelm.classList.contains(Template_IN_SEL_RANGE_Class);
+}
+
+function isTemplateAtDocIdxPrePadded(t_docIdx) {
+    let pre_text = getText({ index: t_docIdx - 1, length: 1 });
+    if (pre_text == ' ') {
+        return isDocIdxBlockStart(t_docIdx - 1);
+    }
+    return false;
+}
+function isTemplateAtDocIdxPostPadded(t_docIdx) {
+    let post_text = getText({ index: t_docIdx + 1, length: 1 });
+    if (post_text == ' ') {
+        return isDocIdxBlockEnd(t_docIdx + 1);
+    }
+    return false;
+}
+
 // #endregion State
 
 // #region Actions
@@ -521,9 +554,6 @@ function isTemplateAnInputType(t) {
 function loadTemplates(isPasteRequest) {
     resetEditTemplateToolbar();
 
-    if (isPasteRequest && hasTemplates()) {
-        IsPastingTemplate = true;
-    }
 
     let telml = getTemplateElements();
     for (var i = 0; i < telml.length; i++) {
@@ -538,7 +568,7 @@ function loadTemplates(isPasteRequest) {
         updateTemplatesAfterTextChanged();
     }
 
-    if (IsPastingTemplate) {
+    if (isShowingPasteToolbar()) {
         if (isAnyTemplateRequireInput()) {
             showPasteToolbar();
         } else {
@@ -648,22 +678,26 @@ function updateTemplatesAfterTextChanged() {
         let t_doc_idx = getTemplateDocIdx(telm.getAttribute('templateInstanceGuid'));
         if (isDocIdxBlockStart(t_doc_idx)) {
             insertText(t_doc_idx, ' ', 'silent');
+            let pre_space_width = getCharacterRect(t_doc_idx).width;
             t_doc_idx++;
-            telm.style.marginLeft = '0px';
-        } else {
+            telm.style.marginLeft = -pre_space_width + 'px';
+        } else if (!isTemplateAtDocIdxPrePadded(t_doc_idx)) {
             telm.style.marginLeft = '0px';
 		}
         if (isDocIdxBlockEnd(t_doc_idx)) {
             insertText(t_doc_idx + 1, ' ', 'silent');
-            telm.style.marginRight = '-3px'
-        } else {
-            telm.style.marginRight = '0px';
+            //let post_space_width = getCharacterRect(t_doc_idx + 1).width;
+            //telm.style.marginRight = -post_space_width + 'px';
+        } else if (!isTemplateAtDocIdxPostPadded(t_doc_idx)) {
+            let hr = parseFloat(telm.style.marginRight) / 2;
+            //telm.style.marginRight = hr+'px';
 		}
         let t = getTemplateFromDomNode(telm);
         applyTemplateToDomNode(telm, t);
 
         debabyTemplateElement(telm);
     }
+    IsTemplatePaddingAfterTextChange = false;
 }
 
 function updateTemplatesAfterSelectionChange() {
@@ -679,7 +713,7 @@ function updateTemplatesAfterSelectionChange() {
     if (WindowMouseDownLoc) {
         return;
     }
-    if (IsPastingTemplate) {
+    if (isShowingPasteToolbar()) {
         updatePasteTemplateToolbarToSelection();
     }
     let sel_range = getDocSelection();
@@ -693,7 +727,7 @@ function updateTemplatesAfterSelectionChange() {
 
     let old_closest_idx = sel_range.index > last_sel_range.index ? last_sel_range.index + last_sel_range.length : last_sel_range.index;
     let is_nav_right = sel_range.index > old_closest_idx && sel_range.length == 0;
-    IsTemplateAtInsert = false;
+
     for (var i = 0; i < all_template_elms.length; i++) {
         let t_elm = all_template_elms[i];
         let tiguid = t_elm.getAttribute('templateInstanceGuid');
@@ -721,7 +755,6 @@ function updateTemplatesAfterSelectionChange() {
                     }
                 } else {
                     setTemplateNavState(t_elm, Template_AT_INSERT_Class);
-                    IsTemplateAtInsert = true;
                 }
 
             } else {
@@ -731,7 +764,6 @@ function updateTemplatesAfterSelectionChange() {
                     } else {
                         setDocSelection(sel_range.index - 1, 0, 'silent');
                         setTemplateNavState(t_elm, Template_AT_INSERT_Class);
-                        IsTemplateAtInsert = true;
                     }
 
                 } else if (!is_nav_right && sel_range.index == t_doc_idx - 1) {
@@ -768,6 +800,9 @@ function insertTemplate(range, t, fromDropDown, source = 'api') {
     //debugger;
     let telm = getTemplateInstanceElement(t.templateInstanceGuid);
     debabyTemplateElement(telm);
+
+    // NOTE update must be called because text change hasn't picked up template yet (when none exist yet)
+    updateTemplatesAfterTextChanged();
 }
 
 function debabyTemplateElement(telm) {
@@ -804,7 +839,7 @@ function moveTemplate(tiguid, nidx, isCopy) {
 }
 
 function focusTemplate(ftguid, fromDropDown = false, isNew = false, fromClickOnTemplate = false) {
-    if (IsPastingTemplate) {
+    if (isShowingPasteToolbar()) {
         // only mark template as visited after it loses focus
         let old_ftguid = getFocusTemplateGuid();
         if (old_ftguid) {
@@ -834,7 +869,7 @@ function focusTemplate(ftguid, fromDropDown = false, isNew = false, fromClickOnT
 		}
     }
 
-    if (IsPastingTemplate) {
+    if (isShowingPasteToolbar()) {
         updatePasteTemplateToolbarToSelection(ftguid);
     } else {
         if (isNew || fromClickOnTemplate) {
