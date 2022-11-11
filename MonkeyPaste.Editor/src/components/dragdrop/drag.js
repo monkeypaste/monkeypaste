@@ -134,11 +134,11 @@ function onDragStart(e) {
     } else if (ContentItemType == 'FileList') {
         e.dataTransfer.effectAllowed = 'copy';
 
-        e.dataTransfer.setData('text\plain', getFileListContentData());
+        e.dataTransfer.setData('text/plain', getFileListContentData());
     } else if (ContentItemType == 'Image') {
         e.dataTransfer.effectAllowed = 'copy';
 
-        e.dataTransfer.setData('text\plain', getImageContentData());
+        e.dataTransfer.setData('text/plain', getImageContentData());
     }
 
 

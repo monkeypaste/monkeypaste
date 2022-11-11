@@ -139,10 +139,8 @@ namespace MonkeyPaste.Avalonia {
                 if (isReadOnly) {
                     MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.ReadOnlyWidth, ctvm.ReadOnlyHeight, 3.0d);
                     string enableReadOnlyRespStr = await wv.EvaluateJavascriptAsync("enableReadOnly_ext()");
-                    var qrm = MpJsonObject.DeserializeBase64Object<MpQuillEnableReadOnlyResponseMessage>(enableReadOnlyRespStr);
-                    if (ctvm.CopyItemData != qrm.itemData) {
-                        ctvm.CopyItemData = qrm.itemData;
-                    }
+                    var qrm = MpJsonObject.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(enableReadOnlyRespStr);
+                    wv.Document.ProcessContentChangedMessage(qrm);
                 } else {
                     MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.EditableWidth, ctvm.EditableHeight, 3.0d);
                     wv.ExecuteJavascript($"disableReadOnly_ext()");
@@ -246,7 +244,6 @@ namespace MonkeyPaste.Avalonia {
                 Dispatcher.UIThread.Post(async () => {
                     // NOTE IsContentLoaded is set true in binding response (notifyLoadComplete) after editor loadContent()
                     wv.IsContentLoaded = false;
-
                     
                     if (ctvm.IsPlaceholder && !ctvm.IsPinned) {
                         return;
@@ -271,18 +268,7 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                     wv.ExecuteJavascript($"loadContent_ext('{loadContentMsg.SerializeJsonObjectToBase64()}')");
-                    //var respStr = await wv.EvaluateJavascriptAsync($"loadContent_ext('{loadContentMsg.SerializeJsonObjectToBase64()}')");
-                    //var resp = MpJsonObject.DeserializeBase64Object<MpQuillLoadContentResponseMessage>(respStr);
-                    //ctvm.UnformattedContentSize = new MpSize(resp.contentWidth, resp.contentHeight);
-                    //ctvm.LineCount = resp.lineCount;
-                    //ctvm.CharCount = resp.charCount;
-                    //wv.Document.ContentEnd.Offset = resp.charCount;
-
-                    //ctvm.IsWaitingForDomLoad = false;
-                    //ctvm.IsBusy = false;
                 });
-                // editor will know its loaded by IsLoaded and just set new html
-                //LoadContentAsync(wv).FireAndForgetSafeAsync(null);
             }
         }
 

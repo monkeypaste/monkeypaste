@@ -574,8 +574,22 @@ function loadTemplates(isPasteRequest) {
         } else {
             finishTemplatePaste();
         }
-
     }
+}
+
+function unparentTemplatesAfterHtmlInsert() {
+    if (!hasTemplates()) {
+        return;
+    }
+    let telms = getTemplateElements();
+    for (var i = 0; i < telms.length; i++) {
+        let telm = telms[i];
+        let t_parent_elm = telm.parentNode;
+        if (t_parent_elm.tagName.toLowerCase() == 'span') {
+            // needs unparenting
+            t_parent_elm.replaceWith(t_parent_elm.firstChild);
+        }
+	}
 }
 
 function enableTemplateSubSelection() {

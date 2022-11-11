@@ -96,11 +96,12 @@ function resetDrop(fromHost, wasLeave) {
 }
 
 function dropData(docIdx, dt) {
-    let drop_content_data = '';
-    let drop_content_data_type = '';
-
     if (dt.types.includes('text/html')) {
         let drop_html_str = dt.getData('text/html');
+        if (isHtmlClipboardFragment(drop_html_str)) {
+            drop_html_str = parseHtmlFromHtmlClipboardFragment(drop_html_str).html;
+        }
+
         if (isDropHtml()) {
             insertHtml(docIdx, drop_html_str, 'user');
             return;
@@ -109,6 +110,7 @@ function dropData(docIdx, dt) {
             // when templates are in html just use it (too much trouble using text since only non-inputs are in db)
             insertHtml(docIdx, drop_html_str, 'user'); 
             loadTemplates();
+            unparentTemplatesAfterHtmlInsert();
             return;
         }
     }

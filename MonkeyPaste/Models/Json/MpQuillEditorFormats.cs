@@ -32,14 +32,6 @@ namespace MonkeyPaste {
         public bool useRegex { get; set; } = false;
     }
 
-    public class MpQuillLoadContentResponseMessage : MpJsonObject {
-        public double contentWidth { get; set; }
-        public double contentHeight { get; set; }
-        public int lineCount { get; set; }
-        public int charCount { get; set; }
-        public bool hasTemplates { get; set; }
-    }
-
     public class MpQuillContentDataRequestMessage : MpJsonObject {
         public List<string> formats { get; set; }
 
@@ -85,15 +77,16 @@ namespace MonkeyPaste {
         public double editorHeight { get; set; }
     }
 
-    public class MpQuillEnableReadOnlyResponseMessage : MpJsonObject {
+    public class MpQuillEditorContentChangedMessage : MpJsonObject {
         public string itemData { get; set; }
 
-        //public List<string> userDeletedTemplateGuids { get; set; }
-        //public List<MpTextTemplate> updatedAllAvailableTextTemplates { get; set; }
         public double editorWidth { get; set; }
         public double editorHeight { get; set; }
-    }
+        public int length { get; set; }
+        public int lines { get; set; }
 
+        public bool hasTemplates { get; set; }
+    }
     public class MpQuillUserDeletedTemplateNotification : MpJsonObject {
         public string userDeletedTemplateGuid { get; set; }
     }
@@ -224,11 +217,6 @@ templateType: "dynamic"
 
         public string selText { get; set; }
         public bool isChangeBegin { get; set; }
-    }
-
-    public class MpQuillContentLengthChangedMessage : MpJsonObject {
-        public int length { get; set; }
-        public int lines { get; set; }
     }
 
     public class MpQuillExceptionMessage : MpJsonObject {

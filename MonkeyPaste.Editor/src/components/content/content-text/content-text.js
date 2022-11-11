@@ -1,6 +1,8 @@
-const InlineTags = ['span', 'a', 'em', 'strong', 'u', 's', 'sub', 'sup', 'img'];
-const BlockTags = ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe', 'blockquote']
-const AllDocumentTags = [...InlineTags,...BlockTags];
+// #region Globals
+
+// #endregion Globals
+
+// #region Life Cycle
 
 function loadTextContent(itemDataStr, isPasteRequest) {
 	quill.enable(true);
@@ -11,6 +13,643 @@ function loadTextContent(itemDataStr, isPasteRequest) {
 	loadTemplates(isPasteRequest);
 }
 
+// #endregion Life Cycle
+
+// #region Getters
+
+function getTextContentData() {
+	let qhtml = getHtml();
+	return qhtml;
+}
+
+function getTextContenLineCount() {
+	return getLineCount();
+}
+function getTextContentCharCount() {
+	return getText().length;
+} 
+
+function getContentRange() {
+	return { index: 0, length: getDocLength() };
+}
+
+function getLineStartDocIdx(docIdx) {
+	//let lineStartDocIdx = 0;
+	//let pt = getText();
+	//for (var i = 0; i < docIdx; i++) {
+	//    if (pt[i] == '\n') {
+	//        lineStartDocIdx = Math.min(i + 1, pt.length);
+	//    }
+	//}
+	//return lineStartDocIdx;
+	docIdx = docIdx < 0 ? 0 : docIdx >= quill.getLength() ? quill.getLength() - 1 : docIdx;
+	while (!isDocIdxLineStart(docIdx)) {
+		docIdx--;
+	}
+	return docIdx;
+}
+
+function getLineEndDocIdx(docIdx) {
+	//let pt = getText();
+	//let lineEndDocIdx = pt.length - 1;
+	//for (var i = pt.length - 1; i >= docIdx; i--) {
+	//    if (pt[i] == '\n') {
+	//        lineEndDocIdx = i;
+	//    }
+	//}
+	//return lineEndDocIdx;
+	docIdx = docIdx < 0 ? 0 : docIdx >= quill.getLength() ? quill.getLength() - 1 : docIdx;
+	while (!isDocIdxLineEnd(docIdx)) {
+		docIdx++;
+	}
+	return docIdx;
+}
+
+function getLineIdx(docIdx) {
+	// NOTE below doesn't work like doc's say it returns the same docIdx given for lineIdx (at least for 1 line content) maybe since this is dev 2.0 quill
+	//let line_blot = quill.getLine(docIdx);
+	//return line_blot ? line_blot[1] : -1;
+
+	let docLength = getDocLength();
+	let cur_line_idx = 0;
+	for (var i = 0; i < docLength; i++) {
+		let line_start_doc_idx = getLineStartDocIdx(i);
+		let line_end_doc_idx = getLineEndDocIdx(i);
+		if (docIdx >= line_start_doc_idx && docIdx <= line_end_doc_idx) {
+			return cur_line_idx;
+		}
+		i = line_end_doc_idx + 1;
+	}
+	return -1;
+}
+
+function getLineDocRange(lineIdx) {
+	lineIdx = lineIdx < 0 ? 0 : lineIdx >= getLineCount() ? getLineCount() - 1 : lineIdx;
+	let docIdx = 0;
+	let maxDocIdx = quill.getLength() - 1;
+	let curLineIdx = 0;
+	while (docIdx <= maxDocIdx) {
+		let lineStartIdx = getLineStartDocIdx(docIdx);
+		let lineEndIdx = getLineEndDocIdx(docIdx);
+		if (curLineIdx == lineIdx) {
+			return [lineStartIdx, lineEndIdx];
+		}
+		curLineIdx++;
+		docIdx = lineEndIdx + 1;
+	}
+	return null;
+}
+
+function getLineCount() {
+	return quill.getLines().length;
+}
+
+function getDocLength() {
+	return quill.getLength();
+}
+
+function getCharacterRect(docIdx, isWindowOrigin = true, inflateToLineRect = true) {
+	docIdx = parseInt(docIdx);
+	if (isNaN(docIdx)) {
+		return cleanRect();
+	}
+
+	//let doc_idx_t = getTemplateAtDocIdx(docIdx);
+
+	//if (doc_idx_t) {
+	//	let doc_idx_t_elm = getTemplateElementsInRange({ index: docIdx, length: 1 });
+	//	if (doc_idx_t_elm) {
+	//		return cleanRect(doc_idx_t_elm.getBoundingClientRect());
+	//	}
+	//}
+
+	let docIdx_rect = quill.getBounds(docIdx, 1);
+
+	if (isWindowOrigin) {
+		docIdx_rect = editorToScreenRect(docIdx_rect);
+	} else {
+		docIdx_rect = cleanRect(docIdx_rect);
+	}
+	if (inflateToLineRect) {
+		let lh = getLineHeightAtDocIdx(docIdx);
+		let inflate_y_amt = Math.ceil((lh - docIdx_rect.height) / 2);
+		docIdx_rect = inflateRect(docIdx_rect, 0, -inflate_y_amt, 0, inflate_y_amt);
+
+	}
+
+	return docIdx_rect;
+}
+
+function getLineRect(lineIdx, snapToEditor = true) {
+	let line_doc_range = getLineDocRange(lineIdx);
+	let line_start_rect = getCharacterRect(line_doc_range[0]);
+	let line_end_rect = getCharacterRect(line_doc_range[1]);
+	let line_rect = rectUnion(line_start_rect, line_end_rect);
+	if (!snapToEditor) {
+		return line_rect;
+	}
+	let editor_rect = getEditorContainerRect();
+	//union line with editor left/right edges
+	line_rect.left = editor_rect.left;
+	line_rect.right = editor_rect.right;
+
+	//inflate TOP of line to previous line bottom so no empties
+	// for 0 inflate to editor top
+	// for last also inflate BOTTOM to editor bottom
+
+	let inflated_top = 0;
+	let lineCount = getLineCount();
+	if (lineIdx == 0) {
+		inflated_top = editor_rect.top;
+	} else {
+		let prev_line_rect = getLineRect(lineIdx - 1);
+		inflated_top = prev_line_rect.bottom;
+	}
+
+	if (lineIdx == lineCount - 1) {
+		line_rect.bottom = editor_rect.bottom;
+	}
+	line_rect.top = inflated_top;
+
+	line_rect = cleanRect(line_rect);
+	return line_rect;
+}
+
+function getRangeRects(range, isWindowOrigin = true, inflateToLineHeight = true) {
+	let range_rects = [];
+	if (!range || range.length == 0) {
+		return range_rects;
+	}
+	let cur_line_rect = null;
+	for (var i = range.index; i < range.index + range.length; i++) {
+		if (i == 95) {
+			//debugger;
+		}
+		let cur_idx_rect = getCharacterRect(i, isWindowOrigin, inflateToLineHeight);
+
+		let is_cur_idx_wrapped = false;
+		if (cur_line_rect == null) {
+			//new line 
+			cur_line_rect = cur_idx_rect
+		} else {
+			// check if idx rect is wrapped if its top is closer to the cur line rects bottom than the current line rect's top
+			let top_dist = Math.abs(cur_idx_rect.top - cur_line_rect.top);
+			let bottom_dist = Math.abs(cur_idx_rect.top - cur_line_rect.bottom);
+			is_cur_idx_wrapped = bottom_dist < top_dist;
+			if (is_cur_idx_wrapped) {
+				let pre_wrap_text = getText({ index: range.index, length: i - range.index });
+				//debugger;
+				range_rects.push(cur_line_rect);
+				cur_line_rect = cur_idx_rect;
+			} else {
+				cur_line_rect = rectUnion(cur_line_rect, cur_idx_rect);
+			}
+		}
+		if (isDocIdxLineEnd(i)) {
+			range_rects.push(cur_line_rect);
+			cur_line_rect = null;
+		}
+	}
+	if (cur_line_rect) {
+		// end of range is before end of line
+		range_rects.push(cur_line_rect);
+	}
+	return range_rects;
+}
+
+function getLineIdxAndRectFromPoint(p) {
+	let lineCount = getLineCount();
+	let blockIdx = getBlockIdxFromPoint(p);
+	let start_line_idx = getLineIdx(blockIdx); //0;
+	for (var i = start_line_idx; i < lineCount; i++) {
+		let line_rect = getLineRect(i);
+		if (isPointInRect(line_rect, p)) {
+			return [i, line_rect];
+		}
+	}
+
+	return null;
+}
+
+function getBlockIdxFromPoint(p) {
+	let p_elm = document.elementFromPoint(p.x, p.y);
+	let blot = Quill.find(p_elm);
+	let block_idx = blot.offset(quill.scroll);
+	if (!isNaN(parseInt(block_idx))) {
+		debugger;
+		const p_range = document.caretRangeFromPoint(p.x, p.y);
+		log('block idx NaN, using caretRangeFromPoint which is ' + p_range.startOffset);
+		return p_range.startOffset;
+	}
+	return block_idx;
+}
+function getElementBlot(elm) {
+	let cur_elm = elm;
+	while (true) {
+		if (cur_elm == null) {
+			return null;
+		}
+
+		let cur_blot = Quill.find(cur_elm);
+		if (cur_blot && typeof cur_blot.offset === 'function') {
+			return cur_blot;
+		}
+		cur_elm = cur_elm.parentNode;
+	}
+}
+
+function getElementDocIdx(elm) {
+	let elm_blot = getElementBlot(elm);
+	if (elm_blot == null) {
+		return 0;
+	}
+	return elm_blot.offset(quill.scroll);
+}
+
+function getDocIdxFromPoint(p, fallbackIdx) {
+	if (!p || p.x === undefined || p.y === undefined) {
+		debugger;
+	}
+	fallbackIdx = fallbackIdx ? parseInt(fallbackIdx) : -1;
+
+	let textNode = null;
+	let text_node_idx = -1;
+	let parent_idx = 0;
+	let doc_idx = fallbackIdx;
+	let range = null;
+	if (document.caretRangeFromPoint) {
+		// see https://developer.mozilla.org/en-US/docs/Wt! How are yeb/API/Document/caretRangeFromPoint
+		range = document.caretRangeFromPoint(p.x, p.y);
+		if (range) {
+			textNode = range.startContainer;
+			text_node_idx = range.startOffset;
+		}
+	} else if (document.caretPositionFromPoint) {
+		range = document.caretPositionFromPoint(p.x, p.y);
+		textNode = range.offsetNode;
+		text_node_idx = range.offset;
+	}
+
+	if (!isNaN(parseInt(text_node_idx)) && text_node_idx >= 0) {
+		let text_blot = Quill.find(textNode);
+		if (text_blot && typeof text_blot.offset === 'function') {
+			doc_idx = Quill.find(textNode).offset(quill.scroll) + text_node_idx;
+		} else {
+			let parent_node = textNode.parentNode;
+			while (parent_node != null) {
+				if (typeof parent_node.offset === 'function') {
+					break;
+				}
+				parent_node = parent_node.parentNode;
+			}
+			if (parent_node) {
+				try {
+					doc_idx = Quill.find(textNode.parentNode, true).offset(quill.scroll);
+				} catch (Ex) {
+					debugger;
+				}
+			}
+
+		}
+
+		return doc_idx;
+
+		if (textNode && textNode.parentElement) {
+			let parent_blot = Quill.find(textNode.parentElement);
+			if (parent_blot && typeof parent_blot.offset === 'function') {
+				// get doc idx of block
+				parent_idx = parent_blot.offset(quill.scroll);
+				let prev_sib_node = textNode.previousSibling;
+				if (prev_sib_node != null) {
+					let prev_sib_total_offset = 0;
+					while (prev_sib_node != null) {
+						// get prev siblings offset from parent block to current node
+						let prev_sib_offset = 0;
+						if (prev_sib_node.nodeType == 3) {
+							prev_sib_offset = prev_sib_node.textContent.length;;
+						} else {
+							let prev_sib_blot = Quill.find(prev_sib_node);
+							if (prev_sib_blot && typeof prev_sib_blot.offset === 'function') {
+								if (prev_sib_node.hasAttribute('templateGuid')) {
+									//length of 0
+								} else {
+									prev_sib_offset = prev_sib_node.innerText.length;
+								}
+							}
+						}
+						if (isNaN(parseInt(prev_sib_offset))) {
+							debugger;
+						} else {
+							prev_sib_total_offset += prev_sib_node.textContent.length;
+						}
+						prev_sib_node = prev_sib_node.previousSibling;
+					}
+					doc_idx = /*text_node_idx + */parent_idx + prev_sib_total_offset;
+				} else {
+					doc_idx = text_node_idx + parent_idx;
+				}
+				doc_idx += range.endOffset;
+
+
+				if (doc_idx == 0) {
+					// NOTE parentElement is editor if p is outside of actual editable space (after line break)
+					// but parentElement will still be the enclosed block blot so find the blot offset
+					let p_elm = document.elementFromPoint(p.x, p.y);
+					if (p_elm) {
+						let blot = Quill.find(p_elm);
+						if (blot && typeof blot.offset === 'function') {
+							let block_idx = blot.offset(quill.scroll);
+							if (!isNaN(parseInt(block_idx))) {
+								doc_idx = block_idx;
+							} else {
+								debugger;
+							}
+						}
+
+					} else {
+						debugger;
+					}
+
+				}
+
+			}
+		}
+	}
+	//log('doc_idx: ' + doc_idx + ' offset: ' + text_node_idx + ' parent_idx: ' + parent_idx);
+	return doc_idx;
+}
+
+function getBlotAtDocIdx(docIdx) {
+	let leaf = quill.getLeaf(docIdx);
+	if (leaf && leaf.length > 0) {
+		return leaf[0];
+	}
+	return null;
+}
+
+function getElementAtDocIdx(docIdx, ignoreTextNode = false) {
+	let doc_idx_blot = getBlotAtDocIdx(docIdx);
+	if (!doc_idx_blot) {
+		return getEditorElement();
+	}
+	if (ignoreTextNode &&
+		doc_idx_blot.domNode &&
+		doc_idx_blot.domNode.nodeType !== undefined &&
+		doc_idx_blot.domNode.nodeType === 3) {
+		return doc_idx_blot.domNode.parentNode;
+	}
+	return doc_idx_blot.domNode;
+}
+
+function getBlockElementAtDocIdx(docIdx) {
+	let cur_blot = getBlotAtDocIdx(docIdx);
+	while (cur_blot != null) {
+		if (cur_blot.domNode && cur_blot.domNode.tagName) {
+			// is false for text nodes
+			let cur_tag_name = cur_blot.domNode.tagName.toLowerCase();
+			if (BlockTags.includes(cur_tag_name)) {
+				return cur_blot.domNode;
+			}
+		}
+		cur_blot = cur_blot.parent;
+	}
+	return null;
+}
+
+function getHtmlFromDocRange(docRange) {
+	let old_sel = getDocSelection();
+
+	IgnoreNextSelectionChange = true;
+
+	setDocSelection(docRange.index, docRange.length, 'silent');
+	let rangeHtml = getSelectedHtml();
+
+	IgnoreNextSelectionChange = true;
+	setDocSelection(old_sel.index, old_sel.length, 'silent');
+
+	if (IgnoreNextSelectionChange) {
+		log('Hey! setSelection by silent doesnt trigger sel change event');
+		IgnoreNextSelectionChange = false;
+	}
+	return rangeHtml;
+}
+
+function getElementDocRange(elm) {
+	let elm_blot = Quill.find(elm);
+	if (!elm_blot) {
+		return null;
+	}
+	let elm_index = elm_blot.offset(quill.scroll);
+	let elm_length = 0;
+
+	if (elm.nextSibling) {
+		let elm_next_blot = Quill.find(elm.nextSibling);
+		if (elm_next_blot) {
+			let elm_next_index = elm_next_blot.offset(quill.scroll);
+			elm_length = elm_next_index - elm_index;
+		}
+	}
+	if (elm_length == 0) {
+		// no next sibling
+		let parent_elm = elm.parentElement;
+		while (true) {
+			if (parent_elm == getEditorElement() || parent_elm == null) {
+				elm_length = getDocLength() - elm_index;
+				break;
+			}
+			if (parent_elm.nextSibling == null) {
+				parent_elm = parent_elm.parentElement;
+			} else {
+				parent_elm = parent_elm.nextSibling;
+				let elm_next_parent_blot = Quill.find(parent_elm);
+				if (elm_next_parent_blot) {
+					let elm_next_parent_index = elm_next_parent_blot.offset(quill.scroll);
+					elm_length = elm_next_parent_index - elm_index;
+					break;
+				}
+			}
+		}
+	}
+	return {
+		index: elm_index,
+		length: elm_length
+	};
+}
+
+
+function getDefaultLineHeight() {
+	let editor_height = getElementLineHeight(getEditorElement());
+	return editor_height;
+}
+
+function getLineHeightAtDocIdx(docIdx) {
+	let doc_idx_elm = getElementAtDocIdx(docIdx);
+	if (!doc_idx_elm) {
+		return getDefaultLineHeight();
+	}
+	let line_height = getElementLineHeight(doc_idx_elm);
+	if (isNaN(line_height)) {
+		return getDefaultLineHeight();
+	}
+	return line_height;
+}
+
+function getElementLineHeight(elm) {
+	let attrb_val = window.getComputedStyle(getEditorElement()).getPropertyValue('line-height');
+	let float_val = parseFloat(attrb_val);
+	return float_val;
+}
+// #endregion Getters
+
+// #region Setters
+
+// #endregion Setters
+
+// #region State
+
+function isBlockElement(elm) {
+	if (elm == null || !elm instanceof HTMLElement) {
+		return false;
+	}
+	let tn = elm.tagName.toLowerCase();
+	return BlockTags.includes(tn);
+}
+
+function isInlineElement(elm) {
+	if (elm == null || !elm instanceof HTMLElement) {
+		return false;
+	}
+	let tn = elm.tagName.toLowerCase();
+	return InlineTags.includes(tn);
+}
+
+function isDocIdxBlockStart(docIdx) {
+	if (isNaN(parseFloat(docIdx))) {
+		return false;
+	}
+	if (docIdx == 0) {
+		return true;
+	}
+	if (docIdx >= quill.getLength()) {
+		return false;
+	}
+	let prev_char = getText({ index: docIdx - 1, length: 1 });
+	return prev_char == '\n';
+}
+
+function isDocIdxBlockEnd(docIdx) {
+	if (isNaN(parseFloat(docIdx))) {
+		return false;
+	}
+	if (docIdx == quill.getLength()) {
+		return true;
+	}
+	if (docIdx < 0) {
+		return false;
+	}
+	let next_char = getText({ index: docIdx + 1, length: 1 });
+	return next_char == '\n';
+}
+
+function isDocIdxLineStart(docIdx) {
+	if (isNaN(parseFloat(docIdx))) {
+		return false;
+	}
+	if (docIdx == 0) {
+		return true;
+	}
+	if (docIdx >= quill.getLength()) {
+		return false;
+	}
+	let idxLine = quill.getLine(docIdx);
+	let prevIdxLine = quill.getLine(docIdx - 1);
+	return idxLine[0] != prevIdxLine[0];
+}
+
+function isDocIdxLineEnd(docIdx) {
+	if (isNaN(parseFloat(docIdx))) {
+		return false;
+	}
+	if (docIdx == quill.getLength()) {
+		return true;
+	}
+	if (docIdx < 0) {
+		return false;
+	}
+	let idxLine = quill.getLine(docIdx);
+	let nextIdxLine = quill.getLine(docIdx + 1);
+	return idxLine[0] != nextIdxLine[0];
+}
+function isDocIdxInRange(docIdx, range) {
+	return docIdx >= range.index && docIdx <= range.index + range.length;
+}
+function isPointOnLine(p, lineIdx) {
+	let line_rect = getLineRect(lineIdx);
+	return isPointInRect(p);
+}
+
+function isPointInRange(p, range, snapToBlock) {
+	let is_in_range = false;
+	let range_rects = getRangeRects(range);
+	for (var i = 0; i < range_rects.length; i++) {
+		let range_rect = range_rects[i];
+		if (isPointInRect(range_rect, p)) {
+			is_in_range = true;
+		}
+	}
+	return is_in_range;
+
+	//let p_doc_idx = getDocIdxFromPoint(p, false);
+	//let is_in_range = isDocIdxInRange(p_doc_idx,range);
+	//return is_in_range;
+}
+// #endregion State
+
+// #region Actions
+
+function convertTextContentToFormats(isForOle, formats) {
+	let sel = getDocSelection(isForOle);
+	let items = [];
+	for (var i = 0; i < formats.length; i++) {
+		let format = formats[i];
+		let data = null;
+		if (isHtmlFormat(format)) {
+			let htmlStr = getHtml(sel);
+			if (isForOle && format.toLowerCase() == 'html format') {
+				// NOTE web html doesn't use fragment format
+				data = createHtmlClipboardFragment(htmlStr, sel);
+			} else {
+				data = htmlStr;
+			}
+		} else if (isPlainTextFormat(format)) {
+			if (isContentATable()) {
+				data = getTableCsv('Text', null, isForOle);
+			} else {
+				data = getText(sel, isForOle);
+			}
+			if (isForOle) {
+				data = trimQuillTrailingLineEndFromText(data);
+			}
+		} else if (isCsvFormat(format)) {
+			// TODO figure out handling table selectinn logic and check here 
+			data = getTableCsv('Text', null, isForOle);
+		} else if (isImageFormat(format)) {
+			// trigger async screenshot notification where host needs 
+			// to null and wait for value to avoid async issues
+			onCreateContentScreenShot_ntf(sel);
+			data = 'pending...';
+		} 
+		if (!data || data == '') {
+			continue;
+		} 
+		let item = {
+			format: format,
+			data: data
+		};
+		items.push(item);
+	}
+	return items;
+}
 
 function adjustQueryRangesForEmptyContent(ranges) {
 	// HACK embed's are empty string in getText.
@@ -24,16 +663,8 @@ function adjustQueryRangesForEmptyContent(ranges) {
 	}
 	return ranges;
 }
+// #endregion Actions
 
-function getTextContentData() {
-	let qhtml = getHtml();
-	return qhtml;
-}
+// #region Event Handlers
 
-function getTextContenLineCount() {
-	return getLineCount();
-}
-function getTextContentCharCount() {
-	return getText().length;
-}
-
+// #endregion Event Handlers

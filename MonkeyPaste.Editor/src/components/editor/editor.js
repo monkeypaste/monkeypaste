@@ -394,13 +394,14 @@ function onEditorTextChanged(delta, oldDelta, source) {
 	if (!IsTemplatePaddingAfterTextChange) {
 		updateTemplatesAfterTextChanged();
 	}
-	
-	let srange = getDocSelection();
-	if (!srange) {
-		return;
-	}
 
-	onContentLengthChanged_ntf();
+	if (isShowingEditorToolbar()) {
+		// NOTE for performance only update db when tile goes back to readonly so..
+		// ignore notification
+	} else {
+		// an ole operation has occured
+		onContentChanged_ntf();
+	}
 	drawOverlay();
 }
 // #endregion Event Handlers

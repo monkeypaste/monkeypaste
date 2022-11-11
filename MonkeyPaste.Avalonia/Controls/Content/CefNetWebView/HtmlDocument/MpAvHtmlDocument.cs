@@ -25,7 +25,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvITextPointer ContentStart { get; private set; }
         public MpAvITextPointer ContentEnd { get; private set; }
 
-        public async Task<MpAvDataObject> GetDataObjectAsync(bool ignoreSelection, bool fillTemplates) {
+        public async Task<MpAvDataObject> GetDataObjectAsync(bool ignoreSelection, bool fillTemplates, string[] formats = null) {
             if (Owner is MpAvCefNetWebView wv && wv.DataContext is MpAvClipTileViewModel ctvm) {
                 bool ignore_ss = true;
                 bool ignore_pseudo_file = false;
@@ -37,7 +37,15 @@ namespace MonkeyPaste.Avalonia {
                     forPaste = ctvm.IsPasting,
                     forDragDrop = ctvm.IsTileDragging
                 };
-                contentDataReq.formats = MpPortableDataFormats.RegisteredFormats.ToList();
+
+                if(formats == null) {
+                    // TODO need to implement disable preset stuff once clipboard ui is in use 
+                    // for realtime RegisterFormats data
+                    contentDataReq.formats = MpPortableDataFormats.RegisteredFormats.ToList();
+                } else {
+                    contentDataReq.formats = formats.ToList();
+                }
+                
                 var contentDataRespStr = await wv.EvaluateJavascriptAsync($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");
                 var contentDataResp = MpJsonObject.DeserializeBase64Object<MpQuillContentDataResponseMessage>(contentDataRespStr);
 
@@ -51,8 +59,8 @@ namespace MonkeyPaste.Avalonia {
 
                 if (contentDataReq.forPaste) {
                     if (ctvm.ItemType == MpCopyItemType.Image) {
-                        var bmp = ctvm.CopyItemData.ToAvBitmap();
                         avdo.SetData(MpPortableDataFormats.AvPNG, ctvm.CopyItemData.ToAvBitmap().ToByteArray());
+                        //var bmp = ctvm.CopyItemData.ToAvBitmap();
                         //avdo.SetData(MpPortableDataFormats.Text, bmp.ToAsciiImage());
                         //avdo.SetData(MpPortableDataFormats.AvHtml_bytes, bmp.ToRichHtmlImage());
                         // TODO add colorized ascii maybe as html and rtf!!
@@ -114,6 +122,25 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
+        public void ProcessContentChangedMessage(MpQuillEditorContentChangedMessage contentChanged_ntf) {
+            if(contentChanged_ntf == null) {
+                // shouldn't be null
+                Debugger.Break();
+                return;
+            }
+            ContentEnd.Offset = contentChanged_ntf.length;
+            if(_owner != null && _owner.BindingContext is MpAvClipTileViewModel ctvm) {
+                ctvm.CharCount = contentChanged_ntf.length;
+                ctvm.LineCount = contentChanged_ntf.lines;
+                ctvm.CopyItemData = contentChanged_ntf.itemData;
+                ctvm.UnformattedContentSize = new MpSize(contentChanged_ntf.editorWidth, contentChanged_ntf.editorHeight);
+
+                if(_owner.IsContentLoaded) {
+                    // trigger id change to reload item
+                    ctvm.OnPropertyChanged(nameof(ctvm.CopyItemId));
+                }
+            }
+        }
 
         public async Task<MpAvITextPointer> GetPosisitionFromPointAsync(MpPoint point, bool snapToText) {
             if (snapToText) {

@@ -23,6 +23,12 @@ namespace MonkeyPaste.Common.Wpf {
     public static class MpWpfHtmlToRtfConverter {
         #region private static Variables
         private static double _indentCharCount = 5;
+
+        private static string[] _ignoredHtmlTagNames = new string[] {
+            "colgroup",
+            "svg"
+        };
+
         #endregion
 
         #region Properties
@@ -76,7 +82,7 @@ namespace MonkeyPaste.Common.Wpf {
         private static TextElement ConvertHtmlNode(HtmlNode n) {
             var cel = new List<TextElement>();
             foreach (var c in n.ChildNodes) {
-                if(c.Name == "colgroup") {
+                if(_ignoredHtmlTagNames.Contains(c.Name)) {
                     continue;
                 }
                 cel.Add(ConvertHtmlNode(c));

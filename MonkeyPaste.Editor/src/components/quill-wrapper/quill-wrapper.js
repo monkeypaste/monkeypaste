@@ -203,7 +203,6 @@ function insertText(docIdx, text, source = 'api', decodeTemplates = false) {
 	quill.insertText(docIdx, text, source);
 }
 
-
 function insertHtml(docIdx, htmlStr, source = 'api', decodeTemplates = true) {
 	quill.clipboard.dangerouslyPasteHTML(docIdx, htmlStr, source);
 	if (decodeTemplates) {
@@ -232,6 +231,17 @@ function insertDelta(range, deltaOrDeltaJsonStr) {
 	setTextInRange(range, '');
 	deltaObj.ops = [{ retain: range.index }, ...deltaObj.ops];
 	quill.updateContents(deltaObj);
+}
+
+function trimQuillTrailingLineEndFromText(textStr) {
+	if (textStr == null) {
+		return null;
+	}
+	if (textStr.endsWith('\n')) {
+		// remove trailing line ending
+		return substringByLength(textStr, 0, textStr.length - 2);
+	}
+	return textStr;
 }
 
 // #endregion Actions

@@ -18,20 +18,6 @@ function onDocSelectionChanged_ntf(range,isSelChangeBegin) {
 	}
 }
 
-function onContentLengthChanged_ntf() {
-	// output MpQuillContentLengthChangedMessage
-
-	let docLength = getDocLength();
-	if (typeof notifyContentLengthChanged === 'function') {
-		let clMsg = {
-			//copyItemId: ContentHandle,
-			length: docLength,
-			lines: parseInt_safe(getLineCount())
-		};
-		let msgStr = toBase64FromJsonObj(clMsg);
-		return notifyContentLengthChanged(msgStr);
-	}	
-}
 
 function onDropCompleted_ntf() {
 	if (typeof notifyDropCompleted === 'function') {
@@ -50,12 +36,14 @@ function onDragLeave_ntf() {
 }
 
 function onContentLoaded_ntf() {
+	// output MpQuillEditorContentChangedMessage
 	if (typeof notifyLoadComplete === 'function') {
 		let respObj = {
-			contentWidth: getContentWidth(),
-			contentHeight: getContentHeight(),
-			lineCount: parseInt_safe(getContentHeightByType()),
-			charCount: parseInt_safe(getContentWidthByType()),
+			editorWidth: getEditorWidth(),
+			editorHeight: getEditorHeight(),
+			itemData: getHtml(),
+			lines: parseInt_safe(getContentHeightByType()),
+			length: parseInt_safe(getContentWidthByType()),
 			hasTemplates: hasTemplates()
 		}
 		log('load content resp msg: ' + respObj);
@@ -80,7 +68,7 @@ function onSubSelectionEnabledChanged_ntf(isEnabled) {
 }
 
 function onReadOnlyChanged_ntf(isReadOnly) {
-	// output (true) MpQuillEnableReadOnlyResponseMessage
+	// output (true) MpQuillEditorContentChangedMessage
 	// output (false) MpQuillDisableReadOnlyResponseMessage
 
 	if (!IsLoaded) {
@@ -88,8 +76,12 @@ function onReadOnlyChanged_ntf(isReadOnly) {
 	}
 	if (isReadOnly) {
 		if (typeof notifyReadOnlyEnabled === 'function') {
+			// NOTE omitting content dimensions since enableReadOnly collapses tile
 			let msg = {
-				itemData: getHtml()
+				itemData: getHtml(),
+				length: getDocLength(),
+				lines: parseInt_safe(getLineCount()),
+				hasTemplates: hasTemplates()
 			};
 			let msgStr = toBase64FromJsonObj(msg);
 			notifyReadOnlyEnabled(msgStr);
@@ -106,6 +98,21 @@ function onReadOnlyChanged_ntf(isReadOnly) {
 	}	
 }
 
+function onContentChanged_ntf() {
+	// output MpQuillEditorContentChangedMessage
+	if (typeof notifyContentLengthChanged === 'function') {
+		let clMsg = {
+			editorWidth: getEditorWidth(),
+			editorHeight: getEditorHeight(),
+			itemData: getHtml(),
+			lines: parseInt_safe(getContentHeightByType()),
+			length: parseInt_safe(getContentWidthByType()),
+			hasTemplates: hasTemplates()
+		};
+		let msgStr = toBase64FromJsonObj(clMsg);
+		return notifyContentLengthChanged(msgStr);
+	}
+}
 function onPasteTemplateRequest_ntf() {
 	// isRequest is for paste (when true) or drag drop doesn't care just waits for this msg 
 	if (typeof notifyPasteTemplateRequest === 'function') {

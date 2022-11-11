@@ -96,39 +96,3 @@ function fixUnicode(text) {
 }
 
 
-function parseHtmlClipboardFormat(cbDataStr) {
-	let cbData = {
-		sourceUrl: '',
-		html: ''
-	};
-	let sourceUrlToken = 'SourceURL:';
-	let source_url_start_idx = cbDataStr.indexOf(sourceUrlToken) + sourceUrlToken.length;
-	if (source_url_start_idx >= 0) {
-		let source_url_length = substringByLength(cbDataStr, source_url_start_idx).indexOf(envNewLine());
-		if (source_url_length >= 0) {
-			let parsed_url = substringByLength(cbDataStr, source_url_start_idx, source_url_length);
-			if (isValidHttpUrl(parsed_url)) {
-				cbData.sourceUrl = parsed_url;
-			}
-		}
-	}
-
-	let htmlStartToken = '<!--StartFragment-->';
-	let htmlEndToken = '<!--EndFragment-->';
-
-	let html_start_idx = cbDataStr.indexOf(htmlStartToken) + htmlStartToken.length;
-	if (html_start_idx >= 0) {
-		let html_length = cbDataStr.indexOf(htmlEndToken);
-		cbData.html = substringByLength(cbDataStr, html_start_idx, html_length);
-	}
-
-	return cbData;
-}
-
-function isHtmlClipboardData(dataStr) {
-	// TODO need to check common browser html clipboard formats this is only for Chrome on Windows
-	if (!dataStr.startsWith("Version:") || !dataStr.includes("StartHTML:") || !dataStr.includes("EndHTML:")) {
-		return false;
-	}
-	return true;
-}

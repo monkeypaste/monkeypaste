@@ -4,7 +4,6 @@ function initMain_ext(initMsgStr_base64) {
 	// input 'MpQuillInitMainRequestMessage'
 	// output 'MpQuillInitMainResponseMessage'
 
-	//log("init request: " + initMsgStr_base64);
 	let initMsgObj = toJsonObjFromBase64Str(initMsgStr_base64);
 
 	if (initMsgObj && initMsgObj.isPlainHtmlConverter) {
@@ -15,13 +14,6 @@ function initMain_ext(initMsgStr_base64) {
 	}
 
 	onInitComplete_ntf();
-	//let respMsg = {};
-	//respMsg.status = initMain(initMsgObj.envName);
-
-
-	//let resp = toBase64FromJsonObj(respMsg);
-
-	//return resp;
 }
 
 function loadContent_ext(loadContentMsgStr_base64) {
@@ -56,74 +48,13 @@ function contentRequest_ext(contentReqMsgStr_base64) {
 	// output 'MpQuillContentDataResponseMessage' (with 'MpQuillContentDataResponseFormattedDataItemFragment' items)
 
 	let req = toJsonObjFromBase64Str(contentReqMsgStr_base64);
-	let sel = null;
-	if (req.forPaste && isSubSelectionEnabled()) {
-		if (ContentItemType != 'Text') {
-			log('Editor State Error! Type is ' + ContentItemType + ' and subselection is enabled, which should only be for text');
-			disableSubSelection();
-		} else {
-			if (!isAllSelected() && !isNoneSelected()) {
-				// only respond w/ sub-selection if neither none nor all is selected
-				sel = getDocSelection();
-			}
-		}		
-	}
+	let is_for_ole = req.forPaste || req.forDragDrop;
 
-	let items = [];
-	for (var i = 0; i < req.formats.length; i++) {
-		let format = req.formats[i];
-		let data = null;
-		//if (ContentItemType == 'Text') {
-		if (format == 'HTML Format') {
-			let htmlStr = getHtml(sel);
-			if (req.forPaste) {
-				data = createHtmlClipboardFragment(htmlStr, sel);
-			} else {
-				data = htmlStr;
-			}
-		} else if (format == 'Text' && ContentItemType != 'Image') {
-			if (isContentATable()) {
-				data = getTableCsv('Text', null, req.forPaste);
-			} else {
-				data = getText(sel, req.forPaste);
-			}
-			
-			if (req.forPaste && data.endsWith('\n')) {
-				// remove trailing line ending
-				data = substringByLength(data, 0, data.length - 2);
-			}
-		} else if (format == 'Csv') {
-			// TODO figure out handling table selectinn logic and check here 
-			data = getTableCsv('Text', null, req.forPaste);
-		} else if (format == 'PNG') {
-			// trigger async screenshot notification where host needs to null and wait for value to avoid async issues
-			if (ContentItemType != 'Image') {
-				onCreateContentScreenShot_ntf(sel);
-				data = 'pending...';
-			} else {
-				//data = ContentData;
-			}
-		} else if (format == 'FileNames' && ContentItemType == 'FileList') {
-			//data = ContentData;
-		}
-		if (!data || data == '') {
-			continue;
-		}
-		//} 
-		let item = {
-			format: format,
-			data: data
-		};
-		items.push(item);
-	}
 	let respObj = {
-		dataItems: items
+		dataItems: convertContentToFormats(is_for_ole, req.formats)
 	};
 
 	let resp = toBase64FromJsonObj(respObj);
-	//log('init Response: ');
-	//log(initResponseMsgStr);
-
 	return resp;
 }
 
@@ -144,10 +75,10 @@ function convertPlainHtml_ext(convertPlainHtmlReqMsgBase64Str) {
 		plainHtml = req.data;
 	}
 
-	let is_html_cb_data = isHtmlClipboardData(plainHtml);
+	let is_html_cb_data = isHtmlClipboardFragment(plainHtml);
 	if (is_html_cb_data) {
 		// html is just plain html when coming from internal copy,cut, or drop 
-		let cbData = parseHtmlClipboardFormat(plainHtml);
+		let cbData = parseHtmlFromHtmlClipboardFragment(plainHtml);
 		plainHtml = cbData.html;
 		url = cbData.sourceUrl;
 	}
