@@ -117,7 +117,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvFileDataObjectItemViewModel() :base (null) { }
 
-        public MpAvFileDataObjectItemViewModel(MpAvClipTileViewModel parent):base(parent) { }
+        public MpAvFileDataObjectItemViewModel(MpAvClipTileViewModel parent) : base(parent) { }
 
         #endregion
 

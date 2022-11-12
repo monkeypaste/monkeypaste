@@ -40,7 +40,7 @@ function updateTemplateToolbarSizesAndPositions() {
     }
 }
 
-function addClickOrKeyClickEventListener(elm, handler) {
+function addClickOrKeyClickEventListener(elm, handler, capture = false) {
     elm.addEventListener('click', function (e) {
         if (!isElementDisabled(e.currentTarget)) {
             handler(e);
@@ -48,12 +48,12 @@ function addClickOrKeyClickEventListener(elm, handler) {
             // prevent parent/children handlers from receiving
             e.stopPropagation();
         }
-    });
+    }, capture);
     elm.addEventListener('keydown', function (e) {
         if (isMouseOrKeyboardButtonClick(e)) {
             handler(e);
         }
-    });
+    }, capture);
 }
 async function scaleFocusTemplates(scaleType, tguid) {
     if (!tguid) {

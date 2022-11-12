@@ -260,7 +260,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr, int holdDelay = 100, int releaseDelay = 50) {            
+        public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr, int holdDelay = 0, int releaseDelay = 0) {            
             List<List<KeyCode>> seq = MpSharpHookKeyboardInputHelpers.ConvertStringToKeySequence(keystr);
             foreach (var combo in seq) {
                 foreach (var key in combo) {

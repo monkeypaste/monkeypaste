@@ -12,6 +12,10 @@ using System.Xml.Linq;
 using Newtonsoft.Json;
 using System.Reflection;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
+using System.Diagnostics;
+using System.Net.Http;
+using System.Threading;
 
 namespace MonkeyPaste.Common {
     public static class MpStringExtensions {
@@ -80,6 +84,13 @@ namespace MonkeyPaste.Common {
             }
             string postStr = str.Substring(postStrIdx, postStrLength);
             return preStr + text + postStr;
+        }
+
+        public static bool IsStringUrl(this string str) {
+            if(string.IsNullOrWhiteSpace(str) || !str.ToLower().StartsWith("http")) {
+                return false;
+            }
+            return Uri.IsWellFormedUriString(str,UriKind.Absolute);
         }
 
         public static bool IsStringNullOrEmpty(this string str) {
@@ -199,6 +210,8 @@ namespace MonkeyPaste.Common {
             });
             return result;
         }
+
+        
         public static string CheckSum(this string str) {
             using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create()) {
                 string hash = BitConverter.ToString(
@@ -214,7 +227,47 @@ namespace MonkeyPaste.Common {
             return Convert.ToBase64String(bytes);
         }
 
-       
+
+        public static async Task<byte[]> ReadUriBytesAsync(this string uri, int timeoutMs = 5000) {
+            using (var httpClient = new HttpClient()) {
+                try {
+                    httpClient.DefaultRequestHeaders.Add("User-Agent", System.Guid.NewGuid().ToString());
+                    byte[] bytes = await httpClient.GetByteArrayAsync(uri).TimeoutAfter(TimeSpan.FromMilliseconds(timeoutMs));
+                    return bytes;
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine(ex);
+                }
+            }
+            return null;
+        }
+
+        public static async Task<string> ToBase64FromRichHtmlImageString(this string htmlStr, string fallbackBase64Str = null, int timeoutMs = 5000) {
+            fallbackBase64Str = fallbackBase64Str == null ? string.Empty : fallbackBase64Str;
+            if (!htmlStr.IsStringRichHtmlImage()) {
+                return fallbackBase64Str;
+            }
+            var htmlDoc = new HtmlDocument();
+            var imgNode = htmlDoc.DocumentNode.FirstChild.FirstChild;
+            if (imgNode.Name.ToLower() != "img") {
+                // what is the string how'd it happen?
+                Debugger.Break();
+                return fallbackBase64Str;
+            }
+            string srcAttrVal = imgNode.GetAttributeValue("src", string.Empty);
+            int base64_token_idx = srcAttrVal.IndexOf("data:image/png;base64,");
+            if(base64_token_idx >= 0) {
+                return srcAttrVal.Substring(base64_token_idx + 1).Trim();
+            }
+            if(srcAttrVal.IsStringUrl()) {
+                var src_bytes = await srcAttrVal.ReadUriBytesAsync(timeoutMs);
+                if(src_bytes == null || src_bytes.Length == 0) {
+                    return fallbackBase64Str;
+                }
+                return src_bytes.ToBase64String();
+            }
+            return fallbackBase64Str;
+        }
 
         public static string ToCsv(this List<string> strList) {
             if(strList == null || strList.Count == 0) {
@@ -507,6 +560,21 @@ namespace MonkeyPaste.Common {
                 if (str.Contains($"</{quillTag}>")) {
                     return true;
                 }
+            }
+            return false;
+        }
+
+        public static bool IsStringRichHtmlImage(this string str) {
+            if(string.IsNullOrWhiteSpace(str) || !str.ToLower().StartsWith("<p>")) {
+                return false;
+            }
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(str);
+            if(htmlDoc.DocumentNode.ChildNodes.Count == 1 &&
+                htmlDoc.DocumentNode.FirstChild.Name.ToLower() == "p" &&
+                htmlDoc.DocumentNode.FirstChild.ChildNodes.Count == 1 &&
+                htmlDoc.DocumentNode.FirstChild.FirstChild.Name.ToLower() == "img") {
+                return true;
             }
             return false;
         }

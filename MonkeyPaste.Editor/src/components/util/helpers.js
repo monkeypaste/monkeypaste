@@ -102,6 +102,22 @@ function isValidHttpUrl(text) {
     return url.protocol === "http:" || url.protocol === "https:";
 }
 
+
+function isValidEmalAddress(text) {
+    return /^\S+@\S+\.\S+$/.test(text) && text.indexOf('mailto:') !== 0;
+}
+
+function isValidFileSystemPath(text) {
+    // 
+    if (!text.startsWith('file:')) {
+        return false;
+    }
+    return true;
+}
+
+function isValidUri(text) {
+    return isValidHttpUrl(text) || isValidEmalAddress(text) || isValidFileSystemPath(text);
+}
 function changeInnerText(elm, text, newText) {
     if (elm == null) {
         return;

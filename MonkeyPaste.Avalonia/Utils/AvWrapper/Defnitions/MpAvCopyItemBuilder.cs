@@ -89,8 +89,25 @@ namespace MonkeyPaste.Avalonia {
 
                     // FILES
 
+                    string fl_str = null;
+                    if(mpdo.GetData(MpPortableDataFormats.AvFileNames) is byte[] fileBytes) {
+                        fl_str = fileBytes.ToDecodedString();
+                    } else if(mpdo.GetData(MpPortableDataFormats.AvFileNames) is string fileStr) {
+                        fl_str = fileStr;
+                    } else if (mpdo.GetData(MpPortableDataFormats.AvFileNames) is IEnumerable<string> paths) {
+                        fl_str = string.Join(Environment.NewLine,paths);
+                    } else {
+                        var fl_data = mpdo.GetData(MpPortableDataFormats.AvFileNames);
+                        // what type is it? string[]?
+                        Debugger.Break();
+                    }
+                    if(string.IsNullOrWhiteSpace(fl_str)) {
+                        // conversion error
+                        Debugger.Break();
+                        return null;
+                    }
                     itemType = MpCopyItemType.FileList;
-                    itemData = mpdo.GetData(MpPortableDataFormats.AvFileNames).ToString();
+                    itemData = fl_str;
                 } else if (mpdo.ContainsData(MpPortableDataFormats.AvCsv) && 
                             mpdo.GetData(MpPortableDataFormats.AvCsv) is byte[] csvBytes &&
                             csvBytes.ToDecodedString() is string csvStr){
@@ -120,7 +137,6 @@ namespace MonkeyPaste.Avalonia {
 
                     // RTF
 
-                    // for now and simplicity there are no platform checks for rtf because it should only (by the DataFormat name at least) be on windows
                     inputTextFormat = "rtf";
                     itemType = MpCopyItemType.Text;
                     itemData = rtfStr.EscapeExtraOfficeRtfFormatting();
@@ -198,10 +214,20 @@ namespace MonkeyPaste.Avalonia {
                         //source_url_str = System.Web.HttpUtility.HtmlDecode(source_url_str);
                         htmlClipboardData.SourceUrl = source_url_str;
                     }
+
+                    if(itemData.IsStringRichHtmlImage()) {
+                        // detect when html is actually just wrapping an image and update data and type
+                        itemData = await itemData.ToBase64FromRichHtmlImageString(MpBase64Images.QuestionMark);
+                        if(string.IsNullOrWhiteSpace(itemData) &&
+                            MpPrefViewModel.Instance.IgnoreWhiteSpaceCopyItems) {
+                            // likely img src is dead link so ignore
+                            return null;
+                        }
+                        itemType = MpCopyItemType.Image;
+                    }
                 }
 
 
-                
 
                 //if (mpdo.ContainsData(MpPortableDataFormats.AvHtml_bytes)) {
                 //    string rawHtmlData = mpdo.GetData(MpPortableDataFormats.AvHtml_bytes).ToString();
@@ -222,6 +248,11 @@ namespace MonkeyPaste.Avalonia {
                         }
                         return null;
                     }
+                }
+
+                if(itemData == "System.String[]") {
+                    // conversion error
+                    Debugger.Break();
                 }
 
                 var dupCheck = await MpDataModelProvider.GetCopyItemByDataAsync(itemData);

@@ -26,9 +26,8 @@ namespace MonkeyPaste.Avalonia {
         public MpAvITextPointer ContentEnd { get; private set; }
 
         public async Task<MpAvDataObject> GetDataObjectAsync(bool ignoreSelection, bool fillTemplates, string[] formats = null) {
-            if (Owner is MpAvCefNetWebView wv && wv.DataContext is MpAvClipTileViewModel ctvm) {
-                bool ignore_ss = true;
-                bool ignore_pseudo_file = false;
+            if (Owner is MpAvCefNetWebView wv && 
+                wv.DataContext is MpAvClipTileViewModel ctvm) {
 
                 // clear screenshot
                 ContentScreenShotBase64 = null;
@@ -38,7 +37,11 @@ namespace MonkeyPaste.Avalonia {
                     forDragDrop = ctvm.IsTileDragging
                 };
 
-                if(formats == null) {
+                bool for_ole = ctvm.IsPasting || ctvm.IsTileDragging;
+
+                bool ignore_ss = true;
+                bool ignore_pseudo_file = false;
+                if (formats == null) {
                     // TODO need to implement disable preset stuff once clipboard ui is in use 
                     // for realtime RegisterFormats data
                     contentDataReq.formats = MpPortableDataFormats.RegisteredFormats.ToList();
@@ -57,7 +60,7 @@ namespace MonkeyPaste.Avalonia {
                     avdo.SetData(di.format, di.data);
                 }
 
-                if (contentDataReq.forPaste) {
+                if (for_ole) {
                     if (ctvm.ItemType == MpCopyItemType.Image) {
                         avdo.SetData(MpPortableDataFormats.AvPNG, ctvm.CopyItemData.ToAvBitmap().ToByteArray());
                         //var bmp = ctvm.CopyItemData.ToAvBitmap();
@@ -130,10 +133,19 @@ namespace MonkeyPaste.Avalonia {
             }
             ContentEnd.Offset = contentChanged_ntf.length;
             if(_owner != null && _owner.BindingContext is MpAvClipTileViewModel ctvm) {
-                ctvm.CharCount = contentChanged_ntf.length;
-                ctvm.LineCount = contentChanged_ntf.lines;
-                ctvm.CopyItemData = contentChanged_ntf.itemData;
-                ctvm.UnformattedContentSize = new MpSize(contentChanged_ntf.editorWidth, contentChanged_ntf.editorHeight);
+                if(contentChanged_ntf.length > 0) {
+                    ctvm.CharCount = contentChanged_ntf.length;
+                }
+                if(contentChanged_ntf.lines > 0) {
+                    ctvm.LineCount = contentChanged_ntf.lines;
+                }
+                if(contentChanged_ntf.itemData != null) {
+                    ctvm.CopyItemData = contentChanged_ntf.itemData;
+                }
+                if(contentChanged_ntf.editorHeight > 0 && contentChanged_ntf.editorHeight > 0) {
+                    ctvm.UnformattedContentSize = new MpSize(contentChanged_ntf.editorWidth, contentChanged_ntf.editorHeight);
+                }
+                
 
                 if(_owner.IsContentLoaded) {
                     // trigger id change to reload item

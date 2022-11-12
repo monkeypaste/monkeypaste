@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -474,6 +475,14 @@ namespace MonkeyPaste.Common {
             return obj.GetPropertyValue(propertyPath, index) as T;
         }
 
+        public static void SetPropertyValue(this object obj, string propertyPath, object newValue) {
+            PropertyInfo propertyInfo = obj.GetType().GetProperty(propertyPath);
+            if (propertyInfo != null) {
+                Type t = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
+                object safeValue = (newValue == null) ? null : Convert.ChangeType(newValue, t);
+                propertyInfo.SetValue(obj, safeValue, null);
+            }
+        }
         #endregion
     }
 }

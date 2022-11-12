@@ -251,6 +251,10 @@ namespace MonkeyPaste.Avalonia {
                     while (!wv.IsEditorInitialized) {
                         await Task.Delay(100);
                     }
+                    while(ctvm.FileItems.Any(x=>x.IsBusy)) {
+                        // wait for file icons to populate from ctvm.Init
+                        await Task.Delay(100);
+                    }
 
                     var loadContentMsg = new MpQuillLoadContentRequestMessage() {
                         contentHandle = ctvm.PublicHandle,
@@ -266,8 +270,10 @@ namespace MonkeyPaste.Avalonia {
                         loadContentMsg.isWholeWord = sbvm.Filters.FirstOrDefault(x => x.FilterType == MpContentFilterType.WholeWord).IsChecked.IsTrue();
                         loadContentMsg.useRegex = sbvm.Filters.FirstOrDefault(x => x.FilterType == MpContentFilterType.Regex).IsChecked.IsTrue();
                     }
-
-                    wv.ExecuteJavascript($"loadContent_ext('{loadContentMsg.SerializeJsonObjectToBase64()}')");
+                    string msgStr = loadContentMsg.SerializeJsonObjectToBase64();
+                    
+                    
+                    wv.ExecuteJavascript($"loadContent_ext('{msgStr}')");
                 });
             }
         }

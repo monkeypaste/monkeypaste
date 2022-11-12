@@ -100,7 +100,7 @@ namespace MonkeyPaste.Avalonia {
                 // assume target is active (if was start process info needs to be activated earlier)
             }
 
-            await Task.Delay(200);
+            //await Task.Delay(200);
             // SIMULATE PASTE CMD
             await MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeSequenceAsync(pasteCmdKeyString);
 
@@ -108,7 +108,7 @@ namespace MonkeyPaste.Avalonia {
                 await MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeSequenceAsync(MpKeyLiteralStringHelpers.ENTER_KEY_LITERAL);
             }
 
-            await Task.Delay(300);
+            //await Task.Delay(300);
 
             MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = false;
         }

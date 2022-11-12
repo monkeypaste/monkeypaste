@@ -9,6 +9,8 @@ function loadFileListContent(itemDataStr) {
 
 	// itemData must remain file-paths separated by new-line
 	hideAllToolbars();
+	disableTableContextMenu();
+	disableTableInteraction();
 	enableReadOnly();
 	disableSubSelection();
 	FileListItems = [];
@@ -20,6 +22,7 @@ function loadFileListContent(itemDataStr) {
 		//ContentData = flif.filePath + envNewLine();
 	}
 	createFileList();
+	loadLinkHandlers();
 	quill.enable(false);
 }
 
@@ -60,6 +63,20 @@ function getTotalFileSize() {
 function getFileCount() {
 	return FileListItems.length;
 }
+
+function getPathUri(path) {
+	let uri = null;
+	try {
+		uri = new URL(path);
+		if (uri) {
+			return uri.href;
+		}
+	} catch (ex) {
+		log('Exception creating uri for path: ' + path);
+		log(ex);
+	}
+	return '';
+}
 // #endregion Getters
 
 // #region Setters
@@ -76,15 +93,17 @@ function createFileList() {
 	let file_list_tbody_inner_html = '';
 	for (var i = 0; i < FileListItems.length; i++) {
 		let row_id = getTableItemIdentifier('row');
+		let fp = FileListItems[i].filePath;
+		let fp_icon = FileListItems[i].fileIconBase64;
 		let file_item_tr_outer_html =
 			'<tr class="file-list-row" data-row="' + row_id + '">' +
 			'<td class="file-list-cell" data-row="' + row_id + '" rowspan="1" colspan="1">' +
 			'<p class="qlbt-cell-line" data-row="' + row_id + '" data-cell="' + getTableItemIdentifier('cell') + '" data-rowspan="1" data-colspan="1">' +
-			'<img class="file-list-icon" src="data:image/png;base64,' + FileListItems[i].fileIconBase64 + '">' +
+			'<img class="file-list-icon" src="data:image/png;base64,' + fp_icon + '">' +
 			'</p></td>' +
 			'<td class="file-list-cell" data-row="' + row_id + '" rowspan="1" colspan="1">' +
 			'<p class="qlbt-cell-line ql-align-right" data-row="' + row_id + '" data-cell="' + getTableItemIdentifier('cell') + '" data-rowspan="1" data-colspan="1">' +
-			'<span class="file-list-path ql-font-consolas ql-align-right">' + formatFilePathDisplayValue(FileListItems[i].filePath) + '</span>' +
+			`<a class="file-list-path ql-font-consolas ql-align-right" href="${getPathUri(fp)}">${formatFilePathDisplayValue(fp)}</a>` +
 			'</p></td>';
 		file_list_tbody_inner_html += file_item_tr_outer_html;
 

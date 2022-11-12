@@ -61,50 +61,24 @@ function getDomFocusRange(forceToEditor = true) {
 	if (forceToEditor) {
 		let needs_fallback = false;
 		if (!window.getSelection().focusNode) {
-			log("There is currently NO focus node will fallback");
+			//log("There is currently NO focus node will fallback");
 			needs_fallback = true;
 		} else if (!isChildOfElement(window.getSelection().focusNode, getEditorElement())) {
-			log('Document focus is not within the editor, will fallback');
+			//log('Document focus is not within the editor, will fallback');
 			needs_fallback = true;
 		} else if (document.getSelection().rangeCount == 0) {
-			log('no sel ranges in document, will fallback')
+			//log('no sel ranges in document, will fallback')
 			needs_fallback = true;
 		}
 
 		if (needs_fallback) {
 			if (!CurSelRange) {
-				log('CurSelRange was null, resetting to home');
+				//log('CurSelRange was null, resetting to home');
 				CurSelRange = { index: 0, length: 0 };
 			}
-			log('Selection focus falling back to last: ' + JSON.stringify(CurSelRange));
+			//log('Selection focus falling back to last: ' + JSON.stringify(CurSelRange));
 			dom_focus_range = convertDocRangeToDomRange(CurSelRange);
 		}
-	}
-	if (!dom_focus_range) {
-		// NOTE omittdd code was for multi range selection (highlighting search)
-		// which didn't work right so its not necessary to discern focus from selection, selection is easier
-
-		//if (document.getSelection().focusNode) {
-		//	// NOTE this doesn't work in all cases, i think the problem is in nested blocks, like p->li
-
-		//	dom_focus_range = document.createRange();
-		//	let dom_sel = document.getSelection();
-		//	// NOTE anchor node/offset is where selection begins and focus node/offset is where last included
-		//	let start_offset = dom_sel.focusOffset < dom_sel.anchorOffset ? dom_sel.focusOffset : dom_sel.anchorOffset;
-		//	let start_node = dom_sel.focusOffset < dom_sel.anchorOffset ? dom_sel.focusNode : dom_sel.anchorNode;
-
-		//	let end_offset = dom_sel.focusOffset < dom_sel.anchorOffset ? dom_sel.anchorOffset : dom_sel.focusOffset;
-		//	let end_node = dom_sel.focusOffset < dom_sel.anchorOffset ? dom_sel.anchorNode : dom_sel.focusNode;
-
-		//	dom_focus_range.setStart(start_node, start_offset);
-		//	dom_focus_range.setEnd(end_node, end_offset);
-		//}
-		//if (!dom_focus_range) {
-		//	// when theres only 1 selection range or no focus node
-		//	dom_focus_range = document.getSelection().getRangeAt(0);
-		//}
-
-		dom_focus_range = document.getSelection().getRangeAt(0);
 	}
 
 	return dom_focus_range;
@@ -330,6 +304,13 @@ function convertDocRangeToDomRange(doc_range) {
 	try {
 		clean_range.setEnd(end_elm, end_offset);
 	} catch (ex) {
+		if (doc_range.length == 0) {
+			debugger;
+			return;
+		} else {
+			doc_range.length--;
+			return convertDocRangeToDomRange(doc_range);
+		}
 		debugger;
 	}
 	return clean_range;
@@ -356,7 +337,7 @@ function coerceCleanSelection(new_range,old_range) {
 		//log('timer: index: ', new_range.index, ' length: ', new_range.length);
 
 		let qsel = getDocSelection();
-		log('quill: index: ', qsel.index, ' length: ', qsel.length);
+		//log('quill: index: ', qsel.index, ' length: ', qsel.length);
 
 		let oldRange = old_range;
 		// updating Last
@@ -393,7 +374,11 @@ function onDocumentSelectionChange(e) {
 	if (didSelectionChange(new_range, CurSelRange)) {
 		LastSelRange = CurSelRange;
 		CurSelRange = new_range;
-		onDocSelectionChanged_ntf(new_range);
+		if (didSelectionChange(CurSelRange, LastSelRange)) {
+			// BUG trying to workaround a selection reset loop
+			onDocSelectionChanged_ntf(new_range);
+		}
+		
 		updateAllElements();
 	}
 }

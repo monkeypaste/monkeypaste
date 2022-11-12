@@ -71,14 +71,24 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 
 	IsLoaded = true;
 	drawOverlay();
+	quill.update();
 	onContentLoaded_ntf();
-	// initial load content length ntf
-	//onContentLengthChanged_ntf();
 }
 
 // #endregion Life Cycle
 
 // #region Getters
+
+function getContentAsMessage() {
+	return {
+		editorWidth: getEditorWidth(),
+		editorHeight: getEditorHeight(),
+		itemData: getContentData(),
+		lines: parseInt_safe(getContentHeightByType()),
+		length: parseInt_safe(getContentWidthByType()),
+		hasTemplates: hasTemplates()
+	};
+}
 
 function getContentData() {
 	if (ContentItemType == 'Text') {
@@ -179,6 +189,12 @@ function getContentHeightByType() {
 
 // #region State
 
+function canEnableSubSelection() {
+	return ContentItemType != 'Image';
+}
+function canDisableReadOnly() {
+	return ContentItemType == 'Text';
+}
 // #endregion State
 
 // #region Actions
@@ -195,6 +211,7 @@ function convertContentToFormats(isForOle, formats) {
 	}
 	return null;
 }
+
 // #endregion Actions
 
 // #region Event Handlers

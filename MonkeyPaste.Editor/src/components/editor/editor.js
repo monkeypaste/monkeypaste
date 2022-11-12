@@ -228,11 +228,12 @@ function enableReadOnly(fromHost = false) {
 }
 
 function disableReadOnly(fromHost = false) {
-	if (!isReadOnly()) {
-		log('disableReadOnly ignored, already editable. fromHost: ' + fromHost);
+	if (!canDisableReadOnly()) {
+		log('disableReadOnly ignored, not text item. fromHost: ' + fromHost);
 		return;
 	}
-	if (ContentItemType != 'Text') {
+	if (!isReadOnly()) {
+		log('disableReadOnly ignored, already editable. fromHost: ' + fromHost);
 		return;
 	}
 
@@ -259,6 +260,10 @@ function disableReadOnly(fromHost = false) {
 }
 
 function enableSubSelection(fromHost = false, showUnderlines = true, showPaste = true) {
+	if (!canEnableSubSelection()) {
+		log('enableSubSelection ignored, content is an image. fromHost: ' + fromHost);
+		return;
+	}
 	if (isSubSelectionEnabled()) {
 		log('enableSubSelection ignored, already sub-selectable. fromHost: ' + fromHost);
 		return;

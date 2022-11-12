@@ -384,6 +384,8 @@ namespace MonkeyPaste {
             }
 
 
+            //var citl = await MpDataModelProvider.GetUnlinkedCopyItemTagIds();
+            //await Task.WhenAll(citl.Select(x => x.DeleteFromDatabaseAsync()));
             MpConsole.WriteLine(@"Db file located: " + MpPlatformWrapper.Services.DbInfo.DbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPrefViewModel.Instance.ThisDeviceGuid);
             MpConsole.WriteLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));

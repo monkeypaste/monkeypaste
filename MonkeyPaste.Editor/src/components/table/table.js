@@ -2,6 +2,9 @@
 
 const TABLE_WRAPPER_CLASS_NAME = 'quill-better-table-wrapper';
 
+var IsBetterTableOpsMenuEnabled = true;
+var IsBetterTableInteractionEnabled = true;
+
 var DefaultCsvProps = {
     ColSeparator: ',',
     RowSeparator: '\n'
@@ -20,6 +23,14 @@ function initTable() {
 // #endregion Life Cycle
 
 // #region Getters
+
+function getBetterTableContextMenuElement() {
+    let ops_menu_elms = document.getElementsByClassName('qlbt-operation-menu');
+    if (ops_menu_elms == null || ops_menu_elms.length == 0) {
+        return null;
+    }
+    return ops_menu_elms[0];
+}
 
 function getTableCsv(format, csvProps, encodeTemplates = false) {
 
@@ -67,6 +78,9 @@ function getTableCsv(format, csvProps, encodeTemplates = false) {
     return csv_output;
 }
 
+function getBetterTableElements() {
+    return document.getElementsByClassName(TABLE_WRAPPER_CLASS_NAME);
+}
 // #endregion Getters
 
 // #region Setters
@@ -94,6 +108,39 @@ function isDocIdxInTable(docIdx) {
 
 // #region Actions
 
+function rejectTableMouseEvent(e) {
+    if (isClassInElementPath(e.target, TABLE_WRAPPER_CLASS_NAME) &&
+        !IsBetterTableOpsMenuEnabled &&
+        e.button == 2) {
+        e.preventDefault();
+        e.stopPropagation();
+        return true;
+    }
+    if (isClassInElementPath(e.target, TABLE_WRAPPER_CLASS_NAME) &&
+        !isClassInElementPath(e.target,'file-list-path') &&
+        !IsBetterTableInteractionEnabled) {
+        e.preventDefault();
+        e.stopPropagation();
+        return true;
+    }
+    return false;
+}
+
+function disableTableContextMenu() {
+    IsBetterTableOpsMenuEnabled = false;
+}
+
+function enableTableContextMenu() {
+    IsBetterTableOpsMenuEnabled = true;
+}
+
+function disableTableInteraction() {
+    IsBetterTableInteractionEnabled = false;
+}
+
+function enableTableInteraction() {
+    IsBetterTableInteractionEnabled = true;
+}
 
 
 // #endregion Actions

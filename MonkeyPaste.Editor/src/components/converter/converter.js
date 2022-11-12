@@ -47,7 +47,9 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 		//setRootText(escapeHtml(dataStr));
 	} else if (formatType == 'html') {
 		dataStr = unescapeHtml(dataStr);
-		insertHtml(0, dataStr, 'api', false);
+		// NOTE insertHtml will remove spaces between spans...
+		//insertHtml(0, dataStr, 'api', false);
+		setRootHtml(dataStr);
 	} 
 
 	quill.update();

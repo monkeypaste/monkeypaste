@@ -117,7 +117,7 @@ namespace MonkeyPaste.Common.Wpf {
                     break;
                 case "img":
                     var ic = new InlineUIContainer();
-                    var img = new System.Windows.Controls.Image();
+                    var img = new Image();
                     ic.Child = img;
                     return ic;
                 case "em":
@@ -477,7 +477,7 @@ namespace MonkeyPaste.Common.Wpf {
                 MpConsole.WriteTraceLine(ex);
             }
             MpWpfRtfDefaultProperties.Instance.AddFontSize(fs);
-            return fs;
+            return (double)((int)fs);
         }
 
         public static double GetIndentLevel(string classValue) {

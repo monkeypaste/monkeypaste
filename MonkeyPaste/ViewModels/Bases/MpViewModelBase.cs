@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace MonkeyPaste {    
     public interface MpIViewModel {
@@ -156,6 +157,17 @@ namespace MonkeyPaste {
 
         protected void WriteModel(MpDbModelBase dbo) {
             WriteModelHelper(dbo).FireAndForgetSafeAsync(this);
+        }
+
+        protected void NotifyModelChanged(object model, string changedPropName, object newVal) {
+            object oldVal = model.GetPropertyValue(changedPropName);
+            if(oldVal == newVal) {
+                // probably an error, property didn't change
+                Debugger.Break();
+            }
+            model.SetPropertyValue(changedPropName, newVal);
+            HasModelChanged = true;
+            MpConsole.WriteLine($"View Model '{this}' Model has changed (writing to db). Property: '{changedPropName}' OldVal: '{oldVal}' NewVal: '{newVal}'");
         }
         #region Db Events
 

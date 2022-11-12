@@ -1,4 +1,42 @@
 // these functions wrap window binding so main editor doesn't worry about details
+function onContentLoaded_ntf() {
+	// output MpQuillEditorContentChangedMessage
+	if (typeof notifyLoadComplete === 'function') {
+		let msgStr = toBase64FromJsonObj(getContentAsMessage());
+		notifyLoadComplete(msgStr);
+	}
+}
+function onReadOnlyChanged_ntf(isReadOnly) {
+	// output (true) MpQuillEditorContentChangedMessage
+	// output (false) MpQuillDisableReadOnlyResponseMessage
+
+	if (!IsLoaded) {
+		return;
+	}
+	if (isReadOnly) {
+		if (typeof notifyReadOnlyEnabled === 'function') {
+			let msgStr = toBase64FromJsonObj(getContentAsMessage());
+			notifyReadOnlyEnabled(msgStr);
+		}
+	} else {
+		if (typeof notifyReadOnlyDisabled === 'function') {
+			let msg = {
+				editorWidth: getEditorWidth(),
+				editorHeight: getEditorHeight()
+			};
+			let msgStr = toBase64FromJsonObj(msg);
+			notifyReadOnlyDisabled(msgStr);
+		}
+	}
+}
+
+function onContentChanged_ntf() {
+	// output MpQuillEditorContentChangedMessage
+	if (typeof notifyContentChanged === 'function') {
+		let msgStr = toBase64FromJsonObj(getContentAsMessage());
+		return notifyContentChanged(msgStr);
+	}
+}
 
 function onDocSelectionChanged_ntf(range,isSelChangeBegin) {
 	// output MpQuillContentSelectionChangedMessage
@@ -18,39 +56,24 @@ function onDocSelectionChanged_ntf(range,isSelChangeBegin) {
 	}
 }
 
-
 function onDropCompleted_ntf() {
 	if (typeof notifyDropCompleted === 'function') {
 		notifyDropCompleted();
 	}
 }
+
 function onDragEnter_ntf() {
 	if (typeof notifyDragEnter === 'function') {
 		notifyDragEnter();
 	}
 }
+
 function onDragLeave_ntf() {
 	if (typeof notifyDragLeave === 'function') {
 		notifyDragLeave();
 	}
 }
 
-function onContentLoaded_ntf() {
-	// output MpQuillEditorContentChangedMessage
-	if (typeof notifyLoadComplete === 'function') {
-		let respObj = {
-			editorWidth: getEditorWidth(),
-			editorHeight: getEditorHeight(),
-			itemData: getHtml(),
-			lines: parseInt_safe(getContentHeightByType()),
-			length: parseInt_safe(getContentWidthByType()),
-			hasTemplates: hasTemplates()
-		}
-		log('load content resp msg: ' + respObj);
-		let resp = toBase64FromJsonObj(respObj);
-		notifyLoadComplete(resp);
-	}
-}
 
 function onSubSelectionEnabledChanged_ntf(isEnabled) {
 	// output MpQuillSubSelectionChangedNotification
@@ -59,60 +82,12 @@ function onSubSelectionEnabledChanged_ntf(isEnabled) {
 		let msg = {
 			isSubSelectionEnabled: isEnabled
 		};
-		if (isEnabled && hasTemplates()) {
-			msg.editorWidth = PasteToolbarDefaultWidth;
-		}
 		let msgStr = toBase64FromJsonObj(msg);
 		notifySubSelectionEnabledChanged(msgStr);
 	}
 }
 
-function onReadOnlyChanged_ntf(isReadOnly) {
-	// output (true) MpQuillEditorContentChangedMessage
-	// output (false) MpQuillDisableReadOnlyResponseMessage
 
-	if (!IsLoaded) {
-		return;
-	}
-	if (isReadOnly) {
-		if (typeof notifyReadOnlyEnabled === 'function') {
-			// NOTE omitting content dimensions since enableReadOnly collapses tile
-			let msg = {
-				itemData: getHtml(),
-				length: getDocLength(),
-				lines: parseInt_safe(getLineCount()),
-				hasTemplates: hasTemplates()
-			};
-			let msgStr = toBase64FromJsonObj(msg);
-			notifyReadOnlyEnabled(msgStr);
-		}
-	} else {
-		if (typeof notifyReadOnlyDisabled === 'function') {
-			let msg = {
-				editorWidth: getEditorWidth(),
-				editorHeight: getEditorHeight()
-			};
-			let msgStr = toBase64FromJsonObj(msg);
-			notifyReadOnlyDisabled(msgStr);
-		}
-	}	
-}
-
-function onContentChanged_ntf() {
-	// output MpQuillEditorContentChangedMessage
-	if (typeof notifyContentLengthChanged === 'function') {
-		let clMsg = {
-			editorWidth: getEditorWidth(),
-			editorHeight: getEditorHeight(),
-			itemData: getHtml(),
-			lines: parseInt_safe(getContentHeightByType()),
-			length: parseInt_safe(getContentWidthByType()),
-			hasTemplates: hasTemplates()
-		};
-		let msgStr = toBase64FromJsonObj(clMsg);
-		return notifyContentLengthChanged(msgStr);
-	}
-}
 function onPasteTemplateRequest_ntf() {
 	// isRequest is for paste (when true) or drag drop doesn't care just waits for this msg 
 	if (typeof notifyPasteTemplateRequest === 'function') {
@@ -225,5 +200,17 @@ function onShowCustomColorPicker_ntf(hexStr,title) {
 		};
 		let msgStr = toBase64FromJsonObj(msg);
 		notifyShowCustomColorPicker(msgStr);
+	}
+}
+
+function onNavigateUriRequested_ntf(navUri, curModKeys) {
+	// output 'MpQuillNavigateUriRequestNotification'
+	if (typeof notifyNavigateUriRequested === 'function') {
+		let msg = {
+			uri: navUri,
+			modKeys: curModKeys
+		};
+		let msgStr = toBase64FromJsonObj(msg);
+		notifyNavigateUriRequested(msgStr);
 	}
 }

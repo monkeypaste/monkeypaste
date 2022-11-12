@@ -329,7 +329,7 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         private static string GetFontSize(Span s) {
-            double fs = (double)s.FontSize;//new FontSizeConverter().ConvertFrom(s.FontSize+"pt");
+            double fs = (double)((int)s.FontSize);//new FontSizeConverter().ConvertFrom(s.FontSize+"pt");
             //MpWpfRtfDefaultProperties.Instance.AddFontSize(fs);
             return string.Format(@" style='font-size: {0}px;", fs);
         }

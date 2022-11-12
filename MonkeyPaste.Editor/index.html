@@ -70,8 +70,8 @@
     <!--<script src="lib/quill-delta-to-html/dist/browser/QuillDeltaToHtmlConverter.bundle.js"></script>-->
     <script type="text/javascript">
         if (UseQuill2) {
-            document.write('<script src="lib/Quill/quill.min.js"><\/script>');
             //document.write('<script src="https://cdn.quilljs.com/2.0.0-dev.4/quill.js"><\/script>');
+            document.write('<script src="lib/Quill/quill.min.js"><\/script>');
             //document.write('<script src="node_modules/quill/dist/quill.js"><\/script>');
             if (UseBetterTable) {
                 //document.write('<script src="lib/Quill-Better-Table/quill-better-table.min.js"><\/script>');
@@ -98,17 +98,21 @@
     <!-- NOTIFIERS -->
 
     <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
+        document.addEventListener('DOMContentLoaded', (e) => {
             //init_test();
             onDomLoaded_ntf();
         });
 
-        window.onbeforeunload = function () {
+        window.onbeforeunload = function (e) {
             //if (!isRunningInHost()) {
             //    return;
             //}
-            alert('Are you sure you want to leave?');
-            return 'poop';
+
+            //alert('Are you sure you want to leave?');
+            log('unload rejected');
+            e.preventDefault();
+            e.stopPropagation
+            return false;
         };
     </script>
 
@@ -177,6 +181,8 @@
     <script src="src/components/table/table.js"></script>
     <script src="src/components/table/toolbar/createTableToolbarButton.js"></script>
 
+    <script src="src/components/link/link.js"></script>
+
     <script src="src/components/overlay/overlay.js"></script>
 
     <script src="src/components/selection/selection.js"></script>
@@ -190,6 +196,7 @@
 
     <script src="src/components/quill-wrapper/quill-wrapper.js"></script>
     <script src="src/components/quill-wrapper/toolbar/quill-toolbar.js"></script>
+    <script src="src/components/quill-wrapper/quill-tooltip/quill-tooltip-wrapper.js"></script>
 
     <script src="src/components/findreplace/findreplace.js"></script>
 
@@ -280,10 +287,10 @@
         <div class="toolbar-separator"></div>
 
         <!-- LINK -->
-        <button class="ql-link"></button>
+        <button id="linkEditorToolbarButton" class="ql-link"></button>
         <button class="ql-image"></button>
         <button class="ql-video"></button>
-        <button class="ql-formula"></button>
+        <!--<button class="ql-formula"></button>-->
 
         <div class="toolbar-separator"></div>
 
@@ -444,11 +451,14 @@
         </button>
     </div>
 
+    <!-- POP UPS -->
+
     <div id="pasteOptionsDiv"
          class="paste-template-item"></div>
     <div id="colorPaletteContainer"
          class="ql-toolbar-template-context-menu"></div>
-
+    <!--<div class="ql-tooltip ql-hidden"></div>-->
+    <!-- OVERLAYS -->
     <canvas id="overlayCanvas"></canvas>
     <div id="dragOverlay" draggable="true"></div>
 

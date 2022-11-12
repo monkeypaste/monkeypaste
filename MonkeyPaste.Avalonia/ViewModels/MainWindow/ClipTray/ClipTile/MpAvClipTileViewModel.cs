@@ -692,7 +692,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsFindAndReplaceVisible { get; set; } = false;
         public string TemplateRichHtml { get; set; }
-        public bool HasContentDataChanged { get; set; }
         
         public string CachedState { get; set; } = null;
         public bool IsReloading => !string.IsNullOrEmpty(CachedState);
@@ -1000,8 +999,9 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if(CopyCount != value) {
-                    CopyItem.CopyCount = value;
-                    HasModelChanged = true;
+                    //CopyItem.CopyCount = value;
+                    //HasModelChanged = true;
+                    NotifyModelChanged(CopyItem, nameof(CopyItem.CopyCount), value);
                     OnPropertyChanged(nameof(CopyCount));
                 }
             }
@@ -1016,8 +1016,9 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (PasteCount != value) {
-                    CopyItem.PasteCount = value;
-                    HasModelChanged = true;
+                    //CopyItem.PasteCount = value;
+                    //HasModelChanged = true;
+                    NotifyModelChanged(CopyItem, nameof(CopyItem.PasteCount), value);
                     OnPropertyChanged(nameof(PasteCount));
                 }
             }
@@ -1078,8 +1079,8 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (CopyItem != null && CopyItem.PreferredFormat != value) {
-                    CopyItem.PreferredFormat = value;
-                    HasModelChanged = true;
+                    //CopyItem.PreferredFormat = value;
+                    //HasModelChanged = true;
                     OnPropertyChanged(nameof(PreferredFormat));
                 }
             }
@@ -1160,9 +1161,10 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (CopyItem != null && CopyItem.ItemData != value) {
-                    CopyItem.ItemData = value;
-                    HasContentDataChanged = true;
-                    HasModelChanged = true;
+                    //CopyItem.ItemData = value;
+                    //HasModelChanged = true;
+
+                    NotifyModelChanged(CopyItem, nameof(CopyItem.ItemData), value);
                     OnPropertyChanged(nameof(CopyItemData));
                 }
             }
@@ -1188,8 +1190,10 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (IconId != value) {
-                    CopyItem.IconId = value;
-                    HasModelChanged = true;
+                    //CopyItem.IconId = value;
+                    //HasModelChanged = true;
+
+                    NotifyModelChanged(CopyItem, nameof(CopyItem.IconId), value);
                     OnPropertyChanged(nameof(IconId));
                 }
             }
@@ -1208,8 +1212,10 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (CopyItemHexColor != value) {
-                    CopyItem.ItemColor = value;
-                    HasModelChanged = true;
+                    //CopyItem.ItemColor = value;
+                    //HasModelChanged = true;
+
+                    NotifyModelChanged(CopyItem, nameof(CopyItem.ItemColor), value);
                     OnPropertyChanged(nameof(CopyItemHexColor));
                 }
             }
@@ -1274,9 +1280,6 @@ namespace MonkeyPaste.Avalonia {
 
             CopyItem = ci;
             QueryOffsetIdx = queryOffset < 0 && ci != null ? QueryOffsetIdx : queryOffset;
-
-
-            //MpMessenger.Unregister<MpMessageType>(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
 
             if (ItemType == MpCopyItemType.FileList) {
                 // BUG will need to check source here... pretty much most places using env.newLine to parse right i think
@@ -1980,8 +1983,13 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(HasModelChanged):
                     if (HasModelChanged) {
-                        if (CopyItemData == "<p><br></p>") {
+                        if (CopyItemData == "<p><br></p>" || CopyItemData == null) {
                             // what IS this nasty shit??
+                            Debugger.Break();
+                            
+                            return;
+                        }
+                        if(ItemType == MpCopyItemType.Image && CopyItemData.StartsWith("<p>")) {
                             Debugger.Break();
                         }
                         //if(!MpAvCefNetApplication.UseCefNet && HasContentDataChanged) {
@@ -2000,7 +2008,6 @@ namespace MonkeyPaste.Avalonia {
                         Task.Run(async () => {
                             await CopyItem.WriteToDatabaseAsync();
                             HasModelChanged = false;
-                            HasContentDataChanged = false;
                         });
                     }
                     break;

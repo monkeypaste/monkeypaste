@@ -2658,10 +2658,16 @@ namespace MonkeyPaste.Avalonia {
                      pctvm = argParts[0] as MpAvClipTileViewModel;
                      pin_idx = (int)argParts[1];
                  }
-                 MpDataModelProvider.AvailableQueryCopyItemIds.Remove(pctvm.CopyItemId);
+                 if(MpDataModelProvider.AvailableQueryCopyItemIds.Remove(pctvm.CopyItemId)) {
+                     // tile was part of query tray
 
-                 Items.Remove(pctvm);
-                 Items.Where(x => x.QueryOffsetIdx > pctvm.QueryOffsetIdx).ForEach(x => x.QueryOffsetIdx = x.QueryOffsetIdx - 1);
+                     if(Items.Remove(pctvm)) {
+                         // tile was part of current page of query
+
+                         Items.Where(x => x.QueryOffsetIdx > pctvm.QueryOffsetIdx).ForEach(x => x.QueryOffsetIdx = x.QueryOffsetIdx - 1);
+                     }
+                 }
+
                  pctvm.QueryOffsetIdx = -1;
                  if(pin_idx == PinnedItems.Count) {
                      PinnedItems.Add(pctvm);
@@ -2672,7 +2678,6 @@ namespace MonkeyPaste.Avalonia {
                  OnPropertyChanged(nameof(IsAnyTilePinned));
                  pctvm.OnPropertyChanged(nameof(pctvm.IsPinned));
                  pctvm.OnPropertyChanged(nameof(pctvm.IsPlaceholder));
-
                  
 
                  MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
@@ -3178,9 +3183,14 @@ namespace MonkeyPaste.Avalonia {
                 
                 SelectedItem.IsPasting = true;
 
-                MpAvDataObject mpdo = await SelectedItem.GetContentView().Document.GetDataObjectAsync(false,true);
+                var cv = SelectedItem.GetContentView();
+                if(cv == null) {
+                    Debugger.Break();
+                    return;
+                }
+                MpAvDataObject mpdo = await cv.Document.GetDataObjectAsync(false,true);
 
-                await Task.Delay(100);
+                //await Task.Delay(100);
                 var pi = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
                 await MpPlatformWrapper.Services.ExternalPasteHandler.PasteDataObject(
                     mpdo, pi);

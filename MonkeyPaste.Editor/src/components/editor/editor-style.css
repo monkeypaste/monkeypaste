@@ -9,13 +9,13 @@
     position: fixed;
     padding: 0px;
     z-index: -1;
+    white-space: pre;
     font-family: var(--defaultFontFamily)
 }
 
 .no-select {
     user-select: none;
     cursor: default;
-    white-space: unset;
     width: 100%;
     height: 100%;
     text-decoration: none;
@@ -103,4 +103,8 @@ body:has(.editable) {
     color: white;
     transition: 1s;
     width: 200px;
+}
+
+#editor:not(.no-select) a {
+    cursor: pointer;
 }

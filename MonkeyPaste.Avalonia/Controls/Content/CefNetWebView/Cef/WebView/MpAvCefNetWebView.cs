@@ -18,6 +18,7 @@ using Avalonia.Interactivity;
 using CefNet.Internal;
 using Avalonia.Controls;
 using Avalonia.Platform;
+using System.Web;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -47,7 +48,8 @@ namespace MonkeyPaste.Avalonia {
         notifyFindReplaceVisibleChange,
         notifyQuerySearchRangesChanged,
         notifyLoadComplete,
-        notifyShowCustomColorPicker
+        notifyShowCustomColorPicker,
+        notifyNavigateUriRequested
     }
     [DoNotNotify]
     public class MpAvCefNetWebView : 
@@ -148,6 +150,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
 
                 case MpAvEditorBindingFunctionType.notifyLoadComplete:
+
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillEditorContentChangedMessage loadComplete_ntf) {
                         Document.ProcessContentChangedMessage(loadComplete_ntf);
@@ -297,6 +300,13 @@ namespace MonkeyPaste.Avalonia {
                             };
                             this.ExecuteJavascript($"provideCustomColorPickerResult_ext('{resp.SerializeJsonObjectToBase64()}')");
                         });
+                    }
+                    break;
+                case MpAvEditorBindingFunctionType.notifyNavigateUriRequested:
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillNavigateUriRequestNotification>(msgJsonBase64Str);
+                    if (ntf is MpQuillNavigateUriRequestNotification navUriReq) {
+                        var uri = new Uri(HttpUtility.HtmlDecode(navUriReq.uri), UriKind.Absolute);
+                        MpAvUriNavigator.NavigateToUri(uri);
                     }
                     break;
                 case MpAvEditorBindingFunctionType.getAllNonInputTemplatesFromDb:

@@ -9,12 +9,20 @@ function initQuill() {
 		languages: ['javascript', 'ruby', 'python', 'xml', 'html', 'xhtml']
 	});
 
+	//class PreserveWhiteSpace {
+	//	constructor(quill,options) {
+	//		quill.container.style.whiteSpace = "pre-line";
+	//	}
+	//}
+	//Quill.register('modules/preserveWhiteSpace', PreserveWhiteSpace);
+
 	let quillOptions = {
 		//debug: true,
 		placeholder: "",
 		//allowReadOnlyEdits: true,
 		theme: "snow",
-        formula: true,
+		formula: true,
+		preserveWhiteSpace: true,
 		syntax: true,
 		modules: {
 			toolbar: '#editorToolbar',

@@ -28,8 +28,7 @@ namespace MonkeyPaste.Common {
                     //string objStr = enc.GetString(bytes, 0, bytes.Length);
 
                     // NOTE ignoring encoding since string is base 64
-                    byte[] bytes = objBase64Str.ToBytesFromBase64String(null);
-                    string objStr = bytes.ToDecodedString(enc);
+                    string objStr = objBase64Str.ToStringFromBase64(enc);
                     return JsonConvert.DeserializeObject<T>(objStr);
                 }catch(Exception ex) {
                     MpConsole.WriteTraceLine("Error deserializing base64 str: "+objBase64Str, ex);
@@ -51,8 +50,10 @@ namespace MonkeyPaste.Common {
                 return string.Empty;
             }
             string jsonStr = SerializeObject(obj);
-            var json_bytes = jsonStr.ToBytesFromString(enc);
-            return json_bytes.ToBase64String();
+            string base64Str = jsonStr.ToBase64String(enc);
+            //var json_bytes = base64Str.ToBytesFromString(enc);
+            //return json_bytes.ToBase64String();
+            return base64Str;
         }
 
         public string SerializeJsonObject() {

@@ -11,6 +11,9 @@ function loadTextContent(itemDataStr, isPasteRequest) {
 	//insertHtml(0, itemDataStr);
 
 	loadTemplates(isPasteRequest);
+	loadLinkHandlers();
+	enableTableContextMenu();
+	enableTableInteraction();
 }
 
 // #endregion Life Cycle
@@ -580,9 +583,11 @@ function isDocIdxLineEnd(docIdx) {
 	let nextIdxLine = quill.getLine(docIdx + 1);
 	return idxLine[0] != nextIdxLine[0];
 }
+
 function isDocIdxInRange(docIdx, range) {
 	return docIdx >= range.index && docIdx <= range.index + range.length;
 }
+
 function isPointOnLine(p, lineIdx) {
 	let line_rect = getLineRect(lineIdx);
 	return isPointInRect(p);

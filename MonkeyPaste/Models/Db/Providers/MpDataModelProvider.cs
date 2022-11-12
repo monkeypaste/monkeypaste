@@ -739,7 +739,11 @@ namespace MonkeyPaste {
         #endregion
 
         #region MpCopyItemTag
-
+        public static async Task<List<MpCopyItemTag>> GetUnlinkedCopyItemTagIds() {
+            var citl = await GetItemsAsync<MpCopyItemTag>();
+            var cil = await GetItemsAsync<MpCopyItem>();
+            return citl.Where(x => cil.All(y => y.Id != x.CopyItemId)).ToList();
+        }
         public static async Task<List<int>> GetCopyItemIdsForTagAsync(int tagId) {
             string query = string.Format(@"select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId={0}", tagId);
             var result = await MpDb.QueryScalarsAsync<int>(query);

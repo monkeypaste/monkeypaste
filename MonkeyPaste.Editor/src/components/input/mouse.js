@@ -38,6 +38,10 @@ function initMouse() {
 // #region Event Handlers
 
 function onWindowClick(e) {
+	if (rejectTableMouseEvent(e)) {
+		return false;
+	} 
+
 	let ignore_classes = [
 		"edit-template-toolbar",
 		"paste-toolbar",
@@ -79,6 +83,9 @@ function onWindowMouseDown(e) {
 	//	log('window mouse down rejected ', e.target, ' is not a child of editor container or drag overlay');
 	//	return;
 	//}
+	if (rejectTableMouseEvent(e)) {
+		return false;
+	} 
 	WindowMouseDownLoc = { x: e.clientX, y: e.clientY };
 	SelectionOnMouseDown = getDocSelection();
 }
@@ -88,6 +95,9 @@ function onWindowMouseMove(e) {
 }
 
 function onWindowMouseUp(e) {
+	if (rejectTableMouseEvent(e)) {
+		return false;
+	} 
 	WindowMouseDownLoc = null;
 	SelectionOnMouseDown = null;
 }

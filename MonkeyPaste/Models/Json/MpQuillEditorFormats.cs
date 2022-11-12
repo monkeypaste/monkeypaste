@@ -185,7 +185,6 @@ templateType: "dynamic"
 
     public class MpQuillSubSelectionChangedNotification : MpJsonObject {
         public bool isSubSelectionEnabled { get; set; }
-        public double editorWidth { get; set; }
     }
 
 
@@ -275,5 +274,10 @@ templateType: "dynamic"
     public class MpQuillGetResponseNotification : MpJsonObject {
         public string requestGuid { get; set; }
         public string responseFragmentJsonStr { get; set; } = string.Empty;
+    }
+
+    public class MpQuillNavigateUriRequestNotification : MpJsonObject {
+        public string uri { get; set; }
+        public List<string> modKeys { get; set; } 
     }
 }

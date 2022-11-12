@@ -77,6 +77,7 @@ function initEditorToolbar() {
 
 	initTable();
 	initLists();
+	initLinks();
 	initFontColorToolbarItems();
 
 	initFontFamilyPicker();

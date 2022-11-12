@@ -143,6 +143,20 @@ function updateModKeys(e) {
 	}
 }
 
+function getDownModKeys(e) {
+	let down_mod_keys = [];
+	if (e.getModifierState("Shift")) {
+		down_mod_keys.push('Shift');
+	}
+	if (e.getModifierState("Control")) {
+		down_mod_keys.push('Control');
+	}
+	if (e.getModifierState("Alt")) {
+		down_mod_keys.push('Alt');
+	}
+	return down_mod_keys;
+}
+
 function isKeyboardButtonClick(e) {
 	if (e.key == ' ' || e.key == 'Enter') {
 		return true;
