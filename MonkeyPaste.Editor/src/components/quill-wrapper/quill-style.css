@@ -1,4 +1,12 @@
 
+.ql-editor {
+    height: auto;
+    padding: 2px 10px;
+}
+
+.ql-editor-converter {
+    white-space: pre-line !important;
+}
 /* maps font sizes to font drop down*/
 .ql-snow
 .ql-picker.ql-size
@@ -52,10 +60,6 @@
     width: 180px;
 }
 
-.ql-editor {
-    height: auto;
-    padding: 2px 10px;
-}
 
 .ql-container.ql-snow {
     border: 0px solid #ccc;

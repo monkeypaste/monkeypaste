@@ -27,6 +27,8 @@
 			"**/obj": true,
 			"**/bin": true,
 		},
-		"editor.smoothScrolling": true
+		"editor.smoothScrolling": true,
+		"javascript.referencesCodeLens.enabled": true,
+		"javascript.referencesCodeLens.showOnAllFunctions": true
 	}
 }

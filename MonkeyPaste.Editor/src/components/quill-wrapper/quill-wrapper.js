@@ -174,7 +174,7 @@ function setTextInRange(range, text, source = 'api', decodeTemplates = false) {
 }
 
 function setRootHtml(html) {
-	quill.root.innerHTML = html;
+	quill.root.innerHTML = html;	
 }
 
 function setRootText(text) {

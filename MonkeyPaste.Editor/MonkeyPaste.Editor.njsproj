@@ -110,7 +110,6 @@
     <Content Include="src\components\template\toolbar\paste\selector\paste-toolbar-template-selector-style.css" />
     <Content Include="src\components\template\toolbar\paste\selector\pasteTemplateFocusSelector.js" />
     <Content Include="src\components\template\types\contacts\contacts.js" />
-    <Content Include="src\components\util\dataTransfer.js" />
     <Content Include="src\components\util\debug.js" />
     <Content Include="src\components\util\graphics\graphics.js" />
     <Content Include="src\components\util\graphics\point.js" />

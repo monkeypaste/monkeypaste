@@ -51,9 +51,6 @@ function setPasteToolbarDefaultFocus() {
 
 // #region State
 
-function isPasteAvailable() {
-    return isSubSelectionEnabled();
-}
 
 function isShowingPasteToolbar() {
     return !getPasteToolbarContainerElement().classList.contains('hidden');

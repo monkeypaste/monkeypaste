@@ -108,10 +108,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPlatformDataObjectHelperAsync Implementation
 
-        async Task<MpPortableDataObject> MpIPlatformDataObjectHelperAsync.ReadDragDropDataObject(object nativeDataObj, int retryCount) {
-            var mpdo = await ReadClipboardOrDropObjectAsync(nativeDataObj);
-            return mpdo;
-        }
 
         async Task<object> MpIPlatformDataObjectHelperAsync.WriteDragDropDataObject(MpPortableDataObject mpdo) {
             object pdo = await WriteClipboardOrDropObjectAsync(mpdo, false);
@@ -122,6 +118,10 @@ namespace MonkeyPaste.Avalonia {
             await WriteClipboardOrDropObjectAsync(portableObj, true);
         }
 
+        async Task<MpPortableDataObject> MpIPlatformDataObjectHelperAsync.ReadDragDropDataObject(object nativeDataObj, int retryCount) {
+            var mpdo = await ReadClipboardOrDropObjectAsync(nativeDataObj);
+            return mpdo;
+        }
         async Task<MpPortableDataObject> MpIPlatformDataObjectHelperAsync.GetPlatformClipboardDataObjectAsync() {
             var pdo = await ReadClipboardOrDropObjectAsync(null);
             return pdo;

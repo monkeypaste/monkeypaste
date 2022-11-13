@@ -12,6 +12,10 @@ namespace AvCoreClipboardHandler {
     public class AvCoreClipboardHandler :
         MpIClipboardReaderComponentAsync,
         MpIClipboardWriterComponentAsync {
+        static AvCoreClipboardHandler() {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        }
+
         #region Private Variables
         private object _readLock = System.Guid.NewGuid().ToString();
 
@@ -146,12 +150,21 @@ namespace AvCoreClipboardHandler {
                 dataObject = currentOutput
             };
         }
-
+       
         private async Task<object> ReadDataObjectFormat(string format, IDataObject avdo) {
             object dataObj;
+
             if(avdo == null) {
                 await WaitForClipboard();
                 dataObj = await Application.Current.Clipboard.GetDataAsync(format);
+                if(OperatingSystem.IsWindows() &&
+                    format == MpPortableDataFormats.AvHtml_bytes && dataObj is byte[] htmlBytes) {
+                    var detected_encoding = htmlBytes.DetectTextEncoding(out string detected_text);
+                    dataObj = Encoding.UTF8.GetBytes(detected_text);
+                    if(detected_text.Contains("Â")) {
+                        Debugger.Break();
+                    }
+                }
                 CloseClipboard();
 
             } else {
@@ -195,7 +208,6 @@ namespace AvCoreClipboardHandler {
             }
         }
         #endregion
-
 
         #region MpClipboardWriterComponent Implementation
 

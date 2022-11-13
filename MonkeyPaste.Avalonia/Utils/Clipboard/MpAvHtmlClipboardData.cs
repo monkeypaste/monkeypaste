@@ -51,7 +51,7 @@ namespace MonkeyPaste.Avalonia {
                         MpConsole.WriteLine("Plain Html Converter Initialized.");
                     }
                 };
-                ConverterWebView.Navigate(MpAvClipTrayViewModel.EditorPath);
+                ConverterWebView.Navigate(MpAvClipTrayViewModel.EditorPath+"?converter=true");
             };
 
             var quillWindow = new Window() {

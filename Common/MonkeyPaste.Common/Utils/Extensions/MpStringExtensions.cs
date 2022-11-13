@@ -28,7 +28,10 @@ namespace MonkeyPaste.Common {
         #region Encoding Extensions
         public static string ToDecodedString(this byte[] bytes, Encoding enc = null) {
             // TODO should use local encoding here
-            enc = enc == null ? Encoding.UTF8 : enc;
+            if(enc == null) {
+                bytes.DetectTextEncoding(out string decodedStr);
+                return decodedStr;
+            }
             return enc.GetString(bytes);
         }
 
@@ -60,14 +63,7 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
-        public static string TrimWithUnicodeSpace(this string str) {
-            // this happens getting firefox urlSource...
-            if(str == null) {
-                return string.Empty;
-            }
-            return str.Replace("\u200B","");
-        }
-        
+
         public static string ReplaceRange(this string str, int index, int length, string text) {
             int preStrLength = index + 1;
             if(str.Length < preStrLength) {
@@ -690,7 +686,8 @@ namespace MonkeyPaste.Common {
                     "s",
                     "sub",
                     "sup",
-                    "img"
+                    "img",
+                    "br"
                 };
             }
         }

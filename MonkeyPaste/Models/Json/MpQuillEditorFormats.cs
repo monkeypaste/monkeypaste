@@ -35,6 +35,7 @@ namespace MonkeyPaste {
     public class MpQuillContentDataRequestMessage : MpJsonObject {
         public List<string> formats { get; set; }
 
+        public bool forCutOrCopy { get; set; }
         public bool forDragDrop { get; set; }
         public bool forPaste { get; set; } // flag to omit trailing newline for paste db is fine
     }
@@ -94,33 +95,7 @@ namespace MonkeyPaste {
     public class MpQuillTemplateAddOrUpdateNotification : MpJsonObject {
         public string addedOrUpdatedTextTemplateBase64JsonStr { get; set; }
     }
-    public class MpQuillTextTemplateBlot : MpJsonObject {
-        /*
-        isFocus: "false"
-templateColor: "#6F562C"
-templateData: ""
-templateDeltaFormat: "[object Object]"
-templateGuid: "1cd87443-ee3c-46bb-b4f1-925205fc0f55"
-templateHtmlFormat: "Template #1"
-templateInstanceGuid: "21d2ea4d-64b0-491e-8552-8cee6c8af75e"
-templateName: "Template #1"
-templateText: "undefined"
-templateType: "dynamic"
-        */
-        public bool isFocus { get; set; }
-        public string templateColor { get; set; }
-        public string templateData { get; set; }
-        public string templateDeltaFormat { get; set; }
-        public string templateGuid { get; set; }
-        public string templateInstanceGuid { get; set; }
-        public string templateName { get; set; }
-        public string templateText { get; set; }
-        public string templateType { get; set; }
-    }
 
-    public class MpQuillActiveTemplateGuidsRequestMessage : MpJsonObject {
-        public List<string> templateGuids { get; set; }
-    }
 
     public class MpQuillGetRangeTextRequestMessage : MpJsonObject {
         public int index { get; set; }
@@ -279,5 +254,9 @@ templateType: "dynamic"
     public class MpQuillNavigateUriRequestNotification : MpJsonObject {
         public string uri { get; set; }
         public List<string> modKeys { get; set; } 
+    }
+
+    public class MpQuillEditorSetClipboardRequestNotification : MpJsonObject {
+        
     }
 }

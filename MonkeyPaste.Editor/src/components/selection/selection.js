@@ -80,6 +80,9 @@ function getDomFocusRange(forceToEditor = true) {
 			dom_focus_range = convertDocRangeToDomRange(CurSelRange);
 		}
 	}
+	if (!dom_focus_range) {
+		dom_focus_range = document.getSelection().getRangeAt(0);
+	}
 
 	return dom_focus_range;
 }
@@ -262,13 +265,15 @@ function clearDomSelectionRanges() {
 }
 
 function convertDomRangeToDocRange(dom_range) {
-	if (!dom_range) {
-		debugger;
+	let sel = { index: 0, length: 0 };
+	if (!dom_range ||
+		dom_range.startContainer === undefined ||
+		dom_range.endContainer === undefined) {
+		return sel;
 	}
 	let start_elm_doc_idx = getElementDocIdx(dom_range.startContainer);
 	let end_elm_doc_idx = getElementDocIdx(dom_range.endContainer);
 
-	let sel = { index: 0, length: 0 };
 	sel.index = start_elm_doc_idx + dom_range.startOffset;
 	sel.length = (end_elm_doc_idx + dom_range.endOffset) - sel.index;
 
@@ -329,34 +334,6 @@ function coerceCleanSelection(new_range,old_range) {
 			//drawOverlay();
 			return new_range;
 		}
-
-		if (!new_range || new_range.index === undefined) {
-			debugger;
-		}
-
-		//log('timer: index: ', new_range.index, ' length: ', new_range.length);
-
-		let qsel = getDocSelection();
-		//log('quill: index: ', qsel.index, ' length: ', qsel.length);
-
-		let oldRange = old_range;
-		// updating Last
-
-		//if (new_range) {
-		//	old_range = new_range;
-		//	updateFontSizePickerToSelection(null, new_range);
-		//	updateFontFamilyPickerToSelection(null, new_range);
-		//	if (hasTemplates()) {
-		//		if (isShowingPasteToolbar()) {
-		//			updatePasteTemplateToolbarToSelection();
-		//		}
-		//		updateTemplatesAfterSelectionChange(new_range, oldRange);
-		//	}
-			
-		//	onDocSelectionChanged_ntf(new_range);
-		//	old_range = new_range;
-		//}
-		//drawOverlay();
 	}
 	return new_range;
 }

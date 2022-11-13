@@ -154,6 +154,14 @@ function convertFileListContentToFormats(isForOle, formats) {
 			data = 'pending...';
 		} else if (isCsvFormat(format)) {
 			data = getFileListContentData().join(',');
+		} else if (format.toLowerCase() == 'text/uri') {
+			data =
+				getFileListContentData()
+					.split(envNewLine())
+					.map(x => getPathUri(x));
+		} else if (format.toLowerCase() == 'filenames' ||
+					format.toLowerCase() == 'filedrop') {
+			data = getFileListContentData();
 		}
 		if (!data || data == '') {
 			continue;

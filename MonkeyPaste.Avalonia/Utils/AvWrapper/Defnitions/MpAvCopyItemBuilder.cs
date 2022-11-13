@@ -132,10 +132,11 @@ namespace MonkeyPaste.Avalonia {
                     //    itemData = itemData.ToRichHtmlText(MpPortableDataFormats.AvCsv);
                     //}
                 } else if (mpdo.ContainsData(MpPortableDataFormats.AvRtf_bytes) &&
-                        mpdo.GetData(MpPortableDataFormats.AvRtf_bytes) is byte[] rtfBytes &&
+                            !mpdo.ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
+                            mpdo.GetData(MpPortableDataFormats.AvRtf_bytes) is byte[] rtfBytes &&
                         rtfBytes.ToDecodedString() is string rtfStr) {
 
-                    // RTF
+                    // RTF (HTML will be preferred)
 
                     inputTextFormat = "rtf";
                     itemType = MpCopyItemType.Text;
@@ -188,7 +189,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (MpPrefViewModel.Instance.IgnoreWhiteSpaceCopyItems &&
                     itemType == MpCopyItemType.Text &&
-                    string.IsNullOrWhiteSpace((itemData).ToPlainText(inputTextFormat).Replace(Environment.NewLine, ""))) {
+                    string.IsNullOrWhiteSpace(itemData.ToPlainText(inputTextFormat).Replace(Environment.NewLine, ""))) {
                     MpConsole.WriteLine($"Whitespace text item detected. Input Format '{inputTextFormat}' Input Data '{itemData}'");
                     return null;
                 }
@@ -199,7 +200,7 @@ namespace MonkeyPaste.Avalonia {
                         Debugger.Break();
                         inputTextFormat = "text";
                     }
-
+                    
                     htmlClipboardData = await MpAvHtmlClipboardData.ParseAsync(itemData, inputTextFormat);
                     if (htmlClipboardData == null) {
                         return null;

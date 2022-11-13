@@ -149,7 +149,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public async Task<MpAvDataObject> GetDataObjectAsync(bool ignoreSelection, bool fillTemplates, string[] formats = null) {
+        public async Task<MpAvDataObject> GetDataObjectAsync(bool ignoreSelection, bool fillTemplates, bool isCutOrCopy, string[] formats = null) {
             await Task.Delay(1);
             var avdo = new MpAvDataObject();
             avdo.SetData(MpPortableDataFormats.Text, ignoreSelection || string.IsNullOrEmpty(SelectedText) ? Text : SelectedText);

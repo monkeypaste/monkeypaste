@@ -197,22 +197,6 @@ namespace MonkeyPaste {
             return TemplateType == MpTextTemplateType.Dynamic;
         }
 
-        public MpQuillTextTemplateBlot ToTextTemplateBlot() {
-            return new MpQuillTextTemplateBlot() {
-                templateColor = HexColor,
-                templateData = TemplateData,
-                templateDeltaFormat = TemplateDeltaFormat,
-                templateGuid = Guid,
-                templateName = TemplateName,
-                templateText = TemplateText,
-                templateType = TemplateTypeStr
-            };
-        }
-
-        public static MpTextTemplate FromTextTemplateBlot(MpQuillTextTemplateBlot templateBlot) {
-            return null;
-
-        }
 
         public override string ToString() {
             return $"'{TemplateName}' - [{TemplateType}]";

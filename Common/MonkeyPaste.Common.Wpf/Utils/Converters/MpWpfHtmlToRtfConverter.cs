@@ -29,6 +29,9 @@ namespace MonkeyPaste.Common.Wpf {
             "svg"
         };
 
+        private static string _defaultFontFamily;
+        private static string _defaultCodeBlockFontFamily;
+
         #endregion
 
         #region Properties
@@ -37,11 +40,13 @@ namespace MonkeyPaste.Common.Wpf {
 
         #region Public Methods
 
-        public static string ConvertQuillHtmlToRtf(string html) {
+        public static string ConvertQuillHtmlToRtf(string html, string defaultFontFamily = null, string defaultCodeBlockFontFamily = null) {
+            _defaultFontFamily = defaultFontFamily == null ? "Arial" : defaultFontFamily;
+            _defaultCodeBlockFontFamily = defaultCodeBlockFontFamily == null ? "Consolas" : defaultCodeBlockFontFamily;
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(html);
             var fd = new FlowDocument {
-                FontFamily = new FontFamily("Arial"),
+                FontFamily = new FontFamily(_defaultFontFamily),
 
             };
             fd.Blocks.Clear();
@@ -193,7 +198,7 @@ namespace MonkeyPaste.Common.Wpf {
                             Padding = new Thickness(3),
                             Background = Brushes.LightGray,
                             Foreground = Brushes.DimGray,
-                            FontFamily = new FontFamily("Consolas")
+                            FontFamily = new FontFamily(_defaultCodeBlockFontFamily)
                         };
                     } else {
                         throw new Exception("Unhanlded html doc element: " + n.ToString());
@@ -485,7 +490,7 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         private static FontFamily GetFontFamily(string classValue) {
-            string defaultFontName = "arial";
+            string defaultFontName = _defaultFontFamily.ToLower();
             FontFamily defaultFontFamily = null;
             FontFamily closestFontFamily = null;
             string fontName = classValue.Replace("ql-font-", string.Empty).Replace("-"," ");

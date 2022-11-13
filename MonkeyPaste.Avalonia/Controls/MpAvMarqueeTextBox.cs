@@ -39,9 +39,6 @@ namespace MonkeyPaste.Avalonia {
 
         private int _curLoopWaitMs = 0;
         private double _distTraveled = 0;
-
-        private IBrush _bgBrush;
-        private IBrush _fgBrush;
         #endregion
 
         #region Statics

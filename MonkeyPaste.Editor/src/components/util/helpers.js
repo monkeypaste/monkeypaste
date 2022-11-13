@@ -59,6 +59,13 @@ function parseInt_safe(obj) {
     return result;
 }
 
+function utf8_to_b64(str) {
+    return window.btoa(unescape(encodeURIComponent(str)));
+}
+
+function b64_to_utf8(str) {
+    return decodeURIComponent(escape(window.atob(str)));
+}
 function toBase64FromJsonObj(obj) {
     let objStr = null
     if (typeof obj === 'string' || obj instanceof String) {
@@ -66,18 +73,19 @@ function toBase64FromJsonObj(obj) {
     } else {
         objStr = JSON.stringify(obj);
 	}
-    let base64 = btoa(objStr);
+    let base64 = utf8_to_b64(objStr);
     return base64;
 }
 
 function toJsonObjFromBase64Str(base64Str) {
     if (typeof base64Str === 'string' || base64Str instanceof String) {
-        let jsonStr = atob(base64Str);
+        let jsonStr = b64_to_utf8(base64Str);
         let jsonObj = JSON.parse(jsonStr);
         return jsonObj;
     }
     return null;
 }
+
 
 function envNewLine() {
     // Windows = CR LF

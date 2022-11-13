@@ -25,7 +25,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvITextPointer ContentStart { get; private set; }
         public MpAvITextPointer ContentEnd { get; private set; }
 
-        public async Task<MpAvDataObject> GetDataObjectAsync(bool ignoreSelection, bool fillTemplates, string[] formats = null) {
+        public async Task<MpAvDataObject> GetDataObjectAsync(bool ignoreSelection, bool fillTemplates, bool isCutOrCopy, string[] formats = null) {
             if (Owner is MpAvCefNetWebView wv && 
                 wv.DataContext is MpAvClipTileViewModel ctvm) {
 
@@ -34,13 +34,16 @@ namespace MonkeyPaste.Avalonia {
 
                 var contentDataReq = new MpQuillContentDataRequestMessage() { 
                     forPaste = ctvm.IsPasting,
-                    forDragDrop = ctvm.IsTileDragging
+                    forDragDrop = ctvm.IsTileDragging,
+                    forCutOrCopy = isCutOrCopy
                 };
 
-                bool for_ole = ctvm.IsPasting || ctvm.IsTileDragging;
+                bool for_ole = contentDataReq.forPaste || contentDataReq.forDragDrop || contentDataReq.forCutOrCopy;
 
                 bool ignore_ss = true;
-                bool ignore_pseudo_file = false;
+                // NOTE when file is on clipboard pasting into tile removes all other formats besides file
+                // and pseudo files are only needed for dnd comptaibility so its gewd
+                bool ignore_pseudo_file = contentDataReq.forCutOrCopy;
                 if (formats == null) {
                     // TODO need to implement disable preset stuff once clipboard ui is in use 
                     // for realtime RegisterFormats data
@@ -75,6 +78,7 @@ namespace MonkeyPaste.Avalonia {
                         }
                         avdo.SetData(MpPortableDataFormats.AvPNG, ContentScreenShotBase64);
                     }
+
                     if (ctvm.ItemType == MpCopyItemType.FileList) {
                         avdo.SetData(MpPortableDataFormats.AvFileNames, ctvm.CopyItemData);
                     } else if(!ignore_pseudo_file) {

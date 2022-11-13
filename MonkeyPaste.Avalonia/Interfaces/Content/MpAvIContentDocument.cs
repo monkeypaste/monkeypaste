@@ -11,7 +11,7 @@ namespace MonkeyPaste.Avalonia {
 
         string ContentScreenShotBase64 { get; }
 
-        Task<MpAvDataObject> GetDataObjectAsync(bool ignoreSelection, bool fillTemplates, string[] formats = null);
+        Task<MpAvDataObject> GetDataObjectAsync(bool ignoreSelection, bool fillTemplates, bool isCutOrCopy, string[] formats = null);
         MpAvITextPointer ContentStart { get; }
         MpAvITextPointer ContentEnd { get; }
 

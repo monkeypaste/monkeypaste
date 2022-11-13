@@ -55,13 +55,7 @@ function handleWindowKeyDown(e) {
 			} else if (NavigationKeys.includes(e.key)) {
 				// allow for navigation input
 				suppresKeyDown = false;
-			} else {
-				// check for shortcut or special navigation input
-				let is_non_input_key_down = IsMetaDown || IsCtrlDown || IsAltDown;
-				if (is_non_input_key_down) {
-					suppresKeyDown = false;
-				}
-			}
+			} 
 		} else {
 			// edit mode all input allowed
 			suppresKeyDown = false;
@@ -74,8 +68,16 @@ function handleWindowKeyDown(e) {
 	}
 
 	if (suppresKeyDown) {
-		e.stopPropagation();
-		e.preventDefault();
+		// allow shortcuts during any state
+		// check for shortcut or special navigation input
+		let is_non_input_key_down = IsMetaDown || IsCtrlDown || IsAltDown;
+		if (is_non_input_key_down) {
+			suppresKeyDown = false;
+		}
+		if (suppresKeyDown) {
+			e.stopPropagation();
+			e.preventDefault();
+		}
 	}
 }
 

@@ -48,7 +48,7 @@ function contentRequest_ext(contentReqMsgStr_base64) {
 	// output 'MpQuillContentDataResponseMessage' (with 'MpQuillContentDataResponseFormattedDataItemFragment' items)
 
 	let req = toJsonObjFromBase64Str(contentReqMsgStr_base64);
-	let is_for_ole = req.forPaste || req.forDragDrop;
+	let is_for_ole = req.forPaste || req.forDragDrop || req.forCutOrCopy;
 
 	let respObj = {
 		dataItems: convertContentToFormats(is_for_ole, req.formats)
@@ -70,7 +70,7 @@ function convertPlainHtml_ext(convertPlainHtmlReqMsgBase64Str) {
 	let qhtml = '';
 
 	if (req.isBase64) {
-		plainHtml = atob(req.data);
+		plainHtml = b64_to_utf8(req.data);
 	} else {
 		plainHtml = req.data;
 	}

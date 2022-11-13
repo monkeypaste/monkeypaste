@@ -2247,6 +2247,24 @@ namespace MonkeyPaste.Avalonia {
                     wv.ShowDevTools();
                 }
             });
+
+        public ICommand CopyToClipboardCommand => new MpAsyncCommand(
+            async() => {
+                IsBusy = true;
+                MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = true;
+                var mpdo = await GetContentView().Document.GetDataObjectAsync(true, false, true);
+                if(mpdo.ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
+                    mpdo.GetData(MpPortableDataFormats.AvHtml_bytes) is byte[] bytes &&
+                    bytes.ToDecodedString() is string htmlStr) {
+                    
+                }
+                await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo);
+
+                // wait extra for cb watcher to know about data
+                await Task.Delay(300);
+                MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = false;
+                IsBusy = false;
+            });
         #endregion
     }
 }

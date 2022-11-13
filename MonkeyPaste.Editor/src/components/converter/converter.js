@@ -5,6 +5,8 @@ function initPlainHtmlConverter(envName) {
 
 	initQuill();
 
+	getEditorElement().classList.add('ql-editor-converter');
+
 	//addPlainHtmlClipboardMatchers();
 	//document.getElementsByClassName("ql-toolbar")[0].classList.add("env-wpf");
 	//disableReadOnly();
@@ -46,14 +48,19 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 		insertText(0, escapeHtml(dataStr),'silent');
 		//setRootText(escapeHtml(dataStr));
 	} else if (formatType == 'html') {
+		if (dataStr.toLowerCase().indexOf('<p>') < 0) {
+			dataStr = '<p>' + dataStr + '</p>';
+		}
 		dataStr = unescapeHtml(dataStr);
 		// NOTE insertHtml will remove spaces between spans...
-		//insertHtml(0, dataStr, 'api', false);
-		setRootHtml(dataStr);
+		insertHtml(0, dataStr, 'api', false);
+		//setRootHtml(dataStr);
 	} 
 
 	quill.update();
 	let qhtml = getHtml();
+	// NOTE this maybe only necessary on windows
+	//qhtml = fixHtmlBug1(qhtml);
 	//qhtml = removeUnicode(qhtml);
 	//qhtml = fixUnicode(qhtml);
 	//qhtml = forceBgOpacity(qhtml, bgOpacity);
@@ -81,6 +88,11 @@ function forceBgOpacity(htmlStr, opacity) {
 		continue;
 	}
 	return html_doc.body.innerHTML;
+}
+
+function fixHtmlBug1(htmlStr) {
+	// replace <span>Â </span>
+	return htmlStr.replaceAll('<span>Â </span>', '');
 }
 
 function removeUnicode(str) {

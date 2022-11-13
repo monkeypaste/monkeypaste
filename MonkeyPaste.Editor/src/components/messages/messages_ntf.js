@@ -214,3 +214,14 @@ function onNavigateUriRequested_ntf(navUri, curModKeys) {
 		notifyNavigateUriRequested(msgStr);
 	}
 }
+
+function onSetClipboardRequested_ntf() {
+	// output 'MpQuillEditorSetClipboardRequestNotification'
+	if (typeof notifySetClipboardRequested === 'function') {
+		let msg = {
+			// empty
+		};
+		let msgStr = toBase64FromJsonObj(msg);
+		notifySetClipboardRequested(msgStr);
+	}
+}

@@ -24,7 +24,6 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvDataObject SourceDataObject { get; private set; }
 
         public MpAvCefNetWebViewGlue(MpAvCefNetWebView view) : base(view) {
-
         }
 
         protected override bool OnSetFocus(CefBrowser browser, CefFocusSource source) {
@@ -105,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
                 } else if (ctvm.ItemType == MpCopyItemType.Image) {
                     allowedEffects = DragDropEffects.Move;
                 }
-                SourceDataObject = await wv.Document.GetDataObjectAsync(false, false);
+                SourceDataObject = await wv.Document.GetDataObjectAsync(false, false, false);
                 if(SourceDataObject == null) {
                     if(ctvm != null) {
                         ctvm.IsTileDragging = false;

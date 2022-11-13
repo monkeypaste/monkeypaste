@@ -339,7 +339,7 @@ namespace MonkeyPaste.Avalonia {
                 
         #region View Models
 
-        public IEnumerable<MpAvClipTileViewModel> SortOrderedItems => Items.OrderBy(x => x.QueryOffsetIdx);
+        public IEnumerable<MpAvClipTileViewModel> SortOrderedItems => Items.Where(x=>x.QueryOffsetIdx >= 0).OrderBy(x => x.QueryOffsetIdx);
 
         public ObservableCollection<MpAvClipTileViewModel> PinnedItems { get; set; } = new ObservableCollection<MpAvClipTileViewModel>();
 
@@ -3156,15 +3156,9 @@ namespace MonkeyPaste.Avalonia {
                  SelectedItem.ChangeColorCommand.Execute(hexStr.ToString());
              });
 
-        public ICommand CopySelectedClipsCommand => new MpAsyncCommand(
-            async () => {
-                MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = true;
-                var mpdo = await SelectedItem.GetContentView().Document.GetDataObjectAsync(true, false); //.ConvertToDataObject(false);
-                await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo);
-
-                // wait extra for cb watcher to know about data
-                await Task.Delay(300);
-                MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = false;
+        public ICommand CopySelectedClipsCommand => new MpCommand(
+            () => {
+                SelectedItem.CopyToClipboardCommand.Execute(null);
             },
             () => {
                 bool canCopy =
@@ -3188,7 +3182,7 @@ namespace MonkeyPaste.Avalonia {
                     Debugger.Break();
                     return;
                 }
-                MpAvDataObject mpdo = await cv.Document.GetDataObjectAsync(false,true);
+                MpAvDataObject mpdo = await cv.Document.GetDataObjectAsync(false,true, false);
 
                 //await Task.Delay(100);
                 var pi = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;

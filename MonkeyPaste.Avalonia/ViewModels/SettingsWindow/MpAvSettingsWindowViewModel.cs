@@ -48,8 +48,9 @@ namespace MonkeyPaste.Avalonia {
                     MpAvMainWindowViewModel.Instance.IsShowingDialog = IsVisible;
 
                     if(IsVisible) {
-                        var sw = new MpAvSettingsWindow();                        
-                        sw.ShowDialog(MpAvMainWindow.Instance);
+                        var sw = new MpAvSettingsWindow();     
+                        
+                        sw.Show();
                     } else {
 
                         

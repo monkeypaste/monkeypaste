@@ -49,7 +49,8 @@ namespace MonkeyPaste.Avalonia {
         notifyQuerySearchRangesChanged,
         notifyLoadComplete,
         notifyShowCustomColorPicker,
-        notifyNavigateUriRequested
+        notifyNavigateUriRequested,
+        notifySetClipboardRequested
     }
     [DoNotNotify]
     public class MpAvCefNetWebView : 
@@ -126,7 +127,7 @@ namespace MonkeyPaste.Avalonia {
             Document = new MpAvHtmlDocument(this);
             Selection = new MpAvTextSelection(Document);
             MpMessenger.RegisterGlobal(ReceivedGlobalMessega);
-
+            
         }
 
         #endregion
@@ -307,6 +308,19 @@ namespace MonkeyPaste.Avalonia {
                     if (ntf is MpQuillNavigateUriRequestNotification navUriReq) {
                         var uri = new Uri(HttpUtility.HtmlDecode(navUriReq.uri), UriKind.Absolute);
                         MpAvUriNavigator.NavigateToUri(uri);
+                    }
+                    break;
+                case MpAvEditorBindingFunctionType.notifySetClipboardRequested:
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillEditorSetClipboardRequestNotification>(msgJsonBase64Str);
+                    if (ntf is MpQuillEditorSetClipboardRequestNotification setClipboardReq) {
+                        if (BrowserSettings.JavascriptDOMPaste == CefState.Disabled) {
+                            Debugger.Break();
+                        }
+                        if (BrowserSettings.JavascriptAccessClipboard == CefState.Disabled) {
+                            Debugger.Break();
+                        }
+
+                        ctvm.CopyToClipboardCommand.Execute(null);
                     }
                     break;
                 case MpAvEditorBindingFunctionType.getAllNonInputTemplatesFromDb:
