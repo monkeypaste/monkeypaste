@@ -1,5 +1,7 @@
 // #region Globals
 
+var IsReadyToPaste = false;
+
 // #endregion Globals
 
 // #region Life Cycle
@@ -56,15 +58,23 @@ function isShowingPasteToolbar() {
     return !getPasteToolbarContainerElement().classList.contains('hidden');
 }
 
+function canPaste() {
+    return updatePasteElementInteractivity();
+}
+
 // #endregion State
 
 // #region Actions
 
-function showPasteToolbar() {
+function showPasteToolbar(isPasting = false) {
     var ptt_elm = getPasteToolbarContainerElement();
     ptt_elm.classList.remove('hidden');
 
-    if (hasTemplates()) {
+    let can_show_templates = hasTemplates() && (!isReadOnly() || isPasting);
+    if (can_show_templates) {
+        if (!isSubSelectionEnabled()) {
+            enabledSubSelection();
+        }
         showPasteTemplateToolbarItems();
     } else {
         hidePasteTemplateToolbarItems();
@@ -91,14 +101,15 @@ function onPasteButtonClickOrKeyDown(e) {
     if (!isRunningInHost()) {
         alert(getText(getDocSelection(true), true));
     }
+    if (canPaste()) {
+        if (IsReadyToPaste) {
+            onPasteRequest_ntf();
+        } else {
+            // this state implies there are templates and contentRequest is blocking until IsReadyToPaste=true
 
-    let can_paste = updatePasteElementInteractivity();
-    if (can_paste) {
-        onPasteTemplateRequest_ntf();
-    } else {
-
+            // stop blocking and paste w/ current sel/value state
+            IsReadyToPaste = true;
+        }
     }
-
-
 }
 // #endregion Event Handlers

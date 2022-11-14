@@ -238,11 +238,6 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task<MpAvDataObject> ReadClipboardOrDropObjectAsync(object forcedDataObject = null) {
             // NOTE forcedDataObject is used to read drag/drop, when null clipboard is read
-            //while(IsBusy) {
-            //    await Task.Delay(100);
-            //}
-            //IsBusy = true;
-
             MpAvDataObject mpdo = new MpAvDataObject();
 
             
@@ -271,16 +266,10 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             mpdo.MapAllPseudoFormats();
-            //IsBusy = false;
             return mpdo;
         }
 
         public async Task<object> WriteClipboardOrDropObjectAsync(MpPortableDataObject mpdo, bool writeToClipboard) {
-            //while (IsBusy) {
-            //    await Task.Delay(100);
-            //}
-            //IsBusy = true;
-
             // pre-pass data object and remove disabled formats
             var formatsToRemove = 
                 mpdo.DataFormatLookup
@@ -320,7 +309,6 @@ namespace MonkeyPaste.Avalonia {
 
             MpConsole.WriteLine("Data written to " + (writeToClipboard ? "CLIPBOARD" : "DATAOBJECT")+":");
             mpdo.DataFormatLookup.ForEach(x => MpConsole.WriteLine("Format: " + x.Key.Name));
-            //IsBusy = false;
             return dobj;
         }
 

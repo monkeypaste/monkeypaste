@@ -417,6 +417,31 @@ namespace MonkeyPaste.Common {
             return str.IsFile() || str.IsDirectory();
         }
 
+        public static string FindParentDirectory(this string path, int level = 0) {
+            if (!path.IsFileOrDirectory()) {
+                return null;
+            }
+            string dir = Path.GetDirectoryName(path);
+            while (level > 0) {
+                dir = new DirectoryInfo(dir).Parent.FullName;
+                level--;
+            }
+            return dir;
+        }
+
+        public static string FindParentDirectory(this string path, string dirName) {
+            string rootPath = Path.GetPathRoot(path);
+            string curDirName = Path.GetFileName(path);
+            while (curDirName != dirName) {
+                if (path == rootPath) {
+                    throw new DirectoryNotFoundException("Could not find the project directory.");
+                }
+                path = Directory.GetParent(path).FullName;
+                curDirName = Path.GetFileName(path);
+            }
+            return path;
+        }
+
         public static List<int> IndexListOfAll(this string text, string str, StringComparison comparisonType = StringComparison.InvariantCultureIgnoreCase) {List<int> allIndexOf = new List<int>();
             int index = text.IndexOf(str, comparisonType);
             while (index != -1) {

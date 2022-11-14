@@ -22,14 +22,12 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvClipboardWatcher : MpIClipboardMonitor, MpIPlatformDataObjectRegistrar {
         #region Private Variables
 
-        private bool _ignoringChanges = false;
         private MpPortableDataObject _lastCbo;
 
         private object _lockObj = new object();
 
         private DispatcherTimer _timer;
 
-        private bool _isCheckingClipboard = false;
 
         private List<string> _rejectedFormats = new List<string>() {
             "FileContents",
@@ -39,7 +37,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
-        public bool IgnoreNextClipboardChangeEvent { get; set; } = false;
 
         public bool IgnoreClipboardChanges { get; set; }
         #endregion
@@ -90,19 +87,15 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void CheckClipboard() {
-            if(_isCheckingClipboard || IgnoreClipboardChanges) {
-                if(IgnoreClipboardChanges && !_ignoringChanges) {
-                    _ignoringChanges = true;
-                }
-                // NOTE internal ignore is set after last read
-                return;
+            if(IgnoreClipboardChanges) {
+                _lastCbo = null;
             }
             
             Dispatcher.UIThread.Post(async () => { await CheckClipboardHelper(); });
         }
         private async Task CheckClipboardHelper() {
-            //setting last here will ensure item on cb isn't added when starting
             if (_lastCbo == null) {
+                //setting last here will ensure item on cb isn't added when starting
                 _lastCbo = await ConvertManagedFormats();
                 return;
             }
@@ -111,25 +104,12 @@ namespace MonkeyPaste.Avalonia {
             if (HasChanged(cbo)) {
                 MpConsole.WriteLine("Cb changed");
                  _lastCbo = cbo;
-                 if(_ignoringChanges) {
-                    MpConsole.WriteLine("Resuming cb watching. Noting new cbo but suppressing change signal");
-                    _ignoringChanges = false;
-                    return;
-                }
                 OnClipboardChanged?.Invoke(typeof(MpAvClipboardWatcher).ToString(), cbo);
             }
         }
 
         private async Task<MpPortableDataObject> ConvertManagedFormats() {
-            if(_isCheckingClipboard) {
-                Debugger.Break();
-            }
-            //while(MpAvClipboardHandlerCollectionViewModel.Instance.IsBusy) {
-            //    await Task.Delay(100);
-            //}
-            _isCheckingClipboard = true;
             MpPortableDataObject ndo = await MpAvClipboardHandlerCollectionViewModel.Instance.ReadClipboardOrDropObjectAsync();
-            _isCheckingClipboard = false;
             return ndo;
         }
 

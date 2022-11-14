@@ -5,7 +5,6 @@
 // #region Life Cycle
 function loadImageContent(itemDataStr) {
 	// itemData must remain base64 image string
-	quill.enable(false);
 	hideAllToolbars();
 	enableReadOnly();
 	disableSubSelection();
@@ -51,12 +50,10 @@ function convertImageContentToFormats(isForOle, formats) {
 		let data = null;
 		if (isHtmlFormat(format)) {
 			data = getHtml();
-			if (isForOle && format.toLowerCase() == 'html format') {
+			if (format.toLowerCase() == 'html format') {
 				// NOTE web html doesn't use fragment format
-				data = createHtmlClipboardFragment(htmlStr, sel);
-			} else {
-				data = htmlStr;
-			}
+				data = createHtmlClipboardFragment(data);
+			} 
 		} else if (isPlainTextFormat(format)) {
 			// handled by host
 		} else if (isImageFormat(format)) {

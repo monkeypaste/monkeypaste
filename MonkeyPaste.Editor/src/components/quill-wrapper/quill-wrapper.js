@@ -4,7 +4,7 @@ var quill;
 // #endregion Globals
 
 // #region Life Cycle
-function initQuill() {
+function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 	hljs.configure({   // optionally configure hljs
 		languages: ['javascript', 'ruby', 'python', 'xml', 'html', 'xhtml']
 	});
@@ -24,28 +24,21 @@ function initQuill() {
 		formula: true,
 		preserveWhiteSpace: true,
 		syntax: true,
-		modules: {
-			toolbar: '#editorToolbar',
-			//table: !UseBetterTable,
-			//htmlEditButton: {
-			//	syntax: true
-			//}
-		}
+		//modules: {
+		//	toolbar: '#editorToolbar',
+		//	//table: !UseBetterTable,
+		//	//htmlEditButton: {
+		//	//	syntax: true
+		//	//}
+		//}
 	}
 
-	quillOptions = initEditorToolbarQuillOptions(quillOptions);
+	quillOptions = initEditorToolbarQuillOptions(quillOptions, toolbarId);
 
-	quill = new Quill(
-		"#editor",
-		quillOptions);
+	let quill_instance = new Quill(editorId, quillOptions);
 
-	initEditorToolbar();
-
-	quill.root.setAttribute("spellcheck", "false");
-
-
-	initEditTemplateToolbar();
-	initPasteToolbar();
+	quill_instance.root.setAttribute("spellcheck", "false");
+	return quill_instance;
 }
 
 // #endregion Life Cycle
@@ -68,70 +61,79 @@ function getText(range, encodeTemplates = false) {
 	return text;
 }
 
+function getRootHtml() {
+	return quill.root.innerHTML;
+}
+
 function getHtml(range) {
-	range = !range ? { index: 0, length: getDocLength() } : range;
-	//let delta = quill.getContents();
-	////log(delta.ops);
-	//let qdc = new window.QuillDeltaToHtmlConverter(delta.ops, window.opts_ || {});
-	//let html = qdc.convert();
-	////log(html);
-	//return html;
+	if (ContentItemType != 'Text') {
+		return getRootHtml();
+	}
+	range = !range ? { index: 0, length: getDocLength() } : range;	
+	return getHtml2(range);
+	//let result = '';
 
+	//let range_content = getDelta(range);
+	//let tempContainer = document.createElement('div');
+	//tempContainer.setAttribute('id', 'tempContainer');
+	//try {
+	//	//let tempToolbar = document.createElement('div');
+	//	//tempToolbar.setAttribute('id', 'tempToolbar');
+	//	let tempQuill = new Quill(tempContainer); //initQuill(tempContainer, tempToolbar);
 
-	var range_content = quill.getContents(range.index, range.length);
-	var tempContainer = document.createElement("div");
-	var tempQuill = new Quill(tempContainer);
+	//	tempQuill.setContents(range_content);
+	//	let result = tempContainer.querySelector(".ql-editor").innerHTML;
+	//	tempContainer.remove();
+	//	//tempToolbar.remove();
 
-	tempQuill.setContents(range_content);
-	let result = tempContainer.querySelector(".ql-editor").innerHTML;
-	tempContainer.remove();
+	//	let htmlStr = result;
+	//	let htmlStr_unescaped = unescapeHtml(htmlStr);
 
-	let htmlStr = result;
-	let htmlStr_unescaped = unescapeHtml(htmlStr);
-	return htmlStr_unescaped;
+	//	result = htmlStr_unescaped;
+	//} catch (ex) {
+	//	debugger;
+	//}
+	//return result;
 }
 
 function getSelectedHtml() {
-	var selection = getDocSelection();
+	let selection = getDocSelection();
 	let sel_html = getHtml(selection);
 	return sel_html;
 }
 
-function getSelectedHtml2() {
-	var selection = window.getSelection();
-	if (selection.rangeCount > 0) {
-		var range = selection.getRangeAt(0);
-		//var docFrag = range.cloneContents();
-
-		//let docFragStr = DomSerializer.serializeToString(docFrag);
-
-		//const xmlnAttribute = ' xmlns="http://www.w3.org/1999/xhtml"';
-		//const regEx = new RegExp(xmlnAttribute, "g");
-		//docFragStr = docFragStr.replace(regEx, "");
-		//return docFragStr;
-		var clonedSelection = range.cloneContents();
-		var div = document.createElement('div');
+function getHtml2(sel) {
+	let dom_range = convertDocRangeToDomRange(sel);
+	if (dom_range) {
+		let clonedSelection = dom_range.cloneContents();
+		let div = document.createElement('div');
 		div.appendChild(clonedSelection);
 		let htmlStr = div.innerHTML;
+		div.remove();
 		return htmlStr;
 	}
 	return "";
 }
 
 function getSelectedHtml3() {
-	var selection = window.getDocSelection();
+	let selection = window.getDocSelection();
 	if (selection.rangeCount > 0) {
-		var range = selection.getRangeAt(0);
-		var documentFragment = range.cloneContents();
+		let range = selection.getRangeAt(0);
+		let documentFragment = range.cloneContents();
 	}
 	console.log(documentFragment || 'nothing selected');
 	return documentFragment;
 }
 
 function getDelta(rangeObj) {
-	rangeObj = rangeObj == null ? { index: 0, length: quill.getLength() } : rangeObj;
+	// NOTE if quill is not enabled it return empty contents
+	let wasEnabled = quill.isEnabled();
+	quill.enable(true);
+	rangeObj = rangeObj == null ? { index: 0, length: getDocLength() } : rangeObj;
 
 	let delta = quill.getContents(rangeObj.index, rangeObj.length);
+	quill.enable(wasEnabled);
+
 	return delta;
 }
 
@@ -149,7 +151,7 @@ function getSelectedDelta() {
 	if (!sel) {
 		return null;
 	}
-	let selDelta = quill.getContents(sel.index, sel.length);
+	let selDelta = getDelta(sel);
 	return selDelta;
 }
 

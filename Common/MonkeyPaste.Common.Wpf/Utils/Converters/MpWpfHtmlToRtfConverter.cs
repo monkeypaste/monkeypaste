@@ -310,7 +310,12 @@ namespace MonkeyPaste.Common.Wpf {
         private static TextElement ApplyImgSrcFormatting(TextElement te, string sv) {
             BitmapSource bmpSrc = null;
             if(Uri.IsWellFormedUriString(sv,UriKind.Absolute)) {
-                bmpSrc = (BitmapSource)new BitmapImage(new Uri(sv));
+                if(sv.StartsWith("data:image/png;base64,")) {
+                    bmpSrc = sv.Replace("data:image/png;base64,", string.Empty).ToBitmapSource();
+                } else {
+                    bmpSrc = (BitmapSource)new BitmapImage(new Uri(sv));
+                }
+                
             }else if(sv.Contains(",")) {
                 var srcvl = sv.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
                 if(srcvl.Length > 1) {
@@ -337,17 +342,28 @@ namespace MonkeyPaste.Common.Wpf {
         private static TextElement ApplyClassFormatting(TextElement te, string cv) {
             if (cv.StartsWith("ql-font-")) {
                 te.FontFamily = GetFontFamily(cv);                
-            } else if (cv.Contains("ql-align-left")) {
-                (te as Block).TextAlignment = TextAlignment.Left;
-            } else if (cv.Contains("ql-align-center")) {
-                (te as Paragraph).TextAlignment = TextAlignment.Center;
-            } else if (cv.Contains("ql-align-right")) {
-                 (te as Block).TextAlignment = TextAlignment.Right;
-            } else if (cv.Contains("ql-align-justify")) {
-                (te as Block).TextAlignment = TextAlignment.Justify;
-            } else if(cv.Contains("ql-indent-")) {
-                (te as Paragraph).TextIndent = GetIndentLevel(cv) * _indentCharCount;
+            } else {
+                Block b = te as Block;
+                if (b == null && te.Parent is Block) {
+                    b = te.Parent as Block;
+                } 
+                if (b != null) {
+                    if (cv.Contains("ql-align-left")) {
+                        b.TextAlignment = TextAlignment.Left;
+                    } else if (cv.Contains("ql-align-center")) {
+                        b.TextAlignment = TextAlignment.Center;
+                    } else if (cv.Contains("ql-align-right")) {
+                        b.TextAlignment = TextAlignment.Right;
+                    } else if (cv.Contains("ql-align-justify")) {
+                        b.TextAlignment = TextAlignment.Justify;
+                    } else if (cv.Contains("ql-indent-")) {
+                        if(b is Paragraph p) {
+                            p.TextIndent = GetIndentLevel(cv) * _indentCharCount;
+                        }
+                    }
+                }
             }
+            
             return te;
         }
 

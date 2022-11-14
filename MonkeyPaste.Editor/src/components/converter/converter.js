@@ -3,7 +3,8 @@
 function initPlainHtmlConverter(envName) {
 	EnvName = envName;
 
-	initQuill();
+	quill = initQuill();
+	getEditorContainerElement().firstChild.setAttribute('id', 'quill-editor');
 
 	getEditorElement().classList.add('ql-editor-converter');
 

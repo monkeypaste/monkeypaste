@@ -198,7 +198,7 @@ async function getAvailableTemplateDefinitions() {
 function getTemplateDocIdx(tiguid) {
     let docLength = quill.getLength();
     for (var i = 0; i < docLength; i++) {
-        let curDelta = quill.getContents(i, 1);
+        let curDelta = getDelta({ index: i, length: 1 });
         if (curDelta.ops.length > 0 &&
             curDelta.ops[0].hasOwnProperty('insert') &&
             curDelta.ops[0].insert.hasOwnProperty('template')) {
@@ -431,6 +431,10 @@ function setTemplateElementText(telm, text) {
 function hasTemplates() {
     let telml = getTemplateElements();
     return telml.length > 0;
+}
+
+function hasAnyInputRequredTemplate() {
+    return getTemplateDefs().some(x => isTemplateAnInputType(x));
 }
 
 function isTemplateElementFocused(telm) {
@@ -825,31 +829,6 @@ function debabyTemplateElement(telm) {
     telm.style.width = 'fit-content';
     telm.style.height = 'fit-content';
     telm.innerText = getTemplateDisplayValue(t);
-}
-
-function moveTemplate(tiguid, nidx, isCopy) {
-    IsMovingTemplate = true;
-
-    let tidx = getTemplateDocIdx(tiguid);
-
-    let t = getTemplateDefByInstanceGuid(tiguid);
-
-    if (isCopy) {
-        t.templateInstanceGuid = generateGuid();
-        t = createTemplateFromDropDown(t);
-    } else {
-        if (tidx < nidx) {
-            //removing template decreases doc size by 3 characters
-            nidx -= 3;
-        }
-        //set tidx to space behind and delete template and spaces from that index
-        quill.deleteText(tidx - 1, 3);
-
-        insertTemplate({ index: nidx, length: 0 }, t);
-    }
-
-    IsMovingTemplate = false;
-    focusTemplate(t, true);
 }
 
 function focusTemplate(ftguid, fromDropDown = false, isNew = false, fromClickOnTemplate = false) {

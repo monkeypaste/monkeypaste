@@ -43,7 +43,7 @@ class TemplateEmbedBlot extends Parchment.EmbedBlot {
             value = getTemplateFromDomNode(value.domNode);
         }
 
-        if (!IsMovingTemplate) {
+        if (IsLoaded) {
             //ensure new template has unique instance guid
             value.templateInstanceGuid = generateGuid();
         }
@@ -232,48 +232,4 @@ function onTemplateClick(e) {
 
     focusTemplate(t.templateGuid, false, false, true);
     //setTemplateElementFocus(e.currentTarget, true, true);
-}
-
-// unused drag drop stuff
-
-function getEditorPosFromTemplateMouse(e) {
-    return getEditorMousePos(e);
-    let curMousePos = { x: e.pageX, y: e.pageY };
-    curMousePos.x -= e.currentTarget.offsetLeft;
-    curMousePos.y -= e.currentTarget.offsetTop;
-    return curMousePos;
-}
-function onTemplatePointerDown(e) {
-    node.addEventListener('pointermove', onTemplatePointerMove);
-    node.setPointerCapture(e.pointerId);
-    //templateDocIdxCache
-}
-
-function onTemplatePointerUp(e) {
-    templateDocIdxCache = null;
-
-    node.removeEventListener('pointermove', onTemplatePointerMove);
-    node.releasePointerCapture(e.pointerId);
-}
-
-function onTemplatePointerMove(e) {
-    let curMousePos = getEditorPosFromTemplateMouse(e);
-    if (!IsMovingTemplate && dist(MouseDownOnTemplatePos, curMousePos) < MIN_TEMPLATE_DRAG_DIST) {
-        return;
-    }
-    if (templateDocIdxCache == null) {
-        templateDocIdxCache = getTemplateElementsWithDocIdx();
-    }
-
-    let docIdx = getDocIdxFromPoint(curMousePos, templateDocIdxCache);
-    log('docIdx: ' + docIdx);
-    if (docIdx < 0) {
-        return;
-    }
-    moveTemplate(value.templateInstanceGuid, docIdx, false);
-
-    //if (!quill.hasFocus()) {
-    //    quill.focus();
-    //}
-    //setDocSelection(docIdx, 0);
 }

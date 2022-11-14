@@ -1002,8 +1002,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsAnyEditingClipTile => Items.Any(x => !x.IsContentReadOnly) || PinnedItems.Any(x => !x.IsContentReadOnly);
 
-        public bool IsAnyPastingTemplate => Items.Any(x => x.IsPastingTemplate) || PinnedItems.Any(x => x.IsPastingTemplate);
-
         
 
         public bool IsAnyTilePinned => PinnedItems.Count > 0;
@@ -1276,6 +1274,13 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
+                // CONTENT RESIZE
+                case MpMessageType.ContentResized:
+                    RefreshLayout();
+                    LockScrollToAnchor();
+                    CheckLoadMore();
+                    SetScrollAnchor();
+                    break;
                 // LAYOUT CHANGE
                 case MpMessageType.TrayLayoutChanged:                    
                     RefreshLayout();
@@ -1303,7 +1308,6 @@ namespace MonkeyPaste.Avalonia {
                     RefreshLayout();
                     LockScrollToAnchor();
                     CheckLoadMore();
-
                     SetScrollAnchor();
                     break;
 
@@ -2193,14 +2197,6 @@ namespace MonkeyPaste.Avalonia {
             //clean up pasted items state after paste
             sctvm.PasteCount++;
             sctvm.IsPasting = false;
-            if (sctvm.HasTemplates) {
-                sctvm.ClearEditing();
-                sctvm.TemplateCollection.Reset();
-                sctvm.TemplateRichHtml = string.Empty;
-                //sctvm.RequestUiUpdate();
-                //sctvm.RequestScrollToHome();
-            }
-
         }
 
         #endregion
@@ -3183,11 +3179,8 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 MpAvDataObject mpdo = await cv.Document.GetDataObjectAsync(false,true, false);
-
-                //await Task.Delay(100);
                 var pi = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
-                await MpPlatformWrapper.Services.ExternalPasteHandler.PasteDataObject(
-                    mpdo, pi);
+                await MpPlatformWrapper.Services.ExternalPasteHandler.PasteDataObject(mpdo, pi);
 
                 CleanupAfterPaste(SelectedItem);
             },
@@ -3202,8 +3195,7 @@ namespace MonkeyPaste.Avalonia {
                             !MpAvMainWindowViewModel.Instance.IsAnyTextBoxFocused &&
                             !MpAvMainWindowViewModel.Instance.IsAnyDropDownOpen &&
                             !IsAnyEditingClipTile &&
-                            !IsAnyEditingClipTitle &&
-                            !IsAnyPastingTemplate)) &&
+                            !IsAnyEditingClipTitle)) &&
                         !MpPrefViewModel.Instance.IsTrialExpired;
             });
 
@@ -3300,8 +3292,7 @@ namespace MonkeyPaste.Avalonia {
                         MpAvMainWindowViewModel.Instance.IsMainWindowActive &&
                         SelectedModels.Count > 0 &&
                         !IsAnyEditingClipTile &&
-                        !IsAnyEditingClipTitle &&
-                        !IsAnyPastingTemplate;
+                        !IsAnyEditingClipTitle;
             });
 
         public ICommand ToggleLinkTagToSelectedItemCommand => new MpAsyncCommand<MpAvTagTileViewModel>(

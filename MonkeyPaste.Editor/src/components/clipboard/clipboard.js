@@ -71,9 +71,9 @@ function isUri(format) {
 }
 
 function isPlainTextFormat(format) {
-    return format.toLowerCase == 'text' ||
-        format.toLowerCase == 'unicode' ||
-        format.toLowerCase == 'oemtext' ||
+    return format.toLowerCase() == 'text' ||
+        format.toLowerCase() == 'unicode' ||
+        format.toLowerCase() == 'oemtext' ||
             format == 'text/plain';
 }
 function isCsvFormat(format) {
@@ -82,7 +82,7 @@ function isCsvFormat(format) {
 
 function isImageFormat(format) {
     return
-        format.toLowerCase == 'png' ||
+        format.toLowerCase() == 'png' ||
         format.toLowerCase() == 'bitmap' ||
         format.toLowerCase() == 'deviceindependentbitmap' ||
         format.startsWith('image/');
@@ -173,7 +173,7 @@ function parseHtmlFromHtmlClipboardFragment(cbDataStr) {
     return cbData;
 }
 
-function createHtmlClipboardFragment(htmlStr, range) {
+function createHtmlClipboardFragment(htmlStr) {
     // NOTE not sure if this varies by OS, assuming no
     /*
     Version:0.9

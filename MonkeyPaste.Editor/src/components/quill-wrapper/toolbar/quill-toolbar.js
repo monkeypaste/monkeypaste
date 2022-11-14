@@ -4,8 +4,7 @@
 
 // #region Life Cycle
 
-function initEditorToolbarQuillOptions(quillOptions) {
-	//initFontFamilySelector();
+function initEditorToolbarQuillOptions(quillOptions, toolbarId) {
 	initFontFamilySelector();
 	let sizes = registerFontSizes();
 
@@ -36,6 +35,9 @@ function initEditorToolbarQuillOptions(quillOptions) {
 	//	//	}
 	//	//}
 	//};
+	quillOptions.modules = {
+		toolbar: toolbarId
+	};
 
 	if (UseBetterTable) {
 		Quill.register({ "modules/better-table": quillBetterTable }, true);
@@ -71,7 +73,6 @@ function initEditorToolbarQuillOptions(quillOptions) {
 function initEditorToolbar() {
 	// called after options are returned and quill creates toolbar
 
-	getEditorContainerElement().firstChild.id = 'quill-editor';
 	getEditorToolbarElement().classList.add('hidden');
 	getEditorToolbarElement().classList.add('top-align');
 

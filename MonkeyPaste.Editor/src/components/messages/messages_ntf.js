@@ -88,10 +88,10 @@ function onSubSelectionEnabledChanged_ntf(isEnabled) {
 }
 
 
-function onPasteTemplateRequest_ntf() {
+function onPasteRequest_ntf() {
 	// isRequest is for paste (when true) or drag drop doesn't care just waits for this msg 
-	if (typeof notifyPasteTemplateRequest === 'function') {
-		notifyPasteTemplateRequest();
+	if (typeof notifyPasteRequest === 'function') {
+		notifyPasteRequest();
 	}
 }
 
@@ -161,6 +161,28 @@ async function onCreateContentScreenShot_ntf(sel) {
 		let msgStr = toBase64FromJsonObj(msg);
 		notifyContentScreenShot(msgStr);
 	}	
+}
+
+async function onWaitTillPasteIsReady_ntf(req) {
+	// output 'MpQuillContentDataResponseMessage' (with 'MpQuillContentDataResponseFormattedDataItemFragment' items)
+	if (typeof notifyPasteIsReady === 'function') {
+		showPasteToolbar(true);
+
+		while (!IsReadyToPaste) {
+			await delay(100);
+		}
+
+		let items = convertContentToFormats(true, req.formats);
+		let respObj = {
+			dataItems: items
+		};
+		let resp = toBase64FromJsonObj(respObj);
+
+		// reset IsReadyToPaste so pasteButtonClick doesn't make extra paste request on subsequent click
+		IsReadyToPaste = !hasAnyInputRequredTemplate();
+
+		notifyPasteIsReady(resp);
+	}
 }
 
 function onFindReplaceVisibleChange_ntf(isVisible) {

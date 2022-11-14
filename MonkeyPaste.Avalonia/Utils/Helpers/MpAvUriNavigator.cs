@@ -23,8 +23,12 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public static void NavigateToPath(string path) {
+        public static void NavigateToPath(string path, bool useFileBrowser = true) {
+            if (path.IsFile() && useFileBrowser) {
+                path = path.FindParentDirectory();
+            } 
             path = path.Contains(" ") ? $"\"{path}\"" : path;
+            
             if (OperatingSystem.IsWindows()) {
                 //using (var myProcess = new Process()) {
                 //    myProcess.StartInfo.UseShellExecute = false;

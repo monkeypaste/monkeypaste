@@ -383,9 +383,6 @@ namespace MonkeyPaste {
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
 
-
-            //var citl = await MpDataModelProvider.GetUnlinkedCopyItemTagIds();
-            //await Task.WhenAll(citl.Select(x => x.DeleteFromDatabaseAsync()));
             MpConsole.WriteLine(@"Db file located: " + MpPlatformWrapper.Services.DbInfo.DbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPrefViewModel.Instance.ThisDeviceGuid);
             MpConsole.WriteLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
@@ -668,14 +665,14 @@ namespace MonkeyPaste {
                  new string[] {"c7248087-2031-406d-b4ab-a9007fbd4bc4","Control+Shift+Q", "CreateQrCode", "Internal"},
                  new string[] {"777367e6-c161-4e93-93e0-9bf12221f7ff","Control+Shift+B", "ToggleAppendLineMode", "Direct"},
                  new string[] {"97e29b06-0ec4-4c55-a393-8442d7695038","Control+Shift+P", "ToggleListenToClipboard", "Direct"},
-                 new string[] {"ee74dd92-d18b-46cf-91b7-3946ab55427c","Control+C", "CopySelection", "Internal"},
+                 //new string[] {"ee74dd92-d18b-46cf-91b7-3946ab55427c","Control+C", "CopySelection", "Internal"},
                  new string[] {"ac8abe92-82c3-46fb-9bd5-39d74b100b23","Home", "ScrollToHome", "Internal"},
                  new string[] {"ac8abe92-82c3-46fb-9bd5-39d74b100b23","End", "ScrollToEnd", "Internal"},
                  new string[] {"9b0ca09a-5724-4004-98d2-f5ef8ae02055","Control+Up", "WindowSizeUp", "Internal"},
                  new string[] {"39a6194e-37e3-4d37-a9f4-254ed83157f2","Control+Down", "WindowSizeDown", "Internal"},
                  new string[] {"6cc03ef0-3b33-4b94-9191-0d751e6b7fb6","Control+Left", "WindowSizeLeft", "Internal"},
                  new string[] {"c4ac1629-cdf0-4075-94af-8f934b014452","Control+Right", "WindowSizeRight", "Internal"},
-                 new string[] {"94e81589-fe2f-4e80-8940-ed066f0d9c27","Control+V", "PasteHere", "Internal"},
+                 //new string[] {"94e81589-fe2f-4e80-8940-ed066f0d9c27","Control+V", "PasteHere", "Internal"},
                  new string[] {"30c813a0-d466-4ae7-b75e-82680b4542fc","PageUp", "PreviousPage", "Internal"},
                  new string[] {"09df97ea-f786-48d9-9112-a60266df6586","PageDown", "NextPage", "Internal"},
                  new string[] {"a39ac0cb-41e4-47b5-b963-70e388dc156a","Control+H", "FindAndReplaceSelectedItem", "Internal"},

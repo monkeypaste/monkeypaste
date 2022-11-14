@@ -788,20 +788,11 @@ namespace MonkeyPaste.Avalonia {
             
             if(isLink) {
                 // try to create link, if it was created (and didn't already exist) notify any triggers
-                var cit = await MpCopyItemTag.Create(TagId, ciid);
+                var cit = await MpCopyItemTag.Create(TagId, ciid, LinkedCopyItemIds.Count());
 
                 if (!cit.WasDupOnCreate) {
                     affectedDb = true;
-                    if(IsSelected) {
-                        var linked_ctvm = MpAvClipTrayViewModel.Instance.GetClipTileViewModelById(ciid);
-                        if(linked_ctvm == null || !linked_ctvm.IsAnyCornerVisible) {
-                            // when linked and tag is selected then the copyitem is part of current query
-                            // but add badge if not on page or not visible
-                            CopyItemIdsNeedingView.Add(ciid);
-                        }
-                    } else {
-                        CopyItemIdsNeedingView.Add(ciid);
-                    }
+                    CopyItemIdsNeedingView.Add(ciid);
                 }
                 
             } else {

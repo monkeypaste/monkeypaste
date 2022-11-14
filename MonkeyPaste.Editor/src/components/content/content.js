@@ -17,7 +17,11 @@ function initContent() {
 }
 
 function loadContent(contentHandle, contentType, contentData, isPasteRequest, searchStateObj) {
-	quill.history.clear();
+	if (contentHandle != ContentHandle) {
+		// when actually a new item and not reload
+		quill.history.clear();
+	}
+	quill.enable(true);
 
 	resetSelection();
 	resetColorPaletteState();
@@ -49,8 +53,11 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 	}
 
 	//getEditorElement().style.backgroundColor = rgbaToCssColor(contentBg_rgba);
-
+	
 	quill.update();
+	if (ContentItemType != 'Text') {
+		quill.enable(false);
+	}
 	updateAllElements();
 
 	if (searchStateObj == null) {
@@ -69,6 +76,7 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 		onQuerySearchRangesChanged_ntf(CurFindReplaceDocRanges.length);
 	}
 
+	IsReadyToPaste = !hasAnyInputRequredTemplate();
 	IsLoaded = true;
 	drawOverlay();
 	quill.update();
@@ -200,16 +208,15 @@ function canDisableReadOnly() {
 // #region Actions
 
 function convertContentToFormats(isForOle, formats) {
+	let items = null;
 	if (ContentItemType == 'Text') {
-		return convertTextContentToFormats(isForOle, formats);
+		items = convertTextContentToFormats(isForOle, formats);
+	} else if (ContentItemType == 'FileList') {
+		items = convertFileListContentToFormats(isForOle, formats);
+	} else if (ContentItemType == 'Image') {
+		items = convertImageContentToFormats(isForOle, formats);
 	}
-	if (ContentItemType == 'FileList') {
-		return convertFileListContentToFormats(isForOle, formats);
-	}
-	if (ContentItemType == 'Image') {
-		return convertImageContentToFormats(isForOle, formats);
-	}
-	return null;
+	return items;
 }
 
 // #endregion Actions

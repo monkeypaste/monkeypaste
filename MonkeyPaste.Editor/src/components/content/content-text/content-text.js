@@ -510,6 +510,14 @@ function getElementLineHeight(elm) {
 
 // #region State
 
+function isDocEndInRange(doc_range) {
+	let dl = getDocLength();
+	if (!doc_range) {
+		return false;
+	}
+	return doc_range.index + doc_range.length >= dl;
+}
+
 function isBlockElement(elm) {
 	if (elm == null || !elm instanceof HTMLElement) {
 		return false;
@@ -619,12 +627,10 @@ function convertTextContentToFormats(isForOle, formats) {
 		let format = formats[i];
 		let data = null;
 		if (isHtmlFormat(format)) {
-			let htmlStr = getHtml(sel);
-			if (isForOle && format.toLowerCase() == 'html format') {
+			data = getHtml(sel);
+			if (format.toLowerCase() == 'html format') {
 				// NOTE web html doesn't use fragment format
-				data = createHtmlClipboardFragment(htmlStr, sel);
-			} else {
-				data = htmlStr;
+				data = createHtmlClipboardFragment(data);
 			}
 		} else if (isPlainTextFormat(format)) {
 			if (isContentATable()) {
@@ -632,10 +638,10 @@ function convertTextContentToFormats(isForOle, formats) {
 			} else {
 				data = getText(sel, isForOle);
 			}
-			if (isForOle) {
+			if (isForOle && isDocEndInRange(sel)) {
 				data = trimQuillTrailingLineEndFromText(data);
 			}
-		} else if (isCsvFormat(format)) {
+		} else if (isCsvFormat(format) && isContentATable()) {
 			// TODO figure out handling table selectinn logic and check here 
 			data = getTableCsv('Text', null, isForOle);
 		} else if (isImageFormat(format)) {

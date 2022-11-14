@@ -44,13 +44,14 @@ namespace MonkeyPaste.Avalonia {
         notifyContentScreenShot,
         notifyUserDeletedTemplate,
         notifyAddOrUpdateTemplate,
-        notifyPasteTemplateRequest,
+        notifyPasteRequest,
         notifyFindReplaceVisibleChange,
         notifyQuerySearchRangesChanged,
         notifyLoadComplete,
         notifyShowCustomColorPicker,
         notifyNavigateUriRequested,
-        notifySetClipboardRequested
+        notifySetClipboardRequested,
+        notifyPasteIsReady
     }
     [DoNotNotify]
     public class MpAvCefNetWebView : 
@@ -156,6 +157,7 @@ namespace MonkeyPaste.Avalonia {
                     if (ntf is MpQuillEditorContentChangedMessage loadComplete_ntf) {
                         Document.ProcessContentChangedMessage(loadComplete_ntf);
                         IsContentLoaded = true;
+                        IsContentUnloaded = false;
                     }
                     break;
                 case MpAvEditorBindingFunctionType.notifyContentChanged:
@@ -258,7 +260,7 @@ namespace MonkeyPaste.Avalonia {
                         Document.ContentScreenShotBase64 = ssMsg.contentScreenShotBase64;
                     }
                     break;
-                case MpAvEditorBindingFunctionType.notifyPasteTemplateRequest:
+                case MpAvEditorBindingFunctionType.notifyPasteRequest:
                     MpAvClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(true);
                     break;
                 case MpAvEditorBindingFunctionType.notifyException:
@@ -313,18 +315,15 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.notifySetClipboardRequested:
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillEditorSetClipboardRequestNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillEditorSetClipboardRequestNotification setClipboardReq) {
-                        if (BrowserSettings.JavascriptDOMPaste == CefState.Disabled) {
-                            Debugger.Break();
-                        }
-                        if (BrowserSettings.JavascriptAccessClipboard == CefState.Disabled) {
-                            Debugger.Break();
-                        }
-
                         ctvm.CopyToClipboardCommand.Execute(null);
                     }
                     break;
                 case MpAvEditorBindingFunctionType.getAllNonInputTemplatesFromDb:
                     HandleBindingGetRequest(notificationType, msgJsonBase64Str).FireAndForgetSafeAsync(ctvm);
+                    break;
+                case MpAvEditorBindingFunctionType.notifyPasteIsReady:
+                    // NOTE picked up in Document.GetDataObject
+                    Document.PastableContentResponse = msgJsonBase64Str;
                     break;
             }
 

@@ -51,9 +51,34 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     contentDataReq.formats = formats.ToList();
                 }
+                if(ctvm.ItemType != MpCopyItemType.Image && ignore_ss) {
+                    contentDataReq.formats.Remove(MpPortableDataFormats.AvPNG);
+                    contentDataReq.formats.Remove(MpPortableDataFormats.WinBitmap);
+                    contentDataReq.formats.Remove(MpPortableDataFormats.WinDib);
+                }
+                if(ctvm.ItemType != MpCopyItemType.FileList && )
+                MpQuillContentDataResponseMessage contentDataResp = null;
+
+                if (contentDataReq.forPaste && ctvm.HasTemplates) {
+                    if(ctvm.IsContentReadOnly) {
+                        var ctv = wv.GetVisualAncestor<MpAvClipTileView>();
+                        if (ctv != null) {
+                            var resizeControl = ctv.FindControl<Control>("ClipTileResizeBorder");
+                            MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.EditableWidth, ctvm.EditableHeight, 3.0d);
+                        }
+                    }
+                    PastableContentResponse = null;
+                    wv.ExecuteJavascript($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");
+                    while(PastableContentResponse == null) {
+                        await Task.Delay(100);
+                    }
+                    contentDataResp = MpJsonObject.DeserializeBase64Object<MpQuillContentDataResponseMessage>(PastableContentResponse);
+                    PastableContentResponse = null;
+                } else {
+                    var contentDataRespStr = await wv.EvaluateJavascriptAsync($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");
+                    contentDataResp = MpJsonObject.DeserializeBase64Object<MpQuillContentDataResponseMessage>(contentDataRespStr);
+                }                
                 
-                var contentDataRespStr = await wv.EvaluateJavascriptAsync($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");
-                var contentDataResp = MpJsonObject.DeserializeBase64Object<MpQuillContentDataResponseMessage>(contentDataRespStr);
 
                 if(contentDataResp.dataItems == null) {
                     return null;
@@ -80,7 +105,7 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                     if (ctvm.ItemType == MpCopyItemType.FileList) {
-                        avdo.SetData(MpPortableDataFormats.AvFileNames, ctvm.CopyItemData);
+                        avdo.SetData(MpPortableDataFormats.AvFileNames, ctvm.CopyItemData.SplitNoEmpty(Environment.NewLine));
                     } else if(!ignore_pseudo_file) {
                         // js doesn't set file stuff for non-files
                         avdo.SetData(
@@ -113,6 +138,7 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
 
+        public string PastableContentResponse { get; set; }
         public string ContentScreenShotBase64 { get; set; }
         #endregion
 
@@ -149,8 +175,9 @@ namespace MonkeyPaste.Avalonia {
                 if(contentChanged_ntf.editorHeight > 0 && contentChanged_ntf.editorHeight > 0) {
                     ctvm.UnformattedContentSize = new MpSize(contentChanged_ntf.editorWidth, contentChanged_ntf.editorHeight);
                 }
-                
+                ctvm.HasTemplates = contentChanged_ntf.hasTemplates;
 
+                ctvm.DetailCollectionViewModel.InitializeAsync().FireAndForgetSafeAsync(ctvm);
                 if(_owner.IsContentLoaded) {
                     // trigger id change to reload item
                     ctvm.OnPropertyChanged(nameof(ctvm.CopyItemId));

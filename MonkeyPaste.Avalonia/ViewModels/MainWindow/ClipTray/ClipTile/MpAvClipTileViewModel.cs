@@ -27,7 +27,7 @@ namespace MonkeyPaste.Avalonia {
         MpIUserColorViewModel,
         MpIHoverableViewModel,
         MpIResizableViewModel,
-        MpIRtfSelectionRange,
+        //MpIRtfSelectionRange,
         MpIContextMenuViewModel,
         //MpIFindAndReplaceViewModel,
         MpITooltipInfoViewModel,
@@ -46,10 +46,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-
-        //public static double DefaultBorderWidth = MpMeasurements.Instance.ClipTileMinSize - MpMeasurements.Instance.ClipTileMargin;
-        //public static double DefaultBorderHeight = MpMeasurements.Instance.ClipTileMinSize;
-
         public static ObservableCollection<string> EditorToolbarIcons => new ObservableCollection<string>() {
 
         };
@@ -80,13 +76,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
+        public MpAvFileItemCollectionViewModel FileItemCollectionViewModel { get; private set; }
         public MpAvClipTileDetailCollectionViewModel DetailCollectionViewModel { get; private set; }
-        public ObservableCollection<MpAvFileDataObjectItemViewModel> FileItems { get; set; } = new ObservableCollection<MpAvFileDataObjectItemViewModel>();
-        public MpImageAnnotationCollectionViewModel DetectedImageObjectCollectionViewModel { get; set; }
-
-        public MpAvTemplateCollectionViewModel TemplateCollection { get; set; }
-
-        public MpContentTableViewModel TableViewModel { get; set; }
 
         public MpAvSourceViewModel SourceViewModel {
             get {
@@ -146,29 +137,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpColorPalettePopupMenuViewModel SelectionFgColorPopupViewModel { get; private set; } = new MpColorPalettePopupMenuViewModel();
-
-        public MpColorPalettePopupMenuViewModel SelectionBgColorPopupViewModel { get; private set; } = new MpColorPalettePopupMenuViewModel();
-        #endregion
-
-        #region MpIConditionalContentReadOnlyViewModel Implementation
-        //bool MpIConditionalContentReadOnlyViewModel.IsReadOnly { 
-        //    get; 
-        //    set; 
-        //}
-
-        //object MpIConditionalContentReadOnlyViewModel.Content { 
-        //    get; 
-        //    set; 
-        //}
-        //object MpIConditionalTitleReadOnlyViewModel.Title { get; set; }
-        //#endregion
-
-        //#region MpIConditionalTitleReadOnlyViewModel Implementation
-        //bool MpIConditionalTitleReadOnlyViewModel.IsReadOnly {
-        //    get;
-        //    set;
-        //}
         #endregion
 
         #region MpITooltipInfoViewModel Implementation
@@ -181,100 +149,6 @@ namespace MonkeyPaste.Avalonia {
 
         double MpISizeViewModel.Width => UnformattedContentSize.Width;
         double MpISizeViewModel.Height => UnformattedContentSize.Height;
-
-        #endregion
-
-        #region MpIRtfSelectionRangeViewModel Implementation 
-
-        public int SelectionStart {
-            get {
-                var cv = GetContentView();
-                if (cv == null) {
-                    return 0;
-                }
-                return cv.Selection.Start.Offset;
-            }
-        }
-        public int SelectionLength {
-            get {
-                var cv = GetContentView();
-                if (cv == null) {
-                    return 0;
-                }
-                return cv.Selection.Length;
-            }
-        }
-
-        public string SelectedPlainText {
-            get {
-                var cv = GetContentView();
-                if (cv == null) {
-                    return string.Empty;
-                }
-                return cv.Selection.Text;
-            }
-            set {
-                var cv = GetContentView();
-                if (cv == null) {
-                    Debugger.Break();
-                }
-                if (cv.Selection.Text != value) {
-                    cv.Selection.Text = value;
-                }
-            }
-        }
-
-        public string SelectedRichText => null;// MpContentDocumentRtfExtension.GetSelectedRichText(this);
-
-        public string SelectionBackgroundColor {
-            get;// => MpContentDocumentRtfExtension.GetSelectionBackgroundColor(this);
-            set;// => MpContentDocumentRtfExtension.SetSelectionBackgroundColor(this, value);
-        }
-        public string SelectionForegroundColor {
-            get;// => MpContentDocumentRtfExtension.GetSelectionForegroundColor(this);
-            set;// => MpContentDocumentRtfExtension.SetSelectionForegroundColor(this, value);
-        }
-
-        public MpRichTextFormatInfoFormat SelectedRichTextFormat {
-            get => null;//MpContentDocumentRtfExtension.GetSelectionFormat(this);
-        }
-
-        public IEnumerable<MpAvTextTemplateViewModelBase> SelectedTextTemplateViewModels {
-            get {
-                if (!IsPastingTemplate) {
-                    return new List<MpAvTextTemplateViewModelBase>();
-                }
-
-                if (string.IsNullOrEmpty(SelectedPlainText)) {
-                    // when selection is empty give em all
-                    return TemplateCollection.Items;
-                }
-
-                var tvml = new List<MpAvTextTemplateViewModelBase>();
-                string spt = SelectedPlainText;
-
-                var mc = MpRegEx.RegExLookup[MpRegExType.Guid].Matches(SelectedPlainText);
-
-                foreach (Match m in mc) {
-                    var tvm = TemplateCollection.Items.FirstOrDefault(x => x.TextTemplateGuid == m.Value);
-                    if (tvm != null) {
-                        tvml.Add(tvm);
-                    }
-                }
-                return tvml.Distinct();
-            }
-        }
-
-        public bool IsTableSelected {
-            get {
-                //if (TableViewModel != null &&
-                //    TableViewModel.SelectedTables != null &&
-                //    TableViewModel.SelectedTables.Count() > 0) {
-                //    return true;
-                //}
-                return false;
-            }
-        }
 
         #endregion
 
@@ -689,7 +563,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
+        public bool HasTemplates { get; set; } = false;
         public bool IsFindAndReplaceVisible { get; set; } = false;
         public string TemplateRichHtml { get; set; }
         
@@ -827,10 +701,7 @@ namespace MonkeyPaste.Avalonia {
                     return true;
                 }
 
-                if (DetectedImageObjectCollectionViewModel != null && DetectedImageObjectCollectionViewModel.IsAnyBusy) {
-                    return true;
-                }
-                if (TemplateCollection != null && TemplateCollection.IsAnyBusy) {
+                if (FileItemCollectionViewModel != null && FileItemCollectionViewModel.IsAnyBusy) {
                     return true;
                 }
                 if (SourceViewModel != null) {
@@ -847,7 +718,6 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
         }
-        public bool HasDetectedObjects => DetectedImageObjectCollectionViewModel != null && DetectedImageObjectCollectionViewModel.Items.Count > 0;
 
         public bool IsOverHyperlink { get; set; } = false;
 
@@ -890,27 +760,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsTitleFocused { get; set; } = false;
 
 
-        public bool IsEditingTemplate {
-            get {
-                if (CopyItem == null || TemplateCollection == null) {
-                    return false;
-                }
-
-                return TemplateCollection.Items.Any(x => x.IsEditingTemplate);
-            }
-        }
-
         public bool IsPasting { get; set; } = false;
-
-        public bool IsPastingTemplate => IsPasting && HasTemplates;
-
-        public bool IsPastingUserInputTemplate => IsPastingTemplate && SelectedTextTemplateViewModels.Any(x => x.IsInputRequiredForPaste);
-
-        public bool HasTemplates {
-            get {
-                return TemplateCollection.Items.Count > 0;
-            }
-        }
 
         public int ItemIdx {
             get {
@@ -966,10 +816,6 @@ namespace MonkeyPaste.Avalonia {
 
 
                 if (!IsContentReadOnly) {
-                    if (IsEditingTemplate ||
-                        IsPastingTemplate) {
-                        return false;
-                    }
                 } else {
                     if (!IsSelected && !IsHovering) {
                         return false;
@@ -1032,7 +878,7 @@ namespace MonkeyPaste.Avalonia {
                 switch(ItemType) {
                     case MpCopyItemType.FileList:
                         var fl_frag = new MpQuillFileListDataFragment() {
-                            fileItems = FileItems.Select(x => new MpQuillFileListItemDataFragmentMessage() {
+                            fileItems = FileItemCollectionViewModel.Items.Select(x => new MpQuillFileListItemDataFragmentMessage() {
                                 filePath = x.Path,
                                 fileIconBase64 = x.IconBase64
                             }).ToList()
@@ -1258,6 +1104,8 @@ namespace MonkeyPaste.Avalonia {
         public MpAvClipTileViewModel(MpAvClipTrayViewModel parent) : base(parent) {
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
             //MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+            FileItemCollectionViewModel = new MpAvFileItemCollectionViewModel(this);
+            DetailCollectionViewModel = new MpAvClipTileDetailCollectionViewModel(this);
             IsBusy = true;
         }
 
@@ -1276,42 +1124,11 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 BoundSize = MinSize;
             }
-            DetailCollectionViewModel = new MpAvClipTileDetailCollectionViewModel(this);
-
+            // NOTE FileItems are init'd before ciid is set so Items are busy when WebView is loading content
+            FileItemCollectionViewModel.InitializeAsync(ci).FireAndForgetSafeAsync(this);
             CopyItem = ci;
             QueryOffsetIdx = queryOffset < 0 && ci != null ? QueryOffsetIdx : queryOffset;
 
-            if (ItemType == MpCopyItemType.FileList) {
-                // BUG will need to check source here... pretty much most places using env.newLine to parse right i think
-                //  or substitute for 'portableNewLine' where necessary
-                var ci_dobil = await MpDataModelProvider.GetDataObjectItemsByDataObjectId(DataObjectId);
-                var fivml = await Task.WhenAll(ci_dobil.Select(x => CreateFileItemViewModel(x)));
-                FileItems = new ObservableCollection<MpAvFileDataObjectItemViewModel>(fivml);
-            } else {
-                FileItems.Clear();
-            }
-
-            TemplateCollection = new MpAvTemplateCollectionViewModel(this);
-
-
-            //if(ci != null) {
-            //    InitTitleLayers().FireAndForgetSafeAsync(this);
-            //}
-            //CycleDetailCommand.Execute(null);
-
-            if (ItemType == MpCopyItemType.Image) {
-                DetectedImageObjectCollectionViewModel = new MpImageAnnotationCollectionViewModel(this);
-                await DetectedImageObjectCollectionViewModel.InitializeAsync(CopyItem);
-                OnPropertyChanged(nameof(HasDetectedObjects));
-            } else if (ItemType == MpCopyItemType.Text) {
-                TableViewModel = new MpContentTableViewModel(this);
-
-                SelectionFgColorPopupViewModel.OnColorChanged -= SelectionFgColorPopupViewModel_OnColorChanged;
-                SelectionFgColorPopupViewModel.OnColorChanged += SelectionFgColorPopupViewModel_OnColorChanged;
-
-                SelectionBgColorPopupViewModel.OnColorChanged -= SelectionBgColorPopupViewModel_OnColorChanged;
-                SelectionBgColorPopupViewModel.OnColorChanged += SelectionBgColorPopupViewModel_OnColorChanged;
-            }
 
             if (isRestoringSelection) {
                 Parent.RestoreSelectionState(this);
@@ -1404,12 +1221,6 @@ namespace MonkeyPaste.Avalonia {
             return _contentView;
         }
        
-
-        private async Task<MpAvFileDataObjectItemViewModel> CreateFileItemViewModel(MpDataObjectItem dobjItem) {
-            var fivm = new MpAvFileDataObjectItemViewModel(this);
-            await fivm.InitializeAsync(dobjItem);
-            return fivm;
-        }
 
         public async Task<MpAvClipTileViewModel> GetNeighborByRowOffsetAsync(int row_offset) {
             var items = IsPinned ? Parent.PinnedItems : Parent.Items;
@@ -1568,195 +1379,10 @@ namespace MonkeyPaste.Avalonia {
         public void ClearEditing() {
             IsTitleReadOnly = true;
             IsContentReadOnly = true;
-            TemplateCollection?.ClearAllEditing();
             if (IsPasting) {
                 IsPasting = false;
                 //Parent.RequestUnexpand();
             }
-        }
-
-
-        public async Task<MpAvDataObject> ConvertToDataObject(bool fillTempalates) {
-            MpAvDataObject d = new MpAvDataObject();
-
-            var wv = GetContentView() as MpAvCefNetWebView;
-            string qhtml = string.Empty;
-            string pt = string.Empty;
-            string bmpBase64 = string.Empty;
-            var sctfl = new List<string>();
-
-            bool isInUi = Parent.GetClipTileViewModelById(CopyItemId) != null;
-            bool isSelectionEmpty = string.IsNullOrEmpty(SelectedPlainText) || !isInUi;
-            bool needsTemplateData = fillTempalates && HasTemplates;
-
-            if (needsTemplateData) {
-                IsPasting = true;
-                needsTemplateData = SelectedTextTemplateViewModels.Count() > 0;
-            }
-            if (needsTemplateData) {
-                IsSelected = true;
-
-                if (!MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                    MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-
-                    while (MpAvMainWindowViewModel.Instance.IsMainWindowOpening) {
-                        await Task.Delay(100);
-                    }
-                } else {
-                    MpAvMainWindow.Instance.Activate();
-                    MpAvMainWindow.Instance.Focus();
-                    MpAvMainWindow.Instance.Topmost = true;
-                    //MpAvMainWindow.Instance.Top = 0;
-                }
-                IsSelected = true;
-
-                await Task.Delay(MpAvClipTrayViewModel.DISABLE_READ_ONLY_DELAY_MS);
-                IsContentReadOnly = false;
-
-                TemplateRichHtml = null;
-
-                TemplateCollection.BeginPasteTemplateCommand.Execute(null);
-                bool wasCanceled = false;
-                await Task.Run(async () => {
-                    while (string.IsNullOrEmpty(TemplateRichHtml)) {
-                        if (IsContentReadOnly) {
-                            wasCanceled = true;
-                            break;
-                        }
-                        await Task.Delay(100);
-                    }
-                });
-                if (wasCanceled) {
-                    Parent.CleanupAfterPaste(this);
-                    return null;
-                }
-
-                qhtml = TemplateRichHtml;
-
-                if (!IsContentReadOnly) {
-                    ClearEditing();
-                }
-
-            } else if (ItemType == MpCopyItemType.Text) {
-                if (isInUi) {
-                    qhtml = await MpAvCefNetWebViewExtension.GetEncodedContentAsync(
-                               wv,
-                               ignoreSubSelection: isSelectionEmpty);
-                } else {
-                    // handle special case when pasting item by id (like from a hotkey)
-                    // and it has no templates (if it did tray would set manual query and show it)
-                    // so since its not in ui need to use model data which is ok because it won't have any modifications
-                    //rtf = CopyItemData.ToContentRichText();
-                    qhtml = CopyItemData;
-                }
-            }
-            switch (ItemType) {
-                case MpCopyItemType.Text:
-                    // NOTE must use rtf here which already is based on selection and any templated input
-                    pt = qhtml.ToPlainText();
-                    //if (wv != null) {
-                    //    var respStr = await wv.EvaluateJavascriptAsync("getContentImageBase64Async_ext()");
-                    //    var respObj = MpJsonObject.DeserializeBase64Object<MpQuillGetEditorScreenshotResponseMessage>(respStr);
-                    //    bmpBase64 = respObj.base64ImgStr;
-                    //}
-
-                    break;
-                case MpCopyItemType.Image:
-                    await Task.Run(() => {
-                        var bmpSrc = CopyItemData.ToAvBitmap();
-                        pt = bmpSrc.ToAsciiImage();
-                        qhtml = bmpSrc.ToRichHtmlImage();
-                    });
-
-                    bmpBase64 = CopyItemData;
-                    break;
-                case MpCopyItemType.FileList:
-                    if (FileItems.All(x => x.IsSelected == false)) {
-                        FileItems.ForEach(x => x.IsSelected = true);
-                    }
-                    pt = string.Join(Environment.NewLine, FileItems.Select(x => x.Path));
-                    break;
-            }
-
-            foreach (string format in MpPortableDataFormats.RegisteredFormats) {
-                switch (format) {
-                    case MpPortableDataFormats.AvFileNames:
-                        //case MpPortableDataFormats.FileDrop:
-                        switch (ItemType) {
-                            case MpCopyItemType.Text:
-                                sctfl.Add(qhtml.ToFile(null, CopyItemTitle));
-                                break;
-                            case MpCopyItemType.Image:
-                                sctfl.Add(bmpBase64.ToFile(null, CopyItemTitle));
-                                break;
-                            case MpCopyItemType.FileList:
-                                foreach (var fp in FileItems.Where(x => x.IsSelected).Select(x => x.Path)) {
-                                    if (fp.IsFileOrDirectory()) {
-                                        sctfl.Add(fp);
-                                    }
-                                }
-                                break;
-                        }
-                        //d.SetData(MpPortableDataFormats.FileDrop, string.Join(Environment.NewLine, sctfl));
-                        break;
-                    case MpPortableDataFormats.AvHtml_bytes:
-                        if (string.IsNullOrEmpty(qhtml)) {
-                            break;
-                        }
-                        d.SetData(MpPortableDataFormats.AvHtml_bytes, qhtml);
-                        break;
-                    // TODO add rtf conversion here...
-                    case MpPortableDataFormats.Text:
-                        if (string.IsNullOrEmpty(pt)) {
-                            break;
-                        }
-                        d.SetData(MpPortableDataFormats.Text, pt);
-                        break;
-                    case MpPortableDataFormats.AvPNG:
-                        if (string.IsNullOrEmpty(bmpBase64)) {
-                            break;
-                        }
-                        d.SetData(MpPortableDataFormats.AvPNG, bmpBase64);
-                        break;
-                    case MpPortableDataFormats.AvCsv:
-                        switch (ItemType) {
-                            case MpCopyItemType.Text:
-
-                                bool hasCsv = await MpDataModelProvider.IsDataObjectContainFormatAsync(DataObjectId, MpPortableDataFormats.AvCsv);
-                                if (hasCsv) {
-                                    d.SetData(MpPortableDataFormats.AvCsv, CopyItemData.ToCsv());
-                                }
-
-                                break;
-                            case MpCopyItemType.Image:
-
-                                break;
-                            case MpCopyItemType.FileList:
-                                d.SetData(
-                                    MpPortableDataFormats.AvCsv,
-                                    string.Join(
-                                        ",",
-                                        FileItems.Where(x => x.IsSelected).Select(x => x.Path)));
-                                break;
-                        }
-                        break;
-                    default:
-                        continue;
-                }
-            }
-            d.MapAllPseudoFormats();
-            return d;
-        }
-
-        public async Task<List<string>> GetSupportedDataFormatsAsync() {
-            await Task.Delay(1);
-            var sdfl = new List<string>();
-            sdfl.Add(MpPortableDataFormats.Text);
-            //sdfl.Add(MpPortableDataFormats.AvFileNames);
-            //if (ItemType == MpCopyItemType.Text) {
-            //    sdfl.Add(MpPortableDataFormats.Text);
-            //}
-            return sdfl;
         }
 
         public void DeleteTempFiles() {
@@ -1811,15 +1437,17 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(SelfBindingRef));
                 }
             } else if (e is MpImageAnnotation dio) {
-                if (dio.CopyItemId == CopyItemId) {
-                    Dispatcher.UIThread.Post(async () => {
-                        if (DetectedImageObjectCollectionViewModel == null) {
-                            DetectedImageObjectCollectionViewModel = new MpImageAnnotationCollectionViewModel(this);
-                        }
-                        await DetectedImageObjectCollectionViewModel.InitializeAsync(CopyItem);
-                        OnPropertyChanged(nameof(HasDetectedObjects));
-                    });
-                }
+                // NOTE DetectedImage stuff is excluded if ref is needed
+
+                //if (dio.CopyItemId == CopyItemId) {
+                //    Dispatcher.UIThread.Post(async () => {
+                //        if (DetectedImageObjectCollectionViewModel == null) {
+                //            DetectedImageObjectCollectionViewModel = new MpImageAnnotationCollectionViewModel(this);
+                //        }
+                //        await DetectedImageObjectCollectionViewModel.InitializeAsync(CopyItem);
+                //        OnPropertyChanged(nameof(HasDetectedObjects));
+                //    });
+                //}
             }
         }
 
@@ -1890,9 +1518,6 @@ namespace MonkeyPaste.Avalonia {
                                 IsSubSelectionEnabled = false;
                             }
                         }
-                        FileItems.ForEach(x => x.IsSelected = false);
-                        //LastSelectedDateTime = DateTime.MinValue;
-                        //ClearSelection();
                     }
 
                     Parent.NotifySelectionChanged();
@@ -1907,9 +1532,6 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(CopyItemData));
                     OnPropertyChanged(nameof(CurrentSize));
                     //UpdateDetails();
-                    break;
-                case nameof(IsEditingTemplate):
-                    //OnPropertyChanged(nameof(De))
                     break;
                 case nameof(IsOverPinButton):
                 case nameof(IsPinned):
@@ -2140,13 +1762,6 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(IsContentReadOnly));
             }
         }
-        private void SelectionBgColorPopupViewModel_OnColorChanged(object sender, string e) {
-            SelectionBackgroundColor = e;
-        }
-
-        private void SelectionFgColorPopupViewModel_OnColorChanged(object sender, string e) {
-            SelectionForegroundColor = e;
-        }
 
         #endregion
 
@@ -2253,11 +1868,6 @@ namespace MonkeyPaste.Avalonia {
                 IsBusy = true;
                 MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = true;
                 var mpdo = await GetContentView().Document.GetDataObjectAsync(true, false, true);
-                if(mpdo.ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
-                    mpdo.GetData(MpPortableDataFormats.AvHtml_bytes) is byte[] bytes &&
-                    bytes.ToDecodedString() is string htmlStr) {
-                    
-                }
                 await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo);
 
                 // wait extra for cb watcher to know about data

@@ -20,7 +20,13 @@ function initEditor() {
 		return;
 	}
 
-	initQuill();
+	quill = initQuill();
+	getEditorContainerElement().firstChild.setAttribute('id', 'quill-editor');
+
+	initEditorToolbar();
+	initEditTemplateToolbar();
+	initPasteToolbar();
+
 	initEditorScroll();
 	initTemplates();
 

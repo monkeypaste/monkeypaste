@@ -9,7 +9,7 @@ using MonkeyPaste.Common;
 
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvFileDataObjectItemViewModel : MpViewModelBase<MpAvClipTileViewModel>,
+    public class MpAvFileDataObjectItemViewModel : MpViewModelBase<MpAvFileItemCollectionViewModel>,
         MpISelectableViewModel,
         MpIHoverableViewModel{
 
@@ -77,10 +77,10 @@ namespace MonkeyPaste.Avalonia {
         public int SourceDeviceId {
             get {
                 if(_sourceDeviceId == 0) {
-                    if(Parent == null) {
+                    if(Parent == null || Parent.Parent == null) {
                         return 0;
                     }
-                    _sourceDeviceId = Parent.SourceId;
+                    _sourceDeviceId = Parent.Parent.SourceId;
                 }
                 return _sourceDeviceId;
             }
@@ -117,7 +117,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvFileDataObjectItemViewModel() :base (null) { }
 
-        public MpAvFileDataObjectItemViewModel(MpAvClipTileViewModel parent) : base(parent) { }
+        public MpAvFileDataObjectItemViewModel(MpAvFileItemCollectionViewModel parent) : base(parent) { }
 
         #endregion
 

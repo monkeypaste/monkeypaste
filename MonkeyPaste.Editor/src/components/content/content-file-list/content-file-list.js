@@ -23,7 +23,6 @@ function loadFileListContent(itemDataStr) {
 	}
 	createFileList();
 	loadLinkHandlers();
-	quill.enable(false);
 }
 
 // #endregion Life Cycle
@@ -139,11 +138,9 @@ function convertFileListContentToFormats(isForOle, formats) {
 		let data = null;
 		if (isHtmlFormat(format)) {
 			data = getHtml();
-			if (isForOle && format.toLowerCase() == 'html format') {
+			if (format.toLowerCase() == 'html format') {
 				// NOTE web html doesn't use fragment format
-				data = createHtmlClipboardFragment(htmlStr, sel);
-			} else {
-				data = htmlStr;
+				data = createHtmlClipboardFragment(data);
 			}
 		} else if (isPlainTextFormat(format)) {
 			data = getFileListContentData();
@@ -153,15 +150,10 @@ function convertFileListContentToFormats(isForOle, formats) {
 			onCreateContentScreenShot_ntf();
 			data = 'pending...';
 		} else if (isCsvFormat(format)) {
-			data = getFileListContentData().join(',');
-		} else if (format.toLowerCase() == 'text/uri') {
-			data =
-				getFileListContentData()
-					.split(envNewLine())
-					.map(x => getPathUri(x));
+			data = getFileListContentData().split(envNewLine()).join(',');
 		} else if (format.toLowerCase() == 'filenames' ||
 					format.toLowerCase() == 'filedrop') {
-			data = getFileListContentData();
+			// handled in host
 		}
 		if (!data || data == '') {
 			continue;

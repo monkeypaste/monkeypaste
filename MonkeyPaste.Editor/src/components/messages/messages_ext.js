@@ -3,7 +3,7 @@
 function initMain_ext(initMsgStr_base64) {
 	// input 'MpQuillInitMainRequestMessage'
 	// output 'MpQuillInitMainResponseMessage'
-
+	log('initMain_ext: ' + initMsgStr_base64);
 	let initMsgObj = toJsonObjFromBase64Str(initMsgStr_base64);
 
 	if (initMsgObj && initMsgObj.isPlainHtmlConverter) {
@@ -19,9 +19,11 @@ function initMain_ext(initMsgStr_base64) {
 function loadContent_ext(loadContentMsgStr_base64) {
 	// input 'MpQuillLoadContentRequestMessage'
 	// output 'MpQuillLoadContentResponseMessage'
+	log('loadContent_ext: ' + loadContentMsgStr_base64);
+
 	let req = toJsonObjFromBase64Str(loadContentMsgStr_base64);
 
-	log('load content request msg: ' + JSON.stringify(req));
+	//log('load content request msg: ' + JSON.stringify(req));
 
 	let searchStateObj = null;
 	if (!isNullOrEmpty(req.searchText)) {
@@ -39,6 +41,8 @@ function loadContent_ext(loadContentMsgStr_base64) {
 }
 
 function hostIsSelectedChanged_ext(hostIsSelectedMsgStr_base64) {
+	// input 'MpQuillIsHostSelectedChangedMessage'
+	log('hostIsSelectedChanged_ext: ' + hostIsSelectedMsgStr_base64);
 	let msg = toJsonObjFromBase64Str(hostIsSelectedMsgStr_base64);
 	setInputFocusable(msg.isHostSelected);
 }
@@ -47,13 +51,18 @@ function contentRequest_ext(contentReqMsgStr_base64) {
 	// input 'MpQuillContentDataRequestMessage'
 	// output 'MpQuillContentDataResponseMessage' (with 'MpQuillContentDataResponseFormattedDataItemFragment' items)
 
+	log('contentRequest_ext: ' + contentReqMsgStr_base64);
 	let req = toJsonObjFromBase64Str(contentReqMsgStr_base64);
+	if (req.forPaste && hasTemplates()) {
+		onWaitTillPasteIsReady_ntf(req);
+		return;
+	}
 	let is_for_ole = req.forPaste || req.forDragDrop || req.forCutOrCopy;
 
+	let items = convertContentToFormats(is_for_ole, req.formats);
 	let respObj = {
-		dataItems: convertContentToFormats(is_for_ole, req.formats)
+		dataItems: items
 	};
-
 	let resp = toBase64FromJsonObj(respObj);
 	return resp;
 }
