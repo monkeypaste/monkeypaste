@@ -23,7 +23,7 @@ using Avalonia.Interactivity;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvMainWindow : Window { 
+    public partial class MpAvMainWindow : Window, MpAvIResizableControl { 
         #region Private Variables
 
         private int? _origResizerIdx;
@@ -36,6 +36,19 @@ namespace MonkeyPaste.Avalonia {
             BoundsProperty.Changed.AddClassHandler<MpAvMainWindow>((x, y) => x.BoundsChangedHandler(y as AvaloniaPropertyChangedEventArgs<Rect>));
         }
 
+        #endregion
+
+        #region MpAvIResizableControl Implementation
+        private Control _resizerControl;
+        Control MpAvIResizableControl.ResizerControl {
+            get {
+                if (_resizerControl == null) {
+                    var mwrv = this.GetVisualDescendant<MpAvMainWindowResizerView>();
+                    _resizerControl = mwrv.FindControl<Control>("MainWindowResizeBorder");
+                }
+                return _resizerControl;
+            }
+        }
         #endregion
 
         #region Properties
@@ -364,12 +377,6 @@ namespace MonkeyPaste.Avalonia {
 
             mwtg.InvalidateMeasure();
         }
-        public Control GetResizerControl() {
-            var mwrv = this.GetVisualDescendant<MpAvMainWindowResizerView>();
-            var resize_control = mwrv.FindControl<Control>("MainWindowResizeBorder");
-            return resize_control;
-        }
-
         #endregion
 
         #region Private Methods

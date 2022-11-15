@@ -130,19 +130,19 @@ namespace MonkeyPaste.Avalonia {
                 wv.IsContentLoaded //&&
                // !wv.BindingContext.IsReloading
                 ) {
-                Control resizeControl = null;
-                var ctv = wv.GetVisualAncestor<MpAvClipTileView>();
-                if(ctv != null) {
-                    resizeControl = ctv.FindControl<Control>("ClipTileResizeBorder");
-                }
+                //Control resizeControl = null;
+                //var ctv = wv.GetVisualAncestor<MpAvClipTileView>();
+                //if(ctv != null) {
+                //    resizeControl = ctv.FindControl<Control>("ClipTileResizeBorder");
+                //}
                 // only signal read only change after webview is loaded
                 if (isReadOnly) {
-                    MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.ReadOnlyWidth, ctvm.ReadOnlyHeight, 3.0d);
+                    MpAvResizeExtension.ResizeAnimated(wv, ctvm.ReadOnlyWidth, ctvm.ReadOnlyHeight);
                     string enableReadOnlyRespStr = await wv.EvaluateJavascriptAsync("enableReadOnly_ext()");
                     var qrm = MpJsonObject.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(enableReadOnlyRespStr);
                     wv.Document.ProcessContentChangedMessage(qrm);
                 } else {
-                    MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.EditableWidth, ctvm.EditableHeight, 3.0d);
+                    MpAvResizeExtension.ResizeAnimated(wv, ctvm.EditableWidth, ctvm.EditableHeight);
                     wv.ExecuteJavascript($"disableReadOnly_ext()");
                 }
             }                  
@@ -174,14 +174,12 @@ namespace MonkeyPaste.Avalonia {
                 wv.DataContext is MpAvClipTileViewModel ctvm &&
                 !ctvm.IsReloading) {
                 if (isSubSelectionEnabled) {
-                    // editor handles enabling by double clicking 
                     wv.ExecuteJavascript("enableSubSelection_ext()");
-                } else {
-                    var ctv = wv.GetVisualAncestor<MpAvClipTileView>();
-                    if (ctv != null) {
-                        var resizeControl = ctv.FindControl<Control>("ClipTileResizeBorder");
-                        MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.ReadOnlyWidth, ctvm.ReadOnlyHeight, 1000.0d);
+                    if(ctvm.HasTemplates) {
+                        MpAvResizeExtension.ResizeAnimated(wv, ctvm.EditableWidth, ctvm.EditableHeight);
                     }
+                } else {
+                    MpAvResizeExtension.ResizeAnimated(wv, ctvm.ReadOnlyWidth, ctvm.ReadOnlyHeight);
                     wv.ExecuteJavascript("disableSubSelection_ext()");
                 }
             }

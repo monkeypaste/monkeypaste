@@ -56,7 +56,8 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvCefNetWebView : 
         WebView, 
-        MpAvIContentView {
+        MpAvIContentView,
+        MpAvIResizableControl {
         #region Private Variables
         #endregion
 
@@ -83,6 +84,21 @@ namespace MonkeyPaste.Avalonia {
         public bool IsEditorInitialized { get; private set; } = false;
 
         public bool IsDomLoaded { get; set; } = false;
+
+        #region MpAvIResizableControl Implementation
+        private Control _resizerControl;
+        Control MpAvIResizableControl.ResizerControl {
+            get {
+                if(_resizerControl == null) {
+                    var ctv = this.GetVisualAncestor<MpAvClipTileView>();
+                    if (ctv != null) {
+                        _resizerControl = ctv.FindControl<Control>("ClipTileResizeBorder");
+                    }
+                }
+                return _resizerControl;
+            }
+        }
+        #endregion
 
         #region MpAvIContentView Implementation
 
@@ -399,6 +415,11 @@ namespace MonkeyPaste.Avalonia {
             if (!BindingContext.IsContentReadOnly) {
                 MpAvMainWindowViewModel.Instance.IsAnyTextBoxFocused = false;
             }
+        }
+
+        protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e) {
+            base.OnDetachedFromVisualTree(e);
+            _resizerControl = null;
         }
 
         #endregion

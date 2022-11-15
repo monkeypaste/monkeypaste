@@ -111,7 +111,13 @@ namespace MonkeyPaste {
             return Path.GetFullPath(finalPath);
         }
 
-        public static string ToFile(this string fileData, string forceDir = "", string forceNamePrefix = "", string forceExt = "", bool overwrite = false, bool isTemporary = true) {
+        public static string ToFile(
+            this string fileData, 
+            string forceDir = "", 
+            string forceNamePrefix = "",
+            string forceExt = "", 
+            bool overwrite = false, 
+            bool isTemporary = true) {
             // NOTE csv is too annoying to discern (probably all are) need to check before and force/convert
             forceExt = string.IsNullOrEmpty(forceExt) ? forceExt : forceExt.Replace(".", string.Empty);
 
@@ -330,6 +336,7 @@ namespace MonkeyPaste {
             Debugger.Break();
             return false;
         }
+
         public static string GetUniqueFileOrDirectoryName(string dir, string fileOrDirectoryName, string instanceSeparator = "_") {
             //only support Image and RichText fileTypes
             string fp = string.IsNullOrEmpty(dir) ? Path.GetTempPath() : dir;

@@ -38,6 +38,8 @@ function showPasteTemplateToolbarItems() {
 }
 
 function hidePasteTemplateToolbarItems() {
+    clearAllTemplateText();
+
     let ptil = Array.from(document.getElementsByClassName('paste-template-item'));
     for (var i = 0; i < ptil.length; i++) {
         ptil[i].classList.add('hidden');

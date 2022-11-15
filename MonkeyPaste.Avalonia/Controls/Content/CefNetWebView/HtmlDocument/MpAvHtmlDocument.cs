@@ -56,16 +56,16 @@ namespace MonkeyPaste.Avalonia {
                     contentDataReq.formats.Remove(MpPortableDataFormats.WinBitmap);
                     contentDataReq.formats.Remove(MpPortableDataFormats.WinDib);
                 }
-                if(ctvm.ItemType != MpCopyItemType.FileList && )
                 MpQuillContentDataResponseMessage contentDataResp = null;
 
-                if (contentDataReq.forPaste && ctvm.HasTemplates) {
+                if (false) {//contentDataReq.forPaste && ctvm.HasTemplates) {
                     if(ctvm.IsContentReadOnly) {
-                        var ctv = wv.GetVisualAncestor<MpAvClipTileView>();
-                        if (ctv != null) {
-                            var resizeControl = ctv.FindControl<Control>("ClipTileResizeBorder");
-                            MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.EditableWidth, ctvm.EditableHeight, 3.0d);
-                        }
+                        //var ctv = wv.GetVisualAncestor<MpAvClipTileView>();
+                        //if (ctv != null) {
+                        //    var resizeControl = ctv.FindControl<Control>("ClipTileResizeBorder");
+                        //    MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.EditableWidth, ctvm.EditableHeight);
+                        //}
+                        MpAvResizeExtension.ResizeAnimated(wv, ctvm.EditableWidth, ctvm.EditableHeight);
                     }
                     PastableContentResponse = null;
                     wv.ExecuteJavascript($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");

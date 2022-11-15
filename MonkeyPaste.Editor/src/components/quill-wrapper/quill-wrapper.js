@@ -70,7 +70,7 @@ function getHtml(range) {
 		return getRootHtml();
 	}
 	range = !range ? { index: 0, length: getDocLength() } : range;	
-	return getHtml2(range);
+	return getHtml3(range);
 	//let result = '';
 
 	//let range_content = getDelta(range);
@@ -105,14 +105,54 @@ function getSelectedHtml() {
 function getHtml2(sel) {
 	let dom_range = convertDocRangeToDomRange(sel);
 	if (dom_range) {
-		let clonedSelection = dom_range.cloneContents();
 		let div = document.createElement('div');
-		div.appendChild(clonedSelection);
+		let actual_contents = dom_range.cloneContents();
+
+		let start_elm = dom_range.startContainer;
+		if (start_elm.nodeType == 3) {
+			let start_block_parent_elm = getBlockElementAtDocIdx(sel.index);
+			dom_range.setStart(start_block_parent_elm, 0);
+		}
+		let end_elm = dom_range.endContainer;
+		if (end_elm.nodeType == 3) {
+			let end_block_parent_elm = getBlockElementAtDocIdx(sel.index + sel.length);
+			dom_range.setEnd(end_block_parent_elm, 0);
+		}
+
+		let blocked_contents = dom_range.cloneContents();
+
+		div.appendChild(blocked_contents);
+
 		let htmlStr = div.innerHTML;
 		div.remove();
 		return htmlStr;
 	}
 	return "";
+}
+
+function getHtml3(sel) {
+	let delta = getDelta(sel);
+	//log(delta.ops)
+	let cfg = {
+		inlineStyles: true,
+		encodeHtml: false
+	};
+	let qdc = new window.QuillDeltaToHtmlConverter(delta.ops, cfg);
+	qdc.renderCustomWith(function (customOp, contextOp) {
+		//if (customOp.insert.type === 'my-blot') {
+		//	let val = customOp.insert.value;
+		//	return `<span id="${val.id}">${val.text}</span>`;
+		//} else {
+		//	return 'Unmanaged custom blot!';
+		//}
+		if (customOp.attributes !== undefined &&
+			customOp.attributes.templateInstanceGuid !== undefined) {
+			return getTemplateInstanceElement(customOp.attributes.templateInstanceGuid).outerHTML;
+		}
+	});
+	let html = qdc.convert();
+	//log(html);
+	return html;
 }
 
 function getSelectedHtml3() {

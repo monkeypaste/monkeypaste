@@ -3,89 +3,83 @@
     /*display: inline;*/
 }
 
-.ql-template-embed-blot {
+.template-blot {
     display: inline;
     text-decoration: none;
     border-radius: 3px;
-    padding: 1px;
-    /*transition: .4s;*/
     cursor: pointer;
-    /*caret-color: transparent;*/
-    border: 2px solid transparent;
     background-blend-mode: multiply;
-    /*-moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;*/
     z-index: 0;
-   /* user-select: none;
-    pointer-events: none;*/
 }
 
-    .ql-template-embed-blot:hover:not(.ql-template-embed-blot-focus):not(.no-select):not(.ql-template-embed-blot-focus-not-instance) {
-        /*padding: 1.5px;*/
-        /*transition: .2s;*/
-        cursor: pointer;
-        border: 2px solid yellow;
+    .template-blot:hover > span {
+        color: var(--hovercolor) !important;
     }
 
-    .ql-template-embed-blot .delete-template-button {
-        padding: 1px;
-        margin-left: 10px;
-        cursor: pointer;
-        width: 10px !important;
-        height: 10px !important;
-    }
-    .ql-template-embed-blot .delete-template-button path {
+#editor:not(.no-select) .template-blot-focus > span {
+    color: var(--focuscolor) !important;
+}
+#editor:not(.no-select) .template-blot-focus-not-instance > span {
+    color: var(--selectedcolor) !important;
+}
+
+#editor:not(.no-select) .template-blot:hover {
+    color: var(--hovercolor) !important;
+}
+
+#editor:not(.no-select) .template-blot-at-insert > span {
+    color: var(--selectedcolor) !important;
+}
+
+.delete-template-button {
+    padding: 1px;
+    margin-left: 10px;
+    cursor: pointer;
+    width: 10px !important;
+    height: 10px !important;
+}
+
+    .delete-template-button path {
         fill: black;
     }
 
-        .ql-template-embed-blot .delete-template-button:hover {
-            background-color: black;
-        }
-        .ql-template-embed-blot .delete-template-button:hover path {
-            fill: white;
-        }
-
-    #editor:not(.no-select) .ql-template-embed-blot-focus {
-        border: 2px solid var(--focusbordercolor);
+    .delete-template-button:hover {
+        background-color: black;
     }
 
-#editor:not(.no-select) .ql-template-embed-blot-focus-not-instance {
-    border: 2px solid var(--selectedbordercolor);
-}
+    .delete-template-button:hover path {
+        fill: white;
+    }
 
-#editor:not(.no-select) .ql-template-embed-blot-at-insert {
-    border: 2px solid orange !important;
-}
 
-.ql-template-embed-blot-selected-overlay {
+.template-blot-selected-overlay {
     background-image: linear-gradient(0deg, var(--selbgcolor), var(--selbgcolor));
 }
 
-.ql-template-embed-blot .svg-icon {
+.template-blot .svg-icon {
     width: 10px !important;
     height: 10px !important;
     margin-left: 1px;
 }
 
-.ql-template-embed-blot-sub-selected {
+.template-blot-sub-selected {
 }
 
-.ql-template-embed-blot-display-key-down {
+.template-blot-display-key-down {
     display: inline-flex;
     transform: scale(1.1);
 }
 
-.ql-template-embed-blot-display-key-up {
-    display: inline-flex;
+.template-blot-display-key-up {
+    display: inline;
     transform: scale(1);
 }
 
-.ql-template-embed-blot-before-insert {
+.template-blot-before-insert {
     /* only used let selection caret exist before embed */
     /*caret-color: var(--selfgcolor);*/
 }
-.ql-template-embed-blot-after-insert {
+.template-blot-after-insert {
     /* only used let selection caret exist before embed */
     /*caret-color: var(--selfgcolor);*/
 }

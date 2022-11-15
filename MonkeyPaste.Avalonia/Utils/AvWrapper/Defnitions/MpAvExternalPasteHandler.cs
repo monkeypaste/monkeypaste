@@ -85,9 +85,9 @@ namespace MonkeyPaste.Avalonia {
 
             // SET CLIPBOARD
 
-            MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = true;
+            //MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = true;
 
-            await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo);
+            await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo, true);
 
             // ACTIVATE TARGET
             if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
@@ -110,7 +110,7 @@ namespace MonkeyPaste.Avalonia {
 
             //await Task.Delay(300);
 
-            MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = false;
+            //MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = false;
         }
 
         #endregion

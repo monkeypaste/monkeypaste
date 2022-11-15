@@ -38,7 +38,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-        public bool IgnoreClipboardChanges { get; set; }
+        //public bool IgnoreClipboardChanges { get; set; }
         #endregion
 
         #region Events
@@ -75,6 +75,7 @@ namespace MonkeyPaste.Avalonia {
         public void StopMonitor() {
             if (_timer != null) {
                 _timer.Stop();
+                _lastCbo = null;
             }
         }
 
@@ -86,11 +87,7 @@ namespace MonkeyPaste.Avalonia {
             CheckClipboard();
         }
 
-        private void CheckClipboard() {
-            if(IgnoreClipboardChanges) {
-                _lastCbo = null;
-            }
-            
+        private void CheckClipboard() {            
             Dispatcher.UIThread.Post(async () => { await CheckClipboardHelper(); });
         }
         private async Task CheckClipboardHelper() {
@@ -101,59 +98,19 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var cbo = await ConvertManagedFormats();
-            if (HasChanged(cbo)) {
+
+            if (MpPortableDataObject.IsDataNotEqual(_lastCbo,cbo)) {
                 MpConsole.WriteLine("Cb changed");
+                MpPortableDataObject.IsDataNotEqual(_lastCbo, cbo);
                  _lastCbo = cbo;
                 OnClipboardChanged?.Invoke(typeof(MpAvClipboardWatcher).ToString(), cbo);
             }
         }
 
         private async Task<MpPortableDataObject> ConvertManagedFormats() {
-            MpPortableDataObject ndo = await MpAvClipboardHandlerCollectionViewModel.Instance.ReadClipboardOrDropObjectAsync();
+            MpPortableDataObject ndo = await MpPlatformWrapper.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync();
             return ndo;
         }
-
-        private bool HasChanged(MpPortableDataObject nco) {
-            if (_lastCbo == null && nco != null) {
-                return true;
-            }
-            if (_lastCbo != null && nco == null) {
-                return true;
-            }
-            if (_lastCbo.DataFormatLookup.Count != nco.DataFormatLookup.Count) {
-                return true;
-            }
-            foreach (var nce in nco.DataFormatLookup) {
-                try {
-                    if (!_lastCbo.DataFormatLookup.ContainsKey(nce.Key)) {
-                        return true;
-                    }
-                    if (nce.Value is byte[] newBytes &&
-                        _lastCbo.DataFormatLookup[nce.Key] is byte[] oldBytes) {
-                        if (!newBytes.SequenceEqual(oldBytes)) {
-                            return true;
-                        }
-                    } else if (nce.Value is IEnumerable<string> valStrs &&
-                                _lastCbo.DataFormatLookup[nce.Key] is IEnumerable<string> lastStrs) { 
-                        // must check actual string entries since the ref is always different 
-                        if(valStrs.Count() != lastStrs.Count()) {
-                            return true;
-                        }
-                        return valStrs.Any(x => !lastStrs.Contains(x));
-                    } else {
-                        if (!_lastCbo.DataFormatLookup[nce.Key].Equals(nce.Value)) {
-                            return true;
-                        }
-                    }
-                } catch(Exception ex) {
-                    MpConsole.WriteTraceLine("Error comparing clipbaord data. ", ex);
-                }
-                
-                
-            }
-            return false;
-        }
-
 
         #endregion
     }

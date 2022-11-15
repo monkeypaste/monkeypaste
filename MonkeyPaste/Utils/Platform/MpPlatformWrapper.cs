@@ -27,7 +27,6 @@ namespace MonkeyPaste {
         MpIMainThreadMarshal MainThreadMarshal { get; set; }
         MpIStringTools StringTools { get; set; }
         MpIOsInfo OsInfo { get; set; }
-        MpIPlatformDataObjectHelper DataObjectHelper { get; set; }
         MpIPlatformDataObjectHelperAsync DataObjectHelperAsync { get; set; }
         MpINativeMessageBox NativeMessageBox { get; set; }
 

@@ -34,7 +34,6 @@ namespace MonkeyPaste.Avalonia {
         public MpIMainThreadMarshal MainThreadMarshal { get; set; }
         public MpIStringTools StringTools { get; set; }
         public MpIOsInfo OsInfo { get; set; }
-        public MpIPlatformDataObjectHelper DataObjectHelper { get; set; }
         public MpIPlatformDataObjectHelperAsync DataObjectHelperAsync { get; set; }
         public MpINativeMessageBox NativeMessageBox { get; set; }
 

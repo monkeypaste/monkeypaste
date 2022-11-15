@@ -37,6 +37,8 @@ namespace MonkeyPaste.Avalonia {
 
         public const double MAX_RESIZE_DISTANCE_TO_EDGE = 5.0d;
 
+        public const int DEFAULT_RESIZE_ANIMATION_MS = 1000;
+
         #endregion
 
         #region Properties
@@ -338,6 +340,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public static void ResetToDefault(Control control) {
+            if (control is MpAvIResizableControl rc) {
+                control = rc.ResizerControl;
+            }
             MpPoint curSize = new MpPoint(GetBoundWidth(control), GetBoundHeight(control));
             MpPoint defSize = new MpPoint(GetDefaultWidth(control), GetDefaultHeight(control));
 
@@ -359,12 +364,21 @@ namespace MonkeyPaste.Avalonia {
             ResizeByDelta(control, dx, dy);
             Reset(control);
 
+            if (control.DataContext is MpIScrollIntoView scv) {
+                scv.ScrollIntoView();
+            }
             //MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeReset);
         }
 
         public static void ResizeByDelta(Control control, double dx, double dy, bool isFromUser = true) {
+            if(control is MpAvIResizableControl rc) {
+                control = rc.ResizerControl;
+            }
             if (Math.Abs(dx) + Math.Abs(dy) < 0.1) {
-                control.BringIntoView();
+
+                if (control.DataContext is MpIScrollIntoView scv2) {
+                    scv2.ScrollIntoView();
+                }
                 return;
             }
             if (isFromUser) {
@@ -408,37 +422,72 @@ namespace MonkeyPaste.Avalonia {
             if(!isFromUser) {
                 SetIsResizing(control, false);
             }
+
+            if (control.DataContext is MpIScrollIntoView scv) {
+                scv.ScrollIntoView();
+            }
         }
 
-        public static void ResizeAnimated(Control control, double nw, double nh, double tt_ms) {
+        public static void ResizeAnimated(Control control, double nw, double nh, int tt_ms = DEFAULT_RESIZE_ANIMATION_MS) {
             if(control == null) {
                 return;
             }
+            if (control is MpAvIResizableControl rc) {
+                control = rc.ResizerControl;
+            }
+            double zeta,omega,fps;
+
+            //if (MpAvSearchBoxViewModel.Instance.HasText) {
+            //    var st_parts = MpAvSearchBoxViewModel.Instance.SearchText.Split(",");
+            //    zeta = double.Parse(st_parts[0]);
+            //    omega = double.Parse(st_parts[1]);
+            //    fps = double.Parse(st_parts[2]);
+            //}
+
+            double cw = GetBoundWidth(control);
+            double ch = GetBoundHeight(control);
+            if (nw > cw || nh > ch) {
+                zeta = 0.5d;
+                omega = 30.0d;
+                fps = 40.0d;
+            } else {
+                zeta = 1.0d;
+                omega = 30.0d;
+                fps = 40.0d;
+            }
+
+            int delay_ms = (int)(1000 / fps);
+            double dw = nw - cw;
+            double dh = nh - ch;
+            double step_w = dw / delay_ms;
+            double step_h = dh / delay_ms;
+            double vx = 0;
             Dispatcher.UIThread.Post(async () => {
-                double dt_ms = 0;
-                double fps = 69;
-                double delay_ms = 1000 / fps;
-                double cw = GetBoundWidth(control);
-                double ch = GetBoundHeight(control);
-                double dw = nw - cw;
-                double dh = nh - ch;
-                double step_w = dw / delay_ms;
-                double step_h = dh / delay_ms;
-                do {
-                    ResizeByDelta(control, step_w, step_h, false);
-                    await Task.Delay((int)delay_ms);
-                    dt_ms += delay_ms;
-                } while (dt_ms < tt_ms);
+                while(true) {
+                    double lw = cw;
+                    MpAnimationHelpers.Spring(ref cw, ref vx, nw, delay_ms / 1000.0d, zeta, omega);
+                    ResizeByDelta(control, cw - lw, step_h, false);
+                    await Task.Delay(delay_ms);
+
+                    bool is_v_zero = Math.Abs(vx) < 0.1d;
+                    if(is_v_zero) {
+                        break;
+                    }
+                    //dt_ms += delay_ms;
+                    //if(dt_ms >= tt_ms) {
+                    //    break;
+                    //}
+                    //cw += step_w;
+                    //ch += step_h;
+                    //if(Math.Abs(cw-nw) + Math.Abs(ch-nh) < 3) {
+                    //    break;
+                    //}
+                } 
                 double fw = GetBoundWidth(control);
                 double fh = GetBoundHeight(control);
                 double fdw = nw - fw;
                 double fdh = nh - fh;
                 ResizeByDelta(control, fdw, fdh, false);
-                if(control.DataContext is MpIScrollIntoView scv) {
-                    scv.ScrollIntoView();
-                } else {
-                    control.BringIntoView();
-                }
                 
             });
         }

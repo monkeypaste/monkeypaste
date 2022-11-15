@@ -146,12 +146,17 @@ function getFocusTemplate() {
     }
     return getTemplateDefByGuid(ftguid);
 }
+
 function getFocusTemplateGuid() {
     let ft = getFocusTemplateElement();
     if (ft == null) {
         return null;
     }
     return ft.getAttribute('templateGuid');
+}
+
+function getSelectedTemplateElements() {
+    return getTemplateElements().filter(x => x.classList.contains(Template_FOCUSED_INSTANCE_Class) || x.classList.contains(Template_FOCUSED_NOT_INSTANCE_Class));
 }
 
 async function getAvailableTemplateDefinitions() {
@@ -443,7 +448,6 @@ function isTemplateElementFocused(telm) {
     }
     if (telm.classList.contains(Template_FOCUSED_INSTANCE_Class) ||
         telm.classList.contains(Template_FOCUSED_NOT_INSTANCE_Class)) {
-        // is this ok time to remove this?
         return true;
     }
     return false;
@@ -729,6 +733,7 @@ function updateTemplatesAfterSelectionChange() {
     //    return;
     //}
     if (WindowMouseDownLoc) {
+        clearAllTemplateNavStates();
         return;
     }
     if (isShowingPasteToolbar()) {
@@ -805,6 +810,10 @@ function clearTemplateNavState(t_elm) {
     t_elm.classList.remove(Template_AT_INSERT_Class);
     t_elm.classList.remove(Template_AFTER_INSERT_Class);
     t_elm.classList.remove(Template_IN_SEL_RANGE_Class);
+}
+
+function clearAllTemplateNavStates() {
+    getTemplateElements().forEach(x => clearTemplateNavState(x));
 }
 
 function insertTemplate(range, t, fromDropDown, source = 'api') {

@@ -287,6 +287,7 @@ function convertDocRangeToDomRange(doc_range) {
 	let start_elm_doc_idx = getElementDocIdx(start_elm);
 	let end_elm_doc_idx = getElementDocIdx(end_elm);
 
+
 	let start_offset = doc_range.index - start_elm_doc_idx;
 	let end_offset = (doc_range.index + doc_range.length) - end_elm_doc_idx;
 

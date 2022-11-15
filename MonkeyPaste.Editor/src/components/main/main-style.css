@@ -11,9 +11,9 @@ body {
     background-color: transparent;
     --selbgcolor: lightblue;
     --selfgcolor: black;
-    --hoverbordercolor: yellow;
-    --focusbordercolor: lime;
-    --selectedbordercolor: red;
+    --hovercolor: yellow;
+    --focuscolor: lime;
+    --selectedcolor: red;
     --editableopacity: 0.5;
     --defaultopacity: 0.0;
     --defaultFontFamily: consolas;

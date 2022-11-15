@@ -53,10 +53,10 @@ function contentRequest_ext(contentReqMsgStr_base64) {
 
 	log('contentRequest_ext: ' + contentReqMsgStr_base64);
 	let req = toJsonObjFromBase64Str(contentReqMsgStr_base64);
-	if (req.forPaste && hasTemplates()) {
-		onWaitTillPasteIsReady_ntf(req);
-		return;
-	}
+	//if (req.forPaste && hasTemplates()) {
+	//	onWaitTillPasteIsReady_ntf(req);
+	//	return;
+	//}
 	let is_for_ole = req.forPaste || req.forDragDrop || req.forCutOrCopy;
 
 	let items = convertContentToFormats(is_for_ole, req.formats);

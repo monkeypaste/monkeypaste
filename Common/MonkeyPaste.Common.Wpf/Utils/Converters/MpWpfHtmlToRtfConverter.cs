@@ -62,6 +62,15 @@ namespace MonkeyPaste.Common.Wpf {
                     }
                     continue;
                 }
+                var te = ConvertHtmlNode(docNode);
+                if(te == null) {
+                    continue;
+                }
+                if(te is Block b) {
+                    fd.Blocks.Add(b);
+                } else if(te is Inline i) {
+                    // NOTE this occurs when html is a sub-selection fragment
+                }
                 fd.Blocks.Add(ConvertHtmlNode(docNode) as Block);
             }
             return fd.ToRichText();
@@ -417,22 +426,27 @@ namespace MonkeyPaste.Common.Wpf {
 
             int rgbOpenIdx = text.IndexOf("(");
             if (rgbOpenIdx < 0) {
+                string hex = null;
                 int preNameIdx = text.IndexOf(":");
-                if (preNameIdx >= 0 && text.Contains(" ")) {
-                    string colorName = text.Substring(preNameIdx + 1)
+                if (preNameIdx >= 0) {
+                    if(text.Contains("#")) {
+                        hex = "#" + text.SplitNoEmpty("#").ElementAt(1);
+                    } else if(text.Contains(" ")) {
+                        string colorName = text.Substring(preNameIdx + 1)
                                         .Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)
                                         .FirstOrDefault(x => !string.IsNullOrWhiteSpace(x) && !x.StartsWith("!"));
-                    if (string.IsNullOrWhiteSpace(colorName)) {
-                        return defaultBrush;
-                    }
-                    string hex = MpSystemColors.ConvertFromString(colorName.Trim(), defaultBrush.ToHex());
-                    if (string.IsNullOrWhiteSpace(hex) || !hex.IsStringHexColor()) {
-                        return defaultBrush;
-                    }
+                        if (string.IsNullOrWhiteSpace(colorName)) {
+                            return defaultBrush;
+                        }
+                        hex = MpSystemColors.ConvertFromString(colorName.Trim(), defaultBrush.ToHex());
+                        if (string.IsNullOrWhiteSpace(hex) || !hex.IsStringHexColor()) {
+                            return defaultBrush;
+                        }
+                    }                    
+                }
+                if(hex != null) {
                     return hex.ToWpfBrush();
                 }
-
-
             }
 
             string commaReplacement = string.Empty;

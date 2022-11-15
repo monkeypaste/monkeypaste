@@ -49,10 +49,6 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public void MapAllPseudoFormats() {
-            // called after all available formats created to map cef types to avalonia and/or vice versa
-            var html_bytes_f = MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvHtml_bytes);
-            var cefHtml_str_f = MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.CefHtml);
-
             if(ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
                 !ContainsData(MpPortableDataFormats.CefHtml) &&
                 GetData(MpPortableDataFormats.AvHtml_bytes) is byte[] html_bytes) {

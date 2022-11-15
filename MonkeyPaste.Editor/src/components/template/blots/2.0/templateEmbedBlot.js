@@ -1,13 +1,13 @@
-var TemplateEmbedClass = 'ql-template-embed-blot';
+var TemplateEmbedClass = 'template-blot';
 
-var Template_FOCUSED_INSTANCE_Class = 'ql-template-embed-blot-focus';
-var Template_FOCUSED_NOT_INSTANCE_Class = 'ql-template-embed-blot-focus-not-instance';
+var Template_FOCUSED_INSTANCE_Class = 'template-blot-focus';
+var Template_FOCUSED_NOT_INSTANCE_Class = 'template-blot-focus-not-instance';
 
-var Template_IN_SEL_RANGE_Class = 'ql-template-embed-blot-selected-overlay';
+var Template_IN_SEL_RANGE_Class = 'template-blot-selected-overlay';
 
-var Template_BEFORE_INSERT_Class = 'ql-template-embed-blot-before-insert';
-var Template_AT_INSERT_Class = 'ql-template-embed-blot-at-insert'; 
-var Template_AFTER_INSERT_Class = 'ql-template-embed-blot-after-insert';
+var Template_BEFORE_INSERT_Class = 'template-blot-before-insert';
+var Template_AT_INSERT_Class = 'template-blot-at-insert'; 
+var Template_AFTER_INSERT_Class = 'template-blot-after-insert';
 
 var TemplateEmbedHtmlAttributes = [
     'background-color',
@@ -195,7 +195,7 @@ function applyTemplateToDomNode(node, value) {
     node.style.backgroundColor = value.templateColor;
     node.style.color = getContrastHexColor(value.templateColor);
 
-    icon_elm.outerHTML = getSvgHtml(getTemplateTypeSvgKey(value.templateType));
+    icon_elm.outerHTML = getSvgHtml(getTemplateTypeSvgKey(value.templateType),'template-type-icon svg-icon');
     setSvgElmColor(icon_elm, node.style.color);
 
     span_elm.innerHTML = value.templateHtmlFormat;

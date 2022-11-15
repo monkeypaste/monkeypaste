@@ -73,6 +73,18 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public IEnumerable<MpIClipboardReaderComponent> EnabledReaderComponents => 
+            EnabledReaders
+            .Select(x => x.Parent.ClipboardPluginComponent)
+            .Distinct()
+            .Cast<MpIClipboardReaderComponent>();
+
+        public IEnumerable<MpIClipboardWriterComponent> EnabledWriterComponents =>
+            EnabledWriters
+            .Select(x => x.Parent.ClipboardPluginComponent)
+            .Distinct()
+            .Cast<MpIClipboardWriterComponent>();
+
         public MpAvClipboardFormatPresetViewModel SelectedPresetViewModel {
             get {
                 if (SelectedItem == null) {
@@ -110,12 +122,12 @@ namespace MonkeyPaste.Avalonia {
 
 
         async Task<object> MpIPlatformDataObjectHelperAsync.WriteDragDropDataObject(MpPortableDataObject mpdo) {
-            object pdo = await WriteClipboardOrDropObjectAsync(mpdo, false);
+            object pdo = await WriteClipboardOrDropObjectAsync(mpdo, false, false);
             return pdo;
         }
 
-        async Task MpIPlatformDataObjectHelperAsync.SetPlatformClipboardAsync(MpPortableDataObject portableObj) {
-            await WriteClipboardOrDropObjectAsync(portableObj, true);
+        async Task MpIPlatformDataObjectHelperAsync.SetPlatformClipboardAsync(MpPortableDataObject portableObj, bool ignoreClipboardChange) {
+            await WriteClipboardOrDropObjectAsync(portableObj, true, ignoreClipboardChange);
         }
 
         async Task<MpPortableDataObject> MpIPlatformDataObjectHelperAsync.ReadDragDropDataObject(object nativeDataObj, int retryCount) {
@@ -226,7 +238,7 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
                 return;
             }
-            var temp = await WriteClipboardOrDropObjectAsync(source as MpAvDataObject, false);
+            var temp = await WriteClipboardOrDropObjectAsync(source as MpAvDataObject, false, false);
             if(temp is MpAvDataObject temp_avdo) {
                 target.DataFormatLookup.Clear();
                 foreach (var kvp in temp_avdo.DataFormatLookup) {
@@ -236,81 +248,6 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
-        public async Task<MpAvDataObject> ReadClipboardOrDropObjectAsync(object forcedDataObject = null) {
-            // NOTE forcedDataObject is used to read drag/drop, when null clipboard is read
-            MpAvDataObject mpdo = new MpAvDataObject();
-
-            
-            //only iterate through actual handlers 
-            var handlers = EnabledFormats.Where(x => x.IsReader)
-                                         .Select(x => x.Parent.ClipboardPluginComponent)
-                                         .Distinct().Cast<MpIClipboardReaderComponentAsync>();
-            //MpConsole.WriteLine("Handlers available: " + handlers.Count());
-            foreach (var handler in handlers) {
-                var req = new MpClipboardReaderRequest() {
-                    isAvalonia = true,
-                    mainWindowImplicitHandle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle.ToInt32(),
-                    platform = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
-                    readFormats = EnabledFormats.Where(x => x.Parent.ClipboardPluginComponent == handler).Select(x => x.Parent.HandledFormat).Distinct().ToList(),
-                    items = EnabledFormats.Where(x => x.Parent.ClipboardPluginComponent == handler).SelectMany(x => x.Items.Cast<MpIParameterKeyValuePair>()).ToList(),
-                    forcedClipboardDataObject = forcedDataObject
-                };
-                
-                var response = await handler.ReadClipboardDataAsync(req);
-
-                bool isValid = MpPluginTransactor.ValidatePluginResponse(response);
-                if (isValid) {
-                    response.dataObject.DataFormatLookup.ForEach(x => mpdo.DataFormatLookup.AddOrReplace(x.Key, x.Value));
-                } else {
-                    MpConsole.WriteLine("Invalid cb reader response: " + response);
-                }
-            }
-            mpdo.MapAllPseudoFormats();
-            return mpdo;
-        }
-
-        public async Task<object> WriteClipboardOrDropObjectAsync(MpPortableDataObject mpdo, bool writeToClipboard) {
-            // pre-pass data object and remove disabled formats
-            var formatsToRemove = 
-                mpdo.DataFormatLookup
-                .Where(x => EnabledWriters.All(y => y.ClipboardFormat.clipboardName != x.Key.Name))
-                .Select(x => x.Key);
-
-            foreach(var format_to_remove in formatsToRemove) {
-                mpdo.DataFormatLookup.Remove(format_to_remove);
-
-            }
-
-
-            var dobj = new MpAvDataObject();
-            var handlers = 
-                EnabledFormats
-                .Where(x => x.IsWriter && MpPortableDataFormats.RegisteredFormats.Contains(x.Parent.HandledFormat))
-                .Distinct();
-
-            foreach(var handler in handlers) {
-                var writeRequest = new MpClipboardWriterRequest() {
-                    data = mpdo,
-                    writeToClipboard = writeToClipboard,
-                    items = handler.Items.Cast<MpIParameterKeyValuePair>().ToList()
-                };
-                var writer_component = handler.Parent.ClipboardPluginComponent as MpIClipboardWriterComponentAsync;
-                if (writer_component == null) {
-                    Debugger.Break();
-                }
-
-                MpClipboardWriterResponse writerResponse = await writer_component.WriteClipboardDataAsync(writeRequest);
-
-                bool isValid = MpPluginTransactor.ValidatePluginResponse(writerResponse);
-                if (isValid && writerResponse.platformDataObject is MpPortableDataObject ido) {
-                    ido.DataFormatLookup.Where(x => x.Value != null).ForEach(x => dobj.SetData(x.Key.Name, x.Value));
-                }
-            }
-
-            MpConsole.WriteLine("Data written to " + (writeToClipboard ? "CLIPBOARD" : "DATAOBJECT")+":");
-            mpdo.DataFormatLookup.ForEach(x => MpConsole.WriteLine("Format: " + x.Key.Name));
-            return dobj;
-        }
 
         #endregion
 
@@ -370,6 +307,75 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private async Task<MpAvDataObject> ReadClipboardOrDropObjectAsync(object forcedDataObject = null) {
+            // NOTE forcedDataObject is used to read drag/drop, when null clipboard is read
+            MpAvDataObject mpdo = new MpAvDataObject();
+
+            //MpConsole.WriteLine("Handlers available: " + handlers.Count());
+            foreach (var read_component in EnabledReaderComponents) {
+                var req = new MpClipboardReaderRequest() {
+                    isAvalonia = true,
+                    mainWindowImplicitHandle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle.ToInt32(),
+                    platform = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
+                    readFormats = EnabledReaders.Where(x => x.Parent.ClipboardPluginComponent == read_component).Select(x => x.Parent.HandledFormat).Distinct().ToList(),
+                    items = EnabledReaders.Where(x => x.Parent.ClipboardPluginComponent == read_component).SelectMany(x => x.Items.Cast<MpIParameterKeyValuePair>()).ToList(),
+                    forcedClipboardDataObject = forcedDataObject
+                };
+
+                var response = await read_component.ReadClipboardDataAsync(req);
+
+                bool isValid = MpPluginTransactor.ValidatePluginResponse(response);
+                if (isValid) {
+                    response.dataObject.DataFormatLookup.ForEach(x => mpdo.DataFormatLookup.AddOrReplace(x.Key, x.Value));
+                } else {
+                    MpConsole.WriteLine("Invalid cb reader response: " + response);
+                }
+            }
+            mpdo.MapAllPseudoFormats();
+            return mpdo;
+        }
+
+        private async Task<object> WriteClipboardOrDropObjectAsync(MpPortableDataObject mpdo, bool writeToClipboard, bool ignoreClipboardChange) {
+            if(ignoreClipboardChange) {
+                MpPlatformWrapper.Services.ClipboardMonitor.StopMonitor();
+            }
+            // pre-pass data object and remove disabled formats
+            var formatsToRemove =
+                mpdo.DataFormatLookup
+                .Where(x => EnabledWriters.All(y => y.ClipboardFormat.clipboardName != x.Key.Name))
+                .Select(x => x.Key);
+
+            foreach (var format_to_remove in formatsToRemove) {
+                mpdo.DataFormatLookup.Remove(format_to_remove);
+
+            }
+
+            var dobj = new MpAvDataObject();
+
+            foreach (var write_component in EnabledWriterComponents) {
+                var writeRequest = new MpClipboardWriterRequest() {
+                    data = mpdo,
+                    writeToClipboard = writeToClipboard,
+                    writeFormats = EnabledWriters.Where(x => x.Parent.ClipboardPluginComponent == write_component).Select(x => x.Parent.HandledFormat).Distinct().ToList(),
+                    items = EnabledWriters.Where(x => x.Parent.ClipboardPluginComponent == write_component).SelectMany(x => x.Items.Cast<MpIParameterKeyValuePair>()).ToList(),
+                };
+
+                MpClipboardWriterResponse writerResponse = await write_component.WriteClipboardDataAsync(writeRequest);
+
+                bool isValid = MpPluginTransactor.ValidatePluginResponse(writerResponse);
+                if (isValid && writerResponse.platformDataObject is MpPortableDataObject ido) {
+                    ido.DataFormatLookup.Where(x => x.Value != null).ForEach(x => dobj.SetData(x.Key.Name, x.Value));
+                }
+            }
+
+            MpConsole.WriteLine("Data written to " + (writeToClipboard ? "CLIPBOARD" : "DATAOBJECT") + ":");
+            mpdo.DataFormatLookup.ForEach(x => MpConsole.WriteLine("Format: " + x.Key.Name));
+
+            if (ignoreClipboardChange) {
+                MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
+            }
+            return dobj;
+        }
         #endregion
 
         #region Commands

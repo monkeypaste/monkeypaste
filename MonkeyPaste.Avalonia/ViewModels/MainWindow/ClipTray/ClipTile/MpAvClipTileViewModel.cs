@@ -1866,13 +1866,11 @@ namespace MonkeyPaste.Avalonia {
         public ICommand CopyToClipboardCommand => new MpAsyncCommand(
             async() => {
                 IsBusy = true;
-                MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = true;
                 var mpdo = await GetContentView().Document.GetDataObjectAsync(true, false, true);
-                await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo);
+                await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo, true);
 
                 // wait extra for cb watcher to know about data
                 await Task.Delay(300);
-                MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = false;
                 IsBusy = false;
             });
         #endregion

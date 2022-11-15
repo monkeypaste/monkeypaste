@@ -653,9 +653,9 @@ namespace MonkeyPaste.Avalonia {
                 for (int i = 0; i < x.Length; i++) {
                     if(i == anchor_idx) {
                         // anchor_idx is 'critically dampened' to 1 so it does not oscillate (doesn't animate past screen edge)
-                        Spring(ref x[i], ref v[i], xt[i], 1, omega, dt);
+                        MpAnimationHelpers.Spring(ref x[i], ref v[i], xt[i],dt, 1, omega);
                     } else {
-                        Spring(ref x[i], ref v[i], xt[i], zeta, omega, dt);
+                        MpAnimationHelpers.Spring(ref x[i], ref v[i], xt[i],dt, zeta, omega);
                     }
                 }
                 MainWindowScreenRect = new MpRect(x);
@@ -687,26 +687,6 @@ namespace MonkeyPaste.Avalonia {
             MainWindowScreenRect = endRect;
         }
 
-        private void Spring(ref double x, ref double v, double xt, double zeta, double omega, double h) {
-            /*
-              from https://allenchou.net/2015/04/game-math-precise-control-over-numeric-springing/
-              x     - value             (input/output)
-              v     - velocity          (input/output)
-              xt    - target value      (input)
-              zeta  - damping ratio     (input)
-              omega - angular frequency (input)
-              h     - time step         (input)
-            */
-            double f = 1.0d + 2.0d * h * zeta * omega;
-            double oo = omega * omega;
-            double hoo = h * oo;
-            double hhoo = h * hoo;
-            double detInv = 1.0d / (f + hhoo);
-            double detX = f * x + h * v + hhoo * xt;
-            double detV = v + hoo * (xt - x);
-            x = detX * detInv;
-            v = detV * detInv;
-        }
 
         private void ClampAnchoredSide(ref double side, ref double v, int idx) {
             if(!IsMainWindowOpening) {
@@ -979,13 +959,13 @@ namespace MonkeyPaste.Avalonia {
         public ICommand WindowResizeCommand => new MpCommand<MpSize>(
             (sizeArg) => {
                 Dispatcher.UIThread.Post(() => {
-                    var rc = MpAvMainWindow.Instance.GetResizerControl();
-                    if (rc == null) {
-                        return;
-                    }
+                    //var rc = MpAvMainWindow.Instance.GetResizerControl();
+                    //if (rc == null) {
+                    //    return;
+                    //}
                     IsResizing = true;
 
-                    MpAvResizeExtension.ResizeByDelta(rc, sizeArg.Width, sizeArg.Height);
+                    MpAvResizeExtension.ResizeByDelta(MpAvMainWindow.Instance, sizeArg.Width, sizeArg.Height);
 
                     IsResizing = false;
                 });
@@ -1030,13 +1010,13 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand WindowSizeToDefaultCommand => new MpCommand(
             () => {
-                var rc = MpAvMainWindow.Instance.GetResizerControl();
-                if (rc == null) {
-                    return;
-                }
+                //var rc = MpAvMainWindow.Instance.GetResizerControl();
+                //if (rc == null) {
+                //    return;
+                //}
                 IsResizing = true;
 
-                MpAvResizeExtension.ResetToDefault(rc);
+                MpAvResizeExtension.ResetToDefault(MpAvMainWindow.Instance);
 
                 IsResizing = false;
             });
