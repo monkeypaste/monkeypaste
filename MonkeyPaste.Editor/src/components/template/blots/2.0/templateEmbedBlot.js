@@ -97,16 +97,16 @@ class TemplateEmbedBlot extends Parchment.EmbedBlot {
 }
 
 function registerTemplateBlots() {    
-    let suppressWarning = false;
-    let config = {
-        scope: Parchment.Scope.INLINE,
-    };
+ //   let suppressWarning = false;
+ //   let config = {
+ //       scope: Parchment.Scope.INLINE,
+ //   };
 
-    for (var i = 0; i < TemplateEmbedHtmlAttributes.length; i++) {
-        let attrb_name = TemplateEmbedHtmlAttributes[i];
-        let attrb = new Parchment.Attributor(attrb_name, attrb_name, config);
-        Quill.register(attrb, suppressWarning);
-	}
+ //   for (var i = 0; i < TemplateEmbedHtmlAttributes.length; i++) {
+ //       let attrb_name = TemplateEmbedHtmlAttributes[i];
+ //       let attrb = new Parchment.Attributor(attrb_name, attrb_name, config);
+ //       Quill.register(attrb, suppressWarning);
+	//}
 
     Quill.register(TemplateEmbedBlot, true);
 }

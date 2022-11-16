@@ -76,33 +76,35 @@ function getTemplatePasteValue(t) {
     if (!t) {
         return '';
     }
-
+    let pv = '';
     let ttype = t.templateType.toLowerCase();
 
     if (ttype == 'dynamic') {
-        return t.templateText;
-	}
-    if (ttype == 'static') {
-        return t.templateData;
-    }
-    if (ttype == 'datetime') {
-        return jQuery.format.date(new Date(), t.templateData);
-    }
-    if (ttype == 'contact') {
+        pv = t.templateText;
+	} else if (ttype == 'static') {
+        pv = t.templateData;
+    } else if (ttype == 'datetime') {
+        pv = jQuery.format.date(new Date(), t.templateData);
+    } else if (ttype == 'contact') {
         if (isNullOrWhiteSpace(t.templateData)) {
             // error, data must be contact field on hide edit template
             //debugger;
             //return null;
-            return 'Full Name';
+            pv = 'Full Name';
         }
 
         if (SelectedContactGuid == null) {
             // TODO should be selected fro drop down in paste toolbar
-            return null;
+            pv = null;
         }
 
-        return getContactFieldValue(SelectedContactGuid, t.templateData);
-	}
+        pv = getContactFieldValue(SelectedContactGuid, t.templateData);
+    }
+
+    //if (isNullOrEmpty(pv)) {
+    //    return '';
+    //}
+    return pv;
 }
 
 function getPasteTemplateDefs() {
@@ -296,7 +298,8 @@ function updatePasteTemplateToolbarToSelection(force_ftguid) {
     if (!ftguid) {
         // either from template click or editor selection
         updatePasteTemplateValues();
-        ftguid = findPasteFocusTemplate(paste_sel);
+        let sel = getDocSelection();
+        ftguid = findPasteFocusTemplate(sel);
 
         focusTemplate(ftguid);
     } else {
@@ -308,8 +311,6 @@ function updatePasteTemplateToolbarToSelection(force_ftguid) {
     
     createTemplateSelector(ftguid, paste_sel);
     updatePasteTemplateToolbarToFocus(ftguid, paste_sel);
-    //updateTemplatesAfterTextChanged();
-    //updateAllElements();
 }
 
 function updatePasteTemplateToolbarToFocus(ftguid, paste_sel) {
@@ -337,7 +338,8 @@ function updatePasteTemplateToolbarToFocus(ftguid, paste_sel) {
         }
     }    
         // update selector item
-    let sel_opt_div = document.getElementById('selectedPasteTemplateOptionDiv');
+    let sel_opt_div = getSelectedPasteOptionDiv();
+    sel_opt_div.setAttribute('templateGuid', ft ? ft.templateGuid : '');
     applyTemplateToOptionDiv(sel_opt_div, ft);
 
     // UPDATE INPUT
@@ -445,9 +447,14 @@ function onTemplatePasteValueChanged(e) {
     let newTemplatePasteValue = getPasteValueTextAreaElement().value;
     let ftguid = getFocusTemplateGuid();
     if (!ftguid) {
-        debugger;
+        ftguid = getSelectedOptionTemplateGuid();
+        if (!ftguid) {
+            debugger;
+        } else {
+            //focusTemplate(ftguid, false);
+        }
         updatePasteTemplateToolbarToSelection();
-        ftguid = getFocusTemplateGuid();
+        //ftguid = getFocusTemplateGuid();
 	}
     setTemplatePasteValue(ftguid, newTemplatePasteValue);
     updatePasteElementInteractivity();

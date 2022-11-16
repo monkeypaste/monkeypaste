@@ -157,7 +157,7 @@ function getText_ext(rangeObjParamStrOrNull) {
 	// input MpQuillGetRangeTextRequestMessage
 	let rangeReq = toJsonObjFromBase64Str(rangeObjParamStrOrNull)
 	if (!rangeReq || rangeReq.index === undefined) {
-		rangeReq = { index: 0, length: quill.getLength() };
+		rangeReq = { index: 0, length: getDocLength() };
 	}
 	let textStr = getText(rangeReq);
 

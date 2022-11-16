@@ -454,3 +454,7 @@ function get2dIdx(idx, cols) {
         parseInt(idx % cols) // col
     ];
 }
+
+function insertTextAtIdx(str, idx, text) {
+    return [str.slice(0, idx), text, str.slice(idx)].join('');
+}

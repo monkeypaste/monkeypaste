@@ -36,6 +36,9 @@
     <Content Include="images\icons\monkey.ico" />
     <Content Include="src\components\content\paste\paste-toolbar-style.css" />
     <Content Include="src\components\content\paste\pastetoolbar.js" />
+    <Content Include="src\components\exceptions\exceptions.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\components\font\fontcolor.js" />
     <Content Include="src\components\link\link.js">
       <SubType>Code</SubType>
@@ -44,6 +47,9 @@
     <Content Include="src\components\list\checkable\checkablelist.js" />
     <Content Include="src\components\list\list.js" />
     <Content Include="src\components\list\list-style.css" />
+    <Content Include="src\components\loader\loader.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\components\quill-wrapper\quill-tooltip\quill-tooltip-wrapper.js" />
     <Content Include="src\components\svg\assets\contact-svgrepo-com.svg" />
     <Content Include="src\components\svg\assets\delete-svgrepo-com.svg" />
@@ -151,6 +157,8 @@
     <Folder Include="src\components\list\" />
     <Folder Include="src\components\messages\async\" />
     <Folder Include="src\components\link\" />
+    <Folder Include="src\components\loader\" />
+    <Folder Include="src\components\exceptions\" />
     <Folder Include="src\components\quill-wrapper\quill-tooltip\" />
     <Folder Include="src\components\svg\" />
     <Folder Include="src\components\overlay\" />

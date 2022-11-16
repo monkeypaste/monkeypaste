@@ -139,10 +139,11 @@ function onDragEnter(e) {
         if (IsDragging) {
             return false;
         }
-        if (!isSubSelectionEnabled()) {
-            enableSubSelection();
-		}
         //return;
+    }
+    onDragEnter_ntf();
+    if (!isSubSelectionEnabled()) {
+        enableSubSelection();
     }
     log('drag enter');
     IsDropping = true;
@@ -155,7 +156,6 @@ function onDragEnter(e) {
         enableSubSelection(false,false,false);
     }
     hidePasteToolbar();
-    onDragEnter_ntf();
     return false;
 }
 

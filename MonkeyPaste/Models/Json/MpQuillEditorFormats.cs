@@ -194,10 +194,12 @@ namespace MonkeyPaste {
     }
 
     public class MpQuillExceptionMessage : MpJsonObject {
-        public string exType { get; set; }
-        public string exData { get; set; }
+        public string url { get; set; }
+        public string msg { get; set; }
+
+        public int lineNum { get; set; }
         public override string ToString() {
-            return $"Quill Exception ofType:'{exType}' withData: '{exData}'";
+            return $"JS Exception. Line: {lineNum} Url:'{url}' Msg: '{msg}'";
         }
     }
     public class MpQuillFileListDataFragment : MpJsonObject {

@@ -337,7 +337,7 @@ function onOverInput(e) {
 }
 
 function getContentDocRanges(ciguid) {
-    let docLength = quill.getLength();
+    let docLength = getDocLength();
 
     let curRange = null;
 
@@ -377,7 +377,7 @@ function getContentDocRanges(ciguid) {
 }
 
 function getContentGuidByIdx(docIdx) {
-    if (docIdx < 0 || docIdx >= quill.getLength()) {
+    if (docIdx < 0 || docIdx >= getDocLength()) {
         return ''
     };
 
@@ -386,7 +386,7 @@ function getContentGuidByIdx(docIdx) {
 }
 
 function getContentSourceGuidByIdx(docIdx) {
-    if (docIdx < 0 || docIdx >= quill.getLength()) {
+    if (docIdx < 0 || docIdx >= getDocLength()) {
         return ''
     };
     let leafElementNode = getElementAtIdx(docIdx);
@@ -401,12 +401,12 @@ function getContentItemByIdx(docIdx) {
 }
 
 function getContentWidth() {
-    var bounds = quill.getBounds(0, quill.getLength());
+    var bounds = quill.getBounds(0, getDocLength());
     return bounds.width;
 }
 
 function getContentHeight() {
-    var bounds = quill.getBounds(0, quill.getLength());
+    var bounds = quill.getBounds(0, getDocLength());
     return bounds.height;
 }
 
@@ -430,7 +430,7 @@ function isDocIdxLineStart(docIdx) {
     if (docIdx == 0) {
         return true;
     }
-    if (docIdx >= quill.getLength()) {
+    if (docIdx >= getDocLength()) {
         return false;
     }
     let idxLine = quill.getLine(docIdx);
@@ -439,7 +439,7 @@ function isDocIdxLineStart(docIdx) {
 }
 
 function isDocIdxLineEnd(docIdx) {
-    if (docIdx == quill.getLength()) {
+    if (docIdx == getDocLength()) {
         return true;
     }
     if (docIdx < 0) {

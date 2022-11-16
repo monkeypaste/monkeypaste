@@ -25,7 +25,7 @@ function updateOverlayBounds(overlayCanvas) {
 function drawUnderlines(ctx, color = 'red', thickness = '0.5') {
     let p1 = null;
     let p2 = null;
-    let count = quill.getLength();
+    let count = getDocLength();
     let windowRect = getEditorContainerRect();
 
     for (var i = 0; i < count; i++) {

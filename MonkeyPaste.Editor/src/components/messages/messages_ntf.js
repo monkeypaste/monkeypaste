@@ -125,26 +125,21 @@ function onAddOrUpdateTemplate_ntf(t) {
 	}
 }
 
-function onException_ntf(exType, exData) {
+function onException_ntf(exMsg, exUrl, exLine) {
 	// output 'MpQuillExceptionMessage'
 
 	if (typeof notifyException === 'function') {
-		let exDataStr = null;
-		if (typeof exData === 'string' || exData instanceof String) {
-			exDataStr = exData;
-		} else {
-			exDataStr = JSON.stringify(exData);
-		}
 		log('');
 		log('exception! ');
-		log('exType: ' + exType);
-		log('exDataStr: ' + exDataStr);
+		log('Msg: ' + exMsg);
+		log('URL: ' + exUrl);
+		log('Line: ' + exLine);
 		log('');
-		// out MpQuillExceptionMessage
+
 		let msg = {
-			//copyItemId: ContentHandle,
-			exType: exType,
-			exData: exDataStr
+			msg: exMsg,
+			url: exUrl,
+			lineNum: exLine
 		};
 		let msgStr = toBase64FromJsonObj(msg);
 		notifyException(msgStr);

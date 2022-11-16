@@ -777,6 +777,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Drag & Drop
 
+        public bool IsDropOverTile { get; set; } = false;
+
         public bool IsTileDragging { get; set; } = false;
 
         #endregion

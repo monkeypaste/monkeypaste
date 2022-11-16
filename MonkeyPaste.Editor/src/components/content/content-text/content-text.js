@@ -45,7 +45,7 @@ function getLineStartDocIdx(docIdx) {
 	//    }
 	//}
 	//return lineStartDocIdx;
-	docIdx = docIdx < 0 ? 0 : docIdx >= quill.getLength() ? quill.getLength() - 1 : docIdx;
+	docIdx = docIdx < 0 ? 0 : docIdx >= getDocLength() ? getDocLength() - 1 : docIdx;
 	while (!isDocIdxLineStart(docIdx)) {
 		docIdx--;
 	}
@@ -61,7 +61,7 @@ function getLineEndDocIdx(docIdx) {
 	//    }
 	//}
 	//return lineEndDocIdx;
-	docIdx = docIdx < 0 ? 0 : docIdx >= quill.getLength() ? quill.getLength() - 1 : docIdx;
+	docIdx = docIdx < 0 ? 0 : docIdx >= getDocLength() ? getDocLength() - 1 : docIdx;
 	while (!isDocIdxLineEnd(docIdx)) {
 		docIdx++;
 	}
@@ -89,7 +89,7 @@ function getLineIdx(docIdx) {
 function getLineDocRange(lineIdx) {
 	lineIdx = lineIdx < 0 ? 0 : lineIdx >= getLineCount() ? getLineCount() - 1 : lineIdx;
 	let docIdx = 0;
-	let maxDocIdx = quill.getLength() - 1;
+	let maxDocIdx = getDocLength() - 1;
 	let curLineIdx = 0;
 	while (docIdx <= maxDocIdx) {
 		let lineStartIdx = getLineStartDocIdx(docIdx);
@@ -108,6 +108,9 @@ function getLineCount() {
 }
 
 function getDocLength() {
+	if (!quill) {
+		return 0;
+	}
 	return quill.getLength();
 }
 
@@ -246,6 +249,7 @@ function getBlockIdxFromPoint(p) {
 	}
 	return block_idx;
 }
+
 function getElementBlot(elm) {
 	let cur_elm = elm;
 	while (true) {
@@ -535,13 +539,16 @@ function isInlineElement(elm) {
 }
 
 function isDocIdxBlockStart(docIdx) {
+	if (isDocIdxAtListItemStart(docIdx)) {
+		return true;
+	}
 	if (isNaN(parseFloat(docIdx))) {
 		return false;
 	}
 	if (docIdx == 0) {
 		return true;
 	}
-	if (docIdx >= quill.getLength()) {
+	if (docIdx >= getDocLength()) {
 		return false;
 	}
 	let prev_char = getText({ index: docIdx - 1, length: 1 });
@@ -552,7 +559,7 @@ function isDocIdxBlockEnd(docIdx) {
 	if (isNaN(parseFloat(docIdx))) {
 		return false;
 	}
-	if (docIdx == quill.getLength()) {
+	if (docIdx == getDocLength()) {
 		return true;
 	}
 	if (docIdx < 0) {
@@ -569,7 +576,7 @@ function isDocIdxLineStart(docIdx) {
 	if (docIdx == 0) {
 		return true;
 	}
-	if (docIdx >= quill.getLength()) {
+	if (docIdx >= getDocLength()) {
 		return false;
 	}
 	let idxLine = quill.getLine(docIdx);
@@ -581,7 +588,7 @@ function isDocIdxLineEnd(docIdx) {
 	if (isNaN(parseFloat(docIdx))) {
 		return false;
 	}
-	if (docIdx == quill.getLength()) {
+	if (docIdx == getDocLength()) {
 		return true;
 	}
 	if (docIdx < 0) {

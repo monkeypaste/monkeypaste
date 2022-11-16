@@ -47,9 +47,16 @@ function getPasteTemplateSelectorHiddenSelectElement() {
     return document.getElementById('pasteTemplateToolbarMenuHiddenSelect');
 }
 
-
 function getPasteFocusTemplateOptionsElement() {
     return document.getElementById('pasteOptionsDiv');
+}
+
+function getSelectedPasteOptionDiv() {
+    return document.getElementById('selectedPasteTemplateOptionDiv');
+}
+
+function getSelectedOptionTemplateGuid() {
+    return getSelectedPasteOptionDiv().getAttribute('templateGuid');
 }
 
 // #endregion Getters
@@ -79,8 +86,8 @@ function createTemplateSelector(ftguid, paste_sel) {
     // and sets selected div w / ftguid(or empty if null) to the given selection range
 
     // clear hidden selector options
-    let sel_elm = getPasteTemplateSelectorHiddenSelectElement();
-    sel_elm.innerHTML = '';
+    //let sel_elm = getPasteTemplateSelectorHiddenSelectElement();
+    //sel_elm.innerHTML = '';
 
     // sel_opt_div is used to clone option elements (and is set to ftguid)
     let sel_opt_div = getPasteFocusSelectedTemplateElement();
@@ -92,10 +99,10 @@ function createTemplateSelector(ftguid, paste_sel) {
     let tl = getTemplateDefsInRange(paste_sel);
     for (var i = 0; i < tl.length; i++) {
         let t = tl[i];
-        let option_value = t.templateGuid;
-        let option_onChange = `focusTemplate('${t.templateGuid}');`;
-        let t_option_str = `<option class="templateOption" value="${option_value}" onchange="${option_onChange}">${t.templateName}</option>`;
-        sel_elm.innerHTML += t_option_str;
+        //let option_value = t.templateGuid;
+        //let option_onChange = `focusTemplate('${t.templateGuid}');`;
+        //let t_option_str = `<option class="templateOption" value="${option_value}" onchange="${option_onChange}">${t.templateName}</option>`;
+        //sel_elm.innerHTML += t_option_str;
 
         let cur_option_div = sel_opt_div.cloneNode(true);
         all_opts_div.appendChild(cur_option_div);
@@ -110,9 +117,7 @@ function createTemplateSelector(ftguid, paste_sel) {
 
         cur_option_div.setAttribute('templateGuid', t.templateGuid);
     }
-    //if (!ftguid) {
-        applyTemplateToOptionDiv(sel_opt_div, null);
-    //}
+    applyTemplateToOptionDiv(sel_opt_div, null);
     // NOTE adding close template selector at end so event signaled before show (if on selector) 
     document.addEventListener('click', onDocumenClickToClosePasteTemplateSelector);
 }

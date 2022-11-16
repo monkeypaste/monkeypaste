@@ -50,14 +50,32 @@ function getSelectedText(encodeTemplates = false) {
 	return getText(selection, encodeTemplates);
 }
 
-function getText(range, encodeTemplates = false) {
-	range = range == null ? { index: 0, length: quill.getLength() } : range;
+function getText(range, for_ole = false) {
+	quill.update();
+	range = range == null ? { index: 0, length: getDocLength() } : range;
 	let text = '';
-	if (IsLoaded & encodeTemplates) {
+	if (IsLoaded && for_ole) {
 		text = getTemplatePlainTextForDocRange(range);
+
+		let li_elms = getAllListItemElements();
+		if (li_elms.length > 0) {
+			let li_elms_doc_idxs = li_elms.map(x => getElementDocIdx(x));
+			for (var i = 0; i < li_elms.length; i++) {
+				let li_elm = li_elms[i];
+				let li_bullet_text = getListItemElementBulletText(li_elm);
+				let li_text = `${li_bullet_text} `;
+				let li_doc_idx = li_elms_doc_idxs[i];
+				let offset = getTemplatePasteLengthBeforeDocIdx(li_doc_idx);
+				text = insertTextAtIdx(text, li_doc_idx + offset, li_text);
+				for (var j = i + 1; j < li_elms_doc_idxs.length; j++) {
+					li_elms_doc_idxs[j] += li_text.length;
+				}
+			}
+		}
 	} else {
 		text = quill.getText(range.index, range.length);
 	}
+
 	return text;
 }
 
@@ -132,9 +150,8 @@ function getHtml2(sel) {
 
 function getHtml3(sel) {
 	let delta = getDelta(sel);
-	//log(delta.ops)
 	let cfg = {
-		inlineStyles: true,
+		//inlineStyles: true,
 		encodeHtml: false
 	};
 	let qdc = new window.QuillDeltaToHtmlConverter(delta.ops, cfg);
@@ -148,6 +165,8 @@ function getHtml3(sel) {
 		if (customOp.attributes !== undefined &&
 			customOp.attributes.templateInstanceGuid !== undefined) {
 			return getTemplateInstanceElement(customOp.attributes.templateInstanceGuid).outerHTML;
+		} else {
+			debugger;
 		}
 	});
 	let html = qdc.convert();

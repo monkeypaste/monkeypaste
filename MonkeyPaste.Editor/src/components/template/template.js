@@ -33,14 +33,11 @@ function getTemplateElements(tguid, sortBy = 'docIdx', isDescending = false) {
         let telm = all_telms[i];
         let t = getTemplateFromDomNode(telm);
         if (!tguid || t.templateGuid == tguid) {
-   //         if (sortBy) {
-   //             telm.setAttribute('docIdx', getTemplateDocIdx(t.templateInstanceGuid));
-			//}
             target_telms.push(telm);
         }
     }
     if (!sortBy || sortBy == 'docIdx') {
-        return target_telms;
+        return isDescending ? target_telms.reverse() : target_telms;
 	}
     return target_telms.sort((a, b) => {
         if (isDescending) {
@@ -61,11 +58,11 @@ function getTemplateInstanceDefs() {
         let telm = telms[i];
         let template = getTemplateFromDomNode(telm);
         template.domNode = telm;
-        if (telm.hasAttribute('docIdx')) {
-            template.docIdx = parseInt(telm.getAttribute('docIdx'));
-        } else {
-            template.docIdx = getTemplateDocIdx(template.templateInstanceGuid);
-		}
+  //      if (telm.hasAttribute('docIdx')) {
+  //          template.docIdx = parseInt(telm.getAttribute('docIdx'));
+  //      } else {
+  //          template.docIdx = getTemplateDocIdx(template.templateInstanceGuid);
+		//}
        
         tdefs.push(template);
     }
@@ -104,6 +101,28 @@ function getTemplateDefByGuid(tguid) {
 function getTemplateCountBeforeDocIdx(docIdx) {
     let t_docIdx_L = getAllTemplateDocIdxs().filter(x => x < docIdx);
     return t_docIdx_L.length;
+}
+
+function getTemplatePasteLengthBeforeDocIdx(docIdx) {
+    let t_docIdx_L = getAllTemplateDocIdxs().filter(x => x < docIdx);
+    let paste_length = 0;
+    for (var i = 0; i < t_docIdx_L.length; i++) {
+        let t = getTemplateAtDocIdx(t_docIdx_L[i]);
+        let t_val = getTemplatePasteValue(t);
+        if (t_val == null) {
+            debugger;
+        }
+        let val_length = getTemplatePasteValue(t).length;
+        if (isTemplateAtDocIdxPrePadded(t_docIdx_L[i])) {
+            val_length -= 1;
+        }
+        if (isTemplateAtDocIdxPostPadded(t_docIdx_L[i])) {
+            val_length -= 1;
+        }
+        
+        paste_length += val_length;
+    }
+    return paste_length - getTemplateCountBeforeDocIdx(docIdx);
 }
 
 function getTemplateDefByInstanceGuid(tiguid) {
@@ -201,7 +220,7 @@ async function getAvailableTemplateDefinitions() {
 }
 
 function getTemplateDocIdx(tiguid) {
-    let docLength = quill.getLength();
+    let docLength = getDocLength();
     for (var i = 0; i < docLength; i++) {
         let curDelta = getDelta({ index: i, length: 1 });
         if (curDelta.ops.length > 0 &&
@@ -232,27 +251,17 @@ function getTemplateElementsInRange(range) {
     if (range == null || range.index == null) {
         log('invalid range: ' + range);
     }
-    let tl = [];
-    let tel = getTemplateElements();
-    tel.forEach(function (te) {
-        let te_blot = Quill.find(te);
-        if (!te_blot) {
-            return;
-        }
-        let te_doc_idx = te_blot.offset(quill.scroll);
+    let target_telms = [];
+    let telms = getTemplateElements();
+    for (var i = 0; i < telms.length; i++) {
+        let telm = telms[i];
+        let te_doc_idx = getElementDocIdx(telm);
         if (te_doc_idx >= range.index && te_doc_idx <= range.index + range.length) {
             // template is range
-            tl.push(te);
+            target_telms.push(telm);
         }
-        //let t = getTemplateFromDomNode(te);
-        //let docIdx = getTemplateDocIdx(t.templateInstanceGuid);
-        //if (docIdx == range.index) {
-        //    tl.push(te);
-        //} else if (docIdx > range.index && docIdx < range.index + range.length) {
-        //    tl.push(te);
-        //}
-    });
-    return tl;
+	}
+    return target_telms;
 }
 
 function getTemplateDefsInRange(range) {
@@ -283,7 +292,7 @@ function getTemplateElementsWithDocIdx() {
 
 function getTemplateAsPlainText(t) {
     if (isShowingPasteToolbar()) {
-        return t.templateText;
+        return getTemplatePasteValue(t);
     }
     let template_text = `${ENCODED_TEMPLATE_OPEN_TOKEN}${t.templateGuid},${t.templateInstanceGuid}${ENCODED_TEMPLATE_CLOSE_TOKEN}`;
     return template_text;
@@ -313,32 +322,6 @@ function getTemplatePlainTextForDocRange(range) {
             if (isTemplateAtDocIdxPostPadded(doc_idx)) {
                 i++;
             }
-            // check if pre template space is a pad space
-            //let pre_t_doc_idx = doc_idx - 1;
-            //let pre_t_doc_idx_char = getText({ index: pre_t_doc_idx, length: 1 });
-            //if (pre_t_doc_idx_char == ' ') {
-            //    // previous is potentially pad since its a space
-            //    let pre_pre_t_doc_idx_char = getText({ index: pre_t_doc_idx - 1, length: 1 });
-            //    let is_pre_t_idx_pad_space = pre_t_doc_idx == 0 || pre_pre_t_doc_idx_char == '\n';
-            //    if (is_pre_t_idx_pad_space) {
-            //        // occurs when previous pad space is beginning of doc or pad was start of new block
-            //        // remove prev pad space
-            //        out_text = substringByLength(out_text, 0, Math.max(0, out_text.length - 1));
-            //    }
-            //}
-            //// check if pre temppostlate space is a pad space
-            //let post_t_doc_idx = doc_idx + 1;
-            //let post_t_doc_idx_char = getText({ index: post_t_doc_idx, length: 1 });
-            //if (post_t_doc_idx_char == ' ') {
-            //    // next is potentially pad since its a space
-            //    let post_post_t_doc_idx_char = getText({ index: post_t_doc_idx + 1, length: 1 });
-            //    let is_post_t_idx_pad_space = post_t_doc_idx == getDocLength() - 1 || post_post_t_doc_idx_char == '\n';
-            //    if (is_post_t_idx_pad_space) {
-            //        // occurs when post pad space is end of doc or pad is end of current block
-            //        // skip next iteration so loop ignores the pad space and picks back up at end of block or terminates
-            //        i++;
-            //    }
-            //}
             out_text += getTemplateAsPlainText(t_at_next_doc_idx);
         }
         out_text += doc_idx_char;
@@ -755,7 +738,8 @@ function updateTemplatesAfterSelectionChange() {
         let t_elm = all_template_elms[i];
         let tiguid = t_elm.getAttribute('templateInstanceGuid');
         let is_t_in_sel_range = template_elms_in_sel_range.includes(t_elm);
-        let t_doc_idx = getTemplateDocIdx(tiguid);
+        //let t_doc_idx = getTemplateDocIdx(tiguid);
+        let t_doc_idx = getElementDocIdx(t_elm);
         if (show_sel_bg_color) {
             if (is_t_in_sel_range) {
                 if (is_nav_right &&
@@ -848,7 +832,10 @@ function focusTemplate(ftguid, fromDropDown = false, isNew = false, fromClickOnT
             let ft = getTemplateDefByGuid(old_ftguid);
             let telms = getTemplateElements(old_ftguid);
             for (var i = 0; i < telms.length; i++) {
-                telms[i].setAttribute('wasVisited', true);
+                if (parseBool(telms[i].getAttribute('wasVisited')) == false) {
+                    telms[i].setAttribute('wasVisited', true);
+                }
+                
             }
 		}
         
@@ -889,15 +876,3 @@ function onEditorTextChangedPadTemplates(delta, oldDelta, source) {
 }
 
 //#endregion
-
-
-
-
-
-
-
-
-
-
-
-

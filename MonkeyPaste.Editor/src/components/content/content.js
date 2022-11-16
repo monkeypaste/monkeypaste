@@ -88,6 +88,7 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 // #region Getters
 
 function getContentAsMessage() {
+	quill.update();
 	return {
 		editorWidth: getEditorWidth(),
 		editorHeight: getEditorHeight(),
@@ -144,13 +145,13 @@ function getContentBg(htmlStr, contrast_opacity = 0.5) {
 }
 
 function getContentWidth() {
-	var bounds = quill.getBounds(0, quill.getLength());
+	var bounds = quill.getBounds(0, getDocLength());
 	bounds = cleanRect(bounds);
 	return parseFloat(bounds.width);
 }
 
 function getContentHeight() {
-	var bounds = quill.getBounds(0, quill.getLength());
+	var bounds = quill.getBounds(0, getDocLength());
 	bounds = cleanRect(bounds);
 	return parseFloat(bounds.height);
 }
@@ -208,6 +209,7 @@ function canDisableReadOnly() {
 // #region Actions
 
 function convertContentToFormats(isForOle, formats) {
+	quill.update();
 	let items = null;
 	if (ContentItemType == 'Text') {
 		items = convertTextContentToFormats(isForOle, formats);
