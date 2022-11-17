@@ -36,6 +36,9 @@
     <Content Include="images\icons\monkey.ico" />
     <Content Include="src\components\content\paste\paste-toolbar-style.css" />
     <Content Include="src\components\content\paste\pastetoolbar.js" />
+    <Content Include="src\components\datatransfer\datatransfer.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\components\exceptions\exceptions.js">
       <SubType>Code</SubType>
     </Content>
@@ -125,6 +128,9 @@
     <Content Include="src\components\util\graphics\roundedRect.js" />
     <Content Include="src\components\util\helpers.js" />
     <Content Include="src\components\svg\svgloader.js" />
+    <Content Include="src\components\datatransfer\htmlfragment.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\components\util\math.js" />
     <Content Include="src\components\util\resize.js" />
     <Content Include="src\components\window\window.js" />
@@ -159,6 +165,7 @@
     <Folder Include="src\components\link\" />
     <Folder Include="src\components\loader\" />
     <Folder Include="src\components\exceptions\" />
+    <Folder Include="src\components\datatransfer\" />
     <Folder Include="src\components\quill-wrapper\quill-tooltip\" />
     <Folder Include="src\components\svg\" />
     <Folder Include="src\components\overlay\" />

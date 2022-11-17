@@ -496,6 +496,17 @@ namespace MonkeyPaste {
 
         #endregion MpUrl
 
+        #region MpCopyItemSource
+        public static async Task<MpCopyItemSource> GetCopyItemSourceByMembersAsync(int ciid, MpCopyItemSourceType sourceType, int sourceObjId) {
+            string query = $"select * from MpCopyItemSource where fk_MpCopyItemId=? and e_MpCopyItemSourceType=? and fk_SourceObjId=?";
+            var result = await MpDb.QueryAsync<MpCopyItemSource>(query, ciid, sourceType.ToString(), sourceObjId);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+        #endregion
+
         #region MpSource
 
         public static async Task<List<MpSource>> GetAllSourcesByAppIdAsync(int appId) {

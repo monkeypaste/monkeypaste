@@ -21,11 +21,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         
-        public static async Task<MpCopyItem> CreateFromDataObject(MpPortableDataObject mpdo, bool fromInternalSource, bool suppressWrite = false) {
+        public static async Task<MpCopyItem> CreateFromDataObject(MpPortableDataObject mpdo, int internalSourceCopyItemId = -1, bool suppressWrite = false) {
+            if (internalSourceCopyItemId == 0) {
+                throw new Exception("Invalid internalSourceCopyItemId, if not -1 needs to be greater than zero. Value was " + internalSourceCopyItemId);
+            }
             try {
                 if (mpdo == null || mpdo.DataFormatLookup.Count == 0) {
                     return null;
                 }
+
+                
 
                 var actual_formats = await Application.Current.Clipboard.GetFormatsAsync();
                 actual_formats.ForEach(x => MpConsole.WriteLine("Actual format: " + x));
@@ -266,7 +271,7 @@ namespace MonkeyPaste.Avalonia {
 
                 MpApp app = null;
                 MpUrl url = null;
-                if(fromInternalSource) {
+                if(internalSourceCopyItemId > 0) {
                     app = await MpDataModelProvider.GetItemAsync<MpApp>(MpPrefViewModel.Instance.ThisAppSource.AppId);
                 } else {
                     var last_pinfo = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
@@ -301,10 +306,12 @@ namespace MonkeyPaste.Avalonia {
 
                 if (app == null) {
                     throw new Exception("Error creating copy item no source discovered");
-                }
+                } 
                 if(url != null) {
                     await MpDb.AddOrUpdateAsync<MpUrl>(url);
                 }
+
+
                 var source = await MpSource.Create(app.Id, url == null ? 0:url.Id);
 
                 var dobj = await MpDataObject.CreateAsync(
@@ -318,6 +325,27 @@ namespace MonkeyPaste.Avalonia {
                     itemType: itemType,
                     suppressWrite: suppressWrite);
 
+                if(app != null) {
+                    if(internalSourceCopyItemId > 0) {
+                        await MpCopyItemSource.CreateAsync(
+                            copyItemId: ci.Id,
+                            sourceObjId: internalSourceCopyItemId,
+                            sourceType: MpCopyItemSourceType.CopyItem);
+                    } else {
+
+                        await MpCopyItemSource.CreateAsync(
+                            copyItemId: ci.Id,
+                            sourceObjId: app.Id,
+                            sourceType: MpCopyItemSourceType.App);
+                    }
+                }
+                if (url != null) {
+                    await MpCopyItemSource.CreateAsync(
+                        copyItemId: ci.Id,
+                        sourceObjId: url.Id,
+                        sourceType: MpCopyItemSourceType.Url);
+                }
+
                 return ci;
             } catch(Exception ex) {
                 MpConsole.WriteTraceLine(ex);
@@ -325,8 +353,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public async Task<MpCopyItem> CreateAsync(MpPortableDataObject pdo, bool fromInternalSource, bool suppressWrite = false) {
-            var ci = await CreateFromDataObject(pdo,fromInternalSource,suppressWrite);
+        public async Task<MpCopyItem> CreateAsync(MpPortableDataObject pdo, int internalSourceCopyItemId = -1, bool suppressWrite = false) {
+            var ci = await CreateFromDataObject(pdo, internalSourceCopyItemId, suppressWrite);
             return ci;
         }
 

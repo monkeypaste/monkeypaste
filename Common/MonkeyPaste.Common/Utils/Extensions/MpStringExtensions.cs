@@ -104,7 +104,7 @@ namespace MonkeyPaste.Common {
             return str;
         }
 
-        public static IEnumerable<string> SplitNoEmpty(this string str, string separator) {
+        public static string[] SplitNoEmpty(this string str, string separator) {
             return str.Split(new string[] { separator }, StringSplitOptions.RemoveEmptyEntries);
         }
 

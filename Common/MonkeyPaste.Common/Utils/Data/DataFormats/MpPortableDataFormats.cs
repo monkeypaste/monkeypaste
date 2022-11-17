@@ -25,6 +25,7 @@ namespace MonkeyPaste.Common {
             WinDib,
 
             // linux
+
             LinuxSourceUrl,
             LinuxGnomeFiles,
             //LinuxUriList //not adding this one cause i don't like it
@@ -41,10 +42,13 @@ namespace MonkeyPaste.Common {
             CefHtml,
             CefText,
             CefJson,
+            CefAsciiUrl,
+            CefUnicodeUrl,
 
             // internal
 
-            INTERNAL_CLIP_TILE_DATA_FORMAT
+            INTERNAL_CLIP_TILE_DATA_FORMAT,
+            
         };
 
         private static Dictionary<int, MpPortableDataFormat> _formatLookup;
@@ -84,12 +88,15 @@ namespace MonkeyPaste.Common {
 
         // Cef Formats
 
+        //public const string CefDragData = "CefDragData";
+        public const string CefUnicodeUrl = "UniformResourceLocator";
+        public const string CefAsciiUrl = "UniformResourceLocator";
+
         public const string CefHtml = "text/html";
         public const string CefText = "text/plain";
         public const string CefJson = "application/json";
 
         public const string INTERNAL_CLIP_TILE_DATA_FORMAT = "Mp Internal Content";
-
         #endregion
 
         #region Properties

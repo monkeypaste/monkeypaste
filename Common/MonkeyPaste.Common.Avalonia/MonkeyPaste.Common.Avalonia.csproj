@@ -58,6 +58,10 @@
     <NoWarn>$(NoWarn),IDE1006</NoWarn>
     <NoWarn>$(NoWarn),CA1401</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Utils\Data\MpAvSafeOleAccessor.cs" />
+  </ItemGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
     <None Remove="Mono.GtkSharp" />

@@ -117,7 +117,6 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                await SourceDataObject.ContainsInternalContentItem_safe(drag_lock);
 
                 // seems excessive...but ultimately all ole pref's come from plugins so pass everthing through cb plugin system just like writing to clipboard
                 DragDataObject = await MpPlatformWrapper.Services.DataObjectHelperAsync.WriteDragDropDataObject(SourceDataObject) as MpAvDataObject;

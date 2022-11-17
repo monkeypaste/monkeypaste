@@ -121,6 +121,11 @@ namespace MonkeyPaste.Avalonia {
                     if (add_tile_data) {
                         avdo.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT, ctvm.PublicHandle);
                     }
+
+                    //MpISourceRef source_ref = ctvm.CopyItem;
+                    //string source_ref_str = MpJsonObject.SerializeObject(source_ref);
+                    //avdo.SetData(MpPortableDataFormats.INTERNAL_COPY_ITEM_SOURCE_DATA_FORMAT, source_ref_str);
+                    avdo.SetData(MpPortableDataFormats.CefAsciiUrl, ctvm.CopyItem.ToSourceRefUrl().ToBytesFromString(Encoding.ASCII));
                 }
 
                

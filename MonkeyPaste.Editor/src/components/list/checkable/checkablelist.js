@@ -6,6 +6,15 @@
 
 function initCheckableList() {
 	getEditorElement().addEventListener('click', onEditorClickForCheckableListItem);
+
+	let suppressWarning = false;
+    let config = {
+        scope: Parchment.Scope.ANY,
+    };
+
+	let attrb_name = "data-list";
+	let attrb = new Parchment.Attributor(attrb_name, "check", config);
+	Quill.register(attrb, suppressWarning);
 }
 
 // #endregion Life Cycle
@@ -19,6 +28,7 @@ function getUncheckedListItemElements() {
 function getCheckedListItemElements() {
 	return Array.from(document.querySelectorAll('[data-list="checked"]'));
 }
+
 
 // #endregion Getters
 
@@ -36,6 +46,11 @@ function updateCheckableItemElements() {
 
 }
 
+function fixDelta2HtmlCheckables(htmlStr) {
+	htmlStr = htmlStr.replaceAll('[data-checked="false"]', '[data-list="unchecked"]');
+	htmlStr = htmlStr.replaceAll('[data-checked="true"]', '[data-list="checked"]');
+	return htmlStr;
+}
 // #endregion Actions
 
 // #region Event Handlers

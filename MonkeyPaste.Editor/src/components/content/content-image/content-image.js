@@ -31,6 +31,14 @@ function getImageContentData() {
 	let img_data = img_elm.getAttribute('src').replace('data:image/png;base64,', '');
 	return img_data;
 }
+
+function getEncodedImageContentText() {
+	// TODO could return analytic result or ascii here
+	return '';
+}
+function getDecodedImageContentText(encoded_text) {
+	return encoded_text;
+}
 // #endregion Getters
 
 // #region Setters

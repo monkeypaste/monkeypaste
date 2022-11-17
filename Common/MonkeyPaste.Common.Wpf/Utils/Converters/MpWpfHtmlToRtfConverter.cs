@@ -32,6 +32,7 @@ namespace MonkeyPaste.Common.Wpf {
         private static string _defaultFontFamily;
         private static string _defaultCodeBlockFontFamily;
 
+        private static FlowDocument _ownerFd;
         #endregion
 
         #region Properties
@@ -45,11 +46,11 @@ namespace MonkeyPaste.Common.Wpf {
             _defaultCodeBlockFontFamily = defaultCodeBlockFontFamily == null ? "Consolas" : defaultCodeBlockFontFamily;
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(html);
-            var fd = new FlowDocument {
+            _ownerFd = new FlowDocument {
                 FontFamily = new FontFamily(_defaultFontFamily),
 
             };
-            fd.Blocks.Clear();
+            _ownerFd.Blocks.Clear();
             foreach (var htmlBlockNode in htmlDoc.DocumentNode.ChildNodes) {
                 var docNode = htmlBlockNode;
                 if(docNode.Name == "div") {
@@ -57,7 +58,7 @@ namespace MonkeyPaste.Common.Wpf {
                     // and for code-block, i'm not sure but there maybe multiple blocks so process all 1st level children
                     docNode = htmlBlockNode.FirstChild;
                     while(docNode != null) {
-                        fd.Blocks.Add(ConvertHtmlNode(docNode) as Block);
+                        _ownerFd.Blocks.Add(ConvertHtmlNode(docNode) as Block);
                         docNode = docNode.NextSibling;
                     }
                     continue;
@@ -66,14 +67,22 @@ namespace MonkeyPaste.Common.Wpf {
                 if(te == null) {
                     continue;
                 }
-                if(te is Block b) {
-                    fd.Blocks.Add(b);
-                } else if(te is Inline i) {
+                if (te is List l) {
+                    var actual_lists = FinishListFormatting(htmlBlockNode, l);
+                    foreach (var actual_list in actual_lists) {
+                        _ownerFd.Blocks.Add(actual_list);
+                    }
+                    continue;
+                }
+                if (te is Block b) {
+                    _ownerFd.Blocks.Add(b);
+                    continue;
+                } else if (te is Inline i) {
                     // NOTE this occurs when html is a sub-selection fragment
                 }
-                fd.Blocks.Add(ConvertHtmlNode(docNode) as Block);
+               // _ownerFd.Blocks.Add(ConvertHtmlNode(docNode) as Block);
             }
-            return fd.ToRichText();
+            return _ownerFd.ToRichText();
         }
 
         public static void Test() {
@@ -120,6 +129,7 @@ namespace MonkeyPaste.Common.Wpf {
                 // column width definitions
                 te = FinishTableFormatting(n, t);
             }
+
             return FormatTextElement(n.Attributes,te);
         }
 
@@ -169,18 +179,9 @@ namespace MonkeyPaste.Common.Wpf {
                 case "li":
                     te = new ListItem();
                     break;
+                case "ul":
                 case "ol":
-                    te = new List();
-                    //since wpf handles list types by list and not list items (like quill)
-                    //this is a special case
-                    if(n.ChildNodes.Count > 0) {
-                        string listTypeName = n.FirstChild.GetAttributeValue("data-list", string.Empty);
-                        if (listTypeName == "unordered") {
-                            (te as List).MarkerStyle = TextMarkerStyle.Disc;
-                        } else if (listTypeName == "ordered") {
-                            (te as List).MarkerStyle = TextMarkerStyle.Decimal;
-                        }
-                    }
+                    te = new List();                    
                     break;
                 case "td":
                     te = new TableCell();
@@ -286,6 +287,7 @@ namespace MonkeyPaste.Common.Wpf {
             }
             return t;
         }
+        
         private static TextElement ApplyRowSpanFormatting(TextElement te, string hv) {
             int rowSpanVal = 1;
             try {
@@ -309,6 +311,65 @@ namespace MonkeyPaste.Common.Wpf {
 
             (te as TableCell).ColumnSpan = colSpanVal;
             return te;
+        }
+
+        private static List<List> FinishListFormatting(HtmlNode n, List l) {
+            // quill groups any bullets types into single list 
+            // this creates unique lists for each common bullet type and returns the set
+            List<List> bc = new List<List>();
+            bc.Add(l);
+
+            var last_list_type = GetListMarkerStyle(n.FirstChild);
+
+            for (int i = 0; i < n.ChildNodes.Count; i++) {
+                if (i == 0) {
+                    l.MarkerStyle = last_list_type;
+                    continue;
+                }
+                var cn = n.ChildNodes[i];
+                var cur_list_type = GetListMarkerStyle(cn);
+
+                if (cur_list_type != last_list_type) {
+                    var nl = new List() {
+                        MarkerStyle = cur_list_type
+                    };
+                    for (int j = i; j < n.ChildNodes.Count; j++) {
+                        ListItem li = l.ListItems.ElementAt(j);
+                        l.ListItems.Remove(li);
+                        nl.ListItems.Add(li);
+                    }
+                    bc.Add(nl);
+
+                    last_list_type = cur_list_type;
+                }
+            }
+
+            return bc;
+        }
+
+        public static TextMarkerStyle GetListMarkerStyle(HtmlNode li_node) {
+            if(li_node.ParentNode.Name == "ol") {
+                return TextMarkerStyle.Decimal;
+            }
+            if(li_node.ParentNode.Name != "ul") {
+                // what is it?
+                Debugger.Break();
+                return TextMarkerStyle.None;
+            }
+            string dataListValue = li_node.GetAttributeValue("data-list", string.Empty);
+            if(string.IsNullOrEmpty(dataListValue)) {
+                return TextMarkerStyle.Disc;
+            }
+            if(dataListValue == "unchecked") {
+                return TextMarkerStyle.Square;
+            }
+            if(dataListValue == "checked") {
+                return TextMarkerStyle.Box;
+            }
+
+            // what the hecks going on!?
+            Debugger.Break();
+            return TextMarkerStyle.None;
         }
 
         private static TextElement ApplyHrefFormatting(TextElement te, string hv) {
@@ -410,7 +471,7 @@ namespace MonkeyPaste.Common.Wpf {
                 (te as Paragraph).Inlines.Add(cte as Inline);
             } else if (te is Span) {
                 (te as Span).Inlines.Add(cte as Inline);
-            }
+            } 
             return te;
         }
 

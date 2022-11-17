@@ -30,6 +30,10 @@ namespace MonkeyPaste.Common.Avalonia {
             // 3. 'text/html' is stored as string
 
             if(data == null) {
+                if(ContainsData(format)) {
+                    // this a workaround to remove formats through interface in writedndobject
+                    base.SetData(format, null);
+                }
                 // will cause error for sometypes
                 return;
             }
@@ -120,6 +124,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
             // TODO should add unicode, oem, etc. here for greater compatibility
         }
+
 
        // private  uint CF_BITMAP = 0;
         public void SetBitmap(byte[] bytes) {

@@ -1,5 +1,9 @@
 ﻿// #region Globals
 
+const ENCODED_LIST_ITEM_OPEN_TOKEN = "{li{";
+const ENCODED_LIST_ITEM_CLOSE_TOKEN = "}li}";
+const ENCODED_LIST_ITEM_REGEXP = new RegExp(ENCODED_LIST_ITEM_OPEN_TOKEN + ".*?" + ENCODED_LIST_ITEM_CLOSE_TOKEN, "");
+
 // #endregion Globals
 
 // #region Life Cycle
@@ -35,6 +39,25 @@ function getAllListItemBulletDocIdxs() {
 	return getAllListItemElements().map(x => getElementDocIdx(x));
 }
 
+function getListItemElementAtDocIdx(doc_idx) {
+	let cur_elm = getElementAtDocIdx(doc_idx);
+	if (!cur_elm) {
+		return null;
+	}
+	while (true) {
+		if (!cur_elm) {
+			return null;
+		}
+		if (cur_elm == getEditorElement()) {
+			return null;
+		}
+		if (cur_elm.tagName !== undefined && cur_elm.tagName.toLowerCase() == 'li') {
+			return cur_elm;
+		}
+		cur_elm = cur_elm.parentNode;
+	}
+}
+
 function getListItemElementBulletText(li_elm) {
 	if (!li_elm || li_elm.tagName === undefined || li_elm.tagName.toLowerCase() != 'li') {
 		debugger;
@@ -54,6 +77,29 @@ function getListItemElementBulletText(li_elm) {
 		return String.fromCharCode(parseInt(2610, 16));; // ☐
 	}
 
+}
+
+function getEncodedListItemStr(li_elm) {
+	if (!li_elm) {
+		return '';
+	}
+	let encoded_li_str = `${ENCODED_LIST_ITEM_OPEN_TOKEN}${getListItemElementBulletText(li_elm)}${ENCODED_LIST_ITEM_CLOSE_TOKEN}`;
+	return encoded_li_str;
+}
+
+function getDecodedListItemText(encoded_text) {
+	if (!encoded_text) {
+		return encoded_text;
+	}
+	let decoded_text = encoded_text;
+	var result = ENCODED_LIST_ITEM_REGEXP.exec(decoded_text);
+	while (result) {
+		let encoded_li_text = decoded_text.substr(result.index, result[0].length);
+		let li_text = encoded_li_text.replace(ENCODED_LIST_ITEM_OPEN_TOKEN, '').replace(ENCODED_LIST_ITEM_CLOSE_TOKEN, '');
+		decoded_text = decoded_text.replaceAll(encoded_li_text, li_text);
+		result = ENCODED_LIST_ITEM_REGEXP.exec(decoded_text);
+	}
+	return decoded_text;
 }
 
 // #endregion Getters

@@ -456,5 +456,10 @@ function get2dIdx(idx, cols) {
 }
 
 function insertTextAtIdx(str, idx, text) {
-    return [str.slice(0, idx), text, str.slice(idx)].join('');
+    return str.substr(0, idx) + text + str.substr(idx);
+}
+
+function replaceTextInRange(str, text, idx, length) {
+    str = str.substr(0, idx) + str.substr(idx+length)
+    return insertTextAtIdx(str, idx, text);
 }

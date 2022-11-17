@@ -6,9 +6,9 @@
 
 function loadTextContent(itemDataStr, isPasteRequest) {
 	quill.enable(true);
-	setRootHtml(itemDataStr);
-	//setRootHtml('');
-	//insertHtml(0, itemDataStr);
+	//setRootHtml(itemDataStr);
+	setRootHtml('');
+	insertHtml(0, itemDataStr);
 
 	loadTemplates(isPasteRequest);
 	loadLinkHandlers();
@@ -25,9 +25,46 @@ function getTextContentData() {
 	return qhtml;
 }
 
+function getEncodedTextContentText(range) {
+	let t_idxs = getAllTemplateDocIdxs();
+	let li_idxs = getAllListItemBulletDocIdxs();
+	let text = getText(range, false);
+
+	let out_text = '';
+	for (var i = 0; i < range.length; i++) {
+		let doc_idx = range.index + i;
+		let doc_idx_char = getText({ index: doc_idx, length: 1 });
+		if (t_idxs.includes(doc_idx)) {
+			let t = getTemplateAtDocIdx(doc_idx);
+			if (isTemplateAtDocIdxPrePadded(doc_idx)) {
+				out_text = substringByLength(out_text, 0, Math.max(0, out_text.length - 1));
+			}
+			if (isTemplateAtDocIdxPostPadded(doc_idx)) {
+				i++;
+			}
+			out_text += getEncodedTemplateStr(t);
+		}
+		if (li_idxs.includes(doc_idx)) {
+			let li_elm = getListItemElementAtDocIdx(doc_idx);
+			out_text += getEncodedListItemStr(li_elm);
+		}
+
+		out_text += doc_idx_char;
+	}
+	return out_text;
+}
+
+function getDecodedTextContentText(encoded_text) {
+	let decoded_text = encoded_text;
+	decoded_text = getDecodedTemplateText(decoded_text);
+	decoded_text = getDecodedListItemText(decoded_text);
+	return decoded_text;
+}
+
 function getTextContenLineCount() {
 	return getLineCount();
 }
+
 function getTextContentCharCount() {
 	return getText().length;
 } 

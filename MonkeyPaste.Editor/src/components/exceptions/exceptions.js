@@ -5,12 +5,10 @@
 // #region Life Cycle
 
 function initExceptionHandler() {
-    window.onerror = function (msg, url, line) {
-        alert("Message : " + msg);
-        alert("url : " + url);
-        alert("Line number : " + line);
-
-        onException_ntf(msg, url, parseInt(line));
+    window.onerror = function (msg, url, line, column, error) {
+        if (typeof onException_ntf === 'function') {
+            onException_ntf(msg, url, parseInt(line), parseInt(column), error);
+        }
     }
 }
 

@@ -51,7 +51,8 @@ namespace MonkeyPaste.Avalonia {
         notifyShowCustomColorPicker,
         notifyNavigateUriRequested,
         notifySetClipboardRequested,
-        notifyPasteIsReady
+        notifyPasteIsReady,
+        notifyDataTransferCompleted
     }
     [DoNotNotify]
     public class MpAvCefNetWebView : 
@@ -152,7 +153,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         #region WebView Binding Methods
-        public void HandleBindingNotification(MpAvEditorBindingFunctionType notificationType, string msgJsonBase64Str) {
+        public async void HandleBindingNotification(MpAvEditorBindingFunctionType notificationType, string msgJsonBase64Str) {
             var ctvm =DataContext as MpAvClipTileViewModel;
             if(ctvm == null && notificationType != MpAvEditorBindingFunctionType.notifyDomLoaded) {
                 // converter doesn't have data context but needs to notify dom loaded which doesn't need it
@@ -168,6 +169,13 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpAvEditorBindingFunctionType.notifyInitComplete:
                     IsEditorInitialized = true;
+                    break;
+                case MpAvEditorBindingFunctionType.notifyReadOnlyDisabled:
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillDisableReadOnlyResponseMessage>(msgJsonBase64Str);
+                    if (ntf is MpQuillDisableReadOnlyResponseMessage disableReadOnlyMsg) {
+                        ctvm.IsContentReadOnly = false;
+                        ctvm.UnformattedContentSize = new MpSize(disableReadOnlyMsg.editorWidth, disableReadOnlyMsg.editorHeight);
+                    }
                     break;
 
                 // CONTENT CHANGED
@@ -194,43 +202,38 @@ namespace MonkeyPaste.Avalonia {
                         Document.ProcessContentChangedMessage(enableReadOnlyMsg);
                     }
                     break;
-
-                // TEMPLATE SYNC
-
-                case MpAvEditorBindingFunctionType.notifyAddOrUpdateTemplate:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillTemplateAddOrUpdateNotification>(msgJsonBase64Str);
-                    if (ntf is MpQuillTemplateAddOrUpdateNotification addOrUpdateTemplateMsg) {
-                        var t = MpJsonObject.DeserializeBase64Object<MpTextTemplate>(addOrUpdateTemplateMsg.addedOrUpdatedTextTemplateBase64JsonStr);
-                        if (t.IsInputTypeTemplate()) {
-                            // ignore, no point persisting input templates since they're only relevant during a paste 
-                            MpConsole.WriteLine($"Ignoring addOrUpdate INPUT template: '{t}'");
-                            return;
+                case MpAvEditorBindingFunctionType.notifyDataTransferCompleted:
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(msgJsonBase64Str);
+                    if (ntf is MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
+                        MpISourceRef sourceRef = null;
+                        if(!string.IsNullOrEmpty(dataTransferCompleted_ntf.dataTransferSourceUrl)) {
+                            var sr = MpSourceRef.ParseFromInternalUrl(dataTransferCompleted_ntf.dataTransferSourceUrl);
+                            if(sr != null) {
+                                if(!string.IsNullOrEmpty(sr.SourcePublicHandle)) {
+                                    // get db id from handle
+                                    if (MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == sr.SourcePublicHandle) is MpAvClipTileViewModel sctvm) {
+                                        sr.SourceObjId = sctvm.CopyItemId;
+                                        // internal source
+                                        sourceRef = sr;
+                                    }
+                                }                                                  
+                            }            
                         }
-                        Task.Run(async () => {
-                            int tid = await MpDataModelProvider.GetTextTemplateIdByGuidAsync(t.Guid);
-                            t.Id = tid;
-                            await t.WriteToDatabaseAsync();
-                            MpConsole.WriteLine($"Template '{t}': {(tid == 0 ? "Added" : "Updated")}");
-                        });
-                    }
-
-                    break;
-                case MpAvEditorBindingFunctionType.notifyUserDeletedTemplate:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillUserDeletedTemplateNotification>(msgJsonBase64Str);
-                    if (ntf is MpQuillUserDeletedTemplateNotification deleteTemplateMsg) {
-                        Task.Run(async () => {
-                            var t = await MpDataModelProvider.GetTextTemplateByGuidAsync(deleteTemplateMsg.userDeletedTemplateGuid);
-                            if (t == null) {
-                                MpConsole.WriteLine($"Template not found to delete. Guid '{deleteTemplateMsg.userDeletedTemplateGuid}' Tile: '{ctvm}'");
-                                return;
+                        if(sourceRef == null) {
+                            var url = await MpPlatformWrapper.Services.UrlBuilder.CreateAsync(dataTransferCompleted_ntf.dataTransferSourceUrl);
+                            if (url != null) {
+                                // remote source
+                                sourceRef = url;
                             }
-                            if (t.IsInputTypeTemplate()) {
-                                // shouldn't exist
-                                Debugger.Break();
+                        }
+                        if(sourceRef == null) {
+                            var app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo);
+                            if(app != null) {
+                                // local source
+                                sourceRef = app;
                             }
-                            await t.DeleteFromDatabaseAsync();
-                            MpConsole.WriteLine($"Template '{t}': DELETED");
-                        });
+                        }
+                        ctvm.AddSourceRefAsync(sourceRef).FireAndForgetSafeAsync(ctvm);
                     }
                     break;
 
@@ -302,12 +305,48 @@ namespace MonkeyPaste.Avalonia {
                         Document.ContentScreenShotBase64 = ssMsg.contentScreenShotBase64;
                     }
                     break;
-                case MpAvEditorBindingFunctionType.notifyException:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);
-                    if(ntf is MpQuillExceptionMessage exceptionMsgObj) {
-                        // handled post-case
+
+                // TEMPLATES
+
+                case MpAvEditorBindingFunctionType.notifyAddOrUpdateTemplate:
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillTemplateAddOrUpdateNotification>(msgJsonBase64Str);
+                    if (ntf is MpQuillTemplateAddOrUpdateNotification addOrUpdateTemplateMsg) {
+                        var t = MpJsonObject.DeserializeBase64Object<MpTextTemplate>(addOrUpdateTemplateMsg.addedOrUpdatedTextTemplateBase64JsonStr);
+                        if (t.IsInputTypeTemplate()) {
+                            // ignore, no point persisting input templates since they're only relevant during a paste 
+                            MpConsole.WriteLine($"Ignoring addOrUpdate INPUT template: '{t}'");
+                            return;
+                        }
+                        Task.Run(async () => {
+                            int tid = await MpDataModelProvider.GetTextTemplateIdByGuidAsync(t.Guid);
+                            t.Id = tid;
+                            await t.WriteToDatabaseAsync();
+                            MpConsole.WriteLine($"Template '{t}': {(tid == 0 ? "Added" : "Updated")}");
+                        }).FireAndForgetSafeAsync(ctvm);
+                    }
+
+                    break;
+                case MpAvEditorBindingFunctionType.notifyUserDeletedTemplate:
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillUserDeletedTemplateNotification>(msgJsonBase64Str);
+                    if (ntf is MpQuillUserDeletedTemplateNotification deleteTemplateMsg) {
+                        Task.Run(async () => {
+                            var t = await MpDataModelProvider.GetTextTemplateByGuidAsync(deleteTemplateMsg.userDeletedTemplateGuid);
+                            if (t == null) {
+                                MpConsole.WriteLine($"Template not found to delete. Guid '{deleteTemplateMsg.userDeletedTemplateGuid}' Tile: '{ctvm}'");
+                                return;
+                            }
+                            if (t.IsInputTypeTemplate()) {
+                                // shouldn't exist
+                                Debugger.Break();
+                            }
+                            await t.DeleteFromDatabaseAsync();
+                            MpConsole.WriteLine($"Template '{t}': DELETED");
+                        }).FireAndForgetSafeAsync(ctvm);
                     }
                     break;
+
+                // REUSABLE
+
                 case MpAvEditorBindingFunctionType.notifyShowCustomColorPicker:
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillShowCustomColorPickerNotification>(msgJsonBase64Str);
                     if(ntf is MpQuillShowCustomColorPickerNotification showCustomColorPickerMsg) {
@@ -336,14 +375,11 @@ namespace MonkeyPaste.Avalonia {
                         MpAvUriNavigator.NavigateToUri(uri);
                     }
                     break;
-
-                // EDITOR STATE
-
-                case MpAvEditorBindingFunctionType.notifyReadOnlyDisabled:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillDisableReadOnlyResponseMessage>(msgJsonBase64Str);
-                    if (ntf is MpQuillDisableReadOnlyResponseMessage disableReadOnlyMsg) {
-                        ctvm.IsContentReadOnly = false;
-                        ctvm.UnformattedContentSize = new MpSize(disableReadOnlyMsg.editorWidth, disableReadOnlyMsg.editorHeight);
+                case MpAvEditorBindingFunctionType.notifyException:
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);
+                    if (ntf is MpQuillExceptionMessage exceptionMsgObj) {
+                        MpConsole.WriteLine(exceptionMsgObj.ToString());
+                        //Debugger.Break();
                     }
                     break;
 
@@ -459,6 +495,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
+
         #endregion
     }
 }

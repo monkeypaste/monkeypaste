@@ -22,8 +22,6 @@ namespace MonkeyPaste.Avalonia {
 
         private MpAvDropHostAdorner _dropAdorner;
 
-        private object _dropLock = System.Guid.NewGuid().ToString();
-
         #endregion
 
         #region Statics
@@ -75,7 +73,7 @@ namespace MonkeyPaste.Avalonia {
             e.DragEffects = DragDropEffects.None;
             if (is_drop_valid) {
                 e.DragEffects = is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
-                bool is_internal = await e.Data.ContainsInternalContentItem_safe(_dropLock);
+                bool is_internal = e.Data.ContainsInternalContentItem();
                 if (is_internal) {
                     // Internal Drop
                     await PerformTileDropAsync(drop_idx, e.Data, is_copy);
@@ -137,7 +135,7 @@ namespace MonkeyPaste.Avalonia {
             int drag_pctvm_idx = BindingContext.PinnedItems.IndexOf(drag_pctvm);
             
             bool is_drop_onto_same_idx = drop_idx == drag_pctvm_idx || drop_idx == drag_pctvm_idx + 1;
-            bool is_internal = await avdo.ContainsInternalContentItem_safe(_dropLock);
+            bool is_internal = avdo.ContainsInternalContentItem();
             bool is_partial_drop = !is_internal;
 
             if (!is_copy && !is_partial_drop && is_drop_onto_same_idx) {
@@ -158,7 +156,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task PerformTileDropAsync(int drop_idx, IDataObject avdo, bool isCopy) {
-            string drop_ctvm_pub_handle = await avdo.Get_safe(_dropLock, MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT) as string;
+            string drop_ctvm_pub_handle = avdo.Get(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT) as string;
             var drop_ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x=>x.PublicHandle == drop_ctvm_pub_handle);
             if (drop_ctvm == null) {
                 Debugger.Break();
@@ -192,8 +190,7 @@ namespace MonkeyPaste.Avalonia {
         private async Task PerformExternalOrPartialDropAsync(int drop_idx, IDataObject avdo) {
             MpPortableDataObject mpdo = await MpPlatformWrapper.Services.DataObjectHelperAsync.ReadDragDropDataObject(avdo);
 
-            bool isFromInternal = MpAvClipTrayViewModel.Instance.IsAnyTileDragging;
-            var avdo_ci = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(mpdo,isFromInternal);
+            var avdo_ci = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(mpdo, MpAvClipTrayViewModel.Instance.DragItemId);
 
             var drop_ctvm = await BindingContext.CreateClipTileViewModel(avdo_ci, -1);
             BindingContext.PinTileCommand.Execute(new object[] { drop_ctvm, drop_idx });

@@ -9,7 +9,7 @@ var IsSplitDrop = false;
 var IsPreBlockDrop = false;
 var IsPostBlockDrop = false;
 
-const AllowedEffects = ['copy', 'copyLink', 'copyMove', 'link', 'linkMove', 'move'];
+const AllowedEffects = ['copy', 'copyLink', 'copyMove', 'link', 'linkMove', 'move', 'all'];
 
 const AllowedDropTypes = ['text/plain', 'text/html', 'application/json', 'files'];
 
@@ -96,28 +96,7 @@ function resetDrop(fromHost, wasLeave) {
 }
 
 function dropData(docIdx, dt) {
-    if (dt.types.includes('text/html')) {
-        let drop_html_str = dt.getData('text/html');
-        if (isHtmlClipboardFragment(drop_html_str)) {
-            drop_html_str = parseHtmlFromHtmlClipboardFragment(drop_html_str).html;
-        }
-
-        if (isDropHtml()) {
-            insertHtml(docIdx, drop_html_str, 'user');
-            return;
-        }
-        if (drop_html_str.toLowerCase().indexOf('templateguid') >= 0) {
-            // when templates are in html just use it (too much trouble using text since only non-inputs are in db)
-            insertHtml(docIdx, drop_html_str, 'user'); 
-            loadTemplates();
-            unparentTemplatesAfterHtmlInsert();
-            return;
-        }
-    }
-    
-    let drop_pt = dt.getData('text/plain');
-
-    insertText(docIdx, drop_pt, 'silent', true);
+    performDataTransferOnContent(dt, { index: docIdx, length: 0 });
 }
 
 // #endregion Actions
@@ -142,9 +121,6 @@ function onDragEnter(e) {
         //return;
     }
     onDragEnter_ntf();
-    if (!isSubSelectionEnabled()) {
-        enableSubSelection();
-    }
     log('drag enter');
     IsDropping = true;
 
@@ -168,9 +144,9 @@ function onDragOver(e) {
         log('onDragOver called but not dropping, returning false');
         return false;
     }
-    //if (e.target.id == 'dragOverlay') {
-    //    debugger;
-    //}
+    if (e.target.id == 'dragOverlay') {
+        debugger;
+    }
     let emp = getEditorMousePos(e);
 
 

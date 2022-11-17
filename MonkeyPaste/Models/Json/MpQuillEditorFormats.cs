@@ -198,8 +198,11 @@ namespace MonkeyPaste {
         public string msg { get; set; }
 
         public int lineNum { get; set; }
+        public int colNum { get; set; }
+
+        public string errorObjJsonStr { get; set; }
         public override string ToString() {
-            return $"JS Exception. Line: {lineNum} Url:'{url}' Msg: '{msg}'";
+            return $"JS Exception. Line: {lineNum} Col: {colNum} Url:'{url}' Msg: '{msg}' ErrorObj: '{errorObjJsonStr.ToPrettyPrintJson()}'";
         }
     }
     public class MpQuillFileListDataFragment : MpJsonObject {
@@ -260,5 +263,8 @@ namespace MonkeyPaste {
 
     public class MpQuillEditorSetClipboardRequestNotification : MpJsonObject {
         
+    }
+    public class MpQuillDataTransferCompletedNotification : MpJsonObject {
+        public string dataTransferSourceUrl { get; set; }
     }
 }

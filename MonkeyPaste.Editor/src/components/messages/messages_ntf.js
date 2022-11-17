@@ -125,7 +125,7 @@ function onAddOrUpdateTemplate_ntf(t) {
 	}
 }
 
-function onException_ntf(exMsg, exUrl, exLine) {
+function onException_ntf(exMsg, exUrl, exLine, exCol, exErrorObj) {
 	// output 'MpQuillExceptionMessage'
 
 	if (typeof notifyException === 'function') {
@@ -139,7 +139,9 @@ function onException_ntf(exMsg, exUrl, exLine) {
 		let msg = {
 			msg: exMsg,
 			url: exUrl,
-			lineNum: exLine
+			lineNum: exLine,
+			colNum: exCol,
+			errorObjJsonStr: JSON.stringify(exErrorObj)
 		};
 		let msgStr = toBase64FromJsonObj(msg);
 		notifyException(msgStr);
@@ -240,5 +242,16 @@ function onSetClipboardRequested_ntf() {
 		};
 		let msgStr = toBase64FromJsonObj(msg);
 		notifySetClipboardRequested(msgStr);
+	}
+}
+
+function onDataTransferCompleted_ntf(sourceUrl) {
+	// output 'MpQuillDataTransferCompletedNotification'
+	if (typeof notifyDataTransferCompleted === 'function') {
+		let msg = {
+			dataTransferSourceUrl: sourceUrl
+		};
+		let msgStr = toBase64FromJsonObj(msg);
+		notifyDataTransferCompleted(msgStr);
 	}
 }

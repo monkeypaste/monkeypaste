@@ -1,12 +1,13 @@
+// #region Globals
 
 const TEMPLATE_VALID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890#-_ ";
 const MIN_TEMPLATE_DRAG_DIST = 5;
 
 var availableTemplates = null;
 
-var ENCODED_TEMPLATE_OPEN_TOKEN = "{t{";
-var ENCODED_TEMPLATE_CLOSE_TOKEN = "}t}";
-var ENCODED_TEMPLATE_REGEXP = new RegExp(ENCODED_TEMPLATE_OPEN_TOKEN + ".*?" + ENCODED_TEMPLATE_CLOSE_TOKEN, "");
+const ENCODED_TEMPLATE_OPEN_TOKEN = "{t{";
+const ENCODED_TEMPLATE_CLOSE_TOKEN = "}t}";
+const ENCODED_TEMPLATE_REGEXP = new RegExp(ENCODED_TEMPLATE_OPEN_TOKEN + ".*?" + ENCODED_TEMPLATE_CLOSE_TOKEN, "");
 
 var IsMovingTemplate = false;
 
@@ -14,6 +15,8 @@ var IsTemplatePaddingAfterTextChange = false;
 
 var IsAnyTemplateBgTemporary = false;
 var DragAnchorDocIdxWhenTemplateWithinSelection = -1;
+
+// #endregion Globals
 
 // #region Life Cycle
 
@@ -101,28 +104,6 @@ function getTemplateDefByGuid(tguid) {
 function getTemplateCountBeforeDocIdx(docIdx) {
     let t_docIdx_L = getAllTemplateDocIdxs().filter(x => x < docIdx);
     return t_docIdx_L.length;
-}
-
-function getTemplatePasteLengthBeforeDocIdx(docIdx) {
-    let t_docIdx_L = getAllTemplateDocIdxs().filter(x => x < docIdx);
-    let paste_length = 0;
-    for (var i = 0; i < t_docIdx_L.length; i++) {
-        let t = getTemplateAtDocIdx(t_docIdx_L[i]);
-        let t_val = getTemplatePasteValue(t);
-        if (t_val == null) {
-            debugger;
-        }
-        let val_length = getTemplatePasteValue(t).length;
-        if (isTemplateAtDocIdxPrePadded(t_docIdx_L[i])) {
-            val_length -= 1;
-        }
-        if (isTemplateAtDocIdxPostPadded(t_docIdx_L[i])) {
-            val_length -= 1;
-        }
-        
-        paste_length += val_length;
-    }
-    return paste_length - getTemplateCountBeforeDocIdx(docIdx);
 }
 
 function getTemplateDefByInstanceGuid(tiguid) {
@@ -294,8 +275,29 @@ function getTemplateAsPlainText(t) {
     if (isShowingPasteToolbar()) {
         return getTemplatePasteValue(t);
     }
-    let template_text = `${ENCODED_TEMPLATE_OPEN_TOKEN}${t.templateGuid},${t.templateInstanceGuid}${ENCODED_TEMPLATE_CLOSE_TOKEN}`;
-    return template_text;
+    return getEncodedTemplateStr(t);
+}
+
+function getEncodedTemplateStr(t) {
+    let encoded_template_str = `${ENCODED_TEMPLATE_OPEN_TOKEN}${t.templateGuid}${ENCODED_TEMPLATE_CLOSE_TOKEN}`;
+    return encoded_template_str;
+}
+
+function getDecodedTemplateText(encoded_text) {
+    if (!encoded_text) {
+        return encoded_text;
+    }
+    let decoded_text = encoded_text;
+    var result = ENCODED_TEMPLATE_REGEXP.exec(decoded_text);
+    while (result) {
+        let encoded_template_text = decoded_text.substr(result.index, result[0].length);
+        let tguid = encoded_template_text.replace(ENCODED_TEMPLATE_OPEN_TOKEN, '').replace(ENCODED_TEMPLATE_CLOSE_TOKEN, '');
+        let t = getTemplateDefByGuid(tguid);
+        let tpv = getTemplatePasteValue(t);
+        decoded_text = decoded_text.replaceAll(encoded_template_text, tpv);
+        result = ENCODED_TEMPLATE_REGEXP.exec(decoded_text);
+    }
+    return decoded_text;
 }
 
 function getTemplateDisplayValue(t) {
@@ -538,14 +540,28 @@ function isTemplateAtDocIdxPostPadded(t_docIdx) {
     return false;
 }
 
+function isHtmlStrContainTemplate(htmlStr) {
+    if (isNullOrEmpty(htmlStr)) {
+        return false;
+    }
+    return htmlStr.toLowerCase().indexOf('templateguid') >= 0;
+}
+
+function isPlainTextStrContainTemplate(ptStr) {
+    if (isNullOrEmpty(ptStr)) {
+        return false;
+    }
+    return
+    ptStr.toLowerCase().indexOf(ENCODED_TEMPLATE_OPEN_TOKEN) >= 0 &&
+        ptStr.toLowerCase().indexOf(ENCODED_TEMPLATE_CLOSE_TOKEN) >= 0;
+}
+
 // #endregion State
 
 // #region Actions
 
 function loadTemplates(isPasteRequest) {
     resetEditTemplateToolbar();
-
-
     let telml = getTemplateElements();
     for (var i = 0; i < telml.length; i++) {
         let t_elm = telml[i];

@@ -12,15 +12,15 @@ using Avalonia.Controls;
 using MonkeyPaste.Common.Avalonia;
 using Avalonia;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace MonkeyPaste.Common {
     public static class MpAvDragDropExtensions {
-        public static async Task<bool> ContainsInternalContentItem_safe(this IDataObject ido, object lockObj) {
+        public static bool ContainsInternalContentItem(this IDataObject ido) {
             if(ido == null) {
                 return false;
             }
-            var formats = await ido.GetDataFormats_safe(lockObj);
-            return formats.Contains(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT);
+            return ido.GetDataFormats().Contains(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT);
         }
 
         public static void DragCheckAndStart(

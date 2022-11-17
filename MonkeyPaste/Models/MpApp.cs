@@ -10,7 +10,7 @@ using MonkeyPaste.Common;
 using System.Diagnostics;
 
 namespace MonkeyPaste {
-    public class MpApp : MpDbModelBase, MpISourceItem, MpISyncableDbObject {        
+    public class MpApp : MpDbModelBase, MpISourceItem, MpISyncableDbObject, MpISourceRef {        
         #region Columns
 
         [Column("pk_MpAppId")]
@@ -53,8 +53,6 @@ namespace MonkeyPaste {
             }
         }
 
-        [Ignore]
-        public bool IsUrl => false;
 
         [Ignore]
         public IEnumerable<string> ArgumentList {
@@ -91,6 +89,9 @@ namespace MonkeyPaste {
         #region MpICopyItemSource Implementation
 
         [Ignore]
+        public bool IsUrl => false;
+
+        [Ignore]
         public bool IsDll => false;
 
         [Ignore]
@@ -115,6 +116,16 @@ namespace MonkeyPaste {
 
         [Ignore]
         public int RootId => Id;
+        #endregion
+
+        #region MpISourceRef Implementation
+
+        [Ignore]
+        int MpISourceRef.SourceObjId => Id;
+
+        [Ignore]
+        MpCopyItemSourceType MpISourceRef.SourceType => MpCopyItemSourceType.App;
+
         #endregion
 
         public static async Task<MpApp> CreateAsync(
@@ -142,6 +153,7 @@ namespace MonkeyPaste {
                     dupApp.IconId = iconId;
                     await dupApp.WriteToDatabaseAsync();                    
                 }
+                dupApp.WasDupOnCreate = true;
                 return dupApp;
             }
             //if app doesn't exist create image,icon,app and source

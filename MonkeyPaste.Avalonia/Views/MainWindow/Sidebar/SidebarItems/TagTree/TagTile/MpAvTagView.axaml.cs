@@ -18,8 +18,6 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvTagView : MpAvUserControl<MpAvTagTileViewModel> {
         #region Private Variables
 
-        private object _dropLock = System.Guid.NewGuid().ToString();
-
         #endregion
 
         public MpAvTagView() {
@@ -106,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (BindingContext.IsDragOverTagValid) {
                 e.DragEffects = is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
-                bool is_internal = await e.Data.ContainsInternalContentItem_safe(_dropLock);
+                bool is_internal = e.Data.ContainsInternalContentItem();
                 if (is_internal) {
                     // Internal Drop
                     await PerformTileDropAsync(e.Data, is_copy);
@@ -128,10 +126,10 @@ namespace MonkeyPaste.Avalonia {
 
             MpConsole.WriteLine($"DragOverTag: " + BindingContext + " IsCopy: "+is_copy);
 
-            bool is_internal = await avdo.ContainsInternalContentItem_safe(_dropLock);
+            bool is_internal =  avdo.ContainsInternalContentItem();
             if(!is_copy && is_internal) {
                 // invalidate tile drag if tag is already linked to copy item and its not a copy operation
-                string drop_ctvm_pub_handle = await avdo.Get_safe(_dropLock, MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT) as string;
+                string drop_ctvm_pub_handle = avdo.Get(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT) as string;
                 var ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == drop_ctvm_pub_handle);
                 if(ctvm != null) {
                     bool is_already_linked = await BindingContext.IsCopyItemLinkedAsync(ctvm.CopyItemId);
@@ -149,7 +147,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task PerformTileDropAsync(IDataObject avdo, bool isCopy) {
-            string drop_ctvm_pub_handle = await avdo.Get_safe(_dropLock, MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT) as string;
+            string drop_ctvm_pub_handle = avdo.Get(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT) as string;
             var drop_ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == drop_ctvm_pub_handle);
             if (drop_ctvm == null) {
                 Debugger.Break();
@@ -174,8 +172,7 @@ namespace MonkeyPaste.Avalonia {
         private async Task PerformExternalOrPartialDropAsync(IDataObject avdo) {
             MpPortableDataObject mpdo = await MpPlatformWrapper.Services.DataObjectHelperAsync.ReadDragDropDataObject(avdo);
 
-            bool isFromInternal = MpAvClipTrayViewModel.Instance.IsAnyTileDragging;
-            MpCopyItem drop_ci = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(mpdo, isFromInternal);
+            MpCopyItem drop_ci = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(mpdo, MpAvClipTrayViewModel.Instance.DragItemId);
 
             if (drop_ci == null) {
                 return;

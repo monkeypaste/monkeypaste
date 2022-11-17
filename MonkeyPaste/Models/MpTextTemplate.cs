@@ -20,7 +20,7 @@ namespace MonkeyPaste {
         DateTime
     }
 
-    public class MpTextTemplate : MpDbModelBase, MpIClonableDbModel<MpTextTemplate> {
+    public class MpTextTemplate : MpDbModelBase, MpIClonableDbModel<MpTextTemplate>,MpIJsonObject, MpIJsonBase64Object {
         #region Constants
         public const string TextTemplateOpenToken = @"{t{";
         public const string TextTemplateCloseToken = @"}t}";
@@ -77,9 +77,23 @@ namespace MonkeyPaste {
         public string TemplateHtmlFormat { get; set; } = string.Empty;
         [JsonIgnore]
         public string RichTextFormatJson { get; set; } = string.Empty;
-  
+
         #endregion
 
+        #region MpIJsonObject Implementation
+
+        public string SerializeJsonObject() {
+            return MpJsonObject.SerializeObject(this);
+        }
+        #endregion
+
+        #region MpIJsonBase64Object Implementation
+
+        public string SerializeJsonObjectToBase64(Encoding enc = null) {
+            return MpJsonObject.SerializeObjectToBase64JsonStr(this, enc);
+        }
+
+        #endregion
 
         #region Properties
 
@@ -201,5 +215,6 @@ namespace MonkeyPaste {
         public override string ToString() {
             return $"'{TemplateName}' - [{TemplateType}]";
         }
+
     }
 }

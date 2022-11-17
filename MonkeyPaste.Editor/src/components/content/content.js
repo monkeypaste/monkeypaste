@@ -112,6 +112,32 @@ function getContentData() {
 	return '';
 }
 
+function getEncodedContentText(range) {
+	if (ContentItemType == 'Text') {
+		return getEncodedTextContentText(range);
+	}
+	if (ContentItemType == 'Image') {
+		return getEncodedImageContentText(range);
+	}
+	if (ContentItemType == 'FileList') {
+		return getEncodedFileListContentText(range);
+	}
+	return '';
+}
+
+function getDecodedContentText(encodedText) {
+	if (ContentItemType == 'Text') {
+		return getDecodedTextContentText(encodedText);
+	}
+	if (ContentItemType == 'Image') {
+		return getDecodedImageContentText(encodedText);
+	}
+	if (ContentItemType == 'FileList') {
+		return getDecodedFileListContentText(encodedText);
+	}
+	return '';
+}
+
 function getContentBg(htmlStr, contrast_opacity = 0.5) {
 	if (ContentItemType != 'Text') {
 		return cleanColor();

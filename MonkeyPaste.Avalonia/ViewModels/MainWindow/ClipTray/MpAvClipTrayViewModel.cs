@@ -448,17 +448,9 @@ namespace MonkeyPaste.Avalonia {
                 };
             }
         }
+        public MpAvClipTileViewModel DragItem => AllItems.FirstOrDefault(x => x.IsTileDragging);
 
-        public MpAvClipTileViewModel DragItem {
-            get {
-                var dragItem = Items.FirstOrDefault(x => x.IsTileDragging);
-                if (dragItem == null) {
-                    return PinnedItems.FirstOrDefault(x => x.IsTileDragging);
-                }
-                return dragItem;
-            }
-        }
-
+        public int DragItemId => DragItem == default ? -1 : DragItem.CopyItemId;
         public IEnumerable<MpAvClipTileViewModel> VisibleItems => Items.Where(x => x.IsAnyCornerVisible);
 
         public Orientation DefaultScrollOrientation {
@@ -985,22 +977,22 @@ namespace MonkeyPaste.Avalonia {
 
         #region Child Property Wrappers
 
-        public bool IsAnyBusy => Items.Any(x => x.IsAnyBusy) || PinnedItems.Any(x => x.IsAnyBusy) || IsBusy;
-        public bool IsAnyTileContextMenuOpened => Items.Any(x => x.IsContextMenuOpen) || PinnedItems.Any(x => x.IsContextMenuOpen);
+        public bool IsAnyBusy => AllItems.Any(x => x.IsAnyBusy) || IsBusy;
+        public bool IsAnyTileContextMenuOpened => AllItems.Any(x => x.IsContextMenuOpen);
 
-        public bool IsAnyResizing => Items.Any(x => x.IsResizing) || PinnedItems.Any(x => x.IsResizing);
+        public bool IsAnyResizing => AllItems.Any(x => x.IsResizing);
 
-        public bool CanAnyResize => Items.Any(x => x.CanResize) || PinnedItems.Any(x => x.CanResize);
+        public bool CanAnyResize => AllItems.Any(x => x.CanResize);
 
-        public bool IsAnyEditing => Items.Any(x => !x.IsContentAndTitleReadOnly) || PinnedItems.Any(x => !x.IsContentAndTitleReadOnly);
-
-
-        public bool IsAnyHovering => Items.Any(x => x.IsHovering) || PinnedItems.Any(x => x.IsHovering);
+        public bool IsAnyEditing => AllItems.Any(x => !x.IsContentAndTitleReadOnly);
 
 
-        public bool IsAnyEditingClipTitle => Items.Any(x => !x.IsTitleReadOnly) || PinnedItems.Any(x => !x.IsTitleReadOnly);
+        public bool IsAnyHovering => AllItems.Any(x => x.IsHovering);
 
-        public bool IsAnyEditingClipTile => Items.Any(x => !x.IsContentReadOnly) || PinnedItems.Any(x => !x.IsContentReadOnly);
+
+        public bool IsAnyEditingClipTitle => AllItems.Any(x => !x.IsTitleReadOnly);
+
+        public bool IsAnyEditingClipTile => AllItems.Any(x => !x.IsContentReadOnly);
 
         
 
@@ -2443,7 +2435,7 @@ namespace MonkeyPaste.Avalonia {
             createItemSw.Start();
 
 
-            var newCopyItem = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(cd, false, IsAnyAppendMode && _appendModeCopyItem != null);
+            var newCopyItem = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(cd, -1, IsAnyAppendMode && _appendModeCopyItem != null);
 
             MpConsole.WriteLine("CreateFromClipboardAsync: " + createItemSw.ElapsedMilliseconds + "ms");
 

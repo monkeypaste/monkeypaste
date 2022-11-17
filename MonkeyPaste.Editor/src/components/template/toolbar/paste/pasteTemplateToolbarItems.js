@@ -95,15 +95,15 @@ function getTemplatePasteValue(t) {
 
         if (SelectedContactGuid == null) {
             // TODO should be selected fro drop down in paste toolbar
-            pv = null;
+            //pv = null;
         }
 
         pv = getContactFieldValue(SelectedContactGuid, t.templateData);
     }
 
-    //if (isNullOrEmpty(pv)) {
-    //    return '';
-    //}
+    if (pv == null) {
+        return '';
+    }
     return pv;
 }
 
@@ -292,16 +292,19 @@ function updatePasteTemplateToolbarToSelection(force_ftguid) {
         showPasteTemplateToolbarItems();
     }
     let paste_sel = getDocSelection(true);
-    let pre_ftguid = getFocusTemplateGuid();
 
     let ftguid = force_ftguid;
     if (!ftguid) {
         // either from template click or editor selection
         updatePasteTemplateValues();
-        let sel = getDocSelection();
-        ftguid = findPasteFocusTemplate(sel);
 
-        focusTemplate(ftguid);
+        ftguid = getFocusTemplateGuid();
+        if (!ftguid) {
+            let sel = getDocSelection();
+            ftguid = findPasteFocusTemplate(sel);
+
+            focusTemplate(ftguid);
+        }
     } else {
         // called from focus template when either:
         // 1. template blot was clicked
@@ -389,8 +392,8 @@ function updatePasteElementInteractivity() {
 
     let can_edit = paste_t_defs.length > 0;
 
-    let can_paste =
-        paste_t_defs.filter(x => !isTemplateReadyToPaste(x)).length == 0;
+    //let can_paste = paste_t_defs.filter(x => !isTemplateReadyToPaste(x)).length == 0;
+    let can_paste = true;
 
     let template_button_classes = 'disabled';
     if (getTemplateDefs().length == 0) {

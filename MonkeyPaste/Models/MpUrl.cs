@@ -8,7 +8,7 @@ using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
-    public class MpUrl : MpDbModelBase, MpISourceItem {
+    public class MpUrl : MpDbModelBase, MpISourceItem, MpISourceRef {
         #region Columns
 
         [PrimaryKey, AutoIncrement]
@@ -100,6 +100,16 @@ namespace MonkeyPaste {
         public int RootId => Id;
         #endregion
 
+        #region MpISourceRef Implementation
+
+        [Ignore]
+        int MpISourceRef.SourceObjId => Id;
+
+        [Ignore]
+        MpCopyItemSourceType MpISourceRef.SourceType => MpCopyItemSourceType.Url;
+
+        #endregion
+
         public static async Task<MpUrl> Create(
             string urlPath = "",
             string urlTitle = "",
@@ -109,6 +119,7 @@ namespace MonkeyPaste {
             var dupCheck = await MpDataModelProvider.GetUrlByPathAsync(urlPath);
             if(dupCheck != null) {
                 dupCheck = await MpDataModelProvider.GetItemAsync<MpUrl>(dupCheck.Id);
+                dupCheck.WasDupOnCreate = true;
                 return dupCheck;
             }
 

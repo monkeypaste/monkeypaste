@@ -28,7 +28,7 @@ namespace MonkeyPaste {
         LastOutput
     }
 
-    public class MpCopyItem : MpDbModelBase, MpISyncableDbObject {
+    public class MpCopyItem : MpDbModelBase, MpISyncableDbObject, MpISourceRef {
         #region Statics
 
         public static string[] PhysicalComparePropertyPaths {
@@ -235,8 +235,13 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region MpICopyItemReference Implementation
+        #region MpISourceRef Implementation
 
+        [Ignore]
+        int MpISourceRef.SourceObjId => Id;
+
+        [Ignore]
+        MpCopyItemSourceType MpISourceRef.SourceType => MpCopyItemSourceType.CopyItem;
 
         #endregion
 

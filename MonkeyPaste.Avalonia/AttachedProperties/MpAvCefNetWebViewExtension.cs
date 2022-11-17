@@ -175,7 +175,7 @@ namespace MonkeyPaste.Avalonia {
                 !ctvm.IsReloading) {
                 if (isSubSelectionEnabled) {
                     wv.ExecuteJavascript("enableSubSelection_ext()");
-                    if(ctvm.HasTemplates) {
+                    if(ctvm.HasTemplates && !ctvm.IsDropOverTile) {
                         MpAvResizeExtension.ResizeAnimated(wv, ctvm.EditableWidth, ctvm.EditableHeight);
                     }
                 } else {

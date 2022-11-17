@@ -1221,8 +1221,7 @@ namespace MonkeyPaste.Avalonia {
             }
             _contentView = ctcv.ContentView;
             return _contentView;
-        }
-       
+        }       
 
         public async Task<MpAvClipTileViewModel> GetNeighborByRowOffsetAsync(int row_offset) {
             var items = IsPinned ? Parent.PinnedItems : Parent.Items;
@@ -1412,6 +1411,16 @@ namespace MonkeyPaste.Avalonia {
             //(Parent.CreateQrCodeFromSelectedClipsCommand as MpCommand).NotifyCanExecuteChanged();
         }
 
+        public async Task AddSourceRefAsync(MpISourceRef sourceRef) {
+            if(sourceRef == null) {
+                return;
+            }
+            await MpCopyItemSource.CreateAsync(
+                copyItemId: CopyItemId,
+                sourceObjId: sourceRef.SourceObjId,
+                sourceType: sourceRef.SourceType);
+        }
+
         #region IDisposable
 
         public override void Dispose() {
@@ -1561,6 +1570,11 @@ namespace MonkeyPaste.Avalonia {
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTitle));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
+                    break;
+                case nameof(IsDropOverTile):
+                    if(IsDropOverTile && !IsSubSelectionEnabled) {
+                        IsSubSelectionEnabled = true;
+                    }
                     break;
                 case nameof(IsContentReadOnly):
                     if (!IsContentReadOnly && !IsSelected) {

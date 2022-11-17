@@ -20,7 +20,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #region Drop
-        private object _dropLock = System.Guid.NewGuid().ToString();
 
         private void Sb_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             var sb = sender as AutoCompleteBox;
@@ -34,14 +33,12 @@ namespace MonkeyPaste.Avalonia {
 
         private async void DragOver(object sender, DragEventArgs e) {
             //e.DragEffects = DragDropEffects.Default;
-            var formats = await e.Data.GetDataFormats_safe(_dropLock);
-            if(!formats.Contains(MpPortableDataFormats.Text)) {
+            if(!e.Data.GetDataFormats().Contains(MpPortableDataFormats.Text)) {
                 e.DragEffects = DragDropEffects.None;
             }
         }
         private async void Drop(object sender, DragEventArgs e) {
-            var formats = await e.Data.GetDataFormats_safe(_dropLock);
-            if (!formats.Contains(MpPortableDataFormats.Text)) {
+            if (!e.Data.GetDataFormats().Contains(MpPortableDataFormats.Text)) {
                 e.DragEffects = DragDropEffects.None;
                 return;
             }

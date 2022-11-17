@@ -42,7 +42,13 @@ function getFileListTableDivElement() {
 	let flc_elm = document.getElementById('fileListTableDiv');
 	return flc_elm;
 }
+function getEncodedFileListContentText() {
+	return getFileListContentData();
+}
 
+function getDecodedFileListContentText(encoded_text) {
+	return encoded_text;
+}
 
 function getFileListContentData() {
 	let paths_str = '';

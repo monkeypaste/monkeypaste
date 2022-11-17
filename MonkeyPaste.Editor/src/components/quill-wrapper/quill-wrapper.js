@@ -55,23 +55,8 @@ function getText(range, for_ole = false) {
 	range = range == null ? { index: 0, length: getDocLength() } : range;
 	let text = '';
 	if (IsLoaded && for_ole) {
-		text = getTemplatePlainTextForDocRange(range);
-
-		let li_elms = getAllListItemElements();
-		if (li_elms.length > 0) {
-			let li_elms_doc_idxs = li_elms.map(x => getElementDocIdx(x));
-			for (var i = 0; i < li_elms.length; i++) {
-				let li_elm = li_elms[i];
-				let li_bullet_text = getListItemElementBulletText(li_elm);
-				let li_text = `${li_bullet_text} `;
-				let li_doc_idx = li_elms_doc_idxs[i];
-				let offset = getTemplatePasteLengthBeforeDocIdx(li_doc_idx);
-				text = insertTextAtIdx(text, li_doc_idx + offset, li_text);
-				for (var j = i + 1; j < li_elms_doc_idxs.length; j++) {
-					li_elms_doc_idxs[j] += li_text.length;
-				}
-			}
-		}
+		let encoded_text = getEncodedContentText(range);
+		text = getDecodedContentText(encoded_text);
 	} else {
 		text = quill.getText(range.index, range.length);
 	}
@@ -170,6 +155,8 @@ function getHtml3(sel) {
 		}
 	});
 	let html = qdc.convert();
+	html = fixDelta2HtmlCheckables(html);
+	//
 	//log(html);
 	return html;
 }
@@ -277,6 +264,7 @@ function insertHtml(docIdx, htmlStr, source = 'api', decodeTemplates = true) {
 	if (decodeTemplates) {
 		// default is true unlike text, since blot's need to be bound to events not sure if thats always right
 		loadTemplates();
+		unparentTemplatesAfterHtmlInsert()
 	}
 }
 
