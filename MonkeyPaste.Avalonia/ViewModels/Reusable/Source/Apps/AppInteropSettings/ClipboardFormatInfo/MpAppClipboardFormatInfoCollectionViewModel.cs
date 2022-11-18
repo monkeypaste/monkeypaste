@@ -25,14 +25,14 @@ namespace MonkeyPaste.Avalonia {
         MpAvSelectorViewModelBase<MpAvAppViewModel, MpAppClipboardFormatInfoViewModel> {
         #region Private Variables
 
-        private static readonly MpClipboardFormatType[] _DefaultFormats = new MpClipboardFormatType[] {
-            MpClipboardFormatType.Text,
-            MpClipboardFormatType.Html,
-            MpClipboardFormatType.Rtf,
-            MpClipboardFormatType.Csv,
-            MpClipboardFormatType.Bitmap,
-            MpClipboardFormatType.FileDrop
-        };
+        //private static readonly MpClipboardFormatType[] _DefaultFormats = new MpClipboardFormatType[] {
+        //    MpClipboardFormatType.Text,
+        //    MpClipboardFormatType.Html,
+        //    MpClipboardFormatType.Rtf,
+        //    MpClipboardFormatType.Csv,
+        //    MpClipboardFormatType.Bitmap,
+        //    MpClipboardFormatType.FileDrop
+        //};
 
         #endregion
 
@@ -67,15 +67,14 @@ namespace MonkeyPaste.Avalonia {
 
             var aisl = await MpDataModelProvider.GetAppClipboardFormatInfosByAppIdAsync(appId);
 
-            for (int i = 0; i < _DefaultFormats.Length; i++) {
-                MpClipboardFormatType defType = _DefaultFormats[i];
-                if(aisl.Any(x=>x.FormatType == defType)) {
+            foreach(var format in MpPortableDataFormats.RegisteredFormats) {
+                if (aisl.Any(x => x.FormatType == format)) {
                     continue;
                 }
 
                 var defInfo = new MpAppClipboardFormatInfo() {
                     AppId = appId,
-                    FormatType = defType,
+                    FormatType = format,
                     IgnoreFormatValue = aisl.Count
                 };
                 aisl.Add(defInfo);

@@ -10,11 +10,84 @@ const ENCODED_LIST_ITEM_REGEXP = new RegExp(ENCODED_LIST_ITEM_OPEN_TOKEN + ".*?"
 
 function initLists() {
 	initCheckableList();
+	//initOrderedList();
+}
+
+function registerListBlot() {
+	
+	//class MyListContainer extends ListContainer {
+	//	static tagName = ["OL", "UL"];
+	//	static defaultTag = "OL";
+
+	//	static create(value) {
+	//		return document.createElement(this.getTag(value));
+	//	}
+
+	//	static getTag(val) {
+	//		// Our "ql-list" values are "bullet" and "ordered"
+	//		const map = {
+	//			bullet: "UL",
+	//			ordered: "OL",
+	//		};
+	//		return map[val] || this.defaultTag;
+	//	}
+
+	//	checkMerge() {
+	//		// Only merge if the next list is the same type as this one
+	//		return (
+	//			super.checkMerge() &&
+	//			this.domNode.tagName === this.next.domNode.tagName
+	//		);
+	//	}
+	//}
+
+	//class MyListItem extends ListItem {
+	//	static requiredContainer = MyListContainer;
+
+	//	static register() {
+	//		Quill.register(MyListContainer, true);
+	//	}
+
+	//	optimize(context) {
+	//		if (
+	//			this.statics.requiredContainer &&
+	//			!(this.parent instanceof this.statics.requiredContainer)
+	//		) {
+	//			// Insert the format value (bullet, ordered) into wrap arguments
+	//			this.wrap(
+	//				this.statics.requiredContainer.blotName,
+	//				MyListItem.formats(this.domNode)
+	//			);
+	//		}
+	//		super.optimize(context);
+	//	}
+
+	//	format(name, value) {
+	//		// If the list type is different, wrap this list item in a new MyListContainer of that type
+	//		if (
+	//			name === ListItem.blotName &&
+	//			value !== MyListItem.formats(this.domNode)
+	//		) {
+	//			this.wrap(this.statics.requiredContainer.blotName, value);
+	//		}
+	//		super.format(name, value);
+	//	}
+	//}
+
 }
 
 // #endregion Life Cycle
 
 // #region Getters
+
+
+function getDiscListToolbarButton() {
+	return document.getElementById('discListToolbarButton');
+}
+
+function getCheckListToolbarButton() {
+	return document.getElementById('checkListToolbarButton');
+}
 
 function getListItemCountBeforeDocIdx(docIdx) {
 	let list_item_count = 0;

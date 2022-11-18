@@ -8,6 +8,35 @@ var StoredEditorSel = null;
 
 // #region Life Cycle
 
+function initFontSizes() {
+    initFontSizeMatcher();
+}
+
+function initFontSizeMatcher() {
+    let Delta = Quill.imports.delta;
+
+    quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
+        let fs_class = Array.from(node.classList).find(x => x.startsWith('ql-size'));
+        if (!fs_class) {
+            return delta;
+        }
+        let size_val = fs_class.replace('ql-size-', '');
+        if (delta && delta.ops !== undefined && delta.ops.length > 0) {
+            for (var i = 0; i < delta.ops.length; i++) {
+                if (delta.ops[i].insert === undefined) {
+                    continue;
+                }
+                if (delta.ops[i].attributes === undefined) {
+                    delta.ops[i].attributes = {};
+                }
+                delta.ops[i].attributes.size = size_val;
+
+            }
+        }
+        return delta;
+    });
+}
+
 function registerFontSizes() {
     var size = Quill.import('attributors/style/size');
     size.whitelist = DefaultFontSizes;

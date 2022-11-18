@@ -1,5 +1,6 @@
 // #region Globals
 
+/*const Parchment = Quill.imports.parchment;*/
 var quill;
 // #endregion Globals
 
@@ -134,9 +135,25 @@ function getHtml2(sel) {
 }
 
 function getHtml3(sel) {
+
+	function onCustomTagAttributes(op) {
+		//debugger;
+		if (op && op.attributes !== undefined && op.attributes.list !== undefined) {
+			let li_type = op.attributes.list;
+			let li_val = '';
+
+			if (op.insert.type === 'text') {
+				li_val = op.insert.value;
+			} else {
+				debugger;
+			}
+			return `<li data-list="${li_type}">${li_val}</li>`;
+		}
+	}
 	let delta = getDelta(sel);
 	let cfg = {
-		//inlineStyles: true,
+		inlineStyles: true,
+		//customTagAttributes: onCustomTagAttributes,
 		encodeHtml: false
 	};
 	let qdc = new window.QuillDeltaToHtmlConverter(delta.ops, cfg);
@@ -147,15 +164,17 @@ function getHtml3(sel) {
 		//} else {
 		//	return 'Unmanaged custom blot!';
 		//}
-		if (customOp.attributes !== undefined &&
-			customOp.attributes.templateInstanceGuid !== undefined) {
-			return getTemplateInstanceElement(customOp.attributes.templateInstanceGuid).outerHTML;
-		} else {
-			debugger;
-		}
+		if (customOp.attributes !== undefined) {
+			if (customOp.attributes.templateInstanceGuid !== undefined) {
+				return getTemplateInstanceElement(customOp.attributes.templateInstanceGuid).outerHTML;
+			} else {
+				debugger;
+			}
+			
+		} 
 	});
 	let html = qdc.convert();
-	html = fixDelta2HtmlCheckables(html);
+	//html = fixDelta2HtmlCheckables(html);
 	//
 	//log(html);
 	return html;

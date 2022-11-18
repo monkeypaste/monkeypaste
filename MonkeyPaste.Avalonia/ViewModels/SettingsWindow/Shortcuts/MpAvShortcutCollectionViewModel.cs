@@ -804,7 +804,7 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
                     // NOTE!! this maybe bad only firing when window open 
                     // but its for drag/drop and not doing could interfere w/ performance too much
-                    OnGlobalMouseMove?.Invoke(typeof(MpAvShortcutCollectionViewModel).ToString(), GlobalMouseLocation);
+                    Dispatcher.UIThread.Post(()=>OnGlobalMouseMove?.Invoke(typeof(MpAvShortcutCollectionViewModel).ToString(), GlobalMouseLocation));
                 } else {
                     bool isShowingMainWindow = false;
                     if (MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdge &&

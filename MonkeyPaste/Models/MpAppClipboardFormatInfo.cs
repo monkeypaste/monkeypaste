@@ -21,18 +21,13 @@ namespace MonkeyPaste {
         public int AppId { get; set; }
 
 
-        public string FormatTypeName { get; set; }
+        public string FormatType { get; set; }
 
         public string FormatInfo { get; set; }
 
         [Column("b_IgnoreFormatValue")]
         public int IgnoreFormatValue { get; set; }
 
-        [Ignore]
-        public MpClipboardFormatType FormatType {
-            get => FormatTypeName.ToEnum<MpClipboardFormatType>();
-            set => FormatTypeName = value.ToString();
-        }
 
         [Ignore]
         public bool IgnoreFormat {
@@ -55,9 +50,27 @@ namespace MonkeyPaste {
 
         public static async Task<MpAppClipboardFormatInfo> CreateAsync(
             int appId = 0,
-            MpClipboardFormatType format = MpClipboardFormatType.None,
+            string format = "",
             string formatInfo = "",
-            bool ignoreFormat = false) {
+            bool ignoreFormat = false,
+            bool suppressWrite = false) {
+            if(string.IsNullOrEmpty(format)) {
+                throw new Exception("Must have format name");
+            }
+            if(appId == 0) {
+                throw new Exception("Must have app id");
+            }
+            var dupCheck = await MpDataModelProvider.GetAppClipboardFormatInfosByAppIdAsync(appId);
+            if(dupCheck.Any(x=>x.FormatType.ToLower() == format.ToLower())) {
+                var dup = dupCheck.FirstOrDefault(x => x.FormatType.ToLower() == format.ToLower());
+                dup.WasDupOnCreate = true;
+                dup.FormatInfo = formatInfo;
+                dup.IgnoreFormat = ignoreFormat;
+                if(!suppressWrite) {
+                    await dup.WriteToDatabaseAsync();
+                }
+                return dup;                
+            }
             var ais = new MpAppClipboardFormatInfo() {
                 AppClipboardFormatInfoGuid = System.Guid.NewGuid(),
                 AppId = appId,

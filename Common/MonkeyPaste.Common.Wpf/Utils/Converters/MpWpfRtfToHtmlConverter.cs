@@ -168,7 +168,10 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         private static string WrapWithList(List l, string content) {
-            return WrapWithTag("ol", content);
+            if(l.MarkerStyle == TextMarkerStyle.Decimal) {
+                return WrapWithTag("ol", content);
+            }
+            return WrapWithTag("ul", content);
         }
 
         private static string WrapWithListItem(ListItem li, string content) {
@@ -176,6 +179,10 @@ namespace MonkeyPaste.Common.Wpf {
             string listType = @"bullet";
             if (l.MarkerStyle == TextMarkerStyle.Decimal) {
                 listType = @"ordered";
+            } else if(l.MarkerStyle == TextMarkerStyle.Square) {
+                listType = "unchecked";
+            } else if (l.MarkerStyle == TextMarkerStyle.Box) {
+                listType = "checked";
             }
             return string.Format(
                 @"<li data-list='{0}'><span class='ql-ui' contenteditable='false'></span>{1}</li>",

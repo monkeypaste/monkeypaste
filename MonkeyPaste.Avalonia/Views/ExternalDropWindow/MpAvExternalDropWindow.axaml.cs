@@ -11,15 +11,17 @@ using PropertyChanged;
 using Avalonia.Input;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvExternalDropWindow : Window {
         #region Private Variables
 
-        private Dictionary<int, bool> _preShowPresetState = new Dictionary<int, bool>();
 
         #endregion
+
 
         private static MpAvExternalDropWindow _instance;
         public static MpAvExternalDropWindow Instance => _instance ?? (_instance = new MpAvExternalDropWindow());
@@ -34,28 +36,31 @@ namespace MonkeyPaste.Avalonia {
 #if DEBUG
             this.AttachDevTools();
 #endif
+            DataContext = MpAvExternalDropWindowViewModel.Instance;
+
             var hdmb = this.FindControl<Border>("HideDropMenuButton");
             hdmb.AddHandler(DragDrop.DragOverEvent, OnHideOver);
 
             var dilb = this.FindControl<ListBox>("DropItemListBox");
             dilb.AddHandler(DragDrop.DragOverEvent, DragOver);
         }
+
+        private void NoButton_Click(object sender, RoutedEventArgs e) {
+            this.Hide();
+        }
+
+        private void YesButton_Click(object sender, RoutedEventArgs e) {
+
+            
+        }
+
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }
 
 
-        public override void Show() {
-            // TODO should add a preference to disable drop widget and ignore show if enabled here
-            this.FindControl<Control>("DropMenuBorderContainer").IsVisible = true;
-            StoreFormatPresetState();
-            ApplyAppPresetFormatState();
-            base.Show();
-        }
-
         private void Window_OnIsVisibleChanged() {
             if(!IsVisible) {
-                RestoreFormatPresetState();
                 return;
             }
             PositionDropWindow();
@@ -73,26 +78,7 @@ namespace MonkeyPaste.Avalonia {
             Position = w_origin.ToAvPixelPoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.PixelDensity);
         }
 
-        private void StoreFormatPresetState() {
-            _preShowPresetState =
-               MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets
-               .ToDictionary(kvp => kvp.PresetId, kvp => kvp.IsEnabled);
-
-        }
-
-        private void ApplyAppPresetFormatState() {
-
-            // TODO should use MpAppClipboardFormatInfo data for last active here
-        }
-
-        private void RestoreFormatPresetState() {
-            if(_preShowPresetState == null || _preShowPresetState.Count == 0) {
-                return;
-            }
-
-            MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets
-                .ForEach(x => x.IsEnabled = _preShowPresetState[x.PresetId]);
-        }
+        
 
 
         #region Drop

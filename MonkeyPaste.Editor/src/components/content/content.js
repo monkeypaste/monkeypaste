@@ -12,9 +12,6 @@ const AllDocumentTags = [...InlineTags, ...BlockTags];
 // #endregion Globals
 
 // #region Life Cycle
-function initContent() {
-	registerTemplateBlots();
-}
 
 function loadContent(contentHandle, contentType, contentData, isPasteRequest, searchStateObj) {
 	if (contentHandle != ContentHandle) {

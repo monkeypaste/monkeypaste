@@ -115,7 +115,7 @@ namespace MonkeyPaste.Common.Wpf {
         public static uint DpiX { get; private set; }
         public static uint DpiY { get; private set; }
 
-        public static double ThisAppDip { get; private set; }
+        public static double ThisAppDip { get; private set; } = 1.0d;
 
         public static void Init() {
             uint dpiX;

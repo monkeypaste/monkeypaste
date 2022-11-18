@@ -82,6 +82,7 @@ function initEditorToolbar() {
 	initFontColorToolbarItems();
 
 	initFontFamilyPicker();
+	initFontSizes();
 	//initLinkToolbarButton();
 	initTemplateToolbarButton();
 	initFindReplaceToolbar();

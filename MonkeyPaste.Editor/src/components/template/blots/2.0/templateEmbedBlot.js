@@ -28,87 +28,91 @@ var TemplateEmbedHtmlAttributes = [
     //'wasVisited'
 ];
 
-const Parchment = Quill.imports.parchment;
+function initTemplateBlot() {
+    let Parchment = Quill.imports.parchment;
+    class TemplateEmbedBlot extends Parchment.EmbedBlot {
+        static blotName = 'template';
+        static tagName = 'SPAN';
+        static className = TemplateEmbedClass;
 
-class TemplateEmbedBlot extends Parchment.EmbedBlot {
-    static blotName = 'template';
-    static tagName = 'SPAN';
-    static className = TemplateEmbedClass;
+        static create(value) {
+            const node = super.create(value);
 
-    static create(value) {
-        const node = super.create(value);
+            if (value.domNode != null) {
+                // creating existing instance
+                value = getTemplateFromDomNode(value.domNode);
+            }
 
-        if (value.domNode != null) {
-            // creating existing instance
-            value = getTemplateFromDomNode(value.domNode);
+            if (IsLoaded) {
+                //ensure new template has unique instance guid
+                value.templateInstanceGuid = generateGuid();
+            }
+
+            applyTemplateToDomNode(node, value);
+            return node;
         }
 
-        if (IsLoaded) {
-            //ensure new template has unique instance guid
-            value.templateInstanceGuid = generateGuid();
+        static formats(node) {
+            return getTemplateFromDomNode(node);
+        }
+        format(name, value) {
+            super.format(name, value);
         }
 
-        applyTemplateToDomNode(node, value);
-        return node;
-    }
+        update(mutations, context) {
+            //let last_sel = LastSelRange;
+            //let sel = getDocSelection();
 
-    static formats(node) {
-        return getTemplateFromDomNode(node);
-    }
-    format(name, value) {
-        super.format(name, value);
-    }
+            //for (var i = 0; i < mutations.length; i++) {
+            //    let outstr = 'mutation: ' + mutations[i].type;
+            //    if (mutations[i].type == 'attributes') {
+            //        outstr += ' ' + mutations[i].attributeName;
+            //    }
+            //    if (mutations[i].type == 'characterData') {
+            //        let forced_text = this.domNode.getAttribute('templateName');
+            //        let added_text = substringByLength(this.domNode.innerText, forced_text.length);
+            //        this.domNode.innerText = forced_text;
+            //        insertText(sel.index + 1, added_text, 'user');
+            //        if (!sel || sel.length > 0) {
+            //            // what's happening? how do we handle this?
+            //            debugger;
+            //            continue;
+            //        }
 
-    update(mutations, context) {
-        //let last_sel = LastSelRange;
-        //let sel = getDocSelection();
+            //        setDocSelection(sel.index + added_text.length + 1, 0, 'api');
+            //        return;
+            //    }
+            //    log(outstr);
+            //}
+            //super.update(mutations, context);
+        }
 
-        //for (var i = 0; i < mutations.length; i++) {
-        //    let outstr = 'mutation: ' + mutations[i].type;
-        //    if (mutations[i].type == 'attributes') {
-        //        outstr += ' ' + mutations[i].attributeName;
-        //    }
-        //    if (mutations[i].type == 'characterData') {
-        //        let forced_text = this.domNode.getAttribute('templateName');
-        //        let added_text = substringByLength(this.domNode.innerText, forced_text.length);
-        //        this.domNode.innerText = forced_text;
-        //        insertText(sel.index + 1, added_text, 'user');
-        //        if (!sel || sel.length > 0) {
-        //            // what's happening? how do we handle this?
-        //            debugger;
-        //            continue;
-        //        }
-
-        //        setDocSelection(sel.index + added_text.length + 1, 0, 'api');
-        //        return;
-        //    }
-        //    log(outstr);
+        //length() {
+        //    return 1;
         //}
-        //super.update(mutations, context);
+
+        static value(node) {
+            return getTemplateFromDomNode(node);
+        }
     }
 
-    //length() {
-    //    return 1;
+    //   let suppressWarning = false;
+    //   let config = {
+    //       scope: Parchment.Scope.INLINE,
+    //   };
+
+    //   for (var i = 0; i < TemplateEmbedHtmlAttributes.length; i++) {
+    //       let attrb_name = TemplateEmbedHtmlAttributes[i];
+    //       let attrb = new Parchment.Attributor(attrb_name, attrb_name, config);
+    //       Quill.register(attrb, suppressWarning);
     //}
 
-    static value(node) {
-        return getTemplateFromDomNode(node);
-    }
+    Quill.register(TemplateEmbedBlot, true);
 }
 
+
 function registerTemplateBlots() {    
- //   let suppressWarning = false;
- //   let config = {
- //       scope: Parchment.Scope.INLINE,
- //   };
 
- //   for (var i = 0; i < TemplateEmbedHtmlAttributes.length; i++) {
- //       let attrb_name = TemplateEmbedHtmlAttributes[i];
- //       let attrb = new Parchment.Attributor(attrb_name, attrb_name, config);
- //       Quill.register(attrb, suppressWarning);
-	//}
-
-    Quill.register(TemplateEmbedBlot, true);
 }
 
 function getTemplateFromDomNode(domNode) {

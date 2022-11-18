@@ -2,12 +2,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia"
         mc:Ignorable="d"
         d:DesignWidth="800"
         d:DesignHeight="450"
         x:Class="MonkeyPaste.Avalonia.MpAvExternalDropWindow"
-        IsVisible="False"
+        local:MpAvIsHoveringExtension.IsEnabled="True"
+        local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
         Topmost="True"
         Width="300"
         Height="75"
@@ -15,8 +17,7 @@
         TransparencyLevelHint="Transparent"
         WindowState="Normal"
         HasSystemDecorations="False"
-        ShowInTaskbar="False"
-        DataContext="{x:Static local:MpAvClipboardHandlerCollectionViewModel.Instance}">
+        ShowInTaskbar="False">
     <Border x:Name="DumbParentBorder"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
@@ -54,10 +55,12 @@
                                Text="x" />
                 </Border>
                 <ListBox x:Name="DropItemListBox"
+                         DataContext="{x:Static local:MpAvClipboardHandlerCollectionViewModel.Instance}"
                          Background="Transparent"
                          BorderBrush="Transparent"
                          HorizontalAlignment="Left"
                          VerticalAlignment="Top"
+                         IsVisible="{Binding !IsShowingFinishMenu, Source={x:Static local:MpAvExternalDropWindowViewModel.Instance}}"
                          SelectionMode="Toggle"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -76,6 +79,76 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
+                <Grid x:Name="DropCompleteGrid"
+                      IsVisible="{Binding IsShowingFinishMenu}"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      RowDefinitions="30,30"
+                      ColumnDefinitions="0.25*,0.75*">
+                    <DockPanel Grid.Row="0"
+                               Grid.ColumnSpan="2"
+                               DataContext="{Binding DropAppViewModel}"
+                               LastChildFill="False"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Stretch">
+                        <Image DockPanel.Dock="Left"
+                               Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                               Stretch="UniformToFill"
+                               Width="{Binding $self.Bounds.Height}"
+                               VerticalAlignment="Stretch" />
+                        <TextBlock x:Name="FinishDropTextBlock"
+                                   DockPanel.Dock="Right"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Top"
+                                   TextAlignment="Left"
+                                   TextWrapping="WrapWithOverflow"
+                                   FontSize="16"
+                                   Foreground="White">
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource MultiStringAppendConverter}">
+                                    <Binding>
+                                        <Binding.Source>
+                                            <sys:String>Remember Drop Settings for '</sys:String>
+                                        </Binding.Source>
+                                    </Binding>
+                                    <Binding Path="AppName" />
+                                    <Binding>
+                                        <Binding.Source>
+                                            <sys:String>'? (</sys:String>
+                                        </Binding.Source>
+                                    </Binding>
+                                    <Binding Source="{x:Static local:MpAvExternalDropWindowViewModel.Instance}"
+                                             Path="RememberSecondsRemainingLabel" />
+                                    <Binding>
+                                        <Binding.Source>
+                                            <sys:String>)</sys:String>
+                                        </Binding.Source>
+                                    </Binding>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </DockPanel>
+                    <Button x:Name="DoNotRememberDropInfoButton"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Command="{Binding DoNotRememberDropInfoCommand}"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+                        <TextBlock Text="No" />
+                    </Button>
+                    <Button x:Name="RememberDropInfoButton"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Command="{Binding RememberDropInfoCommand}"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+                        <TextBlock Text="Yes" />
+                    </Button>
+                </Grid>
             </Grid>
         </Border>
     </Border>

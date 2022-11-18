@@ -50,7 +50,6 @@
     <link href="src/components/overlay/overlay-style.css" rel="stylesheet" />
 
     <link href="src/components/list/list-style.css" rel="stylesheet" />
-    <link href="src/components/list/checkable/checkable-list-style.css" rel="stylesheet" />
 
     <link href="src/components/findreplace/find-replace-style.css" rel="stylesheet" />
 
@@ -60,7 +59,6 @@
     <link href="src/components/common/toolbar/common-toolbar-style.css" rel="stylesheet" />
 
     <!-- EXTERNAL APIS -->
-
 
     <script src="lib/HighlightJs/highlight.min.js"></script>
     <script src="lib/HighlightJs/xml.min.js"></script>
@@ -130,7 +128,9 @@
     <script src="src/components/content/paste/pastetoolbar.js"></script>
 
     <script src="src/components/list/list.js"></script>
-    <script src="src/components/list/checkable/checkablelist.js"></script>
+    <script src="src/components/list/bullets/checkable/checkablelist.js"></script>
+    <script src="src/components/list/bullets/ordered/orderedlist.js"></script>
+    <script src="src/components/list/bullets/disc/disclist.js"></script>
 
     <script src="src/components/common/toolbar/commonToolbar.js"></script>
 
@@ -236,6 +236,10 @@
         <button class="ql-list" value="ordered"></button>
         <button class="ql-list" value="bullet"></button>
         <button class="ql-list" value="check"></button>
+
+        <!--<button id="orderedListToolbarButton"></button>
+        <button id="discListToolbarButton"></button>
+        <button id="checkListToolbarButton"></button>-->
 
         <div class="toolbar-separator"></div>
 

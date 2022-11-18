@@ -38,6 +38,11 @@ namespace MonkeyPaste.Avalonia {
         #region Drop Events
 
         private void DragEnter(object sender, DragEventArgs e) {
+            // no matter what flag that this dnd has a unique state so 
+            // any config's should be ignored, too bad (i think)
+
+            MpAvExternalDropWindowViewModel.Instance.HasUserToggledAnyHandlers = true;
+
             MpConsole.WriteLine("[DragEnter] Source: " + e.Source);
             if (BindingContext.IsDropItemHovering || e.Source is not Border) {
                 // false drag enter, ignore

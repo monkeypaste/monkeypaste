@@ -46,8 +46,13 @@
     <Content Include="src\components\link\link.js">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="src\components\list\checkable\checkable-list-style.css" />
-    <Content Include="src\components\list\checkable\checkablelist.js" />
+    <Content Include="src\components\list\bullets\checkable\checkablelist.js" />
+    <Content Include="src\components\list\bullets\disc\disclist.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\components\list\bullets\ordered\orderedlist.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\components\list\list.js" />
     <Content Include="src\components\list\list-style.css" />
     <Content Include="src\components\loader\loader.js">
@@ -107,7 +112,6 @@
     <Content Include="src\components\table\toolbar\create-table-style.css" />
     <Content Include="src\components\table\toolbar\createTableToolbarButton.js" />
     <Content Include="src\components\template\blots\2.0\templateEmbedBlot.js" />
-    <Content Include="src\components\template\blots\2.0\templatePadAttribute.js" />
     <Content Include="src\components\template\template-style.css" />
     <Content Include="src\components\template\template.js" />
     <Content Include="src\components\common\toolbar\common-toolbar-style.css" />
@@ -153,7 +157,10 @@
     <Folder Include="src\components\dragdrop\" />
     <Folder Include="src\components\editor\" />
     <Folder Include="src\components\font\" />
-    <Folder Include="src\components\list\checkable\" />
+    <Folder Include="src\components\list\bullets\checkable\" />
+    <Folder Include="src\components\list\bullets\" />
+    <Folder Include="src\components\list\bullets\disc\" />
+    <Folder Include="src\components\list\bullets\ordered\" />
     <Folder Include="src\components\main\" />
     <Folder Include="src\components\messages\" />
     <Folder Include="src\components\color\" />

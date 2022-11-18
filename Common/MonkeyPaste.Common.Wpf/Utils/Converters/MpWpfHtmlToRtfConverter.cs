@@ -22,17 +22,22 @@ using System.Windows.Media.Imaging;
 namespace MonkeyPaste.Common.Wpf {
     public static class MpWpfHtmlToRtfConverter {
         #region private static Variables
-        private static double _indentCharCount = 5;
 
         private static string[] _ignoredHtmlTagNames = new string[] {
             "colgroup",
             "svg"
         };
 
-        private static string _defaultFontFamily;
-        private static string _defaultCodeBlockFontFamily;
+        public const string FALLBACK_DEFAULT_FONT_FAMILY = "Arial";
+        public const string FALLBACK_DEFAULT_CODE_BLOCK_FONT_FAMILY = "Arial";
+        public const double FALLBACK_DEFAULT_FONT_SIZE = 12.0d;
+        public const int FALLBACK_DEFAULT_INDENT_CHAR_COUNT = 5;
+        public static string CurrentDefaultFontFamily { get; private set; }
+        public static string CurrentDefaultCodeBlockFontFamily { get; private set; }
+        public static double CurrentDefaultFontSize { get; private set; }
+        public static int CurrentIndentCharCount { get; private set; }
 
-        private static FlowDocument _ownerFd;
+        public static FlowDocument CurrentFd { get; set; }
         #endregion
 
         #region Properties
@@ -41,16 +46,24 @@ namespace MonkeyPaste.Common.Wpf {
 
         #region Public Methods
 
-        public static string ConvertQuillHtmlToRtf(string html, string defaultFontFamily = null, string defaultCodeBlockFontFamily = null) {
-            _defaultFontFamily = defaultFontFamily == null ? "Arial" : defaultFontFamily;
-            _defaultCodeBlockFontFamily = defaultCodeBlockFontFamily == null ? "Consolas" : defaultCodeBlockFontFamily;
+        public static string ConvertQuillHtmlToRtf(
+            string html, 
+            string defaultFontFamily = FALLBACK_DEFAULT_FONT_FAMILY, 
+            string defaultCodeBlockFontFamily = FALLBACK_DEFAULT_CODE_BLOCK_FONT_FAMILY,
+            double defaultFontSize = FALLBACK_DEFAULT_FONT_SIZE,
+            int indentCharCount = FALLBACK_DEFAULT_INDENT_CHAR_COUNT) {
+            CurrentDefaultFontFamily = defaultFontFamily;
+            CurrentDefaultCodeBlockFontFamily = defaultCodeBlockFontFamily;
+            CurrentDefaultFontSize = defaultFontSize;
+            CurrentIndentCharCount = indentCharCount;
+
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(html);
-            _ownerFd = new FlowDocument {
-                FontFamily = new FontFamily(_defaultFontFamily),
+            CurrentFd = new FlowDocument {
+                FontFamily = new FontFamily(CurrentDefaultFontFamily),
 
             };
-            _ownerFd.Blocks.Clear();
+            CurrentFd.Blocks.Clear();
             foreach (var htmlBlockNode in htmlDoc.DocumentNode.ChildNodes) {
                 var docNode = htmlBlockNode;
                 if(docNode.Name == "div") {
@@ -58,7 +71,7 @@ namespace MonkeyPaste.Common.Wpf {
                     // and for code-block, i'm not sure but there maybe multiple blocks so process all 1st level children
                     docNode = htmlBlockNode.FirstChild;
                     while(docNode != null) {
-                        _ownerFd.Blocks.Add(ConvertHtmlNode(docNode) as Block);
+                        CurrentFd.Blocks.Add(ConvertHtmlNode(docNode) as Block);
                         docNode = docNode.NextSibling;
                     }
                     continue;
@@ -70,19 +83,19 @@ namespace MonkeyPaste.Common.Wpf {
                 if (te is List l) {
                     var actual_lists = FinishListFormatting(htmlBlockNode, l);
                     foreach (var actual_list in actual_lists) {
-                        _ownerFd.Blocks.Add(actual_list);
+                        CurrentFd.Blocks.Add(actual_list);
                     }
                     continue;
                 }
                 if (te is Block b) {
-                    _ownerFd.Blocks.Add(b);
+                    CurrentFd.Blocks.Add(b);
                     continue;
                 } else if (te is Inline i) {
                     // NOTE this occurs when html is a sub-selection fragment
                 }
                // _ownerFd.Blocks.Add(ConvertHtmlNode(docNode) as Block);
             }
-            return _ownerFd.ToRichText();
+            return CurrentFd.ToRichText();
         }
 
         public static void Test() {
@@ -208,7 +221,7 @@ namespace MonkeyPaste.Common.Wpf {
                             Padding = new Thickness(3),
                             Background = Brushes.LightGray,
                             Foreground = Brushes.DimGray,
-                            FontFamily = new FontFamily(_defaultCodeBlockFontFamily)
+                            FontFamily = new FontFamily(CurrentDefaultCodeBlockFontFamily)
                         };
                     } else {
                         throw new Exception("Unhanlded html doc element: " + n.ToString());
@@ -262,6 +275,7 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         private static Table FinishTableFormatting(HtmlNode tn, Table t) {
+            bool has_unknown_col_widths = false;
             if (tn.FirstChild.Name == "colgroup") {
                 var colDefList = tn.FirstChild.ChildNodes;
                 for (int i = 0; i < colDefList.Count; i++) {
@@ -273,17 +287,29 @@ namespace MonkeyPaste.Common.Wpf {
                         }
                     }
 
+                    double colWidth = -1.0d;
                     var colDef = colDefList[i];
-
-                    double colWidth = 50;
-                    try {
-                        colWidth = Convert.ToDouble(colDef.GetAttributeValue("width", colWidth.ToString()));
+                    string colWidthAttrVal = colDef.GetAttributeValue("width", string.Empty);
+                    if (colWidthAttrVal != string.Empty) {
+                        try {
+                            colWidth = double.Parse(colWidthAttrVal);
+                        }
+                        catch (Exception ex) {
+                            MpConsole.WriteTraceLine(ex);
+                        }
                     }
-                    catch (Exception ex) {
-                        MpConsole.WriteTraceLine(ex);
+                    if(colWidth.IsNumber() && colWidth >= 0) {
+                        t.Columns[i].Width = new GridLength(colWidth);
+                    } else {
+                        t.Columns[i].Width = new GridLength(0, GridUnitType.Auto);
+                        has_unknown_col_widths = true;
                     }
-                    t.Columns[i].Width = new GridLength(colWidth);
                 }
+            }
+            if(has_unknown_col_widths) {
+                // try this if col's still messed up
+                t = MpCsvToRtfTableConverter.CalculateColumnWidths(t);
+                //t.Columns.ForEach(x => x.Width = new GridLength(0, GridUnitType.Auto));
             }
             return t;
         }
@@ -356,14 +382,14 @@ namespace MonkeyPaste.Common.Wpf {
                 Debugger.Break();
                 return TextMarkerStyle.None;
             }
-            string dataListValue = li_node.GetAttributeValue("data-list", string.Empty);
+            string dataListValue = li_node.GetAttributeValue("data-checked", string.Empty);
             if(string.IsNullOrEmpty(dataListValue)) {
                 return TextMarkerStyle.Disc;
             }
-            if(dataListValue == "unchecked") {
+            if(dataListValue == "false") {
                 return TextMarkerStyle.Square;
             }
-            if(dataListValue == "checked") {
+            if(dataListValue == "true") {
                 return TextMarkerStyle.Box;
             }
 
@@ -428,7 +454,7 @@ namespace MonkeyPaste.Common.Wpf {
                         b.TextAlignment = TextAlignment.Justify;
                     } else if (cv.Contains("ql-indent-")) {
                         if(b is Paragraph p) {
-                            p.TextIndent = GetIndentLevel(cv) * _indentCharCount;
+                            p.TextIndent = GetIndentLevel(cv) * CurrentIndentCharCount;
                         }
                     }
                 }
@@ -552,7 +578,7 @@ namespace MonkeyPaste.Common.Wpf {
 
             // NOTE non px types may need adjustment when DPI is not 96
             string fontSizeStr = string.Empty;
-            double fs = 12;
+            double fs = CurrentDefaultFontSize;
             if(styleValue.Contains("px")) {
                 fontSizeStr = styleValue.Replace("font-size: ", string.Empty).Replace("px", string.Empty);
             } else if(styleValue.Contains("rem")) {
@@ -581,7 +607,7 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         private static FontFamily GetFontFamily(string classValue) {
-            string defaultFontName = _defaultFontFamily.ToLower();
+            string defaultFontName = CurrentDefaultFontFamily.ToLower();
             FontFamily defaultFontFamily = null;
             FontFamily closestFontFamily = null;
             string fontName = classValue.Replace("ql-font-", string.Empty).Replace("-"," ");

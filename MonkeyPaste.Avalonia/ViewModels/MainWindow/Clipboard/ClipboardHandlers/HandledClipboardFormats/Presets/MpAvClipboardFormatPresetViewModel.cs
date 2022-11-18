@@ -352,6 +352,9 @@ namespace MonkeyPaste.Avalonia {
             return naipvm;
         }
 
+        public string GetPresetParamJson() {
+            return MpJsonObject.SerializeObject(Items.Select(x => new[] { x.ParamName, x.CurrentValue }).ToList());
+        }
         #endregion
 
         #region Protected Methods

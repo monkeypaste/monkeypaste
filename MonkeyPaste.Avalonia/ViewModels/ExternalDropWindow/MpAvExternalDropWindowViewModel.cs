@@ -1,0 +1,212 @@
+﻿using MonkeyPaste.Common;
+using System.Collections.Generic;
+using System.Windows.Input;
+using System.Linq;
+using System.Runtime.Intrinsics.X86;
+using System.Diagnostics;
+using System;
+using System.Threading.Tasks;
+using Avalonia.Threading;
+
+namespace MonkeyPaste.Avalonia {
+    public class MpAvExternalDropWindowViewModel : MpViewModelBase, MpIHoverableViewModel {
+        #region Private Variables
+        private Dictionary<int, bool> _preShowPresetState = new Dictionary<int, bool>();
+        #endregion
+
+        #region Statics
+        private static MpAvExternalDropWindowViewModel _instance;
+        public static MpAvExternalDropWindowViewModel Instance => _instance ?? (_instance = new MpAvExternalDropWindowViewModel());
+
+        #endregion
+
+        #region MpIHoverableViewModel Implementation
+        public bool IsHovering { get; set; } = false;
+
+        #endregion
+
+        #region Properties
+
+        #region View Models
+
+        public MpAvAppViewModel DropAppViewModel { get; set; }
+        #endregion
+
+        #region State
+        public bool HasUserToggledAnyHandlers { get; set; } = false;
+        public int TotalRememberWaitTimeS => 30;
+        public int RememberSecondsRemaining { get; set; }
+
+        public bool IsShowingDropWindow { get; set; } = false;
+        public bool IsShowingFinishMenu { get; private set; } = false;
+        #endregion
+
+        #region Model
+
+
+        #endregion
+        #endregion
+
+        #region Constructors
+
+        public MpAvExternalDropWindowViewModel() : base(null) {
+            PropertyChanged += MpAvExternalDropWindowViewModel_PropertyChanged;
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        #endregion
+
+        #region Private Methods
+
+        private void MpAvExternalDropWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(IsShowingDropWindow):
+                    if(IsShowingDropWindow) {
+                        MpAvExternalDropWindow.Instance.Show();
+                        IsShowingFinishMenu = false;
+                    } else {
+                        RestoreFormatPresetState();
+                        DropAppViewModel = null;
+                        MpAvExternalDropWindow.Instance.Hide();
+                    }
+                    break;
+            }
+        }
+        private Dictionary<int, bool> GetFormatPresetState() {
+            return
+              MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets
+              .ToDictionary(kvp => kvp.PresetId, kvp => kvp.IsEnabled);
+
+        }
+
+        private void ApplyAppPresetFormatState() {
+
+            // TODO should use MpAppClipboardFormatInfo data for last active here
+        }
+        private bool HasPresetsChanged() {
+            foreach (var wp in MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets) {
+                if (_preShowPresetState[wp.PresetId] != wp.IsEnabled) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        private void RestoreFormatPresetState() {
+            if (_preShowPresetState == null || _preShowPresetState.Count == 0) {
+                return;
+            }
+
+            MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets
+                .ForEach(x => x.IsEnabled = _preShowPresetState[x.PresetId]);
+        }
+        #endregion
+
+        #region Commands
+        public ICommand ShowDropWindowCommand => new MpCommand(
+            () => {
+                IsShowingDropWindow = true;
+                IsShowingFinishMenu = false;
+                HasUserToggledAnyHandlers = false;
+                _preShowPresetState = GetFormatPresetState();
+                ApplyAppPresetFormatState();
+            },()=>!IsShowingDropWindow);
+
+        public ICommand UpdateDropAppViewModelCommand => new MpCommand<object>(
+            (drop_gmp_arg) => {
+                var gmp = drop_gmp_arg as MpPoint;
+                if (gmp == null) {
+                    return;
+                }
+
+                // TODO need to account for other screen here and use density for screen where gmp is contained
+                var result = MpAvAppCollectionViewModel.Instance.GetAppViewModelFromScreenPoint(gmp, MpAvMainWindowViewModel.Instance.MainWindowScreen.PixelDensity);
+                if(result != null) {
+                    if(HasUserToggledAnyHandlers || (DropAppViewModel != null && result.AppId == DropAppViewModel.AppId)) {
+                        return;
+                    }
+                    DropAppViewModel = result;
+                    Dispatcher.UIThread.Post(async () => {
+                        var acil = await MpDataModelProvider.GetAppClipboardFormatInfosByAppIdAsync(DropAppViewModel.AppId);
+
+                        // TODO eventually should also apply param settings (in which case store in state info in show window)
+
+                        //
+                        for (int i = 0; i < acil.Count; i++) {
+                            var aci = acil[i];
+                            var wpvm = MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets.FirstOrDefault(x => x.ClipboardFormat.clipboardName == aci.FormatType);
+                            if(wpvm == null) {
+                                continue;
+                            }
+                            wpvm.IsEnabled = !aci.IgnoreFormat;
+                        }
+                        //MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets
+                        //.Where(x => acil.Any(y => y.FormatType == x.ClipboardFormat.clipboardName))
+                        //.ForEach(x => x.IsEnabled = !acil.FirstOrDefault(y => y.FormatType == x.ClipboardFormat.clipboardName).IgnoreFormat);
+
+                        //Dispatcher.UIThread.Post(MpAvClipboardHandlerCollectionViewModel.Instance.OnPropertyChanged(nameof(MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets)));
+                    });
+                }
+            },(drop_gmp_arg) =>!IsShowingFinishMenu);
+
+        public ICommand ShowFinishDropMenuCommand => new MpAsyncCommand<object>(
+            async(drop_gmp_arg) => {
+                if(DropAppViewModel == null || !HasPresetsChanged()) {
+                    DoNotRememberDropInfoCommand.Execute(null);
+                    return;
+                }
+                IsShowingFinishMenu = true;
+
+                RememberSecondsRemaining = TotalRememberWaitTimeS;
+                var sw = Stopwatch.StartNew();
+                while (true) {
+                    RememberSecondsRemaining = TotalRememberWaitTimeS - (int)Math.Floor(sw.Elapsed.TotalSeconds);
+                    if (!IsShowingDropWindow) {
+                        break;
+                    }
+                    if (RememberSecondsRemaining < 0) {
+                        break;
+                    }
+                    while (IsHovering) {
+                        if (!IsShowingDropWindow) {
+                            break;
+                        }
+                        RememberSecondsRemaining = TotalRememberWaitTimeS;
+                        await Task.Delay(100);
+                    }
+                    await Task.Delay(100);
+                }
+                IsShowingFinishMenu = false;
+                IsShowingDropWindow = false;
+            },(drop_gmp_arg) =>!IsShowingFinishMenu);
+
+        public ICommand RememberDropInfoCommand => new MpAsyncCommand(
+            async() => {
+
+                foreach (var preset_vm in MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets) {
+                    string param_info = preset_vm.GetPresetParamJson();
+                    await MpAppClipboardFormatInfo.CreateAsync(
+                        appId: DropAppViewModel.AppId,
+                        format: preset_vm.ClipboardFormat.clipboardName,
+                        formatInfo: param_info,
+                        ignoreFormat: !preset_vm.IsEnabled);
+                }
+
+                IsShowingDropWindow = false;
+            },()=>DropAppViewModel != null);
+
+        public ICommand DoNotRememberDropInfoCommand => new MpCommand(
+            () => {
+                if(_preShowPresetState != null) {
+                    _preShowPresetState.Clear();
+                }
+                DropAppViewModel = null;
+                HasUserToggledAnyHandlers = false;
+                IsShowingFinishMenu = false;
+                IsShowingDropWindow = false;
+            });
+        #endregion
+    }
+}

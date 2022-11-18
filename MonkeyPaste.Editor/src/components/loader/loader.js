@@ -1,5 +1,6 @@
 // #region Globals
 
+
 const REL_EXTERNAL_ROOT_DIR = 'node_modules';
 const REL_INTERNAL_ROOT_DIR = 'src';
 
@@ -84,12 +85,12 @@ function loadVariableInternalScripts() {
         //document.write('<script src="src/components/template/blots/2.0/templateEmbedBlot.js"><\/script>');
         //document.write('<script src="src/components/template/blots/2.0/templatePadAttribute.js"><\/script>');
         addScript(`${REL_INTERNAL_ROOT_DIR}/components/template/blots/2.0/templateEmbedBlot.js`);
-        addScript(`${REL_INTERNAL_ROOT_DIR}/components/template/blots/2.0/templatePadAttribute.js`);
+        //addScript(`${REL_INTERNAL_ROOT_DIR}/components/template/blots/2.0/templatePadAttribute.js`);
     } else {
         //document.write('<script src="src/components/template/blots/1.0/templateEmbedBlot.js"><\/script>');
         //document.write('<script src="src/components/template/blots/1.0/templatePadAttribute.js"><\/script>');
         addScript(`${REL_INTERNAL_ROOT_DIR}/components/template/blots/1.0/templateEmbedBlot.js`);
-        addScript(`${REL_INTERNAL_ROOT_DIR}/components/template/blots/1.0/templatePadAttribute.js`);
+        //addScript(`${REL_INTERNAL_ROOT_DIR}/components/template/blots/1.0/templatePadAttribute.js`);
     }
 }
 

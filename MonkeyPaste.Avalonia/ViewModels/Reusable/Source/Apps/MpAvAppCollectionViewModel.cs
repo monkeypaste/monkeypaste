@@ -27,6 +27,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ObservableCollection<MpAvAppViewModel> FilteredApps { get; set; }
 
+        public MpAvAppViewModel ActiveAppViewModel { get; private set; }
         #endregion
 
         #region State
@@ -103,6 +104,17 @@ namespace MonkeyPaste.Avalonia {
             }
             return aivm.ClipboardFormatInfos;
         }
+
+        public MpAvAppViewModel GetAppViewModelFromScreenPoint(MpPoint gmp, double pixelDensity) {
+            var handle = MpPlatformWrapper.Services.ProcessWatcher.GetParentHandleAtPoint(gmp);
+            if(handle == IntPtr.Zero) {
+                return null;
+            }
+            string handle_path = MpPlatformWrapper.Services.ProcessWatcher.GetProcessPath(handle);
+            MpConsole.WriteLine("Drop Path: " + handle_path,true,true);
+            // TODO need to filter by current device here
+            return Items.FirstOrDefault(x => x.AppPath.ToLower() == handle_path.ToLower());
+        }
         #endregion
 
         #region Protected Methods
@@ -162,21 +174,36 @@ namespace MonkeyPaste.Avalonia {
             return al;
         }
 
-        private void MpProcessManager_OnAppActivated(object sender, MpPortableProcessInfo e) {
+        private async void MpProcessManager_OnAppActivated(object sender, MpPortableProcessInfo e) {
             // if app is unknown add it
             // TODO device logic
-            bool isUnknown = Items.FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower()) == null;
+            while(IsBusy) {
+                await Task.Delay(100);
+            }
+            var avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower());
 
-            if(isUnknown) {
+            if(avm == null) {
                 Dispatcher.UIThread.Post(async () => {
+                    IsBusy = true;
+
                     var iconStr = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(e.ProcessPath);
                     var icon = await MpIcon.Create(iconStr);
                     var app = await MpApp.CreateAsync(
                         appPath: e.ProcessPath, 
                         appName: MpPlatformWrapper.Services.ProcessWatcher.ParseTitleForApplicationName(e.MainWindowTitle), 
                         iconId: icon.Id);
+
                     // vm is added in db add handler
+                    while (avm == null) {
+                        avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower());
+                    }
+                    ActiveAppViewModel = avm;
+
+                    IsBusy = false;
+
                 });
+            } else {
+                ActiveAppViewModel = avm;
             }
         }
 

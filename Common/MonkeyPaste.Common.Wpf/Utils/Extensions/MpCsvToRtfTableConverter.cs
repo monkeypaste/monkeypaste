@@ -185,10 +185,10 @@ namespace MonkeyPaste.Common.Wpf {
                 tableRowGroup.Rows.Add(row);
             }
 
-            AutoResizeColumns(table);
+            CalculateColumnWidths(table);
             return table;
         }
-        public static void AutoResizeColumns(Table table) {
+        public static Table CalculateColumnWidths(Table table, string fallback_ff = null) {
             TableColumnCollection columns = table.Columns;
             TableRowCollection rows = table.RowGroups[0].Rows;
             TableCellCollection cells;
@@ -211,7 +211,7 @@ namespace MonkeyPaste.Common.Wpf {
                 // loop through all cells in the row    
                 for (int c = 0; c < columnCount && c < cellCount; c++) {
                     cell = cells[c];
-                    columnWidth = GetDesiredWidth(new TextRange(cell.ContentStart, cell.ContentEnd)) + 19;
+                    columnWidth = GetDesiredWidth(new TextRange(cell.ContentStart, cell.ContentEnd));// + 19;
 
                     if (columnWidth > columnWidths[c]) {
                         columnWidths[c] = columnWidth;
@@ -223,21 +223,44 @@ namespace MonkeyPaste.Common.Wpf {
             for (int c = 0; c < columnCount; c++) {
                 columns[c].Width = new GridLength(columnWidths[c]);
             }
+            double total_width = columnWidths.Sum();
+            if(MpWpfHtmlToRtfConverter.CurrentFd != null && 
+                (!MpWpfHtmlToRtfConverter.CurrentFd.PageWidth.IsNumber() ||
+                MpWpfHtmlToRtfConverter.CurrentFd.PageWidth < total_width)) {
+                MpWpfHtmlToRtfConverter.CurrentFd.PageWidth = total_width;
+            }
+            return table;
         }
-        static double GetDesiredWidth(TextRange textRange) {
-            return new FormattedText(
+        static double GetDesiredWidth(TextRange textRange, string fallback_ff = null) {
+            //var start_rect = textRange.Start.GetCharacterRect(LogicalDirection.Forward);
+            //var end_rect = textRange.End.GetCharacterRect(LogicalDirection.Backward);
+            //start_rect.Union(end_rect);
+            //if(start_rect.Width.IsNumber()) {
+            //    return start_rect.Width;
+            //}
+            //Debugger.Break();
+
+            fallback_ff = fallback_ff == null ? MpWpfHtmlToRtfConverter.CurrentDefaultFontFamily : fallback_ff;
+            var p = textRange.Start.Paragraph;            
+
+            var ft = new FormattedText(
                 textRange.Text,
                 CultureInfo.CurrentCulture,
-                FlowDirection.LeftToRight,
+                p.FlowDirection,
                 new Typeface(
-                    textRange.GetPropertyValue(TextElement.FontFamilyProperty) as FontFamily,
-                    (FontStyle)textRange.GetPropertyValue(TextElement.FontStyleProperty),
-                    (FontWeight)textRange.GetPropertyValue(TextElement.FontWeightProperty),
-                    FontStretches.Normal),
-                    (double)textRange.GetPropertyValue(TextElement.FontSizeProperty),
+                    p.FontFamily,
+                    p.FontStyle,
+                    p.FontWeight,
+                    p.FontStretch),
+                    p.FontSize,
                 Brushes.Black,
                 new NumberSubstitution(),
-                MpScreenInformation.ThisAppDip).Width;
+                MpScreenInformation.ThisAppDip);
+            if(ft.Width == 0 || !ft.Width.IsNumber()) {
+                double fs = p.FontSize == 0 || !p.FontSize.IsNumber() ? MpWpfHtmlToRtfConverter.CurrentDefaultFontSize : p.FontSize;
+                return textRange.Text.Length * fs;
+            }
+            return ft.Width;
         }
     }
 }

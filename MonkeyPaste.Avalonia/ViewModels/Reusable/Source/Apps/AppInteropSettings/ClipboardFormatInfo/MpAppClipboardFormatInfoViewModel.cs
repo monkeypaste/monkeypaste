@@ -71,10 +71,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
-        public MpClipboardFormatType ClipboardFormatType {
+        public string ClipboardFormatType {
             get {
                 if (AppClipboardFormatInfo == null) {
-                    return MpClipboardFormatType.None;
+                    return string.Empty;
                 }
                 return AppClipboardFormatInfo.FormatType;
             }

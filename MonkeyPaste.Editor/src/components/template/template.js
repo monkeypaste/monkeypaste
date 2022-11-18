@@ -22,6 +22,7 @@ var DragAnchorDocIdxWhenTemplateWithinSelection = -1;
 
 function initTemplates() {
     quill.on("text-change", onEditorTextChangedPadTemplates);
+    initTemplateBlot();
 }
 
 //#endregion Life Cycle
