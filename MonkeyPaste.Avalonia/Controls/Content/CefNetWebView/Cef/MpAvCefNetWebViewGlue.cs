@@ -19,9 +19,6 @@ using Avalonia.Interactivity;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvCefNetWebViewGlue : AvaloniaWebViewGlue {
-        public static MpAvDataObject DragDataObject { get; private set; }
-
-        public static MpAvDataObject SourceDataObject { get; private set; }
 
         public MpAvCefNetWebViewGlue(MpAvCefNetWebView view) : base(view) {
         }
@@ -47,148 +44,10 @@ namespace MonkeyPaste.Avalonia {
         /// <returns>Return false to abort the drag operation or true to handle the drag operation.</returns>
         /// 
         protected override bool StartDragging(CefBrowser browser, CefDragData dragData, CefDragOperationsMask allowedOps, int x, int y) {
-            bool isDragValid = true;
-
-            // TODO should check dragData here and when invalid return false
-
-            if (!isDragValid) {
-                return false;
+            if(browser.Host.Client.GetWebView() is MpAvCefNetWebView wv) {
+                return wv.HandleStartDragging(browser, dragData, allowedOps, x, y);
             }
-
-            Dispatcher.UIThread.Post(async () => {
-                var wv = browser.Host.Client.GetWebView() as MpAvCefNetWebView;
-                var ctvm = wv.BindingContext;
-                object drag_lock = System.Guid.NewGuid().ToString();
-
-                // NOTE only setting this true (maynot be if not all selected) for js msg to know its for ole
-                ctvm.IsTileDragging = true; 
-
-                PointerEventArgs pe = null;
-                EventHandler<PointerEventArgs> pointer_move_handler = null;
-                EventHandler<string> modKeyUpOrDownHandler = null;
-                EventHandler<MpPoint> globaleMouseMoveHandler = null;
-                EventHandler<bool> globalPointerReleasedHandler = null;
-
-                pointer_move_handler = (s, e) => {
-                    pe = e;
-                    if(!e.IsLeftDown(wv)) {
-                        // NOTE not sure if these events are received since dnd is progress 
-                        // but probably good to keep since drag end is so annoying to handle...
-                        MpConsole.WriteLine("CefGlue pointer move event detached ITSELF");
-                        wv.PointerMoved -= pointer_move_handler;
-
-                        MpAvExternalDropWindowViewModel.Instance.DoNotRememberDropInfoCommand.Execute(null);
-                        return;
-                    }
-
-                };
-
-                wv.PointerMoved += pointer_move_handler;
-                bool wasEscapePressed = false;
-
-                modKeyUpOrDownHandler = (s, e) => {
-                    if(MpAvShortcutCollectionViewModel.Instance.GlobalIsEscapeDown) {
-                        wasEscapePressed = true;
-                    }
-                    var modKeyMsg = new MpQuillModifierKeysNotification() {
-                        ctrlKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown,
-                        altKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsAltDown,
-                        shiftKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsShiftDown,
-                        escKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsEscapeDown
-                    };
-                    wv.ExecuteJavascript($"updateModifierKeysFromHost_ext('{modKeyMsg.SerializeJsonObjectToBase64()}')");
-                };
-                MpPoint last_gmp = null;
-                globaleMouseMoveHandler = (s, e) => {
-                    if(!MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
-                        MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased -= globalPointerReleasedHandler;
-                        MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove -= globaleMouseMoveHandler;
-                        //Dispatcher.UIThread.Post(()=>MpAvExternalDropWindowViewModel.Instance.ShowFinishDropMenuCommand.Execute(null));
-                        MpAvExternalDropWindowViewModel.Instance.ShowFinishDropMenuCommand.Execute(null);
-                    }
-                    if(last_gmp != null && e.Distance(last_gmp) < 10) { 
-                        return;
-                    }
-                    //Dispatcher.UIThread.Post(() => MpAvExternalDropWindowViewModel.Instance.UpdateDropAppViewModelCommand.Execute(e));
-                    MpAvExternalDropWindowViewModel.Instance.UpdateDropAppViewModelCommand.Execute(e);
-                    last_gmp = e;
-                };
-
-                globalPointerReleasedHandler = (s, e) => {
-                    MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased -= globalPointerReleasedHandler;
-                    MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove -= globaleMouseMoveHandler;
-                    MpAvExternalDropWindowViewModel.Instance.ShowFinishDropMenuCommand.Execute(null);
-                };
-
-                MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed += modKeyUpOrDownHandler;
-                MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased += modKeyUpOrDownHandler;
-
-                MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove += globaleMouseMoveHandler;
-                MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += globalPointerReleasedHandler;
-
-                //bool is_tile_drag = false;
-                DragDropEffects allowedEffects = allowedOps.ToDragDropEffects();
-
-                if (ctvm.ItemType == MpCopyItemType.FileList) {
-                    allowedEffects = DragDropEffects.Copy;
-                } else if (ctvm.ItemType == MpCopyItemType.Image) {
-                    allowedEffects = DragDropEffects.Move;
-                }
-                SourceDataObject = await wv.Document.GetDataObjectAsync(false, false, false);
-                if(SourceDataObject == null) {
-                    if(ctvm != null) {
-                        ctvm.IsTileDragging = false;
-                    }
-                    // NOTE i think this occurs because of a bug when wv is recycled 
-                    MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= modKeyUpOrDownHandler;
-                    MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= modKeyUpOrDownHandler;
-                    wv.PointerMoved -= pointer_move_handler;
-                    allowedOps = CefDragOperationsMask.None;
-                    return;
-                }
-
-
-                // seems excessive...but ultimately all ole pref's come from plugins so pass everthing through cb plugin system just like writing to clipboard
-                DragDataObject = await MpPlatformWrapper.Services.DataObjectHelperAsync.WriteDragDropDataObject(SourceDataObject) as MpAvDataObject;
-                MpAvExternalDropWindowViewModel.Instance.ShowDropWindowCommand.Execute(null);
-
-                while (pe == null) {
-                    await Task.Delay(100);
-                }
-
-                var result = await DragDrop.DoDragDrop(pe, DragDataObject, allowedEffects);
-
-                bool wasCopy = MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown;
-                bool wasSelfDrop = !wasEscapePressed && ctvm.IsHovering;
-                ctvm.IsTileDragging = false;
-                wv.PointerMoved -= pointer_move_handler;
-
-                MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= modKeyUpOrDownHandler;
-                MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= modKeyUpOrDownHandler;
-
-                MpConsole.WriteLine("Cef Drag Result: " + result);
-                MpConsole.WriteLine("Was Self drop: " + wasSelfDrop);
-
-                string dropEffect = wasSelfDrop && !wasCopy ? "move":"copy";
-
-                if(wasEscapePressed) {
-                    dropEffect = "none";
-                }
-
-                MpConsole.WriteLine("ACTUAL drag result: " + dropEffect);
-                var dragEndMsg = new MpQuillDragEndMessage() {
-                    dataTransfer = new MpQuillDataTransferMessageFragment() {
-                        dropEffect = dropEffect
-                    },
-                    fromHost = true,
-                    wasCancel = wasEscapePressed
-                };
-
-                await wv.EvaluateJavascriptAsync($"dragEnd_ext('{dragEndMsg.SerializeJsonObjectToBase64()}')");
-                //MpAvExternalDropWindow.Instance.Hide();
-
-            });
-            return false;
+            return false;            
         }
         protected override void OnBeforeContextMenu(CefBrowser browser, CefFrame frame, CefContextMenuParams menuParams, CefMenuModel model) {
             // ensure default cefnet context menu is empty

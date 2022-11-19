@@ -463,3 +463,55 @@ function replaceTextInRange(str, text, idx, length) {
     str = str.substr(0, idx) + str.substr(idx+length)
     return insertTextAtIdx(str, idx, text);
 }
+
+function convertIntToRomanNumeral(num) {
+    if (!num) {
+        return '';
+    }
+    num = parseInt(num);
+    let roman = ["M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"];
+    let arabic = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
+    let index = 0;
+    let result = "";
+    while (num > 0) {
+        if (num >= arabic[index]) {
+            result += roman[index];
+            num -= arabic[index];
+        } else index++;
+    }
+
+    return result;
+}
+
+function convertRomanNumeralToInt(str1) {
+    if (str1 == null) return -1;
+
+    function char_to_int(c) {
+        switch (c) {
+            case 'I': return 1;
+            case 'V': return 5;
+            case 'X': return 10;
+            case 'L': return 50;
+            case 'C': return 100;
+            case 'D': return 500;
+            case 'M': return 1000;
+            default: return -1;
+        }
+    }
+
+    var num = char_to_int(str1.charAt(0));
+    var pre, curr;
+
+    for (var i = 1; i < str1.length; i++) {
+        curr = char_to_int(str1.charAt(i));
+        pre = char_to_int(str1.charAt(i - 1));
+        if (curr <= pre) {
+            num += curr;
+        } else {
+            num = num - pre * 2 + curr;
+        }
+    }
+
+    return num;
+}
+

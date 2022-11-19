@@ -107,5 +107,81 @@ namespace MonkeyPaste.Common {
                 ucn.OnGlobalEscKeyPressed += userCancel_Handler;
             }
         }
+
+
+        public static MpPoint AutoScroll(
+            this ScrollViewer sv, 
+            MpPoint gmp, 
+            Control relativeTo,
+            ref double[] velAccumulators,
+            bool performScroll = true,
+            double minVel = 5,
+            double[] sideThresholds = null) {
+            if (sv == null) {
+                return MpPoint.Zero;
+            }
+
+            sideThresholds = sideThresholds == null ? Enumerable.Repeat<double>(25, 4).ToArray() : sideThresholds;
+
+            if (velAccumulators == null) {
+                velAccumulators = new double[4];
+            }
+
+            relativeTo = relativeTo == null ? sv : relativeTo;
+
+            //var rt_mp = VisualExtensions.PointToClient(relativeTo, rt_mp.ToAvPixelPoint(1.0d)).ToPortablePoint();
+
+            MpRect bounds = relativeTo.Bounds.ToPortableRect();
+            var pd = relativeTo.VisualPixelDensity();
+            var origin = relativeTo.PointToScreen(new Point()).ToPortablePoint(pd);
+            bounds.X = origin.X;
+            bounds.Y = origin.Y;
+            if(!bounds.Contains(gmp)) {
+                // outside of bounds, clear v's
+                velAccumulators.ForEach(x => x = 0);
+                return MpPoint.Zero;
+            }
+
+            double l_dist = Math.Abs(gmp.X - bounds.Left);
+            double r_dist = Math.Abs(bounds.Right - gmp.X);
+            double t_dist = Math.Abs(gmp.Y - bounds.Top);
+            double b_dist = Math.Abs(bounds.Bottom - gmp.Y);
+
+            //MpConsole.WriteLine(string.Format(@"L:{0} R:{1} T:{2} B:{3}", l_dist, r_dist, t_dist, b_dist));
+
+            double[] side_deltas = Enumerable.Repeat<double>(0, 4).ToArray();
+            if (l_dist <= sideThresholds[MpRect.LEFT_IDX]) {
+                side_deltas[MpRect.LEFT_IDX] = -minVel;
+            } else if (r_dist <= sideThresholds[MpRect.RIGHT_IDX]) {
+                side_deltas[MpRect.RIGHT_IDX] = minVel;
+            }
+
+            if (t_dist <= sideThresholds[MpRect.TOP_IDX]) {
+                side_deltas[MpRect.TOP_IDX] = -minVel;
+            } else if (b_dist <= sideThresholds[MpRect.BOTTOM_IDX]) {
+                side_deltas[MpRect.BOTTOM_IDX] = minVel;
+            }
+
+            MpPoint scroll_delta = MpPoint.Zero;
+            for (int i = 0; i < side_deltas.Length; i++) {
+                if (side_deltas[i] == 0) {
+                    // clear accumaltors of sides not changing
+                    velAccumulators[i] = 0;
+                } else {
+                    // accumulate sides with delta
+                    velAccumulators[i] += side_deltas[i];
+                    if(i == MpRect.LEFT_IDX || i == MpRect.RIGHT_IDX) {
+                        scroll_delta.X = velAccumulators[i];
+                    } else {
+                        scroll_delta.Y = velAccumulators[i];
+                    }
+                }
+            }
+
+            if(performScroll) {
+                sv.ScrollByPointDelta(scroll_delta);
+            }
+            return scroll_delta;
+        }
     }
 }

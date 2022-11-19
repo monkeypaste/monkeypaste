@@ -40,12 +40,12 @@ namespace MonkeyPaste.Avalonia {
             BindingContext.IsDragOverPinTray = true;
         }
 
-        private async void DragOver(object sender, DragEventArgs e) {
+        private void DragOver(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragOver] PinTrayListBox: ");
             var ptr_mp = e.GetPosition(sender as Control).ToPortablePoint();
             int drop_idx = GetDropIdx(ptr_mp);
             bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
-            bool is_drop_valid = await IsDropValidAsync(e.Data, drop_idx, is_copy);
+            bool is_drop_valid = IsDropValid(e.Data, drop_idx, is_copy);
             MpConsole.WriteLine("[DragOver] PinTrayListBox DropIdx: " + drop_idx + " IsCopy: "+is_copy+" IsValid: "+is_drop_valid);
             e.DragEffects = DragDropEffects.None;
             if (is_drop_valid) {
@@ -67,7 +67,7 @@ namespace MonkeyPaste.Avalonia {
             var host_mp = e.GetPosition(sender as Control).ToPortablePoint();
             int drop_idx = GetDropIdx(host_mp);
             bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
-            bool is_drop_valid = await IsDropValidAsync(e.Data, drop_idx, is_copy);
+            bool is_drop_valid = IsDropValid(e.Data, drop_idx, is_copy);
             MpConsole.WriteLine("[Drop] PinTrayListBox DropIdx: " + drop_idx + " IsCopy: " + is_copy + " IsValid: " + is_drop_valid);
 
             e.DragEffects = DragDropEffects.None;
@@ -89,7 +89,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Drop Helpers
-
         private int GetDropIdx(MpPoint host_mp) {
             var ptr_lb = this.FindControl<ListBox>("PinTrayListBox");
             var ptr_lb_mp = this.TranslatePoint(host_mp.ToAvPoint(), ptr_lb).Value.ToPortablePoint();
@@ -120,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
             return closest_side_lbi_idx;
         }
 
-        private async Task<bool> IsDropValidAsync(IDataObject avdo, int drop_idx, bool is_copy) {
+        private bool IsDropValid(IDataObject avdo, int drop_idx, bool is_copy) {
             // called in DropExtension DragOver 
 
             MpConsole.WriteLine("IsDropValid DropIdx: " + drop_idx);

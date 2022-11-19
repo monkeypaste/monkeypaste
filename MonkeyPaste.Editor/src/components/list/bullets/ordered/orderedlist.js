@@ -70,6 +70,56 @@ function getOrderedListToolbarButton() {
 	return document.getElementById('orderedListToolbarButton');
 }
 
+function getOrderedListItemBulletText(idx, counter_val) {
+	let symbol = '';
+	let punc = '. ';
+	if (isNullOrEmpty(counter_val)) {
+		symbol = (idx + 1).toString();
+	} else {
+		// test results:
+
+		// indent 0: 'counter(list-0) ". "''
+		// indent 1: 'counter(list-1, lower-alpha) ". "'
+		// indent 2: 'counter(list-2, lower-roman) ". "'
+		// indent 3: goto 0
+
+		let indent = -1;
+		if (counter_val.startsWith('counter(list-0)')) {
+			indent = 0;
+		} else {
+			indent = parseInt(counter_val.split('counter(list-')[1].split(',')[0]);
+		}
+
+		let format = '';
+		if (indent % 3 == 0) {
+			// types repeat and roman numerals
+			format = 'decimal';
+		} else {
+			format = counter_val.split(',')[1].trim().split(')')[0];
+		}
+
+		symbol = getOrderedListItemSymbol(format, idx);
+
+		punc = counter_val.split('"')[1];
+
+	}
+
+	return symbol + punc;
+}
+
+function getOrderedListItemSymbol(listType, idx) {
+	if (listType == 'decimal') {
+		return (idx + 1).toString();
+	}
+	if (listType == 'lower-alpha') {
+		// BUG this will give wrong result > 26 prolly A instead of aa
+		return String.fromCharCode('a'.charCodeAt(0) + idx);
+	}
+	if (listType == 'lower-roman') {
+		return convertIntToRomanNumeral(idx + 1).toLowerCase();
+	}
+}
+
 // #endregion Getters
 
 // #region Setters

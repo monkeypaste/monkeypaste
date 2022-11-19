@@ -1575,6 +1575,10 @@ namespace MonkeyPaste.Avalonia {
                     if(IsDropOverTile && !IsSubSelectionEnabled) {
                         IsSubSelectionEnabled = true;
                     }
+                    if(IsDropOverTile) {
+                        Parent.NotifyDragOverTrays(true);                        
+                    }
+                    
                     break;
                 case nameof(IsContentReadOnly):
                     if (!IsContentReadOnly && !IsSelected) {

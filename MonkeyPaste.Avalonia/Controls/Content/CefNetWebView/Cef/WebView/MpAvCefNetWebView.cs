@@ -424,7 +424,7 @@ namespace MonkeyPaste.Avalonia {
             MpMessageType selChangeMsg = isChangeBegin ? MpMessageType.ContentSelectionChangeBegin : MpMessageType.ContentSelectionChangeEnd;
             MpMessenger.Send(selChangeMsg, DataContext);
 
-            MpConsole.WriteLine($"Tile: '{(DataContext as MpAvClipTileViewModel).CopyItemTitle}' Selection Changed: '{Selection}'");
+            //MpConsole.WriteLine($"Tile: '{(DataContext as MpAvClipTileViewModel).CopyItemTitle}' Selection Changed: '{Selection}'");
         }
         public void SelectAll() {
             this.ExecuteJavascript("selectAll_ext()");
@@ -433,6 +433,15 @@ namespace MonkeyPaste.Avalonia {
             this.ExecuteJavascript($"deselectAll_ext()");
         }
 
+
+        #endregion
+
+        #region Drag Handler
+
+        public bool HandleStartDragging(CefBrowser browser, CefDragData dragData, CefDragOperationsMask allowedOps, int x, int y) {
+            PerformDragAsync(dragData, allowedOps).FireAndForgetSafeAsync();
+            return false;
+        }
 
         #endregion
 
@@ -495,6 +504,172 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
+
+        #region Drag Helpers
+
+        private PointerEventArgs _capturedPointerEventArgs;
+        private bool _wasEscPressed = false;
+        private MpPoint _lastGlobalMousePoint; // debouncer
+        private DragDropEffects _dragEffects;
+        private async Task PerformDragAsync(CefDragData dragData, CefDragOperationsMask allowedOps) {
+            if(!Dispatcher.UIThread.CheckAccess()) {
+                await Dispatcher.UIThread.InvokeAsync(() => PerformDragAsync(dragData, allowedOps));
+                return;
+            }
+
+            ResetDragState();
+            BindingContext.IsTileDragging = true;
+            HookDragEvents();
+
+            _dragEffects = allowedOps.ToDragDropEffects();
+
+            if (BindingContext.ItemType == MpCopyItemType.FileList) {
+                _dragEffects = DragDropEffects.Copy;
+            } else if (BindingContext.ItemType == MpCopyItemType.Image) {
+                _dragEffects = DragDropEffects.Move;
+            } else {
+                // no changes for text
+            }
+
+            var source_data_object = await Document.GetDataObjectAsync(false, false, false);
+
+            if(source_data_object == null) {
+                // this seems to happen due to data conversion errors somewhere
+                Debugger.Break();
+                FinishDrag(true);
+                return;
+            }
+            MpAvDataObject.SetSourceDragDataObject(source_data_object);
+
+            // seems excessive...but ultimately all ole pref's come from plugins so pass everthing through cb plugin system just like writing to clipboard
+            var processed_data_object = await MpPlatformWrapper.Services.DataObjectHelperAsync.WriteDragDropDataObject(source_data_object) as MpAvDataObject;
+            MpAvDataObject.UpdateDragDataObject(processed_data_object);
+            MpAvExternalDropWindowViewModel.Instance.ShowDropWindowCommand.Execute(null);
+
+            while (_capturedPointerEventArgs == null) {
+                await Task.Delay(100);
+            }
+
+            var result = await DragDrop.DoDragDrop(_capturedPointerEventArgs, processed_data_object, _dragEffects);
+
+            
+            FinishDrag(false);
+
+            MpConsole.WriteLine("Cef Drag Result: " + result);
+        }
+
+        private void CapturePointerEventHandler(object sender, PointerEventArgs e) {
+            _capturedPointerEventArgs = e;
+            if (!e.IsLeftDown(this)) {
+                // NOTE not sure if these events are received since dnd is progress 
+                // but probably good to keep since drag end is so annoying to handle...
+                MpConsole.WriteLine("CefGlue pointer move event detached ITSELF");
+                this.PointerMoved -= CapturePointerEventHandler;
+
+                MpAvExternalDropWindowViewModel.Instance.DoNotRememberDropInfoCommand.Execute(null);
+                return;
+            }
+        }
+
+        private void OnGlobalKeyPrssedOrReleasedHandler(object sender, string key) {
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                Dispatcher.UIThread.Post(() => OnGlobalKeyPrssedOrReleasedHandler(sender, key));
+                return;
+            }
+
+            if (MpAvShortcutCollectionViewModel.Instance.GlobalIsEscapeDown) {
+                _wasEscPressed = true;
+            }
+            var modKeyMsg = new MpQuillModifierKeysNotification() {
+                ctrlKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown,
+                altKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsAltDown,
+                shiftKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsShiftDown,
+                escKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsEscapeDown
+            };
+            this.ExecuteJavascript($"updateModifierKeysFromHost_ext('{modKeyMsg.SerializeJsonObjectToBase64()}')");
+        }
+
+        private void OnGlobalMouseMove(object s, MpPoint e) {
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                Dispatcher.UIThread.Post(() => OnGlobalMouseMove(s, e));
+                return;
+            }
+            var scvm = MpAvShortcutCollectionViewModel.Instance;
+
+            if(_lastGlobalMousePoint == null) {
+                _lastGlobalMousePoint = e;
+            } else if(e.Distance(_lastGlobalMousePoint) < MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST) {
+                // debounce (window handle from point is expensive)
+                return;
+            }
+            MpAvExternalDropWindowViewModel.Instance.UpdateDropAppViewModelCommand.Execute(e);
+            _lastGlobalMousePoint = e;
+        }
+
+        private void OnGlobalMouseReleased(object s, bool e) {
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                Dispatcher.UIThread.Post(() => OnGlobalMouseReleased(s, e));
+                return;
+            }
+            MpAvExternalDropWindowViewModel.Instance.ShowFinishDropMenuCommand.Execute(null);
+
+        }
+
+        private void HookDragEvents() {
+            this.PointerMoved += CapturePointerEventHandler;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed += OnGlobalKeyPrssedOrReleasedHandler;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased += OnGlobalKeyPrssedOrReleasedHandler;
+
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove += OnGlobalMouseMove;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += OnGlobalMouseReleased;
+        }
+
+        private void UnhookDragEvents() {
+            this.PointerMoved -= CapturePointerEventHandler;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= OnGlobalKeyPrssedOrReleasedHandler;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= OnGlobalKeyPrssedOrReleasedHandler;
+
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove -= OnGlobalMouseMove;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased -= OnGlobalMouseReleased;
+        }
+
+        private void FinishDrag(bool wasErrorOrCancel) {
+            MpAvDataObject.SetSourceDragDataObject(null);
+
+            bool wasCopy = MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown;
+            bool wasSuccess = !_wasEscPressed && !wasErrorOrCancel;
+            bool wasSelfDrop = wasSuccess && BindingContext.IsDropOverTile;
+
+            string dropEffect = wasSelfDrop && !wasCopy ? "move" : "copy";
+
+            if (!wasSuccess) {
+                dropEffect = "none";
+            }
+
+            var dragEndMsg = new MpQuillDragEndMessage() {
+                dataTransfer = new MpQuillDataTransferMessageFragment() {
+                    dropEffect = dropEffect
+                },
+                fromHost = true,
+                wasCancel = !wasSuccess
+            };
+
+            this.ExecuteJavascript($"dragEnd_ext('{dragEndMsg.SerializeJsonObjectToBase64()}')");
+
+            ResetDragState();
+            MpConsole.WriteLine("Was Self drop: " + wasSelfDrop);
+            MpConsole.WriteLine("ACTUAL drag result: " + dropEffect);
+        }
+        private void ResetDragState() {
+            UnhookDragEvents();
+            if (BindingContext != null) {
+                BindingContext.IsTileDragging = false;
+            }
+            _capturedPointerEventArgs = null;
+            _wasEscPressed = false;
+            _lastGlobalMousePoint = null;
+        }
+        #endregion
 
         #endregion
     }

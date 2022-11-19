@@ -21,6 +21,24 @@ namespace MonkeyPaste.Common.Avalonia {
     }
 
     public class MpAvDataObject : MpPortableDataObject, IDataObject {
+        #region Statics
+
+        private static IDataObject _dragDataObject;
+        private static IDataObject _sourceDataObject;
+
+        public static IDataObject DragDataObject => _dragDataObject;
+
+        public static IDataObject SourceDataObject => _sourceDataObject;
+        public static void SetSourceDragDataObject(IDataObject sido) {
+            _sourceDataObject = sido;
+            _dragDataObject = sido;
+        }
+        public static void UpdateDragDataObject(IDataObject dido) {
+            _dragDataObject = dido;
+        }
+
+        #endregion
+
         public override void SetData(string format, object data) {
             // NOTE this wrapper just ensures formats are saved properly 
             // mapping is done after obj created so nothing is overwritten if it was populated

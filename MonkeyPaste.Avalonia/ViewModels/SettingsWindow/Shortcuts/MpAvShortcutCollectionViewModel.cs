@@ -117,7 +117,8 @@ namespace MonkeyPaste.Avalonia {
         #region Events
 
         #region Mouse Events
-        public event EventHandler OnGlobalEscKeyPressed;
+        public event EventHandler OnGlobalDragBegin;
+        public event EventHandler OnGlobalDragEnd;
 
         public event EventHandler<MpPoint> OnGlobalMouseWheelScroll;
 
@@ -134,6 +135,8 @@ namespace MonkeyPaste.Avalonia {
 
         public event EventHandler<string> OnGlobalKeyPressed;
         public event EventHandler<string> OnGlobalKeyReleased;
+
+        public event EventHandler OnGlobalEscKeyPressed;
         public event EventHandler OnGlobalEscapeReleased;
 
         #endregion
@@ -655,34 +658,20 @@ namespace MonkeyPaste.Avalonia {
 
         private void Hook_MouseDragged(object sender, MouseHookEventArgs e) {
             // NOTE: SharpHook Drag event doesn't receive button info
-            //MpConsole.WriteLine("Global Drag Button Data: " + e.Data.Button);
-            //if(!MpAvMainWindowViewModel.Instance.IsMainWindowActive && 
-            //    MpAvMainWindowViewModel.Instance.IsMainWindowOpen && 
-            //    !MpAvMainWindowViewModel.Instance.IsMainWindowClosing) {
-            //    MpAvMainWindow.Instance.Activate();
-            //}
 
             if (GlobalIsMouseLeftButtonDown) {
                 // NOTE only flag drag when left button is down, any other is poop
                 GlobalIsPointerDragging = true;
+                OnGlobalDragBegin?.Invoke(this, null);
             }
             
             var gmp = GetScaledScreenPoint(e.Data);
             HandlePointerMove(gmp);
-
-            // TODO 1 should have a pref to auto show on drag and maybe a drag dist check here
-            // TODO 2 should use same logic as mw drag (not built) and show window from opposite edge of drag, something nice
-            //if(!MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-            //    MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-            //}
-            //if (MpAvClipTrayViewModel.Instance.IsPinTrayEmpty) {
-            //    MpAvClipTrayViewModel.Instance.IsPinTrayDropPopOutVisible = true;
-            //}
         }
 
         #endregion
 
-        #region Keyboard EventHadlers
+        #region Keyboard EventHandlers
         private void Hook_KeyPressed(object sender, KeyboardHookEventArgs e) {
             string keyStr = MpSharpHookKeyboardInputHelpers.GetKeyLiteral(e.Data.KeyCode);
             HandleKeyDown(keyStr);
@@ -772,153 +761,51 @@ namespace MonkeyPaste.Avalonia {
         #region Pointer
 
         private void HandlePointerPress(bool isLeftButton) {
-            Dispatcher.UIThread.Post(() => {
-                if (isLeftButton) {
-                    GlobalIsMouseLeftButtonDown = true;
-                    GlobalMouseLeftButtonDownLocation = GlobalMouseLocation;
-                    LastLeftClickDateTime = DateTime.Now;
-                } else {
-                    GlobalIsMouseRightButtonDown = true;
-                    LastRightClickDateTime = DateTime.Now;
-                    if (GlobalIsPointerDragging) {
-                        // NOTE no matter what when right mouse is pressed don't treat as dragging (drag handler still processes mouse move)
-                        GlobalIsPointerDragging = false;
-                    }
+            if (isLeftButton) {
+                GlobalIsMouseLeftButtonDown = true;
+                GlobalMouseLeftButtonDownLocation = GlobalMouseLocation;
+                LastLeftClickDateTime = DateTime.Now;
+            } else {
+                GlobalIsMouseRightButtonDown = true;
+                LastRightClickDateTime = DateTime.Now;
+                if (GlobalIsPointerDragging) {
+                    // NOTE no matter what when right mouse is pressed don't treat as dragging (drag handler still processes mouse move)
+                    GlobalIsPointerDragging = false;
+                    OnGlobalDragEnd?.Invoke(this, null);
                 }
+            }
 
-                OnGlobalMousePressed?.Invoke(this, isLeftButton);
-            });
-            
-        }
-
-        private void HandlePointerMove(MpPoint gmp) {
-            //Dispatcher.UIThread.Post(() => {
-            GlobalMouseLocation = gmp;
-
-            
-
-                //MpConsole.WriteLine("WinForms: " + e.Location.X + "," + e.Location.Y);
-                //MpConsole.WriteLine("Wpf: " + GlobalMouseLocation.X + "," + GlobalMouseLocation.Y);
-                //MpConsole.WriteLine("");
-
-                if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                    // NOTE!! this maybe bad only firing when window open 
-                    // but its for drag/drop and not doing could interfere w/ performance too much
-                    Dispatcher.UIThread.Post(()=>OnGlobalMouseMove?.Invoke(typeof(MpAvShortcutCollectionViewModel).ToString(), GlobalMouseLocation));
-                } else {
-                    bool isShowingMainWindow = false;
-                    if (MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdge &&
-                        !MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
-                        if (GlobalMouseLocation.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
-                            MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-                            isShowingMainWindow = true;
-                        }
-                    }
-
-                    if (!isShowingMainWindow &&
-                        GlobalMouseLeftButtonDownLocation != null &&
-                        GlobalMouseLocation.Distance(GlobalMouseLeftButtonDownLocation) >= MIN_GLOBAL_DRAG_DIST &&
-                        GlobalMouseLocation.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight &&
-                        MpPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop) {
-                        MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-                    }
-                }
-           // });
-            
+            OnGlobalMousePressed?.Invoke(this, isLeftButton);
         }
 
         private void HandlePointerReleased(bool isLeftButton) {
-            Dispatcher.UIThread.Post(() => {
-                if (isLeftButton) {
-                    GlobalMouseLeftButtonDownLocation = null;
-                    GlobalIsMouseLeftButtonDown = false;
-                    if (GlobalIsPointerDragging) {
-                        // this signals end of left pointer drag
-                        GlobalIsPointerDragging = false;
-                    }
-
-                    if (OperatingSystem.IsWindows()) {
-                      //  if (MpAvDragExtension.CurrentDragHost != null) {
-                            // (I think...) This is supposed to capture pointer release before a drop w/ templates? Not sure though...
-
-                            //Dispatcher.UIThread.Post(async () => {
-                            //    var handle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle;
-                            //    WinApi.SetForegroundWindow(handle);
-                            //    WinApi.SetActiveWindow(handle);
-
-                            //    while (true) {
-                            //        await Task.Delay(100);
-                            //    }
-                            //    //MessageBox.Show("Mouse up");
-                            //});
-                       // }
-                    }
-
-                } else {
-                    GlobalIsMouseRightButtonDown = false;
+            if (isLeftButton) {
+                GlobalMouseLeftButtonDownLocation = null;
+                GlobalIsMouseLeftButtonDown = false;
+                if (GlobalIsPointerDragging) {
+                    // this signals end of left pointer drag
+                    GlobalIsPointerDragging = false;
+                    OnGlobalDragEnd?.Invoke(this, null);
                 }
 
-                OnGlobalMouseReleased?.Invoke(this, isLeftButton);
+            } else {
+                GlobalIsMouseRightButtonDown = false;
+            }
 
-                if (MpAvMainWindow.Instance != null) {
-                    if (!MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                        if (MpAvClipTrayViewModel.Instance.IsAutoCopyMode) {
-                            if (isLeftButton && !MpAvMainWindow.Instance.IsActive) {
-                                //SimulateKeyStrokeSequence("control+c");
-                                MpConsole.WriteLine("Auto copy is ON");
-                            }
-                        }
-                        if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
-                            if (!isLeftButton && !MpAvMainWindow.Instance.IsActive) {
-                                // TODO this is hacky because mouse gestures are not formally handled
-                                // also app collection should be queried for custom paste cmd instead of this
-                                SimulateKeyStrokeSequenceAsync("control+v").FireAndForgetSafeAsync();
-                            }
-                        }
-                    } else if (!MpAvMainWindowViewModel.Instance.IsMainWindowClosing &&
-                              !MpAvMainWindowViewModel.Instance.IsMainWindowLocked &&
-                              //!MpExternalDropBehavior.Instance.IsPreExternalTemplateDrop &&
-                              GlobalMouseLocation != null &&
-                              GlobalMouseLocation.Y < MpAvMainWindowViewModel.Instance.MainWindowTop) {
-                        MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
-                    }
-                }
-            });
-            
+            OnGlobalMouseReleased?.Invoke(this, isLeftButton);
+        }
+        private void HandlePointerMove(MpPoint gmp) {
+            GlobalMouseLocation = gmp;
+            OnGlobalMouseMove?.Invoke(typeof(MpAvShortcutCollectionViewModel).ToString(), GlobalMouseLocation);
         }
 
+
         private void HandlePointerClick(bool isLeftButton) {
-            Dispatcher.UIThread.Post(() => {
-                if (!MpAvMainWindow.Instance.IsActive &&
-               !MpAvMainWindow.Instance.Bounds.Contains(GlobalMouseLocation.ToAvPoint()) &&
-               MpAvMainWindowViewModel.Instance.IsMainWindowOpen &&
-               !MpAvMainWindowViewModel.Instance.IsMainWindowClosing) {
-
-                    MpAvMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
-                }
-
-                OnGlobalMouseClicked?.Invoke(this, isLeftButton);
-            });
+            OnGlobalMouseClicked?.Invoke(this, isLeftButton);
         }
 
         private void HandlePointerWheel(MpPoint delta) {
-            Dispatcher.UIThread.Post(() => {
-                if (!MpAvMainWindowViewModel.Instance.IsMainWindowOpen &&
-                !MpAvMainWindowViewModel.Instance.IsMainWindowOpening &&
-                MpBootstrapperViewModelBase.IsCoreLoaded) {
-                    if (MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
-                        if (GlobalMouseLocation != null &&
-                            GlobalMouseLocation.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
-                            MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-                        }
-                    }
-                }
-
-                //MpConsole.WriteLine("Scroll wheel: " + e.Data.Rotation);
-                OnGlobalMouseWheelScroll?.Invoke(typeof(MpAvShortcutCollectionViewModel).ToString(), delta);
-            });
-
-            
+            OnGlobalMouseWheelScroll?.Invoke(typeof(MpAvShortcutCollectionViewModel).ToString(), delta);
         }
 
         #endregion

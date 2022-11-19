@@ -7,6 +7,7 @@ using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonoMac.Foundation;
+using MonoMac.OpenAL;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -967,7 +968,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsRequery { get; set; } = false;
 
         #region Drag Drop
-
+        public bool IsAnyDropOverTrays { get; private set; }
         public bool IsAnyTileDragging => AllItems.Any(x => x.IsTileDragging);
 
         //public bool IsExternalDragOverClipTrayContainer { get; set; }
@@ -2191,6 +2192,14 @@ namespace MonkeyPaste.Avalonia {
             sctvm.IsPasting = false;
         }
 
+        public void NotifyDragOverTrays(bool isOver) {
+            IsAnyDropOverTrays = isOver;
+            if(isOver) {
+                MpMessenger.SendGlobal(MpMessageType.DropOverTraysBegin);
+            } else {
+                MpMessenger.SendGlobal(MpMessageType.DropOverTraysEnd);
+            }
+        }
         #endregion
 
         #region Db Events

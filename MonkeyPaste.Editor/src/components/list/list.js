@@ -131,6 +131,38 @@ function getListItemElementAtDocIdx(doc_idx) {
 	}
 }
 
+function getListItemElementIndentedIdx(li_elm) {
+	let li_elm_idx = 0;
+	let prev_li_elm = li_elm.previousSibling;
+	while (true) {
+		if (prev_li_elm == null) {
+			return li_elm_idx;
+		}
+		let is_same_indent =
+			Array.from(prev_li_elm.classList).every(x => Array.from(li_elm.classList).includes(x)) &&
+			Array.from(li_elm.classList).every(x => Array.from(prev_li_elm.classList).includes(x));
+		if (!is_same_indent) {
+			return li_elm_idx;
+		}
+		li_elm_idx++;
+		prev_li_elm = prev_li_elm.previousSibling;
+	}
+}
+
+function getListItemElementCounterValue(li_elm) {
+	if (!li_elm) {
+		return null;
+	}
+	return window.getComputedStyle(li_elm.firstChild, '::before').getPropertyValue('content');
+}
+
+function getListItemIndentLevel(li_elm) {
+	if (li_elm.classList.length == 0) {
+		return 0;
+	}
+	return parseInt(li_elm.classList[0].split('ql-indent-')[1]);
+}
+
 function getListItemElementBulletText(li_elm) {
 	if (!li_elm || li_elm.tagName === undefined || li_elm.tagName.toLowerCase() != 'li') {
 		debugger;
@@ -140,8 +172,9 @@ function getListItemElementBulletText(li_elm) {
 		return String.fromCharCode(parseInt(2022, 16)); // •
 	}
 	if (item_type == 'ordered') {
-		let li_elm_idx = Array.from(li_elm.parentNode.children).indexOf(li_elm);
-		return (li_elm_idx + 1) + '.';
+		let li_elm_idx = getListItemElementIndentedIdx(li_elm);
+		let li_elm_counter_val = getListItemElementCounterValue(li_elm);
+		return getOrderedListItemBulletText(li_elm_idx, li_elm_counter_val);
 	}
 	if (item_type == 'checked') {
 		return String.fromCharCode(parseInt(2611, 16)); // ☑
@@ -156,9 +189,10 @@ function getEncodedListItemStr(li_elm) {
 	if (!li_elm) {
 		return '';
 	}
-	let encoded_li_str = `${ENCODED_LIST_ITEM_OPEN_TOKEN}${getListItemElementBulletText(li_elm)}${ENCODED_LIST_ITEM_CLOSE_TOKEN}`;
+	let encoded_li_str = `${ENCODED_LIST_ITEM_OPEN_TOKEN}${getListItemElementBulletText(li_elm)}[${getListItemIndentLevel(li_elm)}]${ENCODED_LIST_ITEM_CLOSE_TOKEN}`;
 	return encoded_li_str;
 }
+
 
 function getDecodedListItemText(encoded_text) {
 	if (!encoded_text) {
@@ -169,6 +203,8 @@ function getDecodedListItemText(encoded_text) {
 	while (result) {
 		let encoded_li_text = decoded_text.substr(result.index, result[0].length);
 		let li_text = encoded_li_text.replace(ENCODED_LIST_ITEM_OPEN_TOKEN, '').replace(ENCODED_LIST_ITEM_CLOSE_TOKEN, '');
+		let indent_lvl = parseInt(li_text.split('[')[1].split(']')[0])
+		li_text = '\t'.repeat(indent_lvl) + li_text.split('[')[0];
 		decoded_text = decoded_text.replaceAll(encoded_li_text, li_text);
 		result = ENCODED_LIST_ITEM_REGEXP.exec(decoded_text);
 	}

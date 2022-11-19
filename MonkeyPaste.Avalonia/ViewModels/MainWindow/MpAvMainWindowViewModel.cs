@@ -20,13 +20,6 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         private double _resize_shortcut_nudge_amount = 50;
-
-        //private DispatcherTimer _windowOpenTimer;
-        //private DispatcherTimer _windowCloseTimer;
-        //private double _windowTimerStep;
-        //private double d_l, d_r, d_t, d_b;
-
-        //private int _animateTimeOut_ms = 5000;
         private CancellationTokenSource _animationCts;
 
         #endregion
@@ -313,6 +306,9 @@ namespace MonkeyPaste.Avalonia {
             get {
                 // TODO this only contains clip tiles now but should be the central
                 // check for dnd state
+                if(IsMainWindowOrientationDragging) {
+                    return true;
+                }
                 return MpAvClipTrayViewModel.Instance.IsAnyTileDragging;
             }
         }
@@ -428,8 +424,92 @@ namespace MonkeyPaste.Avalonia {
             MainWindowOrientationType = (MpMainWindowOrientationType)Enum.Parse(typeof(MpMainWindowOrientationType), MpPrefViewModel.Instance.MainWindowOrientation, false);
             MainWindowShowBehaviorType = (MpMainWindowShowBehaviorType)Enum.Parse(typeof(MpMainWindowShowBehaviorType), MpPrefViewModel.Instance.MainWindowShowBehaviorType, false);
             PropertyChanged += MpAvMainWindowViewModel_PropertyChanged;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += Instance_OnGlobalMouseReleased;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove += Instance_OnGlobalMouseMove;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseClicked += Instance_OnGlobalMouseClicked;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseWheelScroll += Instance_OnGlobalMouseWheelScroll;
             //InitWindowTimers();
         }
+
+        private void Instance_OnGlobalMouseWheelScroll(object sender, MpPoint delta) {
+            if (!MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
+                return;
+            }
+            if (!IsMainWindowOpening && MpBootstrapperViewModelBase.IsCoreLoaded) {
+                if (MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation != null &&
+                         MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
+                    // show mw on top edge scroll flick
+                    ShowWindowCommand.Execute(null);
+                }
+            }
+        }
+
+        private void Instance_OnGlobalMouseClicked(object sender, bool isLeftButton) {
+            if(MpAvMainWindow.Instance.IsActive || 
+                !isLeftButton ||
+                !IsMainWindowOpen ||
+                IsMainWindowClosing) {
+                return;
+            }
+            var gmavp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.ToAvPoint();
+            if (!MpAvMainWindow.Instance.Bounds.Contains(gmavp)) {
+                // attempt to hide mw
+                HideWindowCommand.Execute(null);
+            }
+        }
+
+        private void Instance_OnGlobalMouseReleased(object sender, bool isLeftButton) {
+            if(MpAvMainWindow.Instance == null) {
+                return;
+            }
+            if (!IsMainWindowOpen) {
+                if (MpAvClipTrayViewModel.Instance.IsAutoCopyMode) {
+                    if (isLeftButton && !MpAvMainWindow.Instance.IsActive) {
+                        //SimulateKeyStrokeSequence("control+c");
+                        MpConsole.WriteLine("Auto copy is ON");
+                    }
+                }
+                if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
+                    if (!isLeftButton && !MpAvMainWindow.Instance.IsActive) {
+                        // TODO this is hacky because mouse gestures are not formally handled
+                        // also app collection should be queried for custom paste cmd instead of this
+                        MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeSequenceAsync("control+v").FireAndForgetSafeAsync();
+                    }
+                }
+            } else if (!IsMainWindowClosing &&
+                      !IsMainWindowLocked &&
+                      //!MpExternalDropBehavior.Instance.IsPreExternalTemplateDrop &&
+                      MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation != null &&
+                      MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.Y < MainWindowTop) {
+                HideWindowCommand.Execute(null);
+            }
+        }
+        private void Instance_OnGlobalMouseMove(object sender, MpPoint gmp) {
+            if(IsMainWindowOpen) {
+                return;
+            }
+            bool isShowingMainWindow = false;
+            if (MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdge &&
+                !MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
+                if (gmp.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
+                    // show mw when mouse is within hit zone regardless of buttons or scroll delta (probably a weird pref context) 
+                    ShowWindowCommand.Execute(null);
+                    isShowingMainWindow = true;
+                }
+            }
+
+            if (!isShowingMainWindow &&
+                MpPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop) {
+                if ( MpAvShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonDownLocation != null &&
+                    gmp.Distance(MpAvShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonDownLocation) >= MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST &&
+                    gmp.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
+                    // show mw during dnd and user drags to top of screen (when pref set)
+                    ShowWindowCommand.Execute(null);
+                }                
+            }
+        }
+
+
 
         #region Public Methods
 
@@ -687,59 +767,6 @@ namespace MonkeyPaste.Avalonia {
             MainWindowScreenRect = endRect;
         }
 
-
-        private void ClampAnchoredSide(ref double side, ref double v, int idx) {
-            if(!IsMainWindowOpening) {
-                return;
-            }
-            var s = MainWindowScreen;
-            switch (MainWindowOrientationType) {
-                case MpMainWindowOrientationType.Left:
-                    side = idx != 0 ? side : Math.Min(s.WorkArea.Left, side);
-                    break;
-                case MpMainWindowOrientationType.Top:
-                    side = idx != 1 ? side : Math.Min(s.WorkArea.Top, side);
-                    break;
-                case MpMainWindowOrientationType.Right:
-                    side = idx != 2 ? side : Math.Max(s.WorkArea.Right, side);
-                    break;
-                case MpMainWindowOrientationType.Bottom:
-                    if (side < s.WorkArea.Bottom && idx == 3) {
-                        side = s.WorkArea.Bottom;
-                        v = 0;
-                    } 
-                    //side = Math.Max(s.WorkArea.Bottom, side);
-                    break;
-            }
-        }
-
-        private double[] ClampAnchoredSide(double[] sides) {
-            if (!IsMainWindowOpening) {
-                return sides;
-            }
-            var s = MainWindowScreen;
-            switch (MainWindowOrientationType) {
-                case MpMainWindowOrientationType.Left:
-                    sides[0] = Math.Min(s.WorkArea.Left, sides[0]);
-                    break;
-                case MpMainWindowOrientationType.Top:
-                    sides[1] = Math.Min(s.WorkArea.Top, sides[1]);
-                    break;
-                case MpMainWindowOrientationType.Right:
-                    sides[2] =Math.Max(s.WorkArea.Right, sides[2]);
-                    break;
-                case MpMainWindowOrientationType.Bottom:
-                    if (sides[3] < s.WorkArea.Bottom) {
-                        double diff = s.WorkArea.Bottom - sides[3];
-                        sides[3] = s.WorkArea.Bottom;
-                        sides[1] -= diff;
-                        //v = 0;
-                    }
-                    //side = Math.Max(s.WorkArea.Bottom, side);
-                    break;
-            }
-            return sides;
-        }
         #endregion
 
         #region Commands        

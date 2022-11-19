@@ -16,10 +16,11 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTrayView : MpAvUserControl<MpAvClipTrayViewModel> {
         #region Private Variables
+        private DispatcherTimer _autoScrollTimer;
+        private double[] _autoScrollAccumulators;
 
-        private ScrollViewer sv;
-        private ListBox lb;
-
+        private ScrollViewer _sv;
+        private ListBox _lb;
         #endregion
 
         #region Statics
@@ -40,13 +41,13 @@ namespace MonkeyPaste.Avalonia {
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
 
-            sv = this.FindControl<ScrollViewer>("ClipTrayScrollViewer");            
-            lb = this.FindControl<ListBox>("ClipTrayListBox");
-            lb.GotFocus += Lb_GotFocus;
-            var lb_sv = lb.GetVisualDescendant<ScrollViewer>();
+            _sv = this.FindControl<ScrollViewer>("ClipTrayScrollViewer");            
+            _lb = this.FindControl<ListBox>("ClipTrayListBox");
+            _lb.GotFocus += Lb_GotFocus;
+            var lb_sv = _lb.GetVisualDescendant<ScrollViewer>();
             Dispatcher.UIThread.Post(async () => {
                 while(lb_sv == null) {
-                    lb_sv = lb.GetVisualDescendant<ScrollViewer>();
+                    lb_sv = _lb.GetVisualDescendant<ScrollViewer>();
 
                     if(lb_sv == null) {
                         await Task.Delay(100);
@@ -57,6 +58,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             });
         }
+
 
         private void Lb_GotFocus(object sender, global::Avalonia.Input.GotFocusEventArgs e) {
             if (BindingContext.IsTrayEmpty) {
@@ -111,24 +113,61 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.MainWindowSizeChanged:
                 case MpMessageType.MainWindowOrientationChangeBegin:                
                 case MpMessageType.TrayLayoutChanged:
-
-                    //sv?.InvalidateArrange();
-                    //lb?.InvalidateArrange();
-                    //lb_canvas?.InvalidateArrange();
-
-                    //sv?.InvalidateMeasure();
-                    //lb?.InvalidateMeasure();
-                    //lb_canvas?.InvalidateMeasure();
-
-                    //sv?.InvalidateVisual();
-                    //lb?.InvalidateVisual();
-                    //lb_canvas?.InvalidateVisual();
-
-
-                    //lb_canvas?.InvalidateArrange();
                     this.InvalidateMeasure();
+                    break;
+                case MpMessageType.DropOverTraysBegin:
+                    StartAutoScroll();
+                    break;
+                case MpMessageType.DropOverTraysEnd:
+                    StopAutoScroll();
+
                     break;
             }
         }
+
+        #region Auto Scroll
+
+        private void StartAutoScroll() {
+            if(_autoScrollTimer == null) {
+                _autoScrollTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(100) };
+                _autoScrollTimer.Tick += _autoScrollTimer_Tick;
+            }
+            _autoScrollTimer.Start();
+        }
+
+        private void StopAutoScroll() {
+            if (_autoScrollTimer == null) {
+                return;
+            }
+            _autoScrollTimer.Stop();
+            _autoScrollAccumulators.ForEach(x => x = 0);
+
+        }
+
+        private void _autoScrollTimer_Tick(object sender, EventArgs e) {
+            if(!MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
+                // wait till end of dnd to stop timer
+                // otherwise it goes on/off a lot
+                BindingContext.NotifyDragOverTrays(false);
+                return;
+            }
+            if(BindingContext.IsBusy) {
+                return;
+            }
+            Dispatcher.UIThread.Post(() => {
+                var lbmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+                    //this.PointToClient(MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.ToAvPixelPoint(1/this.VisualPixelDensity())).ToPortablePoint();
+                var scroll_delta = _sv.AutoScroll(
+                    lbmp,
+                    _sv,
+                    ref _autoScrollAccumulators,
+                    false);
+
+                BindingContext.ScrollOffset += scroll_delta;
+                //MpConsole.WriteLine(string.Join(",", _autoScrollAccumulators));
+            });            
+        }
+
+        #endregion
     }
 }

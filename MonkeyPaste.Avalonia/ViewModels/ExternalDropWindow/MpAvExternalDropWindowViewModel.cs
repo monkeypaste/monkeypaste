@@ -33,11 +33,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool IsDropWidgetEnabled { get; set; } = false;
+
         public bool HasUserToggledAnyHandlers { get; set; } = false;
         public int TotalRememberWaitTimeS => 30;
-        public int RememberSecondsRemaining { get; set; }
+        public int RememberSecondsRemaining { get; private set; }
 
-        public bool IsShowingDropWindow { get; set; } = false;
+        public bool IsShowingDropWindow { get; private set; } = false;
         public bool IsShowingFinishMenu { get; private set; } = false;
         #endregion
 
@@ -112,7 +115,9 @@ namespace MonkeyPaste.Avalonia {
                 HasUserToggledAnyHandlers = false;
                 _preShowPresetState = GetFormatPresetState();
                 ApplyAppPresetFormatState();
-            },()=>!IsShowingDropWindow);
+            }, () => {
+                return !IsShowingDropWindow && IsDropWidgetEnabled;
+            });
 
         public ICommand UpdateDropAppViewModelCommand => new MpCommand<object>(
             (drop_gmp_arg) => {
@@ -149,7 +154,9 @@ namespace MonkeyPaste.Avalonia {
                         //Dispatcher.UIThread.Post(MpAvClipboardHandlerCollectionViewModel.Instance.OnPropertyChanged(nameof(MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets)));
                     });
                 }
-            },(drop_gmp_arg) =>!IsShowingFinishMenu);
+            },(drop_gmp_arg) => {
+                return !IsShowingFinishMenu && IsDropWidgetEnabled;
+            });
 
         public ICommand ShowFinishDropMenuCommand => new MpAsyncCommand<object>(
             async(drop_gmp_arg) => {
@@ -180,7 +187,9 @@ namespace MonkeyPaste.Avalonia {
                 }
                 IsShowingFinishMenu = false;
                 IsShowingDropWindow = false;
-            },(drop_gmp_arg) =>!IsShowingFinishMenu);
+            },(drop_gmp_arg) => {
+                return !IsShowingFinishMenu && IsDropWidgetEnabled;
+            });
 
         public ICommand RememberDropInfoCommand => new MpAsyncCommand(
             async() => {
@@ -195,7 +204,9 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 IsShowingDropWindow = false;
-            },()=>DropAppViewModel != null);
+            }, () => {
+                return DropAppViewModel != null && IsDropWidgetEnabled;
+            });
 
         public ICommand DoNotRememberDropInfoCommand => new MpCommand(
             () => {

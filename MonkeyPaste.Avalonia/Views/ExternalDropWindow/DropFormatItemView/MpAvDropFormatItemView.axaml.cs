@@ -40,6 +40,10 @@ namespace MonkeyPaste.Avalonia {
         private void DragEnter(object sender, DragEventArgs e) {
             // no matter what flag that this dnd has a unique state so 
             // any config's should be ignored, too bad (i think)
+            if(!Dispatcher.UIThread.CheckAccess()) {
+                Dispatcher.UIThread.Post(() => DragEnter(sender, e));
+                return;
+            }
 
             MpAvExternalDropWindowViewModel.Instance.HasUserToggledAnyHandlers = true;
 
@@ -52,15 +56,14 @@ namespace MonkeyPaste.Avalonia {
 
             MpConsole.WriteLine("[DragEnter] ClipboardFormat: "+BindingContext);
             BindingContext.TogglePresetIsEnabledCommand.Execute(null);
-            Dispatcher.UIThread.Post(async () => {
+            if(MpAvDataObject.SourceDataObject is MpPortableDataObject smpdo &&
+                MpAvDataObject.DragDataObject is MpPortableDataObject dmpdo) {
+                // when drag is internal process w/ plugins
+                // (for now, need to test if changing e.Data ref works for external)
                 
-                //var lastCursor = MpAvExternalDropWindow.Instance.Cursor;
-                //MpAvExternalDropWindow.Instance.Cursor = new Cursor(StandardCursorType.Wait);
-                await MpPlatformWrapper.Services.DataObjectHelperAsync.UpdateDragDropDataObjectAsync(
-                    MpAvCefNetWebViewGlue.SourceDataObject,
-                    MpAvCefNetWebViewGlue.DragDataObject);
-                //MpAvExternalDropWindow.Instance.Cursor = lastCursor;
-            });
+                MpPlatformWrapper.Services.DataObjectHelperAsync.UpdateDragDropDataObjectAsync(smpdo,dmpdo)
+                    .FireAndForgetSafeAsync(BindingContext);
+            }
         }
 
         private void DragOver(object sender, DragEventArgs e) {

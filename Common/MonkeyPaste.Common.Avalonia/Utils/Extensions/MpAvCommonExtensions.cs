@@ -1,20 +1,24 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Platform;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using static Avalonia.VisualExtensions;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvCommonExtensions {
+
         #region Collections
         public static T GetVisualAncestor<T>(this IVisual visual, bool includeSelf = true) where T : IVisual? {
             if (includeSelf && visual is T) {
@@ -82,6 +86,44 @@ namespace MonkeyPaste.Common.Avalonia {
             var relative_origin = control.TranslatePoint(new Point(0, 0), relTo).Value.ToPortablePoint();
             var observed_size = control.Bounds.Size.ToPortableSize();
             return new MpRect(relative_origin, observed_size);
+        }
+
+        #endregion
+
+        #region MainWindow
+
+        public static Window MainWindow(this Application? app) {
+            if(app != null && app.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+                return desktop.MainWindow;
+            }
+            return null;
+        }
+
+        #endregion
+
+        #region Screens
+
+        public static double VisualPixelDensity(this IVisual visual, Window w = null) {
+            if(w == null && 
+                Application.Current.MainWindow() is Window) {
+                w = Application.Current.MainWindow();
+            }
+            
+            if(w == null) {
+                return 1;
+            }
+            if(visual == null) {
+                return w.Screens.Primary.PixelDensity;
+            }
+            var scr = w.Screens.ScreenFromVisual(visual);
+            if(scr == null) {
+                scr = Application.Current.MainWindow().Screens.Primary;
+                if(scr == null) {
+                    Debugger.Break();
+                    return 1;
+                }
+            }
+            return scr.PixelDensity;
         }
 
         #endregion

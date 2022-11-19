@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using System;
 using System.Linq;
+using System.Drawing;
 
 
 namespace MonkeyPaste.Common {
@@ -11,6 +12,15 @@ namespace MonkeyPaste.Common {
         #region Private Variables
 
         private double _left, _top, _right, _bottom;
+
+        #endregion
+
+        #region Constants
+
+        public const int LEFT_IDX = 0;
+        public const int TOP_IDX = 1;
+        public const int RIGHT_IDX = 2;
+        public const int BOTTOM_IDX = 3;
 
         #endregion
 
@@ -63,6 +73,7 @@ namespace MonkeyPaste.Common {
         public string BoxShadows { get; set; } = string.Empty;
 
         #endregion
+
         public double X {
             get => Left;
             set => Left = value;
@@ -117,6 +128,13 @@ namespace MonkeyPaste.Common {
         #region Constructors
 
         public MpRect() : base() { }
+
+        public MpRect(double allVal) : this(){
+            _left = allVal;
+            _top = allVal;
+            _right = allVal;
+            _bottom = allVal;
+        }
 
         public MpRect(double[] sides) : this(sides[0], sides[1], sides[2] - sides[0], sides[3] - sides[1]) { }
         public MpRect(double x, double y, double w, double h) : this(new MpPoint(x, y), new MpSize(w, h)) { }

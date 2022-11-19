@@ -11,7 +11,6 @@ namespace MonkeyPaste.Common {
     public class MpPortableDataObject : MpIPortableDataObject {
         #region Statics
 
-
         public static bool IsDataNotEqual(MpPortableDataObject dbo1, MpPortableDataObject dbo2) {
             if (dbo1 == null && dbo2 != null) {
                 return true;
