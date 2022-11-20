@@ -19,6 +19,7 @@ using CefNet.Internal;
 using Avalonia.Controls;
 using Avalonia.Platform;
 using System.Web;
+using Xamarin.Essentials;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -57,9 +58,14 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvCefNetWebView : 
         WebView, 
-        MpAvIContentView,
+        MpAvIContentView, 
+        MpAvIDragSource,
         MpAvIResizableControl {
         #region Private Variables
+
+        private string _pastableContent_ntf { get; set; }
+        private string _contentScreenShotBase64_ntf { get; set; }
+
         #endregion
 
         #region Statics
@@ -99,6 +105,167 @@ namespace MonkeyPaste.Avalonia {
                 return _resizerControl;
             }
         }
+        #endregion
+
+        #region MpAvIDropTarget Implementation 
+        public bool IsDropping => BindingContext == null ? false : BindingContext.IsDropOverTile;
+        #endregion
+
+        #region MpAvIContentDragSource Implementation
+        public PointerEventArgs DragPointerEventArgs { get; private set; }
+        bool MpAvIDragSource.IsDragging {
+            get => BindingContext != null ? BindingContext.IsTileDragging : false;
+            set {
+                if (BindingContext != null) {
+                    BindingContext.IsTileDragging = true;
+                }
+            }
+        }
+        void MpAvIDragSource.NotifyDropComplete(DragDropEffects dropEffect) {
+            var dragEndMsg = new MpQuillDragEndMessage() {
+                dataTransfer = new MpQuillDataTransferMessageFragment() {
+                    dropEffect = dropEffect.ToString().ToLower()
+                },
+                fromHost = true,
+                wasCancel = dropEffect == DragDropEffects.None
+            };
+
+            this.ExecuteJavascript($"dragEnd_ext('{dragEndMsg.SerializeJsonObjectToBase64()}')");
+
+            MpConsole.WriteLine($"Drag complete for '{BindingContext}'. DropEffect: '{dropEffect}'");
+        }
+        void MpAvIDragSource.NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc) {
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                Dispatcher.UIThread.Post(() => (this as MpAvIDragSource).NotifyModKeyStateChanged(ctrl,alt,shift,esc));
+                return;
+            }
+            var modKeyMsg = new MpQuillModifierKeysNotification() {
+                ctrlKey = ctrl,
+                altKey = alt,
+                shiftKey = shift,
+                escKey = esc
+            };
+            this.ExecuteJavascript($"updateModifierKeysFromHost_ext('{modKeyMsg.SerializeJsonObjectToBase64()}')");
+        }
+        async Task<MpAvDataObject> MpAvIDragSource.GetDataObjectAsync(bool ignoreSelection, bool fillTemplates, bool isCutOrCopy, string[] formats = null) {
+            if(BindingContext == null) {
+                Debugger.Break();
+                return new MpAvDataObject();
+            }
+            var ctvm = BindingContext;
+            // clear screenshot
+            _contentScreenShotBase64_ntf = null;
+
+            var contentDataReq = new MpQuillContentDataRequestMessage() {
+                forPaste = ctvm.IsPasting,
+                forDragDrop = ctvm.IsTileDragging,
+                forCutOrCopy = isCutOrCopy
+            };
+
+            bool for_ole = contentDataReq.forPaste || contentDataReq.forDragDrop || contentDataReq.forCutOrCopy;
+
+            bool ignore_ss = true;
+            // NOTE when file is on clipboard pasting into tile removes all other formats besides file
+            // and pseudo files are only needed for dnd comptaibility so its gewd
+            bool ignore_pseudo_file = contentDataReq.forCutOrCopy;
+            if (formats == null) {
+                // TODO need to implement disable preset stuff once clipboard ui is in use 
+                // for realtime RegisterFormats data
+                contentDataReq.formats = MpPortableDataFormats.RegisteredFormats.ToList();
+            } else {
+                contentDataReq.formats = formats.ToList();
+            }
+            if (ctvm.ItemType != MpCopyItemType.Image && ignore_ss) {
+                contentDataReq.formats.Remove(MpPortableDataFormats.AvPNG);
+                contentDataReq.formats.Remove(MpPortableDataFormats.WinBitmap);
+                contentDataReq.formats.Remove(MpPortableDataFormats.WinDib);
+            }
+            MpQuillContentDataResponseMessage contentDataResp = null;
+
+            if (false) {//contentDataReq.forPaste && ctvm.HasTemplates) {
+                if (ctvm.IsContentReadOnly) {
+                    //var ctv = this.GetVisualAncestor<MpAvClipTileView>();
+                    //if (ctv != null) {
+                    //    var resizeControl = ctv.FindControl<Control>("ClipTileResizeBorder");
+                    //    MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.EditableWidth, ctvm.EditableHeight);
+                    //}
+                    MpAvResizeExtension.ResizeAnimated(this, ctvm.EditableWidth, ctvm.EditableHeight);
+                }
+                _pastableContent_ntf = null;
+                this.ExecuteJavascript($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");
+                while (_pastableContent_ntf == null) {
+                    await Task.Delay(100);
+                }
+                contentDataResp = MpJsonObject.DeserializeBase64Object<MpQuillContentDataResponseMessage>(_pastableContent_ntf);
+                _pastableContent_ntf = null;
+            } else {
+                var contentDataRespStr = await this.EvaluateJavascriptAsync($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");
+                contentDataResp = MpJsonObject.DeserializeBase64Object<MpQuillContentDataResponseMessage>(contentDataRespStr);
+            }
+
+
+            if (contentDataResp.dataItems == null) {
+                return null;
+            }
+            var avdo = new MpAvDataObject();
+            foreach (var di in contentDataResp.dataItems) {
+                avdo.SetData(di.format, di.data);
+            }
+
+            if (for_ole) {
+                if (ctvm.ItemType == MpCopyItemType.Image) {
+                    avdo.SetData(MpPortableDataFormats.AvPNG, ctvm.CopyItemData.ToAvBitmap().ToByteArray());
+                    //var bmp = ctvm.CopyItemData.ToAvBitmap();
+                    //avdo.SetData(MpPortableDataFormats.Text, bmp.ToAsciiImage());
+                    //avdo.SetData(MpPortableDataFormats.AvHtml_bytes, bmp.ToRichHtmlImage());
+                    // TODO add colorized ascii maybe as html and rtf!!
+                } else if (!ignore_ss) {
+                    // screen shot is async and js notifies w/ base64 property here
+                    while (_contentScreenShotBase64_ntf == null) {
+
+                        await Task.Delay(100);
+                    }
+                    avdo.SetData(MpPortableDataFormats.AvPNG, _contentScreenShotBase64_ntf);
+                }
+
+                if (ctvm.ItemType == MpCopyItemType.FileList) {
+                    avdo.SetData(MpPortableDataFormats.AvFileNames, ctvm.CopyItemData.SplitNoEmpty(Environment.NewLine));
+                } else if (!ignore_pseudo_file) {
+                    // js doesn't set file stuff for non-files
+                    avdo.SetData(
+                        MpPortableDataFormats.AvFileNames,
+                        ctvm.CopyItemData.ToFile(
+                            forceNamePrefix: ctvm.CopyItemTitle,
+                            forceExt: ctvm.ItemType == MpCopyItemType.Image ? "png" : "txt",
+                            isTemporary: true));
+                }
+
+                bool add_tile_data = ctvm.ItemType != MpCopyItemType.Text ||
+                                   (this.IsAllSelected() || this.Selection.Length == 0);
+                if (add_tile_data) {
+                    avdo.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT, ctvm.PublicHandle);
+                }
+
+                //MpISourceRef source_ref = ctvm.CopyItem;
+                //string source_ref_str = MpJsonObject.SerializeObject(source_ref);
+                //avdo.SetData(MpPortableDataFormats.INTERNAL_COPY_ITEM_SOURCE_DATA_FORMAT, source_ref_str);
+                avdo.SetData(MpPortableDataFormats.CefAsciiUrl, ctvm.CopyItem.ToSourceRefUrl().ToBytesFromString(Encoding.ASCII));
+            }
+
+
+            avdo.MapAllPseudoFormats();
+
+            //avdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvPNG));
+            //avdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT));
+            //avdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvFileNames));
+            //avdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvHtml_bytes));
+            //avdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.CefHtml));
+            //avdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.CefText));
+
+            return avdo;
+        }
+        public bool IsCurrentDropTarget => BindingContext == null ? false : BindingContext.IsDropOverTile;
+
         #endregion
 
         #region MpAvIContentView Implementation
@@ -211,8 +378,19 @@ namespace MonkeyPaste.Avalonia {
                             if(sr != null) {
                                 if(!string.IsNullOrEmpty(sr.SourcePublicHandle)) {
                                     // get db id from handle
-                                    if (MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == sr.SourcePublicHandle) is MpAvClipTileViewModel sctvm) {
-                                        sr.SourceObjId = sctvm.CopyItemId;
+                                    int ciid = 0;
+                                    var sctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == sr.SourcePublicHandle) as MpAvClipTileViewModel;
+                                    if(sctvm == null) {
+                                        // check for recycled tile
+                                        if(MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Count > 0 &&
+                                            MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels[0].PublicHandle == sr.SourcePublicHandle) {
+                                            ciid = MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels[0].Id;
+                                        }
+                                    } else {
+                                        ciid = sctvm.CopyItemId;
+                                    }
+                                    if (ciid > 0) {
+                                        sr.SourceObjId = ciid;
                                         // internal source
                                         sourceRef = sr;
                                     }
@@ -265,7 +443,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpAvEditorBindingFunctionType.notifyPasteIsReady:
                     // NOTE picked up in Document.GetDataObject
-                    Document.PastableContentResponse = msgJsonBase64Str;
+                    _pastableContent_ntf = msgJsonBase64Str;
                     break;
 
                 // DND
@@ -302,7 +480,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.notifyContentScreenShot:
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillContentScreenShotNotificationMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillContentScreenShotNotificationMessage ssMsg) {
-                        Document.ContentScreenShotBase64 = ssMsg.contentScreenShotBase64;
+                        _contentScreenShotBase64_ntf = ssMsg.contentScreenShotBase64;
                     }
                     break;
 
@@ -378,7 +556,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.notifyException:
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillExceptionMessage exceptionMsgObj) {
-                        MpConsole.WriteLine(exceptionMsgObj.ToString());
+                        MpConsole.WriteLine($"[{ctvm}] {exceptionMsgObj}");
                         //Debugger.Break();
                     }
                     break;
@@ -436,15 +614,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Drag Handler
-
-        public bool HandleStartDragging(CefBrowser browser, CefDragData dragData, CefDragOperationsMask allowedOps, int x, int y) {
-            PerformDragAsync(dragData, allowedOps).FireAndForgetSafeAsync();
-            return false;
-        }
-
-        #endregion
-
         #endregion
 
         #region Protected Methods
@@ -478,6 +647,10 @@ namespace MonkeyPaste.Avalonia {
             _resizerControl = null;
         }
 
+        protected override void OnPointerMoved(PointerEventArgs e) {
+            DragPointerEventArgs = e;
+            base.OnPointerMoved(e);
+        }
         #endregion
 
         #region Private Methods
@@ -502,174 +675,10 @@ namespace MonkeyPaste.Avalonia {
                     var navPrevMsg = new MpQuillContentSearchRangeNavigationMessage() { curIdxOffset = -1 };
                     this.ExecuteJavascript($"searchNavOffsetChanged_ext('{navPrevMsg.SerializeJsonObjectToBase64()}')");
                     break;
+
             }
         }
 
-        #region Drag Helpers
-
-        private PointerEventArgs _capturedPointerEventArgs;
-        private bool _wasEscPressed = false;
-        private MpPoint _lastGlobalMousePoint; // debouncer
-        private DragDropEffects _dragEffects;
-        private async Task PerformDragAsync(CefDragData dragData, CefDragOperationsMask allowedOps) {
-            if(!Dispatcher.UIThread.CheckAccess()) {
-                await Dispatcher.UIThread.InvokeAsync(() => PerformDragAsync(dragData, allowedOps));
-                return;
-            }
-
-            ResetDragState();
-            BindingContext.IsTileDragging = true;
-            HookDragEvents();
-
-            _dragEffects = allowedOps.ToDragDropEffects();
-
-            if (BindingContext.ItemType == MpCopyItemType.FileList) {
-                _dragEffects = DragDropEffects.Copy;
-            } else if (BindingContext.ItemType == MpCopyItemType.Image) {
-                _dragEffects = DragDropEffects.Move;
-            } else {
-                // no changes for text
-            }
-
-            var source_data_object = await Document.GetDataObjectAsync(false, false, false);
-
-            if(source_data_object == null) {
-                // this seems to happen due to data conversion errors somewhere
-                Debugger.Break();
-                FinishDrag(true);
-                return;
-            }
-            MpAvDataObject.SetSourceDragDataObject(source_data_object);
-
-            // seems excessive...but ultimately all ole pref's come from plugins so pass everthing through cb plugin system just like writing to clipboard
-            var processed_data_object = await MpPlatformWrapper.Services.DataObjectHelperAsync.WriteDragDropDataObject(source_data_object) as MpAvDataObject;
-            MpAvDataObject.UpdateDragDataObject(processed_data_object);
-            MpAvExternalDropWindowViewModel.Instance.ShowDropWindowCommand.Execute(null);
-
-            while (_capturedPointerEventArgs == null) {
-                await Task.Delay(100);
-            }
-
-            var result = await DragDrop.DoDragDrop(_capturedPointerEventArgs, processed_data_object, _dragEffects);
-
-            
-            FinishDrag(false);
-
-            MpConsole.WriteLine("Cef Drag Result: " + result);
-        }
-
-        private void CapturePointerEventHandler(object sender, PointerEventArgs e) {
-            _capturedPointerEventArgs = e;
-            if (!e.IsLeftDown(this)) {
-                // NOTE not sure if these events are received since dnd is progress 
-                // but probably good to keep since drag end is so annoying to handle...
-                MpConsole.WriteLine("CefGlue pointer move event detached ITSELF");
-                this.PointerMoved -= CapturePointerEventHandler;
-
-                MpAvExternalDropWindowViewModel.Instance.DoNotRememberDropInfoCommand.Execute(null);
-                return;
-            }
-        }
-
-        private void OnGlobalKeyPrssedOrReleasedHandler(object sender, string key) {
-            if (!Dispatcher.UIThread.CheckAccess()) {
-                Dispatcher.UIThread.Post(() => OnGlobalKeyPrssedOrReleasedHandler(sender, key));
-                return;
-            }
-
-            if (MpAvShortcutCollectionViewModel.Instance.GlobalIsEscapeDown) {
-                _wasEscPressed = true;
-            }
-            var modKeyMsg = new MpQuillModifierKeysNotification() {
-                ctrlKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown,
-                altKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsAltDown,
-                shiftKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsShiftDown,
-                escKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsEscapeDown
-            };
-            this.ExecuteJavascript($"updateModifierKeysFromHost_ext('{modKeyMsg.SerializeJsonObjectToBase64()}')");
-        }
-
-        private void OnGlobalMouseMove(object s, MpPoint e) {
-            if (!Dispatcher.UIThread.CheckAccess()) {
-                Dispatcher.UIThread.Post(() => OnGlobalMouseMove(s, e));
-                return;
-            }
-            var scvm = MpAvShortcutCollectionViewModel.Instance;
-
-            if(_lastGlobalMousePoint == null) {
-                _lastGlobalMousePoint = e;
-            } else if(e.Distance(_lastGlobalMousePoint) < MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST) {
-                // debounce (window handle from point is expensive)
-                return;
-            }
-            MpAvExternalDropWindowViewModel.Instance.UpdateDropAppViewModelCommand.Execute(e);
-            _lastGlobalMousePoint = e;
-        }
-
-        private void OnGlobalMouseReleased(object s, bool e) {
-            if (!Dispatcher.UIThread.CheckAccess()) {
-                Dispatcher.UIThread.Post(() => OnGlobalMouseReleased(s, e));
-                return;
-            }
-            MpAvExternalDropWindowViewModel.Instance.ShowFinishDropMenuCommand.Execute(null);
-
-        }
-
-        private void HookDragEvents() {
-            this.PointerMoved += CapturePointerEventHandler;
-            MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed += OnGlobalKeyPrssedOrReleasedHandler;
-            MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased += OnGlobalKeyPrssedOrReleasedHandler;
-
-            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove += OnGlobalMouseMove;
-            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += OnGlobalMouseReleased;
-        }
-
-        private void UnhookDragEvents() {
-            this.PointerMoved -= CapturePointerEventHandler;
-            MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= OnGlobalKeyPrssedOrReleasedHandler;
-            MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= OnGlobalKeyPrssedOrReleasedHandler;
-
-            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove -= OnGlobalMouseMove;
-            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased -= OnGlobalMouseReleased;
-        }
-
-        private void FinishDrag(bool wasErrorOrCancel) {
-            MpAvDataObject.SetSourceDragDataObject(null);
-
-            bool wasCopy = MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown;
-            bool wasSuccess = !_wasEscPressed && !wasErrorOrCancel;
-            bool wasSelfDrop = wasSuccess && BindingContext.IsDropOverTile;
-
-            string dropEffect = wasSelfDrop && !wasCopy ? "move" : "copy";
-
-            if (!wasSuccess) {
-                dropEffect = "none";
-            }
-
-            var dragEndMsg = new MpQuillDragEndMessage() {
-                dataTransfer = new MpQuillDataTransferMessageFragment() {
-                    dropEffect = dropEffect
-                },
-                fromHost = true,
-                wasCancel = !wasSuccess
-            };
-
-            this.ExecuteJavascript($"dragEnd_ext('{dragEndMsg.SerializeJsonObjectToBase64()}')");
-
-            ResetDragState();
-            MpConsole.WriteLine("Was Self drop: " + wasSelfDrop);
-            MpConsole.WriteLine("ACTUAL drag result: " + dropEffect);
-        }
-        private void ResetDragState() {
-            UnhookDragEvents();
-            if (BindingContext != null) {
-                BindingContext.IsTileDragging = false;
-            }
-            _capturedPointerEventArgs = null;
-            _wasEscPressed = false;
-            _lastGlobalMousePoint = null;
-        }
-        #endregion
 
         #endregion
     }

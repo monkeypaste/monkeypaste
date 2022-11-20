@@ -162,6 +162,7 @@ namespace MonkeyPaste.Common.Wpf {
                     break;
                 case "span":
                 case "code":
+                case "pre":
                     te = new Span();
                     break;
                 case "strong":

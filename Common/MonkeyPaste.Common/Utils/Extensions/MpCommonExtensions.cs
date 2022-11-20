@@ -16,6 +16,11 @@ namespace MonkeyPaste.Common {
     public static class MpCommonExtensions {
 
         #region Collections
+
+        public static IEnumerable<T> Difference<T>(this IEnumerable<T> enumerable, IEnumerable<T> other) {
+            return enumerable.Union(other).Except(enumerable.Intersect(other)); ;
+        }
+
         public static IEnumerable<T> Randomize<T>(this IEnumerable<T> enumerable) {
             List<T> enumerable_copy = enumerable.ToList();
             List<T> rand_list = new List<T>();

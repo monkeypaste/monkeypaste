@@ -26,12 +26,6 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 	ContentHandle = contentHandle;
 	ContentItemType = contentType;
 
-	if (ContentItemType.includes('.')) {
-		log('hey item type is ' + ContentItemType);
-		ContentItemType = ContentItemType.split('.')[1];
-		log('now item type is ' + ContentItemType);
-	}
-
 	// enusre IsLoaded is false so msg'ing doesn't get clogged up
 	IsLoaded = false;
 

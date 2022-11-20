@@ -56,14 +56,6 @@ namespace MonkeyPaste.Avalonia {
 
             MpConsole.WriteLine("[DragEnter] ClipboardFormat: "+BindingContext);
             BindingContext.TogglePresetIsEnabledCommand.Execute(null);
-            if(MpAvDataObject.SourceDataObject is MpPortableDataObject smpdo &&
-                MpAvDataObject.DragDataObject is MpPortableDataObject dmpdo) {
-                // when drag is internal process w/ plugins
-                // (for now, need to test if changing e.Data ref works for external)
-                
-                MpPlatformWrapper.Services.DataObjectHelperAsync.UpdateDragDropDataObjectAsync(smpdo,dmpdo)
-                    .FireAndForgetSafeAsync(BindingContext);
-            }
         }
 
         private void DragOver(object sender, DragEventArgs e) {

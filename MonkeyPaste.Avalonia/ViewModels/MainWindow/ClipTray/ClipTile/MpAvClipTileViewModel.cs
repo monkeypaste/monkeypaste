@@ -26,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
         MpIScrollIntoView,
         MpIUserColorViewModel,
         MpIHoverableViewModel,
-        MpIResizableViewModel,
+        MpIResizableViewModel, 
         //MpIRtfSelectionRange,
         MpIContextMenuViewModel,
         //MpIFindAndReplaceViewModel,
@@ -199,6 +199,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
+
 
         #region Appearance
 
@@ -1119,7 +1120,7 @@ namespace MonkeyPaste.Avalonia {
             //GetContentView().IsContentUnloaded = false;
 
             IsBusy = true;
-
+            await Task.Delay(1);
 
             if (ci != null && MpAvPersistentClipTilePropertiesHelper.TryGetByPersistentSize_ById(ci.Id, out double uniqueWidth)) {
                 BoundSize = new MpSize(uniqueWidth, MinHeight);
@@ -1146,18 +1147,16 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(ContentMarginThickness));
             OnPropertyChanged(nameof(Next));
             OnPropertyChanged(nameof(Prev));
+            OnPropertyChanged(nameof(CopyItemId));
 
+            //MpMessenger.Send<MpMessageType>(MpMessageType.ContentItemsChanged, this);
 
-            MpMessenger.Send<MpMessageType>(MpMessageType.ContentItemsChanged, this);
-
-            //OnPropertyChanged(nameof(CopyItemTitle));
-
-            //OnPropertyChanged(nameof(CopyItemData));
-
-            if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileEditable_ById(CopyItemId)) {
+            if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileContentEditable_ById(CopyItemId)) {
                 IsContentReadOnly = false;
             }
-
+            if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileTitleEditable_ById(CopyItemId)) {
+                IsTitleReadOnly = false;
+            }
             IsBusy = false;
         }
 
@@ -1222,6 +1221,13 @@ namespace MonkeyPaste.Avalonia {
             _contentView = ctcv.ContentView;
             return _contentView;
         }       
+
+        public MpAvIDragSource GetDragSource() {
+            if(GetContentView() is MpAvIDragSource ds) {
+                return ds;
+            }
+            return null;
+        }
 
         public async Task<MpAvClipTileViewModel> GetNeighborByRowOffsetAsync(int row_offset) {
             var items = IsPinned ? Parent.PinnedItems : Parent.Items;
@@ -1563,7 +1569,10 @@ namespace MonkeyPaste.Avalonia {
 
                     break;
                 case nameof(IsTitleReadOnly):
-                    if (!IsTitleReadOnly) {
+                    if (IsTitleReadOnly) {
+                        MpAvPersistentClipTilePropertiesHelper.RemovePersistentIsTitleEditableTile_ById(CopyItemId);
+                    } else {
+                        MpAvPersistentClipTilePropertiesHelper.AddPersistentIsTitleEditableTile_ById(CopyItemId);
                         _originalTitle = CopyItemTitle;
                         IsTitleFocused = true;
                         IsSelected = true;
@@ -1571,23 +1580,14 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTitle));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
                     break;
-                case nameof(IsDropOverTile):
-                    if(IsDropOverTile && !IsSubSelectionEnabled) {
-                        IsSubSelectionEnabled = true;
-                    }
-                    if(IsDropOverTile) {
-                        Parent.NotifyDragOverTrays(true);                        
-                    }
-                    
-                    break;
                 case nameof(IsContentReadOnly):
                     if (!IsContentReadOnly && !IsSelected) {
                         IsSelected = true;
                     }
                     if (IsContentReadOnly) {
-                        MpAvPersistentClipTilePropertiesHelper.RemovePersistentEditableTile_ById(CopyItemId);
+                        MpAvPersistentClipTilePropertiesHelper.RemovePersistentIsContentEditableTile_ById(CopyItemId);
                     } else {
-                        MpAvPersistentClipTilePropertiesHelper.AddPersistentEditableTile_ById(CopyItemId);
+                        MpAvPersistentClipTilePropertiesHelper.AddPersistentIsContentEditableTile_ById(CopyItemId);
                     }
                     MpMessenger.Send<MpMessageType>(IsContentReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
                     Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
@@ -1602,15 +1602,6 @@ namespace MonkeyPaste.Avalonia {
 
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
-
-                    if (Next == null) {
-                        break;
-                    }
-
-                    //if (!IsContentReadOnly) {
-                    //    IsFindMode = false;
-                    //    IsReplaceMode = false;
-                    //}
                     break;
                 case nameof(IsContextMenuOpen):
                     OnPropertyChanged(nameof(TileBorderHexColor));
@@ -1622,6 +1613,20 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsTileDragging):
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyTileDragging));
+                    if(IsTileDragging) {
+                        // NOTE only notify drag start since tile may get recycled
+                        // end msg is sent by dnd helper
+                        MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
+                    } 
+                    break;
+                case nameof(IsDropOverTile):
+                    if (IsDropOverTile && !IsSubSelectionEnabled) {
+                        IsSubSelectionEnabled = true;
+                    }
+                    if (IsDropOverTile) {
+                        Parent.NotifyDragOverTrays(true);
+                    }
+
                     break;
                 case nameof(HasModelChanged):
                     if (HasModelChanged) {
@@ -1886,7 +1891,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand CopyToClipboardCommand => new MpAsyncCommand(
             async() => {
                 IsBusy = true;
-                var mpdo = await GetContentView().Document.GetDataObjectAsync(true, false, true);
+                var mpdo = await GetDragSource().GetDataObjectAsync(true, false, true);
                 await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo, true);
 
                 // wait extra for cb watcher to know about data

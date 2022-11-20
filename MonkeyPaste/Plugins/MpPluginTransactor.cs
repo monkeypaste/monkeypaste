@@ -91,7 +91,7 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine($"Clipboard Reader Plugin error, empty response ");
                 return false;
             }
-            if (response.errorMessage != null) {
+            if (!string.IsNullOrWhiteSpace(response.errorMessage)) {
                 MpConsole.WriteTraceLine($"Plugin error (ignoring new clipboard data): " + response.errorMessage);
                 return false;
             }

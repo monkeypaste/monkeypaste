@@ -108,8 +108,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task<MpPortableDataObject> ConvertManagedFormats() {
-            MpPortableDataObject ndo = await MpPlatformWrapper.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync();
-            return ndo;
+            var result = await MpPlatformWrapper.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync();
+            return result as MpPortableDataObject;
         }
 
         #endregion

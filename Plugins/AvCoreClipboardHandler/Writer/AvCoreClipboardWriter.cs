@@ -10,7 +10,6 @@ using MonkeyPaste.Common.Wpf;
 
 namespace AvCoreClipboardHandler {
     public static class AvCoreClipboardWriter {
-
         private static string[] _AvWriterFormats = new string[]{
             MpPortableDataFormats.Text,
             MpPortableDataFormats.CefText,
@@ -27,12 +26,21 @@ namespace AvCoreClipboardHandler {
             if (request == null) {
                 return null;
             }
-            MpAvDataObject dataObj = request.data as MpAvDataObject ?? new MpAvDataObject();
-            var writeFormats = request.writeFormats.Where(x => request.data.ContainsData(x));
+            var ido = request.data as IDataObject;
+            if(ido == null) {
+                return null;
+            }
+            var sb = new StringBuilder();
+            IDataObject dataObj = ido ?? new MpAvDataObject();
+            var writeFormats = request.writeFormats.Where(x => ido.GetAllDataFormats().Contains(x));
+
             foreach(var write_format in writeFormats) {
 
                 foreach (var param in request.items) {
-                    ProcessWriterParam(param, dataObj);
+                    if(ProcessWriterParam(param, dataObj) is string errors &&
+                        !string.IsNullOrWhiteSpace(errors)) {
+                        sb.AppendLine(errors);
+                    }
                 }
             }
            
@@ -43,34 +51,37 @@ namespace AvCoreClipboardHandler {
             }
 
             return new MpClipboardWriterResponse() {
-                platformDataObject = dataObj
+                processedDataObject = dataObj,
+                errorMessage = sb.ToString()
             };
         }
 
-        private static void ProcessWriterParam(MpIParameterKeyValuePair pkvp, MpAvDataObject dataObj) {
+        private static string ProcessWriterParam(MpIParameterKeyValuePair pkvp, IDataObject dataObj) {
+            string errors = null;
             CoreClipboardParamType paramType = (CoreClipboardParamType)int.Parse(pkvp.paramName);
             switch(paramType) {
                 case CoreClipboardParamType.W_MaxCharCount_Text:
-                    if(dataObj.ContainsData(MpPortableDataFormats.Text) &&
-                        dataObj.GetData(MpPortableDataFormats.Text) is string text) {
+                    if(dataObj.Contains(MpPortableDataFormats.Text) &&
+                        dataObj.Get(MpPortableDataFormats.Text) is string text) {
                         int max_length = int.Parse(pkvp.value);
                         if(text.Length > max_length) {
                             text = text.Substring(0, max_length);
-                            dataObj.SetData(MpPortableDataFormats.Text, text);
+                            dataObj.Set(MpPortableDataFormats.Text, text);
                         }
                     }
                     break;
                 case CoreClipboardParamType.W_MaxCharCount_WebText:
-                    if (dataObj.ContainsData(MpPortableDataFormats.CefText) &&
-                        dataObj.GetData(MpPortableDataFormats.CefText) is string cefText) {
+                    if (dataObj.Contains(MpPortableDataFormats.CefText) &&
+                        dataObj.Get(MpPortableDataFormats.CefText) is string cefText) {
                         int max_length = int.Parse(pkvp.value);
                         if (cefText.Length > max_length) {
                             cefText = cefText.Substring(0, max_length);
-                            dataObj.SetData(MpPortableDataFormats.CefText, cefText);
+                            dataObj.Set(MpPortableDataFormats.CefText, cefText);
                         }
                     }
                     break;
             }
+            return errors;
         }
     }
 }

@@ -330,6 +330,60 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region CanThumbDrag AvaloniaProperty
+        public static bool GetCanThumbDrag(AvaloniaObject obj) {
+            return obj.GetValue(CanThumbDragProperty);
+        }
+
+        public static void SetCanThumbDrag(AvaloniaObject obj, bool value) {
+            obj.SetValue(CanThumbDragProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> CanThumbDragProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
+                "CanThumbDrag",
+                false,
+                false,
+                BindingMode.TwoWay);
+
+        #endregion
+
+        #region CanThumbDragX AvaloniaProperty
+        public static bool GetCanThumbDragX(AvaloniaObject obj) {
+            return obj.GetValue(CanThumbDragXProperty);
+        }
+
+        public static void SetCanThumbDragX(AvaloniaObject obj, bool value) {
+            obj.SetValue(CanThumbDragXProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> CanThumbDragXProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
+                "CanThumbDragX",
+                false,
+                false,
+                BindingMode.TwoWay);
+
+        #endregion
+
+        #region CanThumbDragY AvaloniaProperty
+        public static bool GetCanThumbDragY(AvaloniaObject obj) {
+            return obj.GetValue(CanThumbDragYProperty);
+        }
+
+        public static void SetCanThumbDragY(AvaloniaObject obj, bool value) {
+            obj.SetValue(CanThumbDragYProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> CanThumbDragYProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
+                "CanThumbDragY",
+                false,
+                false,
+                BindingMode.TwoWay);
+
+        #endregion
+
         #region IsScrollJumping AvaloniaProperty
         public static bool GetIsScrollJumping(AvaloniaObject obj) {
             return obj.GetValue(IsScrollJumpingProperty);
@@ -568,7 +622,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             track.Tag = sv.Tag;
-            var track_mp = e.GetPosition(track);
+            var track_mp = e.GetPosition(track).ToPortablePoint();
 
             Thumb thumb = (e.Source as Control).GetVisualAncestor<Thumb>();
             bool isThumbPress = thumb != null;
@@ -602,7 +656,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 var thumb = track.GetVisualDescendant<Thumb>();
 
-                var track_mp = e.GetPosition(track);
+                var track_mp = e.GetPosition(track).ToPortablePoint();
                 AdjustThumbTransform(track, track_mp, false);
 
                 e.Handled = true;
@@ -616,29 +670,7 @@ namespace MonkeyPaste.Avalonia {
                     e.Source is Thumb thumb &&
                     thumb.GetVisualAncestor<Track>() is Track track) {
                     //finish thumb drag
-                    if (GetIsThumbDraggingX(lb)) {
-                        if (thumb.RenderTransform is TranslateTransform tt) {
-                            double hw = thumb.Bounds.Width / 2;
-                            double x = tt.X + thumb.Bounds.X + hw;
-                            track.Value = track.ValueFromPoint(new Point(x, 0));
-                            tt.X = 0;
-                            SetScrollOffsetX(lb, track.Value);
-                            SetIsThumbDraggingX(lb, false);
-                        }
-
-                    } else if (GetIsThumbDraggingY(lb)) {
-                        if (thumb.RenderTransform is TranslateTransform tt) {
-                            double hh = thumb.Bounds.Height / 2;
-                            double y = tt.Y + thumb.Bounds.Y + hh;
-                            track.Value = track.ValueFromPoint(new Point(0,y));
-                            tt.Y = 0;
-                            SetScrollOffsetY(lb, track.Value);
-                            SetIsThumbDraggingY(lb, false);
-                        }
-                    } else {
-                        // shouldn't happen
-                        Debugger.Break();
-                    }
+                    FinishThumbDrag(lb, track);
                     e.Pointer.Capture(null);
                     e.Handled = true;
                     return;
@@ -769,7 +801,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return false;
         }
-        private static void AdjustThumbTransform(Track track, Point track_mp, bool isThumbPress) {
+        private static void AdjustThumbTransform(Track track, MpPoint track_mp, bool isThumbPress) {
             var attached_control = track.Tag as AvaloniaObject;
 
             var thumb = track.GetVisualDescendant<Thumb>();
@@ -803,10 +835,89 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private static void FinishThumbDrag(ListBox lb, Track track) {
+            var thumb = track.GetVisualDescendant<Thumb>();
+            if (GetIsThumbDraggingX(lb)) {
+                if (thumb.RenderTransform is TranslateTransform tt) {
+                    double hw = thumb.Bounds.Width / 2;
+                    double x = tt.X + thumb.Bounds.X + hw;
+                    track.Value = track.ValueFromPoint(new Point(x, 0));
+                    tt.X = 0;
+                    SetScrollOffsetX(lb, track.Value);
+                    SetIsThumbDraggingX(lb, false);
+                }
+
+            } else if (GetIsThumbDraggingY(lb)) {
+                if (thumb.RenderTransform is TranslateTransform tt) {
+                    double hh = thumb.Bounds.Height / 2;
+                    double y = tt.Y + thumb.Bounds.Y + hh;
+                    track.Value = track.ValueFromPoint(new Point(0, y));
+                    tt.Y = 0;
+                    SetScrollOffsetY(lb, track.Value);
+                    SetIsThumbDraggingY(lb, false);
+                }
+            } else {
+                // shouldn't happen
+                Debugger.Break();
+            }
+        }
         #endregion
 
         #region Public Methods
+        public static bool CheckAndDoAutoScrollJump(ScrollViewer sv, ListBox lb, MpPoint gmp) {
+            if(!GetCanThumbDrag(lb)) {
+                return false;
+            }
 
+            Track hit_track = null;
+            var tracks = sv.GetVisualDescendants<Track>();
+            foreach(var track in tracks) {
+                var track_rect = track.Bounds.ToPortableRect(track, true);
+                if(track_rect.Contains(gmp)) {
+                    if (track.Orientation == Orientation.Horizontal &&
+                        GetCanThumbDragX(lb)) {
+                        hit_track = track;
+                    } else if(track.Orientation == Orientation.Vertical &&
+                        GetCanThumbDragY(lb)) {
+                        hit_track = track;
+                    }
+                    break;
+                }
+            }
+
+            if(hit_track == null) {
+                if(GetIsThumbDragging(lb)) {
+                    Track finish_track = null;
+                    if(GetIsThumbDraggingX(lb)) {
+                        finish_track = tracks.FirstOrDefault(x => x.Orientation == Orientation.Horizontal);
+                    } else {
+                        finish_track = tracks.FirstOrDefault(x => x.Orientation == Orientation.Vertical);
+                    }
+                    if(finish_track == null) {
+                        // not sure how this could happen but probably can so clear all state here
+                        SetIsThumbDraggingX(lb, false);
+                        SetIsThumbDraggingY(lb, false);
+                    } else {
+                        // trigger jump if was thumb dragging
+                        FinishThumbDrag(lb, finish_track);
+                    }
+                }
+                return false;
+            }
+
+            bool is_thumb_press = !GetIsThumbDragging(lb);
+            if(is_thumb_press) {
+                // must be initial hit
+                if(hit_track.Orientation == Orientation.Horizontal) {
+                    SetIsThumbDraggingX(lb, true);
+                } else {
+                    SetIsThumbDraggingY(lb, true);
+                }
+            }
+            AdjustThumbTransform(hit_track, gmp.TranslatePoint(hit_track, false), is_thumb_press);
+
+            return true;
+        }
         #endregion
     }
 

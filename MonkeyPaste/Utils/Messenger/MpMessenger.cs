@@ -51,6 +51,8 @@ namespace MonkeyPaste {
         ExternalDragBegin,
         ExternalDragEnd,
 
+        ClipboardPresetsChanged,
+
         TrayScrollChanged,
 
         TraySelectionChanged,

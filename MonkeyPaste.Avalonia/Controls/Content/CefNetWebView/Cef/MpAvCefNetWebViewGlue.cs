@@ -44,8 +44,12 @@ namespace MonkeyPaste.Avalonia {
         /// <returns>Return false to abort the drag operation or true to handle the drag operation.</returns>
         /// 
         protected override bool StartDragging(CefBrowser browser, CefDragData dragData, CefDragOperationsMask allowedOps, int x, int y) {
-            if(browser.Host.Client.GetWebView() is MpAvCefNetWebView wv) {
-                return wv.HandleStartDragging(browser, dragData, allowedOps, x, y);
+            if(browser.Host.Client.GetWebView() is MpAvIDragSource ds) {
+                Dispatcher.UIThread.Post(async () => {
+
+                    await MpAvDocumentDragHelper.PerformDragAsync(ds, ds.DragPointerEventArgs, allowedOps.ToDragDropEffects());
+                    
+                });
             }
             return false;            
         }

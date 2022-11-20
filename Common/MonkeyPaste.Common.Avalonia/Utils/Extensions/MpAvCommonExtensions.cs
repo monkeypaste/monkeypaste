@@ -414,7 +414,25 @@ namespace MonkeyPaste.Common.Avalonia {
             return new PixelPoint((int)(p.X* pixelDensity), (int)(p.Y*pixelDensity));
         }
 
+        public static MpPoint TranslatePoint(this MpPoint p, Control relativeTo = null, bool toScreen = false) {
+            // NOTE when toScreen is FALSE p is assumed to be a screen point
 
+            if (relativeTo == null) {
+                relativeTo = Application.Current.MainWindow();
+                if (relativeTo == null) {
+                    return p;
+                }
+            }
+
+            var pd = relativeTo.VisualPixelDensity();
+            if(toScreen) {
+                MpPoint origin = relativeTo.PointToScreen(new Point()).ToPortablePoint(pd);
+                p.X = origin.X;
+                p.Y = origin.Y;
+                return p;
+            }
+            return relativeTo.PointToClient(p.ToAvPixelPoint(pd)).ToPortablePoint();
+        }
         #endregion
 
         #region Vector
@@ -467,8 +485,19 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region Rect
 
-        public static MpRect ToPortableRect(this Rect rect) {
-            return new MpRect(rect.Position.ToPortablePoint(), rect.Size.ToPortableSize());
+        public static void TranslateOrigin(this MpRect rect, Control relativeTo = null, bool toScreen = false) {
+            MpPoint origin = rect.Location.TranslatePoint(relativeTo, toScreen);
+            rect.X = origin.X;
+            rect.Y = origin.Y;
+        }
+
+        public static MpRect ToPortableRect(this Rect rect, Control relativeTo = null, bool toScreen = false) {
+            var prect = new MpRect(rect.Position.ToPortablePoint(), rect.Size.ToPortableSize());
+            if(relativeTo == null) {
+                return prect;
+            }
+            prect.TranslateOrigin(relativeTo, toScreen);
+            return prect;
         }
 
         public static Rect ToAvRect(this MpRect rect) {

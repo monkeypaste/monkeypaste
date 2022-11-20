@@ -767,6 +767,10 @@ namespace MonkeyPaste.Avalonia {
             MainWindowScreenRect = endRect;
         }
 
+        private void SanitizeMainWindowState() {
+            // case: 
+            //if(IsMainWindowOpen && !IsMainWindowActive)
+        }
         #endregion
 
         #region Commands        

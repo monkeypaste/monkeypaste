@@ -23,19 +23,7 @@ namespace MonkeyPaste.Common.Avalonia {
     public class MpAvDataObject : MpPortableDataObject, IDataObject {
         #region Statics
 
-        private static IDataObject _dragDataObject;
-        private static IDataObject _sourceDataObject;
-
-        public static IDataObject DragDataObject => _dragDataObject;
-
-        public static IDataObject SourceDataObject => _sourceDataObject;
-        public static void SetSourceDragDataObject(IDataObject sido) {
-            _sourceDataObject = sido;
-            _dragDataObject = sido;
-        }
-        public static void UpdateDragDataObject(IDataObject dido) {
-            _dragDataObject = dido;
-        }
+        
 
         #endregion
 

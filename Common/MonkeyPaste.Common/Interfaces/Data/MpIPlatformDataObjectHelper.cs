@@ -2,11 +2,11 @@
 
 namespace MonkeyPaste.Common {
     public interface MpIPlatformDataObjectHelperAsync {
-        Task<MpPortableDataObject> ReadDragDropDataObject(object nativeDataObj, int retryCount = 5);
-        Task<object> WriteDragDropDataObject(MpPortableDataObject portableObj);
-        Task SetPlatformClipboardAsync(MpPortableDataObject portableObj, bool ignoreClipboardChange);
-        Task<MpPortableDataObject> GetPlatformClipboardDataObjectAsync();
+        Task<object> ReadDragDropDataObject(object idoObj, int retryCount = 5);
+        Task<object> WriteDragDropDataObject(object idoObj);
+        Task SetPlatformClipboardAsync(object idoObj, bool ignoreClipboardChange);
+        Task<object> GetPlatformClipboardDataObjectAsync();
 
-        Task UpdateDragDropDataObjectAsync(MpPortableDataObject source, MpPortableDataObject target);
+        Task UpdateDragDropDataObjectAsync(object source, object target);
     }
 }

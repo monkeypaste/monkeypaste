@@ -113,7 +113,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.MainWindowSizeChanged:
                 case MpMessageType.MainWindowOrientationChangeBegin:                
                 case MpMessageType.TrayLayoutChanged:
-                    this.InvalidateMeasure();
+                    //this.InvalidateMeasure();
                     break;
                 case MpMessageType.DropOverTraysBegin:
                     StartAutoScroll();
@@ -156,7 +156,11 @@ namespace MonkeyPaste.Avalonia {
             }
             Dispatcher.UIThread.Post(() => {
                 var lbmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
-                    //this.PointToClient(MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.ToAvPixelPoint(1/this.VisualPixelDensity())).ToPortablePoint();
+                if(MpAvPagingListBoxExtension.CheckAndDoAutoScrollJump(_sv,_lb,lbmp)) {
+                    // drag is over a tray track and is thumb dragging
+                    // until outside track, then busy for load more
+                    return;
+                }
                 var scroll_delta = _sv.AutoScroll(
                     lbmp,
                     _sv,
@@ -164,7 +168,6 @@ namespace MonkeyPaste.Avalonia {
                     false);
 
                 BindingContext.ScrollOffset += scroll_delta;
-                //MpConsole.WriteLine(string.Join(",", _autoScrollAccumulators));
             });            
         }
 

@@ -922,6 +922,11 @@ namespace MonkeyPaste.Avalonia {
 
         public int MaxClipTrayQueryIdx => TotalTilesInQuery - 1; 
         public int MinClipTrayQueryIdx => 0;
+
+        public bool CanThumbDragVertical => ClipTrayScreenHeight < ClipTrayTotalHeight;
+        public bool CanThumbDragHorizontal => ClipTrayScreenWidth< ClipTrayTotalWidth;
+
+        public bool CanThumbDrag => CanThumbDragHorizontal || CanThumbDragVertical;
         #endregion
 
         #endregion
@@ -969,7 +974,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Drag Drop
         public bool IsAnyDropOverTrays { get; private set; }
-        public bool IsAnyTileDragging => AllItems.Any(x => x.IsTileDragging);
+        public bool IsAnyTileDragging => 
+            AllItems.Any(x => x.IsTileDragging) || 
+            (MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Count > 0 &&
+             MpAvPersistentClipTilePropertiesHelper.IsPersistentTileDraggingEditable_ById(
+                 MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels[0].Id));
 
         //public bool IsExternalDragOverClipTrayContainer { get; set; }
         public bool IsDragOverPinTray { get; set; }
@@ -1149,14 +1158,21 @@ namespace MonkeyPaste.Avalonia {
             if(_anchor_query_idx < 0) {
                 return;
             }
-            //QueryCommand.Execute(anchor_query_idx);
-            var anchor_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == _anchor_query_idx);
+            MpPoint anchor_offset = MpPoint.Zero;
+            var anchor_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == _anchor_query_idx);            
             if(anchor_ctvm == null) {
-                Debugger.Break();
-                return;
+                // this occurs in a scroll jump (at least), set anchor to page head
+                if(HeadItem != null) {
+                    anchor_offset = HeadItem.TrayLocation;
+                } else {
+                    // what's going on here? is the list empty?
+                    Debugger.Break();
+                }
+            } else {
+                anchor_offset = anchor_ctvm.TrayLocation;
             }
 
-            ForceScrollOffset(anchor_ctvm.TrayLocation);
+            ForceScrollOffset(anchor_offset);
         }
 
         #endregion
@@ -1338,6 +1354,10 @@ namespace MonkeyPaste.Avalonia {
 
                 // SCROLL JUMP
                 case MpMessageType.JumpToIdxCompleted:
+                    RefreshLayout();
+                    LockScrollToAnchor();
+                    CheckLoadMore(true);
+
                     SetScrollAnchor();
                     break;
 
@@ -2154,17 +2174,21 @@ namespace MonkeyPaste.Avalonia {
             MpMessenger.SendGlobal(MpMessageType.TraySelectionChanged);
         }
 
-        public void StoreSelectionState(MpAvClipTileViewModel tile) {
-            if(tile.IsPlaceholder) {
+        public void StoreSelectionState(MpAvClipTileViewModel ctvm) {
+            if(ctvm.IsPlaceholder) {
                 // started happening in external pin tray drop
                 Debugger.Break();
                 return;
             }
-            if (!tile.IsSelected) {
+            if (!ctvm.IsSelected) {
                 return;
             }
 
-            MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels = new List<MpCopyItem>() { tile.CopyItem };
+            MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels = new List<MpCopyItem>() { ctvm.CopyItem };
+            MpAvPersistentClipTilePropertiesHelper.ClearPersistentIsTileDragging();
+            if(ctvm.IsTileDragging) {
+                MpAvPersistentClipTilePropertiesHelper.AddPersistentIsTileDraggingTile_ById(ctvm.CopyItemId);
+            }
         }
 
         public void RestoreSelectionState(MpAvClipTileViewModel tile) {
@@ -2181,9 +2205,6 @@ namespace MonkeyPaste.Avalonia {
 
             IsRestoringSelection = false;
         }
-        
-
-
 
         public void CleanupAfterPaste(MpAvClipTileViewModel sctvm) {
             IsPasting = false;
@@ -2995,11 +3016,13 @@ namespace MonkeyPaste.Avalonia {
                 List<int> fetchQueryIdxList = Enumerable.Range(loadOffsetIdx, loadCount).ToList();
                 if (fetchQueryIdxList.Count > 0) {
                     if (!isLoadMore) {
-                        // Cleanup Tray item count depending on last query
+                        // Cleanup Tray item count depending on last query 
                         int itemCountDiff = Items.Count - fetchQueryIdxList.Count;
                         if (itemCountDiff > 0) {
                             while (itemCountDiff > 0) {
-                                Items.RemoveAt(0);
+                                // keep unneeded items as placeholders (maybe good to cap to some limit...)
+                                //Items.RemoveAt(0);
+                                Items[itemCountDiff].TriggerUnloadedNotification();
                                 itemCountDiff--;
                             }
                         } else if (itemCountDiff < 0) {
@@ -3044,13 +3067,16 @@ namespace MonkeyPaste.Avalonia {
 
                         
                     }
-                    //await Task.WhenAll(initTasks.ToArray());
-                    foreach (var initTask in initTasks) {
-                        initTask.FireAndForgetSafeAsync(this);
-                    }
+                    //if(LayoutType == MpAvClipTrayLayoutType.Stack) {
+                    //    await Task.WhenAll(initTasks.ToArray());
+                    //} else {
+                        foreach (var initTask in initTasks) {
+                            initTask.FireAndForgetSafeAsync(this);
+                        }
+                    //}
                 }
 
-                //while (Items.Any(x => x.IsAnyBusy)) {
+                //while (Items.Any(x => x.IsBusy)) {
                 //    await Task.Delay(100);
                 //}
 
@@ -3174,12 +3200,12 @@ namespace MonkeyPaste.Avalonia {
                 
                 SelectedItem.IsPasting = true;
 
-                var cv = SelectedItem.GetContentView();
-                if(cv == null) {
+                var ds = SelectedItem.GetDragSource();
+                if(ds == null) {
                     Debugger.Break();
                     return;
                 }
-                MpAvDataObject mpdo = await cv.Document.GetDataObjectAsync(false,true, false);
+                MpAvDataObject mpdo = await ds.GetDataObjectAsync(false,true, false);
                 var pi = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
                 await MpPlatformWrapper.Services.ExternalPasteHandler.PasteDataObject(mpdo, pi);
 

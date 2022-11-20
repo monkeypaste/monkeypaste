@@ -391,6 +391,9 @@ namespace MonkeyPaste.Avalonia {
                     }
                     OnPropertyChanged(nameof(DropItemBorderHexColor));
                     OnPropertyChanged(nameof(DropItemTitleHexColor));
+
+                    // this msg is used by dnd helper to update current drag dataobject if dnd in process
+                    MpMessenger.SendGlobal(MpMessageType.ClipboardPresetsChanged);
                     break;
                 case nameof(HasModelChanged):
                     if(HasModelChanged && IsAllValid) {

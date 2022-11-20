@@ -121,24 +121,50 @@ namespace MonkeyPaste.Avalonia {
         #region MpIPlatformDataObjectHelperAsync Implementation
 
 
-        async Task<object> MpIPlatformDataObjectHelperAsync.WriteDragDropDataObject(MpPortableDataObject mpdo) {
-            object pdo = await WriteClipboardOrDropObjectAsync(mpdo, false, false);
-            return pdo;
+        async Task<object> MpIPlatformDataObjectHelperAsync.WriteDragDropDataObject(object idoObj) {
+            if(idoObj is IDataObject ido) {
+                object pdo = await WriteClipboardOrDropObjectAsync(ido, false, false);
+                return pdo;
+            }
+            return null;
         }
 
-        async Task MpIPlatformDataObjectHelperAsync.SetPlatformClipboardAsync(MpPortableDataObject portableObj, bool ignoreClipboardChange) {
-            await WriteClipboardOrDropObjectAsync(portableObj, true, ignoreClipboardChange);
+        async Task MpIPlatformDataObjectHelperAsync.SetPlatformClipboardAsync(object idoObj, bool ignoreClipboardChange) {
+            if (idoObj is IDataObject ido) {
+                await WriteClipboardOrDropObjectAsync(ido, true, ignoreClipboardChange);
+            }
         }
 
-        async Task<MpPortableDataObject> MpIPlatformDataObjectHelperAsync.ReadDragDropDataObject(object nativeDataObj, int retryCount) {
-            var mpdo = await ReadClipboardOrDropObjectAsync(nativeDataObj);
-            return mpdo;
+        async Task<object> MpIPlatformDataObjectHelperAsync.ReadDragDropDataObject(object idoObj, int retryCount) {
+            if (idoObj is IDataObject ido) {
+                var mpdo = await ReadClipboardOrDropObjectAsync(ido);
+                return mpdo;
+            }
+            return null;
         }
-        async Task<MpPortableDataObject> MpIPlatformDataObjectHelperAsync.GetPlatformClipboardDataObjectAsync() {
+        async Task<object> MpIPlatformDataObjectHelperAsync.GetPlatformClipboardDataObjectAsync() {
             var pdo = await ReadClipboardOrDropObjectAsync(null);
             return pdo;
         }
 
+        async Task MpIPlatformDataObjectHelperAsync.UpdateDragDropDataObjectAsync(object source, object target) {
+            // NOTE this is called during a drag drop when user toggles a format preset
+            // source should be the initial output of ContentView dataObject and should have the highest fidelity of data on it for conversions
+            // NOTE DO NOT re-instantiate target haven't tested but I imagine the reference must persist that which was given to .DoDragDrop in StartDragging
+            if(source is IDataObject sido &&
+                target is IDataObject tido) {
+
+                var temp = await WriteClipboardOrDropObjectAsync(sido, false, false);
+                if(temp is IDataObject temp_ido) {
+                    tido.CopyFrom(temp_ido);
+                }
+            } else {
+                // need to cast or whats goin on here?
+                Debugger.Break();
+                return;
+            }
+
+        }
         #endregion
 
         #region Layout
@@ -229,24 +255,6 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public async Task UpdateDragDropDataObjectAsync(MpPortableDataObject source, MpPortableDataObject target) {
-            // NOTE this is called during a drag drop when user toggles a format preset
-            // source should be the initial output of ContentView dataObject and should have the highest fidelity of data on it for conversions
-            // NOTE DO NOT re-instantiate target haven't tested but I imagine the reference must persist that which was given to .DoDragDrop in StartDragging
-            if(source is not MpAvDataObject) {
-                // need to cast or whats goin on here?
-                Debugger.Break();
-                return;
-            }
-            var temp = await WriteClipboardOrDropObjectAsync(source as MpAvDataObject, false, false);
-            if(temp is MpAvDataObject temp_avdo) {
-                target.DataFormatLookup.Clear();
-                foreach (var kvp in temp_avdo.DataFormatLookup) {
-                    target.SetData(kvp.Key.Name, kvp.Value);
-                }
-            }
-
-        }
 
 
         #endregion
@@ -307,7 +315,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private async Task<MpAvDataObject> ReadClipboardOrDropObjectAsync(object forcedDataObject = null) {
+        private async Task<MpAvDataObject> ReadClipboardOrDropObjectAsync(IDataObject forced_ido = null) {
             // NOTE forcedDataObject is used to read drag/drop, when null clipboard is read
             MpAvDataObject mpdo = new MpAvDataObject();
 
@@ -319,7 +327,7 @@ namespace MonkeyPaste.Avalonia {
                     platform = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
                     readFormats = EnabledReaders.Where(x => x.Parent.ClipboardPluginComponent == read_component).Select(x => x.Parent.HandledFormat).Distinct().ToList(),
                     items = EnabledReaders.Where(x => x.Parent.ClipboardPluginComponent == read_component).SelectMany(x => x.Items.Cast<MpIParameterKeyValuePair>()).ToList(),
-                    forcedClipboardDataObject = forcedDataObject
+                    forcedClipboardDataObject = forced_ido
                 };
 
                 var response = await read_component.ReadClipboardDataAsync(req);
@@ -335,26 +343,28 @@ namespace MonkeyPaste.Avalonia {
             return mpdo;
         }
 
-        private async Task<object> WriteClipboardOrDropObjectAsync(MpPortableDataObject mpdo, bool writeToClipboard, bool ignoreClipboardChange) {
+        private async Task<object> WriteClipboardOrDropObjectAsync(IDataObject ido, bool writeToClipboard, bool ignoreClipboardChange) {
             if(ignoreClipboardChange) {
                 MpPlatformWrapper.Services.ClipboardMonitor.StopMonitor();
             }
             // pre-pass data object and remove disabled formats
             var formatsToRemove =
-                mpdo.DataFormatLookup
-                .Where(x => EnabledWriters.All(y => y.ClipboardFormat.clipboardName != x.Key.Name))
-                .Select(x => x.Key);
+                ido.GetAllDataFormats()
+                .Where(x => EnabledWriters.All(y => y.ClipboardFormat.clipboardName != x))
+                .Select(x => x);
 
-            foreach (var format_to_remove in formatsToRemove) {
-                mpdo.DataFormatLookup.Remove(format_to_remove);
+            //foreach (var format_to_remove in formatsToRemove) {
+            //    mpdo.DataFormatLookup.Remove(format_to_remove);
 
-            }
+            //}
+            formatsToRemove.ForEach(x => ido.TryRemove(x));
+
 
             var dobj = new MpAvDataObject();
 
             foreach (var write_component in EnabledWriterComponents) {
                 var writeRequest = new MpClipboardWriterRequest() {
-                    data = mpdo,
+                    data = ido,
                     writeToClipboard = writeToClipboard,
                     writeFormats = EnabledWriters.Where(x => x.Parent.ClipboardPluginComponent == write_component).Select(x => x.Parent.HandledFormat).Distinct().ToList(),
                     items = EnabledWriters.Where(x => x.Parent.ClipboardPluginComponent == write_component).SelectMany(x => x.Items.Cast<MpIParameterKeyValuePair>()).ToList(),
@@ -363,13 +373,13 @@ namespace MonkeyPaste.Avalonia {
                 MpClipboardWriterResponse writerResponse = await write_component.WriteClipboardDataAsync(writeRequest);
 
                 bool isValid = MpPluginTransactor.ValidatePluginResponse(writerResponse);
-                if (isValid && writerResponse.platformDataObject is MpPortableDataObject ido) {
-                    ido.DataFormatLookup.Where(x => x.Value != null).ForEach(x => dobj.SetData(x.Key.Name, x.Value));
+                if (isValid && writerResponse.processedDataObject is IDataObject processed_ido) {
+                    processed_ido.GetAllDataFormats().ForEach(x => dobj.SetData(x, processed_ido.Get(x)));
                 }
             }
 
             MpConsole.WriteLine("Data written to " + (writeToClipboard ? "CLIPBOARD" : "DATAOBJECT") + ":");
-            mpdo.DataFormatLookup.ForEach(x => MpConsole.WriteLine("Format: " + x.Key.Name));
+            dobj.GetAllDataFormats().ForEach(x => MpConsole.WriteLine("Format: " + x));
 
             if (ignoreClipboardChange) {
                 MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();

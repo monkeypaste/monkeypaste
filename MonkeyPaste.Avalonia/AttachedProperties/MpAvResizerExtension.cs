@@ -523,12 +523,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void PointerEnterHandler(object s, PointerEventArgs e) {
-            if (s is AvaloniaObject ao) {
-                if (!GetIsEnabled(ao) ||
-                    IsAnyResizing) {
+            if (s is Control control) {
+                if (!GetIsEnabled(control) ||
+                    IsAnyResizing ||
+                    MpAvMainWindowViewModel.Instance.IsAnyItemDragging ||
+                    (e.IsLeftDown(control) && !GetIsResizing(control))) {
                     return;
                 }
-                SetCanResize(ao, true);
+                SetCanResize(control, true);
             }
         }
 

@@ -31,7 +31,7 @@ namespace MonkeyPaste.Common.Plugin {
     }
 
     public class MpClipboardWriterRequest : MpPluginRequestFormatBase {
-        public MpPortableDataObject data { get; set; }
+        public object data { get; set; }
         public List<string> writeFormats { get; set; }
         public bool writeToClipboard { get; set; } = true; // (optional) this is used when creating drag/drop data object
         
@@ -40,6 +40,6 @@ namespace MonkeyPaste.Common.Plugin {
     public class MpClipboardReaderResponse : MpPluginResponseFormatBase { }
 
     public class MpClipboardWriterResponse : MpPluginResponseFormatBase { 
-        public object platformDataObject { get; set; }
+        public object processedDataObject { get; set; }
     }
 }

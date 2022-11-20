@@ -7,11 +7,14 @@ using System.Diagnostics;
 using System;
 using System.Threading.Tasks;
 using Avalonia.Threading;
+using Gtk;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvExternalDropWindowViewModel : MpViewModelBase, MpIHoverableViewModel {
         #region Private Variables
-        private Dictionary<int, bool> _preShowPresetState = new Dictionary<int, bool>();
+        private Dictionary<int, bool> _preShowPresetState { get; set; } = new Dictionary<int, bool>();
+        private DispatcherTimer _curDropTargetTimer { get; set; }
+        private MpPoint _lastGlobalMousePoint { get; set; } // debouncer
         #endregion
 
         #region Statics
@@ -54,6 +57,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvExternalDropWindowViewModel() : base(null) {
             PropertyChanged += MpAvExternalDropWindowViewModel_PropertyChanged;
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessega);
         }
 
         #endregion
@@ -75,6 +79,17 @@ namespace MonkeyPaste.Avalonia {
                         DropAppViewModel = null;
                         MpAvExternalDropWindow.Instance.Hide();
                     }
+                    break;
+            }
+        }
+        private void ReceivedGlobalMessega(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.ItemDragBegin:
+                    ShowDropWindowCommand.Execute(null);
+                    break;
+                case MpMessageType.ItemDragEnd:
+                    // NOTE ItemDragEnd not sent if drag source is recycled (so listener checks for left mouse down)
+                    ShowFinishDropMenuCommand.Execute(null);
                     break;
             }
         }
@@ -104,6 +119,40 @@ namespace MonkeyPaste.Avalonia {
 
             MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets
                 .ForEach(x => x.IsEnabled = _preShowPresetState[x.PresetId]);
+        }
+
+        private void StartDropTargetListener() {
+            if (_curDropTargetTimer == null) {
+                _curDropTargetTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(100) };
+                _curDropTargetTimer.Tick += _curDropTargetTimer_Tick;
+            }
+            _curDropTargetTimer.Start();
+        }
+
+        private void StopDropTargetListener() {
+            if (_curDropTargetTimer == null) {
+                return;
+            }
+            _curDropTargetTimer.Stop();
+            _lastGlobalMousePoint = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+
+        }
+
+        private void _curDropTargetTimer_Tick(object sender, EventArgs e) {
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                Dispatcher.UIThread.Post(() => _curDropTargetTimer_Tick(sender,e));
+                return;
+            }
+            if(!MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
+                var drag_item = MpAvClipTrayViewModel.Instance.DragItem;
+                if(drag_item != null) {
+                    // test to see if this is received before dragend signal from dnd helper
+                    bool test = drag_item.IsTileDragging;
+                    Debugger.Break();
+                }
+            }
+            var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;           
+            UpdateDropAppViewModelCommand.Execute(gmp);
         }
         #endregion
 
@@ -155,7 +204,22 @@ namespace MonkeyPaste.Avalonia {
                     });
                 }
             },(drop_gmp_arg) => {
-                return !IsShowingFinishMenu && IsDropWidgetEnabled;
+                var gmp = drop_gmp_arg as MpPoint;
+                if(drop_gmp_arg is not MpPoint) {
+                    return false;
+                }
+                bool canUpdate = !IsShowingFinishMenu && IsDropWidgetEnabled;
+                if(!canUpdate) {
+                    return false;
+                }
+                if (_lastGlobalMousePoint != null &&
+                            gmp.Distance(_lastGlobalMousePoint) < MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST) {
+                    // debounce (window handle from point is expensive)
+                    return false;
+                }
+
+                _lastGlobalMousePoint = gmp;
+                return true;
             });
 
         public ICommand ShowFinishDropMenuCommand => new MpAsyncCommand<object>(

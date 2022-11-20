@@ -47,6 +47,7 @@ function getCaretColor() {
 }
 
 function getDocSelection(isForPaste = false) {
+
 	let doc_sel = convertDomRangeToDocRange(getDomFocusRange());
 
 	if (isForPaste && (!doc_sel || (doc_sel && doc_sel.length == 0))) {

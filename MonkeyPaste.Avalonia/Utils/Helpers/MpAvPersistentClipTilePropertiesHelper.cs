@@ -8,33 +8,77 @@ using MonkeyPaste.Common;
 namespace MonkeyPaste.Avalonia {
     public static class MpAvPersistentClipTilePropertiesHelper {
         #region Properties
-        public static List<MpCopyItem> PersistentSelectedModels { get; set; } = new List<MpCopyItem>();
-
-        private static List<int> _persistentEditableTiles_ById { get; set; } = new List<int>();
-        private static Dictionary<int, double> _persistentUniqueTileSizeLookup_ById { get; set; } = new Dictionary<int, double>();
-        private static Dictionary<int, double> _persistentUniqueTileSizeLookup_ByIdx { get; set; } = new Dictionary<int, double>();
 
 
         #endregion
+        #region IsSelected
+        public static List<MpCopyItem> PersistentSelectedModels { get; set; } = new List<MpCopyItem>();
+        #endregion
 
-        #region Public Methods
-
-        public static void AddPersistentEditableTile_ById(int ciid) {
-            if (_persistentEditableTiles_ById.Contains(ciid)) {
+        #region IsTileDragging
+        private static List<int> _persistentIsTileDraggingTiles_ById { get; set; } = new List<int>();
+        public static void AddPersistentIsTileDraggingTile_ById(int ciid) {
+            if (_persistentIsTileDraggingTiles_ById.Contains(ciid)) {
                 return;
             }
-            _persistentEditableTiles_ById.Add(ciid);
+            _persistentIsTileDraggingTiles_ById.Add(ciid);
         }
-        public static void RemovePersistentEditableTile_ById(int ciid) {
-            if (_persistentEditableTiles_ById.Contains(ciid)) {
-                _persistentEditableTiles_ById.Remove(ciid);
+        public static void RemovePersistentIsTileDraggingTile_ById(int ciid) {
+            if (_persistentIsTileDraggingTiles_ById.Contains(ciid)) {
+                _persistentIsTileDraggingTiles_ById.Remove(ciid);
+            }
+        }
+        public static void ClearPersistentIsTileDragging() {
+            _persistentIsTileDraggingTiles_ById.Clear();
+        }
+
+        public static bool IsPersistentTileDraggingEditable_ById(int ciid) {
+            return _persistentIsTileDraggingTiles_ById.Contains(ciid);
+        }
+        #endregion
+
+        #region IsContentEditable
+        private static List<int> _persistentIsContentEditableTiles_ById { get; set; } = new List<int>();
+        public static void AddPersistentIsContentEditableTile_ById(int ciid) {
+            if (_persistentIsContentEditableTiles_ById.Contains(ciid)) {
+                return;
+            }
+            _persistentIsContentEditableTiles_ById.Add(ciid);
+        }
+        public static void RemovePersistentIsContentEditableTile_ById(int ciid) {
+            if (_persistentIsContentEditableTiles_ById.Contains(ciid)) {
+                _persistentIsContentEditableTiles_ById.Remove(ciid);
             }
         }
 
-        public static bool IsPersistentTileEditable_ById(int ciid) {
-            return _persistentEditableTiles_ById.Contains(ciid);
+        public static bool IsPersistentTileContentEditable_ById(int ciid) {
+            return _persistentIsContentEditableTiles_ById.Contains(ciid);
+        }
+        #endregion
+
+        #region IsTitleEditable
+        private static List<int> _persistentIsTitleEditableTiles_ById { get; set; } = new List<int>();
+        public static void AddPersistentIsTitleEditableTile_ById(int ciid) {
+            if (_persistentIsTitleEditableTiles_ById.Contains(ciid)) {
+                return;
+            }
+            _persistentIsTitleEditableTiles_ById.Add(ciid);
+        }
+        public static void RemovePersistentIsTitleEditableTile_ById(int ciid) {
+            if (_persistentIsTitleEditableTiles_ById.Contains(ciid)) {
+                _persistentIsTitleEditableTiles_ById.Remove(ciid);
+            }
         }
 
+        public static bool IsPersistentTileTitleEditable_ById(int ciid) {
+            return _persistentIsTitleEditableTiles_ById.Contains(ciid);
+        }
+        #endregion
+
+        #region Unique Size
+
+        private static Dictionary<int, double> _persistentUniqueTileSizeLookup_ById { get; set; } = new Dictionary<int, double>();
+        private static Dictionary<int, double> _persistentUniqueTileSizeLookup_ByIdx { get; set; } = new Dictionary<int, double>();
         public static void AddOrReplacePersistentSize_ById(int ciid, double uniqueSize) {
             _persistentUniqueTileSizeLookup_ById.AddOrReplace(ciid, uniqueSize);
 
@@ -54,14 +98,6 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             _persistentUniqueTileSizeLookup_ByIdx.Remove(queryOffset);
-        }
-
-        public static void ShiftPersistentSize(int ciid, int oldOffsetIdx, int newOffsetIdx) {
-            // called when tile is removed and query offset lookup needs to be adjusted
-            if (TryGetByPersistentSize_ById(ciid, out double uniqueSize)) {
-                _persistentUniqueTileSizeLookup_ByIdx.Remove(oldOffsetIdx);
-                _persistentUniqueTileSizeLookup_ByIdx.Add(newOffsetIdx, uniqueSize);
-            }
         }
 
         public static bool TryGetByPersistentSize_ById(int ciid, out double uniqueSize) {

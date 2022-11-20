@@ -50,6 +50,9 @@
                          local:MpAvPagingListBoxExtension.IsThumbDraggingX="{Binding IsThumbDraggingX, Mode=TwoWay}"
                          local:MpAvPagingListBoxExtension.IsThumbDraggingY="{Binding IsThumbDraggingY, Mode=TwoWay}"
                          local:MpAvPagingListBoxExtension.IsThumbDragging="{Binding IsThumbDragging}"
+                         local:MpAvPagingListBoxExtension.CanThumbDragX="{Binding CanThumbDragX}"
+                         local:MpAvPagingListBoxExtension.CanThumbDragY="{Binding CanThumbDragY}"
+                         local:MpAvPagingListBoxExtension.CanThumbDrag="{Binding CanThumbDrag}"
                          local:MpAvPagingListBoxExtension.IsScrollJumping="{Binding IsScrollJumping, Mode=TwoWay}"
                          local:MpAvPagingListBoxExtension.MaxScrollOffsetX="{Binding MaxScrollOffsetX}"
                          local:MpAvPagingListBoxExtension.MaxScrollOffsetY="{Binding MaxScrollOffsetY}"
@@ -59,7 +62,6 @@
                          local:MpAvPagingListBoxExtension.CanScrollY="{Binding CanScroll}"
                          local:MpAvPagingListBoxExtension.ListOrientation="{Binding ListOrientation}"
                          local:MpAvPagingListBoxExtension.LayoutType="{Binding LayoutType}"
-                         
                          Width="{Binding ClipTrayTotalWidth}"
                          Height="{Binding ClipTrayTotalHeight}"
                          Items="{Binding Items}">

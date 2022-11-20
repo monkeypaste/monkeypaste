@@ -39,6 +39,7 @@ namespace MonkeyPaste.Avalonia {
             if(BindingContext.ValueLoaded >= 100.0d) {
                 await Task.Delay(1000);
                 BindingContext.HideNotification();
+                _updateTimer.Stop();
             }
         }
 
