@@ -165,8 +165,9 @@ function getHtml3(sel) {
 		//	return 'Unmanaged custom blot!';
 		//}
 		if (customOp.attributes !== undefined) {
-			if (customOp.attributes.templateInstanceGuid !== undefined) {
-				return getTemplateInstanceElement(customOp.attributes.templateInstanceGuid).outerHTML;
+			if (customOp.attributes.templateGuid !== undefined) {
+				let temp_span = document.createElement('span');
+				return applyTemplateToDomNode(temp_span, getTemplateDefByGuid(customOp.attributes.templateGuid)).outerHTML;
 			} else {
 				debugger;
 			}
@@ -276,6 +277,13 @@ function insertText(docIdx, text, source = 'api', decodeTemplates = false) {
 		return;
 	}
 	quill.insertText(docIdx, text, source);
+}
+
+function deleteText(range, source = 'api') {
+	if (!range || range.length == 0) {
+		return;
+	}
+	quill.deleteText(range.index, range.length, source);
 }
 
 function insertHtml(docIdx, htmlStr, source = 'api', decodeTemplates = true) {

@@ -58,10 +58,6 @@ function isShowingPasteToolbar() {
     return !getPasteToolbarContainerElement().classList.contains('hidden');
 }
 
-function canPaste() {
-    return updatePasteElementInteractivity();
-}
-
 // #endregion State
 
 // #region Actions

@@ -123,6 +123,10 @@ function setTemplateDetailData(tguid, detailData) {
 		}
 	}
 }
+
+function setEditToolbarColorButtonColor(chex) {
+    getEditTemplateColorBoxElement().style.backgroundColor = chex;
+}
 // #endregion Setters
 
 // #region Actions
@@ -285,7 +289,6 @@ function onColorPaletteItemClick(chex) {
     let t = getTemplateDefByGuid(tguid);
 
     setTemplateBgColor(tguid, chex, false);
-    getEditTemplateColorBoxElement().style.backgroundColor = chex;
     
     hideAllTemplateContextMenus();
 }

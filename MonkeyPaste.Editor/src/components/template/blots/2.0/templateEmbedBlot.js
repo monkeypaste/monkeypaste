@@ -1,13 +1,6 @@
-var TemplateEmbedClass = 'template-blot';
+var TemplateEmbedClass = 'template-blot';;
 
-var Template_FOCUSED_INSTANCE_Class = 'template-blot-focus';
-var Template_FOCUSED_NOT_INSTANCE_Class = 'template-blot-focus-not-instance';
-
-var Template_IN_SEL_RANGE_Class = 'template-blot-selected-overlay';
-
-var Template_BEFORE_INSERT_Class = 'template-blot-before-insert';
 var Template_AT_INSERT_Class = 'template-blot-at-insert'; 
-var Template_AFTER_INSERT_Class = 'template-blot-after-insert';
 
 var TemplateEmbedHtmlAttributes = [
     'background-color',
@@ -43,10 +36,10 @@ function initTemplateBlot() {
                 value = getTemplateFromDomNode(value.domNode);
             }
 
-            if (IsLoaded) {
-                //ensure new template has unique instance guid
-                value.templateInstanceGuid = generateGuid();
-            }
+            //if (IsLoaded) {
+            //    //ensure new template has unique instance guid
+            //    value.templateInstanceGuid = generateGuid();
+            //}
 
             applyTemplateToDomNode(node, value);
             return node;
@@ -55,6 +48,7 @@ function initTemplateBlot() {
         static formats(node) {
             return getTemplateFromDomNode(node);
         }
+
         format(name, value) {
             super.format(name, value);
         }
@@ -125,8 +119,8 @@ function getTemplateFromDomNode(domNode) {
     return {
         //domNode: domNode,
         templateGuid: domNode.getAttribute('templateGuid'),
-        templateInstanceGuid: domNode.getAttribute('templateInstanceGuid'),
-        isFocus: domNode.classList.contains(Template_FOCUSED_INSTANCE_Class) || domNode.classList.contains(Template_FOCUSED_NOT_INSTANCE_Class),
+        //templateInstanceGuid: domNode.getAttribute('templateInstanceGuid'),
+        isFocus: domNode.classList.contains('focused'),
         templateName: domNode.getAttribute('templateName'),
         templateColor: domNode.getAttribute('templateColor'),
         templateText: domNode.getAttribute('templateText'),
@@ -134,11 +128,13 @@ function getTemplateFromDomNode(domNode) {
         templateData: domNode.getAttribute('templateData'),
         templateDeltaFormat: domNode.getAttribute('templateDeltaFormat'),
         templateHtmlFormat: domNode.getAttribute('templateHtmlFormat'),
-        wasVisited: parseBool(domNode.getAttribute('wasVisited'))
+        wasVisited: parseBool(domNode.getAttribute('wasVisited')),
+        //tabIdx: parseInt(domNode.getAttribute('tabindex'))
     }
 }
 
 function applyTemplateToDomNode(node, value) {
+    // PRE-GAME
     if (node == null || value == null) {
         return node;
     }
@@ -156,10 +152,10 @@ function applyTemplateToDomNode(node, value) {
     }
     if (!value.templateText) {
         value.templateText = '';
-	}
+    }
 
+    // MODEL
     node.setAttribute('templateGuid', value.templateGuid);
-    node.setAttribute('templateInstanceGuid', value.templateInstanceGuid);
     node.setAttribute('templateName', value.templateName);
     node.setAttribute('templateType', value.templateType);
     node.setAttribute('templateColor', value.templateColor);
@@ -167,73 +163,68 @@ function applyTemplateToDomNode(node, value) {
     node.setAttribute('templateText', value.templateText);
     node.setAttribute('templateDeltaFormat', value.templateDeltaFormat);
     node.setAttribute('templateHtmlFormat', value.templateHtmlFormat);
+
+    // STATE
     node.setAttribute('wasVisited', value.wasVisited);
 
+    // DOM
     node.setAttribute("spellcheck", "false");
-    node.classList.add(TemplateEmbedClass);
     node.setAttribute('draggable', false);
     node.setAttribute('contenteditable', false);
 
-    if (value.isFocus) {
-        if (node.classList.contains(Template_FOCUSED_INSTANCE_Class)) {
-            // is this ok time to remove this?
-            //debugger;
-		}
-        node.classList.add(Template_FOCUSED_NOT_INSTANCE_Class);
-        node.classList.remove(Template_FOCUSED_INSTANCE_Class);
-    } else {
-        if (node.classList.contains(Template_FOCUSED_INSTANCE_Class) ||
-            node.classList.contains(Template_FOCUSED_NOT_INSTANCE_Class)) {
-            // is this ok time to remove this?
-            //debugger;
-        }
-        node.classList.remove(Template_FOCUSED_NOT_INSTANCE_Class);
-        node.classList.remove(Template_FOCUSED_INSTANCE_Class);
-    }
-    let icon_elm = document.createElement('SVG');
-    let span_elm = document.createElement('SPAN');
-    let delete_elm = document.createElement('SVG');
-
-    node.replaceChildren(icon_elm, span_elm, delete_elm);
-
+    // STYLE
+    node.classList.add(TemplateEmbedClass);
     node.style.backgroundColor = value.templateColor;
-    node.style.color = getContrastHexColor(value.templateColor);
 
-    icon_elm.outerHTML = getSvgHtml(getTemplateTypeSvgKey(value.templateType),'template-type-icon svg-icon');
-    setSvgElmColor(icon_elm, node.style.color);
+    node.replaceChildren();
 
+    // ICON
+    let icon_elm = document.createElement('SVG');
+    icon_elm = createSvgElement(getTemplateTypeSvgKey(value.templateType), 'template-type-icon svg-icon contrast-bg');
+    node.appendChild(icon_elm);
+
+    // LABEL
+    let span_elm = document.createElement('SPAN');
+    //span_elm.classList.add('template-label');
+    span_elm.classList.add('flicker');
     span_elm.innerHTML = value.templateHtmlFormat;
     span_elm.innerText = getTemplateDisplayValue(value);
-    span_elm.style.color = node.style.color;
+    //span_elm.style.color = getContrastHexColor(value.templateColor);
+    node.appendChild(span_elm);
 
-    delete_elm.outerHTML = getSvgHtml('delete','delete-template-button');
+    // DELETE BUTTON
+    let delete_elm = document.createElement('SVG');
+    delete_elm = createSvgElement('delete','delete-template-button contrast-bg');
+    node.appendChild(delete_elm);
+
+    // EVENTS
+
+    node.addEventListener('click', onTemplateClick, true);
     delete_elm.addEventListener('click', onTemplateDeleteButtonClick);
 
-    node.addEventListener('click', onTemplateClick);
     return node;
 }
 
 function onTemplateDeleteButtonClick(e) {
     let telm = e.target.parentNode;
     if (telm) {
-        telm.parentNode.removeChild(telm);
+        removeTemplateElement(telm);
     }
 }
 
 function onTemplateClick(e) {
+    log('template clicked');
+
+
+    if (!isSubSelectionEnabled()) {
+        log("Selection disabled so ignoring click on template " + value.templateGuid);
+        return;
+    }
     if (e.target.classList.contains('delete-template-button')) {
         onTemplateDeleteButtonClick(e);
         return;
     }
     let t = getTemplateFromDomNode(e.currentTarget);
-    if (!t) {
-        debugger;
-	}
-    if (!isSubSelectionEnabled()) {
-        log("Selection disabled so ignoring click on template " + value.templateInstanceGuid);
-        return;
-    }
 
-    focusTemplate(t.templateGuid, false, false, true);
-    //setTemplateElementFocus(e.currentTarget, true, true);
+    focusTemplate(t.templateGuid);
 }

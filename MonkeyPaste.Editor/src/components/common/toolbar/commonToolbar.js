@@ -138,14 +138,14 @@ function onBouncyTextAreaBlur(e) {
 
 
 function onBouncyTextAreaKeyDown(e) {
-    getSelectedTemplateElements().forEach(x => {
+    getFocusTemplateElements().forEach(x => {
         x.classList.add('template-blot-display-key-down');
     });
     
 }
 
 async function onBouncyTextAreaKeyUp(e) {
-    getSelectedTemplateElements().forEach(x => {
+    getFocusTemplateElements().forEach(x => {
         x.classList.remove('template-blot-display-key-down');
     });
 }

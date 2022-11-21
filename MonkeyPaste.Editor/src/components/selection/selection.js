@@ -240,14 +240,33 @@ function isDomRangeEqual(dom_range_1, dom_range_2) {
 
 }
 
-function isNavJump(sel, last_sel) {
-
-}
-function isNavRight(sel, last_sel) {
-	if (!sel || !last_sel) {
-		return;
+function isNavJump() {
+	let sel_range = getDocSelection();
+	if (!sel_range || sel_range.length > 0) {
+		return false;
 	}
-	//if(sel.index)
+	if (!didSelectionChange(sel_range, LastSelRange)) {
+		return false;
+	}
+	if (!LastSelRange) {
+		return true;
+	}
+	return Math.abs(sel_range.index = LastSelRange.index) > 1;
+}
+
+function isNavRight() {
+	let sel_range = getDocSelection();
+	let last_sel_range = LastSelRange;
+
+	last_sel_range = last_sel_range ? last_sel_range : sel_range;
+
+
+	let old_closest_idx =
+		sel_range.index > last_sel_range.index ?
+			last_sel_range.index + last_sel_range.length : last_sel_range.index;
+
+	let is_nav_right = sel_range.index > old_closest_idx && sel_range.length == 0;
+	return is_nav_right;
 }
 // #endregion State
 
@@ -261,6 +280,7 @@ function resetSelection() {
 	DragSelectionRange = null;
 	clearDomSelectionRanges();
 }
+
 function clearDomSelectionRanges() {
 	document.getSelection().removeAllRanges();
 }
@@ -339,6 +359,39 @@ function coerceCleanSelection(new_range,old_range) {
 	}
 	return new_range;
 }
+
+function calculateTotalOffset(node, offset) {
+	let total = offset
+	let curNode = node
+
+	while (curNode != getEditorElement()) {
+		if (isClassInElementPath(curNode, TemplateEmbedClass)) {
+			while (true) {
+				curNode = curNode.parentElement;
+				if (curNode.nodeType == 3 ||
+					!curNode.classList.contains(TemplateEmbedClass)) {
+					continue;
+				}
+				break;
+			}
+			
+		}
+		if (!curNode.includes(TemplateEmbedClass) && curNode.hasAttribute === 'function' &&
+			parseBool(curNode.getAttribute('contenteditable')) === false) {
+			curNode = curNode.parentElement;
+		}
+		if (curNode.previousSibling) {
+			total += curNode.previousSibling.textContent.length
+
+			curNode = curNode.previousSibling
+		} else {
+			curNode = curNode.parentElement
+		}
+	}
+
+	return total
+}
+
 
 // #endregion Actions
 

@@ -2,6 +2,10 @@
 // #region Globals
 
 const PasteToolbarDefaultWidth = 1125.0;
+const PasteTemplateTimerTickMs = 5000;
+const EmptyPasteValText = '???';
+
+var PasteTemplateTimerFlipState = false;
 
 var IsTemplatePasteValueTextAreaFocused = false;
 
@@ -17,8 +21,7 @@ function initPasteTemplateToolbarItems() {
     addClickOrKeyClickEventListener(getPasteClearTextButtonElement(), onPasteTemplateClearAllValuesClickOrKeyDown);
     addClickOrKeyClickEventListener(getPasteEditFocusTemplateButtonElement(), onPasteEditFocusTemplateClickOrKeyDown);
 
-    getPasteValueTextAreaElement().addEventListener('input', onTemplatePasteValueChanged);
-    initBouncyTextArea(getPasteValueTextAreaElement());
+    initPasteTemplateValue();
 
     initPasteTemplateFocusSelector();
 }
@@ -34,7 +37,7 @@ function showPasteTemplateToolbarItems() {
 
     updatePasteTemplateToolbarToSelection();
 
-    PasteTemplateTimerInterval = setInterval(onPasteTemplateTimer, 300, getEditorElement());
+    PasteTemplateTimerInterval = setInterval(onPasteTemplateTimer, PasteTemplateTimerTickMs, getEditorElement());
 }
 
 function hidePasteTemplateToolbarItems() {
@@ -68,9 +71,6 @@ function getPasteEditFocusTemplateButtonElement() {
     return document.getElementById('pasteEditFocusTemplateButton');
 }
 
-function getPasteValueTextAreaElement() {
-    return document.getElementById('templatePasteValueTextArea');
-}
 
 function getTemplatePasteValue(t) {
     if (!t) {
@@ -121,28 +121,35 @@ function setTemplatePasteValue(tguid, val) {
     for (var i = 0; i < telms.length; i++) {
         var telm = telms[i];
         let t = getTemplateFromDomNode(telm);
-        let bouncing = false;
-   //     if (!isTemplateAnInputType(t)) {
-   //         if (telm.innerText == val) {
-   //             telm.style.transform = 'scale(1)';
-   //         } else {
-   //             telm.style.transform = 'scale(1.1)'
-   //             bouncing = true;
-
-			//}
-   //     } 
         let paste_val = getTemplatePasteValue(t);
         let has_changed = paste_val != val;
         if (has_changed) {
             //telm.innerText = val;
             setTemplateElementText(telm, val);
             telm.setAttribute('templateText', val);
-            if (!bouncing) {
-                debabyTemplateElement(telm);
+        }
+        let max_length = Math.max(paste_val.length, t.templateName.length);
+        let cur_val = '';
 
+        let show_name = !quill.hasFocus() || PasteTemplateTimerFlipState;
+        if (!show_name) {
+            // show value
+            if (isNullOrEmpty(paste_val)) {
+                cur_val = EmptyPasteValText;
+            } else {
+                cur_val = paste_val;
             }
-		}
-        
+        } else {
+            // show label
+            cur_val = t.templateName;
+        }
+        let width_pad = '';
+        if (cur_val.length < max_length) {
+            // retain template width when swapping
+            width_pad = ' '.repeat(max_length - cur_val.length);
+        }
+
+        setTemplateElementText(telm, cur_val + width_pad);
     }
     //updateTemplatesAfterTextChanged();
 }
@@ -329,44 +336,15 @@ function updatePasteTemplateToolbarToFocus(ftguid, paste_sel) {
     }
 
     // UPDATE SELECTOR 
+    createTemplateSelector(ftguid, paste_sel);
 
-        // update option list
-    let opt_elms = getPasteFocusTemplateOptionsElement().children;//.getElementsByClassName('paste-template-option-div');
-    for (var i = 0; i < opt_elms.length; i++) {
-        let opt_elm = opt_elms[i];
-        if (opt_elm.getAttribute('templateGuid') == ftguid) {
-            opt_elm.classList.add('selected-paste-option');
-        } else {
-            opt_elm.classList.remove('selected-paste-option');
-        }
-    }    
-        // update selector item
-    let sel_opt_div = getSelectedPasteOptionDiv();
-    sel_opt_div.setAttribute('templateGuid', ft ? ft.templateGuid : '');
-    applyTemplateToOptionDiv(sel_opt_div, ft);
-
-    // UPDATE INPUT
-    let pv_textarea_elm = getPasteValueTextAreaElement();
-    
-    if (ft && isTemplateAnInputType(ft)) {
-        // TODO need have html/css for contact here
-        // but just pass field name by text for now...
-        pv_textarea_elm.readOnly = false;
-        pv_textarea_elm.value = getTemplatePasteValue(ft);
-        pv_textarea_elm.placeholder = `Enter paste text for [${ft.templateName}] here...`;
-    } else if (ft) {
-        pv_textarea_elm.readOnly = true;
-        pv_textarea_elm.value = '';
-        pv_textarea_elm.placeholder = getTemplatePasteValue(ft);
-    } else {
-        pv_textarea_elm.readOnly = true;
-        pv_textarea_elm.value = '';
-        pv_textarea_elm.placeholder = 'No templates to paste...';
-	}
+    // UPDATE TEXTAREA
+    updatePasteValueTextAreaToFocus(ft);
 
     // CHECK FOR READY
     updatePasteElementInteractivity();
 }
+
 
 function updatePasteTemplateValues(fromTimer = false) {
     let tl = getTemplateDefs();
@@ -395,37 +373,38 @@ function updatePasteElementInteractivity() {
     //let can_paste = paste_t_defs.filter(x => !isTemplateReadyToPaste(x)).length == 0;
     let can_paste = true;
 
-    let template_button_classes = 'disabled';
-    if (getTemplateDefs().length == 0) {
-        template_button_classes = 'hidden';
-    }
+    let inactive_template_button_classes = 'hidden';
+    //let inactive_template_button_classes = 'disabled';
+    //if (getTemplateDefs().length == 0) {
+    //    inactive_template_button_classes = 'hidden';
+    //}
 
     if (can_navigate) {
-        getPasteGotoPrevButtonElement().classList.remove(template_button_classes);
-        getPasteGotoNextButtonElement().classList.remove(template_button_classes);
+        getPasteGotoPrevButtonElement().classList.remove(inactive_template_button_classes);
+        getPasteGotoNextButtonElement().classList.remove(inactive_template_button_classes);
     } else {
-        getPasteGotoPrevButtonElement().classList.add(template_button_classes);
-        getPasteGotoNextButtonElement().classList.add(template_button_classes);
+        getPasteGotoPrevButtonElement().classList.add(inactive_template_button_classes);
+        getPasteGotoNextButtonElement().classList.add(inactive_template_button_classes);
     }
 
     if (is_selector_enabled) {
-        getPasteFocusTemplateContainerElement().classList.remove(template_button_classes);
+        getPasteFocusTemplateContainerElement().classList.remove(inactive_template_button_classes);
     } else {
-        getPasteFocusTemplateContainerElement().classList.add(template_button_classes);
+        getPasteFocusTemplateContainerElement().classList.add(inactive_template_button_classes);
     }
 
     if (can_clear) {
-        getPasteClearTextButtonElement().classList.remove(template_button_classes);
+        getPasteClearTextButtonElement().classList.remove(inactive_template_button_classes);
     } else {
-        getPasteClearTextButtonElement().classList.add(template_button_classes);
+        getPasteClearTextButtonElement().classList.add(inactive_template_button_classes);
     }
 
     if (can_edit) {
-        getPasteEditFocusTemplateButtonElement().classList.remove(template_button_classes);
-        getPasteValueTextAreaElement().classList.remove(template_button_classes);
+        getPasteEditFocusTemplateButtonElement().classList.remove(inactive_template_button_classes);
+        getPasteValueTextAreaElement().classList.remove(inactive_template_button_classes);
     } else {
-        getPasteEditFocusTemplateButtonElement().classList.add(template_button_classes);
-        getPasteValueTextAreaElement().classList.add(template_button_classes);
+        getPasteEditFocusTemplateButtonElement().classList.add(inactive_template_button_classes);
+        getPasteValueTextAreaElement().classList.add(inactive_template_button_classes);
 	}
 
     if (can_paste) {
@@ -444,24 +423,9 @@ function updatePasteElementInteractivity() {
 
 function onPasteTemplateTimer(e) {
     updatePasteTemplateValues(true);
+    PasteTemplateTimerFlipState = !PasteTemplateTimerFlipState;
 }
 
-function onTemplatePasteValueChanged(e) {
-    let newTemplatePasteValue = getPasteValueTextAreaElement().value;
-    let ftguid = getFocusTemplateGuid();
-    if (!ftguid) {
-        ftguid = getSelectedOptionTemplateGuid();
-        if (!ftguid) {
-            debugger;
-        } else {
-            //focusTemplate(ftguid, false);
-        }
-        updatePasteTemplateToolbarToSelection();
-        //ftguid = getFocusTemplateGuid();
-	}
-    setTemplatePasteValue(ftguid, newTemplatePasteValue);
-    updatePasteElementInteractivity();
-}
 
 function onPasteTemplateGotoNextClickOrKeyDown(e) {
     gotoNextTemplate();

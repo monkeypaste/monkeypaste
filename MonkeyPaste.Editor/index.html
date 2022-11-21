@@ -46,6 +46,7 @@
     <link href="src/components/content/content-file-list/content-file-list-style.css" rel="stylesheet" />
     <link href="src/components/content/content-image/content-image-style.css" rel="stylesheet" />
     <link href="src/components/content/paste/paste-toolbar-style.css" rel="stylesheet" />
+    <link href="src/components/experiments/fade-across.css" rel="stylesheet" />
 
     <link href="src/components/overlay/overlay-style.css" rel="stylesheet" />
 
@@ -110,6 +111,7 @@
     <script src="src/components/template/toolbar/edit/editTemplateToolbar.js"></script>
     <script src="src/components/template/toolbar/paste/pasteTemplateToolbarItems.js"></script>
     <script src="src/components/template/toolbar/paste/selector/pasteTemplateFocusSelector.js"></script>
+    <script src="src/components/template/toolbar/paste/pastevalue/pasteTemplateValue.js"></script>
 
     <script type="text/javascript">
         loadVariableInternalScripts();
@@ -377,15 +379,7 @@
         <!-- SELECTOR -->
         <div id="pasteTemplateToolbarMenuSelectorDiv"
              class="paste-template-item">
-            <select id="pasteTemplateToolbarMenuHiddenSelect"
-                    tabindex="0"
-                    class="hidden">
-            </select>
-            <div id="selectedPasteTemplateOptionDiv"
-                 class="paste-template-option-div">
-                <i class="paste-template-option-icon"></i>
-                <span class="paste-template-option-label"></span>
-            </div>
+            <div id="selectedPasteTemplateOptionDiv"></div>
             <div id="pasteTemplateToolbarMenuSelectorArrowDiv"></div>
         </div>
         <!-- PASTE VALUE TEXT AREA-->

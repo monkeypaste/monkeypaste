@@ -923,10 +923,10 @@ namespace MonkeyPaste.Avalonia {
         public int MaxClipTrayQueryIdx => TotalTilesInQuery - 1; 
         public int MinClipTrayQueryIdx => 0;
 
-        public bool CanThumbDragVertical => ClipTrayScreenHeight < ClipTrayTotalHeight;
-        public bool CanThumbDragHorizontal => ClipTrayScreenWidth< ClipTrayTotalWidth;
+        public bool CanThumbDragY => ClipTrayScreenHeight < ClipTrayTotalHeight;
+        public bool CanThumbDragX => ClipTrayScreenWidth< ClipTrayTotalWidth;
 
-        public bool CanThumbDrag => CanThumbDragHorizontal || CanThumbDragVertical;
+        public bool CanThumbDrag => CanThumbDragX || CanThumbDragY;
         #endregion
 
         #endregion

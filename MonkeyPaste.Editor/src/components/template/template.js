@@ -85,7 +85,7 @@ function getTemplateDefs() {
         }
         delete uti.domNode;
         delete uti.docIdx;
-        delete uti.templateInstanceGuid;
+        //delete uti.templateInstanceGuid;
         tdl.push(uti);
     }
     return tdl;
@@ -107,35 +107,48 @@ function getTemplateCountBeforeDocIdx(docIdx) {
     return t_docIdx_L.length;
 }
 
-function getTemplateDefByInstanceGuid(tiguid) {
-    let telm = getTemplateInstanceElement(tiguid);
-    if (!telm) {
-        debugger;
-    }
-    return getTemplateFromDomNode(telm);
-}
-
-function getTemplateInstanceElement(tiguid) {
-    let telm = document.querySelector('[templateInstanceGuid="' + tiguid + '"]');
-    return telm;
- //   if (telm == null) {
- //       return null;
- //   }
- //   let telm_l = Array.from(telm);
- //   if (telm_l.length == 0) {
- //       return null;
-	//}
- //   return telm_l[0];
-}
-
 function getFocusTemplateElement() {
-    let fallback_telm = null;
-    let telml = getTemplateElements();
-    for (var i = 0; i < telml.length; i++) {
-        let telm = telml[i];
-        if (isTemplateElementFocused(telm)) {
-            return telm;
-        }
+    //let fallback_telm = null;
+    //let ftelm = null;
+    //let telml = getTemplateElements();
+    //if (telml.length == 0) {
+    //    return null;
+    //}
+    //for (var i = 0; i < telml.length; i++) {
+    //    let telm = telml[i];
+    //    if (!fallback_telm && isTemplateElementFocusNotInstance(telm)) {
+    //        fallback_telm = telm;
+    //    }
+    //    if (isTemplateElementFocusInstance(telm)) {
+    //        if (ftelm) {
+    //            // should only be 1
+    //            debugger;
+    //        }
+    //        ftelm = telm;
+    //        break;
+    //    }
+    //}
+    //let selected_tguid = getSelectedOptionTemplateGuid();
+    //if (ftelm) {
+    //    if (isNullOrWhiteSpace(selected_tguid)) {
+    //        // selector should have updated
+    //        debugger;
+    //    }
+    //    if (ftelm.getAttribute('templateguid') != selected_tguid) {
+    //        // selector should have updated or vice versa
+    //        debugger;
+    //    }
+    //    return ftelm;
+    //}
+
+    //if (fallback_telm) {
+    //    // this should be focus (maybe set here)
+    //    debugger;
+    //}
+    //return fallback_telm;
+    let ftelms = getFocusTemplateElements();
+    if (ftelms.length > 0) {
+        return ftelms[0];
     }
     return null;
 }
@@ -156,8 +169,9 @@ function getFocusTemplateGuid() {
     return ft.getAttribute('templateGuid');
 }
 
-function getSelectedTemplateElements() {
-    return getTemplateElements().filter(x => x.classList.contains(Template_FOCUSED_INSTANCE_Class) || x.classList.contains(Template_FOCUSED_NOT_INSTANCE_Class));
+function getFocusTemplateElements() {
+    return getTemplateElements().filter(x =>
+        x.classList.contains('focused'));
 }
 
 async function getAvailableTemplateDefinitions() {
@@ -201,33 +215,6 @@ async function getAvailableTemplateDefinitions() {
     return allMergedTemplates;
 }
 
-function getTemplateDocIdx(tiguid) {
-    let docLength = getDocLength();
-    for (var i = 0; i < docLength; i++) {
-        let curDelta = getDelta({ index: i, length: 1 });
-        if (curDelta.ops.length > 0 &&
-            curDelta.ops[0].hasOwnProperty('insert') &&
-            curDelta.ops[0].insert.hasOwnProperty('template')) {
-            let curTemplate = curDelta.ops[0].insert.template;
-            if (curTemplate.templateInstanceGuid == tiguid) {
-                return i;
-            }
-        }
-    }
-    return -1;
-}
-
-function getTemplateAtDocIdx(docIdx) {
-    let result = quill.getLeaf(docIdx + 1);
-    if (!result || result.length < 2) {
-        return null;
-    }
-    let blot = result[0];
-    if (blot && blot.domNode && blot.domNode.hasAttribute != null && blot.domNode.hasAttribute('templateGuid')) {
-        return getTemplateFromDomNode(blot.domNode);
-    }
-    return null;
-}
 
 function getTemplateElementsInRange(range) {
     if (range == null || range.index == null) {
@@ -259,17 +246,6 @@ function getTemplateDefsInRange(range) {
         tl.push(t);
     }
     return tl;
-}
-
-function getTemplateElementsWithDocIdx() {
-    let tewdil = [];
-    let t_elms = getTemplateElements();
-    for (var i = 0; i < t_elms.length; i++) {
-        let te = t_elms[i];
-        let teDocIdx = getTemplateDocIdx(te.getAttribute('templateInstanceGuid'));
-        tewdil.push({ teDocIdx, te });
-    }
-    return tewdil;
 }
 
 function getTemplateAsPlainText(t) {
@@ -332,16 +308,53 @@ function getTemplatePlainTextForDocRange(range) {
     return out_text;
 }
 
-function getAllTemplateDocIdxs() {
-    let tDocIdxs = [];
-    for (var i = 0; i < getDocLength(); i++) {
-        if (getTemplateAtDocIdx(i)) {
-            tDocIdxs.push(i);
-        }
+function getAllTemplateDocIdxs(tguid = null) {
+    let telms = [];
+    if (tguid) {
+        telms = Array.from(
+            document.querySelectorAll(`span[templateGuid="${tguid}"]`));
+    } else {
+        telms = Array.from(
+            document.querySelectorAll(`span[templateGuid]`));
     }
-    return tDocIdxs;
+    // NOTE these are always off by 1 i thinks a zero length thing
+    return telms.map(x => getElementDocIdx(x) + 1);
 }
 
+//function getTemplateDocIdx(tiguid) {
+//    let docLength = getDocLength();
+//    for (var i = 0; i < docLength; i++) {
+//        let curDelta = getDelta({ index: i, length: 1 });
+//        if (curDelta.ops.length > 0 &&
+//            curDelta.ops[0].hasOwnProperty('insert') &&
+//            curDelta.ops[0].insert.hasOwnProperty('template')) {
+//            let curTemplate = curDelta.ops[0].insert.template;
+//            if (curTemplate.templateInstanceGuid == tiguid) {
+//                return i;
+//            }
+//        }
+//    }
+//    return -1;
+//}
+
+//function getTemplateAtDocIdx(docIdx) {
+//    let result = quill.getLeaf(docIdx + 1);
+//    if (!result || result.length < 2) {
+//        return null;
+//    }
+//    let blot = result[0];
+//    if (blot && blot.domNode && blot.domNode.hasAttribute != null && blot.domNode.hasAttribute('templateGuid')) {
+//        return getTemplateFromDomNode(blot.domNode);
+//    }
+//    return
+function getTemplateAtDocIdx(docIdx) {
+    //
+    let telm = getElementAtDocIdx(docIdx);
+    if (!telm || telm.nodeType === 3 || !telm.hasAttribute('templateGuid')) {
+        return null;
+    }
+    return getTemplateFromDomNode(telm);
+}
 function getTemplateEmbedStr(t, sToken = ENCODED_TEMPLATE_OPEN_TOKEN, eToken = ENCODED_TEMPLATE_CLOSE_TOKEN) {
     var result = sToken + t.domNode.getAttribute('templateGuid') + eToken;
     return result;
@@ -369,47 +382,47 @@ function getTemplateTypeSvgKey(ttype) {
     return 'empty';
 }
 
+function getTemplatePadAdjustedDocIdx(doc_idx) {
+    let adj_idx = doc_idx;
+    if (isDocIdxTemplatePreOrPostPad(doc_idx)) {
+        if (isDocIdxTemplatePrePad(doc_idx) && isDocIdxTemplatePostPad(doc_idx)) {
+            // i don't think this should happen, good test would be 2 docidx between two adjacent templates 
+            debugger;
+        }
+        if (isNavJump()) {
+            adj_idx++;
+        } else if (isNavRight()) {
+            adj_idx++;
+        } else {
+            // nav left
+            adj_idx--;
+        }
+    }
+    return adj_idx;
+}
 
+function getTemplatePadAdjustedRange(sel) {
+    let adj_start_idx = getTemplatePadAdjustedDocIdx(sel.index);
+    let adj_end_idx = getTemplatePadAdjustedDocIdx(sel.index + sel.length);
+    let min_idx = Math.min(adj_start_idx, adj_end_idx);
+    let max_idx = Math.max(adj_start_idx, adj_end_idx);
+    return { index: min_idx, length: max_idx - min_idx };
+}
 // #endregion Getters
 
 // #region Setters
 
-function setTemplateElementFocus(telm, isFocusInstance, isFocusNotInstance) {
-    if (!telm) {
-        return;
-    }
-    if (isFocusInstance) {
-        telm.classList.add(Template_FOCUSED_INSTANCE_Class);
-    } else {
-        telm.classList.remove(Template_FOCUSED_INSTANCE_Class);
-    }
-    if (isFocusNotInstance) {
-        telm.classList.add(Template_FOCUSED_NOT_INSTANCE_Class);
-    } else {
-        telm.classList.remove(Template_FOCUSED_NOT_INSTANCE_Class);
-    }
-}
-function setTemplateBgColor(tguid, color_name_or_hex, isTemporary) {
+function setTemplateBgColor(tguid, color_name_or_hex) {
     let tel = getTemplateElements(tguid);
     for (var i = 0; i < tel.length; i++) {
         tel[i].style.backgroundColor = color_name_or_hex;
-        tel[i].style.color = getContrastHexColor(color_name_or_hex);
-        setSvgElmColor(tel[i].firstChild, tel[i].style.color);
-        if (isTemporary) {
-            tel[i].classList.add('temporary-bg-color');
-            continue;
-        }
+        tel[i].firstChild.nextSibling.style.color = getContrastHexColor(color_name_or_hex);
+        //setSvgElmColor(tel[i].firstChild, tel[i].style.color);
 
         tel[i].setAttribute('templateColor', color_name_or_hex);
     }
-}
-
-function setTemplateNavState(t_elm, navStateClass) {
-    clearTemplateNavState(t_elm);
-    if (!navStateClass) {
-        return;
-    }
-    t_elm.classList.add(navStateClass);
+    setEditToolbarColorButtonColor(color_name_or_hex);
+    createTemplateSelector(tguid, getDocSelection(true));
 }
 
 function setTemplateElementText(telm, text) {
@@ -432,12 +445,9 @@ function isTemplateElementFocused(telm) {
     if (!telm) {
         return false;
     }
-    if (telm.classList.contains(Template_FOCUSED_INSTANCE_Class) ||
-        telm.classList.contains(Template_FOCUSED_NOT_INSTANCE_Class)) {
-        return true;
-    }
-    return false;
+    return telm.classList.contains('focused');
 }
+
 
 function validateTemplate(t) {
     if (!t) {
@@ -483,19 +493,13 @@ function isTemplateDefChanged(orig_t, new_t) {
     }
     return false;
 }
+
 function isTemplateFocused() {
     return getFocusTemplateElement() != null;
 }
 
 function isTemplateAtDocIdx(docIdx) {
     return getTemplateAtDocIdx(docIdx) != null;
-}
-
-function isTemplateInNavState(t_elm) {
-    let is_before = t_elm.classList.contains(Template_BEFORE_INSERT_Class);
-    let is_at = t_elm.classList.contains(Template_AT_INSERT_Class);
-    let is_after = t_elm.classList.contains(Template_AT_INSERT_Class);
-    return is_before || is_at || is_after;
 }
 
 function isAnyTemplateRequireInput() {
@@ -507,6 +511,7 @@ function isAnyTemplateRequireInput() {
     }
     return false;
 }
+
 function isTemplateAnInputType(t) {
     if (!t) {
         return false;
@@ -519,11 +524,12 @@ function isTemplateAnInputType(t) {
 }
 
 function isSelAtFocusTemplateInsert() {
-    let ftelm = getFocusTemplateElement();
-    if (!ftelm) {
-        return false;
-    }
-    return ftelm.classList.contains(Template_IN_SEL_RANGE_Class);
+    //let sel = getDocSelection();
+    //if (sel.length > 0) {
+    //    return false;
+    //}
+    //return isTemplateAtDocIdx(sel.index);
+    return document.getElementsByClassName(Template_AT_INSERT_Class).length > 0;
 }
 
 function isTemplateAtDocIdxPrePadded(t_docIdx) {
@@ -533,12 +539,25 @@ function isTemplateAtDocIdxPrePadded(t_docIdx) {
     }
     return false;
 }
+
 function isTemplateAtDocIdxPostPadded(t_docIdx) {
     let post_text = getText({ index: t_docIdx + 1, length: 1 });
     if (post_text == ' ') {
         return isDocIdxBlockEnd(t_docIdx + 1);
     }
     return false;
+}
+
+function isDocIdxTemplatePrePad(doc_idx) {
+    return isTemplateAtDocIdx(doc_idx + 1) && isTemplateAtDocIdxPrePadded(doc_idx + 1);
+}
+
+function isDocIdxTemplatePostPad(doc_idx) {
+    return isTemplateAtDocIdx(doc_idx - 1) && isTemplateAtDocIdxPostPadded(doc_idx - 1);
+}
+
+function isDocIdxTemplatePreOrPostPad(doc_idx) {
+    return isDocIdxTemplatePrePad(doc_idx) || isDocIdxTemplatePostPad(doc_idx);
 }
 
 function isHtmlStrContainTemplate(htmlStr) {
@@ -555,6 +574,10 @@ function isPlainTextStrContainTemplate(ptStr) {
     return
     ptStr.toLowerCase().indexOf(ENCODED_TEMPLATE_OPEN_TOKEN) >= 0 &&
         ptStr.toLowerCase().indexOf(ENCODED_TEMPLATE_CLOSE_TOKEN) >= 0;
+}
+
+function isDocIdxAtTemplateInsert(doc_idx, telm) {
+
 }
 
 // #endregion State
@@ -635,24 +658,33 @@ function finishTemplatePaste() {
 
 }
 
-function removeTemplatesByGuid(tguid) {
-    let util = getTemplateInstanceDefs();
-    for (var i = 0; i < util.length; i++) {
-        let cit = util[i];
-        if (cit.templateGuid == tguid) {
-            let docIdx = getTemplateDocIdx(cit.templateInstanceGuid);
-            if (docIdx >= 0) {
-                quill.deleteText(docIdx, 1);
-            }
-        }
+function removeTemplatesByGuid(tguid) {    
+    let telms_to_remove = getTemplateElements(tguid);
+    for (var i = 0; i < telms_to_remove.length; i++) {
+        removeTemplateElement(telms_to_remove[i]);
     }
+}
+
+function removeTemplateElement(telm) {
+    let telm_doc_idx = getElementDocIdx(telm);
+    let range_to_del = { index: telm_doc_idx, length: 1 };
+
+    if (isTemplateAtDocIdxPrePadded(telm_doc_idx)) {
+        range_to_del.index--;
+        range_to_del.length++;
+    }
+    if (isTemplateAtDocIdxPostPadded(telm_doc_idx)) {
+        range_to_del.length++;
+    }
+    deleteText(range_to_del);
 }
 
 function clearTemplateFocus() {
     let telms = getTemplateElements(null,null);
     for (var i = 0; i < telms.length; i++) {
         let telm = telms[i];
-        setTemplateElementFocus(telm, false, false);
+        //setTemplateElementFocus(telm, false, false);
+        telm.classList.remove('focused');
     }
 }
 
@@ -697,7 +729,8 @@ function updateTemplatesAfterTextChanged() {
 
         // IMPORTANT!!! source MUST be silent or the change compounds itself
         // ensure templates along block edges are padded w/ a space
-        let t_doc_idx = getTemplateDocIdx(telm.getAttribute('templateInstanceGuid'));
+        //let t_doc_idx = getTemplateDocIdx(telm.getAttribute('templateInstanceGuid'));
+        let t_doc_idx = getElementDocIdx(telm);
         if (isDocIdxBlockStart(t_doc_idx)) {
             insertText(t_doc_idx, ' ', 'silent');
             let pre_space_width = getCharacterRect(t_doc_idx).width;
@@ -717,131 +750,141 @@ function updateTemplatesAfterTextChanged() {
         let t = getTemplateFromDomNode(telm);
         applyTemplateToDomNode(telm, t);
 
-        debabyTemplateElement(telm);
+        //debabyTemplateElement(telm);
     }
     IsTemplatePaddingAfterTextChange = false;
 }
 
 function updateTemplatesAfterSelectionChange() {
-    //if (WasTextChanged) {
-    //    // selection timer and input can throw off sel_range here
-    //    // probably bugs w/ the nav classes but hard to tell..
-    //    // but keeping a one-or-the-other approach (when sel changes)
-    //    // is appearing less problematic for now
-    //    updateTemplatesAfterTextChanged();
-    //    WasTextChanged = false;
-    //    return;
-    //}
-    if (WindowMouseDownLoc) {
-        clearAllTemplateNavStates();
+    // this alters selection SILENTLY when template has pre/post padding
+    // so range never falls on padding indexes.
+    // when an extent is on a pad it then checks navigation to decide where to move it to
+    // cases:
+        // nav jump (last sel is not +/- 1 of current and length == 0)
+        // -move pad extent to template
+        // nav right pre/post pad
+        // -move caret + 1
+        // nav left pre/post pad
+        // - move caret -1
+    // then clear at insert class from all templates
+    // and if updated extent is at template idx (must be done here since its silent) 
+    if (!IsLoaded) {
         return;
     }
     if (isShowingPasteToolbar()) {
         updatePasteTemplateToolbarToSelection();
     }
+    //return;
     let sel_range = getDocSelection();
-    let last_sel_range = LastSelRange;
-
-    last_sel_range = last_sel_range ? last_sel_range : sel_range;
-    let sel_bg_color = getTextSelectionBgColor();
-    let template_elms_in_sel_range = sel_range ? getTemplateElementsInRange(sel_range) : [];
-    let all_template_elms = getTemplateElements();
-    let show_sel_bg_color = !isShowingEditTemplateToolbar() && isSubSelectionEnabled();
-
-    let old_closest_idx = sel_range.index > last_sel_range.index ? last_sel_range.index + last_sel_range.length : last_sel_range.index;
-    let is_nav_right = sel_range.index > old_closest_idx && sel_range.length == 0;
-
-    for (var i = 0; i < all_template_elms.length; i++) {
-        let t_elm = all_template_elms[i];
-        let tiguid = t_elm.getAttribute('templateInstanceGuid');
-        let is_t_in_sel_range = template_elms_in_sel_range.includes(t_elm);
-        //let t_doc_idx = getTemplateDocIdx(tiguid);
-        let t_doc_idx = getElementDocIdx(t_elm);
-        if (show_sel_bg_color) {
-            if (is_t_in_sel_range) {
-                if (is_nav_right &&
-                    !t_elm.classList.contains(Template_IN_SEL_RANGE_Class) &&
-                    !t_elm.classList.contains(Template_AT_INSERT_Class)) {
-                    setTemplateNavState(t_elm, Template_BEFORE_INSERT_Class);
-                    continue;
-                }
-                log('sel template: ' + t_elm.getAttribute('templateInstanceGuid'));
-                if (sel_range.length > 0) {
-                    let is_t_at_sel_bounds = t_doc_idx == sel_range.index || t_doc_idx == sel_range.index + sel_range.length;
-                    if (is_t_at_sel_bounds) {
-                        if (t_elm.classList.contains(Template_AT_INSERT_Class)) {
-                            setTemplateNavState(t_elm, Template_IN_SEL_RANGE_Class);
-                        } else {
-                            clearTemplateNavState(t_elm);
-                        }
-                    } else {
-                        setTemplateNavState(t_elm, Template_IN_SEL_RANGE_Class);
-                    }
-                } else {
-                    setTemplateNavState(t_elm, Template_AT_INSERT_Class);
-                }
-
-            } else {
-                if (is_nav_right && sel_range.index == t_doc_idx + 1) {
-                    if (t_elm.classList.contains(Template_AT_INSERT_Class)) {
-                        setTemplateNavState(t_elm);
-                    } else {
-                        setDocSelection(sel_range.index - 1, 0, 'silent');
-                        setTemplateNavState(t_elm, Template_AT_INSERT_Class);
-                    }
-
-                } else if (!is_nav_right && sel_range.index == t_doc_idx - 1) {
-                    if (t_elm.classList.contains(Template_BEFORE_INSERT_Class)) {
-                        clearTemplateNavState(t_elm);
-                    } else {
-                        setDocSelection(sel_range.index + 1, 0, 'silent');
-                        setTemplateNavState(t_elm, Template_BEFORE_INSERT_Class);
-                    }
-
-                } else {
-                    clearTemplateNavState(t_elm);
-                }
-            }
+    let adj_range = getTemplatePadAdjustedRange(sel_range);
+    if (didSelectionChange(sel_range, adj_range)) {
+        // needs adjustment
+        setDocSelection(adj_range.index, adj_range.length, 'silent');
+        sel_range = adj_range;
+        quill.update();
+    }
+    let all_t_doc_idxs = getAllTemplateDocIdxs();
+    for (var i = 0; i < all_t_doc_idxs.length; i++) {
+        let t_doc_idx = all_t_doc_idxs[i];
+        if (t_doc_idx >= sel_range.index && t_doc_idx <= sel_range.index + sel_range.length) {
+            getElementAtDocIdx(t_doc_idx).classList.add(Template_AT_INSERT_Class);
+        } else {
+            getElementAtDocIdx(t_doc_idx).classList.remove(Template_AT_INSERT_Class);
         }
     }
+    drawOverlay();
+    return;
+    ///////
+
+    //if (WindowMouseDownLoc) {
+    //    clearAllTemplateNavStates();
+    //    return;
+    //}
+    //let sel_range = getDocSelection();
+    //let last_sel_range = LastSelRange;
+
+    //last_sel_range = last_sel_range ? last_sel_range : sel_range;
+    //let sel_bg_color = getTextSelectionBgColor();
+    //let template_elms_in_sel_range = sel_range ? getTemplateElementsInRange(sel_range) : [];
+    //let all_template_elms = getTemplateElements();
+    //let show_sel_bg_color = !isShowingEditTemplateToolbar() && isSubSelectionEnabled();
+
+    //let old_closest_idx = sel_range.index > last_sel_range.index ? last_sel_range.index + last_sel_range.length : last_sel_range.index;
+    //let is_nav_right = sel_range.index > old_closest_idx && sel_range.length == 0;
+
+    //for (var i = 0; i < all_template_elms.length; i++) {
+    //    let t_elm = all_template_elms[i];
+    //    //let tiguid = t_elm.getAttribute('templateInstanceGuid');
+    //    let is_t_in_sel_range = template_elms_in_sel_range.includes(t_elm);
+    //    //let t_doc_idx = getTemplateDocIdx(tiguid);
+    //    let t_doc_idx = getElementDocIdx(t_elm);
+    //    if (show_sel_bg_color) {
+    //        if (is_t_in_sel_range) {
+    //            if (is_nav_right &&
+    //                !t_elm.classList.contains(Template_IN_SEL_RANGE_Class) &&
+    //                !t_elm.classList.contains(Template_AT_INSERT_Class)) {
+    //                setTemplateNavState(t_elm, Template_BEFORE_INSERT_Class);
+    //                continue;
+    //            }
+    //            log('sel template: ' + t_elm.getAttribute('templateGuid'));
+    //            if (sel_range.length > 0) {
+    //                let is_t_at_sel_bounds = t_doc_idx == sel_range.index || t_doc_idx == sel_range.index + sel_range.length;
+    //                if (is_t_at_sel_bounds) {
+    //                    if (t_elm.classList.contains(Template_AT_INSERT_Class)) {
+    //                        setTemplateNavState(t_elm, Template_IN_SEL_RANGE_Class);
+    //                    } else {
+    //                        clearTemplateNavState(t_elm);
+    //                    }
+    //                } else {
+    //                    setTemplateNavState(t_elm, Template_IN_SEL_RANGE_Class);
+    //                }
+    //            } else {
+    //                setTemplateNavState(t_elm, Template_AT_INSERT_Class);
+    //            }
+
+    //        } else {
+    //            if (is_nav_right && sel_range.index == t_doc_idx + 1) {
+    //                if (t_elm.classList.contains(Template_AT_INSERT_Class)) {
+    //                    setTemplateNavState(t_elm);
+    //                } else {
+    //                    setDocSelection(sel_range.index - 1, 0, 'silent');
+    //                    setTemplateNavState(t_elm, Template_AT_INSERT_Class);
+    //                }
+
+    //            } else if (!is_nav_right && sel_range.index == t_doc_idx - 1) {
+    //                if (t_elm.classList.contains(Template_BEFORE_INSERT_Class)) {
+    //                    clearTemplateNavState(t_elm);
+    //                } else {
+    //                    setDocSelection(sel_range.index + 1, 0, 'silent');
+    //                    setTemplateNavState(t_elm, Template_BEFORE_INSERT_Class);
+    //                }
+
+    //            } else {
+    //                clearTemplateNavState(t_elm);
+    //            }
+    //        }
+    //    }
+    //}
 }
 
-function clearTemplateNavState(t_elm) {
-    t_elm.classList.remove(Template_BEFORE_INSERT_Class);
-    t_elm.classList.remove(Template_AT_INSERT_Class);
-    t_elm.classList.remove(Template_AFTER_INSERT_Class);
-    t_elm.classList.remove(Template_IN_SEL_RANGE_Class);
-}
-
-function clearAllTemplateNavStates() {
-    getTemplateElements().forEach(x => clearTemplateNavState(x));
-}
 
 function insertTemplate(range, t, fromDropDown, source = 'api') {
     quill.deleteText(range.index, range.length, source);
     quill.insertEmbed(range.index, "template", t, source);
 
-    //quill.insertText(range.index, t.templateName, source);
-    //range.length = t.templateName.length;
-    //quill.formatText(range.index, range.length, 'template', t);
-
-    //debugger;
-    let telm = getTemplateInstanceElement(t.templateInstanceGuid);
-    debabyTemplateElement(telm);
-
     // NOTE update must be called because text change hasn't picked up template yet (when none exist yet)
     updateTemplatesAfterTextChanged();
 }
 
-function debabyTemplateElement(telm) {
-    return;
-    let t = getTemplateFromDomNode(telm);
-    telm.style.width = 'fit-content';
-    telm.style.height = 'fit-content';
-    telm.innerText = getTemplateDisplayValue(t);
-}
+//function debabyTemplateElement(telm) {
+//    return;
+//    let t = getTemplateFromDomNode(telm);
+//    telm.style.width = 'fit-content';
+//    telm.style.height = 'fit-content';
+//    telm.innerText = getTemplateDisplayValue(t);
+//}
 
-function focusTemplate(ftguid, fromDropDown = false, isNew = false, fromClickOnTemplate = false) {
+function focusTemplate(ftguid) {
     if (isShowingPasteToolbar()) {
         // only mark template as visited after it loses focus
         let old_ftguid = getFocusTemplateGuid();
@@ -863,15 +906,15 @@ function focusTemplate(ftguid, fromDropDown = false, isNew = false, fromClickOnT
     }
     clearTemplateFocus();
     hideAllTemplateContextMenus();
-
+    
     var telms = getTemplateElements();
     for (var i = 0; i < telms.length; i++) {
         var telm = telms[i];
         let t = getTemplateFromDomNode(telm);
         if (t.templateGuid == ftguid) {
-            setTemplateElementFocus(telm, true, true);
+            telm.classList.add('focused');
         } else {
-            setTemplateElementFocus(telm, false, false);
+            telm.classList.remove('focused');
 		}
     }
 

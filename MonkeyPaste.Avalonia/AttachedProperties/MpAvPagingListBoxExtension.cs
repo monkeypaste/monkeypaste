@@ -901,6 +901,10 @@ namespace MonkeyPaste.Avalonia {
                         // trigger jump if was thumb dragging
                         FinishThumbDrag(lb, finish_track);
                     }
+                    if(finish_track != null) {
+                        // flag actual jump as true so timer blocks until tray finishes requery
+                        return true;
+                    }
                 }
                 return false;
             }

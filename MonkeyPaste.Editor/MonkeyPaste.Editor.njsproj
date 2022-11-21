@@ -42,6 +42,9 @@
     <Content Include="src\components\exceptions\exceptions.js">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\components\experiments\fade-across.css" />
+    <Content Include="src\components\experiments\index.html" />
+    <Content Include="src\components\experiments\twinkle.css" />
     <Content Include="src\components\font\fontcolor.js" />
     <Content Include="src\components\link\link.js">
       <SubType>Code</SubType>
@@ -121,6 +124,7 @@
     <Content Include="src\components\template\toolbar\edit\editTemplateToolbar.js" />
     <Content Include="src\components\template\toolbar\paste\paste-template-toolbar-items-style.css" />
     <Content Include="src\components\template\toolbar\paste\pasteTemplateToolbarItems.js" />
+    <Content Include="src\components\template\toolbar\paste\pastevalue\pasteTemplateValue.js" />
     <Content Include="src\components\template\toolbar\paste\selector\paste-toolbar-template-selector-style.css" />
     <Content Include="src\components\template\toolbar\paste\selector\pasteTemplateFocusSelector.js" />
     <Content Include="src\components\template\types\contacts\contacts.js" />
@@ -173,6 +177,7 @@
     <Folder Include="src\components\loader\" />
     <Folder Include="src\components\exceptions\" />
     <Folder Include="src\components\datatransfer\" />
+    <Folder Include="src\components\experiments\" />
     <Folder Include="src\components\quill-wrapper\quill-tooltip\" />
     <Folder Include="src\components\svg\" />
     <Folder Include="src\components\overlay\" />
@@ -190,6 +195,7 @@
     <Folder Include="src\components\template\toolbar\create\" />
     <Folder Include="src\components\template\toolbar\edit\" />
     <Folder Include="src\components\template\toolbar\paste\" />
+    <Folder Include="src\components\template\toolbar\paste\pastevalue\" />
     <Folder Include="src\components\template\toolbar\paste\selector\" />
     <Folder Include="src\components\template\types\" />
     <Folder Include="src\components\template\types\contacts\" />

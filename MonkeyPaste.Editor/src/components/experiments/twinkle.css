@@ -1,0 +1,146 @@
+/* from https://adrianroselli.com/2021/12/experimenting-with-text-and-css-background-clip.html */
+
+/* Brunch twinkle text
+    
+    <h1 tabindex="0">
+      <span aria-hidden="true">BRUNCH</span>
+      <span>BRUNCH</span>
+      <span class="star"><span></span></span>
+    </h1>
+*/
+
+body {
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    line-height: 1.4;
+    background-color: #336;
+    background: linear-gradient(0deg, #336 0%, #112 100%);
+    /*   line-height: 1.5; */
+    /*   letter-spacing: 0.12em; */
+    /*   word-spacing: 0.16em; */
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+h1 {
+    /*   font-size: 800%; */
+    font-size: 20vw;
+    font-weight: bold;
+    line-height: 0.9;
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    position: relative;
+}
+
+    h1:focus {
+        outline: none;
+    }
+
+    h1 span:nth-child(2) {
+        background: linear-gradient( rgb(38, 40, 115) 12%, rgb(51, 53, 153) 30%, rgb(51, 153, 204) 40%, rgb(192, 240, 168) 47%, rgb(255, 255, 245) 49%, rgb(0, 0, 0) 51%, rgb(23, 23, 28) 63%, rgb(38, 38, 115) 72%, rgb(82, 129, 224) 81%, rgb(137, 190, 250) 85% );
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-stroke: 0.02em rgb(150, 200, 220);
+    }
+
+    h1 span[aria-hidden] {
+        position: absolute;
+        z-index: 1;
+        background: linear-gradient( 270deg, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0.6) 40% );
+        background-clip: text;
+        -webkit-background-clip: text;
+        background-position: 0 0;
+        /*   animation: highlight .5s linear infinite; */
+        animation: none;
+    }
+
+        h1 span[aria-hidden]:hover, h1:focus span[aria-hidden] {
+            animation: highlight 0.3s linear;
+            animation-delay: 0;
+        }
+
+@keyframes highlight {
+    from {
+        background-position: 0;
+    }
+
+    to {
+        background-position: 4.2em;
+    }
+}
+
+@keyframes compress {
+    from {
+        background: linear-gradient( 270deg, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0.6) 40% );
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
+
+    to {
+        background: linear-gradient( 270deg, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0.6) 10% );
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
+}
+
+.star span,
+.star span::before,
+.star span::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    width: 0.8em;
+    height: 0.32em;
+    background: radial-gradient( circle, rgba(255, 255, 204, 1) 0%, rgba(0, 0, 0, 0) 100% );
+    background-size: 100% 5%;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    /*   transform: translate(.1em, .05em); */
+}
+
+    .star span::before,
+    .star span::after {
+        position: absolute;
+        content: "";
+        transform: rotate(60deg);
+    }
+
+    .star span::after {
+        transform: rotate(120deg);
+    }
+
+.star {
+    position: absolute;
+    top: 0;
+    right: -0.15em;
+    width: 0.8em;
+    height: 0.32em;
+    display: none;
+    transform: rotate(90deg) scale(0.01);
+    /*   animation: star 1s linear infinite alternate; */
+    /*   outline: 2px dotted #f00; */
+}
+
+h1:hover .star, h1:focus .star {
+    display: block;
+    animation: star 0.3s linear alternate;
+    animation-delay: 0.3s;
+    animation-iteration-count: 2;
+}
+
+@keyframes star {
+    from {
+        transform: rotate(90deg) scale(0.01);
+    }
+
+    to {
+        transform: rotate(0deg) scale(1);
+    }
+}
+
+/* h1:hover .star */

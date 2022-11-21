@@ -39,14 +39,33 @@
         transform: translate(0,-3px) scaleY(1);
     }
 
+#pasteOptionsDiv {
+    position: absolute;
+    min-width: 150px;
+    display: block;
+    overflow: auto;
+    background-color: white;
+    border: 1px solid black;
+    transform: translate(0px,-10px);
+    border-radius: 3px;
+}
+
+    #pasteOptionsDiv > div:hover {
+        background-color: var(--opthovercolor) !important;
+        width: 100%;
+    }
+
+    #pasteOptionsDiv > div.selected-paste-option {
+        background-color: var(--optselectcolor) !important;
+        width: 100%;
+    }
+
 .paste-template-option-div {
     display: inline-flex;
     align-items: center;
+    background-color: transparent !important;
+    cursor: pointer !important
 }
-
-    .paste-template-option-div:not(.no-input-template):hover {
-        cursor: pointer;
-    }
 
 .paste-template-option-icon {
     border-radius: 3px;
@@ -60,41 +79,9 @@
 .paste-template-option-icon svg {
     width: 15px;
     height: 15px;
-    margin-left: 3px;
-    margin-top: 3px;
 }
 
 .paste-template-option-label {
-    margin-left: 10px;
+    margin: 5px 5px 5px 10px;
 }
 
-.paste-template-option-div.no-input-template > .paste-template-option-label {
-    font-style: italic;
-    color: silver;
-}
-
-#pasteOptionsDiv {
-    position: absolute;
-    min-width: 150px;
-    display: block;
-    overflow: auto;
-    background-color: white;
-    border: 1px solid black;
-    transform: translate(0px,-10px);
-    border-radius: 3px;
-    /*transition: 0.4s;*/
-}
-
-    #pasteOptionsDiv > div {
-        display: flex;
-    }
-
-    #pasteOptionsDiv .paste-template-option-icon,
-    #pasteOptionsDiv .paste-template-option-label {
-        margin: 5px;
-    }
-
-    #pasteOptionsDiv .selected-paste-option,
-    #pasteOptionsDiv .paste-template-option-div:not(.no-input-template):hover {
-        background-color: silver;
-    }

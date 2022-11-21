@@ -12,8 +12,11 @@ body {
     --selbgcolor: lightblue;
     --selfgcolor: black;
     --hovercolor: yellow;
-    --focuscolor: lime;
-    --selectedcolor: red;
+    --opthovercolor: lightblue;
+    --optselectcolor: lightgreen;
+    --focuscolor: red;
+    --selectedcolor: lime;
+    --insertselectcolor: darkorange;
     --editableopacity: 0.5;
     --defaultopacity: 0.0;
     --defaultFontFamily: consolas;
@@ -131,4 +134,18 @@ button {
     to {
         transform: rotate(360deg);
     }
+}
+
+.contrast-bg {
+    color: inherit !important;
+    background: inherit;
+    -webkit-background-clip: text;
+    background-clip: text;
+    filter: invert(1) grayscale(1);
+    -webkit-filter: invert(1) grayscale(1);
+    /* mix-blend-mode: difference;*/
+}
+
+.unavailable-text {
+    text-decoration: line-through;
 }

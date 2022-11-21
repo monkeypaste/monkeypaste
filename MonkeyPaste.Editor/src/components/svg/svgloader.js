@@ -16,10 +16,16 @@ var SvgElements = {
 
 function getSvgHtml(svgKey, classes) {
 	let htmlStr = SvgElements[svgKey];
-	if (classes) {
+	if (classes != null) {
 		htmlStr = htmlStr.replace("class='svg-icon'", `class='${classes}'`);
 	}
 	return htmlStr;
+}
+function createSvgElement(svgKey, classes) {
+	let dummy = document.createElement('div');
+	dummy.innerHTML = getSvgHtml(svgKey, classes);
+	//dummy.removeChild(svg_elm);
+	return dummy.firstChild;
 }
 
 function setSvgElmColor(svgElm, chex) {

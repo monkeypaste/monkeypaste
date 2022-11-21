@@ -424,7 +424,7 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 }
 
 function getBlotAtDocIdx(docIdx) {
-	if (!quill || quill.getLeaf !== 'function') {
+	if (!quill) {
 		return null;
 	}
 	let leaf = quill.getLeaf(docIdx);

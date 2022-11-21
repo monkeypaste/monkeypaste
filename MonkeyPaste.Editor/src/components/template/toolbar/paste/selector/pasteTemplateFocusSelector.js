@@ -5,25 +5,25 @@
 // #region Life Cycle
 
 function initPasteTemplateFocusSelector() {
-    getPasteFocusTemplateOptionsElement().classList.add('hidden');
+    getPasteTemplateSelectorOptionsElement().classList.add('hidden');
 
     getPasteFocusTemplateContainerElement().addEventListener('click', onTemplateSelectorClick, true);
 }
 
 
 function showPasteTemplateSelectorOptions() {
-    if (isElementDisabled(getPasteFocusTemplateOptionsElement(), true)) {
+    if (isElementDisabled(getPasteTemplateSelectorOptionsElement(), true)) {
         return;
     }
     if (isPasteTemplateHaveOptions()) {
-        getPasteFocusTemplateOptionsElement().classList.remove('hidden');
+        getPasteTemplateSelectorOptionsElement().classList.remove('hidden');
         updatePasteTemplateOptionsBounds();
     }
     getPasteTemplateSelectorArrowElement().classList.add('active');
 }
 
 function hidePasteTemplateSelectorOptions() {
-    getPasteFocusTemplateOptionsElement().classList.add('hidden');
+    getPasteTemplateSelectorOptionsElement().classList.add('hidden');
     getPasteTemplateSelectorArrowElement().classList.remove('active');
 }
 
@@ -35,7 +35,7 @@ function getPasteFocusTemplateContainerElement() {
     return document.getElementById('pasteTemplateToolbarMenuSelectorDiv');
 }
 
-function getPasteFocusSelectedTemplateElement() {
+function getPasteTemplateSelectorHeaderElement() {
     return document.getElementById('selectedPasteTemplateOptionDiv');
 }
 
@@ -43,11 +43,8 @@ function getPasteTemplateSelectorArrowElement() {
     return document.getElementById("pasteTemplateToolbarMenuSelectorArrowDiv");
 }
 
-function getPasteTemplateSelectorHiddenSelectElement() {
-    return document.getElementById('pasteTemplateToolbarMenuHiddenSelect');
-}
 
-function getPasteFocusTemplateOptionsElement() {
+function getPasteTemplateSelectorOptionsElement() {
     return document.getElementById('pasteOptionsDiv');
 }
 
@@ -63,12 +60,23 @@ function getSelectedOptionTemplateGuid() {
 
 // #region Setters
 
+function setPasteTemplateSelectorTemplate(tguid) {
+    let cur_sel_tguid = getSelectedOptionTemplateGuid();
+    if (cur_sel_tguid) {
+        if (cur_sel_tguid == tguid) {
+            // nothing to do
+            return;
+        }
+        // unset current
+
+    }
+}
 // #endregion Setters
 
 // #region State
 
 function isPasteTemplateHaveOptions() {
-    let opts_div = getPasteFocusTemplateOptionsElement();
+    let opts_div = getPasteTemplateSelectorOptionsElement();
 
     if (opts_div.children.length <= 1) {
         // when 1 item is available it'll be selected so don't show the one item
@@ -81,52 +89,117 @@ function isPasteTemplateHaveOptions() {
 
 // #region Actions
 
+function clearAllTemplateElementsSelectorFlag() {
+    let telms = getTemplateElements();
+    for (var i = 0; i < telms.length; i++) {
+        let telm = telms[i];
+        telm.classList.remove('')
+	}
+}
+
 function createTemplateSelector(ftguid, paste_sel) {
     // NOTE this clears all options
     // and sets selected div w / ftguid(or empty if null) to the given selection range
-
-    // clear hidden selector options
-    //let sel_elm = getPasteTemplateSelectorHiddenSelectElement();
-    //sel_elm.innerHTML = '';
-
-    // sel_opt_div is used to clone option elements (and is set to ftguid)
-    let sel_opt_div = getPasteFocusSelectedTemplateElement();
-
-    // clear current options
-    let all_opts_div = getPasteFocusTemplateOptionsElement();
-    all_opts_div.innerHTML = '';
-
-    let tl = getTemplateDefsInRange(paste_sel);
+    let new_item_elms = [];
+    let tl = getTemplateDefs();
+    let stguid = ftguid ? ftguid : tl.length > 0 ? tl[0].templateGuid : null;
     for (var i = 0; i < tl.length; i++) {
-        let t = tl[i];
-        //let option_value = t.templateGuid;
-        //let option_onChange = `focusTemplate('${t.templateGuid}');`;
-        //let t_option_str = `<option class="templateOption" value="${option_value}" onchange="${option_onChange}">${t.templateName}</option>`;
-        //sel_elm.innerHTML += t_option_str;
-
-        let cur_option_div = sel_opt_div.cloneNode(true);
-        all_opts_div.appendChild(cur_option_div);
-        cur_option_div.removeAttribute('id');
-
-        applyTemplateToOptionDiv(cur_option_div, t);
-        cur_option_div.addEventListener('click', onTemplateOptionClick);
-        if (t.templateGuid == ftguid) {
-            cur_option_div.classList.add('selected-paste-option');
-            applyTemplateToOptionDiv(sel_opt_div, t);
-        }
-
-        cur_option_div.setAttribute('templateGuid', t.templateGuid);
+        let item_elm = createTemplateSelectorItem(tl[i], paste_sel, stguid, onTemplateOptionClick);
+        new_item_elms.push(item_elm);
     }
-    applyTemplateToOptionDiv(sel_opt_div, null);
-    // NOTE adding close template selector at end so event signaled before show (if on selector) 
-    document.addEventListener('click', onDocumenClickToClosePasteTemplateSelector);
+    getPasteTemplateSelectorOptionsElement().replaceChildren(...new_item_elms);
+
+    let new_header_elm = createTemplateSelectorItem(getTemplateDefByGuid(stguid), paste_sel, onDocumenClickToClosePasteTemplateSelector);
+    let old_header_elm = getPasteTemplateSelectorHeaderElement();
+    let header_parent_elm = old_header_elm.parentNode;
+    header_parent_elm.replaceChild(new_header_elm, old_header_elm);
+    new_header_elm.id = old_header_elm.id;
+}
+
+function createTemplateSelectorItem(t, sel, ftguid, onClick) {
+    let is_disabled = true;
+    let is_unavailable = false;
+    let is_selected = false;
+    if (t) {
+        is_disabled = !isTemplateAnInputType(t);
+        is_unavailable =
+            getAllTemplateDocIdxs(t.templateGuid).every(x => !isDocIdxInRange(x, sel));
+        is_selected = t.templateGuid == ftguid;
+    }
+
+    let icon_color = t ? t.templateColor : 'black';
+    let icon_svg_key = t ? getTemplateTypeSvgKey(t.templateType) : 'empty';
+    let label_text = t ? t.templateName : '';
+    let tguid = t ? t.templateGuid : '';
+
+    let item_elm = document.createElement('DIV');
+    let icon_elm = document.createElement('DIV');
+    let label_elm = document.createElement('SPAN');
+
+    // ICON SVG
+    let icon_svg_elm = createSvgElement(icon_svg_key, 'contrast-bg');
+    icon_elm.appendChild(icon_svg_elm);
+
+    // ICON CONTAINER
+    icon_elm.classList.add('paste-template-option-icon');
+    icon_elm.style.backgroundColor = icon_color;
+
+    // LABEL
+    label_elm.classList.add('paste-template-option-label');
+    label_elm.innerText = label_text;
+
+
+    // CONTAINER
+    item_elm.appendChild(icon_elm);
+    item_elm.appendChild(label_elm);
+    if (is_disabled) {
+        item_elm.classList.add('disabled');
+    }
+    if (is_unavailable) {
+        item_elm.classList.add('unavailable-text');
+    }
+    if (is_selected) {
+        item_elm.classList.add('selected-paste-option');
+    }
+    item_elm.classList.add('paste-template-option-div');
+    item_elm.setAttribute('templateGuid', tguid);
+    item_elm.addEventListener('click', onClick);
+
+    return item_elm;
+}
+
+function applyTemplateToOptionDiv(opt_div, t) {
+    let icon_color = t ? t.templateColor : 'black';
+    let icon_svg_key = t ? getTemplateTypeSvgKey(t.templateType) : 'empty';
+    let label_text = t ? t.templateName : '';
+
+    let icon_elm = document.createElement('DIV');
+    let label_elm = document.createElement('SPAN');
+    opt_div.replaceChildren(icon_elm, label_elm);
+
+    icon_elm.classList.add('paste-template-option-icon');
+    icon_elm.style.backgroundColor = icon_color;
+
+    let icon_svg_elm = document.createElement('SVG');
+    icon_elm.appendChild(icon_svg_elm);
+    icon_svg_elm.outerHTML = getSvgHtml(icon_svg_key, '');
+    //setSvgElmColor(icon_svg_elm, icon_color);
+
+    label_elm.classList.add('paste-template-option-label');
+    label_elm.innerText = label_text;
+
+    if (isTemplateAnInputType(t)) {
+        opt_div.classList.remove('no-input-template');
+    } else {
+        opt_div.classList.add('no-input-template');
+    }
 }
 
 function updatePasteTemplateOptionsBounds() {
     if (!isPasteTemplateHaveOptions()) {
         return;
 	}
-    let opts_div = getPasteFocusTemplateOptionsElement();
+    let opts_div = getPasteTemplateSelectorOptionsElement();
     let sel_div = getPasteFocusTemplateContainerElement();
 
     let opt_item_height = opts_div.children[0].getBoundingClientRect().height;
@@ -170,35 +243,10 @@ function updatePasteTemplateOptionsBounds() {
 
 }
 
-function applyTemplateToOptionDiv(opt_div, t) {
-    let icon_elm = document.createElement('DIV');
-    let label_elm = document.createElement('SPAN');
-    opt_div.replaceChildren(icon_elm, label_elm);
 
-
-    let icon_color = t ? t.templateColor : 'black';
-    icon_elm.classList.add('paste-template-option-icon');
-    icon_elm.style.backgroundColor = icon_color;
-
-    let icon_svg_elm = document.createElement('SVG');
-    icon_elm.appendChild(icon_svg_elm);
-    let icon_svg_key = t ? getTemplateTypeSvgKey(t.templateType) : 'empty';
-    icon_svg_elm.outerHTML = getSvgHtml(icon_svg_key,'');
-    //setSvgElmColor(icon_svg_elm, icon_color);
-
-    let label_text = t ? t.templateName : '';
-    label_elm.classList.add('paste-template-option-label');
-    label_elm.innerText = label_text;
-
-    if (isTemplateAnInputType(t)) {
-        opt_div.classList.remove('no-input-template');
-    } else {
-        opt_div.classList.add('no-input-template');
-    }
-}
 
 function toggleShowPasteTemplateSelectorOptions() {
-    let opts_div = getPasteFocusTemplateOptionsElement();
+    let opts_div = getPasteTemplateSelectorOptionsElement();
     if (opts_div.classList.contains('hidden')) {
         showPasteTemplateSelectorOptions();
     } else {
@@ -217,16 +265,20 @@ function onDocumenClickToClosePasteTemplateSelector(e) {
 }
 
 function onTemplateOptionClick(e) {
-    if (e.currentTarget.classList.contains('no-input-template')) {
-        return;
-    }
+    //if (e.currentTarget.classList.contains('no-input-template')) {
+    //    return;
+    //}
 
     let clicked_templateGuid = e.currentTarget.getAttribute('templateGuid');
     focusTemplate(clicked_templateGuid);
+    hideAllPopups();
     log('templateGuid: ' + clicked_templateGuid);
 }
 
 function onTemplateSelectorClick(e) {
+    if (isElementDisabled(getPasteFocusTemplateContainerElement())) {
+        return;
+    }
     toggleShowPasteTemplateSelectorOptions()
 }
 // #endregion Event Handlers

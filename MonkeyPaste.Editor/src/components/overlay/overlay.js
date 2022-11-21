@@ -225,7 +225,8 @@ function drawTextSelection(ctx) {
                 sel_bg_color = 'salmon';
             }
         }
-    } else if (isSubSelectionEnabled()) {
+    }
+    else if (isSubSelectionEnabled()) {
         if (isEditorToolbarVisible()) {
             if (isSelAtFocusTemplateInsert()) {
                 // hide cursor within focus template
