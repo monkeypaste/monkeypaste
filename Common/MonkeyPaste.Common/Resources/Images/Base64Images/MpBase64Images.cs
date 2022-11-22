@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonkeyPaste {
+namespace MonkeyPaste.Common {
     public static class MpBase64Images {
         public static string LinuxPenguin {
             get {

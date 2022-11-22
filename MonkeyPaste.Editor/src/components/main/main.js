@@ -232,6 +232,9 @@ function updateAllSizeAndPositions() {
 }
 
 function updateAllElements() {
+	if (!IsLoaded) {
+		return;
+	}
 	updateAllSizeAndPositions();
 	updateAllSelectionDependantElements();
 	drawOverlay();

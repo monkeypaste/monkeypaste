@@ -66,7 +66,7 @@ namespace MonkeyPaste {
     }
 
     public interface MpIQueryInfo : MpIJsonObject {
-        public int TotalItemsInQuery { get; set; }
+        //public int TotalItemsInQuery { get; set; }
 
         public bool IsDescending { get;  set; }
 
@@ -74,7 +74,7 @@ namespace MonkeyPaste {
 
         public MpContentFilterType FilterFlags { get; set; }
 
-        public MpLogicalFilterFlagType LogicFlags { get; set; }
+        public MpLogicalFilterFlagType NextJoinType { get; set; }
 
         public MpTextFilterFlagType TextFlags { get; set; }
 
@@ -89,5 +89,7 @@ namespace MonkeyPaste {
         void RegisterProvider(MpIQueryInfoProvider qip);
 
         void NotifyQueryChanged(bool isFilterSortOrSearch = true);
+
+        MpIQueryInfo Next { get; }
     }
 }

@@ -664,7 +664,13 @@ namespace MonkeyPaste.Avalonia {
             IsMainWindowOpening = false;
 
             MpAvMainWindow.Instance.Show();
+            //if(MpAvNotificationWindow.Instance.IsVisible) {
+            //    MpAvMainWindow.Instance.Topmost = false;
+            //} else {
+            //    MpAvMainWindow.Instance.Topmost = true;
+            //}
             MpAvMainWindow.Instance.Topmost = true;
+
             IsMainWindowVisible = true;
             MainWindowScreenRect = MainWindowOpenedScreenRect;
 
@@ -895,7 +901,19 @@ namespace MonkeyPaste.Avalonia {
             },
             () => {
                 if(IsAnyItemDragging) {
-                    MpConsole.WriteLine("Force ignore mw close, dnd in progress");
+                    string drag_info = string.Empty;
+                    if(MpAvClipTrayViewModel.Instance.DragItem == null) {
+                        if(MpAvPersistentClipTilePropertiesHelper.GetIsDraggingTiles().Count == 0) {
+                            drag_info = "NULL";
+                        } else {
+                            drag_info = string.Join(",", MpAvPersistentClipTilePropertiesHelper.GetIsDraggingTiles());
+                        }
+
+                    } else {
+                        drag_info = MpAvClipTrayViewModel.Instance.DragItem.ToString();
+                    }
+
+                    MpConsole.WriteLine($"Force ignore mw close, dnd in progress on {drag_info}");
                     return false;
                 }
 
@@ -942,7 +960,7 @@ namespace MonkeyPaste.Avalonia {
                 return canHide;
             });
 
-        public ICommand CycleOrientationCommand => new MpCommand<object>(
+        public ICommand CycleOrientationCommand => new MpAsyncCommand<object>(
             async(dirStrOrEnumArg) => {
                 int nextOr = (int)MainWindowOrientationType;
 
@@ -956,8 +974,11 @@ namespace MonkeyPaste.Avalonia {
                         nextOr = Enum.GetNames(typeof(MpMainWindowOrientationType)).Length - 1;
                     }
                 } else if(dirStrOrEnumArg is MpMainWindowOrientationType dirEnum) {
+                    // messages are handled by window drag in title
                     nextOr = (int)dirEnum;
+                    //isDiscreteChange = false;
                 }
+
 
                 MpMessenger.SendGlobal(MpMessageType.MainWindowOrientationChangeBegin);
 
@@ -969,11 +990,13 @@ namespace MonkeyPaste.Avalonia {
                 MainWindowRight = MainWindowOpenedScreenRect.Right;
                 MainWindowBottom = MainWindowOpenedScreenRect.Bottom;
 
+                MainWindowScreenRect = MainWindowOpenedScreenRect;
+
+
                 var mw = MpAvMainWindow.Instance;
                 mw.UpdateContentOrientation();
 
                 await Task.Delay(300);
-                
                 MpMessenger.SendGlobal(MpMessageType.MainWindowOrientationChangeEnd);
             });
 

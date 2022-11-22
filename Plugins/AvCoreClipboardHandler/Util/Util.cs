@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +23,20 @@ namespace AvCoreClipboardHandler {
             if (OperatingSystem.IsWindows()) {
                 MonkeyPaste.Common.Avalonia.WinApi.CloseClipboard();
             }
+        }
+
+        public static MpPluginUserNotificationFormat CreateNotification(
+            MpPluginNotificationType nftype,
+            string title,
+            string msg,
+            string detail) {
+            return new MpPluginUserNotificationFormat() {
+                NotificationType = nftype,
+                Title = title,
+                Body = msg,
+                Detail = detail,
+                IconSourceStr = MpBase64Images.ClipboardIcon
+            };
         }
     }
 }

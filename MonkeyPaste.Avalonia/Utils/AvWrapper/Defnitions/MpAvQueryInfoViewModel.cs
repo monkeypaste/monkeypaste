@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIQueryInfo Implementation
 
-        public int TotalItemsInQuery { get; set; } = 0;
+        //public int TotalItemsInQuery { get; set; } = 0;
         public bool IsDescending { get; set; } = true;
         public MpContentSortType SortType { get; set; } = MpContentSortType.CopyDateTime;
         public int TagId { get; set; } = 0;
@@ -38,7 +38,9 @@ namespace MonkeyPaste.Avalonia {
         public MpContentFilterType FilterFlags { get; set; } = MpContentFilterType.None;
         public MpTextFilterFlagType TextFlags { get; set; } = MpTextFilterFlagType.None;
         public MpTimeFilterFlagType TimeFlags { get; set; } = MpTimeFilterFlagType.None;
-        public MpLogicalFilterFlagType LogicFlags { get; set; }
+        public MpLogicalFilterFlagType NextJoinType { get; set; }
+
+        public MpIQueryInfo Next { get; set; }
 
         public int PageSize { get; set; } = 0;
 
@@ -59,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
             //SortType = MpAvClipTileSortViewModel.Instance.SelectedSortType;
             TagId = MpAvTagTrayViewModel.Instance.SelectedItem.TagId;
             SearchText = MpAvSearchBoxViewModel.Instance.SearchText;
-            TotalItemsInQuery = MpDataModelProvider.TotalTilesInQuery;
+            //TotalItemsInQuery = MpDataModelProvider.TotalTilesInQuery;
 
             // NOTE not sure why this isn't set so maybe bad
             //FilterFlags = MpContentFilterType.TextType | MpContentFilterType.FileType | MpContentFilterType.ImageType; //MpSearchBoxViewModel.Instance.FilterType;
@@ -84,6 +86,7 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
+
         #region MpIJsonObject Implementation
 
         public string SerializeJsonObject() {
@@ -104,6 +107,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
+        public void JoinWithNext(MpIQueryInfo next, MpLogicalFilterFlagType joinType) {
+            Next = next;
+            NextJoinType = joinType;
+        }
         
         
 

@@ -445,7 +445,7 @@ namespace MonkeyPaste {
         #region Preferences
         public string KnownFileExtensionsPsv { get; set; } = MpRegEx.KnownFileExtensions;
 
-        public int MaxRtfCharCount { get; set; } = 250000;
+        public int MaxRtfCharCount { get; set; } = 250_000;
 
         public bool LoadOnLogin { get; set; } = false;
 

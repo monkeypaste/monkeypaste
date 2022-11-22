@@ -63,6 +63,32 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
+        #region Converters
+
+        public static string ToRichHtmlTable(this string csvStr, MpCsvFormatProperties csvProps = null) {
+            return MpCsvToRichHtmlTableConverter.CreateRichHtmlTableFromCsv(csvStr, csvProps);
+        }
+
+        public static string ToCsv(this string str) {
+            // (currently) this assumes csvStr is html table and down converting 
+            string csvStr = MpCsvToRichHtmlTableConverter.RichHtmlTableToCsv(str);
+            return csvStr;
+        }
+        public static string ToPlainText(this string text, string sourceFormat = null) {
+            if (sourceFormat == "text") {
+                return text;
+            }
+            if (text.IsStringRichHtmlText()) {
+                var htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(text);
+                return htmlDoc.DocumentNode.InnerText;// == null ? String.Empty : htmlDoc.Text;
+            }
+            
+            return text;
+        }
+
+        #endregion
+
 
         public static string ReplaceRange(this string str, int index, int length, string text) {
             int preStrLength = index + 1;

@@ -113,7 +113,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIContentDragSource Implementation
         public PointerEventArgs DragPointerEventArgs { get; private set; }
-        bool MpAvIDragSource.IsDragging {
+        public bool IsDragging {
             get => BindingContext != null ? BindingContext.IsTileDragging : false;
             set {
                 if (BindingContext != null) {
@@ -132,6 +132,7 @@ namespace MonkeyPaste.Avalonia {
 
             this.ExecuteJavascript($"dragEnd_ext('{dragEndMsg.SerializeJsonObjectToBase64()}')");
 
+            IsDragging = false;
             MpConsole.WriteLine($"Drag complete for '{BindingContext}'. DropEffect: '{dropEffect}'");
         }
         void MpAvIDragSource.NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc) {

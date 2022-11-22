@@ -62,7 +62,11 @@ namespace MonkeyPaste {
         AppModeChange,
         AppendBuffer,
         ContentFormatDegradation,
-        TrialExpired
+        TrialExpired,
+        PluginResponseError,
+        PluginResponseWarning,
+        PluginResponseWarningWithOption,
+        PluginResponseOther
     }
 
     public enum MpNotificationLayoutType {
@@ -86,14 +90,17 @@ namespace MonkeyPaste {
                 case MpNotificationType.InvalidPlugin:
                 case MpNotificationType.InvalidAction:
                 case MpNotificationType.InvalidClipboardFormatHandler:
+                case MpNotificationType.PluginResponseWarningWithOption:
                     return MpNotificationLayoutType.WarningWithOption;
                 case MpNotificationType.AnalyzerTimeout:
                 case MpNotificationType.InvalidRequest:
                 case MpNotificationType.InvalidResponse:
                 case MpNotificationType.TrialExpired:
+                case MpNotificationType.PluginResponseWarning:
                     return MpNotificationLayoutType.Warning;
                 case MpNotificationType.BadHttpRequest:
                 case MpNotificationType.DbError:
+                case MpNotificationType.PluginResponseError:
                     return MpNotificationLayoutType.Error;
                 default:
                     return MpNotificationLayoutType.Default;

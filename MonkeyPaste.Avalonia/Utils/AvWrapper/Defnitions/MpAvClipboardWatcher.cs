@@ -88,6 +88,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void CheckClipboard() {            
+            if(MpPlatformWrapper.Services.DataObjectHelperAsync.IsOleBusy) {
+                // don't bother it
+                return;
+            }
             Dispatcher.UIThread.Post(async () => { await CheckClipboardHelper(); });
         }
         private async Task CheckClipboardHelper() {

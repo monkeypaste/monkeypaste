@@ -185,11 +185,11 @@ function applyTemplateToDomNode(node, value) {
 
     // LABEL
     let span_elm = document.createElement('SPAN');
-    //span_elm.classList.add('template-label');
-    span_elm.classList.add('flicker');
+    span_elm.classList.add('template-label');
+    //span_elm.classList.add('flicker');
     span_elm.innerHTML = value.templateHtmlFormat;
     span_elm.innerText = getTemplateDisplayValue(value);
-    //span_elm.style.color = getContrastHexColor(value.templateColor);
+    span_elm.style.color = getContrastHexColor(value.templateColor);
     node.appendChild(span_elm);
 
     // DELETE BUTTON

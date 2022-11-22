@@ -62,9 +62,6 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\components\quill-wrapper\quill-tooltip\quill-tooltip-wrapper.js" />
-    <Content Include="src\components\svg\assets\contact-svgrepo-com.svg" />
-    <Content Include="src\components\svg\assets\delete-svgrepo-com.svg" />
-    <Content Include="src\components\svg\assets\findreplace.svg" />
     <Content Include="index.html" />
     <Content Include="package.json" />
     <Content Include="README.md" />
@@ -107,9 +104,6 @@
     <Content Include="src\components\quill-wrapper\toolbar\quill-toolbar.js" />
     <Content Include="src\components\selection\fancy-selection\fancy-selection.js" />
     <Content Include="src\components\selection\selection.js" />
-    <Content Include="src\components\svg\assets\i-schedule-school-date-time-svgrepo-com.svg" />
-    <Content Include="src\components\svg\assets\snow-svgrepo-com.svg" />
-    <Content Include="src\components\svg\assets\text-svgrepo-com.svg" />
     <Content Include="src\components\table\table-style.css" />
     <Content Include="src\components\table\table.js" />
     <Content Include="src\components\table\toolbar\create-table-style.css" />
@@ -185,7 +179,6 @@
     <Folder Include="src\components\quill-wrapper\toolbar\" />
     <Folder Include="src\components\selection\" />
     <Folder Include="src\components\selection\fancy-selection\" />
-    <Folder Include="src\components\svg\assets\" />
     <Folder Include="src\components\table\" />
     <Folder Include="src\components\table\toolbar\" />
     <Folder Include="src\components\template\" />

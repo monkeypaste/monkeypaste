@@ -11,7 +11,7 @@ using MonkeyPaste.Common.Wpf;
 namespace AvCoreClipboardHandler {
     public static class AvCoreClipboardReader {
 
-        private static string[] _AvReaderFormats = new string[]{
+        public static string[] _AvReaderFormats = new string[]{
             MpPortableDataFormats.Text,
             MpPortableDataFormats.CefText,
             MpPortableDataFormats.AvRtf_bytes,
@@ -34,20 +34,39 @@ namespace AvCoreClipboardHandler {
             } else if(request.forcedClipboardDataObject is IDataObject) {
                 avdo = request.forcedClipboardDataObject as IDataObject;
 
-                //availableFormats = await avdo.GetDataFormats_safe(_readLock);
                 availableFormats = avdo.GetDataFormats().Where(x=>avdo.Get(x) != null).ToArray();
             }
 
+            List<MpPluginUserNotificationFormat> nfl = new List<MpPluginUserNotificationFormat>();
+            List<Exception> exl = new List<Exception>();
+            var read_output = new MpAvDataObject();
             var readFormats = request.readFormats.Where(x => availableFormats.Contains(x));
-            var currentOutput = new MpAvDataObject();
 
-            foreach (var supportedTypeName in readFormats) {
-                object data = await ReadDataObjectFormat(supportedTypeName, avdo);
-                currentOutput.SetData(supportedTypeName, data);
+            foreach (var read_format in readFormats) {
+                object data = await ReadDataObjectFormat(read_format, avdo);
+                foreach (var param in request.items) {
+                    data = ProcessReaderParam(param, read_format, data, out var ex, out var param_nfl);
+                    if (ex != null) {
+                        exl.Add(ex);
+                    }
+                    if (param_nfl != null) {
+                        nfl.AddRange(param_nfl);
+                    }
+                    if (data == null) {
+                        // param omitted format, don't process rest of params
+                        break;
+                    }
+                }
+                if (data == null) {
+                    continue;
+                }
+                read_output.SetData(read_format, data);
             }
 
             return new MpClipboardReaderResponse() {
-                dataObject = currentOutput
+                dataObject = read_output,
+                userNotifications = nfl,
+                errorMessage = string.Join(Environment.NewLine, exl)
             };
         }
        
@@ -72,11 +91,9 @@ namespace AvCoreClipboardHandler {
                     if (avdo.GetFileNames() == null) {
                         return String.Empty;
                     }
-                    //dataObj = await avdo.GetFileNames_safe(_readLock);
                     dataObj = avdo.GetFileNames();
                 } else {
                     dataObj = avdo.Get(format);
-                    //dataObj = await avdo.Get_safe(_readLock,format);
                 }                
             }
             string dataStr = null;
@@ -90,6 +107,52 @@ namespace AvCoreClipboardHandler {
                 return bytes;
             }
             return dataStr;
+        }
+
+
+        private static object ProcessReaderParam(MpIParameterKeyValuePair pkvp, string format, object data, out Exception ex, out List<MpPluginUserNotificationFormat> nfl) {
+            ex = null;
+            nfl = null;
+            if (data == null) {
+                // already omitted
+                return null;
+            }
+            try {
+                CoreClipboardParamType paramType = (CoreClipboardParamType)int.Parse(pkvp.paramName);
+                switch (format) {
+                    case MpPortableDataFormats.Text:
+                        switch (paramType) {
+                            case CoreClipboardParamType.R_MaxCharCount_Text:
+                                if (data is string text) {
+                                    int max_length = int.Parse(pkvp.value);
+                                    if (text.Length > max_length) {
+                                        //nfl = new List<MpPluginUserNotificationFormat>() {
+                                        //    Util.CreateNotification(
+                                        //        MpPluginNotificationType.PluginResponseWarning,
+                                        //        "Max Char Count Reached",
+                                        //        $"Text limit is '{max_length}' and data was '{text.Length}'",
+                                        //        "CoreClipboardWriter")
+                                        //};
+                                        data = text.Substring(0, max_length);
+                                    }
+                                }
+                                break;
+                            case CoreClipboardParamType.R_Ignore_Text:
+                                data = null;
+                                break;
+                        }
+                        break;
+                    default:
+                        // TODO process other types
+
+                        break;
+                }
+                return data;
+            }
+            catch (Exception e) {
+                ex = e;
+            }
+            return data;
         }
     }
 }

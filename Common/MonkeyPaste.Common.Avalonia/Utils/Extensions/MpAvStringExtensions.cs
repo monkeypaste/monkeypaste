@@ -47,22 +47,6 @@ namespace MonkeyPaste.Common.Avalonia {
             return false;
         }
 
-        public static string ToCsv(this string str) {
-            // (currently) this assumes csvStr is html table and down converting 
-            string csvStr = MpCsvToRichHtmlTableConverter.RichHtmlTableToCsv(str);
-            return csvStr;
-        }
-        public static string ToPlainText(this string text, string sourceFormat = null) {
-            if(sourceFormat == "text") {
-                return text;
-            }
-            if (text.IsStringRichHtmlText()) {
-                var htmlDoc = new HtmlDocument();
-                htmlDoc.LoadHtml(text);
-                return htmlDoc.DocumentNode.InnerText;// == null ? String.Empty : htmlDoc.Text;
-            }
-            return text;
-        }
         public static string ToRichHtmlText(this string str, string strFormat) {
             if(str.IsStringRichText() && OperatingSystem.IsWindows()) {
                 string qhtml = MonkeyPaste.Common.Wpf.MpWpfRtfToHtmlConverter.ConvertFormatToHtml(str, strFormat);
@@ -81,9 +65,6 @@ namespace MonkeyPaste.Common.Avalonia {
                 return rtf;
             }
             return str;
-        }
-        public static string ToRichHtmlTable(this string csvStr, MpCsvFormatProperties csvProps = null) {
-            return MpCsvToRichHtmlTableConverter.CreateRichHtmlTableFromCsv(csvStr, csvProps);
         }
 
         public static string EscapeExtraOfficeRtfFormatting(this string str) {

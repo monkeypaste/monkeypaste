@@ -85,21 +85,55 @@ namespace MonkeyPaste {
             return null;
         }
 
-        public static bool ValidatePluginResponse(MpPluginResponseFormatBase response) {
+        public static async Task<T> ValidatePluginResponseAsync<T>(
+            MpPluginRequestFormatBase request,
+            MpPluginResponseFormatBase response,
+            Task<T> retryTask) where T : MpPluginResponseFormatBase {
             if (response == null) {
                 //MpConsole.WriteTraceLine($"Clipboard Reader Plugin error, no response from {handler.ToString()}, (ignoring its assigned formats) ");
                 MpConsole.WriteTraceLine($"Clipboard Reader Plugin error, empty response ");
-                return false;
+                return null;
             }
             if (!string.IsNullOrWhiteSpace(response.errorMessage)) {
                 MpConsole.WriteTraceLine($"Plugin error (ignoring new clipboard data): " + response.errorMessage);
-                return false;
+                return null;
             }
             if (response.otherMessage != null) {
                 MpConsole.WriteLine(response.otherMessage);
             }
+            response = await HandlePluginNotifcationsAsync<T>(request, response, retryTask);
 
-            return true;
+            return response as T;
+        }
+
+        private static async Task<MpPluginResponseFormatBase> HandlePluginNotifcationsAsync<T>(
+            MpPluginRequestFormatBase request, 
+            MpPluginResponseFormatBase response,
+            Task<T> retryTask,
+            int cur_idx = 0) where T:MpPluginResponseFormatBase {
+            if (response.userNotifications == null || response.userNotifications.Count == 0) {
+                return response;
+            }
+
+            for (int i = cur_idx; i < response.userNotifications.Count; i++) {
+                var nf = response.userNotifications[i];
+                nf.FixCommand = new MpCommand(() => {
+                    MpPlatformWrapper.Services.NativeMessageBox.ShowOkCancelMessageBox("test", "Fix me");
+                });
+
+                var result = await MpNotificationBuilder.ShowNotificationAsync(nf);
+                if (result == MpNotificationDialogResultType.Ignore) {
+                    continue;
+                }
+                if(result == MpNotificationDialogResultType.Retry) {
+                    // should be after fix cycle
+                    // user changed settings or whatever and request is called again
+                    T retry_response = await retryTask;
+                    
+                    response = await HandlePluginNotifcationsAsync(request, retry_response, retryTask, i);
+                }
+            }
+            return response as T;
         }
 
         private static async Task<MpPluginTransactionBase> HandleErrorAsync(
@@ -128,5 +162,6 @@ namespace MonkeyPaste {
 
             return at;
         }
+        
     }
 }

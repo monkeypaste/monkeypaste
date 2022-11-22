@@ -26,11 +26,14 @@ namespace MonkeyPaste.Avalonia {
                 throw new Exception("Invalid internalSourceCopyItemId, if not -1 needs to be greater than zero. Value was " + internalSourceCopyItemId);
             }
             try {
+                
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // PRE GAME
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+               
                 if (mpdo == null || mpdo.DataFormatLookup.Count == 0) {
                     return null;
-                }
-
-                
+                }               
 
                 var actual_formats = await Application.Current.Clipboard.GetFormatsAsync();
                 actual_formats.ForEach(x => MpConsole.WriteLine("Actual format: " + x));
@@ -83,10 +86,13 @@ namespace MonkeyPaste.Avalonia {
                 // }
 
                 mpdo.DataFormatLookup.ForEach(x => MpConsole.WriteLine("Creating copyItem w/ available format; " + x.Key.Name));
+
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // PARSE DATA OBJECT
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 
                 string inputTextFormat = null;
                 string itemData = null;
-                //string htmlData = string.Empty;
                 MpAvHtmlClipboardData htmlClipboardData = new MpAvHtmlClipboardData();
                 MpCopyItemType itemType = MpCopyItemType.None;
 
@@ -186,11 +192,18 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteTraceLine("clipboard data is not known format");
                     return null;
                 }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // VALIDATE & POST-PROCESS
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                
+                // EMPTY CHECK
 
-                if(itemData == null) {
+                if (itemData == null) {
                     MpConsole.WriteTraceLine("Warning! CopyItemBuilder could not create itemData");
                     return null;
                 }
+
+                // WHITESPACE CHECK
 
                 if (MpPrefViewModel.Instance.IgnoreWhiteSpaceCopyItems &&
                     itemType == MpCopyItemType.Text &&
@@ -198,6 +211,8 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine($"Whitespace text item detected. Input Format '{inputTextFormat}' Input Data '{itemData}'");
                     return null;
                 }
+
+                // POST-PROCESS (TEXT ONLY)
 
                 if (itemType == MpCopyItemType.Text) {
                     if(string.IsNullOrEmpty(inputTextFormat)) {
@@ -232,14 +247,6 @@ namespace MonkeyPaste.Avalonia {
                         itemType = MpCopyItemType.Image;
                     }
                 }
-
-
-
-                //if (mpdo.ContainsData(MpPortableDataFormats.AvHtml_bytes)) {
-                //    string rawHtmlData = mpdo.GetData(MpPortableDataFormats.AvHtml_bytes).ToString();
-                //    htmlClipboardData = MpHtmlClipboardDataConverter.Parse(rawHtmlData);
-                //    //htmlData = mpdo.GetData(MpPortableDataFormats.AvHtml_bytes).ToString();
-                //}
 
                 if (itemType == MpCopyItemType.Text && ((string)itemData).Length > MpPrefViewModel.Instance.MaxRtfCharCount) {
                     itemData = itemData.ToPlainText();
@@ -325,7 +332,14 @@ namespace MonkeyPaste.Avalonia {
                     itemType: itemType,
                     suppressWrite: suppressWrite);
 
-                if(app != null) {
+                // NOTE Ensure url source is written first so its create date is minimum ie primary source
+                if (url != null) {
+                    await MpCopyItemSource.CreateAsync(
+                        copyItemId: ci.Id,
+                        sourceObjId: url.Id,
+                        sourceType: MpCopyItemSourceType.Url);
+                }
+                if (app != null) {
                     if(internalSourceCopyItemId > 0) {
                         await MpCopyItemSource.CreateAsync(
                             copyItemId: ci.Id,
@@ -338,12 +352,6 @@ namespace MonkeyPaste.Avalonia {
                             sourceObjId: app.Id,
                             sourceType: MpCopyItemSourceType.App);
                     }
-                }
-                if (url != null) {
-                    await MpCopyItemSource.CreateAsync(
-                        copyItemId: ci.Id,
-                        sourceObjId: url.Id,
-                        sourceType: MpCopyItemSourceType.Url);
                 }
 
                 return ci;
@@ -361,6 +369,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
+
+
         #endregion
 
         #region Commands

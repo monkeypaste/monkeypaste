@@ -51,7 +51,7 @@ namespace MonkeyPaste {
         public static async Task ShowMessageAsync(
             string title = "", 
             string msg = "", 
-            int maxShowTimeMs = 3000,
+            int maxShowTimeMs = MpNotificationFormat.MAX_MESSAGE_DISPLAY_MS,
             MpNotificationType msgType = MpNotificationType.Message,        
             string iconSourceStr = null) {
             await ShowNotificationAsync(
@@ -109,7 +109,13 @@ namespace MonkeyPaste {
             return result;            
         }
 
-        public static async Task<MpNotificationDialogResultType> ShowNotificationAsync(MpNotificationFormat nf) {
+        public static async Task<MpNotificationDialogResultType> ShowNotificationAsync(MpINotificationFormat inf) {
+            var nf = inf as MpNotificationFormat;
+            if(nf == null && inf is MpPluginUserNotificationFormat pnf) {
+                // convert plugin notification to core nf
+                nf = new MpNotificationFormat(pnf);
+            }
+
             bool isDoNotShowType = MpPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr
                     .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(x => Convert.ToInt32(x)).Any(x => x == (int)nf.NotificationType);

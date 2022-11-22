@@ -35,6 +35,10 @@ namespace MonkeyPaste.Avalonia {
         public static bool IsPersistentTileDraggingEditable_ById(int ciid) {
             return _persistentIsTileDraggingTiles_ById.Contains(ciid);
         }
+
+        public static List<int> GetIsDraggingTiles() {
+            return _persistentIsTileDraggingTiles_ById;
+        }
         #endregion
 
         #region IsContentEditable

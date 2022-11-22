@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Avalonia;
 using MonkeyPaste.Common.Wpf;
+using Avalonia.Threading;
 
 namespace AvCoreClipboardHandler {
     public class AvCoreClipboardHandler :
@@ -16,12 +17,17 @@ namespace AvCoreClipboardHandler {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
 
+        
+
         #region Private Variables
         #endregion
 
         #region MpIClipboardReaderComponentAsync Implementation
 
-        async Task<MpClipboardReaderResponse> MpIClipboardReaderComponent.ReadClipboardDataAsync(MpClipboardReaderRequest request) {
+        public async Task<MpClipboardReaderResponse> ReadClipboardDataAsync(MpClipboardReaderRequest request) {
+            if(!Dispatcher.UIThread.CheckAccess()) {
+                return await Dispatcher.UIThread.InvokeAsync(()=>ReadClipboardDataAsync(request));
+            }
             MpClipboardReaderResponse resp = await AvCoreClipboardReader.ProcessReadRequestAsync(request);
             return resp;
         }
@@ -30,7 +36,10 @@ namespace AvCoreClipboardHandler {
 
         #region MpClipboardWriterComponent Implementation
 
-        async Task<MpClipboardWriterResponse> MpIClipboardWriterComponent.WriteClipboardDataAsync(MpClipboardWriterRequest request) {
+        public async Task<MpClipboardWriterResponse> WriteClipboardDataAsync(MpClipboardWriterRequest request) {
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                return await Dispatcher.UIThread.InvokeAsync(() => WriteClipboardDataAsync(request));
+            }
             MpClipboardWriterResponse resp = await AvCoreClipboardWriter.PerformWriteRequestAsync(request);
             return resp;
         }

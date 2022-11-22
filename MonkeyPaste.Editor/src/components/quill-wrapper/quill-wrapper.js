@@ -323,7 +323,7 @@ function trimQuillTrailingLineEndFromText(textStr) {
 	}
 	if (textStr.endsWith('\n')) {
 		// remove trailing line ending
-		return substringByLength(textStr, 0, textStr.length - 2);
+		return substringByLength(textStr, 0, textStr.length - 1);
 	}
 	return textStr;
 }

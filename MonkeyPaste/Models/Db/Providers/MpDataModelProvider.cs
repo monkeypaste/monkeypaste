@@ -31,7 +31,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public static ObservableCollection<int> AvailableQueryCopyItemIds { get; private set; } = new ObservableCollection<int>();
+        public static List<int> AvailableQueryCopyItemIds { get; private set; } = new List<int>();
 
 
         public static int TotalTilesInQuery => AvailableQueryCopyItemIds.Count;
@@ -60,65 +60,8 @@ namespace MonkeyPaste {
 
         #region MpQueryInfo Fetch Methods      
         
-        public static async Task<string> QueryForTotalCountAsync(IEnumerable<int> idsToOmit, IEnumerable<int> tagIds) { // = null) {
-            idsToOmit = idsToOmit == null ? new List<int>() : idsToOmit;
-
-            string viewQueryStr = string.Empty;
-            AvailableQueryCopyItemIds.Clear();
-
-            MpLogicalFilterFlagType lastLogicFlag = MpLogicalFilterFlagType.None;
-
-            for (int i = 0;i < QueryInfos.Count;i++) {
-                var qi = QueryInfos[i];
-                if(i > 0) {
-                    qi.IsDescending = QueryInfos[i - 1].IsDescending;
-                    qi.SortType = QueryInfos[i - 1].SortType;
-                    qi.TagId = QueryInfos[i - 1].TagId;
-                }
-                if(qi.FilterFlags.HasFlag(MpContentFilterType.Tag) && i > 0) {
-                    if(qi.FilterFlags.HasFlag(MpContentFilterType.Regex)) {
-                        qi.TagId = MpTag.AllTagId;
-                    } else {
-                        qi.TagId = Convert.ToInt32(qi.SearchText);
-                    }
-                }
-                if(qi.LogicFlags != MpLogicalFilterFlagType.None) {
-                    lastLogicFlag = qi.LogicFlags;
-                    continue;
-                }
-                string allRootIdQuery = GetQueryForCount(i,tagIds);
-                viewQueryStr = allRootIdQuery;
-                string totalWidthQuery = allRootIdQuery.Replace("RootId", "SUM(ItemWidth)");
-
-                MpConsole.WriteLine("Current DataModel Query: " + allRootIdQuery);
-                
-                var idl = await MpDb.QueryScalarsAsync<int>(allRootIdQuery);
-                var curIds = new ObservableCollection<int>(idl.Distinct());
-
-                var totalIds = new List<int>();
-                if (i == 0) {
-                    AvailableQueryCopyItemIds = curIds;
-                } else if (lastLogicFlag == MpLogicalFilterFlagType.And) {
-                    foreach (var allId in AvailableQueryCopyItemIds) {
-                        if (curIds.Contains(allId)) {
-                            totalIds.Add(allId);
-                        }
-                    }
-                } else {
-                    //same as or
-                    totalIds.AddRange(AvailableQueryCopyItemIds);
-                    totalIds.AddRange(curIds);
-                    totalIds = totalIds.Distinct().ToList();
-                }
-
-                if(totalIds.Count > 0) {
-                    AvailableQueryCopyItemIds = new ObservableCollection<int>(idl.Distinct());
-                }
-            }
-            AvailableQueryCopyItemIds =  new ObservableCollection<int>(AvailableQueryCopyItemIds.Where(x => !idsToOmit.Contains(x)));
-            QueryInfo.TotalItemsInQuery = AvailableQueryCopyItemIds.Count;
-
-            return viewQueryStr;
+        public static async Task QueryForTotalCountAsync(IEnumerable<int> ci_idsToOmit, IEnumerable<int> tagIds) { // = null) {
+            AvailableQueryCopyItemIds = await MpContentQuery.QueryAllAsync(QueryInfo, tagIds, ci_idsToOmit);
         }
 
 
@@ -137,146 +80,7 @@ namespace MonkeyPaste {
         #region View Queries
 
 
-        public static string GetQueryForCount(int qiIdx, IEnumerable<int> tagIds) {
-            var qi = QueryInfos[qiIdx];
-            string query = "select RootId from MpSortableCopyItem_View";
-            string tagClause = string.Empty;
-            string sortClause = string.Empty;
-            List<string> types = new List<string>();
-            List<string> filters = new List<string>();
 
-            if (qi.TagId != MpTag.AllTagId) {
-                // NOTE ignoring tagIds for all is just to optimize since they're all included anyway
-                string tag_where_stmt = string.Join(" or ", tagIds.Select(x => $"fk_MpTagId={x}"));
-                tagClause = string.Format(
-                    @"RootId in 
-                    (select distinct pk_MpCopyItemId from MpCopyItem where pk_MpCopyItemId in 
-		                (select fk_MpCopyItemId from MpCopyItemTag where {0}))",
-                    tag_where_stmt);
-            }
-            if (!string.IsNullOrEmpty(qi.SearchText)) {
-                string searchOp = "like";
-                string escapeStr = "";
-                if (qi.FilterFlags.HasFlag(MpContentFilterType.CaseSensitive)) {
-                    searchOp = "=";
-                } else if (qi.FilterFlags.HasFlag(MpContentFilterType.Regex)) {
-                    searchOp = "REGEXP";
-                } else {
-                    escapeStr = "%";
-                }
-                string searchText = qi.SearchText;
-
-                string escapeClause = string.Empty;
-                if (searchOp == "like" && searchText.Contains('%')) {
-                    searchText = searchText.Replace("%", @"\%");
-                    escapeClause = @" ESCAPE '\'";
-                }
-                if(searchText.Contains("'")) {
-                    searchText = searchText.Replace("'", "''");
-                }
-                if (qi.FilterFlags.HasFlag(MpContentFilterType.Title)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("Title"), searchOp, escapeStr, searchText, escapeClause));
-                }
-                if (qi.FilterFlags.HasFlag(MpContentFilterType.Content)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("ItemData"), searchOp, escapeStr, searchText, escapeClause));
-                }
-                if (qi.FilterFlags.HasFlag(MpContentFilterType.Url)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("UrlPath"), searchOp, escapeStr, searchText, escapeClause));
-                }
-                if (qi.FilterFlags.HasFlag(MpContentFilterType.UrlTitle)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("UrlTitle"), searchOp, escapeStr, searchText, escapeClause));
-                }
-                if (qi.FilterFlags.HasFlag(MpContentFilterType.AppName)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("AppName"), searchOp, escapeStr, searchText, escapeClause));
-                }
-                if (qi.FilterFlags.HasFlag(MpContentFilterType.AppPath)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("AppPath"), searchOp, escapeStr, searchText, escapeClause));
-                }
-                if (qi.FilterFlags.HasFlag(MpContentFilterType.Meta)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("ItemDescription"), searchOp, escapeStr, searchText, escapeClause));
-                }
-
-                if(qi.FilterFlags.HasFlag(MpContentFilterType.Time)) {
-                    if(qi.TimeFlags.HasFlag(MpTimeFilterFlagType.After)) {
-                        searchOp = ">";
-                    } else if (qi.TimeFlags.HasFlag(MpTimeFilterFlagType.Before)) {
-                        searchOp = "<";
-                    } else {
-                        searchOp = "=";
-                    }
-                    searchText = DateTime.Parse(searchText).Ticks.ToString();
-                    filters.Add(string.Format(@"{0} {1} {2}", CaseFormat("CopyDateTime"), searchOp, searchText));
-                }
-            }
-            if (qi.FilterFlags.HasFlag(MpContentFilterType.TextType)) {
-                types.Add(string.Format(@"fk_MpCopyItemTypeId={0}", (int)MpCopyItemType.Text));
-            }
-            if (qi.FilterFlags.HasFlag(MpContentFilterType.FileType)) {
-                types.Add(string.Format(@"fk_MpCopyItemTypeId={0}", (int)MpCopyItemType.FileList));
-            }
-            if (qi.FilterFlags.HasFlag(MpContentFilterType.ImageType)) {
-                types.Add(string.Format(@"fk_MpCopyItemTypeId={0}", (int)MpCopyItemType.Image));
-            }
-            
-            switch (qi.SortType) {
-                case MpContentSortType.CopyDateTime:
-                    sortClause = string.Format(@"order by {0}", "CopyDateTime");
-                    break;
-                case MpContentSortType.Source:
-                    sortClause = string.Format(@"order by {0}", "SourcePath");
-                    break;
-                case MpContentSortType.Title:
-                    sortClause = string.Format(@"order by {0}", "Title");
-                    break;
-                case MpContentSortType.ItemData:
-                    sortClause = string.Format(@"order by {0}", "ItemData");
-                    break;
-                case MpContentSortType.ItemType:
-                    sortClause = string.Format(@"order by {0}", "fk_MpCopyItemTypeId");
-                    break;
-                case MpContentSortType.UsageScore:
-                    sortClause = string.Format(@"order by {0}", "UsageScore");
-                    break;
-            }
-
-            if(!string.IsNullOrEmpty(sortClause)) {
-                sortClause = qi.IsDescending ? sortClause + " DESC" : sortClause;
-            }
-
-            if (!string.IsNullOrEmpty(tagClause)) {
-                query += " where " + tagClause;
-                if (filters.Count > 0) {
-                    query += " and (";
-                    query += string.Join(" or ", filters) + ")";
-                }
-                if (types.Count > 0) {
-                    query += " and (";
-                    query += string.Join(" or ", types) + ")";
-                }
-            } else if (filters.Count > 0) {
-                query += " where ";
-                if(types.Count > 0) {
-                    query += "(";
-                }
-                query += string.Join(" or ", filters);
-                if (types.Count > 0) {
-                    query += ") and (";
-                    query += string.Join(" or ", types) + ")";
-                }
-            } else if(types.Count > 0) {
-                query += " where ";
-                query += string.Join(" or ", types);
-            }            
-            query += " " + sortClause;
-            return query;
-        }
-
-        private static string CaseFormat(string fieldOrSearchText) {
-            //if (QueryInfo.FilterFlags.HasFlag(MpContentFilterType.CaseSensitive)) {
-            //    return string.Format(@"UPPER({0})", fieldOrSearchText);
-            //}
-            return fieldOrSearchText;
-        }
         #endregion
 
         #region Select queries
@@ -1045,6 +849,12 @@ namespace MonkeyPaste {
         public static async Task<List<MpDataObjectItem>> GetDataObjectItemsByDataObjectId(int dobjid) {
             string query = "select * from MpDataObjectItem where fk_MpDataObjectId=?";
             var result = await MpDb.QueryAsync<MpDataObjectItem>(query, dobjid);
+            return result;
+        }
+
+        public static async Task<List<MpDataObjectItem>> GetDataObjectItemsForFormatByDataObjectId(int dobjid, string format) {
+            string query = "select * from MpDataObjectItem where fk_MpDataObjectId=? and ItemFormat=?";
+            var result = await MpDb.QueryAsync<MpDataObjectItem>(query, dobjid,format);
             return result;
         }
 

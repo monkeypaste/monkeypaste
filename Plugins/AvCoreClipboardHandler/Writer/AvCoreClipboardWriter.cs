@@ -10,7 +10,7 @@ using MonkeyPaste.Common.Wpf;
 
 namespace AvCoreClipboardHandler {
     public static class AvCoreClipboardWriter {
-        private static string[] _AvWriterFormats = new string[]{
+        public static string[] AvWriterFormats = new string[]{
             MpPortableDataFormats.Text,
             MpPortableDataFormats.CefText,
             MpPortableDataFormats.AvRtf_bytes,
@@ -22,6 +22,7 @@ namespace AvCoreClipboardHandler {
             MpPortableDataFormats.LinuxGnomeFiles, // only needed for write
             MpPortableDataFormats.AvCsv
         };
+
         public static async Task<MpClipboardWriterResponse> PerformWriteRequestAsync(MpClipboardWriterRequest request) {
             if (request == null) {
                 return null;
@@ -30,58 +31,88 @@ namespace AvCoreClipboardHandler {
             if(ido == null) {
                 return null;
             }
-            var sb = new StringBuilder();
-            IDataObject dataObj = ido ?? new MpAvDataObject();
+            List<MpPluginUserNotificationFormat> nfl = new List<MpPluginUserNotificationFormat>();
+            List<Exception> exl = new List<Exception>();
+            IDataObject write_output = ido ?? new MpAvDataObject();
             var writeFormats = request.writeFormats.Where(x => ido.GetAllDataFormats().Contains(x));
 
             foreach(var write_format in writeFormats) {
-
+                object data = write_output.Get(write_format);
                 foreach (var param in request.items) {
-                    if(ProcessWriterParam(param, dataObj) is string errors &&
-                        !string.IsNullOrWhiteSpace(errors)) {
-                        sb.AppendLine(errors);
+                    data = ProcessWriterParam(param, write_format, data, out var ex, out var param_nfl);
+                    if(ex != null) {
+                        exl.Add(ex);
+                    }
+                    if(param_nfl != null) {
+                        nfl.AddRange(param_nfl);
+                    }
+                    if(data == null) {
+                        // param omitted format, don't process rest of params
+                        break;
                     }
                 }
+                if(data == null) {
+                    continue;
+                }
+                write_output.Set(write_format, data);
             }
            
             if (request.writeToClipboard) {
                 await Util.WaitForClipboard();
-                await Application.Current.Clipboard.SetDataObjectAsync(dataObj);
+                await Application.Current.Clipboard.SetDataObjectAsync(write_output);
                 Util.CloseClipboard();
             }
 
             return new MpClipboardWriterResponse() {
-                processedDataObject = dataObj,
-                errorMessage = sb.ToString()
+                processedDataObject = write_output,
+                userNotifications = nfl,
+                errorMessage = string.Join(Environment.NewLine,exl)
             };
         }
 
-        private static string ProcessWriterParam(MpIParameterKeyValuePair pkvp, IDataObject dataObj) {
-            string errors = null;
-            CoreClipboardParamType paramType = (CoreClipboardParamType)int.Parse(pkvp.paramName);
-            switch(paramType) {
-                case CoreClipboardParamType.W_MaxCharCount_Text:
-                    if(dataObj.Contains(MpPortableDataFormats.Text) &&
-                        dataObj.Get(MpPortableDataFormats.Text) is string text) {
-                        int max_length = int.Parse(pkvp.value);
-                        if(text.Length > max_length) {
-                            text = text.Substring(0, max_length);
-                            dataObj.Set(MpPortableDataFormats.Text, text);
-                        }
-                    }
-                    break;
-                case CoreClipboardParamType.W_MaxCharCount_WebText:
-                    if (dataObj.Contains(MpPortableDataFormats.CefText) &&
-                        dataObj.Get(MpPortableDataFormats.CefText) is string cefText) {
-                        int max_length = int.Parse(pkvp.value);
-                        if (cefText.Length > max_length) {
-                            cefText = cefText.Substring(0, max_length);
-                            dataObj.Set(MpPortableDataFormats.CefText, cefText);
-                        }
-                    }
-                    break;
+        private static object ProcessWriterParam(MpIParameterKeyValuePair pkvp, string format, object data, out Exception ex, out List<MpPluginUserNotificationFormat> nfl) {
+            ex = null;
+            nfl = null;
+            if(data == null) {
+                // already omitted
+                return null;
             }
-            return errors;
+            try {
+                CoreClipboardParamType paramType = (CoreClipboardParamType)int.Parse(pkvp.paramName);
+                switch(format) {
+                    case MpPortableDataFormats.Text:
+                        switch (paramType) {
+                            case CoreClipboardParamType.W_MaxCharCount_Text:
+                                if (data is string text) {
+                                    int max_length = int.Parse(pkvp.value);
+                                    if (text.Length > max_length) {
+                                        nfl = new List<MpPluginUserNotificationFormat>() {
+                                            Util.CreateNotification(
+                                                MpPluginNotificationType.PluginResponseWarning,
+                                                "Max Char Count Reached",
+                                                $"Text limit is '{max_length}' and data was '{text.Length}'",
+                                                "CoreClipboardWriter")
+                                        };
+                                        data = text.Substring(0, max_length);
+                                    }
+                                }
+                                break;
+                            case CoreClipboardParamType.W_Ignore_Text:
+                                data = null;
+                                break;
+                        }
+                        break;
+                    default:
+                        // TODO process other types
+
+                        break;
+                }
+                return data;
+            }
+            catch(Exception e) {
+                ex = e;
+            }
+            return data;
         }
     }
 }

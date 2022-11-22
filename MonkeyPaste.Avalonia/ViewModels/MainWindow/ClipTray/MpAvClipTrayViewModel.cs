@@ -86,7 +86,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void SetQueryInfo() {
-            MpAvQueryInfoViewModel.Current.TotalItemsInQuery = TotalTilesInQuery;
+            //MpAvQueryInfoViewModel.Current.TotalItemsInQuery = TotalTilesInQuery;
         }
 
         #endregion
@@ -1395,6 +1395,22 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.SubQueryChanged:
                     QueryCommand.Execute(ScrollOffset);
                     break;
+
+                // DND
+                case MpMessageType.ItemDragBegin:
+                    OnPropertyChanged(nameof(IsAnyTileDragging));
+                    if(DragItem == null) {
+                        // shant be true
+                        Debugger.Break();
+                        return;
+                    }
+                    MpAvPersistentClipTilePropertiesHelper.AddPersistentIsTileDraggingTile_ById(DragItem.CopyItemId);
+                    break;
+                case MpMessageType.ItemDragEnd:
+                    OnPropertyChanged(nameof(IsAnyTileDragging));
+
+                    MpAvPersistentClipTilePropertiesHelper.ClearPersistentIsTileDragging();
+                    break;
             }
         }
 
@@ -2185,10 +2201,6 @@ namespace MonkeyPaste.Avalonia {
             }
 
             MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels = new List<MpCopyItem>() { ctvm.CopyItem };
-            MpAvPersistentClipTilePropertiesHelper.ClearPersistentIsTileDragging();
-            if(ctvm.IsTileDragging) {
-                MpAvPersistentClipTilePropertiesHelper.AddPersistentIsTileDraggingTile_ById(ctvm.CopyItemId);
-            }
         }
 
         public void RestoreSelectionState(MpAvClipTileViewModel tile) {
@@ -2384,15 +2396,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
-        private void ReceivedDragDropManagerMessage(MpMessageType msg) {
-            switch (msg) {
-                case MpMessageType.ItemDragBegin:
-                case MpMessageType.ItemDragEnd:
-                    OnPropertyChanged(nameof(IsAnyTileDragging));
-                    break;
-            }
-        }
 
         private bool CanTileNavigate() {
             bool canNavigate = !IsAnyBusy && !IsArrowSelecting &&

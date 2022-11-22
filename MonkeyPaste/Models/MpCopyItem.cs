@@ -4,7 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using SQLite;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common;
+
 using System.Diagnostics;
 
 namespace MonkeyPaste {
@@ -246,20 +248,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region Static Methods
-
-        //public static async Task<ObservableCollection<MpCopyItem>> SearchAsync(int tagId, string searchString) {
-        //    var allCopyItems = await MpDataModelProvider.GetItemsAsync<MpCopyItem>();
-        //    var allCopyItemTags = await MpDataModelProvider.GetItemsAsync<MpCopyItemTag>();
-
-        //    var searchResult = (from ci in allCopyItems
-        //                        join cit in allCopyItemTags on
-        //                        tagId equals cit.TagId
-        //                        where ci.ItemData.ContainsByCaseOrRegexSetting(searchString)
-        //                        select ci);//.Skip(2).Take(2);
-
-        //    return new ObservableCollection<MpCopyItem>(searchResult);
-        //}
-
         public static async Task<MpCopyItem> Create(
             int sourceId = 0,
             string data = "", 
@@ -332,6 +320,40 @@ namespace MonkeyPaste {
             return $"{Title} Id:{Id}";
         }
 
+        public async Task UpdateDataObject() {
+            string searchable_text = null;
+            switch (ItemType) {
+                case MpCopyItemType.FileList:
+                    // TODO could use parsing analytics here to get content/meta information
+                    searchable_text = ItemData;
+                    break;
+                case MpCopyItemType.Image:
+                    // TODO could use computer vision analytics here to get content/meta information
+
+                    break;
+                case MpCopyItemType.Text:
+                    searchable_text = ItemData.ToPlainText("html");
+                    break;
+            }
+            if (string.IsNullOrWhiteSpace(searchable_text)) {
+                // ignore empty
+                return;
+            }
+
+            var doil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectId(DataObjectId, MpPortableDataFormats.Text);
+            if (doil.Count == 0) {
+                doil.Add(new MpDataObjectItem() {
+                    DataObjectId = DataObjectId,
+                    ItemFormat = MpPortableDataFormats.Text
+                });
+            }
+            if (doil.Count > 1) {
+                // (currently) there should only be 1 entry
+                Debugger.Break();
+            }
+            doil[0].ItemData = searchable_text;
+            await doil[0].WriteToDatabaseAsync();
+        }
 
         public override async Task WriteToDatabaseAsync() {
             if(IgnoreDb) {
@@ -339,20 +361,14 @@ namespace MonkeyPaste {
                 return;
             }
 
-            //if(Id > 0) {
-            //    // somethings wrong and ignoring updates for now
-            //    return;
-            //}
             if(ItemData == "<p><br></p>") {
                 // what IS this nasty shit??
                 Debugger.Break();
             }
-            //var test_ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(Id);
-            //if(test_ci != null && test_ci.ItemData != ItemData) {
-            //    // why is the data changing hmmmmmm?
-            //    Debugger.Break();
-            //}
             await base.WriteToDatabaseAsync();
+
+
+            _ = Task.Run(UpdateDataObject);
         }
 
         public override async Task DeleteFromDatabaseAsync() {

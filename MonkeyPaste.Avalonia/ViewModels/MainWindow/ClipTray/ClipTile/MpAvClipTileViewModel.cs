@@ -1612,12 +1612,13 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.IsPasting));
                     break;
                 case nameof(IsTileDragging):
-                    Parent.OnPropertyChanged(nameof(Parent.IsAnyTileDragging));
                     if(IsTileDragging) {
                         // NOTE only notify drag start since tile may get recycled
                         // end msg is sent by dnd helper
                         MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
-                    } 
+                    }
+                    MpConsole.WriteLine($"Tile[{this}] IsTileDragging:{IsTileDragging}");
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyTileDragging));
                     break;
                 case nameof(IsDropOverTile):
                     if (IsDropOverTile && !IsSubSelectionEnabled) {

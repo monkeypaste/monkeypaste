@@ -49,7 +49,6 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 	if (ContentItemType != 'Text') {
 		quill.enable(false);
 	}
-	updateAllElements();
 
 	if (searchStateObj == null) {
 		if (isShowingFindReplaceToolbar()) {
@@ -69,7 +68,7 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 
 	IsReadyToPaste = !hasAnyInputRequredTemplate();
 	IsLoaded = true;
-	drawOverlay();
+	updateAllElements();
 	quill.update();
 	onContentLoaded_ntf();
 }

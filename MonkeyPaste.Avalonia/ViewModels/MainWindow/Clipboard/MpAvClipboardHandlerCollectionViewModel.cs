@@ -120,6 +120,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPlatformDataObjectHelperAsync Implementation
 
+        bool MpIPlatformDataObjectHelperAsync.IsOleBusy => IsBusy;
 
         async Task<object> MpIPlatformDataObjectHelperAsync.WriteDragDropDataObject(object idoObj) {
             if(idoObj is IDataObject ido) {
@@ -317,11 +318,12 @@ namespace MonkeyPaste.Avalonia {
 
         private async Task<MpAvDataObject> ReadClipboardOrDropObjectAsync(IDataObject forced_ido = null) {
             // NOTE forcedDataObject is used to read drag/drop, when null clipboard is read
+            IsBusy = true;
+
             MpAvDataObject mpdo = new MpAvDataObject();
 
-            //MpConsole.WriteLine("Handlers available: " + handlers.Count());
             foreach (var read_component in EnabledReaderComponents) {
-                var req = new MpClipboardReaderRequest() {
+                var reader_request = new MpClipboardReaderRequest() {
                     isAvalonia = true,
                     mainWindowImplicitHandle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle.ToInt32(),
                     platform = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
@@ -330,20 +332,31 @@ namespace MonkeyPaste.Avalonia {
                     forcedClipboardDataObject = forced_ido
                 };
 
-                var response = await read_component.ReadClipboardDataAsync(req);
+                MpClipboardReaderResponse reader_response = await read_component.ReadClipboardDataAsync(reader_request);
 
-                bool isValid = MpPluginTransactor.ValidatePluginResponse(response);
-                if (isValid) {
-                    response.dataObject.DataFormatLookup.ForEach(x => mpdo.DataFormatLookup.AddOrReplace(x.Key, x.Value));
+                reader_response = await MpPluginTransactor.ValidatePluginResponseAsync(
+                    reader_request,
+                    reader_response,
+                    Task.Run(async () => {
+                        var result = await read_component.ReadClipboardDataAsync(reader_request);
+                        return result;
+                    }));
+
+
+                if (reader_response != null) {
+                    reader_response.dataObject.DataFormatLookup.ForEach(x => mpdo.DataFormatLookup.AddOrReplace(x.Key, x.Value));
                 } else {
-                    MpConsole.WriteLine("Invalid cb reader response: " + response);
+                    MpConsole.WriteLine("Invalid cb reader response: " + reader_response);
                 }
             }
             mpdo.MapAllPseudoFormats();
+            IsBusy = false;
             return mpdo;
         }
 
         private async Task<object> WriteClipboardOrDropObjectAsync(IDataObject ido, bool writeToClipboard, bool ignoreClipboardChange) {
+            IsBusy = true;
+
             if(ignoreClipboardChange) {
                 MpPlatformWrapper.Services.ClipboardMonitor.StopMonitor();
             }
@@ -353,10 +366,6 @@ namespace MonkeyPaste.Avalonia {
                 .Where(x => EnabledWriters.All(y => y.ClipboardFormat.clipboardName != x))
                 .Select(x => x);
 
-            //foreach (var format_to_remove in formatsToRemove) {
-            //    mpdo.DataFormatLookup.Remove(format_to_remove);
-
-            //}
             formatsToRemove.ForEach(x => ido.TryRemove(x));
 
 
@@ -372,10 +381,15 @@ namespace MonkeyPaste.Avalonia {
 
                 MpClipboardWriterResponse writerResponse = await write_component.WriteClipboardDataAsync(writeRequest);
 
-                bool isValid = MpPluginTransactor.ValidatePluginResponse(writerResponse);
-                if (isValid && writerResponse.processedDataObject is IDataObject processed_ido) {
+                writerResponse = await MpPluginTransactor.ValidatePluginResponseAsync(
+                    writeRequest, writerResponse,
+                    Task.Run(async () => {
+                        return await write_component.WriteClipboardDataAsync(writeRequest);
+                    }));
+
+                if (writerResponse != null && writerResponse.processedDataObject is IDataObject processed_ido) {
                     processed_ido.GetAllDataFormats().ForEach(x => dobj.SetData(x, processed_ido.Get(x)));
-                }
+                } 
             }
 
             MpConsole.WriteLine("Data written to " + (writeToClipboard ? "CLIPBOARD" : "DATAOBJECT") + ":");
@@ -384,6 +398,7 @@ namespace MonkeyPaste.Avalonia {
             if (ignoreClipboardChange) {
                 MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
             }
+            IsBusy = false;
             return dobj;
         }
         #endregion

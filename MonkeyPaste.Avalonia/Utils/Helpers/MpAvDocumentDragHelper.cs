@@ -45,9 +45,9 @@ namespace MonkeyPaste.Avalonia {
                 FinishDrag(null);
                 return;
             }
-            DragDataObject = SourceDataObject.Clone();            
+            DragDataObject = SourceDataObject.Clone();
             // signals vm to post ItemDragBegin which notifies drop widget to show
-            dragSource.IsDragging = true;
+            _dragSource.IsDragging = true;
 
             var result = await DragDrop.DoDragDrop(pointerEventArgs, DragDataObject, allowedEffects);
 
