@@ -3,7 +3,7 @@ using System.Linq;
 using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Common {
-    public class MpAvKeyGestureHelper2 {
+    public class MpKeyGestureHelper2 {
         #region Private Variables
         public const string COMBO_SEPARATOR = "+";
         public const string SEQUENCE_SEPARATOR = "|";

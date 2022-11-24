@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using MonoMac.AppKit;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvWinPathIconHelper {

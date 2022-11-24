@@ -174,6 +174,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Adorners\MpAvContentDragDropAdorner.cs" />
+    <Compile Remove="AttachedProperties\MpAvCefNetWebViewExtension.cs" />
     <Compile Remove="AttachedProperties\MpAvCefWebViewExtension.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
@@ -1028,6 +1029,8 @@
     <Folder Include="Utils\Clipboard\Win32\" />
     <Folder Include="Controls\ProgressRing\" />
     <Folder Include="Utils\Input\Mouse\" />
+    <Folder Include="ViewModels\MainWindow\SearchBox\Filter\Items\" />
+    <Folder Include="ViewModels\MainWindow\TagTray\TagTile\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
     <Folder Include="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\" />
   </ItemGroup>
@@ -1061,6 +1064,12 @@
     </Compile>
     <Compile Update="Views\MainWindow\FilterMenu\MpAvFilterMenuView.axaml.cs">
       <DependentUpon>MpAvFilterMenuView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\FilterMenu\Sort\Direction\MpAvClipTileSortDirectionView.axaml.cs">
+      <DependentUpon>MpAvClipTileSortDirectionView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\FilterMenu\Sort\Field\MpAvClipTileSortFieldView.axaml.cs">
+      <DependentUpon>MpAvClipTileSortFieldView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\Buttons\MpAvClearTextButton.axaml.cs">
       <DependentUpon>MpAvClearTextButton.axaml</DependentUpon>

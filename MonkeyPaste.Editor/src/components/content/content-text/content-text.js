@@ -276,7 +276,7 @@ function getLineIdxAndRectFromPoint(p) {
 
 function getBlockIdxFromPoint(p) {
 	let p_elm = document.elementFromPoint(p.x, p.y);
-	let blot = Quill.find(p_elm);
+	let blot = quillFindBlot(p_elm);
 	let block_idx = blot.offset(quill.scroll);
 	if (!isNaN(parseInt(block_idx))) {
 		debugger;
@@ -294,7 +294,7 @@ function getElementBlot(elm) {
 			return null;
 		}
 
-		let cur_blot = Quill.find(cur_elm);
+		let cur_blot = quillFindBlot(cur_elm);
 		if (cur_blot && typeof cur_blot.offset === 'function') {
 			return cur_blot;
 		}
@@ -335,9 +335,10 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 	}
 
 	if (!isNaN(parseInt(text_node_idx)) && text_node_idx >= 0) {
-		let text_blot = Quill.find(textNode);
+		let text_blot = quillFindBlot(textNode);
 		if (text_blot && typeof text_blot.offset === 'function') {
-			doc_idx = Quill.find(textNode).offset(quill.scroll) + text_node_idx;
+			//doc_idx = Quill.find(textNode).offset(quill.scroll) + text_node_idx;
+			doc_idx = quillFindBlotOffset(textNode) + text_node_idx;
 		} else {
 			let parent_node = textNode.parentNode;
 			while (parent_node != null) {
@@ -348,7 +349,7 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 			}
 			if (parent_node) {
 				try {
-					doc_idx = Quill.find(textNode.parentNode, true).offset(quill.scroll);
+					doc_idx = quillFindBlotOffset(textNode.parentNode, true);
 				} catch (Ex) {
 					debugger;
 				}
@@ -359,7 +360,7 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 		return doc_idx;
 
 		if (textNode && textNode.parentElement) {
-			let parent_blot = Quill.find(textNode.parentElement);
+			let parent_blot = quillFindBlot(textNode.parentElement);
 			if (parent_blot && typeof parent_blot.offset === 'function') {
 				// get doc idx of block
 				parent_idx = parent_blot.offset(quill.scroll);
@@ -372,7 +373,7 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 						if (prev_sib_node.nodeType == 3) {
 							prev_sib_offset = prev_sib_node.textContent.length;;
 						} else {
-							let prev_sib_blot = Quill.find(prev_sib_node);
+							let prev_sib_blot = quillFindBlot(prev_sib_node);
 							if (prev_sib_blot && typeof prev_sib_blot.offset === 'function') {
 								if (prev_sib_node.hasAttribute('templateGuid')) {
 									//length of 0
@@ -400,7 +401,7 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 					// but parentElement will still be the enclosed block blot so find the blot offset
 					let p_elm = document.elementFromPoint(p.x, p.y);
 					if (p_elm) {
-						let blot = Quill.find(p_elm);
+						let blot = quillFindBlot(p_elm);
 						if (blot && typeof blot.offset === 'function') {
 							let block_idx = blot.offset(quill.scroll);
 							if (!isNaN(parseInt(block_idx))) {
@@ -482,7 +483,7 @@ function getHtmlFromDocRange(docRange) {
 }
 
 function getElementDocRange(elm) {
-	let elm_blot = Quill.find(elm);
+	let elm_blot = quillFindBlot(elm);
 	if (!elm_blot) {
 		return null;
 	}
@@ -490,7 +491,7 @@ function getElementDocRange(elm) {
 	let elm_length = 0;
 
 	if (elm.nextSibling) {
-		let elm_next_blot = Quill.find(elm.nextSibling);
+		let elm_next_blot = quillFindBlot(elm.nextSibling);
 		if (elm_next_blot) {
 			let elm_next_index = elm_next_blot.offset(quill.scroll);
 			elm_length = elm_next_index - elm_index;
@@ -508,7 +509,7 @@ function getElementDocRange(elm) {
 				parent_elm = parent_elm.parentElement;
 			} else {
 				parent_elm = parent_elm.nextSibling;
-				let elm_next_parent_blot = Quill.find(parent_elm);
+				let elm_next_parent_blot = quillFindBlot(parent_elm);
 				if (elm_next_parent_blot) {
 					let elm_next_parent_index = elm_next_parent_blot.offset(quill.scroll);
 					elm_length = elm_next_parent_index - elm_index;

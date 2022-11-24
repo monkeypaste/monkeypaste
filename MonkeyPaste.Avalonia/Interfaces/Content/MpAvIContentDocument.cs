@@ -12,11 +12,11 @@ namespace MonkeyPaste.Avalonia {
     }
     public interface MpAvIDragSource {
 
-        PointerEventArgs DragPointerEventArgs { get; }
-        bool IsDragging { get; set; }
+        PointerPressedEventArgs LastPointerPressedEventArgs { get; }
+        //bool IsDragging { get; set; }
         void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc);
         void NotifyDropComplete(DragDropEffects dropEffect);
-        Task<MpAvDataObject> GetDataObjectAsync(bool ignoreSelection, bool fillTemplates, bool isCutOrCopy, string[] formats = null);
+        Task<MpAvDataObject> GetDataObjectAsync(bool forOle, string[] formats = null);
 
     }
 

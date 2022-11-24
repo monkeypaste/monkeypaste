@@ -184,13 +184,12 @@ namespace MonkeyPaste.Avalonia {
             }
             return RunningProcessLookup.Any(x => x.Value.Contains(handle));
         }
-
         #endregion
 
         #region Protected Methods
 
         protected abstract MpPortableProcessInfo GetActiveProcessInfo();
-       // protected abstract IEnumerable<MpPortableProcessInfo> GetRunningProcessInfos();
+        // protected abstract IEnumerable<MpPortableProcessInfo> GetRunningProcessInfos();
 
         protected abstract MpPortableProcessInfo RefreshRunningProcessLookup();
 

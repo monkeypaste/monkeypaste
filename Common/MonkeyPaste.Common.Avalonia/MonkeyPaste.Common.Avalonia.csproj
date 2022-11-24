@@ -60,6 +60,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <AvaloniaXaml Remove="Utils\Input\Platform\Win32\COM\**" />
+    <Compile Remove="Utils\Input\Platform\Win32\COM\**" />
+    <EmbeddedResource Remove="Utils\Input\Platform\Win32\COM\**" />
+    <None Remove="Utils\Input\Platform\Win32\COM\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Utils\Data\MpAvSafeOleAccessor.cs" />
   </ItemGroup>
   <ItemGroup>

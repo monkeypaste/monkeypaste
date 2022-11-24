@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
@@ -20,8 +21,12 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         private double _resize_shortcut_nudge_amount = 50;
-        private CancellationTokenSource _animationCts;
+        //private CancellationTokenSource _animationCts;
 
+        private bool _isAnimationCanceled = false;
+        private DispatcherTimer _animationTimer;
+
+        private const int _ANIMATE_WINDOW_TIMEOUT_MS = 2000;
         #endregion
 
         #region Statics
@@ -309,7 +314,8 @@ namespace MonkeyPaste.Avalonia {
                 if(IsMainWindowOrientationDragging) {
                     return true;
                 }
-                return MpAvClipTrayViewModel.Instance.IsAnyTileDragging;
+                //return MpAvClipTrayViewModel.Instance.IsAnyTileDragging;
+                return MpAvDocumentDragHelper.IsDragging;
             }
         }
         public bool IsMainWindowOrientationDragging { get; set; } = false;
@@ -362,7 +368,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsAnyDropDownOpen { get; set; }
 
-        public bool IsShowingDialog { get; set; } = false;
+        public bool IsAnyDialogOpen { get; set; } = false;
 
         public bool IsMainWindowActive { get; set; }
 
@@ -420,7 +426,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         public MpAvMainWindowViewModel() : base() {
-            _animationCts = new CancellationTokenSource();
+            //_animationCts = new CancellationTokenSource();
             MainWindowOrientationType = (MpMainWindowOrientationType)Enum.Parse(typeof(MpMainWindowOrientationType), MpPrefViewModel.Instance.MainWindowOrientation, false);
             MainWindowShowBehaviorType = (MpMainWindowShowBehaviorType)Enum.Parse(typeof(MpMainWindowShowBehaviorType), MpPrefViewModel.Instance.MainWindowShowBehaviorType, false);
             PropertyChanged += MpAvMainWindowViewModel_PropertyChanged;
@@ -485,7 +491,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private void Instance_OnGlobalMouseMove(object sender, MpPoint gmp) {
-            if(IsMainWindowOpen) {
+            if (IsMainWindowOpen) {
                 return;
             }
             bool isShowingMainWindow = false;
@@ -500,12 +506,12 @@ namespace MonkeyPaste.Avalonia {
 
             if (!isShowingMainWindow &&
                 MpPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop) {
-                if ( MpAvShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonDownLocation != null &&
+                if (MpAvShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonDownLocation != null &&
                     gmp.Distance(MpAvShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonDownLocation) >= MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST &&
                     gmp.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
                     // show mw during dnd and user drags to top of screen (when pref set)
                     ShowWindowCommand.Execute(null);
-                }                
+                }
             }
         }
 
@@ -653,7 +659,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void FinishMainWindowShow() {            
-            if (_animationCts.IsCancellationRequested) {
+            if (_isAnimationCanceled) {
                 MpConsole.WriteLine("FinishShow canceled, ignoring view changes");
                 return;
             }
@@ -680,7 +686,7 @@ namespace MonkeyPaste.Avalonia {
         
         public void FinishMainWindowHide(MpPortableProcessInfo active_pinfo) {
 
-            if(_animationCts.IsCancellationRequested) {
+            if(_isAnimationCanceled) {
                 MpConsole.WriteLine("FinishHide canceled, ignoring view changes");
                 return;
             }
@@ -707,7 +713,7 @@ namespace MonkeyPaste.Avalonia {
             var active_info = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
             MpConsole.WriteLine("Active: " + active_info);
         }
-        private async Task AnimateMainWindowAsync(MpRect startRect, MpRect endRect, CancellationToken ct) {
+        private async Task AnimateMainWindowAsync(MpRect startRect, MpRect endRect) {
             // close 0.12 20
             // open 
             double zeta = 0.22d;
@@ -729,7 +735,6 @@ namespace MonkeyPaste.Avalonia {
                 MpMainWindowOrientationType.Bottom => 3,
                 _ => throw new NotImplementedException()
             };
-
             bool isDone = false;
             DateTime prevTime = DateTime.Now;
             EventHandler tick = (s, e) => {
@@ -748,25 +753,31 @@ namespace MonkeyPaste.Avalonia {
 
                 bool is_v_zero = v.All(x => Math.Abs(x) < 0.1d);
 
-                if(is_v_zero || ct.IsCancellationRequested) {
+                if(is_v_zero || _isAnimationCanceled) {
                     // consider done when all v's are pretty low or canceled
                     isDone = true;
                     return;
                 }               
             };
 
-            var timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(1000d / 60d);
-            timer.Tick += tick;
-            timer.Start();
-
-            while(!isDone) {                
-                await Task.Delay(5);
+            if(_animationTimer == null) {
+                _animationTimer = new DispatcherTimer();
+                _animationTimer.Interval = TimeSpan.FromMilliseconds(1000d / 60d);
             }
-            timer.Stop();
-            timer.Tick -= tick;
+            _animationTimer.Tick += tick;
+            _animationTimer.Start();
 
-            if(ct.IsCancellationRequested) {
+            var timeout_sw = Stopwatch.StartNew();
+            while (!isDone) {                
+                await Task.Delay(5);
+                if(timeout_sw.ElapsedMilliseconds >= _ANIMATE_WINDOW_TIMEOUT_MS) {
+                    isDone = true;
+                }
+            }
+            _animationTimer.Stop();
+            _animationTimer.Tick -= tick;
+
+            if(_isAnimationCanceled) {
                 return;
             }
 
@@ -777,164 +788,199 @@ namespace MonkeyPaste.Avalonia {
             // case: 
             //if(IsMainWindowOpen && !IsMainWindowActive)
         }
+
+        private bool IsMainWindowAnimating() {
+            if(_animationTimer == null) {
+                return false;
+            }
+            return _animationTimer.IsEnabled;
+        }
         #endregion
 
         #region Commands        
 
-        public ICommand ShowWindowCommand => new MpAsyncCommand(
-            async () => {
-                MpConsole.WriteLine("Opening Main Widow");
-                if (!Dispatcher.UIThread.CheckAccess()) {
-                    Dispatcher.UIThread.Post(() => {
-                        ShowWindowCommand.Execute(null);
-                    });
-                    return;
-                }
-                if (IsMainWindowClosing) {
-                    _animationCts?.Cancel();
-                    //while (IsMainWindowClosing) { await Task.Delay(5); }
-                }
+        public ICommand ShowWindowCommand => new MpCommand(
+             () => {
 
-                SetupMainWindowSize();
+                Dispatcher.UIThread.Post(async() => {
+                    if (IsMainWindowOpening && IsMainWindowAnimating()) {
+                        return;
+                    }
 
-                if (IsMainWindowInitiallyOpening) {
-                    MainWindowScreenRect = MainWindowClosedScreenRect;
-                }
+                    if (IsMainWindowClosing || IsMainWindowOpening) {
+                        _isAnimationCanceled = true;
+                        var sw = Stopwatch.StartNew();
+                        while (IsMainWindowAnimating()) {
+                            await Task.Delay(100);
+                            if (sw.ElapsedMilliseconds >= _ANIMATE_WINDOW_TIMEOUT_MS) {
+                                break;
+                            }
+                        }
+                        await Task.Delay(100);
+                        IsMainWindowClosing = false;
+                        _isAnimationCanceled = false;
+                    }
 
-                IsMainWindowOpening = true;              
+                    MpConsole.WriteLine("Opening Main Widow");
+                    SetupMainWindowSize();
 
-                if (AnimateShowWindow) {
-                    MpAvMainWindow.Instance.Show();
-                    MpAvMainWindow.Instance.Topmost = false;
-                    //MpAvMainWindow.Instance.Renderer.Start();
+                    if (IsMainWindowInitiallyOpening) {
+                        MainWindowScreenRect = MainWindowClosedScreenRect;
+                    }
 
-                    _animationCts.TryReset();
-                    await AnimateMainWindowAsync(MainWindowScreenRect, MainWindowOpenedScreenRect, _animationCts.Token);
-                }
-                FinishMainWindowShow();
+                    IsMainWindowOpening = true;
+
+                    if (AnimateShowWindow) {
+                        MpAvMainWindow.Instance.Show();
+                        MpAvMainWindow.Instance.Topmost = false;
+                        //MpAvMainWindow.Instance.Renderer.Start();
+
+                        //_animationCts.TryReset();
+                        await AnimateMainWindowAsync(MainWindowScreenRect, MainWindowOpenedScreenRect);
+                    }
+                    FinishMainWindowShow();
+                });
+                
             },
             () => {
                 bool canShow = !IsMainWindowLoading &&
-                        !IsShowingDialog &&
+                        !IsAnyDialogOpen &&
                         !IsMainWindowOpen &&
                         //!IsMainWindowClosing &&
                         !IsMainWindowOpening;
 
                 if(!canShow) {
-                    MpConsole.WriteLine("");
-                    MpConsole.WriteLine($"Cannot show main window:");
-                    MpConsole.WriteLine($"IsMainWindowOpen: {(IsMainWindowOpen)}");
-                    MpConsole.WriteLine($"IsMainWindowLoading: {(IsMainWindowLoading)}");
-                    MpConsole.WriteLine($"IsShowingDialog: {(IsShowingDialog)}");
-                    MpConsole.WriteLine($"IsMainWindowClosing: {(IsMainWindowClosing)}");
-                    MpConsole.WriteLine($"IsMainWindowOpening: {(IsMainWindowOpening)}");
-                    MpConsole.WriteLine("");
-                    if(IsMainWindowInitiallyOpening) {
+
+                    if (IsMainWindowInitiallyOpening) {
                         return canShow;
                     }
+                    //if(IsMainWindowOpening) {
+                    //    bool wasOpening = _animationCts.TryReset();
+                    //    MpConsole.WriteLine("Canceling opening: " + wasOpening);
+                    //    if (!wasOpening) {
+                    //        // don't allow in this, recall Can
+                    //        IsMainWindowOpening = false;
+                    //        bool recallResult = ShowWindowCommand.CanExecute(null);
+                    //        MpConsole.WriteLine("Wasn't opening, unset IsMainWindowOpening to false, recall result: " + recallResult);
+                    //        return recallResult;
+                    //    } else {
+                    //        canShow = true;
+                    //    }
+                    //}
+                    //if (IsMainWindowClosing) {
+                    //    bool wasClosing = _animationCts.TryReset();
+                    //    MpConsole.WriteLine("Canceling closing: " + wasClosing);
+                    //    if (!wasClosing) {
+                    //        // don't allow in this, recall Can
+                    //        IsMainWindowClosing = false;
+                    //        bool recallResult = ShowWindowCommand.CanExecute(null);
+                    //        MpConsole.WriteLine("Wasn't closing, unset IsMainWindowClosing to false, recall result: " + recallResult);
+                    //        return recallResult;
+                    //    } else {
+                    //        canShow = true;
+                    //    }
+                    //}
 
-                    if(IsMainWindowOpening) {
-                        bool wasOpening = _animationCts.TryReset();
-                        MpConsole.WriteLine("Canceling opening: " + wasOpening);
-                        if (!wasOpening) {
-                            // don't allow in this, recall Can
-                            IsMainWindowOpening = false;
-                            bool recallResult = ShowWindowCommand.CanExecute(null);
-                            MpConsole.WriteLine("Wasn't opening, unset IsMainWindowOpening to false, recall result: " + recallResult);
-                            return recallResult;
-                        } else {
-                            canShow = true;
-                        }
+                    if(!canShow) {
+                        MpConsole.WriteLine("");
+                        MpConsole.WriteLine($"Cannot show main window:");
+                        MpConsole.WriteLine($"IsMainWindowOpen: {(IsMainWindowOpen)}");
+                        MpConsole.WriteLine($"IsMainWindowLoading: {(IsMainWindowLoading)}");
+                        MpConsole.WriteLine($"IsShowingDialog: {(IsAnyDialogOpen)}");
+                        MpConsole.WriteLine($"IsMainWindowClosing: {(IsMainWindowClosing)}");
+                        MpConsole.WriteLine($"IsMainWindowOpening: {(IsMainWindowOpening)}");
+                        MpConsole.WriteLine("");
                     }
-                    if (IsMainWindowClosing) {
-                        bool wasClosing = _animationCts.TryReset();
-                        MpConsole.WriteLine("Canceling closing: " + wasClosing);
-                        if (!wasClosing) {
-                            // don't allow in this, recall Can
-                            IsMainWindowClosing = false;
-                            bool recallResult = ShowWindowCommand.CanExecute(null);
-                            MpConsole.WriteLine("Wasn't closing, unset IsMainWindowClosing to false, recall result: " + recallResult);
-                            return recallResult;
-                        } else {
-                            canShow = true;
-                        }
-                    }
+
+                    
                 }
                 return canShow;
             });
 
-        public ICommand HideWindowCommand => new MpAsyncCommand(
-            async() => {
-                MpConsole.WriteLine("Closing Main WIndow");
+        public ICommand HideWindowCommand => new MpCommand(
+            () => {
+                Dispatcher.UIThread.Post(async () => {
+                    if (IsMainWindowClosing && IsMainWindowAnimating()) {
+                        return;
+                    }
 
-                if (!Dispatcher.UIThread.CheckAccess()) {
-                    Dispatcher.UIThread.Post(() => {
-                        HideWindowCommand.Execute(null);
-                    });
-                    return;
-                }
-                if(IsMainWindowOpening) {
-                    _animationCts?.Cancel();
-                    //while(IsMainWindowOpening) { await Task.Delay(5); }
-                }
-                
+                    if (IsMainWindowOpening || IsMainWindowClosing) {
+                        _isAnimationCanceled = true;
+                        var sw = Stopwatch.StartNew();
+                        while (IsMainWindowAnimating()) {
+                            await Task.Delay(100);
+                            if (sw.ElapsedMilliseconds >= _ANIMATE_WINDOW_TIMEOUT_MS) {
+                                break;
+                            }
+                        }
+                        await Task.Delay(100);
+                        IsMainWindowOpening = false;
+                        _isAnimationCanceled = false;
+                    }
 
-                IsMainWindowClosing = true;
+                    MpConsole.WriteLine("Closing Main WIndow");
+                    IsMainWindowClosing = true;
 
-                MpPortableProcessInfo active_pinfo = null;
-                if(!MpAvClipTrayViewModel.Instance.IsPasting) {
-                    // let external paste handler sets active after hide signal because when pasting the activated app may not be last active 
-                    active_pinfo = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
-                }
-                if(AnimateHideWindow) {
+                    MpPortableProcessInfo active_pinfo = null;
                     if (!MpAvClipTrayViewModel.Instance.IsPasting) {
                         // let external paste handler sets active after hide signal because when pasting the activated app may not be last active 
-                        MpPlatformWrapper.Services.ProcessWatcher.SetActiveProcess(MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle);
+                        active_pinfo = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
                     }
-                    //
-                    MpAvMainWindow.Instance.Topmost = false;
-                    //MpAvMainWindow.Instance.Renderer.Start();
-                    _animationCts.TryReset();
-                    await AnimateMainWindowAsync(MainWindowScreenRect, MainWindowClosedScreenRect, _animationCts.Token);
-                }
-                FinishMainWindowHide(active_pinfo);
+                    if (AnimateHideWindow) {
+                        if (!MpAvClipTrayViewModel.Instance.IsPasting) {
+                            // let external paste handler sets active after hide signal because when pasting the activated app may not be last active 
+                            MpPlatformWrapper.Services.ProcessWatcher.SetActiveProcess(MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle);
+                        }
+                        //
+                        MpAvMainWindow.Instance.Topmost = false;
+                        await AnimateMainWindowAsync(MainWindowScreenRect, MainWindowClosedScreenRect);
+                    }
+                    FinishMainWindowHide(active_pinfo);
+                });
+               
+
             },
             () => {
                 if(IsAnyItemDragging) {
                     string drag_info = string.Empty;
-                    if(MpAvClipTrayViewModel.Instance.DragItem == null) {
-                        if(MpAvPersistentClipTilePropertiesHelper.GetIsDraggingTiles().Count == 0) {
-                            drag_info = "NULL";
-                        } else {
-                            drag_info = string.Join(",", MpAvPersistentClipTilePropertiesHelper.GetIsDraggingTiles());
-                        }
+                    //if(MpAvClipTrayViewModel.Instance.DragItem == null) {
+                    //    if(MpAvPersistentClipTilePropertiesHelper.GetIsDraggingTiles().Count == 0) {
+                    //        drag_info = "NULL";
+                    //    } else {
+                    //        drag_info = string.Join(",", MpAvPersistentClipTilePropertiesHelper.GetIsDraggingTiles());
+                    //    }
 
-                    } else {
-                        drag_info = MpAvClipTrayViewModel.Instance.DragItem.ToString();
+                    //} else {
+                    //    drag_info = MpAvClipTrayViewModel.Instance.DragItem.ToString();
+                    //}
+                    if(MpAvDocumentDragHelper.DragDataObject is IDataObject ido) {
+                        drag_info = ido.Get(MpPortableDataFormats.Text) as string;
+                    } else if(IsMainWindowOrientationDragging) {
+                        drag_info = "ORIENTATION DRAG";
                     }
 
                     MpConsole.WriteLine($"Force ignore mw close, dnd in progress on {drag_info}");
                     return false;
                 }
 
-                if (IsShowingDialog) {
+                if (IsAnyDialogOpen) {
                     MpConsole.WriteLine("Force ignore mw close, dialog is open");
                     return false;
                 }
 
                 bool fromShorcutKey = false;
 
-                bool canHide = 
+                bool canHide =
                         !IsMainWindowLocked &&
                           !IsAnyDropDownOpen &&
                           !IsAnyTextBoxFocused &&
                           !IsMainWindowInitiallyOpening &&
-                          !IsShowingDialog &&    
+                          !IsAnyDialogOpen &&
                           !IsAnyItemDragging &&
                           //!MpContextMenuView.Instance.IsOpen &&
                           //!IsMainWindowOpening &&
-                          !IsResizing &&
-                          !IsMainWindowClosing;
+                          !IsResizing;// &&
+                          //!IsMainWindowClosing;
 
                 if(canHide && fromShorcutKey) {
                     var sctvm = MpAvClipTrayViewModel.Instance.SelectedItem;
@@ -952,7 +998,7 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine($"IsMainWindowLocked: {(IsMainWindowLocked)}");
                     MpConsole.WriteLine($"IsMainWindowInitiallyOpening: {(IsMainWindowInitiallyOpening)}");
                     MpConsole.WriteLine($"IsAnyDropDownOpen: {(IsAnyDropDownOpen)}");
-                    MpConsole.WriteLine($"IsShowingDialog: {(IsShowingDialog)}");
+                    MpConsole.WriteLine($"IsShowingDialog: {(IsAnyDialogOpen)}");
                     MpConsole.WriteLine($"IsResizing: {(IsResizing)}");
                     MpConsole.WriteLine($"IsMainWindowClosing: {(IsMainWindowClosing)}");
                     MpConsole.WriteLine("");

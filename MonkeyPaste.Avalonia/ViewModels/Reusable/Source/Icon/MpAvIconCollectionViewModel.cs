@@ -192,7 +192,7 @@ namespace MonkeyPaste.Avalonia {
                 //    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
                 //};
 
-                MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
+                MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
 
                 var selectedImagePath = await new OpenFileDialog() {
                     Filters = new List<FileDialogFilter>() {
@@ -228,7 +228,7 @@ namespace MonkeyPaste.Avalonia {
 
                     //uivm.SetIconCommand.Execute(icon);
                 }
-                MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
+                MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
             });
 
         public ICommand ChangeIconCommand => new MpCommand<object>(

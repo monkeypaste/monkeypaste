@@ -6,6 +6,10 @@ var quill;
 
 // #region Life Cycle
 function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
+	if (Quill === undefined) {
+		/// host load error case
+		debugger;
+	}
 	hljs.configure({   // optionally configure hljs
 		languages: ['javascript', 'ruby', 'python', 'xml', 'html', 'xhtml']
 	});
@@ -25,13 +29,13 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 		formula: true,
 		preserveWhiteSpace: true,
 		syntax: true,
-		//modules: {
-		//	toolbar: '#editorToolbar',
-		//	//table: !UseBetterTable,
-		//	//htmlEditButton: {
-		//	//	syntax: true
-		//	//}
-		//}
+		modules: {
+			toolbar: toolbarId,
+			//table: !UseBetterTable,
+			//htmlEditButton: {
+			//	syntax: true
+			//}
+		}
 	}
 
 	quillOptions = initEditorToolbarQuillOptions(quillOptions, toolbarId);
@@ -152,7 +156,7 @@ function getHtml3(sel) {
 	}
 	let delta = getDelta(sel);
 	let cfg = {
-		inlineStyles: true,
+		//inlineStyles: true,
 		//customTagAttributes: onCustomTagAttributes,
 		encodeHtml: false
 	};
@@ -267,6 +271,26 @@ function setContents(jsonStr) {
 
 // #region Actions
 
+function quillFindBlot(elm, bubble = false) {
+	if (Quill === undefined) {
+		/// host load error case
+		debugger;
+		return null;
+	}
+	return Quill.find(elm, bubble);
+}
+
+function quillFindBlotOffset(elm, bubble = false) {
+	let blot = quillFindBlot(elm, bubble);
+	if (!blot) {
+		return 0;
+	}
+	if (quill == null) {
+		// load error
+		debugger;
+	}
+	return blot.offset(quill.scroll);
+}
 function formatDocRange(range, format, source = 'api') {
 	quill.formatText(range.index, range.length, format, source);
 }

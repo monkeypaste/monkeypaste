@@ -1,15 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Threading;
 using MonkeyPaste;
 using MonkeyPaste.Common;
 using Newtonsoft.Json;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvQueryInfoViewModel : MpViewModelBase, MpIQueryInfo, MpIJsonObject {
+        #region Private Variables
+        [JsonIgnore]
+        private ObservableCollection<MpIQueryInfoValueProvider> _valueProviders = new ObservableCollection<MpIQueryInfoValueProvider>();
+
+        [JsonIgnore]
+        private List<int> _allQueryCopyItemIds = new List<int>();
+
+        [JsonIgnore]
+        private IEnumerable<string> _requeryPropertieNames = new string[] {
+            nameof(TagId),
+        };
+        #endregion
 
         #region Statics
 
@@ -22,14 +37,13 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvQueryInfoViewModel Current => _current;
         #endregion
 
-        #region Properties
+        #region Properties      
         
-        [JsonIgnore]
-        public ObservableCollection<MpIQueryInfoProvider> InfoProviders { get; private set; } = new ObservableCollection<MpIQueryInfoProvider>();
+
 
         #region MpIQueryInfo Implementation
 
-        //public int TotalItemsInQuery { get; set; } = 0;
+        public int TotalAvailableItemsInQuery => _allQueryCopyItemIds.Count;
         public bool IsDescending { get; set; } = true;
         public MpContentSortType SortType { get; set; } = MpContentSortType.CopyDateTime;
         public int TagId { get; set; } = 0;
@@ -42,48 +56,8 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIQueryInfo Next { get; set; }
 
-        public int PageSize { get; set; } = 0;
-
         public int SortOrderIdx { get; set; } = 0;
 
-        public void RegisterProvider(MpIQueryInfoProvider qip) {
-            if(InfoProviders.Contains(qip)) {
-                MpConsole.WriteLine("Ignoring duplicate query info provider registration");
-                return;
-            }
-            InfoProviders.Add(qip);
-        }
-
-        public void NotifyQueryChanged(bool isFilterSortOrSearch = true) {
-            //SupressPropertyChangedNotification = true;
-
-            //IsDescending = MpAvClipTileSortViewModel.Instance.IsSortDescending;
-            //SortType = MpAvClipTileSortViewModel.Instance.SelectedSortType;
-            TagId = MpAvTagTrayViewModel.Instance.SelectedItem.TagId;
-            SearchText = MpAvSearchBoxViewModel.Instance.SearchText;
-            //TotalItemsInQuery = MpDataModelProvider.TotalTilesInQuery;
-
-            // NOTE not sure why this isn't set so maybe bad
-            //FilterFlags = MpContentFilterType.TextType | MpContentFilterType.FileType | MpContentFilterType.ImageType; //MpSearchBoxViewModel.Instance.FilterType;
-            FilterFlags = MpAvSearchBoxViewModel.Instance.FilterType;
-
-            MpPrefViewModel.Instance.LastQueryInfoJson = SerializeJsonObject();
-
-            //var qi = MpDataModelProvider.QueryInfo;
-            MpDataModelProvider.QueryInfos.Clear();
-
-            //qi.FilterFlags = FilterFlags;//MpSearchBoxViewModel.Instance.FilterType;
-            MpDataModelProvider.QueryInfos.Add(this);
-            // MpSearchBoxViewModel.Instance.CriteriaItems.OrderBy(x => x.SortOrderIdx).ForEach(x => MpDataModelProvider.QueryInfos.Add(x.ToQueryInfo()));
-
-            MpPlatformWrapper.Services.MainThreadMarshal.RunOnMainThread(() => {
-                if (isFilterSortOrSearch) {
-                    MpMessenger.SendGlobal(MpMessageType.QueryChanged);
-                } else {
-                    MpMessenger.SendGlobal(MpMessageType.SubQueryChanged);
-                }
-            });
-        }
         #endregion
 
 
@@ -97,11 +71,15 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Events
+        #endregion
+
         #region Constructors
 
         public MpAvQueryInfoViewModel() {
             PropertyChanged += MpAvQueryInfoViewModel_PropertyChanged;
         }
+
 
         #endregion
 
@@ -111,8 +89,111 @@ namespace MonkeyPaste.Avalonia {
             Next = next;
             NextJoinType = joinType;
         }
+
+        #region Query Methods
+        public async Task QueryForTotalCountAsync(IEnumerable<int> ci_idsToOmit, IEnumerable<int> tagIds) { // = null) {
+            _allQueryCopyItemIds = await MpContentQuery.QueryAllAsync(this, tagIds, ci_idsToOmit);
+        }
+
+        public async Task<List<MpCopyItem>> FetchCopyItemsByQueryIdxListAsync(List<int> copyItemQueryIdxList) {
+            var fetchRootIds = _allQueryCopyItemIds
+                                .Select((val, idx) => (val, idx))
+                                .Where(x => copyItemQueryIdxList.Contains(x.idx))
+                                .Select(x => x.val).ToList();
+            var items = await MpDataModelProvider.GetCopyItemsByIdListAsync(fetchRootIds);
+            return items;
+        }
+        #endregion
+
+        #region Result Interaction
+        public void ResetQuery() {
+            _allQueryCopyItemIds.Clear();
+        }
         
-        
+        public int GetItemId(int queryIdx) {
+            if(queryIdx < 0 || queryIdx >= _allQueryCopyItemIds.Count) {
+                return -1;
+            }
+            return _allQueryCopyItemIds[queryIdx];
+        }
+
+        public int GetItemOffsetIdx(int itemId) {
+            return _allQueryCopyItemIds.IndexOf(itemId);
+        }
+
+        public void InsertId(int idx, int id) {
+            if(idx < 0 || idx > _allQueryCopyItemIds.Count) {
+                // bad idx
+                Debugger.Break();
+                return;
+            }
+            if(idx == _allQueryCopyItemIds.Count) {
+                _allQueryCopyItemIds.Add(id);
+            } else {
+                _allQueryCopyItemIds.Insert(idx, id);
+            }
+        }
+        public bool RemoveItemId(int itemId) {
+            bool was_removed = _allQueryCopyItemIds.Remove(itemId);
+            return was_removed;
+        }
+        public bool RemoveIdx(int queryIdx) {
+            if (queryIdx < 0 || queryIdx >= _allQueryCopyItemIds.Count) {
+                return false;
+            }
+            _allQueryCopyItemIds.RemoveAt(queryIdx);
+            return true;
+        }
+        #endregion
+
+        #region Value Provider Interaction
+
+        public void RestoreProviderValues() {
+            foreach(var vp in _valueProviders) {
+                vp.Source.SetPropertyValue(vp.SourcePropertyName, this.GetPropertyValue(vp.QueryValueName));
+            }
+        }
+
+        public void RegisterProvider(MpIQueryInfoValueProvider qip) {
+            if(!qip.Source.GetType().GetProperty(qip.SourcePropertyName).CanWrite) {
+                // needs to allow reset
+                Debugger.Break();
+            }
+            if (_valueProviders.Contains(qip)) {
+                MpConsole.WriteLine("Ignoring duplicate query info provider registration");
+                return;
+            }
+            _valueProviders.Add(qip);
+        }
+
+        public void NotifyQueryChanged(bool forceRequery = false) {
+            if(!Dispatcher.UIThread.CheckAccess()) {
+                Dispatcher.UIThread.Post(()=>NotifyQueryChanged(forceRequery));
+                return;
+            }
+
+            bool has_query_changed = RefreshQuery();
+
+            if(has_query_changed || forceRequery) {
+                MpPrefViewModel.Instance.LastQueryInfoJson = SerializeJsonObject();
+
+                _allQueryCopyItemIds.Clear();
+                MpMessenger.SendGlobal(MpMessageType.QueryChanged);
+            } else {
+                MpMessenger.SendGlobal(MpMessageType.SubQueryChanged);
+
+            }
+
+
+            //var qi = MpDataModelProvider.QueryInfo;
+
+            //qi.FilterFlags = FilterFlags;//MpSearchBoxViewModel.Instance.FilterType;
+            //MpDataModelProvider.QueryInfos.Add(this);
+            // MpSearchBoxViewModel.Instance.CriteriaItems.OrderBy(x => x.SortOrderIdx).ForEach(x => MpDataModelProvider.QueryInfos.Add(x.ToQueryInfo()));
+            
+        }
+
+        #endregion
 
         #endregion
 
@@ -128,6 +209,20 @@ namespace MonkeyPaste.Avalonia {
                 // persist current query to pref json
                 //MpPrefViewModel.Instance.LastQueryInfoJson = SerializeJsonObject();
             }
+        }
+
+
+        private bool RefreshQuery() {
+            bool hasChanged = false;
+            foreach (var vp in _valueProviders) {
+                object provided_value = vp.Source.GetPropertyValue(vp.SourcePropertyName);
+                object cur_value = this.GetPropertyValue(vp.QueryValueName);
+                if(!cur_value.Equals(provided_value)) {
+                    hasChanged = true;
+                }
+                this.SetPropertyValue(vp.QueryValueName, provided_value);
+            }
+            return hasChanged;
         }
 
         #endregion

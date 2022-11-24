@@ -42,25 +42,27 @@ namespace AvCoreClipboardHandler {
             var read_output = new MpAvDataObject();
             var readFormats = request.readFormats.Where(x => availableFormats.Contains(x));
 
-            foreach (var read_format in readFormats) {
-                object data = await ReadDataObjectFormat(read_format, avdo);
-                foreach (var param in request.items) {
-                    data = ProcessReaderParam(param, read_format, data, out var ex, out var param_nfl);
-                    if (ex != null) {
-                        exl.Add(ex);
-                    }
-                    if (param_nfl != null) {
-                        nfl.AddRange(param_nfl);
+            if(!request.ignoreParams) {
+                foreach (var read_format in readFormats) {
+                    object data = await ReadDataObjectFormat(read_format, avdo);
+                    foreach (var param in request.items) {
+                        data = ProcessReaderParam(param, read_format, data, out var ex, out var param_nfl);
+                        if (ex != null) {
+                            exl.Add(ex);
+                        }
+                        if (param_nfl != null) {
+                            nfl.AddRange(param_nfl);
+                        }
+                        if (data == null) {
+                            // param omitted format, don't process rest of params
+                            break;
+                        }
                     }
                     if (data == null) {
-                        // param omitted format, don't process rest of params
-                        break;
+                        continue;
                     }
+                    read_output.SetData(read_format, data);
                 }
-                if (data == null) {
-                    continue;
-                }
-                read_output.SetData(read_format, data);
             }
 
             return new MpClipboardReaderResponse() {
@@ -69,6 +71,7 @@ namespace AvCoreClipboardHandler {
                 errorMessage = string.Join(Environment.NewLine, exl)
             };
         }
+
        
         private static async Task<object> ReadDataObjectFormat(string format, IDataObject avdo) {
             object dataObj;

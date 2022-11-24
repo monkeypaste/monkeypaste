@@ -35,9 +35,10 @@ namespace MonkeyPaste {
     public class MpQuillContentDataRequestMessage : MpJsonObject {
         public List<string> formats { get; set; }
 
-        public bool forCutOrCopy { get; set; }
-        public bool forDragDrop { get; set; }
-        public bool forPaste { get; set; } // flag to omit trailing newline for paste db is fine
+        public bool forOle { get; set; }
+        //public bool forCutOrCopy { get; set; }
+        //public bool forDragDrop { get; set; }
+        //public bool forPaste { get; set; } // flag to omit trailing newline for paste db is fine
     }
 
     public class MpQuillContentDataResponseMessage : MpJsonObject {
@@ -146,8 +147,8 @@ namespace MonkeyPaste {
         public bool isPlainText { get; set; }
     }
 
-    public class MpQuillIsHostSelectedChangedMessage : MpJsonObject {
-        public bool isHostSelected { get; set; }
+    public class MpQuillIsHostFocusedChangedMessage : MpJsonObject {
+        public bool isHostFocused { get; set; }
     }
 
     public class MpQuillGetEncodedRangeDataResponseMessage : MpJsonObject {

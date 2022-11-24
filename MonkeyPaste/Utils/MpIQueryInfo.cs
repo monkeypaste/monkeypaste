@@ -34,6 +34,7 @@ namespace MonkeyPaste {
         WholeWord = 16384
     }
 
+    // Criteria Item Flags
     [Flags]
     public enum MpTimeFilterFlagType {
         None = 0,
@@ -59,14 +60,14 @@ namespace MonkeyPaste {
         RegEx
     }
 
-    public interface MpIQueryInfoProvider {
-
-        void RestoreQueryInfo();
-        void SetQueryInfo();
+    public interface MpIQueryInfoValueProvider {
+        object Source { get; }
+        string SourcePropertyName { get; }
+        string QueryValueName { get; }
     }
 
     public interface MpIQueryInfo : MpIJsonObject {
-        //public int TotalItemsInQuery { get; set; }
+        public int TotalAvailableItemsInQuery { get; }
 
         public bool IsDescending { get;  set; }
 
@@ -76,7 +77,7 @@ namespace MonkeyPaste {
 
         public MpLogicalFilterFlagType NextJoinType { get; set; }
 
-        public MpTextFilterFlagType TextFlags { get; set; }
+        //public MpTextFilterFlagType TextFlags { get; set; }
 
         public MpTimeFilterFlagType TimeFlags { get; set; }
 
@@ -85,11 +86,8 @@ namespace MonkeyPaste {
         public string SearchText { get;  set; }
 
         public int SortOrderIdx { get; set; }
-
-        void RegisterProvider(MpIQueryInfoProvider qip);
-
-        void NotifyQueryChanged(bool isFilterSortOrSearch = true);
-
         MpIQueryInfo Next { get; }
+
+        void NotifyQueryChanged(bool forceRequery = false);
     }
 }

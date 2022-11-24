@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using System.Diagnostics;
 
 namespace MonkeyPaste {
     [Table("MpCopyItemTag")]
@@ -173,6 +174,15 @@ namespace MonkeyPaste {
 
         public bool IsSudoTag() {
             return Id != MpTag.AllTagId;
+        }
+        public override async Task WriteToDatabaseAsync() {
+            if(CopyItemId < 0) {
+                // why is this happening? (have a hunch its when dragging tile onto pin tray or onto tag)
+                Debugger.Break();
+                CopyItemId *= -1;
+            }
+            await base.WriteToDatabaseAsync();
+
         }
         #endregion
     }

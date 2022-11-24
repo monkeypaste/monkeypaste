@@ -26,6 +26,8 @@ namespace MonkeyPaste.Common.Plugin {
         public string platform { get; set; }
         public int mainWindowImplicitHandle { get; set; }
         public List<string> readFormats { get; set; }
+
+        public bool ignoreParams { get; set; }
         
         public object forcedClipboardDataObject { get; set; } // (optional) this is used to convert drag/drop data 
     }

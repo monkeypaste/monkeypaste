@@ -45,7 +45,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvSettingsWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsVisible):
-                    MpAvMainWindowViewModel.Instance.IsShowingDialog = IsVisible;
+                    MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = IsVisible;
 
                     if(IsVisible) {
                         var sw = new MpAvSettingsWindow();     

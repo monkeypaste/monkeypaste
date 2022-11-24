@@ -16,6 +16,10 @@ function initCheckableListMatcher() {
 	// delta-html converter clears ordered and bullet li's attrs and encloses in ol|ul respectively
 	// delta-html converter substitutes li's w/ data-list attr (checked|unchecked) w/ data-checked attr (true|false)
 
+	if (Quill === undefined) {
+		/// host load error case
+		debugger;
+	}
 	let Delta = Quill.imports.delta;
 
 	quill.clipboard.addMatcher('LI', function (node, delta) {

@@ -5,6 +5,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using drawing = System.Drawing;
+using IDataObject_Com = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace MonkeyPaste.Common.Wpf {
     public static class WinApi {
@@ -15,6 +18,15 @@ namespace MonkeyPaste.Common.Wpf {
         public const int WM_CLIPBOARDUPDATE = 0x031D;
         public const int EM_SETRECT = 0xB3;
         public const int HWND_BROADCAST = 0xffff;
+        public const int WM_SYSCOMMAND = 0x0112;
+        public const int SC_CLOSE = 0xF060;
+
+        [DllImport("user32.dll")]
+        public static extern int FindWindow(string ClassName, string WindowName);
+
+        [DllImport("user32.dll")]
+        public static extern int SendMessage(int hWnd, uint Msg, int wParam, int lParam);
+
 
         [DllImport("User32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr SetClipboardViewer(IntPtr hWndNewViewer);
@@ -29,7 +41,11 @@ namespace MonkeyPaste.Common.Wpf {
         public static extern bool SetForegroundWindow(IntPtr hWnd);
 
         [DllImport("user32.dll")]
-        public static extern bool SetActiveWindow(IntPtr hWnd);
+        public static extern IntPtr SetActiveWindow(IntPtr hWnd);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool TerminateProcess(IntPtr hProcess, uint uExitCode);
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern IntPtr GetOpenClipboardWindow();
@@ -673,5 +689,85 @@ namespace MonkeyPaste.Common.Wpf {
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool DeleteObject(IntPtr hObject);
 
+
+        //[DllImport("user32.dll")]
+        //public static extern bool GetCursorPos(out System.Windows.Point lpPoint);
+
+        #region Native Control
+        public enum CommonControls : uint {
+            ICC_LISTVIEW_CLASSES = 0x00000001, // listview, header
+            ICC_TREEVIEW_CLASSES = 0x00000002, // treeview, tooltips
+            ICC_BAR_CLASSES = 0x00000004, // toolbar, statusbar, trackbar, tooltips
+            ICC_TAB_CLASSES = 0x00000008, // tab, tooltips
+            ICC_UPDOWN_CLASS = 0x00000010, // updown
+            ICC_PROGRESS_CLASS = 0x00000020, // progress
+            ICC_HOTKEY_CLASS = 0x00000040, // hotkey
+            ICC_ANIMATE_CLASS = 0x00000080, // animate
+            ICC_WIN95_CLASSES = 0x000000FF,
+            ICC_DATE_CLASSES = 0x00000100, // month picker, date picker, time picker, updown
+            ICC_USEREX_CLASSES = 0x00000200, // comboex
+            ICC_COOL_CLASSES = 0x00000400, // rebar (coolbar) control
+            ICC_INTERNET_CLASSES = 0x00000800,
+            ICC_PAGESCROLLER_CLASS = 0x00001000, // page scroller
+            ICC_NATIVEFNTCTL_CLASS = 0x00002000, // native font control
+            ICC_STANDARD_CLASSES = 0x00004000,
+            ICC_LINK_CLASS = 0x00008000
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct INITCOMMONCONTROLSEX {
+            public int dwSize;
+            public uint dwICC;
+        }
+
+        [DllImport("Comctl32.dll")]
+        public static extern void InitCommonControlsEx(ref INITCOMMONCONTROLSEX init);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool DestroyWindow(IntPtr hwnd);
+
+        [DllImport("kernel32.dll")]
+        public static extern IntPtr LoadLibrary(string lib);
+
+
+        [DllImport("kernel32.dll")]
+        public static extern IntPtr GetModuleHandle(string lpModuleName);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr CreateWindowEx(
+            int dwExStyle,
+            string lpClassName,
+            string lpWindowName,
+            uint dwStyle,
+            int x,
+            int y,
+            int nWidth,
+            int nHeight,
+            IntPtr hWndParent,
+            IntPtr hMenu,
+            IntPtr hInstance,
+            IntPtr lpParam);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct SETTEXTEX {
+            public uint Flags;
+            public uint Codepage;
+        }
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, EntryPoint = "SendMessageW")]
+        public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, ref SETTEXTEX wParam, byte[] lParam);
+
+        #endregion
+
+        #region Dnd
+        [ComVisible(true), ComImport, Guid("4657278B-411B-11D2-839A-00C04FD918D0"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IDropTargetHelper {
+            void DragEnter([In] IntPtr hwndTarget, [In, MarshalAs(UnmanagedType.Interface)] IDataObject_Com dataObject, [In] ref drawing.Point pt, [In] DragDropEffects effect);
+            void DragLeave();
+            void DragOver([In] ref drawing.Point pt, [In] DragDropEffects effect);
+            void Drop([In, MarshalAs(UnmanagedType.Interface)] IDataObject_Com dataObject, [In] ref drawing.Point pt, [In] DragDropEffects effect);
+            void Show([In] bool show);
+        }
+        #endregion
     }
 }

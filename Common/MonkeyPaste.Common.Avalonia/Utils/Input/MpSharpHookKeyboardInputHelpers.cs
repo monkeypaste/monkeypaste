@@ -15,9 +15,9 @@ namespace MonkeyPaste.Common.Avalonia {
                 return keyList;
             }
 
-            var combos = keyStr.Split(new string[] { MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+            var combos = keyStr.Split(new string[] { MpKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var c in combos) {
-                var keys = c.Split(new string[] { MpAvKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+                var keys = c.Split(new string[] { MpKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
                 keyList.Add(new List<KeyCode>());
                 foreach (var k in keys) {
                     keyList[keyList.Count - 1].Add(GetKeyValue(k));
@@ -30,16 +30,16 @@ namespace MonkeyPaste.Common.Avalonia {
             var outStr = string.Empty;
             foreach (var kl in keyList) {
                 if (!string.IsNullOrEmpty(outStr)) {
-                    outStr += MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR;
+                    outStr += MpKeyGestureHelper2.SEQUENCE_SEPARATOR;
                 }
                 foreach (var k in kl) {
-                    outStr += GetKeyLiteral(k) + MpAvKeyGestureHelper2.COMBO_SEPARATOR;
+                    outStr += GetKeyLiteral(k) + MpKeyGestureHelper2.COMBO_SEPARATOR;
                 }
-                outStr = outStr.Remove(outStr.Length - MpAvKeyGestureHelper2.COMBO_SEPARATOR.Length, MpAvKeyGestureHelper2.COMBO_SEPARATOR.Length);
+                outStr = outStr.Remove(outStr.Length - MpKeyGestureHelper2.COMBO_SEPARATOR.Length, MpKeyGestureHelper2.COMBO_SEPARATOR.Length);
             }
             if (!string.IsNullOrEmpty(outStr)) {
-                if (outStr.EndsWith(MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR)) {
-                    outStr = outStr.Remove(outStr.Length - MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR.Length, MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR.Length);
+                if (outStr.EndsWith(MpKeyGestureHelper2.SEQUENCE_SEPARATOR)) {
+                    outStr = outStr.Remove(outStr.Length - MpKeyGestureHelper2.SEQUENCE_SEPARATOR.Length, MpKeyGestureHelper2.SEQUENCE_SEPARATOR.Length);
                 }
             }
             return outStr;

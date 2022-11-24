@@ -47,12 +47,12 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvShortcutKeyGroupViewModel> KeyItems {
             get {
                 var keyItems = new List<MpAvShortcutKeyGroupViewModel>();
-                var combos = KeyString.Split(new String[] { MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+                var combos = KeyString.Split(new String[] { MpKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
                 int maxComboIdx = combos.Length - 1;
                 for (int comboIdx = 0; comboIdx < combos.Length; comboIdx++) {
                     string combo = combos[comboIdx];
                     var comboGroup = new MpAvShortcutKeyGroupViewModel();
-                    var keys = combo.Split(new String[] { MpAvKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+                    var keys = combo.Split(new String[] { MpKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
                     for (int keyIdx = 0; keyIdx < keys.Length; keyIdx++) {
                         string key = keys[keyIdx];
 
@@ -520,7 +520,7 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     // when mw is active treat global shortcuts like any other
                     if(mwvm.IsMainWindowActive) {
-                        if (mwvm.IsShowingDialog ||
+                        if (mwvm.IsAnyDialogOpen ||
                             mwvm.IsAnyItemDragging ||
                             mwvm.IsAnyTextBoxFocused ||
                             !mwvm.IsMainWindowActive) {
@@ -536,7 +536,7 @@ namespace MonkeyPaste.Avalonia {
                 if(!canPerformShortcut) {
                     MpConsole.WriteLine($"IsGlobalShortcut: "+IsGlobalShortcut);
                     MpConsole.WriteLine($"IsMainWindowActive: "+mwvm.IsMainWindowActive);
-                    MpConsole.WriteLine($"IsShowingDialog: "+mwvm.IsShowingDialog);
+                    MpConsole.WriteLine($"IsShowingDialog: "+mwvm.IsAnyDialogOpen);
                     MpConsole.WriteLine($"IsAnyItemDragging: "+mwvm.IsAnyItemDragging);
                     MpConsole.WriteLine($"IsAnyTextBoxFocused: "+mwvm.IsAnyTextBoxFocused);
                     MpConsole.WriteLine($"IsMainWindowActive: "+mwvm.IsMainWindowActive);

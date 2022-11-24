@@ -11,14 +11,21 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvCefNetContentWebView">
+    <!--
+        local:MpAvCefNetWebViewExtension.IsEnabled="False"
+        local:MpAvCefNetWebViewExtension.IsDevToolsVisible="{Binding IsDevToolsVisible, Mode=TwoWay}"
+        local:MpAvCefNetWebViewExtension.IsHostSelected="{Binding IsSelected}"
+        local:MpAvCefNetWebViewExtension.IsContentReadOnly="{Binding IsContentReadOnly, Mode=TwoWay}"
+        local:MpAvCefNetWebViewExtension.IsSubSelectionEnabled="{Binding IsSubSelectionEnabled, Mode=TwoWay}"
+        local:MpAvCefNetWebViewExtension.CopyItemId="{Binding CopyItemId}"
+        local:MpAvCefNetWebViewExtension.IsFindAndReplaceVisible="{Binding IsFindAndReplaceVisible}"
+    -->
     <local:MpAvCefNetWebView x:Name="CefNetWebView"
-                             local:MpAvCefNetWebViewExtension.IsEnabled="True"
-                             local:MpAvCefNetWebViewExtension.IsDevToolsVisible="{Binding IsDevToolsVisible, Mode=TwoWay}"
-                             local:MpAvCefNetWebViewExtension.IsHostSelected="{Binding IsSelected}"
-                             local:MpAvCefNetWebViewExtension.IsContentReadOnly="{Binding IsContentReadOnly, Mode=TwoWay}"
-                             local:MpAvCefNetWebViewExtension.IsSubSelectionEnabled="{Binding IsSubSelectionEnabled, Mode=TwoWay}"
-                             local:MpAvCefNetWebViewExtension.CopyItemId="{Binding CopyItemId}"
-                             local:MpAvCefNetWebViewExtension.IsFindAndReplaceVisible="{Binding IsFindAndReplaceVisible}"
+                             ContentHandle="{Binding PublicHandle, Mode=OneWay}"
+                             IsContentSelected="{Binding IsSelected}"
+                             IsContentReadOnly="{Binding IsContentReadOnly, Mode=TwoWay}"
+                             IsContentSubSelectable="{Binding IsSubSelectionEnabled, Mode=TwoWay}"
+                             IsContentFindAndReplaceVisible="{Binding IsFindAndReplaceVisible, Mode=TwoWay}"
                              Focusable="True"
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch" />

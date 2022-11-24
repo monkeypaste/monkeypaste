@@ -61,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
                 } else if (initDir.IsFile()) {
                     initDir = Path.GetDirectoryName(initDir);
                 }
-                MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
+                MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
 
 
                 if (IsDirectoryChooser) {
@@ -91,7 +91,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
 
-                MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
+                MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
             });
 
         #endregion

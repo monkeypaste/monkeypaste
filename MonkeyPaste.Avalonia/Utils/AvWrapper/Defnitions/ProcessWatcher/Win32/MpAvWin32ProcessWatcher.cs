@@ -15,6 +15,8 @@ using System.Timers;
 using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Wpf;
+using static MonkeyPaste.Common.Wpf.WinApi;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvWin32ProcessWatcher : MpAvProcessWatcherBase {
@@ -70,6 +72,8 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine($"SetForegroundWindow to '{handle}' from '{lastActive}' was {(success ? "SUCCESSFUL" : "FAILED")}");
             return lastActive;
         }
+
+        
         protected override MpPortableProcessInfo GetActiveProcessInfo() {
             IntPtr active_handle = WinApi.GetForegroundWindow();
             var active_info = new MpPortableProcessInfo() {

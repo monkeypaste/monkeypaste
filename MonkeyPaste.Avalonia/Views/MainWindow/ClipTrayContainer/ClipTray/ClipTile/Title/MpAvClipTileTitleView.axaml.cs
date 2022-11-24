@@ -24,17 +24,25 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipTileTitleView() {
             InitializeComponent();
-            //var iconGrid
+            var sb = this.FindControl<Button>("ClipTileAppIconImageButton");
+            sb.Click += Sb_Click;
         }
 
+        private void Sb_Click(object sender, RoutedEventArgs e) {
+            if (this.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv &&
+                ctv.GetVisualDescendant<MpAvCefNetWebView>() is MpAvCefNetWebView wv) {
+                wv.ShowDevTools();
+            }
+        }
 
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }
         private void SourceIconGrid_PointerPressed(object sender, PointerPressedEventArgs e) {
-            if(BindingContext.GetContentView() is MpAvCefNetWebView wv) {
-                wv.ShowDevTools();
-            }
+            //if(BindingContext.GetContentView() is MpAvCefNetWebView wv) {
+            //    wv.ShowDevTools();
+            //}
+            
         }
     }
 }

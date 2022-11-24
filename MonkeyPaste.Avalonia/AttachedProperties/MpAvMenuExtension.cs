@@ -230,7 +230,7 @@ namespace MonkeyPaste.Avalonia {
                     CancelEventHandler onCloseHandler = null;
 
                     onCloseHandler = (s, e1) => {
-                        MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
+                        MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
                         SetIsOpen(control, false);
                         _cmInstance.ContextMenuClosing -= onCloseHandler;
                         _cmInstance.ContextMenuOpening -= onOpenHandler;
@@ -257,7 +257,7 @@ namespace MonkeyPaste.Avalonia {
                     _cmInstance.VerticalOffset = ctrl_mp.Y;
 
                     _cmInstance.Open(MpAvMainWindow.Instance);
-                    MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
+                    MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
                 }
             }            
         }

@@ -145,7 +145,8 @@ namespace MonkeyPaste.Avalonia {
 
                     //new MpBootstrappedItemViewModel(this,typeof(MpSoundPlayerGroupCollectionViewModel)),
 
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvClipTileSortViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvClipTileSortFieldViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvClipTileSortDirectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvSearchBoxViewModel)),
 
                     //new MpBootstrappedItemViewModel(this,typeof(MpAnalyticItemCollectionViewModel)),

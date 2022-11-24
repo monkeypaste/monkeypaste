@@ -40,6 +40,11 @@ function initEditorToolbarQuillOptions(quillOptions, toolbarId) {
 	};
 
 	if (UseBetterTable) {
+		if (quillBetterTable === undefined || Quill === undefined) {
+			/// host load error case
+			debugger;
+		}
+
 		Quill.register({ "modules/better-table": quillBetterTable }, true);
 		//quillOptions.modules.toolbar.container.push([{ "Table-Input": registerTables() }]);
 		//quillOptions.modules.toolbar.handlers = {

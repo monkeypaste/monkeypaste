@@ -19,33 +19,33 @@ namespace MonkeyPaste {
         #region Properties
 
         
-        public static List<MpIQueryInfo> QueryInfos { get; private set; } = new List<MpIQueryInfo>();
+        //public static List<MpIQueryInfo> QueryInfos { get; private set; } = new List<MpIQueryInfo>();
 
-        public static MpIQueryInfo QueryInfo {
-            get {
-                //if(QueryInfos.Count > 0) {
-                //    return QueryInfos.OrderBy(x => x.SortOrderIdx).ToList()[0];
-                //}
-                //return null;
-                return MpPlatformWrapper.Services.QueryInfo;
-            }
-        }
+        //public static MpIQueryInfo QueryInfo {
+        //    get {
+        //        //if(QueryInfos.Count > 0) {
+        //        //    return QueryInfos.OrderBy(x => x.SortOrderIdx).ToList()[0];
+        //        //}
+        //        //return null;
+        //        return MpPlatformWrapper.Services.QueryInfo;
+        //    }
+        //}
 
-        public static List<int> AvailableQueryCopyItemIds { get; private set; } = new List<int>();
+        //public static List<int> AvailableQueryCopyItemIds { get; private set; } = new List<int>();
 
 
-        public static int TotalTilesInQuery => AvailableQueryCopyItemIds.Count;
+        //public static int TotalTilesInQuery => AvailableQueryCopyItemIds.Count;
 
         #endregion
 
         #region Constructor
 
 
-        public static void Init() {
-            QueryInfos.Clear();
-            QueryInfos.Add(MpPlatformWrapper.Services.QueryInfo);
-            ResetQuery();
-        }
+        //public static void Init() {
+        //    QueryInfos.Clear();
+        //    QueryInfos.Add(MpPlatformWrapper.Services.QueryInfo);
+        //    ResetQuery();
+        //}
 
 
 
@@ -53,35 +53,9 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-        public static void ResetQuery() {
-            AvailableQueryCopyItemIds.Clear();
-        }
-
-
-        #region MpQueryInfo Fetch Methods      
-        
-        public static async Task QueryForTotalCountAsync(IEnumerable<int> ci_idsToOmit, IEnumerable<int> tagIds) { // = null) {
-            AvailableQueryCopyItemIds = await MpContentQuery.QueryAllAsync(QueryInfo, tagIds, ci_idsToOmit);
-        }
-
-
-        public static async Task<List<MpCopyItem>> FetchCopyItemsByQueryIdxListAsync(
-            List<int> copyItemQueryIdxList) {
-            var fetchRootIds = AvailableQueryCopyItemIds
-                                .Select((val, idx) => (val, idx))
-                                .Where(x => copyItemQueryIdxList.Contains(x.idx))
-                                .Select(x => x.val).ToList();
-            var items = await GetCopyItemsByIdListAsync(fetchRootIds);
-            return items;
-        }
-
-        #endregion
-
-        #region View Queries
-
-
-
-        #endregion
+        //public static void ResetQuery() {
+        //    AvailableQueryCopyItemIds.Clear();
+        //}
 
         #region Select queries
 
@@ -379,6 +353,9 @@ namespace MonkeyPaste {
         }
 
         public static async Task<List<MpCopyItem>> GetCopyItemsByIdListAsync(List<int> ciida) {
+            if(ciida.Count == 0) {
+                return new List<MpCopyItem>();
+            }
             string whereStr = string.Join(" or ", ciida.Select(x => string.Format(@"pk_MpCopyItemId={0}", x)));
             string query = $"select * from MpCopyItem where {whereStr}";
             var result = await MpDb.QueryAsync<MpCopyItem>(query);
@@ -874,22 +851,6 @@ namespace MonkeyPaste {
         #endregion
 
         #endregion
-
-        public static MpCopyItem RemoveQueryItem(int copyItemId) {
-            //returns first child or null
-            //return value is used to adjust dropIdx in ClipTrayDrop
-            if (!AvailableQueryCopyItemIds.Contains(copyItemId)) {
-                //throw new Exception("Query does not contain item " + copyItemId);
-                return null;
-            }
-            int itemIdx = AvailableQueryCopyItemIds.IndexOf(copyItemId);
-            AvailableQueryCopyItemIds.Remove(copyItemId);
-            AvailableQueryCopyItemIds.Remove(copyItemId);
-
-            MpConsole.WriteLine($"QueryItem {copyItemId} was removed from [{itemIdx}]");
-
-            return null;
-        }
 
     }
 }

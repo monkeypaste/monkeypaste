@@ -87,33 +87,39 @@
         </Border>
 
         <!--  IsBusy Overlay  -->
-        <!--<Border HorizontalAlignment="Stretch"
+        <Border HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 IsVisible="{Binding IsBusy}">
-            <Border.Background>
-                <SolidColorBrush Color="Black"
-                                 Opacity="0.2" />
-            </Border.Background>
-            <local:ProgressRing Width="50"
-                                Height="50"
-                                IsActive="True"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Foreground="Green" />
-        </Border>-->
+            <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Width="70"
+                                       Height="70" />
+        </Border>
 
         <!--  IsEmpty Overlay  -->
 
         <Border HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                Background="Transparent"
-                IsVisible="{Binding IsEmpty}">
+                Background="Transparent">
+            <Border.IsVisible>
+                <MultiBinding Converter="{StaticResource MultiBoolConverter}"
+                              ConverterParameter="AND">
+                    <Binding Path="IsEmpty" />
+                    <Binding Path="!IsAnyBusy" />
+                    <Binding Path="!IsMainWindowInitiallyOpening"
+                             Source="{x:Static local:MpAvMainWindowViewModel.Instance}" />
+                </MultiBinding>
+            </Border.IsVisible>
             <TextBlock HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        FontSize="42"
                        FontStyle="Italic"
                        FontWeight="SemiBold"
                        Foreground="LightGray">
+                <TextBlock.Foreground>
+                    <SolidColorBrush Color="LightGray"
+                                     Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
+                </TextBlock.Foreground>
                 <TextBlock.Text>
                     <MultiBinding Converter="{StaticResource MultiStringAppendConverter}">
                         <Binding>

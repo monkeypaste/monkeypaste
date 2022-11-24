@@ -1,7 +1,7 @@
 ﻿// #region Globals
 
-var IsHostSelected = false;
 
+var IsHostFocused = false;
 // #endregion Globals
 
 // #region Life Cycle
@@ -19,11 +19,11 @@ function initInput() {
 // #region Setters
 
 function setInputFocusable(isInputFocused) {
-	if (isInputFocused != IsHostSelected) {
-		log('host selection changed. IsHostSelected: ' + isInputFocused);
+	if (isInputFocused != IsHostFocused) {
+		log('host selection changed. IsHostFocused: ' + isInputFocused);
 	}
-	IsHostSelected = isInputFocused;
-	if (IsHostSelected && !document.hasFocus()) {
+	IsHostFocused = isInputFocused;
+	if (isInputFocused && !document.hasFocus()) {
 		window.focus();
 		log('document focus attempted: ' + (document.hasFocus() ? "SUCCESS" : "FAILED"));
 	}
@@ -35,7 +35,7 @@ function setInputFocusable(isInputFocused) {
 // #region State
 
 function isWindowFocused() {
-	return document.hasFocus() && IsHostSelected;
+	return document.hasFocus() && IsHostFocused;
 }
 // #endregion State
 

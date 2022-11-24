@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Variables
 
-        private MpAvKeyGestureHelper2 _gestureHelper;
+        private MpKeyGestureHelper2 _gestureHelper;
 
         private bool _isReplacingShortcut = false;
         private bool _wasPreviouslyASequence = false;
@@ -36,12 +36,12 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvShortcutKeyGroupViewModel> KeyItems {
             get {
                 var keyItems = new List<MpAvShortcutKeyGroupViewModel>();
-                var combos = KeyString.Split(new String[] { MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+                var combos = KeyString.Split(new String[] { MpKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
                 int maxComboIdx = combos.Length - 1;
                 for (int comboIdx = 0; comboIdx < combos.Length; comboIdx++) {
                     string combo = combos[comboIdx];
                     var comboGroup = new MpAvShortcutKeyGroupViewModel();
-                    var keys = combo.Split(new String[] { MpAvKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+                    var keys = combo.Split(new String[] { MpKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
                     
                     for (int keyIdx = 0; keyIdx < keys.Length; keyIdx++) {
                         string key = keys[keyIdx];
@@ -77,7 +77,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsSequence => KeyString.Contains(MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR);
+        public bool IsSequence => KeyString.Contains(MpKeyGestureHelper2.SEQUENCE_SEPARATOR);
 
         public bool ShowWarning => IsSequence || _wasPreviouslyASequence || _isReplacingShortcut;
         public string WarningString { get; set; }
@@ -129,7 +129,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Static Methods
         public static async Task<string> ShowAssignShortcutWindow(string shortcutName,string keys,ICommand command, string commandParameter) {
-            MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
+            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
             var ascw = new MpAvAssignShortcutWindow();
             var ascwvm = new MpAvAssignShortcutModalWindowViewModel(shortcutName, keys, command, commandParameter);
             ascw.DataContext = ascwvm;
@@ -141,7 +141,7 @@ namespace MonkeyPaste.Avalonia {
             MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentEnded);
 
             var assignResult = ascw.DialogResult;
-            MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
+            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
             if (assignResult == true) {
                 return ascwvm.KeyString;
             }
@@ -168,7 +168,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(KeyItems));
 
 
-            _gestureHelper = new MpAvKeyGestureHelper2();
+            _gestureHelper = new MpKeyGestureHelper2();
             //KeysString = keysList;
         }
 
@@ -189,7 +189,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         private void _windowRef_Closed(object sender, EventArgs e) {
-            MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
+            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
         }
 
         #endregion

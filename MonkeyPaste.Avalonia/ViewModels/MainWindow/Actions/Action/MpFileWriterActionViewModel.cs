@@ -181,14 +181,14 @@ namespace MonkeyPaste.Avalonia {
                     initDir = Path.GetDirectoryName(initDir);
                 }
 
-                MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
+                MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
                 var selectedDir = await new OpenFolderDialog() {
                     Title = "Select folder",
                     Directory = initDir
                 }.ShowAsync(MpAvMainWindow.Instance);
                 
 
-                MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
+                MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
                 if (string.IsNullOrEmpty(selectedDir)) {
                     FileSystemPath = selectedDir;
                     await ReEnable();

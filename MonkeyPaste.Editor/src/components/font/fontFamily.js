@@ -50,6 +50,11 @@ function initFontFamilyPicker() {
 
 
 function initFontWhiteList() {
+    if (Quill === undefined) {
+        /// host load error case
+        debugger;
+    }
+
     let fontFamilys = getFontsByEnv();
     // TODO may need to remove current/selected font family here...
 
@@ -71,6 +76,10 @@ function initFontFamilyStyles() {
 }
 
 function initFontFamilyMatcher() {
+    if (Quill === undefined) {
+        /// host load error case
+        debugger;
+    }
     let Delta = Quill.imports.delta;
 
     quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {

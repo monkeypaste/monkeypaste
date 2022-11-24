@@ -10,11 +10,13 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public enum MpMessageType {
         None,
+        
         RequeryCompleted,
         QueryChanged,
-        SubQueryChanged, //sent when composite parent is moved or tile deleted
+        SubQueryChanged, 
         JumpToIdxCompleted,
         TotalQueryCountChanged,
+
         IsReadOnly, //has context (tile)
         IsEditable,   //has context (tile)
         ResizingMainWindowComplete,

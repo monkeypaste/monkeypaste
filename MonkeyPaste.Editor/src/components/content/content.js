@@ -30,7 +30,7 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 	IsLoaded = false;
 
 	//let contentBg_rgba = getContentBg(contentData);
-
+	disableSubSelection();
 	enableReadOnly();
 
 	log('Editor loaded');

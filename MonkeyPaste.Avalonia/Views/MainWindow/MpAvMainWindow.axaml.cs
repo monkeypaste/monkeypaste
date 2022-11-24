@@ -379,6 +379,10 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
+        #region Protected Overrides
+
+        #endregion
+
         #region Private Methods
         private async Task InitAsync() {
             while (!MpBootstrapperViewModelBase.IsCoreLoaded) {
@@ -401,9 +405,10 @@ namespace MonkeyPaste.Avalonia {
             MpAvMainWindowViewModel.Instance.IsMainWindowLoading = false;
 
             MpPlatformWrapper.Services.ProcessWatcher.StartWatcher();
-
             MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
-            MpDataModelProvider.QueryInfo.NotifyQueryChanged(true);
+
+            MpAvQueryInfoViewModel.Current.RestoreProviderValues();
+            
             MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
 
             // Need to delay or resizer thinks bounds are empty on initial show
@@ -413,6 +418,12 @@ namespace MonkeyPaste.Avalonia {
 
             //MpPlatformWrapper.Services.ProcessWatcher.StartWatcher();
             MpMessenger.SendGlobal(MpMessageType.MainWindowLoadComplete);
+
+            while(MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening) {
+                await Task.Delay(100);
+            }
+
+            MpAvClipTrayViewModel.Instance.QueryCommand.Execute(null);
         }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {

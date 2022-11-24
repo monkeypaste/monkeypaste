@@ -13,6 +13,10 @@ function initFontSizes() {
 }
 
 function initFontSizeMatcher() {
+    if (Quill === undefined) {
+        /// host load error case
+        debugger;
+    }
     let Delta = Quill.imports.delta;
 
     quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
@@ -38,6 +42,11 @@ function initFontSizeMatcher() {
 }
 
 function registerFontSizes() {
+
+    if (Quill === undefined) {
+        /// host load error case
+        debugger;
+    }
     var size = Quill.import('attributors/style/size');
     size.whitelist = DefaultFontSizes;
     Quill.register(size, true);

@@ -6,7 +6,7 @@ namespace MonkeyPaste.Common {
         Task<object> ReadDragDropDataObject(object idoObj, int retryCount = 5);
         Task<object> WriteDragDropDataObject(object idoObj);
         Task SetPlatformClipboardAsync(object idoObj, bool ignoreClipboardChange);
-        Task<object> GetPlatformClipboardDataObjectAsync();
+        Task<object> GetPlatformClipboardDataObjectAsync(bool ignorePlugins);
 
         Task UpdateDragDropDataObjectAsync(object source, object target);
     }

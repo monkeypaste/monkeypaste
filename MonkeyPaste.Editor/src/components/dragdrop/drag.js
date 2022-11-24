@@ -62,7 +62,7 @@ function resetDrag(fromHost = false, wasDragCanceled = false) {
     SelIdxBeforeDrag = -1;
     DocLengthBeforeDrag = -1;
 
-    log('drag reset: ' + (fromHost ? "FROM HOST" : "INTERNALLY"));
+    log(`drag reset. fromHost: ${fromHost} wasCancel: ${wasDragCanceled}`);
     drawOverlay();
 }
 function enableDragOverlay() {
@@ -90,16 +90,7 @@ function onDragStart(e) {
     if (IsDragging) {
         return;
     }
- //   if (!WindowMouseDownLoc || !SelectionOnMouseDown) {
- //       return;
- //   }
- //   let is_valid_drag_gesture = isPointInRange(WindowMouseDownLoc, SelectionOnMouseDown);
- //   if (!is_valid_drag_gesture) {
- //       log('drag rejected, mouse down' + JSON.stringify(WindowMouseDownLoc) + ' not in range' + JSON.stringify(SelectionOnMouseDown));
- //       e.preventDefault();
- //       //e.stopPropagation();
- //       return false;
-	//}
+
     let sel = getDocSelection();
 
     if (e.target.id == 'dragOverlay') {
@@ -127,18 +118,17 @@ function onDragStart(e) {
     if (ContentItemType == 'Text') {
         e.dataTransfer.effectAllowed = 'copyMove';
 
-        let textStr = getText(sel, true);
-        e.dataTransfer.setData('text/plain', textStr);
-
-        e.dataTransfer.setData('text/html', getTextContentData());
+        //let textStr = getText(sel, true);
+        //e.dataTransfer.setData('text/plain', textStr);
+        //e.dataTransfer.setData('text/html', getTextContentData());
     } else if (ContentItemType == 'FileList') {
         e.dataTransfer.effectAllowed = 'copy';
 
-        e.dataTransfer.setData('text/plain', getFileListContentData());
+        //e.dataTransfer.setData('text/plain', getFileListContentData());
     } else if (ContentItemType == 'Image') {
         e.dataTransfer.effectAllowed = 'copy';
 
-        e.dataTransfer.setData('text/plain', getImageContentData());
+        //e.dataTransfer.setData('text/plain', getImageContentData());
     }
 
 
@@ -153,8 +143,8 @@ function onDragEnd(e) {
         log('ignoring host drag end');
         return;
     }
-    log('drag end not rejected and finishing..');
     let selfDrop = DropIdx >= 0;
+    log('drag end not rejected and finishing...Self drop: ' + selfDrop);
     if (selfDrop && e && e.dataTransfer.dropEffect.toLowerCase().includes('move')) {
         // 'move' should imply it was an internal drop
         let drop_doc_length_delta = getDocLength() - DocLengthBeforeDrag;

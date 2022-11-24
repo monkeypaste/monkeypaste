@@ -8,7 +8,7 @@ using MonkeyPaste;
 using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvSearchFilterViewModel : MpViewModelBase<MpAvSearchBoxViewModel> {
+    public class MpAvSearchFilterViewModel : MpViewModelBase<MpAvSearchFilterCollectionViewModel> {
         #region Private Variables
 
         private MpContentFilterType _filterType = MpContentFilterType.None;
@@ -62,11 +62,11 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvSearchFilterViewModel() : base(null) { }
 
-        public MpAvSearchFilterViewModel(MpAvSearchBoxViewModel parent, bool isSeperator) : base(parent) {
+        public MpAvSearchFilterViewModel(MpAvSearchFilterCollectionViewModel parent, bool isSeperator) : base(parent) {
             IsSeperator = isSeperator;
         }
 
-        public MpAvSearchFilterViewModel(MpAvSearchBoxViewModel parent, string label, string prefName, MpContentFilterType filterType) : base(parent) {
+        public MpAvSearchFilterViewModel(MpAvSearchFilterCollectionViewModel parent, string label, string prefName, MpContentFilterType filterType) : base(parent) {
             PropertyChanged += MpSearchFilterViewModel_PropertyChanged;
             _filterType = filterType;
             Label = label;

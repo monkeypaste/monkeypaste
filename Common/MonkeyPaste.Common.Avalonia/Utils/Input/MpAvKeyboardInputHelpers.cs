@@ -15,9 +15,9 @@ namespace MonkeyPaste.Common.Avalonia {
                 return keyList;
             }
 
-            var combos = keyStr.Split(new string[] { MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+            var combos = keyStr.Split(new string[] { MpKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var c in combos) {
-                var keys = c.Split(new string[] { MpAvKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+                var keys = c.Split(new string[] { MpKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
                 keyList.Add(new List<Key>());
                 foreach (var k in keys) {
                     keyList[keyList.Count - 1].Add(ConvertStringToKey(k));
@@ -43,10 +43,10 @@ namespace MonkeyPaste.Common.Avalonia {
             var outStr = string.Empty;
             foreach (var kl in keyList) {
                 if (!string.IsNullOrEmpty(outStr)) {
-                    outStr += MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR;
+                    outStr += MpKeyGestureHelper2.SEQUENCE_SEPARATOR;
                 }
                 foreach (var k in kl) {
-                    outStr += GetKeyLiteral(k) + MpAvKeyGestureHelper2.COMBO_SEPARATOR;
+                    outStr += GetKeyLiteral(k) + MpKeyGestureHelper2.COMBO_SEPARATOR;
                 }
                 outStr = outStr.Remove(outStr.Length - 1, 1);
             }
@@ -192,11 +192,11 @@ namespace MonkeyPaste.Common.Avalonia {
             //}
 
             var sb = new StringBuilder();
-            string[] keySequences = keyString.Split(new string[] { MpAvKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+            string[] keySequences = keyString.Split(new string[] { MpKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < keySequences.Length; i++) {
                 string seq = keySequences[i].Trim();
                 //string outStr = string.Empty;
-                var keys = seq.Split(new string[] { MpAvKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+                var keys = seq.Split(new string[] { MpKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var key in keys) {
                     switch (key) {
                         case "Ctrl":

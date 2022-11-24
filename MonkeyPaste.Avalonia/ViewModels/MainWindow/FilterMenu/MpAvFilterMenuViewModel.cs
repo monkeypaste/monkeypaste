@@ -35,6 +35,9 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+        public double SearchBoxObservedWidth { get; set; }
+        public double ClipTileSortViewWidth { get; set; }
+        public double PlayPauseButtonWidth { get; set; }
         #endregion
 
         #endregion
@@ -50,9 +53,18 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpAvTitleMenuViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            //switch(e.PropertyName) {
+            switch(e.PropertyName) {
+                case nameof(SearchBoxObservedWidth):
+                    MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayScreenWidth));
+                    break;
+                case nameof(ClipTileSortViewWidth):
+                    MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayScreenWidth));
+                    break;
+                case nameof(PlayPauseButtonWidth):
+                    MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayScreenWidth));
+                    break;
 
-            //}
+            }
         }
         #endregion
     }

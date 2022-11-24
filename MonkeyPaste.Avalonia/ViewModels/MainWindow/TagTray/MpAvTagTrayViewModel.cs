@@ -16,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel,
         MpISelectableViewModel,
         MpIOrientedSidebarItemViewModel,
-        MpIQueryInfoProvider {
+        MpIQueryInfoValueProvider {
         #region Private Variables
         
         private bool _isSelecting = false;
@@ -60,20 +60,29 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIQueryInfoProvider Implementation
-        public void RestoreQueryInfo() {
-            SelectTagCommand.Execute(MpAvQueryInfoViewModel.Current.TagId);
-        }
+        //#region MpIQueryInfoProvider Implementation
+        //public void RestoreQueryInfo() {
+        //    SelectTagCommand.Execute(MpAvQueryInfoViewModel.Current.TagId);
+        //}
 
-        public void SetQueryInfo() {
-            if(SelectedItem == null) {
-                // default to all 
-                MpAvQueryInfoViewModel.Current.TagId = AllTagViewModel.TagId;
-            } else {
-                MpAvQueryInfoViewModel.Current.TagId = SelectedItem.TagId;
-            }
+        //public void SetQueryInfo() {
+        //    if(SelectedItem == null) {
+        //        // default to all 
+        //        MpAvQueryInfoViewModel.Current.TagId = AllTagViewModel.TagId;
+        //    } else {
+        //        MpAvQueryInfoViewModel.Current.TagId = SelectedItem.TagId;
+        //    }
             
-        }
+        //}
+
+        //#endregion
+
+        #region MpIQueryInfoProvider Implementation
+
+        object MpIQueryInfoValueProvider.Source => this;
+        string MpIQueryInfoValueProvider.SourcePropertyName => nameof(SelectedItemId);
+
+        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpAvQueryInfoViewModel.Current.TagId);
 
         #endregion
 
@@ -124,6 +133,23 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public int SelectedItemId {
+            // NOTE only used w/ QueryInfo
+            get {
+                if(SelectedItem == null) {
+                    return AllTagViewModel.TagId;
+                }
+                return SelectedItem.TagId;
+            }
+            set {
+                //if(SelectedItemId != value) {
+                //    if(value <= 0) {
+                //        SelectedItem = null;
+                //    }
+                //}
+                SelectTagCommand.Execute(value);
+            }
+        }
         //public bool IsNavButtonsVisible => MpAvMainWindowViewModel.Instance.IsHorizontalOrientation && 
         //                                    TagTrayTotalWidth > TagTrayScreenWidth;
         public bool IsNavButtonsVisible { get; private set; } = false;
@@ -149,9 +175,10 @@ namespace MonkeyPaste.Avalonia {
                 //    return mww - other_items_width;
                 //}
                 //return double.NaN;
-                double ppbw = MpAvClipTrayViewModel.Instance.PlayPauseButtonWidth;
-                double ctsvw = MpAvClipTileSortViewModel.Instance.ClipTileSortViewWidth;
-                double sbvw = MpAvSearchBoxViewModel.Instance.SearchBoxViewWidth;
+                var fmvm = MpAvFilterMenuViewModel.Instance;
+                double ppbw = fmvm.PlayPauseButtonWidth;
+                double ctsvw = fmvm.ClipTileSortViewWidth;
+                double sbvw = fmvm.SearchBoxObservedWidth;
 
                 double ttsw = mww - ppbw - ctsvw - sbvw;
 
@@ -489,10 +516,9 @@ namespace MonkeyPaste.Avalonia {
                     _isSelecting = false;
                     return;
                 }
-                SetQueryInfo();
                 _isSelecting = false;
 
-                MpAvQueryInfoViewModel.Current.NotifyQueryChanged();
+                MpAvQueryInfoViewModel.Current.NotifyQueryChanged(true);
             },
             (args)=>args != null && !_isSelecting);
 

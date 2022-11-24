@@ -275,81 +275,13 @@
                 </MultiBinding>
             </local:MpAvMarqueeTextBox.FontSize>
         </local:MpAvMarqueeTextBox>
-        <!--<Grid x:Name="TitleTextBoxContainerGrid"
-              Grid.Column="0"
-              HorizontalAlignment="Left"
-              VerticalAlignment="Stretch"
-              Margin="15,0,0,0"
-              ClipToBounds="True"
-              Background="Transparent"
-              local:MpAvIsHoveringExtension.IsEnabled="True"
-              local:MpAvIsHoveringExtension.IsHovering="{Binding IsHoveringOnTitleTextGrid, Mode=TwoWay}"
-              Cursor="IBeam"
-              IsHitTestVisible="{Binding !HasScrollVelocity, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
-            <Grid.MaxWidth>
-                <MultiBinding Converter="{StaticResource MultiDoubleMathConverter}">
-                    <Binding Path="Bounds.Width"
-                             ElementName="TitleContainerGrid" />
-                    <Binding Path="Bounds.Width"
-                             ElementName="SourceIconContainerGrid"
-                             Converter="{StaticResource NegateDoubleConverter}" />
-                    <Binding>
-                        <Binding.Source>
-                            <sys:Double>-5</sys:Double>
-                        </Binding.Source>
-                    </Binding>
-                </MultiBinding>
-            </Grid.MaxWidth>
-            <TextBox x:Name="ClipTileTitleTextBox"
-                     FontFamily="Segoe UI"
-                     BorderThickness="0"
-                     Padding="0"
-                     local:MpAvIsFocusedExtension.IsEnabled="{Binding IsMarqueeEnabled, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                     local:MpAvIsFocusedExtension.IsReadOnly="{Binding IsTitleReadOnly, Mode=TwoWay}"
-                     local:MpAvIsFocusedExtension.IsFocused="{Binding IsTitleFocused, Mode=TwoWay}"
-                     local:MpAvIsFocusedExtension.SelectAllOnFocus="True"
-                     local:MpAvIsFocusedExtension.SelectViewModelOnFocus="True"
-                     local:MpAvMarqueeTextBoxExtension.IsEnabled="True"
-                     local:MpAvMarqueeTextBoxExtension.CancelEditCommand="{Binding CancelEditTitleCommand}"
-                     local:MpAvMarqueeTextBoxExtension.FinishEditCommand="{Binding FinishEditTitleCommand}"
-                     local:MpAvMarqueeTextBoxExtension.IsReadOnly="{Binding IsTitleReadOnly, Mode=TwoWay}"
-                     local:MpAvMarqueeTextBoxExtension.MaxPanelWidth="{Binding MaxWidth, ElementName=TitleTextBoxContainerGrid}"
-                     IsReadOnly="{Binding IsTitleReadOnly, Mode=OneWay}"
-                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                     HorizontalAlignment="Left"
-                     VerticalAlignment="Top"
-                     HorizontalContentAlignment="Left"
-                     VerticalContentAlignment="Top"
-                     Background="White"
-                     Foreground="Black"
-                     Text="{Binding CopyItemTitle, Mode=TwoWay}">
-                <TextBox.FontSize>
-                    <MultiBinding Converter="{StaticResource MultiDoubleMathConverter}"
-                                  ConverterParameter="/,-">
-                        <Binding Path="Bounds.Height"
-                                 ElementName="TitleContainerGrid" />
-                        <Binding>
-                            <Binding.Source>
-                                <sys:Double>2</sys:Double>
-                            </Binding.Source>
-                        </Binding>
-                        <Binding>
-                            <Binding.Source>
-                                <sys:Double>2</sys:Double>
-                            </Binding.Source>
-                        </Binding>
-                    </MultiBinding>
-                </TextBox.FontSize>
-            </TextBox>
-        </Grid>-->
-
+        
         <!--  Source Icon  -->
         <Grid x:Name="SourceIconContainerGrid"
               Grid.Column="1"
               Width="{Binding Bounds.Height, ElementName=TitleContainerGrid}"
               HorizontalAlignment="Right"
-              Margin="0,0,5,0"
+              Margin="0,0,12,0"
               ClipToBounds="False">
 
             <!--<Ellipse x:Name="SourceMatchEllipse"
@@ -363,7 +295,6 @@
                     local:MpAvPointerPressCommandExtension.IsEnabled="True"
                     local:MpAvPointerPressCommandExtension.RightPressCommand="{Binding EnableFilterByAppCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                     local:MpAvPointerPressCommandExtension.RightPressCommandParameter="{Binding .}"
-                    local:MpAvPointerPressCommandExtension.LeftPressCommand="{Binding ShowCefDevToolsCommand}"
                     ClipToBounds="False"
                     BorderThickness="0"
                     HorizontalAlignment="Stretch"

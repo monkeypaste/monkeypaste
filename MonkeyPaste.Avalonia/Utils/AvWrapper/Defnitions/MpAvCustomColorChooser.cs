@@ -26,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task<string> ShowCustomColorMenuAsync(string selectedColor, string title = null, MpIUserColorViewModel ucvm = null) {
             string newColor = String.Empty;
 
-            MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
+            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
             MpAvMenuExtension.IsChildDialogOpen = true;
 
             var cpw = new ColorPickerWindow(selectedColor.ToAvColor()) {
@@ -42,7 +42,7 @@ namespace MonkeyPaste.Avalonia {
                     ucvm.UserHexColor = newColor;
                 }
             }
-            MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
+            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
             MpAvMenuExtension.IsChildDialogOpen = false;
             MpPlatformWrapper.Services.ContextMenuCloser.CloseMenu();
 

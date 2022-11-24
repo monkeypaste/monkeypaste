@@ -475,7 +475,7 @@ namespace MonkeyPaste {
 	                                                    pk_MpCopyItemId as RootId,
 	                                                    fk_MpCopyItemTypeId,
 	                                                    Title,
-	                                                    ItemData,
+	                                                    MpDataObjectItem.ItemData as ItemData,
 	                                                    ItemDescription,
 	                                                    CopyDateTime,
 	                                                    (select PasteDateTime from MpPasteHistory where fk_MpCopyItemId=pk_MpCopyItemId order by PasteDateTime desc limit 1) AS LastPasteDateTime,
@@ -500,6 +500,7 @@ namespace MonkeyPaste {
 	                                                    MpUserDevice.PlatformTypeId AS SourceDeviceType
                                                     FROM
 	                                                    MpCopyItem
+													INNER JOIN MpDataObjectItem ON MpDataObjectItem.fk_MpDataObjectId = MpCopyItem.fk_MpDataObjectId AND MpDataObjectItem.ItemFormat == 'Text'
                                                     INNER JOIN MpUserDevice ON MpUserDevice.pk_MpUserDeviceId = MpApp.fk_MpUserDeviceId
                                                     INNER JOIN MpSource ON MpSource.pk_MpSourceId = MpCopyItem.fk_MpSourceId
                                                     INNER JOIN MpApp ON MpApp.pk_MpAppId = MpSource.fk_MpAppId

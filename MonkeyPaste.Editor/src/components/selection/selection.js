@@ -4,6 +4,7 @@ const DefaultSelectionBgColor = 'lightblue';
 const DefaultSelectionFgColor = 'black';
 const DefaultCaretColor = 'black';
 
+
 var BlurredSelectionRects = null;
 
 var SelectionHistory = [];

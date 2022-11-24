@@ -80,6 +80,10 @@ function isInternalClipTileFormat(format) {
 // #region Actions
 
 function addPlainHtmlClipboardMatchers() {
+    if (Quill === undefined) {
+        /// host load error case
+        debugger;
+    }
     // NOTE I think under the hood, quill handles html tags somehow but for xml tags it just
     // omits them completely so if content is xml or xml fragment, the entire content may just
     // become omitted

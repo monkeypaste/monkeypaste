@@ -14,7 +14,7 @@ namespace MonkeyPaste {
 
 
         ConcurrentDictionary<string,ObservableCollection<IntPtr>> RunningProcessLookup { get; }
-
+        
         IntPtr GetParentHandleAtPoint(MpPoint poIntPtr);
         IntPtr GetLastActiveInstance(string path);
         bool IsHandleRunningProcess(IntPtr handle);

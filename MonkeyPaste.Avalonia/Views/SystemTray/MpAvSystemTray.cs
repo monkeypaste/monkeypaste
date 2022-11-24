@@ -54,11 +54,11 @@ namespace MonkeyPaste.Avalonia {
 
 
         private static void Menu_Closed(object sender, EventArgs e) {
-            MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
+            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
         }
 
         private static void Menu_Opening(object sender, EventArgs e) {
-            MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
+            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
         }
     }
 }

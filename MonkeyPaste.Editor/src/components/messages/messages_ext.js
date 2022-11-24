@@ -13,7 +13,6 @@ function initMain_ext(initMsgStr_base64) {
 		initMain(initMsgObj.envName);
 	}
 
-	onInitComplete_ntf();
 }
 
 function loadContent_ext(loadContentMsgStr_base64) {
@@ -40,11 +39,11 @@ function loadContent_ext(loadContentMsgStr_base64) {
 
 }
 
-function hostIsSelectedChanged_ext(hostIsSelectedMsgStr_base64) {
-	// input 'MpQuillIsHostSelectedChangedMessage'
-	log('hostIsSelectedChanged_ext: ' + hostIsSelectedMsgStr_base64);
-	let msg = toJsonObjFromBase64Str(hostIsSelectedMsgStr_base64);
-	setInputFocusable(msg.isHostSelected);
+function hostIsFocusedChanged_ext(hostIsFocusedMsgStr_base64) {
+	// input 'MpQuillIsHostFocusedChangedMessage'
+	log('hostIsFocusedChanged_ext: ' + hostIsFocusedMsgStr_base64);
+	let msg = toJsonObjFromBase64Str(hostIsFocusedMsgStr_base64);
+	setInputFocusable(msg.isHostFocused);
 }
 
 function contentRequest_ext(contentReqMsgStr_base64) {
@@ -57,9 +56,8 @@ function contentRequest_ext(contentReqMsgStr_base64) {
 	//	onWaitTillPasteIsReady_ntf(req);
 	//	return;
 	//}
-	let is_for_ole = req.forPaste || req.forDragDrop || req.forCutOrCopy;
 
-	let items = convertContentToFormats(is_for_ole, req.formats);
+	let items = convertContentToFormats(req.forOle, req.formats);
 	let respObj = {
 		dataItems: items
 	};

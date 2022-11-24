@@ -28,7 +28,8 @@ namespace MonkeyPaste {
                 await targetCopyItem.WriteToDatabaseAsync();
 
                 if(sourceCopyItem.Id != targetCopyItem.Id) {
-                    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                    //MpAvQueryInfoViewModel.Current.NotifyQueryChanged(false);
+                    MpPlatformWrapper.Services.QueryInfo.NotifyQueryChanged();
                 }
             }
 

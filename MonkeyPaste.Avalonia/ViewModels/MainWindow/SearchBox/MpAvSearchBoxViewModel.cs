@@ -19,130 +19,26 @@ namespace MonkeyPaste.Avalonia {
 
     public class MpAvSearchBoxViewModel : MpViewModelBase, 
         MpIAsyncSingletonViewModel<MpAvSearchBoxViewModel>,
-        MpIPopupMenuViewModel,
-        MpIQueryInfoProvider {
+        MpIQueryInfoValueProvider {
         #region Private Variables
         #endregion
 
         #region Properties     
 
         #region View Models
-
         public ObservableCollection<MpSearchCriteriaItemViewModel> CriteriaItems { get; set; } = new ObservableCollection<MpSearchCriteriaItemViewModel>();
 
-        private ObservableCollection<MpAvSearchFilterViewModel> _filters;
-        public ObservableCollection<MpAvSearchFilterViewModel> Filters {
-            get {
-                if (_filters == null) {
-                    _filters = new ObservableCollection<MpAvSearchFilterViewModel>() {
-                        new MpAvSearchFilterViewModel(
-                            this,
-                            "Content",
-                            nameof(MpPrefViewModel.Instance.SearchByContent),
-                            MpContentFilterType.Content),
-                        new MpAvSearchFilterViewModel(
-                            this,
-                            "Title",
-                            nameof(MpPrefViewModel.Instance.SearchByTitle),
-                            MpContentFilterType.Title),
-                        new MpAvSearchFilterViewModel(
-                            this,
-                            "Url",
-                            nameof(MpPrefViewModel.Instance.SearchBySourceUrl),
-                            MpContentFilterType.Url),
-                        new MpAvSearchFilterViewModel(
-                            this,
-                            "Url Title",
-                            nameof(MpPrefViewModel.Instance.SearchByUrlTitle),
-                            MpContentFilterType.UrlTitle),
-                        new MpAvSearchFilterViewModel(
-                            this,
-                            "Application Path",
-                            nameof(MpPrefViewModel.Instance.SearchByProcessName),
-                            MpContentFilterType.AppPath),
-                        new MpAvSearchFilterViewModel(
-                            this,
-                            "Application Name",
-                            nameof(MpPrefViewModel.Instance.SearchByApplicationName),
-                            MpContentFilterType.AppName),
-                        //new MpSearchFilterViewModel(
-                        //    this,
-                        //    "Collections",
-                        //    nameof(MpJsonPreferenceIO.Instance.SearchByTag),
-                        //    MpContentFilterType.Tag),
-                        new MpAvSearchFilterViewModel(
-                            this,
-                            "Description",
-                            nameof(MpPrefViewModel.Instance.SearchByDescription),
-                            MpContentFilterType.Meta),
-                        new MpAvSearchFilterViewModel(this,true),
-                        new MpAvSearchFilterViewModel(
-                            this,
-                            "Text Type",
-                            nameof(MpPrefViewModel.Instance.SearchByTextType),
-                            MpContentFilterType.TextType),
-                        new MpAvSearchFilterViewModel(
-                            this,
-                            "File Type",
-                            nameof(MpPrefViewModel.Instance.SearchByFileType),
-                            MpContentFilterType.FileType),
-                        new MpAvSearchFilterViewModel(
-                            this,
-                            "Image Type",
-                            nameof(MpPrefViewModel.Instance.SearchByImageType),
-                            MpContentFilterType.ImageType),
-                        new MpAvSearchFilterViewModel(this,true),
-                        new MpAvSearchFilterViewModel(
-                            this,
-                            "Case Sensitive",
-                            nameof(MpPrefViewModel.Instance.SearchByIsCaseSensitive),
-                            MpContentFilterType.CaseSensitive),
-                        new MpAvSearchFilterViewModel(
-                            this,
-                            "Whole Word",
-                            nameof(MpPrefViewModel.Instance.SearchByWholeWord),
-                            MpContentFilterType.WholeWord),
-                        new MpAvSearchFilterViewModel(
-                            this,
-                            "Regular Expression",
-                            nameof(MpPrefViewModel.Instance.SearchByRegex),
-                            MpContentFilterType.Regex)
-                    };
-                }
-                return _filters;
-            }
-        }
-
+        private MpAvSearchFilterCollectionViewModel _searchFilterCollectionViewModel;
+        public MpAvSearchFilterCollectionViewModel SearchFilterCollectionViewModel => _searchFilterCollectionViewModel ?? (_searchFilterCollectionViewModel = new MpAvSearchFilterCollectionViewModel(this));
         #endregion
 
         #region MpIQueryInfoProvider Implementation
-        public void RestoreQueryInfo() {
-            SearchText = MpAvQueryInfoViewModel.Current.SearchText;
-        }
 
-        public void SetQueryInfo() {
-            MpAvQueryInfoViewModel.Current.SearchText = SearchText;
-        }
+        object MpIQueryInfoValueProvider.Source => this;
+        string MpIQueryInfoValueProvider.SourcePropertyName => nameof(SearchText);
 
-        #endregion
+        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpAvQueryInfoViewModel.Current.SearchText);
 
-        #region MpIPopupMenuViewModel Implementation
-
-        public MpMenuItemViewModel PopupMenuViewModel {
-            get {
-                return new MpMenuItemViewModel() {
-                    //SubItems = Filters.Select(
-                    //    x => new MpMenuItemViewModel() {
-                    //        IsSeparator = x.IsSeperator,
-                    //        IsChecked = x.IsChecked,
-                    //        IsEnabled = x.IsEnabled,
-                    //        Header = x.Label,
-                    //        IconHexStr = MpSystemColors.Transparent,
-                    //    }).Cast<MpMenuItemViewModel>().ToList()
-                    SubItems = Filters.Select(x=>x.MenuItemViewModel).ToList()
-                };
-            }
-        }
         #endregion
 
         #region Layout
@@ -177,14 +73,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public double SearchBoxViewWidth { get; set; }
-        public MpRect SearchBoxViewBounds { get; set; } = new MpRect();
-        #endregion
-
-        #region Business Logic Properties
-
-        public string PlaceholderText => MpPrefViewModel.Instance.SearchPlaceHolderText;
-
         #endregion
 
         #region State
@@ -217,15 +105,17 @@ namespace MonkeyPaste.Avalonia {
                 if(IsSearching) {
                     return true;
                 }
-                if(MpAvTagTrayViewModel.Instance.SelectedItem == null) {
+                if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
                     return true;
-                } else if (MpAvTagTrayViewModel.Instance.SelectedItem.TagClipCount == 0) {
-                    return true;
-                } else if(MpAvClipTrayViewModel.Instance.TotalTilesInQuery == 0) {
-                    // when current tag has items but current search criteria produces no result mark as invalid
-                    return false;
                 }
-                return true;
+                if (MpAvTagTrayViewModel.Instance.SelectedItem == null) {
+                    return true;
+                } 
+                if (MpAvTagTrayViewModel.Instance.SelectedItem.TagClipCount == 0) {
+                    return true;
+                } 
+                // when current tag has items but current search criteria produces no result mark as invalid
+                return MpAvClipTrayViewModel.Instance.TotalTilesInQuery > 0;
             }
         }
 
@@ -234,7 +124,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool HasText => SearchText.Length > 0;
 
-        public bool IsOverSearchByButton { get; set; }
         public bool IsOverSaveSearchButton { get; set; }
 
         public bool IsOverDeleteSearchButton { get; set; }
@@ -303,15 +192,6 @@ namespace MonkeyPaste.Avalonia {
 
         public MpUserSearch UserSearch { get; set; }
 
-        public MpContentFilterType FilterType {
-            get {
-                MpContentFilterType ft = MpContentFilterType.None;
-                foreach (var sfvm in Filters) {
-                    ft |= sfvm.FilterValue;
-                }
-                return ft;
-            }
-        }
 
         #endregion
 
@@ -338,14 +218,10 @@ namespace MonkeyPaste.Avalonia {
                 MpAvQueryInfoViewModel.Current.RegisterProvider(this);
                 CriteriaItems.CollectionChanged += CriteriaItems_CollectionChanged;
 
-
-                ValidateFilters();
-                foreach (var sfvm in Filters.Where(x=>!x.IsSeperator)) {
-                    sfvm.PropertyChanged += Sfvm_PropertyChanged;
-                }
+                SearchFilterCollectionViewModel.Init();
 
 
-                MpMessenger.Register<MpMessageType>(MpAvClipTrayViewModel.Instance, ReceiveClipTrayViewModelMessage);
+                MpMessenger.RegisterGlobal(ReceiveGlobalMessage);
             });
         }
 
@@ -374,37 +250,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        private void Sfvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            var sfvm = sender as MpAvSearchFilterViewModel;
-            switch(e.PropertyName) {
-                case nameof(sfvm.IsChecked):
-                    ValidateFilters();
-                    break;
-            }
-        }
-
-        private void ValidateFilters() {
-            //var regex_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByRegex));
-            //var case_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByIsCaseSensitive));
-            //var whole_word_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByWholeWord));
-
-            //if (regex_filter.IsChecked.IsTrue()) {
-            //    case_filter.IsChecked = null;
-            //    whole_word_filter.IsChecked = null;
-            //} else {
-            //    case_filter.IsChecked = false;
-            //}
-
-            //var text_type_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByTextType));
-            //var image_type_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByImageType));
-            //var file_type_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByFileType));
-
-            //if(text_type_filter.IsChecked.IsFalse() && image_type_filter.IsChecked.IsFalse() && file_type_filter.IsChecked.IsFalse()) {
-            //    text_type_filter.IsChecked = true;
-            //    image_type_filter.IsChecked = true;
-            //    file_type_filter.IsChecked = true;
-            //}
-        }
+        
 
         public void NotifyHasMultipleMatches() {
             Dispatcher.UIThread.VerifyAccess();
@@ -432,7 +278,7 @@ namespace MonkeyPaste.Avalonia {
             return nscivm;
         }
 
-        private void ReceiveClipTrayViewModelMessage(MpMessageType msg) {
+        private void ReceiveGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.RequeryCompleted:
                     IsSearching = false;
@@ -444,12 +290,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpSearchBoxViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(SearchBoxViewWidth):
-                    MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayScreenWidth));
-                    break;
-                case nameof(SearchBoxViewBounds):
-                    MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayScreenWidth));
-                    break;
+               
                 case nameof(SearchText):
                     OnPropertyChanged(nameof(ClearAndBusyColumnWidth));
                     OnPropertyChanged(nameof(NavButtonsColumnWidth));
@@ -533,9 +374,9 @@ namespace MonkeyPaste.Avalonia {
                 IsMultipleMatches = false;
                 SearchText = string.Empty;
                 if(!string.IsNullOrWhiteSpace(LastSearchText)) {
-                    //MpDataModelProvider.QueryInfo.NotifyQueryChanged();
-                    SetQueryInfo();
-                    MpDataModelProvider.QueryInfo.NotifyQueryChanged();
+                    //MpAvQueryInfoViewModel.Current.NotifyQueryChanged();
+                    //SetQueryInfo();
+                    MpAvQueryInfoViewModel.Current.NotifyQueryChanged();
                 }
                 LastSearchText = string.Empty;
             },
@@ -557,8 +398,8 @@ namespace MonkeyPaste.Avalonia {
 
                 OnPropertyChanged(nameof(IsSearchValid));
 
-                SetQueryInfo(); 
-                MpDataModelProvider.QueryInfo.NotifyQueryChanged();
+                //SetQueryInfo(); 
+                MpAvQueryInfoViewModel.Current.NotifyQueryChanged();
                 UpdateRecentSearchTexts();
             },()=>!MpAvMainWindowViewModel.Instance.IsMainWindowLoading);
 

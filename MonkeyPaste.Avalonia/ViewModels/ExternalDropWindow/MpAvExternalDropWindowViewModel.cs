@@ -49,7 +49,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
-
         #endregion
         #endregion
 
@@ -63,7 +62,18 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
+        public void Init() {
+            //MpAvShortcutCollectionViewModel.Instance.OnGlobalDragBegin += Instance_OnGlobalDragBegin;
+            //MpAvShortcutCollectionViewModel.Instance.OnGlobalDragEnd += Instance_OnGlobalDragEnd;
+        }
 
+        private void Instance_OnGlobalDragEnd(object sender, EventArgs e) {
+            throw new NotImplementedException();
+        }
+
+        private void Instance_OnGlobalDragBegin(object sender, EventArgs e) {
+
+        }
         #endregion
 
         #region Private Methods
@@ -144,12 +154,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             if(!MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
-                var drag_item = MpAvClipTrayViewModel.Instance.DragItem;
-                if(drag_item != null) {
-                    // test to see if this is received before dragend signal from dnd helper
-                    bool test = drag_item.IsTileDragging;
-                    Debugger.Break();
-                }
+                StopDropTargetListener();
             }
             var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;           
             UpdateDropAppViewModelCommand.Execute(gmp);

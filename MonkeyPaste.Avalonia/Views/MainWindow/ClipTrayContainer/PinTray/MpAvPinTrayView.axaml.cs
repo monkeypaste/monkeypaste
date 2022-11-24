@@ -126,11 +126,13 @@ namespace MonkeyPaste.Avalonia {
             if (drop_idx < 0) {
                 return false;
             }
-            var drag_pctvm = BindingContext.PinnedItems.FirstOrDefault(x => x.IsTileDragging);
-            if (drag_pctvm == null) {
+            string drag_ctvm_pub_handle = avdo.Get(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT) as string;
+            if(string.IsNullOrEmpty(drag_ctvm_pub_handle)) {
                 // Tile drop is always valid
                 return true;
             }
+
+            var drag_pctvm = BindingContext.PinnedItems.FirstOrDefault(x => x.PublicHandle == drag_ctvm_pub_handle);
             int drag_pctvm_idx = BindingContext.PinnedItems.IndexOf(drag_pctvm);
             
             bool is_drop_onto_same_idx = drop_idx == drag_pctvm_idx || drop_idx == drag_pctvm_idx + 1;
@@ -188,8 +190,16 @@ namespace MonkeyPaste.Avalonia {
 
         private async Task PerformExternalOrPartialDropAsync(int drop_idx, IDataObject avdo) {
             MpPortableDataObject mpdo = await MpPlatformWrapper.Services.DataObjectHelperAsync.ReadDragDropDataObject(avdo) as MpPortableDataObject;
-
-            var avdo_ci = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(mpdo, MpAvClipTrayViewModel.Instance.DragItemId);
+            int drag_ciid = -1;
+            string drag_ctvm_pub_handle = mpdo.GetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT) as string;
+            if (!string.IsNullOrEmpty(drag_ctvm_pub_handle)) {
+                var drag_ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == drag_ctvm_pub_handle);
+                if (drag_ctvm != null) {
+                    // tile sub-selection drop
+                    drag_ciid = drag_ctvm.CopyItemId;
+                }
+            }
+            var avdo_ci = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(mpdo, drag_ciid);
 
             var drop_ctvm = await BindingContext.CreateClipTileViewModel(avdo_ci, -1);
             BindingContext.PinTileCommand.Execute(new object[] { drop_ctvm, drop_idx });

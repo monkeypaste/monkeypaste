@@ -143,7 +143,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return null;
         }
-        async Task<object> MpIPlatformDataObjectHelperAsync.GetPlatformClipboardDataObjectAsync() {
+        async Task<object> MpIPlatformDataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(bool ignorePlugins) {
             var pdo = await ReadClipboardOrDropObjectAsync(null);
             return pdo;
         }
@@ -316,7 +316,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private async Task<MpAvDataObject> ReadClipboardOrDropObjectAsync(IDataObject forced_ido = null) {
+        private async Task<MpAvDataObject> ReadClipboardOrDropObjectAsync(IDataObject forced_ido = null, bool ignorePlugins = false) {
             // NOTE forcedDataObject is used to read drag/drop, when null clipboard is read
             IsBusy = true;
 
@@ -324,6 +324,7 @@ namespace MonkeyPaste.Avalonia {
 
             foreach (var read_component in EnabledReaderComponents) {
                 var reader_request = new MpClipboardReaderRequest() {
+                    ignoreParams = ignorePlugins,
                     isAvalonia = true,
                     mainWindowImplicitHandle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle.ToInt32(),
                     platform = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),

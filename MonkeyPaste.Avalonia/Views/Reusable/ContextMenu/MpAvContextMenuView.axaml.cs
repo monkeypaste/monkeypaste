@@ -32,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void MpAvContextMenuView_ContextMenuOpening(object sender, System.ComponentModel.CancelEventArgs e) {
-            MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
+            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
             return;
         }
 
@@ -42,7 +42,7 @@ namespace MonkeyPaste.Avalonia {
                 e.Cancel = true;
                 return;
             }
-            MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
+            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
         }
 
 

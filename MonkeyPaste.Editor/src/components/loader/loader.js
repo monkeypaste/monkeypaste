@@ -29,6 +29,9 @@ var UseBetterTable = true;
 
 function loadEditorGlobals() {
     if (window.location.search != '') {
+        // this is the case for converter which uses 1.3.6
+        // because it doesn't have that whitespace exclusion bug between spans
+        // it doesn't need the quill tables because it converts plain html which doesn't rely on better table
         UseBetterTable = false;
         UseQuill2 = false;
     }

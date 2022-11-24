@@ -66,6 +66,8 @@ namespace MonkeyPaste.Avalonia {
                 if(_owner.IsContentLoaded) {
                     // trigger id change to reload item
                     ctvm.OnPropertyChanged(nameof(ctvm.CopyItemId));
+                    ctvm.OnPropertyChanged(nameof(ctvm.PublicHandle));
+
                 }
             }
         }

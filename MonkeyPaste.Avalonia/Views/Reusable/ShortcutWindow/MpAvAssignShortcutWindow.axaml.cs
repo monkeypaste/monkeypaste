@@ -39,14 +39,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MpAvAssignShortcutWindow_Opened(object sender, System.EventArgs e) {
-            MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
+            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
            
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed += Instance_OnGlobalKeyPressed;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased += Instance_OnGlobalKeyReleased;
         }
 
         private void MpAvAssignShortcutWindow_Closed(object sender, System.EventArgs e) {
-            MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
+            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= Instance_OnGlobalKeyPressed;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= Instance_OnGlobalKeyReleased;
         }

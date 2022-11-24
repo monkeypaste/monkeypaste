@@ -355,3 +355,4 @@ MigrationBackup/
 /MonkeyPaste.Avalonia/cef
 /MonkeyPaste.Avalonia/cef_old/win
 /MonkeyPaste.Editor/lib
+/WebTest

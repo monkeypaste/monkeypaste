@@ -6,6 +6,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using drawing = System.Drawing;
+using IDataObject_Com = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class WinApi {
@@ -749,6 +751,8 @@ namespace MonkeyPaste.Common.Avalonia {
         public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, ref SETTEXTEX wParam, byte[] lParam);
 
         #endregion
+            
+        
 
-    }
+}
 }

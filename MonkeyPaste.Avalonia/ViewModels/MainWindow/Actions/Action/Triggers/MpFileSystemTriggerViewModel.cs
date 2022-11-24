@@ -145,7 +145,7 @@ namespace MonkeyPaste.Avalonia {
                         bool isVisible = MpAvClipTrayViewModel.Instance.GetClipTileViewModelById((int)ci.Id) != null;
                         await ci.DeleteFromDatabaseAsync();
                         if(isVisible) {
-                            MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                            MpAvQueryInfoViewModel.Current.NotifyQueryChanged();
                         }
                         break;
                 }
@@ -190,14 +190,14 @@ namespace MonkeyPaste.Avalonia {
                 } else if(File.Exists(initDir)) {
                     initDir = Path.GetDirectoryName(initDir);
                 }
-                MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
+                MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
                 var selectedDir = await new OpenFolderDialog() {
                     Title = "Select folder",
                     Directory = initDir
                 }.ShowAsync(MpAvMainWindow.Instance);
 
 
-                MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
+                MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
                 if (string.IsNullOrEmpty(selectedDir)) {
                     FileSystemPath = selectedDir;
                     await ReEnable();

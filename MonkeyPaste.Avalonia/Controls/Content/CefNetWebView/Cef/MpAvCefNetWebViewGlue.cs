@@ -47,7 +47,10 @@ namespace MonkeyPaste.Avalonia {
             if(browser.Host.Client.GetWebView() is MpAvIDragSource ds) {
                 Dispatcher.UIThread.Post(async () => {
 
-                    await MpAvDocumentDragHelper.PerformDragAsync(ds, ds.DragPointerEventArgs, allowedOps.ToDragDropEffects());
+                    //var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+                    //var kmf = MpAvShortcutCollectionViewModel.Instance.GlobalKeyModifierFlags;
+                    //var pe = MpAvPointerInputHelpers.SimulatePointerEventArgs(ds as Control, gmp, kmf);
+                    await MpAvDocumentDragHelper.PerformDragAsync(ds, ds.LastPointerPressedEventArgs, allowedOps.ToDragDropEffects());
                     
                 });
             }

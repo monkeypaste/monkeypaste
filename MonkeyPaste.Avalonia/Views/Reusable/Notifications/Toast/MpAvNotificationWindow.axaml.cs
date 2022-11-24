@@ -88,8 +88,8 @@ namespace MonkeyPaste.Avalonia {
 
         private static void _windows_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             _UpdateWindows();
-            MpAvMainWindowViewModel.Instance.IsShowingDialog = _windows.Count > 0;
-            if (!MpAvMainWindowViewModel.Instance.IsShowingDialog) {
+            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = _windows.Count > 0;
+            if (!MpAvMainWindowViewModel.Instance.IsAnyDialogOpen) {
                 _instance = null;
             }
         }

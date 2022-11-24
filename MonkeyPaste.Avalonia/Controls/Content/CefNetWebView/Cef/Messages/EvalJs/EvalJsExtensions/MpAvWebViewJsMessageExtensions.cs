@@ -29,6 +29,14 @@ namespace MonkeyPaste.Avalonia {
         }
         #region MpAvCefNetWebView Extensions
 
+        public static int PendingEvalCount(this MpAvCefNetWebView wv) {
+            var kvp = GetJsPendingMessageLookup(wv);
+            if(kvp == null) {
+                return 0;
+            }
+            return kvp.Values.Count;
+        }
+
         public static async Task<string> EvaluateJavascriptAsync(this MpAvCefNetWebView wv, string script) {
             while(!wv.IsDomLoaded) {
                 await Task.Delay(100);
@@ -49,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
                 string resp = await wv.EvaluateJavascriptAsync_helper(script, evalKey);
                 bool is_valid = resp != null && resp != MpAvCefNetApplication.JS_REF_ERROR;
 
-                if(wv.IsContentUnloaded) {
+                if(wv.NeedsEvalJsCleared) {
                     // wv is being recycled so clear evals and breakout here
                     ClearWebViewEvals(wv);
 
@@ -73,7 +81,7 @@ namespace MonkeyPaste.Avalonia {
             if (wv.DataContext is MpAvClipTileViewModel ctvm) {
 
                 MpConsole.WriteLine($"Attempting reload of item: {ctvm.CopyItemTitle}");
-                var stateMsg = MpAvCefNetWebViewExtension.GetEditorStateFromClipTile(ctvm);
+                var stateMsg = wv.GetEditorStateFromClipTile();
                 if(wv.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv) {
                     await ctv.ReloadContentAsync(stateMsg.SerializeJsonObjectToBase64());
                     // should probably try to re eval script here but not sure depending on what it was so keep
@@ -157,7 +165,8 @@ namespace MonkeyPaste.Avalonia {
                     // one case for ths is wv is being recycled and calling method has already acknowledge and removed this requeset
                     return null;
                 }
-                if(wv.IsContentUnloaded) {
+                if(wv.NeedsEvalJsCleared) {
+                    // break out of this eval
                     MpConsole.WriteLine("wv unload caught in eval helper, returning null");
                     return null;
                 }
@@ -211,7 +220,7 @@ namespace MonkeyPaste.Avalonia {
             _webViewEvalJsLookup[wv].Clear();
 
             // NOTE reseting this flag here since its the only place that needs to know
-            wv.IsContentUnloaded = false;
+            wv.NeedsEvalJsCleared = false;
             MpConsole.WriteLine($"{eval_count} pending eval's cleared from wv '{wv.DataContext}' and wv unload flag was reset");
         }
         #endregion

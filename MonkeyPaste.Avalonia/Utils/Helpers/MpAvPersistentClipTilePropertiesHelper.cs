@@ -82,26 +82,26 @@ namespace MonkeyPaste.Avalonia {
         #region Unique Size
 
         private static Dictionary<int, double> _persistentUniqueTileSizeLookup_ById { get; set; } = new Dictionary<int, double>();
-        private static Dictionary<int, double> _persistentUniqueTileSizeLookup_ByIdx { get; set; } = new Dictionary<int, double>();
+        //private static Dictionary<int, double> _persistentUniqueTileSizeLookup_ByIdx { get; set; } = new Dictionary<int, double>();
         public static void AddOrReplacePersistentSize_ById(int ciid, double uniqueSize) {
             _persistentUniqueTileSizeLookup_ById.AddOrReplace(ciid, uniqueSize);
 
-            int queryOffset = MpDataModelProvider.AvailableQueryCopyItemIds.FastIndexOf(ciid);
-            if (queryOffset < 0) {
-                return;
-            }
-            _persistentUniqueTileSizeLookup_ByIdx.AddOrReplace(queryOffset, uniqueSize);
+            //int queryOffset = MpDataModelProvider.AvailableQueryCopyItemIds.FastIndexOf(ciid);
+            //if (queryOffset < 0) {
+            //    return;
+            //}
+            //_persistentUniqueTileSizeLookup_ByIdx.AddOrReplace(queryOffset, uniqueSize);
         }
 
         public static void RemovePersistentSize_ById(int ciid) {
             if (_persistentUniqueTileSizeLookup_ById.ContainsKey(ciid)) {
                 _persistentUniqueTileSizeLookup_ById.Remove(ciid);
             }
-            int queryOffset = MpDataModelProvider.AvailableQueryCopyItemIds.FastIndexOf(ciid);
-            if (queryOffset < 0) {
-                return;
-            }
-            _persistentUniqueTileSizeLookup_ByIdx.Remove(queryOffset);
+            //int queryOffset = MpDataModelProvider.AvailableQueryCopyItemIds.FastIndexOf(ciid);
+            //if (queryOffset < 0) {
+            //    return;
+            //}
+            //_persistentUniqueTileSizeLookup_ByIdx.Remove(queryOffset);
         }
 
         public static bool TryGetByPersistentSize_ById(int ciid, out double uniqueSize) {
@@ -112,7 +112,7 @@ namespace MonkeyPaste.Avalonia {
             return _persistentUniqueTileSizeLookup_ById.TryGetValue(ciid, out double uniqueSize);
         }
         public static void ClearPersistentWidths() {
-            _persistentUniqueTileSizeLookup_ByIdx.Clear();
+            //_persistentUniqueTileSizeLookup_ByIdx.Clear();
             _persistentUniqueTileSizeLookup_ById.Clear();
         }
         #endregion

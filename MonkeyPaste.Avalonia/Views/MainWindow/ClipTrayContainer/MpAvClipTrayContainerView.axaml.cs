@@ -75,7 +75,7 @@ namespace MonkeyPaste.Avalonia {
         private void Gs_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
             Dispatcher.UIThread.Post(async () => {
                 await Task.Delay(300);
-                BindingContext.RefreshLayout();
+                BindingContext.RefreshQueryTrayLayout();
             });
         }
 

@@ -26,7 +26,7 @@
         <!--  Pause / Resume Clipboard Listener Toggle Button  -->
         <ToggleButton Tag="PlayPause"
                       local:MpAvSizeObserverExtension.IsEnabled="False"
-                      local:MpAvSizeObserverExtension.ObservedWidth="{Binding PlayPauseButtonWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWayToSource}"
+                      local:MpAvSizeObserverExtension.ObservedWidth="{Binding PlayPauseButtonWidth, Mode=OneWayToSource}"
                       Padding="10"
                       HorizontalAlignment="Center"
                       VerticalAlignment="Top"
@@ -55,7 +55,7 @@
         <!--  Content Sort View  -->
         <local:MpAvClipTileSortView Tag="Sort"
                                     local:MpAvSizeObserverExtension.IsEnabled="False"
-                                    local:MpAvSizeObserverExtension.ObservedWidth="{Binding ClipTileSortViewWidth, Source={x:Static local:MpAvClipTileSortViewModel.Instance}, Mode=OneWayToSource}"
+                                    local:MpAvSizeObserverExtension.ObservedWidth="{Binding ClipTileSortViewWidth, Mode=OneWayToSource}"
                                     HorizontalAlignment="Left" />
         <!--  SearchBox View  -->
 
@@ -64,7 +64,7 @@
                                  DockPanel.Dock="Right"
                                  MaxWidth="300"
                                  local:MpAvSizeObserverExtension.IsEnabled="False"
-                                 local:MpAvSizeObserverExtension.ObservedWidth="{Binding SearchBoxViewWidth, Source={x:Static local:MpAvSearchBoxViewModel.Instance}, Mode=OneWayToSource}" />
+                                 local:MpAvSizeObserverExtension.ObservedWidth="{Binding SearchBoxViewWidth, Mode=OneWayToSource}" />
 
         <!--  Tag Tray View  -->
         <local:MpAvTagTrayView IsVisible="{Binding IsHorizontalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />

@@ -295,6 +295,10 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private void RenderMarquee(DrawingContext ctx) {
+            if(_marqueeBitmap == null) {
+                return;
+            }
+
             ctx.FillRectangle(ReadOnlyBackground, this.Bounds);
 
             MpRect bmp_rect = new MpRect(MpPoint.Zero, _marqueeBitmap.Size.ToPortableSize());

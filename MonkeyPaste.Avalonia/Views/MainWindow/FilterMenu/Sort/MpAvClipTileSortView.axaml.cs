@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
 namespace MonkeyPaste.Avalonia {
-    public partial class MpAvClipTileSortView : MpAvUserControl<MpAvClipTileSortViewModel> {
+    public partial class MpAvClipTileSortView : MpAvUserControl<MpAvFilterMenuViewModel> {
         public MpAvClipTileSortView() {
             InitializeComponent();
         }

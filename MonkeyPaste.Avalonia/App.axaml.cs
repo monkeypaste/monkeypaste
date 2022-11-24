@@ -61,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void RootIcon_Clicked(object sender, EventArgs e) {
-            MpAvMainWindowViewModel.Instance.IsShowingDialog = DateTime.Now - MpAvShortcutCollectionViewModel.Instance.LastRightClickDateTime < TimeSpan.FromMilliseconds(1000);
+            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = DateTime.Now - MpAvShortcutCollectionViewModel.Instance.LastRightClickDateTime < TimeSpan.FromMilliseconds(1000);
 
         }
     }

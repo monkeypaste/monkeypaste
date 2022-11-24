@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         private string _sim_keystr_to_this_app = string.Empty;
-        private MpAvKeyGestureHelper2 _keyboardGestureHelper;
+        private MpKeyGestureHelper2 _keyboardGestureHelper;
 
         //private DateTime? _waitToExecuteShortcutStartDateTime;
 
@@ -78,11 +78,31 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public MpKeyModifierFlags GlobalKeyModifierFlags {
+            get {
+                MpKeyModifierFlags kmf = MpKeyModifierFlags.None;
+                if(GlobalIsCtrlDown) {
+                    kmf |= MpKeyModifierFlags.Control;
+                }
+                if (GlobalIsAltDown) {
+                    kmf |= MpKeyModifierFlags.Alt;
+                }
+                if (GlobalIsShiftDown) {
+                    kmf |= MpKeyModifierFlags.Shift;
+                }
+                if (GlobalIsMetaDown) {
+                    kmf |= MpKeyModifierFlags.Meta;
+                }
+                return kmf;
+            }
+        }
+
         public bool GlobalIsCtrlDown { get; private set; } = false;
 
         public bool GlobalIsAltDown { get; private set; } = false;
 
         public bool GlobalIsShiftDown { get; private set; } = false;
+        public bool GlobalIsMetaDown { get; private set; } = false;
         public bool GlobalIsEscapeDown { get; private set; } = false;
         public bool GlobalIsPointerDragging { get; private set; } = false;
 
@@ -148,7 +168,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvShortcutCollectionViewModel() : base(null) { }
 
         public async Task InitAsync() {
-            _keyboardGestureHelper = new MpAvKeyGestureHelper2();
+            _keyboardGestureHelper = new MpKeyGestureHelper2();
             _simInputCts = new CancellationTokenSource();
 
             await InitShortcutsAsync();
@@ -186,7 +206,7 @@ namespace MonkeyPaste.Avalonia {
             MpShortcutType shortcutType,
             string commandParameter,
             string keys) {
-            MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
+            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
             string shortcutKeyString = await MpAvAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(title, keys, command, commandParameter);
 
             MpAvShortcutViewModel scvm = null;
@@ -238,7 +258,7 @@ namespace MonkeyPaste.Avalonia {
 
                 await scvm.InitializeAsync(scvm.Shortcut, scvm.Command);
             }
-            MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
+            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
             return shortcutKeyString;
         }
 
@@ -822,8 +842,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (keyStr.IsShift()) {
-                    GlobalIsShiftDown = true;
-                    
+                    GlobalIsShiftDown = true;                    
                 }
                 if (keyStr.IsAlt()) {
                     GlobalIsAltDown = true;
@@ -831,6 +850,9 @@ namespace MonkeyPaste.Avalonia {
                 if (keyStr.IsCtrl()) {
                     GlobalIsCtrlDown = true;
                     //MpConsole.WriteLine("Global ctrl key: DOWN");
+                }
+                if (keyStr.IsMeta()) {
+                    GlobalIsMetaDown = true;
                 }
                 if (keyStr.IsEscape()) {
                     GlobalIsEscapeDown = true;
@@ -862,6 +884,9 @@ namespace MonkeyPaste.Avalonia {
                 if (keyStr.IsCtrl()) {
                     GlobalIsCtrlDown = false; 
                     //MpConsole.WriteLine("Global ctrl key: UP");
+                }
+                if (keyStr.IsMeta()) {
+                    GlobalIsMetaDown = false;
                 }
                 if (keyStr.IsEscape()) {
                     GlobalIsEscapeDown = false;

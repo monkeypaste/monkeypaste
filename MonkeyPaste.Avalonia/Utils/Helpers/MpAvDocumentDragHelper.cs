@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using MonkeyPaste.Common.Avalonia;
 using Avalonia.Controls;
 using System.Diagnostics;
+using Gtk;
+using Avalonia.Interactivity;
+using Xamarin.Essentials;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvDocumentDragHelper {
@@ -19,6 +22,8 @@ namespace MonkeyPaste.Avalonia {
         public static IDataObject DragDataObject { get; private set; }
 
         public static IDataObject SourceDataObject { get; private set; }
+
+        public static bool IsDragging => DragDataObject != null;
 
         #endregion
 
@@ -37,7 +42,7 @@ namespace MonkeyPaste.Avalonia {
 
             _dragSource = dragSource;
 
-            SourceDataObject = await dragSource.GetDataObjectAsync(false, false, false);
+            SourceDataObject = await dragSource.GetDataObjectAsync(true);
 
             if (SourceDataObject == null) {
                 // this seems to happen due to data conversion errors somewhere
@@ -46,9 +51,11 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             DragDataObject = SourceDataObject.Clone();
+            MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
             // signals vm to post ItemDragBegin which notifies drop widget to show
-            _dragSource.IsDragging = true;
+            //_dragSource.IsDragging = true;
 
+            ApplyClipboardPresetToDragDataAsync().FireAndForgetSafeAsync();
             var result = await DragDrop.DoDragDrop(pointerEventArgs, DragDataObject, allowedEffects);
 
 
@@ -61,17 +68,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private static void ReceivedGlobalMessage(MpMessageType msg) {
-            switch(msg) {
-                case MpMessageType.ItemDragBegin:
-                case MpMessageType.ClipboardPresetsChanged:
-                    ApplyClipboardPresetToDragDataAsync().FireAndForgetSafeAsync();
-                    break;
-                case MpMessageType.ItemDragEnd:
-                    ResetDragState();
-                    break;
-            }
-        }
+        //private static void ReceivedGlobalMessage(MpMessageType msg) {
+        //    switch(msg) {
+        //        case MpMessageType.ItemDragBegin:
+        //        case MpMessageType.ClipboardPresetsChanged:
+        //            ApplyClipboardPresetToDragDataAsync().FireAndForgetSafeAsync();
+        //            break;
+        //        case MpMessageType.ItemDragEnd:
+        //            ResetDragState();
+        //            break;
+        //    }
+        //}
 
         private static async Task ApplyClipboardPresetToDragDataAsync() {
             // seems excessive...but ultimately all ole pref's come
@@ -98,14 +105,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void HookDragEvents() {
-            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+            //MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed += OnGlobalKeyPrssedOrReleasedHandler;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased += OnGlobalKeyPrssedOrReleasedHandler;
 
         }
 
         private static void UnhookDragEvents() {
-            MpMessenger.UnregisterGlobal(ReceivedGlobalMessage);
+            //MpMessenger.UnregisterGlobal(ReceivedGlobalMessage);
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= OnGlobalKeyPrssedOrReleasedHandler;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= OnGlobalKeyPrssedOrReleasedHandler;
 
@@ -120,7 +127,7 @@ namespace MonkeyPaste.Avalonia {
                 DragDropEffects actualDropEffect = wasSuccess ? wasCopy ? DragDropEffects.Copy : DragDropEffects.Move : DragDropEffects.None;
                 _dragSource.NotifyDropComplete(actualDropEffect);
             }
-
+            ResetDragState();
             
 
             MpMessenger.SendGlobal(MpMessageType.ItemDragEnd);
@@ -132,6 +139,8 @@ namespace MonkeyPaste.Avalonia {
             DragDataObject = null;
             _dragSource = null;
         }
+
+        
         #endregion
     }
 }

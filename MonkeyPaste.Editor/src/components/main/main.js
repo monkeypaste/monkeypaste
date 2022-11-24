@@ -113,7 +113,8 @@ function initMain(envName) {
 
 	IsLoaded = true;
 	log('Main Initialized.');
-	return 'Success';
+
+	onInitComplete_ntf();
 }
 // #endregion Life Cycle
 

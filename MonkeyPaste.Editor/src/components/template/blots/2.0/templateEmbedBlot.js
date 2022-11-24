@@ -22,6 +22,12 @@ var TemplateEmbedHtmlAttributes = [
 ];
 
 function initTemplateBlot() {
+
+    if (Quill === undefined) {
+        /// host load error case
+        debugger;
+    }
+
     let Parchment = Quill.imports.parchment;
     class TemplateEmbedBlot extends Parchment.EmbedBlot {
         static blotName = 'template';

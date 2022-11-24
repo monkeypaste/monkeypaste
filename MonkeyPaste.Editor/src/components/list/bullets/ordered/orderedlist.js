@@ -15,6 +15,11 @@ function initOrderedListToolbarButton() {
 }
 
 function initOrderListBlot() {
+
+	if (Quill === undefined) {
+		/// host load error case
+		debugger;
+	}
 	let Parchment = Quill.imports.parchment;
 	class OrderedListContainer extends Parchment.ContainerBlot {
 		static create(value) {

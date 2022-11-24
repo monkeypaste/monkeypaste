@@ -221,7 +221,7 @@ namespace MonkeyPaste.Avalonia {
                                     "ENABLED" :
                                     "DISABLED";
             string notificationText = $"Action '{FullName}' is now  {enabledText}";
-            MpAvMainWindowViewModel.Instance.IsShowingDialog = MpAvMainWindowViewModel.Instance.IsMainWindowOpen;
+            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = MpAvMainWindowViewModel.Instance.IsMainWindowOpen;
 
             await MpNotificationBuilder.ShowMessageAsync(
                 iconSourceStr: IconResourceKeyStr,
@@ -229,7 +229,7 @@ namespace MonkeyPaste.Avalonia {
                 msg: notificationText);
 
 
-            MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
+            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
         }
         #endregion
 

@@ -16,8 +16,7 @@ using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common.Avalonia;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-//using MonkeyPaste.Common.Wpf;
-using WinApi = MonkeyPaste.Common.Avalonia.WinApi;
+
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipboardWatcher : MpIClipboardMonitor, MpIPlatformDataObjectRegistrar {
         #region Private Variables
@@ -112,7 +111,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task<MpPortableDataObject> ConvertManagedFormats() {
-            var result = await MpPlatformWrapper.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync();
+            var result = await MpPlatformWrapper.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(true);
             return result as MpPortableDataObject;
         }
 

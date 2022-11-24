@@ -85,20 +85,23 @@
                         Height="25"
                         Margin="3,0,0,0"
                         Padding="0"
-                        local:MpAvIsHoveringExtension.IsEnabled="True"
-                        local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverSearchByButton}"
+                        DataContext="{Binding SearchFilterCollectionViewModel}"
                         local:MpAvMenuExtension.IsEnabled="True"
                         local:MpAvMenuExtension.HideOnClick="False"
                         local:MpAvMenuExtension.SelectOnRightClick="False"
-                        local:MpAvMenuExtension.IsOpen="{Binding IsPopupMenuOpened, Mode=TwoWay}"
+                        local:MpAvMenuExtension.IsOpen="{Binding IsFilterPopupOpen}"
                         Background="Transparent"
-                        BorderBrush="Transparent"
                         BorderThickness="1">
                     <Button.Styles>
+                        <Style Selector=":is(Button)">
+                            <Setter Property="BorderBrush"
+                                    Value="Transparent" />
+                        </Style>
                         <Style Selector=":is(Button):pointerover">
                             <Setter Property="BorderBrush"
                                     Value="Black" />
                         </Style>
+
                     </Button.Styles>
                     <Grid>
                         <PathIcon Foreground="DimGray"
@@ -109,7 +112,7 @@
                                   Margin="3,18,0,0"
                                   HorizontalAlignment="Left"
                                   VerticalAlignment="Bottom"
-                                  IsVisible="{Binding IsOverSearchByButton}"
+                                  IsVisible="{Binding IsPointerOver, ElementName=SearchDropDownButton}"
                                   Data="{StaticResource MenuDownArrowSvg}" />
                     </Grid>
                 </Button>

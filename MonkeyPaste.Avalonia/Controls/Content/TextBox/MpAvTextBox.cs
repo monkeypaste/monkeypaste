@@ -87,14 +87,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpAvIContentView Implementation
-        public bool IsCurrentDragSource {
-        get => Owner.DataContext is MpAvClipTileViewModel ctvm ? ctvm.IsTileDragging : false;
-            set {
-                if(Owner.DataContext is MpAvClipTileViewModel ctvm) {
-                    ctvm.IsTileDragging = true;
-                }
-}
-        }
+//        public bool IsCurrentDragSource {
+//        get => Owner.DataContext is MpAvClipTileViewModel ctvm ? ctvm.IsTileDragging : false;
+//            set {
+//                if(Owner.DataContext is MpAvClipTileViewModel ctvm) {
+//                    ctvm.IsTileDragging = true;
+//                }
+//}
+//        }
         public bool IsCurrentDropTarget => Owner.DataContext is MpAvClipTileViewModel ctvm ? ctvm.IsDropOverTile : false;
         public MpCopyItemType ContentType => Owner.DataContext is MpAvClipTileViewModel ctvm ? ctvm.ItemType : MpCopyItemType.None;
 
