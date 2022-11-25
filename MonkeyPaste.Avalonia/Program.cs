@@ -2,6 +2,8 @@ using Avalonia;
 using System;
 using System.Threading;
 using MonkeyPaste.Common;
+using CefNet;
+
 namespace MonkeyPaste.Avalonia
 {
     internal class Program
@@ -21,7 +23,8 @@ namespace MonkeyPaste.Avalonia
             //#endif
             Args = args;
             BuildAvaloniaApp()
-            .StartWithClassicDesktopLifetime(args);
+            //.StartWithClassicDesktopLifetime(args);
+            .StartWithCefNetApplicationLifetime(args);
         }
 
         // Avalonia configuration, don't remove; also used by visual designer.

@@ -43,7 +43,7 @@ namespace MonkeyPaste.Common {
             CefText,
             CefJson,
             CefAsciiUrl,
-            CefUnicodeUrl,
+            //CefUnicodeUrl,
 
             // internal
 
@@ -89,7 +89,7 @@ namespace MonkeyPaste.Common {
         // Cef Formats
 
         //public const string CefDragData = "CefDragData";
-        public const string CefUnicodeUrl = "UniformResourceLocator";
+        //public const string CefUnicodeUrl = "UniformResourceLocatorW";
         public const string CefAsciiUrl = "UniformResourceLocator";
 
         public const string CefHtml = "text/html";

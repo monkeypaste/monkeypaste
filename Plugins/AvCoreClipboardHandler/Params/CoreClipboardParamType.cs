@@ -53,6 +53,9 @@
         W_IgnoreAll_FileDrop_Linux,
         W_IgnoreExt_FileDrop_Linux,
 
-        W_Ignore_Csv // 34
+        W_Ignore_Csv, // 34
+
+        W_Ignore_Url, // 35
+        R_Ignore_Url // 36
     }
 }

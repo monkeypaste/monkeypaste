@@ -905,8 +905,6 @@ namespace MonkeyPaste.Avalonia {
 
         public int TailQueryIdx => Items.Count == 0 ? -1 : Items.Max(x => x.QueryOffsetIdx);// Math.Min(TotalTilesInQuery - 1, Items.Max(x => x.QueryOffsetIdx));
 
-        public int HeadItemIdx => HeadItem == null ? -1 : Items.IndexOf(HeadItem);
-        public int TailItemIdx => TailItem == null ? -1 : Items.IndexOf(TailItem);
         public int MaxLoadQueryIdx => Math.Max(0, MaxClipTrayQueryIdx - DefaultLoadCount + 1);
 
         public int MaxClipTrayQueryIdx => TotalTilesInQuery - 1; 
@@ -2721,7 +2719,8 @@ namespace MonkeyPaste.Avalonia {
                  OnPropertyChanged(nameof(IsAnyTilePinned));
 
                  if (!IsAnyTilePinned) {
-                     PinTrayTotalWidth = ObservedPinTrayScreenWidth = 0;
+                     PinTrayTotalWidth = 0;
+                     ObservedPinTrayScreenWidth = 0;
                  }
                  
                  OnPropertyChanged(nameof(PinnedItems));
@@ -2731,7 +2730,19 @@ namespace MonkeyPaste.Avalonia {
                  OnPropertyChanged(nameof(ClipTrayScreenWidth));
                  OnPropertyChanged(nameof(ClipTrayScreenHeight));
 
-                 if(IsPinTrayEmpty) {
+                 ClearClipSelection(false);
+                 // perform inplace requery to potentially put unpinned tile back
+                 QueryCommand.Execute(string.Empty);
+                 while(IsAnyBusy) {
+                     await Task.Delay(100);
+                 }
+                 await Task.Delay(300);
+                 var unpinned_ctvm = Items.FirstOrDefault(x => x.CopyItemId == unpinnedId);
+
+                 if(unpinned_ctvm != null) {
+                     // if unpinned tile is in current page select it
+                     SelectedItem = unpinned_ctvm;
+                 } else if(IsPinTrayEmpty) {
                      // select left most visible tile if pin tray empty
                      SelectedItem = VisibleItems.Aggregate((a, b) => a.QueryOffsetIdx < b.QueryOffsetIdx ? a : b);
                  } else {
@@ -2863,6 +2874,7 @@ namespace MonkeyPaste.Avalonia {
                     bool isScrollJump = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is MpPoint;
                     bool isOffsetJump = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is int;
                     bool isLoadMore = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is bool;
+                    bool isInPlaceRequery = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is string;
                     bool isRequery = !isSubQuery;
 
                     int loadOffsetIdx = 0;
@@ -2913,12 +2925,20 @@ namespace MonkeyPaste.Avalonia {
                                     return;
                                 }
                             }
+                        } else if(isInPlaceRequery) {
+                            newScrollOffset = ScrollOffset;
+                            loadOffsetIdx = HeadQueryIdx;
+
+                            await MpAvQueryInfoViewModel.Current.QueryForTotalCountAsync(
+                                PinnedItems.Select(x => x.CopyItemId),
+                                MpAvTagTrayViewModel.Instance.SelectedItem
+                                .SelfAndAllDescendants
+                                .Cast<MpAvTagTileViewModel>().Select(x => x.TagId));
                         }
                     } else {
                         // new query all content and offsets are re-initialized
 
                         ClearClipSelection();
-                        CurrentQuery.ResetQuery();
 
                         await MpAvQueryInfoViewModel.Current.QueryForTotalCountAsync(
                             PinnedItems.Select(x => x.CopyItemId),
@@ -3071,7 +3091,7 @@ namespace MonkeyPaste.Avalonia {
                         MpMessenger.SendGlobal<MpMessageType>(MpMessageType.RequeryCompleted);
                     } else {
 
-                        if (isOffsetJump || isScrollJump) {
+                        if (isOffsetJump || isScrollJump || isInPlaceRequery) {
                             ForceScrollOffset(newScrollOffset);
                             MpMessenger.SendGlobal<MpMessageType>(MpMessageType.JumpToIdxCompleted);
                         } else {
@@ -3130,10 +3150,10 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand SelectAllCommand => new MpCommand(
             () => {
-                ClearClipSelection();
-                foreach (var ctvm in Items) {
-                    ctvm.IsSelected = true;
-                }
+                //ClearClipSelection();
+                //foreach (var ctvm in Items) {
+                //    ctvm.IsSelected = true;
+                //}
             });
 
         public ICommand ChangeSelectedClipsColorCommand => new MpCommand<object>(

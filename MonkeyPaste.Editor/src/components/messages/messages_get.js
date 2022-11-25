@@ -26,6 +26,22 @@ async function getAllNonInputTemplatesFromDbAsync_get() {
     return all_non_input_templates;
 }
 
+async function getClipboardDataTransferObjectAsync_get() {
+    // output 'MpQuillEditorDataTransferObjectRequestNotification'
+    let clipboard_dt = new DataTransfer();
+    if (typeof getClipboardDataTransferObject === 'function') {
+        let req = {
+            //empty
+        };
+        let dt_json_obj = await processGetRequestAsync(getClipboardDataTransferObject, JSON.stringify(req));
+        for (var i = 0; i < dt_json_obj.dataItems.length; i++) {
+            let dti = dt_json_obj.dataItems[i];
+            clipboard_dt.setData(dti.format, dti.data);
+		}
+    } 
+    return clipboard_dt;
+}
+
 function getContacts_get(filterField) {
     // TODO should return contacts with available field from binding property
     if (IsTesting) {

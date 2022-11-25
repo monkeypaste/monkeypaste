@@ -221,7 +221,7 @@ namespace MonkeyPaste.Avalonia {
                         inputTextFormat = "text";
                     }
                     
-                    htmlClipboardData = await MpAvHtmlClipboardData.ParseAsync(itemData, inputTextFormat);
+                    htmlClipboardData = await MpAvPlainHtmlConverter.Instance.ParseAsync(itemData, inputTextFormat);
                     if (htmlClipboardData == null) {
                         return null;
                     }

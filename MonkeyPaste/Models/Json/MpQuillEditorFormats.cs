@@ -36,13 +36,11 @@ namespace MonkeyPaste {
         public List<string> formats { get; set; }
 
         public bool forOle { get; set; }
-        //public bool forCutOrCopy { get; set; }
-        //public bool forDragDrop { get; set; }
-        //public bool forPaste { get; set; } // flag to omit trailing newline for paste db is fine
     }
 
     public class MpQuillContentDataResponseMessage : MpJsonObject {
         public List<MpQuillContentDataResponseFormattedDataItemFragment> dataItems { get; set; }
+        public bool isAllContent { get; set; }
     }
 
     public class MpQuillContentDataResponseFormattedDataItemFragment : MpJsonObject {
@@ -70,10 +68,6 @@ namespace MonkeyPaste {
         public double editorHeight { get; set; }
     }
 
-    public class MpQuillIsAllSelectedResponseMessage : MpJsonObject {
-       public bool isAllSelected { get; set; }
-    }
-
     public class MpQuillDisableReadOnlyResponseMessage : MpJsonObject {
         public double editorWidth { get; set; }
         public double editorHeight { get; set; }
@@ -97,30 +91,6 @@ namespace MonkeyPaste {
         public string addedOrUpdatedTextTemplateBase64JsonStr { get; set; }
     }
 
-
-    public class MpQuillGetRangeTextRequestMessage : MpJsonObject {
-        public int index { get; set; }
-        public int length { get; set; }
-    }
-
-    public class MpQuillGetRangeTextResponseMessage : MpJsonObject {
-        public string text { get; set; }
-    }
-
-    public class MpQuillGetRangeHtmlRequestMessage : MpJsonObject {
-        public int index { get; set; }
-        public int length { get; set; }
-    }
-
-    public class MpQuillGetRangeHtmlResponseMessage : MpJsonObject {
-        public string html { get; set; }
-    }
-
-    public class MpQuillSetSelectionRangeRequestMessage : MpJsonObject {
-        public int index { get; set; }
-        public int length { get; set; }
-    }
-
     public class MpQuillConvertPlainHtmlToQuillHtmlRequestMessage : MpJsonObject {
         public string data { get; set; }
         public string dataFormatType { get; set; }
@@ -132,31 +102,8 @@ namespace MonkeyPaste {
         public string sourceUrl { get; set; }
     }
 
-    public class MpQuillContentSetTextRangeMessage : MpJsonObject {
-        public int index { get; set; }
-        public int length { get; set; }
-
-        public string text { get; set; }
-
-        public bool isHostJsonMsg => true;
-    }
-
-    public class MpQuillGetEncodedRangeDataRequestMessage : MpJsonObject {
-        public int index { get; set; }
-        public int length { get; set; }
-        public bool isPlainText { get; set; }
-    }
-
     public class MpQuillIsHostFocusedChangedMessage : MpJsonObject {
         public bool isHostFocused { get; set; }
-    }
-
-    public class MpQuillGetEncodedRangeDataResponseMessage : MpJsonObject {
-        public string encodedRangeData { get; set; }
-    }
-
-    public class MpQuillGetEditorScreenshotResponseMessage : MpJsonObject {
-        public string base64ImgStr { get; set; }
     }
 
     public class MpQuillSubSelectionChangedNotification : MpJsonObject {
@@ -171,27 +118,6 @@ namespace MonkeyPaste {
     }
     public class MpQuillDataTransferMessageFragment : MpJsonObject {
         public string dropEffect { get; set; }
-    }
-
-    public class MpQuillEditorIndexFromPointRequestMessage : MpJsonObject {
-        public double x { get; set; }
-        public double y { get; set; }
-        public bool snapToLine { get; set; } = true;
-
-        public int fallBackIdx { get; set; } = -1;
-    }
-
-    public class MpQuillEditorIndexFromPointResponseMessage : MpJsonObject {
-        public int docIdx { get; set; }
-    }
-
-    public class MpQuillContentSelectionChangedMessage : MpJsonObject {
-        //public int copyItemId { get; set; }
-        public int index { get; set; }
-        public int length { get; set; }
-
-        public string selText { get; set; }
-        public bool isChangeBegin { get; set; }
     }
 
     public class MpQuillExceptionMessage : MpJsonObject {
@@ -220,10 +146,6 @@ namespace MonkeyPaste {
         public bool altKey { get; set; }
         public bool shiftKey { get; set; }
         public bool escKey { get; set; }
-    }
-
-    public class MpQuillIsHostDraggingMessage : MpJsonObject {
-        public bool isDragging { get; set; }
     }
 
     public class MpQuillEditorStateMessage : MpJsonObject {
@@ -264,6 +186,14 @@ namespace MonkeyPaste {
 
     public class MpQuillEditorSetClipboardRequestNotification : MpJsonObject {
         
+    }
+    public class MpQuillEditorDataTransferObjectRequestNotification : MpJsonObject {
+        
+    }
+    public class MpQuillEditorDataTransferObjectResponseNotification : MpJsonObject {
+        public List<MpQuillContentDataResponseFormattedDataItemFragment> dataItems { get; set; }
+
+        public string enc { get; set; } = "utf8";
     }
     public class MpQuillDataTransferCompletedNotification : MpJsonObject {
         public string dataTransferSourceUrl { get; set; }

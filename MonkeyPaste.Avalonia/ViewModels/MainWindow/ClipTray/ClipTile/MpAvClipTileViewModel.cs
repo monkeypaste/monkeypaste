@@ -78,17 +78,16 @@ namespace MonkeyPaste.Avalonia {
         public MpAvFileItemCollectionViewModel FileItemCollectionViewModel { get; private set; }
         public MpAvClipTileDetailCollectionViewModel DetailCollectionViewModel { get; private set; }
 
+        private MpAvSourceViewModel _sourceViewModel;
         public MpAvSourceViewModel SourceViewModel {
             get {
-                if (MpAvSourceCollectionViewModel.Instance.IsAnyBusy) {
-                    Debugger.Break();
-                    return null;
+                if(_sourceViewModel == null) {
+                    _sourceViewModel = MpAvSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == SourceId);
+                    if (_sourceViewModel == null) {
+                        _sourceViewModel= MpAvSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == MpPrefViewModel.Instance.ThisAppSourceId);
+                    }
                 }
-                var svm = MpAvSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == SourceId);
-                if (svm == null) {
-                    return MpAvSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == MpPrefViewModel.Instance.ThisAppSourceId);
-                }
-                return svm;
+                return _sourceViewModel;
             }
         }
 
@@ -586,6 +585,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public bool IsViewAttached { get; set; }
+
         public bool IsTitleReadOnly { get; set; } = true;
 
         private bool _isContentReadOnly = true;
@@ -710,7 +711,7 @@ namespace MonkeyPaste.Avalonia {
                 //if(cv == null || !cv.IsViewLoaded) {
                 //    return true;
                 //}
-                if(!IsPlaceholder && !IsViewLoaded && IsAnyCornerVisible) {
+                if(!IsPlaceholder && !IsViewLoaded) {//IsAnyCornerVisible) {
                     return true;
                 }
 
@@ -1000,7 +1001,7 @@ namespace MonkeyPaste.Avalonia {
                 if(CopyItem == null || CopyItemId == 0 || string.IsNullOrEmpty(CopyItemGuid)) {
                     return string.Empty;
                 }
-                return (CopyItem.PublicHandle + QueryOffsetIdx.ToString()).CheckSum();
+                return CopyItem.PublicHandle;
             }
         }
 
@@ -1129,8 +1130,8 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         public async Task InitializeAsync(MpCopyItem ci, int queryOffset = -1, bool isRestoringSelection = false) {
             _curItemRandomHexColor = string.Empty;
-            _contentView = null;
-
+            _dragSource = null;
+            _sourceViewModel = null;
             //GetContentView().IsContentUnloaded = false;
 
             IsBusy = true;
@@ -1162,7 +1163,8 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(Next));
             OnPropertyChanged(nameof(Prev));
             OnPropertyChanged(nameof(CopyItemId));
-            OnPropertyChanged(nameof(PublicHandle));
+            OnPropertyChanged(nameof(IsAnyBusy));
+            OnPropertyChanged(nameof(SourceViewModel));
 
             //MpMessenger.Send<MpMessageType>(MpMessageType.ContentItemsChanged, this);
 
@@ -1220,26 +1222,19 @@ namespace MonkeyPaste.Avalonia {
             CopyItem = null;
             QueryOffsetIdx = -1;
             OnPropertyChanged(nameof(IsPlaceholder));
-            OnPropertyChanged(nameof(PublicHandle));
+            OnPropertyChanged(nameof(CopyItemId));
             //if(GetContentView() is MpAvIContentView cv) {
             //    cv.IsContentUnloaded = true;
             //}
         }
 
-        private MpAvIContentView _contentView;
-        public MpAvIContentView GetContentView() {
-            if(_contentView != null) {
-                return _contentView;
-            }
-            _contentView = MpAvCefNetWebView.LocateWebView(CopyItemId);
-            return _contentView;
-        }       
-
+        private MpAvIDragSource _dragSource;
         public MpAvIDragSource GetDragSource() {
-            if(GetContentView() is MpAvIDragSource ds) {
-                return ds;
+            if (_dragSource != null) {
+                return _dragSource;
             }
-            return null;
+            _dragSource = MpAvCefNetWebView.LocateWebView(CopyItemId);
+            return _dragSource;
         }
 
         public async Task<MpAvClipTileViewModel> GetNeighborByRowOffsetAsync(int row_offset) {
@@ -1512,10 +1507,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-
-        private void ReceivedGlobalMessage(MpMessageType msg) {
-
-        }
 
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
             switch (e1.PropertyName) {

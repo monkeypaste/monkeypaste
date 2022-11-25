@@ -13,7 +13,7 @@
                        d:DesignHeight="52"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileTitleView">
     <Grid x:Name="TitleContainerGrid"
-          ColumnDefinitions="*,0.3*">
+          ColumnDefinitions="0.7*,0.3*">
         <Grid.Styles>
             <Style Selector="Grid#SourceIconContainerGrid:pointerover">
                 <Style.Animations>
@@ -204,6 +204,8 @@
                                   Foreground="Black"
                                   ReadOnlyBackground="Transparent"
                                   ReadOnlyForeground="White"
+                                  AcceptsReturn="False"
+                                  AcceptsTab="False"
                                   Margin="15,0,0,0"
                                   Padding="0"
                                   ClipToBounds="True"
@@ -275,13 +277,13 @@
                 </MultiBinding>
             </local:MpAvMarqueeTextBox.FontSize>
         </local:MpAvMarqueeTextBox>
-        
+
         <!--  Source Icon  -->
         <Grid x:Name="SourceIconContainerGrid"
               Grid.Column="1"
               Width="{Binding Bounds.Height, ElementName=TitleContainerGrid}"
               HorizontalAlignment="Right"
-              Margin="0,0,12,0"
+              Margin="0,0,10,0"
               ClipToBounds="False">
 
             <!--<Ellipse x:Name="SourceMatchEllipse"

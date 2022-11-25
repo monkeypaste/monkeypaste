@@ -1,11 +1,12 @@
 // these functions wrap window binding so main editor doesn't worry about details
-function onContentLoaded_ntf() {
+function onContentLoaded_ntf(conentMsg) {
 	// output MpQuillEditorContentChangedMessage
 	if (typeof notifyLoadComplete === 'function') {
-		let msgStr = toBase64FromJsonObj(getContentAsMessage());
+		let msgStr = toBase64FromJsonObj(conentMsg);
 		notifyLoadComplete(msgStr);
 	}
 }
+
 function onReadOnlyChanged_ntf(isReadOnly) {
 	// output (true) MpQuillEditorContentChangedMessage
 	// output (false) MpQuillDisableReadOnlyResponseMessage
@@ -35,24 +36,6 @@ function onContentChanged_ntf() {
 	if (typeof notifyContentChanged === 'function') {
 		let msgStr = toBase64FromJsonObj(getContentAsMessage());
 		return notifyContentChanged(msgStr);
-	}
-}
-
-function onDocSelectionChanged_ntf(range,isSelChangeBegin) {
-	// output MpQuillContentSelectionChangedMessage
-
-	let text = getText(range,false); 
-	let selChangedObj = {
-		//contentHandle: ContentHandle,
-		index: range.index,
-		length: range.length,
-		isChangeBegin: isSelChangeBegin,
-		selText: text
-	};
-
-	let base64Str = toBase64FromJsonObj(selChangedObj);
-	if (typeof notifyDocSelectionChanged === 'function') {
-		notifyDocSelectionChanged(base64Str);
 	}
 }
 

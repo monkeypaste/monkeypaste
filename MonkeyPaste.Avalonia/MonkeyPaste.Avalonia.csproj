@@ -85,6 +85,9 @@
     <AvaloniaXaml Remove="Behaviors\**" />
     <AvaloniaXaml Remove="cef\**" />
     <AvaloniaXaml Remove="cef_old\**" />
+    <AvaloniaXaml Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
+    <AvaloniaXaml Remove="Controls\Content\TextElement\**" />
+    <AvaloniaXaml Remove="Interfaces\Content\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
@@ -94,6 +97,9 @@
     <Compile Remove="Behaviors\**" />
     <Compile Remove="cef\**" />
     <Compile Remove="cef_old\**" />
+    <Compile Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
+    <Compile Remove="Controls\Content\TextElement\**" />
+    <Compile Remove="Interfaces\Content\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
@@ -103,6 +109,9 @@
     <EmbeddedResource Remove="Behaviors\**" />
     <EmbeddedResource Remove="cef\**" />
     <EmbeddedResource Remove="cef_old\**" />
+    <EmbeddedResource Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
+    <EmbeddedResource Remove="Controls\Content\TextElement\**" />
+    <EmbeddedResource Remove="Interfaces\Content\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
@@ -112,12 +121,18 @@
     <None Remove="Behaviors\**" />
     <None Remove="cef\**" />
     <None Remove="cef_old\**" />
+    <None Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
+    <None Remove="Controls\Content\TextElement\**" />
+    <None Remove="Interfaces\Content\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <Page Remove="AttachedProperties\DragDrop\**" />
     <Page Remove="cef_old\**" />
+    <Page Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
+    <Page Remove="Controls\Content\TextElement\**" />
+    <Page Remove="Interfaces\Content\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
@@ -1026,11 +1041,11 @@
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Mac\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
-    <Folder Include="Utils\Clipboard\Win32\" />
     <Folder Include="Controls\ProgressRing\" />
     <Folder Include="Utils\Input\Mouse\" />
     <Folder Include="ViewModels\MainWindow\SearchBox\Filter\Items\" />
     <Folder Include="ViewModels\MainWindow\TagTray\TagTile\" />
+    <Folder Include="Views\HtmlConverterWindow\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
     <Folder Include="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\" />
   </ItemGroup>

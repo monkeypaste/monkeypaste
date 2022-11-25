@@ -1,5 +1,6 @@
 ﻿using Avalonia.Input;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,20 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public interface MpAvIDragHost {
-        bool CanDrag { get; }
-        bool IsDragValid(MpPoint host_mp);
-        Task<IDataObject> GetDragDataObjectAsync(bool fillTemplates);
-        void DragBegin();
-        void DragEnd();
+    public interface MpAvIDropTarget {
+        bool IsDropping { get; }
     }
+    public interface MpAvIDragSource {
 
-    public interface MpAvIDropHost  {
-        bool IsDropEnabled { get; }
-        bool IsDropValid(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects);
-        //void DragEnter();
-        void DragOver(MpPoint host_mp, IDataObject avdo, DragDropEffects dragEffects);
-        void DragLeave();
-        Task<DragDropEffects> DropDataObjectAsync(IDataObject avdo, MpPoint host_mp, DragDropEffects dragEffects);
+        PointerPressedEventArgs LastPointerPressedEventArgs { get; }
+        //bool IsDragging { get; set; }
+        void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc);
+        void NotifyDropComplete(DragDropEffects dropEffect);
+        Task<MpAvDataObject> GetDataObjectAsync(bool forOle, string[] formats = null);
+
     }
 }

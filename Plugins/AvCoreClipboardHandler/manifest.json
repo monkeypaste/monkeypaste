@@ -293,6 +293,27 @@
             ]
           }
         ]
+      },
+      {
+        "handlerGuid": "2e50a430-1cde-4a0a-9973-06aaa5508c41",
+        "displayName": "Url",
+        "iconUri": "html.png",
+        "clipboardName": "UniformResourceLocator",
+        "parameters": [
+          {
+            "label": "Ignore",
+            "description": "When checked Url format will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramName": "36",
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
       }
     ],
     "writers": [
@@ -616,6 +637,27 @@
             "controlType": "CheckBox",
             "unitType": "Bool",
             "paramName": "34",
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "handlerGuid": "e36f1993-4865-4043-a517-0e2c31de042e",
+        "displayName": "Url",
+        "iconUri": "html.png",
+        "clipboardName": "UniformResourceLocator",
+        "parameters": [
+          {
+            "label": "Ignore",
+            "description": "When checked Url format will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramName": "35",
             "values": [
               {
                 "value": "false",

@@ -158,9 +158,6 @@ function getDocRangeScrollOffset(doc_range) {
 function setDocSelection(doc_idx, len, source = 'user') {
 	CurSelRange = { index: doc_idx, length: len };
 	quill.setSelection(doc_idx, len, source);
-	if (source == 'silent') {
-		onDocSelectionChanged_ntf({ index: doc_idx, length: len });
-	}
 }
 
 function setDomSelection(domRange) {
@@ -407,11 +404,6 @@ function onDocumentSelectionChange(e) {
 	if (didSelectionChange(new_range, CurSelRange)) {
 		LastSelRange = CurSelRange;
 		CurSelRange = new_range;
-		if (didSelectionChange(CurSelRange, LastSelRange)) {
-			// BUG trying to workaround a selection reset loop
-			onDocSelectionChanged_ntf(new_range);
-		}
-		
 		updateAllElements();
 	}
 }

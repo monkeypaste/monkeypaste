@@ -12,7 +12,8 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileCornerButtonsView">
     <Grid HorizontalAlignment="Stretch"
-          VerticalAlignment="Stretch">
+          VerticalAlignment="Stretch"
+          Margin="2">
         <!--  Hide Title Button  -->
 
         <ToggleButton x:Name="HideTitleButton"
@@ -20,7 +21,6 @@
                       HorizontalAlignment="Left"
                       VerticalAlignment="Top"
                       BorderThickness="0"
-                      Margin="0,0,0,1"
                       Background="Transparent">
             <Grid>
                 <PathIcon IsVisible="{Binding IsTitleVisible}"
@@ -42,7 +42,6 @@
                       HorizontalContentAlignment="Center"
                       VerticalContentAlignment="Center"
                       BorderThickness="0"
-                      Margin="2,0,0,1"
                       Background="Transparent">
             <ToggleButton.Styles>
                 <Style Selector="ToggleButton:checked /template/ ContentPresenter">
@@ -59,35 +58,14 @@
             </Grid>
         </ToggleButton>
 
-        <!--  Detail View  -->
-        <!--<Grid HorizontalAlignment="Stretch"
-              VerticalAlignment="Bottom"
-              Height="20"
-              IsVisible="{Binding !IsSubSelectionEnabled}">
-        <local:MpAvClipTileDetailView DataContext="{Binding DetailCollectionViewModel}"
-                                      VerticalAlignment="Stretch"
-                                      HorizontalAlignment="Stretch" />
-        </Grid>-->
-
-
-
         <!--  Hotkey Button  -->
         <Button x:Name="ClipTileHotkeyButton"
                 Width="16"
                 Height="16"
-                Margin="2,2,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Command="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
                 CommandParameter="{Binding}">
-            <!--<Button.ToolTip>
-                    <TextBlock>
-                        <TextBlock.Text>
-                            <Run Text="Assign Shorcut " />
-                            <Run Text="{Binding Short}"
-                        </TextBlock.Text>
-                    </TextBlock>
-                </Button.ToolTip>-->
             <PathIcon Data="{StaticResource ControllerOutlineSvg}" />
         </Button>
 

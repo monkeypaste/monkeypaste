@@ -16,6 +16,7 @@ using System.Diagnostics;
 
 namespace MonkeyPaste.Common {
     public static class MpAvDragDropExtensions {
+
         public static IEnumerable<string> GetAllDataFormats(this IDataObject ido) {
             if(ido == null) {
                 return null;

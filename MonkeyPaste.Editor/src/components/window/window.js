@@ -1,5 +1,7 @@
 // #region Globals
 
+var IsWindowResizeUpdateEnabled = true;
+
 // #endregion Globals
 
 // #region Life Cycle
@@ -70,6 +72,9 @@ function onWindowScroll(e) {
 }
 
 function onWindowResize(e) {
+	if (!IsWindowResizeUpdateEnabled) {
+		return;
+	}
 	updateAllElements();
 	drawOverlay();
 }

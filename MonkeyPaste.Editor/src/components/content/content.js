@@ -20,18 +20,22 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 	}
 	quill.enable(true);
 
-	resetSelection();
-	resetColorPaletteState();
 
 	ContentHandle = contentHandle;
 	ContentItemType = contentType;
 
+	if (IsLoaded) {
+		// initial load shouldn't need state changes
+		resetSelection();
+		resetColorPaletteState();
+
+		enableReadOnly();
+		disableSubSelection();
+	}
 	// enusre IsLoaded is false so msg'ing doesn't get clogged up
 	IsLoaded = false;
 
 	//let contentBg_rgba = getContentBg(contentData);
-	disableSubSelection();
-	enableReadOnly();
 
 	log('Editor loaded');
 
@@ -70,7 +74,7 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 	IsLoaded = true;
 	updateAllElements();
 	quill.update();
-	onContentLoaded_ntf();
+	onContentLoaded_ntf(getContentAsMessage());
 }
 
 // #endregion Life Cycle

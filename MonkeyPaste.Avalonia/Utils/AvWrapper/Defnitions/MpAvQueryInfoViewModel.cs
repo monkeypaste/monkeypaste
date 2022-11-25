@@ -92,7 +92,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Query Methods
         public async Task QueryForTotalCountAsync(IEnumerable<int> ci_idsToOmit, IEnumerable<int> tagIds) { // = null) {
-            _allQueryCopyItemIds = await MpContentQuery.QueryAllAsync(this, tagIds, ci_idsToOmit);
+            var result = await MpContentQuery.QueryAllAsync(this, tagIds, ci_idsToOmit);
+            _allQueryCopyItemIds.Clear();
+            _allQueryCopyItemIds.AddRange(result);
         }
 
         public async Task<List<MpCopyItem>> FetchCopyItemsByQueryIdxListAsync(List<int> copyItemQueryIdxList) {
@@ -106,9 +108,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Result Interaction
-        public void ResetQuery() {
-            _allQueryCopyItemIds.Clear();
-        }
         
         public int GetItemId(int queryIdx) {
             if(queryIdx < 0 || queryIdx >= _allQueryCopyItemIds.Count) {

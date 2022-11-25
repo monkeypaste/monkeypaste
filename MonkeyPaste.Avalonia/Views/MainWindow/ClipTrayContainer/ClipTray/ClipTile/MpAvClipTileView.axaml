@@ -123,7 +123,7 @@
                     local:MpAvResizeExtension.IsResizing="{Binding IsResizing, Mode=TwoWay}"
                     local:MpAvResizeExtension.XFactor="-1"
                     local:MpAvResizeExtension.YFactor="0"
-                    local:MpAvResizeExtension.GlobalResizeMessage="ContentResized"
+                    local:MpAvResizeExtension.GlobalResizeMessage="None"
                     local:MpAvResizeExtension.IsEnabled="True"
                     local:MpAvPointerPressCommandExtension.IsEnabled="True"
                     local:MpAvPointerPressCommandExtension.DoubleLeftPressCommand="{Binding ResetTileSizeToDefaultCommand}"

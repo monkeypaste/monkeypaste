@@ -20,8 +20,7 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvTextBox : 
         TextBox, 
-        MpAvIContentView, 
-        MpAvIContentDocument, 
+        MpAvIDragSource,
         IStyleable {
         #region Private Variables
 
@@ -30,20 +29,7 @@ namespace MonkeyPaste.Avalonia {
         #region Statics
 
         static MpAvTextBox() {
-            SelectionStartProperty.Changed.AddClassHandler<MpAvTextBox>((x, y) => HandleSelectionStartChanged(x, y));
-            SelectionEndProperty.Changed.AddClassHandler<MpAvTextBox>((x, y) => HandleSelectionEndChanged(x, y));
             TextProperty.Changed.AddClassHandler<MpAvTextBox>((x, y) => HandleTextChanged(x, y));
-        }
-
-        private static void HandleSelectionStartChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
-            if (element is MpAvTextBox tb && e.NewValue is int startIdx) {
-                tb.UpdateSelection(startIdx, tb.SelectionEnd,tb.SelectedText, true, true);
-            }
-        }
-        private static void HandleSelectionEndChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
-            if (element is MpAvTextBox tb && e.NewValue is int endIdx) {
-                tb.UpdateSelection(tb.SelectionStart, endIdx, tb.SelectedText, true, false);
-            }
         }
 
         private static void HandleTextChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
@@ -62,110 +48,22 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-        private MpAvTextSelection _selection;
-        public MpAvTextSelection Selection {
-            get { return _selection; }
-            set {
-                value = CoerceSelection(value);
-                SetAndRaise(SelectionProperty, ref _selection, value);
-            }
+
+        #region MpAvIDragSource Implementation
+
+
+        public PointerPressedEventArgs LastPointerPressedEventArgs { get; }
+
+        public void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc) {
+            throw new NotImplementedException();
         }
 
-        public static readonly DirectProperty<MpAvTextBox, MpAvTextSelection> SelectionProperty =
-            AvaloniaProperty.RegisterDirect<MpAvTextBox,MpAvTextSelection>(
-                nameof(Selection),
-                x => x.Selection,
-                defaultBindingMode: BindingMode.TwoWay,
-                enableDataValidation: true);
-
-
-
-        #region MpAvIDropHost Implementation
-
-
-
-        #endregion
-
-        #region MpAvIContentView Implementation
-//        public bool IsCurrentDragSource {
-//        get => Owner.DataContext is MpAvClipTileViewModel ctvm ? ctvm.IsTileDragging : false;
-//            set {
-//                if(Owner.DataContext is MpAvClipTileViewModel ctvm) {
-//                    ctvm.IsTileDragging = true;
-//                }
-//}
-//        }
-        public bool IsCurrentDropTarget => Owner.DataContext is MpAvClipTileViewModel ctvm ? ctvm.IsDropOverTile : false;
-        public MpCopyItemType ContentType => Owner.DataContext is MpAvClipTileViewModel ctvm ? ctvm.ItemType : MpCopyItemType.None;
-
-        public bool IsViewLoaded { get; set; } = false;
-        public IControl Owner => this;
-        public MpAvIContentDocument Document => this;
-
-
-        public void DeselectAll() {
-            UpdateSelection(0, 0, String.Empty, false, false);
-        }
-        #endregion
-
-        #region MpAvIContentDocument Implementation
-
-        public string ContentScreenShotBase64 { get; }
-        public MpAvITextPointer ContentStart => new MpAvTextPointer(this, 0);
-        public MpAvITextPointer ContentEnd => new MpAvTextPointer(this, Text == null ? 0 : Text.Length - 1);
-
-
-        public async Task<MpAvITextPointer> GetPosisitionFromPointAsync(MpPoint point, bool snapToText) {
-            await Task.Delay(1);
-            var ft = this.ToFormattedText();
-            if (snapToText) {
-                point.Clamp(ft.Bounds.ToPortableRect());
-            }
-            var hitTestResult = ft.HitTestPoint(point.ToAvPoint());
-            if (hitTestResult == null || hitTestResult.TextPosition < 0) {
-                return null;
-            }
-            return new MpAvTextPointer(this, hitTestResult.TextPosition);
+        public void NotifyDropComplete(DragDropEffects dropEffect) {
+            throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<MpAvITextRange>> FindAllTextAsync(string matchText, bool isCaseSensitive, bool matchWholeWord, bool useRegex) {
-            await Task.Delay(1);
-
-            string pattern = useRegex ? matchText : matchText.Replace(Environment.NewLine, string.Empty);
-            pattern = useRegex ? pattern : Regex.Escape(pattern);
-            pattern = !useRegex && matchWholeWord ? $"\b{pattern}\b" : pattern;
-
-            string input = Text;
-            var mc = Regex.Matches(input, pattern, isCaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase);
-            var matches = new List<MpAvITextRange>();
-
-            foreach (Match m in mc) {
-                foreach (Group mg in m.Groups) {
-                    foreach (Capture c in mg.Captures) {
-                        if (useRegex && matchWholeWord && !Regex.IsMatch(c.Value, $"\b{c.Value}\b")) {
-                            continue;
-                        }
-
-                        matches.AddRange(
-                            input.IndexListOfAll(c.Value)
-                                    .Select(x =>
-                                        new MpAvTextRange(
-                                            new MpAvTextPointer(this, x),
-                                            new MpAvTextPointer(this, x + c.Value.Length))));
-                    }
-                }
-            }
-            matches = matches.Distinct().ToList();
-
-            return matches;
-        }
-
-
-        public async Task<MpAvDataObject> GetDataObjectAsync(bool ignoreSelection, bool fillTemplates, bool isCutOrCopy, string[] formats = null) {
-            await Task.Delay(1);
-            var avdo = new MpAvDataObject();
-            avdo.SetData(MpPortableDataFormats.Text, ignoreSelection || string.IsNullOrEmpty(SelectedText) ? Text : SelectedText);
-            return avdo;
+        public Task<MpAvDataObject> GetDataObjectAsync(bool forOle, string[] formats = null) {
+            throw new NotImplementedException();
         }
 
         #endregion
@@ -175,50 +73,16 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvTextBox() : base() {
-            Selection = new MpAvTextSelection(this);
         }
+
         #endregion
 
         #region Public Methods
-
-        public void UpdateSelection(int index, int length,string text, bool isFromEditor, bool isChngeBegin) {
-            var newStart = new MpAvTextPointer(Document, index);
-            var newEnd = new MpAvTextPointer(Document, index + length);
-            if (isFromEditor) {
-                Selection.Start = newStart;
-                Selection.End = newEnd;
-            } else {
-                Selection.Select(newStart, newEnd);
-            }
-            Selection.Text = text;
-        }
 
 
         #endregion
 
         #region Private Methods
-
-        private MpAvTextSelection CoerceSelection(MpAvTextSelection value) {
-            if(value == null) {
-                return ContentStart.ToTextRange() as MpAvTextSelection;
-            }
-            if(value.Start == null) {
-                if(Text == null) {
-                    Text = String.Empty;
-                }
-                value.Start = new MpAvTextPointer(this, 0);
-            }
-            if(value.End == null) {
-                value.End = value.Start;
-            }
-
-            return value;
-
-        }
-
-        public bool IsContentUnloaded { get; set; }
-
-
 
 
         #endregion

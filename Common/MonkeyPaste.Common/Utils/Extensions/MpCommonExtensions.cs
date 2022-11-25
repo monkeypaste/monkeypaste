@@ -166,12 +166,18 @@ namespace MonkeyPaste.Common {
             return queue.Dequeue();
         }
         public static void ForEach<T>(this IEnumerable source, Action<T> action) {
+            if(source == null) {
+                return;
+            }
             foreach (T item in source) {
                 action(item);
             }
         }
 
         public static void ForEach<T>(this IEnumerable source, Action<T,int> action) {
+            if (source == null) {
+                return;
+            }
             int idx = 0;
             foreach (T item in source) {
                 action(item,idx++);
@@ -179,11 +185,17 @@ namespace MonkeyPaste.Common {
         }
 
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) {
+            if (source == null) {
+                return;
+            }
             foreach (T item in source) {
                 action(item);
             }
         }
         public static void ForEach<T>(this IEnumerable<T> source, Action<T, int> action) {
+            if (source == null) {
+                return;
+            }
             int idx = 0;
             foreach (T item in source) {
                 action(item, idx++);

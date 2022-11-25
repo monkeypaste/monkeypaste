@@ -396,10 +396,6 @@ namespace MonkeyPaste.Avalonia {
 
             double max_w = GetMaxWidth(control);
             double max_h = GetMaxHeight(control);
-            // MpConsole.WriteLine("Bound w " + bound_width + " h " + bound_height);
-            // MpConsole.WriteLine("Min w " + min_w + " h " + min_h);
-            // MpConsole.WriteLine("Max w " + max_w + " h " + max_h);
-            // MpConsole.WriteLine("Delta w " + dx + " h " + dy);
 
             if (bound_width + dx < 0) {
                 ResetToDefault(control);
@@ -419,6 +415,7 @@ namespace MonkeyPaste.Avalonia {
             if(resizeMsg != MpMessageType.None) {
                 MpMessenger.SendGlobal(resizeMsg);
             }
+
             if(!isFromUser) {
                 SetIsResizing(control, false);
             }
@@ -427,13 +424,27 @@ namespace MonkeyPaste.Avalonia {
                 scv.ScrollIntoView();
             }
         }
-
-        public static void ResizeAnimated(Control control, double nw, double nh, int tt_ms = DEFAULT_RESIZE_ANIMATION_MS) {
-            if(control == null) {
+        public static void Resize(Control control, double nw, double nh) {
+            if (control == null) {
                 return;
             }
             if (control is MpAvIResizableControl rc) {
                 control = rc.ResizerControl;
+            }
+            double cw = GetBoundWidth(control);
+            double ch = GetBoundHeight(control);
+            double fdw = nw - cw;
+            double fdh = nh - ch;
+            ResizeByDelta(control, fdw, fdh, false);
+        }
+
+        public static void ResizeAnimated(Control control, double nw, double nh, Action onComplete = null, int tt_ms = DEFAULT_RESIZE_ANIMATION_MS) {
+
+            if (control is MpAvIResizableControl rc) {
+                control = rc.ResizerControl;
+            }
+            if (control == null) {
+                return;
             }
             double zeta,omega,fps;
 
@@ -473,21 +484,14 @@ namespace MonkeyPaste.Avalonia {
                     if(is_v_zero) {
                         break;
                     }
-                    //dt_ms += delay_ms;
-                    //if(dt_ms >= tt_ms) {
-                    //    break;
-                    //}
-                    //cw += step_w;
-                    //ch += step_h;
-                    //if(Math.Abs(cw-nw) + Math.Abs(ch-nh) < 3) {
-                    //    break;
-                    //}
                 } 
                 double fw = GetBoundWidth(control);
                 double fh = GetBoundHeight(control);
                 double fdw = nw - fw;
                 double fdh = nh - fh;
                 ResizeByDelta(control, fdw, fdh, false);
+
+                onComplete?.Invoke();
                 
             });
         }

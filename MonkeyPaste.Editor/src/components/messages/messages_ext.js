@@ -2,7 +2,6 @@
 
 function initMain_ext(initMsgStr_base64) {
 	// input 'MpQuillInitMainRequestMessage'
-	// output 'MpQuillInitMainResponseMessage'
 	log('initMain_ext: ' + initMsgStr_base64);
 	let initMsgObj = toJsonObjFromBase64Str(initMsgStr_base64);
 
@@ -12,17 +11,13 @@ function initMain_ext(initMsgStr_base64) {
 	} else {
 		initMain(initMsgObj.envName);
 	}
-
 }
 
 function loadContent_ext(loadContentMsgStr_base64) {
 	// input 'MpQuillLoadContentRequestMessage'
-	// output 'MpQuillLoadContentResponseMessage'
 	log('loadContent_ext: ' + loadContentMsgStr_base64);
 
 	let req = toJsonObjFromBase64Str(loadContentMsgStr_base64);
-
-	//log('load content request msg: ' + JSON.stringify(req));
 
 	let searchStateObj = null;
 	if (!isNullOrEmpty(req.searchText)) {
@@ -59,7 +54,8 @@ function contentRequest_ext(contentReqMsgStr_base64) {
 
 	let items = convertContentToFormats(req.forOle, req.formats);
 	let respObj = {
-		dataItems: items
+		dataItems: items,
+		isAllContent: isAllSelected()
 	};
 	let resp = toBase64FromJsonObj(respObj);
 	return resp;
@@ -99,90 +95,11 @@ function convertPlainHtml_ext(convertPlainHtmlReqMsgBase64Str) {
 	return resp;
 }
 
-function getDocIdxFromPoint_ext(editorPointMsgStr) {
-	// input MpQuillEditorIndexFromPointRequestMessage
-
-	// NOTE fallbackIdx is handy when user is dragging a template instance
-	// so location freeze's when drag is out of bounds
-
-	let editorPointMsgObj = toJsonObjFromBase64Str(editorPointMsgStr);
-	let doc_idx = -1;
-
-	if (editorPointMsgObj) {
-		let p = { x: editorPointMsgObj.x, y: editorPointMsgObj.y };
-		let fallbackIdx = editorPointMsgObj.fallbackIdx;
-		let snapToLine = editorPointMsgObj.snapToLine;
-
-		if (snapToLine) {
-			doc_idx = getDocIdxFromPoint(p, fallbackIdx);
-		} else {
-			doc_idx = getDocIdxFromPoint(p, fallbackIdx);
-		}
-	}
-
-	// output MpQuillEditorIndexFromPointResponseMessage
-	let respObj = {
-		docIdx: doc_idx
-	};
-	let resp = toBase64FromJsonObj(respObj);
-	return resp;
-}
-
-function setSelection_ext(selMsgReq) {
-	// input MpQuillSetSelectionRangeRequestMessage
-
-	let selMsg = toJsonObjFromBase64Str(selMsgReq);
-	if (!selMsg || selMsg.index === undefined) {
-		log('cannot parse setSelection_ext msg: ' + selMsgReq);
-		return '';
-	}
-	log('selection set from external: ', selMsg);
-
-	setDocSelection(selMsg.index, selMsg.length,'api');
-}
-
-
-function getHtml_ext() {
-	// output MpQuillGetRangeHtmlResponseMessage
-	let respObj = {
-		html: getHtml()
-	};
-	let resp = toBase64FromJsonObj(respObj);
-	return resp;
-}
-
-function getText_ext(rangeObjParamStrOrNull) {
-	// input MpQuillGetRangeTextRequestMessage
-	let rangeReq = toJsonObjFromBase64Str(rangeObjParamStrOrNull)
-	if (!rangeReq || rangeReq.index === undefined) {
-		rangeReq = { index: 0, length: getDocLength() };
-	}
-	let textStr = getText(rangeReq);
-
-	// output MpQuillGetRangeTextResponseMessage
-
-	let respObj = {
-		text: textStr
-	};
-	let resp = toBase64FromJsonObj(respObj);
-	return resp;
-}
-
-function setTextInRange_ext(setTextInRangeMsgStr) {
-	// input MpQuillContentSetTextRangeMessage
-
-	let setTextInRangeMsg = toJsonObjFromBase64Str(setTextInRangeMsgStr);
-
-	let rangeObj = { index: setTextInRangeMsg.index, length: setTextInRangeMsg.length };
-	let rangeText = setTextInRangeMsg.text;
-
-	setTextInRange(rangeObj, rangeText);
-}
-
 function enableReadOnly_ext() {
+	// output 'MpQuillResponseMessage'  updated master collection of templates
+
 	enableReadOnly(true);
 
-	// output 'MpQuillResponseMessage'  updated master collection of templates
 	let qrmObj = {
 		itemData: getContentData()
 	};
@@ -214,23 +131,6 @@ function disableSubSelection_ext() {
 	disableSubSelection(true);
 }
 
-function selectAll_ext() {
-	selectAll();
-}
-
-function deselectAll_ext() {
-	let sel = getDocSelection();
-	if (!sel) {
-		return;
-	}
-
-	setDocSelection(0, 0);
-	if (isSubSelectionEnabled()) {
-		return;
-	}
-	getEditorContainerElement().style.userSelect = 'none';
-}
-
 function updateModifierKeysFromHost_ext(modKeyMsgStr) {
 	// input MpQuillModifierKeysNotification
 	log('mod key msg from host recvd: ' + modKeyMsgStr);
@@ -252,55 +152,11 @@ function setState_ext(stateObjBase64Str) {
 	setState(new_state,true);
 	return 'done';
 }
-
-function isAllSelected_ext() {
-	// output MpQuillIsAllSelectedResponseMessage
-	let is_all_selected = isAllSelected();
-	let respObj = {
-		isAllSelected: is_all_selected
-	}
-	let resp = toBase64FromJsonObj(respObj);
-	return resp;
-}
-
-
 function dragEnd_ext(dragEndMsg_base64str) {
 	// input MpQuillDragEndMessage
 	let dragEnd_e = toJsonObjFromBase64Str(dragEndMsg_base64str);
 	onDragEnd(dragEnd_e);
 	return 'done';
-}
-
-function getEncodedDataFromRange_ext(encRangeMsgBase64Str) {
-	// input MpQuillGetEncodedRangeDataRequestMessage
-	let encRangeReqMsg = toJsonObjFromBase64Str(encRangeMsgBase64Str);
-	if (encRangeReqMsg == null) {
-		log('error opening host msg in "getEncodedDataFromRange_ext" data was (ignoring): ' + encRangeMsgBase64Str);
-		return null;
-	}
-	let rangeData = getHtmlFromDocRange({ index: encRangeReqMsg.index, length: encRangeReqMsg.length });
-
-	if (encRangeReqMsg.isPlainText) {
-		let range_doc = DomParser.parseFromString(rangeData);
-		rangeData = range_doc.body.innerText;
-	}
-
-	// output MpQuillGetEncodedRangeDataResponseMessage
-	let encRangeRespMsg = {
-		encodedRangeData: rangeData
-	};
-	let resp = toBase64FromJsonObj(encRangeRespMsg);
-	return resp;
-}
-
-function getEditorScreenShot_ext() {
-	// output MpQuillGetEditorScreenshotResponseMessage
-	let base64Str = getEditorScreenShot();
-	let ssRespMsg = {
-		base64ImgStr: base64Str
-	};
-	let resp = toBase64FromJsonObj(ssRespMsg);
-	return resp;
 }
 
 function showFindAndReplace_ext() {
@@ -334,4 +190,13 @@ function getRequestResponse_ext(getRespBase64Str) {
 	// input 'MpQuillGetResponseNotification'
 	let msg = toJsonObjFromBase64Str(getRespBase64Str);
 	PendingGetResponses.push(msg);
+}
+
+function disableWindowResizeUpdate_ext() {
+	IsWindowResizeUpdateEnabled = false;
+}
+
+function enableWindowResizeUpdate_ext() {
+	IsWindowResizeUpdateEnabled = true;
+	onWindowResize();
 }

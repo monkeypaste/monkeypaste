@@ -977,10 +977,7 @@ namespace MonkeyPaste.Avalonia {
                           !IsMainWindowInitiallyOpening &&
                           !IsAnyDialogOpen &&
                           !IsAnyItemDragging &&
-                          //!MpContextMenuView.Instance.IsOpen &&
-                          //!IsMainWindowOpening &&
-                          !IsResizing;// &&
-                          //!IsMainWindowClosing;
+                          !IsResizing;
 
                 if(canHide && fromShorcutKey) {
                     var sctvm = MpAvClipTrayViewModel.Instance.SelectedItem;

@@ -30,7 +30,6 @@ function initEditor() {
 	initEditorScroll();
 	initTemplates();
 
-	//quill.on("selection-change", onEditorSelectionChanged);
 	quill.on("text-change", onEditorTextChanged);
 
 	getEditorElement().addEventListener('focus', onEditorFocus);
@@ -215,6 +214,7 @@ function enableReadOnly(fromHost = false) {
 	}
 
 	hideAllToolbars();
+	disableSubSelection();
 
 	getEditorContainerElement().classList.remove('editable');
 	getEditorContainerElement().classList.remove('sub-select');
@@ -222,7 +222,6 @@ function enableReadOnly(fromHost = false) {
 
 	scrollToHome();
 	updateAllElements();
-	disableSubSelection();
 	disableTemplateSubSelection();
 
 	drawOverlay();
@@ -353,47 +352,6 @@ function onEditorBlur(e) {
 	drawOverlay();
 }
 
-
-function onEditorSelectionChanged(range, oldRange, source) {
-	return;
-	let logRange = range ? range : { index: -1, length: 0 };
-	let logOldRange = oldRange ? oldRange : { oldRange: -1, length: 0 };
-	//log('Sel Changed. range.index: ' + logRange.index + ' range.length: ' + logRange.length + ' oldRange.index: ' + logOldRange.index + ' oldRange.length: ' + logOldRange.length + ' source: ' + source);
-
-
-	if (IgnoreNextSelectionChange) {
-		IgnoreNextSelectionChange = false;
-		drawOverlay();
-		return;
-	}
-
-	//if (range) {
-	//	updateFontSizePickerToSelection();
-	//	updateFontFamilyPickerToSelection();
-	//	//updateTemplatesAfterSelectionChange(range, oldRange);
-	//	onDocSelectionChanged_ntf(range);
-	//} else {
-	//	log("Cursor not in the editor");
-	//}
-
-	//let was_blur = false;
-	//if (!range && !isEditTemplateTextAreaFocused()) {
-	//	if (oldRange) {
-	//		was_blur = true;
-	//		//blur occured
-	//		//setDocSelection(oldRange.index, oldRange.length,'silent');
-	//	}
-	//}
-	//if (was_blur && isEditorToolbarVisible()) {
-	//	// only do this to show selection when in toolbar drop down
-	//	BlurredSelectionRange = oldRange;
-	//	BlurredSelectionRects = getRangeRects(oldRange);
-	//} else {
-	//	BlurredSelectionRange = null;
-	//	BlurredSelectionRects = null;
-	//}
-	drawOverlay();
-}
 
 function onEditorTextChanged(delta, oldDelta, source) {
 	log('quill event: text changed');

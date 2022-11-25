@@ -149,10 +149,18 @@ function onCopy(e) {
 }
 
 function onPaste(e) {
-    performDataTransferOnContent(e.clipboardData,getDocSelection());
-
+    // NOTE if cut/copy was internal and all supported formats set,
+    // the e.clipboardData obj strips everything but files from the transfer 
+    // so this makes a get request and gets back current clipboard asynchronously
     e.preventDefault();
     e.stopPropagation();
+
+    var cur_paste_sel = getDocSelection();
+
+    getClipboardDataTransferObjectAsync_get()
+        .then((result) => {
+            performDataTransferOnContent(result, cur_paste_sel);
+    });
 }
 
 function onManualClipboardKeyDown(e) {

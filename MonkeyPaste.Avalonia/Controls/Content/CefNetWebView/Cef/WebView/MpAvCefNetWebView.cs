@@ -29,7 +29,8 @@ namespace MonkeyPaste.Avalonia {
     public enum MpAvEditorBindingFunctionType {
         // two-way *_get async requests
         getDragData,
-        getAllNonInputTemplatesFromDb,
+        getAllNonInputTemplatesFromDb, 
+        getClipboardDataTransferObject,
 
         // one-way *_ntf notifications
         notifyDocSelectionChanged,
@@ -61,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvCefNetWebView : 
         WebView, 
-        MpAvIContentView, 
+        //MpAvIContentView, 
         MpAvIDragSource,
         MpAvIResizableControl {
         #region Private Variables
@@ -71,10 +72,17 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Constants
+
+        public const string BLANK_URL = "about:blank";
+
+        #endregion
+
         #region Statics
 
         private static List<MpAvCefNetWebView> _AllWebViews = new List<MpAvCefNetWebView>();
 
+        public static string DefaultContentUrl => MpAvClipTrayViewModel.EditorPath;
         public static MpAvCefNetWebView LocateWebView(int ciid) {
             if(ciid < 1) {
                 return null;
@@ -84,21 +92,6 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
             if(result.Count > 1) {
-                // is this during a pin toggle? was this item pinned?
-                Debugger.Break();
-            }
-            return result[0];
-        }
-
-        public static MpAvCefNetWebView LocateWebView(string publicHandle) {
-            if(string.IsNullOrWhiteSpace(publicHandle)) {
-                return null;
-            }
-            var result = _AllWebViews.Where(x => x.DataContext is MpAvClipTileViewModel ctvm && ctvm.PublicHandle == publicHandle).ToList();
-            if (result.Count == 0) {
-                return null;
-            }
-            if (result.Count > 1) {
                 // is this during a pin toggle? was this item pinned?
                 Debugger.Break();
             }
@@ -258,19 +251,15 @@ namespace MonkeyPaste.Avalonia {
                             isTemporary: true));
                 }
 
-                bool add_tile_data = ctvm.ItemType != MpCopyItemType.Text ||
-                                   (this.IsAllSelected() || this.Selection.Length == 0);
+                bool add_tile_data = ctvm.ItemType != MpCopyItemType.Text || contentDataResp.isAllContent;
                 if (add_tile_data) {
                     avdo.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT, ctvm.PublicHandle);
                 }
-
-                //MpISourceRef source_ref = ctvm.CopyItem;
-                //string source_ref_str = MpJsonObject.SerializeObject(source_ref);
-                //avdo.SetData(MpPortableDataFormats.INTERNAL_COPY_ITEM_SOURCE_DATA_FORMAT, source_ref_str);
-                avdo.SetData(MpPortableDataFormats.CefAsciiUrl, ctvm.CopyItem.ToSourceRefUrl().ToBytesFromString(Encoding.ASCII));
+                string ctvm_source_url = ctvm.CopyItem.ToSourceRefUrl();
+                avdo.SetData(MpPortableDataFormats.CefAsciiUrl, ctvm_source_url.ToBytesFromString(Encoding.ASCII));
             }
 
-
+            
             avdo.MapAllPseudoFormats();
 
             //avdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvPNG));
@@ -286,58 +275,27 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpAvIContentView Implementation
-
-        //public bool IsViewLoaded => IsDomLoaded;
-
-        //public bool IsContentUnloaded { get; set; } = false;
-        public MpAvTextSelection Selection { get; private set; }        
-
-        MpAvIContentDocument MpAvIContentView.Document => Document;
-        public bool IsAllSelected() {
-            bool is_all_selected;
-            if (BindingContext.IsSubSelectionEnabled) {
-                // NOTE blindly accounting for quill's extra new line at doc end that can't seem to be gathered
-                is_all_selected = Selection.Start.Offset == Document.ContentStart.Offset &&
-                                    (Selection.End.Offset == Document.ContentEnd.Offset ||
-                                     Selection.End.Offset == Document.ContentEnd.Offset - 1);
-            } else {
-                is_all_selected = true;
-            }
-            return is_all_selected;
-        }
-
-
-        #region Document Property
-
-        public MpAvHtmlDocument Document { get; set; }
-
-        public static readonly DirectProperty<MpAvCefNetWebView, MpAvHtmlDocument> DocumentProperty =
-            AvaloniaProperty.RegisterDirect<MpAvCefNetWebView, MpAvHtmlDocument>(
-                nameof(Document),
-                x => x.Document,
-                enableDataValidation: true);
-
-        #endregion
-
-        #endregion
 
         #endregion
 
         #region Constructors
 
         public MpAvCefNetWebView() : base() {
-            //this.CreateWindow += MpAvCefNetWebView_CreateWindow;
-            Document = new MpAvHtmlDocument(this);
-            Selection = new MpAvTextSelection(Document);
             MpMessenger.RegisterGlobal(ReceivedGlobalMessega);
 
-            this.GetObservable(MpAvCefNetWebView.ContentHandleProperty).Subscribe(value => OnContentHandleChanged());
+            this.GetObservable(MpAvCefNetWebView.ContentIdProperty).Subscribe(value => OnContentIdChanged());
             this.GetObservable(MpAvCefNetWebView.IsContentSelectedProperty).Subscribe(value => OnIsContentSelectedChanged());
+            this.GetObservable(MpAvCefNetWebView.IsContentResizingProperty).Subscribe(value => OnIsContentResizingChanged());
             this.GetObservable(MpAvCefNetWebView.IsContentReadOnlyProperty).Subscribe(value => OnIsContentReadOnlyChanged());
             this.GetObservable(MpAvCefNetWebView.IsContentSubSelectableProperty).Subscribe(value => OnIsContentSubSelectableChanged());
-            this.GetObservable(MpAvCefNetWebView.IsContentFindAndReplaceVisibleProperty).Subscribe(value => OnIsContentFindOrReplaceVisibleChanged());
-            
+            this.GetObservable(MpAvCefNetWebView.IsContentFindAndReplaceVisibleProperty).Subscribe(value => OnIsContentFindOrReplaceVisibleChanged());            
+        }
+
+        public MpAvCefNetWebView(string converterParams) : this() {
+            if(string.IsNullOrWhiteSpace(converterParams)) {
+                return;
+            }
+            ContentUrl = $"{DefaultContentUrl}?{converterParams}";
         }
 
         #endregion
@@ -362,24 +320,6 @@ namespace MonkeyPaste.Avalonia {
         protected override WebViewGlue CreateWebViewGlue() {
             return new MpAvCefNetWebViewGlue(this);
         }
-
-
-        protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e) {
-            base.OnAttachedToLogicalTree(e);
-            if (_AllWebViews.Contains(this)) {
-                // should only happen once
-                Debugger.Break();
-                return;
-            }
-            _AllWebViews.Add(this);
-        }
-
-        protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e) {
-            base.OnDetachedFromLogicalTree(e);
-            _AllWebViews.Remove(this);
-            _resizerControl = null;
-
-        }       
 
         protected override void OnGotFocus(GotFocusEventArgs e) {
             base.OnGotFocus(e);
@@ -406,8 +346,6 @@ namespace MonkeyPaste.Avalonia {
             LastPointerPressedEventArgs = e;
         }
 
-        #region Content Lifecycle
-        #endregion
 
         #endregion
 
@@ -461,7 +399,8 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.notifyLoadComplete:
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillEditorContentChangedMessage loadComplete_ntf) {
-                        ProcessLoadCompleteResponse(loadComplete_ntf);
+                        IsContentLoaded = true;
+                        ProcessContentChangedMessage(loadComplete_ntf);
                     }
                     break;
 
@@ -480,13 +419,13 @@ namespace MonkeyPaste.Avalonia {
                     if (ntf is MpQuillEditorContentChangedMessage enableReadOnlyMsg) {
                         // NOTE only difference from contentChanged is no dimension info and this needs to enable readonly
                         ctvm.IsContentReadOnly = true;
-                        Document.ProcessContentChangedMessage(enableReadOnlyMsg);
+                        ProcessContentChangedMessage(enableReadOnlyMsg);
                     }
                     break;
                 case MpAvEditorBindingFunctionType.notifyContentChanged:
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillEditorContentChangedMessage contentChanged_ntf) {
-                        Document.ProcessContentChangedMessage(contentChanged_ntf);
+                        ProcessContentChangedMessage(contentChanged_ntf);
                     }
                     break;
                 case MpAvEditorBindingFunctionType.notifyDataTransferCompleted:
@@ -537,12 +476,6 @@ namespace MonkeyPaste.Avalonia {
 
                 // SELECTION
 
-                case MpAvEditorBindingFunctionType.notifyDocSelectionChanged:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillContentSelectionChangedMessage>(msgJsonBase64Str);
-                    if (ntf is MpQuillContentSelectionChangedMessage selChange_ntf) {
-                        UpdateSelection(selChange_ntf.index, selChange_ntf.length, selChange_ntf.selText, true, selChange_ntf.isChangeBegin);
-                    }
-                    break;
                 case MpAvEditorBindingFunctionType.notifySubSelectionEnabledChanged:
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillSubSelectionChangedNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillSubSelectionChangedNotification subSelChangedNtf) {
@@ -683,6 +616,7 @@ namespace MonkeyPaste.Avalonia {
 
                 // GET CALLBACKS
 
+                case MpAvEditorBindingFunctionType.getClipboardDataTransferObject:
                 case MpAvEditorBindingFunctionType.getAllNonInputTemplatesFromDb:
                     HandleBindingGetRequest(notificationType, msgJsonBase64Str).FireAndForgetSafeAsync(ctvm);
                     break;
@@ -694,44 +628,93 @@ namespace MonkeyPaste.Avalonia {
 
         private async Task HandleBindingGetRequest(MpAvEditorBindingFunctionType getReqType, string msgJsonBase64) {
             var getReq = MpJsonObject.DeserializeBase64Object<MpQuillGetRequestNotification>(msgJsonBase64);
+            var getResp = new MpQuillGetResponseNotification() { requestGuid = getReq.requestGuid };
             switch (getReqType) {
                 case MpAvEditorBindingFunctionType.getAllNonInputTemplatesFromDb:
                     var templateReq = MpJsonObject.DeserializeObject<MpQuillTemplateDbQueryRequestMessage>(getReq.reqMsgFragmentJsonStr);
                     var tl = await MpDataModelProvider.GetTextTemplatesByType(templateReq.templateTypes.Select(x => x.ToEnum<MpTextTemplateType>()));
 
-                    var getResp = new MpQuillGetResponseNotification() {
-                        requestGuid = getReq.requestGuid,
-                        responseFragmentJsonStr = MpJsonObject.SerializeObject(tl)
-                    };
+                    getResp.responseFragmentJsonStr = MpJsonObject.SerializeObject(tl);
+                    break;
+                case MpAvEditorBindingFunctionType.getClipboardDataTransferObject:
+                    var dtObjReq = MpJsonObject.DeserializeObject<MpQuillEditorDataTransferObjectRequestNotification>(getReq.reqMsgFragmentJsonStr);
+                    var avdo = await MpPlatformWrapper.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(false) as IDataObject;
+                    if(avdo == null) {
+                        avdo = new MpAvDataObject();
+                    }
+                    var dil = new List<MpQuillContentDataResponseFormattedDataItemFragment>();
+                    foreach (var format in avdo.GetAllDataFormats()) {
+                        string data = null;
+                        if(avdo.Get(format) is byte[] bytes &&
+                            bytes.ToBase64String() is string bytesStr) {
+                            data = bytesStr;
+                        } else if(avdo.Get(format) is IEnumerable<string> strs &&
+                            string.Join(Environment.NewLine,strs) is string strSet) {
+                            data = strSet;
+                        } else {
+                            data = avdo.Get(format).ToString();
+                        }
+                        if(data == null) {
+                            continue;
+                        }
+                        dil.Add(new MpQuillContentDataResponseFormattedDataItemFragment() { format = format, data = data });
+                    }
 
-                    this.ExecuteJavascript($"getRequestResponse_ext('{getResp.SerializeJsonObjectToBase64()}')");
+                    var dtObjResp = new MpQuillEditorDataTransferObjectResponseNotification() {
+                        dataItems = dil
+                    };
+                    getResp.responseFragmentJsonStr = MpJsonObject.SerializeObject(dtObjResp);
                     break;
             }
-        }
 
-        public void UpdateSelection(int index, int length, string text, bool isFromEditor, bool isChangeBegin) {
-            var newStart = new MpAvTextPointer(Document, index);
-            var newEnd = new MpAvTextPointer(Document, index + length);
-            if (isFromEditor) {
-                Selection.Start = newStart;
-                Selection.End = newEnd;
-                Selection.UpdateSelectedTextFromEditor(text);
-            } else {
-                Selection.Select(newStart, newEnd);
+            if(string.IsNullOrEmpty(getResp.responseFragmentJsonStr)) {
+                // no data to return
+                return;
             }
-            MpMessageType selChangeMsg = isChangeBegin ? MpMessageType.ContentSelectionChangeBegin : MpMessageType.ContentSelectionChangeEnd;
-            MpMessenger.Send(selChangeMsg, DataContext);
 
-            //MpConsole.WriteLine($"Tile: '{(DataContext as MpAvClipTileViewModel).CopyItemTitle}' Selection Changed: '{Selection}'");
-        }
-        public void SelectAll() {
-            this.ExecuteJavascript("selectAll_ext()");
-        }
-        public void DeselectAll() {
-            this.ExecuteJavascript($"deselectAll_ext()");
+            this.ExecuteJavascript($"getRequestResponse_ext('{getResp.SerializeJsonObjectToBase64()}')");
         }
 
+        #endregion
 
+        #region Control Life Cycle
+
+        #region IsAttachedToVisualTree Property
+
+        private bool _isAttachedToVisualTree;
+        public bool IsAttachedToVisualTree {
+            get { return _isAttachedToVisualTree; }
+            set { SetAndRaise(IsAttachedToVisualTreeProperty, ref _isAttachedToVisualTree, value); }
+        }
+
+        public static DirectProperty<MpAvCefNetWebView, bool> IsAttachedToVisualTreeProperty =
+            AvaloniaProperty.RegisterDirect<MpAvCefNetWebView, bool>(
+                nameof(IsAttachedToVisualTree),
+                x => x.IsAttachedToVisualTree,
+                (x, o) => x.IsAttachedToVisualTree = o);
+
+        #endregion IsAttachedToVisualTree Property
+
+
+        protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e) {
+            base.OnAttachedToLogicalTree(e);
+            IsAttachedToVisualTree = true;
+
+            if (_AllWebViews.Contains(this)) {
+                // should only happen once
+                Debugger.Break();
+                return;
+            }
+            _AllWebViews.Add(this);
+        }
+
+        protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e) {
+            base.OnDetachedFromLogicalTree(e);
+            IsAttachedToVisualTree = false;
+            _AllWebViews.Remove(this);
+            _resizerControl = null;
+
+        }
         #endregion
 
         #region Dom Init
@@ -754,13 +737,31 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion IsDomLoaded Property
 
+
+        #region ContentUrl Property
+
+        private string _contentUrl = DefaultContentUrl;
+        public string ContentUrl {
+            get { return _contentUrl; }
+            set { SetAndRaise(ContentUrlProperty, ref _contentUrl, value); }
+        }
+
+        public static DirectProperty<MpAvCefNetWebView, string> ContentUrlProperty =
+            AvaloniaProperty.RegisterDirect<MpAvCefNetWebView, string>(
+                nameof(ContentUrl),
+                x => x.ContentUrl,
+                (x, o) => x.ContentUrl = o);
+
+        #endregion ContentUrl Property
+
         protected override void OnBrowserCreated(EventArgs e) {
             base.OnBrowserCreated(e);
-            Navigate(MpAvClipTrayViewModel.EditorPath);
+            Navigate(ContentUrl);
         }
+
         protected override void OnNavigated(NavigatedEventArgs e) {
             base.OnNavigated(e);
-            if (e.Url == "about:blank") {
+            if (e.Url == BLANK_URL) {
                 return;
             }
             LoadEditorAsync().FireAndForgetSafeAsync();
@@ -773,10 +774,12 @@ namespace MonkeyPaste.Avalonia {
                 // wait for Navigate(EditorPath)
                 await Task.Delay(100);
             }
+
+            bool is_converter = ContentUrl != DefaultContentUrl;
             if (BindingContext == null || string.IsNullOrEmpty(BindingContext.CachedState)) {
                 var req = new MpQuillInitMainRequestMessage() {
                     envName = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
-                    isPlainHtmlConverter = false
+                    isPlainHtmlConverter = is_converter
                 };
                 this.ExecuteJavascript($"initMain_ext('{req.SerializeJsonObjectToBase64()}')");
             } else {
@@ -789,31 +792,41 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Content Life Cycle
-        public bool IsContentLoaded { get; set; }
 
         public bool NeedsEvalJsCleared { get; set; }
 
-        #region ContentHandle Property
+        #region ContentId Property
 
-        private string _contentHandle;
-        public string ContentHandle {
-            get { return _contentHandle; }
-            set { SetAndRaise(ContentHandleProperty, ref _contentHandle, value); }
+        private int _contentId;
+        public int ContentId {
+            get { return _contentId; }
+            set { SetAndRaise(ContentIdProperty, ref _contentId, value); }
         }
-        public static DirectProperty<MpAvCefNetWebView, string> ContentHandleProperty =
-            AvaloniaProperty.RegisterDirect<MpAvCefNetWebView, string>(
-                nameof(ContentHandle),
-                x => x.ContentHandle,
-                (x, o) => x.ContentHandle = o);
+        public static DirectProperty<MpAvCefNetWebView, int> ContentIdProperty =
+            AvaloniaProperty.RegisterDirect<MpAvCefNetWebView, int>(
+                nameof(ContentId),
+                x => x.ContentId,
+                (x, o) => x.ContentId = o);
 
-        #endregion ContentHandle Property
+        #endregion ContentId Property
 
-        protected override void OnDataContextChanged(EventArgs e) {
-            base.OnDataContextChanged(e);
+        #region IsContentLoaded Property
 
-            PerformLoadContentRequestAsync().FireAndForgetSafeAsync();
+        private bool _isContentLoaded;
+        public bool IsContentLoaded {
+            get { return _isContentLoaded; }
+            set { SetAndRaise(IsContentLoadedProperty, ref _isContentLoaded, value); }
         }
-        private void OnContentHandleChanged() {
+
+        public static DirectProperty<MpAvCefNetWebView, bool> IsContentLoadedProperty =
+            AvaloniaProperty.RegisterDirect<MpAvCefNetWebView, bool>(
+                nameof(IsContentLoaded),
+                x => x.IsContentLoaded,
+                (x, o) => x.IsContentLoaded = o);
+
+        #endregion IsContentLoaded Property
+
+        private void OnContentIdChanged() {
             if(BindingContext == null || BindingContext.IsReloading) {
                 return;
             }
@@ -823,9 +836,7 @@ namespace MonkeyPaste.Avalonia {
 
         private async Task PerformLoadContentRequestAsync() {
             Dispatcher.UIThread.VerifyAccess();
-
-            // NOTE!! we want to bind IsContentLoaded to IsViewLoaded but keeps giving stackoverflow
-            BindingContext.IsViewLoaded = false;
+            
             IsContentLoaded = false;
 
             if (this.PendingEvalCount() > 0) {
@@ -866,12 +877,45 @@ namespace MonkeyPaste.Avalonia {
 
             this.ExecuteJavascript($"loadContent_ext('{msgStr}')");
         }
+        private void ProcessContentChangedMessage(MpQuillEditorContentChangedMessage contentChanged_ntf) {
+            if(!IsAttachedToVisualTree) {
+                // this happens when pinning a tile from this control on data context, not sure but from the observablechange handler 
+                //Debugger.Break();
+            }
+            if(!IsContentLoaded) {
+                Debugger.Break();
+            }
 
-        private void ProcessLoadCompleteResponse(MpQuillEditorContentChangedMessage contentChangeResp) {
-            Document.ProcessContentChangedMessage(contentChangeResp);
-            IsContentLoaded = true;
-            BindingContext.IsViewLoaded = true;
+            if (contentChanged_ntf == null) {
+                // shouldn't be null
+                Debugger.Break();
+                return;
+            }
+            if (contentChanged_ntf.length > 0) {
+                BindingContext.CharCount = contentChanged_ntf.length;
+            }
+            if (contentChanged_ntf.lines > 0) {
+                BindingContext.LineCount = contentChanged_ntf.lines;
+            }
+            if (contentChanged_ntf.itemData != null) {
+                BindingContext.CopyItemData = contentChanged_ntf.itemData;
+            }
+            if (contentChanged_ntf.editorHeight > 0 && contentChanged_ntf.editorHeight > 0) {
+                BindingContext.UnformattedContentSize = new MpSize(contentChanged_ntf.editorWidth, contentChanged_ntf.editorHeight);
+            }
+            BindingContext.HasTemplates = contentChanged_ntf.hasTemplates;
+
+            BindingContext.DetailCollectionViewModel.InitializeAsync().FireAndForgetSafeAsync(BindingContext);
+
+            if (IsContentLoaded) {
+                // trigger id change to reload item
+                //BindingContext.OnPropertyChanged(nameof(BindingContext.CopyItemId));
+                //BindingContext.OnPropertyChanged(nameof(BindingContext.PublicHandle));
+                //PerformLoadContentRequestAsync().FireAndForgetSafeAsync(BindingContext);
+                //RaisePropertyChanged(nameof(ContentId));
+            }
         }
+
         #endregion
 
         #region Content State
@@ -906,9 +950,35 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion IsContentSelected
 
+        #region IsContentResizing 
+
+        private bool _isContentResizing;
+        public bool IsContentResizing {
+            get { return _isContentResizing; }
+            set { SetAndRaise(IsContentResizingProperty, ref _isContentResizing, value); }
+        }
+
+        public static DirectProperty<MpAvCefNetWebView, bool> IsContentResizingProperty =
+            AvaloniaProperty.RegisterDirect<MpAvCefNetWebView, bool>(
+                nameof(IsContentResizing),
+                x => x.IsContentResizing,
+                (x, o) => x.IsContentResizing = o);
+
+        private void OnIsContentResizingChanged() {
+            if (BindingContext == null || !IsContentLoaded) {
+                return;
+            }
+            if (IsContentResizing) {
+                this.ExecuteJavascript($"disableWindowResizeUpdate_ext()");
+            } else {
+                this.ExecuteJavascript($"enableWindowResizeUpdate_ext()"); ;
+            }
+        }
+        #endregion IsContentResizing 
+
         #region IsContentReadOnly 
 
-        private bool _isContentReadOnly;
+        private bool _isContentReadOnly = true;
         public bool IsContentReadOnly {
             get { return _isContentReadOnly; }
             set { SetAndRaise(IsContentReadOnlyProperty, ref _isContentReadOnly, value); }
@@ -918,7 +988,8 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaProperty.RegisterDirect<MpAvCefNetWebView, bool>(
                 nameof(IsContentReadOnly),
                 x => x.IsContentReadOnly,
-                (x, o) => x.IsContentReadOnly = o);
+                (x, o) => x.IsContentReadOnly = o,
+                true);
 
         private void OnIsContentReadOnlyChanged() {
             if (BindingContext == null || !IsContentLoaded) {
@@ -929,11 +1000,11 @@ namespace MonkeyPaste.Avalonia {
                 Dispatcher.UIThread.Post(async () => {
                     string enableReadOnlyRespStr = await this.EvaluateJavascriptAsync("enableReadOnly_ext()");
                     var qrm = MpJsonObject.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(enableReadOnlyRespStr);
-                    this.Document.ProcessContentChangedMessage(qrm);
+                    ProcessContentChangedMessage(qrm);
                 });
             } else {
-                MpAvResizeExtension.ResizeAnimated(this, BindingContext.EditableWidth, BindingContext.EditableHeight);
                 this.ExecuteJavascript($"disableReadOnly_ext()");
+                MpAvResizeExtension.ResizeAnimated(this,BindingContext.EditableWidth, BindingContext.EditableHeight);
             }
         }
         #endregion IsContentReadOnly 
@@ -965,8 +1036,8 @@ namespace MonkeyPaste.Avalonia {
                     MpAvResizeExtension.ResizeAnimated(this, BindingContext.EditableWidth, BindingContext.EditableHeight);
                 }
             } else {
-                MpAvResizeExtension.ResizeAnimated(this, BindingContext.ReadOnlyWidth, BindingContext.ReadOnlyHeight);
                 this.ExecuteJavascript("disableSubSelection_ext()");
+                MpAvResizeExtension.ResizeAnimated(this,BindingContext.ReadOnlyWidth, BindingContext.ReadOnlyHeight);
             }
 
         }

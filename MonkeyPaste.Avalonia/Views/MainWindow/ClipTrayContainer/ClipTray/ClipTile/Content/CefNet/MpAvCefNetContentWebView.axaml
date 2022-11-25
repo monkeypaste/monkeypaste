@@ -21,11 +21,14 @@
         local:MpAvCefNetWebViewExtension.IsFindAndReplaceVisible="{Binding IsFindAndReplaceVisible}"
     -->
     <local:MpAvCefNetWebView x:Name="CefNetWebView"
-                             ContentHandle="{Binding PublicHandle, Mode=OneWay}"
+                             ContentId="{Binding CopyItemId, Mode=OneWay}"
+                             IsContentLoaded="{Binding IsViewLoaded, Mode=TwoWay}"
+                             IsContentResizing="{Binding IsResizing}"
                              IsContentSelected="{Binding IsSelected}"
                              IsContentReadOnly="{Binding IsContentReadOnly, Mode=TwoWay}"
                              IsContentSubSelectable="{Binding IsSubSelectionEnabled, Mode=TwoWay}"
                              IsContentFindAndReplaceVisible="{Binding IsFindAndReplaceVisible, Mode=TwoWay}"
+                             IsAttachedToVisualTree="{Binding IsViewAttached, Mode=TwoWay}"
                              Focusable="True"
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch" />

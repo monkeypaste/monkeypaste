@@ -12,6 +12,7 @@ using System.Linq;
 using System.Collections.Generic;
 using MonkeyPaste.Common;
 using System.IO;
+using Avalonia.Controls;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvIconSourceObjToBitmapConverter : IValueConverter {
@@ -41,7 +42,12 @@ namespace MonkeyPaste.Avalonia {
                 return new MpAvStringBase64ToBitmapConverter().Convert(ivm.IconBase64, null, scale.ToString(), CultureInfo.CurrentCulture);
             } else if(value is string valStr) {
                 //types: resource key, hex color, base64, file system path
-                if(valStr.EndsWith("Image") || valStr.IsAvResourceString()) {
+                if (valStr.EndsWith("Icon")) {
+                    return new WindowIcon(
+                        MpAvStringResourceConverter.Instance.Convert(
+                            MpPlatformWrapper.Services.PlatformResource.GetResource(valStr), null, null, null) as Bitmap);
+                }
+                if (valStr.EndsWith("Image") || valStr.IsAvResourceString()) {
                     return new MpAvStringResourceConverter()
                                 .Convert(value, targetType, parameter, culture) as Bitmap;
                 }

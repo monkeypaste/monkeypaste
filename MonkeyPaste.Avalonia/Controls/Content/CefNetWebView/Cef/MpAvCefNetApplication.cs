@@ -23,7 +23,6 @@ namespace MonkeyPaste.Avalonia {
         #region Constants
 
         public const string JS_REF_ERROR = "JS_REF_ERROR";
-        public const string BLANK_URL = "about:blank";
         public static bool UseCefNet { get; private set; } = true;
         #endregion
 

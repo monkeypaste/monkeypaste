@@ -46,6 +46,8 @@ namespace MonkeyPaste.Avalonia {
                 var bootstrapper = new MpAvBootstrapperViewModel();
                 await bootstrapper.InitAsync();
 
+            } else if(ApplicationLifetime is ISingleViewApplicationLifetime singleView) {
+                Debugger.Break();
             }
 
             base.OnFrameworkInitializationCompleted();
