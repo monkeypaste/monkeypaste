@@ -12,6 +12,8 @@ using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using Xamarin.Essentials;
 
 namespace MonkeyPaste {   
+
+    
     public static class MpNotificationBuilder {
         #region Static Variables
         #endregion

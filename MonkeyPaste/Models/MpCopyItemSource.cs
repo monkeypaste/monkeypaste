@@ -2,6 +2,7 @@
 using SQLite;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -75,6 +76,10 @@ namespace MonkeyPaste {
                 throw new Exception("Must have valid sourceType, sourceType is " + sourceType);
             }
 
+            if(copyItemId == sourceObjId && sourceType == MpCopyItemSourceType.CopyItem) {
+                // self reference detected, not sure how to handle, letting happen for now
+                Debugger.Break();
+            }
             if(!createdDateTime.HasValue) {
                 createdDateTime = DateTime.UtcNow;
             }

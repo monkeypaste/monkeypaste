@@ -2224,10 +2224,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            //if (e is MpCopyItem ci) {
-                //var ivm = GetClipTileViewModelById(ci.Id);
-                //ivm.CopyItem = ci;
-           // }
+            if (e is MpCopyItem ci) {
+                if(_appendModeCopyItem != null && ci.Id == _appendModeCopyItem.Id) {
+                    DeactivateAppendMode();
+                }
+            }
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
@@ -2447,206 +2448,198 @@ namespace MonkeyPaste.Avalonia {
             }
             IsAddingClipboardItem = true;
 
-            var totalAddSw = new Stopwatch();
-            totalAddSw.Start();
+            var newCopyItem = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(cd, -1);//, IsAnyAppendMode && _appendModeCopyItem != null);
 
-            var createItemSw = new Stopwatch();
-            createItemSw.Start();
-
-
-            var newCopyItem = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(cd, -1, IsAnyAppendMode && _appendModeCopyItem != null);
-
-            MpConsole.WriteLine("CreateFromClipboardAsync: " + createItemSw.ElapsedMilliseconds + "ms");
-
-            if (newCopyItem == null) {
+            if (newCopyItem == null || newCopyItem.Id < 1) {
                 //this occurs if the copy item is not a known format or app init
                 MpConsole.WriteTraceLine("Unable to create copy item from clipboard!");
                 IsAddingClipboardItem = false;
                 return;
             }
 
-            bool isDup = newCopyItem.WasDupOnCreate;
-            if(isDup) {
+            if(newCopyItem.WasDupOnCreate) {
                 MpConsole.WriteLine("Duplicate copy item detected, item: " + newCopyItem);
             }
-            //newCopyItem.Id = isDup ? -newCopyItem.Id : newCopyItem.Id;
 
-            if (IsAppendMode || IsAppendLineMode) {
-                if (isDup) {
-                    //when duplicate copied in append mode treat item as new and don't unlink original 
-                    isDup = false;
-                    newCopyItem.Id = 0;
-                    newCopyItem.CopyDateTime = DateTime.Now;
-                    //await newCopyItem.WriteToDatabaseAsync();
-                }
-                if (_appendModeCopyItem != null && newCopyItem.Id > 0) {
-                    Debugger.Break();
-                }
-                //when in append mode just append the new items text to selecteditem
-                if (_appendModeCopyItem == null) {
-                    if (_newModels != null &&
-                       _newModels.Where(x => x.ItemType == MpCopyItemType.Text).Count() > 0 &&
-                       (SelectedItem == null || SelectedItem.ItemType != MpCopyItemType.Text ||
-                       (SelectedItem != null && _newModels.Where(x => x.ItemType == MpCopyItemType.Text).Max(x => x.CopyDateTime) > SelectedItem.LastSelectedDateTime))) {
-                        // when new models are pending (to be added to pin tray) check if they are more
-                        // recent then last selected item and prefer newest model when append is enabled
-                        _appendModeCopyItem = _newModels.Where(x => x.ItemType == MpCopyItemType.Text).Aggregate((a, b) => a.CopyDateTime > b.CopyDateTime ? a : b);
-
-                    } else if ((SelectedItem == null ||
-                        (SelectedItem != null && (SelectedItem.ItemType != MpCopyItemType.Text || SelectedItem.LastSelectedDateTime < newCopyItem.CopyDateTime))) && newCopyItem.ItemType == MpCopyItemType.Text) {
-                        // when no pending items are available and this item was created after last selected (and type is text)
-                        _appendModeCopyItem = newCopyItem;
-                    } else if (SelectedItem.ItemType == MpCopyItemType.Text) {
-                        _appendModeCopyItem = SelectedItem.CopyItem;
-                    }
-                }
-                if (_appendModeCopyItem != null && newCopyItem.ItemType == MpCopyItemType.Text) {
-                    if (_appendModeCopyItem != newCopyItem) {
-
-                        //var am_ctvm = GetClipTileViewModelById(_appendModeCopyItem.Id);
-                        //if (am_ctvm != null) {
-                        //    var am_cv = Application.Current.MainWindow.GetVisualDescendents<MpRtbContentView>().FirstOrDefault(x => x.DataContext == am_ctvm);
-
-                        //    if (am_cv != null) {
-                        //        am_cv.Rtb.Document = (MpEventEnabledFlowDocument)am_cv.Rtb.Document.Combine(
-                        //        newCopyItem.ItemData.ToFlowDocument(), null, IsAppendLineMode);
-
-                        //        await MpContentDocumentRtfExtension.SaveTextContent(am_cv.Rtb);
-                        //    }
-                        //} else {
-                        //    var cfd = _appendModeCopyItem.ItemData.ToFlowDocument().Combine(newCopyItem.ItemData.ToFlowDocument(), null, IsAppendLineMode);
-                        //    _appendModeCopyItem.ItemData = cfd.ToRichText();
-                        //    await _appendModeCopyItem.WriteToDatabaseAsync();
-
-                        //    int newIdx = _newModels.IndexOf(_newModels.FirstOrDefault(x => x.Id == _appendModeCopyItem.Id));
-                        //    _newModels.RemoveAt(newIdx);
-                        //    _newModels.Insert(newIdx, _appendModeCopyItem);
-                        //}
-
-                        //if (MpPrefViewModel.Instance.NotificationShowAppendBufferToast) {
-                        //    // TODO now composite item doesn't roll up children so the buffer needs to be created here
-                        //    // if I use this at all
-
-                        //    MpNotificationBuilder.ShowMessageAsync(
-                        //        title: "Append Buffer",
-                        //        msg: _appendModeCopyItem.ItemData.ToPlainText(),
-                        //        msgType: MpNotificationType.AppendBuffer)
-                        //        .FireAndForgetSafeAsync(this);
-                        //}
-
-                        //if (MpPrefViewModel.Instance.NotificationDoCopySound) {
-                        //    MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
-                        //}
-                    }
-                }
-            } else {
-                _appendModeCopyItem = null;
-                if (MpPrefViewModel.Instance.NotificationDoCopySound) {
-                    //MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
-                }
-                if (MpPrefViewModel.Instance.IsTrialExpired) {
-                    MpNotificationBuilder.ShowMessageAsync(
-                        title: "Trial Expired",
-                        msg: "Please update your membership to use Monkey Paste",
-                        msgType: MpNotificationType.TrialExpired,
-                        iconSourceStr: MpPrefViewModel.Instance.AbsoluteResourcesPath + @"/Images/monkey (2).png")
-                        .FireAndForgetSafeAsync(this);
-                }
+            if (MpPrefViewModel.Instance.NotificationDoCopySound) {
+                //MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
             }
-            if (isDup) {
-                //item is a duplicate
-                MpConsole.WriteLine("Duplicate item detected, incrementing copy count and updating copydatetime");
-                newCopyItem.CopyCount++;
-                // reseting CopyDateTime will move item to top of recent list
-                newCopyItem.CopyDateTime = DateTime.Now;
-                await newCopyItem.WriteToDatabaseAsync();
+            if (MpPrefViewModel.Instance.IsTrialExpired) {
+                MpNotificationBuilder.ShowMessageAsync(
+                    title: "Trial Expired",
+                    msg: "Please update your membership to use Monkey Paste",
+                    msgType: MpNotificationType.TrialExpired,
+                    iconSourceStr: MpPrefViewModel.Instance.AbsoluteResourcesPath + @"/Images/monkey (2).png")
+                    .FireAndForgetSafeAsync(this);
+            }
 
-                var dup_ctvm = AllItems.FirstOrDefault(x => x.CopyItemId == newCopyItem.Id);
-                if(dup_ctvm == null) {
-                    // duplicate is not in the current query page or pin tray
-                    int dup_query_offset_idx = CurrentQuery.GetItemOffsetIdx(newCopyItem.Id);//MpDataModelProvider.AvailableQueryCopyItemIds.IndexOf(newCopyItem.Id);
-                    if(dup_query_offset_idx < 0) {
-                        // duplicate is not in the current query at all so treat like a new model (pin tray or appeneded
-                        _newModels.Add(newCopyItem);                        
-                    } else {
-                        // dup is in current query 
-                        if(dup_query_offset_idx >= HeadQueryIdx && dup_query_offset_idx <= TailQueryIdx) {
-                            // this shouldn't happen, dup_ctvm should of been found in page
-                            Debugger.Break();
-                        } else {
-                            // remove dup from query since its pinning
 
-                            CurrentQuery.RemoveIdx(dup_query_offset_idx);
-                            if (HeadQueryIdx > dup_query_offset_idx) {
-                                // pinning dup alters current pages offsets so down tick them...
+            bool wasAppended = UpdateAppendMode(newCopyItem);
+            if (newCopyItem.WasDupOnCreate) {
+                await UpdateDuplicateCopyItemAsync(newCopyItem);
+            }
+            if(!wasAppended) {
+                _newModels.Add(newCopyItem);
+                if (!MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
+                    MpAvTagTrayViewModel.Instance.AllTagViewModel.LinkCopyItemCommand.Execute(newCopyItem.Id);
+                }
+                OnCopyItemAdd?.Invoke(this, newCopyItem);
+            }
+            IsAddingClipboardItem = false;
+        }
 
-                                IsBatchOffsetChange = true;
-                                Items.ForEach(x => x.QueryOffsetIdx--);
-                                IsBatchOffsetChange = false;
-                                RefreshQueryTrayLayout();
-                            } else {
-                                // dup is after current page so no need to adjust this page's offsets
-                            }
+        private async Task UpdateDuplicateCopyItemAsync(MpCopyItem newCopyItem) {
+            //item is a duplicate
+            MpConsole.WriteLine("Duplicate item detected, incrementing copy count and updating copydatetime");
+            newCopyItem.CopyCount++;
+            // reseting CopyDateTime will move item to top of recent list
+            newCopyItem.CopyDateTime = DateTime.Now;
+            await newCopyItem.WriteToDatabaseAsync();
 
-                            _newModels.Add(newCopyItem);
-                        }
-                    }
+            var dup_ctvm = AllItems.FirstOrDefault(x => x.CopyItemId == newCopyItem.Id);
+            if (dup_ctvm == null) {
+                // duplicate is not in the current query page or pin tray
+                int dup_query_offset_idx = CurrentQuery.GetItemOffsetIdx(newCopyItem.Id);//MpDataModelProvider.AvailableQueryCopyItemIds.IndexOf(newCopyItem.Id);
+                if (dup_query_offset_idx < 0) {
+                    // duplicate is not in the current query at all so treat like a new model (pin tray or appeneded
+                    _newModels.Add(newCopyItem);
                 } else {
-                    // dup is in current query page or already pinned
-                    if(dup_ctvm.IsPinned) {
-                        // if already pinned move to head and select
-                        int dup_pin_idx = PinnedItems.IndexOf(dup_ctvm);
-                        
-                        if(dup_pin_idx < 0) {
-                            // shouldn't happen
-                            Debugger.Break();
-                        } else if(dup_pin_idx > 0){
-                            // if 0 then its where it should be
-                            PinnedItems.Move(dup_pin_idx, 0);
-                        }
-                        //reacquire tile sents moving can do funky thinks to vm references
-                        dup_ctvm = PinnedItems.FirstOrDefault(x => x.CopyItemId == newCopyItem.Id);
-                        SelectedItem = dup_ctvm;
+                    // dup is in current query 
+                    if (dup_query_offset_idx >= HeadQueryIdx && dup_query_offset_idx <= TailQueryIdx) {
+                        // this shouldn't happen, dup_ctvm should of been found in page
+                        Debugger.Break();
                     } else {
-                        // dup is in query page 
-                        // to stay out of ui flip id back to negative and AddNewCommand will notice (or Append does abs val) and call toggle pin on window open
-                        //newCopyItem.Id *= -1;
+                        // remove dup from query since its pinning
+
+                        CurrentQuery.RemoveIdx(dup_query_offset_idx);
+                        if (HeadQueryIdx > dup_query_offset_idx) {
+                            // pinning dup alters current pages offsets so down tick them...
+
+                            IsBatchOffsetChange = true;
+                            Items.ForEach(x => x.QueryOffsetIdx--);
+                            IsBatchOffsetChange = false;
+                            RefreshQueryTrayLayout();
+                        } else {
+                            // dup is after current page so no need to adjust this page's offsets
+                        }
+
                         _newModels.Add(newCopyItem);
                     }
                 }
-            } else if (!MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
-                if (newCopyItem.Id != 0) {
+            } else {
+                // dup is in current query page or already pinned
+                if (dup_ctvm.IsPinned) {
+                    // if already pinned move to head and select
+                    int dup_pin_idx = PinnedItems.IndexOf(dup_ctvm);
+
+                    if (dup_pin_idx < 0) {
+                        // shouldn't happen
+                        Debugger.Break();
+                    } else if (dup_pin_idx > 0) {
+                        // if 0 then its where it should be
+                        PinnedItems.Move(dup_pin_idx, 0);
+                    }
+                    //reacquire tile sents moving can do funky thinks to vm references
+                    dup_ctvm = PinnedItems.FirstOrDefault(x => x.CopyItemId == newCopyItem.Id);
+                    SelectedItem = dup_ctvm;
+                } else {
+                    // dup is in query page 
+                    // to stay out of ui flip id back to negative and AddNewCommand will notice (or Append does abs val) and call toggle pin on window open
+                    //newCopyItem.Id *= -1;
                     _newModels.Add(newCopyItem);
                 }
-
-                //MpAvTagTrayViewModel.Instance.AllTagViewModel.TagClipCount++;
-                MpAvTagTrayViewModel.Instance.AllTagViewModel.LinkCopyItemCommand.Execute(newCopyItem.Id);
-
-
             }
-            if (IsAppendMode) {
-                AppendNewItemsCommand.Execute(null);
-            } else {
-                AddNewItemsCommand.Execute(null);
-            }
-
-            
-            IsAddingClipboardItem = false;
-
-            OnCopyItemAdd?.Invoke(this, newCopyItem);
-
-            //MpAvTagTrayViewModel.Instance.AllTagViewModel.NotifyAllTagItemLinked(newCopyItem);
-
-            totalAddSw.Stop();
-            MpConsole.WriteLine("Time to create new copyitem: " + totalAddSw.ElapsedMilliseconds + " ms");
-
-
         }
 
-        #region Sync Events
+        private async Task ActivateAppendMode(bool isAppendLine) {
+            if (_appendModeCopyItem == null) {
+                // append mode was just toggled ON (param was null)
 
-        #endregion
+                // always try to assign current clipboard as appenItem
+                _appendModeCopyItem = await MpDataModelProvider.GetMostRecentCopyItem(new MpCopyItemType[] { MpCopyItemType.Image });
+            }
+            IsAppendMode = !isAppendLine;
+            IsAppendLineMode = isAppendLine;
 
+            string icon_res = IsAppendLineMode ? "AppendLineImage" : "AppendImage";
+
+            Dispatcher.UIThread.Post(async () => {
+                await MpNotificationBuilder.ShowMessageAsync(
+                           title: $"MODE CHANGED",
+                           msg: $"Append{(isAppendLine ? "-Line" : "")} Mode Activated",
+                           msgType: MpNotificationType.AppModeChange,
+                           iconSourceStr: MpPlatformWrapper.Services.PlatformResource.GetResource(icon_res) as string);
+
+            });
+        }
+        private void DeactivateAppendMode() {
+            bool wasAppendLineMode = IsAppendLineMode;
+            IsAppendLineMode = false;
+            IsAppendMode = false;
+            _appendModeCopyItem = null;
+            Dispatcher.UIThread.Post(async () => {
+                await MpNotificationBuilder.ShowMessageAsync(
+                           title: $"MODE CHANGED",
+                           msg: $"Append{(wasAppendLineMode ? "-Line" : "")} Mode Deactivated",
+                           msgType: MpNotificationType.AppModeChange,
+                           iconSourceStr: MpPlatformWrapper.Services.PlatformResource.GetResource("NoEntryImage") as string);
+            });
+        }
+
+        private bool UpdateAppendMode(MpCopyItem aci) {
+            if (!IsAnyAppendMode) {
+                return false;
+            }
+            if (_appendModeCopyItem == null) {
+                _appendModeCopyItem = aci;
+                return true;
+            }
+
+            string append_text = aci.ItemData.ToPlainText();
+            Task.Run(async () => {
+                // no need to wait for source updates
+                // clone items sources into append item
+                var aci_sources = await MpDataModelProvider.GetCopyItemSources(aci.Id);
+                foreach (var aci_source in aci_sources) {
+                    await MpCopyItemSource.CreateAsync(
+                           copyItemId: _appendModeCopyItem.Id,
+                           sourceObjId: aci_source.SourceObjId,
+                           sourceType: aci_source.CopyItemSourceType);
+                }
+                if (aci.WasDupOnCreate) {
+                    // also ref if exisiting item
+                    await MpCopyItemSource.CreateAsync(
+                            copyItemId: _appendModeCopyItem.Id,
+                            sourceObjId: aci.Id,
+                            sourceType: MpCopyItemSourceType.CopyItem);
+                } else {
+                    // delete redundant new item
+                    await aci.DeleteFromDatabaseAsync();
+                }
+            }).FireAndForgetSafeAsync();
+
+            Dispatcher.UIThread.Post(async () => {
+                bool addNewLine = IsAppendLineMode;
+                if (_appendModeCopyItem.ItemType == MpCopyItemType.FileList) {
+                    // files ignore specific mode and just append
+                    addNewLine = true;
+                }
+                _appendModeCopyItem.ItemData = _appendModeCopyItem.ItemData.AppendText(append_text, addNewLine);
+
+
+                string append_buffer = _appendModeCopyItem.ItemData.ToPlainText();
+                string icon_res = IsAppendLineMode ? "AppendLineImage" : "AppendImage";
+                await MpNotificationBuilder.ShowMessageAsync(
+                           title: $"Append Buffer CHANGED",
+                           msg: append_buffer,
+                           msgType: MpNotificationType.AppendBuffer,
+                           iconSourceStr: MpPlatformWrapper.Services.PlatformResource.GetResource(icon_res) as string);
+
+                await _appendModeCopyItem.WriteToDatabaseAsync();
+            });
+
+            return true;
+        }
         #endregion
 
         #region Commands
@@ -3499,23 +3492,25 @@ namespace MonkeyPaste.Avalonia {
                 MpNotificationBuilder.ShowMessageAsync("MODE CHANGED", string.Format("AUTO-COPY SELECTION MODE: {0}", IsAutoCopyMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
             }, () => !IsAppPaused);
 
+        
         public ICommand ToggleAppendModeCommand => new MpCommand(
             () => {
-                IsAppendMode = !IsAppendMode;
-                if (IsAppendMode && IsAppendLineMode) {
-                    ToggleAppendLineModeCommand.Execute(null);
+                if (IsAppendMode) {
+                    DeactivateAppendMode();
+                } else {
+                    ActivateAppendMode(false).FireAndForgetSafeAsync();
                 }
-                MpNotificationBuilder.ShowMessageAsync("MODE CHANGED", string.Format("APPEND MODE: {0}", IsAppendMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
-            }, () => !IsAppPaused);
+                
+            });
 
         public ICommand ToggleAppendLineModeCommand => new MpCommand(
             () => {
-                IsAppendLineMode = !IsAppendLineMode;
-                if (IsAppendLineMode && IsAppendMode) {
-                    ToggleAppendModeCommand.Execute(null);
+                if (IsAppendLineMode) {
+                    DeactivateAppendMode();
+                } else {
+                    ActivateAppendMode(true).FireAndForgetSafeAsync();
                 }
-                MpNotificationBuilder.ShowMessageAsync("MODE CHANGED", string.Format("APPEND LINE MODE: {0}", IsAppendLineMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
-            }, () => !IsAppPaused);
+            });
 
         public ICommand EnableFindAndReplaceForSelectedItem => new MpCommand(
             () => {

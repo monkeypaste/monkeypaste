@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using Avalonia.Threading;
 using MonkeyPaste;
 
@@ -105,6 +106,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         #endregion
+        #endregion
+
+        #region Commands
         #endregion
     }
 }

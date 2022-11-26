@@ -11,10 +11,11 @@ using PropertyChanged;
 using System.Collections.Generic;
 using System.Diagnostics;
 using MonkeyPaste.Common.Avalonia;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvNotificationWindow : Window, MpINotificationBalloonView {
+    public partial class MpAvNotificationWindow : Window, MpINotificationBalloonView, MpINotificationViewer {
         #region Statics
 
 
@@ -153,7 +154,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Event Handlers
         private void MpAvNotificationWindow_Closed(object sender, System.EventArgs e) {
-            MpConsole.WriteLine($"fade out complete for: '{(sender as Control).DataContext}'");
+            //MpConsole.WriteLine($"fade out complete for: '{(sender as Control).DataContext}'");
             this.Hide();
             _windows.Remove(this);
         }
@@ -247,7 +248,7 @@ namespace MonkeyPaste.Avalonia {
 
             MpPoint window_position = new MpPoint(screen_mid_x - window_hw, screen_mid_y - window_hh);
             this.Position = window_position.ToAvPixelPoint(primaryScreen.PixelDensity);
-            MpConsole.WriteLine($"Notification Idx {_windows.IndexOf(this)} density {primaryScreen.PixelDensity} x {this.Position.X} y {this.Position.Y}  width {s.Width} height {s.Height}");
+            //MpConsole.WriteLine($"Notification Idx {_windows.IndexOf(this)} density {primaryScreen.PixelDensity} x {this.Position.X} y {this.Position.Y}  width {s.Width} height {s.Height}");
         }
 
         private void PositionWindowToSystemTray() {
@@ -306,6 +307,10 @@ namespace MonkeyPaste.Avalonia {
             double w = this.Bounds.Width.IsNumber() && this.Bounds.Width != 0 ? this.Bounds.Width : 350;
             double h = this.Bounds.Height.IsNumber() && this.Bounds.Height != 0 ? this.Bounds.Height : 150;
             return new MpSize(w, h);
+        }
+
+        public Task<MpNotificationDialogResultType> ShowNotificationAsync(MpNotificationFormat nf) {
+            throw new NotImplementedException();
         }
     }
 }

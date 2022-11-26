@@ -283,6 +283,12 @@ namespace MonkeyPaste {
             }
             return result[0];
         }
+
+        public static async Task<List<MpCopyItemSource>> GetCopyItemSources(int ciid) {
+            string query = $"select * from MpCopyItemSource where fk_MpCopyItemId=?";
+            var result = await MpDb.QueryAsync<MpCopyItemSource>(query,ciid);
+            return result;
+        }
         #endregion
 
         #region MpSource
@@ -401,7 +407,22 @@ namespace MonkeyPaste {
             }
             return result[0];
         }
+        public static async Task<List<MpCopyItem>> GetMostRecentCopyItems(int count, MpCopyItemType[] excludedFormats) {
+            string whereClause = excludedFormats == null || excludedFormats.Length == 0 ?
+                string.Empty :
+                "where " + string.Join(" and ", excludedFormats.Select(x => "fk_MpCopyItemTypeId <> " + ((int)(x)).ToString()));
 
+            string query = $"select * from MpCopyItem {whereClause} order by CopyDateTime DESC limit ?";
+            var result = await MpDb.QueryAsync<MpCopyItem>(query, count);
+            return result;
+        }
+        public static async Task<MpCopyItem> GetMostRecentCopyItem(MpCopyItemType[] excludedFormats) {
+            var result = await GetMostRecentCopyItems(1,excludedFormats);
+            if(result.Count > 0) {
+                return result[0];
+            }
+            return null;
+        }
         public static async Task<int> GetTotalCopyItemCountAsync() {
             string query = "select count(pk_MpCopyItemId) from MpCopyItem";
             var result = await MpDb.QueryScalarAsync<int>(query);

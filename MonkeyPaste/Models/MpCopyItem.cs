@@ -384,6 +384,9 @@ namespace MonkeyPaste {
             //var citl = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(Id);
             //delete_tasks.AddRange(citl.Select(x => x.DeleteFromDatabaseAsync()));
 
+            var cisl = await MpDataModelProvider.GetCopyItemSources(Id);
+            delete_tasks.AddRange(cisl.Select(x => x.DeleteFromDatabaseAsync()));
+
             var doil = await MpDataModelProvider.GetDataObjectItemsByDataObjectId(DataObjectId);
             delete_tasks.AddRange(doil.Select(x => x.DeleteFromDatabaseAsync()));
 

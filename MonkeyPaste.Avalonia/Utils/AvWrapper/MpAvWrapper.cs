@@ -14,6 +14,7 @@ namespace MonkeyPaste.Avalonia {
         //private static MpAvWrapper _instance;
         //public static MpAvWrapper Instance => _instance  (_instance = new MpAvWrapper());
 
+        public MpINotificationViewer NotificationViewer { get; set; }
         public MpINotificationBalloonView NotificationView { get; set; }
         public MpIProcessWatcher ProcessWatcher { get; set; }
         public MpICursor Cursor { get; set; }
@@ -93,6 +94,8 @@ namespace MonkeyPaste.Avalonia {
 
             ScreenInfoCollection = new MpAvScreenInfoCollection();
             NotificationView = MpAvNotificationWindow.Instance;
+
+            NotificationViewer = MpAvNotificationWindow.Instance;
         }
 
     }

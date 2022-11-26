@@ -119,7 +119,7 @@ namespace MonkeyPaste {
         }
 
         public override async Task<MpNotificationDialogResultType> ShowNotificationAsync() {
-            ShowBalloon();
+            await base.ShowNotificationAsync();
             while (DialogResult == MpNotificationDialogResultType.None) {
                 await Task.Delay(100);
             }

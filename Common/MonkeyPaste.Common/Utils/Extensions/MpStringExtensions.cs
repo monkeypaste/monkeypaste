@@ -89,7 +89,25 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
-
+        public static string AppendText(this string str, string text, bool insertNewLine) {
+            if (str.IsStringRichHtmlText()) {
+                var htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(str);
+                var textNode = htmlDoc.CreateTextNode(text);
+                var textSpan = htmlDoc.CreateElement("span");
+                textSpan.AppendChild(textNode);
+                if(insertNewLine) {
+                    var textPar = htmlDoc.CreateElement("p");
+                    textPar.AppendChild(textSpan);
+                    htmlDoc.DocumentNode.AppendChild(textPar);
+                } else {
+                    htmlDoc.DocumentNode.LastChild.AppendChild(textSpan);
+                }
+                return htmlDoc.DocumentNode.OuterHtml;
+            } else {
+                return str + (insertNewLine ? Environment.NewLine : string.Empty) + text;
+            }
+        }
         public static string ReplaceRange(this string str, int index, int length, string text) {
             int preStrLength = index + 1;
             if(str.Length < preStrLength) {
