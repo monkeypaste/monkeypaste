@@ -52,14 +52,14 @@ namespace MonkeyPaste {
         #region Public Methods
         public static async Task ShowMessageAsync(
             string title = "", 
-            string msg = "", 
+            object body = null, 
             int maxShowTimeMs = MpNotificationFormat.MAX_MESSAGE_DISPLAY_MS,
             MpNotificationType msgType = MpNotificationType.Message,        
             string iconSourceStr = null) {
             await ShowNotificationAsync(
                 notificationType: msgType,
                 title: title,
-                msg: msg,
+                body: body,
                 maxShowTimeMs: maxShowTimeMs,
                 iconSourceStr: iconSourceStr);
         }
@@ -76,7 +76,7 @@ namespace MonkeyPaste {
         public static async Task<MpNotificationDialogResultType> ShowNotificationAsync(
             MpNotificationType notificationType = MpNotificationType.None,
             string title = "",
-            string msg = "",
+            object body = null,
             int maxShowTimeMs = -1,
             Action<object> retryAction = null,
             object retryActionObj = null,
@@ -84,14 +84,17 @@ namespace MonkeyPaste {
             ICommand fixCommand = null,
             object fixCommandArgs = null,
             MpIProgressLoader loader = null) {                                   
-
+            if(body == null) {
+                body = string.Empty;
+            }
             if (string.IsNullOrEmpty(title)) {
                 title = notificationType.EnumToLabel();
             }
 
             MpNotificationFormat nf = new MpNotificationFormat() {
                 Title = title,
-                Body = msg,
+                Body = body,
+                BodyFormat = body is string ? MpTextContentFormat.PlainText : MpTextContentFormat.RichHtml,
                 MaxShowTimeMs = maxShowTimeMs,
                 NotificationType = notificationType,
                 IconSourceStr = iconSourceStr,
@@ -104,7 +107,7 @@ namespace MonkeyPaste {
 
 
             MpConsole.WriteLine($"Notification balloon set to:", true);
-            MpConsole.WriteLine($"\tmsg: '{msg}'");
+            MpConsole.WriteLine($"\tmsg: '{body}'");
             MpConsole.WriteLine($"\ttype: '{notificationType.ToString()}'");
 
             MpNotificationDialogResultType result = await ShowNotificationAsync(nf);

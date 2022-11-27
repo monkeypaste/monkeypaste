@@ -17,7 +17,7 @@ using KeyEventArgs = Avalonia.Input.KeyEventArgs;
 using Key = Avalonia.Input.Key;
 using Cursor = Avalonia.Input.Cursor;
 using Avalonia.VisualTree;
-using Gtk;
+using Avalonia.Controls.Primitives;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -61,7 +61,8 @@ namespace MonkeyPaste.Avalonia {
                 return _readOnlyForeground;
             }
             set {
-                _readOnlyForeground = value;
+                //_readOnlyForeground = value;
+                SetAndRaise(ReadOnlyForegroundProperty, ref _readOnlyForeground, value);
             }
         }
 
@@ -81,7 +82,8 @@ namespace MonkeyPaste.Avalonia {
                 return _readOnlyBackground;
             }
             set {
-                _readOnlyBackground = value;
+                //_readOnlyBackground = value;
+                SetAndRaise(ReadOnlyBackgroundProperty, ref _readOnlyBackground, value);
             }
         }
 
@@ -91,7 +93,15 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region DropShadowOffset AvaloniaProperty
-        public MpPoint DropShadowOffset { get; set; } = new MpPoint(1, 1);
+
+        private MpPoint _dropShadowOffset = new MpPoint(1, 1);
+        public MpPoint DropShadowOffset {
+            get => _dropShadowOffset;
+            set {
+
+                SetAndRaise(DropShadowOffsetProperty, ref _dropShadowOffset, value);
+            }
+        }
 
         public static readonly StyledProperty<MpPoint> DropShadowOffsetProperty =
             AvaloniaProperty.Register<MpAvMarqueeTextBox, MpPoint>(nameof(DropShadowOffset));
@@ -99,7 +109,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region DropShadowBrush AvaloniaProperty
-        public IBrush DropShadowBrush { get; set; } = Brushes.Black;
+
+        private IBrush _dropShadowBrush = Brushes.Black;
+        public IBrush DropShadowBrush {
+            get => _dropShadowBrush;
+            set {
+                SetAndRaise(DropShadowBrushProperty, ref _dropShadowBrush, value);
+            }
+        }
 
         public static readonly StyledProperty<IBrush> DropShadowBrushProperty =
             AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>(nameof(DropShadowBrush));
@@ -171,10 +188,25 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region AutoMarquee AvaloniaProperty
+        public bool AutoMarquee { get; set; } = false;
+
+        public static readonly StyledProperty<bool> AutoMarqueeProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, bool>(nameof(AutoMarquee));
+
+        #endregion
+
         #endregion
 
         public MpAvMarqueeTextBox() {
-            
+            this.AcceptsReturn = false;
+            this.AcceptsTab = false;
+            this.TextWrapping = TextWrapping.NoWrap;
+            this.ClipToBounds = true;
+            this.BorderThickness = new Thickness(0);
+
+            ScrollViewer.SetVerticalScrollBarVisibility(this, ScrollBarVisibility.Hidden);
+            ScrollViewer.SetHorizontalScrollBarVisibility(this, ScrollBarVisibility.Hidden);
             this.GetObservable(MpAvMarqueeTextBox.IsVisibleProperty).Subscribe(value => OnIsVisibleChanged());
             this.GetObservable(MpAvMarqueeTextBox.IsReadOnlyProperty).Subscribe(value => OnIsReadOnlyChanged());
             this.GetObservable(MpAvMarqueeTextBox.TextProperty).Subscribe(value => OnTextChanged());
@@ -182,7 +214,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #region Event Handlers
-
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
+            base.OnAttachedToVisualTree(e);
+            if(AutoMarquee) {
+                Init();
+                AnimateAsync().FireAndForgetSafeAsync();
+            }
+        }
         protected override void OnGotFocus(GotFocusEventArgs e) {
             base.OnGotFocus(e);
             if(CanEdit) {

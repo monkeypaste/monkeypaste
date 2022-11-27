@@ -562,6 +562,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool IsHoveringOverSourceIcon { get; set; } = false;
         public bool HasTemplates { get; set; } = false;
         public bool IsFindAndReplaceVisible { get; set; } = false;
         public string TemplateRichHtml { get; set; }
@@ -1794,7 +1796,7 @@ namespace MonkeyPaste.Avalonia {
             var result = await MpNotificationBuilder.ShowNotificationAsync(
                                     notificationType: MpNotificationType.ContentFormatDegradation,
                                     title: "Data Degradation Warning",
-                                    msg: $"Editing in comptability mode will remove all rich formatting. Are you sure you wish to modify this?");
+                                    body: $"Editing in comptability mode will remove all rich formatting. Are you sure you wish to modify this?");
 
             if (result == MpNotificationDialogResultType.Ok) {
                 _isContentReadOnly = false;

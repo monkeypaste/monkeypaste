@@ -85,7 +85,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsNew {
             get {
-                return Shortcut.ShortcutId == 0;
+                return ShortcutId == 0;
             }
         }
 
@@ -203,11 +203,11 @@ namespace MonkeyPaste.Avalonia {
                 if (Shortcut == null) {
                     return 0;
                 }
-                return Shortcut.ShortcutId;
+                return Shortcut.Id;
             }
             set {
-                if (Shortcut != null && Shortcut.ShortcutId != value) {
-                    Shortcut.ShortcutId = value;
+                if (Shortcut != null && Shortcut.Id != value) {
+                    Shortcut.Id = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(ShortcutId));
                 }

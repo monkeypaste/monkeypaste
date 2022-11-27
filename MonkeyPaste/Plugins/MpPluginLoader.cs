@@ -92,7 +92,7 @@ namespace MonkeyPaste {
                 // Empty or io error on manifest file read
                 var manifest_not_found_result = await MpNotificationBuilder.ShowNotificationAsync(
                     notificationType: MpNotificationType.InvalidPlugin,
-                    msg: $"Plugin manifest not found in '{manifestPath}'",
+                    body: $"Plugin manifest not found in '{manifestPath}'",
                     retryAction: (args) => {
                         //await LoadPluginAsync(manifestPath); 
                         needsFixing = false;
@@ -113,7 +113,7 @@ namespace MonkeyPaste {
                 catch (Exception ex) {
                     var invalid_or_malformed_json_result = await MpNotificationBuilder.ShowNotificationAsync(
                             notificationType: MpNotificationType.InvalidPlugin,
-                            msg: $"Error parsing plugin manifest '{manifestPath}': {ex.Message}",
+                            body: $"Error parsing plugin manifest '{manifestPath}': {ex.Message}",
                             retryAction: (args) => {
                                 needsFixing = false;
                             },
@@ -132,7 +132,7 @@ namespace MonkeyPaste {
                     catch (Exception ex) {
                         var ivalid_plugin_component_result = await MpNotificationBuilder.ShowNotificationAsync(
                                 notificationType: MpNotificationType.InvalidPlugin,
-                                msg: ex.Message,
+                                body: ex.Message,
                                 retryAction: (args) => {
                                     needsFixing = false;
                                 },

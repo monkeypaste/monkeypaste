@@ -6,7 +6,7 @@ var ContentItemType = 'Text';
 var ContentScreenshotBase64Str = null;
 
 const InlineTags = ['span', 'a', 'em', 'strong', 'u', 's', 'sub', 'sup', 'img'];
-const BlockTags = ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe', 'blockquote']
+const BlockTags = ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe', 'blockquote', 'pre']
 const AllDocumentTags = [...InlineTags, ...BlockTags];
 
 // #endregion Globals

@@ -255,7 +255,7 @@ namespace MonkeyPaste.Avalonia {
                         if (MpPrefViewModel.Instance.NotificationShowCopyItemTooLargeToast) {
                             MpNotificationBuilder.ShowMessageAsync(
                                 title: "Item TOO LARGE",
-                                msg: $"Max Item Characters is {MpPrefViewModel.Instance.MaxRtfCharCount} and copied item is {((string)itemData).Length} characters",
+                                body: $"Max Item Characters is {MpPrefViewModel.Instance.MaxRtfCharCount} and copied item is {((string)itemData).Length} characters",
                                 msgType: MpNotificationType.DbError)
                                     .FireAndForgetSafeAsync(MpAvClipTrayViewModel.Instance);
                         }

@@ -513,11 +513,11 @@ namespace MonkeyPaste.Avalonia {
                 if (Action == null) {
                     return false;
                 }
-                return Action.IsReadOnly;
+                return Action.IsModelReadOnly;
             }
             set {
                 if (IsReadOnly != value) {
-                    Action.IsReadOnly = value;
+                    Action.IsModelReadOnly = value;
                     OnPropertyChanged(nameof(IsReadOnly));
                 }
             }
@@ -831,7 +831,7 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(() => {
                 MpNotificationBuilder.ShowNotificationAsync(
                     notificationType: MpNotificationType.InvalidAction,
-                    msg: ValidationText,
+                    body: ValidationText,
                     retryAction: async (args) => { await Validate(); },
                     fixCommand: Parent.SelectActionCommand,
                     fixCommandArgs: ActionId).FireAndForgetSafeAsync(this);

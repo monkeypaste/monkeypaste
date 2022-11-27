@@ -15,7 +15,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>3c310299-03d8-47c4-992d-80f4eccb8ff4</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>app.js</StartupFile>
+    <StartupFile>src\app.js</StartupFile>
     <StartWebBrowser>False</StartWebBrowser>
     <SearchPath>
     </SearchPath>
@@ -25,6 +25,10 @@
     <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
     <StartWebBrowser>False</StartWebBrowser>
   </PropertyGroup>
+  <PropertyGroup>
+  <!-- Makes the TypeScript compilation task a no-op -->
+  <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+</PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
@@ -32,7 +36,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="app.js" />
+    <Content Include="src\app.js" />
     <Content Include="images\icons\monkey.ico" />
     <Content Include="src\components\content\paste\paste-toolbar-style.css" />
     <Content Include="src\components\content\paste\pastetoolbar.js" />

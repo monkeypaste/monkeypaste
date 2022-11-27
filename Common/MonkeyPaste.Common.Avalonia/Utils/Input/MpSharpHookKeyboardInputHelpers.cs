@@ -48,7 +48,8 @@ namespace MonkeyPaste.Common.Avalonia {
         public static KeyCode GetKeyValue(string keyStr) {
            
             string lks = keyStr.ToLower();
-            if (lks == "control") {
+            if (lks == MpKeyLiteralStringHelpers.AV_CONTROL_KEY_LITERAL.ToLower() ||
+                lks == MpKeyLiteralStringHelpers.CONTROL_KEY_LITERAL.ToLower()) {
                 return KeyCode.VcLeftControl;//.LeftCtrl;
             }
             if (lks == "alt") {

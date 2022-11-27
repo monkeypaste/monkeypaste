@@ -252,6 +252,15 @@ namespace MonkeyPaste {
 
         #region Model
 
+        public MpTextContentFormat BodyFormat {
+            get {
+                if(NotificationFormat == null) {
+                    return MpTextContentFormat.PlainText;
+                }
+                return NotificationFormat.BodyFormat;
+            }
+        }
+
         public virtual string Title {
             get {
                 if(NotificationFormat == null) {
@@ -261,7 +270,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public virtual string Body {
+        public virtual object Body {
             get {
                 if (NotificationFormat == null) {
                     return string.Empty;

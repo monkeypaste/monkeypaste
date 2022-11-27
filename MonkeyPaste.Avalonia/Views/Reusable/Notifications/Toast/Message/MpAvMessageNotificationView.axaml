@@ -11,15 +11,23 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvMessageNotificationView">
-    <Grid RowDefinitions="Auto,*">
-        <TextBlock Grid.Row="0"
-                   Margin="10,10,0,1"
-                   FontSize="20"
-                   VerticalAlignment="Bottom"
-                   HorizontalAlignment="Left"
-                   Foreground="White"
-                   FontWeight="SemiBold"
-                   Text="{Binding Title}" />
+    <Grid RowDefinitions="Auto,*"
+          Margin="0,0,0,0">
+        <local:MpAvMarqueeTextBox Grid.Row="0"
+                                  Margin="3,0,10,3"
+                                  CanEdit="False"
+                                  MinHeight="30"
+                                  FontSize="20"
+                                  IsReadOnly="True"
+                                  IsMarqueeEnabled="True"
+                                  DropShadowBrush="Black"
+                                  VerticalAlignment="Top"
+                                  HorizontalAlignment="Stretch"
+                                  HorizontalContentAlignment="Left"
+                                  VerticalContentAlignment="Top"
+                                  Foreground="White"
+                                  FontWeight="SemiBold"
+                                  Text="{Binding Title}" />
         <Border Grid.Row="0"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Bottom"
@@ -28,7 +36,7 @@
                 Margin="5,0,5,0"
                 Background="White"
                 Height="1" />
-        <TextBlock Grid.Row="1"
+        <!--<TextBlock Grid.Row="1"
                    HorizontalAlignment="Left"
                    Margin="10,5,10,0"
                    TextWrapping="Wrap"
@@ -38,6 +46,56 @@
                    Focusable="True"
                    Foreground="{Binding NotificationTextForegroundColor,
                                         Converter={StaticResource StringHexToBrushConverter}}"
-                   Text="{Binding Body}" />
+                   Text="{Binding Body}" />-->
+        <ScrollViewer Grid.Row="1"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="3"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      HorizontalContentAlignment="Left"
+                      VerticalContentAlignment="Top"
+                      Margin="0,0,5,0"
+                      Background="Transparent"
+                      AllowAutoHide="True"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <!--<ContentControl x:Name="NotificationBodyContentControl"
+                            Focusable="True"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            DataContext="{Binding}"
+                            Content="{Binding}">
+                <ContentControl.DataTemplates>
+                    <local:MpAvNotificationBodyTemplateSelector>
+                        <DataTemplate x:Key="PlainTextTemplate"
+                                      DataType="pcl:MpMessageNotificationViewModel">
+                            <TextBlock Grid.Row="1"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Top"
+                                       TextWrapping="NoWrap"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Background="Transparent"
+                                       Focusable="True"
+                                       Foreground="{Binding NotificationTextForegroundColor, Converter={StaticResource StringHexToBrushConverter}}"
+                                       Text="{Binding Body}" />
+                        </DataTemplate>
+                        <DataTemplate x:Key="RichHtmlTemplate"
+                                      DataType="pcl:MpMessageNotificationViewModel">
+                            <local:MpAvClipTileContentView DataContext="{Binding Body}" />
+                        </DataTemplate>
+                    </local:MpAvNotificationBodyTemplateSelector>
+                </ContentControl.DataTemplates>
+            </ContentControl>-->
+            <TextBlock HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       TextWrapping="NoWrap"
+                       FontSize="14"
+                       FontWeight="SemiBold"
+                       Background="Transparent"
+                       Focusable="False"
+                       Foreground="{Binding NotificationTextForegroundColor, Converter={StaticResource StringHexToBrushConverter}}"
+                       Text="{Binding Body}" />
+        </ScrollViewer>
     </Grid>
 </local:MpAvUserControl>

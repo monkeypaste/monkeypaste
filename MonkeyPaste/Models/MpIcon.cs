@@ -91,7 +91,7 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public override bool IsReadOnly {
+        public override bool IsModelReadOnly {
             get => IsReadOnlyValue == 1;
             set => IsReadOnlyValue = value ? 1 : 0;
         }
@@ -174,7 +174,7 @@ namespace MonkeyPaste {
             var ci = new MpIcon() {
                 IconGuid = System.Guid.NewGuid(),
                 HexColors = this.HexColors,
-                IsReadOnly = this.IsReadOnly,
+                IsModelReadOnly = this.IsModelReadOnly,
                 IconImageId = cimgId,
                 IconBorderImageId = cbimgId
             };

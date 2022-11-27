@@ -540,15 +540,4 @@ namespace MonkeyPaste.Avalonia {
         public void CloseMenu() {
             MpAvMenuExtension.CloseMenu();
         }
-    }
-
-    [DoNotNotify]
-    class TestContextMenu : ContextMenu {
-        public TestContextMenu() : base() {
-
-        }
-        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
-            base.OnAttachedToVisualTree(e);
-        }
-    }
-}
+    }}

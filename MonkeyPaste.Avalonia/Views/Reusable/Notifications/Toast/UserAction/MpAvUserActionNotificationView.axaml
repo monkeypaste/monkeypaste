@@ -65,7 +65,8 @@
                 VerticalAlignment="Top"
                 IsVisible="{Binding ShowIgnoreButton}"
                 Command="{Binding IgnoreCommand}" />
-        <Button x:Name="RetryButton" Grid.Row="2"
+        <Button x:Name="RetryButton"
+                Grid.Row="2"
                 Grid.Column="1"
                 Margin="5"
                 Padding="5"
@@ -83,7 +84,7 @@
                 Content="FIX"
                 IsVisible="{Binding ShowFixButton}"
                 VerticalAlignment="Top"
-                Command="{Binding FixWrapperCommand}"/>
+                Command="{Binding FixWrapperCommand}" />
         <Button Grid.Row="2"
                 Grid.Column="1"
                 Margin="5"

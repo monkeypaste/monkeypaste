@@ -16,6 +16,7 @@ using HtmlAgilityPack;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Threading;
+using System.Web;
 
 namespace MonkeyPaste.Common {
     public static class MpStringExtensions {
@@ -79,13 +80,11 @@ namespace MonkeyPaste.Common {
                 return text;
             }
             if (text.IsStringRichHtmlText()) {
-                var htmlDoc = new HtmlDocument();
-                htmlDoc.LoadHtml(text);
-                return htmlDoc.DocumentNode.InnerText;// == null ? String.Empty : htmlDoc.Text;
+                return MpRichHtmlToPlainTextConverter.Convert(text);
             }
             
             return text;
-        }
+        }        
 
         #endregion
 

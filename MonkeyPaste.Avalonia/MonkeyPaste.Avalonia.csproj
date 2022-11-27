@@ -162,6 +162,7 @@
     <None Remove="Assets\Icons\cog.ico" />
     <None Remove="Assets\Icons\monkey.ico" />
     <None Remove="Assets\Images\monkey.png" />
+    <None Remove="Assets\Images\scissors.png" />
     <None Remove="CefNet" />
     <None Remove="CefNet.Avalonia" />
     <None Remove="WebViewControl-Avalonia" />
@@ -835,6 +836,9 @@
     <AvaloniaResource Include="Assets\Images\scales.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\scissors.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\search.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -1014,6 +1018,7 @@
     <PackageReference Include="Avalonia" Version="0.10.18" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.18" />
+    <PackageReference Include="Avalonia.HtmlRenderer" Version="0.10.0" />
     <PackageReference Include="Avalonia.MonoMac" Version="0.6.1" />
     <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.18" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="0.10.18" />
@@ -1143,5 +1148,9 @@
      See: https://learn.microsoft.com/en-us/dotnet/standard/assembly/reference-assemblies
      -->
      <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+</PropertyGroup>
+  <PropertyGroup>
+  <!-- Makes the TypeScript compilation task a no-op -->
+  <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
 </PropertyGroup>
 </Project>

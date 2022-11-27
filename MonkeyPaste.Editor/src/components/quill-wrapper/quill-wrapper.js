@@ -156,7 +156,7 @@ function getHtml3(sel) {
 	}
 	let delta = getDelta(sel);
 	let cfg = {
-		//inlineStyles: true,
+		inlineStyles: true,
 		//customTagAttributes: onCustomTagAttributes,
 		encodeHtml: false
 	};

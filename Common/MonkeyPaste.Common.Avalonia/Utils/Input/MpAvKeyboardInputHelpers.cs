@@ -64,7 +64,8 @@ namespace MonkeyPaste.Common.Avalonia {
             }
 
             string lks = keyStr.ToLower();
-            if (lks == "ctrl") {
+            if (lks == MpKeyLiteralStringHelpers.AV_CONTROL_KEY_LITERAL.ToLower() ||
+                lks == MpKeyLiteralStringHelpers.CONTROL_KEY_LITERAL.ToLower()) {
                 return Key.LeftCtrl;//.LeftCtrl;
             }
             if (lks == "alt") {
@@ -109,27 +110,10 @@ namespace MonkeyPaste.Common.Avalonia {
             if (lks == "pagedown") {
                 return Key.PageDown;
             }
-            if(lks == "control") {
-                return Key.LeftCtrl;
-            }
 
             var kg = KeyGesture.Parse(lks);
 
             return (Key)Enum.Parse(typeof(Key), keyStr, true);
-        }
-
-        public static string ConvertKeyToString(Key key) {
-            if (key == Key.LeftCtrl || key == Key.RightCtrl) {
-                return "Ctrl";
-            }
-            if (key == Key.LeftAlt || key == Key.RightAlt) { //} || key == Key.System) {
-                return "Alt";
-            }
-            if (key == Key.LeftShift || key == Key.RightShift) {
-                return "Shift";
-            }
-
-            return key.ToString();
         }
 
         public static string GetKeyLiteral(Key key) {
@@ -140,7 +124,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 return MpKeyLiteralStringHelpers.ALT_KEY_LITERAL;
             }
             if (key == Key.LeftCtrl || key == Key.RightCtrl) {
-                return MpKeyLiteralStringHelpers.CONTROL_KEY_LITERAL;
+                return MpKeyLiteralStringHelpers.AV_CONTROL_KEY_LITERAL;
             }
             if(key == Key.Escape) {
                 return MpKeyLiteralStringHelpers.ESCAPE_KEY_LITERAL;

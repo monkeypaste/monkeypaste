@@ -386,29 +386,11 @@ namespace MonkeyPaste.Avalonia {
                         case MpShortcutType.SelectPreviousRowItem:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.SelectPreviousRowItemCommand;
                             break;
-                        case MpShortcutType.SelectAll:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.SelectAllCommand;
-                            break;
-                        case MpShortcutType.InvertSelection:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.InvertSelectionCommand;
-                            break;
-                        case MpShortcutType.BringSelectedToFront:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.BringSelectedClipTilesToFrontCommand;
-                            break;
-                        case MpShortcutType.SendSelectedToBack:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.SendSelectedClipTilesToBackCommand;
-                            break;
                         case MpShortcutType.AssignShortcut:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.AssignHotkeyCommand;
                             break;
                         case MpShortcutType.ChangeColor:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.ChangeSelectedClipsColorCommand;
-                            break;
-                        case MpShortcutType.SpeakSelectedItem:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.SpeakSelectedClipsCommand;
-                            break;
-                        case MpShortcutType.MergeSelectedItems:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.MergeSelectedClipsCommand;
                             break;
                         case MpShortcutType.Undo:
                             shortcutCommand = MpAvMainWindowViewModel.Instance.UndoCommand;
@@ -424,12 +406,6 @@ namespace MonkeyPaste.Avalonia {
                             break;
                         case MpShortcutType.Duplicate:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.DuplicateSelectedClipsCommand;
-                            break;
-                        case MpShortcutType.SendToEmail:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.SendToEmailCommand;
-                            break;
-                        case MpShortcutType.CreateQrCode:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.CreateQrCodeFromSelectedClipsCommand;
                             break;
                         case MpShortcutType.ToggleAppendLineMode:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAppendLineModeCommand;
@@ -998,8 +974,16 @@ namespace MonkeyPaste.Avalonia {
                 scvm.KeyString = scvm.Shortcut.DefaultKeyString;
                 await scvm.InitializeAsync(scvm.Shortcut,scvm.Command);
                 await scvm.Shortcut.WriteToDatabaseAsync();
-            },(args) => args is MpAvShortcutViewModel svm && !string.IsNullOrEmpty(svm.DefaultKeyString));      
+            },(args) => args is MpAvShortcutViewModel svm && !string.IsNullOrEmpty(svm.DefaultKeyString));
 
+        public ICommand SimulateKeyStrokeCommand => new MpCommand<object>(
+            (keysArg) => {
+                string keys = keysArg as string;
+                if(string.IsNullOrEmpty(keys)) {
+                    return;
+                }
+                SimulateKeyStrokeSequenceAsync(keys).FireAndForgetSafeAsync();
+            });
         #endregion
     }
     public static class MpDebuggerHelper {

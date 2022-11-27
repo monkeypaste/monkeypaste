@@ -86,6 +86,19 @@ namespace MonkeyPaste.Avalonia {
                 _lastProcessInfo = value;
             }
         }
+        private MpPortableProcessInfo _fileSystemProcessInfo;
+        public MpPortableProcessInfo FileSystemProcessInfo {
+            get {
+                if(_fileSystemProcessInfo == null) {
+                    _fileSystemProcessInfo = GetProcessPathProcessInfo(MpPlatformWrapper.Services.OsInfo.OsFileManagerPath);
+                }
+                return _fileSystemProcessInfo;
+            }
+            private set {
+                _fileSystemProcessInfo = value;
+            }
+        }
+
 
         public ConcurrentDictionary<string, ObservableCollection<IntPtr>> RunningProcessLookup { get; protected set; } = new ConcurrentDictionary<string, ObservableCollection<IntPtr>>();
 
@@ -225,7 +238,18 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-
+        private MpPortableProcessInfo GetProcessPathProcessInfo(string processPath) {
+            var kvp = RunningProcessLookup.FirstOrDefault(x => x.Key.ToLower() == processPath.ToLower());
+            if(kvp.Equals(default(KeyValuePair<string,ObservableCollection<IntPtr>>)) ||
+                kvp.Value == null || kvp.Value.Count == 0) {
+                return null;
+            }
+            return new MpPortableProcessInfo() {
+                Handle = kvp.Value[0],
+                ProcessPath = processPath,
+                MainWindowTitle = GetProcessTitle(kvp.Value[0])
+            };
+        }
 
 
         #endregion

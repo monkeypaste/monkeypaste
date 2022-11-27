@@ -17,9 +17,6 @@ using System.Text;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileContentView : MpAvUserControl<MpAvClipTileViewModel> {
-
-        //public MpAvIContentView ContentView { get; private set; }
-
         public MpAvClipTileContentView() {
             InitializeComponent();
         }
@@ -27,11 +24,5 @@ namespace MonkeyPaste.Avalonia {
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }
-
-        //private void ContentTemplate_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-        //    if (sender is UserControl contentContainer) {
-        //        ContentView = contentContainer.Content as MpAvIContentView;
-        //    }
-        //}
     }
 }

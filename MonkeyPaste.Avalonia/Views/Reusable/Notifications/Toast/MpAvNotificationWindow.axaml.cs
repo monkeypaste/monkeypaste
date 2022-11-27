@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvNotificationWindow : Window, MpINotificationBalloonView, MpINotificationViewer {
+    public partial class MpAvNotificationWindow : Window, MpINotificationBalloonView {
         #region Statics
 
 
@@ -278,39 +278,13 @@ namespace MonkeyPaste.Avalonia {
             y = Math.Max(0, y);
 
             this.Position = new PixelPoint((int)x, (int)y);
-            MpConsole.WriteLine($"Notification Idx {_windows.IndexOf(this)} density {primaryScreen.PixelDensity} x {this.Position.X} y {this.Position.Y}  width {s.Width} height {s.Height}");
+            //MpConsole.WriteLine($"Notification Idx {_windows.IndexOf(this)} density {primaryScreen.PixelDensity} x {this.Position.X} y {this.Position.Y}  width {s.Width} height {s.Height}");
         }
 
         private MpSize SetupSize() {
-            //double w, h;
-            //if (DataContext is MpAvLoaderNotificationView) {
-            //    w = 350;
-            //    h = 200;
-            //    this.MaxHeight = h;
-            //    this.MaxWidth = w;
-            //    this.Width = w;
-            //    this.Height = h;
-
-            //    //this.SizeToContent = SizeToContent.Manual;
-            //} else {
-            //    w = 350;
-            //    h = 200;
-            //    this.MinWidth = 350;
-            //    this.MaxWidth = 800;
-            //    this.MinHeight = 200;
-            //    this.MaxHeight = 500;
-            //    //this.SizeToContent = SizeToContent.Manual;
-            //}
-            //this.InvalidateAll();
-            //return new MpSize(350, 200);
-
             double w = this.Bounds.Width.IsNumber() && this.Bounds.Width != 0 ? this.Bounds.Width : 350;
             double h = this.Bounds.Height.IsNumber() && this.Bounds.Height != 0 ? this.Bounds.Height : 150;
             return new MpSize(w, h);
-        }
-
-        public Task<MpNotificationDialogResultType> ShowNotificationAsync(MpNotificationFormat nf) {
-            throw new NotImplementedException();
         }
     }
 }

@@ -6,7 +6,7 @@ namespace MonkeyPaste.Common.Plugin {
         public string NotificationTypeStr => NotificationType.ToString();
 
         public MpPluginNotificationType NotificationType { get; set; }
-        public string Body { get; set; }
+        public object Body { get; set; }
         public string Detail { get; set; }
         public ICommand FixCommand { get; set; }
         public object FixCommandArgs { get; set; }

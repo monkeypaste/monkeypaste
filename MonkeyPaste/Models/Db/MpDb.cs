@@ -378,7 +378,7 @@ namespace MonkeyPaste {
             MpPrefViewModel.Instance.ThisAppIcon = await MpDataModelProvider.GetItemAsync<MpIcon>(thisAppApp.IconId);
             MpPrefViewModel.Instance.ThisOsFileManagerSource = await MpDataModelProvider.GetItemAsync<MpSource>(MpPrefViewModel.Instance.ThisOsFileManagerSourceId);
 
-
+            await ResetShortcutsAsync();
             if(isNewDb) {
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
@@ -634,53 +634,50 @@ namespace MonkeyPaste {
         }
 
         private static async Task InitDefaultShortcutsAsync() {
+            var ps = MpPlatformWrapper.Services.PlatformShorcuts;
             List<string[]> defaultShortcutDefinitions = new List<string[]>() {
                 // ORDER:
-                // guid,keyString,shortcutType,routeType
-                 new string[] {"5dff238e-770e-4665-93f5-419e48326f01","Control+Shift+D", "ShowMainWindow", "Direct"},
-                 new string[] {"cb807500-9121-4e41-80d3-8c3682ce90d9","Escape", "HideMainWindow", "Internal"},
-                 new string[] {"a41aeed8-d4f3-47de-86c5-f9ca296fb103","Control+Shift+A", "ToggleAppendMode", "Direct"},
-                 new string[] {"892bf7d7-ba8e-4db1-b2ca-62b41ff6614c","Control+Shift+C", "ToggleAutoCopyMode", "Direct"},
-                 new string[] {"a12c4211-ab1f-4b97-98ff-fbeb514e9a1c","Control+Shift+R", "ToggleRightClickPasteMode", "Direct"},
+                // guid,keyString,shortcutType,routeType, readOnly = false
+
+                // GLOBAL
+
+                 new string[] {"5dff238e-770e-4665-93f5-419e48326f01","Caps Lock", "ShowMainWindow", "Direct"},
+                 new string[] {"97e29b06-0ec4-4c55-a393-8442d7695038","Control+F1", "ToggleListenToClipboard", "Direct"},
+                 new string[] {"777367e6-c161-4e93-93e0-9bf12221f7ff","Control+F2", "ToggleAppendLineMode", "Direct"},
+                 new string[] {"a41aeed8-d4f3-47de-86c5-f9ca296fb103","Control+F3", "ToggleAppendMode", "Direct"},
+                 new string[] {"892bf7d7-ba8e-4db1-b2ca-62b41ff6614c","Control+F4", "ToggleAutoCopyMode", "Direct"},
+                 new string[] {"a12c4211-ab1f-4b97-98ff-fbeb514e9a1c","Control+F5", "ToggleRightClickPasteMode", "Direct"},
+
+                 // APPLICATION
+                 new string[] {"94e81589-fe2f-4e80-8940-ed066f0d9c27",ps.PasteKeys, "PasteHere", "Internal","True"},
+                 new string[] {"ee74dd92-d18b-46cf-91b7-3946ab55427c",ps.CopyKeys, "CopySelection", "Internal","True"},
+                 new string[] {"2acde1cc-c8e4-4675-8895-81712a6f0a36",ps.CutKeys, "CutSelection", "Internal","True"},
+                 new string[] {"cb807500-9121-4e41-80d3-8c3682ce90d9","Escape", "HideMainWindow", "Internal","True"},
                  new string[] {"1d212ca5-fb2a-4962-8f58-24ed9a5d007d","Enter", "PasteSelectedItems", "Internal"},
                  new string[] {"e94ca4f3-4c6e-40dc-8941-c476a81543c7","Delete", "DeleteSelectedItems", "Internal"},
                  new string[] {"7fe24929-6c9e-49c0-a880-2f49780dfb3a","Right", "SelectNextColumnItem", "Internal"},
                  new string[] {"ee657845-f1dc-40cf-848d-6768c0081670","Left", "SelectPreviousColumnItem", "Internal"},
-
-                 new string[] { "674bae7f-0a60-4f17-ac2c-81d5c6c3d879", "Down", "SelectNextRowItem", "Internal"},
-                 new string[] { "b916ab44-d4bd-4d8b-ac4a-de947343bd5a", "Up", "SelectPreviousRowItem", "Internal"},
-
-                 new string[] {"5480f103-eabd-4e40-983c-ebae81645a10","Control+A", "SelectAll", "Internal"},
-                 new string[] {"39a6b8b5-a585-455b-af83-015fd97ac3fa","Control+Shift+Alt+A", "InvertSelection", "Internal"},
-                 new string[] {"166abd7e-7295-47f2-bbae-c96c03aa6082","Control+Home", "BringSelectedToFront", "Internal"},
-                 new string[] {"84c11b86-3acc-4d22-b8e9-3bd785446f72","Control+End", "SendSelectedToBack", "Internal"},
-                 new string[] {"6487f6ff-da0c-475b-a2ae-ef1484233de0","Control+Shift+H", "AssignShortcut", "Internal"},
-                 new string[] {"837e0c20-04b8-4211-ada0-3b4236da0821","Control+Shift+Alt+C", "ChangeColor", "Internal"},
-                 new string[] {"4a567aff-33a8-4a1f-8484-038196812849","Control+Shift+S", "SpeakSelectedItem", "Internal"},
-                 new string[] {"330afa20-25c3-425c-8e18-f1423eda9066","Control+Shift+M", "MergeSelectedItems", "Internal"},
+                 new string[] {"674bae7f-0a60-4f17-ac2c-81d5c6c3d879","Down", "SelectNextRowItem", "Internal"},
+                 new string[] {"b916ab44-d4bd-4d8b-ac4a-de947343bd5a","Up", "SelectPreviousRowItem", "Internal"},
+                 new string[] {"6487f6ff-da0c-475b-a2ae-ef1484233de0","Control+I", "AssignShortcut", "Internal"},
+                 new string[] {"837e0c20-04b8-4211-ada0-3b4236da0821","Control+P", "ChangeColor", "Internal"},                 
                  new string[] {"118a2ca6-7021-47a0-8458-7ebc31094329","Control+Z", "Undo", "Internal"},
                  new string[] {"3980efcc-933b-423f-9cad-09e455c6824a","Control+Y", "Redo", "Internal"},
                  new string[] {"7a7580d1-4129-432d-a623-2fff0dc21408","Control+E", "EditContent", "Internal"},
                  new string[] {"085338fb-f297-497a-abb7-eeb7310dc6f3","F2", "EditTitle", "Internal"},
                  new string[] {"e22faafd-4313-441a-b361-16910fc7e9d3","Control+D", "Duplicate", "Internal"},
-                 new string[] {"4906a01e-b2f7-43f0-af1e-fb99d55c9778","Control+E", "SendToEmail", "Internal"},
-                 new string[] {"c7248087-2031-406d-b4ab-a9007fbd4bc4","Control+Shift+Q", "CreateQrCode", "Internal"},
-                 new string[] {"777367e6-c161-4e93-93e0-9bf12221f7ff","Control+Shift+B", "ToggleAppendLineMode", "Direct"},
-                 new string[] {"97e29b06-0ec4-4c55-a393-8442d7695038","Control+Shift+P", "ToggleListenToClipboard", "Direct"},
-                 //new string[] {"ee74dd92-d18b-46cf-91b7-3946ab55427c","Control+C", "CopySelection", "Internal"},
                  new string[] {"ac8abe92-82c3-46fb-9bd5-39d74b100b23","Home", "ScrollToHome", "Internal"},
                  new string[] {"ac8abe92-82c3-46fb-9bd5-39d74b100b23","End", "ScrollToEnd", "Internal"},
                  new string[] {"9b0ca09a-5724-4004-98d2-f5ef8ae02055","Control+Up", "WindowSizeUp", "Internal"},
                  new string[] {"39a6194e-37e3-4d37-a9f4-254ed83157f2","Control+Down", "WindowSizeDown", "Internal"},
                  new string[] {"6cc03ef0-3b33-4b94-9191-0d751e6b7fb6","Control+Left", "WindowSizeLeft", "Internal"},
                  new string[] {"c4ac1629-cdf0-4075-94af-8f934b014452","Control+Right", "WindowSizeRight", "Internal"},
-                 //new string[] {"94e81589-fe2f-4e80-8940-ed066f0d9c27","Control+V", "PasteHere", "Internal"},
                  new string[] {"30c813a0-d466-4ae7-b75e-82680b4542fc","PageUp", "PreviousPage", "Internal"},
                  new string[] {"09df97ea-f786-48d9-9112-a60266df6586","PageDown", "NextPage", "Internal"},
                  new string[] {"a39ac0cb-41e4-47b5-b963-70e388dc156a","Control+H", "FindAndReplaceSelectedItem", "Internal"},
-                 new string[] {"cb1ac03b-a20f-4911-bf4f-bc1a858590e3", "Control+L", "ToggleMainWindowLocked", "Internal"},
-                 new string[] {"d73204f5-fbed-4d87-9dca-6dfa8d8cba82", "Control+K", "ToggleFilterMenuVisible", "Internal"},
-                 new string[] { "49f44a89-e381-4d6a-bf8c-1090eb443f17", "Control+Q", "ExitApplication", "Internal"}
+                 new string[] {"cb1ac03b-a20f-4911-bf4f-bc1a858590e3","Control+L", "ToggleMainWindowLocked", "Internal"},
+                 new string[] {"d73204f5-fbed-4d87-9dca-6dfa8d8cba82","Control+K", "ToggleFilterMenuVisible", "Internal"},
+                 new string[] {"49f44a89-e381-4d6a-bf8c-1090eb443f17","Control+Q", "ExitApplication", "Internal"}
             };
 
             foreach (var defaultShortcut in defaultShortcutDefinitions) {
@@ -688,7 +685,8 @@ namespace MonkeyPaste {
                     guid: defaultShortcut[0],
                     keyString: defaultShortcut[1],
                     shortcutType: defaultShortcut[2].ToEnum<MpShortcutType>(),
-                    routeType: defaultShortcut[3].ToEnum<MpRoutingType>());
+                    routeType: defaultShortcut[3].ToEnum<MpRoutingType>(),
+                    isReadOnly: defaultShortcut.Length >= 5 ? bool.Parse(defaultShortcut[4]):false);
             }
         }
 

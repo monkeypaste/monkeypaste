@@ -451,7 +451,7 @@ namespace MonkeyPaste.Avalonia {
                     msgType: MpNotificationType.PluginUpdated,
                     title: $"Clipboard Handler '{Title}' Updated",
                     iconSourceStr: ivm == null ? null : ivm.IconBase64,                    
-                    msg: "Reseting presets to default...")
+                    body: "Reseting presets to default...")
                     .FireAndForgetSafeAsync(this);
 
                 presets = await ResetPresetsAsync(presets);

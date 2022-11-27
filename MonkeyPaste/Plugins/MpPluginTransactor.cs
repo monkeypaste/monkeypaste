@@ -147,7 +147,7 @@ namespace MonkeyPaste {
 
             var userAction = await MpNotificationBuilder.ShowNotificationAsync(
                 notificationType: MpNotificationType.InvalidRequest,
-                msg: ex.Message,
+                body: ex.Message,
                 maxShowTimeMs: 5000);
             
             if (at.Response == null) {

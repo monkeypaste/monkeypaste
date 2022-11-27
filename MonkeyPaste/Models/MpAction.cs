@@ -120,7 +120,7 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public override bool IsReadOnly {
+        public override bool IsModelReadOnly {
             get => ReadOnly == 1;
             set => ReadOnly = value ? 1 : 0;
         }

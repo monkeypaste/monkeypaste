@@ -21,18 +21,23 @@ namespace MonkeyPaste {
         [JsonIgnore]
         [Ignore]
         protected string SyncingWithDeviceGuid { get; set; } = string.Empty;
+
         [JsonIgnore]
         [Ignore]
         public bool IsSyncing => !string.IsNullOrEmpty(SyncingWithDeviceGuid);
+
         [JsonIgnore]
         [Ignore]
         public string Guid { get; set; }
+
         [JsonIgnore]
         [Ignore]
-        public virtual bool IsReadOnly { get; set; } = false;
+        public virtual bool IsModelReadOnly { get; set; } = false;
+
         [JsonIgnore]
         [Ignore]
         public virtual string PublicHandle => (Id.ToString() + Guid).CheckSum();
+
         [JsonIgnore]
         [Ignore]
         public virtual bool WasDupOnCreate { get; set; } = false;
@@ -56,7 +61,7 @@ namespace MonkeyPaste {
         }
 
         public virtual async Task WriteToDatabaseAsync(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
-            if(IsReadOnly) {
+            if(IsModelReadOnly) {
                 MpConsole.WriteTraceLine($"Warning, trying to write read-only data object: '{GetType()}' ignoring");
                 return;
             }
@@ -90,7 +95,7 @@ namespace MonkeyPaste {
         }
 
         public virtual async Task DeleteFromDatabaseAsync(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
-            if (IsReadOnly) {
+            if (IsModelReadOnly) {
                 MpConsole.WriteTraceLine($"Warning, trying to delete read-only data object: '{GetType()}' ignoring");
                 return;
             }

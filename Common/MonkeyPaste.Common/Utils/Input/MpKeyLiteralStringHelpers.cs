@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Common {
 
     public static class MpKeyLiteralStringHelpers {
-        public const string CONTROL_KEY_LITERAL = "Ctrl";
+        public const string AV_CONTROL_KEY_LITERAL = "Ctrl";
+        public const string CONTROL_KEY_LITERAL = "Control";
+        public const string META_KEY_LITERAL = "Meta";
         public const string ALT_KEY_LITERAL = "Alt";
         public const string SHIFT_KEY_LITERAL = "Shift";
         public const string ESCAPE_KEY_LITERAL = "Esc";

@@ -163,6 +163,9 @@
     <s:String x:Key="CopyImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/copy.png
     </s:String>
+    <s:String x:Key="ScissorsImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/scissors.png
+    </s:String>
     <s:String x:Key="WarningImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/warning.png
     </s:String>

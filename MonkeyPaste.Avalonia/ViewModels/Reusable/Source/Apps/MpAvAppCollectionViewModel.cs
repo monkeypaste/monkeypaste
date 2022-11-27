@@ -13,6 +13,7 @@ using System.IO;
 
 using MonkeyPaste.Common;
 using Avalonia.Threading;
+using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAppCollectionViewModel : 
@@ -27,7 +28,9 @@ namespace MonkeyPaste.Avalonia {
 
         public ObservableCollection<MpAvAppViewModel> FilteredApps { get; set; }
 
-        public MpAvAppViewModel ActiveAppViewModel { get; private set; }
+        public MpAvAppViewModel ThisAppViewModel => Items.FirstOrDefault(x => x.AppId == MpPrefViewModel.Instance.ThisAppSource.AppId);
+
+        public MpAvAppViewModel LastActiveAppViewModel { get; private set; }
         #endregion
 
         #region State
@@ -83,7 +86,30 @@ namespace MonkeyPaste.Avalonia {
 
             //MpProcessManager.OnAppActivated += MpProcessManager_OnAppActivated;
             MpPlatformWrapper.Services.ProcessWatcher.OnAppActivated += MpProcessManager_OnAppActivated;
+            MpPlatformWrapper.Services.ProcessWatcher.StartWatcher();
 
+
+            _ = Task.Run(async () => {
+                // wait for running processes to get created
+                await Task.Delay(1000);
+                var la_pi = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
+                if(la_pi == null) {
+                    // since application is being started from file system init LastActive to file system app
+                    la_pi = MpPlatformWrapper.Services.ProcessWatcher.FileSystemProcessInfo;
+                    if (la_pi == null) {
+                        // need to get this set on init in process watcher
+                        Debugger.Break();
+                    }
+                }
+                if(la_pi != null) {
+                    LastActiveAppViewModel = Items.FirstOrDefault(x => x.AppPath.ToLower() == la_pi.ProcessPath.ToLower());
+                    if (LastActiveAppViewModel == null) {
+                        // what's the deal?
+                        Debugger.Break();
+                        LastActiveAppViewModel = ThisAppViewModel;
+                    }
+                }
+            });
             IsBusy = false;
         }
 
@@ -204,13 +230,13 @@ namespace MonkeyPaste.Avalonia {
                     while (avm == null) {
                         avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower());
                     }
-                    ActiveAppViewModel = avm;
+                    LastActiveAppViewModel = avm;
 
                     IsBusy = false;
 
                 });
             } else {
-                ActiveAppViewModel = avm;
+                LastActiveAppViewModel = avm;
             }
         }
 

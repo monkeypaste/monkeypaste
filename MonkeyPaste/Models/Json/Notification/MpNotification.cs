@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Input;
 
 namespace MonkeyPaste {
+
     public class MpNotificationFormat : MpJsonObject, MpINotificationFormat {
         #region Constants
 
@@ -17,10 +18,9 @@ namespace MonkeyPaste {
 
         public string NotificationTypeStr => NotificationType.ToString();
         public MpNotificationType NotificationType { get; set; }
-
         public int MaxShowTimeMs { get; set; } = -1;
         public string Title { get; set; }
-        public string Body { get; set; }
+        public object Body { get; set; }
         public string Detail { get; set; }
 
         public string IconSourceStr { get; set; }
@@ -32,6 +32,8 @@ namespace MonkeyPaste {
         public object FixCommandArgs { get; set; }
 
         public object OtherArgs { get; set; } // used to pass MpIloader to loader notification
+
+        public MpTextContentFormat BodyFormat { get; set; } = MpTextContentFormat.PlainText;
 
         #endregion
 

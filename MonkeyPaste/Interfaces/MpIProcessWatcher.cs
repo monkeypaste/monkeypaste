@@ -11,7 +11,7 @@ namespace MonkeyPaste {
         bool IsThisAppActive { get; }
 
         MpPortableProcessInfo LastProcessInfo { get; }
-
+        MpPortableProcessInfo FileSystemProcessInfo { get; }
 
         ConcurrentDictionary<string,ObservableCollection<IntPtr>> RunningProcessLookup { get; }
         
