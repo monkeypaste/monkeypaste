@@ -378,7 +378,6 @@ namespace MonkeyPaste {
             MpPrefViewModel.Instance.ThisAppIcon = await MpDataModelProvider.GetItemAsync<MpIcon>(thisAppApp.IconId);
             MpPrefViewModel.Instance.ThisOsFileManagerSource = await MpDataModelProvider.GetItemAsync<MpSource>(MpPrefViewModel.Instance.ThisOsFileManagerSourceId);
 
-            await ResetShortcutsAsync();
             if(isNewDb) {
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }

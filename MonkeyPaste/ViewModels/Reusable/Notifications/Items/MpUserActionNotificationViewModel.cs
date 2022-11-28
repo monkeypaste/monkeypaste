@@ -1,6 +1,7 @@
 ﻿using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -119,7 +120,15 @@ namespace MonkeyPaste {
         }
 
         public override async Task<MpNotificationDialogResultType> ShowNotificationAsync() {
-            await base.ShowNotificationAsync();
+            var base_result = await base.ShowNotificationAsync();
+
+            if (base_result == MpNotificationDialogResultType.DoNotShow) {
+                // NOTE pretty sure do not show isn't allowed for action notifications 
+                // so this shouldn't happen
+                Debugger.Break();
+                HideNotification();
+                return base_result;
+            }
             while (DialogResult == MpNotificationDialogResultType.None) {
                 await Task.Delay(100);
             }

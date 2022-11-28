@@ -568,9 +568,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsFindAndReplaceVisible { get; set; } = false;
         public string TemplateRichHtml { get; set; }
         
-        public string CachedState { get; set; } = null;
-        public bool IsReloading => !string.IsNullOrEmpty(CachedState);
-        //public bool IsWaitingForDomLoad { get; set; } = false;
 
         public bool IsAnyCornerVisible => Parent == null ? false : ScreenRect.IsAnyPointWithinOtherRect(Parent.ScreenRect);
 

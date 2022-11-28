@@ -1,4 +1,6 @@
-﻿namespace MonkeyPaste {
+﻿using System.Threading.Tasks;
+
+namespace MonkeyPaste {
     public interface MpINotification : MpIViewModel {
         string Title { get; set; }
         string Body { get; set; }
@@ -15,5 +17,7 @@
 
     public interface MpIProgressLoader : MpINotification {        
         double PercentLoaded { get; }
+        Task StartLoaderAsync();
+        Task FinishLoaderAsync();
     }
 }

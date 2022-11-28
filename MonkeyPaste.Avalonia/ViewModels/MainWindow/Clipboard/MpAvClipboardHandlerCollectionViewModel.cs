@@ -144,7 +144,7 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
         async Task<object> MpIPlatformDataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(bool ignorePlugins) {
-            var pdo = await ReadClipboardOrDropObjectAsync(null);
+            var pdo = await ReadClipboardOrDropObjectAsync(null,ignorePlugins);
             return pdo;
         }
 
@@ -333,15 +333,17 @@ namespace MonkeyPaste.Avalonia {
                     forcedClipboardDataObject = forced_ido
                 };
 
+                Func<Task<MpClipboardReaderResponse>> retryHandlerReadFunc = async () => {
+                    var result = await read_component.ReadClipboardDataAsync(reader_request);
+                    return result;
+                };
+
                 MpClipboardReaderResponse reader_response = await read_component.ReadClipboardDataAsync(reader_request);
 
                 reader_response = await MpPluginTransactor.ValidatePluginResponseAsync(
                     reader_request,
                     reader_response,
-                    Task.Run(async () => {
-                        var result = await read_component.ReadClipboardDataAsync(reader_request);
-                        return result;
-                    }));
+                    retryHandlerReadFunc);
 
 
                 if (reader_response != null) {
@@ -373,20 +375,24 @@ namespace MonkeyPaste.Avalonia {
             var dobj = new MpAvDataObject();
 
             foreach (var write_component in EnabledWriterComponents) {
-                var writeRequest = new MpClipboardWriterRequest() {
+                var write_request = new MpClipboardWriterRequest() {
                     data = ido,
                     writeToClipboard = writeToClipboard,
                     writeFormats = EnabledWriters.Where(x => x.Parent.ClipboardPluginComponent == write_component).Select(x => x.Parent.HandledFormat).Distinct().ToList(),
                     items = EnabledWriters.Where(x => x.Parent.ClipboardPluginComponent == write_component).SelectMany(x => x.Items.Cast<MpIParameterKeyValuePair>()).ToList(),
                 };
 
-                MpClipboardWriterResponse writerResponse = await write_component.WriteClipboardDataAsync(writeRequest);
+                Func<Task<MpClipboardWriterResponse>> retryHandlerWriteFunc = async () => {
+                    var result = await write_component.WriteClipboardDataAsync(write_request);
+                    return result;
+                };
+
+                MpClipboardWriterResponse writerResponse = await write_component.WriteClipboardDataAsync(write_request);
 
                 writerResponse = await MpPluginTransactor.ValidatePluginResponseAsync(
-                    writeRequest, writerResponse,
-                    Task.Run(async () => {
-                        return await write_component.WriteClipboardDataAsync(writeRequest);
-                    }));
+                    write_request, 
+                    writerResponse,
+                    retryHandlerWriteFunc);
 
                 if (writerResponse != null && writerResponse.processedDataObject is IDataObject processed_ido) {
                     processed_ido.GetAllDataFormats().ForEach(x => dobj.SetData(x, processed_ido.Get(x)));

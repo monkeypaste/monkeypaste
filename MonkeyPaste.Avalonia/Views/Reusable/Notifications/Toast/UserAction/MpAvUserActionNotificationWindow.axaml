@@ -1,0 +1,205 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="using:MonkeyPaste.Avalonia"
+        xmlns:pcl="using:MonkeyPaste"
+        mc:Ignorable="d"
+        d:DesignWidth="800"
+        d:DesignHeight="450"
+        x:Name="UserActionNotificationWindow"
+        x:DataType="pcl:MpUserActionNotificationViewModel"
+        x:CompileBindings="True"
+        x:Class="MonkeyPaste.Avalonia.MpAvUserActionNotificationWindow"
+        Classes.IsClosing="{Binding IsClosing}"
+        Classes.notificationWindow="True"
+        IsVisible="{Binding IsVisible, Mode=TwoWay}"
+        Topmost="True"
+        Width="350"
+        Height="150"
+        SizeToContent="Manual"
+        ShowInTaskbar="False"
+        WindowState="Normal"
+        SystemDecorations="None"
+        TransparencyLevelHint="Transparent"
+        Background="Transparent"
+        Title="">
+    <Border HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            MinHeight="130"
+            BorderThickness="7"
+            BorderBrush="{Binding BorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+            Background="{Binding BackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+            local:MpAvIsHoveringExtension.IsEnabled="True"
+            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
+        <Grid x:Name="NotificationWindowContainerGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.35*" />
+                <ColumnDefinition Width="0.75*" />
+            </Grid.ColumnDefinitions>
+            <Image Grid.Row="0"
+                   Grid.Column="0"
+                   Width="72"
+                   Height="72"
+                   IsVisible="{Binding IconSourceStr, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
+                   Source="{Binding IconSourceStr, Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                   Stretch="Fill"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Margin="10,5,0,0" />
+            <CheckBox Grid.Column="0"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Bottom"
+                      VerticalContentAlignment="Center"
+                      Margin="7,0,0,5"
+                      IsVisible="{Binding CanChooseNotShowAgain}"
+                      IsChecked="{Binding DoNotShowAgain, Mode=TwoWay}">
+                <CheckBox.Content>
+                    <TextBlock MaxWidth="100"
+                               Foreground="White"
+                               FontSize="9"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Right"
+                               TextWrapping="Wrap"
+                               Text="Do Not Show Again" />
+                </CheckBox.Content>
+            </CheckBox>
+            <Button x:Name="CloseButton"
+                    Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Margin="5"
+                    Background="Transparent"
+                    BorderThickness="0">
+                <Image Width="15"
+                       Height="15"
+                       Stretch="Fill"
+                       Source="{Binding ., Converter={StaticResource StringResourceConverter}, Source={StaticResource CloseImage}}" />
+            </Button>
+
+            <Grid Grid.Column="1"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="0.6*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.3*" />
+                    <ColumnDefinition Width="0.3*" />
+                    <ColumnDefinition Width="0.3*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0"
+                           Grid.ColumnSpan="3"
+                           VerticalAlignment="Bottom"
+                           HorizontalAlignment="Left"
+                           Margin="10,10,0,1"
+                           FontSize="20"
+                           Foreground="White"
+                           FontWeight="SemiBold"
+                           TextWrapping="NoWrap"
+                           Text="{Binding Title}" />
+                <Border Grid.Row="0"
+                        Grid.ColumnSpan="3"
+                        Margin="5,0,5,0"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Bottom"
+                        BorderThickness="0"
+                        Background="White"
+                        Height="1" />
+                <TextBlock Grid.Row="1"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="3"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           ScrollViewer.VerticalScrollBarVisibility="Auto"
+                           Margin="5,5,5,10"
+                           TextWrapping="Wrap"
+                           MaxWidth="300"
+                           FontSize="14"
+                           FontWeight="SemiBold"
+                           Background="Transparent"
+                           Focusable="True"
+                           Foreground="{Binding NotificationTextForegroundColor, Converter={StaticResource StringHexToBrushConverter}}"
+                           Text="{Binding Body}" />
+                <!--  Ignore, Retry, Fix, Shutdown states  -->
+                <Button Grid.Row="2"
+                        Grid.Column="0"
+                        Margin="5"
+                        Padding="5"
+                        FontWeight="SemiBold"
+                        Content="IGNORE"
+                        VerticalAlignment="Top"
+                        IsVisible="{Binding ShowIgnoreButton}"
+                        Command="{Binding IgnoreCommand}" />
+                <Button x:Name="RetryButton"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="5"
+                        Padding="5"
+                        FontWeight="SemiBold"
+                        VerticalAlignment="Top"
+                        Content="RETRY"
+                        IsVisible="{Binding ShowRetryButton}"
+                        Command="{Binding RetryCommand}" />
+                <Button x:Name="FixButton"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="5"
+                        Padding="5"
+                        FontWeight="SemiBold"
+                        Content="FIX"
+                        IsVisible="{Binding ShowFixButton}"
+                        VerticalAlignment="Top"
+                        Command="{Binding FixWrapperCommand}" />
+                <Button Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="5"
+                        Padding="5"
+                        FontWeight="SemiBold"
+                        VerticalAlignment="Top"
+                        Content="SHUTDOWN"
+                        IsVisible="{Binding ShowShutdownButton}"
+                        Command="{Binding ShutdownCommand}" />
+                <!--  Yes, No, Cancel or Ok, Cancel States  -->
+                <Button Grid.Row="2"
+                        Grid.Column="0"
+                        Margin="5"
+                        Padding="5"
+                        FontWeight="SemiBold"
+                        Content="YES"
+                        VerticalAlignment="Top"
+                        Command="{Binding YesCommand}"
+                        IsVisible="{Binding ShowYesButton}" />
+                <Button Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="5"
+                        Padding="5"
+                        FontWeight="SemiBold"
+                        Content="NO"
+                        VerticalAlignment="Top"
+                        Command="{Binding NoCommand}"
+                        IsVisible="{Binding ShowNoButton}" />
+                <Button Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="5"
+                        Padding="5"
+                        FontWeight="SemiBold"
+                        Content="OK"
+                        VerticalAlignment="Top"
+                        Command="{Binding OkCommand}"
+                        IsVisible="{Binding ShowOkButton}" />
+                <Button Grid.Row="2"
+                        Grid.Column="2"
+                        Margin="5"
+                        Padding="5"
+                        FontWeight="SemiBold"
+                        Content="CANCEL"
+                        VerticalAlignment="Top"
+                        Command="{Binding CancelCommand}"
+                        IsVisible="{Binding ShowCancelButton}" />
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

@@ -104,9 +104,9 @@ namespace MonkeyPaste.Avalonia {
 
             if (MpPortableDataObject.IsDataNotEqual(_lastCbo,cbo)) {
                 MpConsole.WriteLine("Cb changed");
-                MpPortableDataObject.IsDataNotEqual(_lastCbo, cbo);
                  _lastCbo = cbo;
-                OnClipboardChanged?.Invoke(typeof(MpAvClipboardWatcher).ToString(), cbo);
+                var process_cbo = await MpPlatformWrapper.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(false) as MpPortableDataObject;
+                OnClipboardChanged?.Invoke(typeof(MpAvClipboardWatcher).ToString(), process_cbo);
             }
         }
 

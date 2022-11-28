@@ -64,5 +64,6 @@ namespace MonkeyPaste {
             OtherArgs = pluginNotfication.OtherArgs;
         }
         #endregion
+
     }
 }

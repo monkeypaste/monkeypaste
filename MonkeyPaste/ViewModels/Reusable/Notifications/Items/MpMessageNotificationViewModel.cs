@@ -10,7 +10,12 @@ namespace MonkeyPaste {
         #region Public Methods
 
         public override async Task<MpNotificationDialogResultType> ShowNotificationAsync() {
-            await base.ShowNotificationAsync();
+            var base_result = await base.ShowNotificationAsync();
+            if(base_result == MpNotificationDialogResultType.DoNotShow) {
+                HideNotification();
+                return base_result;
+            }
+
             if (MaxShowTimeMs > 0) {
                 DateTime startTime = DateTime.Now;
                 while (DateTime.Now - startTime <= TimeSpan.FromMilliseconds(MaxShowTimeMs)) {

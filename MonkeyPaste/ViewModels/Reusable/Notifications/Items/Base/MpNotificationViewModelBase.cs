@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
@@ -53,7 +54,6 @@ namespace MonkeyPaste {
         InvalidRequest,
         InvalidResponse,
         DbError,
-        LoadComplete,
         Help,
         PluginUpdated,
         Message,
@@ -63,6 +63,7 @@ namespace MonkeyPaste {
         AppendBuffer,
         ContentFormatDegradation,
         TrialExpired,
+        PluginResponseMessage,
         PluginResponseError,
         PluginResponseWarning,
         PluginResponseWarningWithOption,
@@ -70,7 +71,7 @@ namespace MonkeyPaste {
     }
 
     public enum MpNotificationLayoutType {
-        Default = 0,
+        //Default = 0,
         Message,
         Loader,
         Warning, //confirm
@@ -103,7 +104,7 @@ namespace MonkeyPaste {
                 case MpNotificationType.PluginResponseError:
                     return MpNotificationLayoutType.Error;
                 default:
-                    return MpNotificationLayoutType.Default;
+                    return MpNotificationLayoutType.Message;
             }
         }
         public static MpNotificationButtonsType GetNotificationButtonsType(MpNotificationType ndt) {
@@ -113,6 +114,7 @@ namespace MonkeyPaste {
                 default:
                     MpNotificationLayoutType layoutType = GetLayoutTypeFromNotificationType(ndt);
                     switch (layoutType) {
+                        case MpNotificationLayoutType.ErrorWithOption:
                         case MpNotificationLayoutType.WarningWithOption:
                             return MpNotificationButtonsType.IgnoreRetryFix;
                         case MpNotificationLayoutType.Warning:
@@ -166,7 +168,7 @@ namespace MonkeyPaste {
                     LayoutType == MpNotificationLayoutType.ErrorWithOption) {
                     return MpSystemColors.Red;
                 }
-                if (LayoutType != MpNotificationLayoutType.Default) {
+                if (LayoutType != MpNotificationLayoutType.Message) {
                     return MpSystemColors.royalblue;
                 }
                 return MpSystemColors.White;
@@ -329,6 +331,15 @@ namespace MonkeyPaste {
         }
 
         public virtual async Task<MpNotificationDialogResultType> ShowNotificationAsync() {
+
+            bool isDoNotShowType = MpPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr
+                    .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => Convert.ToInt32(x)).Any(x => x == (int)NotificationType);
+
+            if (isDoNotShowType) {
+                MpConsole.WriteTraceLine($"Notification: {NotificationType.ToString()} marked as hidden");
+                return MpNotificationDialogResultType.DoNotShow;
+            }
             await Task.Delay(1);
             ShowBalloon();
             return MpNotificationDialogResultType.None;
@@ -344,12 +355,12 @@ namespace MonkeyPaste {
         protected void ShowBalloon() {
             //_nbv.ShowWindow(nvmb);
             //IsVisible = true;
-            MpPlatformWrapper.Services.NotificationView.ShowWindow(this);
+            MpPlatformWrapper.Services.NotificationManager.ShowNotification(this);
         }
 
         protected void HideBalloon() {
             //_nbv.HideWindow(nvmb);
-            MpPlatformWrapper.Services.NotificationView.HideWindow(this);
+            MpPlatformWrapper.Services.NotificationManager.HideNotification(this);
             //Parent.RemoveNotificationCommand.Execute(this);
             //Notifications.Remove(nvmb);
             //IsVisible = false;

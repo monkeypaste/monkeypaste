@@ -10,9 +10,13 @@ using System.Runtime.InteropServices;
 
 namespace MonkeyPaste {
     public static class MpPluginTransactor {
+        #region Constants
         // TODO In Release Mode change these to smaller values
         private const int _ANALYZE_TIMEOUT_MS = 1000000;
         private const int _PROCESS_TIMEOUT_MS = 500000;
+        #endregion
+
+        #region Public Methods
 
         public static async Task<MpPluginTransactionBase> PerformTransaction(
             MpPluginFormat pluginFormat, 
@@ -88,7 +92,7 @@ namespace MonkeyPaste {
         public static async Task<T> ValidatePluginResponseAsync<T>(
             MpPluginRequestFormatBase request,
             MpPluginResponseFormatBase response,
-            Task<T> retryTask) where T : MpPluginResponseFormatBase {
+            Func<Task<T>> retryFunc) where T : MpPluginResponseFormatBase {
             if (response == null) {
                 //MpConsole.WriteTraceLine($"Clipboard Reader Plugin error, no response from {handler.ToString()}, (ignoring its assigned formats) ");
                 MpConsole.WriteTraceLine($"Clipboard Reader Plugin error, empty response ");
@@ -101,15 +105,19 @@ namespace MonkeyPaste {
             if (response.otherMessage != null) {
                 MpConsole.WriteLine(response.otherMessage);
             }
-            response = await HandlePluginNotifcationsAsync<T>(request, response, retryTask);
+            response = await HandlePluginNotifcationsAsync<T>(request, response, retryFunc);
 
             return response as T;
         }
 
+        #endregion
+
+        #region Private Methods
+
         private static async Task<MpPluginResponseFormatBase> HandlePluginNotifcationsAsync<T>(
             MpPluginRequestFormatBase request, 
             MpPluginResponseFormatBase response,
-            Task<T> retryTask,
+            Func<Task<T>> retryFunc,
             int cur_idx = 0) where T:MpPluginResponseFormatBase {
             if (response.userNotifications == null || response.userNotifications.Count == 0) {
                 return response;
@@ -128,9 +136,9 @@ namespace MonkeyPaste {
                 if(result == MpNotificationDialogResultType.Retry) {
                     // should be after fix cycle
                     // user changed settings or whatever and request is called again
-                    T retry_response = await retryTask;
+                    T retry_response = await retryFunc.Invoke();
                     
-                    response = await HandlePluginNotifcationsAsync(request, retry_response, retryTask, i);
+                    response = await HandlePluginNotifcationsAsync(request, retry_response, retryFunc, i);
                 }
             }
             return response as T;
@@ -162,6 +170,7 @@ namespace MonkeyPaste {
 
             return at;
         }
-        
+
+        #endregion
     }
 }

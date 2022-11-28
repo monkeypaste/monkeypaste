@@ -79,7 +79,6 @@ namespace MonkeyPaste.Avalonia {
             var sidebarSplitter = this.FindControl<GridSplitter>("SidebarGridSplitter");
             sidebarSplitter.GetObservable(GridSplitter.IsVisibleProperty).Subscribe(value => SidebarSplitter_isVisibleChange(sidebarSplitter, value));
 
-            MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
 
             Dispatcher.UIThread.Post(async () => {
                 await InitAsync();
@@ -385,6 +384,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
         private async Task InitAsync() {
+            MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
             while (!MpBootstrapperViewModelBase.IsCoreLoaded) {
                 MpConsole.WriteLine("MainWindow waiting to open...");
                 await Task.Delay(100);

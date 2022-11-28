@@ -120,42 +120,10 @@ function initMain(envName) {
 
 // #region Getters
 
-function getState() {
-	return {
-		envName: EnvName,
-		contentHandle: ContentHandle,
-		contentItemType: ContentItemType,
-		contentData: getHtml(),
-		isSubSelectionEnabled: isSubSelectionEnabled(),
-		isReadOnly: isReadOnly(),
-		sel: getDocSelection(),
-		isPastingTemplate: isShowingPasteToolbar()
-	}
-}
 // #endregion Getters
 
 // #region Setters
 
-function setState(stateObj) {
-	IsLoaded = false;
-	initMain(stateObj.envName);
-	loadContent(stateObj.contentHandle, stateObj.contentItemType, stateObj.contentData, stateObj.isPastingTemplate);
-	if (stateObj.isSubSelectionEnabled) {
-		enableSubSelection();
-	} else {
-		disableSubSelection();
-	}
-
-	if (stateObj.isReadOnly) {
-		enableReadOnly();
-	} else {
-		disableReadOnly();
-	}
-
-	if (stateObj.sel) {
-		setDocSelection(stateObj.sel.index, stateObj.sel.length, 'silent');
-	}
-}
 // #endregion Setters
 
 // #region State

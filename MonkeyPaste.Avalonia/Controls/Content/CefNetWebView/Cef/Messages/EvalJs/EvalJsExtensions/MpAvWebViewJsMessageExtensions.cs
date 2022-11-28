@@ -17,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         static MpAvWebViewJsMessageExtensions() {
-            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+            //MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
 
         private static void ReceivedGlobalMessage(MpMessageType msg) {
@@ -77,27 +77,8 @@ namespace MonkeyPaste.Avalonia {
             // 1. I think this happens from drag/drop using fileItem and redirecting to file 
             // what else?
             MpConsole.WriteLine($"retry count exceeded for '{script}' w/ key:'{evalKey}' attempts#:{attempt}");
-
-            if (wv.DataContext is MpAvClipTileViewModel ctvm) {
-
-                MpConsole.WriteLine($"Attempting reload of item: {ctvm.CopyItemTitle}");
-                var stateMsg = wv.GetEditorStateFromClipTile();
-                if(wv.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv) {
-                    await ctv.ReloadContentAsync(stateMsg.SerializeJsonObjectToBase64());
-                    // should probably try to re eval script here but not sure depending on what it was so keep
-                    // looking at the case of failure but it gets here that shows this at least works :)
-                    //Debugger.Break();
-                    var reloaded_result = await wv.EvaluateJavascriptAsync(script);
-                    if(reloaded_result == MpAvCefNetApplication.JS_REF_ERROR) {
-                        return null;
-                    }
-                    return reloaded_result;
-                } else {
-                    MpConsole.WriteLine("Reload failed, webview container not found");
-                }
-            } else {
-                MpConsole.WriteLine("Reload failed, webview data context lost");
-            }
+            Debugger.Break();
+            wv.PerformLoadContentRequestAsync().FireAndForgetSafeAsync();
 
 
             //Debugger.Break();

@@ -16,38 +16,6 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileView : MpAvUserControl<MpAvClipTileViewModel> {
-        #region Private Variables
-
-        #endregion
-
-
-        public async Task ReloadContentAsync(string cacheState) {
-            await Dispatcher.UIThread.InvokeAsync(async () => {
-
-                var ctcv = this.FindControl<MpAvClipTileContentView>("ClipTileContentView");
-                var cc = ctcv.FindControl<ContentControl>("ClipTileContentControl");
-                var wv = cc.GetVisualDescendant<MpAvCefNetWebView>();
-                if(wv == null) {
-                    return;
-                }
-                if(string.IsNullOrWhiteSpace(cacheState)) {
-                    BindingContext.CachedState = await wv.EvaluateJavascriptAsync($"getState_ext()");
-                } else {
-                    BindingContext.CachedState = cacheState;
-                }
-                
-                BindingContext.IsSelected = false;
-
-                if (cc.DataTemplates.ElementAt(0) is MpAvClipTileContentDataTemplateSelector selector) {
-                    cc.Content = selector.Build(BindingContext);
-                    MpConsole.WriteLine($"Reload of {BindingContext.CopyItemTitle} successful.");
-                    return;
-                }
-                MpConsole.WriteLine($"Reload of {BindingContext.CopyItemTitle} failed.");
-                //cc.ApplyTemplate();
-            });
-        }
-
         public MpAvClipTileView() {
             InitializeComponent();
         }

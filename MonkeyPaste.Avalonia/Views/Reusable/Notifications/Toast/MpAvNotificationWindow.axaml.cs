@@ -15,103 +15,8 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvNotificationWindow : Window, MpINotificationBalloonView {
-        #region Statics
-
-
-        private static ObservableCollection<MpAvNotificationWindow> _windows;
-
-        static MpAvNotificationWindow() {
-            _windows = new ObservableCollection<MpAvNotificationWindow>();
-            _windows.CollectionChanged += _windows_CollectionChanged;
-        }
-
-        private static MpAvNotificationWindow _instance;
-        public static MpAvNotificationWindow Instance => _instance ?? (_instance = new MpAvNotificationWindow());
-
-        private static void _UpdateWindows() {
-            _windows.ForEach(x => x.PositionWindowByNotificationType());
-        }
-
-        private static void _ShowWindow(MpAvNotificationWindow callingWindow, object dc) {
-            var nvmb = dc as MpNotificationViewModelBase;
-            if (nvmb == null) {
-                // somethigns wrong
-                Debugger.Break();
-            }
-
-            Dispatcher.UIThread.Post(() => {
-                MpAvNotificationWindow nw = null;
-
-                if (App.Desktop.MainWindow == null) {
-                    // occurs on startup
-                    nw = callingWindow;
-                    App.Desktop.MainWindow = nw;
-                } else {
-                    nw = new MpAvNotificationWindow();
-                }
-                nw.DataContext = nvmb;
-
-                //nw.Opacity = 1;
-
-                if (nvmb.IsModal) {
-                    bool wasLocked = MpAvMainWindowViewModel.Instance.IsMainWindowLocked;
-                    if(!wasLocked) {
-                        MpAvMainWindowViewModel.Instance.ToggleMainWindowLockCommand.Execute(null);
-                    }
-                    
-                    nw.Show();
-                    if (!wasLocked) {
-                        MpAvMainWindowViewModel.Instance.ToggleMainWindowLockCommand.Execute(null);
-                    }
-                } else {
-                    nw.Show();
-                }
-
-                _UpdateWindows();
-            });
-        }
-
-        private static void _HideWindow(object dc) {
-            var nvmb = dc as MpNotificationViewModelBase;
-            if (nvmb == null) {
-                // somethigns wrong
-                Debugger.Break();
-            } 
-            if(nvmb is MpUserActionNotificationViewModel uanvm) {
-                var uaw = _windows.FirstOrDefault(x => x.DataContext == uanvm);
-                uaw.Close();
-                return;
-            }
-            // this triggers fade out which ends w/ IsVisible=false
-            nvmb.IsClosing = true;
-        }
-
-        private static void _windows_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            _UpdateWindows();
-            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = _windows.Count > 0;
-            if (!MpAvMainWindowViewModel.Instance.IsAnyDialogOpen) {
-                _instance = null;
-            }
-        }
-        #endregion
-
-        #region MpINotificationBalloonView Implementation
-
-        public void ShowWindow(object dc) {
-            _ShowWindow(this,dc);
-        }
-
-        public void HideWindow(object dc) {
-            Dispatcher.UIThread.Post(() => {
-                _HideWindow(dc);
-            });
-        }
-
-        public void SetDataContext(object dataContext) {
-            DataContext = dataContext;
-        }
-
+    public partial class MpAvNotificationWindow : Window {
+        #region Statics       
         #endregion
 
         public MpAvNotificationWindow() {
@@ -120,23 +25,22 @@ namespace MonkeyPaste.Avalonia {
             this.AttachDevTools();
 #endif
            
-            if(_instance == null) {
-                _instance = this;
-                if(MpPlatformWrapper.Services != null) {
-                    // this is set in wrapper init but subsequent ref's from wrapper need
-                    // a non-disposed window so this update the wrapper ref
-                    MpPlatformWrapper.Services.NotificationView = _instance;
-                }
-            }
+            //if(_instance == null) {
+            //    _instance = this;
+            //    if(MpPlatformWrapper.Services != null) {
+            //        // this is set in wrapper init but subsequent ref's from wrapper need
+            //        // a non-disposed window so this update the wrapper ref
+            //        MpPlatformWrapper.Services.NotificationManager = _instance;
+            //    }
+            //}
 
-            _windows.Add(this);
+            //_windows.Add(this);
             
             this.Opened += MpAvNotificationWindow_Opened;
             this.Closed += MpAvNotificationWindow_Closed;
             this.EffectiveViewportChanged += MpAvNotificationWindow_EffectiveViewportChanged;
-
-            var nwcg = this.FindControl<Control>("NotificationWindowContainerGrid");
-            nwcg.PointerReleased += MpAvNotificationWindow_PointerReleased;
+            
+            this.PointerReleased += MpAvNotificationWindow_PointerReleased;
 
             var ncc = this.FindControl<Control>("NotificationContentControl");
             ncc.DataContextChanged += ContentControl_DataContextChanged;
@@ -215,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
 
-        private void PositionWindowByNotificationType() {
+        public void PositionWindowByNotificationType() {
             var nvmb = DataContext as MpNotificationViewModelBase;
             if(nvmb == null) {
                 return;

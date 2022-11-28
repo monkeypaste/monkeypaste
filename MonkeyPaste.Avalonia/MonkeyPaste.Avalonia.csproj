@@ -155,7 +155,10 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ToolTip.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TreeViewItem.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\Window.axaml" />
     <AvaloniaXaml Remove="Themes\Default\DefaultLight.axaml" />
+    <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml" />
+    <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml" />
     <None Remove="Assets\Cursors\copy.png" />
     <None Remove="Assets\Cursors\hand_closed.png" />
     <None Remove="Assets\Cursors\hand_open.png" />
@@ -194,6 +197,8 @@
     <Compile Remove="AttachedProperties\MpAvCefWebViewExtension.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
+    <Compile Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml.cs" />
+    <Compile Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
@@ -971,6 +976,7 @@
     <AvaloniaResource Include="Themes\Default\Accents\Base.axaml">
       
     </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Default\Controls\Window.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Button.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTagTile.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvClipTray.axaml" />
@@ -1100,8 +1106,14 @@
     <Compile Update="Views\Reusable\ContextMenu\DefaultMenuItem\MpAvDefaultMenuItemView.axaml.cs">
       <DependentUpon>MpAvDefaultMenuItemView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml.cs">
-      <DependentUpon>MpAvUserActionNotificationView.axaml</DependentUpon>
+    <Compile Update="Views\Reusable\Notifications\Toast\Loader\MpAvLoaderNotificationWindow.axaml.cs">
+      <DependentUpon>MpAvLoaderNotificationWindow.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\Notifications\Toast\Message\MpAvMessageNotificationWindow.axaml.cs">
+      <DependentUpon>MpAvMessageNotificationWindow.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationWindow.axaml.cs">
+      <DependentUpon>MpAvUserActionNotificationWindow.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\KeyGroup\Key\MpAvShortcutKeyView.axaml.cs">
       <DependentUpon>MpAvShortcutKeyView.axaml</DependentUpon>

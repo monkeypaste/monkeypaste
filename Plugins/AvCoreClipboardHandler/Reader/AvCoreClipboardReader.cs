@@ -42,9 +42,9 @@ namespace AvCoreClipboardHandler {
             var read_output = new MpAvDataObject();
             var readFormats = request.readFormats.Where(x => availableFormats.Contains(x));
 
-            if(!request.ignoreParams) {
-                foreach (var read_format in readFormats) {
-                    object data = await ReadDataObjectFormat(read_format, avdo);
+            foreach (var read_format in readFormats) {
+                object data = await ReadDataObjectFormat(read_format, avdo);
+                if(!request.ignoreParams) {
                     foreach (var param in request.items) {
                         data = ProcessReaderParam(param, read_format, data, out var ex, out var param_nfl);
                         if (ex != null) {
@@ -58,11 +58,11 @@ namespace AvCoreClipboardHandler {
                             break;
                         }
                     }
-                    if (data == null) {
-                        continue;
-                    }
-                    read_output.SetData(read_format, data);
                 }
+                if (data == null) {
+                    continue;
+                }
+                read_output.SetData(read_format, data);
             }
 
             return new MpClipboardReaderResponse() {
@@ -129,19 +129,39 @@ namespace AvCoreClipboardHandler {
                                 if (data is string text) {
                                     int max_length = int.Parse(pkvp.value);
                                     if (text.Length > max_length) {
-                                        //nfl = new List<MpPluginUserNotificationFormat>() {
-                                        //    Util.CreateNotification(
-                                        //        MpPluginNotificationType.PluginResponseWarning,
-                                        //        "Max Char Count Reached",
-                                        //        $"Text limit is '{max_length}' and data was '{text.Length}'",
-                                        //        "CoreClipboardWriter")
-                                        //};
+                                        nfl = new List<MpPluginUserNotificationFormat>() {
+                                            Util.CreateNotification(
+                                                MpPluginNotificationType.PluginResponseWarning,
+                                                "Max Char Count Reached",
+                                                $"Text limit is '{max_length}' and data was '{text.Length}'",
+                                                "CoreClipboardWriter")
+                                        };
                                         data = text.Substring(0, max_length);
                                     }
                                 }
                                 break;
                             case CoreClipboardParamType.R_Ignore_Text:
-                                data = null;
+                                bool ignoreText = bool.Parse(pkvp.value);
+                                if(ignoreText) {
+                                    nfl = new List<MpPluginUserNotificationFormat>() {
+                                        Util.CreateNotification(
+                                            MpPluginNotificationType.PluginResponseWarning,
+                                            "Format Ignored",
+                                            $"Text Format is flagged as 'ignored'",
+                                            "CoreClipboardWriter")
+                                    };
+                                    data = null;
+
+                                } else {
+                                    nfl = new List<MpPluginUserNotificationFormat>() {
+                                        Util.CreateNotification(
+                                            MpPluginNotificationType.PluginResponseMessage,
+                                            "Test",
+                                            $"Text Copied: '{data.ToString()}'",
+                                            "CoreClipboardWriter")
+                                    };
+                                    return data;
+                                }
                                 break;
                         }
                         break;

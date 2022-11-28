@@ -42,7 +42,38 @@ namespace MonkeyPaste {
 
         public int LoadedCount { get; set; } = 0;
 
+        public async Task StartLoaderAsync() {
+            for (int i = 0; i < _coreItems.Count; i++) {
+                await LoadItemAsync(_coreItems[i], i);
+                while (IsBusy) {
+                    await Task.Delay(100);
+                }
+            }
+            while (_coreItems.Any(x => x.IsBusy)) {
+                await Task.Delay(100);
+            }
+            await Task.Delay(1000);
+            //for (int i = 1; i <= 1000; i++) {
+            //    await MpCopyItem.Create(
+            //        sourceId: MpPrefViewModel.Instance.ThisAppSourceId,
+            //        title: $"{i} This is a test title BOO!",
+            //        data: $"This is the content for test {i}",
+            //        itemType: MpCopyItemType.Text);
+            //}
+        }
 
+        public virtual async Task FinishLoaderAsync() {
+            // once mw and all mw views are loaded load platform items
+            for (int i = 0; i < _platformItems.Count(); i++) {
+                await LoadItemAsync(_platformItems[i], i);
+                while (IsBusy) {
+                    await Task.Delay(100);
+                }
+            }
+            while (_platformItems.Any(x => x.IsBusy)) {
+                await Task.Delay(100);
+            }
+        }
         #endregion
 
         public MpBootstrapperViewModelBase() {

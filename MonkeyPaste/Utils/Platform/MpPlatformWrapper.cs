@@ -8,7 +8,7 @@ using MonkeyPaste.Common;
 namespace MonkeyPaste {
     public interface MpIPlatformWrapper {
         MpIPlatformShorcuts PlatformShorcuts { get; set; }
-        MpINotificationBalloonView NotificationView { get; set; }
+        MpINotificationManager NotificationManager { get; set; }
         MpIProcessWatcher ProcessWatcher { get; set; }
         MpICursor Cursor { get; set; }
         MpIDbInfo DbInfo { get; set; }

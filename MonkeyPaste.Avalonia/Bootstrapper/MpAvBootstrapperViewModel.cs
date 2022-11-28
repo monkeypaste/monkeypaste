@@ -23,82 +23,25 @@ namespace MonkeyPaste.Avalonia {
             } else if (OperatingSystem.IsMacOS()) {
                 MpAvMacHelpers.EnsureInitialized();
             }
-
+            
             var pw = new MpAvWrapper();
             await pw.InitializeAsync();
             await MpPlatformWrapper.InitAsync(pw);
 
-            //await MpNotificationBuilder.Instance.InitAsync(null);
-
-            if (MpPlatformWrapper.Services.NotificationView is Window nw) {
-                //nw.Opened += Nw_Opened;
-                //nw.Closed += Nw_Closed;
-                bool wasVisible = false;
-                nw.GetObservable(Window.IsVisibleProperty).Subscribe(value => {
-                    if(nw.IsVisible) {
-                        if(wasVisible) {
-                            Debugger.Break();
-                        }
-                        wasVisible = true;
-                        Nw_Opened(nw, null);
-                    } else if(wasVisible) {
-                        Nw_Closed(nw, null); 
-                    } else {
-                       // Debugger.Break();
-                    }
-                });
-            }
-
             CreateLoaderItems();
-            //Nw_Opened(null, null);
-            //await MpNotificationBuilder.Instance.BeginLoaderAsync(this);
-            var result = await MpNotificationBuilder.ShowLoaderNotificationAsync(this);
-            if(result == MpNotificationDialogResultType.DoNotShow) {
-                Nw_Opened(MpPlatformWrapper.Services.NotificationView, null);
-            }
-            while (IsCoreLoaded == false) {
-                await Task.Delay(100);
-            }
+            await MpNotificationBuilder.ShowLoaderNotificationAsync(this);           
+        }
+
+        public override async Task FinishLoaderAsync() {
+            IsCoreLoaded = true;
 
             MpConsole.WriteLine("Core and ViewModel Bootstrap complete");
 
-            Window omw = null;
-            if(App.Desktop.MainWindow != null) {
-                //Debugger.Break();
-                omw = App.Desktop.MainWindow;
-                //App.Desktop.MainWindow = null;
-            }
+            // swap main window then close loader
+            var lw = App.Desktop.MainWindow;
             App.Desktop.MainWindow = new MpAvMainWindow();
-            //omw?.Close();
             App.Desktop.MainWindow.Show();
-
-            
-        }
-
-
-        private async void Nw_Opened(object sender, EventArgs e) {
-            for (int i = 0; i < _coreItems.Count; i++) {
-                await LoadItemAsync(_coreItems[i], i);
-                while(IsBusy) {
-                    await Task.Delay(100);
-                }
-            }
-            while (_coreItems.Any(x => x.IsBusy)) {
-                await Task.Delay(100);
-            }
-            await Task.Delay(1000);
-
-            //for (int i = 1; i <= 1000; i++) {
-            //    await MpCopyItem.Create(
-            //        sourceId: MpPrefViewModel.Instance.ThisAppSourceId,
-            //        title: $"{i} This is a test title BOO!",
-            //        data: $"This is the content for test {i}",
-            //        itemType: MpCopyItemType.Text);
-            //}
-        }
-
-        private async void Nw_Closed(object sender, EventArgs e) {
-            IsCoreLoaded = true;
+            lw.Close();
 
             // MainWindow is now being created and Av AppLifetime desktop is being swapped to MainWindow
             // wait for mw instance to exist
@@ -106,16 +49,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            // once mw and all mw views are loaded load platform items
-            for (int i = 0; i < _platformItems.Count(); i++) {
-                await LoadItemAsync(_platformItems[i], i);
-                while (IsBusy) {
-                    await Task.Delay(100);
-                }
-            }
-            while (_platformItems.Any(x => x.IsBusy)) {
-                await Task.Delay(100);
-            }
+            await base.FinishLoaderAsync();
             IsPlatformLoaded = true;
         }
         protected override void CreateLoaderItems() {
@@ -182,7 +116,8 @@ namespace MonkeyPaste.Avalonia {
                 new List<MpBootstrappedItemViewModel>() {
                     new MpBootstrappedItemViewModel(this,typeof(MpAvPlainHtmlConverter)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvSystemTray)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvExternalDropWindow))
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvExternalDropWindow)),
+                    //new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindow)),
                 });
         }
         protected override async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {

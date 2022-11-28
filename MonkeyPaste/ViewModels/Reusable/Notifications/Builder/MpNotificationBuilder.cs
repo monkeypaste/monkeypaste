@@ -121,14 +121,6 @@ namespace MonkeyPaste {
                 nf = new MpNotificationFormat(pnf);
             }
 
-            bool isDoNotShowType = MpPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr
-                    .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(x => Convert.ToInt32(x)).Any(x => x == (int)nf.NotificationType);
-
-            if (isDoNotShowType) {
-                MpConsole.WriteTraceLine($"Notification: {nf.NotificationType.ToString()} marked as hidden");
-                return MpNotificationDialogResultType.DoNotShow;
-            }
 
             var nvm = await CreateNotifcationViewModelAsync(nf);
 
@@ -146,7 +138,6 @@ namespace MonkeyPaste {
                 case MpNotificationLayoutType.Loader:
                     nvmb = new MpLoaderNotificationViewModel();
                     break;
-                case MpNotificationLayoutType.Default:
                 case MpNotificationLayoutType.Warning:
                 case MpNotificationLayoutType.Error:
                 case MpNotificationLayoutType.Message:

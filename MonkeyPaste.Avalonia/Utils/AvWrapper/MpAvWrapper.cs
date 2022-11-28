@@ -12,7 +12,7 @@ using MonkeyPaste.Common;
 namespace MonkeyPaste.Avalonia {
     public class MpAvWrapper : MpIPlatformWrapper {
         public MpIPlatformShorcuts PlatformShorcuts { get; set; }
-        public MpINotificationBalloonView NotificationView { get; set; }
+        public MpINotificationManager NotificationManager { get; set; }
         public MpIProcessWatcher ProcessWatcher { get; set; }
         public MpICursor Cursor { get; set; }
         public MpIDbInfo DbInfo { get; set; }
@@ -90,7 +90,7 @@ namespace MonkeyPaste.Avalonia {
             DataObjectRegistrar = ClipboardMonitor as MpIPlatformDataObjectRegistrar;
 
             ScreenInfoCollection = new MpAvScreenInfoCollection();
-            NotificationView = MpAvNotificationWindow.Instance;
+            NotificationManager = MpAvNotificationWindowManager.Instance;
 
             PlatformShorcuts = new MpAvPlatformShortcuts();
         }

@@ -141,17 +141,6 @@ function updateModifierKeysFromHost_ext(modKeyMsgStr) {
 	drawOverlay();
 }
 
-function getState_ext() {
-	let cur_state = getState();
-	let resp = toBase64FromJsonObj(cur_state);
-	return resp;
-}
-
-function setState_ext(stateObjBase64Str) {
-	let new_state = toJsonObjFromBase64Str(stateObjBase64Str);
-	setState(new_state,true);
-	return 'done';
-}
 function dragEnd_ext(dragEndMsg_base64str) {
 	// input MpQuillDragEndMessage
 	let dragEnd_e = toJsonObjFromBase64Str(dragEndMsg_base64str);

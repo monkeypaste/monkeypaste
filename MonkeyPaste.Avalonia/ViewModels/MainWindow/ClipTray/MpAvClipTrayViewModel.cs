@@ -2219,6 +2219,9 @@ namespace MonkeyPaste.Avalonia {
 
             if (newCopyItem.WasDupOnCreate) {
                 MpConsole.WriteLine("Duplicate copy item detected, item: " + newCopyItem);
+                newCopyItem.CopyCount++;
+                newCopyItem.CopyDateTime = DateTime.Now;
+                await newCopyItem.WriteToDatabaseAsync();
             }
 
             if (MpPrefViewModel.Instance.NotificationDoCopySound) {

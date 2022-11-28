@@ -15,4 +15,5 @@
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/TextBox.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/ToolTip.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/TreeViewItem.axaml" />
+    <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Window.axaml" />
 </Styles>

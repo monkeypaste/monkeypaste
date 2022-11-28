@@ -302,17 +302,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public MpQuillEditorStateMessage GetEditorStateFromClipTile() {
-            return new MpQuillEditorStateMessage() {
-                envName = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
-                contentHandle = BindingContext.PublicHandle,
-                contentItemType = BindingContext.ItemType.ToString(),
-                contentData = BindingContext.CopyItemData,
-                isSubSelectionEnabled = BindingContext.IsSubSelectionEnabled,
-                isReadOnly = BindingContext.IsContentReadOnly,
-                isPastimgTemplate = BindingContext.IsPasting
-            };
-        }
         #endregion
 
         #region Protected Methods
@@ -776,17 +765,11 @@ namespace MonkeyPaste.Avalonia {
             }
 
             bool is_converter = ContentUrl != DefaultContentUrl;
-            if (BindingContext == null || string.IsNullOrEmpty(BindingContext.CachedState)) {
-                var req = new MpQuillInitMainRequestMessage() {
-                    envName = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
-                    isPlainHtmlConverter = is_converter
-                };
-                this.ExecuteJavascript($"initMain_ext('{req.SerializeJsonObjectToBase64()}')");
-            } else {
-                await this.EvaluateJavascriptAsync($"setState_ext('{BindingContext.CachedState}')");
-
-                BindingContext.CachedState = null;
-            }
+            var req = new MpQuillInitMainRequestMessage() {
+                envName = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
+                isPlainHtmlConverter = is_converter
+            };
+            this.ExecuteJavascript($"initMain_ext('{req.SerializeJsonObjectToBase64()}')");
         }
 
         #endregion
@@ -827,14 +810,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion IsContentLoaded Property
 
         private void OnContentIdChanged() {
-            if(BindingContext == null || BindingContext.IsReloading) {
+            if(BindingContext == null) {
                 return;
             }
 
             PerformLoadContentRequestAsync().FireAndForgetSafeAsync();
         }
 
-        private async Task PerformLoadContentRequestAsync() {
+        public async Task PerformLoadContentRequestAsync() {
             Dispatcher.UIThread.VerifyAccess();
             
             IsContentLoaded = false;
@@ -1026,8 +1009,7 @@ namespace MonkeyPaste.Avalonia {
         private void OnIsContentSubSelectableChanged() {
             if (BindingContext == null ||
                 !IsContentLoaded ||
-                !IsContentReadOnly ||
-                BindingContext.IsReloading) {
+                !IsContentReadOnly) {
                 return;
             }
             if (IsContentSubSelectable) {
