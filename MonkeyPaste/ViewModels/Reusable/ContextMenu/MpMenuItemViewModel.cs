@@ -140,11 +140,8 @@ namespace MonkeyPaste {
         }
 
         public bool? IsChecked { get; set; } = false;
-        //public bool IsPartiallySelected { get; set; } = false; // for multi-select tag ischecked overlay
-        //public bool? IsChecked { get; set; } = false;
 
-        //// for multi-select tag ischecked overlay
-        //public bool IsPartialChecked => !IsChecked.HasValue;
+        public string ToggleType { get; set; } = "None";
 
         public bool IsHovering { get; set; }
 
@@ -172,7 +169,26 @@ namespace MonkeyPaste {
         }
         #endregion
 
+        #region Bindings
+        public object IconSrcBindingObj { get; set; }
+        public string IconPropPath { get; set; }
+        public object HeaderSrcObj { get; set; }
+        public string HeaderPropPath { get; set; }
+
+        public object TooltipSrcObj { get; set; }
+        public string TooltipPropPath { get; set; }
+
+        public object CommandSrcObj { get; set; }
+        public string CommandPath { get; set; }
+        public object CommandParamSrcObj { get; set; }
+        public string CommandParamPropPath { get; set; }
+
+        public object IsCheckedSrcObj { get; set; }
+        public string IsCheckedPropPath { get; set; }
+        #endregion
+
         #region Commands
+
 
         public ICommand Command { get; set; }
 
@@ -251,11 +267,11 @@ namespace MonkeyPaste {
                 if(IconId > 0) {
                     return IconId;
                 }
-                if(IconHexStr.IsStringHexColor()) {
-                    return IconHexStr;
-                }
-                if(IconResourceKey.IsStringResourcePath()) {
+                if (!string.IsNullOrWhiteSpace(IconResourceKey)) {
                     return IconResourceKey;
+                }
+                if (IconHexStr.IsStringHexColor()) {
+                    return IconHexStr;
                 }
                 if(IconSourceUri != null) {
                     return IconSourceUri;

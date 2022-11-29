@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Layout;
-using MonkeyPaste.Avalonia.Utils.ToolWindow.Win;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common;
 using System;
@@ -39,7 +38,7 @@ namespace MonkeyPaste.Avalonia {
             if (!MpAvCefNetApplication.UseCefNet) {
                 return;
             }
-            ConverterWebView = new MpAvCefNetWebView("converter=true") {
+            ConverterWebView = new MpAvCefNetWebView(MpAvCefNetWebView.HTML_CONVERTER_PARAMS) {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
             };

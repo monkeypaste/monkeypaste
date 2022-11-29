@@ -35,8 +35,11 @@ namespace MonkeyPaste.Avalonia {
             if (rawUri.StartsWith("avares://")) {
                 uri = new Uri(rawUri);
             } else {
-                string assemblyName = Assembly.GetEntryAssembly().GetName().Name;
-                uri = new Uri($"avares://{assemblyName}{rawUri}");
+                string resource_val = MpPlatformWrapper.Services.PlatformResource.GetResource(rawUri) as string;
+                if(string.IsNullOrWhiteSpace(resource_val)) {
+                    return null;
+                }
+                uri = new Uri(resource_val);
             }
 
             var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();

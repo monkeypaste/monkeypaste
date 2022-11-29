@@ -75,11 +75,12 @@ namespace MonkeyPaste.Common {
             string csvStr = MpCsvToRichHtmlTableConverter.RichHtmlTableToCsv(str);
             return csvStr;
         }
-        public static string ToPlainText(this string text, string sourceFormat = null) {
+        public static string ToPlainText(this string text, string sourceFormat = "") {
+            sourceFormat = sourceFormat.ToLower();
             if (sourceFormat == "text") {
                 return text;
             }
-            if (text.IsStringRichHtmlText()) {
+            if (text.IsStringRichHtml()) {
                 return MpRichHtmlToPlainTextConverter.Convert(text);
             }
             
@@ -88,11 +89,11 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
-        public static string AppendText(this string str, string text, bool insertNewLine) {
-            if (str.IsStringRichHtmlText()) {
+        public static string AppendData(this string str, string data, string dataFormat, bool insertNewLine) {
+            if (str.IsStringRichHtml()) {
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(str);
-                var textNode = htmlDoc.CreateTextNode(text);
+                var textNode = htmlDoc.CreateTextNode(data);
                 var textSpan = htmlDoc.CreateElement("span");
                 textSpan.AppendChild(textNode);
                 if(insertNewLine) {
@@ -104,7 +105,7 @@ namespace MonkeyPaste.Common {
                 }
                 return htmlDoc.DocumentNode.OuterHtml;
             } else {
-                return str + (insertNewLine ? Environment.NewLine : string.Empty) + text;
+                return str + (insertNewLine ? Environment.NewLine : string.Empty) + data;
             }
         }
         public static string ReplaceRange(this string str, int index, int length, string text) {
@@ -615,7 +616,7 @@ namespace MonkeyPaste.Common {
             return true;
         }
 
-        public static bool IsStringRichHtmlText(this string str) {
+        public static bool IsStringRichHtml(this string str) {
             if (string.IsNullOrEmpty(str) || !str.StartsWith("<")) {
                 return false;
             }

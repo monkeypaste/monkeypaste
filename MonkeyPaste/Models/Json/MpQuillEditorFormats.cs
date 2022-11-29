@@ -10,6 +10,7 @@ namespace MonkeyPaste {
 
         public string envName { get; set; } // will be wpf,android, etc.
         public bool isPlainHtmlConverter { get; set; }
+        public bool isAppendNotifier { get; set; }
     }
 
     public class MpQuillInitMainResponseMessage : MpJsonObject {

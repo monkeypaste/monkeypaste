@@ -20,7 +20,6 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 	}
 	quill.enable(true);
 
-
 	ContentHandle = contentHandle;
 	ContentItemType = contentType;
 
@@ -30,7 +29,11 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 		resetColorPaletteState();
 
 		enableReadOnly();
-		disableSubSelection();
+		if (IsAppendNotifier) {
+			enableSubSelection();
+		} else {
+			disableSubSelection();
+		}		
 	}
 	// enusre IsLoaded is false so msg'ing doesn't get clogged up
 	IsLoaded = false;

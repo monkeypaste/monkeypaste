@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System;
 
-namespace MonkeyPaste.Avalonia.Utils.ToolWindow.Win {
+namespace MonkeyPaste.Avalonia {
     public static class MpAvToolWindow_Win32 {
         [Flags]
         public enum ExtendedWindowStyles {

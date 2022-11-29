@@ -304,6 +304,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public string ShowOrHideLabel => IsMainWindowOpen ? "Hide" : "Show";
+        public string ShowOrHideIconResourceKey => IsMainWindowOpen ? "ClosedEyeImage" : "OpenEyeImage";
         public bool AnimateShowWindow { get; set; } = true;
         public bool AnimateHideWindow { get; set; } = true;
 
@@ -1137,6 +1139,17 @@ namespace MonkeyPaste.Avalonia {
                 return _redoCommand;
             }
         }
+
+        public ICommand ToggleShowMainWindowCommand => new MpCommand(() => {
+            if(IsMainWindowOpen) {
+                if(IsMainWindowLocked) {
+                    IsMainWindowLocked = false;
+                }
+                HideWindowCommand.Execute(null);
+            } else {
+                ShowWindowCommand.Execute(null);
+            }
+        }, () => !IsMainWindowLoading);
         #endregion
 
     }

@@ -20,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
 
         private ObservableCollection<Window> _windows = new ObservableCollection<Window>();
 
-        private Window _wvMessageWindow;
+        //private Window _wvMessageWindow;
 
         #endregion
 
@@ -38,30 +38,26 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
             }
 
-            Dispatcher.UIThread.Post(() => {
+            Dispatcher.UIThread.Post(async() => {
                 Window nw = null;
                 var layoutType = MpNotificationViewModelBase.GetLayoutTypeFromNotificationType(nvmb.NotificationType);
                 switch(layoutType) {
                     case MpNotificationLayoutType.Loader:
                         nw = new MpAvLoaderNotificationWindow();
+                        nw.DataContext = nvmb;
                         break;
                     case MpNotificationLayoutType.ErrorWithOption:
                     case MpNotificationLayoutType.WarningWithOption:
                     case MpNotificationLayoutType.ErrorAndShutdown:
                         nw = new MpAvUserActionNotificationWindow();
+                        nw.DataContext = nvmb;
                         break;
                     default:
                         if(nvmb.BodyFormat == MpTextContentFormat.RichHtml) {
-                            if (_wvMessageWindow == null) {
-                                _wvMessageWindow = new MpAvMessageNotificationWindow();
-                            }
-                            if(_wvMessageWindow.IsVisible) {
-                                // trying to only have 1 of these
-                                Debugger.Break();
-                            }
-                            nw = _wvMessageWindow;
+                            nw = MpAvMessageNotificationWindow.WebViewInstance;
                         } else {
                             nw = new MpAvMessageNotificationWindow();
+                            nw.DataContext = nvmb;
                         }
                         break;
                 }
@@ -69,7 +65,6 @@ namespace MonkeyPaste.Avalonia {
                     // somethings wrong
                     Debugger.Break();
                 }
-                nw.DataContext = nvmb;
                 nw.Opened += Nw_Opened;
                 nw.Closed += Nw_Closed;
                 nw.DataContextChanged += Nw_DataContextChanged;
@@ -86,7 +81,11 @@ namespace MonkeyPaste.Avalonia {
                 if (App.Desktop.MainWindow == null) {
                     // occurs on startup
                     App.Desktop.MainWindow = nw;
-                } 
+                } else {
+                    App.Desktop.MainWindow.Topmost = false;
+                }
+                nw.Topmost = true;
+
                 if (nvmb.IsModal) {
                     bool wasLocked = MpAvMainWindowViewModel.Instance.IsMainWindowLocked;
                     if (!wasLocked) {
@@ -102,6 +101,17 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 UpdateWindowPositions();
+                if(nw == MpAvMessageNotificationWindow.WebViewInstance && 
+                    nw.DataContext is MpMessageNotificationViewModel mnvm) {
+                    await mnvm.InitializeAsync(nvmb.NotificationFormat);
+
+                    var wv = nw.GetVisualDescendant<MpAvCefNetWebView>();
+                    await wv.PerformLoadContentRequestAsync();
+                    while (!wv.IsContentLoaded) {
+                        await Task.Delay(100);
+                    }
+                    return;
+                }
             });
         }
 
@@ -123,6 +133,50 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
+
+        #region Properties
+
+        #endregion
+
+        #region Constructors
+        private MpAvNotificationWindowManager() {
+            _windows.CollectionChanged += _windows_CollectionChanged;
+        }
+        #endregion
+
+        #region Public Methods
+
+        public async Task InitAsync() {
+            await MpAvMessageNotificationWindow.CreateWebViewInstanceAsync();
+            if(MpAvMessageNotificationWindow.WebViewInstance != null) {
+                MpAvMessageNotificationWindow.WebViewInstance.Show();
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void _windows_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            UpdateWindowPositions();
+            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = _windows.Count > 0;
+
+            if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+                if (_windows.Any(x => x.IsVisible)) {
+                    MpAvMainWindow.Instance.Topmost = false;
+                    _windows.Last().Topmost = true;
+                } else {
+                    MpAvMainWindow.Instance.Topmost = true;
+                }
+            } else if(_windows.Count > 0) {
+                _windows.Last().Topmost = true;
+            }
+        }
+        private void UpdateWindowPositions() {
+            _windows.ForEach(x => PositionWindowByNotificationType(x));
+        }
+
+        #region Window Events
 
         private void Nw_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
             if (MpAvMainWindow.Instance == null || !MpAvMainWindow.Instance.IsInitialized) {
@@ -152,10 +206,14 @@ namespace MonkeyPaste.Avalonia {
 
         private void Nw_Closed(object sender, EventArgs e) {
             //MpConsole.WriteLine($"fade out complete for: '{(sender as Control).DataContext}'");
+            
             var w = sender as Window;
+
+            var nvmb = w.DataContext as MpNotificationViewModelBase;
+            nvmb.IsClosing = false;
             if (w.DataContext is MpAvLoaderNotificationWindow) {
                 // ignore so bootstrapper can swap main window
-            }else if(w == _wvMessageWindow) {
+            } else if (w == MpAvMessageNotificationWindow.WebViewInstance) {
                 w.Hide();
             } else {
                 w.Close();
@@ -197,32 +255,7 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
-        #region Properties
-
         #endregion
-
-        #region Constructors
-        private MpAvNotificationWindowManager() {
-            _windows.CollectionChanged += _windows_CollectionChanged;
-        }
-        #endregion
-
-        #region Public Methods
-        #endregion
-
-
-        #region Private Methods
-
-        private void _windows_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            UpdateWindowPositions();
-            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = _windows.Count > 0;
-            if (!MpAvMainWindowViewModel.Instance.IsAnyDialogOpen) {
-                _instance = null;
-            }
-        }
-        public void UpdateWindowPositions() {
-            _windows.ForEach(x => PositionWindowByNotificationType(x));
-        }
 
         #region Positioning
 

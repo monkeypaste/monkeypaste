@@ -171,21 +171,8 @@ namespace MonkeyPaste.Avalonia {
 
 
                 drop_ctvm = await BindingContext.CreateClipTileViewModel(dup_ci, -1);
-                BindingContext.PinTileCommand.Execute(new object[] { drop_ctvm, drop_idx });
-            } else {
-                // move
-
-                if (drop_ctvm.IsPinned) {
-                    int drop_ctvm_idx = BindingContext.PinnedItems.IndexOf(drop_ctvm);
-                    if (drop_idx > drop_ctvm_idx) {
-                        drop_idx -= 1;
-                    }
-
-                    BindingContext.PinnedItems.Move(drop_ctvm_idx, drop_idx);
-                } else {
-                    BindingContext.PinTileCommand.Execute(new object[] { drop_ctvm, drop_idx });
-                }
-            }
+            } 
+            BindingContext.PinTileCommand.Execute(new object[] { drop_ctvm, drop_idx });
         }
 
         private async Task PerformExternalOrPartialDropAsync(int drop_idx, IDataObject avdo) {

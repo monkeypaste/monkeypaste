@@ -11,15 +11,6 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvCefNetContentWebView">
-    <!--
-        local:MpAvCefNetWebViewExtension.IsEnabled="False"
-        local:MpAvCefNetWebViewExtension.IsDevToolsVisible="{Binding IsDevToolsVisible, Mode=TwoWay}"
-        local:MpAvCefNetWebViewExtension.IsHostSelected="{Binding IsSelected}"
-        local:MpAvCefNetWebViewExtension.IsContentReadOnly="{Binding IsContentReadOnly, Mode=TwoWay}"
-        local:MpAvCefNetWebViewExtension.IsSubSelectionEnabled="{Binding IsSubSelectionEnabled, Mode=TwoWay}"
-        local:MpAvCefNetWebViewExtension.CopyItemId="{Binding CopyItemId}"
-        local:MpAvCefNetWebViewExtension.IsFindAndReplaceVisible="{Binding IsFindAndReplaceVisible}"
-    -->
     <local:MpAvCefNetWebView x:Name="CefNetWebView"
                              ContentId="{Binding CopyItemId, Mode=OneWay}"
                              IsContentLoaded="{Binding IsViewLoaded, Mode=TwoWay}"

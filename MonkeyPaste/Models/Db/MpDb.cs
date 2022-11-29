@@ -676,7 +676,8 @@ namespace MonkeyPaste {
                  new string[] {"a39ac0cb-41e4-47b5-b963-70e388dc156a","Control+H", "FindAndReplaceSelectedItem", "Internal"},
                  new string[] {"cb1ac03b-a20f-4911-bf4f-bc1a858590e3","Control+L", "ToggleMainWindowLocked", "Internal"},
                  new string[] {"d73204f5-fbed-4d87-9dca-6dfa8d8cba82","Control+K", "ToggleFilterMenuVisible", "Internal"},
-                 new string[] {"49f44a89-e381-4d6a-bf8c-1090eb443f17","Control+Q", "ExitApplication", "Internal"}
+                 new string[] {"49f44a89-e381-4d6a-bf8c-1090eb443f17","Control+Q", "ExitApplication", "Internal"},
+                 new string[] { "31e0a078-e80b-4d31-b236-2a585d6352cf", "Control+,", "ShowSettings", "Internal"}
             };
 
             foreach (var defaultShortcut in defaultShortcutDefinitions) {

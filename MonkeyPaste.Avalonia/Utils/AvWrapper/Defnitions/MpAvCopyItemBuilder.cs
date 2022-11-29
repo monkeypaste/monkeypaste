@@ -22,8 +22,38 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         
         public static async Task<MpCopyItem> CreateFromDataObject(MpPortableDataObject mpdo, int internalSourceCopyItemId = -1, bool suppressWrite = false) {
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // PRUNE INTERNAL SOURCE FORMATS
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
             if (internalSourceCopyItemId == 0) {
                 throw new Exception("Invalid internalSourceCopyItemId, if not -1 needs to be greater than zero. Value was " + internalSourceCopyItemId);
+            }
+            if(internalSourceCopyItemId < 0 &&
+                mpdo.ContainsData(MpPortableDataFormats.CefAsciiUrl) &&
+                mpdo.GetData(MpPortableDataFormats.CefAsciiUrl) is byte[] urlBytes &&
+                urlBytes.ToDecodedString() is string urlRef &&
+                MpSourceRef.ParseFromInternalUrl(urlRef) is MpSourceRef sourceRef &&
+                sourceRef.SourceType == MpCopyItemSourceType.CopyItem) {
+                // occurs on sub-selection drop onto pintray or tag
+                internalSourceCopyItemId = sourceRef.SourceObjId;
+            }
+            if(internalSourceCopyItemId > 0) {
+                // when creating an item from an internal source
+                // get source item type and remove higher priority formats that aren't of source type
+                // (so partial drop of text isn't inferred as files for example)
+
+                var source_ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(internalSourceCopyItemId);
+                if (source_ci != null) {
+                    if (source_ci.ItemType != MpCopyItemType.FileList) {
+                        mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvFileNames));
+                    }
+                    if (source_ci.ItemType != MpCopyItemType.Image) {
+                        mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvPNG));
+                    }
+                    mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvRtf_bytes));
+                    mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvCsv));
+                }
             }
             try {
                 

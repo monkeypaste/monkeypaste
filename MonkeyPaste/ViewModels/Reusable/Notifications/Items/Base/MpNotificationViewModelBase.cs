@@ -80,7 +80,7 @@ namespace MonkeyPaste {
         ErrorWithOption, //retry/ignore/quit
         ErrorAndShutdown //confirm
     }
-    public abstract class MpNotificationViewModelBase : MpViewModelBase {
+    public abstract class MpNotificationViewModelBase : MpViewModelBase, MpIPopupMenuViewModel {
         #region Statics
 
         public static MpNotificationLayoutType GetLayoutTypeFromNotificationType(MpNotificationType ndt) {
@@ -149,6 +149,29 @@ namespace MonkeyPaste {
 
         #region Properties
 
+        #region MpIPopupMenuViewModel Implementation
+
+        public MpMenuItemViewModel PopupMenuViewModel { 
+            get {
+                return new MpMenuItemViewModel() {
+                    SubItems = new List<MpMenuItemViewModel>() {
+                        new MpMenuItemViewModel() {
+                            Header = "Close",
+                            IconResourceKey = "ErrorImage",
+                            Command = CloseNotificationCommand
+                        },
+                        new MpMenuItemViewModel() {
+                            Header = "Don't Show Again",
+                            IconResourceKey = "ClosedEyeImage",
+                            Command = CheckDoNotShowAgainCommand
+                        }
+                    }
+                };
+            }
+        }
+
+        #endregion
+
         #region Appearance
         public object IconSourceStr {
             get {
@@ -214,6 +237,7 @@ namespace MonkeyPaste {
 
         #region State
 
+        public bool IsPopupMenuVisible { get; set; }
         //public bool IsVisible { get; set; } = false;
 
         public virtual bool CanChooseNotShowAgain => true;
@@ -380,6 +404,8 @@ namespace MonkeyPaste {
                 case nameof(NotificationType):
                     OnPropertyChanged(nameof(LayoutType));
                     break;
+                case nameof(IsPopupMenuVisible):
+                    break;
             }
         }
         #endregion
@@ -392,6 +418,16 @@ namespace MonkeyPaste {
 
              }, () => MpBootstrapperViewModelBase.IsCoreLoaded);
 
+        public ICommand CheckDoNotShowAgainCommand => new MpCommand(
+            () => {
+                DoNotShowAgain = true;
+                CloseNotificationCommand.Execute(null);
+            });
+
+        public ICommand CloseNotificationCommand => new MpCommand(
+            () => {
+                MpPlatformWrapper.Services.NotificationManager.HideNotification(this);
+            });
         #endregion
     }
 }

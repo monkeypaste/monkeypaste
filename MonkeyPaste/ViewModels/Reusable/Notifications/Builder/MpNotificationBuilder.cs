@@ -91,10 +91,23 @@ namespace MonkeyPaste {
                 title = notificationType.EnumToLabel();
             }
 
+            MpTextContentFormat bodyFormat = MpTextContentFormat.PlainText;
+            if(body is MpViewModelBase ||
+                body.ToString().IsStringRichHtml()) {
+                if(!MpPlatformWrapper.Services.PlatformCompatibility.UseCefNet) {
+                    if (body is MpITextContentViewModel tcvm) {
+                        body = tcvm.PlainText;
+                    } else {
+                        body = body.ToString();
+                    }                    
+                } else {
+                    bodyFormat = MpTextContentFormat.RichHtml;
+                }                
+            }
             MpNotificationFormat nf = new MpNotificationFormat() {
                 Title = title,
                 Body = body,
-                BodyFormat = body is string ? MpTextContentFormat.PlainText : MpTextContentFormat.RichHtml,
+                BodyFormat = bodyFormat,
                 MaxShowTimeMs = maxShowTimeMs,
                 NotificationType = notificationType,
                 IconSourceStr = iconSourceStr,
@@ -127,11 +140,9 @@ namespace MonkeyPaste {
             MpNotificationDialogResultType result = await nvm.ShowNotificationAsync();
             return result;
         }
-        #endregion
 
-        #region Private Methods
 
-        private static async Task<MpNotificationViewModelBase> CreateNotifcationViewModelAsync(MpNotificationFormat nf) {            
+        public static async Task<MpNotificationViewModelBase> CreateNotifcationViewModelAsync(MpNotificationFormat nf) {
             MpNotificationLayoutType layoutType = MpNotificationViewModelBase.GetLayoutTypeFromNotificationType(nf.NotificationType);
             MpNotificationViewModelBase nvmb = null;
             switch (layoutType) {
@@ -154,6 +165,10 @@ namespace MonkeyPaste {
             await nvmb.InitializeAsync(nf);
             return nvmb;
         }
+        #endregion
+
+        #region Private Methods
+
 
 
         #endregion

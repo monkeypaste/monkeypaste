@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Threading;
 using CefNet.Avalonia;
-using MonkeyPaste.Avalonia.Utils.ToolWindow.Win;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 //using Org.BouncyCastle.Bcpg.OpenPgp;

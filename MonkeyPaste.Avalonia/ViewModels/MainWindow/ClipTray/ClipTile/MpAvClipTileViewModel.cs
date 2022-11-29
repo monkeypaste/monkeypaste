@@ -26,6 +26,7 @@ namespace MonkeyPaste.Avalonia {
         MpIUserColorViewModel,
         MpIHoverableViewModel,
         MpIResizableViewModel, 
+        MpITextContentViewModel,
         //MpIRtfSelectionRange,
         MpIContextMenuViewModel,
         //MpIFindAndReplaceViewModel,
@@ -137,6 +138,18 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region MpITextContentViewModel Implementation
+
+        string MpITextContentViewModel.PlainText {
+            get {
+                if(ItemType == MpCopyItemType.Image) {
+                    return string.Empty;
+                }
+                return CopyItemData.ToPlainText();
+            }
+        }
+        #endregion
+
         #region MpITooltipInfoViewModel Implementation
 
         public object Tooltip { get; set; }
@@ -197,7 +210,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
-
 
         #region Appearance
 
@@ -1232,7 +1244,7 @@ namespace MonkeyPaste.Avalonia {
             if (_dragSource != null) {
                 return _dragSource;
             }
-            _dragSource = MpAvCefNetWebView.LocateWebView(CopyItemId);
+            _dragSource = MpAvCefNetWebView.LocateTileWebView(CopyItemId);
             return _dragSource;
         }
 
@@ -1735,7 +1747,7 @@ namespace MonkeyPaste.Avalonia {
                     //Next.OnPropertyChanged(nameof(Next.TrayX));
                     break;
                 case nameof(QueryOffsetIdx):
-                    if (IsPlaceholder || Parent.IsUnpinning || Parent.IsBatchOffsetChange) {
+                    if (IsPlaceholder) {
                         break;
                     }
                     //MpRect prevRect = Prev == null ? null : Prev.TrayRect;

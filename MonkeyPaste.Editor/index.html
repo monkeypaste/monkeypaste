@@ -12,10 +12,13 @@
     <script type="text/javascript">
         //initExceptionHandler();
         //loadEditorGlobals();
+        const HTML_CONVERTER_PARAMS = "converter=true";
+        const APPEND_NOTIFIER_PARAMS = "append_notifier=true";
+
         var UseQuill2 = true;
         var UseBetterTable = true;
 
-        if (window.location.search != '') {
+        if (window.location.search.toLowerCase() == HTML_CONVERTER_PARAMS) {
             // this is the case for converter which uses 1.3.6
             // because it doesn't have that whitespace exclusion bug between spans
             // it doesn't need the quill tables because it converts plain html which doesn't rely on better table

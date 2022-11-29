@@ -20,6 +20,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsVisible { get; set; } = false;
 
+        public int TabIdx { get; set; } = 0; 
+
         #endregion
 
         #endregion
@@ -62,10 +64,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand ShowSettingsWindowCommand => new MpCommand(
-            () => {
+        public ICommand ShowSettingsWindowCommand => new MpCommand<object>(
+            (args) => {
+                if (args is int) {
+                    TabIdx = (int)args;
+                } else if (args is MpAvClipTileViewModel) {
+                    args = (args as MpAvClipTileViewModel).AppViewModel.App;
+                    TabIdx = 1;
+                }
                 IsVisible = true;
-            });
+            }, (args) => MpBootstrapperViewModelBase.IsCoreLoaded && !IsVisible);
         #endregion
     }
 }

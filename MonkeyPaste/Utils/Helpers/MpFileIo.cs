@@ -129,7 +129,7 @@ namespace MonkeyPaste {
                     forceExt = "png";
                 } /*else if (fileData.IsStringCsv()) {
                     forceExt = "csv";
-                }*/ else if (fileData.IsStringRichHtmlText()) {
+                }*/ else if (fileData.IsStringRichHtml()) {
                     forceExt = "html";
                 } else if (!fileData.IsFileOrDirectory()) {
                     forceExt = "txt";

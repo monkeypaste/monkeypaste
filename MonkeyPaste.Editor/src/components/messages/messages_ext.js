@@ -9,7 +9,7 @@ function initMain_ext(initMsgStr_base64) {
 		initPlainHtmlConverter(initMsgObj.envName);
 		log('plainHtml converter initialized.');
 	} else {
-		initMain(initMsgObj.envName);
+		initMain(initMsgObj.envName, initMsgObj.isAppendNotifier);
 	}
 }
 

@@ -153,13 +153,13 @@ namespace AvCoreClipboardHandler {
                                     data = null;
 
                                 } else {
-                                    nfl = new List<MpPluginUserNotificationFormat>() {
-                                        Util.CreateNotification(
-                                            MpPluginNotificationType.PluginResponseMessage,
-                                            "Test",
-                                            $"Text Copied: '{data.ToString()}'",
-                                            "CoreClipboardWriter")
-                                    };
+                                    //nfl = new List<MpPluginUserNotificationFormat>() {
+                                    //    Util.CreateNotification(
+                                    //        MpPluginNotificationType.PluginResponseMessage,
+                                    //        "Test",
+                                    //        $"Text Copied: '{data.ToString()}'",
+                                    //        "CoreClipboardWriter")
+                                    //};
                                     return data;
                                 }
                                 break;

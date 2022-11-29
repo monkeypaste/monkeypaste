@@ -17,19 +17,18 @@ namespace MonkeyPaste.Avalonia {
 
         public IControl Build(object param) {
             string key;
-            if(param is MpNotificationViewModelBase nvmb) {
-                key = nvmb.BodyFormat.ToString();
+            if(param is MpAvClipTileViewModel ctvm) {
+                key = "RichHtmlTemplate";
             } else {
-                throw new Exception("Unknown notification: " + param);
+                key = "PlainTextTemplate";
             }
-            key += "Template";
             // build the control to display
             return AvailableTemplates[key].Build(param);
         }
 
         public bool Match(object data) {
             // Check if we can accept the provided data
-            return data is MpNotificationViewModelBase;
+            return true;// data is MpNotificationViewModelBase;
         }
     }
 }

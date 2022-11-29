@@ -75,6 +75,8 @@ namespace MonkeyPaste.Avalonia {
         #region Constants
 
         public const string BLANK_URL = "about:blank";
+        public static string HTML_CONVERTER_PARAMS => "converter=true";
+        public static string APPEND_NOTIFIER_PARAMS => "append_notifier=true";
 
         #endregion
 
@@ -82,12 +84,18 @@ namespace MonkeyPaste.Avalonia {
 
         private static List<MpAvCefNetWebView> _AllWebViews = new List<MpAvCefNetWebView>();
 
-        public static string DefaultContentUrl => MpAvClipTrayViewModel.EditorPath;
-        public static MpAvCefNetWebView LocateWebView(int ciid) {
+        public string DefaultContentUrl => MpAvClipTrayViewModel.EditorPath;
+        public static MpAvCefNetWebView LocateTileWebView(int ciid) {
             if(ciid < 1) {
                 return null;
             }
-            var result = _AllWebViews.Where(x => x.DataContext is MpAvClipTileViewModel ctvm && ctvm.CopyItemId == ciid).ToList();
+            var result = _AllWebViews
+                .Where(x => 
+                    !x.IsHtmlConverter && 
+                    !x.IsAppendNotifier &&
+                    x.DataContext is MpAvClipTileViewModel ctvm && 
+                    ctvm.CopyItemId == ciid).ToList();
+
             if(result.Count == 0) {
                 return null;
             }
@@ -103,7 +111,17 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
-        public MpAvClipTileViewModel BindingContext => this.DataContext as MpAvClipTileViewModel;
+        public MpAvClipTileViewModel BindingContext {
+            get {
+                if(DataContext is MpAvClipTileViewModel) {
+                    return DataContext as MpAvClipTileViewModel;
+                }
+                if(DataContext is MpNotificationViewModelBase nvmb) {
+                    return nvmb.Body as MpAvClipTileViewModel;
+                }
+                return null;
+            }
+        }
 
         #endregion
 
@@ -275,6 +293,11 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region State
+
+        public bool IsHtmlConverter => ContentUrl != null && ContentUrl.ToLower().EndsWith(HTML_CONVERTER_PARAMS.ToLower());
+        public bool IsAppendNotifier => ContentUrl != null && ContentUrl.ToLower().EndsWith(APPEND_NOTIFIER_PARAMS.ToLower());
+        #endregion
 
         #endregion
 
@@ -368,8 +391,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region WebView Binding Methods
         public async void HandleBindingNotification(MpAvEditorBindingFunctionType notificationType, string msgJsonBase64Str) {
-            var ctvm = DataContext as MpAvClipTileViewModel;
-            if (ctvm == null && notificationType != MpAvEditorBindingFunctionType.notifyDomLoaded) {
+            if(DataContext is MpNotificationViewModelBase) {
+                int j = 0;
+            }
+            var ctvm = BindingContext;
+            if (ctvm == null && 
+                notificationType != MpAvEditorBindingFunctionType.notifyDomLoaded &&
+                notificationType != MpAvEditorBindingFunctionType.notifyInitComplete) {
                 // converter doesn't have data context but needs to notify dom loaded which doesn't need it
                 return;
             }
@@ -729,7 +757,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region ContentUrl Property
 
-        private string _contentUrl = DefaultContentUrl;
+        private string _contentUrl = MpAvClipTrayViewModel.EditorPath;
         public string ContentUrl {
             get { return _contentUrl; }
             set { SetAndRaise(ContentUrlProperty, ref _contentUrl, value); }
@@ -745,6 +773,9 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void OnBrowserCreated(EventArgs e) {
             base.OnBrowserCreated(e);
+            if(DataContext is MpMessageNotificationViewModel) {
+                Debugger.Break();
+            }
             Navigate(ContentUrl);
         }
 
@@ -764,10 +795,10 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            bool is_converter = ContentUrl != DefaultContentUrl;
             var req = new MpQuillInitMainRequestMessage() {
                 envName = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
-                isPlainHtmlConverter = is_converter
+                isPlainHtmlConverter = IsHtmlConverter,
+                isAppendNotifier = IsAppendNotifier
             };
             this.ExecuteJavascript($"initMain_ext('{req.SerializeJsonObjectToBase64()}')");
         }
@@ -828,7 +859,7 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
             }
-
+             
             if (BindingContext.IsPlaceholder && !BindingContext.IsPinned) {
                 return;
             }

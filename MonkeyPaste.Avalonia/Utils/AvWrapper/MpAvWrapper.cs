@@ -11,6 +11,7 @@ using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvWrapper : MpIPlatformWrapper {
+        public MpIPlatformCompatibility PlatformCompatibility { get; set; }
         public MpIPlatformShorcuts PlatformShorcuts { get; set; }
         public MpINotificationManager NotificationManager { get; set; }
         public MpIProcessWatcher ProcessWatcher { get; set; }
@@ -76,6 +77,7 @@ namespace MonkeyPaste.Avalonia {
             CustomColorChooserMenu = new MpAvCustomColorChooser();
             CustomColorChooserMenuAsync = CustomColorChooserMenu as MpICustomColorChooserMenuAsync;
 
+            PlatformCompatibility = new MpAvPlatformCompatibility();
             PlatformResource = new MpAvPlatformResource();
             Cursor = new MpAvCursor((MpAvPlatformResource)PlatformResource);
             ContextMenuCloser = new MpAvContextMenuCloser();

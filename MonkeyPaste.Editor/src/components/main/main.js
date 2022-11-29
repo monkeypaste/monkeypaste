@@ -21,6 +21,7 @@ var WebEnv = 'Web';
 var UknownEnv = 'Unknown';
 
 var EnvName = "";
+var IsAppendNotifier = false;
 
 // #endregion Globals
 
@@ -97,8 +98,9 @@ function init_test() {
 	}
 }
 
-function initMain(envName) {
+function initMain(envName, isAppendNotifier) {
 	EnvName = !envName ? WindowsEnv : envName;
+	IsAppendNotifier = isAppendNotifier;
 
 	initClipboard();
 

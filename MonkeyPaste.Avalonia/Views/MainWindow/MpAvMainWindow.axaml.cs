@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
-using MonkeyPaste.Avalonia.Utils.ToolWindow.Win;
 using MonkeyPaste.Common;
 using PropertyChanged;
 using SharpHook;
@@ -19,7 +18,6 @@ using System;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]

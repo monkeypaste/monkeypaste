@@ -60,7 +60,7 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static string ToContentRichText(this string str) {
-            if(str.IsStringRichHtmlText() && OperatingSystem.IsWindows()) {
+            if(str.IsStringRichHtml() && OperatingSystem.IsWindows()) {
                 string rtf = MpWpfHtmlToRtfConverter.ConvertQuillHtmlToRtf(str);
                 return rtf;
             }
