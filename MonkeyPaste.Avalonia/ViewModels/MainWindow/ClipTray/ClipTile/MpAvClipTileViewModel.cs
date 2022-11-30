@@ -575,13 +575,34 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsAppendClipTile {
+            get {
+                if(Parent == null || Parent.AppendNotifierViewModel == null) {
+                    return false;
+                }
+                return Parent.AppendNotifierViewModel.CopyItemId == CopyItemId && !IsAppendNotifier;
+            }
+        }
+
+        public bool IsAppendNotifier {
+            get {
+                if (Parent == null) {
+                    return false;
+                }
+                return Parent.AppendNotifierViewModel == this;
+            }
+        }
+
+        public bool HasAppendModel => IsAppendNotifier || IsAppendClipTile;
+
+        public string AppendData { get; set; } = null;
         public bool IsHoveringOverSourceIcon { get; set; } = false;
         public bool HasTemplates { get; set; } = false;
         public bool IsFindAndReplaceVisible { get; set; } = false;
         public string TemplateRichHtml { get; set; }
         
-
         public bool IsAnyCornerVisible => Parent == null ? false : ScreenRect.IsAnyPointWithinOtherRect(Parent.ScreenRect);
+        public bool IsAllCornersVisible => Parent == null ? false : ScreenRect.IsAllPointWithinOtherRect(Parent.ScreenRect);
 
         public bool IsDevToolsVisible { get; set; } = false;
 
@@ -717,17 +738,22 @@ namespace MonkeyPaste.Avalonia {
                 if (IsBusy) {
                     return true;
                 }
-
+                bool isplaceHolder = IsPlaceholder && !IsAppendNotifier;
                 //var cv = GetContentView();
                 //if(cv == null || !cv.IsViewLoaded) {
                 //    return true;
                 //}
-                if(!IsPlaceholder && !IsViewLoaded) {//IsAnyCornerVisible) {
+                if(!isplaceHolder && !IsViewLoaded) {//IsAnyCornerVisible) {
                     return true;
                 }
 
+
                 if (FileItemCollectionViewModel != null && FileItemCollectionViewModel.IsAnyBusy) {
                     return true;
+                }
+
+                if(IsAppendNotifier) {
+                    return false;
                 }
                 if (SourceViewModel != null) {
                     if (AppViewModel != null && AppViewModel.IsBusy) {
@@ -1184,6 +1210,9 @@ namespace MonkeyPaste.Avalonia {
             }
             if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileTitleEditable_ById(CopyItemId)) {
                 IsTitleReadOnly = false;
+            }
+            if(Parent.IsAnyAppendMode && HasAppendModel) {
+                OnPropertyChanged(nameof(HasAppendModel));
             }
             IsBusy = false;
         }
@@ -1916,6 +1945,15 @@ namespace MonkeyPaste.Avalonia {
                 // wait extra for cb watcher to know about data
                 await Task.Delay(300);
                 IsBusy = false;
+            });
+
+        public ICommand SetAppendDataCommand => new MpAsyncCommand<object>(
+            async (dataArg) => {
+                var append_data_str = dataArg as string;
+                if(string.IsNullOrEmpty(append_data_str)) {
+                    return;
+                }
+                AppendData = append_data_str;
             });
         #endregion
     }

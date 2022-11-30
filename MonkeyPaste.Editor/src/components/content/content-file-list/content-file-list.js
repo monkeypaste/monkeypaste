@@ -14,12 +14,10 @@ function loadFileListContent(itemDataStr) {
 	enableReadOnly();
 	disableSubSelection();
 	FileListItems = [];
-	//ContentData = '';
 	let fldfObj = toJsonObjFromBase64Str(itemDataStr);
 	for (var i = 0; i < fldfObj.fileItems.length; i++) {
 		let flif = fldfObj.fileItems[i];
 		FileListItems.push(flif);
-		//ContentData = flif.filePath + envNewLine();
 	}
 	createFileList();
 	loadLinkHandlers();
@@ -171,6 +169,17 @@ function convertFileListContentToFormats(isForOle, formats) {
 		items.push(item);
 	}
 	return items;
+}
+function appendFileListContentData(data) {
+	// input 'MpQuillFileListDataFragment'
+	let fldfObj = toJsonObjFromBase64Str(data);
+	for (var i = 0; i < fldfObj.fileItems.length; i++) {
+		// input 'MpQuillFileListItemDataFragmentMessage'
+		let flif = fldfObj.fileItems[i];
+		FileListItems.push(flif);
+	}
+	createFileList();
+	loadLinkHandlers();
 }
 // #endregion Actions
 

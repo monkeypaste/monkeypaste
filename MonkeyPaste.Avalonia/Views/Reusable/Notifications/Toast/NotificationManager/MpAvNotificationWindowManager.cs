@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using PropertyChanged;
 using Avalonia;
 using MonkeyPaste.Common.Avalonia;
+using Org.BouncyCastle.Asn1.Mozilla;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -32,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpINotificationManager Implementation
-        void MpINotificationManager.ShowNotification(MpNotificationViewModelBase nvmb) {
+        public void ShowNotification(MpNotificationViewModelBase nvmb) {
             if (nvmb == null) {
                 // somethigns wrong
                 Debugger.Break();
@@ -65,15 +66,30 @@ namespace MonkeyPaste.Avalonia {
                     // somethings wrong
                     Debugger.Break();
                 }
-                nw.Opened += Nw_Opened;
+                if(_windows.Contains(nw)) {
+                    _windows.Add(nw);
+                }
+                
                 nw.Closed += Nw_Closed;
                 nw.DataContextChanged += Nw_DataContextChanged;
                 nw.EffectiveViewportChanged += Nw_EffectiveViewportChanged;
                 nw.PointerReleased += Nw_PointerReleased;
+                nw.Deactivated += Nw_Deactivated;
 
-                nw.GetObservable(Window.BoundsProperty).Subscribe(value => MpAvNotificationWindow_BoundsChangedHandler(nw));
-                nw.GetObservable(Window.IsVisibleProperty).Subscribe(value => MpAvNotificationWindow_IsVisibleChangedHandler(nw));
-                
+                nw.GetObservable(Window.BoundsProperty).Subscribe(value => OnNotificationWindowBoundsChangedHandler(nw));
+                nw.GetObservable(Window.IsVisibleProperty).Subscribe(value => OnNotificationWindowIsVisibleChangedHandler(nw));
+                nw.GetObservable(Window.TopmostProperty).Subscribe(value => OnNotificationWindowTopmostChanged(nw));
+
+                //if (nw == MpAvMessageNotificationWindow.WebViewInstance &&
+                //    nw.DataContext != nvmb) {
+                //    // how did it get changed?
+                //    Debugger.Break();
+                //}
+                //if (nw != MpAvMessageNotificationWindow.WebViewInstance) {
+                //    // wv has fixed data context
+                //    nw.DataContext = nvmb;
+                //}
+                //nw.DataContext = nvmb;
                 var cb = nw.FindControl<Button>("CloseButton");
                 if(cb != null) {
                     cb.Click += CloseButton_Click;
@@ -82,40 +98,26 @@ namespace MonkeyPaste.Avalonia {
                     // occurs on startup
                     App.Desktop.MainWindow = nw;
                 } else {
-                    App.Desktop.MainWindow.Topmost = false;
-                }
-                nw.Topmost = true;
-
-                if (nvmb.IsModal) {
-                    bool wasLocked = MpAvMainWindowViewModel.Instance.IsMainWindowLocked;
-                    if (!wasLocked) {
-                        MpAvMainWindowViewModel.Instance.ToggleMainWindowLockCommand.Execute(null);
-                    }
-
-                    nw.Show();
-                    if (!wasLocked) {
-                        MpAvMainWindowViewModel.Instance.ToggleMainWindowLockCommand.Execute(null);
-                    }
-                } else {
-                    nw.Show();
+                    //App.Desktop.MainWindow.Topmost = false;
                 }
 
-                UpdateWindowPositions();
-                if(nw == MpAvMessageNotificationWindow.WebViewInstance && 
+                if (nw == MpAvMessageNotificationWindow.WebViewInstance &&
                     nw.DataContext is MpMessageNotificationViewModel mnvm) {
-                    await mnvm.InitializeAsync(nvmb.NotificationFormat);
-
                     var wv = nw.GetVisualDescendant<MpAvCefNetWebView>();
-                    await wv.PerformLoadContentRequestAsync();
-                    while (!wv.IsContentLoaded) {
-                        await Task.Delay(100);
+                    if(!wv.IsContentLoaded) {
+                        await mnvm.InitializeAsync(nvmb.NotificationFormat);
+
+                        await wv.PerformLoadContentRequestAsync();
                     }
-                    return;
+                    
                 }
+
+                BeginOpen(nw);
+                
             });
         }
 
-        void MpINotificationManager.HideNotification(MpNotificationViewModelBase nvmb) {
+        public void HideNotification(MpNotificationViewModelBase nvmb) {
             var wl = _windows.Where(x => x.DataContext == nvmb).ToList();
             if (wl.Count != 1) {
                 // equality conflict?
@@ -124,7 +126,7 @@ namespace MonkeyPaste.Avalonia {
             }
             if (wl.Count > 0) {
                 if (nvmb is MpUserActionNotificationViewModel uanvm) {
-                    Nw_Closed(wl[0], null);
+                    FinishClose(wl[0]);
                     return;
                 }
                 // this triggers fade out which ends w/ IsVisible=false
@@ -135,6 +137,18 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+
+        public bool IsAnyNotificationVisible => _windows.Any(x => x.IsVisible);
+
+        public bool IsAnyNotificationActive => _windows.Any(x => x.IsActive);
+        public Window HeadNotificationWindow {
+            get {
+                if(!IsAnyNotificationVisible) {
+                    return null;
+                }
+                return _windows.Aggregate((a, b) => a.Position.Y < b.Position.Y ? a : b);
+            }
+        }
 
         #endregion
 
@@ -153,32 +167,87 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public void UpdateTopmost(Window newVisibleWindow = null, bool wasDeactivated = false) {
+            var w = newVisibleWindow == null ? HeadNotificationWindow : newVisibleWindow;
+            if(w == null) {
+                return;
+            }
+            if(MpAvMainWindow.Instance != null) {
+                MpAvMainWindow.Instance.Topmost = false;
+            }
+            
+            //if (!wasDeactivated) {
+
+            //}
+            w.Activate();
+            w.Topmost = true;
+            w.Focus();
+
+            w.Activate();
+            w.Topmost = true;
+            w.Focus();
+
+        }
         #endregion
 
         #region Private Methods
 
         private void _windows_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             UpdateWindowPositions();
-            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = _windows.Count > 0;
-
-            if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                if (_windows.Any(x => x.IsVisible)) {
-                    MpAvMainWindow.Instance.Topmost = false;
-                    _windows.Last().Topmost = true;
-                } else {
-                    MpAvMainWindow.Instance.Topmost = true;
-                }
-            } else if(_windows.Count > 0) {
-                _windows.Last().Topmost = true;
-            }
+            //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = _windows.Count > 0;
         }
         private void UpdateWindowPositions() {
             _windows.ForEach(x => PositionWindowByNotificationType(x));
         }
 
+        private void BeginOpen(Window nw) {
+            if (!_windows.Contains(nw)) {
+                _windows.Add(nw);
+            }
+
+            var nvmb = nw.DataContext as MpNotificationViewModelBase;
+            if (nvmb.IsModal) {
+                bool wasLocked = MpAvMainWindowViewModel.Instance.IsMainWindowLocked;
+                if (!wasLocked) {
+                    MpAvMainWindowViewModel.Instance.ToggleMainWindowLockCommand.Execute(null);
+                }
+
+                nw.Show();
+                if (!wasLocked) {
+                    MpAvMainWindowViewModel.Instance.ToggleMainWindowLockCommand.Execute(null);
+                }
+            } else {
+                nw.Show();
+            }
+
+            UpdateWindowPositions();
+        }
+
+        private void FinishClose(Window w) {
+            //var nvmb = w.DataContext as MpNotificationViewModelBase;
+            if (w.DataContext is MpAvLoaderNotificationWindow) {
+                // ignore so bootstrapper can swap main window
+            } else if (w == MpAvMessageNotificationWindow.WebViewInstance) {
+                w.Hide();
+            } else {
+                w.Close();
+            }
+            _windows.Remove(w);
+        }
+
         #region Window Events
 
+        private void Nw_Deactivated(object sender, EventArgs e) {
+            var w = sender as Window;
+            w.Topmost = false;
+            w.Topmost = true;
+            //UpdateTopmost(w, true);
+        }
+
         private void Nw_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
+            if(sender == MpAvMessageNotificationWindow.WebViewInstance) {
+                return;
+            }
             if (MpAvMainWindow.Instance == null || !MpAvMainWindow.Instance.IsInitialized) {
                 return;
             }
@@ -190,9 +259,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void Nw_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
             var w = sender as Window;
-            if (!_windows.Contains(w)) {
-                _windows.Add(w);
-            }
+            
             UpdateWindowPositions();
         }
 
@@ -208,49 +275,43 @@ namespace MonkeyPaste.Avalonia {
             //MpConsole.WriteLine($"fade out complete for: '{(sender as Control).DataContext}'");
             
             var w = sender as Window;
-
-            var nvmb = w.DataContext as MpNotificationViewModelBase;
-            nvmb.IsClosing = false;
-            if (w.DataContext is MpAvLoaderNotificationWindow) {
-                // ignore so bootstrapper can swap main window
-            } else if (w == MpAvMessageNotificationWindow.WebViewInstance) {
-                w.Hide();
-            } else {
-                w.Close();
-            }
-            _windows.Remove(w);
+            FinishClose(w);
         }
 
-        private void Nw_Opened(object sender, EventArgs e) {
-            var w = sender as Window;
-            if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen &&
-                MpAvMainWindow.Instance.Topmost) {
-                MpAvMainWindow.Instance.Topmost = false;
-            }
-            UpdateWindowPositions();
-        }
 
         private void CloseButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
             //HideWindow(DataContext as MpNotificationViewModelBase);
             var control = sender as Control;
-            Nw_Closed(control.GetVisualAncestor<Window>(), null);
+            if(control.GetVisualAncestor<Window>() is Window w &&
+                w.DataContext is MpNotificationViewModelBase nvmb) {
+                HideNotification(nvmb);
+            }
         }
 
+        private void OnNotificationWindowTopmostChanged(Window w) {
+            if(!w.IsVisible) {
+                return;
+            }
+            if(_windows.All(x=>!x.Topmost)) {
+                w.Topmost = true;
+            }
+        }
 
-        private void MpAvNotificationWindow_BoundsChangedHandler(Window w) {
+        private void OnNotificationWindowBoundsChangedHandler(Window w) {
             if (!_windows.Contains(w)) {
                 _windows.Add(w);
             }
             UpdateWindowPositions();
         }
 
-        private void MpAvNotificationWindow_IsVisibleChangedHandler(Window w) {
-            if (w.IsVisible) {
-                Nw_Opened(w, null);
+        private void OnNotificationWindowIsVisibleChangedHandler(Window w) {
+            if(w.IsVisible) {
+                w.Activate();
+                UpdateTopmost(w);
                 return;
             }
-            if (w.DataContext is MpNotificationViewModelBase nvmb && nvmb.IsClosing) {
-                Nw_Closed(w, null);
+            if (!w.IsVisible && w.DataContext is MpNotificationViewModelBase nvmb && nvmb.IsClosing) {
+                FinishClose(w);
             }
 
         }

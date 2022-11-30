@@ -382,15 +382,21 @@ namespace MonkeyPaste.Avalonia {
 
                 double bmp_width = _marqueeBitmap.Size.Width;
 
-                var cmp = _tb_mp;
-                cmp = cmp == null ? new MpPoint() : cmp;
+                var cmp = _tb_mp == null ? new MpPoint() : _tb_mp;
                 bool isReseting = _tb_mp == null || !new MpRect(MpPoint.Zero,this.Bounds.Size.ToPortableSize()).Contains(cmp);
 
                 //var tb = GetTextBoxFromParent(canvas.Parent as Panel);
                 double max_width = GetRenderWidth();
-                double velMultiplier = cmp.X / max_width;
-                velMultiplier = isReseting ? 1.0 : Math.Min(1.0, Math.Max(0.1, velMultiplier));
+                double velMultiplier = isReseting ? 1.0 : Math.Min(1.0, Math.Max(0.1, cmp.X / max_width));
 
+                if(AutoMarquee) {
+                    if(_tb_mp != null) {
+                        AutoMarquee = false;
+                    } else {
+                        velMultiplier = 1.0d;
+                        isReseting = false;
+                    }
+                }
                 double deltaX = MaxVelocity * velMultiplier;
 
                 double left1 = _offsetX1;

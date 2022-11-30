@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:svg="clr-namespace:Avalonia.Svg;assembly=Avalonia.Svg"
         xmlns:local="using:MonkeyPaste.Avalonia"
         xmlns:pcl="using:MonkeyPaste"
         mc:Ignorable="d"
@@ -47,6 +48,7 @@
                    Stretch="Fill" />
             <local:MpAvMarqueeTextBox Grid.Row="0"
                                       Grid.Column="1"
+                                      AutoMarquee="True"
                                       CanEdit="False"
                                       MinHeight="30"
                                       FontSize="20"
@@ -70,63 +72,72 @@
                     Background="White"
                     Height="1" />
 
-            <ContentControl x:Name="NotificationBodyContentControl"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="3"
-                            Focusable="True"
-                            Margin="0,0,5,0"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                            DataContext="{Binding Body}"
-                            Content="{Binding}">
-                <ContentControl.DataTemplates>
-                    <local:MpAvNotificationBodyTemplateSelector>
-                        <DataTemplate x:Key="PlainTextTemplate"
-                                      x:DataType="sys:String">
-                            <TextBlock HorizontalAlignment="Left"
-                                       VerticalAlignment="Top"
-                                       TextWrapping="NoWrap"
-                                       FontSize="14"
-                                       FontWeight="SemiBold"
-                                       Background="Transparent"
-                                       Focusable="False"
-                                       Foreground="Black"
-                                       Text="{Binding}" />
-                        </DataTemplate>
-                        <DataTemplate x:Key="RichHtmlTemplate"
-                                      x:DataType="local:MpAvClipTileViewModel">
-                            <local:MpAvCefNetWebView x:Name="CefNetWebView"
-                                                     ContentId="{Binding CopyItemId, Mode=OneWay}"
-                                                     IsContentLoaded="{Binding IsViewLoaded, Mode=TwoWay}"
-                                                     IsAttachedToVisualTree="{Binding IsViewAttached, Mode=TwoWay}"
-                                                     Focusable="True"
-                                                     HorizontalAlignment="Stretch"
-                                                     VerticalAlignment="Stretch" />
-                        </DataTemplate>
-                    </local:MpAvNotificationBodyTemplateSelector>
-                </ContentControl.DataTemplates>
-            </ContentControl>
+            <Border Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    BorderThickness="1"
+                    BorderBrush="White"
+                    CornerRadius="5"
+                    Background="{DynamicResource ClipTileContentBackgroundBrush}"
+                    Margin="10">
+                <ContentControl x:Name="NotificationBodyContentControl"
+                                Background="Transparent"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                DataContext="{Binding Body}"
+                                Content="{Binding}">
+                    <ContentControl.DataTemplates>
+                        <local:MpAvNotificationBodyTemplateSelector>
+                            <DataTemplate x:Key="PlainTextTemplate"
+                                          x:DataType="sys:String">
+                                <TextBlock HorizontalAlignment="Left"
+                                           VerticalAlignment="Top"
+                                           TextWrapping="NoWrap"
+                                           FontSize="14"
+                                           FontWeight="SemiBold"
+                                           Background="Transparent"
+                                           Focusable="True"
+                                           Foreground="Black"
+                                           Text="{Binding}" />
+                            </DataTemplate>
+                            <DataTemplate x:Key="RichHtmlTemplate"
+                                          x:DataType="local:MpAvClipTileViewModel">
+                                <Grid HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch">
+                                    <local:MpAvCefNetWebView x:Name="CefNetWebView"
+                                                             ContentId="{Binding CopyItemId, Mode=OneWay}"
+                                                             HasAppendModel="{Binding HasAppendModel, Mode=OneWay}"
+                                                             AppendData="{Binding AppendData, Mode=TwoWay}"
+                                                             IsContentLoaded="{Binding IsViewLoaded, Mode=TwoWay}"
+                                                             IsAttachedToVisualTree="{Binding IsViewAttached, Mode=TwoWay}"
+                                                             Focusable="True"
+                                                             Background="Transparent"
+                                                             HorizontalAlignment="Stretch"
+                                                             VerticalAlignment="Stretch" />
+                                    <Border IsVisible="{Binding IsAnyBusy, FallbackValue=True, TargetNullValue=True}"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch">
+                                        <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"
+                                                                   Width="70"
+                                                                   Height="70" />
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </local:MpAvNotificationBodyTemplateSelector>
+                    </ContentControl.DataTemplates>
+                </ContentControl>
 
-            <Button x:Name="OptionsButton"
-                    Grid.Row="0"
-                    Grid.Column="2"
-                    VerticalAlignment="Stretch"
-                    HorizontalAlignment="Right"
-                    HorizontalContentAlignment="Stretch"
-                    VerticalContentAlignment="Stretch"
-                    Width="5"
-                    Margin="0,3,7,3"
-                    BorderThickness="0"
-                    Background="Transparent"
-                    local:MpAvMenuExtension.IsEnabled="True"
-                    local:MpAvMenuExtension.IsOpen="{Binding IsPopupMenuVisible, Mode=TwoWay}">
-                <Image Width="{Binding Bounds.Height, ElementName=NotificationIconImage}"
-                       HorizontalAlignment="Stretch"
-                       VerticalAlignment="Stretch"
-                       Source="{Binding ., Source={StaticResource DotsImage}, Converter={StaticResource IconSourceObjToBitmapConverter}}"
-                       Stretch="Fill" />
-            </Button>
+            </Border>
+
+            <local:MpAvOptionsButton Grid.Row="0"
+                                     Grid.Column="2"
+                                     Width="15"
+                                     Margin="0,3,7,3"
+                                     local:MpAvMenuExtension.PlacementMode="Left"
+                                     local:MpAvMenuExtension.IsOpen="{Binding IsPopupMenuVisible, Mode=TwoWay}"
+                                     VerticalAlignment="Stretch"
+                                     HorizontalAlignment="Right" />
         </Grid>
     </Border>
 </Window>

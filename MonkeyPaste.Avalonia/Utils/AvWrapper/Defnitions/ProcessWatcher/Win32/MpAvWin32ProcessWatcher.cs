@@ -74,7 +74,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         
-        protected override MpPortableProcessInfo GetActiveProcessInfo() {
+        public override MpPortableProcessInfo GetActiveProcessInfo() {
             IntPtr active_handle = WinApi.GetForegroundWindow();
             var active_info = new MpPortableProcessInfo() {
                 Handle = active_handle,

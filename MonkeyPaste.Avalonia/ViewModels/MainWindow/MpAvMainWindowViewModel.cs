@@ -641,13 +641,15 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(IsMainWindowLocked):
-                    MpAvMainWindow.Instance.Topmost = IsMainWindowLocked;
+                    //MpAvMainWindow.Instance.Topmost = IsMainWindowLocked;
+                    MpAvMainWindow.Instance.UpdateTopmost();
                     break;
                 case nameof(IsMainWindowActive):
                     if(IsMainWindowActive) {
                         MpMessenger.SendGlobal(MpMessageType.MainWindowActivated);
                     } else {
                         MpMessenger.SendGlobal(MpMessageType.MainWindowDeactivated);
+
                         HideWindowCommand.Execute(null);
                     }
                     break;
@@ -677,7 +679,8 @@ namespace MonkeyPaste.Avalonia {
             //} else {
             //    MpAvMainWindow.Instance.Topmost = true;
             //}
-            MpAvMainWindow.Instance.Topmost = true;
+            //MpAvMainWindow.Instance.Topmost = true;
+            MpAvMainWindow.Instance.UpdateTopmost();
 
             IsMainWindowVisible = true;
             MainWindowScreenRect = MainWindowOpenedScreenRect;
@@ -700,7 +703,8 @@ namespace MonkeyPaste.Avalonia {
             MainWindowScreenRect = MainWindowClosedScreenRect;
             IsMainWindowVisible = false;
             MpAvMainWindow.Instance.Hide();
-            MpAvMainWindow.Instance.Topmost = false;
+            MpAvMainWindow.Instance.UpdateTopmost();
+            //MpAvMainWindow.Instance.Topmost = false;
             //MpAvMainWindow.Instance.Renderer.Stop();
 
             //OnMainWindowClosed?.Invoke(this, EventArgs.Empty);
@@ -834,7 +838,8 @@ namespace MonkeyPaste.Avalonia {
 
                     if (AnimateShowWindow) {
                         MpAvMainWindow.Instance.Show();
-                        MpAvMainWindow.Instance.Topmost = false;
+                        //MpAvMainWindow.Instance.Topmost = false;
+                        MpAvMainWindow.Instance.UpdateTopmost();
                         //MpAvMainWindow.Instance.Renderer.Start();
 
                         //_animationCts.TryReset();
@@ -846,7 +851,7 @@ namespace MonkeyPaste.Avalonia {
             },
             () => {
                 bool canShow = !IsMainWindowLoading &&
-                        !IsAnyDialogOpen &&
+                        //!IsAnyDialogOpen &&
                         !IsMainWindowOpen &&
                         //!IsMainWindowClosing &&
                         !IsMainWindowOpening;
@@ -856,39 +861,13 @@ namespace MonkeyPaste.Avalonia {
                     if (IsMainWindowInitiallyOpening) {
                         return canShow;
                     }
-                    //if(IsMainWindowOpening) {
-                    //    bool wasOpening = _animationCts.TryReset();
-                    //    MpConsole.WriteLine("Canceling opening: " + wasOpening);
-                    //    if (!wasOpening) {
-                    //        // don't allow in this, recall Can
-                    //        IsMainWindowOpening = false;
-                    //        bool recallResult = ShowWindowCommand.CanExecute(null);
-                    //        MpConsole.WriteLine("Wasn't opening, unset IsMainWindowOpening to false, recall result: " + recallResult);
-                    //        return recallResult;
-                    //    } else {
-                    //        canShow = true;
-                    //    }
-                    //}
-                    //if (IsMainWindowClosing) {
-                    //    bool wasClosing = _animationCts.TryReset();
-                    //    MpConsole.WriteLine("Canceling closing: " + wasClosing);
-                    //    if (!wasClosing) {
-                    //        // don't allow in this, recall Can
-                    //        IsMainWindowClosing = false;
-                    //        bool recallResult = ShowWindowCommand.CanExecute(null);
-                    //        MpConsole.WriteLine("Wasn't closing, unset IsMainWindowClosing to false, recall result: " + recallResult);
-                    //        return recallResult;
-                    //    } else {
-                    //        canShow = true;
-                    //    }
-                    //}
 
                     if(!canShow) {
                         MpConsole.WriteLine("");
                         MpConsole.WriteLine($"Cannot show main window:");
                         MpConsole.WriteLine($"IsMainWindowOpen: {(IsMainWindowOpen)}");
                         MpConsole.WriteLine($"IsMainWindowLoading: {(IsMainWindowLoading)}");
-                        MpConsole.WriteLine($"IsShowingDialog: {(IsAnyDialogOpen)}");
+                        //MpConsole.WriteLine($"IsShowingDialog: {(IsAnyDialogOpen)}");
                         MpConsole.WriteLine($"IsMainWindowClosing: {(IsMainWindowClosing)}");
                         MpConsole.WriteLine($"IsMainWindowOpening: {(IsMainWindowOpening)}");
                         MpConsole.WriteLine("");
@@ -934,7 +913,8 @@ namespace MonkeyPaste.Avalonia {
                             MpPlatformWrapper.Services.ProcessWatcher.SetActiveProcess(MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle);
                         }
                         //
-                        MpAvMainWindow.Instance.Topmost = false;
+                        //MpAvMainWindow.Instance.Topmost = false;
+                        MpAvMainWindow.Instance.UpdateTopmost();
                         await AnimateMainWindowAsync(MainWindowScreenRect, MainWindowClosedScreenRect);
                     }
                     FinishMainWindowHide(active_pinfo);
@@ -970,6 +950,8 @@ namespace MonkeyPaste.Avalonia {
                     return false;
                 }
 
+                bool isNotificationActive = MpAvNotificationWindowManager.Instance.IsAnyNotificationActive;
+
                 bool fromShorcutKey = false;
 
                 bool canHide =
@@ -979,6 +961,7 @@ namespace MonkeyPaste.Avalonia {
                           !IsMainWindowInitiallyOpening &&
                           !IsAnyDialogOpen &&
                           !IsAnyItemDragging &&
+                          !isNotificationActive &&
                           !IsResizing;
 
                 if(canHide && fromShorcutKey) {
@@ -997,6 +980,7 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine($"IsMainWindowLocked: {(IsMainWindowLocked)}");
                     MpConsole.WriteLine($"IsMainWindowInitiallyOpening: {(IsMainWindowInitiallyOpening)}");
                     MpConsole.WriteLine($"IsAnyDropDownOpen: {(IsAnyDropDownOpen)}");
+                    MpConsole.WriteLine($"isNotificationActive: {(isNotificationActive)}");
                     MpConsole.WriteLine($"IsShowingDialog: {(IsAnyDialogOpen)}");
                     MpConsole.WriteLine($"IsResizing: {(IsResizing)}");
                     MpConsole.WriteLine($"IsMainWindowClosing: {(IsMainWindowClosing)}");

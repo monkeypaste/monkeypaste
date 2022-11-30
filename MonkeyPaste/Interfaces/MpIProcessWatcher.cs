@@ -9,7 +9,7 @@ namespace MonkeyPaste {
         IntPtr ThisAppHandle { get;}
         
         bool IsThisAppActive { get; }
-
+        MpPortableProcessInfo GetActiveProcessInfo();
         MpPortableProcessInfo LastProcessInfo { get; }
         MpPortableProcessInfo FileSystemProcessInfo { get; }
 

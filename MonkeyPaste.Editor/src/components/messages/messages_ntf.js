@@ -238,3 +238,14 @@ function onDataTransferCompleted_ntf(sourceUrl) {
 		notifyDataTransferCompleted(msgStr);
 	}
 }
+
+//function onAppendComplete_ntf(sourceUrl) {
+//	// output 'MpQuillDataTransferCompletedNotification'
+//	if (typeof notifyDataTransferCompleted === 'function') {
+//		let msg = {
+//			dataTransferSourceUrl: sourceUrl
+//		};
+//		let msgStr = toBase64FromJsonObj(msg);
+//		notifyDataTransferCompleted(msgStr);
+//	}
+//}

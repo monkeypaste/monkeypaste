@@ -11,6 +11,21 @@ using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvFileItemCollectionViewModel : MpViewModelBase<MpAvClipTileViewModel>{
+        #region Statics
+
+        public static async Task<string> CreateFileListEditorFragment(MpCopyItem ci) {
+            var ficvm = new MpAvFileItemCollectionViewModel();
+            await ficvm.InitializeAsync(ci);
+            var fl_frag = new MpQuillFileListDataFragment() {
+                fileItems = ficvm.Items.Select(x => new MpQuillFileListItemDataFragmentMessage() {
+                    filePath = x.Path,
+                    fileIconBase64 = x.IconBase64
+                }).ToList()
+            };
+            var itemData = fl_frag.SerializeJsonObjectToBase64();
+            return itemData;
+        }
+        #endregion
 
         #region Properties
 
@@ -50,7 +65,7 @@ namespace MonkeyPaste.Avalonia {
 
             // BUG will need to check source here... pretty much most places using env.newLine to parse right i think
             //  or substitute for 'portableNewLine' where necessary
-            var ci_dobil = await MpDataModelProvider.GetDataObjectItemsByDataObjectId(ci.DataObjectId);
+            var ci_dobil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectId(ci.DataObjectId, MpPortableDataFormats.AvFileNames);
             var fivml = await Task.WhenAll(ci_dobil.Select(x => CreateFileItemViewModel(x)));
             Items.Clear();
             fivml.ForEach(x => Items.Add(x));

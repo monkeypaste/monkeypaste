@@ -138,7 +138,6 @@ namespace MonkeyPaste.Avalonia {
            _timer?.Stop();
         }
 
-
         public string ParseTitleForApplicationName(string windowTitle) {
             string mwt = windowTitle;
             if (string.IsNullOrEmpty(mwt)) {
@@ -201,7 +200,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
 
-        protected abstract MpPortableProcessInfo GetActiveProcessInfo();
+        public abstract MpPortableProcessInfo GetActiveProcessInfo();
         // protected abstract IEnumerable<MpPortableProcessInfo> GetRunningProcessInfos();
 
         protected abstract MpPortableProcessInfo RefreshRunningProcessLookup();

@@ -390,6 +390,9 @@ namespace MonkeyPaste {
             var doil = await MpDataModelProvider.GetDataObjectItemsByDataObjectId(DataObjectId);
             delete_tasks.AddRange(doil.Select(x => x.DeleteFromDatabaseAsync()));
 
+            var dobj = await MpDataModelProvider.GetItemAsync<MpDataObject>(DataObjectId);
+            delete_tasks.Add(dobj.DeleteFromDatabaseAsync());
+
             var do_model = await MpDataModelProvider.GetItemAsync<MpDataObject>(DataObjectId);
             if(do_model != null) {
                 delete_tasks.Add(do_model.DeleteFromDatabaseAsync());

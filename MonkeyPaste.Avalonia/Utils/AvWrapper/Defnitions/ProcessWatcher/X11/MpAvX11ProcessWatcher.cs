@@ -61,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
             $"xdotool windowactivate {handle_val}".ShellExec();
             return lastHandle;
         }
-        protected override MpPortableProcessInfo GetActiveProcessInfo() {
+        public override MpPortableProcessInfo GetActiveProcessInfo() {
             var active_info = new MpPortableProcessInfo();
             string activeWindow = "xdotool getfocuswindow".ShellExec().Trim();
             active_info.MainWindowTitle = "xdotool getfocuswindow getwindowname".ShellExec().Trim();

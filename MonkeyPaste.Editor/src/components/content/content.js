@@ -9,11 +9,13 @@ const InlineTags = ['span', 'a', 'em', 'strong', 'u', 's', 'sub', 'sup', 'img'];
 const BlockTags = ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe', 'blockquote', 'pre']
 const AllDocumentTags = [...InlineTags, ...BlockTags];
 
+var IsAppendMode = false;
+var IsAppendLineMode = false;
 // #endregion Globals
 
 // #region Life Cycle
 
-function loadContent(contentHandle, contentType, contentData, isPasteRequest, searchStateObj) {
+function loadContent(contentHandle, contentType, contentData, isPasteRequest, searchStateObj, isAppendLineMode, isAppendMode) {
 	if (contentHandle != ContentHandle) {
 		// when actually a new item and not reload
 		quill.history.clear();
@@ -29,11 +31,7 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 		resetColorPaletteState();
 
 		enableReadOnly();
-		if (IsAppendNotifier) {
-			enableSubSelection();
-		} else {
-			disableSubSelection();
-		}		
+		disableSubSelection();	
 	}
 	// enusre IsLoaded is false so msg'ing doesn't get clogged up
 	IsLoaded = false;
@@ -71,6 +69,12 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 		setFindReplaceInputState(searchStateObj);
 		populateFindReplaceResults();
 		onQuerySearchRangesChanged_ntf(CurFindReplaceDocRanges.length);
+	}
+
+	IsAppendMode = isAppendMode;
+	IsAppendLineMode = isAppendLineMode;
+	if (IsAppendMode || IsAppendLineMode || isAppendNotifier()) {
+		enableSubSelection();
 	}
 
 	IsReadyToPaste = !hasAnyInputRequredTemplate();
@@ -242,6 +246,17 @@ function convertContentToFormats(isForOle, formats) {
 		items = convertImageContentToFormats(isForOle, formats);
 	}
 	return items;
+}
+
+function appendContentData(data) {
+	if (ContentItemType == 'Text') {
+		appendTextContentData(data);
+	} else if (ContentItemType == 'FileList') {
+		appendFileListContentData(data);
+	} else if (ContentItemType == 'Image') {
+		appendImageContentData(data);
+	}
+	scrollToEnd();
 }
 
 // #endregion Actions

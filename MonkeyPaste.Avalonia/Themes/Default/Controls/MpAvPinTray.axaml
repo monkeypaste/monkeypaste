@@ -6,7 +6,7 @@
         <Setter Property="Background"
                 Value="{DynamicResource PinTrayBgColor}" />
     </Style>
-    <Style Selector="local|MpAvPinTrayView.dragOver">
+    <Style Selector="local|MpAvPinTrayView.dragover">
         <Setter Property="Background"
                 Value="{DynamicResource PinTrayDragOverBgColor}" />
     </Style>

@@ -166,6 +166,11 @@
     <None Remove="Assets\Icons\monkey.ico" />
     <None Remove="Assets\Images\monkey.png" />
     <None Remove="Assets\Images\scissors.png" />
+    <None Remove="Assets\svg\close-svgrepo-com.svg" />
+    <None Remove="Assets\svg\dots-outline.svg" />
+    <None Remove="Assets\svg\dots-solid.svg" />
+    <None Remove="Assets\svg\Font_Awesome_5_solid_circle.svg" />
+    <None Remove="Assets\svg\shark-fin-01.svg" />
     <None Remove="CefNet" />
     <None Remove="CefNet.Avalonia" />
     <None Remove="WebViewControl-Avalonia" />
@@ -970,6 +975,21 @@
     <AvaloniaResource Include="Assets\Images\yinyang.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\svg\close-svgrepo-com.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\svg\dots-outline.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\svg\dots-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\svg\Font_Awesome_5_solid_circle.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\svg\shark-fin-01.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Accents\BaseLight.axaml">
       
     </AvaloniaResource>
@@ -1026,6 +1046,7 @@
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.18" />
     <PackageReference Include="Avalonia.HtmlRenderer" Version="0.10.0" />
     <PackageReference Include="Avalonia.MonoMac" Version="0.6.1" />
+    <PackageReference Include="Avalonia.Svg" Version="0.10.18" />
     <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.18" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="0.10.18" />
     <PackageReference Include="AvaloniaColorPicker" Version="1.3.4" />
@@ -1096,6 +1117,9 @@
     </Compile>
     <Compile Update="Views\MainWindow\FilterMenu\Sort\Field\MpAvClipTileSortFieldView.axaml.cs">
       <DependentUpon>MpAvClipTileSortFieldView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\Buttons\MpAvOptionsButton.axaml.cs">
+      <DependentUpon>MpAvOptionsButton.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\Buttons\MpAvClearTextButton.axaml.cs">
       <DependentUpon>MpAvClearTextButton.axaml</DependentUpon>

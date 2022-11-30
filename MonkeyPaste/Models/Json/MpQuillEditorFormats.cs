@@ -10,12 +10,6 @@ namespace MonkeyPaste {
 
         public string envName { get; set; } // will be wpf,android, etc.
         public bool isPlainHtmlConverter { get; set; }
-        public bool isAppendNotifier { get; set; }
-    }
-
-    public class MpQuillInitMainResponseMessage : MpJsonObject {
-
-        public string mainStatus { get; set; }
     }
 
     public class MpQuillLoadContentRequestMessage : MpJsonObject {
@@ -24,13 +18,15 @@ namespace MonkeyPaste {
 
         public string itemData { get; set; }
 
-
         public bool isPasteRequest { get; set; } = false; //request should ONLY happen if encoded w/ templates
 
         public string searchText { get; set; } = null;
         public bool isCaseSensitive { get; set; } = false;
         public bool isWholeWord { get; set; } = false;
         public bool useRegex { get; set; } = false;
+
+        public bool isAppendLineMode { get; set; }
+        public bool isAppendMode { get; set; }
     }
 
     public class MpQuillContentDataRequestMessage : MpJsonObject {
@@ -148,16 +144,6 @@ namespace MonkeyPaste {
         public bool shiftKey { get; set; }
         public bool escKey { get; set; }
     }
-
-    public class MpQuillEditorStateMessage : MpJsonObject {
-        public string envName { get; set; }
-        public string contentHandle { get; set; }
-        public string contentItemType { get; set; }
-        public string contentData { get; set; }
-        public bool isSubSelectionEnabled { get; set; }
-        public bool isReadOnly { get; set; }
-        public bool isPastimgTemplate { get; set; }
-    }
     public class MpQuillShowCustomColorPickerNotification : MpJsonObject {
         public string currentHexColor { get; set; }
         public string pickerTitle { get; set; }
@@ -198,5 +184,17 @@ namespace MonkeyPaste {
     }
     public class MpQuillDataTransferCompletedNotification : MpJsonObject {
         public string dataTransferSourceUrl { get; set; }
+    }
+
+    public class MpQuillAppendModeEnabledRequestMessage : MpJsonObject {
+        // may not need
+        public bool isAppendLineMode { get; set; }
+    }
+    public class MpQuillAppendModeDisabledResponseMessage : MpJsonObject {
+        // empty may not need
+    }
+
+    public class MpQuillAppendDataRequestMessage : MpJsonObject {
+        public string appendData { get; set; }
     }
 }

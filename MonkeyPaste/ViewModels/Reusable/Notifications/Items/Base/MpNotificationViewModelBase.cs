@@ -406,6 +406,11 @@ namespace MonkeyPaste {
                     break;
                 case nameof(IsPopupMenuVisible):
                     break;
+                case nameof(IsVisible):
+                    if(!IsVisible) {
+                        IsClosing = false;
+                    }
+                    break;
             }
         }
         #endregion

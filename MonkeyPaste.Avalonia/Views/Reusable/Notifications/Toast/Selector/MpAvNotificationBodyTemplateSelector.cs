@@ -17,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
 
         public IControl Build(object param) {
             string key;
-            if(param is MpAvClipTileViewModel ctvm) {
+            if(param is MpAvClipTileViewModel) {
                 key = "RichHtmlTemplate";
             } else {
                 key = "PlainTextTemplate";

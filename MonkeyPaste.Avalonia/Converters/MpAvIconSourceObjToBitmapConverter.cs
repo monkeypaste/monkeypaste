@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using MonkeyPaste.Common;
 using System.IO;
 using Avalonia.Controls;
+using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvIconSourceObjToBitmapConverter : IValueConverter {
@@ -53,7 +54,12 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if(valStr.EndsWith("Svg")) {
                     if(Application.Current.Resources.TryGetValue(valStr, out object data)) {
-                        return data as Geometry;
+                        if(data is Geometry geometry) {
+                            return geometry;
+                        }
+                        if(data is string svgPath) {
+                            Debugger.Break();
+                        }
                     }
 
                 }

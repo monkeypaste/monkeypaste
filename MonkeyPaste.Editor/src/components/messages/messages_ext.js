@@ -9,7 +9,7 @@ function initMain_ext(initMsgStr_base64) {
 		initPlainHtmlConverter(initMsgObj.envName);
 		log('plainHtml converter initialized.');
 	} else {
-		initMain(initMsgObj.envName, initMsgObj.isAppendNotifier);
+		initMain(initMsgObj.envName);
 	}
 }
 
@@ -30,7 +30,7 @@ function loadContent_ext(loadContentMsgStr_base64) {
 			useRegEx: req.useRegex
 		};
 	}
-	loadContent(req.contentHandle, req.contentType, req.itemData, req.isPasteRequest, searchStateObj);
+	loadContent(req.contentHandle, req.contentType, req.itemData, req.isPasteRequest, searchStateObj, req.isAppendLineMode, req.isAppendMode);
 
 }
 
@@ -188,4 +188,20 @@ function disableWindowResizeUpdate_ext() {
 function enableWindowResizeUpdate_ext() {
 	IsWindowResizeUpdateEnabled = true;
 	onWindowResize();
+}
+
+function appendModeEnabled_ext(reqMsgBase64Str) {
+	// input 'MpQuillAppendModeEnabledRequestMessage'
+	let msg = toJsonObjFromBase64Str(reqMsgBase64Str);
+	enableAppendMode(msg.isAppendLineMode);
+}
+
+function appendModeDisabled_ext() {
+	disableAppendMode();
+}
+function appendData_ext(reqMsgBase64Str) {
+	// input 'MpQuillAppendDataRequestMessage'
+	log('append requested: ' + reqMsgBase64Str);
+	let req = toJsonObjFromBase64Str(reqMsgBase64Str);
+	appendContentData(req.appendData);
 }

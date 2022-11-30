@@ -53,6 +53,13 @@ namespace MonkeyPaste.Common {
                     otherRect.Contains(rect.BottomRight);
         }
 
+        public static bool IsAllPointWithinOtherRect(this MpRect rect, MpRect otherRect) {
+            return otherRect.Contains(rect.TopLeft) &&
+                    otherRect.Contains(rect.TopRight) &&
+                    otherRect.Contains(rect.BottomLeft) &&
+                    otherRect.Contains(rect.BottomRight);
+        }
+
         public static bool Contains(this MpRect rect, MpPoint p) {
             return p.X >= rect.Left && p.X <= rect.Right &&
                    p.Y >= rect.Top && p.Y <= rect.Bottom;

@@ -26,9 +26,9 @@
     <StartWebBrowser>False</StartWebBrowser>
   </PropertyGroup>
   <PropertyGroup>
-  <!-- Makes the TypeScript compilation task a no-op -->
-  <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
-</PropertyGroup>
+    <!-- Makes the TypeScript compilation task a no-op -->
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
@@ -38,6 +38,8 @@
   <ItemGroup>
     <Content Include="src\app.js" />
     <Content Include="images\icons\monkey.ico" />
+    <Content Include="src\components\content\ext-content-source-blot\ext-content-source-blot.css" />
+    <Content Include="src\components\content\ext-content-source-blot\ext-content-source-blot.js" />
     <Content Include="src\components\content\paste\paste-toolbar-style.css" />
     <Content Include="src\components\content\paste\pastetoolbar.js" />
     <Content Include="src\components\datatransfer\datatransfer.js">
@@ -154,6 +156,7 @@
     <Folder Include="src\components\content\content-file-list\" />
     <Folder Include="src\components\content\content-image\" />
     <Folder Include="src\components\content\content-text\" />
+    <Folder Include="src\components\content\ext-content-source-blot\" />
     <Folder Include="src\components\content\paste\" />
     <Folder Include="src\components\converter\" />
     <Folder Include="src\components\dragdrop\" />

@@ -231,6 +231,10 @@ namespace MonkeyPaste.Common.Wpf {
         [DllImport("user32.dll", EntryPoint = "SetWindowLong", SetLastError = true)]
         public static extern Int32 IntSetWindowLong(IntPtr hWnd, int nIndex, Int32 dwNewLong);
 
+
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, int uFlags);
         public static int IntPtrToInt32(IntPtr intPtr) {
             return unchecked((int)intPtr.ToInt64());
         }

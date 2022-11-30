@@ -1,5 +1,9 @@
 ﻿using System.Runtime.InteropServices;
 using System;
+using Avalonia.Markup.Xaml;
+using MonkeyPaste.Common.Wpf;
+using MonkeyPaste.Common;
+using Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvToolWindow_Win32 {
@@ -26,39 +30,42 @@ namespace MonkeyPaste.Avalonia {
         [DllImport("user32.dll", EntryPoint = "SetWindowLong", SetLastError = true)]
         public static extern int IntSetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
-        public static int IntPtrToInt32(IntPtr intPtr) {
-            return unchecked((int)intPtr.ToInt64());
-        }
-        private static IntPtr SetWindowLong(IntPtr hWnd, int nIndex, IntPtr dwNewLong) {
-            int error = 0;
-            IntPtr result = IntPtr.Zero;
-            // Win32 SetWindowLong doesn't clear error on success
-            SetLastError(0);
-
-            if (IntPtr.Size == 4) {
-                // use SetWindowLong
-                int tempResult = IntSetWindowLong(hWnd, nIndex, IntPtrToInt32(dwNewLong));
-                error = Marshal.GetLastWin32Error();
-                result = new IntPtr(tempResult);
-            } else {
-                // use SetWindowLongPtr
-                result = IntSetWindowLongPtr(hWnd, nIndex, dwNewLong);
-                error = Marshal.GetLastWin32Error();
-            }
-
-            if (result == IntPtr.Zero && error != 0) {
-                throw new System.ComponentModel.Win32Exception(error);
-            }
-
-            return result;
-        }
-
         public static void InitToolWindow(IntPtr handle) {
-            int exStyle = GetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE);
-            exStyle |= (int)ExtendedWindowStyles.WS_EX_TOOLWINDOW;
-            SetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
+            int exStyle = WinApi.GetWindowLong(handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE);
+            exStyle |= (int)WinApi.ExtendedWindowStyles.WS_EX_TOOLWINDOW;
+            WinApi.SetWindowLong(handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
 
         }
     }
 
+    public static class MpAvTopMostWindow {
+        [DllImport("user32.dll")]
+        static extern int SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
+
+        static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        private const int SWP_NOSIZE = 0x0001;
+        private const int SWP_NOZORDER = 0x0004;
+        private const int SWP_SHOWWINDOW = 0x0040;
+        private const int SWP_NOMOVE = 0x0002;
+        enum WindowLongFlags : int {
+            GWL_EXSTYLE = -20,
+            GWLP_HINSTANCE = -6,
+            GWLP_HWNDPARENT = -8,
+            GWL_ID = -12,
+            GWL_STYLE = -16,
+            GWL_USERDATA = -21,
+            GWL_WNDPROC = -4,
+            DWLP_USER = 0x8,
+            DWLP_MSGRESULT = 0x0,
+            DWLP_DLGPROC = 0x4
+        }
+
+        private const uint WS_EX_TOPMOST = 0x00000008;
+
+
+
+        public static void InitTopmostWindow(IntPtr handle, int x, int y, int cx, int cy) {
+            WinApi.SetWindowPos(handle, HWND_TOPMOST, x,y,cx,cy, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+        }
+    }
 }

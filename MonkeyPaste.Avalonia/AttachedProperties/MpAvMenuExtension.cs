@@ -108,6 +108,22 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region PlacementMode AvaloniaProperty
+        public static PlacementMode GetPlacementMode(AvaloniaObject obj) {
+            return obj.GetValue(PlacementModeProperty);
+        }
+
+        public static void SetPlacementMode(AvaloniaObject obj, PlacementMode value) {
+            obj.SetValue(PlacementModeProperty, value);
+        }
+
+        public static readonly AttachedProperty<PlacementMode> PlacementModeProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, PlacementMode>(
+                "PlacementMode",
+                PlacementMode.Pointer);
+
+        #endregion
+
         #region IsOpen AvaloniaProperty
         public static bool GetIsOpen(AvaloniaObject obj) {
             return obj.GetValue(IsOpenProperty);
@@ -241,22 +257,29 @@ namespace MonkeyPaste.Avalonia {
                     onOpenHandler = (s, e1) => {
                         e1.Cancel = false;
                     };
-
+                    
                     _cmInstance.Items = mivm.SubItems.Where(x => x.IsVisible).Select(x => CreateMenuItem(x));
 
                     _cmInstance.PlacementTarget = control;
-                    _cmInstance.PlacementAnchor = PopupAnchor.AllMask;
-                    _cmInstance.PlacementMode = PlacementMode.Pointer;
-                    _cmInstance.DataContext = mivm;
+                    _cmInstance.PlacementMode = GetPlacementMode(control);
+                    if(_cmInstance.PlacementMode == PlacementMode.Pointer) {
+                        _cmInstance.PlacementAnchor = PopupAnchor.AllMask;
+                        _cmInstance.PlacementMode = PlacementMode.Pointer;
+                        _cmInstance.DataContext = mivm;
+
+                        var ctrl_mp = e.GetPosition(control);
+                        _cmInstance.HorizontalOffset = ctrl_mp.X;
+                        _cmInstance.VerticalOffset = ctrl_mp.Y;
+                    }
 
                     _cmInstance.ContextMenuOpening += onOpenHandler;
                     _cmInstance.ContextMenuClosing += onCloseHandler;
 
-                    var ctrl_mp = e.GetPosition(control);
-                    _cmInstance.HorizontalOffset = ctrl_mp.X;
-                    _cmInstance.VerticalOffset = ctrl_mp.Y;
-
-                    _cmInstance.Open(MpAvMainWindow.Instance);
+                    var w = control.GetVisualAncestor<Window>();
+                    if(w == null) {
+                        Debugger.Break();
+                    }
+                    _cmInstance.Open(w);
                     MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
                 }
             }            

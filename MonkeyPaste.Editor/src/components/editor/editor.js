@@ -29,6 +29,7 @@ function initEditor() {
 
 	initEditorScroll();
 	initTemplates();
+	initExtContentSourceBlot();
 
 	quill.on("text-change", onEditorTextChanged);
 
@@ -138,7 +139,11 @@ function isSubSelectionEnabled() {
 // #region Actions
 
 function scrollToHome() {
-	getEditorElement().scrollTop = 0;
+	getEditorContainerElement().scrollTop = 0;
+}
+
+function scrollToEnd() {
+	getEditorElement().scrollTop = getEditorContainerElement().getBoundingClientRect().bottom;
 }
 
 function hideAllToolbars() {
@@ -264,7 +269,7 @@ function disableReadOnly(fromHost = false) {
 	log('ReadOnly: DISABLED fromHost: ' + fromHost);
 }
 
-function enableSubSelection(fromHost = false, showUnderlines = true, showPaste = true) {
+function enableSubSelection(fromHost = false) {
 	if (!canEnableSubSelection()) {
 		log('enableSubSelection ignored, content is an image. fromHost: ' + fromHost);
 		return;
@@ -276,20 +281,12 @@ function enableSubSelection(fromHost = false, showUnderlines = true, showPaste =
 
 	getEditorContainerElement().classList.remove('no-select');
 	getEditorContainerElement().classList.add('sub-select');
-	if (showUnderlines) {
-		getEditorContainerElement().classList.add('underline-content');
-	} else {
-		getEditorContainerElement().classList.remove('underline-content');
-	}
+	getEditorContainerElement().classList.add('underline-content');
+
 	showScrollbars();
 	disableDragOverlay();
 	enableTemplateSubSelection();
-
-	if (showPaste) {
-		showPasteToolbar();
-	} else {
-		hidePasteToolbar();
-	}
+	showPasteToolbar();
 	updateAllElements();
 
 	drawOverlay();
@@ -306,11 +303,6 @@ function disableSubSelection(fromHost = false) {
 		return;
 	}
 
-	//DragSelectionRange = null;
-	//BlurredSelectionRects = null;
-
-	//let sel = getDocSelection();
-	//deselectAll(sel ? sel.index : 0);
 	resetSelection();
 
 	getEditorContainerElement().classList.add('no-select');
@@ -328,6 +320,25 @@ function disableSubSelection(fromHost = false) {
 		onSubSelectionEnabledChanged_ntf(isSubSelectionEnabled());
 	}
 	log('sub-selection DISABLED from: '+(fromHost ? 'HOST':'INTERNAL'));
+}
+
+function enableAppendMode(isAppendLine) {
+	if (isAppendLine) {
+		IsAppendLineMode = true;
+		IsAppendMode = false;
+	} else {
+		IsAppendLineMode = false;
+		IsAppendMode = true;
+	}
+	enableSubSelection();
+
+	log('append mode enabled. IsAppendNotifier: ' + isAppendNotifier());
+}
+
+function disableAppendMode() {	
+	IsAppendLineMode = false;
+	IsAppendMode = false;
+	log('append mode disabled. IsAppendNotifier: ' + isAppendNotifier());
 }
 
 // #endregion Actions

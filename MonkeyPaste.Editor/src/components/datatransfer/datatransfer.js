@@ -37,34 +37,51 @@ function performDataTransferOnContent(dt, dest_doc_range) {
         log('data transfer error  no data transfer or destination range');
         return;
     }
+    // DECODE HTML & URL FRAGMENT SOURCE (IF AVAILABLE)
 
     let source_url = null;
     let dt_html_str = null;
     if (dt.types.includes('html format')) {
         // prefer system html format to get source_url (on windows)
         dt_html_str = b64_to_utf8(dt.getData('html format'));
-    } else if (dt.types.includes('text/html')) {
-        let dt_html_str = dt.getData('text/html');
-    }
 
-    if (!isNullOrEmpty(dt_html_str)) {
         if (isHtmlClipboardFragment(dt_html_str)) {
             let cb_frag = parseHtmlFromHtmlClipboardFragment(dt_html_str);
             dt_html_str = cb_frag.html;
             source_url = cb_frag.sourceUrl;
         }
+    } else if (dt.types.includes('text/html')) {
+        let dt_html_str = dt.getData('text/html');
+    }
+
+    // PERFORM TRANSFER
+
+    let pre_doc_length = getDocLength();
+
+    if (!isNullOrEmpty(dt_html_str)) {
         setHtmlInRange(dest_doc_range, dt_html_str, 'user', true);
     } else if (dt.types.includes('text/plain')) {
         let dt_pt_str = dt.getData('text/plain');
         setTextInRange(dest_doc_range, dt_pt_str, 'user', true);
     }
 
-    // TODO (on linux at least) check for moz uri here for source url
+    // SELECT TRANSFER
+
+    let dt_length_diff = getDocLength() - pre_doc_length;
+
+    let dt_range = dest_doc_range;
+    dt_range.length += dt_length_diff;
+    setDocSelection(dt_range.index, dt_range.length);
+
+
+    // CHECK FOR INTERNAL URL SOURCE
 
     if (!source_url && dt.types.includes(URL_DATA_FORMAT)) {
+    // TODO (on linux at least) check for moz uri here for source url
         let url_base64 = dt.getData(URL_DATA_FORMAT);
         source_url = b64_to_utf8(url_base64);
     }
+
     onDataTransferCompleted_ntf(source_url);
 }
 

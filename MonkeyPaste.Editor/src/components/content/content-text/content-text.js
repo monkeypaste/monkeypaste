@@ -722,6 +722,19 @@ function adjustQueryRangesForEmptyContent(ranges) {
 	}
 	return ranges;
 }
+
+function appendTextContentData(data) {
+	let eof_idx = getDocLength() - 1;
+	let append_idx = eof_idx;
+	if (IsAppendLineMode) {
+		data = '<br>' + data;
+	}
+	let dt = new DataTransfer();
+	// NOTE since data is result of ci builder it will always be html
+	dt.setData('text/html', data);
+	performDataTransferOnContent(dt, { index: append_idx, length: 0 });
+}
+
 // #endregion Actions
 
 // #region Event Handlers

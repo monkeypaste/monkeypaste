@@ -86,7 +86,7 @@ function resetDrop(fromHost, wasLeave) {
     updateAllElements();
     stopAutoScroll(wasLeave);
 
-    if (isReadOnly() && !IsDragging) {
+    if (wasLeave) {
         disableSubSelection();
     }
 
@@ -129,7 +129,7 @@ function onDragEnter(e) {
     }
     startAutoScroll();
     if (!isSubSelectionEnabled()) {
-        enableSubSelection(false,false,false);
+        enableSubSelection(false);
     }
     hidePasteToolbar();
     return false;
@@ -326,7 +326,7 @@ function onDrop(e) {
 
     // SELECT DROP CONTENT
 
-    setDocSelection(post_sel_start_idx, length_delta);
+    //setDocSelection(post_sel_start_idx, length_delta);
 
     // RESET
 

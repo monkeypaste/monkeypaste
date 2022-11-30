@@ -80,6 +80,9 @@ function convertImageContentToFormats(isForOle, formats) {
 	}
 	return items;
 }
+function appendImageContentData(data) {
+	return;
+}
 // #endregion Actions
 
 // #region Event Handlers

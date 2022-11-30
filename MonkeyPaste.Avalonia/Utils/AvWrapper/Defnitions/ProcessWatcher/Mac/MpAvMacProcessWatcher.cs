@@ -61,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-        protected override MpPortableProcessInfo GetActiveProcessInfo() {
+        public override MpPortableProcessInfo GetActiveProcessInfo() {
             var active_app = NSWorkspace.SharedWorkspace.FrontmostApplication;
             var active_info = new MpPortableProcessInfo() {
                 Handle = active_app.Handle,
