@@ -32,7 +32,7 @@ function isHtmlClipboardFragment(dataStr) {
 
 // #region Actions
 
-function performDataTransferOnContent(dt, dest_doc_range) {
+function performDataTransferOnContent(dt, dest_doc_range, source = 'api') {
 	if (!dt || !dest_doc_range) {
         log('data transfer error  no data transfer or destination range');
         return;
@@ -44,14 +44,14 @@ function performDataTransferOnContent(dt, dest_doc_range) {
     if (dt.types.includes('html format')) {
         // prefer system html format to get source_url (on windows)
         dt_html_str = b64_to_utf8(dt.getData('html format'));
-
-        if (isHtmlClipboardFragment(dt_html_str)) {
-            let cb_frag = parseHtmlFromHtmlClipboardFragment(dt_html_str);
-            dt_html_str = cb_frag.html;
-            source_url = cb_frag.sourceUrl;
-        }
     } else if (dt.types.includes('text/html')) {
-        let dt_html_str = dt.getData('text/html');
+        dt_html_str = dt.getData('text/html');
+    }
+
+    if (dt_html_str != null && isHtmlClipboardFragment(dt_html_str)) {
+        let cb_frag = parseHtmlFromHtmlClipboardFragment(dt_html_str);
+        dt_html_str = cb_frag.html;
+        source_url = cb_frag.sourceUrl;
     }
 
     // PERFORM TRANSFER
@@ -59,10 +59,10 @@ function performDataTransferOnContent(dt, dest_doc_range) {
     let pre_doc_length = getDocLength();
 
     if (!isNullOrEmpty(dt_html_str)) {
-        setHtmlInRange(dest_doc_range, dt_html_str, 'user', true);
+        setHtmlInRange(dest_doc_range, dt_html_str, source, true);
     } else if (dt.types.includes('text/plain')) {
         let dt_pt_str = dt.getData('text/plain');
-        setTextInRange(dest_doc_range, dt_pt_str, 'user', true);
+        setTextInRange(dest_doc_range, dt_pt_str, source, true);
     }
 
     // SELECT TRANSFER
@@ -73,7 +73,7 @@ function performDataTransferOnContent(dt, dest_doc_range) {
     dt_range.length += dt_length_diff;
     setDocSelection(dt_range.index, dt_range.length);
 
-
+    scrollDocRangeIntoView(dt_range);
     // CHECK FOR INTERNAL URL SOURCE
 
     if (!source_url && dt.types.includes(URL_DATA_FORMAT)) {

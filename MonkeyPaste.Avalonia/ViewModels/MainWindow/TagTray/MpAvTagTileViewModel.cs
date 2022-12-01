@@ -292,6 +292,12 @@ namespace MonkeyPaste.Avalonia {
 
         public string TagTextHexColor {
             get {
+                var mwvm = MpAvMainWindowViewModel.Instance;
+                var ctrvm = MpAvClipTrayViewModel.Instance;
+                var ttrvm = MpAvTagTrayViewModel.Instance;
+                if(MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
+                    return MpSystemColors.White;
+                }
                 if (!IsSelected && IsLinkedToSelectedClipTile.IsTrueOrNull() && !IsAllTag) {
                     return MpSystemColors.Yellow;
                 }

@@ -67,7 +67,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvIDragSource,
         MpAvIResizableControl {
         #region Private Variables
-
+        private const int _APPEND_TIMEOUT_MS = 5000;
         private string _pastableContent_ntf { get; set; }
         private string _contentScreenShotBase64_ntf { get; set; }
 
@@ -297,7 +297,8 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public bool IsHtmlConverter => ContentUrl != null && ContentUrl.ToLower().EndsWith(HTML_CONVERTER_PARAMS.ToLower());
-        public bool IsAppendNotifier => ContentUrl != null && ContentUrl.ToLower().EndsWith(APPEND_NOTIFIER_PARAMS.ToLower());
+        public bool IsAppendNotifier => DataContext == MpAvClipTrayViewModel.Instance.AppendClipTileViewModel;
+
         #endregion
 
         #endregion
@@ -316,6 +317,7 @@ namespace MonkeyPaste.Avalonia {
             this.GetObservable(MpAvCefNetWebView.IsContentFindAndReplaceVisibleProperty).Subscribe(value => OnIsContentFindOrReplaceVisibleChanged());            
             this.GetObservable(MpAvCefNetWebView.HasAppendModelProperty).Subscribe(value => OnHasAppendModelChanged());            
             this.GetObservable(MpAvCefNetWebView.AppendDataProperty).Subscribe(value => OnAppendDataChanged());            
+            this.GetObservable(MpAvCefNetWebView.IsAppendLineModeProperty).Subscribe(value => OnIsAppendLineModeChanged());            
         }
 
         public MpAvCefNetWebView(string converterParams) : this() {
@@ -845,13 +847,13 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 BindingMode.TwoWay);
         private void OnIsContentLoadedChanged() {
-            if(!IsContentLoaded) {
-                return;
-            }
-            if(HasAppendModel || IsAppendNotifier) {
-                // trigger msg to editor to update state
-                OnHasAppendModelChanged();
-            }
+            //if(!IsContentLoaded) {
+            //    return;
+            //}
+            //if(HasAppendModel || IsAppendNotifier) {
+            //    // trigger msg to editor to update state
+            //    OnHasAppendModelChanged();
+            //}
         }
         #endregion IsContentLoaded Property
 
@@ -928,6 +930,7 @@ namespace MonkeyPaste.Avalonia {
             if (contentChanged_ntf.lines > 0) {
                 BindingContext.LineCount = contentChanged_ntf.lines;
             }
+
             if (contentChanged_ntf.itemData != null) {
                 BindingContext.CopyItemData = contentChanged_ntf.itemData;
             }
@@ -1101,7 +1104,7 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion IsContentFindAndReplaceVisible Property
 
-        #region IsAppendClipTile Property
+        #region HasAppendModel Property
 
         private bool _hasAppendModel;
         public bool HasAppendModel {
@@ -1113,8 +1116,10 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaProperty.RegisterDirect<MpAvCefNetWebView, bool>(
                 nameof(HasAppendModel),
                 x => x.HasAppendModel,
-                (x, o) => x.HasAppendModel = o);
+                (x, o) => x.HasAppendModel = o,
+                false);
         private void OnHasAppendModelChanged() {
+            MpConsole.WriteLine($"HasAppendModel changed. IsNotifier: {IsAppendNotifier} HasAppendModel: {HasAppendModel} AppendData: {AppendData}");
             if (BindingContext == null) {
                 return;
             }
@@ -1139,7 +1144,50 @@ namespace MonkeyPaste.Avalonia {
                 }
             });
         }
-        #endregion IsAppendClipTile Property
+        #endregion HasAppendModel Property
+
+        #region IsAppendLineMode Property
+
+        private bool? _isAppendLineMode;
+        public bool? IsAppendLineMode {
+            get { return _isAppendLineMode; }
+            set { SetAndRaise(IsAppendLineModeProperty, ref _isAppendLineMode, value); }
+        }
+
+        public static DirectProperty<MpAvCefNetWebView, bool?> IsAppendLineModeProperty =
+            AvaloniaProperty.RegisterDirect<MpAvCefNetWebView, bool?>(
+                nameof(IsAppendLineMode),
+                x => x.IsAppendLineMode,
+                (x, o) => x.IsAppendLineMode = o,
+                null);
+        private void OnIsAppendLineModeChanged() {
+            MpConsole.WriteLine($"IsAppendLineMode changed. IsAppendLineMode: {IsAppendLineMode}");
+            if (BindingContext == null) {
+                return;
+            }
+
+            Dispatcher.UIThread.Post(async () => {
+                var sw = Stopwatch.StartNew();
+                while (!IsContentLoaded) {
+                    await Task.Delay(100);
+                    if (sw.ElapsedMilliseconds > _APPEND_TIMEOUT_MS) {
+                        //timeout, content changed never notified back
+                        Debugger.Break();
+                        break;
+                    }
+                }
+
+                if (IsAppendLineMode.HasValue) {
+                    var reqMsg = new MpQuillAppendModeEnabledRequestMessage() {
+                        isAppendLineMode = IsAppendLineMode.Value
+                    };
+                    this.ExecuteJavascript($"appendModeEnabled_ext('{reqMsg.SerializeJsonObjectToBase64()}')");
+                } else {
+                    this.ExecuteJavascript($"appendModeDisabled_ext()");
+                }
+            });
+        }
+        #endregion HasAppendModel Property
 
         #region AppendData Property
 
@@ -1158,28 +1206,44 @@ namespace MonkeyPaste.Avalonia {
                 BindingMode.TwoWay);
 
         private void OnAppendDataChanged() {
+            MpConsole.WriteLine($"AppendData changed. IsNotifier: {IsAppendNotifier} HasAppendModel: {HasAppendModel} AppendData: {AppendData}");
             if (BindingContext == null ||
-                //!IsAppendNotifier ||
-                //!BindingContext.IsAppendNotifier ||
+                !BindingContext.IsAppendNotifier ||
                 AppendData == null) {
                 return;
             }
             
             Dispatcher.UIThread.Post(async () => {
-                IsContentLoaded = false;
-
+                //IsContentLoaded = false;
+                if(!IsContentLoaded) {
+                    // these changes maybe colliding
+                    Debugger.Break();
+                }
                 var req = new MpQuillAppendDataRequestMessage() { appendData = AppendData };
                 this.ExecuteJavascript($"appendData_ext('{req.SerializeJsonObjectToBase64()}')");
 
                 var sw = Stopwatch.StartNew();
+                while(IsContentLoaded) {
+                    // wait for onContentChanged_ntf
+                    await Task.Delay(100);
+                    if (sw.ElapsedMilliseconds > _APPEND_TIMEOUT_MS) {
+                        //timeout, content changed never notified back
+                        Debugger.Break();
+                        break;
+                    }
+                }
+                sw = Stopwatch.StartNew();
                 while (!IsContentLoaded) {
                     await Task.Delay(100);
-                    if (sw.ElapsedMilliseconds > 5000) {
-                        // timeout, content changed never notified back
+                    if (sw.ElapsedMilliseconds > _APPEND_TIMEOUT_MS) {
+                        //timeout, content changed never notified back
+                        Debugger.Break();
                         break;
                     }
                 }
                 AppendData = null;
+                
+                MpNotificationBuilder.ShowNotificationAsync(MpNotificationType.AppendChanged).FireAndForgetSafeAsync();
                 
             });
 

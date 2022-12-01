@@ -14,7 +14,8 @@ namespace MonkeyPaste {
         MpPortableProcessInfo FileSystemProcessInfo { get; }
 
         ConcurrentDictionary<string,ObservableCollection<IntPtr>> RunningProcessLookup { get; }
-        
+
+        //bool IsParentHandle(IntPtr parentHandle, IntPtr handle);
         IntPtr GetParentHandleAtPoint(MpPoint poIntPtr);
         IntPtr GetLastActiveInstance(string path);
         bool IsHandleRunningProcess(IntPtr handle);

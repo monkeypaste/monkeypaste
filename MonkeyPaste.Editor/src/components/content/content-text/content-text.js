@@ -144,11 +144,21 @@ function getLineCount() {
 	return quill.getLines().length;
 }
 
-function getDocLength() {
+function getDocLength(omitTrailingLineEnd = false) {
 	if (!quill) {
 		return 0;
 	}
-	return quill.getLength();
+
+	let len = quill.getLength();
+	if (omitTrailingLineEnd) {
+		let pt = getAllText();
+		if (!isNullOrEmpty(pt)) {
+			if (pt.endsWith('\n')) {
+				len--;
+			}
+		}
+	} 
+	return len;
 }
 
 function getCharacterRect(docIdx, isWindowOrigin = true, inflateToLineRect = true) {
@@ -724,15 +734,14 @@ function adjustQueryRangesForEmptyContent(ranges) {
 }
 
 function appendTextContentData(data) {
-	let eof_idx = getDocLength() - 1;
-	let append_idx = eof_idx;
-	if (IsAppendLineMode) {
-		data = '<br>' + data;
+	let append_range = { index: getDocLength(), length: 1 };
+	if (IsAppendMode) {
+		append_range.index = Math.max(0, append_range.index - 1);
 	}
 	let dt = new DataTransfer();
 	// NOTE since data is result of ci builder it will always be html
 	dt.setData('text/html', data);
-	performDataTransferOnContent(dt, { index: append_idx, length: 0 });
+	performDataTransferOnContent(dt, append_range);
 }
 
 // #endregion Actions

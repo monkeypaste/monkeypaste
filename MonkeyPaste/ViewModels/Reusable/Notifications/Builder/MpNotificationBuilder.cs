@@ -91,23 +91,16 @@ namespace MonkeyPaste {
                 title = notificationType.EnumToLabel();
             }
 
-            MpTextContentFormat bodyFormat = MpTextContentFormat.PlainText;
-            if(body is MpViewModelBase ||
-                body.ToString().IsStringRichHtml()) {
-                if(!MpPlatformWrapper.Services.PlatformCompatibility.UseCefNet) {
-                    if (body is MpITextContentViewModel tcvm) {
-                        body = tcvm.PlainText;
-                    } else {
-                        body = body.ToString();
-                    }                    
-                } else {
-                    bodyFormat = MpTextContentFormat.RichHtml;
-                }                
+            MpNotificationDialogResultType result = MpNotificationDialogResultType.None;
+            if (notificationType == MpNotificationType.AppendChanged) {
+                result = await MpAppendNotificationViewModel.Instance.ShowNotificationAsync();
+                return result;
             }
+
             MpNotificationFormat nf = new MpNotificationFormat() {
                 Title = title,
                 Body = body,
-                BodyFormat = bodyFormat,
+                //BodyFormat = bodyFormat,
                 MaxShowTimeMs = maxShowTimeMs,
                 NotificationType = notificationType,
                 IconSourceStr = iconSourceStr,
@@ -123,7 +116,7 @@ namespace MonkeyPaste {
             MpConsole.WriteLine($"\tmsg: '{body}'");
             MpConsole.WriteLine($"\ttype: '{notificationType.ToString()}'");
 
-            MpNotificationDialogResultType result = await ShowNotificationAsync(nf);
+            result = await ShowNotificationAsync(nf);
             return result;            
         }
 

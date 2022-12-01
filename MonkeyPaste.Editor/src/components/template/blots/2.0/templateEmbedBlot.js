@@ -42,11 +42,6 @@ function initTemplateBlot() {
                 value = getTemplateFromDomNode(value.domNode);
             }
 
-            //if (IsLoaded) {
-            //    //ensure new template has unique instance guid
-            //    value.templateInstanceGuid = generateGuid();
-            //}
-
             applyTemplateToDomNode(node, value);
             return node;
         }
@@ -60,52 +55,12 @@ function initTemplateBlot() {
         }
 
         update(mutations, context) {
-            //let last_sel = LastSelRange;
-            //let sel = getDocSelection();
-
-            //for (var i = 0; i < mutations.length; i++) {
-            //    let outstr = 'mutation: ' + mutations[i].type;
-            //    if (mutations[i].type == 'attributes') {
-            //        outstr += ' ' + mutations[i].attributeName;
-            //    }
-            //    if (mutations[i].type == 'characterData') {
-            //        let forced_text = this.domNode.getAttribute('templateName');
-            //        let added_text = substringByLength(this.domNode.innerText, forced_text.length);
-            //        this.domNode.innerText = forced_text;
-            //        insertText(sel.index + 1, added_text, 'user');
-            //        if (!sel || sel.length > 0) {
-            //            // what's happening? how do we handle this?
-            //            debugger;
-            //            continue;
-            //        }
-
-            //        setDocSelection(sel.index + added_text.length + 1, 0, 'api');
-            //        return;
-            //    }
-            //    log(outstr);
-            //}
-            //super.update(mutations, context);
         }
-
-        //length() {
-        //    return 1;
-        //}
 
         static value(node) {
             return getTemplateFromDomNode(node);
         }
     }
-
-    //   let suppressWarning = false;
-    //   let config = {
-    //       scope: Parchment.Scope.INLINE,
-    //   };
-
-    //   for (var i = 0; i < TemplateEmbedHtmlAttributes.length; i++) {
-    //       let attrb_name = TemplateEmbedHtmlAttributes[i];
-    //       let attrb = new Parchment.Attributor(attrb_name, attrb_name, config);
-    //       Quill.register(attrb, suppressWarning);
-    //}
 
     Quill.register(TemplateEmbedBlot, true);
 }
@@ -119,13 +74,8 @@ function getTemplateFromDomNode(domNode) {
     if (domNode == null) {
         return null;
     }
- //   if (!domNode.hasAttribute('wasVisited')) {
- //       domNode.setAttribute('wasVisited', false);
-	//}
     return {
-        //domNode: domNode,
         templateGuid: domNode.getAttribute('templateGuid'),
-        //templateInstanceGuid: domNode.getAttribute('templateInstanceGuid'),
         isFocus: domNode.classList.contains('focused'),
         templateName: domNode.getAttribute('templateName'),
         templateColor: domNode.getAttribute('templateColor'),
@@ -135,7 +85,6 @@ function getTemplateFromDomNode(domNode) {
         templateDeltaFormat: domNode.getAttribute('templateDeltaFormat'),
         templateHtmlFormat: domNode.getAttribute('templateHtmlFormat'),
         wasVisited: parseBool(domNode.getAttribute('wasVisited')),
-        //tabIdx: parseInt(domNode.getAttribute('tabindex'))
     }
 }
 

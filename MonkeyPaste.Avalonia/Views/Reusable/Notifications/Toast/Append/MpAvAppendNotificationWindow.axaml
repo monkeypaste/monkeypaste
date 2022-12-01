@@ -9,17 +9,17 @@
         mc:Ignorable="d"
         d:DesignWidth="800"
         d:DesignHeight="450"
-        x:Name="MessageNotificationWindow"
-        x:DataType="pcl:MpMessageNotificationViewModel"
+        x:Name="AppendNotificationWindow"
+        x:DataType="pcl:MpAppendNotificationViewModel"
         x:CompileBindings="True"
-        x:Class="MonkeyPaste.Avalonia.MpAvMessageNotificationWindow"
+        x:Class="MonkeyPaste.Avalonia.MpAvAppendNotificationWindow"
         Classes.IsClosing="{Binding IsClosing}"
         Classes.notificationWindow="True"
         IsVisible="{Binding IsVisible}"
         Topmost="True"
         Width="350"
-        MinHeight="100"
-        SizeToContent="Height"
+        Height="300"
+        SizeToContent="Manual"
         ShowInTaskbar="False"
         WindowState="Normal"
         SystemDecorations="None"
@@ -28,6 +28,7 @@
         Title="">
     <Border HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
+            MinHeight="130"
             BorderThickness="7"
             BorderBrush="{Binding BorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
             Background="{Binding BackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
@@ -41,7 +42,7 @@
                    Grid.Column="0"
                    Width="{Binding Bounds.Height, ElementName=NotificationIconImage}"
                    HorizontalAlignment="Left"
-                   VerticalAlignment="Top"
+                   VerticalAlignment="Stretch"
                    IsVisible="{Binding IconSourceStr, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
                    Source="{Binding IconSourceStr, Converter={StaticResource IconSourceObjToBitmapConverter}}"
                    Stretch="Fill" />
@@ -72,25 +73,37 @@
                     Height="1" />
 
             <Border Grid.Row="1"
-                    Grid.Column="1"
+                    Grid.Column="0"
                     Grid.ColumnSpan="3"
                     BorderThickness="1"
                     BorderBrush="White"
-                    MinHeight="25"
-                    HorizontalAlignment="Stretch"
                     CornerRadius="5"
                     Background="{DynamicResource ClipTileContentBackgroundBrush}"
                     Margin="10">
+                <Grid HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      x:DataType="local:MpAvClipTileViewModel"
+                      DataContext="{Binding Body}">
+                    <local:MpAvCefNetWebView x:Name="CefNetWebView"
+                                             ContentId="{Binding CopyItemId, Mode=OneWay}"
+                                             AppendData="{Binding AppendData, Mode=TwoWay}"
+                                             IsAppendLineMode="{Binding IsAppendLineMode, Mode=OneWay}"
+                                             IsContentLoaded="{Binding IsViewLoaded, Mode=TwoWay}"
+                                             IsAttachedToVisualTree="{Binding IsViewAttached, Mode=TwoWay}"
+                                             Focusable="True"
+                                             Background="Transparent"
+                                             HorizontalAlignment="Stretch"
+                                             VerticalAlignment="Stretch" />
+                    <Border IsVisible="{Binding IsAnyBusy, FallbackValue=True, TargetNullValue=True}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+                        <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Width="70"
+                                                   Height="70" />
+                    </Border>
+                </Grid>
 
-                <TextBlock HorizontalAlignment="Left"
-                           VerticalAlignment="Top"
-                           TextWrapping="NoWrap"
-                           FontSize="14"
-                           FontWeight="SemiBold"
-                           Background="Transparent"
-                           Focusable="True"
-                           Foreground="Black"
-                           Text="{Binding Body}" />
             </Border>
 
             <local:MpAvOptionsButton Grid.Row="0"

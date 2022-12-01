@@ -37,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             if (IsVisible) {
-                BindingContext.ProgressLoader.StartLoaderAsync().FireAndForgetSafeAsync(BindingContext);
+                BindingContext.ProgressLoader.BeginLoaderAsync().FireAndForgetSafeAsync(BindingContext);
                 Dispatcher.UIThread.Post(async () => {
                     while (true) {
                         BindingContext.OnPropertyChanged(nameof(BindingContext.ProgressBarCurrentWidth));

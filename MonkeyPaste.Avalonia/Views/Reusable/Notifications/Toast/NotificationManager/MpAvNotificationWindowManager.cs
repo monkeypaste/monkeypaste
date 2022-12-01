@@ -53,13 +53,12 @@ namespace MonkeyPaste.Avalonia {
                         nw = new MpAvUserActionNotificationWindow();
                         nw.DataContext = nvmb;
                         break;
+                    case MpNotificationLayoutType.Append:
+                        nw = MpAvAppendNotificationWindow.Instance;
+                        break;
                     default:
-                        if(nvmb.BodyFormat == MpTextContentFormat.RichHtml) {
-                            nw = MpAvMessageNotificationWindow.WebViewInstance;
-                        } else {
-                            nw = new MpAvMessageNotificationWindow();
-                            nw.DataContext = nvmb;
-                        }
+                        nw = new MpAvMessageNotificationWindow();
+                        nw.DataContext = nvmb;
                         break;
                 }
                 if(nw == null) {
@@ -74,48 +73,35 @@ namespace MonkeyPaste.Avalonia {
                 nw.DataContextChanged += Nw_DataContextChanged;
                 nw.EffectiveViewportChanged += Nw_EffectiveViewportChanged;
                 nw.PointerReleased += Nw_PointerReleased;
+                nw.Activated += Nw_Activated;
                 nw.Deactivated += Nw_Deactivated;
+                nw.LostFocus += Nw_LostFocus;
 
                 nw.GetObservable(Window.BoundsProperty).Subscribe(value => OnNotificationWindowBoundsChangedHandler(nw));
                 nw.GetObservable(Window.IsVisibleProperty).Subscribe(value => OnNotificationWindowIsVisibleChangedHandler(nw));
                 nw.GetObservable(Window.TopmostProperty).Subscribe(value => OnNotificationWindowTopmostChanged(nw));
 
-                //if (nw == MpAvMessageNotificationWindow.WebViewInstance &&
-                //    nw.DataContext != nvmb) {
-                //    // how did it get changed?
-                //    Debugger.Break();
-                //}
-                //if (nw != MpAvMessageNotificationWindow.WebViewInstance) {
-                //    // wv has fixed data context
-                //    nw.DataContext = nvmb;
-                //}
-                //nw.DataContext = nvmb;
-                var cb = nw.FindControl<Button>("CloseButton");
-                if(cb != null) {
-                    cb.Click += CloseButton_Click;
-                }
                 if (App.Desktop.MainWindow == null) {
                     // occurs on startup
                     App.Desktop.MainWindow = nw;
-                } else {
-                    //App.Desktop.MainWindow.Topmost = false;
-                }
+                } 
 
-                if (nw == MpAvMessageNotificationWindow.WebViewInstance &&
-                    nw.DataContext is MpMessageNotificationViewModel mnvm) {
-                    var wv = nw.GetVisualDescendant<MpAvCefNetWebView>();
-                    if(!wv.IsContentLoaded) {
-                        await mnvm.InitializeAsync(nvmb.NotificationFormat);
+                //if (nw == MpAvAppendNotificationWindow.Instance &&
+                //    nw.DataContext is MpMessageNotificationViewModel mnvm) {
+                //    var wv = nw.GetVisualDescendant<MpAvCefNetWebView>();
+                //    if(!wv.IsContentLoaded) {
+                //        await mnvm.InitializeAsync(nvmb.NotificationFormat);
 
-                        await wv.PerformLoadContentRequestAsync();
-                    }
+                //        await wv.PerformLoadContentRequestAsync();
+                //    }
                     
-                }
+                //}
 
                 BeginOpen(nw);
                 
             });
         }
+
 
         public void HideNotification(MpNotificationViewModelBase nvmb) {
             var wl = _windows.Where(x => x.DataContext == nvmb).ToList();
@@ -160,12 +146,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public async Task InitAsync() {
-            await MpAvMessageNotificationWindow.CreateWebViewInstanceAsync();
-            if(MpAvMessageNotificationWindow.WebViewInstance != null) {
-                MpAvMessageNotificationWindow.WebViewInstance.Show();
-            }
-        }
 
         public void UpdateTopmost(Window newVisibleWindow = null, bool wasDeactivated = false) {
             var w = newVisibleWindow == null ? HeadNotificationWindow : newVisibleWindow;
@@ -227,7 +207,7 @@ namespace MonkeyPaste.Avalonia {
             //var nvmb = w.DataContext as MpNotificationViewModelBase;
             if (w.DataContext is MpAvLoaderNotificationWindow) {
                 // ignore so bootstrapper can swap main window
-            } else if (w == MpAvMessageNotificationWindow.WebViewInstance) {
+            } else if (w == MpAvAppendNotificationWindow.Instance) {
                 w.Hide();
             } else {
                 w.Close();
@@ -237,15 +217,35 @@ namespace MonkeyPaste.Avalonia {
 
         #region Window Events
 
+        private void Nw_Activated(object sender, EventArgs e) {
+
+        }
         private void Nw_Deactivated(object sender, EventArgs e) {
             var w = sender as Window;
+            if(w is not MpAvAppendNotificationWindow) {
+                return;
+            }
+            MpConsole.WriteLine($"Notification '{w.DataContext}' Deactivated");
             w.Topmost = false;
             w.Topmost = true;
-            //UpdateTopmost(w, true);
+            w.Activate();
+            //w.Focus();
         }
 
+        private void Nw_LostFocus(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
+            var w = sender as Window;
+            MpConsole.WriteLine($"Notification '{w.DataContext}' Lost Focus");
+            if (w is not MpAvAppendNotificationWindow) {
+                return;
+            }
+            MpConsole.WriteLine($"Notification '{w.DataContext}' Deactivated");
+            w.Topmost = false;
+            w.Topmost = true;
+            w.Activate();
+            //w.Focus();
+        }
         private void Nw_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
-            if(sender == MpAvMessageNotificationWindow.WebViewInstance) {
+            if(sender == MpAvAppendNotificationWindow.Instance) {
                 return;
             }
             if (MpAvMainWindow.Instance == null || !MpAvMainWindow.Instance.IsInitialized) {
@@ -278,23 +278,14 @@ namespace MonkeyPaste.Avalonia {
             FinishClose(w);
         }
 
-
-        private void CloseButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-            //HideWindow(DataContext as MpNotificationViewModelBase);
-            var control = sender as Control;
-            if(control.GetVisualAncestor<Window>() is Window w &&
-                w.DataContext is MpNotificationViewModelBase nvmb) {
-                HideNotification(nvmb);
-            }
-        }
-
         private void OnNotificationWindowTopmostChanged(Window w) {
-            if(!w.IsVisible) {
-                return;
-            }
-            if(_windows.All(x=>!x.Topmost)) {
-                w.Topmost = true;
-            }
+            MpConsole.WriteLine($"Window '{w.DataContext}' topmost changed: {w.Topmost}");
+            //if(!w.IsVisible) {
+            //    return;
+            //}
+            //if(_windows.All(x=>!x.Topmost)) {
+            //    w.Topmost = true;
+            //}
         }
 
         private void OnNotificationWindowBoundsChangedHandler(Window w) {
@@ -304,16 +295,24 @@ namespace MonkeyPaste.Avalonia {
             UpdateWindowPositions();
         }
 
-        private void OnNotificationWindowIsVisibleChangedHandler(Window w) {
+        private async void OnNotificationWindowIsVisibleChangedHandler(Window w) {
             if(w.IsVisible) {
+                MpAvMainWindowViewModel.Instance.IsAnyNotificationActivating = true;
                 w.Activate();
-                UpdateTopmost(w);
+                w.Topmost = false;
+                w.Topmost = true;
+                if(w == MpAvAppendNotificationWindow.Instance) {
+                    w.Focus();
+                }
+                //UpdateTopmost(w);
+
+                await Task.Delay(1000);
+                MpAvMainWindowViewModel.Instance.IsAnyNotificationActivating = false;
                 return;
             }
             if (!w.IsVisible && w.DataContext is MpNotificationViewModelBase nvmb && nvmb.IsClosing) {
                 FinishClose(w);
             }
-
         }
 
         #endregion

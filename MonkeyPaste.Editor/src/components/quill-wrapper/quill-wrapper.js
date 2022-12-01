@@ -1,10 +1,10 @@
 // #region Globals
 
-/*const Parchment = Quill.imports.parchment;*/
 var quill;
 // #endregion Globals
 
 // #region Life Cycle
+
 function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 	if (Quill === undefined) {
 		/// host load error case
@@ -13,13 +13,6 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 	hljs.configure({   // optionally configure hljs
 		languages: ['javascript', 'ruby', 'python', 'xml', 'html', 'xhtml']
 	});
-
-	//class PreserveWhiteSpace {
-	//	constructor(quill,options) {
-	//		quill.container.style.whiteSpace = "pre-line";
-	//	}
-	//}
-	//Quill.register('modules/preserveWhiteSpace', PreserveWhiteSpace);
 
 	let quillOptions = {
 		//debug: true,
@@ -67,6 +60,12 @@ function getText(range, for_ole = false) {
 	}
 
 	return text;
+}
+function getAllText() {
+	if (!quill) {
+		return '';
+	}
+	return quill.getText();
 }
 
 function getRootHtml() {

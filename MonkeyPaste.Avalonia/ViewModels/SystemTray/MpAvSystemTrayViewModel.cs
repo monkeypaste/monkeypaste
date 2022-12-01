@@ -114,7 +114,7 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpMenuItemViewModel() {
                             Header = "Show Notifier DevTools",
-                            Command = MpAvMessageNotificationWindow.WebViewInstance.ShowNotifierDevToolsCommand
+                            Command = MpAvAppendNotificationWindow.Instance.ShowNotifierDevToolsCommand
                         },
 #endif
                         new MpMenuItemViewModel() {IsSeparator = true},

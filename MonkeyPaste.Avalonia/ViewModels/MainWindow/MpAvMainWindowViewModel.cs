@@ -309,6 +309,7 @@ namespace MonkeyPaste.Avalonia {
         public bool AnimateShowWindow { get; set; } = true;
         public bool AnimateHideWindow { get; set; } = true;
 
+        public DateTime? LastDecreasedFocusLevelDateTime { get; set; }
         public bool IsAnyItemDragging {
             get {
                 // TODO this only contains clip tiles now but should be the central
@@ -367,6 +368,7 @@ namespace MonkeyPaste.Avalonia {
         public bool CanResize { get; set; } = false;
 
         public bool IsAnyTextBoxFocused { get; set; }
+        public bool IsAnyNotificationActivating { get; set; }
 
         public bool IsAnyDropDownOpen { get; set; }
 
@@ -642,7 +644,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsMainWindowLocked):
                     //MpAvMainWindow.Instance.Topmost = IsMainWindowLocked;
-                    MpAvMainWindow.Instance.UpdateTopmost();
+                    UpdateTopmost();
                     break;
                 case nameof(IsMainWindowActive):
                     if(IsMainWindowActive) {
@@ -680,7 +682,7 @@ namespace MonkeyPaste.Avalonia {
             //    MpAvMainWindow.Instance.Topmost = true;
             //}
             //MpAvMainWindow.Instance.Topmost = true;
-            MpAvMainWindow.Instance.UpdateTopmost();
+            UpdateTopmost();
 
             IsMainWindowVisible = true;
             MainWindowScreenRect = MainWindowOpenedScreenRect;
@@ -703,7 +705,7 @@ namespace MonkeyPaste.Avalonia {
             MainWindowScreenRect = MainWindowClosedScreenRect;
             IsMainWindowVisible = false;
             MpAvMainWindow.Instance.Hide();
-            MpAvMainWindow.Instance.UpdateTopmost();
+            UpdateTopmost();
             //MpAvMainWindow.Instance.Topmost = false;
             //MpAvMainWindow.Instance.Renderer.Stop();
 
@@ -801,6 +803,34 @@ namespace MonkeyPaste.Avalonia {
             }
             return _animationTimer.IsEnabled;
         }
+
+
+        private void UpdateTopmost() {            
+            var mw = MpAvMainWindow.Instance;
+            bool initialTopmost = mw.Topmost;
+            bool hasNotification = MpAvNotificationWindowManager.Instance.HeadNotificationWindow != null;
+            if (IsMainWindowOpening && AnimateShowWindow) {
+                mw.Topmost = false;
+            } else if (IsMainWindowClosing && AnimateHideWindow) {
+                mw.Topmost = false;
+            } else if (IsMainWindowOpen) {
+                mw.Topmost = true;
+                if (hasNotification) {
+                    mw.Topmost = false;
+                    MpAvNotificationWindowManager.Instance.HeadNotificationWindow.Topmost = false;
+                    MpAvNotificationWindowManager.Instance.HeadNotificationWindow.Topmost = true;
+                } 
+            } else {
+                mw.Topmost = false;
+            }
+            if(mw.Topmost != initialTopmost) {
+                MpConsole.WriteLine($"Main Window Top Most Changed. Topmost: {mw.Topmost}", true);
+                MpConsole.WriteLine($"IsMainWindowOpening: {IsMainWindowOpening}");
+                MpConsole.WriteLine($"IsMainWindowClosing: {IsMainWindowClosing}");
+                MpConsole.WriteLine($"IsMainWindowOpen: {IsMainWindowOpen}");
+                MpConsole.WriteLine($"hasNotification: {hasNotification}",false,true);
+            }
+        }
         #endregion
 
         #region Commands        
@@ -839,7 +869,7 @@ namespace MonkeyPaste.Avalonia {
                     if (AnimateShowWindow) {
                         MpAvMainWindow.Instance.Show();
                         //MpAvMainWindow.Instance.Topmost = false;
-                        MpAvMainWindow.Instance.UpdateTopmost();
+                        UpdateTopmost();
                         //MpAvMainWindow.Instance.Renderer.Start();
 
                         //_animationCts.TryReset();
@@ -914,7 +944,7 @@ namespace MonkeyPaste.Avalonia {
                         }
                         //
                         //MpAvMainWindow.Instance.Topmost = false;
-                        MpAvMainWindow.Instance.UpdateTopmost();
+                        UpdateTopmost();
                         await AnimateMainWindowAsync(MainWindowScreenRect, MainWindowClosedScreenRect);
                     }
                     FinishMainWindowHide(active_pinfo);
@@ -923,36 +953,9 @@ namespace MonkeyPaste.Avalonia {
 
             },
             () => {
-                if(IsAnyItemDragging) {
-                    string drag_info = string.Empty;
-                    //if(MpAvClipTrayViewModel.Instance.DragItem == null) {
-                    //    if(MpAvPersistentClipTilePropertiesHelper.GetIsDraggingTiles().Count == 0) {
-                    //        drag_info = "NULL";
-                    //    } else {
-                    //        drag_info = string.Join(",", MpAvPersistentClipTilePropertiesHelper.GetIsDraggingTiles());
-                    //    }
-
-                    //} else {
-                    //    drag_info = MpAvClipTrayViewModel.Instance.DragItem.ToString();
-                    //}
-                    if(MpAvDocumentDragHelper.DragDataObject is IDataObject ido) {
-                        drag_info = ido.Get(MpPortableDataFormats.Text) as string;
-                    } else if(IsMainWindowOrientationDragging) {
-                        drag_info = "ORIENTATION DRAG";
-                    }
-
-                    MpConsole.WriteLine($"Force ignore mw close, dnd in progress on {drag_info}");
-                    return false;
-                }
-
-                if (IsAnyDialogOpen) {
-                    MpConsole.WriteLine("Force ignore mw close, dialog is open");
-                    return false;
-                }
-
-                bool isNotificationActive = MpAvNotificationWindowManager.Instance.IsAnyNotificationActive;
-
-                bool fromShorcutKey = false;
+                bool wasFocusLevelJustDecreased = 
+                    LastDecreasedFocusLevelDateTime.HasValue && 
+                        (DateTime.Now - LastDecreasedFocusLevelDateTime.Value).TotalMilliseconds < 1000;
 
                 bool canHide =
                         !IsMainWindowLocked &&
@@ -961,27 +964,22 @@ namespace MonkeyPaste.Avalonia {
                           !IsMainWindowInitiallyOpening &&
                           !IsAnyDialogOpen &&
                           !IsAnyItemDragging &&
-                          !isNotificationActive &&
+                          !IsAnyNotificationActivating &&
+                          !wasFocusLevelJustDecreased &&
                           !IsResizing;
 
-                if(canHide && fromShorcutKey) {
-                    var sctvm = MpAvClipTrayViewModel.Instance.SelectedItem;
-                    if (sctvm != null && (
-                            sctvm.IsSubSelectionEnabled ||
-                            !sctvm.IsContentAndTitleReadOnly)) {
-                        // escape is at a higher focus level than main window so ignore 
-                        canHide = false;
-                    }
-                }
                 if(!canHide) {
                     MpConsole.WriteLine("");
                     MpConsole.WriteLine($"Cannot hide main window:");
-                    MpConsole.WriteLine($"fromShortcutKey: {(fromShorcutKey)}");
                     MpConsole.WriteLine($"IsMainWindowLocked: {(IsMainWindowLocked)}");
-                    MpConsole.WriteLine($"IsMainWindowInitiallyOpening: {(IsMainWindowInitiallyOpening)}");
                     MpConsole.WriteLine($"IsAnyDropDownOpen: {(IsAnyDropDownOpen)}");
-                    MpConsole.WriteLine($"isNotificationActive: {(isNotificationActive)}");
+                    MpConsole.WriteLine($"IsAnyDialogOpen: {(IsAnyDialogOpen)}");
+                    MpConsole.WriteLine($"IsAnyTextBoxFocused: {(IsAnyTextBoxFocused)}");
+                    MpConsole.WriteLine($"IsMainWindowInitiallyOpening: {(IsMainWindowInitiallyOpening)}");
                     MpConsole.WriteLine($"IsShowingDialog: {(IsAnyDialogOpen)}");
+                    MpConsole.WriteLine($"IsAnyItemDragging: {(IsAnyItemDragging)}");
+                    MpConsole.WriteLine($"IsAnyNotificationActivating: {(IsAnyNotificationActivating)}");
+                    MpConsole.WriteLine($"wasFocusLevelJustDecreased: {(wasFocusLevelJustDecreased)}");
                     MpConsole.WriteLine($"IsResizing: {(IsResizing)}");
                     MpConsole.WriteLine($"IsMainWindowClosing: {(IsMainWindowClosing)}");
                     MpConsole.WriteLine("");

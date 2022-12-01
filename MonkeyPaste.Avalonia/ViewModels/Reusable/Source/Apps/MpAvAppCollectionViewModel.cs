@@ -217,7 +217,7 @@ namespace MonkeyPaste.Avalonia {
 
             if(avm == null) {
                 Dispatcher.UIThread.Post(async () => {
-                    IsBusy = true;
+                    //IsBusy = true;
 
                     var iconStr = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(e.ProcessPath);
                     var icon = await MpIcon.Create(iconStr);
@@ -232,7 +232,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     LastActiveAppViewModel = avm;
 
-                    IsBusy = false;
+                    //IsBusy = false;
 
                 });
             } else {

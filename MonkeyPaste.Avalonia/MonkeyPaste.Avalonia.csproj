@@ -1130,6 +1130,9 @@
     <Compile Update="Views\Reusable\ContextMenu\DefaultMenuItem\MpAvDefaultMenuItemView.axaml.cs">
       <DependentUpon>MpAvDefaultMenuItemView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Reusable\Notifications\Toast\Append\MpAvAppendNotificationWindow.axaml.cs">
+      <DependentUpon>MpAvAppendNotificationWindow.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Reusable\Notifications\Toast\Loader\MpAvLoaderNotificationWindow.axaml.cs">
       <DependentUpon>MpAvLoaderNotificationWindow.axaml</DependentUpon>
     </Compile>

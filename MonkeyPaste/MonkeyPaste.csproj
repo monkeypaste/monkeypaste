@@ -59,6 +59,7 @@
     <None Remove="ViewModels\Shell\**" />
     <None Remove="Views\**" />
     <Compile Remove="App.xaml.cs" />
+    <Compile Remove="Enums\MpTextContentFormat.cs" />
     <Compile Remove="Models\MpAnalyticItemParameter.cs" />
     <Compile Remove="Models\MpAnalyticItemParameterValue.cs" />
     <Compile Remove="Models\MpColor.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="ViewModels\Reusable\Notifications\Builder\MpNotificationBuilder.cs" />
     <Compile Include="ViewModels\Reusable\Notifications\Items\Base\MpNotificationViewModelBase.cs" />
     <Compile Include="ViewModels\Reusable\Notifications\Items\MpLoaderNotificationViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\Notifications\Items\MpAppendNotificationViewModel.cs" />
     <Compile Include="ViewModels\Reusable\Notifications\Items\MpMessageNotificationViewModel.cs" />
     <Compile Include="ViewModels\Reusable\Notifications\Items\MpUserActionNotificationViewModel.cs" />
     <Compile Include="ViewModels\Reusable\Preferences\MpPrefViewModel.cs" />

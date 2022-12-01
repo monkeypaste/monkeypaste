@@ -69,12 +69,14 @@ namespace MonkeyPaste.Avalonia {
             }
 
             _timer.Start();
+            MpConsole.WriteLine("Clipboard watcher started");
         }
 
         public void StopMonitor() {
             if (_timer != null) {
                 _timer.Stop();
                 _lastCbo = null;
+                MpConsole.WriteLine("Clipboard watcher stopped");
             }
         }
 

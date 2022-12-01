@@ -2345,32 +2345,41 @@ namespace MonkeyPaste.Avalonia {
                     // append mode was just toggled ON (param was null)
                     await AssignAppendClipTileAsync();
                 }
+                bool was_append_already_enabled = IsAnyAppendMode;
+
                 IsAppendMode = !isAppendLine;
                 IsAppendLineMode = isAppendLine;
-                string icon_res = IsAppendLineMode ? "AppendLineImage" : "AppendImage";
-                await MpNotificationBuilder.ShowMessageAsync(
-                           maxShowTimeMs: -1,
-                           title: $"Append{(isAppendLine ? "-Line" : "")} Mode Activated", 
-                           body: AppendNotifierViewModel,
-                           msgType: MpNotificationType.AppModeChange,
-                           iconSourceStr: MpPlatformWrapper.Services.PlatformResource.GetResource(icon_res) as string);
 
+                AppendClipTileViewModel.OnPropertyChanged(nameof(AppendClipTileViewModel.IsAppendLineMode));
+
+                MpNotificationBuilder.ShowMessageAsync(
+                           title: "MODE CHANGED",
+                           body: $"Append{(isAppendLine ? "-Line" : "")} Mode Activated",
+                           msgType: MpNotificationType.AppModeChange,
+                           iconSourceStr: IsAppendLineMode ? "AppendLineImage" : "AppendImage").FireAndForgetSafeAsync(this);
+                if (was_append_already_enabled) {
+                    // don't trigger if already activated, the AppendDataChanged() timesout because IsContentLoaded doesn't goto false
+                    return;
+                }
+                // wait so append doesn't beat activate onto window stack
+                await Task.Delay(150);
+                MpNotificationBuilder.ShowNotificationAsync(MpNotificationType.AppendChanged).FireAndForgetSafeAsync();
             });
         }
         private void DeactivateAppendMode() {
-            
-
             Dispatcher.UIThread.Post(async () => {
                 bool wasAppendLineMode = IsAppendLineMode;
                 var append_tile = AppendClipTileViewModel;
                 IsAppendLineMode = false;
                 IsAppendMode = false;
+                AppendClipTileViewModel.OnPropertyChanged(nameof(AppendClipTileViewModel.IsAppendLineMode));
+
                 if (append_tile != null) {
                     append_tile.OnPropertyChanged(nameof(append_tile.HasAppendModel));
                 }
-                await AppendNotifierViewModel.InitializeAsync(null);
+                //await AppendNotifierViewModel.InitializeAsync(null);
                 AppendNotifierViewModel.OnPropertyChanged(nameof(AppendNotifierViewModel.HasAppendModel));
-                OnPropertyChanged(nameof(AppendNotifierViewModel));
+                //OnPropertyChanged(nameof(AppendNotifierViewModel));
 
                 await MpNotificationBuilder.ShowMessageAsync(
                            title: $"MODE CHANGED",

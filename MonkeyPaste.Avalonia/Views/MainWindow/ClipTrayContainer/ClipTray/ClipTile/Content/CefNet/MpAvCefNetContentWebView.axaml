@@ -13,7 +13,6 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvCefNetContentWebView">
     <local:MpAvCefNetWebView x:Name="CefNetWebView"
                              ContentId="{Binding CopyItemId, Mode=OneWay}"
-                             AppendData="{x:Null}"
                              HasAppendModel="{Binding HasAppendModel, Mode=OneWay}"
                              IsContentLoaded="{Binding IsViewLoaded, Mode=TwoWay}"
                              IsContentResizing="{Binding IsResizing}"

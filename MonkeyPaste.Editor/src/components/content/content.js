@@ -249,6 +249,9 @@ function convertContentToFormats(isForOle, formats) {
 }
 
 function appendContentData(data) {
+	if (isNullOrEmpty(data)) {
+		return;
+	}
 	if (ContentItemType == 'Text') {
 		appendTextContentData(data);
 	} else if (ContentItemType == 'FileList') {
@@ -256,7 +259,6 @@ function appendContentData(data) {
 	} else if (ContentItemType == 'Image') {
 		appendImageContentData(data);
 	}
-	scrollToEnd();
 }
 
 // #endregion Actions

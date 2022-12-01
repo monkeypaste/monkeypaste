@@ -375,24 +375,6 @@ namespace MonkeyPaste.Avalonia {
             mwtg.InvalidateMeasure();
         }
 
-        public void UpdateTopmost() {
-            if (BindingContext.IsMainWindowOpening &&
-                        BindingContext.AnimateShowWindow) {
-                this.Topmost = false;
-            } else if (BindingContext.IsMainWindowClosing &&
-                        BindingContext.AnimateHideWindow) {
-                this.Topmost = false;
-            } else if (BindingContext.IsMainWindowOpen) {
-                if (MpAvNotificationWindowManager.Instance.IsAnyNotificationVisible) {
-                    this.Topmost = false;
-                    MpAvNotificationWindowManager.Instance.UpdateTopmost();
-                } else {
-                    this.Topmost = true;
-                }
-            } else {
-                this.Topmost = false;
-            }
-        }
         #endregion
 
         #region Protected Overrides

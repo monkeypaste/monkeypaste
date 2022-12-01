@@ -793,78 +793,6 @@ function updateTemplatesAfterSelectionChange() {
         }
     }
     drawOverlay();
-    return;
-    ///////
-
-    //if (WindowMouseDownLoc) {
-    //    clearAllTemplateNavStates();
-    //    return;
-    //}
-    //let sel_range = getDocSelection();
-    //let last_sel_range = LastSelRange;
-
-    //last_sel_range = last_sel_range ? last_sel_range : sel_range;
-    //let sel_bg_color = getTextSelectionBgColor();
-    //let template_elms_in_sel_range = sel_range ? getTemplateElementsInRange(sel_range) : [];
-    //let all_template_elms = getTemplateElements();
-    //let show_sel_bg_color = !isShowingEditTemplateToolbar() && isSubSelectionEnabled();
-
-    //let old_closest_idx = sel_range.index > last_sel_range.index ? last_sel_range.index + last_sel_range.length : last_sel_range.index;
-    //let is_nav_right = sel_range.index > old_closest_idx && sel_range.length == 0;
-
-    //for (var i = 0; i < all_template_elms.length; i++) {
-    //    let t_elm = all_template_elms[i];
-    //    //let tiguid = t_elm.getAttribute('templateInstanceGuid');
-    //    let is_t_in_sel_range = template_elms_in_sel_range.includes(t_elm);
-    //    //let t_doc_idx = getTemplateDocIdx(tiguid);
-    //    let t_doc_idx = getElementDocIdx(t_elm);
-    //    if (show_sel_bg_color) {
-    //        if (is_t_in_sel_range) {
-    //            if (is_nav_right &&
-    //                !t_elm.classList.contains(Template_IN_SEL_RANGE_Class) &&
-    //                !t_elm.classList.contains(Template_AT_INSERT_Class)) {
-    //                setTemplateNavState(t_elm, Template_BEFORE_INSERT_Class);
-    //                continue;
-    //            }
-    //            log('sel template: ' + t_elm.getAttribute('templateGuid'));
-    //            if (sel_range.length > 0) {
-    //                let is_t_at_sel_bounds = t_doc_idx == sel_range.index || t_doc_idx == sel_range.index + sel_range.length;
-    //                if (is_t_at_sel_bounds) {
-    //                    if (t_elm.classList.contains(Template_AT_INSERT_Class)) {
-    //                        setTemplateNavState(t_elm, Template_IN_SEL_RANGE_Class);
-    //                    } else {
-    //                        clearTemplateNavState(t_elm);
-    //                    }
-    //                } else {
-    //                    setTemplateNavState(t_elm, Template_IN_SEL_RANGE_Class);
-    //                }
-    //            } else {
-    //                setTemplateNavState(t_elm, Template_AT_INSERT_Class);
-    //            }
-
-    //        } else {
-    //            if (is_nav_right && sel_range.index == t_doc_idx + 1) {
-    //                if (t_elm.classList.contains(Template_AT_INSERT_Class)) {
-    //                    setTemplateNavState(t_elm);
-    //                } else {
-    //                    setDocSelection(sel_range.index - 1, 0, 'silent');
-    //                    setTemplateNavState(t_elm, Template_AT_INSERT_Class);
-    //                }
-
-    //            } else if (!is_nav_right && sel_range.index == t_doc_idx - 1) {
-    //                if (t_elm.classList.contains(Template_BEFORE_INSERT_Class)) {
-    //                    clearTemplateNavState(t_elm);
-    //                } else {
-    //                    setDocSelection(sel_range.index + 1, 0, 'silent');
-    //                    setTemplateNavState(t_elm, Template_BEFORE_INSERT_Class);
-    //                }
-
-    //            } else {
-    //                clearTemplateNavState(t_elm);
-    //            }
-    //        }
-    //    }
-    //}
 }
 
 
@@ -875,14 +803,6 @@ function insertTemplate(range, t, fromDropDown, source = 'api') {
     // NOTE update must be called because text change hasn't picked up template yet (when none exist yet)
     updateTemplatesAfterTextChanged();
 }
-
-//function debabyTemplateElement(telm) {
-//    return;
-//    let t = getTemplateFromDomNode(telm);
-//    telm.style.width = 'fit-content';
-//    telm.style.height = 'fit-content';
-//    telm.innerText = getTemplateDisplayValue(t);
-//}
 
 function focusTemplate(ftguid) {
     if (isShowingPasteToolbar()) {

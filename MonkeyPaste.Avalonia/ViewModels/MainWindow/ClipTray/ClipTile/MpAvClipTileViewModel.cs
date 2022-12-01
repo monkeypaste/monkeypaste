@@ -28,7 +28,8 @@ namespace MonkeyPaste.Avalonia {
         MpIResizableViewModel, 
         MpITextContentViewModel,
         //MpIRtfSelectionRange,
-        MpIContextMenuViewModel,
+        MpIContextMenuViewModel, 
+        MpITitledViewModel,
         //MpIFindAndReplaceViewModel,
         MpITooltipInfoViewModel,
         MpISizeViewModel {
@@ -148,6 +149,11 @@ namespace MonkeyPaste.Avalonia {
                 return CopyItemData.ToPlainText();
             }
         }
+        #endregion
+
+        #region MpITitledViewModel Implementation
+
+        string MpITitledViewModel.Title => CopyItemTitle;
         #endregion
 
         #region MpITooltipInfoViewModel Implementation
@@ -575,6 +581,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        #region Append
         public bool IsAppendClipTile {
             get {
                 if(Parent == null || Parent.AppendNotifierViewModel == null) {
@@ -596,6 +603,23 @@ namespace MonkeyPaste.Avalonia {
         public bool HasAppendModel => IsAppendNotifier || IsAppendClipTile;
 
         public string AppendData { get; set; } = null;
+
+        public bool? IsAppendLineMode {
+            get {
+                // null == no append mode
+                // false == append mode
+                // true == append line mode
+                if(!IsAppendNotifier || Parent == null) {
+                    return null;
+                }
+                if(!Parent.IsAnyAppendMode) {
+                    return null;
+                }
+                return Parent.IsAppendLineMode;
+            }
+        }
+
+        #endregion
         public bool IsHoveringOverSourceIcon { get; set; } = false;
         public bool HasTemplates { get; set; } = false;
         public bool IsFindAndReplaceVisible { get; set; } = false;
@@ -1172,6 +1196,7 @@ namespace MonkeyPaste.Avalonia {
             //GetContentView().IsContentUnloaded = false;
 
             IsBusy = true;
+
             await Task.Delay(1);
 
             if (ci != null && MpAvPersistentClipTilePropertiesHelper.TryGetByPersistentSize_ById(ci.Id, out double uniqueWidth)) {
@@ -1527,6 +1552,8 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     Dispatcher.UIThread.Post(async () => {
                         await InitializeAsync(ci);
+                        //wait for model to propagate then trigger view to reload
+                        IsViewLoaded = false;
                     });
                 }
             }
@@ -1616,13 +1643,19 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.CanScroll));
                     OnPropertyChanged(nameof(IsHorizontalScrollbarVisibile));
                     OnPropertyChanged(nameof(IsVerticalScrollbarVisibile));
-
+                    if(!IsSubSelectionEnabled) {
+                        MpAvMainWindowViewModel.Instance.LastDecreasedFocusLevelDateTime = DateTime.Now;
+                    }
                     break;
                 case nameof(IsTitleReadOnly):
                     if (IsTitleReadOnly) {
+                        MpAvMainWindowViewModel.Instance.LastDecreasedFocusLevelDateTime = DateTime.Now;
                         MpAvPersistentClipTilePropertiesHelper.RemovePersistentIsTitleEditableTile_ById(CopyItemId);
                         if(CopyItemTitle != _originalTitle) {
                             HasModelChanged = true;
+                            if(this is MpITitledViewModel tvm) {
+                                tvm.OnPropertyChanged(nameof(tvm.Title));
+                            }
                         }
                     } else {
                         MpAvPersistentClipTilePropertiesHelper.AddPersistentIsTitleEditableTile_ById(CopyItemId);
@@ -1634,12 +1667,13 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
                     break;
                 case nameof(IsContentReadOnly):
-                    if (!IsContentReadOnly && !IsSelected) {
-                        IsSelected = true;
-                    }
                     if (IsContentReadOnly) {
                         MpAvPersistentClipTilePropertiesHelper.RemovePersistentIsContentEditableTile_ById(CopyItemId);
                     } else {
+                        MpAvMainWindowViewModel.Instance.LastDecreasedFocusLevelDateTime = DateTime.Now;
+                        if (!IsSelected) {
+                            IsSelected = true;
+                        }
                         MpAvPersistentClipTilePropertiesHelper.AddPersistentIsContentEditableTile_ById(CopyItemId);
                     }
                     MpMessenger.Send<MpMessageType>(IsContentReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
@@ -1684,6 +1718,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(HasModelChanged):
                     if (HasModelChanged) {
+                        
                         if (CopyItemData == "<p><br></p>" || CopyItemData == null) {
                             // what IS this nasty shit??
                             Debugger.Break();

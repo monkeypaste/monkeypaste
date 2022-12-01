@@ -65,7 +65,7 @@ function startAutoScroll() {
 
     editor_elm.style.width = adjusted_editor_width + 'px';
 
-    scrollToDocRange(DragSelectionRange, editor_elm);
+    scrollDocRangeIntoView(DragSelectionRange);
 
     AutoScrollInterval = setInterval(onAutoScrollTick, 300, editor_elm);
 }
@@ -85,17 +85,20 @@ function stopAutoScroll(isLeave) {
     }
 }
 
-function scrollToDocRange(docRange, target) {
-    target = target ? target : getEditorContainerElement();
-    if (!docRange) {
-        return;
+function scrollDocRangeIntoView(docRange) {
+    let dom_range = convertDocRangeToDomRange(docRange);
+    let scroll_elm = dom_range.endContainer;
+    if (!scroll_elm) {
+        scroll_elm = dom_range.startContainer;
+        if (!scroll_elm) {
+            log('error scrolling to doc range: ' + docRange);
+            return;
+        }
     }
-    let range_rects = getRangeRects(docRange);
-    if (!range_rects || range_rects.length == 0) {
-        scrollToHome();
-        return;
+    if (scroll_elm.nodeType === 3) {
+        scroll_elm = scroll_elm.parentNode;
     }
-    scrollToOffset(range_rects[0], target);
+    scroll_elm.scrollIntoView();
 }
 
 function scrollEditorTop(new_top) {

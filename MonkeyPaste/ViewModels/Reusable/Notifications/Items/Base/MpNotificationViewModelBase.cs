@@ -60,7 +60,7 @@ namespace MonkeyPaste {
         UserTriggerEnabled,
         UserTriggerDisabled,
         AppModeChange,
-        AppendBuffer,
+        AppendChanged,
         ContentFormatDegradation,
         TrialExpired,
         PluginResponseMessage,
@@ -73,6 +73,7 @@ namespace MonkeyPaste {
     public enum MpNotificationLayoutType {
         //Default = 0,
         Message,
+        Append,
         Loader,
         Warning, //confirm
         WarningWithOption, //retry/ignore/quit
@@ -103,6 +104,8 @@ namespace MonkeyPaste {
                 case MpNotificationType.DbError:
                 case MpNotificationType.PluginResponseError:
                     return MpNotificationLayoutType.Error;
+                case MpNotificationType.AppendChanged:
+                    return MpNotificationLayoutType.Append;
                 default:
                     return MpNotificationLayoutType.Message;
             }
@@ -161,7 +164,7 @@ namespace MonkeyPaste {
                             Command = CloseNotificationCommand
                         },
                         new MpMenuItemViewModel() {
-                            Header = "Don't Show Again",
+                            Header = $"Hide all '{NotificationType.EnumToLabel()}' notifications",
                             IconResourceKey = "ClosedEyeImage",
                             Command = CheckDoNotShowAgainCommand
                         }
@@ -278,14 +281,14 @@ namespace MonkeyPaste {
 
         #region Model
 
-        public MpTextContentFormat BodyFormat {
-            get {
-                if(NotificationFormat == null) {
-                    return MpTextContentFormat.PlainText;
-                }
-                return NotificationFormat.BodyFormat;
-            }
-        }
+        //public MpTextContentFormat BodyFormat {
+        //    get {
+        //        if(NotificationFormat == null) {
+        //            return MpTextContentFormat.PlainText;
+        //        }
+        //        return NotificationFormat.BodyFormat;
+        //    }
+        //}
 
         public virtual string Title {
             get {

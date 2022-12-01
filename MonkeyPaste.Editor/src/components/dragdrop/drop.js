@@ -96,7 +96,7 @@ function resetDrop(fromHost, wasLeave) {
 }
 
 function dropData(docIdx, dt) {
-    performDataTransferOnContent(dt, { index: docIdx, length: 0 });
+    performDataTransferOnContent(dt, { index: docIdx, length: 0 },'user');
 }
 
 // #endregion Actions
@@ -152,10 +152,10 @@ function onDragOver(e) {
 
     // VALIDATE (EXTERNAL)
 
-    if (SelIdxBeforeDrag >= 0) {
-        // don't allow overlay drag to drop, needs to be sub-selectable to allow
-        return false;
-    }
+    //if (SelIdxBeforeDrag >= 0) {
+    //    // don't allow overlay drag to drop, needs to be sub-selectable to allow
+    //    return false;
+    //}
 
     let is_valid = false;
     for (var i = 0; i < e.dataTransfer.types.length; i++) {
@@ -283,10 +283,10 @@ function onDrop(e) {
     // DROP DATA
 
     let cur_drop_idx = DropIdx;
-    let pre_doc_length = getDocLength();
+    //let pre_doc_length = getDocLength();
 
-    let length_delta = 0;
-    let post_sel_start_idx = cur_drop_idx;
+    //let length_delta = 0;
+    //let post_sel_start_idx = cur_drop_idx;
 
     if (IsPreBlockDrop) {
         let isFirstLine = getLineIdx(cur_drop_idx) == 0;
@@ -298,8 +298,8 @@ function onDrop(e) {
         insertText(0, '\n');
         dropData(0, e.dataTransfer);
 
-        length_delta = getDocLength() - pre_doc_length - 1;
-        post_sel_start_idx = 0;
+        //length_delta = getDocLength() - pre_doc_length - 1;
+        //post_sel_start_idx = 0;
     } else if (IsPostBlockDrop) {
         cur_drop_idx = getLineEndDocIdx(cur_drop_idx);
         if (cur_drop_idx < getDocLength() - 1) {
@@ -309,19 +309,19 @@ function onDrop(e) {
         }
         dropData(cur_drop_idx, e.dataTransfer);
 
-        length_delta = getDocLength() - pre_doc_length - 1;
-        post_sel_start_idx = cur_drop_idx;
+        //length_delta = getDocLength() - pre_doc_length - 1;
+        //post_sel_start_idx = cur_drop_idx;
     } else if (IsSplitDrop) {
         insertText(cur_drop_idx, '\n');
         insertText(cur_drop_idx, '\n');
         dropData(cur_drop_idx + 1, e.dataTransfer);
 
-        length_delta = getDocLength() - pre_doc_length - 2;
-        post_sel_start_idx = cur_drop_idx + 1;
+        //length_delta = getDocLength() - pre_doc_length - 2;
+        //post_sel_start_idx = cur_drop_idx + 1;
     } else {
         dropData(cur_drop_idx, e.dataTransfer);
 
-        length_delta = getDocLength() - pre_doc_length;
+        //length_delta = getDocLength() - pre_doc_length;
     }
 
     // SELECT DROP CONTENT

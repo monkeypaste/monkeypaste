@@ -77,8 +77,9 @@ namespace MonkeyPaste {
             }
 
             if(copyItemId == sourceObjId && sourceType == MpCopyItemSourceType.CopyItem) {
-                // self reference detected, not sure how to handle, letting happen for now
-                Debugger.Break();
+                // self reference (ole within item), ignore
+                MpConsole.WriteLine($"Self reference detected. Ignoring MpCopyItemSource create for ciid: " + copyItemId);
+                return null;
             }
             if(!createdDateTime.HasValue) {
                 createdDateTime = DateTime.UtcNow;
