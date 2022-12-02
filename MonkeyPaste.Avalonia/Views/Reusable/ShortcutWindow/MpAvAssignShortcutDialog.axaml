@@ -8,12 +8,11 @@
         xmlns:local="using:MonkeyPaste.Avalonia"
         MinHeight="300"
         MinWidth="400"
-        Topmost="True"
         ShowInTaskbar="False"
         WindowStartupLocation="CenterScreen"
-        x:DataType="local:MpAvAssignShortcutModalWindowViewModel"
+        x:DataType="local:MpAvAssignShortcutViewModel"
         x:CompileBindings="True"
-        x:Class="MonkeyPaste.Avalonia.MpAvAssignShortcutWindow"
+        x:Class="MonkeyPaste.Avalonia.MpAvAssignShortcutDialog"
         Title="Assign Shortcut">
     <Grid RowDefinitions="20,*,Auto,Auto,50">
         <TextBlock Grid.Row="0"

@@ -10,10 +10,10 @@ using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvAssignShortcutWindow : Window {
+    public partial class MpAvAssignShortcutDialog : Window {
 
         public bool DialogResult { get; set; } = false;
-        public MpAvAssignShortcutWindow() {
+        public MpAvAssignShortcutDialog() {
             InitializeComponent();
 #if DEBUG
             this.AttachDevTools();
@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
             if(DataContext == null) {
                 return;
             }
-            if(DataContext is MpAvAssignShortcutModalWindowViewModel asmwvm) {
+            if(DataContext is MpAvAssignShortcutViewModel asmwvm) {
                 //var dg = this.FindControl<DataGrid>("ShortcutDataGrid");
                 //var cv = new DataGridCollectionView(asmwvm.KeyItems);
                 //cv.GroupDescriptions.Add(new DataGridPathGroupDescription("SeqIdx"));
@@ -58,7 +58,7 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                if (DataContext is MpAvAssignShortcutModalWindowViewModel asmwvm) {
+                if (DataContext is MpAvAssignShortcutViewModel asmwvm) {
                     asmwvm.AddKeyDownCommand.Execute(keyStr);
                 }
             });
@@ -69,14 +69,14 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                if (DataContext is MpAvAssignShortcutModalWindowViewModel asmwvm) {
+                if (DataContext is MpAvAssignShortcutViewModel asmwvm) {
                     asmwvm.RemoveKeyDownCommand.Execute(keyStr);
                 }
             });
             
         }
         private void Ok_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-            (DataContext as MpAvAssignShortcutModalWindowViewModel).OkCommand.Execute(null);
+            (DataContext as MpAvAssignShortcutViewModel).OkCommand.Execute(null);
             DialogResult = true;
             Close();
         }

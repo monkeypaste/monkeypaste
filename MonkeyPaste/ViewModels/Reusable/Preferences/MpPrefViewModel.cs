@@ -398,6 +398,7 @@ namespace MonkeyPaste {
         public string SpeechSynthVoiceName { get; set; } = "Zira";
 
         public bool IgnoreNewDuplicates { get; set; } = true;
+        public bool IgnoreAppendedItems { get; set; } = true;
 
         public int MaxRecentClipItems { get; set; } = 25;
 

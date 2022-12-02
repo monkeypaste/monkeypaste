@@ -20,13 +20,14 @@ using Avalonia.Interactivity;
 namespace MonkeyPaste.Avalonia {
     public class MpAvCefNetWebViewGlue : AvaloniaWebViewGlue {
 
-        public MpAvCefNetWebViewGlue(MpAvCefNetWebView view) : base(view) {
+        public MpAvCefNetWebViewGlue(WebView view) : base(view) {
         }
 
         protected override bool OnSetFocus(CefBrowser browser, CefFocusSource source) {
             if (source == CefFocusSource.Navigation) {
                 return true;
             }
+            
             return false;
         }
 

@@ -173,9 +173,50 @@ function drawDropPreview(ctx, color = 'red', thickness = 1.0, line_style = [5,5]
     if (render_caret_line) {        
         drawLine(ctx, render_caret_line, color, thickness);
 	}
-
 }
 
+function drawAppendNotifierPreview(ctx, color = 'red', thickness = 1.0, line_style = [5, 5]) {
+    let append_idx = getDocLength() - (IsAppendMode ? 1:0);
+    if (isDragCopy()) {
+        color = 'lime';
+    }
+    if (append_idx < 0) {
+        return;
+    }
+
+    let block_line_offset = 3.0;
+    let editor_rect = getEditorContainerRect();
+
+    let line_start_idx = getLineStartDocIdx(append_idx);
+    let line_start_rect = getCharacterRect(line_start_idx);
+    let pre_y = line_start_rect.top - block_line_offset;
+    let pre_line = { x1: 0, y1: pre_y, x2: editor_rect.width, y2: pre_y };
+
+    let line_end_idx = getLineEndDocIdx(append_idx);
+    let line_end_rect = getCharacterRect(line_end_idx);
+    let post_y = line_end_rect.bottom + block_line_offset;
+    let post_line = { x1: 0, y1: post_y, x2: editor_rect.width, y2: post_y };
+
+    let caret_rect = getCharacterRect(append_idx);
+    let caret_line = getCaretLine(append_idx);
+
+    let render_lines = [];
+    let render_caret_line = null;
+
+    if (IsAppendLineMode) {
+        render_lines.push(post_line);
+    } else {
+        render_caret_line = caret_line;
+    }
+
+    for (var i = 0; i < render_lines.length; i++) {
+        let line = render_lines[i];
+        drawLine(ctx, line, color, thickness, line_style)
+    }
+    if (render_caret_line) {
+        drawLine(ctx, render_caret_line, color, thickness);
+    }
+}
 function drawFancyTextSelection(ctx) {
     let sel_rects = getRangeRects(getDocSelection());
     sel_rects.forEach((srect) => drawRect(ctx, srect, 'purple', 'goldenrod', 1.5, 100/255));
@@ -198,7 +239,7 @@ function drawTextSelection(ctx) {
         drawFancyTextSelection(ctx);
         return;
     }
-    if (!IsDragging && !IsDropping && !BlurredSelectionRects && !CurFindReplaceDocRangesRects) {
+    if (!IsDragging && !IsDropping && !BlurredSelectionRects && !CurFindReplaceDocRangesRects && !isAppendNotifier()) {
         return;
 	}
 
@@ -313,4 +354,8 @@ function drawOverlay() {
     if (isDropPreviewVisible) {
        drawDropPreview(ctx);
     } 
+
+    if (isAppendNotifier()) {
+        drawAppendNotifierPreview(ctx);
+    }
 }

@@ -25,7 +25,7 @@ namespace MonkeyPaste {
 
         public override string Title {
             get {
-                if (Body is MpITitledViewModel tvm) {
+                if (Body is MpIAppendTitleViewModel tvm) {
                     return tvm.Title;
                 }
                 return string.Empty;

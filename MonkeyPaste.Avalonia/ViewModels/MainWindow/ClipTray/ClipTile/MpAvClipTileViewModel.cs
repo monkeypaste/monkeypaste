@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
         MpITextContentViewModel,
         //MpIRtfSelectionRange,
         MpIContextMenuViewModel, 
-        MpITitledViewModel,
+        MpIAppendTitleViewModel,
         //MpIFindAndReplaceViewModel,
         MpITooltipInfoViewModel,
         MpISizeViewModel {
@@ -151,9 +151,9 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-        #region MpITitledViewModel Implementation
+        #region MpIAppendTitleViewModel Implementation
 
-        string MpITitledViewModel.Title => CopyItemTitle;
+        string MpIAppendTitleViewModel.Title => $"{CopyItemTitle} - [{(Parent.IsAppendLineMode ? "Line":"Inline")} mode]";
         #endregion
 
         #region MpITooltipInfoViewModel Implementation
@@ -600,24 +600,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool HasAppendModel => IsAppendNotifier || IsAppendClipTile;
+        //public bool HasAppendModel => IsAppendNotifier || IsAppendClipTile;
 
-        public string AppendData { get; set; } = null;
-
-        public bool? IsAppendLineMode {
-            get {
-                // null == no append mode
-                // false == append mode
-                // true == append line mode
-                if(!IsAppendNotifier || Parent == null) {
-                    return null;
-                }
-                if(!Parent.IsAnyAppendMode) {
-                    return null;
-                }
-                return Parent.IsAppendLineMode;
-            }
-        }
 
         #endregion
         public bool IsHoveringOverSourceIcon { get; set; } = false;
@@ -1236,9 +1220,9 @@ namespace MonkeyPaste.Avalonia {
             if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileTitleEditable_ById(CopyItemId)) {
                 IsTitleReadOnly = false;
             }
-            if(Parent.IsAnyAppendMode && HasAppendModel) {
-                OnPropertyChanged(nameof(HasAppendModel));
-            }
+            //if(Parent.IsAnyAppendMode && HasAppendModel) {
+            //    OnPropertyChanged(nameof(HasAppendModel));
+            //}
             IsBusy = false;
         }
 
@@ -1560,9 +1544,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            //if (MpAvDragDropManager.IsDragAndDrop) {
-            //    return;
-            //}
             if (e is MpCopyItem ci && CopyItemId == ci.Id) {
 
             } 
@@ -1653,7 +1634,7 @@ namespace MonkeyPaste.Avalonia {
                         MpAvPersistentClipTilePropertiesHelper.RemovePersistentIsTitleEditableTile_ById(CopyItemId);
                         if(CopyItemTitle != _originalTitle) {
                             HasModelChanged = true;
-                            if(this is MpITitledViewModel tvm) {
+                            if(this is MpIAppendTitleViewModel tvm) {
                                 tvm.OnPropertyChanged(nameof(tvm.Title));
                             }
                         }
@@ -1982,14 +1963,6 @@ namespace MonkeyPaste.Avalonia {
                 IsBusy = false;
             });
 
-        public ICommand SetAppendDataCommand => new MpAsyncCommand<object>(
-            async (dataArg) => {
-                var append_data_str = dataArg as string;
-                if(string.IsNullOrEmpty(append_data_str)) {
-                    return;
-                }
-                AppendData = append_data_str;
-            });
         #endregion
     }
 }

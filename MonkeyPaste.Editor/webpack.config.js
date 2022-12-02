@@ -22,8 +22,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader"]
+        test: /\.js$/i,
+        use: ["style-loader", "css-loader", "source-map-loader"]
       }
     ]
   },

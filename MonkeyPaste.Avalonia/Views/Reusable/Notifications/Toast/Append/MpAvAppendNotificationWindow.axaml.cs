@@ -25,14 +25,12 @@ namespace MonkeyPaste.Avalonia {
 
         public static MpAvAppendNotificationWindow Instance { get; private set; }
 
-        public static async Task<MpAvAppendNotificationWindow> CreateWebViewInstanceAsync() {
-            if(Instance != null) {
-                return Instance;
+        public static async Task InitAsync() {
+            if (Instance != null) {
+                return;
             }
-            
-            Instance = new MpAvAppendNotificationWindow();
 
-            //var empty_ctvm = await MpAvClipTrayViewModel.Instance.CreateClipTileViewModel(null);
+            Instance = new MpAvAppendNotificationWindow();
 
             var empty_msg_nf = new MpNotificationFormat() {
                 NotificationType = MpNotificationType.AppendChanged,
@@ -44,36 +42,16 @@ namespace MonkeyPaste.Avalonia {
 
             Instance.DataContext = await MpAppendNotificationViewModel.InitAsync(empty_msg_nf);
 
-            if(Instance.Content is Control rootControl) {
-                rootControl.AttachedToVisualTree += async(s, e) => {
-                    if (OperatingSystem.IsWindows()) {
-                        // hide converter window from windows alt-tab menu
-
-                        //MpAvToolWindow_Win32.InitToolWindow(WebViewInstance.PlatformImpl.Handle.Handle);
-
-                    }
+            if (Instance.Content is Control rootControl) {
+                rootControl.AttachedToVisualTree += (s, e) => {
                     Instance.Hide();
-                    var wv = Instance.GetVisualDescendant<MpAvCefNetWebView>();
-                    while(wv == null) {
-                        await Task.Delay(10);
-                        wv = Instance.GetVisualDescendant<MpAvCefNetWebView>();
-                    }
-                    wv.ContentUrl = $"{wv.DefaultContentUrl}?{MpAvCefNetWebView.APPEND_NOTIFIER_PARAMS}";
-
                 };
             }
-           
-            return Instance;
-        }
-        public static async Task InitAsync() {
-            await CreateWebViewInstanceAsync();
-            if (Instance != null) {
-                Instance.Show();
-            }
+            Instance.Show();
         }
         #endregion
 
-        public MpMessageNotificationViewModel BindingContext => DataContext as MpMessageNotificationViewModel;
+        public MpAppendNotificationViewModel BindingContext => DataContext as MpAppendNotificationViewModel;
 
         #region Constructors
         public MpAvAppendNotificationWindow() {

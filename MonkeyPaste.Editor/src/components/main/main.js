@@ -100,6 +100,12 @@ function init_test() {
 function initMain(envName) {
 	EnvName = !envName ? WindowsEnv : envName;
 
+	if (isPlainHtmlConverter()) {
+		initPlainHtmlConverter(envName);
+		log('Main Initialized.(Converter)');
+		return;
+	}
+
 	initClipboard();
 
 	initWindow();
@@ -112,7 +118,12 @@ function initMain(envName) {
 	initEditor();
 
 	IsLoaded = true;
-	log('Main Initialized.');
+	if (isAppendNotifier()) {
+		log('Main Initialized.(Appender)');
+	} else {
+		log('Main Initialized.(Content)');
+	}
+	
 
 	onInitComplete_ntf();
 }
@@ -129,7 +140,11 @@ function initMain(envName) {
 // #region State
 
 function isAppendNotifier() {
-	return window.location.search.toLowerCase() == APPEND_NOTIFIER_PARAMS.toLowerCase();
+	return window.location.search.toLowerCase().endsWith(APPEND_NOTIFIER_PARAMS.toLowerCase());
+}
+
+function isPlainHtmlConverter() {
+	return window.location.search.toLowerCase().endsWith(HTML_CONVERTER_PARAMS.toLowerCase());
 }
 
 function isElementDisabled(elm, ignoreHidden = false) {

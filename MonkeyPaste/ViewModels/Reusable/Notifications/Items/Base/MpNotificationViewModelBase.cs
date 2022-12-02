@@ -265,6 +265,7 @@ namespace MonkeyPaste {
 
         public bool IsVisible { get; set; } = false;
 
+        public bool IsOpening { get; set; }
         public bool IsClosing { get; set; }
         public string NotifierGuid { get; private set; }
         public bool DoNotShowAgain { get; set; } = false;

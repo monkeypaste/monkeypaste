@@ -23,7 +23,8 @@ namespace MonkeyPaste.Avalonia {
             } else if (OperatingSystem.IsMacOS()) {
                 MpAvMacHelpers.EnsureInitialized();
             }
-            
+            MpAvNotificationWindowManager.Instance.Init();
+
             var pw = new MpAvWrapper();
             await pw.InitializeAsync();
             await MpPlatformWrapper.InitAsync(pw);
@@ -58,57 +59,21 @@ namespace MonkeyPaste.Avalonia {
             _coreItems.AddRange(
                new List<MpBootstrappedItemViewModel>() {
                     new MpBootstrappedItemViewModel(this,typeof(MpPortableDataFormats),MpPlatformWrapper.Services.DataObjectRegistrar),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpAvQueryInfoViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpDocumentHtmlExtension)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpProcessManager), Properties.Settings.Default.IgnoredProcessNames),
-                    ////new MpBootstrappedItemViewModel(this,typeof(MpProcessAutomation)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpScreenInformation)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpThemeColors)),
-
-                    //new MpBootstrappedItemViewModel(this,typeof(MpMeasurements)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpFileSystemWatcher)),
-
                     new MpBootstrappedItemViewModel(this,typeof(MpAvIconCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvAppCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvUrlCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvSourceCollectionViewModel)),
-
-
                     new MpBootstrappedItemViewModel(this,typeof(MpAvSystemTrayViewModel)),
-
-                    //new MpBootstrappedItemViewModel(this,typeof(MpSoundPlayerGroupCollectionViewModel)),
-
                     new MpBootstrappedItemViewModel(this,typeof(MpAvClipTileSortFieldViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvClipTileSortDirectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvSearchBoxViewModel)),
-
-                    //new MpBootstrappedItemViewModel(this,typeof(MpAnalyticItemCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvClipboardHandlerCollectionViewModel)),
-
-                    ////new MpBootstrappedItemViewModel(this,typeof(MpClipboardManager)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvSettingsWindowViewModel)),
-
                     new MpBootstrappedItemViewModel(this,typeof(MpAvClipTrayViewModel)),
-
                     new MpBootstrappedItemViewModel(this,typeof(MpAvShortcutCollectionViewModel)),
-
-
                     new MpBootstrappedItemViewModel(this,typeof(MpAvTagTrayViewModel)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindowViewModel)),
-
                     new MpBootstrappedItemViewModel(this,typeof(MpAvExternalPasteHandler)),
-                   //new MpBootstrappedItemViewModel(this,typeof(MpActionCollectionViewModel)),
-
-                   //new MpBootstrappedItemViewModel(this,typeof(MpContextMenuView)),
-
-                   //new MpBootstrappedItemViewModel(this,typeof(MpAvDragDropManager)),
-
-
-                   //new MpBootstrappedItemViewModel(this,typeof(MpWpfDataObjectHelper)),
-                   //new MpBootstrappedItemViewModel(this,typeof(MpQuillHtmlToRtfConverter)),
-                   //new MpBootstrappedItemViewModel(this,typeof(MpTooltipInfoCollectionViewModel))
-                   ////new MpBootstrappedItem(typeof(MpMouseHook))
                    new MpBootstrappedItemViewModel(this,typeof(MpDataModelProvider))
                });
 
@@ -117,8 +82,7 @@ namespace MonkeyPaste.Avalonia {
                     new MpBootstrappedItemViewModel(this,typeof(MpAvPlainHtmlConverter)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvExternalDropWindow)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvAppendNotificationWindow)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvSystemTray)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindow)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvSystemTray))
                 });
         }
         protected override async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {

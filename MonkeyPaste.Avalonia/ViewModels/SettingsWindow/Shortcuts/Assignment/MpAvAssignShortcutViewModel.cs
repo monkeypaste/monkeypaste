@@ -13,7 +13,7 @@ using MonkeyPaste.Common.Avalonia;
 using SharpHook.Native;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvAssignShortcutModalWindowViewModel : MpViewModelBase {
+    public class MpAvAssignShortcutViewModel : MpViewModelBase {
         #region Static Variables
         #endregion
 
@@ -128,10 +128,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Static Methods
-        public static async Task<string> ShowAssignShortcutWindow(string shortcutName,string keys,ICommand command, string commandParameter) {
+        public static async Task<string> ShowAssignShortcutDialog(string shortcutName,string keys,ICommand command, string commandParameter) {
             MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
-            var ascw = new MpAvAssignShortcutWindow();
-            var ascwvm = new MpAvAssignShortcutModalWindowViewModel(shortcutName, keys, command, commandParameter);
+            var ascw = new MpAvAssignShortcutDialog();
+            var ascwvm = new MpAvAssignShortcutViewModel(shortcutName, keys, command, commandParameter);
             ascw.DataContext = ascwvm;
 
             MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentStarted);
@@ -150,9 +150,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpAvAssignShortcutModalWindowViewModel() : this(string.Empty,string.Empty,null,string.Empty) { }
+        public MpAvAssignShortcutViewModel() : this(string.Empty,string.Empty,null,string.Empty) { }
 
-        private MpAvAssignShortcutModalWindowViewModel(string shortcutName, string keyString, ICommand command,string commandParameter) : base(null) {
+        private MpAvAssignShortcutViewModel(string shortcutName, string keyString, ICommand command,string commandParameter) : base(null) {
             PropertyChanged += MpAssignShortcutModalWindowViewModel_PropertyChanged;
 
             if (!string.IsNullOrEmpty(keyString) && keyString.Contains(@",")) {

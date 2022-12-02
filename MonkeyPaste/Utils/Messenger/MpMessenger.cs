@@ -24,11 +24,14 @@ namespace MonkeyPaste {
         //UnexpandComplete,
         //MainWindowOpening,
         MainWindowOpened,
-        //MainWindowHiding,
+        MainWindowClosing,
         MainWindowHid,
 
         MainWindowActivated,
         MainWindowDeactivated,
+
+        MainWindowLocked,
+        MainWindowUnlocked,
 
         MainWindowOrientationChangeBegin,
         MainWindowOrientationChangeEnd,

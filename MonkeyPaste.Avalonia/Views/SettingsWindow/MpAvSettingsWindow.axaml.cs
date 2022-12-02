@@ -13,10 +13,12 @@ using PropertyChanged;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvSettingsWindow : Window {
-        //private static MpAvSettingsWindow _instance;
-        //public static MpAvSettingsWindow Instance => _instance ?? (_instance = new MpAvSettingsWindow());
+        public static MpAvSettingsWindow Instance { get; private set; }
 
-        public MpAvSettingsWindow() {             
+        public MpAvSettingsWindow() {
+            if (Instance == null) {
+                Instance = this;
+            }
             InitializeComponent();
             DataContext = MpAvSettingsWindowViewModel.Instance;
             this.AttachedToVisualTree += MpAvSettingsWindow_AttachedToVisualTree;

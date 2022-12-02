@@ -1064,7 +1064,6 @@
     <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\Content\CefNetWebView\Cef\WebView\" />
     <Folder Include="Styles\ProgressRing\" />
     <Folder Include="Themes\Default\Assets\" />
     <Folder Include="Themes\Default\DensityStyles\" />
@@ -1075,6 +1074,7 @@
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
     <Folder Include="Controls\ProgressRing\" />
     <Folder Include="Utils\Input\Mouse\" />
+    <Folder Include="Utils\Notifications\" />
     <Folder Include="ViewModels\MainWindow\SearchBox\Filter\Items\" />
     <Folder Include="ViewModels\MainWindow\TagTray\TagTile\" />
     <Folder Include="Views\HtmlConverterWindow\" />
@@ -1142,6 +1142,9 @@
     <Compile Update="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationWindow.axaml.cs">
       <DependentUpon>MpAvUserActionNotificationWindow.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Reusable\ShortcutWindow\MpAvAssignShortcutDialog.axaml.cs">
+      <DependentUpon>MpAvAssignShortcutDialog.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\KeyGroup\Key\MpAvShortcutKeyView.axaml.cs">
       <DependentUpon>MpAvShortcutKeyView.axaml</DependentUpon>
     </Compile>
@@ -1164,9 +1167,6 @@
   </Target>
 
   <Target Name="_CollectWatchItems" />
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Reusable\ShortcutWindow\MpAvAssignShortcutWindow.axaml" />
-  </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\Cursors\copy.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -4,13 +4,11 @@ function initMain_ext(initMsgStr_base64) {
 	// input 'MpQuillInitMainRequestMessage'
 	log('initMain_ext: ' + initMsgStr_base64);
 	let initMsgObj = toJsonObjFromBase64Str(initMsgStr_base64);
-
-	if (initMsgObj && initMsgObj.isPlainHtmlConverter) {
-		initPlainHtmlConverter(initMsgObj.envName);
-		log('plainHtml converter initialized.');
-	} else {
-		initMain(initMsgObj.envName);
+	if (!initMsgObj) {
+		log('init error, request null. ignoring');
+		return;
 	}
+	initMain(initMsgObj.envName);
 }
 
 function loadContent_ext(loadContentMsgStr_base64) {

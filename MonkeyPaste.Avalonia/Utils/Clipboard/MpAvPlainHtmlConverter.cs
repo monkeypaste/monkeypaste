@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-        public MpAvCefNetWebView ConverterWebView { get; private set; }
+        public MpAvCefNetPlainHtmlConverterWebView ConverterWebView { get; private set; }
 
         #endregion
 
@@ -38,7 +38,7 @@ namespace MonkeyPaste.Avalonia {
             if (!MpAvCefNetApplication.UseCefNet) {
                 return;
             }
-            ConverterWebView = new MpAvCefNetWebView(MpAvCefNetWebView.HTML_CONVERTER_PARAMS) {
+            ConverterWebView = new MpAvCefNetPlainHtmlConverterWebView() {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
             };
@@ -52,15 +52,14 @@ namespace MonkeyPaste.Avalonia {
             };
 
             quillWindow.Content = ConverterWebView;
-
-            quillWindow.AttachedToVisualTree += (s, e) => {
+            ConverterWebView.AttachedToVisualTree += (s, e) => {
                 if (OperatingSystem.IsWindows()) {
                     // hide converter window from windows alt-tab menu
-
                     MpAvToolWindow_Win32.InitToolWindow(quillWindow.PlatformImpl.Handle.Handle);
                 }
                 quillWindow.Hide();
             };
+            quillWindow.Show();
         }
         public async Task<MpAvHtmlClipboardData> ParseAsync(string htmlDataStr, string inputFormatType, MpCsvFormatProperties csvProps = null) {
             if (htmlDataStr == null) {

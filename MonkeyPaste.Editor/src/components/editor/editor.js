@@ -298,6 +298,10 @@ function enableSubSelection(fromHost = false) {
 }
 
 function disableSubSelection(fromHost = false) {
+	if (!canDisableSubSelection()) {
+		log('disableSubSelection ignored, this is appender. fromHost: ' + fromHost);
+		return;
+	}
 	if (!isSubSelectionEnabled()) {
 		log('disableSubSelection ignored, already sub-selectable. fromHost: ' + fromHost);
 		return;
@@ -323,6 +327,7 @@ function disableSubSelection(fromHost = false) {
 }
 
 function enableAppendMode(isAppendLine) {
+	let append_idx = getDocLength();
 	if (isAppendLine) {
 		IsAppendLineMode = true;
 		IsAppendMode = false;
@@ -332,12 +337,14 @@ function enableAppendMode(isAppendLine) {
 	}
 	enableSubSelection();
 
+	drawOverlay();
 	log('append mode enabled. IsAppendNotifier: ' + isAppendNotifier());
 }
 
 function disableAppendMode() {	
 	IsAppendLineMode = false;
 	IsAppendMode = false;
+	drawOverlay();
 	log('append mode disabled. IsAppendNotifier: ' + isAppendNotifier());
 }
 

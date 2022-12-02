@@ -15,7 +15,7 @@ var IsAppendLineMode = false;
 
 // #region Life Cycle
 
-function loadContent(contentHandle, contentType, contentData, isPasteRequest, searchStateObj, isAppendLineMode, isAppendMode) {
+function loadContent(contentHandle, contentType, contentData, isPasteRequest, searchStateObj) {
 	if (contentHandle != ContentHandle) {
 		// when actually a new item and not reload
 		quill.history.clear();
@@ -69,12 +69,6 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 		setFindReplaceInputState(searchStateObj);
 		populateFindReplaceResults();
 		onQuerySearchRangesChanged_ntf(CurFindReplaceDocRanges.length);
-	}
-
-	IsAppendMode = isAppendMode;
-	IsAppendLineMode = isAppendLineMode;
-	if (IsAppendMode || IsAppendLineMode || isAppendNotifier()) {
-		enableSubSelection();
 	}
 
 	IsReadyToPaste = !hasAnyInputRequredTemplate();
@@ -228,8 +222,11 @@ function getContentHeightByType() {
 function canEnableSubSelection() {
 	return ContentItemType != 'Image';
 }
+function canDisableSubSelection() {
+	return !isAppendNotifier();
+}
 function canDisableReadOnly() {
-	return ContentItemType == 'Text';
+	return ContentItemType == 'Text' && !isAppendNotifier();
 }
 // #endregion State
 

@@ -72,7 +72,7 @@ namespace MonkeyPaste.Avalonia {
             string evalKey = responseFromCef.ArgumentList.GetString(0);
             string jsRespStr_browser = responseFromCef.ArgumentList.GetString(1);
             Dispatcher.UIThread.Post(() => {
-                if (frame.Browser.Host.Client.GetWebView() is MpAvCefNetWebView wv) {
+                if (frame.Browser.Host.Client.GetWebView() is WebView wv) {
                     wv.SetJavascriptResult(evalKey, jsRespStr_browser);
                     wasHandled = true;
                 }

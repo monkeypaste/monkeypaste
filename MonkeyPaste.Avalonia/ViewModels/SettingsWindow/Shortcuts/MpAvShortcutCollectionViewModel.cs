@@ -207,7 +207,7 @@ namespace MonkeyPaste.Avalonia {
             string commandParameter,
             string keys) {
             MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
-            string shortcutKeyString = await MpAvAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(title, keys, command, commandParameter);
+            string shortcutKeyString = await MpAvAssignShortcutViewModel.ShowAssignShortcutDialog(title, keys, command, commandParameter);
 
             MpAvShortcutViewModel scvm = null;
             if((int)shortcutType < MpShortcut.MIN_USER_SHORTCUT_TYPE) {

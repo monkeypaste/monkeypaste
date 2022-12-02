@@ -14,7 +14,6 @@
         Classes.IsClosing="{Binding IsClosing}"
         Classes.notificationWindow="True"
         IsVisible="{Binding IsVisible}"
-        Topmost="True"
         Width="350"
         Height="130"
         SizeToContent="Manual"

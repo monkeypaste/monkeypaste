@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste {
-    public interface MpITitledViewModel : MpIViewModel {
+    public interface MpIAppendTitleViewModel : MpIViewModel {
         string Title { get; }
     }
 }

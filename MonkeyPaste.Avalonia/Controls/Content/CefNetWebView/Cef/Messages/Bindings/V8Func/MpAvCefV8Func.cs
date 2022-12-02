@@ -9,7 +9,6 @@ namespace MonkeyPaste.Avalonia {
     class MpAvCefV8Func : CefV8Handler {
         private string _dbPath;
 
-
         public MpAvCefV8Func(string dbPath) : base() {
             _dbPath = dbPath;
         }

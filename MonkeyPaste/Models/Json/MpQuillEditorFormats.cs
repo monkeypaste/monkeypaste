@@ -9,7 +9,6 @@ namespace MonkeyPaste {
     public class MpQuillInitMainRequestMessage : MpJsonObject {
 
         public string envName { get; set; } // will be wpf,android, etc.
-        public bool isPlainHtmlConverter { get; set; }
     }
 
     public class MpQuillLoadContentRequestMessage : MpJsonObject {

@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-        public static MpAvMainWindow? Instance { get; private set; } = null;
+        public static MpAvMainWindow Instance { get; private set; } = null;
         static MpAvMainWindow() {
             BoundsProperty.Changed.AddClassHandler<MpAvMainWindow>((x, y) => x.BoundsChangedHandler(y as AvaloniaPropertyChangedEventArgs<Rect>));
         }
@@ -393,36 +393,12 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine("MainWindow waiting to initialize...");
                 await Task.Delay(100);
             }
-            DataContext = MpAvMainWindowViewModel.Instance;
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+            if (OperatingSystem.IsWindows()) {
                 MpAvToolWindow_Win32.InitToolWindow(this.PlatformImpl.Handle.Handle);
             }
+            DataContext = MpAvMainWindowViewModel.Instance;
 
-            MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeChanged);
-
-            MpAvMainWindowViewModel.Instance.IsMainWindowLoading = false;
-
-            //MpPlatformWrapper.Services.ProcessWatcher.StartWatcher();
-            MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
-
-            MpAvQueryInfoViewModel.Current.RestoreProviderValues();
-            
-            MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-
-            // Need to delay or resizer thinks bounds are empty on initial show
-            await Task.Delay(300);
-            //ReceivedGlobalMessage(MpMessageType.MainWindowOrientationChanged);
-            MpAvMainWindowViewModel.Instance.CycleOrientationCommand.Execute(null);
-
-            //MpPlatformWrapper.Services.ProcessWatcher.StartWatcher();
-            MpMessenger.SendGlobal(MpMessageType.MainWindowLoadComplete);
-
-            while(MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening) {
-                await Task.Delay(100);
-            }
-
-            MpAvClipTrayViewModel.Instance.QueryCommand.Execute(null);
+            await MpAvMainWindowViewModel.Instance.InitializeAsync();           
         }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
