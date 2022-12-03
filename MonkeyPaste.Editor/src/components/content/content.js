@@ -9,8 +9,6 @@ const InlineTags = ['span', 'a', 'em', 'strong', 'u', 's', 'sub', 'sup', 'img'];
 const BlockTags = ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe', 'blockquote', 'pre']
 const AllDocumentTags = [...InlineTags, ...BlockTags];
 
-var IsAppendMode = false;
-var IsAppendLineMode = false;
 // #endregion Globals
 
 // #region Life Cycle
@@ -218,6 +216,11 @@ function getContentHeightByType() {
 // #endregion Setters
 
 // #region State
+
+function isContentEmpty() {
+	let pt = getText();
+	return !pt || pt == '\n';
+}
 
 function canEnableSubSelection() {
 	return ContentItemType != 'Image';

@@ -1,39 +1,47 @@
-﻿var IsConverterLoaded = false;
+﻿// #region Globals
 
-function initPlainHtmlConverter(envName) {
-	EnvName = envName;
+var IsConverterLoaded = false;
 
+// #endregion Globals
+
+// #region Life Cycle
+
+function initPlainHtmlConverter() {
 	quill = initQuill();
 	getEditorContainerElement().firstChild.setAttribute('id', 'quill-editor');
 
 	getEditorElement().classList.add('ql-editor-converter');
 
-	//addPlainHtmlClipboardMatchers();
-	//document.getElementsByClassName("ql-toolbar")[0].classList.add("env-wpf");
-	//disableReadOnly();
-	//hideEditorToolbar();
-	//window.addEventListener(
-	//	"resize",
-	//	function (event) {
-	//		updateAllElements();
-	//	},
-	//	true
-	//);
-
-	//updateAllElements();
-
 	IsConverterLoaded = true;
 	IsLoaded = true;
-	//return "CONVERTER LOADED";
+
+	onInitComplete_ntf();
 }
 
+// #endregion Life Cycle
 
+// #region Getters
+
+// #endregion Getters
+
+// #region Setters
+
+// #endregion Setters
+
+// #region State
+
+function isPlainHtmlConverter() {
+	return window.location.search.toLowerCase().endsWith(HTML_CONVERTER_PARAMS.toLowerCase());
+}
+// #endregion State
+
+// #region Actions
 function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 	if (!IsConverterLoaded) {
 		log('convertPlainHtml error! converter not initialized, returning null');
 		return null;
 	}
-	
+
 
 	log("Converting This Plain Html:");
 	log(dataStr);
@@ -46,7 +54,7 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 		//insertHtml(0, dataStr, 'api');
 		//setRootHtml(escapeHtml(dataStr));
 		//insertText(0, dataStr);
-		insertText(0, escapeHtml(dataStr),'silent');
+		insertText(0, escapeHtml(dataStr), 'silent');
 		//setRootText(escapeHtml(dataStr));
 	} else if (formatType == 'html') {
 		if (dataStr.toLowerCase().indexOf('<p>') < 0) {
@@ -56,7 +64,7 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 		// NOTE insertHtml will remove spaces between spans...
 		insertHtml(0, dataStr, 'api', false);
 		//setRootHtml(dataStr);
-	} 
+	}
 
 	quill.update();
 	let qhtml = getHtml();
@@ -73,13 +81,11 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 	log(qhtml);
 	return qhtml;
 }
-
-
 function forceBgOpacity(htmlStr, opacity) {
 	let html_doc = DomParser.parseFromString(htmlStr, 'text/html');
 	let elms = html_doc.querySelectorAll(InlineTags.join(", ") + ',' + BlockTags.join(','));
 	for (var i = 0; i < elms.length; i++) {
-		if ( elms[i].style.backgroundColor === undefined || elms[i].style.backgroundColor == '') {
+		if (elms[i].style.backgroundColor === undefined || elms[i].style.backgroundColor == '') {
 			continue;
 		}
 		let rgba = cleanColor(elms[i].style.backgroundColor);
@@ -109,5 +115,8 @@ function fixUnicode(text) {
 	fixedText = fixedText.replaceAll(regex2, '');
 	return fixedText;
 }
+// #endregion Actions
 
+// #region Event Handlers
 
+// #endregion Event Handlers

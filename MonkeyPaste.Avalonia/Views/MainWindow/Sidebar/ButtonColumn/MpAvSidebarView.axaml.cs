@@ -52,15 +52,10 @@ namespace MonkeyPaste.Avalonia {
 
         private void BindingContext_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(BindingContext.IsAppendMode):
-                case nameof(BindingContext.IsAppendLineMode):
+                case nameof(BindingContext.ClipboardModeFlags):
                     if (AppendModeToggleButton.ContextMenu != null) {
                         AppendModeToggleButton.ContextMenu.Close();
                     }
-
-                    //AppendModeToggleButton.IsChecked = BindingContext.IsAnyAppendMode;
-                    BindingContext.OnPropertyChanged(nameof(BindingContext.IsAnyAppendMode));
-
                     break;
                 case nameof(BindingContext.IsAutoCopyMode):
                 case nameof(BindingContext.IsRightClickPasteMode):

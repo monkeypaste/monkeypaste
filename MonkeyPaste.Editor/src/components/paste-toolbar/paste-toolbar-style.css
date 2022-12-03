@@ -1,0 +1,35 @@
+﻿.paste-toolbar {
+    background-color: teal;
+}
+
+    .paste-toolbar button {
+        background-color: dodgerblue;
+        border: solid 2px #67c5ff;
+        color: white;
+    }
+
+#pasteButton {
+    margin-left: 10px;
+    margin-right: 0;
+    border-radius: 5px 0 0 5px;
+    border-width: 1px 0 1px 1px;
+}
+
+    #pasteButton span {
+        margin-left: 5px;
+    }
+
+#pasteButtonPopupExpander {
+    font-size: 8px;
+    margin-left: 0;
+    margin-right: 10px;
+    border-radius: 0 5px 5px 0;
+    border-width: 1px 1px 1px 0;
+}
+
+    /*#pasteButtonPopupExpander span {
+        content: "\25BC"
+    }
+    #pasteButtonPopupExpander.expanded span {
+        content: "\25B2"
+    }*/

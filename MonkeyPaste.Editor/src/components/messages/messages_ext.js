@@ -203,3 +203,20 @@ function appendData_ext(reqMsgBase64Str) {
 	let req = toJsonObjFromBase64Str(reqMsgBase64Str);
 	appendContentData(req.appendData);
 }
+
+function setSelection_ext(selMsgBase64Str) {
+	// input 'MpQuillSelectionChangedMessage'
+	let req = toJsonObjFromBase64Str(selMsgBase64Str);
+	if (didSelectionChange(CurSelRange, req)) {
+		SuppressNextSelChangedHostNotification = true;
+		setDocSelection(req);
+	}	
+}
+function setScroll_ext(scrollMsgBase64Str) {
+	// input 'MpQuillScrollChangedMessage'
+	let req = toJsonObjFromBase64Str(scrollMsgBase64Str);
+	if (didEditorScrollChange(getEditorScroll(), req)) {
+		SuppressNextEditorScrollChangedNotification = true;
+		setEditorScroll(req);
+	}	
+}

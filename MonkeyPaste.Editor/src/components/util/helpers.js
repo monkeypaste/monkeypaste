@@ -441,6 +441,9 @@ function getElementComputedStyleProp(elm, propName) {
 }
 
 function setElementComputedStyleProp(elm, propName, value) {
+    if (!elm) {
+        debugger;
+    }
     elm.style.setProperty(propName, value);
 }
 

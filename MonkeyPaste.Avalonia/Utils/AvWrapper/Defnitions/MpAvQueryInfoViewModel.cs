@@ -166,30 +166,27 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void NotifyQueryChanged(bool forceRequery = false) {
-            if(!Dispatcher.UIThread.CheckAccess()) {
-                Dispatcher.UIThread.Post(()=>NotifyQueryChanged(forceRequery));
-                return;
-            }
+            Dispatcher.UIThread.Post(() => {
 
-            bool has_query_changed = RefreshQuery();
+                bool has_query_changed = RefreshQuery();
 
-            if(has_query_changed || forceRequery) {
-                MpPrefViewModel.Instance.LastQueryInfoJson = SerializeJsonObject();
+                if (has_query_changed || forceRequery) {
+                    MpPrefViewModel.Instance.LastQueryInfoJson = SerializeJsonObject();
 
-                _allQueryCopyItemIds.Clear();
-                MpMessenger.SendGlobal(MpMessageType.QueryChanged);
-            } else {
-                MpMessenger.SendGlobal(MpMessageType.SubQueryChanged);
+                    _allQueryCopyItemIds.Clear();
+                    MpMessenger.SendGlobal(MpMessageType.QueryChanged);
+                } else {
+                    MpMessenger.SendGlobal(MpMessageType.SubQueryChanged);
 
-            }
+                }
 
 
-            //var qi = MpDataModelProvider.QueryInfo;
+                //var qi = MpDataModelProvider.QueryInfo;
 
-            //qi.FilterFlags = FilterFlags;//MpSearchBoxViewModel.Instance.FilterType;
-            //MpDataModelProvider.QueryInfos.Add(this);
-            // MpSearchBoxViewModel.Instance.CriteriaItems.OrderBy(x => x.SortOrderIdx).ForEach(x => MpDataModelProvider.QueryInfos.Add(x.ToQueryInfo()));
-            
+                //qi.FilterFlags = FilterFlags;//MpSearchBoxViewModel.Instance.FilterType;
+                //MpDataModelProvider.QueryInfos.Add(this);
+                // MpSearchBoxViewModel.Instance.CriteriaItems.OrderBy(x => x.SortOrderIdx).ForEach(x => MpDataModelProvider.QueryInfos.Add(x.ToQueryInfo()));
+            });
         }
 
         #endregion

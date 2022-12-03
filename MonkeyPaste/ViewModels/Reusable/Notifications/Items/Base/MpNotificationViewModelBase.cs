@@ -159,7 +159,7 @@ namespace MonkeyPaste {
                 return new MpMenuItemViewModel() {
                     SubItems = new List<MpMenuItemViewModel>() {
                         new MpMenuItemViewModel() {
-                            Header = "Close",
+                            Header = "Hide",
                             IconResourceKey = "ErrorImage",
                             Command = CloseNotificationCommand
                         },

@@ -93,16 +93,15 @@ namespace MonkeyPaste {
             }
 
             if (initMethodInfo.ReturnType == typeof(Task)) {
-                MpViewModelBase vm = itemObj as MpViewModelBase;
-                if (vm is MpIBootstrappedItem bsi) {
+                if (itemObj is MpIBootstrappedItem bsi) {
                     Label = bsi.Label;
                 }
 
                 var initTask = (Task)initMethodInfo.Invoke(itemObj, args);
                 await initTask;
 
-                if (vm != null) {
-                    while (vm.IsBusy) {
+                if(itemObj is MpIAsyncObject ao) {
+                    while(ao.IsBusy) {
                         await Task.Delay(100);
                     }
                 }

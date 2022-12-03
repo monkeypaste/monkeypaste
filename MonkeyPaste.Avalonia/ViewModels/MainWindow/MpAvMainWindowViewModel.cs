@@ -530,7 +530,6 @@ namespace MonkeyPaste.Avalonia {
 
             MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
 
-            MpAvQueryInfoViewModel.Current.RestoreProviderValues();
 
             MainWindowScreenRect = MainWindowClosedScreenRect;
 
@@ -546,7 +545,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            MpAvClipTrayViewModel.Instance.QueryCommand.Execute(null);
+            MpAvQueryInfoViewModel.Current.RestoreProviderValues();
         }
 
         public void SetupMainWindowSize(bool isOrientationChange = false) {

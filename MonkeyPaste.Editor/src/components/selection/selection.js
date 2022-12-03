@@ -4,6 +4,7 @@ const DefaultSelectionBgColor = 'lightblue';
 const DefaultSelectionFgColor = 'black';
 const DefaultCaretColor = 'black';
 
+var SuppressNextSelChangedHostNotification = false;
 
 var BlurredSelectionRects = null;
 
@@ -156,8 +157,12 @@ function getDocRangeScrollOffset(doc_range) {
 // #region Setters
 
 function setDocSelection(doc_idx, len, source = 'user') {
+	if (!quill.hasFocus()) {
+		quill.focus();
+	}
 	CurSelRange = { index: doc_idx, length: len };
 	quill.setSelection(doc_idx, len, source);
+		
 }
 
 function setDomSelection(domRange) {
@@ -300,6 +305,9 @@ function convertDomRangeToDocRange(dom_range) {
 }
 
 function convertDocRangeToDomRange(doc_range) {
+	if (!doc_range || doc_range.index === undefined) {
+		doc_range = { index: 0, length: 0 };
+	}
 	let start_elm = getElementAtDocIdx(doc_range.index);
 	let end_elm = getElementAtDocIdx(doc_range.index + doc_range.length);
 
@@ -405,6 +413,12 @@ function onDocumentSelectionChange(e) {
 		LastSelRange = CurSelRange;
 		CurSelRange = new_range;
 		updateAllElements();
+
+		if (SuppressNextSelChangedHostNotification) {
+			SuppressNextSelChangedHostNotification = false;
+		} else {
+			onSelectionChanged_ntf(CurSelRange);
+		}
 	}
 }
 

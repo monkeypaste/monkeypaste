@@ -60,23 +60,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        //#region MpIQueryInfoProvider Implementation
-        //public void RestoreQueryInfo() {
-        //    SelectTagCommand.Execute(MpAvQueryInfoViewModel.Current.TagId);
-        //}
-
-        //public void SetQueryInfo() {
-        //    if(SelectedItem == null) {
-        //        // default to all 
-        //        MpAvQueryInfoViewModel.Current.TagId = AllTagViewModel.TagId;
-        //    } else {
-        //        MpAvQueryInfoViewModel.Current.TagId = SelectedItem.TagId;
-        //    }
-            
-        //}
-
-        //#endregion
-
         #region MpIQueryInfoProvider Implementation
 
         object MpIQueryInfoValueProvider.Source => this;
@@ -137,7 +120,7 @@ namespace MonkeyPaste.Avalonia {
             // NOTE only used w/ QueryInfo
             get {
                 if(SelectedItem == null) {
-                    return AllTagViewModel.TagId;
+                    return 0;
                 }
                 return SelectedItem.TagId;
             }
@@ -220,8 +203,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-
+        private static int createCount = 0;
         public MpAvTagTrayViewModel() : base(null) {
+            createCount++;
             PropertyChanged += MpTagTrayViewModel_PropertyChanged;
         }
 
@@ -264,11 +248,11 @@ namespace MonkeyPaste.Avalonia {
             //PinnedItems.CollectionChanged += PinnedItems_CollectionChanged;
             //UpdateSortOrder(true);
 
-            Items.FirstOrDefault(x => x.TagId == DefaultTagId).IsSelected = true;
+            //Items.FirstOrDefault(x => x.TagId == DefaultTagId).IsSelected = true;
 
             AllTagViewModel.IsExpanded = true;
 
-            SelectTagCommand.Execute(DefaultTagId);
+            //SelectTagCommand.Execute(DefaultTagId);
 
 
             OnPropertyChanged(nameof(Items));
@@ -349,6 +333,11 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(Items):
                     OnPropertyChanged(nameof(RootItems));
+                    break;
+                case nameof(SelectedItem):
+                    if(SelectedItem == null) {
+                        Debugger.Break();
+                    }
                     break;
             }
         }

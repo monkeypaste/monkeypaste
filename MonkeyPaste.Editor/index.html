@@ -63,7 +63,7 @@
     <link href="src/components/content/content-style.css" rel="stylesheet" />
     <link href="src/components/content/content-file-list/content-file-list-style.css" rel="stylesheet" />
     <link href="src/components/content/content-image/content-image-style.css" rel="stylesheet" />
-    <link href="src/components/content/paste/paste-toolbar-style.css" rel="stylesheet" />
+    <link href="src/components/paste-toolbar/paste-toolbar-style.css" rel="stylesheet" />
     <link href="src/components/content/ext-content-source-blot/ext-content-source-blot.css" rel="stylesheet" />
     <!--<link href="src/components/experiments/fade-across.css" rel="stylesheet" />-->
 
@@ -72,6 +72,9 @@
     <link href="src/components/list/list-style.css" rel="stylesheet" />
 
     <link href="src/components/findreplace/find-replace-style.css" rel="stylesheet" />
+
+    <link href="src/components/append/append-style.css" rel="stylesheet" />
+    <link href="src/components/append/toolbar/append-toolbar-item-style.css" rel="stylesheet" />
 
     <link href="src/components/table/table-style.css" rel="stylesheet" />
     <link href="src/components/table/toolbar/create-table-style.css" rel="stylesheet" />
@@ -143,6 +146,8 @@
 
 
     <script src="src/components/svg/svgloader.js"></script>
+    <script src="src/components/append/append.js"></script>
+    <script src="src/components/append/toolbar/append-toolbar-items.js"></script>
 
     <script src="src/components/util/helpers.js"></script>
     <script src="src/components/util/resize.js"></script>
@@ -185,7 +190,8 @@
     <script src="src/components/content/content-text/content-text.js"></script>
     <script src="src/components/content/content-file-list/content-file-list.js"></script>
     <script src="src/components/content/content-image/content-image.js"></script>
-    <script src="src/components/content/paste/pastetoolbar.js"></script>
+    <script src="src/components/paste-toolbar/pastetoolbar.js"></script>
+    <script src="src/components/paste-toolbar/popup/paste-button-popup.js"></script>
     <script src="src/components/content/ext-content-source-blot/ext-content-source-blot.js"></script>
 
     <script src="src/components/list/list.js"></script>
@@ -475,11 +481,17 @@
             <i class="fa-solid fa-pen-to-square"></i><span>Edit</span>
         </button>
         <!-- PASTE BUTTON -->
-        <button id="pasteButton"
-                tabindex="6"
-                class="right-align">
-            <i class="fa-solid fa-paste"></i><span>PASTE</span>
-        </button>
+        <div class="right-align">
+            <button id="pasteButton"
+                    tabindex="6">
+                <i class="fa-solid fa-paste"></i><span>PASTE</span>
+            </button>
+            <div class="toolbar-separator"></div>
+            <button id="pasteButtonPopupExpander"
+                    tabindex="7">
+                <span id="pasteButtonPopupExpanderLabel"></span>
+            </button>
+        </div>
     </div>
 
     <!-- POP UPS -->

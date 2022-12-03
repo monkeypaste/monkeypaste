@@ -420,18 +420,18 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region LayoutType AvaloniaProperty
-        public static MpAvClipTrayLayoutType GetLayoutType(AvaloniaObject obj) {
+        public static MpClipTrayLayoutType GetLayoutType(AvaloniaObject obj) {
             return obj.GetValue(LayoutTypeProperty);
         }
 
-        public static void SetLayoutType(AvaloniaObject obj, MpAvClipTrayLayoutType value) {
+        public static void SetLayoutType(AvaloniaObject obj, MpClipTrayLayoutType value) {
             obj.SetValue(LayoutTypeProperty, value);
         }
 
-        public static readonly AttachedProperty<MpAvClipTrayLayoutType> LayoutTypeProperty =
-            AvaloniaProperty.RegisterAttached<object, ListBox, MpAvClipTrayLayoutType>(
+        public static readonly AttachedProperty<MpClipTrayLayoutType> LayoutTypeProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, MpClipTrayLayoutType>(
                 "LayoutType",
-                MpAvClipTrayLayoutType.Stack,
+                MpClipTrayLayoutType.Stack,
                 false);
 
         #endregion
@@ -599,8 +599,8 @@ namespace MonkeyPaste.Avalonia {
                 var layout_type = GetLayoutType(lb);
                 double vFactor = -120;
 
-                bool isScrollHorizontal = (lb_orientation == Orientation.Horizontal && layout_type == MpAvClipTrayLayoutType.Stack) ||
-                                            (lb_orientation == Orientation.Vertical && layout_type == MpAvClipTrayLayoutType.Grid);
+                bool isScrollHorizontal = (lb_orientation == Orientation.Horizontal && layout_type == MpClipTrayLayoutType.Stack) ||
+                                            (lb_orientation == Orientation.Vertical && layout_type == MpClipTrayLayoutType.Grid);
                 double v0x = isScrollHorizontal
                                 ? e.Delta.Y * vFactor : e.Delta.X * vFactor;
                 double v0y = isScrollHorizontal

@@ -12,7 +12,8 @@ function initPasteToolbar() {
     addClickOrKeyClickEventListener(getPasteButtonElement(), onPasteButtonClickOrKeyDown);
 
     initPasteTemplateToolbarItems();
-    
+
+    initPastePopup();
 }
 // #endregion Life Cycle
 

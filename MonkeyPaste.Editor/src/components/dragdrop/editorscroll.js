@@ -1,4 +1,7 @@
 ﻿// #region Globals
+
+var SuppressNextEditorScrollChangedNotification = false;
+
 var AutoScrolledOffset = null;
 
 var AutoScrollVelX = 0;
@@ -21,6 +24,12 @@ function initEditorScroll() {
 
 // #region Getters
 
+function getEditorScroll() {
+    return {
+        left: getEditorContainerElement().scrollLeft,
+        top: getEditorContainerElement().scrollTop
+    };
+}
 // #endregion Getters
 
 // #region Setters
@@ -34,6 +43,19 @@ function isAutoScrolling() {
         return false;
     }
     return AutoScrollVelX != 0 || AutoScrollVelY != 0;
+}
+
+function didEditorScrollChange(old_scroll, new_scroll) {
+    if (!old_scroll && !new_scroll) {
+        return false;
+    }
+    if (old_scroll && !new_scroll) {
+        return true;
+    }
+    if (new_scroll && !old_scroll) {
+        return true;
+    }
+    return old_scroll.left != new_scroll.left || old_scroll.top != new_scroll.top;
 }
 // #endregion State
 
@@ -101,29 +123,10 @@ function scrollDocRangeIntoView(docRange) {
     scroll_elm.scrollIntoView();
 }
 
-function scrollEditorTop(new_top) {
-    let eh = getEditorVisibleHeight();
-    if (new_top > eh) {
-        getEditorContainerElement().scrollTop = new_top - eh;
-    } else {
-        getEditorContainerElement().scrollTop = 0;
-    }
-}
 
-function scrollToHome(target) {
-    if (!target) {
-        // maybe default to editor here?
-        return;
-    }
-    scrollToOffset(null);
-}
-
-function scrollToOffset(offset, target) {
-    target = !target ? document.body : target;
-    offset = !offset ? { left: 0, top: 0 } : offset;
-
-    target.scrollLeft = offset.left;
-    target.scrollTop = offset.top;
+function setEditorScroll(new_scroll) {
+    getEditorContainerElement().scrollLeft = new_scroll.left;
+    getEditorContainerElement().scrollTop = new_scroll.top;
 }
 // #endregion Actions
 
@@ -161,6 +164,12 @@ function onEditorContainerScroll(e) {
  //   } else if (BlurredSelectionRects) {
  //       // TODO update these guys
     //}
+
+    if (SuppressNextEditorScrollChangedNotification) {
+        SuppressNextEditorScrollChangedNotification = false;
+    } else {
+        onScrollChanged_ntf(getEditorScroll());
+    }
     drawOverlay();
 }
 // #endregion Event Handlers

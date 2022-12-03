@@ -45,12 +45,15 @@ namespace MonkeyPaste.Common.Avalonia {
             return outStr;
         }
 
-        public static KeyCode GetKeyValue(string keyStr) {
-           
+        public static KeyCode GetKeyValue(string keyStr) {           
             string lks = keyStr.ToLower();
             if (lks == MpKeyLiteralStringHelpers.AV_CONTROL_KEY_LITERAL.ToLower() ||
                 lks == MpKeyLiteralStringHelpers.CONTROL_KEY_LITERAL.ToLower()) {
                 return KeyCode.VcLeftControl;//.LeftCtrl;
+            }
+            if (lks == MpKeyLiteralStringHelpers.AV_CAPS_LOCK_KEY_LITERAL.ToLower() ||
+               lks == MpKeyLiteralStringHelpers.SH_CAPS_LOCK_KEY_LITERAL.ToLower()) {
+                return KeyCode.VcCapsLock;
             }
             if (lks == "alt") {
                 return KeyCode.VcLeftAlt;//.LeftAlt;
@@ -103,15 +106,21 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static string GetKeyLiteral(KeyCode key) {
             if (key == KeyCode.VcLeftShift || key == KeyCode.VcRightShift) {
-                return "Shift";
+                return MpKeyLiteralStringHelpers.SHIFT_KEY_LITERAL;
             }
             if (key == KeyCode.VcLeftAlt || key == KeyCode.VcRightAlt) {
-                return "Alt";
+                return MpKeyLiteralStringHelpers.ALT_KEY_LITERAL;
             }
             if (key == KeyCode.VcLeftControl || key == KeyCode.VcRightControl) {
-                return "Control";
+                return MpKeyLiteralStringHelpers.CONTROL_KEY_LITERAL;
             }
-            if(key == KeyCode.VcNumPadDivide) {
+            if(key == KeyCode.VcCapsLock) {
+                return MpKeyLiteralStringHelpers.CAPS_LOCK_KEY_LITERAL;
+            }
+            if (key == KeyCode.VcNumPadEnter) {
+                return MpKeyLiteralStringHelpers.ENTER_KEY_LITERAL;
+            }
+            if (key == KeyCode.VcNumPadDivide) {
                 return @"/";
             }
             if (key == KeyCode.VcNumPadMultiply) {
@@ -125,9 +134,6 @@ namespace MonkeyPaste.Common.Avalonia {
             }
             if (key == KeyCode.VcNumPadAdd) {
                 return @"+";
-            }
-            if (key == KeyCode.VcNumPadEnter) {
-                return @"Enter";
             }
             if (key == KeyCode.VcNumPadSeparator) { 
                 // what key is this?

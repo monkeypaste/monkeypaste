@@ -196,4 +196,14 @@ namespace MonkeyPaste {
     public class MpQuillAppendDataRequestMessage : MpJsonObject {
         public string appendData { get; set; }
     }
+
+    public class MpQuillSelectionChangedMessage : MpJsonObject {
+        public int index { get; set; }
+        public int length { get; set; }
+    }
+
+    public class MpQuillScrollChangedMessage : MpJsonObject {
+        public int left { get; set; }
+        public int top { get; set; }
+    }
 }

@@ -72,7 +72,6 @@ namespace MonkeyPaste {
             return result;
         }
 
-
         public static async Task<MpNotificationDialogResultType> ShowNotificationAsync(
             MpNotificationType notificationType = MpNotificationType.None,
             string title = "",

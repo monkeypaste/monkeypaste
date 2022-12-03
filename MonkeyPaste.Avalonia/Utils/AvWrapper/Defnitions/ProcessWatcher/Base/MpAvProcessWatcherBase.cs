@@ -32,7 +32,9 @@ namespace MonkeyPaste.Avalonia {
         }
         public IntPtr ThisAppHandle {
             get {
-                if(App.Desktop == null || App.Desktop.MainWindow == null) {
+                if(App.Desktop == null || 
+                    App.Desktop.MainWindow == null ||
+                    App.Desktop.MainWindow.PlatformImpl == null) {
                     return IntPtr.Zero;
                 }
                 return App.Desktop.MainWindow.PlatformImpl.Handle.Handle;

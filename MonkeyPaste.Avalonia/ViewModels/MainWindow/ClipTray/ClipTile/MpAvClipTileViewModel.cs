@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Layout;
@@ -29,7 +30,6 @@ namespace MonkeyPaste.Avalonia {
         MpITextContentViewModel,
         //MpIRtfSelectionRange,
         MpIContextMenuViewModel, 
-        MpIAppendTitleViewModel,
         //MpIFindAndReplaceViewModel,
         MpITooltipInfoViewModel,
         MpISizeViewModel {
@@ -151,11 +151,6 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-        #region MpIAppendTitleViewModel Implementation
-
-        string MpIAppendTitleViewModel.Title => $"{CopyItemTitle} - [{(Parent.IsAppendLineMode ? "Line":"Inline")} mode]";
-        #endregion
-
         #region MpITooltipInfoViewModel Implementation
 
         public object Tooltip { get; set; }
@@ -221,7 +216,6 @@ namespace MonkeyPaste.Avalonia {
 
         public int[] TitleLayerZIndexes { get; private set; } = Enumerable.Range(1, 3).ToArray();
         public string[] TitleLayerHexColors { get; private set; } = Enumerable.Repeat(MpSystemColors.Transparent, 4).ToArray();
-
 
         public string TileBorderHexColor {
             get {
@@ -582,12 +576,12 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         #region Append
-        public bool IsAppendClipTile {
+        public bool IsAppendTrayItem {
             get {
-                if(Parent == null || Parent.AppendNotifierViewModel == null) {
+                if(Parent == null || Parent.ModalClipTileViewModel == null) {
                     return false;
                 }
-                return Parent.AppendNotifierViewModel.CopyItemId == CopyItemId && !IsAppendNotifier;
+                return Parent.ModalClipTileViewModel.CopyItemId == CopyItemId && !IsAppendNotifier;
             }
         }
 
@@ -596,7 +590,7 @@ namespace MonkeyPaste.Avalonia {
                 if (Parent == null) {
                     return false;
                 }
-                return Parent.AppendNotifierViewModel == this;
+                return Parent.ModalClipTileViewModel == this;
             }
         }
 
@@ -625,7 +619,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsViewAttached { get; set; }
 
         public bool IsTitleReadOnly { get; set; } = true;
 
@@ -746,12 +739,12 @@ namespace MonkeyPaste.Avalonia {
                 if (IsBusy) {
                     return true;
                 }
-                bool isplaceHolder = IsPlaceholder && !IsAppendNotifier;
+                //bool isplaceHolder = IsPlaceholder && !IsAppendNotifier;
                 //var cv = GetContentView();
                 //if(cv == null || !cv.IsViewLoaded) {
                 //    return true;
                 //}
-                if(!isplaceHolder && !IsViewLoaded) {//IsAnyCornerVisible) {
+                if(!IsPlaceholder && !IsViewLoaded) {//IsAnyCornerVisible) {
                     return true;
                 }
 
@@ -1267,14 +1260,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void TriggerUnloadedNotification() {
-            //_contentView = null;
             CopyItem = null;
             QueryOffsetIdx = -1;
             OnPropertyChanged(nameof(IsPlaceholder));
             OnPropertyChanged(nameof(CopyItemId));
-            //if(GetContentView() is MpAvIContentView cv) {
-            //    cv.IsContentUnloaded = true;
-            //}
         }
 
         private MpAvIDragSource _dragSource;
@@ -1282,7 +1271,12 @@ namespace MonkeyPaste.Avalonia {
             if (_dragSource != null) {
                 return _dragSource;
             }
-            _dragSource = MpAvCefNetWebView.LocateTileWebView(CopyItemId);
+            if(IsAppendNotifier) {
+                _dragSource = MpAvCefNetWebView.LocateModalWebView();
+            } else {
+                _dragSource = MpAvCefNetWebView.LocateTrayTileWebView(CopyItemId);
+            }
+            
             return _dragSource;
         }
 
@@ -1302,7 +1296,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (target_ctvm == null) {
-                    if (IsPinned || Parent.LayoutType == MpAvClipTrayLayoutType.Stack || Parent.HeadQueryIdx == 0) {
+                    if (IsPinned || Parent.LayoutType == MpClipTrayLayoutType.Stack || Parent.HeadQueryIdx == 0) {
                         // fallback and treat up as left
                         target_ctvm = await GetNeighborByColumnOffsetAsync(row_offset);
                     } else {
@@ -1324,7 +1318,7 @@ namespace MonkeyPaste.Avalonia {
                             b.ObservedBounds.Location.Distance(ObservedBounds.Location) ? a : b);
                 }
                 if (target_ctvm == null) {
-                    if (IsPinned || Parent.LayoutType == MpAvClipTrayLayoutType.Stack || Parent.TailQueryIdx == Parent.MaxClipTrayQueryIdx) {
+                    if (IsPinned || Parent.LayoutType == MpClipTrayLayoutType.Stack || Parent.TailQueryIdx == Parent.MaxClipTrayQueryIdx) {
                         // fallback and treat down as right
                         target_ctvm = await GetNeighborByColumnOffsetAsync(row_offset);
                     } else {
@@ -1634,9 +1628,6 @@ namespace MonkeyPaste.Avalonia {
                         MpAvPersistentClipTilePropertiesHelper.RemovePersistentIsTitleEditableTile_ById(CopyItemId);
                         if(CopyItemTitle != _originalTitle) {
                             HasModelChanged = true;
-                            if(this is MpIAppendTitleViewModel tvm) {
-                                tvm.OnPropertyChanged(nameof(tvm.Title));
-                            }
                         }
                     } else {
                         MpAvPersistentClipTilePropertiesHelper.AddPersistentIsTitleEditableTile_ById(CopyItemId);

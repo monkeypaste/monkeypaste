@@ -9,7 +9,7 @@ namespace MonkeyPaste.Avalonia {
         bool IsThumbDraggingX { get; set; }
         bool IsThumbDraggingY { get; set; }
         bool IsThumbDragging { get; }
-        MpAvClipTrayLayoutType LayoutType { get; set; }
+        MpClipTrayLayoutType LayoutType { get; set; }
         Orientation ListOrientation { get; }
         double MaxScrollOffsetX { get; }
         double MaxScrollOffsetY { get; }

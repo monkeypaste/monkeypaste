@@ -13,6 +13,7 @@
         x:Class="MonkeyPaste.Avalonia.MpAvUserActionNotificationWindow"
         Classes.IsClosing="{Binding IsClosing}"
         Classes.notificationWindow="True"
+        Classes.userActionNotificationWindow="True"
         IsVisible="{Binding IsVisible}"
         Width="350"
         Height="150"

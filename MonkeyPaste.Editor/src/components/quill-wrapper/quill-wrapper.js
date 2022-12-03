@@ -1,5 +1,7 @@
 // #region Globals
 
+
+const EditorPlaceHolderText = 'Feed me banana...';
 var quill;
 // #endregion Globals
 
@@ -16,7 +18,7 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 
 	let quillOptions = {
 		//debug: true,
-		placeholder: "",
+		placeholder: EditorPlaceHolderText,
 		//allowReadOnlyEdits: true,
 		theme: "snow",
 		formula: true,

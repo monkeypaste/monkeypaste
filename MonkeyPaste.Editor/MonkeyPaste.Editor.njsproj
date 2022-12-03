@@ -38,10 +38,13 @@
   <ItemGroup>
     <Content Include="src\app.js" />
     <Content Include="images\icons\monkey.ico" />
+    <Content Include="src\components\append\append.js" />
+    <Content Include="src\components\append\append-style.css" />
+    <Content Include="src\components\append\toolbar\append-toolbar-item-style.css" />
+    <Content Include="src\components\append\toolbar\append-toolbar-items.js" />
     <Content Include="src\components\content\ext-content-source-blot\ext-content-source-blot.css" />
     <Content Include="src\components\content\ext-content-source-blot\ext-content-source-blot.js" />
-    <Content Include="src\components\content\paste\paste-toolbar-style.css" />
-    <Content Include="src\components\content\paste\pastetoolbar.js" />
+    <Content Include="src\components\paste-toolbar\popup\paste-button-popup.js" />
     <Content Include="src\components\datatransfer\datatransfer.js">
       <SubType>Code</SubType>
     </Content>
@@ -67,6 +70,8 @@
     <Content Include="src\components\loader\loader.js">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\components\paste-toolbar\paste-toolbar-style.css" />
+    <Content Include="src\components\paste-toolbar\pastetoolbar.js" />
     <Content Include="src\components\quill-wrapper\quill-tooltip\quill-tooltip-wrapper.js" />
     <Content Include="index.html" />
     <Content Include="package.json" />
@@ -150,6 +155,7 @@
     <Folder Include="images\svg\" />
     <Folder Include="src\" />
     <Folder Include="src\components\" />
+    <Folder Include="src\components\append\toolbar\" />
     <Folder Include="src\components\clipboard\" />
     <Folder Include="src\components\common\toolbar\" />
     <Folder Include="src\components\content\" />
@@ -157,7 +163,6 @@
     <Folder Include="src\components\content\content-image\" />
     <Folder Include="src\components\content\content-text\" />
     <Folder Include="src\components\content\ext-content-source-blot\" />
-    <Folder Include="src\components\content\paste\" />
     <Folder Include="src\components\converter\" />
     <Folder Include="src\components\dragdrop\" />
     <Folder Include="src\components\editor\" />
@@ -173,12 +178,14 @@
     <Folder Include="src\components\findreplace\" />
     <Folder Include="src\components\common\" />
     <Folder Include="src\components\list\" />
-    <Folder Include="src\components\messages\async\" />
     <Folder Include="src\components\link\" />
     <Folder Include="src\components\loader\" />
     <Folder Include="src\components\exceptions\" />
     <Folder Include="src\components\datatransfer\" />
     <Folder Include="src\components\experiments\" />
+    <Folder Include="src\components\append\" />
+    <Folder Include="src\components\paste-toolbar\" />
+    <Folder Include="src\components\paste-toolbar\popup\" />
     <Folder Include="src\components\quill-wrapper\quill-tooltip\" />
     <Folder Include="src\components\svg\" />
     <Folder Include="src\components\overlay\" />

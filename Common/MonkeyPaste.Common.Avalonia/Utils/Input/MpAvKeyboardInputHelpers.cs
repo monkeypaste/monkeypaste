@@ -68,6 +68,11 @@ namespace MonkeyPaste.Common.Avalonia {
                 lks == MpKeyLiteralStringHelpers.CONTROL_KEY_LITERAL.ToLower()) {
                 return Key.LeftCtrl;//.LeftCtrl;
             }
+            if(lks == MpKeyLiteralStringHelpers.AV_CAPS_LOCK_KEY_LITERAL.ToLower() ||
+                lks == MpKeyLiteralStringHelpers.SH_CAPS_LOCK_KEY_LITERAL.ToLower()) {
+                return Key.CapsLock;
+            }
+
             if (lks == "alt") {
                 return Key.LeftAlt;//.LeftAlt;
             }

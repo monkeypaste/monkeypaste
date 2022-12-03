@@ -361,6 +361,9 @@ namespace MonkeyPaste.Avalonia {
                         case MpShortcutType.ToggleAppendMode:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAppendModeCommand;
                             break;
+                        case MpShortcutType.ToggleAppendLineMode:
+                            shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAppendLineModeCommand;
+                            break;
                         case MpShortcutType.ToggleAutoCopyMode:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAutoCopyModeCommand;
                             break;
@@ -369,7 +372,7 @@ namespace MonkeyPaste.Avalonia {
                             shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleRightClickPasteCommand;
                             break;
                         case MpShortcutType.PasteSelectedItems:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.PasteSelectedClipsCommand;
+                            shortcutCommand = MpAvClipTrayViewModel.Instance.PasteSelectedClipTileFromShortcutCommand;
                             break;
                         case MpShortcutType.PasteHere:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.PasteCurrentClipboardIntoSelectedTileCommand;
@@ -409,9 +412,6 @@ namespace MonkeyPaste.Avalonia {
                             break;
                         case MpShortcutType.Duplicate:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.DuplicateSelectedClipsCommand;
-                            break;
-                        case MpShortcutType.ToggleAppendLineMode:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAppendLineModeCommand;
                             break;
                         case MpShortcutType.ToggleListenToClipboard:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleIsAppPausedCommand;

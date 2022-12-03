@@ -98,7 +98,7 @@ namespace MonkeyPaste.Avalonia {
                     la_pi = MpPlatformWrapper.Services.ProcessWatcher.FileSystemProcessInfo;
                     if (la_pi == null) {
                         // need to get this set on init in process watcher
-                        Debugger.Break();
+                        //Debugger.Break();
                     }
                 }
                 if(la_pi != null) {

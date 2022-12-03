@@ -21,6 +21,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvClipboardWatcher : MpIClipboardMonitor, MpIPlatformDataObjectRegistrar {
         #region Private Variables
 
+        private bool _isInitialStart = false;
         private MpPortableDataObject _lastCbo;
 
         private object _lockObj = new object();
@@ -97,9 +98,13 @@ namespace MonkeyPaste.Avalonia {
         }
         private async Task CheckClipboardHelper() {
             if (_lastCbo == null) {
-                //setting last here will ensure item on cb isn't added when starting
-                _lastCbo = await ConvertManagedFormats();
-                return;
+                if(_isInitialStart) {
+                    _isInitialStart = false;
+                } else {
+                    // this ensures start/stop ignores last change
+                    _lastCbo = await ConvertManagedFormats();
+                    return;
+                }
             }
 
             var cbo = await ConvertManagedFormats();

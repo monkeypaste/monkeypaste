@@ -29,7 +29,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-        public static MpAvMainWindow Instance { get; private set; } = null;
+        private static MpAvMainWindow _instance;
+        public static MpAvMainWindow Instance => _instance ?? (_instance = new MpAvMainWindow());
         static MpAvMainWindow() {
             BoundsProperty.Changed.AddClassHandler<MpAvMainWindow>((x, y) => x.BoundsChangedHandler(y as AvaloniaPropertyChangedEventArgs<Rect>));
         }
@@ -58,12 +59,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvMainWindow() {
-            // while (!Debugger.IsAttached) {
-            //     Thread.Sleep(100);
-            // }
-            if (Instance == null) {
-                Instance = this;
-            }
+
 
             InitializeComponent();
 #if DEBUG
@@ -78,14 +74,25 @@ namespace MonkeyPaste.Avalonia {
             sidebarSplitter.GetObservable(GridSplitter.IsVisibleProperty).Subscribe(value => SidebarSplitter_isVisibleChange(sidebarSplitter, value));
 
 
-            Dispatcher.UIThread.Post(async () => {
-                await InitAsync();
-            });
+            //Dispatcher.UIThread.Post(async () => {
+            //    await InitAsync();
+            //});
         }
 
         #endregion
 
         #region Public Methods
+        public async Task InitAsync() {
+
+            App.Desktop.MainWindow = this;
+
+            MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
+            if (OperatingSystem.IsWindows()) {
+                MpAvToolWindow_Win32.InitToolWindow(this.PlatformImpl.Handle.Handle);
+            }
+            DataContext = MpAvMainWindowViewModel.Instance;
+        }
+
         public void UpdateResizerOrientation() {
             var mwvm = MpAvMainWindowViewModel.Instance;
 
@@ -382,24 +389,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-        private async Task InitAsync() {
-            MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
-            while (!MpBootstrapperViewModelBase.IsCoreLoaded) {
-                MpConsole.WriteLine("MainWindow waiting to open...");
-                await Task.Delay(100);
-            }
-
-            while (!this.IsInitialized) {
-                MpConsole.WriteLine("MainWindow waiting to initialize...");
-                await Task.Delay(100);
-            }
-            if (OperatingSystem.IsWindows()) {
-                MpAvToolWindow_Win32.InitToolWindow(this.PlatformImpl.Handle.Handle);
-            }
-            DataContext = MpAvMainWindowViewModel.Instance;
-
-            await MpAvMainWindowViewModel.Instance.InitializeAsync();           
-        }
+        
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {

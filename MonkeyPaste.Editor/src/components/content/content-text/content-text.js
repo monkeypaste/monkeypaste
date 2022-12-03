@@ -734,13 +734,11 @@ function adjustQueryRangesForEmptyContent(ranges) {
 }
 
 function appendTextContentData(data) {
-	let append_range = { index: getDocLength(), length: 1 };
-	if (IsAppendMode) {
-		append_range.index = Math.max(0, append_range.index - 1);
-	}
 	let dt = new DataTransfer();
 	// NOTE since data is result of ci builder it will always be html
 	dt.setData('text/html', data);
+
+	let append_range = { index: getAppendIdx(), length: 1 };
 	performDataTransferOnContent(dt, append_range);
 }
 

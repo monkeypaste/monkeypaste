@@ -26,13 +26,17 @@
                 Value="White" />
 
     </Style>
-    <Style Selector="Window.notificationWindow Button:pointerover">
+    <Style Selector="Window.notificationWindow > Border">
+        <Setter Property="CornerRadius"
+                Value="5" />
+    </Style>
+    <Style Selector="Window.userActionNotificationWindow Button:pointerover">
         <Setter Property="BorderBrush"
                 Value="Yellow" />
         <Setter Property="Background"
                 Value="Silver" />
     </Style>
-    <Style Selector="Window.notificationWindow Button:pressed">
+    <Style Selector="Window.userActionNotificationWindow Button:pressed">
         <Setter Property="BorderBrush"
                 Value="Lime" />
     </Style>

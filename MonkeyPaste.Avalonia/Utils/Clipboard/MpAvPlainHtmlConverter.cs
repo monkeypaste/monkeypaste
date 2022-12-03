@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvPlainHtmlConverter  {
+    public class MpAvPlainHtmlConverter : MpIBootstrappedItem, MpIAsyncObject {
         #region Private Variables
 
         #endregion
@@ -20,6 +20,12 @@ namespace MonkeyPaste.Avalonia {
 
         private static MpAvPlainHtmlConverter _instance;
         public static MpAvPlainHtmlConverter Instance => _instance ?? (_instance = new MpAvPlainHtmlConverter());
+        #endregion
+
+        #region MpIAsyncBootstrappedItem Implementation
+
+        public string Label => "Web Converter";
+        public bool IsBusy { get; private set; } = false;
         #endregion
 
         #region Properties
@@ -34,10 +40,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public void Init() {
+        public async Task InitAsync() {
             if (!MpAvCefNetApplication.UseCefNet) {
                 return;
             }
+            IsBusy = true;
+
             ConverterWebView = new MpAvCefNetPlainHtmlConverterWebView() {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
@@ -60,6 +68,13 @@ namespace MonkeyPaste.Avalonia {
                 quillWindow.Hide();
             };
             quillWindow.Show();
+
+            MpConsole.WriteLine("Waiting for Html converter to initialize...");
+            while (!ConverterWebView.IsEditorInitialized) {
+                await Task.Delay(100);
+            }
+            MpConsole.WriteLine("Html converter initialized");
+            IsBusy = false;
         }
         public async Task<MpAvHtmlClipboardData> ParseAsync(string htmlDataStr, string inputFormatType, MpCsvFormatProperties csvProps = null) {
             if (htmlDataStr == null) {
@@ -109,6 +124,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 ConverterWebView.ShowDevTools();
             });
+
         #endregion
     }
 }

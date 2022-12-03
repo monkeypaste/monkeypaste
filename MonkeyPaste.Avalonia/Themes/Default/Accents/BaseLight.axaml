@@ -95,6 +95,10 @@
                          Color="{DynamicResource ClipTileContentBackgroundColor}"
                          Opacity="{DynamicResource GlobalBgOpacity}" />
 
+        <SolidColorBrush x:Key="ModalClipTileContentBackgroundBrush"
+                         Color="{DynamicResource ClipTileContentBackgroundColor}"
+                         Opacity="1" />
+
         <!--  BORDER  -->
         <SolidColorBrush x:Key="DefaultBorderBrush_unselected"
                          Color="{DynamicResource UnselectedBorderColor}"

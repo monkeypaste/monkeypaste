@@ -36,22 +36,25 @@ namespace MonkeyPaste.Avalonia {
         public override async Task FinishLoaderAsync() {
             IsCoreLoaded = true;
 
-            MpConsole.WriteLine("Core and ViewModel Bootstrap complete");
+            MpConsole.WriteLine("Core Load complete");
 
             // swap main window then close loader
-            var lw = App.Desktop.MainWindow;
-            App.Desktop.MainWindow = new MpAvMainWindow();
-            App.Desktop.MainWindow.Show();
-            lw.Close();
 
             // MainWindow is now being created and Av AppLifetime desktop is being swapped to MainWindow
             // wait for mw instance to exist
-            while (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
-                await Task.Delay(100);
-            }
+            //while (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
+            //    await Task.Delay(100);
+            //}
+            Window lw = App.Desktop.MainWindow;
 
             await base.FinishLoaderAsync();
+
+            if (lw != null) {
+                lw.Close();
+            }
+            App.Desktop.MainWindow.Show();
             IsPlatformLoaded = true;
+            MpConsole.WriteLine("Platform Load complete");
         }
         protected override void CreateLoaderItems() {
             base.CreateLoaderItems();
@@ -82,7 +85,9 @@ namespace MonkeyPaste.Avalonia {
                     new MpBootstrappedItemViewModel(this,typeof(MpAvPlainHtmlConverter)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvExternalDropWindow)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvAppendNotificationWindow)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvSystemTray))
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvSystemTray)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindow)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindowViewModel))
                 });
         }
         protected override async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {

@@ -1,6 +1,4 @@
-﻿//var IsUnderlinesVisible = false;
-var IsHighlightingVisible = false;
-//var IsDropPreviewVisible = false;
+﻿var IsHighlightingVisible = false;
 
 var HighlightRects = [];
 var SelectedHighlightRectIdx = -1;
@@ -19,75 +17,6 @@ function updateOverlayBounds(overlayCanvas) {
 	overlayCanvas.style.top = editorRect.top;
     overlayCanvas.width = window_rect.width;
     overlayCanvas.height = window_rect.height;
-}
-
-
-function drawUnderlines(ctx, color = 'red', thickness = '0.5') {
-    let p1 = null;
-    let p2 = null;
-    let count = getDocLength();
-    let windowRect = getEditorContainerRect();
-
-    for (var i = 0; i < count; i++) {
-        
-        //log('drawing idx ' + i + ' of ' + count);
-
-        let idx_rect = getCharacterRect(i); //quill.getBounds(i);
-        //log('idx rect: ' + idx_rect);
-
-        let is_initial_line = p1 == null;        
-        let is_tail = i == count - 1;
-        let is_new_line = false;
-
-
-        if (is_initial_line) {
-            // initial line
-            p1 = { x: idx_rect.left, y: idx_rect.bottom };
-            
-        } else if (is_tail) {
-            // last line
-            p2 = { x: idx_rect.right, y: idx_rect.bottom };
-        } else {
-            let idx_block_elm = getBlockElementAtDocIdx(i);
-            let last_block_elm = getBlockElementAtDocIdx(i - 1);
-            if (idx_block_elm != last_block_elm ||
-                idx_rect.bottom > p1.y) {
-                // start of new line
-                let last_idx_rect = getCharacterRect(i - 1);// quill.getBounds(i - 1);
-                p2 = { x: last_idx_rect.right, y: last_idx_rect.bottom };
-            } 
-		}
-        //if (is_initial_line) {
-        //    // initial line
-        //    p1 = { x: idx_rect.left, y: idx_rect.bottom };
-        //} else if (is_new_line) {
-        //    // start of new line
-        //    let last_idx_rect = getCharacterRect(i - 1);// quill.getBounds(i - 1);
-        //    p2 = { x: last_idx_rect.right, y: last_idx_rect.bottom };
-        //} else if (is_tail) {
-        //    // last line
-        //    p2 = { x: idx_rect.right, y: idx_rect.bottom };
-        //}
-
-        //if (isPointInRect(windowRect, p1) && isPointInRect(windowRect, p2)) {
-        if (p1 && p2) {
-            // force straight lines
-
-            let max_line_bottom = Math.max(p1.y, p2.y);
-            drawLine(ctx, { x1: p1.x, y1: max_line_bottom, x2: p2.x, y2: max_line_bottom }, color, thickness);
-            p1 = p2 = null;
-            if (is_tail) {
-                return;
-            }
-
-            p1 = { x: idx_rect.left, y: max_line_bottom };
-            
-        }
-        //if (isTemplateAtDocIdx(i + 1)) {
-        //    // skip template idx
-        //    i += 3;
-        //}
-	}
 }
 
 function drawHighlighting(ctx, forceColor) {
@@ -176,7 +105,7 @@ function drawDropPreview(ctx, color = 'red', thickness = 1.0, line_style = [5,5]
 }
 
 function drawAppendNotifierPreview(ctx, color = 'red', thickness = 1.0, line_style = [5, 5]) {
-    let append_idx = getDocLength() - (IsAppendMode ? 1:0);
+    let append_idx = getAppendIdx();
     if (isDragCopy()) {
         color = 'lime';
     }
@@ -217,6 +146,7 @@ function drawAppendNotifierPreview(ctx, color = 'red', thickness = 1.0, line_sty
         drawLine(ctx, render_caret_line, color, thickness);
     }
 }
+
 function drawFancyTextSelection(ctx) {
     let sel_rects = getRangeRects(getDocSelection());
     sel_rects.forEach((srect) => drawRect(ctx, srect, 'purple', 'goldenrod', 1.5, 100/255));
@@ -341,21 +271,14 @@ function drawOverlay() {
 
     drawTextSelection(ctx);
 
-    //let isUnderlinesVisible = !isEditorToolbarVisible() && isSubSelectionEnabled() && !isDropping();
-    //if (isUnderlinesVisible) {
-    //    drawUnderlines(ctx);
-    //} 
-
     if (IsHighlightingVisible) {
         drawHighlighting(ctx);
     } 
 
-    let isDropPreviewVisible = IsDropping;
-    if (isDropPreviewVisible) {
+    if (IsDropping) {
        drawDropPreview(ctx);
-    } 
-
-    if (isAppendNotifier()) {
+    } else if (isAnyAppendEnabled()) {
+        // MOTE don't draw append if dropping
         drawAppendNotifierPreview(ctx);
     }
 }

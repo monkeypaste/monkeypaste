@@ -29,7 +29,8 @@ namespace MonkeyPaste {
     public abstract class MpViewModelBase : 
         INotifyPropertyChanged, 
         MpIErrorHandler, 
-        MpIViewModel {
+        MpIViewModel,
+        MpIAsyncObject {
 
         //[JsonIgnore]
         //private static Dictionary<string, int> _instanceCountLookup;
