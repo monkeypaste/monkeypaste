@@ -26,22 +26,54 @@
         TransparencyLevelHint="Transparent"
         Background="Transparent"
         Title="">
-    <Grid x:Name="NotificationWindowContainerGrid"
-          HorizontalAlignment="Stretch"
-          VerticalAlignment="Stretch">
-        <local:MpAvClipTileView DataContext="{Binding Body}"
-                                x:DataType="local:MpAvClipTileViewModel"
-                                Background="{DynamicResource ModalClipTileContentBackgroundBrush}"
-          
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch" />
+    <Window.Styles>
+        <Style Selector="Expander:expanded:down /template/ Border#ExpanderContent">
+            <Setter Property="Padding"
+                    Value="0" />
+        </Style>
+
+    </Window.Styles>
+    <Window.Resources>
+
+    </Window.Resources>
+    <Expander Header="{Binding Title}"
+              IsExpanded="{Binding IsExpanded, Mode=TwoWay}"
+              ExpandDirection="Down">
+        <Expander.Header>
+            <Grid HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  ColumnDefinitions="25,25,*"
+                  Height="30">
+                <Image x:Name="ExpanderHeaderIcon"
+                       Grid.Column="0"
+                       Source="{Binding IconSourceStr, Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                       Stretch="Fill"
+                       Width="{Binding Bounds.Height, ElementName=ExpanderHeaderIcon}"
+                       VerticalAlignment="Stretch" />
+                <local:MpAvOptionsButton Width="15"
+                                         Grid.Column="1"
+                                         Margin="0,3,7,3"
+                                         local:MpAvMenuExtension.PlacementMode="Left"
+                                         local:MpAvMenuExtension.IsOpen="{Binding IsPopupMenuVisible, Mode=TwoWay}"
+                                         VerticalAlignment="Top"
+                                         HorizontalAlignment="Right" />
+                <TextBlock Grid.Column="2"
+                           FontSize="20"
+                           VerticalAlignment="Bottom"
+                           HorizontalAlignment="Left"
+                           Foreground="White"
+                           FontWeight="SemiBold"
+                           Text="{Binding Title}" />
+            </Grid>
+        </Expander.Header>
+        <Grid>
+            <local:MpAvClipTileView DataContext="{Binding Body}"
+                                    x:DataType="local:MpAvClipTileViewModel"
+                                    Background="{DynamicResource ModalClipTileContentBackgroundBrush}"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch" />
 
 
-        <local:MpAvOptionsButton Width="15"
-                                 Margin="0,3,7,3"
-                                 local:MpAvMenuExtension.PlacementMode="Left"
-                                 local:MpAvMenuExtension.IsOpen="{Binding IsPopupMenuVisible, Mode=TwoWay}"
-                                 VerticalAlignment="Top"
-                                 HorizontalAlignment="Right" />
-    </Grid>
+        </Grid>
+    </Expander>
 </Window>

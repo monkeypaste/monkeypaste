@@ -95,7 +95,7 @@
                       Grid.Row="2"
                       local:MpAvIsHoveringExtension.IsEnabled="True"
                       local:MpAvIsHoveringExtension.HoverCursor="Hand"
-                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance}}"
+                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpAvAnalyticItemCollectionViewModel.Instance}}"
                       Padding="10">
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="Analyze" />
@@ -107,7 +107,7 @@
                       local:MpAvIsHoveringExtension.IsEnabled="True"
                       local:MpAvIsHoveringExtension.HoverCursor="Hand"
                       IsEnabled="True"
-                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpActionCollectionViewModel.Instance}}"
+                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpAvActionCollectionViewModel.Instance}}"
                       Padding="10">
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="Actions" />

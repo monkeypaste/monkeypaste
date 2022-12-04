@@ -3,6 +3,11 @@
     background-color: transparent;
 }
 
+div.ql-code-block-container, div.ql-code-block {
+    background-color: rgba(0,0,0,var(--editableopacity)) !important;
+}
+
+
 #editor {
     width: 100%;
     height: 100%;

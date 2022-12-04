@@ -84,11 +84,11 @@
                         <Binding Path="IsSidebarVisible"
                                  Source="{x:Static local:MpAvTagTrayViewModel.Instance}" />
                         <Binding Path="IsSidebarVisible"
-                                 Source="{x:Static local:MpAnalyticItemCollectionViewModel.Instance}" />
+                                 Source="{x:Static local:MpAvAnalyticItemCollectionViewModel.Instance}" />
                         <Binding Path="IsSidebarVisible"
                                  Source="{x:Static local:MpAvClipboardHandlerCollectionViewModel.Instance}" />
                         <Binding Path="IsSidebarVisible"
-                                 Source="{x:Static local:MpActionCollectionViewModel.Instance}" />
+                                 Source="{x:Static local:MpAvActionCollectionViewModel.Instance}" />
                     </MultiBinding>
                 </GridSplitter.IsVisible>
             </GridSplitter>

@@ -32,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvContentAddTriggerViewModel(MpActionCollectionViewModel parent) : base(parent) {
+        public MpAvContentAddTriggerViewModel(MpAvActionCollectionViewModel parent) : base(parent) {
 
         }
         #endregion

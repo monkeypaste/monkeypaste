@@ -22,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
     }
 
     public abstract class MpAvActionViewModelBase :
-        MpViewModelBase<MpActionCollectionViewModel>,
+        MpViewModelBase<MpAvActionCollectionViewModel>,
         MpIHoverableViewModel,
         MpISelectableViewModel,
         MpIUserIconViewModel,
@@ -84,23 +84,23 @@ namespace MonkeyPaste.Avalonia {
             get {
                 string toolTipStr = string.Empty;
 
-                if (this is MpAnalyzeActionViewModel) {
+                if (this is MpAvAnalyzeActionViewModel) {
                     toolTipStr = "Analyzer - Processes triggered content or previous action output using a selected plugin.";
-                } else if (this is MpClassifyActionViewModel) {
+                } else if (this is MpAvClassifyActionViewModel) {
                     toolTipStr = "Classifier - Automatically adds triggered content to the selected collection.";
-                } else if (this is MpCompareActionViewModelBase) {
+                } else if (this is MpAvCompareActionViewModelBase) {
                     toolTipStr = "Comparer - Parses content or previous action output for text. When text is found, the output is ranges where those conditions were met. When comparision fails, no subsequent actions will be evaluated.";
-                } else if (this is MpFileWriterActionViewModel) {
+                } else if (this is MpAvFileWriterActionViewModel) {
                     toolTipStr = "File Writer - Saves content to the selected folder.";
-                } else if (this is MpMacroActionViewModel) {
+                } else if (this is MpAvMacroActionViewModel) {
                     toolTipStr = "Macro - When used after a compare action, embeds a selected local or remote command for onto the text of each match";
                 } else if (this is MpAvContentAddTriggerViewModel) {
                     toolTipStr = "Content Added - Triggered when content of the selected type is added";
                 } else if (this is MpAvContentTaggedTriggerViewModel) {
                     toolTipStr = "Content Classified - Triggered when content is added to the selected collection";
-                } else if (this is MpFileSystemTriggerViewModel) {
+                } else if (this is MpAvFileSystemTriggerViewModel) {
                     toolTipStr = "Folder Changed - Triggered when a file is added to the selected directory (or subdirectory if checked)";
-                } else if (this is MpShortcutTriggerViewModel) {
+                } else if (this is MpAvShortcutTriggerViewModel) {
                     toolTipStr = "Shortcut - Triggered when the recorded shortcut is pressed on the currently selected content";
                 }
 
@@ -194,7 +194,7 @@ namespace MonkeyPaste.Avalonia {
                         isVisible = false;
                     }
                     if (GetType().IsSubclassOf(typeof(MpAvTriggerActionViewModelBase)) &&
-                       GetType() != typeof(MpCompareActionViewModelBase) &&
+                       GetType() != typeof(MpAvCompareActionViewModelBase) &&
                        at == MpActionType.Macro) {
                         isVisible = false;
                     }
@@ -681,7 +681,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvActionViewModelBase() : base(null) { }
 
-        public MpAvActionViewModelBase(MpActionCollectionViewModel parent) : base(parent) {
+        public MpAvActionViewModelBase(MpAvActionCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpActionViewModelBase_PropertyChanged;
         }
 
@@ -726,22 +726,22 @@ namespace MonkeyPaste.Avalonia {
                 case MpActionType.Trigger:
                     throw new Exception("Trigger's should be created in the collection forest");
                 case MpActionType.Analyze:
-                    avm = new MpAnalyzeActionViewModel(Parent);
+                    avm = new MpAvAnalyzeActionViewModel(Parent);
                     break;
                 case MpActionType.Classify:
-                    avm = new MpClassifyActionViewModel(Parent);
+                    avm = new MpAvClassifyActionViewModel(Parent);
                     break;
                 case MpActionType.Compare:
-                    avm = new MpCompareActionViewModelBase(Parent);
+                    avm = new MpAvCompareActionViewModelBase(Parent);
                     break;
                 case MpActionType.Macro:
-                    avm = new MpMacroActionViewModel(Parent);
+                    avm = new MpAvMacroActionViewModel(Parent);
                     break;
                 case MpActionType.Timer:
-                    avm = new MpTimerActionViewModel(Parent);
+                    avm = new MpAvTimerActionViewModel(Parent);
                     break;
                 case MpActionType.FileWriter:
-                    avm = new MpFileWriterActionViewModel(Parent);
+                    avm = new MpAvFileWriterActionViewModel(Parent);
                     break;
             }
             avm.ParentActionViewModel = this;

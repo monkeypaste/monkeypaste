@@ -16,12 +16,32 @@ namespace MonkeyPaste {
         }
         #endregion
 
+        #region Properties
+
+        #region State
+
+        public bool IsExpanded { get; set; } = false;
+        #endregion
+
+        #region Model
+
+        public override string Title {
+            get {
+                if(Body is MpIAppendTitleViewModel atvm) {
+                    return atvm.AppendTitle;
+                }
+                return string.Empty;
+            }
+        }
+
+        #endregion
+
+        #endregion
+
         #region Constructors
         private MpAppendNotificationViewModel() : base() { }
         #endregion
 
-        #region Properties
-        #endregion
 
         #region Public Methods
         #endregion

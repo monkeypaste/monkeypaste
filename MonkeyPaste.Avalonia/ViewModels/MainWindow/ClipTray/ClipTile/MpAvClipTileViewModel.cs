@@ -28,6 +28,7 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel,
         MpIResizableViewModel, 
         MpITextContentViewModel,
+        MpIAppendTitleViewModel,
         //MpIRtfSelectionRange,
         MpIContextMenuViewModel, 
         //MpIFindAndReplaceViewModel,
@@ -137,6 +138,19 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        #endregion
+
+        #region MpIAppendTitleViewModel Implementation
+
+        public string AppendTitle {
+            get {
+                if(!IsAppendNotifier || Parent == null || !Parent.IsAnyAppendMode) {
+                    return string.Empty;
+                }
+                return $"Append [{(Parent.IsAppendLineMode ? "Line":"Inline")}] - {CopyItemTitle}";
+            }
+        }
+        
         #endregion
 
         #region MpITextContentViewModel Implementation

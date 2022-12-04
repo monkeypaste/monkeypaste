@@ -288,7 +288,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         SourceContextMenuViewModel,
-                        MpAnalyticItemCollectionViewModel.Instance.ContextMenuItemViewModel,
+                        MpAvAnalyticItemCollectionViewModel.Instance.ContextMenuItemViewModel,
                         new MpMenuItemViewModel() {IsSeparator = true},
                         MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(SelectedItem),
                         new MpMenuItemViewModel() {IsSeparator = true},
@@ -3007,7 +3007,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand PasteFromClipTilePasteButtonCommand => new MpCommand<object>(
             (args) => {
-                PasteClipTileAsync((args as object[])[1] as MpAvClipTileViewModel).FireAndForgetSafeAsync();
+                PasteClipTileAsync(args as MpAvClipTileViewModel).FireAndForgetSafeAsync();
             },
             (args)=> {
                 if(args is MpAvClipTileViewModel ctvm) {
@@ -3185,7 +3185,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand AnalyzeSelectedItemCommand => new MpAsyncCommand<object>(
             async (presetIdObj) => {
                 var preset = await MpDataModelProvider.GetItemAsync<MpPluginPreset>((int)presetIdObj);
-                var analyticItemVm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.PluginGuid == preset.PluginGuid);
+                var analyticItemVm = MpAvAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.PluginGuid == preset.PluginGuid);
                 var presetVm = analyticItemVm.Items.FirstOrDefault(x => x.Preset.Id == preset.Id);
 
                 analyticItemVm.SelectPresetCommand.Execute(presetVm);

@@ -27,7 +27,9 @@ function setInputFocusable(isInputFocused) {
 		window.focus();
 		log('document focus attempted: ' + (document.hasFocus() ? "SUCCESS" : "FAILED"));
 	}
-
+	if (!IsHostFocused) {
+		hideAllPopups();
+	}
 }
 
 // #endregion Setters

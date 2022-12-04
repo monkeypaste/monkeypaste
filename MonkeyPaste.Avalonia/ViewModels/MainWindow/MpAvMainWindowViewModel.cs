@@ -45,11 +45,11 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvTagTrayViewModel.Instance.IsSidebarVisible) {
                     return MpAvTagTrayViewModel.Instance;
                 }
-                if (MpActionCollectionViewModel.Instance.IsSidebarVisible) {
-                    return MpActionCollectionViewModel.Instance;
+                if (MpAvActionCollectionViewModel.Instance.IsSidebarVisible) {
+                    return MpAvActionCollectionViewModel.Instance;
                 }
-                if (MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible) {
-                    return MpAnalyticItemCollectionViewModel.Instance;
+                if (MpAvAnalyticItemCollectionViewModel.Instance.IsSidebarVisible) {
+                    return MpAvAnalyticItemCollectionViewModel.Instance;
                 }
                 return null;
             }

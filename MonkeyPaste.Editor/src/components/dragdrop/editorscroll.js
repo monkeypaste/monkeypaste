@@ -26,8 +26,8 @@ function initEditorScroll() {
 
 function getEditorScroll() {
     return {
-        left: getEditorContainerElement().scrollLeft,
-        top: getEditorContainerElement().scrollTop
+        left: parseInt(getEditorContainerElement().scrollLeft),
+        top: parseInt(getEditorContainerElement().scrollTop)
     };
 }
 // #endregion Getters

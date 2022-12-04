@@ -511,7 +511,7 @@ namespace MonkeyPaste.Avalonia {
                 var ctrvm = MpAvClipTrayViewModel.Instance;
                 var ttrvm = MpAvTagTrayViewModel.Instance;
                 var sbvm = MpAvSearchBoxViewModel.Instance;
-                var acvm = MpActionCollectionViewModel.Instance;
+                var acvm = MpAvActionCollectionViewModel.Instance;
 
                 bool canPerformShortcut = true;
 

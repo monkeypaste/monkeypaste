@@ -49,7 +49,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static string ToRichHtmlText(this string str, string strFormat) {
             if(str.IsStringRichText() && OperatingSystem.IsWindows()) {
-                string qhtml = MonkeyPaste.Common.Wpf.MpWpfRtfToHtmlConverter.ConvertFormatToHtml(str, strFormat);
+                string qhtml = MonkeyPaste.Common.Wpf.MpWpfRtfToHtmlConverter2.ConvertFormatToHtml(str, strFormat);
                 return qhtml;
             }  else if(str.IsStringCsv()) {
                 // TODO create quill tables here

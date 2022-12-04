@@ -50,7 +50,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAnnotateActionViewModel(MpActionCollectionViewModel parent) : base(parent) {
+        public MpAnnotateActionViewModel(MpAvActionCollectionViewModel parent) : base(parent) {
 
         }
 
@@ -69,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
                 if(actionInput.CopyItem.ItemType == MpCopyItemType.Image) {
 
                 } else {
-                    if(arg is MpCompareOutput co) {
+                    if(arg is MpAvCompareOutput co) {
                         //var fd = co.CopyItem.ItemData.ToFlowDocument();
                         //var matchRanges = co.Matches.Select(x => new TextRange(
                         //    fd.ContentStart.GetPositionAtOffset(x.Offset),

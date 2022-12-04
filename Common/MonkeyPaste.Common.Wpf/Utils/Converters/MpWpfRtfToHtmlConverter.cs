@@ -20,6 +20,7 @@ namespace MonkeyPaste.Common.Wpf {
         private static string[] _inlineTags { get; set; } = new string[] { "span", "a", "em", "strong", "u", "s", "sub", "sup", "img" };
         private static string[] _blockTags { get; set; } = new string[] { "p", "ol", "ul", "li", "div", "table", "colgroup", "col", "tbody", "tr", "td", "iframe" };
 
+        private static HtmlDocument _htmlDoc;
         #endregion
 
         #region Public Methods
@@ -39,6 +40,8 @@ namespace MonkeyPaste.Common.Wpf {
         #region Private Methods
 
         private static string ConvertFlowDocumentToHtml(FlowDocument fd, Dictionary<string, string> globalBlockAttributes = null, Dictionary<string, string> globalInlineAttributes = null) {
+            _htmlDoc = new HtmlDocument();
+
             var sb = new StringBuilder();
             foreach (Block b in fd.Blocks) {
                 if (b is Table t) {
@@ -226,24 +229,25 @@ namespace MonkeyPaste.Common.Wpf {
                 sb.Append(" " + tcAttr);
             }
             if (string.IsNullOrWhiteSpace(content)) {
-                content = @"<br>";
+                content = $"{(content == null ? string.Empty : content)}<br>";
             }
             sb.AppendFormat(@">{0}</p>", content);
             return sb.ToString();
         }
 
         private static string WrapWithSpan(Span span, string content) {
-            if (content == "<br>") {
-                //when adding linebreak inside a span quill internally converts
-                //the one linebreak into two empty paragraphs
-                //so do not wrap linebreak with a span
-                return string.Empty;
-            }
-            if (content == " ") {
-                //wrapping unformatted spaces with a span makes quill ignore the space
-                //so just return the space
-                return content;
-            }
+            //if (content == "<br>") {
+            //    //when adding linebreak inside a span quill internally converts
+            //    //the one linebreak into two empty paragraphs
+            //    //so do not wrap linebreak with a span
+            //    return string.Empty;
+            //}
+            //if (string.IsNullOrWhiteSpace(content)) {
+            //    //wrapping unformatted spaces with a span makes quill ignore the space
+            //    //so just return the space
+            //    return content;
+            //}
+            content = content == null ? string.Empty : content;
             if(span is Hyperlink hl) {
                 content = WrapWithHyperlink(hl,content);
             }

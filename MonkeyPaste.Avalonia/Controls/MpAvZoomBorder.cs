@@ -227,7 +227,7 @@ namespace MonkeyPaste.Avalonia {
                 if (DesignerItem != null) {
                     DesignerItem.ScaleX = st.ScaleX;
                     DesignerItem.ScaleY = st.ScaleY;
-                    if (DataContext is MpActionCollectionViewModel acvm) {
+                    if (DataContext is MpAvActionCollectionViewModel acvm) {
                         acvm.HasModelChanged = true;
                     }
                 }
@@ -257,7 +257,7 @@ namespace MonkeyPaste.Avalonia {
                 IsTranslating = false;
                 e.Pointer.Capture(null);
                 MpPlatformWrapper.Services.Cursor.UnsetCursor(DataContext);
-                if(DataContext is MpActionCollectionViewModel acvm) {
+                if(DataContext is MpAvActionCollectionViewModel acvm) {
                     acvm.HasModelChanged = true;
                 }
             }

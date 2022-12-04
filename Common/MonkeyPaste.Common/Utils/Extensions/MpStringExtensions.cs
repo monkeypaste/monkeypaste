@@ -152,8 +152,11 @@ namespace MonkeyPaste.Common {
             return str.Split(new string[] { separator }, StringSplitOptions.RemoveEmptyEntries);
         }
 
-        public static string TrimTrailingLineEndings(this string str) {
-            return str.TrimEnd(System.Environment.NewLine.ToCharArray());
+        public static string TrimTrailingLineEnding(this string str) {
+            if(str.EndsWith(Environment.NewLine)) {
+                return str.Substring(0, str.Length - 1);
+            }
+            return str;
         }
 
         public static bool IsStringResourcePath(this string text) {
@@ -414,9 +417,49 @@ namespace MonkeyPaste.Common {
             }
             return false;
         }
-             
-        public static string Escape(this string badString) {
-            return badString.Replace("&", "&amp;").Replace("\"", "&quot;").Replace("'", "&apos;").Replace(">", "&gt;").Replace("<", "&lt;");
+
+        private static Dictionary<char, string> _escapeEntities = new Dictionary<char, string>() {
+            {' ',"&nbsp;" },
+            {'&',"&amp;" },
+            {'\"',"&quot;" },
+            {'\'',"&apos;" },
+            {'>',"&gt;" },
+            {'¢',"&cent;" },
+            {'£',"&pound;" },
+            {'¥',"&yen;" },
+            {'€',"&euro;" },
+            {'©',"&copy;" },
+            {'®',"&reg;" },
+            {'™',"&trade;" },
+            {'<',"&lt;" }
+        };
+        public static string EscapeSpecialHtmlEntities(this string str) {
+            var sb = new StringBuilder();
+            for (int i = 0; i < str.Length; i++) {
+                if (_escapeEntities.ContainsKey(str[i])) {
+                    sb.Append(_escapeEntities[str[i]]);
+                } else {
+                    sb.Append(str[i]);
+                }
+            }
+            return sb.ToString();
+        }
+
+        public static string UnescapeSpecialHtmlEntities(this string str) {
+            var sb = new StringBuilder();
+            for (int i = 0; i < str.Length; i++) {
+                var kvp = _escapeEntities.FirstOrDefault(x => str.Substring(i).StartsWith(x.Value));
+                if(!kvp.Equals(default(KeyValuePair<char,string>))) {
+                    sb.Append(kvp.Key);
+                } else {
+                    sb.Append(str[i]);
+                }
+            }
+            return sb.ToString();
+        }
+
+        public static bool ContainsSpecialHtmlEntities(this string str) {
+            return _escapeEntities.Any(x => str.Contains(x.Key));
         }
 
         public static string EscapeMenuItemHeader(this string str, int altNavIdx = -1) {

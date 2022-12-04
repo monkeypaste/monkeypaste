@@ -29,13 +29,13 @@ namespace MonkeyPaste.Avalonia {
 
 
         public void RegisterActionComponent(MpIActionTrigger mvm) {
-            var fstvm = mvm as MpFileSystemTriggerViewModel;
+            var fstvm = mvm as MpAvFileSystemTriggerViewModel;
             AddWatcher(fstvm.FileSystemPath, fstvm);
             MpConsole.WriteLine($"FileSystemWatcher Registered {mvm.Label} matcher");
         }
 
         public void UnregisterActionComponent(MpIActionTrigger mvm) {
-            var fstvm = mvm as MpFileSystemTriggerViewModel;
+            var fstvm = mvm as MpAvFileSystemTriggerViewModel;
             RemoveWatcher(fstvm.FileSystemPath);
             MpConsole.WriteLine($"FileSystemWatcher Unregistered {mvm.Label} matcher");
         }

@@ -7,11 +7,11 @@ using System.Web;
 
 namespace MonkeyPaste.Common {
     public static class MpRichHtmlToPlainTextConverter {
-        public static string Convert(string html) {
-            return HttpUtility.HtmlDecode(FormatLineBreaks(html));
+        public static string Convert(string html, string envNewLine = null) {
+            return HttpUtility.HtmlDecode(FormatLineBreaks(html, envNewLine));
         }
 
-        private static string FormatLineBreaks(string html) {
+        private static string FormatLineBreaks(string html, string envNewLine = null) {
             //first - remove all the existing '\n' from HTML
             //they mean nothing in HTML, but break our logic
             html = html.Replace("\r", "").Replace("\n", " ");

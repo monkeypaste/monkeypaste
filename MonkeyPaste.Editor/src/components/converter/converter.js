@@ -57,13 +57,17 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 		insertText(0, escapeHtml(dataStr), 'silent');
 		//setRootText(escapeHtml(dataStr));
 	} else if (formatType == 'html') {
-		if (dataStr.toLowerCase().indexOf('<p>') < 0) {
-			dataStr = '<p>' + dataStr + '</p>';
-		}
-		dataStr = unescapeHtml(dataStr);
+		//if (dataStr.toLowerCase().indexOf('<p>') < 0) {
+		//	dataStr = '<p>' + dataStr + '</p>';
+		//}
+		//dataStr = unescapeHtml(dataStr);
+		//dataStr = decodeURIComponent(unescapeHtml(encodeURIComponent(dataStr)));
 		// NOTE insertHtml will remove spaces between spans...
-		insertHtml(0, dataStr, 'api', false);
-		//setRootHtml(dataStr);
+		//insertHtml(0, dataStr, 'api', false);
+		setRootHtml(dataStr);
+
+		//const delta = quill.clipboard.convert(dataStr);
+		//quill.setContents(delta, 'silent')
 	}
 
 	quill.update();

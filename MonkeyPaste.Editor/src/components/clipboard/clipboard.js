@@ -105,6 +105,9 @@ function addPlainHtmlClipboardMatchers() {
                 if (delta.ops[i].insert === undefined) {
                     continue;
                 }
+                if (delta.ops[i].insert.contains('imgTagStartStr')) {
+                    debugger;
+                }
                 //delta.ops[i].insert = escapeHtml(node.outerHTML);
                 //return delta;
                 return new Delta().insert(escapeHtml(node.outerHTML));
