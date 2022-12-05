@@ -1,3 +1,32 @@
 .ql-editor.append {
     margin-bottom: 30px;
 }
+
+#pasteAppendToolbarLabelContainer {
+    background-color: var(--editableeditorbgcolor_opaque);
+    display: inline-flex;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: white;
+    text-align: center;
+    font-family: Impact;
+    font-size: 12px;
+    transition: 0.5s;
+}
+
+#pasteAppendToolbarLabelContainer span {
+    padding: 3px 10px;
+}
+
+.append-mode-label {
+    color: salmon;
+}
+
+.insert-mode-label {
+    color: mediumturquoise;
+}
+
+#pasteAppendIsManualToolbarLabel {
+    background-color: silver;
+    color: dimgray;
+}

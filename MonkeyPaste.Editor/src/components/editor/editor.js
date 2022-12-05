@@ -326,28 +326,6 @@ function disableSubSelection(fromHost = false) {
 	log('sub-selection DISABLED from: '+(fromHost ? 'HOST':'INTERNAL'));
 }
 
-function enableAppendMode(isAppendLine) {
-	let append_idx = getDocLength();
-	if (isAppendLine) {
-		IsAppendLineMode = true;
-		IsAppendMode = false;
-	} else {
-		IsAppendLineMode = false;
-		IsAppendMode = true;
-	}
-	enableSubSelection();
-
-	drawOverlay();
-	log('append mode enabled. IsAppendNotifier: ' + isAppendNotifier());
-}
-
-function disableAppendMode() {	
-	IsAppendLineMode = false;
-	IsAppendMode = false;
-	drawOverlay();
-	log('append mode disabled. IsAppendNotifier: ' + isAppendNotifier());
-}
-
 // #endregion Actions
 
 // #region Event Handlers

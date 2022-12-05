@@ -185,12 +185,10 @@ namespace MonkeyPaste {
         public string dataTransferSourceUrl { get; set; }
     }
 
-    public class MpQuillAppendModeEnabledRequestMessage : MpJsonObject {
-        // may not need
+    public class MpQuillAppendModeChangedMessage : MpJsonObject {
         public bool isAppendLineMode { get; set; }
-    }
-    public class MpQuillAppendModeDisabledResponseMessage : MpJsonObject {
-        // empty may not need
+        public bool isAppendMode { get; set; }
+        public bool isAppendManualMode { get; set; }
     }
 
     public class MpQuillAppendDataRequestMessage : MpJsonObject {

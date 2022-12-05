@@ -17,7 +17,7 @@
         Classes.notificationWindow="True"
         IsVisible="{Binding IsVisible}"
         Width="350"
-        MinHeight="100"
+        MinHeight="50"
         SizeToContent="Height"
         ShowInTaskbar="False"
         WindowState="Normal"
@@ -34,13 +34,13 @@
             local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
         <Grid x:Name="NotificationWindowContainerGrid"
               ColumnDefinitions="0.15*,*,15"
-              RowDefinitions="0.1*,0.8*">
+              RowDefinitions="25,Auto">
             <Image x:Name="NotificationIconImage"
                    Grid.Row="0"
                    Grid.Column="0"
                    Width="{Binding Bounds.Height, ElementName=NotificationIconImage}"
                    HorizontalAlignment="Left"
-                   VerticalAlignment="Top"
+                   VerticalAlignment="Stretch"
                    IsVisible="{Binding IconSourceStr, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
                    Source="{Binding IconSourceStr, Converter={StaticResource IconSourceObjToBitmapConverter}}"
                    Stretch="Fill" />
@@ -65,10 +65,21 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Bottom"
                     BorderThickness="0"
-                    IsVisible="True"
                     Margin="5,0,5,0"
                     Background="White"
                     Height="1" />
+
+
+            <local:MpAvOptionsButton Grid.Row="0"
+                                     Grid.Column="2"
+                                     Width="15"
+                                     Margin="0,3,7,3"
+                                     local:MpAvIsHoveringExtension.IsEnabled="True"
+                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
+                                     local:MpAvMenuExtension.PlacementMode="Left"
+                                     local:MpAvMenuExtension.IsOpen="{Binding IsPopupMenuVisible, Mode=TwoWay}"
+                                     VerticalAlignment="Stretch"
+                                     HorizontalAlignment="Right" />
 
             <Border Grid.Row="1"
                     Grid.Column="1"
@@ -80,7 +91,6 @@
                     CornerRadius="5"
                     Background="{DynamicResource ClipTileContentBackgroundBrush}"
                     Margin="10">
-
                 <TextBlock HorizontalAlignment="Left"
                            VerticalAlignment="Top"
                            TextWrapping="NoWrap"
@@ -91,15 +101,6 @@
                            Foreground="Black"
                            Text="{Binding Body}" />
             </Border>
-
-            <local:MpAvOptionsButton Grid.Row="0"
-                                     Grid.Column="2"
-                                     Width="15"
-                                     Margin="0,3,7,3"
-                                     local:MpAvMenuExtension.PlacementMode="Left"
-                                     local:MpAvMenuExtension.IsOpen="{Binding IsPopupMenuVisible, Mode=TwoWay}"
-                                     VerticalAlignment="Stretch"
-                                     HorizontalAlignment="Right" />
         </Grid>
     </Border>
 </Window>

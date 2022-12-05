@@ -9,6 +9,9 @@ body {
     overflow: hidden;
     cursor: default;
     background-color: transparent;
+    --subselecteditorbgcolor: rgb(189, 188, 188,var(--editableopacity));
+    --editableeditorbgcolor: rgba(255, 248, 220,var(--editableopacity));
+    --editableeditorbgcolor_opaque: rgb(255, 248, 220);
     --selbgcolor: lightblue;
     --selfgcolor: black;
     --hovercolor: yellow;
@@ -148,4 +151,9 @@ button {
 
 .unavailable-text {
     text-decoration: line-through;
+}
+
+/* override superCm so they aren't so tall */
+.context-menu-option {
+    padding: 1px 30px 1px 15px !important;
 }

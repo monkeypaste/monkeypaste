@@ -103,7 +103,7 @@
             <!--  Corner Button Overlay  -->
             <local:MpAvClipTileCornerButtonsView Grid.Row="0"
                                                  Grid.RowSpan="3"
-                                                 IsVisible="{Binding IsHovering}"
+                                                 IsVisible="{Binding IsOverlayButtonsVisible}"
                                                  HorizontalAlignment="Stretch"
                                                  VerticalAlignment="Stretch"
                                                  DataContext="{Binding}" />
@@ -119,6 +119,7 @@
                     local:MpAvResizeExtension.BoundHeight="{Binding BoundHeight, Mode=TwoWay}"
                     local:MpAvResizeExtension.DefaultWidth="{Binding MinWidth}"
                     local:MpAvResizeExtension.DefaultHeight="{Binding MinHeight}"
+                    local:MpAvResizeExtension.IsResizable="{Binding IsResizable}"
                     local:MpAvResizeExtension.CanResize="{Binding CanResize, Mode=TwoWay}"
                     local:MpAvResizeExtension.IsResizing="{Binding IsResizing, Mode=TwoWay}"
                     local:MpAvResizeExtension.XFactor="-1"
@@ -127,7 +128,6 @@
                     local:MpAvResizeExtension.IsEnabled="True"
                     local:MpAvPointerPressCommandExtension.IsEnabled="True"
                     local:MpAvPointerPressCommandExtension.DoubleLeftPressCommand="{Binding ResetTileSizeToDefaultCommand}"
-                    
                     local:MpAvIsHoveringExtension.IsEnabled="True"
                     Cursor="SizeWestEast"
                     HorizontalAlignment="Right"
@@ -141,7 +141,7 @@
             <!--  Trial Expired Overlay  -->
             <Border HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    IsVisible="False">
+                    IsVisible="{Binding IsTrialOverlayVisibile}">
                 <Border.Background>
                     <SolidColorBrush Color="Black"
                                      Opacity="0.2" />

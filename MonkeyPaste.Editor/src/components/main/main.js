@@ -237,6 +237,7 @@ function hideAllPopups() {
 	hideCreateTemplateToolbarContextMenu();
 	hideCreateTableContextMenu();
 	hidePasteButtonExpander();
+	hideEditorAlignMenu();
 }
 // #endregion Actions
 

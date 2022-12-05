@@ -36,44 +36,63 @@
     <Window.Resources>
 
     </Window.Resources>
-    <Expander Header="{Binding Title}"
-              IsExpanded="{Binding IsExpanded, Mode=TwoWay}"
-              ExpandDirection="Down">
-        <Expander.Header>
-            <Grid HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"
-                  ColumnDefinitions="25,25,*"
-                  Height="30">
-                <Image x:Name="ExpanderHeaderIcon"
-                       Grid.Column="0"
-                       Source="{Binding IconSourceStr, Converter={StaticResource IconSourceObjToBitmapConverter}}"
-                       Stretch="Fill"
-                       Width="{Binding Bounds.Height, ElementName=ExpanderHeaderIcon}"
-                       VerticalAlignment="Stretch" />
-                <local:MpAvOptionsButton Width="15"
-                                         Grid.Column="1"
-                                         Margin="0,3,7,3"
-                                         local:MpAvMenuExtension.PlacementMode="Left"
-                                         local:MpAvMenuExtension.IsOpen="{Binding IsPopupMenuVisible, Mode=TwoWay}"
-                                         VerticalAlignment="Top"
-                                         HorizontalAlignment="Right" />
-                <TextBlock Grid.Column="2"
-                           FontSize="20"
-                           VerticalAlignment="Bottom"
-                           HorizontalAlignment="Left"
-                           Foreground="White"
-                           FontWeight="SemiBold"
-                           Text="{Binding Title}" />
-            </Grid>
-        </Expander.Header>
-        <Grid>
-            <local:MpAvClipTileView DataContext="{Binding Body}"
+    <Border HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            BorderThickness="7"
+            BorderBrush="{Binding BorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+            Background="{Binding BackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+            local:MpAvIsHoveringExtension.IsEnabled="True"
+            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
+        <Grid x:Name="NotificationWindowContainerGrid"
+              Background="{DynamicResource ModalClipTileContentBackgroundBrush}"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              RowDefinitions="30,*"
+              ColumnDefinitions="25,*,25">
+            <Image x:Name="NotificationIconImage"
+                   Grid.Row="0"
+                   Grid.Column="0"
+                   Width="{Binding Bounds.Height, ElementName=NotificationIconImage}"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   IsVisible="{Binding IconSourceStr, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
+                   Source="{Binding IconSourceStr, Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                   Stretch="Fill" />
+            <local:MpAvMarqueeTextBox Grid.Row="0"
+                                      Grid.Column="1"
+                                      AutoMarquee="True"
+                                      CanEdit="False"
+                                      MinHeight="30"
+                                      FontSize="20"
+                                      IsReadOnly="True"
+                                      IsMarqueeEnabled="True"
+                                      DropShadowBrush="Black"
+                                      VerticalAlignment="Top"
+                                      HorizontalAlignment="Stretch"
+                                      HorizontalContentAlignment="Left"
+                                      VerticalContentAlignment="Top"
+                                      Foreground="White"
+                                      FontWeight="SemiBold"
+                                      Text="{Binding Title}" />
+            <local:MpAvOptionsButton Grid.Row="0"
+                                     Grid.Column="2"
+                                     Width="15"
+                                     Margin="0,3,7,3"
+                                     local:MpAvIsHoveringExtension.IsEnabled="True"
+                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
+                                     local:MpAvMenuExtension.PlacementMode="Left"
+                                     local:MpAvMenuExtension.IsOpen="{Binding IsPopupMenuVisible, Mode=TwoWay}"
+                                     VerticalAlignment="Stretch"
+                                     HorizontalAlignment="Right" />
+
+            <local:MpAvClipTileView Grid.Row="1"
+                                    Grid.ColumnSpan="3"
+                                    DataContext="{Binding Body}"
                                     x:DataType="local:MpAvClipTileViewModel"
-                                    Background="{DynamicResource ModalClipTileContentBackgroundBrush}"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch" />
 
 
         </Grid>
-    </Expander>
+    </Border>
 </Window>

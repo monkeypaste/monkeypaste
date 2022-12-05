@@ -84,6 +84,7 @@ function initEditorToolbar() {
 	initTable();
 	initLists();
 	initLinks();
+	initAlignEditorToolbarButton();
 	initFontColorToolbarItems();
 
 	initFontFamilyPicker();

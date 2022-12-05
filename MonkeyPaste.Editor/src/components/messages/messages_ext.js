@@ -188,15 +188,16 @@ function enableWindowResizeUpdate_ext() {
 	onWindowResize();
 }
 
-function appendModeEnabled_ext(reqMsgBase64Str) {
-	// input 'MpQuillAppendModeEnabledRequestMessage'
+function appendModeChanged_ext(reqMsgBase64Str) {
+	// input 'MpQuillAppendModeChangedMessage'
 	let msg = toJsonObjFromBase64Str(reqMsgBase64Str);
-	enableAppendMode(msg.isAppendLineMode);
+	if (msg.isAppendLineMode || msg.isAppendMode) {
+		enableAppendMode(msg.isAppendLineMode, msg.isAppendManualMode, true);
+	} else {
+		disableAppendMode(true);
+	}	
 }
 
-function appendModeDisabled_ext() {
-	disableAppendMode();
-}
 function appendData_ext(reqMsgBase64Str) {
 	// input 'MpQuillAppendDataRequestMessage'
 	log('append requested: ' + reqMsgBase64Str);

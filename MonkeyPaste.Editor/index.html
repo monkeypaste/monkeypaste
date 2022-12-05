@@ -149,7 +149,6 @@
 
     <!-- NOTIFIERS -->
 
-
     <script src="src/components/svg/svgloader.js"></script>
     <script src="src/components/append/append.js"></script>
     <script src="src/components/append/toolbar/append-toolbar-items.js"></script>
@@ -224,6 +223,7 @@
     <script src="src/components/table/toolbar/createTableToolbarButton.js"></script>
 
     <script src="src/components/link/link.js"></script>
+    <script src="src/components/align/align.js"></script>
 
     <script src="src/components/overlay/overlay.js"></script>
 
@@ -289,6 +289,18 @@
 
         <div class="toolbar-separator"></div>
 
+
+        <!-- INDENT -->
+        <button class="ql-indent" value="-1"></button>
+        <button class="ql-indent" value="+1"></button>
+
+        <div class="toolbar-separator"></div>
+
+        <!-- ALIGN -->
+        <button id="alignEditorToolbarButton"></button>
+
+        <div class="toolbar-separator"></div>
+
         <!-- CREATE TABLE -->
         <span id="createTableToolbarButton" class="ql-Table-Input ql-picker">
             <span id="createTableToolbarButtonLabel" class="ql-picker-label"></span>
@@ -298,38 +310,30 @@
         <div class="toolbar-separator"></div>
 
         <!-- BLOCK QUOTE-->
-        <button class="ql-blockquote"></button>
+        <button class="ql-blockquote hidden"></button>
 
         <!-- CODE BLOCK -->
-        <button class="ql-code-block"></button>
+        <button class="ql-code-block hidden"></button>
 
-        <div class="toolbar-separator"></div>
+        <div class="toolbar-separator hidden"></div>
 
         <!-- LIST -->
         <button class="ql-list" value="ordered"></button>
         <button class="ql-list" value="bullet"></button>
         <button class="ql-list" value="check"></button>
 
-        <!--<button id="orderedListToolbarButton"></button>
-        <button id="discListToolbarButton"></button>
-        <button id="checkListToolbarButton"></button>-->
 
         <div class="toolbar-separator"></div>
 
         <!-- SUB/SUPER SCRIPT -->
-        <button class="ql-script" value="sub"></button>
-        <button class="ql-script" value="super"></button>
+        <button class="ql-script hidden" value="sub"></button>
+        <button class="ql-script hidden" value="super"></button>
 
-        <div class="toolbar-separator"></div>
 
-        <!-- INDENT -->
-        <button class="ql-indent" value="-1"></button>
-        <button class="ql-indent" value="+1"></button>
-
-        <div class="toolbar-separator"></div>
+        <div class="toolbar-separator hidden"></div>
 
         <!-- FLOW DIRECTION -->
-        <button class="ql-direction" value="rtl"></button>
+        <button class="ql-direction hidden" value="rtl"></button>
 
         <div class="toolbar-separator"></div>
 
@@ -339,10 +343,6 @@
         <button class="ql-video"></button>
         <!--<button class="ql-formula"></button>-->
 
-        <div class="toolbar-separator"></div>
-
-        <!-- ALIGN -->
-        <button class="ql-align"></button>
 
 
         <div class="toolbar-separator"></div>
@@ -485,13 +485,26 @@
                 tabindex="5">
             <i class="fa-solid fa-pen-to-square"></i><span>Edit</span>
         </button>
-        <!-- PASTE BUTTON -->
-        <div class="right-align">
+        <!-- PASTE BUTTON/MODE CONTAINER -->
+        <div id="pasteButtonAndModeContainer"
+             class="right-align">
+
+            <!-- APPEND STATE CONTAINER -->
+            <div id="pasteAppendToolbarLabelContainer">
+                <!-- APPEND MANUAL LABEL -->
+                <span id="pasteAppendIsManualToolbarLabel">MANUAL</span>
+                <!-- APPEND MODE LABEL -->
+                <span id="pasteAppendToolbarLabel"></span>
+            </div>
+
+            <!-- PASTE BUTTON -->
             <button id="pasteButton"
                     tabindex="6">
                 <i class="fa-solid fa-paste"></i><span>PASTE</span>
             </button>
             <div class="toolbar-separator"></div>
+
+            <!-- PASTE BUTTON POPUP -->
             <button id="pasteButtonPopupExpander"
                     tabindex="7">
                 <span id="pasteButtonPopupExpanderLabel"></span>

@@ -361,15 +361,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Layout
-        public Thickness ContentMarginThickness {
-            get {
-                if (IsTitleVisible) {
-                    return new Thickness();
-                }
-                double bottomMargin = IsDetailGridVisibile ? 0 : 10;
-                return new Thickness(5, 0, 5, bottomMargin);
-            }
-        }
 
         public MpSize UnformattedContentSize { get; set; }
         public double TileTitleHeight => IsTitleVisible ? 100 : 0;
@@ -705,12 +696,6 @@ namespace MonkeyPaste.Avalonia {
         //    }
         //}
 
-        public bool IsTileOnScreen {
-            get {
-                return ParentScreenRect.IsAnyPointWithinOtherRect(ObservedBounds);
-            }
-        }
-
         public bool IsHorizontalScrollbarVisibile {
             get {
                 if (!IsContentReadOnly) {
@@ -738,7 +723,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool TrialOverlayVisibility {
+        public bool IsTrialOverlayVisibile {
             get {
                 return MpPrefViewModel.Instance.IsTrialExpired ? true : false;
             }
@@ -802,8 +787,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool HasBeenSeen { get; set; } = false;
-
 
         #region Scroll
 
@@ -827,15 +810,6 @@ namespace MonkeyPaste.Avalonia {
 
 
         public bool IsPasting { get; set; } = false;
-
-        public int ItemIdx {
-            get {
-                if (Parent == null) {
-                    return -1;
-                }
-                return Parent.Items.IndexOf(this);
-            }
-        }
 
 
         public bool IsCustomWidth => Parent == null ? false : MpAvPersistentClipTilePropertiesHelper.IsTileHaveUniqueSize(CopyItemId);
@@ -862,6 +836,8 @@ namespace MonkeyPaste.Avalonia {
                                                 EditableContentSize.Height > TileContentHeight :
                                                 UnformattedContentSize.Height > TileContentHeight;
 
+        public bool IsOverlayButtonsVisible => IsHovering && !IsAppendNotifier;
+        public bool IsResizable => !IsAppendNotifier;
         public bool CanResize { get; set; } = false;
 
         public bool IsResizing { get; set; } = false;
@@ -871,27 +847,22 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsTextItem => ItemType == MpCopyItemType.Text;
 
-        public bool IsTitleVisible { get; set; } = true;
-
-        public bool IsDetailGridVisibile {
+        private bool _isTitleVisible = true;
+        public bool IsTitleVisible { 
             get {
-                if (Parent.HasScrollVelocity) {
+                if(IsAppendNotifier) {
                     return false;
                 }
-                if (IsFindAndReplaceVisible) {
-                    return false;
+                return _isTitleVisible;
+            }
+            set {
+                if(IsTitleVisible != value) {
+                    _isTitleVisible = value;
+                    OnPropertyChanged(nameof(IsTitleVisible));
                 }
-
-
-                if (!IsContentReadOnly) {
-                } else {
-                    if (!IsSelected && !IsHovering) {
-                        return false;
-                    }
-                }
-                return true;
             }
         }
+
 
         public bool IsContentAndTitleReadOnly => IsContentReadOnly && IsTitleReadOnly;
 
@@ -1141,7 +1112,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #endregion
 
         #region Events
@@ -1212,7 +1182,6 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsTextItem));
             OnPropertyChanged(nameof(IsFileListItem));
             OnPropertyChanged(nameof(TileBackgroundHexColor));
-            OnPropertyChanged(nameof(ContentMarginThickness));
             OnPropertyChanged(nameof(Next));
             OnPropertyChanged(nameof(Prev));
             OnPropertyChanged(nameof(CopyItemId));
@@ -1580,6 +1549,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsHovering):
                     Parent.OnPropertyChanged(nameof(Parent.CanScroll));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyHovering));
+                    OnPropertyChanged(nameof(IsOverlayButtonsVisible));
                     break;
                 case nameof(IsBusy):
                     OnPropertyChanged(nameof(IsAnyBusy));
@@ -1704,7 +1674,9 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(HasModelChanged):
                     if (HasModelChanged) {
-                        
+                        HasModelChanged = false;
+                        return;
+
                         if (CopyItemData == "<p><br></p>" || CopyItemData == null) {
                             // what IS this nasty shit??
                             Debugger.Break();

@@ -673,6 +673,9 @@ namespace MonkeyPaste.Avalonia {
                         HideWindowCommand.Execute(null);
                     }
                     break;
+                case nameof(IsMainWindowOpening):
+                    MpMessenger.SendGlobal(MpMessageType.MainWindowOpening);
+                    break;
                 case nameof(IsMainWindowClosing):
                     MpMessenger.SendGlobal(MpMessageType.MainWindowClosing);
                     break;

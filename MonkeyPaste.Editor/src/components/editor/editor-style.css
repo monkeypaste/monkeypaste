@@ -55,7 +55,7 @@ div.ql-code-block-container, div.ql-code-block {
     text-decoration: underline blink dimgray;
 }
 body:has(.sub-select) {
-    background-color: rgb(189, 188, 188,var(--editableopacity));
+    background-color: var(--subselecteditorbgcolor);
     transition: .4s;
 }
 
@@ -68,7 +68,7 @@ body:has(.sub-select) {
 }
 
 body:has(.editable) {
-    background-color: rgba(255, 248, 220,var(--editableopacity));
+    background-color: var(--editableeditorbgcolor);
     /*opacity: var(--editableopacity);*/
     transition: .4s;
 }

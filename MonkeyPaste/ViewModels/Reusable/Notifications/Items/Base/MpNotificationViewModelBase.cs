@@ -85,7 +85,7 @@ namespace MonkeyPaste {
         #region Statics
 
         public static MpNotificationLayoutType GetLayoutTypeFromNotificationType(MpNotificationType ndt) {
-            switch(ndt) {
+            switch (ndt) {
                 case MpNotificationType.Loader:
                     return MpNotificationLayoutType.Loader;
                 case MpNotificationType.ContentFormatDegradation:
@@ -140,7 +140,7 @@ namespace MonkeyPaste {
         }
 
         public static bool GetNotificationTypeModality(MpNotificationType ndt) {
-            switch(ndt) {
+            switch (ndt) {
                 case MpNotificationType.ContentFormatDegradation:
                     return true;
                 default:
@@ -154,7 +154,7 @@ namespace MonkeyPaste {
 
         #region MpIPopupMenuViewModel Implementation
 
-        public MpMenuItemViewModel PopupMenuViewModel { 
+        public MpMenuItemViewModel PopupMenuViewModel {
             get {
                 return new MpMenuItemViewModel() {
                     SubItems = new List<MpMenuItemViewModel>() {
@@ -240,6 +240,7 @@ namespace MonkeyPaste {
 
         #region State
 
+        public bool IsOverOptionsButton {get;set;}
         public bool IsPopupMenuVisible { get; set; }
         //public bool IsVisible { get; set; } = false;
 

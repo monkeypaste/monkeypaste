@@ -8,6 +8,11 @@
         color: white;
     }
 
+#pasteButtonAndModeContainer {
+    display: inline-flex;
+    align-items: center;
+}
+
 #pasteButton {
     margin-left: 10px;
     margin-right: 0;
@@ -20,16 +25,9 @@
     }
 
 #pasteButtonPopupExpander {
-    font-size: 8px;
+    font-size: 10px;
     margin-left: 0;
     margin-right: 10px;
     border-radius: 0 5px 5px 0;
     border-width: 1px 1px 1px 0;
 }
-
-    /*#pasteButtonPopupExpander span {
-        content: "\25BC"
-    }
-    #pasteButtonPopupExpander.expanded span {
-        content: "\25B2"
-    }*/

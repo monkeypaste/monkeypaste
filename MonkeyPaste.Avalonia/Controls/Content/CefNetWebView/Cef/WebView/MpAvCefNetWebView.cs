@@ -60,7 +60,8 @@ namespace MonkeyPaste.Avalonia {
         notifyPasteIsReady,
         notifyDataTransferCompleted,
         notifySelectionChanged,
-        notifyScrollChanged
+        notifyScrollChanged,
+        notifyAppendModeChanged
     }
     [DoNotNotify]
     public class MpAvCefNetWebView : 
@@ -455,31 +456,44 @@ namespace MonkeyPaste.Avalonia {
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
                         MpISourceRef sourceRef = null;
+                        bool had_internal_handle = false;
                         if (!string.IsNullOrEmpty(dataTransferCompleted_ntf.dataTransferSourceUrl)) {
                             var sr = MpSourceRef.ParseFromInternalUrl(dataTransferCompleted_ntf.dataTransferSourceUrl);
                             if (sr != null) {
                                 if (!string.IsNullOrEmpty(sr.SourcePublicHandle)) {
                                     // get db id from handle
+                                    had_internal_handle = true;
                                     int ciid = 0;
+                                    // check all tiles
                                     var sctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == sr.SourcePublicHandle) as MpAvClipTileViewModel;
                                     if (sctvm == null) {
                                         // check for recycled tile
                                         if (MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Count > 0 &&
                                             MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels[0].PublicHandle == sr.SourcePublicHandle) {
+                                            // recycled source (internal)
                                             ciid = MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels[0].Id;
                                         }
+                                        if(ciid == 0) {
+                                            // check pending new models
+                                            var pending_ci = MpAvClipTrayViewModel.Instance.PendingNewModels.FirstOrDefault(x => x.PublicHandle.ToLower() == sr.SourcePublicHandle.ToLower());
+                                            if(pending_ci != null) {
+                                                // pending source (internal)
+                                                ciid = pending_ci.Id;
+                                            }
+                                        }
                                     } else {
+                                        // tile source (internal)
                                         ciid = sctvm.CopyItemId;
                                     }
                                     if (ciid > 0) {
-                                        sr.SourceObjId = ciid;
                                         // internal source
+                                        sr.SourceObjId = ciid;
                                         sourceRef = sr;
                                     }
                                 }
                             }
                         }
-                        if (sourceRef == null) {
+                        if (sourceRef == null && !had_internal_handle) {
                             var url = await MpPlatformWrapper.Services.UrlBuilder.CreateAsync(dataTransferCompleted_ntf.dataTransferSourceUrl);
                             if (url != null) {
                                 // remote source
@@ -548,6 +562,13 @@ namespace MonkeyPaste.Avalonia {
                         dest_wv.ExecuteJavascript($"setScroll_ext('{msgJsonBase64Str}')");
                     }
                     break;
+                case MpAvEditorBindingFunctionType.notifyAppendModeChanged:
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillAppendModeChangedMessage>(msgJsonBase64Str);
+                    if (ntf is MpQuillAppendModeChangedMessage appendModeChangedMsg) {
+                        ProcessAppendModeChangedAsync(appendModeChangedMsg).FireAndForgetSafeAsync();
+                    }
+                    break;
+
 
                 // CLIPBOARD
 
@@ -1132,27 +1153,24 @@ namespace MonkeyPaste.Avalonia {
 
             MpConsole.WriteLine($"AppendModeState changed. AppendModeState: {AppendModeState}");
             Dispatcher.UIThread.Post(async () => {
-                var sw = Stopwatch.StartNew();
-                while (!IsContentLoaded) {
-                    await Task.Delay(100);
-                    if (sw.ElapsedMilliseconds > _APPEND_TIMEOUT_MS) {
-                        //timeout, content changed never notified back
-                        Debugger.Break();
-                        break;
-                    }
-                }
+                //var sw = Stopwatch.StartNew();
+                //while (!IsContentLoaded) {
+                //    await Task.Delay(100);
+                //    if (sw.ElapsedMilliseconds > _APPEND_TIMEOUT_MS) {
+                //        //timeout, content changed never notified back
+                //        Debugger.Break();
+                //        break;
+                //    }
+                //}
+                var reqMsg = new MpQuillAppendModeChangedMessage() {
+                    isAppendLineMode = AppendModeState.IsTrue(),
+                    isAppendMode = AppendModeState.IsFalse()
+                };
+                this.ExecuteJavascript($"appendModeChanged_ext('{reqMsg.SerializeJsonObjectToBase64()}')");
 
-                if (AppendModeState.HasValue) {
-                    var reqMsg = new MpQuillAppendModeEnabledRequestMessage() {
-                        isAppendLineMode = AppendModeState.Value
-                    };
-                    this.ExecuteJavascript($"appendModeEnabled_ext('{reqMsg.SerializeJsonObjectToBase64()}')");
-                } else {
-                    this.ExecuteJavascript($"appendModeDisabled_ext()");
-
-                    if(BindingContext.IsAppendNotifier) {
-                        MpAppendNotificationViewModel.Instance.IsClosing = true;
-                    }
+                if (BindingContext.IsAppendNotifier && AppendModeState.IsNull()) {
+                    //MpAppendNotificationViewModel.Instance.IsClosing = true;
+                    MpAvNotificationWindowManager.Instance.HideNotification(MpAppendNotificationViewModel.Instance);
                 }
             });
         }
@@ -1198,6 +1216,22 @@ namespace MonkeyPaste.Avalonia {
 
         }
         #endregion AppendData Property
+
+        private async Task ProcessAppendModeChangedAsync(MpQuillAppendModeChangedMessage appendChangedMsg) {
+            await MpAvClipTrayViewModel.Instance.UpdateAppendModeStateFromContentAsync(BindingContext, appendChangedMsg);
+            MpAvCefNetWebView dest_wv;
+            if (BindingContext.IsAppendNotifier) {
+                // relay sel to tray
+                dest_wv = LocateTrayTileWebView(BindingContext.CopyItemId);
+            } else {
+                // relay to modal
+                dest_wv = LocateModalWebView();
+            }
+            if (dest_wv == null) {
+                return;
+            }
+            dest_wv.ExecuteJavascript($"appendModeChanged_ext('{appendChangedMsg.SerializeJsonObjectToBase64()}')");
+        }
         #endregion
     }
 }

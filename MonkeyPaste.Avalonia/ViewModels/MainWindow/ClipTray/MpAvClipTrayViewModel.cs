@@ -1778,7 +1778,9 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
 
+                CheckLoadMore();
                 RefreshQueryTrayLayout();
+
                 OnPropertyChanged(nameof(TotalTilesInQuery));
             } else if (e is MpCopyItemTag cit) {
                 var sttvm = MpAvTagTrayViewModel.Instance.SelectedItem;
@@ -3226,6 +3228,24 @@ namespace MonkeyPaste.Avalonia {
             }
             return ModalClipTileViewModel.ItemType == ci.ItemType;
         }
+
+        public async Task UpdateAppendModeStateFromContentAsync(MpAvClipTileViewModel sender_ctvm, MpQuillAppendModeChangedMessage msg) {
+            // cases
+            // - an append mode was activated on a tile w/ no current appender
+            // - an append mode was activated on a tile AND there's another that is active
+
+            // - an append mode was deactivated on a tile
+            // - an append mode was deactivated on the append notifier
+
+            // - append mode was changed on a tile
+            // - append mode was changed on the append notifier
+
+            // - manual mode was activated/deactivated on a tile
+            // - manual mode was acctivated/deactivated on the append notifier
+
+
+
+        }
         private async Task AssignAppendClipTileAsync() {
             // use cases
             // 1. app is hidden and user hits hot key or enables in system tray
@@ -3290,15 +3310,14 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(AppendModeState));
             MpAppendNotificationViewModel.Instance.OnPropertyChanged(nameof(MpAppendNotificationViewModel.Instance.Title));
 
-            if (ModalClipTileViewModel.IsPlaceholder) {
-                MpNotificationBuilder.ShowMessageAsync(
-                    maxShowTimeMs: 1000,
-                    title: "MODE CHANGED",
-                    body: $"Append{(isAppendLine ? "-Line" : "")} Mode Activated",
-                    msgType: MpNotificationType.AppModeChange,
-                    iconSourceStr: IsAppendLineMode ? "AppendLineImage" : "AppendImage").FireAndForgetSafeAsync();
-                return;
-            }
+            //if (ModalClipTileViewModel.IsPlaceholder) {
+            //    MpNotificationBuilder.ShowMessageAsync(
+            //        title: "MODE CHANGED",
+            //        body: $"Append{(isAppendLine ? "-Line" : "")} Mode Activated",
+            //        msgType: MpNotificationType.AppModeChange,
+            //        iconSourceStr: IsAppendLineMode ? "AppendLineImage" : "AppendImage").FireAndForgetSafeAsync();
+            //    return;
+            //}
             if (was_append_already_enabled) {
                 // don't trigger if already activated, the AppendDataChanged() timesout because IsContentLoaded doesn't goto false
                 return;
@@ -3321,6 +3340,12 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(AppendModeState));
 
             await ModalClipTileViewModel.InitializeAsync(null);
+
+            if(MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+                return;
+            }
+
+            MpAvNotificationWindowManager.Instance.HideNotification(MpAppendNotificationViewModel.Instance);
 
             await MpNotificationBuilder.ShowMessageAsync(
                        title: $"MODE CHANGED",

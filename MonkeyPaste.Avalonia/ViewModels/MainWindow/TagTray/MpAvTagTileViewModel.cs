@@ -759,7 +759,7 @@ namespace MonkeyPaste.Avalonia {
                         // only mark item as seen if viewed in its query tray
                         continue;
                     }
-                    if (civm.IsTileOnScreen && IsSelected) {
+                    if (civm.IsAnyCornerVisible && IsSelected) {
                         idsSeen.Add(ciid);
                     }
                 }

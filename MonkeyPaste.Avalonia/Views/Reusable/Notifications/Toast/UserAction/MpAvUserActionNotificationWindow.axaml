@@ -53,6 +53,8 @@
                                      Width="15"
                                      Height="25"
                                      Margin="0,3,7,3"
+                                     local:MpAvIsHoveringExtension.IsEnabled="True"
+                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
                                      local:MpAvMenuExtension.PlacementMode="Left"
                                      local:MpAvMenuExtension.IsOpen="{Binding IsPopupMenuVisible, Mode=TwoWay}"
                                      HorizontalAlignment="Right" />

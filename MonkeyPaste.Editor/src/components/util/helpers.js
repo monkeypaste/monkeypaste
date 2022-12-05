@@ -447,6 +447,11 @@ function setElementComputedStyleProp(elm, propName, value) {
     elm.style.setProperty(propName, value);
 }
 
+function clearElementClasses(elm) {
+    while(elm.classList.length > 0) {
+        elm.classList.remove(elm.classList[0]);
+	}
+} 
 async function readFileAsDataURL(file) {
     let result_base64 = await new Promise((resolve) => {
         let fileReader = new FileReader();

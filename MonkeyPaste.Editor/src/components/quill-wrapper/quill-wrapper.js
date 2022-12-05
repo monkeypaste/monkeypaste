@@ -296,6 +296,10 @@ function formatDocRange(range, format, source = 'api') {
 	quill.formatText(range.index, range.length, format, source);
 }
 
+function formatSelection(format, value, source = 'api') {
+	quill.format(format, value, source);
+}
+
 function insertText(docIdx, text, source = 'api', decodeTemplates = false) {
 	if (decodeTemplates) {
 		decodeInsertedTemplates(docIdx, text, source);

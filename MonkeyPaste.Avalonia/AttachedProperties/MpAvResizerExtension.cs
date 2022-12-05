@@ -230,6 +230,25 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region IsResizable Property
+        public static bool GetIsResizable(AvaloniaObject obj) {
+            return obj.GetValue(IsResizableProperty);
+        }
+
+        public static void SetIsResizable(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsResizableProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool>
+            IsResizableProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+            "IsResizable",
+            true,
+            false);
+
+        #endregion
+
+
         #region CanResize Property
         public static bool GetCanResize(AvaloniaObject obj) {
             return obj.GetValue(CanResizeProperty);
@@ -529,6 +548,7 @@ namespace MonkeyPaste.Avalonia {
         private static void PointerEnterHandler(object s, PointerEventArgs e) {
             if (s is Control control) {
                 if (!GetIsEnabled(control) ||
+                    !GetIsResizable(control) ||
                     IsAnyResizing ||
                     MpAvMainWindowViewModel.Instance.IsAnyItemDragging ||
                     (e.IsLeftDown(control) && !GetIsResizing(control))) {

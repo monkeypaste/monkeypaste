@@ -25,6 +25,7 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 
 	if (IsLoaded) {
 		// initial load shouldn't need state changes
+		disableAppendMode();
 		resetSelection();
 		resetColorPaletteState();
 

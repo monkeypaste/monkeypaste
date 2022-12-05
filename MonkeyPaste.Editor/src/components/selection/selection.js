@@ -321,7 +321,10 @@ function convertDocRangeToDomRange(doc_range) {
 	let clean_range = document.createRange();
 	try {
 		clean_range.setStart(start_elm, start_offset);
-	} catch(ex) {
+	} catch (ex) {
+		log('exception converting doc2dom range. range: idx: ' + doc_range.index + ' len: ' + doc_range.length + ' exception: ');
+		log(ex);
+		debugger;
 		//debugger;
 		if (doc_range.index == 0) {
 			// how do we deal with this case?

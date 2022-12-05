@@ -262,3 +262,16 @@ function onScrollChanged_ntf(scrollObj) {
 		notifyScrollChanged(msgStr);
 	}
 }
+
+function onAppendModeChanged_ntf() {
+	// output 'MpQuillAppendModeChangedMessage'
+	if (typeof notifyAppendModeChanged === 'function') {
+		let msg = {
+			isAppendLineMode: IsAppendLineMode,
+			isAppendMode: IsAppendMode,
+			isAppendManualMode: IsAppendManualMode
+		};
+		let msgStr = toBase64FromJsonObj(msg);
+		notifyAppendModeChanged(msgStr);
+	}
+}

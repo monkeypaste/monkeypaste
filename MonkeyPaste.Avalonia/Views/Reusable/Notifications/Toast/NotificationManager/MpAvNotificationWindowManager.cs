@@ -143,6 +143,10 @@ namespace MonkeyPaste.Avalonia {
                 _windows.Add(nw);
             }
 
+            if(nw == MpAvAppendNotificationWindow.Instance && 
+                MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+                return;
+            }
             MpAvMainWindowViewModel.Instance.IsAnyNotificationActivating = true;
             var nvmb = nw.DataContext as MpNotificationViewModelBase;
             if (nvmb.IsModal) {
@@ -172,12 +176,25 @@ namespace MonkeyPaste.Avalonia {
             _windows.Remove(w);
         }
 
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch(msg) {
+                case MpMessageType.MainWindowOpening:
+                    if(MpAvAppendNotificationWindow.Instance.IsVisible) {
+                        HideNotification(MpAppendNotificationViewModel.Instance);
+                    }
+                    break;
+            }
+        }
+
         #region Window Events
 
         private void Nw_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
-            if(sender == MpAvAppendNotificationWindow.Instance) {
+            if(sender == MpAvAppendNotificationWindow.Instance ||
+                sender is Window w && w.DataContext is MpNotificationViewModelBase nvmb &&
+                nvmb.IsOverOptionsButton) {
                 return;
             }
+
             if (MpAvMainWindow.Instance == null || !MpAvMainWindow.Instance.IsInitialized) {
                 return;
             }
@@ -208,12 +225,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
-
-        #region Positioning
-
-        
-        #endregion
-
 
         #endregion
 

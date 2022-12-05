@@ -38,6 +38,7 @@
   <ItemGroup>
     <Content Include="src\app.js" />
     <Content Include="images\icons\monkey.ico" />
+    <Content Include="src\components\align\align.js" />
     <Content Include="src\components\append\append.js" />
     <Content Include="src\components\append\append-style.css" />
     <Content Include="src\components\append\toolbar\append-toolbar-item-style.css" />
@@ -184,6 +185,7 @@
     <Folder Include="src\components\datatransfer\" />
     <Folder Include="src\components\experiments\" />
     <Folder Include="src\components\append\" />
+    <Folder Include="src\components\align\" />
     <Folder Include="src\components\paste-toolbar\" />
     <Folder Include="src\components\paste-toolbar\popup\" />
     <Folder Include="src\components\quill-wrapper\quill-tooltip\" />
