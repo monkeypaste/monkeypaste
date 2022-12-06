@@ -29,7 +29,7 @@ function initEditor() {
 
 	initEditorScroll();
 	initTemplates();
-	initExtContentSourceBlot();
+	//initExtContentSourceBlot();
 
 	quill.on("text-change", onEditorTextChanged);
 

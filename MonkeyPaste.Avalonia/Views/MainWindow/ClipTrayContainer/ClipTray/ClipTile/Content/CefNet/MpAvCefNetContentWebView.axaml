@@ -12,7 +12,7 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvCefNetContentWebView">
     <local:MpAvCefNetWebView x:Name="CefNetWebView"
-                             ContentId="{Binding CopyItemId, Mode=OneWay}"
+                             ContentData="{Binding EditorFormattedItemData, Mode=OneWay}"
                              IsContentLoaded="{Binding IsViewLoaded, Mode=TwoWay}"
                              IsContentResizing="{Binding IsResizing}"
                              IsContentSelected="{Binding IsSelected}"

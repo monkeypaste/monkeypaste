@@ -275,3 +275,14 @@ function onAppendModeChanged_ntf() {
 		notifyAppendModeChanged(msgStr);
 	}
 }
+
+function onInternalContextMenuIsVisibleChanged_ntf(isVisible) {
+	// output 'MpQuillInternalContextIsVisibleChangedNotification'
+	if (typeof notifyInternalContextMenuIsVisibleChanged === 'function') {
+		let msg = {
+			isInternalContextMenuVisible: isVisible
+		};
+		let msgStr = toBase64FromJsonObj(msg);
+		notifyInternalContextMenuIsVisibleChanged(msgStr);
+	}
+}

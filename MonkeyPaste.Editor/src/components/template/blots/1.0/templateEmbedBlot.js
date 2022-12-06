@@ -170,7 +170,7 @@ function onTemplateClick(e) {
 // unused drag drop stuff
 
 function getEditorPosFromTemplateMouse(e) {
-    return getEditorMousePos(e);
+    return getClientMousePos(e);
     let curMousePos = { x: e.pageX, y: e.pageY };
     curMousePos.x -= e.currentTarget.offsetLeft;
     curMousePos.y -= e.currentTarget.offsetTop;

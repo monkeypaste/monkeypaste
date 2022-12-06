@@ -603,6 +603,9 @@ namespace MonkeyPaste.Avalonia {
 
 
         #endregion
+
+        public bool IsContextMenuEnabled { get; set; } = true;
+
         public bool IsHoveringOverSourceIcon { get; set; } = false;
         public bool HasTemplates { get; set; } = false;
         public bool IsFindAndReplaceVisible { get; set; } = false;
@@ -1654,15 +1657,6 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsPasting):
                     Parent.OnPropertyChanged(nameof(Parent.IsPasting));
                     break;
-                //case nameof(IsTileDragging):
-                //    if(IsTileDragging) {
-                //        // NOTE only notify drag start since tile may get recycled
-                //        // end msg is sent by dnd helper
-                //        MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
-                //    }
-                //    MpConsole.WriteLine($"Tile[{this}] IsTileDragging:{IsTileDragging}");
-                //    Parent.OnPropertyChanged(nameof(Parent.IsAnyTileDragging));
-                //    break;
                 case nameof(IsDropOverTile):
                     if (IsDropOverTile && !IsSubSelectionEnabled) {
                         IsSubSelectionEnabled = true;
@@ -1674,9 +1668,8 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(HasModelChanged):
                     if (HasModelChanged) {
-                        HasModelChanged = false;
-                        return;
-
+                        //HasModelChanged = false;
+                        //return;
                         if (CopyItemData == "<p><br></p>" || CopyItemData == null) {
                             // what IS this nasty shit??
                             Debugger.Break();
@@ -1709,6 +1702,7 @@ namespace MonkeyPaste.Avalonia {
                     InitTitleLayers().FireAndForgetSafeAsync(this);
                     break;
                 case nameof(CopyItemData):
+                    OnPropertyChanged(nameof(EditorFormattedItemData));
                     break;
 
                 case nameof(CanResize):

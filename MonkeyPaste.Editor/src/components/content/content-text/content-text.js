@@ -6,9 +6,10 @@
 
 function loadTextContent(itemDataStr, isPasteRequest) {
 	quill.enable(true);
-	//setRootHtml(itemDataStr);
+	//setRootHtml(itemDataStr)
+	log('loading text content: ' + itemDataStr);
 	setRootHtml('');
-	insertHtml(0, itemDataStr);
+	insertHtml(0, itemDataStr, 'silent');
 
 	loadTemplates(isPasteRequest);
 	loadLinkHandlers();

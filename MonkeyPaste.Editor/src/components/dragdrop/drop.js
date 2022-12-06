@@ -35,14 +35,6 @@ function initDrop() {
 
 // #region Getters
 
-function getEditorMousePos(e) {
-    if (!e || !e.clientX || !e.clientY) {
-        return { x: -1, y: -1 };
-    }
-
-    let mp = { x: parseFloat(e.clientX), y: parseFloat(e.clientY) };
-    return mp;
-}
 
 // #endregion Getters
 
@@ -147,7 +139,7 @@ function onDragOver(e) {
     if (e.target.id == 'dragOverlay') {
         debugger;
     }
-    let emp = getEditorMousePos(e);
+    let emp = getClientMousePos(e);
 
 
     // VALIDATE (EXTERNAL)
@@ -242,7 +234,7 @@ function onDragLeave(e) {
         return;
     }
 
-    let emp = getEditorMousePos(e);
+    let emp = getClientMousePos(e);
     let editor_rect = getEditorContainerRect();
     if (isPointInRect(editor_rect, emp)) {
         return;

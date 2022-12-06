@@ -37,7 +37,6 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 
 	//let contentBg_rgba = getContentBg(contentData);
 
-	log('Editor loaded');
 
 	if (ContentItemType == 'Image') {
 		loadImageContent(contentData);
@@ -75,6 +74,7 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 	updateAllElements();
 	quill.update();
 	onContentLoaded_ntf(getContentAsMessage());
+	log('Editor loaded');
 }
 
 // #endregion Life Cycle
