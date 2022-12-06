@@ -73,6 +73,8 @@ function enableAppendMode(isAppendLine, isAppendManual, fromHost = false) {
 
 	updatePasteAppendToolbarLabel();
 
+	scrollToAppendIdx();
+
 	if (!fromHost && (did_append_mode_change || did_manual_mode_change)) {
 		onAppendModeChanged_ntf();
 	}
@@ -92,6 +94,10 @@ function disableAppendMode(fromHost = false) {
 	getEditorElement().classList.remove('append');
 	updatePasteAppendToolbarLabel();
 
+	if (isReadOnly()) {
+		disableSubSelection();
+	}
+
 	if (!fromHost && (did_append_mode_change || did_manual_mode_change)) {
 		onAppendModeChanged_ntf();
 	}
@@ -104,6 +110,8 @@ function enableAppendManualMode(fromHost = false) {
 
 	IsAppendManualMode = true;
 	updatePasteAppendToolbarLabel();
+	scrollToAppendIdx();
+
 	drawOverlay();
 	log('append manual mode enabled. IsAppendNotifier: ' + isAppendNotifier());
 	if (!fromHost && did_manual_mode_change) {
@@ -117,6 +125,10 @@ function disableAppendManualMode(fromHost = false) {
 
 	setDocSelection({ index: getAppendIdx(), length: 0 });
 	updatePasteAppendToolbarLabel();
+
+	if (isAnyAppendEnabled()) {
+		scrollToAppendIdx();
+	}
 
 	drawOverlay();
 	log('append manual mode disabled. IsAppendNotifier: ' + isAppendNotifier());

@@ -1,0 +1,242 @@
+﻿{
+  "title": "OpenAi",
+  "description": "General Ai stuff",
+  "version": "1.0",
+  "credits": "OpenAi",
+  "guid": "0f6d1b4a-7aa5-41c5-b34f-85941b9a500d",
+  "iconUri": "logo.png",
+  "ioType": {
+    "isHttp": true
+  },
+  "analyzer": {
+    "inputType": {
+      "text": true
+    },
+    "outputType": {
+      "text": true
+    },
+    "http": {
+      "name": "OpenAiHttpTransaction",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "pathExpression": {
+              "value": "Bearer {0}",
+              "pathExpression": "@10"
+            }
+          }
+        ],
+        "url": {
+          "raw": "https://api.openai.com/v1/engines/davinci/completions",
+          "protocol": "https",
+          "host": [
+            "api",
+            "openai",
+            "com"
+          ],
+          "dynamicPath": [
+            {
+              "value": "v1"
+            },
+            {
+              "value": "engines"
+            },
+            {
+              "pathExpression": "@1"
+            },
+            {
+              "pathExpression": "@2"
+            }
+          ]
+        },
+        "body": {
+          "mode": "parameterized",
+          "raw": "{\"prompt\":\"@8\",\"temperature\":@3,\"max_tokens\":@4,\"top_p\":@5,\"frequency_penalty\":@6,\"presence_penalty\":@7}",
+          "mediaType": "application/json"
+        }
+      },
+      "response": {
+        "newContentItem": {
+          "name": "OpenAiAnalysisResponse",
+          "label": {
+            "value": "OpenAi Analysis"
+          },
+          "content": {
+            "pathExpression": "$.['choices'][0].text"
+          }
+        }
+      }
+    },
+    "parameters": [
+      {
+        "label": "Engine",
+        "description": "The intelligence type used for analysis",
+        "controlType": "ComboBox",
+        "unitType": "PlainText",
+        "isRequired": true,
+        "paramId": 1,
+        "values": [
+          {
+            "label": "DaVinci",
+            "value": "text-davinci-001",
+            "isDefault": true
+          },
+          {
+            "label": "Curie",
+            "value": "text-curie-001",
+            "isDefault": false
+          },
+          {
+            "label": "Babbage",
+            "value": "text-babbage-001",
+            "isDefault": false
+          },
+          {
+            "label": "Ada",
+            "value": "text-ada-001",
+            "isDefault": false
+          }
+        ]
+      },
+      {
+        "label": "End Point",
+        "controlType": "ComboBox",
+        "unitType": "PlainText",
+        "paramId": 2,
+        "isRequired": true,
+        "isVisible": false,
+        "values": [
+          {
+            "label": "Completions",
+            "value": "completions",
+            "isDefault": true
+          },
+          {
+            "label": "Searches",
+            "value": "searches",
+            "isDefault": false
+          },
+          {
+            "label": "Classifications",
+            "value": "classifications",
+            "isDefault": false
+          },
+          {
+            "label": "Answers",
+            "value": "answers",
+            "isDefault": false
+          },
+          {
+            "label": "Files",
+            "value": "files",
+            "isDefault": false
+          }
+        ]
+      },
+      {
+        "label": "Temperature",
+        "controlType": "Slider",
+        "unitType": "Decimal",
+        "isRequired": true,
+        "minimum": 0,
+        "maximum": 1,
+        "paramId": 3,
+        "values": [
+          {
+            "value": "0.75",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Max Tokens",
+        "controlType": "Slider",
+        "unitType": "Integer",
+        "isRequired": true,
+        "minimum": 1,
+        "maximum": 2048,
+        "paramId": 4,
+        "values": [
+          {
+            "value": "64",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Top P",
+        "controlType": "Slider",
+        "unitType": "Decimal",
+        "isRequired": true,
+        "minimum": 0,
+        "maximum": 1,
+        "paramId": 5,
+        "values": [
+          {
+            "value": "1",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Frequency Penalty",
+        "controlType": "Slider",
+        "unitType": "Decimal",
+        "isRequired": true,
+        "minimum": 0,
+        "maximum": 2,
+        "paramId": 6,
+        "values": [
+          {
+            "value": "0",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Presence Penalty",
+        "controlType": "Slider",
+        "unitType": "Decimal",
+        "isRequired": true,
+        "minimum": 0,
+        "maximum": 2,
+        "paramId": 7,
+        "values": [
+          {
+            "value": "0",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Source Content",
+        "description": "The text to translate",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isRequired": true,
+        "isVisible": false,
+        "paramId": 8,
+        "values": [
+          {
+            "value": "{ItemData}"
+          }
+        ]
+      },
+      {
+        "label": "OpenAi Api Token",
+        "controlType": "TextBox",
+        "unitType": "PlainText",
+        "paramId": 10,
+        "isRequired": true,
+        "isVisible": false,
+        "values": [
+          {
+            "value": "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"
+          }
+        ]
+      }
+    ]
+  }
+}

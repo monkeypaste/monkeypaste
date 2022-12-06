@@ -9,6 +9,8 @@ var WindowMouseLoc = null;
 
 function initMouse() {
 	let capture = true;
+	window.addEventListener("contextmenu", onWindowContextMenu, capture);
+
 	window.addEventListener("mousedown", onWindowMouseDown, capture);
 	window.addEventListener("mousemove", onWindowMouseMove, capture);
 	window.addEventListener("mouseup", onWindowMouseUp, capture);
@@ -21,6 +23,23 @@ function initMouse() {
 
 // #region Getters
 
+function getClientMousePos(e) {
+	if (!e || !e.clientX || !e.clientY) {
+		return { x: -1, y: -1 };
+	}
+
+	let mp = { x: parseFloat(e.clientX), y: parseFloat(e.clientY) };
+	return mp;
+}
+
+function getScreenMousePos(e) {
+	if (!e || !e.screenX || !e.screenY) {
+		return { x: -1, y: -1 };
+	}
+
+	let mp = { x: parseFloat(e.screenX), y: parseFloat(e.screenY) };
+	return mp;
+}
 // #endregion Getters
 
 // #region Setters
@@ -77,13 +96,18 @@ function onWindowDoubleClick(e) {
 	enableSubSelection();
 }
 
-function onWindowMouseDown(e) {
-	//if (!isChildOfElement(e.target, getEditorContainerElement()) && !isChildOfElement(e.target, getDragOverlayElement())) {
-	//	// NOTE this is to ignore tracking of mouse events in toolbars for the sake of drag and drop
-	//	log('window mouse down rejected ', e.target, ' is not a child of editor container or drag overlay');
-	//	return;
-	//}
+function onWindowContextMenu(e) {
 	if (rejectTableMouseEvent(e)) {
+		e.preventDefault();
+		e.stopPropagation();
+		return false;
+	}
+}
+
+function onWindowMouseDown(e) {
+	if (rejectTableMouseEvent(e)) {
+		e.preventDefault();
+		e.stopPropagation();
 		return false;
 	} 
 	WindowMouseDownLoc = { x: e.clientX, y: e.clientY };

@@ -61,7 +61,8 @@ namespace MonkeyPaste.Avalonia {
         notifyDataTransferCompleted,
         notifySelectionChanged,
         notifyScrollChanged,
-        notifyAppendModeChanged
+        notifyAppendModeChanged,
+        notifyInternalContextMenuIsVisibleChanged
     }
     [DoNotNotify]
     public class MpAvCefNetWebView : 
@@ -321,7 +322,7 @@ namespace MonkeyPaste.Avalonia {
             this.GetObservable(MpAvCefNetWebView.AppendDataProperty).Subscribe(value => OnAppendDataChanged());
             this.GetObservable(MpAvCefNetWebView.AppendModeStateProperty).Subscribe(value => OnAppendModeStateChanged());
 
-            this.GetObservable(MpAvCefNetWebView.ContentIdProperty).Subscribe(value => OnContentIdChanged());
+            this.GetObservable(MpAvCefNetWebView.ContentDataProperty).Subscribe(value => OnContentDataChanged());
             this.GetObservable(MpAvCefNetWebView.IsContentSelectedProperty).Subscribe(value => OnIsContentSelectedChanged());
             this.GetObservable(MpAvCefNetWebView.IsContentResizingProperty).Subscribe(value => OnIsContentResizingChanged());
             this.GetObservable(MpAvCefNetWebView.IsContentReadOnlyProperty).Subscribe(value => OnIsContentReadOnlyChanged());
@@ -663,7 +664,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
 
-                // REUSABLE
+                // WINDOW ACTIONS
 
                 case MpAvEditorBindingFunctionType.notifyShowCustomColorPicker:
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillShowCustomColorPickerNotification>(msgJsonBase64Str);
@@ -693,6 +694,15 @@ namespace MonkeyPaste.Avalonia {
                         MpAvUriNavigator.NavigateToUri(uri);
                     }
                     break;
+                case MpAvEditorBindingFunctionType.notifyInternalContextMenuIsVisibleChanged:
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillInternalContextIsVisibleChangedNotification>(msgJsonBase64Str);
+                    if (ntf is MpQuillInternalContextIsVisibleChangedNotification ctxMenuChangedMsg) {
+                        
+                    }
+                    break;
+
+                // OTHER
+
                 case MpAvEditorBindingFunctionType.notifyException:
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillExceptionMessage exceptionMsgObj) {
@@ -842,18 +852,18 @@ namespace MonkeyPaste.Avalonia {
 
         public bool NeedsEvalJsCleared { get; set; }
 
-        #region ContentId Property
+        #region ContentData Property
 
-        private int _contentId;
-        public int ContentId {
-            get { return _contentId; }
-            set { SetAndRaise(ContentIdProperty, ref _contentId, value); }
+        private string _contentData;
+        public string ContentData {
+            get { return _contentData; }
+            set { SetAndRaise(ContentDataProperty, ref _contentData, value); }
         }
-        public static DirectProperty<MpAvCefNetWebView, int> ContentIdProperty =
-            AvaloniaProperty.RegisterDirect<MpAvCefNetWebView, int>(
-                nameof(ContentId),
-                x => x.ContentId,
-                (x, o) => x.ContentId = o);
+        public static DirectProperty<MpAvCefNetWebView, string> ContentDataProperty =
+            AvaloniaProperty.RegisterDirect<MpAvCefNetWebView, string>(
+                nameof(ContentData),
+                x => x.ContentData,
+                (x, o) => x.ContentData = o);
 
         #endregion 
 
@@ -875,7 +885,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion 
 
-        private void OnContentIdChanged() {
+        private void OnContentDataChanged() {
             if(BindingContext == null) {
                 return;
             }
@@ -913,12 +923,18 @@ namespace MonkeyPaste.Avalonia {
 
             this.ExecuteJavascript($"loadContent_ext('{msgStr}')");
         }
-
+        private static int test = 0;
         protected virtual MpQuillLoadContentRequestMessage CreateLoadContentRequestMessage() {
+            //if(BindingContext.CopyItemTitle == "Untitled1579") {
+            //    test++;
+            //    if(test > 1) {
+            //        Debugger.Break();
+            //    }
+            //}
             var loadContentMsg = new MpQuillLoadContentRequestMessage() {
                 contentHandle = BindingContext.PublicHandle,
                 contentType = BindingContext.ItemType.ToString(),
-                itemData = BindingContext.EditorFormattedItemData,
+                itemData = ContentData,//BindingContext.EditorFormattedItemData,
                 isPasteRequest = BindingContext.IsPasting
             };
 

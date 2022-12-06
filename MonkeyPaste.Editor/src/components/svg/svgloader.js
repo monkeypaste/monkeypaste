@@ -27,6 +27,9 @@ var SvgElements = {
 };
 
 function getSvgHtml(svgKey, classes) {
+	if (isNullOrWhiteSpace(svgKey) || SvgElements[svgKey] == null) {
+		svgKey = 'empty';
+	}
 	let htmlStr = SvgElements[svgKey];
 	classes = isNullOrEmpty(classes) ? 'svg-icon' : classes;
 	htmlStr = htmlStr.replace('<svg ', `<svg class='${classes}' `);

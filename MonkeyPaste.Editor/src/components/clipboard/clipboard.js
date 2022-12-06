@@ -108,9 +108,9 @@ function addPlainHtmlClipboardMatchers() {
                 if (delta.ops[i].insert.contains('imgTagStartStr')) {
                     debugger;
                 }
-                //delta.ops[i].insert = escapeHtml(node.outerHTML);
+                //delta.ops[i].insert = escapeHtmlSpecialEntities(node.outerHTML);
                 //return delta;
-                return new Delta().insert(escapeHtml(node.outerHTML));
+                return new Delta().insert(escapeHtmlSpecialEntities(node.outerHTML));
             }
         }
         return delta;

@@ -321,6 +321,7 @@ function isClassInElementPath(elm, classOrClasses, compareOp = 'OR') {
 		}
         search_elm = search_elm.parentNode;
     }
+    return false;
 }
 
 function overrideEvent(elm, eventName, handler) {
@@ -405,34 +406,75 @@ function isTextElement(elm) {
 //    td.removeChild(child);
 //    td.insertBefore(child, before); //attempt to insert it   
 //}
-function unescapeHtml(htmlStr) {
-    //return htmlStr.replace(/&lt;/g, "<")
-    //    .replace(/&gt;/g, ">")
-    //    .replace(/&quot;/g, '"')
-    //    .replace(/&amp;/g, "&");
+const HtmlEntitiesLookup = {
+    " ": "&nbsp;",
+    "&": "&amp;",
+    "\"": "&quot;",
+    "\'": "&apos;",
+    ">": "&gt;",
+    "¢": "&cent;",
+    "£": "&pound;",
+    "¥": "&yen;",
+    "€": "&euro;",
+    "©": "&copy;",
+    "®": "&reg;",
+    "™": "&trade;",
+    "<": "&lt;" 
+};
 
-    //const doc = DomParser.parseFromString(htmlStr, "text/html");
-    //return doc.documentElement.textContent;
-
-    const e = document.createElement('textarea');
-    e.innerHTML = htmlStr;
-    return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
-}
-
-function escapeHtml(htmlStr) {
-    if (!htmlStr) {
-        htmlStr = '';
+function isStringContainSpecialHtmlEntities(str) {
+    if (isNullOrEmpty(str)) {
+        return false;
     }
-
-    const htmlEntities = {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&apos;",
-    };
-    return htmlStr.replace(/([&<>\"'])/g, match => htmlEntities[match]);
+    return Object.entries(HtmlEntitiesLookup).find(([k, v]) => str.includes(k)) != null;
 }
+function escapeHtmlSpecialEntities(str) {
+    if (isNullOrEmpty(str)) {
+        return '';
+    }
+    let out_str = '';
+    for (var i = 0; i < str.length; i++) {
+        let kvp = Object.entries(HtmlEntitiesLookup).find(([k, v]) => str.substr(i).startsWith(k));
+        if (kvp == null) {
+            out_str += str.charAt(i);
+        } else {
+            out_str += kvp[1];
+        }
+    }
+    return out_str;
+}
+
+function unescapeHtmlSpecialEntities(str) {
+    if (isNullOrEmpty(str)) {
+        return '';
+    }
+    let out_str = '';
+    for (var i = 0; i < str.length; i++) {
+        let kvp = Object.entries(HtmlEntitiesLookup).find(([k, v]) => str.substr(i).startsWith(v));
+        if (kvp == null) {
+            out_str += str.charAt(i);
+        } else {
+            out_str += kvp[0];
+            i += kvp[1].length - 1;
+        }
+    }
+    return out_str;
+}
+
+function getAllTextElementsInElement(elm) {
+    var text_elms = [];
+    if (!elm) {
+        return text_elms;
+    }
+    for (elm = elm.firstChild; elm; elm = elm.nextSibling) {
+        if (elm.nodeType == 3) {
+            text_elms.push(elm);
+        }
+        else text_elms = text_elms.concat(getAllTextElementsInElement(elm));
+    }
+    return text_elms;
+}
+
 const delay = time => new Promise(res => setTimeout(res, time));
 
 function getElementComputedStyleProp(elm, propName) {

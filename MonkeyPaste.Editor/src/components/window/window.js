@@ -43,7 +43,6 @@ function getWindowRect() {
 	wrect = cleanRect(wrect);
 	return wrect;
 }
-
 // #endregion Getters
 
 // #region Setters

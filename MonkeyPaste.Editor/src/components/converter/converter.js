@@ -52,10 +52,10 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 	if (formatType == 'text') {
 		//dataStr = unescapeHtml(dataStr);
 		//insertHtml(0, dataStr, 'api');
-		//setRootHtml(escapeHtml(dataStr));
+		//setRootHtml(escapeHtmlSpecialEntities(dataStr));
 		//insertText(0, dataStr);
-		insertText(0, escapeHtml(dataStr), 'silent');
-		//setRootText(escapeHtml(dataStr));
+		insertText(0, escapeHtmlSpecialEntities(dataStr), 'silent');
+		//setRootText(escapeHtmlSpecialEntities(dataStr));
 	} else if (formatType == 'html') {
 		//if (dataStr.toLowerCase().indexOf('<p>') < 0) {
 		//	dataStr = '<p>' + dataStr + '</p>';
@@ -64,10 +64,12 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 		//dataStr = decodeURIComponent(unescapeHtml(encodeURIComponent(dataStr)));
 		// NOTE insertHtml will remove spaces between spans...
 		//insertHtml(0, dataStr, 'api', false);
-		setRootHtml(dataStr);
+		//setRootHtml(dataStr);
 
 		//const delta = quill.clipboard.convert(dataStr);
 		//quill.setContents(delta, 'silent')
+		const delta = convertHtmlToDelta(dataStr);
+		setContents(delta);
 	}
 
 	quill.update();

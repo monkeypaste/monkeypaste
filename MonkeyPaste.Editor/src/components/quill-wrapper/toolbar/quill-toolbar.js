@@ -60,8 +60,8 @@ function initEditorToolbarQuillOptions(quillOptions, toolbarId) {
 					}
 				},
 				color: {
-					colors: ["green", "red", "yellow", "blue", "white"],
-					text: "Background Colors:"
+					colors: ContentColors,//["green", "red", "yellow", "blue", "white"],
+					text: "Background Color:"
 				}
 			}
 		};

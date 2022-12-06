@@ -1,1 +1,9 @@
-﻿
+﻿/* Override table menu width so colors wrap correctly*/
+.qlbt-operation-menu {
+    width: 300px !important;
+}
+
+    .qlbt-operation-menu .qlbt-operation-color-picker .qlbt-operation-color-picker-item {
+        width: 12px !important;
+        height: 12px !important;
+    }

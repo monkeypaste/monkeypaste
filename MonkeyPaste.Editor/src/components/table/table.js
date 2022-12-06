@@ -18,6 +18,12 @@ var DefaultCsvProps = {
 function initTable() {
     initTableToolbarButton();
     DefaultCsvProps.RowSeparator = envNewLine();
+
+    //let editor_elm = getEditorElement();
+    //if (editor_elm == null) {
+    //    debugger;
+    //}
+    //editor_elm.addEventListener("contextmenu", onWindowMouseDown, true);
 }
 
 // #endregion Life Cycle
@@ -81,6 +87,31 @@ function getTableCsv(format, csvProps, encodeTemplates = false) {
 function getBetterTableElements() {
     return document.getElementsByClassName(TABLE_WRAPPER_CLASS_NAME);
 }
+
+function getBetterTableModule() {    
+    let betterTableModule = quill.getModule('better-table');
+    return betterTableModule;
+}
+
+function getTableObject(range) {
+    // table is [TableContainer, TableRow, TableCell, offset]
+    let btm = getBetterTableModule();
+    if (!btm) {
+        return null;
+    }
+    return btm.getTable(range);
+}
+
+function getBetterTableElementRect(table_elm) {
+    // normally returns block width w/o using inner tbody element
+    if (!table_elm) {
+        return cleanRect();
+    }
+    let tbody_elm = table_elm.firstChild.firstChild.nextSibling;
+
+    return cleanRect(tbody_elm.getBoundingClientRect());
+}
+
 // #endregion Getters
 
 // #region Setters
@@ -88,6 +119,10 @@ function getBetterTableElements() {
 // #endregion Setters
 
 // #region State
+
+function isTableInDocument() {
+    return getBetterTableElements().length > 0;
+}
 
 function isContentATable() {
     if (ContentItemType != 'Text') {
@@ -104,23 +139,70 @@ function isDocIdxInTable(docIdx) {
     return isClassInElementPath(doc_idx_elm, TABLE_WRAPPER_CLASS_NAME);
 }
 
+function isTableCellDocFocus() {
+    let tblObj = getTableObject();
+    if (!tblObj || !Array.isArray(tblObj)) {
+        return false;
+    }
+    return tblObj[3] >= 0;
+}
+
+function isScreenPointInAnyTable(client_mp) {
+    if (!isTableInDocument()) {
+        return false;
+    }
+    let table_elms = getBetterTableElements();
+    for (var i = 0; i < table_elms.length; i++) {
+        let table_elm = table_elms[i];
+        let table_elm_rect = getBetterTableElementRect(table_elm);
+        if (isPointInRect(table_elm_rect, client_mp)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function isContextMenuEventGoingToShowTableMenu(e) {
+    if (!isTableInDocument() || !IsBetterTableOpsMenuEnabled) {
+        return false;
+    }
+    if (e.button == 2 && isTableCellDocFocus()) {
+        return true;
+    }
+    return false;
+}
+
 // #endregion State
 
 // #region Actions
 
 function rejectTableMouseEvent(e) {
-    if (isClassInElementPath(e.target, TABLE_WRAPPER_CLASS_NAME) &&
-        !IsBetterTableOpsMenuEnabled &&
-        e.button == 2) {
-        e.preventDefault();
-        e.stopPropagation();
-        return true;
+    if (!isTableInDocument()) {
+        return false;
     }
-    if (isClassInElementPath(e.target, TABLE_WRAPPER_CLASS_NAME) &&
+
+    let is_click_in_cell = isScreenPointInAnyTable(getClientMousePos(e)); //isClassInElementPath(e.target, TABLE_WRAPPER_CLASS_NAME);
+    let is_cell_focus = isTableCellDocFocus();
+
+    if (e.button == 2) {
+        if (IsBetterTableOpsMenuEnabled) {
+            if (!is_click_in_cell && is_cell_focus) {
+                // BUG prevent better table bug where cell element is null (quill-better-table.js:2942 )
+                // mentioned here https://github.com/soccerloway/quill-better-table/issues/77#issue-999274656
+                return true;
+            }
+        } else {
+            if (is_click_in_cell) {
+                // prevent show table context menu
+                return true;
+            }
+        }
+    }
+    
+    if (is_click_in_cell &&
         !isClassInElementPath(e.target,'file-list-path') &&
         !IsBetterTableInteractionEnabled) {
-        e.preventDefault();
-        e.stopPropagation();
+        // disable any table clicks for file list
         return true;
     }
     return false;

@@ -204,4 +204,8 @@ namespace MonkeyPaste {
         public int left { get; set; }
         public int top { get; set; }
     }
+
+    public class MpQuillInternalContextIsVisibleChangedNotification : MpJsonObject {
+        public bool isInternalContextMenuVisible { get; set; }
+    }
 }

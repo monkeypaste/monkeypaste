@@ -305,15 +305,13 @@ function convertDomRangeToDocRange(dom_range) {
 }
 
 function convertDocRangeToDomRange(doc_range) {
-	if (!doc_range || doc_range.index === undefined) {
-		doc_range = { index: 0, length: 0 };
-	}
+	doc_range = cleanDocRange(doc_range);
+
 	let start_elm = getElementAtDocIdx(doc_range.index);
 	let end_elm = getElementAtDocIdx(doc_range.index + doc_range.length);
 
 	let start_elm_doc_idx = getElementDocIdx(start_elm);
 	let end_elm_doc_idx = getElementDocIdx(end_elm);
-
 
 	let start_offset = doc_range.index - start_elm_doc_idx;
 	let end_offset = (doc_range.index + doc_range.length) - end_elm_doc_idx;
@@ -350,6 +348,25 @@ function convertDocRangeToDomRange(doc_range) {
 		debugger;
 	}
 	return clean_range;
+}
+
+function cleanDocRange(doc_range) {
+	if (!doc_range || doc_range.index === undefined) {
+		doc_range = { index: 0, length: 0 };
+	}
+	if (doc_range.index < 0) {
+		doc_range.index = 0;
+	}
+	// ex. docLength = 2, range = {2,1}
+
+	let max_idx = Math.max(0,getDocLength() - 1); // is 1
+	if (doc_range.index > max_idx) {
+		doc_range.index = max_idx; // range = {1,1}
+	}
+	if (doc_range.index + doc_range.length > max_idx) {
+		doc_range.length = max_idx - doc_range.index; // range = {1,0}
+	}
+	return doc_range;
 }
 
 function coerceCleanSelection(new_range,old_range) {

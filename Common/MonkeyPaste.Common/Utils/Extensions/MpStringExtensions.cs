@@ -451,6 +451,7 @@ namespace MonkeyPaste.Common {
                 var kvp = _escapeEntities.FirstOrDefault(x => str.Substring(i).StartsWith(x.Value));
                 if(!kvp.Equals(default(KeyValuePair<char,string>))) {
                     sb.Append(kvp.Key);
+                    i += kvp.Value.Length - 1;
                 } else {
                     sb.Append(str[i]);
                 }

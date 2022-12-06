@@ -426,7 +426,7 @@ namespace MonkeyPaste.Avalonia {
         //public MpAvClipTileViewModel DragItem => AllItems.FirstOrDefault(x => x.IsTileDragging);
 
         //public int DragItemId => DragItem == default ? -1 : DragItem.CopyItemId;
-        public IEnumerable<MpAvClipTileViewModel> VisibleItems => Items.Where(x => x.IsAnyCornerVisible);
+        public IEnumerable<MpAvClipTileViewModel> VisibleItems => Items.Where(x => x.IsAnyCornerVisible && !x.IsPlaceholder);
 
         public Orientation DefaultScrollOrientation {
             get {
