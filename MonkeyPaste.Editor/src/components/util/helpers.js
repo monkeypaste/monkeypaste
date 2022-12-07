@@ -428,23 +428,29 @@ function isStringContainSpecialHtmlEntities(str) {
     }
     return Object.entries(HtmlEntitiesLookup).find(([k, v]) => str.includes(k)) != null;
 }
-function escapeHtmlSpecialEntities(str) {
+function encodeHtmlSpecialEntities(str) {
     if (isNullOrEmpty(str)) {
         return '';
     }
     let out_str = '';
     for (var i = 0; i < str.length; i++) {
         let kvp = Object.entries(HtmlEntitiesLookup).find(([k, v]) => str.substr(i).startsWith(k));
-        if (kvp == null) {
-            out_str += str.charAt(i);
-        } else {
+        if (kvp != null) {
+            let already_encoded_kvp = Object.entries(HtmlEntitiesLookup).find(([k, v]) => str.substr(i).startsWith(v));
+            if (already_encoded_kvp != null) {
+                out_str += already_encoded_kvp[1];
+                i += already_encoded_kvp[1].length - 1;
+                continue;
+            }
             out_str += kvp[1];
+        } else {
+            out_str += str.charAt(i);
         }
     }
     return out_str;
 }
 
-function unescapeHtmlSpecialEntities(str) {
+function decodeHtmlSpecialEntities(str) {
     if (isNullOrEmpty(str)) {
         return '';
     }

@@ -522,7 +522,7 @@ namespace MonkeyPaste.Avalonia {
                     if(mwvm.IsMainWindowActive) {
                         if (mwvm.IsAnyDialogOpen ||
                             mwvm.IsAnyItemDragging ||
-                            mwvm.IsAnyTextBoxFocused ||
+                            mwvm.IsAnyMainWindowTextBoxFocused ||
                             !mwvm.IsMainWindowActive) {
                             canPerformShortcut = false;
                         }
@@ -538,7 +538,7 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine($"IsMainWindowActive: "+mwvm.IsMainWindowActive);
                     MpConsole.WriteLine($"IsShowingDialog: "+mwvm.IsAnyDialogOpen);
                     MpConsole.WriteLine($"IsAnyItemDragging: "+mwvm.IsAnyItemDragging);
-                    MpConsole.WriteLine($"IsAnyTextBoxFocused: "+mwvm.IsAnyTextBoxFocused);
+                    MpConsole.WriteLine($"IsAnyTextBoxFocused: "+mwvm.IsAnyMainWindowTextBoxFocused);
                     MpConsole.WriteLine($"IsMainWindowActive: "+mwvm.IsMainWindowActive);
                 }
                 return canPerformShortcut;

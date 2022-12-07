@@ -13,6 +13,8 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Xml.Linq;
 using System.Web;
+using System.Text.RegularExpressions;
+using System.Security.Policy;
 
 namespace MonkeyPaste.Common.Wpf {
     public static class MpWpfRtfToHtmlConverter2 {
@@ -142,10 +144,69 @@ namespace MonkeyPaste.Common.Wpf {
             }  else if (te is Span s) {
                 return WrapWithSpan(s, children);
             } else if (te is Run r) {
-                return _htmlDoc.CreateTextNode(r.Text.EscapeSpecialHtmlEntities());
+                return ProcessRun(r, children);
             } else {
                 throw new Exception(@"Unknown text element: " + te.ToString());
             }
+        }
+
+        private static HtmlNode ProcessRun(Run r, List<HtmlNode> children) {
+            if(!r.Text.ContainsEncodedSpecialHtmlEntities()) {
+                // valid example "if (CopyItemData == "<p><br></p>" || CopyItemData == null)"
+
+                // no encoded entities to wrap with code tag so return encoded run
+                return _htmlDoc.CreateTextNode(r.Text.EncodeSpecialHtmlEntities());
+            }
+            // example "{'>',"&gt;" },"
+            // since there's encoded entities will need return a container node (span)
+            HtmlNode span_node = _htmlDoc.CreateElement("span");
+            int cur_idx = 0;
+            Match m = MpRegEx.RegExLookup[MpRegExType.EncodedHtmlEntity].Match(r.Text);
+            while(m.Success) {
+                int match_idx = r.Text.Substring(cur_idx).IndexOf(m.Value);
+
+                if(match_idx > 0) {
+                    // create lead run (in example "{'>',"")
+                    string lead_text = r.Text.Substring(cur_idx, match_idx);
+                    HtmlNode lead_text_node = _htmlDoc.CreateTextNode(lead_text.EncodeSpecialHtmlEntities());
+                    HtmlNode lead_text_node_wrapper_span = _htmlDoc.CreateElement("span");
+                    lead_text_node_wrapper_span.AppendChild(lead_text_node);
+                    span_node.AppendChild(lead_text_node_wrapper_span);
+                }
+
+                // wrap encoded special entity in code tag
+                HtmlNode match_text_node = _htmlDoc.CreateTextNode(m.Value);
+                HtmlNode code_node = _htmlDoc.CreateElement("code");
+                code_node.AppendChild(match_text_node);
+                span_node.AppendChild(code_node);
+
+                cur_idx = match_idx + m.Value.Length;
+                string test = r.Text.Substring(cur_idx);
+                m = MpRegEx.RegExLookup[MpRegExType.EncodedHtmlEntity].Match(r.Text.Substring(cur_idx));
+            }
+            if(cur_idx < r.Text.Length) {
+                // create trailing run after encoded special entities
+                string trailing_text = r.Text.Substring(cur_idx);
+                HtmlNode trail_text_node = _htmlDoc.CreateTextNode(trailing_text.EncodeSpecialHtmlEntities());
+                HtmlNode trailing_text_node_wrapper_span = _htmlDoc.CreateElement("span");
+                trailing_text_node_wrapper_span.AppendChild(trail_text_node);
+                span_node.AppendChild(trailing_text_node_wrapper_span);
+            }
+
+            string valid_check = r.Text.EncodeSpecialHtmlEntities();
+            string test_check = span_node.InnerText;
+            if(valid_check != test_check) {
+                MpConsole.WriteLine("Error encoding run.", true);
+                MpConsole.WriteLine($"Actual Text:");
+                MpConsole.WriteLine(r.Text);
+                MpConsole.WriteLine($"Encoded Text:");
+                MpConsole.WriteLine(valid_check);
+                MpConsole.WriteLine($"Processed Text:");
+                MpConsole.WriteLine(test_check,false,true);
+                Debugger.Break();
+            }
+
+            return span_node;
         }
 
         private static HtmlNode WrapWithTable(Table t, List<HtmlNode> children) {

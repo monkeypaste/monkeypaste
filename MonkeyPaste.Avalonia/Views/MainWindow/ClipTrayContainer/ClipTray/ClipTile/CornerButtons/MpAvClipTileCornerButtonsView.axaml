@@ -17,16 +17,16 @@
         <!--  Hide Title Button  -->
 
         <ToggleButton x:Name="HideTitleButton"
-                      IsChecked="{Binding !IsTitleVisible, Mode=TwoWay}"
+                      IsChecked="{Binding !IsHeaderAndFooterVisible, Mode=TwoWay}"
                       HorizontalAlignment="Left"
                       VerticalAlignment="Top"
                       BorderThickness="0"
                       Background="Transparent">
             <Grid>
-                <PathIcon IsVisible="{Binding IsTitleVisible}"
+                <PathIcon IsVisible="{Binding IsHeaderAndFooterVisible}"
                           Data="{StaticResource HideSvg}" />
 
-                <PathIcon IsVisible="{Binding !IsTitleVisible}"
+                <PathIcon IsVisible="{Binding !IsHeaderAndFooterVisible}"
                           Data="{StaticResource ShowSvg}" />
             </Grid>
         </ToggleButton>

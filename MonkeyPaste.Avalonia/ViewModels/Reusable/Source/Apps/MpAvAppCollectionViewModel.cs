@@ -228,7 +228,9 @@ namespace MonkeyPaste.Avalonia {
 
                     // vm is added in db add handler
                     while (avm == null) {
-                        avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower());
+                        // NOTE when MpApp is created and db handler is adding to items
+                        // without calling .ToList() here will give collection modified exception
+                        avm = Items.ToList().FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower());
                     }
                     LastActiveAppViewModel = avm;
 

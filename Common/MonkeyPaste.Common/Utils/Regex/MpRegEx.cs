@@ -22,7 +22,8 @@ namespace MonkeyPaste.Common {
         HasSpecialCharacters,
         Is_NOT_Number,
         StartsWithWindowsStyleDirectory,
-        ContainsInvalidFileNameChar
+        ContainsInvalidFileNameChar,
+        EncodedHtmlEntity
        // HtmlTag
     }
 
@@ -84,7 +85,10 @@ namespace MonkeyPaste.Common {
             @"^[a-zA-Z]:\\$",
 
             //ContainsInvalidFileNameChar
-            @"["+Regex.Escape(InvalidFileNameChars)+"]"
+            @"["+Regex.Escape(InvalidFileNameChars)+"]",
+
+            //EncodedHtmlEntity
+            @"&#?[a-zA-Z0-9]*;"
         };
 
         private static Dictionary<MpRegExType, Regex> _regExLookup;

@@ -73,13 +73,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public async Task InitializeAsync() {
+        public async Task InitializeAsync(MpAvClipTileDetailItemViewModel forceSelectedItem = null) {
             //IsBusy = true;
 
 
             await Task.WhenAll(Items.Select(x => x.IntializeAsync()));
-            SelectedItem = Items[0];
+            SelectedItem = forceSelectedItem == null ? Items[0] : forceSelectedItem;
+            if(forceSelectedItem != null) {
+                forceSelectedItem.UpdateDetailTextCommand.Execute(null);
+            }
             //IsBusy = false;
+        }
+
+        public async Task RefreshAsync() {
+            await InitializeAsync(SelectedItem);
         }
         #endregion
 

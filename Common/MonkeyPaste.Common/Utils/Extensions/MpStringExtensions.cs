@@ -418,26 +418,31 @@ namespace MonkeyPaste.Common {
             return false;
         }
 
-        private static Dictionary<char, string> _escapeEntities = new Dictionary<char, string>() {
-            {' ',"&nbsp;" },
-            {'&',"&amp;" },
-            {'\"',"&quot;" },
-            {'\'',"&apos;" },
-            {'>',"&gt;" },
-            {'¢',"&cent;" },
-            {'£',"&pound;" },
-            {'¥',"&yen;" },
-            {'€',"&euro;" },
-            {'©',"&copy;" },
-            {'®',"&reg;" },
-            {'™',"&trade;" },
-            {'<',"&lt;" }
-        };
-        public static string EscapeSpecialHtmlEntities(this string str) {
+        public static Dictionary<char, string> HtmlEntityLookup =>
+            new Dictionary<char, string>() {
+                {' ',"&nbsp;" },
+                {'&',"&amp;" },
+                {'\"',"&quot;" }, {'\'',"&apos;" }, {'>',"&gt;" },
+                {'¢',"&cent;" },
+                {'£',"&pound;" },
+                {'¥',"&yen;" },
+                {'€',"&euro;" },
+                {'©',"&copy;" },
+                {'®',"&reg;" },
+                {'™',"&trade;" },
+                {'<',"&lt;" }
+            };
+        public static string EncodeSpecialHtmlEntities(this string str) {
             var sb = new StringBuilder();
             for (int i = 0; i < str.Length; i++) {
-                if (_escapeEntities.ContainsKey(str[i])) {
-                    sb.Append(_escapeEntities[str[i]]);
+                if (HtmlEntityLookup.ContainsKey(str[i])) {
+                    var already_encoded_kvp = HtmlEntityLookup.FirstOrDefault(x => str.Substring(i).StartsWith(x.Value));
+                    if(!already_encoded_kvp.Equals(default(KeyValuePair<char,string>))) {
+                        sb.Append(already_encoded_kvp.Value);
+                        i += already_encoded_kvp.Value.Length - 1;
+                        continue;
+                    }
+                    sb.Append(HtmlEntityLookup[str[i]]);
                 } else {
                     sb.Append(str[i]);
                 }
@@ -445,10 +450,10 @@ namespace MonkeyPaste.Common {
             return sb.ToString();
         }
 
-        public static string UnescapeSpecialHtmlEntities(this string str) {
+        public static string DecodeSpecialHtmlEntities(this string str) {
             var sb = new StringBuilder();
             for (int i = 0; i < str.Length; i++) {
-                var kvp = _escapeEntities.FirstOrDefault(x => str.Substring(i).StartsWith(x.Value));
+                var kvp = HtmlEntityLookup.FirstOrDefault(x => str.Substring(i).StartsWith(x.Value));
                 if(!kvp.Equals(default(KeyValuePair<char,string>))) {
                     sb.Append(kvp.Key);
                     i += kvp.Value.Length - 1;
@@ -460,7 +465,11 @@ namespace MonkeyPaste.Common {
         }
 
         public static bool ContainsSpecialHtmlEntities(this string str) {
-            return _escapeEntities.Any(x => str.Contains(x.Key));
+            return HtmlEntityLookup.Any(x => str.Contains(x.Key));
+        }
+
+        public static bool ContainsEncodedSpecialHtmlEntities(this string str) {
+            return MpRegEx.RegExLookup[MpRegExType.EncodedHtmlEntity].IsMatch(str);
         }
 
         public static string EscapeMenuItemHeader(this string str, int altNavIdx = -1) {

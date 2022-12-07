@@ -17,6 +17,7 @@ namespace MonkeyPaste.Avalonia {
         public static void Init() {
             var tray_icons = CreateTrayIcons();
             TrayIcon.SetIcons(Application.Current, tray_icons);
+
         }
 
 
@@ -60,7 +61,8 @@ namespace MonkeyPaste.Avalonia {
                         Converter = MpAvIconSourceObjToBitmapConverter.Instance
                     });
             } else if (tmivm.IconSourceObj != null) {
-                rootIcon.Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert(tmivm.IconSourceObj,null,null,null) as WindowIcon;
+                rootIcon.Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert(tmivm.IconSourceObj, null, null, null) as WindowIcon;
+
             }
 
             // COMMAND

@@ -2,7 +2,7 @@
 
 const TABLE_WRAPPER_CLASS_NAME = 'quill-better-table-wrapper';
 
-var IsBetterTableOpsMenuEnabled = true;
+var IsBetterTableOpsMenuEnabled = false;
 var IsBetterTableInteractionEnabled = true;
 
 var DefaultCsvProps = {
@@ -36,6 +36,10 @@ function getBetterTableContextMenuElement() {
         return null;
     }
     return ops_menu_elms[0];
+}
+
+function getBetterTableSelectionLineElements() {
+    return Array.from(document.getElementsByClassName('qlbt-selection-line'));
 }
 
 function getTableCsv(format, csvProps, encodeTemplates = false) {
@@ -139,12 +143,8 @@ function isDocIdxInTable(docIdx) {
     return isClassInElementPath(doc_idx_elm, TABLE_WRAPPER_CLASS_NAME);
 }
 
-function isTableCellDocFocus() {
-    let tblObj = getTableObject();
-    if (!tblObj || !Array.isArray(tblObj)) {
-        return false;
-    }
-    return tblObj[3] >= 0;
+function isAnyTableSelectionElementsVisible() {
+    return getBetterTableSelectionLineElements().length > 0;
 }
 
 function isScreenPointInAnyTable(client_mp) {
@@ -166,12 +166,16 @@ function isContextMenuEventGoingToShowTableMenu(e) {
     if (!isTableInDocument() || !IsBetterTableOpsMenuEnabled) {
         return false;
     }
-    if (e.button == 2 && isTableCellDocFocus()) {
+    if (e.button == 2 && isAnyTableSelectionElementsVisible()) {
         return true;
     }
     return false;
 }
 
+function isBetterTableContextMenuVisible() {
+    return getBetterTableContextMenuElement() != null &&
+        !getBetterTableContextMenuElement().classList.contains('hidden');
+}
 // #endregion State
 
 // #region Actions
@@ -182,7 +186,7 @@ function rejectTableMouseEvent(e) {
     }
 
     let is_click_in_cell = isScreenPointInAnyTable(getClientMousePos(e)); //isClassInElementPath(e.target, TABLE_WRAPPER_CLASS_NAME);
-    let is_cell_focus = isTableCellDocFocus();
+    let is_cell_focus = isAnyTableSelectionElementsVisible();
 
     if (e.button == 2) {
         if (IsBetterTableOpsMenuEnabled) {
@@ -213,7 +217,7 @@ function disableTableContextMenu() {
 }
 
 function enableTableContextMenu() {
-    IsBetterTableOpsMenuEnabled = true;
+    //IsBetterTableOpsMenuEnabled = true;
 }
 
 function disableTableInteraction() {
@@ -223,7 +227,6 @@ function disableTableInteraction() {
 function enableTableInteraction() {
     IsBetterTableInteractionEnabled = true;
 }
-
 
 // #endregion Actions
 

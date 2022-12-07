@@ -79,44 +79,6 @@ function isInternalClipTileFormat(format) {
 
 // #region Actions
 
-function addPlainHtmlClipboardMatchers() {
-    if (Quill === undefined) {
-        /// host load error case
-        debugger;
-    }
-    // NOTE I think under the hood, quill handles html tags somehow but for xml tags it just
-    // omits them completely so if content is xml or xml fragment, the entire content may just
-    // become omitted
-
-    // This is attached to converter and called during dangerousPaste and escapes non-quill nodes
-    // I think this is called after quill does its thing so there won't be html tags in here.
-    // may need more testing and/or new tags added to some kinda group or something to ignore this i don't know
-    let Delta = Quill.imports.delta;
-
-    quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
-        let tag_name = node.tagName.toLowerCase();
-        if (AllDocumentTags.includes(tag_name)) {
-            // for normal tags use default behavior
-            return delta;
-        }
-        // for any unrecognized tags treat its html as plain text
-        if (delta && delta.ops !== undefined && delta.ops.length > 0) {
-            for (var i = 0; i < delta.ops.length; i++) {
-                if (delta.ops[i].insert === undefined) {
-                    continue;
-                }
-                if (delta.ops[i].insert.contains('imgTagStartStr')) {
-                    debugger;
-                }
-                //delta.ops[i].insert = escapeHtmlSpecialEntities(node.outerHTML);
-                //return delta;
-                return new Delta().insert(escapeHtmlSpecialEntities(node.outerHTML));
-            }
-        }
-        return delta;
-    });
-}
-
 function startClipboardHandler() {
     window.addEventListener('paste', onPaste, true);
     window.addEventListener('cut', onCut, true);
@@ -128,8 +90,6 @@ function stopClipboardHandler() {
     window.removeEventListener('cut', onCut);
     window.removeEventListener('copy', onCopy);
 }
-
-
 
 // #endregion Actions
 
@@ -152,6 +112,9 @@ function onCopy(e) {
 }
 
 function onPaste(e) {
+    if (!isRunningOnHost()) {
+        return;
+    }
     // NOTE if cut/copy was internal and all supported formats set,
     // the e.clipboardData obj strips everything but files from the transfer 
     // so this makes a get request and gets back current clipboard asynchronously

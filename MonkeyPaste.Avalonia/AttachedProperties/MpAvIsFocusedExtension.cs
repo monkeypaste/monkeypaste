@@ -212,9 +212,9 @@ namespace MonkeyPaste.Avalonia {
 
             if (control.GetVisualDescendant<TextBox>() is TextBox tb) {
                 if(tb.IsReadOnly) {
-                    MpAvMainWindowViewModel.Instance.IsAnyTextBoxFocused = false;
+                    MpAvMainWindowViewModel.Instance.IsAnyMainWindowTextBoxFocused = false;
                 } else {
-                    MpAvMainWindowViewModel.Instance.IsAnyTextBoxFocused = true;
+                    MpAvMainWindowViewModel.Instance.IsAnyMainWindowTextBoxFocused = true;
                     //
                 }
                 //if (GetSelectAllOnFocus(control)) {
@@ -229,7 +229,7 @@ namespace MonkeyPaste.Avalonia {
 
         private static void LostFocus(Control control) {
             if (control.GetVisualDescendant<TextBox>() is TextBox tb) {
-                MpAvMainWindowViewModel.Instance.IsAnyTextBoxFocused = false;
+                MpAvMainWindowViewModel.Instance.IsAnyMainWindowTextBoxFocused = false;
             } 
             SetIsFocused(control, false);
         }

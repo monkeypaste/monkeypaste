@@ -2989,7 +2989,7 @@ namespace MonkeyPaste.Avalonia {
                 return MpAvMainWindowViewModel.Instance.IsAnyDialogOpen == false &&
                     SelectedItem != null &&
                     MpAvMainWindowViewModel.Instance.IsMainWindowActive &&
-                    !MpAvMainWindowViewModel.Instance.IsAnyTextBoxFocused &&
+                    !MpAvMainWindowViewModel.Instance.IsAnyMainWindowTextBoxFocused &&
                     !MpAvMainWindowViewModel.Instance.IsAnyDropDownOpen &&
                     !IsAnyEditingClipTile &&
                     !IsAnyEditingClipTitle &&

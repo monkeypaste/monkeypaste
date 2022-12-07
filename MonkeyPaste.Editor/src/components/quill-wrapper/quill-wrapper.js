@@ -12,9 +12,9 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 		/// host load error case
 		debugger;
 	}
-	hljs.configure({   // optionally configure hljs
-		languages: ['javascript', 'ruby', 'python', 'xml', 'html', 'xhtml']
-	});
+	//hljs.configure({   // optionally configure hljs
+	//	languages: ['javascript', 'ruby', 'python', 'xml', 'html', 'xhtml']
+	//});
 
 	let quillOptions = {
 		//debug: true,
@@ -23,7 +23,7 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 		theme: "snow",
 		formula: true,
 		preserveWhiteSpace: true,
-		syntax: true,
+		//syntax: true,
 		modules: {
 			toolbar: toolbarId,
 			//table: !UseBetterTable,
@@ -81,7 +81,7 @@ function getHtml(range) {
 	range = !range ? { index: 0, length: getDocLength() } : range;
 	let delta = getDelta(range);
 
-	delta = escapeDeltaInserts(delta);
+	delta = encodeHtmlEntitiesInDeltaInserts(delta);
 	let htmlStr = convertDeltaToHtml(delta);
 	return htmlStr;
 	//let result = '';
@@ -179,12 +179,7 @@ function setTextInRange(range, text, source = 'api', decodeTemplates = false) {
 	insertText(range.index, text, source, decodeTemplates);
 }
 
-function setRootHtml(html, convertToDelta = false, source = 'api') {
-	if (convertToDelta) {
-		const delta = convertHtmlToDelta(html);
-		setContents(delta, source);
-		return;
-	}
+function setRootHtml(html) {
 	quill.root.innerHTML = html;	
 }
 
@@ -228,7 +223,7 @@ function convertDeltaToHtml(delta) {
 	let cfg = {
 		inlineStyles: true,
 		//customTagAttributes: onCustomTagAttributes,
-		encodeHtml: false
+		encodeHtml: true
 	};
 	let qdc = new window.QuillDeltaToHtmlConverter(delta.ops, cfg);
 	qdc.renderCustomWith(function (customOp, contextOp) {
@@ -261,7 +256,8 @@ function convertHtmlToDelta(htmlStr) {
 	let text_elms = getAllTextElementsInElement(html_doc.body);
 	for (var i = 0; i < text_elms.length; i++) {
 		let text_elm = text_elms[i];
-		text_elm.nodeValue = escapeHtmlSpecialEntities(text_elm.nodeValue);
+
+		text_elm.nodeValue = encodeHtmlSpecialEntities(text_elm.nodeValue);
 	}
 	htmlStr = html_doc.body.innerHTML;
 
@@ -275,7 +271,7 @@ function convertHtmlToDelta(htmlStr) {
 		return delta;
 	}
 
-	delta = escapeDeltaInserts(delta);
+	delta = encodeHtmlEntitiesInDeltaInserts(delta);
 	return delta;
 }
 
@@ -364,14 +360,32 @@ function trimQuillTrailingLineEndFromText(textStr) {
 	return textStr;
 }
 
-function escapeDeltaInserts(delta) {
+function encodeHtmlEntitiesInDeltaInserts(delta) {
 	if (delta && delta.ops !== undefined) {
 		// unescape html special entities only if they were just escaped
 		for (var i = 0; i < delta.ops.length; i++) {
 			if (delta.ops[i].insert === undefined) {
 				continue;
 			}
-			delta.ops[i].insert = escapeHtmlSpecialEntities(delta.ops[i].insert);
+			delta.ops[i].insert = encodeHtmlSpecialEntities(delta.ops[i].insert);
+		}
+	}
+	return delta;
+}
+
+function decodeHtmlEntitiesInDeltaInserts(delta) {
+	if (delta && delta.ops !== undefined) {
+		// unescape html special entities only if they were just escaped
+		for (var i = 0; i < delta.ops.length; i++) {
+			if (delta.ops[i].insert === undefined) {
+				continue;
+			}
+			if (delta.ops[i].attributes !== undefined &&
+				delta.ops[i].attributes.code !== undefined) {
+				// insert has code attribute so don't decode
+				continue;
+			}
+			delta.ops[i].insert = decodeHtmlSpecialEntities(delta.ops[i].insert);
 		}
 	}
 	return delta;

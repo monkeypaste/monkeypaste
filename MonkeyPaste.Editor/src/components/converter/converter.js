@@ -52,10 +52,10 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 	if (formatType == 'text') {
 		//dataStr = unescapeHtml(dataStr);
 		//insertHtml(0, dataStr, 'api');
-		//setRootHtml(escapeHtmlSpecialEntities(dataStr));
+		//setRootHtml(encodeHtmlSpecialEntities(dataStr));
 		//insertText(0, dataStr);
-		insertText(0, escapeHtmlSpecialEntities(dataStr), 'silent');
-		//setRootText(escapeHtmlSpecialEntities(dataStr));
+		insertText(0, encodeHtmlSpecialEntities(dataStr), 'silent');
+		//setRootText(encodeHtmlSpecialEntities(dataStr));
 	} else if (formatType == 'html') {
 		//if (dataStr.toLowerCase().indexOf('<p>') < 0) {
 		//	dataStr = '<p>' + dataStr + '</p>';
@@ -78,7 +78,7 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 	//qhtml = fixHtmlBug1(qhtml);
 	//qhtml = removeUnicode(qhtml);
 	//qhtml = fixUnicode(qhtml);
-	//qhtml = forceBgOpacity(qhtml, bgOpacity);
+	qhtml = forceBgOpacity(qhtml, bgOpacity);
 
 	setRootHtml(qhtml);
 
@@ -87,6 +87,7 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 	log(qhtml);
 	return qhtml;
 }
+
 function forceBgOpacity(htmlStr, opacity) {
 	let html_doc = DomParser.parseFromString(htmlStr, 'text/html');
 	let elms = html_doc.querySelectorAll(InlineTags.join(", ") + ',' + BlockTags.join(','));

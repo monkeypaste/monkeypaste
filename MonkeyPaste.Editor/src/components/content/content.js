@@ -14,7 +14,8 @@ const AllDocumentTags = [...InlineTags, ...BlockTags];
 // #region Life Cycle
 
 function loadContent(contentHandle, contentType, contentData, isPasteRequest, searchStateObj) {
-	if (contentHandle != ContentHandle) {
+	let is_reload = contentHandle == ContentHandle;
+	if (!is_reload) {
 		// when actually a new item and not reload
 		quill.history.clear();
 	}
@@ -23,8 +24,11 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 	ContentHandle = contentHandle;
 	ContentItemType = contentType;
 
-	if (IsLoaded) {
-		// initial load shouldn't need state changes
+	let sel_to_restore = null;
+	if (is_reload) {
+		// when content is reloaded, any selection will be lost so save to restore
+		sel_to_restore = getDocSelection();
+	} else {
 		disableAppendMode();
 		resetSelection();
 		resetColorPaletteState();
@@ -36,7 +40,6 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 	IsLoaded = false;
 
 	//let contentBg_rgba = getContentBg(contentData);
-
 
 	if (ContentItemType == 'Image') {
 		loadImageContent(contentData);
@@ -71,6 +74,11 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 
 	IsReadyToPaste = !hasAnyInputRequredTemplate();
 	IsLoaded = true;
+
+	if (sel_to_restore != null) {
+		sel_to_restore = cleanDocRange(sel_to_restore);
+		setDocSelection(sel_to_restore)
+	}
 	updateAllElements();
 	quill.update();
 	onContentLoaded_ntf(getContentAsMessage());

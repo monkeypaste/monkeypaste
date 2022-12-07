@@ -55,6 +55,8 @@ namespace MonkeyPaste.Avalonia {
             App.Desktop.MainWindow.Show();
             IsPlatformLoaded = true;
             MpConsole.WriteLine("Platform Load complete");
+
+            MpAvSystemTray.Init();
         }
         protected override void CreateLoaderItems() {
             base.CreateLoaderItems();
@@ -86,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
                     new MpBootstrappedItemViewModel(this,typeof(MpAvPlainHtmlConverter)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvExternalDropWindow)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvAppendNotificationWindow)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvSystemTray)),
+                    //new MpBootstrappedItemViewModel(this,typeof(MpAvSystemTray)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindow)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindowViewModel))
                 });

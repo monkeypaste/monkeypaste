@@ -25,4 +25,6 @@
     <local:MpAvCollectionIsNotEmptyToBoolConverter x:Key="CollectionIsNotEmptyToBoolConverter" />
     <local:MpAvCollectionCountToStringConverter x:Key="CollectionCountToStringConverter" />
     <local:MpAvDoubleArrayToAvListConverter x:Key="DoubleArrayToAvListConverter" />
+    <local:MpAvBoolToGridLengthConverter x:Key="BoolToGridLengthConverter" />
+
 </ResourceDictionary>

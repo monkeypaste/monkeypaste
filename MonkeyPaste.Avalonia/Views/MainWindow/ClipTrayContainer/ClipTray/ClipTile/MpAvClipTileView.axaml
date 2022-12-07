@@ -39,6 +39,7 @@
                           Classes.IsAnyBusy="{Binding IsAnyBusy}"
                           VerticalAlignment="Stretch"
                           local:MpAvMenuExtension.IsEnabled="True"
+                          local:MpAvMenuExtension.CanShowMenu="{Binding CanShowContextMenu, Mode=OneWay}"
                           local:MpAvMenuExtension.SuppressDefaultRightClick="True"
                           local:MpAvMenuExtension.IsOpen="{Binding IsContextMenuOpened, Mode=TwoWay}"
                           local:MpAvPointerPressCommandExtension.IsEnabled="True"
@@ -51,10 +52,10 @@
         <Grid HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.25*"
+                <RowDefinition Height="{Binding IsTitleVisible, Converter={StaticResource BoolToGridLengthConverter}, ConverterParameter=0.25*|0, FallbackValue=0, TargetNullValue=0}"
                                MaxHeight="40" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="20" />
+                <RowDefinition Height="{Binding IsDetailVisible, Converter={StaticResource BoolToGridLengthConverter}, ConverterParameter=20|0, FallbackValue=0, TargetNullValue=0}" />
             </Grid.RowDefinitions>
             <!--  Title  -->
             <local:MpAvClipTileTitleView x:Name="TileTitleView"
@@ -90,15 +91,18 @@
             <!--  Detail  -->
             <Grid Grid.Row="2"
                   HorizontalAlignment="Stretch"
-                  VerticalAlignment="Bottom"
-                  IsVisible="{Binding IsHovering}">
+                  VerticalAlignment="Bottom">
+                <Grid.IsVisible>
+                    <MultiBinding Converter="{StaticResource MultiBoolConverter}"
+                                  ConverterParameter="OR">
+                        <Binding Path="IsHovering" />
+                        <Binding Path="!IsContentReadOnly" />
+                    </MultiBinding>
+                </Grid.IsVisible>
                 <local:MpAvClipTileDetailView DataContext="{Binding DetailCollectionViewModel}"
                                               VerticalAlignment="Stretch"
                                               HorizontalAlignment="Stretch" />
             </Grid>
-
-
-
 
             <!--  Corner Button Overlay  -->
             <local:MpAvClipTileCornerButtonsView Grid.Row="0"

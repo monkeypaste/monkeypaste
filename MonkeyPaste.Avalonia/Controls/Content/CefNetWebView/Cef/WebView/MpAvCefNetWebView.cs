@@ -79,6 +79,8 @@ namespace MonkeyPaste.Avalonia {
         private string _pastableContent_ntf { get; set; }
         private string _contentScreenShotBase64_ntf { get; set; }
 
+        private string _lastLoadedContentHandle = null;
+
         #endregion
 
         #region Constants
@@ -349,7 +351,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             if(!BindingContext.IsContentReadOnly) {
-                MpAvMainWindowViewModel.Instance.IsAnyTextBoxFocused = true;
+                MpAvMainWindowViewModel.Instance.IsAnyMainWindowTextBoxFocused = true;
             }
         }
 
@@ -359,7 +361,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             if (!BindingContext.IsContentReadOnly) {
-                MpAvMainWindowViewModel.Instance.IsAnyTextBoxFocused = false;
+                MpAvMainWindowViewModel.Instance.IsAnyMainWindowTextBoxFocused = false;
             }
         }
 
@@ -697,7 +699,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.notifyInternalContextMenuIsVisibleChanged:
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillInternalContextIsVisibleChangedNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillInternalContextIsVisibleChangedNotification ctxMenuChangedMsg) {
-                        
+                        ctvm.CanShowContextMenu = !ctxMenuChangedMsg.isInternalContextMenuVisible;
                     }
                     break;
 
@@ -886,7 +888,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion 
 
         private void OnContentDataChanged() {
-            if(BindingContext == null) {
+            if(BindingContext == null ||
+                !BindingContext.IsContentReadOnly ) {
                 return;
             }
 
@@ -949,7 +952,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ProcessContentChangedMessage(MpQuillEditorContentChangedMessage contentChanged_ntf) {
-            if(!IsContentLoaded) {
+            bool is_reload = BindingContext.PublicHandle == _lastLoadedContentHandle;
+            _lastLoadedContentHandle = BindingContext.PublicHandle;
+
+            if (!IsContentLoaded) {
                 //Debugger.Break();
             }
 
@@ -973,7 +979,12 @@ namespace MonkeyPaste.Avalonia {
             }
             BindingContext.HasTemplates = contentChanged_ntf.hasTemplates;
 
-            BindingContext.DetailCollectionViewModel.InitializeAsync().FireAndForgetSafeAsync(BindingContext);
+            if(is_reload) {
+                BindingContext.DetailCollectionViewModel.RefreshAsync().FireAndForgetSafeAsync(BindingContext);
+            } else {
+                BindingContext.DetailCollectionViewModel.InitializeAsync().FireAndForgetSafeAsync(BindingContext);
+            }
+            
 
             IsContentLoaded = true;
 

@@ -164,6 +164,7 @@
     <None Remove="Assets\Cursors\hand_open.png" />
     <None Remove="Assets\Icons\cog.ico" />
     <None Remove="Assets\Icons\monkey.ico" />
+    <None Remove="Assets\Icons\test_icon.ico" />
     <None Remove="Assets\Images\monkey.png" />
     <None Remove="Assets\Images\scissors.png" />
     <None Remove="Assets\svg\close-svgrepo-com.svg" />
@@ -408,6 +409,7 @@
     <AvaloniaResource Include="Assets\Icons\monkey.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Icons\test_icon.ico" />
     <AvaloniaResource Include="Assets\Images\Add.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>

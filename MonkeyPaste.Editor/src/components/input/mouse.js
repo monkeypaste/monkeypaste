@@ -3,6 +3,8 @@
 var WindowMouseDownLoc = null;
 var WindowMouseLoc = null;
 
+var WasSupressRightMouseDownSentToHost = false;
+
 // #endregion Globals
 
 // #region Life Cycle
@@ -101,15 +103,28 @@ function onWindowContextMenu(e) {
 		e.preventDefault();
 		e.stopPropagation();
 		return false;
-	}
+	} 
 }
 
 function onWindowMouseDown(e) {
+	if (WasSupressRightMouseDownSentToHost) {
+		// sanity check to cleanup any uncaptured mouse ups during a down supress
+		// (like if right click down on cell then up outside of editor window)
+		WasSupressRightMouseDownSentToHost = false;
+		onInternalContextMenuIsVisibleChanged_ntf(false);
+	}
+
 	if (rejectTableMouseEvent(e)) {
 		e.preventDefault();
 		e.stopPropagation();
 		return false;
-	} 
+	}
+	if (isContextMenuEventGoingToShowTableMenu(e)) {
+		// notify host to not show 
+		onInternalContextMenuIsVisibleChanged_ntf(true);
+		WasSupressRightMouseDownSentToHost = true;
+	}
+
 	WindowMouseDownLoc = { x: e.clientX, y: e.clientY };
 	SelectionOnMouseDown = getDocSelection();
 }
@@ -119,9 +134,17 @@ function onWindowMouseMove(e) {
 }
 
 function onWindowMouseUp(e) {
+	if (WasSupressRightMouseDownSentToHost) {
+		delay(300)
+			.then(() => {
+				onInternalContextMenuIsVisibleChanged_ntf(false);
+			});		
+	}
 	if (rejectTableMouseEvent(e)) {
+		e.preventDefault();
+		e.stopPropagation();
 		return false;
-	} 
+	}
 	WindowMouseDownLoc = null;
 	SelectionOnMouseDown = null;
 }

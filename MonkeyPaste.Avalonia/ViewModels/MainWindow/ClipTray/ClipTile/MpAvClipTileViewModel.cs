@@ -604,7 +604,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        public bool IsContextMenuEnabled { get; set; } = true;
+        public bool CanShowContextMenu { get; set; } = true;
 
         public bool IsHoveringOverSourceIcon { get; set; } = false;
         public bool HasTemplates { get; set; } = false;
@@ -862,6 +862,43 @@ namespace MonkeyPaste.Avalonia {
                 if(IsTitleVisible != value) {
                     _isTitleVisible = value;
                     OnPropertyChanged(nameof(IsTitleVisible));
+                }
+            }
+        }
+
+        private bool _isDetailVisible = true;
+        public bool IsDetailVisible {
+            get {
+                if (IsAppendNotifier) {
+                    return false;
+                }
+                return _isDetailVisible;
+            }
+            set {
+                if (IsDetailVisible != value) {
+                    _isDetailVisible = value;
+                    OnPropertyChanged(nameof(IsDetailVisible));
+                }
+            }
+        }
+
+        private bool _isHeaderAndFooterVisible = true;
+        public bool IsHeaderAndFooterVisible {
+            get {
+                if (IsAppendNotifier) {
+                    return false;
+                }
+                return _isHeaderAndFooterVisible;
+            }
+            set {
+                if(IsAppendNotifier) {
+                    return;
+                }
+                if (IsHeaderAndFooterVisible != value) {
+                    _isHeaderAndFooterVisible = value;
+                    IsDetailVisible = value;
+                    IsTitleVisible = value;
+                    OnPropertyChanged(nameof(IsHeaderAndFooterVisible));
                 }
             }
         }
@@ -1664,7 +1701,7 @@ namespace MonkeyPaste.Avalonia {
                     if (IsDropOverTile) {
                         Parent.NotifyDragOverTrays(true);
                     }
-
+                    
                     break;
                 case nameof(HasModelChanged):
                     if (HasModelChanged) {

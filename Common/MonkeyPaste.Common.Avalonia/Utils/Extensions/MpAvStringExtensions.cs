@@ -55,6 +55,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 // TODO create quill tables here
 
             }
+
             // TODO add image and file stuff here
             return str;
         }

@@ -367,7 +367,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool CanResize { get; set; } = false;
 
-        public bool IsAnyTextBoxFocused { get; set; }
+        public bool IsAnyMainWindowTextBoxFocused { get; set; }
         public bool IsAnyNotificationActivating { get; set; }
 
         public bool IsAnyDropDownOpen { get; set; }
@@ -429,7 +429,8 @@ namespace MonkeyPaste.Avalonia {
         //public event EventHandler? OnMainWindowClosed;
         #endregion
 
-        public MpAvMainWindowViewModel() : base() {
+        #region Constructors
+        private MpAvMainWindowViewModel() : base() {
             //_animationCts = new CancellationTokenSource();
             MainWindowOrientationType = (MpMainWindowOrientationType)Enum.Parse(typeof(MpMainWindowOrientationType), MpPrefViewModel.Instance.MainWindowOrientation, false);
             MainWindowShowBehaviorType = (MpMainWindowShowBehaviorType)Enum.Parse(typeof(MpMainWindowShowBehaviorType), MpPrefViewModel.Instance.MainWindowShowBehaviorType, false);
@@ -441,95 +442,17 @@ namespace MonkeyPaste.Avalonia {
             //InitWindowTimers();
         }
 
-        private void Instance_OnGlobalMouseWheelScroll(object sender, MpPoint delta) {
-            if (!MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
-                return;
-            }
-            if (!IsMainWindowOpening && MpBootstrapperViewModelBase.IsCoreLoaded) {
-                if (MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation != null &&
-                         MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
-                    // show mw on top edge scroll flick
-                    ShowWindowCommand.Execute(null);
-                }
-            }
-        }
-
-        private void Instance_OnGlobalMouseClicked(object sender, bool isLeftButton) {
-            if(MpAvMainWindow.Instance.IsActive || 
-                !isLeftButton ||
-                !IsMainWindowOpen ||
-                IsMainWindowClosing) {
-                return;
-            }
-            var gmavp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.ToAvPoint();
-            if (!MpAvMainWindow.Instance.Bounds.Contains(gmavp)) {
-                // attempt to hide mw
-                HideWindowCommand.Execute(null);
-            }
-        }
-
-        private void Instance_OnGlobalMouseReleased(object sender, bool isLeftButton) {
-            if(MpAvMainWindow.Instance == null) {
-                return;
-            }
-            if (!IsMainWindowOpen) {
-                if (MpAvClipTrayViewModel.Instance.IsAutoCopyMode) {
-                    if (isLeftButton && !MpAvMainWindow.Instance.IsActive) {
-                        //SimulateKeyStrokeSequence("control+c");
-                        MpConsole.WriteLine("Auto copy is ON");
-                    }
-                }
-                if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
-                    if (!isLeftButton && !MpAvMainWindow.Instance.IsActive) {
-                        // TODO this is hacky because mouse gestures are not formally handled
-                        // also app collection should be queried for custom paste cmd instead of this
-                        MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeSequenceAsync("control+v").FireAndForgetSafeAsync();
-                    }
-                }
-            } else if (!IsMainWindowClosing &&
-                      !IsMainWindowLocked &&
-                      //!MpExternalDropBehavior.Instance.IsPreExternalTemplateDrop &&
-                      MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation != null &&
-                      MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.Y < MainWindowTop) {
-                HideWindowCommand.Execute(null);
-            }
-        }
-        private void Instance_OnGlobalMouseMove(object sender, MpPoint gmp) {
-            if (IsMainWindowOpen) {
-                return;
-            }
-            bool isShowingMainWindow = false;
-            if (MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdge &&
-                !MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
-                if (gmp.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
-                    // show mw when mouse is within hit zone regardless of buttons or scroll delta (probably a weird pref context) 
-                    ShowWindowCommand.Execute(null);
-                    isShowingMainWindow = true;
-                }
-            }
-
-            if (!isShowingMainWindow &&
-                MpPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop) {
-                if (MpAvShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonDownLocation != null &&
-                    gmp.Distance(MpAvShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonDownLocation) >= MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST &&
-                    gmp.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
-                    // show mw during dnd and user drags to top of screen (when pref set)
-                    ShowWindowCommand.Execute(null);
-                }
-            }
-        }
-
+        #endregion
 
 
         #region Public Methods
 
         public async Task InitializeAsync() {
-            MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowSizeChanged);
+            MpMessenger.SendGlobal(MpMessageType.MainWindowSizeChanged);
 
             IsMainWindowLoading = false;
 
             MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
-
 
             MainWindowScreenRect = MainWindowClosedScreenRect;
 
@@ -665,13 +588,7 @@ namespace MonkeyPaste.Avalonia {
                     MpMessenger.SendGlobal(IsMainWindowLocked ? MpMessageType.MainWindowLocked : MpMessageType.MainWindowUnlocked);
                     break;
                 case nameof(IsMainWindowActive):
-                    if(IsMainWindowActive) {
-                        MpMessenger.SendGlobal(MpMessageType.MainWindowActivated);
-                    } else {
-                        MpMessenger.SendGlobal(MpMessageType.MainWindowDeactivated);
-
-                        HideWindowCommand.Execute(null);
-                    }
+                    MpMessenger.SendGlobal(IsMainWindowActive ? MpMessageType.MainWindowActivated : MpMessageType.MainWindowDeactivated);
                     break;
                 case nameof(IsMainWindowOpening):
                     MpMessenger.SendGlobal(MpMessageType.MainWindowOpening);
@@ -687,6 +604,17 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
+
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch(msg) {
+                case MpMessageType.MainWindowDeactivated:
+                    IsAnyMainWindowTextBoxFocused = false;
+                    HideWindowCommand.Execute(null);
+                    break;
+            }
+        }
+
+        #region Window Animation Helpers
 
         private void FinishMainWindowShow() {            
             if (_isAnimationCanceled) {
@@ -846,33 +774,90 @@ namespace MonkeyPaste.Avalonia {
             return _animationTimer.IsEnabled;
         }
 
+        #endregion
 
-        private void UpdateTopmost() {            
-            var mw = MpAvMainWindow.Instance;
-            bool initialTopmost = mw.Topmost;
-            bool hasNotification = MpAvNotificationWindowManager.Instance.HeadNotificationWindow != null;
-            if (IsMainWindowOpening && AnimateShowWindow) {
-                mw.Topmost = false;
-            } else if (IsMainWindowClosing && AnimateHideWindow) {
-                mw.Topmost = false;
-            } else if (IsMainWindowOpen) {
-                mw.Topmost = true;
-                if (hasNotification) {
-                    mw.Topmost = false;
-                    MpAvNotificationWindowManager.Instance.HeadNotificationWindow.Topmost = false;
-                    MpAvNotificationWindowManager.Instance.HeadNotificationWindow.Topmost = true;
-                } 
-            } else {
-                mw.Topmost = false;
+
+        #region Global Pointer Event Handlers
+        private void Instance_OnGlobalMouseWheelScroll(object sender, MpPoint delta) {
+            if (!MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
+                return;
             }
-            if(mw.Topmost != initialTopmost) {
-                MpConsole.WriteLine($"Main Window Top Most Changed. Topmost: {mw.Topmost}", true);
-                MpConsole.WriteLine($"IsMainWindowOpening: {IsMainWindowOpening}");
-                MpConsole.WriteLine($"IsMainWindowClosing: {IsMainWindowClosing}");
-                MpConsole.WriteLine($"IsMainWindowOpen: {IsMainWindowOpen}");
-                MpConsole.WriteLine($"hasNotification: {hasNotification}",false,true);
+            if (!IsMainWindowOpening && MpBootstrapperViewModelBase.IsCoreLoaded) {
+                if (MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation != null &&
+                         MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
+                    // show mw on top edge scroll flick
+                    ShowWindowCommand.Execute(null);
+                }
             }
         }
+
+        private void Instance_OnGlobalMouseClicked(object sender, bool isLeftButton) {
+            if (MpAvMainWindow.Instance.IsActive ||
+                !isLeftButton ||
+                !IsMainWindowOpen ||
+                IsMainWindowClosing) {
+                return;
+            }
+            var gmavp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.ToAvPoint();
+            if (!MpAvMainWindow.Instance.Bounds.Contains(gmavp)) {
+                // attempt to hide mw
+                HideWindowCommand.Execute(null);
+            }
+        }
+
+        private void Instance_OnGlobalMouseReleased(object sender, bool isLeftButton) {
+            if (MpAvMainWindow.Instance == null) {
+                return;
+            }
+            if (!IsMainWindowOpen) {
+                if (MpAvClipTrayViewModel.Instance.IsAutoCopyMode) {
+                    if (isLeftButton && !MpAvMainWindow.Instance.IsActive) {
+                        //SimulateKeyStrokeSequence("control+c");
+                        MpConsole.WriteLine("Auto copy is ON");
+                    }
+                }
+                if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
+                    if (!isLeftButton && !MpAvMainWindow.Instance.IsActive) {
+                        // TODO this is hacky because mouse gestures are not formally handled
+                        // also app collection should be queried for custom paste cmd instead of this
+                        MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeSequenceAsync("control+v").FireAndForgetSafeAsync();
+                    }
+                }
+            } else if (!IsMainWindowClosing &&
+                      !IsMainWindowLocked &&
+                      //!MpExternalDropBehavior.Instance.IsPreExternalTemplateDrop &&
+                      MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation != null &&
+                      MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.Y < MainWindowTop) {
+                HideWindowCommand.Execute(null);
+            }
+        }
+        private void Instance_OnGlobalMouseMove(object sender, MpPoint gmp) {
+            if (IsMainWindowOpen) {
+                return;
+            }
+            bool isShowingMainWindow = false;
+            if (MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdge &&
+                !MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
+                if (gmp.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
+                    // show mw when mouse is within hit zone regardless of buttons or scroll delta (probably a weird pref context) 
+                    ShowWindowCommand.Execute(null);
+                    isShowingMainWindow = true;
+                }
+            }
+
+            if (!isShowingMainWindow &&
+                MpPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop) {
+                if (MpAvShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonDownLocation != null &&
+                    gmp.Distance(MpAvShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonDownLocation) >= MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST &&
+                    gmp.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
+                    // show mw during dnd and user drags to top of screen (when pref set)
+                    ShowWindowCommand.Execute(null);
+                }
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Commands        
@@ -977,7 +962,7 @@ namespace MonkeyPaste.Avalonia {
                 bool canHide =
                         !IsMainWindowLocked &&
                           !IsAnyDropDownOpen &&
-                          !IsAnyTextBoxFocused &&
+                          !IsAnyMainWindowTextBoxFocused &&
                           !IsMainWindowInitiallyOpening &&
                           !IsAnyDialogOpen &&
                           !IsAnyItemDragging &&
@@ -991,7 +976,7 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine($"IsMainWindowLocked: {(IsMainWindowLocked)}");
                     MpConsole.WriteLine($"IsAnyDropDownOpen: {(IsAnyDropDownOpen)}");
                     MpConsole.WriteLine($"IsAnyDialogOpen: {(IsAnyDialogOpen)}");
-                    MpConsole.WriteLine($"IsAnyTextBoxFocused: {(IsAnyTextBoxFocused)}");
+                    MpConsole.WriteLine($"IsAnyTextBoxFocused: {(IsAnyMainWindowTextBoxFocused)}");
                     MpConsole.WriteLine($"IsMainWindowInitiallyOpening: {(IsMainWindowInitiallyOpening)}");
                     MpConsole.WriteLine($"IsShowingDialog: {(IsAnyDialogOpen)}");
                     MpConsole.WriteLine($"IsAnyItemDragging: {(IsAnyItemDragging)}");

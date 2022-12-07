@@ -160,7 +160,7 @@ namespace MonkeyPaste.Avalonia {
             
             settings.LocalesDirPath = localDirPath;
             settings.ResourcesDirPath = resourceDirPath;
-            settings.LogSeverity = CefLogSeverity.Verbose;
+            settings.LogSeverity = CefLogSeverity.Warning;
         
             App.FrameworkShutdown += App_FrameworkShutdown;
             

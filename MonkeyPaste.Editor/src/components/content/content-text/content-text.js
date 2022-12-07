@@ -8,8 +8,11 @@ function loadTextContent(itemDataStr, isPasteRequest) {
 	quill.enable(true);
 	//setRootHtml(itemDataStr)
 	log('loading text content: ' + itemDataStr);
-	setRootHtml('');
-	insertHtml(0, itemDataStr, 'silent');
+	//setRootHtml('');
+	//insertHtml(0, itemDataStr, 'silent');
+	let delta = convertHtmlToDelta(itemDataStr);
+	delta = decodeHtmlEntitiesInDeltaInserts(delta);
+	setContents(delta);
 
 	loadTemplates(isPasteRequest);
 	loadLinkHandlers();
@@ -231,14 +234,17 @@ function getLineRect(lineIdx, snapToEditor = true) {
 
 function getRangeRects(range, isWindowOrigin = true, inflateToLineHeight = true) {
 	let range_rects = [];
-	if (!range || range.length == 0) {
+	if (!range) {
 		return range_rects;
 	}
+	if (range.length == 0) {
+		let caret_rect = getCharacterRect(range.index, isWindowOrigin, inflateToLineHeight);
+		range_rects.push(caret_rect);
+		return range_rects;
+	}
+
 	let cur_line_rect = null;
 	for (var i = range.index; i < range.index + range.length; i++) {
-		if (i == 95) {
-			//debugger;
-		}
 		let cur_idx_rect = getCharacterRect(i, isWindowOrigin, inflateToLineHeight);
 
 		let is_cur_idx_wrapped = false;

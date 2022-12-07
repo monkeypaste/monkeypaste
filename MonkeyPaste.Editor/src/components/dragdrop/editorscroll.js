@@ -118,9 +118,18 @@ function scrollDocRangeIntoView(docRange) {
         }
     }
     if (scroll_elm.nodeType === 3) {
-        scroll_elm = scroll_elm.parentNode;
+        let docRange_rects = getRangeRects(docRange);
+        if (!docRange_rects || docRange_rects.length == 0) {
+            scroll_elm = scroll_elm.parentNode;
+        } else {
+            // clear scroll elm to disable element scroll and scroll manually by rect
+            scroll_elm = null;
+            getEditorContainerElement().scrollTop = docRange_rects[0].top;
+        }
+    } 
+    if (scroll_elm) {
+        scroll_elm.scrollIntoView();
     }
-    scroll_elm.scrollIntoView();
 }
 
 

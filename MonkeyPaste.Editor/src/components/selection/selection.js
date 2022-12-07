@@ -305,19 +305,24 @@ function convertDomRangeToDocRange(dom_range) {
 }
 
 function convertDocRangeToDomRange(doc_range) {
-	doc_range = cleanDocRange(doc_range);
-
-	let start_elm = getElementAtDocIdx(doc_range.index);
-	let end_elm = getElementAtDocIdx(doc_range.index + doc_range.length);
-
-	let start_elm_doc_idx = getElementDocIdx(start_elm);
-	let end_elm_doc_idx = getElementDocIdx(end_elm);
-
-	let start_offset = doc_range.index - start_elm_doc_idx;
-	let end_offset = (doc_range.index + doc_range.length) - end_elm_doc_idx;
-
-	let clean_range = document.createRange();
+	let clean_range = null;
+	let start_elm = null;
+	let end_elm = null;
+	let start_offset = 0;
+	let end_offset = 0;
 	try {
+		doc_range = cleanDocRange(doc_range);
+
+		start_elm = getElementAtDocIdx(doc_range.index);
+		end_elm = getElementAtDocIdx(doc_range.index + doc_range.length);
+
+		start_elm_doc_idx = getElementDocIdx(start_elm);
+		end_elm_doc_idx = getElementDocIdx(end_elm);
+
+		start_offset = doc_range.index - start_elm_doc_idx;
+		end_offset = (doc_range.index + doc_range.length) - end_elm_doc_idx;
+
+		clean_range = document.createRange();
 		clean_range.setStart(start_elm, start_offset);
 	} catch (ex) {
 		log('exception converting doc2dom range. range: idx: ' + doc_range.index + ' len: ' + doc_range.length + ' exception: ');
@@ -333,7 +338,11 @@ function convertDocRangeToDomRange(doc_range) {
 			return convertDocRangeToDomRange(doc_range);
 		}
 	}
-	
+
+	if (!clean_range) {
+		log('dom range null error in doc2dom range. range: idx: ' + doc_range.index + ' len: ' + doc_range.length + ' exception: ');		
+		return null;
+	}
 
 	try {
 		clean_range.setEnd(end_elm, end_offset);
@@ -351,6 +360,7 @@ function convertDocRangeToDomRange(doc_range) {
 }
 
 function cleanDocRange(doc_range) {
+	// this ensures range is within content limits
 	if (!doc_range || doc_range.index === undefined) {
 		doc_range = { index: 0, length: 0 };
 	}

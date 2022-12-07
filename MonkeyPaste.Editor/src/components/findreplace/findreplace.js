@@ -291,13 +291,19 @@ function populateFindReplaceResults() {
 	let dirty_ranges = queryText(getText(), search_text, is_case_sensitive, is_whole_word, use_regex);
 	CurFindReplaceDocRanges = adjustQueryRangesForEmptyContent(dirty_ranges);
 
-
 	if (CurFindReplaceDocRanges.length == 0) {
 		resetFindReplaceResults();
 	} else {
 		CurFindReplaceDocRangeIdx = 0;
 	}
+
+	if (!Array.isArray(CurFindReplaceDocRanges)) {
+		// this seems to happen on a query search where content
+		// isn't what has the match
+		CurFindReplaceDocRanges = [];
+	}
 	updateFindReplaceRangeRects();
+	
 	navigateFindReplaceResults(0);
 }
 

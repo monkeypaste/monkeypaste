@@ -286,3 +286,7 @@ function onInternalContextMenuIsVisibleChanged_ntf(isVisible) {
 		notifyInternalContextMenuIsVisibleChanged(msgStr);
 	}
 }
+
+function isRunningOnHost() {
+	return typeof notifyInitComplete !== 'function';
+}
