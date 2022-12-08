@@ -27,7 +27,7 @@ function initEditor() {
 	initEditTemplateToolbar();
 	initPasteToolbar();
 
-	initEditorScroll();
+	initScroll();
 	initTemplates();
 	//initExtContentSourceBlot();
 
@@ -54,21 +54,24 @@ function getEditorElement() {
 	return document.getElementById("quill-editor");
 }
 
-function getEditorContainerRect() {
+function getEditorContainerRect(includeScrollBars = true) {
 	let editor_container_rect = getEditorContainerElement().getBoundingClientRect();
 	editor_container_rect = cleanRect(editor_container_rect);
+	if (!includeScrollBars) {
+		editor_container_rect.right -= getVerticalScrollBarWidth();
+		editor_container_rect.bottom -= getHorizontalScrollBarHeight();
+		editor_container_rect = cleanRect(editor_container_rect);
+	}
+	
 	return editor_container_rect;
 }
 
 function getEditorWidth() {
-	var editorRect = getEditorElement().getBoundingClientRect();
-	//var editorHeight = parseInt($('.ql-editor').wi());
-	return editorRect.width;
+	return getEditorContainerRect().width;
 }
 
 function getEditorHeight() {
-	var editorRect = getEditorElement().getBoundingClientRect();
-	return editorRect.height;
+	return getEditorContainerRect().height;
 }
 
 function getEditorVisibleHeight() {
@@ -138,14 +141,6 @@ function isSubSelectionEnabled() {
 
 // #region Actions
 
-function scrollToHome() {
-	getEditorContainerElement().scrollTop = 0;
-}
-
-function scrollToEnd() {
-	getEditorElement().scrollTop = getEditorContainerElement().getBoundingClientRect().bottom;
-}
-
 function hideAllToolbars() {
 	hideEditorToolbar();
 	hideEditTemplateToolbar();
@@ -203,15 +198,6 @@ function createLink() {
 }
 
 
-function hideScrollbars() {
-	getEditorContainerElement().classList.remove('show-scrollbars');
-	getEditorContainerElement().classList.add('hide-scrollbars');
-}
-
-function showScrollbars() {
-	getEditorContainerElement().classList.add('show-scrollbars');
-	getEditorContainerElement().classList.remove('hide-scrollbars');
-}
 function enableReadOnly(fromHost = false) {
 	if (isReadOnly()) {
 		log('enableReadOnly ignored, already read-only. fromHost: ' + fromHost);
@@ -299,7 +285,11 @@ function enableSubSelection(fromHost = false) {
 
 function disableSubSelection(fromHost = false) {
 	if (!canDisableSubSelection()) {
-		log('disableSubSelection ignored, this is appender. fromHost: ' + fromHost);
+		log('disableSubSelection ignored, this is appender or appendee. fromHost: ' + fromHost);
+		if (fromHost) {
+			// notify host sub-selection canceled
+			onSubSelectionEnabledChanged_ntf(isSubSelectionEnabled());
+		}
 		return;
 	}
 	if (!isSubSelectionEnabled()) {
@@ -343,17 +333,16 @@ function onEditorBlur(e) {
 	//if (isTemplateFocused()) {
 	//	return;
 	//}
-	BlurredSelectionRects = getRangeRects(getDocSelection());
+	//BlurredSelectionRects = getRangeRects(getDocSelection());
 	getEditorElement().classList.remove('focused');
 	drawOverlay();
 }
 
 
 function onEditorTextChanged(delta, oldDelta, source) {
-	log('quill event: text changed');
-
+	log('editor text changed');
+	
 	updateAllElements();
-	//WasTextChanged = true;
 
 	if (!IsLoaded) {
 		return;
@@ -363,13 +352,7 @@ function onEditorTextChanged(delta, oldDelta, source) {
 		updateTemplatesAfterTextChanged();
 	}
 
-	if (isShowingEditorToolbar()) {
-		// NOTE for performance only update db when tile goes back to readonly so..
-		// ignore notification
-	} else {
-		// an ole operation has occured
-		onContentChanged_ntf();
-	}
+	onContentChanged_ntf();
 	drawOverlay();
 }
 // #endregion Event Handlers

@@ -25,7 +25,6 @@ var SelTimerInterval = null;
 
 function initSelection() {
 	document.addEventListener('selectionchange', onDocumentSelectionChange, true);
-	//SelTimerInterval = setInterval(onSelectionCheckTick, 100);
 }
 
 // #endregion Life Cycle
@@ -280,7 +279,7 @@ function resetSelection() {
 	CurSelRange = null;
 	SelectionOnMouseDown = null;
 	BlurredSelectionRects = null;
-	DragSelectionRange = null;
+	//DragSelectionRange = null;
 	clearDomSelectionRanges();
 }
 
@@ -379,22 +378,22 @@ function cleanDocRange(doc_range) {
 	return doc_range;
 }
 
-function coerceCleanSelection(new_range,old_range) {
-	if (didSelectionChange(new_range, old_range)) {
-		//log('Sel Changed from Timer.');
-		if (IsDragging) {
-			if (DragSelectionRange) {
-				new_range = DragSelectionRange;
-			}
-			log('drag detected sel timer overriding selection. LastRange: ', old_range, ' DragRange: ', DragSelectionRange);
-			setDocSelection(old_range.index, old_range.length, 'silent');
+//function coerceCleanSelection(new_range,old_range) {
+//	if (didSelectionChange(new_range, old_range)) {
+//		//log('Sel Changed from Timer.');
+//		if (isDragging()) {
+//			if (DragSelectionRange) {
+//				new_range = DragSelectionRange;
+//			}
+//			log('drag detected sel timer overriding selection. LastRange: ', old_range, ' DragRange: ', DragSelectionRange);
+//			setDocSelection(old_range.index, old_range.length, 'silent');
 
-			//drawOverlay();
-			return new_range;
-		}
-	}
-	return new_range;
-}
+//			//drawOverlay();
+//			return new_range;
+//		}
+//	}
+//	return new_range;
+//}
 
 function calculateTotalOffset(node, offset) {
 	let total = offset
@@ -437,7 +436,7 @@ function onDocumentSelectionChange(e) {
 	// Selection Change issues:
 	// 1. 
 	let new_range = getDocSelection();
-	new_range = coerceCleanSelection(new_range, CurSelRange);
+	//new_range = coerceCleanSelection(new_range, CurSelRange);
 
 	if (didSelectionChange(new_range, CurSelRange)) {
 		LastSelRange = CurSelRange;
@@ -450,9 +449,5 @@ function onDocumentSelectionChange(e) {
 			onSelectionChanged_ntf(CurSelRange);
 		}
 	}
-}
-
-function onSelectionCheckTick(e) {
-	CurSelRange = coerceCleanSelection();
 }
 // #endregion Event Handlers

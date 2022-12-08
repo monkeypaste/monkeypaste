@@ -39,7 +39,7 @@
                    Grid.Row="0"
                    Grid.Column="0"
                    Width="{Binding Bounds.Height, ElementName=NotificationIconImage}"
-                   HorizontalAlignment="Left"
+                   HorizontalAlignment="Center"
                    VerticalAlignment="Stretch"
                    IsVisible="{Binding IconSourceStr, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
                    Source="{Binding IconSourceStr, Converter={StaticResource IconSourceObjToBitmapConverter}}"

@@ -30,5 +30,9 @@ namespace MonkeyPaste {
         void StartWatcher();
         void StopWatcher();
 
+
+        void AddOtherThisAppHandle(IntPtr handle);
+        void RemoveOtherThisAppHandle(IntPtr handle);
+
     }
 }

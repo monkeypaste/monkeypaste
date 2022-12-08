@@ -41,13 +41,7 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 
 	//let contentBg_rgba = getContentBg(contentData);
 
-	if (ContentItemType == 'Image') {
-		loadImageContent(contentData);
-	} else if (ContentItemType == 'FileList') {
-		loadFileListContent(contentData);
-	} else if (ContentItemType == 'Text') {
-		loadTextContent(contentData, isPasteRequest);
-	}
+	loadContentData(contentData);
 
 	//getEditorElement().style.backgroundColor = rgbaToCssColor(contentBg_rgba);
 	
@@ -234,9 +228,17 @@ function isContentEmpty() {
 function canEnableSubSelection() {
 	return ContentItemType != 'Image';
 }
+
 function canDisableSubSelection() {
-	return !isAppendNotifier();
+	if (isAppendNotifier()) {
+		return false;
+	}
+	if (isAnyAppendEnabled()) {
+		return false;
+	}
+	return true;
 }
+
 function canDisableReadOnly() {
 	return ContentItemType == 'Text' && !isAppendNotifier();
 }
@@ -267,6 +269,16 @@ function appendContentData(data) {
 		appendFileListContentData(data);
 	} else if (ContentItemType == 'Image') {
 		appendImageContentData(data);
+	}
+}
+
+function loadContentData(contentData) {
+	if (ContentItemType == 'Image') {
+		loadImageContent(contentData);
+	} else if (ContentItemType == 'FileList') {
+		loadFileListContent(contentData);
+	} else if (ContentItemType == 'Text') {
+		loadTextContent(contentData);
 	}
 }
 

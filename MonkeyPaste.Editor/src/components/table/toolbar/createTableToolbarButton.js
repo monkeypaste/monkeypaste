@@ -41,7 +41,7 @@ function showCreateTableContextMenu() {
         addClickOrKeyClickEventListener(opt_span, onCreateTableOptionClick);
     }
 
-    window.addEventListener('click', onWindowClickWithCreateTableOpen);
+    window.addEventListener('mousedown', onWindowClickWithCreateTableOpen, true);
     window.addEventListener('keydown', onWindowKeyDownWithCreateTableOpen, true);
 
     setCreateTableSelection(1, 1);
@@ -51,7 +51,7 @@ function hideCreateTableContextMenu() {
     getCreateTableToolbarButtonElement().classList.remove('ql-expanded');
     getCreateTableToolbarOptionsElement().classList.add('hidden');
 
-    window.removeEventListener('click', onWindowClickWithCreateTableOpen);
+    window.removeEventListener('click', onWindowClickWithCreateTableOpen, true);
     window.removeEventListener('keydown', onWindowKeyDownWithCreateTableOpen, true);
 }
 // #endregion Life Cycle
@@ -208,9 +208,9 @@ function onCreateTableToolbarButtonClick(e) {
 }
 
 function onWindowClickWithCreateTableOpen(e) {
-    if (isChildOfElement(e.target, getCreateTableToolbarOptionsElement())) {
+    //if (isChildOfElement(e.target, getCreateTableToolbarOptionsElement())) {
 
-    }
+    //}
     hideCreateTableContextMenu();
 }
 

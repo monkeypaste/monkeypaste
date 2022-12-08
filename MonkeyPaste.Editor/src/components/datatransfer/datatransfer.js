@@ -32,7 +32,7 @@ function isHtmlClipboardFragment(dataStr) {
 
 // #region Actions
 
-function performDataTransferOnContent(dt, dest_doc_range, source = 'api') {
+function performDataTransferOnContent(dt, dest_doc_range, source_doc_range, source = 'api') {
 	if (!dt || !dest_doc_range) {
         log('data transfer error  no data transfer or destination range');
         return;
@@ -53,6 +53,13 @@ function performDataTransferOnContent(dt, dest_doc_range, source = 'api') {
         dt_html_str = cb_frag.html;
         source_url = cb_frag.sourceUrl;
     }
+    // CHECK FOR INTERNAL URL SOURCE
+
+    if (!source_url && dt.types.includes(URL_DATA_FORMAT)) {
+        // TODO (on linux at least) check for moz uri here for source url
+        let url_base64 = dt.getData(URL_DATA_FORMAT);
+        source_url = b64_to_utf8(url_base64);
+    }
 
     // PERFORM TRANSFER
 
@@ -65,22 +72,28 @@ function performDataTransferOnContent(dt, dest_doc_range, source = 'api') {
         setTextInRange(dest_doc_range, dt_pt_str, source, true);
     }
 
-    // SELECT TRANSFER
-
     let dt_length_diff = getDocLength() - pre_doc_length;
 
-    let dt_range = dest_doc_range;
+
+    // REMOVE SOURCE
+    if (source_doc_range) {
+        if (dest_doc_range.index < source_doc_range.index) {
+            // when drop is before drag sel adjust drag range from added drop length
+            source_doc_range.index += dt_length_diff;
+        } else {
+            // adjust doc diff for removed source for removed drag length
+            dest_doc_range.index -= source_doc_range.length;
+        }
+        setTextInRange(source_doc_range, '', source);
+        
+    }
+
+    // SELECT TRANSFER
+
+    var dt_range = dest_doc_range;
     dt_range.length += dt_length_diff;
     setDocSelection(dt_range.index, dt_range.length);
-
-    scrollDocRangeIntoView(dt_range);
-    // CHECK FOR INTERNAL URL SOURCE
-
-    if (!source_url && dt.types.includes(URL_DATA_FORMAT)) {
-    // TODO (on linux at least) check for moz uri here for source url
-        let url_base64 = dt.getData(URL_DATA_FORMAT);
-        source_url = b64_to_utf8(url_base64);
-    }
+    scrollDocRangeIntoView(dt_range);    
 
     onDataTransferCompleted_ntf(source_url);
 }

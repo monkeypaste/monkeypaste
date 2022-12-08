@@ -91,20 +91,12 @@ namespace MonkeyPaste.Avalonia {
 
 
         public void HideNotification(MpNotificationViewModelBase nvmb) {
-            var wl = _windows.Where(x => x.DataContext == nvmb).ToList();
-            if (wl.Count != 1) {
-                // equality conflict?
-                Debugger.Break();
-
-            }
-            if (wl.Count > 0) {
-                if (nvmb is MpUserActionNotificationViewModel uanvm) {
-                    FinishClose(wl[0]);
-                    return;
-                }
-                // this triggers fade out which ends w/ IsVisible=false
-                nvmb.IsClosing = true;
-            }
+            //if (nvmb is MpUserActionNotificationViewModel uanvm) {
+            //    FinishClose(wl[0]);
+            //    return;
+            //}
+            // this triggers fade out which ends w/ IsVisible=false
+            nvmb.IsClosing = true;
         }
 
         #endregion
@@ -133,12 +125,16 @@ namespace MonkeyPaste.Avalonia {
         public void Init() {
             _positioner = new MpAvNotificationPositioner();
             _topmostSelector = new MpAvTopmostSelector();
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
         #endregion
 
         #region Private Methods
 
         private void BeginOpen(Window nw) {
+            var nvmb = nw.DataContext as MpNotificationViewModelBase;
+            nvmb.IsClosing = false;
+
             if (!_windows.Contains(nw)) {
                 _windows.Add(nw);
             }
@@ -148,7 +144,6 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             MpAvMainWindowViewModel.Instance.IsAnyNotificationActivating = true;
-            var nvmb = nw.DataContext as MpNotificationViewModelBase;
             if (nvmb.IsModal) {
                 bool wasLocked = MpAvMainWindowViewModel.Instance.IsMainWindowLocked;
                 if (!wasLocked) {
@@ -161,6 +156,9 @@ namespace MonkeyPaste.Avalonia {
                 }
             } else {
                 nw.Show();
+            }
+            if(!nw.IsVisible) {
+                Debugger.Break();
             }
         }
 

@@ -32,6 +32,8 @@ function initFontFamilySelector(active_ff_dv) {
         opt_elm.innerText = ff;
         fontSelector_elm.appendChild(opt_elm);        
     }
+
+    addClickOrKeyClickEventListener(document.getElementsByClassName('ql-font')[0], onFontFamilyToolbarButtonClick);
 }
 
 function initFontFamilyPicker() {
@@ -256,5 +258,15 @@ function onFontPickerItemClick(e) {
     }
     setDocRangeFontFamily(sel, ff_dv);
     updateFontFamilyPickerToSelection();
+}
+
+function onFontFamilyToolbarButtonClick(e) {
+    getFontFamilyToolbarPicker().classList.remove('hidden');
+    window.addEventListener('mousedown', onTempFontFamilyWindowClick, true);
+}
+
+function onTempFontFamilyWindowClick(e) {
+    getFontFamilyToolbarPicker().classList.add('hidden');
+    window.removeEventListener(onTempFontFamilyWindowClick);
 }
 // #endregion Event Handlers

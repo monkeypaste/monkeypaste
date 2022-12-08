@@ -14,6 +14,7 @@ using System.Diagnostics;
 using MonkeyPaste.Common.Avalonia;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia.Platform;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -45,6 +46,8 @@ namespace MonkeyPaste.Avalonia {
             if (Instance.Content is Control rootControl) {
                 rootControl.AttachedToVisualTree += (s, e) => {
                     Instance.Hide();
+
+                    MpPlatformWrapper.Services.ProcessWatcher.AddOtherThisAppHandle(Instance.PlatformImpl.Handle.Handle);
                 };
             }
             Instance.Show();
@@ -54,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAppendNotificationViewModel BindingContext => DataContext as MpAppendNotificationViewModel;
 
         #region Constructors
-        public MpAvAppendNotificationWindow() {
+        public MpAvAppendNotificationWindow() : base() {
             InitializeComponent();
 #if DEBUG
             this.AttachDevTools();

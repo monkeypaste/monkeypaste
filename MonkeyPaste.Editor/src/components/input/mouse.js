@@ -54,6 +54,28 @@ function getScreenMousePos(e) {
 
 // #region Actions
 
+function updateWindowMouseState(e) {
+	// NOTE this is called from both mouse and dnd events so state is 'always' accurate
+	if (!e || e.buttons === undefined) {
+		return;
+	}
+	WindowMouseLoc = getClientMousePos(e);
+	if (e.buttons === 1) {
+		if (WindowMouseDownLoc == null) {
+			WindowMouseDownLoc = WindowMouseLoc;
+			if (isDragging()) {
+				// drag end was not triggered, so reset here
+				// i think this only happen when resuming from breakpoint in dnd
+
+				log('lingering drag elm caught in mouse down, resetting...')
+				CurDragTargetElm = null;
+			}
+		}
+	} else {
+		WindowMouseDownLoc = null;
+	}
+}
+
 // #endregion Actions
 
 // #region Event Handlers
@@ -125,12 +147,14 @@ function onWindowMouseDown(e) {
 		WasSupressRightMouseDownSentToHost = true;
 	}
 
-	WindowMouseDownLoc = { x: e.clientX, y: e.clientY };
+	//WindowMouseDownLoc = { x: e.clientX, y: e.clientY };
+	updateWindowMouseState(e);
 	SelectionOnMouseDown = getDocSelection();
 }
 
 function onWindowMouseMove(e) {
-	WindowMouseLoc = { x: e.clientX, y: e.clientY };
+	//WindowMouseLoc = { x: e.clientX, y: e.clientY };
+	updateWindowMouseState(e);
 }
 
 function onWindowMouseUp(e) {
@@ -145,7 +169,8 @@ function onWindowMouseUp(e) {
 		e.stopPropagation();
 		return false;
 	}
-	WindowMouseDownLoc = null;
+	//WindowMouseDownLoc = null;
+	updateWindowMouseState(e);
 	SelectionOnMouseDown = null;
 }
 // #endregion Event Handlers

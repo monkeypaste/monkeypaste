@@ -18,6 +18,7 @@ namespace MonkeyPaste.Avalonia {
         //protected Tuple<string, string, IntPtr>? _lastProcessTuple = default;
         private DispatcherTimer _timer;
 
+        private List<IntPtr> _otherThisAppHandles = new List<IntPtr>();
         #endregion
 
         #region Properties
@@ -140,6 +141,16 @@ namespace MonkeyPaste.Avalonia {
            _timer?.Stop();
         }
 
+        public void AddOtherThisAppHandle(IntPtr handle) {
+            if(_otherThisAppHandles.Contains(handle)) {
+                return;
+            }
+            _otherThisAppHandles.Add(handle);
+        }
+        public void RemoveOtherThisAppHandle(IntPtr handle) {
+            _otherThisAppHandles.Remove(handle);
+        }
+
         public string ParseTitleForApplicationName(string windowTitle) {
             string mwt = windowTitle;
             if (string.IsNullOrEmpty(mwt)) {
@@ -218,7 +229,8 @@ namespace MonkeyPaste.Avalonia {
             if (activeProcessInfo == null) {
                 return;
             }
-            if(activeProcessInfo.Handle == ThisAppHandle) {
+            if(activeProcessInfo.Handle == ThisAppHandle ||
+                _otherThisAppHandles.Contains(activeProcessInfo.Handle)) {
                 IsThisAppActive = true;
                 return;
             }

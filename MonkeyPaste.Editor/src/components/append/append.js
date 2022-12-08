@@ -44,6 +44,10 @@ function isAppendNotifier() {
 	return window.location.search.toLowerCase().endsWith(APPEND_NOTIFIER_PARAMS.toLowerCase());
 }
 
+function isAppendee() {
+	return isAnyAppendEnabled() && !isAppendNotifier();
+}
+
 function isAnyAppendEnabled() {
 	return IsAppendMode || IsAppendLineMode;
 }
@@ -142,7 +146,11 @@ function disableAppendManualMode(fromHost = false) {
 // #region Actions
 
 function scrollToAppendIdx() {
-	scrollDocRangeIntoView({ index: getAppendIdx(), length: 0 });
+	//scrollDocRangeIntoView({ index: getAppendIdx(), length: 0 }, 0 , 15);
+	if (IsAppendManualMode) {
+		return;
+	}
+	scrollToEnd();
 }
 
 // #endregion Actions

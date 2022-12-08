@@ -1,7 +1,11 @@
 function drawLine(ctx, line, stroke = 'black', width = 1, dash = [1, 0]) {
     if (!line) {
         return;
-	}
+    }
+    if (line.ignoreLineStyle !== undefined) {
+        // NOTE this is used so caret preview isn't dashed
+        dash = [1, 0];
+    }
     ctx.setLineDash(dash);
 
     ctx.beginPath();

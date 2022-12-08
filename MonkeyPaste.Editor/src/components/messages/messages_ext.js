@@ -29,7 +29,29 @@ function loadContent_ext(loadContentMsgStr_base64) {
 		};
 	}
 	loadContent(req.contentHandle, req.contentType, req.itemData, req.isPasteRequest, searchStateObj, req.isAppendLineMode, req.isAppendMode);
+}
 
+function contentChanged_ext(contentChangedMsgStr_base64) {
+	// input 'MpQuillIsHostFocusedChangedMessage'
+	log('content changed from host: ' + contentChangedMsgStr_base64);
+	let msg = toJsonObjFromBase64Str(contentChangedMsgStr_base64);
+
+	// only update if changed
+	let cur_data = getContentAsMessage().itemData;
+	if (cur_data == msg.itemData) {
+		// no change so avoid infinite loop in append sync
+		log('rejecting content changed, no change for me. appender: ' + isAppendNotifier() + ' appendee: ' + isAnyAppendEnabled());
+		return;
+	}
+	log('');
+	log('content change accepted. appender: ' + isAppendNotifier() + ' appendee: ' + isAnyAppendEnabled());
+	log('mine:')
+	log(cur_data);
+	log('');
+	log('incoming: ');
+	log(msg.itemData);
+	log('');
+	loadContentData(msg.itemData);
 }
 
 function hostIsFocusedChanged_ext(hostIsFocusedMsgStr_base64) {

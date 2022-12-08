@@ -88,7 +88,7 @@ function handleWindowKeyUp(e) {
 	updateModKeys(e);
 
 	if (e.code == DecreaseFocusLevelKey) {
-		if (IsDragging || IsDropping || WasDragCanceled) {
+		if (isDragging() || isDropping()) {// || WasDragCanceled) {
 			return;
 		}
 		if (isTemplateFocused()) {

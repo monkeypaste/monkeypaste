@@ -584,7 +584,7 @@ function isDocIdxAtTemplateInsert(doc_idx, telm) {
 
 // #region Actions
 
-function loadTemplates(isPasteRequest) {
+function loadTemplates() {
     resetEditTemplateToolbar();
     let telml = getTemplateElements();
     for (var i = 0; i < telml.length; i++) {

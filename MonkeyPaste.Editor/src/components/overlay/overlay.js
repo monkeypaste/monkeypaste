@@ -7,9 +7,6 @@ var IsCaretBlinkOn = false;
 var CaretBlinkOffColor = null;
 
 function updateOverlayBounds(overlayCanvas) {
- //   if (IsDropping) {
- //       debugger;
-	//}
     let editorRect = getEditorContainerRect();
     let window_rect = getWindowRect();
 
@@ -28,18 +25,15 @@ function drawHighlighting(ctx, forceColor) {
 	}
 }
 
-function drawDropPreview(ctx, color = 'red', thickness = 1.0, line_style = [5,5]) {
-    let drop_idx = DropIdx;
-    if (isDragCopy()) {
-        color = 'lime';
-	}
-    //log('dropIdx: ' + drop_idx);
+// #region Ole Previews
+
+function getPreviewLines(drop_idx, block_state) {
     if (drop_idx < 0) {
-        return;
+        return [];
     }
 
     let block_line_offset = 3.0;
-    let editor_rect = getEditorContainerRect();
+    let editor_rect = getEditorContainerRect(false);
     //let editor_rect = getWindowRect();
 
     let line_start_idx = getLineStartDocIdx(drop_idx);
@@ -54,98 +48,64 @@ function drawDropPreview(ctx, color = 'red', thickness = 1.0, line_style = [5,5]
 
     let caret_rect = getCharacterRect(drop_idx);
     let caret_line = getCaretLine(drop_idx);
-
-    IsSplitDrop = IsShiftDown; //IsCtrlDown || IsAltDown;
-
-    let block_threshold = Math.max(2, caret_line.height / 4);
-    let doc_start_rect = getCharacterRect(0);
-
-    // NOTE to avoid conflicts between each line as pre/post drop only use pre for first
-    // line of content then only check post for others
-    if (!WindowMouseLoc || WindowMouseLoc.y === undefined) {
-        debugger;
-	}
-    IsPreBlockDrop = Math.abs(WindowMouseLoc.y - doc_start_rect.top) < block_threshold || WindowMouseLoc.y < doc_start_rect.top;
-    IsPostBlockDrop = Math.abs(WindowMouseLoc.y - caret_line.y2) < block_threshold || WindowMouseLoc.y > caret_line.y2;
-  
-    if (IsSplitDrop && ContentItemType != 'FileList') {
-        IsPreBlockDrop = false;
-        IsPostBlockDrop = false;
-    }
+    caret_line.ignoreLineStyle = true;
 
     let render_lines = [];
-    let render_caret_line = null;
+    switch (block_state) {
+        case 'split':
+            let pre_split_line = pre_line;
+            pre_split_line.x1 = caret_line.x1;
 
-    if (IsSplitDrop) {
-        let pre_split_line = pre_line;
-        pre_split_line.x1 = caret_line.x1;
+            let post_split_line = post_line;
+            post_split_line.x2 = caret_line.x1;
 
-        let post_split_line = post_line;
-        post_split_line.x2 = caret_line.x1;
+            render_lines.push(pre_split_line);
+            render_lines.push(post_split_line);
 
-        render_lines.push(pre_split_line);
-        render_lines.push(post_split_line);
+            render_lines.push(caret_line);
+            break;
+        case 'pre':
+            render_lines.push(pre_line);
+            break;
+        case 'post':
 
-        render_caret_line = caret_line;
-    } else if (IsPreBlockDrop) {
-        render_lines.push(pre_line);
-    } else if (IsPostBlockDrop) {
-        render_lines.push(post_line);
-    } else {
-        render_caret_line = caret_line;
+            render_lines.push(post_line);
+            break;
+        case 'inline':
+        default:
+            //render_caret_line = caret_line;
+            render_lines.push(caret_line);
+            break;
     }
-
-    for (var i = 0; i < render_lines.length; i++) {
-        let line = render_lines[i];
-        drawLine(ctx, line, color, thickness, line_style)
-    }
-    if (render_caret_line) {        
-        drawLine(ctx, render_caret_line, color, thickness);
-	}
+    return render_lines;
 }
 
-function drawAppendNotifierPreview(ctx, color = 'red', thickness = 1.0, line_style = [5, 5]) {
-    let append_idx = getAppendIdx();
+function drawDropPreview(ctx, color = 'red', thickness = 1.0, line_style = [5, 5]) {
     if (isDragCopy()) {
         color = 'lime';
     }
-    if (append_idx < 0) {
-        return;
-    }
-
-    let block_line_offset = 3.0;
-    let editor_rect = getEditorContainerRect();
-
-    let line_start_idx = getLineStartDocIdx(append_idx);
-    let line_start_rect = getCharacterRect(line_start_idx);
-    let pre_y = line_start_rect.top - block_line_offset;
-    let pre_line = { x1: 0, y1: pre_y, x2: editor_rect.width, y2: pre_y };
-
-    let line_end_idx = getLineEndDocIdx(append_idx);
-    let line_end_rect = getCharacterRect(line_end_idx);
-    let post_y = line_end_rect.bottom + block_line_offset;
-    let post_line = { x1: 0, y1: post_y, x2: editor_rect.width, y2: post_y };
-
-    let caret_rect = getCharacterRect(append_idx);
-    let caret_line = getCaretLine(append_idx);
-
-    let render_lines = [];
-    let render_caret_line = null;
-
-    if (IsAppendLineMode) {
-        render_lines.push(post_line);
-    } else {
-        render_caret_line = caret_line;
-    }
+    let drop_block_state = getDropBlockState(DropIdx, WindowMouseLoc, IsShiftDown);
+    let render_lines = getPreviewLines(DropIdx, drop_block_state);
 
     for (var i = 0; i < render_lines.length; i++) {
         let line = render_lines[i];
         drawLine(ctx, line, color, thickness, line_style)
     }
-    if (render_caret_line) {
-        drawLine(ctx, render_caret_line, color, thickness);
+}
+
+function drawAppendNotifierPreview(ctx, color = 'red', thickness = 1.0, line_style = [5, 5]) {
+    if (IsAppendManualMode) {
+        color = 'lime';
+    }
+    let block_state = IsAppendLineMode ? 'post' : 'inline';
+    let render_lines = getPreviewLines(getAppendIdx(), block_state, false);
+    for (var i = 0; i < render_lines.length; i++) {
+        let line = render_lines[i];
+        drawLine(ctx, line, color, thickness, line_style)
     }
 }
+
+// #endregion Ole preview
 
 function drawFancyTextSelection(ctx) {
     let sel_rects = getRangeRects(getDocSelection());
@@ -169,7 +129,11 @@ function drawTextSelection(ctx) {
         drawFancyTextSelection(ctx);
         return;
     }
-    if (!IsDragging && !IsDropping && !BlurredSelectionRects && !CurFindReplaceDocRangesRects && !isAppendNotifier()) {
+    if (!isDragging() &&
+        !isDropping() &&
+        !BlurredSelectionRects &&
+        !CurFindReplaceDocRangesRects &&
+        !isAppendNotifier()) {
         return;
 	}
 
@@ -179,10 +143,10 @@ function drawTextSelection(ctx) {
     let sel_fg_color = DefaultSelectionFgColor;
     let caret_color = DefaultCaretColor;
 
-    if (IsDropping || IsDragging) {
-        if (IsDragging) {
+    if (isDropping() || isDragging()) {
+        if (isDragging()) {
             // ignoring invalidity if external drop
-            let is_drop_valid = DropIdx >= 0 || !IsDropping;
+            let is_drop_valid = DropIdx >= 0 || !isDropping();
             if (is_drop_valid) {
                 if (isDragCopy()) {
                     sel_bg_color = 'lime';
@@ -275,7 +239,7 @@ function drawOverlay() {
         drawHighlighting(ctx);
     } 
 
-    if (IsDropping) {
+    if (isDropping()) {
        drawDropPreview(ctx);
     } else if (isAnyAppendEnabled()) {
         // MOTE don't draw append if dropping

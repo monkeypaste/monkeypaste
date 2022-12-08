@@ -40,80 +40,6 @@ function initTemplateToolbarButton() {
     getCreateTemplateToolbarButton().innerHTML = getSvgHtml('createtemplate');
 }
 
-function showTemplateToolbarContextMenu() {
-    if (!isCreateTemplateValid()) {
-        log('user add template currently disabled (selection must be on/within template)');
-        return;
-    }
-
-    var tb = getCreateTemplateToolbarButton();
-    let tb_rect = tb.getBoundingClientRect();
-    let x = tb_rect.left;
-    let y = tb_rect.bottom;
-
-    let spinner_mil = [
-        {
-            icon: 'fa-solid fa-spinner',
-            iconFgColor: 'dimgray',
-            iconClassList: ['rotate'],
-            label: 'Loading...'
-        }
-    ];
-    superCm.createMenu(spinner_mil, { pageX: x, pageY: y });
-
-    getAllNonInputTemplatesFromDbAsync_get()
-        .then((result) => {
-            result = result ? result : [];
-
-            let all_non_input_defs = result;
-            let all_local_defs = getTemplateDefs();
-            let db_defs_to_add = all_non_input_defs.filter(x => all_local_defs.every(y => y.templateGuid != x.templateGuid));
-
-            let allTemplateDefs = [...all_local_defs, ...db_defs_to_add];
-
-            let cm = [];
-
-            for (var i = 0; i < TemplateTypesMenuOptions.length; i++) {
-                let tmi = TemplateTypesMenuOptions[i];
-
-                let allTemplateDefsForType = allTemplateDefs.filter(x => x.templateType.toLowerCase() == tmi.label.toLowerCase());
-
-                tmi.submenu = allTemplateDefsForType.map(function (ttd) {
-                    return {
-                        icon: ' ',
-                        iconBgColor: ttd.templateColor,
-                        label: ttd.templateName,
-                        action: function (option, contextMenuIndex, optionIndex) {
-                            createTemplateFromDropDown(ttd);
-                        },
-                    }
-                });
-
-                if (allTemplateDefsForType.length > 0) {
-                    tmi.submenu.push({ separator: true });
-                }
-                tmi.submenu.push(
-                    {
-                        icon: 'fa-solid fa-plus',
-                        iconFgColor: 'lime',
-                        label: 'New...',
-                        action: function (option, contextMenuIndex, optionIndex) {
-                            createTemplateFromDropDown(null, tmi.label.toLowerCase());
-                        },
-                    }
-                )
-                cm.push(tmi);
-            }
-            superCm.destroyMenu();
-            superCm.createMenu(cm, { pageX: x, pageY: y });
-        });
-}
-
-function hideCreateTemplateToolbarContextMenu() {
-    if (isShowingCreateTemplateToolbarMenu()) {
-        superCm.destroyMenu();
-    }
-}
 
 // #endregion Life Cycle
 
@@ -213,12 +139,87 @@ function updateCreateTemplateToolbarButtonToSelection() {
         getCreateTemplateToolbarButton().classList.add('disabled');
 	}
 }
+
+
+function showTemplateToolbarContextMenu() {
+    if (!isCreateTemplateValid()) {
+        log('user add template currently disabled (selection must be on/within template)');
+        return;
+    }
+
+    var tb = getCreateTemplateToolbarButton();
+    let tb_rect = tb.getBoundingClientRect();
+    let x = tb_rect.left;
+    let y = tb_rect.bottom;
+
+    let spinner_mil = [
+        {
+            icon: 'fa-solid fa-spinner',
+            iconFgColor: 'dimgray',
+            iconClassList: ['rotate'],
+            label: 'Loading...'
+        }
+    ];
+    superCm.createMenu(spinner_mil, { pageX: x, pageY: y });
+
+    getAllNonInputTemplatesFromDbAsync_get()
+        .then((result) => {
+            result = result ? result : [];
+
+            let all_non_input_defs = result;
+            let all_local_defs = getTemplateDefs();
+            let db_defs_to_add = all_non_input_defs.filter(x => all_local_defs.every(y => y.templateGuid != x.templateGuid));
+
+            let allTemplateDefs = [...all_local_defs, ...db_defs_to_add];
+
+            let cm = [];
+
+            for (var i = 0; i < TemplateTypesMenuOptions.length; i++) {
+                let tmi = TemplateTypesMenuOptions[i];
+
+                let allTemplateDefsForType = allTemplateDefs.filter(x => x.templateType.toLowerCase() == tmi.label.toLowerCase());
+
+                tmi.submenu = allTemplateDefsForType.map(function (ttd) {
+                    return {
+                        icon: ' ',
+                        iconBgColor: ttd.templateColor,
+                        label: ttd.templateName,
+                        action: function (option, contextMenuIndex, optionIndex) {
+                            createTemplateFromDropDown(ttd);
+                        },
+                    }
+                });
+
+                if (allTemplateDefsForType.length > 0) {
+                    tmi.submenu.push({ separator: true });
+                }
+                tmi.submenu.push(
+                    {
+                        icon: 'fa-solid fa-plus',
+                        iconFgColor: 'lime',
+                        label: 'New...',
+                        action: function (option, contextMenuIndex, optionIndex) {
+                            createTemplateFromDropDown(null, tmi.label.toLowerCase());
+                        },
+                    }
+                )
+                cm.push(tmi);
+            }
+            superCm.destroyMenu();
+            superCm.createMenu(cm, { pageX: x, pageY: y });
+        });
+}
+
+function hideCreateTemplateToolbarContextMenu() {
+    if (isShowingCreateTemplateToolbarMenu()) {
+        superCm.destroyMenu();
+    }
+}
 // #endregion Actions
 
 // #region Event Handlers
 
 function onTemplateToolbarButtonClick(e) {
-
     if (isShowingCreateTemplateToolbarMenu()) {
         hideCreateTemplateToolbarContextMenu();
     } else {

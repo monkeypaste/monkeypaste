@@ -38,6 +38,10 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 	let quill_instance = new Quill(editorId, quillOptions);
 
 	quill_instance.root.setAttribute("spellcheck", "false");
+
+	quill_instance.getModule("toolbar").container.addEventListener("mousedown", (e) => {
+		e.preventDefault();
+	});
 	return quill_instance;
 }
 

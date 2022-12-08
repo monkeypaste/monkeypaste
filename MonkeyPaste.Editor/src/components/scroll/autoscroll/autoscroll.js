@@ -1,6 +1,4 @@
-﻿// #region Globals
-
-var SuppressNextEditorScrollChangedNotification = false;
+// #region Globals
 
 var AutoScrolledOffset = null;
 
@@ -13,23 +11,15 @@ var AutoScrollBaseVelocity = 25;
 const MIN_AUTO_SCROLL_DIST = 30;
 
 var AutoScrollInterval = null;
+
 // #endregion Globals
 
 // #region Life Cycle
 
-function initEditorScroll() {
-    getEditorContainerElement().addEventListener('scroll', onEditorContainerScroll);
-}
 // #endregion Life Cycle
 
 // #region Getters
 
-function getEditorScroll() {
-    return {
-        left: parseInt(getEditorContainerElement().scrollLeft),
-        top: parseInt(getEditorContainerElement().scrollTop)
-    };
-}
 // #endregion Getters
 
 // #region Setters
@@ -45,18 +35,6 @@ function isAutoScrolling() {
     return AutoScrollVelX != 0 || AutoScrollVelY != 0;
 }
 
-function didEditorScrollChange(old_scroll, new_scroll) {
-    if (!old_scroll && !new_scroll) {
-        return false;
-    }
-    if (old_scroll && !new_scroll) {
-        return true;
-    }
-    if (new_scroll && !old_scroll) {
-        return true;
-    }
-    return old_scroll.left != new_scroll.left || old_scroll.top != new_scroll.top;
-}
 // #endregion State
 
 // #region Actions
@@ -87,7 +65,7 @@ function startAutoScroll() {
 
     editor_elm.style.width = adjusted_editor_width + 'px';
 
-    scrollDocRangeIntoView(DragSelectionRange);
+    scrollDocRangeIntoView(getDocSelection());
 
     AutoScrollInterval = setInterval(onAutoScrollTick, 300, editor_elm);
 }
@@ -102,40 +80,9 @@ function stopAutoScroll(isLeave) {
     AutoScrollVelX = 0;
     AutoScrollVelY = 0;
 
-    if (isLeave && !IsDragging) {
+    if (isLeave && !isDragging()) {
         scrollToHome();
     }
-}
-
-function scrollDocRangeIntoView(docRange) {
-    let dom_range = convertDocRangeToDomRange(docRange);
-    let scroll_elm = dom_range.endContainer;
-    if (!scroll_elm) {
-        scroll_elm = dom_range.startContainer;
-        if (!scroll_elm) {
-            log('error scrolling to doc range: ' + docRange);
-            return;
-        }
-    }
-    if (scroll_elm.nodeType === 3) {
-        let docRange_rects = getRangeRects(docRange);
-        if (!docRange_rects || docRange_rects.length == 0) {
-            scroll_elm = scroll_elm.parentNode;
-        } else {
-            // clear scroll elm to disable element scroll and scroll manually by rect
-            scroll_elm = null;
-            getEditorContainerElement().scrollTop = docRange_rects[0].top;
-        }
-    } 
-    if (scroll_elm) {
-        scroll_elm.scrollIntoView();
-    }
-}
-
-
-function setEditorScroll(new_scroll) {
-    getEditorContainerElement().scrollLeft = new_scroll.left;
-    getEditorContainerElement().scrollTop = new_scroll.top;
 }
 // #endregion Actions
 
@@ -167,18 +114,5 @@ function onAutoScrollTick(e) {
         AutoScrollVelX += AutoScrollAccumlator;
     }
 }
-function onEditorContainerScroll(e) {
- //   if (isShowingFindReplaceToolbar()) {
- //       updateFindReplaceRangeRects();
- //   } else if (BlurredSelectionRects) {
- //       // TODO update these guys
-    //}
 
-    if (SuppressNextEditorScrollChangedNotification) {
-        SuppressNextEditorScrollChangedNotification = false;
-    } else {
-        onScrollChanged_ntf(getEditorScroll());
-    }
-    drawOverlay();
-}
 // #endregion Event Handlers

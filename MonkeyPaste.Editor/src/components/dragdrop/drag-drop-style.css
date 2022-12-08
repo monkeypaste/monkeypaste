@@ -28,5 +28,7 @@
     .drop > .ql-editor {
         /* NOTE only temporary, adjusted to actual width after layout update in auto scroll*/
         /*user-select: none;*/
+        margin-top: 10px;
+        margin-bottom: 10px;
         width: 808080px;
     }

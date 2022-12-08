@@ -3,6 +3,12 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpMessageNotificationViewModel : MpNotificationViewModelBase {
+        #region Properties
+
+        public override int MaxShowTimeMs => DEFAULT_NOTIFICATION_SHOWTIME_MS;
+
+        #endregion
+
         #region Constructors
         public MpMessageNotificationViewModel() : base() { }
         #endregion

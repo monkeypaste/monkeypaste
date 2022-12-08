@@ -43,6 +43,7 @@
     <Content Include="src\components\append\append-style.css" />
     <Content Include="src\components\append\toolbar\append-toolbar-item-style.css" />
     <Content Include="src\components\append\toolbar\append-toolbar-items.js" />
+    <Content Include="src\components\dragdrop\debouncer\dragover-debouncer.js" />
     <Content Include="src\components\paste-toolbar\popup\paste-button-popup.js" />
     <Content Include="src\components\datatransfer\datatransfer.js">
       <SubType>Code</SubType>
@@ -88,7 +89,6 @@
     <Content Include="src\components\dragdrop\drag-drop-style.css" />
     <Content Include="src\components\dragdrop\drag.js" />
     <Content Include="src\components\dragdrop\drop.js" />
-    <Content Include="src\components\dragdrop\editorscroll.js" />
     <Content Include="src\components\editor\editor-style.css" />
     <Content Include="src\components\editor\editor.js" />
     <Content Include="src\components\findreplace\find-replace-style.css" />
@@ -109,6 +109,10 @@
     <Content Include="src\components\quill-wrapper\quill-style.css" />
     <Content Include="src\components\quill-wrapper\quill-wrapper.js" />
     <Content Include="src\components\quill-wrapper\toolbar\quill-toolbar.js" />
+    <Content Include="src\components\scroll\autoscroll\autoscroll.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\components\scroll\scroll.js" />
     <Content Include="src\components\selection\fancy-selection\fancy-selection.js" />
     <Content Include="src\components\selection\selection.js" />
     <Content Include="src\components\table\table-style.css" />
@@ -160,6 +164,7 @@
     <Folder Include="src\components\content\content-text\" />
     <Folder Include="src\components\converter\" />
     <Folder Include="src\components\dragdrop\" />
+    <Folder Include="src\components\dragdrop\debouncer\" />
     <Folder Include="src\components\editor\" />
     <Folder Include="src\components\font\" />
     <Folder Include="src\components\list\bullets\checkable\" />
@@ -179,9 +184,11 @@
     <Folder Include="src\components\experiments\" />
     <Folder Include="src\components\append\" />
     <Folder Include="src\components\align\" />
+    <Folder Include="src\components\scroll\" />
     <Folder Include="src\components\paste-toolbar\" />
     <Folder Include="src\components\paste-toolbar\popup\" />
     <Folder Include="src\components\quill-wrapper\quill-tooltip\" />
+    <Folder Include="src\components\scroll\autoscroll\" />
     <Folder Include="src\components\svg\" />
     <Folder Include="src\components\overlay\" />
     <Folder Include="src\components\quill-wrapper\" />

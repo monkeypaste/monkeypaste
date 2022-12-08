@@ -346,24 +346,15 @@ namespace MonkeyPaste.Avalonia {
 
         public override MpAvClipTileViewModel SelectedItem {
             get {
-                //if (PinnedItems.Any(x => x.IsSelected)) {
-                //    return PinnedItems.FirstOrDefault(x => x.IsSelected);
-                //}
+                if(MpAvAppendNotificationWindow.Instance != null &&
+                    MpAvAppendNotificationWindow.Instance.IsVisible) {
+                    // only visible if mw is not open
+                    return ModalClipTileViewModel;
+                }
+
                 return AllItems.FirstOrDefault(x => x.IsSelected);
             }
             set {
-                //if (SelectedItem != value && value != null) {
-                //    if (PinnedItems.Any(x => x.CopyItemId == value.CopyItemId)) {
-                //        PinnedItems.ForEach(x => x.IsSelected = x.CopyItemId == value.CopyItemId);
-                //        Items.ForEach(x => x.IsSelected = false);
-                //    } else if (Items.Any(x => x.CopyItemId == value.CopyItemId)) {
-                //        Items.ForEach(x => x.IsSelected = x.CopyItemId == value.CopyItemId);
-                //        PinnedItems.ForEach(x => x.IsSelected = false);
-                //    } else {
-                //        SelectedItem = null;
-                //    }
-
-                //}
                 if(value == null) {
                     AllItems.ForEach(x => x.IsSelected = false);
                 } else {
@@ -3298,6 +3289,11 @@ namespace MonkeyPaste.Avalonia {
 
         private async Task ActivateAppendModeAsync(bool isAppendLine) {
             Dispatcher.UIThread.VerifyAccess();
+            while(IsAddingClipboardItem) {
+                // if new item is being added, its important to wait for it
+                await Task.Delay(100);
+            }
+
             if (ModalClipTileViewModel.IsPlaceholder) {
                 // append mode was just toggled ON (param was null)
                 await AssignAppendClipTileAsync();
@@ -3310,14 +3306,6 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(AppendModeState));
             MpAppendNotificationViewModel.Instance.OnPropertyChanged(nameof(MpAppendNotificationViewModel.Instance.Title));
 
-            //if (ModalClipTileViewModel.IsPlaceholder) {
-            //    MpNotificationBuilder.ShowMessageAsync(
-            //        title: "MODE CHANGED",
-            //        body: $"Append{(isAppendLine ? "-Line" : "")} Mode Activated",
-            //        msgType: MpNotificationType.AppModeChange,
-            //        iconSourceStr: IsAppendLineMode ? "AppendLineImage" : "AppendImage").FireAndForgetSafeAsync();
-            //    return;
-            //}
             if (was_append_already_enabled) {
                 // don't trigger if already activated, the AppendDataChanged() timesout because IsContentLoaded doesn't goto false
                 return;

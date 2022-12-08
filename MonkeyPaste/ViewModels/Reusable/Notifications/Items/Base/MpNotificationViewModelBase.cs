@@ -82,6 +82,12 @@ namespace MonkeyPaste {
         ErrorAndShutdown //confirm
     }
     public abstract class MpNotificationViewModelBase : MpViewModelBase, MpIPopupMenuViewModel {
+        #region Constants
+
+        public const int DEFAULT_NOTIFICATION_SHOWTIME_MS = 3000;
+
+        #endregion
+
         #region Statics
 
         public static MpNotificationLayoutType GetLayoutTypeFromNotificationType(MpNotificationType ndt) {

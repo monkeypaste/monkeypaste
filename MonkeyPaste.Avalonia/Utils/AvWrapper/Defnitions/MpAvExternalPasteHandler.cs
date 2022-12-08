@@ -85,8 +85,6 @@ namespace MonkeyPaste.Avalonia {
 
             // SET CLIPBOARD
 
-            //MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = true;
-
             await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo, true);
 
             // ACTIVATE TARGET
@@ -96,11 +94,13 @@ namespace MonkeyPaste.Avalonia {
                     MpAvMainWindowViewModel.Instance.FinishMainWindowHide(null);
                 }
 
+            } else if (MpAvAppendNotificationWindow.Instance.IsActive) {
+                IntPtr lastActive = MpPlatformWrapper.Services.ProcessWatcher.SetActiveProcess(pasteToHandle);
+                //MpAvNotificationWindowManager.Instance.HideNotification(MpAppendNotificationViewModel.Instance);
             } else {
                 // assume target is active (if was start process info needs to be activated earlier)
             }
 
-            //await Task.Delay(200);
             // SIMULATE PASTE CMD
             await MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeSequenceAsync(pasteCmdKeyString);
 

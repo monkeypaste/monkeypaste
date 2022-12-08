@@ -4,7 +4,7 @@
 
 // #region Life Cycle
 
-function loadTextContent(itemDataStr, isPasteRequest) {
+function loadTextContent(itemDataStr) {
 	quill.enable(true);
 	//setRootHtml(itemDataStr)
 	log('loading text content: ' + itemDataStr);
@@ -14,7 +14,7 @@ function loadTextContent(itemDataStr, isPasteRequest) {
 	delta = decodeHtmlEntitiesInDeltaInserts(delta);
 	setContents(delta);
 
-	loadTemplates(isPasteRequest);
+	loadTemplates();
 	loadLinkHandlers();
 	enableTableContextMenu();
 	enableTableInteraction();
