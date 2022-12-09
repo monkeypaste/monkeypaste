@@ -293,7 +293,7 @@ namespace MonkeyPaste.Avalonia {
                 if (add_tile_data) {
                     avdo.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT, ctvm.PublicHandle);
                 }
-                string ctvm_source_url = ctvm.CopyItem.ToSourceRefUrl();
+                string ctvm_source_url = MpSourceRefHelper.ToUrl(ctvm.CopyItem);
                 avdo.SetData(MpPortableDataFormats.CefAsciiUrl, ctvm_source_url.ToBytesFromString(Encoding.ASCII));
             }
 
@@ -325,7 +325,7 @@ namespace MonkeyPaste.Avalonia {
             this.GetObservable(MpAvCefNetWebView.AppendDataProperty).Subscribe(value => OnAppendDataChanged());
             this.GetObservable(MpAvCefNetWebView.AppendModeStateProperty).Subscribe(value => OnAppendModeStateChanged());
 
-            this.GetObservable(MpAvCefNetWebView.ContentDataProperty).Subscribe(value => OnContentDataChanged());
+            this.GetObservable(MpAvCefNetWebView.ContentIdProperty).Subscribe(value => OnContentIdChanged());
             this.GetObservable(MpAvCefNetWebView.IsContentSelectedProperty).Subscribe(value => OnIsContentSelectedChanged());
             this.GetObservable(MpAvCefNetWebView.IsContentResizingProperty).Subscribe(value => OnIsContentResizingChanged());
             this.GetObservable(MpAvCefNetWebView.IsContentReadOnlyProperty).Subscribe(value => OnIsContentReadOnlyChanged());
@@ -460,57 +460,9 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.notifyDataTransferCompleted:
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
-                        MpISourceRef sourceRef = null;
-                        bool had_internal_handle = false;
-                        if (!string.IsNullOrEmpty(dataTransferCompleted_ntf.dataTransferSourceUrl)) {
-                            var sr = MpSourceRef.ParseFromInternalUrl(dataTransferCompleted_ntf.dataTransferSourceUrl);
-                            if (sr != null) {
-                                if (!string.IsNullOrEmpty(sr.SourcePublicHandle)) {
-                                    // get db id from handle
-                                    had_internal_handle = true;
-                                    int ciid = 0;
-                                    // check all tiles
-                                    var sctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == sr.SourcePublicHandle) as MpAvClipTileViewModel;
-                                    if (sctvm == null) {
-                                        // check for recycled tile
-                                        if (MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Count > 0 &&
-                                            MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels[0].PublicHandle == sr.SourcePublicHandle) {
-                                            // recycled source (internal)
-                                            ciid = MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels[0].Id;
-                                        }
-                                        if(ciid == 0) {
-                                            // check pending new models
-                                            var pending_ci = MpAvClipTrayViewModel.Instance.PendingNewModels.FirstOrDefault(x => x.PublicHandle.ToLower() == sr.SourcePublicHandle.ToLower());
-                                            if(pending_ci != null) {
-                                                // pending source (internal)
-                                                ciid = pending_ci.Id;
-                                            }
-                                        }
-                                    } else {
-                                        // tile source (internal)
-                                        ciid = sctvm.CopyItemId;
-                                    }
-                                    if (ciid > 0) {
-                                        // internal source
-                                        sr.SourceObjId = ciid;
-                                        sourceRef = sr;
-                                    }
-                                }
-                            }
-                        }
-                        if (sourceRef == null && !had_internal_handle) {
-                            var url = await MpPlatformWrapper.Services.UrlBuilder.CreateAsync(dataTransferCompleted_ntf.dataTransferSourceUrl);
-                            if (url != null) {
-                                // remote source
-                                sourceRef = url;
-                            }
-                        }
-                        if (sourceRef == null) {
-                            var app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo);
-                            if (app != null) {
-                                // local source
-                                sourceRef = app;
-                            }
+                        MpISourceRef sourceRef = await FindSourceRefFromUrl(dataTransferCompleted_ntf.dataTransferSourceUrl);
+                        if(sourceRef == null) {
+                            return;
                         }
                         ctvm.AddSourceRefAsync(sourceRef).FireAndForgetSafeAsync(ctvm);
                     }
@@ -841,18 +793,19 @@ namespace MonkeyPaste.Avalonia {
 
         public bool NeedsEvalJsCleared { get; set; }
 
-        #region ContentData Property
+        #region ContentId Property
 
-        private string _contentData;
-        public string ContentData {
-            get { return _contentData; }
-            set { SetAndRaise(ContentDataProperty, ref _contentData, value); }
+        private int _contentId;
+        public int ContentId {
+            get { return _contentId; }
+            set { SetAndRaise(ContentIdProperty, ref _contentId, value); }
         }
-        public static DirectProperty<MpAvCefNetWebView, string> ContentDataProperty =
-            AvaloniaProperty.RegisterDirect<MpAvCefNetWebView, string>(
-                nameof(ContentData),
-                x => x.ContentData,
-                (x, o) => x.ContentData = o);
+        public static DirectProperty<MpAvCefNetWebView, int> ContentIdProperty =
+            AvaloniaProperty.RegisterDirect<MpAvCefNetWebView, int>(
+                nameof(ContentId),
+                x => x.ContentId,
+                (x, o) => x.ContentId = o,
+                0);
 
         #endregion 
 
@@ -874,9 +827,9 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion 
 
-        private void OnContentDataChanged() {
+        private void OnContentIdChanged() {
             if(BindingContext == null ||
-                !BindingContext.IsContentReadOnly ) {
+                !BindingContext.IsContentReadOnly) {
                 return;
             }
 
@@ -911,7 +864,7 @@ namespace MonkeyPaste.Avalonia {
             var loadContentMsg = new MpQuillLoadContentRequestMessage() {
                 contentHandle = BindingContext.PublicHandle,
                 contentType = BindingContext.ItemType.ToString(),
-                itemData = ContentData,//BindingContext.EditorFormattedItemData,
+                itemData = BindingContext.EditorFormattedItemData,
                 isPasteRequest = BindingContext.IsPasting
             };
 
@@ -1052,6 +1005,8 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             if (IsContentReadOnly) {
+                MpAvMainWindowViewModel.Instance.IsAnyMainWindowTextBoxFocused = false;
+
                 MpAvResizeExtension.ResizeAnimated(this, BindingContext.ReadOnlyWidth, BindingContext.ReadOnlyHeight);
                 Dispatcher.UIThread.Post(async () => {
                     string enableReadOnlyRespStr = await this.EvaluateJavascriptAsync("enableReadOnly_ext()");
@@ -1234,6 +1189,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void RelayMsg(string msg) {
+            return;
             MpAvCefNetWebView dest_wv = null;
             if (BindingContext.IsAppendNotifier) {
                 // relay sel to tray
@@ -1248,5 +1204,61 @@ namespace MonkeyPaste.Avalonia {
             dest_wv.ExecuteJavascript(msg);
         }
         #endregion
+
+        private async Task<MpISourceRef> FindSourceRefFromUrl(string sourceUrl) {
+            MpISourceRef sourceRef = null;
+            bool had_internal_handle = false;
+            if (!string.IsNullOrEmpty(sourceUrl)) {
+                var sr = MpSourceRefHelper.ParseFromInternalUrl(sourceUrl);
+                if (sr != null) {
+                    if (!string.IsNullOrEmpty(sr.SourcePublicHandle)) {
+                        // get db id from handle
+                        had_internal_handle = true;
+                        int ciid = 0;
+                        // check all tiles
+                        var sctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == sr.SourcePublicHandle) as MpAvClipTileViewModel;
+                        if (sctvm == null) {
+                            // check for recycled tile
+                            if (MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Count > 0 &&
+                                MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels[0].PublicHandle == sr.SourcePublicHandle) {
+                                // recycled source (internal)
+                                ciid = MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels[0].Id;
+                            }
+                            if (ciid == 0) {
+                                // check pending new models
+                                var pending_ci = MpAvClipTrayViewModel.Instance.PendingNewModels.FirstOrDefault(x => x.PublicHandle.ToLower() == sr.SourcePublicHandle.ToLower());
+                                if (pending_ci != null) {
+                                    // pending source (internal)
+                                    ciid = pending_ci.Id;
+                                }
+                            }
+                        } else {
+                            // tile source (internal)
+                            ciid = sctvm.CopyItemId;
+                        }
+                        if (ciid > 0) {
+                            // internal source
+                            sr.SourceObjId = ciid;
+                            sourceRef = sr;
+                        }
+                    }
+                }
+            }
+            if (sourceRef == null && !had_internal_handle) {
+                var url = await MpPlatformWrapper.Services.UrlBuilder.CreateAsync(sourceUrl);
+                if (url != null) {
+                    // remote source
+                    sourceRef = url;
+                }
+            }
+            if (sourceRef == null) {
+                var app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo);
+                if (app != null) {
+                    // local source
+                    sourceRef = app;
+                }
+            }
+            return sourceRef;
+        }
     }
 }

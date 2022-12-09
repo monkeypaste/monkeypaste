@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using FocusManager = Avalonia.Input.FocusManager;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMainWindowViewModel : MpViewModelBase, MpIResizableViewModel {

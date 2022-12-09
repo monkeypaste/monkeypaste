@@ -30,7 +30,12 @@ namespace MonkeyPaste {
         LastOutput
     }
 
-    public class MpCopyItem : MpDbModelBase, MpISyncableDbObject, MpISourceRef {
+    public class MpCopyItem : 
+        MpDbModelBase, 
+        MpISyncableDbObject, 
+        MpISourceRef,
+        MpIDbIconId,
+        MpILabelText {
         #region Statics
 
         public static string[] PhysicalComparePropertyPaths {
@@ -237,6 +242,11 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region MpILabelText Implementation
+        string MpILabelText.LabelText => Title;
+
+        #endregion
+
         #region MpISourceRef Implementation
 
         [Ignore]
@@ -418,7 +428,7 @@ namespace MonkeyPaste {
                 ItemData = objParts[4],
                 ItemDescription = objParts[5],
                 ItemType = (MpCopyItemType)Convert.ToInt32(objParts[6]),
-                SourceId = source == null ? MpPrefViewModel.Instance.ThisAppSourceId : source.Id
+                //SourceId = source == null ? MpPrefViewModel.Instance.ThisAppSourceId : source.Id
             };
             //ci.Source = await MpDb.GetDbObjectByTableGuidAsync("MpSource", objParts[7]) as MpSource;
             //TODO deserialize this once img and files added
@@ -438,8 +448,8 @@ namespace MonkeyPaste {
                 CopyDateTime.ToString(),
                 ItemData,
                 ItemDescription,
-                ((int)ItemType).ToString(),
-                MpDataModelProvider.GetItem<MpSource>(SourceId).Guid//Source.SourceGuid.ToString()
+                ((int)ItemType).ToString()
+                //MpDataModelProvider.GetItem<MpSource>(SourceId).Guid//Source.SourceGuid.ToString()
                 );
         }
 
@@ -490,12 +500,12 @@ namespace MonkeyPaste {
                 other.ItemDescription,
                 "ItemDescription",
                 diffLookup);
-            diffLookup = CheckValue(
-                SourceId,
-                other.SourceId,
-                "fk_MpSourceId",
-                diffLookup,
-                MpDataModelProvider.GetItem<MpSource>(SourceId).Guid);
+            //diffLookup = CheckValue(
+            //    SourceId,
+            //    other.SourceId,
+            //    "fk_MpSourceId",
+            //    diffLookup,
+            //    MpDataModelProvider.GetItem<MpSource>(SourceId).Guid);
             diffLookup = CheckValue(
                 ItemType,
                 other.ItemType,
@@ -534,13 +544,13 @@ namespace MonkeyPaste {
                     case "ItemDescription":
                         newCopyItem.ItemDescription = li.AffectedColumnValue;
                         break;
-                    case "fk_MpSourceId":
-                        var source = await MpDataModelProvider.GetSourceByGuidAsync(li.AffectedColumnValue);
-                        if(source != null) {
-                            source = await MpDataModelProvider.GetItemAsync<MpSource>(source.Id);
-                        }
-                        newCopyItem.SourceId = Convert.ToInt32(source.Id);
-                        break;
+                    //case "fk_MpSourceId":
+                    //    var source = await MpDataModelProvider.GetSourceByGuidAsync(li.AffectedColumnValue);
+                    //    if(source != null) {
+                    //        source = await MpDataModelProvider.GetItemAsync<MpSource>(source.Id);
+                    //    }
+                    //    newCopyItem.SourceId = Convert.ToInt32(source.Id);
+                    //    break;
                     case "fk_MpCopyItemTypeId":
                         newCopyItem.ItemType = (MpCopyItemType)Convert.ToInt32(li.AffectedColumnValue);
                         break;
@@ -566,7 +576,7 @@ namespace MonkeyPaste {
                 Title = this.Title,
                 ItemData = this.ItemData,
                 IconId = this.IconId,
-                SourceId = this.SourceId,
+                //SourceId = this.SourceId,
                 CopyCount = 1,
                 CopyDateTime = DateTime.Now,
                 Id = 0,

@@ -67,11 +67,12 @@ function updateWindowMouseState(e) {
 				// drag end was not triggered, so reset here
 				// i think this only happen when resuming from breakpoint in dnd
 
-				log('lingering drag elm caught in mouse down, resetting...')
-				CurDragTargetElm = null;
+				//log('lingering drag elm caught in mouse down, manually calling dragEnd...')
+				//onDragEnd('forced from window mousedown');
 			}
 		}
-	} else {
+	} else if (e.dataTransfer === undefined) {
+		// 
 		WindowMouseDownLoc = null;
 	}
 }
@@ -172,5 +173,6 @@ function onWindowMouseUp(e) {
 	//WindowMouseDownLoc = null;
 	updateWindowMouseState(e);
 	SelectionOnMouseDown = null;
+	DragDomRange = null;
 }
 // #endregion Event Handlers

@@ -256,7 +256,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            if (mivm == null) {
+            if (mivm == null || mivm.SubItems == null) {
                 e.Handled = GetSuppressDefaultRightClick(control) && e.IsRightPress(control);
                 SetIsOpen(control, false);
                 return;

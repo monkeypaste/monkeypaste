@@ -8,7 +8,13 @@ using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
-    public class MpUrl : MpDbModelBase, MpISourceItem, MpISourceRef {
+    public class MpUrl : 
+        MpDbModelBase, 
+        MpISourceItem, 
+        MpISourceRef,
+        MpIDbIconId,
+        MpILabelText,
+        MpIUriSource {
         #region Columns
 
         [PrimaryKey, AutoIncrement]
@@ -99,6 +105,16 @@ namespace MonkeyPaste {
         [Ignore]
         public int RootId => Id;
         #endregion
+
+        #region MpILabelText Implementation
+        string MpILabelText.LabelText => UrlDomainPath;
+
+        #endregion
+
+        #region MpIUriSource Implementation
+        string MpIUriSource.Uri => UrlPath;
+        #endregion
+
 
         #region MpISourceRef Implementation
 

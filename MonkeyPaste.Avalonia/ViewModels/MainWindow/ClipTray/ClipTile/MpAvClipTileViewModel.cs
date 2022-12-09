@@ -81,36 +81,37 @@ namespace MonkeyPaste.Avalonia {
         public MpAvFileItemCollectionViewModel FileItemCollectionViewModel { get; private set; }
         public MpAvClipTileDetailCollectionViewModel DetailCollectionViewModel { get; private set; }
 
-        private MpAvSourceViewModel _sourceViewModel;
-        public MpAvSourceViewModel SourceViewModel {
-            get {
-                if(_sourceViewModel == null) {
-                    _sourceViewModel = MpAvSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == SourceId);
-                    if (_sourceViewModel == null) {
-                        _sourceViewModel= MpAvSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == MpPrefViewModel.Instance.ThisAppSourceId);
-                    }
-                }
-                return _sourceViewModel;
-            }
-        }
+        public MpAvClipTileSourceCollectionViewModel SourceCollectionViewModel { get; private set; }
+        //private MpAvSourceViewModel _sourceViewModel;
+        //public MpAvSourceViewModel SourceViewModel {
+        //    get {
+        //        if(_sourceViewModel == null) {
+        //            _sourceViewModel = MpAvSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == SourceId);
+        //            if (_sourceViewModel == null) {
+        //                _sourceViewModel= MpAvSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == MpPrefViewModel.Instance.ThisAppSourceId);
+        //            }
+        //        }
+        //        return _sourceViewModel;
+        //    }
+        //}
 
-        public MpAvAppViewModel AppViewModel {
-            get {
-                if (SourceViewModel == null) {
-                    return null;
-                }
-                return SourceViewModel.AppViewModel;
-            }
-        }
+        //public MpAvAppViewModel AppViewModel {
+        //    get {
+        //        if (SourceViewModel == null) {
+        //            return null;
+        //        }
+        //        return SourceViewModel.AppViewModel;
+        //    }
+        //}
 
-        public MpAvUrlViewModel UrlViewModel {
-            get {
-                if (SourceViewModel == null) {
-                    return null;
-                }
-                return SourceViewModel.UrlViewModel;
-            }
-        }
+        //public MpAvUrlViewModel UrlViewModel {
+        //    get {
+        //        if (SourceViewModel == null) {
+        //            return null;
+        //        }
+        //        return SourceViewModel.UrlViewModel;
+        //    }
+        //}
 
         public MpAvClipTileViewModel Next {
             get {
@@ -361,6 +362,24 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Layout
+
+        public GridLength TitleGridRowHeight {
+            get {
+                if(IsTitleVisible) {
+                    return new GridLength(0.25, GridUnitType.Star);
+                }
+                return new GridLength(0, GridUnitType.Pixel);
+            }
+        }
+
+        public GridLength DetailGridRowHeight {
+            get {
+                if (IsDetailVisible) {
+                    return new GridLength(20, GridUnitType.Pixel);
+                }
+                return new GridLength(0, GridUnitType.Pixel);
+            }
+        }
 
         public MpSize UnformattedContentSize { get; set; }
         public double TileTitleHeight => IsTitleVisible ? 100 : 0;
@@ -755,20 +774,23 @@ namespace MonkeyPaste.Avalonia {
                     return true;
                 }
 
+                if(SourceCollectionViewModel.IsAnyBusy) {
+                    return true;
+                }
                 if(IsAppendNotifier) {
                     return false;
                 }
-                if (SourceViewModel != null) {
-                    if (AppViewModel != null && AppViewModel.IsBusy) {
-                        return true;
-                    }
-                    if (UrlViewModel != null && UrlViewModel.IsBusy) {
-                        return true;
-                    }
-                    if (SourceViewModel != null && SourceViewModel.IsBusy) {
-                        return true;
-                    }
-                }
+                //if (SourceViewModel != null) {
+                //    if (AppViewModel != null && AppViewModel.IsBusy) {
+                //        return true;
+                //    }
+                //    if (UrlViewModel != null && UrlViewModel.IsBusy) {
+                //        return true;
+                //    }
+                //    if (SourceViewModel != null && SourceViewModel.IsBusy) {
+                //        return true;
+                //    }
+                //}
                 return false;
             }
         }
@@ -1068,14 +1090,14 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public int SourceId {
-            get {
-                if (CopyItem == null) {
-                    return 0;
-                }
-                return CopyItem.SourceId;
-            }
-        }
+        //public int SourceId {
+        //    get {
+        //        if (CopyItem == null) {
+        //            return 0;
+        //        }
+        //        return CopyItem.SourceId;
+        //    }
+        //}
 
         public string CopyItemData {
             get {
@@ -1096,33 +1118,36 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public int IconId {
-            get {
-                if (CopyItem == null) {
-                    return 0;
-                }
-                if (CopyItem.IconId > 0) {
-                    return CopyItem.IconId;
-                }
-                if (SourceViewModel == null || SourceViewModel.PrimarySourceViewModel == null) {
-                    // BUG currently when plugin creates new content it is not setting source info
-                    // so return app icon
+        //public int IconId {
+        //    get {
+        //        if (CopyItem == null) {
+        //            return 0;
+        //        }
+        //        if (CopyItem.IconId > 0) {
+        //            return CopyItem.IconId;
+        //        }
+        //        if (SourceViewModel == null || SourceViewModel.PrimarySourceViewModel == null) {
+        //            // BUG currently when plugin creates new content it is not setting source info
+        //            // so return app icon
 
-                    return MpPrefViewModel.Instance.ThisAppIcon.Id;
-                }
+        //            return MpPrefViewModel.Instance.ThisAppIcon.Id;
+        //        }
 
-                return SourceViewModel.PrimarySourceViewModel.IconId;
-            }
-            set {
-                if (IconId != value) {
-                    //CopyItem.IconId = value;
-                    //HasModelChanged = true;
+        //        return SourceViewModel.PrimarySourceViewModel.IconId;
+        //    }
+        //    set {
+        //        if (IconId != value) {
+        //            //CopyItem.IconId = value;
+        //            //HasModelChanged = true;
 
-                    NotifyModelChanged(CopyItem, nameof(CopyItem.IconId), value);
-                    OnPropertyChanged(nameof(IconId));
-                }
-            }
-        }
+        //            NotifyModelChanged(CopyItem, nameof(CopyItem.IconId), value);
+        //            OnPropertyChanged(nameof(IconId));
+        //        }
+        //    }
+        //}
+        public int IconId => SourceCollectionViewModel.PrimaryItem == null ?
+            MpPrefViewModel.Instance.ThisAppIcon.Id :
+            SourceCollectionViewModel.PrimaryItem.SourceIconId;
 
         private string _curItemRandomHexColor;
         public string CopyItemHexColor {
@@ -1184,6 +1209,7 @@ namespace MonkeyPaste.Avalonia {
             //MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             FileItemCollectionViewModel = new MpAvFileItemCollectionViewModel(this);
             DetailCollectionViewModel = new MpAvClipTileDetailCollectionViewModel(this);
+            SourceCollectionViewModel = new MpAvClipTileSourceCollectionViewModel(this);
             IsBusy = true;
         }
 
@@ -1193,7 +1219,8 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitializeAsync(MpCopyItem ci, int queryOffset = -1, bool isRestoringSelection = false) {
             _curItemRandomHexColor = string.Empty;
             _dragSource = null;
-            _sourceViewModel = null;
+            //IsViewLoaded = false;
+            //_sourceViewModel = null;
             //GetContentView().IsContentUnloaded = false;
 
             IsBusy = true;
@@ -1207,14 +1234,17 @@ namespace MonkeyPaste.Avalonia {
             }
             // NOTE FileItems are init'd before ciid is set so Items are busy when WebView is loading content
             FileItemCollectionViewModel.InitializeAsync(ci).FireAndForgetSafeAsync(this);
+
             CopyItem = ci;
             QueryOffsetIdx = queryOffset < 0 && ci != null ? QueryOffsetIdx : queryOffset;
 
+            await SourceCollectionViewModel.InitializeAsync(CopyItemId);
 
             if (isRestoringSelection) {
                 Parent.RestoreSelectionState(this);
             }
 
+            OnPropertyChanged(nameof(IconId));
             OnPropertyChanged(nameof(IsPlaceholder));
             OnPropertyChanged(nameof(TrayX));
             OnPropertyChanged(nameof(TileBorderHexColor));
@@ -1226,7 +1256,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(Prev));
             OnPropertyChanged(nameof(CopyItemId));
             OnPropertyChanged(nameof(IsAnyBusy));
-            OnPropertyChanged(nameof(SourceViewModel));
+            //OnPropertyChanged(nameof(SourceViewModel));
 
             //MpMessenger.Send<MpMessageType>(MpMessageType.ContentItemsChanged, this);
 
@@ -1554,7 +1584,7 @@ namespace MonkeyPaste.Avalonia {
                     Dispatcher.UIThread.Post(async () => {
                         await InitializeAsync(ci);
                         //wait for model to propagate then trigger view to reload
-                        IsViewLoaded = false;
+                        //IsViewLoaded = false;
                     });
                 }
             }
@@ -1618,7 +1648,6 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(CopyItem):
                     DetailCollectionViewModel.InitializeAsync().FireAndForgetSafeAsync();
-
                     if (CopyItem == null) {
                         break;
                     }
@@ -1736,6 +1765,9 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(CopyItemHexColor):
+                    InitTitleLayers().FireAndForgetSafeAsync(this);
+                    break;
+                case nameof(IconId):
                     InitTitleLayers().FireAndForgetSafeAsync(this);
                     break;
                 case nameof(CopyItemData):

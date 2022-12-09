@@ -8,12 +8,10 @@
 }
 
 .drag-overlay-enabled {
-    /*background-color: orange;*/
     pointer-events: all;
 }
 
 .drag-overlay-disabled {
-    /*background-color: purple;*/
     pointer-events: none;
 }
 

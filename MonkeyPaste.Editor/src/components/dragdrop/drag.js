@@ -2,21 +2,11 @@
 
 const MIN_DRAG_DIST = 10;
 
-//var IsDragging = false;
-
-//var WasDragCanceled = false;
-
-//var DragSelectionRange = null;
-
-//var DragStartScrollOffset = null;
-
-//var SelIdxBeforeDrag = -1;
-//var DocLengthBeforeDrag = -1;
-
+var WasNoSelectBeforeDragStart = false;
+var DragDomRange = null;
 var CurDragTargetElm = null;
-
-
 var DragItemElms = [];
+
 // #endregion Globals
 
 // #region Life Cycle
@@ -53,27 +43,6 @@ function isDragging() {
 
 // #region Actions
 
-function resetDrag(fromHost = false, wasDragCanceled = false) {
-
-    // NOTE only flagging drag cancel in drag source to avoid confuse other state changes
-    // when true, window keyup handler ignores decrease focus 
-    CurDragTargetElm = null;
-
-    //WasDragCanceled = wasDragCanceled;
-    //if (!WasDragCanceled) {
-    // NOTE don't know why but selection is reset when drag cancels
-    // and document sel change will null this after it restores sel
-    //DragSelectionRange = null;
-    //resetSelection();
-    //}
-    //IsDragging = false
-    //SelIdxBeforeDrag = -1;
-    //DocLengthBeforeDrag = -1;
-
-    log(`drag reset. fromHost: ${fromHost} wasCancel: ${wasDragCanceled}`);
-    //drawOverlay();
-}
-
 function enableDragOverlay() {
     getDragOverlayElement().classList.remove('drag-overlay-disabled');
     getDragOverlayElement().classList.add('drag-overlay-enabled');
@@ -89,44 +58,42 @@ function disableDragOverlay() {
 
     getEditorContainerElement().setAttribute('draggable', true);
 }
+
 // #endregion Actions
 
-// #region Event Handlers
+// #region Event Handlersconsidered 
 
 function onDragStart(e) {
-    log('has focus: ' + quill.hasFocus());
-
+    // dragstart doesn't have buttons set so updateState'll screw up
     updateWindowMouseState(e);
-
-    //WasDragCanceled = false;
 
     if (isDragging()) {
         return;
     }
+    
+    if (!isSubSelectionEnabled()) {
+        WasNoSelectBeforeDragStart = true;
+        //enableSubSelection();
+        selectAll();
+    } else {
+        WasNoSelectBeforeDragStart = false;
+    }
 
     let sel = getDocSelection();
 
-    if (e.target.id == 'dragOverlay') {
-        // overlay drag is full content so select all
-        //SelIdxBeforeDrag = sel ? sel.index : -1;
-        selectAll();
-        sel = getDocSelection();
-    }
-
     if (!sel || sel.length == 0) {
+        log('drag start rejected by selection state. selectable but w/o range');
+        WasNoSelectBeforeDragStart = false;
         e.preventDefault();
         e.stopPropagation();
-        //SelIdxBeforeDrag = -1;
         return false;
     }
+    DragDomRange = convertDocRangeToDomRange(sel);
+    //BlurredSelectionRects = getRangeRects(sel);
+
     CurDragTargetElm = e.target;
 
-    //DragSelectionRange = sel;
-
-    log('drag start sel: ', sel);
-
-    //IsDragging = true;
-    //DocLengthBeforeDrag = getDocLength();
+    log('drag start. sel: ' + sel);
     e.stopPropagation();
 
     if (ContentItemType == 'Text') {
@@ -140,39 +107,26 @@ function onDragStart(e) {
 }
 
 function onDragEnd(e) {
+    let fromHost = e && e.fromHost ? e.fromHost : false;
+    log('drag end fromHost: ', fromHost);
+    if (isDropping() && fromHost) {
+        log('ignoring host drag end');
+        return;
+    }
+    log('drag end');
     updateWindowMouseState(e);
     CurDragTargetElm = null;
     IsShiftDown = false;
     IsCtrlDown = false;
     IsAltDown = false;
-
-    //let fromHost = e.fromHost ? e.fromHost : false;
-    //log('drag end fromHost: ', fromHost);
-    //if (isDropping() && fromHost) {
-    //    log('ignoring host drag end');
-    //    return;
-    //}
-    ////let selfDrop = DropIdx >= 0;
-    ////log('drag end not rejected and finishing...Self drop: ' + selfDrop);
-    ////if (selfDrop && e && e.dataTransfer.dropEffect.toLowerCase().includes('move')) {
-    ////    // 'move' should imply it was an internal drop
-    ////    let drop_doc_length_delta = getDocLength() - DocLengthBeforeDrag;
-    ////    // this should only happen for internal drop
-    ////    if (DropIdx < DragSelectionRange.index) {
-    ////        // when drop is before drag sel adjust drag range to clear the move
-    ////        DragSelectionRange.index += drop_doc_length_delta;
-    ////    }
-    ////    setTextInRange(DragSelectionRange, '', 'user');
-    ////    DropIdx = -1;
-    ////}
-
-    ////deselectAll(SelIdxBeforeDrag >= 0 ? SelIdxBeforeDrag : DragSelectionRange ? DragSelectionRange.index : 0);
-    //let wasCanceled = e.dataTransfer.dropEffect == 'none';
-    //if (!wasCanceled && fromHost) {
-    //    // just to be sure since drop target maybe external check msg from host for cancel
-    //    wasCanceled = e.wasCancel;
-    //}
-
-    //resetDrag(fromHost, wasCanceled);
+    DragDomRange = null;
+    BlurredSelectionRects = null;
+    
+    if (WasNoSelectBeforeDragStart) {
+        resetSelection();
+        disableSubSelection();
+        WasNoSelectBeforeDragStart = false;
+    }
+    drawOverlay();
 }
 // #endregion Event Handlers

@@ -73,18 +73,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private int _sourceDeviceId = 0;
-        public int SourceDeviceId {
-            get {
-                if(_sourceDeviceId == 0) {
-                    if(Parent == null || Parent.Parent == null) {
-                        return 0;
-                    }
-                    _sourceDeviceId = Parent.Parent.SourceId;
-                }
-                return _sourceDeviceId;
-            }
-        }
 
         private string _iconBase64 = null;
         public string IconBase64 {

@@ -320,6 +320,13 @@ namespace MonkeyPaste.Common.Wpf {
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int GetWindowThreadProcessId(IntPtr handle, out uint processId);
 
+        [DllImport("psapi.dll")]
+        public static extern uint GetProcessImageFileName(
+            IntPtr hProcess,
+            [Out] StringBuilder lpImageFileName,
+            [In][MarshalAs(UnmanagedType.U4)] int nSize
+        );
+
         [DllImport("user32.dll", EntryPoint = "FindWindow", SetLastError = true)]
         public static extern IntPtr FindWindowByCaption(IntPtr zeroOnly, string lpWindowName);
 

@@ -57,19 +57,20 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitAsync() {
             IsBusy = true;
 
-            while (MpAvIconCollectionViewModel.Instance.IsAnyBusy) {
-                // wait for icons to load since app vm depends on icon vm
-                await Task.Delay(100);
-            }
+            //while (MpAvIconCollectionViewModel.Instance.IsAnyBusy) {
+            //    // wait for icons to load since app vm depends on icon vm
+            //    await Task.Delay(100);
+            //}
 
             var appl = await RegisterWithProcessesManager();
+            var cbfil = await MpDataModelProvider.GetItemsAsync<MpAppClipboardFormatInfo>();
             Items.Clear();
             foreach (var app in appl) {
                 if(Items.Any(x=>x.AppId == app.Id)) {
                     // unknown apps in register will already be added so no duppys
                     continue;
                 }
-                var avm = await CreateAppViewModel(app);
+                var avm = await CreateAppViewModel(app, cbfil.Where(x=>x.AppId == app.Id));
 
                 Items.Add(avm);
             }
@@ -84,38 +85,15 @@ namespace MonkeyPaste.Avalonia {
                 Items[0].IsSelected = true;
             }
 
-            //MpProcessManager.OnAppActivated += MpProcessManager_OnAppActivated;
-            MpPlatformWrapper.Services.ProcessWatcher.OnAppActivated += MpProcessManager_OnAppActivated;
-            MpPlatformWrapper.Services.ProcessWatcher.StartWatcher();
-
-
-            _ = Task.Run(async () => {
-                // wait for running processes to get created
-                await Task.Delay(1000);
-                var la_pi = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
-                if(la_pi == null) {
-                    // since application is being started from file system init LastActive to file system app
-                    la_pi = MpPlatformWrapper.Services.ProcessWatcher.FileSystemProcessInfo;
-                    if (la_pi == null) {
-                        // need to get this set on init in process watcher
-                        //Debugger.Break();
-                    }
-                }
-                if(la_pi != null) {
-                    LastActiveAppViewModel = Items.FirstOrDefault(x => x.AppPath.ToLower() == la_pi.ProcessPath.ToLower());
-                    if (LastActiveAppViewModel == null) {
-                        // what's the deal?
-                        Debugger.Break();
-                        LastActiveAppViewModel = ThisAppViewModel;
-                    }
-                }
-            });
+            InitLastAppViewModel().FireAndForgetSafeAsync();
             IsBusy = false;
         }
 
-        public async Task<MpAvAppViewModel> CreateAppViewModel(MpApp app) {
+        public async Task<MpAvAppViewModel> CreateAppViewModel(
+            MpApp app, 
+            IEnumerable<MpAppClipboardFormatInfo> appClipboardFormatOverrides) {
             var avm = new MpAvAppViewModel(this);
-            await avm.InitializeAsync(app);
+            await avm.InitializeAsync(app, appClipboardFormatOverrides);
             return avm;
         }
 
@@ -159,7 +137,7 @@ namespace MonkeyPaste.Avalonia {
                         //when initializing (at least) this preveents collection modified exception
                         await Task.Delay(100);
                     }
-                    var avm = await CreateAppViewModel(a);
+                    var avm = await CreateAppViewModel(a, null);
                     Items.Add(avm);
                 });
             }
@@ -170,6 +148,27 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
+        private async Task InitLastAppViewModel() {
+            // wait for running processes to get created
+            await Task.Delay(1000);
+            var la_pi = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
+            if (la_pi == null) {
+                // since application is being started from file system init LastActive to file system app
+                la_pi = MpPlatformWrapper.Services.ProcessWatcher.FileSystemProcessInfo;
+                if (la_pi == null) {
+                    // need to get this set on init in process watcher
+                    //Debugger.Break();
+                }
+            }
+            if (la_pi != null) {
+                LastActiveAppViewModel = Items.FirstOrDefault(x => x.AppPath.ToLower() == la_pi.ProcessPath.ToLower());
+                if (LastActiveAppViewModel == null) {
+                    // what's the deal?
+                    Debugger.Break();
+                    LastActiveAppViewModel = ThisAppViewModel;
+                }
+            }
+        }
         private void MpAppCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(SelectedItem):
@@ -184,11 +183,16 @@ namespace MonkeyPaste.Avalonia {
         }
         private async Task<List<MpApp>> RegisterWithProcessesManager() {
             // This is only called during init to keep app storage in sync so any running apps are added if unknown
+            var sw = Stopwatch.StartNew();
+
+            MpPlatformWrapper.Services.ProcessWatcher.OnAppActivated += MpProcessManager_OnAppActivated;
+            MpPlatformWrapper.Services.ProcessWatcher.StartWatcher();
 
             var al = await MpDataModelProvider.GetItemsAsync<MpApp>();
             var unknownApps = MpPlatformWrapper.Services.ProcessWatcher.RunningProcessLookup.Keys
                                     .Where(x => !al.Any(y => y.AppPath.ToLower() == x.ToLower())).ToList();
 
+            MpConsole.WriteLine($"AppCollection RegisterWithProcessesManager '{unknownApps.Count}' unknown apps detected.");
             foreach(var uap in unknownApps) {
                 var handle = MpPlatformWrapper.Services.ProcessWatcher.RunningProcessLookup[uap][0];
                 string appName = MpPlatformWrapper.Services.ProcessWatcher.GetProcessApplicationName(handle);
@@ -201,7 +205,9 @@ namespace MonkeyPaste.Avalonia {
                     iconId: icon.Id);
                 al.Add(app);
             }
-            
+
+            sw.Stop();
+            MpConsole.WriteLine($"process watcher registration took: {sw.ElapsedMilliseconds}ms");
 
            
             return al;

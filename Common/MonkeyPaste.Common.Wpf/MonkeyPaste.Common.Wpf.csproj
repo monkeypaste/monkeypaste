@@ -73,6 +73,7 @@
     <Compile Include="Utils\Helpers\Graphics\Imaging\MpWpfClipboardImageHelper.cs" />
     <Compile Include="Utils\Helpers\Graphics\Imaging\MpWpfImagingHelper.cs" />
     <Compile Include="Utils\Helpers\Graphics\MpScreenInformation.cs" />
+    <Compile Include="Utils\PInvoke\DevicePathMapper\MpWpfDevicePathMapper.cs" />
     <Compile Include="Utils\PInvoke\WinApi.cs" />
   </ItemGroup>
   <ItemGroup>

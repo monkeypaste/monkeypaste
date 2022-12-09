@@ -292,8 +292,7 @@
                      Margin="0,3,13,0" />-->
             <Button x:Name="ClipTileAppIconImageButton"
                     local:MpAvPointerPressCommandExtension.IsEnabled="True"
-                    local:MpAvPointerPressCommandExtension.RightPressCommand="{Binding EnableFilterByAppCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                    local:MpAvPointerPressCommandExtension.RightPressCommandParameter="{Binding .}"
+                    local:MpAvPointerPressCommandExtension.RightPressCommand="{Binding SourceCollectionViewModel.FilterByPrimarySourceCommand}"
                     local:MpAvIsHoveringExtension.IsEnabled="True"
                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsHoveringOverSourceIcon, Mode=TwoWay}"
                     ClipToBounds="False"

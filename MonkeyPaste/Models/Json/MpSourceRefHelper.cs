@@ -8,13 +8,13 @@ namespace MonkeyPaste {
         int SourceObjId { get; }
         MpCopyItemSourceType SourceType { get; }
     }
-    public class MpSourceRef : MpISourceRef {
+    public class MpSourceRefHelper : MpISourceRef {
         public const string INTERNAL_SOURCE_DOMAIN = "https://localhost";
-        public static MpSourceRef ParseFromInternalUrl(string url) {
+        public static MpSourceRefHelper ParseFromInternalUrl(string url) {
             if(!IsInternalSourceRef(url)) {
                 return null;
             }
-            var sr = new MpSourceRef();
+            var sr = new MpSourceRefHelper();
             if(url.SplitNoEmpty("?") is string[] urlParts &&
                 urlParts.Length > 1 &&
                 urlParts[1].SplitNoEmpty("&") is string[] paramParts) {
@@ -32,25 +32,23 @@ namespace MonkeyPaste {
         public static bool IsInternalSourceRef(string str) {
             return !string.IsNullOrEmpty(str) && str.StartsWith(INTERNAL_SOURCE_DOMAIN);
         }
-        public static MpSourceRef ReplicateSource(MpISourceRef sr) {
-            return new MpSourceRef() {
+        public static MpSourceRefHelper ReplicateSource(MpISourceRef sr) {
+            return new MpSourceRefHelper() {
                 SourceObjId = sr.SourceObjId,
                 SourceType = sr.SourceType
             };
+        }
+
+        public static string ToUrl(MpISourceRef sr) {
+            return ReplicateSource(sr).ToString();
         }
 
         public string SourcePublicHandle { get; set; }
         public int SourceObjId { get; set; } = 0;
         public MpCopyItemSourceType SourceType { get; set; } = MpCopyItemSourceType.None;
 
-        public string ToUrl() {
+        public override string ToString() {
             return $"{INTERNAL_SOURCE_DOMAIN}?type={SourceType.ToString()}&id={SourceObjId}";
-        }
-    }
-
-    public static class MpSourceRefExtensions {
-        public static string ToSourceRefUrl(this MpISourceRef sr) {
-            return MpSourceRef.ReplicateSource(sr).ToUrl();
         }
     }
 }

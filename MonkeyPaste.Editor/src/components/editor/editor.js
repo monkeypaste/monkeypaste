@@ -31,6 +31,7 @@ function initEditor() {
 	initTemplates();
 	//initExtContentSourceBlot();
 
+	quill.on("selection-change", onEditorSelChanged);
 	quill.on("text-change", onEditorTextChanged);
 
 	getEditorElement().addEventListener('focus', onEditorFocus);
@@ -160,7 +161,7 @@ function updateEditorSizesAndPositions() {
 	getEditorContainerElement().style.height = eh + 'px';
 }
 
-function selectAll() {
+function selectAll() {	
 	setDocSelection(0, getDocLength(), 'api');
 }
 
@@ -260,10 +261,10 @@ function enableSubSelection(fromHost = false) {
 		log('enableSubSelection ignored, content is an image. fromHost: ' + fromHost);
 		return;
 	}
-	if (isSubSelectionEnabled()) {
-		log('enableSubSelection ignored, already sub-selectable. fromHost: ' + fromHost);
-		return;
-	}
+	//if (isSubSelectionEnabled()) {
+	//	log('enableSubSelection ignored, already sub-selectable. fromHost: ' + fromHost);
+	//	return;
+	//}
 
 	getEditorContainerElement().classList.remove('no-select');
 	getEditorContainerElement().classList.add('sub-select');
@@ -292,16 +293,18 @@ function disableSubSelection(fromHost = false) {
 		}
 		return;
 	}
-	if (!isSubSelectionEnabled()) {
-		log('disableSubSelection ignored, already sub-selectable. fromHost: ' + fromHost);
-		return;
-	}
+	//if (!isSubSelectionEnabled()) {
+	//	log('disableSubSelection ignored, already sub-selectable. fromHost: ' + fromHost);
+	//	return;
+	//}
 
 	resetSelection();
 
 	getEditorContainerElement().classList.add('no-select');
 	getEditorContainerElement().classList.remove('sub-select');
 	getEditorContainerElement().classList.remove('underline-content');
+
+	scrollToHome();
 	hideScrollbars();
 	enableDragOverlay();
 
@@ -338,7 +341,12 @@ function onEditorBlur(e) {
 	drawOverlay();
 }
 
-
+function onEditorSelChanged(range, oldRange, source) {
+	if (!isDragging()) {
+		return;
+	}
+	return;
+}
 function onEditorTextChanged(delta, oldDelta, source) {
 	log('editor text changed');
 	

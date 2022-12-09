@@ -166,16 +166,19 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpApp app) {
+        public async Task InitializeAsync(MpApp app, IEnumerable<MpAppClipboardFormatInfo> appClipboardFormatOverrides) {
             IsBusy = true;
             
 
             App = app;
             
             OnPropertyChanged(nameof(IconId));
+
+            if (ClipboardFormatInfos == null) {
+                ClipboardFormatInfos = new MpAppClipboardFormatInfoCollectionViewModel(this);
+            }
             
-            ClipboardFormatInfos = new MpAppClipboardFormatInfoCollectionViewModel(this);
-            await ClipboardFormatInfos.Init(AppId);
+            await ClipboardFormatInfos.InitializeAsync(AppId,appClipboardFormatOverrides.ToList());
 
             MpAppPasteShortcut aps = await MpDataModelProvider.GetAppPasteShortcutAsync(AppId);
             if(aps != null) {

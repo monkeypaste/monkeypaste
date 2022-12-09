@@ -16,6 +16,7 @@ using Xamarin.Forms;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 //using SQLiteNetExtensions.Extensions;
 using System.Reflection;
+using Org.BouncyCastle.Crypto.Prng;
 
 namespace MonkeyPaste {
     public static class MpDb {
@@ -381,6 +382,37 @@ namespace MonkeyPaste {
             if(isNewDb) {
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
+
+            //var apps = await MpDataModelProvider.GetItemsAsync<MpApp>();
+            //var appGroups = new Dictionary<string, List<MpApp>>();
+            //foreach (var app in apps) {
+            //    if(appGroups.ContainsKey(app.AppPath)) {
+            //        appGroups[app.AppPath].Add(app);
+            //    } else {
+            //        appGroups.Add(app.AppPath, new List<MpApp>() { app });
+            //    }
+            //}
+            //var dupAppGroups = appGroups.Where(x => x.Value.Count > 1);
+            //List<MpApp> appsToRemove = new List<MpApp>();
+            //foreach(var dupAppGroup in dupAppGroups) {
+            //    var app_to_keep = dupAppGroup.Value.First();
+            //    //appsToRemove.AddRange(dupAppGroup.Value.Skip(1).Take(dupAppGroup.Value.Count - 1));
+            //    for (int i = 1; i < dupAppGroup.Value.Count; i++) {
+            //        var app_sources = await MpDataModelProvider.GetAllSourcesByAppIdAsync(dupAppGroup.Value[i].Id);
+            //        foreach(var app_source in app_sources) {
+            //            app_source.AppId = app_to_keep.Id;
+            //            await app_to_keep.WriteToDatabaseAsync();
+            //        }
+            //        var app_ci_refs = await MpDataModelProvider.GetCopyItemSourceByMembersAsync()
+            //    }
+            //}
+            //if(dupAppGroups.Sum(x=>x.Value.Count) == appsToRemove.Count) {
+            //    // messed up
+            //    Debugger.Break();
+            //}
+            //foreach(var appToRemove in appsToRemove) {
+
+            //}
 
             MpConsole.WriteLine(@"Db file located: " + MpPlatformWrapper.Services.DbInfo.DbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPrefViewModel.Instance.ThisDeviceGuid);

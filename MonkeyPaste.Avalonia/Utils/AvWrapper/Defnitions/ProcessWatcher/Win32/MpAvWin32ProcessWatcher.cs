@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Windows;
 using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -169,48 +170,62 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public override string GetProcessPath(IntPtr hwnd) {
+        public override string GetProcessPath(IntPtr hWnd) {
             string fallback = _FallbackProcessPath;
             try {
-                if (hwnd == null || hwnd == IntPtr.Zero) {
+                if (hWnd == null || hWnd == IntPtr.Zero) {
                     return fallback; //fallback;
                 }
 
-                WinApi.GetWindowThreadProcessId(hwnd, out uint pid);
-                using (Process proc = Process.GetProcessById((int)pid)) {
-                    // TODO when user clicks eye (to hide it) icon on running apps it should add to a string[] pref
-                    // and if it contains proc.ProcessName return fallback (so choice persists
-                    if (_ignoredProcessNames.Contains(proc.ProcessName.ToLower())) {
-                        //occurs with messageboxes and dialogs
-                        MpConsole.WriteTraceLine($"Active process '{proc.ProcessName}' is on ignored list, using fallback '{fallback}'");
-                        return fallback; //fallback;
-                    }
-                    if (proc.MainWindowHandle == IntPtr.Zero) {
-                        return fallback; //fallback;
-                    }
+                //WinApi.GetWindowThreadProcessId(hwnd, out uint pid);
+                //using (Process proc = Process.GetProcessById((int)pid)) {
+                //    // TODO when user clicks eye (to hide it) icon on running apps it should add to a string[] pref
+                //    // and if it contains proc.ProcessName return fallback (so choice persists
+                //    if (_ignoredProcessNames.Contains(proc.ProcessName.ToLower())) {
+                //        //occurs with messageboxes and dialogs
+                //        MpConsole.WriteTraceLine($"Active process '{proc.ProcessName}' is on ignored list, using fallback '{fallback}'");
+                //        return fallback; //fallback;
+                //    }
+                //    if (proc.MainWindowHandle == IntPtr.Zero) {
+                //        return fallback; //fallback;
+                //    }
 
 
-                    if (!Environment.Is64BitProcess && Is64Bit(proc)) {
-                        return fallback;
-                    }
+                //    if (!Environment.Is64BitProcess && Is64Bit(proc)) {
+                //        return fallback;
+                //    }
 
-                    bool isProcElevated = IsProcessAdmin(proc.MainWindowHandle);
+                //    bool isProcElevated = IsProcessAdmin(proc.MainWindowHandle);
 
-                    if (!IsThisAppAdmin && isProcElevated) {
-                        return fallback;
-                    }
+                //    if (!IsThisAppAdmin && isProcElevated) {
+                //        return fallback;
+                //    }
 
-                    try {
-                        return proc.MainModule.FileName.ToString().ToLower();
-                    }
-                    catch (InvalidOperationException) {
-                        return fallback;
-                    }
+                //    try {
+                //        return proc.MainModule.FileName.ToString().ToLower();
+                //    }
+                //    catch (InvalidOperationException) {
+                //        return fallback;
+                //    }
 
-                }
+                //}
+
+                StringBuilder sb = new StringBuilder(2000);
+
+                /** Need to get the process ID from handle under cursor **/
+                GetWindowThreadProcessId(hWnd, out uint pid);
+
+                /** Hook into process **/
+                IntPtr pic = OpenProcess(ProcessAccessFlags.All, true, (int)pid);
+
+                /** This gets the filename of the process image. Path is in device format **/
+                GetProcessImageFileName(pic, sb, 2000);
+
+                return MpWpfDevicePathMapper.FromDevicePath(sb.ToString());
+
             }
             catch (Exception e) {
-                MpConsole.WriteTraceLine("Cannot find process path (w/ Handle " + hwnd.ToString() + ") : " + e.ToString(), e);
+                MpConsole.WriteTraceLine("Cannot find process path (w/ Handle " + hWnd.ToString() + ") : " + e.ToString(), e);
                 //return GetExecutablePathAboveVista(hwnd);
                 return fallback; //fallback;
             }
@@ -253,7 +268,10 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                     int length = WinApi.GetWindowTextLength(hWnd);
-                    if (length == 0 || !WinApi.IsWindow(hWnd)) return true;
+                   
+                    if (length == 0 || !WinApi.IsWindow(hWnd)) {
+                        return true;
+                    }
 
                     //if(MpHelpers.IsThisAppAdmin()) {
                     //    process.WaitForInputIdle(100);
@@ -261,8 +279,11 @@ namespace MonkeyPaste.Avalonia {
 
                     //StringBuilder builder = new StringBuilder(length);
                     //WinApi.GetWindowText(hWnd, builder, length + 1);
-
-                    windows.AddOrReplace(GetProcessPath(hWnd), hWnd);
+                    string process_path = GetProcessPath(hWnd);
+                    if(string.IsNullOrEmpty(process_path)) {
+                        return true;
+                    }
+                    windows.AddOrReplace(process_path, hWnd);
                 }
                 catch (InvalidOperationException ex) {
                     // no graphical interface

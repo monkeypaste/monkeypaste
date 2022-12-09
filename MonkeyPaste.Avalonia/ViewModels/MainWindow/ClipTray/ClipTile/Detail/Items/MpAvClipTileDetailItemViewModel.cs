@@ -181,24 +181,25 @@ namespace MonkeyPaste.Avalonia {
                         DetailText = $"{ctvm.CopyCount} copies | {ctvm.PasteCount} pastes";
                         break;
                     case MpCopyItemDetailType.UrlInfo:
-                        if (ctvm.UrlViewModel == null) {
-                            break;
+                        if(ctvm.SourceCollectionViewModel.PrimaryItem != null &&
+                            ctvm.SourceCollectionViewModel.PrimaryItem.SourceRef is MpUrl url) {
+
+                            DetailText = $"Goto url '{url.UrlTitle}'";
+                            DetailUri = url.UrlPath;
+                            IsUriEnabled = true;
                         }
-                        DetailText = $"Goto url '{ctvm.UrlViewModel.UrlTitle}'";
-                        DetailUri = ctvm.UrlViewModel.UrlPath;
-                        IsUriEnabled = true;
                         break;
                     case MpCopyItemDetailType.AppInfo:
-                        if (ctvm.AppViewModel == null) {
-                            break;
-                        }
-                        DetailText = $"Open folder for '{ctvm.AppViewModel.AppName}'";
-                        IsUriEnabled = ctvm.AppViewModel.UserDeviceId == MpPrefViewModel.Instance.ThisUserDevice.Id;                        
-                        if(IsUriEnabled) {
+                        if (ctvm.SourceCollectionViewModel.PrimaryItem != null &&
+                            ctvm.SourceCollectionViewModel.PrimaryItem.SourceRef is MpApp app) {
+                            DetailText = $"Open folder for '{app.AppName}'";
+                            IsUriEnabled = app.UserDeviceId == MpPrefViewModel.Instance.ThisUserDevice.Id;
+                            if (IsUriEnabled) {
 
-                            DetailUri = ctvm.AppViewModel.AppPath;
-                        } else {
-                            DetailText += " [EXTERNAL SOURCE]";                            
+                                DetailUri = app.AppPath;
+                            } else {
+                                DetailText += " [EXTERNAL SOURCE]";
+                            }
                         }
                         break;
                     default:

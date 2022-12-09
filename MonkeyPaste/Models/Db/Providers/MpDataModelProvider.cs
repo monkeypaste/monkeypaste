@@ -209,7 +209,7 @@ namespace MonkeyPaste {
                 result = await MpDb.QueryAsync<MpApp>(query, path.ToLower(), deviceId);
             } else {
                 string query = $"select * from MpApp where LOWER(SourcePath)=? and Arguments=? and fk_MpUserDeviceId=?";
-                result = await MpDb.QueryAsync<MpApp>(query, args, path.ToLower(), deviceId);
+                result = await MpDb.QueryAsync<MpApp>(query, path.ToLower(), args, deviceId);
             }
             
             if (result == null || result.Count == 0) {
@@ -552,11 +552,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region MpCopyItemTag
-        public static async Task<List<MpCopyItemTag>> GetUnlinkedCopyItemTagIds() {
-            var citl = await GetItemsAsync<MpCopyItemTag>();
-            var cil = await GetItemsAsync<MpCopyItem>();
-            return citl.Where(x => cil.All(y => y.Id != x.CopyItemId)).ToList();
-        }
         public static async Task<List<int>> GetCopyItemIdsForTagAsync(int tagId) {
             string query = string.Format(@"select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId={0}", tagId);
             var result = await MpDb.QueryScalarsAsync<int>(query);

@@ -7,7 +7,7 @@
 function loadTextContent(itemDataStr) {
 	quill.enable(true);
 	//setRootHtml(itemDataStr)
-	log('loading text content: ' + itemDataStr);
+	//log('loading text content: ' + itemDataStr);
 	//setRootHtml('');
 	//insertHtml(0, itemDataStr, 'silent');
 	let delta = convertHtmlToDelta(itemDataStr);
@@ -233,6 +233,8 @@ function getLineRect(lineIdx, snapToEditor = true) {
 }
 
 function getRangeRects(range, isWindowOrigin = true, inflateToLineHeight = true) {
+	range = cleanDocRange(range);
+
 	let range_rects = [];
 	if (!range) {
 		return range_rects;

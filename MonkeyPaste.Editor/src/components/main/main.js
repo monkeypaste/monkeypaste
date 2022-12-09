@@ -85,8 +85,8 @@ function init_test() {
 		};
 
 		loadContent_ext(toBase64FromJsonObj(load_req, false));
-
-		disableReadOnly();
+		enableSubSelection();
+		//disableReadOnly();
 
 		//showFindReplaceToolbar();
 

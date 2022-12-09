@@ -10,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvBoolToGridLengthConverter : IValueConverter {
         public static readonly MpAvBoolToGridLengthConverter Instance = new();
 
-        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if(value is bool boolVal &&
                 parameter is string paramStr &&
                 paramStr.SplitNoEmpty("|") is string[] paramParts) {
@@ -29,10 +29,11 @@ namespace MonkeyPaste.Avalonia {
                 double pixel_val = double.Parse(param_val);
                 return new GridLength(pixel_val, GridUnitType.Pixel);
             }
-            throw new Exception("error converting bool to grid length");
+            // throw new Exception("error converting bool to grid length");
+            return new GridLength(0, GridUnitType.Pixel);
         }
 
-        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
             throw new NotSupportedException();
         }
     }

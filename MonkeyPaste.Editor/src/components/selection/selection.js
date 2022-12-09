@@ -156,11 +156,15 @@ function getDocRangeScrollOffset(doc_range) {
 // #region Setters
 
 function setDocSelection(doc_idx, len, source = 'user') {
-	if (!quill.hasFocus()) {
-		quill.focus();
-	}
+	//if (!quill.hasFocus()) {
+	//	//quill.focus();
+	//	setDomSelectionFromDocRange({ index: doc_idx, length: len });
+	//} else {
+	//	quill.setSelection(doc_idx, len, source);
+	//}
+	setDomSelectionFromDocRange({ index: doc_idx, length: len });
 	CurSelRange = { index: doc_idx, length: len };
-	quill.setSelection(doc_idx, len, source);
+	
 		
 }
 
@@ -281,6 +285,7 @@ function resetSelection() {
 	BlurredSelectionRects = null;
 	//DragSelectionRange = null;
 	clearDomSelectionRanges();
+	setDocSelection({ index: 0, length: 0 });
 }
 
 function clearDomSelectionRanges() {
@@ -433,12 +438,15 @@ function calculateTotalOffset(node, offset) {
 // #region Event Handlers
 
 function onDocumentSelectionChange(e) {
-	// Selection Change issues:
-	// 1. 
 	let new_range = getDocSelection();
 	//new_range = coerceCleanSelection(new_range, CurSelRange);
-
+	if (DragDomRange) {
+		// drag selection collapses so prevent here, don't know why...
+		//setDomSelection(DragDomRange);
+		//return;
+	}
 	if (didSelectionChange(new_range, CurSelRange)) {
+		
 		LastSelRange = CurSelRange;
 		CurSelRange = new_range;
 		updateAllElements();

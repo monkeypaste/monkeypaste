@@ -10,7 +10,14 @@ using MonkeyPaste.Common;
 using System.Diagnostics;
 
 namespace MonkeyPaste {
-    public class MpApp : MpDbModelBase, MpISourceItem, MpISyncableDbObject, MpISourceRef {        
+    public class MpApp : 
+        MpDbModelBase, 
+        MpISourceItem, 
+        MpISyncableDbObject, 
+        MpIDbIconId,
+        MpISourceRef,
+        MpILabelText,
+        MpIUriSource {        
         #region Columns
 
         [Column("pk_MpAppId")]
@@ -116,6 +123,16 @@ namespace MonkeyPaste {
 
         [Ignore]
         public int RootId => Id;
+        #endregion
+
+        #region MpILabelText Implementation
+        string MpILabelText.LabelText => AppName;
+
+        #endregion
+
+        #region MpIUriSource Implementation
+        string MpIUriSource.Uri => AppPath;
+
         #endregion
 
         #region MpISourceRef Implementation

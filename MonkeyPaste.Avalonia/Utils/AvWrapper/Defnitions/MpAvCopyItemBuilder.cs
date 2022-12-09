@@ -33,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
                 mpdo.ContainsData(MpPortableDataFormats.CefAsciiUrl) &&
                 mpdo.GetData(MpPortableDataFormats.CefAsciiUrl) is byte[] urlBytes &&
                 urlBytes.ToDecodedString() is string urlRef &&
-                MpSourceRef.ParseFromInternalUrl(urlRef) is MpSourceRef sourceRef &&
+                MpSourceRefHelper.ParseFromInternalUrl(urlRef) is MpSourceRefHelper sourceRef &&
                 sourceRef.SourceType == MpCopyItemSourceType.CopyItem) {
                 // occurs on sub-selection drop onto pintray or tag
                 internalSourceCopyItemId = sourceRef.SourceObjId;

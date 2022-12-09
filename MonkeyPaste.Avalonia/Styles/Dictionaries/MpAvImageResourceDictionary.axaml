@@ -55,6 +55,9 @@
     <sys:String x:Key="ExecuteImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/execute.png
     </sys:String>
+    <sys:String x:Key="EggImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/egg.png
+    </sys:String>
     <sys:String x:Key="PasteImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/paste.png
     </sys:String>

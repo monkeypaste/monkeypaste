@@ -3,8 +3,6 @@
 //var IsDropping = false;
 var DropIdx = -1;
 
-var WasEditableBeforeDragEnter = false;
-
 //var IsSplitDrop = false;
 //var IsPreBlockDrop = false;
 //var IsPostBlockDrop = false;
@@ -98,44 +96,33 @@ function isDropping() {
 
 function resetDrop(fromHost, wasLeave) {
     resetDebounceDragOver();
+    stopAutoScroll(wasLeave);
 
     CurDropTargetElm = null;
-
-    for (var i = 0; i < DropItemElms.length; i++) {
-        DropItemElms[i].classList.remove('drop');
-    }
-
-    stopAutoScroll(wasLeave);
-    if (isDragging()) {
-        updateAllElements();
-        log('(self) drop reset: ' + (fromHost ? "FROM HOST" : "INTERNALLY") + (wasLeave ? '| WAS LEAVE' : '| WAS DROP'));
-        return;
-    }
-
-    //IsDropping = false;
-    //if (!isDragging()) {
-    // for dragend needs dropIdx if effect was move
-    DropIdx = -1;
-    //}
 
     IsCtrlDown = false;
     IsAltDown = false
     IsShiftDown = false;
 
-
-    //updateAllElements();
-
-    if (wasLeave && !WasEditableBeforeDragEnter) {
-        disableSubSelection();
+    for (var i = 0; i < DropItemElms.length; i++) {
+        DropItemElms[i].classList.remove('drop');
     }
 
+    DropIdx = -1;
+    if (wasLeave && !isDragging() && WasNoSelectBeforeDragStart) {
+        disableSubSelection();
+    } else {
+        if (wasLeave && isDragging() && DragDomRange) {
+            //setDocSelection(DragDomRange.index, DragDomRange.length, 'api');
+            setDomSelection(DragDomRange);
+            // NOTE dragend isn't called on drag cancel (from escape key)
+            onDragEnd();
+        }
+        updateAllElements();
+    }
 
     log('drop reset: ' + (fromHost ? "FROM HOST" : "INTERNALLY") + (wasLeave ? '| WAS LEAVE' : '| WAS DROP'));
 }
-
-//function dropData(docIdx, dt, source_range) {
-//    performDataTransferOnContent(dt, { index: docIdx, length: 0 }, 'user');
-//}
 
 // #endregion Actions
 
@@ -151,36 +138,40 @@ function onDragEnter(e) {
         return false;
     }
     if (ContentItemType != 'Text') {
-        return false;
+        return false; 
     }
-    //if (e.target.id == 'dragOverlay') {
-    //    // this should be able to happen when sub-selection is disabled
-    //    if (isDragging()) {
-    //        return false;
-    //    }
-    //    //return;
-    //}
+
     CurDropTargetElm = e.target;
+    resetDebounceDragOver();
 
     onDragEnter_ntf();
     log('drag enter');
-    //IsDropping = true;
-
     for (var i = 0; i < DropItemElms.length; i++) {
         DropItemElms[i].classList.add('drop');
     }
     startAutoScroll();
 
     // store state before drop starts so the right state is restored 
-    WasEditableBeforeDragEnter = !isReadOnly();
-    if (!isSubSelectionEnabled()) {
-        enableSubSelection(false);
+    if (DragDomRange) {
+        // update blur ranges due to drop class margins
+        //BlurredSelectionRects = getRangeRects(convertDomRangeToDocRange(DragDomRange));
     }
+    if (!isDragging()) {
+        if (isSubSelectionEnabled()) {
+            WasNoSelectBeforeDragStart = false;
+        } else {
+            WasNoSelectBeforeDragStart = true;
+            enableSubSelection();
+        }
+    }
+
     hidePasteToolbar();
     return false;
 }
 
 function onDragOver(e) {
+    //log('drag over called');
+
     updateWindowMouseState(e);
 
     e.stopPropagation();
@@ -194,15 +185,13 @@ function onDragOver(e) {
     if (e.target.id == 'dragOverlay') {
         debugger;
     }
-    //let emp = getClientMousePos(e);
-
+    // DEBOUNCE (my own type but word comes from https://css-tricks.com/debouncing-throttling-explained-examples/)
+    let can_proceed = canDebounceDragOverProceed();
+    if (!can_proceed) {
+        return false;
+    }
 
     // VALIDATE (EXTERNAL)
-
-    //if (SelIdxBeforeDrag >= 0) {
-    //    // don't allow overlay drag to drop, needs to be sub-selectable to allow
-    //    return false;
-    //}
 
     let is_valid = false;
     for (var i = 0; i < e.dataTransfer.types.length; i++) {
@@ -239,33 +228,7 @@ function onDragOver(e) {
     }
 
 
-    // DEBOUNCE (my own type but word comes from https://css-tricks.com/debouncing-throttling-explained-examples/)
-    let can_proceed = canDebounceDragOverProceed();
-    if (!can_proceed) {
-        return false;
-    }
-
-    //let cur_date_time = Date.now();
-
-    //LastDragOverDateTime = LastDragOverDateTime == null ? cur_date_time : LastDragOverDateTime;
-    //let m_dt = LastDragOverDateTime - cur_date_time;
-
-    //if (WindowMouseLoc == null) {
-    //    // mouse was not over editor until drag was in progress
-    //    WindowMouseLoc = emp;
-    //}
-
-    //let m_delta_dist = dist(emp, WindowMouseLoc);
-    //let m_v = m_delta_dist / m_dt;
-
-    //LastDragOverDateTime = cur_date_time;
-
-    //WindowMouseLoc = emp;
-    //let debounce = m_delta_dist != 0 || m_v != 0;
-    //if (debounce) {
-    //    return false;
-    //}
-
+    
 
     // DROP IDX
 
@@ -281,30 +244,19 @@ function onDragOver(e) {
             e.dataTransfer.dropEffect = "none";
         }
     }
-
-    //let drop_over_drag_range = isDragging() && isDocIdxInRange(DropIdx, DragSelectionRange);
-    //if (drop_over_drag_range) {
-    //    log('invalidating drop over drag range');
-    //}
-    //let drop_over_template = getAllTemplateDocIdxs().includes(DropIdx);
-    //if (drop_over_template) {
-    //    log('invalidating drop over template');
-    //}
-    //if (drop_over_drag_range || drop_over_template || DropIdx < 0) {
-    //    DropIdx = -1;
-    //    e.dataTransfer.dropEffect = 'none';
-    //}
     drawOverlay();
 
     return false;
 }
 
 function onDragLeave(e) {
+    log('drag leave called');
+
     updateWindowMouseState(e);
 
-    if (e.target.id == 'dragOverlay') {
-        return;
-    }
+    //if (e.target.id == 'dragOverlay') {
+    //    return;
+    //}
 
     //let emp = getClientMousePos(e);
     let editor_rect = getEditorContainerRect();
@@ -312,7 +264,7 @@ function onDragLeave(e) {
         return;
     }
 
-    log('drag leave');
+    log('drag leave confirmed');
 
     resetDrop(e.fromHost, true);
 
@@ -359,19 +311,10 @@ function onDrop(e) {
             insertText(drop_range.index, '\n');
             insertText(drop_range.index, '\n');
             drop_range.index += 1;
-        //dropData(cur_drop_idx + 1, e.dataTransfer);
             break;
         case 'pre':
-            //let isFirstLine = getLineIdx(drop_range.index) == 0;
-            //if (!isFirstLine) {
-            //    log('WARNING! drop is flagged as pre block but not 1st line line is ' + getLineIdx(drop_range.index));
-            //} else {
-            //    //cur_drop_idx = 0;
-            //    drop_range.index = 0;
-            //}
             drop_range.index = 0;
             insertText(drop_range.index, '\n');
-        //dropData(0, e.dataTransfer);
             break;
         case 'post':
             drop_range.index = getLineEndDocIdx(drop_range.index);
@@ -380,11 +323,9 @@ function onDrop(e) {
                 insertText(drop_range.index, '\n');
                 drop_range.index += 1;
             }
-        //dropData(cur_drop_idx, e.dataTransfer);
             break;
         case 'inline':
         default:
-        //dropData(cur_drop_idx, e.dataTransfer);
             break;
     }
 

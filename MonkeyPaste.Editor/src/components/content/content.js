@@ -36,8 +36,6 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 		enableReadOnly();
 		disableSubSelection();	
 	}
-	// enusre IsLoaded is false so msg'ing doesn't get clogged up
-	IsLoaded = false;
 
 	//let contentBg_rgba = getContentBg(contentData);
 
@@ -67,7 +65,6 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 	}
 
 	IsReadyToPaste = !hasAnyInputRequredTemplate();
-	IsLoaded = true;
 
 	if (sel_to_restore != null) {
 		sel_to_restore = cleanDocRange(sel_to_restore);
@@ -273,6 +270,9 @@ function appendContentData(data) {
 }
 
 function loadContentData(contentData) {
+	// enusre IsLoaded is false so msg'ing doesn't get clogged up
+	IsLoaded = false;
+
 	if (ContentItemType == 'Image') {
 		loadImageContent(contentData);
 	} else if (ContentItemType == 'FileList') {
@@ -280,6 +280,8 @@ function loadContentData(contentData) {
 	} else if (ContentItemType == 'Text') {
 		loadTextContent(contentData);
 	}
+
+	IsLoaded = true;
 }
 
 // #endregion Actions

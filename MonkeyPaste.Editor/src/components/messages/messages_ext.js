@@ -230,6 +230,7 @@ function appendData_ext(reqMsgBase64Str) {
 function setSelection_ext(selMsgBase64Str) {
 	// input 'MpQuillSelectionChangedMessage'
 	let req = toJsonObjFromBase64Str(selMsgBase64Str);
+	log('recvd setSelection msg from host.did change: ' + (didSelectionChange(CurSelRange, req)) + ' value: ' + req);
 	if (didSelectionChange(CurSelRange, req)) {
 		SuppressNextSelChangedHostNotification = true;
 		setDocSelection(req);

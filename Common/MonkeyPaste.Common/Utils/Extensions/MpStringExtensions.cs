@@ -539,6 +539,7 @@ namespace MonkeyPaste.Common {
             return path;
         }
 
+
         public static List<int> IndexListOfAll(this string text, string str, StringComparison comparisonType = StringComparison.InvariantCultureIgnoreCase) {List<int> allIndexOf = new List<int>();
             int index = text.IndexOf(str, comparisonType);
             while (index != -1) {

@@ -89,65 +89,66 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIContextMenuItemViewModel Implementation
 
-        public MpMenuItemViewModel SourceContextMenuViewModel {
-            get {
-                if(SelectedItem == null) {
-                    return new MpMenuItemViewModel();
-                }
-                return new MpMenuItemViewModel() {
-                    Header = "Source",
-                    SubItems = new List<MpMenuItemViewModel>() {
-                        new MpMenuItemViewModel() {
-                                    Header = $"Filter to '{SelectedItem.AppViewModel.AppName}'",
-                                    AltNavIdx = 0,
-                                    IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("FilterImage") as string,
-                                    Command = EnableFilterByAppCommand,
-                                    CommandParameter = SelectedItem
-                                },
-                        new MpMenuItemViewModel() {
-                                    Header = $"'{SelectedItem.AppViewModel.AppName}' to Excluded App",
-                                    AltNavIdx = SelectedItem.AppViewModel.AppName.Length + 6,
-                                    IconId = SelectedItem.AppViewModel.AppId,
-                                    Command = ExcludeSubSelectedItemApplicationCommand
-                                },
-                        new MpMenuItemViewModel() {
-                            Header = SelectedItem.UrlViewModel == null ?
-                                        null :
-                                        $"'{SelectedItem.UrlViewModel.UrlDomainPath}' to Excluded Domain",
+        //public MpMenuItemViewModel SourceContextMenuViewModel {
+        //    get {
+        //        if(SelectedItem == null) {
+        //            return new MpMenuItemViewModel();
+        //        }
+        //        return new MpMenuItemViewModel() {
+        //            Header = "Source",
+        //            SubItems = new List<MpMenuItemViewModel>() {
+        //                new MpMenuItemViewModel() {
+        //                            Header = $"Filter to '{SelectedItem.AppViewModel.AppName}'",
+        //                            AltNavIdx = 0,
+        //                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("FilterImage") as string,
+        //                            Command = EnableFilterByAppCommand,
+        //                            CommandParameter = SelectedItem
+        //                        },
+        //                new MpMenuItemViewModel() {
+        //                            Header = $"'{SelectedItem.AppViewModel.AppName}' to Excluded App",
+        //                            AltNavIdx = SelectedItem.AppViewModel.AppName.Length + 6,
+        //                            IconId = SelectedItem.AppViewModel.AppId,
+        //                            Command = ExcludeSubSelectedItemApplicationCommand
+        //                        },
+        //                new MpMenuItemViewModel() {
+        //                    Header = SelectedItem.UrlViewModel == null ?
+        //                                null :
+        //                                $"'{SelectedItem.UrlViewModel.UrlDomainPath}' to Excluded Domain",
 
-                            AltNavIdx = SelectedItem.UrlViewModel == null ?
-                                        -1 : SelectedItem.UrlViewModel.UrlDomainPath.Length + 6,
+        //                    AltNavIdx = SelectedItem.UrlViewModel == null ?
+        //                                -1 : SelectedItem.UrlViewModel.UrlDomainPath.Length + 6,
 
-                            IconId = SelectedItem.UrlViewModel == null ?
-                                        0 :
-                                        SelectedItem.UrlViewModel.IconId,
-                            IsVisible = SelectedItem.UrlViewModel != null,
-                            Command = ExcludeSubSelectedItemUrlDomainCommand
-                        },
-                        new MpMenuItemViewModel() {
-                            Header = "Into Macro",
-                            AltNavIdx = 5,
-                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("RobotClawImage") as string,
-                            Command = MpAvSettingsWindowViewModel.Instance.ShowSettingsWindowCommand,
-                            CommandParameter = this
-                        },
-                        new MpMenuItemViewModel() {
-                            Header = "To Shorcut",
-                            AltNavIdx = 3,
-                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("HotkeyImage") as string,
-                            Command = MpAvSettingsWindowViewModel.Instance.ShowSettingsWindowCommand,
-                            CommandParameter = this,
+        //                    IconId = SelectedItem.UrlViewModel == null ?
+        //                                0 :
+        //                                SelectedItem.UrlViewModel.IconId,
+        //                    IsVisible = SelectedItem.UrlViewModel != null,
+        //                    Command = ExcludeSubSelectedItemUrlDomainCommand
+        //                },
+        //                new MpMenuItemViewModel() {
+        //                    Header = "Into Macro",
+        //                    AltNavIdx = 5,
+        //                    IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("RobotClawImage") as string,
+        //                    Command = MpAvSettingsWindowViewModel.Instance.ShowSettingsWindowCommand,
+        //                    CommandParameter = this
+        //                },
+        //                new MpMenuItemViewModel() {
+        //                    Header = "To Shorcut",
+        //                    AltNavIdx = 3,
+        //                    IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("HotkeyImage") as string,
+        //                    Command = MpAvSettingsWindowViewModel.Instance.ShowSettingsWindowCommand,
+        //                    CommandParameter = this,
                                     
-                            //ShortcutArgs = new object[] { MpShortcutType.PasteCopyItem,
-                            //ShortcutObjId = SelectedItem.CopyItemId,
-                            ShortcutArgs = new object[] {
-                                MpShortcutType.PasteCopyItem,
-                                SelectedItem.CopyItemId, },
-                        }
-                    }
-                };
-            }
-        }
+        //                    //ShortcutArgs = new object[] { MpShortcutType.PasteCopyItem,
+        //                    //ShortcutObjId = SelectedItem.CopyItemId,
+        //                    ShortcutArgs = new object[] {
+        //                        MpShortcutType.PasteCopyItem,
+        //                        SelectedItem.CopyItemId, },
+        //                }
+        //            }
+        //        };
+        //    }
+        //}
+        
         public MpMenuItemViewModel ContextMenuViewModel {
             get {
                 if (SelectedItem == null) {
@@ -157,7 +158,7 @@ namespace MonkeyPaste.Avalonia {
                 //    return SelectedItem.TableViewModel.ContextMenuViewModel;
                 //}
                 if (SelectedItem.IsHoveringOverSourceIcon) {
-                    return SourceContextMenuViewModel;
+                    return SelectedItem.SourceCollectionViewModel.ContextMenuViewModel;
                 }
                 if (MpAvTagTrayViewModel.Instance.IsAnyBusy) {
                     Debugger.Break();
@@ -287,7 +288,7 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             }
                         },
-                        SourceContextMenuViewModel,
+                        SelectedItem.SourceCollectionViewModel.ContextMenuViewModel,
                         MpAvAnalyticItemCollectionViewModel.Instance.ContextMenuItemViewModel,
                         new MpMenuItemViewModel() {IsSeparator = true},
                         MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(SelectedItem),
@@ -1228,9 +1229,9 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = true;
 
-            while (MpAvSourceCollectionViewModel.Instance.IsAnyBusy) {
-                await Task.Delay(100);
-            }
+            //while (MpAvSourceCollectionViewModel.Instance.IsAnyBusy) {
+            //    await Task.Delay(100);
+            //}
 
             PropertyChanged += MpAvClipTrayViewModel_PropertyChanged;
             Items.CollectionChanged += Items_CollectionChanged;
@@ -1610,6 +1611,7 @@ namespace MonkeyPaste.Avalonia {
             IsSelectionReset = false;
         }
 
+
         public void ClipboardChanged(object sender, MpPortableDataObject mpdo) {
             bool is_change_ignored = MpAvMainWindowViewModel.Instance.IsMainWindowLoading ||
                                         IsAppPaused ||
@@ -1821,32 +1823,32 @@ namespace MonkeyPaste.Avalonia {
         private void MpDbObject_SyncAdd(object sender, MpDbSyncEventArgs e) {
             Dispatcher.UIThread.Post(async () => {
                 if (sender is MpCopyItem ci) {
-                    ci.StartSync(e.SourceGuid);
+                    //ci.StartSync(e.SourceGuid);
 
-                    var svm = MpAvSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == ci.SourceId);
+                    //var svm = MpAvSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == ci.SourceId);
 
-                    var app = svm.AppViewModel.App;
-                    app.StartSync(e.SourceGuid);
-                    //ci.Source.App.Icon.StartSync(e.SourceGuid);
-                    //ci.Source.App.Icon.IconImage.StartSync(e.SourceGuid);
+                    //var app = svm.AppViewModel.App;
+                    //app.StartSync(e.SourceGuid);
+                    ////ci.Source.App.Icon.StartSync(e.SourceGuid);
+                    ////ci.Source.App.Icon.IconImage.StartSync(e.SourceGuid);
 
-                    var dupCheck = this.GetClipTileViewModelById((int)ci.Id);
-                    if (dupCheck == null) {
-                        if (ci.Id == 0) {
-                            await ci.WriteToDatabaseAsync();
-                        }
-                        _newModels.Add(ci);
-                        //AddNewTiles();
-                    } else {
-                        MpConsole.WriteTraceLine(@"Warning, attempting to add existing copy item: " + dupCheck.CopyItem.ItemData + " ignoring and updating existing.");
-                        //dupCheck.CopyItem = ci;
-                    }
-                    app.EndSync();
-                    //ci.Source.App.Icon.EndSync();
-                    //ci.Source.App.Icon.IconImage.EndSync();
-                    ci.EndSync();
+                    //var dupCheck = this.GetClipTileViewModelById((int)ci.Id);
+                    //if (dupCheck == null) {
+                    //    if (ci.Id == 0) {
+                    //        await ci.WriteToDatabaseAsync();
+                    //    }
+                    //    _newModels.Add(ci);
+                    //    //AddNewTiles();
+                    //} else {
+                    //    MpConsole.WriteTraceLine(@"Warning, attempting to add existing copy item: " + dupCheck.CopyItem.ItemData + " ignoring and updating existing.");
+                    //    //dupCheck.CopyItem = ci;
+                    //}
+                    //app.EndSync();
+                    ////ci.Source.App.Icon.EndSync();
+                    ////ci.Source.App.Icon.IconImage.EndSync();
+                    //ci.EndSync();
 
-                    ResetClipSelection();
+                    //ResetClipSelection();
                 }
             });
         }
@@ -2910,26 +2912,6 @@ namespace MonkeyPaste.Avalonia {
                 return !IsAnyBusy && !IsRequery;
             });
 
-        public ICommand ExcludeSubSelectedItemApplicationCommand => new MpAsyncCommand(
-            async () => {
-                var avm = MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppId == SelectedItem.AppViewModel.AppId);
-                if (avm == null) {
-                    return;
-                }
-                await avm.RejectApp();
-            },
-            () => SelectedItem != null);
-
-        public ICommand ExcludeSubSelectedItemUrlDomainCommand => new MpAsyncCommand(
-            async () => {
-                var uvm = MpAvUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == SelectedItem.UrlViewModel.UrlId);
-                if (uvm == null) {
-                    MpConsole.WriteTraceLine("Error cannot find url id: " + SelectedItem.UrlViewModel.UrlId);
-                    return;
-                }
-                await uvm.RejectUrlOrDomain(true);
-            },
-            () => SelectedItem != null && SelectedItem.UrlViewModel != null);
 
         public ICommand SearchWebCommand => new MpCommand<object>(
             (args) => {
@@ -3128,22 +3110,6 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             });
 
-        public ICommand EnableFilterByAppCommand => new MpCommand<object>(
-            (targetCtvmArg) => {
-                var targetCtvm = targetCtvmArg as MpAvClipTileViewModel;
-                if (targetCtvm == null) {
-                    return;
-                }
-
-                //MpHelpers.OpenUrl(CopyItem.Source.App.AppPath);
-                ClearClipSelection();
-                targetCtvm.IsSelected = true;
-                //this triggers clip tray to swap out the app icons for the filtered app
-                //MpClipTrayViewModel.Instance.FilterByAppIcon = ctvm.CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64.ToBitmapSource();
-                IsFilteringByApp = true;
-            }, (targetCtvmArg) => {
-                return targetCtvmArg is MpAvClipTileViewModel tctvm && !tctvm.IsPinned;
-            });
         public ICommand AssignHotkeyCommand => new MpCommand(
             () => {
                 MpAvShortcutCollectionViewModel.Instance.ShowAssignShortcutDialogCommand.Execute(SelectedItem);

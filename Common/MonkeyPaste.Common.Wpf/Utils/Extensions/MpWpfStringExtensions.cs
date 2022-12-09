@@ -6,6 +6,7 @@ using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Common.Wpf {
     public static class MpWpfStringExtensions {
+
         public static int GetColCount(string text) {
             int maxCols = int.MinValue;
             foreach (string row in text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)) {
