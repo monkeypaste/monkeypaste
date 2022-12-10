@@ -80,7 +80,6 @@
     <NoWarn>$(NoWarn),IDE1006</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <AvaloniaXaml Remove="Assets\Images\backup\**" />
     <AvaloniaXaml Remove="AttachedProperties\DragDrop\**" />
     <AvaloniaXaml Remove="Behaviors\**" />
     <AvaloniaXaml Remove="cef\**" />
@@ -92,7 +91,6 @@
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
-    <Compile Remove="Assets\Images\backup\**" />
     <Compile Remove="AttachedProperties\DragDrop\**" />
     <Compile Remove="Behaviors\**" />
     <Compile Remove="cef\**" />
@@ -104,7 +102,6 @@
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
-    <EmbeddedResource Remove="Assets\Images\backup\**" />
     <EmbeddedResource Remove="AttachedProperties\DragDrop\**" />
     <EmbeddedResource Remove="Behaviors\**" />
     <EmbeddedResource Remove="cef\**" />
@@ -116,7 +113,6 @@
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <EmbeddedResource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
-    <None Remove="Assets\Images\backup\**" />
     <None Remove="AttachedProperties\DragDrop\**" />
     <None Remove="Behaviors\**" />
     <None Remove="cef\**" />
@@ -165,50 +161,6 @@
     <None Remove="Assets\Icons\cog.ico" />
     <None Remove="Assets\Icons\monkey.ico" />
     <None Remove="Assets\Icons\test_icon.ico" />
-    <None Remove="Assets\Images\egg.png" />
-    <None Remove="Assets\Images\monkey.png" />
-    <None Remove="Assets\Images\scissors.png" />
-    <None Remove="Assets\svg\close-svgrepo-com.svg" />
-    <None Remove="Assets\svg\dots-outline.svg" />
-    <None Remove="Assets\svg\dots-solid.svg" />
-    <None Remove="Assets\svg\Font_Awesome_5_solid_circle.svg" />
-    <None Remove="Assets\svg\shark-fin-01.svg" />
-    <None Remove="CefNet" />
-    <None Remove="CefNet.Avalonia" />
-    <None Remove="WebViewControl-Avalonia" />
-    <None Remove="Avalonia.MonoMac" />
-    <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
-    <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Base\" />
-    <None Remove="Utils\AvWrapper\Defnitions\TrayIcon\" />
-    <None Remove="Utils\AvWrapper\Defnitions\TrayIcon\Mac\" />
-    <None Remove="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
-    <None Remove="CefGlue.Avalonia" />
-    <None Remove="Dotnet.Bundle" />
-    <None Remove="WebkitGtkSharp" />
-    <None Remove="Styles\Spinner\" />
-    <EmbeddedResource Remove="Styles\ProgressRing\ProgressRing.xaml" />
-    <EmbeddedResource Remove="Styles\Spinner\Spinner.xaml" />
-    <None Remove="Controls\ProgressRing\" />
-    <None Remove="GtkSharp" />
-    <None Remove="GioSharp" />
-    <None Remove="gtk-sharp-3" />
-    <None Remove="Avalonia.Gtk3" />
-    <None Remove="SharpWebview" />
-    <None Remove="MonoMac.NetStandard" />
-    <None Remove="Microsoft.AspNetCore" />
-    <None Remove="Microsoft.AspNetCore.StaticFiles" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Adorners\MpAvContentDragDropAdorner.cs" />
-    <Compile Remove="AttachedProperties\MpAvCefNetWebViewExtension.cs" />
-    <Compile Remove="AttachedProperties\MpAvCefWebViewExtension.cs" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
-    <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
-    <Compile Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml.cs" />
-    <Compile Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove=".gitignore" />
     <None Remove="Assets\Images\Add.png" />
     <None Remove="Assets\Images\add1.png" />
     <None Remove="Assets\Images\add2.png" />
@@ -261,6 +213,7 @@
     <None Remove="Assets\Images\duckduckgoIcon.png" />
     <None Remove="Assets\Images\duplicate.png" />
     <None Remove="Assets\Images\edit.png" />
+    <None Remove="Assets\Images\egg.png" />
     <None Remove="Assets\Images\ellipses.png" />
     <None Remove="Assets\Images\email.png" />
     <None Remove="Assets\Images\error.png" />
@@ -272,6 +225,7 @@
     <None Remove="Assets\Images\folder.png" />
     <None Remove="Assets\Images\forward_black.png" />
     <None Remove="Assets\Images\frame_grip.png" />
+    <None Remove="Assets\Images\frame_grip_org.png" />
     <None Remove="Assets\Images\googleIcon.png" />
     <None Remove="Assets\Images\google_signin.png" />
     <None Remove="Assets\Images\help.png" />
@@ -297,42 +251,7 @@
     <None Remove="Assets\Images\merge.png" />
     <None Remove="Assets\Images\minus.png" />
     <None Remove="Assets\Images\minus2.png" />
-    <None Remove="Assets\Images\monkey (1).png" />
-    <None Remove="Assets\Images\monkey(2).png" />
-    <None Remove="Assets\Images\MpRichTextBox\aligncenter.png" />
-    <None Remove="Assets\Images\MpRichTextBox\alignjustify.png" />
-    <None Remove="Assets\Images\MpRichTextBox\alignleft.PNG" />
-    <None Remove="Assets\Images\MpRichTextBox\alignright.png" />
-    <None Remove="Assets\Images\MpRichTextBox\arrow_refresh.png" />
-    <None Remove="Assets\Images\MpRichTextBox\Backcolor.png" />
-    <None Remove="Assets\Images\MpRichTextBox\codeblock.png" />
-    <None Remove="Assets\Images\MpRichTextBox\codeinline.png" />
-    <None Remove="Assets\Images\MpRichTextBox\editcopy.png" />
-    <None Remove="Assets\Images\MpRichTextBox\editcut.png" />
-    <None Remove="Assets\Images\MpRichTextBox\editpaste.png" />
-    <None Remove="Assets\Images\MpRichTextBox\editredo.png" />
-    <None Remove="Assets\Images\MpRichTextBox\editundo.png" />
-    <None Remove="Assets\Images\MpRichTextBox\filesave.png" />
-    <None Remove="Assets\Images\MpRichTextBox\fontbold.png" />
-    <None Remove="Assets\Images\MpRichTextBox\fontgrow.png" />
-    <None Remove="Assets\Images\MpRichTextBox\fontitalic.png" />
-    <None Remove="Assets\Images\MpRichTextBox\fontshrink.png" />
-    <None Remove="Assets\Images\MpRichTextBox\fontunderline.png" />
-    <None Remove="Assets\Images\MpRichTextBox\indentdecrease.png" />
-    <None Remove="Assets\Images\MpRichTextBox\indentincrease.png" />
-    <None Remove="Assets\Images\MpRichTextBox\listbullets.png" />
-    <None Remove="Assets\Images\MpRichTextBox\listnumbers.png" />
-    <None Remove="Assets\Images\MpRichTextBox\normaltext.png" />
-    <None Remove="Assets\Images\MpRichTextBox\Print.png" />
-    <None Remove="Assets\Images\MpRichTextBox\separator.png" />
-    <None Remove="Assets\Images\MpRichTextBox\spellcheck.png" />
-    <None Remove="Assets\Images\MpRichTextBox\spreadsheet.png" />
-    <None Remove="Assets\Images\MpRichTextBox\Strikeout.png" />
-    <None Remove="Assets\Images\MpRichTextBox\templateadd.png" />
-    <None Remove="Assets\Images\MpRichTextBox\templatedisabled.png" />
-    <None Remove="Assets\Images\MpRichTextBox\templateremove.png" />
-    <None Remove="Assets\Images\MpRichTextBox\templaterename.png" />
-    <None Remove="Assets\Images\MpRichTextBox\Textcolor.png" />
+    <None Remove="Assets\Images\monkey.png" />
     <None Remove="Assets\Images\noentry.png" />
     <None Remove="Assets\Images\noneclick.png" />
     <None Remove="Assets\Images\paste.png" />
@@ -356,6 +275,7 @@
     <None Remove="Assets\Images\rtf.png" />
     <None Remove="Assets\Images\save.png" />
     <None Remove="Assets\Images\scales.png" />
+    <None Remove="Assets\Images\scissors.png" />
     <None Remove="Assets\Images\search.png" />
     <None Remove="Assets\Images\selectall.png" />
     <None Remove="Assets\Images\selection.png" />
@@ -398,19 +318,83 @@
     <None Remove="Assets\Images\wrench.png" />
     <None Remove="Assets\Images\yandexIcon.png" />
     <None Remove="Assets\Images\yinyang.png" />
+    <None Remove="Assets\svg\align-center.svg" />
+    <None Remove="Assets\svg\align-justify.svg" />
+    <None Remove="Assets\svg\align-left.svg" />
+    <None Remove="Assets\svg\align-right.svg" />
+    <None Remove="Assets\svg\append-outline.svg" />
+    <None Remove="Assets\svg\append-solid.svg" />
+    <None Remove="Assets\svg\close-svgrepo-com.svg" />
+    <None Remove="Assets\svg\dots-outline.svg" />
+    <None Remove="Assets\svg\dots-solid.svg" />
+    <None Remove="Assets\svg\Font_Awesome_5_solid_circle.svg" />
+    <None Remove="Assets\svg\insert-outline.svg" />
+    <None Remove="Assets\svg\insert-solid.svg" />
+    <None Remove="Assets\svg\radio-off.svg" />
+    <None Remove="Assets\svg\radio-on.svg" />
+    <None Remove="Assets\svg\shark-fin-01.svg" />
+    <None Remove="Assets\svg\text-insert-caret-solid.svg" />
+    <None Remove="Assets\svg\text-insert-caret.svg" />
+    <None Remove="CefNet" />
+    <None Remove="CefNet.Avalonia" />
+    <None Remove="WebViewControl-Avalonia" />
+    <None Remove="Avalonia.MonoMac" />
+    <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
+    <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Base\" />
+    <None Remove="Utils\AvWrapper\Defnitions\TrayIcon\" />
+    <None Remove="Utils\AvWrapper\Defnitions\TrayIcon\Mac\" />
+    <None Remove="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
+    <None Remove="CefGlue.Avalonia" />
+    <None Remove="Dotnet.Bundle" />
+    <None Remove="WebkitGtkSharp" />
+    <None Remove="Styles\Spinner\" />
+    <EmbeddedResource Remove="Styles\ProgressRing\ProgressRing.xaml" />
+    <EmbeddedResource Remove="Styles\Spinner\Spinner.xaml" />
+    <None Remove="Controls\ProgressRing\" />
+    <None Remove="GtkSharp" />
+    <None Remove="GioSharp" />
+    <None Remove="gtk-sharp-3" />
+    <None Remove="Avalonia.Gtk3" />
+    <None Remove="SharpWebview" />
+    <None Remove="MonoMac.NetStandard" />
+    <None Remove="Microsoft.AspNetCore" />
+    <None Remove="Microsoft.AspNetCore.StaticFiles" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Adorners\MpAvContentDragDropAdorner.cs" />
+    <Compile Remove="AttachedProperties\MpAvCefNetWebViewExtension.cs" />
+    <Compile Remove="AttachedProperties\MpAvCefWebViewExtension.cs" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
+    <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
+    <Compile Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml.cs" />
+    <Compile Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove=".gitignore" />
     <None Remove="Settings.settings" />
   </ItemGroup>
   <ItemGroup>
     <Page Remove="Styles\ProgressRing\ProgressRing.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <AvaloniaResource Include="Assets\Cursors\copy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Cursors\hand_closed.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Cursors\hand_open.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Icons\cog.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Icons\monkey.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Icons\test_icon.ico" />
+    <AvaloniaResource Include="Assets\Icons\test_icon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\Add.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -603,6 +587,9 @@
     <AvaloniaResource Include="Assets\Images\frame_grip.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\frame_grip_org.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\googleIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -679,108 +666,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\monkey.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\aligncenter.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\alignjustify.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\alignleft.PNG">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\alignright.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\arrow_refresh.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\Backcolor.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\codeblock.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\codeinline.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\editcopy.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\editcut.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\editpaste.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\editredo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\editundo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\filesave.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\fontbold.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\fontgrow.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\fontitalic.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\fontshrink.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\fontunderline.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\indentdecrease.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\indentincrease.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\listbullets.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\listnumbers.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\normaltext.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\Print.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\separator.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\spellcheck.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\spreadsheet.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\Strikeout.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\templateadd.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\templatedisabled.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\templateremove.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\templaterename.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\MpRichTextBox\Textcolor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\noentry.png">
@@ -981,6 +866,24 @@
     <AvaloniaResource Include="Assets\Images\yinyang.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\svg\align-center.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\svg\align-justify.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\svg\align-left.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\svg\align-right.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\svg\append-outline.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\svg\append-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\svg\close-svgrepo-com.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -993,7 +896,25 @@
     <AvaloniaResource Include="Assets\svg\Font_Awesome_5_solid_circle.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\svg\insert-outline.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\svg\insert-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\svg\radio-off.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\svg\radio-on.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\svg\shark-fin-01.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\svg\text-insert-caret-solid.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\svg\text-insert-caret.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Accents\BaseLight.axaml">
@@ -1094,9 +1015,6 @@
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Icons\monkey.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Update="Views\ExternalDropWindow\DropFormatItemView\MpAvDropFormatItemView.axaml.cs">
       <DependentUpon>MpAvDropFormatItemView.axaml</DependentUpon>
     </Compile>
@@ -1173,17 +1091,6 @@
   </Target>
 
   <Target Name="_CollectWatchItems" />
-  <ItemGroup>
-    <AvaloniaResource Include="Assets\Cursors\copy.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Cursors\hand_closed.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Cursors\hand_open.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-  </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="call $(ProjectDir)scripts\kill_mpav_processes.bat" Condition="'$(BuildOs)' == 'WINDOWS'" />
   </Target>

@@ -107,12 +107,6 @@ function onDragStart(e) {
 }
 
 function onDragEnd(e) {
-    let fromHost = e && e.fromHost ? e.fromHost : false;
-    log('drag end fromHost: ', fromHost);
-    if (isDropping() && fromHost) {
-        log('ignoring host drag end');
-        return;
-    }
     log('drag end');
     updateWindowMouseState(e);
     CurDragTargetElm = null;

@@ -239,42 +239,7 @@ function onDataTransferCompleted_ntf(sourceUrl) {
 	}
 }
 
-function onSelectionChanged_ntf(sel) {
-	// output 'MpQuillSelectionChangedMessage'
-	if (typeof notifySelectionChanged === 'function') {
-		let msg = {
-			index: sel.index,
-			length: sel.length
-		};
-		let msgStr = toBase64FromJsonObj(msg);
-		notifySelectionChanged(msgStr);
-	}
-}
 
-function onScrollChanged_ntf(scrollObj) {
-	// output 'MpQuillScrollChangedMessage'
-	if (typeof notifyScrollChanged === 'function') {
-		let msg = {
-			left: scrollObj.left,
-			top: scrollObj.top
-		};
-		let msgStr = toBase64FromJsonObj(msg);
-		notifyScrollChanged(msgStr);
-	}
-}
-
-function onAppendModeChanged_ntf() {
-	// output 'MpQuillAppendModeChangedMessage'
-	if (typeof notifyAppendModeChanged === 'function') {
-		let msg = {
-			isAppendLineMode: IsAppendLineMode,
-			isAppendMode: IsAppendMode,
-			isAppendManualMode: IsAppendManualMode
-		};
-		let msgStr = toBase64FromJsonObj(msg);
-		notifyAppendModeChanged(msgStr);
-	}
-}
 
 function onInternalContextMenuIsVisibleChanged_ntf(isVisible) {
 	// output 'MpQuillInternalContextIsVisibleChangedNotification'
@@ -290,3 +255,51 @@ function onInternalContextMenuIsVisibleChanged_ntf(isVisible) {
 function isRunningOnHost() {
 	return typeof notifyInitComplete !== 'function';
 }
+
+
+
+
+function onAppendStateChanged_ntf(appendDataStr = null) {	
+	// output 'MpQuillAppendStateChangedMessage'
+	if (appendDataStr && !isAppendNotifier()) {
+		log('append error. only notifier should pass append data. data: ', appendDataStr);
+		debugger;
+		return;
+	}
+	if (typeof notifyAppendStateChanged === 'function') {
+		let msg = {
+			isAppendLineMode: IsAppendLineMode,
+			isAppendMode: IsAppendMode,
+			isAppendManualMode: IsAppendManualMode,
+			appendDocIdx: getAppendDocRange().index,
+			appendDocLength: getAppendDocRange().length,
+			appendData: appendDataStr
+		};
+		let msgStr = toBase64FromJsonObj(msg);
+		notifyAppendStateChanged(msgStr);
+	}
+}
+
+//function onSelectionChanged_ntf(sel) {
+//	// output 'MpQuillSelectionChangedMessage'
+//	if (typeof notifySelectionChanged === 'function') {
+//		let msg = {
+//			index: sel.index,
+//			length: sel.length
+//		};
+//		let msgStr = toBase64FromJsonObj(msg);
+//		notifySelectionChanged(msgStr);
+//	}
+//}
+
+//function onScrollChanged_ntf(scrollObj) {
+//	// output 'MpQuillScrollChangedMessage'
+//	if (typeof notifyScrollChanged === 'function') {
+//		let msg = {
+//			left: scrollObj.left,
+//			top: scrollObj.top
+//		};
+//		let msgStr = toBase64FromJsonObj(msg);
+//		notifyScrollChanged(msgStr);
+//	}
+//}

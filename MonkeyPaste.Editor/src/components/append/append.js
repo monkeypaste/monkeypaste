@@ -10,26 +10,30 @@ var IsAppendManualMode = false;
 // #region Life Cycle
 
 function initAppend() {
+	if (!isAppendNotifier()) {
+		return;
+	}
+
+	document.addEventListener('selectionchange', onAppendDocumentSelectionChange, true);
 }
 
 // #endregion Life Cycle
 
 // #region Getters
 
-function getAppendIdx() {
-	let sel = getDocSelection();
-	if (sel && IsAppendManualMode) {
-		return sel.index + sel.length;
+function getAppendDocRange() {
+	if (IsAppendManualMode) {
+		return cleanDocRange(getDocSelection());
 	}
 
-	let eof_idx = getDocLength();
-	if (IsAppendLineMode) {
-		return eof_idx;
-	}
+	let append_idx = getDocLength();
 	if (IsAppendMode) {
-		return Math.max(0,eof_idx - 1);
+		append_idx = Math.max(0, append_idx - 1);
 	}
-	return 0;
+	return {
+		index: append_idx,
+		length: 1
+	};
 }
 // #endregion Getters
 
@@ -67,9 +71,9 @@ function enableAppendMode(isAppendLine, isAppendManual, fromHost = false) {
 
 	// handle all msgs here not in manual 
 	if (isAppendManual) {
-		enableAppendManualMode();
+		enableAppendManualMode(false);
 	} else {
-		disableAppendManualMode();
+		disableAppendManualMode(false);
 	}
 
 	getEditorElement().classList.add('append');
@@ -80,7 +84,7 @@ function enableAppendMode(isAppendLine, isAppendManual, fromHost = false) {
 	scrollToAppendIdx();
 
 	if (!fromHost && (did_append_mode_change || did_manual_mode_change)) {
-		onAppendModeChanged_ntf();
+		onAppendStateChanged_ntf();
 	}
 
 	drawOverlay();
@@ -93,7 +97,8 @@ function disableAppendMode(fromHost = false) {
 
 	IsAppendLineMode = false;
 	IsAppendMode = false;
-	IsAppendManualMode = false;
+	// NOTE dont allow manual to notify here (regardless of source) to avoid double messages
+	disableAppendManualMode(false);
 
 	getEditorElement().classList.remove('append');
 	updatePasteAppendToolbarLabel();
@@ -103,7 +108,7 @@ function disableAppendMode(fromHost = false) {
 	}
 
 	if (!fromHost && (did_append_mode_change || did_manual_mode_change)) {
-		onAppendModeChanged_ntf();
+		onAppendStateChanged_ntf();
 	}
 	drawOverlay();
 	log('append mode disabled. IsAppendNotifier: ' + isAppendNotifier());
@@ -119,7 +124,7 @@ function enableAppendManualMode(fromHost = false) {
 	drawOverlay();
 	log('append manual mode enabled. IsAppendNotifier: ' + isAppendNotifier());
 	if (!fromHost && did_manual_mode_change) {
-		onAppendModeChanged_ntf();
+		onAppendStateChanged_ntf();
 	}
 }
 
@@ -127,10 +132,10 @@ function disableAppendManualMode(fromHost = false) {
 	let did_manual_mode_change = IsAppendManualMode;
 	IsAppendManualMode = false;
 
-	setDocSelection({ index: getAppendIdx(), length: 0 });
 	updatePasteAppendToolbarLabel();
 
 	if (isAnyAppendEnabled()) {
+		setDocSelection(getAppendDocRange());
 		scrollToAppendIdx();
 	}
 
@@ -138,12 +143,64 @@ function disableAppendManualMode(fromHost = false) {
 	log('append manual mode disabled. IsAppendNotifier: ' + isAppendNotifier());
 
 	if (!fromHost && did_manual_mode_change) {
-		onAppendModeChanged_ntf();
+		onAppendStateChanged_ntf();
 	}
 }
 // #endregion State
 
 // #region Actions
+
+function updateAppendModeState(
+	isAppendLine,
+	isAppend,
+	isAppendManual,
+	appendDocIdx,
+	appendDocLength,
+	appendData,
+	fromHost) {
+	let new_append_range = cleanDocRange({ index: appendDocIdx, length: appendDocLength });
+
+	let is_enabling = !isAnyAppendEnabled() && (isAppendLine || isAppend);
+	let is_disabling = isAnyAppendEnabled() && !isAppendLine && !isAppend;
+
+	let is_updating_state =
+		IsAppendLineMode != isAppendLine ||
+		IsAppendMode != isAppend ||
+		IsAppendManualMode != isAppendManual;
+
+	let is_appending_data = !isNullOrEmpty(appendData);
+
+	let is_append_range_changed =
+		isAppendManual &&
+		didSelectionChange(getAppendDocRange(), new_append_range);
+
+	log(' ');
+	log(`updateAppendFromHost changes:`);
+	log('is_enabling: ' + is_enabling);
+	log('is_disabling: ' + is_disabling);
+	log('is_updating_state: ' + is_updating_state);
+	log('is_append_range_changed: ' + is_append_range_changed);
+	log('cur append range: ', getAppendDocRange());
+	log('new append range: ', new_append_range);
+	log('is_appending_data: ' + is_appending_data);
+	log('append_data: ' + appendData);
+	log(' ');
+
+	if (is_append_range_changed) {
+		setDocSelection(new_append_range);
+	}
+
+	if (is_enabling || is_updating_state) {
+		enableAppendMode(isAppendLine, isAppendManual, fromHost);
+	}
+	if (is_disabling) {
+		disableAppendMode(fromHost);
+	}
+
+	if (is_appending_data) {
+		appendContentData(appendData);
+	}
+}
 
 function scrollToAppendIdx() {
 	//scrollDocRangeIntoView({ index: getAppendIdx(), length: 0 }, 0 , 15);
@@ -156,5 +213,6 @@ function scrollToAppendIdx() {
 // #endregion Actions
 
 // #region Event Handlers
+
 
 // #endregion Event Handlers

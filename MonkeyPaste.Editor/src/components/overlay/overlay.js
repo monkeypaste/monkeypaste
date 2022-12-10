@@ -98,7 +98,7 @@ function drawAppendNotifierPreview(ctx, color = 'red', thickness = 1.0, line_sty
         color = 'lime';
     }
     let block_state = IsAppendLineMode ? 'post' : 'inline';
-    let render_lines = getPreviewLines(getAppendIdx(), block_state, false);
+    let render_lines = getPreviewLines(getAppendDocRange().index, block_state, false);
     for (var i = 0; i < render_lines.length; i++) {
         let line = render_lines[i];
         drawLine(ctx, line, color, thickness, line_style)

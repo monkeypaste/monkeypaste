@@ -81,6 +81,10 @@ function showPasteToolbar(isPasting = false) {
 }
 
 function hidePasteToolbar() {
+    if (isAppendNotifier()) {
+        // should always have pastey for appender
+        return;
+    }
     var ptt = getPasteToolbarContainerElement();
     ptt.classList.add('hidden');
 

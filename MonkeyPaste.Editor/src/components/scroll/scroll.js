@@ -136,11 +136,11 @@ function onEditorContainerScroll(e) {
     //       // TODO update these guys
     //}
 
-    if (SuppressNextEditorScrollChangedNotification) {
-        SuppressNextEditorScrollChangedNotification = false;
-    } else {
-        onScrollChanged_ntf(getEditorScroll());
-    }
+    //if (SuppressNextEditorScrollChangedNotification) {
+    //    SuppressNextEditorScrollChangedNotification = false;
+    //} else {
+    //    onScrollChanged_ntf(getEditorScroll());
+    //}
     drawOverlay();
 }
 // #endregion Event Handlers

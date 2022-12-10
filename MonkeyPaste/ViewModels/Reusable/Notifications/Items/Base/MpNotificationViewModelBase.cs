@@ -160,7 +160,7 @@ namespace MonkeyPaste {
 
         #region MpIPopupMenuViewModel Implementation
 
-        public MpMenuItemViewModel PopupMenuViewModel {
+        public virtual MpMenuItemViewModel PopupMenuViewModel {
             get {
                 return new MpMenuItemViewModel() {
                     SubItems = new List<MpMenuItemViewModel>() {
@@ -173,6 +173,13 @@ namespace MonkeyPaste {
                             Header = $"Hide all '{NotificationType.EnumToLabel()}' notifications",
                             IconResourceKey = "ClosedEyeImage",
                             Command = CheckDoNotShowAgainCommand
+                        },
+                        new MpMenuItemViewModel() {IsSeparator = true, IsVisible = CanPin},
+                        new MpMenuItemViewModel() {
+                            IsVisible = CanPin,
+                            Header = IsPinned ? "Unpin":"Pin",
+                            IconResourceKey = IsPinned ? "PinDownImage" : "PinImage",
+                            Command = ToggleIsPinnedCommand
                         }
                     }
                 };
@@ -245,6 +252,9 @@ namespace MonkeyPaste {
         #endregion
 
         #region State
+
+        public virtual bool CanPin => false;
+        public bool IsPinned { get; set; } = false;
 
         public bool IsOverOptionsButton {get;set;}
         public bool IsPopupMenuVisible { get; set; }
@@ -444,6 +454,11 @@ namespace MonkeyPaste {
             () => {
                 MpPlatformWrapper.Services.NotificationManager.HideNotification(this);
             });
+
+        public ICommand ToggleIsPinnedCommand => new MpCommand(
+            () => {
+                IsPinned = !IsPinned;
+            },()=>CanPin);
         #endregion
     }
 }

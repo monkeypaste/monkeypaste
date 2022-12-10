@@ -747,8 +747,7 @@ function appendTextContentData(data) {
 	// NOTE since data is result of ci builder it will always be html
 	dt.setData('text/html', data);
 
-	let append_range = { index: getAppendIdx(), length: 1 };
-	performDataTransferOnContent(dt, append_range);
+	performDataTransferOnContent(dt, getAppendDocRange(),null, 'api', true);
 }
 
 // #endregion Actions

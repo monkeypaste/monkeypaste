@@ -47,6 +47,9 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Constants
+        #endregion
+
         #region Statics
         public static ObservableCollection<string> EditorToolbarIcons => new ObservableCollection<string>() {
 
@@ -174,8 +177,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpISizeViewModel Implementation
 
-        double MpISizeViewModel.Width => UnformattedContentSize.Width;
-        double MpISizeViewModel.Height => UnformattedContentSize.Height;
+        double MpISizeViewModel.Width => UnconstrainedContentSize.Width;
+        double MpISizeViewModel.Height => UnconstrainedContentSize.Height;
 
         #endregion
 
@@ -381,7 +384,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpSize UnformattedContentSize { get; set; }
+        public MpSize UnconstrainedContentSize { get; set; }
         public double TileTitleHeight => IsTitleVisible ? 100 : 0;
         public double TileDetailHeight => 25;// MpMeasurements.Instance.ClipTileDetailHeight;
 
@@ -416,7 +419,7 @@ namespace MonkeyPaste.Avalonia {
             TileDetailHeight;
 
 
-        public MpSize ContentSize => IsContentReadOnly ? ReadOnlyContentSize : UnformattedContentSize;
+        public MpSize ContentSize => IsContentReadOnly ? ReadOnlyContentSize : UnconstrainedContentSize;
         //new Size(
         //        ContainerSize.Width - MpMeasurements.Instance.ClipTileBorderThickness,
         //        ContainerSize.Height - MpMeasurements.Instance.ClipTileBorderThickness);
@@ -436,7 +439,7 @@ namespace MonkeyPaste.Avalonia {
                     return new MpSize();
                 }
                 //get contents actual size
-                var ds = UnformattedContentSize;//CopyItemData.ToFlowDocument().GetDocumentSize();
+                var ds = UnconstrainedContentSize;//CopyItemData.ToFlowDocument().GetDocumentSize();
 
                 //if item's content is larger than expanded width make sure it gets that width (will show scroll bars)
                 double w = Math.Max(ds.Width, MinWidth);// MpMeasurements.Instance.ClipTileContentMinMaxWidth);
@@ -484,50 +487,6 @@ namespace MonkeyPaste.Avalonia {
         public double MaxTitleHeight => 40;
 
         public double TitleFontSize => Math.Max(8,(TitleHeight / 2) - 2);
-        //public double TrayX {
-        //    get {
-        //        double trayX = 0;
-        //        if (Parent == null) {
-        //            return trayX;
-        //        }
-        //        trayX = MinSize * ColIdx;
-
-        //        return trayX;
-        //    }
-        //}
-
-        //private double _trayX;
-        //public double TrayX {
-        //    get => _trayX;
-        //    set {
-        //        if (_trayX != value) {
-        //            _trayX = value;
-        //            OnPropertyChanged(nameof(TrayX));
-        //        }
-        //    }
-        //}
-
-        //public double TrayY {
-        //    get {
-        //        double trayY = 0;
-        //        if (Parent == null) {
-        //            return trayY;
-        //        }
-        //        trayY = MinSize * RowIdx;
-        //        return trayY;
-        //    }
-        //}
-
-        //private double _trayY;
-        //public double TrayY {
-        //    get => _trayY;
-        //    set {
-        //        if (_trayY != value) {
-        //            _trayY = value;
-        //            OnPropertyChanged(nameof(TrayY));
-        //        }
-        //    }
-        //}
 
         public double TrayX => TrayLocation.X;
         public double TrayY => TrayLocation.Y;
@@ -564,12 +523,14 @@ namespace MonkeyPaste.Avalonia {
         public double ReadOnlyHeight => MinHeight;
         public MpSize ReadOnlySize => new MpSize(ReadOnlyWidth, ReadOnlyHeight);
 
+        
+
         public double EditableWidth {
             get {
                 if (Parent == null) {
                     return 0;
                 }
-                double w = Parent.DefaultEditableItemWidth;// Math.Min(Parent.DefaultEditableItemWidth, UnformattedContentSize.Width);
+                double w = Math.Min(Parent.DefaultEditableItemWidth, UnconstrainedContentSize.Width);
                 return w;
             }
         }
@@ -859,7 +820,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool CanVerticallyScroll => !IsContentReadOnly ?
                                                 EditableContentSize.Height > TileContentHeight :
-                                                UnformattedContentSize.Height > TileContentHeight;
+                                                UnconstrainedContentSize.Height > TileContentHeight;
 
         public bool IsOverlayButtonsVisible => IsHovering && !IsAppendNotifier;
         public bool IsResizable => !IsAppendNotifier;
@@ -875,7 +836,7 @@ namespace MonkeyPaste.Avalonia {
         private bool _isTitleVisible = true;
         public bool IsTitleVisible { 
             get {
-                if(IsAppendNotifier) {
+                if(IsAppendNotifier || !IsContentReadOnly) {
                     return false;
                 }
                 return _isTitleVisible;
@@ -1700,6 +1661,8 @@ namespace MonkeyPaste.Avalonia {
                             IsSelected = true;
                         }
                         MpAvPersistentClipTilePropertiesHelper.AddPersistentIsContentEditableTile_ById(CopyItemId);
+                        IsTitleReadOnly = true;
+                        OnPropertyChanged(nameof(IsTitleVisible));
                     }
                     MpMessenger.Send<MpMessageType>(IsContentReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
                     Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));

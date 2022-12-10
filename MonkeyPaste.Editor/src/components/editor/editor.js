@@ -3,6 +3,7 @@
 var DefaultEditorWidth = 1200;
 
 var IgnoreNextSelectionChange = false;
+var SuppressTextChangedNtf = false;
 
 var IsSubSelectionEnabled = false;
 var IsReadOnly = false;
@@ -360,7 +361,10 @@ function onEditorTextChanged(delta, oldDelta, source) {
 		updateTemplatesAfterTextChanged();
 	}
 
-	onContentChanged_ntf();
+	if (!SuppressTextChangedNtf) {
+		onContentChanged_ntf();
+	}
+	
 	drawOverlay();
 }
 // #endregion Event Handlers

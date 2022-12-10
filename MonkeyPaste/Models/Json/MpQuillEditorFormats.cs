@@ -185,14 +185,15 @@ namespace MonkeyPaste {
         public string dataTransferSourceUrl { get; set; }
     }
 
-    public class MpQuillAppendModeChangedMessage : MpJsonObject {
+    public class MpQuillAppendStateChangedMessage : MpJsonObject {
         public bool isAppendLineMode { get; set; }
         public bool isAppendMode { get; set; }
         public bool isAppendManualMode { get; set; }
-    }
 
-    public class MpQuillAppendDataRequestMessage : MpJsonObject {
+        public int appendDocIdx { get; set; }
+        public int appendDocLength { get; set; }
         public string appendData { get; set; }
+
     }
 
     public class MpQuillSelectionChangedMessage : MpJsonObject {

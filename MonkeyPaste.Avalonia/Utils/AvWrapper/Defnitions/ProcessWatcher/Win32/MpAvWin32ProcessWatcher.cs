@@ -305,6 +305,9 @@ namespace MonkeyPaste.Avalonia {
                     //if it is not resolve its process path
                     processName = GetProcessPath(fgHandle);
                 }
+                if(processName == null) {
+                    return;
+                }
                 //if (processName == fallback) {
                 //    return;
                 //}

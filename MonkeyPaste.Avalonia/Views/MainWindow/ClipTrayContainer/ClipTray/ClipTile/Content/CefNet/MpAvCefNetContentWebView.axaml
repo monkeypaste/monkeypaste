@@ -20,7 +20,7 @@
                              IsContentSubSelectable="{Binding IsSubSelectionEnabled, Mode=TwoWay}"
                              IsContentFindAndReplaceVisible="{Binding IsFindAndReplaceVisible, Mode=TwoWay}"
                              AppendData="{Binding AppendData, Mode=TwoWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                             AppendModeState="{Binding AppendModeState, Mode=TwoWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                             AppendModeState="{Binding AppendModeStateFlags, Mode=TwoWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                              Focusable="True"
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch" />

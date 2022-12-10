@@ -11,7 +11,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly MpAvBoolToGridLengthConverter Instance = new();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            if(value is bool boolVal &&
+            if(value is bool boolVal && 
                 parameter is string paramStr &&
                 paramStr.SplitNoEmpty("|") is string[] paramParts) {
                 int idx = boolVal ? 0 : 1;
@@ -34,7 +34,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-            throw new NotSupportedException();
+            //if(value is GridLength gl) {
+            //    return gl.Value == 0 && gl.GridUnitType == GridUnitType.Pixel;
+            //}
+            //return false;
+            return true;
         }
     }
 }

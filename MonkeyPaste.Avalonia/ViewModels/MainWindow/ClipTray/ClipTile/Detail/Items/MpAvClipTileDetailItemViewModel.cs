@@ -165,7 +165,7 @@ namespace MonkeyPaste.Avalonia {
                     case MpCopyItemDetailType.DataSize:
                         switch(ctvm.ItemType) {
                             case MpCopyItemType.Image:
-                                DetailText = $"({(int)ctvm.UnformattedContentSize.Width}px) | ({(int)ctvm.UnformattedContentSize.Height}px)";
+                                DetailText = $"({(int)ctvm.UnconstrainedContentSize.Width}px) | ({(int)ctvm.UnconstrainedContentSize.Height}px)";
                                 break;
                             case MpCopyItemType.Text:
                                 DetailText = $"{ctvm.CharCount} chars | {ctvm.LineCount} lines";

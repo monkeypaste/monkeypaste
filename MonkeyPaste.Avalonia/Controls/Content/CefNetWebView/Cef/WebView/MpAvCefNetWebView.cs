@@ -1,30 +1,25 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Data;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.LogicalTree;
+using Avalonia.Platform;
+using Avalonia.Threading;
+using Avalonia.VisualTree;
 using CefNet;
 using CefNet.Avalonia;
+using CefNet.Internal;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
+using PropertyChanged;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PropertyChanged;
-using System.Diagnostics;
-using System.Collections.Concurrent;
-using System.Threading;
-using Avalonia.Input;
-using MonkeyPaste.Common.Avalonia;
-using Avalonia;
-using MonkeyPaste.Common;
-using Avalonia.Interactivity;
-using CefNet.Internal;
-using Avalonia.Controls;
-using Avalonia.Platform;
 using System.Web;
-using Xamarin.Essentials;
-using Avalonia.LogicalTree;
-using Pango;
-using System.Collections;
-using Avalonia.Data;
-using Avalonia.VisualTree;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -62,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
         notifyDataTransferCompleted,
         notifySelectionChanged,
         notifyScrollChanged,
-        notifyAppendModeChanged,
+        notifyAppendStateChanged,
         notifyInternalContextMenuIsVisibleChanged
     }
     [DoNotNotify]
@@ -172,20 +167,20 @@ namespace MonkeyPaste.Avalonia {
         #region MpAvIContentDragSource Implementation
         public PointerPressedEventArgs LastPointerPressedEventArgs { get; private set; }
 
-        public void NotifyDropComplete(DragDropEffects dropEffect) {
-            var dragEndMsg = new MpQuillDragEndMessage() {
-                dataTransfer = new MpQuillDataTransferMessageFragment() {
-                    dropEffect = dropEffect.ToString().ToLower()
-                },
-                fromHost = true,
-                wasCancel = dropEffect == DragDropEffects.None
-            };
+        //public void NotifyDropComplete(DragDropEffects dropEffect) {
+        //    var dragEndMsg = new MpQuillDragEndMessage() {
+        //        dataTransfer = new MpQuillDataTransferMessageFragment() {
+        //            dropEffect = dropEffect.ToString().ToLower()
+        //        },
+        //        fromHost = true,
+        //        wasCancel = dropEffect == DragDropEffects.None
+        //    };
 
-            this.ExecuteJavascript($"dragEnd_ext('{dragEndMsg.SerializeJsonObjectToBase64()}')");
+        //    this.ExecuteJavascript($"dragEnd_ext('{dragEndMsg.SerializeJsonObjectToBase64()}')");
 
-            //IsDragging = false;
-            MpConsole.WriteLine($"Drag complete for '{BindingContext}'. DropEffect: '{dropEffect}'");
-        }
+        //    //IsDragging = false;
+        //    MpConsole.WriteLine($"Drag complete for '{BindingContext}'. DropEffect: '{dropEffect}'");
+        //}
         public void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc) {
             if (!Dispatcher.UIThread.CheckAccess()) {
                 Dispatcher.UIThread.Post(() => (this as MpAvIDragSource).NotifyModKeyStateChanged(ctrl,alt,shift,esc));
@@ -323,7 +318,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvCefNetWebView() : base() {
             MpMessenger.RegisterGlobal(ReceivedGlobalMessega);
             this.GetObservable(MpAvCefNetWebView.AppendDataProperty).Subscribe(value => OnAppendDataChanged());
-            this.GetObservable(MpAvCefNetWebView.AppendModeStateProperty).Subscribe(value => OnAppendModeStateChanged());
+            this.GetObservable(MpAvCefNetWebView.AppendModeStateProperty).Subscribe(value => OnAppendModeStateChanged("command"));
 
             this.GetObservable(MpAvCefNetWebView.ContentIdProperty).Subscribe(value => OnContentIdChanged());
             this.GetObservable(MpAvCefNetWebView.IsContentSelectedProperty).Subscribe(value => OnIsContentSelectedChanged());
@@ -429,6 +424,7 @@ namespace MonkeyPaste.Avalonia {
                     if (ntf is MpQuillEditorContentChangedMessage loadComplete_ntf) {
                         IsContentLoaded = true;
                         ProcessContentChangedMessage(loadComplete_ntf);
+                        //OnAppendModeStateChanged("editor");
                     }
                     break;
 
@@ -439,7 +435,7 @@ namespace MonkeyPaste.Avalonia {
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillDisableReadOnlyResponseMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillDisableReadOnlyResponseMessage disableReadOnlyMsg) {
                         ctvm.IsContentReadOnly = false;
-                        ctvm.UnformattedContentSize = new MpSize(disableReadOnlyMsg.editorWidth, disableReadOnlyMsg.editorHeight);
+                        ctvm.UnconstrainedContentSize = new MpSize(disableReadOnlyMsg.editorWidth, disableReadOnlyMsg.editorHeight);
                     }
                     break;
                 case MpAvEditorBindingFunctionType.notifyReadOnlyEnabled:
@@ -454,7 +450,7 @@ namespace MonkeyPaste.Avalonia {
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillEditorContentChangedMessage contentChanged_ntf) {
                         ProcessContentChangedMessage(contentChanged_ntf);
-                        RelayMsg($"contentChanged_ext('{msgJsonBase64Str}')");
+                        //RelayMsg($"contentChanged_ext('{msgJsonBase64Str}')");
                     }
                     break;
                 case MpAvEditorBindingFunctionType.notifyDataTransferCompleted:
@@ -479,28 +475,28 @@ namespace MonkeyPaste.Avalonia {
 
                 // MODAL SYNC
 
-                case MpAvEditorBindingFunctionType.notifySelectionChanged:
-                    if(!ctvm.IsAppendNotifier && !ctvm.IsAppendTrayItem) {
-                        break;
-                    }
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillSelectionChangedMessage>(msgJsonBase64Str);
-                    if (ntf is MpQuillSelectionChangedMessage selChangedMsg) {
-                        RelayMsg($"setSelection_ext('{msgJsonBase64Str}')");
-                    }
-                    break;
-                case MpAvEditorBindingFunctionType.notifyScrollChanged:
-                    if (!ctvm.IsAppendNotifier && !ctvm.IsAppendTrayItem) {
-                        break;
-                    }
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillScrollChangedMessage>(msgJsonBase64Str);
-                    if (ntf is MpQuillScrollChangedMessage scrollChangedMsg) {
-                        //RelayMsg($"setScroll_ext('{msgJsonBase64Str}')");
-                    }
-                    break;
-                case MpAvEditorBindingFunctionType.notifyAppendModeChanged:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillAppendModeChangedMessage>(msgJsonBase64Str);
-                    if (ntf is MpQuillAppendModeChangedMessage appendModeChangedMsg) {
-                        ProcessAppendModeChangedAsync(appendModeChangedMsg).FireAndForgetSafeAsync();
+                //case MpAvEditorBindingFunctionType.notifySelectionChanged:
+                //    if(!ctvm.IsAppendNotifier && !ctvm.IsAppendTrayItem) {
+                //        break;
+                //    }
+                //    ntf = MpJsonObject.DeserializeBase64Object<MpQuillSelectionChangedMessage>(msgJsonBase64Str);
+                //    if (ntf is MpQuillSelectionChangedMessage selChangedMsg) {
+                //        RelayMsg($"setSelection_ext('{msgJsonBase64Str}')");
+                //    }
+                //    break;
+                //case MpAvEditorBindingFunctionType.notifyScrollChanged:
+                //    if (!ctvm.IsAppendNotifier && !ctvm.IsAppendTrayItem) {
+                //        break;
+                //    }
+                //    ntf = MpJsonObject.DeserializeBase64Object<MpQuillScrollChangedMessage>(msgJsonBase64Str);
+                //    if (ntf is MpQuillScrollChangedMessage scrollChangedMsg) {
+                //        //RelayMsg($"setScroll_ext('{msgJsonBase64Str}')");
+                //    }
+                //    break;
+                case MpAvEditorBindingFunctionType.notifyAppendStateChanged:
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillAppendStateChangedMessage>(msgJsonBase64Str);
+                    if (ntf is MpQuillAppendStateChangedMessage appendStateChangedMsg) {
+                        ProcessAppendStateChangedMessage(appendStateChangedMsg,"editor");
                     }
                     break;
 
@@ -905,7 +901,7 @@ namespace MonkeyPaste.Avalonia {
                 BindingContext.CopyItemData = contentChanged_ntf.itemData;
             }
             if (contentChanged_ntf.editorHeight > 0 && contentChanged_ntf.editorHeight > 0) {
-                BindingContext.UnformattedContentSize = new MpSize(contentChanged_ntf.editorWidth, contentChanged_ntf.editorHeight);
+                BindingContext.UnconstrainedContentSize = new MpSize(contentChanged_ntf.editorWidth, contentChanged_ntf.editorHeight);
             }
             BindingContext.HasTemplates = contentChanged_ntf.hasTemplates;
 
@@ -1036,12 +1032,23 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 BindingMode.TwoWay);
 
-        private void OnIsContentSubSelectableChanged() {
+        private async void OnIsContentSubSelectableChanged() {
             if (BindingContext == null ||
+               
                 !IsContentLoaded ||
                 !IsContentReadOnly) {
                 return;
             }
+
+            if(!IsEditorInitialized && BindingContext.IsPlaceholder) {
+                // it does happen (i think this is the other i case for pin/unpin thing)
+                Debugger.Break();
+            }
+            while(!IsEditorInitialized) {
+                // when tile ispinned is toggled and was subselectable, need to let the new view catch up
+                await Task.Delay(100);
+            }
+
             if (IsContentSubSelectable) {
                 this.ExecuteJavascript("enableSubSelection_ext()");
                 if (BindingContext.HasTemplates && !BindingContext.IsDropOverTile) {
@@ -1094,49 +1101,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region AppendModeState Property
 
-        private bool? _appendModeState;
-        public bool? AppendModeState {
+        private MpAppendModeFlags _appendModeState;
+        public MpAppendModeFlags AppendModeState {
             get { return _appendModeState; }
             set { SetAndRaise(AppendModeStateProperty, ref _appendModeState, value); }
         }
 
-        public static DirectProperty<MpAvCefNetWebView, bool?> AppendModeStateProperty =
-            AvaloniaProperty.RegisterDirect<MpAvCefNetWebView, bool?>(
+        public static DirectProperty<MpAvCefNetWebView, MpAppendModeFlags> AppendModeStateProperty =
+            AvaloniaProperty.RegisterDirect<MpAvCefNetWebView, MpAppendModeFlags>(
                 nameof(AppendModeState),
                 x => x.AppendModeState,
                 (x, o) => x.AppendModeState = o,
-                null,
+                MpAppendModeFlags.None,
                 BindingMode.TwoWay);
-        private void OnAppendModeStateChanged() {
-            if (BindingContext == null ||
-                (!BindingContext.IsAppendNotifier &&
-                !BindingContext.IsAppendTrayItem)) {
-                return;
-            }
-
-            MpConsole.WriteLine($"AppendModeState changed. AppendModeState: {AppendModeState}");
-            Dispatcher.UIThread.Post(async () => {
-                //var sw = Stopwatch.StartNew();
-                //while (!IsContentLoaded) {
-                //    await Task.Delay(100);
-                //    if (sw.ElapsedMilliseconds > _APPEND_TIMEOUT_MS) {
-                //        //timeout, content changed never notified back
-                //        Debugger.Break();
-                //        break;
-                //    }
-                //}
-                var reqMsg = new MpQuillAppendModeChangedMessage() {
-                    isAppendLineMode = AppendModeState.IsTrue(),
-                    isAppendMode = AppendModeState.IsFalse()
-                };
-                this.ExecuteJavascript($"appendModeChanged_ext('{reqMsg.SerializeJsonObjectToBase64()}')");
-
-                if (BindingContext.IsAppendNotifier && AppendModeState.IsNull()) {
-                    //MpAppendNotificationViewModel.Instance.IsClosing = true;
-                    MpAvNotificationWindowManager.Instance.HideNotification(MpAppendNotificationViewModel.Instance);
-                }
-            });
-        }
+        
         #endregion
 
         #region AppendData Property
@@ -1155,47 +1133,89 @@ namespace MonkeyPaste.Avalonia {
                 null,
                 BindingMode.TwoWay);
 
-        private async void OnAppendDataChanged() {
+        
+        #endregion
+
+        private void OnAppendModeStateChanged(string source) {
             if (BindingContext == null ||
-                AppendData == null ||
+                !BindingContext.IsAppendNotifier) {
+                return;
+            }
+
+            // only called when mode changed in tray so the processState() ignores it (source is not 'editor')
+            // except relaying it to tray tile (if present)
+            var ctrvm = MpAvClipTrayViewModel.Instance;
+            MpConsole.WriteLine($"AppendModeState changed. AppendModeState: {AppendModeState}");
+            var reqMsg = new MpQuillAppendStateChangedMessage() {
+                isAppendLineMode = AppendModeState.HasFlag(MpAppendModeFlags.AppendLine),
+                isAppendMode = AppendModeState.HasFlag(MpAppendModeFlags.Append),
+                isAppendManualMode = AppendModeState.HasFlag(MpAppendModeFlags.Manual),
+            };
+            ProcessAppendStateChangedMessage(reqMsg, source);
+        }
+
+        private void OnAppendDataChanged() {
+            if (BindingContext == null ||
+                string.IsNullOrEmpty(AppendData) ||
                 !BindingContext.IsAppendNotifier) {
                 return;
             }
 
             MpConsole.WriteLine($"AppendData changed. AppendData: {AppendData}");
-            var req = new MpQuillAppendDataRequestMessage() { appendData = AppendData };
-            this.ExecuteJavascript($"appendData_ext('{req.SerializeJsonObjectToBase64()}')");
+            var req = new MpQuillAppendStateChangedMessage() {
+
+                isAppendLineMode = AppendModeState.HasFlag(MpAppendModeFlags.AppendLine),
+                isAppendMode = AppendModeState.HasFlag(MpAppendModeFlags.Append),
+                isAppendManualMode = AppendModeState.HasFlag(MpAppendModeFlags.Manual),
+                appendData = AppendData 
+            };
+            this.ExecuteJavascript($"appendDataToNotifier_ext('{req.SerializeJsonObjectToBase64()}')");
 
             AppendData = null;
-            IsContentLoaded = false;
-            if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen ||
-                (MpAppendNotificationViewModel.Instance.IsVisible &&
-                 !MpAppendNotificationViewModel.Instance.IsClosing)) {
-                // don't show notifier w/ open mw
-                return;
-            }
-            while (!IsContentLoaded) {
-                await Task.Delay(100);
-            }
-            //show updated append buffer if not already visible
-            MpNotificationBuilder.ShowNotificationAsync(MpNotificationType.AppendChanged).FireAndForgetSafeAsync();
 
         }
-        #endregion
 
-        private async Task ProcessAppendModeChangedAsync(MpQuillAppendModeChangedMessage appendChangedMsg) {
-            await MpAvClipTrayViewModel.Instance.UpdateAppendModeStateFromContentAsync(BindingContext, appendChangedMsg);
-            RelayMsg($"appendModeChanged_ext('{appendChangedMsg.SerializeJsonObjectToBase64()}')");
+        private void ProcessAppendStateChangedMessage(MpQuillAppendStateChangedMessage appendChangedMsg, string source) {
+            Dispatcher.UIThread.Post(async () => {
+                var ctrvm = MpAvClipTrayViewModel.Instance;
+                var cur_append_tile = ctrvm.AppendClipTileViewModel;
+
+                if (source == "editor") {
+                    // no matter source if mode has a true and doesn't match tray update tray
+                    // only disable once message from notifier has no true modes 
+                    // only show ntf if it was an appendData msg, the rest delegated to tray
+                    if (appendChangedMsg.isAppendLineMode && !ctrvm.IsAppendLineMode) {
+                        ctrvm.ToggleAppendLineModeCommand.Execute(null);
+                    } else if (appendChangedMsg.isAppendMode && !ctrvm.IsAppendMode) {
+                        ctrvm.ToggleAppendModeCommand.Execute(null);
+                    } else if(BindingContext.IsAppendNotifier &&
+                        (!appendChangedMsg.isAppendLineMode && !appendChangedMsg.isAppendMode && ctrvm.IsAnyAppendMode)) {
+                        // only let notifier deactivate
+                        await ctrvm.DeactivateAppendModeAsync();
+                    } else if(BindingContext.IsAppendNotifier &&
+                                !string.IsNullOrEmpty(appendChangedMsg.appendData)) {
+                        MpNotificationBuilder.ShowNotificationAsync(MpNotificationType.AppendChanged).FireAndForgetSafeAsync();
+                    }
+                }
+                while(ctrvm.IsAnyBusy) {
+                    await Task.Delay(100);
+                }
+                while (ctrvm.IsAddingClipboardItem) {
+                    await Task.Delay(100);
+                }
+                RelayMsg($"appendStateChanged_ext('{appendChangedMsg.SerializeJsonObjectToBase64()}')").FireAndForgetSafeAsync();
+            });
         }
 
-        private void RelayMsg(string msg) {
-            return;
+        private async Task RelayMsg(string msg) {
+            await Task.Delay(1);
             MpAvCefNetWebView dest_wv = null;
             if (BindingContext.IsAppendNotifier) {
-                // relay sel to tray
+                // relay to tray tile
                 dest_wv = LocateTrayTileWebView(BindingContext.CopyItemId);
+               
             } else if(BindingContext.IsAppendTrayItem) {
-                // relay to modal
+                // relay to notifier
                 dest_wv = LocateModalWebView();
             }
             if (dest_wv == null) {

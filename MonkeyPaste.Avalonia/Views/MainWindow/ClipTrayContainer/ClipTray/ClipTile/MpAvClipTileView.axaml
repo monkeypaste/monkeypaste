@@ -37,6 +37,8 @@
                           Classes.CanResize="{Binding CanResize}"
                           Classes.IsResizing="{Binding IsResizing}"
                           Classes.IsAnyBusy="{Binding IsAnyBusy}"
+                          Classes.showTitle="{Binding IsTitleVisible}"
+                          Classes.showDetail="{Binding IsDetailVisible}"
                           VerticalAlignment="Stretch"
                           local:MpAvMenuExtension.IsEnabled="True"
                           local:MpAvMenuExtension.CanShowMenu="{Binding CanShowContextMenu, Mode=OneWay}"
@@ -49,21 +51,15 @@
                           CornerRadius="{StaticResource TileCornerRadius}"
                           BorderThickness="{StaticResource TileBorderThickness}"
                           Background="{DynamicResource ClipTileContentBackgroundBrush}">
-        <Grid HorizontalAlignment="Stretch"
-              VerticalAlignment="Stretch">
-            <Grid.RowDefinitions>
-                <!--<RowDefinition Height="{Binding TitleGridRowHeight}"
-                               MaxHeight="40" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="{Binding DetailGridRowHeight}" />-->
-                <RowDefinition Height="0.25*"
-                               MaxHeight="40" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="20" />
-            </Grid.RowDefinitions>
+
+        <Grid x:Name="TileGrid"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              RowDefinitions="0.25*,*,20">
             <!--  Title  -->
             <local:MpAvClipTileTitleView x:Name="TileTitleView"
                                          Grid.Row="0"
+                                         MaxHeight="40"
                                          DataContext="{Binding}"
                                          HorizontalAlignment="Stretch"
                                          VerticalAlignment="Stretch"

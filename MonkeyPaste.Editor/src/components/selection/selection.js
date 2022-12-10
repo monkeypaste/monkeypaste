@@ -4,7 +4,7 @@ const DefaultSelectionBgColor = 'lightblue';
 const DefaultSelectionFgColor = 'black';
 const DefaultCaretColor = 'black';
 
-var SuppressNextSelChangedHostNotification = false;
+//var SuppressNextSelChangedHostNotification = false;
 
 var BlurredSelectionRects = null;
 
@@ -383,55 +383,6 @@ function cleanDocRange(doc_range) {
 	return doc_range;
 }
 
-//function coerceCleanSelection(new_range,old_range) {
-//	if (didSelectionChange(new_range, old_range)) {
-//		//log('Sel Changed from Timer.');
-//		if (isDragging()) {
-//			if (DragSelectionRange) {
-//				new_range = DragSelectionRange;
-//			}
-//			log('drag detected sel timer overriding selection. LastRange: ', old_range, ' DragRange: ', DragSelectionRange);
-//			setDocSelection(old_range.index, old_range.length, 'silent');
-
-//			//drawOverlay();
-//			return new_range;
-//		}
-//	}
-//	return new_range;
-//}
-
-function calculateTotalOffset(node, offset) {
-	let total = offset
-	let curNode = node
-
-	while (curNode != getEditorElement()) {
-		if (isClassInElementPath(curNode, TemplateEmbedClass)) {
-			while (true) {
-				curNode = curNode.parentElement;
-				if (curNode.nodeType == 3 ||
-					!curNode.classList.contains(TemplateEmbedClass)) {
-					continue;
-				}
-				break;
-			}
-			
-		}
-		if (!curNode.includes(TemplateEmbedClass) && curNode.hasAttribute === 'function' &&
-			parseBool(curNode.getAttribute('contenteditable')) === false) {
-			curNode = curNode.parentElement;
-		}
-		if (curNode.previousSibling) {
-			total += curNode.previousSibling.textContent.length
-
-			curNode = curNode.previousSibling
-		} else {
-			curNode = curNode.parentElement
-		}
-	}
-
-	return total
-}
-
 
 // #endregion Actions
 
@@ -445,17 +396,16 @@ function onDocumentSelectionChange(e) {
 		//setDomSelection(DragDomRange);
 		//return;
 	}
-	if (didSelectionChange(new_range, CurSelRange)) {
-		
+	if (didSelectionChange(new_range, CurSelRange)) {		
 		LastSelRange = CurSelRange;
 		CurSelRange = new_range;
 		updateAllElements();
 
-		if (SuppressNextSelChangedHostNotification) {
-			SuppressNextSelChangedHostNotification = false;
-		} else {
-			onSelectionChanged_ntf(CurSelRange);
-		}
+		//if (SuppressNextSelChangedHostNotification) {
+		//	SuppressNextSelChangedHostNotification = false;
+		//} else {
+		//	onSelectionChanged_ntf(CurSelRange);
+		//}
 	}
 }
 // #endregion Event Handlers

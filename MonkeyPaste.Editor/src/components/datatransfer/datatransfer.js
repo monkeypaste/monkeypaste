@@ -32,11 +32,24 @@ function isHtmlClipboardFragment(dataStr) {
 
 // #region Actions
 
-function performDataTransferOnContent(dt, dest_doc_range, source_doc_range, source = 'api') {
+function performDataTransferOnContent(
+    dt,
+    dest_doc_range,
+    source_doc_range,
+    source = 'api',
+    suppressMsg = false) {
 	if (!dt || !dest_doc_range) {
         log('data transfer error  no data transfer or destination range');
         return;
     }
+
+    let wasTextChangeSuppressed = false;
+    if (!SuppressTextChangedNtf && suppressMsg) {
+        // NOTE don't unflag textchange ntf if currently set (should be wrapped somewhere) only flag if needed
+        SuppressTextChangedNtf = true;
+        wasTextChangeSuppressed = true;
+    }
+
     // DECODE HTML & URL FRAGMENT SOURCE (IF AVAILABLE)
 
     let source_url = null;
@@ -95,7 +108,13 @@ function performDataTransferOnContent(dt, dest_doc_range, source_doc_range, sour
     setDocSelection(dt_range.index, dt_range.length);
     scrollDocRangeIntoView(dt_range);    
 
-    onDataTransferCompleted_ntf(source_url);
+    if (!suppressMsg) {
+        onDataTransferCompleted_ntf(source_url);
+    }    
+
+    if (wasTextChangeSuppressed) {
+        SuppressTextChangedNtf = false;
+    }
 }
 
 // #endregion Actions

@@ -5,6 +5,7 @@ namespace MonkeyPaste {
     public class MpMessageNotificationViewModel : MpNotificationViewModelBase {
         #region Properties
 
+        public override bool CanPin => true;
         public override int MaxShowTimeMs => DEFAULT_NOTIFICATION_SHOWTIME_MS;
 
         #endregion
@@ -27,7 +28,8 @@ namespace MonkeyPaste {
                 while (DateTime.Now - startTime <= TimeSpan.FromMilliseconds(MaxShowTimeMs)) {
                     await Task.Delay(100);
 
-                    while (IsHovering) {
+                    while (IsHovering || IsPinned) {
+                        startTime = DateTime.Now;
                         await Task.Delay(100);
                         if(DoNotShowAgain) {
                             return MpNotificationDialogResultType.DoNotShow;
@@ -37,6 +39,14 @@ namespace MonkeyPaste {
                 HideNotification();
             }
             return MpNotificationDialogResultType.None;
+        }
+
+        public override void HideNotification() {
+            if(IsPinned) {
+                // ignore until unpinned
+                return;
+            }
+            base.HideNotification();
         }
         #endregion
     }

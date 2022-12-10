@@ -119,17 +119,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void FinishDrag(DragDropEffects? dropEffect) {
+            //if(_dragSource != null) {
+            //    bool wasCopy = MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown;
+            //    bool wasSuccess = dropEffect.HasValue;
 
-            if(_dragSource != null) {
-                bool wasCopy = MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown;
-                bool wasSuccess = dropEffect.HasValue;
-
-                DragDropEffects actualDropEffect = wasSuccess ? wasCopy ? DragDropEffects.Copy : DragDropEffects.Move : DragDropEffects.None;
-                _dragSource.NotifyDropComplete(actualDropEffect);
-            }
+            //    DragDropEffects actualDropEffect = wasSuccess ? wasCopy ? DragDropEffects.Copy : DragDropEffects.Move : DragDropEffects.None;
+            //    _dragSource.NotifyDropComplete(actualDropEffect);
+            //}
             ResetDragState();
-            
-
             MpMessenger.SendGlobal(MpMessageType.ItemDragEnd);
 
         }

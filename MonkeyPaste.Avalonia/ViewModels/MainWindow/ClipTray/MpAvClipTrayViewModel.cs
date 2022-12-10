@@ -17,7 +17,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using X11;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -49,6 +48,7 @@ namespace MonkeyPaste.Avalonia {
 
         public const double MAX_TILE_SIZE_CONTAINER_PAD = 50;
         public const double MIN_SIZE_ZOOM_FACTOR_COEFF = (double)1 / (double)7;
+        public const double EDITOR_TOOLBAR_MIN_WIDTH = 830.0d;
 
         #endregion
 
@@ -864,7 +864,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpSize DefaultItemSize => new MpSize(DefaultItemWidth, DefaultItemHeight);
 
-        public double DefaultEditableItemWidth => 1130.0d; // based on edit toolbar width
+        public double DefaultEditableItemWidth => EDITOR_TOOLBAR_MIN_WIDTH;
 
         public MpSize DefaultEditableItemSize => new MpSize(DefaultEditableItemWidth, DefaultItemHeight);
         public double ScrollBarFixedAxisSize => 30;
@@ -987,15 +987,11 @@ namespace MonkeyPaste.Avalonia {
 
         public string AppendData { get; private set; } = null;
 
-        public bool? AppendModeState {
-            get {
-                // null == no append mode
-                // false == append mode
-                // true == append line mode
-                if (!IsAnyAppendMode) {
-                    return null;
-                }
-                return IsAppendLineMode;
+        private MpAppendModeFlags _appendModeFlags = MpAppendModeFlags.None;
+        public MpAppendModeFlags AppendModeStateFlags {
+            get => _appendModeFlags;
+            set {
+                UpdateAppendModeStateFlags(value,"property");
             }
         }
 
@@ -1003,6 +999,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsAppendMode { get; set; }
 
         public bool IsAppendLineMode { get; set; }
+
+        public bool IsAppendManualMode { get; set; }
 
         public bool IsAnyAppendMode => IsAppendMode || IsAppendLineMode;
         #endregion
@@ -3185,24 +3183,6 @@ namespace MonkeyPaste.Avalonia {
             }
             return ModalClipTileViewModel.ItemType == ci.ItemType;
         }
-
-        public async Task UpdateAppendModeStateFromContentAsync(MpAvClipTileViewModel sender_ctvm, MpQuillAppendModeChangedMessage msg) {
-            // cases
-            // - an append mode was activated on a tile w/ no current appender
-            // - an append mode was activated on a tile AND there's another that is active
-
-            // - an append mode was deactivated on a tile
-            // - an append mode was deactivated on the append notifier
-
-            // - append mode was changed on a tile
-            // - append mode was changed on the append notifier
-
-            // - manual mode was activated/deactivated on a tile
-            // - manual mode was acctivated/deactivated on the append notifier
-
-
-
-        }
         private async Task AssignAppendClipTileAsync() {
             // use cases
             // 1. app is hidden and user hits hot key or enables in system tray
@@ -3245,6 +3225,8 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
                 if (append_ctvm != null) {
+                    // pin (or move to front) if exists 
+                    //PinTileCommand.Execute(append_ctvm);
                     append_ctvm.OnPropertyChanged(nameof(append_ctvm.IsAppendTrayItem));
                 }
             }
@@ -3252,8 +3234,15 @@ namespace MonkeyPaste.Avalonia {
             //OnPropertyChanged(nameof(ModalClipTileViewModel));
         }
 
-
-        private async Task ActivateAppendModeAsync(bool isAppendLine) {
+        private void UpdateAppendModeStateFlags(MpAppendModeFlags flags, string source) {
+            IsAppendLineMode = flags.HasFlag(MpAppendModeFlags.AppendLine);
+            IsAppendMode = flags.HasFlag(MpAppendModeFlags.Append);
+            IsAppendManualMode = flags.HasFlag(MpAppendModeFlags.Manual);
+            _appendModeFlags = flags;
+            OnPropertyChanged(nameof(AppendModeStateFlags));
+        }
+        
+        private async Task ActivateAppendModeAsync(bool isAppendLine, bool isManualMode) {
             Dispatcher.UIThread.VerifyAccess();
             while(IsAddingClipboardItem) {
                 // if new item is being added, its important to wait for it
@@ -3264,38 +3253,58 @@ namespace MonkeyPaste.Avalonia {
                 // append mode was just toggled ON (param was null)
                 await AssignAppendClipTileAsync();
             }
-            bool was_append_already_enabled = IsAnyAppendMode;
+            bool was_append_already_enabled = IsAnyAppendMode && !ModalClipTileViewModel.IsPlaceholder;
 
-            IsAppendMode = !isAppendLine;
-            IsAppendLineMode = isAppendLine;
+            MpAppendModeFlags amf = MpAppendModeFlags.None;
+            if (isAppendLine) {
+                amf |= MpAppendModeFlags.AppendLine;
+            }else {
+                amf |= MpAppendModeFlags.Append;
+            }
+            if (isManualMode) {
+                amf |= MpAppendModeFlags.Manual;
+            }
+            UpdateAppendModeStateFlags(amf, "command");
 
-            OnPropertyChanged(nameof(AppendModeState));
             MpAppendNotificationViewModel.Instance.OnPropertyChanged(nameof(MpAppendNotificationViewModel.Instance.Title));
 
             if (was_append_already_enabled) {
                 // don't trigger if already activated, the AppendDataChanged() timesout because IsContentLoaded doesn't goto false
                 return;
             }
-            // wait so append doesn't beat activate onto window stack
-            //await Task.Delay(500);
-            MpNotificationBuilder.ShowNotificationAsync(MpNotificationType.AppendChanged).FireAndForgetSafeAsync();
+
+            if(ModalClipTileViewModel.IsPlaceholder) {
+                // no item assigned yet so just show enable message
+                MpNotificationBuilder.ShowMessageAsync(
+                       title: $"MODE CHANGED",
+                       body: $"Append{(IsAppendLineMode ? "-Line" : "")} Mode Activated",
+                       msgType: MpNotificationType.AppModeChange,
+                       iconSourceStr: "NoEntryImage").FireAndForgetSafeAsync();
+            } else {
+                MpNotificationBuilder.ShowNotificationAsync(MpNotificationType.AppendChanged).FireAndForgetSafeAsync();
+            }
         }
-        private async Task DeactivateAppendModeAsync() {
+        public async Task DeactivateAppendModeAsync(bool isSilent = false) {
             Dispatcher.UIThread.VerifyAccess();
 
             bool wasAppendLineMode = IsAppendLineMode;
 
-            var append_tile = AllItems.FirstOrDefault(x => x.IsAppendTrayItem);
-            IsAppendLineMode = false;
-            IsAppendMode = false;
-            if (append_tile != null) {
-                append_tile.OnPropertyChanged(nameof(append_tile.IsAppendTrayItem));
+            //var append_tile = AllItems.FirstOrDefault(x => x.IsAppendTrayItem);
+            UpdateAppendModeStateFlags(MpAppendModeFlags.None, "command");
+
+            //if (append_tile != null) {
+            //    append_tile.OnPropertyChanged(nameof(append_tile.IsAppendTrayItem));
+            //}
+            if(!isSilent) {
+
+                OnPropertyChanged(nameof(AppendModeStateFlags));
             }
-            OnPropertyChanged(nameof(AppendModeState));
+            
 
             await ModalClipTileViewModel.InitializeAsync(null);
 
-            if(MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+            if(MpAvMainWindowViewModel.Instance.IsMainWindowOpen ||
+                isSilent) {
                 return;
             }
 
@@ -3330,7 +3339,9 @@ namespace MonkeyPaste.Avalonia {
             if (ModalClipTileViewModel.ItemType == MpCopyItemType.FileList) {
                 append_data = await MpAvFileItemCollectionViewModel.CreateFileListEditorFragment(aci);
             }
-            if (isNew && MpPrefViewModel.Instance.IgnoreAppendedItems) {
+            if (isNew && 
+                MpPrefViewModel.Instance.IgnoreAppendedItems &&
+                ModalClipTileViewModel.CopyItemId != aci.Id) {
                 aci.DeleteFromDatabaseAsync().FireAndForgetSafeAsync();
             }
             //Task.Run(async () => {
@@ -3372,7 +3383,7 @@ namespace MonkeyPaste.Avalonia {
                 if (IsAppendMode) {
                     DeactivateAppendModeAsync().FireAndForgetSafeAsync();
                 } else {
-                    ActivateAppendModeAsync(false).FireAndForgetSafeAsync();
+                    ActivateAppendModeAsync(false, IsAppendManualMode).FireAndForgetSafeAsync();
                 }
 
             });
@@ -3382,9 +3393,21 @@ namespace MonkeyPaste.Avalonia {
                 if (IsAppendLineMode) {
                     DeactivateAppendModeAsync().FireAndForgetSafeAsync();
                 } else {
-                    ActivateAppendModeAsync(true).FireAndForgetSafeAsync();
+                    ActivateAppendModeAsync(true, IsAppendManualMode).FireAndForgetSafeAsync();
                 }
             });
+        public ICommand ToggleAppendManualModeCommand => new MpCommand(
+            () => {
+                bool new_manual_state = !IsAppendManualMode;
+                bool append_state = IsAppendLineMode;
+                if(!IsAnyAppendMode && new_manual_state) {
+                    // append line by default
+                    append_state = true;
+                }
+
+                ActivateAppendModeAsync(append_state, new_manual_state).FireAndForgetSafeAsync();
+            });
+
         public ICommand SetAppendDataCommand => new MpAsyncCommand<object>(
             async (dataArg) => {
                 var append_data_str = dataArg as string;

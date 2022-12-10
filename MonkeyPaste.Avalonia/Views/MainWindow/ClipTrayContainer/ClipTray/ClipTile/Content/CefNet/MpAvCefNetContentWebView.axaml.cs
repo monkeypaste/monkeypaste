@@ -10,6 +10,7 @@ using Avalonia.Threading;
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvCefNetContentWebView : MpAvUserControl<MpAvClipTileViewModel> {
         public MpAvCefNetContentWebView() {
+
             InitializeComponent();         
         }
 

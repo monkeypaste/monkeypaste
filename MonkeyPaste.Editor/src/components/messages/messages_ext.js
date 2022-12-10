@@ -161,12 +161,6 @@ function updateModifierKeysFromHost_ext(modKeyMsgStr) {
 	drawOverlay();
 }
 
-function dragEnd_ext(dragEndMsg_base64str) {
-	// input MpQuillDragEndMessage
-	let dragEnd_e = toJsonObjFromBase64Str(dragEndMsg_base64str);
-	onDragEnd(dragEnd_e);
-	return 'done';
-}
 
 function showFindAndReplace_ext() {
 	if (isShowingFindReplaceToolbar()) {
@@ -210,37 +204,65 @@ function enableWindowResizeUpdate_ext() {
 	onWindowResize();
 }
 
-function appendModeChanged_ext(reqMsgBase64Str) {
-	// input 'MpQuillAppendModeChangedMessage'
-	let msg = toJsonObjFromBase64Str(reqMsgBase64Str);
-	if (msg.isAppendLineMode || msg.isAppendMode) {
-		enableAppendMode(msg.isAppendLineMode, msg.isAppendManualMode, true);
-	} else {
-		disableAppendMode(true);
-	}	
-}
-
-function appendData_ext(reqMsgBase64Str) {
-	// input 'MpQuillAppendDataRequestMessage'
-	log('append requested: ' + reqMsgBase64Str);
+function appendDataToNotifier_ext(reqMsgBase64Str) {
+	// input 'MpQuillAppendStateChangedMessage'
+	if (!isAppendNotifier()) {
+		log('append error. only notifier should get data upate');
+		debugger;
+		return;
+	}
 	let req = toJsonObjFromBase64Str(reqMsgBase64Str);
-	appendContentData(req.appendData);
+
+	updateAppendModeState(
+		req.isAppendLineMode,
+		req.isAppendMode,
+		req.isAppendManualMode,
+		req.appendDocIdx,
+		req.appendDocLength,
+		req.appendData,
+		false); // sync notifier w/ host state and append data
+
+	onAppendStateChanged_ntf(req.appendData);
+	onContentChanged_ntf();
 }
 
-function setSelection_ext(selMsgBase64Str) {
-	// input 'MpQuillSelectionChangedMessage'
-	let req = toJsonObjFromBase64Str(selMsgBase64Str);
-	log('recvd setSelection msg from host.did change: ' + (didSelectionChange(CurSelRange, req)) + ' value: ' + req);
-	if (didSelectionChange(CurSelRange, req)) {
-		SuppressNextSelChangedHostNotification = true;
-		setDocSelection(req);
-	}	
+function appendStateChanged_ext(reqMsgBase64Str) {
+	// input 'MpQuillAppendStateChangedMessage'
+	let req = toJsonObjFromBase64Str(reqMsgBase64Str);
+	log('appendStateChanged_ext: ', req);
+
+	updateAppendModeState(
+		req.isAppendLineMode,
+		req.isAppendMode,
+		req.isAppendManualMode,
+		req.appendDocIdx,
+		req.appendDocLength,
+		req.appendData,
+		true);	
 }
-function setScroll_ext(scrollMsgBase64Str) {
-	// input 'MpQuillScrollChangedMessage'
-	let req = toJsonObjFromBase64Str(scrollMsgBase64Str);
-	if (didEditorScrollChange(getEditorScroll(), req)) {
-		SuppressNextEditorScrollChangedNotification = true;
-		setEditorScroll(req);
-	}	
-}
+
+//function setSelection_ext(selMsgBase64Str) {
+//	// input 'MpQuillSelectionChangedMessage'
+//	let req = toJsonObjFromBase64Str(selMsgBase64Str);
+//	log('recvd setSelection msg from host.did change: ' + (didSelectionChange(CurSelRange, req)) + ' value: ' + req);
+//	if (didSelectionChange(CurSelRange, req)) {
+//		SuppressNextSelChangedHostNotification = true;
+//		setDocSelection(req);
+//	}
+//}
+//function setScroll_ext(scrollMsgBase64Str) {
+//	// input 'MpQuillScrollChangedMessage'
+//	let req = toJsonObjFromBase64Str(scrollMsgBase64Str);
+//	if (didEditorScrollChange(getEditorScroll(), req)) {
+//		SuppressNextEditorScrollChangedNotification = true;
+//		setEditorScroll(req);
+//	}
+//}
+
+
+//function dragEnd_ext(dragEndMsg_base64str) {
+//	// input MpQuillDragEndMessage
+//	let dragEnd_e = toJsonObjFromBase64Str(dragEndMsg_base64str);
+//	onDragEnd(dragEnd_e);
+//	return 'done';
+//}
