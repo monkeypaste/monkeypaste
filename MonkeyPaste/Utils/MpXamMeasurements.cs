@@ -15,7 +15,7 @@ namespace MonkeyPaste {
         public double MainWindowToScreenHeightRatio = 0.35;
 
         private MpXamMeasurements() {
-            if (MpPrefViewModel.Instance.ThisDeviceType == MpUserDeviceType.Windows) {                
+            if (MpDefaultDataModelTools.ThisUserDeviceType == MpUserDeviceType.Windows) {                
                 return;
             }
             UpdateMeasurements();
@@ -30,7 +30,7 @@ namespace MonkeyPaste {
             // Properties.Settings.Default.MaxRecentClipItems = TotalVisibleClipTiles;
             // Properties.Settings.Default.Save();
 
-            if (MpPrefViewModel.Instance.ThisDeviceType == MpUserDeviceType.Windows) {
+            if (MpDefaultDataModelTools.ThisUserDeviceType == MpUserDeviceType.Windows) {
                 return;
             }
             Device.BeginInvokeOnMainThread(() => {

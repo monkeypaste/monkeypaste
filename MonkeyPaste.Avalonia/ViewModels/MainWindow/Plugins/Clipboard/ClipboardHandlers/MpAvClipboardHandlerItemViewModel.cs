@@ -16,10 +16,11 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipboardHandlerItemViewModel :
-        MpAvSelectorViewModelBase<MpAvClipboardHandlerCollectionViewModel, MpAvHandledClipboardFormatViewModel>,
+        MpAvTreeSelectorViewModelBase<MpAvClipboardHandlerCollectionViewModel, MpAvHandledClipboardFormatViewModel>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
-        MpIMenuItemViewModel, 
+        MpIMenuItemViewModel,
+        MpIAsyncComboBoxItemViewModel,
         MpITreeItemViewModel,
         MpIBoxViewModel {
 
@@ -47,9 +48,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpITreeItemViewModel Implementation
 
-        public bool IsExpanded { get; set; }
-        public MpITreeItemViewModel ParentTreeItem => Parent;
-        public IEnumerable<MpITreeItemViewModel> Children => Items;// new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
+        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem => Parent;
+        IEnumerable<MpITreeItemViewModel> MpITreeItemViewModel.Children => Items;
+
+        #endregion
+
+        #region MpIAsyncComboBoxItemViewModel Implementation
+
+
+        int MpIComboBoxItemViewModel.IconId => PluginIconId;
+        string MpIComboBoxItemViewModel.Label => HandlerName;
 
         #endregion
 

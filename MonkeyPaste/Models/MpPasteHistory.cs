@@ -54,7 +54,7 @@ namespace MonkeyPaste {
                 CopyItemId = copyItemId,
                 AppId = appId,
                 UrlId = urlId,
-                UserDeviceId = userDeviceId == 0 ? MpPrefViewModel.Instance.ThisUserDevice.Id : userDeviceId,
+                UserDeviceId = userDeviceId == 0 ? MpDefaultDataModelTools.ThisUserDeviceId : userDeviceId,
                 PasteDateTime = pasteDateTime == default ? DateTime.Now : pasteDateTime
             };
             await ph.WriteToDatabaseAsync();

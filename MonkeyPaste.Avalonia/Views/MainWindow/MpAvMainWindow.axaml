@@ -45,12 +45,15 @@
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Center" />
 
-        <!--  Tray Row  -->
+        <!--  CONTENT ROW  -->
         <Grid x:Name="MainWindowTrayGrid"
               Grid.Row="2"
               ColumnDefinitions="40,Auto,*"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
+
+            <!--  SIDEBAR BUTTON COLUMN  -->
+
             <local:MpAvSidebarView x:Name="SidebarView"
                                    Grid.Column="0"
                                    Margin="0,3"
@@ -59,11 +62,31 @@
                                    HorizontalContentAlignment="Stretch"
                                    VerticalContentAlignment="Stretch" />
 
+            <!--  TAG TREE  -->
+
             <local:MpAvTagTreeView x:Name="TagTreeView"
                                    Grid.Column="1"
                                    HorizontalAlignment="Stretch"
                                    HorizontalContentAlignment="Stretch"
                                    IsVisible="{Binding IsSidebarVisible, Source={x:Static local:MpAvTagTrayViewModel.Instance}}" />
+
+            <!--  CLIPBOARD HANDLER  -->
+
+            <local:MpAvClipboardHandlerSelectorView x:Name="ClipboardHandlerSelectorView"
+                                                    Grid.Column="1"
+                                                    HorizontalAlignment="Stretch"
+                                                    HorizontalContentAlignment="Stretch"
+                                                    IsVisible="{Binding IsSidebarVisible, Source={x:Static local:MpAvClipboardHandlerCollectionViewModel.Instance}}" />
+            <!--  ANALYZERS  -->
+
+            <local:MpAvAnalyticItemSelectorView x:Name="AnalyticItemSelectorView"
+                                                Grid.Column="1"
+                                                HorizontalAlignment="Stretch"
+                                                HorizontalContentAlignment="Stretch"
+                                                IsVisible="{Binding IsSidebarVisible, Source={x:Static local:MpAvAnalyticItemCollectionViewModel.Instance}}" />
+
+            <!--  SIDEBAR SPLITTER  -->
+
             <GridSplitter x:Name="SidebarGridSplitter"
                           Grid.Column="1"
                           Width="5"
@@ -92,6 +115,8 @@
                     </MultiBinding>
                 </GridSplitter.IsVisible>
             </GridSplitter>
+
+            <!--  CONTENT TRAY CONTAINER  -->
 
             <local:MpAvClipTrayContainerView x:Name="ClipTrayContainerView"
                                              Grid.Column="2"

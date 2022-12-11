@@ -309,7 +309,7 @@ namespace MonkeyPaste.Avalonia {
                 MpApp app = null;
                 MpUrl url = null;
                 if(internalSourceCopyItemId > 0) {
-                    app = await MpDataModelProvider.GetItemAsync<MpApp>(MpPrefViewModel.Instance.ThisAppSource.AppId);
+                    app = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
                 } else {
                     var last_pinfo = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
 

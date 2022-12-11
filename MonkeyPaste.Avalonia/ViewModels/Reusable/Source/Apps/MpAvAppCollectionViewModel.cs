@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ObservableCollection<MpAvAppViewModel> FilteredApps { get; set; }
 
-        public MpAvAppViewModel ThisAppViewModel => Items.FirstOrDefault(x => x.AppId == MpPrefViewModel.Instance.ThisAppSource.AppId);
+        public MpAvAppViewModel ThisAppViewModel => Items.FirstOrDefault(x => x.AppId == MpDefaultDataModelTools.ThisAppId);
 
         public MpAvAppViewModel LastActiveAppViewModel { get; private set; }
         #endregion
@@ -63,14 +63,13 @@ namespace MonkeyPaste.Avalonia {
             //}
 
             var appl = await RegisterWithProcessesManager();
-            var cbfil = await MpDataModelProvider.GetItemsAsync<MpAppClipboardFormatInfo>();
             Items.Clear();
             foreach (var app in appl) {
                 if(Items.Any(x=>x.AppId == app.Id)) {
                     // unknown apps in register will already be added so no duppys
                     continue;
                 }
-                var avm = await CreateAppViewModel(app, cbfil.Where(x=>x.AppId == app.Id));
+                var avm = await CreateAppViewModel(app);
 
                 Items.Add(avm);
             }
@@ -89,11 +88,9 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public async Task<MpAvAppViewModel> CreateAppViewModel(
-            MpApp app, 
-            IEnumerable<MpAppClipboardFormatInfo> appClipboardFormatOverrides) {
+        public async Task<MpAvAppViewModel> CreateAppViewModel(MpApp app) {
             var avm = new MpAvAppViewModel(this);
-            await avm.InitializeAsync(app, appClipboardFormatOverrides);
+            await avm.InitializeAsync(app);
             return avm;
         }
 
@@ -137,7 +134,7 @@ namespace MonkeyPaste.Avalonia {
                         //when initializing (at least) this preveents collection modified exception
                         await Task.Delay(100);
                     }
-                    var avm = await CreateAppViewModel(a, null);
+                    var avm = await CreateAppViewModel(a);
                     Items.Add(avm);
                 });
             }

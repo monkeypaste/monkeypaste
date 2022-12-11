@@ -1,0 +1,34 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+    <Style Selector="ComboBoxItem /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="{DynamicResource SelectableItemDefaultBgBrush}" />
+    </Style>
+
+    <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="{DynamicResource SelectableItemPointerOverBgBrush}" />
+    </Style>
+
+    <Style Selector="ComboBoxItem:selected /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="{DynamicResource SelectableItemSelectedBgBrush}" />
+    </Style>
+
+    <!--<Style Selector="ComboBoxItem:selected:focus /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>
+
+    <Style Selector="ComboBoxItem:selected:pointerover /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>
+
+    <Style Selector="ComboBoxItem:selected:focus:pointerover /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>-->
+</Styles>

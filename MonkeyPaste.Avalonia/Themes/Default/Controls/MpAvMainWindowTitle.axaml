@@ -4,11 +4,11 @@
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Style Selector="Window#AvMainWindow local|MpAvMainWindowTitleMenuView Grid#TitlePanel">
         <Setter Property="Background"
-                Value="{DynamicResource TitleMenuInactiveBgColor}" />
+                Value="{DynamicResource TitleMenuInactiveBgBrush}" />
     </Style>
     <Style Selector="Window#AvMainWindow:focus-within local|MpAvMainWindowTitleMenuView Grid#TitlePanel">
         <Setter Property="Background"
-                Value="{DynamicResource TitleMenuActiveBgColor}" />
+                Value="{DynamicResource TitleMenuActiveBgBrush}" />
     </Style>
   
   

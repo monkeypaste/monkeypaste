@@ -163,7 +163,7 @@ namespace MonkeyPaste {
             }
             // NOTE checking app by path and arguments and device here
             // NOTE when args are differnt should be treated as unique app since it could be significantly different
-            var dupApp = await MpDataModelProvider.GetAppByPathAsync(appPath, arguments, MpPrefViewModel.Instance.ThisUserDevice.Id);
+            var dupApp = await MpDataModelProvider.GetAppByPathAsync(appPath, arguments, MpDefaultDataModelTools.ThisUserDeviceId);
             if (dupApp != null) {
                 if(dupApp.IconId != iconId && iconId > 0) {
                     // this means app icon has changed (probably from an update)
@@ -181,7 +181,7 @@ namespace MonkeyPaste {
                 //not sure why this happens but duplicating MpDb.InitDefaultData...
                 thisDevice = new MpUserDevice() {
                     UserDeviceGuid = System.Guid.Parse(MpPrefViewModel.Instance.ThisDeviceGuid),
-                    PlatformType = MpPrefViewModel.Instance.ThisDeviceType
+                    PlatformType = MpDefaultDataModelTools.ThisUserDeviceType
                 };
                 await thisDevice.WriteToDatabaseAsync();
             }

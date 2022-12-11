@@ -419,6 +419,7 @@ namespace MonkeyPaste.Avalonia {
         private void UpdateSidebarGridsplitter() {
             //only reset when isVisibilityChanged = true, isVisibilityChanged = false is orientation change
             var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");
+            var selected_sb_item_vm = MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel;
             var containerGrid = sbgs.GetVisualAncestor<Grid>();
 
             if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
@@ -426,7 +427,7 @@ namespace MonkeyPaste.Avalonia {
                     UpdateContentOrientation();
                 }
                 if (sbgs.IsVisible) {
-                    containerGrid.ColumnDefinitions[1].Width = new GridLength(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel.DefaultSidebarWidth);
+                    containerGrid.ColumnDefinitions[1].Width = new GridLength(selected_sb_item_vm.DefaultSidebarWidth);
                 } else {
                     containerGrid.ColumnDefinitions[1].Width = new GridLength(0);
                 }
@@ -435,7 +436,7 @@ namespace MonkeyPaste.Avalonia {
                     UpdateContentOrientation();
                 }
                 if (sbgs.IsVisible) {
-                    containerGrid.RowDefinitions[1].Height = new GridLength(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel.DefaultSidebarHeight);
+                    containerGrid.RowDefinitions[1].Height = new GridLength(selected_sb_item_vm.DefaultSidebarHeight);
                 } else {
                     containerGrid.RowDefinitions[1].Height = new GridLength(0);
                 }

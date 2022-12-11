@@ -137,6 +137,7 @@
     <AvaloniaXaml Remove="Themes\Default\Accents\BaseLight.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Button.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ButtonBase.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\ComboBoxItem.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\DefaultControls.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ListBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ListBoxItem.axaml" />
@@ -366,6 +367,7 @@
     <Compile Remove="AttachedProperties\MpAvCefWebViewExtension.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
+    <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\CheckBox\MpCheckBoxParameterView.axaml.cs" />
     <Compile Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml.cs" />
     <Compile Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml.cs" />
   </ItemGroup>
@@ -395,7 +397,7 @@
     <AvaloniaResource Include="Assets\Icons\test_icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Add.png">
+    <AvaloniaResource Include="Assets\Images\add.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\add1.png">
@@ -923,6 +925,7 @@
     <AvaloniaResource Include="Themes\Default\Accents\Base.axaml">
       
     </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Default\Controls\ComboBoxItem.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Window.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Button.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTagTile.axaml" />
@@ -969,6 +972,7 @@
   <ItemGroup>
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Include="Avalonia" Version="0.10.18" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.18" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.18" />
     <PackageReference Include="Avalonia.HtmlRenderer" Version="0.10.0" />
@@ -1006,7 +1010,6 @@
     <Folder Include="ViewModels\MainWindow\TagTray\TagTile\" />
     <Folder Include="Views\HtmlConverterWindow\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
-    <Folder Include="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />
@@ -1042,6 +1045,27 @@
     <Compile Update="Views\MainWindow\FilterMenu\Sort\Field\MpAvClipTileSortFieldView.axaml.cs">
       <DependentUpon>MpAvClipTileSortFieldView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Analytics\MpAvAnalyticItemSelectorView.axaml.cs">
+      <DependentUpon>MpAvAnalyticItemSelectorView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\MpAvClipboardHandlerSelectorView.axaml.cs">
+      <DependentUpon>MpAvClipboardHandlerSelectorView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Base\MpAvPluginSelectorView.axaml.cs">
+      <DependentUpon>MpAvPluginSelectorView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Base\SelectorItem\MpAvPluginSelectorItemView.axaml.cs">
+      <DependentUpon>MpAvPluginSelectorItemView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Analytics\Presets\MpAvAnalyticItemPresetDataGridView.axaml.cs">
+      <DependentUpon>MpAvAnalyticItemPresetDataGridView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\MpAvPluginParameterItemView.axaml.cs">
+      <DependentUpon>MpAvPluginParameterItemView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\MpAvPluginParameterListBoxView.axaml.cs">
+      <DependentUpon>MpAvPluginParameterListBoxView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Reusable\Buttons\MpAvOptionsButton.axaml.cs">
       <DependentUpon>MpAvOptionsButton.axaml</DependentUpon>
     </Compile>
@@ -1068,6 +1092,9 @@
     </Compile>
     <Compile Update="Views\Reusable\ShortcutWindow\MpAvAssignShortcutDialog.axaml.cs">
       <DependentUpon>MpAvAssignShortcutDialog.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\KeyGesture\MpAvShortcutGestureView.axaml.cs">
+      <DependentUpon>MpAvShortcutGestureView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\KeyGroup\Key\MpAvShortcutKeyView.axaml.cs">
       <DependentUpon>MpAvShortcutKeyView.axaml</DependentUpon>

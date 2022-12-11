@@ -1,0 +1,39 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:pcl="using:MonkeyPaste"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:TypeArguments="local:MpAvIPluginParameterCollectionViewModel"
+                       x:DataType="local:MpAvIPluginParameterCollectionViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvPluginParameterListBoxView">
+    <ListBox x:Name="ConfigurePresetListBox"
+             Grid.Row="1"
+             Background="Transparent"
+             Margin="5,10"
+             Items="{Binding Items}"
+             SelectedItem="{Binding SelectedItem}"
+             VerticalAlignment="Top"
+             HorizontalAlignment="Stretch"
+             ScrollViewer.VerticalScrollBarVisibility="Auto"
+             BorderThickness="0">
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <WrapPanel Orientation="Vertical" />
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <local:MpAvPluginParameterItemView IsVisible="{Binding IsVisible}"
+                                                   HorizontalAlignment="Stretch"
+                                                   DataContext="{Binding}" />
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
+</local:MpAvUserControl>
+

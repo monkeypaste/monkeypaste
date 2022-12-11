@@ -119,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
                     case WatcherChangeTypes.Changed:
                     case WatcherChangeTypes.Created:
                         ci = await MpCopyItem.Create(
-                            sourceId: MpPrefViewModel.Instance.ThisOsFileManagerSource.Id,
+                            sourceId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
                             itemType: MpCopyItemType.FileList,
                             data: e.FullPath,
                             suppressWrite: true);
@@ -129,7 +129,7 @@ namespace MonkeyPaste.Avalonia {
                         ci = await MpDataModelProvider.GetCopyItemByDataAsync(re.OldFullPath);
                         if(ci == null) {
                             ci = await MpCopyItem.Create(
-                                sourceId: MpPrefViewModel.Instance.ThisOsFileManagerSource.Id,
+                                sourceId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
                                 itemType: MpCopyItemType.FileList,
                                 data: e.FullPath,
                                 suppressWrite: true);

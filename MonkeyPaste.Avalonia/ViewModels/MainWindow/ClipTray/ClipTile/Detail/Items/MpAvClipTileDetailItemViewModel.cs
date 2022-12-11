@@ -193,7 +193,7 @@ namespace MonkeyPaste.Avalonia {
                         if (ctvm.SourceCollectionViewModel.PrimaryItem != null &&
                             ctvm.SourceCollectionViewModel.PrimaryItem.SourceRef is MpApp app) {
                             DetailText = $"Open folder for '{app.AppName}'";
-                            IsUriEnabled = app.UserDeviceId == MpPrefViewModel.Instance.ThisUserDevice.Id;
+                            IsUriEnabled = app.UserDeviceId == MpDefaultDataModelTools.ThisUserDeviceId;
                             if (IsUriEnabled) {
 
                                 DetailUri = app.AppPath;

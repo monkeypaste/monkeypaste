@@ -1,0 +1,47 @@
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvMultiSelectListBoxParameterView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="local:MpAvEnumerableParameterViewModel"
+                       x:DataType="local:MpAvEnumerableParameterViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignHeight="450"
+                       d:DesignWidth="800">
+    <Border x:Name="ListContainerBorder"
+            BorderThickness="0"
+            CornerRadius="2"
+            BorderBrush="{Binding ParameterBorderBrush, Converter={StaticResource StringHexToBrushConverter}}">
+        <Grid RowDefinitions="*,0.2*">
+            <ListBox x:Name="MultiSelectComboBox"
+                     Grid.Row="0"
+                     Background="Transparent"
+                     HorizontalAlignment="Stretch"
+                     Items="{Binding Items}"
+                     SelectedItems="{Binding SelectedItems}"
+                     SelectionMode="Multiple"
+                     Margin="10,0"
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                     MaxWidth="{Binding Bounds.Width, ElementName=ListContainerBorder}"
+                     MinWidth="80">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1"
+                                Background="Transparent"
+                                IsVisible="{Binding IsReadOnly}"
+                                BorderBrush="{Binding BorderBrush, Converter={StaticResource StringHexToBrushConverter}}">
+                            <TextBlock Background="{Binding BackgroundBrush, Converter={StaticResource StringHexToBrushConverter}}"
+                                       Foreground="OldLace"
+                                       local:MpAvIsHoveringExtension.IsEnabled="True"
+                                       local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                                       Text="{Binding Label}" />
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </Border>
+</local:MpAvUserControl>

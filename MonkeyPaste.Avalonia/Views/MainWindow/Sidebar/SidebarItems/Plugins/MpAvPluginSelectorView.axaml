@@ -1,0 +1,35 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:pcl="using:MonkeyPaste"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:TypeArguments="pcl:MpIAsyncComboBoxViewModel"
+                       x:DataType="pcl:MpIAsyncComboBoxViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvPluginSelectorView">
+    <Border BorderThickness="0"
+            BorderBrush="Black"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Stretch"
+            Margin="10,0">
+        <ComboBox HorizontalAlignment="Stretch"
+                  HorizontalContentAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  VerticalContentAlignment="Stretch"
+                  IsDropDownOpen="{Binding IsDropDownOpen}"
+                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                  Items="{Binding Items}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <local:MpAvPluginSelectorItemView DataContext="{Binding}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+    </Border>
+</local:MpAvUserControl>
+

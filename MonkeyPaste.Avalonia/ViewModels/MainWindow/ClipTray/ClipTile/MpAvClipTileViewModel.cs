@@ -1091,7 +1091,7 @@ namespace MonkeyPaste.Avalonia {
         //            // BUG currently when plugin creates new content it is not setting source info
         //            // so return app icon
 
-        //            return MpPrefViewModel.Instance.ThisAppIcon.Id;
+        //            return MpDefaultDataModelTools.ThisAppIconId;
         //        }
 
         //        return SourceViewModel.PrimarySourceViewModel.IconId;
@@ -1107,7 +1107,7 @@ namespace MonkeyPaste.Avalonia {
         //    }
         //}
         public int IconId => SourceCollectionViewModel.PrimaryItem == null ?
-            MpPrefViewModel.Instance.ThisAppIcon.Id :
+            MpDefaultDataModelTools.ThisAppIconId :
             SourceCollectionViewModel.PrimaryItem.SourceIconId;
 
         private string _curItemRandomHexColor;

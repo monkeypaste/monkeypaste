@@ -138,8 +138,6 @@ namespace MonkeyPaste {
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         public string CopyItemSourceGuid { get; set; }
-        //public string ParentCopyItemGuid { get; set; }
-
 
 
         //[ForeignKey(typeof(MpSource))]
@@ -156,18 +154,11 @@ namespace MonkeyPaste {
         [Indexed]
         public string ItemData { get; set; } = string.Empty;
 
-        //public string ItemData_rtf { get; set; } = string.Empty;
-
-        //[ForeignKey(typeof(MpIcon))]
         [Column("fk_MpIconId")]
         public int IconId { get; set; }
 
         [Column("fk_MpDataObjectId")]
         public int DataObjectId { get; set; }
-
-        //[ForeignKey(typeof(MpDbImage))]
-        //[Column("fk_SsMpDbImageId")]
-        //public int SsDbImageId { get; set; }
 
         public string ItemDescription { get; set; } = string.Empty;
 

@@ -90,6 +90,17 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #endregion
 
+        #region Text Box
+
+        public static int SelectionLength(this TextBox tb) {
+            if(tb == null) {
+                return 0;
+            }
+
+            return tb.SelectionEnd - tb.SelectionStart;
+        }
+        #endregion
+
         #region MainWindow
 
         public static Window MainWindow(this Application? app) {

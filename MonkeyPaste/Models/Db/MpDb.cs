@@ -132,7 +132,21 @@ namespace MonkeyPaste {
             return result;
         }
 
+        public static async Task CreateTableAsync<T>() where T: new() {
+            if (_connectionAsync == null) {
+                CreateConnection();
+            }
+            await _connectionAsync.CreateTableAsync<T>();
+        }
 
+        public static async Task CloseConnectionAsync() {
+            if(_connectionAsync == null) {
+                return;
+            }
+
+            await _connectionAsync.CloseAsync();
+            _connectionAsync = null;
+        }
 
         private static async Task AddItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             if (_connectionAsync == null) {
@@ -327,7 +341,7 @@ namespace MonkeyPaste {
             }
         }
 
-        private static async Task<bool> InitDbConnectionAsync(MpIDbInfo dbInfo, bool allowCreate) {
+        public static async Task<bool> InitDbConnectionAsync(MpIDbInfo dbInfo, bool allowCreate) {
             //SQLitePCL.Batteries.Init();
 
             var dbPath = dbInfo.DbPath;
@@ -358,61 +372,36 @@ namespace MonkeyPaste {
             
             if (isNewDb) {
                 await CreateViewsAsync();
-                await InitDefaultDataAsync();
+                await CreateDefaultDataAsync();
 
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
 
-            if(Environment.CurrentDirectory.Contains("MpWpfApp")) {
-                MpTag.AllTagId = 2;
-                MpTag.FavoritesTagId = 3;
-                MpPrefViewModel.Instance.ThisAppSourceId = 5;
-                MpPrefViewModel.Instance.ThisOsFileManagerSourceId = 4;
-                MpPrefViewModel.Instance.ThisDeviceGuid = "f64b221e-806a-4e28-966a-f9c5ff0d9370";
-            }
-
-
-            MpPrefViewModel.Instance.ThisUserDevice = await MpDataModelProvider.GetUserDeviceByGuidAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
-            
-            MpPrefViewModel.Instance.ThisAppSource = await MpDataModelProvider.GetItemAsync<MpSource>(MpPrefViewModel.Instance.ThisAppSourceId);
-            var thisAppApp = await MpDataModelProvider.GetItemAsync<MpApp>(MpPrefViewModel.Instance.ThisAppSource.AppId);
-            MpPrefViewModel.Instance.ThisAppIcon = await MpDataModelProvider.GetItemAsync<MpIcon>(thisAppApp.IconId);
-            MpPrefViewModel.Instance.ThisOsFileManagerSource = await MpDataModelProvider.GetItemAsync<MpSource>(MpPrefViewModel.Instance.ThisOsFileManagerSourceId);
+            await MpDefaultDataModelTools.InitializeAsync(
+                MpPrefViewModel.Instance.ThisDeviceGuid,
+                MpPlatformWrapper.Services.OsInfo.OsType,
+                MpPlatformWrapper.Services.OsInfo.OsFileManagerPath);
 
             if(isNewDb) {
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
 
+            //var sources = await MpDataModelProvider.GetItemsAsync<MpSource>();
             //var apps = await MpDataModelProvider.GetItemsAsync<MpApp>();
-            //var appGroups = new Dictionary<string, List<MpApp>>();
-            //foreach (var app in apps) {
-            //    if(appGroups.ContainsKey(app.AppPath)) {
-            //        appGroups[app.AppPath].Add(app);
-            //    } else {
-            //        appGroups.Add(app.AppPath, new List<MpApp>() { app });
-            //    }
-            //}
-            //var dupAppGroups = appGroups.Where(x => x.Value.Count > 1);
-            //List<MpApp> appsToRemove = new List<MpApp>();
-            //foreach(var dupAppGroup in dupAppGroups) {
-            //    var app_to_keep = dupAppGroup.Value.First();
-            //    //appsToRemove.AddRange(dupAppGroup.Value.Skip(1).Take(dupAppGroup.Value.Count - 1));
-            //    for (int i = 1; i < dupAppGroup.Value.Count; i++) {
-            //        var app_sources = await MpDataModelProvider.GetAllSourcesByAppIdAsync(dupAppGroup.Value[i].Id);
-            //        foreach(var app_source in app_sources) {
-            //            app_source.AppId = app_to_keep.Id;
-            //            await app_to_keep.WriteToDatabaseAsync();
-            //        }
-            //        var app_ci_refs = await MpDataModelProvider.GetCopyItemSourceByMembersAsync()
-            //    }
-            //}
-            //if(dupAppGroups.Sum(x=>x.Value.Count) == appsToRemove.Count) {
-            //    // messed up
-            //    Debugger.Break();
-            //}
-            //foreach(var appToRemove in appsToRemove) {
+            //var urls = await MpDataModelProvider.GetItemsAsync<MpUrl>();
+            //var cisl = await MpDataModelProvider.GetItemsAsync<MpCopyItemSource>();
+            //var cil = await MpDataModelProvider.GetItemsAsync<MpCopyItem>();
 
+            //var ci_without_cisl = cil.Where(x => cisl.All(y => y.CopyItemId != x.Id));
+            //foreach(var ci_without_cis in ci_without_cisl) {
+            //    var ci_source = sources.FirstOrDefault(x => x.Id == ci_without_cis.SourceId);
+            //    if(ci_source == null) {
+            //        await MpCopyItemSource.CreateAsync(
+            //            copyItemId: ci_without_cis.Id,
+            //            sourceObjId: MpDefaultDataModelTools.ThisAppId);
+            //    }
             //}
+            
 
             MpConsole.WriteLine(@"Db file located: " + MpPlatformWrapper.Services.DbInfo.DbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPrefViewModel.Instance.ThisDeviceGuid);
@@ -539,59 +528,10 @@ namespace MonkeyPaste {
 
         }
 
-        public static async Task<bool> ResetPreferenceDefaultsAsync(MpIDbInfo dbInfo, MpIOsInfo osInfo) {
-            bool wouldBeNewDb = await InitDbConnectionAsync(dbInfo, false);
-            if (wouldBeNewDb) {
-                //this should be caught in pref init so somethings wrong
-                Debugger.Break();
-                return false;
-            }
-            await _connectionAsync.CreateTableAsync<MpUserDevice>();
-            MpUserDevice this_device = await MpDataModelProvider.GetUserDeviceByMachineNameAndDeviceTypeAsync(osInfo.OsMachineName,osInfo.OsType);
-            MpPrefViewModel.Instance.ThisDeviceGuid = this_device.Guid;
-            MpPrefViewModel.Instance.ThisDeviceType = osInfo.OsType;
-
-            await _connectionAsync.CreateTableAsync<MpApp>();
-            using var process = Process.GetCurrentProcess();
-            string thisAppPath = process.MainModule.FileName;
-            //string thisAppArgs = process.StartInfo == null ? string.Empty : process.StartInfo.Arguments;
-            //var thisApp = await MpDataModelProvider.GetAppByPathAsync(thisAppPath, thisAppArgs, this_device.Id);
-            //string thisAppPath = Assembly.GetEntryAssembly().Location;
-            var thisApp = await MpDataModelProvider.GetAppByPathAsync(thisAppPath, null, this_device.Id);
-
-            await _connectionAsync.CreateTableAsync<MpSource>();
-            var thisAppSource = await MpSource.Create(appId: thisApp.Id, urlId: 0);
-            MpPrefViewModel.Instance.ThisAppSourceId = thisAppSource.Id;
-
-
-            var osApp = await MpDataModelProvider.GetAppByPathAsync(osInfo.OsFileManagerPath, null, this_device.Id);
-            var osAppSource = await MpDataModelProvider.GetSourceByMembersAsync(osApp.Id,0);
-            MpPrefViewModel.Instance.ThisOsFileManagerSourceId = osAppSource.Id;
-
-            await _connectionAsync.CloseAsync();
-            _connectionAsync = null;
-            return true;
-        }
-
-        private static async Task InitDefaultDataAsync() {
+        private static async Task CreateDefaultDataAsync() {
             // NOTE! MpTag.AllTagId needs to be changed to 1 not 2 since recent was removed
 
-            #region User Device
-
-            MpPrefViewModel.Instance.ThisDeviceType = MpPlatformWrapper.Services.OsInfo.OsType;
-
-            MpPrefViewModel.Instance.ThisDeviceGuid = Guid.NewGuid().ToString();
-
-            var thisDevice = new MpUserDevice() {
-                UserDeviceGuid = Guid.Parse(MpPrefViewModel.Instance.ThisDeviceGuid),
-                PlatformType = MpPrefViewModel.Instance.ThisDeviceType,
-                MachineName = Environment.MachineName
-            };
-
-            await AddItemAsync<MpUserDevice>(thisDevice);
-            MpPrefViewModel.Instance.ThisUserDevice = thisDevice;
-
-            #endregion
+            await MpDefaultDataModelTools.CreateAsync();
 
             #region Tags
 
@@ -626,33 +566,7 @@ namespace MonkeyPaste {
 
             #endregion
 
-
-            #region Icon
-
-            var sourceIcon = await MpIcon.Create(MpBase64Images.AppIcon);
-
-            #endregion
-
-            #region Source
-
-            var process = Process.GetCurrentProcess();
-            string thisAppPath = process.MainModule.FileName;
-            string thisAppName = MpPrefViewModel.Instance.ApplicationName;
-            var thisApp = await MpApp.CreateAsync(
-                appPath: thisAppPath, 
-                appName: thisAppName, 
-                iconId: sourceIcon.Id);
-            var thisAppSource = await MpSource.Create(appId: thisApp.Id, urlId: 0);
-            MpPrefViewModel.Instance.ThisAppSourceId = thisAppSource.Id;
-
-            var osApp = await MpApp.CreateAsync(
-                appPath: MpPlatformWrapper.Services.OsInfo.OsFileManagerPath, 
-                appName: MpPlatformWrapper.Services.OsInfo.OsFileManagerName);
-
-            var osAppSource = await MpSource.Create(osApp.Id, 0);
-            MpPrefViewModel.Instance.ThisOsFileManagerSourceId = osAppSource.Id;
-
-            #endregion
+            
 
             MpConsole.WriteTraceLine(@"Created all default tables");
         }

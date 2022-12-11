@@ -8,35 +8,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste {
-    //public interface MpIHierarchialViewModel<T> : 
-    //    MpIViewModel,
-    //    MpITreeItemViewModel<T>,
-    //    MpIHoverableViewModel,
-    //    MpIFocusableViewModel,
-    //    MpISelectableViewModel
-    //    //MpIEditableViewModel,
-    //    //MpIMenuItemViewModel 
-    //    where T:MpViewModelBase, MpITreeItemViewModel {
-
-    //    string Label { get; set; }
-
-    //    double LabelFontSize { get; }
-    //    string LabelForegroundHexColor { get; }
-    //    bool ShowAddButton { get; }
-    //    double ScreenWidth { get; set; }
-    //    double ScreenHeight { get; }
-    //    string BackgroundHexColor { get; }
-    //    string BorderHexColor { get; }
-    //    string IconHexColor { get; }
-    //    string IconTextOrResourceKey { get; }
-    //    string IconLabelHexColor { get; }
-
-    //    bool IsNew { get; }
-        
-
-    //    ICommand AddChildCommand { get; } 
-    //}
-
     public interface MpITreeItemViewModel : MpIViewModel {
         bool IsExpanded { get; set; }
 

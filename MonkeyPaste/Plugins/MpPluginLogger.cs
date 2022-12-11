@@ -36,8 +36,9 @@ namespace MonkeyPaste {
             if (trans.Response == null) {
                 trans.Response = new MpPluginResponseFormatBase();
             }
-            int transAppId = MpPrefViewModel.Instance.ThisAppSource.AppId;
-            int transUrlId = MpPrefViewModel.Instance.ThisAppSource.UrlId;
+            int transAppId = MpDefaultDataModelTools.ThisAppId;
+            // TODO (removed ref to ThisAppSource.UrlId) what should url be? Should plugin provide?
+            int transUrlId = 0;
 
             if (trans.Response is MpPluginResponseFormatBase prf) {                
                 MpCopyItemTransactionType transType = MpCopyItemTransactionType.None;

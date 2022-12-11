@@ -1,0 +1,52 @@
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvFileChooserParameterView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="local:MpAvFileChooserParameterViewModel"
+                       x:DataType="local:MpAvFileChooserParameterViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignHeight="450"
+                       d:DesignWidth="800">
+    <Border MaxWidth="150"
+            MinWidth="100"
+            HorizontalAlignment="Center"
+            Padding="10,3">
+        <ToolTip.Tip>
+            <local:MpAvToolTipView ToolTipText="{Binding CurrentValue}" />
+        </ToolTip.Tip>
+        <Button Command="{Binding SelectFileSystemPathCommand}"
+                Background="Transparent"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                BorderThickness="0">
+            <StackPanel>
+                <TextBlock Text="Select.."
+                           IsVisible="{Binding CurrentValue, Converter={StaticResource IsNotNullToBoolConverter}, ConverterParameter=flip}" />
+                <TextBlock Cursor="Hand"
+                           IsVisible="{Binding CurrentValue, Converter={StaticResource IsNotNullToBoolConverter}}"
+                           Text="{Binding CurrentValue, Converter={StaticResource AbsoluteToRelativePathStringConverter}}"
+                           TextAlignment="Right"
+                           VerticalAlignment="Center">
+                    <TextBlock.Styles>
+                        <Style Selector="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="Black" />
+                            <Setter Property="FontWeight"
+                                    Value="Normal" />
+                        </Style>
+                        <Style Selector="TextBlock:pointerover">
+                            <Setter Property="Foreground"
+                                    Value="Crimson" />
+                            <Setter Property="FontWeight"
+                                    Value="Normal" />
+                        </Style>
+                    </TextBlock.Styles>
+                </TextBlock>
+            </StackPanel>
+        </Button>
+    </Border>
+</local:MpAvUserControl>

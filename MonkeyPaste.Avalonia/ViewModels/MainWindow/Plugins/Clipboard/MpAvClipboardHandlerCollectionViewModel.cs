@@ -19,24 +19,16 @@ using Avalonia.Threading;
 namespace MonkeyPaste.Avalonia {
 
     public class MpAvClipboardHandlerCollectionViewModel :
-        MpAvSelectorViewModelBase<object, MpAvClipboardHandlerItemViewModel>,
+        MpAvTreeSelectorViewModelBase<object, MpAvClipboardHandlerItemViewModel>,
         MpIMenuItemViewModel,
         MpIAsyncSingletonViewModel<MpAvClipboardHandlerCollectionViewModel>,
-        MpITreeItemViewModel,
+        MpITreeItemViewModel, 
+        MpIOrientedSidebarItemViewModel,
         MpISidebarItemViewModel,
+        MpIAsyncComboBoxViewModel,
         MpIClipboardFormatDataHandlers,
         MpIPlatformDataObjectHelperAsync { //
-        #region Properties
-
-        #region MpITreeItemViewModel Implementation
-
-        public IEnumerable<MpITreeItemViewModel> Children => Items;// new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
-
-        public MpITreeItemViewModel ParentTreeItem => null;
-
-        public bool IsExpanded { get; set; }
-
-        #endregion
+        #region Properties       
 
         #region View Models
 
@@ -102,19 +94,58 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
+        #region MpITreeItemViewModel Implementation
+
+        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem => null;
+        IEnumerable<MpITreeItemViewModel> MpITreeItemViewModel.Children => Items;
+        #endregion
+
+        #region MpIAsyncComboBoxViewModel Implementation
+
+        IEnumerable<MpIComboBoxItemViewModel> MpIAsyncComboBoxViewModel.Items => Items;
+        MpIComboBoxItemViewModel MpIAsyncComboBoxViewModel.SelectedItem {
+            get => SelectedItem;
+            set => SelectedItem = (MpAvClipboardHandlerItemViewModel)value;
+        }
+        bool MpIAsyncComboBoxViewModel.IsDropDownOpen {
+            get => IsHandlerDropDownOpen;
+            set => IsHandlerDropDownOpen = value;
+        }
+
+        #endregion
+
         #region MpIClipboardFormatHandlers Implementation
         public IEnumerable<MpIClipboardPluginComponent> Handlers => EnabledFormats.Select(x => x.Parent.ClipboardPluginComponent).Distinct();
 
         #endregion
 
-        #region MpISidebarItemViewModel Implementation
-        public double SidebarWidth { get; set; } = 0;// MpMeasurements.Instance.DefaultAnalyzerPresetPanelWidth;
-        public double DefaultSidebarWidth => 350;// MpMeasurements.Instance.DefaultAnalyzerPresetPanelWidth;
-        public bool IsSidebarVisible { get; set; } = false;
+        #region MpIOrientedSidebarItemViewModel Implementation
+        public double SidebarWidth { get; set; } = 0;
+        public double SidebarHeight { get; set; }
 
-        public MpISidebarItemViewModel NextSidebarItem => SelectedPresetViewModel;
+        public double DefaultSidebarWidth {
+            get {
+                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                    return 350;
+                } else {
+                    return MpAvMainWindowViewModel.Instance.MainWindowWidth;
+                }
+            }
+        }
+        public double DefaultSidebarHeight {
+            get {
+                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                    return MpAvClipTrayViewModel.Instance.ClipTrayScreenHeight;
+                } else {
+                    return 300;
+                }
+            }
+        }
+        public bool IsSidebarVisible { get; set; }
 
-        public MpISidebarItemViewModel PreviousSidebarItem => null;
+        public MpISidebarItemViewModel NextSidebarItem => MpAvAnalyticItemCollectionViewModel.Instance;
+        public MpISidebarItemViewModel PreviousSidebarItem => MpAvTagTrayViewModel.Instance;
+
 
         #endregion
 
@@ -183,6 +214,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsHovering { get; set; }
 
+        public bool IsHandlerDropDownOpen { get; set; }
 
         #endregion
 
@@ -291,7 +323,6 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsAnySelected):
                     break;
                 case nameof(IsSidebarVisible):
-                    MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.ClipTrayScreenHeight));
                     if (IsSidebarVisible) {
                         MpAvTagTrayViewModel.Instance.IsSidebarVisible = false;
                         MpAvActionCollectionViewModel.Instance.IsSidebarVisible = false;
@@ -312,6 +343,9 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(SelectedItem):
                     OnPropertyChanged(nameof(SelectedPresetViewModel));
+                    break;
+                case nameof(IsHandlerDropDownOpen):
+                    MpAvMainWindowViewModel.Instance.IsAnyDropDownOpen = IsHandlerDropDownOpen;
                     break;
             }
         }

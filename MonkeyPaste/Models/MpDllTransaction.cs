@@ -70,7 +70,7 @@ namespace MonkeyPaste {
                 throw new Exception("Must specifiy path");
             }
             if (deviceId <= 0) {
-                deviceId = MpPrefViewModel.Instance.ThisUserDevice.Id;
+                deviceId = MpDefaultDataModelTools.ThisUserDeviceId;
             }
             var mr = new MpDllTransaction() {
                 DllTransactionGuid = System.Guid.NewGuid(),

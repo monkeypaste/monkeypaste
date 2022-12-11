@@ -34,9 +34,10 @@ namespace MonkeyPaste.Avalonia {
         File = 8
     }
     public class MpAvAnalyticItemViewModel : 
-        MpAvSelectorViewModelBase<MpAvAnalyticItemCollectionViewModel,MpAvAnalyticItemPresetViewModel>, 
+        MpAvTreeSelectorViewModelBase<MpAvAnalyticItemCollectionViewModel,MpAvAnalyticItemPresetViewModel>, 
         MpISelectableViewModel,
         MpIHoverableViewModel,
+        MpIAsyncComboBoxItemViewModel,
         MpITreeItemViewModel, 
         MpIMenuItemViewModel {
         #region Private Variables
@@ -48,10 +49,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpITreeItemViewModel Implementation
 
-        public IEnumerable<MpITreeItemViewModel> Children => Items;
-
-        public MpITreeItemViewModel ParentTreeItem => Parent;
-        public bool IsExpanded { get; set; }
+        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem => Parent;
+        IEnumerable<MpITreeItemViewModel> MpITreeItemViewModel.Children => Items;
         #endregion
 
         #region View Models
@@ -85,6 +84,7 @@ namespace MonkeyPaste.Avalonia {
 
         //public ObservableCollection<MpITreeItemViewModel> Children => new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
 
+        
         #endregion
 
         #region MpISelectableViewModel Implementation
@@ -92,6 +92,13 @@ namespace MonkeyPaste.Avalonia {
         public bool IsSelected { get; set; } = false;
 
         public DateTime LastSelectedDateTime { get; set; }
+
+        #endregion
+        #region MpIAsyncComboBoxItemViewModel Implementation
+
+
+        int MpIComboBoxItemViewModel.IconId => PluginIconId;
+        string MpIComboBoxItemViewModel.Label => Title;
 
         #endregion
 
@@ -986,6 +993,7 @@ namespace MonkeyPaste.Avalonia {
 
                     IsBusy = false;
                 });
+
         #endregion
     }
 }

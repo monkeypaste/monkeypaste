@@ -14,7 +14,7 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvTagTreeView">
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
-          Background="{DynamicResource TagTreeBgColor}"
+          Background="{DynamicResource TagTreeBgBrush}"
           local:MpAvSizeObserverExtension.IsEnabled="True"
           local:MpAvSizeObserverExtension.ObservedWidth="{Binding SidebarWidth, Mode=OneWayToSource}"
           local:MpAvSizeObserverExtension.ObservedHeight="{Binding SidebarHeight, Mode=OneWayToSource}">
@@ -42,7 +42,7 @@
                 </Style>
             </TreeView.Styles>
             <TreeView.ItemTemplate>
-                <TreeDataTemplate DataType="{x:Type local:MpAvTagTileViewModel}" 
+                <TreeDataTemplate DataType="{x:Type local:MpAvTagTileViewModel}"
                                   ItemsSource="{Binding SortedItems}">
                     <local:MpAvTagView DataContext="{Binding}" />
                 </TreeDataTemplate>

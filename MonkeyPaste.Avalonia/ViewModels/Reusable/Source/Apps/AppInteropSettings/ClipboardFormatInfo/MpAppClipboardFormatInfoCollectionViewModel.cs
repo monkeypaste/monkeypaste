@@ -62,10 +62,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public async Task InitializeAsync(int appId, List<MpAppClipboardFormatInfo> overrideInfos) {
+        public async Task InitializeAsync(int appId) {
             IsBusy = true;
 
-            //var aisl = await MpDataModelProvider.GetAppClipboardFormatInfosByAppIdAsync(appId);
+            var overrideInfos = await MpDataModelProvider.GetAppClipboardFormatInfosByAppIdAsync(appId);
             Items.Clear();
             foreach(var format in MpPortableDataFormats.RegisteredFormats) {
                 if (overrideInfos.Any(x => x.FormatType == format)) {

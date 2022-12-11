@@ -9,10 +9,11 @@ using System.Windows.Input;
 using MonkeyPaste;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; 
 using Newtonsoft.Json;
+using Avalonia.Controls;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAnalyticItemPresetViewModel : 
-        MpAvSelectorViewModelBase<MpAvAnalyticItemViewModel, MpAvPluginParameterViewModelBase>,
+        MpAvTreeSelectorViewModelBase<MpAvAnalyticItemViewModel, MpAvPluginParameterViewModelBase>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpIMenuItemViewModel,
@@ -22,15 +23,14 @@ namespace MonkeyPaste.Avalonia {
         //MpIUserColorViewModel,
         MpAvIShortcutCommand, 
         MpITreeItemViewModel,
-        MpIPluginComponentViewModel {
+        MpIPluginComponentViewModel,
+        MpAvIPluginParameterCollectionViewModel {
         #region Properties
 
         #region MpITreeItemViewModel Implementation
 
-        public IEnumerable<MpITreeItemViewModel> Children => Items;
-
-        public MpITreeItemViewModel ParentTreeItem => Parent;
-        public bool IsExpanded { get; set; }
+        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem => Parent;
+        IEnumerable<MpITreeItemViewModel> MpITreeItemViewModel.Children => Items;
         #endregion
 
         #region View Models
@@ -106,6 +106,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPluginComponentViewModel Implementation
         public MpPluginComponentBaseFormat ComponentFormat => AnalyzerFormat;
+
+        #endregion
+
+        #region MpAvIPluginParameterCollectionViewModel Implementation
+
+        IEnumerable<MpAvPluginParameterViewModelBase>
+            MpAvIPluginParameterCollectionViewModel.Items => Items;
+
+        MpAvPluginParameterViewModelBase
+            MpAvIPluginParameterCollectionViewModel.SelectedItem {
+            get => SelectedItem;
+            set => SelectedItem = value;
+        }
+
 
         #endregion
 
@@ -553,7 +567,7 @@ namespace MonkeyPaste.Avalonia {
                 if (ShortcutViewModel != null) {
                     ShortcutViewModel.OnPropertyChanged(nameof(ShortcutViewModel.KeyItems));
                 }
-            });
+            });        
 
         #endregion
     }

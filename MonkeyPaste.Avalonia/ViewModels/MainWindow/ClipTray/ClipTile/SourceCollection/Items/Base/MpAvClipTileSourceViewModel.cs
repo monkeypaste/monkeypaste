@@ -70,7 +70,7 @@ namespace MonkeyPaste.Avalonia {
                 if(SourceRef is MpIDbIconId dbi && dbi.IconId > 0) {
                     return dbi.IconId;
                 }
-                return MpPrefViewModel.Instance.ThisAppIcon.Id;
+                return MpDefaultDataModelTools.ThisAppIconId;
             }
         }
 

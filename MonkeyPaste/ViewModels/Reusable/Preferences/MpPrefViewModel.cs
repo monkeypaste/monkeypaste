@@ -75,18 +75,14 @@ namespace MonkeyPaste {
 
         #region Application Properties
 
-        public string ThisAppName => "Monkey Paste";
-
-
-        public string ThisAppPath => Assembly.GetExecutingAssembly().Location;
-
+        
         #region Encyption
         public string SslAlgorithm { get; set; } = "SHA256WITHRSA";
         public string SslCASubject { get; set; } = "CN=MPCA";
         public string SslCertSubject { get; set; } = "CN=127.0.01";
         #endregion
 
-        public MpUserDeviceType ThisDeviceType { get; set; } 
+       
 
         public string LocalStoragePath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
@@ -321,13 +317,9 @@ namespace MonkeyPaste {
 
         public int UniqueContentItemIdx { get; set; } = 0;
 
-        public string ThisDeviceGuid { get; set; } = System.Guid.NewGuid().ToString();
-
+        
         public bool ShowMainWindowOnDragToScreenTop { get; set; } = true;
 
-        public int ThisAppSourceId { get; set; } = 0;
-
-        public int ThisOsFileManagerSourceId { get; set; } = 0;
 
         public bool IgnoreInternalClipboardChanges { get; set; } = true;
 
@@ -504,20 +496,10 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region User/Device Derived Models
+        #region User/Device Derived Models               
+        
 
-        [JsonIgnore]
-        public MpSource ThisAppSource { get; set; }
-        
-        [JsonIgnore]
-        public MpSource ThisOsFileManagerSource { get; set; }
-        
-        [JsonIgnore]
-        public MpIcon ThisAppIcon { get; set; }
-        
-        [JsonIgnore]
-        public MpUserDevice ThisUserDevice { get; set; }
-
+        public string ThisDeviceGuid { get; set; } = System.Guid.NewGuid().ToString();
         #endregion
 
         #region MpIJsonObject Implementation
@@ -656,7 +638,8 @@ namespace MonkeyPaste {
 
             if(isReset) {
                 Instance = new MpPrefViewModel();
-                bool success = await MpDb.ResetPreferenceDefaultsAsync(_dbInfo, _osInfo);
+                //bool success = await MpDb.ResetPreferenceDefaultsAsync(_dbInfo, _osInfo);
+                bool success = await MpDefaultDataModelTools.ResetAsync(_dbInfo, _osInfo);
             } else {
                 // TODO remove this later only to automate restoring test db and preferences
                 string execute_path = Assembly.GetExecutingAssembly().Location;

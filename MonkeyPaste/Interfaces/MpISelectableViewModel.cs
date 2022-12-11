@@ -31,4 +31,5 @@ namespace MonkeyPaste {
     public interface MpIPluginComponentViewModel : MpIViewModel {
         public MpPluginComponentBaseFormat ComponentFormat { get; }
     }
+
 }

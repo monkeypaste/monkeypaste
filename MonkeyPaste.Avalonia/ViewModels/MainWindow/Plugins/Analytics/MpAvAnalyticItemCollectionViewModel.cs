@@ -22,10 +22,11 @@ namespace MonkeyPaste.Avalonia {
     }
 
     public class MpAvAnalyticItemCollectionViewModel : 
-        MpAvSelectorViewModelBase<object,MpAvAnalyticItemViewModel>,
+        MpAvTreeSelectorViewModelBase<object,MpAvAnalyticItemViewModel>,
         MpIMenuItemViewModel,
         MpIAsyncSingletonViewModel<MpAvAnalyticItemCollectionViewModel>, 
         MpITreeItemViewModel,
+        MpIAsyncComboBoxViewModel,
         MpIOrientedSidebarItemViewModel {
         #region Private Variables
 
@@ -38,10 +39,23 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpITreeItemViewModel Implementation
 
-        public IEnumerable<MpITreeItemViewModel> Children => Items;
+        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem => null;
+        IEnumerable<MpITreeItemViewModel> MpITreeItemViewModel.Children => Items;
 
-        public MpITreeItemViewModel ParentTreeItem => null;
-        public bool IsExpanded { get; set; }
+        #endregion
+
+        #region MpIAsyncComboBoxViewModel Implementation
+
+        IEnumerable<MpIComboBoxItemViewModel> MpIAsyncComboBoxViewModel.Items => Items;
+        MpIComboBoxItemViewModel MpIAsyncComboBoxViewModel.SelectedItem {
+            get => SelectedItem;
+            set => SelectedItem = (MpAvAnalyticItemViewModel)value;
+        }
+        bool MpIAsyncComboBoxViewModel.IsDropDownOpen {
+            get => IsAnalyticItemSelectorDropDownOpen;
+            set => IsAnalyticItemSelectorDropDownOpen = value;
+        }
+
         #endregion
 
         #region View Models
@@ -83,10 +97,25 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIOrientedSidebarItemViewModel Implementation
-        public double SidebarWidth { get; set; } = 0;// MpMeasurements.Instance.DefaultAnalyzerPresetPanelWidth;
-        public double DefaultSidebarWidth => 350;// MpMeasurements.Instance.DefaultAnalyzerPresetPanelWidth;
-
-        public double DefaultSidebarHeight => 350;
+        public double SidebarWidth { get; set; } = 0;
+        public double DefaultSidebarWidth {
+            get {
+                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                    return 350;
+                } else {
+                    return MpAvMainWindowViewModel.Instance.MainWindowWidth;
+                }
+            }
+        }
+        public double DefaultSidebarHeight {
+            get {
+                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                    return MpAvClipTrayViewModel.Instance.ClipTrayScreenHeight;
+                } else {
+                    return 300;
+                }
+            }
+        }
         public double SidebarHeight { get; set; } = 0;
 
         public bool IsSidebarVisible { get; set; } = false;
@@ -114,7 +143,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsLoaded => Items.Count > 0;
 
-
+        public bool IsAnalyticItemSelectorDropDownOpen { get; set; }
         //public bool IsAnyEditingParameters => Items.Any(x => x.IsAnyEditingParameters);
 
         #endregion
@@ -215,7 +244,6 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsAnySelected):
                     break;
                 case nameof(IsSidebarVisible):                    
-                    MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.ClipTrayScreenHeight));
                     if (IsSidebarVisible) {
                         MpAvTagTrayViewModel.Instance.IsSidebarVisible = false;
                         MpAvActionCollectionViewModel.Instance.IsSidebarVisible = false;
@@ -237,8 +265,12 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(SelectedItem):
                     OnPropertyChanged(nameof(SelectedPresetViewModel));
                     break;
+                case nameof(IsAnalyticItemSelectorDropDownOpen):
+                    MpAvMainWindowViewModel.Instance.IsAnyDropDownOpen = IsAnalyticItemSelectorDropDownOpen;
+                    break;
             }
         }
+
         #endregion
 
         #region Commands

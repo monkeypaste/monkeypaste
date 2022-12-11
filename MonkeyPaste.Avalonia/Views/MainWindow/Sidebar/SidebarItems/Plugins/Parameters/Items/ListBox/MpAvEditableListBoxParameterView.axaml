@@ -1,0 +1,56 @@
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvEditableListBoxParameterView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="local:MpAvEnumerableParameterViewModel"
+                       x:DataType="local:MpAvEnumerableParameterViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignHeight="450"
+                       d:DesignWidth="800">
+    <Border x:Name="ListBoxContainerBorder"
+            BorderThickness="0"
+            CornerRadius="2"
+            BorderBrush="{Binding ParameterBorderBrush, Converter={StaticResource StringHexToBrushConverter}}">
+        <Grid RowDefinitions="*,0.2*">
+            <ListBox x:Name="EditableList"
+                     Grid.Row="0"
+                     Background="Transparent"
+                     HorizontalAlignment="Stretch"
+                     Items="{Binding Items}"
+                     SelectedItem="{Binding SelectedItem}"
+                     SelectionMode="Single"
+                     Margin="10,0"
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                     MaxWidth="{Binding Bounds.Width, ElementName=ListBoxContainerBorder}"
+                     MinWidth="80">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <local:MpAvContentQueryTextBoxView Background="Transparent"
+                                                           DataContext="{Binding}"
+                                                           BorderBrush="{Binding BorderBrush, Converter={StaticResource StringHexToBrushConverter}}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Button Grid.Row="1"
+                    Width="75"
+                    BorderThickness="0"
+                    Background="Beige"
+                    Margin="10,5,10,0"
+                    HorizontalAlignment="Right"
+                    Command="{Binding AddValueCommand}">
+                <DockPanel>
+                    <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource AddImage}}"
+                           DockPanel.Dock="Left"
+                           Width="15"
+                           Height="15" />
+                    <Label DockPanel.Dock="Right"
+                           Content="Add" />
+                </DockPanel>
+            </Button>
+        </Grid>
+    </Border>
+</local:MpAvUserControl>

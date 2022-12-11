@@ -1,6 +1,7 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <FluentTheme Mode="Light" />
+    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Accents/Base.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Accents/BaseLight.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/DefaultControls.axaml" />

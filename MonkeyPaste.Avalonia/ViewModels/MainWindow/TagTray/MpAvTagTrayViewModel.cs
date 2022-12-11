@@ -69,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpISidebarItemViewModel Implementation
+        #region MpIOrientedSidebarItemViewModel Implementation
         public double SidebarWidth { get; set; } = 0;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
         public double SidebarHeight { get; set; }
         
@@ -93,8 +93,8 @@ namespace MonkeyPaste.Avalonia {
         }
         public bool IsSidebarVisible { get; set; }
 
-        public MpISidebarItemViewModel NextSidebarItem { get; }
-        public MpISidebarItemViewModel PreviousSidebarItem { get; }
+        public MpISidebarItemViewModel NextSidebarItem => MpAvClipboardHandlerCollectionViewModel.Instance;
+        public MpISidebarItemViewModel PreviousSidebarItem => null;
         
 
         #endregion

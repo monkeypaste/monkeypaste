@@ -15,7 +15,7 @@
     <DockPanel x:Name="FilterDockPanel"
                HorizontalAlignment="Stretch"
                VerticalAlignment="Stretch"
-               Background="{StaticResource FilterMenuBgColor}"
+               Background="{StaticResource FilterMenuBgBrush}"
                LastChildFill="True">
         <DockPanel.Styles>
             <Style Selector="ToggleButton">

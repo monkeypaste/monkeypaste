@@ -64,6 +64,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsParameterDropDownOpen { get; set; }
         #endregion
 
         #region Model
@@ -77,7 +78,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvEnumerableParameterViewModel() : base() { }
 
         public MpAvEnumerableParameterViewModel(MpIPluginComponentViewModel parent) : base(parent) {
-            //PropertyChanged += MpEnumerableParameterViewModel_PropertyChanged;
+            PropertyChanged += MpEnumerableParameterViewModel_PropertyChanged;
         }
 
         #endregion
@@ -153,14 +154,17 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MpEnumerableParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            //switch(e.PropertyName) {
-            //    case nameof(SelectedItem):
-            //    case nameof(SelectedItems):
-            //    case nameof(Items):
-            //        OnPropertyChanged(nameof(CurrentValue));
-            //        HasModelChanged = true;
-            //        break;
-            //}
+            switch (e.PropertyName) {
+                //case nameof(SelectedItem):
+                //case nameof(SelectedItems):
+                //case nameof(Items):
+                //    OnPropertyChanged(nameof(CurrentValue));
+                //    HasModelChanged = true;
+                //    break;
+                case nameof(IsParameterDropDownOpen):
+                    MpAvMainWindowViewModel.Instance.IsAnyDropDownOpen = IsParameterDropDownOpen;
+                    break;
+            }
         }
 
         #endregion

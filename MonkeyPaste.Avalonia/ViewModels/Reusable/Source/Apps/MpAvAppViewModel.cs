@@ -156,17 +156,18 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpAvAppViewModel() : base(null) { }
+        public MpAvAppViewModel() : this(null) { }
 
         public MpAvAppViewModel(MpAvAppCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpAppViewModel_PropertyChanged;
+            ClipboardFormatInfos = new MpAppClipboardFormatInfoCollectionViewModel(this);
         }
 
         #endregion
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpApp app, IEnumerable<MpAppClipboardFormatInfo> appClipboardFormatOverrides) {
+        public async Task InitializeAsync(MpApp app) {
             IsBusy = true;
             
 
@@ -174,11 +175,7 @@ namespace MonkeyPaste.Avalonia {
             
             OnPropertyChanged(nameof(IconId));
 
-            if (ClipboardFormatInfos == null) {
-                ClipboardFormatInfos = new MpAppClipboardFormatInfoCollectionViewModel(this);
-            }
-            
-            await ClipboardFormatInfos.InitializeAsync(AppId,appClipboardFormatOverrides.ToList());
+            await ClipboardFormatInfos.InitializeAsync(AppId);
 
             MpAppPasteShortcut aps = await MpDataModelProvider.GetAppPasteShortcutAsync(AppId);
             if(aps != null) {
