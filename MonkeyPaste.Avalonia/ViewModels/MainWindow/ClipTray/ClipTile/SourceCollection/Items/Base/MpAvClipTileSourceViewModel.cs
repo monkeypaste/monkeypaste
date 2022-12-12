@@ -11,14 +11,14 @@ namespace MonkeyPaste.Avalonia {
         MpViewModelBase<MpAvClipTileSourceCollectionViewModel>,
         MpIHoverableViewModel,
         MpISelectableViewModel,
-        MpIContextMenuViewModel {
+        MpIMenuItemViewModel {
         #region Properties
 
         #region View Models
 
         #region MpIContextMenuItemViewModel Implementation
 
-        public MpMenuItemViewModel ContextMenuViewModel {
+        public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 if (SourceRef == null) {
                     return new MpMenuItemViewModel();

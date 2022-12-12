@@ -112,6 +112,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsValid => string.IsNullOrEmpty(ValidationMessage);
 
 
+        // TODO I forget why this is needed but was used to hide trigger stuff from query path selector popup
+        public bool IsActionParameter { get; set; } = false;
         #endregion
 
 

@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 using System.Windows.Input;
 using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; 
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using Avalonia.Controls.Selection;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvEnumerableParameterViewModel : MpAvPluginParameterViewModelBase {
@@ -38,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public virtual IList<MpAvEnumerableParameterValueViewModel> SelectedItems {
-            get {
+            get {  
                 if(ParameterFormat.controlType == MpPluginParameterControlType.EditableList) {
                     return Items;
                 }
@@ -60,6 +61,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        //public SelectionModel<MpAvEnumerableParameterValueViewModel> Selection { get; private set; }
         #endregion
 
         #region State
@@ -79,7 +81,10 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvEnumerableParameterViewModel(MpIPluginComponentViewModel parent) : base(parent) {
             PropertyChanged += MpEnumerableParameterViewModel_PropertyChanged;
+            //Selection = new SelectionModel<MpAvEnumerableParameterValueViewModel>();
+            //Selection.SelectionChanged += Selection_SelectionChanged;
         }
+
 
         #endregion
 
@@ -133,6 +138,11 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
+            OnPropertyChanged(nameof(SelectedItem));
+            OnPropertyChanged(nameof(SelectedItems));
+            
+            //Selection.Source = SelectedItems;
+
             IsBusy = false;
         }
 
@@ -153,6 +163,11 @@ namespace MonkeyPaste.Avalonia {
             //HasModelChanged = true;
         }
 
+        private void Selection_SelectionChanged(object sender, SelectionModelSelectionChangedEventArgs<MpAvEnumerableParameterValueViewModel> e) {
+            Items.ForEach(x => x.IsSelected = e.SelectedItems.Contains(x));
+            OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(SelectedItems));
+        }
         private void MpEnumerableParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 //case nameof(SelectedItem):

@@ -143,6 +143,7 @@ namespace MonkeyPaste.Avalonia {
                 };
             }
         }
+        public bool IsContextMenuOpen { get; set; } = false;
 
         #endregion
 
@@ -238,7 +239,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsTagNameTextBoxFocused { get; set; } = false;
         public bool? IsLinkedToSelectedClipTile { get; set; }
 
-        public bool IsContextMenuOpened { get; set; } = false;
 
         #endregion
 
@@ -281,7 +281,7 @@ namespace MonkeyPaste.Avalonia {
                     return MpSystemColors.red1;
                 }
 
-                if(IsContextMenuOpened) {
+                if(IsContextMenuOpen) {
                     return MpSystemColors.red1;
                 }
                 

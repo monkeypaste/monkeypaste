@@ -4,24 +4,21 @@ using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Atk;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSliderParameterViewModel : MpAvPluginParameterViewModelBase, MpISliderViewModel {
         #region Private Variables
-       // private string _defaultValue;
         #endregion
 
         #region Properties
 
         #region View Models
-        //public override MpAnalyticItemParameterValueViewModel CurrentValueViewModel => new MpAnalyticItemParameterValueViewModel() { Value = this.Value.ToString() };
         #endregion
 
         #region MpISliderViewModel Implementation
 
-        public double TotalWidth { get; set; }
-
-        public double SliderValue {
+        public double SliderValue { 
             get {
                 if (CurrentValue == null || ParameterFormat == null) {
                     return 0;
@@ -37,16 +34,16 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             set {
-                if (SliderValue != value) {
+                if(this is MpISliderViewModel svm &&
+                    svm.SliderValue != value) {
                     CurrentValue = value.ToString();
                     HasModelChanged = true;
-                    OnPropertyChanged(nameof(SliderValue));
+                    svm.OnPropertyChanged(nameof(svm.SliderValue));
                 }
             }
         }
-
         public double MinValue => Minimum;
-        public double MaxValue => Maximum;        
+        public double MaxValue => Maximum;
 
         #endregion
 
@@ -71,15 +68,19 @@ namespace MonkeyPaste.Avalonia {
 
             await base.InitializeAsync(aipv);
 
-            OnPropertyChanged(nameof(CurrentValue));            
-            OnPropertyChanged(nameof(MinValue));
-            OnPropertyChanged(nameof(MaxValue));
-            OnPropertyChanged(nameof(SliderValue));
+            OnPropertyChanged(nameof(CurrentValue));     
+            if(this is MpISliderViewModel svm) {
+                svm.OnPropertyChanged(nameof(svm.MinValue));
+                svm.OnPropertyChanged(nameof(svm.MaxValue));
+                svm.OnPropertyChanged(nameof(svm.SliderValue));
+
+            }
             
             await Task.Delay(1);
 
             IsBusy = false;
         }
+
 
 
         #endregion

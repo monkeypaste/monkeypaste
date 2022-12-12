@@ -146,7 +146,9 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMainWindow.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMainWindowTitle.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPinTray.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSliderParameter.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTagTile.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTooltip.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\PathIcon.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBlock.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBox.axaml" />
@@ -365,6 +367,7 @@
     <Compile Remove="Adorners\MpAvContentDragDropAdorner.cs" />
     <Compile Remove="AttachedProperties\MpAvCefNetWebViewExtension.cs" />
     <Compile Remove="AttachedProperties\MpAvCefWebViewExtension.cs" />
+    <Compile Remove="AttachedProperties\MpAvTextSelectionExtension.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\CheckBox\MpCheckBoxParameterView.axaml.cs" />
@@ -926,6 +929,8 @@
       
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Controls\ComboBoxItem.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvSliderParameter.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvTooltip.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Window.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Button.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTagTile.axaml" />

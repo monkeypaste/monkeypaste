@@ -17,7 +17,6 @@
           local:MpAvIsHoveringExtension.HoverCursor="Hand"
           local:MpAvMenuExtension.IsEnabled="True"
           local:MpAvMenuExtension.SelectOnRightClick="False"
-          local:MpAvMenuExtension.IsOpen="{Binding IsContextMenuOpened, Mode=TwoWay}"
           local:MpAvPointerPressCommandExtension.IsEnabled="True"
           local:MpAvPointerPressCommandExtension.RoutingStrategy="Tunnel"
           local:MpAvPointerPressCommandExtension.LeftPressCommand="{Binding SelectTagCommand}"
@@ -37,7 +36,7 @@
                               Classes.isselected="{Binding IsSelected}"
                               Classes.dragover="{Binding IsDragOverTag}"
                               Classes.dragover_invalid="{Binding !IsDragOverTagValid}"
-                              Classes.contextfocus="{Binding IsContextMenuOpened}"
+                              Classes.contextfocus="{Binding IsContextMenuOpen}"
                               BorderThickness="1.5">
             <StackPanel Orientation="Horizontal">
                 <Grid>

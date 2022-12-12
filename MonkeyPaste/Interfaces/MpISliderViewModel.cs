@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MonkeyPaste {
-    public interface MpISliderViewModel {
-        double TotalWidth { get; }
+    public interface MpISliderViewModel : MpIViewModel {
         double SliderValue { get; set; }
         double MinValue { get; }
         double MaxValue { get; }

@@ -66,6 +66,7 @@
 
             <local:MpAvTagTreeView x:Name="TagTreeView"
                                    Grid.Column="1"
+                                   Padding="0,5"
                                    HorizontalAlignment="Stretch"
                                    HorizontalContentAlignment="Stretch"
                                    IsVisible="{Binding IsSidebarVisible, Source={x:Static local:MpAvTagTrayViewModel.Instance}}" />
@@ -74,6 +75,7 @@
 
             <local:MpAvClipboardHandlerSelectorView x:Name="ClipboardHandlerSelectorView"
                                                     Grid.Column="1"
+                                                    Padding="0,5"
                                                     HorizontalAlignment="Stretch"
                                                     HorizontalContentAlignment="Stretch"
                                                     IsVisible="{Binding IsSidebarVisible, Source={x:Static local:MpAvClipboardHandlerCollectionViewModel.Instance}}" />
@@ -81,6 +83,7 @@
 
             <local:MpAvAnalyticItemSelectorView x:Name="AnalyticItemSelectorView"
                                                 Grid.Column="1"
+                                                Padding="0,5"
                                                 HorizontalAlignment="Stretch"
                                                 HorizontalContentAlignment="Stretch"
                                                 IsVisible="{Binding IsSidebarVisible, Source={x:Static local:MpAvAnalyticItemCollectionViewModel.Instance}}" />

@@ -8,7 +8,8 @@ using System.Web;
 namespace MonkeyPaste.Common {
     public static class MpRichHtmlToPlainTextConverter {
         public static string Convert(string html, string envNewLine = null) {
-            return HttpUtility.HtmlDecode(FormatLineBreaks(html, envNewLine));
+            string pt = HttpUtility.HtmlDecode(FormatLineBreaks(html, envNewLine)).DecodeSpecialHtmlEntities();
+            return pt;
         }
 
         private static string FormatLineBreaks(string html, string envNewLine = null) {

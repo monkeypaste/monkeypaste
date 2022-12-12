@@ -1,10 +1,10 @@
 ﻿using System.Windows.Input;
 
 namespace MonkeyPaste {
-    public interface MpIContentQueryTextBoxViewModel {
+    public interface MpIContentQueryTextBoxViewModel : MpITextSelectionRange {
+        bool IsPathSelectorPopupOpen { get; set; }
         bool IsActionParameter { get; set; }
         string ContentQuery { get; set; }
-        ICommand ShowContentPathSelectorMenuCommand { get; }
         ICommand ClearQueryCommand { get; }
     }
 }

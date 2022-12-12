@@ -57,18 +57,15 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitAsync() {
             IsBusy = true;
 
-            //while (MpAvIconCollectionViewModel.Instance.IsAnyBusy) {
-            //    // wait for icons to load since app vm depends on icon vm
-            //    await Task.Delay(100);
-            //}
+           
 
-            var appl = await RegisterWithProcessesManager();
+            var appl = await MpDataModelProvider.GetItemsAsync<MpApp>();
             Items.Clear();
             foreach (var app in appl) {
-                if(Items.Any(x=>x.AppId == app.Id)) {
-                    // unknown apps in register will already be added so no duppys
-                    continue;
-                }
+                //if(Items.Any(x=>x.AppId == app.Id)) {
+                //    // unknown apps in register will already be added so no duppys
+                //    continue;
+                //}
                 var avm = await CreateAppViewModel(app);
 
                 Items.Add(avm);
@@ -78,18 +75,24 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
+
+            await RegisterWithProcessesManager();
+
             OnPropertyChanged(nameof(Items));
 
             if(Items.Count > 0) {
                 Items[0].IsSelected = true;
             }
 
-            InitLastAppViewModel().FireAndForgetSafeAsync();
             IsBusy = false;
         }
 
         public async Task<MpAvAppViewModel> CreateAppViewModel(MpApp app) {
             var avm = new MpAvAppViewModel(this);
+            while (MpAvIconCollectionViewModel.Instance.IsAnyBusy) {
+                // wait for icons to load since app vm depends on icon vm
+                await Task.Delay(100);
+            }
             await avm.InitializeAsync(app);
             return avm;
         }
@@ -129,13 +132,14 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if(e is MpApp a && Items.All(x=>x.AppId != a.Id)) {
-                Task.Run(async () => {
-                    while(IsBusy) {
-                        //when initializing (at least) this preveents collection modified exception
-                        await Task.Delay(100);
-                    }
+                Dispatcher.UIThread.Post(async () => {
+                    IsBusy = true;
+                    MpConsole.WriteLine($"Adding new app to app collection:");
+                    MpConsole.WriteLine(a.ToString());
                     var avm = await CreateAppViewModel(a);
                     Items.Add(avm);
+                    IsBusy = false;
+                    MpConsole.WriteLine($"App w/ id: '{a.Id}' added to collection.");
                 });
             }
         }
@@ -144,10 +148,24 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
+        private void MpAppCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(SelectedItem):
+                    if (SelectedItem != null) {
+                        SelectedItem.OnPropertyChanged(nameof(SelectedItem.IconId));
+
+                        //CollectionViewSource.GetDefaultView(SelectedItem.ClipboardFormatInfos.Items).Refresh();
+                        SelectedItem.ClipboardFormatInfos.OnPropertyChanged(nameof(SelectedItem.ClipboardFormatInfos.Items));
+                    }
+                    break;
+            }
+        }
+
+
 
         private async Task InitLastAppViewModel() {
             // wait for running processes to get created
-            await Task.Delay(1000);
+            await Task.Delay(0);
             var la_pi = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
             if (la_pi == null) {
                 // since application is being started from file system init LastActive to file system app
@@ -166,48 +184,39 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        private void MpAppCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
-                case nameof(SelectedItem):
-                    if (SelectedItem != null) {
-                        SelectedItem.OnPropertyChanged(nameof(SelectedItem.IconId));
-
-                        //CollectionViewSource.GetDefaultView(SelectedItem.ClipboardFormatInfos.Items).Refresh();
-                        SelectedItem.ClipboardFormatInfos.OnPropertyChanged(nameof(SelectedItem.ClipboardFormatInfos.Items));
-                    }
-                    break;
-            }
-        }
-        private async Task<List<MpApp>> RegisterWithProcessesManager() {
+        private async Task RegisterWithProcessesManager() {
             // This is only called during init to keep app storage in sync so any running apps are added if unknown
-            var sw = Stopwatch.StartNew();
-
-            MpPlatformWrapper.Services.ProcessWatcher.OnAppActivated += MpProcessManager_OnAppActivated;
             MpPlatformWrapper.Services.ProcessWatcher.StartWatcher();
 
-            var al = await MpDataModelProvider.GetItemsAsync<MpApp>();
             var unknownApps = MpPlatformWrapper.Services.ProcessWatcher.RunningProcessLookup.Keys
-                                    .Where(x => !al.Any(y => y.AppPath.ToLower() == x.ToLower())).ToList();
+                                    .Where(x => !Items.Any(y => y.AppPath.ToLower() == x.ToLower()))
+                                    .Select(x => new MpPortableProcessInfo() { ProcessPath = x }).ToList();
 
             MpConsole.WriteLine($"AppCollection RegisterWithProcessesManager '{unknownApps.Count}' unknown apps detected.");
             foreach(var uap in unknownApps) {
-                var handle = MpPlatformWrapper.Services.ProcessWatcher.RunningProcessLookup[uap][0];
-                string appName = MpPlatformWrapper.Services.ProcessWatcher.GetProcessApplicationName(handle);
+                //var handle = MpPlatformWrapper.Services.ProcessWatcher.RunningProcessLookup[uap][0];
+                //string appName = MpPlatformWrapper.Services.ProcessWatcher.GetProcessApplicationName(handle);
 
-                var iconStr = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(uap);
-                var icon = await MpIcon.Create(iconStr);
-                var app = await MpApp.CreateAsync(
-                    appPath: uap, 
-                    appName: appName, 
-                    iconId: icon.Id);
-                al.Add(app);
+                //var iconStr = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(uap);
+                //var icon = await MpIcon.Create(iconStr);
+                //var app = await MpApp.CreateAsync(
+                //    appPath: uap, 
+                //    appName: appName, 
+                //    iconId: icon.Id);
+                //al.Add(app);
+                var app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(uap);
+                // wait for db add callback to pickup db add event
+                await Task.Delay(100);
+                while(IsBusy) {
+                    // wait for app to be added to items from db add callback
+                    await Task.Delay(100);
+                }
             }
 
-            sw.Stop();
-            MpConsole.WriteLine($"process watcher registration took: {sw.ElapsedMilliseconds}ms");
+            await InitLastAppViewModel();
 
-           
-            return al;
+            // wait to add activated handler until all apps at startup are syncd
+            MpPlatformWrapper.Services.ProcessWatcher.OnAppActivated += MpProcessManager_OnAppActivated;
         }
 
         private async void MpProcessManager_OnAppActivated(object sender, MpPortableProcessInfo e) {
@@ -216,33 +225,30 @@ namespace MonkeyPaste.Avalonia {
             while(IsBusy) {
                 await Task.Delay(100);
             }
-            var avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower());
+            Dispatcher.UIThread.Post(async () => {
+                var avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower());
 
-            if(avm == null) {
-                Dispatcher.UIThread.Post(async () => {
-                    //IsBusy = true;
-
-                    var iconStr = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(e.ProcessPath);
-                    var icon = await MpIcon.Create(iconStr);
-                    var app = await MpApp.CreateAsync(
-                        appPath: e.ProcessPath, 
-                        appName: MpPlatformWrapper.Services.ProcessWatcher.ParseTitleForApplicationName(e.MainWindowTitle), 
-                        iconId: icon.Id);
-
-                    // vm is added in db add handler
-                    while (avm == null) {
-                        // NOTE when MpApp is created and db handler is adding to items
-                        // without calling .ToList() here will give collection modified exception
-                        avm = Items.ToList().FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower());
+                if (avm == null) {
+                    // unknown app activated add like in registration
+                    var new_app =
+                    await MpPlatformWrapper.Services.AppBuilder.CreateAsync(e);
+                    // wait for db add to pick up model
+                    await Task.Delay(100);
+                    while(IsBusy) {
+                        // wait for vm to be added to items
+                        await Task.Delay(100);
                     }
-                    LastActiveAppViewModel = avm;
 
-                    //IsBusy = false;
-
-                });
-            } else {
+                    // BUG may need to add .ToList() on items here, hopefully fixed w/ dbAdd waiting
+                    avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower());
+                    if(avm == null) {
+                        // somethings wrong check console for db add msgs
+                        Debugger.Break();
+                    }
+                } 
                 LastActiveAppViewModel = avm;
-            }
+            });
+            
         }
 
         #endregion

@@ -23,7 +23,9 @@ namespace MonkeyPaste {
                 MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(this)
             }
         };
+        public bool IsPopupMenuOpen { get; set; }
 
         public MpColorPalettePopupMenuViewModel() : base(null) { }
+
     }
 }

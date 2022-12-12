@@ -89,7 +89,6 @@
                         local:MpAvMenuExtension.IsEnabled="True"
                         local:MpAvMenuExtension.HideOnClick="False"
                         local:MpAvMenuExtension.SelectOnRightClick="False"
-                        local:MpAvMenuExtension.IsOpen="{Binding IsFilterPopupOpen}"
                         Background="Transparent"
                         BorderThickness="1">
                     <Button.Styles>

@@ -83,7 +83,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public async Task InitAsync() {
-
+            await Task.Delay(1);
             App.Desktop.MainWindow = this;
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
@@ -188,6 +188,14 @@ namespace MonkeyPaste.Avalonia {
             var ctrcv_gs = ctrcv.FindControl<GridSplitter>("ClipTraySplitter");
             var ctrcv_ctrv = ctrcv.FindControl<MpAvClipTrayView>("ClipTrayView");
             var ttv = this.FindControl<MpAvTagTreeView>("TagTreeView");
+            var chsv = this.FindControl<MpAvClipboardHandlerSelectorView>("ClipboardHandlerSelectorView");
+            var aisv = this.FindControl<MpAvAnalyticItemSelectorView>("AnalyticItemSelectorView");
+            var aimcsv = aisv.FindControl<ScrollViewer>("AnalyticItemMainContainerScrollViewer");
+            var aimcg = aisv.FindControl<Grid>("AnalyticItemMainContainerGrid");
+            var apsv = aisv.FindControl<MpAvPluginSelectorView>("AnalyzerPluginSelectorView");
+            var appcb = aisv.FindControl<Border>("AnalyzerPluginPresetContainerBorder");
+            var applbcb = aisv.FindControl<Border>("AnalyzerPluginParameterListBoxContainerBorder");
+
             var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");
 
             if (mwvm.IsHorizontalOrientation) {
@@ -208,9 +216,27 @@ namespace MonkeyPaste.Avalonia {
                 sbgs.ResizeDirection = GridResizeDirection.Columns;
                 MpAvIsHoveringExtension.SetHoverCursor(sbgs, MpCursorType.ResizeWE);
 
-                // Add Sidebar items here
+                // Sidebar items 
                 Grid.SetRow(ttv, 0);
                 Grid.SetColumn(ttv, 1);
+                Grid.SetRow(aisv, 0);
+                Grid.SetColumn(aisv, 1);
+                Grid.SetRow(chsv, 0);
+                Grid.SetColumn(chsv, 1);
+
+                // sidebar internal columns
+
+                // analyzer
+                ScrollViewer.SetVerticalScrollBarVisibility(aimcsv, ScrollBarVisibility.Disabled);
+                aimcg.ColumnDefinitions = new ColumnDefinitions("Auto,*");
+                aimcg.RowDefinitions = new RowDefinitions("50,*");
+                Grid.SetRow(apsv, 0);
+                Grid.SetColumn(apsv, 0);
+                Grid.SetRow(appcb, 1);
+                Grid.SetColumn(appcb, 0);
+                Grid.SetRow(applbcb, 0);
+                Grid.SetColumn(applbcb, 1);
+                Grid.SetRowSpan(applbcb, 2);
 
                 // cliptray container view
                 Grid.SetRow(ctrcv, 0);
@@ -248,32 +274,12 @@ namespace MonkeyPaste.Avalonia {
                      ctrv_cd
                 };
 
-                //pin tray view margin (horizontal)
-                //ctrcv_ptrv.Margin = new Thickness(0, 0, 5, 0);
-
                 // pin tray listbox padding (horizontal) for head/tail drop adorners
                 if(MpAvClipTrayViewModel.Instance.IsAnyTilePinned) {
                     ctrcv_ptr_lb.Padding = new Thickness(10, 0, 10, 0);
                 } else {
                     ctrcv_ptr_lb.Padding = new Thickness();
                 }
-                
-
-                // pin tray min/max size (horizontal)
-                // pintray min width/height
-                //ctrcv_ptrv.Bind(
-                //    MpAvPinTrayView.MinWidthProperty,
-                //    new Binding() {
-                //        Source = MpAvClipTrayViewModel.Instance,
-                //        Path = nameof(MpAvClipTrayViewModel.Instance.MinPinTrayScreenWidth)
-                //    });
-                //ctrcv_ptrv.Bind(
-                //    MpAvPinTrayView.MinHeightProperty,
-                //    new Binding() {
-                //        Source = MpAvClipTrayViewModel.Instance,
-                //        Path = nameof(MpAvClipTrayViewModel.Instance.MinPinTrayScreenHeight)
-                //    });
-
 
                 // clip/pin tray grid splitter
                 ctrcv_gs.HorizontalAlignment = HorizontalAlignment.Right;
@@ -292,6 +298,8 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetRow(ctrcv_ctrv, 0);
                 Grid.SetColumn(ctrcv_ctrv, 1);
             } else {
+                // VERTICAL 
+
                 mwtg.RowDefinitions = new RowDefinitions("*,Auto,40");
                 mwtg.ColumnDefinitions.Clear();
                 // sidebar columns
@@ -308,9 +316,25 @@ namespace MonkeyPaste.Avalonia {
                 sbgs.ResizeDirection = GridResizeDirection.Rows;
                 MpAvIsHoveringExtension.SetHoverCursor(sbgs, MpCursorType.ResizeNS);
 
-                // Add Sidebar items here
+                // sidebar mw views
                 Grid.SetRow(ttv, 1);
                 Grid.SetColumn(ttv, 0);
+                Grid.SetRow(aisv, 1);
+                Grid.SetColumn(aisv, 0);
+                Grid.SetRow(chsv, 1);
+                Grid.SetColumn(chsv, 0);
+
+                // analyzer
+                ScrollViewer.SetVerticalScrollBarVisibility(aimcsv, ScrollBarVisibility.Visible);
+                aimcg.RowDefinitions = new RowDefinitions("50,*,*");
+                aimcg.ColumnDefinitions.Clear();
+                Grid.SetRow(apsv, 0);
+                Grid.SetColumn(apsv, 0);
+                Grid.SetRow(appcb, 1);
+                Grid.SetColumn(appcb, 0);
+                Grid.SetRow(applbcb, 2);
+                Grid.SetColumn(applbcb, 0);
+                Grid.SetRowSpan(applbcb, 1);
 
                 // cliptray container view
                 Grid.SetRow(ctrcv, 0);
@@ -347,10 +371,6 @@ namespace MonkeyPaste.Avalonia {
                      ptrv_rd,
                      ctrv_rd
                 };
-
-                //pin tray (vertical)
-                //ctrcv_ptrv.Margin = new Thickness(0, 5, 0, 5);
-                // pin tray listbox padding (vertical) for head/tail drop adorners
                 
                 if (MpAvClipTrayViewModel.Instance.IsAnyTilePinned) {
                     ctrcv_ptr_lb.Padding = new Thickness(10, 10, 10, 10);

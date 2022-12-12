@@ -1,44 +1,61 @@
 ﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvSliderParameterView"
-                     xmlns="https://github.com/avaloniaui"
-                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                     xmlns:local="using:MonkeyPaste.Avalonia"
-                     xmlns:pcl="using:MonkeyPaste"
-                     x:TypeArguments="pcl:MpISliderViewModel"
-                     mc:Ignorable="d"
-                     d:DesignHeight="450"
-                     d:DesignWidth="800">
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="pcl:MpISliderViewModel"
+                       mc:Ignorable="d"
+                       d:DesignHeight="450"
+                       d:DesignWidth="800">
     <Border x:Name="SliderBorder"
             BorderThickness="1"
             Background="Transparent"
             Focusable="True"
             MinWidth="87"
+            Margin="10,0,0,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            local:MpAvSizeObserverExtension.IsEnabled="True"
-            local:MpAvSizeObserverExtension.ObservedWidth="{Binding TotalWidth, Mode=OneWayToSource}"
             Cursor="SizeWestEast">
-        <!--<Border.Style>
-            <Style TargetType="Border">
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="BorderBrush" Value="Yellow" />
-                    </Trigger>
-                    <Trigger Property="IsMouseOver" Value="False">
-                        <Setter Property="BorderBrush" Value="Black" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-        </Border.Style>-->
         <Grid HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
             <Rectangle x:Name="SliderValueRectangle"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Stretch"
                        MinWidth="0"
-                       MaxWidth="{Binding TotalWidth}"
-                       Width="{Binding ., Converter={StaticResource SliderValueWidthConverter}}">
+                       MaxWidth="{Binding Bounds.Width, ElementName=SliderBorder}">
+                <!--<Rectangle.Width>
+                    <MultiBinding Converter="{StaticResource MultiDoubleMathExpressionConverter}"
+                                  ConverterParameter="(a/(b-c))*d"
+                                  FallbackValue="0"
+                                  TargetNullValue="0">
+                        <Binding Path="SliderValue"
+                                 FallbackValue="1"
+                                 TargetNullValue="1" />
+                        <Binding Path="MaxValue"
+                                 FallbackValue="1"
+                                 TargetNullValue="1" />
+                        <Binding Path="MinValue"
+                                 FallbackValue="0"
+                                 TargetNullValue="0" />
+                        <Binding Path="Bounds.Width"
+                                 ElementName="SliderBorder"
+                                 FallbackValue="50"
+                                 TargetNullValue="50" />
+                    </MultiBinding>
+                    <MultiBinding Converter="{StaticResource MultiDoubleMathConverter}"
+                                  ConverterParameter="*">
+                        <Binding Path="SliderValue"
+                                 FallbackValue="1"
+                                 TargetNullValue="1" />
+                        <Binding Path="Bounds.Width"
+                                 ElementName="SliderBorder"
+                                 FallbackValue="50"
+                                 TargetNullValue="50" />
+                    </MultiBinding>
+                </Rectangle.Width>-->
                 <Rectangle.Fill>
                     <SolidColorBrush Color="Black"
                                      Opacity="0.6" />
@@ -51,53 +68,9 @@
                      IsReadOnly="False"
                      HorizontalAlignment="Center"
                      VerticalAlignment="Center"
+                     MinWidth="0"
                      Text="{Binding SliderValue, Mode=TwoWay}">
-                <!--<TextBox.Style>
-                    <Style TargetType="TextBox">
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver"
-                                     Value="True">
-                                <Setter Property="Background"
-                                        Value="White" />
-                            </Trigger>
-                            <Trigger Property="IsMouseOver"
-                                     Value="False">
-                                <Setter Property="Background"
-                                        Value="Transparent" />
-                            </Trigger>
-                            <Trigger Property="IsMouseOver"
-                                     Value="True">
-                                <Setter Property="Foreground"
-                                        Value="Black" />
-                            </Trigger>
-                            <Trigger Property="IsMouseOver"
-                                     Value="False">
-                                <Setter Property="Foreground"
-                                        Value="White" />
-                            </Trigger>
-                            <Trigger Property="IsFocused"
-                                     Value="True">
-                                <Setter Property="Background"
-                                        Value="White" />
-                            </Trigger>
-                            <Trigger Property="IsFocused"
-                                     Value="False">
-                                <Setter Property="Background"
-                                        Value="Transparent" />
-                            </Trigger>
-                            <Trigger Property="IsFocused"
-                                     Value="True">
-                                <Setter Property="Foreground"
-                                        Value="Black" />
-                            </Trigger>
-                            <Trigger Property="IsFocused"
-                                     Value="False">
-                                <Setter Property="Foreground"
-                                        Value="White" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBox.Style>-->
+
             </TextBox>
         </Grid>
     </Border>

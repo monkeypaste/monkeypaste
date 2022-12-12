@@ -11,8 +11,7 @@
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
-    <Border DockPanel.Dock="Right"
-            BorderThickness="0"
+    <Border BorderThickness="0"
             CornerRadius="2"
             BorderBrush="{Binding ParameterBorderBrush, Converter={StaticResource StringHexToBrushConverter}}">
         <ToolTip.Tip>
@@ -22,6 +21,7 @@
                   SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                   IsDropDownOpen="{Binding IsParameterDropDownOpen}"
                   HorizontalAlignment="Center"
+                  Margin="3"
                   MinWidth="80">
             <ComboBox.ItemTemplate>
                 <DataTemplate>

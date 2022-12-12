@@ -460,6 +460,7 @@ namespace MonkeyPaste.Avalonia {
 
             MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
 
+            SetupMainWindowSize();
             MainWindowScreenRect = MainWindowClosedScreenRect;
 
             ShowWindowCommand.Execute(null);

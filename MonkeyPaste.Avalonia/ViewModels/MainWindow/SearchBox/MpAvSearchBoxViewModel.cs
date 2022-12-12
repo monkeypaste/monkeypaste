@@ -81,7 +81,6 @@ namespace MonkeyPaste.Avalonia {
             set => MpPrefViewModel.Instance.RecentSearchTexts = string.Join(MpPrefViewModel.STRING_ARRAY_SPLIT_TOKEN, value);
         }
 
-        public bool IsPopupMenuOpened { get; set; } = false;
 
         public bool CanDeleteSearch => UserSearch != null && UserSearch.Id > 0;
 
@@ -98,7 +97,6 @@ namespace MonkeyPaste.Avalonia {
         public string LastSearchText { get; private set; } = string.Empty;
 
         public bool IsTextBoxFocused { get; set; }
-
 
         public bool IsSearchValid { 
             get {

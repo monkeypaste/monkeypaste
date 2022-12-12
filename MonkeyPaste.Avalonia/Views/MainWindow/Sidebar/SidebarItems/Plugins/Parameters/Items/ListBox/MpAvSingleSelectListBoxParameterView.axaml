@@ -16,11 +16,12 @@
             CornerRadius="2"
             BorderBrush="{Binding ParameterBorderBrush, Converter={StaticResource StringHexToBrushConverter}}">
         <Grid RowDefinitions="*,0.2*">
-            <ListBox x:Name="MultiSelectComboBox"
+            <ListBox x:Name="SingleSelectComboBox"
                      Grid.Row="0"
                      Background="Transparent"
                      HorizontalAlignment="Stretch"
                      Items="{Binding Items}"
+                     SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                      SelectionMode="Single"
                      Margin="10,0"
                      ScrollViewer.HorizontalScrollBarVisibility="Auto"

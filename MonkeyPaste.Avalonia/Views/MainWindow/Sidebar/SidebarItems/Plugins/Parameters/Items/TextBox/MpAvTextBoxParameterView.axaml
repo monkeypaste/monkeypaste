@@ -24,8 +24,8 @@
                      MaxWidth="100"
                      MinWidth="100"
                      local:MpAvIsFocusedExtension.IsEnabled="True"
-                     local:MpAvTextBoxSelectionExtension.IsEnabled="True"
-                     local:MpAvTextBoxSelectionExtension.TextSelectionRange="{Binding}"
+                     SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
+                     SelectionEnd="{Binding SelectionEnd, Mode=TwoWay}"
                      Text="{Binding CurrentValue, Mode=TwoWay}" />
 
             <Button Grid.Column="1"
@@ -33,8 +33,7 @@
                     Background="Beige"
                     Margin="5"
                     IsVisible="{Binding IsContentQuery}"
-                    Command="{Binding ShowContentPathSelectorMenuCommand}"
-                    CommandParameter="{Binding $self}">
+                    local:MpAvMenuExtension.IsEnabled="True">
                 <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource FilterImage}}"
                        Stretch="Uniform"
                        Width="10"

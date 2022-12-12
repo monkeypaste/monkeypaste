@@ -1,0 +1,50 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+    <!--  DEFAULT  -->
+    <Style Selector="local|MpAvToolTipView Border">
+        <Setter Property="BorderBrush"
+                Value="DarkKhaki" />
+        <Setter Property="Background"
+                Value="Khaki" />
+    </Style>
+    <Style Selector="local|MpAvToolTipView TextBlock">
+        <Setter Property="Foreground"
+                Value="Black" />
+        <Setter Property="TextDecorations"
+                Value="{x:Null}" />
+    </Style>
+
+    <!--  ERROR  -->
+
+    <Style Selector="local|MpAvToolTipView Border.error">
+        <Setter Property="BorderBrush"
+                Value="Yellow" />
+        <Setter Property="Background"
+                Value="Crimson" />
+    </Style>
+
+    <Style Selector="local|MpAvToolTipView Border.error TextBlock">
+        <Setter Property="Foreground"
+                Value="White" />
+        <Setter Property="TextDecorations"
+                Value="{x:Null}" />
+    </Style>
+
+    <!--  LINK  -->
+    <Style Selector="local|MpAvToolTipView TextBlock.IsLink">
+        <Setter Property="Foreground"
+                Value="Blue" />
+        <Setter Property="TextDecorations"
+                Value="Underline" />
+    </Style>
+    <Style Selector="local|MpAvToolTipView Border:pointerover TextBlock.IsLink">
+        <Setter Property="Foreground"
+                Value="Red" />
+        <Setter Property="TextDecorations"
+                Value="Underline" />
+        <Setter Property="Cursor"
+                Value="Hand" />
+    </Style>
+</Styles>

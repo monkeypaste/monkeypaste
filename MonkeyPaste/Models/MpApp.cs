@@ -211,7 +211,9 @@ namespace MonkeyPaste {
 
         public MpApp() { }
 
-
+        public override string ToString() {
+            return $"Id: '{Id}' | Name: '{AppName}' | Path: '{AppPath}' | Args: '{Arguments}' Device: '{DeviceType}'";
+        }
         public async Task<object> CreateFromLogsAsync(string appGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             var adr = await MpDb.GetDbObjectByTableGuidAsync("MpApp", appGuid);
             MpApp appFromLog = null;

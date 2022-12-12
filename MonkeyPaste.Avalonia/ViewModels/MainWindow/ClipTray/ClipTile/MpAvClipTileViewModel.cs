@@ -486,8 +486,6 @@ namespace MonkeyPaste.Avalonia {
         }
         public double MaxTitleHeight => 40;
 
-        public double TitleFontSize => Math.Max(8,(TitleHeight / 2) - 2);
-
         public double TrayX => TrayLocation.X;
         public double TrayY => TrayLocation.Y;
         public MpPoint TrayLocation { get; set; } = MpPoint.Zero;
@@ -789,7 +787,6 @@ namespace MonkeyPaste.Avalonia {
         public bool CanEdit => IsSelected && IsTextItem;
 
 
-        public bool IsContextMenuOpen { get; set; } = false;
 
 
         public bool IsTitleFocused { get; set; } = false;
@@ -889,8 +886,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsContentAndTitleReadOnly => IsContentReadOnly && IsTitleReadOnly;
 
-
-        public bool IsContextMenuOpened { get; set; }
+        public bool IsContextMenuOpen { get; set; } = false;
 
         public bool AllowMultiSelect { get; set; } = false;
 

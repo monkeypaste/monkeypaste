@@ -43,7 +43,6 @@
                           local:MpAvMenuExtension.IsEnabled="True"
                           local:MpAvMenuExtension.CanShowMenu="{Binding CanShowContextMenu, Mode=OneWay}"
                           local:MpAvMenuExtension.SuppressDefaultRightClick="True"
-                          local:MpAvMenuExtension.IsOpen="{Binding IsContextMenuOpened, Mode=TwoWay}"
                           local:MpAvPointerPressCommandExtension.IsEnabled="True"
                           local:MpAvPointerPressCommandExtension.DoubleLeftPressCommand="{Binding EnableSubSelectionCommand}"
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
@@ -62,7 +61,7 @@
                                          MaxHeight="40"
                                          DataContext="{Binding}"
                                          HorizontalAlignment="Stretch"
-                                         VerticalAlignment="Stretch"
+                                         VerticalAlignment="Top"
                                          local:MpAvSizeObserverExtension.IsEnabled="False"
                                          local:MpAvSizeObserverExtension.ObservedHeight="{Binding TitleHeight, Mode=OneWayToSource}"
                                          IsVisible="{Binding IsTitleVisible}" />

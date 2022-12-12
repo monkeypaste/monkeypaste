@@ -1,9 +1,12 @@
 ﻿namespace MonkeyPaste {
 
-    public interface MpITextSelectionRange {
-        int SelectionStart { get; }
+    public interface MpITextSelectionRange : MpIViewModel {
+        int SelectionStart { get; set; }
+        int SelectionEnd { get; set; }
+        string SelectedPlainText { get; set; }
         int SelectionLength { get; }
-        string SelectedPlainText { get; }
+
+        string Text { get; set; }
     }
 
     public interface MpIRtfSelectionRange : MpITextSelectionRange {

@@ -8,33 +8,37 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Wpf;
 namespace MonkeyPaste.Avalonia {
-    /// <summary>
-    /// Interaction logic for MpListBoxParameterView.xaml
-    /// </summary>
+
     public partial class MpAvSliderParameterView : MpAvUserControl<MpISliderViewModel> {
         private MpPoint _lastMousePosition;
         private bool _isSliding = false;
-        
+        private double _oldVal = 0;
+
         public MpAvSliderParameterView() {
             InitializeComponent();
 
             var sb = this.FindControl<Border>("SliderBorder");
+            sb.EffectiveViewportChanged += Sb_EffectiveViewportChanged;
             sb.PointerPressed += Sb_PointerPressed;
             sb.PointerReleased += Sb_PointerReleased;
             sb.PointerMoved += Sb_PointerMoved;
 
-
             var svtb = this.FindControl<TextBox>("SliderValueTextBox");
+            svtb.GotFocus += Svtb_GotFocus;
+            svtb.LostFocus += Svtb_LostFocus;
             svtb.KeyDown += Svtb_KeyDown;
-            svtb.GetObservable(TextBox.TextProperty).Subscribe(value => OnSliderValueTextBoxValueChanged());
-            
         }
 
+
+        private void Sb_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
+            UpdateRectWidth();
+        }
 
         private void Sb_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
             if (!IsEnabled) {
@@ -65,6 +69,7 @@ namespace MonkeyPaste.Avalonia {
                     double newValue = ((BindingContext.MaxValue - BindingContext.MinValue) * widthPercent) + BindingContext.MinValue;
                     BindingContext.SliderValue = Math.Round(newValue, BindingContext.Precision);
                 }
+                UpdateRectWidth();
             }
         }
 
@@ -97,7 +102,8 @@ namespace MonkeyPaste.Avalonia {
             double newValue = ((BindingContext.MaxValue - BindingContext.MinValue) * widthPercent) + BindingContext.MinValue;
             BindingContext.SliderValue = Math.Round(newValue, BindingContext.Precision);
 
-            _lastMousePosition = mp.ToPortablePoint();
+            _lastMousePosition = mp.ToPortablePoint(); 
+            UpdateRectWidth();
         }
 
         private void Sb_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
@@ -111,29 +117,60 @@ namespace MonkeyPaste.Avalonia {
                     e.Pointer.Capture(null);
                 }
             }
+            UpdateRectWidth();
         }
 
+        private void Svtb_GotFocus(object sender, GotFocusEventArgs e) {
+            var svtb = this.FindControl<TextBox>("SliderValueTextBox");
+            if (double.TryParse(svtb.Text, out var dblVal)) {
+                _oldVal = dblVal;
+            }
+        }
+
+        private void Svtb_LostFocus(object sender, RoutedEventArgs e) {
+            OnSliderValueTextBoxValueChanged();
+        }
 
         private void Svtb_KeyDown(object sender, global::Avalonia.Input.KeyEventArgs e) {
-            var keyStr = MpAvKeyboardInputHelpers.GetKeyLiteral(e.Key);
-            if (MpRegEx.RegExLookup[MpRegExType.Is_NOT_Number].IsMatch(keyStr) && 
-                e.Key != Key.Delete && e.Key != Key.Back) {
-                e.Handled = true;
+            if(e.Key == Key.Enter) {
+                // trigger lost focus
+                this.FindControl<Border>("SliderBorder").Focus();
+                return;
+            }
+            if(e.Key == Key.Escape) {
+                var svtb = this.FindControl<TextBox>("SliderValueTextBox");
+                // avoid breaking the binding?
+                TextBox.TextProperty.Setter.Invoke(svtb, _oldVal.ToString());
+                // trigger lost focus
+                this.FindControl<Border>("SliderBorder").Focus();
             }
         }
 
         private void OnSliderValueTextBoxValueChanged() {
-            if(BindingContext == null) {
+            if (BindingContext == null) {
+                return;
+            }
+            var svtb = this.FindControl<TextBox>("SliderValueTextBox");
+            if(double.TryParse(svtb.Text, out var dblVal)) {
+                BindingContext.SliderValue = dblVal;
+                _oldVal = dblVal;
+                UpdateRectWidth();
+            } else {
+                if(!_oldVal.IsNumber()) {
+                    _oldVal = 0;
+                }
+                // avoid breaking the binding?
+                TextBox.TextProperty.Setter.Invoke(svtb, _oldVal.ToString());
+                OnSliderValueTextBoxValueChanged();
+            }
+        }
+
+        private void UpdateRectWidth() {
+            if (BindingContext == null) {
                 return;
             }
             var sb = this.FindControl<Border>("SliderBorder");
-            var svtb = this.FindControl<TextBox>("SliderValueTextBox");
             var svr = this.FindControl<Rectangle>("SliderValueRectangle");
-            try {
-                BindingContext.SliderValue = Convert.ToDouble(svtb.Text);
-            }
-            catch {
-            }
 
             double percentFilled = BindingContext.SliderValue / (BindingContext.MaxValue - BindingContext.MinValue);
             svr.Width = sb.Bounds.Width * percentFilled;

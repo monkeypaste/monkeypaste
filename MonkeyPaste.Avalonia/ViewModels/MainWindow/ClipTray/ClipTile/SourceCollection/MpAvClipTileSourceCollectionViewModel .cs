@@ -29,17 +29,18 @@ namespace MonkeyPaste.Avalonia {
 
         public MpMenuItemViewModel ContextMenuViewModel {
             get {
-                if (SelectedItem == null) {
-                    return new MpMenuItemViewModel();
-                }
+                //if (SelectedItem == null) {
+                //    return new MpMenuItemViewModel();
+                //}
                 return new MpMenuItemViewModel() {
                     Header = "Sources",
                     IconResourceKey = "EggImage",
-                    SubItems = SortedItems.Select(x => x.ContextMenuViewModel).ToList()
+                    SubItems = SortedItems.Select(x => x.ContextMenuItemViewModel).ToList()
                 };
             }
         }
 
+        public bool IsContextMenuOpen { get; set; }
         #endregion
 
         #region State
@@ -112,6 +113,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
 
             });
+
         #endregion
     }
 }

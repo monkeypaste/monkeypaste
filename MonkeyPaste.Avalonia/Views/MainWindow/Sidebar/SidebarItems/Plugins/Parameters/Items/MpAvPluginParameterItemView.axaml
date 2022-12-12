@@ -13,53 +13,74 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPluginParameterItemView">
     <local:MpAvUserControl.Styles>
-        <Style Selector="Border">
+        <Style Selector="Border#ParameterContainerBorder">
             <Setter Property="BorderBrush"
                     Value="Transparent" />
         </Style>
-        <Style Selector="Border:not(.isValid)">
+        <Style Selector="Border#ParameterContainerBorder:not(.isValid)">
             <Setter Property="BorderBrush"
                     Value="Red" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <Border BorderThickness="2"
+    <Border x:Name="ParameterContainerBorder" 
+            BorderThickness="2"
             Background="Transparent"
             Classes.isValid="{Binding IsValid}">
-        <Grid ShowGridLines="True"
+        <Grid ShowGridLines="False"
               Background="DarkViolet"
-              ColumnDefinitions="150,*">
-            <DockPanel Grid.Column="0"
-                       LastChildFill="False">
-                <TextBlock TextWrapping="Wrap"
-                           MaxWidth="110"
-                           HorizontalAlignment="Left"
-                           VerticalAlignment="Top"
-                           FontSize="13"
+              ColumnDefinitions="100,30,*">
+            <!--  LABEL  -->
+
+            <TextBlock Grid.Column="0"
+                       TextWrapping="Wrap"
+                       MaxWidth="110"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       FontSize="13"
+                       FontWeight="SemiBold"
+                       Foreground="White"
+                       Margin="5,1,7,0"
+                       Text="{Binding Label}" />
+
+            <!--  DESCRIPTION  -->
+
+            <Grid Grid.Column="1"
+                  Cursor="Help"
+                  Width="15"
+                  Height="15"
+                  IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}}"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Right">
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView ToolTipText="{Binding Description}" />
+                </ToolTip.Tip>
+                <Ellipse HorizontalAlignment="Stretch"
+                         VerticalAlignment="Stretch"
+                         StrokeThickness="1"
+                         Stroke="White"
+                         Fill="Blue" />
+                <TextBlock Foreground="White"
+                           FontSize="10"
                            FontWeight="SemiBold"
-                           Foreground="White"
-                           Margin="5,5,7,0"
-                           DockPanel.Dock="Left"
-                           Text="{Binding Label}" />
-                <Grid DockPanel.Dock="Right"
-                      Width="15"
-                      Height="15"
-                      VerticalAlignment="Center"
-                      HorizontalAlignment="Right">
-                    <ToolTip.Tip>
-                        <local:MpAvToolTipView ToolTipText="{Binding Description}" />
-                    </ToolTip.Tip>
-                    <Ellipse HorizontalAlignment="Stretch"
-                             VerticalAlignment="Stretch"
-                             Stroke="White"
-                             Fill="Blue" />
-                    <TextBlock Foreground="White">
-                        i
-                    </TextBlock>
-                </Grid>
-            </DockPanel>
+                           TextAlignment="Center"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center">
+                    i
+                </TextBlock>
+            </Grid>
+
+            <!--  PARAMETER  -->
+
             <ContentControl x:Name="ParameterContentControl"
-                            Grid.Column="1"
+                            Grid.Column="2"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch"
                             Content="{Binding}">
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView Classes.error="True"
+                                           IsVisible="{Binding !IsValid}"
+                                           ToolTipText="{Binding ValidationMessage}" />
+                </ToolTip.Tip>
                 <ContentControl.DataTemplates>
                     <local:MpAvPluginParameterTemplateSelector>
 
@@ -129,6 +150,31 @@
                     </local:MpAvPluginParameterTemplateSelector>
                 </ContentControl.DataTemplates>
             </ContentControl>
+
+            <!--  VALDIATION  -->
+
+            <!--<Grid Grid.Column="3"
+                  IsVisible="{Binding !IsValid}"
+                  Width="15"
+                  Height="15"
+                  Cursor="Help"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Right">
+                <ToolTip.Tip>
+                </ToolTip.Tip>
+                <Ellipse HorizontalAlignment="Stretch"
+                         VerticalAlignment="Stretch"
+                         StrokeThickness="1"
+                         Stroke="White"
+                         Fill="Crimson" />
+                <TextBlock Foreground="White"
+                           FontSize="8"
+                           TextAlignment="Center"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center">
+                    !
+                </TextBlock>
+            </Grid>-->
         </Grid>
     </Border>
 </local:MpAvUserControl>

@@ -186,6 +186,7 @@ namespace MonkeyPaste {
             }
         }
 
+        public bool IsPopupMenuOpen { get; set; }
         #endregion
 
         #region Appearance
@@ -257,8 +258,6 @@ namespace MonkeyPaste {
         public bool IsPinned { get; set; } = false;
 
         public bool IsOverOptionsButton {get;set;}
-        public bool IsPopupMenuVisible { get; set; }
-        //public bool IsVisible { get; set; } = false;
 
         public virtual bool CanChooseNotShowAgain => true;
 
@@ -425,7 +424,7 @@ namespace MonkeyPaste {
                 case nameof(NotificationType):
                     OnPropertyChanged(nameof(LayoutType));
                     break;
-                case nameof(IsPopupMenuVisible):
+                case nameof(IsPopupMenuOpen):
                     break;
                 case nameof(IsVisible):
                     if(!IsVisible) {

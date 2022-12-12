@@ -50,7 +50,7 @@
               RowDefinitions="20,*"
               ColumnDefinitions="25,*,25">
             <Image x:Name="NotificationIconImage"
-                   Grid.Row="0"                  
+                   Grid.Row="0"
                    Grid.Column="0"
                    Margin="3,3,10,3"
                    Width="{Binding Bounds.Height, ElementName=NotificationIconImage}"
@@ -81,7 +81,6 @@
                                      local:MpAvIsHoveringExtension.IsEnabled="True"
                                      local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
                                      local:MpAvMenuExtension.PlacementMode="Left"
-                                     local:MpAvMenuExtension.IsOpen="{Binding IsPopupMenuVisible, Mode=TwoWay}"
                                      VerticalAlignment="Stretch"
                                      HorizontalAlignment="Right" />
 

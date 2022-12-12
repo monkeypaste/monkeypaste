@@ -304,6 +304,36 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        bool MpIContextMenuViewModel.IsContextMenuOpen {
+            get {
+                if(SelectedItem == null) {
+                    return false;
+                }
+                if(SelectedItem.IsContextMenuOpen || 
+                    SelectedItem.SourceCollectionViewModel.IsContextMenuOpen) {
+                    return true;
+                }
+                return false;
+            }
+            set {
+                if(SelectedItem == null) {
+                    return;
+                }
+                if(value) {
+                    if(SelectedItem.IsHoveringOverSourceIcon) {
+                        SelectedItem.SourceCollectionViewModel.IsContextMenuOpen = true;
+                        SelectedItem.IsContextMenuOpen = false;
+                    } else {
+                        SelectedItem.SourceCollectionViewModel.IsContextMenuOpen = false;
+                        SelectedItem.IsContextMenuOpen = true;
+                    }
+                } else {
+                    SelectedItem.SourceCollectionViewModel.IsContextMenuOpen = false;
+                    SelectedItem.IsContextMenuOpen = false;
+                }
+            }
+        }
+
         #endregion
 
         #region View Models

@@ -124,24 +124,23 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region IsOpen AvaloniaProperty
-        public static bool GetIsOpen(AvaloniaObject obj) {
-            return obj.GetValue(IsOpenProperty);
-        }
+        //#region IsOpen AvaloniaProperty
+        //public static bool GetIsOpen(AvaloniaObject obj) {
+        //    return obj.GetValue(IsOpenProperty);
+        //}
 
-        public static void SetIsOpen(AvaloniaObject obj, bool value) {
-            obj.SetValue(IsOpenProperty, value);
-        }
+        //public static void SetIsOpen(AvaloniaObject obj, bool value) {
+        //    obj.SetValue(IsOpenProperty, value);
+        //}
 
-        public static readonly AttachedProperty<bool> IsOpenProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, bool>(
-                "IsOpen",
-                false,
-                false,
-                BindingMode.TwoWay);
+        //public static readonly AttachedProperty<bool> IsOpenProperty =
+        //    AvaloniaProperty.RegisterAttached<object, Control, bool>(
+        //        "IsOpen",
+        //        false,
+        //        false,
+        //        BindingMode.TwoWay);
 
-        #endregion
-
+        //#endregion
 
         #region CanShowMenu AvaloniaProperty
         public static bool GetCanShowMenu(AvaloniaObject obj) {
@@ -258,18 +257,25 @@ namespace MonkeyPaste.Avalonia {
 
             if (mivm == null || mivm.SubItems == null) {
                 e.Handled = GetSuppressDefaultRightClick(control) && e.IsRightPress(control);
-                SetIsOpen(control, false);
+                
+                //SetIsOpen(control, false);
                 return;
             }
-            SetIsOpen(control, true);
+
+            //SetIsOpen(control, true);
             e.Handled = true;
 
             CancelEventHandler onOpenHandler = null;
             CancelEventHandler onCloseHandler = null;
 
             onCloseHandler = (s, e1) => {
+                if (control.DataContext is MpIContextMenuViewModel cmvm) {
+                    cmvm.IsContextMenuOpen = false;
+                }
+                if (control.DataContext is MpIPopupMenuViewModel pumvm) {
+                    pumvm.IsPopupMenuOpen = false;
+                }
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
-                SetIsOpen(control, false);
                 _cmInstance.ContextMenuClosing -= onCloseHandler;
                 _cmInstance.ContextMenuOpening -= onOpenHandler;
                 control.ContextMenu = null;
@@ -278,6 +284,13 @@ namespace MonkeyPaste.Avalonia {
 
             onOpenHandler = (s, e1) => {
                 e1.Cancel = false;
+                MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
+                if (control.DataContext is MpIContextMenuViewModel cmvm) {
+                    cmvm.IsContextMenuOpen = true;
+                }
+                if (control.DataContext is MpIPopupMenuViewModel pumvm) {
+                    pumvm.IsPopupMenuOpen = true;
+                }
             };
 
             _cmInstance.Items = mivm.SubItems.Where(x => x.IsVisible).Select(x => CreateMenuItem(x));

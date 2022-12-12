@@ -15,31 +15,70 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvEnumerableParameterValueViewModel : 
         MpViewModelBase<MpAvEnumerableParameterViewModel>,
-        MpIMenuItemViewModel,
-        MpITextSelectionRange,
+        MpIPopupMenuViewModel,
         MpIContentQueryTextBoxViewModel {
         #region Private Variables
 
         #endregion
 
         #region Properties
+        #region MpIContentQueryTextBoxViewModel Implementation
+
+        public bool IsActionParameter { get; set; } = false;
+
+        public string ContentQuery {
+            get => Value;
+            set => Value = value;
+        }
+
+        public ICommand AddContentPropertyPathCommand => new MpCommand<object>(
+            (args) => {
+                if (args == null) {
+                    return;
+                }
+                var cppt = (MpCopyItemPropertyPathType)args;
+                if (cppt == MpCopyItemPropertyPathType.None) {
+                    return;
+                }
+
+                string pathStr = string.Format(@"{{{0}}}", cppt.ToString());
+                Value = Value.Remove(SelectionStart, SelectionLength).Insert(SelectionStart, pathStr);
+            });
+
+        public ICommand ClearQueryCommand {
+            get {
+                if (Parent == null) {
+                    return null;
+                }
+                return Parent.RemoveValueCommand;
+            }
+        }
+        bool MpIContentQueryTextBoxViewModel.IsPathSelectorPopupOpen { get; set; }
+        #endregion
 
         #region MpITextSelectionRangeViewModel Implementation 
 
-        public int SelectionStart => 0;// MpTextBoxSelectionRangeExtension.GetSelectionStart(this);
-        public int SelectionLength => 0;// MpTextBoxSelectionRangeExtension.GetSelectionLength(this);
-
+        public int SelectionStart { get; set; }
+        public int SelectionEnd { get; set; }
         public string SelectedPlainText {
-            get;// => MpTextBoxSelectionRangeExtension.GetSelectedPlainText(this);
-            set;// => MpTextBoxSelectionRangeExtension.SetSelectionText(this, value);
+            get => Text.Substring(SelectionStart, SelectionLength);
+            set {
+                string pre_text = Text.Substring(SelectionStart);
+                string post_text = Text.Substring(SelectionLength);
+                Text = $"{pre_text}{value}{post_text}";
+                SelectionEnd = SelectionStart + value.Length;
+            }
         }
+        public int SelectionLength => SelectionEnd - SelectionStart;
+
+        public string Text { get; set; }
 
 
         #endregion
 
-        #region MpIMenuItemViewModel Implementation
+        #region MpIPopupMenuViewModel Implementation
 
-        public MpMenuItemViewModel ContextMenuItemViewModel {
+        public MpMenuItemViewModel PopupMenuViewModel {
             get {
                 var tmivml = new List<MpMenuItemViewModel>();
                 var propertyPathLabels = typeof(MpCopyItemPropertyPathType).EnumToLabels();
@@ -61,62 +100,10 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public bool IsPopupMenuOpen { get; set; }
         #endregion
 
-        #region MpIContentQueryTextBoxViewModel Implementation
 
-        public bool IsActionParameter { get; set; } = false;
-
-        public string ContentQuery {
-            get => Value;
-            set => Value = value;
-        }
-
-        public ICommand ShowContentPathSelectorMenuCommand => new MpCommand<object>(
-             (args) => {
-                 //var fe = args as FrameworkElement;
-
-                 //IsActionParameter = fe.GetVisualAncestor<MpTriggerActionChooserView>() != null;
-
-                 //var cm = MpContextMenuView.Instance;
-                 //cm.DataContext = MenuItemViewModel;
-                 //fe.ContextMenu = cm;
-                 //fe.ContextMenu.PlacementTarget = fe;
-                 //fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
-                 //fe.ContextMenu.IsOpen = true;
-                 //fe.ContextMenu.Closed += ContextMenu_Closed;
-             });
-
-        //private void ContextMenu_Closed(object sender, RoutedEventArgs e) {
-        //    var cm = sender as ContextMenu;
-        //    IsActionParameter = false;
-        //    cm.Closed -= ContextMenu_Closed;
-        //}
-
-        public ICommand AddContentPropertyPathCommand => new MpCommand<object>(
-            (args) => {
-                if (args == null) {
-                    return;
-                }
-                var cppt = (MpCopyItemPropertyPathType)args;
-                if (cppt == MpCopyItemPropertyPathType.None) {
-                    return;
-                }
-
-                string pathStr = string.Format(@"{{{0}}}", cppt.ToString());
-                Value = Value.Remove(SelectionStart, SelectionLength).Insert(SelectionStart, pathStr);
-            });
-
-        public ICommand ClearQueryCommand {
-            get {
-                if(Parent == null) {
-                    return null;
-                }
-                return Parent.RemoveValueCommand;
-            }
-        }
-
-        #endregion
 
         #region Appearance
 

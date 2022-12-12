@@ -12,33 +12,9 @@
         <TranslateTransform />
     </UserControl.RenderTransform>
     <Grid>
-        <Border BorderBrush="DarkKhaki"
-                BorderThickness="1.5"
+        <Border BorderThickness="1.5"
                 Padding="5"
-                CornerRadius="0"
-                Background="Khaki">
-            <Border.Styles>
-                <Style Selector="TextBlock">
-                    <Setter Property="Foreground"
-                            Value="Black" />
-                    <Setter Property="TextDecorations"
-                            Value="{x:Null}" />
-                </Style>
-                <Style Selector="TextBlock.IsLink">
-                    <Setter Property="Foreground"
-                            Value="Blue" />
-                    <Setter Property="TextDecorations"
-                            Value="Underline" />
-                </Style>
-                <Style Selector="Border:pointerover TextBlock.IsLink">
-                    <Setter Property="Foreground"
-                            Value="Red" />
-                    <Setter Property="TextDecorations"
-                            Value="Underline" />
-                    <Setter Property="Cursor"
-                            Value="Hand" />
-                </Style>
-            </Border.Styles>
+                CornerRadius="0">
             <!--<Border.Effect>
         <DropShadowEffect RenderingBias="Quality"
                           Color="Black"
@@ -48,7 +24,6 @@
       </Border.Effect>-->
             <TextBlock x:Name="ToolTipTextBlock"
                        MaxWidth="300"
-                       Foreground="Black"
                        FontWeight="Light"
                        TextWrapping="WrapWithOverflow" />
 

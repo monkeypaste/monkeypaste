@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 using System.Windows;
 
 using System.Windows.Input;
+using Avalonia.Controls;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvTextBoxParameterViewModel : 
         MpAvPluginParameterViewModelBase,
-        MpIMenuItemViewModel,
-        MpITextSelectionRange,
+        MpIPopupMenuViewModel,
         MpIContentQueryTextBoxViewModel {
         #region Private Variables
-        
+
         //private string _defaultValue;
 
         #endregion
@@ -25,7 +25,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpMenuItemViewModel ContextMenuItemViewModel {
+
+        #endregion
+
+        #region MpIPopupMenuViewModel Implementation
+        public MpMenuItemViewModel PopupMenuViewModel {
             get {
                 var tmivml = new List<MpMenuItemViewModel>();
                 var propertyPathLabels = typeof(MpCopyItemPropertyPathType).EnumToLabels();
@@ -47,18 +51,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        #endregion
-
-        #region MpITextSelectionRangeViewModel Implementation 
-
-        public int SelectionStart => 0;// MpTextBoxSelectionRangeExtension.GetSelectionStart(this);
-        public int SelectionLength => 0;// MpTextBoxSelectionRangeExtension.GetSelectionLength(this);
-
-        public string SelectedPlainText {
-            get;// => MpTextBoxSelectionRangeExtension.GetSelectedPlainText(this);
-            set;// => MpTextBoxSelectionRangeExtension.SetSelectionText(this, value);
-        }
-
+        public bool IsPopupMenuOpen { get; set; }
 
         #endregion
 
@@ -74,14 +67,30 @@ namespace MonkeyPaste.Avalonia {
                 CurrentValue = string.Empty;
             },
             () => !string.IsNullOrEmpty(CurrentValue));
+        bool MpIContentQueryTextBoxViewModel.IsPathSelectorPopupOpen { get; set; }
+
+        #endregion
+
+        #region MpITextSelectionRange Implementation 
+        public int SelectionStart { get; set; }
+        public int SelectionEnd { get; set; }
+        public string SelectedPlainText {
+            get => Text.Substring(SelectionStart, SelectionLength);
+            set {
+                string pre_text = Text.Substring(SelectionStart);
+                string post_text = Text.Substring(SelectionLength);
+                Text = $"{pre_text}{value}{post_text}";
+                SelectionEnd = SelectionStart + value.Length;
+            }
+        }
+        public int SelectionLength => SelectionEnd - SelectionStart;
+
+        public string Text { get; set; }
 
         #endregion
 
         #region State
 
-        public bool IsActionParameter { get; set; } = false;
-
-        public int CaretIndex { get; set; } = 0;
 
         #endregion
 
@@ -171,22 +180,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand ShowContentPathSelectorMenuCommand => new MpCommand<object>(
-             (args) => {
-                 //var fe = args as FrameworkElement;
-
-                 //IsActionParameter = fe.GetVisualAncestor<MpTriggerActionChooserView>() != null;
-
-                 //var cm = MpContextMenuView.Instance;
-                 //cm.DataContext = MenuItemViewModel;
-                 //fe.ContextMenu = cm;
-                 //fe.ContextMenu.PlacementTarget = fe;
-                 //fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
-                 //fe.ContextMenu.IsOpen = true;
-                 //fe.ContextMenu.Closed += ContextMenu_Closed;
-             });
-
-
         public ICommand AddContentPropertyPathCommand => new MpCommand<object>(
             (args) => {
                 if (args == null) {
@@ -200,6 +193,8 @@ namespace MonkeyPaste.Avalonia {
                 string pathStr = string.Format(@"{{{0}}}", cppt.ToString());
                 CurrentValue = CurrentValue.Remove(SelectionStart, SelectionLength).Insert(SelectionStart, pathStr);
             });
+
+
 
         #endregion
     }

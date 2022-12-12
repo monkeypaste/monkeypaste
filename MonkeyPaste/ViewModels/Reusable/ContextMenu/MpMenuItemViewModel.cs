@@ -12,11 +12,14 @@ namespace MonkeyPaste {
         MpMenuItemViewModel ContextMenuItemViewModel { get; }
     }
 
+    
     public interface MpIContextMenuViewModel : MpIMenuItemViewModelBase {
+        bool IsContextMenuOpen { get; set; }
         MpMenuItemViewModel ContextMenuViewModel { get; }
     }
 
     public interface MpIPopupMenuViewModel : MpIMenuItemViewModelBase {
+        bool IsPopupMenuOpen { get; set; }
         MpMenuItemViewModel PopupMenuViewModel { get; }
     }
 

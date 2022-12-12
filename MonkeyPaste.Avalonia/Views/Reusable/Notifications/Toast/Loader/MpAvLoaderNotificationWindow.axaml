@@ -108,7 +108,6 @@
                                      local:MpAvIsHoveringExtension.IsEnabled="True"
                                      local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
                                      local:MpAvMenuExtension.PlacementMode="Left"
-                                     local:MpAvMenuExtension.IsOpen="{Binding IsPopupMenuVisible, Mode=TwoWay}"
                                      VerticalAlignment="Top"
                                      HorizontalAlignment="Right" />
         </Grid>

@@ -21,11 +21,11 @@
     <local:MpAvBoolToScrollBarVisibilityConverter x:Key="BoolToScrollBarVisibilityConverter" />
     <local:MpAvContentDataConverter x:Key="ContentDataConverter" />
     <local:MpAvMultiDoubleMathConverter x:Key="MultiDoubleMathConverter" />
+    <local:MpAvMultiDoubleMathExpressionConverter x:Key="MultiDoubleMathExpressionConverter" />
     <local:MpAvDoubleToGridLengthConverter x:Key="DoubleToGridLengthConverter" />
     <local:MpAvCollectionIsNotEmptyToBoolConverter x:Key="CollectionIsNotEmptyToBoolConverter" />
     <local:MpAvCollectionCountToStringConverter x:Key="CollectionCountToStringConverter" />
     <local:MpAvDoubleArrayToAvListConverter x:Key="DoubleArrayToAvListConverter" />
     <local:MpAvBoolToGridLengthConverter x:Key="BoolToGridLengthConverter" />
     <local:MpAvAbsoluteToRelativePathStringConverter x:Key="AbsoluteToRelativePathStringConverter" />
-    <local:MpAvSliderValueWidthConverter x:Key="SliderValueWidthConverter" />
 </ResourceDictionary>

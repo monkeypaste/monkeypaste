@@ -15,27 +15,36 @@
     <Border HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Background="{DynamicResource AnalyzerSidebarBgBrush}">
-        <Grid ColumnDefinitions="Auto,*"
-              RowDefinitions="50,*">
-            <local:MpAvPluginSelectorView Grid.Row="0"
-                                          Grid.Column="0"
-                                          DataContext="{Binding}" />
-            <Border Grid.Row="1"
-                    DataContext="{Binding SelectedItem}">
-                <local:MpAvAnalyticItemPresetDataGridView VerticalAlignment="Top"
+        <ScrollViewer x:Name="AnalyticItemMainContainerScrollViewer"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Disabled">
+            <Grid x:Name="AnalyticItemMainContainerGrid"
+                  ColumnDefinitions="Auto,*"
+                  RowDefinitions="50,*">
+                <local:MpAvPluginSelectorView x:Name="AnalyzerPluginSelectorView"
+                                              Grid.Row="0"
+                                              Grid.Column="0"
+                                              DataContext="{Binding}" />
+                <Border x:Name="AnalyzerPluginPresetContainerBorder"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        DataContext="{Binding SelectedItem}">
+                    <local:MpAvAnalyticItemPresetDataGridView VerticalAlignment="Top"
+                                                              DataContext="{Binding}" />
+                </Border>
+
+                <Border x:Name="AnalyzerPluginParameterListBoxContainerBorder"
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="1"
+                        HorizontalAlignment="Stretch"
+                        DataContext="{Binding SelectedPresetViewModel}">
+                    <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
                                                           DataContext="{Binding}" />
-            </Border>
+                </Border>
 
-            <Border Grid.Column="1"
-                    Grid.Row="0"
-                    Grid.RowSpan="2"
-                    HorizontalAlignment="Stretch"
-                    DataContext="{Binding SelectedPresetViewModel}">
-                <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
-                                                      DataContext="{Binding}" />
-            </Border>
-
-        </Grid>
+            </Grid>
+        </ScrollViewer>
     </Border>
 </local:MpAvUserControl>
 
