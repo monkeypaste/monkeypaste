@@ -695,7 +695,7 @@ namespace MonkeyPaste.Avalonia {
                         // only creat preset values in db, they will then be picked up when the preset vm is initialized
                         var aipv = await MpPluginPresetParameterValue.CreateAsync(
                             presetId: presetModel.Id, 
-                            paramName: presetValueModel.paramName,
+                            paramId: presetValueModel.paramId,
                             value: presetValueModel.value
                             //format: AnalyzerPluginFormat.parameters.FirstOrDefault(x => x.paramName == presetValueModel.paramName)
                             );                        
@@ -730,7 +730,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public MpIAsyncCommand<object> ExecuteAnalysisCommand => new MpAsyncCommand<object>(
+        public ICommand ExecuteAnalysisCommand => new MpAsyncCommand<object>(
             async (args) => {
 
                 IsBusy = true;
@@ -762,7 +762,6 @@ namespace MonkeyPaste.Avalonia {
                     }
                     sourceCopyItem = MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem;
                 }
-
                 Items.ForEach(x => x.IsSelected = x == targetAnalyzer);
                 OnPropertyChanged(nameof(SelectedItem));
 
@@ -794,7 +793,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (result is MpAnalyzerTransaction) {
                     LastTransaction = result as MpAnalyzerTransaction;
-                    //OnAnalysisCompleted?.Invoke(SelectedItem, LastTransaction.ResponseContent);
+                    OnAnalysisCompleted?.Invoke(SelectedItem, LastTransaction.ResponseContent);
 
                     if(isUserExecutedAnalysis) {
 
@@ -918,7 +917,7 @@ namespace MonkeyPaste.Avalonia {
                 IsBusy = false;
             });
 
-        public MpIAsyncCommand ResetDefaultPresetCommand => new MpAsyncCommand(
+        public ICommand ResetDefaultPresetCommand => new MpAsyncCommand(
             async () => {
                 IsBusy = true;
 
@@ -974,7 +973,7 @@ namespace MonkeyPaste.Avalonia {
             });
 
 
-            public MpIAsyncCommand<object> DuplicatePresetCommand => new MpAsyncCommand<object>(
+            public ICommand DuplicatePresetCommand => new MpAsyncCommand<object>(
                 async (args) => {
                     IsBusy = true;
 

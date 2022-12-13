@@ -1,6 +1,7 @@
 ﻿using Google.Apis.PeopleService.v1.Data;
 using MonkeyPaste.Common;
 using System.Linq;
+using System.Text;
 
 namespace MonkeyPaste {
 
@@ -8,6 +9,8 @@ namespace MonkeyPaste {
         int SourceObjId { get; }
         MpCopyItemSourceType SourceType { get; }
     }
+
+    
     public class MpSourceRefHelper : MpISourceRef {
         public const string INTERNAL_SOURCE_DOMAIN = "https://localhost";
         public static MpSourceRefHelper ParseFromInternalUrl(string url) {
@@ -32,15 +35,14 @@ namespace MonkeyPaste {
         public static bool IsInternalSourceRef(string str) {
             return !string.IsNullOrEmpty(str) && str.StartsWith(INTERNAL_SOURCE_DOMAIN);
         }
-        public static MpSourceRefHelper ReplicateSource(MpISourceRef sr) {
-            return new MpSourceRefHelper() {
-                SourceObjId = sr.SourceObjId,
-                SourceType = sr.SourceType
-            };
-        }
 
         public static string ToUrl(MpISourceRef sr) {
-            return ReplicateSource(sr).ToString();
+            return sr.ToString();
+        }
+
+        public static byte[] ToUrlAsciiBytes(MpISourceRef sr) {
+            // for clipboard storage as CefAsciiBytes format
+            return ToUrl(sr).ToBytesFromString(Encoding.ASCII);
         }
 
         public string SourcePublicHandle { get; set; }

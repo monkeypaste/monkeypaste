@@ -22,7 +22,7 @@
             "description": "For performance concerns, a maximum amount characters is needed :(",
             "controlType": "Slider",
             "unitType": "Integer",
-            "paramName": "1",
+            "paramId": "1",
             "isRequired": true,
             "minimum": 1,
             "maximum": 10000000,
@@ -38,7 +38,7 @@
             "description": "When checked Plain Text format will be completely ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "2",
+            "paramId": "2",
             "values": [
               {
                 "value": "false",
@@ -59,7 +59,7 @@
             "description": "For performance concerns, a maximum amount characters is needed :(",
             "controlType": "Slider",
             "unitType": "Integer",
-            "paramName": "3",
+            "paramId": "3",
             "isRequired": true,
             "minimum": 1,
             "maximum": 10000000,
@@ -75,7 +75,7 @@
             "description": "When checked Plain Text format will be completely ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "4",
+            "paramId": "4",
             "values": [
               {
                 "value": "false",
@@ -96,7 +96,7 @@
             "description": "For performance concerns, a maximum amount characters is needed :(",
             "controlType": "Slider",
             "unitType": "Integer",
-            "paramName": "5",
+            "paramId": "5",
             "isRequired": true,
             "minimum": 1,
             "maximum": 10000000,
@@ -112,7 +112,7 @@
             "description": "When checked Rich Text format will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "6",
+            "paramId": "6",
             "values": [
               {
                 "value": "false",
@@ -133,7 +133,7 @@
             "description": "For performance concerns, a maximum amount characters is needed :(",
             "controlType": "Slider",
             "unitType": "Integer",
-            "paramName": "7",
+            "paramId": "7",
             "isRequired": true,
             "minimum": 1,
             "maximum": 10000000,
@@ -149,7 +149,7 @@
             "description": "When checked Html format will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "8",
+            "paramId": "8",
             "values": [
               {
                 "value": "false",
@@ -170,7 +170,7 @@
             "description": "For performance concerns, a maximum amount characters is needed :(",
             "controlType": "Slider",
             "unitType": "Integer",
-            "paramName": "9",
+            "paramId": "9",
             "isRequired": true,
             "minimum": 1,
             "maximum": 10000000,
@@ -186,7 +186,7 @@
             "description": "When checked Html format will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "10",
+            "paramId": "10",
             "values": [
               {
                 "value": "false",
@@ -207,7 +207,7 @@
             "description": "When checked Html format will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "11",
+            "paramId": "11",
             "values": [
               {
                 "value": "false",
@@ -228,7 +228,7 @@
             "description": "When checked Image format will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "12",
+            "paramId": "12",
             "values": [
               {
                 "value": "false",
@@ -249,7 +249,7 @@
             "description": "When checked Files will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "13",
+            "paramId": "13",
             "values": [
               {
                 "value": "false",
@@ -262,14 +262,14 @@
             "description": "These file types will be ignored when added to clipboard",
             "controlType": "EditableList",
             "unitType": "PlainText",
-            "paramName": "14"
+            "paramId": "14"
           },
           {
             "label": "Ignored Directories",
             "description": "These directories and all sub-directories will be ignored",
             "controlType": "EditableList",
             "unitType": "PlainText",
-            "paramName": "15"
+            "paramId": "15"
           }
         ]
       },
@@ -284,7 +284,7 @@
             "description": "When checked Csv will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "16",
+            "paramId": "16",
             "values": [
               {
                 "value": "false",
@@ -305,7 +305,7 @@
             "description": "When checked Url format will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "36",
+            "paramId": "36",
             "values": [
               {
                 "value": "false",
@@ -328,7 +328,7 @@
             "description": "For performance concerns, a maximum amount characters is needed :(",
             "controlType": "Slider",
             "unitType": "Integer",
-            "paramName": "17",
+            "paramId": "17",
             "isRequired": true,
             "minimum": 1,
             "maximum": 10000000,
@@ -344,7 +344,7 @@
             "description": "When checked Plain Text format will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "18",
+            "paramId": "18",
             "values": [
               {
                 "value": "false",
@@ -365,7 +365,7 @@
             "description": "For performance concerns, a maximum amount characters is needed :(",
             "controlType": "Slider",
             "unitType": "Integer",
-            "paramName": "19",
+            "paramId": "19",
             "isRequired": true,
             "minimum": 1,
             "maximum": 10000000,
@@ -381,7 +381,7 @@
             "description": "When checked Plain Text format will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "20",
+            "paramId": "20",
             "values": [
               {
                 "value": "false",
@@ -402,7 +402,7 @@
             "description": "This is max plain text, formatting length is ignored",
             "controlType": "Slider",
             "unitType": "Integer",
-            "paramName": "21",
+            "paramId": "21",
             "isRequired": true,
             "minimum": 1,
             "maximum": 10000000,
@@ -418,7 +418,7 @@
             "description": "When checked Rich Text format will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "22",
+            "paramId": "22",
             "values": [
               {
                 "value": "false",
@@ -439,7 +439,7 @@
             "description": "For performance concerns, a maximum amount characters is needed :(",
             "controlType": "Slider",
             "unitType": "Integer",
-            "paramName": "23",
+            "paramId": "23",
             "isRequired": true,
             "minimum": 1,
             "maximum": 10000000,
@@ -455,7 +455,7 @@
             "description": "When checked Html format will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "24",
+            "paramId": "24",
             "values": [
               {
                 "value": "false",
@@ -476,7 +476,7 @@
             "description": "For performance concerns, a maximum amount characters is needed :(",
             "controlType": "Slider",
             "unitType": "Integer",
-            "paramName": "25",
+            "paramId": "25",
             "isRequired": true,
             "minimum": 1,
             "maximum": 10000000,
@@ -492,7 +492,7 @@
             "description": "When checked Html format will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "26",
+            "paramId": "26",
             "values": [
               {
                 "value": "false",
@@ -513,7 +513,7 @@
             "description": "When checked Html format will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "27",
+            "paramId": "27",
             "values": [
               {
                 "value": "false",
@@ -534,7 +534,7 @@
             "description": "When pasting or dropping a bitmap this will be the default file type",
             "controlType": "ComboBox",
             "unitType": "PlainText",
-            "paramName": "28",
+            "paramId": "28",
             "isRequired": true,
             "values": [
               {
@@ -559,7 +559,7 @@
             "description": "When checked Image format will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "29",
+            "paramId": "29",
             "values": [
               {
                 "value": "false",
@@ -580,7 +580,7 @@
             "description": "When checked Files will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "30",
+            "paramId": "30",
             "values": [
               {
                 "value": "false",
@@ -593,7 +593,7 @@
             "description": "These file types will be ignored",
             "controlType": "EditableList",
             "unitType": "PlainText",
-            "paramName": "31"
+            "paramId": "31"
           }
         ]
       },
@@ -608,7 +608,7 @@
             "description": "When checked Files will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "32",
+            "paramId": "32",
             "values": [
               {
                 "value": "false",
@@ -621,7 +621,7 @@
             "description": "These file types will be ignored",
             "controlType": "EditableList",
             "unitType": "PlainText",
-            "paramName": "33"
+            "paramId": "33"
           }
         ]
       },
@@ -636,7 +636,7 @@
             "description": "When checked Csv will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "34",
+            "paramId": "34",
             "values": [
               {
                 "value": "false",
@@ -657,7 +657,7 @@
             "description": "When checked Url format will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "35",
+            "paramId": "35",
             "values": [
               {
                 "value": "false",

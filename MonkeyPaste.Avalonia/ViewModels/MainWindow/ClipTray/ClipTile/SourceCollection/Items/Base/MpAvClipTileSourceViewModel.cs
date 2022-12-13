@@ -213,8 +213,8 @@ namespace MonkeyPaste.Avalonia {
                 //MpClipTrayViewModel.Instance.FilterByAppIcon = ctvm.CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64.ToBitmapSource();
                 //IsFilteringByApp = true;
             });
-        public ICommand ExcludeSourceCommand => new MpAsyncCommand(
-            async () => {
+        public ICommand ExcludeSourceCommand => new MpCommand(
+             () => {
                 //var avm = MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppId == SelectedItem.AppViewModel.AppId);
                 //if (avm == null) {
                 //    return;
@@ -222,8 +222,8 @@ namespace MonkeyPaste.Avalonia {
                 //await avm.RejectApp();
             });
 
-        public ICommand ExcludeSubSelectedItemUrlDomainCommand => new MpAsyncCommand(
-            async () => {
+        public ICommand ExcludeSubSelectedItemUrlDomainCommand => new MpCommand(
+            () => {
                 //var uvm = MpAvUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == SelectedItem.UrlViewModel.UrlId);
                 //if (uvm == null) {
                 //    MpConsole.WriteTraceLine("Error cannot find url id: " + SelectedItem.UrlViewModel.UrlId);

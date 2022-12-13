@@ -28,7 +28,7 @@ namespace MonkeyPaste.Common {
 
             LinuxSourceUrl,
             LinuxGnomeFiles,
-            //LinuxUriList //not adding this one cause i don't like it
+            LinuxUriList, //not adding this one cause i don't like it
 
             // avalonia
 
@@ -48,6 +48,7 @@ namespace MonkeyPaste.Common {
             // internal
 
             INTERNAL_CLIP_TILE_DATA_FORMAT,
+            INTERNAL_CLIP_TILE_TITLE_FORMAT
             
         };
 
@@ -97,6 +98,7 @@ namespace MonkeyPaste.Common {
         public const string CefJson = "application/json";
 
         public const string INTERNAL_CLIP_TILE_DATA_FORMAT = "Mp Internal Content";
+        public const string INTERNAL_CLIP_TILE_TITLE_FORMAT = "Mp Internal Content Title";
         #endregion
 
         #region Properties

@@ -46,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-        string MpIParameterKeyValuePair.paramName => ParamName;
+        object MpIParameterKeyValuePair.paramId => ParamId;
         string MpIParameterKeyValuePair.value => CurrentValue;
         
 
@@ -342,7 +342,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Plugin (MpPluginParameterFormat)
 
-        public string ParamName {
+        public object ParamId {
             get {
                 if (ParameterFormat == null) {
                     return null;
@@ -350,7 +350,7 @@ namespace MonkeyPaste.Avalonia {
                 //if(string.IsNullOrEmpty(ParameterFormat.paramName)) {
                 //    ParameterFormat.paramName = 
                 //}
-                return ParameterFormat.paramName;
+                return ParameterFormat.paramId;
             }
         }
 
@@ -391,7 +391,7 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
                 //AnalyzerFormat.parameters.FirstOrDefault(y => y.paramName == x.ParamName)
-                return Parent.ComponentFormat.parameters.FirstOrDefault(x=>x.paramName == PresetValueModel.ParamName);
+                return Parent.ComponentFormat.parameters.FirstOrDefault(x=>x.paramId == PresetValueModel.ParamId);
             }
         }
         #endregion

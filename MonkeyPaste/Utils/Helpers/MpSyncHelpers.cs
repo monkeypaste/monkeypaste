@@ -47,12 +47,6 @@ namespace MonkeyPaste {
             return MpNetworkHelpers.GetAllLocalIPv4();
         }
 
-        public static string GetExternalIp4Address() {
-            if (!IsConnectedToInternet()) {
-                return "0.0.0.0";
-            }
-            return MpNetworkHelpers.GetExternalIp4Address();
-        }
 
         public static async Task<List<MpDbLog>> GetDbObjectLogs(string dboGuid, DateTime fromDtUtc) {
             var logs = await MpDataModelProvider.GetDbLogsByGuidAsync(dboGuid, fromDtUtc);

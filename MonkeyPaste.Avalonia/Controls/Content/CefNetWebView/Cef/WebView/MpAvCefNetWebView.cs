@@ -226,26 +226,26 @@ namespace MonkeyPaste.Avalonia {
             }
             MpQuillContentDataResponseMessage contentDataResp = null;
 
-            if (false) {//contentDataReq.forPaste && ctvm.HasTemplates) {
-                if (ctvm.IsContentReadOnly) {
-                    //var ctv = this.GetVisualAncestor<MpAvClipTileView>();
-                    //if (ctv != null) {
-                    //    var resizeControl = ctv.FindControl<Control>("ClipTileResizeBorder");
-                    //    MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.EditableWidth, ctvm.EditableHeight);
-                    //}
-                    MpAvResizeExtension.ResizeAnimated(this, ctvm.EditableWidth, ctvm.EditableHeight);
-                }
-                _pastableContent_ntf = null;
-                this.ExecuteJavascript($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");
-                while (_pastableContent_ntf == null) {
-                    await Task.Delay(100);
-                }
-                contentDataResp = MpJsonObject.DeserializeBase64Object<MpQuillContentDataResponseMessage>(_pastableContent_ntf);
-                _pastableContent_ntf = null;
-            } else {
+            //if (false) {//contentDataReq.forPaste && ctvm.HasTemplates) {
+            //    if (ctvm.IsContentReadOnly) {
+            //        //var ctv = this.GetVisualAncestor<MpAvClipTileView>();
+            //        //if (ctv != null) {
+            //        //    var resizeControl = ctv.FindControl<Control>("ClipTileResizeBorder");
+            //        //    MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.EditableWidth, ctvm.EditableHeight);
+            //        //}
+            //        MpAvResizeExtension.ResizeAnimated(this, ctvm.EditableWidth, ctvm.EditableHeight);
+            //    }
+            //    _pastableContent_ntf = null;
+            //    this.ExecuteJavascript($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");
+            //    while (_pastableContent_ntf == null) {
+            //        await Task.Delay(100);
+            //    }
+            //    contentDataResp = MpJsonObject.DeserializeBase64Object<MpQuillContentDataResponseMessage>(_pastableContent_ntf);
+            //    _pastableContent_ntf = null;
+            //} else {
                 var contentDataRespStr = await this.EvaluateJavascriptAsync($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");
                 contentDataResp = MpJsonObject.DeserializeBase64Object<MpQuillContentDataResponseMessage>(contentDataRespStr);
-            }
+            //}
 
 
             if (contentDataResp.dataItems == null) {
@@ -288,8 +288,7 @@ namespace MonkeyPaste.Avalonia {
                 if (add_tile_data) {
                     avdo.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT, ctvm.PublicHandle);
                 }
-                string ctvm_source_url = MpSourceRefHelper.ToUrl(ctvm.CopyItem);
-                avdo.SetData(MpPortableDataFormats.CefAsciiUrl, ctvm_source_url.ToBytesFromString(Encoding.ASCII));
+                avdo.SetData(MpPortableDataFormats.CefAsciiUrl, MpSourceRefHelper.ToUrlAsciiBytes(ctvm.CopyItem));
             }
 
             

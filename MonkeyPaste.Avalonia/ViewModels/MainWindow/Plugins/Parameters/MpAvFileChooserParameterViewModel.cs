@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvFileChooserParameterViewModel : MpAvPluginParameterViewModelBase {
@@ -53,7 +54,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public MpIAsyncCommand SelectFileSystemPathCommand => new MpAsyncCommand(
+        public ICommand SelectFileSystemPathCommand => new MpAsyncCommand(
             async () => {
                 string initDir = CurrentValue;
                 if (string.IsNullOrEmpty(initDir)) {

@@ -22,7 +22,7 @@
         "header": [
           {
             "key": "Authorization",
-            "pathExpression": {
+            "valuePath": {
               "value": "Bearer {0}",
               "pathExpression": "@10"
             }
@@ -60,6 +60,7 @@
       "response": {
         "newContentItem": {
           "name": "OpenAiAnalysisResponse",
+          "format": "Text",
           "label": {
             "value": "OpenAi Analysis"
           },

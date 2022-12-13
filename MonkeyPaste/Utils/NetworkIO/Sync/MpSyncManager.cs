@@ -71,15 +71,13 @@ namespace MonkeyPaste {
             _ct = _cts.Token;
             MpSyncHelpers.OnSyncableChange += LocalSync_OnSyncableChange;
 
-            ConnectedDevices = MpSyncHelpers.GetRemoteDevices();
-
-            SessionManager = new MpSessionManager();
-
-            IsRunning = true;
-
-            ThisEndpoint = MpDeviceEndpointFactory.CreateEndpoint();
 
             Task.Run(async () => {
+                ConnectedDevices = MpSyncHelpers.GetRemoteDevices();
+                SessionManager = new MpSessionManager();
+                IsRunning = true;
+                ThisEndpoint = await MpDeviceEndpointFactory.CreateEndpointAsync();
+
                 Socket listener = null;
                 ClientWebSocket cws = null;
 
@@ -93,7 +91,7 @@ namespace MonkeyPaste {
                     while (!MpSyncHelpers.IsConnectedToNetwork()) {
                         await Task.Delay(10000);
                     }
-                    ThisEndpoint = MpDeviceEndpointFactory.CreateEndpoint();
+                    ThisEndpoint = await MpDeviceEndpointFactory.CreateEndpointAsync();
 
                     if (MpSyncHelpers.IsConnectedToInternet()) {
                         

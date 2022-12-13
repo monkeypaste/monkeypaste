@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Data;
 using System.Windows.Input;
-using System;
 using Avalonia;
 using KeyGesture = Avalonia.Input.KeyGesture;
 

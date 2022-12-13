@@ -21,7 +21,7 @@ namespace MonkeyPaste {
         public static async Task<MpPluginTransactionBase> PerformTransaction(
             MpPluginFormat pluginFormat, 
             MpIPluginComponentBase pluginComponent,
-            Dictionary<string,string> paramValues,
+            Dictionary<object,string> paramValues,
             MpCopyItem sourceCopyItem,
             object sourceHandler,
             bool suppressWrite = false) { 
@@ -57,7 +57,7 @@ namespace MonkeyPaste {
                 at.RequestContent = contentParam == null ? 
                     null :
                     (at.Request as MpAnalyzerPluginRequestFormat).items
-                    .FirstOrDefault(x => x.paramName == contentParam.paramName).value;
+                    .FirstOrDefault(x => x.paramId.Equals(contentParam.paramId)).value;
 
                 // GET RESPONSE
                 try {
@@ -74,11 +74,11 @@ namespace MonkeyPaste {
 
                 // LOG TRANSACTION
 
-                int sourceId = await MpPluginLogger.LogTransactionAsync(pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
+                int ci_trans_id = await MpPluginLogger.LogTransactionAsync(pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
 
                 // PROCESS RESPONSE
                 try {
-                    at.ResponseContent = await MpPluginResponseConverter.ConvertAsync(at, sourceCopyItem, sourceId, suppressWrite);
+                    at.ResponseContent = await MpPluginResponseConverter.ConvertAsync(at, sourceCopyItem, ci_trans_id, suppressWrite);
                     return at;
                 }
                 catch (Exception ex) {

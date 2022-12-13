@@ -162,7 +162,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public MpIAsyncCommand SelectFileSystemPathCommand => new MpAsyncCommand(
+        public ICommand SelectFileSystemPathCommand => new MpAsyncCommand(
             async () => {
                 string initDir = FileSystemPath;
                 if (string.IsNullOrEmpty(initDir)) {

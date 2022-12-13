@@ -7,6 +7,9 @@ using System.Text;
 using Xamarin.Essentials;
 using System.Linq;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using System.Threading.Tasks;
+using Xamarin.Forms;
+using System.IO;
 
 namespace MonkeyPaste {
     public static class MpNetworkHelpers {
@@ -96,8 +99,24 @@ namespace MonkeyPaste {
             return ipAddrList.ToArray();
         }
 
-        public static string GetExternalIp4Address() {
-            return new System.Net.WebClient().DownloadString("https://api.ipify.org");
+        public static async Task<string> GetExternalIp4AddressAsync() {
+            //string result = await MpUrlHelpers.ReadUrlAsString("https://api.ipify.org");
+            //return result;
+
+            var request = (HttpWebRequest)WebRequest.Create("http://ifconfig.me");
+
+            request.UserAgent = "curl"; // this will tell the server to return the information as if the request was made by the linux "curl" command
+
+            string publicIPAddress;
+
+            request.Method = "GET";
+            using (WebResponse response = request.GetResponse()) {
+                using (var reader = new StreamReader(response.GetResponseStream())) {
+                    publicIPAddress = await reader.ReadToEndAsync();
+                }
+            }
+
+            return publicIPAddress.Replace("\n", "");
         }
     }
 }

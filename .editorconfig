@@ -223,6 +223,7 @@ dotnet_diagnostic.CS8632.severity = none
 
 # CS8073: The result of the expression is always the same since a value of this type is never equal to 'null'
 dotnet_diagnostic.CS8073.severity = none
+csharp_style_prefer_top_level_statements = true:silent
 
 [*.{cs,vb}]
 dotnet_style_coalesce_expression = true:suggestion

@@ -669,32 +669,32 @@ namespace MonkeyPaste {
         public static bool IsConnectedToInternet() {
             return MpNetworkHelpers.IsConnectedToInternet();
         }
-        public static int GetSyncPort() {
-            return 44381;
-        }
-        public static string GetThisClientGuid() {
-            return MpPrefViewModel.Instance.ThisDeviceGuid;
-        }
-        public static string GetPrimaryLocalIp4Address() {
-            if (!IsConnectedToNetwork()) {
-                return "0.0.0.0";
-            }
-            return MpNetworkHelpers.GetLocalIp4Address();
-        }
+        //public static int GetSyncPort() {
+        //    return 44381;
+        //}
+        //public static string GetThisClientGuid() {
+        //    return MpPrefViewModel.Instance.ThisDeviceGuid;
+        //}
+        //public static string GetPrimaryLocalIp4Address() {
+        //    if (!IsConnectedToNetwork()) {
+        //        return "0.0.0.0";
+        //    }
+        //    return MpNetworkHelpers.GetLocalIp4Address();
+        //}
 
-        public static string[] GetAllLocalIp4Addresses() {
-            if (!IsConnectedToNetwork()) {
-                return new string[] { "0.0.0.0" };
-            }
-            return MpNetworkHelpers.GetAllLocalIPv4();
-        }
+        //public static string[] GetAllLocalIp4Addresses() {
+        //    if (!IsConnectedToNetwork()) {
+        //        return new string[] { "0.0.0.0" };
+        //    }
+        //    return MpNetworkHelpers.GetAllLocalIPv4();
+        //}
 
-        public static string GetExternalIp4Address() {
-            if (!IsConnectedToInternet()) {
-                return "0.0.0.0";
-            }
-            return MpNetworkHelpers.GetExternalIp4Address();
-        }
+        //public static string GetExternalIp4Address() {
+        //    if (!IsConnectedToInternet()) {
+        //        return "0.0.0.0";
+        //    }
+        //    return MpNetworkHelpers.GetExternalIp4AddressAsync();
+        //}
 
         public static async Task<List<MpDbLog>> GetDbObjectLogsAsync(string dboGuid, DateTime fromDtUtc) {
             var logs = await MpDataModelProvider.GetDbLogsByGuidAsync(dboGuid, fromDtUtc);

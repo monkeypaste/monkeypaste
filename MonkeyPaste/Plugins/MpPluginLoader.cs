@@ -193,7 +193,7 @@ namespace MonkeyPaste {
                 }
                 return new MpCommandLinePlugin() { Endpoint = exePath };
             } else if (plugin.ioType.isHttp) {
-                return new MpHttpPlugin(plugin.analyzer.http);
+                return new MpHttpAnalyzerPlugin(plugin.analyzer.http);
             }
             throw new MpUserNotifiedException(@"Unknown or undefined plugin type: " + JsonConvert.SerializeObject(plugin.ioType));
         }

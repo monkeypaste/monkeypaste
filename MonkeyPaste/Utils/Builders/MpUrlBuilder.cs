@@ -19,13 +19,13 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-        public static async Task<MpUrl> CreateUrl(string sourceUrl, string title = "") {
+        public static async Task<MpUrl> CreateUrlAsync(string sourceUrl, string title = "") {
             if(string.IsNullOrWhiteSpace(sourceUrl)) {
                 return null;
             }
             string sourceUrlTitle = title;
             if (string.IsNullOrEmpty(sourceUrlTitle)) {
-                sourceUrlTitle = await MpUrlHelpers.GetUrlTitle(sourceUrl);
+                sourceUrlTitle = await MpUrlHelpers.GetUrlTitleAsync(sourceUrl);
             }
 
             var result = await MpUrl.Create(sourceUrl, sourceUrlTitle);
@@ -33,7 +33,7 @@ namespace MonkeyPaste {
         }
 
         public async Task<MpUrl> CreateAsync(string uri, string title = "") {
-            var url = await MpUrlBuilder.CreateUrl(uri, title);
+            var url = await MpUrlBuilder.CreateUrlAsync(uri, title);
             return url;
         }
         #endregion

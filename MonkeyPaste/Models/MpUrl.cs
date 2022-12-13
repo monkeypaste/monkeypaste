@@ -139,7 +139,7 @@ namespace MonkeyPaste {
                 return dupCheck;
             }
 
-            urlTitle = string.IsNullOrEmpty(urlTitle) ? await MpUrlHelpers.GetUrlTitle(urlPath) : urlTitle;
+            urlTitle = string.IsNullOrEmpty(urlTitle) ? await MpUrlHelpers.GetUrlTitleAsync(urlPath) : urlTitle;
 
             var domainStr = MpUrlHelpers.GetUrlDomain(urlPath);
             var newUrl = new MpUrl() {

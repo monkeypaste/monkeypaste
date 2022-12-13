@@ -107,7 +107,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public MpIAsyncCommand AssignHotkeyCommand => new MpAsyncCommand(
+        public ICommand AssignHotkeyCommand => new MpAsyncCommand(
             async () => {
                 await MpAvShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
                     $"Trigger {Label} Action",

@@ -78,7 +78,7 @@ namespace AvCoreClipboardHandler {
                 return null;
             }
             try {
-                CoreClipboardParamType paramType = (CoreClipboardParamType)int.Parse(pkvp.paramName);
+                CoreClipboardParamType paramType = (CoreClipboardParamType)Convert.ToInt32(pkvp.paramId);
                 switch(format) {
                     case MpPortableDataFormats.Text:
                         switch (paramType) {

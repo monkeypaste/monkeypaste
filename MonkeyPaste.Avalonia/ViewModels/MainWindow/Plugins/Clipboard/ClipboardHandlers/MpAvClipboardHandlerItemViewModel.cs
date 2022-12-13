@@ -237,7 +237,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             foreach (var handler in allHandlers) {
-                var paramNameGroups = handler.parameters.GroupBy(x => x.paramName);
+                var paramNameGroups = handler.parameters.GroupBy(x => x.paramId);
                 foreach(var paramNameGroup in paramNameGroups) {
                     if(paramNameGroup.Count() <= 1) {
                         continue;

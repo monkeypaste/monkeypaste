@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Threading.Tasks;
 using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public class MpDeviceEndpointFactory {
-        public static MpDeviceEndpoint CreateEndpoint() {
+        public static async Task<MpDeviceEndpoint> CreateEndpointAsync() {
+            string ip = await MpNetworkHelpers.GetExternalIp4AddressAsync();
             var newEndpoint = new MpDeviceEndpoint() {
-                PublicIp4Address = MpSyncHelpers.GetExternalIp4Address(),
+                PublicIp4Address = ip,
                 PrivateIp4Addresses = new ObservableCollection<string>(MpSyncHelpers.GetAllLocalIp4Addresses()),
                 DeviceGuid = MpSyncHelpers.GetThisClientGuid(),
                 PublicPortNum = MpSyncHelpers.GetSyncPort(),

@@ -31,13 +31,13 @@ namespace MonkeyPaste.Avalonia {
             e.DragEffects = DragDropEffects.Copy | DragDropEffects.Move;
         }
 
-        private async void DragOver(object sender, DragEventArgs e) {
+        private void DragOver(object sender, DragEventArgs e) {
             //e.DragEffects = DragDropEffects.Default;
             if(!e.Data.GetDataFormats().Contains(MpPortableDataFormats.Text)) {
                 e.DragEffects = DragDropEffects.None;
             }
         }
-        private async void Drop(object sender, DragEventArgs e) {
+        private void Drop(object sender, DragEventArgs e) {
             if (!e.Data.GetDataFormats().Contains(MpPortableDataFormats.Text)) {
                 e.DragEffects = DragDropEffects.None;
                 return;

@@ -1017,7 +1017,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public MpIAsyncCommand<object> ToggleIsEnabledCommand => new MpAsyncCommand<object>(
+        public ICommand ToggleIsEnabledCommand => new MpAsyncCommand<object>(
             async (parentToggledState) => {
                 bool wasBusy = IsBusy;
                 IsBusy = true;
@@ -1142,7 +1142,7 @@ namespace MonkeyPaste.Avalonia {
                 ParentActionViewModel.DeleteChildActionCommand.Execute(this);
             });
 
-        public MpIAsyncCommand PerformActionOnSelectedContentCommand => new MpAsyncCommand(
+        public ICommand PerformActionOnSelectedContentCommand => new MpAsyncCommand(
             async () => {
                 if(MpAvClipTrayViewModel.Instance.SelectedItem == null) {
                     return;

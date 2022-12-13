@@ -140,8 +140,8 @@
                                                 <Button Background="Transparent"
                                                         BorderThickness="0"
                                                         IsVisible="{Binding Parent.CanAnalyzerExecute}"
-                                                        Command="{Binding Parent.ExecuteAnalysisCommand}"
-                                                        CommandParameter="{Binding}">
+                                                        Command="{Binding AnalyzeSelectedItemCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                                                        CommandParameter="{Binding AnalyticItemPresetId}">
                                                     <ToolTip.Tip>
                                                         <local:MpAvToolTipView ToolTipText="Analyze" />
                                                     </ToolTip.Tip>

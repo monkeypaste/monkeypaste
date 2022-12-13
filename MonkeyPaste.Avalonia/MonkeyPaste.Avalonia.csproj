@@ -1125,6 +1125,7 @@
   <Target Name="_CollectWatchItems" />
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="call $(ProjectDir)scripts\kill_mpav_processes.bat" Condition="'$(BuildOs)' == 'WINDOWS'" />
+    <Exec Command="call $(ProjectDir)scripts\move_declarative_plugins_to_bin.bat" Condition="'$(BuildOs)' == 'WINDOWS'" />
   </Target>
   <PropertyGroup>
      <!-- 

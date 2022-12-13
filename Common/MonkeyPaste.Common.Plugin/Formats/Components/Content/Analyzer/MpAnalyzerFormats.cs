@@ -8,6 +8,7 @@ using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Common.Plugin {
     public class MpAnalyzerPluginFormat : MpPluginContentComponentBaseFormat {
+        public new MpHttpAnalyzerTransactionFormat http { get; set; }
     }
         
     public class MpAnalyzerPluginRequestFormat : MpPluginRequestFormatBase {
@@ -15,6 +16,8 @@ namespace MonkeyPaste.Common.Plugin {
         public MpPortableDataObject data { get; set; }
     }
 
-    public class MpAnalyzerPluginResponseFormat : MpPluginResponseFormatBase { }
+    public class MpAnalyzerPluginResponseFormat : MpPluginResponseFormatBase {
+        
+    }
 
 }

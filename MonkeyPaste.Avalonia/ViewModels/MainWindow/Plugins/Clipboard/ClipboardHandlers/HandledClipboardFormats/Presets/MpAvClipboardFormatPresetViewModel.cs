@@ -317,7 +317,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
         public async Task<MpAvPluginParameterViewModelBase> CreateParameterViewModelAsync(MpPluginPresetParameterValue aipv) {
-            MpPluginParameterControlType controlType = ClipboardFormat.parameters.FirstOrDefault(x => x.paramName == aipv.ParamName).controlType;
+            MpPluginParameterControlType controlType = ClipboardFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId).controlType;
             MpAvPluginParameterViewModelBase naipvm = null;
 
             switch (controlType) {
@@ -353,7 +353,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public string GetPresetParamJson() {
-            return MpJsonObject.SerializeObject(Items.Select(x => new[] { x.ParamName, x.CurrentValue }).ToList());
+            return MpJsonObject.SerializeObject(Items.Select(x => new[] { x.ParamId, x.CurrentValue }).ToList());
         }
         #endregion
 
@@ -429,7 +429,7 @@ namespace MonkeyPaste.Avalonia {
             //}
             // loop through plugin formats parameters and add or replace (if found in db) to the preset values
             foreach (var paramFormat in ClipboardFormat.parameters) {
-                if (!presetValues.Any(x => x.ParamName == paramFormat.paramName)) {
+                if (!presetValues.Any(x => x.ParamId == paramFormat.paramId)) {
                     // if no value is found in db for a parameter defined in manifest...
 
                     string paramVal = string.Empty;
@@ -448,7 +448,7 @@ namespace MonkeyPaste.Avalonia {
 
                     var newPresetVal = await MpPluginPresetParameterValue.CreateAsync(
                         presetId: Preset.Id,
-                        paramName: paramFormat.paramName,
+                        paramId: paramFormat.paramId,
                         value: paramVal
                         //format: paramFormat
                         );

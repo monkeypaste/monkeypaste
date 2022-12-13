@@ -26,6 +26,7 @@ namespace MonkeyPaste.Avalonia {
             // PRUNE INTERNAL SOURCE FORMATS
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+            List<MpISourceRef> refs = new List<MpISourceRef>();
             if (internalSourceCopyItemId == 0) {
                 throw new Exception("Invalid internalSourceCopyItemId, if not -1 needs to be greater than zero. Value was " + internalSourceCopyItemId);
             }
@@ -33,11 +34,24 @@ namespace MonkeyPaste.Avalonia {
                 mpdo.ContainsData(MpPortableDataFormats.CefAsciiUrl) &&
                 mpdo.GetData(MpPortableDataFormats.CefAsciiUrl) is byte[] urlBytes &&
                 urlBytes.ToDecodedString() is string urlRef &&
-                MpSourceRefHelper.ParseFromInternalUrl(urlRef) is MpSourceRefHelper sourceRef &&
-                sourceRef.SourceType == MpCopyItemSourceType.CopyItem) {
-                // occurs on sub-selection drop onto pintray or tag
-                internalSourceCopyItemId = sourceRef.SourceObjId;
+                MpSourceRefHelper.ParseFromInternalUrl(urlRef) is MpSourceRefHelper sourceRef) {
+                if(sourceRef.SourceType == MpCopyItemSourceType.CopyItem) {
+                    // occurs on sub-selection drop onto pintray or tag
+                    internalSourceCopyItemId = sourceRef.SourceObjId;
+                } else {
+                    // this should probably be passed w/ uri-list but adding in case
+                    refs.Add(sourceRef);
+                }                
             }
+            if(mpdo.ContainsData(MpPortableDataFormats.LinuxUriList) && 
+                mpdo.GetData(MpPortableDataFormats.LinuxUriList) is IEnumerable<string> uril) {
+                refs.AddRange(uril.Select(x => MpSourceRefHelper.ParseFromInternalUrl(x)));
+                if(internalSourceCopyItemId < 0 &&
+                    refs.FirstOrDefault(x=>x.SourceType == MpCopyItemSourceType.CopyItem) is MpCopyItem source_ci) {
+                    internalSourceCopyItemId = source_ci.Id;
+                }
+            }
+
             if(internalSourceCopyItemId > 0) {
                 // when creating an item from an internal source
                 // get source item type and remove higher priority formats that aren't of source type
@@ -327,7 +341,7 @@ namespace MonkeyPaste.Avalonia {
                     app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(last_pinfo);
 
                     url = htmlClipboardData == null ?
-                            null : await MpUrlBuilder.CreateUrl(htmlClipboardData.SourceUrl);
+                            null : await MpUrlBuilder.CreateUrlAsync(htmlClipboardData.SourceUrl);
 
                     if (url != null) {
                         if (MpAvUrlCollectionViewModel.Instance.IsRejected(url.UrlDomainPath)) {
@@ -354,9 +368,16 @@ namespace MonkeyPaste.Avalonia {
                 var dobj = await MpDataObject.CreateAsync(
                     pdo: mpdo);
 
+                string title = null;
+                if(mpdo.ContainsData(MpPortableDataFormats.INTERNAL_CLIP_TILE_TITLE_FORMAT) &&
+                    mpdo.GetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_TITLE_FORMAT) is string titleStr) {
+                    title = titleStr;
+                }
+
                 var ci = await MpCopyItem.Create(
                     sourceId: source.Id,
                     dataObjectId: dobj.Id,
+                    title: title,
                     //preferredFormatName: htmlClipboardData == null ? null : MpPortableDataFormats.AvHtml_bytes,
                     data: itemData,
                     itemType: itemType,
@@ -383,7 +404,16 @@ namespace MonkeyPaste.Avalonia {
                             sourceType: MpCopyItemSourceType.App);
                     }
                 }
-
+                if(refs != null && refs.Count > 0) {
+                    // add any other sources
+                    // (occurs during analyzer transaction where there is at least the plugin and content sources)
+                    await Task.WhenAll(
+                        refs.Select(x =>
+                        MpCopyItemSource.CreateAsync(
+                            copyItemId: ci.Id,
+                            sourceObjId: x.SourceObjId,
+                            sourceType: x.SourceType)));
+                }
                 return ci;
             } catch(Exception ex) {
                 MpConsole.WriteTraceLine(ex);

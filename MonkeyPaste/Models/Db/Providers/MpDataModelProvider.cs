@@ -511,9 +511,9 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public static async Task<MpTextAnnotation> GetTextAnnotationByDataAsync(int ciid, int sid, string label, string matchValue, string description) {
-            string query = @"select * from MpTextAnnotation where fk_MpCopyItemId=? and fk_MpSourceId=? and Label=? and MatchValue=? and Description=?";
-            var result = await MpDb.QueryAsync<MpTextAnnotation>(query, ciid, sid,label,matchValue, description);
+        public static async Task<MpTextAnnotation> GetTextAnnotationByDataAsync(int ciid, int citid, string label, string matchValue, string description) {
+            string query = @"select * from MpTextAnnotation where fk_MpCopyItemId=? and fk_MpCopyItemTransactionId=? and Label=? and MatchValue=? and Description=?";
+            var result = await MpDb.QueryAsync<MpTextAnnotation>(query, ciid, citid,label,matchValue, description);
             if (result == null || result.Count == 0) {
                 return null;
             }
@@ -715,9 +715,9 @@ namespace MonkeyPaste {
         }
 
 
-        public static async Task<MpPluginPresetParameterValue> GetPluginPresetValueAsync(int presetId, string paramName) {
-            string query = $"select * from MpPluginPresetParameterValue where fk_MpPluginPresetId=? and ParamName=?";
-            var result = await MpDb.QueryAsync<MpPluginPresetParameterValue>(query, presetId, paramName);
+        public static async Task<MpPluginPresetParameterValue> GetPluginPresetValueAsync(int presetId, string paramId) {
+            string query = $"select * from MpPluginPresetParameterValue where fk_MpPluginPresetId=? and ParamId=?";
+            var result = await MpDb.QueryAsync<MpPluginPresetParameterValue>(query, presetId, paramId);
             if (result == null || result.Count == 0) {
                 return null;
             }

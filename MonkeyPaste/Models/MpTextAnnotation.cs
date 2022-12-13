@@ -35,8 +35,8 @@ namespace MonkeyPaste {
         [Column("fk_MpCopyItemId")]
         public int CopyItemId { get; set; }
 
-        [Column("fk_MpSourceId")]
-        public int SourceId { get; set; }
+        [Column("fk_MpCopyItemTransactionId")]
+        public int CopyItemTransactionId { get; set; }
 
         public string HexColor { get; set; }
         
@@ -52,14 +52,14 @@ namespace MonkeyPaste {
 
         public static async Task<MpTextAnnotation> Create(
             int copyItemId = 0,
-            int sourceId = 0,
+            int copyItemTransId = 0,
             string label = "",
             string matchValue = "",
             string description = "",
             double score = 1,
             string hexColor = "",
             bool suppressWrite = false) {
-            var dupCheck = await MpDataModelProvider.GetTextAnnotationByDataAsync(copyItemId, sourceId,label,matchValue,description); 
+            var dupCheck = await MpDataModelProvider.GetTextAnnotationByDataAsync(copyItemId, copyItemTransId,label,matchValue,description); 
             if (dupCheck != null) {
                 MpConsole.WriteLine($"Duplicate Text Annotation detected during create, ignoring");
                 return dupCheck;
@@ -70,7 +70,7 @@ namespace MonkeyPaste {
             var newTextToken = new MpTextAnnotation() {
                 TextAnnotationGuid = System.Guid.NewGuid(),
                 CopyItemId = copyItemId,
-                SourceId = sourceId,
+                CopyItemTransactionId = copyItemTransId,
                 Label = label,
                 MatchValue = matchValue,
                 Description = description,

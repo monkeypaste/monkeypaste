@@ -20,7 +20,7 @@ namespace MonkeyPaste {
         [Column("fk_MpPluginPresetId")]
         public int PluginPresetId { get; set; }
 
-        public string ParamName { get; set; }
+        public string ParamId { get; set; }
 
         public string Value { get; set; } = string.Empty;
 
@@ -45,24 +45,24 @@ namespace MonkeyPaste {
 
         public static async Task<MpPluginPresetParameterValue> CreateAsync(
             int presetId = 0, 
-            string paramName = null,
+            object paramId = null,
             string value = ""
             //MpPluginParameterFormat format = null
             ) {
             if (presetId == 0) {
                 throw new Exception("Preset Value must be associated with a preset and parameter");
             }
-            if(string.IsNullOrEmpty(paramName)) {
-                throw new Exception("ParamName must cannot be null or empty");
+            if(string.IsNullOrEmpty(paramId.ToString())) {
+                throw new Exception("ParamId must cannot be null or empty");
             }
 
-            var dupItem = await MpDataModelProvider.GetPluginPresetValueAsync(presetId, paramName);
+            var dupItem = await MpDataModelProvider.GetPluginPresetValueAsync(presetId, paramId.ToString());
             if (dupItem != null) {
-                MpConsole.WriteLine($"Updating preset Id{presetId} for {paramName}");
+                MpConsole.WriteLine($"Updating preset Id{presetId} for {paramId}");
 
                 dupItem = await MpDataModelProvider.GetItemAsync<MpPluginPresetParameterValue>(dupItem.Id);
                 dupItem.PluginPresetId = presetId;
-                dupItem.ParamName = paramName;
+                dupItem.ParamId = paramId.ToString();
                 dupItem.Value = value;
                 //dupItem.ParameterFormat = format;
                 await dupItem.WriteToDatabaseAsync();
@@ -73,7 +73,7 @@ namespace MonkeyPaste {
                 PluginPresetParameterValueGuid = System.Guid.NewGuid(),
                 //ParameterFormat = format,
                 PluginPresetId = presetId,
-                ParamName = paramName,
+                ParamId = paramId.ToString(),
                 Value = value
             };
 
@@ -90,7 +90,7 @@ namespace MonkeyPaste {
             var cppv = new MpPluginPresetParameterValue() {
                 PluginPresetParameterValueGuid = System.Guid.NewGuid(),
                 PluginPresetId = this.PluginPresetId,
-                ParamName = this.ParamName,
+                ParamId = this.ParamId,
                 Value = this.Value,
                 //ParameterFormat = this.ParameterFormat
             };

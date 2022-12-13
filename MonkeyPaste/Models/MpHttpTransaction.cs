@@ -86,7 +86,9 @@ namespace MonkeyPaste {
             if (deviceId <= 0) {
                 deviceId = MpDefaultDataModelTools.ThisUserDeviceId;
             }
-
+            if(string.IsNullOrEmpty(ip)) {
+                ip = await MpNetworkHelpers.GetExternalIp4AddressAsync();
+            }
 
             var mr = new MpHttpTransaction() {
                 HttpTransactionGuid = System.Guid.NewGuid(),

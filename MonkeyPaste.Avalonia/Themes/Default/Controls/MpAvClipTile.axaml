@@ -13,7 +13,7 @@
     </Styles.Resources>
 
 
-    <Style Selector="ListBoxItem"
+    <Style Selector="local|MpAvClipTrayContainerView ListBoxItem"
            x:DataType="local:MpAvClipTileViewModel">
         <Setter Property="Margin"
                 Value="{Binding OuterSpacing}" />
@@ -26,7 +26,7 @@
     </Style>
 
     <!--  ListBoxItem Border .TileBorder  -->
-    <Style Selector=":is(local|MpAvClipBorder).TileBorder"
+    <Style Selector="local|MpAvClipTrayContainerView :is(local|MpAvClipBorder).TileBorder"
            x:DataType="local:MpAvClipTileViewModel">
         <Setter Property="Transitions">
             <Transitions>
@@ -40,7 +40,7 @@
 
     <!--  Hover Unselected  -->
 
-    <Style Selector="ListBoxItem:pointerover:not(:selected) :is(Border).TileBorder"
+    <Style Selector="local|MpAvClipTrayContainerView ListBoxItem:pointerover:not(:selected) :is(Border).TileBorder"
            x:DataType="local:MpAvClipTileViewModel">
         <Setter Property="BorderBrush"
                 Value="{StaticResource IsHoveringBorderBrush_unselected}" />
@@ -56,7 +56,7 @@
 
     <!--  Default Selected  -->
 
-    <Style Selector="ListBoxItem:selected :is(Border).TileBorder"
+    <Style Selector="local|MpAvClipTrayContainerView ListBoxItem:selected :is(Border).TileBorder"
            x:DataType="local:MpAvClipTileViewModel">
         <Setter Property="BorderBrush"
                 Value="{StaticResource DefaultBorderBrush_selected}" />
@@ -65,7 +65,7 @@
 
     <!--  Hover Selected  -->
 
-    <Style Selector="ListBoxItem:selected:pointerover :is(Border).TileBorder:not(.CanResize):not(.IsResizing)"
+    <Style Selector="local|MpAvClipTrayContainerView ListBoxItem:selected:pointerover :is(Border).TileBorder:not(.CanResize):not(.IsResizing)"
            x:DataType="local:MpAvClipTileViewModel">
         <Setter Property="BorderBrush"
                 Value="{StaticResource IsHoveringBorderBrush_selected}" />
@@ -80,7 +80,7 @@
 
     <!--  Default Resize  -->
 
-    <Style Selector="ListBoxItem :is(Border).TileBorder.IsResizing"
+    <Style Selector="local|MpAvClipTrayContainerView ListBoxItem :is(Border).TileBorder.IsResizing"
            x:DataType="local:MpAvClipTileViewModel">
         <Setter Property="BorderBrush"
                 Value="{StaticResource IsResizingBorderBrush}" />
@@ -89,7 +89,7 @@
 
     <!--  Hover Resizing  -->
 
-    <Style Selector="ListBoxItem:selected:pointerover :is(Border).TileBorder.CanResize:not(.IsResizing)"
+    <Style Selector="local|MpAvClipTrayContainerView ListBoxItem:selected:pointerover :is(Border).TileBorder.CanResize:not(.IsResizing)"
            x:DataType="local:MpAvClipTileViewModel">
         <Setter Property="BorderBrush"
                 Value="{StaticResource CanResizeBorderBrush}" />

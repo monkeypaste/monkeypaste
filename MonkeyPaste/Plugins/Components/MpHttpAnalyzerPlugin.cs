@@ -16,7 +16,7 @@ using MonkeyPaste.Common;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpHttpPlugin : MpIAnalyzeAsyncComponent {
+    public class MpHttpAnalyzerPlugin : MpIAnalyzeAsyncComponent {
         #region Private Variables
         /*private bool _showDebug = true;
 
@@ -479,7 +479,7 @@ namespace MonkeyPaste {
 	}
 }";*/
         private IEnumerable<MpIParameterKeyValuePair> _reqParams;
-        private MpHttpTransactionFormat _httpTransactionFormat;
+        private MpHttpAnalyzerTransactionFormat _httpTransactionFormat;
         private JToken _rootResponseToken;
 
         private readonly string _paramRefRegEx = @"@[0-9]*";
@@ -504,7 +504,7 @@ namespace MonkeyPaste {
 
         #region Constructor
 
-        public MpHttpPlugin(MpHttpTransactionFormat hf) {
+        public MpHttpAnalyzerPlugin(MpHttpAnalyzerTransactionFormat hf) {
             _httpTransactionFormat = hf;
         }
 
@@ -552,7 +552,7 @@ namespace MonkeyPaste {
                         var responseObj = CreateResponse(responseStr);
 
                         //reset format or subsequent requests compound data 
-                        _httpTransactionFormat = JsonConvert.DeserializeObject<MpHttpTransactionFormat>(unalteredHttpFormat);
+                        _httpTransactionFormat = JsonConvert.DeserializeObject<MpHttpAnalyzerTransactionFormat>(unalteredHttpFormat);
                         return responseObj;
                     }
                     catch (Exception ex) {
@@ -629,7 +629,7 @@ namespace MonkeyPaste {
                 foreach (var qkvp in urlFormat.query) {
                     string queryVal = qkvp.value;
                     if (qkvp.isEnumId) {
-                        queryVal = GetParamValue(qkvp.value);
+                        queryVal = GetParamValueStr(qkvp.value);
                         if (string.IsNullOrEmpty(queryVal) && qkvp.omitIfNullOrEmpty) {
                             continue;
                         }
@@ -681,7 +681,7 @@ namespace MonkeyPaste {
                 foreach (Match m in mc) {
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {
-                            string paramVal = GetParamValue(c.Value);
+                            string paramVal = GetParamValueStr(c.Value);
                             string escapedParamVal = HttpUtility.JavaScriptStringEncode(paramVal);
 
                             raw = raw.Replace(c.Value, escapedParamVal);// JsonConvert.SerializeObject(raw.Replace(c.Value, paramEnum.value));
@@ -707,11 +707,11 @@ namespace MonkeyPaste {
             return raw;
         }
 
-        private string GetParamValue(string queryParamValueStr) {
-            string paramName = GetParamName(queryParamValueStr);
-            var enumParam = _reqParams.FirstOrDefault(x => x.paramName == paramName);
+        private string GetParamValueStr(string queryParamValueStr) {
+            string paramIdStr = GetParamIdStr(queryParamValueStr);
+            var enumParam = _reqParams.FirstOrDefault(x => x.paramId.Equals(paramIdStr));
             if (enumParam == null) {
-                Console.WriteLine($"Error parsing dynamic query item, enumId: '{paramName}' does not exist");
+                Console.WriteLine($"Error parsing dynamic query item, enumId: '{paramIdStr}' does not exist");
                 Console.WriteLine($"In request with params: ");
                 Console.WriteLine(JsonConvert.SerializeObject(_reqParams));
                 return null;
@@ -719,7 +719,7 @@ namespace MonkeyPaste {
             return enumParam.value;
         }
 
-        private string GetParamName(string queryParamValueStr) {
+        private string GetParamIdStr(string queryParamValueStr) {
             if(string.IsNullOrEmpty(queryParamValueStr)) {
                 throw new Exception("Error creating http uri, dynamic query item has undefined value");
             }
@@ -734,7 +734,7 @@ namespace MonkeyPaste {
         }
 
         private MpAnalyzerPluginResponseFormat CreateResponse(string responseStr) {
-            var response = _httpTransactionFormat.response as MpAnalyzerPluginResponseFormat;
+            var response = _httpTransactionFormat.response;
 
             if (responseStr.StartsWith("[")) {
                 JArray a = JArray.Parse(responseStr);

@@ -9,7 +9,7 @@ using MonkeyPaste.Common;
 namespace MonkeyPaste.Common {
     public enum MpJsonDataTokenType {
         None = 0,
-        RequestParam, // @<paramName>
+        RequestParamValueRef, // @<paramId>
         Subsititution, // value: '...{0}...' where valuePath={0}
         PathIndex, // [#] where # is swapped for * and Property is list
         Eof, // <EOF> used to denoted contentEnd for text range annotation
@@ -21,8 +21,24 @@ namespace MonkeyPaste.Common {
     }
 
     public class MpJsonPathProperty {
-        private static readonly string _inputParamRegexStr = @"@[0-9]*";
+        #region Private Variables
+
+        private static readonly string _inputParamRegexStr = $"{REQUEST_PARAM_VALUE_REF_START_TOKEN}[0-9]*";
         private static Regex _inputParamRegex;
+
+        #endregion
+
+        #region Constants
+
+        public const string REQUEST_PARAM_VALUE_REF_START_TOKEN = "@";
+
+        #endregion
+
+        #region Statics
+
+        #endregion
+
+        #region Properties
 
         public string value { get; set; } = string.Empty;
         public string pathExpression { get; set; } = string.Empty;
@@ -30,13 +46,19 @@ namespace MonkeyPaste.Common {
         public MpJsonPathType pathType { get; set; } = MpJsonPathType.Absolute;
 
         public bool omitIfPathNotFound { get; set; } = true;
+        #endregion
 
+        #region Constructors
+
+        #endregion
+
+        #region Public Methods
         public static string Query(object jsonObj, string jsonQuery) {
             string jsonStr;
-            if(jsonObj == null) {
+            if (jsonObj == null) {
                 return null;
             }
-            if(jsonObj is string) {
+            if (jsonObj is string) {
                 jsonStr = jsonObj.ToString();
             } else {
                 jsonStr = JsonConvert.SerializeObject(jsonObj);
@@ -67,7 +89,7 @@ namespace MonkeyPaste.Common {
             this.value = value;
         }
 
-        public MpJsonPathProperty(string value,string valuePath) : this(value) {
+        public MpJsonPathProperty(string value, string valuePath) : this(value) {
             this.pathExpression = valuePath;
         }
 
@@ -78,16 +100,23 @@ namespace MonkeyPaste.Common {
             value = FindValuePathResult(curToken, reqParams, idx);
         }
 
+
+        public override string ToString() {
+            return value;
+        }
+        #endregion
+
+        #region Protected Methods
         protected string FindValuePathResult(JToken curToken, IEnumerable<MpIParameterKeyValuePair> reqParams, int idx = 0) {
             string result = string.Empty;
-            if (pathExpression.StartsWith("@")) {
+            if (pathExpression.Trim().StartsWith(REQUEST_PARAM_VALUE_REF_START_TOKEN)) {
                 result = GetParamValue(pathExpression, reqParams);
-            } else if(!string.IsNullOrEmpty(pathExpression)) {
+            } else if (!string.IsNullOrEmpty(pathExpression)) {
                 try {
-                    if(pathExpression.Contains("[#]")) {
+                    if (pathExpression.Contains("[#]")) {
                         string jsonPathValue = pathExpression.Replace("[#]", "[*]");
                         var dataTokens = curToken.SelectTokens(jsonPathValue, false).ToList();
-                        if(dataTokens == null || dataTokens.Count == 0) {
+                        if (dataTokens == null || dataTokens.Count == 0) {
                             throw new MpJsonPathPropertyException($"valuePath '{pathExpression}' not found");
                         }
                         if (idx >= dataTokens.Count) {
@@ -96,15 +125,15 @@ namespace MonkeyPaste.Common {
                         result = dataTokens[idx].ToString();
                     } else {
                         JToken dataToken = curToken.SelectToken(pathExpression, false);
-                        if(dataToken == null) {
+                        if (dataToken == null) {
                             throw new MpJsonPathPropertyException($"valuePath '{pathExpression}' not found");
                         }
                         result = dataToken.ToString();
                     }
-                    
+
                 }
                 catch (Exception ex) {
-                    if(ex is MpJsonPathPropertyException jppe) {
+                    if (ex is MpJsonPathPropertyException jppe) {
                         throw jppe;
                     }
                     MpConsole.WriteLine("Error parsing resposne: " + ex);
@@ -134,11 +163,14 @@ namespace MonkeyPaste.Common {
             return outputValue;
         }
 
+        #endregion
+
+        #region Private Methods
         private string GetParamValue(string queryParamValueStr, IEnumerable<MpIParameterKeyValuePair> reqParams) {
-            string paramName = GetParamName(queryParamValueStr);
-            MpIParameterKeyValuePair param_kvp = reqParams.FirstOrDefault(x => x.paramName == paramName);
+            string paramId = GetParamId(queryParamValueStr);
+            MpIParameterKeyValuePair param_kvp = reqParams.FirstOrDefault(x => paramId.Equals(x.paramId));
             if (param_kvp == null) {
-                MpConsole.WriteLine($"Error parsing dynamic query item, enumId: '{paramName}' does not exist");
+                MpConsole.WriteLine($"Error parsing dynamic query item, enumId: '{paramId}' does not exist");
                 MpConsole.WriteLine($"In request with params: ");
                 MpConsole.WriteLine(JsonConvert.SerializeObject(reqParams));
                 return null;
@@ -146,7 +178,7 @@ namespace MonkeyPaste.Common {
             return param_kvp.value;
         }
 
-        private string GetParamName(string queryParamValueStr) {
+        private string GetParamId(string queryParamValueStr) {
             if (string.IsNullOrEmpty(queryParamValueStr)) {
                 throw new Exception("Error creating http uri, dynamic query item has undefined value");
             }
@@ -161,9 +193,10 @@ namespace MonkeyPaste.Common {
             }
         }
 
-        public override string ToString() {
-            return value;
-        }
+        #endregion
+
+        #region Commands
+        #endregion
     }
 
     public class MpJsonPathProperty<T> : MpJsonPathProperty where T : struct {

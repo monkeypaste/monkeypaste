@@ -17,12 +17,12 @@ namespace MonkeyPaste {
             object sourceHandler,
             bool suppressWrite = false) {
             if(trans is MpAnalyzerTransaction at) {
-                int sourceId = await LogAnalyzerTransactionAsync(
+                int ci_trans_id = await LogAnalyzerTransactionAsync(
                     pluginFormat, at, 
                     sourceContent, 
                     sourceHandler as MpPluginPreset, 
                     suppressWrite);
-                return sourceId;
+                return ci_trans_id;
             }
             return 0;
         }
@@ -49,20 +49,19 @@ namespace MonkeyPaste {
                     string urlPath;
                     if (string.IsNullOrEmpty(trans.Request.ToString())) {
                         urlPath = pluginFormat.analyzer.http.request.url.raw;
-                    } else if (pluginFormat.Component is MpHttpPlugin httpPlugin) {
+                    } else if (pluginFormat.Component is MpHttpAnalyzerPlugin httpPlugin) {
                         urlPath = httpPlugin.GetRequestUri(trans.Request.items);
                     } else {
                         throw new MpUserNotifiedException("Http Plugin Component does not exist");
                     }
 
-                    var url = MpPlatformWrapper.Services.UrlBuilder.CreateAsync(urlPath, preset.Label);                    
+                    var url = await MpPlatformWrapper.Services.UrlBuilder.CreateAsync(urlPath, preset.Label);                    
 
                     var httpTrans = await MpHttpTransaction.Create(
                         presetId: preset.Id,
                         //url: urlPath,
                         //urlName: SelectedItem.FullName,
                         urlId: url.Id,
-                        ip: MpNetworkHelpers.GetExternalIp4Address(),
                         timeSent: trans.RequestTime,
                         timeReceived: trans.ResponseTime,
                         bytesSent: trans.Request.ByteCount(),
@@ -134,12 +133,13 @@ namespace MonkeyPaste {
                     responseJson: JsonConvert.SerializeObject(trans.Response),
                     suppressWrite: suppressWrite);
 
-                    var source = await MpSource.Create(
-                        copyItemTransactionId: cit.Id,
-                        appId: transAppId,
-                        urlId: transUrlId,
-                        suppressWrite: suppressWrite);
-                    return source.Id;
+                    //var source = await MpSource.Create(
+                    //    copyItemTransactionId: cit.Id,
+                    //    appId: transAppId,
+                    //    urlId: transUrlId,
+                    //    suppressWrite: suppressWrite);
+                    //return source.Id;
+                    return cit.Id;
                 }
             }
             return 0;

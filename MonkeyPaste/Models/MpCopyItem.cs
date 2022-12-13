@@ -137,8 +137,6 @@ namespace MonkeyPaste {
         [Indexed]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        public string CopyItemSourceGuid { get; set; }
-
 
         //[ForeignKey(typeof(MpSource))]
         [Column("fk_MpSourceId")]
@@ -253,7 +251,7 @@ namespace MonkeyPaste {
             int sourceId = 0,
             string data = "", 
             string preferredFormatName = null,
-            string copyItemSourceGuid = "",
+            //string copyItemSourceGuid = "",
             MpCopyItemType itemType = MpCopyItemType.None,
             string title = "",
             string description = "",
@@ -298,7 +296,7 @@ namespace MonkeyPaste {
                 PrefferedFormatName = preferredFormatName,                                        
                 SourceId = sourceId,
                 CopyCount = 1,
-                CopyItemSourceGuid = copyItemSourceGuid,
+                //CopyItemSourceGuid = copyItemSourceGuid,
                 DataObjectId = dataObjectId
             };
             if (!suppressWrite) {
@@ -593,12 +591,6 @@ namespace MonkeyPaste {
             return newItem;
         }
 
-    }
-
-    public static class MpCopyItemExtensions {
-        public static string ToRichText(this MpCopyItem ci) {
-            return null;
-        }
     }
 
     public enum MpCopyItemDetailType {

@@ -7,6 +7,7 @@ using MonkeyPaste.Common;
 using Avalonia.Threading;
 using PropertyChanged;
 using Avalonia.Controls;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvFileSystemTriggerViewModel : MpAvTriggerActionViewModelBase, MpIFileSystemEventHandler {
@@ -119,17 +120,24 @@ namespace MonkeyPaste.Avalonia {
                     case WatcherChangeTypes.Changed:
                     case WatcherChangeTypes.Created:
                         ci = await MpCopyItem.Create(
-                            sourceId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
+                            //sourceId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
                             itemType: MpCopyItemType.FileList,
                             data: e.FullPath,
                             suppressWrite: true);
+                        if(!ci.WasDupOnCreate) {
+                            // new item, create source ref
+                            await MpCopyItemSource.CreateAsync(
+                                copyItemId: ci.Id,
+                                sourceObjId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
+                                sourceType: MpCopyItemSourceType.App);
+                        }
                         break;
                     case WatcherChangeTypes.Renamed:
                         RenamedEventArgs re = e as RenamedEventArgs;
                         ci = await MpDataModelProvider.GetCopyItemByDataAsync(re.OldFullPath);
                         if(ci == null) {
                             ci = await MpCopyItem.Create(
-                                sourceId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
+                                //sourceId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
                                 itemType: MpCopyItemType.FileList,
                                 data: e.FullPath,
                                 suppressWrite: true);
@@ -182,7 +190,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public MpIAsyncCommand SelectFileSystemPathCommand => new MpAsyncCommand(
+        public ICommand SelectFileSystemPathCommand => new MpAsyncCommand(
             async () => {
                 string initDir = FileSystemPath;
                 if(string.IsNullOrEmpty(initDir)) {

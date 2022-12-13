@@ -11,7 +11,7 @@ namespace MonkeyPaste {
     public static class MpPluginRequestBuilder {
         public static async Task<MpAnalyzerPluginRequestFormat> BuildRequest(
             List<MpPluginParameterFormat> paramFormats,
-            Dictionary<string,string> paramValues,
+            Dictionary<object,string> paramValues,
             MpCopyItem sourceContent) {
             
             List<MpPluginRequestItemFormat> requestItems = new List<MpPluginRequestItemFormat>();
@@ -19,7 +19,7 @@ namespace MonkeyPaste {
             foreach(var paramFormat in paramFormats) {
                 MpPluginRequestItemFormat requestItem = await BuildRequestItem(
                     paramFormat,
-                    paramValues[paramFormat.paramName],
+                    paramValues[paramFormat.paramId],
                     sourceContent);
                 requestItems.Add(requestItem);
             }
@@ -34,7 +34,7 @@ namespace MonkeyPaste {
             string paramValue,
             MpCopyItem sourceContent) {
             return new MpPluginRequestItemFormat() { 
-                paramName = paramFormat.paramName, 
+                paramId = paramFormat.paramId, 
                 value = await GetParameterRequestValue(paramFormat.unitType,paramValue, sourceContent)
             };
         }

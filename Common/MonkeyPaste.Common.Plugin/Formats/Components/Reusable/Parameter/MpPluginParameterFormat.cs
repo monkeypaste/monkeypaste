@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using MonkeyPaste.Common;
+using Newtonsoft.Json.Linq;
 
 namespace MonkeyPaste.Common.Plugin {
 
@@ -35,29 +36,28 @@ namespace MonkeyPaste.Common.Plugin {
     }
     
     public class MpPluginParameterFormat : MpJsonObject {
-        // NOTE paramName can be empty in manifest and will fall back to index of parameter in manifest
+        // NOTE paramId can be empty in manifest and will fall back to index of parameter in manifest
         // internally this doesn't matter but plugin needs to either name them or be aware of the order
         // or request args will be mismatched
         // NOTE! important when using manifest index that readers are counted before writers no matter 
         // order in file so readers should be defined before writers as a convention, not mandated
 
-        private string _paramName = string.Empty;
-        public string paramName {
+        private string _paramId = null;
+        public string paramId {
             get {
-                if (string.IsNullOrEmpty(_paramName)) {
+                if (string.IsNullOrEmpty(_paramId)) {
                     // fallback
-                    _paramName = label;
+                    _paramId = label;
                 }
-                return _paramName;
+                return _paramId;
             }
             set {
-                if (!string.IsNullOrEmpty(value) && paramName != value) {
+                if (!string.IsNullOrEmpty(value) && paramId != value) {
                     // don't let omitted/empty name become value
-                    _paramName = value;
+                    _paramId = value;
                 }
             }
         }
-        //public string paramName { get; set; } = string.Empty;
 
         public string label { get; set; } = string.Empty;
         public string description { get; set; } = string.Empty;

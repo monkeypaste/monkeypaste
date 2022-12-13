@@ -125,7 +125,7 @@ namespace MonkeyPaste.Avalonia {
                 var uvm = Items.FirstOrDefault(x => x.UrlPath.ToLower() == UrlPath.ToLower());
                 if (uvm == null) {
                     string iconBase64Str = await MpUrlHelpers.GetUrlFavIconAsync(UrlPath);
-                    string title = await MpUrlHelpers.GetUrlTitle(UrlPath);
+                    string title = await MpUrlHelpers.GetUrlTitleAsync(UrlPath);
                     var icon = await MpIcon.Create(iconBase64Str);
                     url = await MpUrl.Create(UrlPath, title);
                     uvm = await CreateUrlViewModel(url);

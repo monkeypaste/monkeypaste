@@ -14,7 +14,7 @@ namespace MonkeyPaste.Common.Plugin {
     }
 
     public class MpPluginPresetValueFormat : MpJsonObject {
-        public string paramName { get; set; } = string.Empty;
+        public object paramId { get; set; } = string.Empty;
         public string value { get; set; } = string.Empty;
     }
 }

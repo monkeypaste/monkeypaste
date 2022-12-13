@@ -4,12 +4,16 @@ using System.Text;
 using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Common.Plugin {
-    public class MpHttpTransactionFormat : MpJsonObject {
+    public class MpHttpTransactionFormatBase : MpJsonObject {
         public string name { get; set; }
 
         public MpHttpRequestFormat request { get; set; }
 
         public MpPluginResponseFormatBase response { get; set; }
+    }
+
+    public class MpHttpAnalyzerTransactionFormat : MpHttpTransactionFormatBase {
+        public new MpAnalyzerPluginResponseFormat response { get; set; }
     }
 
     #region Request

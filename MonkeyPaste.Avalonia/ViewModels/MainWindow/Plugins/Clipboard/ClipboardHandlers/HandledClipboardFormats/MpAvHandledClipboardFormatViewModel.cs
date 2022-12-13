@@ -591,7 +591,7 @@ namespace MonkeyPaste.Avalonia {
                 IsBusy = false;
             });
 
-        public MpIAsyncCommand ResetDefaultPresetCommand => new MpAsyncCommand(
+        public ICommand ResetDefaultPresetCommand => new MpAsyncCommand(
             async () => {
                 IsBusy = true;
 
@@ -654,7 +654,7 @@ namespace MonkeyPaste.Avalonia {
             });
 
 
-        public MpIAsyncCommand<object> DuplicatePresetCommand => new MpAsyncCommand<object>(
+        public ICommand DuplicatePresetCommand => new MpAsyncCommand<object>(
             async (args) => {
                 IsBusy = true;
 

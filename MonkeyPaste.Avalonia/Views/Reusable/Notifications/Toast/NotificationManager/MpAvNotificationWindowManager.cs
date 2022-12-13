@@ -49,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
             }
 
-            Dispatcher.UIThread.Post(async() => {
+            Dispatcher.UIThread.Post(() => {
                 Window nw = null;
                 var layoutType = MpNotificationViewModelBase.GetLayoutTypeFromNotificationType(nvmb.NotificationType);
                 switch(layoutType) {

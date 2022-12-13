@@ -1844,13 +1844,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MpDbObject_SyncUpdate(object sender, MpDbSyncEventArgs e) {
-            Dispatcher.UIThread.Post((Action)(() => {
-            }));
+            //Dispatcher.UIThread.Post((Action)(() => {
+            //}));
         }
 
         private void MpDbObject_SyncAdd(object sender, MpDbSyncEventArgs e) {
-            Dispatcher.UIThread.Post(async () => {
-                if (sender is MpCopyItem ci) {
+            //Dispatcher.UIThread.Post(async () => {
+            //    if (sender is MpCopyItem ci) {
                     //ci.StartSync(e.SourceGuid);
 
                     //var svm = MpAvSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == ci.SourceId);
@@ -1877,8 +1877,8 @@ namespace MonkeyPaste.Avalonia {
                     //ci.EndSync();
 
                     //ResetClipSelection();
-                }
-            });
+            //    }
+            //});
         }
 
         #endregion
@@ -2322,33 +2322,37 @@ namespace MonkeyPaste.Avalonia {
             }
 
 
-            if (newCopyItem.WasDupOnCreate) {
-                //item is a duplicate
-                MpConsole.WriteLine("Duplicate item detected, incrementing copy count and updating copydatetime");
-                newCopyItem.CopyCount++;
-                // reseting CopyDateTime will move item to top of recent list
-                newCopyItem.CopyDateTime = DateTime.Now;
-                await newCopyItem.WriteToDatabaseAsync();
-            }
+            await AddUpdateOrAppendCopyItemAsync(newCopyItem);
 
-            if(ModalClipTileViewModel.IsPlaceholder) {
-                _newModels.Add(newCopyItem);
-            }
-            bool wasAppended = false;
-            if(IsAnyAppendMode) {
-                wasAppended = await UpdateAppendModeAsync(newCopyItem);
-            }
-
-            if (!wasAppended) {                
-                if (!MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
-                    MpAvTagTrayViewModel.Instance.AllTagViewModel.LinkCopyItemCommand.Execute(newCopyItem.Id);
-                }
-                AddNewItemsCommand.Execute(null);
-                OnCopyItemAdd?.Invoke(this, newCopyItem);
-            }
             IsAddingClipboardItem = false;
         }
 
+        private async Task AddUpdateOrAppendCopyItemAsync(MpCopyItem ci) {
+            if (ci.WasDupOnCreate) {
+                //item is a duplicate
+                MpConsole.WriteLine("Duplicate item detected, incrementing copy count and updating copydatetime");
+                ci.CopyCount++;
+                // reseting CopyDateTime will move item to top of recent list
+                ci.CopyDateTime = DateTime.Now;
+                await ci.WriteToDatabaseAsync();
+            }
+
+            if (ModalClipTileViewModel.IsPlaceholder) {
+                _newModels.Add(ci);
+            }
+            bool wasAppended = false;
+            if (IsAnyAppendMode) {
+                wasAppended = await UpdateAppendModeAsync(ci);
+            }
+
+            if (!wasAppended) {
+                if (!MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
+                    MpAvTagTrayViewModel.Instance.AllTagViewModel.LinkCopyItemCommand.Execute(ci.Id);
+                }
+                AddNewItemsCommand.Execute(null);
+                OnCopyItemAdd?.Invoke(this, ci);
+            }
+        }
         
 
 
@@ -2683,8 +2687,8 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             });
 
-        public ICommand QueryCommand => new MpAsyncCommand<object>(
-            async (offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg) => {
+        public ICommand QueryCommand => new MpCommand<object>(
+            (offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg) => {
                 Dispatcher.UIThread.Post(async () => {
                     IsBusy = IsRequery = true;
                     var sw = new Stopwatch();
@@ -3170,13 +3174,26 @@ namespace MonkeyPaste.Avalonia {
 
 
         public ICommand AnalyzeSelectedItemCommand => new MpAsyncCommand<object>(
-            async (presetIdObj) => {
+            async(presetIdObj) => {
                 var preset = await MpDataModelProvider.GetItemAsync<MpPluginPreset>((int)presetIdObj);
                 var analyticItemVm = MpAvAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.PluginGuid == preset.PluginGuid);
+
+                EventHandler<MpCopyItem> analysisCompleteHandler = null;
+                analysisCompleteHandler = (s, e) => {
+                    analyticItemVm.OnAnalysisCompleted -= analysisCompleteHandler;
+                    if(e == null) {
+                        return;
+                    }
+                    AddUpdateOrAppendCopyItemAsync(e).FireAndForgetSafeAsync();
+                };
+                
                 var presetVm = analyticItemVm.Items.FirstOrDefault(x => x.Preset.Id == preset.Id);
 
                 analyticItemVm.SelectPresetCommand.Execute(presetVm);
-                analyticItemVm.ExecuteAnalysisCommand.Execute(null);
+                if(analyticItemVm.ExecuteAnalysisCommand.CanExecute(null)) {
+                    analyticItemVm.OnAnalysisCompleted += analysisCompleteHandler;
+                    analyticItemVm.ExecuteAnalysisCommand.Execute(null);
+                }
             });
 
         public ICommand ToggleIsAppPausedCommand => new MpCommand(
@@ -3438,8 +3455,8 @@ namespace MonkeyPaste.Avalonia {
                 ActivateAppendModeAsync(append_state, new_manual_state).FireAndForgetSafeAsync();
             });
 
-        public ICommand SetAppendDataCommand => new MpAsyncCommand<object>(
-            async (dataArg) => {
+        public ICommand SetAppendDataCommand => new MpCommand<object>(
+            (dataArg) => {
                 var append_data_str = dataArg as string;
                 if (string.IsNullOrEmpty(append_data_str)) {
                     return;

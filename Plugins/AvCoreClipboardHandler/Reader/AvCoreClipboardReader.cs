@@ -121,7 +121,9 @@ namespace AvCoreClipboardHandler {
                 return null;
             }
             try {
-                CoreClipboardParamType paramType = (CoreClipboardParamType)int.Parse(pkvp.paramName);
+                // NOTE by internal convention 'paramId' is an int.
+                // plugin creator has to manage mapping internally
+                CoreClipboardParamType paramType = (CoreClipboardParamType)Convert.ToInt32(pkvp.paramId);
                 switch (format) {
                     case MpPortableDataFormats.Text:
                         switch (paramType) {

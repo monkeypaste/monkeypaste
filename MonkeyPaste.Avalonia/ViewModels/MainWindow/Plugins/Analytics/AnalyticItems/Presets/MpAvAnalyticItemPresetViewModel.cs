@@ -35,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public Dictionary<string, MpAvPluginParameterViewModelBase> ParamLookup => Items.ToDictionary(x => x.ParamName,x => x); //{
+        public Dictionary<object, MpAvPluginParameterViewModelBase> ParamLookup => Items.ToDictionary(x => x.ParamId,x => x); //{
         //    get {
         //        var paraDict = new Dictionary<int, MpPluginParameterViewModelBase>();
         //        foreach (var pvm in Items) {
@@ -381,7 +381,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<MpAvPluginParameterViewModelBase> CreateParameterViewModel(MpPluginPresetParameterValue aipv) {
-            MpPluginParameterControlType controlType = AnalyzerFormat.parameters.FirstOrDefault(x => x.paramName == aipv.ParamName).controlType;
+            MpPluginParameterControlType controlType = AnalyzerFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId).controlType;
 
             MpAvPluginParameterViewModelBase naipvm = null;
 
@@ -512,7 +512,7 @@ namespace MonkeyPaste.Avalonia {
 
             // loop through plugin formats parameters and add or replace (if found in db) to the preset values
             foreach (var paramFormat in AnalyzerFormat.parameters) {
-                if (!presetValues.Any(x => x.ParamName == paramFormat.paramName)) {
+                if (!presetValues.Any(x => paramFormat.paramId.Equals(x.ParamId))) {
                     // if no value is found in db for a parameter defined in manifest...
 
                     string paramVal = string.Empty;
@@ -528,7 +528,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     var newPresetVal = await MpPluginPresetParameterValue.CreateAsync(
                         presetId: Preset.Id,
-                        paramName: paramFormat.paramName,
+                        paramId: paramFormat.paramId,
                         value: paramVal
                         //format: paramFormat
                         );

@@ -10,71 +10,98 @@ namespace MonkeyPaste {
         public static async Task<MpCopyItem> ConvertAsync(
             MpAnalyzerTransaction trans,
             MpCopyItem sourceCopyItem,
-            int transSourceId,
+            int citid,
             bool suppressWrite) {
-            MpCopyItem targetCopyItem;
+            MpCopyItem target_ci;
 
             if (trans.Response is MpPluginResponseFormatBase prf) {
-                targetCopyItem = await ProcessNewContentItemAsync(prf, sourceCopyItem, transSourceId, suppressWrite);
+                target_ci = await ProcessNewContentItemAsync(prf, sourceCopyItem, citid, suppressWrite);
             } else {
-                targetCopyItem = sourceCopyItem;
+                target_ci = sourceCopyItem;
             }
-            await ProcessAnnotationsAsync(trans, targetCopyItem, transSourceId, suppressWrite);
+            await ProcessAnnotationsAsync(trans, target_ci, citid, suppressWrite);
 
-            await ProcessDataObjectAsync(trans, targetCopyItem, transSourceId, suppressWrite);
+            await ProcessDataObjectAsync(trans, target_ci, citid, suppressWrite);
 
-            if (suppressWrite == false && targetCopyItem != null) {
+            if (suppressWrite == false && target_ci != null) {
                 // NOTE when target is in tray it will get notified from db update and re-initialize
-                await targetCopyItem.WriteToDatabaseAsync();
+                await target_ci.WriteToDatabaseAsync();
 
-                if(sourceCopyItem.Id != targetCopyItem.Id) {
+                if(sourceCopyItem.Id != target_ci.Id) {
                     //MpAvQueryInfoViewModel.Current.NotifyQueryChanged(false);
                     MpPlatformWrapper.Services.QueryInfo.NotifyQueryChanged();
                 }
             }
 
-            if (targetCopyItem == null) {
+            if (target_ci == null) {
                 //this should only occur during an action sequece
-                targetCopyItem = sourceCopyItem;
+                target_ci = sourceCopyItem;
             }
 
-            return targetCopyItem;
+            return target_ci;
         }
 
 
         private static async Task<MpCopyItem> ProcessNewContentItemAsync(
             MpPluginResponseFormatBase prf,
-            MpCopyItem sourceCopyItem,
-            int transSourceId,
+            MpCopyItem sourceCopyItem, 
+            int citid,
             bool suppressWrite = false) {
+
             if (prf == null || prf.newContentItem == null) {
                 return sourceCopyItem;
             }
-            var source = await MpDataModelProvider.GetItemAsync<MpSource>(transSourceId);
+            //var source = await MpDataModelProvider.GetItemAsync<MpSource>(transSourceId);\
+            //var targetCopyItem = await MpCopyItem.Create(
+            //    //sourceId: source.Id,
+            //    title: title,
+            //    data: prf.newContentItem.content.value,
+            //    //copyItemSourceGuid: sourceCopyItem.Guid,
+            //    itemType: targetCopyItemType,
+            //    suppressWrite: suppressWrite);
 
+            List<MpISourceRef> target_refs = new List<MpISourceRef>();
+            if(citid > 0) {
+                var ci_trans = await MpDataModelProvider.GetItemAsync<MpCopyItemTransaction>(citid);
+                if (ci_trans != null) {
+                    // TODO probably refactor non-ci transactions to poly table
+                    // or add others here
+                    // or make helper to get to app, url or item (MpISourceRef)
+                    if(ci_trans.CopyItemTransactionType == MpCopyItemTransactionType.Http) {
+                        var http_tran = await MpDataModelProvider.GetItemAsync<MpHttpTransaction>(ci_trans.CopyItemTransactionObjId);
+                        if(http_tran != null) {
+                            var url = await MpDataModelProvider.GetItemAsync<MpUrl>(http_tran.UrlId);
+                            if(url != null) {
+                                target_refs.Add(url);
+                            }
+                        }
+                    }
+                }
+            }
+            target_refs.Add(sourceCopyItem);
+            
             string title = sourceCopyItem.Title + " Analysis";
             if (prf.newContentItem.label != null) {
                 title = prf.newContentItem.label.value;
             }
+            var nc_pdo = new MpPortableDataObject();
+            nc_pdo.SetData(prf.newContentItem.format, prf.newContentItem.content.value);
+            nc_pdo.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_TITLE_FORMAT, title);
+            nc_pdo.SetData(MpPortableDataFormats.LinuxUriList, target_refs);
+            //nc_pdo.SetData(MpPortableDataFormats.CefAsciiUrl, MpSourceRefHelper.ToUrlAsciiBytes(sourceCopyItem));
 
-            var targetCopyItem = await MpCopyItem.Create(
-                sourceId: source.Id,
-                title: title,
-                data: prf.newContentItem.content.value,
-                copyItemSourceGuid: sourceCopyItem.Guid,
-                //itemType: MpCopyItemType.Text,
-                suppressWrite: suppressWrite);
+            var target_ci = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(nc_pdo);
 
-            return targetCopyItem;
+            return target_ci;
         }
 
-        private static async Task ProcessAnnotationsAsync(MpAnalyzerTransaction trans, MpCopyItem sourceCopyItem, int transSourceId, bool suppressWrite = false) {
+        private static async Task ProcessAnnotationsAsync(MpAnalyzerTransaction trans, MpCopyItem sourceCopyItem, int citid, bool suppressWrite = false) {
             if (trans == null || trans.Response == null) {
                 return;
             }
             if (trans.Response is MpPluginResponseFormatBase prf && prf.annotations != null) {
 
-                await Task.WhenAll(prf.annotations.Select(x => ProcesseAnnotationAsync(x, sourceCopyItem.Id, sourceCopyItem.ItemType, trans.RequestContent, transSourceId, suppressWrite)));
+                await Task.WhenAll(prf.annotations.Select(x => ProcesseAnnotationAsync(x, sourceCopyItem.Id, sourceCopyItem.ItemType, trans.RequestContent, citid, suppressWrite)));
             }
 
         }
@@ -84,7 +111,7 @@ namespace MonkeyPaste {
             int copyItemId,
             MpCopyItemType copyItemType,
             object reqContent,
-            int transSourceId,
+            int citid,
             bool suppressWrite = false) {
             if (a == null) {
                 return;
@@ -137,7 +164,7 @@ namespace MonkeyPaste {
                 }
                 var ta = await MpTextAnnotation.Create(
                         copyItemId: copyItemId,
-                        sourceId: transSourceId,
+                        copyItemTransId: citid,
                         matchValue: reqContent.ToString().Substring(sIdx, Math.Max(0, eIdx - sIdx - 1)),
                         label: label,
                         score: score,
@@ -145,11 +172,11 @@ namespace MonkeyPaste {
             }
 
             if (a.children != null) {
-                await Task.WhenAll(a.children.Select(x => ProcesseAnnotationAsync(x, copyItemId, copyItemType, reqContent, transSourceId, suppressWrite)));
+                await Task.WhenAll(a.children.Select(x => ProcesseAnnotationAsync(x, copyItemId, copyItemType, reqContent, citid, suppressWrite)));
             }
         }
 
-        private static async Task ProcessDataObjectAsync(MpAnalyzerTransaction trans, MpCopyItem sourceCopyItem, int transSourceId, bool suppressWrite = false) {
+        private static async Task ProcessDataObjectAsync(MpAnalyzerTransaction trans, MpCopyItem sourceCopyItem, int citid, bool suppressWrite = false) {
             if (trans == null || trans.Response == null) {
                 return;
             }

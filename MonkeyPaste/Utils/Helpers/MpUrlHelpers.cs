@@ -35,14 +35,14 @@ namespace MonkeyPaste {
             return @"http://" + str;
         }
 
-        public static async Task<string> GetUrlTitle(string url) {
+        public static async Task<string> GetUrlTitleAsync(string url) {
             // TODO (pretty complex and unnecessary but more efficient)
             // read source as stream only up to title tag
-            string urlSource = await GetHttpSourceCode(url);
+            string urlSource = await ReadUrlAsString(url);
             return GetXmlElementContent(urlSource, @"title");
         }
 
-        public static async Task<string> GetHttpSourceCode(string url) {
+        public static async Task<string> ReadUrlAsString(string url) {
             if (!IsValidUrl(url)) {
                 return string.Empty;
             }
