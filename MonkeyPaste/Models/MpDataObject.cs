@@ -68,7 +68,7 @@ namespace MonkeyPaste {
 
                     if (kvp.Key.Name != MpPortableDataFormats.AvFileNames) {
                         // why is this a string list?
-                        Debugger.Break();
+                        //Debugger.Break();
                         continue;
                     }
                     // store file/path icon with path

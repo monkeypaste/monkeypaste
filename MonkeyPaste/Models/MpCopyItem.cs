@@ -138,7 +138,6 @@ namespace MonkeyPaste {
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
 
-        //[ForeignKey(typeof(MpSource))]
         [Column("fk_MpSourceId")]
         public int SourceId { get; set; }
 
@@ -237,7 +236,8 @@ namespace MonkeyPaste {
         #endregion
 
         #region MpISourceRef Implementation
-
+        [Ignore]
+        int MpISourceRef.Priority => 1;
         [Ignore]
         int MpISourceRef.SourceObjId => Id;
 
@@ -247,7 +247,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Static Methods
-        public static async Task<MpCopyItem> Create(
+        public static async Task<MpCopyItem> CreateAsync(
             int sourceId = 0,
             string data = "", 
             string preferredFormatName = null,

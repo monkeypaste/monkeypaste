@@ -49,23 +49,56 @@ namespace MonkeyPaste.Avalonia {
                     hcd.Html = MpAvContentDataConverter.Instance.Convert(plainHtml, null, "plaintext", null) as string;
                 }
             }
-            string sourceUrlToken = "SourceURL:";
-            int source_url_start_idx = htmlClipboardData.IndexOf(sourceUrlToken) + sourceUrlToken.Length;
-            if (source_url_start_idx >= 0) {
-                int source_url_length = htmlClipboardData.Substring(source_url_start_idx).IndexOf(Environment.NewLine);
-                if (source_url_length >= 0) {
-                    string parsed_url = htmlClipboardData.Substring(source_url_start_idx, source_url_length);
-                    if (Uri.IsWellFormedUriString(parsed_url, UriKind.Absolute)) {
-                        hcd.SourceUrl = parsed_url;
-                    } else {
-                        MpConsole.WriteTraceLine("Malformed uri: " + parsed_url);
-                        hcd.SourceUrl = null;
-                    }
-                }
-            }
+            hcd.SourceUrl = ParseHtmlFragmentForSourceUrl(htmlClipboardData);
             return hcd;
         }
 
 
+        public static string FindSourceUrl(MpPortableDataObject mpdo) {
+            string htmlStr = null;
+
+            if (mpdo.ContainsData(MpPortableDataFormats.LinuxSourceUrl) &&
+                       mpdo.GetData(MpPortableDataFormats.LinuxSourceUrl) is byte[] url_bytes &&
+                       url_bytes.ToDecodedString(Encoding.ASCII) is string source_url_str) {
+                // on linux html is not in fragment format like windows and firefox supports this format
+                // but chrome doesn't
+                //source_url_str = System.Web.HttpUtility.HtmlDecode(source_url_str);
+                return source_url_str;
+            }
+            if (mpdo.ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
+                        mpdo.GetData(MpPortableDataFormats.AvHtml_bytes) is byte[] htmlBytes &&
+                        htmlBytes.ToDecodedString() is string avhtmlStr) {
+
+                // HTML
+                htmlStr = avhtmlStr;
+            }
+            if (string.IsNullOrEmpty(htmlStr) &&
+                mpdo.ContainsData(MpPortableDataFormats.CefHtml) &&
+                mpdo.GetData(MpPortableDataFormats.CefHtml) is string cefhtmlStr) {
+                htmlStr = cefhtmlStr;
+            }
+            if(string.IsNullOrWhiteSpace(htmlStr)) {
+                return null;
+            }
+            return ParseHtmlFragmentForSourceUrl(htmlStr);
+        }
+
+        private static string ParseHtmlFragmentForSourceUrl(string htmlFragStr) {
+
+            string sourceUrlToken = "SourceURL:";
+            int source_url_start_idx = htmlFragStr.IndexOf(sourceUrlToken) + sourceUrlToken.Length;
+            if (source_url_start_idx >= 0) {
+                int source_url_length = htmlFragStr.Substring(source_url_start_idx).IndexOf(Environment.NewLine);
+                if (source_url_length >= 0) {
+                    string parsed_url = htmlFragStr.Substring(source_url_start_idx, source_url_length);
+                    if (Uri.IsWellFormedUriString(parsed_url, UriKind.Absolute)) {
+                        return parsed_url;
+                    } 
+                }
+            }
+
+            MpConsole.WriteTraceLine($"Could not find source url in html fragment: '{htmlFragStr}'");
+            return null;
+        }
     }
 }

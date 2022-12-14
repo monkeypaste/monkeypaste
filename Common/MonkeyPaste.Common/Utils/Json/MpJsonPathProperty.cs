@@ -145,9 +145,9 @@ namespace MonkeyPaste.Common {
             string outputValue = value;
             outputValue = string.IsNullOrWhiteSpace(outputValue) ? "{0}" : outputValue;
 
-            if (!string.IsNullOrWhiteSpace(outputValue) && !string.IsNullOrWhiteSpace(result) && !outputValue.Contains("{0}")) {
-                throw new Exception($"if path exists, value must be formatted to subsititue it (value: '{outputValue}' path: '{pathExpression}' pathResult: '{result}')");
-            }
+            //if (!string.IsNullOrWhiteSpace(outputValue) && !string.IsNullOrWhiteSpace(result) && !outputValue.Contains("{0}")) {
+            //    throw new Exception($"if path exists, value must be formatted to subsititue it (value: '{outputValue}' path: '{pathExpression}' pathResult: '{result}')");
+            //}
             outputValue = outputValue.Replace("{0}", result);
             MatchCollection mc = _inputParamRegex.Matches(outputValue);
 

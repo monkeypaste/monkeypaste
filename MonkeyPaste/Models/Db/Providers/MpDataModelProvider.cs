@@ -305,9 +305,9 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public static async Task<MpSource> GetSourceByMembersAsync(int appId, int urlId, int copyItemTransactionId = 0) {
-            string query = $"select * from MpSource where fk_MpAppId=? and fk_MpUrlId=? and fk_MpCopyItemTransactionId=?";
-            var result = await MpDb.QueryAsync<MpSource>(query, appId, urlId,copyItemTransactionId);
+        public static async Task<MpSource> GetSourceByMembersAsync(int appId, int urlId, int copyItemId = 0) {
+            string query = $"select * from MpSource where fk_MpAppId=? and fk_MpUrlId=? and fk_MpCopyItemId=?";
+            var result = await MpDb.QueryAsync<MpSource>(query, appId, urlId,copyItemId);
             if (result == null || result.Count == 0) {
                 return null;
             }

@@ -59,6 +59,8 @@ namespace MonkeyPaste {
                     (at.Request as MpAnalyzerPluginRequestFormat).items
                     .FirstOrDefault(x => x.paramId.Equals(contentParam.paramId)).value;
 
+                // TODO (for http) phone home w/ request half of transaction and await return
+
                 // GET RESPONSE
                 try {
                     if(pluginComponent is MpIAnalyzeAsyncComponent analyzeAsyncComponent) {
@@ -72,9 +74,11 @@ namespace MonkeyPaste {
                     return await HandleErrorAsync(ex, pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
                 }
 
-                // LOG TRANSACTION
+                // LOG TRANSACTION (create record of params, ref to plugin source(local/remote))
 
                 int ci_trans_id = await MpPluginLogger.LogTransactionAsync(pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
+
+                // TODO (for http) phone home w/ response to finish transaction record and await return
 
                 // PROCESS RESPONSE
                 try {

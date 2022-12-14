@@ -528,7 +528,7 @@ namespace MonkeyPaste.Avalonia {
                 if (Parent == null) {
                     return 0;
                 }
-                double w = Math.Min(Parent.DefaultEditableItemWidth, UnconstrainedContentSize.Width);
+                double w = Parent.DefaultEditableItemWidth;
                 return w;
             }
         }

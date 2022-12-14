@@ -357,6 +357,10 @@ namespace MonkeyPaste.Avalonia {
                 foreach (var pctvm in PinnedItems) {
                     yield return pctvm;
                 }
+                if(ModalClipTileViewModel != null) {
+                    yield return ModalClipTileViewModel;
+                }
+                
             }
         }
         public MpAvClipTileViewModel HeadItem => SortOrderedItems.ElementAtOrDefault(0);
@@ -1657,24 +1661,6 @@ namespace MonkeyPaste.Avalonia {
             });
         }
 
-
-        public MpAvClipTileViewModel GetClipTileViewModelById(int ciid) {
-            var pctvm = PinnedItems.FirstOrDefault(x => x.CopyItemId == ciid);
-            if (pctvm != null) {
-                return pctvm;
-            }
-            return Items.FirstOrDefault(x => x.CopyItemId == ciid);
-        }
-
-        public MpAvClipTileViewModel GetClipTileViewModelByGuid(string ciguid) {
-            var pctvm = PinnedItems.FirstOrDefault(x => x.CopyItemGuid == ciguid);
-            if (pctvm != null) {
-                return pctvm;
-            }
-            return Items.FirstOrDefault(x => x.CopyItemGuid == ciguid);
-        }
-
-
         public void InitIntroItems() {
             //var introItem1 = new MpCopyItem(
             //        MpCopyItemType.RichText,
@@ -1769,7 +1755,7 @@ namespace MonkeyPaste.Avalonia {
                 CurrentQuery.RemoveItemId(ci.Id);
                 //MpDataModelProvider.AvailableQueryCopyItemIds.Remove(ci.Id);
 
-                var removed_ctvm = GetClipTileViewModelById(ci.Id);
+                var removed_ctvm = AllItems.FirstOrDefault(x => x.CopyItemId == ci.Id);
                 if (removed_ctvm != null) {
                     bool wasSelected = removed_ctvm.IsSelected;
 
@@ -1831,7 +1817,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpDbObject_SyncDelete(object sender, MpDbSyncEventArgs e) {
             Dispatcher.UIThread.Post((Action)(() => {
                 if (sender is MpCopyItem ci) {
-                    var ctvmToRemove = GetClipTileViewModelById(ci.Id);
+                    var ctvmToRemove = AllItems.FirstOrDefault(x => x.CopyItemId == ci.Id);
                     if (ctvmToRemove != null) {
                         ctvmToRemove.CopyItem.StartSync(e.SourceGuid);
                         //ctvmToRemove.CopyItem.Color.StartSync(e.SourceGuid);
@@ -2300,7 +2286,7 @@ namespace MonkeyPaste.Avalonia {
 
             IsAddingClipboardItem = true;
 
-            var newCopyItem = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(cd, -1);//, IsAnyAppendMode && _appendModeCopyItem != null);
+            var newCopyItem = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(cd);
 
             if (newCopyItem == null || newCopyItem.Id < 1) {
                 //this occurs if the copy item is not a known format or app init

@@ -16,240 +16,235 @@
             BorderThickness="0"
             VerticalAlignment="Stretch"
             HorizontalAlignment="Stretch">
-        <StackPanel Orientation="Vertical">
-            <Border VerticalAlignment="Stretch"
-                    HorizontalAlignment="Stretch">
-                <ScrollViewer MaxHeight="200"
-                              VerticalScrollBarVisibility="Auto">
-                    <DataGrid x:Name="PresetDataGrid"
-                              Items="{Binding Items}"
-                              SelectedItem="{Binding SelectedItem}"
-                              SelectionMode="Single"
-                              BorderThickness="10"
-                              HeadersVisibility="None"
-                              Margin="12"
-                              HorizontalAlignment="Stretch"
-                              VerticalAlignment="Stretch"
-                              ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                              CanUserResizeColumns="False"
-                              CanUserReorderColumns="False"
-                              CanUserSortColumns="True">
+        <Grid RowDefinitions="*,40">
 
-                        <DataGrid.Columns>
-                            <!--  ICON COLUMN  -->
-                            <DataGridTemplateColumn Width="50"
-                                                    Header="Icon">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
+            <DataGrid x:Name="PresetDataGrid"
+                      Grid.Row="0"
+                      Items="{Binding Items}"
+                      SelectedItem="{Binding SelectedItem}"
+                      SelectionMode="Single"
+                      HeadersVisibility="None"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                      CanUserResizeColumns="False"
+                      CanUserReorderColumns="False"
+                      CanUserSortColumns="True">
 
-                                        <Border BorderThickness="0">
-                                            <Button x:Name="PresetIcon"
-                                                    BorderThickness="0"
-                                                    Height="40"
-                                                    Cursor="Hand"
-                                                    Background="Transparent"
-                                                    IsEnabled="{Binding !IsDefault}"
-                                                    DataContext="{Binding}"
-                                                    Command="{Binding ChangeIconCommand, Source={x:Static local:MpAvIconCollectionViewModel.Instance}}"
-                                                    CommandParameter="{Binding}">
-                                                <Image Width="20"
-                                                       Height="20"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center"
-                                                       Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
-                                            </Button>
-                                        </Border>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
+                <DataGrid.Columns>
+                    <!--  ICON COLUMN  -->
+                    <DataGridTemplateColumn Width="30"
+                                            Header="Icon">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
 
-                            </DataGridTemplateColumn>
+                                <Border BorderThickness="0">
+                                    <Button x:Name="PresetIcon"
+                                            BorderThickness="0"
+                                            Cursor="Hand"
+                                            Background="Transparent"
+                                            IsEnabled="{Binding !IsDefault}"
+                                            DataContext="{Binding}"
+                                            Command="{Binding ChangeIconCommand, Source={x:Static local:MpAvIconCollectionViewModel.Instance}}"
+                                            CommandParameter="{Binding}">
+                                        <Image Width="20"
+                                               Height="20"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+                                    </Button>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
 
-                            <!--  LABEL COLUMN  -->
-                            <DataGridTemplateColumn Width="120"
-                                                    Header="Label">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
+                    </DataGridTemplateColumn>
 
-                                        <Grid ClipToBounds="True"
-                                              HorizontalAlignment="Stretch"
-                                              VerticalAlignment="Stretch"
-                                              Margin="1,0">
-                                            <local:MpAvMarqueeTextBox AutoMarquee="False"
-                                                                      CanEdit="True"
-                                                                      MinHeight="30"
-                                                                      FontSize="16"
-                                                                      IsReadOnly="True"
-                                                                      IsMarqueeEnabled="True"
-                                                                      DropShadowBrush="Black"
-                                                                      VerticalAlignment="Center"
-                                                                      HorizontalAlignment="Stretch"
-                                                                      HorizontalContentAlignment="Left"
-                                                                      VerticalContentAlignment="Top"
-                                                                      Foreground="White"
-                                                                      FontWeight="SemiBold"
-                                                                      Text="{Binding Label, Mode=TwoWay}" />
-                                        </Grid>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                    <!--  LABEL COLUMN  -->
+                    <DataGridTemplateColumn Width="120"
+                                            Header="Label">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
 
-                            <!--  QUICK AcTION COLUMN  -->
-                            <DataGridTemplateColumn Width="Auto"
-                                                    Header="Quick Action?">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
+                                <Grid ClipToBounds="True"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch"
+                                      Margin="5">
+                                    <local:MpAvMarqueeTextBox AutoMarquee="False"
+                                                              CanEdit="True"
+                                                              MinHeight="30"
+                                                              FontSize="14"
+                                                              IsReadOnly="True"
+                                                              IsMarqueeEnabled="True"
+                                                              DropShadowBrush="Black"
+                                                              VerticalAlignment="Center"
+                                                              HorizontalAlignment="Stretch"
+                                                              HorizontalContentAlignment="Left"
+                                                              VerticalContentAlignment="Top"
+                                                              Foreground="White"
+                                                              FontWeight="SemiBold"
+                                                              Text="{Binding Label, Mode=TwoWay}" />
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                                        <CheckBox HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"
-                                                  IsThreeState="False"
-                                                  IsChecked="{Binding IsQuickAction, Mode=TwoWay}">
-                                            <ToolTip.Tip>
-                                                <local:MpAvToolTipView ToolTipText="Quick Action?" />
-                                            </ToolTip.Tip>
-                                        </CheckBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                    <!--  QUICK AcTION COLUMN  -->
+                    <DataGridTemplateColumn Width="30"
+                                            Header="Quick Action?">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
 
-                            <!--  HOTKEY COLUMN  -->
-                            <DataGridTemplateColumn Width="Auto"
-                                                    Header="Shortcut">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
+                                <CheckBox HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          IsThreeState="False"
+                                          IsChecked="{Binding IsQuickAction, Mode=TwoWay}">
+                                    <ToolTip.Tip>
+                                        <local:MpAvToolTipView ToolTipText="Quick Action?" />
+                                    </ToolTip.Tip>
+                                </CheckBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!--  HOTKEY COLUMN  -->
+                    <DataGridTemplateColumn Width="30"
+                                            Header="Shortcut">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
+                                <Button Background="Transparent"
+                                        BorderThickness="0"
+                                        IsVisible="{Binding Parent.CanAnalyzerExecute}"
+                                        Command="{Binding AssignHotkeyCommand}">
+                                    <ToolTip.Tip>
+                                        <local:MpAvToolTipView ToolTipText="Assign Shortcut" />
+                                    </ToolTip.Tip>
+                                    <Image Width="20"
+                                           Height="20"
+                                           Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource HotkeyImage}}" />
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!--  PERFORM ANALYSIS  -->
+                    <DataGridTemplateColumn MinWidth="30">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
+                                <Grid>
+                                    <Grid IsVisible="{Binding !Parent.IsBusy}">
                                         <Button Background="Transparent"
                                                 BorderThickness="0"
                                                 IsVisible="{Binding Parent.CanAnalyzerExecute}"
-                                                Command="{Binding AssignHotkeyCommand}">
+                                                Command="{Binding AnalyzeSelectedItemCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                                                CommandParameter="{Binding AnalyticItemPresetId}">
                                             <ToolTip.Tip>
-                                                <local:MpAvToolTipView ToolTipText="Assign Shortcut" />
+                                                <local:MpAvToolTipView ToolTipText="Analyze" />
                                             </ToolTip.Tip>
                                             <Image Width="20"
                                                    Height="20"
-                                                   Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource HotkeyImage}}" />
+                                                   Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource ExecuteImage}}" />
                                         </Button>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                                        <Image Width="20"
+                                               Height="20"
+                                               IsVisible="{Binding !Parent.CanAnalyzerExecute}}"
+                                               Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource QuestionMarkImage}}">
+                                            <ToolTip.Tip>
+                                                <local:MpAvToolTipView ToolTipText="{Binding Parent.CannotExecuteTooltip}" />
+                                            </ToolTip.Tip>
+                                        </Image>
+                                    </Grid>
+                                    <Border IsVisible="{Binding IsBusy, FallbackValue=True, TargetNullValue=True}">
 
-                            <!--  PERFORM ANALYSIS  -->
-                            <DataGridTemplateColumn MinWidth="40">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
-                                        <Grid>
-                                            <Grid IsVisible="{Binding !Parent.IsBusy}">
-                                                <Button Background="Transparent"
-                                                        BorderThickness="0"
-                                                        IsVisible="{Binding Parent.CanAnalyzerExecute}"
-                                                        Command="{Binding AnalyzeSelectedItemCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                                                        CommandParameter="{Binding AnalyticItemPresetId}">
-                                                    <ToolTip.Tip>
-                                                        <local:MpAvToolTipView ToolTipText="Analyze" />
-                                                    </ToolTip.Tip>
-                                                    <Image Width="20"
-                                                           Height="20"
-                                                           Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource ExecuteImage}}" />
-                                                </Button>
-                                                <Image Width="20"
-                                                       Height="20"
-                                                       IsVisible="{Binding !Parent.CanAnalyzerExecute}}"
-                                                       Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource QuestionMarkImage}}">
-                                                    <ToolTip.Tip>
-                                                        <local:MpAvToolTipView ToolTipText="{Binding Parent.CannotExecuteTooltip}" />
-                                                    </ToolTip.Tip>
-                                                </Image>
-                                            </Grid>
-                                            <Border IsVisible="{Binding IsBusy, FallbackValue=True, TargetNullValue=True}">
+                                        <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"
+                                                                   Width="20"
+                                                                   Height="20" />
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                                                <local:MpAvBusySpinnerView HorizontalAlignment="Center"
-                                                                           VerticalAlignment="Center"
-                                                                           Width="20"
-                                                                           Height="20" />
-                                            </Border>
-                                        </Grid>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                    <!--  DUPLICATE COLUMN  -->
+                    <DataGridTemplateColumn MinWidth="30"
+                                            Header="Duplicate">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
+                                <Grid>
+                                    <Button Background="Transparent"
+                                            BorderThickness="0"
+                                            IsVisible="{Binding !Parent.IsBusy}"
+                                            Command="{Binding Parent.DuplicatePresetCommand}"
+                                            CommandParameter="{Binding}">
+                                        <ToolTip.Tip>
+                                            <local:MpAvToolTipView ToolTipText="Duplicate" />
+                                        </ToolTip.Tip>
+                                        <Image Width="20"
+                                               Height="20"
+                                               Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource SheepImage}}" />
+                                    </Button>
+                                    <Border IsVisible="{Binding Parent.IsBusy, FallbackValue=True, TargetNullValue=True}">
 
-                            <!--  DUPLICATE COLUMN  -->
-                            <DataGridTemplateColumn MinWidth="40"
-                                                    Header="Duplicate">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
-                                        <Grid>
-                                            <Button Background="Transparent"
-                                                    BorderThickness="0"
-                                                    IsVisible="{Binding !Parent.IsBusy}"
-                                                    Command="{Binding Parent.DuplicatePresetCommand}"
-                                                    CommandParameter="{Binding}">
-                                                <ToolTip.Tip>
-                                                    <local:MpAvToolTipView ToolTipText="Duplicate" />
-                                                </ToolTip.Tip>
-                                                <Image Width="20"
-                                                       Height="20"
-                                                       Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource SheepImage}}" />
-                                            </Button>
-                                            <Border IsVisible="{Binding Parent.IsBusy, FallbackValue=True, TargetNullValue=True}">
+                                        <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"
+                                                                   Width="20"
+                                                                   Height="20" />
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                                                <local:MpAvBusySpinnerView HorizontalAlignment="Center"
-                                                                           VerticalAlignment="Center"
-                                                                           Width="20"
-                                                                           Height="20" />
-                                            </Border>
-                                        </Grid>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                    <!--  DELETE/RESET ANALYSIS  -->
+                    <DataGridTemplateColumn MinWidth="30">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
+                                <Grid>
+                                    <Grid IsVisible="{Binding !Parent.IsBusy}">
+                                        <!--  RESET BUTTON  -->
+                                        <Button Background="Transparent"
+                                                BorderThickness="0"
+                                                IsVisible="{Binding IsDefault}"
+                                                Command="{Binding Parent.ResetDefaultPresetCommand}"
+                                                CommandParameter="{Binding}">
+                                            <ToolTip.Tip>
+                                                <local:MpAvToolTipView ToolTipText="Reset" />
+                                            </ToolTip.Tip>
+                                            <Image Width="20"
+                                                   Height="20"
+                                                   Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource ResetImage}}" />
+                                        </Button>
+                                        <!--  DELETE BUTTON  -->
+                                        <Button Background="Transparent"
+                                                BorderThickness="0"
+                                                IsVisible="{Binding !IsDefault}"
+                                                Command="{Binding Parent.DeletePresetCommand}"
+                                                CommandParameter="{Binding}">
+                                            <ToolTip.Tip>
+                                                <local:MpAvToolTipView ToolTipText="Delete" />
+                                            </ToolTip.Tip>
+                                            <Image Width="20"
+                                                   Height="20"
+                                                   Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource TrashCanImage}}" />
+                                        </Button>
+                                    </Grid>
+                                    <Border IsVisible="{Binding IsBusy, FallbackValue=True, TargetNullValue=True}">
 
-                            <!--  DELETE/RESET ANALYSIS  -->
-                            <DataGridTemplateColumn MinWidth="40">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
-                                        <Grid>
-                                            <Grid IsVisible="{Binding !Parent.IsBusy}">
-                                                <!--  RESET BUTTON  -->
-                                                <Button Background="Transparent"
-                                                        BorderThickness="0"
-                                                        IsVisible="{Binding IsDefault}"
-                                                        Command="{Binding Parent.ResetDefaultPresetCommand}"
-                                                        CommandParameter="{Binding}">
-                                                    <ToolTip.Tip>
-                                                        <local:MpAvToolTipView ToolTipText="Reset" />
-                                                    </ToolTip.Tip>
-                                                    <Image Width="20"
-                                                           Height="20"
-                                                           Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource ResetImage}}" />
-                                                </Button>
-                                                <!--  DELETE BUTTON  -->
-                                                <Button Background="Transparent"
-                                                        BorderThickness="0"
-                                                        IsVisible="{Binding !IsDefault}"
-                                                        Command="{Binding Parent.DeletePresetCommand}"
-                                                        CommandParameter="{Binding}">
-                                                    <ToolTip.Tip>
-                                                        <local:MpAvToolTipView ToolTipText="Delete" />
-                                                    </ToolTip.Tip>
-                                                    <Image Width="20"
-                                                           Height="20"
-                                                           Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource TrashCanImage}}" />
-                                                </Button>
-                                            </Grid>
-                                            <Border IsVisible="{Binding IsBusy, FallbackValue=True, TargetNullValue=True}">
+                                        <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"
+                                                                   Width="20"
+                                                                   Height="20" />
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
 
-                                                <local:MpAvBusySpinnerView HorizontalAlignment="Center"
-                                                                           VerticalAlignment="Center"
-                                                                           Width="20"
-                                                                           Height="20" />
-                                            </Border>
-                                        </Grid>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </ScrollViewer>
-            </Border>
             <!--  ADD PRESET BUTTON  -->
-            <Button Width="150"
+            <Button Grid.Row="1"
+                    Width="150"
                     BorderThickness="0"
                     Background="Beige"
                     Margin="10,5,10,10"
@@ -274,7 +269,7 @@
                            Content="Add Preset" />
                 </DockPanel>
             </Button>
-        </StackPanel>
+        </Grid>
     </Border>
 </local:MpAvUserControl>
 

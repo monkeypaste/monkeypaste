@@ -28,247 +28,247 @@ namespace ProcessAutomation {
 
         #region Public Methods
 
-        public static MpProcessInfo StartProcess(MpProcessInfo pi, int waitForInputIdleTimeout = 30000) {
-            var result = StartProcess(
-                                processPath: pi.ProcessPath,
-                                argList: pi.ArgumentList,
-                                asAdministrator: pi.IsAdmin,
-                                isSilent: pi.IsSilent,
-                                useShellExecute: pi.UseShellExecute,
-                                workingDirectory: pi.WorkingDirectory,
-                                showError: pi.ShowError,
-                                windowState: pi.WindowState,
-                                closeOnComplete: pi.CloseOnComplete,
-                                createNoWindow: pi.CreateNoWindow,
-                                domain: pi.Domain,
-                                userName: pi.UserName,
-                                password: pi.Password);
-            return result;
-        }
+        //public static MpProcessInfo StartProcess(MpProcessInfo pi, int waitForInputIdleTimeout = 30000) {
+        //    var result = StartProcess(
+        //                        processPath: pi.ProcessPath,
+        //                        argList: pi.ArgumentList,
+        //                        asAdministrator: pi.IsAdmin,
+        //                        isSilent: pi.IsSilent,
+        //                        useShellExecute: pi.UseShellExecute,
+        //                        workingDirectory: pi.WorkingDirectory,
+        //                        showError: pi.ShowError,
+        //                        windowState: pi.WindowState,
+        //                        closeOnComplete: pi.CloseOnComplete,
+        //                        createNoWindow: pi.CreateNoWindow,
+        //                        domain: pi.Domain,
+        //                        userName: pi.UserName,
+        //                        password: pi.Password);
+        //    return result;
+        //}
 
-        public static MpProcessInfo StartProcess(
-            string processPath = null,
-            List<string> argList = null,
-            bool asAdministrator = false,
-            bool isSilent = false,
-            bool useShellExecute = true,
-            string workingDirectory = null,
-            bool showError = true,
-            WinApi.ShowWindowCommands windowState = WinApi.ShowWindowCommands.Normal,
-            bool closeOnComplete = false,
-            bool createNoWindow = false,
-            string domain = null,
-            string userName = null,
-            string password = null,
-            int waitForInputIdleTimeout = 30000) {
-            string originalPath = GetMachinePathEnvironmentVariable();
-            IntPtr outHandle = IntPtr.Zero;
+        //public static MpProcessInfo StartProcess(
+        //    string processPath = null,
+        //    List<string> argList = null,
+        //    bool asAdministrator = false,
+        //    bool isSilent = false,
+        //    bool useShellExecute = true,
+        //    string workingDirectory = null,
+        //    bool showError = true,
+        //    WinApi.ShowWindowCommands windowState = WinApi.ShowWindowCommands.Normal,
+        //    bool closeOnComplete = false,
+        //    bool createNoWindow = false,
+        //    string domain = null,
+        //    string userName = null,
+        //    string password = null,
+        //    int waitForInputIdleTimeout = 30000) {
+        //    string originalPath = GetMachinePathEnvironmentVariable();
+        //    IntPtr outHandle = IntPtr.Zero;
 
-            string stdOut = string.Empty;
-            string stdErr = string.Empty;
+        //    string stdOut = string.Empty;
+        //    string stdErr = string.Empty;
 
-            argList = argList == null ? new List<string>() : argList;
-            int argsLength = string.Join(string.Empty, argList).Length;
-            if (argsLength > _MAX_ARG_LENGTH) {
-                var result = MessageBox.Show(
-                    $"Cannot start '{processPath}' args must be less than or equal to {_MAX_ARG_LENGTH} characters and args is {argsLength}",
-                    "Start Process Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+        //    argList = argList == null ? new List<string>() : argList;
+        //    int argsLength = string.Join(string.Empty, argList).Length;
+        //    if (argsLength > _MAX_ARG_LENGTH) {
+        //        var result = MessageBox.Show(
+        //            $"Cannot start '{processPath}' args must be less than or equal to {_MAX_ARG_LENGTH} characters and args is {argsLength}",
+        //            "Start Process Error",
+        //            MessageBoxButtons.OK,
+        //            MessageBoxIcon.Error);
 
-                return null;
-            }
-            bool loadUserProfile = false;
-            if (!string.IsNullOrEmpty(userName)) {
-                loadUserProfile = true;
-                if(useShellExecute) {
-                    MpConsole.WriteTraceLine("Warning! Malformed StartProcessInfo parameter detected, must leave useShellExecute unchecked if providing username. Pretending its not checked...");
-                    useShellExecute = false;
-                }
-                if(string.IsNullOrEmpty(workingDirectory)) {
-                    MpConsole.WriteTraceLine(@"Warning! When providing user credentials a working directory should be provided..defaulting to %SYSTEMROOT%\system32");
-                }
-                if(userName.Contains("@") && !string.IsNullOrEmpty(domain)) {
-                    MpConsole.WriteTraceLine(@"Warning! Username appears to follow UPN format which negates usage of domain, pretending domain was not provided");
-                    domain = null;
-                }
-            }
-            try {
-                string processName = Path.GetFileName(processPath);
-                string processDir = Path.GetDirectoryName(processPath);
+        //        return null;
+        //    }
+        //    bool loadUserProfile = false;
+        //    if (!string.IsNullOrEmpty(userName)) {
+        //        loadUserProfile = true;
+        //        if(useShellExecute) {
+        //            MpConsole.WriteTraceLine("Warning! Malformed StartProcessInfo parameter detected, must leave useShellExecute unchecked if providing username. Pretending its not checked...");
+        //            useShellExecute = false;
+        //        }
+        //        if(string.IsNullOrEmpty(workingDirectory)) {
+        //            MpConsole.WriteTraceLine(@"Warning! When providing user credentials a working directory should be provided..defaulting to %SYSTEMROOT%\system32");
+        //        }
+        //        if(userName.Contains("@") && !string.IsNullOrEmpty(domain)) {
+        //            MpConsole.WriteTraceLine(@"Warning! Username appears to follow UPN format which negates usage of domain, pretending domain was not provided");
+        //            domain = null;
+        //        }
+        //    }
+        //    try {
+        //        string processName = Path.GetFileName(processPath);
+        //        string processDir = Path.GetDirectoryName(processPath);
 
-                if (!originalPath.ToLower().Contains(processDir.ToLower())) {
-                    AddDirectoryToPath(processDir);
-                }
+        //        if (!originalPath.ToLower().Contains(processDir.ToLower())) {
+        //            AddDirectoryToPath(processDir);
+        //        }
 
-                Process p = new Process();
-                p.StartInfo.UseShellExecute = useShellExecute;
-                p.StartInfo.Verb = asAdministrator ? "runas" : string.Empty;
-                p.StartInfo.ErrorDialog = showError;
+        //        Process p = new Process();
+        //        p.StartInfo.UseShellExecute = useShellExecute;
+        //        p.StartInfo.Verb = asAdministrator ? "runas" : string.Empty;
+        //        p.StartInfo.ErrorDialog = showError;
 
-                p.StartInfo.LoadUserProfile = loadUserProfile;
-                p.StartInfo.Domain = domain;
-                p.StartInfo.UserName = userName;
-                p.StartInfo.PasswordInClearText = password;
+        //        p.StartInfo.LoadUserProfile = loadUserProfile;
+        //        p.StartInfo.Domain = domain;
+        //        p.StartInfo.UserName = userName;
+        //        p.StartInfo.PasswordInClearText = password;
 
-                if (showError) {
-                    p.StartInfo.ErrorDialogParentHandle = MpProcessManager.ThisAppHandle;
-                }
-                if (!useShellExecute) {
-                    p.StartInfo.WorkingDirectory = string.IsNullOrEmpty(workingDirectory) ? processDir : workingDirectory;
+        //        if (showError) {
+        //            p.StartInfo.ErrorDialogParentHandle = MpProcessManager.ThisAppHandle;
+        //        }
+        //        if (!useShellExecute) {
+        //            p.StartInfo.WorkingDirectory = string.IsNullOrEmpty(workingDirectory) ? processDir : workingDirectory;
                     
-                    if (!Path.GetExtension(processPath).ToLower().Contains("exe")) {
-                        if (p.StartInfo.WorkingDirectory != processDir) {
-                            argList.Insert(0, processPath);
-                        } else {
-                            argList.Insert(0, processName);
-                        }
-                        processName = "cmd.exe";
-                    }
+        //            if (!Path.GetExtension(processPath).ToLower().Contains("exe")) {
+        //                if (p.StartInfo.WorkingDirectory != processDir) {
+        //                    argList.Insert(0, processPath);
+        //                } else {
+        //                    argList.Insert(0, processName);
+        //                }
+        //                processName = "cmd.exe";
+        //            }
 
-                    p.StartInfo.CreateNoWindow = createNoWindow;
-                    if (!isSilent) {
-                        ProcessWindowStyle windowStyle = ProcessWindowStyle.Normal;
-                        if (windowState == WinApi.ShowWindowCommands.Hide) {
-                            windowStyle = ProcessWindowStyle.Hidden;
-                        } else if (windowState == WinApi.ShowWindowCommands.Minimized) {
-                            windowStyle = ProcessWindowStyle.Minimized;
-                        } else if (windowState == WinApi.ShowWindowCommands.Maximized) {
-                            windowStyle = ProcessWindowStyle.Maximized;
-                        }
-                        p.StartInfo.WindowStyle = windowStyle;
-                    }
-                    p.StartInfo.RedirectStandardOutput = true;
-                    p.StartInfo.RedirectStandardError = true;
-                    p.OutputDataReceived += new DataReceivedEventHandler((sender, e) => { stdOut += e.Data; });
-                    p.ErrorDataReceived += new DataReceivedEventHandler((sender, e) => { stdErr += e.Data; });
-                } else {
-                    p.StartInfo.WorkingDirectory = processDir;
-                }
+        //            p.StartInfo.CreateNoWindow = createNoWindow;
+        //            if (!isSilent) {
+        //                ProcessWindowStyle windowStyle = ProcessWindowStyle.Normal;
+        //                if (windowState == WinApi.ShowWindowCommands.Hide) {
+        //                    windowStyle = ProcessWindowStyle.Hidden;
+        //                } else if (windowState == WinApi.ShowWindowCommands.Minimized) {
+        //                    windowStyle = ProcessWindowStyle.Minimized;
+        //                } else if (windowState == WinApi.ShowWindowCommands.Maximized) {
+        //                    windowStyle = ProcessWindowStyle.Maximized;
+        //                }
+        //                p.StartInfo.WindowStyle = windowStyle;
+        //            }
+        //            p.StartInfo.RedirectStandardOutput = true;
+        //            p.StartInfo.RedirectStandardError = true;
+        //            p.OutputDataReceived += new DataReceivedEventHandler((sender, e) => { stdOut += e.Data; });
+        //            p.ErrorDataReceived += new DataReceivedEventHandler((sender, e) => { stdErr += e.Data; });
+        //        } else {
+        //            p.StartInfo.WorkingDirectory = processDir;
+        //        }
 
-                p.StartInfo.FileName = processName;
-                if (closeOnComplete) {
-                    argList.Insert(0, "/c");
-                }
-                //p.StartInfo.Arguments = GetArgumentStr(argList);
-                p.Start();
+        //        p.StartInfo.FileName = processName;
+        //        if (closeOnComplete) {
+        //            argList.Insert(0, "/c");
+        //        }
+        //        //p.StartInfo.Arguments = GetArgumentStr(argList);
+        //        p.Start();
 
-                SetPath(originalPath);
-                WinApi.ShowWindowAsync(p.Handle, GetShowWindowValue(windowState));
+        //        SetPath(originalPath);
+        //        WinApi.ShowWindowAsync(p.Handle, GetShowWindowValue(windowState));
 
-                WinApi.SetForegroundWindow(p.Handle);
-                WinApi.SetActiveWindow(p.Handle);
+        //        WinApi.SetForegroundWindow(p.Handle);
+        //        WinApi.SetActiveWindow(p.Handle);
 
-                if (!useShellExecute) {
-                    // To avoid deadlocks, use an asynchronous read operation on at least one of the streams.  
-                    p.BeginErrorReadLine();
-                    p.BeginOutputReadLine();
-                }
+        //        if (!useShellExecute) {
+        //            // To avoid deadlocks, use an asynchronous read operation on at least one of the streams.  
+        //            p.BeginErrorReadLine();
+        //            p.BeginOutputReadLine();
+        //        }
 
-                if (!createNoWindow && !p.HasExited) {
-                    p.WaitForInputIdle(waitForInputIdleTimeout);
-                }
+        //        if (!createNoWindow && !p.HasExited) {
+        //            p.WaitForInputIdle(waitForInputIdleTimeout);
+        //        }
 
-                outHandle = p.Handle;
-                p.Dispose();
-            }
-            catch (Exception ex) {
-                MpConsole.WriteLine("Start Process error (Admin to Normal mode): " + ex);
-                SetPath(originalPath);
-            }
+        //        outHandle = p.Handle;
+        //        p.Dispose();
+        //    }
+        //    catch (Exception ex) {
+        //        MpConsole.WriteLine("Start Process error (Admin to Normal mode): " + ex);
+        //        SetPath(originalPath);
+        //    }
 
-            return new MpProcessInfo() {
-                Handle = outHandle,
-                ProcessPath = processPath,
-                ArgumentList = argList,
-                IsAdmin = asAdministrator,
-                IsSilent = isSilent,
-                UseShellExecute = useShellExecute,
-                WorkingDirectory = workingDirectory,
-                ShowError = showError,
-                WindowState = windowState,
-                CloseOnComplete = closeOnComplete,
-                CreateNoWindow = createNoWindow,
-                Domain = domain,
-                UserName = userName,
-                Password = password,
-                StandardOutput = stdOut,
-                StandardError = stdErr
-            };
-        }
+        //    return new MpProcessInfo() {
+        //        Handle = outHandle,
+        //        ProcessPath = processPath,
+        //        ArgumentList = argList,
+        //        IsAdmin = asAdministrator,
+        //        IsSilent = isSilent,
+        //        UseShellExecute = useShellExecute,
+        //        WorkingDirectory = workingDirectory,
+        //        ShowError = showError,
+        //        WindowState = windowState,
+        //        CloseOnComplete = closeOnComplete,
+        //        CreateNoWindow = createNoWindow,
+        //        Domain = domain,
+        //        UserName = userName,
+        //        Password = password,
+        //        StandardOutput = stdOut,
+        //        StandardError = stdErr
+        //    };
+        //}
 
-        private static void P_OutputDataReceived(object sender, DataReceivedEventArgs e) {
-            throw new NotImplementedException();
-        }
+        //private static void P_OutputDataReceived(object sender, DataReceivedEventArgs e) {
+        //    throw new NotImplementedException();
+        //}
 
-        public static void ActivateThisApp() {
-            var thisAppHandle = ThisAppHandle;
-            SetActiveProcess(thisAppHandle);
-        }
+        //public static void ActivateThisApp() {
+        //    var thisAppHandle = ThisAppHandle;
+        //    SetActiveProcess(thisAppHandle);
+        //}
 
-        public static void SetActiveProcess(IntPtr handle) {
-            WinApi.SetForegroundWindow(handle);
-            WinApi.SetActiveWindow(handle);
-        }
+        //public static void SetActiveProcess(IntPtr handle) {
+        //    WinApi.SetForegroundWindow(handle);
+        //    WinApi.SetActiveWindow(handle);
+        //}
 
-        public static MpProcessInfo SetActiveProcess(MpProcessInfo pi, int waitForInputIdleTimeout = 30000) {
-            if(pi == null) {
-                return null;
-            }
-            try {
-                //enforce that process won't be closed
-                pi.CloseOnComplete = false;
+        //public static MpProcessInfo SetActiveProcess(MpProcessInfo pi, int waitForInputIdleTimeout = 30000) {
+        //    if(pi == null) {
+        //        return null;
+        //    }
+        //    try {
+        //        //enforce that process won't be closed
+        //        pi.CloseOnComplete = false;
 
-                if (string.IsNullOrEmpty(pi.ProcessPath)) {
-                    if(pi.Handle == null || pi.Handle == IntPtr.Zero) {
-                        return pi;
-                    }
-                    pi.ProcessPath = GetProcessPath((IntPtr)pi.Handle);
-                }
+        //        if (string.IsNullOrEmpty(pi.ProcessPath)) {
+        //            if(pi.Handle == null || pi.Handle == IntPtr.Zero) {
+        //                return pi;
+        //            }
+        //            pi.ProcessPath = GetProcessPath((IntPtr)pi.Handle);
+        //        }
 
-                //pi.Handle is only passed when its a running application
+        //        //pi.Handle is only passed when its a running application
                 
-                if (!IsHandleRunningProcess(pi.Handle) && !IsProcessRunning(pi.ProcessPath)) {
-                    //if process is not running anymore or needs to be started (custom pastetoapppath)
-                    pi = StartProcess(pi);
-                } else {
-                    //ensure the process has a handle matching isAdmin, if not it needs to be created
-                    bool wasMatched = false;
-                    if(CurrentProcessWindowHandleStackDictionary.ContainsKey(pi.ProcessPath)) {
-                        var handleList = CurrentProcessWindowHandleStackDictionary[pi.ProcessPath];
-                        foreach (var h in handleList) {
-                            if (pi.IsAdmin == IsProcessAdmin(h)) {
-                                pi.Handle = h;
-                                if (CurrentWindowStateHandleDictionary.ContainsKey(h)) {
-                                    pi.WindowState = CurrentWindowStateHandleDictionary[h];
-                                }
-                                wasMatched = true;
-                                break;
-                                //if (CurrentWindowStateHandleDictionary.ContainsKey(handle)) {
-                                //    pi.WindowState = CurrentWindowStateHandleDictionary[handle];
-                                //}
-                                //break;
-                            }
-                        }
-                    }
-                    if(!wasMatched) {
-                        //
-                        pi = StartProcess(pi);
-                    } else {
-                        //show running window with last known window state
-                        WinApi.ShowWindowAsync(pi.Handle, GetShowWindowValue(pi.WindowState));
-                        WinApi.SetForegroundWindow(pi.Handle);
-                        WinApi.SetActiveWindow(pi.Handle);
-                    }
-                }
+        //        if (!IsHandleRunningProcess(pi.Handle) && !IsProcessRunning(pi.ProcessPath)) {
+        //            //if process is not running anymore or needs to be started (custom pastetoapppath)
+        //            pi = StartProcess(pi);
+        //        } else {
+        //            //ensure the process has a handle matching isAdmin, if not it needs to be created
+        //            bool wasMatched = false;
+        //            if(CurrentProcessWindowHandleStackDictionary.ContainsKey(pi.ProcessPath)) {
+        //                var handleList = CurrentProcessWindowHandleStackDictionary[pi.ProcessPath];
+        //                foreach (var h in handleList) {
+        //                    if (pi.IsAdmin == IsProcessAdmin(h)) {
+        //                        pi.Handle = h;
+        //                        if (CurrentWindowStateHandleDictionary.ContainsKey(h)) {
+        //                            pi.WindowState = CurrentWindowStateHandleDictionary[h];
+        //                        }
+        //                        wasMatched = true;
+        //                        break;
+        //                        //if (CurrentWindowStateHandleDictionary.ContainsKey(handle)) {
+        //                        //    pi.WindowState = CurrentWindowStateHandleDictionary[handle];
+        //                        //}
+        //                        //break;
+        //                    }
+        //                }
+        //            }
+        //            if(!wasMatched) {
+        //                //
+        //                pi = StartProcess(pi);
+        //            } else {
+        //                //show running window with last known window state
+        //                WinApi.ShowWindowAsync(pi.Handle, GetShowWindowValue(pi.WindowState));
+        //                WinApi.SetForegroundWindow(pi.Handle);
+        //                WinApi.SetActiveWindow(pi.Handle);
+        //            }
+        //        }
 
-                return pi;
-            }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine("SetActiveApplication error: " + ex);
-                return null;
-            }
-        }
+        //        return pi;
+        //    }
+        //    catch (Exception ex) {
+        //        MpConsole.WriteTraceLine("SetActiveApplication error: " + ex);
+        //        return null;
+        //    }
+        //}
 
 
         public static string GetArgumentStr(List<string> argList) {

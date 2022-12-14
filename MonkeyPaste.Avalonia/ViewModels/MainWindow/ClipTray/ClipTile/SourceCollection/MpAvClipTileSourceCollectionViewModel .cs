@@ -21,7 +21,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public IEnumerable<MpAvClipTileSourceViewModel> SortedItems => Items.OrderBy(x => x.SourceCreatedDateTime);
+        public IEnumerable<MpAvClipTileSourceViewModel> SortedItems => 
+            Items
+            .OrderByDescending(x => x.SourcePriority)
+            .ThenByDescending(x=>x.SourceCreatedDateTime);
 
         public MpAvClipTileSourceViewModel PrimaryItem => SortedItems.FirstOrDefault();
 
@@ -105,6 +108,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
+
         #endregion
 
         #region Commands

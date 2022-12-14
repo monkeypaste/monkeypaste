@@ -22,7 +22,7 @@ namespace MonkeyPaste {
                     break;
             }
             if(includeRef) {
-                pdo.SetData(MpPortableDataFormats.CefAsciiUrl, MpSourceRefHelper.ToUrlAsciiBytes(ci));
+                pdo.SetData(MpPortableDataFormats.CefAsciiUrl, MpPlatformWrapper.Services.SourceRefBuilder.ToUrlAsciiBytes(ci));
             }
             if(includeTitle) {
                 pdo.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_TITLE_FORMAT, ci.Title);

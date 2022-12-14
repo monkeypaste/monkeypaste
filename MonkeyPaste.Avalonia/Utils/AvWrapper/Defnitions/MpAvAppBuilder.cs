@@ -25,18 +25,8 @@ namespace MonkeyPaste.Avalonia {
                 }
                 // likely running application when no process path, find the path from the handle and use handle to query for mw title (if not already set)
                 processPath = MpPlatformWrapper.Services.ProcessWatcher.GetProcessPath(pi.Handle);
-            } else if(pi.Handle != IntPtr.Zero) {
-                processPath = pi.ProcessPath;
             } else {
-                // shouldn't happen or 
-                Debugger.Break();
-
-                // since source is unknown set to this app
-                //processPath = Assembly.GetExecutingAssembly().Location;
-                //// force app name and icon here (when not given) since this a fallback
-                //appName = string.IsNullOrEmpty(pi.MainWindowTitle) ? MpPrefViewModel.Instance.ThisAppName : pi.MainWindowTitle;
-                //iconBase64 = String.IsNullOrEmpty(pi.MainWindowIconBase64) ? MpBase64Images.AppIcon : pi.MainWindowIconBase64;
-                return null;
+                processPath = pi.ProcessPath;
             }
 
             // GET APP NAME

@@ -479,13 +479,18 @@ namespace MonkeyPaste.Avalonia {
                 _isSelecting = true;
 
                 int tagId;
-                if(args == null) {
+                if (args == null) {
                     tagId = DefaultTagId;
-                } else if(args is MpAvTagTileViewModel ttvm) {
+                } else if (args is MpAvTagTileViewModel ttvm) {
                     tagId = ttvm.TagId;
-                } else if(args is int){
+                } else if (args is int) {
                     tagId = (int)args;
-                } else {
+                } else if (args is string shorcutCommandParamTagIdStr &&
+                    int.Parse(shorcutCommandParamTagIdStr) is int cmdTagId) {
+                    // from shortcut
+                    tagId = cmdTagId;
+                }
+                else {
                     Debugger.Break();
                     tagId = MpTag.AllTagId;
                 }

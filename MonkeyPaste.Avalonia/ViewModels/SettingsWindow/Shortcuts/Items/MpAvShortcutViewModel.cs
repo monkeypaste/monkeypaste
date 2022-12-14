@@ -489,7 +489,6 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
         public ICommand PerformShortcutCommand => new MpCommand(
             () => {
-
                 Command?.Execute(CommandParameter);
 
                 if (ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset) {

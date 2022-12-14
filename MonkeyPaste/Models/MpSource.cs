@@ -18,17 +18,13 @@ namespace MonkeyPaste {
         [Column("MpSourceGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
+        [Column("fk_MpCopyItemId")]
+        public int CopyItemId { get; set; }
 
-        //[ForeignKey(typeof(MpCopyItemTransaction))]
-        [Column("fk_MpCopyItemTransactionId")]
-        public int CopyItemTransactionId { get; set; }
-
-        //[ForeignKey(typeof(MpUrl))]
         [Column("fk_MpUrlId")]
         public int UrlId { get; set; }
 
 
-        //[ForeignKey(typeof(MpApp))]
         [Column("fk_MpAppId")]
         public int AppId { get; set; }
 
@@ -110,18 +106,18 @@ namespace MonkeyPaste {
         [Ignore]
         public static int ThisAppSourceId { get; set; }
 
-        public static async Task<MpSource> Create(
+        public static async Task<MpSource> CreateAsync(
             int appId = 0,
             int urlId = 0,
-            int copyItemTransactionId = 0,
+            int copyItemId = 0,
             bool suppressWrite = false) {
 
             // NOTE this create is for item's from external sources but added copyItemTransactionId for more flexibility
 
-            if(appId == 0 && copyItemTransactionId == 0) {
+            if(appId == 0 && copyItemId == 0) {
                 throw new Exception("Source must have an app or item associated");
             }
-            MpSource dupCheck = await MpDataModelProvider.GetSourceByMembersAsync(appId, urlId, copyItemTransactionId);
+            MpSource dupCheck = await MpDataModelProvider.GetSourceByMembersAsync(appId, urlId, copyItemId);
             if(dupCheck != null) {
                 return dupCheck;
             }
@@ -129,7 +125,7 @@ namespace MonkeyPaste {
                 SourceGuid = System.Guid.NewGuid(),
                 AppId = appId,
                 UrlId = urlId,
-                CopyItemTransactionId = copyItemTransactionId
+                CopyItemId = copyItemId
             };
 
             if(!suppressWrite) {

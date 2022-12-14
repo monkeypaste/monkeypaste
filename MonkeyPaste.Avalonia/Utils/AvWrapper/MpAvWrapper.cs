@@ -22,6 +22,7 @@ namespace MonkeyPaste.Avalonia {
         public MpIIconBuilder IconBuilder { get; set; }
         public MpIUrlBuilder UrlBuilder { get; set; }
         public MpIAppBuilder AppBuilder { get; set; }
+        public MpISourceRefBuilder SourceRefBuilder { get; set; }
         public MpICustomColorChooserMenu CustomColorChooserMenu { get; set; }
         public MpICustomColorChooserMenuAsync CustomColorChooserMenuAsync { get; set; }
         public MpIKeyboardInteractionService KeyboardInteractionService { get; set; }
@@ -73,7 +74,8 @@ namespace MonkeyPaste.Avalonia {
             IconBuilder = new MpAvIconBuilder().IconBuilder;
             UrlBuilder = new MpUrlBuilder();
             AppBuilder = new MpAvAppBuilder();
-            
+            SourceRefBuilder = new MpAvSourceRefBuilder();
+
             CustomColorChooserMenu = new MpAvCustomColorChooser();
             CustomColorChooserMenuAsync = CustomColorChooserMenu as MpICustomColorChooserMenuAsync;
 

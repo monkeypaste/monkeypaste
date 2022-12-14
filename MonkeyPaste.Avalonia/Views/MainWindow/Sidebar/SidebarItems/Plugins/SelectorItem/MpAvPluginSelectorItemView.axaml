@@ -13,7 +13,6 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPluginSelectorItemView">
     <Border Margin="5"
-            Padding="5"
             MinHeight="30"
             HorizontalAlignment="Stretch"
             BorderThickness="0"

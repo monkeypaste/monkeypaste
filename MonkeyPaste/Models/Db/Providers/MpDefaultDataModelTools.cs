@@ -28,6 +28,7 @@ namespace MonkeyPaste {
         public static int ThisAppIconId { get; private set; }
         public static int ThisAppIconDbImageId { get; private set; }
         public static int ThisAppId { get; private set; }
+        public static int ThisSourceId { get; private set; }
         public static int ThisOsFileManagerAppId { get; private set; }
 
 
@@ -120,6 +121,10 @@ namespace MonkeyPaste {
                 appName: thisAppName,
                 iconId: thisAppIcon.Id);
 
+            // This source
+
+            var thisSource = await MpSource.CreateAsync(appId: thisApp.Id);           
+
             // OS App
             var osApp = await MpApp.CreateAsync(
                 appPath: MpPlatformWrapper.Services.OsInfo.OsFileManagerPath,
@@ -160,6 +165,14 @@ namespace MonkeyPaste {
                 Debugger.Break();
             }
             ThisAppId = this_app.Id;
+
+            // THIS SOURCE
+            var this_source = await MpDataModelProvider.GetSourceByMembersAsync(ThisAppId, 0, 0);
+            if(this_source == null) {
+                // error
+                Debugger.Break();
+            }
+            ThisSourceId = this_source.Id;
 
             // OS APP
             

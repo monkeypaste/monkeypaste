@@ -113,6 +113,7 @@ namespace MonkeyPaste.Avalonia {
                 SourceUrl = resp.sourceUrl
             };
         }
+
         #endregion
 
         #region Private Methods

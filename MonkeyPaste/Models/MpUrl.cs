@@ -117,6 +117,8 @@ namespace MonkeyPaste {
 
 
         #region MpISourceRef Implementation
+        [Ignore]
+        int MpISourceRef.Priority => 3;
 
         [Ignore]
         int MpISourceRef.SourceObjId => Id;

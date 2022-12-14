@@ -190,11 +190,11 @@ namespace MonkeyPaste.Avalonia {
             var ttv = this.FindControl<MpAvTagTreeView>("TagTreeView");
             var chsv = this.FindControl<MpAvClipboardHandlerSelectorView>("ClipboardHandlerSelectorView");
             var aisv = this.FindControl<MpAvAnalyticItemSelectorView>("AnalyticItemSelectorView");
-            var aimcsv = aisv.FindControl<ScrollViewer>("AnalyticItemMainContainerScrollViewer");
-            var aimcg = aisv.FindControl<Grid>("AnalyticItemMainContainerGrid");
-            var apsv = aisv.FindControl<MpAvPluginSelectorView>("AnalyzerPluginSelectorView");
-            var appcb = aisv.FindControl<Border>("AnalyzerPluginPresetContainerBorder");
-            var applbcb = aisv.FindControl<Border>("AnalyzerPluginParameterListBoxContainerBorder");
+            //var aimcsv = aisv.FindControl<ScrollViewer>("AnalyticItemMainContainerScrollViewer");
+            //var aimcg = aisv.FindControl<Grid>("AnalyticItemMainContainerGrid");
+            //var apsv = aisv.FindControl<MpAvPluginSelectorView>("AnalyzerPluginSelectorView");
+            //var appcb = aisv.FindControl<Border>("AnalyzerPluginPresetContainerBorder");
+            //var applbcb = aisv.FindControl<Border>("AnalyzerPluginParameterListBoxContainerBorder");
 
             var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");
 
@@ -227,16 +227,16 @@ namespace MonkeyPaste.Avalonia {
                 // sidebar internal columns
 
                 // analyzer
-                ScrollViewer.SetVerticalScrollBarVisibility(aimcsv, ScrollBarVisibility.Disabled);
-                aimcg.ColumnDefinitions = new ColumnDefinitions("Auto,*");
-                aimcg.RowDefinitions = new RowDefinitions("50,*");
-                Grid.SetRow(apsv, 0);
-                Grid.SetColumn(apsv, 0);
-                Grid.SetRow(appcb, 1);
-                Grid.SetColumn(appcb, 0);
-                Grid.SetRow(applbcb, 0);
-                Grid.SetColumn(applbcb, 1);
-                Grid.SetRowSpan(applbcb, 2);
+                //ScrollViewer.SetVerticalScrollBarVisibility(aimcsv, ScrollBarVisibility.Disabled);
+                //aimcg.ColumnDefinitions = new ColumnDefinitions("Auto,*");
+                //aimcg.RowDefinitions = new RowDefinitions("50,*");
+                //Grid.SetRow(apsv, 0);
+                //Grid.SetColumn(apsv, 0);
+                //Grid.SetRow(appcb, 1);
+                //Grid.SetColumn(appcb, 0);
+                //Grid.SetRow(applbcb, 0);
+                //Grid.SetColumn(applbcb, 1);
+                //Grid.SetRowSpan(applbcb, 2);
 
                 // cliptray container view
                 Grid.SetRow(ctrcv, 0);
@@ -299,7 +299,6 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetColumn(ctrcv_ctrv, 1);
             } else {
                 // VERTICAL 
-
                 mwtg.RowDefinitions = new RowDefinitions("*,Auto,40");
                 mwtg.ColumnDefinitions.Clear();
                 // sidebar columns
@@ -325,16 +324,16 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetColumn(chsv, 0);
 
                 // analyzer
-                ScrollViewer.SetVerticalScrollBarVisibility(aimcsv, ScrollBarVisibility.Visible);
-                aimcg.RowDefinitions = new RowDefinitions("50,*,*");
-                aimcg.ColumnDefinitions.Clear();
-                Grid.SetRow(apsv, 0);
-                Grid.SetColumn(apsv, 0);
-                Grid.SetRow(appcb, 1);
-                Grid.SetColumn(appcb, 0);
-                Grid.SetRow(applbcb, 2);
-                Grid.SetColumn(applbcb, 0);
-                Grid.SetRowSpan(applbcb, 1);
+                //ScrollViewer.SetVerticalScrollBarVisibility(aimcsv, ScrollBarVisibility.Visible);
+                //aimcg.RowDefinitions = new RowDefinitions("50,*,*");
+                //aimcg.ColumnDefinitions.Clear();
+                //Grid.SetRow(apsv, 0);
+                //Grid.SetColumn(apsv, 0);
+                //Grid.SetRow(appcb, 1);
+                //Grid.SetColumn(appcb, 0);
+                //Grid.SetRow(applbcb, 2);
+                //Grid.SetColumn(applbcb, 0);
+                //Grid.SetRowSpan(applbcb, 1);
 
                 // cliptray container view
                 Grid.SetRow(ctrcv, 0);

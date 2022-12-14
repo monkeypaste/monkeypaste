@@ -89,12 +89,19 @@ namespace MonkeyPaste.Avalonia {
                     return uris.Uri;
                 } else if(SourceRef != null) {
                     // for copyitem's use localhost handle
-                    return MpSourceRefHelper.ToUrl(SourceRef);
+                    return MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(SourceRef);
                 }
                 return string.Empty;
             }
         }
-
+        public int SourcePriority {
+            get {
+                if(SourceRef == null) {
+                    return 0;
+                }
+                return SourceRef.Priority;
+            }
+        }
         public int SourceObjId {
             get {
                 if (CopyItemSource == null) {

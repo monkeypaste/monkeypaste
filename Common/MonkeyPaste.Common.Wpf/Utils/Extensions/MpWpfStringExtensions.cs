@@ -72,24 +72,6 @@ namespace MonkeyPaste.Common.Wpf {
                 return str;
             }
             return str.ToFlowDocument().ToPlainText();
-        }
-
-        public static string EscapeExtraOfficeRtfFormatting(this string str) {
-            string extraFormatToken = @"{\*\themedata";
-            int tokenIdx = str.IndexOf(extraFormatToken);
-            if (tokenIdx >= 0) {
-                str = str.Substring(0, tokenIdx);
-            }
-            return str;
-        }
-
-        public static string EscapeExtraOfficeHTMLFormatting(this string str) {
-            string extraFormatToken = @"{\*\themedata";
-            int tokenIdx = str.IndexOf(extraFormatToken);
-            if (tokenIdx >= 0) {
-                str = str.Substring(0, tokenIdx);
-            }
-            return str;
-        }                
+        }          
     }
 }

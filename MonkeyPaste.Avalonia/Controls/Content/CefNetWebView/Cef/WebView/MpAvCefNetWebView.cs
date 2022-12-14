@@ -286,9 +286,9 @@ namespace MonkeyPaste.Avalonia {
 
                 bool add_tile_data = ctvm.ItemType != MpCopyItemType.Text || contentDataResp.isAllContent;
                 if (add_tile_data) {
-                    avdo.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_DATA_FORMAT, ctvm.PublicHandle);
+                    avdo.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_REF_FORMAT, ctvm.PublicHandle);
                 }
-                avdo.SetData(MpPortableDataFormats.CefAsciiUrl, MpSourceRefHelper.ToUrlAsciiBytes(ctvm.CopyItem));
+                avdo.SetData(MpPortableDataFormats.CefAsciiUrl, MpPlatformWrapper.Services.SourceRefBuilder.ToUrlAsciiBytes(ctvm.CopyItem));
             }
 
             
@@ -455,7 +455,10 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.notifyDataTransferCompleted:
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
-                        MpISourceRef sourceRef = await FindSourceRefFromUrl(dataTransferCompleted_ntf.dataTransferSourceUrl);
+                        //MpISourceRef sourceRef = await FindSourceRefFromUrl(dataTransferCompleted_ntf.dataTransferSourceUrl);
+                        MpISourceRef sourceRef = 
+                            await MpPlatformWrapper.Services.SourceRefBuilder
+                            .FetchOrCreateSourceAsync(dataTransferCompleted_ntf.dataTransferSourceUrl);
                         if(sourceRef == null) {
                             return;
                         }
@@ -999,19 +1002,19 @@ namespace MonkeyPaste.Avalonia {
             if (BindingContext == null || !IsContentLoaded) {
                 return;
             }
-            if (IsContentReadOnly) {
-                MpAvMainWindowViewModel.Instance.IsAnyMainWindowTextBoxFocused = false;
+            Dispatcher.UIThread.Post(async () => {
+                if (IsContentReadOnly) {
+                    MpAvMainWindowViewModel.Instance.IsAnyMainWindowTextBoxFocused = false;
 
-                MpAvResizeExtension.ResizeAnimated(this, BindingContext.ReadOnlyWidth, BindingContext.ReadOnlyHeight);
-                Dispatcher.UIThread.Post(async () => {
+                    MpAvResizeExtension.ResizeAnimated(this, BindingContext.ReadOnlyWidth, BindingContext.ReadOnlyHeight);
                     string enableReadOnlyRespStr = await this.EvaluateJavascriptAsync("enableReadOnly_ext()");
                     var qrm = MpJsonObject.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(enableReadOnlyRespStr);
                     ProcessContentChangedMessage(qrm);
-                });
-            } else {
-                this.ExecuteJavascript($"disableReadOnly_ext()");
-                MpAvResizeExtension.ResizeAnimated(this,BindingContext.EditableWidth, BindingContext.EditableHeight);
-            }
+                } else {
+                    MpAvResizeExtension.ResizeAnimated(this, BindingContext.EditableWidth, BindingContext.EditableHeight);
+                    this.ExecuteJavascript($"disableReadOnly_ext()");
+                }
+            });
         }
         #endregion 
 
@@ -1224,60 +1227,5 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-        private async Task<MpISourceRef> FindSourceRefFromUrl(string sourceUrl) {
-            MpISourceRef sourceRef = null;
-            bool had_internal_handle = false;
-            if (!string.IsNullOrEmpty(sourceUrl)) {
-                var sr = MpSourceRefHelper.ParseFromInternalUrl(sourceUrl);
-                if (sr != null) {
-                    if (!string.IsNullOrEmpty(sr.SourcePublicHandle)) {
-                        // get db id from handle
-                        had_internal_handle = true;
-                        int ciid = 0;
-                        // check all tiles
-                        var sctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == sr.SourcePublicHandle) as MpAvClipTileViewModel;
-                        if (sctvm == null) {
-                            // check for recycled tile
-                            if (MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Count > 0 &&
-                                MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels[0].PublicHandle == sr.SourcePublicHandle) {
-                                // recycled source (internal)
-                                ciid = MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels[0].Id;
-                            }
-                            if (ciid == 0) {
-                                // check pending new models
-                                var pending_ci = MpAvClipTrayViewModel.Instance.PendingNewModels.FirstOrDefault(x => x.PublicHandle.ToLower() == sr.SourcePublicHandle.ToLower());
-                                if (pending_ci != null) {
-                                    // pending source (internal)
-                                    ciid = pending_ci.Id;
-                                }
-                            }
-                        } else {
-                            // tile source (internal)
-                            ciid = sctvm.CopyItemId;
-                        }
-                        if (ciid > 0) {
-                            // internal source
-                            sr.SourceObjId = ciid;
-                            sourceRef = sr;
-                        }
-                    }
-                }
-            }
-            if (sourceRef == null && !had_internal_handle) {
-                var url = await MpPlatformWrapper.Services.UrlBuilder.CreateAsync(sourceUrl);
-                if (url != null) {
-                    // remote source
-                    sourceRef = url;
-                }
-            }
-            if (sourceRef == null) {
-                var app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo);
-                if (app != null) {
-                    // local source
-                    sourceRef = app;
-                }
-            }
-            return sourceRef;
-        }
     }
 }

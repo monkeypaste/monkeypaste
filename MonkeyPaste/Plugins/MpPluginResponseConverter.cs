@@ -60,8 +60,9 @@ namespace MonkeyPaste {
             //    itemType: targetCopyItemType,
             //    suppressWrite: suppressWrite);
 
-            List<MpISourceRef> target_refs = new List<MpISourceRef>();
+            List<MpISourceRef> target_source_refs = new List<MpISourceRef>();
             if(citid > 0) {
+                // NOTE since this is in response phase source records should exist and actual plugin url is not needed
                 var ci_trans = await MpDataModelProvider.GetItemAsync<MpCopyItemTransaction>(citid);
                 if (ci_trans != null) {
                     // TODO probably refactor non-ci transactions to poly table
@@ -72,13 +73,13 @@ namespace MonkeyPaste {
                         if(http_tran != null) {
                             var url = await MpDataModelProvider.GetItemAsync<MpUrl>(http_tran.UrlId);
                             if(url != null) {
-                                target_refs.Add(url);
+                                target_source_refs.Add(url);
                             }
                         }
                     }
                 }
             }
-            target_refs.Add(sourceCopyItem);
+            target_source_refs.Add(sourceCopyItem);
             
             string title = sourceCopyItem.Title + " Analysis";
             if (prf.newContentItem.label != null) {
@@ -87,7 +88,8 @@ namespace MonkeyPaste {
             var nc_pdo = new MpPortableDataObject();
             nc_pdo.SetData(prf.newContentItem.format, prf.newContentItem.content.value);
             nc_pdo.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_TITLE_FORMAT, title);
-            nc_pdo.SetData(MpPortableDataFormats.LinuxUriList, target_refs);
+            var source_urls = target_source_refs.Select(x => MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(x));
+            nc_pdo.SetData(MpPortableDataFormats.LinuxUriList, source_urls);
             //nc_pdo.SetData(MpPortableDataFormats.CefAsciiUrl, MpSourceRefHelper.ToUrlAsciiBytes(sourceCopyItem));
 
             var target_ci = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(nc_pdo);

@@ -752,7 +752,7 @@ namespace MonkeyPaste.Avalonia {
 
             var idsSeen = new List<int>();
             foreach (int ciid in CopyItemIdsNeedingView) {
-                var civm = MpAvClipTrayViewModel.Instance.GetClipTileViewModelById(ciid);
+                var civm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.CopyItemId == ciid);
                 if (civm != null) {
                     if (civm.IsPinned) {
                         // only mark item as seen if viewed in its query tray

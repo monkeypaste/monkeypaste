@@ -9,41 +9,53 @@
                        x:CompileBindings="True"
                        DataContext="{x:Static local:MpAvAnalyticItemCollectionViewModel.Instance}"
                        mc:Ignorable="d"
-                       d:DesignWidth="800"
+                       d:DesignWidth="350"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvAnalyticItemSelectorView">
     <Border HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
+            Padding="10"
             Background="{DynamicResource AnalyzerSidebarBgBrush}">
-        <ScrollViewer x:Name="AnalyticItemMainContainerScrollViewer"
-                      HorizontalScrollBarVisibility="Disabled"
-                      VerticalScrollBarVisibility="Disabled">
-            <Grid x:Name="AnalyticItemMainContainerGrid"
-                  ColumnDefinitions="Auto,*"
-                  RowDefinitions="50,*">
-                <local:MpAvPluginSelectorView x:Name="AnalyzerPluginSelectorView"
-                                              Grid.Row="0"
-                                              Grid.Column="0"
-                                              DataContext="{Binding}" />
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Auto">
+            <WrapPanel Orientation="Horizontal"
+                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                       ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <Border x:Name="AnalyzerPluginPresetContainerBorder"
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        DataContext="{Binding SelectedItem}">
-                    <local:MpAvAnalyticItemPresetDataGridView VerticalAlignment="Top"
-                                                              DataContext="{Binding}" />
+                        Width="350"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top">
+                    <StackPanel Orientation="Vertical">
+                        <local:MpAvPluginSelectorView x:Name="AnalyzerPluginSelectorView"
+                                                      Height="50"
+                                                      Margin="20"
+                                                      HorizontalContentAlignment="Stretch"
+                                                      HorizontalAlignment="Stretch"
+                                                      VerticalAlignment="Stretch"
+                                                      VerticalContentAlignment="Stretch"
+                                                      DataContext="{Binding}" />
+                        <Border Margin="0,10,0,0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                DataContext="{Binding SelectedItem}">
+                            <local:MpAvAnalyticItemPresetDataGridView HorizontalAlignment="Stretch"
+                                                                      VerticalAlignment="Stretch"
+                                                                      DataContext="{Binding}" />
+                        </Border>
+                    </StackPanel>
                 </Border>
 
                 <Border x:Name="AnalyzerPluginParameterListBoxContainerBorder"
-                        Grid.Row="0"
-                        Grid.RowSpan="2"
-                        Grid.Column="1"
-                        HorizontalAlignment="Stretch"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Margin="0,10,0,0"
+                        Width="350"
                         DataContext="{Binding SelectedPresetViewModel}">
                     <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
+                                                          VerticalAlignment="Stretch"
                                                           DataContext="{Binding}" />
                 </Border>
-
-            </Grid>
+            </WrapPanel>
         </ScrollViewer>
     </Border>
 </local:MpAvUserControl>

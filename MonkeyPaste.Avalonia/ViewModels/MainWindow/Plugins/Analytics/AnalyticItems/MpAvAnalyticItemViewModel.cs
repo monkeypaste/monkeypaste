@@ -747,7 +747,7 @@ namespace MonkeyPaste.Avalonia {
                     targetAnalyzer = argParts[0] as MpAvAnalyticItemPresetViewModel;
                     if (argParts[1] is string) {
                         suppressWrite = true;
-                        sourceCopyItem = await MpCopyItem.Create(
+                        sourceCopyItem = await MpCopyItem.CreateAsync(
                                                             data: argParts[1] as string,
                                                             suppressWrite: true);
                     } else if (argParts[1] is MpCopyItem) {

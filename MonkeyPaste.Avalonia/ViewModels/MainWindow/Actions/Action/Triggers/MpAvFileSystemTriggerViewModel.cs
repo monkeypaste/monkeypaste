@@ -8,6 +8,7 @@ using Avalonia.Threading;
 using PropertyChanged;
 using Avalonia.Controls;
 using System.Windows.Input;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvFileSystemTriggerViewModel : MpAvTriggerActionViewModelBase, MpIFileSystemEventHandler {
@@ -119,7 +120,7 @@ namespace MonkeyPaste.Avalonia {
                 switch (e.ChangeType) {
                     case WatcherChangeTypes.Changed:
                     case WatcherChangeTypes.Created:
-                        ci = await MpCopyItem.Create(
+                        ci = await MpCopyItem.CreateAsync(
                             //sourceId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
                             itemType: MpCopyItemType.FileList,
                             data: e.FullPath,
@@ -136,7 +137,7 @@ namespace MonkeyPaste.Avalonia {
                         RenamedEventArgs re = e as RenamedEventArgs;
                         ci = await MpDataModelProvider.GetCopyItemByDataAsync(re.OldFullPath);
                         if(ci == null) {
-                            ci = await MpCopyItem.Create(
+                            ci = await MpCopyItem.CreateAsync(
                                 //sourceId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
                                 itemType: MpCopyItemType.FileList,
                                 data: e.FullPath,
@@ -150,7 +151,7 @@ namespace MonkeyPaste.Avalonia {
                         if(ci == null) {
                             return;
                         }
-                        bool isVisible = MpAvClipTrayViewModel.Instance.GetClipTileViewModelById((int)ci.Id) != null;
+                        bool isVisible = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.CopyItemId == ci.Id) != null;
                         await ci.DeleteFromDatabaseAsync();
                         if(isVisible) {
                             MpAvQueryInfoViewModel.Current.NotifyQueryChanged();

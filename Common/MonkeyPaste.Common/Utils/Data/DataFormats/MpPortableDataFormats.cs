@@ -47,7 +47,7 @@ namespace MonkeyPaste.Common {
 
             // internal
 
-            INTERNAL_CLIP_TILE_DATA_FORMAT,
+            INTERNAL_CLIP_TILE_REF_FORMAT,
             INTERNAL_CLIP_TILE_TITLE_FORMAT
             
         };
@@ -97,7 +97,7 @@ namespace MonkeyPaste.Common {
         public const string CefText = "text/plain";
         public const string CefJson = "application/json";
 
-        public const string INTERNAL_CLIP_TILE_DATA_FORMAT = "Mp Internal Content";
+        public const string INTERNAL_CLIP_TILE_REF_FORMAT = "Mp Internal Content";
         public const string INTERNAL_CLIP_TILE_TITLE_FORMAT = "Mp Internal Content Title";
         #endregion
 
