@@ -75,6 +75,13 @@ namespace MonkeyPaste.Common {
 
         public double Length => Distance(MpPoint.Zero);
 
+        public MpPoint Normalized {
+            get {
+                var n = new MpPoint(X, Y);
+                n.Normalize();
+                return n;
+            }
+        }
         public void Normalize() {
             double distance = Math.Sqrt(X * X + Y * Y);
             X /= distance;

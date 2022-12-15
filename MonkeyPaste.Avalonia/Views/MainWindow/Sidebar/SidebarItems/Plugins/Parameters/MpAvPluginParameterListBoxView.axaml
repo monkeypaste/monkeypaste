@@ -13,27 +13,9 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPluginParameterListBoxView">
     <ListBox x:Name="PluginParameterListBox"
-             Grid.Row="1"
-             Background="Transparent"
-             Margin="5,10"
-             Padding="20,0"
+             Classes="paramListBox"
              Items="{Binding Items}"
-             SelectedItem="{Binding SelectedItem}"
-             VerticalAlignment="Stretch"
-             HorizontalAlignment="Stretch"
-             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-             ScrollViewer.VerticalScrollBarVisibility="Disabled"
-             BorderThickness="0">
-        <ListBox.Styles>
-            <Style Selector="ListBoxItem">
-                <Setter Property="Margin"
-                        Value="5" />
-                <Setter Property="Padding"
-                        Value="0" />
-                <Setter Property="HorizontalAlignment"
-                        Value="Stretch" />
-            </Style>
-        </ListBox.Styles>
+             SelectedItem="{Binding SelectedItem}">
         <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
                 <VirtualizingStackPanel Orientation="Vertical"
@@ -43,8 +25,7 @@
         </ListBox.ItemsPanel>
         <ListBox.ItemTemplate>
             <DataTemplate>
-                <local:MpAvPluginParameterItemView IsVisible="{Binding IsVisible}"
-                                                   HorizontalAlignment="Stretch"
+                <local:MpAvPluginParameterItemView HorizontalAlignment="Stretch"
                                                    DataContext="{Binding}" />
             </DataTemplate>
         </ListBox.ItemTemplate>

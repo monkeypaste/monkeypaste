@@ -12,7 +12,6 @@ using System.Diagnostics;
 namespace MonkeyPaste {
     public class MpApp : 
         MpDbModelBase, 
-        MpISourceItem, 
         MpISyncableDbObject, 
         MpIDbIconId,
         MpISourceRef,
@@ -28,7 +27,6 @@ namespace MonkeyPaste {
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         [Indexed]
-        [Column("SourcePath")]
         public string AppPath { get; set; } = string.Empty;
 
         public string AppName { get; set; } = string.Empty;
@@ -59,8 +57,6 @@ namespace MonkeyPaste {
                 }
             }
         }
-
-
         [Ignore]
         public IEnumerable<string> ArgumentList {
             get {
@@ -91,38 +87,6 @@ namespace MonkeyPaste {
             }
         }
 
-        #endregion
-
-        #region MpICopyItemSource Implementation
-
-        [Ignore]
-        public bool IsUrl => false;
-
-        [Ignore]
-        public bool IsDll => false;
-
-        [Ignore]
-        public bool IsExe => false;
-        [Ignore]
-        public bool IsUser => false;
-
-        [Ignore]
-        public bool IsRejected => IsAppRejected;
-
-        [Ignore]
-        public bool IsSubRejected => IsRejected;
-
-        //[Ignore]
-        //public MpIcon SourceIcon => Icon;
-
-        [Ignore]
-        public string SourcePath => AppPath;
-
-        [Ignore]
-        public string SourceName => AppName;
-
-        [Ignore]
-        public int RootId => Id;
         #endregion
 
         #region MpILabelText Implementation
@@ -328,7 +292,7 @@ namespace MonkeyPaste {
                 diffLookup,
                 MpDataModelProvider.GetItem<MpIcon>(IconId).Guid);
             diffLookup = CheckValue(AppPath, other.AppPath,
-                "SourcePath",
+                "AppPath",
                 diffLookup);
             diffLookup = CheckValue(AppName, other.AppName,
                 "AppName",

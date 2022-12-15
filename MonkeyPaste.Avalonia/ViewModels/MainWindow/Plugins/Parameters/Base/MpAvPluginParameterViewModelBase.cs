@@ -80,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-        public string ParameterBorderBrush {
+        public virtual string ParameterBorderBrush {
             get {
                 if (IsValid) {
                     return MpSystemColors.Transparent;

@@ -115,7 +115,13 @@ namespace MonkeyPaste {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("AppPath"), searchOp, escapeStr, searchText, escapeClause));
                 }
                 if (qi.FilterFlags.HasFlag(MpContentFilterType.Meta)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("ItemDescription"), searchOp, escapeStr, searchText, escapeClause));
+                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("ItemMetaData"), searchOp, escapeStr, searchText, escapeClause));
+                }
+                if (qi.FilterFlags.HasFlag(MpContentFilterType.DeviceName)) {
+                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("DeviceName"), searchOp, escapeStr, searchText, escapeClause));
+                }
+                if (qi.FilterFlags.HasFlag(MpContentFilterType.DeviceType)) {
+                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("DeviceType"), searchOp, escapeStr, searchText, escapeClause));
                 }
 
                 if (qi.FilterFlags.HasFlag(MpContentFilterType.Time)) {
@@ -131,13 +137,13 @@ namespace MonkeyPaste {
                 }
             }
             if (qi.FilterFlags.HasFlag(MpContentFilterType.TextType)) {
-                types.Add(string.Format(@"fk_MpCopyItemTypeId={0}", (int)MpCopyItemType.Text));
+                types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.Text.ToString()));
             }
             if (qi.FilterFlags.HasFlag(MpContentFilterType.FileType)) {
-                types.Add(string.Format(@"fk_MpCopyItemTypeId={0}", (int)MpCopyItemType.FileList));
+                types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.FileList.ToString()));
             }
             if (qi.FilterFlags.HasFlag(MpContentFilterType.ImageType)) {
-                types.Add(string.Format(@"fk_MpCopyItemTypeId={0}", (int)MpCopyItemType.Image));
+                types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.Image.ToString()));
             }
 
             switch (qi.SortType) {
@@ -154,7 +160,7 @@ namespace MonkeyPaste {
                     sortClause = string.Format(@"order by {0}", "ItemData");
                     break;
                 case MpContentSortType.ItemType:
-                    sortClause = string.Format(@"order by {0}", "fk_MpCopyItemTypeId");
+                    sortClause = string.Format(@"order by {0}", "e_MpCopyItemType");
                     break;
                 case MpContentSortType.UsageScore:
                     sortClause = string.Format(@"order by {0}", "UsageScore");

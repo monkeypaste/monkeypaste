@@ -17,15 +17,19 @@
             VerticalAlignment="Stretch"
             HorizontalAlignment="Stretch">
         <Grid RowDefinitions="*,40">
-
             <DataGrid x:Name="PresetDataGrid"
                       Grid.Row="0"
+                      RowBackground="Silver"
+                      AlternatingRowBackground="LightGray"
                       Items="{Binding Items}"
                       SelectedItem="{Binding SelectedItem}"
                       SelectionMode="Single"
                       HeadersVisibility="None"
-                      HorizontalAlignment="Stretch"
+                      RowHeight="40"
+                      HorizontalAlignment="Center"
                       VerticalAlignment="Stretch"
+                      VerticalScrollBarVisibility="Hidden"
+                      HorizontalScrollBarVisibility="Hidden"
                       ScrollViewer.VerticalScrollBarVisibility="Disabled"
                       CanUserResizeColumns="False"
                       CanUserReorderColumns="False"
@@ -67,28 +71,29 @@
 
                                 <Grid ClipToBounds="True"
                                       HorizontalAlignment="Stretch"
-                                      VerticalAlignment="Stretch"
-                                      Margin="5">
+                                      VerticalAlignment="Stretch">
                                     <local:MpAvMarqueeTextBox AutoMarquee="False"
                                                               CanEdit="True"
-                                                              MinHeight="30"
+                                                              EditOnDoubleClick="True"
+                                                              MinHeight="20"
                                                               FontSize="14"
+                                                              DropShadowBrush="Transparent"
+                                                              ReadOnlyForeground="Black"
+                                                              Foreground="Black"
                                                               IsReadOnly="True"
                                                               IsMarqueeEnabled="True"
-                                                              DropShadowBrush="Black"
                                                               VerticalAlignment="Center"
                                                               HorizontalAlignment="Stretch"
                                                               HorizontalContentAlignment="Left"
-                                                              VerticalContentAlignment="Top"
-                                                              Foreground="White"
-                                                              FontWeight="SemiBold"
+                                                              VerticalContentAlignment="Center"
+                                                              FontFamily="Segue UI"
                                                               Text="{Binding Label, Mode=TwoWay}" />
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <!--  QUICK AcTION COLUMN  -->
+                    <!--  QUICK ACTION COLUMN  -->
                     <DataGridTemplateColumn Width="30"
                                             Header="Quick Action?">
                         <DataGridTemplateColumn.CellTemplate>
@@ -113,7 +118,6 @@
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Button Background="Transparent"
                                         BorderThickness="0"
-                                        IsVisible="{Binding Parent.CanAnalyzerExecute}"
                                         Command="{Binding AssignHotkeyCommand}">
                                     <ToolTip.Tip>
                                         <local:MpAvToolTipView ToolTipText="Assign Shortcut" />
@@ -147,7 +151,7 @@
                                         <Image Width="20"
                                                Height="20"
                                                IsVisible="{Binding !Parent.CanAnalyzerExecute}}"
-                                               Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource QuestionMarkImage}}">
+                                               Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource NoEntryImage}}">
                                             <ToolTip.Tip>
                                                 <local:MpAvToolTipView ToolTipText="{Binding Parent.CannotExecuteTooltip}" />
                                             </ToolTip.Tip>
@@ -244,30 +248,35 @@
 
             <!--  ADD PRESET BUTTON  -->
             <Button Grid.Row="1"
+                    Margin="0,5,0,0"
                     Width="150"
+                    Background="Transparent"
                     BorderThickness="0"
-                    Background="Beige"
-                    Margin="10,5,10,10"
-                    HorizontalAlignment="Right"
+                    HorizontalAlignment="Center"
                     Command="{Binding CreateNewPresetCommand}">
                 <Button.Styles>
-                    <Style Selector="Button">
+                    <Style Selector="Border">
                         <Setter Property="Background"
                                 Value="Beige" />
                     </Style>
-                    <Style Selector="Button:pointerover">
+                    <Style Selector="Border:pointerover">
                         <Setter Property="Background"
                                 Value="AntiqueWhite" />
                     </Style>
                 </Button.Styles>
-                <DockPanel>
-                    <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource AddImage}}"
-                           DockPanel.Dock="Left"
-                           Width="15"
-                           Height="15" />
-                    <Label DockPanel.Dock="Right"
-                           Content="Add Preset" />
-                </DockPanel>
+                <Border CornerRadius="5"
+                        HorizontalAlignment="Stretch"
+                        Padding="5">
+                    <DockPanel>
+                        <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource AddImage}}"
+                               DockPanel.Dock="Left"
+                               Width="15"
+                               Height="15" />
+                        <Label DockPanel.Dock="Right"
+                               Foreground="Black"
+                               Content="Add Preset" />
+                    </DockPanel>
+                </Border>
             </Button>
         </Grid>
     </Border>

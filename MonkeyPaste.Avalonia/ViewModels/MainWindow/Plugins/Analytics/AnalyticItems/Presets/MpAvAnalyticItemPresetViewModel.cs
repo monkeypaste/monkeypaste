@@ -60,10 +60,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        //public MpITreeItemViewModel ParentTreeItem => Parent;
-
-        //public ObservableCollection<MpITreeItemViewModel> Children { get; set; } = null;
-
         #endregion
 
         #region MpISidebarItemViewModel Implementation
@@ -112,7 +108,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpAvIPluginParameterCollectionViewModel Implementation
 
         IEnumerable<MpAvPluginParameterViewModelBase>
-            MpAvIPluginParameterCollectionViewModel.Items => Items;
+            MpAvIPluginParameterCollectionViewModel.Items => Items.Where(x=>x.IsVisible);
 
         MpAvPluginParameterViewModelBase
             MpAvIPluginParameterCollectionViewModel.SelectedItem {

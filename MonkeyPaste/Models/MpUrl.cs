@@ -10,7 +10,6 @@ using MonkeyPaste.Common;
 namespace MonkeyPaste {
     public class MpUrl : 
         MpDbModelBase, 
-        MpISourceItem, 
         MpISourceRef,
         MpIDbIconId,
         MpILabelText,
@@ -69,7 +68,7 @@ namespace MonkeyPaste {
         [Ignore]
         public bool IsUrlRejected {
             get {
-                return UrlRejected == 1;
+                return IsDomainRejected || UrlRejected == 1;
             }
             set {
                 UrlRejected = value ? 1 : 0;
@@ -84,8 +83,6 @@ namespace MonkeyPaste {
         [Ignore]
         public bool IsUrl => true;
 
-        [Ignore]
-        public bool IsRejected => IsDomainRejected;
 
         [Ignore]
         public bool IsSubRejected => IsUrlRejected;

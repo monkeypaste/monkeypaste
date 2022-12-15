@@ -8,6 +8,7 @@ namespace MonkeyPaste.Common {
         Ios,
         Android,
         Windows,
+        Wsl, // only using this because its in db and is a gray area but not sure how to actually detect yet
         Mac,
         Linux,
         Web,

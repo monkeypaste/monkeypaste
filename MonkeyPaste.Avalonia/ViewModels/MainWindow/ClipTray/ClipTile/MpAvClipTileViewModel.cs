@@ -974,18 +974,25 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpPortableDataFormat PreferredFormat {
+        public MpPortableDataFormat DataFormat {
             get {
                 if (CopyItem == null) {
                     return null;
                 }
-                return CopyItem.PreferredFormat;
+                if (!MpPortableDataFormats.RegisteredFormats.All(x => x != CopyItem.DataFormat)) {
+                    MpPortableDataFormats.RegisterDataFormat(CopyItem.DataFormat);
+                }
+                return MpPortableDataFormats.GetDataFormat(CopyItem.DataFormat);
             }
             set {
-                if (CopyItem != null && CopyItem.PreferredFormat != value) {
-                    //CopyItem.PreferredFormat = value;
-                    //HasModelChanged = true;
-                    OnPropertyChanged(nameof(PreferredFormat));
+                if (CopyItem != null && CopyItem.DataFormat != value.Name) {
+                    CopyItem.DataFormat = value.Name;
+
+                    if (!MpPortableDataFormats.RegisteredFormats.All(x => x != CopyItem.DataFormat)) {
+                        MpPortableDataFormats.RegisterDataFormat(CopyItem.DataFormat);
+                    }
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(DataFormat));
                 }
             }
         }

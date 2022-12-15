@@ -18,6 +18,7 @@ using Key = Avalonia.Input.Key;
 using Cursor = Avalonia.Input.Cursor;
 using Avalonia.VisualTree;
 using Avalonia.Controls.Primitives;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -29,6 +30,8 @@ namespace MonkeyPaste.Avalonia {
         private Bitmap _marqueeBitmap { get; set; }
 
         private MpSize _ftSize;
+
+        private string _orgText;
 
         private double _offsetX1 { get; set; }
         private double _offsetX2 { get; set; }
@@ -108,6 +111,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+
         #region DropShadowBrush AvaloniaProperty
 
         private IBrush _dropShadowBrush = Brushes.Black;
@@ -153,6 +157,21 @@ namespace MonkeyPaste.Avalonia {
 
         public static readonly StyledProperty< bool> CanEditProperty =
             AvaloniaProperty.Register<MpAvMarqueeTextBox, bool>(nameof(CanEdit));
+
+        #endregion
+
+        #region EditOnDoubleClick AvaloniaProperty
+
+        private bool _editOnDoubleClick = false;
+        public bool EditOnDoubleClick {
+            get => _editOnDoubleClick;
+            set {
+                SetAndRaise(EditOnDoubleClickProperty, ref _editOnDoubleClick, value);
+            }
+        }
+
+        public static readonly StyledProperty<bool> EditOnDoubleClickProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, bool>(nameof(EditOnDoubleClick));
 
         #endregion
 
@@ -223,6 +242,16 @@ namespace MonkeyPaste.Avalonia {
         }
         protected override void OnGotFocus(GotFocusEventArgs e) {
             base.OnGotFocus(e);
+            if(EditOnDoubleClick) {
+                //var focusable_ancestor = this.GetVisualAncestors().FirstOrDefault(x => x is Control c && c.Focusable);
+                //if(focusable_ancestor != null && focusable_ancestor is Control ac) {
+                //    ac.Focus();
+                //}
+                if(DataContext is MpISelectableViewModel svm) {
+                    svm.IsSelected = true;
+                }
+                return;
+            }
             if(CanEdit) {
                 SetValue(IsReadOnlyProperty, false);
                 BeginEditCommand?.Execute(null);
@@ -242,11 +271,18 @@ namespace MonkeyPaste.Avalonia {
             if(e.Key == Key.Escape) {
                 SetValue(IsReadOnlyProperty, true);
                 CancelEditCommand?.Execute(null);
+                if(CancelEditCommand == null && 
+                    Text != _orgText &&
+                    !string.IsNullOrEmpty(_orgText)) {
+                    Text = _orgText;
+                }
+                e.Handled = true;
                 return;
             }
             if(e.Key == Key.Enter) {
                 SetValue(IsReadOnlyProperty, true);
                 EndEditCommand?.Execute(null);
+                e.Handled = true;
                 return;
             }
             base.OnKeyDown(e);
@@ -261,6 +297,17 @@ namespace MonkeyPaste.Avalonia {
             base.OnPointerEnter(e);
             _tb_mp = e.GetClientMousePoint(this);
             AnimateAsync().FireAndForgetSafeAsync();
+        }
+
+        protected override void OnPointerPressed(PointerPressedEventArgs e) {
+            base.OnPointerPressed(e);
+            if(!EditOnDoubleClick || !CanEdit || !IsReadOnly) {
+                return;
+            }
+            if(e.ClickCount == 2) {
+                SetValue(IsReadOnlyProperty, false);
+                BeginEditCommand?.Execute(null);
+            }
         }
         protected override void OnPointerLeave(PointerEventArgs e) {
             base.OnPointerLeave(e);
@@ -284,6 +331,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private void OnIsReadOnlyChanged() {
+            if(!IsReadOnly) {
+                _orgText = Text;
+            }
             Init();
             this.InvalidateAll();
         }

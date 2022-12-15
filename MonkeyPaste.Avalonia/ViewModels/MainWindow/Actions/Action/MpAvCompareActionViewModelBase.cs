@@ -68,7 +68,6 @@ namespace MonkeyPaste.Avalonia {
                 switch (ComparePropertyPathType) {
                     case MpCopyItemPropertyPathType.ItemData:
                     case MpCopyItemPropertyPathType.ItemType:
-                    case MpCopyItemPropertyPathType.ItemDescription:
                     case MpCopyItemPropertyPathType.Title:
                     case MpCopyItemPropertyPathType.CopyDateTime:
                     case MpCopyItemPropertyPathType.CopyCount:

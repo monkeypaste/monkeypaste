@@ -13,58 +13,15 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvAppViewModel : 
         MpViewModelBase<MpAvAppCollectionViewModel>,
         MpISelectableViewModel,
-        MpIHoverableViewModel,
-        MpISourceItemViewModel {
+        MpIHoverableViewModel
+        //MpISourceItemViewModel 
+        {
         #region Properties
 
         #region View Models
         public MpAppClipboardFormatInfoCollectionViewModel ClipboardFormatInfos { get; set; }
 
         public MpPasteShortcutViewModel PasteShortcutViewModel { get; set; }
-        #endregion
-
-        #region MpISourceItemViewModel Implementation
-        public bool IsUser => false;
-        public bool IsDll => false;
-
-        public bool IsExe => false;
-
-        public string SourcePath {
-            get {
-                if (App == null) {
-                    return null;
-                }
-                return App.AppPath;
-            }
-        }
-
-        public string SourceName {
-            get {
-                if (App == null) {
-                    return null;
-                }
-                return App.AppName;
-            }
-        }
-
-        public int RootId {
-            get {
-                if (App == null) {
-                    return 0;
-                }
-                return App.Id;
-            }
-        }
-
-        public bool IsUrl {
-            get {
-                if (App == null) {
-                    return false;
-                }
-                return App.IsUrl;
-            }
-        }
-
         #endregion
 
         #region Appearance

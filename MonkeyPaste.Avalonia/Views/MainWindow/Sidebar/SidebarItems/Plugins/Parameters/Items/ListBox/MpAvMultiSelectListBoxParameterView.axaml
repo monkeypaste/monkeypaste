@@ -12,10 +12,9 @@
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <Border x:Name="ListContainerBorder"
-            BorderThickness="0"
-            CornerRadius="2"
-            BorderBrush="{Binding ParameterBorderBrush, Converter={StaticResource StringHexToBrushConverter}}">
+            Classes="paramBorder">
         <ListBox x:Name="MultiSelectListBox"
+                     Classes="paramValueListBox"
                  Grid.Row="0"
                  Background="Transparent"
                  HorizontalAlignment="Stretch"

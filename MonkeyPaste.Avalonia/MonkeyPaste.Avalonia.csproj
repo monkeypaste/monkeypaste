@@ -137,6 +137,7 @@
     <AvaloniaXaml Remove="Themes\Default\Accents\BaseLight.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Button.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ButtonBase.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\ComboBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ComboBoxItem.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\DefaultControls.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ListBox.axaml" />
@@ -370,6 +371,8 @@
     <Compile Remove="AttachedProperties\MpAvTextSelectionExtension.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
+    <Compile Remove="ViewModels\Reusable\Source\MpAvSourceCollectionViewModel.cs" />
+    <Compile Remove="ViewModels\Reusable\Source\MpAvSourceViewModel.cs" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\CheckBox\MpCheckBoxParameterView.axaml.cs" />
     <Compile Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml.cs" />
     <Compile Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml.cs" />
@@ -928,6 +931,7 @@
     <AvaloniaResource Include="Themes\Default\Accents\Base.axaml">
       
     </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Default\Controls\ComboBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ComboBoxItem.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvSliderParameter.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTooltip.axaml" />

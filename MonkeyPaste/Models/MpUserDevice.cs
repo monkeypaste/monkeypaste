@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SQLite;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using CsvHelper;
 
 namespace MonkeyPaste {
     
@@ -22,8 +23,8 @@ namespace MonkeyPaste {
 
         public string MachineName { get; set; }
 
-        [Column("PlatformTypeId")]
-        public int TypeId { get; set; } = 0;
+        [Column("e_MpUserDeviceType")]
+        public string PlatformTypeName { get; set; } = MpUserDeviceType.None.ToString();
 
 
         #endregion
@@ -45,14 +46,8 @@ namespace MonkeyPaste {
 
         [Ignore]
         public MpUserDeviceType PlatformType {
-            get {
-                return (MpUserDeviceType)TypeId;
-            }
-            set {
-                if (PlatformType != value) {
-                    TypeId = (int)value;
-                }
-            }
+            get => PlatformTypeName.ToEnum<MpUserDeviceType>();
+            set => PlatformTypeName = value.ToString();
         }
 
         [Ignore]
@@ -89,7 +84,7 @@ namespace MonkeyPaste {
                     case "MpUserDeviceGuid":
                         ud.UserDeviceGuid = System.Guid.Parse(li.AffectedColumnValue);
                         break;
-                    case "PlatformTypeId":
+                    case "e_MpUserDeviceType":
                         ud.PlatformType = (MpUserDeviceType)Convert.ToInt32(li.AffectedColumnValue);
                         break;
                     default:
@@ -141,9 +136,9 @@ namespace MonkeyPaste {
                 diffLookup,
                 UserDeviceGuid.ToString());
             diffLookup = CheckValue(PlatformType, other.PlatformType,
-                "PlatformTypeId",
+                "e_MpUserDeviceType",
                 diffLookup,
-                ((int)PlatformType).ToString());
+                PlatformType.ToString());
 
             return diffLookup;
         }

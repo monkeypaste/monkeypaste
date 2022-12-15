@@ -4,32 +4,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using SQLite;
-using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
 
 using System.Diagnostics;
 
 namespace MonkeyPaste {
-    public enum MpCopyItemPropertyPathType {
-        None = 0,
-        ItemData,
-        ItemType,
-        ItemDescription,
-        Title, //seperator
-        AppPath,
-        AppName,
-        UrlPath,
-        UrlTitle,
-        UrlDomainPath, //seperator
-        CopyDateTime,
-        LastPasteDateTime, //seperator
-        CopyCount,
-        PasteCount,
-        SourceDeviceName,
-        SourceDeviceType,
-        LastOutput
-    }
-
     public class MpCopyItem : 
         MpDbModelBase, 
         MpISyncableDbObject, 
@@ -47,7 +27,6 @@ namespace MonkeyPaste {
                     switch (cppt) {
                         case MpCopyItemPropertyPathType.ItemData:
                         case MpCopyItemPropertyPathType.ItemType:
-                        case MpCopyItemPropertyPathType.ItemDescription:
                         case MpCopyItemPropertyPathType.Title:
                         case MpCopyItemPropertyPathType.CopyDateTime:
                         case MpCopyItemPropertyPathType.CopyCount:
@@ -82,7 +61,6 @@ namespace MonkeyPaste {
                     return null;
                 case MpCopyItemPropertyPathType.ItemData:
                 case MpCopyItemPropertyPathType.ItemType:
-                case MpCopyItemPropertyPathType.ItemDescription:
                 case MpCopyItemPropertyPathType.Title:
                 case MpCopyItemPropertyPathType.CopyDateTime:
                 case MpCopyItemPropertyPathType.CopyCount:
@@ -99,31 +77,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public static MpPortableDataFormat GetDefaultFormatForItemType(MpCopyItemType itemType) {
-            if(MpPlatformWrapper.Services.OsInfo.IsAvalonia) {
-                switch (itemType) {
-                    case MpCopyItemType.Text:
-                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvHtml_bytes);
-                    case MpCopyItemType.Image:
-                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvPNG);
-                    case MpCopyItemType.FileList:
-                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvFileNames);
-                }
-
-            } else {
-                // this is bad but its only so wpf still builds...
-                switch (itemType) {
-                    case MpCopyItemType.Text:
-                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.WinRtf);
-                    case MpCopyItemType.Image:
-                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.WinBitmap);
-                    case MpCopyItemType.FileList:
-                        return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.WinFileDrop);
-                }
-
-            }
-            return null;
-        }
+        
              
         #endregion
 
@@ -138,13 +92,13 @@ namespace MonkeyPaste {
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
 
-        [Column("fk_MpSourceId")]
+        //[Column("fk_MpSourceId")]
         public int SourceId { get; set; }
 
         public string Title { get; set; } = string.Empty;
 
-        [Column("fk_MpCopyItemTypeId")]
-        public int TypeId { get; set; } = 0;
+        [Column("e_MpCopyItemType")]
+        public string ItemTypeName { get; set; } = MpCopyItemType.None.ToString();
 
         public DateTime CopyDateTime { get; set; }
 
@@ -157,8 +111,6 @@ namespace MonkeyPaste {
         [Column("fk_MpDataObjectId")]
         public int DataObjectId { get; set; }
 
-        public string ItemDescription { get; set; } = string.Empty;
-
         public int CopyCount { get; set; } = 0;
 
         public int PasteCount { get; set; } = 0;
@@ -166,9 +118,10 @@ namespace MonkeyPaste {
         [Column("HexColor")]
         public string ItemColor { get; set; } = string.Empty;
 
-        public string PrefferedFormatName { get; set; } = string.Empty;
+        [Column("DataFormat")]
+        public string DataFormat { get; set; } = string.Empty;
 
-
+        public string ItemMetaData { get; set; }
         #endregion
 
         #region Fk Models
@@ -213,19 +166,11 @@ namespace MonkeyPaste {
         [Ignore]
         public MpCopyItemType ItemType {
             get {
-                return (MpCopyItemType)TypeId;
+                return ItemTypeName.ToEnum<MpCopyItemType>();
             }
             set {
-                if (ItemType != value) {
-                    TypeId = (int)value;
-                }
+                ItemTypeName = value.ToString();
             }
-        }
-
-        [Ignore]
-        public MpPortableDataFormat PreferredFormat {
-            get => MpPortableDataFormats.GetDataFormat(PrefferedFormatName);
-            set => PrefferedFormatName = value == null ? null : value.Name;
         }
 
         #endregion
@@ -248,20 +193,16 @@ namespace MonkeyPaste {
 
         #region Static Methods
         public static async Task<MpCopyItem> CreateAsync(
-            int sourceId = 0,
+            //int sourceId = 0,
             string data = "", 
-            string preferredFormatName = null,
-            //string copyItemSourceGuid = "",
-            MpCopyItemType itemType = MpCopyItemType.None,
+            string dataFormat = MpPortableDataFormats.Text,
+            MpCopyItemType itemType = MpCopyItemType.Text,
             string title = "",
-            string description = "",
             int dataObjectId = 0,
             bool suppressWrite = false) {
             var dupCheck = await MpDataModelProvider.GetCopyItemByDataAsync(data);
             if (MpPrefViewModel.Instance.IgnoreNewDuplicates && 
                 dupCheck != null && !suppressWrite) {
-                //flipping pk sign notifies AddItemThread item already exists and flips it back
-                //dupCheck.Id *= -1;
                 dupCheck.WasDupOnCreate = true;
                 return dupCheck;
             }
@@ -270,31 +211,15 @@ namespace MonkeyPaste {
                 MpPrefViewModel.Instance.UniqueContentItemIdx = await MpDataModelProvider.GetTotalCopyItemCountAsync();
             }
             
-            if(itemType == MpCopyItemType.None) {
-                //derive content type from data
-                if(data.IsStringBase64()) {
-                    itemType = MpCopyItemType.Image;
-                } else if(data.IsStringWindowsFileOrPathFormat()) {
-                    // TODO this check will not work if data is list of files need to check for EOL char, split and check first item
-                    itemType = MpCopyItemType.FileList;
-                } else {
-                    itemType = MpCopyItemType.Text;
-                }
-            }
-
-            preferredFormatName = string.IsNullOrEmpty(preferredFormatName) ?
-                                    GetDefaultFormatForItemType(itemType).Name :
-                                    preferredFormatName;
 
             var newCopyItem = new MpCopyItem() {
                 CopyItemGuid = System.Guid.NewGuid(),
                 CopyDateTime = DateTime.Now,
-                Title = string.IsNullOrEmpty(title) ? "Untitled" + (++MpPrefViewModel.Instance.UniqueContentItemIdx) : title,
-                ItemDescription = description,
+                Title = title, //string.IsNullOrEmpty(title) ? "Untitled" + (++MpPrefViewModel.Instance.UniqueContentItemIdx) : title,
                 ItemData = data,
                 ItemType = itemType,
-                PrefferedFormatName = preferredFormatName,                                        
-                SourceId = sourceId,
+                DataFormat = dataFormat,                                        
+                //SourceId = sourceId,
                 CopyCount = 1,
                 //CopyItemSourceGuid = copyItemSourceGuid,
                 DataObjectId = dataObjectId
@@ -415,8 +340,7 @@ namespace MonkeyPaste {
                 CopyCount = Convert.ToInt32(objParts[2]),
                 CopyDateTime = DateTime.Parse(objParts[3]),
                 ItemData = objParts[4],
-                ItemDescription = objParts[5],
-                ItemType = (MpCopyItemType)Convert.ToInt32(objParts[6]),
+                ItemType = (MpCopyItemType)Convert.ToInt32(objParts[5]),
                 //SourceId = source == null ? MpPrefViewModel.Instance.ThisAppSourceId : source.Id
             };
             //ci.Source = await MpDb.GetDbObjectByTableGuidAsync("MpSource", objParts[7]) as MpSource;
@@ -429,15 +353,14 @@ namespace MonkeyPaste {
             await Task.Delay(1);
 
             return string.Format(
-                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}",
+                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}",
                 ParseToken,
                 CopyItemGuid.ToString(),
                 Title,
                 CopyCount,
                 CopyDateTime.ToString(),
                 ItemData,
-                ItemDescription,
-                ((int)ItemType).ToString()
+                ItemType.ToString()
                 //MpDataModelProvider.GetItem<MpSource>(SourceId).Guid//Source.SourceGuid.ToString()
                 );
         }
@@ -484,11 +407,6 @@ namespace MonkeyPaste {
                 other.ItemData,
                 "ItemData",
                 diffLookup);
-            diffLookup = CheckValue(
-                ItemDescription,
-                other.ItemDescription,
-                "ItemDescription",
-                diffLookup);
             //diffLookup = CheckValue(
             //    SourceId,
             //    other.SourceId,
@@ -529,9 +447,6 @@ namespace MonkeyPaste {
                         break;
                     case "ItemData":
                         newCopyItem.ItemData = li.AffectedColumnValue;
-                        break;
-                    case "ItemDescription":
-                        newCopyItem.ItemDescription = li.AffectedColumnValue;
                         break;
                     //case "fk_MpSourceId":
                     //    var source = await MpDataModelProvider.GetSourceByGuidAsync(li.AffectedColumnValue);
@@ -591,38 +506,6 @@ namespace MonkeyPaste {
             return newItem;
         }
 
-    }
-
-    public enum MpCopyItemDetailType {
-        None = 0,
-        DateTimeCreated,
-        DataSize,
-        UsageStats,
-        UrlInfo,
-        AppInfo
-    }
-
-    public enum MpContentTableContextActionType {
-        None = 0,
-        InsertColumnRight,
-        InsertColumnLeft,
-        InsertRowUp,
-        InsertRowDown,
-        MergeSelectedCells,
-        UnmergeCells,
-        //separator
-        DeleteSelectedColumns,
-        DeleteSelectedRows,
-        DeleteTable,
-        //separator
-        //ChangeSelectedBackgroundColor
-    }
-
-    public enum MpCopyItemType {
-        None = 0,
-        Text,
-        Image,
-        FileList
     }
 
 }

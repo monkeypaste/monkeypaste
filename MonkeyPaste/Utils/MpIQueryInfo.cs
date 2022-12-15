@@ -31,7 +31,9 @@ namespace MonkeyPaste {
         Content = 2048,
         UrlTitle = 4096,
         Time = 8192,
-        WholeWord = 16384
+        WholeWord = 16384,
+        DeviceType = 32768,
+        DeviceName = 65536
     }
 
     // Criteria Item Flags

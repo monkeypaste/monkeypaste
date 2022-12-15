@@ -11,21 +11,20 @@
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
-    <Border BorderThickness="0"
-            CornerRadius="2"
-            BorderBrush="{Binding ParameterBorderBrush, Converter={StaticResource StringHexToBrushConverter}}">
+    <Border Classes="paramBorder">
         <ToolTip.Tip>
             <local:MpAvToolTipView ToolTipText="{Binding ParameterTooltipText}" />
         </ToolTip.Tip>
         <ComboBox Items="{Binding Items}"
                   SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                   IsDropDownOpen="{Binding IsParameterDropDownOpen}"
-                  HorizontalAlignment="Center"
+                  HorizontalAlignment="Stretch"
                   Margin="3"
                   MinWidth="80">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Label}" />
+                    <TextBlock DataContext="{Binding}" 
+                               Text="{Binding Label}" />
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>

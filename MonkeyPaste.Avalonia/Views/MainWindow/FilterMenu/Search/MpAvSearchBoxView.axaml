@@ -108,7 +108,7 @@
                         <PathIcon Foreground="DimGray"
                                   Width="8"
                                   Height="8"
-                                  Margin="3,18,0,0"
+                                  Margin="3,22,0,0"
                                   HorizontalAlignment="Left"
                                   VerticalAlignment="Bottom"
                                   IsVisible="{Binding IsPointerOver, ElementName=SearchDropDownButton}"
@@ -201,6 +201,7 @@
                         Classes="TextBoxButton"
                         Grid.Column="4"
                         Margin="0,5"
+                        
                         Width="{Binding $self.Bounds.Height}"
                         VerticalAlignment="Stretch"
                         IsVisible="{Binding IsMultipleMatches}"

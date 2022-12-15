@@ -124,24 +124,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        //#region IsOpen AvaloniaProperty
-        //public static bool GetIsOpen(AvaloniaObject obj) {
-        //    return obj.GetValue(IsOpenProperty);
-        //}
-
-        //public static void SetIsOpen(AvaloniaObject obj, bool value) {
-        //    obj.SetValue(IsOpenProperty, value);
-        //}
-
-        //public static readonly AttachedProperty<bool> IsOpenProperty =
-        //    AvaloniaProperty.RegisterAttached<object, Control, bool>(
-        //        "IsOpen",
-        //        false,
-        //        false,
-        //        BindingMode.TwoWay);
-
-        //#endregion
-
         #region CanShowMenu AvaloniaProperty
         public static bool GetCanShowMenu(AvaloniaObject obj) {
             return obj.GetValue(CanShowMenuProperty);

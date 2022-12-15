@@ -25,7 +25,8 @@
         <local:MpAvClipBorder CornerRadius="10"
                               BorderThickness="1"
                               BorderBrush="Black"
-                              Margin="2">
+                              Margin="2,5">
+          
             <ComboBox FontSize="16"
                       BorderThickness="0"
                       Background="White"

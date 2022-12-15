@@ -387,21 +387,33 @@ namespace MonkeyPaste {
             }
 
             //var sources = await MpDataModelProvider.GetItemsAsync<MpSource>();
-            //var apps = await MpDataModelProvider.GetItemsAsync<MpApp>();
-            //var urls = await MpDataModelProvider.GetItemsAsync<MpUrl>();
             //var cisl = await MpDataModelProvider.GetItemsAsync<MpCopyItemSource>();
             //var cil = await MpDataModelProvider.GetItemsAsync<MpCopyItem>();
 
             //var ci_without_cisl = cil.Where(x => cisl.All(y => y.CopyItemId != x.Id));
-            //foreach(var ci_without_cis in ci_without_cisl) {
+            //foreach (var ci_without_cis in ci_without_cisl) {
             //    var ci_source = sources.FirstOrDefault(x => x.Id == ci_without_cis.SourceId);
-            //    if(ci_source == null) {
+            //    if (ci_source == null) {
             //        await MpCopyItemSource.CreateAsync(
             //            copyItemId: ci_without_cis.Id,
-            //            sourceObjId: MpDefaultDataModelTools.ThisAppId);
+            //            sourceObjId: MpDefaultDataModelTools.ThisAppId,
+            //            sourceType: MpCopyItemSourceType.App);
+            //    } else {
+            //        if(ci_source.UrlId > 0) {
+            //            await MpCopyItemSource.CreateAsync(
+            //                copyItemId: ci_without_cis.Id,
+            //                sourceObjId: ci_source.UrlId,
+            //                sourceType: MpCopyItemSourceType.Url);
+            //        }
+            //        if (ci_source.AppId > 0) {
+            //            await MpCopyItemSource.CreateAsync(
+            //                copyItemId: ci_without_cis.Id,
+            //                sourceObjId: ci_source.AppId,
+            //                sourceType: MpCopyItemSourceType.App);
+            //        }
             //    }
             //}
-            
+
 
             MpConsole.WriteLine(@"Db file located: " + MpPlatformWrapper.Services.DbInfo.DbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPrefViewModel.Instance.ThisDeviceGuid);
@@ -490,41 +502,72 @@ namespace MonkeyPaste {
         }
 
         private static async Task CreateViewsAsync() {
-            await _connectionAsync.ExecuteAsync(@"CREATE VIEW MpSortableCopyItem_View as
-                                                    SELECT 
-	                                                    pk_MpCopyItemId as RootId,
-	                                                    fk_MpCopyItemTypeId,
-	                                                    Title,
-	                                                    MpDataObjectItem.ItemData as ItemData,
-	                                                    ItemDescription,
-	                                                    CopyDateTime,
-	                                                    (select PasteDateTime from MpPasteHistory where fk_MpCopyItemId=pk_MpCopyItemId order by PasteDateTime desc limit 1) AS LastPasteDateTime,
-	                                                    CopyCount,
-	                                                    PasteCount,
-	                                                    CopyCount + PasteCount as UsageScore,
-	                                                    MpSource.pk_MpSourceId AS SourceId,
-	                                                    case MpSource.fk_MpUrlId
-		                                                    when 0
-			                                                    then MpApp.SourcePath
-		                                                    ELSE
-			                                                    MpUrl.UrlPath
-	                                                    end as SourcePath,
-	                                                    MpApp.AppName,
-	                                                    MpApp.SourcePath as AppPath,
-	                                                    MpApp.pk_MpAppId AS AppId,
-	                                                    MpUrl.pk_MpUrlId AS UrlId,
-	                                                    MpUrl.UrlPath,
-	                                                    MpUrl.UrlDomainPath,
-	                                                    MpUrl.UrlTitle,
-	                                                    MpUserDevice.MachineName AS SourceDeviceName,
-	                                                    MpUserDevice.PlatformTypeId AS SourceDeviceType
-                                                    FROM
-	                                                    MpCopyItem
-													INNER JOIN MpDataObjectItem ON MpDataObjectItem.fk_MpDataObjectId = MpCopyItem.fk_MpDataObjectId AND MpDataObjectItem.ItemFormat == 'Text'
-                                                    INNER JOIN MpUserDevice ON MpUserDevice.pk_MpUserDeviceId = MpApp.fk_MpUserDeviceId
-                                                    INNER JOIN MpSource ON MpSource.pk_MpSourceId = MpCopyItem.fk_MpSourceId
-                                                    INNER JOIN MpApp ON MpApp.pk_MpAppId = MpSource.fk_MpAppId
-                                                    LEFT JOIN MpUrl ON MpUrl.pk_MpUrlId = MpSource.fk_MpUrlId");
+            await _connectionAsync.ExecuteAsync(@"
+CREATE VIEW MpSortableCopyItem_View as
+SELECT 
+	pk_MpCopyItemId as RootId,
+	MpCopyItemSource.fk_SourceObjId as SourceObjId,
+	MpCopyItemSource.e_MpCopyItemSourceType as SourceType,	
+	case 
+		when MpCopyItemSource.e_MpCopyItemSourceType == 'App' 
+			then 
+				(select AppPath from MpApp where pk_MpAppId == MpCopyItemSource.fk_SourceObjId limit 1)
+		when MpCopyItemSource.e_MpCopyItemSourceType == 'Url' 
+			then 
+				(select UrlPath from MpUrl where pk_MpUrlId == MpCopyItemSource.fk_SourceObjId limit 1)
+		when MpCopyItemSource.e_MpCopyItemSourceType == 'CopyItem' 
+			then 
+				'https://localhost?type=copyItem&id=' || MpCopyItemSource.fk_SourceObjId
+	end as SourcePath,
+	case 
+		when MpCopyItemSource.e_MpCopyItemSourceType == 'App' 
+			then 
+				(select AppPath from MpApp where pk_MpAppId == MpCopyItemSource.fk_SourceObjId limit 1)
+		when MpCopyItemSource.e_MpCopyItemSourceType == 'Url' 
+			then 
+				(select UrlTitle from MpUrl where pk_MpUrlId == MpCopyItemSource.fk_SourceObjId limit 1)
+		when MpCopyItemSource.e_MpCopyItemSourceType == 'CopyItem' 
+			then 
+				(select Title from MpCopyItem where pk_MpCopyItemId == MpCopyItemSource.fk_SourceObjId limit 1)
+	end as AppPath,
+	case
+		when MpCopyItemSource.e_MpCopyItemSourceType == 'App' 
+				then 
+					(select AppName from MpApp where pk_MpAppId == MpCopyItemSource.fk_SourceObjId limit 1)
+	end as AppName,
+	case
+		when MpCopyItemSource.e_MpCopyItemSourceType == 'Url' 
+				then 
+					(select UrlPath from MpUrl where pk_MpUrlId == MpCopyItemSource.fk_SourceObjId limit 1)
+	end as UrlPath,
+	case
+		when MpCopyItemSource.e_MpCopyItemSourceType == 'Url' 
+				then 
+					(select UrlTitle from MpUrl where pk_MpUrlId == MpCopyItemSource.fk_SourceObjId limit 1)
+	end as UrlTitle,
+	case 
+		when MpCopyItemSource.e_MpCopyItemSourceType == 'App' 
+			then 
+				(select MachineName from MpUserDevice where pk_MpUserDeviceId in (select fk_MpUserDeviceId from MpApp where pk_MpAppId == MpCopyItemSource.fk_SourceObjId limit 1))
+	end as DeviceName,
+	case 
+		when MpCopyItemSource.e_MpCopyItemSourceType == 'App' 
+			then 
+				(select e_MpUserDeviceType from MpUserDevice where pk_MpUserDeviceId in (select fk_MpUserDeviceId from MpApp where pk_MpAppId == MpCopyItemSource.fk_SourceObjId limit 1))
+	end as DeviceType,
+	e_MpCopyItemType,
+	ItemMetaData,
+	Title,
+	MpDataObjectItem.ItemData as ItemData,
+	CopyDateTime,
+	(select PasteDateTime from MpPasteHistory where fk_MpCopyItemId=pk_MpCopyItemId order by PasteDateTime desc limit 1) AS LastPasteDateTime,
+	CopyCount,
+	PasteCount,
+	CopyCount + PasteCount as UsageScore
+FROM
+	MpCopyItem
+INNER JOIN MpDataObjectItem ON MpDataObjectItem.fk_MpDataObjectId = MpCopyItem.fk_MpDataObjectId AND MpDataObjectItem.ItemFormat == 'Text'
+INNER JOIN MpCopyItemSource ON MpCopyItemSource.fk_MpCopyItemId = MpCopyItem.pk_MpCopyItemId");
 
         }
 

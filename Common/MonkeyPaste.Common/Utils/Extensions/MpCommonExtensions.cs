@@ -17,6 +17,10 @@ namespace MonkeyPaste.Common {
 
         #region Collections
 
+        public static IEnumerable<T> ToIEnumerable<T>(this T obj) {
+            return new List<T>() { obj };
+        }
+
         public static IEnumerable<T> Difference<T>(this IEnumerable<T> enumerable, IEnumerable<T> other) {
             return enumerable.Union(other).Except(enumerable.Intersect(other)); ;
         }

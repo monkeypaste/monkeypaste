@@ -12,12 +12,11 @@
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <Border x:Name="ListContainerBorder"
-            BorderThickness="0"
-            CornerRadius="2"
-            BorderBrush="{Binding ParameterBorderBrush, Converter={StaticResource StringHexToBrushConverter}}">
+            Classes="paramBorder">
         <Grid RowDefinitions="*,0.2*">
             <ListBox x:Name="SingleSelectComboBox"
                      Grid.Row="0"
+                     Classes="paramValueListBox"
                      Background="Transparent"
                      HorizontalAlignment="Stretch"
                      Items="{Binding Items}"

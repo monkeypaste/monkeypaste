@@ -125,7 +125,7 @@ namespace MonkeyPaste.Avalonia {
                             itemType: MpCopyItemType.FileList,
                             data: e.FullPath,
                             suppressWrite: true);
-                        if(!ci.WasDupOnCreate) {
+                        if (!ci.WasDupOnCreate) {
                             // new item, create source ref
                             await MpCopyItemSource.CreateAsync(
                                 copyItemId: ci.Id,

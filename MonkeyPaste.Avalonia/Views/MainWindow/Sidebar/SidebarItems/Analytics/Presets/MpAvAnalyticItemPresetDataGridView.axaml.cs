@@ -7,6 +7,7 @@ using MonkeyPaste.Common.Avalonia;
 using System.Linq;
 using System;
 using Avalonia.Input;
+using Avalonia.Media;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvAnalyticItemPresetDataGridView : MpAvUserControl<MpAvAnalyticItemViewModel> {
@@ -24,10 +25,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-
+            // BUG can't get dataGrid to resize w/ row changes so hardsetting height (RowHeight=40)
             var pdg = this.FindControl<DataGrid>("PresetDataGrid");
-            //pdg.InvalidateAll();
-
+            if(pdg == null) {
+                return;
+            }
+            pdg.Height = BindingContext.Items.Count * pdg.RowHeight;
+            pdg.InvalidateMeasure();
         }
 
      

@@ -3,14 +3,14 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
 
-    <Style Selector="local|MpAvSliderParameterView Border#SliderBorder">
+    <!--<Style Selector="local|MpAvSliderParameterView Border#SliderBorder">
         <Setter Property="BorderBrush"
                 Value="Black" />
     </Style>
     <Style Selector="local|MpAvSliderParameterView Border#SliderBorder:pointerover">
         <Setter Property="BorderBrush"
                 Value="Yellow" />
-    </Style>
+    </Style>-->
     <Style Selector="local|MpAvSliderParameterView TextBox">
         <Setter Property="Background"
                 Value="Transparent" />

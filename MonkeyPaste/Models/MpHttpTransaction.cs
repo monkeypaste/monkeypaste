@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
-    public class MpHttpTransaction : MpDbModelBase, MpISourceTransaction {
+    public class MpHttpTransaction : MpDbModelBase, MpITransactionError {
         #region Protected variables 
 
         protected int iconId { get; set; } = 0;

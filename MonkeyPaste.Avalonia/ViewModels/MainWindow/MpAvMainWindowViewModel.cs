@@ -676,7 +676,7 @@ namespace MonkeyPaste.Avalonia {
             MpMessenger.SendGlobal(MpMessageType.MainWindowHid);
 
             if(active_pinfo != null) {
-                MpPlatformWrapper.Services.ProcessWatcher.SetActiveProcess(active_pinfo.Handle);
+                //MpPlatformWrapper.Services.ProcessWatcher.SetActiveProcess(active_pinfo.Handle);
             }
             
             MpConsole.WriteLine("CLOSE WINDOW DONE");

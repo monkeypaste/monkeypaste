@@ -48,7 +48,7 @@ namespace MonkeyPaste {
                 return false;
             }
             await MpDb.CreateTableAsync<MpUserDevice>();
-            MpUserDevice this_device = await MpDataModelProvider.GetUserDeviceByMachineNameAndDeviceTypeAsync(osInfo.OsMachineName, osInfo.OsType);
+            MpUserDevice this_device = await MpDataModelProvider.GetUserDeviceByMembersAsync(osInfo.OsMachineName, osInfo.OsType);
             if (this_device == null) {
                 // reset error
                 Debugger.Break();

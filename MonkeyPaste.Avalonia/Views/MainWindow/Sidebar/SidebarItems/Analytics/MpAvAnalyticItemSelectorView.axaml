@@ -16,6 +16,36 @@
             VerticalAlignment="Stretch"
             Padding="10"
             Background="{DynamicResource AnalyzerSidebarBgBrush}">
+        <Border.Resources>
+            <LinearGradientBrush x:Key="UnderlineFadeOutBrush"
+                                 StartPoint="0%,0%"
+                                 EndPoint="100%,0%">
+                <GradientStop Offset="0"
+                              Color="White" />
+                <GradientStop Offset="0.75"
+                              Color="Transparent" />
+            </LinearGradientBrush>
+        </Border.Resources>
+        <Border.Styles>
+            <Style Selector="Label">
+                <Setter Property="Foreground"
+                        Value="White" />
+                <Setter Property="FontFamily"
+                        Value="Segue UI" />
+            </Style>
+            <Style Selector="Border.labelUnderline">
+                <Setter Property="Background"
+                        Value="{StaticResource UnderlineFadeOutBrush}" />
+                <Setter Property="HorizontalAlignment"
+                        Value="Stretch" />
+                <Setter Property="Height"
+                        Value="3" />
+                <Setter Property="CornerRadius"
+                        Value="3" />
+                <Setter Property="Margin"
+                        Value="0,0,20,10" />
+            </Style>
+        </Border.Styles>
         <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Auto">
             <WrapPanel Orientation="Horizontal"
@@ -26,15 +56,21 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top">
                     <StackPanel Orientation="Vertical">
+                        <Label Classes="h1"
+                               Content="Analyzer" />
+                        <Border Classes="labelUnderline" />
                         <local:MpAvPluginSelectorView x:Name="AnalyzerPluginSelectorView"
                                                       Height="50"
-                                                      Margin="20"
+                                                      Margin="20,0"
                                                       HorizontalContentAlignment="Stretch"
                                                       HorizontalAlignment="Stretch"
                                                       VerticalAlignment="Stretch"
                                                       VerticalContentAlignment="Stretch"
                                                       DataContext="{Binding}" />
-                        <Border Margin="0,10,0,0"
+                        <Label Classes="h1"
+                               Content="Presets" />
+                        <Border Classes="labelUnderline" />
+                        <Border Margin="0,0,0,0"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
                                 DataContext="{Binding SelectedItem}">
@@ -48,12 +84,17 @@
                 <Border x:Name="AnalyzerPluginParameterListBoxContainerBorder"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        Margin="0,10,0,0"
                         Width="350"
                         DataContext="{Binding SelectedPresetViewModel}">
-                    <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
-                                                          VerticalAlignment="Stretch"
-                                                          DataContext="{Binding}" />
+                    <StackPanel Orientation="Vertical">
+                        <Label Classes="h1"
+                               Content="Settings" />
+                        <Border Classes="labelUnderline" />
+                        <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
+                                                              VerticalAlignment="Stretch"
+                                                              DataContext="{Binding}" />
+                    </StackPanel>
+
                 </Border>
             </WrapPanel>
         </ScrollViewer>

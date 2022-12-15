@@ -451,24 +451,6 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     ttvm.TagTraySortIdx = -1;
                 }
-                //if(wasPinned) {
-                //    var ttvm_toRemove = PinnedItems.FirstOrDefault(x => x.TagId == ttvm.TagId);
-                //    PinnedItems.Remove(ttvm_toRemove);
-                //    var tree_ttvm = Items.FirstOrDefault(x => x.TagId == ttvm.TagId);
-                //    if(tree_ttvm == null) {
-                //        Debugger.Break();
-                //    }
-                //    tree_ttvm.IsModelPinned = false;
-                //} else {
-                //    var pttvm = new MpAvTagTileViewModel(this);
-                //    await pttvm.InitializeAsync(ttvm.Tag, false);
-                //    pttvm.ParentTreeItem = ttvm.ParentTreeItem;
-                //    pttvm.TagClipCount = ttvm.TagClipCount;
-                //    pttvm.CopyItemIdsNeedingView = ttvm.CopyItemIdsNeedingView;
-                //    PinnedItems.Add(pttvm);
-                //    pttvm.IsModelPinned = true;
-                //}
-
                 OnPropertyChanged(nameof(PinnedItems));
                 OnPropertyChanged(nameof(IsNavButtonsVisible));
                 OnPropertyChanged(nameof(TagTrayScreenWidth));

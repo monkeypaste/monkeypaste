@@ -72,6 +72,14 @@
     },
     "parameters": [
       {
+        "label": "Prompt",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "description": "Prefixed to your request to openai.",
+        "paramId": 11,
+        "isRequired": false
+      },
+      {
         "label": "Engine",
         "description": "The intelligence type used for analysis",
         "controlType": "ComboBox",
@@ -237,14 +245,6 @@
             "value": "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"
           }
         ]
-      },
-      {
-        "label": "Prompt",
-        "controlType": "TextBox",
-        "unitType": "PlainText",
-        "description": "Prefixed to your request to openai.",
-        "paramId": 11,
-        "isRequired": false
       }
     ]
   }

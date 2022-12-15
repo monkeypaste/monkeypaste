@@ -10,8 +10,9 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvUrlViewModel : 
         MpViewModelBase<MpAvUrlCollectionViewModel>,
         MpIHoverableViewModel,
-        MpISelectableViewModel,
-        MpISourceItemViewModel {
+        MpISelectableViewModel
+        //MpISourceItemViewModel
+        {
         #region Properties
 
         #region View Models
@@ -27,52 +28,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Model
-
-
-        #region MpISourceItemViewModel Implementation
-
-        public bool IsUser => false;
-        public bool IsDll => false;
-
-        public bool IsExe => false;
-
-        public string SourcePath {
-            get {
-                if (Url == null) {
-                    return null;
-                }
-                return Url.UrlPath;
-            }
-        }
-
-        public string SourceName {
-            get {
-                if (Url == null) {
-                    return null;
-                }
-                return Url.UrlPath;
-            }
-        }
-
-        public int RootId {
-            get {
-                if (Url == null) {
-                    return 0;
-                }
-                return Url.Id;
-            }
-        }
-
-        public bool IsUrl {
-            get {
-                if (Url == null) {
-                    return false;
-                }
-                return Url.IsUrl;
-            }
-        }
-
-
         public int IconId {
             get {
                 if (Url == null) {
@@ -81,9 +36,6 @@ namespace MonkeyPaste.Avalonia {
                 return Url.IconId;
             }
         }
-
-        #endregion
-
         public int UrlId {
             get {
                 if(Url == null) {
@@ -125,10 +77,10 @@ namespace MonkeyPaste.Avalonia {
                 if (Url == null) {
                     return false;
                 }
-                return Url.IsRejected;
+                return Url.IsDomainRejected;
             }
             set {
-                if(Url != null && Url.IsRejected != value) {
+                if(Url != null && Url.IsDomainRejected != value) {
                     Url.IsDomainRejected = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(IsRejected));
@@ -237,13 +189,13 @@ namespace MonkeyPaste.Avalonia {
                 if (url.Id == UrlId) {
                     Url = url;
                 } else if(url.UrlDomainPath.ToLower() == UrlDomainPath.ToLower()) {
-                    if(url.IsRejected && !IsRejected) {
+                    if(url.IsDomainRejected && !IsRejected) {
                         //when this url's domain is rejected this url needs to know without notifying user
                         SupressPropertyChangedNotification = true;
                         IsRejected = true;
                         SupressPropertyChangedNotification = false;
                         HasModelChanged = true;
-                    } else if(!url.IsRejected && IsRejected) {
+                    } else if(!url.IsDomainRejected && IsRejected) {
                         IsRejected = false;
                     }
                     

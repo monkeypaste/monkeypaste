@@ -42,34 +42,35 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
 
+            var dobj = await MpDataObject.CreateAsync(pdo: mpdo);
+
+            //MpSource original_source = null;
+            //if (refs != null && refs.Count() > 0) {
+            //    // create 'originial' source ref (used to keep full data search working/fast and avoid many-to-many CopyItemSource table)
+            //    var primary_app_ref = refs.FirstOrDefault(x => x.SourceType == MpCopyItemSourceType.App);
+            //    var primary_url_ref = refs.FirstOrDefault(x => x.SourceType == MpCopyItemSourceType.Url);
+            //    var primary_ci_ref = refs.FirstOrDefault(x => x.SourceType == MpCopyItemSourceType.CopyItem);
+
+            //    if (primary_app_ref != null ||
+            //        primary_url_ref != null ||
+            //        primary_ci_ref != null) {
+
+            //        original_source = await MpSource.CreateAsync(
+            //            appId: primary_app_ref == null ? 0 : primary_app_ref.SourceObjId,
+            //            urlId: primary_url_ref == null ? 0 : primary_url_ref.SourceObjId,
+            //            copyItemId: primary_ci_ref == null ? 0 : primary_ci_ref.SourceObjId);
+            //    }
+            //}
+
             MpCopyItemType itemType = data_tuple.Item1;
             string itemData = data_tuple.Item2;
-            var dobj = await MpDataObject.CreateAsync(
-                pdo: mpdo);
-
-            MpSource original_source = null;
-            if (refs != null && refs.Count() > 0) {
-                // create 'originial' source ref (used to keep full data search working/fast and avoid many-to-many CopyItemSource table)
-                var primary_app_ref = refs.FirstOrDefault(x => x.SourceType == MpCopyItemSourceType.App);
-                var primary_url_ref = refs.FirstOrDefault(x => x.SourceType == MpCopyItemSourceType.Url);
-                var primary_ci_ref = refs.FirstOrDefault(x => x.SourceType == MpCopyItemSourceType.CopyItem);
-
-                if (primary_app_ref != null ||
-                    primary_url_ref != null ||
-                    primary_ci_ref != null) {
-
-                    original_source = await MpSource.CreateAsync(
-                        appId: primary_app_ref == null ? 0 : primary_app_ref.SourceObjId,
-                        urlId: primary_url_ref == null ? 0 : primary_url_ref.SourceObjId,
-                        copyItemId: primary_ci_ref == null ? 0 : primary_ci_ref.SourceObjId);
-                }
-            }
-
+            string default_title = GetDefaultItemTitle(itemType, mpdo);
+            string data_format = GetPreferredContentType(itemType);
             var ci = await MpCopyItem.CreateAsync(
-                sourceId: original_source == null ? MpDefaultDataModelTools.ThisSourceId : original_source.Id,
+                //sourceId: original_source == null ? MpDefaultDataModelTools.ThisSourceId : original_source.Id,
                 dataObjectId: dobj.Id,
-                title: mpdo.GetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_TITLE_FORMAT) as string,
-                //preferredFormatName: htmlClipboardData == null ? null : MpPortableDataFormats.AvHtml_bytes,
+                title: default_title,
+                dataFormat: data_format,
                 data: itemData,
                 itemType: itemType,
                 suppressWrite: suppressWrite);
@@ -183,11 +184,11 @@ namespace MonkeyPaste.Avalonia {
         private bool IsAnySourceRejected(IEnumerable<MpISourceRef> refs) {
             foreach (var source_ref in refs) {
                 if (source_ref is MpUrl url &&
-                    (url.IsRejected || url.IsDomainRejected)) {
+                    (url.IsDomainRejected || url.IsDomainRejected)) {
                     MpConsole.WriteLine($"Rejected url detected. Url: '{url}'");
                     return true;
                 } else if (source_ref is MpApp app &&
-                    app.IsRejected) {
+                    app.IsAppRejected) {
                     MpConsole.WriteLine($"Rejected app detected. App: '{app}'");
                     return true;
                 }
@@ -320,6 +321,25 @@ namespace MonkeyPaste.Avalonia {
             return new Tuple<MpCopyItemType, string>(itemType, itemData);
         }
 
+        private string GetPreferredContentType(MpCopyItemType itemType) {
+            switch (itemType) {
+                case MpCopyItemType.Text:
+                    return MpPortableDataFormats.AvHtml_bytes;
+                case MpCopyItemType.Image:
+                    return MpPortableDataFormats.AvPNG;
+                case MpCopyItemType.FileList:
+                    return MpPortableDataFormats.AvFileNames;
+            }
+            return MpPortableDataFormats.Text.ToString();
+        }
+
+        private string GetDefaultItemTitle(MpCopyItemType itemType, MpPortableDataObject mpdo) {
+            string default_title = mpdo.GetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_TITLE_FORMAT) as string;
+            if(string.IsNullOrEmpty(default_title)) {
+                default_title = $"{itemType} {(++MpPrefViewModel.Instance.UniqueContentItemIdx)}";
+            }
+            return default_title;
+        }
         #endregion
 
         #region Platform Handling

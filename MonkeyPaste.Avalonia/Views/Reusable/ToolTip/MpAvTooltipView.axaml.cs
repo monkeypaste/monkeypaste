@@ -98,13 +98,11 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             if (_lastMousePos == null) {
-                _lastMousePos = e.GetClientMousePoint(hc);
+                _lastMousePos = e.GetScreenMousePoint(hc);
             }
-            var mp = e.GetClientMousePoint(hc);
-            var diff = mp - _lastMousePos;
+            var mp = e.GetScreenMousePoint(hc);
 
-            var offset = GetToolTipOffset(hc);
-            SetToolTipOffset(hc, offset + diff);
+            SetToolTipOffset(hc, mp);
             _lastMousePos = mp;
         }
 
@@ -150,10 +148,33 @@ namespace MonkeyPaste.Avalonia {
             };
         }
 
-        private void SetToolTipOffset(Control hc, MpPoint newOffset) {
+        private void SetToolTipOffset(Control hc, MpPoint mp) {
             if(hc == null) {
                 return;
             }
+
+            var diff = mp - _lastMousePos;
+            var w = hc.GetVisualAncestor<Window>();
+            if(w == null) {
+                // huh?
+                Debugger.Break();
+                return;
+            }
+
+            double pd = 1;// w.PlatformImpl.DesktopScaling;
+            MpRect mw_screen_rect = w.Screens.ScreenFromBounds(w.Bounds.ToPortableRect().ToAvPixelRect(pd)).Bounds.ToPortableRect(pd);
+
+            var screen_centroid = mw_screen_rect.Centroid();
+            var hc_centroid = hc.PointToScreen(hc.Bounds.ToPortableRect().Centroid().ToAvPoint()).ToPortablePoint(pd);
+
+            var hc_vector = hc_centroid - screen_centroid;
+            double hc_dist = hc_vector.Length;
+
+            double scale = 10;// (this.Bounds.Width + this.Bounds.Height) / 2.0d;
+            double tt_dist = hc_dist - scale;
+
+            var new_vector = (hc_vector.Normalized * tt_dist) + diff;
+            var newOffset = new_vector - hc_vector;
             ToolTip.SetHorizontalOffset(hc, newOffset.X);
             ToolTip.SetVerticalOffset(hc, newOffset.Y);
         }

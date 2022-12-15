@@ -11,17 +11,16 @@
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
-    <Border MaxWidth="150"
-            MinWidth="100"
-            HorizontalAlignment="Center"
-            Padding="10,3">
+    <Border Classes="paramBorder">
         <ToolTip.Tip>
             <local:MpAvToolTipView ToolTipText="{Binding CurrentValue}" />
         </ToolTip.Tip>
-        <Button Command="{Binding SelectFileSystemPathCommand}"
+        <Button MaxWidth="150"
+                MinWidth="100"
+                HorizontalAlignment="Center"
+                Padding="10,3"
+                Command="{Binding SelectFileSystemPathCommand}"
                 Background="Transparent"
-                HorizontalAlignment="Stretch"
-                HorizontalContentAlignment="Stretch"
                 BorderThickness="0">
             <StackPanel>
                 <TextBlock Text="Select.."

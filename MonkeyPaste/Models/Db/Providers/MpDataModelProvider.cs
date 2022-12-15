@@ -124,9 +124,9 @@ namespace MonkeyPaste {
             return result[0];
         }
 
-        public static async Task<MpUserDevice> GetUserDeviceByMachineNameAndDeviceTypeAsync(string machineName, MpUserDeviceType deviceType) {
+        public static async Task<MpUserDevice> GetUserDeviceByMembersAsync(string machineName, MpUserDeviceType deviceType) {
             string query = $"select * from MpUserDevice where MachineName=? and PlatformTypeId=?";
-            var result = await MpDb.QueryAsync<MpUserDevice>(query, machineName,(int)deviceType);
+            var result = await MpDb.QueryAsync<MpUserDevice>(query, machineName, deviceType.ToString());
             if (result == null || result.Count == 0) {
                 return null;
             }
@@ -205,10 +205,10 @@ namespace MonkeyPaste {
         public static async Task<MpApp> GetAppByPathAsync(string path, string args, int deviceId) {
             List<MpApp> result;
             if(args == null) {
-                string query = $"select * from MpApp where LOWER(SourcePath)=? and Arguments is NULL and fk_MpUserDeviceId=?";
+                string query = $"select * from MpApp where LOWER(AppPath)=? and Arguments is NULL and fk_MpUserDeviceId=?";
                 result = await MpDb.QueryAsync<MpApp>(query, path.ToLower(), deviceId);
             } else {
-                string query = $"select * from MpApp where LOWER(SourcePath)=? and Arguments=? and fk_MpUserDeviceId=?";
+                string query = $"select * from MpApp where LOWER(AppPath)=? and Arguments=? and fk_MpUserDeviceId=?";
                 result = await MpDb.QueryAsync<MpApp>(query, path.ToLower(), args, deviceId);
             }
             
@@ -219,7 +219,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<bool> IsAppRejectedAsync(string path, int deviceId) {
-            string query = $"select count(*) from MpApp where LOWER(SourcePath)=? and IsAppRejected=1 and fk_MpUserDeviceId=?";
+            string query = $"select count(*) from MpApp where LOWER(AppPath)=? and IsAppRejected=1 and fk_MpUserDeviceId=?";
             var result = await MpDb.QueryScalarAsync<int>(query, path.ToLower(), deviceId);
             return result > 0;
         }

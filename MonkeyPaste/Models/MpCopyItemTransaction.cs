@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using MonkeyPaste.Common;
+using SQLite;
 
 
 using System;
@@ -26,14 +27,15 @@ namespace MonkeyPaste {
         [Column("MpCopyItemTransactionGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        [Column("fk_CopyItemTransactionObjectId")]
-        public int CopyItemTransactionObjId { get; set; }
-
         [Column("fk_MpCopyItemId")]
         public int CopyItemId { get; set; }
 
-        [Column("e_MpCopyItemTransactionTypeId")]
-        public int CopyItemTransactionTypeId { get; set; } = 0;
+        [Column("fk_CopyItemTransactionObjectId")]
+        public int CopyItemTransactionObjId { get; set; }
+
+
+        [Column("e_MpCopyItemTransactionType")]
+        public string CopyItemTransactionTypeName { get; set; } = MpCopyItemTransactionType.None.ToString();
 
         public string ResponseJson { get; set; }
 
@@ -56,21 +58,10 @@ namespace MonkeyPaste {
 
         [Ignore]
         public MpCopyItemTransactionType CopyItemTransactionType {
-            get => (MpCopyItemTransactionType)CopyItemTransactionTypeId;
-            set => CopyItemTransactionTypeId = (int)value;
+            get => CopyItemTransactionTypeName.ToEnum<MpCopyItemTransactionType>();
+            set => CopyItemTransactionTypeName = value.ToString();
         }
 
-        //[Ignore]
-        //public MpHttpTransaction HttpTransaction { get; set; }
-
-        //[Ignore]
-        //public MpCliTransaction CliTransaction { get; set; }
-
-        //[Ignore]
-        //public MpDllTransaction DllTransaction { get; set; }
-
-        //[Ignore]
-        //public MpUserTransaction UserTransaction { get; set; }
         #endregion
 
 

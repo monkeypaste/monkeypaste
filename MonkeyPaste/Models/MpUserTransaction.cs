@@ -12,7 +12,7 @@ namespace MonkeyPaste {
         Paste,
         Drop
     }
-    public class MpUserTransaction : MpDbModelBase, MpISourceTransaction {
+    public class MpUserTransaction : MpDbModelBase, MpITransactionError {
         #region Protected variables 
         //uses manifest iconUrl for MpISourceItem interface
         protected int iconId { get; set; } = 0;

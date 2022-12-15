@@ -6,19 +6,22 @@
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
-                       x:TypeArguments="pcl:MpISliderViewModel"
+                       x:TypeArguments="local:MpAvSliderParameterViewModel"
+                       x:DataType="local:MpAvSliderParameterViewModel"
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <Border x:Name="SliderBorder"
-            BorderThickness="1"
-            Background="Transparent"
+            Classes="paramBorder"
+            local:MpAvIsHoveringExtension.IsEnabled="True"
+            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
             Focusable="True"
-            MinWidth="87"
-            Margin="10,0,0,0"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
+            MaxHeight="20"
             Cursor="SizeWestEast">
+        <Border.Background>
+            <SolidColorBrush Color="White"
+                             Opacity="0.01" />
+        </Border.Background>
         <Grid HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
             <Rectangle x:Name="SliderValueRectangle"
@@ -64,6 +67,7 @@
             <TextBox x:Name="SliderValueTextBox"
                      Cursor="Ibeam"
                      local:MpAvIsFocusedExtension.IsEnabled="True"
+                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
                      BorderThickness="0"
                      IsReadOnly="False"
                      HorizontalAlignment="Center"

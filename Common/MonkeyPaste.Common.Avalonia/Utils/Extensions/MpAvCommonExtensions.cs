@@ -387,7 +387,11 @@ namespace MonkeyPaste.Common.Avalonia {
         public static MpPoint GetClientMousePoint(this PointerEventArgs e, IVisual? control) {
             return e.GetPosition(control).ToPortablePoint();
         }
-
+        public static MpPoint GetScreenMousePoint(this PointerEventArgs e, IVisual control) {
+            var c_mp = e.GetPosition(control).ToPortablePoint();
+            var c_origin = control.PointToScreen(new Point()).ToPortablePoint(control.VisualPixelDensity());
+            return c_mp + c_origin;
+        }
 
         #endregion
 

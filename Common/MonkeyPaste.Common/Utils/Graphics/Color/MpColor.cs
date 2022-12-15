@@ -1,42 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 
 namespace MonkeyPaste.Common {
-    public static class MpColorExtensions {
-        public static string ToHex(this byte[] bytes) {
-            if (bytes == null) {
-                throw new Exception("Bytes are null");
-            }
-            return "#" + BitConverter.ToString(bytes).Replace("-", string.Empty);
-        }
-
-
-        public static string AdjustAlpha(this string hexStr, double opacity) {
-            // opacity is 0-1
-            if (!hexStr.IsStringHexColor()) {
-                throw new Exception("Not a hex color");
-            }
-            var c = new MpColor(hexStr);
-            c.A = (byte)(255.0 * opacity);
-            return c.ToHex();
-        }
-
-        public static double ColorDistance(this MpColor e1, MpColor e2) {
-            //distance between 0 and 1 (tested by checking between black and white where distance is 1)
-            long rmean = ((long)(e1.R) + (long)(e2.R)) / 2;
-            long r = (long)(e1.R) - (long)(e2.R);
-            long g = (long)(e1.G) - (long)(e2.G);
-            long b = (long)(e1.B) - (long)(e2.B);
-            double max = 764.83331517396655; // changed last digit from 3 to 5 :)
-            double d = Math.Sqrt((((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8));
-            return d / max;
-        }
-
-        public static MpColor ToPortableColor(this string str) {
-            return new MpColor(str);
-        }
-    }
     public class MpColor {
         public byte[] Channels { get; set; }
 
@@ -78,6 +44,11 @@ namespace MonkeyPaste.Common {
                 return string.Empty;
             }
             return Channels.ToHex();
+        }
+
+        public double GetHue() {
+            Color c = Color.FromArgb(A, R, G, B);
+            return (double)c.GetHue();
         }
 
         public override string ToString() {

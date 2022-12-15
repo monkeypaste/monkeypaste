@@ -352,11 +352,11 @@ namespace MonkeyPaste.Common {
         }
 
 
-        public static TEnum ToEnum<TEnum>(this object obj) where TEnum: struct {
+        public static TEnum ToEnum<TEnum>(this object obj, bool ignoreCase = true, TEnum notFoundValue = default) where TEnum: struct {
             if(obj != null) {
                 try {
                     if (obj is string str) {
-                        if (Enum.TryParse<TEnum>(str, true, out TEnum result)) {
+                        if (Enum.TryParse<TEnum>(str, ignoreCase, out TEnum result)) {
                             return result;
                         }
                     } else {
@@ -370,7 +370,7 @@ namespace MonkeyPaste.Common {
                     MpConsole.WriteTraceLine(ex);
                 }
             }
-            return default;
+            return notFoundValue;
         }
 
         public static string RemoveSpecialCharacters(this string str) {

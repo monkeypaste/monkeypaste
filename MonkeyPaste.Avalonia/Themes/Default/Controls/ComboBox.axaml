@@ -1,0 +1,10 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+    <Styles.Resources>
+        <Thickness x:Key="ComboBoxPadding">
+            12,0,0,0
+        </Thickness>
+    </Styles.Resources>
+</Styles>
