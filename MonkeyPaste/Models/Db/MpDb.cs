@@ -498,7 +498,6 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpUrl>();
             await _connectionAsync.CreateTableAsync<MpUserDevice>();
             await _connectionAsync.CreateTableAsync<MpUserSearch>();
-            await _connectionAsync.CreateTableAsync<MpUserTransaction>();
         }
 
         private static async Task CreateViewsAsync() {
@@ -518,6 +517,7 @@ SELECT
 		when MpCopyItemSource.e_MpCopyItemSourceType == 'CopyItem' 
 			then 
 				'https://localhost?type=copyItem&id=' || MpCopyItemSource.fk_SourceObjId
+		else NULL
 	end as SourcePath,
 	case 
 		when MpCopyItemSource.e_MpCopyItemSourceType == 'App' 
@@ -529,36 +529,47 @@ SELECT
 		when MpCopyItemSource.e_MpCopyItemSourceType == 'CopyItem' 
 			then 
 				(select Title from MpCopyItem where pk_MpCopyItemId == MpCopyItemSource.fk_SourceObjId limit 1)
+		else NULL
 	end as AppPath,
 	case
 		when MpCopyItemSource.e_MpCopyItemSourceType == 'App' 
 				then 
 					(select AppName from MpApp where pk_MpAppId == MpCopyItemSource.fk_SourceObjId limit 1)
+		else NULL
 	end as AppName,
 	case
 		when MpCopyItemSource.e_MpCopyItemSourceType == 'Url' 
 				then 
 					(select UrlPath from MpUrl where pk_MpUrlId == MpCopyItemSource.fk_SourceObjId limit 1)
+		else NULL
 	end as UrlPath,
 	case
 		when MpCopyItemSource.e_MpCopyItemSourceType == 'Url' 
 				then 
 					(select UrlTitle from MpUrl where pk_MpUrlId == MpCopyItemSource.fk_SourceObjId limit 1)
+		else NULL
 	end as UrlTitle,
 	case 
 		when MpCopyItemSource.e_MpCopyItemSourceType == 'App' 
 			then 
 				(select MachineName from MpUserDevice where pk_MpUserDeviceId in (select fk_MpUserDeviceId from MpApp where pk_MpAppId == MpCopyItemSource.fk_SourceObjId limit 1))
+		else NULL
 	end as DeviceName,
 	case 
 		when MpCopyItemSource.e_MpCopyItemSourceType == 'App' 
 			then 
 				(select e_MpUserDeviceType from MpUserDevice where pk_MpUserDeviceId in (select fk_MpUserDeviceId from MpApp where pk_MpAppId == MpCopyItemSource.fk_SourceObjId limit 1))
+		else NULL
 	end as DeviceType,
 	e_MpCopyItemType,
 	ItemMetaData,
 	Title,
-	MpDataObjectItem.ItemData as ItemData,
+	case 
+		when MpCopyItem.e_MpCopyItemType == 'Text' or MpCopyItem.e_MpCopyItemType == 'FileList'
+			then 
+				(select ItemData from MpDataObjectItem where fk_MpDataObjectId = MpCopyItem.fk_MpDataObjectId limit 1)
+		else NULL
+	end as ItemData,
 	CopyDateTime,
 	(select PasteDateTime from MpPasteHistory where fk_MpCopyItemId=pk_MpCopyItemId order by PasteDateTime desc limit 1) AS LastPasteDateTime,
 	CopyCount,
@@ -566,7 +577,6 @@ SELECT
 	CopyCount + PasteCount as UsageScore
 FROM
 	MpCopyItem
-INNER JOIN MpDataObjectItem ON MpDataObjectItem.fk_MpDataObjectId = MpCopyItem.fk_MpDataObjectId AND MpDataObjectItem.ItemFormat == 'Text'
 INNER JOIN MpCopyItemSource ON MpCopyItemSource.fk_MpCopyItemId = MpCopyItem.pk_MpCopyItemId");
 
         }

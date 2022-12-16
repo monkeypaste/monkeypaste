@@ -59,8 +59,7 @@ namespace MonkeyPaste {
 
                     var httpTrans = await MpHttpTransaction.Create(
                         presetId: preset.Id,
-                        //url: urlPath,
-                        //urlName: SelectedItem.FullName,
+                        reqArgs: trans.Request.ToString(),
                         urlId: url.Id,
                         timeSent: trans.RequestTime,
                         timeReceived: trans.ResponseTime,
@@ -90,7 +89,7 @@ namespace MonkeyPaste {
                             var cliTrans = await MpCliTransaction.Create(
                                 presetId: preset.Id,
                                 //cliPath: pf.Value.ComponentPath,
-                                appId: app.Id,
+                                appId: app.Id, 
                                 //cliName: SelectedItem.FullName,
                                 workingDirectory: pluginDir,
                                 args: trans.Request.ToString(),
@@ -107,7 +106,6 @@ namespace MonkeyPaste {
                             var dllTrans = await MpDllTransaction.Create(
                                 presetId: preset.Id,
                                 dllPath: processPath,
-                                //dllName: SelectedItem.FullName,
                                 args: trans.Request.ToString(),
                                 transDateTime: trans.RequestTime,
                                 errorMsg: trans.TransactionErrorMessage,

@@ -26,9 +26,8 @@ namespace MonkeyPaste {
         [Column("fk_MpAnalyticItemPresetId")]
         public int PresetId { get; set; }
 
-        //[ForeignKey(typeof(MpUserDevice))]
         //[Column("fk_MpUserDeviceId")]
-        //public int DeviceId { get; set; }
+        public int DeviceId { get; set; }
 
         //public string CliPath { get; set; }
         //public string CliName { get; set; }
@@ -88,7 +87,7 @@ namespace MonkeyPaste {
 
         public static async Task<MpCliTransaction> Create(
             int presetId = 0,
-            //int deviceId = 0,
+            int deviceId = 0,
             //string cliPath = "",
             //string cliName = "",
             int appId = 0,
@@ -102,15 +101,15 @@ namespace MonkeyPaste {
             if (appId <= 0) {
                 throw new Exception("Must  have app id");
             }
-            //if (deviceId <= 0) {
-            //    deviceId = MpJsonPreferenceIO.Instance.ThisUserDevice.Id;
-            //}
+            if (deviceId <= 0) {
+                deviceId = MpDefaultDataModelTools.ThisUserDeviceId;
+            }
 
             var mr = new MpCliTransaction() {
                 CliTransactionGuid = System.Guid.NewGuid(),
                 PresetId = presetId,
                 AppId = appId,
-                //DeviceId = deviceId,
+                DeviceId = deviceId,
                 //CliPath = cliPath,
                 //CliName = string.IsNullOrWhiteSpace(cliName) ? Path.GetFileNameWithoutExtension(cliPath) : cliName,
                 WorkingDirectory = string.IsNullOrEmpty(workingDirectory) ? Directory.GetCurrentDirectory():workingDirectory,

@@ -4,6 +4,7 @@
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
                        x:TypeArguments="local:MpAvAnalyticItemCollectionViewModel"
                        x:DataType="local:MpAvAnalyticItemCollectionViewModel"
                        x:CompileBindings="True"

@@ -15,7 +15,8 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvAnalyticItemPresetViewModel : 
         MpAvTreeSelectorViewModelBase<MpAvAnalyticItemViewModel, MpAvPluginParameterViewModelBase>,
         MpISelectableViewModel,
-        MpIHoverableViewModel,
+        MpILabelTextViewModel,
+        MpIHoverableViewModel, 
         MpIMenuItemViewModel,
         MpIActionComponent, 
         MpISidebarItemViewModel,
@@ -32,6 +33,12 @@ namespace MonkeyPaste.Avalonia {
         MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem => Parent;
         IEnumerable<MpITreeItemViewModel> MpITreeItemViewModel.Children => Items;
         #endregion
+
+        #region MpILabelTextViewModel Implementation
+
+        string MpILabelText.LabelText => Label;
+        #endregion
+
 
         #region View Models
 
@@ -59,6 +66,8 @@ namespace MonkeyPaste.Avalonia {
                 };
             }
         }
+
+        public IEnumerable<MpAvPluginParameterViewModelBase> VisibleItems => Items.Where(x => x.IsVisible);
 
         #endregion
 
@@ -108,7 +117,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpAvIPluginParameterCollectionViewModel Implementation
 
         IEnumerable<MpAvPluginParameterViewModelBase>
-            MpAvIPluginParameterCollectionViewModel.Items => Items.Where(x=>x.IsVisible);
+            MpAvIPluginParameterCollectionViewModel.Items => VisibleItems;
 
         MpAvPluginParameterViewModelBase
             MpAvIPluginParameterCollectionViewModel.SelectedItem {

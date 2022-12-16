@@ -154,9 +154,12 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var diff = mp - _lastMousePos;
-            var w = hc.GetVisualAncestor<Window>();
+            var w = GetPopupRoot();
+            
+            //var w = hc.GetVisualAncestor<Window>();
             if(w == null) {
-                // huh?
+                // occuring in plugin preset icon popup menu (when window)
+                var test = hc.GetVisualAncestors();
                 Debugger.Break();
                 return;
             }

@@ -17,4 +17,14 @@
     <Exec Command="if not exist &quot;$(SolutionDir)MpWpfApp\bin\Debug\Plugins\$(ProjectName)&quot; md &quot;$(SolutionDir)MpWpfApp\bin\Debug\Plugins\$(ProjectName)&quot;&#xD;&#xA;xcopy /s /D /Y &quot;$(TargetDir)\*&quot; &quot;$(SolutionDir)MpWpfApp\bin\Debug\Plugins\$(ProjectName)&quot;&#xD;&#xA;copy &quot;$(ProjectDir)manifest.json&quot; &quot;$(SolutionDir)MpWpfApp\bin\Debug\Plugins\$(ProjectName)&quot;&#xD;&#xA;" />
   </Target>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(BuildOs)' == 'WINDOWS'">
+    <ItemGroup>
+      <BuildFiles Include="$(TargetDir)\*.*" />
+      <ProjectFiles Include="$(ProjectDir)\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(BuildFiles)" OverwriteReadOnlyFiles="False" SkipUnchangedFiles="true" ContinueOnError="true" DestinationFolder="$(SolutionDir)MonkeyPaste.Avalonia\bin\Debug\net6.0\Plugins\$(ProjectName)\" />
+    <Copy SourceFiles="@(BuildFiles)" OverwriteReadOnlyFiles="False" SkipUnchangedFiles="true" ContinueOnError="true" DestinationFolder="$(SolutionDir)MonkeyPaste.Avalonia\bin\Debug\net6.0-windows\Plugins\$(ProjectName)\" />
+    <Copy SourceFiles="@(ProjectFiles)" OverwriteReadOnlyFiles="False" SkipUnchangedFiles="true" ContinueOnError="true" DestinationFolder="$(SolutionDir)MonkeyPaste.Avalonia\bin\Debug\net6.0\Plugins\$(ProjectName)\" />
+    <Copy SourceFiles="@(ProjectFiles)" OverwriteReadOnlyFiles="False" SkipUnchangedFiles="true" ContinueOnError="true" DestinationFolder="$(SolutionDir)MonkeyPaste.Avalonia\bin\Debug\net6.0-windows\Plugins\$(ProjectName)\" />
+  </Target>
 </Project>

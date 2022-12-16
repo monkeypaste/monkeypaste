@@ -242,7 +242,7 @@
         avares://MonkeyPaste.Avalonia/Assets/Images/down_black.png
     </sys:String>
     <sys:String x:Key="ImageImage">
-        avares://MonkeyPaste.Avalonia/Assets/Images/image_Image.png
+        avares://MonkeyPaste.Avalonia/Assets/Images/image.png
     </sys:String>
     <sys:String x:Key="ClipboardImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/clipboard.png

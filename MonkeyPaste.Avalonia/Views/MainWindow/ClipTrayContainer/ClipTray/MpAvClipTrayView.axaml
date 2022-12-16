@@ -113,13 +113,7 @@
             <TextBlock HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        FontSize="42"
-                       FontStyle="Italic"
-                       FontWeight="SemiBold"
-                       Foreground="LightGray">
-                <TextBlock.Foreground>
-                    <SolidColorBrush Color="LightGray"
-                                     Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
-                </TextBlock.Foreground>
+                       Classes="disabled">
                 <TextBlock.Text>
                     <MultiBinding Converter="{StaticResource MultiStringAppendConverter}">
                         <Binding>

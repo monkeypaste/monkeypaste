@@ -12,8 +12,7 @@ namespace MonkeyPaste {
         None = 0,
         Dll,
         Cli,
-        Http,
-        User
+        Http
     }
 
     public class MpCopyItemTransaction : MpDbModelBase {

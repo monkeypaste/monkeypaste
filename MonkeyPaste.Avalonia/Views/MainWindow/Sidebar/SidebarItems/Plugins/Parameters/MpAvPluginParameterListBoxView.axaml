@@ -12,23 +12,60 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPluginParameterListBoxView">
-    <ListBox x:Name="PluginParameterListBox"
-             Classes="paramListBox"
-             Items="{Binding Items}"
-             SelectedItem="{Binding SelectedItem}">
-        <ListBox.ItemsPanel>
-            <ItemsPanelTemplate>
-                <VirtualizingStackPanel Orientation="Vertical"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch" />
-            </ItemsPanelTemplate>
-        </ListBox.ItemsPanel>
-        <ListBox.ItemTemplate>
-            <DataTemplate>
-                <local:MpAvPluginParameterItemView HorizontalAlignment="Stretch"
-                                                   DataContext="{Binding}" />
-            </DataTemplate>
-        </ListBox.ItemTemplate>
-    </ListBox>
+    <Grid HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch">
+
+        <ListBox x:Name="PluginParameterListBox"
+                 Classes="paramListBox"
+                 IsVisible="{Binding Items, Converter={StaticResource CollectionIsNotEmptyToBoolConverter}, FallbackValue=True, TargetNullValue=True}"
+                 Items="{Binding Items}"
+                 SelectedItem="{Binding SelectedItem}">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel Orientation="Vertical"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <local:MpAvPluginParameterItemView HorizontalAlignment="Stretch"
+                                                       DataContext="{Binding}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <!--  IsEmpty Overlay  -->
+
+        <Border HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                MinWidth="50"
+                IsVisible="{Binding Items, ConverterParameter=flip, Converter={StaticResource CollectionIsNotEmptyToBoolConverter}, FallbackValue=False, TargetNullValue=False}"
+                Background="Transparent">
+            <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       TextWrapping="WrapWithOverflow"
+                       TextAlignment="Center"
+                       FontSize="14"
+                       Classes="disabled">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource MultiStringAppendConverter}">
+                        <Binding>
+                            <Binding.Source>
+                                <sys:String>'</sys:String>
+                            </Binding.Source>
+                        </Binding>
+                        <Binding Path="LabelText"
+                                 x:DataType="pcl:MpILabelTextViewModel" />
+                        <Binding>
+                            <Binding.Source>
+                                <sys:String>' Has No Settings</sys:String>
+                            </Binding.Source>
+                        </Binding>
+
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </Border>
+    </Grid>
 </local:MpAvUserControl>
 

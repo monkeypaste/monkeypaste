@@ -24,8 +24,9 @@ namespace MonkeyPaste.Avalonia {
 
         private MpIUserIconViewModel _currentIconViewModel;
 
+
         #endregion
-         
+
         #region Properties
 
         #region View Models
@@ -175,6 +176,7 @@ namespace MonkeyPaste.Avalonia {
             //}
             //uivm.OnPropertyChanged(nameof(uivm.IconId));
         }
+
         #endregion
 
         #region Commands
@@ -233,73 +235,71 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ChangeIconCommand => new MpCommand<object>(
              (args) => {
-                 //FrameworkElement fe = args as FrameworkElement;
-                 //dynamic fe = args;
-                 //MpMenuItemViewModel mivm = new MpMenuItemViewModel();
+                 var controlArg = args as Control;
+                 MpMenuItemViewModel mivm = new MpMenuItemViewModel();
 
-                 //if(fe.DataContext is MpISelectableViewModel svm) {
-                 //    svm.IsSelected = true;
-                 //}
+                 if (controlArg.DataContext is MpISelectableViewModel svm) {
+                     svm.IsSelected = true;
+                 }
 
-                 //if (fe.DataContext is MpIUserColorViewModel ucvm) {
-                 //    mivm.SubItems = new ObservableCollection<MpMenuItemViewModel>() {
-                 //        MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(ucvm)
-                 //    };
-                 //} else if (fe.DataContext is MpIUserIconViewModel uivm) {
-                 //    _currentIconViewModel = uivm;
+                 if (controlArg.DataContext is MpIUserColorViewModel ucvm) {
+                     mivm.SubItems = new ObservableCollection<MpMenuItemViewModel>() {
+                         MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(ucvm)
+                     };
+                 } else if (controlArg.DataContext is MpIUserIconViewModel uivm) {
+                     _currentIconViewModel = uivm;
 
-                 //    mivm.SubItems = new ObservableCollection<MpMenuItemViewModel>() {
-                 //        MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(this),
-                 //        new MpMenuItemViewModel() { IsSeparator = true },
-                 //        new MpMenuItemViewModel() {
-                 //            Header = "Choose Image...",
-                 //            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("ImageIcon") as string,
-                 //            Command = SelectImagePathCommand,
-                 //            CommandParameter = uivm
-                 //        }
-                 //    };
-                 //}
+                     mivm.SubItems = new ObservableCollection<MpMenuItemViewModel>() {
+                         MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(this),
+                         new MpMenuItemViewModel() { IsSeparator = true },
+                         new MpMenuItemViewModel() {
+                             Header = "Choose Image...",
+                             IconResourceKey = "ImageImage",
+                             Command = SelectImagePathCommand,
+                             CommandParameter = uivm
+                         }
+                     };
+                 }
+                 MpAvMenuExtension.ShowMenu(controlArg, mivm, MpPoint.Zero);
 
-                 //MpContextMenuView.Instance.DataContext = mivm;
-                 //MpContextMenuView.Instance.PlacementTarget = fe;
-                 //MpContextMenuView.Instance.IsOpen = true;
 
-                 //if(fe.DataContext is MpIUserIconViewModel) {
-                 //    var uivm = fe.DataContext as MpIUserIconViewModel;
-                 //    //wait for selection, if color then conver to icon
-                 //    Dispatcher.UIThread.Post(async () => {
-                 //        while (MpContextMenuView.Instance.IsOpen) {
-                 //            await Task.Delay(100);
-                 //        }
-                 //        if (string.IsNullOrEmpty(UserHexColor)) {
-                 //            return;
-                 //        }
-                 //        await SetUserIconToCurrentHexColorAsync(UserHexColor, uivm);
+                 if (controlArg.DataContext is MpIUserIconViewModel) {
+                     var uivm = controlArg.DataContext as MpIUserIconViewModel;
+                     //wait for selection, if color then conver to icon
+                     Dispatcher.UIThread.Post(async () => {
+                         while (MpAvMenuExtension.IsOpen) {
+                             await Task.Delay(100);
+                         }
+                         if (string.IsNullOrEmpty(UserHexColor)) {
+                             return;
+                         }
+                         await SetUserIconToCurrentHexColorAsync(UserHexColor, uivm);
 
-                 //        _currentIconViewModel = null;
-                 //        UserHexColor = null;
-                 //    });
-                 //} else {
+                         _currentIconViewModel = null;
+                         UserHexColor = null;
+                     });
+                 } else {
 
-                 //    _currentIconViewModel = null;
-                 //    UserHexColor = null;
-                 //}
-            },(args)=> {
-                //if(args !=  null) {
-                //    object dc = args;
-                //    if(args is FrameworkElement fe) {
-                //        dc = fe.DataContext;
-                //    }
-                //    if(dc is MpIUserIconViewModel uivm) {
-                //        var icon = MpDataModelProvider.GetIconById(uivm.IconId);
-                //        return !icon.IsReadOnly;
-                //    }
-                //    if (dc is MpIUserColorViewModel ucvm) {
-                //        return true;
-                //    }
-                //}
-                return false;
+                     _currentIconViewModel = null;
+                     UserHexColor = null;
+                 }
+             },(args)=> {
+                 if (args != null) {
+                     object dc = args;
+                     if (args is Control fe) {
+                         dc = fe.DataContext;
+                     }
+                     if (dc is MpIUserIconViewModel uivm) {
+                         var icon = MpDataModelProvider.GetItem<MpIcon>(uivm.IconId);
+                         return !icon.IsModelReadOnly;
+                     }
+                     if (dc is MpIUserColorViewModel ucvm) {
+                         return true;
+                     }
+                 }
+                 return false;
             });
+
 
 
         #endregion

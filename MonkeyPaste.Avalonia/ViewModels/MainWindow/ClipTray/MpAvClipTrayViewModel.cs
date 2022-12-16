@@ -6,6 +6,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Wpf;
 using MonoMac.Foundation;
 using MonoMac.OpenAL;
 using Newtonsoft.Json;
@@ -45,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         public const int DISABLE_READ_ONLY_DELAY_MS = 500;
-
+        
         public const double MAX_TILE_SIZE_CONTAINER_PAD = 50;
         public const double MIN_SIZE_ZOOM_FACTOR_COEFF = (double)1 / (double)7;
         public const double EDITOR_TOOLBAR_MIN_WIDTH = 830.0d;
@@ -176,16 +177,14 @@ namespace MonkeyPaste.Avalonia {
                         new MpMenuItemViewModel() {
                             Header = @"Copy",
                             IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("CopyImage") as string,
-                            Command = MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeCommand,
-                            CommandParameter = MpPlatformWrapper.Services.PlatformShorcuts.CopyKeys,
+                            Command = CutSelectionFromContextMenuCommand,
                             ShortcutArgs = new object[] { MpShortcutType.CopySelection },
                         },
                         new MpMenuItemViewModel() {
                             Header = @"Paste Here",
                             AltNavIdx = 6,
                             IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("PasteImage") as string,
-                            Command = MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeCommand,
-                            CommandParameter = MpPlatformWrapper.Services.PlatformShorcuts.PasteKeys,
+                            Command = PasteHereFromContextMenuCommand,
                             ShortcutArgs = new object[] { MpShortcutType.PasteHere },
                         },
                         new MpMenuItemViewModel() {
@@ -2968,6 +2967,15 @@ namespace MonkeyPaste.Avalonia {
                 return canCopy;
             });
 
+        public ICommand CutSelectionFromContextMenuCommand => new MpCommand<object>(
+            (args) => {
+                MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeCommand
+                    .Execute(MpPlatformWrapper.Services.PlatformShorcuts.CutKeys);
+            },
+            (args) => {
+                return SelectedItem != null && SelectedItem.IsSubSelectionEnabled;
+            });
+
         public ICommand PasteSelectedClipTileFromShortcutCommand => new MpCommand<object>(
             (args) => {
                 bool fromEditorButton = false;
@@ -2996,6 +3004,14 @@ namespace MonkeyPaste.Avalonia {
             },
             (args) => {
                 return SelectedItem != null;
+            });
+
+        public ICommand PasteHereFromContextMenuCommand => new MpCommand<object>(
+            (args) => {
+                MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeCommand
+                    .Execute(MpPlatformWrapper.Services.PlatformShorcuts.PasteKeys);            },
+            (args) => {
+                return SelectedItem != null && SelectedItem.IsSubSelectionEnabled;
             });
 
         public ICommand PasteFromClipTilePasteButtonCommand => new MpCommand<object>(

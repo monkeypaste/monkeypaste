@@ -77,32 +77,6 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region MpICopyItemSource Implementation
-        [Ignore]
-        public bool IsUser => false;
-        [Ignore]
-        public bool IsUrl => true;
-
-
-        [Ignore]
-        public bool IsSubRejected => IsUrlRejected;
-
-        [Ignore]
-        public bool IsDll => false;
-
-        [Ignore]
-        public bool IsExe => false;
-
-        [Ignore]
-        public string SourcePath => UrlPath;
-
-        [Ignore]
-        public string SourceName => UrlPath;
-
-        [Ignore]
-        public int RootId => Id;
-        #endregion
-
         #region MpILabelText Implementation
         string MpILabelText.LabelText => UrlDomainPath;
 
@@ -160,7 +134,7 @@ namespace MonkeyPaste {
                     suppressWrite: suppressWrite);
             }
             if(icon == null) {
-                string favIconImg64 = await MpUrlHelpers.GetUrlFavIconAsync(domainStr);
+                string favIconImg64 = await MpUrlHelpers.GetUrlFavIconAsync(urlPath);
                 if (favIconImg64 == MpBase64Images.UnknownFavIcon || favIconImg64 == null) {
                     //url has no and result is google's default
                     favIconImg64 = MpBase64Images.QuestionMark;

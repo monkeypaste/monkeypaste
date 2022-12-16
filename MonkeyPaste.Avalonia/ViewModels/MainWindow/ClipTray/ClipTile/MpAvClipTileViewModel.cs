@@ -384,7 +384,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpSize UnconstrainedContentSize { get; set; }
+        public MpSize UnconstrainedContentSize { get; set; } = MpSize.Empty;
         public double TileTitleHeight => IsTitleVisible ? 100 : 0;
         public double TileDetailHeight => 25;// MpMeasurements.Instance.ClipTileDetailHeight;
 

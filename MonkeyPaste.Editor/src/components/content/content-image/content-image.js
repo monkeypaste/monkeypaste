@@ -11,10 +11,20 @@ function loadImageContent(itemDataStr) {
 
 	let img_html = '<p class="ql-align-center"><img class="content-image" src="data:image/png;base64,' + itemDataStr + '"></p>';
 	setRootHtml(img_html);
+	updateImageContentSizeAndPosition();
 }
 // #endregion Life Cycle
 
 // #region Getters
+
+function getContentImageElement() {
+	let imgl = Array.from(getEditorElement().getElementsByClassName('content-image'));
+	if (!imgl || imgl.length < 1) {
+		return null;
+	}
+	return imgl[0];
+}
+
 function getImageContentWidth() {
 	// TODO need to test still if images are being scaled on copy but definitely need to calculate differently
 	return getContentWidth();
@@ -82,6 +92,19 @@ function convertImageContentToFormats(isForOle, formats) {
 }
 function appendImageContentData(data) {
 	return;
+}
+
+function updateImageContentSizeAndPosition() {
+	let img_elm = getContentImageElement();
+	if (!img_elm) {
+		return;
+	}
+	// NOTE when using 100% for max dim the editor just overflows and container isn't accounted for
+	let ecw = getEditorContainerRect().width;
+	let ech = getEditorContainerRect().height;
+
+	setElementComputedStyleProp(img_elm, 'max-width', `${ecw}px`);
+	setElementComputedStyleProp(img_elm, 'max-height', `${ech}px`);
 }
 // #endregion Actions
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
+
     public class MpHttpTransaction : MpDbModelBase, MpITransactionError {
         #region Protected variables 
 
@@ -29,10 +30,11 @@ namespace MonkeyPaste {
         public int DeviceId { get; set; }
 
         //public string DestinationUrl { get; set; }
+        //public string DestinationName { get; set; }
         [Column("fk_MpUrlId")]
         public int UrlId { get; set; }
 
-        //public string DestinationName { get; set; }
+        public string Args { get; set; }
 
         public string SourceIp { get; set; }
 
@@ -66,7 +68,7 @@ namespace MonkeyPaste {
         public static async Task<MpHttpTransaction> Create(
             int presetId = 0,
             int deviceId = 0,
-            //string url = "",
+            string reqArgs = "",
             int urlId = 0,
             //string urlName = "",
             string ip = "",
@@ -95,9 +97,8 @@ namespace MonkeyPaste {
                 PresetId = presetId,
                 DeviceId = deviceId,
                 SourceIp = ip,
-                //DestinationUrl = url,
+                Args = reqArgs,
                 UrlId = urlId,
-                //DestinationName = string.IsNullOrWhiteSpace(urlName) ? MpUrlHelpers.GetUrlDomain(url) : urlName,
                 DateTimeSent = timeSent.HasValue ? timeSent.Value : DateTime.Now,
                 DateTimeReceived = timeReceived.HasValue ? timeReceived.Value : null,
                 BytesSent = bytesSent,

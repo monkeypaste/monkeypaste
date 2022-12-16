@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
+using Google.Apis.PeopleService.v1.Data;
+using System.Diagnostics;
 
 namespace MonkeyPaste {
 
@@ -136,7 +138,55 @@ namespace MonkeyPaste {
 
         public static async Task<string> GetUrlFavIconAsync(string url) {
             try {
+                string base64FavIcon = string.Empty;
+                if(Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
+                    var uri = new Uri(url, UriKind.Absolute);
+                    base64FavIcon = await GetDomainFavIcon1(uri.Host);
+                    if(string.IsNullOrEmpty(base64FavIcon)) {
+                        base64FavIcon = await GetDomainFavIcon2(url);
+                    }
+                }
+                return base64FavIcon;
+            }
+            catch (Exception ex) {
+                Console.WriteLine("MpHelpers.GetUrlFavicon error for url: " + url + " with exception: " + ex);
+                return string.Empty;
+            }
+        }
+
+        private static async Task<string> GetDomainFavIcon1(string domain) {
+            try {
+                if(!domain.StartsWith("https://")) {
+                    domain = "https://" + domain;
+                }
+                if(!domain.EndsWith("/")) {
+                    domain += "/";
+                }
+                string favicon_uri_str = $"{domain}favicon.ico";
+                if(!Uri.IsWellFormedUriString(favicon_uri_str,UriKind.Absolute)) {
+                    // whats the domain?
+                    Debugger.Break();
+                    return null;
+                }
+                Uri favicon = new Uri(favicon_uri_str, UriKind.Absolute);
+                var bytes = await MpFileIo.ReadBytesFromUriAsync(favicon.AbsoluteUri);
+                string base64FavIcon = bytes == null || bytes.Length == 0 ? MpBase64Images.UnknownFavIcon : Convert.ToBase64String(bytes);
+                if (base64FavIcon.Equals(MpBase64Images.UnknownFavIcon)) {
+                    base64FavIcon = MpBase64Images.AppIcon;
+                }
+                return base64FavIcon;
+            }
+            catch (Exception ex) {
+                Console.WriteLine("MpHelpers.GetUrlFavicon error for url: " + domain + " with exception: " + ex);
+                return string.Empty;
+            }
+        }
+
+        private static async Task<string> GetDomainFavIcon2(string url) {
+             try {
+
                 string urlDomain = GetUrlDomain(url);
+
                 Uri favicon = new Uri(@"https://www.google.com/s2/favicons?sz=128&domain_url=" + urlDomain, UriKind.Absolute);
                 var bytes = await MpFileIo.ReadBytesFromUriAsync(favicon.AbsoluteUri);
                 string base64FavIcon = bytes == null || bytes.Length == 0 ? MpBase64Images.UnknownFavIcon : Convert.ToBase64String(bytes);
@@ -144,6 +194,7 @@ namespace MonkeyPaste {
                     base64FavIcon = MpBase64Images.AppIcon;
                 }
                 return base64FavIcon;
+
             }
             catch (Exception ex) {
                 Console.WriteLine("MpHelpers.GetUrlFavicon error for url: " + url + " with exception: " + ex);

@@ -22,6 +22,7 @@ namespace MonkeyPaste.Avalonia {
         private static Type[] _inputControlTypes { get; set; } = new Type[] {
             typeof(TextBox),
             typeof(AutoCompleteBox),
+            typeof(ComboBoxItem),
             typeof(WebView)
         };
         public static bool IsInputControlFocused {

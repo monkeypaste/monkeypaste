@@ -5,11 +5,10 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common;
 namespace MonkeyPaste {
-    public interface MpICommandLine {
 
-    }
     public class MpCommandLinePlugin : MpIAnalyzerComponent {
         public string Endpoint { get; set; }
 

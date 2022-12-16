@@ -195,6 +195,7 @@ function updateAllSelectionDependantElements() {
 }
 
 function updateAllSizeAndPositions() {
+	updateContentSizeAndPosition();
 	updateTemplateToolbarSizesAndPositions();
 	updateEditorSizesAndPositions();
 	updateFindReplaceToolbarSizesAndPositions();

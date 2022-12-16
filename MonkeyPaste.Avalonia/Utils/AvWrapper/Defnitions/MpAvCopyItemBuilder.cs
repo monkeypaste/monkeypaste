@@ -117,22 +117,22 @@ namespace MonkeyPaste.Avalonia {
                 refs.AddRange(list_refs);
             }
 
-            if (refs.FirstOrDefault(x => x.SourceType == MpCopyItemSourceType.CopyItem) is MpCopyItem source_ci) {
-                // when creating an item from an internal source
-                // get source item type and remove higher priority formats that aren't of source type
-                // (so partial drop of text isn't inferred as files for example)
+            //if (refs.FirstOrDefault(x => x.SourceType == MpCopyItemSourceType.CopyItem) is MpCopyItem source_ci) {
+            //    // when creating an item from an internal source
+            //    // get source item type and remove higher priority formats that aren't of source type
+            //    // (so partial drop of text isn't inferred as files for example)
 
-                if (source_ci != null) {
-                    if (source_ci.ItemType != MpCopyItemType.FileList) {
-                        mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvFileNames));
-                    }
-                    if (source_ci.ItemType != MpCopyItemType.Image) {
-                        mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvPNG));
-                    }
-                    mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvRtf_bytes));
-                    mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvCsv));
-                }
-            }
+            //    if (source_ci != null) {
+            //        if (source_ci.ItemType != MpCopyItemType.FileList) {
+            //            mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvFileNames));
+            //        }
+            //        if (source_ci.ItemType != MpCopyItemType.Image) {
+            //            mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvPNG));
+            //        }
+            //        mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvRtf_bytes));
+            //        mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvCsv));
+            //    }
+            //}
             if(refs == null || refs.Count == 0) {
                 // external ole create
                 var ext_refs = await GatherExternalSourceRefsAsync(mpdo);
@@ -265,9 +265,15 @@ namespace MonkeyPaste.Avalonia {
                         mpdo.GetData(MpPortableDataFormats.AvPNG) is byte[] pngBytes &&
                         pngBytes.ToBase64String() is string pngBase64Str) {
 
-                // BITMAP
+                // BITMAP (bytes)
                 itemType = MpCopyItemType.Image;
                 itemData = pngBase64Str;
+            } else if (mpdo.ContainsData(MpPortableDataFormats.AvPNG) &&
+                        mpdo.GetData(MpPortableDataFormats.AvPNG) is string pngBytesStr) {
+
+                // BITMAP (base64)
+                itemType = MpCopyItemType.Image;
+                itemData = pngBytesStr;
             } else if (mpdo.ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
                         mpdo.GetData(MpPortableDataFormats.AvHtml_bytes) is byte[] htmlBytes &&
                         htmlBytes.ToDecodedString() is string htmlStr) {

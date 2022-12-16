@@ -1,4 +1,4 @@
-﻿using MonkeyPaste.Common.Plugin; 
+﻿using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
 using Newtonsoft.Json;
 using SQLite;
@@ -11,7 +11,10 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpPluginPreset : MpDbModelBase, MpIClonableDbModel<MpPluginPreset> {
+    public class MpPluginPreset : 
+        MpDbModelBase, 
+        MpIClonableDbModel<MpPluginPreset> {
+
         #region Columns
         [Column("pk_MpPluginPresetId")]
         [PrimaryKey, AutoIncrement]
@@ -55,6 +58,7 @@ namespace MonkeyPaste {
         public DateTime LastSelectedDateTime { get; set; }
 
         #endregion
+
 
         #region Properties
         [Ignore]
@@ -213,8 +217,5 @@ namespace MonkeyPaste {
 
         public MpPluginPreset() : base() { }
 
-
-
-        
     }
 }

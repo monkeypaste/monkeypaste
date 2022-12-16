@@ -15,7 +15,7 @@ namespace MonkeyPaste.Common.Plugin {
                 throw new NullReferenceException($"Request error, no data");
             }
 
-            var kvp = req.items.FirstOrDefault(x => x.paramId == paramId);
+            var kvp = req.items.FirstOrDefault(x => x.paramId.ToString().Equals(paramId.ToString()));
             if (kvp == null) {
                 throw new NullReferenceException($"param '{paramId}' not found");
             }
@@ -48,6 +48,13 @@ namespace MonkeyPaste.Common.Plugin {
         public static string GetRequestParamStringValue(this MpPluginRequestFormatBase req, object paramId) {
             var kvp = ValidateGet(req, paramId);
             return kvp.value;
+        }
+
+        public static bool HasParam(this MpPluginRequestFormatBase req, object paramId) {
+            if(req == null || req.items == null || req.items.All(x=>!x.paramId.Equals(paramId))) {
+                return false;
+            }
+            return true;
         }
     }
 }

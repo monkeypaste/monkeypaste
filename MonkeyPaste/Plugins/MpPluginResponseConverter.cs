@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Google.Apis.PeopleService.v1.Data;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -62,21 +63,9 @@ namespace MonkeyPaste {
 
             List<MpISourceRef> target_source_refs = new List<MpISourceRef>();
             if(citid > 0) {
-                // NOTE since this is in response phase source records should exist and actual plugin url is not needed
-                var ci_trans = await MpDataModelProvider.GetItemAsync<MpCopyItemTransaction>(citid);
-                if (ci_trans != null) {
-                    // TODO probably refactor non-ci transactions to poly table
-                    // or add others here
-                    // or make helper to get to app, url or item (MpISourceRef)
-                    if(ci_trans.CopyItemTransactionType == MpCopyItemTransactionType.Http) {
-                        var http_tran = await MpDataModelProvider.GetItemAsync<MpHttpTransaction>(ci_trans.CopyItemTransactionObjId);
-                        if(http_tran != null) {
-                            var url = await MpDataModelProvider.GetItemAsync<MpUrl>(http_tran.UrlId);
-                            if(url != null) {
-                                target_source_refs.Add(url);
-                            }
-                        }
-                    }
+                var cit_ref = await MpDataModelProvider.GetSourceRefByCopyItemTransactionId(citid);
+                if (cit_ref != null) {
+                    target_source_refs.Add(cit_ref);
                 }
             }
             target_source_refs.Add(sourceCopyItem);

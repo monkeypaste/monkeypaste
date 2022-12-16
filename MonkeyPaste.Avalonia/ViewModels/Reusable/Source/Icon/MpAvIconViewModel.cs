@@ -12,7 +12,8 @@ using System.Windows.Input;
 using MonkeyPaste;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvIconViewModel : MpViewModelBase<MpAvIconCollectionViewModel> {
+    public class MpAvIconViewModel : 
+        MpViewModelBase<MpAvIconCollectionViewModel> {
         #region Properties
 
         #region Appearance

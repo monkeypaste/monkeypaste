@@ -284,6 +284,12 @@ function loadContentData(contentData) {
 	IsLoaded = true;
 }
 
+function updateContentSizeAndPosition() {
+	if (ContentItemType == 'Image') {
+		updateImageContentSizeAndPosition();
+	}
+}
+
 // #endregion Actions
 
 // #region Event Handlers

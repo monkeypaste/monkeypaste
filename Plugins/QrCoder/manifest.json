@@ -5,7 +5,7 @@
   "credits": "Raffael Herrmann",
   "guid": "4abe63e3-f81b-4c75-8401-4268ddea793d",
   "url": "https://github.com/codebude/QRCoder/",
-  "iconUri": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/QR_icon.svg/480px-QR_icon.svg.png",
+  "iconUri": "icon.png",
   "ioType": {
     "isDll": true
   },
@@ -27,6 +27,19 @@
         "values": [
           {
             "value": "{ItemData}"
+          }
+        ]
+      },
+      {
+        "label": "Title prefix",
+        "description": "The Snippet to detect",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isVisible": false,
+        "paramId": 2,
+        "values": [
+          {
+            "value": "{Title}"
           }
         ]
       }

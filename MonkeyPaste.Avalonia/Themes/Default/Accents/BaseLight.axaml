@@ -11,6 +11,10 @@
             OldLace
         </Color>
 
+        <Color x:Key="DisabledTextFgColor">
+            LightGray
+        </Color>
+
         <Color x:Key="UnselectedBorderColor">
             Transparent
         </Color>
@@ -44,6 +48,7 @@
         <!--  BRUSHES  -->
 
         <!--  GENERAL  -->
+        <!--  ItemSource Item Bg  -->
         <SolidColorBrush x:Key="SelectableItemDefaultBgBrush"
                          Color="{DynamicResource SelectableItemDefaultBgColor}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />
@@ -53,7 +58,10 @@
         <SolidColorBrush x:Key="SelectableItemSelectedBgBrush"
                          Color="{DynamicResource SelectableItemSelectedBgColor}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-
+        <!--  Disabled  -->
+        <SolidColorBrush x:Key="DisabledTextFgBrush"
+                         Color="{DynamicResource DisabledTextFgColor}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <!--  TITLE MENU  -->
         <SolidColorBrush x:Key="TitleMenuActiveBgBrush"
                          Color="Goldenrod"

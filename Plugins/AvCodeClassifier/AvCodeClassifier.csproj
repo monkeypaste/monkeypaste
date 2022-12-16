@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="dist\training-set\csharp.cs" />
+    <Compile Remove="training-set\csharp\BasicAuthenticationFixture.cs" />
+    <Compile Remove="training-set\csharp\ChromiumWebBrowser.cs" />
+    <Compile Remove="training-set\csharp\csharp.cs" />
+    <Compile Remove="training-set\csharp\MemberIdentifier.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="dist\training-set\csharp.cs" />
+    <None Include="training-set\csharp\BasicAuthenticationFixture.cs" />
+    <None Include="training-set\csharp\ChromiumWebBrowser.cs" />
+    <None Include="training-set\csharp\csharp.cs" />
+    <None Include="training-set\csharp\MemberIdentifier.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
+    <ProjectReference Include="..\..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(BuildOs)' == 'WINDOWS'">
+    <ItemGroup>
+      <BuildFiles Include="$(TargetDir)\*.*" />
+      <ProjectFiles Include="$(ProjectDir)\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(BuildFiles)" OverwriteReadOnlyFiles="False" SkipUnchangedFiles="true" ContinueOnError="true" DestinationFolder="$(SolutionDir)MonkeyPaste.Avalonia\bin\Debug\net6.0\Plugins\$(ProjectName)\" />
+    <Copy SourceFiles="@(BuildFiles)" OverwriteReadOnlyFiles="False" SkipUnchangedFiles="true" ContinueOnError="true" DestinationFolder="$(SolutionDir)MonkeyPaste.Avalonia\bin\Debug\net6.0-windows\Plugins\$(ProjectName)\" />
+    <Copy SourceFiles="@(ProjectFiles)" OverwriteReadOnlyFiles="False" SkipUnchangedFiles="true" ContinueOnError="true" DestinationFolder="$(SolutionDir)MonkeyPaste.Avalonia\bin\Debug\net6.0\Plugins\$(ProjectName)\" />
+    <Copy SourceFiles="@(ProjectFiles)" OverwriteReadOnlyFiles="False" SkipUnchangedFiles="true" ContinueOnError="true" DestinationFolder="$(SolutionDir)MonkeyPaste.Avalonia\bin\Debug\net6.0-windows\Plugins\$(ProjectName)\" />
+  </Target>
+</Project>

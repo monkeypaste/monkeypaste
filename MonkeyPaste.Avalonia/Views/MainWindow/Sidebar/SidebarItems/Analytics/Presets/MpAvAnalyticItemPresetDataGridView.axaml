@@ -50,7 +50,7 @@
                                             IsEnabled="{Binding !IsDefault}"
                                             DataContext="{Binding}"
                                             Command="{Binding ChangeIconCommand, Source={x:Static local:MpAvIconCollectionViewModel.Instance}}"
-                                            CommandParameter="{Binding}">
+                                            CommandParameter="{Binding $self}">
                                         <Image Width="20"
                                                Height="20"
                                                HorizontalAlignment="Center"

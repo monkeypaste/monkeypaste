@@ -160,6 +160,45 @@ namespace MonkeyPaste {
         }
         #endregion
 
+        #region MpISourceRef
+
+        public static async Task<MpISourceRef> GetSourceRefByCopyItemTransactionId(int citid) {
+            // NOTE since this is in response phase source records should exist and actual plugin url is not needed
+            var ci_trans = await GetItemAsync<MpCopyItemTransaction>(citid);
+            if (ci_trans != null) {
+                // TODO probably refactor non-ci transactions to poly table
+                // or add others here
+                // or make helper to get to app, url or item (MpISourceRef)
+
+                switch(ci_trans.CopyItemTransactionType) {
+                    case MpCopyItemTransactionType.Http:
+                        var http_tran = await GetItemAsync<MpHttpTransaction>(ci_trans.CopyItemTransactionObjId);
+                        if (http_tran != null) {
+                            var url = await GetItemAsync<MpUrl>(http_tran.UrlId);
+                            return url;
+                        }
+                        break;
+                    case MpCopyItemTransactionType.Cli:
+                        var cli_tran = await GetItemAsync<MpCliTransaction>(ci_trans.CopyItemTransactionObjId);
+                        if (cli_tran != null) {
+                            var app = await GetItemAsync<MpApp>(cli_tran.AppId);
+                            return app;
+                        }
+                        break;
+                    case MpCopyItemTransactionType.Dll:
+                        var dll_tran = await GetItemAsync<MpDllTransaction>(ci_trans.CopyItemTransactionObjId);
+                        if (dll_tran != null) {
+                            var app = await GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
+                            return app;
+                        }
+                        break;
+                }
+
+            }
+            return null;
+        }
+        #endregion
+
         #region MpIcon
 
 
@@ -389,7 +428,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<MpCopyItem> GetCopyItemByIdAsync(int ciid) {
-            // NOTE this is used to safely try to get item instead of MpDataModelProvider.GetItemAsync 
+            // NOTE this is used to safely try to get item instead of GetItemAsync 
             // which crashes if the key doesn't exist...
             string query = "select * from MpCopyItem where pk_MpCopyItemId=?";
             var result = await MpDb.QueryAsync<MpCopyItem>(query, ciid);
@@ -724,7 +763,7 @@ namespace MonkeyPaste {
             return result[0];
         }
 
-        #endregion MpAnalyticItem
+        #endregion 
 
         #region MpDbLog
 
@@ -791,19 +830,6 @@ namespace MonkeyPaste {
             }
             return result[0];
         }
-        #endregion
-
-        #region MpBox
-
-        public static async Task<MpBox> GetBoxByTypeAndObjIdAsync(MpBoxType boxType, int objId) {
-            string query = string.Format(@"select * from MpBox where e_MpBoxTypeId=? and fk_BoxObjectId=?");
-            var result = await MpDb.QueryAsync<MpBox>(query, (int)boxType,objId);
-            if (result == null || result.Count == 0) {
-                return null;
-            }
-            return result[0];
-        }
-
         #endregion
 
         #region MpContentToken

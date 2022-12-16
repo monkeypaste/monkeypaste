@@ -6,4 +6,12 @@
         <Setter Property="FontFamily"
                 Value="Helvetica" />
     </Style>
+    <Style Selector="TextBlock.disabled">
+        <Setter Property="FontStyle"
+                Value="Italic" />
+        <Setter Property="FontWeight"
+                Value="SemiBold" />
+        <Setter Property="Foreground"
+                Value="{StaticResource DisabledTextFgBrush}" />
+    </Style>
 </Styles>

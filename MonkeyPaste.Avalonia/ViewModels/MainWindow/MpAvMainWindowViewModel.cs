@@ -966,7 +966,9 @@ namespace MonkeyPaste.Avalonia {
                     LastDecreasedFocusLevelDateTime.HasValue && 
                         (DateTime.Now - LastDecreasedFocusLevelDateTime.Value).TotalMilliseconds < 1000;
 
-                bool canHide =
+                bool isInputControlFocused = MpAvFocusManager.IsInputControlFocused;
+
+                bool canHide = !isInputControlFocused &&
                         !IsMainWindowLocked &&
                           !IsAnyDropDownOpen &&
                           !IsAnyMainWindowTextBoxFocused &&
