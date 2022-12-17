@@ -477,6 +477,10 @@ namespace MonkeyPaste.Avalonia {
             CancelEventHandler onCloseHandler = null;
 
             onCloseHandler = (s, e1) => {
+                if(IsChildDialogOpen) {
+                    e1.Cancel = true;
+                    return;
+                }
                 if (control.DataContext is MpIContextMenuViewModel cmvm) {
                     cmvm.IsContextMenuOpen = false;
                 }

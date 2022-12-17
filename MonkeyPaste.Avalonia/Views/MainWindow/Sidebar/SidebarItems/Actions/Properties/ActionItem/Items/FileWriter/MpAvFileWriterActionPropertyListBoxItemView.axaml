@@ -1,0 +1,72 @@
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvFileWriterActionPropertyListBoxItemView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+                       x:TypeArguments="local:MpAvFileWriterActionViewModel"
+                       mc:Ignorable="d"
+                       d:DesignHeight="450"
+                       d:DesignWidth="800">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.3*" />
+            <RowDefinition Height="0.3*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.3*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   Classes="actionProperty"
+                   Text="Directory" />
+        <Border Grid.Row="0"
+                Grid.Column="1"
+                HorizontalAlignment="Stretch"
+                Classes="actionProperty">
+            <Button Command="{Binding SelectFileSystemPathCommand}"
+                    Background="Transparent"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    MaxWidth="200"
+                    BorderThickness="0">
+                <Grid>
+                    <TextBlock IsVisible="{Binding FileSystemPath, ConverterParameter=flip, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
+                               Text="Select file or folder..."
+                               Foreground="Black"
+                               TextAlignment="Left"
+                               VerticalAlignment="Center" />
+                    <TextBlock IsVisible="{Binding FileSystemPath, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
+                               Text="{Binding FileSystemPath, Converter={StaticResource AbsoluteToRelativePathStringConverter}}"
+                               ToolTip="{Binding FileSystemPath}"
+                               TextAlignment="Right"
+                               VerticalAlignment="Center" />
+                </Grid>
+            </Button>
+        </Border>
+        <DockPanel Grid.Row="1"
+                   Grid.Column="0"
+                   LastChildFill="False">
+            <TextBlock DockPanel.Dock="Left"
+                       Classes="actionProperty"
+                       Text="Prefix" />
+
+            <!--<local:MpTooltipInfoView DataContext="{Binding}"
+                                     DockPanel.Dock="Right" />-->
+            <local:MpAvToolTipInfoHintView DockPanel.Dock="Right"
+                                           ToolTipText="{Binding Tooltip}" />
+        </DockPanel>
+        <TextBox Grid.Row="1"
+                 Grid.Column="1"
+                 MinWidth="100"
+                 Margin="5,10"
+                 local:MpAvIsFocusedExtension.IsEnabled="True"
+                 Text="{Binding NamePrefix, Mode=TwoWay}" />
+    </Grid>
+
+</local:MpAvUserControl>

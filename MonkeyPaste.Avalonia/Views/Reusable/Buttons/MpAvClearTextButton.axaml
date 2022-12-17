@@ -18,7 +18,7 @@
                 <SolidColorBrush x:Key="Brush0"
                                  Color="#FF000000" />
             </Image.Resources>
-            <DrawingImage >
+            <DrawingImage>
                 <DrawingGroup>
                     <DrawingGroup>
                         <DrawingGroup.Transform>

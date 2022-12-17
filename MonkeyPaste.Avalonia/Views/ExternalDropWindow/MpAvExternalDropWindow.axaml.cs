@@ -89,32 +89,11 @@ namespace MonkeyPaste.Avalonia {
                 lb.PointToScreen(e.GetPosition(lb)).ToPortablePoint(lb.VisualPixelDensity()),
                 lb,
                 ref _autoScrollAccumulators);
-            //double amt = 5;
-            //double max_scroll_dist = 25;
-            //var sv_mp = e.GetPosition(lb).ToPortablePoint();
-
-            //double l_dist = Math.Abs(sv_mp.X);
-            //double r_dist = Math.Abs(lb.Bounds.Width - sv_mp.X);
-            //double t_dist = Math.Abs(sv_mp.Y);
-            //double b_dist = Math.Abs(lb.Bounds.Height - sv_mp.Y);
-
-            //MpConsole.WriteLine(string.Format(@"L:{0} R:{1} T:{2} B:{3}", l_dist, r_dist, t_dist, b_dist));
-
-            //if (l_dist <= max_scroll_dist) {
-            //    sv.ScrollByPointDelta(new MpPoint(-amt, 0));
-            //} else if (r_dist <= max_scroll_dist) {
-            //    sv.ScrollByPointDelta(new MpPoint(amt, 0));
-            //}
-
-            //if (t_dist <= max_scroll_dist) {
-            //    sv.ScrollByPointDelta(new MpPoint(0, -amt));
-            //} else if (b_dist <= max_scroll_dist) {
-            //    sv.ScrollByPointDelta(new MpPoint(0, amt));
-            //}
         }
 
         private void DragOver(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragOver] Dnd Widget Window Cur Formats: " +String.Join(Environment.NewLine,e.Data.GetDataFormats()));
+            e.DragEffects = DragDropEffects.None;
             AutoScrollListBox(e);
         }
 

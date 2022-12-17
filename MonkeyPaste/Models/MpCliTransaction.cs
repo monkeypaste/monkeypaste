@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpCliTransaction : MpDbModelBase, MpITransactionError {
+    public class MpCliTransaction : 
+        MpDbModelBase, 
+        MpITransactionError, 
+        MpIPluginPresetTransaction {
         #region Protected variables 
 
         protected int iconId { get; set; } = 0;

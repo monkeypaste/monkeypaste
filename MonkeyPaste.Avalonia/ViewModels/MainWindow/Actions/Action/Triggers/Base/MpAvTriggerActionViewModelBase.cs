@@ -201,7 +201,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvTriggerActionViewModelBase(MpAvActionCollectionViewModel parent) : base(parent) {
-            PropertyChanged += MpTriggerActionViewModelBase_PropertyChanged;
+            PropertyChanged += MpAvTriggerActionViewModelBase_PropertyChanged;
         }
 
         #endregion
@@ -235,7 +235,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private void MpTriggerActionViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        private void MpAvTriggerActionViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsSelected):
                     Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));

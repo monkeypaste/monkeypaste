@@ -426,7 +426,7 @@ namespace MonkeyPaste.Avalonia {
 
         private async Task<int> GetOrCreateIconIdAsync() {
             var bytes = await MpFileIo.ReadBytesFromUriAsync(ClipboardPluginFormat.iconUri, PluginFormat.RootDirectory);
-            var icon = await MpIcon.Create(
+            var icon = await MpIcon.CreateAsync(
                 iconImgBase64: bytes.ToBase64String(),
                 createBorder: false);
             return icon.Id;
@@ -531,24 +531,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand CreateNewPresetCommand => new MpAsyncCommand(
-            async () => {
-                IsBusy = true;
-
-                MpPluginPreset newPreset = await MpPluginPreset.CreateAsync(
-                        pluginGuid: ClipboardHandlerGuid,
-                        //format: ClipboardPluginFormat,
-                        iconId: HandledFormatIconId,
-                        label: GetUniquePresetName());
-
-                var npvm = await CreatePresetViewModelAsync(newPreset);
-                Items.Add(npvm);
-                Items.ForEach(x => x.IsSelected = x == npvm);
-
-                OnPropertyChanged(nameof(Items));
-
-                IsBusy = false;
-            });
 
         public ICommand SelectPresetCommand => new MpCommand<MpAvClipboardFormatPresetViewModel>(
              (selectedPresetVm) => {
@@ -621,39 +603,43 @@ namespace MonkeyPaste.Avalonia {
                 IsBusy = false;
             });
 
-        public ICommand ShiftPresetCommand => new MpAsyncCommand<object>(
+        public ICommand ShiftPresetCommand => new MpCommand<object>(
             // [0] = shift dir [1] = presetvm
-            async (args) => {
-                var argParts = args as object[];
-                int dir = (int)Convert.ToInt32(argParts[0].ToString());
-                MpAvClipboardFormatPresetViewModel pvm = argParts[1] as MpAvClipboardFormatPresetViewModel;
-                int curSortIdx = Items.IndexOf(pvm);
-                int newSortIdx = curSortIdx + dir;
-
-                Items.Move(curSortIdx, newSortIdx);
-                for (int i = 0; i < Items.Count; i++) {
-                    Items[i].SortOrderIdx = i;
-                    await Items[i].Preset.WriteToDatabaseAsync();
-                }
-            },
             (args) => {
-                if (args == null) {
-                    return false;
-                }
-                if (args is object[] argParts) {
-                    int dir = (int)Convert.ToInt32(argParts[0].ToString());
-                    MpAvClipboardFormatPresetViewModel pvm = argParts[1] as MpAvClipboardFormatPresetViewModel;
+                if (args is object[] argParts &&
+                    argParts.Length == 2 &&
+                    argParts[0] is int new_idx &&
+                    argParts[1] is MpAvClipboardFormatPresetViewModel pvm) {
+
+                    new_idx = Math.Max(0, Math.Min(Items.Count - 1, new_idx));
+
                     int curSortIdx = Items.IndexOf(pvm);
-                    int newSortIdx = curSortIdx + dir;
-                    if (newSortIdx < 0 || newSortIdx >= Items.Count || newSortIdx == curSortIdx) {
-                        return false;
+                    Items.Move(curSortIdx, new_idx);
+                    for (int i = 0; i < Items.Count; i++) {
+                        Items[i].SortOrderIdx = i;
                     }
-                    return true;
                 }
-                return false;
             });
 
 
+        public ICommand CreateNewPresetCommand => new MpAsyncCommand(
+            async () => {
+                IsBusy = true;
+
+                MpPluginPreset newPreset = await MpPluginPreset.CreateAsync(
+                        pluginGuid: ClipboardHandlerGuid,
+                        //format: ClipboardPluginFormat,
+                        iconId: HandledFormatIconId,
+                        label: GetUniquePresetName());
+
+                var npvm = await CreatePresetViewModelAsync(newPreset);
+                Items.Add(npvm);
+                Items.ForEach(x => x.IsSelected = x == npvm);
+
+                OnPropertyChanged(nameof(Items));
+
+                IsBusy = false;
+            });
         public ICommand DuplicatePresetCommand => new MpAsyncCommand<object>(
             async (args) => {
                 IsBusy = true;
@@ -662,12 +648,17 @@ namespace MonkeyPaste.Avalonia {
                 if (aipvm == null) {
                     throw new Exception("DuplicatedPresetCommand must have preset as argument");
                 }
+                var p_to_clone = aipvm.Preset;
+                p_to_clone.Label += " - Clone";
+                p_to_clone.SortOrderIdx = Items.Count;
+                p_to_clone.IsModelReadOnly = false;
                 var dp = await aipvm.Preset.CloneDbModelAsync(
                     deepClone: true,
                     suppressWrite: false);
 
                 var dpvm = await CreatePresetViewModelAsync(dp);
                 Items.Add(dpvm);
+                ShiftPresetCommand.Execute(new object[] { aipvm.SortOrderIdx + 1, dpvm });
                 Items.ForEach(x => x.IsSelected = x == dpvm);
                 OnPropertyChanged(nameof(Items));
 

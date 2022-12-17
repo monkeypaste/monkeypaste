@@ -148,6 +148,9 @@ namespace MonkeyPaste {
             if(string.IsNullOrEmpty(pluginGuid)) {
                 throw new Exception("needs analyzer id");
             }
+            if(sortOrderIdx < 0) {
+                sortOrderIdx = await MpDataModelProvider.GetPluginPresetCountByPluginGuidAsync(pluginGuid);
+            }
 
             var newPluginPreset = new MpPluginPreset() {
                 Id = existingDefaultPresetId,   // only not 0 when reseting default preset
@@ -180,8 +183,7 @@ namespace MonkeyPaste {
                 PluginGuid = this.PluginGuid,
                 Label = this.Label + " - Copy",
                 Description = this.Description,
-                ManifestLastModifiedDateTime = this.ManifestLastModifiedDateTime,
-                //ComponentFormat = this.ComponentFormat                
+                ManifestLastModifiedDateTime = this.ManifestLastModifiedDateTime
             };
 
             if(deepClone) {
@@ -216,6 +218,35 @@ namespace MonkeyPaste {
         #endregion
 
         public MpPluginPreset() : base() { }
+
+        public override async Task DeleteFromDatabaseAsync() {
+            if(Id < 1) {
+                return;
+            }
+            List<Task> delete_tasks = new List<Task>();
+            var pppvl = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(Id);
+            if(pppvl != null && pppvl.Count > 0) {
+                delete_tasks.AddRange(pppvl.Select(x => x.DeleteFromDatabaseAsync()));
+            }
+
+            var citl = await MpDataModelProvider.GetCopyItemTransactionsByPluginPresetIdAsync(Id);
+            if(citl != null && citl.Count > 0) {
+                delete_tasks.AddRange(citl.Select(x => x.DeleteFromDatabaseAsync()));
+            }
+            var pptl = await MpDataModelProvider.GetPluginPresetTransactionsByPresetId(Id);
+            if (pptl != null && pptl.Count > 0) {
+                delete_tasks.AddRange(pptl.Cast<MpDbModelBase>().Select(x => x.DeleteFromDatabaseAsync()));
+            }
+            if (IconId > 0) {
+                var icon = await MpDataModelProvider.GetItemAsync<MpIcon>(IconId);
+                if(icon != null) {
+                    delete_tasks.Add(icon.DeleteFromDatabaseAsync());
+                }
+            }
+
+            delete_tasks.Add(base.DeleteFromDatabaseAsync());
+            await Task.WhenAll(delete_tasks);
+        }
 
     }
 }

@@ -611,9 +611,11 @@ namespace MonkeyPaste.Avalonia {
                 if (sc.CommandParameter == TagId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
-            } else if (e is MpCopyItem ci && LinkedCopyItemIds.Contains(ci.Id)) {
-                UnlinkCopyItemCommand.Execute(ci.Id);
-            } 
+            } else if (e is MpCopyItemTag cit && cit.TagId == TagId) {
+                UnlinkCopyItemCommand.Execute(cit.CopyItemId);
+            }// else if (e is MpCopyItem ci && LinkedCopyItemIds.Contains(ci.Id)) {
+            //    UnlinkCopyItemCommand.Execute(ci.Id);
+            //}
         }
         #endregion
 

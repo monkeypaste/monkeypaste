@@ -493,6 +493,7 @@ namespace MonkeyPaste.Avalonia {
                     } else {
                         IsLabelReadOnly = true;
                     }
+                    Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     break;
                 case nameof(HasModelChanged):
                     if(HasModelChanged) {
@@ -572,7 +573,12 @@ namespace MonkeyPaste.Avalonia {
                 if (ShortcutViewModel != null) {
                     ShortcutViewModel.OnPropertyChanged(nameof(ShortcutViewModel.KeyItems));
                 }
-            });        
+            });
+
+        public ICommand ToggleEditLabelCommand => new MpCommand(
+            () => {
+                IsLabelReadOnly = !IsLabelReadOnly;
+            });
 
         #endregion
     }

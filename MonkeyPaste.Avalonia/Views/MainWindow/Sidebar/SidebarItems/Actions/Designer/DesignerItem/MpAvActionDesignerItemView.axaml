@@ -1,0 +1,226 @@
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvActionDesignerItemView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:TypeArguments="local:MpAvActionViewModelBase"
+                       mc:Ignorable="d">
+    <!--<AdornerDecorator>-->
+    <ContentControl x:Name="DesignerItemContentControl"
+                    Width="{Binding Width}"
+                    Height="{Binding Height}"
+                    local:MpAvMoveExtension.IsEnabled="True"
+                    local:MpAvMoveExtension.IsMoving="{Binding IsMoving, Mode=TwoWay}"
+                    ClipToBounds="False"
+                    Background="Transparent"
+                    Content="{Binding}">
+        <!--<ContentControl.Effect>
+            <DropShadowEffect RenderingBias="Quality"
+                              Color="Black"
+                              Direction="315"
+                              Opacity="0.3"
+                              BlurRadius="5" />
+        </ContentControl.Effect>
+        <i:Interaction.Behaviors>
+            <local:MpActionDesignerItemDropBehavior x:Name="ActionDesignerItemDropBehavior" />
+            <local:MpMoveBehavior IsMoving="{Binding IsMoving, Mode=TwoWay}"
+                                  CanMove="{Binding CanMove, Mode=TwoWay}" />
+        </i:Interaction.Behaviors>-->
+        <ContentControl.DataTemplates>
+            <local:MpAvActionItemPropertiesTemplateSelector>
+                <!--  Trigger Circle  -->
+
+                <DataTemplate x:Key="TriggerDesignerTemplate"
+                              DataType="local:MpAvActionViewModelBase">
+                    <Grid>
+                        <Ellipse Width="{Binding Width}"
+                                 Height="{Binding Height}"
+                                 StrokeThickness="2.5"
+                                 local:MpAvIsHoveringExtension.IsEnabled="True"
+                                 local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                                 local:MpAvIsHoveringExtension.HoverCursor="ResizeAll"
+                                 Stroke="{Binding BorderBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                                 Fill="{Binding ActionBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}" />
+                        <Image Width="20"
+                               Height="20"
+                               IsHitTestVisible="False"
+                               Stretch="UniformToFill"
+                               Source="{Binding IconResourceKeyStr, Converter={StaticResource StringResourceToImageSourceConverter}}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                    </Grid>
+                </DataTemplate>
+
+                <!--  Compare Diamond  -->
+
+                <DataTemplate x:Key="CompareDesignerTemplate"
+                              DataType="local:MpAvActionViewModelBase">
+                    <Grid>
+                        <Polygon Width="{Binding Width}"
+                                 Height="{Binding Height}"
+                                 Points="0,25 25,0 50,25 25,50"
+                                 StrokeThickness="2.5"
+                                 local:MpAvIsHoveringExtension.IsEnabled="True"
+                                 local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                                 local:MpAvIsHoveringExtension.HoverCursor="ResizeAll"
+                                 Stroke="{Binding BorderBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                                 Fill="{Binding ActionBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}" />
+                        <Image Width="20"
+                               Height="20"
+                               IsHitTestVisible="False"
+                               Stretch="UniformToFill"
+                               Source="{Binding IconResourceKeyStr, Converter={StaticResource StringResourceToImageSourceConverter}}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                    </Grid>
+                </DataTemplate>
+
+                <!--  Analyze Box  -->
+
+                <DataTemplate x:Key="AnalyzeDesignerTemplate"
+                              DataType="local:MpAvActionViewModelBase">
+                    <Grid>
+                        <Border Width="{Binding Width}"
+                                Height="{Binding Height}"
+                                CornerRadius="10"
+                                BorderThickness="2.5"
+                                local:MpAvIsHoveringExtension.IsEnabled="True"
+                                local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                                local:MpAvIsHoveringExtension.HoverCursor="ResizeAll"
+                                BorderBrush="{Binding BorderBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                                Background="{Binding ActionBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}" />
+                        <Image Width="20"
+                               Height="20"
+                               Stretch="UniformToFill"
+                               IsHitTestVisible="False"
+                               Source="{Binding IconResourceKeyStr, Converter={StaticResource StringResourceToImageSourceConverter}}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                    </Grid>
+                </DataTemplate>
+
+                <!--  Classify Triangle  -->
+
+                <DataTemplate x:Key="ClassifyDesignerTemplate"
+                              DataType="local:MpAvActionViewModelBase">
+                    <Grid>
+                        <Polygon Points="25,0 50,48 0,48"
+                                 Width="{Binding Width}"
+                                 Height="{Binding Height}"
+                                 StrokeThickness="2.5"
+                                 local:MpAvIsHoveringExtension.IsEnabled="True"
+                                 local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                                 local:MpAvIsHoveringExtension.HoverCursor="ResizeAll"
+                                 Stroke="{Binding BorderBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                                 Fill="{Binding ActionBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}" />
+                        <Image Width="20"
+                               Height="20"
+                               IsHitTestVisible="False"
+                               Stretch="UniformToFill"
+                               Source="{Binding IconResourceKeyStr, Converter={StaticResource StringResourceToImageSourceConverter}}"
+                               Margin="0,12,3,0"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                    </Grid>
+                </DataTemplate>
+
+                <!--  Macro Box  -->
+
+                <DataTemplate x:Key="MacroDesignerTemplate"
+                              DataType="local:MpAvActionViewModelBase">
+                    <Grid>
+                        <Border Width="{Binding Width}"
+                                Height="{Binding Height}"
+                                CornerRadius="10"
+                                BorderThickness="2.5"
+                                local:MpAvIsHoveringExtension.IsEnabled="True"
+                                local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                                local:MpAvIsHoveringExtension.HoverCursor="ResizeAll"
+                                BorderBrush="{Binding BorderBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                                Background="{Binding ActionBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}" />
+                        <Image Width="20"
+                               Height="20"
+                               IsHitTestVisible="False"
+                               Stretch="UniformToFill"
+                               Source="{Binding IconResourceKeyStr, Converter={StaticResource StringResourceToImageSourceConverter}}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                    </Grid>
+                </DataTemplate>
+
+                <!--  File Writer Box  -->
+
+                <DataTemplate x:Key="FileWriterDesignerTemplate"
+                              DataType="local:MpAvActionViewModelBase">
+                    <Grid>
+                        <Border Width="{Binding Width}"
+                                   Height="{Binding Height}"
+                                   CornerRadius="10"
+                                   BorderThickness="2.5"
+                                   local:MpAvIsHoveringExtension.IsEnabled="True"
+                                   local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                                   local:MpAvIsHoveringExtension.HoverCursor="ResizeAll"
+                                   BorderBrush="{Binding BorderBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                                   Background="{Binding ActionBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}" />
+                        <Image Width="20"
+                               Height="20"
+                               Stretch="UniformToFill"
+                               IsHitTestVisible="False"
+                               Source="{Binding IconResourceKeyStr, Converter={StaticResource StringResourceToImageSourceConverter}}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                    </Grid>
+                </DataTemplate>
+
+                <!--  Empty Plus Circle  -->
+
+                <DataTemplate x:Key="NoneDesignerTemplate"
+                              DataType="local:MpAvEmptyActionViewModel">
+                    <Button IsVisible="{Binding IsDesignerVisible}"
+                            local:MpAvIsHoveringExtension.IsEnabled="True"
+                            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                            local:MpAvIsHoveringExtension.HoverCursor="ResizeAll"
+                            Command="{Binding ShowActionSelectorMenuCommand}"
+                            CommandParameter="{Binding $self}">
+                        <StackPanel Orientation="Vertical">
+                            <Border BorderThickness="0"
+                                    Padding="1"
+                                    CornerRadius="3">
+                                <Border.Background>
+                                    <SolidColorBrush Color="Wheat"
+                                                     Opacity="0.3" />
+                                </Border.Background>
+
+                                <TextBlock Foreground="Black"
+                                           Text="Add New"
+                                           HorizontalAlignment="Center" />
+                            </Border>
+                            <Grid>
+                                <Ellipse Stroke="{Binding AddNewButtonBorderBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                                         Fill="Transparent"
+                                         StrokeThickness="1"
+                                         Width="25"
+                                         Height="25" />
+                                <Rectangle HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Fill="LightGray"
+                                           Height="15"
+                                           Width="2" />
+                                <Rectangle HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Fill="LightGray"
+                                           Height="2"
+                                           Width="15" />
+                            </Grid>
+                        </StackPanel>
+                    </Button>
+                </DataTemplate>
+            </local:MpAvActionItemPropertiesTemplateSelector>
+        </ContentControl.DataTemplates>
+    </ContentControl>
+    <!--</AdornerDecorator>-->
+</local:MpAvUserControl>

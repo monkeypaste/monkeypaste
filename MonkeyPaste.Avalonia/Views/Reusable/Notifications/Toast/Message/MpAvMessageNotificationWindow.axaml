@@ -47,7 +47,7 @@
             <local:MpAvMarqueeTextBox Grid.Row="0"
                                       Grid.Column="1"
                                       AutoMarquee="True"
-                                      CanEdit="False"
+                                      EditOnFocus="False"
                                       MinHeight="30"
                                       FontSize="20"
                                       IsReadOnly="True"

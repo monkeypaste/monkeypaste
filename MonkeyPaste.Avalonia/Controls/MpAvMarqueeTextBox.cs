@@ -152,26 +152,17 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region CanEdit AvaloniaProperty
-        public bool CanEdit { get; set; } = true;
-
-        public static readonly StyledProperty< bool> CanEditProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, bool>(nameof(CanEdit));
-
-        #endregion
-
-        #region EditOnDoubleClick AvaloniaProperty
-
-        private bool _editOnDoubleClick = false;
-        public bool EditOnDoubleClick {
-            get => _editOnDoubleClick;
+        #region CanDisableReadOnly AvaloniaProperty
+        private bool _editOnFocus = true;
+        public bool EditOnFocus {
+            get => _editOnFocus;
             set {
-                SetAndRaise(EditOnDoubleClickProperty, ref _editOnDoubleClick, value);
+                SetAndRaise(EditOnFocusProperty, ref _editOnFocus, value);
             }
         }
 
-        public static readonly StyledProperty<bool> EditOnDoubleClickProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, bool>(nameof(EditOnDoubleClick));
+        public static readonly StyledProperty< bool> EditOnFocusProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, bool>(nameof(EditOnFocus));
 
         #endregion
 
@@ -229,7 +220,7 @@ namespace MonkeyPaste.Avalonia {
             this.GetObservable(MpAvMarqueeTextBox.IsVisibleProperty).Subscribe(value => OnIsVisibleChanged());
             this.GetObservable(MpAvMarqueeTextBox.IsReadOnlyProperty).Subscribe(value => OnIsReadOnlyChanged());
             this.GetObservable(MpAvMarqueeTextBox.TextProperty).Subscribe(value => OnTextChanged());
-            this.GetObservable(MpAvMarqueeTextBox.CanEditProperty).Subscribe(value => OnCanEditChanged());
+            this.GetObservable(MpAvMarqueeTextBox.EditOnFocusProperty).Subscribe(value => OnCanEditChanged());
         }
 
         #region Event Handlers
@@ -242,17 +233,10 @@ namespace MonkeyPaste.Avalonia {
         }
         protected override void OnGotFocus(GotFocusEventArgs e) {
             base.OnGotFocus(e);
-            if(EditOnDoubleClick) {
-                //var focusable_ancestor = this.GetVisualAncestors().FirstOrDefault(x => x is Control c && c.Focusable);
-                //if(focusable_ancestor != null && focusable_ancestor is Control ac) {
-                //    ac.Focus();
-                //}
-                if(DataContext is MpISelectableViewModel svm) {
-                    svm.IsSelected = true;
-                }
-                return;
+            if (DataContext is MpISelectableViewModel svm) {
+                svm.IsSelected = true;
             }
-            if(CanEdit) {
+            if (EditOnFocus) {
                 SetValue(IsReadOnlyProperty, false);
                 BeginEditCommand?.Execute(null);
             }
@@ -301,12 +285,8 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
             base.OnPointerPressed(e);
-            if(!EditOnDoubleClick || !CanEdit || !IsReadOnly) {
-                return;
-            }
-            if(e.ClickCount == 2) {
-                SetValue(IsReadOnlyProperty, false);
-                BeginEditCommand?.Execute(null);
+            if(DataContext is MpISelectableViewModel svm) {
+                svm.IsSelected = true;
             }
         }
         protected override void OnPointerLeave(PointerEventArgs e) {
@@ -326,13 +306,17 @@ namespace MonkeyPaste.Avalonia {
             Init();
         }
         private void OnCanEditChanged() {
-            if(!CanEdit) {
+            if(!EditOnFocus) {
                 SetValue(IsReadOnlyProperty, true);
             }
         }
         private void OnIsReadOnlyChanged() {
-            if(!IsReadOnly) {
+            SetTextBoxIsVisible(!IsReadOnly);
+            if(IsReadOnly) {
+                this.KillFocus();
+            } else {
                 _orgText = Text;
+                SelectAll();
             }
             Init();
             this.InvalidateAll();

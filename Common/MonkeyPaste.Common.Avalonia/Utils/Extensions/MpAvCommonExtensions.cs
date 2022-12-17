@@ -88,6 +88,20 @@ namespace MonkeyPaste.Common.Avalonia {
             return new MpRect(relative_origin, observed_size);
         }
 
+        public static bool KillFocus(this Control control) {
+            if(control == null || !control.IsFocused) {
+                return false;
+            }
+            var pc = control.Parent as Control;
+            while(pc != null) {
+                if(pc.Focusable) {
+                    pc.Focus();
+                    return true;
+                }
+                pc = pc.Parent as Control;
+            }
+            return false;
+        }
         #endregion
 
         #region Text Box

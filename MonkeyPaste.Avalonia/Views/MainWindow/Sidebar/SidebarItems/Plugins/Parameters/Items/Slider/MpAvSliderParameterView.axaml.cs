@@ -54,7 +54,7 @@ namespace MonkeyPaste.Avalonia {
             if (tbr.Contains(mp)) {
                 return;
             }
-            //svtb.KillFocus();
+            svtb.KillFocus();
 
             e.Pointer.Capture(sb);
             _isSliding = e.Pointer.Captured != null;
@@ -132,17 +132,19 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Svtb_KeyDown(object sender, global::Avalonia.Input.KeyEventArgs e) {
+            var svtb = sender as TextBox;
             if(e.Key == Key.Enter) {
                 // trigger lost focus
-                this.FindControl<Border>("SliderBorder").Focus();
+                //this.FindControl<Border>("SliderBorder").Focus();
+                svtb.KillFocus();
                 return;
             }
             if(e.Key == Key.Escape) {
-                var svtb = this.FindControl<TextBox>("SliderValueTextBox");
                 // avoid breaking the binding?
                 TextBox.TextProperty.Setter.Invoke(svtb, _oldVal.ToString());
                 // trigger lost focus
-                this.FindControl<Border>("SliderBorder").Focus();
+                //this.FindControl<Border>("SliderBorder").Focus();
+                svtb.KillFocus();
             }
         }
 

@@ -328,4 +328,7 @@
     <sys:String x:Key="FileDropFormatImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/folder.png
     </sys:String>
+    <sys:String x:Key="TextureImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/texture.png
+    </sys:String>
 </ResourceDictionary>

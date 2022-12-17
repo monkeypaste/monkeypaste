@@ -1,0 +1,67 @@
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvActionPropertyHeaderView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+                       x:TypeArguments="local:MpAvActionViewModelBase"
+                       mc:Ignorable="d"
+                       d:DesignHeight="450"
+                       d:DesignWidth="800">
+
+    <StackPanel Orientation="Horizontal">
+        <ToggleButton x:Name="ToggleEnableButton"
+                      Grid.Row="0"
+                      Grid.Column="3"
+                      DockPanel.Dock="Right"
+                      HorizontalAlignment="Right"
+                      HorizontalContentAlignment="Right"
+                      ToolTip="{Binding EnableToggleButtonTooltip}"
+                      BorderThickness="0"
+                      Margin="3,0"
+                      Background="Transparent"
+                      IsThreeState="True"
+                      Command="{Binding ToggleIsEnabledCommand}"
+                      CommandParameter="{Binding LastIsEnabledState, Converter={StaticResource BoolFlipConverter}}">
+            <Grid>
+                <Ellipse Width="20"
+                         Height="20"
+                         IsVisible="{Binding IsValid}"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Stroke="White"
+                         Fill="{Binding EnableToggleButtonShapeHexColor, Converter={StaticResource StringHexToBrushConverter}}" />
+                <Image Width="20"
+                       Height="20"
+                       IsVisible="{Binding !IsValid}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Source="{Binding ., Converter={StaticResource StringResourceToImageSourceConverter}, ConverterParameter={StaticResource WarningIcon}}" />
+            </Grid>
+        </ToggleButton>
+        <Image Margin="5,0,0,0"
+               Source="{Binding IconResourceKeyStr, Converter={StaticResource StringResourceToImageSourceConverter}}"
+               Width="20" />
+        <TextBox Grid.Row="1"
+                 Grid.Column="1"
+                 Grid.ColumnSpan="2"
+                 DockPanel.Dock="Left"
+                 Foreground="{Binding LabelForegroundBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                 Background="{Binding LabelBackgroundBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                 BorderThickness="1"
+                 BorderBrush="{Binding LabelBorderBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                 Margin="5,5,15,5"
+                 Padding="3"
+                 VerticalAlignment="Center"
+                 VerticalContentAlignment="Center"
+                 FontSize="14"
+                 FontWeight="SemiBold"
+                 local:MpAvIsHoveringExtension.IsEnabled="True"
+                 local:MpAvIsHoveringExtension.IsHovering="{Binding IsHoveringOverLabel, Mode=TwoWay}"
+                 local:MpAvIsHoveringExtension.HoverCursor="IBeam"
+                 local:MpAvIsFocusedExtension.IsEnabled="True"
+                 local:MpAvIsFocusedExtension.IsFocused="{Binding IsLabelFocused, Mode=TwoWay}"
+                 Text="{Binding Label, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+    </StackPanel>
+</local:MpAvUserControl>

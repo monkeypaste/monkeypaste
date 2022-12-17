@@ -115,19 +115,15 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand AddUrlCommand => new MpCommand(
             async () => {
-                string UrlPath = string.Empty;//MpTextBoxMessageBox.ShowCustomMessageBox("");
+                string UrlPath = string.Empty;
 
                 if(string.IsNullOrEmpty(UrlPath)) {
                     return;
                 }
 
-                MpUrl url = null;
                 var uvm = Items.FirstOrDefault(x => x.UrlPath.ToLower() == UrlPath.ToLower());
                 if (uvm == null) {
-                    string iconBase64Str = await MpUrlHelpers.GetUrlFavIconAsync(UrlPath);
-                    string title = await MpUrlHelpers.GetUrlTitleAsync(UrlPath);
-                    var icon = await MpIcon.Create(iconBase64Str);
-                    url = await MpUrl.Create(UrlPath, title);
+                    var url = await MpUrl.CreateAsync(UrlPath);
                     uvm = await CreateUrlViewModel(url);
                 }
                 SelectedItem = uvm;

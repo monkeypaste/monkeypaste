@@ -86,5 +86,12 @@ namespace MonkeyPaste {
         }
 
         public MpCopyItemTransaction() { }
+
+        public override async Task DeleteFromDatabaseAsync() {
+            if(Id < 1) {
+                return;
+            }
+
+        }
     }
 }

@@ -43,7 +43,7 @@
             </TreeView.Styles>
             <TreeView.ItemTemplate>
                 <TreeDataTemplate DataType="{x:Type local:MpAvTagTileViewModel}"
-                                  ItemsSource="{Binding SortedItems}">
+                                  Items="{Binding SortedItems}">
                     <local:MpAvTagView DataContext="{Binding}" />
                 </TreeDataTemplate>
             </TreeView.ItemTemplate>

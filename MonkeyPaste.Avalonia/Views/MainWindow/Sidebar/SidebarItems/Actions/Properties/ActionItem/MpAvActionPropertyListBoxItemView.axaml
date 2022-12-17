@@ -1,0 +1,149 @@
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvActionPropertyListBoxItemView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:TypeArguments="local:MpAvActionViewModelBase"
+                       mc:Ignorable="d">
+    <Expander x:Name="ActionExpander"
+              Padding="5,0"
+              Background="{Binding ActionBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+              IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
+        <Expander.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.8*" />
+                    <ColumnDefinition Width="0.2*" />
+                </Grid.ColumnDefinitions>
+                <local:MpAvActionPropertyHeaderView Grid.Column="0"
+                                                    HorizontalAlignment="Left"
+                                                    DataContext="{Binding}" />
+                <!--<local:MpTooltipInfoView HorizontalAlignment="Right"
+                                         Grid.Column="1"
+                                         VerticalAlignment="Center"
+                                         DockPanel.Dock="Right"
+                                         DataContext="{Binding}" />-->
+
+                <local:MpAvToolTipInfoHintView HorizontalAlignment="Right"
+                                               Grid.Column="1"
+                                               VerticalAlignment="Center"
+                                               DockPanel.Dock="Right"
+                                               ToolTipText="{Binding Tooltip}" />
+            </Grid>
+        </Expander.Header>
+        <Grid>
+            <Border Grid.Row="2"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    BorderBrush="Black"
+                    BorderThickness="1"
+                    CornerRadius="0"
+                    Background="Transparent"
+                    Margin="0,0,0,5">
+                <DockPanel LastChildFill="True">
+                    <Grid DockPanel.Dock="Bottom"
+                          Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="0.5*" />
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0"
+                                MinHeight="25"
+                                Margin="0,0,5,0"
+                                HorizontalAlignment="Stretch"
+                                Background="Crimson"
+                                Foreground="Cornsilk"
+                                Command="{Binding DeleteThisActionCommand}"
+                                CommandParameter="{Binding}">
+                            <DockPanel LastChildFill="True">
+                                <Image Source="{Binding ., Converter={StaticResource StringResourceToImageSourceConverter}, Source={StaticResource TrashCanIcon}}"
+                                       DockPanel.Dock="Left"
+                                       Width="15"
+                                       Height="15" />
+                                <Label DockPanel.Dock="Right"
+                                       Content="Delete" />
+                            </DockPanel>
+                        </Button>
+
+                        <Button Grid.Column="1"
+                                BorderThickness="0"
+                                Margin="5,0,0,0"
+                                Background="Beige"
+                                HorizontalAlignment="Stretch"
+                                Command="{Binding ShowActionSelectorMenuCommand}"
+                                CommandParameter="{Binding $self}">
+                            <DockPanel LastChildFill="True">
+                                <Image Source="{Binding ., Converter={StaticResource StringResourceToImageSourceConverter}, Source={StaticResource AddIcon}}"
+                                       DockPanel.Dock="Left"
+                                       Width="15"
+                                       Height="15" />
+                                <Label DockPanel.Dock="Right"
+                                       Content="Add" />
+                            </DockPanel>
+                        </Button>
+                    </Grid>
+                    <ContentControl x:Name="RootActionPropertyContentControl"
+                                    Content="{Binding}">
+                        <ContentControl.DataTemplates>
+                            <local:MpAvActionItemPropertiesTemplateSelector>
+                                <!--  Triggers  -->
+
+                                <!--  Content Add  -->
+                                <DataTemplate x:Key="ContentAddedPropertiesTemplate"
+                                              DataType="{x:Type local:MpContentAddTriggerViewModel}">
+                                    <local:MpContentAddTriggerPropertyListBoxItemView DataContext="{Binding}" />
+                                </DataTemplate>
+
+                                <!--  Content Tagged  -->
+                                <DataTemplate x:Key="ContentTaggedPropertiesTemplate"
+                                              DataType="{x:Type local:MpContentTaggedTriggerViewModel}">
+                                    <local:MpContentTaggedTriggerPropertyListBoxItemView DataContext="{Binding}" />
+                                </DataTemplate>
+
+                                <!--  File System Changed  -->
+                                <DataTemplate x:Key="FileSystemChangePropertiesTemplate"
+                                              DataType="{x:Type local:MpFileSystemTriggerViewModel}">
+                                    <local:MpFileSystemTriggerPropertyListBoxItemView DataContext="{Binding}" />
+                                </DataTemplate>
+
+                                <!--  Triggers END  -->
+
+                                <!--  Compare  -->
+                                <DataTemplate x:Key="ComparePropertiesTemplate"
+                                              DataType="{x:Type local:MpCompareActionViewModelBase}">
+                                    <local:MpCompareActionPropertyListBoxItemView DataContext="{Binding}" />
+                                </DataTemplate>
+                                <!--  Analyze  -->
+                                <DataTemplate x:Key="AnalyzePropertiesTemplate"
+                                              DataType="{x:Type local:MpAnalyzeActionViewModel}">
+                                    <local:MpAnalyzeActionPropertyListBoxItemView DataContext="{Binding}" />
+                                </DataTemplate>
+                                <!--  Classify  -->
+                                <DataTemplate x:Key="ClassifyPropertiesTemplate"
+                                              DataType="{x:Type local:MpClassifyActionViewModel}">
+                                    <local:MpClassifyActionPropertyListBoxItemView DataContext="{Binding}" />
+                                </DataTemplate>
+
+                                <!--  File Writer  -->
+                                <DataTemplate x:Key="FileWriterPropertiesTemplate"
+                                              DataType="{x:Type local:MpFileWriterActionViewModel}">
+                                    <local:MpFileWriterActionPropertyListBoxItemView DataContext="{Binding}" />
+                                </DataTemplate>
+
+                                <!--  Macro  -->
+                                <DataTemplate x:Key="MacroPropertiesTemplate"
+                                              DataType="{x:Type local:MpMacroActionViewModel}">
+                                    <local:MpMacroActionPropertyListBoxItemView DataContext="{Binding}" />
+                                </DataTemplate>
+                            </local:MpAvActionItemPropertiesTemplateSelector>
+                        </ContentControl.DataTemplates>
+                    </ContentControl>
+                </DockPanel>
+            </Border>
+        </Grid>
+    </Expander>
+</local:MpAvUserControl>

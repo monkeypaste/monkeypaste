@@ -682,7 +682,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvActionViewModelBase() : base(null) { }
 
         public MpAvActionViewModelBase(MpAvActionCollectionViewModel parent) : base(parent) {
-            PropertyChanged += MpActionViewModelBase_PropertyChanged;
+            PropertyChanged += MpAvActionViewModelBase_PropertyChanged;
         }
 
         #endregion
@@ -953,7 +953,7 @@ namespace MonkeyPaste.Avalonia {
             return prefix + uniqueIdx;
         }
 
-        private void MpActionViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        private void MpAvActionViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsSelected):
                     if (IsSelected) {

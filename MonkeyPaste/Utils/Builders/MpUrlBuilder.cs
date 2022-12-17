@@ -28,7 +28,7 @@ namespace MonkeyPaste {
                 sourceUrlTitle = await MpUrlHelpers.GetUrlTitleAsync(sourceUrl);
             }
 
-            var result = await MpUrl.Create(sourceUrl, sourceUrlTitle);
+            var result = await MpUrl.CreateAsync(sourceUrl, sourceUrlTitle);
             return result;
         }
 

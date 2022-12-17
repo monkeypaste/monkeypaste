@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
-
-    public class MpHttpTransaction : MpDbModelBase, MpITransactionError {
+    public class MpHttpTransaction : MpDbModelBase, MpITransactionError, MpIPluginPresetTransaction {
         #region Protected variables 
 
         protected int iconId { get; set; } = 0;

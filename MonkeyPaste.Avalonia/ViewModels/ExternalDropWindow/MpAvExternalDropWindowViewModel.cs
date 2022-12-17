@@ -37,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public bool IsDropWidgetEnabled { get; set; } = false;
+        public bool IsDropWidgetEnabled { get; set; } = true;
 
         public bool HasUserToggledAnyHandlers { get; set; } = false;
         public int TotalRememberWaitTimeS => 30;

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpDllTransaction : MpDbModelBase, MpITransactionError {
+    public class MpDllTransaction : MpDbModelBase, MpITransactionError, MpIPluginPresetTransaction {
         #region Protected variables 
         //uses manifest iconUrl for MpISourceItem interface
         protected int iconId { get; set; } = 0;

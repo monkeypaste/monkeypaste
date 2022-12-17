@@ -63,7 +63,7 @@ namespace MonkeyPaste {
 
             List<MpISourceRef> target_source_refs = new List<MpISourceRef>();
             if(citid > 0) {
-                var cit_ref = await MpDataModelProvider.GetSourceRefByCopyItemTransactionId(citid);
+                var cit_ref = await MpDataModelProvider.GetSourceRefByCopyItemTransactionIdAsync(citid);
                 if (cit_ref != null) {
                     target_source_refs.Add(cit_ref);
                 }

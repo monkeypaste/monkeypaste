@@ -1,0 +1,158 @@
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvActionDesignerView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:TypeArguments="local:MpAvActionCollectionViewModel"
+                       mc:Ignorable="d">
+    <Grid>
+        <Grid.Background>
+            <SolidColorBrush Color="Gray"
+                             Opacity="0.7" />
+        </Grid.Background>
+        <local:MpAvZoomBorder ClipToBounds="True"
+                              DataContext="{Binding}"
+                              DesignerItem="{Binding SelectedItem}"
+                              ShowGrid="True"
+                              OriginThickness="1.5"
+                              GridLineThickness="0.5"
+                              GridLineSpacing="50"
+                              OriginBrush="Chocolate"
+                              GridLineBrush="BurlyWood">
+            <local:MpAvZoomBorder.Background>
+                <SolidColorBrush Color="White"
+                                 Opacity="0.0001" />
+            </local:MpAvZoomBorder.Background>
+            <ListBox x:Name="ActionDesignerListBox"
+                     ClipToBounds="False"
+                     BorderThickness="0"
+                     
+                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                     Items="{Binding AllSelectedTriggerActions}">
+                <ListBox.Background>
+                    <SolidColorBrush Color="White"
+                                     Opacity="0.0001" />
+                </ListBox.Background>
+
+                <ListBox.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="{Binding ScaleX, Mode=OneWayToSource}"
+                                        ScaleY="{Binding ScaleY, Mode=OneWayToSource}" />
+                        <TranslateTransform />
+                    </TransformGroup>
+                </ListBox.RenderTransform>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <local:MpAvDesignerCanvas x:Name="ActionDesignerCanvas"
+                                                  ClipToBounds="False"
+                                                  TipLength="20"
+                                                  TipWidth="10"
+                                                  TailWidth="3"
+                                                  TransitionLineThickness="1" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.Styles>
+                    <Style Selector="ListBoxItem">
+                        <Setter Property="BorderThickness"
+                                Value="0" />
+                        <Setter Property="Background"
+                                Value="Transparent" />
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Center" />
+                        <Setter Property="VerticalContentAlignment"
+                                Value="Center" />
+                        <Setter Property="HorizontalAlignment"
+                                Value="Center" />
+                        <Setter Property="VerticalAlignment"
+                                Value="Center" />
+                        <Setter Property="ClipToBounds"
+                                Value="False" />
+                        <Setter Property="IsSelected"
+                                Value="{Binding IsSelected, Mode=TwoWay}" />
+                        <Setter Property="Canvas.Left"
+                                Value="{Binding X, Mode=TwoWay}" />
+                        <Setter Property="Canvas.Top"
+                                Value="{Binding Y, Mode=TwoWay}" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <StackPanel Orientation="Vertical"
+                                                HorizontalAlignment="Center">
+                                        <ContentPresenter />
+                                        <TextBlock HorizontalAlignment="Center"
+                                                   IsVisible="{Binding IsSelected}"
+                                                   Padding="3"
+                                                   FontSize="10"
+                                                   Foreground="Wheat"
+                                                   MaxWidth="{Binding Width}"
+                                                   TextWrapping="WrapWithOverflow"
+                                                   Text="{Binding Label}">
+                                            <TextBlock.Background>
+                                                <SolidColorBrush Color="Black"
+                                                                 Opacity="0.2" />
+                                            </TextBlock.Background>
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <!--<ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected"
+                                                 Value="True">
+                                            <Setter Property="BorderBrush"
+                                                    Value="Transparent" />
+                                            <Setter Property="Background"
+                                                    Value="Transparent" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>-->
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.Styles>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <local:MpAvActionDesignerItemView DataContext="{Binding}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </local:MpAvZoomBorder>
+        <!--</zoompan:ZoomAndPanControl>-->
+        <!--</local:MpDesignerViewbox>-->
+        <Button x:Name="AddNewActionButton"
+                IsVisible="{Binding !IsAnySelected}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                BorderThickness="0"
+                local:MpAvIsHoveringExtension.IsEnabled="True"
+                local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                
+                Command="{Binding ShowTriggerSelectorMenuCommand}"
+                CommandParameter="{Binding $self}">
+            <StackPanel Orientation="Vertical">
+                <Grid>
+                    <Ellipse Stroke="{Binding AddNewButtonBorderBrushHexColor}"
+                             Fill="Transparent"
+                             StrokeThickness="3"
+                             Width="50"
+                             Height="50" />
+                    <Rectangle HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Fill="DimGray"
+                               Height="30"
+                               Width="3" />
+                    <Rectangle HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Fill="DimGray"
+                               Height="3"
+                               Width="30" />
+                </Grid>
+                <Label HorizontalAlignment="Center">
+                    Add New
+                </Label>
+            </StackPanel>
+        </Button>
+    </Grid>
+</local:MpAvUserControl>

@@ -28,4 +28,6 @@
     <local:MpAvDoubleArrayToAvListConverter x:Key="DoubleArrayToAvListConverter" />
     <local:MpAvBoolToGridLengthConverter x:Key="BoolToGridLengthConverter" />
     <local:MpAvAbsoluteToRelativePathStringConverter x:Key="AbsoluteToRelativePathStringConverter" />
+    <local:MpAvEnumToIntConverter x:Key="EnumToIntConverter" />
+    <local:MpAvEnumToItemSourceLabelsConverter x:Key="EnumToItemSourceLabelsConverter" />
 </ResourceDictionary>

@@ -20,6 +20,7 @@
             <DataGrid x:Name="PresetDataGrid"
                       Grid.Row="0"
                       RowBackground="Silver"
+                      Focusable="True"
                       AlternatingRowBackground="LightGray"
                       Items="{Binding Items}"
                       SelectedItem="{Binding SelectedItem}"
@@ -42,7 +43,9 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
 
-                                <Border BorderThickness="0">
+                                <local:MpAvClipBorder BorderThickness="0"
+                                                      Padding="3"
+                                                      CornerRadius="5">
                                     <Button x:Name="PresetIcon"
                                             BorderThickness="0"
                                             Cursor="Hand"
@@ -57,7 +60,7 @@
                                                VerticalAlignment="Center"
                                                Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
                                     </Button>
-                                </Border>
+                                </local:MpAvClipBorder>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
 
@@ -72,16 +75,15 @@
                                 <Grid ClipToBounds="True"
                                       HorizontalAlignment="Stretch"
                                       VerticalAlignment="Stretch">
-                                    <local:MpAvMarqueeTextBox AutoMarquee="False"
-                                                              CanEdit="True"
-                                                              EditOnDoubleClick="True"
+                                    <local:MpAvMarqueeTextBox local:MpAvIsFocusedExtension.IsEnabled="True"
+                                                              local:MpAvIsFocusedExtension.IsFocused="{Binding IsLabelTextBoxFocused, Mode=TwoWay}"
                                                               MinHeight="20"
                                                               FontSize="14"
+                                                              EditOnFocus="False"
                                                               DropShadowBrush="Transparent"
                                                               ReadOnlyForeground="Black"
                                                               Foreground="Black"
-                                                              IsReadOnly="True"
-                                                              IsMarqueeEnabled="True"
+                                                              IsReadOnly="{Binding IsLabelReadOnly, Mode=TwoWay}"
                                                               VerticalAlignment="Center"
                                                               HorizontalAlignment="Stretch"
                                                               HorizontalContentAlignment="Left"
@@ -93,27 +95,124 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <!--  QUICK ACTION COLUMN  -->
+                    <!--  TOGGLE EDIT COLUMN  -->
                     <DataGridTemplateColumn Width="30"
-                                            Header="Quick Action?">
+                                            Header="Edit"
+                                            IsVisible="{Binding IsSelected}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
+                                <Grid>
+                                    <Grid.Styles>
+                                        <Style Selector="ToggleButton /template/ ContentPresenter">
+                                            <Setter Property="Background"
+                                                    Value="Transparent" />
+                                        </Style>
+                                        <Style Selector="ToggleButton:checked /template/ ContentPresenter">
+                                            <Setter Property="Background"
+                                                    Value="DarkTurquoise" />
+                                        </Style>
+                                    </Grid.Styles>
+                                    <ToggleButton Background="Transparent"
+                                                  BorderThickness="0"
+                                                  Cursor="Hand"
+                                                  IsChecked="{Binding !IsLabelReadOnly, Mode=TwoWay}">
 
-                                <CheckBox HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"
-                                          IsThreeState="False"
-                                          IsChecked="{Binding IsQuickAction, Mode=TwoWay}">
-                                    <ToolTip.Tip>
-                                        <local:MpAvToolTipView ToolTipText="Quick Action?" />
-                                    </ToolTip.Tip>
-                                </CheckBox>
+                                        <ToolTip.Tip>
+                                            <local:MpAvToolTipView ToolTipText="Edit Label" />
+                                        </ToolTip.Tip>
+                                        <Image Width="20"
+                                               Height="20"
+                                               Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource EditImage}}" />
+
+
+                                    </ToggleButton>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!--  QUICK ACTION COLUMN  -->
+                    <DataGridTemplateColumn Width="30"
+                                            Header="Favorite"
+                                            IsVisible="{Binding IsSelected}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
+                                <Grid>
+                                    <Grid.Styles>
+                                        <Style Selector="ToggleButton /template/ ContentPresenter">
+                                            <Setter Property="Background"
+                                                    Value="Transparent" />
+                                        </Style>
+                                        <Style Selector="ToggleButton:checked /template/ ContentPresenter">
+                                            <Setter Property="Background"
+                                                    Value="Transparent" />
+                                        </Style>
+                                    </Grid.Styles>
+                                    <ToggleButton Background="Transparent"
+                                                  Cursor="Hand"
+                                                  BorderThickness="0"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  Width="15"
+                                                  Height="15"
+                                                  IsChecked="{Binding IsQuickAction, Mode=TwoWay}">
+
+                                        <ToolTip.Tip>
+                                            <local:MpAvToolTipView ToolTipText="Favorite" />
+                                        </ToolTip.Tip>
+                                        <Grid>
+                                            <Image x:Name="StarOutline"
+                                                   IsVisible="{Binding !IsQuickAction}">
+                                                <Image.Resources>
+                                                    <SolidColorBrush x:Key="Brush0"
+                                                                     Color="#FF000000" />
+                                                </Image.Resources>
+                                                <DrawingImage>
+                                                    <DrawingGroup>
+                                                        <DrawingGroup>
+                                                            <DrawingGroup.Transform>
+                                                                <MatrixTransform Matrix="0.99869716,0,0,0.99869716,0,0" />
+                                                            </DrawingGroup.Transform>
+                                                            <GeometryDrawing Brush="{DynamicResource Brush0}"
+                                                                             Geometry="F1 M242.949 93.714C242.067 90.999 239.72 89.02 236.895 88.61L161.915 77.71L128.385 9.769C127.121 7.209 124.514 5.588 121.66 5.588C118.805 5.588 116.198 7.209 114.934 9.769L81.404 77.71L6.422 88.61C3.596 89.021 1.249 91 0.367 93.714C-0.515 96.429 0.22 99.409 2.265 101.402L56.522 154.288L43.715 228.96C43.233 231.774 44.389 234.618 46.698 236.295C49.007 237.973 52.069 238.195 54.596 236.866L121.66 201.612L188.723 236.866C189.82 237.443 191.019 237.727 192.212 237.727C192.219 237.727 192.226 237.727 192.233 237.727C192.233 237.727 192.233 237.727 192.234 237.727C196.376 237.727 199.734 234.369 199.734 230.227C199.734 229.598 199.656 228.987 199.511 228.403L186.798 154.286L241.052 101.401C243.096 99.41 243.832 96.429 242.949 93.714ZM173.504 146.299C171.736 148.022 170.929 150.505 171.347 152.938L182.253 216.519L125.151 186.501C122.966 185.352 120.356 185.352 118.172 186.501L61.069 216.519L71.975 152.938C72.393 150.505 71.586 148.023 69.818 146.299L23.619 101.268L87.466 91.987C89.909 91.632 92.021 90.098 93.113 87.884L121.663 30.035L150.213 87.884C151.305 90.097 153.417 91.632 155.859 91.987L219.703 101.268L173.504 146.299Z" />
+                                                        </DrawingGroup>
+                                                    </DrawingGroup>
+                                                </DrawingImage>
+                                            </Image>
+                                            <Image x:Name="StarSolid"
+                                                   IsVisible="{Binding IsQuickAction}">
+                                                <Image.Resources>
+                                                    <SolidColorBrush x:Key="Brush0"
+                                                                     Color="#FFF4B459" />
+                                                    <SolidColorBrush x:Key="Brush1"
+                                                                     Color="#FFE3A753" />
+                                                </Image.Resources>
+                                                <DrawingImage>
+                                                    <DrawingGroup>
+                                                        <DrawingGroup>
+                                                            <DrawingGroup.Transform>
+                                                                <MatrixTransform Matrix="0.9995574,0,0,0.9995574,0,0" />
+                                                            </DrawingGroup.Transform>
+                                                            <GeometryDrawing Brush="{DynamicResource Brush0}"
+                                                                             Geometry="F1 M280.124 106.914L188.065 100.316L140.057 4.441L91.507 100.315L0 106.914L61.282 180.929L43.763 275.683L140.057 232.069L236.351 275.675L218.552 180.921C218.553 180.919 280.124 106.914 280.124 106.914Z" />
+                                                            <GeometryDrawing Brush="{DynamicResource Brush1}"
+                                                                             Geometry="F1 M236.352 275.683L218.553 180.92L280.071 106.975L280.071 106.905L188.065 100.315L140.057 4.441L140.057 232.068L236.352 275.683Z" />
+                                                        </DrawingGroup>
+                                                    </DrawingGroup>
+                                                </DrawingImage>
+                                            </Image>
+                                        </Grid>
+
+                                    </ToggleButton>
+                                </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
                     <!--  HOTKEY COLUMN  -->
                     <DataGridTemplateColumn Width="30"
-                                            Header="Shortcut">
+                                            Header="Shortcut"
+                                            IsVisible="{Binding IsSelected}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Button Background="Transparent"
@@ -131,7 +230,9 @@
                     </DataGridTemplateColumn>
 
                     <!--  PERFORM ANALYSIS  -->
-                    <DataGridTemplateColumn MinWidth="30">
+                    <DataGridTemplateColumn Width="30"
+                                            Header="Analyze"
+                                            IsVisible="{Binding IsSelected}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Grid>
@@ -170,8 +271,9 @@
                     </DataGridTemplateColumn>
 
                     <!--  DUPLICATE COLUMN  -->
-                    <DataGridTemplateColumn MinWidth="30"
-                                            Header="Duplicate">
+                    <DataGridTemplateColumn Width="30"
+                                            Header="Clone"
+                                            IsVisible="{Binding IsSelected}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Grid>
@@ -181,7 +283,7 @@
                                             Command="{Binding Parent.DuplicatePresetCommand}"
                                             CommandParameter="{Binding}">
                                         <ToolTip.Tip>
-                                            <local:MpAvToolTipView ToolTipText="Duplicate" />
+                                            <local:MpAvToolTipView ToolTipText="Clone" />
                                         </ToolTip.Tip>
                                         <Image Width="20"
                                                Height="20"
@@ -199,8 +301,11 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
+
                     <!--  DELETE/RESET ANALYSIS  -->
-                    <DataGridTemplateColumn MinWidth="30">
+                    <DataGridTemplateColumn Header="Bin"
+                                            Width="30"
+                                            IsVisible="{Binding IsSelected}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Grid>

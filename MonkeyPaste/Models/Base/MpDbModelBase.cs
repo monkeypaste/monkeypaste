@@ -103,6 +103,8 @@ namespace MonkeyPaste {
                 return;
             }
 
+            int del_id = Id;
+
             var dbot = GetType();
             var deleteItemAsyncMethod = typeof(MpDb).GetMethod(nameof(MpDb.DeleteItemAsync));
             var deleteItemByDboTypeAsyncMethod = deleteItemAsyncMethod.MakeGenericMethod(new[] { dbot });

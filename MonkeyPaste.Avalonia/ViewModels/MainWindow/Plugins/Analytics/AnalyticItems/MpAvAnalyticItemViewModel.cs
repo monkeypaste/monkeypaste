@@ -41,8 +41,6 @@ namespace MonkeyPaste.Avalonia {
         MpITreeItemViewModel, 
         MpIMenuItemViewModel {
         #region Private Variables
-
-
         #endregion
 
         #region Properties
@@ -55,7 +53,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpAvAnalyticItemPresetViewModel DefaultPresetViewModel => Items.FirstOrDefault(x => x.IsDefault);
+        public MpAvAnalyticItemPresetViewModel DefaultPresetViewModel => base.Items.FirstOrDefault(x => x.IsDefault);
 
         public MpMenuItemViewModel ContextMenuItemViewModel {
             get { 
@@ -80,11 +78,6 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<MpMenuItemViewModel> QuickActionPresetMenuItems => Items.Where(x => x.IsQuickAction).Select(x => x.ContextMenuItemViewModel);
 
-        //public MpITreeItemViewModel ParentTreeItem => Parent;
-
-        //public ObservableCollection<MpITreeItemViewModel> Children => new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
-
-        
         #endregion
 
         #region MpISelectableViewModel Implementation
@@ -94,6 +87,7 @@ namespace MonkeyPaste.Avalonia {
         public DateTime LastSelectedDateTime { get; set; }
 
         #endregion
+
         #region MpIAsyncComboBoxItemViewModel Implementation
 
 
@@ -104,31 +98,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-        public string ManageLabel => $"{Title} Preset Manager";
-
-        public string ItemBackgroundBrush {
-            get {
-                if (IsSelected) {
-                    return MpSystemColors.dimgray;
-                }
-                if (IsHovering) {
-                    return MpSystemColors.LightGray;
-                }
-                return MpSystemColors.Transparent;
-            }
-        }
-
-        public string ItemTitleForegroundBrush {
-            get {
-                if (IsSelected) {
-                    return MpSystemColors.White;
-                }
-                if (IsHovering) {
-                    return MpSystemColors.Black;
-                }
-                return MpSystemColors.White;
-            }
-        }
 
         public string CannotExecuteTooltip {
             get {
@@ -159,7 +128,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public virtual bool IsLoaded => Items.Count > 0 && Items[0].Items.Count > 0;
+        public virtual bool IsLoaded => base.Items.Count > 0 && base.Items[0].Items.Count > 0;
 
         //public bool IsAnyEditingParameters => Items.Any(x => x.IsEditingParameters);
 
@@ -308,7 +277,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Analyzer Plugin
 
-
         public MpAnalyzerInputFormatFlags InputFormatFlags { 
             get {
                 MpAnalyzerInputFormatFlags flags = MpAnalyzerInputFormatFlags.None;
@@ -370,11 +338,11 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string PluginGuid => PluginFormat == null ? string.Empty : PluginFormat.guid;
-
+        
         public MpBillableItem BillableItem { get; set; }
 
         #region Plugin
+        public string PluginGuid => PluginFormat == null ? string.Empty : PluginFormat.guid;
 
         public MpPluginFormat PluginFormat { get; set; }
 
@@ -402,7 +370,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvAnalyticItemViewModel(MpAvAnalyticItemCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpAnalyticItemViewModel_PropertyChanged;
-            Items.CollectionChanged += PresetViewModels_CollectionChanged;
+            base.Items.CollectionChanged += PresetViewModels_CollectionChanged;
         }
 
         #endregion
@@ -430,17 +398,17 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
                        
-            Items.Clear();
+            base.Items.Clear();
 
             var presets = await PreparePresetModelsAsync();
             foreach (var preset in presets) {
                 var naipvm = await CreatePresetViewModelAsync(preset);
-                Items.Add(naipvm);
+                base.Items.Add(naipvm);
             }
 
-            OnPropertyChanged(nameof(Items));
+            base.OnPropertyChanged(nameof(MpAvSelectorViewModelBase<MpAvAnalyticItemCollectionViewModel, MpAvAnalyticItemPresetViewModel>.Items));
 
-            while (Items.Any(x => x.IsBusy)) {
+            while (base.Items.Any(x => x.IsBusy)) {
                 await Task.Delay(100);
             }
 
@@ -465,7 +433,7 @@ namespace MonkeyPaste.Avalonia {
                                         uniqueName.ToLower(),
                                         uniqueIdx);
 
-            while(Items.Any(x => x.Label.ToLower() == testName)) {
+            while(base.Items.Any(x => x.Label.ToLower() == testName)) {
                 uniqueIdx++;
                 testName = string.Format(
                                         @"{0}{1}",
@@ -519,12 +487,12 @@ namespace MonkeyPaste.Avalonia {
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if(e is MpPluginPreset aip) {
                 if(aip.PluginGuid == PluginGuid) {
-                    var presetVm = Items.FirstOrDefault(x => x.Preset.Id == aip.Id);
+                    var presetVm = base.Items.FirstOrDefault(x => x.Preset.Id == aip.Id);
                     if(presetVm != null) {
-                        int presetIdx = Items.IndexOf(presetVm);
+                        int presetIdx = base.Items.IndexOf(presetVm);
                         if(presetIdx >= 0) {
-                            Items.RemoveAt(presetIdx);
-                            OnPropertyChanged(nameof(Items));
+                            base.Items.RemoveAt(presetIdx);
+                            base.OnPropertyChanged(nameof(MpAvSelectorViewModelBase<MpAvAnalyticItemCollectionViewModel, MpAvAnalyticItemPresetViewModel>.Items));
                             OnPropertyChanged(nameof(SelectedItem));
                             OnPropertyChanged(nameof(QuickActionPresetMenuItems));
                         }
@@ -559,7 +527,7 @@ namespace MonkeyPaste.Avalonia {
                                 isDefault: true,
                                 label: $"{Title} - Default",
                                 iconId: PluginIconId,
-                                sortOrderIdx: existingDefaultPresetId == 0 ? 0 : Items.FirstOrDefault(x => x.IsDefault).SortOrderIdx,
+                                sortOrderIdx: existingDefaultPresetId == 0 ? 0 : base.Items.FirstOrDefault(x => x.IsDefault).SortOrderIdx,
                                 description: $"Auto-generated default preset for '{Title}'",
                                 //format: AnalyzerPluginFormat,
                                 manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime,
@@ -588,7 +556,7 @@ namespace MonkeyPaste.Avalonia {
                         LastSelectedDateTime = DateTime.Now;
 
                         if(SelectedItem == null) {
-                            SelectedItem = Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
+                            base.SelectedItem = base.Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
                         }
                         //CollectionViewSource.GetDefaultView(SelectedItem.Items).Refresh();
                         SelectedItem.OnPropertyChanged(nameof(SelectedItem.Items));
@@ -598,13 +566,6 @@ namespace MonkeyPaste.Avalonia {
                     }                    
                     Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
                     Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
-                    OnPropertyChanged(nameof(ItemBackgroundBrush));
-                    OnPropertyChanged(nameof(ItemTitleForegroundBrush));
-
-                    break;
-                case nameof(IsHovering):
-                    OnPropertyChanged(nameof(ItemBackgroundBrush));
-                    OnPropertyChanged(nameof(ItemTitleForegroundBrush));
                     break;
                 case nameof(SelectedItem):
                     if(SelectedItem != null) {
@@ -612,7 +573,7 @@ namespace MonkeyPaste.Avalonia {
                             SelectedItem.IsSelected = true;
                         }                        
                     } else {
-                        Items.ForEach(x => x.IsSelected = false);
+                        base.Items.ForEach(x => x.IsSelected = false);
                     }
                     Parent.OnPropertyChanged(nameof(Parent.SelectedPresetViewModel));
                     break;
@@ -620,18 +581,18 @@ namespace MonkeyPaste.Avalonia {
         }
         private void UpdatePresetSortOrder(bool fromModel = false) {
             if(fromModel) {
-                Items.Sort(x => x.SortOrderIdx);
+                base.Items.Sort(x => x.SortOrderIdx);
             } else {
-                foreach(var aipvm in Items) {
-                    aipvm.SortOrderIdx = Items.IndexOf(aipvm);
+                foreach(var aipvm in base.Items) {
+                    aipvm.SortOrderIdx = base.Items.IndexOf(aipvm);
                 }
             }
         }
 
         private async Task<int> GetOrCreateIconIdAsync() {
             var bytes = await MpFileIo.ReadBytesFromUriAsync(PluginFormat.iconUri, PluginFormat.RootDirectory); ;
-            var icon = await MpIcon.Create(
-                iconImgBase64: bytes.ToBase64String(),
+            var icon = await MpPlatformWrapper.Services.IconBuilder.CreateAsync(
+                iconBase64: bytes.ToBase64String(),
                 createBorder: false);
 
             return icon.Id;
@@ -762,7 +723,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     sourceCopyItem = MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem;
                 }
-                Items.ForEach(x => x.IsSelected = x == targetAnalyzer);
+                base.Items.ForEach(x => x.IsSelected = x == targetAnalyzer);
                 OnPropertyChanged(nameof(SelectedItem));
 
                 MpPluginTransactionBase result = await MpPluginTransactor.PerformTransaction(
@@ -852,29 +813,6 @@ namespace MonkeyPaste.Avalonia {
                    isOkType;
         }
 
-        public ICommand CreateNewPresetCommand => new MpAsyncCommand<object>(
-            async (args) => {
-                IsBusy = true;
-                bool isActionPreset = false;
-                if(args != null) {
-                    isActionPreset = (bool)args;
-                }
-
-                MpPluginPreset newPreset = await MpPluginPreset.CreateAsync(
-                        pluginGuid: PluginGuid,
-                        //format:AnalyzerPluginFormat,
-                        isActionPreset: isActionPreset,
-                        iconId: PluginIconId,
-                        label: GetUniquePresetName());
-
-                var npvm = await CreatePresetViewModelAsync(newPreset);
-                Items.Add(npvm);
-                Items.ForEach(x => x.IsSelected = x == npvm);
-
-                OnPropertyChanged(nameof(Items));
-
-                IsBusy = false;
-            });
 
         public ICommand SelectPresetCommand => new MpCommand<MpAvAnalyticItemPresetViewModel>(
              (selectedPresetVm) => {
@@ -892,8 +830,8 @@ namespace MonkeyPaste.Avalonia {
                  if (!IsSelected) {
                      Parent.SelectedItem = this;
                  }
-                 if (SelectedItem == null && Items.Count > 0) {
-                     SelectedItem = Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
+                 if (base.SelectedItem == null && base.Items.Count > 0) {
+                     base.SelectedItem = base.Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
                  }
                  if(!Parent.IsSidebarVisible) {
                      Parent.IsSidebarVisible = true;
@@ -921,7 +859,7 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 IsBusy = true;
 
-                var defvm = Items.FirstOrDefault(x => x.IsDefault);
+                var defvm = base.Items.FirstOrDefault(x => x.IsDefault);
                 if(defvm == null) {
                     throw new Exception("Analyzer is supposed to have a default preset");
                 }
@@ -934,46 +872,59 @@ namespace MonkeyPaste.Avalonia {
 
                 await defvm.InitializeAsync(defaultPresetModel);
 
-                Items.ForEach(x => x.IsSelected = x.AnalyticItemPresetId == defvm.AnalyticItemPresetId);
+                base.Items.ForEach(x => x.IsSelected = x.AnalyticItemPresetId == defvm.AnalyticItemPresetId);
                 OnPropertyChanged(nameof(SelectedItem));
 
                 IsBusy = false;
             });
 
-        public ICommand ShiftPresetCommand => new MpAsyncCommand<object>(
-            // [0] = shift dir [1] = presetvm
-            async (args) => {
-                var argParts = args as object[];
-                int dir = (int)Convert.ToInt32(argParts[0].ToString());
-                MpAvAnalyticItemPresetViewModel pvm = argParts[1] as MpAvAnalyticItemPresetViewModel;
-                int curSortIdx = Items.IndexOf(pvm);
-                int newSortIdx = curSortIdx + dir;
-
-                Items.Move(curSortIdx, newSortIdx);
-                for (int i = 0; i < Items.Count; i++) {
-                    Items[i].SortOrderIdx = i;
-                    await Items[i].Preset.WriteToDatabaseAsync();
-                }
-            },
+        public ICommand ShiftPresetCommand => new MpCommand<object>(
+            // [0] = new_idx [1] = presetvm
             (args) => {
-                if (args == null) {
-                    return false;
-                }
-                if(args is object[] argParts) {
-                    int dir = (int)Convert.ToInt32(argParts[0].ToString());
-                    MpAvAnalyticItemPresetViewModel pvm = argParts[1] as MpAvAnalyticItemPresetViewModel;
-                    int curSortIdx = Items.IndexOf(pvm);
-                    int newSortIdx = curSortIdx + dir;
-                    if(newSortIdx < 0 || newSortIdx >= Items.Count || newSortIdx == curSortIdx) {
-                        return false;
+                if(args is object[] argParts &&
+                    argParts.Length == 2 &&
+                    argParts[0] is int new_idx &&
+                    argParts[1] is MpAvAnalyticItemPresetViewModel pvm) {
+
+                    new_idx = Math.Max(0, Math.Min(base.Items.Count - 1, new_idx));
+
+                    int curSortIdx = base.Items.IndexOf(pvm);
+                    base.Items.Move(curSortIdx, new_idx);
+                    for (int i = 0; i < base.Items.Count; i++) {
+                        base.Items[i].SortOrderIdx = i;
                     }
-                    return true;
                 }
-                return false;
             });
 
+        public ICommand CreateNewPresetCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                IsBusy = true;
+                bool isActionPreset = false;
+                if (args != null) {
+                    isActionPreset = (bool)args;
+                }
 
-            public ICommand DuplicatePresetCommand => new MpAsyncCommand<object>(
+                var def_icon = await MpDataModelProvider.GetItemAsync<MpIcon>(PluginIconId);
+
+                var np_icon = await def_icon.CloneDbModelAsync();
+
+                MpPluginPreset newPreset = await MpPluginPreset.CreateAsync(
+                        pluginGuid: PluginGuid,
+                        isActionPreset: isActionPreset,
+                        sortOrderIdx: base.Items.Count,
+                        iconId: np_icon.Id,
+                        label: GetUniquePresetName());
+
+                var npvm = await CreatePresetViewModelAsync(newPreset);
+                base.Items.Add(npvm);
+                base.Items.ForEach(x => x.IsSelected = x == npvm);
+
+                base.OnPropertyChanged(nameof(MpAvSelectorViewModelBase<MpAvAnalyticItemCollectionViewModel, MpAvAnalyticItemPresetViewModel>.Items));
+
+                IsBusy = false;
+            });
+
+        public ICommand DuplicatePresetCommand => new MpAsyncCommand<object>(
                 async (args) => {
                     IsBusy = true;
 
@@ -981,14 +932,17 @@ namespace MonkeyPaste.Avalonia {
                     if(aipvm == null) {
                         throw new Exception("DuplicatedPresetCommand must have preset as argument");
                     }
-                    var dp = await aipvm.Preset.CloneDbModelAsync(
-                        deepClone: true,
-                        suppressWrite: false);
+                    var p_to_clone = aipvm.Preset;
+                    p_to_clone.Label += " - Clone";
+                    p_to_clone.SortOrderIdx = base.Items.Count;
+                    p_to_clone.IsModelReadOnly = false;
+                    var dp = await aipvm.Preset.CloneDbModelAsync();
 
                     var dpvm = await CreatePresetViewModelAsync(dp);
-                    Items.Add(dpvm);
-                    Items.ForEach(x => x.IsSelected = x == dpvm);
-                    OnPropertyChanged(nameof(Items));
+                    base.Items.Add(dpvm);
+                    ShiftPresetCommand.Execute(new object[] { aipvm.SortOrderIdx + 1, dpvm });
+                    base.Items.ForEach(x => x.IsSelected = x == dpvm);
+                    base.OnPropertyChanged(nameof(MpAvSelectorViewModelBase<MpAvAnalyticItemCollectionViewModel, MpAvAnalyticItemPresetViewModel>.Items));
 
                     IsBusy = false;
                 });

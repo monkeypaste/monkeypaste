@@ -108,7 +108,7 @@ namespace MonkeyPaste {
 
             // Icon
 
-            var thisAppIcon = await MpIcon.Create(MpBase64Images.AppIcon);
+            var thisAppIcon = await MpIcon.CreateAsync(MpBase64Images.AppIcon);
 
 
             // This App

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SQLite;
 using MonkeyPaste.Common.Plugin; 
 using MonkeyPaste.Common;
+using Org.BouncyCastle.Crmf;
 
 namespace MonkeyPaste {
     public class MpUrl : 
@@ -99,11 +100,9 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public static async Task<MpUrl> Create(
+        public static async Task<MpUrl> CreateAsync(
             string urlPath = "",
             string urlTitle = "",
-            string urlIconPath = "",
-            int urlIconId = 0,
             bool suppressWrite = false) {
             var dupCheck = await MpDataModelProvider.GetUrlByPathAsync(urlPath);
             if(dupCheck != null) {
@@ -125,24 +124,10 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine("Ignoring mproperly formatted source url: " + urlPath);
                 return null;
             }
-            MpIcon icon = null;
-            if(urlIconId > 0) {
-                icon = await MpDataModelProvider.GetItemAsync<MpIcon>(urlIconId);
-            } else if(!string.IsNullOrEmpty(urlIconPath)) {
-                icon = await MpIcon.Create2Async(
-                    iconUrl: urlIconPath, 
+            string favIconImg64 = await MpUrlHelpers.GetUrlFavIconAsync(urlPath);
+            MpIcon icon = await MpPlatformWrapper.Services.IconBuilder.CreateAsync(
+                    iconBase64: favIconImg64,
                     suppressWrite: suppressWrite);
-            }
-            if(icon == null) {
-                string favIconImg64 = await MpUrlHelpers.GetUrlFavIconAsync(urlPath);
-                if (favIconImg64 == MpBase64Images.UnknownFavIcon || favIconImg64 == null) {
-                    //url has no and result is google's default
-                    favIconImg64 = MpBase64Images.QuestionMark;
-                }
-                icon = await MpIcon.Create(
-                    iconImgBase64: favIconImg64,
-                    suppressWrite: suppressWrite);
-            }
             
             newUrl.IconId = icon.Id;
             if (newUrl.IconId == 0) {

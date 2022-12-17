@@ -1,0 +1,155 @@
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvCompareActionPropertyListBoxItemView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+                       x:TypeArguments="local:MpAvCompareActionViewModelBase"
+                       mc:Ignorable="d"
+                       d:DesignHeight="450"
+                       d:DesignWidth="800">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.3*" />
+            <RowDefinition Height="0.3*" />
+            <RowDefinition Height="0.3*" />
+            <RowDefinition Height="0.3*" />
+            <RowDefinition Height="0.3*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.3*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--  Compare Property Path  -->
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   Classes="actionProperty"
+                   Text="Field" />
+        <Border Grid.Row="0"
+                Grid.Column="1"
+                Classes="actionProperty">
+            <ComboBox Style="{StaticResource ActionPropertyComboBoxStyle}"
+                      Classes="actionProperty"
+                      SelectedIndex="{Binding ComparePropertyPathType, Converter={StaticResource EnumToIntConverter}, ConverterParameter=MonkeyPaste.MpCopyItemPropertyPathType, Mode=TwoWay}"
+                      Items="{Binding ., Converter={StaticResource EnumToItemSourceLabelsConverter}, ConverterParameter=MonkeyPaste.MpCopyItemPropertyPathType}" />
+        </Border>
+
+        <!--  START Item Type / Compare Type Row  -->
+        <!--  Item Type Chooser  -->
+        <TextBlock Grid.Row="1"
+                   Grid.Column="0"
+                   IsVisible="{Binding IsItemTypeCompare}"
+                   Classes="actionProperty"
+                   Text="Type" />
+        <Border Grid.Row="1"
+                Grid.Column="1"
+                IsVisible="{Binding IsItemTypeCompare}"
+                Classes="actionProperty">
+            <ComboBox Classes="actionProperty"
+                      IsDropDownOpen="{Binding IsAnyDropDownOpen, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=OneWayToSource}"
+                      SelectedIndex="{Binding ContentItemType, Converter={StaticResource EnumToIntConverter}, ConverterParameter=MonkeyPaste.MpCopyItemType, Mode=TwoWay}"
+                      Items="{Binding ., Converter={StaticResource EnumToItemSourceLabelsConverter}, ConverterParameter=MonkeyPaste.MpCopyItemType}" />
+        </Border>
+
+        <!--  Comparison Operator Type  -->
+        <TextBlock Grid.Row="1"
+                   Grid.Column="0"
+                   IsVisible="{Binding !IsItemTypeCompare}"
+                      Classes="actionProperty"
+                   Text="Type" />
+        <StackPanel Grid.Row="1"
+                    Grid.Column="1"
+                    Orientation="Horizontal"
+                    IsVisible="{Binding !IsItemTypeCompare}">
+            <Border Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
+                <ComboBox Style="{StaticResource ActionPropertyComboBoxStyle}"
+                          ItemContainerStyle="{StaticResource ActionPropertyComboBoxItemStyle}"
+                          SelectedIndex="{Binding ComparisonOperatorType, Converter={StaticResource EnumToIntConverter}, ConverterParameter=MonkeyPaste.MpComparisonOperatorType, Mode=TwoWay}"
+                          Items="{Binding ., Converter={StaticResource EnumToItemSourceLabelsConverter}, ConverterParameter=MonkeyPaste.MpComparisonOperatorType}" />
+            </Border>
+
+            <CheckBox Visibility="{Binding IsItemTypeCompare, Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                      IsEnabled="{Binding IsCompareTypeRegex, Converter={StaticResource BoolFlipConverter}}"
+                      ToolTip="Case Sensitive?"
+                      ToolTipService.InitialShowDelay="0"
+                      MinWidth="100"
+                      Margin="5,10"
+                      IsChecked="{Binding IsCaseSensitive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
+        </StackPanel>
+
+        <!--  is last output compare json path checkbox  -->
+        <TextBlock Grid.Row="2"
+                   Grid.Column="0"
+                   Visibility="{Binding IsLastOutputCompare, Converter={StaticResource BoolToVisibilityConverter}}"
+                   Style="{StaticResource ActionPropertyTextBlockStyle}"
+                   Text="Query Output?" />
+        <CheckBox Grid.Row="2"
+                  Grid.Column="1"
+                  Visibility="{Binding IsLastOutputCompare, Converter={StaticResource BoolToVisibilityConverter}}"
+                  MinWidth="100"
+                  Margin="5,10"
+                  IsChecked="{Binding IsJsonQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
+
+        <!--  json path query textbox  -->
+        <TextBlock Grid.Row="3"
+                   Grid.Column="0"
+                   Visibility="{Binding IsJsonQuery, Converter={StaticResource BoolToVisibilityConverter}}"
+                   Style="{StaticResource ActionPropertyTextBlockStyle}"
+                   Text="JSON Path" />
+        <Border Grid.Row="3"
+                Grid.Column="1"
+                BorderThickness="0"
+                Background="White"
+                Visibility="{Binding IsJsonQuery, Converter={StaticResource BoolToVisibilityConverter}}"
+                Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
+            <TextBox x:Name="CompareDataJsonPathTextBox"
+                     HorizontalAlignment="Stretch"
+                     HorizontalScrollBarVisibility="Visible"
+                     VerticalScrollBarVisibility="Auto"
+                     BorderThickness="0"
+                     Padding="5"
+                     MinHeight="20"
+                     MinWidth="180"
+                     FontSize="14"
+                     TextWrapping="Wrap"
+                     AcceptsReturn="True"
+                     AcceptsTab="True"
+                     local:MpAvIsFocusedExtension.IsEnabled="True"
+                     Text="{Binding CompareDataJsonPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
+        </Border>
+
+        <!--  END Item Type / Compare Type Row / JsonPath  -->
+
+
+        <!--  Compare Data  -->
+        <TextBlock Grid.Row="4"
+                   Grid.Column="0"
+                   Visibility="{Binding IsItemTypeCompare, Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                   Style="{StaticResource ActionPropertyTextBlockStyle}"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Text="Data" />
+
+        <TextBox x:Name="CompareDataTextBox"
+                 Grid.Row="5"
+                 Grid.Column="0"
+                 Grid.ColumnSpan="3"
+                 Visibility="{Binding IsItemTypeCompare, Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                 HorizontalAlignment="Stretch"
+                 HorizontalScrollBarVisibility="Visible"
+                 VerticalScrollBarVisibility="Auto"
+                 Padding="5"
+                 MinHeight="20"
+                 MinWidth="240"
+                 FontSize="14"
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 AcceptsTab="True"
+                 local:MpAvIsFocusedExtension.IsEnabled="True"
+                 Text="{Binding CompareData, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
+    </Grid>
+</local:MpAvUserControl>

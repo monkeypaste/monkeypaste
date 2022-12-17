@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine("[DragOver] ClipboardFormat: " + BindingContext);
 
             e.DragEffects = DragDropEffects.Link;
-            this.GetVisualAncestor<MpAvExternalDropWindow>().AutoScrollListBox(e);
+            //this.GetVisualAncestor<MpAvExternalDropWindow>().AutoScrollListBox(e);
 
         }
         private void DragLeave(object sender, RoutedEventArgs e) {

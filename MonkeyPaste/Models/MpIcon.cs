@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.Diagnostics;
+using System.Linq;
 
 namespace MonkeyPaste {
 
@@ -100,30 +101,15 @@ namespace MonkeyPaste {
 
         #region Statics
 
-        public static async Task<MpIcon> Create2Async(
-            string iconUrl = "",
-            List<string> hexColors = null,
-            bool createBorder = true,
-            string guid = "",
-            bool suppressWrite = false) {
-            string base64FavIcon = await MpUrlHelpers.GetUrlFavIconAsync(iconUrl);
-            var result = await Create(
-                iconImgBase64: base64FavIcon,
-                hexColors: hexColors,
-                createBorder: createBorder,
-                guid: guid,
-                suppressWrite: suppressWrite);
-            return result;
-        }
-
-        public static async Task<MpIcon> Create(
+        public static async Task<MpIcon> CreateAsync(
             string iconImgBase64 = "",
             List<string> hexColors = null,
-            bool createBorder = true, 
+            bool createBorder = true,
+            bool allowDup = false,
             string guid = "",
             bool suppressWrite = false) {
 
-            if(!string.IsNullOrEmpty(iconImgBase64)) {
+            if(!string.IsNullOrEmpty(iconImgBase64) && !allowDup) {
                 var dupCheck = await MpDataModelProvider.GetIconByImageStrAsync(iconImgBase64);
                 if (dupCheck != null) {
                     return dupCheck;
@@ -234,6 +220,27 @@ namespace MonkeyPaste {
                 await WriteToDatabaseAsync();
             }
         }
+        public override async Task DeleteFromDatabaseAsync() {
+            if (Id < 1) {
+                return;
+            }
+            List<Task> delete_tasks = new List<Task>();
+            if(IconImageId > 0) {
+                var icon_img = await MpDataModelProvider.GetItemAsync<MpDbImage>(IconImageId);
+                if(icon_img != null) {
+                    delete_tasks.Add(icon_img.DeleteFromDatabaseAsync());
+                }
+            }
+            if (IconBorderImageId > 0) {
+                var icon_border_img = await MpDataModelProvider.GetItemAsync<MpDbImage>(IconBorderImageId);
+                if (icon_border_img != null) {
+                    delete_tasks.Add(icon_border_img.DeleteFromDatabaseAsync());
+                }
+            }
+            delete_tasks.Add(base.DeleteFromDatabaseAsync());
+            await Task.WhenAll(delete_tasks);
+        }
+
         #region Sync
 
         public async Task<object> CreateFromLogsAsync(string iconGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {

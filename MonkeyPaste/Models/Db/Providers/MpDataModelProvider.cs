@@ -160,44 +160,7 @@ namespace MonkeyPaste {
         }
         #endregion
 
-        #region MpISourceRef
-
-        public static async Task<MpISourceRef> GetSourceRefByCopyItemTransactionId(int citid) {
-            // NOTE since this is in response phase source records should exist and actual plugin url is not needed
-            var ci_trans = await GetItemAsync<MpCopyItemTransaction>(citid);
-            if (ci_trans != null) {
-                // TODO probably refactor non-ci transactions to poly table
-                // or add others here
-                // or make helper to get to app, url or item (MpISourceRef)
-
-                switch(ci_trans.CopyItemTransactionType) {
-                    case MpCopyItemTransactionType.Http:
-                        var http_tran = await GetItemAsync<MpHttpTransaction>(ci_trans.CopyItemTransactionObjId);
-                        if (http_tran != null) {
-                            var url = await GetItemAsync<MpUrl>(http_tran.UrlId);
-                            return url;
-                        }
-                        break;
-                    case MpCopyItemTransactionType.Cli:
-                        var cli_tran = await GetItemAsync<MpCliTransaction>(ci_trans.CopyItemTransactionObjId);
-                        if (cli_tran != null) {
-                            var app = await GetItemAsync<MpApp>(cli_tran.AppId);
-                            return app;
-                        }
-                        break;
-                    case MpCopyItemTransactionType.Dll:
-                        var dll_tran = await GetItemAsync<MpDllTransaction>(ci_trans.CopyItemTransactionObjId);
-                        if (dll_tran != null) {
-                            var app = await GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
-                            return app;
-                        }
-                        break;
-                }
-
-            }
-            return null;
-        }
-        #endregion
+        
 
         #region MpIcon
 
@@ -580,7 +543,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region MpImageAnnotation
+        #region MpCopyItemTransaction
 
         public static async Task<List<MpCopyItemTransaction>> GetCopyItemTransactionsByCopyItemIdAsync(int ciid) {
             string query = string.Format(@"select * from MpCopyItemTransaction where fk_MpCopyItemId=?");
@@ -588,6 +551,120 @@ namespace MonkeyPaste {
             return result;
         }
 
+        public static async Task<List<MpCopyItemTransaction>> GetCopyItemTransactionsByPluginPresetIdAsync(int ppid) {
+            string query = string.Format(@"select * from MpCopyItemTransaction where fk_CopyItemTransactionObjectId=?");
+            var result = await MpDb.QueryAsync<MpCopyItemTransaction>(query, ppid);
+            return result;
+        }
+
+        #endregion
+
+        #region MpIPluginPresetTransaction
+
+        public static async Task<List<MpIPluginPresetTransaction>> GetPluginPresetTransactionsByCopyItemId(int ciid) {
+            List<MpIPluginPresetTransaction> ci_transactions = new List<MpIPluginPresetTransaction>();
+            var citl = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemIdAsync(ciid);
+            foreach(var cit in citl) {
+                MpIPluginPresetTransaction ppt = null;
+                switch (cit.CopyItemTransactionType) {
+                    case MpCopyItemTransactionType.Http:
+                        ppt = await GetItemAsync<MpHttpTransaction>(cit.CopyItemTransactionObjId);
+                        break;
+                    case MpCopyItemTransactionType.Dll:
+                        ppt = await GetItemAsync<MpDllTransaction>(cit.CopyItemTransactionObjId);
+                        break;
+                    case MpCopyItemTransactionType.Cli:
+                        ppt = await GetItemAsync<MpCliTransaction>(cit.CopyItemTransactionObjId);
+                        break;
+                }
+                if(ppt == null) {
+                    continue;
+                }
+                ci_transactions.Add(ppt);
+            }
+            return ci_transactions;
+        }
+
+        public static async Task<List<MpIPluginPresetTransaction>> GetPluginPresetTransactionsByPresetId(int ppid) {
+            List<MpIPluginPresetTransaction> preset_transactions = new List<MpIPluginPresetTransaction>();
+
+            var clil = await GetCliTransactionsByPresetIdAsync(ppid);
+            if(clil != null && clil.Count > 0) {
+                preset_transactions.AddRange(clil);
+            }
+            var httpl = await GetHttpTransactionsByPresetIdAsync(ppid);
+            if (httpl != null && httpl.Count > 0) {
+                preset_transactions.AddRange(httpl);
+            }
+            var dlll = await GetDllTransactionsByPresetIdAsync(ppid);
+            if (dlll != null && dlll.Count > 0) {
+                preset_transactions.AddRange(dlll);
+            }
+            return preset_transactions;
+        }
+
+        #endregion
+
+        #region MpCliTransaction
+
+        public static async Task<List<MpCliTransaction>> GetCliTransactionsByPresetIdAsync(int pid) {
+            string query = string.Format(@"select * from MpCliTransaction where fk_MpAnalyticItemPresetId=?");
+            var result = await MpDb.QueryAsync<MpCliTransaction>(query,pid);
+            return result;
+        }
+        #endregion
+
+        #region MpHttpTransaction
+
+        public static async Task<List<MpHttpTransaction>> GetHttpTransactionsByPresetIdAsync(int pid) {
+            string query = string.Format(@"select * from MpHttpTransaction where fk_MpAnalyticItemPresetId=?");
+            var result = await MpDb.QueryAsync<MpHttpTransaction>(query, pid);
+            return result;
+        }
+        #endregion
+
+        #region MpDllTransaction
+
+        public static async Task<List<MpDllTransaction>> GetDllTransactionsByPresetIdAsync(int pid) {
+            string query = string.Format(@"select * from MpDllTransaction where fk_MpAnalyticItemPresetId=?");
+            var result = await MpDb.QueryAsync<MpDllTransaction>(query, pid);
+            return result;
+        }
+        #endregion
+
+        #region MpISourceRef
+
+        public static async Task<MpISourceRef> GetSourceRefByCopyItemTransactionIdAsync(int citid) {
+            var ci_trans = await GetItemAsync<MpCopyItemTransaction>(citid);
+            if (ci_trans != null) {
+
+                switch (ci_trans.CopyItemTransactionType) {
+                    case MpCopyItemTransactionType.Http:
+                        var http_tran = await GetItemAsync<MpHttpTransaction>(ci_trans.CopyItemTransactionObjId);
+                        if (http_tran != null) {
+                            var url = await GetItemAsync<MpUrl>(http_tran.UrlId);
+                            return url;
+                        }
+                        break;
+                    case MpCopyItemTransactionType.Cli:
+                        var cli_tran = await GetItemAsync<MpCliTransaction>(ci_trans.CopyItemTransactionObjId);
+                        if (cli_tran != null) {
+                            var app = await GetItemAsync<MpApp>(cli_tran.AppId);
+                            return app;
+                        }
+                        break;
+                    case MpCopyItemTransactionType.Dll:
+                        var dll_tran = await GetItemAsync<MpDllTransaction>(ci_trans.CopyItemTransactionObjId);
+                        if (dll_tran != null) {
+                            var app = await GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
+                            return app;
+                        }
+                        break;
+                }
+
+            }
+            return null;
+        }
         #endregion
 
         #region MpCopyItemTag
@@ -740,7 +817,11 @@ namespace MonkeyPaste {
         #endregion
 
         #region MpAnalytic Item
-
+        public static async Task<int> GetPluginPresetCountByPluginGuidAsync(string aguid) {
+            string query = $"select count(*) from MpPluginPreset where PluginGuid=?";
+            var result = await MpDb.QueryScalarAsync<int>(query, aguid);
+            return result;
+        }
         public static async Task<List<MpPluginPreset>> GetPluginPresetsByPluginGuidAsync(string aguid) {
             string query = $"select * from MpPluginPreset where PluginGuid=?";
             var result = await MpDb.QueryAsync<MpPluginPreset>(query, aguid);

@@ -157,24 +157,25 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task SetUserIconToCurrentHexColorAsync(string hexColor, MpIUserIconViewModel uivm) {
-            await Task.Delay(1);
             //var bmpSrc = (Bitmap)new BitmapImage(new Uri(MpPrefViewModel.Instance.AbsoluteResourcesPath + @"/Images/texture.png"));
             //bmpSrc = bmpSrc.Tint(hexColor.ToWinMediaColor());
-            //MpIcon icon ;
-            //if (uivm.IconId == 0) {
-            //    // likely means its current icon is a default reference to a parent
-            //    icon = await MpIcon.Create(
-            //        iconImgBase64: bmpSrc.ToBase64String(),
-            //        createBorder: false);
-            //    uivm.IconId = icon.Id;
-            //} else {
-            //    icon = await MpDataModelProvider.GetItemAsync<MpIcon>(uivm.IconId);
-            //    var img = await MpDataModelProvider.GetItemAsync<MpDbImage>(icon.IconImageId);
-            //    img.ImageBase64 = bmpSrc.ToBase64String();
-            //    await img.WriteToDatabaseAsync();
-            //    await icon.CreateOrUpdateBorderAsync(forceHexColor: hexColor);
-            //}
-            //uivm.OnPropertyChanged(nameof(uivm.IconId));
+            var bmpSrc = MpAvIconSourceObjToBitmapConverter.Instance.Convert("TextureImage", null, null, null) as Bitmap;
+            bmpSrc = bmpSrc.Tint(hexColor);
+            MpIcon icon;
+            if (uivm.IconId == 0) {
+                // likely means its current icon is a default reference to a parent
+                icon = await MpIcon.CreateAsync(
+                    iconImgBase64: bmpSrc.ToBase64String(),
+                    createBorder: false);
+                uivm.IconId = icon.Id;
+            } else {
+                icon = await MpDataModelProvider.GetItemAsync<MpIcon>(uivm.IconId);
+                var img = await MpDataModelProvider.GetItemAsync<MpDbImage>(icon.IconImageId);
+                img.ImageBase64 = bmpSrc.ToBase64String();
+                await img.WriteToDatabaseAsync();
+                await icon.CreateOrUpdateBorderAsync(forceHexColor: hexColor);
+            }
+            uivm.OnPropertyChanged(nameof(uivm.IconId));
         }
 
         #endregion
@@ -215,7 +216,7 @@ namespace MonkeyPaste.Avalonia {
                     MpIcon icon = null;
                     if (uivm.IconId == 0) {
                         // likely means its current icon is a default reference to a parent
-                        icon = await MpIcon.Create(
+                        icon = await MpIcon.CreateAsync(
                             iconImgBase64: bmpSrc.ToBase64String(),
                             createBorder: false);
                         uivm.IconId = icon.Id;
@@ -263,26 +264,26 @@ namespace MonkeyPaste.Avalonia {
                  MpAvMenuExtension.ShowMenu(controlArg, mivm, MpPoint.Zero);
 
 
-                 if (controlArg.DataContext is MpIUserIconViewModel) {
-                     var uivm = controlArg.DataContext as MpIUserIconViewModel;
-                     //wait for selection, if color then conver to icon
-                     Dispatcher.UIThread.Post(async () => {
-                         while (MpAvMenuExtension.IsOpen) {
-                             await Task.Delay(100);
-                         }
-                         if (string.IsNullOrEmpty(UserHexColor)) {
-                             return;
-                         }
-                         await SetUserIconToCurrentHexColorAsync(UserHexColor, uivm);
+                 //if (controlArg.DataContext is MpIUserIconViewModel) {
+                 //    var uivm = controlArg.DataContext as MpIUserIconViewModel;
+                 //    //wait for selection, if color then conver to icon
+                 //    Dispatcher.UIThread.Post(async () => {
+                 //        while (MpAvMenuExtension.IsOpen) {
+                 //            await Task.Delay(100);
+                 //        }
+                 //        if (string.IsNullOrEmpty(UserHexColor)) {
+                 //            return;
+                 //        }
+                 //        await SetUserIconToCurrentHexColorAsync(UserHexColor, uivm);
 
-                         _currentIconViewModel = null;
-                         UserHexColor = null;
-                     });
-                 } else {
+                 //        _currentIconViewModel = null;
+                 //        UserHexColor = null;
+                 //    });
+                 //} else {
 
-                     _currentIconViewModel = null;
-                     UserHexColor = null;
-                 }
+                 //    _currentIconViewModel = null;
+                 //    UserHexColor = null;
+                 //}
              },(args)=> {
                  if (args != null) {
                      object dc = args;

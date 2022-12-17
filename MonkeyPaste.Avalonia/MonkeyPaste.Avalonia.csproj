@@ -90,6 +90,7 @@
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
+    <AvaloniaXaml Remove="ViewModels\MainWindow\Plugins\_Base\**" />
     <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <Compile Remove="AttachedProperties\DragDrop\**" />
     <Compile Remove="Behaviors\**" />
@@ -101,6 +102,7 @@
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
+    <Compile Remove="ViewModels\MainWindow\Plugins\_Base\**" />
     <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <EmbeddedResource Remove="AttachedProperties\DragDrop\**" />
     <EmbeddedResource Remove="Behaviors\**" />
@@ -112,6 +114,7 @@
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
+    <EmbeddedResource Remove="ViewModels\MainWindow\Plugins\_Base\**" />
     <EmbeddedResource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <None Remove="AttachedProperties\DragDrop\**" />
     <None Remove="Behaviors\**" />
@@ -123,6 +126,7 @@
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
+    <None Remove="ViewModels\MainWindow\Plugins\_Base\**" />
     <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <Page Remove="AttachedProperties\DragDrop\**" />
     <Page Remove="cef_old\**" />
@@ -132,6 +136,7 @@
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
+    <Page Remove="ViewModels\MainWindow\Plugins\_Base\**" />
     <Page Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <AvaloniaXaml Remove="Themes\Default\Accents\Base.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Accents\BaseLight.axaml" />
@@ -142,6 +147,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\DefaultControls.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ListBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ListBoxItem.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionProperty.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTile.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTray.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMainWindow.axaml" />
@@ -352,7 +358,6 @@
     <None Remove="Dotnet.Bundle" />
     <None Remove="WebkitGtkSharp" />
     <None Remove="Styles\Spinner\" />
-    <EmbeddedResource Remove="Styles\ProgressRing\ProgressRing.xaml" />
     <EmbeddedResource Remove="Styles\Spinner\Spinner.xaml" />
     <None Remove="Controls\ProgressRing\" />
     <None Remove="GtkSharp" />
@@ -380,9 +385,6 @@
   <ItemGroup>
     <None Remove=".gitignore" />
     <None Remove="Settings.settings" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Remove="Styles\ProgressRing\ProgressRing.xaml" />
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\Cursors\copy.png">
@@ -933,6 +935,7 @@
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Controls\ComboBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ComboBoxItem.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvActionProperty.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvSliderParameter.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTooltip.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Window.axaml" />
@@ -1004,7 +1007,6 @@
     <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Styles\ProgressRing\" />
     <Folder Include="Themes\Default\Assets\" />
     <Folder Include="Themes\Default\DensityStyles\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
@@ -1019,6 +1021,7 @@
     <Folder Include="ViewModels\MainWindow\TagTray\TagTile\" />
     <Folder Include="Views\HtmlConverterWindow\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
+    <Folder Include="Views\MainWindow\Sidebar\SidebarItems\Actions\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />
@@ -1116,6 +1119,9 @@
     </Compile>
     <Compile Update="Views\Reusable\ToolTip\MpAvToolTipLinkView.axaml.cs">
       <DependentUpon>MpAvToolTipLinkView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\ToolTip\MpAvToolTipInfoHintView.axaml.cs">
+      <DependentUpon>MpAvToolTipInfoHintView.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

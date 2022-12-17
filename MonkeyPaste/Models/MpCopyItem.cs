@@ -302,11 +302,12 @@ namespace MonkeyPaste {
                 return;
             }
 
-            // NOTE copy item tag is handled by tag when copy item is deleted
+            // NOTE shortcut collection handles deleting shortcuts
+
             var delete_tasks = new List<Task>();
 
-            //var citl = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(Id);
-            //delete_tasks.AddRange(citl.Select(x => x.DeleteFromDatabaseAsync()));
+            var citl = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(Id);
+            delete_tasks.AddRange(citl.Select(x => x.DeleteFromDatabaseAsync()));
 
             var cisl = await MpDataModelProvider.GetCopyItemSources(Id);
             delete_tasks.AddRange(cisl.Select(x => x.DeleteFromDatabaseAsync()));
@@ -320,6 +321,23 @@ namespace MonkeyPaste {
             var do_model = await MpDataModelProvider.GetItemAsync<MpDataObject>(DataObjectId);
             if(do_model != null) {
                 delete_tasks.Add(do_model.DeleteFromDatabaseAsync());
+            }
+
+            var citrl = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemIdAsync(Id);
+            if(citrl != null && citrl.Count > 0) {
+                delete_tasks.AddRange(citrl.Select(x=>x.DeleteFromDatabaseAsync()));
+            }
+
+            var ci_pptl = await MpDataModelProvider.GetPluginPresetTransactionsByCopyItemId(Id);
+            if(ci_pptl != null && ci_pptl.Count > 0) {
+                delete_tasks.AddRange(ci_pptl.Cast<MpDbModelBase>().Select(x => x.DeleteFromDatabaseAsync()));
+            }
+
+            if(IconId > 0) {
+                var ci_icon = await MpDataModelProvider.GetItemAsync<MpIcon>(IconId);
+                if(ci_icon != null) {
+                    delete_tasks.Add(ci_icon.DeleteFromDatabaseAsync());
+                }
             }
             delete_tasks.Add(base.DeleteFromDatabaseAsync());
 

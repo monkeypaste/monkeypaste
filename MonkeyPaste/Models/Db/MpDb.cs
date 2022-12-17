@@ -414,6 +414,8 @@ namespace MonkeyPaste {
             //    }
             //}
 
+            //var ppl = await MpDataModelProvider.GetItemsAsync<MpPluginPreset>();
+            //await Task.WhenAll(ppl.Select(x => x.DeleteFromDatabaseAsync()));
 
             MpConsole.WriteLine(@"Db file located: " + MpPlatformWrapper.Services.DbInfo.DbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPrefViewModel.Instance.ThisDeviceGuid);

@@ -1,0 +1,84 @@
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvContentTaggedTriggerPropertyListBoxItemView"
+                     xmlns="https://github.com/avaloniaui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                     xmlns:local="using:MonkeyPaste.Avalonia"
+                     xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+                     x:TypeArguments="local:MpAvContentTaggedTriggerViewModel"
+                     mc:Ignorable="d"
+                     d:DesignHeight="450"
+                     d:DesignWidth="800">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.3*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.3*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                      Classes="actionProperty"
+                   Text="Collection" />
+        <Border Grid.Row="0"
+                Grid.Column="1"
+                      Classes="actionProperty">
+            <ComboBox x:Name="TagChooserComboBox"
+                      Grid.Row="0"
+                      Grid.Column="1"
+                      IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                               Source={x:Static local:MpAvMainWindowViewModel.Instance},
+                                               Mode=OneWayToSource}"
+                      Classes="actionProperty"
+                      MinWidth="150"
+                      
+                      SelectedItem="{Binding SelectedTag,
+                                             Mode=TwoWay}"
+                      Items="{Binding Items,
+                                            Source={x:Static local:MpAvTagTrayViewModel.Instance}}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="3"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Stretch">
+                            <Frame BorderThickness="0.7"
+                                   BorderBrush="LightGray"
+                                   Background="{Binding TagHexColor,
+                                                        Converter={StaticResource StringHexToBrushConverter}}"
+                                   Width="15"
+                                   Height="15">
+                                <Frame.Margin>
+                                    <MultiBinding Converter="{StaticResource TagIdToThicknessNameConverter}">
+                                        <Binding Path="DataContext.TagId"
+                                                 RelativeSource="{RelativeSource Mode=FindAncestor,
+                                                                                 AncestorType=Border}" />
+                                        <Binding Path="IsDropDownOpen"
+                                                 ElementName="TagChooserComboBox" />
+                                        <Binding>
+                                            <Binding.Source>
+                                                <sys:Double>5.0</sys:Double>
+                                            </Binding.Source>
+                                        </Binding>
+                                    </MultiBinding>
+                                </Frame.Margin>
+                            </Frame>
+                            <TextBlock Margin="10,0,0,0"
+                                       FontSize="16"
+                                       Text="{Binding TagName}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+                <ComboBox.ItemContainerStyle>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="HorizontalAlignment"
+                                Value="Stretch" />
+                    </Style>
+                </ComboBox.ItemContainerStyle>
+            </ComboBox>
+        </Border>
+    </Grid>
+</local:MpAvUserControl>

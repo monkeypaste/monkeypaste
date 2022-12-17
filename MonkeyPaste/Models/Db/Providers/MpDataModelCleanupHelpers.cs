@@ -12,5 +12,7 @@ namespace MonkeyPaste {
             var cil = await MpDataModelProvider.GetItemsAsync<MpCopyItem>();
             return citl.Where(x => cil.All(y => y.Id != x.CopyItemId)).ToList();
         }
+
+
     }
 }

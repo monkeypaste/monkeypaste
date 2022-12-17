@@ -103,7 +103,7 @@ namespace MonkeyPaste {
             int windowState = 1,
             bool pressEnter = false) {
 
-            var icon = await MpIcon.Create(
+            var icon = await MpIcon.CreateAsync(
                 iconImgBase64: iconStr, 
                 createBorder: false);
 

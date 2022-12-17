@@ -1,0 +1,43 @@
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvContentAddTriggerPropertyListBoxItemView"
+                     xmlns="https://github.com/avaloniaui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:local="using:MonkeyPaste.Avalonia"
+                     xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+                     x:TypeArguments="local:MpAvContentAddTriggerViewModel"
+                     mc:Ignorable="d"
+                     d:DesignHeight="450"
+                     d:DesignWidth="800">
+    <Grid VerticalAlignment="Stretch"
+          Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.2*" />
+            <ColumnDefinition Width="0.6*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   Style="{StaticResource ActionPropertyTextBlockStyle}"
+                   Text="Trigger" />
+        <Border Grid.Row="0"
+                Grid.Column="1"
+                Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
+            <ComboBox Style="{StaticResource ActionPropertyComboBoxStyle}"
+                      IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                               Source={x:Static local:MpAvMainWindowViewModel.Instance},
+                                               Mode=OneWayToSource}"
+                      ItemContainerStyle="{StaticResource ActionPropertyComboBoxItemStyle}"
+                      SelectedIndex="{Binding AddedContentType,
+                                              Converter={StaticResource EnumToIntConverter},
+                                              ConverterParameter=MonkeyPaste.MpCopyItemType,
+                                              Mode=TwoWay}"
+                      Items="{Binding .,
+                                            Converter={StaticResource EnumToItemSourceLabelsConverter},
+                                            ConverterParameter=MonkeyPaste.MpCopyItemType|All}" />
+        </Border>
+    </Grid>
+</local:MpAvUserControl>

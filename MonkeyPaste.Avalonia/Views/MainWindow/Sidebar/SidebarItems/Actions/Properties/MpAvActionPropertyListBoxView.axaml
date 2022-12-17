@@ -1,0 +1,70 @@
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvActionPropertyListBoxView"
+                     xmlns="https://github.com/avaloniaui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     
+                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                     xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+                     xmlns:local="using:MonkeyPaste.Avalonia"
+                     x:TypeArguments="local:MpAvActionCollectionViewModel"
+                     mc:Ignorable="d">
+    <Grid>
+        <ListBox x:Name="ActionPropertyListBox"
+                 SnapsToDevicePixels="True"
+                 Items="{Binding AllSelectedTriggerActions}"
+                 SelectionChanged="ActionPropertyListBox_SelectionChanged"
+                 Background="Transparent"
+                 Margin="0"
+                 Focusable="True"
+                 BorderThickness="0"
+                 VerticalAlignment="Stretch"
+                 HorizontalAlignment="Stretch"
+                 SelectionMode="Single"
+                 ScrollViewer.CanContentScroll="False"
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="IsSelected"
+                            Value="{Binding IsSelected}" />
+                    <Setter Property="FocusVisualStyle"
+                            Value="{x:Null}" />
+                    <Setter Property="Margin"
+                            Value="{Binding ActionId,
+                                            Converter={StaticResource ActionIdToThicknessConverter},
+                                            FallbackValue=0 0 0 0,
+                                            TargetNullValue=0 0 0 0}" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <ContentPresenter />
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected"
+                                             Value="True">
+                                        <Setter Property="BorderBrush"
+                                                Value="Transparent" />
+                                        <Setter Property="Background"
+                                                Value="Transparent" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <local:MpActionPropertyListBoxItemView Grid.Row="0"
+                                                           BorderThickness="5"
+                                                           Visibility="{Binding IsSelected,
+                                                                                Converter={StaticResource BoolToVisibilityConverter}}"
+                                                           BorderBrush="{Binding BorderBrushHexColor,
+                                                                                 Converter={StaticResource StringHexToBrushConverter}}"
+                                                           DataContext="{Binding}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</local:MpAvUserControl>

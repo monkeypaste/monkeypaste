@@ -187,7 +187,7 @@ namespace MonkeyPaste {
                 if (string.IsNullOrEmpty(iconStr)) {
                     iconId = MpDefaultDataModelTools.ThisAppIconId;
                 } else { 
-                    var icon = await MpIcon.Create(
+                    var icon = await MpIcon.CreateAsync(
                         iconImgBase64: iconStr, 
                         createBorder: false);
                     iconId = icon.Id;

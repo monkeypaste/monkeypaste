@@ -480,6 +480,7 @@ namespace MonkeyPaste.Avalonia {
                 });
             }
         }
+
         #endregion
 
         #region Private Methods
@@ -492,7 +493,7 @@ namespace MonkeyPaste.Avalonia {
                 Command?.Execute(CommandParameter);
 
                 if (ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset) {
-                    //var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(CommandId);
+                    //var aipvm = MpAvAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(CommandId);
                     //if (aipvm != null) {
                     //    Task.Run(async () => {
                     //        await Task.Delay(300);
