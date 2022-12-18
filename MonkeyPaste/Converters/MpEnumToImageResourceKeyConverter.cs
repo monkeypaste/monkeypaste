@@ -10,40 +10,40 @@ namespace MonkeyPaste {
                 if(valueEnum is MpTriggerType tt) {
                     switch(tt) {
                         case MpTriggerType.ContentAdded:
-                            return "ClipboardIcon";
+                            return "ClipboardImage";
                         case MpTriggerType.ContentTagged:
-                            return "PinToCollectionIcon";
+                            return "PinToCollectionImage";
                         case MpTriggerType.FileSystemChange:
-                            return "FolderEventIcon";
+                            return "FolderEventImage";
                         case MpTriggerType.Shortcut:
-                            return "HotkeyIcon"; 
+                            return "HotkeyImage"; 
                         case MpTriggerType.ParentOutput:
-                            return "ChainIcon";
+                            return "ChainImage";
                     }
                 } else if(valueEnum is MpActionType at) {
                     switch(at) {
                         case MpActionType.Analyze:
-                            return "BrainIcon";                            
+                            return "BrainImage";                            
                         case MpActionType.Classify:
-                            return "PinToCollectionIcon";                            
+                            return "PinToCollectionImage";                            
                         case MpActionType.Compare:
-                            return "ScalesIcon";                            
+                            return "ScalesImage";                            
                         case MpActionType.Macro:
-                            return "HotkeyIcon";                            
+                            return "HotkeyImage";                            
                         case MpActionType.Timer:
-                            return "AlarmClockIcon";                            
+                            return "AlarmClockImage";                            
                         case MpActionType.FileWriter:
-                            return "WandIcon";                            
+                            return "WandImage";                            
                     }
                 } else if (valueEnum is MpContentTableContextActionType ctcat) {
                     switch (ctcat) {
                         default:
-                            return "ScalesIcon";
+                            return "ScalesImage";
                     }
                 }
             }
 
-            return "QuestionMarkIcon";
+            return "QuestionMarkImage";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

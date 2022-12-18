@@ -2,6 +2,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
+    <Style Selector="ListBox.actionProperty ListBoxItem">
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Left" />
+    </Style>
 
     <Style Selector="ComboBox.actionProperty">
         <Setter Property="MinWidth"
@@ -11,6 +17,18 @@
         <Setter Property="BorderThickness"
                 Value="0" />
     </Style>
+
+    <Style Selector="ComboBox.actionProperty ComboBoxItem">
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="Padding"
+                Value="3" />
+    </Style>
+
     <Style Selector="Border.actionProperty">
         <Setter Property="CornerRadius"
                 Value="5" />
@@ -27,14 +45,6 @@
     </Style>
 
 
-    <Style Selector="ComboBoxItem.actionProperty">
-        <Setter Property="HorizontalAlignment"
-                Value="Stretch" />
-        <Setter Property="VerticalAlignment"
-                Value="Center" />
-        <Setter Property="VerticalContentAlignment"
-                Value="Center" />
-    </Style>
     <Style Selector="TextBlock.actionProperty">
         <Setter Property="VerticalAlignment"
                 Value="Center" />

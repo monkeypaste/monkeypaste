@@ -8,7 +8,7 @@
              d:DesignWidth="800"
              d:DesignHeight="450"
              x:DataType="pcl:MpMenuItemViewModel"
-             x:CompileBindings="False"
+             x:CompileBindings="True"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch"
              x:Class="MonkeyPaste.Avalonia.MpAvContextMenuView">

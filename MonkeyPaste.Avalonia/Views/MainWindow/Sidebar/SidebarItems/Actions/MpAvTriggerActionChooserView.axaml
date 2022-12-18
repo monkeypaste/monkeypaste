@@ -6,7 +6,10 @@
                        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:CompileBindings="True"
+                       DataContext="{x:Static local:MpAvActionCollectionViewModel.Instance}"
                        x:TypeArguments="local:MpAvActionCollectionViewModel"
+                       x:DataType="local:MpAvActionCollectionViewModel"
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
@@ -17,117 +20,118 @@
             <ColumnDefinition MinWidth="500"
                               Width="*" />
         </Grid.ColumnDefinitions>
-        <Border Grid.Column="0"
-                CornerRadius="3"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                BorderThickness="1"
-                BorderBrush="Black"
-                Margin="10">
-            <Grid Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0"
-                           FontSize="18"
-                           FontWeight="SemiBold"
-                           Margin="0,0,0,5"
-                           Foreground="White"
-                           Text="Actions" />
-                <DockPanel Grid.Row="1"
-                           LastChildFill="True"
-                           VerticalAlignment="Top"
-                           Margin="0,0,0,10">
-                    <Button BorderThickness="0"
-                            DockPanel.Dock="Right"
-                            MaxHeight="30"
-                            Margin="5"
-                            ToolTip="New Trigger"
-                            HorizontalAlignment="Right"
-                            IsVisible="{Binding IsAnySelected}"
-                            Command="{Binding ShowTriggerSelectorMenuCommand}"
-                            CommandParameter="{Binding $self}">
-                        <Image Source="{Binding ., Converter={StaticResource StringResourceToImageSourceConverter}, Source={StaticResource AddIcon}}"
-                               Margin="5"
-                               Width="15"
-                               Height="15" />
-                    </Button>
-                    <ComboBox x:Name="RootActionChooserComboBox"
-                              DockPanel.Dock="Left"
-                              VerticalAlignment="Top"
-                              IsDropDownOpen="{Binding IsAnyDropDownOpen, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=OneWayToSource}"
-                              MinWidth="200"
-                              MaxHeight="40"
-                              Items="{Binding Items, IsAsync=True}"
-                              SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
 
-                                <Border IsVisible="{Binding IsRootAction}"
-                                        MinWidth="200"
-                                        DataContext="{Binding}"
-                                        Margin="5"
-                                        HorizontalAlignment="Stretch"
-                                        BorderThickness="0"
-                                        BorderBrush="Black"
-                                        CornerRadius="3"
-                                        Background="Transparent">
-                                    <DockPanel LastChildFill="False">
-                                        <Image DockPanel.Dock="Left"
-                                               Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}"
-                                               Margin="5,0,5,0"
-                                               Height="15"
-                                               Width="15" />
-                                        <Border DockPanel.Dock="Right"
-                                                VerticalAlignment="Center"
-                                                Margin="0,0,5,0"
-                                                IsVisible="{Binding IsBusy, FallbackValue=True, TargetNullValue=True}">
+        <Border Background="{DynamicResource ActionPropertyListBgBrush}"
+                IsVisible="{Binding Items, Converter={StaticResource CollectionIsNotEmptyToBoolConverter}, ConverterParameter=test}"
+                Grid.Column="0"
+                Padding="10">
+            <Border CornerRadius="3"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    BorderThickness="1"
+                    BorderBrush="Black">
+                <Grid Margin="10"
+                      RowDefinitions="Auto,50,*">
+                  <StackPanel Grid.Row="0"
+                              Orientation="Vertical">
+                    <Label HorizontalAlignment="Left"
+                           Classes="h1"
+                           Content="Actions" />
+                    <Border Classes="labelUnderline"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Bottom" />
+                  </StackPanel>
+                    <DockPanel Grid.Row="1"
+                               LastChildFill="True"
+                               VerticalAlignment="Top"
+                               Margin="0,0,0,10">
+                        <Button DockPanel.Dock="Right"
+                                Cursor="Hand"
+                                Classes="hoverOutline"
+                                MaxHeight="30"
+                                Margin="5"
+                                HorizontalAlignment="Right"
+                                IsVisible="{Binding IsAnySelected}"
+                                Command="{Binding ShowTriggerSelectorMenuCommand}"
+                                CommandParameter="{Binding $self}">
+                            <ToolTip.Tip>
+                                <local:MpAvToolTipView ToolTipText="New Trigger" />
+                            </ToolTip.Tip>
+                            <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource AddImage}}"
+                                   Margin="5"
+                                   Width="15"
+                                   Height="15" />
+                        </Button>
+                        <local:MpAvPluginSelectorView x:Name="AnalyzerPluginSelectorView"
+                                                      DockPanel.Dock="Left"
+                                                      Height="50"
+                                                      Margin="20,0"
+                                                      HorizontalContentAlignment="Stretch"
+                                                      HorizontalAlignment="Stretch"
+                                                      VerticalAlignment="Top"
+                                                      VerticalContentAlignment="Stretch"
+                                                      DataContext="{Binding}" />
+                        <!--<ComboBox x:Name="RootActionChooserComboBox"
+                                  DockPanel.Dock="Left"
+                                  VerticalAlignment="Top"
+                                  MinWidth="200"
+                                  MaxHeight="40"
+                                  Items="{Binding Items}"
+                                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <ComboBoxItem IsVisible="{Binding IsRootAction}">
+                                        <Border MinWidth="200"
+                                                DataContext="{Binding}"
+                                                Margin="5"
+                                                HorizontalAlignment="Stretch"
+                                                BorderThickness="0"
+                                                BorderBrush="Black"
+                                                CornerRadius="3"
+                                                Background="Transparent">
+                                            <DockPanel LastChildFill="False">
+                                                <Image DockPanel.Dock="Left"
+                                                       Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                                                       Margin="5,0,5,0"
+                                                       Height="15"
+                                                       Width="15" />
+                                                <Border DockPanel.Dock="Right"
+                                                        VerticalAlignment="Center"
+                                                        Margin="0,0,5,0"
+                                                        IsVisible="{Binding IsBusy, FallbackValue=True, TargetNullValue=True}">
 
-                                            <local:MpAvBusySpinnerView HorizontalAlignment="Center"
-                                                                       VerticalAlignment="Center"
-                                                                       Width="20"
-                                                                       Height="20" />
+                                                    <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                                                                               VerticalAlignment="Center"
+                                                                               Width="20"
+                                                                               Height="20" />
+                                                </Border>
+                                                <TextBlock x:Name="RootActionTextBlock"
+                                                           Margin="2,0,5,0"
+                                                           Padding="1"
+                                                           MinWidth="50"
+                                                           VerticalAlignment="Center"
+                                                           HorizontalAlignment="Left"
+                                                           Text="{Binding Label}"
+                                                           FontSize="16"
+                                                           Foreground="Black"
+                                                           Background="Transparent">
+                                                    <ToolTip.Tip>
+                                                        <local:MpAvToolTipView ToolTipText="{Binding Description}" />
+                                                    </ToolTip.Tip>
+                                                </TextBlock>
+                                            </DockPanel>
                                         </Border>
-                                        <TextBlock x:Name="RootActionTextBlock"
-                                                   Margin="2,0,5,0"
-                                                   Padding="1"
-                                                   MinWidth="50"
-                                                   VerticalAlignment="Center"
-                                                   HorizontalAlignment="Left"
-                                                   Text="{Binding Label}"
-                                                   FontSize="16"
-                                                   Foreground="Black"
-                                                   Background="Transparent">
-                                            <TextBlock.ToolTip>
-                                                <ToolTip>
-                                                    <TextBlock Text="{Binding Description}" />
-                                                </ToolTip>
-                                            </TextBlock.ToolTip>
-                                        </TextBlock>
-                                    </DockPanel>
-                                </Border>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                        <ComboBox.ItemContainerStyle>
-                            <Style TargetType="ComboBoxItem">
-                                <Setter Property="HorizontalAlignment"
-                                        Value="Stretch" />
-                                <Setter Property="VerticalAlignment"
-                                        Value="Center" />
-                                <Setter Property="VerticalContentAlignment"
-                                        Value="Center" />
-                                <Setter Property="Padding"
-                                        Value="3" />
-                            </Style>
-                        </ComboBox.ItemContainerStyle>
-                    </ComboBox>
-                </DockPanel>
-                <local:MpAvActionPropertyListBoxView Grid.Row="2"
-                                                     DataContext="{Binding}" />
-            </Grid>
+                                    </ComboBoxItem>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>-->
+                    </DockPanel>
+                    <local:MpAvActionPropertyListBoxView Grid.Row="2"
+                                                         DataContext="{Binding}" />
+                </Grid>
+            </Border>
         </Border>
+
         <GridSplitter Background="White"
                       Grid.Row="0"
                       Grid.Column="0"

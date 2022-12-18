@@ -30,4 +30,7 @@
     <local:MpAvAbsoluteToRelativePathStringConverter x:Key="AbsoluteToRelativePathStringConverter" />
     <local:MpAvEnumToIntConverter x:Key="EnumToIntConverter" />
     <local:MpAvEnumToItemSourceLabelsConverter x:Key="EnumToItemSourceLabelsConverter" />
+    <local:MpAvTagIdToThicknessConverter x:Key="TagIdToThicknessConverter" />
+    <local:MpAvActionIdToThicknessConverter x:Key="ActionIdToThicknessConverter" />
+    <local:MpAvAnalyticItemGuidToIconSourceConverter x:Key="AnalyticItemGuidToIconSourceConverter" />
 </ResourceDictionary>

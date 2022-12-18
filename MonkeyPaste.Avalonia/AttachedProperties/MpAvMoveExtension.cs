@@ -273,7 +273,7 @@ namespace MonkeyPaste.Avalonia {
 
         private static void Control_PointerReleased(object sender, PointerReleasedEventArgs e) {
             if(sender is Control control) {
-                e.Pointer.Capture(null);
+                //e.Pointer.Capture(null);
                 FinishMove(control);
             }
         }
@@ -288,8 +288,8 @@ namespace MonkeyPaste.Avalonia {
                 if (control.DataContext is MpISelectableViewModel svm) {
                     svm.IsSelected = true;
                 }
-                e.Pointer.Capture(control);
-                SetIsMoving(control, e.Pointer.Captured == control);
+                //e.Pointer.Capture(control);
+                SetIsMoving(control, true);
                 e.Handled = true;
             }
         }

@@ -6,7 +6,7 @@
                        xmlns:pcl="using:MonkeyPaste"
                        x:TypeArguments="local:MpAvFilterMenuViewModel"
                        x:DataType="local:MpAvFilterMenuViewModel"
-                       x:CompileBindings="False"
+                       x:CompileBindings="True"
                        DataContext="{x:Static local:MpAvFilterMenuViewModel.Instance}"
                        mc:Ignorable="d"
                        d:DesignWidth="800"
@@ -62,9 +62,7 @@
         <local:MpAvSearchBoxView HorizontalAlignment="Right"
                                  Tag="Search"
                                  DockPanel.Dock="Right"
-                                 MaxWidth="300"
-                                 local:MpAvSizeObserverExtension.IsEnabled="False"
-                                 local:MpAvSizeObserverExtension.ObservedWidth="{Binding SearchBoxViewWidth, Mode=OneWayToSource}" />
+                                 MaxWidth="300" />
 
         <!--  Tag Tray View  -->
         <local:MpAvTagTrayView IsVisible="{Binding IsHorizontalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />

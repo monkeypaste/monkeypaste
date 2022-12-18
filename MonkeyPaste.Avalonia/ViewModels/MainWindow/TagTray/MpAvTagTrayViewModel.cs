@@ -183,7 +183,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-        public string TagTreeBgOctColor => MpSystemColors.cyan1.AdjustAlpha(MpPrefViewModel.Instance.MainWindowOpacity);
         #endregion
 
         #region Business Logic

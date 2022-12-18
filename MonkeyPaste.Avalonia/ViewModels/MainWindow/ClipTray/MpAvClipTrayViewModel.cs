@@ -980,14 +980,8 @@ namespace MonkeyPaste.Avalonia {
         public double MaxTileHeight => double.PositiveInfinity;// Math.Max(0, ClipTrayScreenHeight - MAX_TILE_SIZE_CONTAINER_PAD);
 
         public int CurGridFixedCount { get; set; }
-        #endregion
-
-        #region Appearance
 
         public MpClipTrayLayoutType LayoutType { get; set; } = MpClipTrayLayoutType.Stack;
-
-        public string ClipTrayBackgroundHexColor => 
-            MpSystemColors.darkviolet.AdjustAlpha(MpPrefViewModel.Instance.MainWindowOpacity);
 
         #endregion
 
@@ -1948,9 +1942,11 @@ namespace MonkeyPaste.Avalonia {
                         QueryCommand.Execute(ScrollOffset);
                     }
                     break;
-                case nameof(DefaultItemSize):
-                    //AllItems.ForEach(x => x.OnPropertyChanged(nameof(x.MinSize)));
-                    break;
+                //case nameof(DefaultItemWidth):
+                //case nameof(DefaultItemHeight):
+                //case nameof(DefaultItemSize):
+                //    AllItems.ForEach(x => x.OnPropertyChanged(nameof(x.MinSize)));
+                //    break;
                 case nameof(HasScrollVelocity):
                     //MpPlatformWrapper.Services.Cursor.IsCursorFrozen = HasScrollVelocity;
 

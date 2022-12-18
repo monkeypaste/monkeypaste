@@ -256,33 +256,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string TileBackgroundHexColor {
-            get {
-                if (IsTitleVisible) {
-                    return MpSystemColors.oldlace.AdjustAlpha(MpPrefViewModel.Instance.MainWindowOpacity);
-                }
-                return CopyItemHexColor.AdjustAlpha(MpPrefViewModel.Instance.MainWindowOpacity);
-            }
-        }
-
-        public string DetailTextHexColor {
-            get {
-                if (IsSelected || IsHovering) {
-                    return MpSystemColors.Black;//MpSystemColors.DimGray;
-                }
-
-                return MpSystemColors.Transparent;
-            }
-        }
-
-        public string TileTitleTextGridBackgroundHexColor {
-            get {
-                if (IsHoveringOnTitleTextGrid && !IsTitleReadOnly) {
-                    return MpSystemColors.White.AdjustAlpha(0.25);
-                }
-                return MpSystemColors.Transparent;
-            }
-        }
 
         public string TitleTextColor {
             get {
@@ -292,37 +265,6 @@ namespace MonkeyPaste.Avalonia {
                 return MpSystemColors.White;
             }
         }
-
-        public string SelectedTextHexColor {
-            get {
-                if (ItemType == MpCopyItemType.Text) {
-                    return MpSystemColors.lightblue;
-                }
-                return MpSystemColors.Transparent;
-            }
-        }
-
-        public string InactiveSelectedTextHexColor {
-            get {
-                if (ItemType == MpCopyItemType.Text) {
-                    return MpSystemColors.purple;
-                }
-                return MpSystemColors.Transparent;
-            }
-        }
-
-        public string CaretBrushHexColor {
-            get {
-                if (IsContentReadOnly) {
-                    if (IsSubSelectionEnabled || IsFindAndReplaceVisible) {
-                        return MpSystemColors.Red;
-                    }
-                    return MpSystemColors.Transparent;
-                }
-                return MpSystemColors.Black;
-            }
-        }
-
 
         public string PinIconSourcePath {
             get {
@@ -765,7 +707,6 @@ namespace MonkeyPaste.Avalonia {
                 if (_isHoveringOnTitleTextGrid != value) {
                     _isHoveringOnTitleTextGrid = value;
                     OnPropertyChanged(nameof(IsHoveringOnTitleTextGrid));
-                    OnPropertyChanged(nameof(TileTitleTextGridBackgroundHexColor));
                     OnPropertyChanged(nameof(TitleTextColor));
                 }
             }
@@ -1215,7 +1156,6 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(CanVerticallyScroll));
             OnPropertyChanged(nameof(IsTextItem));
             OnPropertyChanged(nameof(IsFileListItem));
-            OnPropertyChanged(nameof(TileBackgroundHexColor));
             OnPropertyChanged(nameof(Next));
             OnPropertyChanged(nameof(Prev));
             OnPropertyChanged(nameof(CopyItemId));

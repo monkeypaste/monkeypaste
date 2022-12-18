@@ -97,8 +97,7 @@
 
                     <!--  TOGGLE EDIT COLUMN  -->
                     <DataGridTemplateColumn Width="30"
-                                            Header="Edit"
-                                            IsVisible="{Binding IsSelected}">
+                                            Header="Edit">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Grid>
@@ -133,8 +132,7 @@
 
                     <!--  QUICK ACTION COLUMN  -->
                     <DataGridTemplateColumn Width="30"
-                                            Header="Favorite"
-                                            IsVisible="{Binding IsSelected}">
+                                            Header="Favorite">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Grid>
@@ -211,8 +209,7 @@
 
                     <!--  HOTKEY COLUMN  -->
                     <DataGridTemplateColumn Width="30"
-                                            Header="Shortcut"
-                                            IsVisible="{Binding IsSelected}">
+                                            Header="Shortcut">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Button Background="Transparent"
@@ -231,8 +228,7 @@
 
                     <!--  PERFORM ANALYSIS  -->
                     <DataGridTemplateColumn Width="30"
-                                            Header="Analyze"
-                                            IsVisible="{Binding IsSelected}">
+                                            Header="Analyze">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Grid>
@@ -272,8 +268,7 @@
 
                     <!--  DUPLICATE COLUMN  -->
                     <DataGridTemplateColumn Width="30"
-                                            Header="Clone"
-                                            IsVisible="{Binding IsSelected}">
+                                            Header="Clone">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Grid>
@@ -304,8 +299,7 @@
 
                     <!--  DELETE/RESET ANALYSIS  -->
                     <DataGridTemplateColumn Header="Bin"
-                                            Width="30"
-                                            IsVisible="{Binding IsSelected}">
+                                            Width="30">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Grid>

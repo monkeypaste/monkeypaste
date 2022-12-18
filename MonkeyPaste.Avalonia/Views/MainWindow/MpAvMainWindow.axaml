@@ -83,6 +83,13 @@
                                                 HorizontalAlignment="Stretch"
                                                 HorizontalContentAlignment="Stretch"
                                                 IsVisible="{Binding IsSidebarVisible, Source={x:Static local:MpAvAnalyticItemCollectionViewModel.Instance}}" />
+            <!--  ACTIONS  -->
+
+            <local:MpAvTriggerActionChooserView x:Name="TriggerActionChooserView"
+                                                Grid.Column="1"
+                                                HorizontalAlignment="Stretch"
+                                                HorizontalContentAlignment="Stretch"
+                                                IsVisible="{Binding IsSidebarVisible, Source={x:Static local:MpAvActionCollectionViewModel.Instance}}" />
 
             <!--  SIDEBAR SPLITTER  -->
 

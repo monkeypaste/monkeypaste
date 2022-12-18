@@ -304,6 +304,10 @@ namespace MonkeyPaste.Avalonia {
                             SearchText = string.Empty;
                         }
                     } else {
+
+                        if (HasText) {
+                            MpAvThemeViewModel.Instance.GlobalBgOpacity = double.Parse(SearchText);
+                        }
                         if (!HasText) {
                             //SearchText = PlaceholderText;
                         }

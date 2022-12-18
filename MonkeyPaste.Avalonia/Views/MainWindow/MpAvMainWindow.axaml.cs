@@ -190,12 +190,7 @@ namespace MonkeyPaste.Avalonia {
             var ttv = this.FindControl<MpAvTagTreeView>("TagTreeView");
             var chsv = this.FindControl<MpAvClipboardHandlerSelectorView>("ClipboardHandlerSelectorView");
             var aisv = this.FindControl<MpAvAnalyticItemSelectorView>("AnalyticItemSelectorView");
-            //var aimcsv = aisv.FindControl<ScrollViewer>("AnalyticItemMainContainerScrollViewer");
-            //var aimcg = aisv.FindControl<Grid>("AnalyticItemMainContainerGrid");
-            //var apsv = aisv.FindControl<MpAvPluginSelectorView>("AnalyzerPluginSelectorView");
-            //var appcb = aisv.FindControl<Border>("AnalyzerPluginPresetContainerBorder");
-            //var applbcb = aisv.FindControl<Border>("AnalyzerPluginParameterListBoxContainerBorder");
-
+            var tacv = this.FindControl<MpAvTriggerActionChooserView>("TriggerActionChooserView");
             var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");
 
             if (mwvm.IsHorizontalOrientation) {
@@ -223,20 +218,9 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetColumn(aisv, 1);
                 Grid.SetRow(chsv, 0);
                 Grid.SetColumn(chsv, 1);
+                Grid.SetRow(tacv, 0);
+                Grid.SetColumn(tacv, 1);
 
-                // sidebar internal columns
-
-                // analyzer
-                //ScrollViewer.SetVerticalScrollBarVisibility(aimcsv, ScrollBarVisibility.Disabled);
-                //aimcg.ColumnDefinitions = new ColumnDefinitions("Auto,*");
-                //aimcg.RowDefinitions = new RowDefinitions("50,*");
-                //Grid.SetRow(apsv, 0);
-                //Grid.SetColumn(apsv, 0);
-                //Grid.SetRow(appcb, 1);
-                //Grid.SetColumn(appcb, 0);
-                //Grid.SetRow(applbcb, 0);
-                //Grid.SetColumn(applbcb, 1);
-                //Grid.SetRowSpan(applbcb, 2);
 
                 // cliptray container view
                 Grid.SetRow(ctrcv, 0);
@@ -322,18 +306,8 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetColumn(aisv, 0);
                 Grid.SetRow(chsv, 1);
                 Grid.SetColumn(chsv, 0);
-
-                // analyzer
-                //ScrollViewer.SetVerticalScrollBarVisibility(aimcsv, ScrollBarVisibility.Visible);
-                //aimcg.RowDefinitions = new RowDefinitions("50,*,*");
-                //aimcg.ColumnDefinitions.Clear();
-                //Grid.SetRow(apsv, 0);
-                //Grid.SetColumn(apsv, 0);
-                //Grid.SetRow(appcb, 1);
-                //Grid.SetColumn(appcb, 0);
-                //Grid.SetRow(applbcb, 2);
-                //Grid.SetColumn(applbcb, 0);
-                //Grid.SetRowSpan(applbcb, 1);
+                Grid.SetRow(tacv, 1);
+                Grid.SetColumn(tacv, 0);
 
                 // cliptray container view
                 Grid.SetRow(ctrcv, 0);

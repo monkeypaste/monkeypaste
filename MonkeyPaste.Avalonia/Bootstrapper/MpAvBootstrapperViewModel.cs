@@ -23,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
             } else if (OperatingSystem.IsMacOS()) {
                 MpAvMacHelpers.EnsureInitialized();
             }
-            MpAvNotificationWindowManager.Instance.Init();
+            //MpAvNotificationWindowManager.Instance.Init();
 
             var pw = new MpAvWrapper();
             await pw.InitializeAsync();
@@ -59,20 +59,25 @@ namespace MonkeyPaste.Avalonia {
             MpAvSystemTray.Init();
         }
         protected override void CreateLoaderItems() {
-            base.CreateLoaderItems();
-
             _coreItems.AddRange(
                new List<MpBootstrappedItemViewModel>() {
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvNotificationWindowManager)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvThemeViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpConsole)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpTempFileManager)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpDb)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpPluginLoader)),
                     new MpBootstrappedItemViewModel(this,typeof(MpPortableDataFormats),MpPlatformWrapper.Services.DataObjectRegistrar),
                     new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvIconCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvAppCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvUrlCollectionViewModel)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpAvSourceCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvSystemTrayViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvClipTileSortFieldViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvClipTileSortDirectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvSearchBoxViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvActionCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvClipboardHandlerCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvAnalyticItemCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvSettingsWindowViewModel)),
@@ -80,7 +85,7 @@ namespace MonkeyPaste.Avalonia {
                     new MpBootstrappedItemViewModel(this,typeof(MpAvShortcutCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvTagTrayViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvExternalPasteHandler)),
-                   new MpBootstrappedItemViewModel(this,typeof(MpDataModelProvider))
+                    new MpBootstrappedItemViewModel(this,typeof(MpDataModelProvider))
                });
 
             _platformItems.AddRange(

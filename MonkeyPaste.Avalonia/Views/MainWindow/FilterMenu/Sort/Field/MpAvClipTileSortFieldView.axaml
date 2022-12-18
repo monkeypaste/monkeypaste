@@ -32,7 +32,6 @@
                       Background="White"
                       HorizontalContentAlignment="Left"
                       VerticalContentAlignment="Center"
-                      IsDropDownOpen="{Binding IsAnyDropDownOpen, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=TwoWay}"
                       SelectedIndex="{Binding SelectedSortTypeIdx, Mode=TwoWay}"
                       Items="{Binding ., Converter={StaticResource EnumToLabelCollectionConverter}, ConverterParameter=MonkeyPaste.MpContentSortType|omit}" />
         </local:MpAvClipBorder>

@@ -6,7 +6,7 @@
                        xmlns:pcl="using:MonkeyPaste"
                        x:TypeArguments="local:MpAvClipboardFormatPresetViewModel"
                        x:DataType="local:MpAvClipboardFormatPresetViewModel"
-                       x:CompileBindings="False"
+                       x:CompileBindings="True"
                        mc:Ignorable="d"
                        d:DesignWidth="800"
                        d:DesignHeight="450"

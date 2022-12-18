@@ -5,6 +5,7 @@ using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 
@@ -14,6 +15,7 @@ namespace MonkeyPaste.Avalonia {
 
         public object Convert(object value, Type targetType, object? parameter, CultureInfo culture) {
             bool isNotEmpty = false;
+
             if(value is ICollection collection) {
                 isNotEmpty = collection.Count > 0;
             } else if(value is IEnumerable<object> enumerable) {

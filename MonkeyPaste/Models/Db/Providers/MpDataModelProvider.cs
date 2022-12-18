@@ -551,9 +551,13 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public static async Task<List<MpCopyItemTransaction>> GetCopyItemTransactionsByPluginPresetIdAsync(int ppid) {
-            string query = string.Format(@"select * from MpCopyItemTransaction where fk_CopyItemTransactionObjectId=?");
-            var result = await MpDb.QueryAsync<MpCopyItemTransaction>(query, ppid);
+        public static async Task<List<MpCopyItemTransaction>> GetCopyItemTransactionsByTransactionTypeIdPairAsync(IEnumerable<KeyValuePair<MpCopyItemTransactionType,int>> trans_lookup) {
+            if (trans_lookup == null || trans_lookup.Count() == 0) {
+                return new List<MpCopyItemTransaction>();
+            }
+            string whereStr = string.Join(" or ", trans_lookup.Select(x => $"(e_MpCopyItemTransactionType='{x.Key}' AND fk_CopyItemTransactionObjectId={x.Value}"));
+            string query = $"select * from MpCopyItemTransaction where {whereStr}";
+            var result = await MpDb.QueryAsync<MpCopyItemTransaction>(query, whereStr);
             return result;
         }
 
@@ -563,7 +567,7 @@ namespace MonkeyPaste {
 
         public static async Task<List<MpIPluginPresetTransaction>> GetPluginPresetTransactionsByCopyItemId(int ciid) {
             List<MpIPluginPresetTransaction> ci_transactions = new List<MpIPluginPresetTransaction>();
-            var citl = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemIdAsync(ciid);
+            var citl = await GetCopyItemTransactionsByCopyItemIdAsync(ciid);
             foreach(var cit in citl) {
                 MpIPluginPresetTransaction ppt = null;
                 switch (cit.CopyItemTransactionType) {

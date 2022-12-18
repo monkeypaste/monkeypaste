@@ -83,7 +83,7 @@ namespace MonkeyPaste.Avalonia {
 
         
 
-        public List<MpAvAnalyticItemPresetViewModel> AllPresets => Items.OrderBy(x => x.Title).SelectMany(x => x.Items).ToList();
+        public IEnumerable<MpAvAnalyticItemPresetViewModel> AllPresets => Items.OrderBy(x => x.Title).SelectMany(x => x.Items);
 
         public MpAvAnalyticItemPresetViewModel SelectedPresetViewModel {
             get {

@@ -15,4 +15,16 @@
         <Setter Property="Foreground"
                 Value="DimGray" />
     </Style>
+    <Style Selector="Button.hoverOutline">
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+        <Setter Property="CornerRadius"
+                Value="5" />
+    </Style>
+    <Style Selector="Button.hoverOutline:pointerover">
+        <Setter Property="BorderBrush"
+                Value="Black" />
+    </Style>
 </Styles>

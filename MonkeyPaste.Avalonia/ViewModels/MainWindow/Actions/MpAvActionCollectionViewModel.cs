@@ -20,15 +20,32 @@ using Avalonia.Controls.Primitives.PopupPositioning;
 
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvActionCollectionViewModel : 
-        MpAvSelectorViewModelBase<object,MpAvTriggerActionViewModelBase>, 
+    public class MpAvActionCollectionViewModel :
+        MpAvTreeSelectorViewModelBase<object, MpAvTriggerActionViewModelBase>,
         MpIMenuItemViewModel,
+        MpIAsyncComboBoxViewModel,
         MpIAsyncSingletonViewModel<MpAvActionCollectionViewModel>,
         MpIHoverableViewModel,
         MpIResizableViewModel,
+        MpITreeItemViewModel,
         MpIOrientedSidebarItemViewModel,
         MpIDesignerSettingsViewModel {
         #region Private Variables
+
+        #endregion
+
+        #region MpIAsyncComboBoxViewModel Implementation
+
+        IEnumerable<MpIComboBoxItemViewModel> MpIAsyncComboBoxViewModel.Items => Items;
+        MpIComboBoxItemViewModel MpIAsyncComboBoxViewModel.SelectedItem {
+            get => SelectedItem;
+            set => SelectedItem = (MpAvTriggerActionViewModelBase)value;
+        }
+        private bool _isTriggerDropDownOpen = false;
+        bool MpIAsyncComboBoxViewModel.IsDropDownOpen {
+            get => _isTriggerDropDownOpen;
+            set => _isTriggerDropDownOpen = value;
+        }
 
         #endregion
 
@@ -43,7 +60,7 @@ namespace MonkeyPaste.Avalonia {
                 var triggerLabels = typeof(MpTriggerType).EnumToLabels("Select Trigger");
                 for (int i = 0; i < triggerLabels.Length; i++) {
                     string resourceKey = string.Empty;
-                    switch((MpTriggerType)i) {
+                    switch ((MpTriggerType)i) {
                         case MpTriggerType.ContentAdded:
                             resourceKey = "ClipboardImage";
                             break;
@@ -87,12 +104,17 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (SelectedItem != value) {
-                    AllSelectedTriggerActions.ForEach(x => x.IsSelected = false);
+                    AllSelectedItemActions.ForEach(x => x.IsSelected = false);
                     if (value != null) {
                         value.IsSelected = true;
                     }
+                    //if (value == null) {
+                    //    AllActions.ForEach(x => x.IsSelected = false);
+                    //} else {
+                    //    AllActions.ForEach(x => x.IsSelected = x.ActionId == value.ActionId);
+                    //}
                     OnPropertyChanged(nameof(SelectedItem));
-                    OnPropertyChanged(nameof(AllSelectedTriggerActions));
+                    OnPropertyChanged(nameof(AllSelectedItemActions));
                     OnPropertyChanged(nameof(SelectedActions));
                     OnPropertyChanged(nameof(PrimaryAction));
                     OnPropertyChanged(nameof(IsAnySelected));
@@ -113,8 +135,18 @@ namespace MonkeyPaste.Avalonia {
                 return avml;
             }
         }
+        //public IEnumerable<MpAvActionViewModelBase> AllActions {
+        //    get {
+        //        foreach (var tavm in Items) {
+        //            yield return tavm;
+        //            foreach (var avm in tavm.Items) {
+        //                yield return avm;
+        //            }
+        //        }
+        //    }
+        //}
 
-        public IList<MpAvActionViewModelBase> AllSelectedTriggerActions {
+        public IList<MpAvActionViewModelBase> AllSelectedItemActions {
             get {
                 if (SelectedItem == null) {
                     return new List<MpAvActionViewModelBase>();
@@ -124,6 +156,17 @@ namespace MonkeyPaste.Avalonia {
                 return avml.Cast<MpAvActionViewModelBase>().ToList();
             }
         }
+        //public IEnumerable<MpAvActionViewModelBase> AllSelectedItemActions {
+        //    get {
+        //        if (SelectedItem == null) {
+        //            yield break;
+        //        }
+        //        yield return SelectedItem;
+        //        foreach (var avm in SelectedItem.Items) {
+        //            yield return avm;
+        //        }
+        //    }
+        //}
 
         public IList<MpAvActionViewModelBase> SelectedActions =>
             AllActions.Where(x => x.IsSelected).OrderByDescending(x => x.LastSelectedDateTime).ToList();
@@ -241,16 +284,19 @@ namespace MonkeyPaste.Avalonia {
 
             await RestoreAllEnabled();//.FireAndForgetSafeAsync(this);
 
-            // select most recent action
-            MpAvActionViewModelBase actionToSelect = AllActions
-                            .Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
+            if(AllActions.Count > 0) {
+                // select most recent action
+                MpAvActionViewModelBase actionToSelect = AllActions
+                                .Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
 
-            if (actionToSelect != null) {
-                SelectedItem = actionToSelect.RootTriggerActionViewModel;
-                actionToSelect.IsSelected = true;
-                OnPropertyChanged(nameof(SelectedItem));
-                SelectedItem.OnPropertyChanged(nameof(SelectedActions));
+                if (actionToSelect != null) {
+                    SelectedItem = actionToSelect.RootTriggerActionViewModel;
+                    actionToSelect.IsSelected = true;
+                    OnPropertyChanged(nameof(SelectedItem));
+                    SelectedItem.OnPropertyChanged(nameof(SelectedActions));
+                }
             }
+            
 
             IsBusy = false;
         }
@@ -342,7 +388,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvActionViewModelBase GetItemNearPoint(MpPoint targetTopLeft, object ignoreItem = null, double radius = 50) {
             MpPoint targetMid = new MpPoint(targetTopLeft.X, targetTopLeft.Y);
-            foreach (var avm in AllSelectedTriggerActions) {
+            foreach (var avm in AllSelectedItemActions) {
                 MpPoint sourceMid = new MpPoint(avm.X, avm.Y);
                 double dist = targetMid.Distance(sourceMid);
                 if (dist < radius && avm != ignoreItem) {
@@ -381,7 +427,7 @@ namespace MonkeyPaste.Avalonia {
         public void NotifyViewportChanged() {
             //CollectionViewSource.GetDefaultView(AllSelectedTriggerActions).Refresh();
             //CollectionViewSource.GetDefaultView(AllSelectedTriggerActions).Refresh();
-            OnPropertyChanged(nameof(AllSelectedTriggerActions));
+            OnPropertyChanged(nameof(AllSelectedItemActions));
         }
         #endregion
 
@@ -467,14 +513,9 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ShowTriggerSelectorMenuCommand => new MpCommand<object>(
              (args) => {
-                 //var fe = args as Control;
-                 //var cm = MpAvContextMenuView.Instance;
-                 //cm.DataContext = ContextMenuItemViewModel;
-                 //fe.ContextMenu = cm;
-                 //fe.ContextMenu.PlacementTarget = fe;
-                 //fe.ContextMenu.PlacementAnchor = PopupAnchor.Right;//Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
-                 //fe.ContextMenu.Open();//IsOpen = true;
-             });
+                 var control = args as Control;
+                 MpAvMenuExtension.ShowMenu(control, ContextMenuItemViewModel, MpPoint.Zero);
+             }, (args) => args is Control);
 
         public ICommand AddTriggerCommand => new MpCommand<object>(
              async (args) => {
@@ -491,20 +532,19 @@ namespace MonkeyPaste.Avalonia {
 
                  var navm = await CreateTriggerViewModel(na);
 
+                 while(navm.IsBusy) {
+                     await Task.Delay(100);
+                 }
+
                  Items.Add(navm);
                  SelectedItem = navm;
 
-                 OnPropertyChanged(nameof(AllSelectedTriggerActions));
+                 OnPropertyChanged(nameof(AllSelectedItemActions));
 
                  OnPropertyChanged(nameof(Items));
 
                  OnPropertyChanged(nameof(IsAnySelected));
 
-                 while(IsBusy) { await Task.Delay(100); }
-
-                 if(SelectedItem != navm) {
-                     SelectedItem = navm;
-                 }
                  SelectedItem.ToggleIsEnabledCommand.Execute(null);
 
                  IsBusy = false;
@@ -523,7 +563,7 @@ namespace MonkeyPaste.Avalonia {
 
                 Items.Remove(tavm);
 
-                OnPropertyChanged(nameof(AllSelectedTriggerActions));
+                OnPropertyChanged(nameof(AllSelectedItemActions));
 
                 await UpdateSortOrder();
                 OnPropertyChanged(nameof(Items));

@@ -7,7 +7,9 @@
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
                        xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:CompileBindings="True"
                        x:TypeArguments="local:MpAvActionViewModelBase"
+                       x:DataType="local:MpAvActionViewModelBase"
                        mc:Ignorable="d">
     <Expander x:Name="ActionExpander"
               Padding="5,0"
@@ -60,7 +62,7 @@
                                 Command="{Binding DeleteThisActionCommand}"
                                 CommandParameter="{Binding}">
                             <DockPanel LastChildFill="True">
-                                <Image Source="{Binding ., Converter={StaticResource StringResourceToImageSourceConverter}, Source={StaticResource TrashCanIcon}}"
+                                <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource TrashCanImage}}"
                                        DockPanel.Dock="Left"
                                        Width="15"
                                        Height="15" />
@@ -77,7 +79,7 @@
                                 Command="{Binding ShowActionSelectorMenuCommand}"
                                 CommandParameter="{Binding $self}">
                             <DockPanel LastChildFill="True">
-                                <Image Source="{Binding ., Converter={StaticResource StringResourceToImageSourceConverter}, Source={StaticResource AddIcon}}"
+                                <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource AddImage}}"
                                        DockPanel.Dock="Left"
                                        Width="15"
                                        Height="15" />
@@ -94,50 +96,50 @@
 
                                 <!--  Content Add  -->
                                 <DataTemplate x:Key="ContentAddedPropertiesTemplate"
-                                              DataType="{x:Type local:MpContentAddTriggerViewModel}">
-                                    <local:MpContentAddTriggerPropertyListBoxItemView DataContext="{Binding}" />
+                                              DataType="{x:Type local:MpAvContentAddTriggerViewModel}">
+                                    <local:MpAvContentAddTriggerPropertyListBoxItemView DataContext="{Binding}" />
                                 </DataTemplate>
 
                                 <!--  Content Tagged  -->
                                 <DataTemplate x:Key="ContentTaggedPropertiesTemplate"
-                                              DataType="{x:Type local:MpContentTaggedTriggerViewModel}">
-                                    <local:MpContentTaggedTriggerPropertyListBoxItemView DataContext="{Binding}" />
+                                              DataType="{x:Type local:MpAvContentTaggedTriggerViewModel}">
+                                    <local:MpAvContentTaggedTriggerPropertyListBoxItemView DataContext="{Binding}" />
                                 </DataTemplate>
 
                                 <!--  File System Changed  -->
                                 <DataTemplate x:Key="FileSystemChangePropertiesTemplate"
-                                              DataType="{x:Type local:MpFileSystemTriggerViewModel}">
-                                    <local:MpFileSystemTriggerPropertyListBoxItemView DataContext="{Binding}" />
+                                              DataType="{x:Type local:MpAvFileSystemTriggerViewModel}">
+                                    <local:MpAvFileSystemTriggerPropertyListBoxItemView DataContext="{Binding}" />
                                 </DataTemplate>
 
                                 <!--  Triggers END  -->
 
                                 <!--  Compare  -->
                                 <DataTemplate x:Key="ComparePropertiesTemplate"
-                                              DataType="{x:Type local:MpCompareActionViewModelBase}">
-                                    <local:MpCompareActionPropertyListBoxItemView DataContext="{Binding}" />
+                                              DataType="{x:Type local:MpAvCompareActionViewModelBase}">
+                                    <local:MpAvCompareActionPropertyListBoxItemView DataContext="{Binding}" />
                                 </DataTemplate>
                                 <!--  Analyze  -->
                                 <DataTemplate x:Key="AnalyzePropertiesTemplate"
-                                              DataType="{x:Type local:MpAnalyzeActionViewModel}">
-                                    <local:MpAnalyzeActionPropertyListBoxItemView DataContext="{Binding}" />
+                                              DataType="{x:Type local:MpAvAnalyzeActionViewModel}">
+                                    <local:MpAvAnalyzeActionPropertyListBoxItemView DataContext="{Binding}" />
                                 </DataTemplate>
                                 <!--  Classify  -->
                                 <DataTemplate x:Key="ClassifyPropertiesTemplate"
-                                              DataType="{x:Type local:MpClassifyActionViewModel}">
-                                    <local:MpClassifyActionPropertyListBoxItemView DataContext="{Binding}" />
+                                              DataType="{x:Type local:MpAvClassifyActionViewModel}">
+                                    <local:MpAvClassifyActionPropertyListBoxItemView DataContext="{Binding}" />
                                 </DataTemplate>
 
                                 <!--  File Writer  -->
                                 <DataTemplate x:Key="FileWriterPropertiesTemplate"
-                                              DataType="{x:Type local:MpFileWriterActionViewModel}">
-                                    <local:MpFileWriterActionPropertyListBoxItemView DataContext="{Binding}" />
+                                              DataType="{x:Type local:MpAvFileWriterActionViewModel}">
+                                    <local:MpAvFileWriterActionPropertyListBoxItemView DataContext="{Binding}" />
                                 </DataTemplate>
 
                                 <!--  Macro  -->
                                 <DataTemplate x:Key="MacroPropertiesTemplate"
-                                              DataType="{x:Type local:MpMacroActionViewModel}">
-                                    <local:MpMacroActionPropertyListBoxItemView DataContext="{Binding}" />
+                                              DataType="{x:Type local:MpAvMacroActionViewModel}">
+                                    <local:MpAvMacroActionPropertyListBoxItemView DataContext="{Binding}" />
                                 </DataTemplate>
                             </local:MpAvActionItemPropertiesTemplateSelector>
                         </ContentControl.DataTemplates>

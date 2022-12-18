@@ -17,35 +17,7 @@
             VerticalAlignment="Stretch"
             Padding="10"
             Background="{DynamicResource AnalyzerSidebarBgBrush}">
-        <Border.Resources>
-            <LinearGradientBrush x:Key="UnderlineFadeOutBrush"
-                                 StartPoint="0%,0%"
-                                 EndPoint="100%,0%">
-                <GradientStop Offset="0"
-                              Color="White" />
-                <GradientStop Offset="0.75"
-                              Color="Transparent" />
-            </LinearGradientBrush>
-        </Border.Resources>
         <Border.Styles>
-            <Style Selector="Label">
-                <Setter Property="Foreground"
-                        Value="White" />
-                <Setter Property="FontFamily"
-                        Value="Segue UI" />
-            </Style>
-            <Style Selector="Border.labelUnderline">
-                <Setter Property="Background"
-                        Value="{StaticResource UnderlineFadeOutBrush}" />
-                <Setter Property="HorizontalAlignment"
-                        Value="Stretch" />
-                <Setter Property="Height"
-                        Value="3" />
-                <Setter Property="CornerRadius"
-                        Value="3" />
-                <Setter Property="Margin"
-                        Value="0,0,20,10" />
-            </Style>
         </Border.Styles>
         <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Auto">

@@ -5,8 +5,10 @@
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:CompileBindings="True"
                        xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
                        x:TypeArguments="local:MpAvClassifyActionViewModel"
+                       x:DataType="local:MpAvClassifyActionViewModel"
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
@@ -24,27 +26,25 @@
                    Grid.Column="0"
                    Classes="actionProperty"
                    Text="Collection" />
-        <Border Grid.Row="0"
+        <Border x:Name="ComboBoxContainerBorder" 
+                Grid.Row="0"
                 Grid.Column="1"
                 Classes="actionProperty">
             <ComboBox x:Name="TagChooserComboBox"
                       Grid.Row="0"
                       Grid.Column="1"
                       Classes="actionProperty"
-                      IsDropDownOpen="{Binding IsAnyDropDownOpen, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=OneWayToSource}"
                       MinWidth="150"
                       SelectedItem="{Binding SelectedTag, Mode=TwoWay}"
                       Items="{Binding Items, Source={x:Static local:MpAvTagTrayViewModel.Instance}}">
+                <ComboBox.Styles>
+                    <Style Selector="ComboBoxItem">
+                        <Setter Property="IsVisible"
+                                Value="{Binding #TagChooserComboBox.SelectedItem, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}" />
+                    </Style>
+                </ComboBox.Styles>
                 <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <!--
-                            For Outer StackPanel
-                            
-                            IsVisible="{Binding DataContext.SelectedTag,
-                            RelativeSource={RelativeSource Mode=FindAncestor,
-                            AncestorType=ComboBox},
-                            Converter={StaticResource IsNotNullToVisibilityConverter}}"
-                        -->
+                    <DataTemplate DataType="local:MpAvTagTileViewModel">
                         <StackPanel Margin="3"
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Stretch">
@@ -56,9 +56,7 @@
                                     Height="15">
                                 <Border.Margin>
                                     <MultiBinding Converter="{StaticResource TagIdToThicknessNameConverter}">
-                                        <Binding Path="DataContext.TagId"
-                                                 RelativeSource="{RelativeSource Mode=FindAncestor,
-                                                                                 AncestorType=Border}" />
+                                        <Binding Path="TagId" />
                                         <Binding Path="IsDropDownOpen"
                                                  ElementName="TagChooserComboBox" />
                                         <Binding>

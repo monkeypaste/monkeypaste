@@ -18,9 +18,19 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvTriggerActionViewModelBase : 
         MpAvActionViewModelBase,
         MpIResizableViewModel,
+        MpIAsyncComboBoxItemViewModel,
         MpISidebarItemViewModel,
         MpIMenuItemViewModel,
         MpIDesignerItemSettingsViewModel {
+
+        #region MpIAsyncComboBoxItemViewModel Implementation
+
+
+        int MpIComboBoxItemViewModel.IconId => IconId;
+        string MpIComboBoxItemViewModel.Label => Label;
+
+        #endregion
+
         #region Properties
 
         #region View Models

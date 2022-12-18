@@ -9,7 +9,7 @@
                        xmlns:pcl="using:MonkeyPaste"
                        x:TypeArguments="local:MpAvFilterMenuViewModel"
                        x:DataType="local:MpAvFilterMenuViewModel"
-                       x:CompileBindings="False"
+                       x:CompileBindings="True"
                        DataContext="{x:Static local:MpAvFilterMenuViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileSortView">
     <StackPanel Orientation="Horizontal">

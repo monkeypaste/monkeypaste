@@ -8,6 +8,7 @@ using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -215,7 +216,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
-
         public string BorderBrushHexColor {
             get {
                 if (Parent != null &&
@@ -943,7 +943,7 @@ namespace MonkeyPaste.Avalonia {
                                         prefix.ToLower(),
                                         uniqueIdx);
 
-            while (Parent.AllSelectedTriggerActions.Any(x => x.Label.ToLower() == testName)) {
+            while (Parent.AllSelectedItemActions.Any(x => x.Label.ToLower() == testName)) {
                 uniqueIdx++;
                 testName = string.Format(
                                         @"{0}{1}",
@@ -959,7 +959,7 @@ namespace MonkeyPaste.Avalonia {
                     if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
 
-                        Parent.AllSelectedTriggerActions.ForEach(x => x.IsExpanded = x.ActionId == ActionId);
+                        Parent.AllSelectedItemActions.ForEach(x => x.IsExpanded = x.ActionId == ActionId);
                         IsExpanded = true;
                     } else {
                         IsExpanded = false;
@@ -972,6 +972,7 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.SelectedActions));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
                     OnPropertyChanged(nameof(BorderBrushHexColor));
+                    //OnPropertyChanged(nameof(IsRootAction));
                     break;
                 case nameof(HasModelChanged):
                     if (HasModelChanged && IsValid) {
@@ -1056,17 +1057,10 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ShowActionSelectorMenuCommand => new MpCommand<object>(
              (args) => {
-                 //var fe = args as Control;
-                 //var cm = MpAvContextMenuView.Instance;
-                 ////LastSelectedDateTime = DateTime.Now;
-                 //IsSelected = true;
-
-                 //cm.DataContext = ContextMenuItemViewModel;
-                 //fe.ContextMenu = cm;
-                 //fe.ContextMenu.PlacementTarget = fe;
-                 //fe.ContextMenu.PlacementAnchor = PopupAnchor.Right; //System.Windows.Controls.Primitives.PlacementMode.Right;
-                 //fe.ContextMenu.Open();//IsOpen = true;
-             });
+                 var fe = args as Control;
+                 IsSelected = true;
+                 MpAvMenuExtension.ShowMenu(fe, ContextMenuItemViewModel);
+             },(args) => args is Control);
 
         public ICommand AddChildActionCommand => new MpCommand<object>(
              async (args) => {
@@ -1082,8 +1076,12 @@ namespace MonkeyPaste.Avalonia {
 
                  var navm = await CreateActionViewModel(na);
 
+                 while(navm.IsBusy) {
+                     await Task.Delay(100);
+                 }
                  Items.Add(navm);
 
+                 
                  //AddChildEmptyActionViewModel.IsSelected = false;
                  navm.IsSelected = true;
 
@@ -1091,7 +1089,7 @@ namespace MonkeyPaste.Avalonia {
 
                  OnPropertyChanged(nameof(Items));
 
-                 Parent.OnPropertyChanged(nameof(Parent.AllSelectedTriggerActions));
+                 Parent.OnPropertyChanged(nameof(Parent.AllSelectedItemActions));
 
                  IsExpanded = true;
 
@@ -1107,20 +1105,28 @@ namespace MonkeyPaste.Avalonia {
             async (args) => {
                 IsBusy = true;
 
-                var avm = args as MpAvActionViewModelBase;
-                await avm.Disable();
+                var to_delete_avm = args as MpAvActionViewModelBase;
+                if(to_delete_avm == null || to_delete_avm.ParentActionViewModel != this) {
+                    // link error (this cmd is called from arg vm using parentacvm)
+                    Debugger.Break();
+                    return;
+                }
+                await to_delete_avm.Disable();
 
-                var grandChildren = Parent.AllSelectedTriggerActions.Where(x => x.ParentActionId == avm.ActionId);
+                var grandChildren = Parent.AllSelectedItemActions.Where(x => x.ParentActionId == to_delete_avm.ActionId);
                 grandChildren.ForEach(x => x.ParentActionId = ActionId);
                 grandChildren.ForEach(x => x.ParentActionViewModel = this);
                 await Task.WhenAll(grandChildren.Select(x => x.Action.WriteToDatabaseAsync()));
-                await avm.Action.DeleteFromDatabaseAsync();
+                await to_delete_avm.Action.DeleteFromDatabaseAsync();
 
-                Parent.OnPropertyChanged(nameof(Parent.AllSelectedTriggerActions));
-                Parent.AllSelectedTriggerActions.Remove(avm);
+                Items.Remove(to_delete_avm);
+                OnPropertyChanged(nameof(Items));
+                to_delete_avm.ParentActionViewModel.Items.Remove(to_delete_avm);
+                Parent.OnPropertyChanged(nameof(Parent.AllSelectedItemActions));
+                //Parent.AllSelectedItemActions.Remove(avm);
                 await RootTriggerActionViewModel.InitializeAsync(RootTriggerActionViewModel.Action);
 
-                avm.ParentActionViewModel = null;
+                to_delete_avm.ParentActionViewModel = null;
 
                 Parent.SelectedItem = RootTriggerActionViewModel;
                 IsSelected = true;

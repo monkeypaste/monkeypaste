@@ -4,8 +4,10 @@
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:CompileBindings="True"
                        xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
                        x:TypeArguments="local:MpAvCompareActionViewModelBase"
+                       x:DataType="local:MpAvCompareActionViewModelBase"
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
@@ -32,8 +34,7 @@
         <Border Grid.Row="0"
                 Grid.Column="1"
                 Classes="actionProperty">
-            <ComboBox Style="{StaticResource ActionPropertyComboBoxStyle}"
-                      Classes="actionProperty"
+            <ComboBox Classes="actionProperty"
                       SelectedIndex="{Binding ComparePropertyPathType, Converter={StaticResource EnumToIntConverter}, ConverterParameter=MonkeyPaste.MpCopyItemPropertyPathType, Mode=TwoWay}"
                       Items="{Binding ., Converter={StaticResource EnumToItemSourceLabelsConverter}, ConverterParameter=MonkeyPaste.MpCopyItemPropertyPathType}" />
         </Border>
@@ -50,7 +51,6 @@
                 IsVisible="{Binding IsItemTypeCompare}"
                 Classes="actionProperty">
             <ComboBox Classes="actionProperty"
-                      IsDropDownOpen="{Binding IsAnyDropDownOpen, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=OneWayToSource}"
                       SelectedIndex="{Binding ContentItemType, Converter={StaticResource EnumToIntConverter}, ConverterParameter=MonkeyPaste.MpCopyItemType, Mode=TwoWay}"
                       Items="{Binding ., Converter={StaticResource EnumToItemSourceLabelsConverter}, ConverterParameter=MonkeyPaste.MpCopyItemType}" />
         </Border>
@@ -59,57 +59,56 @@
         <TextBlock Grid.Row="1"
                    Grid.Column="0"
                    IsVisible="{Binding !IsItemTypeCompare}"
-                      Classes="actionProperty"
+                   Classes="actionProperty"
                    Text="Type" />
         <StackPanel Grid.Row="1"
                     Grid.Column="1"
                     Orientation="Horizontal"
                     IsVisible="{Binding !IsItemTypeCompare}">
-            <Border Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
-                <ComboBox Style="{StaticResource ActionPropertyComboBoxStyle}"
-                          ItemContainerStyle="{StaticResource ActionPropertyComboBoxItemStyle}"
+            <Border Classes="actionProperty">
+                <ComboBox Classes="actionProperty"
                           SelectedIndex="{Binding ComparisonOperatorType, Converter={StaticResource EnumToIntConverter}, ConverterParameter=MonkeyPaste.MpComparisonOperatorType, Mode=TwoWay}"
                           Items="{Binding ., Converter={StaticResource EnumToItemSourceLabelsConverter}, ConverterParameter=MonkeyPaste.MpComparisonOperatorType}" />
             </Border>
 
-            <CheckBox Visibility="{Binding IsItemTypeCompare, Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                      IsEnabled="{Binding IsCompareTypeRegex, Converter={StaticResource BoolFlipConverter}}"
-                      ToolTip="Case Sensitive?"
-                      ToolTipService.InitialShowDelay="0"
-                      MinWidth="100"
-                      Margin="5,10"
-                      IsChecked="{Binding IsCaseSensitive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
+          <CheckBox IsVisible="{Binding !IsItemTypeCompare}"
+                    IsEnabled="{Binding !IsCompareTypeRegex}"
+                    MinWidth="100"
+                    Margin="5,10"
+                    IsChecked="{Binding IsCaseSensitive, Mode=TwoWay}">
+            <ToolTip.Tip>
+              <local:MpAvToolTipView ToolTipText="Case Sensitive?" />
+            </ToolTip.Tip>
+          </CheckBox>
         </StackPanel>
 
         <!--  is last output compare json path checkbox  -->
         <TextBlock Grid.Row="2"
                    Grid.Column="0"
-                   Visibility="{Binding IsLastOutputCompare, Converter={StaticResource BoolToVisibilityConverter}}"
-                   Style="{StaticResource ActionPropertyTextBlockStyle}"
+                   IsVisible="{Binding IsLastOutputCompare}"
+                   Classes="actionProperty"
                    Text="Query Output?" />
         <CheckBox Grid.Row="2"
                   Grid.Column="1"
-                  Visibility="{Binding IsLastOutputCompare, Converter={StaticResource BoolToVisibilityConverter}}"
+                  IsVisible="{Binding IsLastOutputCompare}"
                   MinWidth="100"
                   Margin="5,10"
-                  IsChecked="{Binding IsJsonQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
+                  IsChecked="{Binding IsJsonQuery, Mode=TwoWay}" />
 
         <!--  json path query textbox  -->
         <TextBlock Grid.Row="3"
                    Grid.Column="0"
-                   Visibility="{Binding IsJsonQuery, Converter={StaticResource BoolToVisibilityConverter}}"
-                   Style="{StaticResource ActionPropertyTextBlockStyle}"
+                   IsVisible="{Binding IsJsonQuery}"
+                   Classes="actionProperty"
                    Text="JSON Path" />
         <Border Grid.Row="3"
                 Grid.Column="1"
                 BorderThickness="0"
                 Background="White"
-                Visibility="{Binding IsJsonQuery, Converter={StaticResource BoolToVisibilityConverter}}"
-                Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
+                IsVisible="{Binding IsJsonQuery}"
+                Classes="actionProperty">
             <TextBox x:Name="CompareDataJsonPathTextBox"
                      HorizontalAlignment="Stretch"
-                     HorizontalScrollBarVisibility="Visible"
-                     VerticalScrollBarVisibility="Auto"
                      BorderThickness="0"
                      Padding="5"
                      MinHeight="20"
@@ -119,7 +118,7 @@
                      AcceptsReturn="True"
                      AcceptsTab="True"
                      local:MpAvIsFocusedExtension.IsEnabled="True"
-                     Text="{Binding CompareDataJsonPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
+                     Text="{Binding CompareDataJsonPath, Mode=TwoWay}" />
         </Border>
 
         <!--  END Item Type / Compare Type Row / JsonPath  -->
@@ -128,8 +127,8 @@
         <!--  Compare Data  -->
         <TextBlock Grid.Row="4"
                    Grid.Column="0"
-                   Visibility="{Binding IsItemTypeCompare, Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                   Style="{StaticResource ActionPropertyTextBlockStyle}"
+                   IsVisible="{Binding !IsItemTypeCompare}"
+                   Classes="actionProperty"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Top"
                    Text="Data" />
@@ -138,10 +137,8 @@
                  Grid.Row="5"
                  Grid.Column="0"
                  Grid.ColumnSpan="3"
-                 Visibility="{Binding IsItemTypeCompare, Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                 IsVisible="{Binding !IsItemTypeCompare}"
                  HorizontalAlignment="Stretch"
-                 HorizontalScrollBarVisibility="Visible"
-                 VerticalScrollBarVisibility="Auto"
                  Padding="5"
                  MinHeight="20"
                  MinWidth="240"
@@ -150,6 +147,6 @@
                  AcceptsReturn="True"
                  AcceptsTab="True"
                  local:MpAvIsFocusedExtension.IsEnabled="True"
-                 Text="{Binding CompareData, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
+                 Text="{Binding CompareData, Mode=TwoWay}" />
     </Grid>
 </local:MpAvUserControl>

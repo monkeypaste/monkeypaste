@@ -6,10 +6,19 @@
         <!--  COMMON  -->
 
         <!--  COLORS  -->
-
-        <Color x:Key="ClipTileContentBackgroundColor">
-            OldLace
+        <Color x:Key="MainWindowBgColor">
+            Purple
         </Color>
+
+
+        <Color x:Key="MainWindowTitleMenuActiveBgColor">
+            GoldenRod
+        </Color>
+
+        <Color x:Key="MainWindowTitleMenuInactiveBgColor">
+            Gainsboro
+        </Color>
+
 
         <Color x:Key="DisabledTextFgColor">
             LightGray
@@ -45,6 +54,15 @@
         </Color>
 
 
+        <Color x:Key="ClipTileContentBackgroundColor">
+            OldLace
+        </Color>
+
+        <!--  ACTIONS  -->
+        <Color x:Key="ActionDesignerBgColor">
+            Gainsboro
+        </Color>
+
         <!--  BRUSHES  -->
 
         <!--  GENERAL  -->
@@ -64,35 +82,45 @@
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <!--  TITLE MENU  -->
         <SolidColorBrush x:Key="TitleMenuActiveBgBrush"
-                         Color="Goldenrod"
+                         Color="{DynamicResource MainWindowTitleMenuActiveBgColor}"
                          Opacity="{DynamicResource GlobalBgOpacity}" />
         <SolidColorBrush x:Key="TitleMenuInactiveBgBrush"
-                         Color="Gainsboro"
+                         Color="{DynamicResource MainWindowTitleMenuInactiveBgColor}"
                          Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  FILTER MENU  -->
         <SolidColorBrush x:Key="FilterMenuBgBrush"
-                         Color="Purple"
+                         Color="{DynamicResource MainWindowBgColor}"
                          Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  SIDE BAR  -->
 
         <!--  TAG TREE  -->
         <SolidColorBrush x:Key="TagTreeBgBrush"
-                         Color="Purple"
+                         Color="{DynamicResource MainWindowBgColor}"
                          Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  CLIPBOARD SIDEBAR  -->
 
         <SolidColorBrush x:Key="ClipboardSidebarBgBrush"
-                         Color="Purple"
+                         Color="{DynamicResource MainWindowBgColor}"
                          Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  ANALYZER SIDEBAR  -->
 
         <SolidColorBrush x:Key="AnalyzerSidebarBgBrush"
-                         Color="Purple"
+                         Color="{DynamicResource MainWindowBgColor}"
                          Opacity="{DynamicResource GlobalBgOpacity}" />
+
+        <!--  ACTION SIDEBAR  -->
+
+        <SolidColorBrush x:Key="ActionPropertyListBgBrush"
+                         Color="{DynamicResource MainWindowBgColor}"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="ActionDesignerBgBrush"
+                         Color="{DynamicResource ActionDesignerBgColor}"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+
         <!--  TAG TILE  -->
         <!--  BG  -->
         <SolidColorBrush x:Key="TagTileBgColor"

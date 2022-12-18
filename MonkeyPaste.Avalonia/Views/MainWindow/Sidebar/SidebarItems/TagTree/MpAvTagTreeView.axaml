@@ -27,7 +27,6 @@
                   IsVisible="{Binding IsSidebarVisible}"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch">
-            <TreeView.Resources />
             <TreeView.Styles>
                 <Style Selector="TreeViewItem"
                        x:DataType="local:MpAvTagTileViewModel">
@@ -43,7 +42,7 @@
             </TreeView.Styles>
             <TreeView.ItemTemplate>
                 <TreeDataTemplate DataType="{x:Type local:MpAvTagTileViewModel}"
-                                  Items="{Binding SortedItems}">
+                                  ItemsSource="{Binding SortedItems}">
                     <local:MpAvTagView DataContext="{Binding}" />
                 </TreeDataTemplate>
             </TreeView.ItemTemplate>

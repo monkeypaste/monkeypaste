@@ -48,6 +48,13 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region MpIPluginPresetTransaction Implementation
+
+        [Ignore]
+        MpCopyItemTransactionType MpIPluginPresetTransaction.TransactionType => MpCopyItemTransactionType.Http;
+
+        #endregion
+
         #region Properties
 
         [Ignore]

@@ -75,17 +75,7 @@ namespace MonkeyPaste {
 
         public abstract Task InitAsync();
 
-        protected virtual void CreateLoaderItems() {
-            _coreItems.AddRange(
-                new List<MpBootstrappedItemViewModel>() {
-                    new MpBootstrappedItemViewModel(this,typeof(MpConsole)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpTempFileManager)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpDb)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpDataModelProvider)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpPluginLoader))
-                });
-        }
+        protected abstract void CreateLoaderItems();
 
         protected virtual async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {
             IsBusy = true;

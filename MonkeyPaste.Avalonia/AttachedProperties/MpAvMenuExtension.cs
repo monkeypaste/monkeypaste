@@ -472,7 +472,8 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        public static void ShowMenu(Control control, MpMenuItemViewModel mivm, MpPoint offset) {
+        public static void ShowMenu(Control control, MpMenuItemViewModel mivm, MpPoint offset = null) {
+            offset = offset == null ? MpPoint.Zero : offset;
             CancelEventHandler onOpenHandler = null;
             CancelEventHandler onCloseHandler = null;
 
