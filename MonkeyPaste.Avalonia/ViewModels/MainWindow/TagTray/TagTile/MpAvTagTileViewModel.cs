@@ -19,7 +19,6 @@ namespace MonkeyPaste.Avalonia {
         MpAvTreeSelectorViewModelBase<MpAvTagTrayViewModel, MpAvTagTileViewModel>, 
         MpIHoverableViewModel,
         MpISelectableViewModel,
-        MpITreeItemViewModel,
         MpAvIShortcutCommand, 
         MpIUserColorViewModel,
         MpIActionComponent,
@@ -36,17 +35,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpAvTagTileViewModel ParentTagViewModel => Parent.Items.FirstOrDefault(x => x.TagId == ParentTagId);
-
-        public override MpAvTagTileViewModel ParentTreeItem => ParentTagViewModel;
-
         public IEnumerable<MpAvTagTileViewModel> SortedItems => Items.OrderBy(x => x.TagSortIdx);
+
         #endregion
 
-        #region MpITreeItemViewModel Implementation
+        #region MpAvTreeSelectorViewModelBase Implementation
 
-        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem => ParentTagViewModel;
-        IEnumerable<MpITreeItemViewModel> MpITreeItemViewModel.Children => SortedItems;
+        public override MpAvTagTileViewModel ParentTreeItem => Parent.Items.FirstOrDefault(x => x.TagId == ParentTagId);
+        public override IEnumerable<MpAvTagTileViewModel> Children => SortedItems;
+
         #endregion
 
         #region MpISelectableViewModel Implementation
@@ -700,10 +697,10 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(SortedItems));
                     break;
                 case nameof(TagSortIdx):
-                    if(ParentTagViewModel == null) {
+                    if(ParentTreeItem == null) {
                         break;
                     }
-                    ParentTagViewModel.OnPropertyChanged(nameof(ParentTagViewModel.SortedItems));
+                    ParentTreeItem.OnPropertyChanged(nameof(ParentTreeItem.SortedItems));
                     break;
                 case nameof(TagTraySortIdx):
                     if (Parent == null) {
@@ -951,7 +948,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand DeleteThisTagCommand => new MpCommand(
             () => {
-                ParentTagViewModel.DeleteChildTagCommand.Execute(this);
+                ParentTreeItem.DeleteChildTagCommand.Execute(this);
             }, ()=> !IsTagReadOnly);
 
 

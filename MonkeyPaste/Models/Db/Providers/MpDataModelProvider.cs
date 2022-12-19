@@ -17,45 +17,12 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
-
-        
-        //public static List<MpIQueryInfo> QueryInfos { get; private set; } = new List<MpIQueryInfo>();
-
-        //public static MpIQueryInfo QueryInfo {
-        //    get {
-        //        //if(QueryInfos.Count > 0) {
-        //        //    return QueryInfos.OrderBy(x => x.SortOrderIdx).ToList()[0];
-        //        //}
-        //        //return null;
-        //        return MpPlatformWrapper.Services.QueryInfo;
-        //    }
-        //}
-
-        //public static List<int> AvailableQueryCopyItemIds { get; private set; } = new List<int>();
-
-
-        //public static int TotalTilesInQuery => AvailableQueryCopyItemIds.Count;
-
         #endregion
 
         #region Constructor
-
-
-        //public static void Init() {
-        //    QueryInfos.Clear();
-        //    QueryInfos.Add(MpPlatformWrapper.Services.QueryInfo);
-        //    ResetQuery();
-        //}
-
-
-
         #endregion
 
         #region Public Methods
-
-        //public static void ResetQuery() {
-        //    AvailableQueryCopyItemIds.Clear();
-        //}
 
         #region Select queries
 
@@ -295,11 +262,11 @@ namespace MonkeyPaste {
 
         #region MpSource
 
-        public static async Task<List<MpSource>> GetAllSourcesByAppIdAsync(int appId) {
-            string query = $"select * from MpSource where fk_MpAppId=?";
-            var result = await MpDb.QueryAsync<MpSource>(query, appId);
-            return result;
-        }
+        //public static async Task<List<MpSource>> GetAllSourcesByAppIdAsync(int appId) {
+        //    string query = $"select * from MpSource where fk_MpAppId=?";
+        //    var result = await MpDb.QueryAsync<MpSource>(query, appId);
+        //    return result;
+        //}
 
         public static async Task<List<MpSource>> GetAllSourcesByUrlIdAsync(int urlId) {
             string query = $"select * from MpSource where fk_MpUrlId=?";
@@ -325,49 +292,31 @@ namespace MonkeyPaste {
             return result[0];
         }
 
-        #endregion MpSource
+        #endregion 
 
         #region MpCopyItem
 
-        public static async Task<List<MpCopyItem>> GetCopyItemsByAppIdAsync(int appId) {
-            var sl = await GetAllSourcesByAppIdAsync(appId);
-
-            string whereStr = string.Join(" or ", sl.Select(x => string.Format(@"fk_MpSourceId={0}", x.Id)));
-            string query = $"select * from MpCopyItem where {whereStr}";
-            var result = await MpDb.QueryAsync<MpCopyItem>(query);
+        public static async Task<List<MpCopyItem>> GetCopyItemsBySourceTypeAndIdAsync(
+            MpCopyItemSourceType sourceType, 
+            int sourceObjId) {
+            string query = 
+                $"select fk_MpCopyItemId from MpCopyItemSource where e_MpCopyItemSourceType=='{sourceType.ToString()}' and fk_SourceObjId = ?";
+            var result = await MpDb.QueryAsync<MpCopyItem>(query, sourceObjId);
             return result;
         }
 
-        public static async Task<List<MpCopyItem>> GetCopyItemsByUrlIdAsync(int urlId) {
-            List<MpSource> sl = await GetAllSourcesByUrlIdAsync(urlId);
-            string whereStr = string.Join(" or ", sl.Select(x => string.Format(@"fk_MpSourceId={0}", x.Id)));
-            string query = $"select * from MpCopyItem where {whereStr}";
-            var result = await MpDb.QueryAsync<MpCopyItem>(query);
-            return result;
-        }
-
-        public static async Task<List<MpCopyItem>> GetCopyItemsByUrlDomainAsync(string domainStr) {
-            var urll = await GetAllUrlsByDomainNameAsync(domainStr);
-            List<MpSource> sl = new List<MpSource>();
-            foreach(var url in urll) {
-                var ssl = await GetAllSourcesByUrlIdAsync(url.Id);
-                sl.AddRange(ssl);
-            }
-            sl = sl.Distinct().ToList();
-            string whereStr = string.Join(" or ", sl.Select(x => string.Format(@"fk_MpSourceId={0}", x.Id)));
-            string query = $"select * from MpCopyItem where {whereStr}";
-            var result = await MpDb.QueryAsync<MpCopyItem>(query);
-            return result;
-        }
 
         public static async Task<List<MpCopyItem>> GetCopyItemsByIdListAsync(List<int> ciida) {
-            if(ciida.Count == 0) {
-                return new List<MpCopyItem>();
-            }
-            string whereStr = string.Join(" or ", ciida.Select(x => string.Format(@"pk_MpCopyItemId={0}", x)));
-            string query = $"select * from MpCopyItem where {whereStr}";
-            var result = await MpDb.QueryAsync<MpCopyItem>(query);
-            return result.OrderBy(x=>ciida.IndexOf(x.Id)).ToList();
+            //if(ciida.Count == 0) {
+            //    return new List<MpCopyItem>();
+            //}
+            //string whereStr = string.Join(" or ", ciida.Select(x => string.Format(@"pk_MpCopyItemId={0}", x)));
+            //string query = $"select * from MpCopyItem where {whereStr}";
+            //var result = await MpDb.QueryAsync<MpCopyItem>(query);
+            //return result.OrderBy(x=>ciida.IndexOf(x.Id)).ToList();
+            string query = $"select * from MpCopyItem where pk_MpCopyItemId in ({string.Join(",", ciida.Select(x => "?"))})";
+            var result = await MpDb.QueryAsync<MpCopyItem>(query,ciida.Cast<object>().ToArray());
+            return result.OrderBy(x => ciida.IndexOf(x.Id)).ToList();
         }
 
 
@@ -432,7 +381,7 @@ namespace MonkeyPaste {
         }
 
 
-        #endregion MpCopyItem
+        #endregion 
 
         #region MpTextTemplate
         public static Task<List<string>> ParseTextTemplateGuidsByCopyItemIdAsync(MpCopyItem ci) {
@@ -890,8 +839,8 @@ namespace MonkeyPaste {
         #region MpAction
 
         public static async Task<List<MpAction>> GetAllTriggerActionsAsync() {
-            string query = $"select * from MpAction where e_MpActionTypeId=? and fk_ActionObjId != ?";
-            var result = await MpDb.QueryAsync<MpAction>(query, (int)MpActionType.Trigger,(int)MpTriggerType.ParentOutput);
+            string query = $"select * from MpAction where e_MpActionType=? and fk_ActionObjId != ?";
+            var result = await MpDb.QueryAsync<MpAction>(query, MpActionType.Trigger.ToString(),(int)MpTriggerType.ParentOutput);
             return result;
         }
 

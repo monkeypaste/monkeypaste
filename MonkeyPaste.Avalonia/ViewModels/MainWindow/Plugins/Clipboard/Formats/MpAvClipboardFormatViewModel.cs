@@ -12,7 +12,7 @@ using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipboardFormatViewModel : 
-        MpAvSelectorViewModelBase<MpAvClipboardHandlerCollectionViewModel,MpAvClipboardHandlerItemViewModel>,
+        MpAvTreeSelectorViewModelBase<MpAvClipboardHandlerCollectionViewModel,MpAvClipboardHandlerItemViewModel>,
         MpITreeItemViewModel,
         MpISelectableViewModel {
 
@@ -48,11 +48,10 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpITreeItemViewModel
+        #region MpAvTreeSelectorViewModelBase Overrides
 
-        public bool IsExpanded { get; set; }
-        public MpITreeItemViewModel ParentTreeItem => null;
-        public IEnumerable<MpITreeItemViewModel> Children { 
+        public override MpITreeItemViewModel ParentTreeItem => Parent;
+        public override IEnumerable<MpITreeItemViewModel> Children { 
             get {
                 var c = new ObservableCollection<MpITreeItemViewModel>();
                 foreach(var r in Readers) {

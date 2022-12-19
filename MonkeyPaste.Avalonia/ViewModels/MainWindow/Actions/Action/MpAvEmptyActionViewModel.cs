@@ -9,11 +9,11 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsDesignerVisible {
             get {
-                if(ParentActionViewModel == null ||
+                if(ParentTreeItem == null ||
                     Parent.PrimaryAction == null) {
                     return false;
                 }
-                return IsSelected || ParentActionViewModel.ActionId == Parent.PrimaryAction.ActionId;
+                return IsSelected || ParentTreeItem.ActionId == Parent.PrimaryAction.ActionId;
             }
         }
 
@@ -36,9 +36,9 @@ namespace MonkeyPaste.Avalonia {
         private void MpEmptyActionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsDesignerVisible):
-                    if(IsDesignerVisible && ParentActionViewModel != null) {
-                        X = ParentActionViewModel.X;
-                        Y = ParentActionViewModel.Y - (Height * 1.75);
+                    if(IsDesignerVisible && ParentTreeItem != null) {
+                        X = ParentTreeItem.X;
+                        Y = ParentTreeItem.Y - (Height * 1.75);
                     }
                     break;
             }

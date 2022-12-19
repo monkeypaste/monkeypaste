@@ -22,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
             var temp = avm;
             while (temp.ParentTreeItem != null) {
                 indentCount++;
-                temp = temp.ParentActionViewModel;
+                temp = temp.ParentTreeItem;
             }
             //for first indent level indent icon is all that is needed
             indentCount--;

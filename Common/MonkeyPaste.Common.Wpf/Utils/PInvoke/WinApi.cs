@@ -47,8 +47,6 @@ namespace MonkeyPaste.Common.Wpf {
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool TerminateProcess(IntPtr hProcess, uint uExitCode);
 
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        public static extern IntPtr GetOpenClipboardWindow();
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern int GetWindowText(int hwnd, StringBuilder text, int count);
@@ -56,24 +54,6 @@ namespace MonkeyPaste.Common.Wpf {
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern int GetWindowTextLength(int hwnd);
 
-        public static IntPtr IsClipboardOpen(bool showOpenWindowName = false) {
-            var hwnd = WinApi.GetOpenClipboardWindow();
-
-            if (hwnd == IntPtr.Zero) {
-                return IntPtr.Zero;
-            }
-            if(showOpenWindowName) {
-                //var int32Handle = hwnd.ToInt32();
-                //var len = GetWindowTextLength(int32Handle);
-                var sb = new StringBuilder();
-                GetWindowText(hwnd, sb, 100);
-                MpConsole.WriteLine("Clipboard is open by window: " + sb.ToString());
-            }
-            
-            
-
-            return hwnd;
-        }
 
 
         [StructLayout(LayoutKind.Sequential)]
@@ -104,11 +84,7 @@ namespace MonkeyPaste.Common.Wpf {
             public UInt16 bV5Reserved;
         }
 
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern bool OpenClipboard(IntPtr hWndNewOwner);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern bool CloseClipboard();
+        
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool EmptyClipboard();
@@ -779,6 +755,49 @@ namespace MonkeyPaste.Common.Wpf {
             void Drop([In, MarshalAs(UnmanagedType.Interface)] IDataObject_Com dataObject, [In] ref drawing.Point pt, [In] DragDropEffects effect);
             void Show([In] bool show);
         }
+        #endregion
+
+        #region Clipboard
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern IntPtr GetOpenClipboardWindow();
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool OpenClipboard(IntPtr hWndNewOwner);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool CloseClipboard();
+        public static IntPtr IsClipboardOpen(bool showOpenWindowName = false) {
+            var hwnd = GetOpenClipboardWindow();
+
+            if (hwnd == IntPtr.Zero) {
+                return IntPtr.Zero;
+            }
+            if (showOpenWindowName) {
+                //var int32Handle = hwnd.ToInt32();
+                //var len = GetWindowTextLength(int32Handle);
+                var sb = new StringBuilder();
+                GetWindowText(hwnd, sb, 100);
+                MpConsole.WriteLine("Clipboard is open by window: " + sb.ToString());
+            }
+            return hwnd;
+        }
+
+        //public static async Task<bool> OpenClipboardAsync(IntPtr handle, int retryCount = 10) {
+        //    var i = retryCount;
+
+        //    while (!OpenClipboard(handle)) {
+        //        var open_handle = GetOpenClipboardWindow();
+        //        if (open_handle == handle) {
+        //            break;
+        //        }
+        //        if (--i == 0) {
+        //            return false;
+        //        }
+        //        await Task.Delay(100);
+        //    }
+        //    return true;
+        //}
         #endregion
     }
 }

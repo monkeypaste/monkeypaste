@@ -35,23 +35,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
         public static bool IsAnyMoving { get; private set; }
-
-
-
-
         #endregion
 
 
         #region Private Variables
-
-        //private static List<MpIMovableViewModel> _allMovables = new List<MpIMovableViewModel>();
-
-        //public static bool IsAnyMoving => _allMovables.Any(x => x.IsMoving);
-        //public static bool CanAnyMove => _allMovables.Any(x => x.CanMove);
-
-
-         //public static bool CanAnyMove => Application.Current.MainWindow.GetVisualDescendents<MpMoveBehavior>().Any(x => x.CanMove);
-
         private static MpPoint _lastMousePosition;
 
         private static MpPoint _mouseDownPosition;

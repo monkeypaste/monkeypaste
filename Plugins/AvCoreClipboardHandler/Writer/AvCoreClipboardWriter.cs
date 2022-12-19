@@ -58,9 +58,9 @@ namespace AvCoreClipboardHandler {
             }
            
             if (request.writeToClipboard) {
-                await Util.WaitForClipboard();
-                await Application.Current.Clipboard.SetDataObjectAsync(write_output);
-                Util.CloseClipboard();
+                //await Util.WaitForClipboard();
+                await Application.Current.Clipboard.SetDataObjectSafeAsync(write_output);
+                //Util.CloseClipboard();
             }
 
             return new MpClipboardWriterResponse() {

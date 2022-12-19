@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.Templates;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     /// <summary>
@@ -21,7 +22,9 @@ namespace MonkeyPaste.Avalonia {
 
         private void Aplb_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var lb = sender as ListBox;
-            lb.ScrollIntoView(MpAvActionCollectionViewModel.Instance.PrimaryAction);
+            if(lb != null && e.AddedItems != null && e.AddedItems.Count > 0) {
+                lb.ScrollIntoView(e.AddedItems[e.AddedItems.Count - 1]);
+            }
         }
     }
 }

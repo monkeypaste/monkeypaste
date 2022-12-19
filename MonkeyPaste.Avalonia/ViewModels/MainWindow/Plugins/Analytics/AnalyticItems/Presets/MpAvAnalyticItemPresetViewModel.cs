@@ -23,15 +23,14 @@ namespace MonkeyPaste.Avalonia {
         MpIUserIconViewModel,
         //MpIUserColorViewModel,
         MpAvIShortcutCommand, 
-        MpITreeItemViewModel,
         MpIPluginComponentViewModel,
         MpAvIPluginParameterCollectionViewModel {
         #region Properties
 
-        #region MpITreeItemViewModel Implementation
+        #region MpAvTreeSelectorViewModelBase Overrides
 
-        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem => Parent;
-        IEnumerable<MpITreeItemViewModel> MpITreeItemViewModel.Children => Items;
+        public override MpAvAnalyticItemViewModel ParentTreeItem => Parent;
+
         #endregion
 
         #region MpILabelTextViewModel Implementation

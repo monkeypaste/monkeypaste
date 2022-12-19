@@ -123,7 +123,13 @@ namespace MonkeyPaste.Common.Avalonia {
             }
             return null;
         }
-
+        public static IntPtr MainWindowHandle(this Application? app) {
+            if (app.MainWindow() is Window w &&
+                w.PlatformImpl != null && w.PlatformImpl.Handle != null) {
+                return w.PlatformImpl.Handle.Handle;
+            }
+            return IntPtr.Zero;
+        }
         #endregion
 
         #region Screens

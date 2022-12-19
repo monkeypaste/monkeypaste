@@ -22,12 +22,18 @@ namespace MonkeyPaste.Avalonia {
         MpAvTreeSelectorViewModelBase<object, MpAvClipboardHandlerItemViewModel>,
         MpIMenuItemViewModel,
         MpIAsyncSingletonViewModel<MpAvClipboardHandlerCollectionViewModel>,
-        MpITreeItemViewModel, 
         MpIOrientedSidebarItemViewModel,
         MpISidebarItemViewModel,
         MpIAsyncComboBoxViewModel,
         MpIClipboardFormatDataHandlers,
         MpIPlatformDataObjectHelperAsync { //
+
+        #region Statics
+
+        private static List<string> _oleReqGuids = new List<string>();
+
+        #endregion
+
         #region Properties       
 
         #region View Models
@@ -96,8 +102,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpITreeItemViewModel Implementation
 
-        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem => null;
-        IEnumerable<MpITreeItemViewModel> MpITreeItemViewModel.Children => Items;
+        public override MpITreeItemViewModel ParentTreeItem => null;
+
         #endregion
 
         #region MpIAsyncComboBoxViewModel Implementation
@@ -352,7 +358,7 @@ namespace MonkeyPaste.Avalonia {
 
         private async Task<MpAvDataObject> ReadClipboardOrDropObjectAsync(IDataObject forced_ido = null, bool ignorePlugins = false) {
             // NOTE forcedDataObject is used to read drag/drop, when null clipboard is read
-            IsBusy = true;
+            await WaitForBusyAsync();
 
             MpAvDataObject mpdo = new MpAvDataObject();
 
@@ -392,9 +398,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task<object> WriteClipboardOrDropObjectAsync(IDataObject ido, bool writeToClipboard, bool ignoreClipboardChange) {
-            IsBusy = true;
+            await WaitForBusyAsync();
 
-            if(ignoreClipboardChange) {
+            if (ignoreClipboardChange) {
                 MpPlatformWrapper.Services.ClipboardMonitor.StopMonitor();
             }
             // pre-pass data object and remove disabled formats
@@ -441,6 +447,23 @@ namespace MonkeyPaste.Avalonia {
             }
             IsBusy = false;
             return dobj;
+        }
+
+
+        private async Task WaitForBusyAsync() {
+            if(IsBusy) {
+                string req_guid = System.Guid.NewGuid().ToString();
+                _oleReqGuids.Add(req_guid);
+                while(true) {
+                    if(!IsBusy && _oleReqGuids.First() == req_guid) {
+                        IsBusy = true;
+                        _oleReqGuids.Remove(req_guid);
+                        return;
+                    }
+                    await Task.Delay(100);
+                }
+            }
+            IsBusy = true;
         }
         #endregion
 

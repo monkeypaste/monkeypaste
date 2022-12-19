@@ -27,7 +27,6 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncSingletonViewModel<MpAvActionCollectionViewModel>,
         MpIHoverableViewModel,
         MpIResizableViewModel,
-        MpITreeItemViewModel,
         MpIOrientedSidebarItemViewModel,
         MpIDesignerSettingsViewModel {
         #region Private Variables
@@ -46,6 +45,12 @@ namespace MonkeyPaste.Avalonia {
             get => _isTriggerDropDownOpen;
             set => _isTriggerDropDownOpen = value;
         }
+
+        #endregion
+
+        #region MpAvTreeSelectorViewModelBase Overrides
+
+        public override MpITreeItemViewModel ParentTreeItem => null;
 
         #endregion
 
@@ -103,6 +108,9 @@ namespace MonkeyPaste.Avalonia {
                 return (PrimaryAction as MpITreeItemViewModel).FindRootParent() as MpAvTriggerActionViewModelBase;
             }
             set {
+                if(value == null) {
+                    return;
+                }
                 if (SelectedItem != value) {
                     AllSelectedItemActions.ForEach(x => x.IsSelected = false);
                     if (value != null) {
@@ -278,7 +286,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            Items.ForEach(x => x.OnPropertyChanged(nameof(x.ParentActionViewModel)));
+            Items.ForEach(x => x.OnPropertyChanged(nameof(x.ParentTreeItem)));
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.Children)));
             OnPropertyChanged(nameof(Items));
 
@@ -589,6 +597,7 @@ namespace MonkeyPaste.Avalonia {
                     SelectedItem.AllChildren.ForEach(x => x.IsSelected = x.ActionId == actionId);
                 }
             });
+
 
 
         #endregion

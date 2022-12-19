@@ -17,6 +17,10 @@
                        x:DataType="local:MpAvActionViewModelBase">
                     <Setter Property="IsSelected"
                             Value="{Binding IsSelected, Mode=TwoWay}" />
+                    <Setter Property="Canvas.Left"
+                            Value="{Binding X, Mode=TwoWay}" />
+                    <Setter Property="Canvas.Top"
+                            Value="{Binding Y, Mode=TwoWay}" />
                 </Style>
             </Grid.Styles>
             <local:MpAvZoomBorder ClipToBounds="True"
@@ -24,7 +28,6 @@
                                   VerticalAlignment="Stretch"
                                   IsVisible="{Binding Items, Converter={StaticResource CollectionIsNotEmptyToBoolConverter}}"
                                   Classes="actionDesigner"
-                                  DataContext="{Binding}"
                                   DesignerItem="{Binding SelectedItem}"
                                   ShowGrid="True"
                                   OriginThickness="1.5"
@@ -52,17 +55,6 @@
                                                       TransitionLineThickness="1" />
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
-                    <ListBox.Styles>
-                        <Style Selector="ListBoxItem"
-                               x:DataType="local:MpAvActionViewModelBase">
-                            <!--<Setter Property="IsSelected"
-                                        Value="{Binding IsSelected, Mode=TwoWay}" />-->
-                            <Setter Property="Canvas.Left"
-                                    Value="{Binding X, Mode=TwoWay}" />
-                            <Setter Property="Canvas.Top"
-                                    Value="{Binding Y, Mode=TwoWay}" />
-                        </Style>
-                    </ListBox.Styles>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <local:MpAvActionDesignerItemView DataContext="{Binding}" />

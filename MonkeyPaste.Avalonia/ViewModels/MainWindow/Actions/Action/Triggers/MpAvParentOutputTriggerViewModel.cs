@@ -22,15 +22,15 @@ namespace MonkeyPaste.Avalonia {
 
         protected override async Task Enable() {
             await base.Enable();
-            if (ParentActionViewModel != null) {
-                ParentActionViewModel.RegisterTrigger(this);
+            if (ParentTreeItem != null) {
+                ParentTreeItem.RegisterTrigger(this);
             }
         }
 
         protected override async Task Disable() {
             await base.Disable();
-            if (ParentActionViewModel == null) {
-                ParentActionViewModel.UnregisterTrigger(this);
+            if (ParentTreeItem == null) {
+                ParentTreeItem.UnregisterTrigger(this);
             }
         }
         #endregion

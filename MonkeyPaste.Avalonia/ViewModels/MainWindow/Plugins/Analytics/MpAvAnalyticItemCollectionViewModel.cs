@@ -25,7 +25,6 @@ namespace MonkeyPaste.Avalonia {
         MpAvTreeSelectorViewModelBase<object,MpAvAnalyticItemViewModel>,
         MpIMenuItemViewModel,
         MpIAsyncSingletonViewModel<MpAvAnalyticItemCollectionViewModel>, 
-        MpITreeItemViewModel,
         MpIAsyncComboBoxViewModel,
         MpIOrientedSidebarItemViewModel {
         #region Private Variables
@@ -37,10 +36,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-        #region MpITreeItemViewModel Implementation
+        #region MpAvTreeSelectorViewModelBase Overrides
 
-        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem => null;
-        IEnumerable<MpITreeItemViewModel> MpITreeItemViewModel.Children => Items;
+        public override MpITreeItemViewModel ParentTreeItem => null;
 
         #endregion
 

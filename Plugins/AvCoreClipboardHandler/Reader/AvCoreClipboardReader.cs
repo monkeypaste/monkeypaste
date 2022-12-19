@@ -28,9 +28,9 @@ namespace AvCoreClipboardHandler {
             // only actually read formats found for data
             if (request.forcedClipboardDataObject == null) {
                 // clipboard read
-                await Util.WaitForClipboard();
-                availableFormats = await Application.Current.Clipboard.GetFormatsAsync();
-                Util.CloseClipboard();
+                //await Util.WaitForClipboard();
+                availableFormats = await Application.Current.Clipboard.GetFormatsSafeAsync();
+                //Util.CloseClipboard();
             } else if(request.forcedClipboardDataObject is IDataObject) {
                 avdo = request.forcedClipboardDataObject as IDataObject;
 
@@ -77,8 +77,8 @@ namespace AvCoreClipboardHandler {
             object dataObj;
 
             if(avdo == null) {
-                await Util.WaitForClipboard();
-                dataObj = await Application.Current.Clipboard.GetDataAsync(format);
+                //await Util.WaitForClipboard();
+                dataObj = await Application.Current.Clipboard.GetDataSafeAsync(format);
                 if(OperatingSystem.IsWindows() &&
                     format == MpPortableDataFormats.AvHtml_bytes && dataObj is byte[] htmlBytes) {
                     var detected_encoding = htmlBytes.DetectTextEncoding(out string detected_text);
@@ -87,7 +87,7 @@ namespace AvCoreClipboardHandler {
                         Debugger.Break();
                     }
                 }
-                Util.CloseClipboard();
+                //Util.CloseClipboard();
 
             } else {
                 if (format == "FileNames") {

@@ -21,7 +21,6 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel,
         MpIMenuItemViewModel,
         MpIAsyncComboBoxItemViewModel,
-        MpITreeItemViewModel,
         MpIBoxViewModel {
 
         #region Private
@@ -46,10 +45,10 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpITreeItemViewModel Implementation
 
-        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem => Parent;
-        IEnumerable<MpITreeItemViewModel> MpITreeItemViewModel.Children => Items;
+        #region MpAvTreeSelectorViewModelBase Overrides
+
+        public override MpAvClipboardHandlerCollectionViewModel ParentTreeItem => Parent;
 
         #endregion
 

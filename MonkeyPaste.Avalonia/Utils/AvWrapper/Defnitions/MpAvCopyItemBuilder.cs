@@ -357,7 +357,7 @@ namespace MonkeyPaste.Avalonia {
                     canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
                 }
             }
-            var actual_formats = await Application.Current.Clipboard.GetFormatsAsync();
+            var actual_formats = await Application.Current.Clipboard.GetFormatsSafeAsync();
             actual_formats.ForEach(x => MpConsole.WriteLine("Actual format: " + x));
 
             // foreach(var af in actual_formats) {

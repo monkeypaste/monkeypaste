@@ -71,8 +71,8 @@ namespace MonkeyPaste {
 
         public int SortOrderIdx { get; set; } = 0;
 
-        [Column("e_MpActionTypeId")]
-        public int ActionTypeId { get; set; } = 0;
+        [Column("e_MpActionType")]
+        public string ActionTypeName { get; set; }
 
         [Column("fk_ActionObjId")]
         public int ActionObjId { get; set; } = 0;
@@ -134,8 +134,8 @@ namespace MonkeyPaste {
 
         [Ignore]
         public MpActionType ActionType {
-            get => (MpActionType)ActionTypeId;
-            set => ActionTypeId = (int)value;
+            get => ActionTypeName.ToEnum<MpActionType>();
+            set => ActionTypeName = value.ToString();
         }
 
 
@@ -218,5 +218,9 @@ namespace MonkeyPaste {
         }
 
         public MpAction() { }
+
+        public override string ToString() {
+            return $"Action Id: {Id} ParentId: {ParentActionId} ActionObjId: {ActionObjId} Type: '{ActionType}' Label: '{Label}'";
+        }
     }
 }

@@ -15,22 +15,18 @@ using System.IO;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvHandledClipboardFormatViewModel :
-        MpAvSelectorViewModelBase<MpAvClipboardHandlerItemViewModel,MpAvClipboardFormatPresetViewModel>,
+        MpAvTreeSelectorViewModelBase<MpAvClipboardHandlerItemViewModel,MpAvClipboardFormatPresetViewModel>,
         MpISelectableViewModel,
-        MpIHoverableViewModel,
-        MpITreeItemViewModel {
+        MpIHoverableViewModel {
         #region Private Variables
         #endregion
 
         #region Properties
 
-        #region MpITreeItemViewModel Implementation
+        #region MpAvTreeSelectorViewModelBase Overrides
 
-        public IEnumerable<MpITreeItemViewModel> Children => Items;// new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
+        public override MpITreeItemViewModel ParentTreeItem => Parent;
 
-        public MpITreeItemViewModel ParentTreeItem => null;
-
-        public bool IsExpanded { get; set; }
 
         #endregion
 

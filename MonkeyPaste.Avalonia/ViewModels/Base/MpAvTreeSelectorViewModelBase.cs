@@ -11,8 +11,8 @@ namespace MonkeyPaste.Avalonia {
         #region MpITreeItemViewModel Implementation
 
         public virtual bool IsExpanded { get; set; }
-        public virtual MpITreeItemViewModel ParentTreeItem { get; }
-        public virtual IEnumerable<MpITreeItemViewModel> Children { get; }
+        public abstract MpITreeItemViewModel ParentTreeItem { get; }
+        public virtual IEnumerable<MpITreeItemViewModel> Children => Items;
 
         #endregion
 

@@ -49,9 +49,6 @@ namespace MonkeyPaste.Avalonia {
 
             _timer.Start();
         }
-
-
-
         public override void Render(DrawingContext dc) {
             base.Render(dc);
             if(DataContext == null) {
@@ -76,7 +73,7 @@ namespace MonkeyPaste.Avalonia {
                 Point tail = new Point(avm.X + (avm.Width / 2), avm.Y + (avm.Height / 2));
 
 
-                var pavm = avm.ParentActionViewModel;
+                var pavm = avm.ParentTreeItem;
                 if (pavm == null) {
                     continue;
                 }
@@ -96,7 +93,13 @@ namespace MonkeyPaste.Avalonia {
             InvalidateVisual();
         }
 
-        private void DrawArrow(DrawingContext dc, Point startPoint, Point endPoint, double dw, IBrush borderBrush, IBrush fillBrush) {
+        private void DrawArrow(
+            DrawingContext dc, 
+            Point startPoint, 
+            Point endPoint, 
+            double dw, 
+            IBrush borderBrush, 
+            IBrush fillBrush) {
             Vector direction = endPoint - startPoint;
 
             Vector normalizedDirection = direction;
