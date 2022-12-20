@@ -81,7 +81,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvFileWriterActionViewModel(MpAvActionCollectionViewModel parent) : base(parent) {
+        public MpAvFileWriterActionViewModel(MpAvTriggerCollectionViewModel parent) : base(parent) {
 
         }
 

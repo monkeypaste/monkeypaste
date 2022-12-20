@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvTimerActionViewModel(MpAvActionCollectionViewModel parent) : base(parent) {
+        public MpAvTimerActionViewModel(MpAvTriggerCollectionViewModel parent) : base(parent) {
 
         }
 

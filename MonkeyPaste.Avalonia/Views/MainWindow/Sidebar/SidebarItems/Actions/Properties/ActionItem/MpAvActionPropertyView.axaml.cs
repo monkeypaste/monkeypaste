@@ -18,8 +18,8 @@ namespace MonkeyPaste.Avalonia {
     /// <summary>
     /// Interaction logic for MpAvActionPropertyListBoxView.xaml
     /// </summary>
-    public partial class MpAvActionPropertyListBoxItemView : MpAvUserControl<MpAvActionViewModelBase> {
-        public MpAvActionPropertyListBoxItemView() {
+    public partial class MpAvActionPropertyView : MpAvUserControl<MpAvActionViewModelBase> {
+        public MpAvActionPropertyView() {
             InitializeComponent();
         }
 

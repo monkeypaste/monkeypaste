@@ -152,13 +152,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpITriggerActionViewModel Implementation
 
-        public void RegisterActionComponent(MpIActionTrigger mvm) {
-            OnCopyItemLinked += mvm.OnActionTriggered;
+        public void RegisterActionComponent(MpIInvokableAction mvm) {
+            OnCopyItemLinked += mvm.OnActionInvoked;
             MpConsole.WriteLine($"TagTile {TagName} Registered {mvm.Label} matcher");
         }
 
-        public void UnregisterActionComponent(MpIActionTrigger mvm) {
-            OnCopyItemLinked -= mvm.OnActionTriggered;
+        public void UnregisterActionComponent(MpIInvokableAction mvm) {
+            OnCopyItemLinked -= mvm.OnActionInvoked;
             MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from {TagName} TagAdd");
         }
 

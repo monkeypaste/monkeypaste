@@ -66,7 +66,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvAnalyzeActionViewModel(MpAvActionCollectionViewModel parent) : base(parent) { }
+        public MpAvAnalyzeActionViewModel(MpAvTriggerCollectionViewModel parent) : base(parent) { }
 
         #endregion
 

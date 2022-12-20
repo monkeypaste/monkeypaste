@@ -17,10 +17,17 @@
         <Setter Property="HorizontalAlignment"
                 Value="Stretch" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
-                Value="Hidden" />
+                Value="Disabled" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
-                Value="Hidden" />
-
+                Value="Disabled" />
+    </Style>
+    <Style Selector="ListBox.actionDesigner /template/ ScrollViewer">
+        <Setter Property="ClipToBounds"
+                Value="False" />
+    </Style>
+  <Style Selector="ListBox.actionDesigner /template/ ScrollViewer /template/ ScrollContentPresenter">
+        <Setter Property="ClipToBounds"
+                Value="False" />
     </Style>
     <Style Selector="ListBox.actionDesigner ListBoxItem">
         <Setter Property="BorderThickness"
@@ -28,13 +35,13 @@
         <Setter Property="Background"
                 Value="Transparent" />
         <Setter Property="HorizontalContentAlignment"
-                Value="Center" />
+                Value="Stretch" />
         <Setter Property="VerticalContentAlignment"
-                Value="Center" />
+                Value="Stretch" />
         <Setter Property="HorizontalAlignment"
-                Value="Center" />
+                Value="Stretch" />
         <Setter Property="VerticalAlignment"
-                Value="Center" />
+                Value="Stretch" />
         <Setter Property="ClipToBounds"
                 Value="False" />
         <Setter Property="Cursor"

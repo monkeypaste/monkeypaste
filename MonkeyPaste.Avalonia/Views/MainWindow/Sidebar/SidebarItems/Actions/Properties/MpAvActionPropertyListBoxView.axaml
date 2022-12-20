@@ -11,7 +11,8 @@
                        x:TypeArguments="local:MpAvActionCollectionViewModel"
                        x:DataType="local:MpAvActionCollectionViewModel"
                        mc:Ignorable="d">
-    <Grid>
+    <Grid VerticalAlignment="Stretch"
+          HorizontalAlignment="Stretch">
         <Grid.Styles>
             <Style Selector="ListBox.actionProperty ListBoxItem"
                    x:DataType="local:MpAvActionViewModelBase">
@@ -19,8 +20,8 @@
                         Value="{Binding ActionId, Converter={StaticResource ActionIdToThicknessConverter}, FallbackValue=0, TargetNullValue=0}" />
                 <!--<Setter Property="IsVisible"
                         Value="False" />-->
-                <Setter Property="IsSelected"
-                        Value="{Binding IsSelected, Mode=TwoWay}" />
+                <!--<Setter Property="IsSelected"
+                        Value="{Binding IsSelected, Mode=TwoWay}" />-->
             </Style>
 
             <Style Selector="ListBox.actionProperty ListBoxItem[IsSelected=true]"
@@ -32,18 +33,11 @@
         <ListBox x:Name="ActionPropertyListBox"
                  Classes="actionProperty"
                  Items="{Binding AllSelectedItemActions}"
-                 Background="Transparent"
-                 Margin="0"
                  Focusable="True"
-                 BorderThickness="0"
-                 VerticalAlignment="Stretch"
-                 HorizontalAlignment="Stretch"
-                 SelectionMode="Single"
-                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto">
+                 SelectionMode="Single">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <local:MpAvActionPropertyListBoxItemView Grid.Row="0"
+                    <local:MpAvActionPropertyView Grid.Row="0"
                                                              BorderThickness="5"
                                                              BorderBrush="{Binding BorderBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                                                              DataContext="{Binding}" />

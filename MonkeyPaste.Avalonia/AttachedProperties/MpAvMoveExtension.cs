@@ -238,7 +238,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void Control_PointerMoved(object sender, PointerEventArgs e) {
-            if(sender is Control control) {
+            if(sender is Control control &&
+                control.DataContext is MpAvActionViewModelBase avmb) {
                 if (!GetIsMoving(control)) {
                     return;
                 }
@@ -249,8 +250,8 @@ namespace MonkeyPaste.Avalonia {
                 MpPoint delta = mwmp - _lastMousePosition;
 
                 // NOTE must transform mouse delta from designer canvas scaling
-                delta.X *= 1 / MpAvActionCollectionViewModel.Instance.ScaleX;
-                delta.Y *= 1 / MpAvActionCollectionViewModel.Instance.ScaleY;
+                delta.X *= 1 / avmb.RootTriggerActionViewModel.Scale;
+                delta.Y *= 1 / avmb.RootTriggerActionViewModel.Scale;
 
                 Move(control, delta.X, delta.Y);
 

@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
         #region Constructors
 
-        public MpAvEmptyActionViewModel(MpAvActionCollectionViewModel parent) : base(parent) {
+        public MpAvEmptyActionViewModel(MpAvTriggerCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpEmptyActionViewModel_PropertyChanged;
         }
 

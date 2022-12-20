@@ -43,11 +43,15 @@ namespace MonkeyPaste {
         }
 
         public static MpITreeItemViewModel FindRootParent(this MpITreeItemViewModel tivm)  {
-            MpITreeItemViewModel rootParent = tivm.ParentTreeItem as MpITreeItemViewModel;
-            while (rootParent.ParentTreeItem != null) {
-                rootParent = rootParent.ParentTreeItem as MpITreeItemViewModel;
+            if(tivm == null || tivm.ParentTreeItem == null) {
+                return tivm;
             }
-            return rootParent;
+            return tivm.ParentTreeItem.FindRootParent();
+            //MpITreeItemViewModel rootParent = tivm.ParentTreeItem as MpITreeItemViewModel;
+            //while (rootParent.ParentTreeItem != null) {
+            //    rootParent = rootParent.ParentTreeItem as MpITreeItemViewModel;
+            //}
+            //return rootParent;
         }
 
         #endregion

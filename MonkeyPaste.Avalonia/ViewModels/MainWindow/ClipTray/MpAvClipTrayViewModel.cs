@@ -1398,13 +1398,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIMatchTrigger Implementation
 
-        public void RegisterActionComponent(MpIActionTrigger mvm) {
-            OnCopyItemAdd += mvm.OnActionTriggered;
+        public void RegisterActionComponent(MpIInvokableAction mvm) {
+            OnCopyItemAdd += mvm.OnActionInvoked;
             MpConsole.WriteLine($"ClipTray Registered {mvm.Label} matcher");
         }
 
-        public void UnregisterActionComponent(MpIActionTrigger mvm) {
-            OnCopyItemAdd -= mvm.OnActionTriggered;
+        public void UnregisterActionComponent(MpIInvokableAction mvm) {
+            OnCopyItemAdd -= mvm.OnActionInvoked;
             MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnCopyItemAdded");
         }
 

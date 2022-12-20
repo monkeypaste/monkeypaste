@@ -56,7 +56,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvShortcutTriggerViewModel(MpAvActionCollectionViewModel parent) : base(parent) {
+        public MpAvShortcutTriggerViewModel(MpAvTriggerCollectionViewModel parent) : base(parent) {
 
         }
 

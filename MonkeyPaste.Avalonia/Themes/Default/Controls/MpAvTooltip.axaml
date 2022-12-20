@@ -18,14 +18,14 @@
 
     <!--  ERROR  -->
 
-    <Style Selector="local|MpAvToolTipView Border.error">
+    <Style Selector="local|MpAvToolTipView.error Border">
         <Setter Property="BorderBrush"
                 Value="Yellow" />
         <Setter Property="Background"
                 Value="Crimson" />
     </Style>
 
-    <Style Selector="local|MpAvToolTipView Border.error TextBlock">
+    <Style Selector="local|MpAvToolTipView.error TextBlock">
         <Setter Property="Foreground"
                 Value="White" />
         <Setter Property="TextDecorations"

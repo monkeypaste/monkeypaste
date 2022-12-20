@@ -49,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvContentTaggedTriggerViewModel(MpAvActionCollectionViewModel parent) : base(parent) {
+        public MpAvContentTaggedTriggerViewModel(MpAvTriggerCollectionViewModel parent) : base(parent) {
 
         }
         #endregion

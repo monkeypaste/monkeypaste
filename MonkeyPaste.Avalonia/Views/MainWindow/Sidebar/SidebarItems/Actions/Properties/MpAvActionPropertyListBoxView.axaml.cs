@@ -10,8 +10,8 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvActionPropertyListBoxView : MpAvUserControl<MpAvActionCollectionViewModel> {
         public MpAvActionPropertyListBoxView() {
             InitializeComponent();
-            var aplb = this.FindControl<ListBox>("ActionPropertyListBox");
-            aplb.SelectionChanged += Aplb_SelectionChanged;
+            //var aplb = this.FindControl<ListBox>("ActionPropertyListBox");
+            //aplb.SelectionChanged += Aplb_SelectionChanged;
         }
 
 
@@ -22,9 +22,9 @@ namespace MonkeyPaste.Avalonia {
 
         private void Aplb_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var lb = sender as ListBox;
-            if(lb != null && e.AddedItems != null && e.AddedItems.Count > 0) {
-                lb.ScrollIntoView(e.AddedItems[e.AddedItems.Count - 1]);
-            }
+            //if(lb != null && e.AddedItems != null && e.AddedItems.Count > 0) {
+            //    lb.ScrollIntoView(e.AddedItems[e.AddedItems.Count - 1]);
+            //}
         }
     }
 }

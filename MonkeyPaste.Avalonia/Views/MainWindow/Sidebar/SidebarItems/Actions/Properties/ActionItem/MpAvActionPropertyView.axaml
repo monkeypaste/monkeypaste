@@ -1,4 +1,4 @@
-﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvActionPropertyListBoxItemView"
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvActionPropertyView"
                        xmlns="https://github.com/avaloniaui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
@@ -14,9 +14,9 @@
     <Expander x:Name="ActionExpander"
               Padding="5,0"
               Background="{Binding ActionBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-              IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
+              IsExpanded="True">
         <Expander.Header>
-            <Grid>
+            <!--<Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.8*" />
                     <ColumnDefinition Width="0.2*" />
@@ -24,18 +24,24 @@
                 <local:MpAvActionPropertyHeaderView Grid.Column="0"
                                                     HorizontalAlignment="Left"
                                                     DataContext="{Binding}" />
-                <!--<local:MpTooltipInfoView HorizontalAlignment="Right"
+            -->
+            <!--<local:MpTooltipInfoView HorizontalAlignment="Right"
                                          Grid.Column="1"
                                          VerticalAlignment="Center"
                                          DockPanel.Dock="Right"
                                          DataContext="{Binding}" />-->
+            <!--
 
                 <local:MpAvToolTipInfoHintView HorizontalAlignment="Right"
                                                Grid.Column="1"
                                                VerticalAlignment="Center"
                                                DockPanel.Dock="Right"
                                                ToolTipText="{Binding Tooltip}" />
-            </Grid>
+            </Grid>-->
+
+            <local:MpAvActionPropertyHeaderView Grid.Column="0"
+                                                HorizontalAlignment="Left"
+                                                DataContext="{Binding}" />
         </Expander.Header>
         <Grid>
             <Border Grid.Row="2"

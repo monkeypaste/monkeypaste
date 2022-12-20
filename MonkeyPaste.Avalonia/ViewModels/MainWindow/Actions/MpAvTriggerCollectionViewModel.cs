@@ -17,49 +17,24 @@ using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives.PopupPositioning;
-
+using Avalonia.Controls.Selection;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvActionCollectionViewModel :
-        MpAvTreeSelectorViewModelBase<object, MpAvTriggerActionViewModelBase>,
-        MpIMenuItemViewModel,
+    public class MpAvTriggerCollectionViewModel :
+        MpAvSelectorViewModelBase<object, MpAvTriggerActionViewModelBase>,
+        MpIPopupMenuViewModel,
         MpIAsyncComboBoxViewModel,
-        MpIAsyncSingletonViewModel<MpAvActionCollectionViewModel>,
+        MpIAsyncSingletonViewModel<MpAvTriggerCollectionViewModel>,
         MpIHoverableViewModel,
         MpIResizableViewModel,
-        MpIOrientedSidebarItemViewModel,
-        MpIDesignerSettingsViewModel {
+        MpIOrientedSidebarItemViewModel {
         #region Private Variables
 
         #endregion
 
-        #region MpIAsyncComboBoxViewModel Implementation
-
-        IEnumerable<MpIComboBoxItemViewModel> MpIAsyncComboBoxViewModel.Items => Items;
-        MpIComboBoxItemViewModel MpIAsyncComboBoxViewModel.SelectedItem {
-            get => SelectedItem;
-            set => SelectedItem = (MpAvTriggerActionViewModelBase)value;
-        }
-        private bool _isTriggerDropDownOpen = false;
-        bool MpIAsyncComboBoxViewModel.IsDropDownOpen {
-            get => _isTriggerDropDownOpen;
-            set => _isTriggerDropDownOpen = value;
-        }
-
-        #endregion
-
-        #region MpAvTreeSelectorViewModelBase Overrides
-
-        public override MpITreeItemViewModel ParentTreeItem => null;
-
-        #endregion
-
-        #region Properties
-        public static CancellationTokenSource CTS = new CancellationTokenSource();
-
-        #region View Models
-
-        public MpMenuItemViewModel ContextMenuItemViewModel {
+        #region MpIPopupMenuViewModel Implementation
+        bool MpIPopupMenuViewModel.IsPopupMenuOpen { get; set; }
+        public MpMenuItemViewModel PopupMenuViewModel {
             get {
                 var tmivml = new List<MpMenuItemViewModel>();
                 var triggerLabels = typeof(MpTriggerType).EnumToLabels("Select Trigger");
@@ -97,52 +72,84 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public override MpAvTriggerActionViewModelBase SelectedItem {
-            get {
-                if (PrimaryAction == null) {
-                    return null;
-                }
-                if (PrimaryAction is MpAvTriggerActionViewModelBase) {
-                    return PrimaryAction as MpAvTriggerActionViewModelBase;
-                }
-                return (PrimaryAction as MpITreeItemViewModel).FindRootParent() as MpAvTriggerActionViewModelBase;
-            }
-            set {
-                if(value == null) {
-                    return;
-                }
-                if (SelectedItem != value) {
-                    AllSelectedItemActions.ForEach(x => x.IsSelected = false);
-                    if (value != null) {
-                        value.IsSelected = true;
-                    }
-                    //if (value == null) {
-                    //    AllActions.ForEach(x => x.IsSelected = false);
-                    //} else {
-                    //    AllActions.ForEach(x => x.IsSelected = x.ActionId == value.ActionId);
-                    //}
-                    OnPropertyChanged(nameof(SelectedItem));
-                    OnPropertyChanged(nameof(AllSelectedItemActions));
-                    OnPropertyChanged(nameof(SelectedActions));
-                    OnPropertyChanged(nameof(PrimaryAction));
-                    OnPropertyChanged(nameof(IsAnySelected));
-                }
-            }
+        #endregion
+
+        #region MpIAsyncComboBoxViewModel Implementation
+
+        IEnumerable<MpIComboBoxItemViewModel> MpIAsyncComboBoxViewModel.Items => Items;
+        MpIComboBoxItemViewModel MpIAsyncComboBoxViewModel.SelectedItem {
+            get => SelectedItem;
+            set => SelectedItem = (MpAvTriggerActionViewModelBase)value;
+        }
+        private bool _isTriggerDropDownOpen = false;
+        bool MpIAsyncComboBoxViewModel.IsDropDownOpen {
+            get => _isTriggerDropDownOpen;
+            set => _isTriggerDropDownOpen = value;
         }
 
-        public IList<MpAvActionViewModelBase> AllActions {
-            get {
-                if (Items == null) {
-                    return new List<MpAvActionViewModelBase>();
-                }
-                var avml = new List<MpAvActionViewModelBase>();
-                foreach (var tavm in Items.ToList()) {
-                    avml.Add(tavm);
-                    avml.AddRange(tavm.FindAllChildren().Cast<MpAvActionViewModelBase>());
-                }
-                return avml;
-            }
-        }
+        #endregion
+
+        #region Properties
+        public static CancellationTokenSource CTS = new CancellationTokenSource();
+
+        #region View Models       
+
+        public MpAvActionViewModelBase PrimaryAction =>
+            SelectedItem == null ? null : SelectedItem.SelectedItem;
+
+        public IEnumerable<MpAvActionViewModelBase> AllActions => 
+            Items.SelectMany(x => x.SelfAndAllDescendants).Cast<MpAvActionViewModelBase>();
+
+        public IEnumerable<MpAvActionViewModelBase> AllSelectedItemActions =>
+            SelectedItem == null ? null : SelectedItem.SelfAndAllDescendants.Cast<MpAvActionViewModelBase>();
+
+        //public override MpAvTriggerActionViewModelBase SelectedItem {
+        //    get {
+        //        if (PrimaryAction == null) {
+        //            return null;
+        //        }
+        //        //if (PrimaryAction is MpAvTriggerActionViewModelBase) {
+        //        //    return PrimaryAction as MpAvTriggerActionViewModelBase;
+        //        //}
+        //        return PrimaryAction.RootItem as MpAvTriggerActionViewModelBase;
+        //    }
+        //    //set {
+        //    //    if(value == null) {
+        //    //        return;
+        //    //    }
+        //    //    if (SelectedItem != value) {
+        //    //        AllSelectedItemActions.ForEach(x => x.IsSelected = false);
+        //    //        if (value != null) {
+        //    //            value.IsSelected = true;
+        //    //        }
+        //    //        //if (value == null) {
+        //    //        //    AllActions.ForEach(x => x.IsSelected = false);
+        //    //        //} else {
+        //    //        //    AllActions.ForEach(x => x.IsSelected = x.ActionId == value.ActionId);
+        //    //        //}
+        //    //        OnPropertyChanged(nameof(SelectedItem));
+        //    //        OnPropertyChanged(nameof(AllSelectedItemActions));
+        //    //        OnPropertyChanged(nameof(SelectedActions));
+        //    //        OnPropertyChanged(nameof(PrimaryAction));
+        //    //        OnPropertyChanged(nameof(IsAnySelected));
+        //    //    }
+        //    //}
+        //}
+        //public IList<MpAvActionViewModelBase> SelectedActions =>
+        //    AllActions.Where(x => x.IsSelected).OrderByDescending(x => x.LastSelectedDateTime).ToList();
+        //public IList<MpAvActionViewModelBase> AllActions {
+        //    get {
+        //        if (Items == null) {
+        //            return new List<MpAvActionViewModelBase>();
+        //        }
+        //        var avml = new List<MpAvActionViewModelBase>();
+        //        foreach (var tavm in Items.ToList()) {
+        //            avml.Add(tavm);
+        //            avml.AddRange(tavm.FindAllChildren().Cast<MpAvActionViewModelBase>());
+        //        }
+        //        return avml;
+        //    }
+        //}
         //public IEnumerable<MpAvActionViewModelBase> AllActions {
         //    get {
         //        foreach (var tavm in Items) {
@@ -154,16 +161,16 @@ namespace MonkeyPaste.Avalonia {
         //    }
         //}
 
-        public IList<MpAvActionViewModelBase> AllSelectedItemActions {
-            get {
-                if (SelectedItem == null) {
-                    return new List<MpAvActionViewModelBase>();
-                }
-                var avml = SelectedItem.FindAllChildren().ToList();
-                avml.Insert(0, SelectedItem);
-                return avml.Cast<MpAvActionViewModelBase>().ToList();
-            }
-        }
+        //public IList<MpAvActionViewModelBase> AllSelectedItemActions {
+        //    get {
+        //        if (SelectedItem == null) {
+        //            return new List<MpAvActionViewModelBase>();
+        //        }
+        //        var avml = SelectedItem.FindAllChildren().ToList();
+        //        avml.Insert(0, SelectedItem);
+        //        return avml.Cast<MpAvActionViewModelBase>().ToList();
+        //    }
+        //}
         //public IEnumerable<MpAvActionViewModelBase> AllSelectedItemActions {
         //    get {
         //        if (SelectedItem == null) {
@@ -176,10 +183,7 @@ namespace MonkeyPaste.Avalonia {
         //    }
         //}
 
-        public IList<MpAvActionViewModelBase> SelectedActions =>
-            AllActions.Where(x => x.IsSelected).OrderByDescending(x => x.LastSelectedDateTime).ToList();
 
-        public MpAvActionViewModelBase PrimaryAction => SelectedActions.Count == 0 ? null : SelectedActions[0];
 
         #endregion
 
@@ -211,29 +215,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIDesignerSettingsViewModel Implementation
-
-        public double ScaleX { get; set; } = 1;
-        public double ScaleY { get; set; } = 1;
-
-        public double DesignerWidth { get; set; } = 350;//MpMeasurements.Instance.DefaultDesignerWidth;
-        public double DesignerHeight { get; set; } = 350;// MpAvClipTrayViewModel.Instance.ClipTrayHeight;
-        public double DesignerItemDiameter => 50;
-
-        public double ViewportWidth {
-            get => DesignerWidth / ScaleX;
-            set => DesignerWidth = value * ScaleX;
-        }
-        public double ViewportHeight {
-            get => DesignerHeight / ScaleY;
-            set => DesignerHeight = value * ScaleY;
-        }
-
-        public MpPoint DefaultTriggerLocation => new MpPoint(
-            (ViewportWidth / 2) - (DesignerItemDiameter / 2),
-            (ViewportHeight / 2) - (DesignerItemDiameter / 2));
-
-        #endregion
+        
 
         #region Appearance
 
@@ -249,19 +231,29 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool IsAnyBusy {
+            get {
+                if(IsBusy) {
+                    return true;
+                }
+                return Items.Any(x => x.IsAnyBusy);
+            }
+        }
         #endregion
 
         #endregion
 
         #region Constructors
 
-        private static MpAvActionCollectionViewModel _instance;
-        public static MpAvActionCollectionViewModel Instance => _instance ?? (_instance = new MpAvActionCollectionViewModel());
+        private static MpAvTriggerCollectionViewModel _instance;
+        public static MpAvTriggerCollectionViewModel Instance => _instance ?? (_instance = new MpAvTriggerCollectionViewModel());
 
 
-        public MpAvActionCollectionViewModel() : base(null) {
+        public MpAvTriggerCollectionViewModel() : base(null) {
             PropertyChanged += MpMatcherCollectionViewModel_PropertyChanged;
         }
+
 
 
         #endregion
@@ -281,7 +273,7 @@ namespace MonkeyPaste.Avalonia {
                 Items.Add(tavm);
             }
 
-            while (AllActions.Any(x => x.IsBusy)) {
+            while (Items.Any(x => x.IsAnyBusy)) {
                 // wait for all action trees to initialize before enabling
                 await Task.Delay(100);
             }
@@ -292,16 +284,17 @@ namespace MonkeyPaste.Avalonia {
 
             await RestoreAllEnabled();//.FireAndForgetSafeAsync(this);
 
-            if(AllActions.Count > 0) {
+            if(AllActions.Count() > 0) {
                 // select most recent action
                 MpAvActionViewModelBase actionToSelect = AllActions
                                 .Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
 
                 if (actionToSelect != null) {
-                    SelectedItem = actionToSelect.RootTriggerActionViewModel;
-                    actionToSelect.IsSelected = true;
-                    OnPropertyChanged(nameof(SelectedItem));
-                    SelectedItem.OnPropertyChanged(nameof(SelectedActions));
+                    //SelectedItem = actionToSelect.RootTriggerActionViewModel;
+                    //actionToSelect.IsSelected = true;
+                    //OnPropertyChanged(nameof(SelectedItem));
+                    //SelectedItem.OnPropertyChanged(nameof(SelectedActions));
+                    SelectActionCommand.Execute(actionToSelect);
                 }
             }
             
@@ -363,81 +356,7 @@ namespace MonkeyPaste.Avalonia {
             Items.ForEach(x => x.ToggleIsEnabledCommand.Execute(false));
         }
 
-        #region DesignerItem Placement Methods
-
-        public MpPoint FindOpenDesignerLocation(MpPoint anchorPoint, object ignoreItem = null) {
-            int attempts = 0;
-            int maxAttempts = 10;
-            int count = 4;
-            double dtheta = (2 * Math.PI) / count;
-            double r = DesignerItemDiameter * 2;
-            while (attempts <= maxAttempts) {
-                double theta = 0;
-                for (int i = 0; i < count; i++) {
-                    var tp = new MpPoint();
-                    tp.X = (double)(anchorPoint.X + r * Math.Cos(theta));
-                    tp.Y = (double)(anchorPoint.Y + r * Math.Sin(theta));
-                    if (!OverlapsItem(tp)) {
-                        return tp;
-                    }
-                    theta += dtheta;
-                }
-                r += DesignerItemDiameter * 2;
-
-                attempts++;
-            }
-
-            return new MpPoint(MpHelpers.Rand.NextDouble() * DesignerWidth, MpHelpers.Rand.NextDouble() * DesignerHeight);
-        }
-
-        public bool OverlapsItem(MpPoint targetTopLeft) {
-            return GetItemNearPoint(targetTopLeft) != null;
-        }
-
-        public MpAvActionViewModelBase GetItemNearPoint(MpPoint targetTopLeft, object ignoreItem = null, double radius = 50) {
-            MpPoint targetMid = new MpPoint(targetTopLeft.X, targetTopLeft.Y);
-            foreach (var avm in AllSelectedItemActions) {
-                MpPoint sourceMid = new MpPoint(avm.X, avm.Y);
-                double dist = targetMid.Distance(sourceMid);
-                if (dist < radius && avm != ignoreItem) {
-                    return avm;
-                }
-            }
-            return null;
-        }
-
-        //public void ClearAreaAtPoint(MpPoint p, object ignoreItem = null) {
-        //    var overlapItem = GetItemNearPoint(p, ignoreItem);
-        //    if (overlapItem != null) {
-        //        MpPoint tempLoc = p;
-        //        do {
-        //            var overlapLoc = new MpPoint(overlapItem.X, overlapItem.Y);
-        //            double distToMove = overlapLoc.Distance(tempLoc) + 10;
-
-        //            var dir = overlapLoc - tempLoc;
-        //            dir.Normalize();
-        //            dir = new Vector(-dir.Y, dir.X);
-        //            overlapLoc += dir * distToMove;
-        //            overlapItem.X = overlapLoc.X;
-        //            overlapItem.Y = overlapLoc.Y;
-
-        //            overlapItem = GetItemNearPoint(overlapLoc, overlapItem);
-        //            tempLoc = overlapLoc;
-        //        } while (overlapItem != null && overlapItem != ignoreItem);
-        //    }
-        //}
-
-        //public void ClearAllOverlaps() {
-        //    foreach (var avm in AllSelectedTriggerActions) {
-        //        ClearAreaAtPoint(avm.Location, avm);
-        //    }
-        //}
-        public void NotifyViewportChanged() {
-            //CollectionViewSource.GetDefaultView(AllSelectedTriggerActions).Refresh();
-            //CollectionViewSource.GetDefaultView(AllSelectedTriggerActions).Refresh();
-            OnPropertyChanged(nameof(AllSelectedItemActions));
-        }
-        #endregion
+        
 
         public string GetUniqueTriggerName(string prefix) {
             int uniqueIdx = 1;
@@ -461,11 +380,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
 
-        
+
 
         #endregion
 
         #region Private Methods
+
+        private void Selection_SelectionChanged(object sender, SelectionModelSelectionChangedEventArgs<MpAvActionViewModelBase> e) {
+            foreach(var avmb in AllActions) {
+                avmb.IsSelected = e.SelectedItems.Contains(avmb);
+            }
+        }
 
         private async Task UpdateSortOrder() {
             Items.ForEach(x => x.SortOrderIdx = Items.IndexOf(x));
@@ -484,14 +409,8 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(SelectedItem):
                     OnPropertyChanged(nameof(IsAnySelected));
-                    //OnPropertyChanged(nameof(AllSelectedTriggerActions));
-                    break;
-                case nameof(ScaleX):
-                case nameof(ScaleY):
-                    OnPropertyChanged(nameof(DesignerWidth));
-                    OnPropertyChanged(nameof(DesignerHeight));
-                    OnPropertyChanged(nameof(ViewportWidth));
-                    OnPropertyChanged(nameof(ViewportHeight));
+                    OnPropertyChanged(nameof(AllSelectedItemActions));
+                    OnPropertyChanged(nameof(PrimaryAction));
                     break;
                 case nameof(PrimaryAction):
                     OnPropertyChanged(nameof(IsAnySelected));
@@ -522,7 +441,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ShowTriggerSelectorMenuCommand => new MpCommand<object>(
              (args) => {
                  var control = args as Control;
-                 MpAvMenuExtension.ShowMenu(control, ContextMenuItemViewModel, MpPoint.Zero);
+                 MpAvMenuExtension.ShowMenu(control, PopupMenuViewModel, MpPoint.Zero);
              }, (args) => args is Control);
 
         public ICommand AddTriggerCommand => new MpCommand<object>(
@@ -535,23 +454,16 @@ namespace MonkeyPaste.Avalonia {
                          label: GetUniqueTriggerName(tt.ToString()),
                          actionType: MpActionType.Trigger,
                          actionObjId: (int)tt,
-                         sortOrderIdx: Items.Count,
-                         location: DefaultTriggerLocation);
+                         sortOrderIdx: Items.Count);
 
-                 var navm = await CreateTriggerViewModel(na);
+                 var new_trigger_vm = await CreateTriggerViewModel(na);
 
-                 while(navm.IsBusy) {
+                 while(new_trigger_vm.IsBusy) {
                      await Task.Delay(100);
                  }
 
-                 Items.Add(navm);
-                 SelectedItem = navm;
-
-                 OnPropertyChanged(nameof(AllSelectedItemActions));
-
-                 OnPropertyChanged(nameof(Items));
-
-                 OnPropertyChanged(nameof(IsAnySelected));
+                 Items.Add(new_trigger_vm);
+                 SelectActionCommand.Execute(new_trigger_vm);
 
                  SelectedItem.ToggleIsEnabledCommand.Execute(null);
 
@@ -582,19 +494,18 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand SelectActionCommand => new MpCommand<object>(
             (args) => {
-                if(args == null) {
-                    return;
+                MpAvActionViewModelBase toSelect_avmb = args as MpAvActionViewModelBase;
+                if(toSelect_avmb == null && args is int actionId) {
+                    toSelect_avmb = AllActions.FirstOrDefault(x => x.ActionId == actionId);
                 }
-                if(args is int actionId) {
-                    var actionToSelect = AllActions.FirstOrDefault(x => x.ActionId == actionId);
-                    if(actionToSelect == null) {
-                        return;
-                    }
-                    if (!IsSidebarVisible) {
-                        IsSidebarVisible = true;
-                    }
-                    SelectedItem = actionToSelect.RootTriggerActionViewModel;
-                    SelectedItem.AllChildren.ForEach(x => x.IsSelected = x.ActionId == actionId);
+
+                if (!IsSidebarVisible) {
+                    IsSidebarVisible = true;
+                }
+
+                if(toSelect_avmb != null) {
+                    SelectedItem = toSelect_avmb.RootTriggerActionViewModel;
+                    SelectedItem.SelectedItem = toSelect_avmb;
                 }
             });
 

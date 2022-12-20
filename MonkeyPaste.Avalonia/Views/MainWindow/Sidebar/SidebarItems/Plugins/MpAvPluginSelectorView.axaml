@@ -31,6 +31,10 @@
             <Setter Property="Background"
                     Value="Transparent" />
         </Style>
+        <Style Selector="ComboBox:empty local|MpAvBusySpinnerView">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Border BorderThickness="0"
             BorderBrush="Black"
@@ -42,6 +46,7 @@
                   VerticalAlignment="Stretch"
                   VerticalContentAlignment="Stretch"
                   IsDropDownOpen="{Binding IsDropDownOpen}"
+                  IsEnabled="{Binding Items, Converter={StaticResource CollectionIsNotEmptyToBoolConverter}}"
                   SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                   Items="{Binding Items}">
             <ComboBox.ItemTemplate>

@@ -54,8 +54,8 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvAnalyticItemCollectionViewModel.Instance.IsSidebarVisible) {
                     return MpAvAnalyticItemCollectionViewModel.Instance;
                 }
-                if (MpAvActionCollectionViewModel.Instance.IsSidebarVisible) {
-                    return MpAvActionCollectionViewModel.Instance;
+                if (MpAvTriggerCollectionViewModel.Instance.IsSidebarVisible) {
+                    return MpAvTriggerCollectionViewModel.Instance;
                 }
                 return null;
             }

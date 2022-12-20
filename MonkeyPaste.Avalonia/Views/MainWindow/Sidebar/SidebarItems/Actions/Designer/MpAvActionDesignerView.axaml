@@ -4,31 +4,31 @@
                        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:paz="using:Avalonia.Controls.PanAndZoom"
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        x:CompileBindings="True"
-                       x:TypeArguments="local:MpAvActionCollectionViewModel"
-                       x:DataType="local:MpAvActionCollectionViewModel"
+                       x:TypeArguments="local:MpAvTriggerActionViewModelBase"
+                       x:DataType="local:MpAvTriggerActionViewModelBase"
                        mc:Ignorable="d">
     <Border Background="{DynamicResource ActionDesignerBgBrush}">
         <Grid>
             <Grid.Styles>
                 <Style Selector="ListBox.actionDesigner ListBoxItem"
                        x:DataType="local:MpAvActionViewModelBase">
-                    <Setter Property="IsSelected"
-                            Value="{Binding IsSelected, Mode=TwoWay}" />
+                    <!--<Setter Property="IsSelected"
+                            Value="{Binding IsSelected, Mode=TwoWay}" />-->
                     <Setter Property="Canvas.Left"
                             Value="{Binding X, Mode=TwoWay}" />
                     <Setter Property="Canvas.Top"
                             Value="{Binding Y, Mode=TwoWay}" />
                 </Style>
             </Grid.Styles>
-            <local:MpAvZoomBorder ClipToBounds="True"
+            <local:MpAvZoomBorder ClipToBounds="False"
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Stretch"
-                                  IsVisible="{Binding Items, Converter={StaticResource CollectionIsNotEmptyToBoolConverter}}"
                                   Classes="actionDesigner"
-                                  DesignerItem="{Binding SelectedItem}"
+                                  DesignerItem="{Binding}"
                                   ShowGrid="True"
                                   OriginThickness="1.5"
                                   GridLineThickness="0.5"
@@ -36,12 +36,15 @@
                                   OriginBrush="Chocolate"
                                   GridLineBrush="BurlyWood">
                 <ListBox x:Name="ActionDesignerListBox"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Stretch"
                          Classes="actionDesigner"
-                         Items="{Binding AllSelectedItemActions}">
+                         SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                         Items="{Binding SelfAndAllDescendants}">
                     <ListBox.RenderTransform>
                         <TransformGroup>
-                            <ScaleTransform ScaleX="{Binding ScaleX, Mode=OneWayToSource}"
-                                            ScaleY="{Binding ScaleY, Mode=OneWayToSource}" />
+                            <ScaleTransform ScaleX="{Binding Scale, Mode=TwoWay}"
+                                            ScaleY="{Binding Scale, Mode=TwoWay}" />
                             <TranslateTransform />
                         </TransformGroup>
                     </ListBox.RenderTransform>
@@ -52,6 +55,9 @@
                                                       TipLength="20"
                                                       TipWidth="10"
                                                       TailWidth="3"
+                                                      RenderTransformOrigin="0.5,0.5"
+                                                      local:MpAvListBoxItemBoundsObserverExtension.IsEnabled="True"
+                                                      local:MpAvListBoxItemBoundsObserverExtension.ObservedBounds="{Binding ObservedDesignerBounds, Mode=TwoWay}"
                                                       TransitionLineThickness="1" />
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
@@ -64,6 +70,7 @@
             </local:MpAvZoomBorder>
 
             <!--  ADD NEW TRIGGER BUTTON (EMPTY SELECTION)  -->
+            <!--
 
             <Button x:Name="AddNewActionButton"
                     IsVisible="{Binding Items, ConverterParameter=flip, Converter={StaticResource CollectionIsNotEmptyToBoolConverter}}"
@@ -97,7 +104,7 @@
                         Add New
                     </Label>
                 </StackPanel>
-            </Button>
+            </Button>-->
         </Grid>
     </Border>
 </local:MpAvUserControl>

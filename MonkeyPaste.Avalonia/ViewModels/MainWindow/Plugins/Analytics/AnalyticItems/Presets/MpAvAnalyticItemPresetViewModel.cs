@@ -421,14 +421,14 @@ namespace MonkeyPaste.Avalonia {
             return naipvm;
         }
 
-        public void RegisterActionComponent(MpIActionTrigger mvm) {
-            Parent.OnAnalysisCompleted += mvm.OnActionTriggered;
+        public void RegisterActionComponent(MpIInvokableAction mvm) {
+            Parent.OnAnalysisCompleted += mvm.OnActionInvoked;
             MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} Registered {mvm.Label} matcher");
         }
 
 
-        public void UnregisterActionComponent(MpIActionTrigger mvm) {
-            Parent.OnAnalysisCompleted -= mvm.OnActionTriggered;
+        public void UnregisterActionComponent(MpIInvokableAction mvm) {
+            Parent.OnAnalysisCompleted -= mvm.OnActionInvoked;
             MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} unregistered {mvm.Label} matcher");
         }
 

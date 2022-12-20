@@ -67,7 +67,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvFileSystemTriggerViewModel(MpAvActionCollectionViewModel parent) : base(parent) {
+        public MpAvFileSystemTriggerViewModel(MpAvTriggerCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpFileSystemTriggerViewModel_PropertyChanged;
         }
 

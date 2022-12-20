@@ -1,13 +1,11 @@
-﻿namespace MonkeyPaste {
+﻿using MonkeyPaste.Common;
+
+namespace MonkeyPaste {
     public interface MpIDesignerSettingsViewModel {
 
-        double ScaleX { get; set; }
-        double ScaleY { get; set; }
+        double Scale { get; set; }
 
-        double DesignerWidth { get; set; }
-        double DesignerHeight { get; set; }
-
-        double ViewportWidth { get; }
-        double ViewportHeight { get; }
+        double TranslateOffsetX { get; set; }
+        double TranslateOffsetY { get; set; }
     }
 }

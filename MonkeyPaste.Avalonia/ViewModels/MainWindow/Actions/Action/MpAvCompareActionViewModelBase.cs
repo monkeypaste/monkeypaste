@@ -230,7 +230,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvCompareActionViewModelBase(MpAvActionCollectionViewModel parent) : base(parent) {
+        public MpAvCompareActionViewModelBase(MpAvTriggerCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpCompareActionViewModel_PropertyChanged;
         }
 

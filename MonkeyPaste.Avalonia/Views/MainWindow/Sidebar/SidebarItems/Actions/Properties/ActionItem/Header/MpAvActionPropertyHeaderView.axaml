@@ -11,16 +11,15 @@
                        x:CompileBindings="True"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
+    <Grid ColumnDefinitions="Auto,Auto,*,Auto">
 
-    <StackPanel Orientation="Horizontal">
+        <!--  ENABLE/DISABLE BUTTON  -->
+
         <ToggleButton x:Name="ToggleEnableButton"
-                      Grid.Row="0"
-                      Grid.Column="3"
-                      DockPanel.Dock="Right"
-                      HorizontalAlignment="Right"
-                      HorizontalContentAlignment="Right"
+                      Grid.Column="0"
+                      HorizontalAlignment="Left"
+                      HorizontalContentAlignment="Left"
                       BorderThickness="0"
-                      Margin="3,0"
                       Background="Transparent"
                       IsThreeState="True"
                       Command="{Binding ToggleIsEnabledCommand}"
@@ -45,19 +44,24 @@
                        Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, ConverterParameter={StaticResource WarningImage}}" />
             </Grid>
         </ToggleButton>
-        <Image Margin="5,0,0,0"
+
+        <!--  ACTION ICON  -->
+
+        <Image Grid.Column="1"
+               Margin="5,0,0,0"
                Source="{Binding IconResourceKeyStr, Converter={StaticResource IconSourceObjToBitmapConverter}}"
                Width="20" />
-        <TextBox Grid.Row="1"
-                 Grid.Column="1"
-                 Grid.ColumnSpan="2"
-                 DockPanel.Dock="Left"
+
+        <!--  ACTION LABEL  -->
+
+        <TextBox Grid.Column="2"
                  Foreground="{Binding LabelForegroundBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                  Background="{Binding LabelBackgroundBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                  BorderThickness="1"
                  BorderBrush="{Binding LabelBorderBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                  Margin="5,5,15,5"
                  Padding="3"
+                 HorizontalAlignment="Stretch"
                  VerticalAlignment="Center"
                  VerticalContentAlignment="Center"
                  FontSize="14"
@@ -68,5 +72,12 @@
                  local:MpAvIsFocusedExtension.IsEnabled="True"
                  local:MpAvIsFocusedExtension.IsFocused="{Binding IsLabelFocused, Mode=TwoWay}"
                  Text="{Binding Label, Mode=TwoWay}" />
-    </StackPanel>
+
+        <!--  ACTION HINT  -->
+
+        <local:MpAvToolTipInfoHintView Grid.Column="3"
+                                       HorizontalAlignment="Right"
+                                       VerticalAlignment="Center"
+                                       ToolTipText="{Binding Tooltip}" />
+    </Grid>
 </local:MpAvUserControl>

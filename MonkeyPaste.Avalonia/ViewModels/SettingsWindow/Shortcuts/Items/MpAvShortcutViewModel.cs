@@ -352,15 +352,15 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsEmpty));
         }
 
-        public void RegisterActionComponent(MpIActionTrigger mvm) {
+        public void RegisterActionComponent(MpIInvokableAction mvm) {
             //by design this only can occur for shortcuts with a selected item as its context
 
-            OnShortcutExecuted += mvm.OnActionTriggered;
+            OnShortcutExecuted += mvm.OnActionInvoked;
             MpConsole.WriteLine($"ClipTray Registered {mvm.Label} matcher");
         }
 
-        public void UnregisterActionComponent(MpIActionTrigger mvm) {
-            OnShortcutExecuted -= mvm.OnActionTriggered;
+        public void UnregisterActionComponent(MpIInvokableAction mvm) {
+            OnShortcutExecuted -= mvm.OnActionInvoked;
             MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnShortcutExecuted");
         }
 
@@ -511,7 +511,7 @@ namespace MonkeyPaste.Avalonia {
                 var ctrvm = MpAvClipTrayViewModel.Instance;
                 var ttrvm = MpAvTagTrayViewModel.Instance;
                 var sbvm = MpAvSearchBoxViewModel.Instance;
-                var acvm = MpAvActionCollectionViewModel.Instance;
+                var acvm = MpAvTriggerCollectionViewModel.Instance;
 
                 bool canPerformShortcut = true;
 

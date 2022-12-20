@@ -12,6 +12,8 @@ using System.Windows.Input;
 using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
 using Avalonia.Threading;
+using System.Diagnostics;
+using Avalonia.Controls;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -20,8 +22,7 @@ namespace MonkeyPaste.Avalonia {
         MpIResizableViewModel,
         MpIAsyncComboBoxItemViewModel,
         MpISidebarItemViewModel,
-        MpIMenuItemViewModel,
-        MpIDesignerItemSettingsViewModel {
+        MpIDesignerSettingsViewModel {
 
         #region MpIAsyncComboBoxItemViewModel Implementation
 
@@ -31,17 +32,223 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region MpIDesignerSettingsViewModel Implementation
+
+        public double Scale {
+            get {
+                return ParseScale(Arg2);
+            }
+            set {
+                if (Math.Abs(Scale - value) > 0.1) {
+                    SetDesignerItemSettings(value, TranslateOffsetX, TranslateOffsetY);
+                    OnPropertyChanged(nameof(Scale));
+                }
+            }
+        }
+        public double TranslateOffsetX {
+            get {
+                return ParseTranslationOffset(Arg2).X;
+            }
+            set {
+                if (Math.Abs(TranslateOffsetX - value) > 0.1) {
+                    SetDesignerItemSettings(Scale, value, TranslateOffsetY);
+                    OnPropertyChanged(nameof(TranslateOffsetX));
+                }
+            }
+        }
+        public double TranslateOffsetY {
+            get {
+                return ParseTranslationOffset(Arg2).Y;
+            }
+            set {
+                if (Math.Abs(TranslateOffsetY - value) > 0.1) {
+                    SetDesignerItemSettings(Scale, TranslateOffsetX, value);
+                    OnPropertyChanged(nameof(TranslateOffsetY));
+                }
+            }
+        }
+
+
+        public MpRect ObservedDesignerBounds { get; set; } = MpRect.Empty;
+        public double DesignerItemDiameter => 50;
+
+
+        public MpPoint DefaultTriggerLocation => new MpPoint(
+            (ObservedDesignerBounds.Width / 2) - (DesignerItemDiameter / 2),
+            (ObservedDesignerBounds.Height / 2) - (DesignerItemDiameter / 2));
+
+        #region Designer Helpers
+
+        #region Designer Model Parsing Helpers
+
+        private void SetDesignerItemSettings(double scale, double offsetX, double offsetY) {
+            string arg2 = string.Join(
+                ",",
+                new string[] {
+                    scale.ToString(),
+                    offsetX.ToString(), offsetY.ToString() });
+            Arg2 = arg2;
+        }
+
+        private double ParseScale(string text) {
+            if (string.IsNullOrEmpty(Arg2)) {
+                return 1.0d;
+            }
+            var arg2Parts = Arg2.SplitNoEmpty(",");
+            if(arg2Parts.Length > 0) {
+                return double.Parse(arg2Parts[0]);
+            }
+            return 1.0d;
+        }
+
+        private MpPoint ParseTranslationOffset(string text) {
+            if (string.IsNullOrEmpty(Arg2)) {
+                return MpPoint.Zero;
+            }
+            var arg2Parts = Arg2.SplitNoEmpty(",");
+            if (arg2Parts.Length >= 3) {
+                return new MpPoint() {
+                    X = double.Parse(arg2Parts[1]),
+                    Y = double.Parse(arg2Parts[2])
+                };
+            }
+            return MpPoint.Zero;
+        }
+
+
+        #endregion
+
+        #region DesignerItem Placement Methods
+
+        public MpPoint FindOpenDesignerLocation(MpPoint anchorPoint, object ignoreItem = null) {
+            int attempts = 0;
+            int maxAttempts = 10;
+            int count = 4;
+            double dtheta = (2 * Math.PI) / count;
+            double r = DesignerItemDiameter * 2;
+            while (attempts <= maxAttempts) {
+                double theta = 0;
+                for (int i = 0; i < count; i++) {
+                    var tp = new MpPoint();
+                    tp.X = (double)(anchorPoint.X + r * Math.Cos(theta));
+                    tp.Y = (double)(anchorPoint.Y + r * Math.Sin(theta));
+                    if (!OverlapsItem(tp)) {
+                        return tp;
+                    }
+                    theta += dtheta;
+                }
+                r += DesignerItemDiameter * 2;
+
+                attempts++;
+            }
+
+            return new MpPoint(
+                MpHelpers.Rand.NextDouble() * ObservedDesignerBounds.Width,
+                MpHelpers.Rand.NextDouble() * ObservedDesignerBounds.Height);
+        }
+
+        public bool OverlapsItem(MpPoint targetTopLeft) {
+            return GetItemNearPoint(targetTopLeft) != null;
+        }
+
+        public MpIBoxViewModel GetItemNearPoint(MpPoint targetTopLeft, object ignoreItem = null, double radius = 50) {
+            MpPoint targetMid = new MpPoint(targetTopLeft.X, targetTopLeft.Y);
+            foreach (var avm in SelfAndAllDescendants.Cast<MpIBoxViewModel>()) {
+                MpPoint sourceMid = new MpPoint(avm.X, avm.Y);
+                double dist = targetMid.Distance(sourceMid);
+                if (dist < radius && avm != ignoreItem) {
+                    return avm;
+                }
+            }
+            return null;
+        }
+
+        //public void ClearAreaAtPoint(MpPoint p, object ignoreItem = null) {
+        //    var overlapItem = GetItemNearPoint(p, ignoreItem);
+        //    if (overlapItem != null) {
+        //        MpPoint tempLoc = p;
+        //        do {
+        //            var overlapLoc = new MpPoint(overlapItem.X, overlapItem.Y);
+        //            double distToMove = overlapLoc.Distance(tempLoc) + 10;
+
+        //            var dir = overlapLoc - tempLoc;
+        //            dir.Normalize();
+        //            dir = new Vector(-dir.Y, dir.X);
+        //            overlapLoc += dir * distToMove;
+        //            overlapItem.X = overlapLoc.X;
+        //            overlapItem.Y = overlapLoc.Y;
+
+        //            overlapItem = GetItemNearPoint(overlapLoc, overlapItem);
+        //            tempLoc = overlapLoc;
+        //        } while (overlapItem != null && overlapItem != ignoreItem);
+        //    }
+        //}
+
+        //public void ClearAllOverlaps() {
+        //    foreach (var avm in AllSelectedTriggerActions) {
+        //        ClearAreaAtPoint(avm.Location, avm);
+        //    }
+        //}
+        //public void NotifyViewportChanged() {
+        //    //CollectionViewSource.GetDefaultView(AllSelectedTriggerActions).Refresh();
+        //    //CollectionViewSource.GetDefaultView(AllSelectedTriggerActions).Refresh();
+        //    OnPropertyChanged(nameof(AllSelectedItemActions));
+        //}
+        #endregion
+
+        #endregion
+
+        #endregion
+
         #region Properties
 
         #region View Models
 
-        public IEnumerable<MpAvActionViewModelBase> AllChildren => this.FindAllChildren().Cast<MpAvActionViewModelBase>();//new ObservableCollection<MpAvActionViewModelBase>();
+        //public IEnumerable<MpAvActionViewModelBase> AllChildren => this.FindAllChildren().Cast<MpAvActionViewModelBase>();//new ObservableCollection<MpAvActionViewModelBase>();
+
+        public override MpAvActionViewModelBase SelectedItem {
+            get {
+                if(Parent == null || !IsSelected) {
+                    return null;
+                }
+                //if(base.SelectedItem == null) {
+                //    return this;
+                //}
+                //return base.SelectedItem;
+                var sel_descendant = AllDescendants.Cast<MpISelectableViewModel>().FirstOrDefault(x => x.IsSelected);
+                if(sel_descendant != null) {
+                    return sel_descendant as MpAvActionViewModelBase;
+                }
+                return this;
+            }
+            set {
+                if(value == null) {
+                    IsSelected = false;
+                    AllDescendants.Cast<MpISelectableViewModel>().ForEach(x => x.IsSelected = false);
+                    OnPropertyChanged(nameof(SelectedItem));
+                    return;
+                }
+                if(SelfAndAllDescendants.Cast<MpAvActionViewModelBase>().All(x=>x.ActionId != value.ActionId)) {
+                    // not part of this trigger
+                    Debugger.Break();
+                    return;
+                }
+                IsSelected = true;
+                AllDescendants
+                    .Cast<MpAvActionViewModelBase>()
+                    .ForEach(x => x.IsSelected = x.ActionId == value.ActionId);
+                OnPropertyChanged(nameof(SelectedItem));
+            } 
+        }
+
+        //public override IEnumerable<MpAvActionViewModelBase> SelfAndAllDescendants =>
+        //    SelfAndAllDescendants.Cast<MpAvActionViewModelBase>();
 
         #endregion
 
         #region MpISidebarItemViewModel Implementation
 
-        public double DefaultSidebarWidth => 350;// MpMeasurements.Instance.DefaultDesignerWidth;
+        public double DefaultSidebarWidth => 800;// MpMeasurements.Instance.DefaultDesignerWidth;
         public double SidebarWidth { get; set; } = 0;// MpMeasurements.Instance.DefaultDesignerWidth;
 
         public bool IsSidebarVisible { get; set; }
@@ -57,36 +264,12 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIMenuItemViewModel Implementation
-
-        public MpMenuItemViewModel TriggerTypeMenuItemViewModel {
-            get {
-                var tmivml = new List<MpMenuItemViewModel>();
-                var triggerLabels = typeof(MpTriggerType).EnumToLabels();
-                for (int i = 0; i < triggerLabels.Length; i++) {
-                    string resourceKey = new MpEnumToImageResourceKeyConverter()
-                        .Convert((MpTriggerType)i, null, null, null) as string;
-
-                    var tt = (MpTriggerType)i;
-                    tmivml.Add(new MpMenuItemViewModel() {
-                        IsChecked = tt == TriggerType,
-                        IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource(resourceKey) as string,
-                        Header = triggerLabels[i],
-                        Command = SelectTriggerTypeCommand,
-                        CommandParameter = tt,
-                        IsVisible = tt != MpTriggerType.None && (tt != MpTriggerType.ParentOutput)// || (SelectedItem != null && !SelectedItem.IsRootAction))
-                    });
-                }
-                return new MpMenuItemViewModel() {
-                    SubItems = tmivml
-                };
-            }
-        }
+        #region Appearance
 
         #endregion
 
+        #region Layout
 
-        #region Appearance
 
         #endregion
 
@@ -101,92 +284,7 @@ namespace MonkeyPaste.Avalonia {
         #region Model
 
 
-        #region MpIDesignerItemSettingsViewModel Implementation
-
-        private void SetDesignerItemSettings(double scaleX, double scaleY, double offsetX, double offsetY) {
-            string arg2 = string.Join(",", new string[] { scaleX.ToString(), scaleY.ToString(), offsetX.ToString(), offsetY.ToString() });
-            Arg2 = arg2;
-        }
-
-        private MpPoint ParseScale(string text) {
-            if(string.IsNullOrEmpty(Arg2)) {
-                return new MpPoint(1,1);
-            }
-            var arg2Parts = Arg2.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-            MpPoint scale = new MpPoint(1,1);
-            try {
-                scale.X = Convert.ToDouble(arg2Parts[0]);
-                scale.Y = Convert.ToDouble(arg2Parts[1]);
-            }catch(Exception ex) {
-                MpConsole.WriteTraceLine($"Error parsing scale from arg2: '{Arg2}'",ex);
-            }
-            return scale;
-        }
-
-        private MpPoint ParseTranslationOffset(string text) {
-            if (string.IsNullOrEmpty(Arg2)) {
-                return new MpPoint();
-            }
-            var arg2Parts = Arg2.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-            MpPoint offset = new MpPoint();
-            try {
-                offset.X = Convert.ToDouble(arg2Parts[2]);
-                offset.Y = Convert.ToDouble(arg2Parts[3]);
-            }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error parsing offset from arg2: '{Arg2}'",ex);
-            }
-            return offset;
-        }
-
-        public double ScaleX {
-            get {
-                return ParseScale(Arg2).X;
-            }
-            set {
-                if(ScaleX != value) {
-                    SetDesignerItemSettings(value, ScaleY, TranslateOffsetX, TranslateOffsetY);
-                    OnPropertyChanged(nameof(ScaleX));
-                }
-            }
-        }
-        public double ScaleY {
-            get {
-                return ParseScale(Arg2).Y;
-            }
-            set {
-                if (ScaleY != value) {
-                    SetDesignerItemSettings(ScaleX, value, TranslateOffsetX, TranslateOffsetY);
-                    OnPropertyChanged(nameof(ScaleY));
-                }
-            }
-        }
-
-        public double TranslateOffsetX {
-            get {
-                return ParseTranslationOffset(Arg2).X;
-            }
-            set {
-                if (TranslateOffsetX != value) {
-                    SetDesignerItemSettings(ScaleX, ScaleY, value, TranslateOffsetY);
-                    OnPropertyChanged(nameof(TranslateOffsetX));
-                }
-            }
-        }
-        public double TranslateOffsetY {
-            get {
-                return ParseTranslationOffset(Arg2).Y;
-            }
-            set {
-                if (TranslateOffsetY != value) {
-                    SetDesignerItemSettings(ScaleX, ScaleY, TranslateOffsetX, value);
-                    OnPropertyChanged(nameof(TranslateOffsetY));
-                }
-            }
-        }
-
-
-        #endregion
+        
 
         public MpTriggerType TriggerType {
             get {
@@ -210,9 +308,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvTriggerActionViewModelBase(MpAvActionCollectionViewModel parent) : base(parent) {
+        public MpAvTriggerActionViewModelBase(MpAvTriggerCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpAvTriggerActionViewModelBase_PropertyChanged;
+            Items.CollectionChanged += Items_CollectionChanged;
         }
+
 
         #endregion
 
@@ -258,27 +358,24 @@ namespace MonkeyPaste.Avalonia {
                         await ShowUserEnableChangeNotification();
                     });
                     break;
+                case nameof(Items):
+                    OnPropertyChanged(nameof(SelfAndAllDescendants));
+                    break;
+                case nameof(IsBusy):
+                    if(Parent != null) {
+                        Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
+                    }
+                    break;
             }
         }
 
+
+        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            OnPropertyChanged(nameof(SelfAndAllDescendants));
+        }
         #endregion
 
         #region Commands
-
-        public ICommand SelectTriggerTypeCommand => new MpCommand<object>(
-            (args) => {
-                ///IsDropDownOpen = false;
-
-                TriggerType = (MpTriggerType)args;
-
-                var thisTrigger = Parent.Items.FirstOrDefault(x => x.ActionId == ActionId);
-                if (thisTrigger != null) {
-                    Dispatcher.UIThread.Post(async () => {
-                        thisTrigger = await Parent.CreateTriggerViewModel(Action);
-                    });
-                }
-            });
-
 
         #endregion
     }

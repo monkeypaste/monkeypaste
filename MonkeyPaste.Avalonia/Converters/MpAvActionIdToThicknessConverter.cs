@@ -13,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
             if (value == null) {
                 return new Thickness();
             }
-            var avm = MpAvActionCollectionViewModel.Instance.AllActions.FirstOrDefault(x => x.ActionId == (int)value);
+            var avm = MpAvTriggerCollectionViewModel.Instance.AllActions.FirstOrDefault(x => x.ActionId == (int)value);
             if (avm == null) {
                 return null;
             }

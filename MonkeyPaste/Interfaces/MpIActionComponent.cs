@@ -4,12 +4,12 @@ using System.Text;
 
 namespace MonkeyPaste {
     public interface MpIActionComponent {
-        void RegisterActionComponent(MpIActionTrigger mvm);
-        void UnregisterActionComponent(MpIActionTrigger mvm);
+        void RegisterActionComponent(MpIInvokableAction mvm);
+        void UnregisterActionComponent(MpIInvokableAction mvm);
     }
 
-    public interface MpIActionTrigger {
-        void OnActionTriggered(object sender, object args);
+    public interface MpIInvokableAction {
+        void OnActionInvoked(object sender, object args);
         string Label { get; }
     }
 }

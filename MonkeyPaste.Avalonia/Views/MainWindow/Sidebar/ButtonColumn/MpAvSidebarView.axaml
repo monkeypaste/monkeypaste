@@ -107,7 +107,7 @@
                       local:MpAvIsHoveringExtension.IsEnabled="True"
                       local:MpAvIsHoveringExtension.HoverCursor="Hand"
                       IsEnabled="True"
-                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpAvActionCollectionViewModel.Instance}}"
+                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}"
                       Padding="10">
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="Actions" />

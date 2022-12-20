@@ -5,6 +5,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Wpf;
 using PropertyChanged;
 using System;
@@ -55,37 +56,30 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            var acvm = DataContext as MpAvActionCollectionViewModel;
-            if(acvm == null) {
-                return;
-            }
-            var tavm = acvm.SelectedItem;
-            if(tavm == null) {
-                return;
-            }
-
-            var avmc = tavm.FindAllChildren().ToList();
-            if(avmc == null) {
-                return;
-            }
-            avmc.Insert(0, tavm);
-            foreach (MpAvActionViewModelBase avm in avmc) {
-                Point tail = new Point(avm.X + (avm.Width / 2), avm.Y + (avm.Height / 2));
-
-
-                var pavm = avm.ParentTreeItem;
-                if (pavm == null) {
-                    continue;
+            if(DataContext is MpITreeItemViewModel tivm) {
+                var avmc = tivm.FindAllChildren().ToList();
+                if (avmc == null) {
+                    return;
                 }
+                avmc.Insert(0, tivm);
+                foreach (MpAvActionViewModelBase avm in avmc) {
+                    MpPoint tail = new MpPoint(avm.X + (avm.Width / 2), avm.Y + (avm.Height / 2));
 
-                var borderBrush = pavm.IsHovering ? TransitionLineHoverBorderBrush : TransitionLineDefaultBorderBrush;
-                var fillBrush = avm.IsEnabled.HasValue && avm.IsEnabled.Value ? //&&
-                                //(pavm.ParentActionViewModel == null || (pavm.ParentActionViewModel.IsEnabled.HasValue && pavm.ParentActionViewModel.IsEnabled.Value)) ?
-                    TransitionLineEnabledFillBrush : TransitionLineDisabledFillBrush;
 
-                Point head = new Point(pavm.X + (pavm.Width / 2), pavm.Y + (pavm.Height / 2));
+                    var pavm = avm.ParentTreeItem;
+                    if (pavm == null) {
+                        continue;
+                    }
 
-                DrawArrow(dc, head, tail, avm.Width / 2, borderBrush, fillBrush);
+                    var borderBrush = pavm.IsHovering ? TransitionLineHoverBorderBrush : TransitionLineDefaultBorderBrush;
+                    var fillBrush = avm.IsEnabled.HasValue && avm.IsEnabled.Value ? //&&
+                                                                                    //(pavm.ParentActionViewModel == null || (pavm.ParentActionViewModel.IsEnabled.HasValue && pavm.ParentActionViewModel.IsEnabled.Value)) ?
+                        TransitionLineEnabledFillBrush : TransitionLineDisabledFillBrush;
+
+                    MpPoint head = new MpPoint(pavm.X + (pavm.Width / 2), pavm.Y + (pavm.Height / 2));
+
+                    DrawArrow(dc, head, tail, avm.Width / 2, borderBrush, fillBrush);
+                }
             }
         }
 
@@ -95,28 +89,28 @@ namespace MonkeyPaste.Avalonia {
 
         private void DrawArrow(
             DrawingContext dc, 
-            Point startPoint, 
-            Point endPoint, 
+            MpPoint startPoint, 
+            MpPoint endPoint, 
             double dw, 
             IBrush borderBrush, 
             IBrush fillBrush) {
-            Vector direction = endPoint - startPoint;
+            MpPoint direction = endPoint - startPoint;
 
-            Vector normalizedDirection = direction;
+            MpPoint normalizedDirection = direction;
             normalizedDirection.Normalize();
 
             startPoint += normalizedDirection * dw;
             endPoint -= normalizedDirection * dw;
 
-            Vector normalizedlineWidenVector = new Vector(-normalizedDirection.Y, normalizedDirection.X); // Rotate by 90 degrees
-            Vector lineWidenVector = normalizedlineWidenVector * TailWidth;
+            MpPoint normalizedlineWidenVector = new MpPoint(-normalizedDirection.Y, normalizedDirection.X); // Rotate by 90 degrees
+            MpPoint lineWidenVector = normalizedlineWidenVector * TailWidth;
 
             // Adjust arrow thickness for very thick lines
-            Vector arrowWidthVector = normalizedlineWidenVector * TipWidth;
+            MpPoint arrowWidthVector = normalizedlineWidenVector * TipWidth;
 
-            var pc = new List<Point>();
+            var pc = new List<MpPoint>();
 
-            Point endArrowCenterPosition = endPoint - (normalizedDirection * TipLength);
+            MpPoint endArrowCenterPosition = endPoint - (normalizedDirection * TipLength);
 
             // Start with tip of the arrow
             pc.Add(endArrowCenterPosition + arrowWidthVector);
@@ -125,13 +119,17 @@ namespace MonkeyPaste.Avalonia {
             pc.Add(startPoint - lineWidenVector);
             pc.Add(endArrowCenterPosition - lineWidenVector);
             pc.Add(endArrowCenterPosition - arrowWidthVector);
+            pc.Add(endPoint);
 
 
             StreamGeometry streamGeometry = new StreamGeometry();
             using (StreamGeometryContext geometryContext = streamGeometry.Open()) {
-                geometryContext.BeginFigure(endPoint, true);
-                pc.ForEach(x => geometryContext.LineTo(x));
+                geometryContext.BeginFigure(endPoint.ToAvPoint(), true);
+                pc.ForEach(x => geometryContext.LineTo(x.ToAvPoint()));
                 geometryContext.EndFigure(true);
+                //geometryContext.BeginFigure(startPoint, true);
+                //geometryContext.LineTo(endPoint);
+                //geometryContext.EndFigure(true);
             }
 
             dc.DrawGeometry(

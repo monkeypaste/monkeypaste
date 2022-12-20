@@ -165,6 +165,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\TreeViewItem.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Window.axaml" />
     <AvaloniaXaml Remove="Themes\Default\DefaultLight.axaml" />
+    <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\MpAvActionPropertyListBoxView.axaml" />
     <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml" />
     <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml" />
     <None Remove="Assets\Cursors\copy.png" />
@@ -380,6 +381,7 @@
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
     <Compile Remove="ViewModels\Reusable\Source\MpAvSourceCollectionViewModel.cs" />
     <Compile Remove="ViewModels\Reusable\Source\MpAvSourceViewModel.cs" />
+    <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\MpAvActionPropertyListBoxView.axaml.cs" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\CheckBox\MpCheckBoxParameterView.axaml.cs" />
     <Compile Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml.cs" />
     <Compile Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml.cs" />
@@ -989,6 +991,7 @@
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Include="Avalonia" Version="0.10.18" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.18" />
+    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="10.14.0" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.18" />
     <PackageReference Include="Avalonia.HtmlRenderer" Version="0.10.0" />
@@ -1005,7 +1008,7 @@
     <PackageReference Include="SkiaSharp" Version="2.88.3" />
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
     <PackageReference Include="X11" Version="1.0.6" />
-    <PackageReference Include="XamlNameReferenceGenerator" Version="1.4.2" />
+    <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
     <PackageReference Include="GtkSharp" Version="3.24.24.38" />
     <PackageReference Include="GioSharp" Version="3.24.24.38" />
     <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
@@ -1025,7 +1028,6 @@
     <Folder Include="ViewModels\MainWindow\TagTray\TagTile\" />
     <Folder Include="Views\HtmlConverterWindow\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
-    <Folder Include="Views\MainWindow\Sidebar\SidebarItems\Actions\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />
@@ -1060,6 +1062,9 @@
     </Compile>
     <Compile Update="Views\MainWindow\FilterMenu\Sort\Field\MpAvClipTileSortFieldView.axaml.cs">
       <DependentUpon>MpAvClipTileSortFieldView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\MpAvActionPropertyView.axaml.cs">
+      <DependentUpon>MpAvActionPropertyView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Analytics\MpAvAnalyticItemSelectorView.axaml.cs">
       <DependentUpon>MpAvAnalyticItemSelectorView.axaml</DependentUpon>

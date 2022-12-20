@@ -46,13 +46,13 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region DesignerItem AvaloniaProperty
-        public MpIDesignerItemSettingsViewModel DesignerItem {
-            get { return (MpIDesignerItemSettingsViewModel)GetValue(DesignerItemProperty); }
+        public MpIDesignerSettingsViewModel DesignerItem {
+            get { return (MpIDesignerSettingsViewModel)GetValue(DesignerItemProperty); }
             set { SetValue(DesignerItemProperty, value); }
         }
 
-        public static readonly AttachedProperty<MpIDesignerItemSettingsViewModel> DesignerItemProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, MpIDesignerItemSettingsViewModel>(
+        public static readonly AttachedProperty<MpIDesignerSettingsViewModel> DesignerItemProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, MpIDesignerSettingsViewModel>(
                 "DesignerItem",
                 null,
                 false);
@@ -94,16 +94,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        //public override UIElement Child {
-        //    get { return base.Child; }
-        //    set {
-        //        if (value != null && value != this.Child) {
-        //            this.Initialize(value);
-        //        }
-        //        base.Child = value;
-        //    }
-        //}
-
         #endregion
 
         #region Public Methods
@@ -136,18 +126,18 @@ namespace MonkeyPaste.Avalonia {
             child_MouseMove(Child, e);
         }
         public void Reset() {
-            MpPoint scale = new MpPoint(1, 1);
+            double scale = 1.0d;
             MpPoint offset = new MpPoint();
             if(DesignerItem != null) {
-                scale = new MpPoint(DesignerItem.ScaleX, DesignerItem.ScaleY);
+                scale = DesignerItem.Scale;
                 offset = new MpPoint(DesignerItem.TranslateOffsetX, DesignerItem.TranslateOffsetY);
             }
 
             if (Child != null) {
                 // reset zoom
                 var st = GetScaleTransform(Child);
-                st.ScaleX = scale.X;
-                st.ScaleY = scale.Y;
+                st.ScaleX = scale;
+                st.ScaleY = scale;
 
                 // reset pan
                 var tt = GetTranslateTransform(Child);
@@ -195,42 +185,36 @@ namespace MonkeyPaste.Avalonia {
         #region Child Events
 
         private void child_MouseWheel(object sender, PointerWheelEventArgs e) {
-            if (Child != null) {
-                var st = GetScaleTransform(Child);
-                var tt = GetTranslateTransform(Child);
+            if(Child == null || DesignerItem == null) {
+                return;
+            }
+            var st = GetScaleTransform(Child);
+            double scale = DesignerItem.Scale;
+            var tt = GetTranslateTransform(Child);
 
-                double zoom = e.Delta.Y > 0 ? .2 : -.2;
-                if (!(e.Delta.Y > 0) && (st.ScaleX < MinScale || st.ScaleY < MinScale)) {
-                    return;
-                }
-                MpPoint relative = e.GetPosition(Child).ToPortablePoint();
-                double absoluteX;
-                double absoluteY;
+            double zoom = e.Delta.Y > 0 ? .2 : -.2;
+            if (!(e.Delta.Y > 0) && scale < MinScale) {
+                return;
+            }
+            scale += zoom;
 
-                absoluteX = relative.X * st.ScaleX + tt.X;
-                absoluteY = relative.Y * st.ScaleY + tt.Y;
+            MpPoint relative = e.GetPosition(Child).ToPortablePoint();
+            double absolute;
+            double absoluteY;
 
-                st.ScaleX += zoom;
-                st.ScaleY += zoom;
+            absolute = relative.X * scale + tt.X;
+            absoluteY = relative.Y * scale + tt.Y;
 
-                tt.X = absoluteX - relative.X * st.ScaleX;
-                tt.Y = absoluteY - relative.Y * st.ScaleY;
+            tt.X = absolute - relative.X * scale;
+            tt.Y = absoluteY - relative.Y * scale;
 
-                double zoomCorrected = zoom * st.ScaleX;
-                st.ScaleX += zoomCorrected;
-                st.ScaleY += zoomCorrected;
+            double zoomCorrected = zoom * scale;
+            scale += zoomCorrected;
 
-
-                st.ScaleX = Math.Max(MinScale, st.ScaleX);
-                st.ScaleY = Math.Max(MinScale, st.ScaleY);
-
-                if (DesignerItem != null) {
-                    DesignerItem.ScaleX = st.ScaleX;
-                    DesignerItem.ScaleY = st.ScaleY;
-                    if (DataContext is MpAvActionCollectionViewModel acvm) {
-                        acvm.HasModelChanged = true;
-                    }
-                }
+            DesignerItem.Scale = Math.Min(MaxScale,Math.Max(MinScale, scale));
+            //DesignerItem.Scale = st.ScaleX;
+            if (DataContext is MpAvTriggerCollectionViewModel acvm) {
+                //acvm.HasModelChanged = true;
             }
         }
         
@@ -257,7 +241,7 @@ namespace MonkeyPaste.Avalonia {
                 IsTranslating = false;
                 e.Pointer.Capture(null);
                 MpPlatformWrapper.Services.Cursor.UnsetCursor(DataContext);
-                if(DataContext is MpAvActionCollectionViewModel acvm) {
+                if(DataContext is MpAvTriggerCollectionViewModel acvm) {
                     acvm.HasModelChanged = true;
                 }
             }
@@ -298,46 +282,87 @@ namespace MonkeyPaste.Avalonia {
         }
         
         private void DrawGrid(DrawingContext dc) {
-            MpPoint offset = new MpPoint();// (grid_offset.ToMpPoint() * -1).ToWpfPoint(); //new MpPoint(10, 10);
+            double w = Bounds.Width;
+            double h = Bounds.Height;
+
+            double offset_x = DesignerItem.TranslateOffsetX;
+            double offset_y = DesignerItem.TranslateOffsetY;
 
             var st = GetScaleTransform(Child);
-            int HorizontalGridLineCount = (int)((Bounds.Width / GridLineSpacing) * (1/st.ScaleX));
-            int VerticalGridLineCount = (int)((Bounds.Height / GridLineSpacing) * (1/st.ScaleY));
+            int HorizontalGridLineCount = (int)((w / GridLineSpacing) * (1/st.ScaleX));
+            int VerticalGridLineCount = (int)((h / GridLineSpacing) * (1/st.ScaleY));
 
-            double xStep = Bounds.Width / HorizontalGridLineCount;
-            double yStep = Bounds.Height / VerticalGridLineCount;
+            int major_count = 5;
+            double major_thickness = 2;
+            double minor_thickness = 0.5;
+
+            double xStep = w / HorizontalGridLineCount;
+            double yStep = h / VerticalGridLineCount;
 
             double curX = 0;
             double curY = 0;
 
             for (int x = 0; x < HorizontalGridLineCount; x++) {
                 MpPoint p1 = new MpPoint(curX, 0);
-                p1 = (MpPoint)(p1 - offset);
-                MpPoint p2 = new MpPoint(curX, Bounds.Height);
-                p2 = (MpPoint)(p2 - offset);
+                p1.X += offset_x;
+                MpPoint p2 = new MpPoint(curX, h);
+                p2.X += offset_x;
 
-                bool isOrigin = x == (int)(HorizontalGridLineCount / 2);
-                if (isOrigin) {
-                    DrawLine(dc,new Pen(OriginBrush, OriginThickness), p1, p2);
-                } else {
-                    DrawLine(dc,new Pen(GridLineBrush, GridLineThickness), p1, p2);
+                if (x == 0) {
+                    int fill_count = 0;
+                    var fill_p = p1 - new MpPoint(xStep, 0);
+                    while (fill_p.X > 0) {
+                        fill_count++;
+                        double vert_fill_line_thickness = fill_count % major_count == 0 ? major_thickness : minor_thickness;
+                        DrawLine(dc, new Pen(GridLineBrush, vert_fill_line_thickness), fill_p, fill_p + new MpPoint(0, h));
+                        fill_p -= new MpPoint(xStep, 0);
+                    }
+                } else if (x == HorizontalGridLineCount - 1) {
+                    int fill_count = 0;
+                    var fill_p = p1 + new MpPoint(xStep, 0);
+                    while (fill_p.X < w) {
+                        fill_count++;
+                        double vert_fill_line_thickness = fill_count % major_count == 0 ? major_thickness : minor_thickness;
+                        DrawLine(dc, new Pen(GridLineBrush, vert_fill_line_thickness), fill_p, fill_p + new MpPoint(0, h));
+                        fill_p += new MpPoint(xStep, 0);
+                    }
                 }
+
+                double vert_line_thickness = x % major_count == 0 ? major_thickness : minor_thickness;
+                DrawLine(dc, new Pen(GridLineBrush, vert_line_thickness), p1, p2);
 
                 curX += xStep;
             }
 
             for (int y = 0; y < VerticalGridLineCount; y++) {
                 MpPoint p1 = new MpPoint(0, curY);
-                p1 = (MpPoint)(p1 - offset);
-                MpPoint p2 = new MpPoint(Bounds.Width, curY);
-                p2 = (MpPoint)(p2 - offset);
+                p1.Y += offset_y;
+                MpPoint p2 = new MpPoint(w, curY);
+                p2.Y += offset_y;
 
-                bool isOrigin = y == (int)(VerticalGridLineCount / 2);
-                if (isOrigin) {
-                    DrawLine(dc,new Pen(OriginBrush, OriginThickness), p1, p2);
-                } else {
-                    DrawLine(dc,new Pen(GridLineBrush, GridLineThickness), p1, p2);
+                if (y == 0) {
+                    int fill_count = 0;
+                    var fill_p = p1 - new MpPoint(0, yStep);
+                    while (fill_p.Y > 0) {
+                        fill_count++;
+                        double horiz_fill_line_thickness = fill_count % major_count == 0 ? major_thickness : minor_thickness;
+                        DrawLine(dc, new Pen(GridLineBrush, horiz_fill_line_thickness), fill_p, fill_p + new MpPoint(w, 0));
+                        fill_p -= new MpPoint(0, yStep);
+                    }
+                } else if (y == VerticalGridLineCount - 1) {
+                    int fill_count = 0;
+                    var fill_p = p1 + new MpPoint(0, yStep);
+                    while (fill_p.Y < h) {
+                        fill_count++;
+                        double horiz_fill_line_thickness = fill_count % major_count == 0 ? major_thickness : minor_thickness;
+                        DrawLine(dc, new Pen(GridLineBrush, horiz_fill_line_thickness), fill_p, fill_p + new MpPoint(w, 0));
+                        fill_p += new MpPoint(0, yStep);
+                    }
                 }
+
+
+                double horiz_line_thickness = y % major_count == 0 ? major_thickness : minor_thickness;
+                DrawLine(dc, new Pen(GridLineBrush, horiz_line_thickness), p1, p2);
 
                 curY += yStep;
             }

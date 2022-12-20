@@ -13,6 +13,8 @@
                        mc:Ignorable="d">
     <Border HorizontalAlignment="Center"
             VerticalAlignment="Stretch"
+            local:MpAvListBoxItemBoundsObserverExtension.IsEnabled="True"
+            local:MpAvListBoxItemBoundsObserverExtension.ObservedBounds="{Binding ObservedDesignerItemBounds, Mode=TwoWay}"
             BoxShadow="5 5 10 2 Black">
         <StackPanel Orientation="Vertical"
                     HorizontalAlignment="Center">

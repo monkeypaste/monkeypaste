@@ -62,6 +62,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public virtual MpITreeItemViewModel RootItem => this.FindRootParent();
+
         #endregion
 
         #endregion

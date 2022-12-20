@@ -50,7 +50,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAnnotateActionViewModel(MpAvActionCollectionViewModel parent) : base(parent) {
+        public MpAnnotateActionViewModel(MpAvTriggerCollectionViewModel parent) : base(parent) {
 
         }
 

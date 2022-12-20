@@ -77,7 +77,7 @@ namespace MonkeyPaste.Avalonia {
                     new MpBootstrappedItemViewModel(this,typeof(MpAvClipTileSortFieldViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvClipTileSortDirectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvSearchBoxViewModel)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvActionCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvTriggerCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvClipboardHandlerCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvAnalyticItemCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvSettingsWindowViewModel)),

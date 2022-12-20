@@ -89,7 +89,7 @@
                                                 Grid.Column="1"
                                                 HorizontalAlignment="Stretch"
                                                 HorizontalContentAlignment="Stretch"
-                                                IsVisible="{Binding IsSidebarVisible, Source={x:Static local:MpAvActionCollectionViewModel.Instance}}" />
+                                                IsVisible="{Binding IsSidebarVisible, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" />
 
             <!--  SIDEBAR SPLITTER  -->
 
@@ -117,7 +117,7 @@
                         <Binding Path="IsSidebarVisible"
                                  Source="{x:Static local:MpAvClipboardHandlerCollectionViewModel.Instance}" />
                         <Binding Path="IsSidebarVisible"
-                                 Source="{x:Static local:MpAvActionCollectionViewModel.Instance}" />
+                                 Source="{x:Static local:MpAvTriggerCollectionViewModel.Instance}" />
                     </MultiBinding>
                 </GridSplitter.IsVisible>
             </GridSplitter>

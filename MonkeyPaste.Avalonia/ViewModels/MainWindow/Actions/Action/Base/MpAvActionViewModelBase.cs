@@ -17,14 +17,14 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
 
     public abstract class MpAvActionViewModelBase :
-        MpAvTreeSelectorViewModelBase<MpAvActionCollectionViewModel, MpAvActionViewModelBase>,
+        MpAvTreeSelectorViewModelBase<MpAvTriggerCollectionViewModel, MpAvActionViewModelBase>,
         MpIHoverableViewModel,
         MpISelectableViewModel,
         MpIUserIconViewModel,
         MpITooltipInfoViewModel,
         MpIBoxViewModel,
         MpIMovableViewModel,
-        MpIActionTrigger {
+        MpIInvokableAction {
         #region Private Variables
 
         //private double _maxDeltaLocation = 10;
@@ -36,8 +36,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-        #region MpAvTreeSelectorViewModelBase Implementation
+        #region MpAvTreeSelectorViewModelBase Overrides
 
+        public override bool IsExpanded => true;
 
         private MpAvActionViewModelBase _parentTreeItem;
         public override MpAvActionViewModelBase ParentTreeItem {
@@ -58,19 +59,21 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+
         #endregion
 
         #region View Models               
 
-        public MpAvTriggerActionViewModelBase RootTriggerActionViewModel {
-            get {
-                var rtavm = this;
-                while (rtavm.ParentTreeItem != null) {
-                    rtavm = rtavm.ParentTreeItem;
-                }
-                return rtavm as MpAvTriggerActionViewModelBase;
-            }
-        }
+        public MpAvTriggerActionViewModelBase RootTriggerActionViewModel =>
+            RootItem as MpAvTriggerActionViewModelBase;//{
+        //    get {
+        //        var rtavm = this;
+        //        while (rtavm.ParentTreeItem != null) {
+        //            rtavm = rtavm.ParentTreeItem;
+        //        }
+        //        return rtavm as MpAvTriggerActionViewModelBase;
+        //    }
+        //}
         #endregion
 
         #region MpIMovableViewModel Implementation
@@ -341,6 +344,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsAnyBusy {
+            get {
+                if(IsBusy) {
+                    return true;
+                }
+                return Items.Any(x => x.IsAnyBusy);
+            }
+        }
+
         public bool IsPlaceholder => ActionType == MpActionType.None;
 
         public bool HasDescription => !string.IsNullOrEmpty(Description);
@@ -430,10 +442,11 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public double Width => Parent == null ? 0 : Parent.DesignerItemDiameter;
+        public double Width => 50;// Parent == null ? 0 : ObservedDesignerItemBounds.Width;
 
-        public double Height => Parent == null ? 0 : Parent.DesignerItemDiameter;
+        public double Height => 50;// Parent == null ? 0 : ObservedDesignerItemBounds.Height;
 
+        public MpRect ObservedDesignerItemBounds { get; set; } = MpRect.Empty;
 
         #endregion
 
@@ -685,7 +698,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvActionViewModelBase() : base(null) { }
 
-        public MpAvActionViewModelBase(MpAvActionCollectionViewModel parent) : base(parent) {
+        public MpAvActionViewModelBase(MpAvTriggerCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpAvActionViewModelBase_PropertyChanged;
         }
 
@@ -749,7 +762,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
             //avm.ParentTreeItem = this;
-            OnActionComplete += avm.OnActionTriggered;
+            OnActionComplete += avm.OnActionInvoked;
 
             await avm.InitializeAsync(a);
 
@@ -769,7 +782,7 @@ namespace MonkeyPaste.Avalonia {
         //    return eavm;
         //}
 
-        public void OnActionTriggered(object sender, object args) {
+        public void OnActionInvoked(object sender, object args) {
             if (!IsEnabled.HasValue) {
                 //if action has errors halt 
                 return;
@@ -963,17 +976,17 @@ namespace MonkeyPaste.Avalonia {
                     if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
 
-                        Parent.AllSelectedItemActions.ForEach(x => x.IsExpanded = x.ActionId == ActionId);
-                        IsExpanded = true;
+                        //Parent.AllSelectedItemActions.ForEach(x => x.IsExpanded = x.ActionId == ActionId);
+                        //IsExpanded = true;
                     } else {
-                        IsExpanded = false;
+                        //IsExpanded = false;
                     }
 
-                    if (this is MpAvTriggerActionViewModelBase && Parent.SelectedItem != this) {
-                        Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
-                    }
+                    //if (this is MpAvTriggerActionViewModelBase && Parent.SelectedItem != this) {
+                    //    Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
+                    //}
                     Parent.OnPropertyChanged(nameof(Parent.PrimaryAction));
-                    Parent.OnPropertyChanged(nameof(Parent.SelectedActions));
+                    //Parent.OnPropertyChanged(nameof(Parent.SelectedActions));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
                     OnPropertyChanged(nameof(BorderBrushHexColor));
                     //OnPropertyChanged(nameof(IsRootAction));
@@ -988,9 +1001,9 @@ namespace MonkeyPaste.Avalonia {
                         });
                     }
                     break;
-                case nameof(Items):
-                    Parent.NotifyViewportChanged();
-                    break;
+                //case nameof(Items):
+                //    Parent.NotifyViewportChanged();
+                //    break;
                 case nameof(Location):
                 case nameof(X):
                 case nameof(Y):
@@ -1015,6 +1028,11 @@ namespace MonkeyPaste.Avalonia {
                     }
                     IsEnabledDb = IsEnabled.Value;
                     OnPropertyChanged(nameof(EnableToggleButtonShapeHexColor));
+                    break;
+                case nameof(IsBusy):
+                    if(ParentTreeItem != null) {
+                        ParentTreeItem.OnPropertyChanged(nameof(ParentTreeItem.IsAnyBusy));
+                    }
                     break;
             }
         }
@@ -1076,7 +1094,7 @@ namespace MonkeyPaste.Avalonia {
                                          label: GetUniqueActionName(at.ToString()),
                                          parentId: ActionId,
                                          sortOrderIdx: Items.Count,
-                                         location: Parent.FindOpenDesignerLocation(Location));
+                                         location: RootTriggerActionViewModel.FindOpenDesignerLocation(Location));
 
                  var navm = await CreateActionViewModel(na);
 
@@ -1085,10 +1103,10 @@ namespace MonkeyPaste.Avalonia {
                  }
                  Items.Add(navm);
 
-                 
-                 //AddChildEmptyActionViewModel.IsSelected = false;
-                 navm.IsSelected = true;
 
+                 //AddChildEmptyActionViewModel.IsSelected = false;
+                 //navm.IsSelected = true;
+                 Parent.SelectActionCommand.Execute(navm);
                  //Parent.ClearAllOverlaps();
 
                  OnPropertyChanged(nameof(Items));
@@ -1132,10 +1150,10 @@ namespace MonkeyPaste.Avalonia {
 
                 //to_delete_avm.ParentTreeItem = null;
 
-                Parent.SelectedItem = RootTriggerActionViewModel;
-                IsSelected = true;
+                //Parent.SelectedItem = RootTriggerActionViewModel;
+                //IsSelected = true;
                 //Parent.NotifyViewportChanged();
-
+                Parent.SelectActionCommand.Execute(this);
                 IsBusy = false;
             });
 

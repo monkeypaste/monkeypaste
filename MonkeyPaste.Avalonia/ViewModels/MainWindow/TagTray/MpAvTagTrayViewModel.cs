@@ -320,7 +320,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsSidebarVisible):
                     if(IsSidebarVisible) {
                         MpAvAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = false;
-                        MpAvActionCollectionViewModel.Instance.IsSidebarVisible = false;
+                        MpAvTriggerCollectionViewModel.Instance.IsSidebarVisible = false;
                         MpAvClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
                     }
                     MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel));

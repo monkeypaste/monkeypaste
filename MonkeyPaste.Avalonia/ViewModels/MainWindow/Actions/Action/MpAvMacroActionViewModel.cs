@@ -80,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvMacroActionViewModel(MpAvActionCollectionViewModel parent) : base(parent) {
+        public MpAvMacroActionViewModel(MpAvTriggerCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpMacroActionViewModel_PropertyChanged;
         }
 
