@@ -450,7 +450,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region Public Methods
 
         public async Task InitializeAsync() {
@@ -940,17 +939,17 @@ namespace MonkeyPaste.Avalonia {
                     IsMainWindowClosing = true;
 
                     MpPortableProcessInfo active_pinfo = null;
-                    if (!MpAvClipTrayViewModel.Instance.IsPasting) {
-                        // let external paste handler sets active after
-                        // hide signal because when pasting the activated app may not be last active 
-                        active_pinfo = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
-                    }
+                    //if (!MpAvClipTrayViewModel.Instance.IsPasting) {
+                    //    // let external paste handler sets active after
+                    //    // hide signal because when pasting the activated app may not be last active 
+                    //    active_pinfo = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
+                    //}
                     if (AnimateHideWindow) {
-                        if (!MpAvClipTrayViewModel.Instance.IsPasting) {
-                            // let external paste handler sets active after
-                            // hide signal because when pasting the activated app may not be last active 
-                            MpPlatformWrapper.Services.ProcessWatcher.SetActiveProcess(MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle);
-                        }
+                        //if (!MpAvClipTrayViewModel.Instance.IsPasting) {
+                        //    // let external paste handler sets active after
+                        //    // hide signal because when pasting the activated app may not be last active 
+                        //    MpPlatformWrapper.Services.ProcessWatcher.SetActiveProcess(MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle);
+                        //}
                         //
                         //MpAvMainWindow.Instance.Topmost = false;
                         //UpdateTopmost();

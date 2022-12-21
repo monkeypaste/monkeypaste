@@ -334,7 +334,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = MpAvMainWindowViewModel.Instance.IsMainWindowOpen;
 
             await MpNotificationBuilder.ShowMessageAsync(
-                iconSourceStr: IconResourceKeyStr,
+                iconSourceStr: IconResourceKeyStr.ToString(),
                 title: "ACTION STATUS",
                 body: notificationText);
 

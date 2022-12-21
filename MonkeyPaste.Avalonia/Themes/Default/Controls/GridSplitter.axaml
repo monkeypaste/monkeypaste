@@ -1,0 +1,23 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+
+    <Style Selector="GridSplitter.horizontal">
+        <Setter Property="Cursor"
+                Value="SizeNorthSouth" />
+    </Style>
+    <Style Selector="GridSplitter.vertical">
+        <Setter Property="Cursor"
+                Value="SizeWestEast" />
+    </Style>
+    <Style Selector="GridSplitter /template/ Border">
+        <Setter Property="Background"
+                Value="{DynamicResource DefaultGridSplitterBrush}" />
+    </Style>
+    <Style Selector="GridSplitter:pointerover /template/ Border">
+        <Setter Property="Background"
+                Value="{DynamicResource HoverDefaultGridSplitterBgBrush}" />
+    </Style>
+
+</Styles>

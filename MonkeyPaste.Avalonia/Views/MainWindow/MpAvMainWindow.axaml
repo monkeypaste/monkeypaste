@@ -99,14 +99,8 @@
                           ResizeDirection="Columns"
                           HorizontalAlignment="Right"
                           VerticalAlignment="Stretch"
-                          local:MpAvIsHoveringExtension.HoverCursor="ResizeWE"
-                          local:MpAvIsHoveringExtension.IsEnabled="True">
-                <GridSplitter.Styles>
-                    <Style Selector="GridSplitter:pointerover">
-                        <Setter Property="Background"
-                                Value="Yellow" />
-                    </Style>
-                </GridSplitter.Styles>
+                          Classes.vertical="{Binding !IsVerticalOrientation}"
+                          Classes.horizontal="{Binding IsVerticalOrientation}">
                 <GridSplitter.IsVisible>
                     <MultiBinding Converter="{StaticResource MultiBoolConverter}"
                                   ConverterParameter="Or">

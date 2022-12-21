@@ -18,7 +18,7 @@
         </Style>
         <Style Selector="Border#MainWindowResizeBorder:pointerover">
             <Setter Property="Background"
-                    Value="Yellow" />
+                    Value="{DynamicResource HoverDefaultBorderBrush}" />
         </Style>
         <Style Selector="Border#MainWindowResizeOuterBorder.IsVertical:pointerover">
             <Setter Property="Cursor"

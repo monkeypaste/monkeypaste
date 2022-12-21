@@ -26,8 +26,9 @@ namespace MonkeyPaste.Common {
             set => Channels[3] = value;
         }
 
-        public MpColor(string hexStr) {
-            Channels = MpColorHelpers.GetHexColorBytes(hexStr);
+        public MpColor(string hexOrNamedColorStr) {
+            string hex = MpSystemColors.ConvertFromString(hexOrNamedColorStr, "#FF000000");
+            Channels = MpColorHelpers.GetHexColorBytes(hex);
         }
         public MpColor(byte[] channels) {
             Channels = channels;

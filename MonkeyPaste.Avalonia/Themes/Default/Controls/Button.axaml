@@ -16,14 +16,24 @@
                 Value="DimGray" />
     </Style>
     <Style Selector="Button.hoverOutline">
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Center" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+    </Style>
+    <Style Selector="Button.hoverOutline /template/ ContentPresenter">
         <Setter Property="BorderThickness"
                 Value="1" />
         <Setter Property="BorderBrush"
                 Value="Transparent" />
+        <Setter Property="Background"
+                Value="Transparent" />
         <Setter Property="CornerRadius"
                 Value="5" />
     </Style>
-    <Style Selector="Button.hoverOutline:pointerover">
+    <Style Selector="Button.hoverOutline:pointerover /template/ ContentPresenter">
         <Setter Property="BorderBrush"
                 Value="Black" />
     </Style>

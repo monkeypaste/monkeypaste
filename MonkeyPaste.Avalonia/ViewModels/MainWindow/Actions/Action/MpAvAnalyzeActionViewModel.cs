@@ -33,6 +33,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public override MpMenuItemViewModel SelectedPopupMenuItemViewModel =>
+            SelectedPreset == null ? null : SelectedPreset.ContextMenuItemViewModel;
+
         #endregion
 
         #region State

@@ -33,4 +33,5 @@
     <local:MpAvTagIdToThicknessConverter x:Key="TagIdToThicknessConverter" />
     <local:MpAvActionIdToThicknessConverter x:Key="ActionIdToThicknessConverter" />
     <local:MpAvAnalyticItemGuidToIconSourceConverter x:Key="AnalyticItemGuidToIconSourceConverter" />
+    <local:MpAvStringHexToBitmapTintConverter x:Key="StringHexToBitmapTintConverter" />
 </ResourceDictionary>

@@ -145,6 +145,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\ComboBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ComboBoxItem.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\DefaultControls.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\GridSplitter.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ListBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ListBoxItem.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionDesigner.axaml" />
@@ -938,6 +939,7 @@
       
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Controls\ComboBox.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\GridSplitter.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ComboBoxItem.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvActionDesigner.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvActionProperty.axaml" />
@@ -1086,6 +1088,9 @@
     </Compile>
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\MpAvPluginParameterListBoxView.axaml.cs">
       <DependentUpon>MpAvPluginParameterListBoxView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\Buttons\MpAvPopupMenuSelector.axaml.cs">
+      <DependentUpon>MpAvPopupMenuSelector.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\Buttons\MpAvOptionsButton.axaml.cs">
       <DependentUpon>MpAvOptionsButton.axaml</DependentUpon>

@@ -23,6 +23,8 @@
                             Height="{Binding Height}"
                             local:MpAvMoveExtension.IsEnabled="True"
                             local:MpAvMoveExtension.IsMoving="{Binding IsMoving, Mode=TwoWay}"
+                            local:MpAvMoveExtension.BeginMoveCommand="{Binding Parent.SelectActionCommand}"
+                            local:MpAvMoveExtension.BeginMoveCommandParameter="{Binding .}"
                             ClipToBounds="False"
                             Background="Transparent"
                             Content="{Binding}">

@@ -46,7 +46,7 @@
             </Style>
             <Style Selector="ToggleButton:pointerover /template/ ContentPresenter">
                 <Setter Property="BorderBrush"
-                        Value="Yellow" />
+                        Value="{DynamicResource HoverDefaultBorderBrush}" />
             </Style>
             <Style Selector="ToggleButton:checked /template/ ContentPresenter">
                 <Setter Property="Background"
@@ -70,6 +70,7 @@
             </Style>
         </Grid.Styles>
         <ToggleButton x:Name="TagTreeToggleButton"
+                      Classes="svgOutlineButton"
                       Grid.Row="0"
                       local:MpAvIsHoveringExtension.IsEnabled="True"
                       local:MpAvIsHoveringExtension.HoverCursor="Hand"
@@ -81,6 +82,7 @@
             <PathIcon Data="{StaticResource BooksSvg}" />
         </ToggleButton>
         <ToggleButton x:Name="ClipboardHandlerToggleButton"
+                      Classes="svgOutlineButton"
                       Grid.Row="1"
                       local:MpAvIsHoveringExtension.IsEnabled="True"
                       local:MpAvIsHoveringExtension.HoverCursor="Hand"
@@ -92,6 +94,7 @@
             <PathIcon Data="{StaticResource ClipboardSvg}" />
         </ToggleButton>
         <ToggleButton x:Name="AnalyzerToggleButton"
+                      Classes="svgOutlineButton"
                       Grid.Row="2"
                       local:MpAvIsHoveringExtension.IsEnabled="True"
                       local:MpAvIsHoveringExtension.HoverCursor="Hand"
@@ -103,6 +106,7 @@
             <PathIcon Data="{StaticResource BrainOutlineSvg}" />
         </ToggleButton>
         <ToggleButton x:Name="ActionsToggleButton"
+                      Classes="svgOutlineButton"
                       Grid.Row="3"
                       local:MpAvIsHoveringExtension.IsEnabled="True"
                       local:MpAvIsHoveringExtension.HoverCursor="Hand"
@@ -115,6 +119,7 @@
             <PathIcon Data="{StaticResource BoltSvg}" />
         </ToggleButton>
         <ToggleButton x:Name="AppModeToggleButton"
+                      Classes="svgOutlineButton"
                       Grid.Row="4"
                       local:MpAvIsHoveringExtension.IsEnabled="True"
                       local:MpAvIsHoveringExtension.HoverCursor="Hand"

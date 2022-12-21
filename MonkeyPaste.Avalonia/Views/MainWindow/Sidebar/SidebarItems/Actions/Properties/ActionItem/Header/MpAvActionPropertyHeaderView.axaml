@@ -11,16 +11,59 @@
                        x:CompileBindings="True"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
-    <Grid ColumnDefinitions="Auto,Auto,*,Auto">
+    <Grid ColumnDefinitions="Auto,*,Auto">
+        <Grid.Styles>
+            <Style Selector="ToggleButton#ToggleEnableButton:not(.invalid) /template/ ContentPresenter">
+                <Setter Property="Background"
+                        Value="Red" />
+                <Setter Property="BorderBrush"
+                        Value="White" />
+            </Style>
+            <Style Selector="ToggleButton#ToggleEnableButton.enabled:not(.invalid) /template/ ContentPresenter">
+                <Setter Property="Background"
+                        Value="Green" />
+            </Style>
+            <Style Selector="ToggleButton#ToggleEnableButton:not(.invalid):pointerover /template/ ContentPresenter"
+                   x:DataType="local:MpAvActionViewModelBase">
+                <Setter Property="BorderBrush"
+                        Value="{DynamicResource HoverDefaultBorderBrush}" />
+            </Style>
+            <Style Selector="ToggleButton#ToggleEnableButton.invalid /template/ ContentPresenter">
+                <Setter Property="Background"
+                        Value="Transparent" />
+                <Setter Property="BorderBrush"
+                        Value="Transparent" />
+            </Style>
 
+            <Style Selector="ToggleButton#ToggleEnableButton:not(.invalid) Image"
+                   x:DataType="local:MpAvActionViewModelBase">
+                <Setter Property="Source"
+                        Value="{Binding IconResourceKeyStr, ConverterParameter=white, Converter={StaticResource StringHexToBitmapTintConverter}}" />
+            </Style>
+            <Style Selector="ToggleButton#ToggleEnableButton.invalid Image"
+                   x:DataType="local:MpAvActionViewModelBase">
+                <Setter Property="Source"
+                        Value="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, ConverterParameter={StaticResource WarningImage}}" />
+            </Style>
+        </Grid.Styles>
+        <Grid.RenderTransform>
+            <!--<TranslateTransform X="-3" />-->
+        </Grid.RenderTransform>
         <!--  ENABLE/DISABLE BUTTON  -->
 
         <ToggleButton x:Name="ToggleEnableButton"
+                      Classes.invalid="{Binding !IsValid}"
+                      Classes.enabled="{Binding IsEnabledDb}"
                       Grid.Column="0"
+                      BorderThickness="1.5"
                       HorizontalAlignment="Left"
-                      HorizontalContentAlignment="Left"
-                      BorderThickness="0"
-                      Background="Transparent"
+                      HorizontalContentAlignment="Stretch"
+                      VerticalAlignment="Center"
+                      VerticalContentAlignment="Stretch"
+                      Padding="3"
+                      Width="40"
+                      Height="40"
+                      CornerRadius="12.5"
                       IsThreeState="True"
                       Command="{Binding ToggleIsEnabledCommand}"
                       CommandParameter="{Binding !LastIsEnabledState}">
@@ -28,33 +71,14 @@
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="{Binding EnableToggleButtonTooltip}" />
             </ToolTip.Tip>
-            <Grid>
-                <Ellipse Width="20"
-                         Height="20"
-                         IsVisible="{Binding IsValid}"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center"
-                         Stroke="White"
-                         Fill="{Binding EnableToggleButtonShapeHexColor, Converter={StaticResource StringHexToBrushConverter}}" />
-                <Image Width="20"
-                       Height="20"
-                       IsVisible="{Binding !IsValid}"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, ConverterParameter={StaticResource WarningImage}}" />
-            </Grid>
+            <Image HorizontalAlignment="Stretch"
+                   VerticalAlignment="Stretch" />
         </ToggleButton>
 
-        <!--  ACTION ICON  -->
-
-        <Image Grid.Column="1"
-               Margin="5,0,0,0"
-               Source="{Binding IconResourceKeyStr, Converter={StaticResource IconSourceObjToBitmapConverter}}"
-               Width="20" />
 
         <!--  ACTION LABEL  -->
 
-        <TextBox Grid.Column="2"
+        <TextBox Grid.Column="1"
                  Foreground="{Binding LabelForegroundBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                  Background="{Binding LabelBackgroundBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                  BorderThickness="1"
@@ -75,7 +99,7 @@
 
         <!--  ACTION HINT  -->
 
-        <local:MpAvToolTipInfoHintView Grid.Column="3"
+        <local:MpAvToolTipInfoHintView Grid.Column="2"
                                        HorizontalAlignment="Right"
                                        VerticalAlignment="Center"
                                        ToolTipText="{Binding Tooltip}" />

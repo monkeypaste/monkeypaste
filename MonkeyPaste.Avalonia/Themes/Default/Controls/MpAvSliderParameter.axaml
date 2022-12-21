@@ -9,7 +9,7 @@
     </Style>
     <Style Selector="local|MpAvSliderParameterView Border#SliderBorder:pointerover">
         <Setter Property="BorderBrush"
-                Value="Yellow" />
+                Value="{DynamicResource HoverDefaultBorderBrush}" />
     </Style>-->
     <Style Selector="local|MpAvSliderParameterView TextBox">
         <Setter Property="Background"

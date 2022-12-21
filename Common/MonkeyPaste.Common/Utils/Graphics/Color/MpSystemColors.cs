@@ -5,7 +5,7 @@ using System.Linq;
 namespace MonkeyPaste.Common {
     public static class MpSystemColors {
 
-        public static string ConvertFromString(string namedColorOrHexStr, string fallBack = "#00000000") {
+        public static string ConvertFromString(string namedColorOrHexStr, string fallBack = "#00000000", bool includeAlpha = true) {
             if(string.IsNullOrWhiteSpace(namedColorOrHexStr)) {
                 return fallBack;
             }

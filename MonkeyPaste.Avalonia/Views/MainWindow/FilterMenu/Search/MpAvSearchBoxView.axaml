@@ -85,6 +85,7 @@
                         Height="25"
                         Margin="3,0,0,0"
                         Padding="0"
+                        Classes="svgOutlineButton"
                         DataContext="{Binding SearchFilterCollectionViewModel}"
                         local:MpAvMenuExtension.IsEnabled="True"
                         local:MpAvMenuExtension.HideOnClick="False"
@@ -201,7 +202,6 @@
                         Classes="TextBoxButton"
                         Grid.Column="4"
                         Margin="0,5"
-                        
                         Width="{Binding $self.Bounds.Height}"
                         VerticalAlignment="Stretch"
                         IsVisible="{Binding IsMultipleMatches}"
@@ -222,6 +222,7 @@
                 BorderThickness="0"
                 Width="20"
                 Height="20"
+                Classes="svgOutlineButton"
                 Command="{Binding AddSearchCriteriaItemCommand}"
                 IsVisible="{Binding HasCriteriaItems}">
             <PathIcon Data="{StaticResource PlusSvg}" />
@@ -229,6 +230,7 @@
         <Button x:Name="ClearSearchCriteriaButton"
                 Margin="5"
                 BorderThickness="0"
+                Classes="svgOutlineButton"
                 Command="{Binding ClearSearchCriteriaItemsCommand}"
                 IsVisible="{Binding HasCriteriaItems}">
             <PathIcon Data="{StaticResource MinusBoxSvg}" />

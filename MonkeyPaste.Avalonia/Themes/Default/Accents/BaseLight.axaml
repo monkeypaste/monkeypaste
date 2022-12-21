@@ -19,6 +19,9 @@
             Gainsboro
         </Color>
 
+        <Color x:Key="DefaultGridSplitterColor">
+            Magenta
+        </Color>
 
         <Color x:Key="DisabledTextFgColor">
             LightGray
@@ -30,7 +33,7 @@
         <Color x:Key="SelectedBorderColor">
             Red
         </Color>
-        <Color x:Key="HoverUnselectedBorderColor">
+        <Color x:Key="HoverDefaultBorderColor">
             Yellow
         </Color>
         <Color x:Key="HoverSelectedBorderColor">
@@ -66,6 +69,7 @@
         <!--  BRUSHES  -->
 
         <!--  GENERAL  -->
+
         <!--  ItemSource Item Bg  -->
         <SolidColorBrush x:Key="SelectableItemDefaultBgBrush"
                          Color="{DynamicResource SelectableItemDefaultBgColor}"
@@ -76,10 +80,30 @@
         <SolidColorBrush x:Key="SelectableItemSelectedBgBrush"
                          Color="{DynamicResource SelectableItemSelectedBgColor}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
         <!--  Disabled  -->
         <SolidColorBrush x:Key="DisabledTextFgBrush"
                          Color="{DynamicResource DisabledTextFgColor}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
+        <!--  Hover  -->
+
+        <SolidColorBrush x:Key="HoverDefaultBorderBrush"
+                         Color="{DynamicResource HoverDefaultBorderColor}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
+        <!--  Grid Splitter  -->
+
+        <SolidColorBrush x:Key="DefaultGridSplitterBrush"
+                         Color="{DynamicResource DefaultGridSplitterColor}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+      
+        <SolidColorBrush x:Key="HoverDefaultGridSplitterBgBrush"
+                         Color="{DynamicResource HoverDefaultBorderColor}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
+
+
         <!--  TITLE MENU  -->
         <SolidColorBrush x:Key="TitleMenuActiveBgBrush"
                          Color="{DynamicResource MainWindowTitleMenuActiveBgColor}"
@@ -180,7 +204,7 @@
                          Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <SolidColorBrush x:Key="IsHoveringBorderBrush_unselected"
-                         Color="{DynamicResource HoverUnselectedBorderColor}"
+                         Color="{DynamicResource HoverDefaultBorderColor}"
                          Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <SolidColorBrush x:Key="IsHoveringBorderBrush_selected"

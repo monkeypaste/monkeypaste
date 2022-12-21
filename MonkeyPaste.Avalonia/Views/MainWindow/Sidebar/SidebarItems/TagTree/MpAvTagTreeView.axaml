@@ -48,6 +48,7 @@
             </TreeView.ItemTemplate>
         </TreeView>
         <Button x:Name="AddTagButton"
+                Classes="svgOutlineButton"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 IsVisible="{Binding SelectedItem.CanAddChild}"
@@ -64,7 +65,7 @@
                 </Style>
                 <Style Selector="Button:pointerover PathIcon">
                     <Setter Property="Foreground"
-                            Value="Yellow" />
+                            Value="{DynamicResource HoverDefaultBorderBrush}" />
                     <Setter Property="Data"
                             Value="{StaticResource PlusBoxSvg}" />
                 </Style>

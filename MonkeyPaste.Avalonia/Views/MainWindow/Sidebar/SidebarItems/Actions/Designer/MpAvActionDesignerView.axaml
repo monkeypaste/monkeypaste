@@ -16,8 +16,8 @@
             <Grid.Styles>
                 <Style Selector="ListBox.actionDesigner ListBoxItem"
                        x:DataType="local:MpAvActionViewModelBase">
-                    <!--<Setter Property="IsSelected"
-                            Value="{Binding IsSelected, Mode=TwoWay}" />-->
+                    <Setter Property="IsSelected"
+                            Value="{Binding IsSelected, Mode=TwoWay}" />
                     <Setter Property="Canvas.Left"
                             Value="{Binding X, Mode=TwoWay}" />
                     <Setter Property="Canvas.Top"
@@ -39,12 +39,11 @@
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Stretch"
                          Classes="actionDesigner"
-                         SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                          Items="{Binding SelfAndAllDescendants}">
                     <ListBox.RenderTransform>
                         <TransformGroup>
-                            <ScaleTransform ScaleX="{Binding Scale, Mode=TwoWay}"
-                                            ScaleY="{Binding Scale, Mode=TwoWay}" />
+                            <ScaleTransform ScaleX="{Binding Scale, Mode=TwoWay, FallbackValue=1, TargetNullValue=1}"
+                                            ScaleY="{Binding Scale, Mode=TwoWay, FallbackValue=1, TargetNullValue=1}" />
                             <TranslateTransform />
                         </TransformGroup>
                     </ListBox.RenderTransform>

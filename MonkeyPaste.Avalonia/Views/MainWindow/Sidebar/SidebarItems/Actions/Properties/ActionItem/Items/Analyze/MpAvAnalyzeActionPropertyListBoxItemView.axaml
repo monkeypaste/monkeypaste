@@ -19,17 +19,24 @@
                    Grid.Column="0"
                    Classes="actionProperty"
                    Text="Analyzer" />
+        <local:MpAvPopupMenuSelector Grid.Row="0"
+                                     Grid.Column="1"
+                                     MinWidth="150"
+                                     IsBusy="{Binding IsAnyBusy}"
+                                     IsPopupOpen="{Binding IsPopupMenuOpen, Mode=TwoWay}"
+                                     EmptyIconResourceObj="{Binding IconResourceKeyStr}"
+                                     EmptyText="Select..."
+                                     SelectedMenuItem="{Binding SelectedPopupMenuItemViewModel}" />
 
-        <ComboBox x:Name="AnalyzerPresetComboBox"
+      <!--<ComboBox x:Name="AnalyzerPresetComboBox"
                   x:CompileBindings="False"
                   Grid.Row="0"
-                  Grid.Column="1" 
+                  Grid.Column="1"
                   MinWidth="150"
                   Classes="actionProperty"
                   SelectedItem="{Binding SelectedPreset, Mode=TwoWay}"
                   Items="{Binding AllPresets, Source={x:Static local:MpAvAnalyticItemCollectionViewModel.Instance}, Converter={StaticResource CollectionToGroupedCollectionConverter}, ConverterParameter=PluginGuid}">
 
-            <!--
             , Converter={StaticResource CollectionToGroupedCollectionConverter}, ConverterParameter=PluginGuid
             <ComboBox.GroupStyle>
                 <GroupStyle>
@@ -55,7 +62,7 @@
                         </DataTemplate>
                     </GroupStyle.HeaderTemplate>
                 </GroupStyle>
-            </ComboBox.GroupStyle>-->
+            </ComboBox.GroupStyle>
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Margin="10,3,0,0"
@@ -72,7 +79,7 @@
                     </StackPanel>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
-        </ComboBox>
+        </ComboBox>-->
 
         <TextBlock Grid.Row="1"
                    Grid.Column="0"

@@ -44,6 +44,7 @@
             <!--  Settings Toggle Button  -->
 
             <ToggleButton x:Name="SettingsToggleButton"
+                Classes="svgOutlineButton"
                           IsChecked="{Binding IsVisible, Source={x:Static local:MpAvSettingsWindowViewModel.Instance}}"
                           ToolTip.ShowDelay="500">
                 <ToolTip.Tip>
@@ -55,6 +56,7 @@
             <!--  Lock Toggle Button  -->
 
             <ToggleButton x:Name="LockToggleButton"
+                Classes="svgOutlineButton"
                           IsChecked="{Binding IsMainWindowLocked, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=TwoWay}"
                           ToolTip.ShowDelay="500">
                 <ToolTip.Tip>
@@ -78,9 +80,9 @@
                 </Style>
                 <Style Selector="Border:pointerover">
                     <Setter Property="BorderBrush"
-                            Value="Yellow" />
+                            Value="{DynamicResource HoverDefaultBorderBrush}" />
                     <Setter Property="Background"
-                            Value="Yellow" />
+                            Value="{DynamicResource HoverDefaultBorderBrush}" />
                     <Setter Property="Cursor"
                             Value="SizeAll" />
                 </Style>
@@ -184,7 +186,7 @@
                                                     local:MpAvIsHoveringExtension.IsEnabled="True"
                                                     local:MpAvIsHoveringExtension.HoverCursor="Hand"
                                                     CornerRadius="3"
-                                                    Background="Yellow" />
+                                                    Background="{DynamicResource HoverDefaultBorderBrush}" />
                                         </Grid>
                                     </ControlTemplate>
                                 </Setter>
@@ -209,6 +211,7 @@
             </Grid>
             <!--  Layout Toggle Button  -->
             <ToggleButton x:Name="GridLayoutToggleButton"
+                          Classes="svgOutlineButton"
                           IsChecked="{Binding IsGridLayout, Mode=TwoWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                           ToolTip.ShowDelay="0">
                 <Grid>
@@ -249,6 +252,7 @@
             <Button x:Name="MainWindowCycleOrientationCcwButton"
                     Command="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     CommandParameter="CCW"
+                Classes="svgOutlineButton"
                     local:MpAvPointerPressCommandExtension.IsEnabled="True"
                     local:MpAvPointerPressCommandExtension.RightPressCommand="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     local:MpAvPointerPressCommandExtension.RightPressCommandParameter="CW"

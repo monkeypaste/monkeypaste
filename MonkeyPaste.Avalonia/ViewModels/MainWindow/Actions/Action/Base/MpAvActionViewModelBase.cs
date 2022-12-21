@@ -20,6 +20,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvTreeSelectorViewModelBase<MpAvTriggerCollectionViewModel, MpAvActionViewModelBase>,
         MpIHoverableViewModel,
         MpISelectableViewModel,
+        MpIPopupMenuViewModel,
         MpIUserIconViewModel,
         MpITooltipInfoViewModel,
         MpIBoxViewModel,
@@ -32,6 +33,47 @@ namespace MonkeyPaste.Avalonia {
         private MpPoint _lastLocation = null;
 
 
+        #endregion
+
+        #region Statics
+
+        public string GetDefaultActionIconResourceKey(MpActionType at, object subType) {
+            switch (at) {
+                case MpActionType.Trigger:
+                    if(subType is MpTriggerType tt) {
+                        switch (tt) {
+                            case MpTriggerType.ContentAdded:
+                                return "ClipboardImage";
+                            case MpTriggerType.ContentTagged:
+                                return "PinToCollectionImage";
+                            case MpTriggerType.FileSystemChange:
+                                return "FolderEventImage";
+                            case MpTriggerType.Shortcut:
+                                return "HotkeyImage";
+                            case MpTriggerType.ParentOutput:
+                                return "ChainImage";
+                        }
+                    }
+                    return null;
+                case MpActionType.Analyze:
+                    return "BrainImage";                    
+                case MpActionType.Classify:
+                    return "PinToCollectionImage";                    
+                case MpActionType.Compare:
+                    return "ScalesImage";                    
+                case MpActionType.Macro:
+                    return "HotkeyImage";                    
+                case MpActionType.Timer:
+                    return "AlarmClockImage";                    
+                case MpActionType.FileWriter:
+                    return "FolderEventImage";                    
+                case MpActionType.Annotater:
+                    return "HighlighterImage";
+            }
+            // whats params?
+            Debugger.Break();
+            return null;
+        }
         #endregion
 
         #region Properties
@@ -53,7 +95,8 @@ namespace MonkeyPaste.Avalonia {
                         MpConsole.WriteLine($"Re-parenting detected for action: {Action}");
                     }
                     // find parent by model
-                    _parentTreeItem = Parent.Items.FirstOrDefault(x => x.SelfAndAllDescendants.Cast<MpAvActionViewModelBase>().Any(x => x.ActionId == ParentActionId));
+                    //_parentTreeItem = Parent.Items.FirstOrDefault(x => x.SelfAndAllDescendants.Cast<MpAvActionViewModelBase>().Any(x => x.ActionId == ParentActionId));
+                    _parentTreeItem = Parent.AllActions.FirstOrDefault(x => x.ActionId == ParentActionId);
                 }
                 return _parentTreeItem;
             }
@@ -74,6 +117,8 @@ namespace MonkeyPaste.Avalonia {
         //        return rtavm as MpAvTriggerActionViewModelBase;
         //    }
         //}
+
+        public virtual MpMenuItemViewModel SelectedPopupMenuItemViewModel { get; }
         #endregion
 
         #region MpIMovableViewModel Implementation
@@ -167,36 +212,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIMenuItemViewModel Implementation
 
-        public virtual MpMenuItemViewModel ContextMenuItemViewModel {
+        public virtual MpMenuItemViewModel PopupMenuViewModel {
             get {
                 var amivml = new List<MpMenuItemViewModel>();
-                var triggerLabels = typeof(MpActionType).EnumToLabels();
-                for (int i = 0; i < triggerLabels.Length; i++) {
-                    string resourceKey = string.Empty;
+                var actionLabels = typeof(MpActionType).EnumToLabels();
+                for (int i = 0; i < actionLabels.Length; i++) {
                     MpActionType at = (MpActionType)i;
-                    switch (at) {
-                        case MpActionType.Analyze:
-                            resourceKey = "BrainImage";
-                            break;
-                        case MpActionType.Classify:
-                            resourceKey = "PinToCollectionImage";
-                            break;
-                        case MpActionType.Compare:
-                            resourceKey = "ScalesImage";
-                            break;
-                        case MpActionType.Macro:
-                            resourceKey = "HotkeyImage";
-                            break;
-                        case MpActionType.Timer:
-                            resourceKey = "AlarmClockImage";
-                            break;
-                        case MpActionType.FileWriter:
-                            resourceKey = "FolderEventImage";
-                            break;
-                        case MpActionType.Annotater:
-                            resourceKey = "HighlighterImage";
-                            break;
-                    }
+                    string resourceKey = GetDefaultActionIconResourceKey(at, null);
                     bool isVisible = true;
                     if (at == MpActionType.None || at == MpActionType.Trigger) {
                         isVisible = false;
@@ -207,8 +229,8 @@ namespace MonkeyPaste.Avalonia {
                         isVisible = false;
                     }
                     amivml.Add(new MpMenuItemViewModel() {
-                        IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource(resourceKey) as string,
-                        Header = triggerLabels[i],
+                        IconResourceKey = resourceKey,
+                        Header = actionLabels[i],
                         Command = IsPlaceholder ? ParentTreeItem.AddChildActionCommand : AddChildActionCommand,
                         CommandParameter = (MpActionType)i,
                         IsVisible = isVisible
@@ -219,6 +241,8 @@ namespace MonkeyPaste.Avalonia {
                 };
             }
         }
+
+        public bool IsPopupMenuOpen { get; set; }
 
         #endregion
 
@@ -267,18 +291,27 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string IconResourceKeyStr {
+        public object IconResourceKeyStr {
             get {
                 string resourceKey;
                 if (IsValid) {
-                    switch (ActionType) {
-                        case MpActionType.Trigger:
-                            resourceKey = new MpEnumToImageResourceKeyConverter().Convert((MpTriggerType)ActionObjId, null, null, null) as string;
-                            break;
-                        default:
-                            resourceKey = new MpEnumToImageResourceKeyConverter().Convert(ActionType, null, null, null) as string;
-                            break;
+                    if(IconId > 0) {
+                        if(ActionType != MpActionType.Trigger) {
+                            // triggers should be only type to allow custom icon
+                            Debugger.Break();
+                        }
+                        return IconId;
                     }
+                    //switch (ActionType) {
+                    //    case MpActionType.Trigger:
+                    //        resourceKey = new MpEnumToImageResourceKeyConverter().Convert((MpTriggerType)ActionObjId, null, null, null) as string;
+                    //        break;
+                    //    default:
+                    //        resourceKey = new MpEnumToImageResourceKeyConverter().Convert(ActionType, null, null, null) as string;
+                    //        break;
+                    //}
+
+                    resourceKey = GetDefaultActionIconResourceKey(ActionType, ActionType == MpActionType.Trigger ? (MpTriggerType)ActionObjId : null);
                 } else {
                     resourceKey = "WarningImage";
                 }
@@ -1030,6 +1063,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(EnableToggleButtonShapeHexColor));
                     break;
                 case nameof(IsBusy):
+                    OnPropertyChanged(nameof(IsAnyBusy));
                     if(ParentTreeItem != null) {
                         ParentTreeItem.OnPropertyChanged(nameof(ParentTreeItem.IsAnyBusy));
                     }
@@ -1081,7 +1115,7 @@ namespace MonkeyPaste.Avalonia {
              (args) => {
                  var fe = args as Control;
                  IsSelected = true;
-                 MpAvMenuExtension.ShowMenu(fe, ContextMenuItemViewModel);
+                 MpAvMenuExtension.ShowMenu(fe, PopupMenuViewModel);
              },(args) => args is Control);
 
         public ICommand AddChildActionCommand => new MpCommand<object>(
@@ -1144,15 +1178,9 @@ namespace MonkeyPaste.Avalonia {
                 Items.Remove(to_delete_avm);
                 OnPropertyChanged(nameof(Items));
                 to_delete_avm.ParentTreeItem.Items.Remove(to_delete_avm);
+                to_delete_avm.ParentActionId = 0;
                 Parent.OnPropertyChanged(nameof(Parent.AllSelectedItemActions));
-                //Parent.AllSelectedItemActions.Remove(avm);
                 await RootTriggerActionViewModel.InitializeAsync(RootTriggerActionViewModel.Action);
-
-                //to_delete_avm.ParentTreeItem = null;
-
-                //Parent.SelectedItem = RootTriggerActionViewModel;
-                //IsSelected = true;
-                //Parent.NotifyViewportChanged();
                 Parent.SelectActionCommand.Execute(this);
                 IsBusy = false;
             });

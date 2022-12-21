@@ -12,35 +12,15 @@
                        x:DataType="local:MpAvActionViewModelBase"
                        mc:Ignorable="d">
     <Expander x:Name="ActionExpander"
+              CornerRadius="10"
+              BorderBrush="Khaki"
               Padding="5,0"
+              HorizontalAlignment="Stretch"
               Background="{Binding ActionBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
               IsExpanded="True">
         <Expander.Header>
-            <!--<Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.8*" />
-                    <ColumnDefinition Width="0.2*" />
-                </Grid.ColumnDefinitions>
-                <local:MpAvActionPropertyHeaderView Grid.Column="0"
-                                                    HorizontalAlignment="Left"
-                                                    DataContext="{Binding}" />
-            -->
-            <!--<local:MpTooltipInfoView HorizontalAlignment="Right"
-                                         Grid.Column="1"
-                                         VerticalAlignment="Center"
-                                         DockPanel.Dock="Right"
-                                         DataContext="{Binding}" />-->
-            <!--
-
-                <local:MpAvToolTipInfoHintView HorizontalAlignment="Right"
-                                               Grid.Column="1"
-                                               VerticalAlignment="Center"
-                                               DockPanel.Dock="Right"
-                                               ToolTipText="{Binding Tooltip}" />
-            </Grid>-->
-
             <local:MpAvActionPropertyHeaderView Grid.Column="0"
-                                                HorizontalAlignment="Left"
+                                                HorizontalAlignment="Stretch"
                                                 DataContext="{Binding}" />
         </Expander.Header>
         <Grid>

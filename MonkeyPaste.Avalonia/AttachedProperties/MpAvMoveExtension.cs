@@ -37,7 +37,6 @@ namespace MonkeyPaste.Avalonia {
         public static bool IsAnyMoving { get; private set; }
         #endregion
 
-
         #region Private Variables
         private static MpPoint _lastMousePosition;
 
@@ -45,39 +44,73 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region Properties
 
-        #region Command Property
-        public static ICommand GetCommand(AvaloniaObject obj) {
-            return obj.GetValue(CommandProperty);
+        #region BeginMoveCommand Property
+        public static ICommand GetBeginMoveCommand(AvaloniaObject obj) {
+            return obj.GetValue(BeginMoveCommandProperty);
         }
 
-        public static void SetCommand(AvaloniaObject obj, ICommand value) {
-            obj.SetValue(CommandProperty, value);
+        public static void SetBeginMoveCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(BeginMoveCommandProperty, value);
         }
 
         public static readonly AttachedProperty<ICommand>
-            CommandProperty =
+            BeginMoveCommandProperty =
             AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
-            "Command",
+            "BeginMoveCommand",
             null);
 
         #endregion
 
-        #region CommandParameter Property
-        public static object GetCommandParameter(AvaloniaObject obj) {
-            return obj.GetValue(CommandParameterProperty);
+        #region BeginMoveCommandParameter Property
+        public static object GetBeginMoveCommandParameter(AvaloniaObject obj) {
+            return obj.GetValue(BeginMoveCommandParameterProperty);
         }
 
-        public static void SetCommandParameter(AvaloniaObject obj, object value) {
-            obj.SetValue(CommandParameterProperty, value);
+        public static void SetBeginMoveCommandParameter(AvaloniaObject obj, object value) {
+            obj.SetValue(BeginMoveCommandParameterProperty, value);
         }
 
         public static readonly AttachedProperty<object>
-            CommandParameterProperty =
+            BeginMoveCommandParameterProperty =
             AvaloniaProperty.RegisterAttached<object, Control, object>(
-            "CommandParameter",
+            "BeginMoveCommandParameter",
+            null);
+
+        #endregion
+
+
+        #region FinishMoveCommand Property
+        public static ICommand GetFinishMoveCommand(AvaloniaObject obj) {
+            return obj.GetValue(FinishMoveCommandProperty);
+        }
+
+        public static void SetFinishMoveCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(FinishMoveCommandProperty, value);
+        }
+
+        public static readonly AttachedProperty<ICommand>
+            FinishMoveCommandProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
+            "FinishMoveCommand",
+            null);
+
+        #endregion
+
+        #region FinishMoveCommandParameter Property
+        public static object GetFinishMoveCommandParameter(AvaloniaObject obj) {
+            return obj.GetValue(FinishMoveCommandParameterProperty);
+        }
+
+        public static void SetFinishMoveCommandParameter(AvaloniaObject obj, object value) {
+            obj.SetValue(FinishMoveCommandParameterProperty, value);
+        }
+
+        public static readonly AttachedProperty<object>
+            FinishMoveCommandParameterProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, object>(
+            "FinishMoveCommandParameter",
             null);
 
         #endregion
@@ -193,7 +226,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region Constructors
 
         #endregion
@@ -216,9 +248,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-
         #region Move Event Handlers
-
 
         private static void Control_PointerLeave(object sender, PointerEventArgs e) {
             if(sender is Control control) {
@@ -273,7 +303,9 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 _mouseDownPosition = _lastMousePosition = e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();
-                if (control.DataContext is MpISelectableViewModel svm) {
+                if(GetBeginMoveCommand(control) is ICommand beginMoveCmd) {
+                    GetBeginMoveCommand(control).Execute(GetBeginMoveCommandParameter(control));
+                } else if (control.DataContext is MpISelectableViewModel svm) {
                     svm.IsSelected = true;
                 }
                 //e.Pointer.Capture(control);
@@ -289,7 +321,7 @@ namespace MonkeyPaste.Avalonia {
                 (control.DataContext as MpAvActionViewModelBase).HasModelChanged = true;
             }
             if ((_lastMousePosition - _mouseDownPosition).Length < 5) {
-                GetCommand(control)?.Execute(GetCommandParameter(control));
+                GetFinishMoveCommand(control)?.Execute(GetFinishMoveCommandParameter(control));
             }
         }
 

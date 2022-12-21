@@ -34,7 +34,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
         public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy);
 
         #endregion
@@ -55,36 +54,37 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public async Task InitAsync() {
-            IsBusy = true;
+            await Task.Delay(1);
+            Dispatcher.UIThread.Post(async () => {
+                //IsBusy = true;
 
-           
+                var appl = await MpDataModelProvider.GetItemsAsync<MpApp>();
+                Items.Clear();
+                foreach (var app in appl) {
+                    //if(Items.Any(x=>x.AppId == app.Id)) {
+                    //    // unknown apps in register will already be added so no duppys
+                    //    continue;
+                    //}
+                    var avm = await CreateAppViewModel(app);
 
-            var appl = await MpDataModelProvider.GetItemsAsync<MpApp>();
-            Items.Clear();
-            foreach (var app in appl) {
-                //if(Items.Any(x=>x.AppId == app.Id)) {
-                //    // unknown apps in register will already be added so no duppys
-                //    continue;
-                //}
-                var avm = await CreateAppViewModel(app);
+                    Items.Add(avm);
+                }
 
-                Items.Add(avm);
-            }
-
-            while(Items.Any(x=>x.IsAnyBusy)) {
-                await Task.Delay(100);
-            }
+                while (Items.Any(x => x.IsAnyBusy)) {
+                    await Task.Delay(100);
+                }
 
 
-            await RegisterWithProcessesManager();
+                await RegisterWithProcessesManager();
 
-            OnPropertyChanged(nameof(Items));
+                OnPropertyChanged(nameof(Items));
 
-            if(Items.Count > 0) {
-                Items[0].IsSelected = true;
-            }
+                if (Items.Count > 0) {
+                    Items[0].IsSelected = true;
+                }
 
-            IsBusy = false;
+                //IsBusy = false;
+            });
         }
 
         public async Task<MpAvAppViewModel> CreateAppViewModel(MpApp app) {

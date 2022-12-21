@@ -35,20 +35,11 @@
         <GridSplitter x:Name="ClipTraySplitter"
                       Grid.Column="0"
                       IsTabStop="False"
-                      Background="Magenta">
-            <GridSplitter.Styles>
-                <Style Selector="GridSplitter /template/ Border">
-                    <Setter Property="Background"
-                            Value="Magenta" />
-                </Style>
-                <Style Selector="GridSplitter:pointerover /template/ Border">
-                    <Setter Property="Background"
-                            Value="Yellow" />
-                </Style>
-            </GridSplitter.Styles>
-        </GridSplitter>
+                      Classes.pinAndQueryTraySplitter="True"
+                      Classes.vertical="{Binding !IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+                      Classes.horizontal="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />
         <local:MpAvClipTrayView x:Name="ClipTrayView"
                                 Grid.Column="1"
-                                DataContext="{Binding}"/>
+                                DataContext="{Binding}" />
     </Grid>
 </local:MpAvUserControl>

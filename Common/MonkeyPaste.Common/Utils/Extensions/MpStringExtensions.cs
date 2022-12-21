@@ -89,6 +89,18 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
+        public static bool IsStringImageResourcePathOrKey(this string str) {
+            if(string.IsNullOrWhiteSpace(str)) {
+                return false;
+            }
+            if(str.ToLower().EndsWith("image")) {
+                return true;
+            }
+            if(str.ToLower().EndsWith("png")) {
+                return true;
+            }
+            return false;
+        }
         public static string AppendData(this string str, string data, string dataFormat, bool insertNewLine) {
             if (str.IsStringRichHtml()) {
                 var htmlDoc = new HtmlDocument();

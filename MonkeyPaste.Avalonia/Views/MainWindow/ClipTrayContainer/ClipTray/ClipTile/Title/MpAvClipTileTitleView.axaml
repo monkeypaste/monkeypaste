@@ -330,6 +330,7 @@
                      VerticalAlignment="Stretch"
                      Margin="0,3,13,0" />-->
             <Button x:Name="ClipTileAppIconImageButton"
+                    Classes="svgOutlineButton"
                     local:MpAvPointerPressCommandExtension.IsEnabled="True"
                     local:MpAvPointerPressCommandExtension.RightPressCommand="{Binding SourceCollectionViewModel.FilterByPrimarySourceCommand}"
                     local:MpAvIsHoveringExtension.IsEnabled="True"
