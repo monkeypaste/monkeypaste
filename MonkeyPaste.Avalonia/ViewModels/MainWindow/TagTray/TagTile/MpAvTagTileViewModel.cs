@@ -80,20 +80,15 @@ namespace MonkeyPaste.Avalonia {
         //content menu item
         public MpMenuItemViewModel ContentMenuItemViewModel {
             get {
-                //int totalCount = 1;// MpAvClipTrayViewModel.Instance.SelectedModels.Count;
-                //int linkCount = IsCopyItemLinked(MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem.Id) ? 1 : 0;//MpAvClipTrayViewModel.Instance.SelectedModels.Where(x => IsLinked(x)).Count();
                 return new MpMenuItemViewModel() {
                     Header = TagName,
                     Command = ToggleLinkToSelectedClipTileCommand,
-                    //IsChecked = totalCount == linkCount && totalCount > 0,
-                    //IsPartiallySelected = linkCount != totalCount && totalCount > 0,
                     IsChecked = IsLinkedToSelectedClipTile,
                     IconHexStr = TagHexColor,
-                    //ShortcutObjId = TagId,
-                    //ShortcutType = MpShortcutType.SelectTag,
                     ShortcutArgs = new object[] { MpShortcutType.SelectTag, TagId },
                     SubItems = Items.Select(x => x.ContentMenuItemViewModel).ToList()
                 };
+                //return GetTagMenu(ToggleLinkToSelectedClipTileCommand, IsLinkedToSelectedClipTile, new object[] { MpShortcutType.SelectTag, TagId });
             }
         }
 
@@ -537,6 +532,16 @@ namespace MonkeyPaste.Avalonia {
 
         //    return isLinked;
         //}
+        public MpMenuItemViewModel GetTagMenu(ICommand cmd, IEnumerable<int> selectedTagIds, bool recursive) {
+            return new MpMenuItemViewModel() {
+                Header = TagName,
+                Command = cmd,
+                CommandParameter = TagId,
+                IsChecked = selectedTagIds.Contains(TagId),
+                IconHexStr = TagHexColor,
+                SubItems = recursive ? Items.Select(x => x.GetTagMenu(cmd,selectedTagIds,recursive)).ToList() : null
+            };
+        }
 
         public async Task<bool> IsCopyItemLinkedAsync(int ciid) {
             if (ciid == 0 || Tag == null ||  Tag.Id == 0) {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public static class MpTempFileManager {
@@ -50,9 +51,9 @@ namespace MonkeyPaste {
             }
         }
 
-        public static void Shutdown() {
+        public static async Task ShutdownAsync() {
             string msg = "Warning! Do you want to delete these? " + Environment.NewLine + string.Join(Environment.NewLine, _tempFileList);
-            var result = MpPlatformWrapper.Services.NativeMessageBox.ShowOkCancelMessageBox("Temp File Manager", msg);
+            var result = await MpPlatformWrapper.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync("Temp File Manager", msg);
             if(!result) {
                 return;
             }

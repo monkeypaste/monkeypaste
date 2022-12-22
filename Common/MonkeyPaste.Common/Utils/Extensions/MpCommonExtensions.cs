@@ -302,6 +302,16 @@ namespace MonkeyPaste.Common {
             return names;
         }
 
+        public static IEnumerable<TEnum> EnumerateEnum<TEnum>(this Type enumType) { 
+            //where TEnum: Enum {
+            if (enumType == null || !enumType.IsEnum) {
+                yield break;
+            }
+            foreach(TEnum val in Enum.GetValues(enumType)) {
+                yield return val;
+            }
+        }
+
         public static string EnumToName<TValue>(this TValue value, string noneText = "None")
             where TValue : Enum {
             string valStr = value.ToString();

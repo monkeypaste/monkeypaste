@@ -147,10 +147,9 @@
             <Border x:Name="ActionDesignerInnerContainerBorder"
                     ClipToBounds="True"
                     DataContext="{Binding SelectedItem}"
-                    HorizontalAlignment="Stretch" 
+                    HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
                 <local:MpAvActionDesignerView DataContext="{Binding}"
-                                              MinWidth="{Binding DefaultSidebarWidth}"
                                               HorizontalAlignment="Stretch"
                                               VerticalAlignment="Stretch" />
             </Border>

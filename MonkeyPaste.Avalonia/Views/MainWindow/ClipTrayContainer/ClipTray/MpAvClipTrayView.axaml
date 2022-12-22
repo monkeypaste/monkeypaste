@@ -70,8 +70,8 @@
                             <local:MpAvClipTileView DataContext="{Binding .}"
                                                     local:MpAvIsHoveringExtension.IsEnabled="True"
                                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                                                    local:MpAvListBoxItemBoundsObserverExtension.IsEnabled="True"
-                                                    local:MpAvListBoxItemBoundsObserverExtension.ObservedBounds="{Binding ObservedBounds, Mode=TwoWay}"
+                                                    local:MpAvBoundsObserverExtension.IsEnabled="True"
+                                                    local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedBounds, Mode=TwoWay}"
                                                     IsVisible="{Binding !IsPlaceholder}" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>

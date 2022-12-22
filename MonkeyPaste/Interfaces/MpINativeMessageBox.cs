@@ -1,7 +1,9 @@
-﻿namespace MonkeyPaste {
-    public interface MpINativeMessageBox {
-        bool ShowOkCancelMessageBox(string title, string message);
+﻿using System.Threading.Tasks;
 
-        bool? ShowYesNoCancelMessageBox(string title, string message);
+namespace MonkeyPaste {
+    public interface MpINativeMessageBox {
+        Task<bool> ShowOkCancelMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null);
+
+        Task<bool?> ShowYesNoCancelMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null);
     }
 }

@@ -16,7 +16,7 @@ namespace MonkeyPaste {
     public static class MpFileIo {
         public static void OpenFileBrowser(string path, string browserFileName = null) {
             if(!path.IsFileOrDirectory()) {
-                MpPlatformWrapper.Services.NativeMessageBox.ShowOkCancelMessageBox($"Error", $"{path} not found");
+                MpPlatformWrapper.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync($"Error", $"{path} not found");
                 path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
             }
 
@@ -111,7 +111,7 @@ namespace MonkeyPaste {
             return Path.GetFullPath(finalPath);
         }
 
-        public static string ToFile(
+        public static async Task<string> ToFileAsync(
             this string fileData, 
             string forceDir = "", 
             string forceNamePrefix = "",
@@ -205,7 +205,7 @@ namespace MonkeyPaste {
                 // move temporary file to processed output file path and delete temporary
                 try {
                     // TODO figure out how to handle recrusive directory copy for this case for now don't do it
-                    ofp = CopyFileOrDirectory(tfp, ofp,false,isTemporary,overwrite);
+                    ofp = await CopyFileOrDirectoryAsync(tfp, ofp,false,isTemporary,overwrite);
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine($"Error copying temp file '{tfp}' to '{ofp}', returning temporary. Exception: " + ex);
@@ -238,10 +238,10 @@ namespace MonkeyPaste {
             return -1;
         }
 
-        public static string CopyFileOrDirectory(string sourcePath, string targetPath, bool recursive = true, bool isTemporary = false, bool forceOverwrite = false) {
+        public static async Task<string> CopyFileOrDirectoryAsync(string sourcePath, string targetPath, bool recursive = true, bool isTemporary = false, bool forceOverwrite = false) {
             bool overwrite = forceOverwrite;
             if(!overwrite && targetPath.IsFileOrDirectory()) {
-                var result = MpPlatformWrapper.Services.NativeMessageBox.ShowYesNoCancelMessageBox("Overwrite?", $"Destination '{targetPath}' already exists, would you like to overwrite it?");
+                var result = await MpPlatformWrapper.Services.NativeMessageBox.ShowYesNoCancelMessageBoxAsync("Overwrite?", $"Destination '{targetPath}' already exists, would you like to overwrite it?");
                 if(result.HasValue) {
                     if(result.Value) {
                         overwrite = true;

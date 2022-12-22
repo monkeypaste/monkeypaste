@@ -17,7 +17,7 @@ namespace MonkeyPaste {
     public enum MpNotificationPlacementType {
         None = 0,
         SystemTray,
-        CenterActiveScreen
+        ModalAnchor
     }
 
     public enum MpNotificationDialogResultType {
@@ -45,14 +45,10 @@ namespace MonkeyPaste {
     }
     public enum MpNotificationType {
         None = 0,
+        // Loader
         Loader,
-        InvalidPlugin,
-        InvalidClipboardFormatHandler,
-        InvalidAction,
-        BadHttpRequest,
-        AnalyzerTimeout,
-        InvalidRequest,
-        InvalidResponse,
+
+        // Message
         DbError,
         Help,
         PluginUpdated,
@@ -60,9 +56,28 @@ namespace MonkeyPaste {
         UserTriggerEnabled,
         UserTriggerDisabled,
         AppModeChange,
-        AppendChanged,
-        ContentFormatDegradation,
         TrialExpired,
+
+        // User Action (System Tray)
+        InvalidPlugin,
+        InvalidClipboardFormatHandler,
+        InvalidAction,
+        BadHttpRequest,
+        AnalyzerTimeout,
+        InvalidRequest,
+        InvalidResponse,
+
+        // User Action (Modal) 
+
+        ModalContentFormatDegradation,
+        ModalYesNoCancelMessageBox,
+        ModalOkCancelMessageBox,
+
+        // Append Tile
+
+        AppendChanged,
+
+        // Plugin Wrapper 
         PluginResponseMessage,
         PluginResponseError,
         PluginResponseWarning,
@@ -76,7 +91,7 @@ namespace MonkeyPaste {
         Append,
         Loader,
         Warning, //confirm
-        WarningWithOption, //retry/ignore/quit
+        UserAction, //retry/ignore/quit
         Error, //confirm
         ErrorWithOption, //retry/ignore/quit
         ErrorAndShutdown //confirm
@@ -94,12 +109,14 @@ namespace MonkeyPaste {
             switch (ndt) {
                 case MpNotificationType.Loader:
                     return MpNotificationLayoutType.Loader;
-                case MpNotificationType.ContentFormatDegradation:
+                case MpNotificationType.ModalOkCancelMessageBox:
+                case MpNotificationType.ModalYesNoCancelMessageBox:
+                case MpNotificationType.ModalContentFormatDegradation:
                 case MpNotificationType.InvalidPlugin:
                 case MpNotificationType.InvalidAction:
                 case MpNotificationType.InvalidClipboardFormatHandler:
                 case MpNotificationType.PluginResponseWarningWithOption:
-                    return MpNotificationLayoutType.WarningWithOption;
+                    return MpNotificationLayoutType.UserAction;
                 case MpNotificationType.AnalyzerTimeout:
                 case MpNotificationType.InvalidRequest:
                 case MpNotificationType.InvalidResponse:
@@ -118,13 +135,16 @@ namespace MonkeyPaste {
         }
         public static MpNotificationButtonsType GetNotificationButtonsType(MpNotificationType ndt) {
             switch (ndt) {
-                case MpNotificationType.ContentFormatDegradation:
+                case MpNotificationType.ModalYesNoCancelMessageBox:
+                    return MpNotificationButtonsType.YesNoCancel;
+                case MpNotificationType.ModalOkCancelMessageBox:
+                case MpNotificationType.ModalContentFormatDegradation:
                     return MpNotificationButtonsType.OkCancel;
                 default:
                     MpNotificationLayoutType layoutType = GetLayoutTypeFromNotificationType(ndt);
                     switch (layoutType) {
                         case MpNotificationLayoutType.ErrorWithOption:
-                        case MpNotificationLayoutType.WarningWithOption:
+                        case MpNotificationLayoutType.UserAction:
                             return MpNotificationButtonsType.IgnoreRetryFix;
                         case MpNotificationLayoutType.Warning:
                             return MpNotificationButtonsType.Ok;
@@ -138,16 +158,20 @@ namespace MonkeyPaste {
 
         public static MpNotificationPlacementType GetNotificationPlacementType(MpNotificationType ndt) {
             switch (ndt) {
-                case MpNotificationType.ContentFormatDegradation:
-                    return MpNotificationPlacementType.CenterActiveScreen;
+                case MpNotificationType.ModalYesNoCancelMessageBox:
+                case MpNotificationType.ModalOkCancelMessageBox:
+                case MpNotificationType.ModalContentFormatDegradation:
+                    return MpNotificationPlacementType.ModalAnchor;
                 default:
                     return MpNotificationPlacementType.SystemTray;
             }
         }
 
-        public static bool GetNotificationTypeModality(MpNotificationType ndt) {
+        public static bool IsNotificationTypeModal(MpNotificationType ndt) {
             switch (ndt) {
-                case MpNotificationType.ContentFormatDegradation:
+                case MpNotificationType.ModalYesNoCancelMessageBox:
+                case MpNotificationType.ModalOkCancelMessageBox:
+                case MpNotificationType.ModalContentFormatDegradation:
                     return true;
                 default:
                     return false;
@@ -190,18 +214,18 @@ namespace MonkeyPaste {
         #endregion
 
         #region Appearance
-        public object IconSourceStr {
+        public object IconSourceObj {
             get {
                 if (NotificationFormat == null) {
                     return string.Empty;
                 }
-                return NotificationFormat.IconSourceStr;
+                return NotificationFormat.IconSourceObj;
             }
         }
         public string NotificationTextForegroundColor {
             get {
                 if (LayoutType == MpNotificationLayoutType.Warning ||
-                    LayoutType == MpNotificationLayoutType.WarningWithOption) {
+                    LayoutType == MpNotificationLayoutType.UserAction) {
                     return MpSystemColors.Yellow;
                 }
                 if (LayoutType == MpNotificationLayoutType.ErrorAndShutdown ||
@@ -248,7 +272,8 @@ namespace MonkeyPaste {
 
         public MpNotificationPlacementType PlacementType => GetNotificationPlacementType(NotificationType);
 
-        public bool IsModal => GetNotificationTypeModality(NotificationType);
+        public bool IsModal => IsNotificationTypeModal(NotificationType);
+
 
         #endregion
 
@@ -272,7 +297,7 @@ namespace MonkeyPaste {
         public bool IsWarningNotification {
             get {
                 return LayoutType == MpNotificationLayoutType.Warning ||
-                    LayoutType == MpNotificationLayoutType.WarningWithOption;
+                    LayoutType == MpNotificationLayoutType.UserAction;
             }
         }
 
@@ -307,6 +332,22 @@ namespace MonkeyPaste {
         //    }
         //}
 
+        public object AnchorTarget {
+            get {
+                if (NotificationFormat == null ||
+                    !IsModal) {
+                    return null;
+                }
+                // when null default is center of active screen
+                return NotificationFormat.AnchorTarget;
+            }
+            set {
+                if(AnchorTarget != value) {
+                    NotificationFormat.AnchorTarget = value;
+                    OnPropertyChanged(nameof(AnchorTarget));
+                }
+            }
+        }
         public virtual string Title {
             get {
                 if(NotificationFormat == null) {
@@ -366,8 +407,8 @@ namespace MonkeyPaste {
             IsBusy = true;
             await Task.Delay(1);
 
-            if (string.IsNullOrEmpty(nf.IconSourceStr)) {
-                nf.IconSourceStr = MpBase64Images.AppIcon;
+            if (nf.IconSourceObj == null) {
+                nf.IconSourceObj = MpBase64Images.AppIcon;
             }
             NotificationFormat = nf;
 

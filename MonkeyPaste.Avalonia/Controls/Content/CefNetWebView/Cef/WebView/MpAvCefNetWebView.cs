@@ -278,7 +278,7 @@ namespace MonkeyPaste.Avalonia {
                     // js doesn't set file stuff for non-files
                     avdo.SetData(
                         MpPortableDataFormats.AvFileNames,
-                        ctvm.CopyItemData.ToFile(
+                        ctvm.CopyItemData.ToFileAsync(
                             forceNamePrefix: ctvm.CopyItemTitle,
                             forceExt: ctvm.ItemType == MpCopyItemType.Image ? "png" : "txt",
                             isTemporary: true));

@@ -33,47 +33,39 @@
                     Background="Transparent"
                     Margin="0,0,0,5">
                 <DockPanel LastChildFill="True">
-                    <Grid DockPanel.Dock="Bottom"
-                          Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.5*" />
-                            <ColumnDefinition Width="0.5*" />
-                        </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0"
-                                MinHeight="25"
-                                Margin="0,0,5,0"
-                                HorizontalAlignment="Stretch"
-                                Background="Crimson"
-                                Foreground="Cornsilk"
-                                Command="{Binding DeleteThisActionCommand}"
-                                CommandParameter="{Binding}">
-                            <DockPanel LastChildFill="True">
-                                <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource TrashCanImage}}"
-                                       DockPanel.Dock="Left"
-                                       Width="15"
-                                       Height="15" />
-                                <Label DockPanel.Dock="Right"
-                                       Content="Delete" />
-                            </DockPanel>
-                        </Button>
-
-                        <Button Grid.Column="1"
-                                BorderThickness="0"
-                                Margin="5,0,0,0"
-                                Background="Beige"
-                                HorizontalAlignment="Stretch"
-                                Command="{Binding ShowActionSelectorMenuCommand}"
-                                CommandParameter="{Binding $self}">
-                            <DockPanel LastChildFill="True">
-                                <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource AddImage}}"
-                                       DockPanel.Dock="Left"
-                                       Width="15"
-                                       Height="15" />
-                                <Label DockPanel.Dock="Right"
-                                       Content="Add" />
-                            </DockPanel>
-                        </Button>
-                    </Grid>
+                    <Border HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            IsVisible="{Binding Items, Converter={StaticResource CollectionIsNotEmptyToBoolConverter}}"
+                            DockPanel.Dock="Bottom">
+                        <TreeView x:Name="ChildActionTreeView"
+                                  Items="{Binding Items}"
+                                  BorderThickness="0"
+                                  Background="Transparent"
+                                  SelectedItem="{Binding SelectedTreeItem, Mode=TwoWay}"
+                                  SelectionMode="Single"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch">
+                            <TreeView.Styles>
+                                <Style Selector="TreeViewItem"
+                                       x:DataType="local:MpAvTagTileViewModel">
+                                    <Setter Property="HorizontalAlignment"
+                                            Value="Stretch" />
+                                    <Setter Property="VerticalAlignment"
+                                            Value="Stretch" />
+                                    <Setter Property="Background"
+                                            Value="Transparent" />
+                                    <Setter Property="IsExpanded"
+                                            Value="{Binding IsExpanded, Mode=TwoWay}" />
+                                </Style>
+                            </TreeView.Styles>
+                            <TreeView.ItemTemplate>
+                                <TreeDataTemplate DataType="{x:Type local:MpAvActionViewModelBase}"
+                                                  ItemsSource="{Binding Items}">
+                                    <local:MpAvActionPropertyView DataContext="{Binding}" />
+                                </TreeDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+                    </Border>
                     <ContentControl x:Name="RootActionPropertyContentControl"
                                     Content="{Binding}">
                         <ContentControl.DataTemplates>

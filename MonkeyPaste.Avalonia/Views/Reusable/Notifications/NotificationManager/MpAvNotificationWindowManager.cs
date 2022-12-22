@@ -58,7 +58,7 @@ namespace MonkeyPaste.Avalonia {
                         nw.DataContext = nvmb;
                         break;
                     case MpNotificationLayoutType.ErrorWithOption:
-                    case MpNotificationLayoutType.WarningWithOption:
+                    case MpNotificationLayoutType.UserAction:
                     case MpNotificationLayoutType.ErrorAndShutdown:
                         nw = new MpAvUserActionNotificationWindow();
                         nw.DataContext = nvmb;

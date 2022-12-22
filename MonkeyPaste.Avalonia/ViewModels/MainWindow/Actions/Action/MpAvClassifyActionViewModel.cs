@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -28,12 +29,28 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (SelectedTag != value) {
-                    TagId = value.TagId;
+                    TagId = value == null ? 0 : value.TagId;
                     OnPropertyChanged(nameof(SelectedTag));
                 }
             }
         }
+        public override MpMenuItemViewModel SelectedPopupMenuItemViewModel =>
+            SelectedTag == null ? null : SelectedTag.GetTagMenu(null,new int[] { TagId },false);
 
+
+        public MpMenuItemViewModel TagSelectorPopupMenu {
+            get {
+                return new MpMenuItemViewModel() {
+                    SubItems = new List<MpMenuItemViewModel>() {
+                        MpAvTagTrayViewModel.Instance.AllTagViewModel.GetTagMenu(SelectTagCommand,new int[] { TagId}, true)
+                    }
+                };
+            }
+        }
+
+
+
+        //private MpMenuItemViewModel Get
         #endregion
 
         #region Model
@@ -115,6 +132,18 @@ namespace MonkeyPaste.Avalonia {
             });
         }
 
+        #endregion
+
+        #region Commands
+
+        public ICommand SelectTagCommand => new MpCommand<object>(
+            (args) => {
+                if(args is int tagId) {
+                    TagId = tagId;
+                    OnPropertyChanged(nameof(SelectedTag));
+                    OnPropertyChanged(nameof(SelectedPopupMenuItemViewModel));
+                }
+            });
         #endregion
     }
 }

@@ -36,7 +36,7 @@ namespace AvCoreClipboardHandler {
                 Title = title,
                 Body = msg,
                 Detail = detail,
-                IconSourceStr = MpBase64Images.ClipboardIcon
+                IconSourceObj = MpBase64Images.ClipboardIcon
             };
         }
     }

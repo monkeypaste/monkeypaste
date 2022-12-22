@@ -36,14 +36,14 @@ namespace MonkeyPaste.Avalonia {
 
         public int ShortcutId {
             get {
-                if (Action == null) {
+                if (Action == null || string.IsNullOrEmpty(Arg1)) {
                     return 0;
                 }
-                return ActionObjId;
+                return int.Parse(Arg1);
             }
             set {
                 if (ShortcutId != value) {
-                    ActionObjId = value;
+                    Arg1 = value.ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(ShortcutId));
                 }

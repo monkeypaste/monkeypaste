@@ -308,24 +308,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
-        public GridLength TitleGridRowHeight {
-            get {
-                if(IsTitleVisible) {
-                    return new GridLength(0.25, GridUnitType.Star);
-                }
-                return new GridLength(0, GridUnitType.Pixel);
-            }
-        }
-
-        public GridLength DetailGridRowHeight {
-            get {
-                if (IsDetailVisible) {
-                    return new GridLength(20, GridUnitType.Pixel);
-                }
-                return new GridLength(0, GridUnitType.Pixel);
-            }
-        }
-
         public MpSize UnconstrainedContentSize { get; set; } = MpSize.Empty;
         public double TileTitleHeight => IsTitleVisible ? 100 : 0;
         public double TileDetailHeight => 25;// MpMeasurements.Instance.ClipTileDetailHeight;
@@ -349,30 +331,17 @@ namespace MonkeyPaste.Avalonia {
         public double TileContentWidth =>
             BoundWidth -
             (InnerSpacing * 2);
-        //MpMeasurements.Instance.ClipTileContentMargin -
-        //(MpMeasurements.Instance.ClipTileMargin * 2);
 
         public double TileContentHeight =>
             BoundHeight -
             TileTitleHeight -
             (InnerSpacing * 2) -
-            //MpMeasurements.Instance.ClipTileMargin -
-            //MpMeasurements.Instance.ClipTileBorderThickness -
             TileDetailHeight;
 
 
         public MpSize ContentSize => IsContentReadOnly ? ReadOnlyContentSize : UnconstrainedContentSize;
-        //new Size(
-        //        ContainerSize.Width - MpMeasurements.Instance.ClipTileBorderThickness,
-        //        ContainerSize.Height - MpMeasurements.Instance.ClipTileBorderThickness);
-
-
         public double ContentWidth => ContentSize.Width;
-
-
         public MpSize ReadOnlyContentSize => new MpSize(TileContentWidth, TileContentHeight);
-        //MpMeasurements.Instance.ClipTileContentDefaultWidth,
-        //MpMeasurements.Instance.ClipTileContentDefaultHeight);
 
 
         public MpSize EditableContentSize {
@@ -462,8 +431,7 @@ namespace MonkeyPaste.Avalonia {
         public double ReadOnlyWidth => MinWidth;
         public double ReadOnlyHeight => MinHeight;
         public MpSize ReadOnlySize => new MpSize(ReadOnlyWidth, ReadOnlyHeight);
-
-        
+             
 
         public double EditableWidth {
             get {
@@ -1794,7 +1762,7 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.VerifyAccess();
 
             var result = await MpNotificationBuilder.ShowNotificationAsync(
-                                    notificationType: MpNotificationType.ContentFormatDegradation,
+                                    notificationType: MpNotificationType.ModalContentFormatDegradation,
                                     title: "Data Degradation Warning",
                                     body: $"Editing in comptability mode will remove all rich formatting. Are you sure you wish to modify this?");
 

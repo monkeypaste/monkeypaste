@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvNotificationPositioner {
@@ -81,28 +82,50 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationPlacementType.SystemTray:
                     PositionWindowToSystemTray(w);
                     return;
-                case MpNotificationPlacementType.CenterActiveScreen:
-                    PositionWindowCenterActiveScreen(w);
+                case MpNotificationPlacementType.ModalAnchor:
+                    PositionWindowToAnchor(w,nvmb.AnchorTarget);
                     return;
             }
         }
 
-        private void PositionWindowCenterActiveScreen(Window w) {
-            var s = SetupSize(w);
+        private void PositionWindowToAnchor(Window w, object anchor) {
+            w.Position = FindAnchorPoint(w, anchor);
+        }
 
-            var primaryScreen = new MpAvScreenInfoCollection().Screens.FirstOrDefault(x => x.IsPrimary);
-            if (primaryScreen == null) {
-                // happens before loader attached
-                return;
+        private PixelPoint FindAnchorPoint(Window w, object anchor) {
+            var s = SetupSize(w);
+            MpRect anchor_rect = null;
+            double anchor_pd = w.VisualPixelDensity();
+            if (anchor == null) {
+                // find active screen center
+                var primaryScreen = new MpAvScreenInfoCollection().Screens.FirstOrDefault(x => x.IsPrimary);
+                if (primaryScreen == null) {
+                    // happens before loader attached
+                    return new PixelPoint();
+                }
+                anchor_rect = primaryScreen.WorkArea;
+                anchor_pd = primaryScreen.PixelDensity;
             }
-            double screen_mid_x = primaryScreen.WorkArea.Left + ((primaryScreen.WorkArea.Right - primaryScreen.WorkArea.Left) / 2);
-            double screen_mid_y = primaryScreen.WorkArea.Top + ((primaryScreen.WorkArea.Bottom - primaryScreen.WorkArea.Top) / 2);
+
+            if(anchor is Control ac) {
+                anchor_rect = ac.Bounds.ToPortableRect(ac.Parent == null ? null : ac.Parent as Control, true);
+                anchor_pd = ac.VisualPixelDensity();
+            } else if(anchor is MpRect ar) {
+                anchor_rect = ar;
+            }
+
+            if(anchor_rect == null) {
+                // anchor error
+                Debugger.Break();
+                return new PixelPoint();
+            }
+            MpPoint anchor_centroid = anchor_rect.Centroid();
 
             double window_hw = s.Width / 2;
             double window_hh = s.Height / 2;
 
-            MpPoint window_position = new MpPoint(screen_mid_x - window_hw, screen_mid_y - window_hh);
-            w.Position = window_position.ToAvPixelPoint(primaryScreen.PixelDensity);
+            MpPoint window_position = new MpPoint(anchor_centroid.X - window_hw, anchor_centroid.Y - window_hh);
+            return window_position.ToAvPixelPoint(anchor_pd);
         }
 
         private void PositionWindowToSystemTray(Window w) {

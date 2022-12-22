@@ -86,13 +86,13 @@ namespace MonkeyPaste {
         #region Public Methods
         public override async Task InitializeAsync(MpNotificationFormat nf) {
             IsBusy = true;
-            if(string.IsNullOrEmpty(nf.IconSourceStr)) {
+            if(nf.IconSourceObj == null) {
                 if(IsErrorNotification) {
-                    nf.IconSourceStr = MpBase64Images.Error;
+                    nf.IconSourceObj = MpBase64Images.Error;
                 } else if(IsWarningNotification) {
-                    nf.IconSourceStr = MpBase64Images.Warning;
+                    nf.IconSourceObj = MpBase64Images.Warning;
                 } else {
-                    nf.IconSourceStr = MpBase64Images.QuestionMark;
+                    nf.IconSourceObj = MpBase64Images.QuestionMark;
                 }
             }
             await base.InitializeAsync(nf);

@@ -260,6 +260,7 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = false;
         }
+
         private void TagTileViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             UpdateTreeSortOrder();
             //OnPropertyChanged(nameof(RootItems));

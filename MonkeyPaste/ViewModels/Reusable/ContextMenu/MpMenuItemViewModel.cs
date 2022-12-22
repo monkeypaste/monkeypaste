@@ -299,6 +299,7 @@ namespace MonkeyPaste {
 
         public MpMenuItemViewModel() : base(null) { }
 
+
         #endregion
 
         #region Public Methods
@@ -347,6 +348,12 @@ namespace MonkeyPaste {
             };
         }
 
+        public void ClearCommands() {
+            Command = null;
+            if(SubItems != null) {
+                SubItems.ForEach(x => x.ClearCommands());
+            }
+        }
         #endregion
 
         #region Private Methods

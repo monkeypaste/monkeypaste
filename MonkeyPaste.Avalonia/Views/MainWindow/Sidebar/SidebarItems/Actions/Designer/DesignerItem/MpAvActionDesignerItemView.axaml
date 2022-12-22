@@ -13,9 +13,8 @@
                        mc:Ignorable="d">
     <Border HorizontalAlignment="Center"
             VerticalAlignment="Stretch"
-            local:MpAvListBoxItemBoundsObserverExtension.IsEnabled="True"
-            local:MpAvListBoxItemBoundsObserverExtension.ObservedBounds="{Binding ObservedDesignerItemBounds, Mode=TwoWay}"
-            BoxShadow="5 5 10 2 Black">
+            local:MpAvBoundsObserverExtension.IsEnabled="True"
+            local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedDesignerItemBounds, Mode=TwoWay}">
         <StackPanel Orientation="Vertical"
                     HorizontalAlignment="Center">
             <ContentControl x:Name="DesignerItemContentControl"
@@ -226,18 +225,16 @@
                 </ContentControl.DataTemplates>
             </ContentControl>
             <TextBlock HorizontalAlignment="Center"
+                       ClipToBounds="False"
                        IsVisible="{Binding IsSelected}"
                        Padding="3"
                        FontSize="10"
                        Foreground="Wheat"
+                       Background="Transparent"
+                       TextAlignment="Center"
                        MaxWidth="{Binding Width}"
                        TextWrapping="WrapWithOverflow"
-                       Text="{Binding Label}">
-                <TextBlock.Background>
-                    <SolidColorBrush Color="Black"
-                                     Opacity="0.2" />
-                </TextBlock.Background>
-            </TextBlock>
+                       Text="{Binding Label}"/>
         </StackPanel>
     </Border>
 </local:MpAvUserControl>

@@ -18,20 +18,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
         private DispatcherTimer _renderTimer = null;
 
-        //private UIElement Child = null;
-
-        private MpPoint tt_origin;
         private MpPoint mp_start;
-                
-        private MpPoint grid_offset {
-            get {
-                if(Child == null) {
-                    return new MpPoint();
-                }
-                var tt = GetTranslateTransform(Child);
-                return new MpPoint(tt.X, tt.Y);
-            }
-        }
 
         #endregion
 
@@ -47,7 +34,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region DesignerItem AvaloniaProperty
         public MpIDesignerSettingsViewModel DesignerItem {
-            get { return (MpIDesignerSettingsViewModel)GetValue(DesignerItemProperty); }
+            get { return GetValue(DesignerItemProperty); }
             set { SetValue(DesignerItemProperty, value); }
         }
 
@@ -126,31 +113,50 @@ namespace MonkeyPaste.Avalonia {
             child_MouseMove(Child, e);
         }
         public void Reset() {
-            double scale = 1.0d;
-            MpPoint offset = new MpPoint();
-            if(DesignerItem != null) {
-                scale = DesignerItem.Scale;
-                offset = new MpPoint(DesignerItem.TranslateOffsetX, DesignerItem.TranslateOffsetY);
+            if(DesignerItem == null) {
+                return;
             }
 
-            if (Child != null) {
-                // reset zoom
-                var st = GetScaleTransform(Child);
-                st.ScaleX = scale;
-                st.ScaleY = scale;
-
-                // reset pan
-                var tt = GetTranslateTransform(Child);
-                tt.X = offset.X;
-                tt.Y = offset.Y;
-            }
+            DesignerItem.Scale = 1.0d;
+            DesignerItem.TranslateOffsetX = 0;
+            DesignerItem.TranslateOffsetY = 0;
         }
 
-        public void Translate(double x, double y) {
+        public void Zoom(double scaleDelta, MpPoint relative_anchor) {
+            double scale = DesignerItem.Scale;
+            double tx = DesignerItem.TranslateOffsetX;
+            double ty = DesignerItem.TranslateOffsetY;
+
+            if (scale < MinScale) {
+                return;
+            }
+            scale += scaleDelta;
+
+            double absolute;
+            double absoluteY;
+
+            absolute = relative_anchor.X * scale + tx;
+            absoluteY = relative_anchor.Y * scale + ty;
+
+            tx = absolute - relative_anchor.X * scale;
+            ty = absoluteY - relative_anchor.Y * scale;
+
+            double zoomCorrected = scaleDelta * scale;
+            scale += zoomCorrected;
+
+            DesignerItem.Scale = Math.Min(MaxScale, Math.Max(MinScale, scale));
+            DesignerItem.TranslateOffsetX = tx;
+            DesignerItem.TranslateOffsetY = ty;
+
+            if (DataContext is MpAvTriggerCollectionViewModel acvm) {
+                acvm.HasModelChanged = true;
+            }
+        }
+        public void TranslateOrigin(double x, double y) {
             // NOTE to be used by DesignerItem Drop Behavior
-            var tt = GetTranslateTransform(Child);
-            tt.X = tt_origin.X - x;
-            tt.Y = tt_origin.Y - y;
+            //var tt = GetTranslateTransform(Child);
+            DesignerItem.TranslateOffsetX -= x;
+            DesignerItem.TranslateOffsetY -= y;
         }
 
         #endregion
@@ -188,43 +194,13 @@ namespace MonkeyPaste.Avalonia {
             if(Child == null || DesignerItem == null) {
                 return;
             }
-            var st = GetScaleTransform(Child);
-            double scale = DesignerItem.Scale;
-            var tt = GetTranslateTransform(Child);
-
             double zoom = e.Delta.Y > 0 ? .2 : -.2;
-            if (!(e.Delta.Y > 0) && scale < MinScale) {
-                return;
-            }
-            scale += zoom;
-
-            MpPoint relative = e.GetPosition(Child).ToPortablePoint();
-            double absolute;
-            double absoluteY;
-
-            absolute = relative.X * scale + tt.X;
-            absoluteY = relative.Y * scale + tt.Y;
-
-            tt.X = absolute - relative.X * scale;
-            tt.Y = absoluteY - relative.Y * scale;
-
-            double zoomCorrected = zoom * scale;
-            scale += zoomCorrected;
-
-            DesignerItem.Scale = Math.Min(MaxScale,Math.Max(MinScale, scale));
-            //DesignerItem.Scale = st.ScaleX;
-            if (DataContext is MpAvTriggerCollectionViewModel acvm) {
-                //acvm.HasModelChanged = true;
-            }
+            Zoom(zoom, e.GetPosition(Child).ToPortablePoint());
         }
         
         private void child_PreviewMouseLeftButtonDown(object sender, PointerPressedEventArgs e) {
             if (Child != null && !MpAvMoveExtension.IsAnyMoving) {
-                var tt = GetTranslateTransform(Child);
                 mp_start = e.GetPosition(this).ToPortablePoint();
-                tt_origin = new MpPoint(tt.X, tt.Y);
-                MpPlatformWrapper.Services.Cursor.SetCursor(Child, MpCursorType.Hand);
-
                 e.Pointer.Capture(this);
                 if(e.Pointer.Captured != this) {
                     var capturer = e.Pointer.Captured;
@@ -240,7 +216,6 @@ namespace MonkeyPaste.Avalonia {
             if (Child != null) {
                 IsTranslating = false;
                 e.Pointer.Capture(null);
-                MpPlatformWrapper.Services.Cursor.UnsetCursor(DataContext);
                 if(DataContext is MpAvTriggerCollectionViewModel acvm) {
                     acvm.HasModelChanged = true;
                 }
@@ -254,43 +229,39 @@ namespace MonkeyPaste.Avalonia {
         private void child_MouseMove(object sender, PointerEventArgs e) {
             if (Child != null) {
                 if (IsTranslating) {
-                    var tt = GetTranslateTransform(Child);
-                    var v = mp_start - e.GetPosition(this).ToPortablePoint();
-
-
-                    tt.X = tt_origin.X - v.X;
-                    tt.Y = tt_origin.Y - v.Y;
-
-                    if (DesignerItem != null) {
-                        DesignerItem.TranslateOffsetX = tt.X;
-                        DesignerItem.TranslateOffsetY = tt.Y;
-                    }
+                    //var tt = GetTranslateTransform(Child);
+                    var mp = e.GetPosition(this).ToPortablePoint();
+                    var v =  mp_start - mp;
+                    TranslateOrigin(v.X, v.Y);
+                    mp_start = mp;
                 } 
             }
         }
 
         #endregion
 
-        private TranslateTransform GetTranslateTransform(IControl element) {
-            return (TranslateTransform)((TransformGroup)element.RenderTransform)
-              .Children.First(tr => tr is TranslateTransform);
-        }
+        //private TranslateTransform GetTranslateTransform(IControl element) {
+        //    return (TranslateTransform)((TransformGroup)element.RenderTransform)
+        //      .Children.First(tr => tr is TranslateTransform);
+        //}
 
-        private ScaleTransform GetScaleTransform(IControl element) {
-            return (ScaleTransform)((TransformGroup)element.RenderTransform)
-              .Children.First(tr => tr is ScaleTransform);
-        }
+        //private ScaleTransform GetScaleTransform(IControl element) {
+        //    return (ScaleTransform)((TransformGroup)element.RenderTransform)
+        //      .Children.First(tr => tr is ScaleTransform);
+        //}
         
         private void DrawGrid(DrawingContext dc) {
+            var di = DesignerItem;
+
             double w = Bounds.Width;
             double h = Bounds.Height;
 
-            double offset_x = DesignerItem.TranslateOffsetX;
-            double offset_y = DesignerItem.TranslateOffsetY;
+            double offset_x = di.TranslateOffsetX;
+            double offset_y = di.TranslateOffsetY;
 
-            var st = GetScaleTransform(Child);
-            int HorizontalGridLineCount = (int)((w / GridLineSpacing) * (1/st.ScaleX));
-            int VerticalGridLineCount = (int)((h / GridLineSpacing) * (1/st.ScaleY));
+            //var st = GetScaleTransform(Child);
+            int HorizontalGridLineCount = (int)((w / GridLineSpacing) * (1/di.Scale));
+            int VerticalGridLineCount = (int)((h / GridLineSpacing) * (1/di.Scale));
 
             int major_count = 5;
             double major_thickness = 2;

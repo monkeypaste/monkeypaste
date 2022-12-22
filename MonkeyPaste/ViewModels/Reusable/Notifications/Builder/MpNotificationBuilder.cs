@@ -55,13 +55,15 @@ namespace MonkeyPaste {
             object body = null, 
             int maxShowTimeMs = MpNotificationFormat.MAX_MESSAGE_DISPLAY_MS,
             MpNotificationType msgType = MpNotificationType.Message,        
-            string iconSourceStr = null) {
+            object iconSourceObj = null,
+            object anchor = null) {
             await ShowNotificationAsync(
                 notificationType: msgType,
                 title: title,
                 body: body,
+                anchor: anchor,
                 maxShowTimeMs: maxShowTimeMs,
-                iconSourceStr: iconSourceStr);
+                iconSourceObj: iconSourceObj);
         }
 
         public static async Task<MpNotificationDialogResultType> ShowLoaderNotificationAsync(MpIProgressLoader loader) {
@@ -79,7 +81,8 @@ namespace MonkeyPaste {
             int maxShowTimeMs = -1,
             Action<object> retryAction = null,
             object retryActionObj = null,
-            string iconSourceStr = null,
+            object iconSourceObj = null,
+            object anchor = null,
             ICommand fixCommand = null,
             object fixCommandArgs = null,
             MpIProgressLoader loader = null) {                                   
@@ -99,10 +102,10 @@ namespace MonkeyPaste {
             MpNotificationFormat nf = new MpNotificationFormat() {
                 Title = title,
                 Body = body,
-                //BodyFormat = bodyFormat,
+                AnchorTarget = anchor,
                 MaxShowTimeMs = maxShowTimeMs,
                 NotificationType = notificationType,
-                IconSourceStr = iconSourceStr,
+                IconSourceObj = iconSourceObj,
                 FixCommand = fixCommand,
                 FixCommandArgs = fixCommandArgs,
                 RetryAction = retryAction,
@@ -146,7 +149,7 @@ namespace MonkeyPaste {
                 case MpNotificationLayoutType.Message:
                     nvmb = new MpMessageNotificationViewModel();
                     break;
-                case MpNotificationLayoutType.WarningWithOption:
+                case MpNotificationLayoutType.UserAction:
                 case MpNotificationLayoutType.ErrorWithOption:
                 case MpNotificationLayoutType.ErrorAndShutdown:
                     nvmb = new MpUserActionNotificationViewModel();

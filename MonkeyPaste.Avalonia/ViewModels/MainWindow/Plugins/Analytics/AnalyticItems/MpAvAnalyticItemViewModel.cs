@@ -609,7 +609,7 @@ namespace MonkeyPaste.Avalonia {
                 MpNotificationBuilder.ShowMessageAsync(
                     msgType: MpNotificationType.PluginUpdated,
                     title: $"Analyzer '{Title}' Updated",
-                    iconSourceStr: ivm.IconBase64,
+                    iconSourceObj: ivm.IconBase64,
                     body: "Reseting presets to default...")
                     .FireAndForgetSafeAsync(this);
 

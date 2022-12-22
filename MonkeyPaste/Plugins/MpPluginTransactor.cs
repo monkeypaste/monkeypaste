@@ -130,7 +130,7 @@ namespace MonkeyPaste {
             for (int i = cur_idx; i < response.userNotifications.Count; i++) {
                 var nf = response.userNotifications[i];
                 nf.FixCommand = new MpCommand(() => {
-                    MpPlatformWrapper.Services.NativeMessageBox.ShowOkCancelMessageBox("test", "Fix me");
+                    MpPlatformWrapper.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync("test", "Fix me");
                 });
 
                 var result = await MpNotificationBuilder.ShowNotificationAsync(nf);

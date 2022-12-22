@@ -36,6 +36,20 @@ namespace MonkeyPaste.Avalonia {
         bool MpIPopupMenuViewModel.IsPopupMenuOpen { get; set; }
         public MpMenuItemViewModel PopupMenuViewModel {
             get {
+                return new MpMenuItemViewModel() {
+                    SubItems =
+                                typeof(MpTriggerType)
+                                .EnumerateEnum<MpTriggerType>()
+                                .Where(x => x != MpTriggerType.None)
+                                .Select(x =>
+                                    new MpMenuItemViewModel() {
+                                        Header = x.EnumToLabel(),
+                                        IconResourceKey = MpAvActionViewModelBase.GetDefaultActionIconResourceKey(MpActionType.Trigger, x),
+                                        Command = AddTriggerCommand,
+                                        CommandParameter = x
+                                    }).ToList()
+                };
+
                 var tmivml = new List<MpMenuItemViewModel>();
                 var triggerLabels = typeof(MpTriggerType).EnumToLabels("Select Trigger");
                 for (int i = 0; i < triggerLabels.Length; i++) {

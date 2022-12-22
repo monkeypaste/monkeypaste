@@ -88,6 +88,27 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion 
 
+        #region PopupMenu
+
+        private MpMenuItemViewModel _popupMenu = default;
+
+        public static readonly DirectProperty<MpAvPopupMenuSelector, MpMenuItemViewModel> PopupMenuProperty =
+            AvaloniaProperty.RegisterDirect<MpAvPopupMenuSelector, MpMenuItemViewModel>
+            (
+                nameof(PopupMenu),
+                o => o.PopupMenu,
+                (o, v) => o.PopupMenu = v
+            );
+
+        public MpMenuItemViewModel PopupMenu {
+            get => _popupMenu;
+            set {
+                SetAndRaise(SelectedMenuItemProperty, ref _popupMenu, value);
+            }
+        }
+
+        #endregion 
+
         #region IsBusy
 
         private bool _isBusy = default;
@@ -104,6 +125,28 @@ namespace MonkeyPaste.Avalonia {
             get => _isBusy;
             set {
                 SetAndRaise(IsBusyProperty, ref _isBusy, value);
+            }
+        }
+
+        #endregion
+
+
+        #region ClearCommands
+
+        private bool _clearCommands = true;
+
+        public static readonly DirectProperty<MpAvPopupMenuSelector, bool> ClearCommandsProperty =
+            AvaloniaProperty.RegisterDirect<MpAvPopupMenuSelector, bool>
+            (
+                nameof(ClearCommands),
+                o => o.ClearCommands,
+                (o, v) => o.ClearCommands = v
+            );
+
+        public bool ClearCommands {
+            get => _clearCommands;
+            set {
+                SetAndRaise(ClearCommandsProperty, ref _clearCommands, value);
             }
         }
 
@@ -132,16 +175,26 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion 
 
-        public ICommand PopupMenuButtonClickCommand => new MpCommand(
-            () => {
-                var caret_button = this.FindControl<Button>("PopupButton");
-                MpAvMenuExtension.ShowMenu(caret_button, BindingContext.PopupMenuViewModel);
-            },()=>BindingContext != null);
 
         #endregion
         public MpAvPopupMenuSelector() {
             InitializeComponent();
+            var pub = this.FindControl<Button>("PopupButton");
+            pub.Click += Pub_Click;
         }
+
+        private void Pub_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
+            if (PopupMenu == null) {
+                return;
+            }
+            var caret_button = sender as Control;
+            var pmvm = PopupMenu;
+            if(ClearCommands) {
+                pmvm.ClearCommands();
+            }
+            MpAvMenuExtension.ShowMenu(caret_button, pmvm);
+        }
+
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }

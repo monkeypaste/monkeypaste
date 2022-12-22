@@ -76,8 +76,8 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <local:MpAvTagView local:MpAvListBoxItemBoundsObserverExtension.IsEnabled="True"
-                                       local:MpAvListBoxItemBoundsObserverExtension.ObservedBounds="{Binding ObservedTagTrayBounds, Mode=TwoWay}"
+                    <local:MpAvTagView local:MpAvBoundsObserverExtension.IsEnabled="True"
+                                       local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedTagTrayBounds, Mode=TwoWay}"
                                        DataContext="{Binding}" />
 
                 </DataTemplate>

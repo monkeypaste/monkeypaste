@@ -21,11 +21,15 @@
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
                 Value="Disabled" />
     </Style>
+    <Style Selector="local|MpAvActionDesignerItemView">
+        <Setter Property="ClipToBounds"
+                Value="False" />
+    </Style>
     <Style Selector="ListBox.actionDesigner /template/ ScrollViewer">
         <Setter Property="ClipToBounds"
                 Value="False" />
     </Style>
-  <Style Selector="ListBox.actionDesigner /template/ ScrollViewer /template/ ScrollContentPresenter">
+    <Style Selector="ListBox.actionDesigner /template/ ScrollViewer /template/ ScrollContentPresenter">
         <Setter Property="ClipToBounds"
                 Value="False" />
     </Style>

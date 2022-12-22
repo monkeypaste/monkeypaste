@@ -34,13 +34,24 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIDesignerSettingsViewModel Implementation
 
+        public bool IsGridVisible {
+            get {
+                return ParseShowGrid(Arg2);
+            }
+            set {
+                if (IsGridVisible != value) {
+                    SetDesignerItemSettings(Scale, TranslateOffsetX, TranslateOffsetY, value);
+                    OnPropertyChanged(nameof(IsGridVisible));
+                }
+            }
+        }
         public double Scale {
             get {
                 return ParseScale(Arg2);
             }
             set {
                 if (Math.Abs(Scale - value) > 0.1) {
-                    SetDesignerItemSettings(value, TranslateOffsetX, TranslateOffsetY);
+                    SetDesignerItemSettings(value, TranslateOffsetX, TranslateOffsetY, IsGridVisible);
                     OnPropertyChanged(nameof(Scale));
                 }
             }
@@ -51,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (Math.Abs(TranslateOffsetX - value) > 0.1) {
-                    SetDesignerItemSettings(Scale, value, TranslateOffsetY);
+                    SetDesignerItemSettings(Scale, Math.Round(value,1), TranslateOffsetY, IsGridVisible);
                     OnPropertyChanged(nameof(TranslateOffsetX));
                 }
             }
@@ -62,12 +73,11 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (Math.Abs(TranslateOffsetY - value) > 0.1) {
-                    SetDesignerItemSettings(Scale, TranslateOffsetX, value);
+                    SetDesignerItemSettings(Scale, TranslateOffsetX, Math.Round(value, 1), IsGridVisible);
                     OnPropertyChanged(nameof(TranslateOffsetY));
                 }
             }
         }
-
 
         public MpRect ObservedDesignerBounds { get; set; } = MpRect.Empty;
         public double DesignerItemDiameter => 50;
@@ -81,12 +91,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Designer Model Parsing Helpers
 
-        private void SetDesignerItemSettings(double scale, double offsetX, double offsetY) {
+        private void SetDesignerItemSettings(double scale, double offsetX, double offsetY, bool showGrid) {
             string arg2 = string.Join(
                 ",",
                 new string[] {
                     scale.ToString(),
-                    offsetX.ToString(), offsetY.ToString() });
+                    offsetX.ToString(), offsetY.ToString(),
+                    showGrid.ToString()});
             Arg2 = arg2;
         }
 
@@ -103,7 +114,7 @@ namespace MonkeyPaste.Avalonia {
 
         private MpPoint ParseTranslationOffset(string text) {
             if (string.IsNullOrEmpty(Arg2)) {
-                return MpPoint.Zero;
+                return DefaultTriggerLocation;
             }
             var arg2Parts = Arg2.SplitNoEmpty(",");
             if (arg2Parts.Length >= 3) {
@@ -112,9 +123,18 @@ namespace MonkeyPaste.Avalonia {
                     Y = double.Parse(arg2Parts[2])
                 };
             }
-            return MpPoint.Zero;
+            return DefaultTriggerLocation;
         }
-
+        private bool ParseShowGrid(string text) {
+            if (string.IsNullOrEmpty(Arg2)) {
+                return false;
+            }
+            var arg2Parts = Arg2.SplitNoEmpty(",");
+            if (arg2Parts.Length >= 4) {
+                return arg2Parts[3].ToLower() == "true";
+            }
+            return false;
+        }
 
         #endregion
 
@@ -281,10 +301,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Model
-
-
-        
+        #region Model       
 
         public MpTriggerType TriggerType {
             get {
@@ -334,7 +351,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = MpAvMainWindowViewModel.Instance.IsMainWindowOpen;
 
             await MpNotificationBuilder.ShowMessageAsync(
-                iconSourceStr: IconResourceKeyStr.ToString(),
+                iconSourceObj: IconResourceKeyStr.ToString(),
                 title: "ACTION STATUS",
                 body: notificationText);
 
@@ -377,6 +394,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
+        public ICommand ResetDesignerViewCommand => new MpCommand(() => {
+            Scale = 1.0d;
+            TranslateOffsetX = X;
+            TranslateOffsetY = Y;
+        });
         #endregion
     }
 }

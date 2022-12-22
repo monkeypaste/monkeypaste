@@ -38,7 +38,7 @@ namespace MonkeyPaste.Avalonia {
                 MaxShowTimeMs = -1,
                 //BodyFormat = MpTextContentFormat.RichHtml,
                 Body = MpAvClipTrayViewModel.Instance.ModalClipTileViewModel,
-                IconSourceStr = "AppImage"
+                IconSourceObj = "AppImage"
             };
 
             Instance.DataContext = await MpAppendNotificationViewModel.InitAsync(empty_msg_nf);

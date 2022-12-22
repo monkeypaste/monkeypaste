@@ -57,7 +57,7 @@ namespace MonkeyPaste {
                     if (string.IsNullOrWhiteSpace(curVal)) {
                         break;
                     }
-                    curVal = curVal.ToFile();
+                    curVal = await curVal.ToFileAsync();
                     break;
                 default:
                     curVal = MpPlatformWrapper.Services.StringTools.ToPlainText(curVal);

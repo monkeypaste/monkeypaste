@@ -142,6 +142,23 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+
+        #region ForcedMenuItemViewModel AvaloniaProperty
+        public static MpMenuItemViewModel GetForcedMenuItemViewModel(AvaloniaObject obj) {
+            return obj.GetValue(ForcedMenuItemViewModelProperty);
+        }
+
+        public static void SetForcedMenuItemViewModel(AvaloniaObject obj, MpMenuItemViewModel value) {
+            obj.SetValue(ForcedMenuItemViewModelProperty, value);
+        }
+
+        public static readonly AttachedProperty<MpMenuItemViewModel> ForcedMenuItemViewModelProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, MpMenuItemViewModel>(
+                "ForcedMenuItemViewModel",
+                null);
+
+        #endregion
+
         #region IsEnabled AvaloniaProperty
         public static bool GetIsEnabled(AvaloniaObject obj) {
             return obj.GetValue(IsEnabledProperty);
@@ -197,12 +214,17 @@ namespace MonkeyPaste.Avalonia {
 
         private static async void HostControl_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
             var control = sender as Control;
+
+            // VALIDATE CAN SHOW
+
             if (control == null || 
                 !GetIsEnabled(control) || 
                 !GetCanShowMenu(control)) {
                 return;
             }
             e.Handled = false;
+
+            // HANDLE SELECTION
 
             bool wait_for_selection = false;
             if (control.DataContext is MpISelectorItemViewModel sivm) {
@@ -224,6 +246,8 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(500);
             }
 
+            // LOCATE MENU
+
             MpMenuItemViewModel mivm = null;
 
             if (e.IsLeftPress(control)) {
@@ -238,15 +262,19 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
+            if(GetForcedMenuItemViewModel(control) is MpMenuItemViewModel fmivm) {
+                // used when host vm has multiple context menus
+                mivm = fmivm;
+            }
+
             if (mivm == null || mivm.SubItems == null) {
                 e.Handled = GetSuppressDefaultRightClick(control) && e.IsRightPress(control);
-                
-                //SetIsOpen(control, false);
                 return;
             }
 
-            //SetIsOpen(control, true);
             e.Handled = true;
+
+            // CREATE & SHOW MENU
 
             ShowMenu(control, mivm, e.GetPosition(control).ToPortablePoint());
         }

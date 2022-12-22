@@ -41,8 +41,8 @@
                    Width="{Binding Bounds.Height, ElementName=NotificationIconImage}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Stretch"
-                   IsVisible="{Binding IconSourceStr, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
-                   Source="{Binding IconSourceStr, Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                   IsVisible="{Binding IconSourceObj, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
+                   Source="{Binding IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}"
                    Stretch="Fill" />
             <local:MpAvMarqueeTextBox Grid.Row="0"
                                       Grid.Column="1"

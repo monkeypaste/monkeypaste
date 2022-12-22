@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MonkeyPaste;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvContentAddTriggerViewModel : 
@@ -12,14 +13,14 @@ namespace MonkeyPaste.Avalonia {
 
         public MpCopyItemType AddedContentType {
             get {
-                if (Action == null) {
-                    return 0;
+                if (Action == null || string.IsNullOrEmpty(Arg1)) {
+                    return MpCopyItemType.None;
                 }
-                return (MpCopyItemType)ActionObjId;
+                return Arg1.ToEnum<MpCopyItemType>();
             }
             set {
                 if (AddedContentType != value) {
-                    ActionObjId = (int)value;
+                    Arg1 = value.ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(AddedContentType));
                 }

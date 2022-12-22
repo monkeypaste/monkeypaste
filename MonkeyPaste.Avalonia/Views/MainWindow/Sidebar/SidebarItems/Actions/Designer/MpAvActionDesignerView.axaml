@@ -12,7 +12,8 @@
                        x:DataType="local:MpAvTriggerActionViewModelBase"
                        mc:Ignorable="d">
     <Border Background="{DynamicResource ActionDesignerBgBrush}">
-        <Grid>
+        <Grid HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
             <Grid.Styles>
                 <Style Selector="ListBox.actionDesigner ListBoxItem"
                        x:DataType="local:MpAvActionViewModelBase">
@@ -29,7 +30,7 @@
                                   VerticalAlignment="Stretch"
                                   Classes="actionDesigner"
                                   DesignerItem="{Binding}"
-                                  ShowGrid="True"
+                                  ShowGrid="{Binding IsGridVisible}"
                                   OriginThickness="1.5"
                                   GridLineThickness="0.5"
                                   GridLineSpacing="50"
@@ -44,7 +45,8 @@
                         <TransformGroup>
                             <ScaleTransform ScaleX="{Binding Scale, Mode=TwoWay, FallbackValue=1, TargetNullValue=1}"
                                             ScaleY="{Binding Scale, Mode=TwoWay, FallbackValue=1, TargetNullValue=1}" />
-                            <TranslateTransform />
+                            <TranslateTransform X="{Binding TranslateOffsetX, Mode=TwoWay, FallbackValue=0, TargetNullValue=0}"
+                                                Y="{Binding TranslateOffsetY, Mode=TwoWay, FallbackValue=0, TargetNullValue=0}" />
                         </TransformGroup>
                     </ListBox.RenderTransform>
                     <ListBox.ItemsPanel>
@@ -55,8 +57,9 @@
                                                       TipWidth="10"
                                                       TailWidth="3"
                                                       RenderTransformOrigin="0.5,0.5"
-                                                      local:MpAvListBoxItemBoundsObserverExtension.IsEnabled="True"
-                                                      local:MpAvListBoxItemBoundsObserverExtension.ObservedBounds="{Binding ObservedDesignerBounds, Mode=TwoWay}"
+                                                      local:MpAvBoundsObserverExtension.IsEnabled="True"
+                                                      local:MpAvBoundsObserverExtension.ToScreen="True"
+                                                      local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedDesignerBounds, Mode=TwoWay}"
                                                       TransitionLineThickness="1" />
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
@@ -67,43 +70,31 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </local:MpAvZoomBorder>
-
-            <!--  ADD NEW TRIGGER BUTTON (EMPTY SELECTION)  -->
-            <!--
-
-            <Button x:Name="AddNewActionButton"
-                    IsVisible="{Binding Items, ConverterParameter=flip, Converter={StaticResource CollectionIsNotEmptyToBoolConverter}}"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    local:MpAvIsHoveringExtension.IsEnabled="True"
-                    local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                    Command="{Binding ShowTriggerSelectorMenuCommand}"
-                    CommandParameter="{Binding $self}">
-                <StackPanel Orientation="Vertical">
-                    <Grid>
-                        <Ellipse Stroke="{Binding AddNewButtonBorderBrushHexColor}"
-                                 Fill="Transparent"
-                                 StrokeThickness="3"
-                                 Width="50"
-                                 Height="50" />
-                        <Rectangle HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Fill="DimGray"
-                                   Height="30"
-                                   Width="3" />
-                        <Rectangle HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Fill="DimGray"
-                                   Height="3"
-                                   Width="30" />
-                    </Grid>
-                    <Label HorizontalAlignment="Center">
-                        Add New
-                    </Label>
+            <Border x:Name="DesignerViewMenu"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Margin="0,5,5,0"
+                    CornerRadius="10"
+                    BorderBrush="DimGray"
+                    Background="Silver"
+                    Padding="3">
+                <StackPanel Orientation="Horizontal">
+                    <ToggleButton x:Name="ShowGridToggleButton"
+                                  IsThreeState="False"
+                                  IsChecked="{Binding IsGridVisible, Mode=TwoWay}">
+                        <Label Foreground="White"
+                               Content="Grid" />
+                    </ToggleButton>
+                    <Border Width="2"
+                            VerticalAlignment="Stretch"
+                            Background="DimGray" />
+                    <Button x:Name="ResetViewButton"
+                            Command="{Binding ResetDesignerViewCommand}">
+                        <Label Foreground="White"
+                               Content="Reset" />
+                    </Button>
                 </StackPanel>
-            </Button>-->
+            </Border>
         </Grid>
     </Border>
 </local:MpAvUserControl>

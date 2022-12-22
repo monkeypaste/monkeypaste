@@ -9,10 +9,12 @@ namespace MonkeyPaste.Common.Plugin {
         string Detail { get; set; }
         ICommand FixCommand { get; set; }
         object FixCommandArgs { get; set; }
-        string IconSourceStr { get; set; }
+        object IconSourceObj { get; set; }
         object OtherArgs { get; set; }
         Action<object> RetryAction { get; set; }
         object RetryActionObj { get; set; }
         string Title { get; set; }
+
+        object AnchorTarget { get; set; }
     }
 }

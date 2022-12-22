@@ -13,36 +13,71 @@ using System.Diagnostics;
 namespace MonkeyPaste.Avalonia {
     public class MpAvMessageBox : MpINativeMessageBox {
         private object result;
-        public bool ShowOkCancelMessageBox(string title, string message) {
-            if(OperatingSystem.IsWindows()) {
-#if WINDOWS
-                System.Windows.MessageBox.Show(message, title);
-#endif
-            } else {
-                // add others
+        public async Task<bool> ShowOkCancelMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null) {
+            var result = await MpNotificationBuilder.ShowNotificationAsync(
+                                    notificationType: MpNotificationType.ModalOkCancelMessageBox,
+                                    title: title,
+                                    body: message,
+                                    iconSourceObj: iconResourceObj,
+                                    anchor: anchor);
+
+            if (result == MpNotificationDialogResultType.Ok) {
+                return true;
+            }
+
+            if (result != MpNotificationDialogResultType.Cancel) {
+                // result type mismatch
                 Debugger.Break();
             }
             return false;
+            //            if(OperatingSystem.IsWindows()) {
+            //#if WINDOWS
+            //                System.Windows.MessageBox.Show(message, title);
+            //#endif
+            //            } else {
+            //                // add others
+            //                Debugger.Break();
+            //            }
+            //            return false;
         }
 
-        public bool? ShowYesNoCancelMessageBox(string title, string message) {
-            if(OperatingSystem.IsWindows()) {
-#if WINDOWS
-                var result = System.Windows.MessageBox.Show(message, title, System.Windows.MessageBoxButton.YesNoCancel);
-                if(result == System.Windows.MessageBoxResult.Yes) {
-                    return true;
-                }
-                if(result == System.Windows.MessageBoxResult.No) {
-                    return false;
-                }
-#endif
-                return null;
-            } else {
-                // fill in others
-                Debugger.Break();
+        public async Task<bool?> ShowYesNoCancelMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null) {
+            var result = await MpNotificationBuilder.ShowNotificationAsync(
+                                    notificationType: MpNotificationType.ModalYesNoCancelMessageBox,
+                                    title: title,
+                                    body: message,
+                                    iconSourceObj: iconResourceObj,
+                                    anchor: anchor);
 
+            if (result == MpNotificationDialogResultType.Yes) {
+                return true;
+            }
+            if (result == MpNotificationDialogResultType.No) {
+                return false;
+            }
+
+            if(result != MpNotificationDialogResultType.Cancel) {
+                // result type mismatch
+                Debugger.Break();
             }
             return null;
+
+//            if (OperatingSystem.IsWindows()) {
+//#if WINDOWS
+//                var result = System.Windows.MessageBox.Show(message, title, System.Windows.MessageBoxButton.YesNoCancel);
+//                if(result == System.Windows.MessageBoxResult.Yes) {
+//                    return true;
+//                }
+//                if(result == System.Windows.MessageBoxResult.No) {
+//                    return false;
+//                }
+//#endif
+//                return null;
+//            } else {
+//                // fill in others
+//                Debugger.Break();
+//            }
+//            return null;
         }
 
         private Window CreateSampleWindow(string title, string message) {

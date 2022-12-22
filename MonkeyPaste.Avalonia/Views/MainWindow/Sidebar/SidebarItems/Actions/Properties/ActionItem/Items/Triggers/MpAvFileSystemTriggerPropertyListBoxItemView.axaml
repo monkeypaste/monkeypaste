@@ -36,7 +36,7 @@
                                TextAlignment="Left"
                                VerticalAlignment="Center" />
                     <TextBlock IsVisible="{Binding FileSystemPath, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
-                               Text="{Binding FileSystemPath, Converter={StaticResource StringPathToFileOrFolderNameConverter}}"
+                               Text="{Binding FileSystemPath, Converter={StaticResource AbsoluteToRelativePathStringConverter}}"
                                TextAlignment="Right"
                                VerticalAlignment="Center">
                         <ToolTip.Tip>

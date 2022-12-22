@@ -900,7 +900,7 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultEditableItemWidth => EDITOR_TOOLBAR_MIN_WIDTH;
 
         public MpSize DefaultEditableItemSize => new MpSize(DefaultEditableItemWidth, DefaultItemHeight);
-        public double ScrollBarFixedAxisSize => 30;
+        public double ScrollBarFixedAxisSize => 0;
 
         #endregion
 
@@ -929,7 +929,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Layout
-
 
         public double DefaultPinTrayWidth => DefaultItemWidth * 1.4;
         public double ObservedPinTrayScreenWidth { get; set; }
@@ -969,14 +968,13 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
         public double MinClipTrayScreenWidth => MinClipOrPinTrayScreenWidth;
         public double MinClipTrayScreenHeight => MinClipOrPinTrayScreenHeight;
         public double MinClipOrPinTrayScreenWidth => 0;
         public double MinClipOrPinTrayScreenHeight => 0;
         public double ClipTrayContainerScreenWidth { get; set; }
         public double ClipTrayContainerScreenHeight { get; set; }
-        public double MaxTileWidth => Math.Max(0, ClipTrayScreenWidth - MAX_TILE_SIZE_CONTAINER_PAD);
+        public double MaxTileWidth => double.PositiveInfinity;// Math.Max(0, ClipTrayScreenWidth - MAX_TILE_SIZE_CONTAINER_PAD);
         public double MaxTileHeight => double.PositiveInfinity;// Math.Max(0, ClipTrayScreenHeight - MAX_TILE_SIZE_CONTAINER_PAD);
 
         public int CurGridFixedCount { get; set; }
@@ -2298,7 +2296,7 @@ namespace MonkeyPaste.Avalonia {
                     title: "Trial Expired",
                     body: "Please update your membership to use Monkey Paste",
                     msgType: MpNotificationType.TrialExpired,
-                    iconSourceStr: MpPrefViewModel.Instance.AbsoluteResourcesPath + @"/Images/monkey (2).png")
+                    iconSourceObj: MpPrefViewModel.Instance.AbsoluteResourcesPath + @"/Images/monkey (2).png")
                     .FireAndForgetSafeAsync(this);
             }
 
@@ -3324,7 +3322,7 @@ namespace MonkeyPaste.Avalonia {
                        title: $"MODE CHANGED",
                        body: $"Append{(IsAppendLineMode ? "-Line" : "")} Mode Activated",
                        msgType: MpNotificationType.AppModeChange,
-                       iconSourceStr: "NoEntryImage").FireAndForgetSafeAsync();
+                       iconSourceObj: "NoEntryImage").FireAndForgetSafeAsync();
             } else {
                 MpNotificationBuilder.ShowNotificationAsync(MpNotificationType.AppendChanged).FireAndForgetSafeAsync();
             }
@@ -3359,7 +3357,7 @@ namespace MonkeyPaste.Avalonia {
                        title: $"MODE CHANGED",
                        body: $"Append{(wasAppendLineMode ? "-Line" : "")} Mode Deactivated",
                        msgType: MpNotificationType.AppModeChange,
-                       iconSourceStr: "NoEntryImage");
+                       iconSourceObj: "NoEntryImage");
         }
 
         private async Task<bool> UpdateAppendModeAsync(MpCopyItem aci, bool isNew = true) {

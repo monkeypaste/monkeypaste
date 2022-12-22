@@ -23,8 +23,9 @@ namespace MonkeyPaste {
         public object Body { get; set; }
         public string Detail { get; set; }
 
-        public string IconSourceStr { get; set; }
+        public object IconSourceObj { get; set; }
 
+        public object AnchorTarget { get; set; }
         public Action<object> RetryAction { get; set; }
         public object RetryActionObj { get; set; }
 
@@ -56,7 +57,7 @@ namespace MonkeyPaste {
             Title = pluginNotfication.Title;
             Body = pluginNotfication.Body;
             Detail = pluginNotfication.Detail;
-            IconSourceStr = pluginNotfication.IconSourceStr;
+            IconSourceObj = pluginNotfication.IconSourceObj;
             RetryAction = pluginNotfication.RetryAction;
             RetryActionObj = pluginNotfication.RetryActionObj;
             FixCommand = pluginNotfication.FixCommand;

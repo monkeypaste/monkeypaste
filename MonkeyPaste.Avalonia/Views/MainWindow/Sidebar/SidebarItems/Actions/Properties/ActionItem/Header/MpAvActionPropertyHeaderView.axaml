@@ -11,7 +11,7 @@
                        x:CompileBindings="True"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
-    <Grid ColumnDefinitions="Auto,*,Auto">
+    <Grid ColumnDefinitions="Auto,Auto,*,Auto">
         <Grid.Styles>
             <Style Selector="ToggleButton#ToggleEnableButton:not(.invalid) /template/ ContentPresenter">
                 <Setter Property="Background"
@@ -46,15 +46,20 @@
                         Value="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, ConverterParameter={StaticResource WarningImage}}" />
             </Style>
         </Grid.Styles>
-        <Grid.RenderTransform>
-            <!--<TranslateTransform X="-3" />-->
-        </Grid.RenderTransform>
+        <!--  OPTIONS POPUP  -->
+        <local:MpAvOptionsButton Grid.Column="0"
+                                 Width="15"
+                                 Height="25"
+                                 Margin="3,0,10,0"
+                                 local:MpAvMenuExtension.PlacementMode="Left"
+                                 VerticalAlignment="Center"
+                                 HorizontalAlignment="Left" />
         <!--  ENABLE/DISABLE BUTTON  -->
 
         <ToggleButton x:Name="ToggleEnableButton"
                       Classes.invalid="{Binding !IsValid}"
                       Classes.enabled="{Binding IsEnabledDb}"
-                      Grid.Column="0"
+                      Grid.Column="1"
                       BorderThickness="1.5"
                       HorizontalAlignment="Left"
                       HorizontalContentAlignment="Stretch"
@@ -78,7 +83,7 @@
 
         <!--  ACTION LABEL  -->
 
-        <TextBox Grid.Column="1"
+        <TextBox Grid.Column="2"
                  Foreground="{Binding LabelForegroundBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                  Background="{Binding LabelBackgroundBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                  BorderThickness="1"
@@ -99,7 +104,7 @@
 
         <!--  ACTION HINT  -->
 
-        <local:MpAvToolTipInfoHintView Grid.Column="2"
+        <local:MpAvToolTipInfoHintView Grid.Column="3"
                                        HorizontalAlignment="Right"
                                        VerticalAlignment="Center"
                                        ToolTipText="{Binding Tooltip}" />
