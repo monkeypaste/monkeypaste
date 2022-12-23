@@ -22,13 +22,7 @@
         <local:MpAvPopupMenuSelector Grid.Row="0"
                                      Grid.Column="1"
                                      MinWidth="150"
-                                     DataContext="{Binding}"
-                                     ClearCommands="False"
-                                     PopupMenu="{Binding TagSelectorPopupMenu}"
-                                     IsPopupOpen="{Binding IsPopupMenuOpen, Mode=TwoWay}"
-                                     EmptyIconResourceObj="{Binding IconResourceKeyStr}"
-                                     EmptyText="Select..."
-                                     SelectedMenuItem="{Binding SelectedPopupMenuItemViewModel}" />
+                                     DataContext="{Binding}" />
         <!--<Border x:Name="ComboBoxContainerBorder"
                 Grid.Row="0"
                 Grid.Column="1"

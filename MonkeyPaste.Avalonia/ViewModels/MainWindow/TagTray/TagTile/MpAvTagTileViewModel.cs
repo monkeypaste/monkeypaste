@@ -746,9 +746,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task UpdateClipCountAsync() {
-            LinkedCopyItemIds = await MpDataModelProvider.GetCopyItemIdsForTagAsync(TagId);
-            TagClipCount = SelfAndAllDescendants.Cast<MpAvTagTileViewModel>().SelectMany(x => x.LinkedCopyItemIds).Distinct().Count();
-            //TagClipCount = this_tag_link_count + Items.Sum(x => x.TagClipCount);
+            await Dispatcher.UIThread.InvokeAsync(async () => {
+                LinkedCopyItemIds = await MpDataModelProvider.GetCopyItemIdsForTagAsync(TagId);
+                TagClipCount = SelfAndAllDescendants.Cast<MpAvTagTileViewModel>().SelectMany(x => x.LinkedCopyItemIds).Distinct().Count();
+                //TagClipCount = this_tag_link_count + Items.Sum(x => x.TagClipCount);
+            });            
         }
 
         private void UpdateBadge() {
@@ -963,9 +965,11 @@ namespace MonkeyPaste.Avalonia {
             }, ()=> !IsTagReadOnly);
 
 
-        public ICommand LinkCopyItemCommand => new MpCommand<object>(
-            (ciidArg) => {
-                LinkOrUnlinkCopyItemAsync((int)ciidArg, true).FireAndForgetSafeAsync(this);
+        public ICommand LinkCopyItemCommand => new MpAsyncCommand<object>(
+            async(ciidArg) => {
+                await Dispatcher.UIThread.InvokeAsync(async () => {
+                    await LinkOrUnlinkCopyItemAsync((int)ciidArg, true);
+                });
             }, (ciidArg) => {
                 if (ciidArg is not int) {
                     return false;
@@ -980,8 +984,9 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand UnlinkCopyItemCommand => new MpAsyncCommand<object>(
             async (ciidArg) => {
-                await LinkOrUnlinkCopyItemAsync((int)ciidArg, false);
-
+                await Dispatcher.UIThread.InvokeAsync(async () => {
+                    await LinkOrUnlinkCopyItemAsync((int)ciidArg, false);
+                });
             }, (ciidArg) => {
                 if (ciidArg is not int) {
                     return false;

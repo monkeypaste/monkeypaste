@@ -133,6 +133,7 @@ namespace MonkeyPaste {
 
         #region State
 
+        public int MenuItemId { get; set; }
         public bool IsEnabled {
             get {
                 if(Command == null) {

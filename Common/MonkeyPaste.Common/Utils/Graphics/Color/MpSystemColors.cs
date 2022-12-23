@@ -46,6 +46,7 @@ namespace MonkeyPaste.Common {
         public static string LoadingSpinnerBackground => gray24;
 
         public static string IsSelectedBorderColor => Red;
+        public static string IsHoveringSelectedBorderColor => limegreen;
         public static string IsHoveringBorderColor => Yellow;
         public static string IsInactiveBorderColor => Transparent;
 

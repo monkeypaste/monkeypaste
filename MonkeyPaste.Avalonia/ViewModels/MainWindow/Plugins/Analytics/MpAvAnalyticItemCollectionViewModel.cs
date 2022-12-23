@@ -233,10 +233,26 @@ namespace MonkeyPaste.Avalonia {
             return aivm.DefaultPresetViewModel;
         }
 
+        public MpMenuItemViewModel GetAnalyzerMenu(ICommand cmd) {
+            return new MpMenuItemViewModel() {
+                SubItems = Items.Select(x =>
+                new MpMenuItemViewModel() {                    
+                    Header = x.Title,
+                    IconId = x.PluginIconId,
+                    SubItems = x.Items.Select(y =>
+                    new MpMenuItemViewModel() {
+                        MenuItemId = y.AnalyticItemPresetId,
+                        Header = y.Label,
+                        IconId = y.IconId,
+                        Command = cmd,
+                    }).ToList()
+                }).ToList()
+            };
+        }
         #endregion
 
         #region Private Methods
-        
+
         private async Task<MpAvAnalyticItemViewModel> CreateAnalyticItemViewModel(MpPluginFormat plugin) {
             MpAvAnalyticItemViewModel aivm = new MpAvAnalyticItemViewModel(this);
 

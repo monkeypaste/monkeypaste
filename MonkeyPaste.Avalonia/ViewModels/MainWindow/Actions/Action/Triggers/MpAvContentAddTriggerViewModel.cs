@@ -45,7 +45,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             await base.Enable();
-            //MpAvClipTrayViewModel.Instance.RegisterActionComponent(this);
+            MpAvClipTrayViewModel.Instance.RegisterActionComponent(this);
         }
 
         protected override async Task Disable() {
@@ -53,7 +53,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             await base.Disable();
-            //MpAvClipTrayViewModel.Instance.UnregisterActionComponent(this);
+            MpAvClipTrayViewModel.Instance.UnregisterActionComponent(this);
         }
 
         protected override bool CanPerformAction(object arg) {

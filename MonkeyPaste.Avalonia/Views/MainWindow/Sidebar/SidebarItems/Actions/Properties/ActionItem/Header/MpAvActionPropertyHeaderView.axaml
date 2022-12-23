@@ -45,6 +45,7 @@
                 <Setter Property="Source"
                         Value="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, ConverterParameter={StaticResource WarningImage}}" />
             </Style>
+
         </Grid.Styles>
         <!--  OPTIONS POPUP  -->
         <local:MpAvOptionsButton Grid.Column="0"
@@ -83,7 +84,8 @@
 
         <!--  ACTION LABEL  -->
 
-        <TextBox Grid.Column="2"
+        <TextBox x:Name="LabelTextBox"
+                 Grid.Column="2"
                  Foreground="{Binding LabelForegroundBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                  Background="{Binding LabelBackgroundBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                  BorderThickness="1"
@@ -101,7 +103,29 @@
                  local:MpAvIsFocusedExtension.IsEnabled="True"
                  local:MpAvIsFocusedExtension.IsFocused="{Binding IsLabelFocused, Mode=TwoWay}"
                  Text="{Binding Label, Mode=TwoWay}" />
-
+        <Grid Grid.Column="2"
+              ClipToBounds="True"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
+            <local:MpAvMarqueeTextBox Foreground="{Binding LabelForegroundBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                                      Background="{Binding LabelBackgroundBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                                      BorderThickness="1"
+                                      BorderBrush="{Binding LabelBorderBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                                      Margin="5,5,15,5"
+                                      Padding="3"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Center"
+                                      VerticalContentAlignment="Center"
+                                      FontSize="14"
+                                      FontWeight="SemiBold"
+                                      Cursor="Ibeam"
+                                      local:MpAvIsFocusedExtension.IsEnabled="True"
+                                      local:MpAvIsFocusedExtension.IsFocused="{Binding IsLabelFocused, Mode=TwoWay}"
+                                      Text="{Binding Label, Mode=TwoWay}"
+                                      MinHeight="20"
+                                      HorizontalContentAlignment="Left"
+                                      FontFamily="Segue UI" />
+        </Grid>
         <!--  ACTION HINT  -->
 
         <local:MpAvToolTipInfoHintView Grid.Column="3"

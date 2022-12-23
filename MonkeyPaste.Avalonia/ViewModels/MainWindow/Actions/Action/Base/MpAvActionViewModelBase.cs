@@ -109,12 +109,6 @@ namespace MonkeyPaste.Avalonia {
         public MpAvTriggerActionViewModelBase RootTriggerActionViewModel =>
             RootItem as MpAvTriggerActionViewModelBase;
 
-        public virtual MpMenuItemViewModel SelectedPopupMenuItemViewModel { get; }
-
-        public virtual MpAvActionViewModelBase SelectedTreeItem {
-            get => Items.FirstOrDefault(x => x.IsTreeSelected);
-            set => Items.ForEach(x => x.IsTreeSelected = x == value);
-        }
         #endregion
 
         #region MpIMovableViewModel Implementation
@@ -157,21 +151,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        #endregion
-
-        #region MpITreeItemViewModel Implementation
-
-        //public bool IsExpanded { get; set; } = false;
-
-        //public MpAvActionViewModelBase ParentTreeItem => ParentActionViewModel;
-
-        //public ObservableCollection<MpAvActionViewModelBase> Items { get; set; } = new ObservableCollection<MpAvActionViewModelBase>();
-
-        //public IEnumerable<MpAvActionViewModelBase> Children => Items;
-
-
-        //MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem { get; }
-        //ObservableCollection<MpITreeItemViewModel> MpITreeItemViewModel.Children { get; }
         #endregion
 
         #region MpIUserIcon Implementation
@@ -246,8 +225,8 @@ namespace MonkeyPaste.Avalonia {
         public string BorderBrushHexColor {
             get {
                 if (IsSelectedAction) {
-                    if (IsEnabled.HasValue && IsEnabled.Value) {
-                        return MpSystemColors.limegreen;
+                    if (IsHovering) {
+                        return MpSystemColors.IsHoveringSelectedBorderColor;
                     }
                     return MpSystemColors.IsSelectedBorderColor;
                 }
@@ -371,23 +350,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        private bool _isTreeSelected;
-        public bool IsTreeSelected {
-            get {
-                if(ParentTreeItem == null ||
-                    Parent.SelectedItem != RootTriggerActionViewModel ||
-                    RootTriggerActionViewModel.SelectedItem != ParentTreeItem) {
-                    _isTreeSelected = false;
-                }
-                return _isTreeSelected;
-            }
-            set {
-                if(IsTreeSelected != value) {
-                    _isTreeSelected = value;
-                    OnPropertyChanged(nameof(IsTreeSelected));
-                }
-            }
-        }
         public bool IsSelectedAction {
             get {
                 if(Parent != null &&
@@ -1063,7 +1025,7 @@ namespace MonkeyPaste.Avalonia {
                     //    break;
                     //}
                     //AddChildEmptyActionViewModel.Location = DefaultEmptyActionLocation;
-
+                    
                     _lastLocation = Location;
                     break;
                 case nameof(IsEnabled):
@@ -1081,6 +1043,14 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(Items):
                     OnPropertyChanged(nameof(SelfAndAllDescendants));
+                    break;
+                case nameof(IsExpanded):
+                    if(!IsSelected) {
+                        break;
+                    }
+                    if(!IsExpanded && IsLabelFocused) {
+                        IsExpanded = true;
+                    }
                     break;
             }
         }

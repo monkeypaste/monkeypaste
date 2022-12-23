@@ -17,7 +17,7 @@
               Padding="5,0"
               HorizontalAlignment="Stretch"
               Background="{Binding ActionBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-              IsExpanded="True">
+              IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
         <Expander.Header>
             <local:MpAvActionPropertyHeaderView Grid.Column="0"
                                                 HorizontalAlignment="Stretch"
@@ -32,97 +32,63 @@
                     CornerRadius="0"
                     Background="Transparent"
                     Margin="0,0,0,5">
-                <DockPanel LastChildFill="True">
-                    <Border HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                            IsVisible="{Binding Items, Converter={StaticResource CollectionIsNotEmptyToBoolConverter}}"
-                            DockPanel.Dock="Bottom">
-                        <TreeView x:Name="ChildActionTreeView"
-                                  Items="{Binding Items}"
-                                  BorderThickness="0"
-                                  Background="Transparent"
-                                  SelectedItem="{Binding SelectedTreeItem, Mode=TwoWay}"
-                                  SelectionMode="Single"
-                                  HorizontalAlignment="Stretch"
-                                  VerticalAlignment="Stretch">
-                            <TreeView.Styles>
-                                <Style Selector="TreeViewItem"
-                                       x:DataType="local:MpAvTagTileViewModel">
-                                    <Setter Property="HorizontalAlignment"
-                                            Value="Stretch" />
-                                    <Setter Property="VerticalAlignment"
-                                            Value="Stretch" />
-                                    <Setter Property="Background"
-                                            Value="Transparent" />
-                                    <Setter Property="IsExpanded"
-                                            Value="{Binding IsExpanded, Mode=TwoWay}" />
-                                </Style>
-                            </TreeView.Styles>
-                            <TreeView.ItemTemplate>
-                                <TreeDataTemplate DataType="{x:Type local:MpAvActionViewModelBase}"
-                                                  ItemsSource="{Binding Items}">
-                                    <local:MpAvActionPropertyView DataContext="{Binding}" />
-                                </TreeDataTemplate>
-                            </TreeView.ItemTemplate>
-                        </TreeView>
-                    </Border>
-                    <ContentControl x:Name="RootActionPropertyContentControl"
-                                    Content="{Binding}">
-                        <ContentControl.DataTemplates>
-                            <local:MpAvActionItemPropertiesTemplateSelector>
-                                <!--  Triggers  -->
+                <ContentControl x:Name="RootActionPropertyContentControl"
+                                Content="{Binding}">
+                    <ContentControl.DataTemplates>
+                        <local:MpAvActionItemPropertiesTemplateSelector>
+                            <!--  Triggers  -->
 
-                                <!--  Content Add  -->
-                                <DataTemplate x:Key="ContentAddedPropertiesTemplate"
-                                              DataType="{x:Type local:MpAvContentAddTriggerViewModel}">
-                                    <local:MpAvContentAddTriggerPropertyListBoxItemView DataContext="{Binding}" />
-                                </DataTemplate>
+                            <!--  Content Add  -->
+                            <DataTemplate x:Key="ContentAddedPropertiesTemplate"
+                                          DataType="{x:Type local:MpAvContentAddTriggerViewModel}">
+                                <local:MpAvContentAddTriggerPropertyListBoxItemView DataContext="{Binding}" />
+                            </DataTemplate>
 
-                                <!--  Content Tagged  -->
-                                <DataTemplate x:Key="ContentTaggedPropertiesTemplate"
-                                              DataType="{x:Type local:MpAvContentTaggedTriggerViewModel}">
-                                    <local:MpAvContentTaggedTriggerPropertyListBoxItemView DataContext="{Binding}" />
-                                </DataTemplate>
+                            <!--  Content Tagged  -->
+                            <DataTemplate x:Key="ContentTaggedPropertiesTemplate"
+                                          DataType="{x:Type local:MpAvContentTaggedTriggerViewModel}">
+                                <local:MpAvContentTaggedTriggerPropertyListBoxItemView DataContext="{Binding}" />
+                            </DataTemplate>
 
-                                <!--  File System Changed  -->
-                                <DataTemplate x:Key="FileSystemChangePropertiesTemplate"
-                                              DataType="{x:Type local:MpAvFileSystemTriggerViewModel}">
-                                    <local:MpAvFileSystemTriggerPropertyListBoxItemView DataContext="{Binding}" />
-                                </DataTemplate>
+                            <!--  File System Changed  -->
+                            <DataTemplate x:Key="FileSystemChangePropertiesTemplate"
+                                          DataType="{x:Type local:MpAvFileSystemTriggerViewModel}">
+                                <local:MpAvFileSystemTriggerPropertyListBoxItemView DataContext="{Binding}" />
+                            </DataTemplate>
 
-                                <!--  Triggers END  -->
+                            <!--  Triggers END  -->
 
-                                <!--  Compare  -->
-                                <DataTemplate x:Key="ComparePropertiesTemplate"
-                                              DataType="{x:Type local:MpAvCompareActionViewModelBase}">
-                                    <local:MpAvCompareActionPropertyListBoxItemView DataContext="{Binding}" />
-                                </DataTemplate>
-                                <!--  Analyze  -->
-                                <DataTemplate x:Key="AnalyzePropertiesTemplate"
-                                              DataType="{x:Type local:MpAvAnalyzeActionViewModel}">
-                                    <local:MpAvAnalyzeActionPropertyListBoxItemView DataContext="{Binding}" />
-                                </DataTemplate>
-                                <!--  Classify  -->
-                                <DataTemplate x:Key="ClassifyPropertiesTemplate"
-                                              DataType="{x:Type local:MpAvClassifyActionViewModel}">
-                                    <local:MpAvClassifyActionPropertyListBoxItemView DataContext="{Binding}" />
-                                </DataTemplate>
+                            <!--  Compare  -->
+                            <DataTemplate x:Key="ComparePropertiesTemplate"
+                                          DataType="{x:Type local:MpAvCompareActionViewModelBase}">
+                                <local:MpAvCompareActionPropertyListBoxItemView DataContext="{Binding}" />
+                            </DataTemplate>
+                            <!--  Analyze  -->
+                            <DataTemplate x:Key="AnalyzePropertiesTemplate"
+                                          DataType="{x:Type local:MpAvAnalyzeActionViewModel}">
+                                <local:MpAvAnalyzeActionPropertyListBoxItemView DataContext="{Binding}" />
+                            </DataTemplate>
+                            <!--  Classify  -->
+                            <DataTemplate x:Key="ClassifyPropertiesTemplate"
+                                          DataType="{x:Type local:MpAvClassifyActionViewModel}">
+                                <local:MpAvClassifyActionPropertyListBoxItemView DataContext="{Binding}" />
+                            </DataTemplate>
 
-                                <!--  File Writer  -->
-                                <DataTemplate x:Key="FileWriterPropertiesTemplate"
-                                              DataType="{x:Type local:MpAvFileWriterActionViewModel}">
-                                    <local:MpAvFileWriterActionPropertyListBoxItemView DataContext="{Binding}" />
-                                </DataTemplate>
+                            <!--  File Writer  -->
+                            <DataTemplate x:Key="FileWriterPropertiesTemplate"
+                                          DataType="{x:Type local:MpAvFileWriterActionViewModel}">
+                                <local:MpAvFileWriterActionPropertyListBoxItemView DataContext="{Binding}" />
+                            </DataTemplate>
 
-                                <!--  Macro  -->
-                                <DataTemplate x:Key="MacroPropertiesTemplate"
-                                              DataType="{x:Type local:MpAvMacroActionViewModel}">
-                                    <local:MpAvMacroActionPropertyListBoxItemView DataContext="{Binding}" />
-                                </DataTemplate>
-                            </local:MpAvActionItemPropertiesTemplateSelector>
-                        </ContentControl.DataTemplates>
-                    </ContentControl>
-                </DockPanel>
+                            <!--  Macro  -->
+                            <DataTemplate x:Key="MacroPropertiesTemplate"
+                                          DataType="{x:Type local:MpAvMacroActionViewModel}">
+                                <local:MpAvMacroActionPropertyListBoxItemView DataContext="{Binding}" />
+                            </DataTemplate>
+                        </local:MpAvActionItemPropertiesTemplateSelector>
+                    </ContentControl.DataTemplates>
+                </ContentControl>
+                <!--</DockPanel>-->
             </Border>
         </Grid>
     </Expander>

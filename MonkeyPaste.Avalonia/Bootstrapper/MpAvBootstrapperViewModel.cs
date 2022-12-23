@@ -77,7 +77,6 @@ namespace MonkeyPaste.Avalonia {
                     new MpBootstrappedItemViewModel(this,typeof(MpAvClipTileSortFieldViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvClipTileSortDirectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvSearchBoxViewModel)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvTriggerCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvClipboardHandlerCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvAnalyticItemCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvSettingsWindowViewModel)),
@@ -85,7 +84,8 @@ namespace MonkeyPaste.Avalonia {
                     new MpBootstrappedItemViewModel(this,typeof(MpAvShortcutCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvTagTrayViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvExternalPasteHandler)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpDataModelProvider))
+                    new MpBootstrappedItemViewModel(this,typeof(MpDataModelProvider)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvTriggerCollectionViewModel))
                });
 
             _platformItems.AddRange(

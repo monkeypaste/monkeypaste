@@ -8,12 +8,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia.Controls;
 
 namespace MonkeyPaste.Avalonia {
-
-    public class MpAvClassifyActionViewModel : MpAvActionViewModelBase, MpIActionPluginComponent {
+    public class MpAvClassifyActionViewModel : MpAvActionViewModelBase, MpIActionPluginComponent, MpIPopupSelectorMenu {
         #region Private Variables
 
+        #endregion
+
+        #region MpIPopupSelectorMenu Implementation
+
+
+        public bool IsOpen { get; set; }
+        public MpMenuItemViewModel PopupMenu {
+            get {
+                return new MpMenuItemViewModel() {
+                    SubItems = new List<MpMenuItemViewModel>() {
+                        MpAvTagTrayViewModel.Instance.AllTagViewModel.GetTagMenu(SelectTagCommand,new int[] { TagId}, true)
+                    }
+                };
+            }
+        }
+        public MpMenuItemViewModel SelectedMenuItem =>
+            SelectedTag == null ? null : SelectedTag.GetTagMenu(null, new int[] { TagId }, false);
+        public string EmptyText => "Select Tag...";
+        public object EmptyIconResourceObj => MpAvActionViewModelBase.GetDefaultActionIconResourceKey(MpActionType.Classify, null);
         #endregion
 
         #region Properties
@@ -34,23 +53,6 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        public override MpMenuItemViewModel SelectedPopupMenuItemViewModel =>
-            SelectedTag == null ? null : SelectedTag.GetTagMenu(null,new int[] { TagId },false);
-
-
-        public MpMenuItemViewModel TagSelectorPopupMenu {
-            get {
-                return new MpMenuItemViewModel() {
-                    SubItems = new List<MpMenuItemViewModel>() {
-                        MpAvTagTrayViewModel.Instance.AllTagViewModel.GetTagMenu(SelectTagCommand,new int[] { TagId}, true)
-                    }
-                };
-            }
-        }
-
-
-
-        //private MpMenuItemViewModel Get
         #endregion
 
         #region Model
@@ -141,9 +143,11 @@ namespace MonkeyPaste.Avalonia {
                 if(args is int tagId) {
                     TagId = tagId;
                     OnPropertyChanged(nameof(SelectedTag));
-                    OnPropertyChanged(nameof(SelectedPopupMenuItemViewModel));
+                    OnPropertyChanged(nameof(SelectedMenuItem));
                 }
             });
+
+
         #endregion
     }
 }

@@ -10,7 +10,22 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvAnalyzeActionViewModel : MpAvActionViewModelBase {
+    public class MpAvAnalyzeActionViewModel : MpAvActionViewModelBase, MpIPopupSelectorMenu {
+        #region MpIPopupSelectorMenu Implementation
+        public bool IsOpen { get; set; }
+        public MpMenuItemViewModel PopupMenu =>
+            MpAvAnalyticItemCollectionViewModel.Instance.GetAnalyzerMenu(SelectAnalyzerCommand);
+        public MpMenuItemViewModel SelectedMenuItem =>
+            SelectedPreset == null ?
+                null :
+            (this as MpIPopupSelectorMenu).PopupMenu.SubItems
+            .SelectMany(x => x.SubItems)
+            .FirstOrDefault(x => x.MenuItemId == AnalyticItemPresetId);
+        public string EmptyText => "Select Analyzer...";
+        public object EmptyIconResourceObj => MpAvActionViewModelBase.GetDefaultActionIconResourceKey(MpActionType.Analyze, null);
+
+        #endregion
+
         #region Properties
 
         #region View Models
@@ -32,9 +47,6 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-
-        public override MpMenuItemViewModel SelectedPopupMenuItemViewModel =>
-            SelectedPreset == null ? null : SelectedPreset.ContextMenuItemViewModel;
 
         #endregion
 
@@ -162,6 +174,14 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ToggleShowParametersCommand => new MpCommand(
             () => {
                 IsShowingParameters = !IsShowingParameters;
+            });
+        public ICommand SelectAnalyzerCommand => new MpCommand<object>(
+            (args) => {
+                if (args is int presetId) {
+                    AnalyticItemPresetId = presetId;
+                    OnPropertyChanged(nameof(SelectedPreset));
+                    OnPropertyChanged(nameof(SelectedMenuItem));
+                }
             });
 
         #endregion

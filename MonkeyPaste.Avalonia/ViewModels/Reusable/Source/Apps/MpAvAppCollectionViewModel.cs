@@ -30,7 +30,16 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvAppViewModel ThisAppViewModel => Items.FirstOrDefault(x => x.AppId == MpDefaultDataModelTools.ThisAppId);
 
-        public MpAvAppViewModel LastActiveAppViewModel { get; private set; }
+        private MpAvAppViewModel _lastActiveAppViewModel;
+        public MpAvAppViewModel LastActiveAppViewModel {
+            get => _lastActiveAppViewModel == null ? ThisAppViewModel : _lastActiveAppViewModel;
+            private set {
+                if(LastActiveAppViewModel != value) {
+                    _lastActiveAppViewModel = value;
+                    OnPropertyChanged(nameof(LastActiveAppViewModel));
+                }
+            }
+        }
         #endregion
 
         #region State
@@ -186,7 +195,7 @@ namespace MonkeyPaste.Avalonia {
         }
         private async Task RegisterWithProcessesManager() {
             // This is only called during init to keep app storage in sync so any running apps are added if unknown
-            MpPlatformWrapper.Services.ProcessWatcher.StartWatcher();
+            //PlatformWrapper.Services.ProcessWatcher.StartWatcher();
 
             var unknownApps = MpPlatformWrapper.Services.ProcessWatcher.RunningProcessLookup.Keys
                                     .Where(x => !Items.Any(y => y.AppPath.ToLower() == x.ToLower()))

@@ -21,14 +21,9 @@
                    Text="Analyzer" />
         <local:MpAvPopupMenuSelector Grid.Row="0"
                                      Grid.Column="1"
-                                     MinWidth="150"
-                                     IsBusy="{Binding IsAnyBusy}"
-                                     IsPopupOpen="{Binding IsPopupMenuOpen, Mode=TwoWay}"
-                                     EmptyIconResourceObj="{Binding IconResourceKeyStr}"
-                                     EmptyText="Select..."
-                                     SelectedMenuItem="{Binding SelectedPopupMenuItemViewModel}" />
+                                     MinWidth="150" />
 
-      <!--<ComboBox x:Name="AnalyzerPresetComboBox"
+        <!--<ComboBox x:Name="AnalyzerPresetComboBox"
                   x:CompileBindings="False"
                   Grid.Row="0"
                   Grid.Column="1"

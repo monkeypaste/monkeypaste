@@ -1,0 +1,126 @@
+<local:MpAvUserControl x:Name="PopupMenuSelector"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:DataType="pcl:MpIPopupSelectorMenu"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvPopupMenuSelector">
+
+    <local:MpAvUserControl.Styles>
+        <!--  HOVER BRUSHES  -->
+        <Style Selector="Button#ContainerButton">
+            <Setter Property="BorderBrush"
+                    Value="DimGray" />
+        </Style>
+        <Style Selector="Button#ContainerButton:pointerover">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource HoverDefaultBorderBrush}" />
+        </Style>
+
+        <Style Selector="Border.popupCaret">
+            <Setter Property="BorderBrush"
+                    Value="Silver" />
+        </Style>
+        <Style Selector="Button#ContainerButton:pointerover Border.popupCaret">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource HoverDefaultBorderBrush}" />
+        </Style>
+
+        <Style Selector="Border.popupCaret:pointerover">
+            <Setter Property="Background"
+                    Value="Gainsboro" />
+        </Style>
+
+        <!--  SELECTED ITEM ICON/HEADER CONTENT  -->
+        <Style Selector="Border#SelectionBorder Image">
+            <Setter Property="Source"
+                    Value="{Binding EmptyIconResourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+        </Style>
+        <Style Selector="Border#SelectionBorder.notEmpty Image">
+            <Setter Property="Source"
+                    Value="{Binding SelectedMenuItem.IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+        </Style>
+        <Style Selector="Border#SelectionBorder TextBlock">
+            <Setter Property="Text"
+                    Value="{Binding EmptyText}" />
+        </Style>
+        <Style Selector="Border#SelectionBorder.notEmpty TextBlock">
+            <Setter Property="Text"
+                    Value="{Binding SelectedMenuItem.Header}" />
+        </Style>
+
+        <!--  POPUP CARET DIR TOGGLE  -->
+        <Style Selector="Border.popupCaret PathIcon">
+            <Setter Property="RotateTransform.Angle"
+                    Value="0" />
+        </Style>
+        <Style Selector="Border.popupCaret PathIcon.open">
+            <Setter Property="RotateTransform.Angle"
+                    Value="180" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <Button x:Name="ContainerButton"
+            Cursor="Hand"
+            local:MpAvMenuExtension.IsEnabled="True"
+            local:MpAvMenuExtension.IsOpen="{Binding IsOpen, Mode=TwoWay}"
+            local:MpAvMenuExtension.SuppressDefaultRightClick="True"
+            local:MpAvMenuExtension.PlacementMode="Right"
+            local:MpAvMenuExtension.ForcedMenuItemViewModel="{Binding PopupMenu}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+        <Grid ColumnDefinitions="*, 25"
+              Margin="5"
+              MinHeight="30">
+            <Border x:Name="SelectionBorder"
+                    Grid.Column="0"
+                    Padding="5,3"
+                    Cursor="Arrow"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    BorderThickness="1"
+                    CornerRadius="3"
+                    Background="Transparent"
+                    Classes.notEmpty="{Binding SelectedMenuItem, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}">
+                <DockPanel LastChildFill="True">
+                    <Image Margin="5,0,5,0"
+                           Height="25"
+                           Width="25" />
+                    <TextBlock Margin="5,0,5,0"
+                               Padding="3"
+                               VerticalAlignment="Stretch"
+                               HorizontalAlignment="Left"
+                               FontFamily="Segue UI"
+                               FontSize="14"
+                               Foreground="Black"
+                               Background="Transparent" />
+                </DockPanel>
+            </Border>
+            <!--    -->
+            <Border x:Name="PopupCaretBorder"
+                    Grid.Column="1"
+                    Classes="popupCaret,svgOutlineButton"
+                    Background="DimGray"
+                    BorderThickness="1"
+                    VerticalAlignment="Center"
+                    Margin="7,0,0,0"
+                    Cursor="Hand"
+                    Height="25"
+                    Width="25">
+                <PathIcon Foreground="White"
+                          Width="15"
+                          Height="15"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Classes.open="{Binding IsOpen}"
+                          Data="{StaticResource MenuDownArrowSvg}" />
+            </Border>
+        </Grid>
+    </Button>
+
+</local:MpAvUserControl>

@@ -43,6 +43,12 @@ namespace MonkeyPaste.Avalonia {
                 return new MpAvStringBase64ToBitmapConverter().Convert(ivm.IconBase64, null, scale.ToString(), CultureInfo.CurrentCulture);
             } else if(value is string valStr) {
                 //types: resource key, hex color, base64, file system path
+                if(valStr.StartsWith("#")) {
+                    var blank_bmp = MpAvStringResourceConverter.Instance.Convert(
+                        MpPlatformWrapper.Services.PlatformResource.GetResource("TextureImage"), null, null, null) as Bitmap;
+                    blank_bmp = blank_bmp.Tint(valStr);
+                    return blank_bmp;
+                }
                 if (valStr.EndsWith("Icon")) {
                     return new WindowIcon(
                         MpAvStringResourceConverter.Instance.Convert(

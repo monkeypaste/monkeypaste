@@ -116,7 +116,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-
+        public MpAvProcessWatcherBase() {
+            StartWatcher();
+        }
 
         #endregion
 

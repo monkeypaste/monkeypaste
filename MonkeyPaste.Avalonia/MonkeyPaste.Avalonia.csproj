@@ -1089,7 +1089,7 @@
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\MpAvPluginParameterListBoxView.axaml.cs">
       <DependentUpon>MpAvPluginParameterListBoxView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Reusable\Buttons\MpAvPopupMenuSelector.axaml.cs">
+    <Compile Update="Views\Reusable\Buttons\PopupSelector\MpAvPopupMenuSelector.axaml.cs">
       <DependentUpon>MpAvPopupMenuSelector.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\Buttons\MpAvOptionsButton.axaml.cs">

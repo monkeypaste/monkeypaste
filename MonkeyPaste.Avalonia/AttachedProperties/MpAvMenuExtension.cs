@@ -77,6 +77,24 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region IsOpen AvaloniaProperty
+        public static bool GetIsOpen(AvaloniaObject obj) {
+            return obj.GetValue(IsOpenProperty);
+        }
+
+        public static void SetIsOpen(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsOpenProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsOpenProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "IsOpen",
+                false,
+                false,
+                BindingMode.TwoWay);
+
+        #endregion
+
         #region SuppressDefaultRightClick AvaloniaProperty
         public static bool GetSuppressDefaultRightClick(AvaloniaObject obj) {
             return obj.GetValue(SuppressDefaultRightClickProperty);
@@ -276,7 +294,7 @@ namespace MonkeyPaste.Avalonia {
 
             // CREATE & SHOW MENU
 
-            ShowMenu(control, mivm, e.GetPosition(control).ToPortablePoint());
+            ShowMenu(control, mivm, e.GetPosition(control).ToPortablePoint(), GetPlacementMode(control));
         }
 
         private static void MenuItem_PointerReleased(object sender, PointerReleasedEventArgs e) {
@@ -329,7 +347,6 @@ namespace MonkeyPaste.Avalonia {
 
         private static void MenuItem_PointerEnter(object sender, PointerEventArgs e) {
             if (e.Source is MenuItem mi && mi.DataContext is MpMenuItemViewModel mivm) {
-               // MpConsole.WriteLine("Pointer enter: " + mivm.Header);
                
                 var openMenusToRemove = new List<MenuItem>();
                 foreach(var osmi in openSubMenuItems) {
@@ -338,7 +355,6 @@ namespace MonkeyPaste.Avalonia {
                     if (cmil.Select(x => x.DataContext).Cast<MpMenuItemViewModel>().All(x => x != mivm)) {
                         osmi.Close();
                         osmi.Background = Brushes.Transparent;
-                        //var pcl = openSubMenuItem.GetVisualAncestors<Control>();
                         var ccl = osmi.GetVisualDescendants<Control>();
                         var child_border = ccl.FirstOrDefault(x => x is Border b && (b.Background.ToString() == "#19000000" || b.Background.ToString() == Brushes.LightBlue.ToString()) && b.Tag == null);
                         if (child_border != null) {
@@ -346,7 +362,6 @@ namespace MonkeyPaste.Avalonia {
                         }
                         mi.GetVisualAncestor<Panel>().Background = "#FFF2F2F2".ToAvBrush();
                         openMenusToRemove.Add(osmi);
-                        //openSubMenuItem = null;
                     }
                 }
                 foreach(var mitr in openMenusToRemove) {
@@ -354,7 +369,6 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (mivm.SubItems != null && mivm.SubItems.Count > 0 && !mivm.IsColorPallete) {
-                    //mi.Items.Cast<Control>().ForEach(x => x.InvalidateVisual());
                     mi.InvalidateVisual();
                     mi.IsSubMenuOpen = true;
                     mi.Background = Brushes.LightBlue;
@@ -365,7 +379,6 @@ namespace MonkeyPaste.Avalonia {
                         (child_border as Border).Background = Brushes.LightBlue;
                     }
                     openSubMenuItems.Add(mi);
-                    //MpConsole.WriteLine("Sub Menu Opened for: " + mi.Header.ToString());
                     mi.Open();
                 }
             }
@@ -422,7 +435,7 @@ namespace MonkeyPaste.Avalonia {
             return control;
         }
 
-        private static object CreateIcon(MpMenuItemViewModel mivm) {
+        public static object CreateIcon(MpMenuItemViewModel mivm) {
             if(mivm.ContentTemplateName == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
                 return CreateCheckableIcon(mivm);
             }
@@ -500,7 +513,12 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        public static void ShowMenu(Control control, MpMenuItemViewModel mivm, MpPoint offset = null) {
+        public static void ShowMenu(
+            Control control, 
+            MpMenuItemViewModel mivm, 
+            MpPoint offset = null, 
+            PlacementMode placement = 
+            PlacementMode.AnchorAndGravity) {
             offset = offset == null ? MpPoint.Zero : offset;
             CancelEventHandler onOpenHandler = null;
             CancelEventHandler onCloseHandler = null;
@@ -516,6 +534,7 @@ namespace MonkeyPaste.Avalonia {
                 if (control.DataContext is MpIPopupMenuViewModel pumvm) {
                     pumvm.IsPopupMenuOpen = false;
                 }
+                SetIsOpen(control, false);
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
                 _cmInstance.ContextMenuClosing -= onCloseHandler;
                 _cmInstance.ContextMenuOpening -= onOpenHandler;
@@ -525,6 +544,7 @@ namespace MonkeyPaste.Avalonia {
 
             onOpenHandler = (s, e1) => {
                 e1.Cancel = false;
+                SetIsOpen(control, true);
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
                 if (control.DataContext is MpIContextMenuViewModel cmvm) {
                     cmvm.IsContextMenuOpen = true;
@@ -538,7 +558,7 @@ namespace MonkeyPaste.Avalonia {
 
             _cmInstance.DataContext = mivm;
             _cmInstance.PlacementTarget = control;
-            _cmInstance.PlacementMode = GetPlacementMode(control);
+            _cmInstance.PlacementMode = placement;
             if (_cmInstance.PlacementMode == PlacementMode.Pointer) {
                 _cmInstance.PlacementAnchor = PopupAnchor.AllMask;
                 _cmInstance.PlacementMode = PlacementMode.Pointer;

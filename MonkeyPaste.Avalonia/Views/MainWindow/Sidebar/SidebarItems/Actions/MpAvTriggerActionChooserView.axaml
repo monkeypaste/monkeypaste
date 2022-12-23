@@ -149,9 +149,12 @@
                     DataContext="{Binding SelectedItem}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
-                <local:MpAvActionDesignerView DataContext="{Binding}"
-                                              HorizontalAlignment="Stretch"
-                                              VerticalAlignment="Stretch" />
+                <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto">
+                    <local:MpAvActionDesignerView DataContext="{Binding}"
+                                                  HorizontalAlignment="Stretch"
+                                                  VerticalAlignment="Stretch" />
+                </ScrollViewer>
             </Border>
         </Border>
 
