@@ -2,11 +2,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
+    <!--  ZOOM BORDER  -->
     <Style Selector="local|MpAvZoomBorder.actionDesigner">
         <Setter Property="Background"
                 Value="{StaticResource HitTestableTransparent}" />
 
     </Style>
+    <!--  DESIGNER LISTBOX/LISTBOXITEM LAYOUT  -->
     <Style Selector="ListBox.actionDesigner">
         <Setter Property="BorderThickness"
                 Value="0" />
@@ -51,4 +53,58 @@
         <Setter Property="Cursor"
                 Value="SizeAll" />
     </Style>
+
+    <!--  DESIGNER ITEM STROKE W/ HOVER  -->
+
+    <Style Selector="ContentControl#DesignerItemContentControl :is(Shape)"
+           x:DataType="local:MpAvActionViewModelBase">
+        <Setter Property="Stroke"
+                Value="White" />
+        <Setter Property="Width"
+                Value="{Binding Width}" />
+        <Setter Property="Height"
+                Value="{Binding Height}" />
+        <Setter Property="StrokeThickness"
+                Value="2.5" />
+    </Style>
+    <Style Selector="ContentControl#DesignerItemContentControl.selected :is(Shape)">
+        <Setter Property="Stroke"
+                Value="{DynamicResource SelectedBorderBrush}" />
+    </Style>
+    <Style Selector="ContentControl#DesignerItemContentControl:pointerover :is(Shape)">
+        <Setter Property="Stroke"
+                Value="{DynamicResource HoverDefaultBorderBrush}" />
+    </Style>
+    <Style Selector="ContentControl#DesignerItemContentControl.selected:pointerover :is(Shape)"
+           x:DataType="local:MpAvActionViewModelBase">
+        <Setter Property="Stroke"
+                Value="{DynamicResource HoverSelectedBorderBrush}" />
+    </Style>
+
+    <!--  DESIGNER ITEM IMAGE  -->
+
+    <Style Selector="ContentControl#DesignerItemContentControl Image"
+           x:DataType="local:MpAvActionViewModelBase">
+        <Setter Property="Stretch"
+                Value="UniformToFill" />
+        <Setter Property="IsHitTestVisible"
+                Value="False" />
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+        <Setter Property="VerticalAlignment"
+                Value="Stretch" />
+        <Setter Property="Margin"
+                Value="12" />
+    </Style>
+    <Style Selector="ContentControl#DesignerItemContentControl Image"
+           x:DataType="local:MpAvActionViewModelBase">
+        <Setter Property="Source"
+                Value="{Binding IconResourceKeyStr, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+    </Style>
+    <Style Selector="ContentControl#DesignerItemContentControl.valid Image"
+           x:DataType="local:MpAvActionViewModelBase">
+        <Setter Property="Source"
+                Value="{Binding IconResourceKeyStr, ConverterParameter=white, Converter={StaticResource StringHexToBitmapTintConverter}}" />
+    </Style>
+
 </Styles>

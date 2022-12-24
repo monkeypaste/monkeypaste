@@ -19,123 +19,119 @@
 
         <!--  TRIGGER SELECTOR & SELECTED ACTION PROPERTY COLUMN  -->
 
-        <Border Background="{DynamicResource ActionPropertyListBgBrush}"
+        <Border CornerRadius="3"
+                Background="{DynamicResource ActionPropertyListBgBrush}"
                 Grid.Column="0"
-                Padding="10">
-            <Border CornerRadius="3"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    BorderThickness="1"
-                    BorderBrush="Black">
-                <Border.Styles>
-                    <Style Selector="local|MpAvPluginSelectorView TextBlock">
-                        <Setter Property="Foreground"
-                                Value="White" />
-                    </Style>
-                </Border.Styles>
-                <Grid Margin="10"
-                      HorizontalAlignment="Stretch"
-                      VerticalAlignment="Stretch"
-                      RowDefinitions="25,5,50,1000"
-                      ColumnDefinitions="*,25,25">
-                    <!--  TRIGGER SELECTOR HEADER  -->
-                    <Label Grid.Row="0"
-                           Grid.Column="0"
-                           Grid.ColumnSpan="3"
-                           HorizontalAlignment="Left"
-                           Classes="h1"
-                           Content="Actions" />
-                    <Border Grid.Row="1"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="3"
-                            Classes="labelUnderline"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Bottom" />
+                Padding="10"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+            <Border.Styles>
+                <Style Selector="local|MpAvPluginSelectorView TextBlock">
+                    <Setter Property="Foreground"
+                            Value="White" />
+                </Style>
+            </Border.Styles>
+            <Grid Margin="10"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  RowDefinitions="25,5,50,*"
+                  ColumnDefinitions="*,25,25">
+                <!--  TRIGGER SELECTOR HEADER  -->
+                <Label Grid.Row="0"
+                       Grid.Column="0"
+                       Grid.ColumnSpan="3"
+                       HorizontalAlignment="Left"
+                       Classes="h1"
+                       Content="Actions" />
+                <Border Grid.Row="1"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Classes="labelUnderline"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Bottom" />
 
 
-                    <!--  TRIGGER SELECTOR  -->
-                    <local:MpAvPluginSelectorView x:Name="AnalyzerPluginSelectorView"
-                                                  Grid.Row="2"
-                                                  Grid.Column="0"
-                                                  Height="50"
-                                                  HorizontalContentAlignment="Stretch"
+                <!--  TRIGGER SELECTOR  -->
+                <local:MpAvPluginSelectorView x:Name="AnalyzerPluginSelectorView"
+                                              Grid.Row="2"
+                                              Grid.Column="0"
+                                              Height="50"
+                                              HorizontalContentAlignment="Stretch"
+                                              HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Stretch"
+                                              VerticalContentAlignment="Center"
+                                              DataContext="{Binding}" />
+                <!--  ADD TRIGGER BUTTON  -->
+
+                <Button Grid.Row="2"
+                        Grid.Column="1"
+                        Cursor="Hand"
+                        Classes="hoverOutline"
+                        Margin="5"
+                        Command="{Binding ShowTriggerSelectorMenuCommand}"
+                        CommandParameter="{Binding $self}">
+                    <ToolTip.Tip>
+                        <local:MpAvToolTipView ToolTipText="New Trigger" />
+                    </ToolTip.Tip>
+                    <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource AddImage}}"
+                           Margin="5"
+                           Width="15"
+                           Height="15" />
+                </Button>
+
+                <!--  DELETE SELECTED TRIGGER BUTTON  -->
+
+                <Button Grid.Row="2"
+                        Grid.Column="2"
+                        Cursor="Hand"
+                        Classes="hoverOutline"
+                        Margin="5"
+                        IsVisible="{Binding SelectedItem, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
+                        Command="{Binding DeleteTriggerCommand}"
+                        CommandParameter="{Binding SelectedItem}">
+                    <ToolTip.Tip>
+                        <local:MpAvToolTipView Classes="error">
+                            <local:MpAvToolTipView.ToolTipText>
+                                <MultiBinding Converter="{StaticResource MultiStringAppendConverter}">
+                                    <Binding>
+                                        <Binding.Source>
+                                            <sys:String>Delete '</sys:String>
+                                        </Binding.Source>
+                                    </Binding>
+                                    <Binding Path="SelectedItem.Label" />
+                                    <Binding>
+                                        <Binding.Source>
+                                            <sys:String>'</sys:String>
+                                        </Binding.Source>
+                                    </Binding>
+                                </MultiBinding>
+                            </local:MpAvToolTipView.ToolTipText>
+                        </local:MpAvToolTipView>
+                    </ToolTip.Tip>
+                    <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource DeleteImage}}"
+                           Margin="5"
+                           Width="15"
+                           Height="15" />
+                </Button>
+
+
+                <!--  SELECTED TRIGGER ACTION PROPERTY VIEW  -->
+                <ScrollViewer Grid.Row="3"
+                              Grid.Column="0"
+                              Grid.ColumnSpan="3"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Top"
+                              Padding="0,0,30,0"
+                              IsVisible="{Binding ., Converter={StaticResource IsNotNullOrZeroToBoolConverter}, FallbackValue=False, TargetNullValue=False}"
+                              DataContext="{Binding SelectedItem}">
+
+                    <local:MpAvActionPropertyView VerticalAlignment="Stretch"
                                                   HorizontalAlignment="Stretch"
-                                                  VerticalAlignment="Stretch"
-                                                  VerticalContentAlignment="Center"
-                                                  DataContext="{Binding}" />
-                    <!--  ADD TRIGGER BUTTON  -->
-
-                    <Button Grid.Row="2"
-                            Grid.Column="1"
-                            Cursor="Hand"
-                            Classes="hoverOutline"
-                            Margin="5"
-                            Command="{Binding ShowTriggerSelectorMenuCommand}"
-                            CommandParameter="{Binding $self}">
-                        <ToolTip.Tip>
-                            <local:MpAvToolTipView ToolTipText="New Trigger" />
-                        </ToolTip.Tip>
-                        <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource AddImage}}"
-                               Margin="5"
-                               Width="15"
-                               Height="15" />
-                    </Button>
-
-                    <!--  DELETE SELECTED TRIGGER BUTTON  -->
-
-                    <Button Grid.Row="2"
-                            Grid.Column="2"
-                            Cursor="Hand"
-                            Classes="hoverOutline"
-                            Margin="5"
-                            IsVisible="{Binding SelectedItem, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
-                            Command="{Binding DeleteTriggerCommand}"
-                            CommandParameter="{Binding SelectedItem}">
-                        <ToolTip.Tip>
-                            <local:MpAvToolTipView Classes="error">
-                                <local:MpAvToolTipView.ToolTipText>
-                                    <MultiBinding Converter="{StaticResource MultiStringAppendConverter}">
-                                        <Binding>
-                                            <Binding.Source>
-                                                <sys:String>Delete '</sys:String>
-                                            </Binding.Source>
-                                        </Binding>
-                                        <Binding Path="SelectedItem.Label" />
-                                        <Binding>
-                                            <Binding.Source>
-                                                <sys:String>'</sys:String>
-                                            </Binding.Source>
-                                        </Binding>
-                                    </MultiBinding>
-                                </local:MpAvToolTipView.ToolTipText>
-                            </local:MpAvToolTipView>
-                        </ToolTip.Tip>
-                        <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource DeleteImage}}"
-                               Margin="5"
-                               Width="15"
-                               Height="15" />
-                    </Button>
-
-
-                    <!--  SELECTED TRIGGER ACTION PROPERTY VIEW  -->
-                    <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                  HorizontalScrollBarVisibility="Auto"
-                                  Grid.Row="3"
-                                  Grid.Column="0"
-                                  Grid.ColumnSpan="3"
-                                  Padding="5"
-                                  HorizontalAlignment="Stretch"
-                                  VerticalAlignment="Top"
-                                  IsVisible="{Binding ., Converter={StaticResource IsNotNullOrZeroToBoolConverter}, FallbackValue=False, TargetNullValue=False}"
-                                  DataContext="{Binding SelectedItem}">
-
-                        <local:MpAvActionPropertyView VerticalAlignment="Top"
-                                                      HorizontalAlignment="Stretch"
-                                                      DataContext="{Binding SelectedItem}" />
-                    </ScrollViewer>
-                </Grid>
-            </Border>
+                                                  DataContext="{Binding SelectedItem}" />
+                </ScrollViewer>
+            </Grid>
         </Border>
+
 
         <!--  SELECTED TRIGGER DESIGNER COLUMN  -->
 
@@ -149,23 +145,10 @@
                     DataContext="{Binding SelectedItem}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
-                <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                              VerticalScrollBarVisibility="Auto">
-                    <local:MpAvActionDesignerView DataContext="{Binding}"
-                                                  HorizontalAlignment="Stretch"
-                                                  VerticalAlignment="Stretch" />
-                </ScrollViewer>
+                <local:MpAvActionDesignerView DataContext="{Binding}"
+                                              HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Stretch" />
             </Border>
         </Border>
-
-
-        <!--  SPLITTER  -->
-
-        <!--<GridSplitter Grid.Column="1"
-                      HorizontalAlignment="Right"
-                      VerticalAlignment="Stretch"
-                      IsVisible="{Binding SelectedItem, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
-                      Width="5"
-                      Cursor="SizeWestEast" />-->
     </Grid>
 </local:MpAvUserControl>

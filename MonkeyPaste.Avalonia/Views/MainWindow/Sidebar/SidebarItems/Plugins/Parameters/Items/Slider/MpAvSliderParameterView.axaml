@@ -6,15 +6,13 @@
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
-                       x:TypeArguments="local:MpAvSliderParameterViewModel"
-                       x:DataType="local:MpAvSliderParameterViewModel"
+                       x:TypeArguments="pcl:MpISliderViewModel"
+                       x:DataType="pcl:MpISliderViewModel"
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <Border x:Name="SliderBorder"
             Classes="paramBorder"
-            local:MpAvIsHoveringExtension.IsEnabled="True"
-            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
             Focusable="True"
             MaxHeight="20"
             Cursor="SizeWestEast">
@@ -29,36 +27,6 @@
                        VerticalAlignment="Stretch"
                        MinWidth="0"
                        MaxWidth="{Binding Bounds.Width, ElementName=SliderBorder}">
-                <!--<Rectangle.Width>
-                    <MultiBinding Converter="{StaticResource MultiDoubleMathExpressionConverter}"
-                                  ConverterParameter="(a/(b-c))*d"
-                                  FallbackValue="0"
-                                  TargetNullValue="0">
-                        <Binding Path="SliderValue"
-                                 FallbackValue="1"
-                                 TargetNullValue="1" />
-                        <Binding Path="MaxValue"
-                                 FallbackValue="1"
-                                 TargetNullValue="1" />
-                        <Binding Path="MinValue"
-                                 FallbackValue="0"
-                                 TargetNullValue="0" />
-                        <Binding Path="Bounds.Width"
-                                 ElementName="SliderBorder"
-                                 FallbackValue="50"
-                                 TargetNullValue="50" />
-                    </MultiBinding>
-                    <MultiBinding Converter="{StaticResource MultiDoubleMathConverter}"
-                                  ConverterParameter="*">
-                        <Binding Path="SliderValue"
-                                 FallbackValue="1"
-                                 TargetNullValue="1" />
-                        <Binding Path="Bounds.Width"
-                                 ElementName="SliderBorder"
-                                 FallbackValue="50"
-                                 TargetNullValue="50" />
-                    </MultiBinding>
-                </Rectangle.Width>-->
                 <Rectangle.Fill>
                     <SolidColorBrush Color="Black"
                                      Opacity="0.6" />

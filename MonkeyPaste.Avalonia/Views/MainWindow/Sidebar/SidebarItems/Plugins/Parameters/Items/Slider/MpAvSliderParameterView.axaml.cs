@@ -15,7 +15,7 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Wpf;
 namespace MonkeyPaste.Avalonia {
 
-    public partial class MpAvSliderParameterView : MpAvUserControl<MpAvSliderParameterViewModel> {
+    public partial class MpAvSliderParameterView : MpAvUserControl<MpISliderViewModel> {
         private MpPoint _lastMousePosition;
         private bool _isSliding = false;
         private double _oldVal = 0;

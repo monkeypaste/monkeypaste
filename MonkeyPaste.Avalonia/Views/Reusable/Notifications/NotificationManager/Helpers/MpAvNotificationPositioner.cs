@@ -27,6 +27,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvNotificationPositioner() {
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             _windows.CollectionChanged += _ntfWindows_CollectionChanged;
             MpAvNotificationWindowManager.Instance.OnNotificationWindowIsVisibleChanged += Instance_OnNotificationWindowIsVisibleChanged;
         }
@@ -51,7 +52,14 @@ namespace MonkeyPaste.Avalonia {
                 _windows.Remove(w);
             }
         }
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.MainWindowOpening:
+                    UpdateWindowPositions();
+                    break;
 
+            }
+        }
 
         private void _ntfWindows_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             UpdateWindowPositions();
@@ -89,11 +97,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void PositionWindowToAnchor(Window w, object anchor) {
-            w.Position = FindAnchorPoint(w, anchor);
+            w.Position = FindAnchorPoint(w, null);// anchor);
         }
 
         private PixelPoint FindAnchorPoint(Window w, object anchor) {
-            var s = SetupSize(w);
+            var s = GetWindowSize(w);
             MpRect anchor_rect = null;
             double anchor_pd = w.VisualPixelDensity();
             if (anchor == null) {
@@ -130,7 +138,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void PositionWindowToSystemTray(Window w) {
             // TODO this should somehow know where system tray is on device, it just assumes its bottom right (windows)
-            var s = SetupSize(w);
+            var s = GetWindowSize(w);
 
 
             var primaryScreen = new MpAvScreenInfoCollection().Screens.FirstOrDefault(x => x.IsPrimary);
@@ -154,14 +162,37 @@ namespace MonkeyPaste.Avalonia {
             // when y is less than 0 i think it screws up measuring mw dimensions so its a baby
             y = Math.Max(0, y);
 
+            if(Math.Abs(w.Position.X - x) > 10 && w.DataContext is MpNotificationViewModelBase nvmb && nvmb.NotificationType == MpNotificationType.InvalidAction) {
+               // Debugger.Break();
+            }
             w.Position = new PixelPoint((int)x, (int)y);
+            //ClampWindowToScreen(primaryScreen,w, pad);
             //MpConsole.WriteLine($"Notification Idx {_windows.IndexOf(this)} density {primaryScreen.PixelDensity} x {this.Position.X} y {this.Position.Y}  width {s.Width} height {s.Height}");
         }
 
-        private MpSize SetupSize(Window w) {
-            double width = w.Width.IsNumber() && w.Bounds.Width != 0 ? w.Bounds.Width : 350;
+        private MpSize GetWindowSize(Window w) {
+            double width = w.Bounds.Width.IsNumber() && w.Bounds.Width != 0 ? w.Bounds.Width : 350;
             double height = w.Bounds.Height.IsNumber() && w.Bounds.Height != 0 ? w.Bounds.Height : 150;
             return new MpSize(width, height);
+        }
+
+        private void ClampWindowToScreen(MpIPlatformScreenInfo si, Window w, double pad) {
+            double l = (double)w.Bounds.Position.X;
+            double t = (double)w.Bounds.Position.Y;
+            double r = w.Bounds.Width + l;
+            double b = w.Bounds.Height + t;
+
+            if(r > si.WorkArea.Right - pad) {
+                l = si.WorkArea.Right - pad - w.Bounds.Width;
+            }
+            if(b > si.WorkArea.Bottom - pad) {
+                t = si.WorkArea.Bottom - pad - w.Bounds.Height;
+            }
+            r = w.Bounds.Width + l;
+            b = w.Bounds.Height + t;
+            w.Position = new PixelPoint((int)l, (int)t);
+            w.Width = r - l;
+            w.Height = b - t;
         }
 
         #endregion

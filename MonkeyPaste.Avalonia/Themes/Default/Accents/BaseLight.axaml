@@ -86,10 +86,16 @@
                          Color="{DynamicResource DisabledTextFgColor}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <!--  Hover  -->
+        <!--  Border Brush  -->
 
         <SolidColorBrush x:Key="HoverDefaultBorderBrush"
                          Color="{DynamicResource HoverDefaultBorderColor}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="HoverSelectedBorderBrush"
+                         Color="{DynamicResource HoverSelectedBorderColor}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="SelectedBorderBrush"
+                         Color="{DynamicResource SelectedBorderColor}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
         <!--  Grid Splitter  -->
@@ -97,7 +103,7 @@
         <SolidColorBrush x:Key="DefaultGridSplitterBrush"
                          Color="{DynamicResource DefaultGridSplitterColor}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-      
+
         <SolidColorBrush x:Key="HoverDefaultGridSplitterBgBrush"
                          Color="{DynamicResource HoverDefaultBorderColor}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />

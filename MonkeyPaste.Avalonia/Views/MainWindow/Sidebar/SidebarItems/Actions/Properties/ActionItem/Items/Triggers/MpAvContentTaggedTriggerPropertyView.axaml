@@ -1,4 +1,4 @@
-﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvContentTaggedTriggerPropertyListBoxItemView"
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvContentTaggedTriggerPropertyView"
                        xmlns="https://github.com/avaloniaui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"

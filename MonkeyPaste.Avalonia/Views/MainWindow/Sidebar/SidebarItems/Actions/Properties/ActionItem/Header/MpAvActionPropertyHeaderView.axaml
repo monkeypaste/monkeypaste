@@ -13,20 +13,21 @@
                        d:DesignWidth="800">
     <Grid ColumnDefinitions="Auto,Auto,*,Auto">
         <Grid.Styles>
+            <!--  ENABLE BG/BORDER COLORS  -->
             <Style Selector="ToggleButton#ToggleEnableButton:not(.invalid) /template/ ContentPresenter">
                 <Setter Property="Background"
                         Value="Red" />
                 <Setter Property="BorderBrush"
                         Value="White" />
             </Style>
+
+            <Style Selector="ToggleButton#ToggleEnableButton:not(.invalid):pointerover /template/ ContentPresenter">
+                <Setter Property="BorderBrush"
+                        Value="{DynamicResource HoverDefaultBorderBrush}" />
+            </Style>
             <Style Selector="ToggleButton#ToggleEnableButton.enabled:not(.invalid) /template/ ContentPresenter">
                 <Setter Property="Background"
                         Value="Green" />
-            </Style>
-            <Style Selector="ToggleButton#ToggleEnableButton:not(.invalid):pointerover /template/ ContentPresenter"
-                   x:DataType="local:MpAvActionViewModelBase">
-                <Setter Property="BorderBrush"
-                        Value="{DynamicResource HoverDefaultBorderBrush}" />
             </Style>
             <Style Selector="ToggleButton#ToggleEnableButton.invalid /template/ ContentPresenter">
                 <Setter Property="Background"
@@ -34,6 +35,8 @@
                 <Setter Property="BorderBrush"
                         Value="Transparent" />
             </Style>
+
+            <!--  ENABLE BUTTON IMAGE SOURCE  -->
 
             <Style Selector="ToggleButton#ToggleEnableButton:not(.invalid) Image"
                    x:DataType="local:MpAvActionViewModelBase">
@@ -45,7 +48,6 @@
                 <Setter Property="Source"
                         Value="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, ConverterParameter={StaticResource WarningImage}}" />
             </Style>
-
         </Grid.Styles>
         <!--  OPTIONS POPUP  -->
         <local:MpAvOptionsButton Grid.Column="0"
@@ -58,6 +60,7 @@
         <!--  ENABLE/DISABLE BUTTON  -->
 
         <ToggleButton x:Name="ToggleEnableButton"
+                      
                       Classes.invalid="{Binding !IsValid}"
                       Classes.enabled="{Binding IsEnabledDb}"
                       Grid.Column="1"
@@ -66,6 +69,7 @@
                       HorizontalContentAlignment="Stretch"
                       VerticalAlignment="Center"
                       VerticalContentAlignment="Stretch"
+                      Margin="3"
                       Padding="3"
                       Width="40"
                       Height="40"
@@ -77,42 +81,23 @@
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="{Binding EnableToggleButtonTooltip}" />
             </ToolTip.Tip>
-            <Image HorizontalAlignment="Stretch"
+            <Image Margin="3"
+                   HorizontalAlignment="Stretch"
                    VerticalAlignment="Stretch" />
         </ToggleButton>
 
 
         <!--  ACTION LABEL  -->
 
-        <TextBox x:Name="LabelTextBox"
-                 Grid.Column="2"
-                 Foreground="{Binding LabelForegroundBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                 Background="{Binding LabelBackgroundBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                 BorderThickness="1"
-                 BorderBrush="{Binding LabelBorderBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                 Margin="5,5,15,5"
-                 Padding="3"
-                 HorizontalAlignment="Stretch"
-                 VerticalAlignment="Center"
-                 VerticalContentAlignment="Center"
-                 FontSize="14"
-                 FontWeight="SemiBold"
-                 local:MpAvIsHoveringExtension.IsEnabled="True"
-                 local:MpAvIsHoveringExtension.IsHovering="{Binding IsHoveringOverLabel, Mode=TwoWay}"
-                 local:MpAvIsHoveringExtension.HoverCursor="IBeam"
-                 local:MpAvIsFocusedExtension.IsEnabled="True"
-                 local:MpAvIsFocusedExtension.IsFocused="{Binding IsLabelFocused, Mode=TwoWay}"
-                 Text="{Binding Label, Mode=TwoWay}" />
         <Grid Grid.Column="2"
               ClipToBounds="True"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
-            <local:MpAvMarqueeTextBox Foreground="{Binding LabelForegroundBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                                      Background="{Binding LabelBackgroundBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                                      BorderThickness="1"
-                                      BorderBrush="{Binding LabelBorderBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+            <local:MpAvMarqueeTextBox x:Name="ActionLabelTextBox"
+                                      MaxWidth="200"
                                       Margin="5,5,15,5"
                                       Padding="3"
+                                      ReadOnlyBackground="Transparent"
                                       HorizontalAlignment="Stretch"
                                       VerticalAlignment="Center"
                                       VerticalContentAlignment="Center"

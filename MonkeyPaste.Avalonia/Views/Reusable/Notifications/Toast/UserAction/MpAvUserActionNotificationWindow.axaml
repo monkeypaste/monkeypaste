@@ -16,8 +16,8 @@
         Classes.userActionNotificationWindow="True"
         IsVisible="{Binding IsVisible}"
         Width="350"
-        Height="150"
-        SizeToContent="Manual"
+        MinHeight="150"
+        SizeToContent="Height"
         ShowInTaskbar="False"
         WindowState="Normal"
         SystemDecorations="None"
@@ -59,17 +59,9 @@
                                      HorizontalAlignment="Right" />
             <Grid Grid.Column="1"
                   HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="0.6*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.3*" />
-                    <ColumnDefinition Width="0.3*" />
-                    <ColumnDefinition Width="0.3*" />
-                </Grid.ColumnDefinitions>
+                  VerticalAlignment="Stretch"
+                  RowDefinitions="Auto,*,0.6*"
+                  ColumnDefinitions="0.3*,0.3*,0.3*">
                 <TextBlock Grid.Row="0"
                            Grid.ColumnSpan="3"
                            VerticalAlignment="Bottom"

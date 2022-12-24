@@ -1,10 +1,12 @@
 ﻿
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives.PopupPositioning;
+using Avalonia.Controls.Shapes;
+using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste;
 using MonkeyPaste.Common;
-
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -222,6 +224,34 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
+        public string ActionBackgroundHexColor {
+            get {
+                //switch (ActionType) {
+                //    case MpActionType.Trigger:
+                //        return MpSystemColors.maroon;
+                //    case MpActionType.Analyze:
+                //        return MpSystemColors.magenta;
+                //    case MpActionType.Classify:
+                //        return MpSystemColors.tomato1;
+                //    case MpActionType.Compare:
+                //        return MpSystemColors.cyan1;
+                //    case MpActionType.Macro:
+                //        return MpSystemColors.lightsalmon1;
+                //    case MpActionType.Timer:
+                //        return MpSystemColors.cornflowerblue;
+                //    case MpActionType.FileWriter:
+                //        return MpSystemColors.palegoldenrod;
+                //}
+                //return MpSystemColors.White;
+                string keyStr = $"{ActionType}ActionBrush";
+                var brush = MpPlatformWrapper.Services.PlatformResource.GetResource(keyStr) as IBrush;
+                if(brush == null) {
+                    Debugger.Break();
+                    return MpSystemColors.Black;
+                }
+                return brush.ToHex();
+            }
+        }
         public string BorderBrushHexColor {
             get {
                 if (IsSelectedAction) {
@@ -275,15 +305,6 @@ namespace MonkeyPaste.Avalonia {
                         }
                         return IconId;
                     }
-                    //switch (ActionType) {
-                    //    case MpActionType.Trigger:
-                    //        resourceKey = new MpEnumToImageResourceKeyConverter().Convert((MpTriggerType)ActionObjId, null, null, null) as string;
-                    //        break;
-                    //    default:
-                    //        resourceKey = new MpEnumToImageResourceKeyConverter().Convert(ActionType, null, null, null) as string;
-                    //        break;
-                    //}
-
                     resourceKey = GetDefaultActionIconResourceKey(ActionType, ActionType == MpActionType.Trigger ? (MpTriggerType)ActionObjId : null);
                 } else {
                     resourceKey = "WarningImage";
@@ -324,27 +345,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string ActionBackgroundHexColor {
-            get {
-                switch (ActionType) {
-                    case MpActionType.Trigger:
-                        return MpSystemColors.maroon;
-                    case MpActionType.Analyze:
-                        return MpSystemColors.magenta;
-                    case MpActionType.Classify:
-                        return MpSystemColors.tomato1;
-                    case MpActionType.Compare:
-                        return MpSystemColors.cyan1;
-                    case MpActionType.Macro:
-                        return MpSystemColors.lightsalmon1;
-                    case MpActionType.Timer:
-                        return MpSystemColors.cornflowerblue;
-                    case MpActionType.FileWriter:
-                        return MpSystemColors.palegoldenrod;
-                }
-                return MpSystemColors.White;
-            }
-        }
 
         #endregion
 
@@ -352,9 +352,9 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsSelectedAction {
             get {
-                if(Parent != null &&
-                   Parent.PrimaryAction != null &&
-                   Parent.PrimaryAction.ActionId == ActionId) {
+                if(RootTriggerActionViewModel != null &&
+                    RootTriggerActionViewModel.SelectedItem != null &&
+                    RootTriggerActionViewModel.SelectedItem.ActionId == ActionId) {
                     return true;
                 }
                 return false;
@@ -652,9 +652,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
-
-
         public int ParentActionId {
             get {
                 if (Action == null) {
@@ -817,6 +814,17 @@ namespace MonkeyPaste.Avalonia {
             OnActionComplete?.Invoke(this, arg);
         }
 
+        public MpMenuItemViewModel GetActionMenu(ICommand cmd, IEnumerable<int> selectedActionIds) {
+            return new MpMenuItemViewModel() {
+                MenuItemId = ActionId,
+                Header = Label,
+                IconSourceObj = IconResourceKeyStr,
+                IsChecked = selectedActionIds.Contains(ActionId),
+                Command = cmd,
+                CommandParameter = ActionId,
+                SubItems = Items.Select(x=>x.GetActionMenu(cmd,selectedActionIds)).ToList()
+            };
+        }
 
         #endregion
 
@@ -994,7 +1002,7 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.PrimaryAction));
                     //Parent.OnPropertyChanged(nameof(Parent.SelectedActions));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
-                    OnPropertyChanged(nameof(BorderBrushHexColor));
+                    //OnPropertyChanged(nameof(BorderBrushHexColor));
                     //OnPropertyChanged(nameof(IsRootAction));
                     break;
                 case nameof(HasModelChanged):
@@ -1189,6 +1197,7 @@ namespace MonkeyPaste.Avalonia {
                 Parent.OnPropertyChanged(nameof(Parent.AllSelectedItemActions));
                 await RootTriggerActionViewModel.InitializeAsync(RootTriggerActionViewModel.Action);
                 Parent.SelectActionCommand.Execute(this);
+                RootTriggerActionViewModel.OnPropertyChanged(nameof(RootTriggerActionViewModel.SelectedItem));
                 IsBusy = false;
             });
 

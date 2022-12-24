@@ -264,8 +264,6 @@ namespace MonkeyPaste {
             } 
         }
 
-        public Uri IconSourceUri { get; set; }
-
         public object IconSourceObj {
             get {
                 if(IconId > 0) {
@@ -277,10 +275,27 @@ namespace MonkeyPaste {
                 if (IconHexStr.IsStringHexColor()) {
                     return IconHexStr;
                 }
-                if(IconSourceUri != null) {
-                    return IconSourceUri;
-                }
                 return null;
+            }
+            set {
+                if(value is int iconId) {
+                    IconId = iconId;
+                } else if(value is string valStr) {
+                    if(valStr.IsStringHexColor()) {
+                        IconHexStr = valStr;
+                    } else if(valStr.IsStringImageResourcePathOrKey()) {
+                        IconResourceKey = valStr;
+                    } else {
+                        IconId = 0;
+                        IconHexStr = null;
+                        IconResourceKey = null;
+                    } 
+                } else {
+                    IconId = 0;
+                    IconHexStr = null;
+                    IconResourceKey = null;
+                }
+                OnPropertyChanged(nameof(IconSourceObj));
             }
         }
 

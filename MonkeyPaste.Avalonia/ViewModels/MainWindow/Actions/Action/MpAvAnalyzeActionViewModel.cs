@@ -10,7 +10,9 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvAnalyzeActionViewModel : MpAvActionViewModelBase, MpIPopupSelectorMenu {
+    public class MpAvAnalyzeActionViewModel : 
+        MpAvActionViewModelBase, 
+        MpIPopupSelectorMenu {
         #region MpIPopupSelectorMenu Implementation
         public bool IsOpen { get; set; }
         public MpMenuItemViewModel PopupMenu =>
@@ -140,11 +142,13 @@ namespace MonkeyPaste.Avalonia {
         protected override async Task<bool> Validate() {
             await base.Validate();
             if (!IsValid) {
-                return IsValid;
+                return false;
+            }
+            if(AnalyticItemPresetId == 0) {
+                return true;
             }
 
-            var aipvm = MpAvAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(Action.ActionObjId);
-            if (aipvm == null) {
+            if (SelectedPreset == null) {
                 ValidationText = $"Analyzer for Action '{FullName}' not found";
                 await ShowValidationNotification();
             } else {
@@ -152,8 +156,8 @@ namespace MonkeyPaste.Avalonia {
                 while(pavm != null) {
                     if(pavm is MpAvCompareActionViewModelBase cavm) {
                         if(cavm.IsItemTypeCompare) {
-                            if(!aipvm.Parent.IsContentTypeValid(cavm.ContentItemType)) {
-                                ValidationText = $"Parent Comparer '{pavm.Label}' filters only for '{cavm.ContentItemType.ToString()}' type content and analyzer '{aipvm.FullName}' will never execute because it does not support '{cavm.ContentItemType.ToString()}' type of input ";
+                            if(!SelectedPreset.Parent.IsContentTypeValid(cavm.ContentItemType)) {
+                                ValidationText = $"Parent Comparer '{pavm.Label}' filters only for '{cavm.ContentItemType.ToString()}' type content and analyzer '{SelectedPreset.FullName}' will never execute because it does not support '{cavm.ContentItemType.ToString()}' type of input ";
                                 await ShowValidationNotification();
                                 return IsValid;
                             }

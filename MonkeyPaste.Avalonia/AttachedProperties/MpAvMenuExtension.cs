@@ -442,15 +442,36 @@ namespace MonkeyPaste.Avalonia {
             if(mivm.IconSourceObj == null) {
                 return null;
             }
-            return new Image() {
+            var iconImg = new Image() {
                         HorizontalAlignment = HorizontalAlignment.Stretch,
                         VerticalAlignment = VerticalAlignment.Stretch,
                         Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(mivm.IconSourceObj, null, null, null) as Bitmap,
                     };
+            var iconBorder = GetIconBorder(mivm);
+            if(mivm.IsChecked.IsFalse()) {
+                iconBorder.BorderBrush = Brushes.Transparent;
+            }
+            iconBorder.Child = iconImg;
+            return iconBorder;
         }
         private static object CreateCheckableIcon(MpMenuItemViewModel mivm) {
-            var iconBorder = new Border() {
-                HorizontalAlignment = HorizontalAlignment.Left,
+            
+            var pi = new PathIcon() {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = mivm.CheckResourceKey == "CheckSvg" ? 15 : 7,
+                Height = mivm.CheckResourceKey == "CheckSvg" ? 15 : 7,
+                Data = MpPlatformWrapper.Services.PlatformResource.GetResource(mivm.CheckResourceKey) as StreamGeometry,
+                Foreground = mivm.IconHexStr.HexColorToContrastingFgHexColor().ToAvBrush()
+            };
+            var iconBorder = GetIconBorder(mivm);
+            iconBorder.Child = pi;
+            return iconBorder;
+        }
+
+        private static Border GetIconBorder(MpMenuItemViewModel mivm) {
+            return new Border() {
+                HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
                 MinWidth = 20,
                 MinHeight = 20,
@@ -460,16 +481,6 @@ namespace MonkeyPaste.Avalonia {
                 Margin = new Thickness(5, 0, 30, 0),
                 Background = mivm.IconHexStr.ToAvBrush()
             };
-            var pi = new PathIcon() {
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                Width = mivm.CheckResourceKey == "CheckSvg" ? 15 : 7,
-                Height = mivm.CheckResourceKey == "CheckSvg" ? 15 : 7,
-                Data = MpPlatformWrapper.Services.PlatformResource.GetResource(mivm.CheckResourceKey) as StreamGeometry,
-                Foreground = mivm.IconHexStr.HexColorToContrastingFgHexColor().ToAvBrush()
-            };
-            iconBorder.Child = pi;
-            return iconBorder;
         }
 
         private static IEnumerable<MenuItem> GetChildMenuItems(MenuItem mi) {

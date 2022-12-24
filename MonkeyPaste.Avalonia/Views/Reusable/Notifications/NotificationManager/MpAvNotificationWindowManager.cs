@@ -179,8 +179,9 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.MainWindowOpening:
                     if(MpAvAppendNotificationWindow.Instance.IsVisible) {
                         HideNotification(MpAppendNotificationViewModel.Instance);
-                    }
+                    }                    
                     break;
+                
             }
         }
 

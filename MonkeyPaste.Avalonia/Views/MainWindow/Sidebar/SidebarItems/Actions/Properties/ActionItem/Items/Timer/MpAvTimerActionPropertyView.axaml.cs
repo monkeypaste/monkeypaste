@@ -19,8 +19,8 @@ namespace MonkeyPaste.Avalonia {
 /// <summary>
 /// Interaction logic for MpFileSystemTriggerPropertyListBoxItemView.xaml
 /// </summary>
-    public partial class MpAvContentAddTriggerPropertyListBoxItemView : MpAvUserControl<MpAvContentAddTriggerViewModel> {
-        public MpAvContentAddTriggerPropertyListBoxItemView() {
+    public partial class MpAvTimerActionPropertyView : MpAvUserControl<MpAvTimerActionViewModel> {
+        public MpAvTimerActionPropertyView() {
             InitializeComponent();
         }
 

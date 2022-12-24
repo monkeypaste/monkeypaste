@@ -11,7 +11,10 @@ using System.Windows.Input;
 using Avalonia.Controls;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvClassifyActionViewModel : MpAvActionViewModelBase, MpIActionPluginComponent, MpIPopupSelectorMenu {
+    public class MpAvClassifyActionViewModel : 
+        MpAvActionViewModelBase, 
+        MpIActionPluginComponent, 
+        MpIPopupSelectorMenu {
         #region Private Variables
 
         #endregion
@@ -98,11 +101,16 @@ namespace MonkeyPaste.Avalonia {
                 return IsValid;
             }
 
-            while(MpAvTagTrayViewModel.Instance.IsAnyBusy) {
+            if(TagId == 0) {
+                return IsValid;
+            }
+
+            while (MpAvTagTrayViewModel.Instance.IsAnyBusy) {
                 await Task.Delay(100);
             }
 
             var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
+
             if (ttvm == null) {
                 ValidationText = $"Tag for Classifier '{RootTriggerActionViewModel.Label}/{Label}' not found";
 
@@ -112,6 +120,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return IsValid;
         }
+
 
         public override async Task PerformActionAsync(object arg) {
             if (!CanPerformAction(arg)) {
@@ -123,8 +132,6 @@ namespace MonkeyPaste.Avalonia {
             var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
             if(ttvm != null && actionInput != null && actionInput.CopyItem != null) {
                 ttvm.LinkCopyItemCommand.Execute(actionInput.CopyItem.Id);
-
-
             }
 
             await base.PerformActionAsync(new MpAvClassifyOutput() {

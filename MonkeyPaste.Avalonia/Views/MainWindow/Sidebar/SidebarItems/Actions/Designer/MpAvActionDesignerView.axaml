@@ -41,14 +41,7 @@
                          VerticalAlignment="Stretch"
                          Classes="actionDesigner"
                          Items="{Binding SelfAndAllDescendants}">
-                    <ListBox.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform ScaleX="{Binding Scale, Mode=TwoWay, FallbackValue=1, TargetNullValue=1}"
-                                            ScaleY="{Binding Scale, Mode=TwoWay, FallbackValue=1, TargetNullValue=1}" />
-                            <TranslateTransform X="{Binding TranslateOffsetX, Mode=TwoWay, FallbackValue=0, TargetNullValue=0}"
-                                                Y="{Binding TranslateOffsetY, Mode=TwoWay, FallbackValue=0, TargetNullValue=0}" />
-                        </TransformGroup>
-                    </ListBox.RenderTransform>
+
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <local:MpAvDesignerCanvas x:Name="ActionDesignerCanvas"
@@ -60,7 +53,16 @@
                                                       local:MpAvBoundsObserverExtension.IsEnabled="True"
                                                       local:MpAvBoundsObserverExtension.ToScreen="True"
                                                       local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedDesignerBounds, Mode=TwoWay}"
-                                                      TransitionLineThickness="1" />
+                                                      TransitionLineThickness="1">
+                                <local:MpAvDesignerCanvas.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="{Binding Scale, Mode=TwoWay, FallbackValue=1, TargetNullValue=1}"
+                                                        ScaleY="{Binding Scale, Mode=TwoWay, FallbackValue=1, TargetNullValue=1}" />
+                                        <TranslateTransform X="{Binding TranslateOffsetX, Mode=TwoWay, FallbackValue=0, TargetNullValue=0}"
+                                                            Y="{Binding TranslateOffsetY, Mode=TwoWay, FallbackValue=0, TargetNullValue=0}" />
+                                    </TransformGroup>
+                                </local:MpAvDesignerCanvas.RenderTransform>
+                            </local:MpAvDesignerCanvas>
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
@@ -117,7 +119,7 @@
                         <Setter Property="ToolTip.Tip">
                             <Setter.Value>
                                 <Template>
-                                    <local:MpAvToolTipView ToolTipText="{Binding $parent[Slider].Value, Mode=OneWay, StringFormat='Value \{0:f\}'}" />
+                                    <local:MpAvToolTipView ToolTipText="{Binding $parent[Slider].Value, Mode=OneWay, StringFormat='Zoom \{0:f\}x'}" />
                                 </Template>
                             </Setter.Value>
                         </Setter>

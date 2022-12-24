@@ -900,7 +900,7 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultEditableItemWidth => EDITOR_TOOLBAR_MIN_WIDTH;
 
         public MpSize DefaultEditableItemSize => new MpSize(DefaultEditableItemWidth, DefaultItemHeight);
-        public double ScrollBarFixedAxisSize => 0;
+        public double ScrollBarFixedAxisSize => 30;
 
         #endregion
 

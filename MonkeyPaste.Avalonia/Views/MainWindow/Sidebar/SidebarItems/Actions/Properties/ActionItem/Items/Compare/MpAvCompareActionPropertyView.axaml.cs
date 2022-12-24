@@ -16,11 +16,8 @@ using System.Windows.Shapes;
 using Xamarin.Essentials;
 
 namespace MonkeyPaste.Avalonia {
-/// <summary>
-/// Interaction logic for MpFileSystemTriggerPropertyListBoxItemView.xaml
-/// </summary>
-    public partial class MpAvShortcutTriggerPropertyView : MpAvUserControl<MpAvShortcutTriggerViewModel> {
-        public MpAvShortcutTriggerPropertyView() {
+    public partial class MpAvCompareActionPropertyView : MpAvUserControl<MpAvCompareActionViewModelBase> {
+        public MpAvCompareActionPropertyView() {
             InitializeComponent();
         }
 

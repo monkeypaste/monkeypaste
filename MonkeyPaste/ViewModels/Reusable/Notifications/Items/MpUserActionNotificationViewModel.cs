@@ -161,6 +161,7 @@ namespace MonkeyPaste {
         #region Commands
         public ICommand IgnoreCommand => new MpCommand(
             () => {
+                IsFixing = false;
                 DialogResult = MpNotificationDialogResultType.Ignore;
             });
 

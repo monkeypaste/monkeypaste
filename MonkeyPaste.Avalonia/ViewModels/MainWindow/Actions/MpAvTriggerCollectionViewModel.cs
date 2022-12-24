@@ -520,6 +520,9 @@ namespace MonkeyPaste.Avalonia {
                 if(toSelect_avmb != null) {
                     SelectedItem = toSelect_avmb.RootTriggerActionViewModel;
                     SelectedItem.SelectedItem = toSelect_avmb;
+
+                    SelectedItem.SelfAndAllDescendants.Cast<MpAvActionViewModelBase>()
+                        .ForEach(x => x.OnPropertyChanged(nameof(x.IsSelectedAction)));
                 }
             });
 

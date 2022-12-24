@@ -335,6 +335,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
+        
+
         #endregion
 
         #region Protected Methods
@@ -383,6 +385,10 @@ namespace MonkeyPaste.Avalonia {
                         Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
                     }
                     break;
+                case nameof(SelectedItem):
+                    SelfAndAllDescendants.Cast<MpAvActionViewModelBase>()
+                        .ForEach(x => x.OnPropertyChanged(nameof(x.IsSelectedAction)));
+                    break;
             }
         }
 
@@ -396,8 +402,8 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ResetDesignerViewCommand => new MpCommand(() => {
             Scale = 1.0d;
-            TranslateOffsetX = X;
-            TranslateOffsetY = Y;
+            TranslateOffsetX = -X;
+            TranslateOffsetY = -Y;
         });
         #endregion
     }

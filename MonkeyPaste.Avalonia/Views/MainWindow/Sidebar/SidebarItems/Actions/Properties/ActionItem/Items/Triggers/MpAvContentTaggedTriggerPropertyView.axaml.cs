@@ -16,8 +16,11 @@ using System.Windows.Shapes;
 using Xamarin.Essentials;
 
 namespace MonkeyPaste.Avalonia {
-    public partial class MpAvCompareActionPropertyListBoxItemView : MpAvUserControl<MpAvCompareActionViewModelBase> {
-        public MpAvCompareActionPropertyListBoxItemView() {
+/// <summary>
+/// Interaction logic for MpFileSystemTriggerPropertyListBoxItemView.xaml
+/// </summary>
+    public partial class MpAvContentTaggedTriggerPropertyView : MpAvUserControl<MpAvContentTaggedTriggerViewModel> {
+        public MpAvContentTaggedTriggerPropertyView() {
             InitializeComponent();
         }
 
