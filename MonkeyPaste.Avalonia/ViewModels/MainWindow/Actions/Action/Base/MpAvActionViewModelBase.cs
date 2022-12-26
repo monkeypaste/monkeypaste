@@ -988,10 +988,10 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(IsSelected):
                     if (IsSelected) {
-                        LastSelectedDateTime = DateTime.Now;
+                        //LastSelectedDateTime = DateTime.Now;
 
                         //Parent.AllSelectedItemActions.ForEach(x => x.IsExpanded = x.ActionId == ActionId);
-                        //IsExpanded = true;
+                        IsExpanded = true;
                     } else {
                         //IsExpanded = false;
                     }

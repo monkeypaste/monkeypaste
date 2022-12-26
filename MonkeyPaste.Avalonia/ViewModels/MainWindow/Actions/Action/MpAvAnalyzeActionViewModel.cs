@@ -96,7 +96,7 @@ namespace MonkeyPaste.Avalonia {
 
             var actionInput = GetInput(arg);
 
-            var aipvm = MpAvAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(AnalyticItemPresetId);
+            var aipvm = MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x=>x.AnalyticItemPresetId == AnalyticItemPresetId);
             
             object[] args = new object[] { aipvm, actionInput.CopyItem };
             if(aipvm != null && 

@@ -41,28 +41,33 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpIOrientedSidebarItemViewModel SelectedSidebarItemViewModel {
-            get {
-                if (MpAvTagTrayViewModel.Instance.IsSidebarVisible) {
-                    return MpAvTagTrayViewModel.Instance;
-                }
-
-                if (MpAvClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible) {
-                    return MpAvClipboardHandlerCollectionViewModel.Instance;
-                }
-
-                if (MpAvAnalyticItemCollectionViewModel.Instance.IsSidebarVisible) {
-                    return MpAvAnalyticItemCollectionViewModel.Instance;
-                }
-                if (MpAvTriggerCollectionViewModel.Instance.IsSidebarVisible) {
-                    return MpAvTriggerCollectionViewModel.Instance;
-                }
-                return null;
-            }
-        }
         #endregion
 
         #region Layout
+
+        public double AvailableContentAndSidebarWidth {
+            get {
+                if(IsVerticalOrientation) {
+                    return MainWindowWidth;
+                }
+                return MainWindowWidth -
+                        MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength;
+            }
+        }
+
+        public double AvailableContentAndSidebarHeight {
+            get {
+                if (IsVerticalOrientation) {
+                    return MainWindowHeight -
+                        MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
+                        MpAvFilterMenuViewModel.Instance.FilterMenuHeight -
+                        MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength;
+                }
+                return MainWindowHeight -
+                        MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
+                        MpAvFilterMenuViewModel.Instance.FilterMenuHeight;
+            }
+        }
 
         public double MainWindowDefaultHorizontalHeightRatio => 0.35;
         public double MainWindowDefaultVerticalWidthRatio => 0.2;
@@ -1031,7 +1036,7 @@ namespace MonkeyPaste.Avalonia {
 
 
                 var mw = MpAvMainWindow.Instance;
-                mw.UpdateContentOrientation();
+                mw.UpdateContentLayout();
 
                 await Task.Delay(300);
                 MpMessenger.SendGlobal(MpMessageType.MainWindowOrientationChangeEnd);

@@ -14,7 +14,7 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileSortDirectionView">
 
     <ToggleButton Margin="0,0,0,0"
-                  Classes="svgOutlineButton"
+                  Classes="iconButton"
                   Background="Transparent"
                   BorderThickness="0"
                   local:MpAvIsHoveringExtension.IsEnabled="True"

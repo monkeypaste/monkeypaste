@@ -22,7 +22,6 @@ namespace MonkeyPaste.Avalonia {
         MpAvTreeSelectorViewModelBase<object, MpAvClipboardHandlerItemViewModel>,
         MpIMenuItemViewModel,
         MpIAsyncSingletonViewModel<MpAvClipboardHandlerCollectionViewModel>,
-        MpIOrientedSidebarItemViewModel,
         MpISidebarItemViewModel,
         MpIAsyncComboBoxViewModel,
         MpIClipboardFormatDataHandlers,
@@ -32,6 +31,117 @@ namespace MonkeyPaste.Avalonia {
 
         private static List<string> _oleReqGuids = new List<string>();
 
+        #endregion
+
+
+
+        #region MpITreeItemViewModel Implementation
+
+        public override MpITreeItemViewModel ParentTreeItem => null;
+
+        #endregion
+
+        #region MpIAsyncComboBoxViewModel Implementation
+
+        IEnumerable<MpIComboBoxItemViewModel> MpIAsyncComboBoxViewModel.Items => Items;
+        MpIComboBoxItemViewModel MpIAsyncComboBoxViewModel.SelectedItem {
+            get => SelectedItem;
+            set => SelectedItem = (MpAvClipboardHandlerItemViewModel)value;
+        }
+        bool MpIAsyncComboBoxViewModel.IsDropDownOpen {
+            get => IsHandlerDropDownOpen;
+            set => IsHandlerDropDownOpen = value;
+        }
+
+        #endregion
+
+        #region MpIClipboardFormatHandlers Implementation
+        public IEnumerable<MpIClipboardPluginComponent> Handlers => EnabledFormats.Select(x => x.Parent.ClipboardPluginComponent).Distinct();
+
+        #endregion
+
+        #region MpISidebarItemViewModel Implementation
+        public double SidebarWidth { get; set; } = 0;
+        public double SidebarHeight { get; set; }
+
+        public double DefaultSidebarWidth {
+            get {
+                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                    return 350;
+                } else {
+                    return MpAvMainWindowViewModel.Instance.MainWindowWidth;
+                }
+            }
+        }
+        public double DefaultSidebarHeight {
+            get {
+                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                    return MpAvClipTrayViewModel.Instance.ClipTrayScreenHeight;
+                } else {
+                    return 300;
+                }
+            }
+        }
+
+        #endregion
+
+        #region MpISelectableViewModel Implementation
+
+        public bool IsSelected { get; set; }
+
+        public DateTime LastSelectedDateTime { get; set; }
+
+
+        #endregion
+
+        #region MpIPlatformDataObjectHelperAsync Implementation
+
+        bool MpIPlatformDataObjectHelperAsync.IsOleBusy => IsBusy;
+
+        async Task<object> MpIPlatformDataObjectHelperAsync.WriteDragDropDataObject(object idoObj) {
+            if (idoObj is IDataObject ido) {
+                object pdo = await WriteClipboardOrDropObjectAsync(ido, false, false);
+                return pdo;
+            }
+            return null;
+        }
+
+        async Task MpIPlatformDataObjectHelperAsync.SetPlatformClipboardAsync(object idoObj, bool ignoreClipboardChange) {
+            if (idoObj is IDataObject ido) {
+                await WriteClipboardOrDropObjectAsync(ido, true, ignoreClipboardChange);
+            }
+        }
+
+        async Task<object> MpIPlatformDataObjectHelperAsync.ReadDragDropDataObject(object idoObj, int retryCount) {
+            if (idoObj is IDataObject ido) {
+                var mpdo = await ReadClipboardOrDropObjectAsync(ido);
+                return mpdo;
+            }
+            return null;
+        }
+        async Task<object> MpIPlatformDataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(bool ignorePlugins) {
+            var pdo = await ReadClipboardOrDropObjectAsync(null, ignorePlugins);
+            return pdo;
+        }
+
+        async Task MpIPlatformDataObjectHelperAsync.UpdateDragDropDataObjectAsync(object source, object target) {
+            // NOTE this is called during a drag drop when user toggles a format preset
+            // source should be the initial output of ContentView dataObject and should have the highest fidelity of data on it for conversions
+            // NOTE DO NOT re-instantiate target haven't tested but I imagine the reference must persist that which was given to .DoDragDrop in StartDragging
+            if (source is IDataObject sido &&
+                target is IDataObject tido) {
+
+                var temp = await WriteClipboardOrDropObjectAsync(sido, false, false);
+                if (temp is IDataObject temp_ido) {
+                    tido.CopyFrom(temp_ido);
+                }
+            } else {
+                // need to cast or whats goin on here?
+                Debugger.Break();
+                return;
+            }
+
+        }
         #endregion
 
         #region Properties       
@@ -100,111 +210,6 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-        #region MpITreeItemViewModel Implementation
-
-        public override MpITreeItemViewModel ParentTreeItem => null;
-
-        #endregion
-
-        #region MpIAsyncComboBoxViewModel Implementation
-
-        IEnumerable<MpIComboBoxItemViewModel> MpIAsyncComboBoxViewModel.Items => Items;
-        MpIComboBoxItemViewModel MpIAsyncComboBoxViewModel.SelectedItem {
-            get => SelectedItem;
-            set => SelectedItem = (MpAvClipboardHandlerItemViewModel)value;
-        }
-        bool MpIAsyncComboBoxViewModel.IsDropDownOpen {
-            get => IsHandlerDropDownOpen;
-            set => IsHandlerDropDownOpen = value;
-        }
-
-        #endregion
-
-        #region MpIClipboardFormatHandlers Implementation
-        public IEnumerable<MpIClipboardPluginComponent> Handlers => EnabledFormats.Select(x => x.Parent.ClipboardPluginComponent).Distinct();
-
-        #endregion
-
-        #region MpIOrientedSidebarItemViewModel Implementation
-        public double SidebarWidth { get; set; } = 0;
-        public double SidebarHeight { get; set; }
-
-        public double DefaultSidebarWidth {
-            get {
-                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return 350;
-                } else {
-                    return MpAvMainWindowViewModel.Instance.MainWindowWidth;
-                }
-            }
-        }
-        public double DefaultSidebarHeight {
-            get {
-                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return MpAvClipTrayViewModel.Instance.ClipTrayScreenHeight;
-                } else {
-                    return 300;
-                }
-            }
-        }
-        public bool IsSidebarVisible { get; set; }
-
-        public MpISidebarItemViewModel NextSidebarItem => MpAvAnalyticItemCollectionViewModel.Instance;
-        public MpISidebarItemViewModel PreviousSidebarItem => MpAvTagTrayViewModel.Instance;
-
-
-        #endregion
-
-        #region MpIPlatformDataObjectHelperAsync Implementation
-
-        bool MpIPlatformDataObjectHelperAsync.IsOleBusy => IsBusy;
-
-        async Task<object> MpIPlatformDataObjectHelperAsync.WriteDragDropDataObject(object idoObj) {
-            if(idoObj is IDataObject ido) {
-                object pdo = await WriteClipboardOrDropObjectAsync(ido, false, false);
-                return pdo;
-            }
-            return null;
-        }
-
-        async Task MpIPlatformDataObjectHelperAsync.SetPlatformClipboardAsync(object idoObj, bool ignoreClipboardChange) {
-            if (idoObj is IDataObject ido) {
-                await WriteClipboardOrDropObjectAsync(ido, true, ignoreClipboardChange);
-            }
-        }
-
-        async Task<object> MpIPlatformDataObjectHelperAsync.ReadDragDropDataObject(object idoObj, int retryCount) {
-            if (idoObj is IDataObject ido) {
-                var mpdo = await ReadClipboardOrDropObjectAsync(ido);
-                return mpdo;
-            }
-            return null;
-        }
-        async Task<object> MpIPlatformDataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(bool ignorePlugins) {
-            var pdo = await ReadClipboardOrDropObjectAsync(null,ignorePlugins);
-            return pdo;
-        }
-
-        async Task MpIPlatformDataObjectHelperAsync.UpdateDragDropDataObjectAsync(object source, object target) {
-            // NOTE this is called during a drag drop when user toggles a format preset
-            // source should be the initial output of ContentView dataObject and should have the highest fidelity of data on it for conversions
-            // NOTE DO NOT re-instantiate target haven't tested but I imagine the reference must persist that which was given to .DoDragDrop in StartDragging
-            if(source is IDataObject sido &&
-                target is IDataObject tido) {
-
-                var temp = await WriteClipboardOrDropObjectAsync(sido, false, false);
-                if(temp is IDataObject temp_ido) {
-                    tido.CopyFrom(temp_ido);
-                }
-            } else {
-                // need to cast or whats goin on here?
-                Debugger.Break();
-                return;
-            }
-
-        }
-        #endregion
-
         #region Layout
 
         #endregion
@@ -215,8 +220,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
-        public bool IsSelected { get; set; }
 
         public bool IsHovering { get; set; }
 
@@ -328,15 +331,15 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsHovering):
                 case nameof(IsAnySelected):
                     break;
-                case nameof(IsSidebarVisible):
-                    if (IsSidebarVisible) {
-                        MpAvTagTrayViewModel.Instance.IsSidebarVisible = false;
-                        MpAvTriggerCollectionViewModel.Instance.IsSidebarVisible = false;
-                        MpAvAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = false;
-                    }
-                    OnPropertyChanged(nameof(SelectedItem));
-                    MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel));
-                    break;
+                //case nameof(IsSidebarVisible):
+                //    if (IsSidebarVisible) {
+                //        MpAvTagTrayViewModel.Instance.IsSidebarVisible = false;
+                //        MpAvTriggerCollectionViewModel.Instance.IsSidebarVisible = false;
+                //        MpAvAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = false;
+                //    }
+                //    OnPropertyChanged(nameof(SelectedItem));
+                //    MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel));
+                //    break;
                 case nameof(Items):
                     OnPropertyChanged(nameof(Children));
                     break;

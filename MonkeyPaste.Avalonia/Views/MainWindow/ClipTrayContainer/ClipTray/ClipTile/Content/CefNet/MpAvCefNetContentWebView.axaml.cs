@@ -6,13 +6,18 @@ using System.Diagnostics;
 using CefNet.Avalonia;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using Gdk;
+using Avalonia.Input;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvCefNetContentWebView : MpAvUserControl<MpAvClipTileViewModel> {
         public MpAvCefNetContentWebView() {
 
-            InitializeComponent();         
+            InitializeComponent();
         }
+
+        
 
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);

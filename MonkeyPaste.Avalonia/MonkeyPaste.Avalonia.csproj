@@ -157,6 +157,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMainWindowTitle.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMarqueeTextBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPinTray.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSideBarButtonGroup.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSideBarItems.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSliderParameter.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTagTile.axaml" />
@@ -947,6 +948,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\MpAvActionDesigner.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvActionProperty.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvMarqueeTextBox.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvSideBarButtonGroup.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvSideBarItems.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvSliderParameter.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTooltip.axaml" />
@@ -1068,6 +1070,12 @@
     </Compile>
     <Compile Update="Views\MainWindow\FilterMenu\Sort\Field\MpAvClipTileSortFieldView.axaml.cs">
       <DependentUpon>MpAvClipTileSortFieldView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\ButtonColumn\MpAvSidebarButtonGroupView.axaml.cs">
+      <DependentUpon>MpAvSidebarButtonGroupView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\MpAvSidebarContainerView.axaml.cs">
+      <DependentUpon>MpAvSidebarContainerView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\Analyze\MpAvAnalyzeActionPropertyView.axaml.cs">
       <DependentUpon>MpAvAnalyzeActionPropertyView.axaml</DependentUpon>

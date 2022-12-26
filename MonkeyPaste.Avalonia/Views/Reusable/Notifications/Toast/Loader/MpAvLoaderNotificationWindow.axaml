@@ -63,7 +63,7 @@
                         BorderThickness="0"
                         IsVisible="False"
                         Margin="5,0,5,0"
-                        Background="White"
+                        Classes="labelUnderline"
                         Height="1" />
 
                 <Border x:Name="ProgressBarContainer"

@@ -11,6 +11,7 @@ using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvWrapper : MpIPlatformWrapper {
+        public MpIStartupState StartupState { get; set; }
         public MpIPlatformCompatibility PlatformCompatibility { get; set; }
         public MpIPlatformShorcuts PlatformShorcuts { get; set; }
         public MpINotificationManager NotificationManager { get; set; }

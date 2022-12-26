@@ -551,8 +551,8 @@ namespace MonkeyPaste.Avalonia {
         private void MpAnalyticItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsSelected):
-                    if(IsSelected && Parent.IsSidebarVisible) {
-                        LastSelectedDateTime = DateTime.Now;
+                    if(IsSelected) {
+                        //LastSelectedDateTime = DateTime.Now;
 
                         if(SelectedItem == null) {
                             base.SelectedItem = base.Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
@@ -832,9 +832,10 @@ namespace MonkeyPaste.Avalonia {
                  if (base.SelectedItem == null && base.Items.Count > 0) {
                      base.SelectedItem = base.Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
                  }
-                 if(!Parent.IsSidebarVisible) {
-                     Parent.IsSidebarVisible = true;
-                 }
+                 //if(!Parent.IsSidebarVisible) {
+                 //    Parent.IsSidebarVisible = true;
+                 //}
+                 MpAvSidebarItemCollectionViewModel.Instance.SelectSidebarItemCommand.Execute(Parent);
                  OnPropertyChanged(nameof(SelectedItem));
 
              });

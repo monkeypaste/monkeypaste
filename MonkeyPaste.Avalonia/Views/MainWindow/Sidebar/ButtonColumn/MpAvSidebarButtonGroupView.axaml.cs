@@ -7,10 +7,10 @@ using MonkeyPaste.Common.Avalonia;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
-    public partial class MpAvSidebarView : MpAvUserControl<MpAvClipTrayViewModel> {
+    public partial class MpAvSidebarButtonGroupView : MpAvUserControl<MpAvClipTrayViewModel> {
         public ToggleButton AppendModeToggleButton, MouseModeToggleButton;
 
-        public MpAvSidebarView() {
+        public MpAvSidebarButtonGroupView() {
             InitializeComponent();
             this.DataContextChanged += MpAvSidebarView_DataContextChanged;
 
@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch(msg) {
                 case MpMessageType.MainWindowOrientationChangeEnd:
-                    var ctg = this.FindControl<Grid>("SidebarContainerGrid");
+                    var ctg = this.FindControl<Grid>("SidebarButtonGroupContainerGrid");
                     var tbl = ctg.GetVisualDescendants<ToggleButton>().ToList();
 
                     if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {

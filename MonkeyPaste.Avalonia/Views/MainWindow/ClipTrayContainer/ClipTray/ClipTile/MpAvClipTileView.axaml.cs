@@ -19,8 +19,34 @@ namespace MonkeyPaste.Avalonia {
         public MpAvClipTileView() {
             InitializeComponent();
             DataContextChanged += MpAvClipTileView_DataContextChanged;
+            this.AttachedToVisualTree += MpAvCefNetContentWebView_AttachedToVisualTree;
+        }
+        private void MpAvCefNetContentWebView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            Dispatcher.UIThread.Post(async () => {
+                var ptrlb = this;//.GetVisualAncestor<ListBoxItem>();
+                //while(ptrlb == null) {
+                //    await Task.Delay(100);
+                //    ptrlb = this.GetVisualAncestor<ListBoxItem>();
+                //}
+                DragDrop.SetAllowDrop(ptrlb, true);
+                ptrlb.AddHandler(DragDrop.DragEnterEvent, DragEnter);
+                ptrlb.AddHandler(DragDrop.DragOverEvent, DragOver);
+                ptrlb.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
+                ptrlb.AddHandler(DragDrop.DropEvent, Drop);
+            });
+            
         }
 
+        private void DragEnter(object sender, DragEventArgs e) {
+        }
+
+        private void DragOver(object sender, DragEventArgs e) {
+        }
+        private void DragLeave(object sender, RoutedEventArgs e) {
+        }
+
+        private async void Drop(object sender, DragEventArgs e) {
+        }
         private void MpAvClipTileView_DataContextChanged(object sender, EventArgs e) {
             if(BindingContext == null) {
                 return;

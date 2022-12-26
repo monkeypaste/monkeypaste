@@ -12,62 +12,16 @@
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="0.3*" />
-        </Grid.RowDefinitions>
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.3*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-
+    <Grid Margin="10"
+          RowDefinitions="0.3*"
+          ColumnDefinitions="0.3*,*">
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
                    Classes="actionProperty"
                    Text="Collection" />
-        <Border Grid.Row="0"
-                Grid.Column="1"
-                Classes="actionProperty">
-            <ComboBox x:Name="TagChooserComboBox"
-                      Grid.Row="0"
-                      Grid.Column="1"
-                      Classes="actionProperty"
-                      MinWidth="150"
-                      SelectedItem="{Binding SelectedTag, Mode=TwoWay}"
-                      Items="{Binding Items, Source={x:Static local:MpAvTagTrayViewModel.Instance}}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Margin="3"
-                                    Orientation="Horizontal"
-                                    HorizontalAlignment="Stretch">
-                            <Border BorderThickness="0.7"
-                                    BorderBrush="LightGray"
-                                    Background="{Binding TagHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                                    Width="15"
-                                    Height="15">
-                                <Border.Margin>
-                                    <MultiBinding Converter="{StaticResource TagIdToThicknessNameConverter}">
-                                        <Binding Path="DataContext.TagId"
-                                                 RelativeSource="{RelativeSource Mode=FindAncestor,
-                                                                                 AncestorType=Border}" />
-                                        <Binding Path="IsDropDownOpen"
-                                                 ElementName="TagChooserComboBox" />
-                                        <Binding>
-                                            <Binding.Source>
-                                                <sys:Double>5.0</sys:Double>
-                                            </Binding.Source>
-                                        </Binding>
-                                    </MultiBinding>
-                                </Border.Margin>
-                            </Border>
-                            <TextBlock Margin="10,0,0,0"
-                                       FontSize="16"
-                                       Text="{Binding TagName}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-        </Border>
+        <local:MpAvPopupMenuSelector Grid.Row="0"
+                                     Grid.Column="1"
+                                     MinWidth="150"
+                                     DataContext="{Binding}" />
     </Grid>
 </local:MpAvUserControl>

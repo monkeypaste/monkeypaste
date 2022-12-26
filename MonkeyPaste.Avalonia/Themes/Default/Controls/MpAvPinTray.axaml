@@ -2,11 +2,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
-    <Style Selector="local|MpAvPinTrayView">
+    <Style Selector="local|MpAvPinTrayView Border#PinTrayContainerBorder">
         <Setter Property="Background"
-                Value="{DynamicResource PinTrayBgColor}" />
+                Value="{DynamicResource PinTrayBgBrush}" />
+        <Setter Property="BoxShadow"
+                Value="inset 0 0 10 10 #46000000" />
     </Style>
-    <Style Selector="local|MpAvPinTrayView.dragover">
+    <Style Selector="local|MpAvPinTrayView.dragover Border#PinTrayContainerBorder">
         <Setter Property="Background"
                 Value="{DynamicResource PinTrayDragOverBgColor}" />
     </Style>

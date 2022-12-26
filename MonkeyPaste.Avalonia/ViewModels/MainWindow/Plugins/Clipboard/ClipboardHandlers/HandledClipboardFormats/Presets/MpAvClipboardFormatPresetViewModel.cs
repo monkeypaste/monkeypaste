@@ -15,7 +15,6 @@ namespace MonkeyPaste.Avalonia {
         MpAvSelectorViewModelBase<MpAvHandledClipboardFormatViewModel,MpAvPluginParameterViewModelBase>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
-        MpISidebarItemViewModel,
         MpIUserIconViewModel,
         MpITreeItemViewModel,
         MpIPluginComponentViewModel {
@@ -38,15 +37,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpISidebarItemViewModel Implemntation
-
-        public double SidebarWidth { get; set; } = 0;// MpMeasurements.Instance.DefaultAnalyzerPresetPanelWidth;
-        public double DefaultSidebarWidth => 350;// MpMeasurements.Instance.DefaultAnalyzerPresetPanelWidth;
-        public bool IsSidebarVisible { get; set; } = false;
-        public MpISidebarItemViewModel NextSidebarItem => null;
-        public MpISidebarItemViewModel PreviousSidebarItem => MpAvClipboardHandlerCollectionViewModel.Instance;
-
-        #endregion
 
         #region MpITreeItemViewModel Implementation
 

@@ -85,7 +85,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             if(cur_face_idx < 0) {
-                Debugger.Break();
+                cur_face_idx = (int)_curOrientation;
             }
 
             _curOrientation = (MpMainWindowOrientationType)cur_face_idx;
@@ -110,6 +110,7 @@ namespace MonkeyPaste.Avalonia {
             if(MpAvMainWindowViewModel.Instance.MainWindowOrientationType != final_or) {
                 MpAvMainWindowViewModel.Instance.CycleOrientationCommand.Execute(final_or);
             }
+            MpAvMainWindow.Instance.ClampContentSizes();
         }
 
         #endregion

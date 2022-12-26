@@ -22,6 +22,7 @@
         </Grid.ColumnDefinitions>
         <local:MpAvPinTrayView x:Name="PinTrayView"
                                Grid.Column="0"
+                               Margin="0,0,5,0"
                                DataContext="{Binding}"
                                Classes.dragover="{Binding IsDragOverPinTray}"
                                MinWidth="{Binding MinPinTrayScreenWidth}"
@@ -35,7 +36,7 @@
         <GridSplitter x:Name="ClipTraySplitter"
                       Grid.Column="0"
                       IsTabStop="False"
-                      Classes.pinAndQueryTraySplitter="True"
+                      Classes.clipTraySplitter="True"
                       Classes.vertical="{Binding !IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                       Classes.horizontal="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />
         <local:MpAvClipTrayView x:Name="ClipTrayView"

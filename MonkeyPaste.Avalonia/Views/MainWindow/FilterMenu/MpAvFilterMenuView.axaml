@@ -22,33 +22,38 @@
                 <Setter Property="Padding"
                         Value="0" />
             </Style>
+            <Style Selector="ToggleButton#PlayPause Image">
+                <Setter Property="Source"
+                        Value="{Binding Source={StaticResource PauseImage}, Converter={StaticResource StringResourceConverter}}" />
+            </Style>
+            <Style Selector="ToggleButton#PlayPause.paused Image">
+                <Setter Property="Source"
+                        Value="{Binding Source={StaticResource PlayImage}, Converter={StaticResource StringResourceConverter}}" />
+            </Style>
+            <Style Selector="ToggleButton#PlayPause:pointerover Image">
+                <Setter Property="Source"
+                        Value="{Binding ., Source={StaticResource PauseImage}, ConverterParameter=gray, Converter={StaticResource StringHexToBitmapTintConverter}}" />
+            </Style>
+            <Style Selector="ToggleButton#PlayPause.paused:pointerover Image">
+                <Setter Property="Source"
+                        Value="{Binding ., Source={StaticResource PlayImage}, ConverterParameter=gray, Converter={StaticResource StringHexToBitmapTintConverter}}" />
+            </Style>
         </DockPanel.Styles>
         <!--  Pause / Resume Clipboard Listener Toggle Button  -->
         <ToggleButton Tag="PlayPause"
+                      Classes="iconButton"
                       local:MpAvSizeObserverExtension.IsEnabled="False"
                       local:MpAvSizeObserverExtension.ObservedWidth="{Binding PlayPauseButtonWidth, Mode=OneWayToSource}"
                       Padding="10"
                       HorizontalAlignment="Center"
                       VerticalAlignment="Top"
+                      Classes.paused="{Binding IsAppPaused, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                       IsChecked="{Binding IsAppPaused, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=TwoWay}">
-            <Grid>
-                <Image HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Source="{Binding Source={StaticResource PauseImage}, Converter={StaticResource StringResourceConverter}}"
-                       IsVisible="{Binding !IsAppPaused, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
-                    <ToolTip.Tip>
-                        <local:MpAvToolTipView ToolTipText="Pause Clipboard Listener" />
-                    </ToolTip.Tip>
-                </Image>
-                <Image HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Source="{Binding Source={StaticResource PlayImage}, Converter={StaticResource StringResourceConverter}}"
-                       IsVisible="{Binding IsAppPaused, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
-                    <ToolTip.Tip>
-                        <local:MpAvToolTipView ToolTipText="Resume Clipboard Listener" />
-                    </ToolTip.Tip>
-                </Image>
-            </Grid>
+            <ToolTip.Tip>
+                <local:MpAvToolTipView ToolTipText="{Binding PlayOrPauseLabel, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=TwoWay}" />
+            </ToolTip.Tip>
+            <Image HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
         </ToggleButton>
 
 

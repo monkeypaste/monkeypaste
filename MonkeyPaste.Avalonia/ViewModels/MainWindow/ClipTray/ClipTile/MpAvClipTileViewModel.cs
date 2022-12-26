@@ -728,7 +728,7 @@ namespace MonkeyPaste.Avalonia {
                                                 EditableContentSize.Height > TileContentHeight :
                                                 UnconstrainedContentSize.Height > TileContentHeight;
 
-        public bool IsOverlayButtonsVisible => IsHovering && !IsAppendNotifier;
+        public bool IsOverlayButtonsVisible => IsHovering && !IsAppendNotifier && !Parent.IsAnyDropOverTrays;
         public bool IsResizable => !IsAppendNotifier;
         public bool CanResize { get; set; } = false;
 

@@ -3,7 +3,6 @@
        xmlns:sys="clr-namespace:System;assembly=mscorlib"
        xmlns:local="using:MonkeyPaste.Avalonia">
     <Style.Resources>
-        <!--  COMMON  -->
 
         <!--  COLORS  -->
         <Color x:Key="MainWindowBgColor">
@@ -19,9 +18,6 @@
             Gainsboro
         </Color>
 
-        <Color x:Key="DefaultGridSplitterColor">
-            Magenta
-        </Color>
 
         <Color x:Key="DisabledTextFgColor">
             LightGray
@@ -56,9 +52,13 @@
             DarkTurquoise
         </Color>
 
-
         <Color x:Key="ClipTileContentBackgroundColor">
             OldLace
+        </Color>
+
+        <!--  SIDEBAR BUTTONS  -->
+        <Color x:Key="SidebarButtonsBgColor">
+            Gainsboro
         </Color>
 
         <!--  ACTIONS  -->
@@ -66,9 +66,46 @@
             Gainsboro
         </Color>
 
+        <!--  GRID SPLITTERS  -->
+
+        <Color x:Key="DefaultGridSplitterColor">
+            PowderBlue
+        </Color>
+
+        <Color x:Key="SidebarGridSplitterColor">
+            Cyan
+        </Color>
+
+        <Color x:Key="ClipTrayGridSplitterColor">
+            Magenta
+        </Color>
+
+
         <!--  BRUSHES  -->
 
         <!--  GENERAL  -->
+
+        <!--  GRID SPLITTERS  -->
+
+        <SolidColorBrush x:Key="DefaultGridSplitterBrush"
+                         Color="{DynamicResource DefaultGridSplitterColor}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
+        <SolidColorBrush x:Key="SidebarGridSplitterBrush"
+                         Color="{DynamicResource SidebarGridSplitterColor}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
+        <SolidColorBrush x:Key="ClipTrayGridSplitterBrush"
+                         Color="{DynamicResource ClipTrayGridSplitterColor}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
+        <SolidColorBrush x:Key="HoverDefaultGridSplitterBgBrush"
+                         Color="{DynamicResource HoverDefaultBorderColor}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <!--  SIDEBAR BUTTONS  -->
+        <SolidColorBrush x:Key="SidebarButtonsBgBrush"
+                         Color="{DynamicResource SidebarButtonsBgColor}"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  ItemSource Item Bg  -->
         <SolidColorBrush x:Key="SelectableItemDefaultBgBrush"
@@ -98,16 +135,6 @@
                          Color="{DynamicResource SelectedBorderColor}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <!--  Grid Splitter  -->
-
-        <SolidColorBrush x:Key="DefaultGridSplitterBrush"
-                         Color="{DynamicResource DefaultGridSplitterColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-
-        <SolidColorBrush x:Key="HoverDefaultGridSplitterBgBrush"
-                         Color="{DynamicResource HoverDefaultBorderColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-
 
 
         <!--  TITLE MENU  -->
@@ -125,6 +152,9 @@
 
         <!--  SIDE BAR  -->
 
+        <SolidColorBrush x:Key="SidebarButtonGroupBgBrush"
+                         Color="{DynamicResource MainWindowBgColor}"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
         <!--  TAG TREE  -->
         <SolidColorBrush x:Key="TagTreeBgBrush"
                          Color="{DynamicResource MainWindowBgColor}"
@@ -181,12 +211,15 @@
                          Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  PIN TRAY  -->
-        <SolidColorBrush x:Key="PinTrayBgColor"
+        <SolidColorBrush x:Key="PinTrayBgBrush"
+                         Color="LightSalmon"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="PinTrayShadowBrush"
                          Color="Salmon"
                          Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <SolidColorBrush x:Key="PinTrayDragOverBgColor"
-                         Color="LightSalmon"
+                         Color="Salmon"
                          Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  CLIP TILE  -->

@@ -92,7 +92,13 @@ namespace MonkeyPaste {
         }
 
         public static async Task<MpUserDevice> GetUserDeviceByMembersAsync(string machineName, MpUserDeviceType deviceType) {
-            string query = $"select * from MpUserDevice where MachineName=? and PlatformTypeId=?";
+            string query = null;
+            if(string.IsNullOrEmpty(machineName)) {
+                query = $"select * from MpUserDevice where e_MpUserDeviceType=?";
+            } else {
+                query = $"select * from MpUserDevice where MachineName=? and e_MpUserDeviceType=?";
+            }
+            
             var result = await MpDb.QueryAsync<MpUserDevice>(query, machineName, deviceType.ToString());
             if (result == null || result.Count == 0) {
                 return null;

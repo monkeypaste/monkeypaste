@@ -7,8 +7,6 @@
                 Value="Stretch" />
         <Setter Property="VerticalAlignment"
                 Value="Stretch" />
-        <Setter Property="Foreground"
-                Value="Wheat" />
     </Style>
     <Style Selector="PathIcon /template/ Path">
         <Setter Property="Margin"

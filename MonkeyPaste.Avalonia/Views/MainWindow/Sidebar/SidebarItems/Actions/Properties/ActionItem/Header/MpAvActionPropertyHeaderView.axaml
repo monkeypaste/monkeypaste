@@ -60,7 +60,6 @@
         <!--  ENABLE/DISABLE BUTTON  -->
 
         <ToggleButton x:Name="ToggleEnableButton"
-                      
                       Classes.invalid="{Binding !IsValid}"
                       Classes.enabled="{Binding IsEnabledDb}"
                       Grid.Column="1"
@@ -69,7 +68,7 @@
                       HorizontalContentAlignment="Stretch"
                       VerticalAlignment="Center"
                       VerticalContentAlignment="Stretch"
-                      Margin="3"
+                      Margin="3,5"
                       Padding="3"
                       Width="40"
                       Height="40"

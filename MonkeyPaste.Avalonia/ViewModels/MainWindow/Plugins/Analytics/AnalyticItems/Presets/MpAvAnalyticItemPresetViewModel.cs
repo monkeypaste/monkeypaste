@@ -19,7 +19,6 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel, 
         MpIMenuItemViewModel,
         MpIActionComponent, 
-        MpISidebarItemViewModel,
         MpIUserIconViewModel,
         //MpIUserColorViewModel,
         MpAvIShortcutCommand, 
@@ -67,16 +66,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public IEnumerable<MpAvPluginParameterViewModelBase> VisibleItems => Items.Where(x => x.IsVisible);
-
-        #endregion
-
-        #region MpISidebarItemViewModel Implementation
-        public double SidebarWidth { get; set; } = 0;// MpMeasurements.Instance.DefaultAnalyzerPresetPanelWidth;
-        public double DefaultSidebarWidth => 300;// MpMeasurements.Instance.DefaultAnalyzerPresetPanelWidth;
-        public bool IsSidebarVisible { get; set; } = false;
-
-        public MpISidebarItemViewModel NextSidebarItem => null;
-        public MpISidebarItemViewModel PreviousSidebarItem => MpAvAnalyticItemCollectionViewModel.Instance;
 
         #endregion
 
@@ -481,9 +470,9 @@ namespace MonkeyPaste.Avalonia {
             switch(e.PropertyName) {
                 case nameof(IsSelected):
                     if(IsSelected) {
-                        if(Parent.Parent.IsSidebarVisible) {
-                            LastSelectedDateTime = DateTime.Now;
-                        }                       
+                        //if(Parent.Parent.IsSidebarVisible) {
+                        //    LastSelectedDateTime = DateTime.Now;
+                        //}                       
 
                         Parent.OnPropertyChanged(nameof(Parent.IsSelected));
                         if(Parent.SelectedItem != this) {

@@ -373,7 +373,7 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(IsSelected):
                     if (IsSelected) {
-                        LastSelectedDateTime = DateTime.Now;
+                        //LastSelectedDateTime = DateTime.Now;
 
                         if (SelectedItem == null) {
                             SelectedItem = Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
@@ -547,9 +547,10 @@ namespace MonkeyPaste.Avalonia {
                  if (SelectedItem == null && Items.Count > 0) {
                      SelectedItem = Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
                  }
-                 if (!Parent.Parent.IsSidebarVisible) {
-                     Parent.Parent.IsSidebarVisible = true;
-                 }
+                 //if (!Parent.Parent.IsSidebarVisible) {
+                 //    Parent.Parent.IsSidebarVisible = true;
+                 //}
+                 MpAvSidebarItemCollectionViewModel.Instance.SelectSidebarItemCommand.Execute(Parent.Parent);
                  OnPropertyChanged(nameof(SelectedItem));
 
              });

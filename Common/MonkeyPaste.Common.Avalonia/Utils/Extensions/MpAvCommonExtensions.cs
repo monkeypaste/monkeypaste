@@ -76,6 +76,60 @@ namespace MonkeyPaste.Common.Avalonia {
         #endregion
 
         #region Control
+
+        public static void AnimateSize(this Control control, MpSize new_size, Func<bool> onComplete = null) {
+            double zeta, omega, fps;
+
+            double cw = control.Bounds.Width;
+            double ch = control.Bounds.Height;
+            double nw = new_size.Width;
+            double nh = new_size.Height;
+
+            if (!control.Width.IsNumber()) {
+                control.Width = cw;
+            }
+            if (!control.Height.IsNumber()) {
+                control.Height = ch;
+            }
+
+            if (nw > cw || nh > ch) {
+                zeta = 0.5d;
+                omega = 30.0d;
+                fps = 40.0d;
+            } else {
+                zeta = 1.0d;
+                omega = 30.0d;
+                fps = 40.0d;
+            }
+
+            int delay_ms = (int)(1000 / fps);
+            double dw = nw - cw;
+            double dh = nh - ch;
+            double step_w = dw / delay_ms;
+            double step_h = dh / delay_ms;
+            double vx = 0;
+            double vy = 0;
+            Dispatcher.UIThread.Post(async () => {
+                while (true) {
+                    MpAnimationHelpers.Spring(ref cw, ref vx, nw, delay_ms / 1000.0d, zeta, omega);
+                    MpAnimationHelpers.Spring(ref ch, ref vy, nh, delay_ms / 1000.0d, zeta, omega);
+                    control.Width = cw;
+                    control.Height = ch;
+
+                    await Task.Delay(delay_ms);
+
+                    bool is_v_zero = Math.Abs(vx) < 0.1d;
+                    if (is_v_zero) {
+                        break;
+                    }
+                }
+                control.Width = nw;
+                control.Height = nh;
+
+                onComplete?.Invoke();
+            });
+        }
+
         public static void InvalidateAll(this Control control) {
             control?.InvalidateArrange();
             control?.InvalidateMeasure();

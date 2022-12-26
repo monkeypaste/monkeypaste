@@ -7,7 +7,8 @@ using System.Diagnostics;
 
 namespace MonkeyPaste {
     public abstract class MpBootstrapperViewModelBase : 
-        MpViewModelBase, 
+        MpViewModelBase,
+        MpIStartupState,
         MpIProgressLoader {
         #region Statics
 
@@ -20,6 +21,12 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
+
+        #region MpIStartupState Implementation
+
+        public DateTime? LoadedDateTime { get; private set; } = null;
+
+        #endregion
 
         #region MpIProgressLoader Implementation
 
@@ -66,6 +73,8 @@ namespace MonkeyPaste {
             while (_platformItems.Any(x => x.IsBusy)) {
                 await Task.Delay(100);
             }
+
+            LoadedDateTime = DateTime.Now;
         }
         #endregion
 

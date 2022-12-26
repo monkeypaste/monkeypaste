@@ -269,7 +269,15 @@ namespace MonkeyPaste.Avalonia {
             if(IsReadOnly) {
                 return;
             }
-            if(e.Key == Key.Escape) {
+            if (e.Key == Key.Space) {
+                string pre_str = Text.Substring(0,SelectionStart);
+                string post_str = Text.Substring(SelectionEnd);
+                string new_text = pre_str + " " + post_str;
+                SetValue(TextProperty, new_text);
+                e.Handled = true;
+                return;
+            }
+            if (e.Key == Key.Escape) {
                 SetValue(IsReadOnlyProperty, true);
                 CancelEditCommand?.Execute(null);
                 if(CancelEditCommand == null && 

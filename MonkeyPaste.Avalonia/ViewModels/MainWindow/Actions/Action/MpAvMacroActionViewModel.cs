@@ -159,7 +159,7 @@ namespace MonkeyPaste.Avalonia {
                 return IsValid;
             }
 
-            var aipvm = MpAvAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(AnalyticItemPresetId);
+            var aipvm = MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x=>x.AnalyticItemPresetId  == AnalyticItemPresetId);
             if (aipvm == null) {
                 ValidationText = $"Analyzer for Action '{FullName}' not found";
                 await ShowValidationNotification();

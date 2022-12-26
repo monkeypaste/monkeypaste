@@ -10,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
     public abstract class MpAvSelectorViewModelBase<P,C> : 
         MpSelectorViewModelBase<P,C>
         where P : class
-        where C : MpViewModelBase, MpISelectableViewModel {
+        where C : MpISelectableViewModel {
 
         // BUG error MSB4018: System.ArgumentException: Member 'System.Collections.ObjectModel.ObservableCollection`1' is declared in another module and needs to be imported
         // Must override .net standard observable collection in avalonia for some reason

@@ -152,7 +152,7 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(IsSelected):
                     if (IsSelected) {
-                        LastSelectedDateTime = DateTime.Now;
+                        //LastSelectedDateTime = DateTime.Now;
                     }
                     break;
             }

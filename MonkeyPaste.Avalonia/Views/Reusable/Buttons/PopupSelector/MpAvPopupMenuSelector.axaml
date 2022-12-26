@@ -104,7 +104,7 @@
             <!--    -->
             <Border x:Name="PopupCaretBorder"
                     Grid.Column="1"
-                    Classes="popupCaret,svgOutlineButton"
+                    Classes="popupCaret,iconButton"
                     Background="DimGray"
                     BorderThickness="1"
                     VerticalAlignment="Center"

@@ -44,6 +44,9 @@ namespace MonkeyPaste {
         [JsonIgnore]
         public static string PreferencesPath => _prefPath;
 
+        [JsonIgnore]
+        public static string PreferencesPathBackup => $"{PreferencesPath}.backup";
+
         #endregion
 
         #region Properties
@@ -568,6 +571,8 @@ namespace MonkeyPaste {
                     }
 
                     MpFileIo.WriteTextToFile(PreferencesPath, prefStr, false);
+                    // write backup after succesful save
+                    MpFileIo.WriteTextToFile(PreferencesPathBackup, prefStr, false);
 
                     MpConsole.WriteLine("Preferences Updated Total Ms: " + sw.ElapsedMilliseconds);
 
@@ -637,9 +642,27 @@ namespace MonkeyPaste {
             MpConsole.WriteTraceLine("Pref file was either missing, empty or this is initial startup. (re)creating");
 
             if(isReset) {
+                if(PreferencesPathBackup.IsFile()) {
+                    string backup_str = MpFileIo.ReadTextFromFile(PreferencesPathBackup);
+                    if(ValidatePrefData(backup_str)) {
+                        // pref is corrupt, check it and backup etc.
+                        Debugger.Break();
+                        MpFileIo.WriteTextToFile(PreferencesPath, backup_str, false);
+                        await InitAsync(_prefPath, _dbInfo, _osInfo);
+                        return;
+                    }
+                }
                 Instance = new MpPrefViewModel();
-                //bool success = await MpDb.ResetPreferenceDefaultsAsync(_dbInfo, _osInfo);
-                bool success = await MpDefaultDataModelTools.ResetAsync(_dbInfo, _osInfo);
+                string discovered_device_guid = await MpDefaultDataModelTools.DiscoverThisDeviceGuidAsync(_dbInfo, _osInfo);
+                if(string.IsNullOrEmpty(discovered_device_guid)) {
+                    // this means no machine name/os type or just os type match was found in db file
+                    // which would be strange and will wait to handle but should probably
+                    // create a device guid...
+                    Debugger.Break();
+                } else {
+                    IsLoading = true;
+                    Instance.ThisDeviceGuid = discovered_device_guid;
+                }
             } else {
                 // TODO remove this later only to automate restoring test db and preferences
                 string execute_path = Assembly.GetExecutingAssembly().Location;

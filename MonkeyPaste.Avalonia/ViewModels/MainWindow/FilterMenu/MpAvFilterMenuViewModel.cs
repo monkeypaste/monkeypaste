@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvFilterMenuViewModel : MpViewModelBase {
+    public class MpAvFilterMenuViewModel : 
+        MpViewModelBase {
         #region Statics
 
         private static MpAvFilterMenuViewModel _instance;
@@ -17,24 +18,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
-        private double _filterMenuHeight = 40;
-        public double FilterMenuHeight {
-            get {
-
-                if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading ||
-                   MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening ||
-                   MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    _filterMenuHeight = 40;
-                }
-                return _filterMenuHeight;
-            }
-            set {
-                if(FilterMenuHeight != value) {
-                    _filterMenuHeight = value;
-                    OnPropertyChanged(nameof(FilterMenuHeight));
-                }
-            }
-        }
+        public double FilterMenuHeight => 40;
         public double SearchBoxObservedWidth { get; set; }
         public double ClipTileSortViewWidth { get; set; }
         public double PlayPauseButtonWidth { get; set; }

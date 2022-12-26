@@ -32,10 +32,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
-        public double RowHeight => 20;
-
         public double TitleMenuWidth { get; set; }
-        public double TitleMenuHeight { get; set; }
+        public double TitleMenuHeight => 20;
 
         public double SettingsButtonWidth { get; set; }
         public double LockButtonWidth { get; set; }

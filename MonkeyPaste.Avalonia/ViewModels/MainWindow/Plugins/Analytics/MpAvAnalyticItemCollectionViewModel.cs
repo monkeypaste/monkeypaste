@@ -26,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
         MpIMenuItemViewModel,
         MpIAsyncSingletonViewModel<MpAvAnalyticItemCollectionViewModel>, 
         MpIAsyncComboBoxViewModel,
-        MpIOrientedSidebarItemViewModel {
+        MpISidebarItemViewModel {
         #region Private Variables
 
         private string _processAutomationGuid = "e7e25c85-1c8f-4e79-be8f-2ebfcb5bb94e";
@@ -94,10 +94,9 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIOrientedSidebarItemViewModel Implementation
+        #region MpISidebarItemViewModel Implementation
         private double _defaultSelectorColumnVarDimLength = 350;
         private double _defaultParameterColumnVarDimLength = 450;
-        public double SidebarWidth { get; set; } = 0;
         public double DefaultSidebarWidth {
             get {
                 if(MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
@@ -116,19 +115,22 @@ namespace MonkeyPaste.Avalonia {
                     return MpAvClipTrayViewModel.Instance.ClipTrayScreenHeight;
                 }
                 double h = _defaultSelectorColumnVarDimLength;
-                if (SelectedPresetViewModel != null) {
-                    h += _defaultParameterColumnVarDimLength;
-                }
+                //if (SelectedPresetViewModel != null) {
+                //    h += _defaultParameterColumnVarDimLength;
+                //}
                 return h;
             }
         }
+        public double SidebarWidth { get; set; } = 0;
         public double SidebarHeight { get; set; } = 0;
 
-        public bool IsSidebarVisible { get; set; } = false;
+        #endregion
+        #region MpISelectableViewModel Implementation
 
-        public MpISidebarItemViewModel NextSidebarItem => SelectedPresetViewModel;
+        public bool IsSelected { get; set; }
 
-        public MpISidebarItemViewModel PreviousSidebarItem => null;
+        public DateTime LastSelectedDateTime { get; set; }
+
 
         #endregion
 
@@ -142,8 +144,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
-        public bool IsSelected { get; set; }
 
         public bool IsHovering { get; set; }
 
@@ -214,25 +214,6 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public MpAvAnalyticItemPresetViewModel GetPresetViewModelById(int aipid) {
-            var aipvm = Items.SelectMany(x => x.Items).FirstOrDefault(x => x.AnalyticItemPresetId == aipid);
-            return aipvm;
-        }
-
-        public MpAvAnalyticItemPresetViewModel GetPresetViewModelByGuid(string guid) {
-            var aipvm = Items.SelectMany(x => x.Items).FirstOrDefault(x => x.PresetGuid == guid);
-            return aipvm;
-        }
-
-        public MpAvAnalyticItemPresetViewModel GetDefaultPresetByAnalyzerType(MpAnalyzerType analyzerType) {
-            string title = analyzerType.EnumToLabel();
-            var aivm = Items.FirstOrDefault(x => x.Title.ToLower() == title.ToLower());
-            if(aivm == null) {
-                return null;
-            }
-            return aivm.DefaultPresetViewModel;
-        }
-
         public MpMenuItemViewModel GetAnalyzerMenu(ICommand cmd) {
             return new MpMenuItemViewModel() {
                 SubItems = Items.Select(x =>
@@ -265,15 +246,15 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsHovering):
                 case nameof(IsAnySelected):
                     break;
-                case nameof(IsSidebarVisible):                    
-                    if (IsSidebarVisible) {
-                        MpAvTagTrayViewModel.Instance.IsSidebarVisible = false;
-                        MpAvTriggerCollectionViewModel.Instance.IsSidebarVisible = false;
-                        MpAvClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
-                    }
-                    OnPropertyChanged(nameof(SelectedItem));
-                    MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel));
-                    break;
+                //case nameof(IsSidebarVisible):                    
+                //    if (IsSidebarVisible) {
+                //        MpAvTagTrayViewModel.Instance.IsSidebarVisible = false;
+                //        MpAvTriggerCollectionViewModel.Instance.IsSidebarVisible = false;
+                //        MpAvClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
+                //    }
+                //    OnPropertyChanged(nameof(SelectedItem));
+                //    MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel));
+                //    break;
                 case nameof(Items):
                     OnPropertyChanged(nameof(Children));
                     break;

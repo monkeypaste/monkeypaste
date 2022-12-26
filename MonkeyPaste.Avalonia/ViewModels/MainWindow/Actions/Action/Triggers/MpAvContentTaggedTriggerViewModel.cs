@@ -1,9 +1,33 @@
 ﻿using MonkeyPaste;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvContentTaggedTriggerViewModel : MpAvTriggerActionViewModelBase {
+    public class MpAvContentTaggedTriggerViewModel : 
+        MpAvTriggerActionViewModelBase,
+        MpIPopupSelectorMenu {
+
+
+        #region MpIPopupSelectorMenu Implementation
+
+        public bool IsOpen { get; set; }
+        public MpMenuItemViewModel PopupMenu {
+            get {
+                return new MpMenuItemViewModel() {
+                    SubItems = new List<MpMenuItemViewModel>() {
+                        MpAvTagTrayViewModel.Instance.AllTagViewModel.GetTagMenu(SelectTagCommand,new int[] { TagId}, true)
+                    }
+                };
+            }
+        }
+        public MpMenuItemViewModel SelectedMenuItem =>
+            SelectedTag == null ? null : SelectedTag.GetTagMenu(null, new int[] { TagId }, false);
+        public string EmptyText => "Select Tag...";
+        public object EmptyIconResourceObj => MpAvActionViewModelBase.GetDefaultActionIconResourceKey(MpActionType.Classify, null);
+        #endregion
+
         #region Properties
 
         #region View Models
@@ -92,6 +116,20 @@ namespace MonkeyPaste.Avalonia {
                 ttvm.UnregisterActionComponent(this);
             }
         }
+        #endregion
+
+        #region Commands
+
+        public ICommand SelectTagCommand => new MpCommand<object>(
+            (args) => {
+                if (args is int tagId) {
+                    TagId = tagId;
+                    OnPropertyChanged(nameof(SelectedTag));
+                    OnPropertyChanged(nameof(SelectedMenuItem));
+                }
+            });
+
+
         #endregion
     }
 }

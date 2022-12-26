@@ -26,6 +26,7 @@ namespace MonkeyPaste.Avalonia {
             //MpAvNotificationWindowManager.Instance.Init();
 
             var pw = new MpAvWrapper();
+            pw.StartupState = this;
             await pw.InitializeAsync();
             await MpPlatformWrapper.InitAsync(pw);
 

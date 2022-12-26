@@ -14,46 +14,49 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPinTrayView">
-
-    <Grid HorizontalAlignment="Stretch"
-          VerticalAlignment="Stretch">
-        <ListBox x:Name="PinTrayListBox"
-                 Focusable="True"
-                 TabIndex="1"
-                 IsTabStop="True"
-                 MaxWidth="{Binding MaxPinTrayScreenWidth}"
-                 MaxHeight="{Binding MaxPinTrayScreenHeight}"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 ScrollViewer.VerticalScrollBarVisibility="Visible"
-                 HorizontalAlignment="Stretch"
-                 VerticalAlignment="Stretch"
-                 SelectedItem="{Binding SelectedPinTrayItem, Mode=TwoWay}"
-                 Items="{Binding PinnedItems}">
-            <ListBox.Styles>
-                <Style Selector="ListBoxItem"
-                       x:DataType="local:MpAvClipTileViewModel">
-                    <!--<Setter Property="IsSelected"
+    <Border x:Name="PinTrayContainerBorder"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+        <Grid HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
+            <ListBox x:Name="PinTrayListBox"
+                     Focusable="True"
+                     TabIndex="1"
+                     IsTabStop="True"
+                     MaxWidth="{Binding MaxPinTrayScreenWidth}"
+                     MaxHeight="{Binding MaxPinTrayScreenHeight}"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     ScrollViewer.VerticalScrollBarVisibility="Visible"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch"
+                     SelectedItem="{Binding SelectedPinTrayItem, Mode=TwoWay}"
+                     Items="{Binding PinnedItems}">
+                <ListBox.Styles>
+                    <Style Selector="ListBoxItem"
+                           x:DataType="local:MpAvClipTileViewModel">
+                        <!--<Setter Property="IsSelected"
                             Value="{Binding IsSelected, Mode=TwoWay}" />-->
-                </Style>
-            </ListBox.Styles>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <!--<ListBoxItem Classes.TileHover="{Binding IsHovering}">-->
-                    <local:MpAvClipTileView DataContext="{Binding}"
-                                            local:MpAvIsHoveringExtension.IsEnabled="True"
-                                            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                                            local:MpAvBoundsObserverExtension.IsEnabled="True"
-                                            local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedBounds, Mode=TwoWay}"
-                                            IsVisible="{Binding IsPinned}" />
-                    <!--</ListBoxItem>-->
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel HorizontalAlignment="Stretch"
-                               VerticalAlignment="Stretch" />
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-        </ListBox>
-    </Grid>
+                    </Style>
+                </ListBox.Styles>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <!--<ListBoxItem Classes.TileHover="{Binding IsHovering}">-->
+                        <local:MpAvClipTileView DataContext="{Binding}"
+                                                local:MpAvIsHoveringExtension.IsEnabled="True"
+                                                local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                                                local:MpAvBoundsObserverExtension.IsEnabled="True"
+                                                local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedBounds, Mode=TwoWay}"
+                                                IsVisible="{Binding IsPinned}" />
+                        <!--</ListBoxItem>-->
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+        </Grid>
+    </Border>
 </local:MpAvUserControl>

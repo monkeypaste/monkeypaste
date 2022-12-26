@@ -12,8 +12,7 @@ using Avalonia.Controls;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClassifyActionViewModel : 
-        MpAvActionViewModelBase, 
-        MpIActionPluginComponent, 
+        MpAvActionViewModelBase,  
         MpIPopupSelectorMenu {
         #region Private Variables
 

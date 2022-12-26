@@ -15,7 +15,7 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncSingletonViewModel<MpAvTagTrayViewModel>,
         MpIHoverableViewModel,
         MpISelectableViewModel,
-        MpIOrientedSidebarItemViewModel,
+        MpISidebarItemViewModel,
         MpIQueryInfoValueProvider {
         #region Private Variables
         
@@ -69,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIOrientedSidebarItemViewModel Implementation
+        #region MpISidebarItemViewModel Implementation
         public double SidebarWidth { get; set; } = 0;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
         public double SidebarHeight { get; set; }
         
@@ -91,11 +91,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        public bool IsSidebarVisible { get; set; }
 
-        public MpISidebarItemViewModel NextSidebarItem => MpAvClipboardHandlerCollectionViewModel.Instance;
-        public MpISidebarItemViewModel PreviousSidebarItem => null;
-        
 
         #endregion
 
@@ -318,17 +314,17 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpTagTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(IsSidebarVisible):
-                    if(IsSidebarVisible) {
-                        MpAvAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = false;
-                        MpAvTriggerCollectionViewModel.Instance.IsSidebarVisible = false;
-                        MpAvClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
-                    }
-                    MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel));
-                    break;
+                //case nameof(IsSidebarVisible):
+                //    if(IsSidebarVisible) {
+                //        MpAvAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = false;
+                //        MpAvTriggerCollectionViewModel.Instance.IsSidebarVisible = false;
+                //        MpAvClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
+                //    }
+                //    MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel));
+                //    break;
                 case nameof(IsSelected):
                     if(IsSelected) {
-                        LastSelectedDateTime = DateTime.Now;
+                        //LastSelectedDateTime = DateTime.Now;
                     }
                     break;
                 case nameof(Items):

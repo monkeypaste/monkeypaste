@@ -27,7 +27,7 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncSingletonViewModel<MpAvTriggerCollectionViewModel>,
         MpIHoverableViewModel,
         MpIResizableViewModel,
-        MpIOrientedSidebarItemViewModel {
+        MpISidebarItemViewModel {
         #region Private Variables
 
         #endregion
@@ -103,103 +103,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Properties
-        public static CancellationTokenSource CTS = new CancellationTokenSource();
-
-        #region View Models       
-
-        public MpAvActionViewModelBase PrimaryAction =>
-            SelectedItem == null ? null : SelectedItem.SelectedItem;
-
-        public IEnumerable<MpAvActionViewModelBase> AllActions => 
-            Items.SelectMany(x => x.SelfAndAllDescendants).Cast<MpAvActionViewModelBase>();
-
-        public IEnumerable<MpAvActionViewModelBase> AllSelectedItemActions =>
-            SelectedItem == null ? null : SelectedItem.SelfAndAllDescendants.Cast<MpAvActionViewModelBase>();
-
-        //public override MpAvTriggerActionViewModelBase SelectedItem {
-        //    get {
-        //        if (PrimaryAction == null) {
-        //            return null;
-        //        }
-        //        //if (PrimaryAction is MpAvTriggerActionViewModelBase) {
-        //        //    return PrimaryAction as MpAvTriggerActionViewModelBase;
-        //        //}
-        //        return PrimaryAction.RootItem as MpAvTriggerActionViewModelBase;
-        //    }
-        //    //set {
-        //    //    if(value == null) {
-        //    //        return;
-        //    //    }
-        //    //    if (SelectedItem != value) {
-        //    //        AllSelectedItemActions.ForEach(x => x.IsSelected = false);
-        //    //        if (value != null) {
-        //    //            value.IsSelected = true;
-        //    //        }
-        //    //        //if (value == null) {
-        //    //        //    AllActions.ForEach(x => x.IsSelected = false);
-        //    //        //} else {
-        //    //        //    AllActions.ForEach(x => x.IsSelected = x.ActionId == value.ActionId);
-        //    //        //}
-        //    //        OnPropertyChanged(nameof(SelectedItem));
-        //    //        OnPropertyChanged(nameof(AllSelectedItemActions));
-        //    //        OnPropertyChanged(nameof(SelectedActions));
-        //    //        OnPropertyChanged(nameof(PrimaryAction));
-        //    //        OnPropertyChanged(nameof(IsAnySelected));
-        //    //    }
-        //    //}
-        //}
-        //public IList<MpAvActionViewModelBase> SelectedActions =>
-        //    AllActions.Where(x => x.IsSelected).OrderByDescending(x => x.LastSelectedDateTime).ToList();
-        //public IList<MpAvActionViewModelBase> AllActions {
-        //    get {
-        //        if (Items == null) {
-        //            return new List<MpAvActionViewModelBase>();
-        //        }
-        //        var avml = new List<MpAvActionViewModelBase>();
-        //        foreach (var tavm in Items.ToList()) {
-        //            avml.Add(tavm);
-        //            avml.AddRange(tavm.FindAllChildren().Cast<MpAvActionViewModelBase>());
-        //        }
-        //        return avml;
-        //    }
-        //}
-        //public IEnumerable<MpAvActionViewModelBase> AllActions {
-        //    get {
-        //        foreach (var tavm in Items) {
-        //            yield return tavm;
-        //            foreach (var avm in tavm.Items) {
-        //                yield return avm;
-        //            }
-        //        }
-        //    }
-        //}
-
-        //public IList<MpAvActionViewModelBase> AllSelectedItemActions {
-        //    get {
-        //        if (SelectedItem == null) {
-        //            return new List<MpAvActionViewModelBase>();
-        //        }
-        //        var avml = SelectedItem.FindAllChildren().ToList();
-        //        avml.Insert(0, SelectedItem);
-        //        return avml.Cast<MpAvActionViewModelBase>().ToList();
-        //    }
-        //}
-        //public IEnumerable<MpAvActionViewModelBase> AllSelectedItemActions {
-        //    get {
-        //        if (SelectedItem == null) {
-        //            yield break;
-        //        }
-        //        yield return SelectedItem;
-        //        foreach (var avm in SelectedItem.Items) {
-        //            yield return avm;
-        //        }
-        //    }
-        //}
-
-
-
-        #endregion
 
         #region MpIResizableViewModel Implementation
 
@@ -214,20 +117,64 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIOrientedSidebarItemViewModel Implementation
+        #region MpISidebarItemViewModel Implementation
 
-        public double DefaultSidebarWidth => 500;//MpMeasurements.Instance.DefaultActionPanelWidth;
-        
-        public double SidebarWidth { get; set; } = 0;// MpMeasurements.Instance.DefaultActionPanelWidth;
-        
-        public double DefaultSidebarHeight => 500;
+        private double _defaultSelectorColumnVarDimLength = 350;
+        private double _defaultParameterColumnVarDimLength = 625;
+        public double DefaultSidebarWidth {
+            get {
+                if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
+                    return MpAvMainWindowViewModel.Instance.MainWindowWidth;
+                }
+                double w = _defaultSelectorColumnVarDimLength;
+                if (SelectedItem != null) {
+                    w += _defaultParameterColumnVarDimLength;
+                }
+                return w;
+            }
+        }
+        public double DefaultSidebarHeight {
+            get {
+                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                    return MpAvClipTrayViewModel.Instance.ClipTrayScreenHeight;
+                }
+                double h = _defaultSelectorColumnVarDimLength;
+                //if (SelectedItem != null) {
+                //    //h += _defaultParameterColumnVarDimLength;
+                //}
+                return h;
+            }
+        }
+        public double SidebarWidth { get; set; } = 0;
         public double SidebarHeight { get; set; } = 0;
         public bool IsSidebarVisible { get; set; } = false;
 
-        public MpISidebarItemViewModel NextSidebarItem => SelectedItem == null ? null : SelectedItem;
-        public MpISidebarItemViewModel PreviousSidebarItem => null;
+        #endregion
+        #region MpISelectableViewModel Implementation
+
+        public bool IsSelected { get; set; }
+
+        public DateTime LastSelectedDateTime { get; set; }
+
 
         #endregion
+
+        #region Properties
+        public static CancellationTokenSource CTS = new CancellationTokenSource();
+
+        #region View Models       
+
+        public MpAvActionViewModelBase PrimaryAction =>
+            SelectedItem == null ? null : SelectedItem.SelectedItem;
+
+        public IEnumerable<MpAvActionViewModelBase> AllActions => 
+            Items.SelectMany(x => x.SelfAndAllDescendants).Cast<MpAvActionViewModelBase>();
+
+        public IEnumerable<MpAvActionViewModelBase> AllSelectedItemActions =>
+            SelectedItem == null ? null : SelectedItem.SelfAndAllDescendants.Cast<MpAvActionViewModelBase>();
+
+        #endregion
+
 
         
 
@@ -413,14 +360,14 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpMatcherCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(IsSidebarVisible):
-                    if (IsSidebarVisible) {
-                        MpAvAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = false;
-                        MpAvTagTrayViewModel.Instance.IsSidebarVisible = false;
-                        MpAvClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
-                    }
-                    MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel));
-                    break;
+                //case nameof(IsSidebarVisible):
+                //    if (IsSidebarVisible) {
+                //        MpAvAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = false;
+                //        MpAvTagTrayViewModel.Instance.IsSidebarVisible = false;
+                //        MpAvClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
+                //    }
+                //    MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel));
+                //    break;
                 case nameof(SelectedItem):
                     OnPropertyChanged(nameof(IsAnySelected));
                     OnPropertyChanged(nameof(AllSelectedItemActions));
@@ -477,8 +424,9 @@ namespace MonkeyPaste.Avalonia {
                  }
 
                  Items.Add(new_trigger_vm);
+                 await Task.Delay(300);
                  SelectActionCommand.Execute(new_trigger_vm);
-
+                 await Task.Delay(300);
                  SelectedItem.ToggleIsEnabledCommand.Execute(null);
 
                  IsBusy = false;
@@ -523,6 +471,11 @@ namespace MonkeyPaste.Avalonia {
 
                     SelectedItem.SelfAndAllDescendants.Cast<MpAvActionViewModelBase>()
                         .ForEach(x => x.OnPropertyChanged(nameof(x.IsSelectedAction)));
+
+
+                    if (this is MpIAsyncComboBoxViewModel cmbivm) {
+                        cmbivm.OnPropertyChanged(nameof(cmbivm.SelectedItem));
+                    }
                 }
             });
 

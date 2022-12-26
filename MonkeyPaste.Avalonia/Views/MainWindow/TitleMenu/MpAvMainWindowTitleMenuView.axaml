@@ -44,7 +44,7 @@
             <!--  Settings Toggle Button  -->
 
             <ToggleButton x:Name="SettingsToggleButton"
-                Classes="svgOutlineButton"
+                Classes="iconButton"
                           IsChecked="{Binding IsVisible, Source={x:Static local:MpAvSettingsWindowViewModel.Instance}}"
                           ToolTip.ShowDelay="500">
                 <ToolTip.Tip>
@@ -56,7 +56,7 @@
             <!--  Lock Toggle Button  -->
 
             <ToggleButton x:Name="LockToggleButton"
-                Classes="svgOutlineButton"
+                Classes="iconButton"
                           IsChecked="{Binding IsMainWindowLocked, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=TwoWay}"
                           ToolTip.ShowDelay="500">
                 <ToolTip.Tip>
@@ -211,7 +211,7 @@
             </Grid>
             <!--  Layout Toggle Button  -->
             <ToggleButton x:Name="GridLayoutToggleButton"
-                          Classes="svgOutlineButton"
+                          Classes="iconButton"
                           IsChecked="{Binding IsGridLayout, Mode=TwoWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                           ToolTip.ShowDelay="0">
                 <Grid>
@@ -252,7 +252,7 @@
             <Button x:Name="MainWindowCycleOrientationCcwButton"
                     Command="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     CommandParameter="CCW"
-                Classes="svgOutlineButton"
+                Classes="iconButton"
                     local:MpAvPointerPressCommandExtension.IsEnabled="True"
                     local:MpAvPointerPressCommandExtension.RightPressCommand="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     local:MpAvPointerPressCommandExtension.RightPressCommandParameter="CW"

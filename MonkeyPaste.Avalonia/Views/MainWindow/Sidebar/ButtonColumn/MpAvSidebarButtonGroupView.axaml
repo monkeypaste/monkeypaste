@@ -11,119 +11,49 @@
                        mc:Ignorable="d"
                        d:DesignWidth="800"
                        d:DesignHeight="450"
-                       x:Class="MonkeyPaste.Avalonia.MpAvSidebarView">
-    <Grid x:Name="SidebarContainerGrid"
+                       x:Class="MonkeyPaste.Avalonia.MpAvSidebarButtonGroupView">
+    <Grid x:Name="SidebarButtonGroupContainerGrid"
+          Classes.horizontal="{Binding !IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
           IsTabStop="True"
           TabIndex="0"
           Focusable="True"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
           RowDefinitions="*,*,*,*,*">
-        <Grid.Background>
-            <SolidColorBrush Color="DimGray"
-                             Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}" />
-        </Grid.Background>
-        <Grid.Styles>
-            <Style Selector="ToggleButton">
-                <Setter Property="HorizontalAlignment"
-                        Value="Center" />
-                <Setter Property="VerticalAlignment"
-                        Value="Center" />
-                <Setter Property="HorizontalContentAlignment"
-                        Value="Center" />
-                <Setter Property="VerticalContentAlignment"
-                        Value="Center" />
-                <Setter Property="Padding"
-                        Value="5" />
-                <Setter Property="CornerRadius"
-                        Value="3" />
-                <Setter Property="BorderThickness"
-                        Value="1" />
-            </Style>
-            <Style Selector="ToggleButton:pointerover PathIcon">
-                <Setter Property="Foreground"
-                        Value="Gold" />
-            </Style>
-            <Style Selector="ToggleButton:pointerover /template/ ContentPresenter">
-                <Setter Property="BorderBrush"
-                        Value="{DynamicResource HoverDefaultBorderBrush}" />
-            </Style>
-            <Style Selector="ToggleButton:checked /template/ ContentPresenter">
-                <Setter Property="Background"
-                        Value="Lime" />
-            </Style>
-            <Style Selector="ToggleButton:unchecked /template/ ContentPresenter">
-                <Setter Property="Background"
-                        Value="LightGray" />
-            </Style>
-            <Style Selector="PathIcon">
-                <Setter Property="HorizontalAlignment"
-                        Value="Center" />
-                <Setter Property="VerticalAlignment"
-                        Value="Center" />
-                <Setter Property="Width"
-                        Value="24" />
-                <Setter Property="Height"
-                        Value="24" />
-                <Setter Property="Foreground"
-                        Value="LightSlateGray" />
-            </Style>
-        </Grid.Styles>
         <ToggleButton x:Name="TagTreeToggleButton"
-                      Classes="svgOutlineButton"
                       Grid.Row="0"
-                      local:MpAvIsHoveringExtension.IsEnabled="True"
-                      local:MpAvIsHoveringExtension.HoverCursor="Hand"
-                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
-                      Padding="10">
+                      IsChecked="{Binding IsSelected, Source={x:Static local:MpAvTagTrayViewModel.Instance}}">
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="Collection Tree" />
             </ToolTip.Tip>
             <PathIcon Data="{StaticResource BooksSvg}" />
         </ToggleButton>
         <ToggleButton x:Name="ClipboardHandlerToggleButton"
-                      Classes="svgOutlineButton"
                       Grid.Row="1"
-                      local:MpAvIsHoveringExtension.IsEnabled="True"
-                      local:MpAvIsHoveringExtension.HoverCursor="Hand"
-                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpAvClipboardHandlerCollectionViewModel.Instance}}"
-                      Padding="10">
+                      IsChecked="{Binding IsSelected, Source={x:Static local:MpAvClipboardHandlerCollectionViewModel.Instance}}">
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="Clipboard Handlers" />
             </ToolTip.Tip>
             <PathIcon Data="{StaticResource ClipboardSvg}" />
         </ToggleButton>
         <ToggleButton x:Name="AnalyzerToggleButton"
-                      Classes="svgOutlineButton"
                       Grid.Row="2"
-                      local:MpAvIsHoveringExtension.IsEnabled="True"
-                      local:MpAvIsHoveringExtension.HoverCursor="Hand"
-                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpAvAnalyticItemCollectionViewModel.Instance}}"
-                      Padding="10">
+                      IsChecked="{Binding IsSelected, Source={x:Static local:MpAvAnalyticItemCollectionViewModel.Instance}}">
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="Analyze" />
             </ToolTip.Tip>
             <PathIcon Data="{StaticResource BrainOutlineSvg}" />
         </ToggleButton>
         <ToggleButton x:Name="ActionsToggleButton"
-                      Classes="svgOutlineButton"
                       Grid.Row="3"
-                      local:MpAvIsHoveringExtension.IsEnabled="True"
-                      local:MpAvIsHoveringExtension.HoverCursor="Hand"
-                      IsEnabled="True"
-                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}"
-                      Padding="10">
+                      IsChecked="{Binding IsSelected, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}">
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="Actions" />
             </ToolTip.Tip>
             <PathIcon Data="{StaticResource BoltSvg}" />
         </ToggleButton>
         <ToggleButton x:Name="AppModeToggleButton"
-                      Classes="svgOutlineButton"
                       Grid.Row="4"
-                      local:MpAvIsHoveringExtension.IsEnabled="True"
-                      local:MpAvIsHoveringExtension.HoverCursor="Hand"
-                      Padding="10"
                       IsEnabled="{Binding !IsAppPaused}">
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="Clipboard Modes" />

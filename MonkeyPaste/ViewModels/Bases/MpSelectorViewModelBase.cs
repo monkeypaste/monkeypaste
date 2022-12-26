@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
@@ -11,7 +10,7 @@ namespace MonkeyPaste {
         MpViewModelBase<P>, 
         MpISelectorViewModel
         where P:class 
-        where C: MpViewModelBase,MpISelectableViewModel {
+        where C: MpISelectableViewModel {
 
         public MpSelectorViewModelBase() : base(null) { }
 
@@ -22,41 +21,26 @@ namespace MonkeyPaste {
         public virtual C SelectedItem {
             get => Items.FirstOrDefault(x => x.IsSelected);
             set {
-                if (value != SelectedItem) {
-                    Items.ForEach(x => x.IsSelected = x == value);
+                if (!ReferenceEquals(SelectedItem,value)) {
+                    Items.ForEach(x => x.IsSelected = ReferenceEquals(x,value));
+                    if(MpPlatformWrapper.Services.StartupState.LoadedDateTime != null &&
+                        SelectedItem != null) {
+                        SelectedItem.LastSelectedDateTime = DateTime.Now;
+                    }
+                    OnPropertyChanged(nameof(SelectedItem));
                 }
             }
         }
 
-        public virtual C LastSelectedItem => Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
+        public virtual C LastSelectedItem => Items.OrderByDescending(x => x.LastSelectedDateTime).FirstOrDefault();
         public bool HasItems => Items.Count > 0;
 
         public bool IsAnySelected => SelectedItem != null;
 
         object MpISelectorViewModel.SelectedItem {
             get => SelectedItem;
-            set => SelectedItem = value as C;
+            set => SelectedItem = (C)value;
         }
         //public List<C> SelectedItems => Items.Where(x => x.IsSelected).ToList();
-    }
-
-    public abstract class MpMultiSelectorViewModelBase<P, C> :
-        MpSelectorViewModelBase<P,C>,
-        MpIMultiSelectableViewModel<C> 
-        where P : class
-        where C : MpViewModelBase, MpISelectableViewModel {
-
-        public MpMultiSelectorViewModelBase() : base(null) { }
-
-        public MpMultiSelectorViewModelBase(P p) : base(p) { }
-
-        public override C SelectedItem {
-            get => PrimaryItem;
-            //set => base.SelectedItem = value; 
-        }
-
-        public virtual C PrimaryItem { get; }
-
-        public virtual IList<C> SelectedItems => Items.Where(x => x.IsSelected).ToList();
     }
 }

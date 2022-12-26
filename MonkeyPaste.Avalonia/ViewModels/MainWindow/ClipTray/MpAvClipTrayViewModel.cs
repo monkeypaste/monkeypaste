@@ -25,7 +25,8 @@ namespace MonkeyPaste.Avalonia {
         MpAvSelectorViewModelBase<object, MpAvClipTileViewModel>,
         MpIBootstrappedItem, 
         MpIPagingScrollViewerViewModel,
-        MpIActionComponent,
+        MpIActionComponent, 
+        MpIBoundSizeViewModel,
         MpIContextMenuViewModel {
         #region Private Variables
 
@@ -89,67 +90,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIContextMenuItemViewModel Implementation
-
-        //public MpMenuItemViewModel SourceContextMenuViewModel {
-        //    get {
-        //        if(SelectedItem == null) {
-        //            return new MpMenuItemViewModel();
-        //        }
-        //        return new MpMenuItemViewModel() {
-        //            Header = "Source",
-        //            SubItems = new List<MpMenuItemViewModel>() {
-        //                new MpMenuItemViewModel() {
-        //                            Header = $"Filter to '{SelectedItem.AppViewModel.AppName}'",
-        //                            AltNavIdx = 0,
-        //                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("FilterImage") as string,
-        //                            Command = EnableFilterByAppCommand,
-        //                            CommandParameter = SelectedItem
-        //                        },
-        //                new MpMenuItemViewModel() {
-        //                            Header = $"'{SelectedItem.AppViewModel.AppName}' to Excluded App",
-        //                            AltNavIdx = SelectedItem.AppViewModel.AppName.Length + 6,
-        //                            IconId = SelectedItem.AppViewModel.AppId,
-        //                            Command = ExcludeSubSelectedItemApplicationCommand
-        //                        },
-        //                new MpMenuItemViewModel() {
-        //                    Header = SelectedItem.UrlViewModel == null ?
-        //                                null :
-        //                                $"'{SelectedItem.UrlViewModel.UrlDomainPath}' to Excluded Domain",
-
-        //                    AltNavIdx = SelectedItem.UrlViewModel == null ?
-        //                                -1 : SelectedItem.UrlViewModel.UrlDomainPath.Length + 6,
-
-        //                    IconId = SelectedItem.UrlViewModel == null ?
-        //                                0 :
-        //                                SelectedItem.UrlViewModel.IconId,
-        //                    IsVisible = SelectedItem.UrlViewModel != null,
-        //                    Command = ExcludeSubSelectedItemUrlDomainCommand
-        //                },
-        //                new MpMenuItemViewModel() {
-        //                    Header = "Into Macro",
-        //                    AltNavIdx = 5,
-        //                    IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("RobotClawImage") as string,
-        //                    Command = MpAvSettingsWindowViewModel.Instance.ShowSettingsWindowCommand,
-        //                    CommandParameter = this
-        //                },
-        //                new MpMenuItemViewModel() {
-        //                    Header = "To Shorcut",
-        //                    AltNavIdx = 3,
-        //                    IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("HotkeyImage") as string,
-        //                    Command = MpAvSettingsWindowViewModel.Instance.ShowSettingsWindowCommand,
-        //                    CommandParameter = this,
-                                    
-        //                    //ShortcutArgs = new object[] { MpShortcutType.PasteCopyItem,
-        //                    //ShortcutObjId = SelectedItem.CopyItemId,
-        //                    ShortcutArgs = new object[] {
-        //                        MpShortcutType.PasteCopyItem,
-        //                        SelectedItem.CopyItemId, },
-        //                }
-        //            }
-        //        };
-        //    }
-        //}
-        
         public MpMenuItemViewModel ContextMenuViewModel {
             get {
                 if (SelectedItem == null) {
@@ -332,6 +272,13 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+
+        #endregion
+
+        #region MpIBoundSizeViewModel Implementation
+
+        public double BoundWidth { get; set; }
+        public double BoundHeight { get; set; }
 
         #endregion
 
@@ -929,10 +876,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Layout
-
-        public double DefaultPinTrayWidth => DefaultItemWidth * 1.4;
+        public double ObservedContainerScreenWidth { get; set; }
+        public double ObservedContainerScreenHeight { get; set; }
         public double ObservedPinTrayScreenWidth { get; set; }
         public double ObservedPinTrayScreenHeight { get; set; }
+        public double DefaultPinTrayWidth => DefaultItemWidth * 1.4;
 
         //public double PinTrayPopOutObservedWidth { get; set; }
         //public double PinTrayPopOutObservedHeight { get; set; }
@@ -953,7 +901,7 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if (ListOrientation == Orientation.Horizontal) {
 
-                    return ClipTrayContainerScreenWidth - MinClipTrayScreenWidth;
+                    return ObservedContainerScreenWidth - MinClipTrayScreenWidth;
                 }
                 return double.PositiveInfinity;
             }
@@ -964,7 +912,7 @@ namespace MonkeyPaste.Avalonia {
 
                     return double.PositiveInfinity;
                 }
-                return ClipTrayContainerScreenHeight - MinClipTrayScreenHeight;
+                return ObservedContainerScreenHeight - MinClipTrayScreenHeight;
             }
         }
 
@@ -972,8 +920,6 @@ namespace MonkeyPaste.Avalonia {
         public double MinClipTrayScreenHeight => MinClipOrPinTrayScreenHeight;
         public double MinClipOrPinTrayScreenWidth => 0;
         public double MinClipOrPinTrayScreenHeight => 0;
-        public double ClipTrayContainerScreenWidth { get; set; }
-        public double ClipTrayContainerScreenHeight { get; set; }
         public double MaxTileWidth => double.PositiveInfinity;// Math.Max(0, ClipTrayScreenWidth - MAX_TILE_SIZE_CONTAINER_PAD);
         public double MaxTileHeight => double.PositiveInfinity;// Math.Max(0, ClipTrayScreenHeight - MAX_TILE_SIZE_CONTAINER_PAD);
 
@@ -1168,13 +1114,14 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsPinTrayVisible {
             get {
-                if (!IsPinTrayEmpty) {
-                    return true;
-                }
-                //if (IsPinTrayDropPopOutVisible) {
+                //if (!IsPinTrayEmpty) {
                 //    return true;
-                //} 
-                return false;
+                //}
+                ////if (IsPinTrayDropPopOutVisible) {
+                ////    return true;
+                ////} 
+                //return false;
+                return true;
             }
         }
         public bool HasScrollVelocity => Math.Abs(ScrollVelocityX) + Math.Abs(ScrollVelocityY) > 0.1d;

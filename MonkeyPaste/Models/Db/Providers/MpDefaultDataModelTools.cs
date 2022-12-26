@@ -40,18 +40,23 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-        public static async Task<bool> ResetAsync(MpIDbInfo dbInfo, MpIOsInfo osInfo) {
+        public static async Task<string> DiscoverThisDeviceGuidAsync(MpIDbInfo dbInfo, MpIOsInfo osInfo) {
             bool wouldBeNewDb = await MpDb.InitDbConnectionAsync(dbInfo, false);
             if (wouldBeNewDb) {
                 //this should be caught in pref init so somethings wrong
                 Debugger.Break();
-                return false;
+                return null;
             }
             await MpDb.CreateTableAsync<MpUserDevice>();
             MpUserDevice this_device = await MpDataModelProvider.GetUserDeviceByMembersAsync(osInfo.OsMachineName, osInfo.OsType);
             if (this_device == null) {
-                // reset error
-                Debugger.Break();
+                // maybe user changed machine name so fallback and query just by device type
+                this_device = await MpDataModelProvider.GetUserDeviceByMembersAsync(null, osInfo.OsType);
+                if (this_device == null) {
+                    // reset error
+                    Debugger.Break();
+                    return null;
+                }
             }
             ThisUserDeviceGuid = this_device.Guid;
             ThisUserDeviceType = osInfo.OsType;
@@ -86,7 +91,7 @@ namespace MonkeyPaste {
             //MpPrefViewModel.Instance.ThisOsFileManagerAppId = osAppSource.Id;
 
             await MpDb.CloseConnectionAsync();
-            return true;
+            return ThisUserDeviceGuid;
         }
 
         public static async Task CreateAsync() {

@@ -21,7 +21,6 @@ namespace MonkeyPaste.Avalonia {
         MpAvActionViewModelBase,
         MpIResizableViewModel,
         MpIAsyncComboBoxItemViewModel,
-        MpISidebarItemViewModel,
         MpIDesignerSettingsViewModel {
 
         #region MpIAsyncComboBoxItemViewModel Implementation
@@ -263,17 +262,6 @@ namespace MonkeyPaste.Avalonia {
 
         //public override IEnumerable<MpAvActionViewModelBase> SelfAndAllDescendants =>
         //    SelfAndAllDescendants.Cast<MpAvActionViewModelBase>();
-
-        #endregion
-
-        #region MpISidebarItemViewModel Implementation
-
-        public double DefaultSidebarWidth => 800;// MpMeasurements.Instance.DefaultDesignerWidth;
-        public double SidebarWidth { get; set; } = 0;// MpMeasurements.Instance.DefaultDesignerWidth;
-
-        public bool IsSidebarVisible { get; set; }
-        public MpISidebarItemViewModel NextSidebarItem => null;
-        public MpISidebarItemViewModel PreviousSidebarItem => Parent;
 
         #endregion
 

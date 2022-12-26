@@ -7,7 +7,7 @@
         <Setter Property="Cursor"
                 Value="Hand" />
     </Style>
-    <Style Selector=":is(Button).svgOutlineButton:pointerover /template/ ContentPresenter">
+    <Style Selector=":is(Button).iconButton:pointerover /template/ ContentPresenter">
         <Setter Property="Background"
                 Value="Transparent" />
     </Style>
@@ -15,16 +15,16 @@
         <Setter Property="Foreground"
                 Value="{DynamicResource HoverDefaultBorderBrush}" />
     </Style>
-    <Style Selector="ToggleButton.svgOutlineButton:checked /template/ ContentPresenter">
+    <Style Selector="ToggleButton.iconButton:checked /template/ ContentPresenter">
         <Setter Property="Background"
                 Value="Lime" />
     </Style>
-    <Style Selector=":is(Button).svgOutlineButton:pressed  /template/ ContentPresenter">
+    <Style Selector=":is(Button).iconButton:pressed  /template/ ContentPresenter">
         <Setter Property="Background"
                 Value="Transparent" />
     </Style>
 
-    <Style Selector=":is(Button).svgOutlineButton">
+    <Style Selector=":is(Button).iconButton">
         <Setter Property="HorizontalAlignment"
                 Value="Center" />
         <Setter Property="VerticalAlignment"

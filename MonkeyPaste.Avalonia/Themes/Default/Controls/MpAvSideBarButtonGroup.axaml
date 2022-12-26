@@ -1,0 +1,79 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+    <Styles.Resources>
+    </Styles.Resources>
+
+    <Style Selector="local|MpAvSidebarButtonGroupView">
+        <Setter Property="Background"
+                Value="{DynamicResource SidebarButtonsBgBrush}" />
+        <Setter Property="Padding"
+                Value="3" />
+    </Style>
+
+    <Style Selector="local|MpAvSidebarButtonGroupView ToggleButton">
+        <Setter Property="Cursor"
+                Value="Hand" />
+        <Setter Property="HorizontalAlignment"
+                Value="Center" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Center" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="Padding"
+                Value="10" />
+        <Setter Property="CornerRadius"
+                Value="3" />
+        <Setter Property="BorderThickness"
+                Value="0" />
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>
+
+    <Style Selector="local|MpAvSidebarButtonGroupView:not(.horizontal) ToggleButton">
+        <Setter Property="Height"
+                Value="{Binding $self.Bounds.Width}" />
+    </Style>
+    <Style Selector="local|MpAvSidebarButtonGroupView.horizontal ToggleButton">
+        <Setter Property="Width"
+                Value="{Binding $self.Bounds.Height}" />
+    </Style>
+
+    <Style Selector="local|MpAvSidebarButtonGroupView ToggleButton PathIcon">
+        <Setter Property="HorizontalAlignment"
+                Value="Center" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="Width"
+                Value="24" />
+        <Setter Property="Height"
+                Value="24" />
+    </Style>
+    <Style Selector="local|MpAvSidebarButtonGroupView ToggleButton:pointerover /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>
+    <Style Selector="local|MpAvSidebarButtonGroupView ToggleButton PathIcon">
+        <Setter Property="Foreground"
+                Value="DimGray" />
+    </Style>
+    <Style Selector="local|MpAvSidebarButtonGroupView ToggleButton:pointerover PathIcon">
+        <Setter Property="Foreground"
+                Value="{DynamicResource HoverDefaultBorderBrush}" />
+    </Style>
+    <Style Selector="local|MpAvSidebarButtonGroupView ToggleButton:pointerover:checked PathIcon">
+        <Setter Property="Foreground"
+                Value="{DynamicResource SelectedBorderBrush}" />
+    </Style>
+    <Style Selector="local|MpAvSidebarButtonGroupView ToggleButton:checked PathIcon">
+        <Setter Property="Foreground"
+                Value="{DynamicResource HoverSelectedBorderBrush}" />
+    </Style>
+    <!--<Style Selector="local|MpAvSidebarButtonGroupView ToggleButton:unchecked /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="LightGray" />
+    </Style>-->
+</Styles>
