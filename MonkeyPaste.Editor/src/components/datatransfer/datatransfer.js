@@ -32,6 +32,20 @@ function isHtmlClipboardFragment(dataStr) {
 
 // #region Actions
 
+function convertHostDataItemsToDataTransfer(dataItemsMsgObj) {
+    // input 'MpQuillHostDataItemsMessageFragment'
+
+    let dt = new DataTransfer();
+    if (!dataItemsMsgObj || !dataItemsMsgObj.dataItems || dataItemsMsgObj.dataItems.length == 0) {
+        return dt;
+    }
+    for (var i = 0; i < dataItemsMsgObj.dataItems.length; i++) {
+        let dti = dataItemsMsgObj.dataItems[i];
+        dt.setData(dti.format, dti.data);
+    }
+    return dt;
+}
+
 function performDataTransferOnContent(
     dt,
     dest_doc_range,

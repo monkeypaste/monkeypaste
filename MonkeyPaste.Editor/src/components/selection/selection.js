@@ -243,7 +243,6 @@ function isDomRangeEqual(dom_range_1, dom_range_2) {
 		dom_range_1.endContainer == dom_range_2.endContainer &&
 		dom_range_1.startOffset == dom_range_2.startOffset &&
 		dom_range_1.endOffset == dom_range_2.endOffset;
-
 }
 
 function isNavJump() {
@@ -265,7 +264,6 @@ function isNavRight() {
 	let last_sel_range = LastSelRange;
 
 	last_sel_range = last_sel_range ? last_sel_range : sel_range;
-
 
 	let old_closest_idx =
 		sel_range.index > last_sel_range.index ?
@@ -393,8 +391,8 @@ function onDocumentSelectionChange(e) {
 	//new_range = coerceCleanSelection(new_range, CurSelRange);
 	if (DragDomRange) {
 		// drag selection collapses so prevent here, don't know why...
-		//setDomSelection(DragDomRange);
-		//return;
+		setDomSelection(DragDomRange);
+		return;
 	}
 	if (didSelectionChange(new_range, CurSelRange)) {		
 		LastSelRange = CurSelRange;

@@ -144,7 +144,7 @@ async function onCreateContentScreenShot_ntf(sel) {
 }
 
 async function onWaitTillPasteIsReady_ntf(req) {
-	// output 'MpQuillContentDataResponseMessage' (with 'MpQuillContentDataResponseFormattedDataItemFragment' items)
+	// output 'MpQuillContentDataResponseMessage' (with 'MpQuillHostDataItemFragment' items)
 	if (typeof notifyPasteIsReady === 'function') {
 		showPasteToolbar(true);
 
@@ -253,7 +253,7 @@ function onInternalContextMenuIsVisibleChanged_ntf(isVisible) {
 }
 
 function isRunningOnHost() {
-	return typeof notifyInitComplete !== 'function';
+	return typeof notifyInitComplete === 'function';
 }
 
 

@@ -34,10 +34,7 @@ async function getClipboardDataTransferObjectAsync_get() {
             //empty
         };
         let dt_json_obj = await processGetRequestAsync(getClipboardDataTransferObject, JSON.stringify(req));
-        for (var i = 0; i < dt_json_obj.dataItems.length; i++) {
-            let dti = dt_json_obj.dataItems[i];
-            clipboard_dt.setData(dti.format, dti.data);
-		}
+        clipboard_dt = convertHostDataItemsToDataTransfer(dt_json_obj);
     } 
     return clipboard_dt;
 }

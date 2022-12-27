@@ -276,5 +276,6 @@ namespace MonkeyPaste.Common {
             }
             return scroll_delta;
         }
+
     }
 }

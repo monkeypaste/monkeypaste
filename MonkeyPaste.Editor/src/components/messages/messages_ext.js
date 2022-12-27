@@ -63,7 +63,7 @@ function hostIsFocusedChanged_ext(hostIsFocusedMsgStr_base64) {
 
 function contentRequest_ext(contentReqMsgStr_base64) {
 	// input 'MpQuillContentDataRequestMessage'
-	// output 'MpQuillContentDataResponseMessage' (with 'MpQuillContentDataResponseFormattedDataItemFragment' items)
+	// output 'MpQuillContentDataResponseMessage' (with 'MpQuillHostDataItemFragment' items)
 
 	log('contentRequest_ext: ' + contentReqMsgStr_base64);
 	let req = toJsonObjFromBase64Str(contentReqMsgStr_base64);
@@ -241,6 +241,36 @@ function appendStateChanged_ext(reqMsgBase64Str) {
 		true);	
 }
 
+function dragEventFromHost_ext(dragEnterMsgBase64Str) {
+	// input 'MpQuillDragDropEventMessage'
+	let req = toJsonObjFromBase64Str(dragEnterMsgBase64Str);
+	log('drag event from host received. eventType: ' + req.eventType + ' screenX: '+req.screenX + ' screenY: '+req.screenY);
+	req.buttons = 1;
+	req.fromHost = true;
+	req.target = getEditorContainerElement();
+	req.dataTransfer = convertHostDataItemsToDataTransfer(req.dataItemsFragment);
+
+	
+	if (req.dataItemsFragment && req.dataItemsFragment.effectAllowed) {
+		// NOTE cannot set dt 'effectAllowed' so manually specifiying in parent obj
+		req.effectAllowed_override = req.dataItemsFragment.effectAllowed;
+	} else {
+		if (req.eventType != 'dragleave') {
+			debugger;
+		}
+		req.effectAllowed_override = 'none';
+	}
+	
+	if (req.eventType == 'dragenter') {
+		onDragEnter(req);
+	} else if (req.eventType == 'dragover') {
+		onDragOver(req);
+	} else if (req.eventType == 'dragleave') {
+		onDragLeave(req);
+	} else if (req.eventType == 'drop') {
+		onDrop(req);
+	}	
+}
 //function setSelection_ext(selMsgBase64Str) {
 //	// input 'MpQuillSelectionChangedMessage'
 //	let req = toJsonObjFromBase64Str(selMsgBase64Str);

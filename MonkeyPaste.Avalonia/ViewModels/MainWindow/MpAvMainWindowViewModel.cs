@@ -378,7 +378,21 @@ namespace MonkeyPaste.Avalonia {
 
         public bool CanResize { get; set; } = false;
 
-        public bool IsAnyMainWindowTextBoxFocused { get; set; }
+        private bool _isAnyMainWindowTextBoxFocused;
+        public bool IsAnyMainWindowTextBoxFocused { 
+            get {
+                if(MpAvFocusManager.IsInputControlFocused) {
+                    return true;
+                }
+                return _isAnyMainWindowTextBoxFocused;
+            }
+            set {
+                if(_isAnyMainWindowTextBoxFocused != value) {
+                    _isAnyMainWindowTextBoxFocused = value;
+                    OnPropertyChanged(nameof(IsAnyMainWindowTextBoxFocused));
+                }
+            }
+        }
         public bool IsAnyNotificationActivating { get; set; }
 
         public bool IsAnyDropDownOpen { get; set; }
@@ -970,10 +984,8 @@ namespace MonkeyPaste.Avalonia {
                     LastDecreasedFocusLevelDateTime.HasValue && 
                         (DateTime.Now - LastDecreasedFocusLevelDateTime.Value).TotalMilliseconds < 1000;
 
-                bool isInputControlFocused = MpAvFocusManager.IsInputControlFocused;
 
-                bool canHide = !isInputControlFocused &&
-                        !IsMainWindowLocked &&
+                bool canHide = !IsMainWindowLocked &&
                           !IsAnyDropDownOpen &&
                           !IsAnyMainWindowTextBoxFocused &&
                           !IsMainWindowInitiallyOpening &&

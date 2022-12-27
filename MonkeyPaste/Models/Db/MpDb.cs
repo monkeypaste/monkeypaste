@@ -653,7 +653,7 @@ INNER JOIN MpCopyItemSource ON MpCopyItemSource.fk_MpCopyItemId = MpCopyItem.pk_
                  new string[] {"ee74dd92-d18b-46cf-91b7-3946ab55427c",ps.CopyKeys, "CopySelection", "Internal","True"},
                  new string[] {"2acde1cc-c8e4-4675-8895-81712a6f0a36",ps.CutKeys, "CutSelection", "Internal","True"},
                  new string[] {"cb807500-9121-4e41-80d3-8c3682ce90d9","Escape", "HideMainWindow", "Internal","True"},
-                 new string[] {"1d212ca5-fb2a-4962-8f58-24ed9a5d007d","Enter", "PasteSelectedItems", "Internal"},
+                 new string[] {"1d212ca5-fb2a-4962-8f58-24ed9a5d007d","Control+Enter", "PasteSelectedItems", "Internal"},
                  new string[] {"e94ca4f3-4c6e-40dc-8941-c476a81543c7","Delete", "DeleteSelectedItems", "Internal"},
                  new string[] {"7fe24929-6c9e-49c0-a880-2f49780dfb3a","Right", "SelectNextColumnItem", "Internal"},
                  new string[] {"ee657845-f1dc-40cf-848d-6768c0081670","Left", "SelectPreviousColumnItem", "Internal"},

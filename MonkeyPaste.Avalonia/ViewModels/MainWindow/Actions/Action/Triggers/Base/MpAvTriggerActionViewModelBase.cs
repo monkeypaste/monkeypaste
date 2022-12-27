@@ -25,7 +25,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIAsyncComboBoxItemViewModel Implementation
 
-
         int MpIComboBoxItemViewModel.IconId => IconId;
         string MpIComboBoxItemViewModel.Label => Label;
 

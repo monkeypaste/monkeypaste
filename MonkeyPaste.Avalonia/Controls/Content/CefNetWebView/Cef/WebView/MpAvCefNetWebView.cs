@@ -33,9 +33,7 @@ namespace MonkeyPaste.Avalonia {
         notifyDocSelectionChanged,
         notifyContentChanged,
         notifySubSelectionEnabledChanged,
-        notifyDropEffectChanged,
         notifyException,
-        notifyDragStartOrEnd,
         notifyReadOnlyEnabled,
         notifyReadOnlyDisabled, 
         notifyInitComplete,
@@ -181,16 +179,17 @@ namespace MonkeyPaste.Avalonia {
         //    //IsDragging = false;
         //    MpConsole.WriteLine($"Drag complete for '{BindingContext}'. DropEffect: '{dropEffect}'");
         //}
-        public void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc) {
+        public void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc, bool meta) {
             if (!Dispatcher.UIThread.CheckAccess()) {
-                Dispatcher.UIThread.Post(() => (this as MpAvIDragSource).NotifyModKeyStateChanged(ctrl,alt,shift,esc));
+                Dispatcher.UIThread.Post(() => (this as MpAvIDragSource).NotifyModKeyStateChanged(ctrl,alt,shift,esc,meta));
                 return;
             }
             var modKeyMsg = new MpQuillModifierKeysNotification() {
                 ctrlKey = ctrl,
                 altKey = alt,
                 shiftKey = shift,
-                escKey = esc
+                escKey = esc,
+                metaKey = meta
             };
             this.ExecuteJavascript($"updateModifierKeysFromHost_ext('{modKeyMsg.SerializeJsonObjectToBase64()}')");
         }
@@ -276,12 +275,13 @@ namespace MonkeyPaste.Avalonia {
                     avdo.SetData(MpPortableDataFormats.AvFileNames, ctvm.CopyItemData.SplitNoEmpty(Environment.NewLine));
                 } else if (!ignore_pseudo_file) {
                     // js doesn't set file stuff for non-files
+                    string ctvm_fp = await ctvm.CopyItemData.ToFileAsync(
+                                forceNamePrefix: ctvm.CopyItemTitle,
+                                forceExt: ctvm.ItemType == MpCopyItemType.Image ? "png" : "txt",
+                                isTemporary: true);
                     avdo.SetData(
                         MpPortableDataFormats.AvFileNames,
-                        ctvm.CopyItemData.ToFileAsync(
-                            forceNamePrefix: ctvm.CopyItemTitle,
-                            forceExt: ctvm.ItemType == MpCopyItemType.Image ? "png" : "txt",
-                            isTemporary: true));
+                        new List<string>() { ctvm_fp });
                 }
 
                 bool add_tile_data = ctvm.ItemType != MpCopyItemType.Text || contentDataResp.isAllContent;
@@ -668,30 +668,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.getClipboardDataTransferObject:
                     var dtObjReq = MpJsonObject.DeserializeObject<MpQuillEditorDataTransferObjectRequestNotification>(getReq.reqMsgFragmentJsonStr);
                     var avdo = await MpPlatformWrapper.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(false) as IDataObject;
-                    if(avdo == null) {
-                        avdo = new MpAvDataObject();
-                    }
-                    var dil = new List<MpQuillContentDataResponseFormattedDataItemFragment>();
-                    foreach (var format in avdo.GetAllDataFormats()) {
-                        string data = null;
-                        if(avdo.Get(format) is byte[] bytes &&
-                            bytes.ToBase64String() is string bytesStr) {
-                            data = bytesStr;
-                        } else if(avdo.Get(format) is IEnumerable<string> strs &&
-                            string.Join(Environment.NewLine,strs) is string strSet) {
-                            data = strSet;
-                        } else {
-                            data = avdo.Get(format).ToString();
-                        }
-                        if(data == null) {
-                            continue;
-                        }
-                        dil.Add(new MpQuillContentDataResponseFormattedDataItemFragment() { format = format, data = data });
-                    }
-
-                    var dtObjResp = new MpQuillEditorDataTransferObjectResponseNotification() {
-                        dataItems = dil
-                    };
+                    var dtObjResp = avdo.ToDataItemFragment();
                     getResp.responseFragmentJsonStr = MpJsonObject.SerializeObject(dtObjResp);
                     break;
             }

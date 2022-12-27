@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -41,16 +42,20 @@ namespace MonkeyPaste.Common.Avalonia {
             await WaitForClipboardAsync();
 
             try {
-                var result = await cb.GetDataAsync(format);
+                object result = await cb.GetDataAsync(format);
                 CloseClipboard();
                 return result;
+            }
+            catch(SerializationException ex) {
+                MpConsole.WriteTraceLine($"Error reading cb format: '{format}'.", ex);
+                return null;
             }
             catch (COMException) {
                 if (retryCount >= OLE_RETRY_COUNT) {
                     return new string[] { };
                 }
                 await Task.Delay(OLE_RETRY_DELAY_MS);
-                var retry_result = await cb.GetFormatsSafeAsync(++retryCount);
+                var retry_result = await cb.GetDataSafeAsync(format,++retryCount);
                 return retry_result;
             }
         }
@@ -67,7 +72,7 @@ namespace MonkeyPaste.Common.Avalonia {
                     return;
                 }
                 await Task.Delay(OLE_RETRY_DELAY_MS);
-                await cb.GetFormatsSafeAsync(++retryCount);
+                await cb.SetDataObjectSafeAsync(ido,++retryCount);
             }
         }
 

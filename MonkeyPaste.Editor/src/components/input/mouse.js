@@ -27,7 +27,21 @@ function initMouse() {
 
 function getClientMousePos(e) {
 	if (!e || !e.clientX || !e.clientY) {
-		return { x: -1, y: -1 };
+		if (e && e.screenX && e.screenY) {
+			//let client_rect = getEditorContainerElement().getBoundingClientRect();
+			//let client_ox = client_rect.left;
+			//let client_oy = client_rect.top;
+
+			//let window_x = window.screenX + e.screenX;
+			//let window_y = window.screenY + e.screenY;
+
+			//e.clientX = window_x + client_ox;
+			//e.clientY = window_y + client_oy;
+			e.clientX = e.screenX;
+			e.clientY = e.screenY;
+		} else {
+			return { x: -1, y: -1 };
+		}		
 	}
 
 	let mp = { x: parseFloat(e.clientX), y: parseFloat(e.clientY) };

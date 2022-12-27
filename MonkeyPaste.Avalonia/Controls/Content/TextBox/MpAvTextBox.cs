@@ -54,7 +54,7 @@ namespace MonkeyPaste.Avalonia {
 
         public PointerPressedEventArgs LastPointerPressedEventArgs { get; }
 
-        public void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc) {
+        public void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc, bool meta) {
             throw new NotImplementedException();
         }
 

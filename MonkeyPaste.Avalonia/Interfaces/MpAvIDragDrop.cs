@@ -15,7 +15,7 @@ namespace MonkeyPaste.Avalonia {
 
         PointerPressedEventArgs LastPointerPressedEventArgs { get; }
         //bool IsDragging { get; set; }
-        void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc);
+        void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc, bool meta);
         //void NotifyDropComplete(DragDropEffects dropEffect);
         Task<MpAvDataObject> GetDataObjectAsync(bool forOle, string[] formats = null);
 

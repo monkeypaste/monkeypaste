@@ -101,7 +101,8 @@ namespace MonkeyPaste.Avalonia {
                 MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown,
                 MpAvShortcutCollectionViewModel.Instance.GlobalIsAltDown,
                 MpAvShortcutCollectionViewModel.Instance.GlobalIsShiftDown,
-                MpAvShortcutCollectionViewModel.Instance.GlobalIsEscapeDown);
+                MpAvShortcutCollectionViewModel.Instance.GlobalIsEscapeDown,
+                MpAvShortcutCollectionViewModel.Instance.GlobalIsMetaDown);
         }
 
         private static void HookDragEvents() {

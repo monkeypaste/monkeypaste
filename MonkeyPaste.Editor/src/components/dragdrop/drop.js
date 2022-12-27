@@ -124,14 +124,37 @@ function resetDrop(fromHost, wasLeave) {
     log('drop reset: ' + (fromHost ? "FROM HOST" : "INTERNALLY") + (wasLeave ? '| WAS LEAVE' : '| WAS DROP'));
 }
 
+function processEffectAllowed(e) {
+    let effect_str = 'none';
+    if (e.fromHost === undefined) {
+        effect_str = e.dataTransfer.effectAllowed;
+    } else {
+        effect_str = e.effectAllowed_override;
+    }
+    if (!AllowedEffects.includes(effect_str)) {
+        effect_str = 'none'
+    }
+    if (isDragCopy() || effect_str == 'copy') {
+        effect_str = 'copy';
+    } else if (isDragCut()) {
+        effect_str = 'move';
+    } else {
+        effect_str = 'none';
+    }
+    e.dataTransfer.dropEffect = effect_str;
+    return effect_str;
+}
+
 // #endregion Actions
 
 // #region Event Handlers
 function onDragEnter(e) {
     updateWindowMouseState(e);
 
-    e.stopPropagation();
-    e.preventDefault();
+    if (e.fromHost === undefined) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
 
     if (isDropping()) {
         // NOTE called on every element drag enters, only need once
@@ -174,8 +197,11 @@ function onDragOver(e) {
 
     updateWindowMouseState(e);
 
-    e.stopPropagation();
-    e.preventDefault();
+    if (e.fromHost === undefined) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
+    
 
     if (!isDropping()) {
         // IsDropping won't be set to true when its dragOverlay ie. can't drop whole tile on itself.
@@ -214,21 +240,9 @@ function onDragOver(e) {
         updateModKeys(e);
     }
 
-    if (!AllowedEffects.includes(e.dataTransfer.effectAllowed)) {
+    if (processEffectAllowed(e) == 'none') {
         return false;
-    }
-
-    if (isDragCopy() || e.dataTransfer.effectAllowed == 'copy') {
-        e.dataTransfer.dropEffect = 'copy';
-    } else if (isDragCut()) {
-        e.dataTransfer.dropEffect = 'move';
-    } else {
-        e.dataTransfer.dropEffect = 'none';
-        return false;
-    }
-
-
-    
+    }  
 
     // DROP IDX
 
@@ -277,8 +291,10 @@ function onDrop(e) {
     // OVERRIDE DEFAULT
 
     // stops the browser from redirecting.
-    e.stopPropagation();
-    e.preventDefault();
+    if (e.fromHost === undefined) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
 
     // VALIDATE
 
@@ -287,14 +303,11 @@ function onDrop(e) {
         return false;
     }
 
-    if (isDragCopy() || e.dataTransfer.effectAllowed == 'copy') {
-        e.dataTransfer.dropEffect = 'copy';
-    } else if (isDragCut()) {
-        e.dataTransfer.dropEffect = 'move';
-    } else {
-        e.dataTransfer.dropEffect = 'none';
+    let dropEffect = processEffectAllowed(e);
+    if (dropEffect == 'none') {
         return false;
-    }
+    }  
+
 
     log('drop');
 
@@ -302,7 +315,7 @@ function onDrop(e) {
     let drop_range = { index: DropIdx, length: 0 };
     let source_range = null;
     if (isDragging() &&
-        e.dataTransfer.dropEffect.toLowerCase().includes('move')) {
+        dropEffect.toLowerCase().includes('move')) {
         source_range = getDocSelection();
     }
     let block_state = getDropBlockState(DropIdx, WindowMouseLoc, IsShiftDown);

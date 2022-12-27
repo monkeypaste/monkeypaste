@@ -29,6 +29,9 @@
         <Color x:Key="SelectedBorderColor">
             Red
         </Color>
+        <Color x:Key="DefaultButtonColor">
+            White
+        </Color>
         <Color x:Key="HoverDefaultBorderColor">
             Yellow
         </Color>
@@ -123,9 +126,12 @@
                          Color="{DynamicResource DisabledTextFgColor}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <!--  Border Brush  -->
+        <!--  Border or Button Brush  -->
 
-        <SolidColorBrush x:Key="HoverDefaultBorderBrush"
+        <SolidColorBrush x:Key="DefaultButtonBrush"
+                         Color="{DynamicResource DefaultButtonColor}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+      <SolidColorBrush x:Key="HoverDefaultBorderBrush"
                          Color="{DynamicResource HoverDefaultBorderColor}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="HoverSelectedBorderBrush"
