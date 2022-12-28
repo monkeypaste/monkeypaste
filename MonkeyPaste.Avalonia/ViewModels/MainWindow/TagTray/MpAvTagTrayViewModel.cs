@@ -324,7 +324,7 @@ namespace MonkeyPaste.Avalonia {
                 //    break;
                 case nameof(IsSelected):
                     if(IsSelected) {
-                        //LastSelectedDateTime = DateTime.Now;
+                        LastSelectedDateTime = DateTime.Now;
                     }
                     break;
                 case nameof(Items):
@@ -332,7 +332,8 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(SelectedItem):
                     if(SelectedItem == null) {
-                        Debugger.Break();
+                        //Debugger.Break();
+                        SelectedItem = AllTagViewModel;
                     }
                     break;
             }

@@ -17,17 +17,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
-        public override string ParameterBorderBrush {
-            get {
-                if(IsHovering) {
-                    return MpSystemColors.Yellow;
-                }
-                if (IsValid) {
-                    return MpSystemColors.Black;
-                }
-                return base.ParameterBorderBrush;
-            }
-        }
         #endregion
 
         #region MpISliderViewModel Implementation

@@ -14,7 +14,9 @@ using System.Web;
 using System.Windows;
 using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
-
+using Avalonia.Media;
+using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 
 namespace MonkeyPaste.Avalonia {
     [Flags]
@@ -552,7 +554,7 @@ namespace MonkeyPaste.Avalonia {
             switch(e.PropertyName) {
                 case nameof(IsSelected):
                     if(IsSelected) {
-                        //LastSelectedDateTime = DateTime.Now;
+                        LastSelectedDateTime = DateTime.Now;
 
                         if(SelectedItem == null) {
                             base.SelectedItem = base.Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);

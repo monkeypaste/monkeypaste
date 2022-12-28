@@ -95,6 +95,8 @@
                 Value="Stretch" />
         <Setter Property="Margin"
                 Value="12" />
+        <Setter Property="ClipToBounds"
+                Value="False" />
     </Style>
     <Style Selector="ContentControl#DesignerItemContentControl Image"
            x:DataType="local:MpAvActionViewModelBase">

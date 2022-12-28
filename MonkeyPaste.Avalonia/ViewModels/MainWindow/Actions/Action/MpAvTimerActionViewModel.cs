@@ -42,15 +42,14 @@ namespace MonkeyPaste.Avalonia {
         public bool IsOpen { get; set; }
         public MpMenuItemViewModel PopupMenu =>
             RootTriggerActionViewModel == null ? null : 
-            RootTriggerActionViewModel.GetActionMenu(SelectTickActionCommand, new List<int> { TickActionId });
+            RootTriggerActionViewModel.GetActionMenu(SelectTickActionCommand, new List<int> { TickActionId }, true);
         public MpMenuItemViewModel SelectedMenuItem =>
             SelectedTickActionViewModel == null ?
                 null :
-            (this as MpIPopupSelectorMenu).PopupMenu.SubItems
-            .SelectMany(x => x.SubItems)
-            .FirstOrDefault(x => x.MenuItemId == TickActionId);
-        public string EmptyText => "Select Analyzer...";
-        public object EmptyIconResourceObj => MpAvActionViewModelBase.GetDefaultActionIconResourceKey(MpActionType.Analyze, null);
+            SelectedTickActionViewModel.GetActionMenu(null, new int[] { TickActionId }, false);
+
+        public string EmptyText => "Select Action...";
+        public object EmptyIconResourceObj => GetDefaultActionIconResourceKey(MpActionType.Analyze, null);
 
         #endregion
 

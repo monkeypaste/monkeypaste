@@ -22,7 +22,6 @@
         <Border CornerRadius="3"
                 Background="{DynamicResource ActionPropertyListBgBrush}"
                 Grid.Column="0"
-                Padding="10"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
             <Border.Styles>
@@ -31,7 +30,7 @@
                             Value="White" />
                 </Style>
             </Border.Styles>
-            <Grid Margin="10"
+            <Grid Margin="10,0,10,10"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
                   RowDefinitions="25,5,50,*"
@@ -52,15 +51,29 @@
 
 
                 <!--  TRIGGER SELECTOR  -->
-                <local:MpAvPluginSelectorView x:Name="AnalyzerPluginSelectorView"
-                                              Grid.Row="2"
-                                              Grid.Column="0"
-                                              Height="50"
-                                              HorizontalContentAlignment="Stretch"
-                                              HorizontalAlignment="Stretch"
-                                              VerticalAlignment="Stretch"
-                                              VerticalContentAlignment="Center"
-                                              DataContext="{Binding}" />
+                <Border Classes="iconLabelComboBox"
+                        Grid.Row="2"
+                        Grid.Column="0">
+                    <ComboBox x:Name="TriggerComboBox"
+                              Items="{Binding Items}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Classes="outerComboBoxItemBorder">
+                                    <DockPanel>
+                                        <Image Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+
+                                        <Border Classes="comboBoxItemBusyBorder"
+                                                IsVisible="{Binding IsBusy}">
+                                            <local:MpAvBusySpinnerView />
+                                        </Border>
+                                        <TextBlock Text="{Binding Label}" />
+                                    </DockPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </Border>
+
                 <!--  ADD TRIGGER BUTTON  -->
 
                 <Button Grid.Row="2"
@@ -123,12 +136,12 @@
                               VerticalAlignment="Top"
                               Margin="0,10,0,0"
                               Padding="0,0,30,0"
-                              IsVisible="{Binding ., Converter={StaticResource IsNotNullOrZeroToBoolConverter}, FallbackValue=False, TargetNullValue=False}"
-                              DataContext="{Binding SelectedItem}">
+                              DataContext="{Binding PrimaryAction}">
 
                     <local:MpAvActionPropertyView VerticalAlignment="Stretch"
                                                   HorizontalAlignment="Stretch"
-                                                  DataContext="{Binding SelectedItem}" />
+                                                  IsVisible="{Binding ., Converter={StaticResource IsNotNullOrZeroToBoolConverter}, FallbackValue=False, TargetNullValue=False}"
+                                                  DataContext="{Binding}" />
                 </ScrollViewer>
             </Grid>
         </Border>

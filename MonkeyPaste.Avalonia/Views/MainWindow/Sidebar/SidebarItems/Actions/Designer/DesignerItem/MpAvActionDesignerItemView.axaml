@@ -19,7 +19,7 @@
                     HorizontalAlignment="Center">
             <ContentControl x:Name="DesignerItemContentControl"
                             Cursor="SizeAll"
-                            Classes.selected="{Binding IsSelectedAction}"
+                            Classes.selected="{Binding IsSelected}"
                             Classes.valid="{Binding IsValid}"
                             Width="{Binding Width}"
                             Height="{Binding Height}"
@@ -27,9 +27,11 @@
                             local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
                             local:MpAvIsHoveringExtension.HoverCursor="ResizeAll"
                             local:MpAvMoveExtension.IsEnabled="True"
+                            local:MpAvMoveExtension.CanMove="{Binding CanMove, Mode=TwoWay}"
                             local:MpAvMoveExtension.IsMoving="{Binding IsMoving, Mode=TwoWay}"
                             local:MpAvMoveExtension.BeginMoveCommand="{Binding Parent.SelectActionCommand}"
                             local:MpAvMoveExtension.BeginMoveCommandParameter="{Binding .}"
+                            local:MpAvMoveExtension.FinishMoveCommand="{Binding FinishMoveCommand}"
                             ClipToBounds="False"
                             Background="Transparent"
                             Content="{Binding}">
@@ -78,7 +80,12 @@
                         <DataTemplate x:Key="ClassifyDesignerTemplate">
                             <Grid ClipToBounds="False">
                                 <Polygon Points="25,0 50,50 0,50" />
-                                <Image Margin="10,23,12,12" />
+                                <Image>
+                                    <Image.RenderTransform>
+                                        <TranslateTransform X="-2"
+                                                            Y="10" />
+                                    </Image.RenderTransform>
+                                </Image>
                             </Grid>
                         </DataTemplate>
 
@@ -107,7 +114,15 @@
                         <DataTemplate x:Key="TimerDesignerTemplate">
                             <Grid ClipToBounds="False">
                                 <Polygon Points="25,0 50,50 0,50" />
-                                <Image Margin="10,23,12,12" />
+                                <Image Width="20"
+                                       Height="20"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center">
+                                    <Image.RenderTransform>
+                                        <TranslateTransform X="0"
+                                                            Y="10" />
+                                    </Image.RenderTransform>
+                                </Image>
                             </Grid>
                         </DataTemplate>
                     </local:MpAvActionDesignerItemTemplateSelector>
@@ -117,7 +132,8 @@
                        ClipToBounds="False"
                        IsVisible="{Binding IsSelected}"
                        Padding="3"
-                       FontSize="10"
+                       FontSize="12"
+                       FontWeight="SemiBold"
                        Foreground="Wheat"
                        Background="Transparent"
                        TextAlignment="Center"

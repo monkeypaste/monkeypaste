@@ -7,9 +7,11 @@ using MonkeyPaste.Common.Avalonia;
 using System.Linq;
 using System;
 using Avalonia.Input;
+using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
-    public partial class MpAvPluginSelectorView : MpAvUserControl<MpIAsyncComboBoxViewModel> {
+    [DoNotNotify]
+    public partial class MpAvPluginSelectorView : UserControl {
 
         public MpAvPluginSelectorView() {
             InitializeComponent();

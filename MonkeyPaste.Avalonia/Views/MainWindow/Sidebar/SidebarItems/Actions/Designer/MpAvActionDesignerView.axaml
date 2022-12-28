@@ -12,19 +12,25 @@
                        x:DataType="local:MpAvTriggerActionViewModelBase"
                        mc:Ignorable="d">
     <Border Background="{DynamicResource ActionDesignerBgBrush}">
-        <Grid HorizontalAlignment="Stretch"
-              VerticalAlignment="Stretch">
-            <Grid.Styles>
-                <Style Selector="ListBox.actionDesigner ListBoxItem"
-                       x:DataType="local:MpAvActionViewModelBase">
-                    <Setter Property="IsSelected"
-                            Value="{Binding IsSelected, Mode=TwoWay}" />
-                    <Setter Property="Canvas.Left"
-                            Value="{Binding X, Mode=TwoWay}" />
-                    <Setter Property="Canvas.Top"
-                            Value="{Binding Y, Mode=TwoWay}" />
-                </Style>
-            </Grid.Styles>
+
+        <Border.Styles>
+            <Style Selector="ListBox.actionDesigner ListBoxItem"
+                   x:DataType="local:MpAvActionViewModelBase">
+                <!--<Setter Property="IsSelected"
+                        Value="{Binding IsSelected, Mode=TwoWay}" />-->
+                <Setter Property="Canvas.Left"
+                        Value="{Binding X, Mode=TwoWay}" />
+                <Setter Property="Canvas.Top"
+                        Value="{Binding Y, Mode=TwoWay}" />
+            </Style>
+        </Border.Styles>
+        <Grid x:Name="ActionDesignerContainerGrid"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              Classes.empty="{Binding SelectedItem, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}, ConverterParameter=flip, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}">
+
+            <!--  DESIGNER ZOOM BORDER  -->
+
             <local:MpAvZoomBorder ClipToBounds="False"
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Stretch"
@@ -40,8 +46,8 @@
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Stretch"
                          Classes="actionDesigner"
+                         Selection="{Binding Selection}"
                          Items="{Binding SelfAndAllDescendants}">
-
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <local:MpAvDesignerCanvas x:Name="ActionDesignerCanvas"
@@ -72,6 +78,9 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </local:MpAvZoomBorder>
+
+            <!--  SHOW GRID/ RESET VIEW MENU  -->
+
             <Border x:Name="DesignerViewMenu"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
@@ -103,7 +112,11 @@
                     </Button>
                 </Grid>
             </Border>
-            <Slider Value="{Binding Scale, Mode=TwoWay}"
+
+            <!--  ZOOM SLIDER  -->
+
+            <Slider x:Name="DesignerZoomSlider"
+                    Value="{Binding Scale, Mode=TwoWay}"
                     Margin="0,0,5,5"
                     Minimum="0.1"
                     Maximum="3"
@@ -119,19 +132,13 @@
                         <Setter Property="ToolTip.Tip">
                             <Setter.Value>
                                 <Template>
-                                    <local:MpAvToolTipView ToolTipText="{Binding $parent[Slider].Value, Mode=OneWay, StringFormat='Zoom \{0:f\}x'}" />
+                                    <local:MpAvToolTipView ToolTipText="{Binding $parent[Slider].Value, Mode=OneWay, StringFormat='Zoom {0:P}%'}" />
+                                    <!--<local:MpAvToolTipView ToolTipText="{Binding $parent[Slider].Value, Mode=OneWay, StringFormat='{}{0:#0.00'%'}'}" />-->
                                 </Template>
                             </Setter.Value>
                         </Setter>
-                        <!--<Setter Property="ToolTip.Tip"
-                                Value="{Binding $parent[Slider].Value, Mode=OneWay, StringFormat='Value \{0:f\}'}" />-->
                         <Setter Property="ToolTip.Placement"
                                 Value="Left" />
-                        <!--<Setter Property="ToolTip.VerticalOffset"
-                                Value="0" />
-                        <Setter Property="ToolTip.HorizontalOffset"
-                                Value="-30" />-->
-
                         <Setter Property="CornerRadius"
                                 Value="5" />
                         <Setter Property="Height"
@@ -142,6 +149,39 @@
                     <!--  <Style Selector="Slider /template/ Thumb "  -->
                 </Slider.Styles>
             </Slider>
+            <!--  ADD NEW TRIGGER BUTTON (EMPTY SELECTION)  -->
+
+            <!--<Button x:Name="AddNewActionButton"
+                    x:CompileBindings="False"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    DataContext="{x:Static local:MpAvTriggerCollectionViewModel.Instance}"
+                    Command="{Binding ShowTriggerSelectorMenuCommand}"
+                    CommandParameter="{Binding $self}">
+                <StackPanel Orientation="Vertical">
+                    <Grid>
+                        <Ellipse Fill="Transparent"
+                                 StrokeThickness="3"
+                                 Width="50"
+                                 Height="50" />
+                        <Rectangle HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Fill="DimGray"
+                                   Height="30"
+                                   Width="3" />
+                        <Rectangle HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Fill="DimGray"
+                                   Height="3"
+                                   Width="30" />
+                    </Grid>
+                    <Label HorizontalAlignment="Center">
+                        Add New
+                    </Label>
+                </StackPanel>
+            </Button>-->
         </Grid>
     </Border>
 </local:MpAvUserControl>

@@ -123,6 +123,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void Zoom(double scaleDelta, MpPoint relative_anchor) {
+            if (DesignerItem == null) {
+                return;
+            }
             double scale = DesignerItem.Scale;
             double tx = DesignerItem.TranslateOffsetX;
             double ty = DesignerItem.TranslateOffsetY;
@@ -153,6 +156,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public void TranslateOrigin(double x, double y) {
+            if (DesignerItem == null) {
+                return;
+            }
             // NOTE to be used by DesignerItem Drop Behavior
             //var tt = GetTranslateTransform(Child);
             DesignerItem.TranslateOffsetX -= x;
@@ -251,6 +257,10 @@ namespace MonkeyPaste.Avalonia {
         //}
         
         private void DrawGrid(DrawingContext dc) {
+            if(DesignerItem == null) {
+                return;
+            }
+
             var di = DesignerItem;
 
             double w = Bounds.Width;

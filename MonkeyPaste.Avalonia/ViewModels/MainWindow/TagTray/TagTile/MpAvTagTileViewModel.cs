@@ -644,7 +644,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsSelected):
                     if (IsSelected) {
-                        //LastSelectedDateTime = DateTime.Now;
+                        LastSelectedDateTime = DateTime.Now;
 
                         if (!IsExpanded) {
                             IsExpanded = true;

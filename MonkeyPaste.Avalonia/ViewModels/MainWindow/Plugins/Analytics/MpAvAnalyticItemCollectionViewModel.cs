@@ -44,8 +44,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIAsyncComboBoxViewModel Implementation
 
-        IEnumerable<MpIComboBoxItemViewModel> MpIAsyncComboBoxViewModel.Items => Items;
-        MpIComboBoxItemViewModel MpIAsyncComboBoxViewModel.SelectedItem {
+        IEnumerable<MpIAsyncComboBoxItemViewModel> MpIAsyncComboBoxViewModel.Items => Items;
+        MpIAsyncComboBoxItemViewModel MpIAsyncComboBoxViewModel.SelectedItem {
             get => SelectedItem;
             set => SelectedItem = (MpAvAnalyticItemViewModel)value;
         }
@@ -226,6 +226,7 @@ namespace MonkeyPaste.Avalonia {
                         Header = y.Label,
                         IconId = y.IconId,
                         Command = cmd,
+                        CommandParameter = y.AnalyticItemPresetId
                     }).ToList()
                 }).ToList()
             };

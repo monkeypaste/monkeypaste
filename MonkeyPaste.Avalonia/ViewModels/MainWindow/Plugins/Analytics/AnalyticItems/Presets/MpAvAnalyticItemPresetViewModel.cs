@@ -470,9 +470,9 @@ namespace MonkeyPaste.Avalonia {
             switch(e.PropertyName) {
                 case nameof(IsSelected):
                     if(IsSelected) {
-                        //if(Parent.Parent.IsSidebarVisible) {
-                        //    LastSelectedDateTime = DateTime.Now;
-                        //}                       
+                        //if (Parent.IsSidebarVisible) {
+                            LastSelectedDateTime = DateTime.Now;
+                        //}
 
                         Parent.OnPropertyChanged(nameof(Parent.IsSelected));
                         if(Parent.SelectedItem != this) {

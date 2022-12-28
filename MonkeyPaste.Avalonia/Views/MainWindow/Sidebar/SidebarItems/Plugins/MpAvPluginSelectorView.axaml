@@ -1,53 +1,17 @@
-<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
-                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                       xmlns:pcl="using:MonkeyPaste"
-                       xmlns:local="using:MonkeyPaste.Avalonia"
-                       x:TypeArguments="pcl:MpIAsyncComboBoxViewModel"
-                       x:DataType="pcl:MpIAsyncComboBoxViewModel"
-                       x:CompileBindings="True"
-                       mc:Ignorable="d"
-                       d:DesignWidth="800"
-                       d:DesignHeight="450"
-                       x:Class="MonkeyPaste.Avalonia.MpAvPluginSelectorView">
-    <local:MpAvUserControl.Styles>
-        <Style Selector="ListBox.paramListBox">
-            <Setter Property="Margin"
-                    Value="5,0" />
-            <Setter Property="Padding"
-                    Value="20,0" />
-            <Setter Property="HorizontalAlignment"
-                    Value="Stretch" />
-            <Setter Property="VerticalAlignment"
-                    Value="Stretch" />
-            <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
-                    Value="Disabled" />
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
-                    Value="Disabled" />
-            <Setter Property="BorderThickness"
-                    Value="0" />
-            <Setter Property="Background"
-                    Value="Transparent" />
-        </Style>
-        <Style Selector="ComboBox:empty local|MpAvBusySpinnerView">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-    </local:MpAvUserControl.Styles>
-    <Border BorderThickness="0"
-            BorderBrush="Black"
-            VerticalAlignment="Top"
-            HorizontalAlignment="Stretch"
-            Padding="0">
-        <ComboBox HorizontalAlignment="Stretch"
-                  HorizontalContentAlignment="Stretch"
-                  VerticalAlignment="Stretch"
-                  VerticalContentAlignment="Stretch"
-                  IsDropDownOpen="{Binding IsDropDownOpen}"
-                  IsEnabled="{Binding Items, Converter={StaticResource CollectionIsNotEmptyToBoolConverter}}"
-                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:pcl="using:MonkeyPaste"
+             xmlns:local="using:MonkeyPaste.Avalonia"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             x:Class="MonkeyPaste.Avalonia.MpAvPluginSelectorView">
+    <Border Classes="iconLabelComboBox">
+        <ComboBox IsEnabled="{Binding Items, Converter={StaticResource CollectionIsNotEmptyToBoolConverter}}"
+                  SelectedIndex="{Binding Selection.SelectedIndex, Mode=TwoWay}"
                   Items="{Binding Items}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
@@ -56,5 +20,5 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
     </Border>
-</local:MpAvUserControl>
+</UserControl>
 

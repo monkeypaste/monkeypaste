@@ -252,47 +252,7 @@ namespace MonkeyPaste.Avalonia {
                 return brush.ToHex();
             }
         }
-        public string BorderBrushHexColor {
-            get {
-                if (IsSelectedAction) {
-                    if (IsHovering) {
-                        return MpSystemColors.IsHoveringSelectedBorderColor;
-                    }
-                    return MpSystemColors.IsSelectedBorderColor;
-                }
-                if (IsHovering) {
-                    return MpSystemColors.IsHoveringBorderColor;
-                }
-                return MpSystemColors.Transparent;
-            }
-        }
-
-        public string LabelBorderBrushHexColor {
-            get {
-                if (IsHoveringOverLabel || IsLabelFocused) {
-                    return MpSystemColors.White;
-                }
-                return MpSystemColors.Transparent;
-            }
-        }
-
-        public string LabelForegroundBrushHexColor {
-            get {
-                if (IsLabelFocused) {
-                    return MpSystemColors.Black;
-                }
-                return MpColorHelpers.IsBright(ActionBackgroundHexColor) ? MpSystemColors.black : MpSystemColors.white;
-            }
-        }
-
-        public string LabelBackgroundBrushHexColor {
-            get {
-                if (IsLabelFocused) {
-                    return MpSystemColors.White;
-                }
-                return MpSystemColors.Transparent;
-            }
-        }
+        
 
         public object IconResourceKeyStr {
             get {
@@ -350,16 +310,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public bool IsSelectedAction {
-            get {
-                if(RootTriggerActionViewModel != null &&
-                    RootTriggerActionViewModel.SelectedItem != null &&
-                    RootTriggerActionViewModel.SelectedItem.ActionId == ActionId) {
-                    return true;
-                }
-                return false;
-            }
-        }
         public bool IsAnyBusy {
             get {
                 if(IsBusy) {
@@ -814,7 +764,7 @@ namespace MonkeyPaste.Avalonia {
             OnActionComplete?.Invoke(this, arg);
         }
 
-        public MpMenuItemViewModel GetActionMenu(ICommand cmd, IEnumerable<int> selectedActionIds) {
+        public MpMenuItemViewModel GetActionMenu(ICommand cmd, IEnumerable<int> selectedActionIds, bool recursive) {
             return new MpMenuItemViewModel() {
                 MenuItemId = ActionId,
                 Header = Label,
@@ -822,7 +772,7 @@ namespace MonkeyPaste.Avalonia {
                 IsChecked = selectedActionIds.Contains(ActionId),
                 Command = cmd,
                 CommandParameter = ActionId,
-                SubItems = Items.Select(x=>x.GetActionMenu(cmd,selectedActionIds)).ToList()
+                SubItems = recursive ? Items.Select(x=>x.GetActionMenu(cmd,selectedActionIds, recursive)).ToList() : null
             };
         }
 
@@ -992,6 +942,7 @@ namespace MonkeyPaste.Avalonia {
 
                         //Parent.AllSelectedItemActions.ForEach(x => x.IsExpanded = x.ActionId == ActionId);
                         IsExpanded = true;
+                        Parent.SelectActionCommand.Execute(this);
                     } else {
                         //IsExpanded = false;
                     }
@@ -1000,10 +951,7 @@ namespace MonkeyPaste.Avalonia {
                     //    Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     //}
                     Parent.OnPropertyChanged(nameof(Parent.PrimaryAction));
-                    //Parent.OnPropertyChanged(nameof(Parent.SelectedActions));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
-                    //OnPropertyChanged(nameof(BorderBrushHexColor));
-                    //OnPropertyChanged(nameof(IsRootAction));
                     break;
                 case nameof(HasModelChanged):
                     if (HasModelChanged && IsValid) {
@@ -1229,7 +1177,9 @@ namespace MonkeyPaste.Avalonia {
                 IsPerformingActionFromCommand = false;
             });
 
-
+        public ICommand FinishMoveCommand => new MpCommand(() => {
+            HasModelChanged = true;
+        });
         #endregion
     }
 }

@@ -9,6 +9,9 @@
             Purple
         </Color>
 
+        <Color x:Key="DefaultInvalidColor">
+            Red
+        </Color>
 
         <Color x:Key="MainWindowTitleMenuActiveBgColor">
             GoldenRod
@@ -31,6 +34,9 @@
         </Color>
         <Color x:Key="DefaultButtonColor">
             White
+        </Color>
+        <Color x:Key="HoverButtonColor">
+            Gray
         </Color>
         <Color x:Key="HoverDefaultBorderColor">
             Yellow
@@ -57,6 +63,10 @@
 
         <Color x:Key="ClipTileContentBackgroundColor">
             OldLace
+        </Color>
+
+        <Color x:Key="PluginParameterItemBgColor">
+            DarkViolet
         </Color>
 
         <!--  SIDEBAR BUTTONS  -->
@@ -126,12 +136,20 @@
                          Color="{DynamicResource DisabledTextFgColor}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
+        <!--  Invalid  -->
+        <SolidColorBrush x:Key="DefaultInvalidBrush"
+                         Color="{DynamicResource DefaultInvalidColor}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
         <!--  Border or Button Brush  -->
 
         <SolidColorBrush x:Key="DefaultButtonBrush"
                          Color="{DynamicResource DefaultButtonColor}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-      <SolidColorBrush x:Key="HoverDefaultBorderBrush"
+        <SolidColorBrush x:Key="HoverButtonBrush"
+                         Color="{DynamicResource HoverButtonColor}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="HoverDefaultBorderBrush"
                          Color="{DynamicResource HoverDefaultBorderColor}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="HoverSelectedBorderBrush"
@@ -161,6 +179,12 @@
         <SolidColorBrush x:Key="SidebarButtonGroupBgBrush"
                          Color="{DynamicResource MainWindowBgColor}"
                          Opacity="{DynamicResource GlobalBgOpacity}" />
+
+        <!--  PARAMETERS  -->
+
+        <SolidColorBrush x:Key="PluginParameterItemBgBrush"
+                         Color="{DynamicResource PluginParameterItemBgColor}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <!--  TAG TREE  -->
         <SolidColorBrush x:Key="TagTreeBgBrush"
                          Color="{DynamicResource MainWindowBgColor}"

@@ -234,6 +234,8 @@ namespace MonkeyPaste.Common {
             return "Just Now";
         }
 
+
+
         public static int WeekDifference(this DateTime lValue, DateTime rValue) {
             double weeks = (lValue - rValue).TotalDays / 7;
             return (int)weeks;
@@ -241,6 +243,32 @@ namespace MonkeyPaste.Common {
 
         public static int MonthDifference(this DateTime lValue, DateTime rValue) {
             return (lValue.Month - rValue.Month) + (12 * (lValue.Year - rValue.Year));
+        }
+
+        public static string ToReadableTimeSpan(this TimeSpan ts) {
+            int totalDays = (int)ts.TotalDays;
+            int totalHours = (int)ts.TotalHours;
+            int totalMinutes = (int)ts.TotalMinutes;
+            int totalSeconds = (int)ts.TotalSeconds;
+            int totalMilliseconds = (int)ts.TotalMilliseconds;
+
+            string out_str = string.Empty;
+            if (totalDays >= 1) {
+                out_str += string.Format($"{totalDays.ToString()} Day{(totalDays > 1 ? "s":"")} ");
+            }
+            if (totalHours >= 1) {
+                out_str += string.Format($"{totalHours.ToString()} Hour{(totalHours > 1 ? "s" : "")} ");
+            }
+            if (totalMinutes >= 1) {
+                out_str += string.Format($"{totalMinutes.ToString()} Min{(totalMinutes > 1 ? "s" : "")} ");
+            }
+            if (totalSeconds >= 1) {
+                out_str += string.Format($"{totalSeconds.ToString()} Sec{(totalSeconds > 1 ? "s" : "")} ");
+            }
+            if (totalMilliseconds >= 1) {
+                out_str += string.Format($"{totalMilliseconds.ToString()} Ms ");
+            }
+            return out_str;
         }
 
         public static string ToTitleCase(this string str) {

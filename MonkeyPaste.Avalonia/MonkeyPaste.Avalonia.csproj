@@ -157,6 +157,8 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMainWindowTitle.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMarqueeTextBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPinTray.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPluginParameterListBox.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPluginParameterListBoxItem.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSideBarButtonGroup.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSideBarItems.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSliderParameter.axaml" />
@@ -944,6 +946,8 @@
     <AvaloniaResource Include="Themes\Default\Controls\ComboBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\GridSplitter.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ComboBoxItem.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvPluginParameterListBoxItem.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvPluginParameterListBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvActionDesignerItemColors.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvActionDesigner.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvActionProperty.axaml" />

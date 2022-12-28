@@ -6,7 +6,7 @@ namespace MonkeyPaste {
         MpSelectorViewModelBase<P,C>,
         MpIMultiSelectableViewModel<C> 
         where P : class
-        where C : MpISelectableViewModel {
+        where C : class, MpISelectableViewModel {
 
         public MpMultiSelectorViewModelBase() : base(null) { }
 

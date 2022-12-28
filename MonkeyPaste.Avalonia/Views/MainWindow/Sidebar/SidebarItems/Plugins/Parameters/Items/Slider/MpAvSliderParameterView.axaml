@@ -12,14 +12,11 @@
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <Border x:Name="SliderBorder"
-            Classes="paramBorder"
+            Classes.paramBorder="True"
+            Classes.sliderBorder="True"
             Focusable="True"
             MaxHeight="20"
             Cursor="SizeWestEast">
-        <Border.Background>
-            <SolidColorBrush Color="White"
-                             Opacity="0.01" />
-        </Border.Background>
         <Grid HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
             <Rectangle x:Name="SliderValueRectangle"

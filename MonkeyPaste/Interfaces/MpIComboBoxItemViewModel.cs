@@ -8,8 +8,8 @@ namespace MonkeyPaste {
     public interface MpIAsyncComboBoxItemViewModel : MpIComboBoxItemViewModel, MpIAsyncObject {
     }
     public interface MpIAsyncComboBoxViewModel :MpIViewModel {
-        IEnumerable<MpIComboBoxItemViewModel> Items { get; }
-        MpIComboBoxItemViewModel SelectedItem { get; set; }
+        IEnumerable<MpIAsyncComboBoxItemViewModel> Items { get; }
+        MpIAsyncComboBoxItemViewModel SelectedItem { get; set; }
 
         bool IsDropDownOpen { get; set; }
     }

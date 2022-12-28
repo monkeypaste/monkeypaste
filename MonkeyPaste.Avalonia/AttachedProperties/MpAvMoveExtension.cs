@@ -80,7 +80,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region FinishMoveCommand Property
         public static ICommand GetFinishMoveCommand(AvaloniaObject obj) {
             return obj.GetValue(FinishMoveCommandProperty);
@@ -128,7 +127,9 @@ namespace MonkeyPaste.Avalonia {
             IsMovingProperty =
             AvaloniaProperty.RegisterAttached<object, Control, bool>(
             "IsMoving",
-            false);
+            false,
+            false, 
+            BindingMode.TwoWay);
 
         private static void HandleIsMovingChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isResizing) {
@@ -150,7 +151,8 @@ namespace MonkeyPaste.Avalonia {
             CanMoveProperty =
             AvaloniaProperty.RegisterAttached<object, Control, bool>(
             "CanMove",
-            true);
+            true,
+            false, BindingMode.TwoWay);
 
         #endregion
 
@@ -273,15 +275,18 @@ namespace MonkeyPaste.Avalonia {
                 if (!GetIsMoving(control)) {
                     return;
                 }
+                if (!e.IsLeftDown(control)) {
+                    FinishMove(control);
+                }
 
-                //MpPlatformWrapper.Services.Cursor.SetCursor(Control.DataContext, MpCursorType.ResizeAll);
-                var mwmp = e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();
+                Control relativeTo = control.GetVisualAncestor<MpAvDesignerCanvas>(); //MpAvMainWindow.Instance;
+                var mwmp = e.GetPosition(relativeTo).ToPortablePoint();
 
                 MpPoint delta = mwmp - _lastMousePosition;
 
                 // NOTE must transform mouse delta from designer canvas scaling
-                delta.X *= 1 / avmb.RootTriggerActionViewModel.Scale;
-                delta.Y *= 1 / avmb.RootTriggerActionViewModel.Scale;
+                //delta.X *= 1 / avmb.RootTriggerActionViewModel.Scale;
+                //delta.Y *= 1 / avmb.RootTriggerActionViewModel.Scale;
 
                 Move(control, delta.X, delta.Y);
 
@@ -301,27 +306,30 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvZoomBorder.IsTranslating) {
                     return;
                 }
+                Control relativeTo = control.GetVisualAncestor<MpAvDesignerCanvas>(); //MpAvMainWindow.Instance;
 
-                _mouseDownPosition = _lastMousePosition = e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();
-                if(GetBeginMoveCommand(control) is ICommand beginMoveCmd) {
-                    GetBeginMoveCommand(control).Execute(GetBeginMoveCommandParameter(control));
-                } else if (control.DataContext is MpISelectableViewModel svm) {
-                    svm.IsSelected = true;
-                }
+                _mouseDownPosition = e.GetPosition(relativeTo).ToPortablePoint();
+                _lastMousePosition = _mouseDownPosition;
+                //if (GetBeginMoveCommand(control) is ICommand beginMoveCmd) {
+                //    beginMoveCmd.Execute(GetBeginMoveCommandParameter(control));
+                //} else if (control.DataContext is MpISelectableViewModel svm) {
+                //    svm.IsSelected = true;
+                //}
                 //e.Pointer.Capture(control);
                 SetIsMoving(control, true);
-                e.Handled = true;
+                //e.Handled = true;
             }
         }
 
 
         private static void FinishMove(Control control) {
-            if (GetIsMoving(control)) {
-                SetIsMoving(control, false);
-                (control.DataContext as MpAvActionViewModelBase).HasModelChanged = true;
-            }
-            if ((_lastMousePosition - _mouseDownPosition).Length < 5) {
-                GetFinishMoveCommand(control)?.Execute(GetFinishMoveCommandParameter(control));
+            SetIsMoving(control, false);
+
+            if (_lastMousePosition != null && 
+                _mouseDownPosition != null &&
+                (_lastMousePosition - _mouseDownPosition).Length < 5 &&
+                GetFinishMoveCommand(control) is ICommand finishMoveCmd) {
+                finishMoveCmd.Execute(GetFinishMoveCommandParameter(control));
             }
         }
 

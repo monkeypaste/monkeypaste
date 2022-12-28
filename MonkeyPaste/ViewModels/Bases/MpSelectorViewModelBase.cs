@@ -10,7 +10,7 @@ namespace MonkeyPaste {
         MpViewModelBase<P>, 
         MpISelectorViewModel
         where P:class 
-        where C: MpISelectableViewModel {
+        where C: class, MpISelectableViewModel {
 
         public MpSelectorViewModelBase() : base(null) { }
 
@@ -21,8 +21,8 @@ namespace MonkeyPaste {
         public virtual C SelectedItem {
             get => Items.FirstOrDefault(x => x.IsSelected);
             set {
-                if (!ReferenceEquals(SelectedItem,value)) {
-                    Items.ForEach(x => x.IsSelected = ReferenceEquals(x,value));
+                if (SelectedItem != value) {
+                    Items.ForEach(x => x.IsSelected = x == value);
                     if(MpPlatformWrapper.Services.StartupState.LoadedDateTime != null &&
                         SelectedItem != null) {
                         SelectedItem.LastSelectedDateTime = DateTime.Now;

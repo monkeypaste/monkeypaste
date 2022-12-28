@@ -15,6 +15,24 @@
     <Grid Margin="10"
           RowDefinitions="0.3*,0.3*"
           ColumnDefinitions="0.3*,*">
+        <Grid.Styles>
+            <Style Selector="local|MpAvSliderParameterView TextBox">
+                <Setter Property="Foreground"
+                        Value="Black" />
+                <Setter Property="IsReadOnly"
+                        Value="True" />
+                <Setter Property="Focusable"
+                        Value="False" />
+                <Setter Property="Text"
+                        Value="{Binding IntervalMs, Converter={x:Static local:MpAvMillisecondsToTimeSpanStringConverter.Instance}}" />
+            </Style>
+            <Style Selector="local|MpAvSliderParameterView Border.paramBorder">
+                <Setter Property="BorderThickness"
+                        Value="1" />
+                <Setter Property="BorderBrush"
+                        Value="Black" />
+            </Style>
+        </Grid.Styles>
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
                    Classes="actionProperty"

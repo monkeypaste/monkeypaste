@@ -43,8 +43,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIAsyncComboBoxViewModel Implementation
 
-        IEnumerable<MpIComboBoxItemViewModel> MpIAsyncComboBoxViewModel.Items => Items;
-        MpIComboBoxItemViewModel MpIAsyncComboBoxViewModel.SelectedItem {
+        IEnumerable<MpIAsyncComboBoxItemViewModel> MpIAsyncComboBoxViewModel.Items => Items;
+        MpIAsyncComboBoxItemViewModel MpIAsyncComboBoxViewModel.SelectedItem {
             get => SelectedItem;
             set => SelectedItem = (MpAvClipboardHandlerItemViewModel)value;
         }

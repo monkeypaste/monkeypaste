@@ -7,5 +7,98 @@
             12,0,0,0
         </Thickness>
     </Styles.Resources>
+    <Style Selector="Border.iconLabelComboBox">
+        <Setter Property="BorderThickness"
+                Value="0" />
+        <Setter Property="BorderBrush"
+                Value="Black" />
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+        <Setter Property="VerticalAlignment"
+                Value="Top" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="Height"
+                Value="50" />
+    </Style>
 
+    <Style Selector="Border.iconLabelComboBox ComboBox">
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Stretch" />
+        <Setter Property="VerticalAlignment"
+                Value="Stretch" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+    </Style>
+
+    <Style Selector="Border.iconLabelComboBox ComboBox:empty local|MpAvBusySpinnerView">
+        <Setter Property="IsVisible"
+                Value="False" />
+    </Style>
+
+    <Style Selector="Border.iconLabelComboBox ComboBox[SelectedItem=null] local|MpAvBusySpinnerView">
+        <Setter Property="IsVisible"
+                Value="False" />
+    </Style>
+
+    <Style Selector="Border.outerComboBoxItemBorder">
+        <Setter Property="Margin"
+                Value="5" />
+        <Setter Property="MinHeight"
+                Value="30" />
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+        <Setter Property="BorderThickness"
+                Value="0" />
+        <Setter Property="CornerRadius"
+                Value="3" />
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>
+    <Style Selector="Border.outerComboBoxItemBorder Image">
+        <Setter Property="DockPanel.Dock"
+                Value="Left" />
+        <Setter Property="Margin"
+                Value="5,0,5,0" />
+        <Setter Property="Width"
+                Value="25" />
+        <Setter Property="Height"
+                Value="25" />
+    </Style>
+    <Style Selector="Border.comboBoxItemBusyBorder">
+        <Setter Property="DockPanel.Dock"
+                Value="Right" />
+        <Setter Property="Margin"
+                Value="0,0,5,0" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+    </Style>
+    <Style Selector="Border.comboBoxItemBusyBorder local|MpAvBusySpinnerView">
+        <Setter Property="HorizontalAlignment"
+                Value="Center" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="Width"
+                Value="25" />
+        <Setter Property="Height"
+                Value="25" />
+    </Style>
+    <Style Selector="Border.outerComboBoxItemBorder TextBlock">
+        <Setter Property="Padding"
+                Value="3" />
+        <Setter Property="Margin"
+                Value="2,0,5,0" />
+        <Setter Property="VerticalAlignment"
+                Value="Stretch" />
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="FontSize"
+                Value="16" />
+        <Setter Property="Foreground"
+                Value="Black" />
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>
 </Styles>
