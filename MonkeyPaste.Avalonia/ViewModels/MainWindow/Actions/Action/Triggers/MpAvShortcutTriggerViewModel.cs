@@ -64,8 +64,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
 
-        protected override async Task<bool> Validate() {
-            await base.Validate();
+        protected override async Task<bool> ValidateActionAsync() {
+            await base.ValidateActionAsync();
 
             if (!IsValid) {
                 return IsValid;
@@ -74,12 +74,12 @@ namespace MonkeyPaste.Avalonia {
             var scvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
             if (scvm == null) {
                 ValidationText = $"Shortcut for Trigger Action '{FullName}' not found";
-                await ShowValidationNotification();
+                ShowValidationNotification();
             } else if (IsPerformingActionFromCommand) {
                 if(MpAvClipTrayViewModel.Instance.SelectedModels == null ||
                    MpAvClipTrayViewModel.Instance.SelectedModels.Count == 0) {
                     ValidationText = $"No content selected, cannot execute '{FullName}' ";
-                    await ShowValidationNotification();
+                    ShowValidationNotification();
                 }
             } else {
                 ValidationText = string.Empty;
@@ -87,16 +87,16 @@ namespace MonkeyPaste.Avalonia {
             return IsValid;
         }
 
-        protected override async Task Enable() {
-            await base.Enable();
+        protected override async Task EnableAsync() {
+            await base.EnableAsync();
             var scvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
             if (scvm != null) {
                 scvm.RegisterActionComponent(this);
             }
         }
 
-        protected override async Task Disable() {
-            await base.Disable();
+        protected override async Task DisableAsync() {
+            await base.DisableAsync();
             var scvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
             if (scvm != null) {
                 scvm.UnregisterActionComponent(this);

@@ -18,6 +18,9 @@ namespace MonkeyPaste.Avalonia {
             if (value is double doubleVal) {
                 return doubleVal == 0 ? flip : !flip;
             }
+            if(value is string strVal) {
+                return string.IsNullOrEmpty(strVal) ? flip : !flip;
+            }
             return value == null ? flip : !flip;
         }
 

@@ -59,30 +59,11 @@
                    IsVisible="{Binding IconSourceObj, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
                    Source="{Binding IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}"
                    Stretch="Fill" />
-            <!--<local:MpAvMarqueeTextBox Grid.Row="0"
-                                      Grid.Column="1"
-                                      AutoMarquee="True"
-                                      EditOnFocus="False"
-                                      MinHeight="30"
-                                      FontSize="20"
-                                      IsReadOnly="True"
-                                      IsMarqueeEnabled="True"
-                                      DropShadowBrush="Black"
-                                      VerticalAlignment="Top"
-                                      HorizontalAlignment="Stretch"
-                                      HorizontalContentAlignment="Left"
-                                      VerticalContentAlignment="Top"
-                                      Foreground="White"
-                                      FontWeight="SemiBold"
-                                      Text="{Binding Title}" />-->
             <local:MpAvOptionsButton Grid.Row="0"
                                      Grid.Column="2"
-                                     Width="15"
                                      local:MpAvIsHoveringExtension.IsEnabled="True"
                                      local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
-                                     local:MpAvMenuExtension.PlacementMode="Left"
-                                     VerticalAlignment="Stretch"
-                                     HorizontalAlignment="Right" />
+                                     local:MpAvMenuExtension.PlacementMode="Left" />
 
             <local:MpAvClipTileView Grid.Row="1"
                                     Grid.ColumnSpan="3"

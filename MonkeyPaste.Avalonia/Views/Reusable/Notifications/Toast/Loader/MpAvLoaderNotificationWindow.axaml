@@ -102,14 +102,9 @@
             </Grid>
 
             <local:MpAvOptionsButton Grid.Column="1"
-                                     Width="15"
-                                     Height="25"
-                                     Margin="0,3,7,3"
                                      local:MpAvIsHoveringExtension.IsEnabled="True"
                                      local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
-                                     local:MpAvMenuExtension.PlacementMode="Left"
-                                     VerticalAlignment="Top"
-                                     HorizontalAlignment="Right" />
+                                     local:MpAvMenuExtension.PlacementMode="Left" />
         </Grid>
     </Border>
 </Window>

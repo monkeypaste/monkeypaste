@@ -21,61 +21,8 @@
                    Text="Analyzer" />
         <local:MpAvPopupMenuSelector Grid.Row="0"
                                      Grid.Column="1"
+                                     Classes="actionProperty"
                                      MinWidth="150" />
-
-        <!--<ComboBox x:Name="AnalyzerPresetComboBox"
-                  x:CompileBindings="False"
-                  Grid.Row="0"
-                  Grid.Column="1"
-                  MinWidth="150"
-                  Classes="actionProperty"
-                  SelectedItem="{Binding SelectedPreset, Mode=TwoWay}"
-                  Items="{Binding AllPresets, Source={x:Static local:MpAvAnalyticItemCollectionViewModel.Instance}, Converter={StaticResource CollectionToGroupedCollectionConverter}, ConverterParameter=PluginGuid}">
-
-            , Converter={StaticResource CollectionToGroupedCollectionConverter}, ConverterParameter=PluginGuid
-            <ComboBox.GroupStyle>
-                <GroupStyle>
-                    <GroupStyle.HeaderTemplate>
-                        <DataTemplate>
-                            <Border Background="LightGray">
-                                <DockPanel Margin="10,5">
-                                    <Image DockPanel.Dock="Left"
-                                           Source="{Binding Name,
-                                                            Converter={StaticResource AnalyticItemGuidToIconSourceConverter}}"
-                                           Width="15"
-                                           Height="15"
-                                           Stretch="Fill" />
-                                    <TextBlock DockPanel.Dock="Right"
-                                               Foreground="DimGray"
-                                               FontStyle="Italic"
-                                               FontWeight="SemiBold"
-                                               FontSize="16"
-                                               Text="{Binding Name,
-                                                              Converter={StaticResource AnalyticItemGuidToTitleConverter}}" />
-                                </DockPanel>
-                            </Border>
-                        </DataTemplate>
-                    </GroupStyle.HeaderTemplate>
-                </GroupStyle>
-            </ComboBox.GroupStyle>
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Margin="10,3,0,0"
-                                Orientation="Horizontal">
-                        <Image Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}"
-                               Width="15"
-                               Height="15"
-                               VerticalAlignment="Center"
-                               Stretch="Fill" />
-                        <TextBlock Foreground="DimGray"
-                                   Margin="5,0,0,0"
-                                   Text="{Binding Label}"
-                                   FontSize="14" />
-                    </StackPanel>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>-->
-
         <TextBlock Grid.Row="1"
                    Grid.Column="0"
                    VerticalAlignment="Center"

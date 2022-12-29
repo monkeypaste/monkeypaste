@@ -74,7 +74,19 @@ namespace MonkeyPaste.Common {
         }
 
         public double Length => Distance(MpPoint.Zero);
-
+        public MpPoint NormalizedUnitVector {
+            get {
+                var n = new MpPoint(X, Y);
+                n.Normalize();
+                if(n.X < 0) {
+                    n.X = 1 + n.X;
+                }
+                if(n.Y < 0) {
+                    n.Y = 1 + n.Y;
+                }
+                return n;
+            }
+        }
         public MpPoint Normalized {
             get {
                 var n = new MpPoint(X, Y);

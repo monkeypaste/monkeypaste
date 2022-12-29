@@ -32,32 +32,8 @@
 
             <!--  DESCRIPTION  -->
 
-            <!--<Grid DockPanel.Dock="Right"
-                  Cursor="Help"
-                  Width="15"
-                  Height="15"
-                  IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}}"
-                  Margin="0,2,2,0"
-                  VerticalAlignment="Top"
-                  HorizontalAlignment="Right">
-                <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="{Binding Description}" />
-                </ToolTip.Tip>
-                <Ellipse HorizontalAlignment="Stretch"
-                         VerticalAlignment="Stretch"
-                         StrokeThickness="1"
-                         Stroke="White"
-                         Fill="Blue" />
-                <TextBlock Foreground="White"
-                           FontSize="10"
-                           FontWeight="SemiBold"
-                           TextAlignment="Center"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center">
-                    i
-                </TextBlock>
-            </Grid>-->
             <local:MpAvToolTipInfoHintView Margin="0,2,2,0"
+                                           ClipToBounds="False"
                                            VerticalAlignment="Top"
                                            HorizontalAlignment="Right"
                                            ToolTipText="{Binding Description}" />

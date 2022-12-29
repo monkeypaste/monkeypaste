@@ -2,6 +2,95 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
+
+    <!--  PROPERTY VIEW  -->
+
+    <Style Selector="local|MpAvActionPropertyView">
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Stretch" />
+    </Style>
+
+    <Style Selector="local|MpAvActionPropertyView Expander">
+        <Setter Property="Padding"
+                Value="5,0" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Stretch" />
+    </Style>
+
+    <!--  HEADER  -->
+    <Style Selector="local|MpAvActionPropertyView Expander ToggleButton#ToggleEnableButton">
+        <Setter Property="BorderThickness"
+                Value="1.5" />
+        <Setter Property="Margin"
+                Value="3,5" />
+        <Setter Property="Padding"
+                Value="3" />
+        <Setter Property="Width"
+                Value="40" />
+        <Setter Property="Height"
+                Value="40" />
+        <Setter Property="CornerRadius"
+                Value="12.5" />
+        <Setter Property="IsThreeState"
+                Value="True" />
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Stretch" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Stretch" />
+    </Style>
+
+    <Style Selector="local|MpAvActionPropertyView Expander ToggleButton#ToggleEnableButton Image">
+        <Setter Property="Margin"
+                Value="3" />
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+        <Setter Property="VerticalAlignment"
+                Value="Stretch" />
+    </Style>
+    <!--  ENABLE BG/BORDER COLORS  -->
+    <Style Selector="local|MpAvActionPropertyView Expander ToggleButton#ToggleEnableButton:not(.invalid) /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Red" />
+        <Setter Property="BorderBrush"
+                Value="White" />
+    </Style>
+
+    <Style Selector="local|MpAvActionPropertyView Expander ToggleButton#ToggleEnableButton:not(.invalid):pointerover /template/ ContentPresenter">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource HoverDefaultBorderBrush}" />
+    </Style>
+    <Style Selector="local|MpAvActionPropertyView Expander ToggleButton#ToggleEnableButton.enabled:not(.invalid) /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Green" />
+    </Style>
+    <Style Selector="local|MpAvActionPropertyView Expander ToggleButton#ToggleEnableButton.invalid /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+    </Style>
+
+    <!--  ENABLE BUTTON IMAGE SOURCE  -->
+
+    <Style Selector="ToggleButton#ToggleEnableButton:not(.invalid) Image"
+           x:DataType="local:MpAvActionViewModelBase">
+        <Setter Property="Source"
+                Value="{Binding IconResourceKeyStr, ConverterParameter=white, Converter={StaticResource StringHexToBitmapTintConverter}}" />
+    </Style>
+    <Style Selector="ToggleButton#ToggleEnableButton.invalid Image"
+           x:DataType="local:MpAvActionViewModelBase">
+        <Setter Property="Source"
+                Value="{Binding Source={StaticResource WarningImage}, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+    </Style>
+
+    <!--  PROPERTY CONTROLS  -->
+
     <Style Selector="ListBox.actionProperty">
         <Setter Property="BorderThickness"
                 Value="0" />
@@ -17,19 +106,6 @@
                 Value="Disabled" />
     </Style>
 
-    <Style Selector="local|MpAvActionPropertyView">
-        <Setter Property="HorizontalAlignment"
-                Value="Stretch" />
-        <Setter Property="HorizontalContentAlignment"
-                Value="Stretch" />
-    </Style>
-
-    <Style Selector="local|MpAvActionPropertyView Expander">
-        <Setter Property="Padding"
-                Value="5,0" />
-        <Setter Property="HorizontalContentAlignment"
-                Value="Stretch" />
-    </Style>
 
     <Style Selector="ComboBox.actionProperty">
         <Setter Property="MinWidth"
@@ -51,7 +127,7 @@
                 Value="3" />
     </Style>
 
-    <Style Selector="Border.actionProperty">
+    <Style Selector=":is(TemplatedControl).actionProperty">
         <Setter Property="CornerRadius"
                 Value="5" />
         <Setter Property="Padding"
@@ -64,6 +140,15 @@
                 Value="Left" />
         <Setter Property="Background"
                 Value="Silver" />
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+    </Style>
+
+    <Style Selector=":is(TemplatedControl).actionProperty.invalid">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource DefaultInvalidBrush}" />
     </Style>
 
 
@@ -93,4 +178,5 @@
         <Setter Property="BorderBrush"
                 Value="{DynamicResource HoverDefaultBorderBrush}" />
     </Style>
+
 </Styles>

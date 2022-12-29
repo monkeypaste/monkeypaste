@@ -8,6 +8,12 @@
                 Value="DarkKhaki" />
         <Setter Property="Background"
                 Value="Khaki" />
+        <Setter Property="CornerRadius"
+                Value="10" />
+        <Setter Property="BorderThickness"
+                Value="1.5" />
+        <Setter Property="Padding"
+                Value="10" />
     </Style>
     <Style Selector="local|MpAvToolTipView TextBlock">
         <Setter Property="Foreground"

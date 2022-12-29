@@ -28,6 +28,7 @@ namespace MonkeyPaste.Avalonia {
 
         public override object Tooltip => "Prefix is used for non-file clipboard items. If unset file will use the content's title.";
         #endregion
+
         #region State
 
         public bool IsValidFileSystemPath {
@@ -42,6 +43,25 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Model
+
+        // Arg1
+        public string FileSystemPath {
+            get {
+                if (Arg1 == null) {
+                    return null;
+                }
+                return Arg1;
+            }
+            set {
+                if (FileSystemPath != value) {
+                    Arg1 = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(FileSystemPath));
+                }
+            }
+        }
+
+        // Arg2
 
         public string NamePrefix {
             get {
@@ -59,21 +79,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string FileSystemPath {
-            get {
-                if (Arg1 == null) {
-                    return null;
-                }
-                return Arg1;
-            }
-            set {
-                if (FileSystemPath != value) {
-                    Arg1 = value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(FileSystemPath));
-                }
-            }
-        }
 
         #endregion
 
@@ -123,18 +128,18 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-        protected override async Task<bool> Validate() {
-            await base.Validate();
+        protected override async Task<bool> ValidateActionAsync() {
+            await base.ValidateActionAsync();
             if (!IsValid) {
                 return IsValid;
             }
 
             if (string.IsNullOrWhiteSpace(FileSystemPath)) {
                 ValidationText = $"File Writer Path for Action '{FullName}' not set";
-                await ShowValidationNotification();
+                ShowValidationNotification(1);
             } else if (!IsValidFileSystemPath) {
                 ValidationText = $"File Writer Path '{FileSystemPath}' for Action '{FullName}' not found.";
-                await ShowValidationNotification();
+                ShowValidationNotification(1);
             } else {
                 ValidationText = string.Empty;
             }
@@ -176,13 +181,10 @@ namespace MonkeyPaste.Avalonia {
                     Title = "Select folder",
                     Directory = initDir
                 }.ShowAsync(MpAvMainWindow.Instance);
-                
-
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
-                if (string.IsNullOrEmpty(selectedDir)) {
-                    FileSystemPath = selectedDir;
-                    await ReEnable();
-                }
+
+                FileSystemPath = selectedDir;
+                await ReEnable();
             });
 
         #endregion

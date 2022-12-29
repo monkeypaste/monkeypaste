@@ -81,11 +81,11 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpTag t && t.Id == TagId) {
-                Task.Run(Validate);
+                Task.Run(ValidateActionAsync);
             }
         }
-        protected override async Task<bool> Validate() {
-            await base.Validate();
+        protected override async Task<bool> ValidateActionAsync() {
+            await base.ValidateActionAsync();
 
             if (!IsValid) {
                 return IsValid;
@@ -94,23 +94,23 @@ namespace MonkeyPaste.Avalonia {
             var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
             if (ttvm == null) {
                 ValidationText = $"Tag for Classifier '{RootTriggerActionViewModel.Label}/{Label}' not found";
-                await ShowValidationNotification();
+                ShowValidationNotification();
             } else {
                 ValidationText = string.Empty;
             }
             return IsValid;
         }
 
-        protected override async Task Enable() {
-            await base.Enable();
+        protected override async Task EnableAsync() {
+            await base.EnableAsync();
             var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
             if (ttvm != null) {
                 ttvm.RegisterActionComponent(this);
             }
         }
 
-        protected override async Task Disable() {
-            await base.Disable();
+        protected override async Task DisableAsync() {
+            await base.DisableAsync();
             var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
             if (ttvm != null) {
                 ttvm.UnregisterActionComponent(this);

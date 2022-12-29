@@ -18,7 +18,9 @@ using Key = Avalonia.Input.Key;
 using Cursor = Avalonia.Input.Cursor;
 using Avalonia.VisualTree;
 using Avalonia.Controls.Primitives;
+using Avalonia.Layout;
 using System.Linq;
+using Avalonia.Visuals.Media.Imaging;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -79,6 +81,32 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region EditableForeground AvaloniaProperty
+
+        private IBrush _editableForeground = Brushes.Black;
+        public IBrush EditableForeground {
+            get => _editableForeground;
+            set => SetAndRaise(EditableForegroundProperty, ref _editableForeground, value);
+        }
+
+        public static readonly StyledProperty<IBrush> EditableForegroundProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>(nameof(EditableForeground), Brushes.Black);
+
+        #endregion
+
+        #region EditableBackground AvaloniaProperty
+
+        private IBrush _editableBackground = Brushes.White;
+        public IBrush EditableBackground {
+            get => _editableBackground;
+            set => SetAndRaise(EditableBackgroundProperty, ref _editableBackground, value);
+        }
+
+        public static readonly StyledProperty<IBrush> EditableBackgroundProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>(nameof(EditableBackground), Brushes.White);
+
+        #endregion
+
         #region DropShadowOffset AvaloniaProperty
 
         private Point _dropShadowOffset = new Point(1, 1);
@@ -91,7 +119,6 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaProperty.Register<MpAvMarqueeTextBox, Point>(nameof(DropShadowOffset), new Point(1, 1));
 
         #endregion
-
 
         #region DropShadowBrush AvaloniaProperty
 
@@ -227,17 +254,21 @@ namespace MonkeyPaste.Avalonia {
             this.TextWrapping = TextWrapping.NoWrap;
             this.ClipToBounds = true;
             this.BorderThickness = new Thickness(0);
-            this.MinHeight = 5;
-            this.Background = Brushes.Transparent;
-            this.Foreground = Brushes.Black;
+            //this.MinHeight = 5;
             this.IsReadOnly = true;
+            //this.HorizontalAlignment = HorizontalAlignment.Stretch;
+            //this.VerticalAlignment = VerticalAlignment.Stretch;
 
             ScrollViewer.SetVerticalScrollBarVisibility(this, ScrollBarVisibility.Hidden);
             ScrollViewer.SetHorizontalScrollBarVisibility(this, ScrollBarVisibility.Hidden);
-            this.GetObservable(MpAvMarqueeTextBox.IsVisibleProperty).Subscribe(value => OnIsVisibleChanged());
             this.GetObservable(MpAvMarqueeTextBox.IsReadOnlyProperty).Subscribe(value => OnIsReadOnlyChanged());
             this.GetObservable(MpAvMarqueeTextBox.TextProperty).Subscribe(value => OnTextChanged());
             this.GetObservable(MpAvMarqueeTextBox.EditOnFocusProperty).Subscribe(value => OnCanEditChanged());
+
+            this.GetObservable(MpAvMarqueeTextBox.ReadOnlyBackgroundProperty).Subscribe(value => Init());
+            this.GetObservable(MpAvMarqueeTextBox.ReadOnlyForegroundProperty).Subscribe(value => Init());
+            this.GetObservable(MpAvMarqueeTextBox.DropShadowBrushProperty).Subscribe(value => Init());
+            this.GetObservable(MpAvMarqueeTextBox.DropShadowOffsetProperty).Subscribe(value => Init());
         }
 
         #region Event Handlers
@@ -261,8 +292,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void OnLostFocus(global::Avalonia.Interactivity.RoutedEventArgs e) {
             base.OnLostFocus(e);
-            SetValue(IsReadOnlyProperty, true);
-            
+            SetValue(IsReadOnlyProperty, true);            
         }
 
         protected override void OnKeyDown(KeyEventArgs e) {
@@ -301,13 +331,11 @@ namespace MonkeyPaste.Avalonia {
             base.OnMeasureInvalidated();
             Init();
         }
-
         protected override void OnPointerEnter(PointerEventArgs e) {
             base.OnPointerEnter(e);
             _tb_mp = e.GetClientMousePoint(this);
             AnimateAsync().FireAndForgetSafeAsync();
         }
-
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
             base.OnPointerPressed(e);
             if(DataContext is MpISelectableViewModel svm) {
@@ -324,9 +352,6 @@ namespace MonkeyPaste.Avalonia {
             _tb_mp = e.GetClientMousePoint(this);
         }
 
-        private void OnIsVisibleChanged() {
-
-        }
         private void OnTextChanged() {
             Init();
         }
@@ -376,19 +401,16 @@ namespace MonkeyPaste.Avalonia {
 
             this.InvalidateVisual();
         }
-        private void SetTextBoxIsVisible(bool isVisible) {
+        private void SetTextBoxIsVisible(bool isTextBoxVisible) {
             foreach (var c in VisualChildren) {
-                c.IsVisible = isVisible;
+                c.IsVisible = isTextBoxVisible;
             }
-            if (isVisible) {
-                SetValue(BackgroundProperty, Brushes.White);
-                SetValue(ForegroundProperty, Brushes.Black);
+            if (isTextBoxVisible) {
+                SetValue(BackgroundProperty, EditableBackground);
+                SetValue(ForegroundProperty, EditableForeground);
             } else {
-                //_fgBrush = Foreground;
-                SetValue(ForegroundProperty, Brushes.Transparent);
-
-                //_bgBrush = Background;
-                SetValue(BackgroundProperty, Brushes.Transparent);
+                SetValue(BackgroundProperty, ReadOnlyBackground);
+                SetValue(ForegroundProperty, ReadOnlyForeground);
             }
         }
         private void RenderMarquee(DrawingContext ctx) {
@@ -402,12 +424,12 @@ namespace MonkeyPaste.Avalonia {
 
             MpRect rect1 = bmp_rect;
             rect1.X = _offsetX1;
-            ctx.DrawImage(_marqueeBitmap, rect1.ToAvRect());
+            ctx.DrawImage(_marqueeBitmap, rect1.ToAvRect(),rect1.ToAvRect(), BitmapInterpolationMode.HighQuality);
             
             if(CanMarquee()) {
                 MpRect rect2 = bmp_rect;
                 rect2.X = _offsetX2;
-                ctx.DrawImage(_marqueeBitmap, rect2.ToAvRect());
+                ctx.DrawImage(_marqueeBitmap, rect2.ToAvRect(), rect2.ToAvRect(), BitmapInterpolationMode.HighQuality);
             }
         }
 
@@ -558,7 +580,7 @@ namespace MonkeyPaste.Avalonia {
                 new PixelSize(
                     (int)Math.Max(1.0, ft.Bounds.Width * pixelsPerDip) + pad + (int)DropShadowOffset.X,
                     (int)Math.Max(1.0, ft.Bounds.Height * pixelsPerDip) + (int)DropShadowOffset.Y));
-
+            
             using (var context = ftBmp.CreateDrawingContext(null)) {
                 if (ReadOnlyBackground is SolidColorBrush scb) {
                     context.Clear(scb.Color);
@@ -571,7 +593,6 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var bmp = ftBmp.ToAvBitmap();
-
             //MpFileIo.WriteByteArrayToFile(@"C:\Users\tkefauver\Desktop\text_bmp.png", bmp.ToBytesFromBase64String(), false);
 
             return bmp;

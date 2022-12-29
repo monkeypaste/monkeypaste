@@ -5,5 +5,8 @@
     <Styles.Resources>
         <SolidColorBrush x:Key="TextControlBackground"
                          Color="Transparent" />
+        <sys:Double x:Key="TextControlThemeMinHeight">
+            10
+        </sys:Double>
     </Styles.Resources>
 </Styles>

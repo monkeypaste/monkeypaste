@@ -135,12 +135,12 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if(e is MpPluginPreset aip && aip.Id == AnalyticItemPresetId) {
-                Task.Run(Validate);
+                Task.Run(ValidateActionAsync);
             }
         }
 
-        protected override async Task<bool> Validate() {
-            await base.Validate();
+        protected override async Task<bool> ValidateActionAsync() {
+            await base.ValidateActionAsync();
             if (!IsValid) {
                 return false;
             }
@@ -150,7 +150,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (SelectedPreset == null) {
                 ValidationText = $"Analyzer for Action '{FullName}' not found";
-                await ShowValidationNotification();
+                ShowValidationNotification();
             } else {
                 var pavm = ParentTreeItem;
                 while(pavm != null) {
@@ -158,7 +158,7 @@ namespace MonkeyPaste.Avalonia {
                         if(cavm.IsItemTypeCompare) {
                             if(!SelectedPreset.Parent.IsContentTypeValid(cavm.ContentItemType)) {
                                 ValidationText = $"Parent Comparer '{pavm.Label}' filters only for '{cavm.ContentItemType.ToString()}' type content and analyzer '{SelectedPreset.FullName}' will never execute because it does not support '{cavm.ContentItemType.ToString()}' type of input ";
-                                await ShowValidationNotification();
+                                ShowValidationNotification();
                                 return IsValid;
                             }
                         }

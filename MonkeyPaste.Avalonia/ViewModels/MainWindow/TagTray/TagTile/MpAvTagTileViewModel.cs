@@ -283,9 +283,6 @@ namespace MonkeyPaste.Avalonia {
 
         public string TagTextHexColor {
             get {
-                var mwvm = MpAvMainWindowViewModel.Instance;
-                var ctrvm = MpAvClipTrayViewModel.Instance;
-                var ttrvm = MpAvTagTrayViewModel.Instance;
                 if(MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
                     return MpSystemColors.White;
                 }
@@ -478,9 +475,6 @@ namespace MonkeyPaste.Avalonia {
 
 
         public virtual async Task InitializeAsync(MpTag tag) {
-            //PropertyChanged -= MpTagTileViewModel_PropertyChanged;
-            //PropertyChanged += MpTagTileViewModel_PropertyChanged;
-
             IsBusy = true;
 
             Tag = tag;
@@ -499,15 +493,11 @@ namespace MonkeyPaste.Avalonia {
 
 
             await UpdateClipCountAsync();
-            //MpMessenger.UnregisterGlobal(ReceivedGlobalMessage);
-            //MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
             OnPropertyChanged(nameof(Items));
-            //OnPropertyChanged(nameof(Children));
             OnPropertyChanged(nameof(IsTagNameReadOnly));
 
             if (Parent.Items.All(x => x.TagId != TagId)) {
-
                 // if not pinned item add to flat list
                 Parent.Items.Add(this);
             }
@@ -520,7 +510,6 @@ namespace MonkeyPaste.Avalonia {
         public async Task<MpAvTagTileViewModel> CreateChildTagTileViewModel(MpTag tag) {
             MpAvTagTileViewModel ttvm = new MpAvTagTileViewModel(Parent);
             await ttvm.InitializeAsync(tag);
-            //ttvm.ParentTreeItem = this;
             return ttvm;
         }
 

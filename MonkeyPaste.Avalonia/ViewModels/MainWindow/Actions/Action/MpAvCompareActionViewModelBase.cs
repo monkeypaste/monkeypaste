@@ -300,7 +300,7 @@ namespace MonkeyPaste.Avalonia {
                             MpConsole.WriteTraceLine(ex);
 
                             ValidationText = $"Error performing action '{RootTriggerActionViewModel.Label}/{Label}': {ex}";
-                            await ShowValidationNotification();
+                            ShowValidationNotification();
                         }
                     } else if(ao.OutputData != null) {
                         return ao.OutputData.ToString();

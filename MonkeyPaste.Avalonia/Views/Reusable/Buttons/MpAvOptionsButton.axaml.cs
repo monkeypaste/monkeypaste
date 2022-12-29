@@ -16,9 +16,8 @@ using Avalonia.Styling;
 namespace MonkeyPaste.Avalonia {
 
     [DoNotNotify]
-    public partial class MpAvOptionsButton : Button, IStyleable {
+    public partial class MpAvOptionsButton : UserControl {
         #region Overrides
-        Type IStyleable.StyleKey => typeof(Button);
 
         #endregion
 

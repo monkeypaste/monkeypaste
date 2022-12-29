@@ -147,12 +147,12 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpAction action && action.Id == TickActionId) {
-                Task.Run(Validate);
+                Task.Run(ValidateActionAsync);
             }
         }
 
-        protected override async Task<bool> Validate() {
-            await base.Validate();
+        protected override async Task<bool> ValidateActionAsync() {
+            await base.ValidateActionAsync();
             if (!IsValid) {
                 return IsValid;
             }
@@ -169,7 +169,7 @@ namespace MonkeyPaste.Avalonia {
                 ValidationText = string.Empty;
             }
             if(!string.IsNullOrEmpty(ValidationText)) {
-                await ShowValidationNotification();
+                ShowValidationNotification();
             }
             return IsValid;
         }

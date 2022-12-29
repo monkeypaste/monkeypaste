@@ -20,15 +20,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
 
-        protected override async Task Enable() {
-            await base.Enable();
+        protected override async Task EnableAsync() {
+            await base.EnableAsync();
             if (ParentTreeItem != null) {
                 ParentTreeItem.RegisterTrigger(this);
             }
         }
 
-        protected override async Task Disable() {
-            await base.Disable();
+        protected override async Task DisableAsync() {
+            await base.DisableAsync();
             if (ParentTreeItem == null) {
                 ParentTreeItem.UnregisterTrigger(this);
             }

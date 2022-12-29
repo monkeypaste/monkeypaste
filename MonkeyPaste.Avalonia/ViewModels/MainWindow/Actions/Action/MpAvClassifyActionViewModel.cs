@@ -90,11 +90,11 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Overrides
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpTag t && t.Id == TagId) {
-                Task.Run(Validate);
+                Task.Run(ValidateActionAsync);
             }
         }
-        protected override async Task<bool> Validate() {
-            await base.Validate();
+        protected override async Task<bool> ValidateActionAsync() {
+            await base.ValidateActionAsync();
 
             if (!IsValid) {
                 return IsValid;
@@ -113,7 +113,7 @@ namespace MonkeyPaste.Avalonia {
             if (ttvm == null) {
                 ValidationText = $"Tag for Classifier '{RootTriggerActionViewModel.Label}/{Label}' not found";
 
-                await ShowValidationNotification();
+                ShowValidationNotification();
             } else {
                 ValidationText = string.Empty;
             }

@@ -65,29 +65,19 @@
                           HorizontalAlignment="Left"
                           Margin="5,0,0,0"
                           MaxWidth="100">
-                        <!--  TextControlThemePadding  -->
-                        <TextBox x:Name="TagNameTextBox"
-                                 local:MpAvIsFocusedExtension.IsEnabled="True"
-                                 local:MpAvIsFocusedExtension.SelectViewModelOnFocus="False"
-                                 local:MpAvIsFocusedExtension.IsFocused="{Binding IsTagNameTextBoxFocused, Mode=TwoWay}"
-                                 local:MpAvMarqueeTextBoxExtension.IsEnabled="True"
-                                 local:MpAvMarqueeTextBoxExtension.EditOnMouseClick="False"
-                                 local:MpAvMarqueeTextBoxExtension.CancelEditCommand="{Binding CancelRenameTagCommand}"
-                                 local:MpAvMarqueeTextBoxExtension.FinishEditCommand="{Binding FinishRenameTagCommand}"
-                                 local:MpAvMarqueeTextBoxExtension.IsReadOnly="{Binding IsTagNameReadOnly, Mode=TwoWay}"
-                                 local:MpAvMarqueeTextBoxExtension.ForegroundBrush="{Binding TagTextHexColor}"
-                                 local:MpAvMarqueeTextBoxExtension.Margin="0,2.5,0,0"
-                                 Background="White"
-                                 Foreground="Black"
-                                 MinHeight="0"
-                                 Margin="0"
-                                 Padding="0"
-                                 BorderThickness="0"
-                                 HorizontalAlignment="Center"
-                                 VerticalAlignment="Center"
-                                 IsReadOnly="{Binding IsTagNameReadOnly, Mode=OneWay}"
-                                 FontSize="16"
-                                 Text="{Binding TagName, Mode=TwoWay}" />
+                        <local:MpAvMarqueeTextBox x:Name="TagNameTextBox"
+                                                  local:MpAvIsFocusedExtension.IsEnabled="True"
+                                                  local:MpAvIsFocusedExtension.SelectViewModelOnFocus="False"
+                                                  local:MpAvIsFocusedExtension.IsFocused="{Binding IsTagNameTextBoxFocused, Mode=TwoWay}"
+                                                  EditOnFocus="False"
+                                                  CancelEditCommand="{Binding CancelRenameTagCommand}"
+                                                  EndEditCommand="{Binding FinishRenameTagCommand}"
+                                                  IsReadOnly="{Binding IsTagNameReadOnly, Mode=TwoWay}"
+                                                  Margin="0,2.5,0,0"
+                                                  Padding="0"
+                                                  BorderThickness="0"
+                                                  FontSize="16"
+                                                  Text="{Binding TagName, Mode=TwoWay}" />
                     </Grid>
                 </Grid>
             </StackPanel>

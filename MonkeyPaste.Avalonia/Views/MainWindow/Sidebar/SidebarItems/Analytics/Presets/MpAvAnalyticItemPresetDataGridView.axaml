@@ -82,7 +82,6 @@
                                                               EditOnFocus="False"
                                                               DropShadowBrush="Transparent"
                                                               ReadOnlyForeground="Black"
-                                                              Foreground="Black"
                                                               IsReadOnly="{Binding IsLabelReadOnly, Mode=TwoWay}"
                                                               VerticalAlignment="Center"
                                                               HorizontalAlignment="Stretch"

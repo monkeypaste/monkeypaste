@@ -4,6 +4,7 @@ using Avalonia.Media.Imaging;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 
@@ -61,4 +62,5 @@ namespace MonkeyPaste.Avalonia {
             throw new NotSupportedException();
         }
     }
+
 }

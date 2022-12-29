@@ -12,43 +12,6 @@
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <Grid ColumnDefinitions="Auto,Auto,*,Auto">
-        <Grid.Styles>
-            <!--  ENABLE BG/BORDER COLORS  -->
-            <Style Selector="ToggleButton#ToggleEnableButton:not(.invalid) /template/ ContentPresenter">
-                <Setter Property="Background"
-                        Value="Red" />
-                <Setter Property="BorderBrush"
-                        Value="White" />
-            </Style>
-
-            <Style Selector="ToggleButton#ToggleEnableButton:not(.invalid):pointerover /template/ ContentPresenter">
-                <Setter Property="BorderBrush"
-                        Value="{DynamicResource HoverDefaultBorderBrush}" />
-            </Style>
-            <Style Selector="ToggleButton#ToggleEnableButton.enabled:not(.invalid) /template/ ContentPresenter">
-                <Setter Property="Background"
-                        Value="Green" />
-            </Style>
-            <Style Selector="ToggleButton#ToggleEnableButton.invalid /template/ ContentPresenter">
-                <Setter Property="Background"
-                        Value="Transparent" />
-                <Setter Property="BorderBrush"
-                        Value="Transparent" />
-            </Style>
-
-            <!--  ENABLE BUTTON IMAGE SOURCE  -->
-
-            <Style Selector="ToggleButton#ToggleEnableButton:not(.invalid) Image"
-                   x:DataType="local:MpAvActionViewModelBase">
-                <Setter Property="Source"
-                        Value="{Binding IconResourceKeyStr, ConverterParameter=white, Converter={StaticResource StringHexToBitmapTintConverter}}" />
-            </Style>
-            <Style Selector="ToggleButton#ToggleEnableButton.invalid Image"
-                   x:DataType="local:MpAvActionViewModelBase">
-                <Setter Property="Source"
-                        Value="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, ConverterParameter={StaticResource WarningImage}}" />
-            </Style>
-        </Grid.Styles>
         <!--  OPTIONS POPUP  -->
         <local:MpAvOptionsButton Grid.Column="0"
                                  Width="15"
@@ -63,26 +26,13 @@
                       Classes.invalid="{Binding !IsValid}"
                       Classes.enabled="{Binding IsEnabledDb}"
                       Grid.Column="1"
-                      BorderThickness="1.5"
-                      HorizontalAlignment="Left"
-                      HorizontalContentAlignment="Stretch"
-                      VerticalAlignment="Center"
-                      VerticalContentAlignment="Stretch"
-                      Margin="3,5"
-                      Padding="3"
-                      Width="40"
-                      Height="40"
-                      CornerRadius="12.5"
-                      IsThreeState="True"
                       Command="{Binding ToggleIsEnabledCommand}"
                       CommandParameter="{Binding !LastIsEnabledState}">
 
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="{Binding EnableToggleButtonTooltip}" />
             </ToolTip.Tip>
-            <Image Margin="3"
-                   HorizontalAlignment="Stretch"
-                   VerticalAlignment="Stretch" />
+            <Image />
         </ToggleButton>
 
 
@@ -92,23 +42,21 @@
               ClipToBounds="True"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
+          <!-- NOTE putting marquee properties into a style doesn't set them, i think cause its from textbox or something -->
             <local:MpAvMarqueeTextBox x:Name="ActionLabelTextBox"
+                                      MinHeight="30"
                                       MaxWidth="200"
-                                      Margin="5,5,15,5"
+                                      Margin="5,7,15,5"
                                       Padding="3"
-                                      ReadOnlyBackground="Transparent"
                                       HorizontalAlignment="Stretch"
                                       VerticalAlignment="Center"
+                                      HorizontalContentAlignment="Left"
                                       VerticalContentAlignment="Center"
-                                      FontSize="14"
+                                      FontSize="18"
                                       FontWeight="SemiBold"
-                                      Cursor="Ibeam"
                                       local:MpAvIsFocusedExtension.IsEnabled="True"
                                       local:MpAvIsFocusedExtension.IsFocused="{Binding IsLabelFocused, Mode=TwoWay}"
-                                      Text="{Binding Label, Mode=TwoWay}"
-                                      MinHeight="20"
-                                      HorizontalContentAlignment="Left"
-                                      FontFamily="Segue UI" />
+                                      Text="{Binding Label, Mode=TwoWay}"/>
         </Grid>
         <!--  ACTION HINT  -->
 

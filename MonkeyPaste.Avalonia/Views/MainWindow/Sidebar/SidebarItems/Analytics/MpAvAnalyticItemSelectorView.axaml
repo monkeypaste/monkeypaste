@@ -32,14 +32,36 @@
                         <Label Classes="h1"
                                Content="Analyzer" />
                         <Border Classes="labelUnderline" />
-                        <local:MpAvPluginSelectorView x:Name="AnalyzerPluginSelectorView"
+                        <!--<local:MpAvPluginSelectorView x:Name="AnalyzerPluginSelectorView"
                                                       Height="50"
                                                       Margin="20,0"
                                                       HorizontalContentAlignment="Stretch"
                                                       HorizontalAlignment="Stretch"
                                                       VerticalAlignment="Stretch"
                                                       VerticalContentAlignment="Stretch"
-                                                      DataContext="{Binding}" />
+                                                      DataContext="{Binding}" />-->
+                        <Border Classes="iconLabelComboBox"
+                                Grid.Row="2"
+                                Grid.Column="0">
+                            <ComboBox SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                                      Items="{Binding Items}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Classes="outerComboBoxItemBorder">
+                                            <DockPanel>
+                                                <Image Source="{Binding PluginIconId, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+
+                                                <Border Classes="comboBoxItemBusyBorder"
+                                                        IsVisible="{Binding IsBusy}">
+                                                    <local:MpAvBusySpinnerView />
+                                                </Border>
+                                                <TextBlock Text="{Binding Title}" />
+                                            </DockPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </Border>
                         <Label Classes="h1"
                                Content="Presets" />
                         <Border Classes="labelUnderline" />

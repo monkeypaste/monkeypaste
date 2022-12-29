@@ -14,16 +14,16 @@
                          Color="Tomato" />
         <SolidColorBrush x:Key="CompareActionBrush"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}"
-                         Color="Turquoise" />
+                         Color="DarkTurquoise" />
         <SolidColorBrush x:Key="MacroActionBrush"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}"
                          Color="LightSalmon" />
         <SolidColorBrush x:Key="TimerActionBrush"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}"
-                         Color="CornFlowerBlue" />
+                         Color="SteelBlue" />
         <SolidColorBrush x:Key="FileWriterActionBrush"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}"
-                         Color="PaleGoldenRod" />
+                         Color="ForestGreen" />
     </Styles.Resources>
     <!--  DESIGNER ITEM  -->
     <Style Selector="ContentControl#DesignerItemContentControl :is(Shape)"

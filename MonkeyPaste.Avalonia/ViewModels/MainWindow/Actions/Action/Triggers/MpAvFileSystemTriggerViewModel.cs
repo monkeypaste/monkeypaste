@@ -78,28 +78,28 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
 
-        protected override async Task Enable() {
-            await base.Enable();
+        protected override async Task EnableAsync() {
+            await base.EnableAsync();
             MpAvFileSystemWatcher.Instance.RegisterActionComponent(this);
         }
 
-        protected override async Task Disable() {
-            await base.Disable();
+        protected override async Task DisableAsync() {
+            await base.DisableAsync();
             MpAvFileSystemWatcher.Instance.UnregisterActionComponent(this);
         }
 
-        protected override async Task<bool> Validate() {
-            await base.Validate();
+        protected override async Task<bool> ValidateActionAsync() {
+            await base.ValidateActionAsync();
             if (!IsValid) {
                 return IsValid;
             }
 
             if (string.IsNullOrEmpty(FileSystemPath)) {
                 ValidationText = $"No file system path specified for trigger action '{FullName}'";
-                await ShowValidationNotification();
+                ShowValidationNotification();
             } else if(!IsValidFileSystemPath) {
                 ValidationText = $"File system path '{FileSystemPath}' not found for trigger action '{FullName}'";
-                await ShowValidationNotification();
+                ShowValidationNotification();
             } else {
                 ValidationText = string.Empty;
             }

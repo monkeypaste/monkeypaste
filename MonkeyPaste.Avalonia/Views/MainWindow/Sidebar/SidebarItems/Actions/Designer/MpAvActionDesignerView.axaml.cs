@@ -20,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
     /// <summary>
     /// Interaction logic for MpActionDesignerView.xaml
     /// </summary>
-    public partial class MpAvActionDesignerView : MpAvUserControl<MpAvTriggerActionViewModelBase> {
+    public partial class MpAvActionDesignerView : MpAvUserControl<MpAvTriggerCollectionViewModel> {
         public MpAvActionDesignerView() {
             InitializeComponent(); 
         }

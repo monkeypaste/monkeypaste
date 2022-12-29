@@ -232,22 +232,12 @@ namespace MonkeyPaste.Avalonia {
         #endregion
         #region Properties
 
-        public SelectionModel<MpAvActionViewModelBase> Selection { get; private set; }
+        //public SelectionModel<MpAvActionViewModelBase> Selection { get; private set; }
 
         #region View Models
 
-        public override MpAvActionViewModelBase SelectedItem {
-            get {
-                if (RootTriggerActionViewModel == null) {
-                    return null;
-                }
-                return RootTriggerActionViewModel.Selection.SelectedItem;
-            }
-            set {
-                Parent.SelectActionCommand.Execute(value);
-                OnPropertyChanged(nameof(SelectedItem));
-            }
-        }
+        public ObservableCollection<MpAvActionViewModelBase> Items { get; set; } = new ObservableCollection<MpAvActionViewModelBase>();
+        //public MpAvActionViewModelBase SelectedAction { get; set; }
         #endregion
 
 
@@ -261,10 +251,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
-        public bool IsContentAddTrigger => TriggerType == MpTriggerType.ContentAdded;
-
-        public bool IsFileSystemTrigger => TriggerType == MpTriggerType.FileSystemChange;
 
         #endregion
 
@@ -294,10 +280,10 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvTriggerActionViewModelBase(MpAvTriggerCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpAvTriggerActionViewModelBase_PropertyChanged;
-            Items.CollectionChanged += Items_CollectionChanged;
+            //Items.CollectionChanged += Items_CollectionChanged;
 
-            Selection = new SelectionModel<MpAvActionViewModelBase>() { SingleSelect = true };
-            Selection.SelectionChanged += Selection_SelectionChanged;
+            //Selection = new SelectionModel<MpAvActionViewModelBase>() { SingleSelect = true };
+            //Selection.SelectionChanged += Selection_SelectionChanged;
         }
 
 
@@ -305,14 +291,19 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        
+        public override async Task InitializeAsync(MpAction a) {
+            await base.InitializeAsync(a);
+            Items.Clear();
+            SelfAndAllDescendants.ForEach(x => Items.Add(x));
+            OnPropertyChanged(nameof(Items));
+        }
 
         #endregion
 
         #region Protected Methods
 
-        protected override async Task Enable() {
-            await base.Enable();
+        protected override async Task EnableAsync() {
+            await base.EnableAsync();
         }
 
         protected async Task ShowUserEnableChangeNotification() {
@@ -337,10 +328,10 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvTriggerActionViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsSelected):
-                    Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
-                    Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
+                    //Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
+                    //Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     //Parent.OnPropertyChanged(nameof(Parent.SelectedItemIdx));
-                    OnPropertyChanged(nameof(SelectedItem));
+                    //OnPropertyChanged(nameof(SelectedItem));
                     break;
                 case nameof(IsEnabled):
                     //if(MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
@@ -358,25 +349,22 @@ namespace MonkeyPaste.Avalonia {
                         Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
                     }
                     break;
-                case nameof(SelectedItem):
-                    //SelfAndAllDescendants.Cast<MpAvActionViewModelBase>()
-                    //    .ForEach(x => x.OnPropertyChanged(nameof(x.IsSelectedAction)));
-                    //Parent.OnPropertyChanged(nameof(Parent.SelectedItemIdx));
-                    OnPropertyChanged(nameof(SelfAndAllDescendants));
-                    break;
+                //case nameof(SelectedAction):
+                //    Parent.OnPropertyChanged(nameof(Parent.FocusAction));
+                //    break;
             }
         }
 
 
-        private void Selection_SelectionChanged(object sender, SelectionModelSelectionChangedEventArgs<MpAvActionViewModelBase> e) {
-            Parent.SelectActionCommand.Execute(SelectedItem);
-            Parent.OnPropertyChanged(nameof(Parent.PrimaryAction));
-            if(SelectedItem == null) {
-                SelfAndAllDescendants.Cast<MpAvActionViewModelBase>().ForEach(x => x.IsSelected = false);
-            } else {
-                SelfAndAllDescendants.Cast<MpAvActionViewModelBase>().ForEach(x => x.IsSelected = x == SelectedItem);
-            }
-        }
+        //private void Selection_SelectionChanged(object sender, SelectionModelSelectionChangedEventArgs<MpAvActionViewModelBase> e) {
+        //    Parent.SelectActionCommand.Execute(SelectedItem);
+        //    Parent.OnPropertyChanged(nameof(Parent.SelectedAction));
+        //    if(SelectedItem == null) {
+        //        SelfAndAllDescendants.Cast<MpAvActionViewModelBase>().ForEach(x => x.IsSelected = false);
+        //    } else {
+        //        SelfAndAllDescendants.Cast<MpAvActionViewModelBase>().ForEach(x => x.IsSelected = x == SelectedItem);
+        //    }
+        //}
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(SelfAndAllDescendants));
         }

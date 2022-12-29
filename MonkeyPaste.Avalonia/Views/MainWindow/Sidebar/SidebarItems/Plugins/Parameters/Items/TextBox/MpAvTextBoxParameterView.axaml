@@ -37,11 +37,6 @@
                        Height="10" />
             </Button>
             <TextBox x:Name="ParameterTextBox"
-                     FontSize="12"
-                     Margin="3,0,0,0"
-                     Padding="0"
-                     BorderThickness="0"
-                     HorizontalAlignment="Stretch"
                      local:MpAvIsFocusedExtension.IsEnabled="True"
                      SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
                      SelectionEnd="{Binding SelectionEnd, Mode=TwoWay}"

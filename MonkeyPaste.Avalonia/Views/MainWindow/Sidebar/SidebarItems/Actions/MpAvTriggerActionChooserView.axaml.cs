@@ -17,13 +17,13 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvTriggerActionChooserView : MpAvUserControl<MpAvTriggerCollectionViewModel> {
         public MpAvTriggerActionChooserView() {
             InitializeComponent();
-            var tcmb = this.FindControl<ComboBox>("TriggerComboBox");
-            tcmb.SelectionChanged += Tcmb_SelectionChanged;
-            tcmb.AttachedToVisualTree += Tcmb_AttachedToVisualTree;
-            if(BindingContext != null) {
-                MpAvTriggerActionChooserView_DataContextChanged(this, null);
-            }
-            this.DataContextChanged += MpAvTriggerActionChooserView_DataContextChanged;
+            //var tcmb = this.FindControl<ComboBox>("TriggerComboBox");
+            //tcmb.SelectionChanged += Tcmb_SelectionChanged;
+            //tcmb.AttachedToVisualTree += Tcmb_AttachedToVisualTree;
+            //if(BindingContext != null) {
+            //    MpAvTriggerActionChooserView_DataContextChanged(this, null);
+            //}
+            //this.DataContextChanged += MpAvTriggerActionChooserView_DataContextChanged;
         }
 
 
@@ -31,43 +31,43 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaXamlLoader.Load(this);
         }
 
-        private void MpAvTriggerActionChooserView_DataContextChanged(object sender, EventArgs e) {
-            if(BindingContext == null) {
-                return;
-            }
-            BindingContext.PropertyChanged += BindingContext_PropertyChanged;
-            var tcmb = this.FindControl<ComboBox>("TriggerComboBox");
-            tcmb.SelectedItem = BindingContext.SelectedItem;
-        }
+        //private void MpAvTriggerActionChooserView_DataContextChanged(object sender, EventArgs e) {
+        //    if(BindingContext == null) {
+        //        return;
+        //    }
+        //    BindingContext.PropertyChanged += BindingContext_PropertyChanged;
+        //    var tcmb = this.FindControl<ComboBox>("TriggerComboBox");
+        //    tcmb.SelectedItem = BindingContext.SelectedItem;
+        //}
 
-        private void BindingContext_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
-                case nameof(BindingContext.SelectedItem):
-                    if(BindingContext.SelectedItem == null) {
-                        //Debugger.Break();
-                        return;
-                    }
-                    var tcmb = this.FindControl<ComboBox>("TriggerComboBox");
-                    tcmb.SelectedItem = BindingContext.SelectedItem;
-                    break;
-            }
-        }
+        //private void BindingContext_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        //    switch(e.PropertyName) {
+        //        case nameof(BindingContext.SelectedItem):
+        //            if(BindingContext.SelectedItem == null) {
+        //                //Debugger.Break();
+        //                return;
+        //            }
+        //            var tcmb = this.FindControl<ComboBox>("TriggerComboBox");
+        //            tcmb.SelectedItem = BindingContext.SelectedItem;
+        //            break;
+        //    }
+        //}
 
-        private void Tcmb_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            var tcmb = sender as ComboBox;
-            if(BindingContext == null) {
-                //Debugger.Break();
-                return;
-            }
-            tcmb.SelectedItem = BindingContext.SelectedItem;
-        }
-        private void Tcmb_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            var tcmb = sender as ComboBox;
-            if(tcmb.SelectedItem == null) {
-                //Debugger.Break();
-                return;
-            }
-            BindingContext.SelectActionCommand.Execute(tcmb.SelectedItem as MpAvTriggerActionViewModelBase);
-        }
+        //private void Tcmb_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+        //    var tcmb = sender as ComboBox;
+        //    if(BindingContext == null) {
+        //        //Debugger.Break();
+        //        return;
+        //    }
+        //    tcmb.SelectedItem = BindingContext.SelectedItem;
+        //}
+        //private void Tcmb_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        //    var tcmb = sender as ComboBox;
+        //    if(tcmb.SelectedItem == null) {
+        //        //Debugger.Break();
+        //        return;
+        //    }
+        //    BindingContext.SelectActionCommand.Execute(tcmb.SelectedItem as MpAvTriggerActionViewModelBase);
+        //}
     }
 }

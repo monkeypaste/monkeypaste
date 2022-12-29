@@ -156,6 +156,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMainWindow.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMainWindowTitle.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMarqueeTextBox.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvNotificationWindow.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPinTray.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPluginParameterListBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPluginParameterListBoxItem.axaml" />
@@ -169,7 +170,6 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ToolTip.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TreeViewItem.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\Window.axaml" />
     <AvaloniaXaml Remove="Themes\Default\DefaultLight.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\MpAvActionPropertyListBoxView.axaml" />
     <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml" />
@@ -382,6 +382,7 @@
     <Compile Remove="Adorners\MpAvContentDragDropAdorner.cs" />
     <Compile Remove="AttachedProperties\MpAvCefNetWebViewExtension.cs" />
     <Compile Remove="AttachedProperties\MpAvCefWebViewExtension.cs" />
+    <Compile Remove="AttachedProperties\MpAvMarqueeTextBoxExtension.cs" />
     <Compile Remove="AttachedProperties\MpAvTextSelectionExtension.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
@@ -956,7 +957,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\MpAvSideBarItems.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvSliderParameter.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTooltip.axaml" />
-    <AvaloniaResource Include="Themes\Default\Controls\Window.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvNotificationWindow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Button.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTagTile.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvClipTray.axaml" />

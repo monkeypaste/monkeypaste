@@ -12,16 +12,7 @@
         <TranslateTransform />
     </UserControl.RenderTransform>
     <Grid>
-        <Border BorderThickness="1.5"
-                Padding="5"
-                CornerRadius="0">
-            <!--<Border.Effect>
-        <DropShadowEffect RenderingBias="Quality"
-                          Color="Black"
-                          Direction="315"
-                          Opacity="0.3"
-                          BlurRadius="5" />
-      </Border.Effect>-->
+        <Border>
             <TextBlock x:Name="ToolTipTextBlock"
                        MaxWidth="300"
                        FontWeight="Light"

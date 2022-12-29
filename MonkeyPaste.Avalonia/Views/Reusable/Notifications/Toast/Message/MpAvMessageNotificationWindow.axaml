@@ -52,12 +52,10 @@
                                       FontSize="20"
                                       IsReadOnly="True"
                                       IsMarqueeEnabled="True"
-                                      DropShadowBrush="Black"
                                       VerticalAlignment="Top"
                                       HorizontalAlignment="Stretch"
                                       HorizontalContentAlignment="Left"
                                       VerticalContentAlignment="Top"
-                                      Foreground="White"
                                       FontWeight="SemiBold"
                                       Text="{Binding Title}" />
             <Border Grid.Row="0"
@@ -72,13 +70,9 @@
 
             <local:MpAvOptionsButton Grid.Row="0"
                                      Grid.Column="2"
-                                     Width="15"
-                                     Margin="0,3,7,3"
                                      local:MpAvIsHoveringExtension.IsEnabled="True"
                                      local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
-                                     local:MpAvMenuExtension.PlacementMode="Left"
-                                     VerticalAlignment="Stretch"
-                                     HorizontalAlignment="Right" />
+                                     local:MpAvMenuExtension.PlacementMode="Left" />
 
             <Border Grid.Row="1"
                     Grid.Column="1"

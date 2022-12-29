@@ -2,6 +2,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Media.Immutable;
 using Avalonia.Threading;
 using MonkeyPaste;
 using MonkeyPaste.Common;
@@ -52,34 +53,40 @@ namespace MonkeyPaste.Avalonia {
         }
         public override void Render(DrawingContext dc) {
             base.Render(dc);
-            if(DataContext == null) {
+            var tavm = DataContext as MpAvTriggerActionViewModelBase;
+            if(tavm == null) {
                 return;
             }
+            foreach (MpAvActionViewModelBase avm in tavm.SelfAndAllDescendants) {
+                MpPoint tail = new MpPoint(avm.X + (avm.Width / 2), avm.Y + (avm.Height / 2));
 
-            if(DataContext is MpITreeItemViewModel tivm) {
-                var avmc = tivm.FindAllChildren().ToList();
-                if (avmc == null) {
-                    return;
+                var pavm = avm.ParentTreeItem;
+                if (pavm == null) {
+                    continue;
                 }
-                avmc.Insert(0, tivm);
-                foreach (MpAvActionViewModelBase avm in avmc) {
-                    MpPoint tail = new MpPoint(avm.X + (avm.Width / 2), avm.Y + (avm.Height / 2));
 
+                MpPoint head = new MpPoint(pavm.X + (pavm.Width / 2), pavm.Y + (pavm.Height / 2));
 
-                    var pavm = avm.ParentTreeItem;
-                    if (pavm == null) {
-                        continue;
-                    }
+                var borderBrush = pavm.IsHovering ? TransitionLineHoverBorderBrush : TransitionLineDefaultBorderBrush;
 
-                    var borderBrush = pavm.IsHovering ? TransitionLineHoverBorderBrush : TransitionLineDefaultBorderBrush;
-                    var fillBrush = avm.IsEnabled.HasValue && avm.IsEnabled.Value ? //&&
-                                                                                    //(pavm.ParentActionViewModel == null || (pavm.ParentActionViewModel.IsEnabled.HasValue && pavm.ParentActionViewModel.IsEnabled.Value)) ?
-                        TransitionLineEnabledFillBrush : TransitionLineDisabledFillBrush;
+                Color enabled_color = ((ImmutableSolidColorBrush)TransitionLineEnabledFillBrush).Color;
+                Color disabled_color = ((ImmutableSolidColorBrush)TransitionLineDisabledFillBrush).Color;
 
-                    MpPoint head = new MpPoint(pavm.X + (pavm.Width / 2), pavm.Y + (pavm.Height / 2));
+                var parent_color = pavm.IsEnabled.IsTrue() ? enabled_color : disabled_color;
+                var cur_color = avm.IsEnabled.IsTrue() ? enabled_color : disabled_color;
 
-                    DrawArrow(dc, head, tail, avm.Width / 2, borderBrush, fillBrush);
-                }
+                var fillBrush = new LinearGradientBrush() {
+                    GradientStops = new GradientStops() {
+                        new GradientStop(parent_color,0),
+                        new GradientStop(parent_color,0.45d),
+                        new GradientStop(cur_color,0.55d),
+                        new GradientStop(cur_color,1)
+                    },
+                    StartPoint = new RelativePoint(head.ToAvPoint(),RelativeUnit.Absolute),
+                    EndPoint = new RelativePoint(tail.ToAvPoint(), RelativeUnit.Absolute)
+                };
+
+                DrawArrow(dc, head, tail, avm.Width / 2, borderBrush, fillBrush);
             }
         }
 
@@ -121,15 +128,11 @@ namespace MonkeyPaste.Avalonia {
             pc.Add(endArrowCenterPosition - arrowWidthVector);
             pc.Add(endPoint);
 
-
             StreamGeometry streamGeometry = new StreamGeometry();
             using (StreamGeometryContext geometryContext = streamGeometry.Open()) {
                 geometryContext.BeginFigure(endPoint.ToAvPoint(), true);
                 pc.ForEach(x => geometryContext.LineTo(x.ToAvPoint()));
                 geometryContext.EndFigure(true);
-                //geometryContext.BeginFigure(startPoint, true);
-                //geometryContext.LineTo(endPoint);
-                //geometryContext.EndFigure(true);
             }
 
             dc.DrawGeometry(

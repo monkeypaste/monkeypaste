@@ -55,10 +55,12 @@
                         Grid.Row="2"
                         Grid.Column="0">
                     <ComboBox x:Name="TriggerComboBox"
-                              Items="{Binding Items}">
+                              SelectedItem="{Binding SelectedTrigger, Mode=TwoWay}"
+                              Items="{Binding Triggers}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <Border Classes="outerComboBoxItemBorder">
+                                <Border Classes="outerComboBoxItemBorder"
+                                        IsVisible="{Binding ., Converter={StaticResource IsNotNullOrZeroToBoolConverter}}">
                                     <DockPanel>
                                         <Image Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
 
@@ -99,9 +101,9 @@
                         Cursor="Hand"
                         Classes="hoverOutline"
                         Margin="5"
-                        IsVisible="{Binding SelectedItem, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
+                        IsVisible="{Binding SelectedTrigger, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
                         Command="{Binding DeleteTriggerCommand}"
-                        CommandParameter="{Binding SelectedItem}">
+                        CommandParameter="{Binding SelectedTrigger}">
                     <ToolTip.Tip>
                         <local:MpAvToolTipView Classes="error">
                             <local:MpAvToolTipView.ToolTipText>
@@ -111,7 +113,7 @@
                                             <sys:String>Delete '</sys:String>
                                         </Binding.Source>
                                     </Binding>
-                                    <Binding Path="SelectedItem.Label" />
+                                    <Binding Path="SelectedTrigger.Label" />
                                     <Binding>
                                         <Binding.Source>
                                             <sys:String>'</sys:String>
@@ -136,7 +138,7 @@
                               VerticalAlignment="Top"
                               Margin="0,10,0,0"
                               Padding="0,0,30,0"
-                              DataContext="{Binding PrimaryAction}">
+                              DataContext="{Binding FocusAction}">
 
                     <local:MpAvActionPropertyView VerticalAlignment="Stretch"
                                                   HorizontalAlignment="Stretch"
@@ -151,12 +153,11 @@
 
         <Border x:Name="ActionDesignerOuterContainerBorder"
                 Grid.Column="1"
-                IsVisible="{Binding SelectedItem, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
+                IsVisible="{Binding SelectedTrigger, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
             <Border x:Name="ActionDesignerInnerContainerBorder"
                     ClipToBounds="True"
-                    DataContext="{Binding SelectedItem}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
                 <local:MpAvActionDesignerView DataContext="{Binding}"

@@ -3,11 +3,11 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
     <!--  NOTIFICATION WINDOW  -->
-    <Style Selector="Window.notificationWindow Button">
+    <Style Selector="Window.notificationWindow Button:not(.optionsButton)">
         <Setter Property="HorizontalAlignment"
                 Value="Center" />
         <Setter Property="VerticalAlignment"
-                Value="Center" />
+                Value="Top" />
         <Setter Property="HorizontalContentAlignment"
                 Value="Center" />
         <Setter Property="VerticalContentAlignment"
@@ -18,19 +18,34 @@
                 Value="2" />
         <Setter Property="Padding"
                 Value="5" />
+        <Setter Property="Margin"
+                Value="5" />
         <Setter Property="Background"
                 Value="Silver" />
         <Setter Property="BorderBrush"
                 Value="DimGray" />
         <Setter Property="Foreground"
                 Value="White" />
+        <Setter Property="FontWeight"
+                Value="SemiBold" />
+        <Setter Property="MinWidth"
+                Value="50" />
+        <Setter Property="MaxWidth"
+                Value="100" />
 
+    </Style>
+
+    <Style Selector="Window.notificationWindow Button:not(.optionsButton):pointerover /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="DimGray" />
+        <!--<Setter Property="BorderBrush"
+                Value="Silver" />-->
     </Style>
     <Style Selector="Window.notificationWindow > Border">
         <Setter Property="CornerRadius"
                 Value="5" />
     </Style>
-    <Style Selector="Window.userActionNotificationWindow Button:pointerover">
+    <Style Selector="Window.userActionNotificationWindow Button:not(.optionsButton):pointerover">
         <Setter Property="BorderBrush"
                 Value="{DynamicResource HoverDefaultBorderBrush}" />
         <Setter Property="Background"

@@ -27,33 +27,28 @@
                    Grid.Column="0"
                    Classes="actionProperty"
                    Text="Directory" />
-        <Border Grid.Row="0"
+
+        <Button Grid.Row="0"
                 Grid.Column="1"
-                HorizontalAlignment="Stretch"
-                Classes="actionProperty">
-            <Button Command="{Binding SelectFileSystemPathCommand}"
-                    Background="Transparent"
-                    HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Stretch"
-                    MaxWidth="200"
-                    BorderThickness="0">
-                <Grid>
-                    <TextBlock IsVisible="{Binding FileSystemPath, ConverterParameter=flip, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
-                               Text="Select file or folder..."
-                               Foreground="Black"
-                               TextAlignment="Left"
-                               VerticalAlignment="Center" />
-                    <TextBlock IsVisible="{Binding FileSystemPath, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
-                               Text="{Binding FileSystemPath, Converter={StaticResource AbsoluteToRelativePathStringConverter}}"
-                               TextAlignment="Right"
-                               VerticalAlignment="Center">
-                        <ToolTip.Tip>
-                            <local:MpAvToolTipView ToolTipText="{Binding FileSystemPath}" />
-                        </ToolTip.Tip>
-                    </TextBlock>
-                </Grid>
-            </Button>
-        </Border>
+                Command="{Binding SelectFileSystemPathCommand}"
+                Classes="actionProperty arg1"
+                MaxWidth="200">
+            <Grid>
+                <TextBlock IsVisible="{Binding FileSystemPath, ConverterParameter=flip, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
+                           Text="Select file or folder..."
+                           Foreground="Black"
+                           TextAlignment="Left"
+                           VerticalAlignment="Center" />
+                <TextBlock IsVisible="{Binding FileSystemPath, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
+                           Text="{Binding FileSystemPath, Converter={StaticResource AbsoluteToRelativePathStringConverter}}"
+                           TextAlignment="Right"
+                           VerticalAlignment="Center">
+                    <ToolTip.Tip>
+                        <local:MpAvToolTipView ToolTipText="{Binding FileSystemPath}" />
+                    </ToolTip.Tip>
+                </TextBlock>
+            </Grid>
+        </Button>
         <DockPanel Grid.Row="1"
                    Grid.Column="0"
                    LastChildFill="False">
@@ -70,6 +65,7 @@
                  Grid.Column="1"
                  MinWidth="100"
                  Margin="5,10"
+                 Classes="actionProperty arg2"
                  local:MpAvIsFocusedExtension.IsEnabled="True"
                  Text="{Binding NamePrefix, Mode=TwoWay}" />
     </Grid>

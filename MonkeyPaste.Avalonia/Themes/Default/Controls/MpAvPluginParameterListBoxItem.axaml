@@ -35,6 +35,20 @@
         <Setter Property="Background"
                 Value="{StaticResource HitTestableTransparent}" />
     </Style>
+    <Style Selector="Border.paramBorder:not(.sliderBorder) TextBox">
+        <Setter Property="BorderBrush"
+                Value="Black" />
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="Padding"
+                Value="5" />
+        <Setter Property="Margin"
+                Value="3,0,0,0" />
+        <Setter Property="FontSize"
+                Value="12" />
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+    </Style>
     <Style Selector="Border:pointerover.paramBorder.sliderBorder">
         <Setter Property="BorderBrush"
                 Value="{DynamicResource HoverDefaultBorderBrush}" />
