@@ -635,9 +635,9 @@ namespace MonkeyPaste.Avalonia {
                     if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
 
-                        if (!IsExpanded) {
-                            IsExpanded = true;
-                        }
+                        //if (!IsExpanded) {
+                        //    IsExpanded = true;
+                        //}
                         Parent.SelectTagCommand.Execute(this);
                     } else {
                         IsTagNameReadOnly = true;

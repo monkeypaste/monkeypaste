@@ -111,6 +111,22 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region SuppressMenuLeftClick AvaloniaProperty
+        public static bool GetSuppressMenuLeftClick(AvaloniaObject obj) {
+            return obj.GetValue(SuppressMenuLeftClickProperty);
+        }
+
+        public static void SetSuppressMenuLeftClick(AvaloniaObject obj, bool value) {
+            obj.SetValue(SuppressMenuLeftClickProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> SuppressMenuLeftClickProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "SuppressMenuLeftClick",
+                false);
+
+        #endregion
+
         #region DoubleClickCommand AvaloniaProperty
         public static ICommand GetDoubleClickCommand(AvaloniaObject obj) {
             return obj.GetValue(DoubleClickCommandProperty);
@@ -159,7 +175,6 @@ namespace MonkeyPaste.Avalonia {
                 false);
 
         #endregion
-
 
         #region ForcedMenuItemViewModel AvaloniaProperty
         public static MpMenuItemViewModel GetForcedMenuItemViewModel(AvaloniaObject obj) {
@@ -268,7 +283,7 @@ namespace MonkeyPaste.Avalonia {
 
             MpMenuItemViewModel mivm = null;
 
-            if (e.IsLeftPress(control)) {
+            if (e.IsLeftPress(control) && !GetSuppressMenuLeftClick(control)) {
                 if (e.ClickCount == 2 && GetDoubleClickCommand(control) != null) {
                     GetDoubleClickCommand(control).Execute(null);
                 } else if (control.DataContext is MpIPopupMenuViewModel pumvm) {
@@ -477,7 +492,7 @@ namespace MonkeyPaste.Avalonia {
                 MinHeight = 20,
                 BorderThickness = new Thickness(1),
                 BorderBrush = mivm.BorderHexColor.ToAvBrush(),
-                CornerRadius = new CornerRadius(2.5),
+                CornerRadius = new CornerRadius(mivm.IconCornerRadius),
                 Margin = new Thickness(5, 0, 30, 0),
                 Background = mivm.IconHexStr.ToAvBrush()
             };
@@ -570,10 +585,8 @@ namespace MonkeyPaste.Avalonia {
             _cmInstance.DataContext = mivm;
             _cmInstance.PlacementTarget = control;
             _cmInstance.PlacementMode = placement;
+            _cmInstance.PlacementAnchor = PopupAnchor.TopLeft;
             if (_cmInstance.PlacementMode == PlacementMode.Pointer) {
-                _cmInstance.PlacementAnchor = PopupAnchor.AllMask;
-                _cmInstance.PlacementMode = PlacementMode.Pointer;
-
                 _cmInstance.HorizontalOffset = offset.X;
                 _cmInstance.VerticalOffset = offset.Y;
             }

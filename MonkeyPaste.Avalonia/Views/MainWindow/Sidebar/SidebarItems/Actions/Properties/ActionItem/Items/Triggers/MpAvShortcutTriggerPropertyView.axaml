@@ -21,7 +21,7 @@
                    Text="Shortcut" />
         <Border Grid.Row="0"
                 Grid.Column="1"
-                Classes="actionProperty">
+                Classes="actionProperty arg1">
             <local:MpAvShortcutGestureView Background="Transparent"
                                            DataContext="{Binding}" />
         </Border>

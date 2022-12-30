@@ -483,6 +483,10 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(SelectedItem));
                 OnPropertyChanged(nameof(SelectedPinnedItem));
 
+                if(SelectedItem != null) {
+                    SelectedItem.AllAncestors.ForEach(x => x.IsExpanded = true);
+                }
+
                 if(MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
                     // last loaded tag is selected in ClipTray OnPostMainWindowLoaded 
                     // which notifies query changed so don't notify

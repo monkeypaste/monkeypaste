@@ -31,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
             switch(msg) {
                 case MpMessageType.MainWindowOrientationChangeEnd:
                     var ctg = this.FindControl<Grid>("SidebarButtonGroupContainerGrid");
-                    var tbl = ctg.GetVisualDescendants<ToggleButton>().ToList();
+                    var tbl = ctg.GetVisualDescendants<Button>().ToList();
 
                     if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
                         // horizontal shows sidebar down left side

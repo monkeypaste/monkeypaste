@@ -12,6 +12,12 @@
         <Color x:Key="DefaultInvalidColor">
             Red
         </Color>
+        <Color x:Key="DefaultWarningColor1">
+            Yellow
+        </Color>
+        <Color x:Key="DefaultWarningColor2">
+            Yellow
+        </Color>
 
         <Color x:Key="MainWindowTitleMenuActiveBgColor">
             GoldenRod
@@ -32,8 +38,11 @@
         <Color x:Key="SelectedBorderColor">
             Red
         </Color>
-        <Color x:Key="DefaultButtonColor">
+        <Color x:Key="DefaultIconButtonColor">
             White
+        </Color>
+        <Color x:Key="DefaultButtonColor">
+            DimGray
         </Color>
         <Color x:Key="HoverButtonColor">
             Gray
@@ -141,7 +150,19 @@
                          Color="{DynamicResource DefaultInvalidColor}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <!--  Border or Button Brush  -->
+        <!--  Warning  -->
+        <SolidColorBrush x:Key="DefaultWarningBrush1"
+                         Color="{DynamicResource DefaultWarningColor1}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="DefaultWarningBrush2"
+                         Color="{DynamicResource DefaultWarningColor2}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
+        <!--  Button Brush  -->
+
+        <SolidColorBrush x:Key="DefaultIconButtonBrush"
+                         Color="{DynamicResource DefaultIconButtonColor}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
         <SolidColorBrush x:Key="DefaultButtonBrush"
                          Color="{DynamicResource DefaultButtonColor}"
@@ -149,6 +170,8 @@
         <SolidColorBrush x:Key="HoverButtonBrush"
                          Color="{DynamicResource HoverButtonColor}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
+        <!--  Border Brush  -->
         <SolidColorBrush x:Key="HoverDefaultBorderBrush"
                          Color="{DynamicResource HoverDefaultBorderColor}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />

@@ -54,9 +54,16 @@
                 <Border Classes="iconLabelComboBox"
                         Grid.Row="2"
                         Grid.Column="0">
+                    <Border.Styles>
+                        <Style Selector="ComboBox#TriggerComboBox ComboBoxItem"
+                               x:DataType="local:MpAvActionViewModelBase">
+                            <Setter Property="IsVisible"
+                                    Value="{Binding IsTrigger}" />
+                        </Style>
+                    </Border.Styles>
                     <ComboBox x:Name="TriggerComboBox"
                               SelectedItem="{Binding SelectedTrigger, Mode=TwoWay}"
-                              Items="{Binding Triggers}">
+                              Items="{Binding Items}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <Border Classes="outerComboBoxItemBorder"
@@ -94,42 +101,6 @@
                            Height="15" />
                 </Button>
 
-                <!--  DELETE SELECTED TRIGGER BUTTON  -->
-
-                <Button Grid.Row="2"
-                        Grid.Column="2"
-                        Cursor="Hand"
-                        Classes="hoverOutline"
-                        Margin="5"
-                        IsVisible="{Binding SelectedTrigger, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
-                        Command="{Binding DeleteTriggerCommand}"
-                        CommandParameter="{Binding SelectedTrigger}">
-                    <ToolTip.Tip>
-                        <local:MpAvToolTipView Classes="error">
-                            <local:MpAvToolTipView.ToolTipText>
-                                <MultiBinding Converter="{StaticResource MultiStringAppendConverter}">
-                                    <Binding>
-                                        <Binding.Source>
-                                            <sys:String>Delete '</sys:String>
-                                        </Binding.Source>
-                                    </Binding>
-                                    <Binding Path="SelectedTrigger.Label" />
-                                    <Binding>
-                                        <Binding.Source>
-                                            <sys:String>'</sys:String>
-                                        </Binding.Source>
-                                    </Binding>
-                                </MultiBinding>
-                            </local:MpAvToolTipView.ToolTipText>
-                        </local:MpAvToolTipView>
-                    </ToolTip.Tip>
-                    <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource DeleteImage}}"
-                           Margin="5"
-                           Width="15"
-                           Height="15" />
-                </Button>
-
-
                 <!--  SELECTED TRIGGER ACTION PROPERTY VIEW  -->
                 <ScrollViewer Grid.Row="3"
                               Grid.Column="0"
@@ -153,7 +124,6 @@
 
         <Border x:Name="ActionDesignerOuterContainerBorder"
                 Grid.Column="1"
-                IsVisible="{Binding SelectedTrigger, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
             <Border x:Name="ActionDesignerInnerContainerBorder"

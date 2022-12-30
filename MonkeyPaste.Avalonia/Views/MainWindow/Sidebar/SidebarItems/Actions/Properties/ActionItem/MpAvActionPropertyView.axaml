@@ -11,12 +11,18 @@
                        x:TypeArguments="local:MpAvActionViewModelBase"
                        x:DataType="local:MpAvActionViewModelBase"
                        mc:Ignorable="d">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Expander /template/ ToggleButton">
+            <!--<Setter Property="IsEnabled"
+                    Value="False" />-->
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Expander x:Name="ActionExpander"
               CornerRadius="10"
               BorderBrush="Khaki"
               Padding="5,0"
               HorizontalAlignment="Stretch"
-              IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
+              IsExpanded="True">
         <Expander.Header>
             <local:MpAvActionPropertyHeaderView Grid.Column="0"
                                                 HorizontalAlignment="Stretch"
@@ -55,6 +61,12 @@
                                 <local:MpAvFileSystemTriggerPropertyView DataContext="{Binding}" />
                             </DataTemplate>
 
+                            <!--  Shortcut  -->
+                            <DataTemplate x:Key="ShortcutPropertiesTemplate"
+                                          DataType="{x:Type local:MpAvShortcutTriggerViewModel}">
+                                <local:MpAvShortcutTriggerPropertyView DataContext="{Binding}" />
+                            </DataTemplate>
+
                             <!--  Triggers END  -->
 
                             <!--  Compare  -->
@@ -85,11 +97,11 @@
                                 <local:MpAvMacroActionPropertyView DataContext="{Binding}" />
                             </DataTemplate>
 
-                          <!--  Timer  -->
-                          <DataTemplate x:Key="TimerPropertiesTemplate"
-                                        DataType="{x:Type local:MpAvTimerActionViewModel}">
-                            <local:MpAvTimerActionPropertyView DataContext="{Binding}" />
-                          </DataTemplate>
+                            <!--  Timer  -->
+                            <DataTemplate x:Key="TimerPropertiesTemplate"
+                                          DataType="{x:Type local:MpAvTimerActionViewModel}">
+                                <local:MpAvTimerActionPropertyView DataContext="{Binding}" />
+                            </DataTemplate>
                         </local:MpAvActionItemPropertiesTemplateSelector>
                     </ContentControl.DataTemplates>
                 </ContentControl>

@@ -15,6 +15,7 @@ using Avalonia.Threading;
 using System.Diagnostics;
 using Avalonia.Controls;
 using Avalonia.Controls.Selection;
+using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -31,8 +32,17 @@ namespace MonkeyPaste.Avalonia {
 
         //#endregion
 
+
+        #region Constants
+
+        public const double DEFAULT_MIN_SCALE = 0.1;
+        public const double DEFAULT_MAX_SCALE = 3.0d;
+        #endregion
+
         #region MpIDesignerSettingsViewModel Implementation
 
+        public double MinScale => DEFAULT_MIN_SCALE;
+        public double MaxScale => DEFAULT_MAX_SCALE;
         public bool IsGridVisible {
             get {
                 return ParseShowGrid(Arg2);
@@ -78,13 +88,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpRect ObservedDesignerBounds { get; set; } = MpRect.Empty;
-        public double DesignerItemDiameter => 50;
-
-
-        public MpPoint DefaultTriggerLocation => new MpPoint(
-            (ObservedDesignerBounds.Width / 2) - (DesignerItemDiameter / 2),
-            (ObservedDesignerBounds.Height / 2) - (DesignerItemDiameter / 2));
 
         #region Designer Helpers
 
@@ -117,7 +120,7 @@ namespace MonkeyPaste.Avalonia {
 
         private MpPoint ParseTranslationOffset(string text) {
             if (string.IsNullOrEmpty(Arg2)) {
-                return DefaultTriggerLocation;
+                return Parent.DesignerCenterLocation;
             }
             var arg2Parts = Arg2.SplitNoEmpty(",");
             if (arg2Parts.Length >= 3) {
@@ -126,7 +129,7 @@ namespace MonkeyPaste.Avalonia {
                     Y = double.Parse(arg2Parts[2])
                 };
             }
-            return DefaultTriggerLocation;
+            return Parent.DesignerCenterLocation;
         }
         private bool ParseShowGrid(string text) {
             if (string.IsNullOrEmpty(Arg2)) {
@@ -141,83 +144,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region DesignerItem Placement Methods
-
-        public MpPoint FindOpenDesignerLocation(MpPoint anchorPoint, object ignoreItem = null) {
-            int attempts = 0;
-            int maxAttempts = 10;
-            int count = 4;
-            double dtheta = (2 * Math.PI) / count;
-            double r = DesignerItemDiameter * 2;
-            while (attempts <= maxAttempts) {
-                double theta = 0;
-                for (int i = 0; i < count; i++) {
-                    var tp = new MpPoint();
-                    tp.X = (double)(anchorPoint.X + r * Math.Cos(theta));
-                    tp.Y = (double)(anchorPoint.Y + r * Math.Sin(theta));
-                    if (!OverlapsItem(tp)) {
-                        return tp;
-                    }
-                    theta += dtheta;
-                }
-                r += DesignerItemDiameter * 2;
-
-                attempts++;
-            }
-
-            return new MpPoint(
-                MpHelpers.Rand.NextDouble() * ObservedDesignerBounds.Width,
-                MpHelpers.Rand.NextDouble() * ObservedDesignerBounds.Height);
-        }
-
-        public bool OverlapsItem(MpPoint targetTopLeft) {
-            return GetItemNearPoint(targetTopLeft) != null;
-        }
-
-        public MpIBoxViewModel GetItemNearPoint(MpPoint targetTopLeft, object ignoreItem = null, double radius = 50) {
-            MpPoint targetMid = new MpPoint(targetTopLeft.X, targetTopLeft.Y);
-            foreach (var avm in SelfAndAllDescendants.Cast<MpIBoxViewModel>()) {
-                MpPoint sourceMid = new MpPoint(avm.X, avm.Y);
-                double dist = targetMid.Distance(sourceMid);
-                if (dist < radius && avm != ignoreItem) {
-                    return avm;
-                }
-            }
-            return null;
-        }
-
-        //public void ClearAreaAtPoint(MpPoint p, object ignoreItem = null) {
-        //    var overlapItem = GetItemNearPoint(p, ignoreItem);
-        //    if (overlapItem != null) {
-        //        MpPoint tempLoc = p;
-        //        do {
-        //            var overlapLoc = new MpPoint(overlapItem.X, overlapItem.Y);
-        //            double distToMove = overlapLoc.Distance(tempLoc) + 10;
-
-        //            var dir = overlapLoc - tempLoc;
-        //            dir.Normalize();
-        //            dir = new Vector(-dir.Y, dir.X);
-        //            overlapLoc += dir * distToMove;
-        //            overlapItem.X = overlapLoc.X;
-        //            overlapItem.Y = overlapLoc.Y;
-
-        //            overlapItem = GetItemNearPoint(overlapLoc, overlapItem);
-        //            tempLoc = overlapLoc;
-        //        } while (overlapItem != null && overlapItem != ignoreItem);
-        //    }
-        //}
-
-        //public void ClearAllOverlaps() {
-        //    foreach (var avm in AllSelectedTriggerActions) {
-        //        ClearAreaAtPoint(avm.Location, avm);
-        //    }
-        //}
-        //public void NotifyViewportChanged() {
-        //    //CollectionViewSource.GetDefaultView(AllSelectedTriggerActions).Refresh();
-        //    //CollectionViewSource.GetDefaultView(AllSelectedTriggerActions).Refresh();
-        //    OnPropertyChanged(nameof(AllSelectedItemActions));
-        //}
-        #endregion
+        
 
         #endregion
 
@@ -236,7 +163,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public ObservableCollection<MpAvActionViewModelBase> Items { get; set; } = new ObservableCollection<MpAvActionViewModelBase>();
+        //public ObservableCollection<MpAvActionViewModelBase> Items { get; set; } = new ObservableCollection<MpAvActionViewModelBase>();
         //public MpAvActionViewModelBase SelectedAction { get; set; }
         #endregion
 
@@ -291,12 +218,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public override async Task InitializeAsync(MpAction a) {
-            await base.InitializeAsync(a);
-            Items.Clear();
-            SelfAndAllDescendants.ForEach(x => Items.Add(x));
-            OnPropertyChanged(nameof(Items));
-        }
+        //public override async Task InitializeAsync(MpAction a) {
+        //    await base.InitializeAsync(a);
+        //    Items.Clear();
+        //    SelfAndAllDescendants.ForEach(x => Items.Add(x));
+        //    OnPropertyChanged(nameof(Items));
+        //}
 
         #endregion
 
@@ -310,12 +237,13 @@ namespace MonkeyPaste.Avalonia {
             string enabledText = IsEnabled.HasValue && IsEnabled.Value ?
                                     "ENABLED" :
                                     "DISABLED";
-            string notificationText = $"Action '{FullName}' is now  {enabledText}";
+            string typeStr = ParentActionId == 0 ? "Trigger" : "Action";
+            string notificationText = $"{typeStr} '{FullName}' is now  {enabledText}";
             MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = MpAvMainWindowViewModel.Instance.IsMainWindowOpen;
 
             await MpNotificationBuilder.ShowMessageAsync(
                 iconSourceObj: IconResourceKeyStr.ToString(),
-                title: "ACTION STATUS",
+                title: $"{typeStr.ToUpper()} STATUS",
                 body: notificationText);
 
 
@@ -341,7 +269,7 @@ namespace MonkeyPaste.Avalonia {
                         await ShowUserEnableChangeNotification();
                     });
                     break;
-                case nameof(Items):
+                case nameof(Children):
                     OnPropertyChanged(nameof(SelfAndAllDescendants));
                     break;
                 case nameof(IsBusy):
@@ -373,9 +301,30 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
 
         public ICommand ResetDesignerViewCommand => new MpCommand(() => {
-            Scale = 1.0d;
-            TranslateOffsetX = -X;
-            TranslateOffsetY = -Y;
+            double l = SelfAndAllDescendants.Min(x => x.X);
+            double t = SelfAndAllDescendants.Min(x => x.Y);
+            double r = SelfAndAllDescendants.Max(x => x.X);
+            double b = SelfAndAllDescendants.Max(x => x.Y);
+
+            MpRect actual_bounds = new MpRect(l, t, r - l, b - t);
+            
+            //double r_x = Parent.ObservedDesignerBounds.Width / actual_bounds.Width;
+            //double r_y = Parent.ObservedDesignerBounds.Height / actual_bounds.Height;
+            
+            double r_x = actual_bounds.Width / Parent.ObservedDesignerBounds.Width;
+            double r_y = actual_bounds.Height / Parent.ObservedDesignerBounds.Height;
+
+            double scale_pad = 0.2;
+
+            Parent.Scale = Math.Max(Math.Min(r_x.IsNumber() ? r_x : 1, r_y.IsNumber() ? r_y : 1) - scale_pad, Parent.MinScale);
+
+            var item_half_size = new MpSize(Parent.DesignerItemDiameter/2, Parent.DesignerItemDiameter/2);
+            var view_center = (Parent.ObservedDesignerBounds.Size.ToPortablePoint() - item_half_size.ToPortablePoint()) * 0.5;
+            var actual_center = actual_bounds.Centroid();
+
+            var adj_center = (view_center * Parent.Scale) - actual_center;
+            Parent.TranslateOffsetX = adj_center.X;
+            Parent.TranslateOffsetY = adj_center.Y;
         });
         #endregion
     }

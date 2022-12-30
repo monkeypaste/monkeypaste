@@ -147,7 +147,12 @@ namespace MonkeyPaste.Avalonia {
         public ICommand SelectTagCommand => new MpCommand<object>(
             (args) => {
                 if(args is int tagId) {
-                    TagId = tagId;
+                    if(TagId == tagId) {
+                        TagId = 0;
+                    } else {
+                        TagId = tagId;
+                    }
+                    
                     OnPropertyChanged(nameof(SelectedTag));
                     OnPropertyChanged(nameof(SelectedMenuItem));
                 }

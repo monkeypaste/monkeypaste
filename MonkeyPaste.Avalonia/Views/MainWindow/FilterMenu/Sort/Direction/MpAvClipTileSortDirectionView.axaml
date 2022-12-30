@@ -27,7 +27,7 @@
                 <Setter Property="Data"
                         Value="{StaticResource AscendingSvg}" />
                 <Setter Property="Foreground"
-                        Value="{DynamicResource DefaultButtonBrush}" />
+                        Value="{DynamicResource DefaultIconButtonBrush}" />
             </Style>
             <Style Selector="PathIcon.descending">
                 <Setter Property="Data"

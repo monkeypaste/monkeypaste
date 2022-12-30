@@ -22,9 +22,10 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+
         #region Statics
         static MpAvZoomBorder() {
-            IsEnabledProperty.Changed.AddClassHandler<MpAvZoomBorder>((x, y) => HandleDesignerItemChanged(x, y));
+            //IsEnabledProperty.Changed.AddClassHandler<MpAvZoomBorder>((x, y) => HandleDesignerItemChanged(x, y));
         }
         public static bool IsTranslating { get; private set; } = false;
 
@@ -33,22 +34,24 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region DesignerItem AvaloniaProperty
-        public MpIDesignerSettingsViewModel DesignerItem {
-            get { return GetValue(DesignerItemProperty); }
-            set { SetValue(DesignerItemProperty, value); }
-        }
+        //public MpIDesignerSettingsViewModel DesignerItem {
+        //    get { return GetValue(DesignerItemProperty); }
+        //    set { SetValue(DesignerItemProperty, value); }
+        //}
 
-        public static readonly AttachedProperty<MpIDesignerSettingsViewModel> DesignerItemProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, MpIDesignerSettingsViewModel>(
-                "DesignerItem",
-                null,
-                false);
+        //public static readonly AttachedProperty<MpIDesignerSettingsViewModel> DesignerItemProperty =
+        //    AvaloniaProperty.RegisterAttached<object, Control, MpIDesignerSettingsViewModel>(
+        //        "DesignerItem",
+        //        null,
+        //        false);
 
-        private static void HandleDesignerItemChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
-            if(element is MpAvZoomBorder zb) {
-                zb.Reset();
-            }
-        }
+        //private static void HandleDesignerItemChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+        //    if(element is MpAvZoomBorder zb) {
+        //        zb.Reset();
+        //    }
+        //}
+
+        public MpIDesignerSettingsViewModel DesignerItem => DataContext as MpIDesignerSettingsViewModel;
 
         #endregion
 
@@ -66,10 +69,36 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region MinScale AvaloniaProperty
+        public double MinScale {
+            get { return (double)GetValue(MinScaleProperty); }
+            set { SetValue(MinScaleProperty, value); }
+        }
+
+        public static readonly AttachedProperty<double> MinScaleProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, double>(
+                "MinScale",
+                0.1,
+                false);
+
+        #endregion
+        
+        #region MaxScale AvaloniaProperty
+        public double MaxScale {
+            get { return (double)GetValue(MaxScaleProperty); }
+            set { SetValue(MaxScaleProperty, value); }
+        }
+
+        public static readonly AttachedProperty<double> MaxScaleProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, double>(
+                "MaxScale",
+                3.0d,
+                false);
+
+        #endregion
+
         #region Bg Grid Properties
 
-        public double MinScale { get; set; } = 0.1;
-        public double MaxScale { get; set; } = 3;
 
         public IBrush GridLineBrush { get; set; } = Brushes.LightBlue;
         public double GridLineThickness { get; set; } = 1;

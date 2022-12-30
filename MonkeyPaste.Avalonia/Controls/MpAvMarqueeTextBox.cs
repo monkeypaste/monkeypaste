@@ -21,6 +21,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using System.Linq;
 using Avalonia.Visuals.Media.Imaging;
+using Avalonia.Interactivity;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -269,6 +270,9 @@ namespace MonkeyPaste.Avalonia {
             this.GetObservable(MpAvMarqueeTextBox.ReadOnlyForegroundProperty).Subscribe(value => Init());
             this.GetObservable(MpAvMarqueeTextBox.DropShadowBrushProperty).Subscribe(value => Init());
             this.GetObservable(MpAvMarqueeTextBox.DropShadowOffsetProperty).Subscribe(value => Init());
+
+            this.AddHandler(MpAvMarqueeTextBox.KeyDownEvent, HandleKeyDown, RoutingStrategies.Tunnel);
+            this.AddHandler(MpAvMarqueeTextBox.KeyUpEvent, HandleKeyUp, RoutingStrategies.Tunnel);
         }
 
         #region Event Handlers
@@ -295,37 +299,10 @@ namespace MonkeyPaste.Avalonia {
             SetValue(IsReadOnlyProperty, true);            
         }
 
-        protected override void OnKeyDown(KeyEventArgs e) {
-            if(IsReadOnly) {
-                return;
-            }
-            if (e.Key == Key.Space) {
-                string pre_str = Text.Substring(0,SelectionStart);
-                string post_str = Text.Substring(SelectionEnd);
-                string new_text = pre_str + " " + post_str;
-                SetValue(TextProperty, new_text);
-                e.Handled = true;
-                return;
-            }
-            if (e.Key == Key.Escape) {
-                SetValue(IsReadOnlyProperty, true);
-                CancelEditCommand?.Execute(null);
-                if(CancelEditCommand == null && 
-                    Text != _orgText &&
-                    !string.IsNullOrEmpty(_orgText)) {
-                    Text = _orgText;
-                }
-                e.Handled = true;
-                return;
-            }
-            if(e.Key == Key.Enter) {
-                SetValue(IsReadOnlyProperty, true);
-                EndEditCommand?.Execute(null);
-                e.Handled = true;
-                return;
-            }
-            base.OnKeyDown(e);
-        }
+        //protected override void OnKeyDown(KeyEventArgs e) {
+        //    HandleKeyDown(e);
+        //    base.OnKeyDown(e);
+        //}
 
         protected override void OnMeasureInvalidated() {
             base.OnMeasureInvalidated();
@@ -390,6 +367,48 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
+        private void HandleKeyDown(object sender, KeyEventArgs e) {
+            if (e.Key == Key.Space) {
+                string pre_str = Text.Substring(0, SelectionStart);
+                string post_str = Text.Substring(SelectionEnd);
+                string new_text = pre_str + " " + post_str;
+                int new_sel_start = SelectionStart + 1;
+                SetValue(TextProperty, new_text);
+                SelectionStart = new_sel_start;
+                SelectionEnd = new_sel_start;
+                e.Handled = true;
+                return;
+            }
+        }
+        private void HandleKeyUp(object sender, KeyEventArgs e) {
+            if (IsReadOnly) {
+                return;
+            }
+            e.Handled = true;
+            //if (e.Key == Key.Space) {
+            //    string pre_str = Text.Substring(0, SelectionStart);
+            //    string post_str = Text.Substring(SelectionEnd);
+            //    string new_text = pre_str + " " + post_str;
+            //    int new_sel_start = SelectionStart + 1;
+            //    SetValue(TextProperty, new_text);
+            //    SelectionStart = new_sel_start;
+            //    SelectionEnd = new_sel_start;
+            //    e.Handled = true;
+            //    return;
+            //}
+            if (e.Key == Key.Escape) {
+                SetValue(IsReadOnlyProperty, true);
+                CancelEditCommand?.Execute(null);
+                if (CancelEditCommand == null &&
+                    Text != _orgText &&
+                    !string.IsNullOrEmpty(_orgText)) {
+                    Text = _orgText;
+                }
+            } else if (e.Key == Key.Enter) {
+                SetValue(IsReadOnlyProperty, true);
+                EndEditCommand?.Execute(null);
+            }
+        }
         private void Init() {
             _marqueeBitmap = GetMarqueeBitmap(out _ftSize);
             _offsetX1 = 0;

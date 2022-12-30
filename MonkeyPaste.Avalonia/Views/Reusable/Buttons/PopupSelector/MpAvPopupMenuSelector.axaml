@@ -17,28 +17,29 @@
         <Style Selector="Button#ContainerButton">
             <Setter Property="BorderBrush"
                     Value="DimGray" />
+            <Setter Property="BorderThickness"
+                    Value="2" />
         </Style>
-        <Style Selector="Button#ContainerButton:pointerover">
+        <!--<Style Selector="Button#ContainerButton:pointerover">
             <Setter Property="BorderBrush"
                     Value="{DynamicResource HoverDefaultBorderBrush}" />
-        </Style>
+        </Style>-->
 
         <Style Selector="Border.popupCaret">
+            <Setter Property="Background"
+                    Value="{DynamicResource DefaultButtonBrush}" />
             <Setter Property="BorderBrush"
-                    Value="Silver" />
+                    Value="{DynamicResource DefaultBorderBrush}" />
         </Style>
-        <Style Selector="Button#ContainerButton:pointerover Border.popupCaret">
-            <Setter Property="BorderBrush"
-                    Value="{DynamicResource HoverDefaultBorderBrush}" />
-        </Style>
-
         <Style Selector="Border.popupCaret:pointerover">
             <Setter Property="Background"
-                    Value="Gainsboro" />
+                    Value="{DynamicResource HoverButtonBrush}" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource HoverDefaultBorderBrush}" />
         </Style>
 
         <!--  SELECTED ITEM ICON/HEADER CONTENT  -->
-        <Style Selector="Border#SelectionBorder Image">
+        <Style Selector="Border#SelectionBorder:not(.notEmpty) Image">
             <Setter Property="Source"
                     Value="{Binding EmptyIconResourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
         </Style>
@@ -46,7 +47,7 @@
             <Setter Property="Source"
                     Value="{Binding SelectedMenuItem.IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
         </Style>
-        <Style Selector="Border#SelectionBorder TextBlock">
+        <Style Selector="Border#SelectionBorder:not(.notEmpty) TextBlock">
             <Setter Property="Text"
                     Value="{Binding EmptyText}" />
         </Style>
@@ -104,8 +105,7 @@
             <!--    -->
             <Border x:Name="PopupCaretBorder"
                     Grid.Column="1"
-                    Classes="popupCaret,iconButton"
-                    Background="DimGray"
+                    Classes="popupCaret iconButton"
                     BorderThickness="1"
                     VerticalAlignment="Center"
                     Margin="7,0,0,0"

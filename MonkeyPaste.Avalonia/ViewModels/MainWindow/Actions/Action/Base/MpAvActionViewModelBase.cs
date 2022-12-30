@@ -24,6 +24,7 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel,
         //MpISelectableViewModel,
         MpIPopupMenuViewModel,
+        MpIContextMenuViewModel,
         MpIUserIconViewModel,
         MpITooltipInfoViewModel,
         MpIBoxViewModel,
@@ -90,16 +91,6 @@ namespace MonkeyPaste.Avalonia {
             OnActionComplete -= mvm.OnActionComplete;
             MpConsole.WriteLine($"Parent Matcher {Label} Unregistered {mvm.Label} from OnCopyItemAdded");
         }
-
-        #region MpAvTreeSelectorViewModelBase Overrides
-
-        //public override bool IsExpanded => true;
-
-
-
-        //bool MpITreeItemViewModel.IsExpanded { get; set; }
-
-        #endregion
 
         #endregion
 
@@ -175,13 +166,21 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsSelected {
             get => Parent.FocusAction == null ? false : Parent.FocusAction.ActionId == ActionId;
-            set {
-                if(IsSelected != value) {
-                    Parent.FocusAction = this;
-                    OnPropertyChanged(nameof(IsSelected));
-                }
-            }
+            //set {
+
+            //    if(IsSelected != value) {
+            //        Parent.FocusAction = this;
+            //        OnPropertyChanged(nameof(IsSelected));
+            //    }
+            //}
         }
+
+        #endregion
+
+        #region MpIContextMenuViewModel Implementation
+
+        public bool IsContextMenuOpen { get; set; }
+        public MpMenuItemViewModel ContextMenuViewModel => PopupMenuViewModel;
 
         #endregion
 
@@ -206,6 +205,17 @@ namespace MonkeyPaste.Avalonia {
                                         CommandParameter = x
                                     }).ToList()
                         },
+                        new MpMenuItemViewModel() {
+                            IsSeparator = true,
+                            IsVisible = !IsEnabled.IsNull()
+                        },
+                        new MpMenuItemViewModel() {
+                            IsVisible = !IsEnabled.IsNull(),
+                            Header = IsEnabled.IsTrue() ? "Disable":"Enable",
+                            IconResourceKey = IsEnabled.IsTrue() ? DisabledHexColor:EnabledHexColor,
+                            IconCornerRadius = 10,
+                            Command = ToggleIsEnabledCommand
+                        },
                         new MpMenuItemViewModel() {IsSeparator = true},
                         new MpMenuItemViewModel() {
                             Header = "Remove",
@@ -224,25 +234,25 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models               
-        private MpAvActionViewModelBase _parentTreeItem;
-        public MpAvActionViewModelBase ParentTreeItem {
+        private MpAvActionViewModelBase _parentActionViewModel;
+        public MpAvActionViewModelBase ParentActionViewModel {
             get {
                 if (ParentActionId == 0 || Parent == null) {
                     return null;
                 }
-                if (_parentTreeItem == null ||
-                    _parentTreeItem.ActionId != ParentActionId) {
-                    if (_parentTreeItem != null) {
+                if (_parentActionViewModel == null ||
+                    _parentActionViewModel.ActionId != ParentActionId) {
+                    if (_parentActionViewModel != null) {
                         // re-parent 
                         MpConsole.WriteLine($"Re-parenting detected for action: {Action}");
                     }
                     // find parent by model
-                    _parentTreeItem = Parent.AllActions.FirstOrDefault(x => x.ActionId == ParentActionId);
+                    _parentActionViewModel = Parent.AllActions.FirstOrDefault(x => x.ActionId == ParentActionId);
                 }
-                return _parentTreeItem;
+                return _parentActionViewModel;
             }
         }
-        public IEnumerable<MpAvActionViewModelBase> Items => 
+        public IEnumerable<MpAvActionViewModelBase> Children => 
             Parent.Items
             .Where(x => x.ParentActionId == ActionId).OrderBy(x=>x.SortOrderIdx);
 
@@ -259,10 +269,10 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<int> AncestorActionIds {
             get {
-                var cur_avm = ParentTreeItem;
+                var cur_avm = ParentActionViewModel;
                 while (cur_avm != null) {
                     yield return cur_avm.ActionId;
-                    cur_avm = cur_avm.ParentTreeItem;
+                    cur_avm = cur_avm.ParentActionViewModel;
                 }
             }
         }
@@ -273,7 +283,7 @@ namespace MonkeyPaste.Avalonia {
             get {
                 var avm = this;
                 while (avm.ParentActionId > 0) {
-                    avm = avm.ParentTreeItem;
+                    avm = avm.ParentActionViewModel;
                 }
                 return avm as MpAvTriggerActionViewModelBase;
             }
@@ -338,6 +348,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public string EnabledHexColor => (MpPlatformWrapper.Services.PlatformResource.GetResource("EnabledHighlightBrush") as SolidColorBrush).Color.ToPortableColor().ToHex();
+        public string DisabledHexColor => (MpPlatformWrapper.Services.PlatformResource.GetResource("DisabledHighlightBrush") as SolidColorBrush).Color.ToPortableColor().ToHex();
         public string EnableToggleButtonShapeHexColor {
             get {
                 if (!IsEnabled.HasValue) {
@@ -361,24 +373,24 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public bool IsExpanded { get; set; }
+        public bool IsActionDesignerVisible => Parent.SelectedTrigger == RootTriggerActionViewModel;
+        //public bool IsExpanded { get; set; }
         public bool IsAnyBusy {
             get {
                 if(IsBusy) {
                     return true;
                 }
-                return Items.Any(x => x.IsAnyBusy);
+                return Children.Any(x => x.IsAnyBusy);
             }
         }
 
         public bool HasDescription => !string.IsNullOrEmpty(Description);
 
-        public bool IsRootAction => ParentActionId == 0 && this is MpAvTriggerActionViewModelBase;
+        public bool IsTrigger => ParentActionId == 0 && this is MpAvTriggerActionViewModelBase;
 
         public bool LastIsEnabledState { get; set; } = false;
 
         public bool? IsEnabled { get; set; } = false;
-
 
         public bool IsActionTextBoxFocused { get; set; } = false;
 
@@ -739,9 +751,9 @@ namespace MonkeyPaste.Avalonia {
                 await CreateActionViewModel(ca);
             }
 
-            OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(Children));
 
-            while (Items.Any(x => x.IsAnyBusy)) {
+            while (Children.Any(x => x.IsAnyBusy)) {
                 await Task.Delay(100);
             }
 
@@ -832,15 +844,20 @@ namespace MonkeyPaste.Avalonia {
                 IsChecked = selectedActionIds.Contains(ActionId),
                 Command = cmd,
                 CommandParameter = ActionId,
-                SubItems = recursive ? Items.Select(x=>x.GetActionMenu(cmd,selectedActionIds, recursive)).ToList() : null
+                SubItems = recursive ? Children.Select(x=>x.GetActionMenu(cmd,selectedActionIds, recursive)).ToList() : null
             };
+        }
+
+        public async Task UpdateSortOrderAsync() {
+            Children.ForEach(x => x.SortOrderIdx = Children.IndexOf(x));
+            await Task.WhenAll(Children.Select(x => x.Action.WriteToDatabaseAsync()));
         }
 
         public override string ToString() {
             if (Action == null) {
                 return null;
             }
-            if (ParentTreeItem == null) {
+            if (ParentActionViewModel == null) {
                 return Label;
             }
 
@@ -880,7 +897,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected virtual async Task<bool> ValidateActionAsync() {
             await Task.Delay(1);
-            if (!IsRootAction && ParentTreeItem == null) {
+            if (!IsTrigger && ParentActionViewModel == null) {
                 // this shouldn't happen...
                 ValidationText = $"Action '{RootTriggerActionViewModel.Label}/{Label}' must be linked to a trigger";
                 ShowValidationNotification();
@@ -943,10 +960,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task UpdateSortOrder() {
-            Items.ForEach(x => x.SortOrderIdx = Items.IndexOf(x));
-            await Task.WhenAll(Items.Select(x => x.Action.WriteToDatabaseAsync()));
-        }
 
         public string GetUniqueActionName(string prefix) {
             int uniqueIdx = 1;
@@ -972,7 +985,7 @@ namespace MonkeyPaste.Avalonia {
                         //LastSelectedDateTime = DateTime.Now;
 
                         //Parent.AllSelectedItemActions.ForEach(x => x.IsExpanded = x.ActionId == ActionId);
-                        IsExpanded = true;
+                        //IsExpanded = true;
                         Parent.SelectActionCommand.Execute(this);
                     } else {
                         //IsExpanded = false;
@@ -1020,27 +1033,104 @@ namespace MonkeyPaste.Avalonia {
                         return;
                     }
                     IsEnabledDb = IsEnabled.Value;
-                    OnPropertyChanged(nameof(EnableToggleButtonShapeHexColor));
                     break;
                 case nameof(IsBusy):
                     OnPropertyChanged(nameof(IsAnyBusy));
-                    if(ParentTreeItem != null) {
-                        ParentTreeItem.OnPropertyChanged(nameof(ParentTreeItem.IsAnyBusy));
+                    if(ParentActionViewModel != null) {
+                        ParentActionViewModel.OnPropertyChanged(nameof(ParentActionViewModel.IsAnyBusy));
                     }
                     break;
-                case nameof(Items):
-                    OnPropertyChanged(nameof(SelfAndAllDescendants));
+                case nameof(Children):
+                    //OnPropertyChanged(nameof(SelfAndAllDescendants));
                     break;
-                case nameof(IsExpanded):
-                    if(!IsSelected) {
-                        break;
-                    }
-                    if(!IsExpanded && IsLabelFocused) {
-                        IsExpanded = true;
-                    }
-                    break;
+                //case nameof(IsExpanded):
+                //    if(!IsSelected) {
+                //        break;
+                //    }
+                //    if(!IsExpanded && IsLabelFocused) {
+                //        IsExpanded = true;
+                //    }
+                //    break;
             }
         }
+
+        #region DesignerItem Placement Methods
+
+        private MpPoint FindOpenDesignerLocation(MpPoint anchorPoint, object ignoreItem = null) {
+            int attempts = 0;
+            int maxAttempts = 10;
+            int count = 4;
+            double dtheta = (2 * Math.PI) / count;
+            double r = Parent.DesignerItemDiameter * 2;
+            while (attempts <= maxAttempts) {
+                double theta = 0;
+                for (int i = 0; i < count; i++) {
+                    var tp = new MpPoint();
+                    tp.X = (double)(anchorPoint.X + r * Math.Cos(theta));
+                    tp.Y = (double)(anchorPoint.Y + r * Math.Sin(theta));
+                    if (!OverlapsItem(tp)) {
+                        return tp;
+                    }
+                    theta += dtheta;
+                }
+                r += Parent.DesignerItemDiameter * 2;
+
+                attempts++;
+            }
+
+            return new MpPoint(
+                MpHelpers.Rand.NextDouble() * Parent.ObservedDesignerBounds.Width,
+                MpHelpers.Rand.NextDouble() * Parent.ObservedDesignerBounds.Height);
+        }
+
+        private bool OverlapsItem(MpPoint targetTopLeft) {
+            return GetItemNearPoint(targetTopLeft) != null;
+        }
+
+        private MpIBoxViewModel GetItemNearPoint(MpPoint targetTopLeft, object ignoreItem = null, double radius = 50) {
+            MpPoint targetMid = new MpPoint(targetTopLeft.X, targetTopLeft.Y);
+            foreach (var avm in SelfAndAllDescendants.Cast<MpIBoxViewModel>()) {
+                MpPoint sourceMid = new MpPoint(avm.X, avm.Y);
+                double dist = targetMid.Distance(sourceMid);
+                if (dist < radius && avm != ignoreItem) {
+                    return avm;
+                }
+            }
+            return null;
+        }
+
+        //public void ClearAreaAtPoint(MpPoint p, object ignoreItem = null) {
+        //    var overlapItem = GetItemNearPoint(p, ignoreItem);
+        //    if (overlapItem != null) {
+        //        MpPoint tempLoc = p;
+        //        do {
+        //            var overlapLoc = new MpPoint(overlapItem.X, overlapItem.Y);
+        //            double distToMove = overlapLoc.Distance(tempLoc) + 10;
+
+        //            var dir = overlapLoc - tempLoc;
+        //            dir.Normalize();
+        //            dir = new Vector(-dir.Y, dir.X);
+        //            overlapLoc += dir * distToMove;
+        //            overlapItem.X = overlapLoc.X;
+        //            overlapItem.Y = overlapLoc.Y;
+
+        //            overlapItem = GetItemNearPoint(overlapLoc, overlapItem);
+        //            tempLoc = overlapLoc;
+        //        } while (overlapItem != null && overlapItem != ignoreItem);
+        //    }
+        //}
+
+        //public void ClearAllOverlaps() {
+        //    foreach (var avm in AllSelectedTriggerActions) {
+        //        ClearAreaAtPoint(avm.Location, avm);
+        //    }
+        //}
+        //public void NotifyViewportChanged() {
+        //    //CollectionViewSource.GetDefaultView(AllSelectedTriggerActions).Refresh();
+        //    //CollectionViewSource.GetDefaultView(AllSelectedTriggerActions).Refresh();
+        //    OnPropertyChanged(nameof(AllSelectedItemActions));
+        //}
+        #endregion
         #endregion
 
         #region Commands
@@ -1080,12 +1170,12 @@ namespace MonkeyPaste.Avalonia {
                 //}
 
                 IsBusy = false;
-            });
+            },(parentToggleButton)=>IsEnabled.HasValue);
 
         public ICommand ShowActionSelectorMenuCommand => new MpCommand<object>(
              (args) => {
                  var fe = args as Control;
-                 IsSelected = true;
+                 Parent.FocusAction = this;
                  MpAvMenuExtension.ShowMenu(fe, PopupMenuViewModel);
              },(args) => args is Control);
 
@@ -1098,111 +1188,28 @@ namespace MonkeyPaste.Avalonia {
                                          actionType: at,
                                          label: GetUniqueActionName(at.ToString()),
                                          parentId: ActionId,
-                                         sortOrderIdx: Items.Count(),
-                                         location: RootTriggerActionViewModel.FindOpenDesignerLocation(Location));
+                                         sortOrderIdx: Children.Count(),
+                                         location: FindOpenDesignerLocation(Location));
 
                  var navm = await CreateActionViewModel(na);
 
                  while(navm.IsBusy) {
                      await Task.Delay(100);
                  }
-                 //Items.Add(navm);
-
-
-                 //AddChildEmptyActionViewModel.IsSelected = false;
-                 //navm.IsSelected = true;
-                 //Parent.SelectActionCommand.Execute(navm);
-                 //Parent.ClearAllOverlaps();
-
-                 //OnPropertyChanged(nameof(Items));
-
-                 RootTriggerActionViewModel.Items.Add(navm);
-                 RootTriggerActionViewModel.OnPropertyChanged(nameof(RootTriggerActionViewModel.Items));
-
-                 RootTriggerActionViewModel.OnPropertyChanged(nameof(RootTriggerActionViewModel.SelfAndAllDescendants));
-                 Parent.OnPropertyChanged(nameof(Parent.SelectedTriggerAndAllActions));
-                 //IsExpanded = true;
 
                  navm.OnPropertyChanged(nameof(navm.X));
                  navm.OnPropertyChanged(nameof(navm.Y));
-                 navm.IsSelected = true;
+                 Parent.FocusAction = navm;
                  //navm.AddChildEmptyActionViewModel.OnPropertyChanged(nameof(navm.AddChildEmptyActionViewModel.X));
                  //navm.AddChildEmptyActionViewModel.OnPropertyChanged(nameof(navm.AddChildEmptyActionViewModel.Y));
 
                  IsBusy = false;
              }, (args) => ActionType != MpActionType.None);
 
-        public ICommand DeleteChildActionCommand => new MpCommand<object>(
-            async (args) => {
-                IsBusy = true;
-
-                var to_delete_avm = args as MpAvActionViewModelBase;
-                if(to_delete_avm == null || to_delete_avm.ParentTreeItem != this) {
-                    // link error (this cmd is called from arg vm using parentacvm)
-                    Debugger.Break();
-                    IsBusy = false;
-                    return;
-                }
-                to_delete_avm.ToggleIsEnabledCommand.Execute(false);
-
-                bool remove_descendants = false;
-                if(to_delete_avm.Items.Count() > 0) {
-                    MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
-                    var remove_descendants_result = await MpPlatformWrapper.Services.NativeMessageBox.ShowYesNoCancelMessageBoxAsync(
-                        title: $"Remove Options",
-                        message: $"Would you like to remove all the sub-actions for '{to_delete_avm.Label}'? (Otherwise they will be re-parented to '{Label}')",
-                        iconResourceObj: "ChainImage",
-                        anchor: RootTriggerActionViewModel.ObservedDesignerBounds);
-                    MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
-                    if (remove_descendants_result.IsNull()) {
-                        // cancel
-                        IsBusy = false;
-                        return;
-                    }
-                    remove_descendants = remove_descendants_result.IsTrue();
-                }
-                Parent.SelectActionCommand.Execute(this);
-                await to_delete_avm.DisableAsync();
-
-                List<Task> delete_tasks = new List<Task>() { to_delete_avm.Action.DeleteFromDatabaseAsync() };
-                if (remove_descendants) {
-                    delete_tasks.AddRange(to_delete_avm.AllDescendants.Select(x => x.Action.DeleteFromDatabaseAsync()));
-                    to_delete_avm.AllDescendants.ForEach(x => x.ToggleIsEnabledCommand.Execute(false));
-                    to_delete_avm.AllDescendants.ForEach(x => x.ParentActionId = 0);
-                    to_delete_avm.AllDescendants.ForEach(x => RootTriggerActionViewModel.Items.Remove(x));                    
-                    to_delete_avm.AllDescendants.ForEach(x => Parent.Items.Remove(x));                    
-                } else {
-                    // TODO may need to validate new parent child relationship here? not sure
-                    foreach(var child in to_delete_avm.Items) {
-                        //to_delete_avm.Items.Remove(child);
-                        child.ParentActionId = ActionId;
-                        //Items.Add(child);
-                    }
-                }
-                await Task.WhenAll(delete_tasks);
-
-                Parent.Items.Remove(to_delete_avm);
-                OnPropertyChanged(nameof(Items));
-                //to_delete_avm.ParentTreeItem.Items.Remove(to_delete_avm);
-                to_delete_avm.ParentActionId = 0;
-                RootTriggerActionViewModel.Items.Remove(to_delete_avm);
-                RootTriggerActionViewModel.OnPropertyChanged(nameof(RootTriggerActionViewModel.Items));
-
-                IsBusy = false;
-            });
-
         public ICommand DeleteThisActionCommand => new MpCommand(
             () => {
-                if (IsRootAction) {
-                    Parent.DeleteTriggerCommand.Execute(this);
-                    return;
-                }
-
-                if (ParentTreeItem == null) {
-                    throw new Exception("This shouldn't be null, cannot delete");
-                }
-                ParentTreeItem.DeleteChildActionCommand.Execute(this);
-            });
+                Parent.DeleteActionCommand.Execute(this);
+            },()=>!IsAnyBusy);
 
         public ICommand PerformActionOnSelectedContentCommand => new MpAsyncCommand(
             async () => {
@@ -1222,6 +1229,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand FinishMoveCommand => new MpCommand(() => {
             HasModelChanged = true;
         });
+
 
         #endregion
     }

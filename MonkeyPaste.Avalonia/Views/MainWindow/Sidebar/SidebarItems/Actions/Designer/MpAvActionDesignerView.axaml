@@ -23,20 +23,11 @@
                 <Setter Property="Canvas.Top"
                         Value="{Binding Y, Mode=TwoWay}" />
             </Style>
-            <!--<Style Selector="Grid#ActionDesignerContainerGrid local|MpAvZoomBorder">
-                <Setter Property="IsVisible"
-                        Value="True" />
-            </Style>
-            <Style Selector="Grid#ActionDesignerContainerGrid.empty local|MpAvZoomBorder">
-                <Setter Property="IsVisible"
-                        Value="False" />
-            </Style>-->
         </Border.Styles>
         <Grid x:Name="ActionDesignerContainerGrid"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch"
-              DataContext="{Binding SelectedTrigger}"
-              IsVisible="{Binding ., Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}">
+              IsVisible="{Binding SelectedTrigger, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}">
 
             <!--  DESIGNER ZOOM BORDER  -->
 
@@ -44,8 +35,9 @@
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Stretch"
                                   Classes="actionDesigner"
-                                  DesignerItem="{Binding}"
-                                  ShowGrid="{Binding IsGridVisible}"
+                                  MinScale="{Binding MinScale}"
+                                  MaxScale="{Binding MaxScale}"
+                                  ShowGrid="{Binding IsGridVisible, FallbackValue=False, TargetNullValue=False}"
                                   OriginThickness="1.5"
                                   GridLineThickness="0.5"
                                   GridLineSpacing="50"
@@ -55,7 +47,7 @@
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Stretch"
                          Classes="actionDesigner"
-                         SelectedItem="{Binding Parent.FocusAction, Mode=TwoWay}"
+                         SelectedItem="{Binding FocusAction, Mode=TwoWay}"
                          Items="{Binding Items}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -65,6 +57,12 @@
                                                       TipWidth="10"
                                                       TailWidth="3"
                                                       RenderTransformOrigin="0.5,0.5"
+                                                      WarningBrush1="{DynamicResource DefaultWarningBrush1}"
+                                                      WarningBrush2="{DynamicResource DefaultWarningBrush2}"
+                                                      TransitionLineDefaultBorderBrush="{DynamicResource DefaultIconButtonBrush}"
+                                                      TransitionLineHoverBorderBrush="{DynamicResource HoverDefaultBorderBrush}"
+                                                      TransitionLineDisabledFillBrush="{DynamicResource DisabledHighlightBrush}"
+                                                      TransitionLineEnabledFillBrush="{DynamicResource EnabledHighlightBrush}"
                                                       local:MpAvBoundsObserverExtension.IsEnabled="True"
                                                       local:MpAvBoundsObserverExtension.ToScreen="True"
                                                       local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedDesignerBounds, Mode=TwoWay}"
@@ -81,7 +79,7 @@
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate DataType="local:MpAvActionViewModelBase">
                             <local:MpAvActionDesignerItemView DataContext="{Binding}" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -105,6 +103,7 @@
                                   Padding="5,2"
                                   Grid.Column="0"
                                   IsThreeState="False"
+                                  IsEnabled="{Binding SelectedTrigger, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
                                   IsChecked="{Binding IsGridVisible, Mode=TwoWay}">
                         <Label Foreground="White"
                                Content="Grid" />
@@ -163,7 +162,6 @@
             <!--  ADD NEW TRIGGER BUTTON (EMPTY SELECTION)  -->
             <Border HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    DataContext="{x:Static local:MpAvTriggerCollectionViewModel.Instance}"
                     Margin="0,0,5,5">
                 <Button x:Name="AddNewActionButton"
                         x:CompileBindings="False"

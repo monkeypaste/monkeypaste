@@ -33,5 +33,11 @@
         <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">
             Transparent
         </SolidColorBrush>
+        <SolidColorBrush x:Key="EnabledHighlightBrush">
+            Lime
+        </SolidColorBrush>
+        <SolidColorBrush x:Key="DisabledHighlightBrush">
+            Red
+        </SolidColorBrush>
     </Style.Resources>
 </Style>

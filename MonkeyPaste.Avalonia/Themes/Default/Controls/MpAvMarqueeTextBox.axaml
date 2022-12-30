@@ -8,5 +8,8 @@
         <sys:Double x:Key="TextControlThemeMinHeight">
             10
         </sys:Double>
+        <!--<sys:Double x:Key="TextControlThemeMinWidth">
+            0
+        </sys:Double>-->
     </Styles.Resources>
 </Styles>

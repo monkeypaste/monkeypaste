@@ -19,6 +19,7 @@ using Avalonia.Controls;
 using MonkeyPaste.Common.Avalonia;
 using Avalonia.Threading;
 using Avalonia.Controls.Selection;
+using Gtk;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvTriggerCollectionViewModel :
@@ -28,7 +29,8 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncSingletonViewModel<MpAvTriggerCollectionViewModel>,
         MpIHoverableViewModel,
         MpIResizableViewModel,
-        MpISidebarItemViewModel {
+        MpISidebarItemViewModel,
+        MpIDesignerSettingsViewModel {
         #region Private Variables
 
         #endregion
@@ -55,20 +57,53 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpAvTreeSelectorViewModelBase Overrides
+        #region MpIDesignerSettingsViewModel Implementation
 
-        //public override MpITreeItemViewModel ParentTreeItem => null;
+        public double MinScale => SelectedTrigger == null ? MpAvTriggerActionViewModelBase.DEFAULT_MIN_SCALE : SelectedTrigger.MinScale;
+        public double MaxScale => SelectedTrigger == null ? MpAvTriggerActionViewModelBase.DEFAULT_MAX_SCALE : SelectedTrigger.MaxScale;
+        public double Scale {
+            get => SelectedTrigger == null ? 1 : SelectedTrigger.Scale;
+            set {
+                if(SelectedTrigger == null) {
+                    return;
+                }
+                SelectedTrigger.Scale = value;
+                OnPropertyChanged(nameof(Scale));
+            }
+        }
+        public double TranslateOffsetX {
+            get => SelectedTrigger == null ? 0 : SelectedTrigger.TranslateOffsetX;
+            set {
+                if (SelectedTrigger == null) {
+                    return;
+                }
+                SelectedTrigger.TranslateOffsetX = value;
+                OnPropertyChanged(nameof(TranslateOffsetX));
+            }
+        }
+        public double TranslateOffsetY {
+            get => SelectedTrigger == null ? 0 : SelectedTrigger.TranslateOffsetY;
+            set {
+                if (SelectedTrigger == null) {
+                    return;
+                }
+                SelectedTrigger.TranslateOffsetY = value;
+                OnPropertyChanged(nameof(TranslateOffsetY));
+            }
+        }
 
-        //private MpAvTriggerActionViewModelBase _selectedItem;
-        //public override MpAvTriggerActionViewModelBase SelectedItem {
-        //    get => _selectedItem;
-        //    set {
-        //        if(_selectedItem != value) {
-        //            SelectActionCommand.Execute(value);
-        //        }
-        //    }
-        //}
+        public bool IsGridVisible {
+            get => SelectedTrigger == null ? false : SelectedTrigger.IsGridVisible;
+            set {
+                if (SelectedTrigger == null) {
+                    return;
+                }
+                SelectedTrigger.IsGridVisible = value;
+                OnPropertyChanged(nameof(IsGridVisible));
+            }
+        }
 
+        public ICommand ResetDesignerViewCommand => SelectedTrigger == null ? null : SelectedTrigger.ResetDesignerViewCommand;
 
         #endregion
 
@@ -124,55 +159,59 @@ namespace MonkeyPaste.Avalonia {
 
         public DateTime LastSelectedDateTime { get; set; }
 
-
         #endregion
 
         #region Properties
+
         public static CancellationTokenSource CTS = new CancellationTokenSource();
 
 
         #region View Models       
 
         public ObservableCollection<MpAvActionViewModelBase> Items { get; private set; } = new ObservableCollection<MpAvActionViewModelBase>();
+        public ObservableCollection<MpAvTriggerActionViewModelBase> FocusTriggers { get; private set; } = new ObservableCollection<MpAvTriggerActionViewModelBase>();
         //public SelectionModel<MpAvActionViewModelBase> ActionSelection { get; private set; }
         public IEnumerable<MpAvTriggerActionViewModelBase> Triggers => Items.Where(x => x is MpAvTriggerActionViewModelBase).Cast<MpAvTriggerActionViewModelBase>();
 
-        public MpAvTriggerActionViewModelBase SelectedTrigger { get; set; }
+        private MpAvTriggerActionViewModelBase _selectedTrigger;
+        public MpAvTriggerActionViewModelBase SelectedTrigger {
+            get => _selectedTrigger;
+            set {
+                if(SelectedTrigger != value) {
+                    FocusTriggers.Clear();
+                    _selectedTrigger = value;
+                    if(SelectedTrigger != null) {
+                        FocusTriggers.Add(SelectedTrigger);
+                    }
+                    OnPropertyChanged(nameof(SelectedTrigger));
+                    OnPropertyChanged(nameof(FocusTriggers));
+                }
+            }
+        }
         public MpAvActionViewModelBase FocusAction { get; set; }
 
         public IEnumerable<MpAvActionViewModelBase> SelectedTriggerAndAllActions =>
             Items.Where(x => x.RootTriggerActionViewModel == SelectedTrigger);
-        //    get {
-        //        if (SelectedTrigger == null) {
-        //            return null;
-        //        }
-        //        return SelectedTrigger.SelectedAction;
-        //    }
-        //    set {
-        //        if(value == null) {
-        //            SelectedTrigger = null;
-        //        } else if(SelectedTrigger != value.RootTriggerActionViewModel) {
-        //            SelectedTrigger = value.RootTriggerActionViewModel;
-                    
-        //        }
-        //        if(SelectedTrigger != null) {
-        //            SelectedTrigger.SelectedAction = value;
-        //        }
-        //        OnPropertyChanged(nameof(FocusAction));
-        //    }
-        //}
-
 
         public IEnumerable<MpAvActionViewModelBase> AllActions => Items;
-            //Items.SelectMany(x => x.SelfAndAllDescendants).Cast<MpAvActionViewModelBase>();
 
 
         #endregion
 
-
-        
-
         #region Appearance
+        #endregion
+
+        #region Layout
+
+        public MpRect ObservedDesignerBounds { get; set; } = MpRect.Empty;
+        public double DesignerItemDiameter => 50;
+        //public MpPoint DesignerCenterLocation => new MpPoint(
+        //    (ObservedDesignerBounds.Width / 2) - (DesignerItemDiameter / 2),
+        //    (ObservedDesignerBounds.Height / 2) - (DesignerItemDiameter / 2));
+
+        public MpPoint DesignerCenterLocation => MpPoint.Zero;
+        public MpPoint DefaultTriggerLocation => new MpPoint(-DesignerItemDiameter/2, -DesignerItemDiameter/2);
+
         #endregion
 
         #region State
@@ -197,9 +236,8 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvTriggerCollectionViewModel() : base(null) {
             PropertyChanged += MpAvTriggerCollectionViewModel_PropertyChanged;
+            Items.CollectionChanged += Items_CollectionChanged;
         }
-
-
 
 
         #endregion
@@ -216,7 +254,6 @@ namespace MonkeyPaste.Avalonia {
 
             foreach (var ta in tal) {
                 var tavm = await CreateTriggerViewModel(ta);
-                //Items.Add(tavm);
             }
 
             while (Items.Any(x => x.IsAnyBusy)) {
@@ -224,12 +261,11 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            Items.ForEach(x => x.OnPropertyChanged(nameof(x.ParentTreeItem)));
-            //Items.ForEach(x => x.OnPropertyChanged(nameof(x.Children)));
+            Items.ForEach(x => x.OnPropertyChanged(nameof(x.ParentActionViewModel)));
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(Triggers));
 
-            await RestoreAllEnabled();//.FireAndForgetSafeAsync(this);
+            await RestoreAllEnabled();
 
             if(AllActions.Count() > 0) {
                 // select most recent action
@@ -237,10 +273,6 @@ namespace MonkeyPaste.Avalonia {
                                 .Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
 
                 if (actionToSelect != null) {
-                    //SelectedItem = actionToSelect.RootTriggerActionViewModel;
-                    //actionToSelect.IsSelected = true;
-                    //OnPropertyChanged(nameof(SelectedItem));
-                    //SelectedItem.OnPropertyChanged(nameof(SelectedActions));
                     SelectActionCommand.Execute(actionToSelect);
                 }
             }
@@ -370,21 +402,13 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
 
-        private async Task UpdateSortOrder() {
+        private async Task UpdateSortOrderAsync() {
             Items.ForEach(x => x.SortOrderIdx = Items.IndexOf(x));
             await Task.WhenAll(Items.Select(x => x.Action.WriteToDatabaseAsync()));
         }
 
         private void MpAvTriggerCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                //case nameof(IsSidebarVisible):
-                //    if (IsSidebarVisible) {
-                //        MpAvAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = false;
-                //        MpAvTagTrayViewModel.Instance.IsSidebarVisible = false;
-                //        MpAvClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
-                //    }
-                //    MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel));
-                //    break;
                 case nameof(FocusAction):
                     if (FocusAction == null) {
                         FocusAction = SelectedTrigger;
@@ -404,21 +428,23 @@ namespace MonkeyPaste.Avalonia {
                         SelectedTrigger.OnPropertyChanged(nameof(SelectedTrigger.SelfAndAllDescendants));
                     }
                     OnPropertyChanged(nameof(SelectedTriggerAndAllActions));
-                    //if(SelectedTrigger != null) {
-                    //    SelectedTrigger.OnPropertyChanged(nameof(SelectedItem.SelectedItem));
-                    //    if(SelectedItem != null) {
-                    //        SelectedItem.OnPropertyChanged(nameof(SelectedItem.SelfAndAllDescendants));
-                    //    }
-
-                    //}
+                    OnPropertyChanged(nameof(MinScale));
+                    OnPropertyChanged(nameof(MaxScale));
+                    OnPropertyChanged(nameof(Scale));
+                    OnPropertyChanged(nameof(TranslateOffsetX));
+                    OnPropertyChanged(nameof(TranslateOffsetY));
+                    OnPropertyChanged(nameof(IsGridVisible));
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsActionDesignerVisible)));
+                    OnPropertyChanged(nameof(Items));
                     break;
-                //case nameof(SelectedAction):
-                //    OnPropertyChanged(nameof(IsAnySelected));
-                //    break;
             }
         }
 
 
+        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(Triggers));
+        }
         #endregion
 
         #region Commands
@@ -439,48 +465,94 @@ namespace MonkeyPaste.Avalonia {
                  IsBusy = true;
                                   
                  MpTriggerType tt = args == null ? MpTriggerType.None : (MpTriggerType)args;
-                 
+
                  MpAction na = await MpAction.CreateAsync(
                          label: GetUniqueTriggerName(tt.ToString()),
                          actionType: MpActionType.Trigger,
                          actionObjId: (int)tt,
-                         sortOrderIdx: Items.Count);
+                         sortOrderIdx: Items.Count,
+                         location: DefaultTriggerLocation);
 
                  var new_trigger_vm = await CreateTriggerViewModel(na);
 
                  while(new_trigger_vm.IsBusy) {
                      await Task.Delay(100);
                  }
-
-                 Items.Add(new_trigger_vm);
-                 new_trigger_vm.IsSelected = true;
+                 //Items.Add(new_trigger_vm);
+                 
                  await Task.Delay(300);
+
                  //SelectActionCommand.Execute(new_trigger_vm);
-                 await Task.Delay(300);
-                 //SelectedTrigger.ToggleIsEnabledCommand.Execute(null);
+                 FocusAction = new_trigger_vm;
+                 OnPropertyChanged(nameof(SelectedTrigger));
 
+                 OnPropertyChanged(nameof(Items));
                  OnPropertyChanged(nameof(Triggers));
+                 new_trigger_vm.ResetDesignerViewCommand.Execute(null);
+
                  IsBusy = false;
              });
 
-        public ICommand DeleteTriggerCommand => new MpCommand<object>(
+        public ICommand DeleteActionCommand => new MpCommand<object>(
             async (args) => {
                 IsBusy = true;
 
-                var tavm = args as MpAvTriggerActionViewModelBase;
-                tavm.Items.ForEach(x=>x.ToggleIsEnabledCommand.Execute(false));
-                var toRemove_actions = tavm.SelfAndAllDescendants.Select(x => x.Action);
-                tavm.Items.ForEach(x => Items.Remove(x));
-                await Task.WhenAll(toRemove_actions.Select(x => x.DeleteFromDatabaseAsync()));
+                var child_to_delete_avm = args as MpAvActionViewModelBase;
+                if (child_to_delete_avm == null) {
+                    // link error (this cmd is called from arg vm using parentacvm)
+                    Debugger.Break();
+                    IsBusy = false;
+                    return;
+                }
 
-                //OnPropertyChanged(nameof(SelectedTriggerActions));
+                List<MpAvActionViewModelBase> to_remove_list = new List<MpAvActionViewModelBase>() {
+                    child_to_delete_avm
+                };
 
-                await UpdateSortOrder();
-                OnPropertyChanged(nameof(Items));
-                //OnPropertyChanged(nameof(SelectedTrigger));
-                SelectedTrigger = null;
+                bool remove_descendants = false;
+                if(child_to_delete_avm.ParentActionId == 0) {
+                    // trigger deletes children by default
+                    remove_descendants = true;
+                } else if (child_to_delete_avm.Children.Count() > 0) {
+                    MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
+                    var remove_descendants_result = await MpPlatformWrapper.Services.NativeMessageBox.ShowYesNoCancelMessageBoxAsync(
+                        title: $"Remove Options",
+                        message: $"Would you like to remove all the sub-actions for '{child_to_delete_avm.Label}'? (Otherwise they will be re-parented to '{child_to_delete_avm.ParentActionViewModel.Label}')",
+                        iconResourceObj: "ChainImage",
+                        anchor: ObservedDesignerBounds);
+                    MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
+                    if (remove_descendants_result.IsNull()) {
+                        // cancel
+                        IsBusy = false;
+                        return;
+                    }
+                    remove_descendants = remove_descendants_result.IsTrue();
+                }
 
-                OnPropertyChanged(nameof(Triggers));
+                FocusAction = child_to_delete_avm.ParentActionViewModel;
+                
+                if (remove_descendants) {
+                    to_remove_list.AddRange(child_to_delete_avm.AllDescendants);
+                } else {
+                    child_to_delete_avm.Children.ForEach(x => x.ParentActionId = child_to_delete_avm.ParentActionId);
+                }
+
+                foreach (var to_remove_avm in to_remove_list.OrderByDescending(x => x.TreeLevel).ThenBy(x => x.SortOrderIdx)) {
+                    to_remove_avm.ToggleIsEnabledCommand.Execute(false);
+                    while(to_remove_avm.IsBusy) {
+                        await Task.Delay(100);
+                    }
+                    await to_remove_avm.Action.DeleteFromDatabaseAsync();
+                    //to_remove_avm.RootTriggerActionViewModel.Children.Remove(to_remove_avm);
+                    Items.Remove(to_remove_avm);
+                }
+                if(child_to_delete_avm.ParentActionId == 0) {
+                    await UpdateSortOrderAsync();
+                    SelectedTrigger = null;
+                    OnPropertyChanged(nameof(Triggers));
+                } else {
+                    await child_to_delete_avm.ParentActionViewModel.UpdateSortOrderAsync();
+                }
                 IsBusy = false;
             });
 
@@ -546,6 +618,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return FocusAction.ActionId != toSelect_avmb.ActionId;
             });
+
 
 
 

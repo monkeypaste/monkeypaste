@@ -12,7 +12,7 @@
                 Value="3" />
     </Style>
 
-    <Style Selector="local|MpAvSidebarButtonGroupView ToggleButton">
+    <Style Selector="local|MpAvSidebarButtonGroupView RadioButton">
         <Setter Property="Cursor"
                 Value="Hand" />
         <Setter Property="HorizontalAlignment"
@@ -33,16 +33,16 @@
                 Value="Transparent" />
     </Style>
 
-    <Style Selector="local|MpAvSidebarButtonGroupView:not(.horizontal) ToggleButton">
+    <Style Selector="local|MpAvSidebarButtonGroupView:not(.horizontal) RadioButton">
         <Setter Property="Height"
                 Value="{Binding $self.Bounds.Width}" />
     </Style>
-    <Style Selector="local|MpAvSidebarButtonGroupView.horizontal ToggleButton">
+    <Style Selector="local|MpAvSidebarButtonGroupView.horizontal RadioButton">
         <Setter Property="Width"
                 Value="{Binding $self.Bounds.Height}" />
     </Style>
 
-    <Style Selector="local|MpAvSidebarButtonGroupView ToggleButton PathIcon">
+    <Style Selector="local|MpAvSidebarButtonGroupView RadioButton PathIcon">
         <Setter Property="HorizontalAlignment"
                 Value="Center" />
         <Setter Property="VerticalAlignment"
@@ -52,27 +52,38 @@
         <Setter Property="Height"
                 Value="24" />
     </Style>
-    <Style Selector="local|MpAvSidebarButtonGroupView ToggleButton:pointerover /template/ ContentPresenter">
+    <Style Selector="local|MpAvSidebarButtonGroupView RadioButton /template/ Border#RootBorder > Grid > Grid">
+        <Setter Property="IsVisible"
+                Value="False" />
+    </Style>
+    <Style Selector="local|MpAvSidebarButtonGroupView RadioButton /template/ ContentPresenter">
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <TranslateTransform X="-15" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style Selector="local|MpAvSidebarButtonGroupView RadioButton:pointerover /template/ ContentPresenter">
         <Setter Property="Background"
                 Value="Transparent" />
     </Style>
-    <Style Selector="local|MpAvSidebarButtonGroupView ToggleButton PathIcon">
+    <Style Selector="local|MpAvSidebarButtonGroupView RadioButton PathIcon">
         <Setter Property="Foreground"
                 Value="DimGray" />
     </Style>
-    <Style Selector="local|MpAvSidebarButtonGroupView ToggleButton:pointerover PathIcon">
+    <Style Selector="local|MpAvSidebarButtonGroupView RadioButton:pointerover PathIcon">
         <Setter Property="Foreground"
                 Value="{DynamicResource HoverDefaultBorderBrush}" />
     </Style>
-    <Style Selector="local|MpAvSidebarButtonGroupView ToggleButton:pointerover:checked PathIcon">
+    <Style Selector="local|MpAvSidebarButtonGroupView RadioButton:pointerover:checked PathIcon">
         <Setter Property="Foreground"
                 Value="{DynamicResource SelectedBorderBrush}" />
     </Style>
-    <Style Selector="local|MpAvSidebarButtonGroupView ToggleButton:checked PathIcon">
+    <Style Selector="local|MpAvSidebarButtonGroupView RadioButton:checked PathIcon">
         <Setter Property="Foreground"
                 Value="{DynamicResource HoverSelectedBorderBrush}" />
     </Style>
-    <!--<Style Selector="local|MpAvSidebarButtonGroupView ToggleButton:unchecked /template/ ContentPresenter">
+    <!--<Style Selector="local|MpAvSidebarButtonGroupView RadioButton:unchecked /template/ ContentPresenter">
         <Setter Property="Background"
                 Value="LightGray" />
     </Style>-->

@@ -20,9 +20,9 @@ namespace MonkeyPaste.Avalonia {
             double indentStep = 10;
             int indentCount = 0;
             var temp = avm;
-            while (temp.ParentTreeItem != null) {
+            while (temp.ParentActionViewModel != null) {
                 indentCount++;
-                temp = temp.ParentTreeItem;
+                temp = temp.ParentActionViewModel;
             }
             //for first indent level indent icon is all that is needed
             indentCount--;

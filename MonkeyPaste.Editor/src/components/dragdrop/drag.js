@@ -81,7 +81,7 @@ function onDragStart(e) {
 
     let sel = getDocSelection();
 
-    if (!sel || sel.length == 0) {
+    if (!sel || sel.length == 0 && ContentItemType == 'Text') {
         log('drag start rejected by selection state. selectable but w/o range');
         WasNoSelectBeforeDragStart = false;
         e.preventDefault();

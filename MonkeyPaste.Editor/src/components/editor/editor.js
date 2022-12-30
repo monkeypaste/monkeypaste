@@ -98,6 +98,9 @@ function isShowingEditorToolbar() {
 }
 
 function isAllSelected() {
+	if (ContentItemType != 'Text') {
+		return true;
+	}
 	// NOTE doc length is never 0 and there's always an extra unselectable \n character at end so minus 1 for length to check here
 	let doc_len = getDocLength() - 1;
 	let sel = getEditorSelection_safe();
@@ -106,6 +109,9 @@ function isAllSelected() {
 }
 
 function isNoneSelected() {
+	if (ContentItemType != 'Text') {
+		return false;
+	}
 	let sel = getDocSelection();
 	return !sel || sel.length == 0;
 }

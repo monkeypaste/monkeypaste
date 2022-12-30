@@ -248,6 +248,8 @@ namespace MonkeyPaste {
 
         public string IconResourceKey { get; set; } = string.Empty;
 
+        public double IconCornerRadius { get; set; } = 2.5;
+
         private string _iconHexStr;
         public string IconHexStr { 
             get {

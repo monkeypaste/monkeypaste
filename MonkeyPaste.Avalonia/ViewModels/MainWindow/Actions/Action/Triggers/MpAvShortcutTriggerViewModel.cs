@@ -34,6 +34,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
+        // Arg1
+
         public int ShortcutId {
             get {
                 if (Action == null || string.IsNullOrEmpty(Arg1)) {

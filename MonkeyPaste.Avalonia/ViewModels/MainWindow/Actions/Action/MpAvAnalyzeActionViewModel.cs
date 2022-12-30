@@ -152,7 +152,7 @@ namespace MonkeyPaste.Avalonia {
                 ValidationText = $"Analyzer for Action '{FullName}' not found";
                 ShowValidationNotification();
             } else {
-                var pavm = ParentTreeItem;
+                var pavm = ParentActionViewModel;
                 while(pavm != null) {
                     if(pavm is MpAvCompareActionViewModelBase cavm) {
                         if(cavm.IsItemTypeCompare) {
@@ -163,7 +163,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         }
                     }
-                    pavm = pavm.ParentTreeItem;
+                    pavm = pavm.ParentActionViewModel;
                 }
                 ValidationText = string.Empty;
             }

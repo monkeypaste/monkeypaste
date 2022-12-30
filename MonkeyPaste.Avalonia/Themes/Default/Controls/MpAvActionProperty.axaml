@@ -2,7 +2,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
-
     <!--  PROPERTY VIEW  -->
 
     <Style Selector="local|MpAvActionPropertyView">
@@ -56,9 +55,9 @@
     <!--  ENABLE BG/BORDER COLORS  -->
     <Style Selector="local|MpAvActionPropertyView Expander ToggleButton#ToggleEnableButton:not(.invalid) /template/ ContentPresenter">
         <Setter Property="Background"
-                Value="Red" />
+                Value="{DynamicResource DisabledHighlightBrush}" />
         <Setter Property="BorderBrush"
-                Value="White" />
+                Value="{DynamicResource DefaultIconButtonBrush}" />
     </Style>
 
     <Style Selector="local|MpAvActionPropertyView Expander ToggleButton#ToggleEnableButton:not(.invalid):pointerover /template/ ContentPresenter">
@@ -67,7 +66,7 @@
     </Style>
     <Style Selector="local|MpAvActionPropertyView Expander ToggleButton#ToggleEnableButton.enabled:not(.invalid) /template/ ContentPresenter">
         <Setter Property="Background"
-                Value="Green" />
+                Value="{DynamicResource EnabledHighlightBrush}" />
     </Style>
     <Style Selector="local|MpAvActionPropertyView Expander ToggleButton#ToggleEnableButton.invalid /template/ ContentPresenter">
         <Setter Property="Background"

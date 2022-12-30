@@ -3,6 +3,7 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ using Xamarin.Forms.Internals;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSidebarItemCollectionViewModel : 
-        MpAvSelectorViewModelBase<object,MpISidebarItemViewModel>,
+        MpViewModelBase,
         MpIBoundSizeViewModel {
         #region Private Variable
         #endregion
@@ -37,20 +38,33 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public override MpISidebarItemViewModel LastSelectedItem {
-            get {
-                if(base.LastSelectedItem == null) {
-                    return null;
-                }
-                if (MpPlatformWrapper.Services.StartupState.LoadedDateTime == null) {
-                    return null;
-                }
-                if(base.LastSelectedItem.LastSelectedDateTime < MpPlatformWrapper.Services.StartupState.LoadedDateTime) {
-                    return null;
-                }
-                return base.LastSelectedItem;
+        public ObservableCollection<MpISidebarItemViewModel> Items { get; private set; } = new ObservableCollection<MpISidebarItemViewModel>();
+        //public override MpISidebarItemViewModel LastSelectedItem {
+        //    get {
+        //        if(base.LastSelectedItem == null) {
+        //            return null;
+        //        }
+        //        if (MpPlatformWrapper.Services.StartupState.LoadedDateTime == null) {
+        //            return null;
+        //        }
+        //        if(base.LastSelectedItem.LastSelectedDateTime < MpPlatformWrapper.Services.StartupState.LoadedDateTime) {
+        //            return null;
+        //        }
+        //        return base.LastSelectedItem;
+        //    }
+        //}
+
+        public int SelectedItemIdx {
+            get => Items.IndexOf(SelectedItem);
+            set {
+                //if(value < -1) {
+                //    return;
+                //}
+                SelectedItem = value < 0 || value > Items.Count ? null : Items[value];
             }
         }
+        public MpISidebarItemViewModel SelectedItem { get; private set; }
+        public MpISidebarItemViewModel LastSelectedItem { get; private set; }
 
         #endregion
 
@@ -96,7 +110,6 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             Items.Add(sbivm);
-            sbivm.PropertyChanged += Sbivm_PropertyChanged;
         }
         private void MpAvSidebarItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
@@ -104,20 +117,12 @@ namespace MonkeyPaste.Avalonia {
                     if(MpAvMainWindow.Instance == null) {
                         return;
                     }
-                    if(SelectedItem != null) {
-                        SelectedItem.LastSelectedDateTime = DateTime.Now;
-                    }
-                    OnPropertyChanged(nameof(LastSelectedItem));
-                    MpAvMainWindow.Instance.UpdateContentLayout();
-                    break;
-            }
-        }
 
-        private void Sbivm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            var sbivm = sender as MpISidebarItemViewModel;
-            switch(e.PropertyName) {
-                case nameof(sbivm.IsSelected):
-                    OnPropertyChanged(nameof(SelectedItem));
+                    if (SelectedItem != null) {
+                        LastSelectedItem = SelectedItem;
+                    }
+                    MpAvMainWindow.Instance.UpdateContentLayout();
+                    OnPropertyChanged(nameof(SelectedItemIdx));
                     break;
             }
         }
@@ -139,6 +144,22 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 SelectedItem = sbivm;
+            });
+
+        public ICommand ToggleIsSidebarItemSelectedCommand => new MpCommand<object>(
+            (args) => {
+                int itemIdx = -1;
+                if(args is int) {
+                    itemIdx = (int)args;                    
+                } else if(args is string) {
+                    itemIdx = int.Parse(args.ToString());
+                }
+                if (SelectedItemIdx == itemIdx) {
+                    SelectedItemIdx = -1;
+                } else {
+                    SelectedItemIdx = itemIdx;
+                }
+                OnPropertyChanged(nameof(SelectedItemIdx));
             });
         #endregion
     }

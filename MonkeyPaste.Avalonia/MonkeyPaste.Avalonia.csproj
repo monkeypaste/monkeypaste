@@ -382,7 +382,6 @@
     <Compile Remove="Adorners\MpAvContentDragDropAdorner.cs" />
     <Compile Remove="AttachedProperties\MpAvCefNetWebViewExtension.cs" />
     <Compile Remove="AttachedProperties\MpAvCefWebViewExtension.cs" />
-    <Compile Remove="AttachedProperties\MpAvMarqueeTextBoxExtension.cs" />
     <Compile Remove="AttachedProperties\MpAvTextSelectionExtension.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
@@ -1108,6 +1107,9 @@
     </Compile>
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\Triggers\MpAvFileSystemTriggerPropertyView.axaml.cs">
       <DependentUpon>MpAvFileSystemTriggerPropertyView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\Triggers\MpAvShortcutTriggerPropertyView.axaml.cs">
+      <DependentUpon>MpAvShortcutTriggerPropertyView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\MpAvActionPropertyView.axaml.cs">
       <DependentUpon>MpAvActionPropertyView.axaml</DependentUpon>
