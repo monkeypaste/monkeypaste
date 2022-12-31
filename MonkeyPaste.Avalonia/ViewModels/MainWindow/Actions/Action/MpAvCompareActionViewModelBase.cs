@@ -205,19 +205,21 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        // Arg
         public MpComparisonOperatorType ComparisonOperatorType {
             get {
-                if (Action == null) {
+                if (Action == null || string.IsNullOrEmpty(Arg5)) {
                     return MpComparisonOperatorType.None;
                 }
-                if((MpComparisonOperatorType)ActionObjId == MpComparisonOperatorType.None) {
-                    Action.ActionObjId = (int)MpComparisonOperatorType.Contains;
+                var cot = (MpComparisonOperatorType)int.Parse(Arg5);
+                if(cot == MpComparisonOperatorType.None) {
+                    Action.Arg5 = ((int)MpComparisonOperatorType.Contains).ToString();
                 }
-                return (MpComparisonOperatorType)Action.ActionObjId;
+                return (MpComparisonOperatorType)int.Parse(Arg5);
             }
             set {
                 if (ComparisonOperatorType != value) {
-                    Action.ActionObjId = (int)value;
+                    Action.Arg5 = ((int)value).ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(ComparisonOperatorType));
                 }
@@ -263,6 +265,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Overrides
+
+        protected override async Task ValidateActionAsync() {
+            // TODO compare validation will only be needed for last output but not sure, need use case
+            await Task.Delay(1);
+        }
         #endregion
 
         #region Private Methods
@@ -419,6 +426,7 @@ namespace MonkeyPaste.Avalonia {
 
             return null;
         }
+
 
         #endregion
 

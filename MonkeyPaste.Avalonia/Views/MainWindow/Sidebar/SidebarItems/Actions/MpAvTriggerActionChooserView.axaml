@@ -68,13 +68,14 @@
                             <DataTemplate>
                                 <Border Classes="outerComboBoxItemBorder"
                                         IsVisible="{Binding ., Converter={StaticResource IsNotNullOrZeroToBoolConverter}}">
-                                    <DockPanel>
-                                        <Image Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+                                    <DockPanel LastChildFill="True">
+                                        <Image DockPanel.Dock="Left"
+                                               Source="{Binding IconResourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
 
-                                        <Border Classes="comboBoxItemBusyBorder"
+                                        <!--<Border Classes="comboBoxItemBusyBorder"
                                                 IsVisible="{Binding IsBusy}">
                                             <local:MpAvBusySpinnerView />
-                                        </Border>
+                                        </Border>-->
                                         <TextBlock Text="{Binding Label}" />
                                     </DockPanel>
                                 </Border>

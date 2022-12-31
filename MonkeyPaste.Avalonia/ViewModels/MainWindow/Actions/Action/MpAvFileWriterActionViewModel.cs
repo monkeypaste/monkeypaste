@@ -128,12 +128,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-        protected override async Task<bool> ValidateActionAsync() {
-            await base.ValidateActionAsync();
-            if (!IsValid) {
-                return IsValid;
-            }
-
+        protected override async Task ValidateActionAsync() {
+            await Task.Delay(1);
             if (string.IsNullOrWhiteSpace(FileSystemPath)) {
                 ValidationText = $"File Writer Path for Action '{FullName}' not set";
                 ShowValidationNotification(1);
@@ -143,7 +139,6 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 ValidationText = string.Empty;
             }
-            return IsValid;
         }
 
         #endregion
@@ -152,14 +147,14 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpFileSystemTriggerViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(FileSystemPath):
-                    if (IsBusy) {
-                        return;
-                    }
-                    if (IsEnabled.HasValue && IsEnabled.Value) {
-                        ReEnable().FireAndForgetSafeAsync(this);
-                    }
-                    break;
+                //case nameof(FileSystemPath):
+                //    if (IsBusy) {
+                //        return;
+                //    }
+                //    if (IsEnabled.IsTrue()) {
+                //        ReEnable().FireAndForgetSafeAsync(this);
+                //    }
+                //    break;
             }
         }
 
@@ -184,7 +179,6 @@ namespace MonkeyPaste.Avalonia {
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
 
                 FileSystemPath = selectedDir;
-                await ReEnable();
             });
 
         #endregion

@@ -7,8 +7,8 @@
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        x:CompileBindings="False"
                        xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
-                       x:TypeArguments="local:MpAvFileSystemTriggerViewModel"
-                       x:DataType="local:MpAvFileSystemTriggerViewModel"
+                       x:TypeArguments="local:MpAvFolderWatcherTriggerViewModel"
+                       x:DataType="local:MpAvFolderWatcherTriggerViewModel"
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
@@ -24,26 +24,34 @@
                 HorizontalAlignment="Stretch"
                 Classes="actionProperty">
             <Button Command="{Binding SelectFileSystemPathCommand}"
-                    Background="Transparent"
+                    Classes="arg1"
+                    Padding="5,3"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Stretch"
                     MaxWidth="200"
                     BorderThickness="0">
-                <Grid>
-                    <TextBlock IsVisible="{Binding FileSystemPath, ConverterParameter=flip, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
-                               Text="Select file or folder..."
-                               Foreground="Black"
-                               TextAlignment="Left"
-                               VerticalAlignment="Center" />
-                    <TextBlock IsVisible="{Binding FileSystemPath, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
-                               Text="{Binding FileSystemPath, Converter={StaticResource AbsoluteToRelativePathStringConverter}}"
-                               TextAlignment="Right"
-                               VerticalAlignment="Center">
-                        <ToolTip.Tip>
-                            <local:MpAvToolTipView ToolTipText="{Binding FileSystemPath}" />
-                        </ToolTip.Tip>
-                    </TextBlock>
-                </Grid>
+                <Button.Styles>
+                    <Style Selector="TextBlock:not(.validPath)">
+                        <Setter Property="Text"
+                                Value="Select Folder..." />
+                    </Style>
+                    <Style Selector="TextBlock.validPath"
+                           x:DataType="local:MpAvFolderWatcherTriggerViewModel">
+                        <Setter Property="Text"
+                                Value="{Binding FolderPath, Converter={x:Static local:MpAvAbsoluteToRelativePathStringConverter.Instance}}" />
+                        <Setter Property="ToolTip.Tip">
+                            <Setter.Value>
+                                <Template>
+                                    <local:MpAvToolTipView ToolTipText="{Binding FileSystemPath}" />
+                                </Template>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Styles>
+                <TextBlock Classes.validPath="{Binding IsValid}"
+                           Foreground="Black"
+                           TextAlignment="Center"
+                           VerticalAlignment="Center" />
             </Button>
         </Border>
         <TextBlock Grid.Row="1"
@@ -52,9 +60,12 @@
                    Text="Include Subdirectories" />
         <CheckBox Grid.Row="1"
                   Grid.Column="1"
+                  Classes="arg2"
                   MinWidth="100"
                   Margin="5,10"
-                  IsChecked="{Binding IncludeSubdirectories, Mode=TwoWay}" />
+                  IsThreeState="False"
+                  Command="{Binding ToggleIncludeSubDirectoriesCommand}"
+                  IsChecked="{Binding IncludeSubdirectories, Mode=OneWay}" />
     </Grid>
 
 </local:MpAvUserControl>

@@ -45,7 +45,7 @@
             </TreeView.ItemTemplate>
         </TreeView>
         <Button x:Name="AddTagButton"
-                Classes="iconButton"
+                Classes="noBg noHoverBg"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 IsVisible="{Binding SelectedItem.CanAddChild}"

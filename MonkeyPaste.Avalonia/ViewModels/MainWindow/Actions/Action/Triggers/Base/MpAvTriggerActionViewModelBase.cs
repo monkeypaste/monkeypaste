@@ -16,189 +16,128 @@ using System.Diagnostics;
 using Avalonia.Controls;
 using Avalonia.Controls.Selection;
 using MonkeyPaste.Common.Avalonia;
+using Avalonia.Media;
 
 namespace MonkeyPaste.Avalonia {
 
-    public class MpAvTriggerActionViewModelBase : 
-        MpAvActionViewModelBase,
-        MpIResizableViewModel,
-        //MpIAsyncComboBoxItemViewModel,
-        MpIDesignerSettingsViewModel {
+    public abstract class MpAvTriggerActionViewModelBase : MpAvActionViewModelBase {
+        #region Private Variables
 
-        //#region MpIAsyncComboBoxItemViewModel Implementation
-
-        //int MpAvIComboBoxItemViewModel.IconId => IconId;
-        //string MpAvIComboBoxItemViewModel.Label => Label;
-
-        //#endregion
-
-
-        #region Constants
-
-        public const double DEFAULT_MIN_SCALE = 0.1;
-        public const double DEFAULT_MAX_SCALE = 3.0d;
-        #endregion
-
-        #region MpIDesignerSettingsViewModel Implementation
-
-        public double MinScale => DEFAULT_MIN_SCALE;
-        public double MaxScale => DEFAULT_MAX_SCALE;
-        public bool IsGridVisible {
-            get {
-                return ParseShowGrid(Arg2);
-            }
-            set {
-                if (IsGridVisible != value) {
-                    SetDesignerItemSettings(Scale, TranslateOffsetX, TranslateOffsetY, value);
-                    OnPropertyChanged(nameof(IsGridVisible));
-                }
-            }
-        }
-        public double Scale {
-            get {
-                return ParseScale(Arg2);
-            }
-            set {
-                if (Math.Abs(Scale - value) > 0.1) {
-                    SetDesignerItemSettings(value, TranslateOffsetX, TranslateOffsetY, IsGridVisible);
-                    OnPropertyChanged(nameof(Scale));
-                }
-            }
-        }
-        public double TranslateOffsetX {
-            get {
-                return ParseTranslationOffset(Arg2).X;
-            }
-            set {
-                if (Math.Abs(TranslateOffsetX - value) > 0.1) {
-                    SetDesignerItemSettings(Scale, Math.Round(value,1), TranslateOffsetY, IsGridVisible);
-                    OnPropertyChanged(nameof(TranslateOffsetX));
-                }
-            }
-        }
-        public double TranslateOffsetY {
-            get {
-                return ParseTranslationOffset(Arg2).Y;
-            }
-            set {
-                if (Math.Abs(TranslateOffsetY - value) > 0.1) {
-                    SetDesignerItemSettings(Scale, TranslateOffsetX, Math.Round(value, 1), IsGridVisible);
-                    OnPropertyChanged(nameof(TranslateOffsetY));
-                }
-            }
-        }
-
-
-        #region Designer Helpers
-
-        #region Designer Model Parsing Helpers
-
-        private void SetDesignerItemSettings(double scale, double offsetX, double offsetY, bool showGrid) {
-            string arg2 = string.Join(
-                ",",
-                new string[] {
-                    scale.ToString(),
-                    offsetX.ToString(), offsetY.ToString(),
-                    showGrid.ToString()});
-            Arg2 = arg2;
-            if(!IsMoving) {
-                // move extension triggers model change on pointer up
-                HasModelChanged = true;
-            }
-        }
-
-        private double ParseScale(string text) {
-            if (string.IsNullOrEmpty(Arg2)) {
-                return 1.0d;
-            }
-            var arg2Parts = Arg2.SplitNoEmpty(",");
-            if(arg2Parts.Length > 0) {
-                return double.Parse(arg2Parts[0]);
-            }
-            return 1.0d;
-        }
-
-        private MpPoint ParseTranslationOffset(string text) {
-            if (string.IsNullOrEmpty(Arg2)) {
-                return Parent.DesignerCenterLocation;
-            }
-            var arg2Parts = Arg2.SplitNoEmpty(",");
-            if (arg2Parts.Length >= 3) {
-                return new MpPoint() {
-                    X = double.Parse(arg2Parts[1]),
-                    Y = double.Parse(arg2Parts[2])
-                };
-            }
-            return Parent.DesignerCenterLocation;
-        }
-        private bool ParseShowGrid(string text) {
-            if (string.IsNullOrEmpty(Arg2)) {
-                return false;
-            }
-            var arg2Parts = Arg2.SplitNoEmpty(",");
-            if (arg2Parts.Length >= 4) {
-                return arg2Parts[3].ToLower() == "true";
-            }
-            return false;
-        }
+        private bool _isShowEnabledChangedNotification = false;
 
         #endregion
 
-        
-
-        #endregion
-
-        #endregion
-
-
-        #region MpIResizableViewModel Implementation
-
-        public bool IsResizing { get; set; }
-        public bool CanResize { get; set; }
-
-        #endregion
         #region Properties
-
-        //public SelectionModel<MpAvActionViewModelBase> Selection { get; private set; }
 
         #region View Models
 
-        //public ObservableCollection<MpAvActionViewModelBase> Items { get; set; } = new ObservableCollection<MpAvActionViewModelBase>();
-        //public MpAvActionViewModelBase SelectedAction { get; set; }
+        public override MpMenuItemViewModel PopupMenuViewModel {
+            get {
+                return new MpMenuItemViewModel() {
+                    SubItems = new List<MpMenuItemViewModel>() {
+                        new MpMenuItemViewModel() {
+                            Header = "Add",
+                            IconResourceKey = "AddImage",
+                            SubItems =
+                                typeof(MpActionType)
+                                .EnumerateEnum<MpActionType>()
+                                .Where(x=>x != MpActionType.None && x != MpActionType.Trigger)
+                                .Select(x =>
+                                    new MpMenuItemViewModel() {
+                                        Header = x.EnumToLabel(),
+                                        IconResourceKey = GetDefaultActionIconResourceKey(x,null),
+                                        Command = AddChildActionCommand,
+                                        CommandParameter = x
+                                    }).ToList()
+                        },
+                        new MpMenuItemViewModel() {
+                            IsSeparator = true
+                        },
+                        new MpMenuItemViewModel() {
+                            Header = ToggleEnableOrDisableLabel,
+                            BorderHexColor = MpSystemColors.Transparent,
+                            IconHexStr = IsAllValid ? ToggleEnableOrDisableResourceKey : null,
+                            IconResourceKey = IsAllValid ? null : ToggleEnableOrDisableResourceKey,
+                            IconCornerRadius = IsAllValid ? 20 : 0,
+                            Command = ToggleTriggerEnabledCommand,
+                        },
+                        new MpMenuItemViewModel() {IsSeparator = true},
+                        new MpMenuItemViewModel() {
+                            Header = "Remove",
+                            IconResourceKey = "DeleteImage",
+                            Command = DeleteThisActionCommand
+                        }
+                    }
+                };
+            }
+        }
         #endregion
 
-
         #region Appearance
+        public string EnabledHexColor => (MpPlatformWrapper.Services.PlatformResource.GetResource("EnabledHighlightBrush") as SolidColorBrush).Color.ToPortableColor().ToHex();
+        public string DisabledHexColor => (MpPlatformWrapper.Services.PlatformResource.GetResource("DisabledHighlightBrush") as SolidColorBrush).Color.ToPortableColor().ToHex();
+
+        public string CurEnableOrDisableHexColor => IsEnabled.HasValue ? IsEnabled.IsTrue() ? EnabledHexColor : DisabledHexColor : MpSystemColors.Transparent;
+        public string ToggleEnableOrDisableResourceKey => IsEnabled.HasValue ? IsEnabled.IsTrue() ? DisabledHexColor : EnabledHexColor : "WarningImage";
+
+        public string ToggleEnableOrDisableLabel => IsEnabled.HasValue ? IsEnabled.IsTrue() ? "Disable" : "Enable" : "Fix Errors";
+
+        public override object IconResourceObj {
+            get {
+                string resourceKey;
+                if (IsValid) {
+                    resourceKey = GetDefaultActionIconResourceKey(ActionType, TriggerType);
+                } else {
+                    resourceKey = "WarningImage";
+                }
+
+                return MpPlatformWrapper.Services.PlatformResource.GetResource(resourceKey) as string;
+            }
+        }
 
         #endregion
 
         #region Layout
-
-
         #endregion
 
         #region State
 
+        public bool IsAllValid => IsValid && AllDescendants.All(x => x.IsValid);
         #endregion
 
         #region Model       
 
+
+        // Arg1 (DesignerProps in Parent)
+
+        // Arg2 
+        public bool? IsEnabled {
+            get => string.IsNullOrEmpty(Arg2) ? null : bool.Parse(Arg2);
+            set {
+                var newVal = value == null ? null : value.ToString();
+                if(Arg2 != newVal) {
+                    Arg2 = newVal;
+                    OnPropertyChanged(nameof(IsEnabled));
+                }                
+            }
+
+        }
+
         public MpTriggerType TriggerType {
             get {
-                if (Action == null) {
-                    return MpTriggerType.None;
+                if (Action == null || string.IsNullOrEmpty(Arg3)) {
+                    return 0;
                 }
-                return (MpTriggerType)Action.ActionObjId;
+                return (MpTriggerType)int.Parse(Arg3);
             }
             set {
                 if (TriggerType != value) {
-                    Action.ActionObjId = (int)value;
+                    Arg3 = value.ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(TriggerType));
                 }
             }
         }
-
         #endregion
 
         #endregion
@@ -207,47 +146,43 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvTriggerActionViewModelBase(MpAvTriggerCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpAvTriggerActionViewModelBase_PropertyChanged;
-            //Items.CollectionChanged += Items_CollectionChanged;
-
-            //Selection = new SelectionModel<MpAvActionViewModelBase>() { SingleSelect = true };
-            //Selection.SelectionChanged += Selection_SelectionChanged;
         }
 
 
         #endregion
 
         #region Public Methods
-
-        //public override async Task InitializeAsync(MpAction a) {
-        //    await base.InitializeAsync(a);
-        //    Items.Clear();
-        //    SelfAndAllDescendants.ForEach(x => Items.Add(x));
-        //    OnPropertyChanged(nameof(Items));
-        //}
-
         #endregion
 
         #region Protected Methods
 
-        protected override async Task EnableAsync() {
-            await base.EnableAsync();
-        }
+        protected abstract void EnableTrigger();
 
-        protected async Task ShowUserEnableChangeNotification() {
-            string enabledText = IsEnabled.HasValue && IsEnabled.Value ?
-                                    "ENABLED" :
-                                    "DISABLED";
-            string typeStr = ParentActionId == 0 ? "Trigger" : "Action";
-            string notificationText = $"{typeStr} '{FullName}' is now  {enabledText}";
-            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = MpAvMainWindowViewModel.Instance.IsMainWindowOpen;
-
-            await MpNotificationBuilder.ShowMessageAsync(
-                iconSourceObj: IconResourceKeyStr.ToString(),
-                title: $"{typeStr.ToUpper()} STATUS",
-                body: notificationText);
+        protected abstract void DisableTrigger();
 
 
-            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
+        protected virtual async Task ShowUserEnableChangeNotification() {
+            await Dispatcher.UIThread.InvokeAsync(async () => {
+                if (_isShowEnabledChangedNotification) {
+                    // BUG not sure why but IsEnable change gets fired twice so this avoids 2 notifications
+                    // maybe cause it depends on base Arg2? dunno tried to fix, sorry
+                    return;
+                }
+
+                _isShowEnabledChangedNotification = true;
+
+                string enabledText = IsEnabled.IsTrue() ? "ENABLED" : "DISABLED";
+                string typeStr = ParentActionId == 0 ? "Trigger" : "Action";
+                string notificationText = $"{typeStr} '{FullName}' is now  {enabledText}";
+
+                await MpNotificationBuilder.ShowMessageAsync(
+                    iconSourceObj: IconResourceObj.ToString(),
+                    title: $"{typeStr.ToUpper()} STATUS",
+                    body: notificationText);
+
+                _isShowEnabledChangedNotification = false;
+
+            });
         }
         #endregion
 
@@ -265,9 +200,23 @@ namespace MonkeyPaste.Avalonia {
                     //if(MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
                     //    return;
                     //}                    
-                    Dispatcher.UIThread.Post(async () => {
-                        await ShowUserEnableChangeNotification();
-                    });
+                    //Dispatcher.UIThread.Post(async () => {
+                    //    await ShowUserEnableChangeNotification();
+                    //});
+                    ShowUserEnableChangeNotification().FireAndForgetSafeAsync(this);
+                    SelfAndAllDescendants.ForEach(x => x.OnPropertyChanged(nameof(x.IsTriggerEnabled)));
+
+                    OnPropertyChanged(nameof(CurEnableOrDisableHexColor));
+                    OnPropertyChanged(nameof(ToggleEnableOrDisableResourceKey));
+                    OnPropertyChanged(nameof(ToggleEnableOrDisableLabel));
+                    OnPropertyChanged(nameof(IsTriggerEnabled));
+                    break;
+                case nameof(IsAllValid):
+                    if(IsAllValid && IsEnabled.IsNull()) {
+                        IsEnabled = false;
+                    } else if(!IsAllValid) {
+                        IsEnabled = null;
+                    }
                     break;
                 case nameof(Children):
                     OnPropertyChanged(nameof(SelfAndAllDescendants));
@@ -277,55 +226,50 @@ namespace MonkeyPaste.Avalonia {
                         Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
                     }
                     break;
-                //case nameof(SelectedAction):
-                //    Parent.OnPropertyChanged(nameof(Parent.FocusAction));
-                //    break;
             }
+        }
+        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            OnPropertyChanged(nameof(SelfAndAllDescendants));
         }
 
 
-        //private void Selection_SelectionChanged(object sender, SelectionModelSelectionChangedEventArgs<MpAvActionViewModelBase> e) {
-        //    Parent.SelectActionCommand.Execute(SelectedItem);
-        //    Parent.OnPropertyChanged(nameof(Parent.SelectedAction));
-        //    if(SelectedItem == null) {
-        //        SelfAndAllDescendants.Cast<MpAvActionViewModelBase>().ForEach(x => x.IsSelected = false);
-        //    } else {
-        //        SelfAndAllDescendants.Cast<MpAvActionViewModelBase>().ForEach(x => x.IsSelected = x == SelectedItem);
-        //    }
-        //}
-        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            OnPropertyChanged(nameof(SelfAndAllDescendants));
+        private void EnableOrDisableTrigger(bool isEnabling) {
+            if (isEnabling) {
+                EnableTrigger();
+            } else {
+                DisableTrigger();
+            }
+            IsEnabled = isEnabling;
         }
         #endregion
 
         #region Commands
 
-        public ICommand ResetDesignerViewCommand => new MpCommand(() => {
-            double l = SelfAndAllDescendants.Min(x => x.X);
-            double t = SelfAndAllDescendants.Min(x => x.Y);
-            double r = SelfAndAllDescendants.Max(x => x.X);
-            double b = SelfAndAllDescendants.Max(x => x.Y);
+        public ICommand EnableTriggerCommand => new MpCommand(
+            () => {
+                EnableOrDisableTrigger(true);
+            }, () => {
+                return IsEnabled.IsFalse();
+            });
 
-            MpRect actual_bounds = new MpRect(l, t, r - l, b - t);
-            
-            //double r_x = Parent.ObservedDesignerBounds.Width / actual_bounds.Width;
-            //double r_y = Parent.ObservedDesignerBounds.Height / actual_bounds.Height;
-            
-            double r_x = actual_bounds.Width / Parent.ObservedDesignerBounds.Width;
-            double r_y = actual_bounds.Height / Parent.ObservedDesignerBounds.Height;
+        public ICommand DisableTriggerCommand => new MpCommand(
+            () => {
+                EnableOrDisableTrigger(false);
+            }, () => {
+                return IsEnabled.IsTrue();
+            });
 
-            double scale_pad = 0.2;
+        public ICommand ToggleTriggerEnabledCommand => new MpCommand(
+             () => {
+                IsBusy = true;
 
-            Parent.Scale = Math.Max(Math.Min(r_x.IsNumber() ? r_x : 1, r_y.IsNumber() ? r_y : 1) - scale_pad, Parent.MinScale);
+                EnableOrDisableTrigger(!IsEnabled.IsTrue());
 
-            var item_half_size = new MpSize(Parent.DesignerItemDiameter/2, Parent.DesignerItemDiameter/2);
-            var view_center = (Parent.ObservedDesignerBounds.Size.ToPortablePoint() - item_half_size.ToPortablePoint()) * 0.5;
-            var actual_center = actual_bounds.Centroid();
+                IsBusy = false;
+            }, () => {
+                return IsEnabled.HasValue;
+            });
 
-            var adj_center = (view_center * Parent.Scale) - actual_center;
-            Parent.TranslateOffsetX = adj_center.X;
-            Parent.TranslateOffsetY = adj_center.Y;
-        });
         #endregion
     }
 }

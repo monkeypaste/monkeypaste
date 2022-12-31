@@ -38,14 +38,14 @@ namespace MonkeyPaste.Avalonia {
 
         public int ShortcutId {
             get {
-                if (Action == null || string.IsNullOrEmpty(Arg1)) {
+                if (Action == null || string.IsNullOrEmpty(Arg4)) {
                     return 0;
                 }
-                return int.Parse(Arg1);
+                return int.Parse(Arg4);
             }
             set {
                 if (ShortcutId != value) {
-                    Arg1 = value.ToString();
+                    Arg4 = value.ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(ShortcutId));
                 }
@@ -66,39 +66,45 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
 
-        protected override async Task<bool> ValidateActionAsync() {
-            await base.ValidateActionAsync();
-
-            if (!IsValid) {
-                return IsValid;
-            }
-
-            var scvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
-            if (scvm == null) {
-                ValidationText = $"Shortcut for Trigger Action '{FullName}' not found";
-                ShowValidationNotification();
-            } else if (IsPerformingActionFromCommand) {
-                if(MpAvClipTrayViewModel.Instance.SelectedModels == null ||
-                   MpAvClipTrayViewModel.Instance.SelectedModels.Count == 0) {
-                    ValidationText = $"No content selected, cannot execute '{FullName}' ";
-                    ShowValidationNotification();
-                }
+        protected override async Task ValidateActionAsync() {
+            await Task.Delay(1);
+            if (ShortcutId == 0) {
+                ValidationText = $"No Shortcut selected for Shortcut Trigger '{FullName}'";
             } else {
-                ValidationText = string.Empty;
+                //while (MpAvShortcutCollectionViewModel.Instance.IsAnyBusy) {
+                //    await Task.Delay(100);
+                //}
+                //var ttvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
+
+                if (ShortcutViewModel == null) {
+                    ValidationText = $"Shortcut for Trigger '{FullName}' not found";
+                } else {
+
+                    //if (IsPerformingActionFromCommand) {
+                    //    if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+                    //        if (MpAvClipTrayViewModel.Instance.SelectedModels == null ||
+                    //       MpAvClipTrayViewModel.Instance.SelectedModels.Count == 0) {
+                    //            ValidationText = $"No content selected, cannot execute '{FullName}' ";
+                    //        }
+                    //    }
+                    //}
+                    ValidationText = string.Empty;
+                }
             }
-            return IsValid;
+            if (!IsValid) {
+                ShowValidationNotification();
+            }
         }
 
-        protected override async Task EnableAsync() {
-            await base.EnableAsync();
+        protected override void EnableTrigger() {            
             var scvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
             if (scvm != null) {
                 scvm.RegisterActionComponent(this);
             }
         }
 
-        protected override async Task DisableAsync() {
-            await base.DisableAsync();
+        protected override void DisableTrigger() {
+            
             var scvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
             if (scvm != null) {
                 scvm.UnregisterActionComponent(this);

@@ -17,7 +17,7 @@
         <!--  Hide Title Button  -->
 
         <ToggleButton x:Name="HideTitleButton"
-                      Classes="iconButton"
+                      Classes="noBg noHoverBg"
                       IsChecked="{Binding !IsHeaderAndFooterVisible, Mode=TwoWay}"
                       HorizontalAlignment="Left"
                       VerticalAlignment="Top"
@@ -35,7 +35,7 @@
         <!--  Pin Tile Button  -->
 
         <ToggleButton x:Name="PinTileButton"
-                      Classes="iconButton"
+                      Classes="noBg noHoverBg"
                       Command="{Binding ToggleTileIsPinnedCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                       CommandParameter="{Binding}"
                       IsChecked="{Binding IsPinned}"
@@ -62,7 +62,7 @@
 
         <!--  Hotkey Button  -->
         <Button x:Name="ClipTileHotkeyButton"
-                Classes="iconButton"
+                Classes="noBg noHoverBg"
                 Width="16"
                 Height="16"
                 HorizontalAlignment="Left"
@@ -74,7 +74,7 @@
 
         <!--  Edit Toggle Button  -->
         <ToggleButton x:Name="ClipTileToggleEditButton"
-                      Classes="iconButton"
+                      Classes="noBg noHoverBg"
                       Width="16"
                       Height="16"
                       HorizontalAlignment="Right"

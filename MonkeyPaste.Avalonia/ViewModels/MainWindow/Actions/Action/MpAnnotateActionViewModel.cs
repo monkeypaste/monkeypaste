@@ -58,6 +58,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Overrides
 
+        protected override async Task ValidateActionAsync() {
+            throw new NotImplementedException();
+        }
         public override async Task PerformActionAsync(object arg) {
             if (!CanPerformAction(arg)) {
                 return;
@@ -104,6 +107,7 @@ namespace MonkeyPaste.Avalonia {
             //hl.Click -= Hl_Click;
             //hl.Unloaded -= Hl_Unloaded;
         }
+
 
         #endregion
     }

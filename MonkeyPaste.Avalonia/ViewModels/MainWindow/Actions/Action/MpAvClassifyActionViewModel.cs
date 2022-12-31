@@ -61,17 +61,16 @@ namespace MonkeyPaste.Avalonia {
 
         public int TagId {
             get {
-                if(Action == null) {
+                if (Action == null || string.IsNullOrEmpty(Arg1)) {
                     return 0;
                 }
-                return ActionObjId;
+                return int.Parse(Arg1);
             }
             set {
-                if(TagId != value) {
-                    ActionObjId = value;
+                if (TagId != value) {
+                    Arg1 = value.ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(TagId));
-                    OnPropertyChanged(nameof(SelectedTag));
                 }
             }
         }
@@ -93,31 +92,25 @@ namespace MonkeyPaste.Avalonia {
                 Task.Run(ValidateActionAsync);
             }
         }
-        protected override async Task<bool> ValidateActionAsync() {
-            await base.ValidateActionAsync();
-
-            if (!IsValid) {
-                return IsValid;
-            }
-
+        protected override async Task ValidateActionAsync() {
+            await Task.Delay(1);
             if(TagId == 0) {
-                return IsValid;
-            }
-
-            while (MpAvTagTrayViewModel.Instance.IsAnyBusy) {
-                await Task.Delay(100);
-            }
-
-            var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
-
-            if (ttvm == null) {
-                ValidationText = $"Tag for Classifier '{RootTriggerActionViewModel.Label}/{Label}' not found";
-
-                ShowValidationNotification();
+                ValidationText = $"No Collection selected for Classifier '{FullName}'";
             } else {
-                ValidationText = string.Empty;
+                //while (MpAvTagTrayViewModel.Instance.IsAnyBusy) {
+                //    await Task.Delay(100);
+                //}
+                //var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
+
+                if (SelectedTag == null) {
+                    ValidationText = $"Collection for Classifier '{FullName}' not found";
+                } else {
+                    ValidationText = string.Empty;
+                }
             }
-            return IsValid;
+            if(!IsValid) {
+                ShowValidationNotification();
+            }
         }
 
 

@@ -845,8 +845,8 @@ namespace MonkeyPaste {
         #region MpAction
 
         public static async Task<List<MpAction>> GetAllTriggerActionsAsync() {
-            string query = $"select * from MpAction where e_MpActionType=? and fk_ActionObjId != ?";
-            var result = await MpDb.QueryAsync<MpAction>(query, MpActionType.Trigger.ToString(),(int)MpTriggerType.ParentOutput);
+            string query = $"select * from MpAction where e_MpActionType=?";
+            var result = await MpDb.QueryAsync<MpAction>(query, MpActionType.Trigger.ToString());
             return result;
         }
 

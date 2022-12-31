@@ -131,17 +131,9 @@
                     </local:MpAvActionDesignerItemTemplateSelector>
                 </ContentControl.DataTemplates>
             </ContentControl>
-            <TextBlock HorizontalAlignment="Center"
-                       ClipToBounds="False"
+            <TextBlock Classes="actionLabel"
                        IsVisible="{Binding IsSelected}"
-                       Padding="3"
-                       FontSize="12"
-                       FontWeight="SemiBold"
-                       Foreground="Wheat"
-                       Background="Transparent"
-                       TextAlignment="Center"
                        MaxWidth="{Binding Width}"
-                       TextWrapping="WrapWithOverflow"
                        Text="{Binding Label}" />
         </StackPanel>
     </Border>

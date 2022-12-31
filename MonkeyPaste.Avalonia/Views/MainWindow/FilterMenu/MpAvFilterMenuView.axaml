@@ -33,7 +33,7 @@
         </DockPanel.Styles>
         <!--  Pause / Resume Clipboard Listener Toggle Button  -->
         <ToggleButton x:Name="PlayPause"
-                      Classes="iconButton"
+                      Classes="noBg noHoverBg"
                       local:MpAvSizeObserverExtension.IsEnabled="False"
                       local:MpAvSizeObserverExtension.ObservedWidth="{Binding PlayPauseButtonWidth, Mode=OneWayToSource}"
                       Padding="5"

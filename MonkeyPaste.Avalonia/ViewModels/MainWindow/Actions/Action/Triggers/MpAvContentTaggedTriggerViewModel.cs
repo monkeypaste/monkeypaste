@@ -53,14 +53,14 @@ namespace MonkeyPaste.Avalonia {
 
         public int TagId {
             get {
-                if (Action == null || string.IsNullOrEmpty(Arg1)) {
+                if (Action == null || string.IsNullOrEmpty(Arg4)) {
                     return 0;
                 }
-                return int.Parse(Arg1);
+                return int.Parse(Arg4);
             }
             set {
                 if (TagId != value) {
-                    Arg1 = value.ToString();
+                    Arg4 = value.ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(TagId));
                 }
@@ -84,33 +84,36 @@ namespace MonkeyPaste.Avalonia {
                 Task.Run(ValidateActionAsync);
             }
         }
-        protected override async Task<bool> ValidateActionAsync() {
-            await base.ValidateActionAsync();
+        protected override async Task ValidateActionAsync() {
 
-            if (!IsValid) {
-                return IsValid;
-            }
-
-            var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
-            if (ttvm == null) {
-                ValidationText = $"Tag for Classifier '{RootTriggerActionViewModel.Label}/{Label}' not found";
-                ShowValidationNotification();
+            await Task.Delay(1);
+            if (TagId == 0) {
+                ValidationText = $"No Collection selected for Classify Trigger '{FullName}'";
             } else {
-                ValidationText = string.Empty;
+                //while (MpAvTagTrayViewModel.Instance.IsAnyBusy) {
+                //    await Task.Delay(100);
+                //}
+                //var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
+
+                if (SelectedTag == null) {
+                    ValidationText = $"Collection for Classify Trigger '{FullName}' not found";
+                } else {
+                    ValidationText = string.Empty;
+                }
             }
-            return IsValid;
+            if (!IsValid) {
+                ShowValidationNotification();
+            }
         }
 
-        protected override async Task EnableAsync() {
-            await base.EnableAsync();
+        protected override void EnableTrigger() {            
             var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
             if (ttvm != null) {
                 ttvm.RegisterActionComponent(this);
             }
         }
 
-        protected override async Task DisableAsync() {
-            await base.DisableAsync();
+        protected override void DisableTrigger() {            
             var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
             if (ttvm != null) {
                 ttvm.UnregisterActionComponent(this);

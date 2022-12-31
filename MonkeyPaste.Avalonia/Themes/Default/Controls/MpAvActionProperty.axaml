@@ -19,75 +19,7 @@
     </Style>
 
     <!--  HEADER  -->
-    <Style Selector="local|MpAvActionPropertyView Expander ToggleButton#ToggleEnableButton">
-        <Setter Property="BorderThickness"
-                Value="1.5" />
-        <Setter Property="Margin"
-                Value="3,5" />
-        <Setter Property="Padding"
-                Value="3" />
-        <Setter Property="Width"
-                Value="40" />
-        <Setter Property="Height"
-                Value="40" />
-        <Setter Property="CornerRadius"
-                Value="12.5" />
-        <Setter Property="IsThreeState"
-                Value="True" />
-        <Setter Property="HorizontalAlignment"
-                Value="Left" />
-        <Setter Property="VerticalAlignment"
-                Value="Center" />
-        <Setter Property="HorizontalContentAlignment"
-                Value="Stretch" />
-        <Setter Property="VerticalContentAlignment"
-                Value="Stretch" />
-    </Style>
-
-    <Style Selector="local|MpAvActionPropertyView Expander ToggleButton#ToggleEnableButton Image">
-        <Setter Property="Margin"
-                Value="3" />
-        <Setter Property="HorizontalAlignment"
-                Value="Stretch" />
-        <Setter Property="VerticalAlignment"
-                Value="Stretch" />
-    </Style>
-    <!--  ENABLE BG/BORDER COLORS  -->
-    <Style Selector="local|MpAvActionPropertyView Expander ToggleButton#ToggleEnableButton:not(.invalid) /template/ ContentPresenter">
-        <Setter Property="Background"
-                Value="{DynamicResource DisabledHighlightBrush}" />
-        <Setter Property="BorderBrush"
-                Value="{DynamicResource DefaultIconButtonBrush}" />
-    </Style>
-
-    <Style Selector="local|MpAvActionPropertyView Expander ToggleButton#ToggleEnableButton:not(.invalid):pointerover /template/ ContentPresenter">
-        <Setter Property="BorderBrush"
-                Value="{DynamicResource HoverDefaultBorderBrush}" />
-    </Style>
-    <Style Selector="local|MpAvActionPropertyView Expander ToggleButton#ToggleEnableButton.enabled:not(.invalid) /template/ ContentPresenter">
-        <Setter Property="Background"
-                Value="{DynamicResource EnabledHighlightBrush}" />
-    </Style>
-    <Style Selector="local|MpAvActionPropertyView Expander ToggleButton#ToggleEnableButton.invalid /template/ ContentPresenter">
-        <Setter Property="Background"
-                Value="Transparent" />
-        <Setter Property="BorderBrush"
-                Value="Transparent" />
-    </Style>
-
-    <!--  ENABLE BUTTON IMAGE SOURCE  -->
-
-    <Style Selector="ToggleButton#ToggleEnableButton:not(.invalid) Image"
-           x:DataType="local:MpAvActionViewModelBase">
-        <Setter Property="Source"
-                Value="{Binding IconResourceKeyStr, ConverterParameter=white, Converter={StaticResource StringHexToBitmapTintConverter}}" />
-    </Style>
-    <Style Selector="ToggleButton#ToggleEnableButton.invalid Image"
-           x:DataType="local:MpAvActionViewModelBase">
-        <Setter Property="Source"
-                Value="{Binding Source={StaticResource WarningImage}, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
-    </Style>
-
+  
     <!--  PROPERTY CONTROLS  -->
 
     <Style Selector="ListBox.actionProperty">
@@ -126,6 +58,15 @@
                 Value="3" />
     </Style>
 
+    <Style Selector="ComboBox.actionProperty ComboBoxItem TextBlock">
+        <Setter Property="Margin"
+                Value="5,3" />
+    </Style>
+    <Style Selector="ComboBox.actionProperty ComboBoxItem /template/ TextBlock">
+        <Setter Property="Margin"
+                Value="5,3" />
+    </Style>
+
     <Style Selector=":is(TemplatedControl).actionProperty">
         <Setter Property="CornerRadius"
                 Value="5" />
@@ -150,7 +91,6 @@
                 Value="{DynamicResource DefaultInvalidBrush}" />
     </Style>
 
-
     <Style Selector="TextBlock.actionProperty">
         <Setter Property="VerticalAlignment"
                 Value="Top" />
@@ -163,7 +103,7 @@
         <Setter Property="FontWeight"
                 Value="SemiBold" />
         <Setter Property="Margin"
-                Value="10" />
+                Value="3" />
         <Setter Property="TextWrapping"
                 Value="WrapWithOverflow" />
     </Style>

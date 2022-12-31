@@ -16,7 +16,7 @@
             Yellow
         </Color>
         <Color x:Key="DefaultWarningColor2">
-            Yellow
+            Black
         </Color>
 
         <Color x:Key="MainWindowTitleMenuActiveBgColor">
@@ -46,6 +46,9 @@
         </Color>
         <Color x:Key="HoverButtonColor">
             Gray
+        </Color>
+        <Color x:Key="DefaultBorderColor">
+            Silver
         </Color>
         <Color x:Key="HoverDefaultBorderColor">
             Yellow
@@ -172,6 +175,9 @@
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
         <!--  Border Brush  -->
+        <SolidColorBrush x:Key="DefaultBorderBrush"
+                         Color="{DynamicResource DefaultBorderColor}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="HoverDefaultBorderBrush"
                          Color="{DynamicResource HoverDefaultBorderColor}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />

@@ -5,6 +5,7 @@ using System.IO;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAbsoluteToRelativePathStringConverter : IValueConverter {
+        public static readonly MpAvAbsoluteToRelativePathStringConverter Instance = new();
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is string pathStr) {
                 if (string.IsNullOrEmpty(pathStr)) {

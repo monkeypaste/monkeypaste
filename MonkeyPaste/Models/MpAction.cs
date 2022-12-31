@@ -35,8 +35,7 @@ namespace MonkeyPaste {
         ContentAdded, 
         FileSystemChange,
         ContentTagged,
-        Shortcut,
-        ParentOutput
+        Shortcut
     }
 
     public enum MpActionType {
@@ -66,16 +65,10 @@ namespace MonkeyPaste {
         [Column("fk_ParentActionId")]
         public int ParentActionId { get; set; } = 0;
 
-        [Column("fk_MpIconId")]
-        public int IconId { get; set; } = 0;
-
         public int SortOrderIdx { get; set; } = 0;
 
         [Column("e_MpActionType")]
         public string ActionTypeName { get; set; }
-
-        [Column("fk_ActionObjId")]
-        public int ActionObjId { get; set; } = 0;
 
         public string Arg1 { get; set; } = null;
 
@@ -97,8 +90,6 @@ namespace MonkeyPaste {
 
         public int ReadOnly { get; set; } = 0;
 
-        [Column("b_IsEnabled")]
-        public int IsEnabledValue { get; set; }
 
         public DateTime LastSelectedDateTime { get; set; }
 
@@ -125,12 +116,6 @@ namespace MonkeyPaste {
             set => ReadOnly = value ? 1 : 0;
         }
 
-        [Ignore]
-        public bool IsEnabled {
-            get => IsEnabledValue == 1;
-            set => IsEnabledValue = value ? 1 : 0;
-        }
-
 
         [Ignore]
         public MpActionType ActionType {
@@ -143,7 +128,6 @@ namespace MonkeyPaste {
 
         public static async Task<MpAction> CreateAsync(
             MpActionType actionType = MpActionType.None,
-            int actionObjId = 0,
             string label = "",
             int parentId = 0,
             int sortOrderIdx = 0,
@@ -151,7 +135,6 @@ namespace MonkeyPaste {
             string arg2 = "",
             string arg3 = "",
             string arg4 = "",
-            int iconId = 0,
             string description = "",
             bool isReadOnly = false,
             MpPoint location = null,
@@ -165,47 +148,17 @@ namespace MonkeyPaste {
             if(sortOrderIdx == 0 && parentId > 0) {
                 sortOrderIdx = await MpDataModelProvider.GetChildActionCountAsync(parentId);
             }
-            if(!suppressWrite && actionType == MpActionType.Trigger && iconId == 0) {
-                string iconStr = null;
-                switch ((MpTriggerType)actionObjId) {
-                    case MpTriggerType.ContentAdded:
-                        iconStr = MpBase64Images.ClipboardIcon;
-                        break;
-                    case MpTriggerType.ContentTagged:
-                        iconStr = MpBase64Images.TagIcon;
-                        break;
-                    case MpTriggerType.FileSystemChange:
-                        iconStr = MpBase64Images.FolderChangedIcon;
-                        break;
-                    case MpTriggerType.Shortcut:
-                        iconStr = MpBase64Images.JoystickUnset;
-                        break;
-                    case MpTriggerType.ParentOutput:
-                        iconStr = MpBase64Images.ChainIcon;
-                        break;
-                }
-                if (string.IsNullOrEmpty(iconStr)) {
-                    iconId = MpDefaultDataModelTools.ThisAppIconId;
-                } else { 
-                    var icon = await MpIcon.CreateAsync(
-                        iconImgBase64: iconStr, 
-                        createBorder: false);
-                    iconId = icon.Id;
-                }
-            }
             location = location == null ? new MpPoint() : location;
             var mr = new MpAction() {
                 ActionGuid = System.Guid.NewGuid(),
                 Label = label,
                 ActionType = actionType,
-                ActionObjId = actionObjId,
                 Arg1 = arg1,
                 Arg2 = arg2,
                 Arg3 = arg3,
                 Arg4 = arg4,
                 ParentActionId = parentId,
                 SortOrderIdx = sortOrderIdx,
-                IconId = iconId,
                 Description = description,
                 X = location.X,
                 Y = location.Y
@@ -220,7 +173,7 @@ namespace MonkeyPaste {
         public MpAction() { }
 
         public override string ToString() {
-            return $"Action Id: {Id} ParentId: {ParentActionId} ActionObjId: {ActionObjId} Type: '{ActionType}' Label: '{Label}'";
+            return $"Action Id: {Id} ParentId: {ParentActionId} Type: '{ActionType}' Label: '{Label}'";
         }
     }
 }

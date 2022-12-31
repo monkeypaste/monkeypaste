@@ -57,7 +57,7 @@
 
                             <!--  File System Changed  -->
                             <DataTemplate x:Key="FileSystemChangePropertiesTemplate"
-                                          DataType="{x:Type local:MpAvFileSystemTriggerViewModel}">
+                                          DataType="{x:Type local:MpAvFolderWatcherTriggerViewModel}">
                                 <local:MpAvFileSystemTriggerPropertyView DataContext="{Binding}" />
                             </DataTemplate>
 
@@ -99,7 +99,7 @@
 
                             <!--  Timer  -->
                             <DataTemplate x:Key="TimerPropertiesTemplate"
-                                          DataType="{x:Type local:MpAvTimerActionViewModel}">
+                                          DataType="{x:Type local:MpAvRepeaterActionViewModel}">
                                 <local:MpAvTimerActionPropertyView DataContext="{Binding}" />
                             </DataTemplate>
                         </local:MpAvActionItemPropertiesTemplateSelector>

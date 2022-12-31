@@ -78,6 +78,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy);
         public MpKeyModifierFlags GlobalKeyModifierFlags {
             get {
                 MpKeyModifierFlags kmf = MpKeyModifierFlags.None;

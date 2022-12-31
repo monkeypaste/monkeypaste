@@ -7,11 +7,8 @@
         <Setter Property="Cursor"
                 Value="Hand" />
     </Style>
-    <Style Selector=":is(Button).iconButton:pointerover /template/ ContentPresenter">
-        <Setter Property="Background"
-                Value="Transparent" />
-    </Style>
-    <Style Selector=":is(Button):not(.TextBoxButton):pointerover PathIcon">
+
+    <!--<Style Selector=":is(Button):not(.TextBoxButton):pointerover PathIcon">
         <Setter Property="Foreground"
                 Value="{DynamicResource HoverDefaultBorderBrush}" />
     </Style>
@@ -39,5 +36,5 @@
                 Value="0" />
         <Setter Property="Background"
                 Value="Transparent" />
-    </Style>
+    </Style>-->
 </Styles>

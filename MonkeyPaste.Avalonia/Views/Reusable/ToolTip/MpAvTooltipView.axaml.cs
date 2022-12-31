@@ -66,14 +66,16 @@ namespace MonkeyPaste.Avalonia {
             this.AttachedToVisualTree += MpAvTooltipView_AttachedToVisualTree;
             this.DetachedFromVisualTree += MpAvTooltipView_DetachedFromVisualTree;
             this.GetObservable(Control.IsVisibleProperty).Subscribe(value => OnVisibleChanged());
-            if(App.Desktop.MainWindow != null) {
+            if(App.Desktop != null &&
+                App.Desktop.MainWindow != null) {
                 App.Desktop.MainWindow.GetObservable(Window.IsVisibleProperty).Subscribe(value => OnVisibleChanged());
             }
         }
 
         private void OnVisibleChanged() {
             _lastMousePos = null;
-            if(!App.Desktop.MainWindow.IsVisible) {
+            if(App.Desktop != null &&
+                !App.Desktop.MainWindow.IsVisible) {
                 // workaround for bug where tooltips don't hide when mw hides
                 if(GetPopupRoot() is PopupRoot pur) {
                     pur.Hide();

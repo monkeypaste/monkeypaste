@@ -14,6 +14,7 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileSortDirectionView">
     <ToggleButton Margin="0,0,0,0"
                   Classes.iconButton="True"
+                  Classes.noHoverBg="True"
                   Classes.descending="{Binding IsSortDescending}"
                   Background="Transparent"
                   BorderThickness="0"

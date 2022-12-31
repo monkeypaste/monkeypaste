@@ -62,17 +62,16 @@ namespace MonkeyPaste.Avalonia {
 
         public int AnalyticItemPresetId {
             get {
-                if (Action == null) {
+                if (Action == null || string.IsNullOrEmpty(Arg1)) {
                     return 0;
                 }
-                return ActionObjId;
+                return int.Parse(Arg1);
             }
             set {
                 if (AnalyticItemPresetId != value) {
-                    ActionObjId = value;
+                    Arg1 = value.ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(AnalyticItemPresetId));
-                    OnPropertyChanged(nameof(SelectedPreset));
                 }
             }
         }
@@ -139,27 +138,22 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        protected override async Task<bool> ValidateActionAsync() {
-            await base.ValidateActionAsync();
-            if (!IsValid) {
-                return false;
-            }
-            if(AnalyticItemPresetId == 0) {
-                return true;
-            }
+        protected override async Task ValidateActionAsync() {
+            await Task.Delay(1);
 
-            if (SelectedPreset == null) {
+            if(AnalyticItemPresetId == 0) {
+                ValidationText = $"No analyzer selection for action '{FullName}'";
+            } else if (SelectedPreset == null) {
                 ValidationText = $"Analyzer for Action '{FullName}' not found";
-                ShowValidationNotification();
             } else {
+                // check ancestors to ensure analyzer supports content type as input
                 var pavm = ParentActionViewModel;
                 while(pavm != null) {
                     if(pavm is MpAvCompareActionViewModelBase cavm) {
                         if(cavm.IsItemTypeCompare) {
                             if(!SelectedPreset.Parent.IsContentTypeValid(cavm.ContentItemType)) {
                                 ValidationText = $"Parent Comparer '{pavm.Label}' filters only for '{cavm.ContentItemType.ToString()}' type content and analyzer '{SelectedPreset.FullName}' will never execute because it does not support '{cavm.ContentItemType.ToString()}' type of input ";
-                                ShowValidationNotification();
-                                return IsValid;
+                                break;
                             }
                         }
                     }
@@ -167,7 +161,9 @@ namespace MonkeyPaste.Avalonia {
                 }
                 ValidationText = string.Empty;
             }
-            return IsValid;
+            if(!IsValid) {
+                ShowValidationNotification();
+            }
         }
 
         #endregion

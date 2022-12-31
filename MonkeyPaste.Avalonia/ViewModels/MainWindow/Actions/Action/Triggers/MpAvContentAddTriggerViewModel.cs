@@ -13,14 +13,14 @@ namespace MonkeyPaste.Avalonia {
 
         public MpCopyItemType AddedContentType {
             get {
-                if (Action == null || string.IsNullOrEmpty(Arg1)) {
+                if (Action == null || string.IsNullOrEmpty(Arg4)) {
                     return MpCopyItemType.None;
                 }
-                return Arg1.ToEnum<MpCopyItemType>();
+                return Arg4.ToEnum<MpCopyItemType>();
             }
             set {
                 if (AddedContentType != value) {
-                    Arg1 = value.ToString();
+                    Arg4 = value.ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(AddedContentType));
                 }
@@ -40,19 +40,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
 
-        protected override async Task EnableAsync() {
-            if(IsEnabled.HasValue && IsEnabled.Value) {
-                return;
-            }
-            await base.EnableAsync();
+        protected override async Task ValidateActionAsync() {
+            // is always valid
+            await Task.Delay(1);
+        }
+        protected override void EnableTrigger() {
             MpAvClipTrayViewModel.Instance.RegisterActionComponent(this);
         }
 
-        protected override async Task DisableAsync() {
-            if(IsEnabled.HasValue && !IsEnabled.Value) {
-                return;
-            }
-            await base.DisableAsync();
+        protected override void DisableTrigger() {
             MpAvClipTrayViewModel.Instance.UnregisterActionComponent(this);
         }
 
@@ -69,6 +65,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return true;
         }
+
         #endregion
     }
 }

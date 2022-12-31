@@ -38,17 +38,16 @@ namespace MonkeyPaste.Avalonia {
         //Arg2
         public int AnalyticItemPresetId {
             get {
-                if (Action == null) {
+                if (Action == null || string.IsNullOrEmpty(Arg2)) {
                     return 0;
                 }
-                return ActionObjId;
+                return int.Parse(Arg2);
             }
             set {
                 if (AnalyticItemPresetId != value) {
-                    ActionObjId = value;
+                    Arg2 = value.ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(AnalyticItemPresetId));
-                    OnPropertyChanged(nameof(SelectedPreset));
                 }
             }
         }
@@ -153,20 +152,21 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        protected override async Task<bool> ValidateActionAsync() {
-            await base.ValidateActionAsync();
-            if (!IsValid) {
-                return IsValid;
-            }
+        protected override async Task ValidateActionAsync() {
+            await Task.Delay(1);
 
-            var aipvm = MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x=>x.AnalyticItemPresetId  == AnalyticItemPresetId);
-            if (aipvm == null) {
-                ValidationText = $"Analyzer for Action '{FullName}' not found";
-                ShowValidationNotification();
-            } else {
-                ValidationText = string.Empty;
-            }
-            return IsValid;
+            //if (!IsValid) {
+            //    return IsValid;
+            //}
+
+            //var aipvm = MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x=>x.AnalyticItemPresetId  == AnalyticItemPresetId);
+            //if (aipvm == null) {
+            //    ValidationText = $"Analyzer for Action '{FullName}' not found";
+            //    ShowValidationNotification();
+            //} else {
+            //    ValidationText = string.Empty;
+            //}
+            //return IsValid;
         }
         #endregion
 
@@ -180,7 +180,7 @@ namespace MonkeyPaste.Avalonia {
                     if (SelectedPreset != null) {
                         // if user changes the command type delete the preset vm that was associated
                         SelectedPreset.Parent.DeletePresetCommand.Execute(SelectedPreset);
-                        ActionObjId = 0;
+                        AnalyticItemPresetId = 0;
                         OnPropertyChanged(nameof(SelectedPreset));
                     }
 
@@ -204,7 +204,7 @@ namespace MonkeyPaste.Avalonia {
                                 await Task.Delay(100);
                             }
 
-                            ActionObjId = automationAnalyzer.SelectedItem.AnalyticItemPresetId;
+                            AnalyticItemPresetId = automationAnalyzer.SelectedItem.AnalyticItemPresetId;
                             OnPropertyChanged(nameof(SelectedPreset));
                         });
                     }

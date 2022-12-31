@@ -26,14 +26,14 @@
         </Border.Styles>
         <Grid x:Name="ActionDesignerContainerGrid"
               HorizontalAlignment="Stretch"
-              VerticalAlignment="Stretch"
-              IsVisible="{Binding SelectedTrigger, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}">
+              VerticalAlignment="Stretch">
 
             <!--  DESIGNER ZOOM BORDER  -->
 
             <local:MpAvZoomBorder ClipToBounds="False"
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Stretch"
+                                  IsVisible="{Binding SelectedTrigger, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
                                   Classes="actionDesigner"
                                   MinScale="{Binding MinScale}"
                                   MaxScale="{Binding MaxScale}"
@@ -89,6 +89,7 @@
             <!--  SHOW GRID/ RESET VIEW MENU  -->
 
             <Border x:Name="DesignerViewMenu"
+                    IsVisible="{Binding SelectedTrigger, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
                     Margin="0,5,10,0"
@@ -97,8 +98,7 @@
                     BorderBrush="DimGray"
                     Background="Silver"
                     Padding="5">
-                <Grid ColumnDefinitions="Auto,Auto,Auto"
-                      IsVisible="{Binding ., Converter={StaticResource IsNotNullOrZeroToBoolConverter}}">
+                <Grid ColumnDefinitions="Auto,Auto,Auto">
                     <ToggleButton x:Name="ShowGridToggleButton"
                                   Padding="5,2"
                                   Grid.Column="0"
@@ -125,9 +125,9 @@
             <!--  ZOOM SLIDER  -->
             <Border HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
+                    IsVisible="{Binding SelectedTrigger, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
                     Margin="0,0,5,5">
                 <Slider x:Name="DesignerZoomSlider"
-                        IsVisible="{Binding ., Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
                         Value="{Binding Scale, Mode=TwoWay}"
                         Minimum="0.1"
                         Maximum="3"
@@ -162,14 +162,34 @@
             <!--  ADD NEW TRIGGER BUTTON (EMPTY SELECTION)  -->
             <Border HorizontalAlignment="Center"
                     VerticalAlignment="Center"
+                    MinWidth="50"
+                    MinHeight="50"
+                    IsVisible="{Binding SelectedTrigger, ConverterParameter=flip, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
                     Margin="0,0,5,5">
+                <Border.Styles>
+                    <Style Selector="Button Ellipse">
+                        <Setter Property="Stroke"
+                                Value="{DynamicResource DefaultBorderBrush}" />
+                    </Style>
+                    <Style Selector="Button:pointerover Ellipse">
+                        <Setter Property="Stroke"
+                                Value="{DynamicResource HoverDefaultBorderBrush}" />
+                    </Style>
+                    <Style Selector="Button Label">
+                        <Setter Property="Foreground"
+                                Value="{DynamicResource DefaultBorderBrush}" />
+                    </Style>
+                    <Style Selector="Button:pointerover Label">
+                        <Setter Property="Foreground"
+                                Value="{DynamicResource HoverDefaultBorderBrush}" />
+                    </Style>
+                </Border.Styles>
                 <Button x:Name="AddNewActionButton"
-                        x:CompileBindings="False"
+                        Classes="noBg noHoverBg"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         Background="Transparent"
                         BorderThickness="0"
-                        IsVisible="{Binding SelectedTrigger, ConverterParameter=flip, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
                         Command="{Binding ShowTriggerSelectorMenuCommand}"
                         CommandParameter="{Binding $self}">
                     <StackPanel Orientation="Vertical">

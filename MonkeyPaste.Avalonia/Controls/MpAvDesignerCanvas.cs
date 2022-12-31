@@ -158,8 +158,8 @@ namespace MonkeyPaste.Avalonia {
             Color warning_color1 = ((SolidColorBrush)WarningBrush1).Color;
             Color warning_color2 = ((SolidColorBrush)WarningBrush2).Color;
 
-            var parent_color = pavm.IsEnabled.IsTrue() ? enabled_color : disabled_color;
-            var cur_color = avm.IsEnabled.IsTrue() ? enabled_color : disabled_color;
+            var parent_color = pavm.IsTriggerEnabled ? enabled_color : disabled_color;
+            var cur_color = avm.IsTriggerEnabled ? enabled_color : disabled_color;
 
             var fillBrush = new LinearGradientBrush() {
                 GradientStops = new GradientStops(),
@@ -167,7 +167,7 @@ namespace MonkeyPaste.Avalonia {
                 EndPoint = new RelativePoint(p.ToAvPoint(), RelativeUnit.Absolute)
             };
 
-            if(pavm.IsEnabled.HasValue) {
+            if(pavm.IsValid) {
                 fillBrush.GradientStops.Add(new GradientStop(parent_color, 0));
                 fillBrush.GradientStops.Add(new GradientStop(parent_color, 0.45d));
             } else {
@@ -187,7 +187,7 @@ namespace MonkeyPaste.Avalonia {
                 fillBrush.GradientStops.Add(new GradientStop(warning_color1, 0.5d));
             }
 
-            if (avm.IsEnabled.HasValue) {
+            if (avm.IsValid) {
                 fillBrush.GradientStops.Add(new GradientStop(cur_color, 0.55d));
                 fillBrush.GradientStops.Add(new GradientStop(cur_color, 1.0d));
             } else {

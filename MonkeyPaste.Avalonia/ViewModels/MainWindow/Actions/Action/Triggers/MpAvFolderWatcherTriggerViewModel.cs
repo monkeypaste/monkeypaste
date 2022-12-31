@@ -11,50 +11,41 @@ using System.Windows.Input;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvFileSystemTriggerViewModel : MpAvTriggerActionViewModelBase, MpIFileSystemEventHandler {
+    public class MpAvFolderWatcherTriggerViewModel : MpAvTriggerActionViewModelBase, MpIFileSystemEventHandler {
         #region Properties
 
         #region State
-
-        public bool IsValidFileSystemPath {
-            get {
-                if(string.IsNullOrWhiteSpace(FileSystemPath)) {
-                    return false;
-                }
-                return FileSystemPath.IsFileOrDirectory();
-            }
-        }
 
         #endregion
 
         #region Model
 
-        public string FileSystemPath {
+        public string FolderPath {
             get {
-                if (Arg1 == null) {
+                if (Arg4 == null) {
                     return null;
                 }
-                return Arg1;
+                return Arg4;
             }
             set {
-                if (FileSystemPath != value) {
-                    Arg1 = value;
+                if (FolderPath != value) {
+                    Arg4 = value;
                     HasModelChanged = true;
-                    OnPropertyChanged(nameof(FileSystemPath));
+                    OnPropertyChanged(nameof(FolderPath));
                 }
             }
         }
 
         public bool IncludeSubdirectories {
             get {
-                if (Arg2 == null) {
+                if (Arg5 == null) {
                     return false;
                 }
-                return Arg2 == "1";
+                return Arg5 == "1";
             }
             set {
                 if (IncludeSubdirectories != value) {
-                    Arg2 = value ? "1":"0";
+                    Arg5 = value ? "1":"0";
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(IncludeSubdirectories));
                 }
@@ -67,7 +58,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvFileSystemTriggerViewModel(MpAvTriggerCollectionViewModel parent) : base(parent) {
+        public MpAvFolderWatcherTriggerViewModel(MpAvTriggerCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpFileSystemTriggerViewModel_PropertyChanged;
         }
 
@@ -78,32 +69,27 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
 
-        protected override async Task EnableAsync() {
-            await base.EnableAsync();
+        protected override void EnableTrigger() {            
             MpAvFileSystemWatcher.Instance.RegisterActionComponent(this);
         }
 
-        protected override async Task DisableAsync() {
-            await base.DisableAsync();
+        protected override void DisableTrigger() {            
             MpAvFileSystemWatcher.Instance.UnregisterActionComponent(this);
         }
 
-        protected override async Task<bool> ValidateActionAsync() {
-            await base.ValidateActionAsync();
-            if (!IsValid) {
-                return IsValid;
-            }
-
-            if (string.IsNullOrEmpty(FileSystemPath)) {
-                ValidationText = $"No file system path specified for trigger action '{FullName}'";
-                ShowValidationNotification();
-            } else if(!IsValidFileSystemPath) {
-                ValidationText = $"File system path '{FileSystemPath}' not found for trigger action '{FullName}'";
-                ShowValidationNotification();
+        protected override async Task ValidateActionAsync() {
+            await Task.Delay(1);
+            if (string.IsNullOrEmpty(FolderPath)) {
+                ValidationText = $"No folder specified for trigger action '{FullName}'";
+            } else if(!FolderPath.IsDirectory()) {
+                ValidationText = $"Folder'{FolderPath}' not found for trigger action '{FullName}'";
             } else {
                 ValidationText = string.Empty;
             }
-            return IsValid;
+
+            if (!IsValid) {
+                ShowValidationNotification();
+            }
         }
         #endregion
 
@@ -174,26 +160,39 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpFileSystemTriggerViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
-                case nameof(IncludeSubdirectories):
-                case nameof(FileSystemPath):
-                    if(IsBusy) {
-                        return;
-                    }
-                    if(IsEnabled.HasValue && IsEnabled.Value) {
-                        ReEnable().FireAndForgetSafeAsync(this);
-                    }
-                    break;
-            }
+            //switch (e.PropertyName) {
+            //    case nameof(IncludeSubdirectories):
+            //    case nameof(FileSystemPath):
+            //        if(IsBusy) {
+            //            return;
+            //        }
+            //        if(IsEnabled.IsTrue()) {
+            //            ReEnableTrigger();
+            //        }
+            //        break;
+            //}
         }
 
         #endregion
 
         #region Commands
 
+        public ICommand ToggleIncludeSubDirectoriesCommand => new MpAsyncCommand(
+            async () => {
+                bool wasEnabled = IsEnabled.IsTrue();
+                DisableTriggerCommand.Execute(null);
+                IncludeSubdirectories = !IncludeSubdirectories;
+
+                if (wasEnabled) {
+                    while (IsBusy) { await Task.Delay(100); }
+                    await Task.Delay(300);
+                    EnableTriggerCommand.Execute(null);
+                }
+            },()=>IsValid);
+
         public ICommand SelectFileSystemPathCommand => new MpAsyncCommand(
             async () => {
-                string initDir = FileSystemPath;
+                string initDir = FolderPath;
                 if(string.IsNullOrEmpty(initDir)) {
                     initDir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                 } else if(File.Exists(initDir)) {
@@ -204,12 +203,22 @@ namespace MonkeyPaste.Avalonia {
                     Title = "Select folder",
                     Directory = initDir
                 }.ShowAsync(MpAvMainWindow.Instance);
-
-
+                
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
-                if (string.IsNullOrEmpty(selectedDir)) {
-                    FileSystemPath = selectedDir;
-                    await ReEnable();
+
+                bool wasEnabled = IsEnabled.IsTrue();
+                // remove old watcher
+                DisableTriggerCommand.Execute(null);
+                FolderPath = selectedDir;
+                if(string.IsNullOrEmpty(FolderPath)) {
+                    IncludeSubdirectories = false;
+                }
+
+
+                if(wasEnabled) {
+                    while (IsBusy) { await Task.Delay(100); }
+                    await Task.Delay(300);
+                    EnableTriggerCommand.Execute(null);
                 }
             });
 

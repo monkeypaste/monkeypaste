@@ -34,23 +34,6 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region DesignerItem AvaloniaProperty
-        //public MpIDesignerSettingsViewModel DesignerItem {
-        //    get { return GetValue(DesignerItemProperty); }
-        //    set { SetValue(DesignerItemProperty, value); }
-        //}
-
-        //public static readonly AttachedProperty<MpIDesignerSettingsViewModel> DesignerItemProperty =
-        //    AvaloniaProperty.RegisterAttached<object, Control, MpIDesignerSettingsViewModel>(
-        //        "DesignerItem",
-        //        null,
-        //        false);
-
-        //private static void HandleDesignerItemChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
-        //    if(element is MpAvZoomBorder zb) {
-        //        zb.Reset();
-        //    }
-        //}
-
         public MpIDesignerSettingsViewModel DesignerItem => DataContext as MpIDesignerSettingsViewModel;
 
         #endregion

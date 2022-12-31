@@ -1617,7 +1617,7 @@ namespace MonkeyPaste.Avalonia {
         public void StoreSelectionState(MpAvClipTileViewModel ctvm) {
             if (ctvm.IsPlaceholder) {
                 // started happening in external pin tray drop
-                Debugger.Break();
+                //Debugger.Break();
                 return;
             }
             if (!ctvm.IsSelected) {

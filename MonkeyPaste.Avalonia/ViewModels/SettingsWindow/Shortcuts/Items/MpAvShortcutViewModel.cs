@@ -387,6 +387,9 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(KeyItems));
                     OnPropertyChanged(nameof(IsEmpty));
                     break;
+                case nameof(IsBusy):
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
+                    break;
             }
         }
 
