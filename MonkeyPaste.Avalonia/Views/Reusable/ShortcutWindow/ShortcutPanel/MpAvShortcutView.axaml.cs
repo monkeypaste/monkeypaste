@@ -14,9 +14,9 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvShortcutGestureView : MpAvUserControl<MpAvIShortcutCommand> {
+    public partial class MpAvShortcutView : MpAvUserControl<MpAvIKeyGestureViewModel> {
 
-        public MpAvShortcutGestureView() {
+        public MpAvShortcutView() {
             InitializeComponent();
         }
 

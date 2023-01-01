@@ -66,6 +66,7 @@ namespace MonkeyPaste {
         AnalyzerTimeout,
         InvalidRequest,
         InvalidResponse,
+        FileIoError,
 
         // User Action (Modal) 
 
@@ -114,6 +115,7 @@ namespace MonkeyPaste {
                 case MpNotificationType.ModalContentFormatDegradation:
                 case MpNotificationType.InvalidPlugin:
                 case MpNotificationType.InvalidAction:
+                case MpNotificationType.FileIoError:
                 case MpNotificationType.InvalidClipboardFormatHandler:
                 case MpNotificationType.PluginResponseWarningWithOption:
                     return MpNotificationLayoutType.UserAction;

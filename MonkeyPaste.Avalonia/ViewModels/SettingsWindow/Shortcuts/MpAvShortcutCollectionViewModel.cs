@@ -460,6 +460,8 @@ namespace MonkeyPaste.Avalonia {
                                 shortcutCommand = MpAvTagTrayViewModel.Instance.SelectTagCommand;
                             } else if (sc.ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset) {
                                 shortcutCommand = MpAvClipTrayViewModel.Instance.AnalyzeSelectedItemCommand;
+                            }else if (sc.ShortcutType == MpShortcutType.InvokeAction) {
+                                shortcutCommand = MpAvTriggerCollectionViewModel.Instance.InvokeActionCommand;
                             }
                             break;
                     }

@@ -220,14 +220,7 @@ namespace MonkeyPaste.Avalonia {
                 new MpMenuItemViewModel() {                    
                     Header = x.Title,
                     IconId = x.PluginIconId,
-                    SubItems = x.Items.Select(y =>
-                    new MpMenuItemViewModel() {
-                        MenuItemId = y.AnalyticItemPresetId,
-                        Header = y.Label,
-                        IconId = y.IconId,
-                        Command = cmd,
-                        CommandParameter = y.AnalyticItemPresetId
-                    }).ToList()
+                    SubItems = x.Items.Select(y => y.GetMenu(cmd)).ToList()
                 }).ToList()
             };
         }

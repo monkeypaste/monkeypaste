@@ -11,20 +11,35 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAnalyzeActionViewModel : 
-        MpAvActionViewModelBase, 
-        MpIPopupSelectorMenu {
+        MpAvActionViewModelBase,
+        MpIPopupSelectorMenu 
+        {
         #region MpIPopupSelectorMenu Implementation
         public bool IsOpen { get; set; }
         public MpMenuItemViewModel PopupMenu =>
             MpAvAnalyticItemCollectionViewModel.Instance.GetAnalyzerMenu(SelectAnalyzerCommand);
-        public MpMenuItemViewModel SelectedMenuItem =>
-            SelectedPreset == null ?
-                null :
-            (this as MpIPopupSelectorMenu).PopupMenu.SubItems
-            .SelectMany(x => x.SubItems)
-            .FirstOrDefault(x => x.MenuItemId == AnalyticItemPresetId);
-        public string EmptyText => "Select Analyzer...";
-        public object EmptyIconResourceObj => MpAvActionViewModelBase.GetDefaultActionIconResourceKey(MpActionType.Analyze, null);
+        //public MpMenuItemViewModel SelectedMenuItem =>
+        //    SelectedPreset == null ?
+        //        null :
+        //    (this as MpIPopupSelectorMenu).PopupMenu.SubItems
+        //    .SelectMany(x => x.SubItems)
+        //    .FirstOrDefault(x => x.MenuItemId == AnalyticItemPresetId);
+        //public string EmptyText => "Select Analyzer...";
+        //public object EmptyIconResourceObj => MpAvActionViewModelBase.GetDefaultActionIconResourceKey(MpActionType.Analyze, null);
+
+
+        public object SelectedIconResourceObj =>
+            AnalyticItemPresetId == 0 ?
+                GetDefaultActionIconResourceKey(ActionType) :
+                SelectedPreset == null ?
+                    "WarningImage" :
+                    SelectedPreset.GetMenu(null).IconSourceObj;
+        public string SelectedLabel =>
+            AnalyticItemPresetId == 0 ?
+                "Select Analyzer..." :
+                SelectedPreset == null ?
+                    "Not found..." :
+                    SelectedPreset.GetMenu(null).Header;
 
         #endregion
 
@@ -32,23 +47,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpAvAnalyticItemPresetViewModel SelectedPreset {
-            get {
-                if(MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
-                    return null;
-                }
-                return MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == AnalyticItemPresetId);
-            }
-            set {
-                if(SelectedPreset != value) {
-                    AnalyticItemPresetId = value.AnalyticItemPresetId;
-                    // NOTE dont understand why but HasModelChanged property change not firing from this
-                    // so forcing db write for now..
-                    Task.Run(async () => { await Action.WriteToDatabaseAsync(); });
-                    OnPropertyChanged(nameof(SelectedPreset));
-                }
-            }
-        }
+        public MpAvAnalyticItemPresetViewModel SelectedPreset =>
+            MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == AnalyticItemPresetId);
 
         #endregion
 
@@ -178,11 +178,17 @@ namespace MonkeyPaste.Avalonia {
         public ICommand SelectAnalyzerCommand => new MpCommand<object>(
             (args) => {
                 if (args is int presetId) {
-                    AnalyticItemPresetId = presetId;
+                    if (AnalyticItemPresetId == presetId) {
+                        AnalyticItemPresetId = 0;
+                    } else {
+                        AnalyticItemPresetId = presetId;
+                    }
                     OnPropertyChanged(nameof(SelectedPreset));
-                    OnPropertyChanged(nameof(SelectedMenuItem));
+                    OnPropertyChanged(nameof(SelectedLabel));
+                    OnPropertyChanged(nameof(SelectedIconResourceObj));
                 }
             });
+
 
         #endregion
     }

@@ -51,7 +51,7 @@ namespace MonkeyPaste.Avalonia {
                                 .Select(x =>
                                     new MpMenuItemViewModel() {
                                         Header = x.EnumToLabel(),
-                                        IconResourceKey = MpAvActionViewModelBase.GetDefaultActionIconResourceKey(MpActionType.Trigger, x),
+                                        IconResourceKey = MpAvActionViewModelBase.GetDefaultActionIconResourceKey(x),
                                         Command = AddTriggerCommand,
                                         CommandParameter = x
                                     }).ToList()
@@ -228,16 +228,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-
         #region View Models       
 
         public ObservableCollection<MpAvActionViewModelBase> Items { get; private set; } = new ObservableCollection<MpAvActionViewModelBase>();
 
         public MpAvTriggerActionViewModelBase SelectedTrigger { get; set; }
         public MpAvActionViewModelBase FocusAction { get;  set; }
-
-
-
 
         #endregion
 
@@ -272,7 +268,6 @@ namespace MonkeyPaste.Avalonia {
             PropertyChanged += MpAvTriggerCollectionViewModel_PropertyChanged;
             Items.CollectionChanged += Items_CollectionChanged;
         }
-
 
         #endregion
 
@@ -426,23 +421,9 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvTriggerCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(FocusAction):
-                    //if (FocusAction == null) {
-                    //    FocusAction = SelectedTrigger;
-                    //} else if (SelectedTrigger == null ||
-                    //            SelectedTrigger.ActionId != FocusAction.RootTriggerActionViewModel.ActionId) {
-                    //    SelectedTrigger = FocusAction.RootTriggerActionViewModel;
-                    //}
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
                     break;
                 case nameof(SelectedTrigger):
-                    //if(SelectedTrigger == null) {
-                    //    FocusAction = null;
-                    //} else if (FocusAction == null || FocusAction.RootTriggerActionViewModel.ActionId != SelectedTrigger.ActionId) {
-                    //    FocusAction = SelectedTrigger;
-                    //}
-                    //if (SelectedTrigger != null) {
-                    //    SelectedTrigger.OnPropertyChanged(nameof(SelectedTrigger.SelfAndAllDescendants));
-                    //}
                     FocusAction = SelectedTrigger;
 
                     OnPropertyChanged(nameof(MinScale));
@@ -499,13 +480,20 @@ namespace MonkeyPaste.Avalonia {
 
                  //SelectActionCommand.Execute(new_trigger_vm);
                  OnPropertyChanged(nameof(Items));
+
+                 bool was_empty = SelectedTrigger == null;
                  SelectedTrigger = new_trigger_vm;
                  new_trigger_vm.OnPropertyChanged(nameof(new_trigger_vm.IsTrigger));
                  OnPropertyChanged(nameof(SelectedTrigger));
 
+                 await Task.Delay(300);
                  //OnPropertyChanged(nameof(Triggers));
                  ResetDesignerViewCommand.Execute(null);
 
+                 if (was_empty) {
+                     // when empty resetting twice puts trigger in center
+                     ResetDesignerViewCommand.Execute(null);
+                 }
                  IsBusy = false;
              });
 
@@ -606,7 +594,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }, (args) => {
                 MpAvActionViewModelBase toSelect_avmb = null;
-                int focusArgNum = 0;
+                int focusArgNum = -1;
                 if(args is MpAvActionViewModelBase) {
                     toSelect_avmb = args as MpAvActionViewModelBase;
                 } else if(args is int actionId) {
@@ -619,8 +607,8 @@ namespace MonkeyPaste.Avalonia {
                         focusArgNum = (int)argParts[1];
                     }
                 }
-                if(toSelect_avmb != null && focusArgNum > 0) {
-                    // always allow execute when focus is passed
+                if(toSelect_avmb != null && focusArgNum >= 0) {
+                    // always allow execute when focus is passed (should only be from validation ntf)
                     return true;
                 }
                 if(toSelect_avmb == null && FocusAction != null) {
@@ -635,8 +623,23 @@ namespace MonkeyPaste.Avalonia {
                 return FocusAction.ActionId != toSelect_avmb.ActionId;
             });
 
+        public ICommand InvokeActionCommand => new MpCommand<object>(
+            (args) => {
+                int actionId = 0;
+                if (args is string) {
+                    actionId = int.Parse(args.ToString());
+                } else if (args is int) {
+                    actionId = (int)args;
+                } else if(args is MpAvActionViewModelBase argAvm) {
+                    actionId = argAvm.ActionId;
+                }
+                var avm = Items.FirstOrDefault(x => x.ActionId == actionId);
+                if(avm == null) {
+                    return;
+                }
+                avm.InvokeThisActionCommand.Execute(null);
 
-
+            });
 
         #endregion
     }

@@ -259,6 +259,7 @@ namespace MonkeyPaste.Avalonia {
 
                 invalid_nf.RetryAction = (args) => {
                     needs_fixing = false;
+                    return null;
                 };
 
                 var result = await MpNotificationBuilder.ShowNotificationAsync(invalid_nf);

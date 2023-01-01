@@ -11,7 +11,7 @@ namespace MonkeyPaste.Common.Plugin {
         object FixCommandArgs { get; set; }
         object IconSourceObj { get; set; }
         object OtherArgs { get; set; }
-        Action<object> RetryAction { get; set; }
+        Func<object,object> RetryAction { get; set; }
         object RetryActionObj { get; set; }
         string Title { get; set; }
 

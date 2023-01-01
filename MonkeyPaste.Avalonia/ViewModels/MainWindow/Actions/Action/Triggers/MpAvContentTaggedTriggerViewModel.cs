@@ -22,30 +22,30 @@ namespace MonkeyPaste.Avalonia {
                 };
             }
         }
-        public MpMenuItemViewModel SelectedMenuItem =>
-            SelectedTag == null ? null : SelectedTag.GetTagMenu(null, new int[] { TagId }, false);
-        public string EmptyText => "Select Tag...";
-        public object EmptyIconResourceObj => MpAvActionViewModelBase.GetDefaultActionIconResourceKey(MpActionType.Classify, null);
+        //public MpMenuItemViewModel SelectedMenuItem =>
+        //    SelectedTag == null ? null : SelectedTag.GetTagMenu(null, new int[] { TagId }, false);
+        //public string EmptyText => "Select Tag...";
+        //public object EmptyIconResourceObj => MpAvActionViewModelBase.GetDefaultActionIconResourceKey(MpActionType.Classify, null);
+        public object SelectedIconResourceObj =>
+            TagId == 0 ?
+                GetDefaultActionIconResourceKey(TriggerType) :
+                SelectedTag == null ?
+                    "WarningImage" :
+                    SelectedTag.GetTagMenu(null, new int[] { TagId }, false).IconSourceObj;
+        public string SelectedLabel =>
+            TagId == 0 ?
+                "Select Collection..." :
+                SelectedTag == null ?
+                    "Not found..." :
+                    SelectedTag.GetTagMenu(null, new int[] { TagId }, false).Header;
         #endregion
 
         #region Properties
 
         #region View Models
 
-        public MpAvTagTileViewModel SelectedTag {
-            get {
-                if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
-                    return null;
-                }
-                return MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
-            }
-            set {
-                if (SelectedTag != value) {
-                    TagId = value.TagId;
-                    OnPropertyChanged(nameof(SelectedTag));
-                }
-            }
-        }
+        public MpAvTagTileViewModel SelectedTag => 
+            MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
 
         #endregion
 
@@ -85,7 +85,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         protected override async Task ValidateActionAsync() {
-
             await Task.Delay(1);
             if (TagId == 0) {
                 ValidationText = $"No Collection selected for Classify Trigger '{FullName}'";
@@ -107,17 +106,17 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override void EnableTrigger() {            
-            var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
-            if (ttvm != null) {
-                ttvm.RegisterActionComponent(this);
+            if(SelectedTag == null) {
+                return;
             }
+            SelectedTag.RegisterActionComponent(this);
         }
 
-        protected override void DisableTrigger() {            
-            var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
-            if (ttvm != null) {
-                ttvm.UnregisterActionComponent(this);
+        protected override void DisableTrigger() {
+            if (SelectedTag == null) {
+                return;
             }
+            SelectedTag.UnregisterActionComponent(this);
         }
         #endregion
 
@@ -126,9 +125,14 @@ namespace MonkeyPaste.Avalonia {
         public ICommand SelectTagCommand => new MpCommand<object>(
             (args) => {
                 if (args is int tagId) {
-                    TagId = tagId;
+                    if (TagId == tagId) {
+                        TagId = 0;
+                    } else {
+                        TagId = tagId;
+                    }
                     OnPropertyChanged(nameof(SelectedTag));
-                    OnPropertyChanged(nameof(SelectedMenuItem));
+                    OnPropertyChanged(nameof(SelectedLabel));
+                    OnPropertyChanged(nameof(SelectedIconResourceObj));
                 }
             });
 

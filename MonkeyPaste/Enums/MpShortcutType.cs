@@ -46,7 +46,7 @@
         PasteCopyItem = 101,
         SelectTag = 102,
         AnalyzeCopyItemWithPreset = 103,
-        TriggerAction = 104
+        InvokeAction = 104
     }
     
 }

@@ -11,19 +11,12 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPopupMenuSelector">
-
+    <local:MpAvUserControl.Resources>
+        <SolidColorBrush x:Key="ButtonBorderBrushPointerOver"
+                         Color="{DynamicResource HoverDefaultBorderColor}" />
+    </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
         <!--  HOVER BRUSHES  -->
-        <Style Selector="Button#ContainerButton">
-            <Setter Property="BorderBrush"
-                    Value="DimGray" />
-            <Setter Property="BorderThickness"
-                    Value="2" />
-        </Style>
-        <!--<Style Selector="Button#ContainerButton:pointerover">
-            <Setter Property="BorderBrush"
-                    Value="{DynamicResource HoverDefaultBorderBrush}" />
-        </Style>-->
 
         <Style Selector="Border.popupCaret">
             <Setter Property="Background"
@@ -38,24 +31,6 @@
                     Value="{DynamicResource HoverDefaultBorderBrush}" />
         </Style>
 
-        <!--  SELECTED ITEM ICON/HEADER CONTENT  -->
-        <Style Selector="Border#SelectionBorder:not(.notEmpty) Image">
-            <Setter Property="Source"
-                    Value="{Binding EmptyIconResourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
-        </Style>
-        <Style Selector="Border#SelectionBorder.notEmpty Image">
-            <Setter Property="Source"
-                    Value="{Binding SelectedMenuItem.IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
-        </Style>
-        <Style Selector="Border#SelectionBorder:not(.notEmpty) TextBlock">
-            <Setter Property="Text"
-                    Value="{Binding EmptyText}" />
-        </Style>
-        <Style Selector="Border#SelectionBorder.notEmpty TextBlock">
-            <Setter Property="Text"
-                    Value="{Binding SelectedMenuItem.Header}" />
-        </Style>
-
         <!--  POPUP CARET DIR TOGGLE  -->
         <Style Selector="Border.popupCaret PathIcon">
             <Setter Property="RotateTransform.Angle"
@@ -68,6 +43,8 @@
     </local:MpAvUserControl.Styles>
     <Button x:Name="ContainerButton"
             Cursor="Hand"
+            BorderThickness="1"
+            BorderBrush="DimGray"
             local:MpAvMenuExtension.IsEnabled="True"
             local:MpAvMenuExtension.IsOpen="{Binding IsOpen, Mode=TwoWay}"
             local:MpAvMenuExtension.SuppressDefaultRightClick="True"
@@ -77,7 +54,7 @@
             VerticalAlignment="Stretch">
         <Grid ColumnDefinitions="*, 25"
               Margin="5"
-              MinHeight="30">
+              MinHeight="20">
             <Border x:Name="SelectionBorder"
                     Grid.Column="0"
                     Padding="5,3"
@@ -86,12 +63,12 @@
                     VerticalAlignment="Stretch"
                     BorderThickness="1"
                     CornerRadius="3"
-                    Background="Transparent"
-                    Classes.notEmpty="{Binding SelectedMenuItem, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}">
+                    Background="Transparent">
                 <DockPanel LastChildFill="True">
                     <Image Margin="5,0,5,0"
                            Height="25"
-                           Width="25" />
+                           Width="25"
+                           Source="{Binding SelectedIconResourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
                     <TextBlock Margin="5,0,5,0"
                                Padding="3"
                                VerticalAlignment="Stretch"
@@ -99,7 +76,8 @@
                                FontFamily="Segue UI"
                                FontSize="14"
                                Foreground="Black"
-                               Background="Transparent" />
+                               Background="Transparent"
+                               Text="{Binding SelectedLabel}" />
                 </DockPanel>
             </Border>
             <!--    -->

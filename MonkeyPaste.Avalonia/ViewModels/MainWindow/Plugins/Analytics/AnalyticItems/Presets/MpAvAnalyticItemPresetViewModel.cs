@@ -421,6 +421,16 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} unregistered {mvm.Label} matcher");
         }
 
+        public MpMenuItemViewModel GetMenu(ICommand cmd) {
+            return new MpMenuItemViewModel() {
+                MenuItemId = AnalyticItemPresetId,
+                Header = Label,
+                IconId = IconId,
+                Command = cmd,
+                CommandParameter = AnalyticItemPresetId
+            };
+        }
+
         #endregion
 
         #region Protected Methods

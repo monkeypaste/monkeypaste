@@ -208,18 +208,16 @@ namespace MonkeyPaste.Avalonia {
         // Arg
         public MpComparisonOperatorType ComparisonOperatorType {
             get {
-                if (Action == null || string.IsNullOrEmpty(Arg5)) {
-                    return MpComparisonOperatorType.None;
-                }
-                var cot = (MpComparisonOperatorType)int.Parse(Arg5);
+                var cot = Arg5.ToEnum<MpComparisonOperatorType>(notFoundValue: MpComparisonOperatorType.Contains);
                 if(cot == MpComparisonOperatorType.None) {
-                    Action.Arg5 = ((int)MpComparisonOperatorType.Contains).ToString();
+                    cot = MpComparisonOperatorType.Contains;
+                    Action.Arg5 = cot.ToString();
                 }
-                return (MpComparisonOperatorType)int.Parse(Arg5);
+                return cot;
             }
             set {
                 if (ComparisonOperatorType != value) {
-                    Action.Arg5 = ((int)value).ToString();
+                    Action.Arg5 = value.ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(ComparisonOperatorType));
                 }

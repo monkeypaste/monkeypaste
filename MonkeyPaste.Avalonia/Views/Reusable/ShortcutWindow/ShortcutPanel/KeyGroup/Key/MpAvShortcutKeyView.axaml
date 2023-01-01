@@ -15,12 +15,13 @@
             Width="{Binding $self.Bounds.Height}"
             Background="LightGray"
             BorderBrush="DarkGray"
-            Margin="7"
-            BorderThickness="2"
+            Margin="2"
+            Padding="3"
+            BorderThickness="1"
             CornerRadius="5">
         <TextBlock HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   FontSize="14"
+                   FontSize="10"
                    Foreground="Black"
                    Text="{Binding KeyStr, Converter={StaticResource EnumToKeyLiteralConverter}}"
                    FontWeight="Bold" />

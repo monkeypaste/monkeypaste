@@ -57,7 +57,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public Action<object> RetryAction {
+        public Func<object,object> RetryAction {
             get {
                 if (NotificationFormat == null) {
                     return null;
@@ -141,7 +141,7 @@ namespace MonkeyPaste {
                             await Task.Delay(100);
                         }
                         HideNotification();
-                        RetryAction?.Invoke(RetryActionObj);
+                        var result = RetryAction?.Invoke(RetryActionObj);
                 });
             } else {
                 HideNotification();

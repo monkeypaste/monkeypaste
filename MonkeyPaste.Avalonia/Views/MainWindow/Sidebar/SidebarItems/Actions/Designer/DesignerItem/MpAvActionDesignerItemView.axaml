@@ -39,8 +39,13 @@
                             Background="Transparent"
                             Content="{Binding}">
                 <ContentControl.Styles>
-                    <Style Selector="Image">
-
+                    <Style Selector="TextBlock:not(.visible)">
+                        <Setter Property="Foreground"
+                                Value="Transparent" />
+                    </Style>
+                    <Style Selector="TextBlock.visible">
+                        <Setter Property="Foreground"
+                                Value="Black" />
                     </Style>
                 </ContentControl.Styles>
                 <!--
@@ -131,9 +136,17 @@
                     </local:MpAvActionDesignerItemTemplateSelector>
                 </ContentControl.DataTemplates>
             </ContentControl>
-            <TextBlock Classes="actionLabel"
-                       IsVisible="{Binding IsSelected}"
-                       MaxWidth="{Binding Width}"
+            <TextBlock Classes.actionLabel="True"
+                       Classes.visible="{Binding IsSelected}"
+                       MaxWidth="150"
+                       HorizontalAlignment="Center"
+                       ClipToBounds="False"
+                       Padding="3"
+                       FontSize="12"
+                       FontWeight="SemiBold"
+                       Background="Transparent"
+                       TextAlignment="Center"
+                       TextWrapping="WrapWithOverflow"
                        Text="{Binding Label}" />
         </StackPanel>
     </Border>

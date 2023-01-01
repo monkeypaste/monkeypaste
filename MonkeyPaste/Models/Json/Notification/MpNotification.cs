@@ -26,7 +26,7 @@ namespace MonkeyPaste {
         public object IconSourceObj { get; set; }
 
         public object AnchorTarget { get; set; }
-        public Action<object> RetryAction { get; set; }
+        public Func<object,object> RetryAction { get; set; }
         public object RetryActionObj { get; set; }
 
         public ICommand FixCommand { get; set; }

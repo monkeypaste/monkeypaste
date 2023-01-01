@@ -20,6 +20,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvShortcutViewModel : MpViewModelBase<MpAvShortcutCollectionViewModel>, 
         MpIActionComponent,
         MpAvIShortcutCommand,
+        MpAvIKeyGestureViewModel,
         MpISelectableViewModel {
         #region Properties        
 
@@ -44,6 +45,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
+        public ObservableCollection<MpAvShortcutKeyGroupViewModel> KeyGroups => new ObservableCollection<MpAvShortcutKeyGroupViewModel>(KeyItems);
         public IEnumerable<MpAvShortcutKeyGroupViewModel> KeyItems {
             get {
                 var keyItems = new List<MpAvShortcutKeyGroupViewModel>();
@@ -374,6 +376,10 @@ namespace MonkeyPaste.Avalonia {
                         });
                     }
                     break;
+                case nameof(KeyItems):
+
+                    OnPropertyChanged(nameof(KeyGroups));
+                    break;
                 case nameof(KeyString):
                     //if (IsCustom()) {
                     //    if (Shortcut.CopyItemId > 0) {
@@ -385,6 +391,7 @@ namespace MonkeyPaste.Avalonia {
                     //    }
                     //}
                     OnPropertyChanged(nameof(KeyItems));
+                    OnPropertyChanged(nameof(KeyGroups));
                     OnPropertyChanged(nameof(IsEmpty));
                     break;
                 case nameof(IsBusy):

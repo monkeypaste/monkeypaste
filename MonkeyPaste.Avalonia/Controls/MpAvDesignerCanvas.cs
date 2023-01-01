@@ -135,14 +135,16 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             foreach (MpAvActionViewModelBase avm in tavm.SelfAndAllDescendants) {
-                MpPoint tail = new MpPoint(avm.X + (avm.Width / 2), avm.Y + (avm.Height / 2));
+                //MpPoint tail = new MpPoint(avm.X + (avm.Width / 2), avm.Y + (avm.Height / 2));
+                MpPoint tail = avm.ObservedDesignerItemBounds.Centroid();
 
                 var pavm = avm.ParentActionViewModel;
                 if (pavm == null) {
                     continue;
                 }
 
-                MpPoint head = new MpPoint(pavm.X + (pavm.Width / 2), pavm.Y + (pavm.Height / 2));
+                //MpPoint head = new MpPoint(pavm.X + (pavm.Width / 2), pavm.Y + (pavm.Height / 2));
+                MpPoint head = pavm.ObservedDesignerItemBounds.Centroid();
 
                 var borderBrush = pavm.IsHovering ? TransitionLineHoverBorderBrush : TransitionLineDefaultBorderBrush;
                 var fillBrush = GetArrowFillBrush(pavm, avm, head, tail);

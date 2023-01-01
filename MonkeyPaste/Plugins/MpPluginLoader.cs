@@ -86,6 +86,11 @@ namespace MonkeyPaste {
 
         private static async Task<MpPluginFormat> LoadPluginAsync(string manifestPath) {
             bool needsFixing = false;
+            Func<object, object> retryFunc = (args) => {
+                needsFixing = false;
+                return null;
+            };
+
             MpPluginFormat plugin = null;
             string manifestStr = MpFileIo.ReadTextFromFile(manifestPath);
             if (string.IsNullOrEmpty(manifestStr)) {
@@ -93,10 +98,7 @@ namespace MonkeyPaste {
                 var manifest_not_found_result = await MpNotificationBuilder.ShowNotificationAsync(
                     notificationType: MpNotificationType.InvalidPlugin,
                     body: $"Plugin manifest not found in '{manifestPath}'",
-                    retryAction: (args) => {
-                        //await LoadPluginAsync(manifestPath); 
-                        needsFixing = false;
-                    },
+                    retryAction: retryFunc,
                     fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(Path.GetDirectoryName(manifestPath))));
 
                
@@ -114,9 +116,7 @@ namespace MonkeyPaste {
                     var invalid_or_malformed_json_result = await MpNotificationBuilder.ShowNotificationAsync(
                             notificationType: MpNotificationType.InvalidPlugin,
                             body: $"Error parsing plugin manifest '{manifestPath}': {ex.Message}",
-                            retryAction: (args) => {
-                                needsFixing = false;
-                            },
+                            retryAction: retryFunc,
                             fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(manifestPath)));
                     if (invalid_or_malformed_json_result == MpNotificationDialogResultType.Ignore) {
                         return null;
@@ -133,9 +133,7 @@ namespace MonkeyPaste {
                         var ivalid_plugin_component_result = await MpNotificationBuilder.ShowNotificationAsync(
                                 notificationType: MpNotificationType.InvalidPlugin,
                                 body: ex.Message,
-                                retryAction: (args) => {
-                                    needsFixing = false;
-                                },
+                                retryAction: retryFunc,
                                 fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(manifestPath)));
                         if (ivalid_plugin_component_result == MpNotificationDialogResultType.Ignore) {
                             return null;

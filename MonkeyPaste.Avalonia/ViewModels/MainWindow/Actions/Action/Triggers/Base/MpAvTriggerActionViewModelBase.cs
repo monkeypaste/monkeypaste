@@ -45,7 +45,7 @@ namespace MonkeyPaste.Avalonia {
                                 .Select(x =>
                                     new MpMenuItemViewModel() {
                                         Header = x.EnumToLabel(),
-                                        IconResourceKey = GetDefaultActionIconResourceKey(x,null),
+                                        IconResourceKey = GetDefaultActionIconResourceKey(x),
                                         Command = AddChildActionCommand,
                                         CommandParameter = x
                                     }).ToList()
@@ -86,7 +86,7 @@ namespace MonkeyPaste.Avalonia {
             get {
                 string resourceKey;
                 if (IsValid) {
-                    resourceKey = GetDefaultActionIconResourceKey(ActionType, TriggerType);
+                    resourceKey = GetDefaultActionIconResourceKey(TriggerType);
                 } else {
                     resourceKey = "WarningImage";
                 }
@@ -190,19 +190,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvTriggerActionViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(IsSelected):
-                    //Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
-                    //Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
-                    //Parent.OnPropertyChanged(nameof(Parent.SelectedItemIdx));
-                    //OnPropertyChanged(nameof(SelectedItem));
-                    break;
                 case nameof(IsEnabled):
-                    //if(MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
-                    //    return;
-                    //}                    
-                    //Dispatcher.UIThread.Post(async () => {
-                    //    await ShowUserEnableChangeNotification();
-                    //});
                     ShowUserEnableChangeNotification().FireAndForgetSafeAsync(this);
                     SelfAndAllDescendants.ForEach(x => x.OnPropertyChanged(nameof(x.IsTriggerEnabled)));
 
@@ -213,8 +201,11 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsAllValid):
                     if(IsAllValid && IsEnabled.IsNull()) {
+                        // when trigger is all valid set to disabled state 
+                        // to allow enabling
                         IsEnabled = false;
                     } else if(!IsAllValid) {
+                        // IsEnabled null forces trigger to be valid before enabling
                         IsEnabled = null;
                     }
                     break;
@@ -232,7 +223,6 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(SelfAndAllDescendants));
         }
 
-
         private void EnableOrDisableTrigger(bool isEnabling) {
             if (isEnabling) {
                 EnableTrigger();
@@ -241,19 +231,27 @@ namespace MonkeyPaste.Avalonia {
             }
             IsEnabled = isEnabling;
         }
+
         #endregion
 
         #region Commands
 
-        public ICommand EnableTriggerCommand => new MpCommand(
-            () => {
+        public ICommand EnableTriggerCommand => new MpAsyncCommand(
+            async () => {
+                await ValidateActionAsync();
+                if(!IsValid) {
+                    return;
+                }
                 EnableOrDisableTrigger(true);
             }, () => {
                 return IsEnabled.IsFalse();
             });
 
-        public ICommand DisableTriggerCommand => new MpCommand(
-            () => {
+        public ICommand DisableTriggerCommand => new MpAsyncCommand(
+            async() => {
+                while(IsAnyBusy) {
+                    await Task.Delay(100);
+                }
                 EnableOrDisableTrigger(false);
             }, () => {
                 return IsEnabled.IsTrue();
@@ -261,13 +259,22 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ToggleTriggerEnabledCommand => new MpCommand(
              () => {
-                IsBusy = true;
-
-                EnableOrDisableTrigger(!IsEnabled.IsTrue());
-
-                IsBusy = false;
+                 if (IsEnabled.IsTrue()) {
+                     DisableTriggerCommand.Execute(null);
+                     return;
+                 }
+                 if (IsEnabled.IsFalse()) {
+                     EnableTriggerCommand.Execute(null);
+                     return;
+                 }
             }, () => {
-                return IsEnabled.HasValue;
+                if(IsEnabled.IsTrue()) {
+                    return DisableTriggerCommand.CanExecute(null);
+                }
+                if(IsEnabled.IsFalse()) {
+                    return EnableTriggerCommand.CanExecute(null);
+                }
+                return false;
             });
 
         #endregion

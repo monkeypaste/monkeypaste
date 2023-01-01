@@ -42,40 +42,40 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
 
-        public static string GetDefaultActionIconResourceKey(MpActionType at, object subType) {
-            switch (at) {
-                case MpActionType.Trigger:
-                    if (subType is MpTriggerType tt) {
-                        switch (tt) {
-                            case MpTriggerType.ContentAdded:
-                                return "ClipboardImage";
-                            case MpTriggerType.ContentTagged:
-                                return "PinToCollectionImage";
-                            case MpTriggerType.FileSystemChange:
-                                return "FolderEventImage";
-                            case MpTriggerType.Shortcut:
-                                return "HotkeyImage";
-                        }
-                    }
-                    return null;
-                case MpActionType.Analyze:
-                    return "BrainImage";
-                case MpActionType.Classify:
-                    return "PinToCollectionImage";
-                case MpActionType.Compare:
-                    return "ScalesImage";
-                case MpActionType.Macro:
-                    return "HotkeyImage";
-                case MpActionType.Timer:
-                    return "AlarmClockImage";
-                case MpActionType.FileWriter:
-                    return "FolderEventImage";
-                case MpActionType.Annotater:
-                    return "HighlighterImage";
+        public static string GetDefaultActionIconResourceKey(object actionOrTriggerType) {
+            if(actionOrTriggerType is MpTriggerType tt) {
+                switch (tt) {
+                    case MpTriggerType.ContentAdded:
+                        return "ClipboardImage";
+                    case MpTriggerType.ContentTagged:
+                        return "PinToCollectionImage";
+                    case MpTriggerType.FileSystemChange:
+                        return "FolderEventImage";
+                    case MpTriggerType.Shortcut:
+                        return "HotkeyImage";
+                }
+            }
+            if(actionOrTriggerType is MpActionType at) {
+                switch(at) {
+                    case MpActionType.Analyze:
+                        return "BrainImage";
+                    case MpActionType.Classify:
+                        return "PinToCollectionImage";
+                    case MpActionType.Compare:
+                        return "ScalesImage";
+                    case MpActionType.Macro:
+                        return "HotkeyImage";
+                    case MpActionType.Timer:
+                        return "AlarmClockImage";
+                    case MpActionType.FileWriter:
+                        return "FolderEventImage";
+                    case MpActionType.Annotater:
+                        return "HighlighterImage";
+                }
             }
             // whats params?
             Debugger.Break();
-            return null;
+            return "QuestiongMarkImage";
         }
         #endregion
 
@@ -126,7 +126,7 @@ namespace MonkeyPaste.Avalonia {
                 } else if (this is MpAvFolderWatcherTriggerViewModel) {
                     toolTipStr = "Folder Changed - Triggered when a file is added to the selected directory (or subdirectory if checked)";
                 } else if (this is MpAvShortcutTriggerViewModel) {
-                    toolTipStr = "Shortcut - Triggered when the recorded shortcut is pressed on the currently selected content";
+                    toolTipStr = "Shortcut - Triggered when the recorded shortcut is pressed at anytime with the current clipboard";
                 }
 
                 return toolTipStr;
@@ -180,7 +180,7 @@ namespace MonkeyPaste.Avalonia {
                                 .Select(x =>
                                     new MpMenuItemViewModel() {
                                         Header = x.EnumToLabel(),
-                                        IconResourceKey = GetDefaultActionIconResourceKey(x,null),
+                                        IconResourceKey = GetDefaultActionIconResourceKey(x),
                                         Command = AddChildActionCommand,
                                         CommandParameter = x
                                     }).ToList()
@@ -280,12 +280,11 @@ namespace MonkeyPaste.Avalonia {
             get {
                 string resourceKey;
                 if (IsValid) {                   
-                    resourceKey = GetDefaultActionIconResourceKey(ActionType, null);
+                    resourceKey = GetDefaultActionIconResourceKey(ActionType);
                 } else {
                     resourceKey = "WarningImage";
                 }
-
-                return MpPlatformWrapper.Services.PlatformResource.GetResource(resourceKey) as string;
+                return resourceKey;
             }
         }
 
@@ -301,7 +300,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public bool IsActionDesignerVisible => Parent.SelectedTrigger == RootTriggerActionViewModel;
-        //public bool IsExpanded { get; set; }
+        
         public bool IsAnyBusy {
             get {
                 if (IsBusy) {
@@ -644,6 +643,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             OnPropertyChanged(nameof(Children));
+            OnPropertyChanged(nameof(Tooltip));
 
             while (Children.Any(x => x.IsAnyBusy)) {
                 await Task.Delay(100);
@@ -766,10 +766,19 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 _isShowingValidationMsg = true;
+
+                Func<object,object> retryFunc = (args) => {
+                    Dispatcher.UIThread.Post(async () => {
+                        await ValidateActionAsync();
+                    });
+
+                    return null;
+                };
+
                 var result = await MpNotificationBuilder.ShowNotificationAsync(
                     notificationType: MpNotificationType.InvalidAction,
                     body: ValidationText,
-                    retryAction: async (args) => { await ValidateActionAsync(); },
+                    retryAction: retryFunc,
                     fixCommand: Parent.SelectActionCommand,
                     fixCommandArgs: new object[] { ActionId, focusArgNum, ValidationText });
 
@@ -859,7 +868,12 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(HasArgsChanged):
                     if(HasArgsChanged) {
                         HasArgsChanged = false;
-                        ValidateActionAsync().FireAndForgetSafeAsync(this);
+                        if(IsTriggerEnabled || !IsValid) {
+                            // NOTE only when args change and trigger is active or invalid already, 
+                            // invoke validation to avoid unnecessary warnings during create or while
+                            // its disabled
+                            ValidateActionAsync().FireAndForgetSafeAsync(this);
+                        }                        
                     }
                     break;
                 case nameof(HasModelChanged):
@@ -1013,9 +1027,9 @@ namespace MonkeyPaste.Avalonia {
                  navm.OnPropertyChanged(nameof(navm.Y));
                  Parent.FocusAction = navm;
 
-                 if(RootTriggerActionViewModel.IsEnabled.IsTrue()) {
-                     navm.ValidateActionAsync().FireAndForgetSafeAsync(navm);
-                 }
+                 //if(RootTriggerActionViewModel.IsEnabled.IsTrue()) {
+                 //    navm.ValidateActionAsync().FireAndForgetSafeAsync(navm);
+                 //}
 
                  IsBusy = false;
              }, (args) => ActionType != MpActionType.None);
@@ -1024,27 +1038,48 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 Parent.DeleteActionCommand.Execute(this);
             },()=>!IsAnyBusy);
-
-        public ICommand PerformActionOnSelectedContentCommand => new MpAsyncCommand(
-            async () => {
-                if(MpAvClipTrayViewModel.Instance.SelectedItem == null) {
-                    return;
-                }
-                var ci = MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem;
-                if (ci == null) {
-                    return;
-                }
-                IsPerformingActionFromCommand = true;
-                var ao = GetInput(ci);
-                await PerformActionAsync(ao);
-                IsPerformingActionFromCommand = false;
-            });
+                
 
         public ICommand FinishMoveCommand => new MpCommand(() => {
             HasModelChanged = true;
         });
 
+        public ICommand InvokeThisActionCommand => new MpAsyncCommand(
+            async () => {
+                IsPerformingActionFromCommand = true;
+                await Task.Delay(300);
+                var ctrvm = MpAvClipTrayViewModel.Instance;
+                while (ctrvm.IsAddingClipboardItem) {
+                    // wait for any new item to be logged
+                    await Task.Delay(100);
+                }
+                MpCopyItem ci = null;
+                if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+                    // when mw open assume user will select item before issuing cmd,
+                    // if none selected grab most recent pinned item as fallback
+                    if (ctrvm.SelectedItem == null) {
+                        var newest_ctvm = ctrvm.PinnedItems.OrderByDescending(x => x.CopyItemCreatedDateTime).FirstOrDefault();
+                        if (newest_ctvm != null) {
+                            ci = newest_ctvm.CopyItem;
+                        }
+                    } else {
+                        ci = ctrvm.SelectedItem.CopyItem;
+                    }
 
+                } else {
+                    // select most recently copied item
+                    ci = ctrvm.PendingNewModels.OrderByDescending(x => x.CopyDateTime).FirstOrDefault();
+                }
+                if (ci == null) {
+                    // no item could be selected so ignore shortcut trigger
+                    IsPerformingActionFromCommand = false;
+                    return;
+                }
+
+                var ao = GetInput(ci);
+                await PerformActionAsync(ao);
+                IsPerformingActionFromCommand = false;
+            });
         #endregion
     }
 }

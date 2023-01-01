@@ -79,7 +79,7 @@ namespace MonkeyPaste {
             string title = "",
             object body = null,
             int maxShowTimeMs = -1,
-            Action<object> retryAction = null,
+            Func<object,object> retryAction = null,
             object retryActionObj = null,
             object iconSourceObj = null,
             object anchor = null,

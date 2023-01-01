@@ -1167,14 +1167,14 @@
     <Compile Update="Views\Reusable\ShortcutWindow\MpAvAssignShortcutDialog.axaml.cs">
       <DependentUpon>MpAvAssignShortcutDialog.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\KeyGesture\MpAvShortcutGestureView.axaml.cs">
-      <DependentUpon>MpAvShortcutGestureView.axaml</DependentUpon>
-    </Compile>
     <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\KeyGroup\Key\MpAvShortcutKeyView.axaml.cs">
       <DependentUpon>MpAvShortcutKeyView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\KeyGroup\MpAvShortcutKeyGroupView.axaml.cs">
       <DependentUpon>MpAvShortcutKeyGroupView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\MpAvShortcutView.axaml.cs">
+      <DependentUpon>MpAvShortcutView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\Spinners\MpAvBusySpinnerView.axaml.cs">
       <DependentUpon>MpAvBusySpinnerView.axaml</DependentUpon>

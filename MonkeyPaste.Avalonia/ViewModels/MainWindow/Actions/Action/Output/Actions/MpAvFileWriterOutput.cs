@@ -1,11 +1,11 @@
 ﻿namespace MonkeyPaste.Avalonia {
     public class MpAvFileWriterOutput : MpAvActionOutput {        
-        public string OutputFilePath { get; set; }
-        public override object OutputData => OutputFilePath;
+        public string OutputFilesStr { get; set; }
+        public override object OutputData => OutputFilesStr;
 
         public override string ActionDescription {
             get {
-                return $"CopyItem({CopyItem.Id},{CopyItem.Title}) was written to file path: '{OutputFilePath}'";
+                return $"CopyItem({CopyItem.Id},{CopyItem.Title}) was written to file path: '{OutputFilesStr}'";
             }
         }
     }

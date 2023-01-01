@@ -118,7 +118,8 @@ namespace MonkeyPaste {
             string forceExt = "", 
             bool overwrite = false, 
             bool isTemporary = true) {
-            // NOTE csv is too annoying to discern (probably all are) need to check before and force/convert
+            // NOTE overwrite msgbox only shows up if not temporary
+            // NOTE2 csv is too annoying to discern (probably all are) need to check before and force/convert
             forceExt = string.IsNullOrEmpty(forceExt) ? forceExt : forceExt.Replace(".", string.Empty);
 
             if (string.IsNullOrEmpty(forceExt)) {

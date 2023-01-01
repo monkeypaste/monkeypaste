@@ -77,8 +77,13 @@ namespace MonkeyPaste {
             }
         }
 
+        public static string FileItemSplitter {
+            get {
+                // TODO when from another device get source device to know env new line (add new line string to OsInfo)
+                return Environment.NewLine;
+            }
+        }
         
-             
         #endregion
 
         #region Column Definitions

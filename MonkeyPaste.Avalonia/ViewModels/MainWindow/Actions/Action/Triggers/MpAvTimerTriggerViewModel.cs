@@ -43,13 +43,26 @@ namespace MonkeyPaste.Avalonia {
         public MpMenuItemViewModel PopupMenu =>
             RootTriggerActionViewModel == null ? null : 
             RootTriggerActionViewModel.GetActionMenu(SelectTickActionCommand, new List<int> { TickActionId }, true);
-        public MpMenuItemViewModel SelectedMenuItem =>
-            SelectedTickActionViewModel == null ?
-                null :
-            SelectedTickActionViewModel.GetActionMenu(null, new int[] { TickActionId }, false);
+        //public MpMenuItemViewModel SelectedMenuItem =>
+        //    SelectedTickActionViewModel == null ?
+        //        null :
+        //    SelectedTickActionViewModel.GetActionMenu(null, new int[] { TickActionId }, false);
 
-        public string EmptyText => "Select Action...";
-        public object EmptyIconResourceObj => GetDefaultActionIconResourceKey(MpActionType.Analyze, null);
+        //public string EmptyText => "Select Action...";
+        //public object EmptyIconResourceObj => GetDefaultActionIconResourceKey(MpActionType.Analyze, null);
+
+        public object SelectedIconResourceObj =>
+            TickActionId == 0 ?
+                GetDefaultActionIconResourceKey(ActionType) :
+                SelectedTickActionViewModel == null ?
+                    "WarningImage" :
+                    SelectedTickActionViewModel.GetActionMenu(null, new int[] { TickActionId }, false).IconSourceObj;
+        public string SelectedLabel =>
+            TickActionId == 0 ?
+                "Select Action..." :
+                SelectedTickActionViewModel == null ?
+                    "Not found..." :
+                    SelectedTickActionViewModel.GetActionMenu(null, new int[] { TickActionId }, false).Header;
 
         #endregion
 
@@ -213,9 +226,14 @@ namespace MonkeyPaste.Avalonia {
         public ICommand SelectTickActionCommand => new MpCommand<object>(
             (args) => {
                 if (args is int tickActionId) {
-                    TickActionId = tickActionId;
+                    if (TickActionId == tickActionId) {
+                        TickActionId = 0;
+                    } else {
+                        TickActionId = tickActionId;
+                    }
                     OnPropertyChanged(nameof(SelectedTickActionViewModel));
-                    OnPropertyChanged(nameof(SelectedMenuItem));
+                    OnPropertyChanged(nameof(SelectedLabel));
+                    OnPropertyChanged(nameof(SelectedIconResourceObj));
                 }
             });
 

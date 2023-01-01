@@ -176,34 +176,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
         public MpAvPopupMenuSelector() {
             InitializeComponent();
-            //var pub = this.FindControl<Border>("OuterBorder");
-            //pub.PointerReleased += Pub_PointerReleased;
-
-            //this.GetObservable(SelectedMenuItemProperty).Subscribe(value => OnSelectedItemChanged());
         }
-
-        //private void OnSelectedItemChanged() {
-        //    var sicc = this.FindControl<ContentControl>("SelectedItemIconContentControl");
-        //    if (SelectedMenuItem != null) {
-        //        if (sicc.DataTemplates[0] is MpAvPopupSelectedItemIconTemplateSelector pusiits &&
-        //            pusiits.AvailableTemplates["MenuItemIconTemplate"] is DataTemplate dt) {
-        //            dt.Content = MpAvMenuExtension.CreateIcon(SelectedMenuItem);
-        //        }
-        //    }
-        //    sicc.ApplyTemplate();
-        //}
-        //private void Pub_PointerReleased(object sender, PointerReleasedEventArgs e) {
-        //    if (PopupMenu == null) {
-        //        return;
-        //    }
-        //    var caret_button = this.FindControl<Control>("PopupButton");
-        //    var pmvm = PopupMenu;
-        //    if(ClearCommands) {
-        //        pmvm.ClearCommands();
-        //    }
-        //    MpAvMenuExtension.ShowMenu(caret_button, pmvm, null, PlacementMode.Right);
-        //}
-
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }

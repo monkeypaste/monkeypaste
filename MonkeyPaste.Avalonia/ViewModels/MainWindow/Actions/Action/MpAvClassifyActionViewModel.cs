@@ -31,30 +31,32 @@ namespace MonkeyPaste.Avalonia {
                 };
             }
         }
-        public MpMenuItemViewModel SelectedMenuItem =>
-            SelectedTag == null ? null : SelectedTag.GetTagMenu(null, new int[] { TagId }, false);
-        public string EmptyText => "Select Tag...";
-        public object EmptyIconResourceObj => MpAvActionViewModelBase.GetDefaultActionIconResourceKey(MpActionType.Classify, null);
+        //public MpMenuItemViewModel SelectedMenuItem =>
+        //    SelectedTag == null ? null : SelectedTag.GetTagMenu(null, new int[] { TagId }, false);
+        //public string EmptyText => "Select Tag...";
+        //public object EmptyIconResourceObj => MpAvActionViewModelBase.GetDefaultActionIconResourceKey(MpActionType.Classify, null);
+
+        public object SelectedIconResourceObj =>
+            TagId == 0 ?
+                GetDefaultActionIconResourceKey(ActionType) :
+                SelectedTag == null ?
+                    "WarningImage" :
+                    SelectedTag.GetTagMenu(null, new int[] { TagId }, false).IconSourceObj;
+        public string SelectedLabel =>
+            TagId == 0 ?
+                "Select Collection..." :
+                SelectedTag == null ?
+                    "Not found..." :
+                    SelectedTag.GetTagMenu(null, new int[] { TagId }, false).Header;
         #endregion
 
         #region Properties
 
         #region View Models
 
-        public MpAvTagTileViewModel SelectedTag {
-            get {
-                if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
-                    return null;
-                }
-                return MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
-            }
-            set {
-                if (SelectedTag != value) {
-                    TagId = value == null ? 0 : value.TagId;
-                    OnPropertyChanged(nameof(SelectedTag));
-                }
-            }
-        }
+        public MpAvTagTileViewModel SelectedTag =>
+            MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
+
         #endregion
 
         #region Model
@@ -147,7 +149,8 @@ namespace MonkeyPaste.Avalonia {
                     }
                     
                     OnPropertyChanged(nameof(SelectedTag));
-                    OnPropertyChanged(nameof(SelectedMenuItem));
+                    OnPropertyChanged(nameof(SelectedLabel));
+                    OnPropertyChanged(nameof(SelectedIconResourceObj));
                 }
             });
 

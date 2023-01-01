@@ -272,7 +272,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (ctvm.ItemType == MpCopyItemType.FileList) {
-                    avdo.SetData(MpPortableDataFormats.AvFileNames, ctvm.CopyItemData.SplitNoEmpty(Environment.NewLine));
+                    avdo.SetData(MpPortableDataFormats.AvFileNames, ctvm.CopyItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter));
                 } else if (!ignore_pseudo_file) {
                     // js doesn't set file stuff for non-files
                     string ctvm_fp = await ctvm.CopyItemData.ToFileAsync(

@@ -13,7 +13,9 @@ using MonkeyPaste.Common.Avalonia;
 using SharpHook.Native;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvAssignShortcutViewModel : MpViewModelBase {
+    public class MpAvAssignShortcutViewModel : 
+        MpViewModelBase,
+        MpAvIKeyGestureViewModel {
         #region Static Variables
         #endregion
 
@@ -32,6 +34,8 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         //public List<List<Key>> KeyList { get; set; } = new List<List<Key>>();
+        public ObservableCollection<MpAvShortcutKeyGroupViewModel> KeyGroups => 
+            new ObservableCollection<MpAvShortcutKeyGroupViewModel>(KeyItems);
 
         public IEnumerable<MpAvShortcutKeyGroupViewModel> KeyItems {
             get {
@@ -162,6 +166,7 @@ namespace MonkeyPaste.Avalonia {
 
             _assigningCommand = command;
             _commandParameter = commandParameter;
+            KeyString = keyString;
             ShortcutDisplayName = shortcutName;
 
             OnPropertyChanged(nameof(KeyString));
@@ -179,6 +184,15 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(HasWarning));
                     OnPropertyChanged(nameof(WarningBmp));
                     OnPropertyChanged(nameof(WarningTextHexColor));
+                    break;
+                case nameof(KeyString):
+                    OnPropertyChanged(nameof(KeyItems));
+                    OnPropertyChanged(nameof(KeyGroups));
+                    OnPropertyChanged(nameof(IsEmpty));
+                    break;
+                case nameof(KeyItems):
+
+                    OnPropertyChanged(nameof(KeyGroups));
                     break;
 
             }

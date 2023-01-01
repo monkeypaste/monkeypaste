@@ -1,0 +1,38 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="local:MpAvIKeyGestureViewModel"
+                       x:DataType="local:MpAvIKeyGestureViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       x:Class="MonkeyPaste.Avalonia.MpAvShortcutView">
+    <ItemsControl x:Name="ShortcutListBox"
+                  Background="Transparent"
+                  BorderThickness="0"
+                  HorizontalAlignment="Center"
+                  Items="{Binding KeyGroups}"
+                  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                  ScrollViewer.VerticalScrollBarVisibility="Hidden">
+        <ItemsControl.Resources>
+            <Thickness x:Key="ListBoxItemPadding">
+                0,0,0,0
+            </Thickness>
+        </ItemsControl.Resources>
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <WrapPanel Orientation="Horizontal"
+                           Background="Transparent"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <local:MpAvShortcutKeyGroupView DataContext="{Binding}" />
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</local:MpAvUserControl>

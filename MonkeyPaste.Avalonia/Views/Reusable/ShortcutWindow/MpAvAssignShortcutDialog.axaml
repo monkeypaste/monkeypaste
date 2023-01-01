@@ -10,6 +10,7 @@
         MinWidth="400"
         SizeToContent="Width"
         ShowInTaskbar="False"
+        Topmost="True"
         WindowStartupLocation="CenterScreen"
         x:DataType="local:MpAvAssignShortcutViewModel"
         x:CompileBindings="True"
@@ -33,7 +34,7 @@
                      Background="Transparent"
                      BorderThickness="0"
                      HorizontalAlignment="Center"
-                     Items="{Binding KeyItems}"
+                     Items="{Binding KeyGroups}"
                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden">
                 <ListBox.Resources>
@@ -96,29 +97,34 @@
                            Text="{Binding WarningString}" />
             </Grid>
         </Border>
-        <Grid Grid.Row="4"
-              HorizontalAlignment="Stretch"
-              VerticalAlignment="Bottom"
-              ColumnDefinitions="*,*,*">
-            <Button Margin="10"
-                    Grid.Column="0"
-                    MinHeight="30"
-                    BorderThickness="0"
-                    IsCancel="True"
+        <StackPanel Grid.Row="4"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom">
+            <StackPanel.Styles>
+                <Style Selector="Button">
+                    <Setter Property="Margin"
+                            Value="10" />
+                    <Setter Property="Padding"
+                            Value="5,3" />
+                    <Setter Property="MinWidth"
+                            Value="30" />
+                    <Setter Property="HorizontalAlignment"
+                            Value="Stretch" />
+                    <Setter Property="HorizontalContentAlignment"
+                            Value="Center" />
+                    <Setter Property="VerticalContentAlignment"
+                            Value="Center" />
+                </Style>
+            </StackPanel.Styles>
+            <Button IsCancel="True"
                     Click="Cancel_Click"
-                    Content="Cancel"
-                    HorizontalAlignment="Stretch" />
-            <Button Margin="10"
-                    Grid.Column="1"
-                    Content="Clear"
-                    HorizontalAlignment="Stretch"
-                    Command="{Binding ClearCommand}" />
-            <Button Margin="10"
-                    Grid.Column="2"
-                    Content="Ok"
-                    HorizontalAlignment="Stretch"
+                    Content="Cancel" />
+            <Button Command="{Binding ClearCommand}"
+                    Content="Clear"/>
+            <Button Content="Ok"
                     IsDefault="True"
                     Click="Ok_Click" />
-        </Grid>
+        </StackPanel>
     </Grid>
 </Window>
