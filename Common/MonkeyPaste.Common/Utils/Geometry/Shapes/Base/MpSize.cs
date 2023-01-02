@@ -1,6 +1,16 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace MonkeyPaste.Common {
+    public class MpSizeChangeEventArgs : EventArgs {
+        public MpSize OldSize { get; }
+        public MpSize NewSize { get; }
+
+        public MpSizeChangeEventArgs(MpSize oldSize, MpSize newSize) {
+            OldSize = oldSize;
+            NewSize = newSize;
+        }
+    }
     public class MpSize {
         //public static MpSize Parse(string text) {
         //    text = text.Trim();

@@ -877,9 +877,8 @@ namespace MonkeyPaste.Avalonia {
         public double ObservedPinTrayScreenHeight { get; set; }
         public double DefaultPinTrayWidth => DefaultItemWidth * 1.4;
 
-        //public double PinTrayPopOutObservedWidth { get; set; }
-        //public double PinTrayPopOutObservedHeight { get; set; }
-        public double PinTrayTotalWidth { get; set; } = 0;
+        public double DesiredPinTrayWidth { get; set; }
+        public double DesiredPinTrayHeight { get; set; }
 
         public double MinPinTrayScreenWidth {
             get {
@@ -913,8 +912,8 @@ namespace MonkeyPaste.Avalonia {
 
         public double MinClipTrayScreenWidth => MinClipOrPinTrayScreenWidth;
         public double MinClipTrayScreenHeight => MinClipOrPinTrayScreenHeight;
-        public double MinClipOrPinTrayScreenWidth => 0;
-        public double MinClipOrPinTrayScreenHeight => 0;
+        public double MinClipOrPinTrayScreenWidth => 50;
+        public double MinClipOrPinTrayScreenHeight => 50;
         public double MaxTileWidth => double.PositiveInfinity;// Math.Max(0, ClipTrayScreenWidth - MAX_TILE_SIZE_CONTAINER_PAD);
         public double MaxTileHeight => double.PositiveInfinity;// Math.Max(0, ClipTrayScreenHeight - MAX_TILE_SIZE_CONTAINER_PAD);
 
@@ -925,6 +924,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
 
         #region Append
         public List<MpCopyItem> PendingNewModels => _newModels;
@@ -2485,7 +2485,6 @@ namespace MonkeyPaste.Avalonia {
                  OnPropertyChanged(nameof(IsAnyTilePinned));
 
                  if (!IsAnyTilePinned) {
-                     PinTrayTotalWidth = 0;
                      ObservedPinTrayScreenWidth = 0;
                  }
 

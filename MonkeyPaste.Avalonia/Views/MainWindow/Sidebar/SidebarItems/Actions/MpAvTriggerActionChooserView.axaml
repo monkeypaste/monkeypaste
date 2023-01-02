@@ -67,7 +67,7 @@
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <Border Classes="outerComboBoxItemBorder"
-                                        IsVisible="{Binding ., Converter={StaticResource IsNotNullOrZeroToBoolConverter}}">
+                                        IsVisible="{Binding ., Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}}">
                                     <DockPanel LastChildFill="True">
                                         <Image DockPanel.Dock="Left"
                                                Source="{Binding IconResourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
@@ -114,7 +114,7 @@
 
                     <local:MpAvActionPropertyView VerticalAlignment="Stretch"
                                                   HorizontalAlignment="Stretch"
-                                                  IsVisible="{Binding ., Converter={StaticResource IsNotNullOrZeroToBoolConverter}, FallbackValue=False, TargetNullValue=False}"
+                                                  IsVisible="{Binding ., Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}, FallbackValue=False, TargetNullValue=False}"
                                                   DataContext="{Binding}" />
                 </ScrollViewer>
             </Grid>

@@ -13,9 +13,10 @@
                        d:DesignWidth="800">
     <Border x:Name="ListBoxContainerBorder"
             Classes="paramBorder">
-        <Grid RowDefinitions="*,0.2*">
+        <Grid RowDefinitions="Auto,Auto">
             <ListBox x:Name="EditableList"
                      Classes="paramValueListBox"
+                     IsVisible="{Binding Items, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                      Grid.Row="0"
                      Background="Transparent"
                      HorizontalAlignment="Stretch"
@@ -23,9 +24,9 @@
                      SelectedItem="{Binding SelectedItem}"
                      SelectionMode="Single"
                      Margin="10,0"
-                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                     MaxWidth="{Binding Bounds.Width, ElementName=ListBoxContainerBorder}"
-                     MinWidth="80">
+                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                     MaxWidth="{Binding Bounds.Width, ElementName=ListBoxContainerBorder}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <local:MpAvContentQueryTextBoxView Background="Transparent"
@@ -35,19 +36,14 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <Button Grid.Row="1"
-                    Width="75"
-                    BorderThickness="0"
-                    Background="Beige"
-                    Margin="10,5,10,0"
+                    Classes="defaultButton"
                     HorizontalAlignment="Right"
                     Command="{Binding AddValueCommand}">
                 <DockPanel>
                     <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource AddImage}}"
-                           DockPanel.Dock="Left"
-                           Width="15"
-                           Height="15" />
-                    <Label DockPanel.Dock="Right"
-                           Content="Add" />
+                           DockPanel.Dock="Left" />
+                    <TextBlock DockPanel.Dock="Right"
+                               Text="Add" />
                 </DockPanel>
             </Button>
         </Grid>

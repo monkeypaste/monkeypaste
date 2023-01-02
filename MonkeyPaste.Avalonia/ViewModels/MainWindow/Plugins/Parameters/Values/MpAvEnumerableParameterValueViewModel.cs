@@ -22,6 +22,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+
         #region MpIContentQueryTextBoxViewModel Implementation
 
         public bool IsActionParameter { get; set; } = false;

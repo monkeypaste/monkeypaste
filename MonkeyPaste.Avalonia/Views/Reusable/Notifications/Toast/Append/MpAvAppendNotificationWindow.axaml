@@ -56,7 +56,7 @@
                    Width="{Binding Bounds.Height, ElementName=NotificationIconImage}"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Top"
-                   IsVisible="{Binding IconSourceObj, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
+                   IsVisible="{Binding IconSourceObj, Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}}"
                    Source="{Binding IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}"
                    Stretch="Fill" />
             <local:MpAvOptionsButton Grid.Row="0"

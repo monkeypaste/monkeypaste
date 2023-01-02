@@ -34,12 +34,12 @@
                 Classes="actionProperty arg1"
                 MaxWidth="200">
             <Grid>
-                <TextBlock IsVisible="{Binding FileSystemPath, ConverterParameter=flip, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
+                <TextBlock IsVisible="{Binding FileSystemPath, ConverterParameter=flip, Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}}"
                            Text="Select file or folder..."
                            Foreground="Black"
                            TextAlignment="Left"
                            VerticalAlignment="Center" />
-                <TextBlock IsVisible="{Binding FileSystemPath, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
+                <TextBlock IsVisible="{Binding FileSystemPath, Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}}"
                            Text="{Binding FileSystemPath, Converter={StaticResource AbsoluteToRelativePathStringConverter}}"
                            TextAlignment="Right"
                            VerticalAlignment="Center">

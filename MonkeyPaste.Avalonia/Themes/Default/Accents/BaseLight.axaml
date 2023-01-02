@@ -213,7 +213,7 @@
 
         <SolidColorBrush x:Key="PluginParameterItemBgBrush"
                          Color="{DynamicResource PluginParameterItemBgColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+                         Opacity="{DynamicResource GlobalInteractiveBgOpacity}" />
         <!--  TAG TREE  -->
         <SolidColorBrush x:Key="TagTreeBgBrush"
                          Color="{DynamicResource MainWindowBgColor}"

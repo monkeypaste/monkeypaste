@@ -7,6 +7,9 @@
         <sys:Double x:Key="GlobalBgOpacity">
             0.7
         </sys:Double>
+        <sys:Double x:Key="GlobalInteractiveBgOpacity">
+            0.85
+        </sys:Double>
         <sys:Double x:Key="GlobalInteractiveOpacity">
             1.0
         </sys:Double>

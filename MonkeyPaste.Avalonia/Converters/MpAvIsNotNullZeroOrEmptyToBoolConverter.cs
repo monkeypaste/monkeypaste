@@ -1,11 +1,14 @@
 ﻿using Avalonia.Data.Converters;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvIsNotNullOrZeroToBoolConverter : IValueConverter {
-        public static readonly MpAvIsNotNullOrZeroToBoolConverter Instance = new();
+    public class MpAvIsNotNullZeroOrEmptyToBoolConverter : IValueConverter {
+        public static readonly MpAvIsNotNullZeroOrEmptyToBoolConverter Instance = new();
 
         public object Convert(object value, Type targetType, object? parameter, CultureInfo culture) {
             bool flip = false;
@@ -20,6 +23,12 @@ namespace MonkeyPaste.Avalonia {
             }
             if(value is string strVal) {
                 return string.IsNullOrEmpty(strVal) ? flip : !flip;
+            }
+            if (value is ICollection collection) {
+                return collection.Count == 0 ? flip : !flip;
+            }
+            if (value is IEnumerable<object> enumerable) {
+                return enumerable.Count() == 0 ? flip : !flip;
             }
             return value == null ? flip : !flip;
         }

@@ -7,7 +7,11 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAnimationExtensions {
-        public static void AnimateSize(this MpIBoundSizeViewModel bsvm, MpSize new_size, Func<bool> onComplete = null) {
+        public static void AnimateSize(
+            this MpIBoundSizeViewModel bsvm, 
+            MpSize new_size, 
+            Func<bool> onComplete = null, 
+            Func<MpSizeChangeEventArgs, bool> onTick = null) {
             double zeta, omega, fps;
 
             double cw = bsvm.BoundWidth;
@@ -40,11 +44,15 @@ namespace MonkeyPaste.Avalonia {
             double vx = 0;
             double vy = 0;
             Dispatcher.UIThread.Post(async () => {
+                double lw, lh;
                 while (true) {
+                    lw = bsvm.BoundWidth;
+                    lh = bsvm.BoundHeight;
                     MpAnimationHelpers.Spring(ref cw, ref vx, nw, delay_ms / 1000.0d, zeta, omega);
                     MpAnimationHelpers.Spring(ref ch, ref vy, nh, delay_ms / 1000.0d, zeta, omega);
                     bsvm.BoundWidth = cw;
                     bsvm.BoundHeight = ch;
+                    onTick?.Invoke(new MpSizeChangeEventArgs(new MpSize(lw,lh),new MpSize(cw,ch)));
 
                     await Task.Delay(delay_ms);
 
@@ -53,9 +61,12 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                 }
+                lw = bsvm.BoundWidth;
+                lh = bsvm.BoundHeight;
                 bsvm.BoundWidth = nw;
                 bsvm.BoundHeight = nh;
 
+                onTick?.Invoke(new MpSizeChangeEventArgs(new MpSize(lw, lh), new MpSize(cw, ch)));
                 onComplete?.Invoke();
             });
         }

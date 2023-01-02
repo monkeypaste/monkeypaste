@@ -152,7 +152,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionDesignerItemColors.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionProperty.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTile.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTray.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTrayContainer.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMainWindow.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMainWindowTitle.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMarqueeTextBox.axaml" />
@@ -961,7 +961,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\MpAvNotificationWindow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Button.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTagTile.axaml" />
-    <AvaloniaResource Include="Themes\Default\Controls\MpAvClipTray.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvClipTrayContainer.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvPinTray.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TextBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ToolTip.axaml" />

@@ -120,7 +120,7 @@
                 BorderBrush="White"
                 VerticalAlignment="Top"
                 HorizontalAlignment="Left"
-                IsVisible="{Binding BadgeCount, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}">
+                IsVisible="{Binding BadgeCount, Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}}">
             <TextBlock Foreground="White"
                        FontSize="10"
                        MinWidth="15"

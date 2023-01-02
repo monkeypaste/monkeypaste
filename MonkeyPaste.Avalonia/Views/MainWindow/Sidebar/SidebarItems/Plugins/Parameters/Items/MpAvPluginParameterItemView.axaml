@@ -12,122 +12,127 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPluginParameterItemView">
-    <Grid ShowGridLines="False"
-          ColumnDefinitions="150,150">
-        <DockPanel Grid.Column="0"
-                   LastChildFill="False"
-                   HorizontalAlignment="Stretch"
-                   VerticalAlignment="Top">
-            <!--  LABEL  -->
+    <Border x:Name="OuterParameterItemBorder"
+            Background="{DynamicResource PluginParameterItemBgBrush}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+        <Grid ShowGridLines="False"
+              ColumnDefinitions="150,150">
+            <DockPanel Grid.Column="0"
+                       LastChildFill="False"
+                       HorizontalAlignment="Stretch"
+                       VerticalAlignment="Top">
+                <!--  LABEL  -->
 
-            <TextBlock DockPanel.Dock="Left"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Top"
-                       FontSize="13"
-                       TextWrapping="Wrap"
-                       FontWeight="SemiBold"
-                       Foreground="White"
-                       Margin="5,1,7,0"
-                       Text="{Binding Label}" />
+                <TextBlock DockPanel.Dock="Left"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           MaxWidth="120"
+                           FontSize="12"
+                           TextWrapping="Wrap"
+                           Foreground="White"
+                           Margin="5,1,0,0"
+                           Text="{Binding Label}" />
 
-            <!--  DESCRIPTION  -->
+                <!--  DESCRIPTION  -->
 
-            <local:MpAvToolTipInfoHintView Margin="0,2,2,0"
-                                           ClipToBounds="False"
-                                           VerticalAlignment="Top"
-                                           HorizontalAlignment="Right"
-                                           ToolTipText="{Binding Description}" />
-        </DockPanel>
+                <local:MpAvToolTipInfoHintView DockPanel.Dock="Right"
+                                               Margin="0,5,2,0"
+                                               ClipToBounds="False"
+                                               VerticalAlignment="Top"
+                                               HorizontalAlignment="Right"
+                                               ToolTipText="{Binding Description}" />
+            </DockPanel>
 
 
-        <!--  PARAMETER  -->
+            <!--  PARAMETER  -->
 
-        <ContentControl x:Name="ParameterContentControl"
-                        Grid.Column="2"
-                        Margin="1"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Stretch"
-                        Content="{Binding}">
-            <ToolTip.Tip>
-                <local:MpAvToolTipView Classes.error="True"
-                                       IsVisible="{Binding !IsValid}"
-                                       ToolTipText="{Binding ValidationMessage}" />
-            </ToolTip.Tip>
-            <ContentControl.DataTemplates>
-                <local:MpAvPluginParameterTemplateSelector>
+            <ContentControl x:Name="ParameterContentControl"
+                            Grid.Column="2"
+                            Margin="1"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch"
+                            Content="{Binding}">
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView Classes.error="True"
+                                           IsVisible="{Binding !IsValid}"
+                                           ToolTipText="{Binding ValidationMessage}" />
+                </ToolTip.Tip>
+                <ContentControl.DataTemplates>
+                    <local:MpAvPluginParameterTemplateSelector>
 
-                    <!--  MultiSelect ListBox Parameter  -->
+                        <!--  MultiSelect ListBox Parameter  -->
 
-                    <DataTemplate x:Key="MultiSelectListParameterTemplate"
-                                  DataType="local:MpAvEnumerableParameterViewModel">
-                        <local:MpAvMultiSelectListBoxParameterView DataContext="{Binding}" />
-                    </DataTemplate>
+                        <DataTemplate x:Key="MultiSelectListParameterTemplate"
+                                      DataType="local:MpAvEnumerableParameterViewModel">
+                            <local:MpAvMultiSelectListBoxParameterView DataContext="{Binding}" />
+                        </DataTemplate>
 
-                    <!--  Single Select ListBox Parameter  -->
+                        <!--  Single Select ListBox Parameter  -->
 
-                    <DataTemplate x:Key="ListParameterTemplate"
-                                  DataType="local:MpAvEnumerableParameterViewModel">
-                        <local:MpAvSingleSelectListBoxParameterView DataContext="{Binding}" />
-                    </DataTemplate>
+                        <DataTemplate x:Key="ListParameterTemplate"
+                                      DataType="local:MpAvEnumerableParameterViewModel">
+                            <local:MpAvSingleSelectListBoxParameterView DataContext="{Binding}" />
+                        </DataTemplate>
 
-                    <!--  Editable ListBox Parameter  -->
+                        <!--  Editable ListBox Parameter  -->
 
-                    <DataTemplate x:Key="EditableListParameterTemplate"
-                                  DataType="local:MpAvEnumerableParameterViewModel">
-                        <local:MpAvEditableListBoxParameterView DataContext="{Binding}" />
-                    </DataTemplate>
+                        <DataTemplate x:Key="EditableListParameterTemplate"
+                                      DataType="local:MpAvEnumerableParameterViewModel">
+                            <local:MpAvEditableListBoxParameterView DataContext="{Binding}" />
+                        </DataTemplate>
 
-                    <!--  ComboBox Parameter  -->
+                        <!--  ComboBox Parameter  -->
 
-                    <DataTemplate x:Key="ComboBoxParameterTemplate"
-                                  DataType="local:MpAvEnumerableParameterViewModel">
-                        <local:MpAvComboBoxParameterView DataContext="{Binding}" />
-                    </DataTemplate>
+                        <DataTemplate x:Key="ComboBoxParameterTemplate"
+                                      DataType="local:MpAvEnumerableParameterViewModel">
+                            <local:MpAvComboBoxParameterView DataContext="{Binding}" />
+                        </DataTemplate>
 
-                    <!--  TextBox Parameter  -->
+                        <!--  TextBox Parameter  -->
 
-                    <DataTemplate x:Key="TextBoxParameterTemplate"
-                                  DataType="local:MpAvTextBoxParameterViewModel">
-                        <local:MpAvTextBoxParameterView DataContext="{Binding}" />
-                    </DataTemplate>
+                        <DataTemplate x:Key="TextBoxParameterTemplate"
+                                      DataType="local:MpAvTextBoxParameterViewModel">
+                            <local:MpAvTextBoxParameterView DataContext="{Binding}" />
+                        </DataTemplate>
 
-                    <!--  PasswordBox Parameter  -->
+                        <!--  PasswordBox Parameter  -->
 
-                    <DataTemplate x:Key="PasswordBoxParameterTemplate"
-                                  DataType="local:MpAvTextBoxParameterViewModel">
-                        <local:MpAvPasswordBoxParameterView DataContext="{Binding}" />
-                    </DataTemplate>
+                        <DataTemplate x:Key="PasswordBoxParameterTemplate"
+                                      DataType="local:MpAvTextBoxParameterViewModel">
+                            <local:MpAvPasswordBoxParameterView DataContext="{Binding}" />
+                        </DataTemplate>
 
-                    <!--  CheckBox Parameter  -->
+                        <!--  CheckBox Parameter  -->
 
-                    <DataTemplate x:Key="CheckBoxParameterTemplate"
-                                  DataType="local:MpAvCheckBoxParameterViewModel">
-                        <local:MpAvCheckBoxParameterView DataContext="{Binding}" />
-                    </DataTemplate>
+                        <DataTemplate x:Key="CheckBoxParameterTemplate"
+                                      DataType="local:MpAvCheckBoxParameterViewModel">
+                            <local:MpAvCheckBoxParameterView DataContext="{Binding}" />
+                        </DataTemplate>
 
-                    <!--  Slider Parameter  -->
+                        <!--  Slider Parameter  -->
 
-                    <DataTemplate x:Key="SliderParameterTemplate"
-                                  DataType="local:MpAvSliderParameterViewModel">
-                        <local:MpAvSliderParameterView Margin="10,0"
-                                                       local:MpAvIsHoveringExtension.IsEnabled="True"
-                                                       local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                                                       DataContext="{Binding}" />
-                    </DataTemplate>
+                        <DataTemplate x:Key="SliderParameterTemplate"
+                                      DataType="local:MpAvSliderParameterViewModel">
+                            <local:MpAvSliderParameterView Margin="10,0"
+                                                           local:MpAvIsHoveringExtension.IsEnabled="True"
+                                                           local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                                                           DataContext="{Binding}" />
+                        </DataTemplate>
 
-                    <!--  File or Directory Chooser Parameter  -->
+                        <!--  File or Directory Chooser Parameter  -->
 
-                    <DataTemplate x:Key="FileChooserParameterTemplate"
-                                  DataType="local:MpAvFileChooserParameterViewModel">
-                        <local:MpAvFileChooserParameterView DataContext="{Binding}" />
-                    </DataTemplate>
-                </local:MpAvPluginParameterTemplateSelector>
-            </ContentControl.DataTemplates>
-        </ContentControl>
+                        <DataTemplate x:Key="FileChooserParameterTemplate"
+                                      DataType="local:MpAvFileChooserParameterViewModel">
+                            <local:MpAvFileChooserParameterView DataContext="{Binding}" />
+                        </DataTemplate>
+                    </local:MpAvPluginParameterTemplateSelector>
+                </ContentControl.DataTemplates>
+            </ContentControl>
 
-        <!--  VALDIATION  -->
+            <!--  VALDIATION  -->
 
-        <!--<Grid Grid.Column="3"
+            <!--<Grid Grid.Column="3"
                   IsVisible="{Binding !IsValid}"
                   Width="15"
                   Height="15"
@@ -149,5 +154,6 @@
                     !
                 </TextBlock>
             </Grid>-->
-    </Grid>
+        </Grid>
+    </Border>
 </local:MpAvUserControl>

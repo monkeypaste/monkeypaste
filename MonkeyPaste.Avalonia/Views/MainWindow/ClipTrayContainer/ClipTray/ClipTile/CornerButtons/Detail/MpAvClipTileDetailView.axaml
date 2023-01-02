@@ -32,11 +32,11 @@
                 <DataTemplate>
         -->
         <!--
-            IsEnabled="{Binding DetailText, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}"
+            IsEnabled="{Binding DetailText, Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}}"
         -->
         <!--
                     <local:MpAvClipTileDetailItemTipView DataContext="{Binding}"
-                                                      IsVisible="{Binding DetailText, Converter={StaticResource IsNotNullOrZeroToBoolConverter}}" />
+                                                      IsVisible="{Binding DetailText, Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>-->

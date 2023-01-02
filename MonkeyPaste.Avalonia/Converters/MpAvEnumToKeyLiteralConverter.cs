@@ -15,8 +15,12 @@ namespace MonkeyPaste.Avalonia {
                 if (string.IsNullOrEmpty(valueStr)) {
                     return string.Empty;
                 }
-                return MpAvKeyboardInputHelpers.GetKeyLiteral(
+                string key_literal = MpAvKeyboardInputHelpers.GetKeyLiteral(
                         MpAvKeyboardInputHelpers.ConvertStringToKey(valueStr));
+                if(parameter is string paramStr && paramStr == "label") {
+                    key_literal = key_literal.ToLabel();
+                }
+                return key_literal;
             }
             return null;
         }

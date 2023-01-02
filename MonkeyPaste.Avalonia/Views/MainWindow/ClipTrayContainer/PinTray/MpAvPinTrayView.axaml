@@ -21,6 +21,7 @@
               VerticalAlignment="Stretch">
             <ListBox x:Name="PinTrayListBox"
                      Focusable="True"
+                     Background="Transparent"
                      TabIndex="1"
                      IsTabStop="True"
                      MaxWidth="{Binding MaxPinTrayScreenWidth}"

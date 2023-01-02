@@ -200,6 +200,8 @@ namespace MonkeyPaste.Avalonia {
             var ctrcv_ctrv = ctrcv.FindControl<MpAvClipTrayView>("ClipTrayView");
 
             if (mwvm.IsHorizontalOrientation) {
+                // HORIZONTAL
+
                 mwtg.RowDefinitions.Clear();
                 mwtg.ColumnDefinitions.Clear();
                 var sbbg_cd = new ColumnDefinition(
@@ -309,6 +311,8 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetColumn(ctrcv_ctrv, 1);
             } else {
                 // VERTICAL 
+
+
                 //mwtg.RowDefinitions = new RowDefinitions("*,Auto,40");
                 mwtg.RowDefinitions.Clear();
                 mwtg.ColumnDefinitions.Clear();
@@ -453,7 +457,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private bool _mwGridSplitterChanged = false;
         private void UpdateSidebarGridsplitter() {
             var mwvm = MpAvMainWindowViewModel.Instance;
             var ctrvm = MpAvClipTrayViewModel.Instance;
@@ -476,7 +479,6 @@ namespace MonkeyPaste.Avalonia {
 
             double mw_w = mwvm.MainWindowWidth;
             double mw_h = mwvm.MainWindowHeight;
-
 
             double nsbi_w, nsbi_h;
             double nctrcb_w,nctrcb_h;
@@ -515,6 +517,7 @@ namespace MonkeyPaste.Avalonia {
             ctrvm.AnimateSize(
                 new MpSize(nctrcb_w, nctrcb_h),
                 () => {
+                    // onComplete handler
                     UpdateClipTrayContainerSize(null);
                     return true;
                 });

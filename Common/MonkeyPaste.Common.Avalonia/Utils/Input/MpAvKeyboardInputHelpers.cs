@@ -115,6 +115,9 @@ namespace MonkeyPaste.Common.Avalonia {
             if (lks == "pagedown") {
                 return Key.PageDown;
             }
+            if (lks == "caps lock") {
+                return Key.CapsLock;
+            }
 
             var kg = KeyGesture.Parse(lks);
 

@@ -898,7 +898,10 @@ namespace MonkeyPaste.Avalonia {
             _keyboardGestureHelper.ClearCurrentGesture();
             ValidateGesture();
 
-            var exactMatch = Items.FirstOrDefault(x => x.KeyString.ToLower() == curGestureStr.ToLower());
+            var exactMatch = 
+                Items
+                .Where(x=>!string.IsNullOrEmpty(x.KeyString))
+                .FirstOrDefault(x => x.KeyString.ToLower() == curGestureStr.ToLower());
             if (exactMatch != default) {
                 MpConsole.WriteLine($"Shorcut Gesture '{curGestureStr}' matched for shortcut '{exactMatch.ShortcutType}'");
                 exactMatch.PerformShortcutCommand.Execute(null);

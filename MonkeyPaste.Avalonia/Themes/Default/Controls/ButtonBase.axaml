@@ -7,6 +7,48 @@
         <Setter Property="Cursor"
                 Value="Hand" />
     </Style>
+    <Style Selector=":is(Button).defaultButton /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Beige" />
+        <Setter Property="CornerRadius"
+                Value="5" />
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="BorderBrush"
+                Value="DimGray" />
+        <Setter Property="Padding"
+                Value="5,3" />
+    </Style>
+    <Style Selector=":is(Button).defaultButton">
+        <Setter Property="Padding"
+                Value="5,3" />
+    </Style>
+    <Style Selector=":is(Button):pointerover.defaultButton /template/ ContentPresenter">
+        <Setter Property="BorderBrush"
+                Value="Yellow" />
+        <Setter Property="Background"
+                Value="Silver" />
+    </Style>
+    <Style Selector=":is(Button).defaultButton TextBlock">
+        <Setter Property="Foreground"
+                Value="Black" />
+        <Setter Property="TextAlignment"
+                Value="Center" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+    </Style>
+    <Style Selector=":is(Button).defaultButton Image">
+        <Setter Property="Width"
+                Value="15" />
+        <Setter Property="Height"
+                Value="15" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+    </Style>
+    <Style Selector=":is(Button).defaultButton.textOnlyButton TextBlock">
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+    </Style>
 
     <!--<Style Selector=":is(Button):not(.TextBoxButton):pointerover PathIcon">
         <Setter Property="Foreground"

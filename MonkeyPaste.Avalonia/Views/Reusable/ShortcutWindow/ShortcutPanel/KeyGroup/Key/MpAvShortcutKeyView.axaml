@@ -12,7 +12,7 @@
     <Border Grid.Column="0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Width="{Binding $self.Bounds.Height}"
+            MinWidth="{Binding $self.Bounds.Height}"
             Background="LightGray"
             BorderBrush="DarkGray"
             Margin="2"
@@ -23,7 +23,7 @@
                    VerticalAlignment="Center"
                    FontSize="10"
                    Foreground="Black"
-                   Text="{Binding KeyStr, Converter={StaticResource EnumToKeyLiteralConverter}}"
+                   Text="{Binding KeyStr, Converter={StaticResource EnumToKeyLiteralConverter}, ConverterParameter=label}"
                    FontWeight="Bold" />
     </Border>
 </local:MpAvUserControl>

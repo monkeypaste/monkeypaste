@@ -189,6 +189,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(KeyItems));
                     OnPropertyChanged(nameof(KeyGroups));
                     OnPropertyChanged(nameof(IsEmpty));
+                    Validate();
                     break;
                 case nameof(KeyItems):
 

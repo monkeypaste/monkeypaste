@@ -11,6 +11,8 @@ using Avalonia.Threading;
 using System.Threading.Tasks;
 using Avalonia.Input;
 using System.Diagnostics;
+using Avalonia.Layout;
+using MonoMac.CoreText;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTrayContainerView : MpAvUserControl<MpAvClipTrayViewModel> {
@@ -26,19 +28,13 @@ namespace MonkeyPaste.Avalonia {
 
             InitializeComponent();
 
+
+
             if(BindingContext == null) {
                 this.DataContextChanged += MpAvClipTrayContainerView_DataContextChanged;
             } else {
                 MpAvClipTrayContainerView_DataContextChanged(null, null);
-            }
-            
-            var gs = this.FindControl<GridSplitter>("ClipTraySplitter");
-            //gs.GetObservable(GridSplitter.IsEnabledProperty).Subscribe(value => GridSplitter_IsEnabledChanged(gs, value));
-            //gs.AddHandler(GridSplitter.PointerPressedEvent, Gs_PointerPressed, RoutingStrategies.Tunnel);
-            //gs.AddHandler(GridSplitter.PointerReleasedEvent, Gs_PointerReleased, RoutingStrategies.Tunnel);
-
-            gs.DragDelta += Gs_DragDelta;
-            
+            }                  
         }
 
         private void MpAvClipTrayContainerView_DataContextChanged(object sender, EventArgs e) {
@@ -72,17 +68,6 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaXamlLoader.Load(this);
         }
 
-        private void Gs_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
-            Dispatcher.UIThread.Post(async () => {
-                await Task.Delay(300);
-                BindingContext.RefreshQueryTrayLayout();
-            });
-        }
-
-
-        private void Gs_DragDelta(object sender, global::Avalonia.Input.VectorEventArgs e) {
-            //BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow = true;
-        }
 
     }
 }

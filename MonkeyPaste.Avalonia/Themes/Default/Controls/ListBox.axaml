@@ -3,10 +3,10 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
 
-    <Style Selector="ListBox">
+    <!--<Style Selector="ListBox">
         <Setter Property="Background"
                 Value="Transparent" />
         <Setter Property="BorderThickness"
                 Value="0" />
-    </Style>
+    </Style>-->
 </Styles>

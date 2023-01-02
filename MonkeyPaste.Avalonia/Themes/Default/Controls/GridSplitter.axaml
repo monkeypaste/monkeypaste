@@ -41,6 +41,10 @@
     <Style Selector="GridSplitter">
         <Setter Property="Background"
                 Value="{DynamicResource DefaultGridSplitterBrush}" />
+        <Setter Property="MinWidth"
+                Value="1" />
+        <Setter Property="MinHeight"
+                Value="1" />
     </Style>
     <Style Selector="GridSplitter.sidebarSplitter">
         <Setter Property="Background"

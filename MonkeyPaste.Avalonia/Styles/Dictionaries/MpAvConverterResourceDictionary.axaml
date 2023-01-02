@@ -7,7 +7,7 @@
     <local:MpAvDoubleToThicknessConverter x:Key="DoubleToThicknessConverter" />
     <local:MpAvNegateDoubleConverter x:Key="NegateDoubleConverter" />
     <local:MpAvIconSourceObjToBitmapConverter x:Key="IconSourceObjToBitmapConverter" />
-    <local:MpAvIsNotNullOrZeroToBoolConverter x:Key="IsNotNullOrZeroToBoolConverter" />
+    <local:MpAvIsNotNullZeroOrEmptyToBoolConverter x:Key="IsNotNullZeroOrEmptyToBoolConverter" />
     <local:MpAvStringBase64ToBitmapConverter x:Key="MpAvStringBase64ToBitmapConverter" />
     <local:MpAvBrushToContrastBrushConverter x:Key="BrushToContrastBrushConverter" />
     <local:MpAvColorToContrastColorConverter x:Key="ColorToContrastColorConverter" />
